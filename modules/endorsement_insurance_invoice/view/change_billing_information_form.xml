@@ -8,17 +8,15 @@
         <label name="contract"/>
         <field name="contract"/>
     </group>
-    <group name="current_value" colspan="4" yexpand="1" yfill="1">
-        <field name="current_value" mode="form" expand_toolbar="0" view_ids="contract_insurance_invoice.contract_billing_information_view_form"/>
+    <group name="previous_billing_information" colspan="4" yexpand="1" yfill="1">
+        <field name="previous_billing_information" mode="form" expand_toolbar="0" view_ids="endorsement_insurance_invoice.endorsement_billing_information_view_form"/>
     </group>
-    <group name="new_value" colspan="4" yexpand="1" yfill="1">
-        <field name="new_value" mode="form" expand_toolbar="0" view_ids="contract_insurance_invoice.contract_billing_information_view_form"/>
+    <group name="new_billing_information" colspan="4" yexpand="1" yfill="1">
+        <field name="new_billing_information" mode="form" expand_toolbar="0" view_ids="endorsement_insurance_invoice.endorsement_billing_information_view_form"/>
     </group>
-    <group name="future_value" colspan="4" yexpand="1" yfill="1">
-        <field name="future_value" mode="form" expand_toolbar="0" view_ids="contract_insurance_invoice.contract_billing_information_view_form"/>
+    <group name="other_contracts" colspan="4" yexpand="1" yfill="1">
+        <field name="other_contracts" expand_toolbar="0"/>
     </group>
-    <label name="delete_future"/>
-    <field name="delete_future"/>
     <field name="product"/>
     <field name="endorsement_part"/>
     <field name="subscriber"/>

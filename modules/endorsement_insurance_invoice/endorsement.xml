@@ -23,5 +23,13 @@
             <field name="type">tree</field>
             <field name="name">endorsement_contract_billing_information_list</field>
         </record>
+        <!-- ####################### -->
+        <!-- # Billing Information # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="endorsement_billing_information_view_form">
+            <field name="model">contract.billing_information</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_billing_information_form</field>
+        </record>
     </data>
 </tryton>

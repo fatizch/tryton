@@ -1,6 +1,22 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.billing_information.change:"
+msgid "Please set a  new direct debit account !"
+msgstr "Veuillez renseigner le nouveau compte bancaire !"
+
+msgctxt "error:contract.billing_information.change:"
+msgid ""
+"The contract %s does not have an invoice starting on the %s. Select another "
+"date."
+msgstr ""
+"Le contrat %s n'a pas de quittance commençant au %s. Veuillez choisir une "
+"autre date."
+
+msgctxt "error:contract.billing_information.change:"
+msgid "The date %s is not compatible with the billing mode %s."
+msgstr "La date %s n'est pas compatible avec le mode de quittancement %s."
 
 msgctxt "error:endorsement.contract.billing_information:"
 msgid "New version"
@@ -22,14 +38,6 @@ msgctxt "field:contract.billing_information.change,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:contract.billing_information.change,current_value:"
-msgid "Current Value"
-msgstr "Valeur Courante"
-
-msgctxt "field:contract.billing_information.change,delete_future:"
-msgid "Delete Future Modifications"
-msgstr "Annuler les modifications futures"
-
 msgctxt "field:contract.billing_information.change,effective_date:"
 msgid "Effective Date"
 msgstr "Date d'effet"
@@ -42,17 +50,22 @@ msgctxt "field:contract.billing_information.change,endorsement_part:"
 msgid "Endorsement Part"
 msgstr "Avenant unitaire"
 
-msgctxt "field:contract.billing_information.change,future_value:"
-msgid "Future Value"
-msgstr "Valeur future"
-
 msgctxt "field:contract.billing_information.change,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.billing_information.change,new_value:"
-msgid "New Value"
-msgstr "Nouvelle valeur"
+msgctxt "field:contract.billing_information.change,new_billing_information:"
+msgid "New Billing Information"
+msgstr "Nouveaux Paramètres"
+
+msgctxt "field:contract.billing_information.change,other_contracts:"
+msgid "Other Contracts"
+msgstr "Autres contrats"
+
+msgctxt ""
+"field:contract.billing_information.change,previous_billing_information:"
+msgid "Previous Billing Information"
+msgstr "Paramètres existants"
 
 msgctxt "field:contract.billing_information.change,product:"
 msgid "Product"
@@ -61,6 +74,20 @@ msgstr "Produit"
 msgctxt "field:contract.billing_information.change,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
+
+msgctxt ""
+"field:contract.billing_information.change.contract_displayer,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.billing_information.change.contract_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt ""
+"field:contract.billing_information.change.contract_displayer,to_propagate:"
+msgid "Propagate"
+msgstr "Propager"
 
 msgctxt "field:endorsement,contracts_name:"
 msgid "Contracts Name"
@@ -224,6 +251,10 @@ msgctxt "model:contract.billing_information.change,name:"
 msgid "Change Billing Information"
 msgstr "Modification des paramètres de quittancement"
 
+msgctxt "model:contract.billing_information.change.contract_displayer,name:"
+msgid "Contract Displayer"
+msgstr "Contrat"
+
 msgctxt "model:endorsement.contract.billing_information,name:"
 msgid "Endorsement Billing Information"
 msgstr "Modification des paramètres de quittancement"
@@ -232,13 +263,38 @@ msgctxt "model:endorsement.contract.billing_information.field,name:"
 msgid "Endorsement Billing Information Field"
 msgstr "Champs des paramètres de quittancement"
 
-msgctxt "model:endorsement.definition,name:change_bank_account_definition"
+msgctxt "model:endorsement.definition,name:"
 msgid "Change Bank Account"
 msgstr "Changement du compte bancaire"
 
-msgctxt "model:endorsement.part,name:change_bank_account_endorsement_part"
+msgctxt ""
+"model:endorsement.definition,name:change_billing_information_definition"
+msgid "Change Billing Information"
+msgstr "Modification des paramètres de quittancement"
+
+msgctxt "model:endorsement.part,name:"
 msgid "Change Bank Account"
 msgstr "Changement du compte bancaire"
+
+msgctxt ""
+"model:endorsement.part,name:change_billing_information_endorsement_part"
+msgid "Change Billing Information"
+msgstr "Modification des paramètres de quittancement"
+
+msgctxt ""
+"selection:contract.billing_information.change.contract_displayer,to_propagate:"
+msgid "Bank Account"
+msgstr "Compte Bancaire"
+
+msgctxt ""
+"selection:contract.billing_information.change.contract_displayer,to_propagate:"
+msgid "Everything"
+msgstr "Tout"
+
+msgctxt ""
+"selection:contract.billing_information.change.contract_displayer,to_propagate:"
+msgid "Nothing"
+msgstr "Rien"
 
 msgctxt "selection:endorsement.contract.billing_information,action:"
 msgid "Add"
@@ -256,9 +312,17 @@ msgctxt "selection:endorsement.part,kind:"
 msgid "Billing Information"
 msgstr "Quittancement"
 
+msgctxt "view:contract.billing_information.change.contract_displayer:"
+msgid "Contracts"
+msgstr "Contrats"
+
 msgctxt "view:contract.billing_information.change:"
 msgid "Change Billing Information"
 msgstr "Modification des paramètres de quittancement"
+
+msgctxt "view:contract.billing_information:"
+msgid "Billing Information"
+msgstr "Quittancement"
 
 msgctxt "view:endorsement.contract.billing_information.field:"
 msgid "Endorsement Field"
@@ -273,12 +337,12 @@ msgid "Billing Informations"
 msgstr "Paramètres de quittancement"
 
 msgctxt ""
-"wizard_button:endorsement.start,change_billing_information,billing_information_next:"
+"wizard_button:endorsement.start,change_billing_information,change_billing_information_next:"
 msgid "Next"
 msgstr "Suivant"
 
 msgctxt ""
-"wizard_button:endorsement.start,change_billing_information,billing_information_previous:"
+"wizard_button:endorsement.start,change_billing_information,change_billing_information_previous:"
 msgid "Previous"
 msgstr "Précédent"
 

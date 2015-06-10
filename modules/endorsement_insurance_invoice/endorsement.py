@@ -22,6 +22,11 @@ class BillingInformation(object):
     __metaclass__ = PoolMeta
     __name__ = 'contract.billing_information'
 
+    @classmethod
+    def view_attributes(cls):
+        return [('/form/group[@id="invisible"]', 'states',
+                 {'invisible': True})]
+
 
 class Contract:
     __name__ = 'contract'

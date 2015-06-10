@@ -1,16 +1,16 @@
 import datetime
-from trytond.pool import PoolMeta
-from trytond.wizard import StateView, StateTransition, Button
-from trytond.pyson import Eval
+from trytond.pool import PoolMeta, Pool
+from trytond.pyson import Eval, Len, If
 
-from trytond.modules.cog_utils import model, fields
-from trytond.modules.endorsement import \
-    EndorsementWizardStepVersionedObjectMixin
+from trytond.modules.cog_utils import model, fields, utils
+from trytond.modules.endorsement import EndorsementWizardStepMixin
+from trytond.modules.endorsement import add_endorsement_step
 
 __metaclass__ = PoolMeta
 __all__ = [
     'BasicPreview',
     'ChangeBillingInformation',
+    'ContractDisplayer',
     'StartEndorsement',
     'RemoveOption',
     ]
@@ -74,12 +74,10 @@ class BasicPreview:
         return result
 
 
-class ChangeBillingInformation(EndorsementWizardStepVersionedObjectMixin,
-        model.CoopView):
+class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
     'Change Billing Information'
 
     __name__ = 'contract.billing_information.change'
-    _target_model = 'contract.billing_information'
 
     contract = fields.Many2One('contract', 'Contract', states={
             'readonly': True})
@@ -87,66 +85,279 @@ class ChangeBillingInformation(EndorsementWizardStepVersionedObjectMixin,
             'invisible': True})
     subscriber = fields.Many2One('party.party', 'Subscriber', states={
             'invisible': True})
+    new_billing_information = fields.One2Many('contract.billing_information',
+        None, 'New Billing Information', size=1, domain=[
+            ('billing_mode.products', '=', Eval('product')),
+            ['OR',
+                ('direct_debit_account.owners', '=', Eval('subscriber')),
+                ('direct_debit_account', '=', None)],
+            ['OR',
+                ('direct_debit', '=', False),
+                ('direct_debit_account', '!=', None)],
+            ], depends=['product', 'subscriber'])
+    previous_billing_information = fields.One2Many(
+        'contract.billing_information', None, 'Previous Billing Information',
+        readonly=True)
+    other_contracts = fields.One2Many(
+        'contract.billing_information.change.contract_displayer', None,
+        'Other Contracts', states={
+            'invisible': Len(Eval('other_contracts', [])) == 0})
 
     @classmethod
     def __setup__(cls):
         super(ChangeBillingInformation, cls).__setup__()
-        cls.new_value.domain = [
-            ('billing_mode.products', '=', Eval('product')),
-            ['OR',
-                [
-                    ('direct_debit', '=', False),
-                    ('direct_debit_account', '=', None),
-                ],
-                [
-                    ('direct_debit', '=', True),
-                    ('direct_debit_account.owners', '=', Eval('subscriber'))]]]
-        cls.new_value.depends = ['product', 'subscriber']
+        cls._error_messages.update({
+                'no_matching_invoice_date': 'The contract %s does not have '
+                'an invoice starting on the %s. Select another date.',
+                'unauthorized_date': 'The date %s is not compatible with '
+                'the billing mode %s.',
+                'direct_debit_account_required': 'Please set a  new direct '
+                'debit account !',
+                })
 
-    def update_endorsement(self, endorsement, wizard):
-        wizard.update_revision_endorsement(self, endorsement,
-            'billing_informations')
+    @fields.depends('contract', 'effective_date', 'new_billing_information',
+        'other_contracts', 'previous_billing_information')
+    def on_change_new_billing_information(self):
+        pool = Pool()
+        Contract = pool.get('contract')
+        Displayer = pool.get(
+            'contract.billing_information.change.contract_displayer')
+        new_info = self.new_billing_information[0]
+        previous_bank_account = \
+            self.previous_billing_information[0].direct_debit_account
+        if (not new_info.billing_mode or
+                not new_info.billing_mode.direct_debit or
+                not new_info.direct_debit_account or
+                not previous_bank_account or
+                new_info.direct_debit_account == previous_bank_account):
+            self.other_contracts = []
+            return
+        possible_contracts = {}
+        for contract in Contract.search([
+                    ('subscriber', '=', self.contract.subscriber.id),
+                    ('id', '!=', self.contract.id),
+                    ['OR', ('end_date', '=', None),
+                        ('end_date', '>=', self.effective_date)],
+                    ('billing_informations.direct_debit_account', '=',
+                        previous_bank_account.id)]):
+            for idx, cur_data in enumerate(reversed(
+                        contract.billing_informations)):
+                if cur_data.direct_debit and (cur_data.direct_debit_account ==
+                        previous_bank_account):
+                    possible_contracts[contract.id] = contract
+                    break
+                if (cur_data.date or datetime.date.min) < self.effective_date:
+                    break
+        if not possible_contracts:
+            self.other_contracts = []
+            return
+        new_contracts = [Displayer(contract=x.contract,
+                to_propagate=x.to_propagate) for x in self.other_contracts
+            if x.contract.id in possible_contracts]
+        new_contracts_id = [x.contract.id for x in new_contracts]
+        new_contracts += [Displayer(contract=x, to_propagate='nothing')
+            for x in possible_contracts.itervalues()
+            if x.id not in new_contracts_id]
+        self.other_contracts = new_contracts
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement_insurance_invoice.' + \
+            'change_billing_information_view_form'
+
+    @classmethod
+    def billing_information_fields(cls):
+        return ['billing_mode', 'contract', 'direct_debit',
+            'direct_debit_account', 'direct_debit_day',
+            'direct_debit_day_selector', 'is_once_per_contract',
+            'payment_term', 'possible_payment_terms']
+
+    @classmethod
+    def direct_debit_account_only_fields(cls):
+        return ['direct_debit_account']
+
+    def step_default(self, name):
+        defaults = super(ChangeBillingInformation, self).step_default()
+        base_endorsement = self.wizard.endorsement.contract_endorsements[0]
+        contract = base_endorsement.contract
+        base_instance = utils.get_good_versions_at_date(contract,
+                'billing_informations', self.effective_date, 'date')[0]
+        defaults.update({
+                'contract': contract.id,
+                'subscriber': contract.subscriber.id,
+                'product': contract.product.id,
+                })
+        defaults['previous_billing_information'] = [base_instance.id]
+        for endorsement in base_endorsement.billing_informations:
+            if endorsement.action != 'add':
+                continue
+            endorsement.values['contract'] = contract.id
+            defaults['new_billing_information'] = [endorsement.values]
+            break
+        else:
+            previous_values = self._get_default_values({}, base_instance,
+                self.billing_information_fields())
+            previous_values['date'] = self.effective_date
+            defaults['new_billing_information'] = [previous_values]
+        other_contracts = []
+        for contract_id, contract_endorsement in \
+                self._get_contracts().iteritems():
+            if contract_id == defaults['contract']:
+                continue
+            if not contract_endorsement.billing_informations:
+                other_contracts.append({'contract': contract_id,
+                        'to_propagate': 'nothing'})
+            else:
+                new_modification = [x
+                    for x in contract_endorsement.billing_informations
+                    if x.action in ('update', 'add')][0]
+                if (new_modification.values !=
+                        defaults['new_billing_information'][0]):
+                    other_contracts.append({'contract': contract_id,
+                            'to_propagate': 'bank_account'})
+                else:
+                    other_contracts.append({'contract': contract_id,
+                            'to_propagate': 'everything'})
+        defaults['other_contracts'] = other_contracts
+        return defaults
+
+    def step_update(self):
+        endorsement = self.wizard.select_endorsement.endorsement
+        self.do_update_endorsement(endorsement)
+        endorsement.save()
+
+    def do_update_endorsement(self, master_endorsement):
+        pool = Pool()
+        ContractEndorsement = pool.get('endorsement.contract')
+        BillingInformation = pool.get('contract.billing_information')
+        contract_endorsements = self._get_contracts()
+
+        master_contract = master_endorsement.contract_endorsements[0].contract
+        new_info = self.new_billing_information[0]
+        previous_account = self.previous_billing_information[
+            0].direct_debit_account
+
+        if (not new_info.direct_debit_account and
+                new_info.billing_mode.direct_debit):
+            self.raise_user_error('direct_debit_account_required')
+
+        values = new_info._save_values
+        values['contract'] = None
+        new_endorsements = []
+        for contract, action in [(master_contract, 'everything')] + [
+                (x.contract, x.to_propagate) for x in self.other_contracts]:
+
+            endorsement = contract_endorsements.get(contract.id, None)
+
+            # Retrieve endorsement's current version values
+            old_values = endorsement.apply_values() if endorsement else {}
+
+            # Clean up billing related values, as we are going to update them
+            if 'billing_informations' in old_values:
+                del old_values['billing_informations']
+
+            # Apply current modifications on contract
+            utils.apply_dict(contract, old_values)
+
+            # Remove future billing informations
+            contract_billing_informations = [x
+                for x in contract.billing_informations
+                if not x.date or x.date <= self.effective_date]
+
+            if action == 'everything':
+                if (contract_billing_informations[-1].date ==
+                        self.effective_date):
+                    # Update last billing_information, it matches the
+                    # endorsement date
+                    utils.apply_dict(contract_billing_informations[-1], values)
+                else:
+                    # Create a new billing information
+                    contract_billing_informations.append(BillingInformation(
+                            **values))
+            elif action == 'bank_account':
+                if (contract_billing_informations[-1].date ==
+                        self.effective_date):
+                    contract_billing_informations[-1].direct_debit_account = \
+                        new_info.direct_debit_account
+                elif (contract_billing_informations[-1].direct_debit_account ==
+                        previous_account):
+                    new_values = {x: getattr(contract_billing_informations[-1],
+                            x, None)
+                        for x in self.billing_information_fields()}
+                    for fname in self.direct_debit_account_only_fields():
+                        new_values[fname] = getattr(new_info, fname, None)
+                    contract_billing_informations.append(BillingInformation(
+                            **new_values))
+                for existing_info in contract.billing_informations:
+                    if (not existing_info.date or
+                            existing_info.date <= self.effective_date):
+                        continue
+                    contract_billing_informations.append(existing_info)
+                    if existing_info.direct_debit_account == previous_account:
+                        existing_info.direct_debit_account = \
+                            new_info.direct_debit_account
+            contract.billing_informations = contract_billing_informations
+
+            if endorsement is None:
+                endorsement = ContractEndorsement(contract=contract)
+
+            # Auto update endorsement from modified contract
+            self._update_endorsement(endorsement, contract._save_values)
+
+            if not endorsement.clean_up():
+                new_endorsements.append(endorsement)
+
+        master_endorsement.contract_endorsements = new_endorsements
+
+    @classmethod
+    def check_before_start(cls, select_screen):
+        pool = Pool()
+        ContractInvoice = pool.get('contract.invoice')
+        cur_parameters = (utils.get_good_versions_at_date(
+                select_screen.contract, 'billing_informations',
+                select_screen.effective_date,
+                'date') or select_screen.contract.billing_informations)[0]
+        billing_mode = cur_parameters.billing_mode
+        if select_screen.effective_date < utils.today():
+            # Make sure an invoice exists at this date
+            if not ContractInvoice.search([
+                        ('contract', '=', select_screen.contract.id),
+                        ('start', '=', select_screen.effective_date)]):
+                cls.append_functional_error('no_matching_invoice_date',
+                    (select_screen.contract.rec_name,
+                        select_screen.effective_date))
+        rrule, until = billing_mode.get_rrule(cur_parameters.date
+            or select_screen.contract.start_date,
+            until=select_screen.effective_date)
+        if datetime.datetime.combine(select_screen.effective_date,
+                datetime.datetime.min.time()) not in rrule:
+            if select_screen.effective_date != (cur_parameters.date or
+                    select_screen.contract.start_date):
+                cls.append_functional_error('unauthorized_date', (
+                        select_screen.effective_date, billing_mode.rec_name))
+
+
+class ContractDisplayer(model.CoopView):
+    'Contract Displayer'
+
+    __name__ = 'contract.billing_information.change.contract_displayer'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    to_propagate = fields.Selection([('nothing', 'Nothing'),
+            ('bank_account', 'Bank Account'), ('everything', 'Everything')],
+        'Propagate')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(ContractDisplayer, cls).view_attributes() + [
+            ('/tree', 'colors', If(Eval('to_propagate', '') == 'bank_account',
+                    'green', If(Eval('to_propagate', '') == 'everything',
+                        'blue', 'black')))]
 
 
 class StartEndorsement:
     __name__ = 'endorsement.start'
 
-    change_billing_information = StateView(
-        'contract.billing_information.change',
-        'endorsement_insurance_invoice.change_billing_information_view_form',
-        [Button('Previous', 'billing_information_previous',
-                'tryton-go-previous'),
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Suspend', 'change_billing_information_suspend',
-                'tryton-save'),
-            Button('Next', 'billing_information_next', 'tryton-go-next',
-                default=True)])
-    change_billing_information_suspend = StateTransition()
-    billing_information_next = StateTransition()
-    billing_information_previous = StateTransition()
 
-    def transition_change_billing_information_suspend(self):
-        self.end_current_part('change_billing_information')
-        return 'end'
-
-    def default_change_billing_information(self, name):
-        result = self.get_revision_state_defaults(
-            'change_billing_information', 'contract.billing_information',
-            'billing_informations',
-            'contract_insurance_invoice.'
-            'contract_billing_information_view_form')
-        endorsement_part = self.get_endorsement_part_for_state(
-            'change_billing_information')
-        contract = self.get_endorsed_object(endorsement_part)
-        result['product'] = contract.product.id
-        result['subscriber'] = contract.subscriber.id
-        result['contract'] = self.get_endorsed_object(endorsement_part).id
-        return result
-
-    def transition_billing_information_next(self):
-        self.end_current_part('change_billing_information')
-        return self.get_next_state('change_billing_information')
-
-    def transition_billing_information_previous(self):
-        self.end_current_part('change_billing_information')
-        return self.get_state_before('change_billing_information')
+add_endorsement_step(StartEndorsement, ChangeBillingInformation,
+    'change_billing_information')

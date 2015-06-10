@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<form string="Billing Information">
+    <label name="billing_mode"/>
+    <field name="billing_mode" widget="selection" xexpand="0"/>
+    <newline/>
+    <label name="direct_debit_day_selector"/>
+    <field name="direct_debit_day_selector"/>
+    <label name="direct_debit_account"/>
+    <field name="direct_debit_account"/>
+    <newline/>
+    <label name="payment_term"/>
+    <field name="payment_term" widget="selection"/>
+    <newline/>
+    <group id="invisible" string="">
+        <field name="date"/>
+        <field name="contract"/>
+        <field name="direct_debit"/>
+    </group>
+</form>

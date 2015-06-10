@@ -18,5 +18,13 @@
             <field name="type">form</field>
             <field name="name">change_billing_information_form</field>
         </record>
+        <!-- ###################### -->
+        <!-- # Contract Displayer # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="contract_displayer_view_list">
+            <field name="model">contract.billing_information.change.contract_displayer</field>
+            <field name="type">tree</field>
+            <field name="name">contract_displayer_list</field>
+        </record>
     </data>
 </tryton>

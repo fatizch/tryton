@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<tree string="Contracts" editable="bottom">
+    <field name="to_propagate"/>
+    <field name="contract"/>
+</tree>

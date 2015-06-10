@@ -17,6 +17,7 @@ def register():
         EndorsementDefinition,
         EndorsementPart,
         ChangeBillingInformation,
+        ContractDisplayer,
         BasicPreview,
         RemoveOption,
         Configuration,
