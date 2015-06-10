@@ -2,9 +2,9 @@
 <data>
     <xpath expr="/form/field[@name='origin']" position="after">
         <newline/>
-        <label name="commissionned_contract"/>
-        <field name="commissionned_contract"/>
-        <label name="commissionned_option"/>
-        <field name="commissionned_option"/>
+        <label name="commissioned_contract"/>
+        <field name="commissioned_contract"/>
+        <label name="commissioned_option"/>
+        <field name="commissioned_option"/>
     </xpath>
 </data>

@@ -26,12 +26,12 @@ __metaclass__ = PoolMeta
 
 class Commission:
     __name__ = 'commission'
-    commissionned_contract = fields.Function(
+    commissioned_contract = fields.Function(
         fields.Many2One('contract', 'Commissioned Contract'),
-        'get_commissionned_contract')
-    commissionned_option = fields.Function(
+        'get_commissioned_contract')
+    commissioned_option = fields.Function(
         fields.Many2One('contract.option', 'Commissioned Option'),
-        'get_commissionned_option')
+        'get_commissioned_option')
     party = fields.Function(
         fields.Many2One('party.party', 'Party'),
         'get_party', searcher='search_party')
@@ -45,13 +45,13 @@ class Commission:
         cls.invoice_line.select = True
         cls.type_.searcher = 'search_type_'
 
-    def get_commissionned_option(self, name):
+    def get_commissioned_option(self, name):
         if self.origin and self.origin.details[0]:
             option = self.origin.details[0].get_option()
             if option:
                 return option.id
 
-    def get_commissionned_contract(self, name):
+    def get_commissioned_contract(self, name):
         if self.origin and self.origin.details[0]:
             option = self.origin.details[0].get_option()
             if option:
@@ -118,10 +118,10 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
     commissioned_products = fields.Function(
         fields.Many2Many('offered.product', None, None,
             'Commissioned Products'),
-        'get_commissionned_products', searcher='search_commissioned_products')
+        'get_commissioned_products', searcher='search_commissioned_products')
     commissioned_products_name = fields.Function(
         fields.Char('Commissioned Products'),
-        'get_commissionned_products_name',
+        'get_commissioned_products_name',
         searcher='search_commissioned_products')
 
     @classmethod
@@ -181,14 +181,14 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
             return self.code
         return coop_string.slugify(self.name)
 
-    def get_commissionned_products(self, name):
+    def get_commissioned_products(self, name):
         products = []
         for line in self.lines:
             for option in line.options:
                 products.extend([product.id for product in option.products])
         return list(set(products))
 
-    def get_commissionned_products_name(self, name):
+    def get_commissioned_products_name(self, name):
         return ', '.join([x.name for x in self.commissioned_products])
 
     @classmethod

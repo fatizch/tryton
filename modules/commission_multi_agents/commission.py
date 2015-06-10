@@ -48,7 +48,7 @@ class Agent:
 
     def fill_commissioned_agents(self):
         agents = []
-        for agent in self.plan.commissionned_agents:
+        for agent in self.plan.commissioned_agents:
             agents.append(agent)
         for agent in self.commissioned_agents:
             agents.append(agent)
@@ -76,7 +76,7 @@ class Plan:
     second_level_commission = fields.Boolean('Second level commission',
         states={'invisible': Eval('type_') != 'agent'},
         depends=['type_'])
-    commissionned_agents = fields.Many2Many('commission_plan-agent', 'plan',
+    commissioned_agents = fields.Many2Many('commission_plan-agent', 'plan',
         'agent', 'Commissioned Agents',
         domain=[('second_level_commission', '=', True)],
         states={'invisible': Eval('type_') != 'agent'},
@@ -84,7 +84,7 @@ class Plan:
 
     @classmethod
     def _export_light(cls):
-        return super(Plan, cls)._export_light() | {'commissionned_agents'}
+        return super(Plan, cls)._export_light() | {'commissioned_agents'}
 
 
 class PlanAgentRelation(model.CoopSQL, model.CoopView):

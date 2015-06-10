@@ -50,7 +50,7 @@ msgctxt "field:commission.agent-agent,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:commission.plan,commissionned_agents:"
+msgctxt "field:commission.plan,commissioned_agents:"
 msgid "Commissioned Agents"
 msgstr "Protocoles de commissionnement liés"
 

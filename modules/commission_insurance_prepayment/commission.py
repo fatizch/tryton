@@ -73,14 +73,14 @@ class Commission:
                 ('option', self.origin.details[0].get_option()))
         return (('agent', self.agent), ('option', None))
 
-    def get_commissionned_option(self, name):
+    def get_commissioned_option(self, name):
         if not self.is_prepayment:
-            return super(Commission, self).get_commissionned_option(name)
+            return super(Commission, self).get_commissioned_option(name)
         return self.origin.id
 
-    def get_commissionned_contract(self, name):
+    def get_commissioned_contract(self, name):
         if not self.is_prepayment:
-            return super(Commission, self).get_commissionned_contract(name)
+            return super(Commission, self).get_commissioned_contract(name)
         return self.origin.parent_contract.id
 
     @classmethod

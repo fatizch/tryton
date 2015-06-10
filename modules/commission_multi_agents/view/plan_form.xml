@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form/notebook/page[@id='admin']/field[@name='tags']" position="before">
-        <field name="commissionned_agents" colspan="2"/>
+        <field name="commissioned_agents" colspan="2"/>
     </xpath>
     <xpath expr="/form/field[@name='type_']" position="after">
         <label name="second_level_commission"/>
