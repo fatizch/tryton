@@ -7,4 +7,9 @@
         <label name="commissioned_option"/>
         <field name="commissioned_option"/>
     </xpath>
+    <xpath expr="/form/field[@name='amount']" position="after">
+        <newline/>
+        <label name="commission_rate"/>
+        <field name="commission_rate"/>
+    </xpath>
 </data>

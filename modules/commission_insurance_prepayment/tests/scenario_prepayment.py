@@ -160,10 +160,10 @@ Wizard('contract.activate', models=[contract]).execute('apply')
 # #Comment# #Check prepayment commission creation
 Commission = Model.get('commission')
 commissions = Commission.find([()])
-[(x.amount, x.is_prepayment, x.redeemed_prepayment, x.agent.party.name)
-    for x in commissions] == [
-    (Decimal('720.0000'), True, None, 'Broker'),
-    (Decimal('360.0000'), True, None, 'Insurer')]
+[(x.amount, x.commission_rate, x.is_prepayment, x.redeemed_prepayment,
+    x.agent.party.name) for x in commissions] == [
+    (Decimal('720.0000'), Decimal('60.0'), True, None, 'Broker'),
+    (Decimal('360.0000'), Decimal('30.0'), True, None, 'Insurer')]
 # #Res# #True
 
 # #Comment# #Create invoices

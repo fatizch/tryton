@@ -73,14 +73,20 @@ class ContractOption:
         first_year_premium = sum([line.unit_price for line in lines])
         return first_year_premium
 
-    def _get_prepayment_amount(self, agent, plan, pattern=None):
+    def _get_prepayment_amount_and_rate(self, agent, plan, pattern=None):
         pattern = {
             'first_year_premium': self.first_year_premium,
             'coverage': self.coverage,
             'agent': agent,
             'option': self,
             }
-        return plan.compute_prepayment(self.product, pattern=pattern)
+        amount = plan.compute_prepayment(self.product, pattern=pattern)
+        if amount:
+            rate = (amount / pattern['first_year_premium'] * 100).quantize(
+                Decimal('.01'))
+        else:
+            rate = None
+        return amount, rate
 
     def compute_prepayment(self, adjustment):
         pool = Pool()
@@ -97,7 +103,7 @@ class ContractOption:
         paid_prepayments = Agent.paid_prepayments([(x[0].id, self.id)
                 for x in agents_plans_to_compute])
         for agent, plan in agents_plans_to_compute:
-            amount = self._get_prepayment_amount(agent, plan)
+            amount, rate = self._get_prepayment_amount_and_rate(agent, plan)
             if amount is None:
                 continue
 
@@ -125,6 +131,7 @@ class ContractOption:
                 commission.origin = self
                 commission.agent = agent
                 commission.product = plan.commission_product
+                commission.commission_rate = rate
                 commission.amount = percentage * amount
                 commissions.append(commission)
 

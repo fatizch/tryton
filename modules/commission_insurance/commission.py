@@ -38,6 +38,7 @@ class Commission:
     broker = fields.Function(
         fields.Many2One('distribution.network', 'Broker'),
         'get_broker', searcher='search_broker')
+    commission_rate = fields.Numeric('Commission Rate')
 
     @classmethod
     def __setup__(cls):

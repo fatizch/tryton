@@ -214,9 +214,10 @@ Create invoice::
     >>> first_invoice, = ContractInvoice.find([('contract', '=', contract.id)])
     >>> first_invoice.invoice.total_amount == Decimal('120')
     True
-    >>> set([(x.amount, x.account.code) for x in first_invoice.invoice.lines]) == set([
-    ...         (Decimal('20'), u'broker_fee_account'),
-    ...         (Decimal('100'), None)])
+    >>> set([(x.amount, x.account.code)
+    ...     for x in first_invoice.invoice.lines]) == set([
+    ...             (Decimal('20'), u'broker_fee_account'),
+    ...             (Decimal('100'), None)])
     True
 
 Post Invoice::
@@ -225,8 +226,10 @@ Post Invoice::
     >>> line = first_invoice.invoice.lines[1]
     >>> len(line.commissions)
     2
-    >>> set([(x.amount, x.agent.party.name) for x in line.commissions]) == set([
-    ...     (Decimal('10'), u'Broker'), (Decimal('60'), u'Insurer')])
+    >>> set([(x.amount, x.commission_rate, x.agent.party.name)
+    ...     for x in line.commissions]) == set([
+    ...             (Decimal('10'), Decimal('10'), u'Broker'),
+    ...             (Decimal('60'), Decimal('60'), u'Insurer')])
     True
 
 Pay invoice::

@@ -197,9 +197,10 @@ Contract.first_invoice([contract.id], config.context)
 first_invoice, = ContractInvoice.find([('contract', '=', contract.id)])
 first_invoice.invoice.total_amount == Decimal('120')
 # #Res# #True
-set([(x.amount, x.account.code) for x in first_invoice.invoice.lines]) == set([
-        (Decimal('20'), u'broker_fee_account'),
-        (Decimal('100'), None)])
+set([(x.amount, x.account.code)
+    for x in first_invoice.invoice.lines]) == set([
+            (Decimal('20'), u'broker_fee_account'),
+            (Decimal('100'), None)])
 # #Res# #True
 
 # #Comment# #Post Invoice
@@ -207,8 +208,10 @@ first_invoice.invoice.click('post')
 line = first_invoice.invoice.lines[1]
 len(line.commissions)
 # #Res# #2
-set([(x.amount, x.agent.party.name) for x in line.commissions]) == set([
-    (Decimal('10'), u'Broker'), (Decimal('60'), u'Insurer')])
+set([(x.amount, x.commission_rate, x.agent.party.name)
+    for x in line.commissions]) == set([
+            (Decimal('10'), Decimal('10'), u'Broker'),
+            (Decimal('60'), Decimal('60'), u'Insurer')])
 # #Res# #True
 
 # #Comment# #Pay invoice

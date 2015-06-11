@@ -53,11 +53,14 @@ class InvoiceLine:
                     self.amount, agent.currency, round=False)
             if self.invoice.type == 'out_credit_note':
                 amount *= -1
-            amount = self._get_commission_amount(amount, plan, agent=agent)
-            if amount:
-                digits = Commission.amount.digits
-                amount = amount.quantize(Decimal(str(10.0 ** -digits[1])))
-            if not amount:
+            commission_amount = self._get_commission_amount(amount, plan,
+                agent=agent)
+            if commission_amount:
+                commission_rate = (commission_amount / amount * 100).quantize(
+                    Decimal('.01'))
+                commission_amount = commission_amount.quantize(Decimal(str(
+                            10.0 ** -self.currency_digits)))
+            if not commission_amount:
                 continue
 
             commission = Commission()
@@ -66,7 +69,8 @@ class InvoiceLine:
                 commission.date = today
             commission.agent = agent
             commission.product = plan.commission_product
-            commission.amount = amount
+            commission.amount = commission_amount
+            commission.commission_rate = commission_rate
             commissions.append(commission)
         return commissions
 
@@ -86,9 +90,7 @@ class InvoiceLine:
                     }
         pattern['invoice_line'] = self
         commission_amount = plan.compute(amount, self.product, pattern)
-        if commission_amount:
-            return commission_amount.quantize(
-                Decimal(str(10.0 ** -self.currency_digits)))
+        return commission_amount
 
     def get_move_line(self):
         lines = super(InvoiceLine, self).get_move_line()
