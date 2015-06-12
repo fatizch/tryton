@@ -195,12 +195,20 @@ class Party(export.ExportImportMixin):
 
     @classmethod
     def copy(cls, parties, default=None):
-        if default is None:
-            default = {}
-        else:
-            default = default.copy()
+        default = default.copy() if default else {}
         default.setdefault('synthesis', None)
-        return super(Party, cls).copy(parties, default=default)
+        default.setdefault('first_name', 'temp_for_copy')
+        default.setdefault('name', 'temp_for_copy')
+        clones = super(Party, cls).copy(parties, default=default)
+        for clone, original in zip(clones, parties):
+            if original.first_name:
+                clone.first_name = '%s_1' % original.first_name
+                clone.name = original.name
+            else:
+                clone.first_name = ''
+                clone.name = '%s_1' % original.name
+        cls.save(clones)
+        return clones
 
     @staticmethod
     def order_last_modification(tables):
