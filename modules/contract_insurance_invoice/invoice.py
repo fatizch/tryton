@@ -300,7 +300,8 @@ class Invoice:
                     (invoice_table.state == 'paid')),
                 group_by=[invoice_table.id]))
 
-            result.update(dict(cursor.fetchall()))
+            for k, v in cursor.fetchall():
+                result[k] = v.date()
         return result
 
     def _get_tax_context(self):
