@@ -226,7 +226,6 @@ class Payment:
             payment = payments_list[0]
             sepa_mandate = None
             payment_date = None
-            action = key[1].get_fail_action(payments_list)
             # one reject invoice per different end_to_end_id only
             reject_fee = JournalFailureAction.get_rejected_payment_fee(
                 payment.sepa_return_reason_code)
@@ -235,7 +234,8 @@ class Payment:
             fee_amount = reject_fee.amount
             if fee_amount == 0:
                 continue
-            if action == 'retry':
+            if 'retry' in [action[0] for action in
+                    key[1].get_fail_actions(payments_list)]:
                 sepa_mandate = payment.sepa_mandate
                 payment_date = payment.journal.get_next_possible_payment_date(
                         payment.line, payment.date.day)

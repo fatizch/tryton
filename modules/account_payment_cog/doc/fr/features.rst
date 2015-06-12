@@ -6,6 +6,7 @@
 
     - Paramétrage des raisons d'un rejet
     - Paramétrage par raisons des actions à exécuter suite à un rejet
+    - Paramétrage de la lettre de notification de rejet selon la raison de rejet
 
 - **Blocage des reversements d'un acteur**
     Il est possible de bloquer depuis un acteur tous les versements qu'on aurait

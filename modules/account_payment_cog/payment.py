@@ -10,6 +10,7 @@ from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import coop_string, export, fields, model
 from trytond.modules.cog_utils import coop_date, utils
+from trytond.modules.report_engine import Printable
 
 __metaclass__ = PoolMeta
 
@@ -19,7 +20,7 @@ __all__ = [
     'Journal',
     'JournalFailureAction',
     'RejectReason',
-    'Group'
+    'Group',
     ]
 
 
@@ -34,7 +35,7 @@ class Journal(export.ExportImportMixin):
     default_reject_fee = fields.Many2One('account.fee',
         'Default Fee', ondelete='RESTRICT')
 
-    def get_fail_action(self, payments):
+    def get_fail_actions(self, payments):
         """
             Payments is a list of payments processed in the same payment
             transaction
@@ -48,8 +49,11 @@ class Journal(export.ExportImportMixin):
         for action in possible_actions:
             if (not action.reject_number or
                     action.reject_number == payment_reject_number):
-                return action.action
-        return ('manual')
+                actions = [(action.action, )]
+                if action.report_template:
+                    actions.append(('print', action.report_template))
+                return actions
+        return [('manual',)]
 
     @classmethod
     def _export_light(cls):
@@ -85,6 +89,9 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
         'action will be used for all rejects')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
+    report_template = fields.Many2One('report.template', 'Report Template',
+        domain=[('kind', '=', 'reject_payment')],
+        ondelete='RESTRICT')
 
     @classmethod
     def __register__(cls, module_name):
@@ -186,7 +193,7 @@ class RejectReason(model.CoopSQL, model.CoopView):
             ]
 
 
-class Payment(export.ExportImportMixin):
+class Payment(export.ExportImportMixin, Printable):
     __name__ = 'account.payment'
     _func_key = 'id'
 
@@ -212,7 +219,6 @@ class Payment(export.ExportImportMixin):
     def __setup__(cls):
         super(Payment, cls).__setup__()
         cls._error_messages.update({
-                'action_not_found': 'Action "%s" not found for payments %s',
                 'payments_blocked_for_party': 'Payments blocked for party %s',
                 })
 
@@ -265,13 +271,13 @@ class Payment(export.ExportImportMixin):
         payments_keys = sorted(payments_keys, key=lambda x: x[0])
         for key, payments in groupby(payments_keys, key=lambda x: x[0]):
             payments_list = [payment[1] for payment in payments]
-            action = key[1].get_fail_action(payments_list)
-            if action:
-                actions['fail_%s' % action].extend(payments_list)
-            else:
-                cls.raise_user_error('action_not_found', (
-                    payments_list[0].fail_code, ', '.join(payment.rec_name
-                        for payment in payments_list)))
+            reject_actions = key[1].get_fail_actions(payments_list)
+            for action in reject_actions:
+                if action[0] == 'print':
+                    actions['fail_print'].extend([(action[1],
+                        payments_list)])
+                else:
+                    actions['fail_%s' % action[0]].extend(payments_list)
 
         for action, payments in actions.iteritems():
             getattr(cls, action)(payments)
@@ -285,6 +291,11 @@ class Payment(export.ExportImportMixin):
     @classmethod
     def fail_retry(cls, payments):
         pass
+
+    @classmethod
+    def fail_print(cls, to_prints):
+        for report, payments in to_prints:
+            report.produce_reports(payments, direct_print=True)
 
     @fields.depends('line')
     def on_change_line(self):
@@ -319,6 +330,15 @@ class Payment(export.ExportImportMixin):
         Event = pool.get('event')
         super(Payment, cls).succeed(payments)
         Event.notify_events(payments, 'succeed_payment')
+
+    def get_doc_template_kind(self):
+        return 'reject_payment'
+
+    def get_contact(self):
+        return self.party
+
+    def get_sender(self):
+        return self.company.party
 
 
 class Configuration:

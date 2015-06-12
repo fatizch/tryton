@@ -12,4 +12,6 @@
     <field name="is_fee_required"/>
     <label name="rejected_payment_fee"/>
     <field name="rejected_payment_fee"/>
+    <label name="report_template"/>
+    <field name="report_template"/>
 </form>
