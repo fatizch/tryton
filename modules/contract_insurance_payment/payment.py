@@ -78,7 +78,7 @@ class Payment:
             next_invoice_date = max(payment.line.move.origin.end
                 for payment in grouped_payments
                 if (payment.line.move.origin and
-                    getattr(payment.line.move.origin, 'end', None))
+                    getattr(payment.line.move.origin, 'end', None)))
             next_invoice_date += relativedelta(days=1)
 
             new_billing_information = ContractBillingInformation(
