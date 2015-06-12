@@ -36,13 +36,15 @@ class ChangeBillingInformation:
             self).on_change_new_billing_information()
         Mandate = Pool().get('account.payment.sepa.mandate')
         new_info = self.new_billing_information[0]
-        if not(new_info.direct_debit and new_info.direct_debit_account):
+        if not(new_info.direct_debit and (new_info.direct_debit_account
+                    or new_info.direct_debit_account_selector)):
             self.mandate_needed = False
             return
         possible_mandates = Mandate.search([
                 ('party', '=', self.subscriber.id),
                 ('account_number.account', '=',
-                    new_info.direct_debit_account.id)])
+                    (new_info.direct_debit_account or
+                        new_info.direct_debit_account_selector).id)])
         if possible_mandates:
             self.mandate_needed = False
             self.new_billing_information[0].sepa_mandate = possible_mandates[0]
@@ -66,18 +68,20 @@ class ChangeBillingInformation:
         defaults['mandate_needed'] = False
         return defaults
 
-    def step_update(self):
+    def set_subscriber_as_account_owner(self):
+        super(ChangeBillingInformation, self).set_subscriber_as_account_owner()
         pool = Pool()
         Mandate = pool.get('account.payment.sepa.mandate')
-        new_info = self.new_billing_information[0]
         if self.mandate_needed:
+            new_info = self.new_billing_information[0]
+            account = (new_info.direct_debit_account or
+                new_info.direct_debit_account_selector)
             self.raise_user_warning('new_mandate_creation',
                 'new_mandate_creation', {})
             new_mandate = Mandate()
             new_mandate.party = self.contract.subscriber
             new_mandate.account_number = [x
-                for x in new_info.direct_debit_account.numbers
-                if x.type == 'iban'][0]
+                for x in account.numbers if x.type == 'iban'][0]
             new_mandate.signature_date = self.sepa_signature_date
             new_mandate.company = self.contract.company
             new_mandate.state = 'validated'
@@ -85,7 +89,6 @@ class ChangeBillingInformation:
             new_mandate.scheme = 'CORE'
             new_mandate.save()
             new_info.sepa_mandate = new_mandate
-        super(ChangeBillingInformation, self).step_update()
 
 
 class ChangeDirectDebitAccount(ChangeBillingInformation):

@@ -2,7 +2,7 @@ import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or, Bool
 
 from trytond.modules.cog_utils import model, fields
 from trytond.modules.endorsement import relation_mixin
@@ -22,10 +22,48 @@ class BillingInformation(object):
     __metaclass__ = PoolMeta
     __name__ = 'contract.billing_information'
 
+    direct_debit_account_selector = fields.Function(
+        fields.Many2One('bank.account', 'Bank Account', states={
+                'invisible': ~Eval('search_all_direct_debit_account')},
+            depends=['search_all_direct_debit_account']),
+        'get_direct_debit_account_selector', 'setter_void')
+    search_all_direct_debit_account = fields.Function(
+        fields.Boolean('Search all direct debit accounts',
+            states={'invisible': Or(~Eval('direct_debit'),
+                    Bool(Eval('direct_debit_account', False)))},
+            depends=['direct_debit']),
+        'get_search_all_direct_debit_account', 'setter_void')
+
+    @classmethod
+    def __setup__(cls):
+        super(BillingInformation, cls).__setup__()
+        cls.direct_debit_account.states['invisible'] = Or(
+            cls.direct_debit_account.states['invisible'],
+            Eval('search_all_direct_debit_account', False))
+        cls.direct_debit_account.depends += ['search_all_direct_debit_account']
+
     @classmethod
     def view_attributes(cls):
         return [('/form/group[@id="invisible"]', 'states',
                  {'invisible': True})]
+
+    @fields.depends('contract', 'direct_debit_account',
+        'direct_debit_account_selector', 'search_all_direct_debit_account')
+    def on_change_direct_debit_account_selector(self):
+        if not self.direct_debit_account_selector:
+            return
+        if (self.contract.subscriber in
+                self.direct_debit_account_selector.owners):
+            self.direct_debit_account = self.direct_debit_account_selector
+            self.direct_debit_account_selector = None
+            self.search_all_direct_debit_account = False
+            return
+
+    def get_direct_debit_account_selector(self, name):
+        return None
+
+    def get_search_all_direct_debit_account(self, name):
+        return False
 
 
 class Contract:

@@ -114,6 +114,8 @@ class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
                 'the billing mode %s.',
                 'direct_debit_account_required': 'Please set a  new direct '
                 'debit account !',
+                'subscriber_not_account_owner': 'Subscriber does not own this '
+                'account, do you want it to change ?',
                 })
 
     @fields.depends('contract', 'effective_date', 'new_billing_information',
@@ -126,11 +128,13 @@ class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
         new_info = self.new_billing_information[0]
         previous_bank_account = \
             self.previous_billing_information[0].direct_debit_account
+        new_bank_account = (new_info.direct_debit_account or
+            new_info.direct_debit_account_selector)
         if (not new_info.billing_mode or
                 not new_info.billing_mode.direct_debit or
-                not new_info.direct_debit_account or
+                not new_bank_account or
                 not previous_bank_account or
-                new_info.direct_debit_account == previous_bank_account):
+                new_bank_account == previous_bank_account):
             self.other_contracts = []
             return
         possible_contracts = {}
@@ -224,8 +228,31 @@ class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
 
     def step_update(self):
         endorsement = self.wizard.select_endorsement.endorsement
+        self.set_subscriber_as_account_owner()
         self.do_update_endorsement(endorsement)
         endorsement.save()
+
+    def set_subscriber_as_account_owner(self):
+        new_info = self.new_billing_information[0]
+        if new_info.direct_debit_account:
+            return
+        if not new_info.direct_debit_account_selector:
+            return
+        new_info.search_all_direct_debit_account = False
+        if (self.subscriber in
+                new_info.direct_debit_account_selector.owners):
+            new_info.direct_debit_account = \
+                new_info.direct_debit_account_selector
+            new_info.direct_debit_account_selector = None
+            return
+        self.raise_user_warning(
+            new_info.direct_debit_account_selector.number,
+            'subscriber_not_account_owner')
+        new_info.direct_debit_account_selector.owners = list(
+            new_info.direct_debit_account_selector.owners) + [self.subscriber]
+        new_info.direct_debit_account_selector.save()
+        new_info.direct_debit_account = new_info.direct_debit_account_selector
+        new_info.direct_debit_account_selector = None
 
     def do_update_endorsement(self, master_endorsement):
         pool = Pool()
@@ -244,6 +271,8 @@ class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
 
         values = new_info._save_values
         values['contract'] = None
+        values.pop('direct_debit_account_selector', None)
+        values.pop('search_all_direct_debit_account', None)
         new_endorsements = []
         for contract, action in [(master_contract, 'everything')] + [
                 (x.contract, x.to_propagate) for x in self.other_contracts]:

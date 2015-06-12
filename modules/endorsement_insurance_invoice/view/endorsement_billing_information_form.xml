@@ -5,8 +5,14 @@
     <newline/>
     <label name="direct_debit_day_selector"/>
     <field name="direct_debit_day_selector"/>
-    <label name="direct_debit_account"/>
-    <field name="direct_debit_account"/>
+    <group id="direct_debit" string="" colspan="2" col="7">
+        <label name="direct_debit_account"/>
+        <field name="direct_debit_account"/>
+        <label name="direct_debit_account_selector"/>
+        <field name="direct_debit_account_selector"/>
+        <label name="search_all_direct_debit_account"/>
+        <field name="search_all_direct_debit_account"/>
+    </group>
     <newline/>
     <label name="payment_term"/>
     <field name="payment_term" widget="selection"/>

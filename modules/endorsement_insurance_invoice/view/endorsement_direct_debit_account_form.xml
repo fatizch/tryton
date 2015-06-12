@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
-<form string="Billing Information">
+<form string="Billing Information" col="6">
     <label name="direct_debit_account"/>
     <field name="direct_debit_account"/>
-    <newline/>
+    <label name="direct_debit_account_selector"/>
+    <field name="direct_debit_account_selector"/>
+    <label name="search_all_direct_debit_account"/>
+    <field name="search_all_direct_debit_account"/>
     <group id="invisible" string="">
         <field name="date"/>
         <field name="contract"/>
