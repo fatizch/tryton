@@ -1,4 +1,6 @@
+import codecs
 import datetime
+import os
 from sql.operators import Concat
 
 from trytond import backend
@@ -9,7 +11,6 @@ from trytond.model import fields as tryton_fields
 import fields
 import utils
 from export import ExportImportMixin
-
 
 __metaclass__ = PoolMeta
 
@@ -30,6 +31,7 @@ __all__ = [
     'Property',
     'Lang',
     'Icon',
+    'Translation',
     ]
 SEPARATOR = ' / '
 
@@ -382,3 +384,31 @@ class Lang(ExportImportMixin):
 
 class Icon(ExportImportMixin):
     __name__ = 'ir.ui.icon'
+
+
+class Translation:
+    __name__ = 'ir.translation'
+
+    @classmethod
+    def translation_export(cls, lang, module):
+        res = super(Translation, cls).translation_export(lang, module)
+        override_trans_file = os.path.normpath(os.path.join(
+            os.path.dirname(__file__), '..', module, 'locale',
+            lang + '_custom.po'))
+        if os.path.exists(override_trans_file):
+            custom_data = '\n# Custom translations below\n\n'
+            with codecs.open(override_trans_file, encoding='utf-8') as f:
+                data = [x for x in f.readlines() if x.strip() and not
+                    x.strip().startswith('#')]
+                # Sort translations blocks to facilitate maintenance of
+                # custom.po file by copy-pasting back from resulting .po if
+                # needed.
+                # A block is composed of three lines (msgctxt, msgid, msgstr)
+                for trans_block in sorted(utils.chunker(data, 3),
+                        key=lambda x: x[0]):
+                    # Cannot have two translations blocks referring to same
+                    # element
+                    if str(trans_block[0].strip()) not in res:
+                        custom_data += ''.join(trans_block) + '\n'
+            res += unicode(custom_data).encode('utf-8')
+        return res

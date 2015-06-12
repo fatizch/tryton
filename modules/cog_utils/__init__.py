@@ -64,6 +64,7 @@ def register():
         EventType,
         ExportSummary,
         ExportConfigurationSelection,
+        Translation,
         Attachment,
         module='cog_utils', type_='model')
     if config.get('env', 'testing') == 'True':

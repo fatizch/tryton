@@ -20,6 +20,7 @@ from trytond.model.modelstorage import EvalEnvironment
 __all__ = []
 
 
+
 def get_module_name(cls):
     return cls.__name__.split('.')[0]
 
@@ -348,6 +349,7 @@ def get_json_from_pyson(pyson):
     return ''.join([x if x != '"' else '&quot;' for x in encoded])
 
 
+
 def get_domain_instances(record, field_name):
     field = record._fields[field_name]
     if isinstance(field, fields.Function):
@@ -649,3 +651,7 @@ def apply_dict(instance, data_dict):
             setattr(instance, k, clean_list + new_values)
         else:
             setattr(instance, k, v)
+
+
+def chunker(seq, size):
+    return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
