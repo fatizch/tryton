@@ -87,7 +87,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
     subscriber = fields.Many2One('party.party', 'Subscriber', states={
             'invisible': True})
     new_billing_information = fields.One2Many('contract.billing_information',
-        None, 'New Billing Information', size=1, domain=[
+        'contract', 'New Billing Information', size=1, domain=[
             ('billing_mode.products', '=', Eval('product')),
             ['OR',
                 ('direct_debit_account.owners', '=', Eval('subscriber')),
@@ -193,16 +193,22 @@ class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
                 'product': contract.product.id,
                 })
         defaults['previous_billing_information'] = [base_instance.id]
+        updated = None
         for endorsement in base_endorsement.billing_informations:
+            if (endorsement.action == 'update' and
+                    endorsement.values.get('date', None) ==
+                    self.effective_date):
+                updated = endorsement
             if endorsement.action != 'add':
                 continue
-            endorsement.values['contract'] = contract.id
             defaults['new_billing_information'] = [endorsement.values]
             break
         else:
             previous_values = self._get_default_values({}, base_instance,
                 self.billing_information_fields())
             previous_values['date'] = self.effective_date
+            if updated:
+                previous_values.update(updated.values)
             defaults['new_billing_information'] = [previous_values]
         other_contracts = []
         for contract_id, contract_endorsement in \
@@ -270,7 +276,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
             self.raise_user_error('direct_debit_account_required')
 
         values = new_info._save_values
-        values['contract'] = None
+        values.pop('contract', None)
         values.pop('direct_debit_account_selector', None)
         values.pop('search_all_direct_debit_account', None)
         new_endorsements = []

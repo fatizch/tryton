@@ -162,7 +162,7 @@ class EndorsementRoot(object):
             field and recursively all endorsement related one2manys) are
             considered null, else True
         '''
-        if self.values:
+        if getattr(self, 'values', None):
             return False
         for fname, _ in self._endorsement_tree.itervalues():
             for elem in getattr(self, fname, []):
