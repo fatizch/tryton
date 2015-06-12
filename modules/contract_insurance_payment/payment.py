@@ -38,6 +38,11 @@ class JournalFailureAction:
 class Payment:
     __name__ = 'account.payment'
 
+    def get_reference_object_for_edm(self, template):
+        if not self.line.contract:
+            return super(Payment, self).get_reference_object_for_edm(template)
+        return self.line.contract
+
     @classmethod
     def _group_per_contract_key(cls, payment):
         pool = Pool()
