@@ -560,6 +560,17 @@ def configure(target_env):
     path_inserter(os.path.join(workspace, 'proteus'), '_proteus_path')
     path_inserter(os.path.join(workspace, 'conf'), '_celery_conf_path')
 
+    # Link plugins
+    if os.path.exists(os.path.join(workspace, 'tryton')):
+        os.chdir(os.path.join(workspace, 'tryton', 'tryton', 'plugins'))
+        for fname in os.listdir(os.path.join(workspace, 'tryton', 'tryton',
+                    'plugins')):
+            target = os.path.join(workspace, 'tryton', 'tryton', 'plugins',
+                fname)
+            if os.path.islink(target):
+                os.unlink(target)
+        os.system('ln -s ../../../coopbusiness/plugins/* . 2> /dev/null')
+
 
 if __name__ == '__main__':
     if 'VIRTUAL_ENV' not in os.environ:
