@@ -42,6 +42,12 @@ class Party:
                 {'invisible': Bool(~Eval('is_bank'))}
                 )]
 
+    @classmethod
+    def copy(cls, parties, default=None):
+        default = default.copy() if default else {}
+        default.setdefault('bank_role', None)
+        return super(Party, cls).copy(parties, default=default)
+
     @fields.depends('is_bank')
     def on_change_is_bank(self):
         self._on_change_is_actor('is_bank')

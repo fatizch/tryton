@@ -26,6 +26,12 @@ class Party:
                 {'invisible': ~Bool(Eval('extra_data', None))}
                 )]
 
+    @classmethod
+    def copy(cls, parties, default=None):
+        default = default.copy() if default else {}
+        default.setdefault('covered_elements', None)
+        return super(Party, cls).copy(parties, default=default)
+
     def get_subscribed_contracts(self):
         Contract = Pool().get('contract')
         return Contract.search(['subscriber', '=', self.id])
