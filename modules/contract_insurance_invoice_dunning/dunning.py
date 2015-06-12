@@ -19,6 +19,35 @@ class Dunning:
         fields.Many2One('contract', 'Contract'),
         'get_line_field', searcher='search_line_field')
 
+    @classmethod
+    def _overdue_line_domain(cls, date):
+        domain = super(Dunning, cls)._overdue_line_domain(date)
+        domain.extend([
+                ('payment_date', '=', None),
+                ('contract', '!=', None)
+                ])
+        return domain
+
+    @classmethod
+    def process_dunning_per_level(cls, dunnings):
+        '''
+            This method will filter to treat only the higher level for a
+            contract
+        '''
+        contracts = {}
+        for dunning in dunnings:
+            if dunning.contract not in contracts:
+                contracts[dunning.contract] = dunning
+            elif (contracts[dunning.contract].level.sequence <
+                    dunning.level.sequence):
+                contracts[dunning.contract] = dunning
+        super(Dunning, cls).process_dunning_per_level(contracts.values())
+
+    def get_reference_object_for_edm(self, template):
+        if not self.contract:
+            return super(Dunning, self).get_reference_object_for_edm(template)
+        return self.contract
+
 
 class Level:
     __name__ = 'account.dunning.level'
@@ -32,6 +61,8 @@ class Level:
             ('at_last_paid_invoice', 'At Last Paid Invoice')],
             'Termination Mode', depends=['contract_action'],
             states={'invisible': Eval('contract_action') != 'terminate'})
+    skip_level_for_payment = fields.Boolean('Skip Level For Payment',
+        help='Skip level if line is paid by payment')
 
     def process_hold_contracts(self, dunnings):
         pool = Pool()
@@ -81,6 +112,8 @@ class Level:
         res = super(Level, self).test(line, date)
         if not res:
             return res
+        if self.skip_level_for_payment and line.payments:
+            return False
         if line.contract and line.contract.current_dunning:
             # Do not generate a new dunning for an invoice on a contract
             # with a dunning in progress
