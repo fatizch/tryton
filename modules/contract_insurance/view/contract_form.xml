@@ -2,7 +2,7 @@
 <data>
     <xpath expr="/form/notebook/page[@id='options']" position="before">
         <page string="Covered Elements" id="cov_elements">
-            <hpaned id="covered_element" position="20">
+            <hpaned id="covered_element" position="-1">
                 <child id="tree">
                     <field name="multi_mixed_view" group="multi_mixed_view" mode="tree" view_ids="contract_insurance.covered_elements_clean_tree" expand_toolbar="0"/>
                 </child>
