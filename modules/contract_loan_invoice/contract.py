@@ -14,7 +14,7 @@ from trytond.tools import grouped_slice, reduce_ids
 from trytond.pyson import Eval, And, Or
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, utils
 
 
 __metaclass__ = PoolMeta
@@ -398,11 +398,9 @@ class Contract:
 
     def get_rebill_end_date(self, start_date):
         date = super(Contract, self).get_rebill_end_date(start_date)
-        if self.is_loan and self.last_invoice_end:
-            return min(date, self.last_invoice_end)
-        elif self.is_loan:
-            return start_date
-        return date
+        if not self.is_loan:
+            return date
+        return max(utils.today(), self.start_date)
 
 
 class PremiumAmount(model.CoopSQL, model.CoopView):
