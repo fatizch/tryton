@@ -870,7 +870,7 @@ class StartEndorsement(Wizard):
         result = self.select_endorsement._default_values
         result['endorsement_summary'] = \
             self.endorsement.endorsement_summary
-        result['has_preview'] = self.endorsement.definition.preview_state != ''
+        result['has_preview'] = bool(self.endorsement.definition.preview_state)
         return result
 
     def transition_summary_previous(self):
