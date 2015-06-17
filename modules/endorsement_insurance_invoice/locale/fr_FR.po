@@ -50,6 +50,10 @@ msgctxt "error:contract.direct_debit_account.change:"
 msgid "The selected contract is not paid through direct debit !"
 msgstr "Le contrat sélectionné n'est pas payé par prélèvement automatique !"
 
+msgctxt "error:contract.direct_debit_account.change:"
+msgid "The selected endorsement cannot take place in the past !"
+msgstr "L'avenant sélectionné ne peut avoir lieu dans le passé !"
+
 msgctxt "error:endorsement.contract.billing_information:"
 msgid "New version"
 msgstr "Nouvelle version"

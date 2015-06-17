@@ -386,6 +386,8 @@ class ChangeDirectDebitAccount(ChangeBillingInformation):
         cls._error_messages.update({
                 'not_direct_debit': 'The selected contract is not paid '
                 'through direct debit !',
+                'no_past_date': 'The selected endorsement cannot take place '
+                'in the past !',
                 })
 
     @classmethod
@@ -395,13 +397,16 @@ class ChangeDirectDebitAccount(ChangeBillingInformation):
 
     @classmethod
     def check_before_start(cls, select_screen):
+        super(ChangeDirectDebitAccount, cls).check_before_start(select_screen)
+        cls.pop_functional_error('no_matching_invoice_date')
+        cls.pop_functional_error('unauthorized_date')
         if not utils.get_good_versions_at_date(
                 select_screen.contract, 'billing_informations',
                 select_screen.effective_date,
                 'date')[0].direct_debit:
             cls.append_functional_error('not_direct_debit')
-            return
-        super(ChangeDirectDebitAccount, cls).check_before_start(select_screen)
+        if select_screen.effective_date < utils.today():
+            cls.append_functional_error('no_past_date')
 
 
 class ContractDisplayer(model.CoopView):
