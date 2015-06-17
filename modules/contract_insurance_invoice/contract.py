@@ -1117,7 +1117,8 @@ class Premium:
             line_amount = line_amount.quantize(
                 Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1])
         else:
-            line_amount = self.main_contract.company.currency.round(line_amount)
+            line_amount = self.main_contract.company.currency.round(
+                line_amount)
         return [InvoiceLine(
                 type='line',
                 description=self.get_description(),
