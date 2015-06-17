@@ -2,4 +2,5 @@
 <tree string="Contracts" editable="bottom">
     <field name="to_propagate"/>
     <field name="contract"/>
+    <field name="contract_status"/>
 </tree>

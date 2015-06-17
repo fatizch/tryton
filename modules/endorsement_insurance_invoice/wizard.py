@@ -141,6 +141,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
         for contract in Contract.search([
                     ('subscriber', '=', self.contract.subscriber.id),
                     ('id', '!=', self.contract.id),
+                    ('status', '!=', 'quote'),
                     ['OR', ('end_date', '=', None),
                         ('end_date', '>=', self.effective_date)],
                     ('billing_informations.direct_debit_account', '=',
@@ -157,10 +158,13 @@ class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
             self.other_contracts = []
             return
         new_contracts = [Displayer(contract=x.contract,
-                to_propagate=x.to_propagate) for x in self.other_contracts
+                to_propagate=x.to_propagate,
+                contract_status=x.contract.status_string)
+            for x in self.other_contracts
             if x.contract.id in possible_contracts]
         new_contracts_id = [x.contract.id for x in new_contracts]
-        new_contracts += [Displayer(contract=x, to_propagate='nothing')
+        new_contracts += [Displayer(contract=x, to_propagate='nothing',
+                contract_status=x.status_string)
             for x in possible_contracts.itervalues()
             if x.id not in new_contracts_id]
         self.other_contracts = new_contracts
@@ -415,6 +419,7 @@ class ContractDisplayer(model.CoopView):
     __name__ = 'contract.billing_information.change.contract_displayer'
 
     contract = fields.Many2One('contract', 'Contract', readonly=True)
+    contract_status = fields.Char('Contract Status', readonly=True)
     to_propagate = fields.Selection([('nothing', 'Nothing'),
             ('bank_account', 'Bank Account'), ('everything', 'Everything')],
         'Propagate')
