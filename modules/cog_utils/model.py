@@ -89,20 +89,33 @@ class ErrorManager(object):
     def __init__(self):
         self._errors = []
         self._error_messages = []
-        self._result = True
 
     def add_error(self, error_message, error=None, error_args=None, fail=True):
         'Add a new error to the current error list. If fail is set, the error'
         'will trigger the error raising when exiting the manager.'
-        self._errors.append((error or error_message, error_args or ()))
+        self._errors.append((error or error_message, error_args or (), fail))
         self._error_messages.append(error_message)
-        self._result &= not fail
+
+    def pop_error(self, error_code):
+        for idx, cur_error in enumerate(self._errors):
+            if cur_error[0] == error_code:
+                break
+        else:
+            return False
+        value = self._errors[idx]
+        del self._errors[idx]
+        del self._error_messages[idx]
+        return value
 
     def format_errors(self):
         return '\n'.join(self._error_messages)
 
+    @property
+    def _do_raise(self):
+        return any([x[2] for x in self._errors])
+
     def raise_errors(self):
-        if not self._result:
+        if self._do_raise:
             raise UserError(self.format_errors())
 
 
@@ -127,6 +140,13 @@ class FunctionalErrorMixIn(object):
         error_message = cls.raise_user_error(error, error_args,
             raise_exception=False)
         error_manager.add_error(error_message, error, error_args, fail)
+
+    @classmethod
+    def pop_functional_error(cls, error_code):
+        manager = Transaction().context.get('error_manager', None)
+        if not manager:
+            return False
+        return manager.pop_error(error_code)
 
     @property
     def _error_manager(self):
