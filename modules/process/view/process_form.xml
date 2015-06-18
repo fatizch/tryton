@@ -36,17 +36,19 @@
                     <label name="end_step_name"/>
                     <field name="end_step_name"/>
                 </group>
-                <field name="menu_items" readonly="1" yexpand="1" yfill="1"/>
             </group>
-            <newline/>
-            <group id="xml" xexpand="1" xfill="1" yexpand="1" yfill="1" col="3">
-                <separator name="xml_header"/>
-                <separator name="xml_footer"/>
-                <separator name="xml_tree"/>
-                <field name="xml_header"/>
-                <field name="xml_footer"/>
-                <field name="xml_tree"/>
-            </group>
+        </page>
+        <page name="xml_header">
+            <field name="xml_header"/>
+        </page>
+        <page name="xml_footer">
+            <field name="xml_footer"/>
+        </page>
+        <page name="xml_tree">
+            <field name="xml_tree"/>
+        </page>
+        <page name="menu_items">
+            <field name="menu_items"/>
         </page>
     </notebook>
     <button string="Update Menu" name="update_view"/>
