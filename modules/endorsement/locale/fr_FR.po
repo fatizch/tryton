@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -1185,6 +1185,11 @@ msgctxt "field:endorsement.start.select_endorsement,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt ""
+"field:endorsement.start.select_endorsement,contract_has_future_endorsement:"
+msgid "Contract has future endorsement"
+msgstr "Le contrat sélectionné a un avenant futur !"
+
 msgctxt "field:endorsement.start.select_endorsement,contract_in_process:"
 msgid "Contract in Progress"
 msgstr "Contrat en cours de modification"
@@ -1192,6 +1197,11 @@ msgstr "Contrat en cours de modification"
 msgctxt "field:endorsement.start.select_endorsement,effective_date:"
 msgid "Effective Date"
 msgstr "Date d'effet"
+
+msgctxt ""
+"field:endorsement.start.select_endorsement,effective_date_before_today:"
+msgid "Effective date is in past"
+msgstr "La date d'effet est dans le passé !"
 
 msgctxt "field:endorsement.start.select_endorsement,endorsement:"
 msgid "Endorsement"
@@ -1708,6 +1718,15 @@ msgstr ""
 "L'avenant ne pourra pas être appliqué / prévisualisé tant que ce processus "
 "n'est pas terminé."
 
+msgctxt "view:endorsement.start.select_endorsement:"
+msgid ""
+"The selected contract has endorsement(s) with a posterior effective date"
+msgstr "Le contrat sélectionné a un avenant futur !"
+
+msgctxt "view:endorsement.start.select_endorsement:"
+msgid "The selected date is in the past !"
+msgstr "La date sélectionnée est dans le passé !"
+
 msgctxt "view:endorsement.sub_state:"
 msgid "Endorsement Sub-state"
 msgstr "Sous état d'avenant"
@@ -1743,6 +1762,18 @@ msgstr "Décliner"
 msgctxt "wizard_button:endorsement.decline,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,basic_preview,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:endorsement.start,basic_preview,cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,basic_preview,summary:"
+msgid "Summary"
+msgstr "Synthèse"
 
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
@@ -1803,6 +1834,10 @@ msgctxt ""
 "wizard_button:endorsement.start,select_endorsement,start_endorsement:"
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
+
+msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
 
 msgctxt "wizard_button:endorsement.start,summary,cancel:"
 msgid "Cancel"
