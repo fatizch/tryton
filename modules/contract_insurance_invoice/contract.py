@@ -314,7 +314,7 @@ class Contract:
         billing_informations = iter(self.billing_informations)
         billing_information = billing_informations.next()
         for next_billing_information in billing_informations:
-            if next_billing_information.date > start:
+            if (next_billing_information.date or datetime.date.min) > start:
                 break
             else:
                 billing_information = next_billing_information
