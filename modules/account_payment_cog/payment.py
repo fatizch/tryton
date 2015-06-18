@@ -199,6 +199,9 @@ class Payment(export.ExportImportMixin, Printable):
     __name__ = 'account.payment'
     _func_key = 'id'
 
+    icon = fields.Function(
+        fields.Char('Icon'),
+        'get_icon')
     manual_fail_status = fields.Selection([
         ('', ''),
         ('pending', 'Pending'),
