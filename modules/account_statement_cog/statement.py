@@ -83,5 +83,5 @@ class Statement:
         return [('journal.bank_deposit_ticket_statement',) + tuple(clause[1:])]
 
     @classmethod
-    def validate_manual(self):
+    def validate_manual(cls):
         pass
