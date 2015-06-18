@@ -116,6 +116,8 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
 
     @classmethod
     def get_rejected_payment_fee(cls, code):
+        if not code:
+            return
         JournalFailureAction = Pool().get(
             'account.payment.journal.failure_action')
         failure_actions = JournalFailureAction.search([
