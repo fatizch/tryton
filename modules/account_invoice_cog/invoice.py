@@ -1,4 +1,6 @@
 from trytond.pool import PoolMeta
+from trytond.pyson import Eval
+
 from trytond.modules.cog_utils import export, fields
 from trytond.modules.report_engine import Printable
 
@@ -21,6 +23,7 @@ class Invoice(export.ExportImportMixin, Printable):
         super(Invoice, cls).__setup__()
         cls.move.select = True
         cls.cancel_move.select = True
+        cls.cancel_move.states['invisible'] = ~Eval('cancel_move')
 
     @classmethod
     def is_master_object(cls):
