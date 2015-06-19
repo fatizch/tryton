@@ -313,13 +313,11 @@ def extract_rm_issues_urls(description):
     return ['%s/%s.json' % (redmine_issue_url_root, m[1]) for m in matches]
 
 
-def put_rm_issue(url, payload, user, redmine_api_key):
+def put_rm_issue(url, payload, redmine_api_key):
     requests.put(url, auth=(redmine_api_key, ''),
         data=json.dumps({'issue': payload}),
         verify=False,
-        headers={'content-type': 'application/json',
-            'X-Redmine-Switch-User': user,
-            })
+        headers={'content-type': 'application/json'})
 
 
 def update_rm_issue_on_close(issue_id, description, user, redmine_api_key):
@@ -327,15 +325,15 @@ def update_rm_issue_on_close(issue_id, description, user, redmine_api_key):
         next_version = get_rm_issue_next_version(url, force=True)
         if next_version:
             issue_changes = {'fixed_version_id': next_version}
-            put_rm_issue(url, issue_changes, user, redmine_api_key)
+            put_rm_issue(url, issue_changes, redmine_api_key)
 
 
 def update_rm_issue_on_review(issue_id, description, user, patchset,
         redmine_api_key):
     rm_issue_status = {'status_review': 7}
     rm_custom_fields = {'review_cf': 2}
-    notes = 'Review updated at http://rietveld.coopengo.com/%s/#ps%s' % \
-        (issue_id, patchset)
+    notes = 'Review updated at http://rietveld.coopengo.com/%s/#ps%s by %s' % \
+        (issue_id, patchset, user)
     for url in extract_rm_issues_urls(description):
         next_version = get_rm_issue_next_version(url)
         issue_changes = {
@@ -346,7 +344,7 @@ def update_rm_issue_on_review(issue_id, description, user, patchset,
                 ]}
         if next_version:
             issue_changes['fixed_version_id'] = next_version
-        put_rm_issue(url, issue_changes, user, redmine_api_key)
+        put_rm_issue(url, issue_changes, redmine_api_key)
 
 
 def check_style(session, issue_url, repo_path, email, password):
