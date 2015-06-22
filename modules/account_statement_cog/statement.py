@@ -40,6 +40,12 @@ class Line:
             move.save()
         return move
 
+    def get_move_line(self):
+        move_line = super(Line, self).get_move_line()
+        if not move_line.description and self.number:
+            move_line.description = self.number
+        return move_line
+
 
 class Statement:
     __name__ = 'account.statement'
