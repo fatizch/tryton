@@ -398,7 +398,7 @@ class Contract:
 
     def get_rebill_end_date(self, start_date):
         date = super(Contract, self).get_rebill_end_date(start_date)
-        if not self.is_loan:
+        if not self.is_loan or self.status == 'void':
             return date
         return max(utils.today(), self.start_date)
 
