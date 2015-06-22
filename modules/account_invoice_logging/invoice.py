@@ -15,7 +15,8 @@ class Invoice:
     def post(cls, invoices):
         super(Invoice, cls).post(invoices)
         InvoiceLogging = Pool().get('account.invoice.logging')
-        InvoiceLogging.create(cls.generate_invoice_logging_list(invoices))
+        InvoiceLogging.create(cls.generate_invoice_logging_list(
+                [x for x in invoices if x.state != 'posted']))
 
     @classmethod
     def paid(cls, invoices):
@@ -38,7 +39,7 @@ class Invoice:
                 } for invoice in invoices]
 
 
-class InvoiceLogging(model.CoopSQL):
+class InvoiceLogging(model.CoopSQL, model.CoopView):
     'Invoice Logging'
     __name__ = 'account.invoice.logging'
 
@@ -48,7 +49,12 @@ class InvoiceLogging(model.CoopSQL):
             ('posted', 'Posted'),
             ('paid', 'Paid'),
             ('cancel', 'Canceled'),
-            ], 'State', required=True)
+            ], 'State', required=True, readonly=True)
     invoice = fields.Many2One('account.invoice', 'Invoice', required=True,
-        ondelete='CASCADE', select=True)
-    state_date = fields.Date('State Date')
+        ondelete='CASCADE', select=True, readonly=True)
+    state_date = fields.Date('State Date', readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(InvoiceLogging, cls).__setup__()
+        cls._order = [('state_date', 'DESC')]

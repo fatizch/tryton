@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="invoice_logging_view_list">
+            <field name="model">account.invoice.logging</field>
+            <field name="type">tree</field>
+            <field name="name">invoice_logging_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_invoice_logging_relate_form">
+            <field name="name">Invoice Logging</field>
+            <field name="res_model">account.invoice.logging</field>
+            <field name="domain" eval="[('invoice', '=', Eval('active_id'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_invoice_logging_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">account.invoice,-1</field>
+            <field name="action" ref="act_invoice_logging_relate_form"/>
+        </record>
+    </data>
+</tryton>
