@@ -364,8 +364,7 @@ class ContractOption:
     @classmethod
     def _export_skips(cls):
         return (super(ContractOption, cls)._export_skips() |
-            set(['extra_premium_discounts', 'extra_premium_increases',
-                'extra_premiums']))
+            set(['extra_premium_discounts', 'extra_premium_increases']))
 
     @classmethod
     def default_all_extra_datas(cls):
