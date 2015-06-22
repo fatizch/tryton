@@ -326,6 +326,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
                         for x in self.billing_information_fields()}
                     for fname in self.direct_debit_account_only_fields():
                         new_values[fname] = getattr(new_info, fname, None)
+                    new_values['date'] = self.effective_date
                     contract_billing_informations.append(BillingInformation(
                             **new_values))
                 for existing_info in contract.billing_informations:
