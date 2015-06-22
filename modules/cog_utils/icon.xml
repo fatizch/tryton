@@ -13,5 +13,17 @@
             <field name="name">tag</field>
             <field name="path">icons/tag.svg</field>
         </record>
+        <record model="ir.ui.icon" id="cancel-list_icon">
+            <field name="name">cancel-list</field>
+            <field name="path">icons/cancel-list.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="traffic_light_red_icon">
+            <field name="name">traffic_light_red</field>
+            <field name="path">icons/traffic_light_red.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="traffic_light_green_icon">
+            <field name="name">traffic_light_green</field>
+            <field name="path">icons/traffic_light_green.svg</field>
+        </record>
     </data>
 </tryton>

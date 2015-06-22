@@ -5,5 +5,21 @@
             <field name="name">payment</field>
             <field name="path">icons/payment.svg</field>
         </record>
+        <record model="ir.ui.icon" id="payment_auto_in_icon">
+            <field name="name">payment_auto_in</field>
+            <field name="path">icons/payment_auto_in.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="payment_auto_in_cancel_icon">
+            <field name="name">payment_auto_in_cancel</field>
+            <field name="path">icons/payment_auto_in_cancel.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="payment_auto_out_icon">
+            <field name="name">payment_auto_out</field>
+            <field name="path">icons/payment_auto_out.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="payment_auto_out_cancel_icon">
+            <field name="name">payment_auto_out_cancel</field>
+            <field name="path">icons/payment_auto_out_cancel.svg</field>
+        </record>
     </data>
 </tryton>
