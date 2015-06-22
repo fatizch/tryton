@@ -499,8 +499,8 @@ class Contract:
             description='%s (%s - %s)' % (
                 self.rec_name,
                 lang.strftime(start, lang.code, lang.date) if start else '',
-                lang.strftime(end, lang.code, lang.date)) if end else '',
-            )
+                lang.strftime(end, lang.code, lang.date) if end else '',
+            ))
 
     def finalize_invoices_lines(self, lines):
         for line in lines:
