@@ -51,6 +51,7 @@
         <record model="ir.action.wizard" id="act_debug">
             <field name="name">Debug</field>
             <field name="wiz_name">debug</field>
+            <field name="window">True</field>
         </record>
         <menuitem parent="ir.menu_administration" name="Debug" id="menu_debug" sequence="100" action="act_debug"/>
     </data>

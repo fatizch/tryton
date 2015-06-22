@@ -440,6 +440,8 @@ class VisualizeDebug(ModelView):
 
     __name__ = 'debug.visualize'
 
+    pyson = fields.Text('Pyson to Transform')
+    synch_model_data = fields.Boolean('Synchronise Model Data')
     result = fields.Text('Result')
 
 
@@ -456,14 +458,32 @@ class Debug(Wizard):
 
     def run_code(self):
         # Run your code. return value will be wrote down in the display window
+        if self.display.synch_model_data:
+            return self.synch_model_data()
+        elif self.display.pyson:
+            return self.transform_pyson()
+
+    def transform_pyson(self):
+        from trytond.pyson import Eval, Bool, Or, PYSONEncoder, And, Not
+        encoded = PYSONEncoder().encode(eval(self.display.pyson))
+        return ''.join([x if x != '"' else '&quot;' for x in encoded])
+
+    def synch_model_data(self):
         ModelData = Pool().get('ir.model.data')
         to_sync = ModelData.search([('out_of_sync', '=', True)])
+        nb_to_sync = len(to_sync)
         if to_sync:
             ModelData.sync(to_sync)
-        return ''
+        to_sync = ModelData.search([('out_of_sync', '=', True)])
+        return 'Synchronised %s/%s model data' % (nb_to_sync - len(to_sync),
+            nb_to_sync)
 
     def transition_run(self):
         return 'display'
 
     def default_display(self, name):
-        return {'result': self.run_code()}
+        res = self.display._default_values
+        if not res:
+            return res
+        res.update({'result': self.run_code()})
+        return res

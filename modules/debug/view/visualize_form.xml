@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Debug Result">
-    <field name="result" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
+    <label name="synch_model_data"/>
+    <field name="synch_model_data"/>
+    <newline/>
+    <label name="pyson"/>
+    <newline/>
+    <field name="pyson" yfill="0" yexpand="0" colspan="4"/>
+    <newline/>
+    <label name="result"/>
+    <field name="result" colspan="4"/>
 </form>
