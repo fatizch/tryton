@@ -1132,8 +1132,24 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     calculation_kind = fields.Selection('get_possible_extra_premiums_kind',
         'Calculation Kind')
     calculation_kind_string = calculation_kind.translated('calculation_kind')
-    end_date = fields.Function(fields.Date('End date'), 'get_end_date')
+    start_date = fields.Function(
+        fields.Date('Start Date'), 'get_start_date')
+    manual_start_date = fields.Date('Manual Start date')
+    end_date = fields.Function(fields.Date('End date',
+        states={'invisible': ~Eval('time_limited')},
+        depends=['time_limited']),
+        'get_end_date')
     manual_end_date = fields.Date('Manual End Date')
+    duration = fields.Integer('Duration', states={
+            'invisible': ~Eval('time_limited')}, depends=['time_limited'])
+    duration_unit = fields.Selection(
+        [('month', 'Month'), ('year', 'Year')],
+        'Duration Unit', sort=False, required=True, states={
+            'invisible': ~Eval('time_limited')}, depends=['time_limited'])
+    duration_unit_string = duration_unit.translated('duration_unit')
+    time_limited = fields.Function(
+        fields.Boolean('Time Limited'), 'get_time_limited',
+        setter='setter_void')
     flat_amount = fields.Numeric('Flat amount', states={
             'invisible': Eval('calculation_kind', '') != 'flat',
             'required': Eval('calculation_kind', '') == 'flat',
@@ -1182,19 +1198,6 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     max_rate = fields.Function(
         fields.Numeric('Max Rate'),
         'on_change_with_max_rate', searcher='search_max_rate')
-    start_date = fields.Function(
-        fields.Date('Start Date'), 'get_start_date')
-    manual_start_date = fields.Date('Manual Start date')
-    duration = fields.Integer('Duration', states={
-            'invisible': ~Eval('time_limited')}, depends=['time_limited'])
-    duration_unit = fields.Selection(
-        [('month', 'Month'), ('year', 'Year')],
-        'Duration Unit', sort=False, required=True, states={
-            'invisible': ~Eval('time_limited')}, depends=['time_limited'])
-    duration_unit_string = duration_unit.translated('duration_unit')
-    time_limited = fields.Function(
-        fields.Boolean('Time Limited'), 'get_time_limited',
-        setter='setter_void')
 
     @classmethod
     def __setup__(cls):
