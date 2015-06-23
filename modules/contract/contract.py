@@ -1225,6 +1225,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_all_extra_data(self, at_date):
         res = self.product.get_all_extra_data(at_date)
+        if not at_date:
+            return res
         extra_data = utils.get_value_at_date(self.extra_datas, at_date)
         good_extra_data = extra_data.extra_data_values if extra_data else {}
         res.update(good_extra_data)
