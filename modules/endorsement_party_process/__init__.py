@@ -6,6 +6,7 @@ def register():
     Pool.register(
         Process,
         EndorsementPartyFindProcess,
+        EndorsementFindProcess,
         module='endorsement_party_process', type_='model')
     Pool.register(
         EndorsementPartyStartProcess,

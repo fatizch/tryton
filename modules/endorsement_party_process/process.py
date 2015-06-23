@@ -9,6 +9,7 @@ __all__ = [
     'Process',
     'EndorsementPartyFindProcess',
     'EndorsementPartyStartProcess',
+    'EndorsementFindProcess',
     ]
 
 
@@ -68,3 +69,12 @@ class EndorsementPartyStartProcess(ProcessFinder):
         obj.definition = process_param.definition
         obj.party_endorsements = [PartyEndorsement(party=process_param.party)]
         return res, errs
+
+
+class EndorsementFindProcess:
+    __name__ = 'endorsement.start.find_process'
+
+    @classmethod
+    def __setup__(cls):
+        super(EndorsementFindProcess, cls).__setup__()
+        cls.definition.domain.extend([('is_party', '=', False)])

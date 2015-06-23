@@ -5,7 +5,7 @@
         <field name="effective_date"/>
         <newline/>
         <label name="definition"/>
-        <field name="definition"/>
+        <field name="definition" widget="selection"/>
         <newline/>
         <label name="party"/>
         <field name="party"/>
