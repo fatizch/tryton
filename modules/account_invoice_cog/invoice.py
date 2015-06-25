@@ -17,6 +17,9 @@ class Invoice(export.ExportImportMixin, Printable):
     icon = fields.Function(
         fields.Char('Icon'),
         'on_change_with_icon')
+    color = fields.Function(
+        fields.Char('Color'),
+        'get_color')
 
     @classmethod
     def __setup__(cls):
@@ -24,6 +27,12 @@ class Invoice(export.ExportImportMixin, Printable):
         cls.move.select = True
         cls.cancel_move.select = True
         cls.cancel_move.states['invisible'] = ~Eval('cancel_move')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(Invoice, cls).view_attributes() + [
+            ('/tree', 'colors', Eval('color')),
+            ]
 
     @classmethod
     def is_master_object(cls):
@@ -52,3 +61,14 @@ class Invoice(export.ExportImportMixin, Printable):
 
     def get_sender(self):
         return self.company.party
+
+    def get_color(self, name):
+        if self.state == 'paid':
+            return 'green'
+        elif self.state == 'cancel':
+            return 'grey'
+        elif self.amount_to_pay_today > 0:
+            return 'red'
+        elif self.state == 'posted':
+            return 'blue'
+        return 'black'

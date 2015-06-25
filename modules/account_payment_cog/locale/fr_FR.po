@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -411,3 +411,15 @@ msgctxt ""
 "wizard_button:account.payment.payment_information_modification,payment_information_selection,finalize:"
 msgid "Next"
 msgstr "Suivant"
+
+msgctxt "field:account.invoice,pending_payment:"
+msgid "Pending Payment"
+msgstr "En cours de prélèvement"
+
+msgctxt "field:account.invoice,credit_reconciliation_lines:"
+msgid "Payment Lines"
+msgstr "Lignes de paiement"
+
+msgctxt "field:account.invoice,payments:"
+msgid "Payments"
+msgstr "Paiements"

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="//label[@name='state']" position="before">
+        <label name="pending_payment"/>
+        <field name="pending_payment"/>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='payment']" position="inside">
+        <field name="payments" colspan="4"/>
+        <field name="credit_reconciliation_lines" colspan="4"/>
+    </xpath>
+</data>

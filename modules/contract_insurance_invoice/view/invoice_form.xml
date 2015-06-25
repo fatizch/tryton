@@ -18,7 +18,4 @@
         <label name="reconciliation_date"/>
         <field name="reconciliation_date"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='payment']/field[@name='payment_lines']" position="replace">
-        <field name="lines_to_pay" colspan="4" view_ids="account_cog.move_line_to_pay_view_list"/>
-    </xpath>
 </data>

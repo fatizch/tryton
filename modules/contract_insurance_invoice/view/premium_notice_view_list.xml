@@ -10,4 +10,5 @@
     <field name="amount_to_pay_today"/>
     <field name="contract"/>
     <field name="reconciliation_date"/>
+    <field name="color" tree_invisible="1"/>
 </tree>

@@ -6,6 +6,8 @@ from .payment import *
 from .company import *
 from .move import *
 from .report import *
+from .invoice import *
+
 
 def register():
     Pool.register(
@@ -26,6 +28,7 @@ def register():
         Party,
         PaymentCreationStart,
         ReportTemplate,
+        Invoice,
         module='account_payment_cog', type_='model')
     Pool.register(
         SynthesisMenuOpen,

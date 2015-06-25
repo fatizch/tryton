@@ -66,15 +66,6 @@ class Invoice:
             }
         cls.untaxed_amount.depends += ['contract_invoice']
 
-    @classmethod
-    def view_attributes(cls):
-        return super(Invoice, cls).view_attributes() + [
-            ('/tree', 'colors', If(Eval('state') == 'paid', 'green',
-                    If(Eval('state') == 'cancel', 'grey',
-                        If(Eval('amount_to_pay_today', 0) > 0, 'red',
-                            If(Eval('state') == 'posted', 'blue', 'black'))))),
-            ]
-
     def get_base_amount(self, name):
         return self.untaxed_amount - self.fees
 
