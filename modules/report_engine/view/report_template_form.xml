@@ -12,6 +12,8 @@
     <field name="internal_edm"/>
     <label name="document_desc"/>
     <field name="document_desc"/>
+    <label name="modifiable_before_printing"/>
+    <field name="modifiable_before_printing"/>
     <notebook>
         <page string="Versions" id="versions">
             <field name="versions"/>

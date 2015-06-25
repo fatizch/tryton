@@ -1,6 +1,5 @@
 # -*- coding:utf-8 -*-
 import sys
-import base64
 import traceback
 import os
 import subprocess
@@ -57,6 +56,9 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     internal_edm = fields.Boolean('Use Internal EDM')
     document_desc = fields.Many2One('document.description',
         'Document Description', ondelete='SET NULL')
+    modifiable_before_printing = fields.Boolean('Modifiable',
+        help='Set to true if you want to modify the generated document before '
+        'sending or printing')
 
     @classmethod
     def __setup__(cls):
@@ -486,7 +488,7 @@ class ReportGenerate(Report):
             raise exc
 
     @classmethod
-    def EDM_write_tmp_report(cls, report_data, filename):
+    def edm_write_tmp_report(cls, report_data, filename):
         basename, ext = os.path.splitext(filename)
         filename = coop_string.slugify(basename, lower=False) + ext
         server_shared_folder = config.get('EDM', 'server_shared_folder',
@@ -514,7 +516,7 @@ class ReportGenerateFromFile(Report):
     def execute(cls, ids, data):
         with open(data['output_report_filepath'], 'r') as f:
             value = bytearray(f.read())
-        return ('.pdf', value, False,
+        return (data['output_report_filepath'].split('.')[-1], value, False,
             os.path.splitext(
                 os.path.basename(data['output_report_filepath']))[0])
 
@@ -559,6 +561,7 @@ class ReportCreatePreviewLine(model.CoopView):
 
     __name__ = 'report.create.preview.line'
 
+    template = fields.Many2One('report.template', 'Template')
     generated_report = fields.Char('Link')
     server_filepath = fields.Char('Server Filename',
         states={'invisible': True})
@@ -598,25 +601,28 @@ class ReportCreateAttach(model.CoopView):
 class ReportCreate(Wizard):
     __name__ = 'report.create'
 
-    start_state = 'select_model'
-    post_generation = StateTransition()
+    start_state = 'select_model_needed'
+    select_model_needed = StateTransition()
     select_model = StateView('report.create.select_template',
         'report_engine.document_create_select_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Preview', 'preview_document', 'tryton-go-next',
+            Button('Generate', 'generate_reports', 'tryton-go-next',
                 states={'readonly': ~Eval('models')}, default=True),
             ])
+    generate_reports = StateTransition()
     preview_document = StateView('report.create.preview',
         'report_engine.document_create_preview_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Previous', 'select_model', 'tryton-go-previous'),
             Button('Mail', 'mail', 'tryton-go-next', default=True)
             ])
+    open_document = StateAction('report_engine.generate_file_report')
     mail = StateAction('report_engine.generate_file_report')
     attach = StateView('report.create.attach',
         'report_engine.document_create_attach_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Complete', 'post_generation', 'tryton-ok', default=True)])
+    post_generation = StateTransition()
     attach_to_contact = StateTransition()
 
     @classmethod
@@ -627,23 +633,29 @@ class ReportCreate(Wizard):
                 '  Expression:\n%s\n\n  Error:\n%s',
                 })
 
-    def default_select_model(self, fields):
-        if self.select_model._default_values:
-            return self.select_model._default_values
-        result = {}
+    def transition_select_model_needed(self):
         ActiveModel = Pool().get(Transaction().context.get('active_model'))
         instance = ActiveModel(Transaction().context.get('active_id'))
         if not instance:
-            return {}
-        result['available_models'] = [elem.id for elem in
+            return 'select_model'
+        self.select_model.available_models = [elem.id for elem in
             instance.get_available_doc_templates()]
-        result['party'] = instance.get_contact().id
+        if len(self.select_model.available_models) == 1:
+            self.select_model.models = self.select_model.available_models
+        self.select_model.party = instance.get_contact().id
         if instance.get_contact().addresses:
-            result['good_address'] = instance.get_contact().addresses[0].id
-        return result
+            addresses = instance.get_contact().addresses
+            self.select_model.good_address = addresses[0].id
+            if len(addresses) == 1 and getattr(self.select_model, 'models',
+                    []):
+                return 'generate_reports'
+        return 'select_model'
 
-    def default_preview_document(self, fields):
-        self.remove_EDM_temp_files()
+    def default_select_model(self, fields):
+        return self.select_model._default_values
+
+    def transition_generate_reports(self):
+        self.remove_edm_temp_files()
         pool = Pool()
         ReportModel = pool.get('report.generate', type='report')
         ContactMechanism = pool.get('party.contact_mechanism')
@@ -651,7 +663,7 @@ class ReportCreate(Wizard):
         printable_inst = ActiveModel(Transaction().context.get('active_id'))
         sender = printable_inst.get_sender()
         sender_address = printable_inst.get_sender_address()
-        result = {'reports': []}
+        reports = []
         for doc_template in self.select_model.models:
             ext, filedata, _, file_basename = ReportModel.execute(
                 [Transaction().context.get('active_id')], {
@@ -666,35 +678,57 @@ class ReportCreate(Wizard):
                     else None,
                     })
             client_filepath, server_filepath = \
-                ReportModel.EDM_write_tmp_report(filedata,
+                ReportModel.edm_write_tmp_report(filedata,
                     '%s.%s' % (file_basename, ext))
-            result['reports'].append({'generated_report': client_filepath,
+            reports.append({
+                    'generated_report': client_filepath,
                     'server_filepath': server_filepath,
-                    'file_basename': file_basename
-            })
+                    'file_basename': file_basename,
+                    'template': doc_template,
+                    })
+        self.preview_document.reports = reports
         email = ContactMechanism.search([
                 ('party', '=', self.select_model.party.id),
                 ('type', '=', 'email'),
                 ])
         if email:
-            result['email'] = email[0].value
+            self.preview_document.email = email[0].value
         output = printable_inst.get_document_filename()
-        result['output_report_name'] = coop_string.slugify(output, lower=False)
-        result['party'] = self.select_model.party.id
-        return result
+        self.preview_document.output_report_name = coop_string.slugify(output,
+            lower=False)
+        self.preview_document.output_report_filepath = \
+            self.preview_document.on_change_with_output_report_filepath()
+        self.preview_document.party = self.select_model.party.id
+        if all([x.template.modifiable_before_printing
+                for x in self.preview_document.reports]):
+            return 'preview_document'
+        return 'open_document'
 
-    def do_mail(self, action):
+    def default_preview_document(self, fields):
+        return self.preview_document._default_values
+
+    def open_or_mail_report(self, action, email_print):
         pool = Pool()
         Report = pool.get('report.generate_from_file', type='report')
-        Report.generate_single_attachment(
-            [d.server_filepath for d in self.preview_document.reports],
-            self.preview_document.output_report_filepath)
-        action['email_print'] = True
-        action['email'] = {'to': self.preview_document.email}
-        return action, {
-            'output_report_filepath':
-                self.preview_document.output_report_filepath,
-        }
+        if email_print:
+            Report.generate_single_attachment(
+                [d.server_filepath for d in self.preview_document.reports],
+                self.preview_document.output_report_filepath)
+            filename = self.preview_document.output_report_filepath
+        else:
+            filename = [d.generated_report
+            for d in self.preview_document.reports][0]
+        action['email_print'] = email_print
+        action['direct_print'] = Transaction().context.get('direct_print')
+        action['email'] = {'to': getattr(self.preview_document, 'email', '')}
+        return action, {'output_report_filepath': filename}
+
+    def do_open_document(self, action):
+        return self.open_or_mail_report(action,
+            Transaction().context.get('email_print'))
+
+    def do_mail(self, action):
+        return self.open_or_mail_report(action, True)
 
     def transition_mail(self):
         if all([not model.internal_edm for model in self.select_model.models]):
@@ -734,13 +768,10 @@ class ReportCreate(Wizard):
         contact.save()
         return 'end'
 
-    def remove_EDM_temp_files(self):
+    def remove_edm_temp_files(self):
         try:
             for f in self.preview_document.reports:
                 shutil.rmtree(os.path.dirname(f.server_filepath))
         except (AttributeError, OSError):
             # no reports or report already removed
             pass
-
-    def end(self):
-        self.remove_EDM_temp_files()

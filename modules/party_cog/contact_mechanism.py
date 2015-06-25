@@ -105,7 +105,7 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
 
     @staticmethod
     def default_contact_datetime():
-        return utils.today()
+        return utils.now()
 
     @staticmethod
     def default_user():

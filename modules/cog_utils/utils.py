@@ -135,6 +135,10 @@ def today():
     return Pool().get('ir.date').today()
 
 
+def now():
+    return datetime.datetime.combine(today(), datetime.datetime.now().time())
+
+
 def is_effective_at_date(instance, at_date=None, start_var_name='start_date',
         end_var_name='end_date'):
     if not at_date:
