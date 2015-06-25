@@ -10,18 +10,6 @@
             <field name="type">form</field>
             <field name="name">contract_form</field>
         </record>
-        <!-- #################### -->
-        <!-- # Contract Balance # -->
-        <!-- #################### -->
-        <record model="ir.action.wizard" id="act_balance">
-            <field name="name">Contract Balance</field>
-            <field name="wiz_name">contract.balance</field>
-        </record>
-        <record model="ir.action.keyword" id="act_balance_keyword">
-            <field name="keyword">form_relate</field>
-            <field name="model">contract,-1</field>
-            <field name="action" ref="act_balance"/>
-        </record>
         <!-- ################################ -->
         <!-- # Contract Billing Information # -->
         <!-- ################################ -->

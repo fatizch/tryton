@@ -15,7 +15,7 @@
     </group>
     <notebook colspan="4">
         <page string="Reconciliation" id="reconciliation">
-            <field name="reconciliation_lines"/>
+            <field name="reconciled_with"/>
         </page>
         <page string="Other Info" id="info">
             <label name="maturity_date"/>

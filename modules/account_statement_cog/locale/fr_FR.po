@@ -28,12 +28,12 @@ msgstr "Bordereaux de chèques"
 
 msgctxt "model:ir.action.act_window.domain,name:"
 msgid "Posted"
-msgstr "Emise"
+msgstr "Emis"
 
 msgctxt ""
 "model:ir.action.act_window.domain,name:act_statement_bank_deposit_form_domain_all"
 msgid "All"
-msgstr "Toutes"
+msgstr "Tous"
 
 msgctxt ""
 "model:ir.action.act_window.domain,name:act_statement_bank_deposit_form_domain_draft"
@@ -43,7 +43,7 @@ msgstr "Brouillon"
 msgctxt ""
 "model:ir.action.act_window.domain,name:act_statement_bank_deposit_form_domain_posted"
 msgid "Posted"
-msgstr "Emise"
+msgstr "Emis"
 
 msgctxt ""
 "model:ir.action.act_window.domain,name:act_statement_bank_deposit_form_domain_validated"
@@ -57,6 +57,14 @@ msgstr "Relevé"
 msgctxt "model:ir.ui.menu,name:menu_statement_bank_deposit_form"
 msgid "Bank Deposit Ticket"
 msgstr "Bordereaux de chèques"
+
+msgctxt "selection:account.move,kind:"
+msgid "Manual Payment"
+msgstr "Paiement manuel"
+
+msgctxt "selection:account.move,kind:"
+msgid "Rejected Manual Payment"
+msgstr "Rejet de paiement manuel"
 
 msgctxt "selection:account.statement.journal,validation:"
 msgid "Manual"

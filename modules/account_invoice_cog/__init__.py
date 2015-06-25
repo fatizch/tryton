@@ -3,6 +3,7 @@ from .test_case import *
 from .party import *
 from .invoice import *
 from .report_engine import *
+from .move import *
 
 
 def register():
@@ -11,4 +12,6 @@ def register():
         TestCaseModel,
         Party,
         ReportTemplate,
+        Move,
+        MoveLine,
         module='account_invoice_cog', type_='model')

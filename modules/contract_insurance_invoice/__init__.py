@@ -7,6 +7,7 @@ from .offered import *
 from .contract import *
 from .account import *
 from .wizard import *
+from .move import *
 
 
 def register():
@@ -28,6 +29,7 @@ def register():
         ContractBillingInformation,
         Premium,
         ContractInvoice,
+        Move,
         MoveLine,
         InvoiceLineDetail,
         FeeDesc,
@@ -45,6 +47,5 @@ def register():
         InvoiceContract,
         SynthesisMenuOpen,
         DisplayContractPremium,
-        ContractBalance,
         Renew,
         module='contract_insurance_invoice', type_='wizard')

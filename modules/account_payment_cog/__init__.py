@@ -16,6 +16,7 @@ def register():
         SynthesisMenuPayment,
         SynthesisMenu,
         Company,
+        Move,
         MoveLine,
         PaymentInformationSelection,
         PaymentTreatmentBatch,

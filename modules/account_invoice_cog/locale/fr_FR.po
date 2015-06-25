@@ -10,6 +10,14 @@ msgctxt "field:account.invoice,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.move,is_invoice_canceled:"
+msgid "Invoice Canceled"
+msgstr "Quittance annulée"
+
+msgctxt "field:account.move.line,is_invoice_canceled:"
+msgid "Invoice Canceled"
+msgstr "Quittance annulée"
+
 msgctxt "field:ir.test_case,fiscal_year_number:"
 msgid "Number of Fiscal Years to create"
 msgstr "Nombre d'années fiscales à créer"

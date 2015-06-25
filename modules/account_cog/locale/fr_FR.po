@@ -146,6 +146,34 @@ msgctxt "field:account.journal,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.move,cancel_move:"
+msgid "Cancel Move"
+msgstr "Mouvement d'annulation"
+
+msgctxt "field:account.move,cancel_moves:"
+msgid "Cancel Moves"
+msgstr "Mouvements d'annulation"
+
+msgctxt "field:account.move,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:account.move,is_origin_canceled:"
+msgid "Origin Canceled"
+msgstr "Origine annulée"
+
+msgctxt "field:account.move,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:account.move,origin_item:"
+msgid "Origin"
+msgstr "Origine"
+
+msgctxt "field:account.move,synthesis_rec_name:"
+msgid "Information"
+msgstr "Information"
+
 msgctxt "field:account.move,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -154,13 +182,49 @@ msgctxt "field:account.move.line,account_kind:"
 msgid "Account Kind"
 msgstr "Type de compte"
 
+msgctxt "field:account.move.line,color:"
+msgid "Color"
+msgstr "Couleur"
+
 msgctxt "field:account.move.line,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:account.move.line,reconciliation_lines:"
-msgid "Reconciliation Lines"
-msgstr "Lignes de lettrage"
+msgctxt "field:account.move.line,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:account.move.line,is_origin_canceled:"
+msgid "Origin Canceled"
+msgstr "Origine annulée"
+
+msgctxt "field:account.move.line,is_reconciled:"
+msgid "Reconciled"
+msgstr "Lettré"
+
+msgctxt "field:account.move.line,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:account.move.line,kind_string:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:account.move.line,origin_item:"
+msgid "Origin"
+msgstr "Origine"
+
+msgctxt "field:account.move.line,post_date:"
+msgid "Post Date"
+msgstr "Date d'émission"
+
+msgctxt "field:account.move.line,reconciled_with:"
+msgid "Reconciled With"
+msgstr "Lettré avec"
+
+msgctxt "field:account.move.line,synthesis_rec_name:"
+msgid "Information"
+msgstr "Information"
 
 msgctxt "field:account.move.line,xml_id:"
 msgid "XML Id"
@@ -395,6 +459,14 @@ msgctxt "model:ir.action,name:act_fee_form"
 msgid "Fees"
 msgstr "Frais"
 
+msgctxt "model:ir.action,name:act_move_line_party_balance"
+msgid "Party Balance"
+msgstr "Balance de tiers"
+
+msgctxt "model:ir.action,name:act_move_reconciliation_form"
+msgid "Reconciliation"
+msgstr "Lettrage"
+
 msgctxt "model:ir.action,name:act_tax_form"
 msgid "Taxes"
 msgstr "Taxes"
@@ -427,6 +499,10 @@ msgctxt "model:ir.ui.menu,name:menu_account"
 msgid "Accounting"
 msgstr "Comptabilité"
 
+msgctxt "model:ir.ui.menu,name:menu_move_reconciliation_form"
+msgid "Reconciliation"
+msgstr "Lettrage"
+
 msgctxt "model:ir.ui.menu,name:menu_product_fees"
 msgid "Fees"
 msgstr "Frais"
@@ -446,6 +522,10 @@ msgstr "Fixe"
 msgctxt "selection:account.fee.description.version,kind:"
 msgid "Rate"
 msgstr "Taux"
+
+msgctxt "selection:account.move,kind:"
+msgid ""
+msgstr " "
 
 msgctxt ""
 "selection:account.open_third_party_balance.start,third_party_balance_option:"
@@ -494,6 +574,10 @@ msgid "Fee Description"
 msgstr "Descripteur de Frais"
 
 msgctxt "view:account.move.line:"
+msgid "Balance"
+msgstr "Balance"
+
+msgctxt "view:account.move.line:"
 msgid "Credit"
 msgstr "Créditer"
 
@@ -504,6 +588,10 @@ msgstr "Lignes à payer"
 msgctxt "view:account.move.line:"
 msgid "Other Info"
 msgstr "Autres informations"
+
+msgctxt "view:account.move.line:"
+msgid "Party Balance"
+msgstr "Balance de tiers"
 
 msgctxt "view:account.move.line:"
 msgid "Payments"

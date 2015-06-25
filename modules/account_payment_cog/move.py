@@ -15,12 +15,50 @@ from trytond.modules.cog_utils import fields, model, utils
 __metaclass__ = PoolMeta
 
 __all__ = [
+    'Move',
     'MoveLine',
     'PaymentInformationSelection',
     'PaymentInformationModification',
     'PaymentCreation',
     'PaymentCreationStart',
     ]
+
+
+class Move:
+    __name__ = 'account.move'
+
+    @classmethod
+    def __setup__(cls):
+        super(Move, cls).__setup__()
+        cls.kind.selection.append(
+            ('automatic_payment_in', 'Automatic Payment In'))
+        cls.kind.selection.append(
+            ('automatic_payment_out', 'Automatic Payment Out'))
+        cls.kind.selection.append(
+            ('rejected_payment_in', 'Rejected Payment In'))
+        cls.kind.selection.append(
+            ('rejected_payment_out', 'Rejected Payment Out'))
+
+    def get_kind(self, name):
+        if self.origin:
+            if (self.origin.__name__ == 'account.payment'):
+                return ('automatic_payment_in' if self.origin.kind ==
+                    'receivable' else 'automatic_payment_out')
+            elif (self.origin_item.__name__ == 'account.payment'):
+                return ('rejected_payment_in' if self.origin.origin.kind ==
+                    'receivable' else 'rejected_payment_out')
+        return super(Move, self).get_kind(name)
+
+    def get_icon(self, name):
+        if self.kind == 'automatic_payment_in':
+            return 'payment_auto_in'
+        elif self.kind == 'automatic_payment_out':
+            return 'payment_auto_out'
+        elif self.kind == 'rejected_payment_in':
+            return 'payment_auto_in_cancel'
+        elif self.kind == 'rejected_payment_out':
+            return 'payment_auto_out_cancel'
+        return super(Move, self).get_icon(name)
 
 
 class MoveLine:

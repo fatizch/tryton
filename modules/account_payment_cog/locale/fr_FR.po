@@ -11,10 +11,6 @@ msgid "The code must be unique"
 msgstr "Le code doit être unique"
 
 msgctxt "error:account.payment:"
-msgid "Action \"%s\" not found for payments %s"
-msgstr "L'action \"%s\" n'a pas été trouvée pour les paiements %s"
-
-msgctxt "error:account.payment:"
 msgid "Payments blocked for party %s"
 msgstr "Paiements bloqués pour l'acteur %s"
 
@@ -34,9 +30,17 @@ msgctxt "field:account.move.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.payment,icon:"
+msgid "Icon"
+msgstr "Icône"
+
 msgctxt "field:account.payment,manual_fail_status:"
 msgid "Manual Fail Status"
 msgstr "Statut du rejet manuel"
+
+msgctxt "field:account.payment,reject_description:"
+msgid "Reject Description"
+msgstr "Description du rejet"
 
 msgctxt "field:account.payment,xml_id:"
 msgid "XML Id"
@@ -117,6 +121,10 @@ msgstr "Motif de rejet"
 msgctxt "field:account.payment.journal.failure_action,rejected_payment_fee:"
 msgid "Fee"
 msgstr "Frais"
+
+msgctxt "field:account.payment.journal.failure_action,report_template:"
+msgid "Report Template"
+msgstr "Modèle de courrier"
 
 msgctxt "field:account.payment.journal.failure_action,write_date:"
 msgid "Write Date"
@@ -305,6 +313,22 @@ msgstr "Motifs de rejet"
 msgctxt "model:party.synthesis.menu.payment,name:"
 msgid "Party Synthesis Menu payment"
 msgstr "Synthèse acteur - Paiement"
+
+msgctxt "selection:account.move,kind:"
+msgid "Automatic Payment In"
+msgstr "Prélèvement automatique"
+
+msgctxt "selection:account.move,kind:"
+msgid "Automatic Payment Out"
+msgstr "Virement automatique"
+
+msgctxt "selection:account.move,kind:"
+msgid "Rejected Payment In"
+msgstr "Rejet de prélèvement"
+
+msgctxt "selection:account.move,kind:"
+msgid "Rejected Payment Out"
+msgstr "Rejet de virement"
 
 msgctxt "selection:account.payment,manual_fail_status:"
 msgid ""

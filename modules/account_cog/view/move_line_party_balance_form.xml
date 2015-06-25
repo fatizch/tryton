@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<form string="Party Balance">
+    <label name="date"/>
+    <field name="date"/>
+    <label name="amount"/>
+    <field name="amount"/>
+    <label name="origin_item"/>
+    <field name="origin_item"/>
+    <label name="synthesis_rec_name"/>
+    <field name="synthesis_rec_name"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="move"/>
+    <field name="move"/>
+    <label name="reconciliation"/>
+    <field name="reconciliation"/>
+    <field name="reconciled_with" colspan="4" view_ids="account_cog.move_line_party_balance_view_list,account_cog.move_line_party_balance_view_form"/>
+</form>

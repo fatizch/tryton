@@ -17,5 +17,66 @@
             <field name="type">tree</field>
             <field name="name">move_line_to_pay_list</field>
         </record>
+        <record model="ir.ui.view" id="move_line_view_list_payable_receivable">
+            <field name="model">account.move.line</field>
+            <field name="inherit" ref="account.move_line_view_list_payable_receivable"/>
+            <field name="name">move_line_list_payable_receivable</field>
+        </record>
+        <record model="ir.action.act_window" id="act_move_line_party_balance">
+            <field name="name">Party Balance</field>
+            <field name="res_model">account.move.line</field>
+            <field name="domain" eval="[('party', '=', Eval('active_id')), ('account.kind', 'in', ['payable', 'receivable'])]" pyson="1"/>
+            <field name="search_value" eval="[('is_reconciled', '=', False)]" pyson="1"/>
+            <field name="order" eval="[('post_date', 'DESC'), ('create_date', 'DESC'),
+                ('date', 'DESC')]" pyson="1"/>
+        </record>
+        <record model="ir.ui.view" id="move_line_party_balance_view_form">
+            <field name="model">account.move.line</field>
+            <field name="type">form</field>
+            <field name="name">move_line_party_balance_form</field>
+        </record>
+        <record model="ir.ui.view" id="move_line_party_balance_view_list">
+            <field name="model">account.move.line</field>
+            <field name="type">tree</field>
+            <field name="name">move_line_party_balance_list</field>
+            <field name="priority" eval="9"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_move_line_party_balance_form_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="move_line_party_balance_view_list"/>
+            <field name="act_window" ref="act_move_line_party_balance"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_move_line_party_balannce_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="move_line_party_balance_view_form"/>
+            <field name="act_window" ref="act_move_line_party_balance"/>
+        </record>
+        <record model="ir.action.keyword" id="act_move_line_party_balance_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="act_move_line_party_balance"/>
+        </record>
+        <record model="ir.ui.view" id="move_view_form">
+            <field name="model">account.move</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="account.move_view_form"/>
+            <field name="name">move_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_move_reconciliation_form">
+            <field name="name">Reconciliation</field>
+            <field name="res_model">account.move.reconciliation</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_move_reconciliation_form_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="account.move_reconciliation_view_tree"/>
+            <field name="act_window" ref="act_move_reconciliation_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_move_reconciliation_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="account.move_reconciliation_view_form"/>
+            <field name="act_window" ref="act_move_reconciliation_form"/>
+        </record>
+        <menuitem parent="account.menu_entries" id="menu_move_reconciliation_form"
+            icon="coopengo-reconciliation" action="act_move_reconciliation_form"/>
     </data>
 </tryton>

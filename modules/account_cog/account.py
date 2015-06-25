@@ -11,7 +11,6 @@ from trytond.modules.cog_utils import export, fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'Move',
     'Account',
     'AccountTemplate',
     'AccountKind',
@@ -24,10 +23,6 @@ __all__ = [
     'OpenThirdPartyBalance',
     'OpenThirdPartyBalanceStart',
     ]
-
-
-class Move(export.ExportImportMixin):
-    __name__ = 'account.move'
 
 
 class AccountKind(export.ExportImportMixin):
