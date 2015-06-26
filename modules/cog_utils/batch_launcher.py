@@ -1,7 +1,7 @@
 import datetime
 
 from celery import Celery, group
-from celeryconfig import CELERY_RESULT_BACKEND
+from celeryconfig import CELERY_RESULT_BACKEND, BROKER_URL
 from celery.utils.log import get_task_logger
 from celery_tryton import TrytonTask
 
@@ -41,7 +41,8 @@ from trytond.modules.cog_utils import batch, coop_string
 ##############################################################################
 
 logger = batch.BatchLogger(get_task_logger(__name__), {})
-celery = Celery('Coopengo Batch', backend=CELERY_RESULT_BACKEND)
+app = Celery('Coopengo Batch', backend=CELERY_RESULT_BACKEND,
+    broker=BROKER_URL)
 
 
 def chunks_number(l, n):
@@ -56,7 +57,7 @@ def chunks_size(l, n):
     yield l[n * newn - newn:]
 
 
-@celery.task(base=TrytonTask)
+@app.task(base=TrytonTask)
 def generate_all(batch_name, connexion_date=None, treatment_date=None,
         extra_args=None):
     if not connexion_date:
@@ -89,7 +90,7 @@ def generate_all(batch_name, connexion_date=None, treatment_date=None,
     return job
 
 
-@celery.task(base=TrytonTask)
+@app.task(base=TrytonTask)
 def generate(batch_name, ids, connexion_date, treatment_date, extra_args):
     User = Pool().get('res.user')
     admin, = User.search([('login', '=', 'admin')])
