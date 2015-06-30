@@ -133,7 +133,7 @@ class Plan:
             if line.match(pattern):
                 return line.get_prepayment_amount(**context)
 
-    def compute_prepayment_schedule(self, option):
+    def compute_prepayment_schedule(self, option, agent):
         ''' Return a list of tuple with date and percentage'''
         today = utils.today()
         payment_date = option.parent_contract.signature_date or today

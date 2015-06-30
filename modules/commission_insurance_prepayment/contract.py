@@ -123,7 +123,7 @@ class ContractOption:
             if not amount:
                 continue
 
-            payment_schedule = plan.compute_prepayment_schedule(self)
+            payment_schedule = plan.compute_prepayment_schedule(self, agent)
             for (date, percentage) in payment_schedule:
                 commission = Commission()
                 commission.is_prepayment = True

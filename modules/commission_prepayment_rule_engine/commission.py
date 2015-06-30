@@ -31,9 +31,12 @@ class Plan:
                 'not matching the expected format [(date, percentage)]',
                 })
 
-    def compute_prepayment_schedule(self, option):
+    def compute_prepayment_schedule(self, option, agent):
         if self.prepayment_payment_rule and option:
-            args = {}
+            args = {
+                'date': option.start_date,
+                'extra_data': agent.extra_data
+                }
             option.init_dict_for_rule_engine(args)
             schedule = self.prepayment_payment_rule.calculate(args)
             # check rule result
@@ -49,7 +52,7 @@ class Plan:
                 self.raise_user_error('invalid_rule_result', schedule)
 
             return schedule
-        return super(Plan, self).compute_prepayment_schedule(option)
+        return super(Plan, self).compute_prepayment_schedule(option, agent)
 
 
 class PrepaymentPaymentDateRule(RuleMixin, model.CoopSQL, model.CoopView):
