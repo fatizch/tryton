@@ -212,6 +212,9 @@ class ContractLoan(model.CoopSQL, model.CoopView):
 class ContractOption:
     __name__ = 'contract.option'
 
+    is_loan = fields.Function(
+        fields.Boolean('Loan'),
+        'get_is_loan')
     loan_shares = fields.One2Many('loan.share', 'option', 'Loan Shares',
         states={
             'invisible': Eval('coverage_family', '') != 'loan',
@@ -230,10 +233,10 @@ class ContractOption:
         return (super(ContractOption, cls)._export_skips() |
             set(['multi_mixed_view']))
 
-    @fields.depends('coverage', 'loan_shares')
+    @fields.depends('coverage', 'loan_shares', 'is_loan')
     def on_change_coverage(self):
         super(ContractOption, self).on_change_coverage()
-        if self.coverage_family != 'loan':
+        if not self.is_loan:
             self.loan_shares = []
 
     @fields.depends('start_date', 'end_date', 'loan_shares')
@@ -247,6 +250,9 @@ class ContractOption:
                 to_update.append(res)
         if to_update:
             return {'update': to_update}
+
+    def get_is_loan(self, name):
+        return self.coverage_family == 'loan'
 
     def get_latest_loan_shares(self, name):
         latest_shares = []

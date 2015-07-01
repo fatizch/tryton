@@ -156,6 +156,8 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             ('calculated', 'Calculated'),
             ], 'State', readonly=True)
     state_string = state.translated('state')
+    contracts = fields.Many2Many('contract-loan', 'loan', 'contract',
+        'Contracts')
 
     @classmethod
     def __setup__(cls):
@@ -203,7 +205,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
 
     @classmethod
     def _export_skips(cls):
-        return super(Loan, cls)._export_skips() | {'loan_shares'}
+        return super(Loan, cls)._export_skips() | {'loan_shares', 'contracts'}
 
     @classmethod
     def _export_light(cls):

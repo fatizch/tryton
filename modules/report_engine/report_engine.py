@@ -102,7 +102,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
 
     @fields.depends('on_model')
     def get_possible_kinds(self):
-        return []
+        return [('', '')]
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):

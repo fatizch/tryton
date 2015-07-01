@@ -175,15 +175,6 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def default_declaration_date():
         return utils.today()
 
-    def init_loss(self):
-        if hasattr(self, 'losses') and self.losses:
-            return True
-        Loss = Pool().get('claim.loss')
-        loss = Loss()
-        loss.init_from_claim(self)
-        self.losses = [loss]
-        return True
-
     def get_pending_relapse_loss(self):
         for loss in self.losses:
             if not loss.main_loss:
@@ -196,7 +187,6 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             return True
         Loss = Pool().get('claim.loss')
         loss = Loss()
-        loss.init_from_claim(self)
         self.losses = list(self.losses)
         self.losses.append(loss)
         return True
@@ -322,7 +312,7 @@ class Loss(model.CoopSQL, model.CoopView):
             ],
         depends=['possible_loss_descs'])
     possible_loss_descs = fields.Function(
-        fields.One2Many('benefit.loss.description', None,
+        fields.Many2Many('benefit.loss.description', None, None,
             'Possible Loss Descs', states={'invisible': True}),
         'on_change_with_possible_loss_descs')
     event_desc = fields.Many2One('benefit.event.description', 'Event',
@@ -372,9 +362,6 @@ class Loss(model.CoopSQL, model.CoopView):
             res = utils.init_extra_data(
                 self.loss_desc.extra_data_def)
         return res
-
-    def init_from_claim(self, claim):
-        pass
 
     def init_services(self, option, benefits):
         if (not hasattr(self, 'services')
