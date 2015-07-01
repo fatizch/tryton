@@ -1353,8 +1353,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 option_summary]
 
         activation_summary = [activation_history.get_summary(
-                'contract.activation_history') for activation_history in
-            self.activation_history]
+                'contract.activation_history', activation_history)
+            for activation_history in self.activation_history]
         if activation_summary:
             result[2] += ['activation_change_section',
                 '%s :' % self.raise_user_error(

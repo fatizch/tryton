@@ -544,7 +544,7 @@ class TerminateContract(EndorsementWizardStepMixin, model.CoopView):
                     contract_endorsement=endorsement,
                     activation_history=last_period,
                     definition=self.endorsement_definition,
-                    values=self.endorsement_values)]
+                    values=self.endorsement_values())]
         # second case : we are terminating a contract during its current
         # term
         else:
@@ -555,7 +555,7 @@ class TerminateContract(EndorsementWizardStepMixin, model.CoopView):
                         contract_endorsement=endorsement,
                         activation_history=last_period,
                         definition=self.endorsement_definition,
-                        values=self.endorsement_values)]
+                        values=self.endorsement_values())]
             # We have a next period, we must remove it,
             # And update the current term period
             else:
@@ -579,7 +579,7 @@ class TerminateContract(EndorsementWizardStepMixin, model.CoopView):
                         contract_endorsement=endorsement,
                         activation_history=current_activation_history,
                         definition=self.endorsement_definition,
-                        values=self.endorsement_values))
+                        values=self.endorsement_values()))
                 endorsement.activation_history = history_endorsements
             endorsement.save()
 
