@@ -32,9 +32,9 @@ class PreviewContractPremiums(EndorsementWizardPreviewMixin,
     def view_attributes(cls):
         return [
             ('/form/group[@id="one_contract"]', 'states',
-                {'invisible': Len(Eval('contract_previews', [])) != Len([0])}),
+                {'invisible': Len(Eval('contract_previews', [])) != 1}),
             ('/form/group[@id="multiple_contract"]', 'states',
-                {'invisible': Len(Eval('contract_previews', [])) == Len([0])}),
+                {'invisible': Len(Eval('contract_previews', [])) == 1}),
             ]
 
     @classmethod

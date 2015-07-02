@@ -273,10 +273,6 @@ msgctxt "field:endorsement.loan.change,loan_changes:"
 msgid "Loan Changes"
 msgstr "Modifications du prêt"
 
-msgctxt "field:endorsement.loan.change,loan_count:"
-msgid "Loan Count"
-msgstr "Nombre de prêts"
-
 msgctxt "field:endorsement.loan.change.displayer,current_values:"
 msgid "Current Values"
 msgstr "Valeurs actuelles"

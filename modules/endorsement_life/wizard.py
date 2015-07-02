@@ -47,9 +47,9 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
     def view_attributes(cls):
         return super(ManageBeneficiaries, cls).view_attributes() + [
             ('/form/group[@id="one_option"]', 'states',
-                {'invisible': Len(Eval('options', [])) != Len([0])}),
+                {'invisible': Len(Eval('options', [])) != 1}),
             ('/form/group[@id="multiple_options"]', 'states',
-                {'invisible': Len(Eval('options', [])) == Len([0])}),
+                {'invisible': Len(Eval('options', [])) == 1}),
             ]
 
     @classmethod

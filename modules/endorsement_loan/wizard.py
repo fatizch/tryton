@@ -112,15 +112,14 @@ class ChangeLoan(EndorsementWizardStepMixin, model.CoopView):
 
     loan_changes = fields.One2Many('endorsement.loan.change.displayer', None,
         'Loan Changes')
-    loan_count = fields.Integer('Loan Count', states={'invisible': True})
 
     @classmethod
     def view_attributes(cls):
         return super(ChangeLoan, cls).view_attributes() + [
             ('/form/group[@id="one_loan"]', 'states',
-                {'invisible': Len(Eval('loan_count', [])) != Len([0])}),
+                {'invisible': Len(Eval('loan_changes', [])) != 1}),
             ('/form/group[@id="multiple_loan"]', 'states',
-                {'invisible': Len(Eval('loan_count', [])) == Len([0])}),
+                {'invisible': Len(Eval('loan_changes', [])) == 1}),
             ]
 
     @classmethod
@@ -233,9 +232,9 @@ class LoanDisplayUpdatedPayments(model.CoopView):
     def view_attributes(cls):
         return [
             ('/form/group[@id="one_loan"]', 'states',
-                {'invisible': Len(Eval('loans', [])) != Len([0])}),
+                {'invisible': Len(Eval('loans', [])) != 1}),
             ('/form/group[@id="multiple_loan"]', 'states',
-                {'invisible': Len(Eval('loans', [])) == Len([0])}),
+                {'invisible': Len(Eval('loans', [])) == 1}),
             ]
 
     loans = fields.One2Many('endorsement.loan.change.updated_payments', None,
@@ -633,9 +632,9 @@ class PreviewContractPayments(EndorsementWizardPreviewMixin,
     def view_attributes(cls):
         return [
             ('/form/group[@id="one_contract"]', 'states',
-                {'invisible': Len(Eval('contract_previews', [])) != Len([0])}),
+                {'invisible': Len(Eval('contract_previews', [])) != 1}),
             ('/form/group[@id="multiple_contract"]', 'states',
-                {'invisible': Len(Eval('contract_previews', [])) == Len([0])}),
+                {'invisible': Len(Eval('contract_previews', [])) == 1}),
             ]
 
     @classmethod

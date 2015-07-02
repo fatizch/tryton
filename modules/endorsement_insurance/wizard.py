@@ -734,9 +734,9 @@ class NewExtraPremium(model.CoopView):
     def view_attributes(cls):
         return super(NewExtraPremium, cls).view_attributes() + [
             ('/form/group[@id="one_covered"]', 'states',
-                {'invisible': Len(Eval('covered_elements', [])) != Len([0])}),
+                {'invisible': Len(Eval('covered_elements', [])) != 1}),
             ('/form/group[@id="multiple_covered"]', 'states',
-                {'invisible': Len(Eval('covered_elements', [])) == Len([0])}),
+                {'invisible': Len(Eval('covered_elements', [])) == 1}),
             ]
 
     @classmethod
