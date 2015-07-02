@@ -80,7 +80,7 @@ msgstr "Modèle"
 
 msgctxt "field:contract.subscribe.find_process,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:contract.subscribe.find_process,product:"
 msgid "Product"

@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:account.invoice,party:account_invoice."
-msgid "Party"
-msgstr "Acteur"
-
 msgctxt "field:account.invoice-account.move.line,invoice:account_invoice."
 msgid "Invoice"
 msgstr "Quittance"
@@ -13,10 +9,6 @@ msgstr "Quittance"
 msgctxt "field:account.invoice.line,invoice:account_invoice."
 msgid "Invoice"
 msgstr "Quittance"
-
-msgctxt "field:account.invoice.line,party:account_invoice."
-msgid "Party"
-msgstr "Acteur"
 
 msgctxt "field:account.invoice.pay.ask,invoice:account_invoice."
 msgid "Invoice"

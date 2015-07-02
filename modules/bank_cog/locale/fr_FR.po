@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -92,7 +92,7 @@ msgstr "Compte Bancaire"
 
 msgctxt "field:party.synthesis.menu.bank_account,owner:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.bank_account,rec_name:"
 msgid "Name"
@@ -120,7 +120,7 @@ msgstr "Jeux d'essai : banques"
 
 msgctxt "model:party.synthesis.menu.bank_account,name:"
 msgid "Party Synthesis Menu Bank Account"
-msgstr "Menu Compte Bancaire Synthèse Acteurs "
+msgstr "Menu Compte Bancaire Synthèse Tiers "
 
 msgctxt "view:party.party:"
 msgid "Bank"

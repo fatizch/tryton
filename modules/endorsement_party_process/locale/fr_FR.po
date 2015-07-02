@@ -24,7 +24,7 @@ msgstr "Modèle"
 
 msgctxt "field:endorsement_party.start.find_process,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "model:endorsement_party.start.find_process,name:"
 msgid "Endorsement Party Process Finder"

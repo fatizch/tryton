@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -565,7 +565,7 @@ msgstr "ID"
 msgctxt ""
 "field:party.display_insured_outstanding_loan_balance.select_date,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt ""
 "field:party.display_insured_outstanding_loan_balance.select_date,possible_currencies:"
@@ -606,7 +606,7 @@ msgstr "Prêts"
 
 msgctxt "field:party.synthesis.menu.loan,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.loan,rec_name:"
 msgid "Name"

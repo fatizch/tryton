@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -64,7 +64,7 @@ msgstr "Niveau Supérieur"
 
 msgctxt "field:distribution.network,parent_party:"
 msgid "Parent Party"
-msgstr "Acteur Parent"
+msgstr "Tiers Parent"
 
 msgctxt "field:distribution.network,parents:"
 msgid "Parents"
@@ -72,7 +72,7 @@ msgstr "Parents"
 
 msgctxt "field:distribution.network,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:distribution.network,phone:"
 msgid "Phone"

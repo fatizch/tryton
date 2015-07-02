@@ -12,7 +12,7 @@ msgstr "Le code doit être unique"
 
 msgctxt "error:account.payment:"
 msgid "Payments blocked for party %s"
-msgstr "Paiements bloqués pour l'acteur %s"
+msgstr "Paiements bloqués pour le tiers %s"
 
 msgctxt "field:account.configuration,direct_debit_journal:"
 msgid "Direct Debit Journal"
@@ -228,7 +228,7 @@ msgstr "Prélèvements en cours / Rejet"
 
 msgctxt "field:party.synthesis.menu.payment,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.payment,rec_name:"
 msgid "Name"

@@ -1555,7 +1555,7 @@ msgstr "Société"
 
 msgctxt "selection:offered.item.description,kind:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "selection:offered.item.description,kind:"
 msgid "Person"

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -54,7 +54,7 @@ msgstr "Option commissionnée"
 
 msgctxt "field:commission,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:commission.agent,end_date:"
 msgid "End Date"

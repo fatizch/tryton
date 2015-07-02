@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -32,7 +32,7 @@ msgstr "Tous les processus des contrats sont terminés"
 
 msgctxt "field:contract.set,covered_parties:"
 msgid "Covered Parties"
-msgstr "Acteurs couverts"
+msgstr "Tiers couverts"
 
 msgctxt "field:contract.set,current_log:"
 msgid "Current Log"

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -14,7 +14,7 @@ msgstr "Des doublons existent déjà:"
 
 msgctxt "error:party.party:"
 msgid "The SSN of the party must be unique."
-msgstr "Le NIR de l'acteur doit être unique"
+msgstr "Le NIR du tiers doit être unique"
 
 msgctxt "field:country.zipcode,city:"
 msgid "City"
@@ -170,7 +170,7 @@ msgstr "Media"
 
 msgctxt "field:party.interaction,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:party.interaction,rec_name:"
 msgid "Name"
@@ -346,7 +346,7 @@ msgstr "Parent"
 
 msgctxt "field:party.synthesis.menu,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu,rec_name:"
 msgid "Name"
@@ -390,7 +390,7 @@ msgstr "Fermer la synthèse"
 
 msgctxt "field:party.synthesis.menu.action_close,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.action_close,rec_name:"
 msgid "Name"
@@ -470,7 +470,7 @@ msgstr "Adresses"
 
 msgctxt "field:party.synthesis.menu.address,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.address,rec_name:"
 msgid "Name"
@@ -510,7 +510,7 @@ msgstr "Contacts"
 
 msgctxt "field:party.synthesis.menu.contact,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.contact,rec_name:"
 msgid "Name"
@@ -558,7 +558,7 @@ msgstr "Historique des contacts"
 
 msgctxt "field:party.synthesis.menu.party_interaction,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.party_interaction,rec_name:"
 msgid "Name"
@@ -598,7 +598,7 @@ msgstr "Relation acteurs"
 
 msgctxt "field:party.synthesis.menu.relationship,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.relationship,rec_name:"
 msgid "Name"
@@ -738,7 +738,7 @@ msgstr "Fermer menu synthèse acteurs"
 
 msgctxt "model:party.synthesis.menu.action_refresh,name:"
 msgid "Party Synthesis Menu Action Refresh"
-msgstr "Action Rafraichir Menu Synthese Acteur"
+msgstr "Action Rafraichir Menu Synthese Tiers"
 
 msgctxt "model:party.synthesis.menu.address,name:"
 msgid "Party Synthesis Menu Address"
@@ -762,7 +762,7 @@ msgstr "Synthèse acteur - Moyens de contact"
 
 msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "selection:party.interaction,media:"
 msgid "E-Mail"

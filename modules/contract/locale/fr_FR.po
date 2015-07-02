@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -173,7 +173,7 @@ msgstr "Garanties"
 
 msgctxt "field:contract,parties:"
 msgid "Parties"
-msgstr "Acteurs"
+msgstr "Tiers"
 
 msgctxt "field:contract,product:"
 msgid "Product"
@@ -373,7 +373,7 @@ msgstr "ID"
 
 msgctxt "field:contract.contact,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:contract.contact,rec_name:"
 msgid "Name"

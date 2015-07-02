@@ -46,7 +46,7 @@ msgstr ""
 
 msgctxt "field:endorsement,parties:"
 msgid "Parties"
-msgstr "Acteurs"
+msgstr "Tiers"
 
 msgctxt "field:endorsement,party_endorsements:"
 msgid "Party Endorsement"

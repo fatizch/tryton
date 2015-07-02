@@ -413,7 +413,7 @@ msgstr "Paiements"
 
 msgctxt "field:party.synthesis.menu.move.line,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.move.line,rec_name:"
 msgid "Name"
@@ -513,7 +513,7 @@ msgstr "Taxes"
 
 msgctxt "model:party.synthesis.menu.move.line,name:"
 msgid "Party Synthesis Menu Move line"
-msgstr "Menu Paiement Synthèse Acteur "
+msgstr "Menu Paiement Synthèse Tiers "
 
 msgctxt "selection:account.fee.description.version,kind:"
 msgid "Flat"

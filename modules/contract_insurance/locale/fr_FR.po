@@ -279,15 +279,15 @@ msgstr "Parent"
 
 msgctxt "field:contract.covered_element,party:"
 msgid "Actor"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt "field:contract.covered_element,party_code:"
 msgid "Party Code"
-msgstr "Code de l'acteur"
+msgstr "Code du tiers"
 
 msgctxt "field:contract.covered_element,party_extra_data:"
 msgid "Party Extra Data"
-msgstr "Données complémentaires de l'acteur"
+msgstr "Données complémentaires du tiers"
 
 msgctxt "field:contract.covered_element,product:"
 msgid "Product"
@@ -715,7 +715,7 @@ msgstr "Cacher le risque couvert"
 
 msgctxt "field:contract.wizard.option_subscription.options_displayer,party:"
 msgid "Party"
-msgstr "Acteur"
+msgstr "Tiers"
 
 msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer,possible_covered_elements:"
