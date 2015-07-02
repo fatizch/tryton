@@ -133,13 +133,13 @@ def sync(arguments, config, work_data):
         os.system('hg update %s' % branch_name)
 
     if arguments.target in ('server', 'all'):
-        sync_this('trytond', 'dev')
+        sync_this('trytond', 'coog')
     if arguments.target in ('client', 'all'):
-        sync_this('tryton', 'coopengo')
+        sync_this('tryton', 'coog')
     if arguments.target in ('proteus', 'all'):
         sync_this('proteus')
     if arguments.target in ('coop', 'all'):
-        sync_this('coopbusiness')
+        sync_this('coopbusiness', 'coog')
         arguments.env = os.environ['VIRTUAL_ENV']
         configure(arguments.env)
 
