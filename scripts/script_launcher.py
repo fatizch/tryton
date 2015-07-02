@@ -150,7 +150,7 @@ def database(arguments, config, work_data):
     elif arguments.action == 'install':
         cmd = [work_data['trytond_exec'], '-d', arguments.database,
             '--logconf', work_data['trytond_log_conf'],
-            '-c', work_data['trytond_conf'], '--init', arguments.module]
+            '-c', work_data['trytond_conf'], '-u', arguments.module]
     elif arguments.action == 'update':
         cmd = [work_data['trytond_exec'], '-d', arguments.database,
             '--logconf', work_data['trytond_log_conf'],
