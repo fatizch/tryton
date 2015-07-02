@@ -5,4 +5,4 @@ Batches
    :maxdepth: 1
    :glob:
 
-   ./../../../*/batch
+   ./../../../modules/*/doc/fr/user/batch
