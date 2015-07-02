@@ -843,7 +843,6 @@ class StartEndorsement:
                     'new_values': [
                         model.dictionarize(loan, fields_to_extract)],
                     } for loan in contract.used_loans],
-            'loan_count': len(contract.used_loans),
             }
         ChangeLoan.update_default_values(self, self.endorsement,
             default_values)
