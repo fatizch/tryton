@@ -51,6 +51,7 @@ class BatchRoot(ModelView):
     def __setup__(cls):
         super(BatchRoot, cls).__setup__()
         cls._default_config_items = {
+            'root_dir': config.get('batch', 'log_dir', default=''),
             'filepath_template': u'%{BATCHNAME}/%{FILENAME}',
             'filepath_timestamp_format': u'%Y%m%d_%Hh%Mm%Ss',
             'split_mode': u'divide',
