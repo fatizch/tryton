@@ -110,18 +110,71 @@ class InvoiceLine:
 class Invoice:
     __name__ = 'account.invoice'
 
-    is_commission_invoice = fields.Function(
-        fields.Boolean('Is Commission Invoice'),
-        'get_is_commission_invoice')
+    is_broker_invoice = fields.Function(
+        fields.Boolean('Is Broker Invoice'),
+        'get_is_broker_invoice', searcher='search_is_broker_invoice')
+    is_insurer_invoice = fields.Function(
+        fields.Boolean('Is Insurer Invoice'),
+        'get_is_insurer_invoice', searcher='search_is_insurer_invoice')
 
     def _get_move_line(self, date, amount):
         line = super(Invoice, self)._get_move_line(date, amount)
-        if self.is_commission_invoice and self.total_amount > 0:
+        if (self.is_broker_invoice and self.type == 'in_invoice'
+                and self.total_amount > 0):
             line['payment_date'] = utils.today()
         return line
 
-    def get_is_commission_invoice(self, name):
-        return self.party.is_broker and self.type == 'in_invoice'
+    @classmethod
+    def get_is_broker_invoice(cls, invoices, name):
+        pool = Pool()
+        cursor = Transaction().cursor
+        invoice = pool.get('account.invoice').__table__()
+        network = pool.get('distribution.network').__table__()
+        result = {x.id: False for x in invoices}
+
+        cursor.execute(*invoice.join(network,
+                condition=invoice.party == network.party
+                ).select(invoice.id,
+                where=(invoice.id.in_([x.id for x in invoices])),
+                group_by=[invoice.id]))
+
+        for invoice_id, in cursor.fetchall():
+            result[invoice_id] = True
+        return result
+
+    @classmethod
+    def search_is_broker_invoice(cls, name, clause):
+        if (clause[1] == '=' and clause[2] or
+                clause[1] == ':=' and not clause[2]):
+            return [('party.network', '!=', None)]
+        else:
+            return [('party.network', '=', None)]
+
+    @classmethod
+    def get_is_insurer_invoice(cls, invoices, name):
+        pool = Pool()
+        cursor = Transaction().cursor
+        invoice = pool.get('account.invoice').__table__()
+        insurer = pool.get('insurer').__table__()
+        result = {x.id: False for x in invoices}
+
+        cursor.execute(*invoice.join(insurer,
+                condition=invoice.party == insurer.party
+                ).select(invoice.id,
+                where=(invoice.id.in_([x.id for x in invoices])),
+                group_by=[invoice.id]))
+
+        for invoice_id, in cursor.fetchall():
+            result[invoice_id] = True
+        return result
+
+    @classmethod
+    def search_is_insurer_invoice(cls, name, clause):
+        if (clause[1] == '=' and clause[2] or
+                clause[1] == ':=' and not clause[2]):
+            return [('party.insurer_role', '!=', None)]
+        else:
+            return [('party.insurer_role', '=', None)]
 
     @classmethod
     @ModelView.button

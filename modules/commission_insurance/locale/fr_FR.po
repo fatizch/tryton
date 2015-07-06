@@ -28,9 +28,13 @@ msgctxt "field:account.fee,broker_fee:"
 msgid "Broker Fee"
 msgstr "Frais d'apporteur"
 
-msgctxt "field:account.invoice,is_commission_invoice:"
-msgid "Is Commission Invoice"
-msgstr "Est un bordereau de commissionnement"
+msgctxt "field:account.invoice,is_broker_invoice:"
+msgid "Is Broker Invoice"
+msgstr "Est un bordereau courtier"
+
+msgctxt "field:account.invoice,is_insurer_invoice:"
+msgid "Is Insurer Invoice"
+msgstr "Est un bordereau assureur"
 
 msgctxt "field:account.invoice.line,broker_fee_lines:"
 msgid "Broker Fee Lines"
@@ -43,6 +47,10 @@ msgstr "Lignes de frais d'apporteur"
 msgctxt "field:commission,broker:"
 msgid "Broker"
 msgstr "Courtier"
+
+msgctxt "field:commission,commission_rate:"
+msgid "Commission Rate"
+msgstr "Taux de commissions"
 
 msgctxt "field:commission,commissioned_contract:"
 msgid "Commissioned Contract"
@@ -308,6 +316,10 @@ msgctxt "model:ir.action,name:act_broker_commissioned_contract_relate_form"
 msgid "Commissioned Contracts"
 msgstr "Contrats commissionnés"
 
+msgctxt "model:ir.action,name:act_broker_form"
+msgid "Broker"
+msgstr "Courtier"
+
 msgctxt "model:ir.action,name:act_commission_create_agents"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
@@ -315,6 +327,14 @@ msgstr "Créer les protocoles de commissionnement"
 msgctxt "model:ir.action,name:act_commission_relate_form"
 msgid "Commission"
 msgstr "Commission"
+
+msgctxt "model:ir.action,name:act_invoice_broker_invoice_form"
+msgid "Broker Invoices"
+msgstr "Bordereaux courtiers"
+
+msgctxt "model:ir.action,name:act_invoice_insurer_invoice_form"
+msgid "Insurer Invoices"
+msgstr "Bordereaux assureurs"
 
 msgctxt "model:ir.action.act_window.domain,name:act_commission_domain_broker"
 msgid "Broker"
@@ -328,6 +348,10 @@ msgctxt "model:ir.ui.menu,name:"
 msgid "Brokers"
 msgstr "Courtiers"
 
+msgctxt "model:ir.ui.menu,name:menu_broker"
+msgid "Broker"
+msgstr "Courtier"
+
 msgctxt "model:ir.ui.menu,name:menu_commission_create_agents"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
@@ -335,6 +359,18 @@ msgstr "Créer les protocoles de commissionnement"
 msgctxt "model:ir.ui.menu,name:menu_commission_insurer_form"
 msgid "Insurers"
 msgstr "Assureurs"
+
+msgctxt "model:ir.ui.menu,name:menu_commission_invoice"
+msgid "Commission Invoices"
+msgstr "Bordereaux de commissions"
+
+msgctxt "model:ir.ui.menu,name:menu_invoice_broker_invoice"
+msgid "Broker Invoices"
+msgstr "Bordereaux courtiers"
+
+msgctxt "model:ir.ui.menu,name:menu_invoice_insurer_invoice"
+msgid "Insurer Invoices"
+msgstr "Bordereaux assureurs"
 
 msgctxt "selection:commission.plan,type_:"
 msgid "Broker"

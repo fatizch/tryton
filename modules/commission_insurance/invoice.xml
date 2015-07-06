@@ -7,5 +7,48 @@
             <field name="inherit" ref="account_invoice.invoice_line_view_form"/>
             <field name="name">invoice_line_form</field>
         </record>
+        <menuitem parent="commission.menu_commission" name="Commission Invoices" id="menu_commission_invoice" sequence="25"/>
+        <!-- ############################################################ -->
+        <!-- ########### Broker Invoices ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.action.act_window" id="act_invoice_broker_invoice_form">
+            <field name="name">Broker Invoices</field>
+            <field name="res_model">account.invoice</field>
+            <field name="domain" eval="[('is_broker_invoice', '=', True)]" pyson="1"/>
+            <field name="search_value"></field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_invoice_broker_invoice_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="account_invoice.invoice_view_tree"/>
+            <field name="act_window" ref="act_invoice_broker_invoice_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_invoice_broker_invoice_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="account_invoice.invoice_view_form"/>
+            <field name="act_window" ref="act_invoice_broker_invoice_form"/>
+        </record>
+        <menuitem parent="menu_commission_invoice" action="act_invoice_broker_invoice_form"
+            id="menu_invoice_broker_invoice" sequence="20"/>
+        <!-- ############################################################ -->
+        <!-- ########### Insurer Invoices ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.action.act_window" id="act_invoice_insurer_invoice_form">
+            <field name="name">Insurer Invoices</field>
+            <field name="res_model">account.invoice</field>
+            <field name="domain" eval="[('is_insurer_invoice', '=', True)]" pyson="1"/>
+            <field name="search_value"></field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_invoice_insurer_invoice_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="account_invoice.invoice_view_tree"/>
+            <field name="act_window" ref="act_invoice_insurer_invoice_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_invoice_insurer_invoice_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="account_invoice.invoice_view_form"/>
+            <field name="act_window" ref="act_invoice_insurer_invoice_form"/>
+        </record>
+        <menuitem parent="menu_commission_invoice" action="act_invoice_insurer_invoice_form"
+            id="menu_invoice_insurer_invoice" sequence="20"/>
     </data>
 </tryton>
