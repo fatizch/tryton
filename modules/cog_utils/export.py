@@ -380,7 +380,10 @@ class ExportImportMixin(Model):
             output=None, main_object=None, configuration=None):
         if not main_object:
             main_object = self
-        skip_fields = (skip_fields or set()) | self._export_skips()
+        if not configuration:
+            skip_fields = (skip_fields or set()) | self._export_skips()
+        else:
+            skip_fields = (skip_fields or set())
         values = {
             '__name__': self.__name__,
             '_func_key': getattr(self, self._func_key),
@@ -414,7 +417,8 @@ class ExportImportMixin(Model):
                     isinstance(field, tryton_fields.Property) and
                     not configuration):
                 continue
-            if (field_name in light_exports or model_configuration and
+            if ((field_name in light_exports and not model_configuration) or
+                    model_configuration and
                     field_name in model_configuration['light']):
                 field_value = getattr(self, field_name)
                 if (isinstance(field, (tryton_fields.One2Many,
@@ -811,14 +815,8 @@ class ExportFieldsSelection(Wizard):
         return ExportModel(Transaction().context.get('active_id'))
 
     def default_fields_selection(self, name):
-        pool = Pool()
         export_model = self.get_export_model()
-        ExportModel = pool.get(export_model.model.model)
-        skips = ExportModel._export_skips()
-        return {
-            'available_fields': [x.id for x in export_model.model.fields
-                if x.name not in skips]
-            }
+        return {'available_fields': [x.id for x in export_model.model.fields]}
 
     def transition_apply(self):
         pool = Pool()
