@@ -206,7 +206,7 @@ class TestCaseModel:
                 random.randint(date_interval[0], date_interval[1])),
             addresses=[], lang=cls.get_language(), relations=[])
         if with_address:
-            person.addresses.append(cls.new_address('person'))
+            person.addresses = [cls.new_address('person')]
         return person
 
     @classmethod
