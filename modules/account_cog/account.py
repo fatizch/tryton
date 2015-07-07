@@ -2,6 +2,7 @@ from sql import Literal, Null
 from sql.aggregate import Sum
 
 from trytond.pool import PoolMeta, Pool
+from trytond.cache import Cache
 from trytond.transaction import Transaction
 from trytond.report import Report
 from trytond.pyson import Eval
@@ -117,6 +118,7 @@ class AccountTemplate(export.ExportImportMixin):
 class Journal(export.ExportImportMixin):
     __name__ = 'account.journal'
     _func_key = 'code'
+    _get_default_journal_cache = Cache('get_default_journal')
 
     @classmethod
     def _export_skips(cls):
@@ -126,6 +128,19 @@ class Journal(export.ExportImportMixin):
     def _export_light(cls):
         return super(Journal, cls)._export_light() | {'sequence',
             'credit_account', 'debit_account'}
+
+    @classmethod
+    def get_default_journal(cls, type_):
+        result = cls._get_default_journal_cache.get(type_, default=0)
+        if result is None:
+            return None
+        elif result:
+            return cls(result)
+        result = Pool().get('account.journal').search([
+                ('type', '=', type_)])
+        cls._get_default_journal_cache.set(type_,
+            result[0].id if len(result) == 1 else None)
+        return result[0] if len(result) == 1 else None
 
 
 class FiscalYear(export.ExportImportMixin):
