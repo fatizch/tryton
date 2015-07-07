@@ -110,6 +110,14 @@ msgctxt "field:process,close_tab_on_completion:"
 msgid "Close Tab On Completion"
 msgstr "Fermer l'onglet à la fin"
 
+msgctxt "field:process,complete_message:"
+msgid "Confirmation Message for Completion"
+msgstr "Message de confirmation final"
+
+msgctxt "help:process,complete_message:"
+msgid "A confirmation message that will be displayed when the user clicks the \"Terminate\" button at the end of the process"
+msgstr "Ce message est affiché à l'utilisateur pour confirmation lorsqu'il clique sur le bouton \"Terminer\" du processus"
+
 msgctxt "field:process,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"

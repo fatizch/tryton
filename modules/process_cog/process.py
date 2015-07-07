@@ -515,6 +515,11 @@ class Process(model.CoopSQL, model.TaggedMixin):
     custom_transitions = fields.Boolean('Custom Transitions')
     steps_implicitly_available = fields.Boolean('Steps Implicitly Available',
         states={'invisible': ~Eval('custom_transitions')})
+    complete_message = fields.Char('Confirmation Message for Completion',
+        states={'invisible': Bool(Eval('custom_transitions', False))},
+        help='A confirmation message that will be displayed when the user '
+        'clicks the "Terminate" button at the end of the process',
+        translate=True)
     kind = fields.Selection([('', '')], 'Kind')
     close_tab_on_completion = fields.Boolean('Close Tab On Completion')
 
@@ -630,8 +635,11 @@ class Process(model.CoopSQL, model.TaggedMixin):
         if not self.custom_transitions and self.all_steps[-1] == step_relation:
             result += '<button string="%s" ' % (self.end_step_name or
                 'Complete')
-            result += 'name="_button_complete_%s_%s"/>' % (
+            result += 'name="_button_complete_%s_%s"' % (
                 self.id, step_relation.id)
+            if self.complete_message:
+                result += ' confirm="%s"' % self.complete_message
+            result += '/>'
             nb += 1
         return nb, result
 

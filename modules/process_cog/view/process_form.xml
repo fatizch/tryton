@@ -16,5 +16,7 @@
         <field name="with_prev_next"/>
         <label name="close_tab_on_completion"/>
         <field name="close_tab_on_completion"/>
+        <label name="complete_message"/>
+        <field name="complete_message"/>
     </xpath>
 </data>
