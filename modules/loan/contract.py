@@ -337,7 +337,8 @@ class ExtraPremium:
         if not self.calculation_kind == 'capital_per_mil':
             return super(ExtraPremium, self).calculate_premium_amount(args,
                 base)
-        return args['loan'].amount * self.capital_per_mil_rate
+        return args['loan'].amount * self.capital_per_mil_rate * \
+            args['share'].share
 
     def get_rec_name(self, name):
         if (self.calculation_kind == 'capital_per_mil'
