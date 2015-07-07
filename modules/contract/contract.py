@@ -754,20 +754,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_synthesis_rec_name(self, name):
         Date = Pool().get('ir.date')
-        if self.status in ['quote', 'declined']:
-            return '%s (%s)[%s]' % (
-                coop_string.translate_value(self, 'status'),
-                self.product.rec_name,
-                Date.date_as_string(self.start_date))
-        elif self.end_date:
-            return '%s (%s)[%s - %s]' % (self.contract_number,
-                self.product.rec_name,
-                Date.date_as_string(self.start_date),
-                Date.date_as_string(self.end_date))
+        dates = '[%s - %s]' % (
+            Date.date_as_string(self.start_date) if self.start_date else '',
+            Date.date_as_string(self.end_date) if self.end_date else '')
+        product = '[%s]' % self.product.rec_name
+        status = '[%s]' % coop_string.translate_value(self, 'status')
+        number = self.contract_number or self.quote_number
+        if self.status in ['void', 'declined']:
+            return '%s %s %s' % (number, product, status)
         else:
-            return '%s (%s)[%s ]' % (self.contract_number,
-                self.product.rec_name,
-                Date.date_as_string(self.start_date))
+            return '%s %s %s %s' % (number, product, status, dates)
 
     @classmethod
     def get_extra_data(cls, contracts, names):
