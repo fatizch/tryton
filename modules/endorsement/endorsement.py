@@ -532,7 +532,8 @@ def relation_mixin(value_model, field, model, name):
                             Target = field.get_target()
                             target, = Target.search([('id', '=', value)])
                             export = []
-                            target.export_json(output=export)
+                            target.export_json(output=export,
+                                configuration=configuration)
                             new_values_field[key] = export[-1]
                         else:
                             new_values_field[key] = value
@@ -574,8 +575,8 @@ def relation_mixin(value_model, field, model, name):
             return super(Mixin, self).get_summary(model, base_object)
 
         def get_func_key(self, name):
-            return getattr(self, field).func_key if getattr(self, field) \
-                else ''
+            return getattr(self, field).func_key if getattr(self, field) and \
+                hasattr(getattr(self, field), 'func_key') else ''
 
     setattr(Mixin, field, fields.Function(fields.Many2One(model, name,
                 datetime_field='applied_on',
