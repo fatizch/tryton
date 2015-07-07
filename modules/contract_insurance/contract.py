@@ -1,5 +1,7 @@
 from dateutil.relativedelta import relativedelta
 
+from sql import Null
+
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Or, Bool, Len
 from trytond.transaction import Transaction
@@ -355,6 +357,38 @@ class ContractOption:
                 'propagate_exclusions': _CONTRACT_STATUS_STATES,
                 })
 
+    @classmethod
+    def order_coverage(cls, tables):
+        super(ContractOption, cls).order_coverage(tables)
+
+        pool = Pool()
+        table, _ = tables[None]
+        query_table, _ = tables['coverage_order_tables'][None]
+
+        contract = tables.get('contract')
+        if contract is None:
+            contract = pool.get('contract').__table__()
+
+        covered_element = tables.get('contract.covered_element')
+        if covered_element is None:
+            covered_element = pool.get('contract.covered_element').__table__()
+
+        new_query_table = query_table.join(covered_element, 'LEFT OUTER',
+            condition=(covered_element.contract == query_table.contract)
+            ).select(query_table.contract, query_table.coverage,
+                query_table.order, covered_element.id.as_('covered_element'))
+
+        tables['coverage_order_tables'] = {
+            None: (new_query_table,
+                (new_query_table.coverage == table.coverage) &
+                (
+                    ((new_query_table.contract == table.contract)
+                        & (table.contract != Null)) |
+                    ((new_query_table.covered_element == table.covered_element)
+                        & (table.covered_element != Null))
+                    ))}
+        return [new_query_table.order]
+
     def get_full_name(self, name):
         if self.covered_element:
             return self.covered_element.rec_name + ' - ' + super(
@@ -604,7 +638,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             'all_extra_datas': Eval('all_extra_datas'),
             },
         depends=['id', 'item_desc', 'all_extra_datas', 'product'],
-        target_not_required=True)
+        target_not_required=True, order=[('coverage', 'ASC')])
     declined_options = fields.One2ManyDomain('contract.option',
         'covered_element', 'Declined Options',
         domain=[('status', '=', 'declined')], target_not_required=True)

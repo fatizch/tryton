@@ -152,7 +152,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             ('status', '!=', 'declined'),
             ],
         states=_STATES, depends=['status', 'start_date', 'product',
-            'extra_data_values'], target_not_required=True)
+            'extra_data_values'], target_not_required=True,
+            order=[('coverage', 'ASC')])
     declined_options = fields.One2ManyDomain('contract.option', 'contract',
         'Declined Options', states=_STATES, depends=['status'],
         domain=[('status', '=', 'declined')], target_not_required=True)
@@ -1404,6 +1405,31 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 'end_date_posterior_to_automatic_end_date': 'End date should '
                 'be anterior to option automatic end date : %s',
                 })
+
+    @classmethod
+    def order_coverage(cls, tables):
+        coverage_order = tables.get('coverage_order_tables')
+        if coverage_order is not None:
+            return [coverage_order[None][0].order]
+
+        pool = Pool()
+        table, _ = tables[None]
+        contract = tables.get('contract')
+        if contract is None:
+            contract = pool.get('contract').__table__()
+
+        relation = pool.get('offered.product-option.description').__table__()
+
+        query_table = contract.join(relation, condition=(
+                contract.product == relation.product)).select(
+                contract.id.as_('contract'), relation.coverage, relation.order)
+        tables['coverage_order_tables'] = {
+            None: (query_table,
+                (query_table.contract == table.contract) &
+                (query_table.coverage == table.coverage)
+                )}
+
+        return [query_table.order]
 
     @classmethod
     def get_start_date(cls, options, names):
