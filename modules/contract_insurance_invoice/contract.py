@@ -1438,6 +1438,23 @@ class InvoiceContract(Wizard):
             ])
     invoice = StateTransition()
 
+    def default_start(self, name):
+        if Transaction().context.get('active_model', '') != 'contract':
+            return {}
+        if len(Transaction().context.get('active_ids', [])) != 1:
+            return {}
+        pool = Pool()
+        Contract = pool.get('contract')
+        contract = Contract(Transaction().context.get('active_ids')[0])
+        if contract.last_invoice_end:
+            return {
+                'up_to_date': coop_date.add_day(contract.last_invoice_end, 1),
+                }
+        else:
+            return {
+                'up_to_date': contract.start_date,
+                }
+
     def transition_invoice(self):
         pool = Pool()
         Contract = pool.get('contract')
