@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/tree" position="inside">
+        <field name="balance">
+            <suffix name="currency_symbol"/>
+        </field>
+        <field name="balance_today">
+            <suffix name="currency_symbol"/>
+        </field>
+    </xpath>
+</data>

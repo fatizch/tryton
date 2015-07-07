@@ -3,10 +3,12 @@ import calendar
 from collections import defaultdict
 from decimal import Decimal
 
+from sql import Column, Null, Literal
+from sql.aggregate import Max, Count, Sum
+from sql.conditionals import Coalesce
+
 from dateutil.rrule import rrule, rruleset, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
-from sql.aggregate import Max, Count
-from sql import Column
 
 from trytond.pool import Pool, PoolMeta
 from trytond.model import dualmethod
@@ -101,6 +103,15 @@ class Contract:
     current_term_invoices = fields.Function(
         fields.One2Many('contract.invoice', None, 'Current Term Invoices'),
         'get_current_term_invoices')
+    balance = fields.Function(
+        fields.Numeric('Balance', digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_balance', searcher='search_balance')
+    balance_today = fields.Function(
+        fields.Numeric('Balance Today',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_balance_today', searcher='search_balance_today')
 
     _invoices_cache = Cache('invoices_report')
 
@@ -126,6 +137,157 @@ class Contract:
                     ('start', '>=', self.start_date),
                     ('end', '<=', self.end_date or datetime.date.max),
                     ])]
+
+    @classmethod
+    def get_balance(cls, contracts, name, date=None):
+        pool = Pool()
+        MoveLine = pool.get('account.move.line')
+        Account = pool.get('account.account')
+        User = pool.get('res.user')
+        cursor = Transaction().cursor
+
+        line = MoveLine.__table__()
+        account = Account.__table__()
+
+        result = dict((c.id, Decimal('0.0')) for c in contracts)
+
+        user = User(Transaction().user)
+        if not user.company:
+            return result
+        company_id = user.company.id
+
+        line_query, _ = MoveLine.query_get(line)
+
+        date_clause = Literal(True)
+        if date:
+            date_clause = ((line.maturity_date <= date)
+                | (line.maturity_date == Null))
+
+        balance = (Sum(Coalesce(line.debit, 0)) -
+            Sum(Coalesce(line.credit, 0)))
+        for sub_contracts in grouped_slice(contracts):
+            sub_ids = [c.id for c in sub_contracts]
+            contract_where = reduce_ids(line.contract, sub_ids)
+            cursor.execute(*line.join(account,
+                    condition=account.id == line.account
+                    ).select(line.contract, balance,
+                    where=(account.active
+                        & (account.kind == 'receivable')
+                        & (line.reconciliation == Null)
+                        & (account.company == company_id)
+                        & line_query
+                        & contract_where
+                        & date_clause),
+                    group_by=line.contract))
+            for contract, balance in cursor.fetchall():
+                balance = balance or 0
+                # SQLite uses float for SUM
+                if not isinstance(balance, Decimal):
+                    balance = Decimal(str(balance))
+                result[contract] = balance
+        return result
+
+    @classmethod
+    def search_balance(cls, name, clause, date=None):
+        pool = Pool()
+        MoveLine = pool.get('account.move.line')
+        Account = pool.get('account.account')
+        User = pool.get('res.user')
+
+        line = MoveLine.__table__()
+        account = Account.__table__()
+
+        user = User(Transaction().user)
+        if not user.company:
+            return []
+        company_id = user.company.id
+
+        date_clause = Literal(True)
+        if date:
+            date_clause = ((line.maturity_date <= date)
+                | (line.maturity_date == Null))
+
+        line_query, _ = MoveLine.query_get(line)
+        Operator = fields.SQL_OPERATORS[clause[1]]
+
+        query = line.join(account, condition=account.id == line.account
+                ).select(line.contract,
+                    where=account.active
+                    & (account.kind == 'receivable')
+                    & (line.contract != Null)
+                    & (line.reconciliation == Null)
+                    & (account.company == company_id)
+                    & line_query & date_clause,
+                    group_by=line.contract,
+                    having=Operator(Sum(Coalesce(line.debit, 0)) -
+                        Sum(Coalesce(line.credit, 0)),
+                        Decimal(clause[2] or 0)))
+        return [('id', 'in', query)]
+
+    @classmethod
+    def _order_balance(cls, tables, date=None):
+        table, _ = tables[None]
+        balance_order = tables.get('balance_order')
+
+        if balance_order is None:
+            pool = Pool()
+            MoveLine = pool.get('account.move.line')
+            Account = pool.get('account.account')
+            User = pool.get('res.user')
+
+            line = MoveLine.__table__()
+            account = Account.__table__()
+
+            user = User(Transaction().user)
+            if not user.company:
+                return []
+            company_id = user.company.id
+
+            date_clause = Literal(True)
+            if date:
+                date_clause = ((line.maturity_date <= date)
+                    | (line.maturity_date == Null))
+            line_query, _ = MoveLine.query_get(line)
+
+            balance = (Sum(Coalesce(line.debit, 0)) -
+                Sum(Coalesce(line.credit, 0))).as_('balance')
+            balance_table = line.join(account,
+                condition=(account.id == line.account)
+                ).select(line.contract, balance,
+                where=(account.active
+                    & (account.kind == 'receivable')
+                    & (line.reconciliation == Null)
+                    & (account.company == company_id)
+                    & line_query
+                    & date_clause),
+                group_by=line.contract)
+
+            balance_tables = {
+                None: (balance_table,
+                    balance_table.contract == table.id),
+                }
+            tables['balance_order'] = balance_tables
+
+        return [Coalesce(balance_table.balance, 0)]
+
+    @classmethod
+    def order_balance(cls, tables):
+        return cls._order_balance(tables)
+
+    @classmethod
+    def get_balance_today(cls, contracts, name):
+        return cls.get_balance(contracts, name, date=utils.today())
+
+    @classmethod
+    def search_balance_today(cls, name, clause):
+        return cls.search_balance(name, clause, date=utils.today())
+
+    @classmethod
+    def order_balance_today(cls, tables):
+        return cls._order_balance(tables, date=utils.today())
+
+    def get_balance_at_date(self, at_date):
+        return self.get_balance([self], 'balance', date=at_date)[self.id]
 
     def invoices_report(self):
         pool = Pool()
