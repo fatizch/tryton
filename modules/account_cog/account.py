@@ -4,7 +4,6 @@ from sql.aggregate import Sum
 from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
 from trytond.transaction import Transaction
-from trytond.report import Report
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import export, fields, utils
@@ -233,10 +232,11 @@ class ThirdPartyBalance:
     __name__ = 'account.third_party_balance'
 
     @classmethod
-    def parse(cls, report, objects, data, localcontext):
+    def get_context(cls, records, data):
+        report_context = super(ThirdPartyBalance, cls).get_context(records,
+            data)
         if data['third_party_balance_option'] == 'all':
-            return super(ThirdPartyBalance, cls).parse(report, objects, data,
-                localcontext)
+            return report_context
         pool = Pool()
         Party = pool.get('party.party')
         MoveLine = pool.get('account.move.line')
@@ -250,10 +250,10 @@ class ThirdPartyBalance:
         account = Account.__table__()
 
         company = Company(data['company'])
-        localcontext['company'] = company
-        localcontext['digits'] = company.currency.digits
-        localcontext['fiscalyear'] = data['fiscalyear']
-        with Transaction().set_context(context=localcontext):
+        report_context['company'] = company
+        report_context['digits'] = company.currency.digits
+        report_context['fiscalyear'] = data['fiscalyear']
+        with Transaction().set_context(context=report_context):
             line_query, _ = MoveLine.query_get(line)
         if data['posted']:
             posted_clause = move.state == 'posted'
@@ -291,8 +291,9 @@ class ThirdPartyBalance:
             'solde': x[1] - x[2],
             } for x in res]
         objects.sort(lambda x, y: cmp(x['name'], y['name']))
-        localcontext['total_debit'] = sum((x['debit'] for x in objects))
-        localcontext['total_credit'] = sum((x['credit'] for x in objects))
-        localcontext['total_solde'] = sum((x['solde'] for x in objects))
+        report_context['total_debit'] = sum((x['debit'] for x in objects))
+        report_context['total_credit'] = sum((x['credit'] for x in objects))
+        report_context['total_solde'] = sum((x['solde'] for x in objects))
+        report_context['records'] = objects
 
-        return Report.parse(report, objects, data, localcontext)
+        return report_context
