@@ -424,8 +424,9 @@ class ChangeContractExtraData(EndorsementWizardStepMixin, model.CoopView):
             defaults['current_extra_data'] = extra_data_values
 
             if endorsement.extra_datas:
-                defaults['new_extra_data'] = \
-                    endorsement.extra_datas[-1].new_extra_data_values
+                data_values = endorsement.extra_datas[-1].new_extra_data_values \
+                    or endorsement.extra_datas[-1].values['extra_data_values']
+                defaults['new_extra_data'] = data_values
             else:
                 defaults['new_extra_data'] = extra_data_values
 

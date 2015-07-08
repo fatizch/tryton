@@ -1709,7 +1709,8 @@ class EndorsementExtraData(relation_mixin(
         apply_values = super(EndorsementExtraData, self).apply_values()
         if self.action == 'add':
             values = apply_values[1][0]
-            values['extra_data_values'] = dict(self.new_extra_data_values)
+            if not values.get('extra_data_values'):
+                values['extra_data_values'] = dict(self.new_extra_data_values)
             apply_values = ('create', [values])
         elif self.action == 'update':
             values = apply_values[2]
@@ -1718,8 +1719,12 @@ class EndorsementExtraData(relation_mixin(
         return apply_values
 
     def get_summary(self, model, base_object=None):
+        # We want to present each extra data entry like a field
+        new_data_values = self.values.pop('extra_data_values', None)
         res = super(EndorsementExtraData, self).get_summary(model, base_object)
-        new_data_values = self.new_extra_data_values
+        self.values['extra_data_values'] = new_data_values
+        if not new_data_values:
+            new_data_values = self.new_extra_data_values
         if self.extra_data and self.extra_data.extra_data_values:
             cur_data_values = self.extra_data.extra_data_values
         else:
@@ -1734,6 +1739,10 @@ class EndorsementExtraData(relation_mixin(
             for k, v in new_data_values.iteritems():
                 res[2].append(k + ': ' + u' → ' + str(v))
         return res
+
+    def is_null(self):
+        return super(EndorsementExtraData, self).is_null() and not \
+            self.new_extra_data_values
 
 
 class Configuration(ModelSingleton, model.CoopSQL, model.CoopView):
