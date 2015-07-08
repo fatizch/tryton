@@ -5,7 +5,7 @@ from sql.conditionals import Coalesce
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool, If
+from trytond.pyson import Eval, Bool, If, Len
 
 from trytond.modules.cog_utils import fields, model, coop_string, coop_date
 
@@ -38,7 +38,8 @@ class Contract:
             },
         context={
             'contract': Eval('id'),
-            'start_date': Eval('start_date')
+            'start_date': Eval('start_date'),
+            'nb_of_loans': Len(Eval('loans', [])),
             },
         depends=['is_loan', 'status', 'id', 'show_ordered_loans',
             'start_date'])

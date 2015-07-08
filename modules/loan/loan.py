@@ -247,6 +247,10 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         return Transaction().context.get('start_date', None)
 
     @staticmethod
+    def default_order():
+        return Transaction().context.get('nb_of_loans', 0) + 1
+
+    @staticmethod
     def calculate_rate(annual_rate, payment_frequency):
         if not annual_rate:
             annual_rate = Decimal(0)

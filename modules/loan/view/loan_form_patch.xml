@@ -3,6 +3,8 @@
     <xpath expr="/form//label[@id='main_view_placeholder']" position="replace">
         <label name="number"/>
         <field name="number"/>
+        <label name="order"/>
+        <field name="order"/>
         <label name="company"/>
         <field name="company"/>
         <label name="kind"/>
