@@ -14,7 +14,7 @@
     <label name="state"/>
     <field name="state"/>
     <group col="2" colspan="2" id="buttons">
-        <button name="draft" string="_Draft" icon="tryton-go-previous"/>
-        <button name="calculate_loan" string="Calculate Amortization Table" icon="tryton-go-next"/>
+        <button name="button_draft" string="_Draft" icon="tryton-go-previous"/>
+        <button name="calculate" string="_Calculate Amortization Table" icon="tryton-go-next"/>
     </group>
 </form>

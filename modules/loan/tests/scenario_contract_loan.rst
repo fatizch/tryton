@@ -217,6 +217,7 @@ Create Loans::
     >>> loan_1.rate = Decimal('0.045')
     >>> loan_1.amount = Decimal('250000')
     >>> loan_1.number_of_payments = 200
+    >>> Loan.calculate_loan([loan_1], {})
     >>> loan_1.save()
     >>> loan_2 = Loan()
     >>> loan_2.company = company
@@ -227,8 +228,8 @@ Create Loans::
     >>> loan_2.rate = Decimal('0.03')
     >>> loan_2.amount = Decimal('100000')
     >>> loan_2.number_of_payments = 220
+    >>> Loan.calculate_loan([loan_2], {})
     >>> loan_2.save()
-    >>> Loan.calculate_loan([loan_1.id, loan_2.id], {})
     >>> loan_1.end_date == datetime.date(2030, 12, 1)
     True
     >>> loan_2.end_date == datetime.date(2032, 8, 1)
