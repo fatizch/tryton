@@ -215,7 +215,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
         rule_result = super(BenefitRule, self).get_rule_result(args)
         res = rule_result.result
         if not rule_result.has_errors:
-            res = self.get_revaluated_amount(res, args['start_date'])
+            res = self.get_revaluated_amount(res, args['date'])
         return res, rule_result.print_errors()
 
     def get_simple_result(self, args):
@@ -223,17 +223,17 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             amount = self.amount
         elif self.amount_kind == 'cov_amount':
             amount = self.get_coverage_amount(args)
-        return self.get_revaluated_amount(amount, args['start_date'])
+        return self.get_revaluated_amount(amount, args['date'])
 
     def get_indemnification_for_non_capital(self, args):
-        if 'start_date' not in args:
+        if 'date' not in args:
             return [{}], 'missing_start_date'
         if not self.amount_evolves_over_time:
             return self.get_indemnifications_for_periods(args)
         else:
             return self.get_evolving_indemnifications_for_period(args)
 
-    def get_indemnification_end_date(self, from_date, to_date):
+    def get_indemnification_end_date(self, from_date, to_date, args):
         if (self.max_duration_per_indemnification
                 and self.max_duration_per_indemnification_unit):
             max_end_date = coop_date.get_end_of_period(from_date,
@@ -259,14 +259,17 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
     def get_indemnifications_for_periods(self, args):
         errs = []
         res = []
-        start_date = args['start_date']
+        start_date = args['date']
         end_date = self.get_indemnification_end_date(start_date,
-            args['end_date'] if 'end_date' in args else None)
+            args['end_date'] if 'end_date' in args else None, args)
         while True and not errs:
             period_end_date = self.get_period_end_date(start_date, end_date)
             period_args = args.copy()
-            period_args['start_date'] = start_date
+            period_args['date'] = start_date
             period_args['end_date'] = min(period_end_date, end_date)
+            # We update the dictionary for the new period, information could
+            # change for the new date
+            period_args['service'].init_dict_for_rule_engine(period_args)
             indemns, err = self.get_indemnification_for_period(
                 period_args)
             if not indemns:
@@ -279,22 +282,25 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             start_date = coop_date.add_day(indemn['end_date'], 1)
         return res, errs
 
+    def get_unit_per_period(self, start_date, end_date, args):
+        nb = coop_date.duration_between(start_date, end_date,
+            self.indemnification_calc_unit)
+        return nb, self.indemnification_calc_unit
+
     def get_indemnification_for_period(self, args):
         errs = []
         res = {}
-        res['start_date'] = args['start_date']
+        res['start_date'] = args['date']
         end_date = None
         if self.offered.indemnification_kind == 'period':
             end_date = args['end_date'] if 'end_date' in args else None
         res['end_date'] = self.get_indemnification_end_date(res['start_date'],
-            end_date)
+            end_date, args)
         if not res['end_date']:
             errs += 'missing_end_date'
             return [res], errs
-        nb = coop_date.duration_between(res['start_date'], res['end_date'],
-            self.indemnification_calc_unit)
-        res['nb_of_unit'] = nb
-        res['unit'] = self.indemnification_calc_unit
+        res['nb_of_unit'], res['unit'] = self.get_unit_per_period(
+            res['start_date'], res['end_date'], args)
         res['amount_per_unit'], re_errs = self.give_me_result(args)
         res['beneficiary_kind'] = self.offered.beneficiary_kind
         return [res], errs + re_errs
@@ -302,10 +308,10 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
     def get_evolving_indemnifications_for_period(self, args):
         errs = []
         res = []
-        start_date = args['start_date']
+        start_date = args['date']
         for sub_rule in self.rule_stages:
             sub_args = args.copy()
-            sub_args['start_date'] = start_date
+            sub_args['date'] = start_date
             indemn, err = sub_rule.get_indemnification_for_period(sub_args)
             res.append(indemn)
             errs += err

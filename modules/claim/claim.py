@@ -42,7 +42,15 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             ('reopened', 'Reopened'),
             ], 'Status', sort=False, states={'readonly': True})
     status_string = status.translated('status')
-    sub_status = fields.Selection('get_possible_sub_status', 'Sub Status',
+    sub_status = fields.Selection([
+            ('', ''),
+            ('waiting_doc', 'Waiting For Documents'),
+            ('instruction', 'Instruction'),
+            ('rejected', 'Rejected'),
+            ('waiting_validation', 'Waiting Validation'),
+            ('validated', 'Validated'),
+            ('paid', 'Paid'),
+            ], 'Sub Status',
         states={'readonly': True})
     sub_status_string = sub_status.translated('sub_status')
     reopened_reason = fields.Selection([
@@ -459,11 +467,9 @@ class Loss(model.CoopSQL, model.CoopView):
 
     def init_dict_for_rule_engine(self, cur_dict):
         cur_dict['loss'] = self
-        # this date is the one used for finding the good rule,
-        # so the rules that was effective when the loss occured
-        cur_dict['date'] = self.start_date
-        cur_dict['start_date'] = self.start_date
-        if self.end_date:
+        if 'date' not in cur_dict:
+            cur_dict['date'] = self.start_date
+        if self.end_date and 'end_date' not in cur_dict:
             cur_dict['end_date'] = self.end_date
 
 
@@ -526,44 +532,39 @@ class DeliveredService:
         res += [x.currency for x in self.expenses]
         return tuple(res)
 
-    def create_indemnification(self, cur_dict):
-        details_dict, errors = self.benefit.get_result('indemnification',
-            cur_dict)
-        if errors:
-            return None, errors
-        Indemnification = Pool().get('claim.indemnification')
-        indemnification = Indemnification()
-        indemnifications = list(self.indemnifications)
-        indemnifications.append(indemnification)
-        indemnification.init_from_service(self)
-        self.regularize_indemnification(indemnification, details_dict,
+    def create_indemnification_details(self, cur_dict):
+        IndemnificationDetail = Pool().get('claim.indemnification.detail')
+        details_dict, _ = self.benefit.get_result('indemnification', cur_dict)
+        return IndemnificationDetail.create_details_from_dict(details_dict,
             cur_dict['currency'])
-        indemnification.create_details_from_dict(details_dict, self,
-            cur_dict['currency'])
-        self.indemnifications = indemnifications
-        return self.indemnifications, errors
 
-    def create_indemnifications(self, cur_dict):
-        if not hasattr(self, 'indemnifications') or not self.indemnifications:
-            self.indemnifications = []
-        else:
-            self.indemnifications = list(self.indemnifications)
-        to_del = [x for x in self.indemnifications if x.status == 'calculated']
-        indemn, errs = self.create_indemnification(cur_dict)
-        res = indemn is not None
-        if ('end_date' in cur_dict and res
-                and indemn.end_date < cur_dict['end_date']):
-            while res and indemn.end_date < cur_dict['end_date']:
+    def create_indemnification(self, cur_dict):
+        pool = Pool()
+        Indemnification = pool.get('claim.indemnification')
+
+        indemnifications = list(getattr(self, 'indemnifications', []))
+        indemnifications = [x for x in indemnifications
+            if x.status != 'calculated']
+
+        indemnification = Indemnification()
+        indemnification.init_from_service(self)
+        details = self.create_indemnification_details(cur_dict)
+
+        if 'end_date' in cur_dict:
+            while details[-1].end_date < cur_dict['end_date']:
                 cur_dict = cur_dict.copy()
-                cur_dict['start_date'] = coop_date.add_day(indemn.end_date, 1)
-                indemn, cur_err = self.create_indemnification(cur_dict)
-                res = indemn is not None
-                errs += cur_err
-        for element in to_del:
-            self.indemnifications.remove(element)
-        Indemnification = Pool().get('claim.indemnification')
-        Indemnification.delete(to_del)
-        return res, errs
+                cur_dict['date'] = coop_date.add_day(
+                    details[-1].end_date, 1)
+                details += self.create_indemnification_details(cur_dict)
+        # self.regularize_indemnification(indemnification, details_dict,
+        #     cur_dict['currency'])
+        indemnification.start_date = details[0].start_date
+        indemnification.details = details
+        indemnification.calculate_amount_and_end_date_from_details(self,
+            cur_dict['currency'])
+        indemnifications.append(indemnification)
+        self.indemnifications = indemnifications
+        return True, []
 
     def regularize_indemnification(self, indemn, details_dict, currency):
         amount = Decimal(0)
@@ -602,7 +603,7 @@ class DeliveredService:
         currencies = self.get_local_currencies_used()
         for currency in currencies:
             cur_dict['currency'] = currency
-            cur_res, cur_errs = self.create_indemnifications(cur_dict)
+            cur_res, cur_errs = self.create_indemnification(cur_dict)
             res = res and cur_res
             errs += cur_errs
         self.status = 'calculated'
@@ -733,6 +734,8 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         self.status = 'calculated'
         # TODO : To enhance
         self.customer = service.loss.claim.claimant
+        self.beneficiary = self.get_beneficiary(
+            service.benefit.beneficiary_kind, service)
 
     def get_kind(self, name=None):
         res = ''
@@ -746,34 +749,6 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             res = del_service.contract.get_policy_owner(
                 del_service.loss.start_date)
         return res
-
-    def create_details_from_dict(self, details_dict, del_service, currency):
-        Detail = Pool().get('claim.indemnification.detail')
-        details = []
-        if getattr(self, 'details', None):
-            Detail.delete(list(self.details))
-        for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
-            if key not in details_dict:
-                continue
-            for detail_dict in details_dict[key]:
-                detail = Detail()
-                detail.init_from_indemnification(self)
-                details.append(detail)
-                detail.kind = key
-                for field_name, value in detail_dict.iteritems():
-                    # TODO: Temporary Hack
-                    if (field_name == 'beneficiary_kind'
-                            and not getattr(self, 'beneficiary', None)):
-                        self.beneficiary = self.get_beneficiary(value,
-                            del_service)
-                    else:
-                        setattr(detail, field_name, value)
-                if ('start_date' in detail_dict
-                        and (not getattr(self, 'start_date', None)
-                            or detail.start_date < self.start_date)):
-                    self.start_date = detail.start_date
-        self.details = details
-        self.calculate_amount_and_end_date_from_details(del_service, currency)
 
     def calculate_amount_and_end_date_from_details(self, del_service,
             currency):
@@ -866,9 +841,6 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
     unit_string = unit.translated('unit')
     amount = fields.Numeric('Amount')
 
-    def init_from_indemnification(self, indemnification):
-        pass
-
     def calculate_amount(self):
         self.amount = self.amount_per_unit * self.nb_of_unit
 
@@ -880,6 +852,20 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
                 return self.indemnification.local_currency
             else:
                 return self.indemnification.currency
+
+    @classmethod
+    def create_details_from_dict(cls, details_dict, currency):
+        details = []
+        for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
+            if key not in details_dict:
+                continue
+            for detail_dict in details_dict[key]:
+                detail = cls()
+                details.append(detail)
+                detail.kind = key
+                for field_name, value in detail_dict.iteritems():
+                    setattr(detail, field_name, value)
+        return details
 
 
 class ClaimIndemnificationValidateDisplay(model.CoopView):

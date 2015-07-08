@@ -32,4 +32,7 @@ class ContractService:
         if not self.is_loan:
             return
         cur_dict['loan'] = self.loan
-        cur_dict['share'] = self.loan.get_loan_share(self.loss.covered_person)
+        if self.loan:
+            cur_dict['payment'] = self.loan.get_payment(cur_dict['date'])
+            cur_dict['share'] = self.loan.get_loan_share(
+                self.loss.covered_person, cur_dict['date'])

@@ -200,6 +200,8 @@ class Benefit(model.CoopSQL, offered.Offered):
             indemn_dict = indemn_dicts[-1]
             if (self.indemnification_kind == 'period'
                     and 'end_date' in indemn_dict):
+                if not indemn_dict['end_date']:
+                    return None, 'no_end_date_found'
                 sub_args['start_date'] = coop_date.add_day(
                     indemn_dict['end_date'], 1)
         return res, errs

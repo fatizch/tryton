@@ -145,15 +145,11 @@ class Loss:
     benefit_to_deliver = fields.Function(
         fields.Many2One('benefit', 'Benefit',
             domain=[('id', 'in', Eval('benefits'))],
-            depends=['benefits', 'can_modify_benefit'],
-            states={'invisible': ~Eval('can_modify_benefit')}),
+            depends=['benefits']),
         'get_benefit_to_deliver', 'set_void')
     benefits = fields.Function(
         fields.One2Many('benefit', None, 'Benefits'),
         'on_change_with_benefits')
-    can_modify_benefit = fields.Function(
-        fields.Boolean('Can Modify Benefit?'),
-        'on_change_with_can_modify_benefit')
 
     def get_possible_benefits(self):
         if not self.claim or not self.loss_desc:
@@ -223,12 +219,6 @@ class Loss:
                 if len(set(options)) == 1:
                     service.option = options[0]
         self.services = self.services
-
-    @fields.depends('services')
-    def on_change_with_can_modify_benefit(self, name=None):
-        return (not self.services
-            or (len(self.services) == 1
-                and self.services[0].status == 'calculating'))
 
 
 class Process:
