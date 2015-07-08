@@ -91,7 +91,7 @@ class ContractOption:
     coverage_amount_selection = fields.Function(
         fields.Selection('get_possible_amounts', 'Coverage Amount',
             states={'invisible': ~Eval('has_coverage_amount')},
-            depends=['has_coverage_amount'], sort=False),
+            depends=['has_coverage_amount', 'currency'], sort=False),
         'on_change_with_coverage_amount_selection', 'setter_void')
     person = fields.Function(
         fields.Many2One('party.party', 'Person'),
@@ -139,7 +139,7 @@ class ContractOption:
         if not self.coverage:
             return ''
         if self.coverage_amount:
-            return self.currency.amount_as_string(self.coverage_amount)
+            return str(self.coverage_amount)
         return ''
 
     @fields.depends('covered_element')
