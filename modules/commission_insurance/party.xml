@@ -38,7 +38,7 @@
         <!-- ########### Broker entry point ########### -->
         <!-- ############################################################ -->
         <record model="ir.action.act_window" id="act_broker_form">
-            <field name="name">Broker</field>
+            <field name="name">Brokers</field>
             <field name="res_model">party.party</field>
             <field name="domain" eval="[('is_broker', '=', True)]" pyson="1"/>
             <field name="search_value"></field>
@@ -54,6 +54,6 @@
             <field name="act_window" ref="act_broker_form"/>
         </record>
         <menuitem parent="commission.menu_commission" action="act_broker_form"
-            id="menu_broker" sequence="19"/>
+            id="menu_broker" sequence="19" icon="coog-broker"/>
     </data>
 </tryton>
