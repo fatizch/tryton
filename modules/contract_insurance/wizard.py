@@ -1,5 +1,6 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.wizard import Wizard, StateView, StateTransition, Button
+from trytond.wizard import Wizard, StateView, StateTransition, Button, \
+    StateAction
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
@@ -294,8 +295,11 @@ class CreateExtraPremium(Wizard):
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Modify Extra Premium', 'extra_premium_data',
                 'tryton-go-previous'),
-            Button('Apply', 'apply', 'tryton-go-next', default=True)])
+            Button('Apply', 'apply', 'tryton-go-next', default=True),
+            Button('Apply & New', 'apply_and_relaunch', 'tryton-refresh')])
     apply = StateTransition()
+    apply_and_relaunch = StateTransition()
+    re_launch = StateAction('contract_insurance.act_create_extra_premium')
 
     def default_extra_premium_data(self, name):
         if self.extra_premium_data._default_values:
@@ -321,7 +325,7 @@ class CreateExtraPremium(Wizard):
             'hide_covered_element': hide_covered_element,
             }
 
-    def transition_apply(self):
+    def apply(self):
         ExtraPremium = Pool().get('contract.option.extra_premium')
         to_create = []
         for option in self.select_options.options:
@@ -331,7 +335,21 @@ class CreateExtraPremium(Wizard):
             new_extra_premium['option'] = option.option
             to_create.append(new_extra_premium)
         ExtraPremium.create(to_create)
+
+    def transition_apply(self):
+        self.apply()
         return 'end'
+
+    def transition_apply_and_relaunch(self):
+        self.apply()
+        return 're_launch'
+
+    def do_re_launch(self, action):
+        return action, {
+            'model': Transaction().context.get('active_model'),
+            'id': Transaction().context.get('active_id'),
+            'ids': [Transaction().context.get('active_id')],
+            }
 
 
 class CreateExtraPremiumOptionSelector(model.CoopView):

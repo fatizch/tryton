@@ -1094,3 +1094,8 @@ msgctxt ""
 "wizard_button:contract.wizard.option_subscription,select_package,options_displayer:"
 msgid "Next"
 msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:contract.option.extra_premium.create,select_options,apply_and_relaunch:"
+msgid "Apply & New"
+msgstr "Appliquer & Nouvelle"
