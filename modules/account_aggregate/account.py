@@ -1,10 +1,9 @@
-from sql import Literal, Cast
 from itertools import groupby
 
-Null = None  # TODO remove when python-sql >=0.3
+from sql import Literal, Cast, Null
 from sql.aggregate import Max, Sum
 from sql.conditionals import Coalesce, Case
-from sql.functions import ToChar, Now
+from sql.functions import ToChar, CurrentTimestamp
 from sql.operators import Concat
 
 from trytond.pool import PoolMeta, Pool
@@ -154,7 +153,7 @@ class Snapshot(model.CoopSQL, model.CoopView):
         cursor = Transaction().cursor
         cursor.execute(*move.update(
                 [move.snapshot, move.write_date, move.write_uid],
-                [snapshot.id, Now(), Transaction().user],
+                [snapshot.id, CurrentTimestamp(), Transaction().user],
                 where=(move.snapshot == Null)
                 & (move.post_date != Null)))
         return snapshot.id

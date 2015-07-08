@@ -9,7 +9,7 @@ except ImportError:
 
 from lxml import etree
 from sql import Column, Literal
-from sql.functions import Function, Now
+from sql.functions import Function, CurrentTimestamp
 
 from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
 from trytond.config import config
@@ -1093,7 +1093,8 @@ class Table2D(ModelSQL, ModelView):
         columns = [Column(func, c).as_(c) for c, _ in columns_definitions]
         columns += [func.id.as_('row'),
             Literal(0).as_('create_uid'), Literal(None).as_('write_uid'),
-            Now().as_('create_date'), Literal(None).as_('write_date')]
+            CurrentTimestamp().as_('create_date'),
+                    Literal(None).as_('write_date')]
         return func.select(*columns)
 
     @classmethod

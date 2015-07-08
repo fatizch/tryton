@@ -3,7 +3,7 @@ import copy
 import datetime
 from itertools import groupby
 
-from sql.functions import Now
+from sql.functions import CurrentTimestamp
 from sql.conditionals import Coalesce
 
 from trytond.error import UserError
@@ -1067,7 +1067,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         groups = cls.group_per_model(endorsements)
         for model_name, values in groups.iteritems():
             pool.get(model_name).check_in_progress_unicity(values)
-        cls.write(endorsements, {'rollback_date': Now()})
+        cls.write(endorsements, {'rollback_date': CurrentTimestamp()})
 
     @classmethod
     @model.CoopView.button
@@ -1090,7 +1090,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         if set_rollback:
             cls.write(set_rollback, {
                     'applied_by': Transaction().user,
-                    'rollback_date': Now(),
+                    'rollback_date': CurrentTimestamp(),
                     'application_date': datetime.datetime.now(),
                     })
         if do_not_set_rollback:
@@ -1577,7 +1577,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         endorsement.effective_date = at_date
         endorsement.state = 'applied'
         endorsement.applied_by = Transaction().user
-        endorsement.rollback_date = Now()
+        endorsement.rollback_date = CurrentTimestamp()
         endorsement.application_date = datetime.datetime.now()
         endorsement.definition = definition
         return endorsement
