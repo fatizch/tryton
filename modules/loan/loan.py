@@ -429,7 +429,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         at_date = at_date or utils.today()
         increment = utils.get_value_at_date(self.increments, at_date,
             'start_date')
-        return increment.payment_amount if increment else None
+        return increment.payment_amount if increment else 0
 
     @fields.depends('currency')
     def on_change_with_currency_digits(self, name=None):
