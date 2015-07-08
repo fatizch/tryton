@@ -148,8 +148,10 @@ class ContractOption:
             return self.covered_element.party.id
 
     @fields.depends('coverage', 'start_date', 'covered_element', 'currency',
-        'appliable_conditions_date')
+        'appliable_conditions_date', 'coverage_amount')
     def on_change_with_has_coverage_amount(self, name=None):
+        if self.coverage_amount:
+            return True
         if not self.coverage:
             return False
         if not len(self.get_possible_amounts()) > 1:
