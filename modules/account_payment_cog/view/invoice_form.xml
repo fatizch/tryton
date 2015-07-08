@@ -5,6 +5,7 @@
         <field name="pending_payment"/>
     </xpath>
     <xpath expr="/form/notebook/page[@id='payment']" position="inside">
+        <field name="lines_to_pay" colspan="4" view_ids="account_cog.move_line_to_pay_view_list"/>
         <field name="payments" colspan="4"/>
         <field name="credit_reconciliation_lines" colspan="4"/>
     </xpath>
