@@ -8,6 +8,7 @@ from .contract import *
 from .account import *
 from .wizard import *
 from .move import *
+from .rule_engine import *
 
 
 def register():
@@ -42,6 +43,7 @@ def register():
         PaymentTermLineRelativeDelta,
         SynthesisMenuInvoice,
         SynthesisMenu,
+        RuleEngineRuntime,
         module='contract_insurance_invoice', type_='model')
     Pool.register(
         InvoiceContract,

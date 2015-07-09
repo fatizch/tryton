@@ -11,6 +11,16 @@
             <field name="context" ref="rule_engine.default_context"/>
             <field name="tree_element" ref="te_contract"/>
         </record>
+        <record model="rule_engine.function" id="te_contract_en">
+            <field name="description">Contract</field>
+            <field name="type">folder</field>
+            <field name="language" ref="ir.lang_en"/>
+            <field name="translated_technical_name">contract</field>
+        </record>
+        <record model="rule_engine.context-function" id="def_context-te_contract_en">
+            <field name="context" ref="rule_engine.default_context_en"/>
+            <field name="tree_element" ref="te_contract_en"/>
+        </record>
     </data>
     <data>
         <record model="rule_engine.function" id="date_effet_initiale_contrat">

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data noupdate="1">
+        <record model="rule_engine.function" id="dossier_quittancement">
+            <field name="translated_technical_name">dossier_quittancement</field>
+            <field name="description">Quittancement</field>
+            <field name="type">folder</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="parent" ref="contract.te_contract"/>
+        </record>
+        <record model="rule_engine.function" id="billing_folder">
+            <field name="translated_technical_name">billing_folder</field>
+            <field name="description">Billing</field>
+            <field name="type">folder</field>
+            <field name="language" ref="ir.lang_en"/>
+            <field name="parent" ref="contract.te_contract_en"/>
+        </record>
+    </data>
+    <data>
+        <record model="rule_engine.function" id="frequence_quittancement_code">
+            <field name="translated_technical_name">frequence_quittancement_code</field>
+            <field name="description">Code Fréquence Quittancement</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_billing_frequency</field>
+            <field name="parent" ref="dossier_quittancement"/>
+        </record>
+        <record model="rule_engine.function" id="frequence_quittancement_nom">
+            <field name="translated_technical_name">frequence_quittancement_nom</field>
+            <field name="description">Nom Fréquence Quittancement</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_billing_frequency_string</field>
+            <field name="parent" ref="dossier_quittancement"/>
+        </record>
+        <record model="rule_engine.function" id="prelevement_automatique">
+            <field name="translated_technical_name">est_en_prelevement_automatique</field>
+            <field name="description">Est en Prélèvement Automatique</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_direct_debit</field>
+            <field name="parent" ref="dossier_quittancement"/>
+        </record>
+        <record model="rule_engine.function" id="jour_prelevement_automatique">
+            <field name="translated_technical_name">jour_prelevement_automatique</field>
+            <field name="description">Jour de Prélèvement</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_direct_debit_day</field>
+            <field name="parent" ref="dossier_quittancement"/>
+        </record>
+        <record model="rule_engine.function" id="prime_unique">
+            <field name="translated_technical_name">est_prime_unique</field>
+            <field name="description">Est en Prime Unique</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_billing_is_once_per_contract</field>
+            <field name="parent" ref="dossier_quittancement"/>
+        </record>
+        <record model="rule_engine.function" id="billing_frequency_code">
+            <field name="translated_technical_name">billing_frequency_code</field>
+            <field name="description">Billing Frequency Code</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_en"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_billing_frequency</field>
+            <field name="parent" ref="billing_folder"/>
+        </record>
+        <record model="rule_engine.function" id="billing_frequency_name">
+            <field name="translated_technical_name">billing_frequency_name</field>
+            <field name="description">Billing Frequency Name</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_en"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_billing_frequency_string</field>
+            <field name="parent" ref="billing_folder"/>
+        </record>
+        <record model="rule_engine.function" id="is_direct_debit">
+            <field name="translated_technical_name">is_direct_debit</field>
+            <field name="description">Is Direct Debit</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_en"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_direct_debit</field>
+            <field name="parent" ref="billing_folder"/>
+        </record>
+        <record model="rule_engine.function" id="direct_debit_day">
+            <field name="translated_technical_name">direct_debit_day</field>
+            <field name="description">Direct Debit Day</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_en"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_direct_debit_day</field>
+            <field name="parent" ref="billing_folder"/>
+        </record>
+        <record model="rule_engine.function" id="once_per_contract">
+            <field name="translated_technical_name">is_once_per_contract</field>
+            <field name="description">Is Once Per Contract</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_en"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_billing_is_once_per_contract</field>
+            <field name="parent" ref="billing_folder"/>
+        </record>
+    </data>
+</tryton>

@@ -238,6 +238,9 @@
         </record>
     </data>
     <record model="rule_engine.context" id="default_context">
+        <field name="name">Context par défaut</field>
+    </record>
+    <record model="rule_engine.context" id="default_context_en">
         <field name="name">Default Context</field>
     </record>
     <record model="ir.action.act_window" id="act_rule_engine_log_relate_form">
