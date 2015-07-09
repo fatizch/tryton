@@ -273,9 +273,9 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def __setup__(cls):
         super(ContractFee, cls).__setup__()
-        currency_symbol_states = cls.currency_symbol.states
-        currency_symbol_states['invisible'] = Eval('fee_type', '') != 'fixed'
-        cls.currency_symbol.states = currency_symbol_states
+        cls.currency_symbol.states.update({
+                'invisible': Eval('fee_type', '') != 'fixed',
+                })
 
     @classmethod
     def view_attributes(cls):
