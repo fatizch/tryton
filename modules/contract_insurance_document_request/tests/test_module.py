@@ -40,7 +40,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         rule_engine.short_name = 'doc_rule'
         rule_engine.algorithm = "return ['document3', 'document2']"
         rule_engine.status = 'validated'
-        rule_engine.context, = self.RuleContext.search([])
+        rule_engine.context, = self.RuleContext.search([], limit=1)
         rule_engine.save()
         rule = self.DocumentRule()
         rule.documents = [document_desc1.id, document_desc2.id]
