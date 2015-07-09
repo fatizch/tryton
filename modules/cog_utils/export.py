@@ -12,6 +12,7 @@ from sql.operators import Concat
 from trytond.pyson import Eval
 from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
 from trytond.model import Model, ModelSQL, ModelView, fields as tryton_fields
+from trytond.model import Unique
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
@@ -642,8 +643,9 @@ class ExportConfiguration(ModelSQL, ModelView, ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(ExportConfiguration, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
 
     @property
@@ -687,8 +689,9 @@ class ExportModelConfiguration(ModelSQL, ModelView, ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(ExportModelConfiguration, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
         cls._buttons.update({
                 'button_select_fields': {},

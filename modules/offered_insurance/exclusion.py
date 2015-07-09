@@ -1,3 +1,5 @@
+from trytond.model import Unique
+
 from trytond.modules.cog_utils import model, fields, coop_string
 
 
@@ -18,8 +20,9 @@ class ExclusionKind(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(ExclusionKind, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
 
     @fields.depends('name', 'code')

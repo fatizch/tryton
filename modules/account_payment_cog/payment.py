@@ -4,7 +4,7 @@ from itertools import groupby
 
 from trytond import backend
 from trytond.transaction import Transaction
-from trytond.model import ModelView
+from trytond.model import ModelView, Unique
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 
@@ -175,9 +175,9 @@ class RejectReason(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(RejectReason, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_unique', 'UNIQUE(code)',
-                'The code must be unique'),
+            ('code_unique', Unique(t, t.code), 'The code must be unique'),
             ]
 
     @classmethod

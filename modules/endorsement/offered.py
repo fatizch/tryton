@@ -1,5 +1,6 @@
 from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
+from trytond.model import Unique
 from trytond.wizard import StateView
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -327,8 +328,9 @@ class EndorsementSubState(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(EndorsementSubState, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
 
     @fields.depends('code', 'name')

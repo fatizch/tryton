@@ -1,6 +1,7 @@
 from sql.aggregate import Max
 
 from trytond.pool import PoolMeta, Pool
+from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool, Equal
 
@@ -51,8 +52,9 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
     @classmethod
     def __setup__(cls):
         super(ContractSet, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints = [
-            ('number_uniq', 'UNIQUE(number)',
+            ('number_uniq', Unique(t, t.number),
                 'The contract set number must be unique.')
         ]
         cls._buttons.update({

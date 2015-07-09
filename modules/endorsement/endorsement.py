@@ -10,7 +10,7 @@ from trytond.error import UserError
 from trytond.rpc import RPC
 from trytond.pool import PoolMeta
 from trytond.model import Workflow, Model, fields as tryton_fields, \
-    ModelSingleton
+    ModelSingleton, Unique
 from trytond.pyson import Eval, PYSONEncoder, PYSON, Bool, Len, Or
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -857,8 +857,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                 'invalid_format': 'Invalid file format',
                 'no_sequence_defined': 'No sequence defined in configuration',
                 })
+        t = cls.__table__()
         cls._sql_constraints = [
-            ('number_uniq', 'UNIQUE(number)',
+            ('number_uniq', Unique(t, t.number),
                 'The endorsement number must be unique.')
         ]
 

@@ -1,9 +1,10 @@
+from trytond.pool import Pool
+from trytond.model import Unique
+from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import model, fields, coop_string
 from trytond.modules.currency_cog import ModelCurrency
-from trytond.transaction import Transaction
-from trytond.pool import Pool
 
 __all__ = [
     'ExtraPremiumKind',
@@ -27,8 +28,9 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def __setup__(cls):
         super(ExtraPremiumKind, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
 
     @classmethod

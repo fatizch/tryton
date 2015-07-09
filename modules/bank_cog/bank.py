@@ -1,5 +1,5 @@
 from trytond.pool import Pool, PoolMeta
-from trytond.model import fields as tryton_fields
+from trytond.model import fields as tryton_fields, Unique
 
 from trytond.modules.cog_utils import utils, fields, export
 from trytond.modules.cog_utils import coop_string
@@ -26,8 +26,9 @@ class Bank(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Bank, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('bic_uniq', 'UNIQUE(bic)', 'The bic must be unique!'),
+            ('bic_uniq', Unique(t, t.bic), 'The bic must be unique!'),
             ]
         cls._error_messages.update({
                 'invalid_bic': ('Invalid BIC : %s'),
@@ -212,8 +213,9 @@ class BankAccountNumber(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(BankAccountNumber, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('number_uniq', 'UNIQUE(number)', 'The number must be unique!'),
+            ('number_uniq', Unique(t, t.number), 'The number must be unique!'),
             ]
 
     @staticmethod

@@ -3,6 +3,7 @@ from decimal import Decimal
 from types import FloatType, IntType
 
 from trytond.pool import PoolMeta
+from trytond.model import Unique
 from trytond.pyson import Eval, Bool, Not
 
 from trytond.modules.cog_utils import fields, model, coop_string
@@ -67,8 +68,9 @@ class PrepaymentPaymentDateRule(RuleMixin, model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(PrepaymentPaymentDateRule, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
         cls.rule.domain = [('type_', '=', 'commission')]
 

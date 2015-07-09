@@ -1,4 +1,5 @@
 from trytond.pool import PoolMeta, Pool
+from trytond.model import Unique
 from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.wizard import StateAction
@@ -128,8 +129,9 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
     @classmethod
     def __setup__(cls):
         super(Plan, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
 
     @classmethod

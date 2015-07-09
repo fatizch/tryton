@@ -12,6 +12,7 @@ from sql import Literal, Cast
 from sql.operators import Concat
 from sql.conditionals import Coalesce
 
+from trytond.model import Unique
 from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
 
@@ -105,8 +106,9 @@ class Party(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints = [
-            ('SSN_uniq', 'UNIQUE(ssn)',
+            ('SSN_uniq', Unique(t, t.ssn),
              'The SSN of the party must be unique.')
         ]
         cls._error_messages.update({

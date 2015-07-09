@@ -2,9 +2,10 @@ import datetime
 from decimal import Decimal
 from dateutil.rrule import rrule, YEARLY, MONTHLY
 
-from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool
 from trytond import backend
+from trytond.pool import PoolMeta, Pool
+from trytond.model import Unique
+from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, model, export
@@ -96,9 +97,9 @@ class BillingMode(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(BillingMode, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_unique', 'UNIQUE(code)',
-                'The code must be unique'),
+            ('code_unique', Unique(t, t.code), 'The code must be unique'),
             ]
 
     @classmethod

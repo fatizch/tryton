@@ -2,7 +2,7 @@ import pydot
 import inspect
 import ast
 
-from trytond.model import ModelView, ModelSQL
+from trytond.model import ModelView, ModelSQL, Unique
 from trytond.wizard import Wizard, StateAction
 from trytond.report import Report
 from trytond.transaction import Transaction
@@ -145,8 +145,9 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         super(Process, cls).__setup__()
         cls._buttons.update({
             'update_view': {'invisible': ~Eval('id')}})
+        t = cls.__table__()
         cls._sql_constraints += [(
-                'unique_tech_name', 'UNIQUE(technical_name)',
+                'unique_tech_name', Unique(t, t.technical_name),
                 'The technical name must be unique')]
         cls._error_messages.update({
                 'use_steps_only_once':
@@ -851,8 +852,9 @@ class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
     @classmethod
     def __setup__(cls):
         super(ProcessStep, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [(
-                'unique_tech_name', 'UNIQUE(technical_name)',
+                'unique_tech_name', Unique(t, t.technical_name),
                 'The technical name must be unique')]
 
     @classmethod

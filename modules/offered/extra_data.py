@@ -4,7 +4,7 @@ import copy
 from trytond import backend
 from trytond.pool import PoolMeta
 from trytond.rpc import RPC
-from trytond.model import DictSchemaMixin
+from trytond.model import DictSchemaMixin, Unique
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
@@ -85,8 +85,9 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         cls.name.string = 'Code'
         cls.string.string = 'Name'
         cls.type_.selection.insert(0, ('', ''))
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(name)', 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.name), 'The code must be unique!'),
             ]
         cls.__rpc__.update({'get_default_value_selection': RPC(instantiate=0)})
         cls._error_messages.update({

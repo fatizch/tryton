@@ -3,7 +3,7 @@ import datetime
 
 from sql.conditionals import Coalesce
 
-from trytond.model import fields as tryton_fields
+from trytond.model import fields as tryton_fields, Unique
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.pyson import Eval, Not, And, Bool
@@ -718,8 +718,9 @@ class ViewDescription(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(ViewDescription, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('unique_fs_id', 'UNIQUE(view_name, for_step, view_kind)',
+            ('unique_fs_id', Unique(t, t.view_name, t.for_step, t.view_kind),
                 'The functional id must be unique !')]
         cls.__rpc__.update({'get_field_childs': RPC(instantiate=0)})
 

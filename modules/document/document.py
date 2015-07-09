@@ -1,3 +1,4 @@
+from trytond.model import Unique
 from trytond.modules.cog_utils import fields, model, coop_string
 
 __all__ = [
@@ -17,8 +18,9 @@ class DocumentDescription(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(DocumentDescription, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints = [
-            ('code_unique', 'UNIQUE(code)',
+            ('code_unique', Unique(t, t.code),
                 'The document description code must be unique'),
         ]
         cls._order.insert(0, ('name', 'ASC'))

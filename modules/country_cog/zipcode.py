@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 import re
+from trytond.model import Unique
+
 from trytond.modules.cog_utils import coop_string, fields, model
 
 
@@ -25,8 +27,9 @@ class ZipCode(model.CoopSQL, model.CoopView):
         cls._order.insert(0, ('country', 'ASC'))
         cls._order.insert(1, ('zip', 'ASC'))
         cls._order.insert(2, ('city', 'ASC'))
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('zip_uniq', 'UNIQUE(zip, city, country)',
+            ('zip_uniq', Unique(t, t.zip, t.city, t.country),
                 'This city and this zipcode already exist for this country!'),
             ]
 

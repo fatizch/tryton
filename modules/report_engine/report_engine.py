@@ -12,7 +12,7 @@ from time import sleep
 from trytond import backend
 from trytond.pool import Pool
 from trytond.config import config
-from trytond.model import Model
+from trytond.model import Model, Unique
 from trytond.wizard import Wizard, StateAction, StateView, Button
 from trytond.wizard import StateTransition
 from trytond.report import Report
@@ -63,8 +63,9 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     @classmethod
     def __setup__(cls):
         super(ReportTemplate, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints = [
-            ('code_unique', 'UNIQUE(code)',
+            ('code_unique', Unique(t, t.code),
                 'The document template code must be unique'),
             ]
         cls._error_messages.update({

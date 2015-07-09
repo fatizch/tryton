@@ -16,6 +16,7 @@ from trytond.config import config
 from trytond import backend
 from trytond.cache import Cache
 from trytond.pool import Pool
+from trytond.model import Unique
 from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
@@ -85,8 +86,9 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
     @classmethod
     def __setup__(cls):
         super(TableDefinition, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints = [
-            ('code_unique', 'UNIQUE(code)',
+            ('code_unique', Unique(t, t.code),
                 'The code of "Table Definition" must be unique'),
         ]
         cls._order.insert(0, ('name', 'ASC'))

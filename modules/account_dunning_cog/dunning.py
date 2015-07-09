@@ -1,6 +1,7 @@
 from operator import attrgetter
 from itertools import groupby
 
+from trytond.model import Unique
 from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 
@@ -91,8 +92,9 @@ class Procedure(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Procedure, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_unique', 'UNIQUE(code)', 'The code must be unique')]
+            ('code_unique', Unique(t, t.code), 'The code must be unique')]
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):

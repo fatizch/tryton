@@ -1,4 +1,5 @@
 from trytond.pool import PoolMeta
+from trytond.model import Unique
 
 from trytond.modules.cog_utils import fields, model, coop_string
 from trytond.modules.rule_engine import RuleMixin
@@ -35,8 +36,9 @@ class CommissionRecoveryRule(model.CoopSQL, model.CoopView, RuleMixin):
     @classmethod
     def __setup__(cls):
         super(CommissionRecoveryRule, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
 
     def compute_recovery(self, option, agent):

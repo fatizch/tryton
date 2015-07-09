@@ -1,4 +1,5 @@
 from trytond.pool import Pool
+from trytond.model import Unique
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
@@ -314,8 +315,9 @@ class Product(model.CoopSQL, Offered):
     @classmethod
     def __setup__(cls):
         super(Product, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
         cls.__rpc__.update({'get_product_def': RPC()})
 
@@ -578,8 +580,9 @@ class OptionDescription(model.CoopSQL, Offered):
     @classmethod
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
 
     @classmethod

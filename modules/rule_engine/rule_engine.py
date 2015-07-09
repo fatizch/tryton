@@ -18,7 +18,7 @@ from sql.conditionals import Coalesce
 from trytond import backend
 from trytond.rpc import RPC
 from trytond.cache import Cache
-from trytond.model import DictSchemaMixin, ModelView as TrytonModelView
+from trytond.model import DictSchemaMixin, ModelView as TrytonModelView, Unique
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -641,8 +641,9 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
                 'Update the rule status to "Validated"',
                 'kwarg_expected': 'Expected %s as a parameter',
                 })
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_unique', 'UNIQUE(short_name)',
+            ('code_unique', Unique(t, t.short_name),
                 'The code must be unique'),
             ]
 
@@ -1545,8 +1546,9 @@ class RuleError(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(RuleError, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
         cls._error_messages.update({
                 'arg_number_error':

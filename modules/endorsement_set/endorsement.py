@@ -3,7 +3,7 @@ from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateTransition, StateView, Button
 from trytond.transaction import Transaction
-from trytond.model import Workflow
+from trytond.model import Workflow, Unique
 from trytond.pyson import Eval, Bool, Equal
 
 from trytond.modules.cog_utils import model, fields
@@ -68,8 +68,9 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(EndorsementSet, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints = [
-            ('number_uniq', 'UNIQUE(number)',
+            ('number_uniq', Unique(t, t.number),
                 'The endorsement set number must be unique.')
         ]
         cls._buttons.update({
@@ -188,8 +189,8 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
         Endorsement = pool.get('endorsement')
         if any([(endorsement.effective_date and
                     endorsement.effective_date != value)
-                    for endorsement_set in endorsement_sets for endorsement in
-                    endorsement_set.endorsements]):
+                for endorsement_set in endorsement_sets
+                for endorsement in endorsement_set.endorsements]):
             cls.append_functional_error('effective_date_already_set')
         to_write = []
         for endorsement_set in endorsement_sets:
