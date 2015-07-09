@@ -10,7 +10,7 @@ from sql import Union, Column, Literal
 from contextlib import contextmanager
 
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
-from trytond.model import UnionMixin as TrytonUnionMixin
+from trytond.model import UnionMixin as TrytonUnionMixin, Unique
 from trytond.exceptions import UserError
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
@@ -259,33 +259,38 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn):
 
     @classmethod
     def copy(cls, objects, default=None):
+        # This override is designed to automatically manage Unique constraints
+        # on Char fields when duplicating. Ideally, those should be managed on
+        # a per-model basis.
         constraints = []
         for constraint in cls._sql_constraints:
-            if 'UNIQUE' in constraint[1]:
-                constraints.append(constraint[1][7:-1])
-        # Only one constraint is dealt with, and it must be a char and it
-        # doesn't work with tuple or more.
-        # TODO : This is a temporary hack, the copy function should be coded
-        # explicitly in every object with a constraint
-        if len(constraints) == 1 and constraints[0].find(',') == -1:
-            if default is None:
-                default = {}
-            default = default.copy()
-            default[constraints[0]] = 'temp_for_copy'
-
-            res = super(CoopSQL, cls).copy(objects, default=default)
-            for clone, original in zip(res, objects):
-                i = 1
-                while cls.search([
-                        (constraints[0], '=', '%s_%s' % (
-                            getattr(original, constraints[0]), i))]):
-                    i += 1
-                setattr(clone, constraints[0], '%s_%s' % (
-                    getattr(original, constraints[0]), i))
-                clone.save()
-            return res
-        else:
+            if not isinstance(constraint[1], Unique):
+                continue
+            for column in constraint[1].columns:
+                if column.name not in cls._fields:
+                    continue
+                field = cls._fields[column.name]
+                if not isinstance(field, tryton_fields.Char):
+                    continue
+                constraints.append(column.name)
+        if not constraints:
             return super(CoopSQL, cls).copy(objects, default=default)
+        default = default.copy()
+
+        for constraint in constraints:
+            default[constraint] = 'temp_for_copy'
+        logging.getLogger('model').warning('Automatically changing %s when '
+            'copying instances of %s' % (', '.join(constraints), cls.__name__))
+
+        def single_copy(obj):
+            copy = super(CoopSQL, cls).copy([obj], default)[0]
+            for constraint in constraints:
+                setattr(copy, constraint, '%s_%s' % (
+                    getattr(objects[0], constraint), copy.id))
+            copy.save()
+            return copy
+
+        return [single_copy(obj) for obj in objects]
 
     def get_icon(self, name=None):
         return None
