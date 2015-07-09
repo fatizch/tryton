@@ -271,6 +271,13 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
         'on_change_with_accept_fee', 'set_accept_fee')
 
     @classmethod
+    def __setup__(cls):
+        super(ContractFee, cls).__setup__()
+        currency_symbol_states = cls.currency_symbol.states
+        currency_symbol_states['invisible'] = Eval('fee_type', '') != 'fixed'
+        cls.currency_symbol.states = currency_symbol_states
+
+    @classmethod
     def view_attributes(cls):
         return super(ContractFee, cls).view_attributes() + [
             ('/tree', 'colors', If(Eval('accept_fee', False), 'black',
@@ -294,7 +301,8 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
     def _export_light(cls):
         return super(ContractFee, cls)._export_light() | {'fee'}
 
-    @fields.depends('fee')
+    @fields.depends('fee', 'fee_type', 'fee_allow_override', 'overriden_rate',
+        'overriden_amount', 'accept_fee')
     def on_change_fee(self):
         self.fee_type = self.fee.type if self.fee else None
         self.fee_allow_override = self.fee.allow_override if self.fee else \
@@ -303,7 +311,7 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
         self.overriden_amount = self.fee.amount if self.fee else None
         self.accept_fee = True
 
-    @fields.depends('fee', 'accept_fee')
+    @fields.depends('fee', 'accept_fee', 'overriden_amount', 'overriden_rate')
     def on_change_accept_fee(self):
         if self.accept_fee:
             self.on_change_fee()
@@ -311,16 +319,25 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
             self.overriden_amount = 0
             self.overriden_rate = 0
 
-    @fields.depends('fee_type', 'currency', 'overriden_amount',
-        'overriden_rate', 'accept_fee',)
+    @fields.depends('contract', 'currency', 'currency_symbol')
+    def on_change_contract(self):
+        self.currency = self.contract.currency
+        self.currency_symbol = self.currency.symbol
+
+    @fields.depends('fee_type', 'fee', 'currency', 'overriden_amount',
+        'overriden_rate', 'accept_fee', 'currency_symbol')
     def on_change_with_amount_as_string(self, name=None):
-        if self.fee_type == 'fixed':
+        if self.fee_type == 'fixed' and self.overriden_amount:
             return ' %s %s' % (
                 str(self.currency.round(self.overriden_amount)),
                 self.currency_symbol)
-        elif self.fee_type == 'rate':
-            return ' %f %%' % str(100 * self.overriden_rate)
+        elif self.fee_type == 'percentage' and self.overriden_rate:
+            return ' %0.2f %%' % (100 * self.overriden_rate)
         return ''
+
+    @fields.depends('fee')
+    def on_change_with_rec_name(self, name=None):
+        return self.get_rec_name(name)
 
     @fields.depends('fee_type', 'overriden_amount', 'overriden_rate')
     def on_change_with_accept_fee(self, name=None):

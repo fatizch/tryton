@@ -1,20 +1,19 @@
 <?xml version="1.0"?>
 <form string="Contract Fee">
+    <field name="contract"/>
+    <field name="currency" invisible="1"/>
+    <newline/>
     <label name="fee"/>
     <field name="fee"/>
     <newline/>
-    <group col="1" id="label_amount_rate">
-        <label name="overriden_amount" yfill="1" xexpand="1" yexpand="1"/>
-        <label name="overriden_rate" yfill="1" xexpand="1" yexpand="1"/>
+    <group id="label_amount_rate" colspan="4">
+        <label name="overriden_amount" />
+        <field name="overriden_amount" xexpand="0" />
+        <label name="currency_symbol" string="" xexpand="0" xalign="0" />
     </group>
-    <group col="1" id="amount_rate">
-        <group name="overriden_amount" string="">
-            <field name="overriden_amount" xalign="1" xexpand="0"/>
-            <label name="currency_symbol" string="" xexpand="1" xalign="0"/>
-        </group>
-        <group name="overriden_rate" string="">
-            <field name="overriden_rate" factor="100" xexpand="0"/>
-            <label name="overriden_rate" string="%" xexpand="1" xalign="0"/>
-        </group>
+    <group id="amount_rate" colspan="4">
+        <label name="overriden_rate" />
+        <field name="overriden_rate" factor="100" xexpand="0"/>
+        <label name="overriden_rate" string="%" xexpand="0" xalign="0"/>
     </group>
 </form>
