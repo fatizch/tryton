@@ -432,9 +432,13 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     def init_dict_for_rule_engine(self, current_dict):
         current_dict['loan'] = self
 
-    def get_loan_share(self, party):
+    def get_loan_share(self, party, at_date=None):
+        if not at_date:
+            at_date = utils.today()
         for share in self.loan_shares:
-            if share.person == party:
+            if (share.person == party
+                    and (not share.start_date or share.start_date <= at_date)
+                    and (at_date <= share.end_date)):
                 return share
 
     def get_publishing_values(self):
