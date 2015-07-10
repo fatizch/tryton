@@ -57,7 +57,7 @@
         <!--Rights-->
         <record model='res.group' id="group_distribution">
             <field name="name">Distribution Administration</field>
-        </record>>
+        </record>
         <record model="ir.model.access" id="access_distribution_network_admin">
             <field name="model" search="[('model', '=', 'distribution.network')]"/>
             <field name="group" ref="group_distribution"/>

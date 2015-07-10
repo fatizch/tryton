@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <tryton>
     <data depends="report_engine">
-        <record model="ir.action.keyword" id="report_contract_keyword">
+        <record model="ir.action.keyword" id="report_invoice_keyword">
             <field name="keyword">form_print</field>
-            <field name="model">contract,-1</field>
+            <field name="model">account.invoice,-1</field>
             <field name="action" ref="report_engine.letter_generation_wizard"/>
         </record>
     </data>
