@@ -37,6 +37,13 @@ __all__ = [
     'ReportCreateAttach',
     ]
 
+FILE_EXTENSIONS = [
+    ('odt', 'Open Document Text (.odt)'),
+    ('odp', 'Open Document Presentation (.odp)'),
+    ('ods', 'Open Document Spreadsheet (.ods)'),
+    ('odg', 'Open Document Graphics (.odg)'),
+    ]
+
 
 class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     'Report Template'
@@ -59,6 +66,12 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     modifiable_before_printing = fields.Boolean('Modifiable',
         help='Set to true if you want to modify the generated document before '
         'sending or printing')
+    template_extension = fields.Selection(FILE_EXTENSIONS,
+        'Template Extension')
+    convert_to_pdf = fields.Boolean('Convert to pdf')
+    split_reports = fields.Boolean('Split Reports', help="If checked,"
+        " one document will be produced for each object. If not checked"
+        " a single document will be produced for several objects.")
 
     @classmethod
     def __setup__(cls):
@@ -81,12 +94,35 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         if TableHandler.table_exist(cursor, 'document_template'):
             TableHandler.table_rename(cursor, 'document_template',
                 'report_template')
+        report_template = TableHandler(cursor, cls)
+        has_column = report_template.column_exist('template_extension')
         super(ReportTemplate, cls).__register__(module_name)
+        if not has_column:
+            # Migration from 1.4 : set default values for new columns
+            cursor.execute("UPDATE report_template "
+                "SET template_extension = 'odt' "
+                "WHERE template_extension IS NULL")
+            cursor.execute("UPDATE report_template SET convert_to_pdf = TRUE "
+                "WHERE convert_to_pdf IS NULL")
+            cursor.execute("UPDATE report_template SET split_reports = TRUE "
+                "WHERE split_reports IS NULL")
 
     @classmethod
     def _export_light(cls):
         return super(ReportTemplate, cls)._export_light() | {'products',
             'document_desc', 'on_model'}
+
+    @classmethod
+    def default_convert_to_pdf(cls):
+        return True
+
+    @classmethod
+    def default_template_extension(cls):
+        return 'odt'
+
+    @classmethod
+    def default_split_reports(cls):
+        return True
 
     def get_selected_version(self, date, language):
         for version in self.versions:
@@ -123,8 +159,8 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         pool = Pool()
         Attachment = pool.get('ir.attachment')
         attachment = Attachment()
-        attachment.resource = report['object'].get_reference_object_for_edm(
-            self)
+        attachment.resource = report['resource'] or \
+            report['object'].get_reference_object_for_edm(self)
         attachment.data = report['data']
         attachment.name = report['report_name']
         attachment.document_desc = self.document_desc
@@ -140,8 +176,9 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         for report in reports:
             attachments.append(self._create_attachment_from_report(report))
         Attachment.save(attachments)
+        return attachments
 
-    def _generate_reports(self, objects, origin=None):
+    def _generate_reports(self, objects, origin=None, resource=None):
         """ Return a list of dictionnary with:
             object, report_type, data, report_name"""
         pool = Pool()
@@ -149,29 +186,33 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         if not objects:
             return
         reports = []
-        for cur_obj in objects:
-            report_type, data, _, report_name = ReportModel.execute(
-                [cur_obj.id], {
-                    'id': cur_obj.id,
-                    'ids': [cur_obj.id],
-                    'model': cur_obj.__name__,
-                    'doc_template': [self],
-                    'party': cur_obj.get_contact(),
-                    'address': cur_obj.get_address(),
-                    'sender': cur_obj.get_sender(),
-                    'sender_address': cur_obj.get_sender_address(),
-                    })
-            report = Report()
-            report.template_extension = 'odt'
+        objects_ids = [x.id for x in objects]
+        assert len(set([(x.get_contact(), x.get_address(), x.get_sender(),
+                        x.get_sender_address()) for x in objects])) == 1
+        report_type, data, _, report_name = ReportModel.execute(
+            objects_ids, {
+                'id': objects_ids[0],
+                'ids': objects_ids,
+                'model': objects[0].__name__,
+                'doc_template': [self],
+                'party': objects[0].get_contact(),
+                'address': objects[0].get_address(),
+                'sender': objects[0].get_sender(),
+                'sender_address': objects[0].get_sender_address(),
+                })
+        report = Report()
+        if self.convert_to_pdf:
+            report.template_extension = self.template_extension
             report.extension = 'pdf'
             _, data = Report.convert(report, data)
-            reports.append({
-                    'object': cur_obj,
-                    'report_type': report_type,
-                    'data': data,
-                    'report_name': report_name,
-                    'origin': origin
-                    })
+        reports.append({
+                'object': objects[0],
+                'report_type': report_type,
+                'data': data,
+                'report_name': report_name,
+                'origin': origin,
+                'resource': resource,
+                })
         return reports
 
     def produce_reports(self, objects, direct_print=False, origin=None):
@@ -179,8 +220,8 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         if direct_print:
             self.print_reports(reports)
         if self.internal_edm:
-            self.save_reports_in_edm(reports)
-        return reports
+            attachments = self.save_reports_in_edm(reports)
+        return reports, attachments
 
     @classmethod
     def find_templates_for_objects_and_kind(cls, objects, model_name, kind):

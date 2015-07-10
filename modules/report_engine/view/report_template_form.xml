@@ -14,6 +14,13 @@
     <field name="document_desc"/>
     <label name="modifiable_before_printing"/>
     <field name="modifiable_before_printing"/>
+    <label name="template_extension"/>
+    <field name="template_extension"/>
+    <separator id="automatic_generation" string="Automatic Generation" colspan="4"/>
+    <label name="convert_to_pdf"/>
+    <field name="convert_to_pdf" colspan="3"/>
+    <label name="split_reports"/>
+    <field name="split_reports" colspan="3"/>
     <notebook>
         <page string="Versions" id="versions">
             <field name="versions"/>
