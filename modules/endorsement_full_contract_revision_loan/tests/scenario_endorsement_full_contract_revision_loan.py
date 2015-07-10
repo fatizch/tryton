@@ -336,10 +336,8 @@ new_endorsement.execute('full_contract_revision_next')
 loan = Loan(loan.id)
 loan.amount == Decimal('250000')
 # #Res# #True
-Loan.draft([loan.id], {})
-loan = Loan(loan.id)
 loan.amount = Decimal('1000000')
-loan.state = 'calculated'
+loan.state = ''
 loan.save()
 Loan.calculate_loan([loan.id], {})
 
@@ -365,10 +363,8 @@ new_endorsement.execute('full_contract_revision_next')
 loan = Loan(loan.id)
 loan.amount == Decimal('250000')
 # #Res# #True
-Loan.draft([loan.id], {})
-loan = Loan(loan.id)
 loan.amount = Decimal('1000000')
-loan.state = 'calculated'
+loan.state = ''
 loan.save()
 Loan.calculate_loan([loan.id], {})
 
