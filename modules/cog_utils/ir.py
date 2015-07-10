@@ -1,12 +1,14 @@
-import codecs
 import datetime
-import os
+import polib
 from sql.operators import Concat
 
 from trytond import backend
+from trytond.ir.translation import TrytonPOFile
 from trytond.pool import PoolMeta, Pool
+from trytond.pyson import Eval, PYSONEncoder
 from trytond.transaction import Transaction
-from trytond.model import fields as tryton_fields
+from trytond.model import fields as tryton_fields, ModelView
+from trytond.wizard import Wizard, StateView, Button, StateAction
 
 import fields
 import utils
@@ -32,7 +34,9 @@ __all__ = [
     'Lang',
     'Icon',
     'Translation',
-    ]
+    'TranslationOverride',
+    'TranslationOverrideStart'
+]
 SEPARATOR = ' / '
 
 
@@ -386,29 +390,135 @@ class Icon(ExportImportMixin):
     __name__ = 'ir.ui.icon'
 
 
+class TranslationOverrideStart(ModelView):
+    """Select translation override method"""
+
+    __name__ = 'ir.translation.override.start'
+
+    language = fields.Many2One('ir.lang', 'Language', required=True,
+        domain=[
+            ('translatable', '=', True),
+            ('code', '!=', 'en_US'),
+            ])
+    export_kind = fields.Selection([
+            ('product', 'Product'),
+            ('client', 'Client')], 'Export kind', required=True)
+    target_module = fields.Char('Target module', states={
+            'invisible': Eval('export_kind') == 'product',
+            'required': Eval('export_kind') == 'client',
+            })
+
+
+class TranslationOverride(Wizard):
+    """Override translations Wizard"""
+
+    __name__ = 'ir.translation.override'
+
+    start = StateView('ir.translation.override.start',
+        'cog_utils.override_start_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Edit', 'edit', 'tryton-ok', default=True),
+            ])
+    edit = StateAction('cog_utils.act_override_translation_form')
+
+    def do_edit(self, action):
+        domain = [('lang', '=', self.start.language.code)]
+        context = {'target_module': ''}
+        if self.start.export_kind == 'client':
+            context['target_module'] = self.start.target_module
+        else:
+            domain.append(('module', 'in', utils.get_trytond_modules()))
+        encoder = PYSONEncoder()
+        action['pyson_context'] = encoder.encode(context)
+        action['pyson_domain'] = encoder.encode(domain)
+        return action, {}
+
+
 class Translation:
     __name__ = 'ir.translation'
 
     @classmethod
+    def write(cls, translations, values, *args):
+        # TranslationOverride wizard set target_module to '' in product mode or
+        # a module name in client mode. Assign None to target_module if no info
+        # in context ie TranslationOverride wizard hasn't been called.
+        target_module = Transaction().context.get('target_module', None)
+        if target_module is None:
+            return super(Translation, cls).write(translations, values, *args)
+
+        new_args = []
+        for translation in translations:
+            new_args.append([translation])
+            new_values = values
+            if target_module:
+                if target_module != translation.module:
+                    new_values = values.copy()
+                    new_values['overriding_module'] = target_module
+            else:
+                new_values = values.copy()
+                overriding_module = translation.module + '_cog_translation'
+                new_values['overriding_module'] = overriding_module
+            new_args.append(new_values)
+        args = list(new_args + list(args))
+        super(Translation, cls).write(*args)
+
+    @classmethod
     def translation_export(cls, lang, module):
+        # first pass: extract plain module translations
         res = super(Translation, cls).translation_export(lang, module)
-        override_trans_file = os.path.normpath(os.path.join(
-            os.path.dirname(__file__), '..', module, 'locale',
-            lang + '_custom.po'))
-        if os.path.exists(override_trans_file):
-            custom_data = '\n# Custom translations below\n\n'
-            with codecs.open(override_trans_file, encoding='utf-8') as f:
-                data = [x for x in f.readlines() if x.strip() and not
-                    x.strip().startswith('#')]
-                # Sort translations blocks to facilitate maintenance of
-                # custom.po file by copy-pasting back from resulting .po if
-                # needed.
-                # A block is composed of three lines (msgctxt, msgid, msgstr)
-                for trans_block in sorted(utils.chunker(data, 3),
-                        key=lambda x: x[0]):
-                    # Cannot have two translations blocks referring to same
-                    # element
-                    if str(trans_block[0].strip()) not in res:
-                        custom_data += ''.join(trans_block) + '\n'
-            res += unicode(custom_data).encode('utf-8')
-        return res
+
+        # second pass: append translations overwritten by this module
+        pool = Pool()
+        ModelData = pool.get('ir.model.data')
+        Config = pool.get('ir.configuration')
+
+        models_data = ModelData.search([
+                ('module', '=', module),
+                ])
+        db_id2fs_id = {}
+        for model_data in models_data:
+            db_id2fs_id.setdefault(model_data.model, {})
+            db_id2fs_id[model_data.model][model_data.db_id] = model_data.fs_id
+            for extra_model in cls.extra_model_data(model_data):
+                db_id2fs_id.setdefault(extra_model, {})
+                db_id2fs_id[extra_model][model_data.db_id] = model_data.fs_id
+
+        pofile = TrytonPOFile(wrapwidth=78)
+        pofile.metadata = {
+            'Content-Type': 'text/plain; charset=utf-8',
+            }
+
+        with Transaction().set_context(language=Config.get_language()):
+            translations = cls.search([
+                ('lang', '=', lang),
+                ('overriding_module', '=', module)],
+                order=[('type', 'ASC'), ('name', 'ASC')])
+
+        for translation in translations:
+            flags = [] if not translation.fuzzy else ['fuzzy']
+            trans_ctxt = '%(type)s:%(name)s:' % {
+                'type': translation.type,
+                'name': translation.name,
+                }
+            res_id = translation.res_id
+
+            if res_id >= 0:
+                model, _ = translation.name.split(',')
+                if model in db_id2fs_id:
+                    res_id = db_id2fs_id[model].get(res_id)
+                else:
+                    continue
+                trans_ctxt += '%s' % (res_id or '')
+            tokens = trans_ctxt.split(':')
+            trans_ctxt = '%s:%s.%s' % (':'.join(tokens[:-1]),
+                translation.module, tokens[-1])
+            entry = polib.POEntry(msgid=(translation.src or ''),
+                msgstr=(translation.value or ''), msgctxt=trans_ctxt,
+                flags=flags)
+            pofile.append(entry)
+        if pofile:
+            noheader_pofile = '\n'.join(unicode(pofile).split('\n')[3:])
+            msg = '\n# Custom translations below\n'
+            return res + (msg + noheader_pofile).encode('utf-8')
+        else:
+            return res

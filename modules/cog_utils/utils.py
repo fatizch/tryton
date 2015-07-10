@@ -20,9 +20,26 @@ from trytond.model.modelstorage import EvalEnvironment
 __all__ = []
 
 
-
 def get_module_name(cls):
     return cls.__name__.split('.')[0]
+
+
+def get_trytond_modules():
+    Module = Pool().get('ir.module')
+    modules = Module.search([])
+    cog_utils = Module.search([('name', '=', 'cog_utils')])[0]
+
+    def is_coopengo_module(module):
+        if module.name.endswith('cog_translation') or \
+                module.name == 'cog_utils' or cog_utils in module.parents:
+            return True
+        return any([is_coopengo_module(x) for x in module.parents])
+
+    trytond_modules = []
+    for module in modules:
+        if not is_coopengo_module(module):
+            trytond_modules.append(module.name)
+    return trytond_modules
 
 
 def to_list(data):
@@ -351,7 +368,6 @@ def pyson_encode(pyson_expr, do_eval=False):
 def get_json_from_pyson(pyson):
     encoded = PYSONEncoder().encode(pyson)
     return ''.join([x if x != '"' else '&quot;' for x in encoded])
-
 
 
 def get_domain_instances(record, field_name):

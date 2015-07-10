@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Document Templates">
+    <label name="language"/>
+    <field name="language" widget="selection"/>
+    <newline/>
+    <label name="export_kind"/>
+    <field name="export_kind"/>
+    <label name="target_module"/>
+    <field name="target_module"/>
+</form>

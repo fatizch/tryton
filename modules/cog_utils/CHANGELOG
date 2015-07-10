@@ -1,3 +1,5 @@
+* Add TranslationOverride wizard to edit custom translations
+
 Version 1.4 - 2015-05-29
 * Attachment defines binary data encoding and decoding for export
 * Move attachment from report_engine to cog_utils
@@ -7,8 +9,7 @@ Version 1.4 - 2015-05-29
 * Allow to call ir.model.methods with lists
 
 Version 1.3 - 2015-01-22
-* Externalize batches settings into a custom .conf file referenced by
-trytond.conf 'config_file' entry in a '[batch]' section.
+* Externalize batches settings into a custom .conf file
 * Revamp export / import
 
 Version 1.2 - 2014-07-01

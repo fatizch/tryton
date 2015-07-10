@@ -65,6 +65,7 @@ def register():
         ExportSummary,
         ExportConfigurationSelection,
         Translation,
+        TranslationOverrideStart,
         Attachment,
         module='cog_utils', type_='model')
     if config.get('env', 'testing') == 'True':
@@ -84,4 +85,5 @@ def register():
         TestCaseWizard,
         ExportFieldsSelection,
         ExportToFile,
+        TranslationOverride,
         module='cog_utils', type_='wizard')

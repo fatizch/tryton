@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <!-- ################################ -->
+        <!-- # Translation Override - Start # -->
+        <!-- ################################ -->
+        <record model="ir.ui.view" id="override_start_view_form">
+            <field name="model">ir.translation.override.start</field>
+            <field name="type">form</field>
+            <field name="name">override_start_view_form</field>
+        </record>
+        <!-- ############################### -->
+        <!-- # Translation Override Wizard # -->
+        <!-- ############################### -->
+        <record model="ir.action.wizard" id="act_translation_override">
+            <field name="name">override Translations</field>
+            <field name="wiz_name">ir.translation.override</field>
+        </record>
+        <!-- Entry point -->
+        <menuitem name="Override Translations" parent="ir.menu_localization" action="act_translation_override" id="menu_translation_override" sequence="40"/>
+        <!-- Renamed translation view -->
+        <record model="ir.action.act_window" id="act_override_translation_form">
+            <field name="name">Override Translations</field>
+            <field name="res_model">ir.translation</field>
+        </record>
+    </data>
+</tryton>
