@@ -1161,7 +1161,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def get_var_names_for_full_extract(cls):
         return ['subscriber', ('product', 'light'), 'extra_data_values',
-            'options', 'covered_elements', 'start_date', 'end_date']
+            'options', 'start_date', 'end_date']
 
     def get_publishing_context(self, cur_context):
         Lang = Pool().get('ir.lang')
@@ -1248,8 +1248,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         contacts = list(getattr(self, 'contacts', []))
         self.synchronize_contacts_of_type(contacts,
             'subscriber', [self.subscriber] if self.subscriber else [])
-        self.synchronize_contacts_of_type(contacts,
-            'covered_party', [x.party for x in self.covered_elements])
         self.contacts = contacts
 
     def update_contacts(self):

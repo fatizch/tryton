@@ -78,6 +78,11 @@ class Contract(Printable):
                 'need_option': 'Select at least one option for %s',
                 })
 
+    @classmethod
+    def get_var_names_for_full_extract(cls):
+        return super(Contract, cls).get_var_names_for_full_extract() + \
+            ['covered_elements']
+
     def _get_calculate_targets(self, model_type):
         if model_type == 'covered_elements':
             self.covered_elements = self.covered_elements
@@ -293,6 +298,13 @@ class Contract(Printable):
             covered_element.start_date = contract_dict['start_date']
             covered_element.init_covered_element(product, item_desc, cov_dict)
             self.covered_elements.append(covered_element)
+
+    def update_contacts_list(self):
+        super(Contract, self).update_contacts_list()
+        contacts = list(getattr(self, 'contacts', []))
+        self.synchronize_contacts_of_type(contacts,
+            'covered_party', [x.party for x in self.covered_elements])
+        self.contacts = contacts
 
     @classmethod
     def _export_skips(cls):
