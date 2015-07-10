@@ -4,9 +4,11 @@ from dateutil.relativedelta import relativedelta
 
 import trytond.tests.test_tryton
 
-from trytond.modules.cog_utils import test_framework
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
+from trytond.pool import Pool
+
+from trytond.modules.cog_utils import test_framework
 
 
 class ModuleTestCase(test_framework.CoopTestCase):
@@ -22,6 +24,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_models(cls):
         return {
+            'Address': 'party.address',
+            'Country': 'country.country',
+            'Contact': 'contract.contact',
+            'ZipCode': 'country.zipcode',
+            'Party': 'party.party',
             'Contract': 'contract',
             'Option': 'contract.option',
             'ActivationHistory': 'contract.activation_history',
@@ -31,7 +38,35 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'SubStatus': 'contract.sub_status',
             }
 
+    def createContactTypes(self):
+        ContactType = Pool().get('contract.contact.type')
+        to_create = []
+        for code in ('subscriber', 'covered_party'):
+            to_create.append(ContactType(code=code, name='dummy'))
+        ContactType.save(to_create)
+
+    def test0001_testPersonCreation(self):
+        party = self.Party()
+        party.is_person = True
+        party.name = 'DOE'
+        party.first_name = 'John'
+        party.birth_date = datetime.date(1980, 5, 30)
+        party.gender = 'male'
+        party.save()
+
+        country = self.Country(name="Oz", code='OZ')
+        country.save()
+        address = self.Address(party=party, zip="1", country=country,
+            city="Emerald")
+        address.save()
+        party.addresses = [address.id]
+        party.save()
+
+        party, = self.Party.search([('name', '=', 'DOE')])
+        self.assert_(party.id)
+
     @test_framework.prepare_test(
+        'contract.test0001_testPersonCreation',
         'offered.test0030_testProductCoverageRelation',
         )
     def test0010_testContractCreation(self):
@@ -78,6 +113,23 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(contract.status, 'terminated')
         self.assertEqual(contract.sub_status, self.SubStatus.search(
                 [('code', '=', 'reached_end_date')])[0])
+
+    @test_framework.prepare_test(
+        'contract.test0010_testContractCreation',
+        'contract.createContactTypes',
+        )
+    def test0012_testContractContactsList(self):
+        contract = self.Contract()
+        party = self.Party.search([('is_person', '=', True)])[0]
+        contract.subscriber = party
+        contract.covered_elements = []
+        for _count in range(2):  # don't add contact if it already exists
+            contract.update_contacts()
+            self.assertEqual(len(contract.contacts), 1)
+        contract.subscriber = None
+        for _count in range(2):
+            contract.update_contacts()
+            self.assertEqual(len(contract.contacts), 0)
 
     @test_framework.prepare_test(
         'contract.test0010_testContractCreation',

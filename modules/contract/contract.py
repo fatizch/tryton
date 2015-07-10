@@ -389,7 +389,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def _calculate_methods(cls, product):
         return [('options', 'set_automatic_end_date'),
-            ('contract', 'calculate_activation_dates')]
+            ('contract', 'calculate_activation_dates'),
+            ('contract', 'update_contacts'),
+            ]
 
     @dualmethod
     def calculate(cls, contracts):
@@ -1134,9 +1136,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return cls.browse([x['id'] for x in cursor.dictfetchall()])
 
     def get_contract_address(self, at_date=None):
-        res = utils.get_good_versions_at_date(self, 'addresses', at_date)
-        if res:
-            return res[0].address
+        for contact in self.contacts:
+            if contact.type.code == 'subscriber' and contact.address:
+                return contact.address
 
     def init_default_address(self):
         if getattr(self, 'addresses', None):
@@ -1229,8 +1231,32 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         res.update(good_extra_data)
         return res
 
+    def synchronize_contacts_of_type(self, contacts, code, parties):
+        pool = Pool()
+        ContactType = pool.get('contract.contact.type')
+        Contact = pool.get('contract.contact')
+        type_ = ContactType.search([('code', '=', code)], limit=1,
+            order=[])[0]  # TODO: cache those code/id mappings
+        for contact in contacts[:]:
+            if contact.type == type_ and contact.party not in parties:
+                contacts.remove(contact)
+        contacts.extend([Contact(type=type_, party=party)
+            for party in set(parties) - set(
+                [x.party for x in contacts if x.type == type_])])
+
+    def update_contacts_list(self):
+        contacts = list(getattr(self, 'contacts', []))
+        self.synchronize_contacts_of_type(contacts,
+            'subscriber', [self.subscriber] if self.subscriber else [])
+        self.synchronize_contacts_of_type(contacts,
+            'covered_party', [x.party for x in self.covered_elements])
+        self.contacts = contacts
+
     def update_contacts(self):
-        pass
+        self.update_contacts_list()
+        for c in self.contacts:
+            if not getattr(c, 'address', None):
+                c.address = c.get_default_address_from_party()
 
     def get_product_subscriber_kind(self, name):
         return self.product.subscriber_kind if self.product else ''

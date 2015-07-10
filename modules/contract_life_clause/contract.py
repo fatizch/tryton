@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool, Or
 
 from trytond.modules.cog_utils import fields, model
@@ -17,38 +17,17 @@ __all__ = [
 class Contract:
     __name__ = 'contract'
 
-    def update_contacts(self):
-        super(Contract, self).update_contacts()
-        pool = Pool()
-        Contact = pool.get('contract.contact')
-        ContactType = pool.get('contract.contact.type')
-        accepting_benefs = []
-        benef_parties = []
-        contact_type, = ContactType.search(
-            [('code', '=', 'accepting_beneficiary')], limit=1, order=[])
+    def update_contacts_list(self):
+        super(Contract, self).update_contacts_list()
+        parties = []
         for cov_element in self.covered_elements:
             for option in cov_element.options:
                 for benef in option.beneficiaries:
-                    if not benef.accepting:
-                        continue
-                    accepting_benefs.append(benef)
-                    benef_parties.append(benef.party)
-        contact_parties = [x.party for x in self.contacts
-            if x.type == contact_type]
-
-        to_del = []
-        for contact in self.contacts:
-            if (contact.type == contact_type
-                    and contact.party not in benef_parties):
-                to_del.append(contact)
-        Contact.delete(to_del)
+                    if benef.accepting:
+                        parties.append(benef.party)
         contacts = list(getattr(self, 'contacts', []))
-        for benef in accepting_benefs:
-            if benef.party in contact_parties:
-                continue
-            contact = Contact(type=contact_type, party=benef.party,
-                address=benef.address)
-            contacts.append(contact)
+        self.synchronize_contacts_of_type(contacts,
+            'accepting_beneficiary', parties)
         self.contacts = contacts
 
 

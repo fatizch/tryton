@@ -285,13 +285,11 @@ class Printable(Model):
         except:
             return 'en_us'
 
-    def get_address(self, kind=None):
+    def get_address(self):
         contact = self.get_contact()
         if not contact:
             return ''
-        if kind:
-            address = [adr for adr in contact.addresses if adr.kind == kind][0]
-        else:
+        if contact.address:
             address = contact.addresses[0]
         return address
 

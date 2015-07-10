@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <tree string="Contract Contact">
     <field name="contract"/>
-    <field name="type"/>
-    <field name="party"/>
+    <field name="type" readonly="1"/>
+    <field name="party" readonly="1"/>
+    <field name="address"/>
 </tree>
