@@ -25,6 +25,8 @@ class Party:
 
     contracts = fields.One2ManyDomain('contract', 'subscriber',
         'Contracts', domain=[('status', '!=', 'quote')])
+    related_contracts = fields.Many2Many('contract.contact',
+        'party', 'contract', 'Related Contracts')
     quotes = fields.One2ManyDomain('contract', 'subscriber', 'Quotes',
         domain=[('status', '=', 'quote')])
 
@@ -57,10 +59,8 @@ class Party:
 
     @classmethod
     def _export_skips(cls):
-        result = super(Party, cls)._export_skips()
-        result.add('quotes')
-        result.add('contracts')
-        return result
+        return super(Party, cls)._export_skips() | {'quotes', 'contracts',
+            'related_contracts'}
 
     @fields.depends('quotes')
     def on_change_with_last_quote(self, name=None):

@@ -660,6 +660,10 @@ msgctxt "model:ir.action,name:act_person_form"
 msgid "Persons"
 msgstr "Personnes"
 
+msgctxt "model:ir.action,name:act_related_parties_relate_form"
+msgid "Related parties"
+msgstr "Tiers liés"
+
 msgctxt "model:ir.action,name:start_synthesis_menu"
 msgid "Synthesis"
 msgstr "Synthèse"
