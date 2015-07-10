@@ -432,7 +432,8 @@ class ChangeContractExtraData(EndorsementWizardStepMixin, model.CoopView):
                 effective_date)
             extra_data_values = extra_data_at_date.extra_data_values
             defaults['current_extra_data_date'] = extra_data_at_date.date
-            defaults['new_extra_data_date'] = effective_date
+            defaults['new_extra_data_date'] = effective_date if \
+                effective_date != contract.start_date else None
             defaults['current_extra_data'] = extra_data_values
 
             if endorsement.extra_datas:
@@ -467,7 +468,6 @@ class ChangeContractExtraData(EndorsementWizardStepMixin, model.CoopView):
                     extra_data=extra_data_at_date,
                     relation=extra_data_at_date.id,
                     definition=self.endorsement_definition,
-                    values={'date': self.effective_date},
                     new_extra_data_values=self.new_extra_data,
                     )
             else:

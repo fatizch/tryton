@@ -1849,6 +1849,8 @@ class EndorsementExtraData(relation_mixin(
             cur_data_values = None
 
         if cur_data_values:
+            if not res[2]:
+                res[2] = []
             for k, v in cur_data_values.iteritems():
                 if new_data_values[k] != v:
                     res[2].append(k + ': ' + str(v) + u' → ' + str(

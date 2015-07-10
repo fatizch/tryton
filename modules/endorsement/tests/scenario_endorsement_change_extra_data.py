@@ -163,7 +163,7 @@ contract.product = product
 contract.save()
 
 contract.extra_datas[0].extra_data_values = {'formula': 1}
-contract.extra_datas[0].date = contract_start_date
+contract.extra_datas[0].date = None
 contract.extra_datas[0].save()
 
 
@@ -181,7 +181,7 @@ new_endorsement.form.endorsement = None
 new_endorsement.form.applicant = None
 new_endorsement.form.effective_date = effective_date
 new_endorsement.execute('start_endorsement')
-new_endorsement.form.current_extra_data_date == contract_start_date
+new_endorsement.form.current_extra_data_date == None
 # #Res# #True
 new_endorsement.form.new_extra_data_date == effective_date
 # #Res# #True
@@ -195,7 +195,7 @@ len(contract.extra_datas) == 2
 # #Res# #True
 contract.extra_datas[0].extra_data_values == {'formula': 1}
 # #Res# #True
-contract.extra_datas[0].date == contract_start_date
+contract.extra_datas[0].date == None
 # #Res# #True
 contract.extra_datas[1].extra_data_values == {'formula': 2}
 # #Res# #True
@@ -210,7 +210,7 @@ len(contract.extra_datas) == 1
 # #Res# #True
 contract.extra_datas[0].extra_data_values == {'formula': 1}
 # #Res# #True
-contract.extra_datas[0].date == contract_start_date
+contract.extra_datas[0].date == None
 # #Res# #True
 
 # #Comment# #New Endorsement
@@ -221,9 +221,9 @@ new_endorsement.form.endorsement = None
 new_endorsement.form.applicant = None
 new_endorsement.form.effective_date = contract_start_date
 new_endorsement.execute('start_endorsement')
-new_endorsement.form.current_extra_data_date == contract_start_date
+new_endorsement.form.current_extra_data_date == None
 # #Res# #True
-new_endorsement.form.new_extra_data_date == contract_start_date
+new_endorsement.form.new_extra_data_date == None
 # #Res# #True
 new_endorsement.form.new_extra_data = {'formula': 3}
 new_endorsement.execute('change_contract_extra_data_next')
@@ -234,5 +234,5 @@ len(contract.extra_datas) == 1
 # #Res# #True
 contract.extra_datas[0].extra_data_values == {'formula': 3}
 # #Res# #True
-contract.extra_datas[0].date == contract_start_date
+contract.extra_datas[0].date == None
 # #Res# #True
