@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -7,6 +7,8 @@ msgid ""
 "Following products or coverages : %s have tax included option which is not "
 "allowed with document rounding method."
 msgstr ""
+"Les produits ou garanties suivantes : %s sont paramétrés avec la taxe "
+"incluse ce qui n'est pas compatible avec la stratégie d'arrondi"
 
 msgctxt "error:account.invoice:"
 msgid ""
@@ -219,6 +221,14 @@ msgstr "Factures"
 msgctxt "field:contract,all_premiums:"
 msgid "All Premiums"
 msgstr "Toutes les primes"
+
+msgctxt "field:contract,balance:"
+msgid "Balance"
+msgstr "Balance"
+
+msgctxt "field:contract,balance_today:"
+msgid "Balance Today"
+msgstr "Balance à aujourd'hui"
 
 msgctxt "field:contract,billing_information:"
 msgid "Current Billing Information"

@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:account.invoice,color:"
+msgid "Color"
+msgstr "Couleur"
+
 msgctxt "field:account.invoice,icon:"
 msgid "Icon"
 msgstr "Icône"

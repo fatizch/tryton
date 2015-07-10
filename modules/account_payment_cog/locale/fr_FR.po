@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -21,6 +21,18 @@ msgstr "Journal de prélèvement"
 msgctxt "field:account.configuration,reject_fee_journal:"
 msgid "Reject Fee Journal"
 msgstr "Journal des frais de rejet"
+
+msgctxt "field:account.invoice,credit_reconciliation_lines:"
+msgid "Payment Lines"
+msgstr "Lignes de paiement"
+
+msgctxt "field:account.invoice,payments:"
+msgid "Payments"
+msgstr "Paiements"
+
+msgctxt "field:account.invoice,pending_payment:"
+msgid "Pending Payment"
+msgstr "En cours de prélèvement"
 
 msgctxt "field:account.move.line,payment_date:"
 msgid "Payment Date"
@@ -260,11 +272,11 @@ msgstr "Batch de création des paiements"
 
 msgctxt "model:account.payment.journal.failure_action,name:"
 msgid "Journal Failure Action"
-msgstr ""
+msgstr "Action suite à rejet"
 
 msgctxt "model:account.payment.journal.reject_reason,name:"
 msgid "Payment Journal Reject Reason"
-msgstr ""
+msgstr "Motif de Rejet"
 
 msgctxt "model:account.payment.payment_creation.start,name:"
 msgid "Payment Creation Start"
@@ -356,15 +368,15 @@ msgstr "Paiements"
 
 msgctxt "view:account.payment.group:"
 msgid "Acknowledge"
-msgstr ""
+msgstr "Accuser réception"
 
 msgctxt "view:account.payment.journal.failure_action:"
 msgid "Payment Journal Failure Action"
-msgstr ""
+msgstr "Action suite à rejet"
 
 msgctxt "view:account.payment.journal.failure_action:"
 msgid "Payment Journal Failure Actions"
-msgstr ""
+msgstr "Actions suite à rejet"
 
 msgctxt "view:account.payment.journal.reject_reason:"
 msgid "Payment Journal Reject Reasons"
@@ -411,15 +423,3 @@ msgctxt ""
 "wizard_button:account.payment.payment_information_modification,payment_information_selection,finalize:"
 msgid "Next"
 msgstr "Suivant"
-
-msgctxt "field:account.invoice,pending_payment:"
-msgid "Pending Payment"
-msgstr "En cours de prélèvement"
-
-msgctxt "field:account.invoice,credit_reconciliation_lines:"
-msgid "Payment Lines"
-msgstr "Lignes de paiement"
-
-msgctxt "field:account.invoice,payments:"
-msgid "Payments"
-msgstr "Paiements"

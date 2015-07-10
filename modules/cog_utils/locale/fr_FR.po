@@ -25,7 +25,7 @@ msgstr "Impossible de décoder la pièce jointe %s en base 64"
 
 msgctxt "error:ir.export.configuration.field:"
 msgid "Field %s is not defined in model %s"
-msgstr ""
+msgstr "Le champ %s n'est pas défini dans le modèle %s"
 
 msgctxt "error:ir.export.configuration.model:"
 msgid "The code must be unique!"

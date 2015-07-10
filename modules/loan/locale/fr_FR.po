@@ -107,6 +107,10 @@ msgctxt "field:contract-loan,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract.option,is_loan:"
+msgid "Loan"
+msgstr "Emprunteur"
+
 msgctxt "field:contract.option,latest_loan_shares:"
 msgid "Loan Shares"
 msgstr "Quotités"
@@ -154,6 +158,10 @@ msgstr "Montant"
 msgctxt "field:loan,company:"
 msgid "Company"
 msgstr "Société"
+
+msgctxt "field:loan,contracts:"
+msgid "Contracts"
+msgstr "Contrats"
 
 msgctxt "field:loan,create_date:"
 msgid "Create Date"
@@ -768,6 +776,10 @@ msgstr "Semaine"
 msgctxt "selection:loan,payment_frequency:"
 msgid "Year"
 msgstr "Année"
+
+msgctxt "selection:loan,state:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:loan,state:"
 msgid "Calculated"

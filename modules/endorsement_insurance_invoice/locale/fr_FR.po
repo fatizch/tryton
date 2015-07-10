@@ -124,6 +124,11 @@ msgctxt ""
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt ""
+"field:contract.billing_information.change.contract_displayer,contract_status:"
+msgid "Contract Status"
+msgstr "Statut du contrat"
+
 msgctxt "field:contract.billing_information.change.contract_displayer,id:"
 msgid "ID"
 msgstr "ID"
@@ -132,11 +137,6 @@ msgctxt ""
 "field:contract.billing_information.change.contract_displayer,to_propagate:"
 msgid "Propagate"
 msgstr "Propager"
-
-msgctxt ""
-"field:contract.billing_information.change.contract_displayer,contract_status:"
-msgid "Contract Status"
-msgstr "Statut du contrat"
 
 msgctxt "field:contract.direct_debit_account.change,contract:"
 msgid "Contract"

@@ -317,8 +317,8 @@ msgid "Commissioned Contracts"
 msgstr "Contrats commissionnés"
 
 msgctxt "model:ir.action,name:act_broker_form"
-msgid "Broker"
-msgstr "Courtier"
+msgid "Brokers"
+msgstr "Courtiers"
 
 msgctxt "model:ir.action,name:act_commission_create_agents"
 msgid "Create Agents"
@@ -349,8 +349,8 @@ msgid "Brokers"
 msgstr "Courtiers"
 
 msgctxt "model:ir.ui.menu,name:menu_broker"
-msgid "Broker"
-msgstr "Courtier"
+msgid "Brokers"
+msgstr "Courtiers"
 
 msgctxt "model:ir.ui.menu,name:menu_commission_create_agents"
 msgid "Create Agents"

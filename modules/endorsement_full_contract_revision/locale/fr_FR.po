@@ -33,6 +33,18 @@ msgctxt "field:endorsement.contract.full_revision_start,start_date:"
 msgid "New Start Date"
 msgstr "Nouvelle date de début"
 
+msgctxt "field:process,complete_message:"
+msgid "Confirmation Message for Completion"
+msgstr "Message de confirmation final"
+
+msgctxt "help:process,complete_message:"
+msgid ""
+"A confirmation message that will be displayed when the user clicks the "
+"\"Terminate\" button at the end of the process"
+msgstr ""
+"Ce message est affiché à l'utilisateur pour confirmation lorsqu'il clique "
+"sur le bouton \"Terminer\" du processus"
+
 msgctxt "model:endorsement.contract.full_revision_start,name:"
 msgid "Start Full Contract Revision"
 msgstr "Démarrer la reprise intégrale de contrat"

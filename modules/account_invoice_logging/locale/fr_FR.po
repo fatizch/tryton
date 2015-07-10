@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -50,6 +50,10 @@ msgctxt "model:account.invoice.logging,name:"
 msgid "Invoice Logging"
 msgstr "Enregistrement des quittances"
 
+msgctxt "model:ir.action,name:act_invoice_logging_relate_form"
+msgid "Invoice Logging"
+msgstr "Changements d'états de quittance"
+
 msgctxt "selection:account.invoice.logging,state:"
 msgid "Canceled"
 msgstr "Annulée"
@@ -69,3 +73,7 @@ msgstr "Emise"
 msgctxt "selection:account.invoice.logging,state:"
 msgid "Validated"
 msgstr "Validé"
+
+msgctxt "view:account.invoice.logging:"
+msgid "Invoice Logging"
+msgstr "Changements d'états de quittance"
