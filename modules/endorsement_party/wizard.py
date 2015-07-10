@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
@@ -12,6 +14,7 @@ __all__ = [
     'ChangePartyAddress',
     'ChangePartyBirthDate',
     'ChangePartySSN',
+    'PartyNameDisplayer',
     'ChangePartyName',
     'StartEndorsement',
     'SelectEndorsement',
@@ -64,6 +67,10 @@ class ChangePartyAddress(EndorsementWizardStepMixin, model.CoopView):
         context={'good_party': Eval('party_id'),
             'effective_date': Eval('effective_date')})
     party_id = fields.Integer('party_id')
+
+    @classmethod
+    def is_multi_instance(cls):
+        return False
 
     @classmethod
     def __setup__(cls):
@@ -242,6 +249,10 @@ class ChangePartyBirthDate(EndorsementWizardStepMixin, model.CoopView):
     new_birth_date = fields.Date('New Birth Date')
 
     @classmethod
+    def is_multi_instance(cls):
+        return False
+
+    @classmethod
     def state_view_name(cls):
         return 'endorsement_party.party_change_birth_date_view_form'
 
@@ -284,6 +295,10 @@ class ChangePartySSN(EndorsementWizardStepMixin, model.CoopView):
     new_ssn = fields.Char('New SSN')
 
     @classmethod
+    def is_multi_instance(cls):
+        return False
+
+    @classmethod
     def state_view_name(cls):
         return 'endorsement_party.' \
             'party_change_ssn_view_form'
@@ -322,10 +337,10 @@ class ChangePartySSN(EndorsementWizardStepMixin, model.CoopView):
         party_endorsement.save()
 
 
-class ChangePartyName(EndorsementWizardStepMixin, model.CoopView):
-    'Change Party Name'
+class PartyNameDisplayer(model.CoopView):
+    'Change Party Name Displayer'
 
-    __name__ = 'endorsement.party.change_name'
+    __name__ = 'endorsement.party.change_name.displayer'
 
     current_name = fields.Char('Current Name', readonly=True)
     current_first_name = fields.Char('Current First Name', readonly=True)
@@ -333,6 +348,15 @@ class ChangePartyName(EndorsementWizardStepMixin, model.CoopView):
     new_name = fields.Char('New Name')
     new_first_name = fields.Char('New First Name')
     new_birth_name = fields.Char('New Birth Name')
+
+
+class ChangePartyName(EndorsementWizardStepMixin, model.CoopView):
+    'Change Party Name'
+
+    __name__ = 'endorsement.party.change_name'
+
+    parties = fields.One2Many(
+        'endorsement.party.change_name.displayer', None, 'Parties')
 
     @classmethod
     def state_view_name(cls):
@@ -344,52 +368,47 @@ class ChangePartyName(EndorsementWizardStepMixin, model.CoopView):
         return {}
 
     def _get_parties(self):
-        return {x.party.id: x
-            for x in self.wizard.endorsement.party_endorsements}
+        res = OrderedDict()
+        for party_endorsement in self.wizard.endorsement.party_endorsements:
+            res[party_endorsement.party.id] = party_endorsement
+        return res
 
     def step_default(self, name):
         pool = Pool()
         Party = pool.get('party.party')
+        displayers = []
         defaults = super(ChangePartyName, self).step_default()
-        parties = self._get_parties()
-        party = Party(parties.keys()[0])
-        party_endorsement = parties.values()[0]
-        values = party_endorsement.values
-
-        if 'name' in values:
-            defaults['new_name'] = values['name']
-        else:
-            defaults['new_name'] = party.name
-        if 'first_name' in values:
-            defaults['new_first_name'] = values['first_name']
-        else:
-            defaults['new_first_name'] = party.first_name
-        if 'birth_name' in values:
-            defaults['new_birth_name'] = values['birth_name']
-        else:
-            defaults['new_birth_name'] = party.birth_name
-
-        defaults['current_name'] = party.name
-        defaults['current_first_name'] = party.first_name
-        defaults['current_birth_name'] = party.birth_name
+        for party, party_endorsement in zip(Party.browse(
+                    self._get_parties().keys()), self._get_parties().values()):
+            displayer = {}
+            values = party_endorsement.values
+            displayer['new_name'] = values.get('name', party.name)
+            displayer['new_first_name'] = values.get('first_name',
+                party.first_name)
+            displayer['new_birth_name'] = values.get('birth_name',
+                party.birth_name)
+            displayer['current_name'] = party.name
+            displayer['current_first_name'] = party.first_name
+            displayer['current_birth_name'] = party.birth_name
+            displayers.append(displayer)
+        defaults['parties'] = displayers
         return defaults
 
     def step_update(self):
         pool = Pool()
         Party = pool.get('party.party')
-        parties = self._get_parties()
-        party_endorsement = parties.values()[0]
-        party_id = parties.keys()[0]
-        party = Party(party_id)
-        new_values = {}
-        if self.new_name or party.name:
-            new_values.update({'name': self.new_name})
-        if self.new_birth_name or party.birth_name:
-            new_values.update({'birth_name': self.new_birth_name})
-        if self.new_first_name or party.first_name:
-            new_values.update({'first_name': self.new_first_name})
-        party_endorsement.values = new_values
-        party_endorsement.save()
+        for party, party_endorsement, displayer in zip(
+                Party.browse(self._get_parties().keys()),
+                self._get_parties().values(), self.parties):
+            new_values = {}
+            if displayer.new_name or party.name:
+                new_values.update({'name': displayer.new_name})
+            if displayer.new_birth_name or party.birth_name:
+                new_values.update({'birth_name': displayer.new_birth_name})
+            if displayer.new_first_name or party.first_name:
+                new_values.update({'first_name': displayer.new_first_name})
+            party_endorsement.values = new_values
+            party_endorsement.save()
 
 
 class SelectEndorsement(model.CoopView):

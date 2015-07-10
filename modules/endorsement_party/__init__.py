@@ -19,6 +19,7 @@ def register():
         AddressDisplayer,
         ChangePartyAddress,
         ChangePartySSN,
+        PartyNameDisplayer,
         ChangePartyName,
         SelectEndorsement,
         module='endorsement_party', type_='model')

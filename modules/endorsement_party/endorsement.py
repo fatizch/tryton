@@ -87,7 +87,7 @@ class Endorsement:
     __name__ = 'endorsement'
 
     party_endorsements = fields.One2Many('endorsement.party', 'endorsement',
-        'Party Endorsement', size=1, delete_missing=True)
+        'Party Endorsements', delete_missing=True)
     parties = fields.Function(
         fields.Many2Many('party.party', '', '', 'Parties'),
         'get_parties', searcher='search_parties')

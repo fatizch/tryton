@@ -7,7 +7,6 @@
         <label name="definition"/>
         <field name="definition" widget="selection"/>
         <newline/>
-        <label name="party"/>
-        <field name="party"/>
+        <field name="parties" colspan="4"/>
     </xpath>
 </data>

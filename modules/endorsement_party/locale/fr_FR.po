@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -41,16 +41,15 @@ msgstr "Modifications des informations santé"
 msgctxt "error:endorsement.party:"
 msgid ""
 "There may only be one endorsement in_progress at a given time per party"
-msgstr ""
-"Il ne peut y avoir qu'un seul avenant en cours de saisie sur un acteur"
+msgstr "Il ne peut y avoir qu'un seul avenant en cours de saisie sur un tiers"
 
 msgctxt "field:endorsement,parties:"
 msgid "Parties"
 msgstr "Tiers"
 
 msgctxt "field:endorsement,party_endorsements:"
-msgid "Party Endorsement"
-msgstr "Avenant sur un acteur"
+msgid "Party Endorsements"
+msgstr "Avenants sur tiers"
 
 msgctxt "field:endorsement.definition,definition_for_contracts:"
 msgid "Endorsement Definition For Contracts"
@@ -62,7 +61,7 @@ msgstr "Générer les avenants aux contrats"
 
 msgctxt "field:endorsement.definition,is_party:"
 msgid "Is Party"
-msgstr "Est un avenant de type acteur"
+msgstr "Est un avenant de type tiers"
 
 msgctxt "field:endorsement.definition,is_technical:"
 msgid "Is technical"
@@ -74,11 +73,11 @@ msgstr "Générer les avenants aux contrats"
 
 msgctxt "field:endorsement.part,is_party:"
 msgid "Is Party"
-msgstr "Est un avenant de type acteur"
+msgstr "Est un avenant de type tiers"
 
 msgctxt "field:endorsement.part,party_fields:"
 msgid "Party Fields"
-msgstr "Champs sur acteur"
+msgstr "Champs sur tiers"
 
 msgctxt "field:endorsement.party,addresses:"
 msgid "Addresses"
@@ -372,18 +371,6 @@ msgctxt ""
 msgid "New Health Complement"
 msgstr "Nouvelle information santé"
 
-msgctxt "field:endorsement.party.change_name,current_birth_name:"
-msgid "Current Birth Name"
-msgstr "Date de naissance actuelle"
-
-msgctxt "field:endorsement.party.change_name,current_first_name:"
-msgid "Current First Name"
-msgstr "Prénom actuel"
-
-msgctxt "field:endorsement.party.change_name,current_name:"
-msgid "Current Name"
-msgstr "Nom actuel"
-
 msgctxt "field:endorsement.party.change_name,effective_date:"
 msgid "Effective Date"
 msgstr "Date d'effet"
@@ -400,15 +387,35 @@ msgctxt "field:endorsement.party.change_name,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:endorsement.party.change_name,new_birth_name:"
+msgctxt "field:endorsement.party.change_name,parties:"
+msgid "Parties"
+msgstr "Tiers"
+
+msgctxt "field:endorsement.party.change_name.displayer,current_birth_name:"
+msgid "Current Birth Name"
+msgstr "Nom de naissance actuel"
+
+msgctxt "field:endorsement.party.change_name.displayer,current_first_name:"
+msgid "Current First Name"
+msgstr "Prénom actuel"
+
+msgctxt "field:endorsement.party.change_name.displayer,current_name:"
+msgid "Current Name"
+msgstr "Nom actuel"
+
+msgctxt "field:endorsement.party.change_name.displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.change_name.displayer,new_birth_name:"
 msgid "New Birth Name"
 msgstr "Nouveau nom de naissance"
 
-msgctxt "field:endorsement.party.change_name,new_first_name:"
+msgctxt "field:endorsement.party.change_name.displayer,new_first_name:"
 msgid "New First Name"
 msgstr "Nouveau prénom"
 
-msgctxt "field:endorsement.party.change_name,new_name:"
+msgctxt "field:endorsement.party.change_name.displayer,new_name:"
 msgid "New Name"
 msgstr "Nouveau nom"
 
@@ -632,6 +639,10 @@ msgctxt "model:endorsement.party.change_name,name:"
 msgid "Change Party Name"
 msgstr "Changement de nom de tiers"
 
+msgctxt "model:endorsement.party.change_name.displayer,name:"
+msgid "Change Party Name Displayer"
+msgstr "Afficheur de changement de nom de tiers"
+
 msgctxt "model:endorsement.party.change_ssn,name:"
 msgid "Change Party SSN"
 msgstr "Changement de numéro de sécurité Sociale"
@@ -690,7 +701,7 @@ msgstr "Mise à jour"
 
 msgctxt "view:endorsement.party.change_address:"
 msgid "Change Party Addresses"
-msgstr "Changer les adresses d'un acteur"
+msgstr "Changer les adresses d'un tiers"
 
 msgctxt "view:endorsement.party.change_address_displayer:"
 msgid "Addresses"
@@ -704,9 +715,17 @@ msgctxt "view:endorsement.party.change_birth_date:"
 msgid "Change Party Birth Date"
 msgstr "Changement de date de naissance"
 
+msgctxt "view:endorsement.party.change_name.displayer:"
+msgid "Change Party Name"
+msgstr "Changement de nom de tiers"
+
+msgctxt "view:endorsement.party.change_name.displayer:"
+msgid "Parties"
+msgstr "Tiers"
+
 msgctxt "view:endorsement.party.change_name:"
 msgid "Change Party Name"
-msgstr "Changement de nom d'un acteur"
+msgstr "Changement de nom d'un tiers"
 
 msgctxt "view:endorsement.party.change_ssn:"
 msgid "Change Party SSN"
@@ -722,11 +741,11 @@ msgstr "Champs de l'avenant"
 
 msgctxt "view:endorsement.party:"
 msgid "Party Endorsement"
-msgstr "Avenant sur acteur"
+msgstr "Avenant sur tiers"
 
 msgctxt "view:endorsement.party:"
 msgid "Party Endorsements"
-msgstr "Avenants sur acteur"
+msgstr "Avenants sur tiers"
 
 msgctxt "view:party.party:"
 msgid "Start Endorsement"

@@ -1,6 +1,12 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:endorsement_party.start_process:"
+msgid ""
+"The chosen endorsement definition cannot be applied on several parties."
+msgstr ""
+"La définition d'avenant choisie ne peut pas s'appliquer sur plusieurs tiers."
 
 msgctxt "field:endorsement_party.start.find_process,definition:"
 msgid "Endorsement Definition"
@@ -22,25 +28,25 @@ msgctxt "field:endorsement_party.start.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:endorsement_party.start.find_process,party:"
-msgid "Party"
+msgctxt "field:endorsement_party.start.find_process,parties:"
+msgid "Parties"
 msgstr "Tiers"
 
 msgctxt "model:endorsement_party.start.find_process,name:"
 msgid "Endorsement Party Process Finder"
-msgstr "Sélecteur d'avenant sur acteur"
+msgstr "Sélecteur d'avenant sur tiers"
 
 msgctxt "model:ir.action,name:endorsement_party_process_launcher"
 msgid "Start Party Endorsement Process"
-msgstr "Démarrer le processus d'avenant sur acteur"
+msgstr "Démarrer le processus d'avenant sur tiers"
 
 msgctxt "model:ir.ui.menu,name:menu_start_party_endorsement_process"
 msgid "Start Party Endorsement Process"
-msgstr "Démarrer le processus d'avenant sur acteur"
+msgstr "Démarrer le processus d'avenant sur tiers"
 
 msgctxt "selection:process,kind:"
 msgid "Party Endorsement"
-msgstr "Avenant sur acteur"
+msgstr "Avenant sur tiers"
 
 msgctxt ""
 "wizard_button:endorsement_party.start_process,process_parameters,action:"

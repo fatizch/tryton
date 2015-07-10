@@ -39,6 +39,10 @@ class ChangeContractBroker(EndorsementWizardStepMixin, model.CoopView):
     product = fields.Many2One('offered.product', 'Product', readonly=True,
         states={'invisible': True})
 
+    @classmethod
+    def is_multi_instance(cls):
+        return False
+
     @fields.depends('broker')
     def on_change_with_broker_party(self):
         return self.broker.party.id if self.broker else None

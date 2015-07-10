@@ -1,6 +1,11 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:endorsement.start_process:"
+msgid ""
+"The chosen endorsement definition cannot be applied on several contracts."
+msgstr "L'avenant choisi ne peut pas être appliqué sur plusieurs contrats."
 
 msgctxt "error:endorsement:"
 msgid "Enter a value for field '%s' of '%s'"
@@ -159,18 +164,6 @@ msgid "Modify"
 msgstr "Modifier"
 
 msgctxt "wizard_button:endorsement.start,basic_preview,end:"
-msgid "Ok"
-msgstr "Ok"
-
-msgctxt "wizard_button:endorsement.start,preview_contract_payments,end:"
-msgid "Ok"
-msgstr "Ok"
-
-msgctxt "wizard_button:endorsement.start,preview_contract_premiums,end:"
-msgid "Ok"
-msgstr "Ok"
-
-msgctxt "wizard_button:endorsement.start,preview_loan,end:"
 msgid "Ok"
 msgstr "Ok"
 

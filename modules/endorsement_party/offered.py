@@ -22,7 +22,8 @@ class EndorsementDefinition:
         'get_is_party', searcher='search_is_party')
     generate_contract_endorsements = fields.Function(
         fields.Boolean('Generate Contract Endorsements',
-            states={'invisible': ~Bool(Eval('is_party'))}),
+            states={'invisible': ~Bool(Eval('is_party'))},
+            depends=['is_party']),
         'on_change_with_generate_contract_endorsements',
         )
     definition_for_contracts = fields.Many2One('endorsement.definition',

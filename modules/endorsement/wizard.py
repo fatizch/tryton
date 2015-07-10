@@ -94,6 +94,10 @@ class EndorsementWizardStepMixin(object):
         # current instance of the wizard
         return self.step_update()
 
+    @classmethod
+    def is_multi_instance(cls):
+        return True
+
     @property
     def step_name(self):
         return self._step_name
@@ -384,6 +388,10 @@ class ChangeContractStartDate(EndorsementWizardStepMixin, model.CoopView):
     current_start_date = fields.Date('Current Start Date', readonly=True)
     new_start_date = fields.Date('New Start Date', readonly=True)
 
+    @classmethod
+    def is_multi_instance(cls):
+        return False
+
     def update_endorsement(self, base_endorsement, wizard):
         base_endorsement.values = {
             'start_date': wizard.endorsement.effective_date}
@@ -407,6 +415,10 @@ class ChangeContractExtraData(EndorsementWizardStepMixin, model.CoopView):
     new_extra_data_date = fields.Date('Date of New Extra Data')
     new_extra_data = fields.Dict(
         'extra_data', 'New Extra Data')
+
+    @classmethod
+    def is_multi_instance(cls):
+        return False
 
     def step_default(self, name):
         pool = Pool()
@@ -486,6 +498,10 @@ class TerminateContract(EndorsementWizardStepMixin, model.CoopView):
     termination_reason = fields.Many2One('contract.sub_status',
         'Termination Reason', required=True, domain=[('code', 'in',
                 ['reached_end_date', 'unpaid_premium_termination'])])
+
+    @classmethod
+    def is_multi_instance(cls):
+        return False
 
     @classmethod
     def __setup__(cls):
@@ -599,6 +615,10 @@ class VoidContract(EndorsementWizardStepMixin, model.CoopView):
         required=True, domain=[('code', 'in', ['error',
                     'cancelled_by_customer'])])
     current_end_date = fields.Date('Current End Date', readonly=True)
+
+    @classmethod
+    def is_multi_instance(cls):
+        return False
 
     def step_default(self, name):
         pool = Pool()

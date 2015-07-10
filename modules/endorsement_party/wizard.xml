@@ -36,8 +36,18 @@
             <field name="name">party_change_ssn_form</field>
         </record>
         <!-- #################### -->
-        <!-- # Change Party SSN # -->
+        <!-- # Change Party Name # -->
         <!-- #################### -->
+        <record model="ir.ui.view" id="party_change_name_displayer_view_form">
+            <field name="model">endorsement.party.change_name.displayer</field>
+            <field name="type">form</field>
+            <field name="name">party_change_name_displayer_form</field>
+        </record>
+        <record model="ir.ui.view" id="party_change_name_displayer_view_list">
+            <field name="model">endorsement.party.change_name.displayer</field>
+            <field name="type">tree</field>
+            <field name="name">party_change_name_displayer_list</field>
+        </record>
         <record model="ir.ui.view" id="party_change_name_view_form">
             <field name="model">endorsement.party.change_name</field>
             <field name="type">form</field>

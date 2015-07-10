@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tree string="Parties" editable="bottom">
+    <field name="current_name" readonly="1"/>
+    <field name="current_first_name" readonly="1"/>
+    <field name="current_birth_name" readonly="1"/>
+    <field name="new_name"/>
+    <field name="new_first_name"/>
+    <field name="new_birth_name"/>
+</tree>

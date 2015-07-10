@@ -38,6 +38,14 @@ class EndorsementStartProcess(ProcessFinder):
     __name__ = 'endorsement.start_process'
 
     @classmethod
+    def __setup__(cls):
+        super(EndorsementStartProcess, cls).__setup__()
+        cls._error_messages.update({
+                'single_contract_definition': 'The chosen endorsement '
+                'definition cannot be applied on several contracts.',
+                })
+
+    @classmethod
     def get_parameters_model(cls):
         return 'endorsement.start.find_process'
 
@@ -49,6 +57,9 @@ class EndorsementStartProcess(ProcessFinder):
     def init_main_object_from_process(self, obj, process_param):
         pool = Pool()
         ContractEndorsement = pool.get('endorsement.contract')
+        if (not process_param.definition.is_multi_instance and
+                len(process_param.contracts) > 1):
+            self.raise_user_error('single_contract_definition')
         res, errs = super(EndorsementStartProcess,
             self).init_main_object_from_process(obj, process_param)
         obj.effective_date = process_param.effective_date

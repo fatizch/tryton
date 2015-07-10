@@ -4,19 +4,7 @@
     <field name="effective_date"/>
     <label name="endorsement_part"/>
     <field name="endorsement_part"/>
-    <label name="endorsement_definition"/>
-    <field name="endorsement_definition"/>
+    <field name="endorsement_definition" invisible="1"/>
     <newline/>
-    <label name="current_name"/>
-    <field name="current_name" readonly="1"/>
-    <label name="new_name"/>
-    <field name="new_name"/>
-    <label name="current_first_name"/>
-    <field name="current_first_name" readonly="1"/>
-    <label name="new_first_name"/>
-    <field name="new_first_name"/>
-    <label name="current_birth_name"/>
-    <field name="current_birth_name" readonly="1"/>
-    <label name="new_birth_name"/>
-    <field name="new_birth_name"/>
+    <field name="parties" expand_toolbar="0" colspan="4"/>
 </form>

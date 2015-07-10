@@ -32,7 +32,8 @@ class EndorsementPartyFindProcess(ProcessStart):
     definition = fields.Many2One('endorsement.definition',
         'Endorsement Definition', required=True, domain=[
             ('is_party', '=', True)])
-    party = fields.Many2One('party.party', 'Party', required=True)
+    parties = fields.Many2Many('party.party', None, None, 'Parties',
+        required=True)
 
     @classmethod
     def default_model(cls):
@@ -52,6 +53,14 @@ class EndorsementPartyStartProcess(ProcessFinder):
     __name__ = 'endorsement_party.start_process'
 
     @classmethod
+    def __setup__(cls):
+        super(EndorsementPartyStartProcess, cls).__setup__()
+        cls._error_messages.update({
+                'single_party_definition': 'The chosen endorsement definition '
+                'cannot be applied on several parties.',
+                })
+
+    @classmethod
     def get_parameters_model(cls):
         return 'endorsement_party.start.find_process'
 
@@ -63,11 +72,15 @@ class EndorsementPartyStartProcess(ProcessFinder):
     def init_main_object_from_process(self, obj, process_param):
         pool = Pool()
         PartyEndorsement = pool.get('endorsement.party')
+        if (not process_param.definition.is_multi_instance and
+                len(process_param.parties) > 1):
+            self.raise_user_error('single_party_definition')
         res, errs = super(EndorsementPartyStartProcess,
             self).init_main_object_from_process(obj, process_param)
         obj.effective_date = process_param.effective_date
         obj.definition = process_param.definition
-        obj.party_endorsements = [PartyEndorsement(party=process_param.party)]
+        obj.party_endorsements = [PartyEndorsement(party=x) for x in
+            process_param.parties]
         return res, errs
 
 

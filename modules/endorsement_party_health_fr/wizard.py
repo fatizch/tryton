@@ -22,6 +22,10 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin, model.CoopView):
         'New Health Complement', size=1)
 
     @classmethod
+    def is_multi_instance(cls):
+        return False
+
+    @classmethod
     def state_view_name(cls):
         return 'endorsement_party_health_fr.' \
             'party_change_health_complement_view_form'

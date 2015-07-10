@@ -47,6 +47,9 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
     is_technical = fields.Function(
         fields.Boolean('Is technical'),
         'get_is_technical', searcher='search_is_technical')
+    is_multi_instance = fields.Function(
+        fields.Boolean('Handles Multiple Instances'),
+        'get_is_multi_instance')
 
     @classmethod
     def __setup__(cls):
@@ -57,6 +60,16 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
     def _export_skips(cls):
         return (super(EndorsementDefinition, cls)._export_skips() |
             set(['products']))
+
+    def get_is_multi_instance(self, name):
+        pool = Pool()
+        StartEndorsement = pool.get('endorsement.start', type='wizard')
+        for view in [x.view for x in self.endorsement_parts if x.view]:
+            step_mixin_name = getattr(StartEndorsement, view).model_name
+            StepMixin = pool.get(step_mixin_name)
+            if not StepMixin.is_multi_instance():
+                return False
+        return True
 
     @fields.depends('name', 'code')
     def on_change_with_code(self):

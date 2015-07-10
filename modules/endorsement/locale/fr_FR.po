@@ -921,6 +921,10 @@ msgctxt "field:endorsement.definition,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:endorsement.definition,is_multi_instance:"
+msgid "Handles Multiple Instances"
+msgstr "Gère plusieurs instances."
+
 msgctxt "field:endorsement.definition,is_technical:"
 msgid "Is technical"
 msgstr "Est technique"
@@ -1314,10 +1318,6 @@ msgstr "Champ des données complémentaires à modifier"
 msgctxt "model:endorsement.contract.field,name:"
 msgid "Endorsement Contract Field"
 msgstr "Champs du contrat"
-
-msgctxt "model:endorsement.contract.full_revision_start,name:"
-msgid "Start Full Contract Revision"
-msgstr "Démarrer la reprise intégrale de contrat"
 
 msgctxt "model:endorsement.contract.option,name:"
 msgid "Endorsement Option"
@@ -1763,18 +1763,6 @@ msgctxt "wizard_button:endorsement.decline,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:endorsement.start,basic_preview,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt "wizard_button:endorsement.start,basic_preview,cancel:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:endorsement.start,basic_preview,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
 msgid "Next"
@@ -1812,20 +1800,6 @@ msgctxt "wizard_button:endorsement.start,change_start_date,suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
 
-msgctxt "wizard_button:endorsement.start,full_contract_revision,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt ""
-"wizard_button:endorsement.start,full_contract_revision,full_contract_revision_next:"
-msgid "Next"
-msgstr "Suivant"
-
-msgctxt ""
-"wizard_button:endorsement.start,full_contract_revision,full_contract_revision_previous:"
-msgid "Previous"
-msgstr "Précédent"
-
 msgctxt "wizard_button:endorsement.start,select_endorsement,cancel:"
 msgid "Cancel"
 msgstr "Annuler"
@@ -1834,10 +1808,6 @@ msgctxt ""
 "wizard_button:endorsement.start,select_endorsement,start_endorsement:"
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
-
-msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
 
 msgctxt "wizard_button:endorsement.start,summary,cancel:"
 msgid "Cancel"

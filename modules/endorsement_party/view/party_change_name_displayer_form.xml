@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<form string="Change Party Name">
+    <label name="current_name"/>
+    <field name="current_name" readonly="1"/>
+    <label name="new_name"/>
+    <field name="new_name"/>
+    <label name="current_first_name"/>
+    <field name="current_first_name" readonly="1"/>
+    <label name="new_first_name"/>
+    <field name="new_first_name"/>
+    <label name="current_birth_name"/>
+    <field name="current_birth_name" readonly="1"/>
+    <label name="new_birth_name"/>
+    <field name="new_birth_name"/>
+</form>

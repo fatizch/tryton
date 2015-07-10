@@ -6,5 +6,8 @@
         <label name="definition_for_contracts"/>
         <field name="definition_for_contracts"/>
         <field name="is_party" invisible="1"/>
+        <newline/>
+        <label name="is_multi_instance"/>
+        <field name="is_multi_instance"/>
     </xpath>
 </data>
