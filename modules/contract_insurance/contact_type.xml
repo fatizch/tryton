@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="contract.contact.type" id="covered_party">
+            <field name="code">covered_party</field>
+            <field name="name">Covered Party</field>
+        </record>
+    </data>
+</tryton>

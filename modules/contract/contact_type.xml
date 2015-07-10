@@ -51,5 +51,9 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="contract.contact.type" id="subscriber">
+            <field name="code">subscriber</field>
+            <field name="name">Subscriber</field>
+        </record>
     </data>
 </tryton>

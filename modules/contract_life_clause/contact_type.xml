@@ -5,13 +5,5 @@
             <field name="code">accepting_beneficiary</field>
             <field name="name">Accepting Beneficiary</field>
         </record>
-        <record model="contract.contact.type" id="subscriber">
-            <field name="code">subscriber</field>
-            <field name="name">Subscriber</field>
-        </record>
-        <record model="contract.contact.type" id="covered_party">
-            <field name="code">covered_party</field>
-            <field name="name">Covered Party</field>
-        </record>
     </data>
 </tryton>
