@@ -422,6 +422,64 @@ def values_mixin(value_model):
                         ValueModel, fname, ffield.string, 'field'), old, new)
                 for fname, ffield, old, new in vals if old != new]
 
+        def get_records_before_application(self, current_records,
+                parent_endorsed_record=None):
+            if not parent_endorsed_record:
+                parent_endorsed_record = self.get_endorsed_record()
+            for endorsement_fname in [x[0] for x
+                    in self._endorsement_tree.values()]:
+                sub_endorsements = getattr(self, endorsement_fname, [])
+                if not sub_endorsements:
+                    continue
+                current_records.extend(getattr(parent_endorsed_record,
+                        endorsement_fname))
+                for sub_endorsement in sub_endorsements:
+                    sub_endorsement.get_records_before_application(
+                        current_records, parent_endorsed_record)
+
+        def update_after_application(self, parent_endorsed_record=None,
+                pre_application_records=None, current_records=None):
+            if not parent_endorsed_record:
+                parent_endorsed_record = self.get_endorsed_record()
+            for endorsement_fname in [x[0] for x
+                    in self._endorsement_tree.values()]:
+                sub_endorsements = getattr(self, endorsement_fname, [])
+                if sub_endorsements:
+                    current_records = list(getattr(parent_endorsed_record,
+                            endorsement_fname))
+                    for sub_endorsement in sub_endorsements:
+                        sub_endorsement.update_after_application(
+                            parent_endorsed_record, pre_application_records,
+                            current_records)
+
+        def update_after_cancellation(self, parent_endorsed_record=None):
+            if not parent_endorsed_record:
+                parent_endorsed_record = self.get_endorsed_record()
+            for endorsement_fname in [x[0] for x
+                    in self._endorsement_tree.values()]:
+                sub_endorsements = getattr(self, endorsement_fname, [])
+                for sub_endorsement in sub_endorsements:
+                    sub_endorsement.update_after_cancellation(
+                        parent_endorsed_record)
+
+        def endorsement_matches_record(self, record):
+            if record.__name__ != self._model_name:
+                return False
+            for k, v in self.values.iteritems():
+                if not hasattr(record, k):
+                    return False
+                field = record._fields[k]
+                if isinstance(field, tryton_fields.Property):
+                    field = field._field
+                if isinstance(field, (tryton_fields.Many2One,
+                        tryton_fields.Reference, tryton_fields.One2One)):
+                    if not getattr(record, k).id == v:
+                        return False
+                else:
+                    if not getattr(record, k) == v:
+                        return False
+            return True
+
     return Mixin
 
 
@@ -429,6 +487,8 @@ def relation_mixin(value_model, field, model, name):
 
     class Mixin(values_mixin(value_model)):
         _func_key = 'func_key'
+        _relation_field_name = field
+        _model_name = model
 
         action = fields.Selection([
                 ('add', 'Add'),
@@ -577,6 +637,45 @@ def relation_mixin(value_model, field, model, name):
         def get_func_key(self, name):
             return getattr(self, field).func_key if getattr(self, field) and \
                 hasattr(getattr(self, field), 'func_key') else ''
+
+        def get_records_before_application(self, current_records,
+                parent_endorsed_record=None):
+            if self.action == 'update':
+                parent_endorsed_record = getattr(self,
+                    getattr(self,
+                        '_relation_field_name'))
+            super(Mixin, self).get_records_before_application(current_records,
+                parent_endorsed_record)
+
+        def update_after_application(self, parent_endorsed_record=None,
+                pre_application_records=None, current_records=None):
+            if self.action == 'add':
+                self.set_relation_for_added_record(current_records,
+                    pre_application_records)
+            parent_endorsed_record = getattr(self,
+                getattr(self, '_relation_field_name'))
+            super(Mixin, self).update_after_application(parent_endorsed_record,
+                pre_application_records, current_records)
+
+        def update_after_cancellation(self, parent_endorsed_record=None):
+            if self.action == 'add':
+                self.remove_relation()
+            else:
+                parent_endorsed_record = getattr(self,
+                    getattr(self, '_relation_field_name'))
+            super(Mixin, self).update_after_cancellation(
+                parent_endorsed_record)
+
+        def remove_relation(self):
+            self.set_relation([self], None, None)
+
+        def set_relation_for_added_record(self, current_records,
+                previous_records):
+            relation_record = [x for x in current_records
+                if x not in previous_records and
+                self.endorsement_matches_record(x)][0]
+            self.set_relation([self], None, relation_record.id)
+            return relation_record
 
     setattr(Mixin, field, fields.Function(fields.Many2One(model, name,
                 datetime_field='applied_on',
@@ -1024,6 +1123,8 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                 continue
             ModelClass = pool.get(model_name)
             ModelClass.draft(endorsements_per_model[model_name])
+            for value_endorsement in endorsements_per_model[model_name]:
+                value_endorsement.update_after_cancellation(value_endorsement)
 
     @classmethod
     @model.CoopView.button
@@ -1081,7 +1182,23 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
             if model_name not in endorsements_per_model:
                 continue
             ModelClass = pool.get(model_name)
+
+            # We record the states of records before application
+            # To be able to set the relation field on an endorsement
+            # That will create a new record.
+            records_per_endorsement = {}
+            for value_endorsement in endorsements_per_model[model_name]:
+                current_records = []
+                value_endorsement.get_records_before_application(
+                    current_records)
+                records_per_endorsement[
+                    value_endorsement] = current_records
             ModelClass.apply(endorsements_per_model[model_name])
+            for value_endorsement in endorsements_per_model[model_name]:
+                value_endorsement.update_after_application(
+                    pre_application_records=records_per_endorsement[
+                        value_endorsement])
+
         set_rollback, do_not_set_rollback = [], []
         for endorsement in endorsements:
             if endorsement.rollback_date:
