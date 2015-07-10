@@ -23,7 +23,8 @@ class Configuration:
         Invoice = pool.get('account.invoice')
         if not isinstance(getattr(line, 'origin', None), Invoice):
             return super(Configuration, self).get_payment_journal(line)
-        if not line.origin.is_broker_invoice and self.type == 'in_invoice':
+        if not (line.origin.is_broker_invoice and
+                line.origin.type == 'in_invoice'):
             return super(Configuration, self).get_payment_journal(line)
         journal = self.broker_bank_transfer_journal \
             if line.origin.party.automatic_wire_transfer \
