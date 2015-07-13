@@ -1,7 +1,7 @@
 from decimal import Decimal
 from simpleeval import simple_eval
 from sql import Column, Null
-from sql.operators import Or, Concat
+from sql.operators import Or
 from sql.aggregate import Sum
 
 from trytond.tools import decistmt
@@ -68,20 +68,7 @@ class Commission:
         return invoice_line
 
     def _group_to_agent_option_key(self):
-        if self.origin and getattr(self.origin, 'details', None):
-            return (('agent', self.agent),
-                ('option', self.origin.details[0].get_option()))
-        return (('agent', self.agent), ('option', None))
-
-    def get_commissioned_option(self, name):
-        if not self.is_prepayment:
-            return super(Commission, self).get_commissioned_option(name)
-        return self.origin.id
-
-    def get_commissioned_contract(self, name):
-        if not self.is_prepayment:
-            return super(Commission, self).get_commissioned_contract(name)
-        return self.origin.parent_contract.id
+        return (('agent', self.agent), ('option', self.commissioned_option))
 
     @classmethod
     def copy(cls, commissions, default=None):
@@ -187,9 +174,7 @@ class Agent:
         pool = Pool()
         Commission = pool.get('commission')
         Details = pool.get('account.invoice.line.detail')
-        InvoiceLine = pool.get('account.invoice.line')
         commission = Commission.__table__()
-        invoice_line = InvoiceLine.__table__()
         details = Details.__table__()
 
         cursor = Transaction().cursor
@@ -206,20 +191,15 @@ class Agent:
                     (prepayment_column == True) &
                     (origin_column == 'contract.option,' + str(agent[1]))))
 
-        query_table = commission.join(invoice_line, condition=(
-                commission.origin == (Concat('account.invoice.line,',
-                        invoice_line.id)))
-            ).join(details, condition=(
-                invoice_line.id == details.invoice_line))
-
         result = {}
 
         # sum of redeemed prepayment
-        cursor.execute(*query_table.select(commission.agent, details.option,
+        cursor.execute(*commission.select(commission.agent,
+                commission.commissioned_option,
                 Sum(commission.redeemed_prepayment),
                 where=(where_redeemed and
                     commission.redeemed_prepayment != Null),
-                group_by=[commission.agent, details.option]))
+                group_by=[commission.agent, commission.commissioned_option]))
         for agent, option, amount in cursor.fetchall():
             result[(agent, option)] = -amount
 

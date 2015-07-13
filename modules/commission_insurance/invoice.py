@@ -34,7 +34,7 @@ class InvoiceLine:
 
     def get_commissions(self):
         # Total override of tryton method just to add the agent parameter to
-        # _get_commission_amount
+        # _get_commission_amount and to set commissioned_option
         pool = Pool()
         Commission = pool.get('commission')
         Currency = pool.get('currency.currency')
@@ -71,6 +71,7 @@ class InvoiceLine:
             commission.product = plan.commission_product
             commission.amount = commission_amount
             commission.commission_rate = commission_rate
+            commission.commissioned_option = self.details[0].get_option()
             commissions.append(commission)
         return commissions
 

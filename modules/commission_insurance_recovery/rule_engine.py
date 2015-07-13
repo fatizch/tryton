@@ -1,6 +1,5 @@
 from decimal import Decimal
 from sql.aggregate import Sum
-from sql.operators import Concat
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -21,16 +20,9 @@ class RuleEngineRuntime:
         pool = Pool()
         cursor = Transaction().cursor
         commission = pool.get('commission').__table__()
-        invoice_line = pool.get('account.invoice.line').__table__()
-        details = pool.get('account.invoice.line.detail').__table__()
 
-        query_table = commission.join(invoice_line, condition=(
-                commission.origin == (Concat('account.invoice.line,',
-                        invoice_line.id)))
-            ).join(details, condition=(
-                invoice_line.id == details.invoice_line))
-        cursor.execute(*query_table.select(Sum(commission.amount),
-            where=((details.option == args['option'].id) and
+        cursor.execute(*commission.select(Sum(commission.amount),
+            where=((commission.commissioned_option == args['option'].id) and
                 commission.agent == args['agent'].id)))
         res = cursor.fetchall()
         return res[0][0] or Decimal(0)

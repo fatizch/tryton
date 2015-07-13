@@ -133,6 +133,7 @@ class ContractOption:
                 commission.product = plan.commission_product
                 commission.commission_rate = rate
                 commission.amount = percentage * amount
+                commission.commissioned_option = self
                 commissions.append(commission)
 
         Commission.delete(to_delete)
