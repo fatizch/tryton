@@ -376,7 +376,7 @@ def batch(arguments, config, work_data):
         subprocess.call(['pkill', 'celery'])
         print 'Running workers killed.'
         cmd = ['celery', 'worker', '-l', arguments.log_level,
-            '--config=celeryconfig', '--app=%s' % APPNAME,
+            '--config=%s' % arguments.config, '--app=%s' % APPNAME,
             '--logfile=%s' % log_path]
         with open(os.devnull, 'w') as fnull:
             subprocess.Popen(' '.join(cmd), shell=True, stdout=fnull,
@@ -625,6 +625,8 @@ if __name__ == '__main__':
     usage_str = \
 """Examples:
   Restart celery workers pool: coop batch init
+  Option -g allows to specify a celeryconfig module. Useful to init celery
+  with one process
   Enter an unknown name to list available batches: coop batch --name ???
   Run a batch: coop batch execute --name account.payment.creation -t 2015-01-01
     """
@@ -650,6 +652,9 @@ monitor: starts celery flower server on http://localhost:5555"""
     parser_batch.add_argument('--treatment-date', '-t', type=str,
         help='Batch treatment date',
         default=datetime.date.today().isoformat())
+    parser_batch.add_argument('--config', '-g', type=str,
+        help='Celery Configuration Module',
+        default='celeryconfig')
 
     # Database parser
     parser_database = subparsers.add_parser('database', help='Execute a '
