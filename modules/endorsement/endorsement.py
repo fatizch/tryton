@@ -473,7 +473,9 @@ def values_mixin(value_model):
                     field = field._field
                 if isinstance(field, (tryton_fields.Many2One,
                         tryton_fields.Reference, tryton_fields.One2One)):
-                    if not getattr(record, k).id == v:
+                    if v is None and getattr(record, k) is not None:
+                        return False
+                    elif getattr(record, k) and not getattr(record, k).id == v:
                         return False
                 else:
                     if not getattr(record, k) == v:
