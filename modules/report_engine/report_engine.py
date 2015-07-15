@@ -330,8 +330,7 @@ class Printable(Model):
         contact = self.get_contact()
         if not contact:
             return ''
-        if contact.address:
-            address = contact.addresses[0]
+        address = contact.addresses[0] if contact.addresses else None
         return address
 
     def get_available_doc_templates(self, kind=None):
