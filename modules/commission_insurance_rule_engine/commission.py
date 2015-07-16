@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Not, Or
 
 from trytond.modules.cog_utils import fields, model
@@ -83,6 +83,9 @@ class Agent:
 
     extra_data = fields.Dict('extra_data', 'Extra Data')
     extra_data_string = extra_data.translated('extra_data')
+    extra_data_summary = fields.Function(
+        fields.Text('Extra Data Summary'),
+        'get_extra_data_summary')
 
     @fields.depends('plan')
     def on_change_with_extra_data(self):
@@ -100,3 +103,8 @@ class Agent:
 
     def get_all_extra_data(self, at_date):
         return self.extra_data if getattr(self, 'extra_data', None) else {}
+
+    @classmethod
+    def get_extra_data_summary(cls, agents, name):
+        return Pool().get('extra_data').get_extra_data_summary(agents,
+            'extra_data')
