@@ -1684,7 +1684,7 @@ class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,
         select=True, ondelete='CASCADE')
     extra_data_values = fields.Dict('extra_data', 'Extra Data')
     extra_data_summary = fields.Function(
-        fields.Char('Extra Data Summary'),
+        fields.Text('Extra Data Summary'),
         'get_extra_data_summary')
 
     @staticmethod

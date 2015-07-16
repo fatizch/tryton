@@ -301,11 +301,12 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         for instance in instances:
             res[instance.id] = ''
             for key, value in getattr(instance, var_name).iteritems():
-                res[instance.id] += u'\n%s : %s' % (
+                if res[instance.id]:
+                    res[instance.id] += '\n'
+                res[instance.id] += u'%s : %s' % (
                     coop_string.translate_value(compl_dict[key], 'string',
                         lang),
                     compl_dict[key].get_value_as_string(value, lang))
-            res[instance.id] = coop_string.re_indent_text(res[instance.id], 1)
         return res
 
     @classmethod
