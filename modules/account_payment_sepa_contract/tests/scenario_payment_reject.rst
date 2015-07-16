@@ -76,10 +76,7 @@ Create chart of accounts::
     >>> company_account.bank = bank
     >>> company_account.owners.append(company.party)
     >>> company_account.currency = currency
-    >>> number = Number()
-    >>> number.type = 'iban'
-    >>> number.number = 'ES8200000000000000000000'
-    >>> company_account.numbers.append(number)
+    >>> company_account.number = 'ES8200000000000000000000'
     >>> company_account.save()
 
 Create Product::
@@ -144,10 +141,7 @@ Create SEPA mandate::
     >>> subscriber_account.bank = bank
     >>> subscriber_account.owners.append(subscriber)
     >>> subscriber_account.currency = currency
-    >>> number = Number()
-    >>> number.type = 'iban'
-    >>> number.number = 'BE82068896274468'
-    >>> subscriber_account.numbers.append(number)
+    >>> subscriber_account.number = 'BE82068896274468'
     >>> subscriber_account.save()
     >>> Mandate = Model.get('account.payment.sepa.mandate')
     >>> mandate = Mandate()
