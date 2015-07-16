@@ -20,7 +20,6 @@ def register():
         BankAccountNumber,
         InvoiceLine,
         Journal,
-        MoveLine,
         # Test case
         TestCaseModel,
         Configuration,

@@ -17,7 +17,6 @@ __all__ = [
     'Payment',
     'InvoiceLine',
     'Journal',
-    'MoveLine',
     ]
 
 
@@ -69,6 +68,17 @@ class Group:
             ('currency', payment.currency),
             )
 
+    def update_last_sepa_receivable_date(self):
+        if self.kind != 'receivable':
+            return
+        new_date = max([payment.date for payment in self.payments] +
+                [datetime.date.min])
+        if (not self.journal.last_sepa_receivable_payment_creation_date or
+                new_date >
+                self.journal.last_sepa_receivable_payment_creation_date):
+            self.journal.last_sepa_receivable_payment_creation_date = new_date
+            self.journal.save()
+
     def process_sepa(self):
         # This methods does not call super (defined in account_payment_sepa
         # => payment.py
@@ -111,6 +121,7 @@ class Group:
                         }]
             Payment.write(*to_write)
         self.generate_message(_save=False)
+        self.update_last_sepa_receivable_date()
 
     def dump_sepa_messages(self, dirpath):
         output_paths = []
@@ -336,24 +347,3 @@ class Journal:
         else:
             sync_date = max(line['maturity_date'], utils.today())
         return coop_date.get_next_date_in_sync_with(sync_date, day)
-
-
-class MoveLine:
-    __name__ = 'account.move.line'
-
-    @classmethod
-    def create_payments(cls, lines):
-        payments = super(MoveLine, cls).create_payments(lines)
-        _payments_sort = sorted(payments, key=lambda x: x.journal)
-        for journal, payments_group in groupby(_payments_sort,
-                key=lambda x: x.journal):
-            if journal.process_method != 'sepa':
-                return payments
-            journal.last_sepa_receivable_payment_creation_date = max(
-                journal.last_sepa_receivable_payment_creation_date
-                or datetime.date.min,
-                max([payment['date'] for payment in payments_group
-                        if payment['kind'] == 'receivable'] +
-                    [datetime.date.min]))
-            journal.save()
-        return payments
