@@ -5,7 +5,7 @@ from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
 from trytond.rpc import RPC
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Bool, If
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import coop_string, utils, model, fields
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
@@ -65,6 +65,11 @@ class Invoice:
             'invisible': Bool(Eval('contract_invoice')),
             }
         cls.untaxed_amount.depends += ['contract_invoice']
+        cls._buttons.update({
+                'cancel': {
+                    'invisible': (~Eval('state').in_(['draft', 'validated',
+                        'posted']))
+                    }})
 
     def get_base_amount(self, name):
         return self.untaxed_amount - self.fees
