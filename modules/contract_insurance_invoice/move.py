@@ -1,13 +1,16 @@
 from trytond import backend
-from trytond.pool import PoolMeta
+from trytond.pyson import Bool, Eval, If
+from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Move',
     'MoveLine',
+    'ReconcileShow',
+    'Reconcile',
     ]
 
 
@@ -152,3 +155,141 @@ WHERE
             for line in split_move.lines:
                 line.contract = self.contract
         return split_move
+
+
+class ReconcileShow:
+    __name__ = 'account.reconcile.show'
+
+    remaining_repartition_method = fields.Selection([
+            ('write_off', 'Write Off'),
+            ('set_on_party', 'Set on Party'),
+            ('set_on_contract', 'Set on Contract')
+            ],
+        'Remaining Repartition Method', states={
+            'required': Bool(Eval('write_off', False)),
+            'invisible': Eval('write_off', 0) >= 0,
+            },
+        depends=['write_off'])
+    repartition_method_string = remaining_repartition_method.translated(
+        'remaining_repartition_method')
+    contract = fields.Many2One('contract', 'Contract',
+        domain=[('subscriber', '=', Eval('party'))],
+        states={
+            'required':
+                Eval('remaining_repartition_method', '') == 'set_on_contract',
+            'invisible':
+                Eval('remaining_repartition_method', '') != 'set_on_contract',
+            },
+        depends=['party', 'remaining_repartition_method'])
+
+    @classmethod
+    def __setup__(cls):
+        super(ReconcileShow, cls).__setup__()
+        cls.journal.domain = [If(
+                Eval('remaining_repartition_method', '') == 'write-off',
+                cls.journal.domain,
+                [('type', '=', 'split')])]
+
+    @classmethod
+    def default_date(cls):
+        return utils.today()
+
+    @classmethod
+    def default_remaining_repartition_method(cls):
+        return 'set_on_party'
+
+    @fields.depends('contract', 'description', 'journal', 'lines', 'party',
+        'remaining_repartition_method', 'write_off')
+    def on_change_lines(self):
+        self.write_off = self.on_change_with_write_off()
+        self.on_change_write_off()
+
+    @fields.depends('contract', 'description', 'journal', 'party',
+        'remaining_repartition_method')
+    def on_change_remaining_repartition_method(self):
+        pool = Pool()
+        Contract = pool.get('contract')
+        Journal = pool.get('account.journal')
+        if self.remaining_repartition_method != 'set_on_contract':
+            self.contract = None
+        else:
+            possible_contracts = Contract.search(
+                [('subscriber', '=', self.party.id)])
+            if len(possible_contracts) == 1:
+                self.contract = possible_contracts[0]
+        if self.remaining_repartition_method != 'write_off':
+            self.journal = Journal.get_default_journal('split')
+        else:
+            self.journal = Journal.get_default_journal('write-off')
+        self.description = '%s - %s' % (self.repartition_method_string,
+            self.contract.rec_name if self.contract else self.party.rec_name)
+
+    @fields.depends('contract', 'journal', 'party',
+        'remaining_repartition_method', 'write_off')
+    def on_change_write_off(self):
+        if self.write_off >= 0:
+            self.contract = None
+            self.remaining_repartition_method = 'write_off'
+            self.on_change_remaining_repartition_method()
+        else:
+            self.remaining_repartition_method = 'set_on_party'
+            self.on_change_remaining_repartition_method()
+
+
+class Reconcile:
+    __name__ = 'account.reconcile'
+
+    def transition_reconcile(self):
+        self.prepare_reconciliation()
+        return super(Reconcile, self).transition_reconcile()
+
+    def prepare_reconciliation(self):
+        pool = Pool()
+        Period = pool.get('account.period')
+        Move = pool.get('account.move')
+        Line = pool.get('account.move.line')
+
+        if self.show.remaining_repartition_method == 'write_off':
+            return
+        if not self.show.lines:
+            return
+        to_write_off = self.show.account.currency.round(self.show.write_off)
+        if not to_write_off:
+            return
+        period_id = Period.find(self.show.account.company.id,
+            date=self.show.date)
+
+        move = Move()
+        move.journal = self.show.journal
+        move.period = Period(period_id)
+        move.date = self.show.date
+        move.description = self.show.description
+
+        # Line 1 is the line that will be used to balance the reconciliation
+        line1 = Line()
+        line1.account = self.show.account
+        line1.party = self.show.party
+        if to_write_off > 0:
+            line1.credit = to_write_off
+            line1.debit = 0
+        else:
+            line1.credit = 0
+            line1.debit = -to_write_off
+
+        # Line 2 will be the remaining line after reconciliation
+        line2 = Line()
+        line2.account = self.show.account
+        line2.party = self.show.party
+        if to_write_off > 0:
+            line2.credit = 0
+            line2.debit = to_write_off
+        else:
+            line2.credit = -to_write_off
+            line2.debit = 0
+        if self.show.remaining_repartition_method == 'set_on_contract':
+            line2.contract = self.show.contract
+
+        move.lines = [line1, line2]
+        move.save()
+        Move.post([move])
+        self.show.lines = list(self.show.lines) + [move.lines[1]]

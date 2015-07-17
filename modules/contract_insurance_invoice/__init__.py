@@ -32,6 +32,7 @@ def register():
         ContractInvoice,
         Move,
         MoveLine,
+        ReconcileShow,
         InvoiceLineDetail,
         FeeDesc,
         TaxDesc,
@@ -50,4 +51,5 @@ def register():
         SynthesisMenuOpen,
         DisplayContractPremium,
         Renew,
+        Reconcile,
         module='contract_insurance_invoice', type_='wizard')

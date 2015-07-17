@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/separator[@name='write_off']" position="replace"/>
+    <xpath expr="/form/field[@name='write_off']" position="after">
+        <label name="remaining_repartition_method"/>
+        <field name="remaining_repartition_method"/>
+    </xpath>
+    <xpath expr="/form/field[@name='journal']" position="after">
+        <label name="contract"/>
+        <field name="contract"/>
+    </xpath>
+</data>

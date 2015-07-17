@@ -38,3 +38,13 @@
   prime est définie taxes incluses ou taxes exclues. Cette option n'est
   disponible au niveau d'un produit que si la stratégie d'arrondi définie dans
   la configuration est l'arrondi par ligne.
+
+- **Comptabilité par contrat :** Les lignes de mouvement comptable rattachées à
+  un contrat sont liées à ce contrat. Ce lien est propagé par les
+  reconciliations (autrement dit, les lignes réconciliant des lignes rattachées
+  à un contrat sont rattachées à ce contrat), à condition qu'il n'y ait pas
+  d'ambigüité sur le contrat concerné.
+
+- **Réconciliation plus flexible :** Il est maintenant possible lors des
+  opérations de réconciliation de transférer un éventuel reste sur un compte
+  tiers, voire de le rattacher à un contrat.

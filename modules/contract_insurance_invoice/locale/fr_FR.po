@@ -846,6 +846,14 @@ msgctxt "field:party.synthesis.menu.invoice,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.reconcile.show,remaining_repartition_method:"
+msgid "Remaining Repartition Method"
+msgstr "Répartition du reste"
+
+msgctxt "field:account.reconcile.show,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
 msgctxt "help:offered.billing_mode,allowed_direct_debit_days:"
 msgid ""
 "Days of the month allowed for direct debit payment separated by comma.\n"
@@ -1107,6 +1115,18 @@ msgstr "Octobre"
 msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "September"
 msgstr "Septembre"
+
+msgctxt "selection:account.reconcile.show,remaining_repartition_method:"
+msgid "Write Off"
+msgstr "Pertes et Profits"
+
+msgctxt "selection:account.reconcile.show,remaining_repartition_method:"
+msgid "Set on Party"
+msgstr "Affecter au tiers"
+
+msgctxt "selection:account.reconcile.show,remaining_repartition_method:"
+msgid "Set on Contract"
+msgstr "Affecter au contrat"
 
 msgctxt "view:account.invoice.line.detail:"
 msgid "Invoice Line Detail"
