@@ -189,6 +189,7 @@ class ReconcileShow:
                 Eval('remaining_repartition_method', '') == 'write-off',
                 cls.journal.domain,
                 [('type', '=', 'split')])]
+        cls.journal.depends.append('remaining_repartition_method')
 
     @classmethod
     def default_date(cls):
