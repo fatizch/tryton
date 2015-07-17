@@ -755,7 +755,7 @@ class ReportCreate(Wizard):
                 self.preview_document.output_report_filepath)
             filename = self.preview_document.output_report_filepath
         else:
-            filename = [d.generated_report
+            filename = [d.server_filepath
             for d in self.preview_document.reports][0]
         action['email_print'] = email_print
         action['direct_print'] = Transaction().context.get('direct_print')
