@@ -5,6 +5,7 @@ from .invoice import *
 from .party import *
 from .payment import *
 from .account import *
+from .batch import *
 
 
 def register():
@@ -25,6 +26,8 @@ def register():
         Configuration,
         Fee,
         MoveLine,
+        CreateCommissionInvoiceBatch,
+        PostCommissionInvoiceBatch,
         module='commission_insurance', type_='model')
     Pool.register(
         CreateInvoice,
