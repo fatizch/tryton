@@ -18,5 +18,9 @@
         <field name="close_tab_on_completion"/>
         <label name="complete_message"/>
         <field name="complete_message"/>
+        <label name="delete_button"/>
+        <field name="delete_button"/>
+        <label name="hold_button"/>
+        <field name="hold_button"/>
     </xpath>
 </data>

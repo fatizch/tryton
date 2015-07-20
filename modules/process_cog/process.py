@@ -254,6 +254,10 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
                     'invisible': Not(Bool(Eval('current_state', False))),
                         }
                     })
+        cls.__rpc__.update({
+                'button_delete_task': RPC(instantiate=0, readonly=0),
+                'button_hold_task': RPC(instantiate=0, readonly=0),
+                })
 
     @classmethod
     def _export_skips(cls):
@@ -262,8 +266,23 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
 
     @classmethod
     @model.CoopView.button_action('process_cog.act_resume_process')
-    def button_resume(cls, contracts):
+    def button_resume(cls, objects):
         pass
+
+    @classmethod
+    def button_delete_task(cls, objects):
+        return 'delete,close'
+
+    @classmethod
+    def button_hold_task(cls, objects):
+        Log = Pool().get('process.log')
+        logs = []
+        for obj in objects:
+            obj.current_log.locked = False
+            logs.append(obj.current_log)
+        if logs:
+            Log.save(logs)
+        return 'close'
 
     def get_current_state_name(self, name):
         if self.current_state:
@@ -522,12 +541,22 @@ class Process(model.CoopSQL, model.TaggedMixin):
         translate=True)
     kind = fields.Selection([('', '')], 'Kind')
     close_tab_on_completion = fields.Boolean('Close Tab On Completion')
+    delete_button = fields.Char('Delete Button Name', help='If not null, a '
+        'button will be added on the view with the given name, which will '
+        'allow to delete the current task')
+    hold_button = fields.Char('Hold Button Name', help='If not null, a '
+        'button will be added on the view with the given name, which will '
+        'allow to set the current task on hold')
 
     @classmethod
     def __setup__(cls):
         super(Process, cls).__setup__()
         cls.transitions.states['invisible'] = ~Eval('custom_transitions')
         cls.transitions.depends.append('custom_transitions')
+        cls._error_messages.update({
+                'button_delete_confirm': 'The current record (%s) will be '
+                'deleted, are you sure you want to proceed ?',
+                })
 
     @classmethod
     def _export_skips(cls):
@@ -607,13 +636,34 @@ class Process(model.CoopSQL, model.TaggedMixin):
             if for_task.is_button_available(self, step_relation.step):
                 return step_relation.step
 
+    def get_middle_buttons(self):
+        middle_buttons = []
+        if self.delete_button:
+            middle_buttons.append(
+                '<button string="%s" name="button_delete_task" '
+                'icon="tryton-delete" confirm="%s"/>' % (self.delete_button,
+                    self.raise_user_error('button_delete_confirm',
+                        (self.on_model.rec_name,), raise_exception=False)))
+        if self.hold_button:
+            middle_buttons.append(
+                '<button string="%s" name="button_hold_task" '
+                'icon="tryton-save"/>' % self.hold_button)
+        return middle_buttons
+
     def get_xml_footer(self, colspan=4):
         xml = ''
         if self.with_prev_next:
-            xml += '<group id="group_prevnext" colspan="4" col="8">'
+            middle_buttons = self.get_middle_buttons()
+            xml += '<group id="group_prevnext" colspan="4" col="%s">' % (
+                8 + len(middle_buttons))
             xml += '<button string="Previous  (_j)"'
             xml += ' name="_button_previous_%s"/>' % self.id
-            xml += '<group id="void" colspan="6"/>'
+            if middle_buttons:
+                xml += '<group id="void_l" colspan="3"/>'
+                xml += ''.join(middle_buttons)
+                xml += '<group id="void_r" colspan="3"/>'
+            else:
+                xml += '<group id="void" colspan="6"/>'
             xml += '<button string="Next (_k)" '
             xml += 'name="_button_next_%s"/>' % self.id
             xml += '</group>'

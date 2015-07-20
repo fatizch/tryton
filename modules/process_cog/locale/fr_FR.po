@@ -6,6 +6,10 @@ msgctxt "error:ir.ui.view.description:"
 msgid "The functional id must be unique !"
 msgstr "L'identifiant fonctionnel doit être unique"
 
+msgctxt "error:process:"
+msgid "The current record (%s) will be deleted, are you sure you want to proceed ?"
+msgstr "L'enregistrement courant (%s) sera supprimé, êtes-vous certain de vouloir continuer ?"
+
 msgctxt "error:process.resume:"
 msgid "No active process found"
 msgstr "Pas de processus actif trouvé"
