@@ -1296,7 +1296,9 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @fields.depends('option')
     def on_change_option(self):
-        self.start_date = self.option.initial_start_date
+        # no option when called from CreateExtraPremiumOptionSelector wizard
+        if self.option:
+            self.start_date = self.option.initial_start_date
 
     @fields.depends('time_limited', 'duration')
     def on_change_time_limited(self):
