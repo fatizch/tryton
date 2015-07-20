@@ -128,6 +128,18 @@ class Contract:
                 'first_invoice': {},
                 })
 
+    @fields.depends('subscriber', 'billing_informations')
+    def on_change_subscriber(self):
+        if not self.billing_informations:
+            return
+        new_billing_information = self.billing_informations[-1]
+        new_billing_information.date = None
+        if new_billing_information.direct_debit_account:
+            if (self.subscriber not in
+                    new_billing_information.direct_debit_account.owners):
+                new_billing_information.direct_debit_account = None
+        self.billing_informations = [new_billing_information]
+
     def get_current_term_invoices(self, name):
         pool = Pool()
         ContractInvoice = pool.get('contract.invoice')

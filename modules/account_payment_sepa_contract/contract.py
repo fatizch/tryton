@@ -24,6 +24,27 @@ class Contract:
                 ('sepa_mandate.party', '=', Eval('subscriber'))])
         cls.billing_informations.depends.append('subscriber')
 
+    @fields.depends('subscriber', 'billing_informations')
+    def on_change_subscriber(self):
+        Mandate = Pool().get('account.payment.sepa.mandate')
+        super(Contract, self).on_change_subscriber()
+        if not self.billing_informations:
+            return
+        new_billing_information = self.billing_informations[-1]
+        if new_billing_information.direct_debit_account is None:
+            new_billing_information.sepa_mandate = None
+        else:
+            possible_mandates = Mandate.search([
+                    ('party', '=', self.subscriber.id),
+                    ('account_number.account', '=',
+                        new_billing_information.direct_debit_account.id)
+                    ])
+            if possible_mandates:
+                new_billing_information.sepa_mandate = possible_mandates[0]
+            else:
+                new_billing_information.sepa_mandate = None
+        self.billing_informations = [new_billing_information]
+
     def init_sepa_mandate(self):
         self.billing_information.init_sepa_mandate()
 
