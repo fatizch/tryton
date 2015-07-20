@@ -1,7 +1,7 @@
 from decimal import Decimal
 from collections import defaultdict
 from sql import Literal
-from sql.aggregate import Sum, Max
+from sql.aggregate import Sum
 from sql.conditionals import Coalesce
 
 from trytond.pool import PoolMeta, Pool
@@ -41,25 +41,31 @@ class Contract:
         premium = pool.get('contract.premium').__table__()
         payment = pool.get('loan.payment').__table__()
 
-        query_table = premium_amount.join(premium, condition=(
+        premium_query = premium_amount.join(premium, condition=(
                 premium_amount.premium == premium.id)
-            ).join(payment, type_='LEFT OUTER', condition=(
-                (payment.loan == premium.loan)
-                & (payment.start_date >= premium_amount.period_start)
-                & (payment.start_date <= premium_amount.period_end)))
-        amount_col = Sum(Coalesce(premium_amount.amount, Literal(0))).as_(
-            'amount')
-        tax_col = Sum(Coalesce(premium_amount.tax_amount, Literal(0))).as_(
-            'tax')
-        payment_col = Max(Coalesce(payment.amount, Literal(0))).as_(
-            'payment_amount')
-
-        cursor.execute(*query_table.select(premium.loan, premium.fee,
-                premium_amount.period_start, amount_col, tax_col,
-                payment_col, where=(premium_amount.contract == self.id),
+            ).select(premium.loan, premium.fee, premium_amount.period_start,
+                premium_amount.period_end,
+                Sum(Coalesce(premium_amount.amount, Literal(0))).as_('amount'),
+                Sum(Coalesce(premium_amount.tax_amount, Literal(0))).as_(
+                    'tax'), where=(premium_amount.contract == self.id),
                 group_by=[premium.loan, premium.fee,
-                    premium_amount.period_start],
-                order_by=premium_amount.period_start))
+                    premium_amount.period_start, premium_amount.period_end])
+
+        full_query = premium_query.join(payment, type_='LEFT OUTER',
+            condition=((payment.loan == premium_query.loan)
+                & (payment.start_date >= premium_query.period_start)
+                & (payment.start_date <= premium_query.period_end))
+            )
+
+        cursor.execute(*full_query.select(premium_query.loan,
+                premium_query.fee, premium_query.period_start,
+                premium_query.amount, premium_query.tax,
+                Sum(Coalesce(payment.amount,
+                        Literal(0))).as_('payment_amount'),
+                group_by=[premium_query.loan, premium_query.fee,
+                    premium_query.period_start, premium_query.amount,
+                    premium_query.tax],
+                order_by=premium_query.period_start))
 
         premiums = {
             'per_period': cursor.dictfetchall(),
