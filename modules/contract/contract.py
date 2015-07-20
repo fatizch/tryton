@@ -866,6 +866,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                     'status': contract.status
                     })
             cls.update_contract_after_import([contract])
+            contract.save()
             contract.calculate()
         else:
             cls.raise_user_error('invalid_format')
@@ -1089,22 +1090,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         existing = dict(((x.coverage, x) for x in getattr(
                     self, 'options', [])))
         good_options = []
-        to_delete = [elem for elem in existing.itervalues()]
         OptionModel = Pool().get('contract.option')
         for coverage in self.get_coverages(self.product):
             good_opt = None
             if coverage in existing:
                 good_opt = existing[coverage.code]
-                to_delete.remove(good_opt)
             elif coverage.subscription_behaviour == 'mandatory':
                 good_opt = OptionModel.new_option_from_coverage(coverage,
                     self.product, self.start_date)
-                good_opt.contract = self
             if good_opt:
-                good_opt.save()
+                good_opt.contract = self
                 good_options.append(good_opt)
-        if to_delete:
-            OptionModel.delete(to_delete)
         self.options = good_options
 
     def get_currency(self):

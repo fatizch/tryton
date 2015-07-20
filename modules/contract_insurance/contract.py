@@ -215,7 +215,6 @@ class Contract(Printable):
         super(Contract, cls).update_contract_after_import(contracts)
         for contract in contracts:
             contract.init_covered_elements()
-            contract.save()
 
     @classmethod
     @ModelView.button_action('contract_insurance.act_manage_extra_premium')
