@@ -38,8 +38,11 @@ def update_contacts_list():
             contracts = Contract.search(['status', '!=', 'quote'])
             for c in contracts:
                 c.update_contacts()
-                Contract.save([c])
-
+                try:
+                    c.save()
+                except Exception as e:
+                    print('%s: %s' % (c.rec_name, str(e)))
+                    continue
         except Exception as e:
             transaction.cursor.rollback()
             raise e
