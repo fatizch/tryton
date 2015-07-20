@@ -203,6 +203,11 @@ class OpenThirdPartyBalanceStart:
         depends=['company'])
     at_date = fields.Date('At date', required=True)
 
+    @classmethod
+    def __setup__(cls):
+        super(OpenThirdPartyBalanceStart, cls).__setup__()
+        cls.fiscalyear.required = False
+
     @staticmethod
     def default_posted():
         return True
@@ -215,12 +220,22 @@ class OpenThirdPartyBalanceStart:
     def default_third_party_balance_option():
         return 'only_unbalanced'
 
+    @staticmethod
+    def default_fiscalyear():
+        return None
+
 
 class OpenThirdPartyBalance:
     __name__ = 'account.open_third_party_balance'
 
     def do_print_(self, action):
-        action, data = super(OpenThirdPartyBalance, self).do_print_(action)
+        # Do not call super to avoid trying to set fiscalyear
+        data = {
+            'company': self.start.company.id,
+            'posted': self.start.posted,
+            'fiscalyear':
+                self.start.fiscalyear.id if self.start.fiscalyear else None,
+            }
         data['third_party_balance_option'] = \
             self.start.third_party_balance_option
         data['account'] = self.start.account.id if self.start.account else None
