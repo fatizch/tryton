@@ -263,6 +263,8 @@ class Contract(Printable):
                 possible_end_dates = option.get_possible_end_date()
                 if possible_end_dates:
                     dates.append(max(possible_end_dates.values()))
+                else:
+                    return None
         if dates:
             return max(dates)
         else:

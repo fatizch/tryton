@@ -742,6 +742,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             possible_end_dates = option.get_possible_end_date()
             if possible_end_dates:
                 dates.append(max(possible_end_dates.values()))
+            else:
+                return None
         if dates:
             return max(dates)
         return None
