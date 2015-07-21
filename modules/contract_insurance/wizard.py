@@ -325,7 +325,7 @@ class CreateExtraPremium(Wizard):
             'hide_covered_element': hide_covered_element,
             }
 
-    def apply(self):
+    def apply_(self):
         ExtraPremium = Pool().get('contract.option.extra_premium')
         to_create = []
         for option in self.select_options.options:
@@ -337,11 +337,11 @@ class CreateExtraPremium(Wizard):
         ExtraPremium.create(to_create)
 
     def transition_apply(self):
-        self.apply()
+        self.apply_()
         return 'end'
 
     def transition_apply_and_relaunch(self):
-        self.apply()
+        self.apply_()
         return 're_launch'
 
     def do_re_launch(self, action):
