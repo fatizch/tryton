@@ -153,7 +153,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             ],
         states=_STATES, depends=['status', 'start_date', 'product',
             'extra_data_values'], target_not_required=True,
-            order=[('coverage', 'ASC')])
+            order=[('coverage', 'ASC'), ('start_date', 'ASC')])
     declined_options = fields.One2ManyDomain('contract.option', 'contract',
         'Declined Options', states=_STATES, depends=['status'],
         domain=[('status', '=', 'declined')], target_not_required=True)
@@ -1452,6 +1452,11 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 )}
 
         return [query_table.order]
+
+    @classmethod
+    def order_start_date(cls, tables):
+        table, _ = tables[None]
+        return [Coalesce(table.manual_start_date, datetime.date.min)]
 
     @classmethod
     def get_start_date(cls, options, names):

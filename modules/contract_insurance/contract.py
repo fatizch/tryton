@@ -651,7 +651,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             'all_extra_datas': Eval('all_extra_datas'),
             },
         depends=['id', 'item_desc', 'all_extra_datas', 'product'],
-        target_not_required=True, order=[('coverage', 'ASC')])
+        target_not_required=True, order=[('coverage', 'ASC'),
+            ('start_date', 'ASC')])
     declined_options = fields.One2ManyDomain('contract.option',
         'covered_element', 'Declined Options',
         domain=[('status', '=', 'declined')], target_not_required=True)
