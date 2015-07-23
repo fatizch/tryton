@@ -735,6 +735,22 @@ msgctxt "field:ir.test_case.run.select.method,test_case:"
 msgid "Test Case"
 msgstr "Jeu d'essai"
 
+msgctxt "field:ir.translation.override.start,export_kind:"
+msgid "Export kind"
+msgstr "Type d'export"
+
+msgctxt "field:ir.translation.override.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ir.translation.override.start,language:"
+msgid "Language"
+msgstr "Langue"
+
+msgctxt "field:ir.translation.override.start,target_module:"
+msgid "Target module"
+msgstr "Module cible"
+
 msgctxt "field:ir.ui.icon,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -950,6 +966,10 @@ msgctxt "model:ir.action,name:act_export_package"
 msgid "Export Package"
 msgstr "Exports groupés"
 
+msgctxt "model:ir.action,name:act_override_translation_form"
+msgid "Override Translations"
+msgstr "Surcharger les traductions"
+
 msgctxt "model:ir.action,name:act_tag_form"
 msgid "Tags"
 msgstr "Labels"
@@ -1046,6 +1066,10 @@ msgctxt "model:ir.test_case.run.select.method,name:"
 msgid "Test Case Selector"
 msgstr "Sélection des jeux d'essai"
 
+msgctxt "model:ir.translation.override.start,name:"
+msgid "Select translation override method"
+msgstr "Choix de la méthode de surcharge"
+
 msgctxt "model:ir.ui.menu,name:event_type"
 msgid "Event Type"
 msgstr "Type d'événement"
@@ -1090,6 +1114,10 @@ msgctxt "model:ir.ui.menu,name:menu_test_case_model"
 msgid "Test Case Parameters"
 msgstr "Paramètres des jeux d'essai"
 
+msgctxt "model:ir.ui.menu,name:menu_translation_override"
+msgid "Override Translations"
+msgstr "Surcharger les traductions"
+
 msgctxt "model:ir.ui.menu,name:test_case_menu"
 msgid "Test Case Launcher"
 msgstr "Gestionnaire des jeux d'essai"
@@ -1129,6 +1157,14 @@ msgstr "Manuel"
 msgctxt "selection:ir.test_case.run.select.method,selection:"
 msgid "Not Selected"
 msgstr "Non Sélectionné"
+
+msgctxt "selection:ir.translation.override.start,export_kind:"
+msgid "Client"
+msgstr "Client"
+
+msgctxt "selection:ir.translation.override.start,export_kind:"
+msgid "Product"
+msgstr "Produit"
 
 msgctxt "view:event.type:"
 msgid "Event Type"

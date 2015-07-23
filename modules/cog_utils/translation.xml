@@ -13,7 +13,7 @@
         <!-- # Translation Override Wizard # -->
         <!-- ############################### -->
         <record model="ir.action.wizard" id="act_translation_override">
-            <field name="name">override Translations</field>
+            <field name="name">Override Translations</field>
             <field name="wiz_name">ir.translation.override</field>
         </record>
         <!-- Entry point -->
