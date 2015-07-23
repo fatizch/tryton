@@ -463,6 +463,12 @@ def values_mixin(value_model):
                         parent_endorsed_record)
 
         def endorsement_matches_record(self, record):
+            # If this method crashes with IndexError,it is probably because
+            # there is a Many2One set to None in the endorsement values
+            # and the corresponding field in the added record
+            # was set at endorsement application according to the
+            # reverse One2Many on the parent object.
+
             if record.__name__ != self._model_name:
                 return False
             for k, v in self.values.iteritems():
