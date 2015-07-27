@@ -283,6 +283,8 @@ class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
         values.pop('contract', None)
         values.pop('direct_debit_account_selector', None)
         values.pop('search_all_direct_debit_account', None)
+        if not new_info.billing_mode.direct_debit:
+            values.pop('direct_debit_day_selector', None)
         new_endorsements = []
         for contract, action in [(master_contract, 'everything')] + [
                 (x.contract, x.to_propagate) for x in self.other_contracts]:
