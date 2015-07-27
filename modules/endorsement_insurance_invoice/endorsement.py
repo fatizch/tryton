@@ -104,7 +104,7 @@ class Contract:
             if endorsement.contract not in contracts:
                 continue
             if not rebill_date:
-                if endorsement.values:
+                if not endorsement.is_null():
                     if (endorsement.endorsement.effective_date ==
                             endorsement.contract.start_date):
                         # The endorsement (maybe) changed the start_date,
