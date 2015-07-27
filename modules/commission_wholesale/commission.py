@@ -124,7 +124,7 @@ class CreateInvoicePrincipal:
         if not lines:
             return commission_invoice
         for party, party_lines in groupby(lines, key=lambda x: x.party):
-            amount = sum(l.amount for l in lines)
+            amount = sum(-l.amount for l in lines)
             invoice_line = self.get_wholesale_brokers_line(amount, account,
                 party)
             invoice_line.invoice = commission_invoice
