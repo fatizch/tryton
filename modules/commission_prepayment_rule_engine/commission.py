@@ -84,7 +84,7 @@ class PrepaymentPaymentDateRule(RuleMixin, model.CoopSQL, model.CoopView):
 class PlanLines:
     __name__ = 'commission.plan.line'
 
-    prepayment_rule = fields.Many2One('rule_engine', 'Prepayment Rule Engine',
+    prepayment_rule = fields.Many2One('rule_engine', 'Prepayment Rule',
         ondelete='RESTRICT', domain=[('type_', '=', 'commission')],
         depends=['use_rule_engine'],
         states={

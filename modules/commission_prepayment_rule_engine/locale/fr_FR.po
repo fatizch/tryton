@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -17,6 +17,18 @@ msgstr ""
 msgctxt "field:commission.plan,prepayment_payment_rule:"
 msgid "Payment Date Rule for Prepayment"
 msgstr "Règle de calcul de la date de paiement du précompte"
+
+msgctxt "field:commission.plan.line,prepayment_formula_description:"
+msgid "Prepayment"
+msgstr "Précompte"
+
+msgctxt "field:commission.plan.line,prepayment_rule:"
+msgid "Prepayment Rule"
+msgstr "Règle de calcul du précompte"
+
+msgctxt "field:commission.plan.line,prepayment_rule_extra_data:"
+msgid "Prepayment Rule Extra Data"
+msgstr "Paramètres de la règle de précompte"
 
 msgctxt "field:commission.plan.prepayment.payment_rule,code:"
 msgid "Code"
