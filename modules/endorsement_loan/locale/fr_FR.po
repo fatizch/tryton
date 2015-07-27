@@ -503,7 +503,7 @@ msgstr "Date de fin actuelle"
 
 msgctxt "field:endorsement.loan.select_contracts.contract,endorsement:"
 msgid "Endorsement"
-msgstr "Modèle d'Avenant"
+msgstr "Avenant"
 
 msgctxt "field:endorsement.loan.select_contracts.contract,id:"
 msgid "ID"
@@ -967,17 +967,9 @@ msgctxt "view:endorsement.loan.field:"
 msgid "Endorsement Field"
 msgstr "Champs du prêt"
 
-msgctxt "view:endorsement.loan.field:"
-msgid "Endorsement Fields"
-msgstr "Modèle d'avenant"
-
 msgctxt "view:endorsement.loan.increment.field:"
 msgid "Endorsement Field"
-msgstr "Champs du prêt"
-
-msgctxt "view:endorsement.loan.increment.field:"
-msgid "Endorsement Fields"
-msgstr "Modèle d'avenant"
+msgstr "Champ des paliers"
 
 msgctxt "view:endorsement.loan.increment:"
 msgid "Endorsement Loan Increment"
@@ -1001,7 +993,7 @@ msgstr "Champs de la quotité"
 
 msgctxt "view:endorsement.loan.share.field:"
 msgid "Endorsement Fields"
-msgstr "Modèle d'avenant"
+msgstr "Champs des quotités"
 
 msgctxt "view:endorsement.loan.share:"
 msgid "Loan Endorsement"

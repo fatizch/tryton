@@ -105,7 +105,7 @@ msgstr "Définition"
 
 msgctxt "field:endorsement.party,endorsement:"
 msgid "Endorsement"
-msgstr "Modèle d'avenant"
+msgstr "Avenant"
 
 msgctxt "field:endorsement.party,endorsement_summary:"
 msgid "Endorsement Summary"
@@ -661,7 +661,7 @@ msgstr "Champs de l'avenant de changement des informations de santé"
 
 msgctxt "model:ir.action,name:act_endorsement"
 msgid "Endorsement"
-msgstr "Modèle d'avenant"
+msgstr "Avenant"
 
 msgctxt "selection:endorsement.part,kind:"
 msgid "Party"

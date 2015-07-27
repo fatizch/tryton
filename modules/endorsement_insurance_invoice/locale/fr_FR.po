@@ -436,10 +436,6 @@ msgctxt "view:endorsement.contract.billing_information.field:"
 msgid "Endorsement Field"
 msgstr "Champs des paramètres de quittancement"
 
-msgctxt "view:endorsement.contract.billing_information.field:"
-msgid "Endorsement Fields"
-msgstr "Modèle d'avenant"
-
 msgctxt "view:endorsement.contract.billing_information:"
 msgid "Billing Informations"
 msgstr "Paramètres de quittancement"

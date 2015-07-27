@@ -389,7 +389,7 @@ msgstr "Appliqué le"
 
 msgctxt "field:endorsement.contract.activation_history,contract_endorsement:"
 msgid "Endorsement"
-msgstr "Modèle d'Avenant"
+msgstr "Avenant"
 
 msgctxt "field:endorsement.contract.activation_history,create_date:"
 msgid "Create Date"
@@ -555,7 +555,7 @@ msgstr "Appliqué le"
 
 msgctxt "field:endorsement.contract.extra_data,contract_endorsement:"
 msgid "Endorsement"
-msgstr "Modèle d'Avenant"
+msgstr "Avenant"
 
 msgctxt "field:endorsement.contract.extra_data,create_date:"
 msgid "Create Date"
@@ -1399,10 +1399,6 @@ msgctxt "model:endorsement.sub_state,name:"
 msgid "Endorsement SubState"
 msgstr "Sous état d'avenant"
 
-msgctxt "model:ir.action,name:"
-msgid "Endorsement Fields"
-msgstr "Modèle d'avenant"
-
 msgctxt "model:ir.action,name:act_configuration_form"
 msgid "Endorsement Configuration"
 msgstr "Configuration d'avenant"
@@ -1595,7 +1591,7 @@ msgstr "Champs du prêt"
 
 msgctxt "view:endorsement.contract.activation_history.field:"
 msgid "Endorsement Fields"
-msgstr "Modèle d'avenant"
+msgstr "Champs de l'historique d'activation"
 
 msgctxt "view:endorsement.contract.activation_history:"
 msgid "Endorsement Option"
@@ -1617,17 +1613,9 @@ msgctxt "view:endorsement.contract.field:"
 msgid "Endorsement Field"
 msgstr "Champs du contrat"
 
-msgctxt "view:endorsement.contract.field:"
-msgid "Endorsement Fields"
-msgstr "Modèle d'avenant"
-
 msgctxt "view:endorsement.contract.option.field:"
 msgid "Endorsement Field"
 msgstr "Champs de la garantie souscrite"
-
-msgctxt "view:endorsement.contract.option.field:"
-msgid "Endorsement Fields"
-msgstr "Modèle d'avenant"
 
 msgctxt "view:endorsement.contract.option:"
 msgid "Endorsement Option"

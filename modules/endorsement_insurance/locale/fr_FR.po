@@ -839,10 +839,6 @@ msgctxt "view:endorsement.contract.covered_element.field:"
 msgid "Endorsement Field"
 msgstr "Champs des éléments couverts"
 
-msgctxt "view:endorsement.contract.covered_element.field:"
-msgid "Endorsement Fields"
-msgstr "Modèle d'avenant"
-
 msgctxt "view:endorsement.contract.covered_element.option:"
 msgid "Endorsement Covered Element Option"
 msgstr "Modification des garanties souscrites par un élément couvert"
@@ -869,11 +865,7 @@ msgstr "Surprimes"
 
 msgctxt "view:endorsement.contract.extra_premium.field:"
 msgid "Endorsement Field"
-msgstr "Champs du prêt"
-
-msgctxt "view:endorsement.contract.extra_premium.field:"
-msgid "Endorsement Fields"
-msgstr "Modèle d'avenant"
+msgstr "Champ des surprimes"
 
 msgctxt "view:endorsement.contract.manage_extra_premium:"
 msgid "Manage Extra Premium"
