@@ -496,8 +496,8 @@ class TerminateContract(EndorsementWizardStepMixin, model.CoopView):
     termination_date = fields.Date('Termination Date', required=True,
         readonly=True)
     termination_reason = fields.Many2One('contract.sub_status',
-        'Termination Reason', required=True, domain=[('code', 'in',
-                ['reached_end_date', 'unpaid_premium_termination'])])
+        'Termination Reason', required=True,
+        domain=[('status', '=', 'terminated')])
 
     @classmethod
     def is_multi_instance(cls):
@@ -612,8 +612,7 @@ class VoidContract(EndorsementWizardStepMixin, model.CoopView):
 
     contract = fields.Many2One('contract', 'Contract', readonly=True)
     void_reason = fields.Many2One('contract.sub_status', 'Void Reason',
-        required=True, domain=[('code', 'in', ['error',
-                    'cancelled_by_customer'])])
+        required=True, domain=[('status', '=', 'void')])
     current_end_date = fields.Date('Current End Date', readonly=True)
 
     @classmethod
