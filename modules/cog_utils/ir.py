@@ -472,17 +472,6 @@ class Translation:
         ModelData = pool.get('ir.model.data')
         Config = pool.get('ir.configuration')
 
-        models_data = ModelData.search([
-                ('module', '=', module),
-                ])
-        db_id2fs_id = {}
-        for model_data in models_data:
-            db_id2fs_id.setdefault(model_data.model, {})
-            db_id2fs_id[model_data.model][model_data.db_id] = model_data.fs_id
-            for extra_model in cls.extra_model_data(model_data):
-                db_id2fs_id.setdefault(extra_model, {})
-                db_id2fs_id[extra_model][model_data.db_id] = model_data.fs_id
-
         pofile = TrytonPOFile(wrapwidth=78)
         pofile.metadata = {
             'Content-Type': 'text/plain; charset=utf-8',
@@ -490,10 +479,24 @@ class Translation:
 
         with Transaction().set_context(language=Config.get_language()):
             translations = cls.search([
-                ('lang', '=', lang),
-                ('overriding_module', '=', module)],
-                order=[('type', 'ASC'), ('name', 'ASC')])
+                    ('lang', '=', lang),
+                    ('overriding_module', '=', module)],
+                    order=[('type', 'ASC'), ('name', 'ASC')])
 
+        if not translations:
+            return res
+
+        models_data = ModelData.search(
+            [('module', 'in', [module] + [t.module for t in translations])])
+        db_id2fs_id = {}
+        for model_data in models_data:
+            db_id2fs_id.setdefault(model_data.model, {})
+            db_id2fs_id[model_data.model][model_data.db_id] = \
+                model_data.fs_id
+            for extra_model in cls.extra_model_data(model_data):
+                db_id2fs_id.setdefault(extra_model, {})
+                db_id2fs_id[extra_model][model_data.db_id] = \
+                    model_data.fs_id
         for translation in translations:
             flags = [] if not translation.fuzzy else ['fuzzy']
             trans_ctxt = '%(type)s:%(name)s:' % {
@@ -516,9 +519,7 @@ class Translation:
                 msgstr=(translation.value or ''), msgctxt=trans_ctxt,
                 flags=flags)
             pofile.append(entry)
-        if pofile:
-            noheader_pofile = '\n'.join(unicode(pofile).split('\n')[3:])
-            msg = '\n# Custom translations below\n'
-            return res + (msg + noheader_pofile).encode('utf-8')
-        else:
-            return res
+
+        noheader_pofile = '\n'.join(unicode(pofile).split('\n')[3:])
+        msg = '\n# Custom translations below\n'
+        return res + (msg + noheader_pofile).encode('utf-8')
