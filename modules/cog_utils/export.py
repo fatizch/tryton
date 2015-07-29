@@ -613,7 +613,7 @@ class Add2ExportPackageWizard(Wizard):
     start = StateView('ir.export_package.add_records.start',
         'cog_utils.ir_export_package_add_records_start', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Add', 'add', 'tryton-ok'),
+            Button('Add', 'add', 'tryton-ok', default=True),
             ])
     add = StateTransition()
 
