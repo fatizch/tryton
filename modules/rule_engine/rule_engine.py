@@ -19,6 +19,7 @@ from trytond import backend
 from trytond.rpc import RPC
 from trytond.cache import Cache
 from trytond.model import DictSchemaMixin, ModelView as TrytonModelView, Unique
+from trytond.model import fields as tryton_fields, Model
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -312,6 +313,18 @@ class RuleTools(ModelView):
     __name__ = 'rule_engine.runtime'
 
     @classmethod
+    def __setup__(cls):
+        super(RuleTools, cls).__setup__()
+        cls._error_messages.update({
+                'key_not_available':
+                "Key '%s' is not available in execution context",
+                'field_not_iterable':
+                "Field '%s' of model '%s' is not iterable",
+                'cannot_return_models':
+                'You must return raw value fields (bool, string, integer, etc)'
+                })
+
+    @classmethod
     def get_result(cls, args):
         if '__result__' in args:
             return args['__result__']
@@ -324,6 +337,79 @@ class RuleTools(ModelView):
     @classmethod
     def debug(cls, args, debug):
         args['__result__'].debug.append(debug)
+
+    @classmethod
+    def _re_generic_value_get(cls, args, input_string):
+        '''
+            Input string is a '.' separated list of fields. For lists, it is
+            possible to use [0] or [-1] to select respectively the first or
+            last element of the list.
+            The first field must be available in args.
+
+            Ex : contract.options.extra_premiums[-1].kind will return, for each
+            option on the contract, the kind of the last extra_premium.
+
+            The last field MUST be a non-Model entity (i.e. Bool, Int,
+            String...)
+        '''
+        parsed_string = input_string.split('.')
+        master_key = parsed_string[0]
+
+        if master_key not in args:
+            raise Exception(cls.raise_user_error('key_not_available',
+                    (master_key,), raise_exception=False))
+        data = args[master_key]
+        data = Pool().get('contract')(data)
+
+        def iterate(data, path):
+            if not path or not data:
+                return data
+            cur_path = path.pop(0)
+            if cur_path.endswith('[0]'):
+                fname, operator = cur_path[:-3], 0
+            elif cur_path.endswith('[-1]'):
+                fname, operator = cur_path[:-4], -1
+            else:
+                fname, operator = cur_path, None
+            if isinstance(data, list):
+                return_list = True
+            else:
+                data = [data]
+                return_list = False
+            field = data[0].__class__._fields[fname]
+            if isinstance(field, tryton_fields.Function):
+                field = field._field
+            if isinstance(field, (tryton_fields.Many2Many,
+                        tryton_fields.One2Many)):
+                if operator is None:
+                    return_list = True
+                    return_value = []
+                    for cur_data in data:
+                        return_value += [x for x in getattr(cur_data, fname)]
+                else:
+                    try:
+                        return_value = [getattr(x, fname)[operator]
+                            if x is not None else None
+                            for x in data]
+                    except IndexError:
+                        return_value = [None]
+            else:
+                if operator is not None:
+                    raise Exception(cls.raise_user_error('field_not_iterable',
+                            (fname, data[0].__name__), raise_exception=False))
+                return_value = [getattr(x, fname) if x is not None else None
+                    for x in data]
+            if not return_list:
+                return_value = return_value[0] if return_value else None
+            return iterate(return_value, path)
+
+        res = iterate(data, parsed_string[1:])
+        if not res:
+            return res
+        if isinstance(res[0] if isinstance(res, list) else res, Model):
+            raise Exception(cls.raise_user_error('cannot_return_models',
+                    raise_exception=False))
+        return res
 
     @classmethod
     def _re_years_between(cls, args, date1, date2):

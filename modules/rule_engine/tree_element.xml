@@ -187,5 +187,29 @@
             <field name="long_description">Ajouter un message informatif</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
+        <record model="rule_engine.function" id="valeur_du_champ">
+            <field name="translated_technical_name">champs_technique</field>
+            <field name="description">Valeur du Champ</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_generic_value_get</field>
+            <field name="fct_args">Chemin</field>
+            <field name="long_description">
+Permet de retrouver la valeur d'un champs depuis
+les données métiers disponibles. Seules les données
+brutes sont autorisées. Le chemin doit etre de la
+forme "contract.options.status".
+
+Pour les champs One2Many ou Many2Many, on peut
+utiliser la notation suivante :
+  - contract.options => Toute la liste
+  - contract.options[0] => Le premier élément
+  - contract.options[-1] => Le dernier élément
+
+Le premier noeud de la liste (ex: 'contract') doit
+etre disponible dans le contexte d'exécution</field>
+            <field name="parent" ref="dossier_outils"/>
+        </record>
     </data>
 </tryton>

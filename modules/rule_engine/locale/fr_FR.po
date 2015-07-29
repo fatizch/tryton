@@ -56,6 +56,18 @@ msgctxt "error:rule_engine:"
 msgid "Your algorithm has errors!"
 msgstr "Votre algorithme a des erreurs"
 
+msgctxt "error:rule_engine.runtime:"
+msgid "Key '%s' is not available in execution context"
+msgstr "La donnee '%s' n'est pas disponible dans le contexte d'execution"
+
+msgctxt "error:rule_engine.runtime:"
+msgid "Field '%s' of model '%s' is not iterable"
+msgstr "Le champ '%s' du modele '%s' n'est pas une liste"
+
+msgctxt "error:rule_engine.runtime:"
+msgid "You must return raw value fields (bool, string, integer, etc)"
+msgstr "Vous devez retourner une valeur simple (booleen, texte, entier, etc)"
+
 msgctxt "field:functional_error,arguments:"
 msgid "Arguments"
 msgstr "Arguments"
