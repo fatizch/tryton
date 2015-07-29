@@ -179,7 +179,12 @@ class One2One(tryton_fields.One2One):
 
 
 class Dict(tryton_fields.Dict):
-    pass
+    def get(self, ids, model, name, values=None):
+        result = super(Dict, self).get(ids, model, name, values)
+        for k in result:
+            if result[k] is None:
+                result[k] = {}
+        return result
 
 
 class Unaccent(functions.Function):
