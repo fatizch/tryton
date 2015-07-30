@@ -55,7 +55,7 @@ class EventLog(model.CoopSQL, model.CoopView):
         return res
 
     @classmethod
-    def create_event_logs(cls, objects, event_type, description=None):
+    def create_event_logs(cls, objects, event_type, description=None, **kwargs):
         user_id = Transaction().user
         return cls.create([{
                     'date': datetime.datetime.now(),
@@ -74,13 +74,13 @@ class Event:
     __name__ = 'event'
 
     @classmethod
-    def notify_events(cls, objects, event_code, description=None):
+    def notify_events(cls, objects, event_code, description=None, **kwargs):
         pool = Pool()
         EventLog = pool.get('event.log')
         EventType = pool.get('event.type')
         event_type, = EventType.search([('code', '=', event_code)])
         EventLog.create_event_logs(objects, event_type,
-            description=description)
+            description, **kwargs)
 
 
 class Trigger:
