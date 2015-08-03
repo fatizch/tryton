@@ -4,5 +4,5 @@
     <field name="user"/>
     <field name="event_type"/>
     <field name="object_"/>
-    <field name="description"/>
+    <field name="description_str"/>
 </tree>

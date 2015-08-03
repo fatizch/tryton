@@ -990,6 +990,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     def default_state(cls):
         return 'draft'
 
+    def get_rec_name(self, name):
+        return '%s' % self.definition.name
+
     def get_contracts_name(self, name):
         return '\n'.join([x.rec_name for x in self.contracts])
 

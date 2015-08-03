@@ -19,6 +19,9 @@ class EventLog(model.CoopSQL, model.CoopView):
     __name__ = 'event.log'
 
     description = fields.Char('Description', readonly=True)
+    description_str = fields.Function(
+        fields.Char('Description'),
+        'on_change_with_description_str')
     object_ = fields.Reference('Object', selection='models_get', readonly=True,
         required=True)
     date = fields.DateTime('Date', readonly=True, required=True)
@@ -39,6 +42,10 @@ class EventLog(model.CoopSQL, model.CoopView):
     def on_change_with_date_str(self, name=None):
         return Pool().get('ir.date').datetime_as_string(self.date)
 
+    @fields.depends('description')
+    def on_change_with_description_str(self, name=None):
+        return self.description or self.object_.rec_name
+
     @staticmethod
     def order_date_str(tables):
         table, _ = tables[None]
@@ -55,7 +62,8 @@ class EventLog(model.CoopSQL, model.CoopView):
         return res
 
     @classmethod
-    def create_event_logs(cls, objects, event_type, description=None, **kwargs):
+    def create_event_logs(cls, objects, event_type, description=None,
+            **kwargs):
         user_id = Transaction().user
         return cls.create([{
                     'date': datetime.datetime.now(),
