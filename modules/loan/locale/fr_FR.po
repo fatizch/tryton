@@ -16,10 +16,6 @@ msgid "There must be at least one loan"
 msgstr "Il doit y avoir au moins un prêt"
 
 msgctxt "error:loan:"
-msgid "Amortization table must be calculated"
-msgstr "La table d'amortissement doit être calculée"
-
-msgctxt "error:loan:"
 msgid "No loan sequence defined"
 msgstr "Pas de séquence de prêt définie"
 
@@ -898,6 +894,10 @@ msgid "Amortization Table"
 msgstr "Table d'Amortissement"
 
 msgctxt "view:loan:"
+msgid "Calculate Amortization Table"
+msgstr "Calculer la table d'amortissement"
+
+msgctxt "view:loan:"
 msgid "Loan"
 msgstr "Prêt"
 
@@ -912,10 +912,6 @@ msgstr "Prêts"
 msgctxt "view:loan:"
 msgid "Quota share"
 msgstr "Quotité"
-
-msgctxt "view:loan:"
-msgid "_Calculate Amortization Table"
-msgstr "_Calculer la table d'amortissement"
 
 msgctxt "view:loan:"
 msgid "_Draft"

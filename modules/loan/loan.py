@@ -104,9 +104,9 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 )],
         depends=['kind', 'state'])
     payments = fields.One2Many('loan.payment', 'loan', 'Payments',
-        states=_STATES, depends=_DEPENDS,
         # We force the order to make sure bisect will work properly
-        order=[('start_date', 'ASC')], delete_missing=True)
+        order=[('start_date', 'ASC')],
+        readonly=True, delete_missing=True)
     increments = fields.One2Many('loan.increment', 'loan', 'Increments',
         context={
             'rate': Eval('rate'),
@@ -154,7 +154,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     state = fields.Selection([
             ('draft', 'Draft'),
             ('calculated', 'Calculated'),
-            ], 'State', states={'invisible': True})
+            ], 'State', readonly=True)
     state_string = state.translated('state')
     contracts = fields.Many2Many('contract-loan', 'loan', 'contract',
         'Contracts')
@@ -169,17 +169,16 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                     'The loan "%(loan)s" is used on '
                     'the contract(s) "%(contract)s". '
                     'Are you sure you want to continue?'),
-                'state_draft': 'Amortization table must be calculated',
                 })
         cls._transitions |= set((
                 ('draft', 'calculated'),
                 ('calculated', 'draft'),
                 ))
         cls._buttons.update({
-                'button_draft': {
+                'draft': {
                     'invisible': Eval('state') != 'calculated',
                     },
-                'calculate': {
+                'calculate_loan': {
                     'invisible': Eval('state') != 'draft',
                     },
                 })
@@ -337,10 +336,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         self.increments = self.increments
         self.payments = payments
 
-    @model.CoopView.button_change('kind', 'deferal', 'number_of_payments',
-            'deferal_duration', 'increments', 'rate', 'amount',
-            'funds_release_date', 'first_payment_date', 'currency',
-            'payment_frequency')
     def calculate(self):
         self.init_increments()
         self.update_increments_and_calculate_payments()
@@ -355,11 +350,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             payment_amount=payment_amount,
             deferal=deferal,
             )
-
-    def pre_validate(self):
-        super(Loan, self).pre_validate()
-        if self.state == 'draft':
-            self.raise_user_error('state_draft')
 
     def create_increments_from_deferal(self, duration=None, deferal=None):
         result = [self.create_increment(duration, deferal=deferal)]
@@ -505,7 +495,9 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             ]
 
     @classmethod
-    def check_loan_is_used(cls, loans):
+    @model.CoopView.button
+    @Workflow.transition('draft')
+    def draft(cls, loans):
         for loan in loans:
             contracts = set([(x.contract.rec_name, x.contract.status_string)
                     for x in loan.loan_shares
@@ -517,18 +509,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                             ['%s (%s)' % (x[0], x[1]) for x in contracts]),
                         'loan': loan.rec_name,
                         })
-
-    @model.CoopView.button_change('id')
-    def button_draft(self):
-        if self.id > 0:
-            self.check_loan_is_used([self])
-        self.state = 'draft'
-
-    @classmethod
-    @model.CoopView.button
-    @Workflow.transition('draft')
-    def draft(cls, loans):
-        cls.check_loan_is_used(loans)
 
     @classmethod
     @model.CoopView.button
