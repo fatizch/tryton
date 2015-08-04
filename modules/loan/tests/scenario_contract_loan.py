@@ -249,8 +249,9 @@ contract = Contract(contract.id)
 contract.covered_element_options[0].end_date == datetime.date(2032, 8, 1)
 # #Res# #True
 
-loan_2.increments[0].number_of_payments = 340
-loan_2.increments[0].save()
+Loan.draft([loan_2.id], {})
+loan_2.number_of_payments = 340
+loan_2.save()
 Loan.calculate_loan([loan_2.id], {})
 loan_2 = Loan(loan_2.id)
 loan_2.end_date == datetime.date(2042, 8, 1)
@@ -261,8 +262,9 @@ contract = Contract(contract.id)
 contract.covered_element_options[0].end_date == datetime.date(2042, 8, 1)
 # #Res# #True
 
-loan_2.increments[0].number_of_payments = 100
-loan_2.increments[0].save()
+Loan.draft([loan_2.id], {})
+loan_2.number_of_payments = 100
+loan_2.save()
 Loan.calculate_loan([loan_2.id], {})
 loan_2 = Loan(loan_2.id)
 loan_2.end_date == datetime.date(2022, 8, 1)
