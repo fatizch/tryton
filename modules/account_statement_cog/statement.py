@@ -1,4 +1,5 @@
 from trytond.pool import PoolMeta, Pool
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import fields
 
@@ -17,6 +18,12 @@ class Line:
     in_bank_deposit_ticket = fields.Function(
         fields.Boolean('In Bank Deposit Ticket'),
         'on_change_with_in_bank_deposit_ticket')
+
+    @classmethod
+    def __setup__(cls):
+        super(Line, cls).__setup__()
+        cls.number.depends += ['in_bank_deposit_ticket']
+        cls.number.states['required'] = Bool(Eval('in_bank_deposit_ticket'))
 
     @fields.depends('statement')
     def on_change_statement(self):
