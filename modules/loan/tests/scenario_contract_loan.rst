@@ -217,9 +217,8 @@ Create Loans::
     >>> loan_1.rate = Decimal('0.045')
     >>> loan_1.amount = Decimal('250000')
     >>> loan_1.number_of_payments = 200
-    >>> loan_1.state = ''
+    >>> Loan.calculate_loan([loan_1], {})
     >>> loan_1.save()
-    >>> Loan.calculate_loan([loan_1.id], {})
     >>> loan_2 = Loan()
     >>> loan_2.company = company
     >>> loan_2.kind = 'fixed_rate'
@@ -229,9 +228,8 @@ Create Loans::
     >>> loan_2.rate = Decimal('0.03')
     >>> loan_2.amount = Decimal('100000')
     >>> loan_2.number_of_payments = 220
-    >>> loan_2.state = ''
+    >>> Loan.calculate_loan([loan_2], {})
     >>> loan_2.save()
-    >>> Loan.calculate_loan([loan_2.id], {})
     >>> loan_1.end_date == datetime.date(2030, 12, 1)
     True
     >>> loan_2.end_date == datetime.date(2032, 8, 1)
@@ -261,9 +259,8 @@ Create Test Contract::
     >>> contract = Contract(contract.id)
     >>> contract.covered_element_options[0].end_date == datetime.date(2032, 8, 1)
     True
-    >>> loan_2.state = ''
-    >>> loan_2.number_of_payments = 340
-    >>> loan_2.save()
+    >>> loan_2.increments[0].number_of_payments = 340
+    >>> loan_2.increments[0].save()
     >>> Loan.calculate_loan([loan_2.id], {})
     >>> loan_2 = Loan(loan_2.id)
     >>> loan_2.end_date == datetime.date(2042, 8, 1)
@@ -272,9 +269,8 @@ Create Test Contract::
     >>> contract = Contract(contract.id)
     >>> contract.covered_element_options[0].end_date == datetime.date(2042, 8, 1)
     True
-    >>> loan_2.state = ''
-    >>> loan_2.number_of_payments = 100
-    >>> loan_2.save()
+    >>> loan_2.increments[0].number_of_payments = 100
+    >>> loan_2.increments[0].save()
     >>> Loan.calculate_loan([loan_2.id], {})
     >>> loan_2 = Loan(loan_2.id)
     >>> loan_2.end_date == datetime.date(2022, 8, 1)

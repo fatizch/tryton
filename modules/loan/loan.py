@@ -152,7 +152,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             depends=['currency_digits']),
         'get_outstanding_loan_balance')
     state = fields.Selection([
-            ('', ''),
             ('draft', 'Draft'),
             ('calculated', 'Calculated'),
             ], 'State', states={'invisible': True})
@@ -173,7 +172,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 'state_draft': 'Amortization table must be calculated',
                 })
         cls._transitions |= set((
-                ('', 'calculated'),
                 ('draft', 'calculated'),
                 ('calculated', 'draft'),
                 ))
@@ -183,9 +181,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                     },
                 'calculate': {
                     'invisible': Eval('state') != 'draft',
-                    },
-                'calculate_loan': {
-                    'invisible': True,
                     },
                 })
 
