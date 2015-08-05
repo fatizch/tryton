@@ -30,5 +30,31 @@
             <field name="act_window" ref="act_fee"/>
         </record>
         <menuitem parent="account.menu_account_configuration" action="act_fee" id="menu_fee"/>
+        <!-- ******************************
+             *********** Rights ***********
+             ****************************** -->
+        <!-- Default : read access -->
+        <record model="ir.model.access" id="default_access_fee">
+            <field name="model" search="[('model', '=', 'account.fee')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="res.group" id="group_fee_admin">
+            <field name="name">Fee Administration</field>
+        </record>
+        <record model="ir.model.access" id="admin_access_fee">
+            <field name="model" search="[('model', '=', 'account.fee')]"/>
+            <field name="group" ref="group_fee_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_fee_admin">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_fee_admin"/>
+        </record>
     </data>
 </tryton>
