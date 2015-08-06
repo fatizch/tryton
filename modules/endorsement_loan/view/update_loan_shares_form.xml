@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <form string="Select Loan Shares">
-    <field name="loan_share_selectors" mode="tree" expand_toolbar="0"/>
-    <newline/>
     <field name="shares_per_loan" mode="tree" expand_toolbar="0"/>
+    <newline/>
+    <field name="loan_share_selectors" mode="tree" expand_toolbar="0"/>
     <group id="hidden" string="">
         <field name="endorsement_part"/>
         <field name="effective_date"/>
