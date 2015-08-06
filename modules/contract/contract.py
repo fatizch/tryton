@@ -1686,6 +1686,8 @@ class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,
     contract = fields.Many2One('contract', 'Contract', required=True,
         select=True, ondelete='CASCADE')
     extra_data_values = fields.Dict('extra_data', 'Extra Data')
+    extra_data_values_translated = extra_data_values.translated(
+        'extra_data_values')
     extra_data_summary = fields.Function(
         fields.Text('Extra Data Summary'),
         'get_extra_data_summary')
