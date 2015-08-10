@@ -14,6 +14,12 @@
         <field name="is_company" xexpand="0"/>
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']" position="after">
+        <group id="name" colspan="2" col="2">
+            <label name="name"/>
+            <field name="name"/>
+        </group>
+    </xpath>
+    <xpath expr="/form/group[@id='name']" position="after">
         <group id="person" colspan="6" col="6">
             <label name="gender"/>
             <field name="gender" widget="selection" xexpand="0"/>

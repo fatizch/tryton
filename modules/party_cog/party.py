@@ -131,11 +131,13 @@ class Party(export.ExportImportMixin):
     def view_attributes(cls):
         return super(Party, cls).view_attributes() + [
             ('/form/group[@id="person"]', 'states',
-                {'invisible': Bool(~Eval('is_person'))}),
+                {'invisible': ~Eval('is_person')}),
             ('/form/group[@id="company"]', 'states',
-                {'invisible': Bool(~Eval('is_company'))}),
+                {'invisible': ~Eval('is_company')}),
             ('/form/notebook/page[@id="tree"]', 'states',
                 {'invisible': ~Eval('is_company')}),
+            ('/form/group[@id="name"]', 'states',
+                {'invisible': Eval('is_company') | Eval('is_person')}),
             ]
 
     @classmethod
