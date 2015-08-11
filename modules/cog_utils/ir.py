@@ -12,6 +12,7 @@ from trytond.wizard import Wizard, StateView, Button, StateAction
 
 import fields
 import utils
+import model
 from export import ExportImportMixin
 
 __metaclass__ = PoolMeta
@@ -40,7 +41,7 @@ __all__ = [
 SEPARATOR = ' / '
 
 
-class Sequence(ExportImportMixin):
+class Sequence(ExportImportMixin, model.TaggedMixin):
     __name__ = 'ir.sequence'
     _func_key = 'func_key'
 
