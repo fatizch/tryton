@@ -120,8 +120,8 @@ class Invoice:
 
     def _get_move_line(self, date, amount):
         line = super(Invoice, self)._get_move_line(date, amount)
-        if (self.is_broker_invoice and self.type == 'in_invoice'
-                and self.total_amount > 0):
+        if (getattr(self, 'is_broker_invoice', None) and
+                self.type == 'in_invoice' and self.total_amount > 0):
             line['payment_date'] = utils.today()
         return line
 

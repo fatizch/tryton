@@ -302,7 +302,7 @@ class Invoice:
 
     def _get_tax_context(self):
         context = super(Invoice, self)._get_tax_context()
-        if (self.contract and self.contract.product and
+        if (getattr(self, 'contract', None) and self.contract.product and
                 self.contract.product.taxes_included_in_premium):
             context['tax_included'] = True
         return context
