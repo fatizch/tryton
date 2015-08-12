@@ -32,7 +32,7 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
     party = fields.Many2One('party.party', 'Party', ondelete='CASCADE')
     parent_party = fields.Function(
         fields.Many2One('party.party', 'Parent Party'),
-        'get_parent_party')
+        'get_parent_party', searcher='search_parent_party')
     address = fields.Many2One('party.address', 'Address', ondelete='SET NULL',
         domain=[('party', '=', Eval('parent_party'))],
         depends=['parent_party'])
@@ -116,6 +116,19 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
             ('name',) + tuple(clause[1:]),
             ('party.name',) + tuple(clause[1:]),
             ]
+
+    @classmethod
+    def search_parent_party(cls, name, clause):
+        if clause[1] != '=':
+            raise NotImplementedError
+        network = cls.search([('party', '=', clause[2])])
+        if network:
+            if len(network) > 1:
+                raise NotImplementedError
+            return ['OR', ('parents', '=', network[0]),
+                    ('party', '=', clause[2])]
+        else:
+            return [('id', '=', None)]
 
     @classmethod
     def search_rec_name(cls, name, clause):
