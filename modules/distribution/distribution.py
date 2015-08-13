@@ -1,4 +1,3 @@
-from trytond.pool import Pool
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import model, fields, coop_string
@@ -104,11 +103,19 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
 
     @classmethod
     def search_parents(cls, name, clause):
-        Network = Pool().get('distribution.network')
-        if clause[1] != '=':
+        if clause[1] == '=':
+            network = cls(clause[2])
+            return [('left', '>', network.left), ('right', '<', network.right)]
+        elif clause[1] == 'in':
+            networks = cls.browse(clause[2])
+            clause = ['OR']
+            for network in networks:
+                clause.append([
+                        ('left', '>', network.left),
+                        ('right', '<', network.right)])
+            return clause
+        else:
             raise NotImplementedError
-        network = Network(clause[2])
-        return [('left', '>', network.left), ('right', '<', network.right)]
 
     @classmethod
     def search_full_name(cls, name, clause):
@@ -121,11 +128,12 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
     def search_parent_party(cls, name, clause):
         if clause[1] != '=':
             raise NotImplementedError
-        network = cls.search([('party', '=', clause[2])])
-        if network:
-            if len(network) > 1:
-                raise NotImplementedError
-            return ['OR', ('parents', '=', network[0]),
+        networks = cls.search([('party', '=', clause[2])])
+        if len(networks) == 1:
+            return ['OR', ('parents', '=', networks[0]),
+                    ('party', '=', clause[2])]
+        elif len(networks) > 1:
+            return ['OR', ('parents', 'in', networks),
                     ('party', '=', clause[2])]
         else:
             return [('id', '=', None)]
