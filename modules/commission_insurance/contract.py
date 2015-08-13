@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If
+from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.cog_utils import fields, utils
 from trytond.modules.contract import _STATES, _DEPENDS
@@ -22,7 +22,9 @@ class Contract:
         fields.Many2One('party.party', 'Broker Party'),
         'on_change_with_broker_party')
     agency = fields.Many2One('distribution.network', 'Agency',
-        domain=[('parents', '=', Eval('broker'))],
+        domain=[If(Bool(Eval('broker', False)),
+                   ('parents', '=', Eval('broker')),
+                   ('parent', '=', None))],
         states={
             'readonly': ((Eval('status') != 'quote') | ~Eval('broker', None)),
             },
