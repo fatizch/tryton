@@ -167,10 +167,12 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
             query_table = (query_table if query_table else cell).join(table,
                 condition=(getattr(cell, 'dimension%s' % idx) == table.id))
 
+        if query_table is None:
+            return result
+
         columns = [x.name for x in dimension_tables] + [cell.value]
         cursor.execute(*query_table.select(*columns,
                 where=(cell.definition == self.id)))
-
         result['cells'] = cursor.fetchall()
         return result
 
