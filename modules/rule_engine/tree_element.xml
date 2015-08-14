@@ -187,6 +187,18 @@
             <field name="long_description">Ajouter un message informatif</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
+        <record model="rule_engine.function" id="generer_slug">
+            <field name="translated_technical_name">generer_slug</field>
+            <field name="description">Générer slug</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_slugify</field>
+            <field name="fct_args">Chaine_de_caracteres, caractere_de_substitution, activer_casse_minuscule</field>
+            <field name="long_description">Retourne le slug (chaîne de caractères ASCII en minuscules, sans espace, ponctuation, ni
+caractères spéciaux) d'une chaîne de caractères</field>
+            <field name="parent" ref="dossier_outils"/>
+        </record>
         <record model="rule_engine.function" id="valeur_du_champ">
             <field name="translated_technical_name">champs_technique</field>
             <field name="description">Valeur du Champ</field>

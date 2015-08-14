@@ -468,6 +468,10 @@ class RuleTools(ModelView):
             stick_to_end_of_month)
 
     @classmethod
+    def _re_slugify(cls, args, text, char='_', lower=True):
+        return coop_string.slugify(text, char, lower)
+
+    @classmethod
     def add_error(cls, args, error_code, custom=False, lvl=None):
         RuleError = Pool().get('functional_error')
         if custom:
