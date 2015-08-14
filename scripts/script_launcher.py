@@ -365,13 +365,13 @@ def test(arguments, config, work_data):
 
 def batch(arguments, config, work_data):
     import celery
-    from celery.result import GroupResult
     from trytond.modules.cog_utils import batch_launcher
 
     log_path = os.path.join(work_data['runtime_dir'], 'logs',
         'celery_batch.log')
     APPNAME = 'trytond.modules.cog_utils.batch_launcher'
     PING_ATTEMPTS_DELAY = (10, .3)
+    celery_app = celery.current_app
     if arguments.action == 'init':
         subprocess.call(['pkill', 'celery'])
         print 'Running workers killed.'
@@ -382,25 +382,24 @@ def batch(arguments, config, work_data):
             subprocess.Popen(' '.join(cmd), shell=True, stdout=fnull,
                 stderr=subprocess.STDOUT)
         for i in range(PING_ATTEMPTS_DELAY[0]):
-            if celery.current_app.control.inspect().ping():
+            if celery_app.control.inspect().ping():
                 print 'Workers started, see %s' % log_path
                 return 0
             time.sleep(PING_ATTEMPTS_DELAY[1])
         print 'Failed starting worker instance'
         return 1
     elif arguments.action == 'execute':
-        if not celery.current_app.control.inspect().ping():
+        if not celery_app.control.inspect().ping():
             print 'No celery worker found. Run `coop batch init` first.'
             return 1
         else:
-            status = batch_launcher.generate_all.delay(arguments.name,
+            batch_launcher.generate_all.delay(arguments.name,
                 arguments.connexion_date, arguments.treatment_date,
                 arguments.extra)
-            for s in status.collect():
-                if isinstance(s[0], (GroupResult, tuple)):
-                    result, vals = s
-                    if any(vals):
-                        return 1
+            if arguments.blocking:
+                while celery_app.control.inspect().active().values()[0]:
+                    time.sleep(5)
+
     elif arguments.action == 'monitor':
         with open(os.devnull, 'w') as fnull:
             subprocess.Popen(['celery', '--app=%s' % APPNAME,
@@ -652,6 +651,8 @@ monitor: starts celery flower server on http://localhost:5555"""
     parser_batch.add_argument('--treatment-date', '-t', type=str,
         help='Batch treatment date',
         default=datetime.date.today().isoformat())
+    parser_batch.add_argument('--blocking', '-b', action='store_true',
+        help='Wait that tasks have finished before returning', default=False)
     parser_batch.add_argument('--config', '-g', type=str,
         help='Celery Configuration Module',
         default='celeryconfig')
