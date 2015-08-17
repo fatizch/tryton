@@ -20,7 +20,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_years_between</field>
-            <field name="fct_args">Debut, Fin</field>
+            <field name="fct_args">debut, fin</field>
             <field name="long_description">Calcule le nombre d'années entre deux dates</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -31,7 +31,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_days_between</field>
-            <field name="fct_args">Debut, Fin</field>
+            <field name="fct_args">debut, fin</field>
             <field name="long_description">Calcule le nombre de jours entre deux dates</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -73,7 +73,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_add_days</field>
-            <field name="fct_args">Date, nombre de jours</field>
+            <field name="fct_args">date, nombre_de_jours</field>
             <field name="long_description">Ajouter des jours à une date.</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -84,7 +84,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_add_weeks</field>
-            <field name="fct_args">Date, nombre de semaines</field>
+            <field name="fct_args">date, nombre_de_semaines</field>
             <field name="long_description">Ajouter des semaines à une date.</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -95,7 +95,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_add_months</field>
-            <field name="fct_args">Date, nombre de mois, rester a la fin du mois.</field>
+            <field name="fct_args">date, nombre_de_mois, rester_a_la_fin_du_mois.</field>
             <field name="long_description">Ajouter des mois à une date.</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -106,7 +106,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_add_years</field>
-            <field name="fct_args">Date, nombre de annees, rester a la fin du mois.</field>
+            <field name="fct_args">date, nombre_d_annees, rester_a_la_fin_du_mois.</field>
             <field name="long_description">Ajouter des années à une date.</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -117,7 +117,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_add_quarters</field>
-            <field name="fct_args">Date, nombre de trimestres, rester a la fin du mois.</field>
+            <field name="fct_args">date, nombre_de_trimestres, rester_a_la_fin_du_mois.</field>
             <field name="long_description">Ajouter des trimestres à une date.</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -128,7 +128,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_add_half_years</field>
-            <field name="fct_args">Date, nombre de semestres, rester a la fin du mois.</field>
+            <field name="fct_args">date, nombre_de_semestres, rester_a_la_fin_du_mois.</field>
             <field name="long_description">Ajouter des semestres à une date.</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -139,7 +139,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_add_error</field>
-            <field name="fct_args">Message</field>
+            <field name="fct_args">message</field>
             <field name="long_description">Ajouter un message d'erreur</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -150,7 +150,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_add_warning</field>
-            <field name="fct_args">Message</field>
+            <field name="fct_args">message</field>
             <field name="long_description">Ajouter un message d'avertissement</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -161,7 +161,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_debug</field>
-            <field name="fct_args">Message</field>
+            <field name="fct_args">message</field>
             <field name="long_description">Ajoute un message de debug qui sera affichée lors de la création des cas de test</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -172,7 +172,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_add_error_code</field>
-            <field name="fct_args">Code Erreur</field>
+            <field name="fct_args">code_erreur</field>
             <field name="long_description">Ajouter un message prédéfini</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -183,7 +183,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_add_info</field>
-            <field name="fct_args">Message</field>
+            <field name="fct_args">message</field>
             <field name="long_description">Ajouter un message informatif</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -194,7 +194,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_slugify</field>
-            <field name="fct_args">Chaine_de_caracteres, caractere_de_substitution, activer_casse_minuscule</field>
+            <field name="fct_args">chaine_de_caracteres, caractere_de_substitution, activer_casse_minuscule</field>
             <field name="long_description">Retourne le slug (chaîne de caractères ASCII en minuscules, sans espace, ponctuation, ni
 caractères spéciaux) d'une chaîne de caractères</field>
             <field name="parent" ref="dossier_outils"/>
@@ -206,7 +206,7 @@ caractères spéciaux) d'une chaîne de caractères</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_generic_value_get</field>
-            <field name="fct_args">Chemin</field>
+            <field name="fct_args">chemin</field>
             <field name="long_description">
 Permet de retrouver la valeur d'un champs depuis
 les données métiers disponibles. Seules les données
