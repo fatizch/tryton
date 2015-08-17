@@ -372,9 +372,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         dates = [self.get_date_used_for_contract_end_date()]
         dates.append(self.get_maximum_end_date())
         dates = [x for x in dates if x] or [None]
-        if self.activation_history:
-            self.activation_history[-1].end_date = min(dates)
-            self.activation_history = self.activation_history
+        self.end_date = min(dates)
 
     def notify_end_date_change(self, value):
         for option in self.options:
