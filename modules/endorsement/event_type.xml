@@ -9,5 +9,9 @@
             <field name="name">Decline Endorsement</field>
             <field name="code">decline_endorsement</field>
         </record>
+        <record model="event.type" id="event_cancel_endorsement">
+            <field name="name">Cancel Endorsement</field>
+            <field name="code">cancel_endorsement</field>
+        </record>
     </data>
 </tryton>

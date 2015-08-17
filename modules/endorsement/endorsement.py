@@ -1145,11 +1145,14 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     @model.CoopView.button
     @Workflow.transition('canceled')
     def cancel(cls, endorsements):
+        pool = Pool()
+        Event = pool.get('event')
         cls._draft(endorsements)
         cls.write(endorsements, {
                 'rollback_date': None,
                 'state': 'canceled',
                 })
+        Event.notify_events(endorsements, 'cancel_endorsement')
 
     @classmethod
     @model.CoopView.button
