@@ -945,12 +945,19 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def activate_contract(self):
         pool = Pool()
         Event = pool.get('event')
+        if not self.status or self.status == 'quote':
+            event = 'activate_contract'
+        elif self.status == 'hold':
+            # when activating after suspend
+            event = 'unhold_contract'
+        else:
+            event = 'reactivate_contract'
         self.status = 'active'
         options = list(self.options)
         for option in options:
             option.status = 'active'
         self.options = options
-        Event.notify_events([self], 'activate_contract')
+        Event.notify_events([self], event)
 
     def decline_contract(self, reason):
         pool = Pool()

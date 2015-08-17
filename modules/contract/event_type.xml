@@ -5,6 +5,10 @@
             <field name="name">Activate Contract</field>
             <field name="code">activate_contract</field>
         </record>
+        <record model="event.type" id="event_reactivate_contract">
+            <field name="name">Reactivate Contract</field>
+            <field name="code">reactivate_contract</field>
+        </record>
         <record model="event.type" id="event_decline_contract">
             <field name="name">Decline Contract</field>
             <field name="code">decline_contract</field>
@@ -24,6 +28,10 @@
         <record model="event.type" id="event_hold_contract">
             <field name="name">Hold Contract</field>
             <field name="code">hold_contract</field>
+        </record>
+        <record model="event.type" id="event_hold_contract">
+            <field name="name">Unhold Contract</field>
+            <field name="code">unhold_contract</field>
         </record>
     </data>
     <data depends="event_log">
