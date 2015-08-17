@@ -195,7 +195,7 @@ agent.save()
 subscriber = create_party_person()
 
 # #Comment# #Create Test Contract
-contract_start_date = datetime.date.today()
+contract_start_date = datetime.date(datetime.date.today().year, 1, 1)
 Contract = Model.get('contract')
 ContractPremium = Model.get('contract.premium')
 BillingInformation = Model.get('contract.billing_information')
