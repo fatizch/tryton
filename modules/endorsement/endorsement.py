@@ -418,6 +418,10 @@ def values_mixin(value_model):
                     vals.append((k, field, prev_value, v))
                 else:
                     vals.append((k, field, prev_value, v))
+            if hasattr(self, 'action') and self.action == 'add':
+                return [u'%s : → %s' % (coop_string.translate(
+                        ValueModel, fname, ffield.string, 'field'), new)
+                for fname, ffield, _, new in vals]
             return [u'%s : %s → %s' % (coop_string.translate(
                         ValueModel, fname, ffield.string, 'field'), old, new)
                 for fname, ffield, old, new in vals if old != new]
@@ -1474,25 +1478,25 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         if contract_summary:
             result[2] += ['contract_change_section', contract_summary]
 
-        option_summary = [option.get_summary('contract.option', option)
-            for option in self.options]
+        option_summary = [x.get_summary('contract.option', x.option)
+            for x in self.options]
         if option_summary:
             result[2] += ['option_change_section',
                 '%s :' % self.raise_user_error(
                     'mes_option_modifications', raise_exception=False),
                 option_summary]
 
-        activation_summary = [activation_history.get_summary(
-                'contract.activation_history', activation_history)
-            for activation_history in self.activation_history]
+        activation_summary = [x.get_summary(
+                'contract.activation_history', x.activation_history)
+            for x in self.activation_history]
         if activation_summary:
             result[2] += ['activation_change_section',
                 '%s :' % self.raise_user_error(
                     'mes_activation_history_modifications',
                     raise_exception=False), activation_summary]
 
-        extra_data_summary = [extra_data.get_summary('contract.extra_data',
-                extra_data) for extra_data in self.extra_datas]
+        extra_data_summary = [x.get_summary('contract.extra_data',
+                x.extra_data) for x in self.extra_datas]
         if extra_data_summary:
             result[2] += ['extra_data_change_section',
                 '%s :' % self.raise_user_error(
@@ -1848,6 +1852,7 @@ class EndorsementExtraData(relation_mixin(
         return apply_values
 
     def get_summary(self, model, base_object=None):
+        endorsement_state = self.contract_endorsement.endorsement.state
         # We want to present each extra data entry like a field
         new_data_values = self.values.pop('extra_data_values', None)
         res = super(EndorsementExtraData, self).get_summary(model, base_object)
@@ -1859,9 +1864,9 @@ class EndorsementExtraData(relation_mixin(
         else:
             cur_data_values = None
 
-        if cur_data_values:
-            if not res[2]:
-                res[2] = []
+        if not res[2]:
+            res[2] = []
+        if cur_data_values and not endorsement_state == 'applied':
             for k, v in cur_data_values.iteritems():
                 if new_data_values[k] != v:
                     res[2].append(k + ': ' + str(v) + u' → ' + str(
