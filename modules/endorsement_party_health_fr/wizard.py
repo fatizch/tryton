@@ -89,6 +89,9 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin, model.CoopView):
                     self._health_complement_fields_to_extract())
                 all_values.update(new_values)
                 test_complement = PartyComplement(**all_values)
+                test_complement.insurance_fund = \
+                    PartyComplement.get_insurance_fund(
+                        [test_complement]).values()[0]
                 test_complement.check_insurance_fund_number()
                 h_complement_endorsement = EndorsementHealthComplement(
                     action='update',
