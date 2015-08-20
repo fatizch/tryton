@@ -29,7 +29,7 @@
             <field name="name">Hold Contract</field>
             <field name="code">hold_contract</field>
         </record>
-        <record model="event.type" id="event_hold_contract">
+        <record model="event.type" id="event_unhold_contract">
             <field name="name">Unhold Contract</field>
             <field name="code">unhold_contract</field>
         </record>
