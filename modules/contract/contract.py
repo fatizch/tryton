@@ -87,6 +87,11 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
         'Termination Reason', domain=[('status', '=', 'terminated')],
         ondelete='RESTRICT')
 
+    @classmethod
+    def __setup__(cls):
+        super(ActivationHistory, cls).__setup__()
+        cls._order = [('contract', 'ASC'), ('start_date', 'DESC')]
+
     def get_func_key(self, name):
         return self.contract.quote_number
 
@@ -97,6 +102,12 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
     def clean_before_reactivate(self):
         self.termination_reason = None
         self.end_date = None
+
+    def get_rec_name(self, name):
+        Date = Pool().get('ir.date')
+        return "[%s - %s]" % (
+            Date.date_as_string(self.start_date) if self.start_date else '',
+            Date.date_as_string(self.end_date) if self.end_date else '')
 
 
 class Contract(model.CoopSQL, model.CoopView, ModelCurrency):

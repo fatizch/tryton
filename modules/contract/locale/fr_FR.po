@@ -35,7 +35,7 @@ msgstr "Pas de contrat trouvé"
 
 msgctxt "error:contract:"
 msgid "Activation Periods \"%(first)s\" and \"%(second)s\" overlap."
-msgstr "Les périodes \"%(première)s\" et \"%(seconde)s\" se chevauchent"
+msgstr "Les périodes \"%(first)s\" et \"%(second)s\" se chevauchent"
 
 msgctxt "error:contract:"
 msgid ""
