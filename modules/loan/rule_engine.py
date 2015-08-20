@@ -21,10 +21,10 @@ class RuleEngineRuntime:
 
     @classmethod
     @check_args('loan')
-    def _re_get_loan_number_of_payments(cls, args):
+    def _re_get_loan_duration(cls, args):
         loan = args['loan']
-        if hasattr(loan, 'number_of_payments'):
-            return loan.number_of_payments
+        if hasattr(loan, 'duration'):
+            return loan.duration
 
     @classmethod
     @check_args('loan')

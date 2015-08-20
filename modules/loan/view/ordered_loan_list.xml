@@ -6,10 +6,12 @@
     <field name="rate" factor="100">
         <suffix string="%"/>
     </field>
-    <field name="number_of_payments"/>
+    <field name="duration"/>
+    <field name="duration_unit"/>
     <field name="amount">
         <suffix name="currency_symbol"/>
     </field>
+    <field name="payment_frequency"/>
     <field name="funds_release_date"/>
     <field name="first_payment_date"/>
     <field name="insured_persons_name"/>

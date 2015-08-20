@@ -128,7 +128,7 @@ class ChangeLoan(EndorsementWizardStepMixin, model.CoopView):
             'loan': ['currency', 'rate', 'payment_frequency', 'order',
                 'first_payment_date', 'funds_release_date',
                 'kind', 'amount', 'number', 'company', 'increments',
-                'number_of_payments', 'currency_symbol', 'currency_digits'],
+                'duration', 'currency_symbol', 'currency_digits'],
             'loan.increment': ['number_of_payments', 'deferal', 'end_date',
                 'number', 'rate', 'payment_amount', 'start_date',
                 'begin_balance', 'currency_symbol', 'currency',

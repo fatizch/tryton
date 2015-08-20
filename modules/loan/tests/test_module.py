@@ -95,7 +95,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             first_payment_date=datetime.date(2012, 7, 15),
             payment_frequency='month',
             amount=Decimal(100000),
-            number_of_payments=180,
+            duration=180,
+            duration_unit='month',
             currency=currency,
             company=company)
         loan.deferal = 'partially'
@@ -116,7 +117,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assert_(increment_2)
         self.assertEqual(increment_2.payment_amount, Decimal('778.35'))
 
-        self.assertEqual(len(loan.payments), loan.number_of_payments + 1)
+        self.assertEqual(len(loan.payments), loan.duration + 1)
         self.assertEqual(loan.get_payment(datetime.date(2012, 6, 30)), None)
         self.assert_payment(loan, datetime.date(2013, 7, 14), 12, loan.amount,
             Decimal('333.33'), Decimal(0), Decimal('333.33'), loan.amount)
@@ -151,12 +152,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
             loan.funds_release_date, loan.payment_frequency,
             stick_to_end_of_month=True)
         self.assertEqual(loan.first_payment_date, datetime.date(2014, 6, 5))
-        loan.number_of_payments = 56
+        loan.duration = 14
+        loan.duration_unit = 'year'
         loan.amount = Decimal(134566)
         loan.deferal = 'fully'
         loan.deferal_duration = 8
         loan.calculate()
         loan.save()
+        self.assertEqual(loan.duration, 168)
         self.assertEqual(loan.get_payment_amount(loan.first_payment_date),
             Decimal(0))
         self.assertEqual(len(loan.increments), 2)
@@ -205,7 +208,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             company=company)
         loan.first_payment_date = loan.on_change_with_first_payment_date()
         self.assertEqual(loan.first_payment_date, datetime.date(2014, 9, 5))
-        loan.number_of_payments = 30
+        loan.duration = 30
+        loan.duration_unit = 'half_year'
         loan.amount = Decimal(243455)
         loan.calculate()
         loan.save()
@@ -235,7 +239,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             funds_release_date=datetime.date(2016, 1, 31),
             rate=None,
             amount=Decimal(100000),
-            number_of_payments=120,
+            duration=120,
+            duration_unit='month',
             payment_frequency='month',
             currency=currency,
             company=company)
@@ -273,7 +278,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             first_payment_date=datetime.date(2014, 1, 31),
             payment_frequency='month',
             amount=Decimal(100000),
-            number_of_payments=12,
+            duration=12,
+            duration_unit='month',
             currency=currency,
             company=company)
         loan.calculate()
@@ -307,7 +313,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             first_payment_date=datetime.date(2015, 04, 22),
             rate=Decimal('0.0395'),
             amount=Decimal(101948),
-            number_of_payments=360,
+            duration=360,
+            duration_unit='month',
             payment_frequency='month',
             currency=currency,
             company=company)
@@ -315,16 +322,19 @@ class ModuleTestCase(test_framework.CoopTestCase):
             number=1,
             number_of_payments=180,
             payment_amount=Decimal('435.00'),
+            payment_frequency='month',
             rate=Decimal('0.0395'))
         increment_2 = self.LoanIncrement(
             number=2,
             number_of_payments=96,
             payment_amount=Decimal('536.86'),
+            payment_frequency='month',
             rate=Decimal('0.0395'))
         increment_3 = self.LoanIncrement(
             number=3,
             number_of_payments=84,
             payment_amount=Decimal('625.82'),
+            payment_frequency='month',
             rate=Decimal('0.0395'))
         loan.increments = [increment_1, increment_2, increment_3]
         loan.calculate()
@@ -391,7 +401,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 first_payment_date=base_date + datetime.timedelta(weeks=30),
                 payment_frequency='month',
                 amount=Decimal(amount),
-                number_of_payments=120,
+                duration=120,
+                duration_unit='month',
                 currency=currency,
                 company=company)
             loan.calculate()

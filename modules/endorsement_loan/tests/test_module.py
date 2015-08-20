@@ -31,14 +31,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return ['loan', 'endorsement']
 
     def get_loan(self):
-        loan, = self.Loan.search([
+        return self.Loan.search([
                 ('kind', '=', 'fixed_rate'),
                 ('rate', '=', Decimal('0.0752')),
                 ('funds_release_date', '=', datetime.date(2014, 3, 5)),
-                ('payment_frequency', '=', 'quarter'),
                 ('amount', '=', Decimal('134566')),
-                ])
-        return loan
+                ])[0]
 
     @test_framework.prepare_test('endorsement.test0001_check_possible_views')
     def test0010_create_loan_endorsement_part(self):

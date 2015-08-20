@@ -32,13 +32,13 @@
             <field name="name">_re_get_loan_kind</field>
             <field name="parent" ref="pret"/>
         </record>
-        <record model="rule_engine.function" id="nombre_de_mensualites">
-            <field name="translated_technical_name">nombre_de_mensualites</field>
-            <field name="description">Nombre de Mensualités</field>
+        <record model="rule_engine.function" id="duree_pret_en_mois">
+            <field name="translated_technical_name">duree_pret_en_mois</field>
+            <field name="description">Durée du prêt en mois</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_get_loan_number_of_payments</field>
+            <field name="name">_re_get_loan_duration</field>
             <field name="parent" ref="pret"/>
         </record>
         <record model="rule_engine.function" id="frequence_mensualite">

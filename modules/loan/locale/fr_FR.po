@@ -27,6 +27,18 @@ msgstr ""
 "Le prêt \"%(loan)s\" est utilisé sur le(s) contrat(s) \"%(contract)s\". Etes"
 " vous sûr de vouloir continuer?"
 
+msgctxt "error:rule_engine.runtime:"
+msgid "Field '%s' of model '%s' is not iterable"
+msgstr ""
+
+msgctxt "error:rule_engine.runtime:"
+msgid "Key '%s' is not available in execution context"
+msgstr ""
+
+msgctxt "error:rule_engine.runtime:"
+msgid "You must return raw value fields (bool, string, integer, etc)"
+msgstr ""
+
 msgctxt "field:contract,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
@@ -195,6 +207,14 @@ msgctxt "field:loan,deferal_duration:"
 msgid "Deferal Duration"
 msgstr "Durée du Différé"
 
+msgctxt "field:loan,duration:"
+msgid "Duration"
+msgstr "Durée"
+
+msgctxt "field:loan,duration_unit:"
+msgid "Unit"
+msgstr "Unité"
+
 msgctxt "field:loan,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -235,10 +255,6 @@ msgctxt "field:loan,number:"
 msgid "Number"
 msgstr "Numéro"
 
-msgctxt "field:loan,number_of_payments:"
-msgid "Number of Payments"
-msgstr "Nombre d'Echéance"
-
 msgctxt "field:loan,order:"
 msgid "Order"
 msgstr "Ordre"
@@ -249,7 +265,7 @@ msgstr "Capital restant dû"
 
 msgctxt "field:loan,payment_frequency:"
 msgid "Payment Frequency"
-msgstr "Périodicité"
+msgstr "Fréquence de remboursement"
 
 msgctxt "field:loan,payments:"
 msgid "Payments"
@@ -338,6 +354,10 @@ msgstr "Nombre d'Echéances"
 msgctxt "field:loan.increment,payment_amount:"
 msgid "Payment Amount"
 msgstr "Montant"
+
+msgctxt "field:loan.increment,payment_frequency:"
+msgid "Payment Frequency"
+msgstr "Fréquence de remboursement"
 
 msgctxt "field:loan.increment,rate:"
 msgid "Annual Rate"
@@ -632,7 +652,7 @@ msgctxt "field:party.synthesis.menu.loan,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "help:loan,number_of_payments:"
+msgctxt "help:loan,duration:"
 msgid "Deferal included"
 msgstr "Différé inclu"
 
@@ -725,6 +745,14 @@ msgctxt "selection:loan,deferal:"
 msgid "Partially Deferred"
 msgstr "Différé Partiel"
 
+msgctxt "selection:loan,duration_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:loan,duration_unit:"
+msgid "Year"
+msgstr "Année"
+
 msgctxt "selection:loan,kind:"
 msgid "Balloon"
 msgstr "In Fine"
@@ -746,14 +774,6 @@ msgid "Intermediate"
 msgstr "Relais"
 
 msgctxt "selection:loan,payment_frequency:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:loan,payment_frequency:"
-msgid "Day"
-msgstr "Jour"
-
-msgctxt "selection:loan,payment_frequency:"
 msgid "Half-year"
 msgstr "Semestre"
 
@@ -766,16 +786,8 @@ msgid "Quarter"
 msgstr "Trimestre"
 
 msgctxt "selection:loan,payment_frequency:"
-msgid "Week"
-msgstr "Semaine"
-
-msgctxt "selection:loan,payment_frequency:"
 msgid "Year"
 msgstr "Année"
-
-msgctxt "selection:loan,state:"
-msgid ""
-msgstr " "
 
 msgctxt "selection:loan,state:"
 msgid "Calculated"
@@ -796,6 +808,34 @@ msgstr "Différé Total"
 msgctxt "selection:loan.increment,deferal:"
 msgid "Partially Deferred"
 msgstr "Différé Partiel"
+
+msgctxt "selection:loan.increment,payment_frequency:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:loan.increment,payment_frequency:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:loan.increment,payment_frequency:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:loan.increment,payment_frequency:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:loan.increment,payment_frequency:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:loan.increment,payment_frequency:"
+msgid "Week"
+msgstr ""
+
+msgctxt "selection:loan.increment,payment_frequency:"
+msgid "Year"
+msgstr "Année"
 
 msgctxt "selection:loan.payment,kind:"
 msgid "Deffered"

@@ -5,7 +5,7 @@
     <field name="rate" factor="100">
         <suffix string="%"/>
     </field>
-    <field name="number_of_payments"/>
+    <field name="duration"/>
     <field name="amount">
         <suffix name="currency_symbol"/>
     </field>
