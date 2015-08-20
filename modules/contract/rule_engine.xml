@@ -41,6 +41,15 @@
             <field name="name">_re_get_contract_start_date</field>
             <field name="parent" ref="te_contract"/>
         </record>
+        <record model="rule_engine.function" id="date_fin_terme_courant_contrat">
+            <field name="translated_technical_name">date_fin_terme_courant_contrat</field>
+            <field name="description">Date de fin du terme courant du contrat</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_end_date</field>
+            <field name="parent" ref="te_contract"/>
+        </record>
         <record model="rule_engine.function" id="te_contract_extra_data">
             <field name="description">Donnée Complémentaire</field>
             <field name="name">_re_extra_data</field>

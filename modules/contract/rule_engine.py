@@ -38,6 +38,10 @@ class RuleEngineRuntime:
         return args['contract'].start_date
 
     @classmethod
+    def _re_get_contract_end_date(cls, args):
+        return args['contract'].end_date
+
+    @classmethod
     def _re_contract_conditions_date(cls, args):
         return args['appliable_conditions_date']
 
