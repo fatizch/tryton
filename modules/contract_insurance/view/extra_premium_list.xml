@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Extra Premium">
-    <field name="rec_name"/>
+    <field name="value_as_string"/>
     <field name="motive"/>
     <button string="Propagate" name="propagate"/>
 </tree>

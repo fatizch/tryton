@@ -83,12 +83,6 @@ class Premium:
         key = super(Premium, self).duplicate_sort_key()
         return tuple([self.loan.id if self.loan else None] + list(key))
 
-    def get_rec_name(self, name):
-        rec_name = super(Premium, self).get_rec_name(name)
-        if not self.loan:
-            return rec_name
-        return '[%s] %s' % (self.loan.number, rec_name)
-
     def same_value(self, other):
         return super(Premium, self).same_value(other) and (
             self.loan == other.loan)
@@ -100,12 +94,6 @@ class Premium:
         result = super(Premium, cls).new_line(line, start_date, end_date)
         result.loan = line.loan
         return result
-
-    def get_description(self):
-        description = super(Premium, self).get_description()
-        if not self.loan:
-            return description
-        return '[%s] %s' % (self.loan.number, description)
 
     def _get_key(self, no_date=False):
         key = super(Premium, self)._get_key(no_date=no_date)
@@ -418,6 +406,34 @@ class PremiumAmount(model.CoopSQL, model.CoopView):
     end = fields.Date('End')
     amount = fields.Numeric('Amount')
     tax_amount = fields.Numeric('Tax Amount')
+    covered_element = fields.Function(
+        fields.Many2One('contract.covered_element', 'Covered element'),
+        'get_covered_element')
+    type_ = fields.Function(
+        fields.Many2One('ir.model', 'Type'),
+        'get_type')
+    loan = fields.Function(
+        fields.Many2One('loan', 'Loan'),
+        'get_loan')
+
+    def get_type(self, name=None):
+        if self.premium:
+            model, = Pool().get('ir.model').search(
+                [('model', '=', self.premium.parent.__name__)])
+            return model.id
+
+    def get_covered_element(self, name=None):
+        if self.premium:
+            covered_element = getattr(self.premium.parent, 'covered_element',
+                None)
+            if covered_element:
+                return covered_element.id
+
+    def get_loan(self, name=None):
+        if self.premium:
+            loan = getattr(self.premium, 'loan', None)
+            if loan:
+                return loan.id
 
 
 class PremiumAmountPerPeriod(model.CoopSQL, model.CoopView):

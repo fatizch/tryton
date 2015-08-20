@@ -341,16 +341,16 @@ class ExtraPremium:
         return args['loan'].amount * self.capital_per_mil_rate * \
             args['share'].share
 
-    def get_rec_name(self, name):
+    def get_value_as_string(self, name):
         if (self.calculation_kind == 'capital_per_mil'
                 and self.capital_per_mil_rate):
             return u'%s ‰' % coop_string.format_number('%.2f',
                 self.capital_per_mil_rate * 1000)
-        return super(ExtraPremium, self).get_rec_name(name)
+        return super(ExtraPremium, self).get_value_as_string(name)
 
-    @fields.depends('capital_per_mil_rate')
-    def on_change_with_rec_name(self, name=None):
-        return super(ExtraPremium, self).on_change_with_rec_name(name)
+    @fields.depends('capital_per_mil_rate', 'calculation_kind')
+    def on_change_with_value_as_string(self, name=None):
+        return self.get_value_as_string(name)
 
 
 _STATES = {

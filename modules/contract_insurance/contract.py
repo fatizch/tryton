@@ -403,9 +403,6 @@ class ContractOption:
         return [new_query_table.order]
 
     def get_full_name(self, name):
-        if self.covered_element:
-            return self.covered_element.rec_name + ' - ' + super(
-                ContractOption, self).get_full_name(name)
         return super(ContractOption, self).get_full_name(name)
 
     @classmethod
@@ -1246,6 +1243,12 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     max_rate = fields.Function(
         fields.Numeric('Max Rate'),
         'on_change_with_max_rate', searcher='search_max_rate')
+    value_as_string = fields.Function(
+        fields.Char('Value'),
+        'on_change_with_value_as_string')
+    covered_element = fields.Function(
+        fields.Many2One('contract.covered_element', 'Covered element'),
+        'on_change_with_covered_element')
 
     @classmethod
     def __setup__(cls):
@@ -1342,9 +1345,13 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     def on_change_with_max_rate(self, name=None):
         return self.motive.max_rate if self.motive else None
 
-    @fields.depends('calculation_kind', 'flat_amount', 'rate', 'currency')
+    @fields.depends('value_as_string')
     def on_change_with_rec_name(self, name=None):
         return self.get_rec_name(name)
+
+    @fields.depends('calculation_kind', 'flat_amount', 'rate', 'currency')
+    def on_change_with_value_as_string(self, name=None):
+        return self.get_value_as_string(name)
 
     def get_currency(self):
         return self.option.currency if self.option else None
@@ -1357,16 +1364,24 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         return list(POSSIBLE_EXTRA_PREMIUM_RULES)
 
     def get_rec_name(self, name):
+        return '%s %s %s' % (self.option.rec_name,
+            self.get_value_as_string(name), self.motive.name)
+
+    def get_value_as_string(self, name):
         if self.calculation_kind == 'flat' and self.flat_amount:
             return self.currency.amount_as_string(abs(self.flat_amount))
         elif self.calculation_kind == 'rate' and self.rate:
             return '%s %%' % coop_string.format_number('%.2f',
                 abs(self.rate) * 100)
-        else:
-            return super(ExtraPremium, self).get_rec_name(name)
 
     def get_time_limited(self, name):
         return self.duration != 0
+
+    @fields.depends('option')
+    def on_change_with_covered_element(self, name=None):
+        covered_element = getattr(self.option, 'covered_element', None)
+        if covered_element:
+            return covered_element.id
 
     @classmethod
     def search_max_value(cls, name, clause):

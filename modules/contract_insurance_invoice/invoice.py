@@ -349,6 +349,15 @@ class InvoiceLine:
     detail = fields.Function(
         fields.Many2One('account.invoice.line.detail', 'Detail'),
         'get_detail')
+    covered_element = fields.Function(
+        fields.Many2One('contract.covered_element', 'Covered element'),
+        'get_covered_element')
+    type_ = fields.Function(
+        fields.Many2One('ir.model', 'Type'),
+        'get_type')
+    loan = fields.Function(
+        fields.Many2One('loan', 'Loan'),
+        'get_loan')
 
     def get_currency_symbol(self, name):
         return self.currency.symbol if self.currency else ''
@@ -366,6 +375,27 @@ class InvoiceLine:
 
             result.update(dict(cursor.fetchall()))
         return result
+
+    def get_type(self, name=None):
+        pool = Pool()
+        Model = pool.get('ir.model')
+        if self.detail and self.detail.premium.parent:
+            model, = Model.search([('model', '=',
+                self.detail.premium.parent.__name__)])
+            return model.id
+
+    def get_covered_element(self, name=None):
+        if self.detail and self.detail.premium:
+            covered_element = getattr(self.detail.premium.parent,
+                'covered_element', None)
+            if covered_element:
+                return covered_element.id
+
+    def get_loan(self, name=None):
+        if self.detail and self.detail.premium:
+            loan = getattr(self.detail.premium, 'loan', None)
+            if loan:
+                return loan.id
 
     @property
     def origin_name(self):
