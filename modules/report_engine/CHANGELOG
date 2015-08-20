@@ -1,3 +1,4 @@
+* Add option to store the original generated document in the internal edm even if the final output is converted to pdf
 * Make conversion to pdf optional for automatic generation of documents
 * Enable one click printing or mail
 

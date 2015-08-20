@@ -128,7 +128,7 @@ class Contract(CogProcessFramework):
         Date = pool.get('ir.date')
 
         template_instances = Template.search([('code', 'in', template_codes),
-                ('internal_edm', '=', 'True')])
+                ('format_for_internal_edm', '=', 'pdf')])
 
         for template_instance in template_instances:
             _, filedata, _, file_basename = Report.execute(

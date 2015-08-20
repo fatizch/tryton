@@ -137,13 +137,13 @@ msgctxt "field:report.template,document_desc:"
 msgid "Document Description"
 msgstr "Descripteur de Document"
 
+msgctxt "field:report.template,format_for_internal_edm:"
+msgid "Format for internal EDM"
+msgstr "Format pour la GED interne"
+
 msgctxt "field:report.template,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:report.template,internal_edm:"
-msgid "Use Internal EDM"
-msgstr "Utiliser la ged interne"
 
 msgctxt "field:report.template,kind:"
 msgid "Kind"
@@ -337,6 +337,14 @@ msgctxt "field:report.template.version,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:report.template,format_for_internal_edm:"
+msgid ""
+"If no format is specified, the document will not be stored in the internal "
+"EDM"
+msgstr ""
+"Si aucun format n'est spécifié, le document ne sera pas stocké dans la GED "
+"interne"
+
 msgctxt "help:report.template,modifiable_before_printing:"
 msgid ""
 "Set to true if you want to modify the generated document before sending or "
@@ -412,6 +420,18 @@ msgstr "Rapport"
 msgctxt "model:res.group,name:group_report_admin"
 msgid "Report Administration"
 msgstr "Administration des courriers/rapports"
+
+msgctxt "selection:report.template,format_for_internal_edm:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:report.template,format_for_internal_edm:"
+msgid "Original"
+msgstr "Originel"
+
+msgctxt "selection:report.template,format_for_internal_edm:"
+msgid "Pdf"
+msgstr "Pdf"
 
 msgctxt "selection:report.template,template_extension:"
 msgid "Open Document Graphics (.odg)"

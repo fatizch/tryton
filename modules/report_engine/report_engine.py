@@ -60,7 +60,12 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     kind = fields.Selection('get_possible_kinds', 'Kind')
     mail_subject = fields.Char('eMail Subject')
     mail_body = fields.Text('eMail Body')
-    internal_edm = fields.Boolean('Use Internal EDM')
+    format_for_internal_edm = fields.Selection([
+            ('', ''),
+            ('original', 'Original'),
+            ('pdf', 'Pdf'),
+            ], 'Format for internal EDM', help="If no format is specified, "
+            "the document will not be stored in the internal EDM")
     document_desc = fields.Many2One('document.description',
         'Document Description', ondelete='SET NULL')
     modifiable_before_printing = fields.Boolean('Modifiable',
@@ -95,9 +100,11 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
             TableHandler.table_rename(cursor, 'document_template',
                 'report_template')
         report_template = TableHandler(cursor, cls)
-        has_column = report_template.column_exist('template_extension')
+        has_column_template_extension = report_template.column_exist(
+            'template_extension')
+        has_column_internal_edm = report_template.column_exist('internal_edm')
         super(ReportTemplate, cls).__register__(module_name)
-        if not has_column:
+        if not has_column_template_extension:
             # Migration from 1.4 : set default values for new columns
             cursor.execute("UPDATE report_template "
                 "SET template_extension = 'odt' "
@@ -106,6 +113,15 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 "WHERE convert_to_pdf IS NULL")
             cursor.execute("UPDATE report_template SET split_reports = TRUE "
                 "WHERE split_reports IS NULL")
+        if has_column_internal_edm:
+            # Migration from 1.4 : Store template format for internal edm
+            cursor.execute("UPDATE report_template "
+                "SET format_for_internal_edm = 'pdf' "
+                "WHERE internal_edm = TRUE and convert_to_pdf = TRUE")
+            cursor.execute("UPDATE report_template "
+                "SET format_for_internal_edm = 'original' "
+                "WHERE internal_edm = TRUE and convert_to_pdf = FALSE")
+            report_template.drop_column('internal_edm')
 
     @classmethod
     def _export_light(cls):
@@ -219,7 +235,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         reports = self._generate_reports(objects, origin=origin)
         if direct_print:
             self.print_reports(reports)
-        if self.internal_edm:
+        if self.format_for_internal_edm:
             attachments = self.save_reports_in_edm(reports)
         return reports, attachments
 
@@ -621,11 +637,14 @@ class ReportCreatePreview(model.CoopView):
     output_report_filepath = fields.Char('Output Report Filepath',
         states={'invisible': True})
 
-    @fields.depends('output_report_name')
+    @fields.depends('output_report_name', 'reports')
     def on_change_with_output_report_filepath(self, name=None):
-        # Generate unique temporary output report filepath
-        return os.path.join(tempfile.mkdtemp(),
-            coop_string.slugify(self.output_report_name, lower=False) + '.pdf')
+        if all([x.template.convert_to_pdf for x in self.reports]):
+            # Generate unique temporary output report filepath
+            return os.path.join(tempfile.mkdtemp(), coop_string.slugify(
+                        self.output_report_name, lower=False) + '.pdf')
+        else:
+            return self.reports[0].server_filepath
 
 
 class ReportCreateAttach(model.CoopView):
@@ -749,7 +768,8 @@ class ReportCreate(Wizard):
     def open_or_mail_report(self, action, email_print):
         pool = Pool()
         Report = pool.get('report.generate_from_file', type='report')
-        if email_print:
+        if email_print and all([x.template.convert_to_pdf
+                    for x in self.preview_document.reports]):
             Report.generate_single_attachment(
                 [d.server_filepath for d in self.preview_document.reports],
                 self.preview_document.output_report_filepath)
@@ -770,18 +790,24 @@ class ReportCreate(Wizard):
         return self.open_or_mail_report(action, True)
 
     def transition_mail(self):
-        if all([not model.internal_edm for model in self.select_model.models]):
+        if all([not model.format_for_internal_edm
+                for model in self.select_model.models]):
             return 'end'
         return 'attach'
 
     def default_attach(self, fields):
-        with open(self.preview_document.output_report_filepath, 'r') as f:
+        if any([x.template.format_for_internal_edm == 'original'
+                for x in self.preview_document.reports]):
+            file_name = self.preview_document.reports[0].server_filepath
+        else:
+            file_name = self.preview_document.output_report_filepath
+
+        with open(file_name, 'r') as f:
             attachment = bytearray(f.read())
-        result = {'attachment': attachment,
-            'name': os.path.basename(
-                self.preview_document.output_report_filepath),
-        }
-        return result
+        return {
+            'attachment': attachment,
+            'name': os.path.basename(file_name),
+            }
 
     def transition_post_generation(self):
         GoodModel = Pool().get(Transaction().context.get('active_model'))

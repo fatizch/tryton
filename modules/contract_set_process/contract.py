@@ -78,8 +78,10 @@ class ContractSet(CogProcessFramework):
             Report = pool.get('report.generate', type='report')
             Date = pool.get('ir.date')
 
-            template_instances = Template.search([('code', 'in',
-                        template_codes), ('internal_edm', '=', 'True')])
+            template_instances = Template.search([
+                    ('code', 'in', template_codes),
+                    ('format_for_internal_edm', '=', 'pdf'),
+                    ])
 
             for template_instance in template_instances:
                 _, filedata, _, file_basename = Report.execute(
