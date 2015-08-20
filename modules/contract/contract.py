@@ -12,7 +12,7 @@ from trytond import backend
 from trytond.tools import grouped_slice
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, If, Bool, And
+from trytond.pyson import Eval, If, Bool, And, Len
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.pool import Pool
 from trytond.model import dualmethod
@@ -108,17 +108,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
-    activation_history = fields.One2Many('contract.activation_history',
-        'contract', 'Activation History', order=[('start_date', 'ASC')],
-        states=_STATES, depends=_DEPENDS, delete_missing=True)
     addresses = fields.One2Many('contract.address', 'contract',
         'Addresses', context={
             'policy_owner': Eval('current_policy_owner'),
             'start_date': Eval('start_date'),
             }, depends=['current_policy_owner', 'status'],
             states=_STATES, delete_missing=True)
-    appliable_conditions_date = fields.Date('Appliable Conditions Date',
-        states=_STATES, depends=_DEPENDS)
     company = fields.Many2One('company.company', 'Company', required=True,
         select=True, ondelete='RESTRICT', states=_STATES, depends=_DEPENDS)
     quote_number = fields.Char('Quote Number', readonly=True)
@@ -157,7 +152,31 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     declined_options = fields.One2ManyDomain('contract.option', 'contract',
         'Declined Options', states=_STATES, depends=['status'],
         domain=[('status', '=', 'declined')], target_not_required=True)
+    activation_history = fields.One2Many('contract.activation_history',
+        'contract', 'Activation History', order=[('start_date', 'ASC')],
+        states=_STATES, depends=_DEPENDS, delete_missing=True)
+    initial_start_date = fields.Function(
+        fields.Date('Initial Start Date',
+            states={
+                'invisible': Eval('initial_start_date') == Eval('start_date'),
+                }),
+        'get_initial_start_date')
+    start_date = fields.Function(
+        fields.Date('Start Date', states={
+                'readonly': Eval('status') != 'quote',
+                'required': Eval('status') != 'void',
+                }, depends=['status']),
+        'getter_activation_history', 'setter_start_date',
+        searcher='search_contract_date')
+    end_date = fields.Function(
+        fields.Date('End Date', states=_STATES, depends=_DEPENDS),
+        'getter_activation_history', 'setter_end_date',
+        searcher='search_contract_date')
+    appliable_conditions_date = fields.Date('Appliable Conditions Date',
+        states=_STATES, depends=_DEPENDS)
     start_management_date = fields.Date('Management Date', states=_STATES,
+        depends=_DEPENDS)
+    signature_date = fields.Date('Signature Date', states=_STATES,
         depends=_DEPENDS)
     status = fields.Selection(CONTRACTSTATUSES, 'Status', states=_STATES,
         depends=_DEPENDS, required=True)
@@ -179,10 +198,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     current_policy_owner = fields.Function(
         fields.Many2One('party.party', 'Current Policy Owner'),
         'on_change_with_current_policy_owner')
-    end_date = fields.Function(
-        fields.Date('End Date', states=_STATES, depends=_DEPENDS),
-        'getter_activation_history', 'setter_end_date',
-        searcher='search_contract_date')
     sub_status = fields.Many2One('contract.sub_status', 'Details on status',
         states={
             'readonly': Eval('status') != 'quote',
@@ -202,15 +217,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     product_subscriber_kind = fields.Function(
         fields.Selection(offered.SUBSCRIBER_KIND, 'Product Subscriber Kind'),
         'get_product_subscriber_kind')
-    start_date = fields.Function(
-        fields.Date('Start Date', states={
-                'readonly': Eval('status') != 'quote',
-                'required': Eval('status') != 'void',
-                }, depends=['status']),
-        'getter_activation_history', 'setter_start_date',
-        searcher='search_contract_date')
-    signature_date = fields.Date('Signature Date', states=_STATES,
-        depends=_DEPENDS)
     termination_reason = fields.Function(
         fields.Many2One('contract.sub_status', 'Termination Reason',
             domain=[('status', '=', 'terminated')]),
@@ -229,8 +235,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         states=_STATES, depends=_DEPENDS, delete_missing=True)
     last_modification = fields.Function(fields.DateTime('Last Modification'),
         'get_last_modification')
-    initial_start_date = fields.Function(fields.Date('Initial Start Date'),
-        'get_initial_start_date')
 
     @classmethod
     def __setup__(cls):
@@ -287,11 +291,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def view_attributes(cls):
         return super(Contract, cls).view_attributes() + [(
-                '/form/group[@id="subscriber"]/group[@id="person"]',
+                '//group[@id="subscriber"]/group[@id="person"]',
                 'states',
                 {'invisible': Eval('subscriber_kind') != 'person'}
                 ), (
-                '/form/group[@id="subscriber"]/group[@id="company"]',
+                '//group[@id="subscriber"]/group[@id="company"]',
                 'states',
                 {'invisible': Eval('subscriber_kind') == 'person'}
                 ), (

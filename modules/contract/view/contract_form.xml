@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form string="Contract">
-    <label name="rec_name"/>
-    <field name="rec_name"/>
-    <label name="status"/>
-    <group id="status">
-        <field name="status"/>
-        <field name="sub_status"/>
+<form string="Contract" col="6">
+    <group id="left" colspan="4">
+        <label name="rec_name"/>
+        <field name="rec_name"/>
+        <label name="status"/>
+        <group id="status">
+            <field name="status"/>
+            <field name="sub_status"/>
+        </group>
+        <label name="product"/>
+        <field name="product"/>
+        <label name="subscriber"/>
+        <group id="subscriber" col="99">
+            <field name="subscriber_kind"/>
+            <group id="person" colspan="40">
+                <field name="subscriber" view_ids="party_cog.person_view_tree"/>
+            </group>
+            <group id="company" colspan="40">
+                <field name="subscriber"/>
+            </group>
+        </group>
     </group>
-    <label name="product"/>
-    <field name="product"/>
-    <label name="start_date"/>
-    <group id="date">
+    <group id="right" colspan="2" col="2">
+        <label name="initial_start_date"/>
+        <field name="initial_start_date"/>
+        <label name="start_date"/>
         <field name="start_date"/>
         <label name="end_date"/>
         <field name="end_date"/>
     </group>
-    <newline/>
-    <label name="subscriber"/>
-    <group id="subscriber" col="99">
-        <field name="subscriber_kind"/>
-        <group id="person" colspan="40">
-            <field name="subscriber" view_ids="party_cog.person_view_tree"/>
-        </group>
-        <group id="company" colspan="40">
-            <field name="subscriber"/>
-        </group>
-    </group>
-    <notebook colspan="4">
+    <notebook colspan="6">
         <page string="Options" id="options">
             <field name="options" colspan="4"/>
         </page>
