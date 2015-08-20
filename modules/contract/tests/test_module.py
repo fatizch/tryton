@@ -240,7 +240,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
             self.assertEqual(option.get_end_date('end_date'), expected)
             option.contract.options = [option]
             option.manual_end_date = to_set
+            option.sub_status = \
+                option.on_change_with_sub_status()
             option.save()
+
+            if option.manual_end_date:
+                self.assertEqual(option.sub_status.code, 'terminated')
+            else:
+                self.assertIsNone(option.sub_status)
 
             # test check
             if should_raise:
@@ -292,6 +299,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                         parent_contract=contract,
                         coverage=coverage,
                         )
+                option.sub_status = \
+                    option.on_change_with_sub_status()
                 options.append(option)
             return options
 

@@ -50,6 +50,7 @@ Party = Model.get('party.party')
 Product = Model.get('offered.product')
 Sequence = Model.get('ir.sequence')
 SequenceType = Model.get('ir.sequence.type')
+SubStatus = Model.get('contract.sub_status')
 User = Model.get('res.user')
 
 # #Comment# #Constants
@@ -191,6 +192,8 @@ product.start_date = product_start_date
 product.coverages.append(coverage)
 product.save()
 
+# #Comment# #Create SubStatus
+termination_status, = SubStatus.find([('code', '=', 'terminated')])
 
 # #Comment# #Create Change Start Date Endorsement
 remove_option_part = EndorsementPart()
@@ -248,11 +251,15 @@ new_endorsement.form.effective_date = endorsement_effective_date
 new_endorsement.execute('start_endorsement')
 my_option = new_endorsement.form.options[0].option
 new_endorsement.form.options[0].to_remove = True
+new_endorsement.form.options[0].sub_status = termination_status
 new_endorsement.execute('remove_option_next')
 new_endorsement.execute('apply_endorsement')
 contract.save()
 
-contract.covered_elements[0].options[0].end_date == endorsement_effective_date
+contract.covered_elements[0].options[1].end_date == endorsement_effective_date
+# #Res# #True
+contract.covered_elements[0].options[1].sub_status == \
+    termination_status
 # #Res# #True
 
 good_endorsement, = Endorsement.find([

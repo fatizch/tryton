@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
-<tree string="Options">
+<tree string="Options" editable="bottom">
     <field name="to_remove"/>
     <field name="option"/>
     <field name="covered_element"/>
     <field name="start_date"/>
     <field name="end_date"/>
+    <field name="sub_status" widget="selection"/>
     <field name="covered_element_endorsement" tree_invisible="1"/>
     <field name="option_endorsement" tree_invisible="1"/>
     <field name="covered_element_option_endorsement" tree_invisible="1"/>

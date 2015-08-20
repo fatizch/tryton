@@ -393,6 +393,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 covered_element=covered_element,
                 coverage=coverage,
                 )
+            option.sub_status = \
+                option.on_change_with_sub_status()
             option.save()
             self.assertEqual(option.end_date, expected)
             option.parent_contract.options = [option]
@@ -466,6 +468,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                         coverage=coverage,
                         parent_contract=contract,
                         )
+                option.sub_status = \
+                    option.on_change_with_sub_status()
                 option.save()
                 options.append(option)
             covered_element.options = options

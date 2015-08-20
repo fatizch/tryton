@@ -1350,6 +1350,9 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     status = fields.Selection(OPTIONSTATUS, 'Status',
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     status_string = status.translated('status')
+    sub_status = fields.Many2One('contract.sub_status',
+        'Sub Status', states={'required':
+            Bool(Eval('manual_end_date'))}, depends=['manual_end_date'])
     appliable_conditions_date = fields.Function(
         fields.Date('Appliable Conditions Date'),
         'on_change_with_appliable_conditions_date')
@@ -1462,6 +1465,17 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def order_start_date(cls, tables):
         table, _ = tables[None]
         return [Coalesce(table.manual_start_date, datetime.date.min)]
+
+    @fields.depends('sub_status', 'manual_end_date')
+    def on_change_with_sub_status(self, name=None):
+        pool = Pool()
+        SubStatus = pool.get('contract.sub_status')
+        if not self.manual_end_date:
+            return
+        if not self.sub_status:
+            return SubStatus.search([('xml_id', '=',
+                        'contract.sub_status_terminated')])[0]
+        return self.sub_status
 
     @classmethod
     def get_start_date(cls, options, names):

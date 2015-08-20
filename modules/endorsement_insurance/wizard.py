@@ -125,6 +125,8 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                                 'option': option.id,
                                 'start_date': option.start_date,
                                 'end_date': option.end_date,
+                                'sub_status':
+                                option.sub_status,
                                 })
                     else:
                         real_option = option.option
@@ -134,6 +136,8 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                                 'option': option.relation,
                                 'start_date': real_option.start_date,
                                 'end_date': option.values['manual_end_date'],
+                                'sub_status':
+                                    option.values['sub_status'],
                                 'covered_element_endorsement':
                                     option.covered_element_endorsement.id,
                                 'to_remove':
@@ -152,6 +156,8 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                                 'option': option.id,
                                 'start_date': option.start_date,
                                 'end_date': option.end_date,
+                                'sub_status':
+                                    option.sub_status,
                                 })
                 else:
                     selector = template.copy()
@@ -160,6 +166,8 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                             'option': option.relation,
                             'start_date': real_option.start_date,
                             'end_date': option.values['manual_end_date'],
+                            'sub_status':
+                            option.values['sub_status'],
                             'to_remove': True,
                             'option_endorsement': option.id,
                             })
@@ -225,18 +233,27 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                     OptionEndorsement.delete([option.option_endorsement])
                     OptionEndorsement.create([{
                             'relation': option.option.id,
-                            'values': {'manual_end_date': effective_date},
+                            'values': {'manual_end_date': effective_date,
+                                    'sub_status':
+                                    option.sub_status.id},
                             'action': 'update',
                             'definition': self.endorsement_definition,
                             'contract_endorsement': endorsement.id,
                             }])
+
+                if option.covered_element and option.to_remove and \
+                    option.covered_element_option_endorsement and \
+                        option.covered_element_endorsement:
+                    option.covered_element_option_endorsement.values[
+                        'sub_status'] = option.sub_status.id
 
             vlist_cov_opt = [{
                     'covered_element_endorsement': ce_endorsements[
                         x.covered_element.id],
                     'relation': x.option.id,
                     'definition': self.endorsement_definition,
-                    'values': {'manual_end_date': effective_date},
+                    'values': {'manual_end_date': effective_date,
+                        'sub_status': x.sub_status.id},
                     'action': 'update'}
                 for x in self.options if (x.to_remove and not
                     x.covered_element_option_endorsement and
@@ -245,7 +262,8 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                     'relation': x.option.id,
                     'definition': self.endorsement_definition,
                     'contract_endorsement': endorsement,
-                    'values': {'manual_end_date': effective_date},
+                    'values': {'manual_end_date': effective_date,
+                        'sub_status': x.sub_status.id},
                     'action': 'update'}
                 for x in self.options if (x.to_remove and not
                     x.option_endorsement and not
@@ -284,6 +302,11 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                     self.raise_user_error('end_date_anterior_to_start_date',
                         (option.rec_name))
 
+        for cov in base_endorsement.covered_elements:
+            for opt in cov.options:
+                opt.values = opt.values
+            cov.options = cov.options
+        base_endorsement.covered_elements = base_endorsement.covered_elements
         base_endorsement.save()
 
 
@@ -309,6 +332,9 @@ class RemoveOptionSelector(model.CoopView):
     end_date = fields.Date('End Date',
         states={'required': Bool(Eval('to_remove'))},
         depends=['to_remove'], readonly=True)
+    sub_status = fields.Many2One('contract.sub_status',
+        'Sub Status', states={'required': Bool(Eval('to_remove'))},
+        depends=['to_remove'])
 
     @classmethod
     def view_attributes(cls):

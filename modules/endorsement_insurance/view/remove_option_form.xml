@@ -4,5 +4,5 @@
     <field name="endorsement_part"/>
     <label name="endorsement_definition"/>
     <field name="endorsement_definition"/>
-    <field name="options" no_command="1" mode="tree" colspan="4"/>
+    <field name="options" no_command="1" mode="tree,form" colspan="4"/>
 </form>
