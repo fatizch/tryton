@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <xpath expr="/form/field[@name='main_contract']" position="after">
+        <newline/>
+        <label name="slip_code"/>
+        <field name="slip_code"/>
+        <label name="slip_date"/>
+        <field name="slip_date"/>
+        <label name="invoice_number"/>
+        <field name="invoice_number"/>
+        <label name="invoice_date"/>
+        <field name="invoice_date"/>
+        <label name="noemie_archive_criterion"/>
+        <field name="noemie_archive_criterion"/>
+    </xpath>
+</data>
+

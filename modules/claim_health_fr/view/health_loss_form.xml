@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <xpath expr="/form/field[@name='total_charges']" position="after">
+        <newline/>
+        <label name="act_coefficient"/>
+        <field name="act_coefficient"/>
+        <label name="is_care_access_contract"/>
+        <field name="is_care_access_contract"/>
+        <label name="is_off_care_pathway"/>
+        <field name="is_off_care_pathway"/>
+        <label name="ccam_act_code"/>
+        <field name="ccam_act_code"/>
+        <label name="ss_agreement_price"/>
+        <field name="ss_agreement_price"/>
+        <label name="ss_agreement_rate"/>
+        <field name="ss_agreement_rate"/>
+        <label name="ss_reimbursement_amount"/>
+        <field name="ss_reimbursement_amount"/>
+    </xpath>
+</data>

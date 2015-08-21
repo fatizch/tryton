@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <xpath expr="/tree/field[@name='total_charges']" position="after">
+        <field name="act_coefficient"/>
+        <field name="is_care_access_contract"/>
+        <field name="is_off_care_pathway"/>
+        <field name="ccam_act_code"/>
+        <field name="ss_agreement_price"/>
+        <field name="ss_agreement_rate"/>
+        <field name="ss_reimbursement_amount"/>
+    </xpath>
+</data>
+

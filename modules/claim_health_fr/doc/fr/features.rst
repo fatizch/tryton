@@ -1,0 +1,1 @@
+- **Ajout des champs spécifiques à l'interface avec la sécurité sociale française**
