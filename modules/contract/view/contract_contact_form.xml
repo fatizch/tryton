@@ -3,6 +3,9 @@
     <label name="contract"/>
     <field name="contract"/>
     <newline/>
+    <label name="date"/>
+    <field name="date"/>
+    <newline/>
     <label name="type"/>
     <field name="type"/>
     <label name="party"/>

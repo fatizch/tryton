@@ -735,6 +735,15 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             Date.today())
         return ContractRevision.get_values(contracts, names=names, date=date)
 
+    def get_contact_of_type_at_date(self, type_=None, date=None):
+        if not date:
+            date = utils.today()
+        if type_:
+            contacts = [x for x in self.contacts if x.type.code == type_]
+        else:
+            contacts = self.contacts
+        return utils.get_value_at_date(contacts, date, 'date')
+
     def check_activation_dates(self):
         previous_period = None
         for period in self.activation_history:
@@ -1273,6 +1282,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         for c in self.contacts:
             if not getattr(c, 'address', None):
                 c.address = c.get_default_address_from_party()
+
+    def add_contact_with_address(self, address, date, type_):
+        pool = Pool()
+        Contact = pool.get('contract.contact')
+        ContactType = pool.get('contract.contact.type')
+        contact_type, = ContactType.search([('code', '=',
+                    type_)], limit=1, order=[])
+        self.contacts = self.contacts + (Contact(type=contact_type,
+                party=address.party,
+                date=date,
+                address=address),)
 
     def get_product_subscriber_kind(self, name):
         return self.product.subscriber_kind if self.product else ''

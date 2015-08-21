@@ -32,5 +32,11 @@
             <field name="type">tree</field>
             <field name="name">endorsement_field_list</field>
         </record>
+        <record model="ir.model.method" id="contract_update_contacts_after_endorsement_method">
+            <field name="method_name">update_contacts_after_endorsement</field>
+            <field name="name">Update Contacts After Endorsement</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">999</field>
+        </record>
     </data>
 </tryton>

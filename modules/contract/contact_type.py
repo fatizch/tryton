@@ -22,10 +22,11 @@ class ContactType(model.CoopSQL, model.CoopView):
         return coop_string.slugify(self.name)
 
 
-class ContractContact(model.CoopSQL, model.CoopView):
+class ContractContact(model._RevisionMixin, model.CoopSQL, model.CoopView):
     'Contract Contact'
 
     __name__ = 'contract.contact'
+    _parent_name = 'contract'
 
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
         required=True, select=True)
@@ -44,7 +45,8 @@ class ContractContact(model.CoopSQL, model.CoopView):
     def get_default_address_from_party(self):
         instances = utils.get_domain_instances(self, 'address')
         if len(instances) >= 1:
-            return instances[0]
+            return utils.get_value_at_date(instances, utils.today(),
+                'start_date')
 
     @fields.depends('party')
     def on_change_with_address(self):
@@ -58,3 +60,11 @@ class ContractContact(model.CoopSQL, model.CoopView):
         if self.type:
             return self.type.code in ('subscriber', 'accepting_beneficiary')
         return False
+
+    @staticmethod
+    def revision_columns():
+        return ['type', 'party', 'address']
+
+    @classmethod
+    def get_reverse_field_name(cls):
+        return 'contact'

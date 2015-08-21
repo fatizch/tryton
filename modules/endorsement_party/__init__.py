@@ -22,6 +22,7 @@ def register():
         PartyNameDisplayer,
         ChangePartyName,
         SelectEndorsement,
+        Contract,
         module='endorsement_party', type_='model')
 
     Pool.register(

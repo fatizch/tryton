@@ -2,7 +2,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, utils
 from trytond.modules.endorsement import values_mixin, relation_mixin
 from trytond.model import Workflow
 
@@ -14,6 +14,7 @@ __all__ = [
     'EndorsementParty',
     'EndorsementPartyAddress',
     'Endorsement',
+    'Contract',
     ]
 
 
@@ -80,6 +81,29 @@ class Party:
     @model.CoopView.button_action('endorsement.act_start_endorsement')
     def start_endorsement(cls, parties):
         pass
+
+
+class Contract:
+    __name__ = 'contract'
+
+    def update_contacts_after_endorsement(self, caller=None):
+        # handle new subscriber address added by endorsement
+        generator = caller.endorsement.generated_by
+        party_endorsements = getattr(generator, 'party_endorsements', None)
+        if not party_endorsements:
+            return
+        if party_endorsements:
+            addresses_endorsements = party_endorsements[0].addresses
+        if not addresses_endorsements:
+            return
+        added_address = [x.address for x in addresses_endorsements
+            if x.action == 'add']
+        if not added_address:
+            return
+        added_address = added_address[0]
+        if added_address.party == self.subscriber:
+            self.add_contact_with_address(added_address,
+                added_address.start_date, 'subscriber')
 
 
 class Endorsement:
