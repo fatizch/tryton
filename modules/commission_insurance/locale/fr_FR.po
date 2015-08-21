@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -115,6 +115,14 @@ msgstr "Tiers"
 msgctxt "field:commission.create_invoice.ask,post_invoices:"
 msgid "Post Invoices"
 msgstr "Emettre les bordereaux"
+
+msgctxt "field:commission.invoice.create,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.invoice.post,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:commission.plan,broker_plan:"
 msgid "Broker Plan"
@@ -300,6 +308,14 @@ msgctxt "model:commission.create_agents.parties,name:"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
 
+msgctxt "model:commission.invoice.create,name:"
+msgid "Commission Invoice Creation Batch"
+msgstr "Batch de génération des bordereaux de commission"
+
+msgctxt "model:commission.invoice.post,name:"
+msgid "Post Commission Invoice Batch"
+msgstr "Batch d'émission des bordereaux de commission"
+
 msgctxt "model:commission.plan.lines-offered.option.description,name:"
 msgid "Commission Plan Line - Offered Option Description"
 msgstr "Lien Ligne de plan de commissionnement - Garantie offerte"
@@ -319,6 +335,10 @@ msgstr "Contrats commissionnés"
 msgctxt "model:ir.action,name:act_broker_form"
 msgid "Brokers"
 msgstr "Courtiers"
+
+msgctxt "model:ir.action,name:act_commission_contract_relate_form"
+msgid "Commissions"
+msgstr "Commissions"
 
 msgctxt "model:ir.action,name:act_commission_create_agents"
 msgid "Create Agents"

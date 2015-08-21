@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -531,6 +531,14 @@ msgctxt "field:ir.sequence,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
 
+msgctxt "field:ir.sequence,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:ir.sequence,tags_name:"
+msgid "Tags"
+msgstr "Labels"
+
 msgctxt "field:ir.sequence,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -982,6 +990,10 @@ msgctxt "model:ir.action,name:act_test_case_wizard"
 msgid "Test Case Launcher"
 msgstr "Gestionnaire de jeux d'essai"
 
+msgctxt "model:ir.action,name:act_translation_override"
+msgid "Override Translations"
+msgstr "Surcharger les traductions"
+
 msgctxt "model:ir.action,name:export_fields_selection"
 msgid "Add Fields"
 msgstr "Ajouter des champs"
@@ -1258,6 +1270,10 @@ msgctxt "view:ir.test_case:"
 msgid "Test Case Parameters"
 msgstr "Paramètres des jeu d'essais"
 
+msgctxt "view:ir.translation.override.start:"
+msgid "Document Templates"
+msgstr "Modèles de Lettre"
+
 msgctxt "view:tag-object:"
 msgid "Tagged Object"
 msgstr "Objet avec label"
@@ -1325,3 +1341,11 @@ msgstr "Quitter"
 msgctxt "wizard_button:ir.test_case.run,select_test_cases,execute_test_cases:"
 msgid "Execute Selected"
 msgstr "Exécuter les jeux d'essai sélectionnés"
+
+msgctxt "wizard_button:ir.translation.override,start,edit:"
+msgid "Edit"
+msgstr "Editer"
+
+msgctxt "wizard_button:ir.translation.override,start,end:"
+msgid "Cancel"
+msgstr "Annuler"

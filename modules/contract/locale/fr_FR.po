@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -371,6 +371,10 @@ msgctxt "field:contract.contact,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.contact,is_address_required:"
+msgid "Is Address Required"
+msgstr "Adresse requise?"
+
 msgctxt "field:contract.contact,party:"
 msgid "Party"
 msgstr "Tiers"
@@ -622,6 +626,10 @@ msgstr "Date d'Effet"
 msgctxt "field:contract.option,status:"
 msgid "Status"
 msgstr "Statut"
+
+msgctxt "field:contract.option,sub_status:"
+msgid "Sub Status"
+msgstr "Sous Statut"
 
 msgctxt "field:contract.option,write_date:"
 msgid "Write Date"
@@ -894,6 +902,10 @@ msgctxt "field:party.party,quotes:"
 msgid "Quotes"
 msgstr "Devis"
 
+msgctxt "field:party.party,related_contracts:"
+msgid "Related Contracts"
+msgstr "Contrats liés"
+
 msgctxt "field:party.synthesis.menu.contract,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -958,6 +970,10 @@ msgctxt "model:contract.contact.type,name:"
 msgid "Contact Type"
 msgstr "Type de contact"
 
+msgctxt "model:contract.contact.type,name:subscriber"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
 msgctxt "model:contract.decline.select_reason,name:"
 msgid "Reason selector to decline contract"
 msgstr "Motif pour décliner le contrat"
@@ -1009,6 +1025,10 @@ msgstr "Erreur"
 msgctxt "model:contract.sub_status,name:sub_status_reached_end_date"
 msgid "Reached end date"
 msgstr "Terme atteint"
+
+msgctxt "model:contract.sub_status,name:sub_status_terminated"
+msgid "Terminated"
+msgstr "Terminé"
 
 msgctxt "model:contract.termination.process,name:"
 msgid "Contract end date termination batch"

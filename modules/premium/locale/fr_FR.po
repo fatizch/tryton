@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -637,6 +637,10 @@ msgstr "Relation Produit - Frais"
 msgctxt "model:offered.product.premium_date,name:"
 msgid "Product Premium Dates"
 msgstr "Dates de calcul des primes"
+
+msgctxt "model:res.group,name:group_fee_admin"
+msgid "Fee Administration"
+msgstr "Administration des frais"
 
 msgctxt "model:rule_engine,name:simple_premium_rule"
 msgid "Simple Premium Rule"

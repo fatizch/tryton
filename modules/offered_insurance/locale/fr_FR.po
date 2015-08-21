@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -40,6 +40,13 @@ msgid ""
 msgstr ""
 "La donnée complémentaire risque couvert suivante doit être définie sur le "
 "produit: %s"
+
+msgctxt "error:process:"
+msgid ""
+"The current record (%s) will be deleted, are you sure you want to proceed ?"
+msgstr ""
+"L'enregistrement courant (%s) sera supprimé, êtes-vous certain de vouloir "
+"continuer ?"
 
 msgctxt "field:clause,code:"
 msgid "Code"
@@ -1049,9 +1056,17 @@ msgctxt "field:party.party,is_insurer:"
 msgid "Is Insurer"
 msgstr "Assureur"
 
+msgctxt "field:process,delete_button:"
+msgid "Delete Button Name"
+msgstr "Nom du bouton \"Supprimer\""
+
 msgctxt "field:process,for_products:"
 msgid "Products"
 msgstr "Produits"
+
+msgctxt "field:process,hold_button:"
+msgid "Hold Button Name"
+msgstr "Nom du bouton \"Suspendre\""
 
 msgctxt "field:process-offered.product,create_date:"
 msgid "Create Date"
@@ -1144,6 +1159,22 @@ msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
 msgctxt "help:offered.coverage_amount.rule,amounts:"
 msgid "Specify amounts separated by ;"
 msgstr "Spécifier les montants séparés par des ;"
+
+msgctxt "help:process,delete_button:"
+msgid ""
+"If not null, a button will be added on the view with the given name, which "
+"will allow to delete the current task"
+msgstr ""
+"Si renseigné, un bouton avec le nom donné sera ajouté à la vue, ce qui "
+"permettra de supprimer la tâche"
+
+msgctxt "help:process,hold_button:"
+msgid ""
+"If not null, a button will be added on the view with the given name, which "
+"will allow to set the current task on hold"
+msgstr ""
+"Si renseigné, un bouton avec le nom donné sera ajouté à la vue, ce qui "
+"permettra de mettre la tâche en suspens"
 
 msgctxt "model:clause,name:"
 msgid "Clause"

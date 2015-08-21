@@ -86,14 +86,6 @@ msgctxt "model:contract.contact.type,name:accepting_benef"
 msgid "Accepting Beneficiary"
 msgstr "Bénéficiaire acceptant"
 
-msgctxt "model:contract.contact.type,name:covered_party"
-msgid "Covered Party"
-msgstr "Assuré"
-
-msgctxt "model:contract.contact.type,name:subscriber"
-msgid "Subscriber"
-msgstr "Souscripteur"
-
 msgctxt "model:contract.option.beneficiary,name:"
 msgid "Contract Beneficiary"
 msgstr "Bénéficiaire"

@@ -42,6 +42,10 @@ msgctxt "field:contract.premium.amount,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:contract.premium.amount,covered_element:"
+msgid "Covered element"
+msgstr "Elément couvert"
+
 msgctxt "field:contract.premium.amount,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -61,6 +65,10 @@ msgstr "Fin"
 msgctxt "field:contract.premium.amount,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract.premium.amount,loan:"
+msgid "Loan"
+msgstr "Prêt"
 
 msgctxt "field:contract.premium.amount,period_end:"
 msgid "Period End"
@@ -85,6 +93,10 @@ msgstr "Début"
 msgctxt "field:contract.premium.amount,tax_amount:"
 msgid "Tax Amount"
 msgstr "Montant de la taxe"
+
+msgctxt "field:contract.premium.amount,type_:"
+msgid "Type"
+msgstr "Type"
 
 msgctxt "field:contract.premium.amount,write_date:"
 msgid "Write Date"

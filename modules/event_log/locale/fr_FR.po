@@ -26,6 +26,10 @@ msgctxt "field:event.log,description:"
 msgid "Description"
 msgstr "Description"
 
+msgctxt "field:event.log,description_str:"
+msgid "Description"
+msgstr "Description"
+
 msgctxt "field:event.log,event_type:"
 msgid "Event Type"
 msgstr "Type d'événement"

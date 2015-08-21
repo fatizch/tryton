@@ -189,6 +189,10 @@ msgctxt "field:endorsement.definition,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
 
+msgctxt "field:endorsement.definition,is_multi_instance:"
+msgid "Handles Multiple Instances"
+msgstr "Gère plusieurs instances."
+
 msgctxt "field:endorsement.loan,applied_on:"
 msgid "Applied On"
 msgstr "Appliqué le"

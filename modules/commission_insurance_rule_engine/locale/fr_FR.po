@@ -46,6 +46,10 @@ msgctxt "field:commission.agent,extra_data:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
+msgctxt "field:commission.agent,extra_data_summary:"
+msgid "Extra Data Summary"
+msgstr "Résumé des données complémentaires"
+
 msgctxt "field:commission.plan,extra_data_def:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"

@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -82,6 +82,10 @@ msgctxt "field:account.invoice.line,coverage_start:"
 msgid "Start Date"
 msgstr "Date d'Effet"
 
+msgctxt "field:account.invoice.line,covered_element:"
+msgid "Covered element"
+msgstr "Element couvert"
+
 msgctxt "field:account.invoice.line,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
@@ -93,6 +97,10 @@ msgstr "Détail"
 msgctxt "field:account.invoice.line,details:"
 msgid "Details"
 msgstr "Détails"
+
+msgctxt "field:account.invoice.line,type_:"
+msgid "Type"
+msgstr "Type"
 
 msgctxt "field:account.invoice.line.detail,contract:"
 msgid "Contract"
@@ -209,6 +217,14 @@ msgstr "Identifiant XML"
 msgctxt "field:account.move.line,contract:"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "field:account.reconcile.show,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:account.reconcile.show,remaining_repartition_method:"
+msgid "Remaining Repartition Method"
+msgstr "Répartition du reste"
 
 msgctxt "field:account.tax.description,tax:"
 msgid "Tax"
@@ -846,14 +862,6 @@ msgctxt "field:party.synthesis.menu.invoice,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:account.reconcile.show,remaining_repartition_method:"
-msgid "Remaining Repartition Method"
-msgstr "Répartition du reste"
-
-msgctxt "field:account.reconcile.show,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
 msgctxt "help:offered.billing_mode,allowed_direct_debit_days:"
 msgid ""
 "Days of the month allowed for direct debit payment separated by comma.\n"
@@ -1020,6 +1028,18 @@ msgctxt "selection:account.move,kind:"
 msgid "Invoice Posting"
 msgstr "Emission de quittance"
 
+msgctxt "selection:account.reconcile.show,remaining_repartition_method:"
+msgid "Set on Contract"
+msgstr "Affecter au contrat"
+
+msgctxt "selection:account.reconcile.show,remaining_repartition_method:"
+msgid "Set on Party"
+msgstr "Affecter au tiers"
+
+msgctxt "selection:account.reconcile.show,remaining_repartition_method:"
+msgid "Write Off"
+msgstr "Pertes et Profits"
+
 msgctxt "selection:contract.premium,frequency:"
 msgid "Half-yearly"
 msgstr "Semestriel"
@@ -1115,18 +1135,6 @@ msgstr "Octobre"
 msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "September"
 msgstr "Septembre"
-
-msgctxt "selection:account.reconcile.show,remaining_repartition_method:"
-msgid "Write Off"
-msgstr "Pertes et Profits"
-
-msgctxt "selection:account.reconcile.show,remaining_repartition_method:"
-msgid "Set on Party"
-msgstr "Affecter au tiers"
-
-msgctxt "selection:account.reconcile.show,remaining_repartition_method:"
-msgid "Set on Contract"
-msgstr "Affecter au contrat"
 
 msgctxt "view:account.invoice.line.detail:"
 msgid "Invoice Line Detail"

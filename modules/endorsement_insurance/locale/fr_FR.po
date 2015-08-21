@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -234,6 +234,11 @@ msgctxt ""
 "field:contract.covered_element.option.remove.option_selector,start_date:"
 msgid "Start Date"
 msgstr "Date d'Effet"
+
+msgctxt ""
+"field:contract.covered_element.option.remove.option_selector,sub_status:"
+msgid "Sub Status"
+msgstr "Sous Statut"
 
 msgctxt ""
 "field:contract.covered_element.option.remove.option_selector,to_remove:"
@@ -826,6 +831,10 @@ msgstr "Souscrire une garantie"
 msgctxt "view:contract.covered_element.new:"
 msgid "New Covered Element"
 msgstr "Nouvel élément couvert"
+
+msgctxt "view:contract.covered_element.option.remove.option_selector:"
+msgid "Option"
+msgstr "Option"
 
 msgctxt "view:contract.covered_element.option.remove.option_selector:"
 msgid "Options"

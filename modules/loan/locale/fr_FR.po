@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -29,15 +29,15 @@ msgstr ""
 
 msgctxt "error:rule_engine.runtime:"
 msgid "Field '%s' of model '%s' is not iterable"
-msgstr ""
+msgstr "Le champ '%s' du modele '%s' n'est pas une liste"
 
 msgctxt "error:rule_engine.runtime:"
 msgid "Key '%s' is not available in execution context"
-msgstr ""
+msgstr "La donnee '%s' n'est pas disponible dans le contexte d'execution"
 
 msgctxt "error:rule_engine.runtime:"
 msgid "You must return raw value fields (bool, string, integer, etc)"
-msgstr ""
+msgstr "Vous devez retourner une valeur simple (booleen, texte, entier, etc)"
 
 msgctxt "field:contract,is_loan:"
 msgid "Is Loan"
@@ -831,7 +831,7 @@ msgstr "Trimestre"
 
 msgctxt "selection:loan.increment,payment_frequency:"
 msgid "Week"
-msgstr ""
+msgstr "Semaine"
 
 msgctxt "selection:loan.increment,payment_frequency:"
 msgid "Year"

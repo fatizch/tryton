@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -581,6 +581,10 @@ msgctxt "field:contract.option.extra_premium,calculation_kind:"
 msgid "Calculation Kind"
 msgstr "Type de calcul"
 
+msgctxt "field:contract.option.extra_premium,covered_element:"
+msgid "Covered element"
+msgstr "Elément couvert"
+
 msgctxt "field:contract.option.extra_premium,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -668,6 +672,10 @@ msgstr "Date de Début"
 msgctxt "field:contract.option.extra_premium,time_limited:"
 msgid "Time Limited"
 msgstr "Durée Limitée"
+
+msgctxt "field:contract.option.extra_premium,value_as_string:"
+msgid "Value"
+msgstr "Valeur"
 
 msgctxt "field:contract.option.extra_premium,write_date:"
 msgid "Write Date"
@@ -801,6 +809,10 @@ msgstr "Contrat"
 msgctxt "model:contract.address,name:"
 msgid "Contract Address"
 msgstr "Adresse"
+
+msgctxt "model:contract.contact.type,name:covered_party"
+msgid "Covered Party"
+msgstr "Assuré"
 
 msgctxt "model:contract.covered_element,name:"
 msgid "Covered Element"
