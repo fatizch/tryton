@@ -91,6 +91,11 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
             return self.code
         return coop_string.slugify(self.name)
 
+    @classmethod
+    def _export_light(cls):
+        return super(CommercialProduct, cls)._export_light() | \
+            {'dist_networks', 'product'}
+
 
 class DistributionNetworkComProductRelation(model.CoopSQL):
     'Relation Distribution Network - Commercial Product'

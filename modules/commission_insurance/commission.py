@@ -242,6 +242,9 @@ class PlanLines(export.ExportImportMixin):
     def _export_light(cls):
         return (super(PlanLines, cls)._export_light() | set(['options']))
 
+    def get_func_key(self, name):
+        return self.options_extract
+
 
 class PlanLinesCoverageRelation(model.CoopSQL, model.CoopView):
     'Commission Plan Line - Offered Option Description'

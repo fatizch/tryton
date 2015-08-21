@@ -78,6 +78,12 @@ class DocumentRule(RuleMixin, model.CoopSQL, model.CoopView):
             self.raise_user_error('wrong_documents_rule')
         return list(set(documents_in_rules + list(self.documents)))
 
+    def get_func_key(self, name):
+        if self.product:
+            return getattr(self.product, self.product._func_key)
+        elif self.option:
+            return getattr(self.option, self.option._func_key)
+
 
 class RuleDocumentDescriptionRelation(model.CoopSQL):
     'Rule to Document Description Relation'

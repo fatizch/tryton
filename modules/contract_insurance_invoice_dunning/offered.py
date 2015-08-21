@@ -13,3 +13,7 @@ class Product:
 
     dunning_procedure = fields.Many2One('account.dunning.procedure',
         'Dunning Procedure', ondelete='RESTRICT')
+
+    @classmethod
+    def _export_light(cls):
+        return super(Product, cls)._export_light() | {'dunning_procedure'}

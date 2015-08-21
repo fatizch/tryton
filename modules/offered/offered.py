@@ -346,6 +346,7 @@ class Product(model.CoopSQL, Offered):
         result = super(Product, cls)._export_skips()
         # ordered_coverages should be enough
         result.add('coverages')
+        result.add('report_templates')
         return result
 
     @classmethod
