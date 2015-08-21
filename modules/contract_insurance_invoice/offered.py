@@ -1,6 +1,7 @@
 import datetime
 from decimal import Decimal
 from dateutil.rrule import rrule, YEARLY, MONTHLY
+from dateutil.relativedelta import relativedelta
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
@@ -8,7 +9,7 @@ from trytond.model import Unique
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model, export
+from trytond.modules.cog_utils import fields, model, export, utils
 
 from .contract import FREQUENCIES
 
@@ -291,6 +292,10 @@ class Product:
 
     def get_change_billing_modes_order(self, name):
         return False
+
+    def get_non_periodic_payment_date(self, contract):
+        offset = self.days_offset_for_subscription_payments
+        return utils.today() + relativedelta(days=offset or 0)
 
 
 class ProductBillingModeRelation(model.CoopSQL, model.CoopView):

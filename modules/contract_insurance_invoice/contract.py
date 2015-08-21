@@ -327,6 +327,9 @@ class Contract:
         super(Contract, self).finalize_contract()
         self.invoice_non_periodic_premiums('at_contract_signature')
 
+    def get_non_periodic_payment_date(self):
+        return self.product.get_non_periodic_payment_date(self)
+
     @dualmethod
     def invoice_non_periodic_premiums(cls, contracts, frequency):
         if not contracts:
@@ -348,9 +351,7 @@ class Contract:
                 p.frequency == frequency]
             if not premiums:
                 continue
-            payment_date = utils.today() + relativedelta(
-                days=contract.product.days_offset_for_subscription_payments
-                or 0)
+            payment_date = contract.get_non_periodic_payment_date()
             __, __, billing_info = \
                 contract._get_invoice_rrule_and_billing_information(
                     payment_date)
