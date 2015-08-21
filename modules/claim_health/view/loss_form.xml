@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='extra_data']" position="before">
+        <field name="health_loss"/>
+        <newline/>
+    </xpath>
+</data>
