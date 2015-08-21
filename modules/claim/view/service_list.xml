@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<data>
-    <xpath expr="/tree" position="inside">
-        <field name="benefit"/>
-    </xpath>
-</data>
+<tree string="Claim Service">
+    <field name="status"/>
+    <field name="contract"/>
+    <field name="benefit"/>
+</tree>

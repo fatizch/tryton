@@ -5,12 +5,12 @@ from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'ContractService',
+    'ClaimService',
     ]
 
 
-class ContractService:
-    __name__ = 'contract.service'
+class ClaimService:
+    __name__ = 'claim.service'
 
     is_loan = fields.Function(
         fields.Boolean('Is loan', states={'invisible': True}),
@@ -20,6 +20,10 @@ class ContractService:
         states={'invisible': ~Eval('is_loan')},
         depends=['contract', 'is_loan'])
 
+    @classmethod
+    def _export_light(cls):
+        return super(ClaimService, cls)._export_light() | {'loan'}
+
     def get_loan(self):
         return self.loan
 
@@ -27,12 +31,13 @@ class ContractService:
         return self.option.is_loan
 
     def init_dict_for_rule_engine(self, cur_dict):
-        super(ContractService, self).init_dict_for_rule_engine(
+        super(ClaimService, self).init_dict_for_rule_engine(
             cur_dict)
-        if not self.is_loan:
-            return
-        cur_dict['loan'] = self.loan
-        if self.loan:
-            cur_dict['payment'] = self.loan.get_payment(cur_dict['date'])
-            cur_dict['share'] = self.loan.get_loan_share(
-                self.loss.covered_person, cur_dict['date'])
+        if self.loss.loss_desc.loss_kind == 'life':
+            if not self.is_loan:
+                return
+            cur_dict['loan'] = self.loan
+            if self.loan:
+                cur_dict['payment'] = self.loan.get_payment(cur_dict['date'])
+                cur_dict['share'] = self.loan.get_loan_share(
+                    self.loss.covered_person, cur_dict['date'])

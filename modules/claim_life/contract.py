@@ -13,12 +13,9 @@ class ContractOption:
 
     def is_item_covered(self, loss):
         res = super(ContractOption, self).is_item_covered(loss)
-        if not res or not hasattr(loss, 'covered_person'):
+        if not loss.get_covered_person() or not self.covered_element:
             return res
-        if not utils.is_effective_at_date(self.covered_element,
-                loss.start_date):
-            return False
-        if self.covered_element.is_party_covered(loss.covered_person,
-                loss.start_date):
-            return True
-        return False
+        return res and utils.is_effective_at_date(
+            self.covered_element, loss.get_date()) and \
+            self.covered_element.is_party_covered(
+                loss.get_covered_person(), loss.get_date())

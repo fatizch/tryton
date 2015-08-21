@@ -216,7 +216,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
         res = rule_result.result
         if not rule_result.has_errors:
             res = self.get_revaluated_amount(res, args['date'])
-        return res, rule_result.print_errors()
+        return res
 
     def get_simple_result(self, args):
         if self.amount_kind == 'amount':
@@ -301,9 +301,9 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             return [res], errs
         res['nb_of_unit'], res['unit'] = self.get_unit_per_period(
             res['start_date'], res['end_date'], args)
-        res['amount_per_unit'], re_errs = self.give_me_result(args)
+        res['amount_per_unit'] = self.give_me_result(args)
         res['beneficiary_kind'] = self.offered.beneficiary_kind
-        return [res], errs + re_errs
+        return [res], errs
 
     def get_evolving_indemnifications_for_period(self, args):
         errs = []
@@ -323,9 +323,10 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
     def get_indemnification_for_capital(self, args):
         res = {}
         res['nb_of_unit'] = 1
-        res['amount_per_unit'], errs = self.give_me_result(args)
+        res['amount_per_unit'] = self.give_me_result(args)
         res['beneficiary_kind'] = self.offered.beneficiary_kind
-        return [res], errs
+        res['start_date'] = args['date']
+        return [res], []
 
     def give_me_benefit(self, args):
         if self.offered.indemnification_kind != 'capital':

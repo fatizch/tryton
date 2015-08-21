@@ -14,7 +14,7 @@ __all__ = [
 class Party:
     __name__ = 'party.party'
 
-    claims = fields.One2Many('claim', 'claimant', 'Claims')
+    claims = fields.One2Many('claim', 'claimant', 'Claims', readonly=True)
     number_of_claims = fields.Function(
         fields.Integer('Number Of Claims', states={'invisible': True}),
         'on_change_with_number_of_claims')
@@ -30,6 +30,10 @@ class Party:
                     'invisible': Less(Eval('number_of_claims', 0), 1, True),
                     },
                 })
+
+    @classmethod
+    def _export_light(cls):
+        return super(Party, cls)._export_light() | {'claims'}
 
     @fields.depends('claims')
     def on_change_with_number_of_claims(self, name=None):

@@ -32,15 +32,5 @@
             <field name="fct_args">Code de la depense</field>
             <field name="parent" ref="dossier_sinistre"/>
         </record>
-        <record model="rule_engine.function" id="donnee_compl_prestation">
-            <field name="translated_technical_name">donnee_compl_prestation</field>
-            <field name="description">Donnée Complémentaire Prestation</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_service_extra_data</field>
-            <field name="fct_args">Code donnee complementaire</field>
-            <field name="parent" ref="dossier_sinistre"/>
-        </record>
     </data>
 </tryton>

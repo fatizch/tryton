@@ -9,6 +9,9 @@
     <label name="with_end_date"/>
     <field name="with_end_date"/>
     <newline/>
+    <label name="loss_kind"/>
+    <field name="loss_kind"/>
+    <newline/>
     <notebook>
         <page string="Events" id="events">
             <field name="event_descs"/>

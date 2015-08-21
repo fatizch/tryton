@@ -1,10 +1,10 @@
 from trytond.pool import Pool
-from .contract import *
+from .service import *
 from .benefit import *
 
 
 def register():
     Pool.register(
-        ContractService,
+        ClaimService,
         BenefitRule,
         module='claim_credit', type_='model')

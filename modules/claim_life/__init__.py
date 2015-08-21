@@ -2,16 +2,22 @@ from trytond.pool import Pool
 from .claim import *
 from .contract import *
 from .test_case import *
+from .benefit import *
 
 
 def register():
     Pool.register(
-        # from life_contract
+        LossDescription,
         ContractOption,
-        DeliveredService,
-        # from life_claim
+        ClaimService,
         Loss,
-        ClaimIndemnification,
-        # from test_module
+        Claim,
+        Indemnification,
+        IndemnificationDetail,
+        ClaimIndemnificationValidateDisplay,
+        ClaimIndemnificationValidateSelect,
         TestCaseModel,
         module='claim_life', type_='model')
+    Pool.register(
+        ClaimIndemnificationValidate,
+        module='claim_life', type_='wizard')

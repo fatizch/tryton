@@ -26,19 +26,10 @@ class Claim(CogProcessFramework):
     doc_received = fields.Function(
         fields.Boolean('All Documents Received', depends=['documents']),
         'on_change_with_doc_received')
-    indemnifications = fields.Function(
-        fields.One2Many('claim.indemnification', None, 'Indemnifications'),
-        'get_indemnifications', 'set_indemnifications')
-    indemnifications_consult = fields.Function(
-        fields.One2Many('claim.indemnification', None, 'Indemnifications'),
-        'get_indemnifications')
     contact_history = fields.Function(
         fields.One2Many('party.interaction', '', 'History',
             depends=['claimant']),
         'on_change_with_contact_history')
-    is_pending_indemnification = fields.Function(
-        fields.Boolean('Pending Indemnification', states={'invisible': True}),
-        'get_is_pending_indemnification')
 
     @fields.depends('claimant')
     def on_change_with_contact_history(self, name=None):
@@ -46,15 +37,7 @@ class Claim(CogProcessFramework):
             return []
         ContactHistory = Pool().get('party.interaction')
         return [x.id for x in ContactHistory.search(
-            [('party', '=', self.claimant)])]
-
-    def calculate_indemnification(self):
-        for loss in self.losses:
-            for service in loss.services:
-                if service.status == 'calculating':
-                    service.calculate()
-                    service.save()
-        return True
+                [('party', '=', self.claimant)])]
 
     def init_declaration_document_request(self):
         DocRequest = Pool().get('document.request')
@@ -84,7 +67,7 @@ class Claim(CogProcessFramework):
                         'contract': contract,
                         'loss': loss,
                         'claim': self,
-                        'date': loss.start_date,
+                        'date': loss.get_date(),
                         'appliable_conditions_date':
                         contract.appliable_conditions_date,
                     })
@@ -95,7 +78,6 @@ class Claim(CogProcessFramework):
                 documents.extend([
                     (doc_desc, delivered) for doc_desc in benefit_docs])
         good_req.add_documents(utils.today(), documents)
-        # good_req.clean_extras(documents)
         return True, ()
 
     @fields.depends('documents')
@@ -107,34 +89,10 @@ class Claim(CogProcessFramework):
                 return False
         return True
 
-    def get_indemnifications(self, name=None):
-        res = []
-        for loss in self.losses:
-            for service in loss.services:
-                for indemnification in service.indemnifications:
-                    res.append(indemnification.id)
-        return res
-
-    @classmethod
-    def set_indemnifications(cls, instances, name, vals):
-        Indemnification = Pool().get('claim.indemnification')
-        for val in vals:
-            if not val[0] == 'write':
-                continue
-            Indemnification.write(Indemnification.browse(val[1]), val[2])
-
     def reject_and_close_claim(self):
         self.status = 'closed'
         self.end_date = utils.today()
         return True
-
-    def get_is_pending_indemnification(self, name):
-        for loss in self.losses:
-            for del_ser in loss.services:
-                for indemn in del_ser.indemnifications:
-                    if indemn.status == 'calculated':
-                        return True
-        return False
 
 
 class Loss:
@@ -146,7 +104,7 @@ class Loss:
         fields.Many2One('benefit', 'Benefit',
             domain=[('id', 'in', Eval('benefits'))],
             depends=['benefits']),
-        'get_benefit_to_deliver', 'set_void')
+        'get_benefit_to_deliver', 'setter_void')
     benefits = fields.Function(
         fields.One2Many('benefit', None, 'Benefits'),
         'on_change_with_benefits')
@@ -159,7 +117,7 @@ class Loss:
             contracts = [self.claim.main_contract]
         else:
             contracts = self.claim.get_possible_contracts(
-                at_date=self.start_date)
+                at_date=self.get_date())
         for contract in contracts:
             for covered_element in contract.covered_elements:
                 for option in covered_element.options:
@@ -168,7 +126,7 @@ class Loss:
                         res[option.id] = benefits
         return res
 
-    @fields.depends('loss_desc', 'event_desc', 'start_date', 'claim')
+    @fields.depends('loss_desc', 'event_desc', 'claim')
     def on_change_with_benefits(self, name=None):
         res = []
         for x in self.get_possible_benefits().values():
@@ -180,15 +138,11 @@ class Loss:
                 and self.services[0].status == 'calculating'):
             return self.services[0].benefit.id
 
-    @classmethod
-    def set_void(cls, instances, name, vals):
-        pass
-
-    @fields.depends('benefit_to_deliver', 'services', 'claim', 'start_date',
-        'loss_desc', 'event_desc')
+    @fields.depends('benefit_to_deliver', 'services', 'claim', 'loss_desc',
+        'event_desc')
     def on_change_benefit_to_deliver(self):
         pool = Pool()
-        Service = pool.get('contract.service')
+        Service = pool.get('claim.service')
         if not self.services:
             self.services = [Service(status='calculating')]
         elif not((len(self.services) == 1
@@ -204,7 +158,7 @@ class Loss:
         if self.claim.main_contract:
             contract = self.claim.main_contract
         else:
-            contracts = self.claim.get_possible_contracts(self.start_date)
+            contracts = self.claim.get_possible_contracts(self.get_date())
             if len(contracts) == 1:
                 contract = contracts[0]
         if contract:

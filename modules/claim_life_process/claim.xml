@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="loss_indemnification_view_form">
+            <field name="model">claim.loss</field>
+            <field name="type">form</field>
+            <field name="priority" eval="40"/>
+            <field name="name">loss_indemnification_form</field>
+        </record>
+    </data>
+</tryton>

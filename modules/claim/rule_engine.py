@@ -20,11 +20,6 @@ class RuleEngineRuntime:
 
     @classmethod
     @check_args('service')
-    def _re_service_extra_data(cls, args, data_name):
-        cls.append_error(args, 'deprecated_method')
-
-    @classmethod
-    @check_args('service')
     def _re_service_expense(cls, args, expense_code):
         del_service = args['service']
         return del_service.get_expense(expense_code, args['currency'])

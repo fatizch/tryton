@@ -3,14 +3,15 @@ from trytond.pyson import If, Eval, Bool
 from trytond.modules.cog_utils import model, fields, coop_string
 
 __all__ = [
+    'ServiceMixin',
     'ContractService',
     ]
 
 
-class ContractService(model.CoopView, model.CoopSQL):
-    'Contract Service'
+class ServiceMixin(model.CoopView):
+    'Service Mixin'
 
-    __name__ = 'contract.service'
+    __name__ = 'contract.service_mixin'
 
     status = fields.Selection([
             ('calculating', 'Calculating'),
@@ -37,7 +38,7 @@ class ContractService(model.CoopView, model.CoopSQL):
         if self.option:
             res = self.option.get_rec_name(name)
         else:
-            res = super(ContractService, self).get_rec_name(name)
+            res = super(ServiceMixin, self).get_rec_name(name)
         if self.status:
             res += ' [%s]' % coop_string.translate_value(self, 'status')
         return res
@@ -51,3 +52,12 @@ class ContractService(model.CoopView, model.CoopSQL):
 
     def init_dict_for_rule_engine(self, cur_dict):
         self.option.init_dict_for_rule_engine(cur_dict)
+
+    def calculate(self):
+        raise NotImplementedError
+
+
+class ContractService(ServiceMixin, model.CoopSQL):
+    'Contract Service'
+
+    __name__ = 'contract.service'

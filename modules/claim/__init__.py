@@ -13,11 +13,7 @@ def register():
         # From Claim
         Claim,
         Loss,
-        DeliveredService,
-        Indemnification,
-        IndemnificationDetail,
-        ClaimIndemnificationValidateDisplay,
-        ClaimIndemnificationValidateSelect,
+        ClaimService,
         # From Document
         Document,
         DocumentRequest,
@@ -35,7 +31,3 @@ def register():
         # from test_case
         TestCaseModel,
         module='claim', type_='model')
-
-    Pool.register(
-        ClaimIndemnificationValidate,
-        module='claim', type_='wizard')

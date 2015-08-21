@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<data>
-    <xpath expr="/form/field[@name='expenses']" position="before">
-        <label name="loss"/>
-        <field name="loss"/>
-        <newline/>
-        <label name="benefit"/>
-        <field name="benefit" widget="selection"/>
-        <newline/>
-        <field name="extra_data" colspan="2" no_command="1"/>
-    </xpath>
-    <xpath expr="/form" position="inside">
-        <field name="indemnifications" colspan="4"/>
-    </xpath>
-</data>
+<form string="Claim Service">
+    <label name="status"/>
+    <field name="status"/>
+    <label name="func_error"/>
+    <field name="func_error"/>
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="option"/>
+    <field name="option" widget="selection"/>
+    <label name="loss"/>
+    <field name="loss"/>
+    <newline/>
+    <label name="benefit"/>
+    <field name="benefit" widget="selection"/>
+    <newline/>
+    <field name="extra_data" colspan="2" no_command="1"/>
+</form>

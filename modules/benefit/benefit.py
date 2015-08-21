@@ -40,6 +40,7 @@ class EventDescription(model.CoopSQL, model.CoopView):
     'Event Description'
 
     __name__ = 'benefit.event.description'
+    _func_key = 'code'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
@@ -50,9 +51,24 @@ class EventDescription(model.CoopSQL, model.CoopView):
         ondelete='RESTRICT')
 
     @classmethod
+    def __setup__(cls):
+        super(EventDescription, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_unique', Unique(t, t.code), 'The code must be unique'),
+            ]
+
+    @classmethod
     def _export_light(cls):
-        return (super(EventDescription, cls)._export_light() |
-            set(['loss_descs']))
+        return super(EventDescription, cls)._export_light() | {'company'}
+
+    @classmethod
+    def _export_skips(cls):
+        return super(EventDescription, cls)._export_skips() | {'loss_descs'}
+
+    @classmethod
+    def is_master_object(cls):
+        return True
 
     @classmethod
     def default_company(cls):
@@ -69,6 +85,7 @@ class LossDescription(model.CoopSQL, model.CoopView):
     'Loss Description'
 
     __name__ = 'benefit.loss.description'
+    _func_key = 'code'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
@@ -88,16 +105,37 @@ class LossDescription(model.CoopSQL, model.CoopView):
         'Documents')
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
+    loss_kind = fields.Selection([('generic', 'Generic')], 'Loss Kind')
+
+    @classmethod
+    def __setup__(cls):
+        super(LossDescription, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_unique', Unique(t, t.code), 'The code must be unique'),
+            ]
+
+    @classmethod
+    def default_loss_kind(cls):
+        return 'generic'
+
+    @classmethod
+    def is_master_object(cls):
+        return True
+
+    @classmethod
+    def _export_light(cls):
+        return super(LossDescription, cls)._export_light() | {'company'}
+
+    @classmethod
+    def default_company(cls):
+        return Transaction().context.get('company') or None
 
     def get_documents(self):
         if not (hasattr(self, 'documents') and self.documents):
             return []
 
         return self.documents
-
-    @classmethod
-    def default_company(cls):
-        return Transaction().context.get('company') or None
 
 
 class LossDescriptionDocumentDescriptionRelation(model.CoopSQL):
@@ -137,6 +175,7 @@ class Benefit(model.CoopSQL, offered.Offered):
     'Benefit'
 
     __name__ = 'benefit'
+    _func_key = 'code'
 
     benefit_rules = fields.One2Many('benefit.rule', 'offered', 'Benefit Rules',
         delete_missing=True)
@@ -175,6 +214,10 @@ class Benefit(model.CoopSQL, offered.Offered):
     def default_indemnification_kind():
         return 'capital'
 
+    @classmethod
+    def _export_light(cls):
+        return super(Benefit, cls)._export_light() | {'company'}
+
     def give_me_indemnification(self, args):
         res = {}
         errs = []
@@ -207,6 +250,24 @@ class Benefit(model.CoopSQL, offered.Offered):
                 sub_args['start_date'] = coop_date.add_day(
                     indemn_dict['end_date'], 1)
         return res, errs
+
+    def give_me_delivered_amount(self, args):
+        res = {}
+        errs = []
+        coverage = args['coverage']
+        sub_args = args.copy()
+        try:
+            amount_dicts, amount_errs = coverage.get_result('benefit',
+                sub_args, 'benefit')
+        except offered.NonExistingRuleKindException:
+            try:
+                amount_dicts, amount_errs = self.get_result('benefit',
+                    sub_args, 'benefit')
+                res['benefit'] = amount_dicts
+                errs += amount_errs
+            except offered.NonExistingRuleKindException:
+                pass
+        return amount_dicts, amount_errs
 
     @classmethod
     def get_beneficiary_kind(cls):
