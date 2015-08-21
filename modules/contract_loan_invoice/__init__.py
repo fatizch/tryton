@@ -22,6 +22,7 @@ def register():
         ProductPremiumDate,
         Product,
         InvoiceLineDetail,
+        InvoiceLine,
         module='contract_loan_invoice', type_='model')
 
     Pool.register(

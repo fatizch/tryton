@@ -5,6 +5,7 @@ from trytond.modules.cog_utils import fields
 __metaclass__ = PoolMeta
 __all__ = [
     'InvoiceLineDetail',
+    'InvoiceLine'
     ]
 
 
@@ -20,3 +21,17 @@ class InvoiceLineDetail:
         if premium:
             new_detail.loan = getattr(premium, 'loan', None)
         return new_detail
+
+
+class InvoiceLine:
+    __name__ = 'account.invoice.line'
+
+    loan = fields.Function(
+        fields.Many2One('loan', 'Loan'),
+        'get_loan')
+
+    def get_loan(self, name=None):
+        if self.detail and self.detail.premium:
+            loan = getattr(self.detail.premium, 'loan', None)
+            if loan:
+                return loan.id

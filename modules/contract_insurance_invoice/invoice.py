@@ -355,9 +355,6 @@ class InvoiceLine:
     type_ = fields.Function(
         fields.Many2One('ir.model', 'Type'),
         'get_type')
-    loan = fields.Function(
-        fields.Many2One('loan', 'Loan'),
-        'get_loan')
 
     def get_currency_symbol(self, name):
         return self.currency.symbol if self.currency else ''
@@ -390,12 +387,6 @@ class InvoiceLine:
                 'covered_element', None)
             if covered_element:
                 return covered_element.id
-
-    def get_loan(self, name=None):
-        if self.detail and self.detail.premium:
-            loan = getattr(self.detail.premium, 'loan', None)
-            if loan:
-                return loan.id
 
     @property
     def origin_name(self):
