@@ -22,6 +22,7 @@ class Renew:
             contracts = list(contracts)
             with Transaction().set_context(
                     client_defined_date=new_start_date):
+                contracts = Contract.browse([x.id for x in contracts])
                 Contract.calculate_prices(contracts, start=new_start_date)
                 for contract in contracts:
                     assert contract.start_date == new_start_date

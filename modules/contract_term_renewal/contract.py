@@ -219,11 +219,6 @@ class Renew(model.CoopWizard):
             contracts = list(contracts)
             with Transaction().set_context(
                     client_defined_date=new_start_date):
-                # force reloading of function fields for contract dates
-                assert all([c.end_date == c.activation_history[-1].end_date
-                        for c in contracts]) is True
-                assert all([c.start_date == new_start_date
-                        for c in contracts]) is True
                 Contract.produce_reports(contracts, 'renewal')
 
         return renewed_contracts

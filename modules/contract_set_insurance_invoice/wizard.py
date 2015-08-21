@@ -36,7 +36,5 @@ class Renew:
                     contract_set.contracts[0].activation_history[-1].start_date
             with Transaction().set_context(
                     client_defined_date=new_start_date):
-                assert all([c.start_date ==
-                    new_start_date for c in contract_set.contracts]) is True
                 contract_set.produce_reports([contract_set], 'renewal')
         return renewed_contracts
