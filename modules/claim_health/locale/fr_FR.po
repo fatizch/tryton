@@ -1,0 +1,87 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:claim,quote_date:"
+msgid "Quote Date"
+msgstr "Date du devis"
+
+msgctxt "field:claim,quote_validity_end_date:"
+msgid "Quote Validity End Date"
+msgstr "Date de fin de validité du devis"
+
+msgctxt "field:claim.loss,health_loss:"
+msgid "Health Loss"
+msgstr "Acte santé"
+
+msgctxt "field:claim.loss,loss_kind:"
+msgid "Loss Kind"
+msgstr "Type de préjudice"
+
+msgctxt "field:claim.loss.health,act_date:"
+msgid "Date of Medical Act"
+msgstr "Date de l'acte médical"
+
+msgctxt "field:claim.loss.health,act_description:"
+msgid "Medical Act Description"
+msgstr "Description de l'acte médical"
+
+msgctxt "field:claim.loss.health,act_end_date:"
+msgid "End Date of Medical Act"
+msgstr "Date de fin de l'acte médical"
+
+msgctxt "field:claim.loss.health,covered_person:"
+msgid "Covered Person"
+msgstr "Personne couverte"
+
+msgctxt "field:claim.loss.health,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.loss.health,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.loss.health,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.loss.health,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:claim.loss.health,loss:"
+msgid "Loss"
+msgstr "Préjudice"
+
+msgctxt "field:claim.loss.health,quantity:"
+msgid "Quantity"
+msgstr "Quantité"
+
+msgctxt "field:claim.loss.health,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:claim.loss.health,total_charges:"
+msgid "Total Charges"
+msgstr "Frais réels"
+
+msgctxt "field:claim.loss.health,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:claim.loss.health,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:claim.loss.health,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:claim.loss.health,name:"
+msgid "Health Loss"
+msgstr "Acte santé"
+
+msgctxt "view:claim.loss.health:"
+msgid "Health Loss"
+msgstr "Acte santé"

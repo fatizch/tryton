@@ -17,6 +17,10 @@ msgstr ""
 "Impossible de trouver un contrat principal, essayer de nouveau une fois "
 "celui ci définit"
 
+msgctxt "error:claim:"
+msgid "The number must be unique!"
+msgstr "Le numéro doit être unique"
+
 msgctxt "field:claim,claimant:"
 msgid "Claimant"
 msgstr "Déclarant"
@@ -378,6 +382,10 @@ msgctxt "field:claim.loss,extra_data:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
+msgctxt "field:claim.loss,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:claim.loss,id:"
 msgid "ID"
 msgstr "ID"
@@ -386,12 +394,8 @@ msgctxt "field:claim.loss,loss_desc:"
 msgid "Loss Descriptor"
 msgstr "Description du Préjudice"
 
-msgctxt "field:claim.loss,main_loss:"
-msgid "Main Loss"
-msgstr "Préjudice Initial"
-
 msgctxt "field:claim.loss,multi_level_view:"
-msgid "Delivered Services"
+msgid "Claim Services"
 msgstr "Prestations Fournies"
 
 msgctxt "field:claim.loss,possible_loss_descs:"
@@ -403,16 +407,12 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:claim.loss,services:"
-msgid "Delivered Services"
+msgid "Claim Services"
 msgstr "Prestations Fournies"
 
 msgctxt "field:claim.loss,start_date:"
 msgid "Loss Date"
 msgstr "Date du préjudice"
-
-msgctxt "field:claim.loss,sub_losses:"
-msgid "Sub Losses"
-msgstr "Préjudices liés"
 
 msgctxt "field:claim.loss,with_end_date:"
 msgid "With End Date"
@@ -430,33 +430,77 @@ msgctxt "field:claim.loss,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:claim.service,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:claim.service,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:claim.service,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.service,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.service,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.service,delivered_amount:"
+msgid "Delivered Amount"
+msgstr "Montant remboursé"
+
+msgctxt "field:claim.service,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:claim.service,func_error:"
+msgid "Error"
+msgstr "Erreur"
+
+msgctxt "field:claim.service,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:claim.service,loss:"
+msgid "Loss"
+msgstr "Préjudice"
+
+msgctxt "field:claim.service,option:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:claim.service,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:claim.service,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:claim.service,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:claim.service,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:claim.service,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:contract.option,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
 
-msgctxt "field:contract.service,benefit:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "field:contract.service,extra_data:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:contract.service,indemnifications:"
-msgid "Indemnifications"
-msgstr "indemnisations"
-
-msgctxt "field:contract.service,loss:"
-msgid "Loss"
-msgstr "Préjudice"
-
-msgctxt "field:contract.service,multi_level_view:"
-msgid "Indemnifications"
-msgstr "Indemnisations"
-
-msgctxt "field:document.receive.request,tmp_1:"
-msgid "Contract"
-msgstr "Contrat"
+msgctxt "field:document.receive.request,tmp_0:"
+msgid "Claim"
+msgstr "Sinistre"
 
 msgctxt "field:expense,create_date:"
 msgid "Create Date"
@@ -522,6 +566,10 @@ msgctxt "model:claim.loss,name:"
 msgid "Loss"
 msgstr "Préjudice"
 
+msgctxt "model:claim.service,name:"
+msgid "Claim Service"
+msgstr "Prestation fournie"
+
 msgctxt "model:expense,name:"
 msgid "Expense"
 msgstr "Frais"
@@ -537,14 +585,6 @@ msgstr "Sinistres"
 msgctxt "model:ir.action,name:act_claims_button"
 msgid "Claims"
 msgstr "Sinistres"
-
-msgctxt "model:ir.action,name:act_indemnification_relate_form"
-msgid "Indemnifications"
-msgstr "Indemnisations"
-
-msgctxt "model:ir.action,name:indemnification_validation_wizard"
-msgid "Claim Indemnification Validate"
-msgstr "Validation des Indemnisations"
 
 msgctxt "model:ir.sequence,name:claim_sequence"
 msgid "Claim Sequence"
@@ -573,10 +613,6 @@ msgstr "Sinistre"
 msgctxt "model:ir.ui.menu,name:menu_claim_form"
 msgid "Claims"
 msgstr "Sinistres"
-
-msgctxt "model:ir.ui.menu,name:menu_validate_indemnification"
-msgid "Validate Indemnifications"
-msgstr "Validation des Indemnisations"
 
 msgctxt "model:tag,name:tag_claim"
 msgid "Claim"
@@ -623,20 +659,8 @@ msgid "Paid"
 msgstr "Payé"
 
 msgctxt "selection:claim,sub_status:"
-msgid "Reclamation"
-msgstr "Réclamation"
-
-msgctxt "selection:claim,sub_status:"
-msgid "Regularization"
-msgstr "Régularisation"
-
-msgctxt "selection:claim,sub_status:"
 msgid "Rejected"
 msgstr "Refusé"
-
-msgctxt "selection:claim,sub_status:"
-msgid "Relapse"
-msgstr "Rechute"
 
 msgctxt "selection:claim,sub_status:"
 msgid "Validated"
@@ -750,6 +774,22 @@ msgctxt "selection:claim.indemnification.validate.select,global_value:"
 msgid "Validate"
 msgstr "Valider"
 
+msgctxt "selection:claim.service,status:"
+msgid "Calculated"
+msgstr "Calculé"
+
+msgctxt "selection:claim.service,status:"
+msgid "Calculating"
+msgstr "Calcul en Cours"
+
+msgctxt "selection:claim.service,status:"
+msgid "Delivered"
+msgstr "Delivré"
+
+msgctxt "selection:claim.service,status:"
+msgid "Not Eligible"
+msgstr "Non Eligible"
+
 msgctxt "selection:document.receive.request,kind:"
 msgid "Claim"
 msgstr "Sinistre"
@@ -801,6 +841,10 @@ msgstr "Préjudice"
 msgctxt "view:claim.loss:"
 msgid "Losses"
 msgstr "Préjudices"
+
+msgctxt "view:claim.service:"
+msgid "Claim Service"
+msgstr "Prestation fournie"
 
 msgctxt "view:claim:"
 msgid "Claim"

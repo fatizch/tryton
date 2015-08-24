@@ -2,10 +2,445 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:claim.indemnification.validate.select:"
+msgid "Please unselect all indemnifications first"
+msgstr "Veuillez déselectionner toutes les indemnités."
+
+msgctxt "error:claim.loss:"
+msgid "End Date is smaller than start date"
+msgstr "La date de fin est antérieure à la date de début"
+
+msgctxt "field:claim.indemnification,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:claim.indemnification,beneficiary:"
+msgid "Beneficiary"
+msgstr "Bénéficiaire"
+
+msgctxt "field:claim.indemnification,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.indemnification,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.indemnification,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.indemnification,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:claim.indemnification,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:claim.indemnification,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:claim.indemnification,customer:"
+msgid "Customer"
+msgstr "Client"
+
+msgctxt "field:claim.indemnification,details:"
+msgid "Details"
+msgstr "Détails"
+
+msgctxt "field:claim.indemnification,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:claim.indemnification,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:claim.indemnification,kind:"
+msgid "Kind"
+msgstr "Type de donnée"
+
+msgctxt "field:claim.indemnification,local_currency:"
+msgid "Local Currency"
+msgstr "Devise Locale"
+
+msgctxt "field:claim.indemnification,local_currency_amount:"
+msgid "Local Currency Amount"
+msgstr "Montant en Devise Locale"
+
+msgctxt "field:claim.indemnification,local_currency_digits:"
+msgid "Local Currency Digits"
+msgstr "Précision de la Devise Locale"
+
+msgctxt "field:claim.indemnification,manual:"
+msgid "Manual Calculation"
+msgstr "Calcul Manuel"
+
+msgctxt "field:claim.indemnification,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:claim.indemnification,service:"
+msgid "Claim Service"
+msgstr "Prestation fournie"
+
+msgctxt "field:claim.indemnification,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:claim.indemnification,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:claim.indemnification,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:claim.indemnification,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:claim.indemnification,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:claim.indemnification.detail,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:claim.indemnification.detail,amount_per_unit:"
+msgid "Amount per Unit"
+msgstr "Montant par Unité"
+
+msgctxt "field:claim.indemnification.detail,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.indemnification.detail,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.indemnification.detail,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.indemnification.detail,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:claim.indemnification.detail,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:claim.indemnification.detail,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:claim.indemnification.detail,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:claim.indemnification.detail,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:claim.indemnification.detail,indemnification:"
+msgid "Indemnification"
+msgstr "Indemnisation"
+
+msgctxt "field:claim.indemnification.detail,kind:"
+msgid "Kind"
+msgstr "Type de donnée"
+
+msgctxt "field:claim.indemnification.detail,nb_of_unit:"
+msgid "Nb of Unit"
+msgstr "Nombre d'Unité"
+
+msgctxt "field:claim.indemnification.detail,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:claim.indemnification.detail,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:claim.indemnification.detail,unit:"
+msgid "Unit"
+msgstr "Unité"
+
+msgctxt "field:claim.indemnification.detail,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:claim.indemnification.detail,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:claim.indemnification.detail,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:claim.indemnification.validate.display,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:claim.indemnification.validate.display,claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "field:claim.indemnification.validate.display,claim_declaration_date:"
+msgid "Claim Declaration Date"
+msgstr "Date de déclaration"
+
+msgctxt "field:claim.indemnification.validate.display,claim_number:"
+msgid "Claim Number"
+msgstr "Type de séquence"
+
+msgctxt "field:claim.indemnification.validate.display,covered_element:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt "field:claim.indemnification.validate.display,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:claim.indemnification.validate.display,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:claim.indemnification.validate.display,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:claim.indemnification.validate.display,indemnification:"
+msgid "Indemnification"
+msgstr "Indemnisation"
+
+msgctxt ""
+"field:claim.indemnification.validate.display,indemnification_displayer:"
+msgid "Indemnification"
+msgstr "Indemnisation"
+
+msgctxt "field:claim.indemnification.validate.display,selection:"
+msgid "Selection"
+msgstr "Sélection"
+
+msgctxt "field:claim.indemnification.validate.display,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:claim.indemnification.validate.select,display_domain:"
+msgid "Display Search"
+msgstr "Afficher les critères de recherche"
+
+msgctxt "field:claim.indemnification.validate.select,domain_string:"
+msgid "Domain"
+msgstr "Domaine"
+
+msgctxt "field:claim.indemnification.validate.select,global_value:"
+msgid "Force Value"
+msgstr "Valeur globale"
+
+msgctxt "field:claim.indemnification.validate.select,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:claim.indemnification.validate.select,indemnifications:"
+msgid "Indemnifications"
+msgstr "Indemnisations"
+
+msgctxt "field:claim.indemnification.validate.select,modified:"
+msgid "Modified"
+msgstr "Modifié"
+
+msgctxt "field:claim.indemnification.validate.select,search_size:"
+msgid "Search Size"
+msgstr "Taille de recherche"
+
 msgctxt "field:claim.loss,covered_person:"
 msgid "Covered Person"
 msgstr "Personne Couverte"
 
+msgctxt "field:claim.loss,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
 msgctxt "field:claim.loss,possible_covered_persons:"
 msgid "Covered Persons"
 msgstr "Personnes Couvertes"
+
+msgctxt "field:claim.loss,with_end_date:"
+msgid "With End Date"
+msgstr "Avec Date de Fin"
+
+msgctxt "field:claim.service,indemnifications:"
+msgid "Indemnifications"
+msgstr "Indemnisations"
+
+msgctxt "field:claim.service,multi_level_view:"
+msgid "Indemnifications"
+msgstr "Indemnisations"
+
+msgctxt "model:claim.indemnification,name:"
+msgid "Indemnification"
+msgstr "Indemnisation"
+
+msgctxt "model:claim.indemnification.detail,name:"
+msgid "Indemnification Detail"
+msgstr "Détail de l'indemnisation"
+
+msgctxt "model:claim.indemnification.validate.display,name:"
+msgid "Claim Indemnification Validate Display"
+msgstr "Indemnisations"
+
+msgctxt "model:claim.indemnification.validate.select,name:"
+msgid "Claim Indemnification Validate Select"
+msgstr "Choix des Indemnisations"
+
+msgctxt "model:ir.action,name:act_indemnification_relate_form"
+msgid "Indemnifications"
+msgstr "Indemnisations"
+
+msgctxt "model:ir.action,name:indemnification_validation_wizard"
+msgid "Claim Indemnification Validate"
+msgstr "Validation des Indemnisations"
+
+msgctxt "model:ir.ui.menu,name:menu_validate_indemnification"
+msgid "Validate Indemnifications"
+msgstr "Validation des Indemnisations"
+
+msgctxt "selection:benefit.loss.description,loss_kind:"
+msgid "Life"
+msgstr "Prévoyance"
+
+msgctxt "selection:claim.indemnification,kind:"
+msgid "Annuity"
+msgstr "Rente"
+
+msgctxt "selection:claim.indemnification,kind:"
+msgid "Capital"
+msgstr "Capital"
+
+msgctxt "selection:claim.indemnification,kind:"
+msgid "Period"
+msgstr "Période"
+
+msgctxt "selection:claim.indemnification,status:"
+msgid "Calculated"
+msgstr "Calculé"
+
+msgctxt "selection:claim.indemnification,status:"
+msgid "Paid"
+msgstr "Payé"
+
+msgctxt "selection:claim.indemnification,status:"
+msgid "Rejected"
+msgstr "Refusé"
+
+msgctxt "selection:claim.indemnification,status:"
+msgid "Validated"
+msgstr "Validé"
+
+msgctxt "selection:claim.indemnification.detail,kind:"
+msgid "Deductible"
+msgstr "Franchise"
+
+msgctxt "selection:claim.indemnification.detail,kind:"
+msgid "Indemnified"
+msgstr "Indemnisé"
+
+msgctxt "selection:claim.indemnification.detail,kind:"
+msgid "Limit"
+msgstr "Plafond"
+
+msgctxt "selection:claim.indemnification.detail,kind:"
+msgid "Regularization"
+msgstr "Régularisation"
+
+msgctxt "selection:claim.indemnification.detail,kind:"
+msgid "Waiting Period"
+msgstr "Carence"
+
+msgctxt "selection:claim.indemnification.detail,unit:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:claim.indemnification.detail,unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:claim.indemnification.detail,unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:claim.indemnification.detail,unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:claim.indemnification.detail,unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:claim.indemnification.detail,unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "selection:claim.indemnification.detail,unit:"
+msgid "Year"
+msgstr "Année"
+
+msgctxt "selection:claim.indemnification.validate.display,selection:"
+msgid "Nothing"
+msgstr "Ne rien faire"
+
+msgctxt "selection:claim.indemnification.validate.display,selection:"
+msgid "Refuse"
+msgstr "Refuser"
+
+msgctxt "selection:claim.indemnification.validate.display,selection:"
+msgid "Validate"
+msgstr "Valider"
+
+msgctxt "selection:claim.indemnification.validate.select,global_value:"
+msgid "Nothing"
+msgstr "Ne rien faire"
+
+msgctxt "selection:claim.indemnification.validate.select,global_value:"
+msgid "Refuse"
+msgstr "Refuser"
+
+msgctxt "selection:claim.indemnification.validate.select,global_value:"
+msgid "Validate"
+msgstr "Valider"
+
+msgctxt "view:claim.indemnification.detail:"
+msgid "Indemnification Detail"
+msgstr "Détail de l'indemnisation"
+
+msgctxt "view:claim.indemnification.validate.display:"
+msgid "Indemnification"
+msgstr "Indemnisation"
+
+msgctxt "view:claim.indemnification.validate.display:"
+msgid "Indemnifications"
+msgstr "Indemnisations"
+
+msgctxt "view:claim.indemnification.validate.select:"
+msgid "Claim Indemnification Validate"
+msgstr "Validation des Indemnisations"
+
+msgctxt "view:claim.indemnification:"
+msgid "Indemnification"
+msgstr "Indemnisation"
+
+msgctxt ""
+"wizard_button:claim.indemnification.validate,select_indemnifications,end:"
+msgid "Quit"
+msgstr "Quitter"
+
+msgctxt ""
+"wizard_button:claim.indemnification.validate,select_indemnifications,reload_selection:"
+msgid "Continue"
+msgstr "Continuer"

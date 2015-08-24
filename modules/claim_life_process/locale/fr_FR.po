@@ -1,3 +1,15 @@
 # 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:claim,indemnifications:"
+msgid "Indemnifications"
+msgstr "Indemnisations"
+
+msgctxt "field:claim,indemnifications_consult:"
+msgid "Indemnifications"
+msgstr "Indemnisations"
+
+msgctxt "field:claim,is_pending_indemnification:"
+msgid "Pending Indemnification"
+msgstr "Indemnisation en attente"

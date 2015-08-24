@@ -1,0 +1,51 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:claim,invoice_date:"
+msgid "Invoice Date"
+msgstr "Date de la facture"
+
+msgctxt "field:claim,invoice_number:"
+msgid "Invoice Number"
+msgstr "Numéro de la facture"
+
+msgctxt "field:claim,noemie_archive_criterion:"
+msgid "Noemie Archiving Criterion"
+msgstr "Critère d'archivage NOEMIE"
+
+msgctxt "field:claim,slip_code:"
+msgid "Slip Code"
+msgstr "Code du bordereau"
+
+msgctxt "field:claim,slip_date:"
+msgid "Slip Date"
+msgstr "Date du bordereau"
+
+msgctxt "field:claim.loss.health,act_coefficient:"
+msgid "Medical Act Coefficient"
+msgstr "Coefficient de l'acte médical"
+
+msgctxt "field:claim.loss.health,ccam_act_code:"
+msgid "CCAM act code"
+msgstr "Code de l'acte CCAM"
+
+msgctxt "field:claim.loss.health,is_care_access_contract:"
+msgid "Belongs To Care Access Contract"
+msgstr "Fait partie du contrat d'accès aux soins"
+
+msgctxt "field:claim.loss.health,is_off_care_pathway:"
+msgid "Is Off Care Pathway"
+msgstr "Hors parcours de soin"
+
+msgctxt "field:claim.loss.health,ss_agreement_price:"
+msgid "Social Security Agreement Price"
+msgstr "Montant de convention"
+
+msgctxt "field:claim.loss.health,ss_agreement_rate:"
+msgid "Social Security Agreement Rate"
+msgstr "Taux RO"
+
+msgctxt "field:claim.loss.health,ss_reimbursement_amount:"
+msgid "Social Security Reimbursement Amount"
+msgstr "Montant RO"

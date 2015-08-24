@@ -1,0 +1,67 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:benefit.act.description:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
+msgctxt "field:benefit.act.description,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:benefit.act.description,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.act.description,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.act.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit.act.description,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:benefit.act.description,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.act.description,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.act.description,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:benefit.act.description,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:benefit.act.description,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:benefit.act.description,name:"
+msgid "Medical Act Description"
+msgstr "Description de l'acte médical"
+
+msgctxt "model:ir.action,name:act_medical_act_desc_form"
+msgid "Medical Act Descriptions"
+msgstr "Descriptions d'acte médical"
+
+msgctxt "model:ir.ui.menu,name:menu_medical_act"
+msgid "Medical Act Descriptions"
+msgstr "Descriptions d'acte médical"
+
+msgctxt "selection:benefit.loss.description,loss_kind:"
+msgid "Health"
+msgstr "Santé"
+
+msgctxt "view:benefit.act.description:"
+msgid "Medical Act Description"
+msgstr "Description d'acte médical"
