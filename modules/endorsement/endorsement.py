@@ -475,7 +475,10 @@ def values_mixin(value_model):
 
             if record.__name__ != self._model_name:
                 return False
+            ignore_fields = self._ignore_fields_for_matching()
             for k, v in self.values.iteritems():
+                if k in ignore_fields:
+                    continue
                 if not hasattr(record, k):
                     return False
                 field = record._fields[k]
@@ -491,6 +494,10 @@ def values_mixin(value_model):
                     if not getattr(record, k) == v:
                         return False
             return True
+
+        @classmethod
+        def _ignore_fields_for_matching(cls):
+            return set()
 
     return Mixin
 
@@ -654,8 +661,7 @@ def relation_mixin(value_model, field, model, name):
                 parent_endorsed_record=None):
             if self.action == 'update':
                 parent_endorsed_record = getattr(self,
-                    getattr(self,
-                        '_relation_field_name'))
+                    getattr(self, '_relation_field_name'))
             super(Mixin, self).get_records_before_application(current_records,
                 parent_endorsed_record)
 

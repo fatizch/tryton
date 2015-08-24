@@ -243,3 +243,8 @@ class EndorsementBillingInformation(relation_mixin(
 
     def get_definition(self, name):
         return self.contract_endorsement.definition.id
+
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return super(EndorsementBillingInformation,
+            cls)._ignore_fields_for_matching() | {'contract'}
