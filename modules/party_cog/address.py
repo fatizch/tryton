@@ -100,17 +100,24 @@ class Address(export.ExportImportMixin):
         else:
             return ['']
 
-    def get_zip_and_city(self, name):
+    @classmethod
+    def find_zip_and_city(cls, zip, city, country=None):
         Zip = Pool().get('country.zipcode')
         domain = [
-            ('city', '=', self.city),
-            ('zip', '=', self.zip),
+            ('city', '=', city),
+            ('zip', '=', zip),
             ]
-        if self.country:
-            domain.append(('country', '=', self.country.id))
+        if country:
+            domain.append(('country', '=', country.id))
         zips = Zip.search(domain, limit=1)
         if zips:
-            return zips[0].id
+            return zips[0]
+
+    def get_zip_and_city(self, name):
+        zip_and_city = self.find_zip_and_city(self.zip, self.city,
+            self.country)
+        if zip_and_city:
+            return zip_and_city.id
 
     @fields.depends('zip', 'country', 'city', 'zip_and_city')
     def on_change_zip_and_city(self):
@@ -211,3 +218,12 @@ class Address(export.ExportImportMixin):
     def add_func_key(cls, values):
         values['_func_key'] = '|'.join((values['zip'] or '',
                 values['street'] or ''))
+
+    @classmethod
+    def _import_json(cls, values, main_object=None):
+        if 'zip' in values and 'city' in values:
+            zip_and_city = cls.find_zip_and_city(values['zip'], values['city'])
+            if zip_and_city:
+                values['zip'] = zip_and_city.zip
+                values['city'] = zip_and_city.city
+        return super(Address, cls)._import_json(values, main_object)
