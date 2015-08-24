@@ -32,11 +32,19 @@ class TestCaseModel:
             )
         journal.save()
 
+        statement_sequence = Sequence(
+            company=cls.get_company(),
+            name='Statement Sequence',
+            code='statement'
+            )
+        statement_sequence.save()
+
         statement_journal = StatementJournal(
             name=translater('Check'),
             currency=Configuration.currency,
             company=cls.get_company(),
             journal=journal,
+            sequence=statement_sequence,
             )
         statement_journal.save()
 
