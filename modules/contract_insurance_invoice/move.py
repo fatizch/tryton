@@ -167,7 +167,8 @@ class ReconcileShow:
             ],
         'Remaining Repartition Method', states={
             'required': Bool(Eval('write_off', False)),
-            'invisible': Eval('write_off', 0) >= 0,
+            'invisible': If(~Eval('write_off', 0), 0,
+                Eval('write_off', 0)) >= 0
             },
         depends=['write_off'])
     repartition_method_string = remaining_repartition_method.translated(
