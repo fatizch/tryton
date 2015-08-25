@@ -169,6 +169,7 @@ class Contract:
             cursor.execute(*contract.join(premium_aggregate, condition=(
                         premium_aggregate.contract == contract.id)
                     ).select(contract.id, Sum(premium_aggregate.total),
+                    where=contract.id.in_([x.id for x in contract_slice]),
                     group_by=contract.id))
             values.update(dict(cursor.fetchall()))
         for contract in contracts:
