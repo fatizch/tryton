@@ -38,4 +38,6 @@ class EndorsementContract:
             at_date)
         for contract in instances['contract']:
             instances['contract.fee'] += contract.fees
-            instances['contract.premium'] += contract.all_premiums
+            instances['contract.premium'] += contract.premiums
+            for option in contract.options:
+                instances['contract.premium'] += option.premiums
