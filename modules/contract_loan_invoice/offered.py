@@ -247,6 +247,22 @@ class OptionDescriptionPremiumRule:
         return super(OptionDescriptionPremiumRule, self).must_be_rated(
             rated_instance, date)
 
+    @classmethod
+    def get_not_rated_line(cls, rule_dict, date):
+        # Loan shares that must not be rated should not create an empty line if
+        # there is a new share for the same loan
+        if rule_dict['_rated_instance'].__name__ == 'loan.share':
+            share = rule_dict['_rated_instance']
+            shares = [x for x in share.option.loan_shares
+                if x.loan == share.loan and x.start_date and x.start_date > (
+                    share.start_date or datetime.date.min)]
+            # option.loan_shares are sorted per loan / start
+            if shares and shares[0].start_date == coop_date.add_day(
+                    share.end_date, 1):
+                return []
+        return super(OptionDescriptionPremiumRule, cls).get_not_rated_line(
+            rule_dict, date)
+
 
 class OptionDescription:
     __name__ = 'offered.option.description'

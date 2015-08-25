@@ -240,11 +240,19 @@ class OptionDescriptionPremiumRule(RuleMixin, MatchMixin, model.CoopSQL,
             if self.must_be_rated(rated_instance, date):
                 new_lines = self.do_calculate(rule_dict)
             else:
-                new_lines = [self._premium_result_class(0, rule_dict)]
+                new_lines = self.get_not_rated_line(rule_dict, date)
+            if not new_lines:
+                continue
             self.set_line_frequencies(new_lines, rated_instance, date)
             all_lines += new_lines
             lines[date] += new_lines
         self.finalize_lines(all_lines)
+
+    @classmethod
+    def get_not_rated_line(cls, rule_dict, date):
+        # Default behaviour : Create a 0 amount line at date, for instance to
+        # detect end of options.
+        return [cls._premium_result_class(0, rule_dict)]
 
 
 class OptionDescription:
