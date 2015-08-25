@@ -223,5 +223,16 @@ Le premier noeud de la liste (ex: 'contract') doit
 etre disponible dans le contexte d'exécution</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
+        <record model="rule_engine.function" id="arroundir">
+            <field name="translated_technical_name">arrondir</field>
+            <field name="description">Arrondir</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_round</field>
+            <field name="fct_args">Montant, Facteur d'arrondi</field>
+            <field name="long_description">Arrondir un montant selon un facteur(ex: arrondir(10.242, 0.01) = 10.24)</field>
+            <field name="parent" ref="dossier_outils"/>
+        </record>
     </data>
 </tryton>
