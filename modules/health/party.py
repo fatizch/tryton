@@ -18,7 +18,7 @@ class Party:
         fields.Boolean('Is Health', states={'invisible': True}),
         'get_is_health')
     health_complement = fields.One2Many('health.party_complement', 'party',
-        'Health Complement', size=1, states={
+        'Health Complement', states={
             'invisible': And(~Eval('health_complement'), ~Eval('is_health'))},
         delete_missing=True)
     health_contract = fields.Function(
@@ -54,24 +54,17 @@ class Party:
         return name
 
 
-class HealthPartyComplement(model.CoopSQL, model.CoopView):
+class HealthPartyComplement(model._RevisionMixin, model.CoopSQL,
+        model.CoopView):
     'Health Party Complement'
 
     __name__ = 'health.party_complement'
-    _func_key = 'func_key'
-    func_key = fields.Function(fields.Char('Functional Key'),
-        'get_func_key', searcher='search_func_key')
+    _func_key = 'date'
+    _parent_name = 'party'
 
     party = fields.Many2One('party.party', 'Party', ondelete='CASCADE',
         required=True, select=True)
 
-    def get_func_key(self, name):
-        return ''
-
-    @classmethod
-    def search_func_key(cls, name, clause):
-        return [('party.code',) + tuple(clause[1:])]
-
     @classmethod
     def add_func_key(cls, values):
-        values['_func_key'] = ''
+        values['_func_key'] = values['date'] if 'date' in values else None
