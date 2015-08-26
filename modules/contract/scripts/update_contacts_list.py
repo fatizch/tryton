@@ -36,10 +36,13 @@ def update_contacts_list():
         Contract = pool.get('contract')
         try:
             contracts = Contract.search(['status', '!=', 'quote'])
-            for c in contracts:
+            print('%s contracts to save' % len(contracts))
+            for (i, c) in enumerate(contracts):
                 c.update_contacts()
                 try:
                     c.save()
+                    if i % 10 == 0:
+                        print('%s done' % i)
                 except Exception as e:
                     print('%s: %s' % (c.rec_name, str(e)))
                     continue
