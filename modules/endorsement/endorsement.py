@@ -1145,7 +1145,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
             ModelClass = pool.get(model_name)
             ModelClass.draft(endorsements_per_model[model_name])
             for value_endorsement in endorsements_per_model[model_name]:
-                value_endorsement.update_after_cancellation(value_endorsement)
+                value_endorsement.update_after_cancellation()
 
     @classmethod
     @model.CoopView.button
