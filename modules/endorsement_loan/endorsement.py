@@ -1,6 +1,10 @@
 import datetime
 from collections import defaultdict
 
+from sql import Null, Column
+from sql.conditionals import Coalesce
+
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -35,6 +39,38 @@ class LoanIncrement:
     _history = True
     __metaclass__ = PoolMeta
     __name__ = 'loan.increment'
+
+    @classmethod
+    def __register__(cls, module_name):
+        # Migration from 1.4 Move Payment frequency from loan to increment
+        pool = Pool()
+        Loan = pool.get('loan')
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+
+        super(LoanIncrement, cls).__register__(module_name)
+
+        loan_history_h = TableHandler(cursor, Loan, module_name, history=True)
+        if loan_history_h.column_exist('payment_frequency'):
+            loan_hist = Loan.__table_history__()
+            increment_hist = cls.__table_history__()
+            to_update = cls.__table_history__()
+            update_data = increment_hist.join(loan_hist, 'LEFT OUTER',
+                condition=(loan_hist.id == increment_hist.loan)
+                & (increment_hist.payment_frequency == Null)
+                & (Coalesce(increment_hist.write_date,
+                        increment_hist.create_date) == Coalesce(
+                        loan_hist.write_date, loan_hist.create_date))
+                ).select(Column(increment_hist, '__id').as_('inc_id'),
+                Coalesce(loan_hist.payment_frequency, 'month').as_(
+                    'payment_frequency'),
+                order_by=Column(loan_hist, '__id').asc)
+            cursor.execute(*to_update.update(
+                    columns=[to_update.payment_frequency],
+                    values=[update_data.payment_frequency],
+                    from_=[update_data],
+                    where=update_data.inc_id == Column(to_update, '__id')))
+            loan_history_h.drop_column('payment_frequency')
 
 
 class LoanPayment:

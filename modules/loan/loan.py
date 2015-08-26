@@ -618,9 +618,9 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
                 ).select(loan_increment.id, loan.payment_frequency))
             for loan_increment_id, payment_frequency, in cursor.fetchall():
                 loan_increments.extend([
-                    cls.browse([loan_increment_id]),
-                    {'payment_frequency': payment_frequency}
-                    ])
+                        cls.browse([loan_increment_id]),
+                        {'payment_frequency': payment_frequency}
+                        ])
             if loan_increments:
                 cls.write(*loan_increments)
             loan_h.drop_column('payment_frequency')
