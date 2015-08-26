@@ -40,6 +40,12 @@ class Commission:
         fields.Many2One('distribution.network', 'Broker'),
         'get_broker', searcher='search_broker')
     commission_rate = fields.Numeric('Commission Rate')
+    parent_line_start = fields.Function(
+        fields.Date('Line Start'),
+        'get_parent_line_start')
+    parent_line_end = fields.Function(
+        fields.Date('Line End'),
+        'get_parent_line_end')
 
     @classmethod
     def __register__(cls, module_name):
@@ -88,6 +94,16 @@ class Commission:
     def get_broker(self, name):
         return (self.agent.party.network[0].id
             if self.agent and self.agent.party.network else None)
+
+    def get_parent_line_end(self, name):
+        if not self.origin or self.origin.__name__ != 'account.invoice.line':
+            return None
+        return self.origin.coverage_end
+
+    def get_parent_line_start(self, name):
+        if not self.origin or self.origin.__name__ != 'account.invoice.line':
+            return None
+        return self.origin.coverage_start
 
     def _group_to_invoice_key(self):
         direction = {

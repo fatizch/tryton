@@ -60,6 +60,14 @@ msgctxt "field:commission,commissioned_option:"
 msgid "Commissioned Option"
 msgstr "Option commissionnée"
 
+msgctxt "field:commission,parent_line_end:"
+msgid "Line End"
+msgstr "Date de fin"
+
+msgctxt "field:commission,parent_line_start:"
+msgid "Line Start"
+msgstr "Date de début"
+
 msgctxt "field:commission,party:"
 msgid "Party"
 msgstr "Tiers"
