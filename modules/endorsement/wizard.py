@@ -791,11 +791,12 @@ class StartEndorsement(Wizard):
             Button('Previous', 'change_start_date_previous',
                 'tryton-go-previous'),
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Suspend', 'suspend', 'tryton-save'),
+            Button('Suspend', 'change_start_date_suspend', 'tryton-save'),
             Button('Next', 'change_start_date_next', 'tryton-go-next',
                 default=True)])
     change_start_date_previous = StateTransition()
     change_start_date_next = StateTransition()
+    change_start_date_suspend = StateTransition()
 
     @classmethod
     def __setup__(cls):
@@ -912,6 +913,10 @@ class StartEndorsement(Wizard):
     def transition_change_start_date_previous(self):
         self.end_current_part('change_start_date')
         return self.get_state_before('change_start_date')
+
+    def transition_change_start_date_suspend(self):
+        self.end_current_part('change_start_date')
+        return 'end'
 
     def default_change_start_date(self, name):
         State = Pool().get('endorsement.contract.change_start_date')
