@@ -981,9 +981,21 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         GoodModel = Pool().get(cls.__name__)
         return GoodModel(Transaction().context.get('_master_covered'))
 
+    def get_relation_with_subscriber(self):
+        if not self.party:
+            return
+        subscriber = self.contract.subscriber
+        kinds = [rel.type.name for rel in self.party.relations
+            if rel.to.id == subscriber.id]
+        return ', '.join(kinds)
+
     def get_rec_name(self, value):
         if self.party:
-            return self.party.full_name
+            res = self.party.full_name
+            relations = self.get_relation_with_subscriber()
+            if relations:
+                return '%s (%s)' % (res, relations)
+            return res
         names = [super(CoveredElement, self).get_rec_name(value)]
         names.append(self.item_desc.rec_name if self.item_desc else None)
         names.append(self.name)
