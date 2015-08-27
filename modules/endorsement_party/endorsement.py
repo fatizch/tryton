@@ -327,9 +327,6 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
                     ('subscriber', '=', self.party),
                     ('covered_elements.party', '=', self.party)]])
 
-    def set_applied_on(self, at_datetime):
-        self.applied_on = at_datetime
-
     def get_endorsed_record(self):
         return self.party
 

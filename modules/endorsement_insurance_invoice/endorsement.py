@@ -209,12 +209,6 @@ class EndorsementContract:
             values['billing_informations'] = billing_informations
         return values
 
-    def set_applied_on(self, datetime):
-        super(EndorsementContract, self).set_applied_on(datetime)
-        for billing_information in self.billing_informations:
-            billing_information.applied_on = datetime
-        self.billing_informations = list(self.billing_informations)
-
 
 class EndorsementBillingInformation(relation_mixin(
             'endorsement.contract.billing_information.field',

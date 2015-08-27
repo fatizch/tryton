@@ -183,6 +183,15 @@ class EndorsementRoot(object):
             setattr(self, fname, new_values)
         return self.is_null()
 
+    def set_applied_on(self, at_datetime):
+        self.applied_on = at_datetime
+        for fname, _ in self._endorsement_tree.itervalues():
+            values, new_values = getattr(self, fname, ()), []
+            for elem in values:
+                elem.set_applied_on(at_datetime)
+                new_values.append(elem)
+            setattr(self, fname, new_values)
+
 
 def values_mixin(value_model):
 
@@ -1630,12 +1639,6 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 ('state', '=', 'in_progress')])
         if count:
             cls.raise_user_error('only_one_endorsement_in_progress')
-
-    def set_applied_on(self, at_datetime):
-        self.applied_on = at_datetime
-        for option in self.options:
-            option.applied_on = at_datetime
-        self.options = list(self.options)
 
     def apply_values(self):
         values = (self.values if self.values else {}).copy()

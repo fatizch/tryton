@@ -333,9 +333,6 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
             loan_endorsement.save()
             loan = loan_endorsement.loan
 
-    def set_applied_on(self, at_datetime):
-        self.applied_on = at_datetime
-
     def apply_values(self):
         values = (self.values if self.values else {}).copy()
         increments = []
