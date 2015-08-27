@@ -1590,9 +1590,37 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             else:
                 contract_endorsement.set_applied_on(contract.write_date or
                     contract.create_date)
+            contract_endorsement.clean_up_before_write()
             values = contract_endorsement.apply_values()
             Contract.write([contract], values)
             contract_endorsement.save()
+
+    def clean_up_before_write(self):
+        if self.extra_datas:
+            self.clean_up_extra_datas_before_write()
+
+    def clean_up_extra_datas_before_write(self):
+        # If we added an extra_data at contract start date
+        # we instead update the old extra_data without date
+        new_start_date = self.values.get('start_date', None)
+        if not new_start_date:
+            return
+        new_extra_data_at_start_date = [x for x in self.extra_datas if
+            x.values.get('date', None) == new_start_date and x.action == 'add']
+        if not new_extra_data_at_start_date:
+            return
+        assert len(new_extra_data_at_start_date) == 1
+        new_extra_data_at_start_date = new_extra_data_at_start_date[0]
+        extra_datas_without_date = [e for e in self.contract.extra_datas
+            if not e.date]
+        if not extra_datas_without_date:
+            return
+        old_extra_data = extra_datas_without_date[0]
+        new_extra_data_at_start_date.values['date'] = None
+        new_extra_data_at_start_date.action = 'update'
+        new_extra_data_at_start_date.relation = old_extra_data.id
+        new_extra_data_at_start_date.extra_data = old_extra_data
+        self.extra_datas = self.extra_datas
 
     @classmethod
     def check_in_progress_unicity(cls, contract_endorsements):
@@ -1868,7 +1896,8 @@ class EndorsementExtraData(relation_mixin(
         self.values['extra_data_values'] = new_data_values
         if not new_data_values:
             new_data_values = self.new_extra_data_values
-        if self.extra_data and self.extra_data.extra_data_values:
+        if self.action == 'update' and self.extra_data and \
+                self.extra_data.extra_data_values:
             cur_data_values = self.extra_data.extra_data_values
         else:
             cur_data_values = None
