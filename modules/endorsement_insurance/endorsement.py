@@ -80,16 +80,9 @@ class EndorsementContract:
         for contract in instances['contract']:
             instances['contract.covered_element'] += contract.covered_elements
             for covered_element in contract.covered_elements:
-                instances['contract.option'] += \
-                    covered_element.options
-                for option in covered_element.options:
-                    instances['contract.premium'] += \
-                        option.premiums
+                instances['contract.option'] += covered_element.options
         for option in instances['contract.option']:
-            instances['contract.option.extra_premium'] += \
-                option.extra_premiums
-        for extra_premium in instances['contract.option.extra_premium']:
-            instances['contract.premium'] += extra_premium.premiums
+            instances['contract.option.extra_premium'] += option.extra_premiums
 
     def get_endorsement_summary(self, name):
         result = super(EndorsementContract, self).get_endorsement_summary(name)

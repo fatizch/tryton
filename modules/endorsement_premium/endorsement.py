@@ -36,6 +36,7 @@ class EndorsementContract:
     def _prepare_restore_history(cls, instances, at_date):
         super(EndorsementContract, cls)._prepare_restore_history(instances,
             at_date)
+        instances['contract.premium'] = []
         for contract in instances['contract']:
             instances['contract.fee'] += contract.fees
             instances['contract.premium'] += contract.premiums
