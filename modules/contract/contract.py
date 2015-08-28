@@ -12,7 +12,7 @@ from trytond import backend
 from trytond.tools import grouped_slice
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, If, Bool, And, Len
+from trytond.pyson import Eval, If, Bool, And
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.pool import Pool
 from trytond.model import dualmethod
@@ -1874,10 +1874,9 @@ class ContractHold(Wizard):
         contracts = Contract.browse(Transaction().context.get('active_ids'))
         contracts_to_hold = [contract for contract in contracts
             if contract.status == 'active']
-        Contract.write(contracts_to_hold, {
-            'status': 'hold',
-            'sub_status': self.select_hold_status.hold_reason
-            })
+        if contracts_to_hold:
+            Contract.hold(contracts_to_hold,
+                self.select_hold_status.hold_reason)
         return 'end'
 
 
