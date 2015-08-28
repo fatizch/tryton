@@ -223,17 +223,10 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         Attachment.save(attachments)
         return attachments
 
-    def _generate_reports(self, objects, origin=None, resource=None):
-        """ Return a list of dictionnary with:
-            object, report_type, data, report_name"""
+    def _generate_report(self, objects, origin, resource):
         pool = Pool()
         ReportModel = pool.get('report.generate', type='report')
-        if not objects:
-            return
-        reports = []
         objects_ids = [x.id for x in objects]
-        assert len(set([(x.get_contact(), x.get_address(), x.get_sender(),
-                        x.get_sender_address()) for x in objects])) == 1
         report_type, data, _, report_name = ReportModel.execute(
             objects_ids, {
                 'id': objects_ids[0],
@@ -250,14 +243,27 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         report.extension = ('pdf' if self.convert_to_pdf
             else self.template_extension)
         oext, data = Report.convert(report, data)
-        reports.append({
+        return {
                 'object': objects[0],
                 'report_type': report_type,
                 'data': data,
                 'report_name': '%s.%s' % (report_name, oext),
                 'origin': origin,
                 'resource': resource,
-                })
+                }
+
+    def _generate_reports(self, objects, origin=None, resource=None):
+        """ Return a list of dictionnary with:
+            object, report_type, data, report_name"""
+        if not objects:
+            return []
+        reports = []
+        if self.split_reports:
+            for _object in objects:
+                reports.append(
+                    self._generate_report([_object], origin, resource))
+        else:
+            reports.append(self._generate_report(objects, origin, resource))
         return reports
 
     def produce_reports(self, objects, direct_print=False, origin=None):
