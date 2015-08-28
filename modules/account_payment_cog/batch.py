@@ -14,6 +14,8 @@ __all__ = [
     'PaymentCreationBatch'
     ]
 
+PAYMENT_KINDS = ['receivable', 'payable']
+
 
 class PaymentTreatmentBatch(batch.BatchRoot):
     "Payment Treatment Batch"
@@ -25,7 +27,10 @@ class PaymentTreatmentBatch(batch.BatchRoot):
     @classmethod
     def __setup__(cls):
         super(PaymentTreatmentBatch, cls).__setup__()
-        cls._default_config_items.update({'split_size': 1})
+        cls._default_config_items.update({
+                'split_size': 1,
+                'payment_kind': 'all',
+                })
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -37,9 +42,20 @@ class PaymentTreatmentBatch(batch.BatchRoot):
 
     @classmethod
     def get_batch_domain(cls, treatment_date, extra_args):
-        return [
+        res = [
             ('state', '=', 'approved'),
             ('date', '<=', treatment_date)]
+        payment_kind = extra_args.get('payment_kind',
+            cls.get_conf_item('payment_kind'))
+        if payment_kind:
+            if payment_kind in PAYMENT_KINDS:
+                res.append(('kind', '=', payment_kind))
+            else:
+                msg = "ignore payment_kind: '%s' not in %s" % (payment_kind,
+                    PAYMENT_KINDS)
+                cls.logger.error('%s. Aborting' % msg)
+                raise Exception(msg)
+        return res
 
     @classmethod
     def _group_payment_key(cls, payment):
@@ -77,6 +93,13 @@ class PaymentCreationBatch(batch.BatchRoot):
     logger = batch.get_logger(__name__)
 
     @classmethod
+    def __setup__(cls):
+        super(PaymentCreationBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'payment_kind': '',
+                })
+
+    @classmethod
     def get_batch_main_model_name(cls):
         return 'account.move.line'
 
@@ -92,16 +115,27 @@ class PaymentCreationBatch(batch.BatchRoot):
         move_line = pool.get('account.move.line').__table__()
         account = pool.get('account.account').__table__()
         party = pool.get('party.party').__table__()
-
+        payment_kind = extra_args.get('payment_kind',
+        cls.get_conf_item('payment_kind'))
+        if payment_kind and payment_kind not in PAYMENT_KINDS:
+            msg = "ignore payment_kind: '%s' not in %s" % (payment_kind,
+                PAYMENT_KINDS)
+            cls.logger.error('%s. Aborting' % msg)
+            raise Exception(msg)
+        join_acc_cond = (
+            (move_line.account == account.id)
+            & ((account.kind == 'receivable') |
+                ((account.kind == 'payable') &
+                    (party.block_payable_payments == False)))
+            & (move_line.reconciliation == Null)
+            & (move_line.payment_date <= treatment_date))
+        if payment_kind == 'receivable':
+            join_acc_cond &= (move_line.debit > 0 or move_line.credit < 0)
+        elif payment_kind == 'payable':
+            join_acc_cond &= (move_line.debit < 0 or move_line.credit > 0)
         query_table = move_line.join(party,
             condition=(move_line.party == party.id)
-            ).join(account, condition=(
-                (move_line.account == account.id)
-                & ((account.kind == 'receivable') |
-                    ((account.kind == 'payable') &
-                        (party.block_payable_payments == False)))
-                & (move_line.reconciliation == Null)
-                & (move_line.payment_date <= treatment_date)))
+        ).join(account, condition=join_acc_cond)
 
         cursor.execute(*query_table.select(move_line.id,
             where=Equal(
