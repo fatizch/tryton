@@ -32,7 +32,7 @@ class DocumentRequestBatch(batch.BatchRoot):
         return [('request', 'ASC')]
 
     @classmethod
-    def get_batch_domain(cls, treatment_date):
+    def get_batch_domain(cls, treatment_date, extra_args):
         return [
             ('reception_date', '=', None),
             [

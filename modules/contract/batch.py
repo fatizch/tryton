@@ -19,7 +19,7 @@ class ContractEndDateTerminationBatch(batch.BatchRoot):
         return 'contract'
 
     @classmethod
-    def get_batch_domain(cls, treatment_date):
+    def get_batch_domain(cls, treatment_date, extra_args):
         return [['OR',
                 ('status', '=', 'active'),
                 ('status', '=', 'hold')],

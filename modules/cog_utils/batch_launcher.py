@@ -75,8 +75,8 @@ def generate_all(batch_name, connexion_date=None, treatment_date=None,
     BatchModel = Pool().get(batch_name)
     with Transaction().set_user(admin.id), Transaction().set_context(
             User.get_preferences(context_only=True),
-            client_defined_date=connexion_date, batch_extra_args=extra_args):
-        ids = [x[0] for x in BatchModel.select_ids(treatment_date)]
+            client_defined_date=connexion_date):
+        ids = [x[0] for x in BatchModel.select_ids(treatment_date, extra_args)]
         if BatchModel.get_conf_item('split_mode') == 'number':
             chunking = chunks_number
         else:

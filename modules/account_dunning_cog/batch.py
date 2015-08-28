@@ -45,7 +45,7 @@ class DunningTreatmentBatch(batch.BatchRoot):
         return 'account.dunning'
 
     @classmethod
-    def select_ids(cls, treatment_date):
+    def select_ids(cls, treatment_date, extra_args):
         cursor = Transaction().cursor
         pool = Pool()
         dunning = pool.get('account.dunning').__table__()

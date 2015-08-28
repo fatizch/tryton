@@ -36,7 +36,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
         return 'account.payment'
 
     @classmethod
-    def get_batch_domain(cls, treatment_date):
+    def get_batch_domain(cls, treatment_date, extra_args):
         return [
             ('state', '=', 'approved'),
             ('date', '<=', treatment_date)]
@@ -85,7 +85,7 @@ class PaymentCreationBatch(batch.BatchRoot):
         return 'account.move.line'
 
     @classmethod
-    def select_ids(cls, treatment_date):
+    def select_ids(cls, treatment_date, extra_args):
         cursor = Transaction().cursor
         pool = Pool()
         payment = pool.get('account.payment').__table__()

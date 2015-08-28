@@ -93,7 +93,7 @@ class BatchRoot(ModelView):
         raise NotImplementedError
 
     @classmethod
-    def get_batch_domain(cls, treatment_date):
+    def get_batch_domain(cls, treatment_date, extra_args):
         return []
 
     @classmethod
@@ -105,11 +105,11 @@ class BatchRoot(ModelView):
         return 'id'
 
     @classmethod
-    def select_ids(cls, treatment_date):
+    def select_ids(cls, treatment_date, extra_args=None):
         cursor = Transaction().cursor
         SearchModel = Pool().get(cls.get_batch_search_model())
         tables, expression = SearchModel.search_domain(
-            cls.get_batch_domain(treatment_date))
+            cls.get_batch_domain(treatment_date, extra_args))
         main_table, _ = tables[None]
 
         def convert_from(table, tables):
@@ -181,7 +181,7 @@ class BatchRootNoSelect(BatchRoot):
         raise ''
 
     @classmethod
-    def select_ids(cls, treatment_date):
+    def select_ids(cls, treatment_date, extra_args=None):
         return []
 
 
@@ -199,7 +199,7 @@ class ViewValidationBatch(BatchRoot):
         return 'ir.ui.view'
 
     @classmethod
-    def get_batch_domain(cls, treatment_date):
+    def get_batch_domain(cls, treatment_date, extra_args):
         Module = Pool().get('ir.module')
         modules = Module.search([])
         utils_module = Module.search([('name', '=', 'cog_utils')])[0]

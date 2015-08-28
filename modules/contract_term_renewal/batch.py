@@ -19,7 +19,7 @@ class RenewContracts(batch.BatchRoot):
         return 'contract'
 
     @classmethod
-    def get_batch_domain(cls, treatment_date):
+    def get_batch_domain(cls, treatment_date, extra_args):
         pool = Pool()
         Product = pool.get('offered.product')
         renewable_products = Product.search([

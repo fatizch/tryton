@@ -24,15 +24,14 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
         return 'party.party'
 
     @classmethod
-    def select_ids(cls, treatment_date):
+    def select_ids(cls, treatment_date, extra_args):
         cursor = Transaction().cursor
         pool = Pool()
 
         agent = pool.get('commission.agent').__table__()
         commission = pool.get('commission').__table__()
 
-        args = Transaction().context.get('batch_extra_args')
-        if 'agent_type' not in args:
+        if 'agent_type' not in extra_args:
             cls.logger.warning('No agent_type defined. '
                 'Batch execution aborted')
             return
@@ -43,7 +42,7 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
         cursor.execute(*query_table.select(agent.party,
                 where=((commission.invoice_line == Null) &
                     (commission.date <= treatment_date) &
-                    (agent.type_ == args['agent_type'])),
+                    (agent.type_ == extra_args['agent_type'])),
                 group_by=[agent.party]))
 
         return cursor.fetchall()
@@ -86,20 +85,19 @@ class PostCommissionInvoiceBatch(batch.BatchRoot):
         return 'account.invoice'
 
     @classmethod
-    def select_ids(cls, treatment_date):
+    def select_ids(cls, treatment_date, extra_args):
         pool = Pool()
         AccountInvoice = pool.get('account.invoice')
 
-        args = Transaction().context.get('batch_extra_args')
-        if 'agent_type' not in args:
+        if 'agent_type' not in extra_args:
             cls.logger.warning('No agent_type defined. '
                 'Batch execution aborted')
             return
 
         domain = [('state', '=', 'validated')]
-        if args['agent_type'] == 'agent':
+        if extra_args['agent_type'] == 'agent':
             domain.append(('is_broker_invoice', '=', True),)
-        elif args['agent_type'] == 'principal':
+        elif extra_args['agent_type'] == 'principal':
             domain.append(('is_insurer_invoice', '=', True),)
 
         invoices = AccountInvoice.search(domain)
