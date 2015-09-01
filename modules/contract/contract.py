@@ -1093,7 +1093,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'status': 'hold',
                 'sub_status': hold_reason,
                 })
-        Event.notify_events(contracts, 'hold_contract')
+        Event.notify_events(contracts, 'hold_contract',
+            '%s (%s)' % (hold_reason.name, hold_reason.code))
 
     @classmethod
     def clean_before_reactivate(cls, contracts):
