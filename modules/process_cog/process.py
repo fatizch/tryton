@@ -1083,7 +1083,7 @@ class ProcessFinder(Wizard):
         if (hasattr(good_obj, 'current_state') and good_obj.current_state):
             good_obj.current_state.step.execute_before(good_obj)
         good_obj.save()
-        return good_values[0], {'res_id': good_obj.id}
+        return good_values[0], {'res_id': [good_obj.id]}
 
     def search_main_object(self):
         return None
@@ -1155,7 +1155,7 @@ class ProcessEnd(Wizard):
         good_values[0]['views'] = [
             view for view in good_values[0]['views'] if view[1] == 'form']
         return good_values[0], {
-            'res_id': Transaction().context.get('active_id')}
+            'res_id': Transaction().context.get('active_ids')}
 
     def end(self):
         return 'close'
@@ -1221,7 +1221,7 @@ class ProcessResume(Wizard):
         return (process_action, {
                 'id': active_id,
                 'model': active_model,
-                'res_id': active_id,
+                'res_id': [active_id],
                 'res_model': active_model,
                 })
 

@@ -119,7 +119,7 @@ class StartEndorsement:
         contract.current_state.step.execute_before(contract)
         contract.save()
 
-        return values[0], {'res_id': contract.id}
+        return values[0], {'res_id': [contract.id]}
 
     def do_resume_contract_process(self, action):
         endorsement = Pool().get('endorsement')(
@@ -128,7 +128,7 @@ class StartEndorsement:
         return (action, {
                 'id': contract_id,
                 'model': 'contract',
-                'res_id': contract_id,
+                'res_id': [contract_id],
                 'res_model': 'contract',
                 })
 

@@ -220,6 +220,6 @@ class SynthesisMenuOpen(Wizard):
             actions = {
                 'res_model': 'bank.account',
                 'views': [(None, 'form')],
-                'res_id': record.account.id
+                'res_id': [record.account.id],
             }
         return actions

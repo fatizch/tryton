@@ -141,7 +141,7 @@ class TaskDispatcher(Wizard):
         res = (act, {
                 'id': good_id,
                 'model': good_model,
-                'res_id': good_id,
+                'res_id': [good_id],
                 'res_model': good_model,
                 })
         return res
@@ -191,7 +191,7 @@ class LaunchTask(Wizard):
         return (action, {
                 'id': log.task.id,
                 'model': log.task.__name__,
-                'res_id': log.task.id,
+                'res_id': [log.task.id],
                 'res_model': log.task.__name__,
                 })
 
@@ -201,6 +201,6 @@ class LaunchTask(Wizard):
         return (action, {
                 'id': log.task.id,
                 'model': log.task.__name__,
-                'res_id': log.task.id,
+                'res_id': [log.task.id],
                 'res_model': log.task.__name__,
                 })

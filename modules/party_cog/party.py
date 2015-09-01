@@ -953,7 +953,7 @@ class SynthesisMenuOpen(Wizard):
             action = Action(action_id)
             actions = Action.get_action_values(action.type, [action.id])[0]
         else:
-            actions['res_id'] = record.id
+            actions['res_id'] = [record.id]
         return actions
 
     def get_action_parameters(self, record):
@@ -992,12 +992,11 @@ class SynthesisMenuSet(Wizard):
 
     def do_open(self, action):
         pool = Pool()
-        id = Transaction().context['active_ids'][0]
         action.update({
             'res_model': 'party.party',
             'views': [(pool.get('ir.ui.view').search([('xml_id', '=',
                     'party_cog.party_view_synthesis_form')])[0].id, 'form')],
-            'res_id': id
+            'res_id': Transaction().context['active_ids'][0],
             })
         return action, {}
 

@@ -126,6 +126,6 @@ class SynthesisMenuOpen(Wizard):
                 'views': [(Pool().get('ir.ui.view').search([('xml_id', '=',
                     'account_cog.move_line_view_synthesis_form')])[0].id,
                     'form')],
-                'res_id': record.id
+                'res_id': [record.id],
             }
         return actions
