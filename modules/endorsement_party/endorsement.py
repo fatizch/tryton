@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.cog_utils import fields, model
 from trytond.modules.endorsement import values_mixin, relation_mixin
 from trytond.model import Workflow
 
