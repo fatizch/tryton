@@ -392,6 +392,7 @@ class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
         option.appliable_conditions_date = contract.appliable_conditions_date
         option.all_extra_datas = self.covered_element.all_extra_datas
         option.status = 'quote'
+        option.contract_status = 'quote'
 
     @fields.depends('covered_element', 'new_options', 'effective_date')
     def on_change_new_options(self):
@@ -415,12 +416,10 @@ class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
             # TODO
             raise NotImplementedError
         covered_element = modified_covered_elements[0].covered_element
-        tmp_instance = cls(**default_values)
-        tmp_instance.covered_element = covered_element
-        tmp_instance.effective_date = default_values['effective_date']
         update_dict = {
             'covered_element': covered_element.id,
-            'new_options': [tmp_instance.update_option_dict(x.values)
+            'new_options': [dict({'start_date': x.values.get(
+                            'manual_start_date', None)}, **x.values)
                 for x in modified_covered_elements[0].options
                 if x.action == 'add'],
             }
@@ -458,6 +457,7 @@ class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
                 option_endorsement = EndorsementCoveredElementOption(
                     action='add', values={})
                 new_option_endorsements.append(option_endorsement)
+            new_option.manual_start_date = new_option.start_date
             for field in self.endorsement_part.option_fields:
                 new_value = getattr(new_option, field.name, None)
                 if isinstance(new_value, Model):
