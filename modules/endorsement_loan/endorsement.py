@@ -1,5 +1,6 @@
 import datetime
 from collections import defaultdict
+from sql.functions import CurrentTimestamp
 
 from sql import Null, Column
 from sql.conditionals import Coalesce
@@ -323,8 +324,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
                 loan_endorsement.set_applied_on(
                     loan_endorsement.endorsement.rollback_date)
             else:
-                loan_endorsement.set_applied_on(loan.write_date or
-                    loan.create_date)
+                loan_endorsement.set_applied_on(CurrentTimestamp())
             loan = loan_endorsement.loan
             utils.apply_dict(loan_endorsement.loan,
                 loan_endorsement.apply_values())

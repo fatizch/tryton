@@ -1,3 +1,5 @@
+from sql.functions import CurrentTimestamp
+
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -312,8 +314,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
                 p_endorsement.set_applied_on(
                     p_endorsement.endorsement.rollback_date)
             else:
-                p_endorsement.set_applied_on(party.write_date
-                    or party.create_date)
+                p_endorsement.set_applied_on(CurrentTimestamp())
             values = p_endorsement.apply_values()
             Party.write([party], values)
             p_endorsement.save()

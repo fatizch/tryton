@@ -641,8 +641,10 @@ def relation_mixin(value_model, field, model, name):
         def base_instance(self):
             if not self.relation:
                 return None
-            return utils.get_history_instance(model, self.relation,
-                self.applied_on)
+            with Transaction().set_context(
+                    _datetime=self.applied_on,
+                    _datetime_exclude=True):
+                return Pool().get(model)(self.relation)
 
         def get_summary(self, model, base_object=None):
             if self.action == 'remove':
@@ -1597,8 +1599,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 contract_endorsement.set_applied_on(
                     contract_endorsement.endorsement.rollback_date)
             else:
-                contract_endorsement.set_applied_on(contract.write_date or
-                    contract.create_date)
+                contract_endorsement.set_applied_on(CurrentTimestamp())
             contract_endorsement.clean_up_before_write()
             values = contract_endorsement.apply_values()
             Contract.write([contract], values)
