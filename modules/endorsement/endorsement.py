@@ -673,8 +673,8 @@ def relation_mixin(value_model, field, model, name):
             if self.action == 'update':
                 parent_endorsed_record = getattr(self,
                     getattr(self, '_relation_field_name'))
-            super(Mixin, self).get_records_before_application(current_records,
-                parent_endorsed_record)
+                super(Mixin, self).get_records_before_application(
+                    current_records, parent_endorsed_record)
 
         def update_after_application(self, parent_endorsed_record=None,
                 pre_application_records=None, current_records=None):
