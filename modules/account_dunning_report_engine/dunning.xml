@@ -16,5 +16,10 @@
             <field name="inherit" ref="account_dunning.dunning_level_view_list_sequence"/>
             <field name="name">dunning_level_list_sequence</field>
         </record>
+        <record model="ir.action.keyword" id="report_dunning_keyword">
+            <field name="keyword">form_print</field>
+            <field name="model">account.dunning,-1</field>
+            <field name="action" ref="report_engine.letter_generation_wizard"/>
+        </record>
     </data>
 </tryton>
