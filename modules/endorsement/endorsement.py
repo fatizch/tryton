@@ -401,6 +401,9 @@ def values_mixin(value_model):
             lang = pool.get('res.user')(Transaction().user).language
             ValueModel = pool.get(model)
             vals = []
+            if getattr(self, 'action', None):
+                if self.action == 'update':
+                    base_object = self.base_instance
             if not self.values:
                 return ''
             for k, v in self.values.iteritems():
