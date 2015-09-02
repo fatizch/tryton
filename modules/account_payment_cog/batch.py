@@ -116,7 +116,7 @@ class PaymentCreationBatch(batch.BatchRoot):
         account = pool.get('account.account').__table__()
         party = pool.get('party.party').__table__()
         payment_kind = extra_args.get('payment_kind',
-        cls.get_conf_item('payment_kind'))
+            cls.get_conf_item('payment_kind'))
         if payment_kind and payment_kind not in PAYMENT_KINDS:
             msg = "ignore payment_kind: '%s' not in %s" % (payment_kind,
                 PAYMENT_KINDS)
@@ -130,9 +130,9 @@ class PaymentCreationBatch(batch.BatchRoot):
             & (move_line.reconciliation == Null)
             & (move_line.payment_date <= treatment_date))
         if payment_kind == 'receivable':
-            join_acc_cond &= (move_line.debit > 0 or move_line.credit < 0)
+            join_acc_cond &= (move_line.debit > 0) | (move_line.credit < 0)
         elif payment_kind == 'payable':
-            join_acc_cond &= (move_line.debit < 0 or move_line.credit > 0)
+            join_acc_cond &= (move_line.debit < 0) | (move_line.credit > 0)
         query_table = move_line.join(party,
             condition=(move_line.party == party.id)
         ).join(account, condition=join_acc_cond)
