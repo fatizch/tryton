@@ -217,15 +217,15 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 'sender_address': objects[0].get_sender_address(),
                 })
         report = Report()
-        if self.convert_to_pdf:
-            report.template_extension = self.template_extension
-            report.extension = 'pdf'
-            _, data = Report.convert(report, data)
+        report.template_extension = self.template_extension
+        report.extension = ('pdf' if self.convert_to_pdf
+            else self.template_extension)
+        oext, data = Report.convert(report, data)
         reports.append({
                 'object': objects[0],
                 'report_type': report_type,
                 'data': data,
-                'report_name': report_name,
+                'report_name': '%s.%s' % (report_name, oext),
                 'origin': origin,
                 'resource': resource,
                 })
@@ -466,7 +466,8 @@ class ReportGenerate(Report):
         Date = pool.get('ir.date')
         filename = '%s - %s - %s' % (selected_letter.name,
             selected_obj.get_rec_name(''),
-            Date.date_as_string(utils.today(), selected_party.lang))
+            coop_string.slugify(
+                Date.date_as_string(utils.today(), selected_party.lang)))
         report_context = cls.get_context(records, data)
         oext, content = cls.convert(action_report,
             cls.render(action_report, report_context))
