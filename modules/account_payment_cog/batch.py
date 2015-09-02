@@ -29,7 +29,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
         super(PaymentTreatmentBatch, cls).__setup__()
         cls._default_config_items.update({
                 'split_size': 1,
-                'payment_kind': 'all',
+                'payment_kind': '',
                 })
 
     @classmethod
