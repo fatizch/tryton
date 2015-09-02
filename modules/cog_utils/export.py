@@ -73,6 +73,7 @@ class ExportImportMixin(Model):
         cls.__rpc__['export_json_to_file'] = RPC(instantiate=0,
             readonly=True, result=lambda r: cls._export_format_result(r))
         cls.__rpc__['ws_consult'] = RPC(readonly=True)
+        cls.__rpc__['ws_create_objects'] = RPC(readonly=False)
 
     @classmethod
     def get_xml_id(cls, objects, name):
@@ -504,6 +505,35 @@ class ExportImportMixin(Model):
                     'return': False,
                     'error': exc.message}
         return message
+
+    @classmethod
+    def ws_create_objects(cls, objects):
+        """ Import a list of objects and returns a confirmation message.
+
+        :param objects: a structure like so:
+                        {
+                            "any_exterior_id":
+                                {
+                                    "attribute_x": "the_value",
+                                    "attribute_y": "the_value",
+                                    etc..
+                                },
+                                etc ...
+                        }
+        """
+        return_values = {}
+        for ext_id, to_create in objects.iteritems():
+            try:
+                entity = cls.import_json(to_create)
+            except UserError as exc:
+                return {ext_id: {
+                        'return': False,
+                        'messages': {'error': exc.message},
+                        }}
+            return_values[ext_id] = {'return': True,
+                'messages': {cls.__name__: getattr(entity, getattr(
+                            entity, '_func_key'))}}
+        return return_values
 
 
 class FileSelector(ModelView):

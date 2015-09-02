@@ -1,3 +1,4 @@
+* Add ws_create_objects web service
 * Add tags to sequence
 * Add TranslationOverride wizard to edit custom translations
 
