@@ -264,7 +264,7 @@ New Endorsement::
     >>> new_endorsement.form.effective_date = endorsement_effective_date
     >>> new_endorsement.execute('start_endorsement')
     >>> my_option = new_endorsement.form.options[0].option
-    >>> new_endorsement.form.options[0].to_remove = True
+    >>> new_endorsement.form.options[0].action = 'terminated'
     >>> new_endorsement.form.options[0].sub_status = termination_status
     >>> new_endorsement.execute('remove_option_next')
     >>> new_endorsement.execute('apply_endorsement')

@@ -278,7 +278,7 @@ class OptionDescription:
             for option in base_instance.options:
                 result += self.get_rated_instances(option)
         elif isinstance(base_instance, Option):
-            if base_instance.coverage == self:
+            if base_instance.coverage == self and base_instance.status != 'void':
                 result.append(base_instance)
         return result
 

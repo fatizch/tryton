@@ -36,7 +36,7 @@ class RemoveOption:
                 if end_date:
                     end_dates.append(end_date)
         if end_dates:
-            return min(end_dates) + datetime.timedelta(days=1)
+            return min(end_dates)
 
 
 class BasicPreview:

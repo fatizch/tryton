@@ -1,7 +1,7 @@
 from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
-from trytond.pyson import Eval, Len, Bool, If
+from trytond.pyson import Eval, Len, Bool, If, Equal, Not
 from trytond.model import Model
 
 from trytond.modules.cog_utils import model, fields
@@ -92,6 +92,10 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                 ' to end the contract instead.',
                 'end_date_anterior_to_start_date': 'You are setting an end'
                 ' date anterior to start date for option : "%s"',
+                'voiding': 'You are voiding an option.',
+                'at_start_date_no_void': 'You are ending an option the day'
+                ' it starts. Are you sure you want to have an option lasting'
+                ' only one day and not void it ?',
                 })
 
     options = fields.One2Many(
@@ -109,10 +113,11 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
         for endorsement in all_endorsements:
             template = {
                 'contract': endorsement.contract.id,
-                'to_remove': False,
+                'action': '',
                 'covered_element_endorsement': None,
                 'option_endorsement': None,
-                'covered_element_option_endorsement': None}
+                'covered_element_option_endorsement': None,
+                'effective_date': endorsement.endorsement.effective_date}
             updated_struct = endorsement.updated_struct
             for covered_element, values in (
                     updated_struct['covered_elements'].iteritems()):
@@ -126,7 +131,8 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                                 'start_date': option.start_date,
                                 'end_date': option.end_date,
                                 'sub_status':
-                                option.sub_status,
+                                option.sub_status.id if option.sub_status
+                                else None,
                                 })
                     else:
                         real_option = option.option
@@ -140,9 +146,7 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                                     option.values['sub_status'],
                                 'covered_element_endorsement':
                                     option.covered_element_endorsement.id,
-                                'to_remove':
-                                    option.values['manual_end_date'] ==
-                                        effective_date,
+                                'action': option.values.get('status', ''),
                                 'covered_element_option_endorsement':
                                     option.id,
                                 })
@@ -157,7 +161,8 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                                 'start_date': option.start_date,
                                 'end_date': option.end_date,
                                 'sub_status':
-                                    option.sub_status,
+                                    option.sub_status.id if option.sub_status
+                                    else None,
                                 })
                 else:
                     selector = template.copy()
@@ -168,7 +173,7 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                             'end_date': option.values['manual_end_date'],
                             'sub_status':
                             option.values['sub_status'],
-                            'to_remove': True,
+                            'action': option.values.get('status', ''),
                             'option_endorsement': option.id,
                             })
                 if selector:
@@ -201,7 +206,7 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
             for option in self.options:
                 covered_element = option.covered_element
 
-                if option.covered_element and option.to_remove and not \
+                if option.covered_element and option.action and not \
                         option.covered_element_endorsement:
                     if option.covered_element.id not in ce_endorsements:
                         ce_endorsements[covered_element.id] = \
@@ -213,7 +218,7 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                             ce_endorsements[covered_element.id]
                         ce_endorsements[covered_element.id].save()
 
-                if option.covered_element and not option.to_remove and \
+                if option.covered_element and not option.action and \
                         option.covered_element_option_endorsement:
                     CovOptionEndorsement.delete(
                         [option.covered_element_option_endorsement])
@@ -222,11 +227,11 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                         cov_endorsement_to_delete.append(
                             option.covered_element_endorsement)
 
-                if not option.covered_element and not option.to_remove and \
+                if not option.covered_element and not option.action and \
                         option.option_endorsement:
                     op_endorsement_to_delete.append(option.option_endorsement)
 
-                if not option.covered_element and option.to_remove and \
+                if not option.covered_element and option.action and \
                         option.option_endorsement:
                     # This is a temporary measure to get around the clean_up
                     # method deleting the OptionEndorsement
@@ -234,18 +239,27 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                     OptionEndorsement.create([{
                             'relation': option.option.id,
                             'values': {'manual_end_date': effective_date,
-                                    'sub_status':
-                                    option.sub_status.id},
+                                    'sub_status': option.sub_status.id if
+                                    option.sub_status else None,
+                                    'status': option.action},
                             'action': 'update',
                             'definition': self.endorsement_definition,
                             'contract_endorsement': endorsement.id,
                             }])
-
-                if option.covered_element and option.to_remove and \
+                if option.covered_element and option.action and \
                     option.covered_element_option_endorsement and \
                         option.covered_element_endorsement:
                     option.covered_element_option_endorsement.values[
                         'sub_status'] = option.sub_status.id
+                    option.covered_element_option_endorsement.values[
+                        'status'] = option.action
+
+                if option.action == 'void':
+                    self.raise_user_warning('Voiding', 'voiding')
+                if option.start_date == effective_date and \
+                        option.action and option.action != 'void':
+                    self.raise_user_warning('at_start_date_no_void',
+                        'at_start_date_no_void')
 
             vlist_cov_opt = [{
                     'covered_element_endorsement': ce_endorsements[
@@ -253,9 +267,11 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                     'relation': x.option.id,
                     'definition': self.endorsement_definition,
                     'values': {'manual_end_date': effective_date,
-                        'sub_status': x.sub_status.id},
+                        'sub_status': x.sub_status.id if x.sub_status
+                        else None,
+                        'status': x.action},
                     'action': 'update'}
-                for x in self.options if (x.to_remove and not
+                for x in self.options if (x.action and not
                     x.covered_element_option_endorsement and
                     x.covered_element)]
             vlist_opt = [{
@@ -263,9 +279,11 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                     'definition': self.endorsement_definition,
                     'contract_endorsement': endorsement,
                     'values': {'manual_end_date': effective_date,
-                        'sub_status': x.sub_status.id},
+                        'sub_status': x.sub_status.id if x.sub_status
+                        else None,
+                        'status': x.action},
                     'action': 'update'}
-                for x in self.options if (x.to_remove and not
+                for x in self.options if (x.action and not
                     x.option_endorsement and not
                     x.covered_element)]
 
@@ -327,19 +345,26 @@ class RemoveOptionSelector(model.CoopView):
     covered_element_endorsement = fields.Many2One(
         'endorsement.contract.covered_element', 'Covered Element',
         readonly=True)
-    to_remove = fields.Boolean('To Remove')
+    action = fields.Selection([('', ''), ('terminated', 'Terminate'),
+            ('void', 'Void')], 'Action',
+        domain=[If((Equal(Eval('start_date'), Eval('effective_date'))),
+                ('action', 'in', ['terminated', 'void', '']),
+                ('action', '!=', 'void'))],
+        depends=['start_date', 'effective_date'])
     start_date = fields.Date('Start Date', readonly=True)
     end_date = fields.Date('End Date',
-        states={'required': Bool(Eval('to_remove'))},
-        depends=['to_remove'], readonly=True)
+        states={'required': Bool(Eval('action'))},
+        depends=['action'], readonly=True)
     sub_status = fields.Many2One('contract.sub_status',
-        'Sub Status', states={'required': Bool(Eval('to_remove'))},
-        depends=['to_remove'])
+        'Sub Status', states={'required': Bool(Eval('action'))},
+        domain=[('status', '=', Eval('action'))],
+        depends=['action'])
+    effective_date = fields.Date('Effective Date', readonly=True)
 
     @classmethod
     def view_attributes(cls):
         return super(RemoveOptionSelector, cls).view_attributes() + [
-            ('/tree', 'colors', If(Eval('to_remove', False),
+            ('/tree', 'colors', If(Eval('action', False),
                     'red', 'black')),
             ]
 

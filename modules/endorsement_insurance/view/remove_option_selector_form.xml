@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <form string="Option">
-    <label name="to_remove"/>
-    <field name="to_remove"/>
+    <label name="action"/>
+    <field name="action"/>
     <label name="option"/>
     <field name="option"/>
     <label name="covered_element"/>

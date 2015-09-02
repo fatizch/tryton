@@ -1063,6 +1063,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def is_covered_at_date(self, at_date, coverage=None):
         for option in self.options:
             if ((not coverage or option.coverage == coverage) and
+                    option.status != 'void' and
                     utils.is_effective_at_date(option, at_date)):
                 return True
         for sub_elem in self.sub_covered_elements:
@@ -1073,7 +1074,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         # TODO : Maybe this should go in contract_life / claim
         if party in self.get_covered_parties(at_date):
             for option in self.options:
-                if utils.is_effective_at_date(option, at_date):
+                if option.status != 'void' and utils.is_effective_at_date(
+                        option, at_date):
                     return True
         if hasattr(self, 'sub_covered_elements'):
             for sub_elem in self.sub_covered_elements:
