@@ -60,13 +60,15 @@ class ModuleTestCase(test_framework.CoopTestCase):
             covered_elements=[{
                     'party': party_father,
                     'options': [{
-                            'start_date': datetime.date(2014, 1, 1)
+                            'start_date': datetime.date(2014, 1, 1),
+                            'status': 'active'
                             }],
                     'sub_covered_elements': [],
                     }, {
                     'party': party_child1,
                     'options': [{
-                            'start_date': datetime.date(2014, 1, 1)
+                            'start_date': datetime.date(2014, 1, 1),
+                            'status': 'active',
                             }],
                     'sub_covered_elements': [],
                     }])
@@ -75,7 +77,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             covered_elements=[{
                     'party': party_mother,
                     'options': [{
-                            'start_date': datetime.date(2014, 1, 1)
+                            'start_date': datetime.date(2014, 1, 1),
+                            'status': 'active',
                             }],
                     'sub_covered_elements': [],
                     }, {
@@ -83,6 +86,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'options': [{
                             'start_date': datetime.date(2014, 1, 1),
                             'end_date': datetime.date(2014, 1, 31),
+                            'status': 'active',
                             }],
                     'sub_covered_elements': [],
                     }])
