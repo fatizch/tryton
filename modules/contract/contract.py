@@ -1638,10 +1638,12 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def check_end_date(cls, options):
         Date = Pool().get('ir.date')
         for option in options:
+            if option.status == 'void':
+                continue
             end_date = option.manual_end_date
             if not end_date or not option.start_date:
                 continue
-            if end_date > option.start_date:
+            if end_date >= option.start_date:
                 if not option.parent_contract:
                     continue
                 if (not option.parent_contract.end_date
