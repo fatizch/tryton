@@ -3,7 +3,6 @@ import polib
 from sql.operators import Concat
 
 from trytond import backend
-from trytond.ir.translation import TrytonPOFile
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, PYSONEncoder
 from trytond.transaction import Transaction
@@ -465,6 +464,11 @@ class Translation:
 
     @classmethod
     def translation_export(cls, lang, module):
+        # This import cannot be done at the top of the file, because it forces
+        # the import of ir/sequence.py before batch configuration is loaded.
+        # TODO : Fix this, for instance by moving batch_launcher.py outside of
+        # cog_utils
+        from trytond.ir.translation import TrytonPOFile
         # first pass: extract plain module translations
         res = super(Translation, cls).translation_export(lang, module)
 
