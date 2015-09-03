@@ -21,6 +21,16 @@ le client accède au dossier partagé dans lequel le serveur écrit ::
 (le client doit le cas échéant aussi avoir les droits en écriture sur le
 dossier).
 
+.. _server_export_root_dir:
+
+Export dans un répertoire serveur
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Dans *trytond.cfg* faire pointer ``export_root_dir`` vers un dossier avec des
+droits en écriture pour l'utilisateur Unix de coog. ::
+
+    [report]
+    export_root_dir = /share/documents
 
 Génération du pdf
 ^^^^^^^^^^^^^^^^^
@@ -41,9 +51,33 @@ les templates LibreOffice doivent être présentes sur les pc serveur et client.
 Client
 ------
 
+Envoi de mails
+^^^^^^^^^^^^^^
+
 Ligne de commande à renseigner dans *Options > Email...* pour paramétrer
 l'envoi de mail, en fonction du client mail utilisé :
 
 - Thunderbird ::
 
     thunderbird -compose "to=${to},subject=${subject},attachment=${attachment},body=${body}"
+
+Export dans un répertoire spécifique par modèle de lettre
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+On peut paramétrer dans l'application pour chaque modèle de lettre un
+sous-répertoire de *export_root_dir* (cf :ref:`server_export_root_dir`) dans
+lequel écrire les documents générés :
+
+- si aucun *Répertoire d'export* n'est renseigné alors pas d'export
+- si ``/`` est saisi, alors les documents sont copiés directement à la racine,
+  indiqué par le paramètre de configuration *export_root_dir*
+- sinon le nom saisi est utilisé comme nom de sous-répertoire. Si jamais un
+  chemin absolu est saisi, alors seul le nom de dossier le plus "profond" est
+  conservé.
+
+Exemple : avec le paramétrage de relance ci-dessous
+
+.. image :: images/export_dir.png
+
+Les documents de relance seront copiés dans le répertoire
+``/share/documents/bin``.

@@ -137,6 +137,10 @@ msgctxt "field:report.template,document_desc:"
 msgid "Document Description"
 msgstr "Descripteur de Document"
 
+msgctxt "field:report.template,export_dir:"
+msgid "Export Directory"
+msgstr "Répertoire d'export"
+
 msgctxt "field:report.template,format_for_internal_edm:"
 msgid "Format for internal EDM"
 msgstr "Format pour la GED interne"
@@ -336,6 +340,12 @@ msgstr "Mis à jour par"
 msgctxt "field:report.template.version,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "help:report.template,export_dir:"
+msgid "Store a copy of each generated document in specified server directory"
+msgstr ""
+"Répertoire serveur dans lequel sauvegarder une copie de chaque document "
+"généré."
 
 msgctxt "help:report.template,format_for_internal_edm:"
 msgid ""

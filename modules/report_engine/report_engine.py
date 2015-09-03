@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 import sys
 import traceback
+import logging
 import os
 import subprocess
 import StringIO
@@ -8,6 +9,7 @@ import shutil
 import tempfile
 
 from time import sleep
+from datetime import datetime
 
 from trytond import backend
 from trytond.pool import Pool
@@ -23,6 +25,7 @@ from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields, model, utils, coop_string, export
 
+logger = logging.getLogger(__name__)
 
 __all__ = [
     'ReportTemplate',
@@ -73,6 +76,8 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         'sending or printing')
     template_extension = fields.Selection(FILE_EXTENSIONS,
         'Template Extension')
+    export_dir = fields.Char('Export Directory', help='Store a copy of each '
+        'generated document in specified server directory')
     convert_to_pdf = fields.Boolean('Convert to pdf')
     split_reports = fields.Boolean('Split Reports', help="If checked,"
         " one document will be produced for each object. If not checked"
@@ -164,12 +169,36 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         return coop_string.slugify(self.name)
 
     def print_reports(self, reports):
-        """ Reports is a list of tuple with:
-            object_instance, report type, data, report name"""
-        pass
+        """ Reports is a list of dicts with keys:
+            object, origin, report type, data, report name"""
+        if self.export_dir:
+            self.export_reports(reports)
+
+    def export_reports(self, reports):
+        export_dir_basename = os.path.basename(self.export_dir)
+        if export_dir_basename != self.export_dir:
+            logger.warning("Keep only '%s' part of '%s' export_dir setting" %
+                (export_dir_basename, self.export_dir))
+        export_root_dir = config.get('report', 'export_root_dir')
+        if not export_root_dir:
+            raise Exception('Error', "No 'export_root_dir' configuration "
+                'setting specified.')
+        export_dirname = os.path.join(
+            export_root_dir, export_dir_basename)
+        if not os.path.exists(export_dirname):
+            raise Exception('Error', 'Export directory does not exist: %s' %
+                export_dir_basename)
+        for report in reports:
+            filename, ext = os.path.splitext(report['report_name'])
+            out_path = os.path.join(
+                export_dirname,
+                '%s_%s%s' % (coop_string.slugify(filename),
+                    datetime.now().strftime("%H%M%S%f"), ext))
+            with open(out_path, 'a') as out:
+                out.write(report['data'])
 
     def _create_attachment_from_report(self, report):
-        """ Report is a dictionnary with:
+        """ Report is a dictionary with:
             object_instance, report type, data, report name"""
 
         pool = Pool()

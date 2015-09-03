@@ -16,6 +16,8 @@
     <field name="modifiable_before_printing"/>
     <label name="template_extension"/>
     <field name="template_extension"/>
+    <label name="export_dir"/>
+    <field name="export_dir"/>
     <separator id="automatic_generation" string="Automatic Generation" colspan="4"/>
     <label name="convert_to_pdf"/>
     <field name="convert_to_pdf" colspan="3"/>
