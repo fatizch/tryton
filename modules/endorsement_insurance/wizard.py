@@ -254,12 +254,6 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                     option.covered_element_option_endorsement.values[
                         'status'] = option.action
 
-                if option.action == 'void':
-                    self.raise_user_warning('Voiding', 'voiding')
-                if option.start_date == effective_date and \
-                        option.action and option.action != 'void':
-                    self.raise_user_warning('at_start_date_no_void',
-                        'at_start_date_no_void')
 
             vlist_cov_opt = [{
                     'covered_element_endorsement': ce_endorsements[
@@ -320,10 +314,19 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                     self.raise_user_error('end_date_anterior_to_start_date',
                         (option.rec_name))
 
+        if any(option.action == 'void' for option in self.options):
+            self.raise_user_warning('Voiding', 'voiding')
+        if any(option.start_date == effective_date and
+                option.action and option.action != 'void' for
+                option in self.options):
+            self.raise_user_warning('at_start_date_no_void',
+                'at_start_date_no_void')
+
         for cov in base_endorsement.covered_elements:
             for opt in cov.options:
                 opt.values = opt.values
             cov.options = cov.options
+
         base_endorsement.covered_elements = base_endorsement.covered_elements
         base_endorsement.save()
 
