@@ -30,9 +30,13 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
 
         contract = pool.get('contract').__table__()
         contract_invoice = pool.get('contract.invoice').__table__()
+        invoice = pool.get('account.invoice').__table__()
 
-        query_table = contract.join(contract_invoice, 'LEFT', condition=(
-                contract.id == contract_invoice.contract))
+        query_table = contract.join(contract_invoice, condition=(
+                contract.id == contract_invoice.contract)
+            ).join(invoice, condition=(
+                contract_invoice.invoice == invoice.id) &
+            (invoice.state != 'cancel'))
 
         cursor.execute(*query_table.select(contract.id, group_by=contract.id,
                 where=(contract.status == 'active'),
