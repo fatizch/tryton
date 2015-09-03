@@ -357,9 +357,10 @@ class Contract:
                     payment_date)
             new_invoice = contract.get_invoice(None, None, billing_info)
             new_invoice.journal = journal
-            if not new_invoice.invoice_address:
-                new_invoice.invoice_address = contract.subscriber.addresses[0]
             new_invoice.invoice_date = utils.today()
+            if not new_invoice.invoice_address:
+                new_invoice.invoice_address = contract.get_contract_address(
+                    new_invoice.invoice_date)
             lines = []
             for premium in premiums:
                 lines.extend(premium.get_invoice_lines(None, None))
@@ -625,10 +626,9 @@ class Contract:
                 invoice = contract.get_invoice(*period)
                 if not invoice.journal:
                     invoice.journal = journal
-                if (not invoice.invoice_address
-                        and contract.subscriber.addresses):
-                    # TODO : To enhance
-                    invoice.invoice_address = contract.subscriber.addresses[0]
+                if not invoice.invoice_address:
+                    invoice.invoice_address = contract.get_contract_address(
+                        period[0])
                 invoice.lines = contract.get_invoice_lines(*period[0:2])
                 invoices[period].append((contract, invoice))
         new_invoices = Invoice.create([i._save_values
@@ -664,7 +664,7 @@ class Contract:
             type='out_invoice',
             journal=None,
             party=self.subscriber,
-            invoice_address=self.get_contract_address(),
+            invoice_address=self.get_contract_address(start),
             currency=self.get_currency(),
             account=self.subscriber.account_receivable,
             payment_term=billing_information.payment_term,

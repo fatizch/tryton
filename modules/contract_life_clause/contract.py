@@ -8,27 +8,9 @@ from trytond.modules.cog_utils import fields, model
 __metaclass__ = PoolMeta
 
 __all__ = [
-    'Contract',
     'ContractOption',
     'Beneficiary',
     ]
-
-
-class Contract:
-    __name__ = 'contract'
-
-    def update_contacts_list(self):
-        super(Contract, self).update_contacts_list()
-        parties = []
-        for cov_element in self.covered_elements:
-            for option in cov_element.options:
-                for benef in option.beneficiaries:
-                    if benef.accepting:
-                        parties.append(benef.party)
-        contacts = list(getattr(self, 'contacts', []))
-        self.synchronize_contacts_of_type(contacts,
-            'accepting_beneficiary', parties)
-        self.contacts = contacts
 
 
 class ContractOption:

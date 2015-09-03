@@ -116,23 +116,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @test_framework.prepare_test(
         'contract.test0010_testContractCreation',
-        'contract.createContactTypes',
-        )
-    def test0012_testContractContactsList(self):
-        contract = self.Contract()
-        party = self.Party.search([('is_person', '=', True)])[0]
-        contract.subscriber = party
-        contract.covered_elements = []
-        for _count in range(2):  # don't add contact if it already exists
-            contract.update_contacts()
-            self.assertEqual(len(contract.contacts), 1)
-        contract.subscriber = None
-        for _count in range(2):
-            contract.update_contacts()
-            self.assertEqual(len(contract.contacts), 0)
-
-    @test_framework.prepare_test(
-        'contract.test0010_testContractCreation',
         )
     def test0015_testRevertToProject(self):
         contract, = self.Contract.search([])

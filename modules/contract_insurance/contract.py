@@ -300,13 +300,6 @@ class Contract(Printable):
             covered_element.init_covered_element(product, item_desc, cov_dict)
             self.covered_elements.append(covered_element)
 
-    def update_contacts_list(self):
-        super(Contract, self).update_contacts_list()
-        contacts = list(getattr(self, 'contacts', []))
-        self.synchronize_contacts_of_type(contacts,
-            'covered_party', [x.party for x in self.covered_elements])
-        self.contacts = contacts
-
     @classmethod
     def _export_skips(cls):
         return super(Contract, cls)._export_skips() | set(['multi_mixed_view'])

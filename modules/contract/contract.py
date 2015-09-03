@@ -403,7 +403,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def _calculate_methods(cls, product):
         return [('options', 'set_automatic_end_date'),
             ('contract', 'calculate_activation_dates'),
-            ('contract', 'update_contacts'),
             ]
 
     @dualmethod
@@ -1163,10 +1162,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 None))
         return cls.browse([x['id'] for x in cursor.dictfetchall()])
 
-    def get_contract_address(self, at_date=None):
-        for contact in self.contacts:
-            if contact.type.code == 'subscriber' and contact.address:
-                return contact.address
+    def get_contract_address(self, at_date=None, role='subscriber'):
+        contact = self.get_contact_of_type_at_date(role, at_date)
+        if contact and contact.address:
+            return contact.address
+        return utils.get_good_version_at_date(self.subscriber, 'addresses',
+            at_date)
 
     def init_default_address(self):
         if getattr(self, 'addresses', None):
@@ -1258,31 +1259,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         good_extra_data = extra_data.extra_data_values if extra_data else {}
         res.update(good_extra_data)
         return res
-
-    def synchronize_contacts_of_type(self, contacts, code, parties):
-        pool = Pool()
-        ContactType = pool.get('contract.contact.type')
-        Contact = pool.get('contract.contact')
-        type_ = ContactType.search([('code', '=', code)], limit=1,
-            order=[])[0]  # TODO: cache those code/id mappings
-        for contact in contacts[:]:
-            if contact.type == type_ and contact.party not in parties:
-                contacts.remove(contact)
-        contacts.extend([Contact(type=type_, party=party)
-            for party in set(parties) - set(
-                [x.party for x in contacts if x.type == type_])])
-
-    def update_contacts_list(self):
-        contacts = list(getattr(self, 'contacts', []))
-        self.synchronize_contacts_of_type(contacts,
-            'subscriber', [self.subscriber] if self.subscriber else [])
-        self.contacts = contacts
-
-    def update_contacts(self):
-        self.update_contacts_list()
-        for c in self.contacts:
-            if not getattr(c, 'address', None):
-                c.address = c.get_default_address_from_party()
 
     def add_contact_with_address(self, address, date, type_):
         pool = Pool()
