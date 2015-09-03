@@ -159,10 +159,6 @@ def duration_between(date1, date2, duration_unit):
     date1=01/01/2013 date2=31/01/2013 -> 31 days, 1 Month
     date1=01/01/2013 date2=31/03/2013 -> 90 days, 3 months, 1 quarter
     date1=01/01/2013 date2=31/12/21013 -> 365 days, 12 months, 1 year
-
-    if is_it_exact is set to True:
-    date1=01/01/2013 date2=01/01/21014 -> (366 days, True), (12 months, False),
-        (1 year, False)
     '''
     if duration_unit == 'day':
         return number_of_days_between(date1, date2)
