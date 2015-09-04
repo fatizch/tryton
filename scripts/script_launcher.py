@@ -393,13 +393,23 @@ def batch(arguments, config, work_data):
             print 'No celery worker found. Run `coop batch init` first.'
             return 1
         else:
-            batch_launcher.generate_all.delay(arguments.name,
+            status = batch_launcher.generate_all.delay(arguments.name,
                 arguments.connexion_date, arguments.treatment_date,
                 arguments.extra)
+            # Calling status.collect() does not have intended effect if a task
+            # split has occured, ie when batch_launcher.generate() generates
+            # additional subtasks.
+            # In this case, if you want `coop batch` to return only when all
+            # tasks (originals + additionals) have finished you must pass the
+            # 'blocking' flag. A current limitation is that in 'blocking' mode,
+            # exit status is always 0.
             if arguments.blocking:
                 while celery_app.control.inspect().active().values()[0]:
                     time.sleep(5)
-
+            else:
+                for s in status.collect():
+                    if any([res.get() for res in s[0].get().results]):
+                        return 1
     elif arguments.action == 'monitor':
         with open(os.devnull, 'w') as fnull:
             subprocess.Popen(['celery', '--app=%s' % APPNAME,
