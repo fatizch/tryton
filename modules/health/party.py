@@ -14,26 +14,12 @@ __all__ = [
 class Party:
     __name__ = 'party.party'
 
-    is_health = fields.Function(
-        fields.Boolean('Is Health', states={'invisible': True}),
-        'get_is_health')
     health_complement = fields.One2Many('health.party_complement', 'party',
-        'Health Complement', states={
-            'invisible': And(~Eval('health_complement'), ~Eval('is_health'))},
-        delete_missing=True)
+        'Health Complement', delete_missing=True)
     health_contract = fields.Function(
         fields.Many2One('contract', 'Health Contract', states={
                 'invisible': Eval('context', {}).get('synthesis') != 'health',
                 }), 'get_health_contract_id')
-
-    def get_is_health(self, name):
-        return Transaction().context.get('is_health')
-
-    @classmethod
-    def default_health_complement(cls):
-        if Transaction().context.get('is_health'):
-            return [{}]
-        return []
 
     def get_health_contract_id(self, name):
         for contract in self.contracts:

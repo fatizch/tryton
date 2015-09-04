@@ -51,13 +51,6 @@ class CoveredElement:
         'get_health_complement', 'set_health_complement')
 
     @classmethod
-    def __setup__(cls):
-        super(CoveredElement, cls).__setup__()
-        if not cls.party.context:
-            cls.party.context = {}
-        cls.party.context['is_health'] = Eval('is_health')
-
-    @classmethod
     def create(cls, values):
         pool = Pool()
         Contract = pool.get('contract')
