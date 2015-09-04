@@ -365,6 +365,7 @@ def test(arguments, config, work_data):
 
 def batch(arguments, config, work_data):
     import celery
+    from celery.result import GroupResult
     from trytond.modules.cog_utils import batch_launcher
 
     log_path = os.path.join(work_data['runtime_dir'], 'logs',
@@ -396,19 +397,10 @@ def batch(arguments, config, work_data):
             status = batch_launcher.generate_all.delay(arguments.name,
                 arguments.connexion_date, arguments.treatment_date,
                 arguments.extra)
-            # Calling status.collect() does not have intended effect if a task
-            # split has occured, ie when batch_launcher.generate() generates
-            # additional subtasks.
-            # In this case, if you want `coop batch` to return only when all
-            # tasks (originals + additionals) have finished you must pass the
-            # 'blocking' flag. A current limitation is that in 'blocking' mode,
-            # exit status is always 0.
-            if arguments.blocking:
-                while celery_app.control.inspect().active().values()[0]:
-                    time.sleep(5)
-            else:
-                for s in status.collect():
-                    if any([res.get() for res in s[0].get().results]):
+            for s in status.collect():
+                if isinstance(s[0], (GroupResult, tuple)):
+                    result, vals = s
+                    if any(vals):
                         return 1
     elif arguments.action == 'monitor':
         with open(os.devnull, 'w') as fnull:
