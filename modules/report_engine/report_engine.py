@@ -114,18 +114,18 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
             cursor.execute("UPDATE report_template "
                 "SET template_extension = 'odt' "
                 "WHERE template_extension IS NULL")
-            cursor.execute("UPDATE report_template SET convert_to_pdf = TRUE "
+            cursor.execute("UPDATE report_template SET convert_to_pdf = 'TRUE'"
                 "WHERE convert_to_pdf IS NULL")
-            cursor.execute("UPDATE report_template SET split_reports = TRUE "
+            cursor.execute("UPDATE report_template SET split_reports = 'TRUE'"
                 "WHERE split_reports IS NULL")
         if has_column_internal_edm:
             # Migration from 1.4 : Store template format for internal edm
             cursor.execute("UPDATE report_template "
                 "SET format_for_internal_edm = 'pdf' "
-                "WHERE internal_edm = TRUE and convert_to_pdf = TRUE")
+                "WHERE internal_edm = 'TRUE' and convert_to_pdf = 'TRUE'")
             cursor.execute("UPDATE report_template "
                 "SET format_for_internal_edm = 'original' "
-                "WHERE internal_edm = TRUE and convert_to_pdf = FALSE")
+                "WHERE internal_edm = 'TRUE' and convert_to_pdf = 'FALSE'")
             report_template.drop_column('internal_edm')
 
     @classmethod

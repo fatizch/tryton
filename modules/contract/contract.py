@@ -499,7 +499,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
         def convert(value):
             if value is not None:
-                return datetime.date(*map(int, value.split('-')))
+                if not isinstance(value, datetime.date):
+                    return datetime.date(*map(int, value.split('-')))
+                return value
 
         values = {
             'start_date': defaultdict(lambda: None),
