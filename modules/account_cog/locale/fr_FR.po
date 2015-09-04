@@ -612,3 +612,64 @@ msgstr "Taxe"
 msgctxt "view:party.party:"
 msgid "Account"
 msgstr "Compte"
+
+# Custom translations below
+
+msgctxt "field:account.configuration,default_account_payable:account."
+msgid "Default Account Payable"
+msgstr "Compte à payer par défaut"
+
+msgctxt "field:account.configuration,default_account_receivable:account."
+msgid "Default Account Receivable"
+msgstr "Compte à recevoir par défaut"
+
+msgctxt "field:account.create_chart.properties,account_payable:account."
+msgid "Default Payable Account"
+msgstr "Compte à payer par défaut"
+
+msgctxt "field:account.create_chart.properties,account_receivable:account."
+msgid "Default Receivable Account"
+msgstr "Compte à recevoir par défaut"
+
+msgctxt "field:party.party,account_payable:account."
+msgid "Account Payable"
+msgstr "Compte à payer"
+
+msgctxt "field:party.party,account_receivable:account."
+msgid "Account Receivable"
+msgstr "Compte à recevoir"
+
+msgctxt "model:account.account.template,name:account.account_template_payable"
+msgid "Main Payable"
+msgstr "Compte à payer"
+
+msgctxt ""
+"model:account.account.template,name:account.account_template_receivable"
+msgid "Main Receivable"
+msgstr "Compte à recevoir"
+
+msgctxt ""
+"model:account.account.type.template,name:account.account_type_template_liability_current_payable"
+msgid "Payable"
+msgstr "À payer"
+
+msgctxt ""
+"model:account.account.type.template,name:account.account_type_template_asset_current_receivable"
+msgid "Receivable"
+msgstr "À recevoir"
+
+msgctxt "selection:account.account,kind:account."
+msgid "Payable"
+msgstr "À payer"
+
+msgctxt "selection:account.account,kind:account."
+msgid "Receivable"
+msgstr "À recevoir"
+
+msgctxt "selection:account.account.template,kind:account."
+msgid "Payable"
+msgstr "À payer"
+
+msgctxt "selection:account.account.template,kind:account."
+msgid "Receivable"
+msgstr "À recevoir"

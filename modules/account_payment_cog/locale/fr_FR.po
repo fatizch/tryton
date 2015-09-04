@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -423,3 +423,29 @@ msgctxt ""
 "wizard_button:account.payment.payment_information_modification,payment_information_selection,finalize:"
 msgid "Next"
 msgstr "Suivant"
+
+# Custom translations below
+
+msgctxt "selection:account.move.line,payment_kind:account_payment."
+msgid "Receivable"
+msgstr "À recevoir"
+
+msgctxt "selection:account.move.line,payment_kind:account_payment."
+msgid "Payable"
+msgstr "À payer"
+
+msgctxt "selection:account.payment.group,kind:account_payment."
+msgid "Receivable"
+msgstr "À recevoir"
+
+msgctxt "selection:account.payment.group,kind:account_payment."
+msgid "Payable"
+msgstr "À payer"
+
+msgctxt "selection:account.payment,kind:account_payment."
+msgid "Receivable"
+msgstr "À recevoir"
+
+msgctxt "selection:account.payment,kind:account_payment."
+msgid "Payable"
+msgstr "À payer"
