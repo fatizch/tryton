@@ -11,6 +11,14 @@ class PaymentTreatmentBatch:
     __name__ = 'account.payment.process'
 
     @classmethod
+    def __setup__(cls):
+        super(PaymentTreatmentBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'split_mode': 'divide',
+                'split_size': 1,
+                })
+
+    @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):
         groups = super(PaymentTreatmentBatch, cls).execute(
             objects, ids, treatment_date, extra_args)
