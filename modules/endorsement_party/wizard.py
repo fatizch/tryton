@@ -87,7 +87,8 @@ class ChangePartyAddress(EndorsementWizardStepMixin, model.CoopView):
     @classmethod
     def _address_fields_to_extract(cls):
         return ['name', 'street', 'streetbis', 'zip', 'city', 'start_date',
-            'end_date', 'party', 'country', 'zip_and_city', 'subdivision']
+            'end_date', 'party', 'country', 'zip_and_city', 'subdivision',
+            'active']
 
     def _get_parties(self):
         return {x.party.id: x
@@ -177,7 +178,7 @@ class ChangePartyAddress(EndorsementWizardStepMixin, model.CoopView):
                 new_values = {k: v for k, v in
                     address._save_values.iteritems() if k in
                     self._address_fields_to_extract() and
-                    v or getattr(prev_address, k, False)}
+                    (v or getattr(prev_address, k, False))}
                 new_values.pop('zip_and_city', None)
             return new_values
 

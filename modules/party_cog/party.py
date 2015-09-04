@@ -386,7 +386,16 @@ class Party(export.ExportImportMixin):
             return self.company
 
     def address_get(self, type=None, at_date=None):
+        # TODO : cache
+        pool = Pool()
+        Address = pool.get('party.address')
         addresses = utils.get_good_versions_at_date(self, 'addresses', at_date)
+        if not addresses:
+            if not at_date:
+                at_date = utils.today()
+            return utils.get_value_at_date([x for x in Address.search(
+                        [('party', '=', self.id), ('active', '=', False)])],
+                at_date, 'start_date')
         for address in addresses:
             if not type or getattr(address, type):
                 return address
