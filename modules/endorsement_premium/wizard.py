@@ -57,7 +57,7 @@ class PreviewContractPremiums(EndorsementWizardPreviewMixin,
             new_premium = {x: getattr(premium, x)
                 for x in PremiumPreview.fields_to_extract()}
             new_premium['contract'] = instance.id
-            new_premium['name'] = premium.rec_name
+            new_premium['name'] = premium.full_name
             premiums.append(new_premium)
 
         sorted_premiums = sorted(premiums, key=itemgetter('name', 'start'))

@@ -88,3 +88,10 @@ class Premium:
             ('extra_premium.option.parent_contract',) + tuple(clause[1:]),
             ]
         return new_clause
+
+    @property
+    def full_name(self):
+        if self.option and self.option.covered_element:
+            return ', '.join([self.rec_name,
+                    self.option.covered_element.rec_name])
+        return self.rec_name
