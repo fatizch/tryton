@@ -232,10 +232,12 @@ class ReconcileShow:
         if self.write_off >= 0:
             self.contract = None
             self.remaining_repartition_method = 'write_off'
-            self.on_change_remaining_repartition_method()
         else:
             self.remaining_repartition_method = 'set_on_party'
-            self.on_change_remaining_repartition_method()
+        self.on_change_remaining_repartition_method()
+        if not self.write_off:
+            # Set journal to avoid 0.0 write_off line creation
+            self.journal = None
 
 
 class Reconcile:
