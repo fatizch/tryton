@@ -20,7 +20,6 @@ def register():
         Contract,
         ActivationHistory,
         ContractOption,
-        ContractAddress,
         ContractEndDateTerminationBatch,
         ContractExtraDataRevision,
         ContractSelectEndDate,

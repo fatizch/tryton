@@ -51,7 +51,6 @@ __all__ = [
     'ActivationHistory',
     'Contract',
     'ContractOption',
-    'ContractAddress',
     'ContractExtraDataRevision',
     'ContractSelectEndDate',
     'ContractEnd',
@@ -119,12 +118,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
-    addresses = fields.One2Many('contract.address', 'contract',
-        'Addresses', context={
-            'policy_owner': Eval('current_policy_owner'),
-            'start_date': Eval('start_date'),
-            }, depends=['current_policy_owner', 'status'],
-            states=_STATES, delete_missing=True)
     company = fields.Many2One('company.company', 'Company', required=True,
         select=True, ondelete='RESTRICT', states=_STATES, depends=_DEPENDS)
     quote_number = fields.Char('Quote Number', readonly=True)
@@ -300,6 +293,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         cls._order.insert(0, ('last_modification', 'DESC'))
 
     @classmethod
+    def __register__(cls, module_name):
+        # Migration from 1.4 Drop contract.address
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        if TableHandler.table_exist(cursor, 'contract_address'):
+            TableHandler.drop_table(cursor, 'contract.address',
+                'contract_address')
+        super(Contract, cls).__register__(module_name)
+
+    @classmethod
     def view_attributes(cls):
         return super(Contract, cls).view_attributes() + [(
                 '//group[@id="subscriber"]/group[@id="person"]',
@@ -440,7 +443,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def update_contract_after_import(cls, contracts):
         for contract in contracts:
             contract.init_options()
-            contract.init_default_address()
 
     @classmethod
     def is_master_object(cls):
@@ -819,7 +821,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         self.subscriber = party
         at_date = contract_dict.get('start_date', utils.today())
         self.init_from_product(product, at_date)
-        self.init_default_address()
         self.on_change_extra_data()
 
     def before_activate(self, contract_dict=None):
@@ -847,7 +848,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def _export_light(cls):
         return (super(Contract, cls)._export_light() |
-            set(['product', 'company', 'addresses']))
+            set(['product', 'company']))
 
     @classmethod
     def _export_skips(cls):
@@ -1170,18 +1171,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return contact.address
         return utils.get_good_version_at_date(self.subscriber, 'addresses',
             at_date)
-
-    def init_default_address(self):
-        if getattr(self, 'addresses', None):
-            return True
-        Address = Pool().get('contract.address')
-        addresses = self.subscriber.address_get(at_date=self.start_date)
-        if addresses:
-            cur_address = Address()
-            cur_address.address = addresses
-            cur_address.start_date = self.start_date
-            self.addresses = [cur_address]
-        return True
 
     def get_appliable_logo(self, kind=''):
         if self.company:
@@ -1746,41 +1735,6 @@ class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,
             values['_func_key'] = values['date']
         else:
             values['_func_key'] = None
-
-
-class ContractAddress(model.CoopSQL, model.CoopView):
-    'Contract Address'
-
-    __name__ = 'contract.address'
-
-    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
-        required=True, select=True)
-    start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End Date')
-    address = fields.Many2One('party.address', 'Address', ondelete='RESTRICT',
-        domain=[('party', '=', Eval('policy_owner'))],
-        depends=['policy_owner'])
-    policy_owner = fields.Function(
-        fields.Many2One('party.party', 'Policy Owner',
-            states={'invisible': True}),
-        'on_change_with_policy_owner')
-
-    @staticmethod
-    def default_policy_owner():
-        return Transaction().context.get('policy_owner')
-
-    @staticmethod
-    def default_start_date():
-        return Transaction().context.get('start_date')
-
-    @fields.depends('contract', 'start_date')
-    def on_change_with_policy_owner(self, name=None):
-        if self.contract and self.start_date:
-            res = self.contract.get_policy_owner(self.start_date)
-        else:
-            res = self.default_policy_owner()
-        if res:
-            return res.id
 
 
 class ContractSelectEndDate(model.CoopView):

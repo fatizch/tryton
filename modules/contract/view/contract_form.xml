@@ -38,7 +38,6 @@
         </page>
         <page string="Contacts" id="contacts">
             <field name="contacts" colspan="4"/>
-            <field name="addresses" colspan="4"/>
         </page>
         <page string="Administration" id="admin" col="2">
             <group id="left" col="2" yfill="0">
