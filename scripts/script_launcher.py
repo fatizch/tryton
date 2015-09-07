@@ -397,6 +397,15 @@ def batch(arguments, config, work_data):
             status = batch_launcher.generate_all.delay(arguments.name,
                 arguments.connexion_date, arguments.treatment_date,
                 arguments.extra)
+            # Calling status.collect() does not have intended effect if a task
+            # split has occured, ie when batch_launcher.generate() generates
+            # additional subtasks.
+            # In this case, if you want `coop batch` to return only when all
+            # tasks (originals + additionals) have finished you must pass the
+            # 'blocking' flag.
+            if arguments.blocking:
+                while celery_app.control.inspect().active().values()[0]:
+                    time.sleep(5)
             for s in status.collect():
                 if isinstance(s[0], (GroupResult, tuple)):
                     result, vals = s
