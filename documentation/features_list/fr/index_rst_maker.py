@@ -65,3 +65,5 @@ if __name__ == '__main__':
             for module in modules:
                 output.writelines([module[1], '^' * len(module[1]), '\n\n'])
                 output.writelines(module[2] + ['\n'])
+
+        print("Type 'make latexpdf' to generate the document.")
