@@ -10,6 +10,15 @@ msgctxt "error:account.payment.journal.reject_reason:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
 
+msgctxt "error:account.payment.manual_payment_fail:"
+msgid "Selected payments must have the same payment method."
+msgstr ""
+"Les paiements sélectionnés doivent avoir la même méthode de traitement."
+
+msgctxt "error:account.payment.manual_payment_fail:"
+msgid "Selected payments status must be succeeded or processing"
+msgstr "Le statut des paiements sélectionnés doit être 'réussi' ou 'traité'"
+
 msgctxt "error:account.payment:"
 msgid "Payments blocked for party %s"
 msgstr "Paiements bloqués pour le tiers %s"
@@ -21,18 +30,6 @@ msgstr "Journal de prélèvement"
 msgctxt "field:account.configuration,reject_fee_journal:"
 msgid "Reject Fee Journal"
 msgstr "Journal des frais de rejet"
-
-msgctxt "field:account.invoice,credit_reconciliation_lines:"
-msgid "Payment Lines"
-msgstr "Lignes de paiement"
-
-msgctxt "field:account.invoice,payments:"
-msgid "Payments"
-msgstr "Paiements"
-
-msgctxt "field:account.invoice,pending_payment:"
-msgid "Pending Payment"
-msgstr "En cours de prélèvement"
 
 msgctxt "field:account.move.line,payment_date:"
 msgid "Payment Date"
@@ -61,6 +58,22 @@ msgstr "Identifiant XML"
 msgctxt "field:account.payment.create,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:account.payment.fail_information,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.payment.fail_information,payments:"
+msgid "Payments"
+msgstr "Paiements"
+
+msgctxt "field:account.payment.fail_information,process_method:"
+msgid "Process Method"
+msgstr "Méthode de traitement"
+
+msgctxt "field:account.payment.fail_information,reject_reason:"
+msgid "Reject Reason"
+msgstr "Motif de rejet"
 
 msgctxt "field:account.payment.group,has_processing_payment:"
 msgid "Has Processing Payment"
@@ -270,6 +283,10 @@ msgctxt "model:account.payment.create,name:"
 msgid "Payment Creation Batch"
 msgstr "Batch de création des paiements"
 
+msgctxt "model:account.payment.fail_information,name:"
+msgid "Payment Fail Information"
+msgstr "Informations du rejet"
+
 msgctxt "model:account.payment.journal.failure_action,name:"
 msgid "Journal Failure Action"
 msgstr "Action suite à rejet"
@@ -305,6 +322,10 @@ msgstr "Motifs de rejet"
 msgctxt "model:ir.action,name:create_payments_wizard"
 msgid "Create Payments"
 msgstr "Créer les paiements"
+
+msgctxt "model:ir.action,name:manual_payment_fail_wizard"
+msgid "Fail Payment"
+msgstr "Rejeter des paiements"
 
 msgctxt "model:ir.action,name:modify_payment_information_wizard"
 msgid "Modify Payment Information"
@@ -366,6 +387,10 @@ msgctxt "view:account.move.line:"
 msgid "Payments"
 msgstr "Paiements"
 
+msgctxt "view:account.payment.fail_information:"
+msgid "Payment Fail Information"
+msgstr "Informations du rejet"
+
 msgctxt "view:account.payment.group:"
 msgid "Acknowledge"
 msgstr "Accuser réception"
@@ -399,8 +424,20 @@ msgid "Payment Date Modification"
 msgstr "Modification de la date de paiement"
 
 msgctxt "view:account.payment:"
+msgid "Approve"
+msgstr "Approuver"
+
+msgctxt "view:account.payment:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "view:account.payment:"
 msgid "Failed Payments"
 msgstr "Paiements rejetés"
+
+msgctxt "view:account.payment:"
+msgid "Succeed"
+msgstr "Réussir"
 
 msgctxt "view:contract:"
 msgid "As of today"
@@ -413,6 +450,16 @@ msgstr "Créer les paiements"
 msgctxt "wizard_button:account.payment.creation,start,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:account.payment.manual_payment_fail,fail_information,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:account.payment.manual_payment_fail,fail_information,fail_payments:"
+msgid "Fail Payments"
+msgstr "Rejeter les paiements"
 
 msgctxt ""
 "wizard_button:account.payment.payment_information_modification,payment_information_selection,end:"

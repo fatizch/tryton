@@ -3,6 +3,12 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:account.payment:"
+msgid "Payments with same sepa_merged_id must be failed at the same time."
+msgstr ""
+"Les paiements avec le même identifiant regroupement SEPA doivent être "
+"rejetés en même temps."
+
+msgctxt "error:account.payment:"
 msgid "Unknown amount invoice line : %s %s"
 msgstr "Montant de ligne de quittance inconnu : %s %s"
 

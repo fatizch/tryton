@@ -4,5 +4,7 @@
         <label name="reject_description"/>
         <field name="reject_description"/>
     </xpath>
+    <xpath expr="/form/group/group[@id='buttons']/button[@name='fail']" position="replace">
+        <button string="Fail" name="button_fail_payments"/>
+    </xpath>
 </data>
-

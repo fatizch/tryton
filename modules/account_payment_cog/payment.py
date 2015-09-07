@@ -5,8 +5,9 @@ from itertools import groupby
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.model import ModelView, Unique
+from trytond.wizard import StateView, Button, StateTransition
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Not, In
 
 from trytond.modules.cog_utils import coop_string, export, fields, model
 from trytond.modules.cog_utils import coop_date, utils
@@ -21,6 +22,8 @@ __all__ = [
     'JournalFailureAction',
     'RejectReason',
     'Group',
+    'PaymentFailInformation',
+    'ManualPaymentFail',
     ]
 
 
@@ -179,6 +182,7 @@ class RejectReason(model.CoopSQL, model.CoopView):
         cls._sql_constraints += [
             ('code_unique', Unique(t, t.code), 'The code must be unique'),
             ]
+        cls._order = [('process_method', 'ASC'), ('code', 'ASC')]
 
     @classmethod
     def is_master_object(cls):
@@ -226,6 +230,12 @@ class Payment(export.ExportImportMixin, Printable):
         cls._error_messages.update({
                 'payments_blocked_for_party': 'Payments blocked for party %s',
                 })
+        cls._buttons.update({
+                'button_fail_payments': {
+                    'invisible': Not(In(Eval('state'),
+                            ['processing', 'succeeded'])),
+                    'icon': 'tryton-cancel'
+                    }})
 
     def get_icon(self, name=None):
         return 'payment'
@@ -345,6 +355,15 @@ class Payment(export.ExportImportMixin, Printable):
     def get_sender(self):
         return self.company.party
 
+    @classmethod
+    def manual_set_reject_reason(cls, payments, reject_reason):
+        pass
+
+    @classmethod
+    @ModelView.button_action('account_payment_cog.manual_payment_fail_wizard')
+    def button_fail_payments(cls, payments):
+        pass
+
 
 class Configuration:
     __name__ = 'account.configuration'
@@ -413,3 +432,69 @@ class Group:
         for group_id, in cursor.fetchall():
             result[group_id] = True
         return result
+
+
+class PaymentFailInformation(model.CoopView):
+    'Payment Fail Information'
+    __name__ = 'account.payment.fail_information'
+
+    reject_reason = fields.Many2One('account.payment.journal.reject_reason',
+        'Reject Reason', depends=['process_method'],
+        domain=[('process_method', '=', Eval('process_method'))],
+        required=True)
+    payments = fields.One2Many('account.payment', None, 'Payments',
+        readonly=True)
+    process_method = fields.Char('Process Method')
+
+    @fields.depends('payments')
+    def on_change_with_process_method(self, name=None):
+        methods = [p.journal.process_method for p in self.payments]
+        methods = list(set(methods))
+        if len(methods) == 1:
+            return methods[0]
+        else:
+            return ''
+
+
+class ManualPaymentFail(model.CoopWizard):
+    'Fail Payment'
+    __name__ = 'account.payment.manual_payment_fail'
+
+    start_state = 'fail_information'
+    fail_information = StateView('account.payment.fail_information',
+        'account_payment_cog.payment_fail_information_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Fail Payments', 'fail_payments', 'tryton-ok', default=True)
+            ])
+    fail_payments = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(ManualPaymentFail, cls).__setup__()
+        cls._error_messages.update({
+                'not_same_payment_method': 'Selected payments must have the '
+                'same payment method.',
+                'payment_must_be_succeed_processing': 'Selected payments '
+                'status must be succeeded or processing'
+                })
+
+    def default_fail_information(self, values):
+        pool = Pool()
+        Payment = pool.get('account.payment')
+        active_ids = Transaction().context.get('active_ids')
+        if any([x.state not in ('succeeded', 'processing')
+                for x in Payment.browse(active_ids)]):
+            self.raise_user_error('payment_must_be_succeed_processing')
+        return {
+            'payments': active_ids
+            }
+
+    def transition_fail_payments(self):
+        pool = Pool()
+        Payment = pool.get('account.payment')
+        if not self.fail_information.process_method:
+            self.raise_user_error('not_same_payment_method')
+        Payment.manual_set_reject_reason(list(self.fail_information.payments),
+            self.fail_information.reject_reason)
+        Payment.fail(list(self.fail_information.payments))
+        return 'end'

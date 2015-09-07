@@ -1,6 +1,19 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
+        <!-- ############################################################ -->
+        <!-- ########### Payment Display ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="payment_view_form">
+            <field name="model">account.payment</field>
+            <field name="inherit" ref="account_payment.payment_view_form"/>
+            <field name="name">payment_form</field>
+        </record>
+        <record model="ir.ui.view" id="payment_view_list">
+            <field name="model">account.payment</field>
+            <field name="inherit" ref="account_payment.payment_view_list"/>
+            <field name="name">payment_list</field>
+        </record>
         <record model="ir.ui.view" id="configuration_view_form">
             <field name="model">account.configuration</field>
             <field name="inherit" ref="account.configuration_view_form"/>
@@ -40,11 +53,6 @@
             <field name="model">account.payment.journal.reject_reason</field>
             <field name="type">tree</field>
             <field name="name">payment_journal_reject_reason_list</field>
-        </record>
-        <record model="ir.ui.view" id="payment_view_form">
-            <field name="model">account.payment</field>
-            <field name="inherit" ref="account_payment.payment_view_form"/>
-            <field name="name">payment_form</field>
         </record>
         <record model="ir.action.act_window" id="act_reject_reason_form">
             <field name="name">Reject reasons</field>
@@ -99,6 +107,18 @@
         <record model="event.type" id="event_succeed_payment">
             <field name="name">Succeed payment</field>
             <field name="code">succeed_payment</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Payment Fail Wizard ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="payment_fail_information_view_form">
+            <field name="model">account.payment.fail_information</field>
+            <field name="type">form</field>
+            <field name="name">payment_fail_information_form</field>
+        </record>
+        <record model="ir.action.wizard" id="manual_payment_fail_wizard">
+            <field name="name">Fail Payment</field>
+            <field name="wiz_name">account.payment.manual_payment_fail</field>
         </record>
     </data>
 </tryton>

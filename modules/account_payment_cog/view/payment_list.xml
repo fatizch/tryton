@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/tree/button[@name='draft']" position="replace_attributes">
+        <button string="Draft" name="draft" tree_invisible="1"/>
+    </xpath>
+    <xpath expr="/tree/button[@name='approve']" position="replace_attributes">
+        <button string="Approve" name="approve" tree_invisible="1"/>
+    </xpath>
+    <xpath expr="/tree/button[@name='fail']" position="replace">
+        <button string="Fail" name="button_fail_payments" tree_invisible="1"/>
+    </xpath>
+    <xpath expr="/tree/button[@name='succeed']" position="replace_attributes">
+        <button string="Succeed" name="succeed" tree_invisible="1"/>
+    </xpath>
+</data>

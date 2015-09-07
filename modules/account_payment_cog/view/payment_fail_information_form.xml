@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<form string="Payment Fail Information">
+    <label name="reject_reason"/>
+    <field name="reject_reason" widget="selection"/>
+    <newline/>
+    <field name="payments" colspan="4" expand_toolbar="0"/>
+    <field name="process_method" invisible="1"/>
+</form>

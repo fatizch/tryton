@@ -21,6 +21,7 @@ def register():
         Move,
         MoveLine,
         PaymentInformationSelection,
+        PaymentFailInformation,
         PaymentTreatmentBatch,
         PaymentCreationBatch,
         Configuration,
@@ -34,4 +35,5 @@ def register():
         SynthesisMenuOpen,
         PaymentInformationModification,
         PaymentCreation,
+        ManualPaymentFail,
         module='account_payment_cog', type_='wizard')

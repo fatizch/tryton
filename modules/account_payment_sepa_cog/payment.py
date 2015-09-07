@@ -188,6 +188,8 @@ class Payment:
         cls._error_messages.update({
                 'unknown_amount_invoice_line':
                 'Unknown amount invoice line : %s %s',
+                'missing_payments': 'Payments with same sepa_merged_id must '
+                'be failed at the same time.'
                 })
 
     def _get_transaction_key(self):
@@ -267,6 +269,20 @@ class Payment:
             lines_to_write += [list(i.lines_to_pay), p]
         if lines_to_write:
             MoveLine.write(*lines_to_write)
+
+    @classmethod
+    def manual_set_reject_reason(cls, payments, reject_reason):
+        pool = Pool()
+        Payment = pool.get('account.payment')
+        if reject_reason.process_method != 'sepa':
+            super(Payment, cls).manual_set_reject_reason(payments,
+                reject_reason)
+        sepa_merged_ids = set([p.sepa_merged_id for p in payments])
+        all_payments = Payment.search([
+                ('sepa_merged_id', 'in', sepa_merged_ids)])
+        if len(all_payments) != len(payments):
+            cls.raise_user_error('missing_payments')
+        cls.write(payments, {'sepa_return_reason_code': reject_reason.code})
 
     # contract to attach invoice fee
     @classmethod
