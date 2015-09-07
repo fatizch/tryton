@@ -1,3 +1,4 @@
+# encoding: utf-8
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
@@ -217,6 +218,22 @@ class EndorsementCoveredElement(relation_mixin(
                 x: EndorsementCoveredElementOption.updated_struct(x)
                 for x in (element.new_options if isinstance(element, cls)
                     else element.options)}}
+
+    def get_name_for_summary(self, field_, instance_id):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        Party = pool.get('party.party')
+        CoveredElement = pool.get('contract.covered_element')
+        lang = pool.get('res.user')(Transaction().user).language
+        if field_.name != 'party':
+            return super(EndorsementCoveredElement,
+                self).get_name_for_summary(field_, instance_id)
+        party = Party(instance_id)
+        birth_date_str = Date.date_as_string(party.birth_date, lang)
+        tmp_values = dict(self.values)
+        tmp_values.update({'contract': self.contract_endorsement.contract})
+        cov_rec_name = CoveredElement(**tmp_values).get_rec_name(None)
+        return ', '.join([cov_rec_name, birth_date_str])
 
 
 class EndorsementCoveredElementOption(relation_mixin(

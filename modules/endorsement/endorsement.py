@@ -416,7 +416,7 @@ def values_mixin(value_model):
                     if v:
                         vals.append((k, field,
                                 prev_value.rec_name if prev_value else '',
-                                pool.get(field.model_name)(v).rec_name))
+                                self.get_name_for_summary(field, v)))
                     else:
                         vals.append((k, field,
                                 prev_value.rec_name if prev_value else '', ''))
@@ -510,6 +510,10 @@ def values_mixin(value_model):
         @classmethod
         def _ignore_fields_for_matching(cls):
             return set()
+
+        def get_name_for_summary(self, field_, instance_id):
+            pool = Pool()
+            return pool.get(field_.model_name)(instance_id).rec_name
 
     return Mixin
 
