@@ -11,6 +11,7 @@ __all__ = [
     'EndorsementPart',
     'EndorsementPartyField',
     'EndorsementAddressField',
+    'EndorsementRelationField',
     ]
 
 
@@ -108,3 +109,10 @@ class EndorsementAddressField(field_mixin('party.address'), model.CoopSQL,
     'Endorsement Address Field'
 
     __name__ = 'endorsement.party.address.field'
+
+
+class EndorsementRelationField(field_mixin('party.relation'), model.CoopSQL,
+        model.CoopView):
+    'Endorsement Relations Field'
+
+    __name__ = 'endorsement.party.relation.field'

@@ -61,6 +61,9 @@ class PartyRelation(export.ExportImportMixin):
                 [('to.code',) + tuple(clause[1:])],
                 ]
 
+    def get_rec_name(self, name):
+        return '%s to %s' % (self.type.name, self.to.rec_name)
+
 
 class PartyRelationAll(PartyRelation):
     __name__ = 'party.relation.all'

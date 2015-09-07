@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -30,6 +30,18 @@ msgctxt "error:endorsement.party.health_complement:"
 msgid "Update %s"
 msgstr "Mise à jour de %s"
 
+msgctxt "error:endorsement.party.relation:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.party.relation:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.party.relation:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
 msgctxt "error:endorsement.party:"
 msgid "Addresses Modifications"
 msgstr "Modifications des adresses"
@@ -37,6 +49,10 @@ msgstr "Modifications des adresses"
 msgctxt "error:endorsement.party:"
 msgid "Health Complement Modifications"
 msgstr "Modifications des informations santé"
+
+msgctxt "error:endorsement.party:"
+msgid "Relations Modifications"
+msgstr "Modifications des relations"
 
 msgctxt "error:endorsement.party:"
 msgid ""
@@ -130,6 +146,10 @@ msgstr "Tiers"
 msgctxt "field:endorsement.party,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:endorsement.party,relations:"
+msgid "Relations"
+msgstr "Relations"
 
 msgctxt "field:endorsement.party,state:"
 msgid "State"
@@ -419,6 +439,79 @@ msgctxt "field:endorsement.party.change_name.displayer,new_name:"
 msgid "New Name"
 msgstr "Nouveau nom"
 
+msgctxt "field:endorsement.party.change_relation_displayer,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.party.change_relation_displayer,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.party.change_relation_displayer,from_:"
+msgid "From"
+msgstr "De"
+
+msgctxt "field:endorsement.party.change_relation_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.change_relation_displayer,is_new:"
+msgid "Is New"
+msgstr "Est nouveau"
+
+msgctxt "field:endorsement.party.change_relation_displayer,previous_relation:"
+msgid "Current Relation"
+msgstr "Relations courantes"
+
+msgctxt "field:endorsement.party.change_relation_displayer,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt ""
+"field:endorsement.party.change_relation_displayer,relation_endorsement:"
+msgid "Relation Endorsement"
+msgstr "Avenant de modifications des relations"
+
+msgctxt "field:endorsement.party.change_relation_displayer,to:"
+msgid "To"
+msgstr "de"
+
+msgctxt "field:endorsement.party.change_relation_displayer,type:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:endorsement.party.change_relation_displayer,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.party.change_relation_displayer,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.party.change_relations,displayers:"
+msgid "Relations"
+msgstr "Relations"
+
+msgctxt "field:endorsement.party.change_relations,effective_date:"
+msgid "Effective Date"
+msgstr "Date d'effet"
+
+msgctxt "field:endorsement.party.change_relations,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.party.change_relations,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.change_relations,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.change_relations,party_id:"
+msgid "party_id"
+msgstr "Id du tiers"
+
 msgctxt "field:endorsement.party.change_ssn,current_ssn:"
 msgid "Current SSN"
 msgstr "Numéro de sécurité sociale actuel"
@@ -603,6 +696,118 @@ msgctxt "field:endorsement.party.health_complement.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:endorsement.party.relation,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.party.relation,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.party.relation,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.party.relation,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.party.relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.party.relation,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.party.relation,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.party.relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.relation,party_endorsement:"
+msgid "Party Endorsement"
+msgstr "Avenant sur tiers"
+
+msgctxt "field:endorsement.party.relation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party.relation,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.party.relation,relationship:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.party.relation,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.party.relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.party.relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.party.relation,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.party.relation.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.party.relation.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.party.relation.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.party.relation.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.party.relation.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.relation.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.party.relation.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.relation.field,name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:endorsement.party.relation.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party.relation.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.party.relation.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.party.relation.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:endorsement.start.select_endorsement,party:"
 msgid "Party"
 msgstr "Tiers"
@@ -643,6 +848,14 @@ msgctxt "model:endorsement.party.change_name.displayer,name:"
 msgid "Change Party Name Displayer"
 msgstr "Afficheur de changement de nom de tiers"
 
+msgctxt "model:endorsement.party.change_relation_displayer,name:"
+msgid "Relation Displayer"
+msgstr "Relations"
+
+msgctxt "model:endorsement.party.change_relations,name:"
+msgid "Change Party Relationship"
+msgstr "Modifications des relations"
+
 msgctxt "model:endorsement.party.change_ssn,name:"
 msgid "Change Party SSN"
 msgstr "Changement de numéro de sécurité Sociale"
@@ -658,6 +871,14 @@ msgstr "Avenant de changement des informations de santé"
 msgctxt "model:endorsement.party.health_complement.field,name:"
 msgid "Endorsement Health Complement Field"
 msgstr "Champs de l'avenant de changement des informations de santé"
+
+msgctxt "model:endorsement.party.relation,name:"
+msgid "Endorsement Relations"
+msgstr "Avenant de modifications des relations"
+
+msgctxt "model:endorsement.party.relation.field,name:"
+msgid "Endorsement Relations Field"
+msgstr "Champs de l'avenant"
 
 msgctxt "model:ir.action,name:act_endorsement"
 msgid "Endorsement"
@@ -699,6 +920,18 @@ msgctxt "selection:endorsement.party.health_complement,action:"
 msgid "Update"
 msgstr "Mise à jour"
 
+msgctxt "selection:endorsement.party.relation,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.party.relation,action:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:endorsement.party.relation,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
 msgctxt "view:endorsement.party.change_address:"
 msgid "Change Party Addresses"
 msgstr "Changer les adresses d'un tiers"
@@ -726,6 +959,10 @@ msgstr "Tiers"
 msgctxt "view:endorsement.party.change_name:"
 msgid "Change Party Name"
 msgstr "Changement de nom d'un tiers"
+
+msgctxt "view:endorsement.party.change_relations:"
+msgid "Change Party Relations"
+msgstr "Modifications des relations"
 
 msgctxt "view:endorsement.party.change_ssn:"
 msgid "Change Party SSN"
@@ -824,6 +1061,25 @@ msgid "Suspend"
 msgstr "Suspendre"
 
 msgctxt "wizard_button:endorsement.start,change_party_name,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_relationship,change_party_relationship_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_relationship,change_party_relationship_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_relationship,change_party_relationship_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,change_party_relationship,end:"
 msgid "Cancel"
 msgstr "Annuler"
 

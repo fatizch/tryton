@@ -7,6 +7,7 @@ from trytond.pyson import Eval, Bool
 from trytond.modules.cog_utils import fields, model
 from trytond.modules.endorsement import (EndorsementWizardStepMixin,
     add_endorsement_step)
+from trytond.modules.party_relationship import PartyRelationAll
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -18,6 +19,8 @@ __all__ = [
     'ChangePartyName',
     'StartEndorsement',
     'SelectEndorsement',
+    'RelationDisplayer',
+    'ChangePartyRelationship',
     ]
 
 
@@ -412,6 +415,171 @@ class ChangePartyName(EndorsementWizardStepMixin, model.CoopView):
             party_endorsement.save()
 
 
+class RelationDisplayer(PartyRelationAll):
+    'Relation Displayer'
+
+    __name__ = 'endorsement.party.change_relation_displayer'
+
+    previous_relation = fields.One2Many('party.relation.all', None,
+        'Current Relation', size=1,
+        states={'invisible': Bool(Eval('is_new'))}, readonly=True)
+    is_new = fields.Boolean('Is New')
+    relation_endorsement = fields.Many2One('endorsement.party.relation',
+        'Relation Endorsement')
+
+    @classmethod
+    def default_is_new(cls):
+        return True
+
+    @classmethod
+    def default_from_(cls):
+        return Transaction().context.get('good_party')
+
+
+class ChangePartyRelationship(EndorsementWizardStepMixin, model.CoopView):
+    'Change Party Relationship'
+
+    __name__ = 'endorsement.party.change_relations'
+
+    displayers = fields.One2Many('endorsement.party.change_relation_displayer',
+        None, 'Relations',
+        depends=['party_id'],
+        context={'good_party': Eval('party_id'),
+            'effective_date': Eval('effective_date')})
+    party_id = fields.Integer('party_id')
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement_party.party_change_relations_view_form'
+
+    @classmethod
+    def _relation_fields_to_extract(cls):
+        return ['from_', 'to', 'type', 'start_date', 'end_date']
+
+    def _get_parties(self):
+        res = OrderedDict()
+        for party_endorsement in self.wizard.endorsement.party_endorsements:
+            res[party_endorsement.party.id] = party_endorsement
+        return res
+
+    def step_default(self, name):
+        defaults = super(ChangePartyRelationship, self).step_default()
+        parties = self._get_parties()
+        defaults.update({'displayers': []})
+        for party_id, party_endorsement in parties.iteritems():
+            updated_struct = party_endorsement.updated_struct
+            relations = updated_struct['relations']
+            for relation in relations:
+                if not relation.__name__ == 'endorsement.party.relation':
+                    values = model.dictionarize(relation,
+                        self._relation_fields_to_extract())
+                    displayer = values
+                    displayer.update({
+                            'previous_relation': [relation.id],
+                            'is_new': False,
+                            'relation_endorsement': None,
+                            })
+                elif relation.action == 'update':
+                    values = model.dictionarize(relation.relationship,
+                        self._relation_fields_to_extract())
+                    displayer = values
+                    displayer.update(relation.values)
+                    displayer.update({
+                            'relation_endorsement': relation.id,
+                            'previous_relation': [relation.relationship.id],
+                            'is_new': False,
+                            })
+                else:
+                    displayer = relation.values
+                    displayer.update({
+                            'relation_endorsement': relation.id,
+                            'previous_relation': None,
+                            'is_new': True,
+                            })
+
+                defaults['displayers'].append(displayer)
+                defaults['party_id'] =\
+                    self.wizard.endorsement.party_endorsements[0].party.id
+        return defaults
+
+    def step_update(self):
+        pool = Pool()
+        EndorsementRelation = pool.get('endorsement.party.relation')
+        Party = pool.get('party.party')
+        parties = self._get_parties()
+
+        def get_save_values(relation, prev_relation):
+            res = {}
+            if not hasattr(relation, '_save_values'):
+                return
+            for field in self._relation_fields_to_extract():
+                relation_save_values = relation._save_values
+                if (hasattr(prev_relation, field) and
+                        field in relation_save_values and
+                        getattr(relation, field, False) !=
+                        getattr(prev_relation, field, False) or
+                        not prev_relation and field in relation_save_values):
+                    res[field] = relation_save_values[field]
+            return res
+
+        for party_id, party_endorsement in parties.iteritems():
+            party = Party(party_id)
+            relations_added = None
+            if party_endorsement.relations:
+                relations_added = [x for x in party_endorsement.relations if
+                        x.action == 'add']
+            for displayer in self.displayers:
+                prev_relation = displayer.previous_relation[0] if\
+                    displayer.previous_relation else None
+                new_values = get_save_values(displayer, prev_relation)
+                if not new_values:
+                    continue
+                elif not displayer.relation_endorsement:
+                    if not displayer.is_new:
+                        if not displayer.relation_endorsement:
+                            relation_endorsement = EndorsementRelation(
+                                action='update',
+                                party_endorsement=party_endorsement,
+                                relationship=prev_relation,
+                                relation=prev_relation.id,
+                                definition=self.endorsement_definition,
+                                values=new_values,
+                                )
+                        else:
+                            relation_endorsement = \
+                                displayer.relation_endorsement
+                            relation_endorsement.values = new_values
+                    else:
+                        if relations_added:
+                            self.raise_user_error('only_add_one')
+                        new_values = model.dictionarize(displayer,
+                            self._relation_fields_to_extract())
+                        if not displayer.relation_endorsement:
+                            relation_endorsement = EndorsementRelation(
+                                action='add',
+                                party_endorsement=party_endorsement,
+                                definition=self.endorsement_definition,
+                                values={k: v for k, v in new_values.iteritems()
+                                    if v},
+                                )
+                        else:
+                            relation_endorsement = \
+                                displayer.relation_endorsement
+                            relation_endorsement.values = new_values
+                else:
+                    relation_endorsement = displayer.relation_endorsement
+                    relation_endorsement.values = new_values
+                relation_endorsement.save()
+
+            if relations_added and (
+                    len(party.relations) == len(self.displayers)
+                    and not [x for x in self.displayers
+                        if x.relation_endorsement and
+                        x.relation_endorsement.action == 'add']):
+                EndorsementRelation.delete(relations_added)
+            party_endorsement.save()
+
+
 class SelectEndorsement(model.CoopView):
     'Select Endorsement'
 
@@ -459,3 +627,6 @@ add_endorsement_step(StartEndorsement, ChangePartySSN,
 
 add_endorsement_step(StartEndorsement, ChangePartyName,
     'change_party_name')
+
+add_endorsement_step(StartEndorsement, ChangePartyRelationship,
+    'change_party_relationship')

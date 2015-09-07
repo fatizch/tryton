@@ -53,6 +53,26 @@
             <field name="type">form</field>
             <field name="name">party_change_name_form</field>
         </record>
+        <!-- ############################################################ -->
+        <!-- ########### Change Party Relations ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="party_change_relations_view_form">
+            <field name="model">endorsement.party.change_relations</field>
+            <field name="type">form</field>
+            <field name="name">party_change_relations_form</field>
+        </record>
+        <record model="ir.ui.view" id="party_change_relation_displayer_view_tree">
+            <field name="model">endorsement.party.change_relation_displayer</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="party_cog.relation_view_editable_list"/>
+            <field name="name">party_change_relation_displayer_tree</field>
+        </record>
+        <record model="ir.ui.view" id="party_change_relation_displayer_view_form">
+            <field name="model">endorsement.party.change_relation_displayer</field>
+            <field name="inherit" ref="party_relationship.relation_view_form"/>
+            <field name="type">form</field>
+            <field name="name">party_change_relation_displayer_form</field>
+        </record>
         <!-- ###################### -->
         <!-- # Select Endorsement # -->
         <!-- ###################### -->

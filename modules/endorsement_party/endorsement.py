@@ -15,6 +15,7 @@ __all__ = [
     'Party',
     'EndorsementParty',
     'EndorsementPartyAddress',
+    'EndorsementPartyRelation',
     'Endorsement',
     'Contract',
     ]
@@ -57,6 +58,38 @@ class EndorsementPartyAddress(relation_mixin(
 
     @classmethod
     def updated_struct(cls, address):
+        return {}
+
+
+class EndorsementPartyRelation(relation_mixin(
+            'endorsement.party.relation.field', 'relationship',
+            'party.relation.all', 'Relation'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Relations'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.party.relation'
+
+    party_endorsement = fields.Many2One('endorsement.party',
+        'Party Endorsement', required=True, select=True, ondelete='CASCADE')
+    definition = fields.Function(
+        fields.Many2One('endorsement.definition', 'Definition'),
+        'get_definition')
+
+    @classmethod
+    def default_definition(cls):
+        return Transaction().context.get('definition', None)
+
+    def get_definition(self, name):
+        return self.party_endorsement.definition.id
+
+    def get_rec_name(self, name):
+        if self.relationship:
+            return self.relationship.rec_name
+        else:
+            return self.raise_user_error('new_relation', raise_exception=False)
+
+    @classmethod
+    def updated_struct(cls, relations):
         return {}
 
 
@@ -201,6 +234,12 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
             },
         depends=['state', 'party', 'definition'],
         context={'definition': Eval('definition')}, delete_missing=True)
+    relations = fields.One2Many('endorsement.party.relation',
+        'party_endorsement', 'Relations', states={
+            'readonly': Eval('state') == 'applied',
+            },
+        depends=['state', 'party', 'definition'],
+        context={'definition': Eval('definition')}, delete_missing=True)
 
     @classmethod
     def __setup__(cls):
@@ -208,8 +247,8 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
         cls._error_messages.update({
                 'only_one_endorsement_in_progress': 'There may only be one '
                 'endorsement in_progress at a given time per party',
-                'msg_address_modifications':
-                'Addresses Modifications',
+                'msg_address_modifications': 'Addresses Modifications',
+                'msg_relations_modifications': 'Relations Modifications',
                 })
 
     def get_func_key(self, name):
@@ -245,6 +284,15 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
             result[2].append(['address_change_section',
                 '%s :' % self.raise_user_error('msg_address_modifications',
                     raise_exception=False), address_summary])
+
+        relation_summary = [relation.get_summary('party.relation.all',
+                relation.relationship) for relation in self.relations]
+        if relation_summary:
+            result[2].append(['relation_change_section',
+                    '%s :' % self.raise_user_error(
+                        'msg_relations_modifications', raise_exception=False),
+                    relation_summary])
+
         return ['title_section', self.party.full_name, result]
 
     def get_definition(self, name):
@@ -345,14 +393,32 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
         return elems
 
     @property
+    def new_relations(self):
+        elems = set([x for x in self.party.relations])
+        for elem in getattr(self, 'relations', []):
+            if elem.action == 'add':
+                elems.add(elem)
+            elif elem.action == 'remove':
+                elems.remove(elem.relationship)
+            else:
+                elems.remove(elem.relationship)
+                elems.add(elem)
+        return elems
+
+    @property
     def updated_struct(self):
         pool = Pool()
         EndorsementAddress = pool.get('endorsement.party.address')
+        EndorsementRelation = pool.get('endorsement.party.relation')
         addresses = {}
         for address in self.new_addresses:
             addresses[address] = EndorsementAddress.updated_struct(address)
+        relations = {}
+        for relation in self.new_relations:
+            relations[relation] = EndorsementRelation.updated_struct(relation)
         return {
             'addresses': addresses,
+            'relations': relations,
             }
 
     def apply_values(self):
@@ -362,4 +428,10 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
             addresses.append(address.apply_values())
         if addresses:
             values['addresses'] = addresses
+
+        relations = []
+        for relation in self.relations:
+            relations.append(relation.apply_values())
+        if relations:
+            values['relations'] = relations
         return values
