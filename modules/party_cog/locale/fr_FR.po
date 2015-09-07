@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -871,3 +871,17 @@ msgstr "Synthèse acteur"
 msgctxt "view:party.synthesis.menu:"
 msgid "Synthesis"
 msgstr "Synthèse"
+
+# Custom translations below
+
+msgctxt "field:party.address,name:party."
+msgid "Line 2"
+msgstr "Ligne 2"
+
+msgctxt "field:party.address,street:party."
+msgid "Street"
+msgstr "Rue (Ligne 4)"
+
+msgctxt "field:party.address,streetbis:party."
+msgid "Street (bis)"
+msgstr "Boîte Postale (Ligne 5)"

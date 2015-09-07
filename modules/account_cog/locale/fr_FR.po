@@ -236,7 +236,7 @@ msgstr "Compte"
 
 msgctxt "field:account.open_third_party_balance.start,at_date:"
 msgid "At date"
-msgstr "A la date"
+msgstr "À la date"
 
 msgctxt ""
 "field:account.open_third_party_balance.start,third_party_balance_option:"
@@ -615,6 +615,29 @@ msgstr "Compte"
 
 # Custom translations below
 
+msgctxt "help:account.account,reconcile:account."
+msgid ""
+"Allow move lines of this account \n"
+"to be reconciled."
+msgstr "Autoriser le lettrage des ligne de mouvement de ce compte."
+
+msgctxt ""
+"wizard_button:account.move.reconcile_lines,writeoff,reconcile:account."
+msgid "Reconcile"
+msgstr "Lettrer"
+
+msgctxt "wizard_button:account.reconcile,show,reconcile:account."
+msgid "Reconcile"
+msgstr "Lettrer"
+
+msgctxt "field:account.account,reconcile:account."
+msgid "Reconcile"
+msgstr "À lettrer"
+
+msgctxt "field:account.account.template,reconcile:account."
+msgid "Reconcile"
+msgstr "À lettrer"
+
 msgctxt "field:account.configuration,default_account_payable:account."
 msgid "Default Account Payable"
 msgstr "Compte à payer par défaut"
@@ -631,6 +654,10 @@ msgctxt "field:account.create_chart.properties,account_receivable:account."
 msgid "Default Receivable Account"
 msgstr "Compte à recevoir par défaut"
 
+msgctxt "field:account.move.line,reconciliation:account."
+msgid "Reconciliation"
+msgstr "Lettrage"
+
 msgctxt "field:party.party,account_payable:account."
 msgid "Account Payable"
 msgstr "Compte à payer"
@@ -638,6 +665,64 @@ msgstr "Compte à payer"
 msgctxt "field:party.party,account_receivable:account."
 msgid "Account Receivable"
 msgstr "Compte à recevoir"
+
+msgctxt "error:account.move.line:account."
+msgid "Line \"%s\" (%d) already reconciled."
+msgstr "La ligne \"%s\" (%d) est déjà  lettrée."
+
+msgctxt "error:account.move.line:account."
+msgid "You can not modify line \"%s\" because it is reconciled."
+msgstr "Vous ne pouvez modifier la ligne « %s » car elle est lettrée."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid "You can not modify a reconciliation."
+msgstr "Vous ne pouvez modifier un lettrage."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid ""
+"You can not create a reconciliation where debit \"%(debit)s\" and credit "
+"\"%(credit)s\" differ."
+msgstr ""
+"Vous ne pouvez créer un lettrage où le débit « %(debit)s » et le crédit « "
+"%(credit)s » diffèrent."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid ""
+"You can not reconcile line \"%(line)s\" because it's account \"%(account)s\""
+" is configured as not reconcilable."
+msgstr ""
+"Vous ne pouvez lettrer la ligne « %(line)s » car son compte « %(account)s » "
+"est configuré comme non-lettrable."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid ""
+"You can not reconcile line \"%(line)s\" because it's account "
+"\"%(account1)s\" is different from \"%(account2)s\"."
+msgstr ""
+"Vous ne pouvez lettrer la ligne « %(line)s »  car son compte  « %(account1)s"
+" » est différent de « %(account2)s »."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid "You can not reconcile line \"%s\" because it is not in valid state."
+msgstr ""
+"Vous ne pouvez lettrer la ligne « %s » car elle n'est pas dans un état "
+"valide."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid ""
+"You can not reconcile line \"%(line)s\" because it's party \"%(party1)s\" is"
+" different from \"%(party2)s\"."
+msgstr ""
+"Vous ne pouvez lettrer la ligne « %(line)s »  car son tiers « %(party1)s » "
+"est différent de « %(party2)s »."
+
+msgctxt "error:account.period:account."
+msgid ""
+"You can not change the post move sequence of period \"%s\" because there are"
+" already posted moves in the period."
+msgstr ""
+"Vous ne pouvez changer la séquence des mouvements émis de la période « %s » "
+"car elle contient déjà des mouvements émis."
 
 msgctxt "model:account.account.template,name:account.account_template_payable"
 msgid "Main Payable"
@@ -649,15 +734,64 @@ msgid "Main Receivable"
 msgstr "Compte à recevoir"
 
 msgctxt ""
-"model:account.account.type.template,name:account.account_type_template_liability_current_payable"
-msgid "Payable"
-msgstr "À payer"
-
-msgctxt ""
 "model:account.account.type.template,name:account.account_type_template_asset_current_receivable"
 msgid "Receivable"
 msgstr "À recevoir"
 
+msgctxt ""
+"model:account.account.type.template,name:account.account_type_template_liability_current_payable"
+msgid "Payable"
+msgstr "À payer"
+
+msgctxt "model:account.move.reconcile_lines.writeoff,name:account."
+msgid "Reconcile Lines Write-Off"
+msgstr "Lettrer les lignes de pertes et profits"
+
+msgctxt "model:account.move.reconciliation,name:account."
+msgid "Account Move Reconciliation Lines"
+msgstr "Lignes de lettrage de mouvement comptable"
+
+msgctxt "model:account.reconcile.show,name:account."
+msgid "Reconcile"
+msgstr "Lettrer"
+
+msgctxt "model:ir.action,name:account.act_reconcile"
+msgid "Reconcile Accounts"
+msgstr "Lettrer les comptes"
+
+msgctxt "model:ir.action,name:account.act_reconcile_lines"
+msgid "Reconcile Lines"
+msgstr "Lettrer les lignes"
+
+msgctxt "model:ir.action,name:account.act_move_reconciliation_lines"
+msgid "Reconciliation Lines"
+msgstr "Lignes de lettrage"
+
+msgctxt "model:ir.action,name:account.act_unreconcile_lines"
+msgid "Unreconcile Lines"
+msgstr "Dé-lettrer les lignes"
+
+msgctxt "model:ir.sequence,name:account.sequence_account_move_reconciliation"
+msgid "Default Account Move Reconciliation"
+msgstr "Lettrage des mouvements comptables par défaut"
+
+msgctxt ""
+"model:ir.sequence.type,name:account.sequence_type_account_move_reconciliation"
+msgid "Account Move Reconciliation"
+msgstr "Lettrage de mouvements comptables"
+
+msgctxt "model:ir.ui.menu,name:account."
+msgid "Reconcile Lines"
+msgstr "Lettrer les lignes"
+
+msgctxt "model:ir.ui.menu,name:account.menu_reconcile"
+msgid "Reconcile Accounts"
+msgstr "Lettrer les comptes"
+
+msgctxt "odt:account.move.general_journal:account."
+msgid "Posted"
+msgstr "Emis"
+
 msgctxt "selection:account.account,kind:account."
 msgid "Payable"
 msgstr "À payer"
@@ -667,9 +801,41 @@ msgid "Receivable"
 msgstr "À recevoir"
 
 msgctxt "selection:account.account.template,kind:account."
+msgid "Receivable"
+msgstr "À recevoir"
+
+msgctxt "selection:account.account.template,kind:account."
 msgid "Payable"
 msgstr "À payer"
 
-msgctxt "selection:account.account.template,kind:account."
-msgid "Receivable"
-msgstr "À recevoir"
+msgctxt "selection:account.move.line,move_state:account."
+msgid "Posted"
+msgstr "Emis"
+
+msgctxt "selection:account.move,state:account."
+msgid "Posted"
+msgstr "Emis"
+
+msgctxt "view:account.move:account."
+msgid "Post"
+msgstr "Emettre"
+
+msgctxt "view:account.move.reconciliation:account."
+msgid "Reconciliations"
+msgstr "Lettrages"
+
+msgctxt "view:account.move.reconciliation:account."
+msgid "Reconciliation"
+msgstr "Lettrage"
+
+msgctxt "view:account.reconcile.show:account."
+msgid "Reconcile"
+msgstr "Lettrer"
+
+msgctxt "view:account.tax:account."
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "view:account.tax.template:account."
+msgid "Invoice"
+msgstr "Quittance"

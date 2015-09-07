@@ -69,3 +69,22 @@ msgstr "Rejet de paiement manuel"
 msgctxt "selection:account.statement.journal,validation:"
 msgid "Manual"
 msgstr "Manuelle"
+
+# Custom translations below
+
+msgctxt "field:account.statement.line,invoice:account_statement."
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:account_statement.act_statement_form_domain_posted"
+msgid "Posted"
+msgstr "Emis"
+
+msgctxt "selection:account.statement,state:account_statement."
+msgid "Posted"
+msgstr "Emis"
+
+msgctxt "view:account.statement:account_statement."
+msgid "Post"
+msgstr "Emettre"

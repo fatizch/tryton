@@ -456,7 +456,7 @@ class Translation:
                     new_values['overriding_module'] = target_module
             else:
                 new_values = values.copy()
-                overriding_module = translation.module + '_cog_translation'
+                overriding_module = translation.module + '_cog'
                 new_values['overriding_module'] = overriding_module
             new_args.append(new_values)
         args = list(new_args + list(args))
