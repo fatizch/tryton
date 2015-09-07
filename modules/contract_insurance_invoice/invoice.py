@@ -266,9 +266,8 @@ class Invoice:
             super(Invoice, self).check_cancel_move()
 
     def print_invoice(self):
-        # Don't print invoice report if it's a contract invoice
-        if not self.contract:
-            super(Invoice, self).print_invoice()
+        # Use Coog report_engine module instead
+        return
 
     @classmethod
     def get_reconciliation_date(cls, invoices, name):
