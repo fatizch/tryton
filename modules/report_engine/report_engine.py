@@ -452,6 +452,7 @@ class Printable(Model):
     @classmethod
     def produce_reports(cls, objects, template_kind, direct_print=False,
             origin=None):
+        all_reports, all_attachments = [], []
         pool = Pool()
         Template = pool.get('report.template')
         if not template_kind:
@@ -459,7 +460,11 @@ class Printable(Model):
         templates = Template.find_templates_for_objects_and_kind(objects,
             cls.__name__, template_kind)
         for template, group_objects in templates.iteritems():
-            template.produce_reports(objects, direct_print, origin=origin)
+            reports, attachments = template.produce_reports(objects,
+                direct_print, origin=origin)
+            all_reports.extend(reports)
+            all_attachments.extend(attachments)
+        return all_reports, all_attachments
 
 
 class ReportCreateSelectTemplate(model.CoopView):
