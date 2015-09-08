@@ -19,8 +19,8 @@ class ReportTemplate:
         'report_template', 'product', 'Products')
 
     @classmethod
-    def _export_light(cls):
-        return super(ReportTemplate, cls)._export_light() | {'products'}
+    def _export_skips(cls):
+        return super(ReportTemplate, cls)._export_skips() | {'products'}
 
 
 class ReportProductRelation(model.CoopSQL):
