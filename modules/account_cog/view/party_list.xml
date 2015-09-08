@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/tree/field[@name='receivable_today']" position="replace_attributes">
+        <field name="receivable_today" icon="receivable_today_icon"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='payable_today']" position="replace_attributes">
+        <field name="negative_payable_today" icon="payable_today_icon"/>
+    </xpath>
+</data>

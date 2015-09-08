@@ -5,4 +5,16 @@
     <xpath expr="//field[@name='customer_tax_rule']" position="replace"/>
     <xpath expr="//label[@name='supplier_tax_rule']" position="replace"/>
     <xpath expr="//field[@name='supplier_tax_rule']" position="replace"/>
+    <xpath expr="//label[@name='payable_today']" position="replace"/>
+    <xpath expr="//field[@name='payable_today']" position="replace"/>
+    <xpath expr="//label[@name='payable']" position="replace"/>
+    <xpath expr="//field[@name='payable']" position="replace"/>
+    <xpath expr="//field[@name='receivable_today']" position="after">
+        <label name="negative_payable_today"/>
+        <field name="negative_payable_today"/>
+    </xpath>
+    <xpath expr="//field[@name='receivable']" position="after">
+        <label name="negative_payable"/>
+        <field name="negative_payable"/>
+    </xpath>
 </data>

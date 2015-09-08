@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -390,6 +390,30 @@ msgstr "Périodes de l'Année Fiscale"
 msgctxt "field:ir.test_case,fiscal_year_sync_date:"
 msgid "Fiscal Year Sync Date"
 msgstr "Date de Synchro Année Fiscale"
+
+msgctxt "field:party.party,negative_payable:"
+msgid "Payable"
+msgstr "À payer "
+
+msgctxt "field:party.party,negative_payable_today:"
+msgid "Payable Today"
+msgstr "À payer aujourd'hui"
+
+msgctxt "field:party.party,payable_icon:"
+msgid "Payable Icon"
+msgstr ""
+
+msgctxt "field:party.party,payable_today_icon:"
+msgid "Payable Today Icon"
+msgstr ""
+
+msgctxt "field:party.party,receivable_icon:"
+msgid "Receivable Icon"
+msgstr ""
+
+msgctxt "field:party.party,receivable_today_icon:"
+msgid "Receivable Today Icon"
+msgstr ""
 
 msgctxt "field:party.synthesis.menu.move.line,create_date:"
 msgid "Create Date"

@@ -37,6 +37,7 @@ def register():
         FeeDescriptionVersion,
         # From test_case
         TestCaseModel,
+        Party,
         SynthesisMenuMoveLine,
         SynthesisMenu,
         OpenThirdPartyBalanceStart,

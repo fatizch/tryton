@@ -25,5 +25,13 @@
             <field name="name">traffic_light_green</field>
             <field name="path">icons/traffic_light_green.svg</field>
         </record>
+        <record model="ir.ui.icon" id="check_icon">
+            <field name="name">check</field>
+            <field name="path">icons/check.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="rounded_warning_icon">
+            <field name="name">rounded_warning</field>
+            <field name="path">icons/rounded_warning.svg</field>
+        </record>
     </data>
 </tryton>

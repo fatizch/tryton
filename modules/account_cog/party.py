@@ -3,16 +3,70 @@ from sql.aggregate import Max
 from sql import Literal
 
 from trytond.modules.cog_utils import UnionMixin
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
 from trytond.modules.cog_utils import model, fields, coop_string
 
+__metaclass__ = PoolMeta
 __all__ = [
+    'Party',
     'SynthesisMenuMoveLine',
     'SynthesisMenu',
     'SynthesisMenuOpen',
     ]
+
+
+class Party:
+    __name__ = 'party.party'
+
+    payable_icon = fields.Function(
+        fields.Char('Payable Icon'),
+        'get_payable_receivable_icon')
+    payable_today_icon = fields.Function(
+        fields.Char('Payable Today Icon'),
+        'get_payable_receivable_icon')
+    receivable_icon = fields.Function(
+        fields.Char('Receivable Icon'),
+        'get_payable_receivable_icon')
+    receivable_today_icon = fields.Function(
+        fields.Char('Receivable Today Icon'),
+        'get_payable_receivable_icon')
+    negative_payable = fields.Function(fields.Numeric('Payable'),
+            'get_negative_payable', searcher='search_negative_payable')
+    negative_payable_today = fields.Function(fields.Numeric('Payable Today'),
+            'get_negative_payable', searcher='search_negative_payable')
+
+    def get_negative_payable(self, name):
+        amount = getattr(self, name[9:])
+        return -1 * amount if amount else amount
+
+    @classmethod
+    def search_negative_payable(cls, name, clause):
+        clause[0] = clause[0][9:]
+        if clause[2] is not None and clause[2] != 0:
+            clause[2] = -1 * clause[2]
+        if clause[1] is not None:
+            if clause[1] == '<':
+                clause[1] = '>'
+            elif clause[1] == '>':
+                clause[1] = '<'
+            elif clause[1] == '>=':
+                clause[1] = '<='
+            elif clause[1] == '<=':
+                clause[1] = '>='
+            elif clause[1] in ['!=', '=']:
+                pass
+            else:
+                raise NotImplementedError
+        return cls.search_receivable_payable(name[9:], clause)
+
+    def get_payable_receivable_icon(self, name):
+        code = name[:-5]
+        if getattr(self, code) < 0:
+            return 'check'
+        elif getattr(self, code) > 0:
+            return 'rounded_warning'
 
 
 class SynthesisMenuMoveLine(model.CoopSQL):
