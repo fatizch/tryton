@@ -310,26 +310,19 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
                                 instance.get_rec_name(None),
                                 instance.current_log.user.get_rec_name(None)))
             super(CogProcessFramework, cls).write(*args)
-            Session = Pool().get('ir.session')
             Log = Pool().get('process.log')
-            try:
-                good_session, = Session.search(
-                    [('create_uid', '=', Transaction().user)])
-            except:
-                # TODO : find what to do if there is no current session
-                # (proteus)
-                return
+            good_session = Transaction().context.get('session')
 
             for instance in instances:
                 good_log = instance.current_log
                 if not good_log:
                     continue
-                if good_log.session != good_session.key:
+                if good_log.session != good_session:
                     good_log.latest = False
                     good_log.save()
                     old_log = good_log
                     good_log = Log()
-                    good_log.session = good_session.key
+                    good_log.session = good_session
                     good_log.user = Transaction().user
                     good_log.start_time = datetime.datetime.now()
                     if not (hasattr(old_log, 'to_state') and old_log.to_state):
@@ -348,9 +341,7 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
     def create(cls, values):
         instances = super(CogProcessFramework, cls).create(values)
         Log = Pool().get('process.log')
-        Session = Pool().get('ir.session')
-        good_sessions = Session.search(
-            [('create_uid', '=', Transaction().user)])
+        good_session = Transaction().context.get('session')
         for instance in instances:
             log = Log()
             log.user = Transaction().user
@@ -358,7 +349,7 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
             log.start_time = datetime.datetime.now()
             log.end_time = datetime.datetime.now()
             log.to_state = instance.current_state
-            log.session = good_sessions[0].key if good_sessions else ''
+            log.session = good_session
             log.save()
         return instances
 
@@ -1198,10 +1189,7 @@ class ProcessResume(Wizard):
         Action = pool.get('ir.action')
         process_action = Action.get_action_values(process_action.__name__,
             [process_action.id])[0]
-        Session = Pool().get('ir.session')
-        good_session, = Session.search(
-            [('create_uid', '=', Transaction().user)])
-
+        good_session = Transaction().context.get('session')
         new_log = Log()
         new_log.user = Transaction().user
         new_log.locked = True
@@ -1209,7 +1197,7 @@ class ProcessResume(Wizard):
         new_log.from_state = instance.current_state.id
         new_log.to_state = instance.current_state.id
         new_log.start_time = datetime.datetime.now()
-        new_log.session = good_session.key
+        new_log.session = good_session
         new_log.save()
 
         views = process_action['views']

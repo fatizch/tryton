@@ -6,6 +6,7 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool, Len, If
 from trytond.model import Workflow
+from trytond.tools import grouped_slice
 
 from trytond.modules.cog_utils import utils, coop_date, fields, model
 from trytond.modules.cog_utils import coop_string
@@ -98,7 +99,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         'get_insured_persons', searcher='search_insured_persons')
     insured_persons_name = fields.Function(
         fields.Char('Insured Persons'),
-        'on_change_with_insured_persons_name',
+        'get_insured_persons_name',
         searcher='search_insured_persons_name')
     rate = fields.Numeric('Annual Rate', digits=(16, 4),
         states={
@@ -395,7 +396,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
 
     def get_current_loan_shares(self, name):
         contract_id = Transaction().context.get('contract', None)
-        if not contract_id:
+        if contract_id is None:
             return []
         return [x.id for x in Pool().get('loan.share').search([
                     ('loan', '=', self.id),
@@ -413,14 +414,23 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             name.append(self.currency.amount_as_string(self.amount))
         return ' '.join(name)
 
-    def get_order(self, name):
+    @classmethod
+    def get_order(cls, loans, name=None):
+        ret = {x.id: None for x in loans}
         contract_id = Transaction().context.get('contract', None)
-        if not contract_id:
-            return None
-        contract = Pool().get('contract')(contract_id)
-        for ordered_loan in contract.ordered_loans:
-            if ordered_loan.loan == self:
-                return ordered_loan.number
+        if contract_id is None:
+            return ret
+        cursor = Transaction().cursor
+        ctr_loan = Pool().get('contract-loan').__table__()
+        for loan_slice in grouped_slice(loans):
+            ids = [x.id for x in loan_slice]
+            cursor.execute(*ctr_loan.select(
+                    ctr_loan.loan, ctr_loan.number,
+                    where=(ctr_loan.contract == contract_id) &
+                    (ctr_loan.loan.in_(ids))))
+            for loan_id, loan_number in cursor.fetchall():
+                ret[loan_id] = loan_number
+        return ret
 
     def get_end_date(self, name):
         return self.increments[-1].end_date if self.increments else None
@@ -444,8 +454,28 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         if increments:
             return getattr(increments[0], name)
 
-    def get_insured_persons(self, name):
-        return list(set([x.person.id for x in self.loan_shares]))
+    @classmethod
+    def get_insured_persons(cls, loans, name=None):
+        ret = {x.id: [] for x in loans}
+        pool = Pool()
+        loan_share = pool.get('loan.share').__table__()
+        contract_option = pool.get('contract.option').__table__()
+        covered_element = pool.get('contract.covered_element').__table__()
+        cursor = Transaction().cursor
+        query_table = covered_element.join(contract_option, condition=(
+                contract_option.covered_element == covered_element.id)
+            ).join(loan_share, condition=(
+                loan_share.option == contract_option.id))
+        for loan_slice in grouped_slice(loans):
+            cursor.execute(
+                *query_table
+                .select(
+                    loan_share.loan, covered_element.party,
+                    where=loan_share.loan.in_([i.id for i in loan_slice]),
+                ))
+            for loan_id, party_id in cursor.fetchall():
+                ret[loan_id].append(party_id)
+        return ret
 
     def get_payment(self, at_date=None):
         if not at_date:
@@ -516,6 +546,14 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 'add': [(-1, x._save_values) for x in self.increments],
                 'remove': [x.id for x in previous_increments],
                 }
+
+    @classmethod
+    def get_insured_persons_name(cls, loans, name=None):
+        ret = {}
+        for loan in loans:
+            line = ', '.join([x.rec_name for x in loan.insured_persons])
+            ret[loan.id] = line
+        return ret
 
     @fields.depends('insured_persons')
     def on_change_with_insured_persons_name(self, name=None):

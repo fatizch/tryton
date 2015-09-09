@@ -8,6 +8,7 @@ from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 from trytond.model import dualmethod
+from trytond.cache import Cache
 
 from trytond.modules.cog_utils import model, fields, utils, coop_date
 from trytond.modules.currency_cog import ModelCurrency
@@ -404,10 +405,12 @@ class Premium(model.CoopSQL, model.CoopView):
     parent = fields.Function(
         fields.Reference('Parent', 'get_parent_models'),
         'get_parent')
+    _get_ir_models_cache = Cache('_get_ir_models_cache')
 
     @classmethod
     def __setup__(cls):
         super(Premium, cls).__setup__()
+        cls._get_ir_models_cache.clear()
         cls._order = [('rated_entity', 'ASC'), ('start', 'ASC')]
         cls.__rpc__.update({'get_parent_models': RPC()})
 
@@ -479,10 +482,16 @@ class Premium(model.CoopSQL, model.CoopView):
     def get_rated_entities(cls):
         Model = Pool().get('ir.model')
         models = cls._get_rated_entities()
+        key = ('ir.model', models)
+        value = cls._get_ir_models_cache.get(key, None)
+        if value is not None:
+            return value
+
         models = Model.search([
-                ('model', 'in', models),
-                ])
-        return [(None, '')] + [(m.model, m.name) for m in models]
+                ('model', 'in', models)])
+        value = [(None, '')] + [(m.model, m.name) for m in models]
+        cls._get_ir_models_cache.set(key, value)
+        return value
 
     def get_rec_name(self, name):
         return self.parent.rec_name

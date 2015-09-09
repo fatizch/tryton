@@ -27,6 +27,7 @@ from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
 from trytond.modules.cog_utils.model import CoopView as ModelView
 from trytond.modules.cog_utils import fields
 from trytond.modules.cog_utils import utils, coop_string, model
+from trytond.modules.cog_utils.cache import CoogCache, get_cache_holder
 
 __all__ = [
     'TableCell',
@@ -786,9 +787,16 @@ class TableCell(ModelSQL, ModelView):
         return r
 
     @classmethod
+    def delete(cls, entities):
+        super(TableCell, cls).delete(entities)
+        cls.table_cell_cache().clear()
+
+    @classmethod
     def create(cls, values):
         values = [cls._dump_value(v) for v in values]
-        return super(TableCell, cls).create(values)
+        ret = super(TableCell, cls).create(values)
+        cls.table_cell_cache().clear()
+        return ret
 
     @classmethod
     def write(cls, *args):
@@ -797,7 +805,8 @@ class TableCell(ModelSQL, ModelView):
         for records, values in zip(actions, actions):
             new_values = cls._dump_value(values)
             new_args.extend([records, new_values])
-        return super(TableCell, cls).write(*new_args)
+        super(TableCell, cls).write(*new_args)
+        cls.table_cell_cache().clear()
 
     @classmethod
     def read(cls, ids, fields_names=None):
@@ -822,6 +831,15 @@ class TableCell(ModelSQL, ModelView):
         return result
 
     @classmethod
+    def table_cell_cache(cls):
+        cache_holder = get_cache_holder()
+        cell_cache = cache_holder.get('table_cell_cache')
+        if cell_cache is None:
+            cell_cache = CoogCache()
+            cache_holder['table_cell_cache'] = cell_cache
+        return cell_cache
+
+    @classmethod
     def get_cell(cls, definition, *values):
         pool = Pool()
         Definition = pool.get('table')
@@ -830,21 +848,25 @@ class TableCell(ModelSQL, ModelView):
         if not isinstance(definition, Definition):
             definition = Definition.get(definition)
         values = (values + (None,) * DIMENSION_MAX)[:DIMENSION_MAX]
-        domain = [('definition', '=', definition.id)]
-        for i in range(DIMENSION_MAX):
-            value = values[i]
-            dimension_id = Dimension.get_dimension_id(definition, i, value)
-            domain.append(('dimension%d' % (i + 1), '=', dimension_id))
+
+        cache = cls.table_cell_cache()
+        key = (definition.id, values)
         try:
+            cell = cache[key]
+        except KeyError:
+            domain = [('definition', '=', definition.id)]
+            for i in range(DIMENSION_MAX):
+                value = values[i]
+                dimension_id = Dimension.get_dimension_id(definition, i, value)
+                domain.append(('dimension%d' % (i + 1), '=', dimension_id))
             cells = cls.search(domain)
-        except ValueError:
-            return None
-        if not cells:
-            return None
-        if len(cells) == 1:
-            return cells[0]
-        else:
-            raise Exception('Several cells with same dimensions (%s)' % domain)
+            if len(cells) == 1:
+                cell = cells[0]
+                cache[key] = cell
+            else:
+                raise Exception('Several cells with same dimensions (%s)' %
+                    domain)
+        return cell
 
     @classmethod
     def get(cls, definition, *values):

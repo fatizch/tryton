@@ -117,26 +117,12 @@ class DateClass:
             lang = utils.get_user_language()
         return Lang.strftime(date, lang.code, lang.date)
 
-    @classmethod
-    def datetime_as_string(cls, date, lang=None):
-        if date is None:
-            return ''
-        pool = Pool()
-        Lang = pool.get('ir.lang')
-        User = pool.get('res.user')
-        context = Transaction().context
-        lang = lang if lang else Transaction().language
-        if 'locale' in context and 'date' in context['locale']:
-            date_format = context['locale']['date']
-        else:
-            user = User(Transaction().user)
-            if user.language:
-                date_format = User(Transaction().user).language.date
-            else:
-                date_format = '%m/%d/%Y'
-
-        date_format += ' %H:%M:%S'
-        return Lang.strftime(date, lang, date_format)
+    @staticmethod
+    def datetime_as_string(date, lang=None):
+        Lang = Pool().get('ir.lang')
+        if lang is None:
+            lang = utils.get_user_language()
+        return Lang.strftime(date, lang.code, lang.date + ' %H:%M:%S')
 
 
 class View(ExportImportMixin):
@@ -384,6 +370,16 @@ class Property(ExportImportMixin):
 class Lang(ExportImportMixin):
     __name__ = 'ir.lang'
     _func_key = 'code'
+
+    @classmethod
+    def get_from_code(cls, code):
+        res = cls._lang_cache.get(code)
+        if res is None:
+            res = cls.search_read([('code', '=', code)], limit=1)[0]
+            cls._lang_cache.set(code, res)
+        else:
+            res = cls(**res)
+        return res
 
 
 class Icon(ExportImportMixin):

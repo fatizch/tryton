@@ -199,16 +199,6 @@ def find_date(list_to_filter, date):
     return None
 
 
-def get_those_objects(model_name, domain, limit=None):
-    the_model = Pool().get(model_name)
-    return the_model.search(domain, limit=limit)
-
-
-def get_this_object(model_name, domain):
-    res, = get_those_objects(model_name, domain)
-    return res
-
-
 def delete_reference_backref(objs, target_model, target_field):
     the_model = Pool().get(target_model)
     to_delete = the_model.search([(
@@ -219,7 +209,7 @@ def delete_reference_backref(objs, target_model, target_field):
 
 
 def get_user_language():
-    return get_this_object('ir.lang', [('code', '=', Transaction().language)])
+    return Pool().get('ir.lang').get_from_code(Transaction().language)
 
 
 def get_relation_model_name(from_class_or_instance, field_name):

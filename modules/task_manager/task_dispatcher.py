@@ -117,9 +117,7 @@ class TaskDispatcher(Wizard):
         Action = Pool().get('ir.action')
         act = Action.get_action_values(act.__name__, [act.id])[0]
 
-        Session = Pool().get('ir.session')
-        good_session, = Session.search(
-            [('create_uid', '=', Transaction().user)])
+        good_session = Transaction().context.get('session')
         GoodModel = Pool().get(good_model)
         good_object = GoodModel(good_id)
         new_log = Log()
@@ -129,7 +127,7 @@ class TaskDispatcher(Wizard):
         new_log.from_state = good_object.current_state.id
         new_log.to_state = good_object.current_state.id
         new_log.start_time = datetime.datetime.now()
-        new_log.session = good_session.key
+        new_log.session = good_session
         new_log.save()
 
         views = act['views']

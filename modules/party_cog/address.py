@@ -50,17 +50,13 @@ class Address(export.ExportImportMixin):
 
     @staticmethod
     def get_cities_from_zip(zipcode, country):
-        domain = []
-        domain.append(('zip', '=', zipcode))
-        domain.append(('country', '=', country))
-        return utils.get_those_objects('country.zipcode', domain)
+        return Pool().get('country.zipcode').search([
+                ('zip', '=', zipcode), ('country', '=', country)])
 
     @staticmethod
     def get_zips_from_city(city, country):
-        domain = []
-        domain.append(('city', '=', city))
-        domain.append(('country', '=', country))
-        return utils.get_those_objects('country.zipcode', domain)
+        return Pool().get('country.zipcode').search([
+                ('city', '=', city), ('country', '=', country)])
 
     @fields.depends('zip', 'country', 'zip_and_city')
     def on_change_zip(self):
