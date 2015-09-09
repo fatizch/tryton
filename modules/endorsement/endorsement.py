@@ -6,6 +6,7 @@ from itertools import groupby
 from sql.functions import CurrentTimestamp
 from sql.conditionals import Coalesce
 
+from trytond import backend
 from trytond.error import UserError
 from trytond.rpc import RPC
 from trytond.pool import PoolMeta
@@ -873,6 +874,21 @@ class ContractActivationHistory(object):
     __metaclass__ = PoolMeta
     _history = True
     __name__ = 'contract.activation_history'
+
+    @classmethod
+    def __register__(cls, module_name):
+        # Migration from 1.4 add active field
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        do_migrate = False
+        history_table = TableHandler(cursor, cls)
+        if not history_table.column_exist('active'):
+            do_migrate = True
+        super(ContractActivationHistory, cls).__register__(module_name)
+        if not do_migrate:
+            return
+        cursor.execute("UPDATE contract_activation_history__history "
+            "SET active = 'TRUE'")
 
 
 class ContractExtraData(object):

@@ -640,10 +640,11 @@ class VoidContract(EndorsementWizardStepMixin, model.CoopView):
         endorsement.values = {'status': 'void', 'sub_status':
             self.void_reason.id}
         endorsement.activation_history = [EndorsementActivationHistory(
-                action='remove',
+                action='update',
                 contract_endorsement=endorsement,
                 activation_history=activation_history,
                 relation=activation_history.id,
+                values={'active': False},
                 definition=self.endorsement_definition)
             for activation_history in contract.activation_history]
         endorsement.save()

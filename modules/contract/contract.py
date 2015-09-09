@@ -4,7 +4,7 @@ try:
     import simplejson as json
 except ImportError:
     import json
-from sql import Null
+from sql import Null, Window
 from sql.conditionals import NullIf, Coalesce
 from sql.aggregate import Max, Min
 
@@ -85,6 +85,22 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
     termination_reason = fields.Many2One('contract.sub_status',
         'Termination Reason', domain=[('status', '=', 'terminated')],
         ondelete='RESTRICT')
+    active = fields.Boolean('Active')
+
+    @classmethod
+    def __register__(cls, module_name):
+        # Migration from 1.4 add active field
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        do_migrate = False
+        history_table = TableHandler(cursor, cls)
+        if not history_table.column_exist('active'):
+            do_migrate = True
+        super(ActivationHistory, cls).__register__(module_name)
+        if not do_migrate:
+            return
+        cursor.execute("UPDATE contract_activation_history "
+            "SET active = 'TRUE'")
 
     @classmethod
     def __setup__(cls):
@@ -93,6 +109,10 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
 
     def get_func_key(self, name):
         return self.contract.quote_number
+
+    @staticmethod
+    def default_active():
+        return True
 
     @classmethod
     def search_func_key(cls, name, clause):
@@ -331,8 +351,13 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return '%s|%s' % ((self.quote_number, self.contract_number))
 
     def get_initial_start_date(self, name):
-        if self.activation_history:
-            return self.activation_history[0].start_date
+        pool = Pool()
+        History = pool.get('contract.activation_history')
+        all_periods = History.search([('active', 'in', [True, False]),
+                ('contract', '=', self.id)])
+        all_periods.sort(key=lambda x: x.start_date)
+        if all_periods:
+            return all_periods[0].start_date
 
     @classmethod
     def copy(cls, contracts, default=None):
@@ -497,45 +522,55 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         column_end = NullIf(Coalesce(activation_history.end_date,
                 datetime.date.max), datetime.date.max).as_('end_date')
         column_start = activation_history.start_date.as_('start_date')
-        column_term_reason = activation_history.termination_reason
+        column_term_reason = activation_history.termination_reason.as_(
+            'termination_reason')
+        contract_window = Window([activation_history.contract])
 
         def convert(value):
-            if value is not None:
+            if value:
                 if not isinstance(value, datetime.date):
                     return datetime.date(*map(int, value.split('-')))
                 return value
+            return value
 
+        base_values = {x.id: None for x in contracts}
         values = {
-            'start_date': defaultdict(lambda: None),
-            'end_date': defaultdict(lambda: None),
-            'termination_reason': defaultdict(lambda: None),
+            'start_date': base_values,
+            'end_date': dict(base_values),
+            'termination_reason': dict(base_values),
             }
 
         today = utils.today()
+        max_date = datetime.date.max
         for contract_slice in grouped_slice(contracts):
-            min_start_date_query = activation_history.select(
-                activation_history.contract,
-                Min(activation_history.start_date).as_('start_date'),
-                group_by=activation_history.contract)
+            win_query = activation_history.select(
+                activation_history.contract.as_('id'),
+                column_start, column_end, column_term_reason, Min(
+                    activation_history.start_date,
+                    window=contract_window).as_('min_start'),
+                Max(activation_history.start_date,
+                    window=contract_window).as_('max_start'),
+                where=(activation_history.contract.in_(
+                    [x.id for x in contract_slice]) &
+                    (activation_history.active == True)))
+            query = win_query.select(win_query.id,
+                win_query.start_date,
+                win_query.end_date,
+                win_query.termination_reason,
+                where=(
+                    # case 1: today is inside a period
+                    ((win_query.start_date <= today) &
+                        (Coalesce(win_query.end_date, max_date) >= today))
+                    # case 2: today is after last period
+                    | ((win_query.start_date <= today) &
+                        (win_query.start_date == win_query.max_start))
+                    # case 3: today is before first period
+                    | ((win_query.start_date > today) &
+                        (win_query.start_date == win_query.min_start))
+                    ))
 
-            subquery = activation_history.join(min_start_date_query,
-                condition=(
-                    (activation_history.contract ==
-                        min_start_date_query.contract) &
-                    ((activation_history.start_date <= today) |
-                        (activation_history.start_date ==
-                            min_start_date_query.start_date)))
-                ).select(activation_history.contract,
-                    Max(activation_history.start_date).as_('start_date'),
-                    group_by=activation_history.contract)
+            cursor.execute(*query)
 
-            cursor.execute(*activation_history.join(subquery, condition=(
-                        (activation_history.contract == subquery.contract) &
-                        (activation_history.start_date == subquery.start_date))
-                    ).select(activation_history.contract.as_('id'),
-                    column_start, column_end, column_term_reason, where=(
-                        activation_history.contract.in_(
-                            [x.id for x in contract_slice]))))
             for elem in cursor.dictfetchall():
                 values['start_date'][elem['id']] = elem['start_date']
                 values['end_date'][elem['id']] = elem['end_date']
@@ -706,7 +741,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
         query = activation_history.select(activation_history.contract,
             having=Operator(column, value),
-            group_by=activation_history.contract)
+            group_by=activation_history.contract,
+            where=activation_history.active != False)
 
         return [('id', 'in', query)]
 
@@ -1078,13 +1114,13 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def void(cls, contracts, void_reason):
         pool = Pool()
         Event = pool.get('event')
-        ActivationHistory = pool.get('contract.activation_history')
-        ActivationHistory.delete(ActivationHistory.search([
-                    ('contract', 'in', [x.id for x in contracts])]))
+        History = pool.get('contract.activation_history')
         cls.write(contracts, {
                 'status': 'void',
                 'sub_status': void_reason,
                 })
+        History.write(History.search([('contract', 'in',
+                        [x.id for x in contracts])]), {'active': False})
         Event.notify_events(contracts, 'void_contract')
 
     @classmethod

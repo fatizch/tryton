@@ -155,6 +155,21 @@ Create Change Start Date Endorsement::
     ...     EndorsementDefinitionPartRelation(endorsement_part=change_start_date_part))
     >>> change_start_date.save()
 
+Create Void Endorsement::
+
+    >>> void_contract_part = EndorsementPart()
+    >>> void_contract_part.name = 'Change Start Date'
+    >>> void_contract_part.code = 'void_contract'
+    >>> void_contract_part.kind = 'contract'
+    >>> void_contract_part.view = 'void_contract'
+    >>> void_contract_part.save()
+    >>> void_contract = EndorsementDefinition()
+    >>> void_contract.name = 'Void Contract'
+    >>> void_contract.code = 'void_contract'
+    >>> void_contract.ordered_endorsement_parts.append(
+    ...     EndorsementDefinitionPartRelation(endorsement_part=void_contract_part))
+    >>> void_contract.save()
+
 Create Test Contract::
 
     >>> contract = Contract()
@@ -212,4 +227,31 @@ Test options restauration::
     >>> Endorsement.cancel([good_endorsement.id], config._context)
     >>> contract = Contract(contract.id)
     >>> len(contract.options) == 1
+    True
+
+Test Void Endorsement::
+
+    >>> SubStatus = Model.get('contract.sub_status')
+    >>> error, = SubStatus.find([('code', '=', 'error')])
+
+New Endorsement::
+
+    >>> new_endorsement = Wizard('endorsement.start')
+    >>> new_endorsement.form.contract = contract
+    >>> new_endorsement.form.endorsement_definition = void_contract
+    >>> new_endorsement.form.endorsement = None
+    >>> new_endorsement.form.applicant = None
+    >>> new_endorsement.form.effective_date = contract_start_date
+    >>> new_endorsement.execute('start_endorsement')
+    >>> new_endorsement.form.void_reason = error
+    >>> new_endorsement.execute('void_contract_next')
+    >>> new_endorsement.execute('apply_endorsement')
+    >>> contract = Contract(contract.id)
+    >>> contract.start_date == None
+    True
+    >>> contract.initial_start_date == contract_start_date
+    True
+    >>> contract.status == 'void'
+    True
+    >>> contract.sub_status == error
     True

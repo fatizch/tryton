@@ -117,6 +117,19 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @test_framework.prepare_test(
         'contract.test0010_testContractCreation',
         )
+    def test00112_testVoidContract(self):
+        contract, = self.Contract.search([])
+        initial_date = contract.start_date
+        error, = self.SubStatus.search([('code', '=', 'error')])
+        self.Contract.void([contract], error)
+        self.assertEqual(contract.status, 'void')
+        self.assertEqual(contract.start_date, None)
+        self.assertEqual(contract.end_date, None)
+        self.assertEqual(contract.initial_start_date, initial_date)
+
+    @test_framework.prepare_test(
+        'contract.test0010_testContractCreation',
+        )
     def test0015_testRevertToProject(self):
         contract, = self.Contract.search([])
         start_date = contract.start_date
@@ -349,6 +362,60 @@ class ModuleTestCase(test_framework.CoopTestCase):
         res = self.Option.search([('start_date', '<', contract.start_date +
                     relativedelta(weeks=4))])
         self.assertEqual(len(res), 3)
+
+    @test_framework.prepare_test(
+        'contract.test0010_testContractCreation',
+        )
+    def test0060_getter_activation_history(self):
+        years = (2010, 2011, 2012, 2013)
+        contract, = self.Contract.search([])
+        contract.activation_history = [self.ActivationHistory(start_date=x,
+                end_date=x + relativedelta(years=1, days=-1)) for x in
+            (datetime.date(y, 1, 1) for y in years)]
+        contract.save()
+        self.assertEqual(len(contract.activation_history), 4)
+
+        # test consultation in middle of periods
+        for i, y in enumerate(years):
+            self.assertEqual(contract.activation_history[i].start_date,
+                datetime.date(y, 1, 1))
+            self.assertEqual(contract.activation_history[i].end_date,
+                datetime.date(y, 12, 31))
+            with Transaction().set_context(client_defined_date=datetime.date(
+                        y, 6, 1)):
+                contract = self.Contract(contract.id)
+                self.assertEqual(contract.start_date, datetime.date(y, 1, 1))
+                self.assertEqual(contract.end_date, datetime.date(y, 12, 31))
+
+        # test consultation on last day of periods
+        for y in years:
+            with Transaction().set_context(client_defined_date=datetime.date(
+                        y, 12, 31)):
+                contract = self.Contract(contract.id)
+                self.assertEqual(contract.start_date, datetime.date(y, 1, 1))
+                self.assertEqual(contract.end_date, datetime.date(y, 12, 31))
+
+        # test consultation on first day of periods
+        for y in years:
+            with Transaction().set_context(client_defined_date=datetime.date(
+                        y, 1, 1)):
+                contract = self.Contract(contract.id)
+                self.assertEqual(contract.start_date, datetime.date(y, 1, 1))
+                self.assertEqual(contract.end_date, datetime.date(y, 12, 31))
+
+        # test consultation before first periods
+        with Transaction().set_context(client_defined_date=datetime.date(
+                    2009, 6, 1)):
+            contract = self.Contract(contract.id)
+            self.assertEqual(contract.start_date, datetime.date(2010, 1, 1))
+            self.assertEqual(contract.end_date, datetime.date(2010, 12, 31))
+
+        # test consultation after last period
+        with Transaction().set_context(client_defined_date=datetime.date(
+                    2014, 6, 1)):
+            contract = self.Contract(contract.id)
+            self.assertEqual(contract.start_date, datetime.date(2013, 1, 1))
+            self.assertEqual(contract.end_date, datetime.date(2013, 12, 31))
 
 
 def suite():
