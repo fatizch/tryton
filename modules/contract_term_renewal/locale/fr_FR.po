@@ -106,7 +106,7 @@ msgstr "Décliner le renouvellement de contrat"
 
 msgctxt "model:ir.action,name:act_renew"
 msgid "Renew Contract"
-msgstr "Renouveller le contrat"
+msgstr "Renouveler le contrat"
 
 msgctxt "model:offered.product.term_renewal_rule,name:"
 msgid "Product Term Renewal Rule"
@@ -232,7 +232,7 @@ msgstr "Décliner le renouvellement"
 
 msgctxt "view:contract:"
 msgid "Renew Contract"
-msgstr "Renouveller le contrat"
+msgstr "Renouveler le contrat"
 
 msgctxt "view:contract_term_renewal.decline_renewal.select_reason:"
 msgid "Select Renewal Declination Reason"

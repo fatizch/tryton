@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <!-- ################################## -->
+        <!-- # Renewal Endorsement Configuration # -->
+        <!-- ################################## -->
+        <record model="endorsement.definition" id="renew_contract_definition">
+            <field name="code">renew_contract</field>
+            <field name="name">Renew Contract</field>
+        </record>
+        <record model="endorsement.part" id="renew_contract_part">
+            <field name="code">renew_contract</field>
+            <field name="name">Renew Contract</field>
+            <field name="kind">contract</field>
+            <field name="view">renew_contract</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="renew_contract_relation">
+            <field name="definition" ref="renew_contract_definition"/>
+            <field name="endorsement_part" ref="renew_contract_part"/>
+            <field name="order">1</field>
+        </record>
+    </data>
+</tryton>

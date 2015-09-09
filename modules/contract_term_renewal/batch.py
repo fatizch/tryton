@@ -35,5 +35,5 @@ class RenewContracts(batch.BatchRoot):
     def execute(cls, objects, ids, treatment_date, extra_args):
         RenewalWizard = Pool().get('contract_term_renewal.renew',
             type='wizard')
-        RenewalWizard.renew_contracts(objects)
-        cls.logger.info('Renewed %d contracts.' % len(objects))
+        renewed = RenewalWizard.renew_contracts(objects)
+        cls.logger.info('Renewed %d contracts.' % len(renewed))

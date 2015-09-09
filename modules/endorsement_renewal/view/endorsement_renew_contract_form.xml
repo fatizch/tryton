@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<form string="Renew Contract">
+    <label name="effective_date"/>
+    <field name="effective_date"/>
+    <label name="endorsement_part"/>
+    <field name="endorsement_part"/>
+    <label name="endorsement_definition"/>
+    <field name="endorsement_definition"/>
+    <newline/>
+    <label name="current_start_date"/>
+    <field name="current_start_date"/>
+    <label name="current_end_date"/>
+    <field name="current_end_date"/>
+    <label name="new_period_start_date"/>
+    <field name="new_period_start_date"/>
+    <label name="new_period_end_date"/>
+    <field name="new_period_end_date"/>
+</form>

@@ -1,0 +1,77 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:endorsement.contract.renew:"
+msgid "The contract %s is already renewed "
+msgstr "Le contrat %s est déjà renouvellé"
+
+msgctxt "error:endorsement.contract.renew:"
+msgid "The contract %s is not renewable "
+msgstr "Le contrat %s n'est pas renouvelable"
+
+msgctxt "field:endorsement.contract.renew,current_end_date:"
+msgid "Current End Date"
+msgstr "Date de fin actuelle"
+
+msgctxt "field:endorsement.contract.renew,current_start_date:"
+msgid "Current Start Date"
+msgstr "Date de fin actuelle"
+
+msgctxt "field:endorsement.contract.renew,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.contract.renew,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.contract.renew,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.renew,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.renew,new_period_end_date:"
+msgid "New Period End Date"
+msgstr "Date de fin de la nouvelle période"
+
+msgctxt "field:endorsement.contract.renew,new_period_start_date:"
+msgid "New Period Start Date"
+msgstr "Date de début de la nouvelle période"
+
+msgctxt "model:endorsement.contract.renew,name:"
+msgid "Renew Contract"
+msgstr "Renouveler le contrat"
+
+msgctxt "model:endorsement.definition,name:renew_contract_definition"
+msgid "Renew Contract"
+msgstr "Renouveler le contrat"
+
+msgctxt "model:endorsement.part,name:renew_contract_part"
+msgid "Renew Contract"
+msgstr "Renouveler le contrat"
+
+msgctxt "view:endorsement.contract.renew:"
+msgid "Renew Contract"
+msgstr "Renouveler le contrat"
+
+msgctxt "wizard_button:endorsement.start,renew_contract,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,renew_contract,renew_contract_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,renew_contract,renew_contract_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,renew_contract,renew_contract_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"

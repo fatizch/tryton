@@ -3,7 +3,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Button, Wizard, StateAction, StateView
 
 from trytond.modules.process_cog import ProcessFinder, ProcessStart
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, model
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -154,6 +154,8 @@ class StartEndorsement:
         if Transaction().context.get(
                 'active_model') != 'endorsement.part.union':
             return super(StartEndorsement, self).transition_start_endorsement()
+        with model.error_manager():
+            self.check_before_start()
         if not self.endorsement:
             endorsement = Pool().get('endorsement')()
             endorsement.effective_date = \
