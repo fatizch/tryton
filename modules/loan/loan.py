@@ -147,7 +147,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 'readonly': Eval('state') != 'draft'
                 },
             depends=['deferal', 'kind', 'state']),
-        'get_first_increment_field', 'setter_void')
+        'get_deferal_duration', 'setter_void')
     end_date = fields.Function(
         fields.Date('End Date'),
         'get_end_date')
@@ -448,6 +448,9 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             name = 'number_of_payments'
         if self.increments:
             return getattr(self.increments[0], name)
+
+    def get_deferal_duration(self, name):
+        return self.increments[0].number_of_payments if self.deferal else None
 
     def get_non_deferal_increment_field(self, name):
         increments = [x for x in self.increments if not x.deferal]
