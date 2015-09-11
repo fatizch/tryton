@@ -4,7 +4,7 @@ try:
     import simplejson as json
 except ImportError:
     import json
-from sql import Null, Window
+from sql import Null, Window, Literal
 from sql.conditionals import NullIf, Coalesce
 from sql.aggregate import Max, Min
 
@@ -552,7 +552,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                     window=contract_window).as_('max_start'),
                 where=(activation_history.contract.in_(
                     [x.id for x in contract_slice]) &
-                    (activation_history.active == True)))
+                    (activation_history.active == Literal(True))))
             query = win_query.select(win_query.id,
                 win_query.start_date,
                 win_query.end_date,
@@ -742,7 +742,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         query = activation_history.select(activation_history.contract,
             having=Operator(column, value),
             group_by=activation_history.contract,
-            where=activation_history.active != False)
+            where=activation_history.active != Literal(False))
 
         return [('id', 'in', query)]
 

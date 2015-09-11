@@ -1,5 +1,6 @@
-from trytond.pool import PoolMeta, Pool
+from sql import Literal
 
+from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, coop_string, model
@@ -51,7 +52,8 @@ class User:
 
         cursor.execute(*query_table.select(log.id,
             where=((priority.team.in_([team.id for team in self.teams]))
-                & (log.latest == True) & (log.locked == False)),  # NOQA
+                & (log.latest == Literal(True))
+                & (log.locked == Literal(False))),
             order_by=(priority.value, log.start_time),
             limit=1))
 
@@ -159,7 +161,7 @@ class Team(model.CoopSQL, model.CoopView):
                 priority.process_step == log.to_state))
 
         cursor.execute(*query_table.select(log.id,
-            where=((priority.team == self.id) & (log.latest == True)),  # NOQA
+            where=((priority.team == self.id) & (log.latest == Literal(True))),
             order_by=(priority.value, log.start_time)))
         return [x[0] for x in cursor.fetchall()]
 
@@ -183,8 +185,8 @@ class Team(model.CoopSQL, model.CoopView):
                 priority.process_step == log.to_state))
 
         cursor.execute(*query_table.select(log.id,
-            where=((priority.team == self.id) & (log.latest == True)  # NOQA
-                & (log.locked == False)),
+            where=((priority.team == self.id) & (log.latest == Literal(True))
+                & (log.locked == Literal(False))),
             order_by=(priority.value, log.start_time),
             limit=1))
 
