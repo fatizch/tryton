@@ -648,6 +648,10 @@ msgctxt "model:ir.action,name:act_contact_mechanisms_relate_form"
 msgid "Contact Mechanisms"
 msgstr "Moyens de contact"
 
+msgctxt "model:ir.action,name:act_inactive_addresses_relate_form"
+msgid "Inactive Addresses"
+msgstr "Adresses inactives"
+
 msgctxt "model:ir.action,name:act_menu_form"
 msgid "Synthesis"
 msgstr "Synthèse"
