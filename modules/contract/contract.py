@@ -1415,51 +1415,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     initial_start_date = fields.Function(fields.Date('Initial Start Date'),
         'get_initial_start_date')
 
-    def get_initial_start_date(self, name):
-        if self.parent_contract.initial_start_date:
-            return max(self.manual_start_date or datetime.date.min,
-                self.parent_contract.initial_start_date)
-
-    def get_full_name(self, name):
-        return self.rec_name
-
-    def get_func_key(self, name):
-        if self.contract:
-            elems = [self.contract.quote_number,
-                self.contract.contract_number, self.coverage.rec_name]
-            return '|'.join(str(x) for x in elems)
-        else:
-            return 'None|None|' + self.coverage.rec_name
-
-    @classmethod
-    def search_func_key(cls, name, clause):
-        assert clause[1] == '='
-        if '|' in clause[2]:
-            operands = clause[2].split('|')
-            if len(operands) == 3:
-                quote_num, contract_num, coverage = operands
-                res = []
-                if quote_num != 'None':
-                    res.append(('contract.quote_number', clause[1], quote_num))
-                if contract_num != 'None':
-                    res.append(('contract.contract_number', clause[1],
-                            contract_num))
-                res.append(('coverage.rec_name', clause[1], coverage))
-                return res
-            else:
-                return [('id', '=', None)]
-        else:
-            return ['OR',
-                [('contract.quote_number',) + tuple(clause[1:])],
-                [('contract.contract_number',) + tuple(clause[1:])],
-                [('coverage.rec_name',) + tuple(clause[1:])],
-                ]
-
-    @classmethod
-    def _export_light(cls):
-        return (super(ContractOption, cls)._export_light() |
-            set(['coverage', 'product']))
-
     @classmethod
     def __setup__(cls):
         super(ContractOption, cls).__setup__()
@@ -1476,88 +1431,13 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 })
 
     @classmethod
-    def order_coverage(cls, tables):
-        coverage_order = tables.get('coverage_order_tables')
-        if coverage_order is not None:
-            return [coverage_order[None][0].order]
-
-        pool = Pool()
-        table, _ = tables[None]
-        contract = tables.get('contract')
-        if contract is None:
-            contract = pool.get('contract').__table__()
-
-        relation = pool.get('offered.product-option.description').__table__()
-
-        query_table = contract.join(relation, condition=(
-                contract.product == relation.product)).select(
-                contract.id.as_('contract'), relation.coverage, relation.order)
-        tables['coverage_order_tables'] = {
-            None: (query_table,
-                (query_table.contract == table.contract) &
-                (query_table.coverage == table.coverage)
-                )}
-
-        return [query_table.order]
+    def functional_skips_for_duplicate(cls):
+        return set(['automatic_end_date'])
 
     @classmethod
-    def order_start_date(cls, tables):
-        table, _ = tables[None]
-        return [Coalesce(table.manual_start_date, datetime.date.min)]
-
-    @fields.depends('sub_status', 'manual_end_date')
-    def on_change_with_sub_status(self, name=None):
-        pool = Pool()
-        SubStatus = pool.get('contract.sub_status')
-        if not self.manual_end_date:
-            return
-        if not self.sub_status:
-            return SubStatus.search([('xml_id', '=',
-                        'contract.sub_status_terminated')])[0]
-        return self.sub_status
-
-    @classmethod
-    def get_start_date(cls, options, names):
-        values = {
-            'start_date': defaultdict(lambda: None),
-            }
-        for option in options:
-            ended_previously = False
-            if option.manual_end_date or option.automatic_end_date:
-                ending_date = min(option.manual_end_date or datetime.date.max,
-                    option.automatic_end_date or datetime.date.max)
-                if ending_date < (option.parent_contract.start_date or
-                        datetime.date.min):
-                    ended_previously = True
-                    values['start_date'][option.id] = option.initial_start_date
-            if not ended_previously:
-                if option.parent_contract.start_date:
-                    values['start_date'][option.id] = max(
-                        option.manual_start_date or datetime.date.min,
-                        option.parent_contract.start_date)
-                else:
-                    values['start_date'][option.id] = None
-        return values
-
-    @classmethod
-    def searcher_start_date(cls, name, clause):
-        return ['OR',
-            [('manual_start_date',) + tuple(clause[1:])],
-            [
-                ('contract.start_date',) + tuple(clause[1:]),
-                ('manual_start_date', '=', None)
-            ]
-        ]
-
-    def notify_contract_end_date_change(self, new_end_date):
-        if (new_end_date and self.manual_end_date and
-                self.manual_end_date > new_end_date):
-            self.manual_end_date = None
-
-    def notify_contract_start_date_change(self, new_start_date):
-        if self.automatic_end_date and \
-                self.automatic_end_date < new_start_date:
-            self.automatic_end_date = None
+    def _export_light(cls):
+        return (super(ContractOption, cls)._export_light() |
+            set(['coverage', 'product']))
 
     @classmethod
     def copy(cls, options, default=None):
@@ -1567,10 +1447,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             for x in skips:
                 default.setdefault(x, None)
         return super(ContractOption, cls).copy(options, default=default)
-
-    @classmethod
-    def functional_skips_for_duplicate(cls):
-        return set(['automatic_end_date'])
 
     @classmethod
     def default_product(cls):
@@ -1587,6 +1463,17 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     @fields.depends('coverage')
     def on_change_coverage(self):
         self.coverage_family = self.on_change_with_coverage_family()
+
+    @fields.depends('sub_status', 'manual_end_date')
+    def on_change_with_sub_status(self, name=None):
+        pool = Pool()
+        SubStatus = pool.get('contract.sub_status')
+        if not self.manual_end_date:
+            return
+        if not self.sub_status:
+            return SubStatus.search([('xml_id', '=',
+                        'contract.sub_status_terminated')])[0]
+        return self.sub_status
 
     @fields.depends('contract', 'start_date')
     def on_change_with_appliable_conditions_date(self, name=None):
@@ -1628,6 +1515,43 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         if self.contract:
             return self.contract.id
 
+    @classmethod
+    def get_start_date(cls, options, names):
+        values = {
+            'start_date': defaultdict(lambda: None),
+            }
+        for option in options:
+            ended_previously = False
+            if option.manual_end_date or option.automatic_end_date:
+                ending_date = min(option.manual_end_date or datetime.date.max,
+                    option.automatic_end_date or datetime.date.max)
+                if ending_date < (option.parent_contract.start_date or
+                        datetime.date.min):
+                    ended_previously = True
+                    values['start_date'][option.id] = option.initial_start_date
+            if not ended_previously:
+                if option.parent_contract.start_date:
+                    values['start_date'][option.id] = max(
+                        option.manual_start_date or datetime.date.min,
+                        option.parent_contract.start_date)
+                else:
+                    values['start_date'][option.id] = None
+        return values
+
+    def get_end_date(self, name):
+        dates = [x for x in self.get_possible_end_date().itervalues()]
+        if self.parent_contract.end_date:
+            dates.append(self.parent_contract.end_date)
+        return min(dates) if dates else None
+
+    def get_initial_start_date(self, name):
+        if self.parent_contract.initial_start_date:
+            return max(self.manual_start_date or datetime.date.min,
+                self.parent_contract.initial_start_date)
+
+    def get_full_name(self, name):
+        return self.rec_name
+
     def get_rec_name(self, name):
         if self.coverage:
             return self.coverage.get_rec_name(name)
@@ -1636,6 +1560,101 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def get_currency(self):
         if hasattr(self, 'coverage') and self.coverage:
             return self.coverage.currency
+
+    def get_func_key(self, name):
+        if self.contract:
+            elems = [self.contract.quote_number,
+                self.contract.contract_number, self.coverage.rec_name]
+            return '|'.join(str(x) for x in elems)
+        else:
+            return 'None|None|' + self.coverage.rec_name
+
+    @classmethod
+    def set_end_date(cls, options, name, end_date):
+        cls.write(options, {'manual_end_date': end_date})
+
+    @classmethod
+    def searcher_start_date(cls, name, clause):
+        return ['OR',
+            [('manual_start_date',) + tuple(clause[1:])],
+            [
+                ('contract.start_date',) + tuple(clause[1:]),
+                ('manual_start_date', '=', None)
+            ]
+        ]
+
+    @classmethod
+    def search_parent_contract(cls, name, clause):
+        return [('contract',) + tuple(clause[1:])]
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            if len(operands) == 3:
+                quote_num, contract_num, coverage = operands
+                res = []
+                if quote_num != 'None':
+                    res.append(('contract.quote_number', clause[1], quote_num))
+                if contract_num != 'None':
+                    res.append(('contract.contract_number', clause[1],
+                            contract_num))
+                res.append(('coverage.rec_name', clause[1], coverage))
+                return res
+            else:
+                return [('id', '=', None)]
+        else:
+            return ['OR',
+                [('contract.quote_number',) + tuple(clause[1:])],
+                [('contract.contract_number',) + tuple(clause[1:])],
+                [('coverage.rec_name',) + tuple(clause[1:])],
+                ]
+
+    @classmethod
+    def order_coverage(cls, tables):
+        coverage_order = tables.get('coverage_order_tables')
+        if coverage_order is not None:
+            return [coverage_order[None][0].order]
+
+        pool = Pool()
+        table, _ = tables[None]
+        contract = tables.get('contract')
+        if contract is None:
+            contract = pool.get('contract').__table__()
+
+        relation = pool.get('offered.product-option.description').__table__()
+
+        query_table = contract.join(relation, condition=(
+                contract.product == relation.product)).select(
+                contract.id.as_('contract'), relation.coverage, relation.order)
+        tables['coverage_order_tables'] = {
+            None: (query_table,
+                (query_table.contract == table.contract) &
+                (query_table.coverage == table.coverage)
+                )}
+
+        return [query_table.order]
+
+    @classmethod
+    def order_start_date(cls, tables):
+        table, _ = tables[None]
+        return [Coalesce(table.manual_start_date, datetime.date.min)]
+
+    def init_dict_for_rule_engine(self, args):
+        args['option'] = self
+        self.coverage.init_dict_for_rule_engine(args)
+        self.contract.init_dict_for_rule_engine(args)
+
+    def notify_contract_end_date_change(self, new_end_date):
+        if (new_end_date and self.manual_end_date and
+                self.manual_end_date > new_end_date):
+            self.manual_end_date = None
+
+    def notify_contract_start_date_change(self, new_start_date):
+        if self.automatic_end_date and \
+                self.automatic_end_date < new_start_date:
+            self.automatic_end_date = None
 
     @classmethod
     def check_end_date(cls, options):
@@ -1674,11 +1693,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         res.update(self.contract.get_all_extra_data(at_date))
         return res
 
-    def init_dict_for_rule_engine(self, args):
-        args['option'] = self
-        self.coverage.init_dict_for_rule_engine(args)
-        self.contract.init_dict_for_rule_engine(args)
-
     @classmethod
     def get_var_names_for_full_extract(cls):
         return [('coverage', 'light'), 'start_date', 'end_date']
@@ -1699,10 +1713,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             cls.raise_user_error('inactive_coverage_at_date', (coverage.name,
                     start_date))
 
-    @classmethod
-    def set_end_date(cls, options, name, end_date):
-        cls.write(options, {'manual_end_date': end_date})
-
     def get_possible_end_date(self):
         dates = {}
         if self.manual_end_date:
@@ -1712,12 +1722,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             # before the start date, whisch is strange but not wrong
             dates['automatic_end_date'] = self.automatic_end_date
         return dates
-
-    def get_end_date(self, name):
-        dates = [x for x in self.get_possible_end_date().itervalues()]
-        if self.parent_contract.end_date:
-            dates.append(self.parent_contract.end_date)
-        return min(dates) if dates else None
 
     def set_automatic_end_date(self):
         self.automatic_end_date = self.calculate_automatic_end_date()
@@ -1729,10 +1733,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         exec_context = {'date': self.start_date}
         self.init_dict_for_rule_engine(exec_context)
         return self.coverage.calculate_end_date(exec_context)
-
-    @classmethod
-    def search_parent_contract(cls, name, clause):
-        return [('contract',) + tuple(clause[1:])]
 
 
 class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,
