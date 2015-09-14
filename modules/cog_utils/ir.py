@@ -377,8 +377,7 @@ class Lang(ExportImportMixin):
         if res is None:
             res = cls.search_read([('code', '=', code)], limit=1)[0]
             cls._lang_cache.set(code, res)
-        else:
-            res = cls(**res)
+        res = cls(**res)
         return res
 
 

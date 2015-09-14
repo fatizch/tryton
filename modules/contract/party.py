@@ -82,8 +82,6 @@ class Party:
 
     @classmethod
     def get_summary(cls, parties, name=None, at_date=None, lang=None):
-        if not lang:
-            lang = utils.get_user_language()
         res = super(Party, cls).get_summary(parties, name, at_date, lang)
         for party in parties:
             res[party.id] += coop_string.get_field_as_summary(

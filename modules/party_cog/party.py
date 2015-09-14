@@ -339,8 +339,6 @@ class Party(export.ExportImportMixin):
 
     @classmethod
     def get_summary(cls, parties, name=None, at_date=None, lang=None):
-        if not lang:
-            lang = utils.get_user_language()
         res = {}
         for party in parties:
             res[party.id] = "<b>%s</b>\n" % party.get_rec_name(name)
