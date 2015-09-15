@@ -483,6 +483,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 .select(
                     loan_share.loan, covered_element.party,
                     where=loan_share.loan.in_([i.id for i in loan_slice]),
+                    group_by=[loan_share.loan, covered_element.party],
                 ))
             for loan_id, party_id in cursor.fetchall():
                 ret[loan_id].append(party_id)
