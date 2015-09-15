@@ -367,6 +367,14 @@ msgctxt "field:contract.contact,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:contract.contact,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:contract.contact,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
 msgctxt "field:contract.contact,id:"
 msgid "ID"
 msgstr "ID"

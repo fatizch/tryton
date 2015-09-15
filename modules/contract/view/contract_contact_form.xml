@@ -5,6 +5,8 @@
     <newline/>
     <label name="date"/>
     <field name="date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
     <newline/>
     <label name="type"/>
     <field name="type"/>

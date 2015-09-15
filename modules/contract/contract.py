@@ -774,14 +774,32 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             Date.today())
         return ContractRevision.get_values(contracts, names=names, date=date)
 
-    def get_contact_of_type_at_date(self, type_=None, date=None):
+    def get_default_contacts(self, type_, at_date):
+        '''
+            This methods calculate defaults contacts
+        '''
+        pool = Pool()
+        Contact = pool.get('contract.contact')
+        ContactType = pool.get('contract.contact.type')
+        if not self.subscriber:
+            return []
+        subscriber_type, = ContactType.search([('code', '=', 'subscriber')])
+        return [Contact(
+                type=subscriber_type,
+                party=self.subscriber,
+                address=utils.get_good_version_at_date(self.subscriber,
+                    'addresses', at_date))]
+
+    def get_contacts_of_type_at_date(self, type_, date=None):
         if not date:
             date = utils.today()
-        if type_:
-            contacts = [x for x in self.contacts if x.type.code == type_]
-        else:
-            contacts = self.contacts
-        return utils.get_value_at_date(contacts, date, 'date')
+        contacts = [c for c in self.contacts
+            if (c.type.code == type_ and (not date or (
+                        date >= (c.date or datetime.date.min) and
+                        date <= (c.end_date or datetime.date.max))))]
+        if not contacts:
+            contacts = self.get_default_contacts(type_, date)
+        return contacts
 
     def check_activation_dates(self):
         previous_period = None
@@ -1202,9 +1220,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return cls.browse([x['id'] for x in cursor.dictfetchall()])
 
     def get_contract_address(self, at_date=None, role='subscriber'):
-        contact = self.get_contact_of_type_at_date(role, at_date)
-        if contact and contact.address:
-            return contact.address
+        contacts = self.get_contacts_of_type_at_date(role, at_date)
+        if contacts:
+            assert len(contacts) == 1
+            if contacts[0].address:
+                return contacts[0].address
         return utils.get_good_version_at_date(self.subscriber, 'addresses',
             at_date)
 
@@ -1287,17 +1307,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         res.update(good_extra_data)
         return res
 
-    def add_contact_with_address(self, address, date, type_):
-        pool = Pool()
-        Contact = pool.get('contract.contact')
-        ContactType = pool.get('contract.contact.type')
-        contact_type, = ContactType.search([('code', '=',
-                    type_)], limit=1, order=[])
-        self.contacts = self.contacts + (Contact(type=contact_type,
-                party=address.party,
-                date=date,
-                address=address),)
-
     def get_product_subscriber_kind(self, name):
         return self.product.subscriber_kind if self.product else ''
 
@@ -1347,7 +1356,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 new_end_date = min([x for x in dates if x] or [None])
             finally:
                 transaction.cursor.rollback()
-        if new_end_date != None and new_end_date <= previous_end_date:
+        if new_end_date is not None and new_end_date <= previous_end_date:
             self.append_functional_error('cannot_reactivate_max_end_date')
             return None
         return new_end_date

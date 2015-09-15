@@ -6,7 +6,6 @@ import trytond.tests.test_tryton
 
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
-from trytond.pool import Pool
 
 from trytond.modules.cog_utils import test_framework
 
@@ -36,14 +35,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Coverage': 'offered.option.description',
             'ContractExtraData': 'contract.extra_data',
             'SubStatus': 'contract.sub_status',
+            'ContactType': 'contract.contact.type',
             }
 
     def createContactTypes(self):
-        ContactType = Pool().get('contract.contact.type')
         to_create = []
         for code in ('subscriber', 'covered_party'):
-            to_create.append(ContactType(code=code, name='dummy'))
-        ContactType.save(to_create)
+            to_create.append(self.ContactType(code=code, name='dummy'))
+        self.ContactType.save(to_create)
 
     def test0001_testPersonCreation(self):
         party = self.Party()
@@ -113,19 +112,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(contract.status, 'terminated')
         self.assertEqual(contract.sub_status, self.SubStatus.search(
                 [('code', '=', 'reached_end_date')])[0])
-
-    @test_framework.prepare_test(
-        'contract.test0010_testContractCreation',
-        )
-    def test00112_testVoidContract(self):
-        contract, = self.Contract.search([])
-        initial_date = contract.start_date
-        error, = self.SubStatus.search([('code', '=', 'error')])
-        self.Contract.void([contract], error)
-        self.assertEqual(contract.status, 'void')
-        self.assertEqual(contract.start_date, None)
-        self.assertEqual(contract.end_date, None)
-        self.assertEqual(contract.initial_start_date, initial_date)
 
     @test_framework.prepare_test(
         'contract.test0010_testContractCreation',
@@ -416,6 +402,48 @@ class ModuleTestCase(test_framework.CoopTestCase):
             contract = self.Contract(contract.id)
             self.assertEqual(contract.start_date, datetime.date(2013, 1, 1))
             self.assertEqual(contract.end_date, datetime.date(2013, 12, 31))
+
+    @test_framework.prepare_test('contract.test0001_testPersonCreation')
+    def test0060_get_contacts_of_type_at_date(self):
+        party, = self.Party.search([('name', '=', 'DOE')])
+        subscriber_type, = self.ContactType.search(
+            [('code', '=', 'subscriber')])
+        covered_party_type = self.ContactType(
+            code='covered_party',
+            name='Covered Party')
+        covered_party_type.save()
+        today = datetime.date.today()
+        contract = self.Contract(subscriber=party)
+        contact1 = self.Contact(
+            date=None,
+            end_date=today + relativedelta(days=-30),
+            type=subscriber_type)
+        contact2 = self.Contact(
+            date=today + relativedelta(days=-29),
+            end_date=today + relativedelta(days=-5),
+            type=subscriber_type)
+        contact3 = self.Contact(
+            date=None,
+            end_date=None,
+            type=covered_party_type.id)
+        contract.contacts = (contact1, contact2, contact3)
+        contacts = contract.get_contacts_of_type_at_date('subscriber',
+            today + relativedelta(days=-100))
+        self.assertEqual(contacts, [contact1])
+        contacts = contract.get_contacts_of_type_at_date('subscriber',
+            today + relativedelta(days=-25))
+        self.assertEqual(contacts, [contact2])
+        contacts = contract.get_contacts_of_type_at_date('covered_party')
+        self.assertEqual(contacts, [contact3])
+        contacts = contract.get_contacts_of_type_at_date('subscriber')
+        self.assertEqual(contacts[0].party, party)
+        contact4 = self.Contact(
+            date=today,
+            end_date=None,
+            type=subscriber_type)
+        contract.contacts = (contact1, contact2, contact3, contact4)
+        contacts = contract.get_contacts_of_type_at_date('subscriber')
+        self.assertEqual(contacts, [contact4])
 
 
 def suite():

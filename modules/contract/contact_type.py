@@ -1,3 +1,5 @@
+import datetime
+
 from trytond.modules.cog_utils import model, fields, coop_string, utils
 from trytond.pyson import Eval, Bool
 
@@ -28,6 +30,11 @@ class ContractContact(model._RevisionMixin, model.CoopSQL, model.CoopView):
     __name__ = 'contract.contact'
     _parent_name = 'contract'
 
+    end_date = fields.Date('End Date', domain=['OR',
+            ('end_date', '=', None),
+            ('date', '=', None),
+            ('end_date', '>=', Eval('date', datetime.date.min))],
+        depends=['date'])
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
         required=True, select=True)
     type = fields.Many2One('contract.contact.type', 'Type',

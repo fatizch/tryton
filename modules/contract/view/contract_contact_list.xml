@@ -2,6 +2,7 @@
 <tree string="Contract Contact">
     <field name="contract"/>
     <field name="date"/>
+    <field name="end_date"/>
     <field name="type" readonly="1"/>
     <field name="party" readonly="1"/>
     <field name="address"/>

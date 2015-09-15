@@ -17,7 +17,6 @@ __all__ = [
     'EndorsementPartyAddress',
     'EndorsementPartyRelation',
     'Endorsement',
-    'Contract',
     ]
 
 
@@ -116,29 +115,6 @@ class Party:
     @model.CoopView.button_action('endorsement.act_start_endorsement')
     def start_endorsement(cls, parties):
         pass
-
-
-class Contract:
-    __name__ = 'contract'
-
-    def update_contacts_after_endorsement(self, caller=None):
-        # handle new subscriber address added by endorsement
-        generator = caller.endorsement.generated_by
-        party_endorsements = getattr(generator, 'party_endorsements', None)
-        if not party_endorsements:
-            return
-        if party_endorsements:
-            addresses_endorsements = party_endorsements[0].addresses
-        if not addresses_endorsements:
-            return
-        added_address = [x.address for x in addresses_endorsements
-            if x.action == 'add']
-        if not added_address:
-            return
-        added_address = added_address[0]
-        if added_address.party == self.subscriber:
-            self.add_contact_with_address(added_address,
-                added_address.start_date, 'subscriber')
 
 
 class Endorsement:
