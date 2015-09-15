@@ -142,10 +142,38 @@ class Party(export.ExportImportMixin):
 
     @classmethod
     def add_func_key(cls, values):
-        values['_func_key'] = values['code']
+        if 'code' in values:
+            values['_func_key'] = values['code']
+        elif (values.get('is_person', False) and values.get('name', False) and
+                values.get('first_name', False) and
+                values.get('birth_date', False)):
+            values['_func_key'] = '%s|%s|%s' % (values['name'],
+                values['first_name'], values['birth_date'])
 
     def get_func_key(self, name):
-        return self.code
+        if not self.is_person:
+            return self.code
+        return '%s|%s|%s' % (self.name, self.first_name, self.birth_date)
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            assert len(operands) == 3
+            name, first_name, birth_date = operands
+            res = [('is_person', '=', True)]
+            if name != 'None':
+                res.append(('name', clause[1], name))
+            if first_name != 'None':
+                res.append(('first_name', clause[1], first_name))
+            if birth_date != 'None':
+                res.append(('birth_date', clause[1], birth_date))
+            return res
+        else:
+            return ['OR',
+                [('code',) + tuple(clause[1:])],
+                ]
 
     @classmethod
     def get_existing_lines(cls, main_object, field_name):

@@ -92,8 +92,8 @@ class Party:
         if self.is_person and self.ssn:
             return self.ssn
         elif self.is_person and self.social_security_dependent:
-            return (self.name + '|' + self.first_name + '|' +
-                self.main_insured_ssn)
+            return '%s|%s|%s|%s' % (self.name, self.first_name,
+                self.birth_date, self.main_insured_ssn)
         else:
             return super(Party, self).get_func_key(name)
 
@@ -102,13 +102,16 @@ class Party:
         assert clause[1] == '='
         if '|' in clause[2]:
             operands = clause[2].split('|')
-            assert len(operands) == 3
-            name, first_name, ssn = operands
+            if len(operands) != 4:
+                return super(Party, cls).search_func_key(name, clause)
+            name, first_name, birth_date, ssn = operands
             res = []
             if name != 'None':
                 res.append(('name', clause[1], name))
             if first_name != 'None':
                 res.append(('first_name', clause[1], first_name))
+            if birth_date != 'None':
+                res.append(('birth_date', clause[1], birth_date))
             if ssn != 'None':
                 res.append(('main_insured_ssn', clause[1], ssn))
             return res
@@ -120,22 +123,25 @@ class Party:
 
     @classmethod
     def add_func_key(cls, values):
-        if values.get('code', False):
-            super(Party, cls).add_func_key(values)
-            return
+        if values.get('code', False) or not values.get('is_person', True):
+            return super(Party, cls).add_func_key(values)
         if values.get('ssn', False):
             values['_func_key'] = values['ssn']
             return
-        if not values.get('is_person', False):
-            super(Party, cls).add_func_key(values)
-            return
-        ssn = 'None'
-        for rel in values['relations']:
-            if rel['type']['_func_key'] == 'social_security_dependent':
-                ssn = rel['to']['_func_key']
-                break
-        values['_func_key'] = (values['name'] + '|' + values['first_name']
-           + '|' + ssn)
+        if (not values.get('name', True) or
+                not values.get('first_name', True)
+                or values.get('birth_date', True)):
+            return super(Party, cls).add_func_key(values)
+        values['_func_key'] = '%s|%s|%s' % (values['name'],
+            values['first_name'], values['birth_date'])
+        ssn = ''
+        if 'relations' in values:
+            for rel in values['relations']:
+                if rel['type']['_func_key'] == 'social_security_dependent':
+                    ssn = rel['to']['_func_key']
+                    break
+        if ssn:
+            values['_func_key'] += '|' + ssn
 
 
 class PartyRelation:
@@ -209,6 +215,7 @@ class HealthPartyComplement:
             'Insurance Fund', depends=['insurance_fund_number']),
         'get_insurance_fund')
     insurance_fund_number = fields.Char('Health Care System Number', size=9)
+    birth_order = fields.Integer('Birth Order')
 
     @classmethod
     def __setup__(cls):
