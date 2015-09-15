@@ -950,6 +950,10 @@ msgid "Loans"
 msgstr "Prêts"
 
 msgctxt "view:loan:"
+msgid "Please check the last payment"
+msgstr "Merci de vérifier la dernière échéance"
+
+msgctxt "view:loan:"
 msgid "Quota share"
 msgstr "Quotité"
 

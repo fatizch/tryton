@@ -4,7 +4,7 @@ from decimal import Decimal
 from trytond import backend
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, Bool, Len, If
+from trytond.pyson import Eval, Bool, Len, If, Not
 from trytond.model import Workflow
 from trytond.tools import grouped_slice
 
@@ -169,6 +169,9 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     state_string = state.translated('state')
     contracts = fields.Many2Many('contract-loan', 'loan', 'contract',
         'Contracts')
+    display_warning = fields.Function(
+        fields.Boolean('Warning'),
+        'on_change_with_display_warning')
 
     @classmethod
     def __setup__(cls):
@@ -212,7 +215,12 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     @classmethod
     def view_attributes(cls):
         return [('/form/notebook/page[@id="quote_share"]', 'states',
-                {'invisible': ~Eval('loan_shares')})]
+                {'invisible': ~Eval('loan_shares')}),
+            (
+                '/form/notebook/page[@id="main"]/group[@id="warning"]',
+                'states',
+                {'invisible': Not(Eval('display_warning', False))}
+            )]
 
     @classmethod
     def _export_skips(cls):
@@ -561,6 +569,17 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     @fields.depends('insured_persons')
     def on_change_with_insured_persons_name(self, name=None):
         return ', '.join([x.rec_name for x in self.insured_persons])
+
+    @fields.depends('payments', 'kind', 'state', 'duration')
+    def on_change_with_display_warning(self, name=None):
+        if self.state == 'calculated' and (not self.payments
+                or not self.increments):
+            return True
+        elif self.state != 'calculated':
+            return False
+        diff = self.payments[-1].amount - self.increments[-1].payment_amount
+        if abs(diff > Decimal(0.01) * self.duration):
+            return True
 
     @classmethod
     def search_insured_persons(cls, name, clause):
