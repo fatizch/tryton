@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='accounting']/separator[@id='dunning']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='accounting']/label[@name='dunning_procedure']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='accounting']/field[@name='dunning_procedure']" position="replace"/>
+</data>
