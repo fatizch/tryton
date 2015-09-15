@@ -685,7 +685,7 @@ class Contract:
             journal=None,
             party=self.subscriber,
             invoice_address=self.get_contract_address(
-                max(start, utils.today())),
+                max(start or datetime.date.min, utils.today())),
             currency=self.get_currency(),
             account=self.subscriber.account_receivable,
             payment_term=billing_information.payment_term,
