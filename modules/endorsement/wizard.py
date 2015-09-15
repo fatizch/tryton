@@ -667,7 +667,8 @@ class ChangeContractSubscriber(EndorsementWizardStepMixin, model.CoopView):
     new_subscriber = fields.Many2One('party.party', 'New Subscriber',
         domain=[If(Bool(Eval('all_parties')),
                 [],
-                [('id', 'in', Eval('possible_subscribers'))])], required=True)
+                [('id', 'in', Eval('possible_subscribers'))])],
+        depends=['all_parties', 'possible_subscribers'], required=True)
     possible_subscribers = fields.One2Many('party.party', None,
         'Possible Subscribers')
     all_parties = fields.Boolean('Display All Parties')

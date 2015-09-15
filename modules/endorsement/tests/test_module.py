@@ -127,7 +127,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             x[0] for x in self.EndorsementPart.get_possible_views()]
         self.assertEqual(set(possible_views), {'simple_contract_modification',
                 'dummy_step', 'change_start_date', 'void_contract',
-                'change_contract_extra_data', 'terminate_contract'})
+                'change_contract_extra_data', 'terminate_contract',
+                'change_contract_subscriber'})
 
     @test_framework.prepare_test(
         'endorsement.test0001_check_possible_views',

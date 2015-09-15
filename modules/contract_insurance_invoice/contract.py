@@ -89,7 +89,7 @@ class Contract:
                 [])
         ], delete_missing=True,
         states=_STATES, depends=['product', 'subscriber', 'status',
-            'valid_billing_informations'])
+            'valid_billing_informations', 'id'])
     valid_billing_informations = fields.Function(
         fields.One2Many('contract.billing_information', None,
             'Valid Billing Informations'),
