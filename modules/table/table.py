@@ -860,6 +860,9 @@ class TableCell(ModelSQL, ModelView):
                 dimension_id = Dimension.get_dimension_id(definition, i, value)
                 domain.append(('dimension%d' % (i + 1), '=', dimension_id))
             cells = cls.search(domain)
+            if not cells:
+                cache[key] = None
+                return None
             if len(cells) == 1:
                 cell = cells[0]
                 cache[key] = cell
