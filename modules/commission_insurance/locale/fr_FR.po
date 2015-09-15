@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -443,3 +443,49 @@ msgstr "Suivant"
 msgctxt "wizard_button:commission.create_agents,parties,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+# Custom translations below
+
+msgctxt "field:account.invoice,agent:commission."
+msgid "Commission Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "field:commission,agent:commission."
+msgid "Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "field:product.template-commission.agent,agent:commission."
+msgid "Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "model:commission.agent,name:commission."
+msgid "Commission Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "model:ir.action,name:commission.act_agent_form"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
+
+msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
+
+msgctxt "model:product.template-commission.agent,name:commission."
+msgid "Product Template - Commission Agent"
+msgstr "Modèle produit - Protocole de commissionnement"
+
+msgctxt "selection:commission.agent,type_:commission."
+msgid "Principal Of"
+msgstr "Commissionne"
+
+msgctxt "selection:commission.agent,type_:commission."
+msgid "Agent Of"
+msgstr "Est commissioné par"
+
+msgctxt "view:commission.agent:commission."
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
+
+msgctxt "view:commission.agent:commission."
+msgid "Agent"
+msgstr "Protocole de commissionnement"
