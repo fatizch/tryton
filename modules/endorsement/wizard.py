@@ -1,4 +1,6 @@
+import datetime
 from collections import defaultdict
+from dateutil.relativedelta import relativedelta
 
 from trytond.pool import Pool, PoolMeta
 from trytond.model import Model, fields as tryton_fields
@@ -21,6 +23,7 @@ __all__ = [
     'ChangeContractExtraData',
     'TerminateContract',
     'VoidContract',
+    'ChangeContractSubscriber',
     'EndorsementWizardStepMixin',
     'EndorsementWizardStepBasicObjectMixin',
     'EndorsementWizardStepVersionedObjectMixin',
@@ -654,6 +657,100 @@ class VoidContract(EndorsementWizardStepMixin, model.CoopView):
         return 'endorsement.endorsement_void_contract_view_form'
 
 
+class ChangeContractSubscriber(EndorsementWizardStepMixin, model.CoopView):
+    'Change Contract Subscriber'
+
+    __name__ = 'endorsement.contract.subscriber_change'
+
+    current_subscriber = fields.Many2One('party.party', 'Current Subscriber',
+        readonly=True)
+    new_subscriber = fields.Many2One('party.party', 'New Subscriber',
+        domain=[If(Bool(Eval('all_parties')),
+                [],
+                [('id', 'in', Eval('possible_subscribers'))])], required=True)
+    possible_subscribers = fields.One2Many('party.party', None,
+        'Possible Subscribers')
+    all_parties = fields.Boolean('Display All Parties')
+
+    def step_default(self, name):
+        defaults = super(ChangeContractSubscriber, self).step_default()
+        contracts = self._get_contracts()
+        for contract_id, endorsement in contracts.iteritems():
+            defaults['current_subscriber'] = \
+                endorsement.contract.subscriber.id
+            defaults['new_subscriber'] = endorsement.values.get('subscriber',
+                None)
+        return defaults
+
+    def update_subscriber_contact_to_values(self, endorsement):
+        pool = Pool()
+        EndorsementContact = pool.get('endorsement.contract.contact')
+        ContactType = pool.get('contract.contact.type')
+        type_, = ContactType.search([('code', '=', 'subscriber')])
+        subscriber_contacts = [c for c in endorsement.contract.contacts if
+            c.type.code == 'subscriber']
+        effective_date = endorsement.endorsement.effective_date
+        new_contacts = []
+        # max end date is the last end_date of subscriber contact
+        max_end_date = datetime.date.min
+        for contact in subscriber_contacts:
+            if (contact.party == self.current_subscriber and (
+                    not contact.end_date or
+                    contact.end_date >= effective_date)):
+                # if last subscriber contact is the right subscriber
+                # update the end_date
+                new_contacts.append(EndorsementContact(
+                        action='update',
+                        contract_endorsement=endorsement,
+                        definition=self.endorsement_definition,
+                        relation=contact.id,
+                        contact=contact,
+                        values={
+                            'end_date': effective_date - relativedelta(days=1)
+                            }))
+                max_end_date = effective_date - relativedelta(days=1)
+            elif max_end_date <= contact.end_date:
+                max_end_date = contact.end_date
+        # create a contact if not contact already exist for the old subscriber
+        if max_end_date < effective_date - relativedelta(days=1):
+            max_end_date = max_end_date - relativedelta(days=1) \
+                if max_end_date != datetime.date.min else None
+            new_contacts.append(EndorsementContact(
+                    action='add',
+                    contract_endorsement=endorsement,
+                    definition=self.endorsement_definition,
+                    values={
+                        'date': max_end_date,
+                        'end_date': effective_date - relativedelta(days=1),
+                        'party': self.current_subscriber.id,
+                        'type': type_.id,
+                        'address': self.current_subscriber.
+                        get_main_address_id()
+                        }))
+        endorsement.contacts = new_contacts
+
+    def step_update(self):
+        pool = Pool()
+        EndorsementContract = pool.get('endorsement.contract')
+        to_save = []
+        for contract_id, endorsement_contract in self._get_contracts().items():
+            endorsement_contract.values = {
+                'subscriber': self.new_subscriber.id}
+            self.update_subscriber_contact_to_values(endorsement_contract)
+            to_save.append(endorsement_contract)
+        EndorsementContract.save(to_save)
+
+    @fields.depends('current_subscriber')
+    def on_change_with_possible_subscribers(self, name=None):
+        if not self.current_subscriber:
+            return []
+        return [r.to.id for r in self.current_subscriber.relations]
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement.endorsement_change_contract_subscriber_view_form'
+
+
 class SelectEndorsement(model.CoopView):
     'Select Endorsement'
 
@@ -1131,6 +1228,9 @@ add_endorsement_step(StartEndorsement, TerminateContract,
 
 add_endorsement_step(StartEndorsement, VoidContract,
     'void_contract')
+
+add_endorsement_step(StartEndorsement, ChangeContractSubscriber,
+    'change_contract_subscriber')
 
 
 class OpenContractAtApplicationDate(Wizard):

@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, And
+from trytond.pyson import Eval, And, If, Bool
 from trytond.transaction import Transaction
 from trytond import backend
 
@@ -21,8 +21,13 @@ class Contract:
         cls.billing_informations.domain.append(
             ['OR',
                 ('sepa_mandate', '=', None),
-                ('sepa_mandate.party', '=', Eval('subscriber'))])
-        cls.billing_informations.depends.append('subscriber')
+                ('sepa_mandate.party', '=', Eval('subscriber')),
+                If(Bool(Eval('id', False)),
+                    [('id', 'not in', Eval('valid_billing_informations'))],
+                    [])
+            ])
+        cls.billing_informations.depends.extend(['subscriber',
+                'valid_billing_informations'])
 
     @fields.depends('subscriber', 'billing_informations')
     def on_change_subscriber(self):

@@ -77,6 +77,9 @@ class Contract:
             If(Bool(Eval('subscriber', False)),
                 ['OR',
                     ('direct_debit_account.owners', '=', Eval('subscriber')),
+                    If(Bool(Eval('id', False)),
+                        [('id', 'not in', Eval('valid_billing_informations'))],
+                        []),
                     ('direct_debit_account', '=', None)],
                 [('direct_debit_account', '=', None)]),
             If(Bool(Eval('status') == 'active'),
@@ -85,7 +88,12 @@ class Contract:
                     ('direct_debit_account', '!=', None)],
                 [])
         ], delete_missing=True,
-        states=_STATES, depends=['product', 'subscriber', 'status'])
+        states=_STATES, depends=['product', 'subscriber', 'status',
+            'valid_billing_informations'])
+    valid_billing_informations = fields.Function(
+        fields.One2Many('contract.billing_information', None,
+            'Valid Billing Informations'),
+        'get_valid_billing_informations')
     last_invoice_start = fields.Function(
         fields.Date('Last Invoice Start Date'), 'get_last_invoice',
         searcher='search_last_invoice')
@@ -300,6 +308,18 @@ class Contract:
 
     def get_balance_at_date(self, at_date):
         return self.get_balance([self], 'balance', date=at_date)[self.id]
+
+    def get_valid_billing_informations(self, name):
+        # apply domain only on current and future version
+        # in order to manage subscriber change
+        res = []
+        previous_date = datetime.date.max
+        today = utils.today()
+        for billing_info in reversed(self.billing_informations):
+            if previous_date > today:
+                res.append(billing_info.id)
+            previous_date = billing_info.date
+        return res
 
     def invoices_report(self):
         pool = Pool()
@@ -664,7 +684,8 @@ class Contract:
             type='out_invoice',
             journal=None,
             party=self.subscriber,
-            invoice_address=self.get_contract_address(start),
+            invoice_address=self.get_contract_address(
+                max(start, utils.today())),
             currency=self.get_currency(),
             account=self.subscriber.account_receivable,
             payment_term=billing_information.payment_term,

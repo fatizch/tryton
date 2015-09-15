@@ -37,6 +37,7 @@ __all__ = [
     'EndorsementOption',
     'EndorsementActivationHistory',
     'EndorsementExtraData',
+    'EndorsementContact',
     'Configuration',
     'ReportTemplate',
     ]
@@ -1443,6 +1444,12 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             },
         depends=['state', 'definition'], delete_missing=True,
         context={'definition': Eval('definition')})
+    contacts = fields.One2Many('endorsement.contract.contact',
+        'contract_endorsement', 'Contacts', states={
+            'readonly': Eval('state') == 'applied',
+            },
+        depends=['state', 'definition'], delete_missing=True,
+        context={'definition': Eval('definition')})
     contract = fields.Many2One('contract', 'Contract', required=True,
         states={'readonly': Eval('state') == 'applied'}, depends=['state'],
         ondelete='CASCADE', select=True)
@@ -1486,6 +1493,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 'Activation History Modifications',
                 'mes_extra_data_modifications':
                 'Extra Datas Modifications',
+                'mes_contact_modifications': 'Contacts Modifications',
                 })
         cls.values.states = {
             'readonly': Eval('state') == 'applied',
@@ -1545,6 +1553,14 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 '%s :' % self.raise_user_error(
                     'mes_extra_data_modifications', raise_exception=False),
                 extra_data_summary]
+
+        contact_summary = [x.get_summary('contract.contact', x.contact)
+            for x in self.contacts]
+        if contact_summary:
+            result[2] += ['contact_change_section',
+                '%s :' % self.raise_user_error(
+                    'mes_contact_modifications', raise_exception=False),
+                contact_summary]
 
         return result
 
@@ -1666,7 +1682,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
 
     def apply_values(self):
         values = (self.values if self.values else {}).copy()
-        options, activation_history, extra_datas = [], [], []
+        options, activation_history, extra_datas, contacts = [], [], [], []
         for option in self.options:
             options.append(option.apply_values())
         if options:
@@ -1679,6 +1695,10 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             extra_datas.append(extra_data.apply_values())
         if extra_datas:
             values['extra_datas'] = extra_datas
+        for contact in self.contacts:
+            contacts.append(contact.apply_values())
+        if contacts:
+            values['contacts'] = contacts
         return values
 
     @property
@@ -1853,6 +1873,34 @@ class EndorsementActivationHistory(relation_mixin(
     @classmethod
     def updated_struct(cls, activation_history):
         return {}
+
+
+class EndorsementContact(relation_mixin(
+            'endorsement.contract.contact.field',
+            'contact', 'contract.contact',
+            'Contract Contacts'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Contact'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.contract.contact'
+
+    contract_endorsement = fields.Many2One('endorsement.contract',
+        'Endorsement', required=True, select=True, ondelete='CASCADE')
+    definition = fields.Function(
+        fields.Many2One('endorsement.definition', 'Definition'),
+        'get_definition')
+
+    def get_definition(self, name):
+        return self.contract_endorsement.definition.id
+
+    @classmethod
+    def updated_struct(cls, activation_history):
+        return {}
+
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return super(EndorsementContact,
+            cls)._ignore_fields_for_matching() | {'contract'}
 
 
 class EndorsementExtraData(relation_mixin(

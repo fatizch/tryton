@@ -33,6 +33,14 @@
             <field name="type">form</field>
             <field name="name">endorsement_void_contract_form</field>
         </record>
+        <!-- ############################################################ -->
+        <!-- ########### Change Contract Subscriber ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="endorsement_change_contract_subscriber_view_form">
+            <field name="model">endorsement.contract.subscriber_change</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_change_contract_subscriber_form</field>
+        </record>
         <!-- ###################### -->
         <!-- # Select Endorsement # -->
         <!-- ###################### -->

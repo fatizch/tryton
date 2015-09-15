@@ -79,7 +79,7 @@ class ChangeBillingInformation:
             self.raise_user_warning('new_mandate_creation',
                 'new_mandate_creation', {})
             new_mandate = Mandate()
-            new_mandate.party = self.contract.subscriber
+            new_mandate.party = self.subscriber
             new_mandate.account_number = [x
                 for x in account.numbers if x.type == 'iban'][0]
             new_mandate.signature_date = self.sepa_signature_date

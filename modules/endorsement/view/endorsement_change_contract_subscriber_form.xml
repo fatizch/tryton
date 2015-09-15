@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Change Contract Subscriber" col="6">
+    <label name="current_subscriber"/>
+    <field name="current_subscriber"/>
+    <label name="new_subscriber"/>
+    <field name="new_subscriber"/>
+    <label name="all_parties"/>
+    <field name="all_parties"/>
+    <field name="possible_subscribers" invisible="1"/>
+</form>

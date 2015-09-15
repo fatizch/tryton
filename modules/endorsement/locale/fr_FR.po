@@ -34,6 +34,18 @@ msgctxt "error:endorsement.contract.activation_history:"
 msgid "Update %s"
 msgstr "Mise à jour de %s"
 
+msgctxt "error:endorsement.contract.contact:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.contract.contact:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.contract.contact:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
 msgctxt "error:endorsement.contract.extra_data:"
 msgid "New Extra Data"
 msgstr "Nouvelles données complémentaires"
@@ -89,6 +101,10 @@ msgid "Activation History Modifications"
 msgstr "Modifications des historiques d'activation"
 
 msgctxt "error:endorsement.contract:"
+msgid "Contacts Modifications"
+msgstr "Modifications des contacts"
+
+msgctxt "error:endorsement.contract:"
 msgid "Contract %s is currently locked in process %s."
 msgstr "Le contrat %s est actuellement verrouillé par le processus %s."
 
@@ -124,12 +140,20 @@ msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
 
 msgctxt "error:endorsement:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:endorsement:"
 msgid "Invalid file format"
 msgstr "Format de fichier non valide"
 
 msgctxt "error:endorsement:"
 msgid "No sequence defined in configuration"
 msgstr "Pas de séquence définie dans la configuration"
+
+msgctxt "error:endorsement:"
+msgid "Object %s is currently locked by user %s"
+msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 
 msgctxt "error:endorsement:"
 msgid "The endorsement number must be unique."
@@ -199,6 +223,18 @@ msgctxt "field:endorsement,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:endorsement,current_log:"
+msgid "Current Log"
+msgstr "Trace Courante"
+
+msgctxt "field:endorsement,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
+msgctxt "field:endorsement,current_state_name:"
+msgid "Current State In Process"
+msgstr "Etat courant au sein du processus"
+
 msgctxt "field:endorsement,definition:"
 msgid "Definition"
 msgstr "Définition"
@@ -222,6 +258,10 @@ msgstr "Avenants générés"
 msgctxt "field:endorsement,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:endorsement,logs:"
+msgid "Task"
+msgstr "Tâche"
 
 msgctxt "field:endorsement,number:"
 msgid "Number"
@@ -306,6 +346,10 @@ msgstr "Périodes d'activation"
 msgctxt "field:endorsement.contract,applied_on:"
 msgid "Applied On"
 msgstr "Appliqué le"
+
+msgctxt "field:endorsement.contract,contacts:"
+msgid "Contacts"
+msgstr "Contacts"
 
 msgctxt "field:endorsement.contract,contract:"
 msgid "Contract"
@@ -544,6 +588,118 @@ msgstr "ID"
 msgctxt "field:endorsement.contract.change_start_date,new_start_date:"
 msgid "New Start Date"
 msgstr "Nouvelle date de début"
+
+msgctxt "field:endorsement.contract.contact,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.contract.contact,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.contract.contact,contact:"
+msgid "Contract Contacts"
+msgstr "Contacts d'un contrat"
+
+msgctxt "field:endorsement.contract.contact,contract_endorsement:"
+msgid "Endorsement"
+msgstr "Modèle d'Avenant"
+
+msgctxt "field:endorsement.contract.contact,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.contact,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.contact,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.contact,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.contract.contact,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.contract.contact,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.contact,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.contact,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.contract.contact,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.contract.contact,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.contact,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.contact,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.contact.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.contact.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.contact.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.contact.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.contract.contact.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.contact.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.contract.contact.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.contact.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.contact.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.contact.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.contact.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.contact.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:endorsement.contract.extra_data,action:"
 msgid "Action"
@@ -824,6 +980,38 @@ msgstr "Mis à jour par"
 msgctxt "field:endorsement.contract.option.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.subscriber_change,all_parties:"
+msgid "Display All Parties"
+msgstr "Afficher tous les tiers"
+
+msgctxt "field:endorsement.contract.subscriber_change,current_subscriber:"
+msgid "Current Subscriber"
+msgstr "Souscripteur actuel"
+
+msgctxt "field:endorsement.contract.subscriber_change,effective_date:"
+msgid "Effective Date"
+msgstr "Date d'effet"
+
+msgctxt "field:endorsement.contract.subscriber_change,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.contract.subscriber_change,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.subscriber_change,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.subscriber_change,new_subscriber:"
+msgid "New Subscriber"
+msgstr "Nouveau souscripteur"
+
+msgctxt "field:endorsement.contract.subscriber_change,possible_subscribers:"
+msgid "Possible Subscribers"
+msgstr "Souscripteurs possibles"
 
 msgctxt "field:endorsement.contract.terminate,contract:"
 msgid "Contract"
@@ -1307,6 +1495,14 @@ msgctxt "model:endorsement.contract.change_start_date,name:"
 msgid "Change contract start date"
 msgstr "Modifier la date d'effet du contrat"
 
+msgctxt "model:endorsement.contract.contact,name:"
+msgid "Endorsement Contact"
+msgstr "Avenant de modification des contacts"
+
+msgctxt "model:endorsement.contract.contact.field,name:"
+msgid "Endorsement Contact Field"
+msgstr "Champ d'un avenant de modification de contacts"
+
 msgctxt "model:endorsement.contract.extra_data,name:"
 msgid "Endorsement Extra Data"
 msgstr "Avenant de modification des données complémentaires"
@@ -1326,6 +1522,10 @@ msgstr "Modification de la garantie souscrite"
 msgctxt "model:endorsement.contract.option.field,name:"
 msgid "Endorsement Option Field"
 msgstr "Champs de la garantie souscrite"
+
+msgctxt "model:endorsement.contract.subscriber_change,name:"
+msgid "Change Contract Subscriber"
+msgstr "Changement de souscripteur"
 
 msgctxt "model:endorsement.contract.terminate,name:"
 msgid "Terminate Contract"
@@ -1470,7 +1670,7 @@ msgid "Endorsement Sub-state"
 msgstr "Sous état d'avenant"
 
 msgctxt "model:ir.ui.menu,name:menu_configuration"
-msgid "Endorsement Configuration"
+msgid "Configuration"
 msgstr "Configuration d'avenant"
 
 msgctxt "model:ir.ui.menu,name:menu_endorsement_definition"
@@ -1533,6 +1733,18 @@ msgctxt "selection:endorsement.contract.activation_history,action:"
 msgid "Update"
 msgstr "Mise à jour"
 
+msgctxt "selection:endorsement.contract.contact,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.contract.contact,action:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:endorsement.contract.contact,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
 msgctxt "selection:endorsement.contract.extra_data,action:"
 msgid "Add"
 msgstr "Compléter"
@@ -1577,6 +1789,10 @@ msgctxt "selection:endorsement.sub_state,state:"
 msgid "Declined"
 msgstr "Décliné"
 
+msgctxt "selection:process,kind:"
+msgid "Contract Endorsement"
+msgstr "Avenant au contrat"
+
 msgctxt "view:contract:"
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
@@ -1613,9 +1829,17 @@ msgctxt "view:endorsement.contract.field:"
 msgid "Endorsement Field"
 msgstr "Champs du contrat"
 
+msgctxt "view:endorsement.contract.field:"
+msgid "Endorsement Fields"
+msgstr "Champs de l'avenant"
+
 msgctxt "view:endorsement.contract.option.field:"
 msgid "Endorsement Field"
 msgstr "Champs de la garantie souscrite"
+
+msgctxt "view:endorsement.contract.option.field:"
+msgid "Endorsement Fields"
+msgstr "Champs de l'avenant"
 
 msgctxt "view:endorsement.contract.option:"
 msgid "Endorsement Option"
@@ -1624,6 +1848,10 @@ msgstr "Modification de la garantie souscrite"
 msgctxt "view:endorsement.contract.option:"
 msgid "Endorsement Options"
 msgstr "Modifications de la garantie souscrite"
+
+msgctxt "view:endorsement.contract.subscriber_change:"
+msgid "Change Contract Subscriber"
+msgstr "Changement de souscripteur"
 
 msgctxt "view:endorsement.contract.terminate:"
 msgid "Terminate Contract"
@@ -1779,6 +2007,25 @@ msgid "Suspend"
 msgstr "Suspendre"
 
 msgctxt "wizard_button:endorsement.start,change_contract_extra_data,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_contract_subscriber,change_contract_subscriber_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_contract_subscriber,change_contract_subscriber_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_contract_subscriber,change_contract_subscriber_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,change_contract_subscriber,end:"
 msgid "Cancel"
 msgstr "Annuler"
 

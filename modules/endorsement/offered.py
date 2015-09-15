@@ -19,6 +19,7 @@ __all__ = [
     'EndorsementContractField',
     'EndorsementOptionField',
     'EndorsementActivationHistoryField',
+    'EndorsementContactField',
     'EndorsementExtraDataField',
     'Product',
     'EndorsementDefinitionProductRelation',
@@ -292,6 +293,13 @@ class EndorsementActivationHistoryField(
     'Endorsement Activation History Field'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.activation_history.field'
+
+
+class EndorsementContactField(field_mixin('contract.contact'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Contact Field'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.contract.contact.field'
 
 
 class EndorsementExtraDataField(

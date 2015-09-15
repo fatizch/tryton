@@ -193,7 +193,9 @@ class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
                 'billing_informations', self.effective_date, 'date')[0]
         defaults.update({
                 'contract': contract.id,
-                'subscriber': contract.subscriber.id,
+                'subscriber': base_endorsement.values['subscriber']
+                if 'subscriber' in base_endorsement.values
+                else contract.subscriber.id,
                 'product': contract.product.id,
                 })
         defaults['previous_billing_information'] = [base_instance.id]
