@@ -91,10 +91,12 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin, model.CoopView):
                         health_complement._save_values.iteritems() if k in
                         self._health_complement_fields_to_extract() and
                         v != getattr(self.current_health_complement[0], k)}
+                dates = [x.date for x in party.health_complement]
+                action = 'update' if new_values['date'] in dates else 'add'
                 new_values.pop('party', None)
-                if ('hc_system' in new_values and
-                    self.current_health_complement[0].hc_system and
-                    new_values['hc_system'] ==
+                if (action == 'update' and 'hc_system' in new_values and
+                        self.current_health_complement[0].hc_system and
+                        new_values['hc_system'] ==
                         self.current_health_complement[0].hc_system.id):
                     new_values.pop('hc_system')
                 if not new_values:
@@ -109,9 +111,8 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin, model.CoopView):
                         [test_complement]).values()[0]
                 test_complement.check_insurance_fund_number()
 
-                dates = [x.date for x in party.health_complement]
                 h_complement_endorsement = EndorsementHealthComplement(
-                    action='update' if new_values['date'] in dates else 'add',
+                    action=action,
                     party_endorsement=party_endorsement,
                     health_complement=self.current_health_complement[i],
                     relation=self.current_health_complement[i].id if
