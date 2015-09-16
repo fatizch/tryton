@@ -579,7 +579,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         elif self.state != 'calculated':
             return False
         diff = self.payments[-1].amount - self.increments[-1].payment_amount
-        if abs(diff > Decimal(0.01) * self.duration):
+        if abs(diff) > Decimal(0.01) * self.duration:
             return True
 
     @classmethod
