@@ -9,6 +9,7 @@ import subprocess
 import time
 import codecs
 import unicodedata
+import sys
 
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
@@ -367,9 +368,12 @@ def batch(arguments, config, work_data):
     import celery
     from celery.result import GroupResult
     from trytond.modules.cog_utils import batch_launcher
+    import logging
 
     log_path = os.path.join(work_data['runtime_dir'], 'logs',
         'celery_batch.log')
+    logging.basicConfig(filename=log_path, level='INFO')
+
     APPNAME = 'trytond.modules.cog_utils.batch_launcher'
     PING_ATTEMPTS_DELAY = (10, .3)
     celery_app = celery.current_app
@@ -394,6 +398,8 @@ def batch(arguments, config, work_data):
             print 'No celery worker found. Run `coop batch init` first.'
             return 1
         else:
+            logging.getLogger(__name__).info('Run batch: %s' %
+                ' '.join(sys.argv))
             status = batch_launcher.generate_all.delay(arguments.name,
                 arguments.connexion_date, arguments.treatment_date,
                 arguments.extra)

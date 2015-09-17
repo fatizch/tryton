@@ -1,8 +1,8 @@
 import datetime
+import logging
 
 from celery import Celery, group
 from celeryconfig import CELERY_RESULT_BACKEND, BROKER_URL
-from celery.utils.log import get_task_logger
 from celery_tryton import TrytonTask
 
 from trytond.pool import Pool
@@ -40,7 +40,7 @@ from trytond.modules.cog_utils import batch, coop_string
 #
 ##############################################################################
 
-logger = batch.BatchLogger(get_task_logger(__name__), {})
+logger = logging.getLogger(__name__)
 app = Celery('Coopengo Batch', backend=CELERY_RESULT_BACKEND,
     broker=BROKER_URL)
 
@@ -99,20 +99,23 @@ def generate(batch_name, ids, connexion_date, treatment_date, extra_args):
             User.get_preferences(context_only=True),
             client_defined_date=connexion_date):
         to_treat = BatchModel.convert_to_instances(ids)
-        logger = batch.get_logger(batch_name)
+        batch_logger = batch.get_logger(batch_name)
         try:
+            batch_logger.info('Executing batch on %s' %
+                coop_string.get_print_infos(ids))
             BatchModel.execute(to_treat, ids, treatment_date, extra_args)
-            logger.success('Processed %s', coop_string.get_print_infos(ids))
+            batch_logger.success('Processed %s',
+                coop_string.get_print_infos(ids))
         except Exception:
-            logger.exception('Exception occured when processing %s',
+            batch_logger.exception('Exception occured when processing %s',
                 coop_string.get_print_infos(ids))
             Transaction().cursor.rollback()
             do_not_divide = BatchModel.get_conf_item('split_mode') == \
                 'divide' and int(BatchModel.get_conf_item('split_size')) == 1
             if len(ids) < 2 or do_not_divide:
-                logger.failure('Task cannot be divided, aborting.')
+                batch_logger.failure('Task cannot be divided, aborting.')
                 return 1
-            logger.info('Splitting task in subtasks and retrying.')
+            batch_logger.info('Splitting task in subtasks and retrying.')
             half_idx = len(ids) / 2
             group(generate.s(batch_name, _ids, connexion_date, treatment_date,
                     extra_args)
