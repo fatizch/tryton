@@ -4,18 +4,24 @@ import time
 import copy
 import string
 import random
+import json
 from collections import defaultdict
+
+from sql import Column, Window
+from sql.conditionals import Coalesce
+from sql.aggregate import Max
 
 from trytond.pool import Pool
 from trytond.model import Model, fields as tryton_fields
+from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.transaction import Transaction
-from trytond.model import fields
-
+from trytond.tools import grouped_slice
 
 # Needed for Pyson evaluation
 from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT, Eval, Or, And
 from trytond.model.modelstorage import EvalEnvironment
 
+from .model import fields
 
 __all__ = []
 
@@ -665,3 +671,69 @@ def apply_dict(instance, data_dict):
 
 def chunker(seq, size):
     return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
+
+
+def version_getter(instances, names, version_model, reverse_fname,
+        at_date, date_field='start', field_map=None):
+    '''
+        Generic method for getting values for a versioned list at a given date.
+
+        Required parameters :
+         - instances : list of versioned objects to manage
+         - names : list of fields to load.
+         - version_model : the name of the version model
+         - reverse_fname : the name of the reversed field for the version list
+         - at_date : the date at which to look for the version
+
+        Optional parameters :
+         - date_field : the nams of the field to use for versions ordering
+         - field_map : if set, will be used to convert name fields. Typical use
+           case is :
+                {'id': 'curret_version'},
+           so that the 'current_version' field of the parent will receive the
+           'id' field of the current version.
+    '''
+    assert version_model
+    assert reverse_fname
+
+    field_map = field_map or {}
+    field_map = {x: field_map.get(x, x)
+        for x in field_map.keys() + [x for x in names if x not in
+            field_map.values()]}
+
+    cursor = Transaction().cursor
+    Target = Pool().get(version_model)
+    target = Target.__table__()
+
+    base_values = {x.id: None for x in instances}
+    result, columns, to_convert = {}, [], set()
+    for version_name, master_name in field_map.iteritems():
+        columns.append(Column(target, version_name))
+        if isinstance(Target._fields[version_name], tryton_fields.Dict):
+            to_convert.add(version_name)
+        result[master_name] = dict(base_values)
+
+    start_col = Coalesce(Column(target, date_field),
+        datetime.date.min).as_('start')
+    parent_col = Column(target, reverse_fname)
+    parent_window = Window([parent_col])
+    max_col = Max(Coalesce(Column(target, date_field), datetime.date.min),
+        window=parent_window).as_('max_start')
+    columns += [start_col, max_col, parent_col]
+
+    where_clause = Coalesce(Column(target, date_field),
+        datetime.date.min) <= at_date
+
+    for instance_slice in grouped_slice(instances):
+        view = target.select(*columns, where=where_clause &
+            parent_col.in_([x.id for x in instance_slice]))
+        cursor.execute(*view.select(where=view.start == view.max_start))
+        for value in cursor.dictfetchall():
+            base_id = value[reverse_fname]
+            for k, v in value.iteritems():
+                if k == reverse_fname or k not in field_map:
+                    continue
+                if k in to_convert:
+                    v = json.loads(v, object_hook=JSONDecoder())
+                result[field_map[k]][base_id] = v
+    return result

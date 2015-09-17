@@ -33,6 +33,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'ExportModelConfiguration': 'ir.export.configuration.model',
             'ExportConfiguration': 'ir.export.configuration',
             'ExportFieldConfiguration': 'ir.export.configuration.field',
+            'VersionedObject': 'cog_utils.test_version',
+            'Version': 'cog_utils.test_version.version',
+            'Version1': 'cog_utils.test_version.version1',
             }
 
     def test0020get_module_path(self):
@@ -692,6 +695,89 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         parent = self.ExportTest(parent.id)
         self.assertEqual(len(parent.one2many), 2)
+
+    def test0090_version_management(self):
+        master = self.VersionedObject(test_field='Master')
+        master.save()
+
+        # Check default versions
+        self.assertEqual(len(master.versions), 1)
+        self.assertEqual(master.versions[0].version_field, 'Default Value')
+        self.assertEqual(len(master.versions_1), 1)
+        self.assertEqual(master.versions_1[0].version_field, 'Default Value 1')
+
+        # Check current version getter does not crash with no version
+        master.versions = []
+        master.versions_1 = []
+        master.save()
+        self.assertEqual(master.current_version, None)
+        self.assertEqual(master.current_version_1, None)
+
+        master.versions = [self.Version(version_field='Child 1')]
+        master.save()
+
+        # Check only first versioned field is updated
+        self.assertEqual(master.current_version, master.versions[0])
+        self.assertEqual(master.current_version_1, None)
+
+        before_today = coop_date.add_day(utils.today(), -1)
+        master.versions_1 = [self.Version1(version_field='Child 2'),
+            self.Version1(version_field='Child 3', start_1=before_today)]
+        master.save()
+
+        self.assertEqual(master.current_version, master.versions[0])
+        self.assertEqual(master.current_version_1, master.versions_1[1])
+
+        after_today = coop_date.add_day(utils.today(), 1)
+        master.versions = [self.Version(version_field='Child 4',
+                start=after_today)] + list(master.versions)
+        master.save()
+
+        # Check ordering
+        self.assertEqual([x.version_field for x in master.versions], [
+                'Child 1', 'Child 4'])
+
+        # Check versioning
+        self.assertEqual(master.current_version, master.versions[0])
+
+        some_date = coop_date.add_day(utils.today(), -20)
+        master.versions = [self.Version(version_field='Child 5',
+                start=some_date)] + list(master.versions)
+        master.versions_1 = [self.Version1(version_field='Child 6',
+                start_1=some_date)] + list(master.versions_1)
+
+        # Check get_version_at_date before saving / ordering
+        self.assertEqual(master.get_version_at_date(some_date).version_field,
+            'Child 5')
+        self.assertEqual(
+            master.get_version_1_at_date(some_date).version_field, 'Child 6')
+
+        master.save()
+        # Check get_version_at_date after saving / ordering
+        self.assertEqual(master.get_version_at_date(some_date).version_field,
+            'Child 5')
+        self.assertEqual(
+            master.get_version_1_at_date(some_date).version_field, 'Child 6')
+
+        # Check _get_version_fields_at_date
+        self.assertEqual(master.current_version_1_version_field, 'Child 3')
+        self.assertEqual(utils.version_getter([master], ['version_field'],
+                'cog_utils.test_version.version1', 'master_1', some_date,
+                date_field='start_1'),
+            {'version_field': {master.id: 'Child 6'}})
+
+        # Check field update
+        self.assertEqual(master.current_version.version_field, 'Child 5')
+        master.version_field = 'Updated Child'
+        master.on_change_version_field()
+        self.assertEqual(master.get_version_at_date(
+                utils.today()).version_field, 'Updated Child')
+
+        self.assertEqual(master.current_version_1.version_field, 'Child 3')
+        master.current_version_1_version_field = 'Updated Child 1'
+        master.on_change_current_version_1_version_field()
+        self.assertEqual(master.get_version_1_at_date(
+                utils.today()).version_field, 'Updated Child 1')
 
     def test_string_replace(self):
         s = u'café-THÉ:20$'

@@ -68,6 +68,7 @@ def register():
         TranslationOverrideStart,
         Attachment,
         module='cog_utils', type_='model')
+
     if config.get('env', 'testing') == 'True':
         Pool.register(
             ExportTestTarget,
@@ -78,7 +79,11 @@ def register():
             ExportTestRelation,
             O2MDeletionMaster,
             O2MDeletionChild,
+            TestVersionedObject,
+            TestVersion,
+            TestVersion1,
             module='cog_utils', type_='model')
+
     Pool.register(
         ImportWizard,
         Add2ExportPackageWizard,
