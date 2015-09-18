@@ -81,13 +81,23 @@ class Premium:
             'covered_element', 'extra_premium'}
 
     @classmethod
-    def search_main_contract(cls, name, clause):
-        new_clause = super(Premium, cls).search_main_contract(name, clause)
-        new_clause += [
-            ('covered_element.contract',) + tuple(clause[1:]),
-            ('extra_premium.option.parent_contract',) + tuple(clause[1:]),
-            ]
-        return new_clause
+    def get_premium_tree(cls, contracts):
+        data_dict = super(Premium, cls).get_premium_tree(contracts)
+        data_dict.update({
+                'covered_element': [],
+                'extra_premium': [],
+                })
+        for contract in contracts:
+            for covered_element in contract.covered_elements:
+                data_dict['covered_element'].append(covered_element.id)
+                for option in covered_element.options:
+                    data_dict['option'].append(option.id)
+                    data_dict['extra_premium'] += [x.id
+                        for x in option.extra_premiums]
+            for option in contract.options:
+                data_dict['extra_premium'] += [x.id
+                    for x in option.extra_premiums]
+        return data_dict
 
     @property
     def full_name(self):

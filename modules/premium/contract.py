@@ -71,6 +71,8 @@ class Contract:
 
     @classmethod
     def delete_prices(cls, contracts, limit):
+        if not contracts:
+            return
         limit = limit or datetime.date.min
         Premium = Pool().get('contract.premium')
         ids = [x.id for x in contracts]
@@ -80,11 +82,15 @@ class Contract:
                         ('start', '<', limit),
                         ('main_contract', 'in', ids)]),
                 {'end': limit + datetime.timedelta(days=-1)})
+        void_contracts = [x.id for x in contracts if x.status == 'void']
+        if void_contracts:
+            time_clause = ['OR', ('start', '>=', limit),
+                ('main_contract', 'in', void_contracts)]
+        else:
+            time_clause = ('start', '>=', limit)
         Premium.delete(Premium.search([
                     ('main_contract', 'in', ids),
-                    ['OR',
-                        ('start', '>=', limit),
-                        ('main_contract.status', '=', 'void')],
+                    time_clause,
                     ]))
 
     @classmethod
@@ -500,11 +506,30 @@ class Premium(model.CoopSQL, model.CoopView):
     def search_main_contract(cls, name, clause):
         # Assumes main_contract cannot be null (which, even though it is not
         # enforced in the model, is still a safe assumption)
-        return ['OR',
-            ('contract',) + tuple(clause[1:]),
-            ('option.parent_contract',) + tuple(clause[1:]),
-            ('fee.contract',) + tuple(clause[1:]),
-            ]
+        source, operator, value = clause
+        if operator not in ('=', 'in') or '.' in source:
+            raise NotImplementedError
+        if operator == '=':
+            value = [value]
+        assert value
+        clause_data = cls.get_premium_tree(Pool().get('contract').browse(
+                value))
+        clause = ['OR']
+        for fname, ids in clause_data.iteritems():
+            if not ids:
+                continue
+            clause.append((fname, 'in', ids))
+        return clause
+
+    @classmethod
+    def get_premium_tree(cls, contracts):
+        return {
+            'contract': [x.id for x in contracts],
+            'option': [option.id for contract in contracts
+                for option in contract.options],
+            'fee': [fee.id for contract in contracts
+                for fee in contract.fees],
+            }
 
     @staticmethod
     def order_start(tables):
