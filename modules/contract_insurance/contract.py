@@ -835,7 +835,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
         self.extra_data.update(self.party_extra_data)
 
-        if self.item_desc is None or not self.start_date:
+        if self.item_desc is None or not self.product:
             self.options = []
             return
 
