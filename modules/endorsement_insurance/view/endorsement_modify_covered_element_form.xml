@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<form string="Modify Covered Element">
+    <field name="covered_elements" view_ids="endorsement_insurance.covered_element_endorsement_view_tree,endorsement_insurance.covered_element_endorsement_view_form" expand_toolbar="0"/>
+    <field name="existing_covered_elements" invisible="1"/>
+</form>

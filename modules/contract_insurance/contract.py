@@ -272,7 +272,7 @@ class Contract(Printable):
 
     def get_parties(self, name):
         parties = super(Contract, self).get_parties(name)
-        parties += [x.party.id for x in self.covered_elements if x.person]
+        parties += [x.party.id for x in self.covered_elements if x.party]
         return parties
 
     def activate_contract(self):
@@ -331,6 +331,9 @@ class ContractOption:
             },
         depends=['extra_data', 'contract_status'])
     extra_data_string = extra_data.translated('extra_data')
+    extra_data_summary = fields.Function(
+        fields.Text('Extra Data Summary'),
+        'get_extra_data_summary')
     extra_premiums = fields.One2Many('contract.option.extra_premium',
         'option', 'Extra Premiums',
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS,
@@ -397,6 +400,11 @@ class ContractOption:
 
     def get_full_name(self, name):
         return super(ContractOption, self).get_full_name(name)
+
+    @classmethod
+    def get_extra_data_summary(cls, extra_datas, name):
+        return Pool().get('extra_data').get_extra_data_summary(extra_datas,
+            'extra_data')
 
     @classmethod
     def _export_skips(cls):
@@ -827,9 +835,10 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
         self.extra_data.update(self.party_extra_data)
 
-        if self.item_desc is None:
+        if self.item_desc is None or not self.start_date:
             self.options = []
             return
+
         available_coverages = self.get_coverages(self.product, self.item_desc)
         new_options = list(self.options)
         for elem in new_options:

@@ -20,6 +20,7 @@ def register():
         RemoveOptionSelector,
         RemoveOption,
         NewOptionOnCoveredElement,
+        ModifyCoveredElementInformation,
         ExtraPremiumDisplayer,
         ManageExtraPremium,
         OptionSelector,

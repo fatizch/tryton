@@ -389,6 +389,32 @@ msgctxt "field:endorsement.contract.covered_element.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:endorsement.contract.covered_element.modify,covered_elements:"
+msgid "Covered Elements"
+msgstr "Risques couverts"
+
+msgctxt "field:endorsement.contract.covered_element.modify,effective_date:"
+msgid "Effective Date"
+msgstr "Date d'effet"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.modify,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.contract.covered_element.modify,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.modify,existing_covered_elements:"
+msgid "Covered Elements"
+msgstr "Risques couverts"
+
+msgctxt "field:endorsement.contract.covered_element.modify,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:endorsement.contract.covered_element.option,action:"
 msgid "Action"
 msgstr "Action"
@@ -760,6 +786,10 @@ msgctxt "model:endorsement.contract.covered_element.field,name:"
 msgid "Endorsement Covered Element Field"
 msgstr "Champs des éléments couverts"
 
+msgctxt "model:endorsement.contract.covered_element.modify,name:"
+msgid "Modify Covered Element Information"
+msgstr "Modifier les informations des risques couverts"
+
 msgctxt "model:endorsement.contract.covered_element.option,name:"
 msgid "Endorsement Option"
 msgstr "Champs de la garantie souscrite"
@@ -875,9 +905,25 @@ msgctxt "view:contract.covered_element.option.remove:"
 msgid "Remove Covered Element"
 msgstr "Enlever un élément couvert"
 
+msgctxt "view:contract.covered_element:"
+msgid "Covered Element"
+msgstr "Risque couvert"
+
+msgctxt "view:contract.covered_element:"
+msgid "Covered Elements"
+msgstr "Risques couverts"
+
 msgctxt "view:endorsement.contract.covered_element.field:"
 msgid "Endorsement Field"
 msgstr "Champs des éléments couverts"
+
+msgctxt "view:endorsement.contract.covered_element.field:"
+msgid "Endorsement Fields"
+msgstr "Champs de l'avenant"
+
+msgctxt "view:endorsement.contract.covered_element.modify:"
+msgid "Modify Covered Element"
+msgstr "Modifier les risques couverts"
 
 msgctxt "view:endorsement.contract.covered_element.option:"
 msgid "Endorsement Covered Element Option"
@@ -906,6 +952,10 @@ msgstr "Surprimes"
 msgctxt "view:endorsement.contract.extra_premium.field:"
 msgid "Endorsement Field"
 msgstr "Champ des surprimes"
+
+msgctxt "view:endorsement.contract.extra_premium.field:"
+msgid "Endorsement Fields"
+msgstr "Champs de l'avenant"
 
 msgctxt "view:endorsement.contract.manage_extra_premium:"
 msgid "Manage Extra Premium"
@@ -966,6 +1016,25 @@ msgid "New Extra Premium"
 msgstr "Nouvelle surprime"
 
 msgctxt "wizard_button:endorsement.start,manage_extra_premium,suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,modify_covered_element,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,modify_covered_element,modify_covered_element_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,modify_covered_element,modify_covered_element_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,modify_covered_element,modify_covered_element_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
 

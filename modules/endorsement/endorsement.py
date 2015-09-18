@@ -431,7 +431,7 @@ def values_mixin(value_model):
                         v = Date.date_as_string(v, lang)
                     vals.append((k, field, prev_value, v))
                 else:
-                    vals.append((k, field, prev_value, v))
+                    vals.append((k, field, prev_value, v or ''))
             if hasattr(self, 'action') and self.action == 'add':
                 return [u'%s : → %s' % (coop_string.translate(
                         ValueModel, fname, ffield.string, 'field'), new)

@@ -1,12 +1,12 @@
 from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
-from trytond.pyson import Eval, Len, Bool, If, Equal, Not
+from trytond.pyson import Eval, Len, Bool, If, Equal
 from trytond.model import Model
 
 from trytond.modules.cog_utils import model, fields
-from trytond.modules.endorsement import EndorsementWizardStepMixin
-
+from trytond.modules.endorsement import EndorsementWizardStepMixin, \
+    add_endorsement_step
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -15,6 +15,7 @@ __all__ = [
     'ExtraPremiumDisplayer',
     'ManageExtraPremium',
     'RemoveOptionSelector',
+    'ModifyCoveredElementInformation',
     'RemoveOption',
     'OptionSelector',
     'CoveredElementSelector',
@@ -253,7 +254,6 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                         'sub_status'] = option.sub_status.id
                     option.covered_element_option_endorsement.values[
                         'status'] = option.action
-
 
             vlist_cov_opt = [{
                     'covered_element_endorsement': ce_endorsements[
@@ -495,6 +495,117 @@ class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
         good_endorsement.options = new_option_endorsements
 
         good_endorsement.save()
+
+
+class ModifyCoveredElementInformation(model.CoopView,
+        EndorsementWizardStepMixin):
+    'Modify Covered Element Information'
+
+    __name__ = 'endorsement.contract.covered_element.modify'
+
+    covered_elements = fields.One2Many('contract.covered_element', None,
+        'Covered Elements')
+    existing_covered_elements = fields.One2Many('contract.covered_element',
+        None, 'Covered Elements')
+
+    @classmethod
+    def _covered_element_fields_to_extract(cls):
+        return ['extra_data']
+
+    def step_default(self, name):
+        pool = Pool()
+        Contract = pool.get('contract')
+        defaults = super(ModifyCoveredElementInformation, self).step_default()
+        contracts = self._get_contracts()
+        defaults['covered_elements'] = []
+        defaults['existing_covered_elements'] = []
+        effective_date = self.wizard.endorsement.effective_date
+        for contract_id, endorsement in contracts.iteritems():
+            contract = Contract(contract_id)
+            covered_elements = [c for c in contract.covered_elements
+                if c.is_covered_at_date(effective_date)]
+            for covered in covered_elements:
+                values = model.dictionarize(covered,
+                    self._covered_element_fields_to_extract() +
+                    ['contract', 'party', 'item_desc'])
+                for endorsed_covered in endorsement.covered_elements:
+                    if endorsed_covered.action == 'remove':
+                        continue
+                    if endorsed_covered.relation == covered.id:
+                        values.update(endorsed_covered.values)
+                values['start_date'] = effective_date
+                defaults['covered_elements'].append(values)
+                defaults['existing_covered_elements'].append(covered.id)
+        return defaults
+
+    def step_update(self):
+        pool = Pool()
+        EndorsementCoveredElement = pool.get(
+            'endorsement.contract.covered_element')
+        contract_id, endorsement = self._get_contracts().items()[0]
+
+        def get_save_values(covered, prev_covered):
+            # calculate value to update according current covered
+            res = {}
+            save_values = covered._save_values
+            if not save_values:
+                return
+            for field in self._covered_element_fields_to_extract():
+                if (hasattr(prev_covered, field) and
+                        field in covered._save_values and
+                        getattr(covered, field, False) !=
+                        getattr(prev_covered, field, False) or
+                        not prev_covered and field in covered._save_values):
+                    res[field] = covered._save_values[field]
+            return res
+
+        existing_covered_endorsement, new_covered_elements = {}, []
+        # build a dictionnary with the covered element and the matching
+        # endorsement object
+        for covered_endorsement in endorsement.covered_elements:
+            if not covered_endorsement.covered_element:
+                # if a covered was added keep it like it was
+                new_covered_elements.append(covered_endorsement)
+            existing_covered_endorsement[
+                covered_endorsement.covered_element] = covered_endorsement
+
+        for i, covered in enumerate(self.covered_elements):
+            if (self.existing_covered_elements[i] in
+                    existing_covered_endorsement):
+                matching_endorsement = existing_covered_endorsement[
+                    self.existing_covered_elements[i]]
+            else:
+                matching_endorsement = None
+            new_values = get_save_values(covered,
+                self.existing_covered_elements[i])
+            if new_values:
+                if matching_endorsement:
+                    matching_endorsement.values.update(
+                            model.dictionarize(covered,
+                                self._covered_element_fields_to_extract()))
+                    new_covered_elements.append(matching_endorsement)
+                else:
+                    covered_endorsement = EndorsementCoveredElement(
+                        contract_endorsement=endorsement,
+                        definition=self.endorsement_definition,
+                        action='update',
+                        covered_element=self.existing_covered_elements[i],
+                        relation=self.existing_covered_elements[i].id,
+                        values=new_values)
+                    new_covered_elements.append(covered_endorsement)
+            elif matching_endorsement:
+                for field in self._covered_element_fields_to_extract():
+                    if field in matching_endorsement.values:
+                        matching_endorsement.values.pop(field)
+                if not matching_endorsement.is_null():
+                    new_covered_elements.append(existing_covered_endorsement)
+        endorsement.covered_elements = new_covered_elements
+        endorsement.save()
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement_insurance.'\
+            'endorsement_modify_covered_element_view_form'
 
 
 class ExtraPremiumDisplayer(model.CoopView):
@@ -1111,3 +1222,7 @@ class StartEndorsement:
     def transition_remove_option_previous(self):
         self.end_current_part('remove_option')
         return self.get_state_before('remove_option')
+
+
+add_endorsement_step(StartEndorsement, ModifyCoveredElementInformation,
+    'modify_covered_element')

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tree string="Covered Elements">
+    <field name="covered_name"/>
+    <field name="item_kind" tree_invisible="1"/>
+    <field name="extra_data_summary"/>
+</tree>

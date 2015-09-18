@@ -75,6 +75,24 @@
             <field name="type">tree</field>
             <field name="name">endorsement_covered_element_selector_list</field>
         </record>
+        <!-- ############################################################ -->
+        <!-- ########### Modify covered element ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="endorsement_modify_covered_element_view_form">
+            <field name="model">endorsement.contract.covered_element.modify</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_modify_covered_element_form</field>
+        </record>
+        <record model="ir.ui.view" id="covered_element_endorsement_view_form">
+            <field name="model">contract.covered_element</field>
+            <field name="type">form</field>
+            <field name="name">covered_element_endorsement_form</field>
+        </record>
+        <record model="ir.ui.view" id="covered_element_endorsement_view_tree">
+            <field name="model">contract.covered_element</field>
+            <field name="type">tree</field>
+            <field name="name">covered_element_endorsement_tree</field>
+        </record>
         <!-- ##################### -->
         <!-- # New Extra Premium # -->
         <!-- ##################### -->
