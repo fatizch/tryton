@@ -78,6 +78,22 @@ msgctxt "field:claim.loss.health,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract.covered_element,claim_bank_account:"
+msgid "Claim Bank Account"
+msgstr "Compte bancaire pour le virement des prestations"
+
+msgctxt "field:contract.covered_element,claim_default_bank_account:"
+msgid "Claim Default Bank Account"
+msgstr "Compte bancaire par défaut pour le virement des prestations"
+
+msgctxt "field:contract.covered_element,claim_specific_bank_account:"
+msgid "Specific Claim Bank Account"
+msgstr "Compte bancaire spécifique pour le virement des prestations"
+
+msgctxt "field:contract.covered_element,possible_claim_bank_accounts:"
+msgid "Possible Claim Bank Account"
+msgstr "Comptes bancaires disponibles"
+
 msgctxt "model:claim.loss.health,name:"
 msgid "Health Loss"
 msgstr "Acte santé"

@@ -512,6 +512,11 @@ class ModifyCoveredElementInformation(model.CoopView,
     def _covered_element_fields_to_extract(cls):
         return ['extra_data']
 
+    def init_covered_default_value(self, covered):
+        return model.dictionarize(covered,
+            self._covered_element_fields_to_extract() +
+            ['contract', 'party', 'item_desc'])
+
     def step_default(self, name):
         pool = Pool()
         Contract = pool.get('contract')
@@ -525,9 +530,7 @@ class ModifyCoveredElementInformation(model.CoopView,
             covered_elements = [c for c in contract.covered_elements
                 if c.is_covered_at_date(effective_date)]
             for covered in covered_elements:
-                values = model.dictionarize(covered,
-                    self._covered_element_fields_to_extract() +
-                    ['contract', 'party', 'item_desc'])
+                values = self.init_covered_default_value(covered)
                 for endorsed_covered in endorsement.covered_elements:
                     if endorsed_covered.action == 'remove':
                         continue
