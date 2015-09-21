@@ -961,7 +961,7 @@ class ContractActivationHistory(object):
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().cursor
         do_migrate = False
-        history_table = TableHandler(cursor, cls)
+        history_table = TableHandler(cursor, cls, history=True)
         if not history_table.column_exist('active'):
             do_migrate = True
         super(ContractActivationHistory, cls).__register__(module_name)
