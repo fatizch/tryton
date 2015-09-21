@@ -17,6 +17,9 @@ class Configuration:
         domain=[('process_method', '!=', 'manual')])
     broker_check_journal = fields.Many2One('account.payment.journal',
         'Broker Check Journal')
+    commission_invoice_payment_term = fields.Many2One(
+        'account.invoice.payment_term', 'Commission Invoice Payment Term',
+        ondelete='SET NULL')
 
     def get_payment_journal(self, line):
         pool = Pool()

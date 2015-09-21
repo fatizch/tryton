@@ -136,6 +136,16 @@ class Commission:
     def search_broker(cls, name, clause):
         return [('agent.party.network',) + tuple(clause[1:])],
 
+    @classmethod
+    def _get_invoice(cls, key):
+        pool = Pool()
+        AccountConfiguration = pool.get('account.configuration')
+        invoice = super(Commission, cls)._get_invoice(key)
+        if not invoice.payment_term:
+            conf = AccountConfiguration(1)
+            invoice.payment_term = conf.commission_invoice_payment_term
+        return invoice
+
 
 class Plan(export.ExportImportMixin, model.TaggedMixin):
     __name__ = 'commission.plan'

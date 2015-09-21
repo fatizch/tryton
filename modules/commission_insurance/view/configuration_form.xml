@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <data>
-    <xpath expr="/form/field[@name='reject_fee_journal']" position="after">
+    <xpath expr="/form/separator[@id='product']" position="before">
         <newline/>
+        <separator id="commission" string="Commission" colspan="4"/>
         <label name="broker_bank_transfer_journal"/>
         <field name="broker_bank_transfer_journal"/>
         <label name="broker_check_journal"/>
         <field name="broker_check_journal"/>
+        <label name="commission_invoice_payment_term"/>
+        <field name="commission_invoice_payment_term"/>
     </xpath>
 </data>

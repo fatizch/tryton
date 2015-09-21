@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -23,6 +23,10 @@ msgstr "Journal de virement des courtiers"
 msgctxt "field:account.configuration,broker_check_journal:"
 msgid "Broker Check Journal"
 msgstr "Journal de paiement par chèque des courtiers"
+
+msgctxt "field:account.configuration,commission_invoice_payment_term:"
+msgid "Commission Invoice Payment Term"
+msgstr "Conditions de paiement pour les borderaux de commissions"
 
 msgctxt "field:account.fee,broker_fee:"
 msgid "Broker Fee"
@@ -408,6 +412,10 @@ msgctxt "selection:commission.plan,type_:"
 msgid "Insurer"
 msgstr "Assureur"
 
+msgctxt "view:account.configuration:"
+msgid "Commission"
+msgstr "Commission"
+
 msgctxt "view:commission.create_agents.ask:"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
@@ -483,9 +491,9 @@ msgid "Agent Of"
 msgstr "Est commissioné par"
 
 msgctxt "view:commission.agent:commission."
-msgid "Agents"
-msgstr "Protocoles de commissionnement"
-
-msgctxt "view:commission.agent:commission."
 msgid "Agent"
 msgstr "Protocole de commissionnement"
+
+msgctxt "view:commission.agent:commission."
+msgid "Agents"
+msgstr "Protocoles de commissionnement"

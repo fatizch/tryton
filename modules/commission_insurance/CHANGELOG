@@ -1,3 +1,4 @@
+* Allow to define default payment term for commission invoice in configuration
 * Display commission rate on commission
 
 Version 1.4 - 2015-05-29
