@@ -330,13 +330,19 @@ class Contract:
                 ('non_periodic', '=', True)])
         all_good_invoices = list(set(self.current_term_invoices) |
             set(non_periodic_invoices))
+        amount_per_date = defaultdict(lambda: 0)
+        for invoice in all_good_invoices:
+            if invoice.invoice.lines_to_pay:
+                for line in invoice.invoice.lines_to_pay:
+                    amount_per_date[line.payment_date or line.date] +=\
+                        line.amount
+            else:
+                amount_per_date[invoice.planned_payment_date] += \
+                    invoice.invoice.total_amount
         invoices = [{
-                'start': x.invoice.start,
-                'end': x.invoice.end,
-                'total_amount': x.invoice.total_amount,
-                'planned_payment_date': x.planned_payment_date}
-            for x in all_good_invoices]
-        # we want chronological order
+                'total_amount': amount_per_date[key],
+                'planned_payment_date': key}
+            for key in reversed(sorted(amount_per_date.keys()))]
         return [invoices[::-1],
             sum([x['total_amount'] for x in invoices])]
 
