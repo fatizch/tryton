@@ -3,8 +3,10 @@ import copy
 
 from trytond import backend
 from trytond.pool import PoolMeta
+from trytond.cache import Cache
 from trytond.rpc import RPC
 from trytond.model import DictSchemaMixin, Unique
+from trytond.model.fields.dict import TranslatedDict
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
@@ -66,6 +68,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         'Sub Data Config Kind')
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT',
         states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
+    _translation_cache = Cache('_get_extra_data_summary_cache')
 
     @classmethod
     def __register__(cls, module_name):
@@ -96,6 +99,22 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                 'expected_value': 'Expected key %s to be set in field %s of '
                 '%s',
                 })
+
+    @classmethod
+    def create(cls, vlist):
+        created = super(ExtraData, cls).create(vlist)
+        cls._translation_cache.clear()
+        return created
+
+    @classmethod
+    def delete(cls, ids):
+        super(ExtraData, cls).delete(ids)
+        cls._translation_cache.clear()
+
+    @classmethod
+    def write(cls, *args):
+        super(ExtraData, cls).write(*args)
+        cls._translation_cache.clear()
 
     @classmethod
     def is_master_object(cls):
@@ -291,22 +310,25 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
     @classmethod
     def get_extra_data_summary(cls, instances, var_name, lang=None):
         res = {}
-        domain = []
-        keys = []
         for instance in instances:
-            keys += [key for key in getattr(instance, var_name).iterkeys()]
-        domain = [[('name', '=', key)] for key in set(keys)]
-        domain.insert(0, 'OR')
-        compl_dict = dict([x.name, x] for x in cls.search(domain))
-        for instance in instances:
-            res[instance.id] = ''
+            vals = []
             for key, value in getattr(instance, var_name).iteritems():
-                if res[instance.id]:
-                    res[instance.id] += '\n'
-                res[instance.id] += u'%s : %s' % (
-                    coop_string.translate_value(compl_dict[key], 'string',
-                        lang),
-                    compl_dict[key].get_value_as_string(value, lang))
+                cached_value = cls._translation_cache.get((key, value), None)
+                if cached_value is not None:
+                    vals.append(cached_value)
+                    continue
+                translated_vals = TranslatedDict(name=var_name, type_='values')
+                translated_keys = TranslatedDict(name=var_name, type_='keys')
+                trans_vals = translated_vals.__get__(instance,
+                    instance.__class__)
+                trans_keys = translated_keys.__get__(instance,
+                    instance.__class__)
+                vals = []
+                for k, v in getattr(instance, var_name).iteritems():
+                    vals.append((trans_keys[k], trans_vals[k]))
+                    cls._translation_cache.set((k, v), vals[-1])
+                break
+            res[instance.id] = '\n'.join(('%s : %s' % (x, y) for x, y in vals))
         return res
 
     @classmethod

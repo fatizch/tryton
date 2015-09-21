@@ -398,7 +398,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
             }
 
     def apply_values(self):
-        values = self.values.copy() if self.values else {}
+        values = super(EndorsementParty, self).apply_values()
         addresses = []
         for address in self.addresses:
             addresses.append(address.apply_values())

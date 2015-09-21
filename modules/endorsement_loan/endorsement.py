@@ -319,22 +319,19 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     @classmethod
     def apply(cls, loan_endorsements):
         for loan_endorsement in loan_endorsements:
-            loan = loan_endorsement.loan
             if loan_endorsement.endorsement.rollback_date:
                 loan_endorsement.set_applied_on(
                     loan_endorsement.endorsement.rollback_date)
             else:
                 loan_endorsement.set_applied_on(CurrentTimestamp())
-            loan = loan_endorsement.loan
             utils.apply_dict(loan_endorsement.loan,
                 loan_endorsement.apply_values())
             loan_endorsement.loan.calculate()
             loan_endorsement.loan.save()
             loan_endorsement.save()
-            loan = loan_endorsement.loan
 
     def apply_values(self):
-        values = (self.values if self.values else {}).copy()
+        values = super(EndorsementLoan, self).apply_values()
         increments = []
         for increment in self.increments:
             increments.append(increment.apply_values())

@@ -258,8 +258,9 @@ class EndorsementWizardStepMixin(object):
                                     relation=id_to_del))
                     else:
                         raise Exception('unsupported operation')
-
                 setattr(endorsement, new_name, values)
+            elif isinstance(field, tryton_fields.Dict):
+                setattr(endorsement, endorsement._reversed_endorsed_dict[k], v)
             else:
                 new_values[k] = v
         endorsement.values = new_values

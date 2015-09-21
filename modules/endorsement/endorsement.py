@@ -140,6 +140,16 @@ def field_mixin(model):
 
 class EndorsementRoot(object):
     @classmethod
+    def __setup__(cls):
+        super(EndorsementRoot, cls).__setup__()
+        # cls._endorsed_dicts associates endorsement dict fields with the
+        # endorsed model dict fields.
+        # {'endorsed_extra_data': 'extra_data'} means that the
+        # endorsed_extra_data field on the endorsement should be used to store
+        # the extra_data field modifications on the target model
+        cls._endorsed_dicts = {}
+
+    @classmethod
     def __post_setup__(cls):
         super(EndorsementRoot, cls).__post_setup__()
 
@@ -154,6 +164,8 @@ class EndorsementRoot(object):
             EndorsedField = pool.get(Target.values.schema_model)
             endorsement_tree[EndorsedField._get_model()] = (fname, field)
         cls._endorsement_tree = endorsement_tree
+        cls._reversed_endorsed_dict = {
+            v: k for k, v in cls._endorsed_dicts.iteritems()}
 
     def _get_field_for_model(self, target_model):
         return self.__class__._endorsement_tree[target_model]
@@ -166,6 +178,9 @@ class EndorsementRoot(object):
         '''
         if getattr(self, 'values', None):
             return False
+        for fname in self.__class__._endorsed_dicts:
+            if getattr(self, fname, None):
+                return False
         for fname, _ in self._endorsement_tree.itervalues():
             for elem in getattr(self, fname, []):
                 if not elem.is_null():
@@ -432,6 +447,18 @@ def values_mixin(value_model):
                     vals.append((k, field, prev_value, v))
                 else:
                     vals.append((k, field, prev_value, v or ''))
+            for fname, target_fname in \
+                    self.__class__._endorsed_dicts.iteritems():
+                if base_object:
+                    prev_value = ', '.join(coop_string.translate_value(
+                            base_object, target_fname).split('\n'))
+                else:
+                    prev_value = ''
+                new_value = ', '.join(coop_string.translate_value(self,
+                        fname).split('\n'))
+                if prev_value != new_value:
+                    vals.append((target_fname, getattr(ValueModel,
+                                target_fname), prev_value, new_value))
             if hasattr(self, 'action') and self.action == 'add':
                 return [u'%s : → %s' % (coop_string.translate(
                         ValueModel, fname, ffield.string, 'field'), new)
@@ -512,6 +539,13 @@ def values_mixin(value_model):
         @classmethod
         def _ignore_fields_for_matching(cls):
             return set()
+
+        def apply_values(self):
+            values = (self.values if self.values else {}).copy()
+            for fname, target_fname in \
+                    self.__class__._endorsed_dicts.iteritems():
+                values[target_fname] = getattr(self, fname, {}).copy()
+            return values
 
         def get_name_for_summary(self, field_, instance_id):
             pool = Pool()
@@ -638,7 +672,7 @@ def relation_mixin(value_model, field, model, name):
             return values
 
         def apply_values(self):
-            values = (self.values if self.values else {}).copy()
+            values = super(Mixin, self).apply_values()
             if self.action == 'add':
                 return ('create', [values])
             elif self.action == 'update':
@@ -1681,7 +1715,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             cls.raise_user_error('only_one_endorsement_in_progress')
 
     def apply_values(self):
-        values = (self.values if self.values else {}).copy()
+        values = super(EndorsementContract, self).apply_values()
         options, activation_history, extra_datas, contacts = [], [], [], []
         for option in self.options:
             options.append(option.apply_values())
