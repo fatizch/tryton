@@ -70,7 +70,7 @@
             <field name="email"/>
             <newline/>
             <label name="lang"/>
-            <field name="lang" widget="selection"/>
+            <field name="lang"/>
         </group>
         <field name="relations" colspan="2" view_ids="party_cog.relation_view_editable_list"/>
     </xpath>
