@@ -1,5 +1,5 @@
 import datetime
-from trytond.pyson import Eval, If, Bool
+from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
@@ -218,6 +218,8 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     possible_contracts = fields.Function(
         fields.One2Many('contract', None, 'Contracts'),
         'on_change_with_possible_contracts')
+    attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments',
+        target_not_required=True)
     _claim_number_generator_cache = Cache('claim_number_generator')
 
     @classmethod
@@ -252,6 +254,10 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def _export_light(cls):
         return super(Claim, cls)._export_light() | {'company', 'main_contract',
             'claimant'}
+
+    @classmethod
+    def _export_skips(cls):
+        return super(Claim, cls)._export_skips() | {'attachments'}
 
     @classmethod
     def view_attributes(cls):
