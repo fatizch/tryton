@@ -41,9 +41,9 @@ msgctxt "error:contract:"
 msgid "Invalid file format"
 msgstr "Format de fichier non valide"
 
-msgctxt "field:contract,addresses:"
-msgid "Addresses"
-msgstr "Adresses"
+msgctxt "error:contract:"
+msgid "Select at least one option for %s"
+msgstr "Veuillez sélectionner au moins une option pour %s"
 
 msgctxt "field:contract,contract_number:"
 msgid "Contract Number"
@@ -134,50 +134,6 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:contract,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:contract.address,address:"
-msgid "Address"
-msgstr "Adresse"
-
-msgctxt "field:contract.address,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:contract.address,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:contract.address,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.address,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:contract.address,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.address,policy_owner:"
-msgid "Policy Owner"
-msgstr "Responsable de la Police"
-
-msgctxt "field:contract.address,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.address,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:contract.address,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.address,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -445,10 +401,6 @@ msgctxt "field:contract.manage_extra_premium.select.option,selected:"
 msgid "Selected"
 msgstr "Coché"
 
-msgctxt "field:contract.option,all_extra_datas:"
-msgid "All Extra Datas"
-msgstr "Toutes les données complémentaires"
-
 msgctxt "field:contract.option,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -481,9 +433,9 @@ msgctxt "field:contract.option,exclusions:"
 msgid "Exclusions"
 msgstr "Exclusions"
 
-msgctxt "field:contract.option,extra_data:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
+msgctxt "field:contract.option,extra_data_summary:"
+msgid "Extra Data Summary"
+msgstr "Résumé des données complémentaires"
 
 msgctxt "field:contract.option,extra_premium_discounts:"
 msgid "Discounts"
@@ -508,6 +460,10 @@ msgstr "Icône"
 msgctxt "field:contract.option,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract.option,item_desc:"
+msgid "Item Description"
+msgstr "Description du Risque"
 
 msgctxt "field:contract.option,parent_contract:"
 msgid "Parent Contract"
@@ -734,10 +690,6 @@ msgctxt ""
 msgid "Covered Elements"
 msgstr "Risques Couverts"
 
-msgctxt "field:document.receive.request,tmp_0:"
-msgid "Contract"
-msgstr "Contrat"
-
 msgctxt "field:expense,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -805,10 +757,6 @@ msgstr "Données Complémentaires"
 msgctxt "model:contract,name:"
 msgid "Contract"
 msgstr "Contrat"
-
-msgctxt "model:contract.address,name:"
-msgid "Contract Address"
-msgstr "Adresse"
 
 msgctxt "model:contract.contact.type,name:covered_party"
 msgid "Covered Party"
@@ -965,10 +913,6 @@ msgstr "Non Eligible"
 msgctxt "selection:report.template,kind:"
 msgid "Contract Documents"
 msgstr "Documents du contrat"
-
-msgctxt "view:contract.address:"
-msgid "Contract Address"
-msgstr "Adresse"
 
 msgctxt "view:contract.covered_element:"
 msgid "Covered Element"

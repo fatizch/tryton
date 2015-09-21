@@ -3,8 +3,10 @@ import copy
 import datetime
 from itertools import groupby
 
+from sql import Literal, Column
 from sql.functions import CurrentTimestamp
 from sql.conditionals import Coalesce
+from sql.aggregate import Max
 
 from trytond import backend
 from trytond.error import UserError
@@ -30,6 +32,7 @@ __all__ = [
     'relation_mixin',
     'Contract',
     'ContractOption',
+    'ContractOptionVersion',
     'ContractExtraData',
     'ContractActivationHistory',
     'Endorsement',
@@ -903,6 +906,48 @@ class ContractOption(object):
     __metaclass__ = PoolMeta
     _history = True
     __name__ = 'contract.option'
+
+
+class ContractOptionVersion(object):
+    __metaclass__ = PoolMeta
+    _history = True
+    __name__ = 'contract.option.version'
+
+    @classmethod
+    def __register__(cls, module):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        option_hist = Option.__table_history__()
+        version_hist = cls.__table_history__()
+
+        # Migration from 1.4 : Create default contract.option.version
+        to_migrate = not TableHandler.table_exist(cursor, cls._table +
+            '__history')
+        super(ContractOptionVersion, cls).__register__(module)
+
+        if to_migrate:
+            version_h = TableHandler(cursor, cls, module, history=True)
+            # Delete previously created history, to have full control
+            cursor.execute(*version_hist.delete())
+            cursor.execute(*version_hist.insert(
+                    columns=[
+                        version_hist.create_date, version_hist.create_uid,
+                        version_hist.write_date, version_hist.write_uid,
+                        version_hist.extra_data, version_hist.option,
+                        version_hist.id, Column(version_hist, '__id')],
+                    values=option_hist.select(
+                        option_hist.create_date, option_hist.create_uid,
+                        option_hist.write_date, option_hist.write_uid,
+                        Literal('{}').as_('extra_data'),
+                        option_hist.id.as_('option'),
+                        option_hist.id.as_('id'),
+                        Column(option_hist, '__id').as_('__id'))))
+            cursor.execute(*version_hist.select(
+                    Max(Column(version_hist, '__id'))))
+            cursor.setnextid(version_h.table_name + '__',
+                cursor.fetchone()[0] or 0 + 1)
 
 
 class ContractActivationHistory(object):

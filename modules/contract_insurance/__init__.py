@@ -17,6 +17,7 @@ def register():
         Contract,
         CoveredElement,
         ContractOption,
+        ContractOptionVersion,
         CoveredElementTreeExpansion,
         CoveredElementPartyRelation,
         ExtraPremium,

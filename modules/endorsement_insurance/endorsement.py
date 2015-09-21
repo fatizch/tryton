@@ -1,4 +1,8 @@
 # encoding: utf-8
+from sql import Column
+from sql.conditionals import Coalesce
+
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
@@ -7,6 +11,7 @@ from trytond.modules.cog_utils import model, fields
 from trytond.modules.endorsement import relation_mixin
 
 __all__ = [
+    'ContractOptionVersion',
     'CoveredElement',
     'ExtraPremium',
     'Endorsement',
@@ -15,6 +20,36 @@ __all__ = [
     'EndorsementCoveredElementOption',
     'EndorsementExtraPremium',
     ]
+
+
+class ContractOptionVersion(object):
+    __metaclass__ = PoolMeta
+    __name__ = 'contract.option.version'
+
+    @classmethod
+    def __register__(cls, module):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        option = Option.__table_history__()
+        version = cls.__table_history__()
+
+        super(ContractOptionVersion, cls).__register__(module)
+
+        # Migration from 1.4 : Move contract.option->extra_data in
+        # contract.option.version->extra_data
+        option_h = TableHandler(cursor, Option, module, history=True)
+        if option_h.column_exist('extra_data'):
+            update_data = option.select(Column(option, '__id'),
+                Coalesce(option.extra_data, '{}').as_('extra_data'))
+            cursor.execute(*version.update(
+                    columns=[version.extra_data],
+                    values=[update_data.extra_data],
+                    from_=[update_data],
+                    where=Column(update_data, '__id') == Column(
+                        version, '__id')))
+            option_h.drop_column('extra_data')
 
 
 class CoveredElement(object):

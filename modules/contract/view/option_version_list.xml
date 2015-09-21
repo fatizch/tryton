@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<tree string="Versions">
+    <field name="start_date"/>
+    <field name="extra_data_as_string" expand="1"/>
+</tree>

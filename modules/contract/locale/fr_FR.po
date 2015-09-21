@@ -83,10 +83,6 @@ msgctxt "field:contract,activation_history:"
 msgid "Activation History"
 msgstr "Historique d'activation"
 
-msgctxt "field:contract,addresses:"
-msgid "Addresses"
-msgstr "Adresses"
-
 msgctxt "field:contract,appliable_conditions_date:"
 msgid "Appliable Conditions Date"
 msgstr "Date de Conditions"
@@ -243,6 +239,10 @@ msgctxt "field:contract.activate.confirm,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.activation_history,active:"
+msgid "Active"
+msgstr "Actif"
+
 msgctxt "field:contract.activation_history,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -292,58 +292,6 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:contract.activation_history,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:contract.address,address:"
-msgid "Address"
-msgstr "Adresse"
-
-msgctxt "field:contract.address,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:contract.address,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:contract.address,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:contract.address,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.address,end_date:"
-msgid "End Date"
-msgstr "Date de fin"
-
-msgctxt "field:contract.address,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.address,policy_owner:"
-msgid "Policy Owner"
-msgstr "Détenteur du contrat"
-
-msgctxt "field:contract.address,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.address,start_date:"
-msgid "Start Date"
-msgstr "Date de début"
-
-msgctxt "field:contract.address,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.address,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:contract.address,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -579,9 +527,17 @@ msgctxt "field:contract.option,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
+msgctxt "field:contract.option,current_extra_data:"
+msgid "Current Extra Data"
+msgstr "Données complémentaires courantes"
+
 msgctxt "field:contract.option,current_policy_owner:"
 msgid "Current Policy Owner"
 msgstr "Responsable Courant de la Police"
+
+msgctxt "field:contract.option,current_version:"
+msgid "Current Version"
+msgstr "Version Courante"
 
 msgctxt "field:contract.option,end_date:"
 msgid "End Date"
@@ -639,6 +595,10 @@ msgctxt "field:contract.option,sub_status:"
 msgid "Sub Status"
 msgstr "Sous Statut"
 
+msgctxt "field:contract.option,versions:"
+msgid "Versions"
+msgstr "Versions"
+
 msgctxt "field:contract.option,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -648,6 +608,58 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:contract.option,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.option.version,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.option.version,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.option.version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.option.version,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:contract.option.version,extra_data_as_string:"
+msgid "Extra Data as String"
+msgstr "Données Complémentaires"
+
+msgctxt "field:contract.option.version,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.option.version,option:"
+msgid "Option"
+msgstr "Garantie souscrite"
+
+msgctxt "field:contract.option.version,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.option.version,start:"
+msgid "Start"
+msgstr "Date de début"
+
+msgctxt "field:contract.option.version,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:contract.option.version,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.option.version,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.option.version,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -966,10 +978,6 @@ msgctxt "model:contract.activation_history,name:"
 msgid "Activation History"
 msgstr "Historique d'activation"
 
-msgctxt "model:contract.address,name:"
-msgid "Contract Address"
-msgstr "Adresse du contrat"
-
 msgctxt "model:contract.contact,name:"
 msgid "Contract Contact"
 msgstr "Contact du contrat"
@@ -1001,6 +1009,10 @@ msgstr "Choix de la date de fin pour le contrat"
 msgctxt "model:contract.option,name:"
 msgid "Contract Option"
 msgstr "Garantie"
+
+msgctxt "model:contract.option.version,name:"
+msgid "Contract Option Version"
+msgstr "Version de garantie souscrite"
 
 msgctxt "model:contract.reactivate.check_contracts,name:"
 msgid "Contract Reactivate Check"
@@ -1086,10 +1098,6 @@ msgstr "Décliner"
 msgctxt "model:ir.action,name:act_end"
 msgid "End Contract"
 msgstr "Terminer Contrat"
-
-msgctxt "model:ir.action,name:act_event_log_relate_form"
-msgid "Event Logs"
-msgstr "Logs d'événements"
 
 msgctxt "model:ir.action,name:act_hold_contract"
 msgid "Hold Contract"
@@ -1338,10 +1346,6 @@ msgctxt "view:contract.activation_history:"
 msgid "Activation History"
 msgstr "Historique d'activation"
 
-msgctxt "view:contract.address:"
-msgid "Contract Address"
-msgstr "Adresse"
-
 msgctxt "view:contract.contact.type:"
 msgid "Contact Type"
 msgstr "Type de contact"
@@ -1369,6 +1373,14 @@ msgstr "Données complémentaires"
 msgctxt "view:contract.hold.select_hold_status:"
 msgid "Select Hold Reason"
 msgstr "Selectionner la raison de suspension"
+
+msgctxt "view:contract.option.version:"
+msgid "Version"
+msgstr "Version"
+
+msgctxt "view:contract.option.version:"
+msgid "Versions"
+msgstr "Versions"
 
 msgctxt "view:contract.option:"
 msgid "Main Data"

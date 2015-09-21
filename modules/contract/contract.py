@@ -51,6 +51,7 @@ __all__ = [
     'ActivationHistory',
     'Contract',
     'ContractOption',
+    'ContractOptionVersion',
     'ContractExtraDataRevision',
     'ContractSelectEndDate',
     'ContractEnd',
@@ -1363,7 +1364,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
 
 class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
-            ModelCurrency):
+        ModelCurrency):
     'Contract Option'
 
     __name__ = 'contract.option'
@@ -1377,6 +1378,13 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     parent_contract = fields.Function(
         fields.Many2One('contract', 'Parent Contract'),
         'on_change_with_parent_contract', searcher='search_parent_contract')
+    versions = fields.One2Many('contract.option.version', 'option', 'Versions',
+        states={'readonly': Eval('contract_status') != 'quote'},
+        depends=['contract_status'], delete_missing=True,
+        order=[('start', 'ASC')])
+    current_version = fields.Function(
+        fields.Many2One('contract.option.version', 'Current Version'),
+        'get_current_version')
     coverage = fields.Many2One('offered.option.description', 'Coverage',
         ondelete='RESTRICT', states={
             'required': Eval('contract_status') == 'active',
@@ -1423,6 +1431,14 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         fields.Char('Full Name'), 'get_full_name')
     initial_start_date = fields.Function(fields.Date('Initial Start Date'),
         'get_initial_start_date')
+    current_extra_data = fields.Function(
+        fields.Dict('extra_data', 'Current Extra Data', states={
+                'readonly': Eval('contract_status') != 'quote',
+                'invisible': ~Eval('current_extra_data')},
+            depends=['current_extra_data', 'contract_status']),
+        'get_current_version', setter='setter_void')
+    current_extra_data_string = current_extra_data.translated(
+        'current_extra_data')
 
     @classmethod
     def __setup__(cls):
@@ -1469,9 +1485,26 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def default_status(cls):
         return 'active'
 
-    @fields.depends('coverage')
+    @classmethod
+    def default_versions(cls):
+        return [Pool().get('contract.option.version').get_default_version()]
+
+    @fields.depends('appliable_conditions_date', 'coverage', 'coverage_family',
+        'current_extra_data', 'product', 'start_date', 'versions')
     def on_change_coverage(self):
         self.coverage_family = self.on_change_with_coverage_family()
+        current_version = self.update_current_version()
+        self.current_extra_data = current_version.extra_data
+
+    @fields.depends('current_extra_data', 'versions')
+    def on_change_current_extra_data(self):
+        current_version = self.get_version_at_date(utils.today())
+        if not current_version:
+            return
+        current_version.extra_data = self.current_extra_data
+        current_version.extra_data_as_string = \
+            current_version.on_change_with_extra_data_as_string()
+        self.versions = list(self.versions)
 
     @fields.depends('sub_status', 'manual_end_date')
     def on_change_with_sub_status(self, name=None):
@@ -1523,6 +1556,16 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def on_change_with_parent_contract(self, name=None):
         if self.contract:
             return self.contract.id
+
+    @classmethod
+    def get_current_version(cls, options, names):
+        field_map = cls.get_field_map()
+        return utils.version_getter(options, names, 'contract.option.version',
+            'option', utils.today(), field_map=field_map)
+
+    @classmethod
+    def get_field_map(cls):
+        return {'id': 'current_version', 'extra_data': 'current_extra_data'}
 
     @classmethod
     def get_start_date(cls, options, names):
@@ -1655,6 +1698,13 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         self.coverage.init_dict_for_rule_engine(args)
         self.contract.init_dict_for_rule_engine(args)
 
+    def get_version_at_date(self, at_date):
+        for version in sorted(self.versions,
+                key=lambda x: x.start or datetime.date.min, reverse=True):
+            if (version.start or datetime.date.min) <= at_date:
+                return version
+        raise KeyError
+
     def notify_contract_end_date_change(self, new_end_date):
         if (new_end_date and self.manual_end_date and
                 self.manual_end_date > new_end_date):
@@ -1696,12 +1746,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def clean_up_versions(self, contract):
         pass
 
-    def get_all_extra_data(self, at_date):
-        res = self.coverage.get_all_extra_data(at_date)
-        res.update(getattr(self, 'extra_data', {}))
-        res.update(self.contract.get_all_extra_data(at_date))
-        return res
-
     @classmethod
     def get_var_names_for_full_extract(cls):
         return [('coverage', 'light'), 'start_date', 'end_date']
@@ -1717,6 +1761,8 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             new_option.status = 'active'
             new_option.start_date = start_date
             new_option.appliable_conditions_date = start_date
+            Version = Pool().get('contract.option.version')
+            new_option.versions = [Version(**Version.get_default_version())]
             return new_option
         else:
             cls.raise_user_error('inactive_coverage_at_date', (coverage.name,
@@ -1742,6 +1788,109 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         exec_context = {'date': self.start_date}
         self.init_dict_for_rule_engine(exec_context)
         return self.coverage.calculate_end_date(exec_context)
+
+    def update_current_version(self):
+        current_version = self.get_version_at_date(utils.today())
+        if not current_version:
+            return None
+        current_version.extra_data = self.recalculate_extra_data(
+            current_version.extra_data)
+        self.versions = list(self.versions)
+        return current_version
+
+    def recalculate_extra_data(self, extra_data):
+        if not self.coverage or not self.product:
+            return {}
+        return self.product.get_extra_data_def('option', extra_data.copy(),
+            self.appliable_conditions_date, coverage=self.coverage)
+
+    def get_all_extra_data(self, at_date):
+        current_version = self.get_version_at_date(at_date)
+        res = current_version.extra_data if current_version else {}
+        if self.contract:
+            res.update(self.contract.get_all_extra_data(at_date))
+        return res
+
+
+class ContractOptionVersion(model.CoopSQL, model.CoopView):
+    'Contract Option Version'
+
+    __name__ = 'contract.option.version'
+
+    option = fields.Many2One('contract.option', 'Option',
+        required=True, ondelete='CASCADE', select=True)
+    start = fields.Date('Start')
+    extra_data = fields.Dict('extra_data', 'Extra Data',
+        states={
+            'invisible': ~Eval('extra_data'),
+            },
+        depends=['extra_data'])
+    extra_data_as_string = fields.Function(
+        fields.Char('Extra Data as String'),
+        'on_change_with_extra_data_as_string')
+    extra_data_string = extra_data.translated('extra_data')
+    start_date = fields.Function(
+        fields.Date('Start Date'),
+        'on_change_with_start_date')
+
+    @classmethod
+    def __register__(cls, module):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        option = Option.__table__()
+        version = cls.__table__()
+
+        # Migration from 1.4 : Create default contract.option.version
+        to_migrate = not TableHandler.table_exist(cursor, cls._table)
+
+        super(ContractOptionVersion, cls).__register__(module)
+
+        if to_migrate:
+            version_h = TableHandler(cursor, cls, module)
+            cursor.execute(*version.insert(
+                    columns=[
+                        version.create_date, version.create_uid,
+                        version.write_date, version.write_uid,
+                        version.extra_data, version.option, version.id],
+                    values=option.select(
+                        option.create_date, option.create_uid,
+                        option.write_date, option.write_uid,
+                        Literal('{}').as_('extra_data'),
+                        option.id.as_('option'), option.id.as_('id'))))
+            cursor.execute(*version.select(Max(version.id)))
+            cursor.setnextid(version_h.table_name,
+                cursor.fetchone()[0] or 0 + 1)
+
+    @fields.depends('option', 'start', 'start_date')
+    def on_change_option(self):
+        self.start = self.on_change_with_start_date()
+
+    @fields.depends('extra_data')
+    def on_change_with_extra_data_as_string(self, name=None):
+        if not self.extra_data:
+            return ''
+        return Pool().get('extra_data').get_extra_data_summary([self],
+            'extra_data')[self.id]
+
+    @fields.depends('option', 'start')
+    def on_change_with_start_date(self, name=None):
+        if not self.option:
+            return self.start
+        return self.start or self.option.start_date
+
+    @classmethod
+    def order_start(cls, tables):
+        table, _ = tables[None]
+        return [Coalesce(table.start, datetime.date.min)]
+
+    @classmethod
+    def get_default_version(cls):
+        return {
+            'start': None,
+            'extra_data': {},
+            }
 
 
 class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,

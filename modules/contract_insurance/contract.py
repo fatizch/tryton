@@ -1,7 +1,9 @@
 from dateutil.relativedelta import relativedelta
 
 from sql import Null
+from sql.conditionals import Coalesce
 
+from trytond import backend
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Or, Bool, Len
 from trytond.transaction import Transaction
@@ -27,6 +29,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ContractOption',
+    'ContractOptionVersion',
     'CoveredElement',
     'CoveredElementPartyRelation',
     'ExtraPremium',
@@ -324,13 +327,6 @@ class ContractOption:
     exclusions = fields.Many2Many('contract.option-exclusion.kind',
         'option', 'exclusion', 'Exclusions',
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
-    extra_data = fields.Dict('extra_data', 'Extra Data',
-        states={
-            'invisible': ~Eval('extra_data'),
-            'readonly': Eval('contract_status') != 'quote'
-            },
-        depends=['extra_data', 'contract_status'])
-    extra_data_string = extra_data.translated('extra_data')
     extra_data_summary = fields.Function(
         fields.Text('Extra Data Summary'),
         'get_extra_data_summary')
@@ -348,15 +344,15 @@ class ContractOption:
         domain=[('motive.is_discount', '=', False)],
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS,
         delete_missing=True)
-    all_extra_datas = fields.Function(
-        fields.Dict('extra_data', 'All Extra Datas'),
-        'on_change_with_all_extra_data')
     icon = fields.Function(
         fields.Char('Icon'),
         'on_change_with_icon')
     parent_option = fields.Function(
         fields.Many2One('contract.option', 'Parent Covered Data'),
         'on_change_with_parent_option')
+    item_desc = fields.Function(
+        fields.Many2One('offered.item.description', 'Item Description'),
+        'on_change_with_item_desc')
 
     @classmethod
     def __setup__(cls):
@@ -411,53 +407,16 @@ class ContractOption:
         return (super(ContractOption, cls)._export_skips() |
             set(['extra_premium_discounts', 'extra_premium_increases']))
 
-    @classmethod
-    def default_all_extra_datas(cls):
-        return {}
-
-    @classmethod
-    def default_extra_data(cls):
-        return {}
-
-    @fields.depends('all_extra_datas', 'start_date', 'coverage', 'contract',
-        'appliable_conditions_date', 'product', 'covered_element')
+    @fields.depends('item_desc')
     def on_change_coverage(self):
         super(ContractOption, self).on_change_coverage()
-        self.on_change_extra_data()
 
-    @fields.depends('extra_data', 'start_date', 'coverage', 'contract',
-        'appliable_conditions_date', 'product', 'covered_element')
-    def on_change_extra_data(self):
-        if not self.coverage or not self.product:
-            self.extra_data = {}
-            self.all_extra_datas = self.on_change_with_all_extra_data()
-            return
-        item_desc_id = Transaction().context.get('item_desc', None)
-        item_desc = None
-        if not item_desc_id:
-            if self.covered_element and self.covered_element.id > 0:
-                item_desc = self.covered_element.item_desc
+    @fields.depends('covered_element', 'item_desc')
+    def on_change_covered_element(self):
+        if not self.covered_element:
+            self.item_desc = None
         else:
-            item_desc = Pool().get('offered.item.description')(item_desc_id)
-        self.extra_data = self.product.get_extra_data_def('option',
-            self.on_change_with_all_extra_data(),
-            self.appliable_conditions_date, coverage=self.coverage,
-            item_desc=item_desc)
-        self.all_extra_datas = self.on_change_with_all_extra_data()
-
-    @fields.depends('covered_element', 'contract', 'extra_data')
-    def on_change_with_all_extra_data(self, name=None):
-        all_extra_datas = Transaction().context.get('all_extra_datas', {})
-        if all_extra_datas:
-            parent_extra_data = all_extra_datas
-        elif self.contract and self.contract.id > 0:
-            parent_extra_data = dict(self.contract.extra_data_values)
-        elif self.covered_element and self.covered_element.id > 0:
-            parent_extra_data = dict(self.covered_element.all_extra_datas)
-        else:
-            parent_extra_data = {}
-        parent_extra_data.update(self.extra_data if self.extra_data else {})
-        return parent_extra_data
+            self.item_desc = self.covered_element.item_desc
 
     @fields.depends('covered_element', 'start_date')
     def on_change_with_appliable_conditions_date(self, name=None):
@@ -470,6 +429,13 @@ class ContractOption:
 
     def on_change_with_icon(self, name=None):
         return 'umbrella-black'
+
+    @fields.depends('covered_element')
+    def on_change_with_item_desc(self, name=None):
+        if self.covered_element:
+            return self.covered_element.item_desc.id
+        else:
+            return None
 
     @fields.depends('covered_element')
     def on_change_with_parent_contract(self, name=None):
@@ -545,7 +511,8 @@ class ContractOption:
             start_date, end_date=None, item_desc=None):
         new_option = super(ContractOption, cls).new_option_from_coverage(
             coverage, product, start_date, end_date)
-        new_option.on_change_extra_data()
+        new_option.item_desc = item_desc
+        new_option.on_change_coverage()
         return new_option
 
     def init_from_covered_element(self, covered_element):
@@ -570,13 +537,6 @@ class ContractOption:
 
     def _expand_tree(self, name):
         return True
-
-    def get_all_extra_data(self, at_date):
-        res = getattr(self, 'extra_data', {})
-        res.update(self.covered_element.get_all_extra_data(at_date))
-        if self.parent_option:
-            res.update(self.parent_option.get_all_extra_data(at_date))
-        return res
 
     def init_dict_for_rule_engine(self, args):
         args['option'] = self
@@ -604,6 +564,48 @@ class ContractOption:
         for extra_prem in self.extra_premiums:
             extra_prem.notify_contract_start_date_change(new_start_date)
         self.extra_premiums = self.extra_premiums
+
+    def recalculate_extra_data(self, extra_data):
+        if not self.item_desc or not self.product or not self.coverage:
+            return super(ContractOption, self).recalculate_extra_data(
+                extra_data)
+        return self.product.get_extra_data_def('option', extra_data.copy(),
+            self.appliable_conditions_date, coverage=self.coverage,
+            item_desc=self.item_desc)
+
+    def get_all_extra_data(self, at_date):
+        res = super(ContractOption, self).get_all_extra_data(at_date)
+        if self.covered_element:
+            res.update(self.covered_element.get_all_extra_data(at_date))
+        return res
+
+
+class ContractOptionVersion:
+    __name__ = 'contract.option.version'
+
+    @classmethod
+    def __register__(cls, module):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        option = Option.__table__()
+        version = cls.__table__()
+
+        super(ContractOptionVersion, cls).__register__(module)
+
+        # Migration from 1.4 : Move contract.option->extra_data in
+        # contract.option.version->extra_data
+        option_h = TableHandler(cursor, Option, module)
+        if option_h.column_exist('extra_data'):
+            update_data = option.select(option.id.as_('option'),
+                Coalesce(option.extra_data, '{}').as_('extra_data'))
+            cursor.execute(*version.update(
+                    columns=[version.extra_data],
+                    values=[update_data.extra_data],
+                    from_=[update_data],
+                    where=update_data.option == version.option))
+            option_h.drop_column('extra_data')
 
 
 class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
@@ -643,12 +645,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             ('coverage.item_desc', '=', Eval('item_desc')),
             ('status', '!=', 'declined'),
             ],
-        context={
-            'covered_element': Eval('id'),
-            'item_desc': Eval('item_desc'),
-            'all_extra_datas': Eval('all_extra_datas'),
-            },
-        depends=['id', 'item_desc', 'all_extra_datas', 'product'],
+        depends=['item_desc', 'product'],
         target_not_required=True, order=[('coverage', 'ASC'),
             ('start_date', 'ASC')])
     declined_options = fields.One2ManyDomain('contract.option',

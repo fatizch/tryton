@@ -16,6 +16,7 @@ def register():
         EndorsementDefinitionProductRelation,
         Contract,
         ContractOption,
+        ContractOptionVersion,
         ContractActivationHistory,
         ContractExtraData,
         Endorsement,

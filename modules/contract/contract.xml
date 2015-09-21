@@ -148,6 +148,19 @@
             <field name="type">form</field>
             <field name="name">option_form</field>
         </record>
+        <!-- ################### -->
+        <!-- # Option Versions # -->
+        <!-- ################### -->
+        <record model="ir.ui.view" id="option_version_view_form">
+            <field name="model">contract.option.version</field>
+            <field name="type">form</field>
+            <field name="name">option_version_form</field>
+        </record>
+        <record model="ir.ui.view" id="option_version_view_list">
+            <field name="model">contract.option.version</field>
+            <field name="type">tree</field>
+            <field name="name">option_version_list</field>
+        </record>
         <!--#################### -->
         <!-- Contract Extra Data -->
         <!--#################### -->

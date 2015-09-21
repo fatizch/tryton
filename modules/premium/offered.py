@@ -113,6 +113,7 @@ class Product:
         dates.add(option.start_date)
         if option.end_date:
             dates.add(coop_date.add_day(option.end_date, 1))
+        (dates.add(x.start) for x in option.versions if x.start is not None)
 
     def get_dates(self, contract):
         dates = set()
@@ -278,7 +279,8 @@ class OptionDescription:
             for option in base_instance.options:
                 result += self.get_rated_instances(option)
         elif isinstance(base_instance, Option):
-            if base_instance.coverage == self and base_instance.status != 'void':
+            if base_instance.coverage == self and (
+                    base_instance.status != 'void'):
                 result.append(base_instance)
         return result
 
