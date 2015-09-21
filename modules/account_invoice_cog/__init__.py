@@ -4,6 +4,7 @@ from .party import *
 from .invoice import *
 from .report_engine import *
 from .move import *
+from .configuration import *
 
 
 def register():
@@ -14,4 +15,5 @@ def register():
         ReportTemplate,
         Move,
         MoveLine,
+        Configuration,
         module='account_invoice_cog', type_='model')

@@ -301,6 +301,8 @@ class Payment:
             name_for_billing, sepa_mandate):
         pool = Pool()
         Invoice = pool.get('account.invoice')
+        AccountConfiguration = pool.get('account.configuration')
+        account_configuration = AccountConfiguration(1)
         # create invoice
         invoice = Invoice(
             company=self.company,
@@ -313,6 +315,7 @@ class Payment:
             state='draft',
             description=name_for_billing,
             sepa_mandate=sepa_mandate,
+            payment_term=account_configuration.default_customer_payment_term
             )
         # create invoice line
         invoice.lines = self.get_fee_invoice_lines(fee_amount,

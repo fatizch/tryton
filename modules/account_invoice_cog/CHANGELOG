@@ -1,4 +1,6 @@
+* Allow to define default payment term for customer invoice in configuration
 * Make invoice printable
+
 Version 1.4 - 2015-05-29
 * New icons based on state for invoice
 

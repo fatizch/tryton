@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:account.configuration,default_customer_payment_term:"
+msgid "Default Customer Payment Term"
+msgstr "Conditions de paiement client par défaut"
+
 msgctxt "field:account.invoice,color:"
 msgid "Color"
 msgstr "Couleur"

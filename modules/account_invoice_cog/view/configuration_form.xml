@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/separator[@id='invoice']" position="after">
+        <label name="default_customer_payment_term"/>
+        <field name="default_customer_payment_term"/>
+        <newline/>
+    </xpath>
+</data>
