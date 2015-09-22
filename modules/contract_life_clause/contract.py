@@ -82,17 +82,16 @@ class ContractOption:
     @fields.depends('beneficiary_clause')
     def on_change_coverage(self):
         super(ContractOption, self).on_change_coverage()
+
         if not self.coverage or not self.coverage.beneficiaries_clauses:
             self.beneficiary_clause = None
             self.customized_beneficiary_clause = ''
             self.has_beneficiary_clause = False
             return
         self.has_beneficiary_clause = True
-        if (self.beneficiary_clause and self.beneficiary_clause not in
-                self.coverage.beneficiaries_clauses):
+        if self.beneficiary_clause and (self.beneficiary_clause not in
+                    self.coverage.beneficiaries_clauses):
             self.beneficiary_clause = self.coverage.default_beneficiary_clause
-        else:
-            self.beneficiary_clause = None
         if self.beneficiary_clause:
             self.customized_beneficiary_clause = \
                 self.beneficiary_clause.content
