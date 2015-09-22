@@ -607,13 +607,13 @@ def relation_mixin(value_model, field, model, name):
                     if x['relation']], relation_fields_to_read)
             relation_values = {x['id']: x for x in relation_values}
             for row in result:
-                if 'values' not in row or not row['relation']:
-                    row[fname] = None
                 for fname in relation_fields_to_read:
                     if 'values' in row and fname in row['values']:
                         row[fname] = row['values'][fname]
-                    else:
+                    elif row['relation']:
                         row[fname] = relation_values[row['relation']][fname]
+                    else:
+                        row[fname] = None
             return result
 
         @staticmethod
