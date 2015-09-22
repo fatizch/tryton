@@ -624,12 +624,14 @@ def apply_dict(instance, data_dict):
             continue
         field = Model._fields[k]
         value = getattr(instance, k, None)
-        if not v and not value:
-            continue
         if isinstance(field, tryton_fields.Many2One):
             if value and value.id == v:
                 continue
-            setattr(instance, k, pool.get(field.model_name)(v))
+            if v is None:
+                if not hasattr(instance, k) or value != None:
+                    setattr(instance, k, v)
+            else:
+                setattr(instance, k, pool.get(field.model_name)(v))
         elif isinstance(field, tryton_fields.Reference):
             model_name, value_id = v.split(',')
             if model_name == value.__name__ and value_id == value.id:
@@ -666,7 +668,8 @@ def apply_dict(instance, data_dict):
             clean_list = [to_keep[x] for x in prev_order if x in to_keep]
             setattr(instance, k, clean_list + new_values)
         else:
-            setattr(instance, k, v)
+            if v != value or not hasattr(instance, k):
+                setattr(instance, k, v)
 
 
 def chunker(seq, size):
