@@ -35,7 +35,7 @@ class Plan:
     def compute_prepayment_schedule(self, option, agent):
         if self.prepayment_payment_rule and option:
             args = {
-                'date': option.start_date,
+                'date': option.initial_start_date,
                 'extra_data': agent.extra_data
                 }
             option.init_dict_for_rule_engine(args)
@@ -117,7 +117,7 @@ class PlanLines:
         args = context['names']
         if 'option' in context['names']:
             context['names']['option'].init_dict_for_rule_engine(args)
-            args['date'] = context['names']['option'].start_date
+            args['date'] = context['names']['option'].initial_start_date
         return Decimal(self.prepayment_rule.execute(
                 args, self.prepayment_rule_extra_data).result)
 
