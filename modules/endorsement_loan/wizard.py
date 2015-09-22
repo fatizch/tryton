@@ -373,6 +373,9 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                     updated_struct['covered_elements'].iteritems()):
                 cls.update_dict(template, 'covered_element', covered_element)
                 for option, o_values in values['options'].iteritems():
+                    if option.manual_end_date and (option.manual_end_date <
+                            effective_date):
+                        continue
                     cls.update_dict(template, 'option', option)
                     for loan in [x for x in loans
                             if x not in o_values['loan_shares']]:
@@ -388,10 +391,10 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                             key=lambda x: x.start_date or datetime.date.min)
                         selector = template.copy()
                         for idx, loan_share in enumerate(sorted_list):
-                            if ((loan_share.start_date or
-                                        endorsement.contract.start_date)  # NOQA
-                                    == effective_date and isinstance(
-                                        loan_share, LoanShareEndorsement)):
+                            if (effective_date == (loan_share.start_date
+                                        or endorsement.contract.start_date)
+                                    and isinstance(loan_share,
+                                        LoanShareEndorsement)):
                                 selector['new_share'] = loan_share.share
                                 selector['loan_share_endorsement'] = \
                                     loan_share.id
