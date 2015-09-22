@@ -11,6 +11,7 @@ from sql.aggregate import Max, Min
 from trytond import backend
 from trytond.tools import grouped_slice
 from trytond.rpc import RPC
+from trytond.cache import Cache
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, Bool, And
 from trytond.protocols.jsonrpc import JSONDecoder
@@ -2075,9 +2076,35 @@ class ContractSubStatus(model.CoopSQL, model.CoopView):
     name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     status = fields.Selection(CONTRACTSTATUSES, 'Status', required=True)
+    _get_sub_status_cache = Cache('get_sub_status')
+
+    @classmethod
+    def create(cls, vlist):
+        created = super(ContractSubStatus, cls).create(vlist)
+        cls._get_sub_status_cache.clear()
+        return created
+
+    @classmethod
+    def delete(cls, ids):
+        super(ContractSubStatus, cls).delete(ids)
+        cls._get_sub_status_cache.clear()
+
+    @classmethod
+    def write(cls, *args):
+        super(ContractSubStatus, cls).write(*args)
+        cls._get_sub_status_cache.clear()
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
             return self.code
         return coop_string.slugify(self.name)
+
+    @classmethod
+    def get_sub_status(cls, code):
+        sub_status_id = cls._get_sub_status_cache.get(code, default=-1)
+        if sub_status_id != -1:
+            return cls(sub_status_id)
+        instance = cls.search([('code', '=', code)])[0]
+        cls._get_sub_status_cache.set(code, instance.id)
+        return instance

@@ -1,3 +1,4 @@
+* Add cache on contract.sub_status
 * Add contract.option.version and move extra_data in contract module
 * Voiding a contract preserves initial_start_date and activation_history
 * Add sub_status to option
