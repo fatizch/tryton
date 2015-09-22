@@ -389,7 +389,7 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                         selector = template.copy()
                         for idx, loan_share in enumerate(sorted_list):
                             if ((loan_share.start_date or
-                                        endorsement.contract.start_date)
+                                        endorsement.contract.start_date)  # NOQA
                                     == effective_date and isinstance(
                                         loan_share, LoanShareEndorsement)):
                                 selector['new_share'] = loan_share.share
@@ -545,6 +545,7 @@ class LoanShareSelector(model.CoopView):
                     If(Not(Bool(Eval('previous_share', False))), 'blue',
                         'grey'))),
             ]
+
 
 class SharePerLoan(model.CoopView):
     'Share per Loan'
