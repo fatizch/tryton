@@ -1409,7 +1409,8 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     status_string = status.translated('status')
     sub_status = fields.Many2One('contract.sub_status',
         'Sub Status', states={'required':
-            Bool(Eval('manual_end_date'))}, depends=['manual_end_date'])
+            Bool(Eval('manual_end_date'))}, depends=['manual_end_date'],
+        ondelete='RESTRICT')
     appliable_conditions_date = fields.Function(
         fields.Date('Appliable Conditions Date'),
         'on_change_with_appliable_conditions_date')
