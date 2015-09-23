@@ -16,7 +16,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, Bool, And
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.pool import Pool
-from trytond.model import dualmethod
+from trytond.model import dualmethod, Unique
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
 from trytond.modules.cog_utils import utils, model, fields, coop_date
@@ -2073,6 +2073,7 @@ class ContractSubStatus(model.CoopSQL, model.CoopView):
     'Contract SubStatus'
 
     __name__ = 'contract.sub_status'
+    _func_key = 'code'
 
     name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
@@ -2094,6 +2095,14 @@ class ContractSubStatus(model.CoopSQL, model.CoopView):
     def write(cls, *args):
         super(ContractSubStatus, cls).write(*args)
         cls._get_sub_status_cache.clear()
+
+    @classmethod
+    def __setup__(cls):
+        super(ContractSubStatus, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
+            ]
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
