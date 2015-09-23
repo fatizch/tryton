@@ -1,4 +1,3 @@
-import datetime
 from decimal import Decimal
 from dateutil.relativedelta import relativedelta
 
@@ -64,8 +63,7 @@ class ContractOption:
         if not self.start_date:
             # when a contract is void for example
             return 0
-        end_first_year = min(self.start_date + relativedelta(years=1) -
-            relativedelta(days=1), self.end_date or datetime.date.max)
+        end_first_year = self.start_date + relativedelta(years=1, days=-1)
         lines = []
         for premium in self.premiums:
             lines.extend(premium.get_invoice_lines(self.start_date,
