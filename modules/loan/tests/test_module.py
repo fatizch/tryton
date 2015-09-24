@@ -67,19 +67,26 @@ class ModuleTestCase(test_framework.CoopTestCase):
         company, = self.Company().search([], limit=1)
         self.Sequence(name='Loan', code='loan', company=company).save()
 
-    def assert_payment(self, loan, at_date, number, begin_balance, amount,
-            principal, interest, outstanding_balance):
+    def assert_payment(self, loan, at_date, number=None,
+            begin_balance=None, amount=None, principal=None, interest=None,
+            outstanding_balance=None):
         payment = loan.get_payment(at_date)
         self.assert_(payment)
-        self.assertEqual(payment.number, number)
-        self.assertEqual(payment.begin_balance, begin_balance)
-        self.assertEqual(payment.amount, amount)
-        self.assertEqual(payment.principal, principal)
-        self.assertEqual(payment.interest, interest)
-        self.assertEqual(payment.outstanding_balance, outstanding_balance)
+        if number:
+            self.assertEqual(payment.number, number)
+        if begin_balance:
+            self.assertEqual(payment.begin_balance, Decimal(begin_balance))
+        if amount:
+            self.assertEqual(payment.amount, Decimal(amount))
+        if principal:
+            self.assertEqual(payment.principal, Decimal(principal))
+        if interest:
+            self.assertEqual(payment.interest, Decimal(interest))
+        if outstanding_balance:
+            self.assertEqual(payment.outstanding_balance,
+                Decimal(outstanding_balance))
 
     @test_framework.prepare_test(
-        'contract_insurance.test0001_testPersonCreation',
         'loan.test0010loan_basic_data',
         )
     def test0037loan_creation(self):
@@ -261,8 +268,141 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(loan.payments[2].start_date,
             datetime.date(2016, 3, 27))
 
+        # Test Loan Modification at current date
+        loan = self.Loan(
+            kind='fixed_rate',
+            rate=Decimal('0.033'),
+            funds_release_date=datetime.date(2013, 4, 15),
+            first_payment_date=datetime.date(2013, 5, 15),
+            payment_frequency='month',
+            amount=Decimal('171848.22'),
+            duration=Decimal('252'),
+            duration_unit='month',
+            currency=currency,
+            company=company)
+        loan.deferal = 'partially'
+        loan.deferal_duration = 12
+        loan.calculate()
+        self.assert_payment(loan, datetime.date(2034, 3, 15), 251,
+            begin_balance='1950.18', amount='979.08',
+            principal='973.72', interest='5.36',
+            outstanding_balance='976.46')
+        loan.save()
+
+        # Add manual increment at effective date
+        increment = self.LoanIncrement(
+            start_date=datetime.date(2015, 7, 15),
+            begin_balance=Decimal('166199.5'),
+            number_of_payments=229,
+            rate=Decimal('0.024'),
+            payment_frequency='month',
+            loan=loan,
+            manual=True)
+        increment.payment_amount = increment.on_change_with_payment_amount()
+        loan.increments = list(loan.increments) + [increment]
+        loan.save()
+        loan.calculate()
+        loan.save()
+        self.assertEqual(list(loan.increments)[1].number_of_payments, 14)
+        self.assertEqual(loan.duration, 255)
+        self.assert_payment(loan, datetime.date(2034, 5, 15), 253,
+            begin_balance='2704.24', amount='905.32',
+            principal='899.91', interest='5.41',
+            outstanding_balance='1804.33')
+
+        # Test synchronized date
+        increment = self.LoanIncrement(
+            start_date=datetime.date(2015, 6, 5),
+            begin_balance=Decimal('166199.5'),
+            number_of_payments=225,
+            rate=Decimal('0.024'),
+            payment_frequency='month',
+            loan=loan,
+            manual=True)
+        increment.payment_amount = increment.on_change_with_payment_amount()
+        loan.increments = list(loan.increments) + [increment]
+        loan.calculate()
+        loan.save()
+        increment_2 = list(loan.increments)[1]
+        increment_3 = list(loan.increments)[2]
+        self.assertEqual(increment_2.number_of_payments, 13)
+        self.assertEqual(increment_2.end_date, datetime.date(2015, 5, 15))
+        self.assertEqual(increment_3.start_date, datetime.date(2015, 6, 5))
+        self.assertEqual(increment_3.end_date, datetime.date(2034, 2, 5))
+
+        # Test manual increment with graduated loan
+        loan = self.Loan(
+            kind='graduated',
+            rate=Decimal('0.038'),
+            funds_release_date=datetime.date(2013, 4, 15),
+            first_payment_date=datetime.date(2013, 5, 15),
+            payment_frequency='month',
+            amount=Decimal('65087'),
+            duration=Decimal('312'),
+            duration_unit='month',
+            currency=currency,
+            company=company)
+        loan.increments = [
+            self.LoanIncrement(
+                number_of_payments=12,
+                deferal='partially',
+                rate=loan.rate,
+                payment_amount=Decimal('206.12'),
+                payment_frequency=loan.payment_frequency,
+                ),
+            self.LoanIncrement(
+                number_of_payments=240,
+                rate=loan.rate,
+                payment_amount=Decimal('207.12'),
+                payment_frequency=loan.payment_frequency,
+                ),
+            self.LoanIncrement(
+                number_of_payments=60,
+                begin_balance=Decimal('64724.40'),
+                rate=loan.rate,
+                payment_amount=Decimal('1186.20'),
+                payment_frequency=loan.payment_frequency,
+                ),
+            ]
+        loan.calculate()
+        loan.save()
+
+        loan.increments = list(loan.increments) + [
+            self.LoanIncrement(
+                start_date=datetime.date(2015, 7, 15),
+                begin_balance=Decimal('65074.66'),
+                number_of_payments=288,
+                rate=Decimal('0.024'),
+                payment_amount=Decimal('300'),
+                payment_frequency='month',
+                loan=loan,
+                manual=True,
+                ),
+            self.LoanIncrement(
+                start_date=datetime.date(2034, 7, 15),
+                begin_balance=Decimal('16070.03'),
+                number_of_payments=12,
+                rate=Decimal('0.024'),
+                payment_frequency='month',
+                payment_amount=Decimal('1356.64'),
+                loan=loan,
+                manual=True,
+                )]
+        loan.save()
+        loan.calculate()
+        loan.save()
+        self.assertEqual(loan.increments[2].number_of_payments, 228)
+        self.assertEqual(loan.duration, 266)
+        self.assert_payment(loan, datetime.date(2034, 6, 15), 254,
+            begin_balance='16337.36', amount='300',
+            principal='267.33', interest='32.67',
+            outstanding_balance='16070.03')
+        self.assert_payment(loan, datetime.date(2035, 6, 15), 266,
+            begin_balance='1353.97', amount='1356.68',
+            principal='1353.97', interest='2.71',
+            outstanding_balance='0')
+
     @test_framework.prepare_test(
-        'contract_insurance.test0001_testPersonCreation',
         'loan.test0010loan_basic_data',
         )
     def test0038loan_payment_dates(self):
@@ -297,7 +437,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             datetime.date(2014, 11, 30))
 
     @test_framework.prepare_test(
-        'contract_insurance.test0001_testPersonCreation',
         'loan.test0010loan_basic_data',
         )
     def test0039intermediate_loan_last_payment(self):

@@ -13,8 +13,10 @@
     </notebook>
     <label name="state"/>
     <field name="state"/>
-    <group col="2" colspan="2" id="buttons">
-        <button name="draft" string="_Draft" icon="tryton-go-previous"/>
+    <group col="99" colspan="2" id="buttons">
+        <button name="draft" string="_Modify" icon="tryton-go-previous"/>
+        <button name="add_manual_increment" string="_Insert Manual Increment" icon="tryton-open"/>
         <button name="calculate_loan" string="Calculate Amortization Table" icon="tryton-go-next"/>
     </group>
+    <newline/>
 </form>

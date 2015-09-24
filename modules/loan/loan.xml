@@ -113,6 +113,11 @@
             <field name="type">tree</field>
             <field name="name">loan_increment_tree</field>
         </record>
+        <record model="ir.ui.view" id="loan_increment_view_form">
+            <field name="model">loan.increment</field>
+            <field name="type">form</field>
+            <field name="name">loan_increment_form</field>
+        </record>
         <!-- Default : no access -->
         <record model="ir.model.access" id="default_access_loan">
             <field name="model" search="[('model', '=', 'loan')]"/>
@@ -161,6 +166,10 @@
             <field name="keyword">form_relate</field>
             <field name="model">loan,-1</field>
             <field name="action" ref="act_loan_payment_relate_form"/>
+        </record>
+        <record model="ir.action.wizard" id="act_add_manual_increment">
+            <field name="name">Add Manual Increment</field>
+            <field name="wiz_name">loan.increment.create</field>
         </record>
     </data>
 </tryton>

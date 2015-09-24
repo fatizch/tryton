@@ -15,6 +15,10 @@ msgctxt "error:contract:"
 msgid "There must be at least one loan"
 msgstr "Il doit y avoir au moins un prêt"
 
+msgctxt "error:loan.increment:"
+msgid "Number of payments must be > 0"
+msgstr "Le nombre de paiements doit être > 0"
+
 msgctxt "error:loan:"
 msgid "No loan sequence defined"
 msgstr "Pas de séquence de prêt définie"
@@ -199,6 +203,10 @@ msgctxt "field:loan,current_loan_shares:"
 msgid "Current Loan Share"
 msgstr "Quotité courante"
 
+msgctxt "field:loan,dates_are_calculated:"
+msgid "Dates are calculated"
+msgstr "Les dates sont calculées"
+
 msgctxt "field:loan,deferal:"
 msgid "Deferal"
 msgstr "Différé"
@@ -206,6 +214,10 @@ msgstr "Différé"
 msgctxt "field:loan,deferal_duration:"
 msgid "Deferal Duration"
 msgstr "Durée du Différé"
+
+msgctxt "field:loan,display_warning:"
+msgid "Warning"
+msgstr "Avertissement"
 
 msgctxt "field:loan,duration:"
 msgid "Duration"
@@ -323,6 +335,10 @@ msgctxt "field:loan.increment,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
+msgctxt "field:loan.increment,dates_are_calculated:"
+msgid "Dates are calculated"
+msgstr "Les dates sont calculées"
+
 msgctxt "field:loan.increment,deferal:"
 msgid "Deferal"
 msgstr "Différé"
@@ -342,6 +358,10 @@ msgstr "ID"
 msgctxt "field:loan.increment,loan:"
 msgid "Loan"
 msgstr "Prêt"
+
+msgctxt "field:loan.increment,manual:"
+msgid "Manual"
+msgstr "Manuel"
 
 msgctxt "field:loan.increment,number:"
 msgid "Number"
@@ -664,6 +684,10 @@ msgctxt "model:ir.action,name:"
 msgid "Loan Share Propagation"
 msgstr "Propager Quotité"
 
+msgctxt "model:ir.action,name:act_add_manual_increment"
+msgid "Add Manual Increment"
+msgstr "Ajouter un palier manuel"
+
 msgctxt "model:ir.action,name:act_display_insured_outstanding_loan_balance"
 msgid "Insured Outstanding Loan Balances"
 msgstr "Encours"
@@ -894,6 +918,10 @@ msgid "%"
 msgstr "%"
 
 msgctxt "view:loan.increment:"
+msgid "Loan Increment"
+msgstr "Palier"
+
+msgctxt "view:loan.increment:"
 msgid "Loan Increments"
 msgstr "Paliers"
 
@@ -958,8 +986,12 @@ msgid "Quota share"
 msgstr "Quotité"
 
 msgctxt "view:loan:"
-msgid "_Draft"
-msgstr "_Brouillon"
+msgid "_Insert Manual Increment"
+msgstr "_Insérer un palier manuel"
+
+msgctxt "view:loan:"
+msgid "_Modify"
+msgstr "_Modifier"
 
 msgctxt "view:party.display_insured_outstanding_loan_balance.line_view:"
 msgid "Insurer"
@@ -980,6 +1012,14 @@ msgstr "Encours assurés"
 msgctxt "view:party.party:"
 msgid "Loan Information"
 msgstr "Emprunteur"
+
+msgctxt "wizard_button:loan.increment.create,increment,create_increment:"
+msgid "Create"
+msgstr "Créer"
+
+msgctxt "wizard_button:loan.increment.create,increment,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt ""
 "wizard_button:party.display_insured_outstanding_loan_balance,insured_outstanding_loan_balance_view,end:"
