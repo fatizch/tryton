@@ -1,4 +1,4 @@
-from trytond.pyson import Eval, Len, Bool
+from trytond.pyson import Eval, Len
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.cog_utils import model, fields
@@ -101,8 +101,9 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
                 instance.beneficiaries = []
                 for beneficiary in option.beneficiaries:
                     if beneficiary.action == 'add':
-                        instance.beneficiaries.append(
-                            Beneficiary(**beneficiary.values))
+                        instance.beneficiaries = list(
+                            instance.beneficiaries) + [Beneficiary(
+                                **beneficiary.values)]
                     elif beneficiary.action == 'remove':
                         old_beneficiaries.remove(beneficiary.beneficiary)
                     else:
