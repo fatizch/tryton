@@ -449,7 +449,8 @@ def values_mixin(value_model):
                         v = Date.date_as_string(v, lang)
                     vals.append((k, field, prev_value, v))
                 else:
-                    vals.append((k, field, prev_value, v or ''))
+                    vals.append((k, field, prev_value, v if v is not None
+                            else ''))
             for fname, target_fname in \
                     self.__class__._endorsed_dicts.iteritems():
                 if base_object:
