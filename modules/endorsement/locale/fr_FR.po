@@ -1349,6 +1349,10 @@ msgctxt "field:endorsement.definition,preview_state:"
 msgid "Preview States"
 msgstr "Aperçu à utiliser"
 
+msgctxt "field:endorsement.definition,active:"
+msgid "Active"
+msgstr "Actif"
+
 msgctxt "field:endorsement.definition,products:"
 msgid "Products"
 msgstr "Produits"

@@ -40,6 +40,7 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
         'endorsement.definition-endorsement.part', 'definition',
         'Endorsement Parts', delete_missing=True)
     preview_state = fields.Selection('get_preview_states', 'Preview States')
+    active = fields.Boolean('Active')
     preview_state_string = preview_state.translated('preview_state')
     products = fields.Many2Many('endorsement.definition-product',
         'endorsement_definition', 'product', 'Products')

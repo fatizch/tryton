@@ -6,6 +6,8 @@
     <field name="code"/>
     <label name="preview_state"/>
     <field name="preview_state"/>
+    <label name="active"/>
+    <field name="active"/>
     <newline/>
     <notebook>
         <page name="ordered_endorsement_parts">
