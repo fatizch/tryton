@@ -16,6 +16,10 @@ __all__ = [
 class Endorsement:
     __name__ = 'endorsement'
 
+    generated_sets_processes_over = fields.Function(
+        fields.Boolean('All Processes On Generated Endorsement Sets Are Over'),
+        'get_generated_sets_processes_over')
+
     @classmethod
     def endorse_contracts(cls, contracts, endorsement_definition, origin=None):
         pool = Pool()
@@ -37,6 +41,10 @@ class Endorsement:
             endorsement.current_state = None
         cls.save(endorsements)
         return endorsements
+
+    def get_generated_sets_processes_over(self, name):
+        return all([not x.current_state for x in
+                self.generated_endorsement_sets])
 
 
 class EndorsementSet(CogProcessFramework):

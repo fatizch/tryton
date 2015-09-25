@@ -35,6 +35,11 @@ msgctxt "field:endorsement,contracts_name:"
 msgid "Contracts Name"
 msgstr "Numéros des contrats"
 
+msgctxt "field:endorsement,generated_sets_processes_over:"
+msgid "All Processes On Generated Endorsement Sets Are Over"
+msgstr ""
+"Tous les processus sur les ensembles d'avenants générés sont terminés."
+
 msgctxt "field:endorsement.set,attachments:"
 msgid "Attachments"
 msgstr "Pièces jointes"
