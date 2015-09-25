@@ -64,6 +64,10 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
         return (super(EndorsementDefinition, cls)._export_skips() |
             set(['products']))
 
+    @classmethod
+    def default_active(cls):
+        return True
+
     def get_is_multi_instance(self, name):
         pool = Pool()
         StartEndorsement = pool.get('endorsement.start', type='wizard')
