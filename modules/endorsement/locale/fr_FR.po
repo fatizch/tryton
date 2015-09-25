@@ -66,6 +66,22 @@ msgctxt "error:endorsement.contract.open:"
 msgid "Endorsement is not yet applied"
 msgstr "L'avenant n'est pas encore appliqué"
 
+msgctxt "error:endorsement.contract.option.version:"
+msgid "New Option Version"
+msgstr "Nouvelle version de la garantie"
+
+msgctxt "error:endorsement.contract.option.version:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.contract.option.version:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.contract.option.version:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
 msgctxt "error:endorsement.contract.option:"
 msgid "New Coverage: %s"
 msgstr "Nouvelle garantie : %s"
@@ -81,6 +97,10 @@ msgstr "Suppression de la version"
 msgctxt "error:endorsement.contract.option:"
 msgid "Update %s"
 msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract.option:"
+msgid "Versions Modifications"
+msgstr "Modification des versions"
 
 msgctxt "error:endorsement.contract.terminate:"
 msgid ""
@@ -170,6 +190,102 @@ msgstr "Dernier avenant"
 msgctxt "field:contract,logs:"
 msgid "Task"
 msgstr "Tâche"
+
+msgctxt "field:contract.manage_options,all_options:"
+msgid "All Options"
+msgstr "Toutes les garanties"
+
+msgctxt "field:contract.manage_options,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.manage_options,current_options:"
+msgid "Current Options"
+msgstr "Garanties sélectionnées"
+
+msgctxt "field:contract.manage_options,current_parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:contract.manage_options,effective_date:"
+msgid "Effective Date"
+msgstr "Date d'effet"
+
+msgctxt "field:contract.manage_options,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:contract.manage_options,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:contract.manage_options,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_options,new_coverage:"
+msgid "New Coverage"
+msgstr "Nouvelle garantie"
+
+msgctxt "field:contract.manage_options,possible_coverages:"
+msgid "Possible Coverages"
+msgstr "Garanties disponibles"
+
+msgctxt "field:contract.manage_options,possible_parents:"
+msgid "Possible Parents"
+msgstr "Parents possibles"
+
+msgctxt "field:contract.manage_options.option_displayer,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:contract.manage_options.option_displayer,coverage_id:"
+msgid "Coverage Id"
+msgstr "Garantie offerte"
+
+msgctxt "field:contract.manage_options.option_displayer,cur_option_id:"
+msgid "Existing Option"
+msgstr "Garantie existante"
+
+msgctxt "field:contract.manage_options.option_displayer,display_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.manage_options.option_displayer,effective_date:"
+msgid "Effective Date"
+msgstr "Date d'effet"
+
+msgctxt "field:contract.manage_options.option_displayer,end_date:"
+msgid "End Date"
+msgstr "Date de fin"
+
+msgctxt "field:contract.manage_options.option_displayer,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:contract.manage_options.option_displayer,extra_data_as_string:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:contract.manage_options.option_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_options.option_displayer,parent:"
+msgid "Parent Reference"
+msgstr "Parent"
+
+msgctxt "field:contract.manage_options.option_displayer,parent_rec_name:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:contract.manage_options.option_displayer,start_date:"
+msgid "Start Date"
+msgstr "Date de début"
+
+msgctxt "field:contract.manage_options.option_displayer,sub_status:"
+msgid "Sub Status"
+msgstr "Sous Statut"
 
 msgctxt "field:endorsement,applicant:"
 msgid "Applicant"
@@ -881,6 +997,14 @@ msgctxt "field:endorsement.contract.option,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:endorsement.contract.option,manual_end_date:"
+msgid "End Date"
+msgstr "Date de fin"
+
+msgctxt "field:endorsement.contract.option,manual_start_date:"
+msgid "Start Date"
+msgstr "Date de début"
+
 msgctxt "field:endorsement.contract.option,option:"
 msgid "Options"
 msgstr "Options"
@@ -896,6 +1020,10 @@ msgstr "Relation"
 msgctxt "field:endorsement.contract.option,values:"
 msgid "Values"
 msgstr "Valeurs"
+
+msgctxt "field:endorsement.contract.option,versions:"
+msgid "Versions Endorsements"
+msgstr "Modification de versions des garanties"
 
 msgctxt "field:endorsement.contract.option,write_date:"
 msgid "Write Date"
@@ -954,6 +1082,122 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:endorsement.contract.option.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.option.version,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.contract.option.version,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.contract.option.version,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.option.version,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.option.version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.option.version,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.contract.option.version,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:endorsement.contract.option.version,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.contract.option.version,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.option.version,option_endorsement:"
+msgid "Endorsement"
+msgstr "Modèle d'Avenant"
+
+msgctxt "field:endorsement.contract.option.version,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.option.version,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.contract.option.version,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.contract.option.version,version:"
+msgid "Versions"
+msgstr "Versions"
+
+msgctxt "field:endorsement.contract.option.version,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.option.version,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.option.version,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.option.version.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.option.version.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.option.version.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.option.version.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.contract.option.version.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.option.version.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.contract.option.version.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.option.version.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.option.version.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.option.version.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.option.version.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.option.version.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -1443,6 +1687,14 @@ msgctxt "field:offered.product,endorsement_definitions:"
 msgid "Endorsement Definitions"
 msgstr "Définitions d'avenant"
 
+msgctxt "model:contract.manage_options,name:"
+msgid "Manage Options"
+msgstr "Gérer les options"
+
+msgctxt "model:contract.manage_options.option_displayer,name:"
+msgid "Option Displayer"
+msgstr "Garantie"
+
 msgctxt "model:endorsement,name:"
 msgid "Endorsement"
 msgstr "Avenant"
@@ -1499,6 +1751,14 @@ msgctxt "model:endorsement.contract.option.field,name:"
 msgid "Endorsement Option Field"
 msgstr "Champs de la garantie souscrite"
 
+msgctxt "model:endorsement.contract.option.version,name:"
+msgid "Endorsement Option Version"
+msgstr "Modification de version de garantie"
+
+msgctxt "model:endorsement.contract.option.version.field,name:"
+msgid "Endorsement Option Version Field"
+msgstr "Champ de version de garantie"
+
 msgctxt "model:endorsement.contract.subscriber_change,name:"
 msgid "Change Contract Subscriber"
 msgstr "Changement de souscripteur"
@@ -1542,6 +1802,10 @@ msgstr "Relation entre définition d'avenant et produit"
 msgctxt "model:endorsement.part,name:"
 msgid "Endorsement Part"
 msgstr "Avenant unitaire"
+
+msgctxt "model:endorsement.part,name:manage_options_revision_part"
+msgid "Manage Options"
+msgstr "Gérer les options"
 
 msgctxt "model:endorsement.part,name:reactivate_contract_revision_part"
 msgid "reactivate Contract"
@@ -1669,6 +1933,26 @@ msgctxt "model:res.group,name:group_endorsement_super_user"
 msgid "Endorsement Super User"
 msgstr "Super gestionnaire avenant"
 
+msgctxt "selection:contract.manage_options.option_displayer,action:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:contract.manage_options.option_displayer,action:"
+msgid "Added"
+msgstr "Ajoutée"
+
+msgctxt "selection:contract.manage_options.option_displayer,action:"
+msgid "Modified"
+msgstr "Modifiée"
+
+msgctxt "selection:contract.manage_options.option_displayer,action:"
+msgid "Terminated"
+msgstr "Résiliée"
+
+msgctxt "selection:contract.manage_options.option_displayer,action:"
+msgid "Void"
+msgstr "Sans Effet"
+
 msgctxt "selection:endorsement,state:"
 msgid "Applied"
 msgstr "Appliqué"
@@ -1745,6 +2029,18 @@ msgctxt "selection:endorsement.contract.option,action:"
 msgid "Update"
 msgstr "Mise à jour"
 
+msgctxt "selection:endorsement.contract.option.version,action:"
+msgid "Add"
+msgstr "Ajouter"
+
+msgctxt "selection:endorsement.contract.option.version,action:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:endorsement.contract.option.version,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
 msgctxt "selection:endorsement.part,kind:"
 msgid "Activation Dates"
 msgstr "Périodes d'activation"
@@ -1764,6 +2060,22 @@ msgstr "Option"
 msgctxt "selection:endorsement.sub_state,state:"
 msgid "Declined"
 msgstr "Décliné"
+
+msgctxt "view:contract.manage_options.option_displayer:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "view:contract.manage_options.option_displayer:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "view:contract.manage_options:"
+msgid "Add Option"
+msgstr "Souscrire une garantie"
+
+msgctxt "view:contract.manage_options:"
+msgid "Manage Options"
+msgstr "Gérer les Options"
 
 msgctxt "view:contract:"
 msgid "Start Endorsement"
@@ -2019,6 +2331,24 @@ msgstr "Suspendre"
 msgctxt "wizard_button:endorsement.start,change_start_date,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,manage_options,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,manage_options,manage_options_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_options,manage_options_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_options,manage_options_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
 
 msgctxt "wizard_button:endorsement.start,select_endorsement,cancel:"
 msgid "Cancel"

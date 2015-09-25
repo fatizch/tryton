@@ -17,6 +17,27 @@
             <field name="type">form</field>
             <field name="name">endorsement_change_contract_extra_data_form</field>
         </record>
+        <!-- ################## -->
+        <!-- # Manage Options # -->
+        <!-- ################## -->
+        <record model="ir.ui.view" id="contract_manage_options_view_form">
+            <field name="model">contract.manage_options</field>
+            <field name="type">form</field>
+            <field name="name">contract_manage_options_form</field>
+        </record>
+        <!-- #################### -->
+        <!-- # Option Displayer # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="contract_manage_options_option_displayer_view_form">
+            <field name="model">contract.manage_options.option_displayer</field>
+            <field name="type">form</field>
+            <field name="name">contract_manage_options_option_displayer_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_manage_options_option_displayer_view_list">
+            <field name="model">contract.manage_options.option_displayer</field>
+            <field name="type">tree</field>
+            <field name="name">contract_manage_options_option_displayer_list</field>
+        </record>
         <!-- ####################### -->
         <!-- # Terminate Contract    -->
         <!-- ####################### -->

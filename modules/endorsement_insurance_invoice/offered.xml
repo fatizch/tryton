@@ -128,5 +128,11 @@
             <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'direct_debit_account')]"/>
             <field name="endorsement_part" ref="change_direct_debit_account_endorsement_part"/>
         </record>
+        <!-- ################## -->
+        <!-- # Manage Options # -->
+        <!-- ################## -->
+        <record model="endorsement.part" id="endorsement.manage_options_revision_part">
+            <field name="requires_contract_rebill" eval="True"/>
+        </record>
     </data>
 </tryton>

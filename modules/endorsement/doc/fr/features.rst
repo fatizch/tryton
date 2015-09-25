@@ -20,5 +20,10 @@
   permet de se rendre compte des modifications apportées par l'avenant en
   termes par exemple de primes calculées sur le contrat.
 
+- **Avenant de gestion des garanties :** Permet de gérer les garanties après
+  souscription du contrat. Cela inclut la souscription de nouvelles garanties,
+  la résiliation de garanties existantes, ainsi que la modification des données
+  complémentaires sur des garanties en cours.
+
 - **Outils de développement :** Un ensemble d'outils sont mis à disposition
   des développeurs pour faciliter l'écriture de nouveaux avenants.

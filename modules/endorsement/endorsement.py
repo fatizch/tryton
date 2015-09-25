@@ -38,6 +38,7 @@ __all__ = [
     'Endorsement',
     'EndorsementContract',
     'EndorsementOption',
+    'EndorsementOptionVersion',
     'EndorsementActivationHistory',
     'EndorsementExtraData',
     'EndorsementContact',
@@ -1656,7 +1657,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
     @classmethod
     def _get_restore_history_order(cls):
         return ['contract', 'contract.activation_history', 'contract.option',
-            'contract.extra_data']
+            'contract.extra_data', 'contract.option.version']
 
     def do_restore_history(self):
         pool = Pool()
@@ -1681,6 +1682,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 contract.activation_history
             instances['contract.extra_data'] += \
                 contract.extra_datas
+        for option in contract.options:
+            instances['contract.option.version'] += option.versions
 
     @classmethod
     def draft(cls, contract_endorsements):
@@ -1892,12 +1895,20 @@ class EndorsementOption(relation_mixin(
 
     contract_endorsement = fields.Many2One('endorsement.contract',
         'Endorsement', required=True, select=True, ondelete='CASCADE')
+    versions = fields.One2Many('endorsement.contract.option.version',
+        'option_endorsement', 'Versions Endorsements', delete_missing=True)
     coverage = fields.Function(
         fields.Many2One('offered.option.description', 'Coverage'),
         'on_change_with_coverage')
     definition = fields.Function(
         fields.Many2One('endorsement.definition', 'Definition'),
         'get_definition')
+    manual_start_date = fields.Function(
+        fields.Date('Start Date'),
+        '')
+    manual_end_date = fields.Function(
+        fields.Date('End Date'),
+        '')
 
     @classmethod
     def __setup__(cls):
@@ -1906,6 +1917,7 @@ class EndorsementOption(relation_mixin(
         cls.values.depends = ['definition']
         cls._error_messages.update({
                 'new_coverage': 'New Coverage: %s',
+                'mes_versions_modification': 'Versions Modifications',
                 })
 
     @classmethod
@@ -1929,9 +1941,79 @@ class EndorsementOption(relation_mixin(
         return '%s : %s' % (self.raise_user_error('new_coverage',
                 raise_exception=False), self.coverage.rec_name)
 
+    def apply_values(self):
+        values = super(EndorsementOption, self).apply_values()
+        version_values = []
+        for version in self.versions:
+            version_values.append(version.apply_values())
+        if version_values:
+            if self.action == 'add':
+                values[1][0]['versions'] = version_values
+            elif self.action == 'update':
+                values[2]['versions'] = version_values
+        return values
+
+    def get_summary(self, model, base_object=None):
+        result = super(EndorsementOption, self).get_summary(model,
+            base_object)
+        if self.action == 'remove':
+            return result
+        option_summary = [x.get_summary('contract.option.version', x.version)
+            for x in self.versions]
+        if option_summary:
+            result.append(['option_version_change_section', '%s :' % (
+                        self.raise_user_error('mes_option_modifications',
+                            raise_exception=False)), option_summary])
+        return result
+
     @classmethod
     def updated_struct(cls, option):
         return {}
+
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return {'contract'}
+
+
+class EndorsementOptionVersion(relation_mixin(
+            'endorsement.contract.option.version.field', 'version',
+            'contract.option.version', 'Versions'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Option Version'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.contract.option.version'
+
+    option_endorsement = fields.Many2One('endorsement.contract.option',
+        'Endorsement', required=True, select=True, ondelete='CASCADE')
+    definition = fields.Function(
+        fields.Many2One('endorsement.definition', 'Definition'),
+        'get_definition')
+    extra_data = fields.Dict('extra_data', 'Extra Data')
+
+    @classmethod
+    def __setup__(cls):
+        super(EndorsementOptionVersion, cls).__setup__()
+        cls.values.domain = [('definition', '=', Eval('definition'))]
+        cls.values.depends = ['definition']
+        cls._error_messages.update({
+                'new_option_version': 'New Option Version',
+                })
+        cls._endorsed_dicts = {'extra_data': 'extra_data'}
+
+    @classmethod
+    def default_definition(cls):
+        return Transaction().context.get('definition', None)
+
+    def get_definition(self, name):
+        return self.option_endorsement.definition.id
+
+    def get_rec_name(self, name):
+        return '%s' % (self.raise_user_error('new_option_version',
+                raise_exception=False))
+
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return {'option'}
 
 
 class EndorsementActivationHistory(relation_mixin(

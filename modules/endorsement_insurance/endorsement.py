@@ -18,6 +18,7 @@ __all__ = [
     'EndorsementContract',
     'EndorsementCoveredElement',
     'EndorsementCoveredElementOption',
+    'EndorsementCoveredElementOptionVersion',
     'EndorsementExtraPremium',
     ]
 
@@ -117,6 +118,8 @@ class EndorsementContract:
             instances['contract.covered_element'] += contract.covered_elements
             for covered_element in contract.covered_elements:
                 instances['contract.option'] += covered_element.options
+                for option in covered_element.options:
+                    instances['contract.option.version'] += option.versions
         for option in instances['contract.option']:
             instances['contract.option.extra_premium'] += option.extra_premiums
 
@@ -178,6 +181,12 @@ class EndorsementCoveredElement(relation_mixin(
     definition = fields.Function(
         fields.Many2One('endorsement.definition', 'Definition'),
         'get_definition')
+    party = fields.Function(
+        fields.Many2One('party.party', 'Party'),
+        '')
+    item_desc = fields.Function(
+        fields.Many2One('offered.item.description', 'Item Description'),
+        '')
 
     @classmethod
     def __setup__(cls):
@@ -270,6 +279,10 @@ class EndorsementCoveredElement(relation_mixin(
         cov_rec_name = CoveredElement(**tmp_values).get_rec_name(None)
         return ', '.join([cov_rec_name, birth_date_str])
 
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return {'options'}
+
 
 class EndorsementCoveredElementOption(relation_mixin(
             'endorsement.contract.option.field', 'option', 'contract.option',
@@ -282,6 +295,9 @@ class EndorsementCoveredElementOption(relation_mixin(
     covered_element_endorsement = fields.Many2One(
         'endorsement.contract.covered_element', 'Covered Element Endorsement',
         required=True, select=True, ondelete='CASCADE')
+    versions = fields.One2Many(
+        'endorsement.contract.covered_element.option.version',
+        'option_endorsement', 'Versions Endorsements', delete_missing=True)
     extra_premiums = fields.One2Many('endorsement.contract.extra_premium',
         'covered_option_endorsement', 'Extra Premium Endorsement',
         delete_missing=True)
@@ -291,6 +307,12 @@ class EndorsementCoveredElementOption(relation_mixin(
     definition = fields.Function(
         fields.Many2One('endorsement.definition', 'Definition'),
         'get_definition')
+    manual_start_date = fields.Function(
+        fields.Date('Start Date'),
+        '')
+    manual_end_date = fields.Function(
+        fields.Date('End Date'),
+        '')
 
     @classmethod
     def __setup__(cls):
@@ -299,6 +321,7 @@ class EndorsementCoveredElementOption(relation_mixin(
         cls.values.depends = ['definition']
         cls._error_messages.update({
                 'new_coverage': 'New Coverage: %s',
+                'mes_versions_modification': 'Versions Modifications',
                 'mes_extra_premium_modifications':
                 'Extra Premium Modification',
                 })
@@ -329,6 +352,12 @@ class EndorsementCoveredElementOption(relation_mixin(
             model, base_object)
         if self.action == 'remove':
             return result
+        option_summary = [x.get_summary('contract.option.version', x.version)
+            for x in self.versions]
+        if option_summary:
+            result.append(['option_version_change_section', '%s :' % (
+                        self.raise_user_error('mes_option_modifications',
+                            raise_exception=False)), option_summary])
         extra_premium_summary = [x.get_summary('contract.option.extra_premium',
                 x.extra_premium) for x in self.extra_premiums]
         if extra_premium_summary:
@@ -339,7 +368,14 @@ class EndorsementCoveredElementOption(relation_mixin(
 
     def apply_values(self):
         values = super(EndorsementCoveredElementOption, self).apply_values()
-        extra_premium_values = []
+        version_values, extra_premium_values = [], []
+        for version in self.versions:
+            version_values.append(version.apply_values())
+        if version_values:
+            if self.action == 'add':
+                values[1][0]['versions'] = version_values
+            elif self.action == 'update':
+                values[2]['versions'] = version_values
         for extra_premium in self.extra_premiums:
             extra_premium_values.append(extra_premium.apply_values())
         if extra_premium_values:
@@ -377,6 +413,52 @@ class EndorsementCoveredElementOption(relation_mixin(
                 for x in (element.new_extra_premiums
                     if isinstance(element, cls)
                     else element.extra_premiums)}}
+
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return {'covered_element', 'contract'}
+
+
+class EndorsementCoveredElementOptionVersion(relation_mixin(
+            'endorsement.contract.option.version.field', 'version',
+            'contract.option.version', 'Versions'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Option Version'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.contract.covered_element.option.version'
+
+    option_endorsement = fields.Many2One(
+        'endorsement.contract.covered_element.option', 'Endorsement',
+        required=True, select=True, ondelete='CASCADE')
+    extra_data = fields.Dict('extra_data', 'Extra Data')
+    definition = fields.Function(
+        fields.Many2One('endorsement.definition', 'Definition'),
+        'get_definition')
+
+    @classmethod
+    def __setup__(cls):
+        super(EndorsementCoveredElementOptionVersion, cls).__setup__()
+        cls.values.domain = [('definition', '=', Eval('definition'))]
+        cls.values.depends = ['definition']
+        cls._error_messages.update({
+                'new_option_version': 'New Option Version',
+                })
+        cls._endorsed_dicts = {'extra_data': 'extra_data'}
+
+    @classmethod
+    def default_definition(cls):
+        return Transaction().context.get('definition', None)
+
+    def get_definition(self, name):
+        return self.option_definition.definition.id
+
+    def get_rec_name(self, name):
+        return '%s' % (self.raise_user_error('new_option_version',
+                raise_exception=False))
+
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return {'option'}
 
 
 class EndorsementExtraPremium(relation_mixin(

@@ -7,9 +7,17 @@ from trytond.model import Model, fields as tryton_fields
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.wizard import StateAction
-from trytond.pyson import Eval, Bool, And, Not, Len, If, PYSONEncoder
+from trytond.pyson import Eval, Bool, In, And, Not, Len, If, PYSONEncoder
 
-from trytond.modules.cog_utils import model, fields, utils
+from trytond.modules.cog_utils import model, fields, utils, coop_date
+
+OPTION_ACTIONS = [
+    ('nothing', ''),
+    ('terminated', 'Terminated'),
+    ('void', 'Void'),
+    ('modified', 'Modified'),
+    ('added', 'Added'),
+    ]
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -21,6 +29,8 @@ __all__ = [
     'OpenContractAtApplicationDate',
     'ChangeContractStartDate',
     'ChangeContractExtraData',
+    'ManageOptions',
+    'OptionDisplayer',
     'TerminateContract',
     'VoidContract',
     'ChangeContractSubscriber',
@@ -224,7 +234,7 @@ class EndorsementWizardStepMixin(object):
                     target_model = field.model_name
                 else:
                     target_model = pool.get(field.relation_name)._fields[
-                        fields.target].model_name
+                        field.target].model_name
                 new_name, new_field = endorsement._get_field_for_model(
                     target_model)
                 EndorsedModel = pool.get(new_field.model_name)
@@ -257,7 +267,9 @@ class EndorsementWizardStepMixin(object):
                             values.append(EndorsedModel(action='remove',
                                     relation=id_to_del))
                     else:
-                        raise Exception('unsupported operation')
+                        raise Exception(
+                            'unsupported operation on XXX2Many : %s' % str(
+                                action_data))
                 setattr(endorsement, new_name, values)
             elif isinstance(field, tryton_fields.Dict):
                 setattr(endorsement, endorsement._reversed_endorsed_dict[k], v)
@@ -488,6 +500,530 @@ class ChangeContractExtraData(EndorsementWizardStepMixin, model.CoopView):
     @classmethod
     def state_view_name(cls):
         return 'endorsement.endorsement_change_contract_extra_data_view_form'
+
+
+class ManageOptions(EndorsementWizardStepMixin, model.CoopView):
+    'Manage Options'
+    '''
+        This endorsement step allows to manage all options on a number of
+        contracts. It stores all possible options, and only displays those
+        relevant to the parent selected by the user :
+
+          - possible_parents : The list of possible parents. They may be :
+              > contract
+              > endorsement.contract
+              > anything else which has a list of options (e.g. covered_element
+                in endorsement_insurance)
+
+          - current_parent : The currently selected parent. The possible values
+            are calculated from the possible_parents field.
+
+          - current_options : The options (including modifications) related to
+            the currently selected parent.
+
+          - all_options : All possible options (including modifications) for
+            all possible parents. This is a way to store all data in the view
+            and just filter it by parent to get current_options.
+
+          - new_coverage : The coverage for which an option will be created
+            when the user clicks on the 'New Option' button
+
+          - possible_coverages : The possible coverages that may be added to
+            the current parent options. This list depends on the parent
+            (obviously), and on the current options (cannot subscriber an
+            already subscribed option at the endorsement effective date). It
+            also makes sure that coverage exclusions are satisfied.
+    '''
+
+    __name__ = 'contract.manage_options'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    current_parent = fields.Selection('get_possible_parents',
+        'Parent')
+    all_options = fields.One2Many('contract.manage_options.option_displayer',
+        None, 'All Options')
+    current_options = fields.One2Many(
+        'contract.manage_options.option_displayer', None, 'Current Options')
+    new_coverage = fields.Many2One('offered.option.description',
+        'New Coverage', domain=[('id', 'in', Eval('possible_coverages'))],
+        depends=['possible_coverages'])
+    possible_coverages = fields.Many2Many('offered.option.description', None,
+        None, 'Possible Coverages')
+    possible_parents = fields.Text('Possible Parents', readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(ManageOptions, cls).__setup__()
+        cls._buttons.update({'add_option': {
+                    'readonly': ~Eval('new_coverage'),
+                    'invisible': ~Eval('new_coverage')}})
+
+    @classmethod
+    def view_attributes(cls):
+        return super(ManageOptions, cls).view_attributes() + [(
+                '/form/group[@id="invisible"]',
+                'states',
+                {'invisible': True})]
+
+    @property
+    def _parent(self):
+        if not getattr(self, 'current_parent', None):
+            return None
+        parent_model, parent_id = self.current_parent.split(',')
+        return Pool().get(parent_model)(int(parent_id))
+
+    @fields.depends('possible_parents')
+    def get_possible_parents(self):
+        if not self.possible_parents:
+            return []
+        return [tuple(x.split('|', 1))
+            for x in self.possible_parents.split('\n')]
+
+    @fields.depends('all_options', 'contract', 'current_options',
+        'current_parent', 'effective_date', 'new_coverage',
+        'possible_coverages')
+    def on_change_current_parent(self):
+        self.update_contract()
+        self.update_all_options()
+        self.update_current_options()
+        self.update_possible_coverages()
+
+    @fields.depends('current_options', 'current_parent', 'effective_date',
+        'possible_coverages')
+    def on_change_current_options(self):
+        self.update_possible_coverages()
+
+    def calculate_possible_parents(self):
+        return list(self.wizard.endorsement.contract_endorsements)
+
+    def update_contract(self):
+        if isinstance(self._parent, Pool().get('endorsement.contract')):
+            self.contract = self._parent.contract
+        else:
+            raise NotImplementedError
+
+    def update_all_options(self):
+        if not self.current_options:
+            return
+        new_options = list(self.current_options)
+        for option in self.all_options:
+            if option.parent == new_options[0].parent:
+                continue
+            new_options.append(option)
+        self.all_options = new_options
+
+    def update_current_options(self):
+        new_options = []
+        coverage_order = {x.coverage.id: idx
+            for idx, x in enumerate(self.contract.product.ordered_coverages)}
+        for option in sorted(self.all_options, key=lambda x: (x.parent,
+                    coverage_order[x.coverage.id], x.start_date)):
+            if option.parent == self.current_parent:
+                new_options.append(option)
+        self.current_options = new_options
+
+    def update_possible_coverages(self):
+        self.new_coverage = None
+        current_coverages = {
+            x.coverage for x in self.current_options
+            if x.start_date <= self.effective_date
+            and x.action != 'void'
+            and (not x.end_date or x.end_date >= self.effective_date)}
+        exclusions = set(sum([
+                    list(x.options_excluded) for x in current_coverages], []))
+        self.possible_coverages = list(
+            self.get_all_possible_coverages(self._parent) - current_coverages
+            - exclusions)
+
+    def step_default(self, field_names):
+        defaults = super(ManageOptions, self).step_default()
+        possible_parents = self.calculate_possible_parents()
+        possible_parents = self.filtered_parents(possible_parents)
+        defaults['possible_parents'] = '\n'.join(
+            [str(x) + '|' + self.get_parent_name(x) for x in possible_parents])
+        per_parent = {x: self.get_options_from_parent(x)
+            for x in possible_parents}
+
+        all_options = []
+        for possible_parent, per_coverage in per_parent.iteritems():
+            all_options += self.generate_displayers(possible_parent,
+                per_coverage)
+        defaults['all_options'] = [x._changed_values for x in all_options]
+        if defaults['all_options']:
+            defaults['current_parent'] = defaults['all_options'][0]['parent']
+        return defaults
+
+    @classmethod
+    def filtered_parents(cls, possible_parents):
+        return [x for x in possible_parents if
+            cls.get_all_possible_coverages(x)]
+
+    def step_update(self):
+        self.update_all_options()
+        endorsement = self.wizard.endorsement
+        per_parent = defaultdict(list)
+        for option in self.all_options:
+            per_parent[option.parent].append(option)
+
+        contract_endorsements = {}
+        for contract_endorsement in endorsement.contract_endorsements:
+            contract = contract_endorsement.contract
+            utils.apply_dict(contract, contract_endorsement.apply_values())
+            contract_endorsements[contract.id] = contract
+
+        for parent, new_options in per_parent.iteritems():
+            self.current_parent = parent
+            parent = self.get_parent_endorsed(self._parent,
+                contract_endorsements)
+            existing_options = defaultdict(list)
+            for option in parent.options:
+                existing_options[option.coverage].append(option)
+            self.update_endorsed_options(new_options, parent, existing_options)
+            parent.options = list(parent.options)
+
+        new_endorsements = []
+        for contract_endorsement in endorsement.contract_endorsements:
+            self._update_endorsement(contract_endorsement,
+                contract_endorsement.contract._save_values)
+            if not contract_endorsement.clean_up():
+                new_endorsements.append(contract_endorsement)
+        endorsement.contract_endorsements = new_endorsements
+
+    def get_parent_endorsed(self, parent, contract_endorsements):
+        if isinstance(parent, Pool().get('endorsement.contract')):
+            return contract_endorsements[parent.contract.id]
+        else:
+            raise NotImplementedError
+
+    def update_endorsed_options(self, new_options, parent, existing_options):
+        per_id = {x.id: x for x in parent.options}
+        for new_option in new_options:
+            if new_option.action == 'nothing':
+                self._update_nothing(new_option, parent, existing_options,
+                    per_id)
+                continue
+            if new_option.action == 'void':
+                assert new_option.cur_option_id
+                self._update_void(new_option, parent, existing_options,
+                    per_id)
+                continue
+            if new_option.action == 'terminated':
+                self._update_terminated(new_option, parent, existing_options,
+                    per_id)
+                continue
+            if new_option.action == 'added':
+                self._update_added(new_option, parent, existing_options,
+                    per_id)
+                continue
+            if new_option.action == 'modified':
+                self._update_modified(new_option, parent, existing_options,
+                    per_id)
+                continue
+        # Remove deleted options
+        to_remove = []
+        for coverage in set(existing_options.keys()) - {x.coverage
+                for x in new_options}:
+            to_remove += existing_options[coverage]
+        parent.options = [x for x in parent.options if x not in to_remove]
+
+    def _update_nothing(self, new_option, parent, existing_options, per_id):
+        # Cancel modifications
+        assert new_option.cur_option_id
+        Option = Pool().get('contract.option')
+        prev_option = Option(new_option.cur_option_id)
+        option = per_id[new_option.cur_option_id]
+        option.versions = prev_option.versions
+        option.manual_end_date = prev_option.manual_end_date
+        option.status = prev_option.status
+        option.sub_status = prev_option.sub_status
+
+    def _update_void(self, new_option, parent, existing_options, per_id):
+        assert new_option.cur_option_id
+        existing_option = per_id[new_option.cur_option_id]
+        existing_option.status = new_option.action
+        existing_option.sub_status = new_option.sub_status
+
+    def _update_terminated(self, new_option, parent, existing_options, per_id):
+        assert new_option.cur_option_id
+        existing_option = per_id[new_option.cur_option_id]
+        existing_option.status = new_option.action
+        existing_option.sub_status = new_option.sub_status
+        existing_option.manual_end_date = new_option.end_date
+
+    def _update_added(self, new_option, parent, existing_options, per_id):
+        for option in existing_options[new_option.coverage]:
+            if getattr(option, 'manual_start_date', None) != \
+                    self.effective_date:
+                continue
+            # New option => only update
+            option.versions = [new_option.to_version()]
+            break
+        else:
+            option = new_option.to_option()
+        parent.options = [x for x in parent.options
+            if x.coverage != new_option.coverage
+            or getattr(x, 'manual_start_date', None) != self.effective_date
+            ] + [option]
+
+    def _update_modified(self, new_option, parent, existing_options, per_id):
+        assert new_option.cur_option_id
+        good_option = per_id[new_option.cur_option_id]
+        new_versions = sorted([v for v in good_option.versions
+                if not v.start or v.start <= new_option.effective_date],
+            key=lambda x: x.start or datetime.date.min)
+        current_version = new_versions[-1]
+        if not current_version.start or (current_version.start !=
+                new_option.effective_date):
+            current_version = new_option.to_version(
+                previous_version=new_versions[-1])
+            new_versions.append(current_version)
+        good_option.versions = new_versions
+
+    def get_options_from_parent(self, parent):
+        if isinstance(parent, Pool().get('endorsement.contract')):
+            contract = parent.contract
+            utils.apply_dict(contract, parent.apply_values())
+            return self.contract_options_per_coverage(contract)
+        else:
+            raise NotImplementedError
+
+    def copy_option_data(self, previous_option, new_option):
+        pass
+
+    def contract_options_per_coverage(self, contract):
+        per_coverage = defaultdict(list)
+        for option in contract.options:
+            per_coverage[option.coverage].append(option)
+        return per_coverage
+
+    def generate_displayers(self, parent, per_coverage):
+        Displayer = Pool().get('contract.manage_options.option_displayer')
+        all_options = []
+        for options in per_coverage.itervalues():
+            for idx, option in enumerate(sorted(options,
+                        key=lambda x: x.manual_start_date or x.start_date)):
+                save_values = option._save_values
+                if not save_values and self.effective_date > (
+                        getattr(option, 'manual_end_date',
+                            getattr(option, 'end_date', None))
+                        or datetime.date.max):
+                    continue
+                displayer = Displayer.new_displayer(option,
+                    self.effective_date)
+                displayer.parent = str(parent)
+                displayer.parent_rec_name = self.get_parent_name(parent)
+                all_options.append(displayer)
+                if not save_values:
+                    # Not modified option
+                    displayer.action = 'nothing'
+                    continue
+                if option.id:
+                    # Option existed before, either modification or resiliation
+                    if (option.get_version_at_date(self.effective_date).start
+                            == self.effective_date):
+                        displayer.action = 'modified'
+                    else:
+                        # Only option, resiliation
+                        displayer.action = option.status
+                    break
+                # New option
+                displayer.action = 'added'
+        return all_options
+
+    def get_parent_name(self, parent):
+        if isinstance(parent, Pool().get('endorsement.contract')):
+            return parent.contract.rec_name
+        else:
+            return parent.rec_name
+
+    @classmethod
+    def get_all_possible_coverages(cls, parent):
+        if isinstance(parent, Pool().get('endorsement.contract')):
+            return set(parent.contract.product.coverages)
+        else:
+            raise NotImplementedError
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement.contract_manage_options_view_form'
+
+    @model.CoopView.button_change('contract', 'current_options',
+        'current_parent', 'effective_date', 'new_coverage',
+        'possible_coverages')
+    def add_option(self):
+        assert self.new_coverage
+        new_option = self.new_option()
+        self.new_coverage = None
+        self.current_options = list(self.current_options) + [new_option]
+        self.update_possible_coverages()
+
+    def new_option(self):
+        new_option = Pool().get('contract.manage_options.option_displayer')()
+        new_option.coverage_id = self.new_coverage.id
+        new_option.action = 'added'
+        new_option.parent = self.current_parent
+        new_option.parent_rec_name = self.get_parent_name(self._parent)
+        new_option.start_date = self.effective_date
+        new_option.effective_date = self.effective_date
+        new_option.display_name = 'New Option (%s)' % (
+            self.new_coverage.rec_name)
+        new_option.end_date = None
+        new_option.sub_status = None
+        new_option.extra_data = self.get_default_extra_data(self.new_coverage)
+        new_option.update_extra_data_string()
+        return new_option
+
+    def get_default_extra_data(self, coverage):
+        return self.contract.product.get_extra_data_def('option', {},
+            self.effective_date, coverage=coverage)
+
+
+class OptionDisplayer(model.CoopView):
+    'Option Displayer'
+
+    __name__ = 'contract.manage_options.option_displayer'
+
+    action = fields.Selection(OPTION_ACTIONS, 'Action',
+        domain=[If(Eval('action') == 'modified',
+                ('action', 'in', ('modified', 'nothing')),
+                If(Eval('action') == 'added', ('action', '=', 'added'),
+                    ('action', 'not in', ('added', 'modified'))))])
+    coverage_id = fields.Integer('Coverage Id', readonly=True)
+    parent = fields.Char('Parent Reference', readonly=True)
+    parent_rec_name = fields.Char('Parent', readonly=True)
+    start_date = fields.Date('Start Date', readonly=True, required=True)
+    end_date = fields.Date('End Date', states={
+            'readonly': Eval('action') != 'added'},
+        domain=[If(Eval('action') == 'added',
+                [('end_date', '<=', Eval('effective_date'))],
+                [])])
+    extra_data = fields.Dict('extra_data', 'Extra Data', states={
+            'invisible': ~Eval('extra_data')})
+    extra_data_as_string = fields.Text('Extra Data', readonly=True, states={
+            'invisible': ~Eval('extra_data')})
+    display_name = fields.Char('Name', readonly=True)
+    cur_option_id = fields.Integer('Existing Option', readonly=True)
+    effective_date = fields.Date('Effective Date', readonly=True)
+    sub_status = fields.Many2One('contract.sub_status', 'Sub Status',
+        states={
+            'required': In(Eval('action'), ['terminated', 'void']),
+            'readonly': Not(In(Eval('action'), ['terminated', 'void'])),
+            'invisible': Not(In(Eval('action'), ['terminated', 'void']))},
+        domain=[If(In(Eval('action'), ['terminated', 'void']),
+                [('status', '=', Eval('action'))],
+                [])])
+
+    @property
+    def _parent(self):
+        if hasattr(self, '__parent'):
+            return self.__parent
+        if not getattr(self, 'parent', None):
+            self.__parent = None
+            return None
+        parent_model, parent_id = self.parent.split(',')
+        self.__parent = Pool().get(parent_model)(int(parent_id))
+        return self.__parent
+
+    @property
+    def coverage(self):
+        return Pool().get('offered.option.description')(self.coverage_id)
+
+    @fields.depends('action', 'cur_option_id', 'effective_date', 'end_date',
+        'extra_data', 'extra_data_as_string', 'sub_status')
+    def on_change_action(self):
+        pool = Pool()
+        if self.action not in ('modified', 'added'):
+            self.extra_data = pool.get('contract.option')(
+                self.cur_option_id).get_version_at_date(
+                self.effective_date).extra_data
+            self.update_extra_data_string()
+
+        if self.action == 'terminated':
+            self.end_date = coop_date.add_day(self.effective_date, -1)
+            self.sub_status = pool.get('contract.sub_status').get_sub_status(
+                'terminated')
+        else:
+            if self.end_date == coop_date.add_day(self.effective_date, -1):
+                if self.cur_option_id:
+                    self.end_date = pool.get('contract.option')(
+                        self.cur_option_id).end_date
+
+    @fields.depends('action', 'cur_option_id', 'effective_date', 'extra_data',
+        'extra_data_as_string')
+    def on_change_extra_data(self):
+        self.update_extra_data_string()
+        if self.action == 'added':
+            return
+        previous_extra_data = Pool().get('contract.option')(
+            self.cur_option_id).get_version_at_date(
+            self.effective_date).extra_data
+        if self.extra_data != previous_extra_data and self.action == 'nothing':
+            self.action = 'modified'
+        elif self.extra_data == previous_extra_data and (
+                self.action == 'modified'):
+            self.action = 'nothing'
+
+    def update_extra_data_string(self):
+        self.extra_data_as_string = Pool().get(
+            'extra_data').get_extra_data_summary([self], 'extra_data')[self.id]
+
+    @classmethod
+    def new_displayer(cls, option, effective_date):
+        displayer = cls()
+        displayer.effective_date = effective_date
+        displayer.coverage_id = option.coverage.id
+        if getattr(option, 'id', None):
+            displayer.cur_option_id = option.id
+            displayer.display_name = option.rec_name
+        else:
+            displayer.display_name = 'New Option (%s)' % (
+                option.coverage.rec_name)
+        if getattr(option, 'versions', None) is None:
+            option.versions = [Pool().get(
+                    'contract.option.version').get_default_version()]
+        displayer.start_date = option.manual_start_date or option.start_date
+        displayer.end_date = getattr(option, 'manual_end_date', None)
+        if displayer.end_date is None:
+            displayer.end_date = getattr(option, 'end_date', None)
+        displayer.sub_status = getattr(option, 'sub_status', None)
+        displayer.action = 'nothing'
+        displayer.extra_data = option.get_version_at_date(
+            effective_date).extra_data
+        return displayer
+
+    def to_option(self):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        Version = pool.get('contract.option.version')
+        option = Option(status='active', coverage=self.coverage)
+        option.versions = [Version(**Version.get_default_version())]
+        option.manual_start_date = self.effective_date
+        option.start_date = self.effective_date
+        option.get_version_at_date(self.effective_date).extra_data = \
+            self.extra_data
+        option.versions = list(option.versions)
+        return option
+
+    def to_version(self, previous_version=None):
+        Version = Pool().get('contract.option.version')
+        if previous_version is None:
+            version = Version(start=None)
+        else:
+            version = Version(**model.dictionarize(previous_version,
+                    self._option_fields_to_extract()))
+            version.start = self.effective_date
+        version.extra_data = self.extra_data
+        return version
+
+    def update_from_new_option(self, new_option):
+        self.extra_data = getattr(new_option, 'extra_data', {})
+
+    @classmethod
+    def _option_fields_to_extract(cls):
+        return {
+            'contract.option': ['coverage', 'sub_status'],
+            'contract.option.version': ['extra_data'],
+            }
 
 
 class TerminateContract(EndorsementWizardStepMixin, model.CoopView):
@@ -1225,11 +1761,11 @@ class StartEndorsement(Wizard):
 add_endorsement_step(StartEndorsement, ChangeContractExtraData,
     'change_contract_extra_data')
 
-add_endorsement_step(StartEndorsement, TerminateContract,
-    'terminate_contract')
+add_endorsement_step(StartEndorsement, TerminateContract, 'terminate_contract')
 
-add_endorsement_step(StartEndorsement, VoidContract,
-    'void_contract')
+add_endorsement_step(StartEndorsement, VoidContract, 'void_contract')
+
+add_endorsement_step(StartEndorsement, ManageOptions, 'manage_options')
 
 add_endorsement_step(StartEndorsement, ChangeContractSubscriber,
     'change_contract_subscriber')

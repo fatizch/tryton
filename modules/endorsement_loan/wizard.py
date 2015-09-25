@@ -18,6 +18,8 @@ __all__ = [
     'ExtraPremiumDisplayer',
     'NewExtraPremium',
     'ManageExtraPremium',
+    'ManageOptions',
+    'OptionDisplayer',
     'ChangeLoanDisplayer',
     'ChangeLoan',
     'ChangeLoanUpdatedPayments',
@@ -87,6 +89,64 @@ class NewExtraPremium:
         cls.new_extra_premium.context.update({
                 'is_loan': Eval('is_loan', False)})
         cls.new_extra_premium.depends.append('is_loan')
+
+
+class ManageOptions:
+    __name__ = 'contract.manage_options'
+
+    def _update_added(self, new_option, parent, existing_options, per_id):
+        super(ManageOptions, self)._update_added(new_option, parent,
+            existing_options, per_id)
+        if not self.contract.is_loan:
+            return
+        good_option = [x for x in parent.options
+            if x.coverage == new_option.coverage
+            and x.manual_start_date == self.effective_date][0]
+        if getattr(good_option, 'loan_shares', None):
+            return
+        LoanShare = Pool().get('loan.share')
+        shares_per_loan = defaultdict(set)
+        for share in [x for option in parent.options
+                for x in getattr(option, 'loan_shares', [])]:
+            if share.share == 0 or share.loan.end_date < self.effective_date:
+                continue
+            if ((share.start_date or datetime.date.min) < self.effective_date
+                    < (share.end_date or datetime.date.max)):
+                shares_per_loan[share.loan].add(share.share)
+        new_shares = []
+        for loan, shares in shares_per_loan.iteritems():
+            if len(shares) > 1:
+                continue
+            new_shares.append(LoanShare(loan=loan, share=shares.pop(),
+                    start_date=self.effective_date))
+        good_option.loan_shares = new_shares
+
+
+class OptionDisplayer:
+    __name__ = 'contract.manage_options.option_displayer'
+
+    @classmethod
+    def _option_fields_to_extract(cls):
+        to_extract = super(OptionDisplayer, cls)._option_fields_to_extract()
+        # No need to extract extra_data, they will be overriden anyway
+        to_extract['contract.option'] += ['loan_shares']
+        to_extract['loan.share'] = ['loan', 'share', 'start_date', 'end_date']
+        return to_extract
+
+    def to_option(self):
+        new_option = super(OptionDisplayer, self).to_option()
+        if not getattr(new_option, 'loan_shares', None):
+            return new_option
+        new_shares = []
+        for loan_share in new_option.loan_shares:
+            if self.effective_date > getattr(loan_share, 'end_date',
+                    datetime.date.max):
+                continue
+            loan_share.start_date = min(self.effective_date,
+                loan_share.start_date or datetime.date.max)
+            new_shares.append(loan_share)
+        new_option.loan_shares = new_shares
+        return new_option
 
 
 class ChangeLoanDisplayer(model.CoopView):

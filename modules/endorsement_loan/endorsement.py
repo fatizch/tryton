@@ -501,6 +501,10 @@ class EndorsementLoanShare(relation_mixin(
     def updated_struct(cls, loan_share):
         return {'instance': loan_share}
 
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return {'option'}
+
 
 class EndorsementLoanIncrement(relation_mixin(
             'endorsement.loan.increment.field', 'increment', 'loan.increment',

@@ -36,6 +36,22 @@ msgstr ""
 "Vous ne pouvez pas enlever toutes les options de tous les éléments couverts "
 "du contrat. Vous devez résilier le contrat."
 
+msgctxt "error:endorsement.contract.covered_element.option.version:"
+msgid "New Option Version"
+msgstr "Nouvelle version de la garantie"
+
+msgctxt "error:endorsement.contract.covered_element.option.version:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.contract.covered_element.option.version:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.contract.covered_element.option.version:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
 msgctxt "error:endorsement.contract.covered_element.option:"
 msgid "Extra Premium Modification"
 msgstr "Modification des surprimes"
@@ -55,6 +71,10 @@ msgstr "Suppression de la version"
 msgctxt "error:endorsement.contract.covered_element.option:"
 msgid "Update %s"
 msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract.covered_element.option:"
+msgid "Versions Modifications"
+msgstr "Modification des versions"
 
 msgctxt "error:endorsement.contract.covered_element:"
 msgid "New Covered Element"
@@ -313,9 +333,17 @@ msgctxt "field:endorsement.contract.covered_element,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:endorsement.contract.covered_element,item_desc:"
+msgid "Item Description"
+msgstr "Description du Risque"
+
 msgctxt "field:endorsement.contract.covered_element,options:"
 msgid "Options"
 msgstr "Options"
+
+msgctxt "field:endorsement.contract.covered_element,party:"
+msgid "Party"
+msgstr "Tiers"
 
 msgctxt "field:endorsement.contract.covered_element,rec_name:"
 msgid "Name"
@@ -460,6 +488,14 @@ msgctxt "field:endorsement.contract.covered_element.option,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:endorsement.contract.covered_element.option,manual_end_date:"
+msgid "End Date"
+msgstr "Date de fin"
+
+msgctxt "field:endorsement.contract.covered_element.option,manual_start_date:"
+msgid "Start Date"
+msgstr "Date de début"
+
 msgctxt "field:endorsement.contract.covered_element.option,option:"
 msgid "Options"
 msgstr "Options"
@@ -476,6 +512,10 @@ msgctxt "field:endorsement.contract.covered_element.option,values:"
 msgid "Values"
 msgstr "Valeurs"
 
+msgctxt "field:endorsement.contract.covered_element.option,versions:"
+msgid "Versions Endorsements"
+msgstr "Modification de versions de garanties"
+
 msgctxt "field:endorsement.contract.covered_element.option,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -485,6 +525,82 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:endorsement.contract.covered_element.option,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.covered_element.option.version,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.option.version,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.option.version,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.option.version,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.option.version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.option.version,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.option.version,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:endorsement.contract.covered_element.option.version,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.contract.covered_element.option.version,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.option.version,option_endorsement:"
+msgid "Endorsement"
+msgstr "Modèle d'Avenant"
+
+msgctxt "field:endorsement.contract.covered_element.option.version,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.covered_element.option.version,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.contract.covered_element.option.version,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.contract.covered_element.option.version,version:"
+msgid "Versions"
+msgstr "Versions"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.option.version,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.covered_element.option.version,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.covered_element.option.version,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -794,6 +910,10 @@ msgctxt "model:endorsement.contract.covered_element.option,name:"
 msgid "Endorsement Option"
 msgstr "Champs de la garantie souscrite"
 
+msgctxt "model:endorsement.contract.covered_element.option.version,name:"
+msgid "Endorsement Option Version"
+msgstr "Modification de version de garantie"
+
 msgctxt "model:endorsement.contract.extra_premium,name:"
 msgid "Endorsement Extra Premium"
 msgstr "Modification des surprimes"
@@ -858,6 +978,21 @@ msgid "Remove"
 msgstr "Remplacer"
 
 msgctxt "selection:endorsement.contract.covered_element.option,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
+msgctxt ""
+"selection:endorsement.contract.covered_element.option.version,action:"
+msgid "Add"
+msgstr "Ajouter"
+
+msgctxt ""
+"selection:endorsement.contract.covered_element.option.version,action:"
+msgid "Remove"
+msgstr "Résilier"
+
+msgctxt ""
+"selection:endorsement.contract.covered_element.option.version,action:"
 msgid "Update"
 msgstr "Mise à jour"
 

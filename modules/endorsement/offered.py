@@ -18,6 +18,7 @@ __all__ = [
     'EndorsementPartMethodRelation',
     'EndorsementContractField',
     'EndorsementOptionField',
+    'EndorsementOptionVersionField',
     'EndorsementActivationHistoryField',
     'EndorsementContactField',
     'EndorsementExtraDataField',
@@ -285,6 +286,13 @@ class EndorsementOptionField(field_mixin('contract.option'),
     'Endorsement Option Field'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.option.field'
+
+
+class EndorsementOptionVersionField(field_mixin('contract.option.version'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Option Version Field'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.contract.option.version.field'
 
 
 class EndorsementActivationHistoryField(

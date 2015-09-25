@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<form string="Option">
+    <label name="display_name"/>
+    <field name="display_name"/>
+    <label name="parent_rec_name"/>
+    <field name="parent_rec_name"/>
+    <label name="action"/>
+    <field name="action"/>
+    <label name="sub_status"/>
+    <field name="sub_status" widget="selection"/>
+    <newline/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <label name="extra_data"/>
+    <field name="extra_data" no_command="1"/>
+</form>

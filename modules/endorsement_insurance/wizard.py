@@ -4,7 +4,7 @@ from trytond.wizard import StateView, StateTransition, Button
 from trytond.pyson import Eval, Len, Bool, If, Equal
 from trytond.model import Model
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.cog_utils import model, fields, utils
 from trytond.modules.endorsement import EndorsementWizardStepMixin, \
     add_endorsement_step
 
@@ -14,6 +14,8 @@ __all__ = [
     'NewOptionOnCoveredElement',
     'ExtraPremiumDisplayer',
     'ManageExtraPremium',
+    'ManageOptions',
+    'OptionDisplayer',
     'RemoveOptionSelector',
     'ModifyCoveredElementInformation',
     'RemoveOption',
@@ -823,6 +825,138 @@ class ManageExtraPremium(model.CoopView, EndorsementWizardStepMixin):
             CoveredElementEndorsement.create([x._save_values
                     for x in new_covered_elements
                     if getattr(x, 'contract_endorsement', None)])
+
+
+class ManageOptions:
+    __name__ = 'contract.manage_options'
+
+    def calculate_possible_parents(self):
+        result = super(ManageOptions, self).calculate_possible_parents()
+        parents = []
+        for parent in result:
+            parents.append(parent)
+            if isinstance(parent, Pool().get('endorsement.contract')):
+                old_covered_elements = list(parent.contract.covered_elements)
+                for covered_endorsement in parent.covered_elements:
+                    if covered_endorsement.covered_element:
+                        old_covered_elements.remove(
+                            covered_endorsement.covered_element)
+                    if covered_endorsement.action == 'remove':
+                        continue
+                    parents.append(covered_endorsement)
+                parents += old_covered_elements
+        return parents
+
+    def update_contract(self):
+        pool = Pool()
+        if isinstance(self._parent, pool.get(
+                    'endorsement.contract.covered_element')):
+            self.contract = self._parent.contract_endorsement.contract
+        elif isinstance(self._parent, pool.get('contract.covered_element')):
+            self.contract = self._parent.contract
+        else:
+            super(ManageOptions, self).update_contract()
+
+    def get_options_from_parent(self, parent):
+        pool = Pool()
+        CoveredElement = pool.get('contract.covered_element')
+        if isinstance(parent, pool.get(
+                    'endorsement.contract.covered_element')):
+            if parent.action == 'update':
+                # Force reinitialization in case we are going backward
+                covered_element = CoveredElement(parent.covered_element.id)
+                utils.apply_dict(covered_element, parent.apply_values()[2])
+            else:
+                covered_element = CoveredElement()
+                utils.apply_dict(covered_element, parent.apply_values()[1][0])
+            options = self.covered_element_options_per_coverage(
+                covered_element)
+            return options
+        elif isinstance(parent, CoveredElement):
+            return self.covered_element_options_per_coverage(parent)
+        else:
+            return super(ManageOptions, self).get_options_from_parent(parent)
+
+    def covered_element_options_per_coverage(self, covered_element):
+        per_coverage = defaultdict(list)
+        for option in covered_element.options:
+            per_coverage[option.coverage].append(option)
+        return per_coverage
+
+    def get_parent_name(self, parent):
+        if isinstance(parent, Pool().get(
+                    'endorsement.contract.covered_element')):
+            return parent.party.rec_name
+        return super(ManageOptions, self).get_parent_name(parent)
+
+    @classmethod
+    def get_all_possible_coverages(cls, parent):
+        pool = Pool()
+        if isinstance(parent, pool.get(
+                    'endorsement.contract.covered_element')):
+            if parent.action == 'update':
+                covered_element = parent.covered_element
+                utils.apply_dict(covered_element, parent.apply_values()[2])
+            else:
+                covered_element = pool.get('contract.covered_element')()
+                utils.apply_dict(covered_element, parent.apply_values()[1][0])
+            contract = parent.contract_endorsement.contract
+        elif isinstance(parent, pool.get('contract.covered_element')):
+            contract, covered_element = parent.contract, parent
+        elif isinstance(parent, pool.get('endorsement.contract')):
+            # Remove item_desc related coverages
+            return {x for x in
+                super(ManageOptions, cls).get_all_possible_coverages(parent)
+                if not x.item_desc}
+        else:
+            raise NotImplementedError
+        return {x for x in contract.product.coverages
+            if x.item_desc and x.item_desc == covered_element.item_desc}
+
+    def get_parent_endorsed(self, parent, contract_endorsements):
+        pool = Pool()
+        if isinstance(parent, pool.get('contract.covered_element')):
+            contract = contract_endorsements[parent.contract.id]
+            contract.covered_elements = list(contract.covered_elements)
+            return [x for x in contract.covered_elements if x == parent][0]
+        elif isinstance(parent, pool.get(
+                    'endorsement.contract.covered_element')):
+            contract = contract_endorsements[
+                parent.contract_endorsement.contract.id]
+            contract.covered_elements = list(contract.covered_elements)
+            return [x for x in contract.covered_elements
+                if parent.endorsement_matches_record(x)][0]
+        else:
+            return super(ManageOptions, self).get_parent_endorsed(parent,
+                contract_endorsements)
+
+    def get_default_extra_data(self, coverage):
+        pool = Pool()
+        base_extra_data = super(ManageOptions, self).get_default_extra_data(
+            coverage)
+        parent = self._parent
+        if isinstance(parent, (pool.get('contract.covered_element'),
+                    pool.get('endorsement.contract.covered_element'))):
+            item_desc = parent.item_desc
+        else:
+            return base_extra_data
+        return self.contract.product.get_extra_data_def('option',
+            base_extra_data, self.effective_date, coverage=coverage,
+            item_desc=item_desc)
+
+
+class OptionDisplayer:
+    __name__ = 'contract.manage_options.option_displayer'
+
+    @classmethod
+    def _option_fields_to_extract(cls):
+        to_extract = super(OptionDisplayer, cls)._option_fields_to_extract()
+        # No need to extract extra_data, they will be overriden anyway
+        to_extract['contract.option'] += ['extra_premiums']
+        to_extract['contract.option.extra_premium'] = ['calculation_kind',
+            'manual_start_date', 'manual_end_date', 'duration',
+            'duration_unit', 'flat_amount', 'motive', 'option', 'rate']
+        return to_extract
 
 
 class OptionSelector(model.CoopView):

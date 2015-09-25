@@ -26,6 +26,8 @@ def register():
         ExtraPremiumDisplayer,
         NewExtraPremium,
         ManageExtraPremium,
+        ManageOptions,
+        OptionDisplayer,
         ChangeLoanDisplayer,
         ChangeLoan,
         ChangeLoanUpdatedPayments,

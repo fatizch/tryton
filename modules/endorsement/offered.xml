@@ -230,5 +230,14 @@
             <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'end_date')]"/>
             <field name="endorsement_part" ref="reactivate_contract_revision_part"/>
         </record>
+        <!-- ################################ -->
+        <!-- # Manage Options Configuration # -->
+        <!-- ################################ -->
+        <record model="endorsement.part" id="manage_options_revision_part">
+            <field name="code">manage_options</field>
+            <field name="name">Manage Options</field>
+            <field name="kind">contract</field>
+            <field name="view">manage_options</field>
+        </record>
     </data>
 </tryton>

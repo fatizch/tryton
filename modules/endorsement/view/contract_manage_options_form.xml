@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<form string="Manage Options">
+    <label name="effective_date"/>
+    <field name="effective_date"/>
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="current_parent"/>
+    <field name="current_parent"/>
+    <newline/>
+    <field name="current_options" group="options" mode="tree" colspan="2" expand_toolbar="0"/>
+    <field name="current_options" group="options" mode="form" colspan="2" expand_toolbar="0"/>
+    <label name="new_coverage"/>
+    <field name="new_coverage" widget="selection" colspan="2"/>
+    <button name="add_option" string="Add Option" icon="tryton-new"/>
+    <group id="invisible" string="">
+        <field name="endorsement_definition"/>
+        <field name="possible_coverages"/>
+        <field name="possible_parents"/>
+        <field name="all_options"/>
+    </group>
+</form>
