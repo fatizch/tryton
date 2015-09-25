@@ -1792,7 +1792,12 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         return self.coverage.calculate_end_date(exec_context)
 
     def update_current_version(self):
-        current_version = self.get_version_at_date(utils.today())
+        Version = Pool().get('contract.option.version')
+        if not self.versions:
+            current_version = Version(**Version.get_default_version())
+            self.versions = [current_version]
+        else:
+            current_version = self.get_version_at_date(utils.today())
         if not current_version:
             return None
         current_version.extra_data = self.recalculate_extra_data(
