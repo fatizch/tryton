@@ -11,7 +11,7 @@ __all__ = [
     ]
 
 
-class ContractRenew(EndorsementWizardStepMixin, model.CoopView):
+class ContractRenew(EndorsementWizardStepMixin):
     'Renew Contract'
 
     __name__ = 'endorsement.contract.renew'

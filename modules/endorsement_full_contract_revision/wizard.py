@@ -12,7 +12,7 @@ __all__ = [
     ]
 
 
-class StartFullContractRevision(EndorsementWizardStepMixin, model.CoopView):
+class StartFullContractRevision(EndorsementWizardStepMixin):
     'Start Full Contract Revision'
 
     __name__ = 'endorsement.contract.full_revision_start'

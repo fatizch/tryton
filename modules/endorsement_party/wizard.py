@@ -59,7 +59,7 @@ class AddressDisplayer(model.CoopView):
         self.party = self.new_address[0].party
 
 
-class ChangePartyAddress(EndorsementWizardStepMixin, model.CoopView):
+class ChangePartyAddress(EndorsementWizardStepMixin):
     'Change Party Address'
 
     __name__ = 'endorsement.party.change_address'
@@ -244,7 +244,7 @@ class ChangePartyAddress(EndorsementWizardStepMixin, model.CoopView):
             party_endorsement.save()
 
 
-class ChangePartyBirthDate(EndorsementWizardStepMixin, model.CoopView):
+class ChangePartyBirthDate(EndorsementWizardStepMixin):
     'Change Party Birth Date'
 
     __name__ = 'endorsement.party.change_birth_date'
@@ -290,7 +290,7 @@ class ChangePartyBirthDate(EndorsementWizardStepMixin, model.CoopView):
         party_endorsement.save()
 
 
-class ChangePartySSN(EndorsementWizardStepMixin, model.CoopView):
+class ChangePartySSN(EndorsementWizardStepMixin):
     'Change Party SSN'
 
     __name__ = 'endorsement.party.change_ssn'
@@ -354,7 +354,7 @@ class PartyNameDisplayer(model.CoopView):
     new_birth_name = fields.Char('New Birth Name')
 
 
-class ChangePartyName(EndorsementWizardStepMixin, model.CoopView):
+class ChangePartyName(EndorsementWizardStepMixin):
     'Change Party Name'
 
     __name__ = 'endorsement.party.change_name'
@@ -436,7 +436,7 @@ class RelationDisplayer(PartyRelationAll):
         return Transaction().context.get('good_party')
 
 
-class ChangePartyRelationship(EndorsementWizardStepMixin, model.CoopView):
+class ChangePartyRelationship(EndorsementWizardStepMixin):
     'Change Party Relationship'
 
     __name__ = 'endorsement.party.change_relations'

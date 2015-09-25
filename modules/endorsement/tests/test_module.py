@@ -40,7 +40,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         'Tests the add_endorsement_step method'
         from trytond.pool import Pool
         from trytond.wizard import StateView, StateTransition
-        from trytond.modules.cog_utils import model
         from trytond.modules.endorsement.wizard import (add_endorsement_step,
             EndorsementWizardStepMixin, StartEndorsement)
 
@@ -48,7 +47,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             def __init__(self):
                 pass
 
-        class TestStep(EndorsementWizardStepMixin, model.CoopView):
+        class TestStep(EndorsementWizardStepMixin):
             'Test Step'
             __name__ = 'my_test_step'
 
@@ -97,12 +96,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0001_check_possible_views(self):
         from trytond.pool import Pool
         from trytond.wizard import StateView
-        from trytond.modules.cog_utils import model
         from trytond.modules.endorsement import EndorsementWizardStepMixin
         from trytond.modules.endorsement.wizard import StartEndorsement
 
-        class SimpleContractModification(model.CoopView,
-                EndorsementWizardStepMixin):
+        class SimpleContractModification(EndorsementWizardStepMixin):
             'Simple Contract Modification'
             __name__ = 'endorsement.simple_contract_modification'
 

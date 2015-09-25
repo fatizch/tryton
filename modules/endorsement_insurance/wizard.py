@@ -26,7 +26,7 @@ __all__ = [
     ]
 
 
-class NewCoveredElement(model.CoopView, EndorsementWizardStepMixin):
+class NewCoveredElement(EndorsementWizardStepMixin):
     'New Covered Element'
 
     __name__ = 'contract.covered_element.new'
@@ -78,7 +78,7 @@ class NewCoveredElement(model.CoopView, EndorsementWizardStepMixin):
         EndorsementCoveredElementOption.create(vlist)
 
 
-class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
+class RemoveOption(EndorsementWizardStepMixin):
 
     'Remove Option'
 
@@ -374,7 +374,7 @@ class RemoveOptionSelector(model.CoopView):
             ]
 
 
-class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
+class NewOptionOnCoveredElement(EndorsementWizardStepMixin):
     'New Covered Element Option'
 
     __name__ = 'contract.covered_element.add_option'
@@ -499,8 +499,7 @@ class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
         good_endorsement.save()
 
 
-class ModifyCoveredElementInformation(model.CoopView,
-        EndorsementWizardStepMixin):
+class ModifyCoveredElementInformation(EndorsementWizardStepMixin):
     'Modify Covered Element Information'
 
     __name__ = 'endorsement.contract.covered_element.modify'
@@ -649,7 +648,7 @@ class ExtraPremiumDisplayer(model.CoopView):
             ]
 
 
-class ManageExtraPremium(model.CoopView, EndorsementWizardStepMixin):
+class ManageExtraPremium(EndorsementWizardStepMixin):
     'Manage Extra Premium'
 
     __name__ = 'endorsement.contract.manage_extra_premium'

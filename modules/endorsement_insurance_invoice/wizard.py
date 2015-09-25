@@ -75,7 +75,7 @@ class BasicPreview:
         return result
 
 
-class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
+class ChangeBillingInformation(EndorsementWizardStepMixin):
     'Change Billing Information'
 
     __name__ = 'contract.billing_information.change'

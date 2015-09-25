@@ -85,7 +85,7 @@ def add_endorsement_step(wizard_class, step_class, step_name):
         get_step_method('suspend'))
 
 
-class EndorsementWizardStepMixin(object):
+class EndorsementWizardStepMixin(model.CoopView):
     '''
         A mixin class for State Views being used in the Endorsement Wizard.
         They store basic information about the current endorsement :
@@ -101,6 +101,15 @@ class EndorsementWizardStepMixin(object):
         'Endorsement Definition', states={'readonly': True})
     endorsement_part = fields.Many2One('endorsement.part',
         'Endorsement Part', states={'invisible': True, 'readonly': True})
+
+    @classmethod
+    def __setup__(cls):
+        super(EndorsementWizardStepMixin, cls).__setup__()
+        cls._error_messages.update({
+                'effective_date_before_start_date':
+                'The endorsement\'s effective date must be posterior to '
+                'the contracts\' start date',
+                })
 
     def update_endorsement(self, endorsement, wizard):
         # Updates the current endorsement using the data provided in the
@@ -168,7 +177,21 @@ class EndorsementWizardStepMixin(object):
             endorsement state. The first parameter is the
             endorsement.start.select record from the wizard.
         '''
-        pass
+        error_manager = Transaction().context.get('error_manager', None)
+        if error_manager and 'effective_date_before_start_date' in [x[0] for
+                x in error_manager._errors]:
+            return
+        endorsement = select_screen.endorsement
+        if not cls.allow_effective_date_before_contract(select_screen) and \
+                endorsement and any([x.contract.start_date >
+                    endorsement.effective_date
+                    for x in endorsement.contract_endorsements]):
+            cls.append_functional_error('effective_date_before_start_date')
+
+    @classmethod
+    def allow_effective_date_before_contract(cls, select_screen):
+        return not select_screen.endorsement or not \
+                select_screen.endorsement.contract_endorsements
 
     def _get_contracts(self):
         return {x.contract.id: x
@@ -278,7 +301,7 @@ class EndorsementWizardStepMixin(object):
         endorsement.values = new_values
 
 
-class DummyStep(EndorsementWizardStepMixin, model.CoopView):
+class DummyStep(EndorsementWizardStepMixin):
     'Dummy Step'
 
     __name__ = 'endorsement.start.dummy_step'
@@ -396,13 +419,17 @@ class EndorsementWizardPreviewMixin(object):
         raise NotImplementedError
 
 
-class ChangeContractStartDate(EndorsementWizardStepMixin, model.CoopView):
+class ChangeContractStartDate(EndorsementWizardStepMixin):
     'Change contract start date'
 
     __name__ = 'endorsement.contract.change_start_date'
 
     current_start_date = fields.Date('Current Start Date', readonly=True)
     new_start_date = fields.Date('New Start Date', readonly=True)
+
+    @classmethod
+    def allow_effective_date_before_contract(cls, select_screen):
+        return True
 
     @classmethod
     def is_multi_instance(cls):
@@ -420,7 +447,7 @@ class ChangeContractStartDate(EndorsementWizardStepMixin, model.CoopView):
             }
 
 
-class ChangeContractExtraData(EndorsementWizardStepMixin, model.CoopView):
+class ChangeContractExtraData(EndorsementWizardStepMixin):
     'Change contract extra data'
 
     __name__ = 'endorsement.contract.change_extra_data'
@@ -502,7 +529,7 @@ class ChangeContractExtraData(EndorsementWizardStepMixin, model.CoopView):
         return 'endorsement.endorsement_change_contract_extra_data_view_form'
 
 
-class ManageOptions(EndorsementWizardStepMixin, model.CoopView):
+class ManageOptions(EndorsementWizardStepMixin):
     'Manage Options'
     '''
         This endorsement step allows to manage all options on a number of
@@ -1026,7 +1053,7 @@ class OptionDisplayer(model.CoopView):
             }
 
 
-class TerminateContract(EndorsementWizardStepMixin, model.CoopView):
+class TerminateContract(EndorsementWizardStepMixin):
     'Terminate Contract'
 
     __name__ = 'endorsement.contract.terminate'
@@ -1145,7 +1172,7 @@ class TerminateContract(EndorsementWizardStepMixin, model.CoopView):
         return 'endorsement.endorsement_terminate_contract_view_form'
 
 
-class VoidContract(EndorsementWizardStepMixin, model.CoopView):
+class VoidContract(EndorsementWizardStepMixin):
     'Void Contract'
 
     __name__ = 'endorsement.contract.void'
@@ -1194,7 +1221,7 @@ class VoidContract(EndorsementWizardStepMixin, model.CoopView):
         return 'endorsement.endorsement_void_contract_view_form'
 
 
-class ChangeContractSubscriber(EndorsementWizardStepMixin, model.CoopView):
+class ChangeContractSubscriber(EndorsementWizardStepMixin):
     'Change Contract Subscriber'
 
     __name__ = 'endorsement.contract.subscriber_change'

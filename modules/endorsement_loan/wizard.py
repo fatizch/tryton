@@ -542,7 +542,7 @@ class ChangeLoanDisplayer(model.CoopView):
         return self.new_values[0].get_rec_name(None)
 
 
-class ChangeLoan(EndorsementWizardStepMixin, model.CoopView):
+class ChangeLoan(EndorsementWizardStepMixin):
     'Change Loan Data'
 
     __name__ = 'endorsement.loan.change'
@@ -746,7 +746,7 @@ class LoanContractDisplayer(model.CoopView):
         self.new_end_date = new_end_date
 
 
-class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
+class SelectLoanShares(EndorsementWizardStepMixin):
     'Select Loan Shares'
 
     __name__ = 'contract.covered_element.add_option.loan_shares'

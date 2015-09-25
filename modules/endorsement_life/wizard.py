@@ -35,7 +35,7 @@ class OptionBeneficiaryDisplayer(model.CoopView):
     new_option = fields.One2Many('contract.option', None, 'New Version')
 
 
-class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
+class ManageBeneficiaries(EndorsementWizardStepMixin):
     'Manage Beneficiaries'
 
     __name__ = 'endorsement.contract.beneficiary.manage'

@@ -13,7 +13,7 @@ __all__ = [
     ]
 
 
-class ChangeContractBroker(EndorsementWizardStepMixin, model.CoopView):
+class ChangeContractBroker(EndorsementWizardStepMixin):
     'Change Contract Broker'
 
     __name__ = 'endorsement.contract.change_broker'

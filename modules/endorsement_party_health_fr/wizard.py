@@ -11,7 +11,7 @@ __all__ = [
     ]
 
 
-class ChangePartyHealthComplement(EndorsementWizardStepMixin, model.CoopView):
+class ChangePartyHealthComplement(EndorsementWizardStepMixin):
     'Change Party Health Complement'
 
     __name__ = 'endorsement.party.change_health_complement'
