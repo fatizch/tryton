@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="Add Remove Loans">
+    <field name="loan_actions" mode="tree" expand_toolbar="0" colspan="4"/>
+    <label name="new_loan"/>
+    <field name="new_loan" colspan="3"/>
+    <group id="invisible" string="">
+        <field name="possible_contracts"/>
+    </group>
+</form>

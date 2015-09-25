@@ -21,12 +21,14 @@ __all__ = [
     'LoanShare',
     'PremiumAmount',
     'ExtraPremium',
+    'ContractLoan',
     'Endorsement',
     'EndorsementContract',
     'EndorsementLoan',
     'EndorsementCoveredElementOption',
     'EndorsementLoanShare',
     'EndorsementLoanIncrement',
+    'EndorsementContractLoan',
     ]
 
 
@@ -103,6 +105,12 @@ class ExtraPremium:
         return Transaction().context.get('is_loan', False)
 
 
+class ContractLoan:
+    _history = True
+    __metaclass__ = PoolMeta
+    __name__ = 'contract-loan'
+
+
 class Endorsement:
     __metaclass__ = PoolMeta
     __name__ = 'endorsement'
@@ -176,9 +184,24 @@ class EndorsementContract:
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract'
 
+    ordered_loans = fields.One2Many('endorsement.contract.loan',
+        'contract_endorsement', 'Ordered Loans', states={
+            'readonly': Eval('state') == 'applied',
+            },
+        depends=['state', 'definition'], delete_missing=True,
+        context={'definition': Eval('definition')})
+
+    @classmethod
+    def __setup__(cls):
+        super(EndorsementContract, cls).__setup__()
+        cls._error_messages.update({
+                'msg_contract_loan_changes': 'Contract Loans Changes',
+                })
+
     @classmethod
     def _get_restore_history_order(cls):
         order = super(EndorsementContract, cls)._get_restore_history_order()
+        order.insert(order.index('contract'), 'contract-loan')
         option_idx = order.index('contract.option')
         order.insert(option_idx + 1, 'loan.share')
         order.insert(order.index('contract.premium') + 1,
@@ -191,8 +214,28 @@ class EndorsementContract:
             at_date)
         for contract in instances['contract']:
             instances['contract.premium.amount'] += contract.premium_amounts
+            instances['contract-loan'] += contract.ordered_loans
         for option in instances['contract.option']:
             instances['loan.share'] += option.loan_shares
+
+    def get_endorsement_summary(self, name):
+        result = super(EndorsementContract, self).get_endorsement_summary(name)
+        contract_loans_summary = [x.get_summary('contract-loan',
+                x.contract_loan) for x in self.ordered_loans]
+        if contract_loans_summary:
+            result[2] += ['contract_loan_changes_section', '%s :' %
+                self.raise_user_error('msg_contract_loan_changes',
+                    raise_exception=False), contract_loans_summary]
+        return result
+
+    def apply_values(self):
+        values = super(EndorsementContract, self).apply_values()
+        contract_loans = []
+        for contract_loan in self.ordered_loans:
+            contract_loans.append(contract_loan.apply_values())
+        if contract_loans:
+            values['ordered_loans'] = contract_loans
+        return values
 
 
 class EndorsementLoan(values_mixin('endorsement.loan.field'),
@@ -548,3 +591,39 @@ class EndorsementLoanIncrement(relation_mixin(
         return super(EndorsementLoanIncrement,
             cls)._ignore_fields_for_matching() | {'loan', 'number',
                 'number_of_payments'}
+
+
+class EndorsementContractLoan(relation_mixin(
+            'endorsement.contract.loan.field', 'contract_loan',
+            'contract-loan', 'Contract Loan'),
+        model.CoopSQL, model.CoopView):
+    'Contract Loan'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.contract.loan'
+
+    contract_endorsement = fields.Many2One('endorsement.contract',
+        'Contract Endorsement', required=True, select=True, ondelete='CASCADE')
+    definition = fields.Function(
+        fields.Many2One('endorsement.definition', 'Definition'),
+        'get_definition')
+    loan = fields.Function(
+        fields.Many2One('loan', 'Loan'),
+        '')
+
+    @classmethod
+    def __setup__(cls):
+        super(EndorsementContractLoan, cls).__setup__()
+        cls.values.domain = [('definition', '=', Eval('definition'))]
+        cls.values.depends = ['definition']
+
+    @classmethod
+    def default_definition(cls):
+        return Transaction().context.get('definition', None)
+
+    def get_definition(self, name):
+        return self.contract_endorsement.definition.id
+
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return super(EndorsementContractLoan,
+            cls)._ignore_fields_for_matching() | {'contract'}

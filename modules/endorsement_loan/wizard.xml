@@ -25,6 +25,22 @@
             <field name="inherit" ref="endorsement_insurance.new_extra_premium_view_form"/>
             <field name="name">new_extra_premium_form</field>
         </record>
+        <!-- ################### -->
+        <!-- # Add Remove Loan # -->
+        <!-- ################### -->
+        <record model="ir.ui.view" id="loan_add_remove_view_form">
+            <field name="model">endorsement.loan.add_remove</field>
+            <field name="type">form</field>
+            <field name="name">loan_add_remove_form</field>
+        </record>
+        <!-- ############################# -->
+        <!-- # Add Remove Loan Displayer # -->
+        <!-- ############################# -->
+        <record model="ir.ui.view" id="loan_add_remove_displayer_view_list">
+            <field name="model">endorsement.loan.add_remove.displayer</field>
+            <field name="type">tree</field>
+            <field name="name">loan_add_remove_displayer_list</field>
+        </record>
         <!-- ######################## -->
         <!-- # Change Loan Any Date # -->
         <!-- ######################## -->

@@ -49,6 +49,15 @@
             <field name="type">tree</field>
             <field name="name">endorsement_field_list</field>
         </record>
+        <!-- ################################ -->
+        <!-- # Endorsement Add Remove Loans # -->
+        <!-- ################################ -->
+        <record model="endorsement.part" id="add_remove_loan_revision_part">
+            <field name="code">add_remove_loan</field>
+            <field name="name">Add / Remove Loans</field>
+            <field name="kind">loan</field>
+            <field name="view">loan_add_remove</field>
+        </record>
         <!-- ####################################### -->
         <!-- # Endorsement Change Loan At Any Date # -->
         <!-- ####################################### -->

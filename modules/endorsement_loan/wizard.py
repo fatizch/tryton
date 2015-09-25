@@ -19,6 +19,8 @@ __all__ = [
     'ExtraPremiumDisplayer',
     'NewExtraPremium',
     'ManageExtraPremium',
+    'AddRemoveLoan',
+    'AddRemoveLoanDisplayer',
     'ManageOptions',
     'OptionDisplayer',
     'ChangeLoanAtDate',
@@ -151,6 +153,232 @@ class OptionDisplayer:
         return new_option
 
 
+class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
+    'Add Remove Loan'
+
+    __name__ = 'endorsement.loan.add_remove'
+
+    loan_actions = fields.One2Many('endorsement.loan.add_remove.displayer',
+        None, 'Loans')
+    possible_contracts = fields.Many2Many('contract', None, None,
+        'Possible Contracts', readonly=True)
+    new_loan = fields.Many2One('loan', 'New Loan')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(AddRemoveLoan, cls).view_attributes() + [
+            ('/form/group[@id="invisible"]', 'states', {'invisible': True})]
+
+    @fields.depends('loan_actions', 'possible_contracts')
+    def on_change_loan_actions(self):
+        if not self.loan_actions or not self.possible_contracts:
+            return
+
+        def update_group(loan, contracts, modified):
+            modified.previous_check = modified.checked
+            if not modified.contract:
+                for contract in contracts:
+                    contract.checked = modified.checked
+                    contract.previous_check = modified.previous_check
+            else:
+                loan.checked = any([x.checked for x in contracts])
+                loan.previous_check = loan.checked
+
+        new_displayers = []
+        cur_loan, cur_contracts, modified = None, [], None
+        for action in self.loan_actions:
+            new_displayers.append(action)
+            if not action.contract and not action.loan:
+                continue
+            if not action.contract:
+                if modified:
+                    update_group(cur_loan, cur_contracts, modified)
+                    modified = None
+                cur_loan, cur_contracts = action, []
+            else:
+                cur_contracts.append(action)
+            if action.checked != action.previous_check:
+                modified = action
+        if modified:
+            update_group(cur_loan, cur_contracts, modified)
+        self.loan_actions = new_displayers
+
+    @fields.depends('loan_actions', 'new_loan', 'possible_contracts')
+    def on_change_new_loan(self):
+        if self.new_loan.id in [x.loan.id
+                for x in self.loan_actions if x.loan]:
+            self.new_loan = None
+            return
+
+        Displayer = Pool().get('endorsement.loan.add_remove.displayer')
+        displayers = list(self.loan_actions)
+        displayers.append(Displayer(name=''))
+        loan_action = Displayer(loan=self.new_loan, contract=None,
+            existed_before=False, checked=True, previous_check=True)
+        loan_action.name = loan_action.on_change_with_name()
+        displayers.append(loan_action)
+        for contract in self.possible_contracts:
+            contract_displayer = Displayer(contract=contract,
+                loan=self.new_loan, checked=True, previous_check=True,
+                existed_before=False)
+            contract_displayer.name = contract_displayer.on_change_with_name()
+            displayers.append(contract_displayer)
+        self.loan_actions = displayers
+        self.new_loan = None
+
+    def step_default(self, field_names):
+        pool = Pool()
+        Contract = pool.get('contract')
+        Displayer = pool.get('endorsement.loan.add_remove.displayer')
+        defaults = super(AddRemoveLoan, self).step_default()
+        all_contracts, all_loans, new_matches = set(), set(), {}
+        for ctr_endorsement in self.wizard.endorsement.contract_endorsements:
+            all_contracts.add(ctr_endorsement.contract)
+            all_contracts |= set([
+                    x for loan in ctr_endorsement.contract.loans
+                    for x in loan.contracts])
+            contract = Contract(ctr_endorsement.contract.id)
+            utils.apply_dict(contract, ctr_endorsement.apply_values())
+            new_matches[contract.id] = set([x.loan.id
+                    for x in contract.ordered_loans if not x.id] +
+                [x.id for x in contract.get_used_loans_at_date(
+                        self.effective_date)])
+            all_loans |= set(new_matches[contract.id])
+        defaults['possible_contracts'] = [x.id for x in all_contracts]
+        current_matches = {x.id: [l.id for l in x.get_used_loans_at_date(
+                    self.effective_date)] for x in all_contracts}
+        all_loans |= set(sum(current_matches.values(), []))
+        displayers = []
+        for loan in all_loans:
+            if len(displayers):
+                displayers.append(Displayer(name=''))
+            new_displayer = Displayer(loan=loan, contract=None, checked=True,
+                existed_before=False)
+            displayers.append(new_displayer)
+            for contract in all_contracts:
+                ctr_displayer = Displayer(contract=contract, loan=loan)
+                ctr_displayer.checked = loan in new_matches.get(contract.id,
+                    current_matches[contract.id])
+                ctr_displayer.existed_before = loan in current_matches[
+                    contract.id]
+                ctr_displayer.previous_check = ctr_displayer.checked
+                ctr_displayer.name = ctr_displayer.on_change_with_name()
+                if ctr_displayer.existed_before:
+                    new_displayer.existed_before = True
+                new_displayer.checked |= ctr_displayer.checked
+                displayers.append(ctr_displayer)
+            new_displayer.previous_check = new_displayer.checked
+            new_displayer.name = new_displayer.on_change_with_name()
+        defaults['loan_actions'] = [x._default_values for x in displayers]
+        return defaults
+
+    def step_update(self):
+        pool = Pool()
+        ContractEndorsement = pool.get('endorsement.contract')
+        OrderedLoan = pool.get('contract-loan')
+        Option = pool.get('contract.option')
+        Share = pool.get('loan.share')
+        endorsement = self.wizard.endorsement
+        contracts, endorsements = {}, {}
+        for ctr_endorsement in endorsement.contract_endorsements:
+            contract = ctr_endorsement.contract
+            endorsements[contract.id] = ctr_endorsement
+            utils.apply_dict(contract, ctr_endorsement.apply_values())
+            contracts[contract.id] = contract
+        for contract in self.possible_contracts:
+            if contract.id not in contracts:
+                contracts[contract.id] = contract
+        existing_loans = {x.id: [y.loan.id for y in x.ordered_loans]
+            for x in self.possible_contracts}
+        new_loans = defaultdict(set)
+        for action in self.loan_actions:
+            if not action.contract or not action.checked:
+                continue
+            new_loans[action.contract.id].add(action.loan.id)
+
+        for contract_id in new_loans.iterkeys():
+            contract = contracts[contract_id]
+            removed = set(existing_loans[contract_id]) - new_loans[contract_id]
+            added = new_loans[contract_id] - set(existing_loans[contract_id])
+            contract.ordered_loans = [x for x in contract.ordered_loans
+                if x.loan.id not in added and x.loan.id not in removed] + [
+                OrderedLoan(loan=x) for x in added]
+
+            # Sync loan shares
+            for covered in contract.covered_elements:
+                for option in covered.options:
+                    if not getattr(option, 'id', None):
+                        previous_shares = set({})
+                    else:
+                        previous_shares = {
+                            x for x in Option(option.id).loan_shares
+                            if x.loan.id not in removed}
+                    new_shares = []
+                    per_loan = defaultdict(list)
+                    for share in option.loan_shares:
+                        per_loan[share.loan.id].append(share)
+                    for loan_id, shares in per_loan.iteritems():
+                        if loan_id not in removed:
+                            # Remove previously deleted loans
+                            new_shares += [x for x in shares
+                                if x.share
+                                or x.start_date != self.effective_date]
+                        else:
+                            # Check the share is properly ended
+                            zero_found = False
+                            for share in shares:
+                                if share.start_date == self.effective_date:
+                                    share.share = 0
+                                    zero_found = True
+                                if not share.start_date or (share.start_date <=
+                                        self.effective_date):
+                                    new_shares.append(share)
+                            if not zero_found:
+                                new_shares.append(Share(share=0, loan=loan_id,
+                                        start_date=self.effective_date))
+                    previous_shares = previous_shares - set(new_shares)
+                    option.loan_shares = new_shares + list(previous_shares)
+                covered.options = list(covered.options)
+            contract.covered_elements = list(contract.covered_elements)
+            if contract_id not in endorsements:
+                new_endorsement = ContractEndorsement(contract=contract_id)
+                endorsements[contract_id] = new_endorsement
+            self._update_endorsement(endorsements[contract_id],
+                contract._save_values)
+        endorsement.contract_endorsements = endorsements.values()
+        endorsement.save()
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement_loan.loan_add_remove_view_form'
+
+
+class AddRemoveLoanDisplayer(model.CoopView):
+    'Add Remove Loan Displayer'
+
+    __name__ = 'endorsement.loan.add_remove.displayer'
+
+    name = fields.Char('Name', readonly=True)
+    loan = fields.Many2One('loan', 'Loan')
+    contract = fields.Many2One('contract', 'Contract')
+    checked = fields.Boolean('Checked', states={'invisible': ~Eval('loan')},
+        depends=['loan'])
+    existed_before = fields.Boolean('Existed Before')
+    previous_check = fields.Boolean('Previous Check')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(AddRemoveLoanDisplayer, cls).view_attributes() + [
+            ('/tree', 'colors', If(Eval('checked') != Eval('existed_before'),
+                    If(Bool(Eval('checked')), 'green', 'red'), 'black'))]
+
+    @fields.depends('loan', 'contract')
+    def on_change_with_name(self):
+        if self.contract:
+            return '        ' + self.contract.rec_name
+        return self.loan.rec_name
+
+
 class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
     'Change Loan at Date'
 
@@ -210,6 +438,7 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
         self.new_increments[-1].on_change_loan()
         self.new_increments[-1].start_date = new_start
         self.new_increments[-1].manual = len(self.new_increments) == 1
+        self.new_increments[-1].loan_state = 'draft'
         self.new_increments = list(self.new_increments)
 
     def step_default(self, field_names):
@@ -227,6 +456,8 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
                     increment.loan = loan
                 if not getattr(increment, 'id', None):
                     increment.id = None
+                if not getattr(increment, 'loan_state', None):
+                    increment.loan_state = 'draft'
                 all_increments.append(increment)
         increments_fields = self._increments_fields_to_extract()
         defaults['all_increments'] = [model.dictionarize(x, increments_fields)
@@ -270,7 +501,7 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
                 'end_date', 'loan', 'number_of_payments', 'rate',
                 'payment_amount', 'payment_frequency',
                 'payment_frequency_string', 'deferal', 'deferal_string',
-                'manual', 'id']}
+                'manual', 'id', 'loan_state']}
 
     def get_default_loans(self):
         endorsement = self.wizard.endorsement
@@ -571,8 +802,13 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
         selectors, template, all_loans = [], {}, set()
         for endorsement in all_endorsements:
             updated_struct = endorsement.updated_struct
-            loans = set(list(endorsement.contract.used_loans) + [
-                    x.loan for x in wizard.endorsement.loan_endorsements])
+            loans = set(endorsement.contract.get_used_loans_at_date(
+                    effective_date))
+            for loan in endorsement.ordered_loans:
+                if loan.action == 'remove':
+                    loans.remove(loan.loan)
+                elif loan.action == 'add':
+                    loans.add(loan.loan)
             all_loans |= loans
             template['contract'] = endorsement.contract.id
             for covered_element, values in (
@@ -587,6 +823,8 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                             if x not in o_values['loan_shares']]:
                         o_values['loan_shares'][loan] = {}
                     for loan, shares in o_values['loan_shares'].iteritems():
+                        if loan not in loans:
+                            continue
                         template['loan'] = loan.id
                         template['previous_share'] = None
                         selector = template.copy()
@@ -597,6 +835,8 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                             key=lambda x: x.start_date or datetime.date.min)
                         selector = template.copy()
                         for idx, loan_share in enumerate(sorted_list):
+                            if loan_share.share == 0:
+                                continue
                             if (effective_date == (loan_share.start_date
                                         or endorsement.contract.start_date)
                                     and isinstance(loan_share,
@@ -1265,3 +1505,6 @@ class StartEndorsement:
 
 add_endorsement_step(StartEndorsement, ChangeLoanAtDate,
     'change_loan_any_date')
+
+add_endorsement_step(StartEndorsement, AddRemoveLoan,
+    'loan_add_remove')

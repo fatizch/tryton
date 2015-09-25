@@ -12,6 +12,7 @@ __all__ = [
     'EndorsementLoanField',
     'EndorsementLoanShareField',
     'EndorsementLoanIncrementField',
+    'EndorsementContractLoanField',
     ]
 
 
@@ -114,3 +115,10 @@ class EndorsementLoanIncrementField(field_mixin('loan.increment'),
     'Endorsement Loan Increment Field'
 
     __name__ = 'endorsement.loan.increment.field'
+
+
+class EndorsementContractLoanField(field_mixin('contract-loan'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Contract Loan Field'
+
+    __name__ = 'endorsement.contract.loan.field'

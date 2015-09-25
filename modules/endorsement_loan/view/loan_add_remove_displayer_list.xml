@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tree string="Loans">
+    <field name="checked"/>
+    <field name="name" expand="1"/>
+    <field name="loan" tree_invisible="1"/>
+    <field name="contract" tree_invisible="1"/>
+    <field name="previous_check" tree_invisible="1"/>
+    <field name="existed_before" tree_invisible="1"/>
+</tree>
