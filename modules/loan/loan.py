@@ -7,7 +7,6 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool, If, Not
 from trytond.model import Workflow
 from trytond.tools import grouped_slice
-from trytond.wizard import StateView, Button, StateTransition
 
 from trytond.modules.cog_utils import utils, coop_date, fields, model
 from trytond.modules.cog_utils import coop_string
@@ -16,7 +15,6 @@ from trytond.modules.currency_cog import ModelCurrency
 __all__ = [
     'Loan',
     'LoanIncrement',
-    'LoanIncrementCreate',
     'LoanPayment',
     ]
 
@@ -36,6 +34,10 @@ DEFERALS = [
 
 _STATES = {'readonly': Eval('state') != 'draft'}
 _DEPENDS = ['state']
+_STATES_INCREMENT = {'required': Eval('loan_state') == 'calculated'}
+LOAN_FIELDS_FOR_INCREMENTS = ['kind', 'deferal', 'duration', 'duration_unit',
+    'deferal_duration', 'increments', 'rate', 'payment_frequency',
+    'first_payment_date', 'funds_release_date']
 
 
 class Loan(Workflow, model.CoopSQL, model.CoopView):
@@ -127,7 +129,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             ],
         states={
             'readonly': (
-                Eval('kind') != 'graduated') | (Eval('state') != 'draft'),
+                Eval('state') != 'draft'),
             },
         depends=['state', 'first_payment_date', 'kind'], delete_missing=True)
     deferal = fields.Function(
@@ -174,9 +176,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     display_warning = fields.Function(
         fields.Boolean('Warning'),
         'on_change_with_display_warning')
-    dates_are_calculated = fields.Function(
-        fields.Boolean('Dates are calculated'),
-        'on_change_with_dates_are_calculated')
 
     @classmethod
     def __setup__(cls):
@@ -201,8 +200,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                     'invisible': Eval('state') != 'draft',
                     },
                 'add_manual_increment': {
-                    'invisible': (Eval('state') != 'draft')
-                    | ~Eval('dates_are_calculated'),
+                    'invisible': Eval('state') != 'draft',
                     },
                 })
 
@@ -416,7 +414,9 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     @classmethod
     def insert_manual_increment(cls, increment, increments):
         increments_to_keep = [x for x in increments
-            if x.start_date < increment.start_date]
+            if x.start_date and x.start_date < increment.start_date]
+        increments_added_after_manual_increments = [x for x in increments
+            if not x.start_date]
         if increments_to_keep:
             prev_increment = increments_to_keep[-1]
             prev_increment.number_of_payments, is_exact = (
@@ -427,7 +427,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             if not is_exact:
                 prev_increment.number_of_payments += 1
         increments_to_keep.append(increment)
-        return increments_to_keep
+        return increments_to_keep + increments_added_after_manual_increments
 
     def create_increment(self, duration, payment_frequency,
             payment_amount=None, deferal=None):
@@ -603,11 +603,43 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             return Decimal(0)
         return self.rate
 
-    @fields.depends('kind', 'deferal', 'duration', 'duration_unit',
-            'deferal_duration', 'increments', 'rate', 'payment_frequency')
-    def on_change_with_increments(self):
+    @fields.depends(*LOAN_FIELDS_FOR_INCREMENTS)
+    def on_change_kind(self):
         self.init_increments()
-        return self._changed_values.get('increments', None)
+
+    @fields.depends(*LOAN_FIELDS_FOR_INCREMENTS)
+    def on_change_deferal(self):
+        self.init_increments()
+
+    @fields.depends(*LOAN_FIELDS_FOR_INCREMENTS)
+    def on_change_duration(self):
+        self.init_increments()
+
+    @fields.depends(*LOAN_FIELDS_FOR_INCREMENTS)
+    def on_change_duration_unit(self):
+        self.init_increments()
+
+    @fields.depends(*LOAN_FIELDS_FOR_INCREMENTS)
+    def on_change_deferal_duration(self):
+        self.init_increments()
+
+    @fields.depends(*LOAN_FIELDS_FOR_INCREMENTS)
+    def on_change_rate(self):
+        self.init_increments()
+
+    @fields.depends(*LOAN_FIELDS_FOR_INCREMENTS)
+    def on_change_payment_frequency(self):
+        self.first_payment_date = self.on_change_with_first_payment_date()
+        self.init_increments()
+
+    @fields.depends(*LOAN_FIELDS_FOR_INCREMENTS)
+    def on_change_first_payment_date(self):
+        self.init_increments()
+
+    @fields.depends(*LOAN_FIELDS_FOR_INCREMENTS)
+    def on_change_funds_release_date(self):
+        self.first_payment_date = self.on_change_with_first_payment_date()
+        self.init_increments()
 
     @classmethod
     def get_insured_persons_name(cls, loans, name=None):
@@ -632,11 +664,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             self.increments[-1].payment_amount or Decimal(0))
         if abs(diff) > Decimal(0.01) * self.duration:
             return True
-
-    @fields.depends('increments')
-    def on_change_with_dates_are_calculated(self, name=None):
-        return all([getattr(x, 'start_date', None) is not None
-                for x in self.increments])
 
     @classmethod
     def search_insured_persons(cls, name, clause):
@@ -696,18 +723,11 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
         'get_func_key', searcher='search_func_key')
     number = fields.Integer('Number')
     begin_balance = fields.Numeric('Begin Balance',
-        states={
-            'required': Bool(Eval('dates_are_calculated')),
-            'readonly': ~Eval('manual'),
-            },
+        states=_STATES_INCREMENT,
         digits=(16, Eval('currency_digits', 2)),
-        depends=['currency_digits', 'manual', 'dates_are_calculated'])
+        depends=['currency_digits', 'loan_state'])
     start_date = fields.Date('Start Date',
-        states={
-            'required': Bool(Eval('dates_are_calculated')),
-            'readonly': ~Eval('manual'),
-            },
-        depends=['manual', 'dates_are_calculated'])
+        states=_STATES_INCREMENT, depends=['loan_state'])
     end_date = fields.Function(
         fields.Date('End Date', states={'invisible': ~Eval('end_date')}),
         'get_end_date')
@@ -717,8 +737,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     rate = fields.Numeric('Annual Rate', digits=(16, 4), required=True)
     payment_amount = fields.Numeric('Payment Amount',
         digits=(16, Eval('currency_digits', 2)),
-        states={'required': Bool(Eval('dates_are_calculated'))},
-        depends=['currency_digits', 'dates_are_calculated'])
+        states=_STATES_INCREMENT, depends=['loan_state', 'currency_digits'])
     payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
         'Payment Frequency', sort=False, required=True,
         domain=[('payment_frequency', 'in',
@@ -728,9 +747,9 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     deferal = fields.Selection(DEFERALS, 'Deferal', sort=False)
     deferal_string = deferal.translated('deferal')
     manual = fields.Boolean('Manual')
-    dates_are_calculated = fields.Function(
-        fields.Boolean('Dates are calculated'),
-        'get_dates_are_calculated')
+    loan_state = fields.Function(
+        fields.Char('Loan State'),
+        'get_loan_state')
 
     @classmethod
     def __setup__(cls):
@@ -814,11 +833,12 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     def default_number_of_payments():
         return 0
 
-    @fields.depends('loan', 'payment_frequency', 'manual', 'number')
+    @fields.depends('loan', 'payment_frequency', 'manual', 'number',
+            'loan_state')
     def on_change_loan(self):
         self.payment_frequency = self.loan.payment_frequency
         self.rate = self.loan.rate
-        self.dates_are_calculated = self.get_dates_are_calculated(None)
+        self.loan_state = self.loan.state
 
     def get_start_date(self, name):
         start_date = self.loan.first_payment_date
@@ -836,6 +856,9 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
                 self.payment_frequency, self.number_of_payments - 1,
                 stick_to_end_of_month=True)
 
+    def get_loan_state(self, name):
+        return self.loan.state if self.loan else None
+
     @fields.depends('begin_balance', 'rate', 'number_of_payments', 'deferal',
         'loan', 'payment_frequency')
     def on_change_with_payment_amount(self):
@@ -845,43 +868,9 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
                 self.number_of_payments, self.begin_balance,
                 self.loan.currency, self.payment_frequency, self.deferal)
 
-    def get_dates_are_calculated(self, name):
-        return self.loan.dates_are_calculated if self.loan else None
-
-
-class LoanIncrementCreate(model.CoopWizard):
-    'Create Increment'
-    __name__ = 'loan.increment.create'
-
-    start_state = 'increment'
-    increment = StateView('loan.increment', 'loan.loan_increment_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Create', 'create_increment', 'tryton-ok', default=True)
-            ])
-    create_increment = StateTransition()
-
-    def default_increment(self, name):
-        loan_id = Transaction().context.get('active_id')
-        loan = Pool().get('loan')(loan_id)
-        payment_frequency = (loan.increments[-1].payment_frequency
-            if loan.increments else loan.payment_frequency)
-        rate = loan.increments[-1].rate if loan.increments else loan.rate
-        return {
-            'loan': loan.id,
-            'payment_frequency': payment_frequency,
-            'rate': rate,
-            'manual': True,
-            'dates_are_calculated': loan.dates_are_calculated,
-            }
-
-    def transition_create_increment(self):
-        loan = self.increment.loan
-        loan.increments = loan.insert_manual_increment(self.increment,
-            list(loan.increments))
-        if loan.state == 'calculated':
-            loan.calculate()
-        loan.save()
-        return 'end'
+    @fields.depends('start_date', 'begin_balance')
+    def on_change_with_manual(self):
+        return self.start_date or self.begin_balance
 
 
 class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):

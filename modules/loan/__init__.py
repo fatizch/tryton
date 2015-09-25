@@ -39,5 +39,4 @@ def register():
         CreateExtraPremium,
         SynthesisMenuOpen,
         DisplayInsuredOutstandingLoanBalance,
-        LoanIncrementCreate,
         module='loan', type_='wizard')

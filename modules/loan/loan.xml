@@ -167,9 +167,5 @@
             <field name="model">loan,-1</field>
             <field name="action" ref="act_loan_payment_relate_form"/>
         </record>
-        <record model="ir.action.wizard" id="act_add_manual_increment">
-            <field name="name">Add Manual Increment</field>
-            <field name="wiz_name">loan.increment.create</field>
-        </record>
     </data>
 </tryton>
