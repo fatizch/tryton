@@ -36,3 +36,6 @@ class MedicalActDescription(model.CoopSQL, model.CoopView):
         cls._sql_constraints += [
             ('code_unique', Unique(t, t.code), 'The code must be unique'),
             ]
+
+    def get_rec_name(self, name):
+        return self.code
