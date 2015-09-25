@@ -14,6 +14,8 @@
             <field name="end_date"/>
             <label name="status"/>
             <field name="status"/>
+            <label name="sub_status"/>
+            <field name="sub_status"/>
             <newline/>
             <field name="current_extra_data" colspan="2" no_command="1"/>
         </page>
