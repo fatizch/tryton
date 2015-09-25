@@ -12,4 +12,7 @@
     <xpath expr="/tree/button[@name='succeed']" position="replace_attributes">
         <button string="Succeed" name="succeed" tree_invisible="1"/>
     </xpath>
+    <xpath expr="/tree" position="inside">
+        <button string="Process Payments" name="process_payments" tree_invisible="1"/>
+    </xpath>
 </data>

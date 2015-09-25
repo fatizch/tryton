@@ -234,8 +234,13 @@ class Payment(export.ExportImportMixin, Printable):
                 'button_fail_payments': {
                     'invisible': Not(In(Eval('state'),
                             ['processing', 'succeeded'])),
-                    'icon': 'tryton-cancel'
-                    }})
+                    'icon': 'tryton-cancel',
+                },
+                'process_payments': {
+                    'invisible': Eval('state') != 'approved',
+                    'icon': 'tryton-go-next'
+                }
+        })
 
     def get_icon(self, name=None):
         return 'payment'
@@ -263,6 +268,12 @@ class Payment(export.ExportImportMixin, Printable):
             Overriden in account_payment_sepa_cog
         """
         return (self, self.journal)
+
+    @classmethod
+    @model.CoopView.button_action(
+        'account_payment_cog.act_process_payments_button')
+    def process_payments(cls, payments):
+        pass
 
     @property
     def fail_code(self):

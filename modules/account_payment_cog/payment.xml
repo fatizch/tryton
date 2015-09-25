@@ -120,5 +120,16 @@
             <field name="name">Fail Payment</field>
             <field name="wiz_name">account.payment.manual_payment_fail</field>
         </record>
+        <!-- ############################################################ -->
+        <!-- ########### Process Payments Wizard ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.action.wizard" id="act_process_payments">
+            <field name="active" eval="False"/>
+        </record>
+        <record model="ir.action.wizard" id="act_process_payments_button">
+            <field name="name">Process Payments</field>
+            <field name="wiz_name">account.payment.process</field>
+            <field name="model">account.payment</field>
+        </record>
     </data>
 </tryton>

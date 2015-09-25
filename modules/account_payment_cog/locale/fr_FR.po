@@ -23,6 +23,11 @@ msgctxt "error:account.payment:"
 msgid "Payments blocked for party %s"
 msgstr "Paiements bloqués pour le tiers %s"
 
+#, fuzzy
+msgctxt "field:account.configuration,default_customer_payment_term:"
+msgid "Default Customer Payment Term"
+msgstr "Conditions de paiement client par défaut"
+
 msgctxt "field:account.configuration,direct_debit_journal:"
 msgid "Direct Debit Journal"
 msgstr "Journal de prélèvement"
@@ -30,6 +35,20 @@ msgstr "Journal de prélèvement"
 msgctxt "field:account.configuration,reject_fee_journal:"
 msgid "Reject Fee Journal"
 msgstr "Journal des frais de rejet"
+
+#, fuzzy
+msgctxt "field:account.invoice,credit_reconciliation_lines:"
+msgid "Payment Lines"
+msgstr "Lignes de paiement"
+
+#, fuzzy
+msgctxt "field:account.invoice,payments:"
+msgid "Payments"
+msgstr "Paiements"
+
+msgctxt "field:account.invoice,pending_payment:"
+msgid "Pending Payment"
+msgstr ""
 
 msgctxt "field:account.move.line,payment_date:"
 msgid "Payment Date"
@@ -315,6 +334,14 @@ msgctxt "model:ir.action,name:act_payment_fail_status_form"
 msgid "Payments Rejected"
 msgstr "Paiements rejetés"
 
+msgctxt "model:ir.action,name:act_process_payments"
+msgid "Process Payments"
+msgstr "Traiter les paiements"
+
+msgctxt "model:ir.action,name:act_process_payments_button"
+msgid "Process Payments"
+msgstr "Traiter les paiements"
+
 msgctxt "model:ir.action,name:act_reject_reason_form"
 msgid "Reject reasons"
 msgstr "Motifs de rejet"
@@ -431,9 +458,18 @@ msgctxt "view:account.payment:"
 msgid "Draft"
 msgstr "Brouillon"
 
+#, fuzzy
+msgctxt "view:account.payment:"
+msgid "Fail"
+msgstr "Échouer"
+
 msgctxt "view:account.payment:"
 msgid "Failed Payments"
 msgstr "Paiements rejetés"
+
+msgctxt "view:account.payment:"
+msgid "Process Payments"
+msgstr "Traiter les paiements"
 
 msgctxt "view:account.payment:"
 msgid "Succeed"
