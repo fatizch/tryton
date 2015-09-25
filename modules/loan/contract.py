@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
+from collections import defaultdict
+
 from sql.conditionals import Coalesce
 
 from trytond import backend
@@ -7,7 +9,8 @@ from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, If, Len
 
-from trytond.modules.cog_utils import fields, model, coop_string, coop_date
+from trytond.modules.cog_utils import fields, model, coop_string, coop_date, \
+    utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -95,12 +98,15 @@ class Contract:
             ContractLoan.write(*to_write)
 
     def get_used_loans(self, name):
-        loans = set([share.loan
-            for covered_element in self.covered_elements
-            for option in covered_element.options
-            for share in option.loan_shares])
+        return [x.id for x in self.get_used_loans_at_date(utils.today())]
 
-        return [x.id for x in sorted(list(loans), key=lambda x: x.id)]
+    def get_used_loans_at_date(self, at_date):
+        return sorted(list(set([x.loan
+                        for covered_element in self.covered_elements
+                        for option in covered_element.options
+                        for x in option.get_shares_at_date(at_date)
+                        if x.share])),
+            key=lambda x: x.id)
 
     def get_show_ordered_loans(self, name):
         return False
@@ -256,16 +262,23 @@ class ContractOption:
         return self.coverage_family == 'loan'
 
     def get_latest_loan_shares(self, name):
-        latest_shares = []
-        for loan_share in sorted(self.loan_shares, reverse=True,
-                key=lambda x: (x.loan, x.start_date or datetime.date.min)):
-            if not latest_shares:
-                latest_shares.append(loan_share)
-                continue
-            if latest_shares[-1].loan == loan_share.loan:
-                continue
-            latest_shares.append(loan_share)
-        return [x.id for x in latest_shares]
+        return [x[-1].id for x in self.get_shares_per_loan().itervalues()]
+
+    def get_shares_at_date(self, at_date):
+        result = []
+        for shares in self.get_shares_per_loan().itervalues():
+            for share in reversed(shares):
+                if not share.start_date or share.start_date <= at_date:
+                    result.append(share)
+                    break
+        return result
+
+    def get_shares_per_loan(self):
+        result = defaultdict(list)
+        for share in sorted(self.loan_shares,
+                key=lambda x: x.start_date or datetime.date.min):
+            result[share.loan.id].append(share)
+        return result
 
     def get_possible_end_date(self):
         dates = super(ContractOption, self).get_possible_end_date()
