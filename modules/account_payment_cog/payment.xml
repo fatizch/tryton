@@ -123,7 +123,7 @@
         <!-- ############################################################ -->
         <!-- ########### Process Payments Wizard ########### -->
         <!-- ############################################################ -->
-        <record model="ir.action.wizard" id="act_process_payments">
+        <record model="ir.action.wizard" id="account_payment.act_process_payments">
             <field name="active" eval="False"/>
         </record>
         <record model="ir.action.wizard" id="act_process_payments_button">
