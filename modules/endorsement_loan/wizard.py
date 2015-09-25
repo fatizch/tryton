@@ -8,7 +8,8 @@ from trytond.pyson import Eval, Bool, Len, If, Not
 
 from trytond.modules.cog_utils import fields, model, utils
 from trytond.modules.endorsement import EndorsementWizardPreviewMixin
-from trytond.modules.endorsement import EndorsementWizardStepMixin
+from trytond.modules.endorsement import EndorsementWizardStepMixin, \
+    add_endorsement_step
 
 PAYMENT_FIELDS = ['kind', 'number', 'start_date', 'begin_balance',
     'amount', 'principal', 'interest', 'outstanding_balance']
@@ -20,6 +21,7 @@ __all__ = [
     'ManageExtraPremium',
     'ManageOptions',
     'OptionDisplayer',
+    'ChangeLoanAtDate',
     'ChangeLoanDisplayer',
     'ChangeLoan',
     'ChangeLoanUpdatedPayments',
@@ -147,6 +149,150 @@ class OptionDisplayer:
             new_shares.append(loan_share)
         new_option.loan_shares = new_shares
         return new_option
+
+
+class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
+    'Change Loan at Date'
+
+    __name__ = 'endorsement.loan.change_any_date'
+
+    current_loan = fields.Many2One('loan', 'Current Loan', states={
+            'invisible': Len(Eval('possible_loans', [])) == 1},
+        domain=[('id', 'in', Eval('possible_loans'))],
+        depends=['possible_loans'])
+    possible_loans = fields.Many2Many('loan', None, None, 'Possible Loans',
+        readonly=True)
+    all_increments = fields.One2Many('loan.increment', None, 'All increments',
+        readonly=True)
+    current_increments = fields.One2Many('loan.increment', None,
+        'Current Increments', readonly=True)
+    new_increments = fields.One2Many('loan.increment', None, 'New Increments')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(ChangeLoanAtDate, cls).view_attributes() + [(
+                '/form/group[@id="invisible"]',
+                'states',
+                {'invisible': True})]
+
+    @fields.depends('all_increments', 'current_increments', 'current_loan',
+        'effective_date', 'new_increments')
+    def on_change_current_loan(self):
+        if self.new_increments:
+            self.all_increments = [x for x in self.all_increments
+                if x.loan != self.new_increments[0].loan
+                or x.number is not None] + list(self.new_increments)
+        if not self.current_loan:
+            self.current_increments = []
+            self.new_increments = []
+            return
+        current_increments, new_increments = [], []
+        for increment in self.all_increments:
+            if increment.loan != self.current_loan:
+                continue
+            if increment.number is not None:
+                current_increments.append(increment)
+            else:
+                new_increments.append(increment)
+        self.current_increments = current_increments
+        self.new_increments = new_increments
+
+    @fields.depends('current_loan', 'effective_date', 'new_increments')
+    def on_change_new_increments(self):
+        if not self.new_increments or getattr(self.new_increments[-1],
+                'loan', None):
+            return
+        self.new_increments[-1].loan = self.current_loan
+        if len(self.new_increments) > 1:
+            new_start = self.new_increments[-2].get_end_date(None)
+        else:
+            new_start = self.effective_date
+        self.new_increments[-1].on_change_loan()
+        self.new_increments[-1].start_date = new_start
+        self.new_increments[-1].manual = len(self.new_increments) == 1
+        self.new_increments = list(self.new_increments)
+
+    def step_default(self, field_names):
+        defaults = super(ChangeLoanAtDate, self).step_default()
+        updated_loans = self.updated_loans(self.get_default_loans())
+        defaults['possible_loans'] = [x.id for x in updated_loans.itervalues()]
+        defaults['current_loan'] = defaults['possible_loans'][0]
+
+        all_increments = []
+        for loan in updated_loans.itervalues():
+            for increment in sorted(loan.increments,
+                    key=lambda x: x.start_date):
+                # Force set for new increments
+                if not getattr(increment, 'loan', None):
+                    increment.loan = loan
+                if not getattr(increment, 'id', None):
+                    increment.id = None
+                all_increments.append(increment)
+        increments_fields = self._increments_fields_to_extract()
+        defaults['all_increments'] = [model.dictionarize(x, increments_fields)
+            for x in all_increments]
+        return defaults
+
+    def step_update(self):
+        # Update all_increments
+        self.on_change_current_loan()
+        LoanEndorsement = Pool().get('endorsement.loan')
+        endorsement_data = self.get_default_loans()
+        updated_loans = self.updated_loans(endorsement_data)
+        new_increments = {loan: [x for x in loan.increments
+                if x.start_date < self.effective_date]
+            for loan in self.possible_loans}
+        modified = set()
+        for increment in self.all_increments:
+            if increment.number is None:
+                new_increments[increment.loan].append(increment)
+                modified.add(increment.loan.id)
+        loan_endorsements = []
+        for loan_id in modified:
+            loan = updated_loans[loan_id]
+            loan.increments = new_increments[loan]
+            endorsement = endorsement_data[loan]
+            if endorsement is None:
+                endorsement = LoanEndorsement(loan=loan)
+            self._update_endorsement(endorsement, loan._save_values)
+            loan_endorsements.append(endorsement)
+        if loan_endorsements:
+            self.wizard.endorsement.loan_endorsements = loan_endorsements
+            self.wizard.endorsement.save()
+
+    def step_next(self):
+        super(ChangeLoanAtDate, self).step_next()
+        return 'display_updated_payments'
+
+    @classmethod
+    def _increments_fields_to_extract(cls):
+        return {'loan.increment': ['number', 'begin_balance', 'start_date',
+                'end_date', 'loan', 'number_of_payments', 'rate',
+                'payment_amount', 'payment_frequency',
+                'payment_frequency_string', 'deferal', 'deferal_string',
+                'manual', 'id']}
+
+    def get_default_loans(self):
+        endorsement = self.wizard.endorsement
+        existing_endorsements = {x.loan: x
+            for x in endorsement.loan_endorsements}
+        for contract_endorsement in endorsement.contract_endorsements:
+            for loan in contract_endorsement.contract.loans:
+                if loan not in existing_endorsements:
+                    existing_endorsements[loan] = None
+        return existing_endorsements
+
+    def updated_loans(self, loan_dicts):
+        loans = {}
+        for loan, endorsement in loan_dicts.iteritems():
+            if endorsement:
+                utils.apply_dict(loan, endorsement.apply_values())
+            loans[loan.id] = loan
+        return loans
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement_loan.loan_change_any_date_view_form'
 
 
 class ChangeLoanDisplayer(model.CoopView):
@@ -829,11 +975,12 @@ class StartEndorsement:
     display_updated_payments = StateView(
         'endorsement.loan.display_updated_payments',
         'endorsement_loan.display_updated_payments_view_form', [
-            Button('Previous', 'change_loan_data', 'tryton-go-previous'),
+            Button('Previous', 'back_to_loan_state', 'tryton-go-previous'),
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Suspend', 'suspend', 'tryton-save'),
             Button('Next', 'loan_select_contracts', 'tryton-go-next',
                 default=True)])
+    back_to_loan_state = StateTransition()
     change_loan_data_next = StateTransition()
     loan_select_contracts = StateView('endorsement.loan.select_contracts',
         'endorsement_loan.select_contracts_view_form', [
@@ -921,6 +1068,12 @@ class StartEndorsement:
         self.change_loan_data.update_endorsement(None, self)
         return 'display_updated_payments'
 
+    def transition_back_to_loan_state(self):
+        return [x.endorsement_part.view
+            for x in self.definition.ordered_endorsement_parts
+            if x.endorsement_part.view in (
+                'change_loan_data', 'change_loan_any_date')][0]
+
     def default_display_updated_payments(self, name):
         default_values = []
         for endorsement in self.endorsement.loan_endorsements:
@@ -1005,7 +1158,10 @@ class StartEndorsement:
         return 'change_loan_data_next'
 
     def transition_change_loan_data_next(self):
-        return self.get_next_state('change_loan_data')
+        return self.get_next_state([x.endorsement_part.view
+                for x in self.definition.ordered_endorsement_parts
+                if x.endorsement_part.view in (
+                    'change_loan_data', 'change_loan_any_date')][0])
 
     def default_loan_share_update(self, name):
         ContractEndorsement = Pool().get('endorsement.contract')
@@ -1098,3 +1254,14 @@ class StartEndorsement:
         result['is_loan'] = result['new_extra_premium'][0]['is_loan'] = any([
                 contract.is_loan for contract in contracts])
         return result
+
+    def end_current_part(self, state_name):
+        # Override because change_loan_at_date does not use automatically
+        # calculated endorsement
+        if state_name != 'change_loan_any_date':
+            return super(StartEndorsement, self).end_current_part(state_name)
+        state = getattr(self, state_name)
+        state.update_endorsement(self.endorsement, self)
+
+add_endorsement_step(StartEndorsement, ChangeLoanAtDate,
+    'change_loan_any_date')

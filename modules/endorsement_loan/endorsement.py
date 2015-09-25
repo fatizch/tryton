@@ -181,7 +181,8 @@ class EndorsementContract:
         order = super(EndorsementContract, cls)._get_restore_history_order()
         option_idx = order.index('contract.option')
         order.insert(option_idx + 1, 'loan.share')
-        order.append('contract.premium.amount')
+        order.insert(order.index('contract.premium') + 1,
+            'contract.premium.amount')
         return order
 
     @classmethod
@@ -228,6 +229,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
                     'applied.'),
                 'only_one_endorsement_in_progress': 'There may only be one '
                 'endorsement in_progress at a given time per loan',
+                'msg_increment_modifications': 'Increments Modifications',
                 })
         cls.values.states = {
             'readonly': Eval('state') == 'applied',
@@ -258,6 +260,14 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         loan_summary = self.get_summary('loan', self.base_instance)
         if loan_summary:
             result[2] += ['loan_change_section', loan_summary]
+
+        increment_summary = [x.get_summary('loan.increment', x.increment)
+            for x in self.increments]
+        if increment_summary:
+            result[2] += ['increment_change_section',
+                '%s :' % self.raise_user_error(
+                    'msg_increment_modifications', raise_exception=False),
+                increment_summary]
         return result
 
     def get_state(self, name):
@@ -532,3 +542,9 @@ class EndorsementLoanIncrement(relation_mixin(
 
     def get_definition(self, name):
         return self.loan_endorsement.definition.id
+
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return super(EndorsementLoanIncrement,
+            cls)._ignore_fields_for_matching() | {'loan', 'number',
+                'number_of_payments'}

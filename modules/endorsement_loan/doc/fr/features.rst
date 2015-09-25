@@ -5,6 +5,11 @@
   pas recalculés, mais toute modification ultérieure prendra en compte les
   nouvelles données du prêt.
 
+- **Avenant unitaire de modification des paliers :** Permet de modifier les
+  paliers du prêt à une date différente de la date de début. Cet avenant permet
+  de gérer les remboursements anticipés, de même que la vie des prêts à
+  paliers.
+
 - **Avenant unitaire de modification des quotités :** Permet de modifier les
   quotités du ou des contrats rattachés au prêt. Ces modifications sont
   versionnées et peuvent se faire dans le passé ou le futur. Il est également

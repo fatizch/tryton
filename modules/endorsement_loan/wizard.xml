@@ -25,6 +25,14 @@
             <field name="inherit" ref="endorsement_insurance.new_extra_premium_view_form"/>
             <field name="name">new_extra_premium_form</field>
         </record>
+        <!-- ######################## -->
+        <!-- # Change Loan Any Date # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="loan_change_any_date_view_form">
+            <field name="model">endorsement.loan.change_any_date</field>
+            <field name="type">form</field>
+            <field name="name">loan_change_any_date_form</field>
+        </record>
         <!-- ######################### -->
         <!-- # Change Loan Displayer # -->
         <!-- ######################### -->

@@ -49,5 +49,14 @@
             <field name="type">tree</field>
             <field name="name">endorsement_field_list</field>
         </record>
+        <!-- ####################################### -->
+        <!-- # Endorsement Change Loan At Any Date # -->
+        <!-- ####################################### -->
+        <record model="endorsement.part" id="change_loan_any_date_revision_part">
+            <field name="code">change_loan_any_date</field>
+            <field name="name">Change Loan at any Date</field>
+            <field name="kind">loan</field>
+            <field name="view">change_loan_any_date</field>
+        </record>
     </data>
 </tryton>

@@ -35,6 +35,10 @@ msgid "Endorsement \"%s\" is not the latest applied."
 msgstr "L'avenant \"%s\" n'est pas le plus récent appliqué"
 
 msgctxt "error:endorsement.loan:"
+msgid "Increments Modifications"
+msgstr "Modification des paliers"
+
+msgctxt "error:endorsement.loan:"
 msgid "There may only be one endorsement in_progress at a given time per loan"
 msgstr ""
 "Il ne peut y avoir qu'un seul avenant en cours de saisie sur un prêt donné."
@@ -316,6 +320,42 @@ msgstr "Prêt"
 msgctxt "field:endorsement.loan.change.updated_payments,new_payments:"
 msgid "New Payments"
 msgstr "Nouvel échéancier"
+
+msgctxt "field:endorsement.loan.change_any_date,all_increments:"
+msgid "All increments"
+msgstr "Tous les paliers"
+
+msgctxt "field:endorsement.loan.change_any_date,current_increments:"
+msgid "Current Increments"
+msgstr "Paliers existants"
+
+msgctxt "field:endorsement.loan.change_any_date,current_loan:"
+msgid "Current Loan"
+msgstr "Prêt sélectionné"
+
+msgctxt "field:endorsement.loan.change_any_date,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.loan.change_any_date,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.loan.change_any_date,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.loan.change_any_date,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.loan.change_any_date,new_increments:"
+msgid "New Increments"
+msgstr "Nouveaux paliers"
+
+msgctxt "field:endorsement.loan.change_any_date,possible_loans:"
+msgid "Possible Loans"
+msgstr "Prêts possibles"
 
 msgctxt "field:endorsement.loan.display_updated_payments,id:"
 msgid "ID"
@@ -831,6 +871,10 @@ msgctxt "model:endorsement.loan.change.updated_payments,name:"
 msgid "Change Loan Updated Payments"
 msgstr "Echéancier mis à jour après modification"
 
+msgctxt "model:endorsement.loan.change_any_date,name:"
+msgid "Change Loan at Date"
+msgstr "Modification du prêt à date d'effet"
+
 msgctxt "model:endorsement.loan.display_updated_payments,name:"
 msgid "Display Updated Payments"
 msgstr "Affichage du nouvel échéancier"
@@ -862,6 +906,10 @@ msgstr "Quotité"
 msgctxt "model:endorsement.loan.share.field,name:"
 msgid "Endorsement Loan Share Field"
 msgstr "Champs de la quotité"
+
+msgctxt "model:endorsement.part,name:change_loan_any_date_revision_part"
+msgid "Change Loan at any Date"
+msgstr "Modification du prêt à date d'effet"
 
 msgctxt "model:endorsement.start.preview_contract_payments,name:"
 msgid "Preview Contract Payments"
@@ -963,6 +1011,10 @@ msgctxt "view:endorsement.loan.change:"
 msgid "Change Loan"
 msgstr "Modification du prêt"
 
+msgctxt "view:endorsement.loan.change_any_date:"
+msgid "Change Loan At Date"
+msgstr "Modification du prêt à date d'effet"
+
 msgctxt "view:endorsement.loan.display_updated_payments:"
 msgid "Updated Loan Payments"
 msgstr "Echéancier actualisé"
@@ -971,9 +1023,17 @@ msgctxt "view:endorsement.loan.field:"
 msgid "Endorsement Field"
 msgstr "Champs du prêt"
 
+msgctxt "view:endorsement.loan.field:"
+msgid "Endorsement Fields"
+msgstr "Champs des incréments"
+
 msgctxt "view:endorsement.loan.increment.field:"
 msgid "Endorsement Field"
 msgstr "Champ des paliers"
+
+msgctxt "view:endorsement.loan.increment.field:"
+msgid "Endorsement Fields"
+msgstr "Champs des incréments"
 
 msgctxt "view:endorsement.loan.increment:"
 msgid "Endorsement Loan Increment"
@@ -1034,6 +1094,25 @@ msgstr "Prévisualisation de l'échéancier"
 msgctxt "view:endorsement.start.preview_loan:"
 msgid "Loan Preview Changes"
 msgstr "Aperçu des changements du prêt"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_loan_any_date,change_loan_any_date_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_loan_any_date,change_loan_any_date_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_loan_any_date,change_loan_any_date_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,change_loan_any_date,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt ""
 "wizard_button:endorsement.start,change_loan_data,calculate_updated_payments:"
