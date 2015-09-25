@@ -38,7 +38,9 @@ class EndorsementContract:
             at_date)
         instances['contract.premium'] = []
         for contract in instances['contract']:
-            instances['contract.fee'] += contract.fees
             instances['contract.premium'] += contract.premiums
+            for fee in contract.fees:
+                instances['contract.fee'].append(fee)
+                instances['contract.premium'] += fee.premiums
             for option in contract.options:
                 instances['contract.premium'] += option.premiums
