@@ -896,7 +896,7 @@ class OptionDisplayer(model.CoopView):
             'readonly': Eval('action') != 'added'},
         domain=[If(Eval('action') == 'added',
                 [('end_date', '<=', Eval('effective_date'))],
-                [])])
+                [])], depends=['action', 'effective_date'])
     extra_data = fields.Dict('extra_data', 'Extra Data', states={
             'invisible': ~Eval('extra_data')})
     extra_data_as_string = fields.Text('Extra Data', readonly=True, states={
@@ -911,7 +911,7 @@ class OptionDisplayer(model.CoopView):
             'invisible': Not(In(Eval('action'), ['terminated', 'void']))},
         domain=[If(In(Eval('action'), ['terminated', 'void']),
                 [('status', '=', Eval('action'))],
-                [])])
+                [])], depends=['action'])
 
     @property
     def _parent(self):
