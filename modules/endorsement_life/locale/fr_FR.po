@@ -219,6 +219,10 @@ msgctxt "model:endorsement.contract.beneficiary.manage.option,name:"
 msgid "Option Beneficiary Displayer"
 msgstr "Présenteur de bénéficiaire"
 
+msgctxt "model:endorsement.part,name:change_beneficiary_revision_part"
+msgid "Change Beneficiaries"
+msgstr "Modifier les bénéficiaires"
+
 msgctxt "selection:endorsement.contract.beneficiary,action:"
 msgid "Add"
 msgstr "Ajouter"
