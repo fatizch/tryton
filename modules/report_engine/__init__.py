@@ -2,6 +2,7 @@ from trytond.pool import Pool
 
 from .report_engine import *
 from .ir import *
+from .event import *
 
 
 def register():
@@ -12,6 +13,9 @@ def register():
         ReportCreatePreview,
         ReportCreatePreviewLine,
         ReportCreateAttach,
+        Event,
+        EventType,
+        EventTypeReportTemplate,
         Model,
         module='report_engine', type_='model')
     Pool.register(

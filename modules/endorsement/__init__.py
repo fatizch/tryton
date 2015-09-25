@@ -2,6 +2,7 @@ from trytond.pool import Pool
 from .endorsement import *
 from .offered import *
 from .wizard import *
+from .event import *
 
 
 def register():
@@ -43,7 +44,9 @@ def register():
         ChangeContractSubscriber,
         BasicPreview,
         EndorsementSelectDeclineReason,
+        EndorsementDefinitionReportTemplate,
         ReportTemplate,
+        Event,
         module='endorsement', type_='model')
 
     Pool.register(

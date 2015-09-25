@@ -18,7 +18,7 @@ class Event(Model):
     __name__ = 'event'
 
     @classmethod
-    def notify_events(cls, objects, event_code, description=None):
+    def notify_events(cls, objects, event_code, description=None, **kwargs):
         'This method can be called each time an event happens'
         pass
 

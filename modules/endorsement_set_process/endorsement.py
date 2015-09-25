@@ -93,35 +93,17 @@ class EndorsementSet(CogProcessFramework):
                 res.append(part.id + 100 * endorsement.id)
         return res
 
-    def generate_and_attach_reports_on_contracts(self, template_codes):
-        for endorsement in self.endorsements:
-            for contract in endorsement.contracts:
-                contract.generate_and_attach_reports(template_codes,
-                    creator=endorsement)
-
-    def generate_and_attach_reports_on_endorsements(self):
-        pool = Pool()
-        Endorsement = pool.get('endorsement')
-        Endorsement.produce_reports(self.endorsements, 'endorsement',
-            origin=self)
-
-    def generate_and_attach_reports_on_contract_set(self, template_codes):
-        first_contract = self.endorsements[0].contracts[0]
-        if not first_contract.contract_set:
-            return
-        first_contract.contract_set.generate_and_attach_reports_on_set(
-            template_codes, creator=self)
-
     def get_created_attachments(self, name):
         pool = Pool()
         Attachment = pool.get('ir.attachment')
 
-        operand = ['%s,%s' % (endorsement.__name__, endorsement.id)
+        endorsements = ['%s,%s' % (endorsement.__name__, endorsement.id)
             for endorsement in self.endorsements]
-        operand.append('%s,%s' % (self.__name__, self.id))
+        endorsements_and_set = endorsements + ['endorsement.set,%s' % self.id]
 
         return [x.id for x in Attachment.search(
-                [('origin', 'in', operand)])]
+            ['OR', [('resource', 'in', endorsements)],
+                [('origin', 'in', endorsements_and_set)]])]
 
     def get_attachments(self, name):
         pool = Pool()

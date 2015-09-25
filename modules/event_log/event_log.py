@@ -89,6 +89,8 @@ class Event:
 
     @classmethod
     def notify_events(cls, objects, event_code, description=None, **kwargs):
+        super(Event, cls).notify_events(objects, event_code, description,
+            **kwargs)
         pool = Pool()
         EventLog = pool.get('event.log')
         EventType = pool.get('event.type')

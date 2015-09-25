@@ -10,6 +10,7 @@ from .contact_type import *
 from .configuration import *
 from .offered import *
 from .batch import *
+from .event import *
 
 
 def register():
@@ -42,6 +43,7 @@ def register():
         ContractStopSelectContracts,
         ContractSelectHoldReason,
         ContractReactivateCheck,
+        Event,
         module='contract', type_='model')
     Pool.register(
         OptionSubscription,

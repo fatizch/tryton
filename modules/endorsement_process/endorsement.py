@@ -68,10 +68,6 @@ class Endorsement(CogProcessFramework):
     def button_preview_changes(cls, endorsements):
         pass
 
-    def generate_and_attach_reports_in_endorsement(self, template_codes):
-        for contract in self.contracts:
-            contract.generate_and_attach_reports(template_codes, creator=self)
-
 
 class EndorsementPartUnion(model.CoopSQL, model.CoopView):
     'Endorsement Part Display'

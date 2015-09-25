@@ -82,6 +82,8 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     split_reports = fields.Boolean('Split Reports', help="If checked,"
         " one document will be produced for each object. If not checked"
         " a single document will be produced for several objects.")
+    event_types = fields.Many2Many('event.type-report.template',
+            'report_template', 'event_type', 'Event Types')
 
     @classmethod
     def __setup__(cls):
@@ -131,7 +133,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     @classmethod
     def _export_light(cls):
         return super(ReportTemplate, cls)._export_light() | {'products',
-            'document_desc', 'on_model'}
+            'document_desc', 'on_model', 'event_types'}
 
     @classmethod
     def default_convert_to_pdf(cls):

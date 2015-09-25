@@ -16,5 +16,8 @@
         <page name="products">
             <field name="products"/>
         </page>
+        <page name="report_templates">
+            <field name="report_templates"/>
+        </page>
     </notebook>
 </form>

@@ -53,6 +53,9 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
     is_multi_instance = fields.Function(
         fields.Boolean('Handles Multiple Instances'),
         'get_is_multi_instance')
+    report_templates = fields.Many2Many(
+        'endorsement.definition-report.template', 'definition',
+        'report_template', 'Report Templates')
 
     @classmethod
     def __setup__(cls):
@@ -67,6 +70,11 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
     @classmethod
     def default_active(cls):
         return True
+
+    @classmethod
+    def _export_light(cls):
+        return (super(EndorsementDefinition, cls)._export_skips() |
+            set(['report_templates']))
 
     def get_is_multi_instance(self, name):
         pool = Pool()

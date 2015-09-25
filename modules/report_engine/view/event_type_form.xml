@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='code']" position="after">
+        <notebook>
+            <page name="report_templates">
+                <field name="report_templates" colspan="4"/>
+            </page>
+        </notebook>
+    </xpath>
+</data>

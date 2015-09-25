@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="event_type_view_form">
+            <field name="model">event.type</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="cog_utils.event_type_view_form"/>
+            <field name="name">event_type_form</field>
+        </record>
+    </data>
+</tryton>

@@ -1373,7 +1373,8 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                 for method in methods:
                     method.execute(endorsement, instance)
                 instance.save()
-        Event.notify_events(endorsements, 'apply_endorsement')
+        if not Transaction().context.get('will_be_rollbacked', False):
+            Event.notify_events(endorsements, 'apply_endorsement')
 
     @classmethod
     @model.CoopView.button
@@ -1434,17 +1435,19 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
 
             # Apply endorsement in a sandboxed transaction
             with Transaction().new_cursor():
-                applied_self = self.__class__(self.id)
-                self.apply_for_preview([applied_self])
-                for unitary_endorsement in applied_self.all_endorsements():
-                    endorsed_record = unitary_endorsement.get_endorsed_record()
-                    endorsed_model, endorsed_id = (endorsed_record.__name__,
-                        endorsed_record.id)
-                    record = pool.get(endorsed_model)(endorsed_id)
-                    new_values['%s,%i' % (endorsed_model, endorsed_id)] = \
-                        extraction_method(record, **kwargs)
-                old_values = current_values
-                Transaction().cursor.rollback()
+                with Transaction().set_context(will_be_rollbacked=True):
+                    applied_self = self.__class__(self.id)
+                    self.apply_for_preview([applied_self])
+                    for unitary_endorsement in applied_self.all_endorsements():
+                        endorsed_record = \
+                            unitary_endorsement.get_endorsed_record()
+                        endorsed_model, endorsed_id = (
+                            endorsed_record.__name__, endorsed_record.id)
+                        record = pool.get(endorsed_model)(endorsed_id)
+                        new_values['%s,%i' % (endorsed_model, endorsed_id)] = \
+                            extraction_method(record, **kwargs)
+                    old_values = current_values
+                    Transaction().cursor.rollback()
             return {'old': old_values, 'new': new_values}
 
     @classmethod
