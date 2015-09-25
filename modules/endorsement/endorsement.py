@@ -1134,7 +1134,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
 
     @fields.depends('application_date')
     def on_change_with_application_date_str(self, name=None):
-        return Pool().get('ir.date').datetime_as_string(self.application_date)
+        if self.application_date:
+            return Pool().get('ir.date').datetime_as_string(
+                self.application_date)
 
     @fields.depends('state')
     def on_change_with_sub_state_required(self, name=None):
