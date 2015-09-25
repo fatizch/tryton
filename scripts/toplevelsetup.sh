@@ -22,7 +22,7 @@ echo $SEP
 echo Installing server packages
 echo $SEP
 sudo apt-get install gcc ghostscript libxml2-dev libxslt-dev libldap2-dev \
-libsasl2-dev
+libsasl2-dev lib32z1-dev
 echo $SEP
 echo Installing client packages
 sudo apt-get install python-gtk2
