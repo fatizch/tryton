@@ -31,10 +31,6 @@ class Contract:
 
         Commission.save(commissions)
 
-    def finalize_contract(self):
-        super(Contract, self).finalize_contract()
-        self.create_prepayment_commissions(adjustement=False)
-
     def rebill(self, at_date=None):
         super(Contract, self).rebill(at_date)
         self.create_prepayment_commissions(adjustement=True)

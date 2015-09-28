@@ -330,10 +330,7 @@ class ContractActivate(model.CoopWizard):
         Contract = pool.get('contract')
         active_id = Transaction().context.get('active_id')
         selected_contract = Contract(active_id)
-        selected_contract.before_activate()
         selected_contract.activate_contract()
-        selected_contract.finalize_contract()
-
         return 'end'
 
 

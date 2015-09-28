@@ -98,10 +98,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
         contract.save()
         self.assertEqual(contract.termination_reason, sub_status)
         contract.activate_contract()
-        contract.finalize_contract()
+        contract.end_date = end_date
+        contract.save()
         self.assertEqual(contract.status, 'active')
         self.assert_(contract.contract_number)
         self.assertEqual(contract.start_date, start_date)
+        self.assertEqual(contract.end_date, end_date)
 
     @test_framework.prepare_test(
         'contract.test0010_testContractCreation',

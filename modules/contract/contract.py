@@ -409,10 +409,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def calculate_activation_dates(self):
         if self.status == 'void':
-            self.start_date = None
-            self.end_date = None
-            Pool().get('contract.activation_history').delete(
-                list(self.activation_history))
             return
         dates = [self.get_date_used_for_contract_end_date()]
         dates.append(self.get_maximum_end_date())
@@ -879,7 +875,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         self.init_from_product(product, at_date)
         self.on_change_extra_data()
 
-    def before_activate(self, contract_dict=None):
+    def before_activate(self):
         self.calculate()
 
     @classmethod
@@ -896,9 +892,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 if x.coverage.is_service]:
             contract.options.append(SubscribedOpt.new_option_from_coverage(
                     coverage, product, at_date))
-        contract.before_activate(contract_dict)
         contract.activate_contract()
-        contract.finalize_contract()
         return contract
 
     @classmethod
@@ -1008,7 +1002,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'date': self.start_date,
                 })[0]
 
-    def finalize_contract(self):
+    def after_activate(self):
         if not getattr(self, 'contract_number', None):
             self.contract_number = self.get_new_contract_number()
         # if contract was hold remove sub status reason
@@ -1034,12 +1028,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             event = 'unhold_contract'
         else:
             event = 'reactivate_contract'
+        self.before_activate()
+        self.do_activate()
+        self.after_activate()
+        Event.notify_events([self], event)
+
+    def do_activate(self):
         self.status = 'active'
         options = list(self.options)
         for option in options:
             option.status = 'active'
         self.options = options
-        Event.notify_events([self], event)
 
     def decline_contract(self, reason):
         pool = Pool()
@@ -1169,7 +1168,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         cls.clean_before_reactivate(contracts)
         cls.save(contracts)
         for contract in contracts:
-            contract.before_activate()
             contract.activate_contract()
 
     @classmethod

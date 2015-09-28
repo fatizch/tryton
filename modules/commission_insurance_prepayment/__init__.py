@@ -2,6 +2,7 @@ from trytond.pool import Pool
 from .contract import *
 from .commission import *
 from .invoice import *
+from .event import *
 
 
 def register():
@@ -13,4 +14,5 @@ def register():
         Plan,
         Agent,
         Invoice,
+        Event,
         module='commission_insurance_prepayment', type_='model')

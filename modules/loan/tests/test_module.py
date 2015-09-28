@@ -577,7 +577,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             contract.account_for_billing = account
             contract.subscriber = subscriber
             contract.activate_contract()
-            contract.finalize_contract()
             self.assertEqual(contract.status, 'active')
             return contract
 

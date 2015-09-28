@@ -9,6 +9,7 @@ from .account import *
 from .wizard import *
 from .move import *
 from .rule_engine import *
+from .event import *
 
 
 def register():
@@ -45,6 +46,7 @@ def register():
         SynthesisMenuInvoice,
         SynthesisMenu,
         RuleEngineRuntime,
+        Event,
         module='contract_insurance_invoice', type_='model')
     Pool.register(
         InvoiceContract,

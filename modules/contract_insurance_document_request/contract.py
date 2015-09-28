@@ -112,6 +112,6 @@ class Contract:
         if not self.doc_received:
             self.raise_user_error('missing_required_document')
 
-    def before_activate(self, contract_dict=None):
+    def before_activate(self):
         self.check_required_documents()
         super(Contract, self).before_activate()

@@ -53,7 +53,7 @@ class Contract:
     def init_sepa_mandate(self):
         self.billing_information.init_sepa_mandate()
 
-    def before_activate(self, contract_dict=None):
+    def before_activate(self):
         super(Contract, self).before_activate()
         self.init_sepa_mandate()
 

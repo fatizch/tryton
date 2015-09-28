@@ -349,10 +349,6 @@ class Contract:
     def invoice_to_end_date(self):
         Contract.invoice([self], self.end_date)
 
-    def finalize_contract(self):
-        super(Contract, self).finalize_contract()
-        self.invoice_non_periodic_premiums('at_contract_signature')
-
     def get_non_periodic_payment_date(self):
         return self.product.get_non_periodic_payment_date(self)
 

@@ -119,10 +119,11 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
         values['_func_key'] = values['number']
 
     def activate_set(self):
+        pool = Pool()
+        Event = pool.get('event')
         for contract in self.contracts:
-            contract.before_activate()
             contract.activate_contract()
-            contract.finalize_contract()
+        Event.notify_events([self], 'activate_contract_set')
 
     def decline_set(self, reason):
         for contract in self.contracts:

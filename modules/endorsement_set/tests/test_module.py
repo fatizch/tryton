@@ -41,7 +41,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             )
         contract2.save()
         contract2.activate_contract()
-        contract2.finalize_contract()
         contract2.save()
         self.assertEqual(contract2.status, 'active')
 
