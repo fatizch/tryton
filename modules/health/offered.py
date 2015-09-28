@@ -25,6 +25,14 @@ class Product:
     def search_is_health(cls, name, clause):
         return [('coverages.is_health',) + tuple(clause[1:])]
 
+    def get_covered_element_dates(self, dates, covered_element):
+        super(Product, self).get_covered_element_dates(dates,
+            covered_element)
+        if self.is_health:
+            for complement in covered_element.party.health_complement:
+                if complement.date:
+                    dates.add(complement.date)
+
 
 class OptionDescription:
     __name__ = 'offered.option.description'
