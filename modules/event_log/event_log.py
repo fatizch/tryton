@@ -79,9 +79,10 @@ class EventLog(model.CoopSQL, model.CoopView):
         return cls.create_event_logs(objects, trigger.event_type, trigger.name)
 
     @classmethod
-    def search_for_export_import(cls, values):
+    def add_func_key(cls, values):
         # importing an event log will always create a new one
-        return []
+        # override add_func_key since it's required during import
+        values['_func_key'] = 0
 
 
 class Event:
