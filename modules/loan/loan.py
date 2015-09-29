@@ -415,8 +415,9 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     def insert_manual_increment(cls, increment, increments):
         increments_to_keep = [x for x in increments
             if x.start_date and x.start_date < increment.start_date]
+        i = increments.index(increment)
         increments_added_after_manual_increments = [x for x in increments
-            if not x.number]
+            if not x.number and increments.index(x) > i]
         if increments_to_keep:
             prev_increment = increments_to_keep[-1]
             prev_increment.number_of_payments, is_exact = (

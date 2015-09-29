@@ -367,11 +367,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
         loan.calculate()
         loan.save()
 
+        loan.state = 'draft'
         loan.increments = list(loan.increments) + [
             self.LoanIncrement(
                 start_date=datetime.date(2015, 7, 15),
                 begin_balance=Decimal('65074.66'),
-                number_of_payments=288,
+                number_of_payments=228,
                 rate=Decimal('0.024'),
                 payment_amount=Decimal('300'),
                 payment_frequency='month',
@@ -379,19 +380,19 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 manual=True,
                 ),
             self.LoanIncrement(
-                start_date=datetime.date(2034, 7, 15),
-                begin_balance=Decimal('16070.03'),
                 number_of_payments=12,
                 rate=Decimal('0.024'),
                 payment_frequency='month',
                 payment_amount=Decimal('1356.64'),
                 loan=loan,
-                manual=True,
                 )]
         loan.save()
         loan.calculate()
         loan.save()
         self.assertEqual(loan.increments[2].number_of_payments, 228)
+        self.assertEqual(loan.increments[3].begin_balance, Decimal('16070.03'))
+        self.assertEqual(loan.increments[3].start_date,
+            datetime.date(2034, 7, 15))
         self.assertEqual(loan.duration, 266)
         self.assert_payment(loan, datetime.date(2034, 6, 15), 254,
             begin_balance='16337.36', amount='300',
