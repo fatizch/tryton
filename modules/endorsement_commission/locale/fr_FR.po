@@ -1,6 +1,26 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:endorsement.contract.change_broker:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
+
+msgctxt "error:endorsement.contract.change_commission:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
+
+msgctxt "field:endorsement.contract.change_broker,agency:"
+msgid "Agency"
+msgstr "Agence"
 
 msgctxt "field:endorsement.contract.change_broker,agent:"
 msgid "New Agent"
@@ -14,6 +34,10 @@ msgctxt "field:endorsement.contract.change_broker,broker_party:"
 msgid "New Broker Party"
 msgstr "Nouveau courtier"
 
+msgctxt "field:endorsement.contract.change_broker,current_agency:"
+msgid "Current Agency"
+msgstr "Agence actuelle"
+
 msgctxt "field:endorsement.contract.change_broker,current_agent:"
 msgid "Current Agent"
 msgstr "Protocole de commissionnement actuel"
@@ -21,6 +45,10 @@ msgstr "Protocole de commissionnement actuel"
 msgctxt "field:endorsement.contract.change_broker,current_broker:"
 msgid "Current Broker"
 msgstr "Courtier actuel"
+
+msgctxt "field:endorsement.contract.change_broker,current_plan:"
+msgid "Current Plan"
+msgstr "Plan de commissionnement sélectionné"
 
 msgctxt "field:endorsement.contract.change_broker,effective_date:"
 msgid "Effective Date"
@@ -42,6 +70,10 @@ msgctxt "field:endorsement.contract.change_broker,product:"
 msgid "Product"
 msgstr "Produit"
 
+msgctxt "field:endorsement.contract.change_commission,agency:"
+msgid "Agency"
+msgstr "Agence"
+
 msgctxt "field:endorsement.contract.change_commission,agent:"
 msgid "New Agent"
 msgstr "Nouveau protocole de commissionnement"
@@ -54,6 +86,10 @@ msgctxt "field:endorsement.contract.change_commission,broker_party:"
 msgid "New Broker Party"
 msgstr "Nouveau courtier"
 
+msgctxt "field:endorsement.contract.change_commission,current_agency:"
+msgid "Current Agency"
+msgstr "Agence actuelle"
+
 msgctxt "field:endorsement.contract.change_commission,current_agent:"
 msgid "Current Agent"
 msgstr "Protocole de commissionnement actuel"
@@ -61,10 +97,6 @@ msgstr "Protocole de commissionnement actuel"
 msgctxt "field:endorsement.contract.change_commission,current_broker:"
 msgid "Current Broker"
 msgstr "Courtier actuel"
-
-msgctxt "field:endorsement.contract.change_commission,current_plan:"
-msgid "Current Plan"
-msgstr "Plan de commissionnement actuel"
 
 msgctxt "field:endorsement.contract.change_commission,effective_date:"
 msgid "Effective Date"
@@ -94,17 +126,25 @@ msgctxt "model:endorsement.contract.change_commission,name:"
 msgid "Change Contract Commission"
 msgstr "Modifications des commissions sur un contrat"
 
+msgctxt "model:endorsement.part,name:change_broker_revision_part"
+msgid "Change Broker"
+msgstr "Changement d'apporteur"
+
+msgctxt "model:endorsement.part,name:change_commission_data_revision_part"
+msgid "Change Commission Data"
+msgstr "Changement de paramètres de commissionnement"
+
 msgctxt "selection:endorsement.part,kind:"
 msgid "Commission"
 msgstr "Commission"
 
 msgctxt "view:endorsement.contract.change_broker:"
-msgid "Change Contract Commission"
-msgstr "Modifications des commissions sur un contrat"
+msgid "Change Contract Broker"
+msgstr "Changement d'apporteur"
 
 msgctxt "view:endorsement.contract.change_commission:"
-msgid "Change Contract Broker"
-msgstr "Changement de courtier sur un contrat"
+msgid "Change Contract Commission"
+msgstr "Modifications des paramètres de commissionnement"
 
 msgctxt "wizard_button:endorsement.start,change_broker,change_broker_next:"
 msgid "Next"

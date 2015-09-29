@@ -1,8 +1,8 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
-from trytond.pyson import Eval, If
+from trytond.pyson import Eval, If, Bool
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.cog_utils import fields
 from trytond.modules.endorsement import EndorsementWizardStepMixin
 
 __metaclass__ = PoolMeta
@@ -13,10 +13,10 @@ __all__ = [
     ]
 
 
-class ChangeContractBroker(EndorsementWizardStepMixin):
-    'Change Contract Broker'
+class ChangeContractCommission(EndorsementWizardStepMixin):
+    'Change Contract Commission'
 
-    __name__ = 'endorsement.contract.change_broker'
+    __name__ = 'endorsement.contract.change_commission'
 
     agent = fields.Many2One('commission.agent', 'New Agent',
         domain=[
@@ -30,11 +30,18 @@ class ChangeContractBroker(EndorsementWizardStepMixin):
         depends=['broker_party', 'product'])
     broker = fields.Many2One('distribution.network', 'New Broker',
         domain=[('party.agents', '!=', None)])
+    agency = fields.Many2One('distribution.network', 'Agency',
+        domain=[If(Bool(Eval('broker', False)),
+                   ('parents', '=', Eval('broker')),
+                   ('parent', '=', None))],
+        depends=['broker'])
     broker_party = fields.Many2One('party.party', 'New Broker Party',
         states={'invisible': True})
     current_broker = fields.Many2One('distribution.network', 'Current Broker',
         readonly=True)
     current_agent = fields.Many2One('commission.agent', 'Current Agent',
+        readonly=True)
+    current_agency = fields.Many2One('distribution.network', 'Current Agency',
         readonly=True)
     product = fields.Many2One('offered.product', 'Product', readonly=True,
         states={'invisible': True})
@@ -43,6 +50,12 @@ class ChangeContractBroker(EndorsementWizardStepMixin):
     def is_multi_instance(cls):
         return False
 
+    @fields.depends('agency', 'agent', 'broker')
+    def on_change_broker(self):
+        if not self.broker:
+            self.agency = None
+            self.agent = None
+
     @fields.depends('broker')
     def on_change_with_broker_party(self):
         return self.broker.party.id if self.broker else None
@@ -50,7 +63,8 @@ class ChangeContractBroker(EndorsementWizardStepMixin):
     @classmethod
     def _contract_fields_to_extract(cls):
         return {
-            'contract': ['agent', 'broker', 'broker_party', 'product'],
+            'contract': ['agency', 'agent', 'broker', 'broker_party',
+                'product'],
             }
 
     @classmethod
@@ -75,24 +89,35 @@ class ChangeContractBroker(EndorsementWizardStepMixin):
         base_endorsement.save()
 
 
-class ChangeContractCommission(ChangeContractBroker):
-    'Change Contract Commission'
+class ChangeContractBroker(ChangeContractCommission):
+    'Change Contract Broker'
 
-    __name__ = 'endorsement.contract.change_commission'
+    __name__ = 'endorsement.contract.change_broker'
 
     current_plan = fields.Many2One('commission.plan', 'Current Plan',
         readonly=True, states={'invisible': True})
 
     @classmethod
     def __setup__(cls):
-        super(ChangeContractCommission, cls).__setup__()
+        super(ChangeContractBroker, cls).__setup__()
         cls.agent.domain = cls.agent.domain + [
             ('plan', '=', Eval('current_plan'))]
         cls.agent.depends.append('current_plan')
+        cls.broker.domain = cls.broker.domain + [
+            ('party.agents.plan', '=', Eval('current_plan'))]
+        cls.broker.depends.append('current_plan')
+        cls.agent.readonly = True
+
+    @fields.depends('current_plan')
+    def on_change_broker(self):
+        super(ChangeContractBroker, self).on_change_broker()
+        if self.broker:
+            self.agent = [x.id for x in self.broker.party.agents
+                if x.plan == self.current_plan][0]
 
     @classmethod
     def update_default_values(cls, wizard, endorsement, default_values):
-        new_defaults = super(ChangeContractCommission,
+        new_defaults = super(ChangeContractBroker,
             cls).update_default_values(wizard, endorsement, default_values)
         if not endorsement.contract.agent:
             return new_defaults

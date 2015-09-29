@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ########################## -->
+        <!-- # Change Commission Data # -->
+        <!-- ########################## -->
+        <record model="endorsement.part" id="change_commission_data_revision_part">
+            <field name="code">change_commission_data</field>
+            <field name="name">Change Commission Data</field>
+            <field name="kind">commission</field>
+            <field name="view">change_commission</field>
+        </record>
+        <!-- ################# -->
+        <!-- # Change Broker # -->
+        <!-- ################# -->
+        <record model="endorsement.part" id="change_broker_revision_part">
+            <field name="code">change_broker</field>
+            <field name="name">Change Broker</field>
+            <field name="kind">commission</field>
+            <field name="view">change_broker</field>
+        </record>
+    </data>
+    <data depends="endorsement_insurance_invoice">
+        <record model="endorsement.part" id="endorsement_commission.change_commission_data_revision_part">
+            <field name="requires_contract_rebill" eval="True"/>
+        </record>
+    </data>
+</tryton>
