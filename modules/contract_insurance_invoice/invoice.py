@@ -375,9 +375,9 @@ class InvoiceLine:
     def get_type(self, name=None):
         pool = Pool()
         Model = pool.get('ir.model')
-        if self.detail and self.detail.premium.parent:
+        if self.detail and self.detail.parent:
             model, = Model.search([('model', '=',
-                self.detail.premium.parent.__name__)])
+                self.detail.parent.__name__)])
             return model.id
 
     def get_covered_element(self, name=None):
