@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
-<form string="Option">
-    <label name="display_name"/>
-    <field name="display_name"/>
+<form string="Option" col="2">
     <label name="parent_rec_name"/>
     <field name="parent_rec_name"/>
     <label name="action"/>
