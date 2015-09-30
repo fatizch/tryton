@@ -110,6 +110,8 @@ class Product:
         dates.add(contract.start_date)
 
     def get_option_dates(self, dates, option):
+        if option.status == 'void':
+            return
         dates.add(option.start_date)
         if option.end_date:
             dates.add(coop_date.add_day(option.end_date, 1))
