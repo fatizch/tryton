@@ -119,7 +119,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
                 })
 
     @fields.depends('contract', 'effective_date', 'new_billing_information',
-        'other_contracts', 'previous_billing_information')
+        'other_contracts', 'previous_billing_information', 'subscriber')
     def on_change_new_billing_information(self):
         pool = Pool()
         Contract = pool.get('contract')
@@ -139,7 +139,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
             return
         possible_contracts = {}
         for contract in Contract.search([
-                    ('subscriber', '=', self.contract.subscriber.id),
+                    ('subscriber', '=', self.subscriber.id),
                     ('id', '!=', self.contract.id),
                     ('status', '!=', 'quote'),
                     ['OR', ('end_date', '=', None),
@@ -187,6 +187,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
 
     def step_default(self, name):
         defaults = super(ChangeBillingInformation, self).step_default()
+        Party = Pool().get('party.party')
         base_endorsement = self.wizard.endorsement.contract_endorsements[0]
         contract = base_endorsement.contract
         base_instance = utils.get_good_versions_at_date(contract,
@@ -216,6 +217,13 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
             if updated:
                 previous_values.update(updated.values)
             defaults['new_billing_information'] = [previous_values]
+        new_account = defaults['new_billing_information'][0].get(
+            'direct_debit_account', None)
+        if (defaults['subscriber'] != contract.subscriber.id and new_account):
+            if new_account not in [x.id for x in Party(
+                        defaults['subscriber']).bank_accounts]:
+                defaults['new_billing_information'][0][
+                    'direct_debit_account'] = None
         other_contracts = []
         for contract_id, contract_endorsement in \
                 self._get_contracts().iteritems():
