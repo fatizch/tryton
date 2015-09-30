@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
     <xpath expr="/form/notebook/page[@id='contacts']" position="before">
-        <page string="Documents" id="documents">
+        <page string="Requested Documents" id="requested_documents">
             <field name="document_request_lines" colspan="4"/>
         </page>
     </xpath>

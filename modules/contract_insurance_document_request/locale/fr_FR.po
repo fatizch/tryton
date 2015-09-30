@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -166,8 +166,8 @@ msgid "Option"
 msgstr "Option"
 
 msgctxt "view:contract:"
-msgid "Documents"
-msgstr "Documents"
+msgid "Requested Documents"
+msgstr "Documents demandés"
 
 msgctxt "view:document.rule:"
 msgid "Required Documents Rule"
