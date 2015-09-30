@@ -593,6 +593,9 @@ def relation_mixin(value_model, field, model, name):
                     'mes_update_version': 'Update %s',
                     })
 
+        def is_null(self):
+            return super(Mixin, self).is_null() and self.action != 'remove'
+
         @classmethod
         def read(cls, ids, fields_names=None):
             BaseModel = Pool().get(model)
