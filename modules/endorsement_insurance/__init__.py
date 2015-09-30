@@ -30,6 +30,7 @@ def register():
         OptionSelector,
         CoveredElementSelector,
         NewExtraPremium,
+        VoidContract,
         module='endorsement_insurance', type_='model')
 
     Pool.register(

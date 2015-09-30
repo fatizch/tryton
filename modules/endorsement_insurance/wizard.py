@@ -22,6 +22,7 @@ __all__ = [
     'OptionSelector',
     'CoveredElementSelector',
     'NewExtraPremium',
+    'VoidContract',
     'StartEndorsement',
     ]
 
@@ -1140,6 +1141,34 @@ class NewExtraPremium(model.CoopView):
         ContractEndorsement.save(all_endorsements.values())
 
 
+class VoidContract:
+    __name__ = 'endorsement.contract.void'
+
+    def step_update(self):
+        pool = Pool()
+        CovOptionEndorsement = pool.get(
+            'endorsement.contract.covered_element.option')
+        CoveredElementEndorsement = pool.get(
+            'endorsement.contract.covered_element')
+        Contract = pool.get('contract')
+        contract_id, endorsement = self._get_contracts().items()[0]
+        contract = Contract(contract_id)
+        cov_elem_endorsements = []
+        for cov in contract.covered_elements:
+            cov_elem_endorsements.append(CoveredElementEndorsement(
+                    contract_endorsement=endorsement,
+                    action='update', relation=cov.id,
+                    options=[CovOptionEndorsement(
+                            action='update',
+                            relation=option.id,
+                            definition=self.endorsement_definition,
+                            values={'status': 'void',
+                                'sub_status': self.void_reason.id})
+                        for option in cov.options]))
+        endorsement.covered_elements = cov_elem_endorsements
+        super(VoidContract, self).step_update()
+
+
 class StartEndorsement:
     __name__ = 'endorsement.start'
 
@@ -1394,7 +1423,6 @@ class StartEndorsement:
     def transition_remove_option_previous(self):
         self.end_current_part('remove_option')
         return self.get_state_before('remove_option')
-
 
 add_endorsement_step(StartEndorsement, ModifyCoveredElementInformation,
     'modify_covered_element')

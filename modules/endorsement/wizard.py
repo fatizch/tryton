@@ -1200,6 +1200,7 @@ class VoidContract(EndorsementWizardStepMixin):
         pool = Pool()
         EndorsementActivationHistory = pool.get(
             'endorsement.contract.activation_history')
+        EndorsementOption = pool.get('endorsement.contract.option')
         Contract = pool.get('contract')
         contract_id, endorsement = self._get_contracts().items()[0]
 
@@ -1214,6 +1215,11 @@ class VoidContract(EndorsementWizardStepMixin):
                 values={'active': False},
                 definition=self.endorsement_definition)
             for activation_history in contract.activation_history]
+        endorsement.options = [EndorsementOption(action='update',
+                contract_endorsement=endorsement, relation=option.id,
+                values={'status': 'void', 'sub_status': self.void_reason.id},
+                definition=self.endorsement_definition)
+            for option in contract.options]
         endorsement.save()
 
     @classmethod
