@@ -272,6 +272,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         reports = self._generate_reports(objects, origin=origin)
         if direct_print:
             self.print_reports(reports)
+        attachments = []
         if self.format_for_internal_edm:
             attachments = self.save_reports_in_edm(reports)
         return reports, attachments
