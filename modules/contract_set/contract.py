@@ -42,7 +42,7 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
         target_not_required=True)
     subscribers = fields.Function(fields.Text('Subscribers'),
         'get_subscribers', searcher='search_subscribers')
-    products = fields.Function(fields.Char('Products'),
+    products = fields.Function(fields.Text('Products'),
         'get_products', searcher='search_products')
     contracts_declined = fields.Function(fields.Boolean('Contracts Declined'),
         'get_contracts_declined')
