@@ -314,6 +314,12 @@ class Contract(Printable):
             ('covered_elements.party.id',) + tuple(clause[1:]),
             ]
 
+    def get_covered_elements_at_date(self, at_date=None):
+        if not at_date:
+            at_date = utils.today()
+        return [covered for covered in self.covered_elements
+            if covered.is_covered_at_date(at_date)]
+
 
 class ContractOption:
     __name__ = 'contract.option'
