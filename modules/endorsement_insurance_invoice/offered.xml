@@ -47,18 +47,6 @@
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="priority">2000</field>
         </record>
-        <!-- #################################################### -->
-        <!-- # Stop Contract Endorsement Configuration # -->
-        <!-- #################################################### -->
-        <record model="endorsement.part" id="endorsement.stop_contract_revision_part">
-            <field name="requires_contract_rebill">True</field>
-        </record>
-        <!-- ########################################### -->
-        <!-- # Void Contract Endorsement Configuration # -->
-        <!-- ########################################### -->
-        <record model="endorsement.part" id="endorsement.void_contract_revision_part">
-            <field name="requires_contract_rebill">True</field>
-        </record>
         <!-- ############################################## -->
         <!-- # Billing Information Endorsement Definition # -->
         <!-- ############################################## -->
@@ -128,10 +116,19 @@
             <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'direct_debit_account')]"/>
             <field name="endorsement_part" ref="change_direct_debit_account_endorsement_part"/>
         </record>
-        <!-- ################## -->
-        <!-- # Manage Options # -->
-        <!-- ################## -->
+        <!-- ####################### -->
+        <!-- # Set Requires Rebill # -->
+        <!-- ####################### -->
         <record model="endorsement.part" id="endorsement.manage_options_revision_part">
+            <field name="requires_contract_rebill" eval="True"/>
+        </record>
+        <record model="endorsement.part" id="endorsement.stop_contract_revision_part">
+            <field name="requires_contract_rebill" eval="True"/>
+        </record>
+        <record model="endorsement.part" id="endorsement.void_contract_revision_part">
+            <field name="requires_contract_rebill" eval="True"/>
+        </record>
+        <record model="endorsement.part" id="endorsement.reactivate_contract_revision_part">
             <field name="requires_contract_rebill" eval="True"/>
         </record>
     </data>
