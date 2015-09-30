@@ -1008,16 +1008,15 @@ class SharePerLoan(model.CoopView):
 class SelectEndorsement:
     __name__ = 'endorsement.start.select_endorsement'
 
-    @fields.depends('endorsement_definition', 'effective_date', 'contract')
+    @fields.depends('endorsement_definition', 'effective_date', 'endorsement',
+        'contract')
     def on_change_endorsement_definition(self):
+        if self.endorsement:
+            self.effective_date = self.endorsement.effective_date
         if self.endorsement_definition and self.endorsement_definition.is_loan:
             if self.contract and len(self.contract.used_loans) == 1:
                 self.effective_date = \
                     self.contract.used_loans[0].funds_release_date
-            else:
-                self.effective_date = None
-        else:
-            self.effective_date = None
 
 
 class PreviewLoanEndorsement(EndorsementWizardPreviewMixin, model.CoopView):
