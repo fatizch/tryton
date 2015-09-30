@@ -36,5 +36,14 @@
             <field name="type">tree</field>
             <field name="name">endorsement_field_list</field>
         </record>
+        <!-- ###################################### -->
+        <!-- # Manage Extra Premium Configuration # -->
+        <!-- ###################################### -->
+        <record model="endorsement.part" id="manage_extra_premiums_revision_part">
+            <field name="code">manage_extra_premiums</field>
+            <field name="name">Manage Extra Premiums</field>
+            <field name="kind">extra_premium</field>
+            <field name="view">manage_extra_premium</field>
+        </record>
     </data>
 </tryton>

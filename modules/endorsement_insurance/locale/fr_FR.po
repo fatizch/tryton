@@ -942,6 +942,10 @@ msgctxt "model:endorsement.option.selector,name:"
 msgid "Option Selector"
 msgstr "Garantie"
 
+msgctxt "model:endorsement.part,name:manage_extra_premiums_revision_part"
+msgid "Manage Extra Premiums"
+msgstr "Gérer les surprimes"
+
 msgctxt ""
 "selection:contract.covered_element.option.remove.option_selector,action:"
 msgid ""

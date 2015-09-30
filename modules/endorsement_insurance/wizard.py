@@ -703,9 +703,12 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
         else:
             instance = extra_premium
             displayer['extra_premium_id'] = extra_premium.id
-        displayer['extra_premium_name'] = instance.get_rec_name(None)
+        instance.currency = template['currency']
+        displayer['extra_premium_name'] = '%s %s' % (
+            instance.get_value_as_string(None), instance.motive.name)
         displayer['extra_premium'] = [model.dictionarize(instance,
                 cls._extra_premium_fields_to_extract())]
+        displayer['extra_premium'][0]['option'] = template['fake_option']
         return displayer
 
     @classmethod
@@ -720,6 +723,11 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
             all_endorsements = list(wizard.endorsement.contract_endorsements)
         displayers, template = [], {'to_delete': False, 'to_add': False,
             'to_update': False}
+        # Set fake option to bypass required rule
+        contract = all_endorsements[0].contract
+        template['fake_option'] = (contract.options +
+            contract.covered_element_options)[0].id
+        template['currency'] = contract.currency.id
         for endorsement in all_endorsements:
             updated_struct = endorsement.updated_struct
             template['contract'] = endorsement.contract.id
@@ -744,6 +752,7 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
             all_endorsements = {x.contract.id: x
                 for x in wizard.endorsement.contract_endorsements}
         pool = Pool()
+        ContractEndorsement = pool.get('endorsement.contract')
         CoveredElementEndorsement = pool.get(
             'endorsement.contract.covered_element')
         OptionEndorsement = pool.get(
@@ -753,6 +762,8 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
         ExtraPremium = pool.get('contract.option.extra_premium')
         new_covered_elements, new_options, to_create = {}, {}, []
         for elem in self.extra_premiums:
+            values = elem.extra_premium[0]._save_values
+            values.pop('option', None)
             if elem.to_delete:
                 if elem.extra_premium_id:
                     ex_endorsement = ExtraPremiumEndorsement(action='remove',
@@ -761,14 +772,13 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
                     continue
             elif elem.to_add:
                 ex_endorsement = ExtraPremiumEndorsement(action='add',
-                    values=elem.extra_premium[0]._save_values)
+                    values=values)
                 ex_endorsement.values['manual_start_date'] = \
                     self.effective_date
-            else:
+            elif elem.to_update:
                 base_instance = ExtraPremium(elem.extra_premium_id)
                 update_values = {
-                    k: v for k, v in
-                    elem.extra_premium[0]._save_values.iteritems()
+                    k: v for k, v in values.iteritems()
                     if getattr(base_instance, k, None) != v}
                 if update_values:
                     ex_endorsement = ExtraPremiumEndorsement(action='update',
@@ -776,6 +786,8 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
                         values=update_values)
                 else:
                     continue
+            else:
+                continue
             if not (elem.option_endorsement or elem.option.id in new_options):
                 option_endorsement = OptionEndorsement(action='update',
                     option=elem.option.id, extra_premiums=[])
@@ -815,6 +827,12 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
                 option_endorsement.extra_premiums = list(
                     option_endorsement.extra_premiums) + [ex_endorsement]
         if to_create:
+            # Purge existing endorsements
+            option_endorsements = list(set(x.covered_option_endorsement
+                    for x in to_create))
+            ExtraPremiumEndorsement.delete(ExtraPremiumEndorsement.search([
+                        ('covered_option_endorsement', 'in',
+                            option_endorsements)]))
             ExtraPremiumEndorsement.create([x._save_values for x in to_create])
         if new_options:
             OptionEndorsement.create([x._save_values
@@ -824,6 +842,9 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
             CoveredElementEndorsement.create([x._save_values
                     for x in new_covered_elements
                     if getattr(x, 'contract_endorsement', None)])
+        for endorsement in all_endorsements.itervalues():
+            endorsement.clean_up()
+        ContractEndorsement.save(all_endorsements.values())
 
 
 class ManageOptions:
@@ -1014,6 +1035,15 @@ class NewExtraPremium(model.CoopView):
     covered_elements = fields.One2Many('endorsement.covered_element.selector',
         None, 'Covered Elements')
 
+    @classmethod
+    def view_attributes(cls):
+        return super(NewExtraPremium, cls).view_attributes() + [
+            ('/form/group[@id="one_covered"]', 'states',
+                {'invisible': Len(Eval('covered_elements', [])) != 1}),
+            ('/form/group[@id="multiple_covered"]', 'states',
+                {'invisible': Len(Eval('covered_elements', [])) == 1}),
+        ]
+
     @fields.depends('covered_elements', 'options')
     def on_change_covered_elements(self):
         for covered_element in self.covered_elements:
@@ -1032,15 +1062,6 @@ class NewExtraPremium(model.CoopView):
         self.covered_elements = self.covered_elements
 
     @classmethod
-    def view_attributes(cls):
-        return super(NewExtraPremium, cls).view_attributes() + [
-            ('/form/group[@id="one_covered"]', 'states',
-                {'invisible': Len(Eval('covered_elements', [])) != 1}),
-            ('/form/group[@id="multiple_covered"]', 'states',
-                {'invisible': Len(Eval('covered_elements', [])) == 1}),
-            ]
-
-    @classmethod
     def _extra_premium_fields_to_extract(cls):
         return ['calculation_kind', 'capital_per_mil_rate', 'currency',
             'currency_digits', 'currency_symbol', 'duration', 'duration_unit',
@@ -1052,6 +1073,7 @@ class NewExtraPremium(model.CoopView):
         all_endorsements = {x.contract.id: x
             for x in wizard.endorsement.contract_endorsements}
         pool = Pool()
+        ContractEndorsement = pool.get('endorsement.contract')
         CoveredElementEndorsement = pool.get(
             'endorsement.contract.covered_element')
         OptionEndorsement = pool.get(
@@ -1065,6 +1087,7 @@ class NewExtraPremium(model.CoopView):
             'values': model.dictionarize(self.new_extra_premium[0],
                 self._extra_premium_fields_to_extract()),
             }
+        new_values['values'].pop('option', None)
         for option_selector in self.options:
             if not option_selector.selected:
                 continue
@@ -1112,6 +1135,9 @@ class NewExtraPremium(model.CoopView):
             CoveredElementEndorsement.create([x._save_values
                     for x in new_covered_elements.itervalues()
                     if getattr(x, 'contract_endorsement', None)])
+        for endorsement in all_endorsements.itervalues():
+            endorsement.clean_up()
+        ContractEndorsement.save(all_endorsements.values())
 
 
 class StartEndorsement:
@@ -1155,7 +1181,7 @@ class StartEndorsement:
         'endorsement_insurance.new_extra_premium_view_form', [
             Button('Cancel', 'manage_extra_premium', 'tryton-go-previous'),
             Button('Continue', 'add_extra_premium', 'tryton-go-next',
-                default=True)])
+                default=True, states={'readonly': ~Eval('option_selected')})])
     add_extra_premium = StateTransition()
     manage_extra_premium_next = StateTransition()
     remove_option = StateView('contract.covered_element.option.remove',
@@ -1291,9 +1317,19 @@ class StartEndorsement:
             'endorsement.covered_element.selector')
         OptionSelector = pool.get('endorsement.option.selector')
         endorsements = list(self.endorsement.contract_endorsements)
+        contract = endorsements[0].contract
         default_values = {
-            'new_extra_premium': [
-                {'start_date': self.select_endorsement.effective_date}],
+            'new_extra_premium': [{
+                    'start_date': self.select_endorsement.effective_date,
+                    'duration_unit': pool.get(
+                        'contract.option.extra_premium').default_duration_unit(
+                        ),
+                    # Set fake option to bypass required in view
+                    'option': (contract.options +
+                        contract.covered_element_options)[0].id,
+                    'currency': contract.currency.id,
+                    'currency_symbol': contract.currency_symbol,
+                    }],
             'covered_elements': [],
             'options': [],
             }
