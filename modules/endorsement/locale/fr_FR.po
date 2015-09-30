@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.manage_options:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
+
 msgctxt "error:contract:"
 msgid "Enter a value for field '%s' of '%s'"
 msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
@@ -1353,6 +1361,10 @@ msgctxt "field:endorsement.decline.select_reason,reason:"
 msgid "Reason"
 msgstr "Raison"
 
+msgctxt "field:endorsement.definition,active:"
+msgid "Active"
+msgstr "Actif"
+
 msgctxt "field:endorsement.definition,code:"
 msgid "Code"
 msgstr "Code"
@@ -1397,10 +1409,6 @@ msgctxt "field:endorsement.definition,preview_state:"
 msgid "Preview States"
 msgstr "Aperçu à utiliser"
 
-msgctxt "field:endorsement.definition,active:"
-msgid "Active"
-msgstr "Actif"
-
 msgctxt "field:endorsement.definition,products:"
 msgid "Products"
 msgstr "Produits"
@@ -1408,6 +1416,10 @@ msgstr "Produits"
 msgctxt "field:endorsement.definition,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:endorsement.definition,report_templates:"
+msgid "Report Templates"
+msgstr "Modèles de courrier"
 
 msgctxt "field:endorsement.definition,write_date:"
 msgid "Write Date"
@@ -1502,6 +1514,46 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:endorsement.definition-product,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.definition-report.template,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.definition-report.template,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.definition-report.template,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.definition-report.template,definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.definition-report.template,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.definition-report.template,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.definition-report.template,report_template:"
+msgid "Report Template"
+msgstr "Modèle de courrier"
+
+msgctxt "field:endorsement.definition-report.template,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.definition-report.template,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.definition-report.template,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -1851,9 +1903,21 @@ msgctxt "model:endorsement.definition-product,name:"
 msgid "Endorsement Definition to Product Relation"
 msgstr "Relation entre définition d'avenant et produit"
 
+msgctxt "model:endorsement.definition-report.template,name:"
+msgid "Endorsement Definition Report Template Relation"
+msgstr ""
+
 msgctxt "model:endorsement.part,name:"
 msgid "Endorsement Part"
 msgstr "Avenant unitaire"
+
+msgctxt "model:endorsement.part,name:change_contract_start_date_revision_part"
+msgid "Change Contract Start Date"
+msgstr "Modifier la date d'effet du contrat"
+
+msgctxt "model:endorsement.part,name:change_contract_subscriber_revision_part"
+msgid "Change Contract Subscriber"
+msgstr "Changement de souscripteur"
 
 msgctxt "model:endorsement.part,name:manage_options_revision_part"
 msgid "Manage Options"

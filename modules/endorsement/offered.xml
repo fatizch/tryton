@@ -140,6 +140,24 @@
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="priority">2</field>
         </record>
+        <!-- ################################### -->
+        <!-- # Change Start Date Configuration # -->
+        <!-- ################################### -->
+        <record model="endorsement.part" id="change_contract_start_date_revision_part">
+            <field name="code">change_contract_start_date</field>
+            <field name="name">Change Contract Start Date</field>
+            <field name="kind">contract</field>
+            <field name="view">change_start_date</field>
+        </record>
+        <!-- ############################################ -->
+        <!-- # Change Contract Subscriber Configuration # -->
+        <!-- ############################################ -->
+        <record model="endorsement.part" id="change_contract_subscriber_revision_part">
+            <field name="code">change_contract_subscriber</field>
+            <field name="name">Change Contract Subscriber</field>
+            <field name="kind">contract</field>
+            <field name="view">change_contract_subscriber</field>
+        </record>
         <!-- ################################## -->
         <!-- # Stop Endorsement Configuration # -->
         <!-- ################################## -->

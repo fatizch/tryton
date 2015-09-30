@@ -119,6 +119,12 @@
         <!-- ####################### -->
         <!-- # Set Requires Rebill # -->
         <!-- ####################### -->
+        <record model="endorsement.part" id="endorsement.change_contract_start_date_revision_part">
+            <field name="requires_contract_rebill" eval="True"/>
+        </record>
+        <record model="endorsement.part" id="endorsement.change_contract_subscriber_revision_part">
+            <field name="requires_contract_rebill" eval="True"/>
+        </record>
         <record model="endorsement.part" id="endorsement.manage_options_revision_part">
             <field name="requires_contract_rebill" eval="True"/>
         </record>
