@@ -224,6 +224,7 @@ class Payment:
         JournalFailureAction = pool.get(
             'account.payment.journal.failure_action')
         Invoice = pool.get('account.invoice')
+        ContractInvoice = pool.get('contract.invoice')
         Configuration = pool.get('account.configuration')
         MoveLine = pool.get('account.move.line')
         config = Configuration(1)
@@ -231,6 +232,7 @@ class Payment:
         super(Payment, cls).fail(payments)
 
         invoices_to_create = []
+        contract_invoices_to_create = []
         payment_date_to_update = []
         payments_keys = [(x._get_transaction_key(), x) for x in payments]
         payments_keys = sorted(payments_keys, key=lambda x: x[0])
@@ -255,14 +257,19 @@ class Payment:
             journal = config.reject_fee_journal
             account = reject_fee.product.template.account_revenue_used
             name_for_billing = reject_fee.name
-            contract_id = cls.get_contract_id(payments_list)
-            invoices_to_create.append(payment.create_fee_invoice(
-                    fee_amount, journal, account, name_for_billing,
-                    sepa_mandate))
-            payment_date_to_update.append({'payment_date': payment_date,
-                    'contract': contract_id})
+            invoice = payment.create_fee_invoice(
+                fee_amount, journal, account, name_for_billing,
+                sepa_mandate)
+            contract = cls.get_contract(payments_list)
+            if contract is not None:
+                contract_invoice = ContractInvoice(
+                    contract=contract, invoice=invoice, non_periodic=True)
+                contract_invoices_to_create.append(contract_invoice)
+            invoices_to_create.append(invoice)
+            payment_date_to_update.append({'payment_date': payment_date})
 
         Invoice.save(invoices_to_create)
+        ContractInvoice.save(contract_invoices_to_create)
         Invoice.post(invoices_to_create)
         lines_to_write = []
         for i, p in zip(invoices_to_create, payment_date_to_update):
@@ -284,9 +291,9 @@ class Payment:
             cls.raise_user_error('missing_payments')
         cls.write(payments, {'sepa_return_reason_code': reject_reason.code})
 
-    # contract to attach invoice fee
     @classmethod
     def get_contract_id(cls, payments):
+        # contract to attach invoice fee
         contract_id = None
         for payment in payments:
             contract = payment.line.contract
@@ -297,12 +304,21 @@ class Payment:
             contract_id = contract.id
         return contract_id
 
+    @classmethod
+    def get_contract(cls, payments):
+        # contract to attach invoice fee
+        for payment in payments:
+            if payment.line.contract:
+                return payment.line.contract
+        return None
+
     def create_fee_invoice(self, fee_amount, journal, account_for_billing,
             name_for_billing, sepa_mandate):
         pool = Pool()
         Invoice = pool.get('account.invoice')
         AccountConfiguration = pool.get('account.configuration')
         account_configuration = AccountConfiguration(1)
+
         # create invoice
         invoice = Invoice(
             company=self.company,
@@ -315,7 +331,8 @@ class Payment:
             state='draft',
             description=name_for_billing,
             sepa_mandate=sepa_mandate,
-            payment_term=account_configuration.default_customer_payment_term
+            payment_term=account_configuration.default_customer_payment_term,
+            invoice_date=utils.today()
             )
         # create invoice line
         invoice.lines = self.get_fee_invoice_lines(fee_amount,
