@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <tree string="Endorsement Parts" editable="bottom" sequence="order">
-    <field name="endorsement_part"/>
+    <field name="endorsement_part" expand="1"/>
     <field name="order" tree_invisible="1"/>
 </tree>
