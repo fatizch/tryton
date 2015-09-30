@@ -1571,10 +1571,10 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     @classmethod
     def get_start_date(cls, options, names):
-        values = {
-            'start_date': defaultdict(lambda: None),
-            }
+        values = {'start_date': {x.id: None for x in options}}
         for option in options:
+            if option.status == 'void':
+                continue
             ended_previously = False
             if option.manual_end_date or option.automatic_end_date:
                 ending_date = min(option.manual_end_date or datetime.date.max,
@@ -1593,6 +1593,8 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         return values
 
     def get_end_date(self, name):
+        if self.status == 'void':
+            return None
         dates = [x for x in self.get_possible_end_date().itervalues()]
         if self.parent_contract.end_date:
             dates.append(self.parent_contract.end_date)

@@ -215,6 +215,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 expected=None, should_raise=False,
                 to_set=None, should_set=True):
             option = self.Option(
+                status='active',
                 automatic_end_date=automatic_end_date,
                 manual_end_date=manual_end_date,
                 contract=contract,
@@ -446,6 +447,21 @@ class ModuleTestCase(test_framework.CoopTestCase):
         contract.contacts = (contact1, contact2, contact3, contact4)
         contacts = contract.get_contacts_of_type_at_date('subscriber')
         self.assertEqual(contacts, [contact4])
+
+    @test_framework.prepare_test(
+        'contract.test0010_testContractCreation',
+        )
+    def test0070_void_option_dates(self):
+        contract, = self.Contract.search([])
+        coverage, = self.Coverage.search([])
+        sub_status, = self.SubStatus.search([('code', '=', 'error')])
+        option = self.Option(status='void', contract=contract,
+            manual_start_date=datetime.date(1999, 9, 1),
+            manual_end_date=datetime.date(2001, 9, 1),
+            coverage=coverage, sub_status=sub_status)
+        option.save()
+        self.assertEqual(option.end_date, None)
+        self.assertEqual(option.start_date, None)
 
 
 def suite():
