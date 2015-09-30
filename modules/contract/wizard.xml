@@ -73,5 +73,17 @@
             <field name="name">Reactivate Contract</field>
             <field name="wiz_name">contract.reactivate</field>
         </record>
+        <!-- ######################## -->
+        <!-- # Related Attachments # -->
+        <!-- ######################## -->
+        <record model="ir.action.wizard" id="act_related_attachments">
+            <field name="name">Related Attachments</field>
+            <field name="wiz_name">contract.related_attachments</field>
+        </record>
+        <record model="ir.action.keyword" id="act_related_attachments_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_related_attachments"/>
+        </record>
     </data>
 </tryton>

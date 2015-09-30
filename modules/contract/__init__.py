@@ -56,4 +56,5 @@ def register():
         ContractStop,
         ContractHold,
         ContractReactivate,
+        RelatedAttachments,
         module='contract', type_='wizard')

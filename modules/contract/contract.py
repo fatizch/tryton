@@ -361,6 +361,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         if all_periods:
             return all_periods[0].start_date
 
+    def related_attachments_resources(self):
+        return [str(self)]
+
     @classmethod
     def copy(cls, contracts, default=None):
         default = {} if default is None else default.copy()

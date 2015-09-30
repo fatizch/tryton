@@ -185,6 +185,10 @@ class Contract:
             return self.contract_set.get_dates()
         return super(Contract, self).get_dates()
 
+    def related_attachments_resources(self):
+        return super(Contract, self).related_attachments_resources() + [
+            str(self.contract_set)]
+
     @classmethod
     def validate(cls, contracts):
         pool = Pool()

@@ -187,6 +187,10 @@ msgctxt "field:contract,rec_name:"
 msgid "Number"
 msgstr "Numéro"
 
+msgctxt "field:contract,related_attachments:"
+msgid "Related Attachments"
+msgstr "Pièces jointes liées"
+
 msgctxt "field:contract,signature_date:"
 msgid "Signature Date"
 msgstr "Date de signature"
@@ -1106,6 +1110,10 @@ msgstr "Suspendre le contrat"
 msgctxt "model:ir.action,name:act_reactivate"
 msgid "Reactivate Contract"
 msgstr "Réactiver le contrat"
+
+msgctxt "model:ir.action,name:act_related_attachments"
+msgid "Related Attachments"
+msgstr "Pièces jointes liées"
 
 msgctxt "model:ir.action,name:act_stop"
 msgid "Stop Contract"

@@ -1,7 +1,7 @@
 import datetime
 
 from trytond.pool import Pool
-from trytond.pyson import Eval, Len, If
+from trytond.pyson import Eval, Len, If, PYSONEncoder
 from trytond.wizard import StateTransition, StateView, Button, StateAction
 from trytond.transaction import Transaction
 
@@ -22,6 +22,7 @@ __all__ = [
     'ContractStop',
     'ContractReactivateCheck',
     'ContractReactivate',
+    'RelatedAttachments',
     ]
 
 
@@ -497,3 +498,24 @@ class ContractReactivate(model.CoopWizard):
         Pool().get('contract').reactivate(
             [self.validate_reactivation.contract])
         return 'end'
+
+
+class RelatedAttachments(model.CoopWizard):
+    'Related Attachments'
+
+    __name__ = 'contract.related_attachments'
+
+    start_state = 'display_attachments'
+    display_attachments = StateAction('ir.act_attachment_form')
+
+    def do_display_attachments(self, action):
+        pool = Pool()
+        Contract = pool.get('contract')
+        Attachment = pool.get('ir.attachment')
+        contract = Contract(Transaction().context.get('active_id'))
+        res = Attachment.search([('resource', 'in',
+                contract.related_attachments_resources())])
+        encoder = PYSONEncoder()
+        action['pyson_domain'] = encoder.encode([('id', 'in',
+                    [x.id for x in res])])
+        return action, {}

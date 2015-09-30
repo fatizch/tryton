@@ -805,6 +805,14 @@ class Contract(CogProcessFramework):
         if endorsement:
             return endorsement[0].id
 
+    def related_attachments_resources(self):
+        pool = Pool()
+        Endorsement = pool.get('endorsement')
+        endorsements = Endorsement.search([('contracts', '=', self.id),
+                ('state', '=', 'applied')])
+        return super(Contract, self).related_attachments_resources() + [
+            str(x) for x in endorsements]
+
     @classmethod
     @model.CoopView.button
     def revert_current_endorsement(cls, contracts):
