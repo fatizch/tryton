@@ -301,13 +301,28 @@ class CreateExtraPremium(Wizard):
     apply_and_relaunch = StateTransition()
     re_launch = StateAction('contract_insurance.act_create_extra_premium')
 
+    @classmethod
+    def __setup__(cls):
+        super(CreateExtraPremium, cls).__setup__()
+        cls._error_messages.update({
+                'option_required': 'An option must be subscribed on the '
+                'contract before going on',
+                })
+
     def default_extra_premium_data(self, name):
         if self.extra_premium_data._default_values:
             return self.extra_premium_data._default_values
         contract_id = Transaction().context.get('active_id')
         Contract = Pool().get('contract')
         contract = Contract(contract_id)
-        return {'start_date': contract.start_date}
+        all_options = contract.options + contract.covered_element_options
+        if not all_options:
+            self.raise_user_error('option_required')
+        return {
+            'start_date': contract.start_date,
+            # Set one random option to bypass the "required" attribute
+            'option': all_options[0].id,
+            }
 
     def default_select_options(self, name):
         if self.select_options._default_values:

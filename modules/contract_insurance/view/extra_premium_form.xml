@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Extra Premium">
-    <label name="option"/>
-    <field name="option"/>
-    <newline/>
     <label name="motive"/>
     <field name="motive" widget="selection"/>
     <label name="calculation_kind"/>
@@ -44,6 +41,7 @@
     <field name="end_date"/>
     <newline/>
     <group id="invisible">
+        <field name="option"/>
         <field name="currency"/>
         <field name="is_discount"/>
     </group>
