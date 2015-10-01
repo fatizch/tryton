@@ -261,6 +261,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         states=_STATES, depends=_DEPENDS, delete_missing=True)
     last_modification = fields.Function(fields.DateTime('Last Modification'),
         'get_last_modification')
+    icon = fields.Function(fields.Char('Icon'), 'get_icon')
+    color = fields.Function(fields.Char('Color'), 'get_color')
 
     @classmethod
     def __setup__(cls):
@@ -342,7 +344,14 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 '/form/group[@id="button_change_start_date"]',
                 'states',
                 {'invisible': True}
+                ), (
+                '/tree', 'colors', Eval('color', 'black')
                 )]
+
+    def get_color(self, name):
+        if self.status in ['void', 'terminated']:
+            return 'grey'
+        return 'black'
 
     @staticmethod
     def order_last_modification(tables):

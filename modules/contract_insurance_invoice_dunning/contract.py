@@ -22,6 +22,11 @@ class Contract:
         fields.Many2One('account.dunning', 'Current Dunning'),
         'get_current_dunning')
 
+    def get_color(self, name):
+        if self.dunning_status:
+            return 'red'
+        return super(Contract, self).get_color(name)
+
     @classmethod
     def search_dunning_status(cls, name, clause):
         pool = Pool()
