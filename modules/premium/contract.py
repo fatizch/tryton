@@ -1,4 +1,5 @@
 import datetime
+import logging
 from collections import defaultdict
 from sql import Column
 from sql.conditionals import Coalesce
@@ -95,7 +96,17 @@ class Contract:
 
     @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
-        cls.save(contracts)
+        # TO DO: replace save by assert on _save_values.
+        # Contract has to be saved prior to calling this method.
+        # Contracts have to be saved in separate transaction due to
+        # different context
+        for contract in contracts:
+            if contract._save_values:
+                logging.getLogger('calculate_prices').warning('Contracts must '
+                    'be saved prior to calling calculate_prices: %s' %
+                    [contract.rec_name for contract in contracts])
+                contract.save()
+
         final_prices = defaultdict(list)
         for contract in contracts:
             if contract.status == 'void':
