@@ -176,7 +176,7 @@ class RuleEngineRuntime:
     def _re_subscriber_subscribed(cls, args, product_name):
         contracts = args['contract'].subscriber.get_subscribed_contracts()
         matches = [
-            1 for x in contracts if x.get_product().code == product_name]
+            1 for x in contracts if x.product.code == product_name]
         return len(matches) > 0
 
     @classmethod
@@ -203,7 +203,7 @@ class RuleEngineRuntime:
     def _re_person_subscribed(cls, args, product_name):
         contracts = cls.get_person(args).get_subscribed_contracts()
         matches = [
-            1 for x in contracts if x.get_product().code == product_name]
+            1 for x in contracts if x.product.code == product_name]
         return len(matches) > 0
 
     @classmethod
