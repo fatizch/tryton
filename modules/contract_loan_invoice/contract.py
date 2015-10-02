@@ -49,8 +49,8 @@ class LoanShare:
             contract = share.option.covered_element.contract
             rule = contract.product.average_loan_premium_rule
             vals = rule.calculate_average_premium_for_option(contract, share)
-            field_values['base_premium_amount'][share.id] = vals[0]
-            field_values['average_premium_rate'][share.id] = vals[1]
+            field_values['base_premium_amount'][share.id] = vals[0] or 0
+            field_values['average_premium_rate'][share.id] = vals[1] or 0
         return field_values
 
 
