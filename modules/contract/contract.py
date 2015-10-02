@@ -1319,6 +1319,15 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         res.update(good_extra_data)
         return res
 
+    def get_extra_data_values(self, at_date=None, translated=False):
+        at_date = at_date or utils.today()
+        extra_data = utils.get_value_at_date(self.extra_datas, at_date)
+        if extra_data:
+            if translated:
+                return extra_data.extra_data_values_translated
+            return extra_data.extra_data_values
+        return {}
+
     def get_product_subscriber_kind(self, name):
         return self.product.subscriber_kind if self.product else ''
 
