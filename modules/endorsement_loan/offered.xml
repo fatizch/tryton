@@ -55,7 +55,7 @@
         <record model="endorsement.part" id="add_remove_loan_revision_part">
             <field name="code">add_remove_loan</field>
             <field name="name">Add / Remove Loans</field>
-            <field name="kind">loan</field>
+            <field name="kind">contract</field>
             <field name="view">loan_add_remove</field>
             <field name="requires_contract_rebill" eval="True"/>
         </record>

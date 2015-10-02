@@ -1,3 +1,4 @@
+import datetime
 import bisect
 from decimal import Decimal
 
@@ -642,6 +643,30 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         self.first_payment_date = self.on_change_with_first_payment_date()
         self.init_increments()
 
+    @fields.depends('increments', 'state', 'payment_frequency', 'rate')
+    def on_change_increments(self):
+        new_increments = []
+        sorted_increments = sorted(self.increments,
+            key=lambda x: getattr(x, 'start_date', None) or datetime.date.max)
+        for idx, increment in enumerate(sorted_increments):
+            new_increments.append(increment)
+            if not getattr(increment, 'loan_state', None):
+                # We may assume a new increment
+                increment.loan_state = self.state
+                increment.payment_frequency = self.payment_frequency
+                increment.rate = self.rate
+            if idx == 0:
+                continue
+            previous_end = sorted_increments[idx - 1].on_change_with_end_date()
+            if not previous_end:
+                continue
+            previous_end = coop_date.add_duration(previous_end,
+                sorted_increments[idx - 1].payment_frequency, 1)
+            if increment.begin_balance or (increment.start_date and
+                    increment.start_date < previous_end):
+                increment.manual = True
+        self.increments = new_increments
+
     @classmethod
     def get_insured_persons_name(cls, loans, name=None):
         ret = {}
@@ -731,7 +756,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
         states=_STATES_INCREMENT, depends=['loan_state'])
     end_date = fields.Function(
         fields.Date('End Date', states={'invisible': ~Eval('end_date')}),
-        'get_end_date')
+        'on_change_with_end_date')
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE', required=True,
         select=True)
     number_of_payments = fields.Integer('Number of Payments', required=True)
@@ -805,6 +830,47 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
             # forces the focus on the field in form view
             self.raise_user_error('invalid_number_of_payments')
 
+    @fields.depends('begin_balance', 'number_of_payments', 'deferal',
+        'loan', 'payment_amount', 'payment_frequency', 'rate')
+    def on_change_begin_balance(self):
+        self.payment_amount = self.calculate_payment_amount()
+
+    @fields.depends('begin_balance', 'number_of_payments', 'deferal',
+        'loan', 'payment_amount', 'payment_frequency', 'rate')
+    def on_change_deferal(self):
+        self.payment_amount = self.calculate_payment_amount()
+
+    @fields.depends('begin_balance', 'number_of_payments', 'deferal',
+        'loan', 'payment_amount', 'payment_frequency', 'rate')
+    def on_change_number_of_payments(self):
+        self.payment_amount = self.calculate_payment_amount()
+
+    @fields.depends('begin_balance', 'number_of_payments', 'deferal',
+        'loan', 'payment_amount', 'payment_frequency', 'rate')
+    def on_change_payment_frequency(self):
+        self.payment_amount = self.calculate_payment_amount()
+
+    @fields.depends('begin_balance', 'number_of_payments', 'deferal',
+        'loan', 'payment_amount', 'payment_frequency', 'rate')
+    def on_change_rate(self):
+        self.payment_amount = self.calculate_payment_amount()
+
+    @fields.depends('number_of_payments', 'payment_frequency', 'start_date')
+    def on_change_with_end_date(self, name=None):
+        if (self.start_date and self.payment_frequency
+                and self.number_of_payments):
+            return coop_date.add_duration(self.start_date,
+                self.payment_frequency, self.number_of_payments - 1,
+                stick_to_end_of_month=True)
+
+    def calculate_payment_amount(self):
+        if (self.begin_balance and self.rate and self.number_of_payments
+                and self.payment_frequency):
+            return self.loan.calculate_payment_amount(self.rate,
+                self.number_of_payments, self.begin_balance,
+                self.loan.currency, self.payment_frequency, self.deferal)
+        return None
+
     def get_func_key(self, name):
         return '|'.join([self.loan.number, str(self.number)])
 
@@ -834,13 +900,6 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     def default_number_of_payments():
         return 0
 
-    @fields.depends('loan', 'payment_frequency', 'manual', 'number',
-            'loan_state')
-    def on_change_loan(self):
-        self.payment_frequency = self.loan.payment_frequency
-        self.rate = self.loan.rate
-        self.loan_state = self.loan.state
-
     def get_start_date(self, name):
         start_date = self.loan.first_payment_date
         for increment in self.loan.increments:
@@ -850,28 +909,8 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
                 self.payment_frequency, increment.number_of_payments,
                 stick_to_end_of_month=True)
 
-    def get_end_date(self, name):
-        if (self.start_date and self.payment_frequency
-                and self.number_of_payments):
-            return coop_date.add_duration(self.start_date,
-                self.payment_frequency, self.number_of_payments - 1,
-                stick_to_end_of_month=True)
-
     def get_loan_state(self, name):
         return self.loan.state if self.loan else None
-
-    @fields.depends('begin_balance', 'rate', 'number_of_payments', 'deferal',
-        'loan', 'payment_frequency')
-    def on_change_with_payment_amount(self):
-        if (self.begin_balance and self.rate and self.number_of_payments
-                and self.payment_frequency):
-            return self.loan.calculate_payment_amount(self.rate,
-                self.number_of_payments, self.begin_balance,
-                self.loan.currency, self.payment_frequency, self.deferal)
-
-    @fields.depends('start_date', 'begin_balance')
-    def on_change_with_manual(self):
-        return self.start_date or self.begin_balance
 
 
 class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):

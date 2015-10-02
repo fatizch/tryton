@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import StateView, Button, StateTransition
 from trytond.pyson import Eval, Bool, Len, If, Not
 
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.cog_utils import fields, model, utils, coop_date
 from trytond.modules.endorsement import EndorsementWizardPreviewMixin
 from trytond.modules.endorsement import EndorsementWizardStepMixin, \
     add_endorsement_step
@@ -432,10 +432,16 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
             return
         self.new_increments[-1].loan = self.current_loan
         if len(self.new_increments) > 1:
-            new_start = self.new_increments[-2].get_end_date(None)
+            new_start = coop_date.add_duration(
+                self.new_increments[-2].end_date,
+                self.new_increments[-2].payment_frequency, 1)
+            new_rate = self.new_increments[-2].rate
         else:
             new_start = self.effective_date
-        self.new_increments[-1].on_change_loan()
+            new_rate = self.current_loan.rate
+        self.new_increments[-1].payment_frequency = \
+            self.current_loan.payment_frequency
+        self.new_increments[-1].rate = new_rate
         self.new_increments[-1].start_date = new_start
         self.new_increments[-1].manual = len(self.new_increments) == 1
         self.new_increments[-1].loan_state = 'draft'
@@ -458,6 +464,8 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
                     increment.id = None
                 if not getattr(increment, 'loan_state', None):
                     increment.loan_state = 'draft'
+                increment.calculated_amount = \
+                    increment.calculate_payment_amount()
                 all_increments.append(increment)
         increments_fields = self._increments_fields_to_extract()
         defaults['all_increments'] = [model.dictionarize(x, increments_fields)
@@ -501,7 +509,7 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
                 'end_date', 'loan', 'number_of_payments', 'rate',
                 'payment_amount', 'payment_frequency',
                 'payment_frequency_string', 'deferal', 'deferal_string',
-                'manual', 'id', 'loan_state']}
+                'manual', 'id', 'loan_state', 'calculated_amount']}
 
     def get_default_loans(self):
         endorsement = self.wizard.endorsement
@@ -582,12 +590,15 @@ class ChangeLoan(EndorsementWizardStepMixin):
         for loan_change, loan_id in [(x['new_values'][0], x['loan_id'])
                     for x in default_values['loan_changes']]:
             loan_change['state'] = 'draft'
-            if loan_id not in loan_endorsements:
-                continue
-            cur_changes = loan_endorsements[loan_id]
-            loan_change.update(cur_changes.values)
-            loan_change['increments'] = [x.values for x in
-                cur_changes.increments]
+            if loan_id in loan_endorsements:
+                cur_changes = loan_endorsements[loan_id]
+                loan_change.update(cur_changes.values)
+                loan_change['increments'] = [x.values for x in
+                    cur_changes.increments]
+            loan_change['previous_frequency'] = loan_change[
+                'payment_frequency']
+            loan_change['previous_release_date'] = loan_change[
+                'funds_release_date']
 
     def update_endorsement(self, base_endorsement, wizard):
         all_endorsements = {x.loan.id: x
@@ -804,7 +815,7 @@ class SelectLoanShares(EndorsementWizardStepMixin):
             updated_struct = endorsement.updated_struct
             loans = set(endorsement.contract.get_used_loans_at_date(
                     effective_date))
-            for loan in endorsement.ordered_loans:
+            for loan in getattr(endorsement, 'ordered_loans', []):
                 if loan.action == 'remove':
                     loans.remove(loan.loan)
                 elif loan.action == 'add':

@@ -37,11 +37,63 @@ class Loan:
     __metaclass__ = PoolMeta
     __name__ = 'loan'
 
+    previous_frequency = fields.Function(
+        fields.Char('Previous Frequency'),
+        'get_previous_frequency')
+    previous_release_date = fields.Function(
+        fields.Date('Previous Fund Release Date'),
+        'get_previous_release_date')
+
+    @classmethod
+    def default_previous_frequency(cls):
+        return cls.default_payment_frequency()
+
+    @classmethod
+    def default_previous_release_date(cls):
+        return cls.default_funds_release_date()
+
+    @fields.depends('first_payment_date', 'previous_frequency',
+        'previous_release_date')
+    def on_change_payment_frequency(self):
+        super(Loan, self).on_change_payment_frequency()
+        self.previous_frequency = self.payment_frequency
+
+    @fields.depends('first_payment_date', 'previous_frequency',
+        'previous_release_date')
+    def on_change_first_payment_date(self):
+        super(Loan, self).on_change_first_payment_date()
+
+    @fields.depends('first_payment_date', 'previous_frequency',
+        'previous_release_date')
+    def on_change_funds_release_date(self):
+        super(Loan, self).on_change_funds_release_date()
+        self.previous_release_date = self.funds_release_date
+
+    @fields.depends('first_payment_date', 'funds_release_date',
+        'payment_frequency', 'previous_frequency', 'previous_release_date')
+    def on_change_with_first_payment_date(self):
+        if self.payment_frequency == self.previous_frequency and (
+                self.funds_release_date == self.previous_release_date):
+            return self.first_payment_date
+        return super(Loan, self).on_change_with_first_payment_date()
+
+    def get_previous_frequency(self, name):
+        return self.payment_frequency
+
+    def get_previous_release_date(self, name):
+        return self.funds_release_date
+
 
 class LoanIncrement:
     _history = True
     __metaclass__ = PoolMeta
     __name__ = 'loan.increment'
+
+    calculated_amount = fields.Function(
+        fields.Numeric('Calculated Amount',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_calculated_amount')
 
     @classmethod
     def __register__(cls, module_name):
@@ -74,6 +126,61 @@ class LoanIncrement:
                     from_=[update_data],
                     where=update_data.inc_id == Column(to_update, '__id')))
             loan_history_h.drop_column('payment_frequency')
+
+    def get_calculated_amount(self, name):
+        return self.calculate_payment_amount()
+
+    @fields.depends('begin_balance', 'calculated_amount', 'number_of_payments',
+        'deferal', 'loan', 'payment_amount', 'payment_frequency', 'rate')
+    def on_change_payment_amount(self):
+        if self.payment_amount is None:
+            self.payment_amount = self.calculate_payment_amount()
+            self.calculated_amount = self.payment_amount
+
+    @fields.depends('calculated_amount')
+    def on_change_begin_balance(self):
+        old_amount = self.payment_amount
+        super(LoanIncrement, self).on_change_begin_balance()
+        new_amount = self.payment_amount
+        if old_amount is not None and self.calculated_amount != old_amount:
+            self.payment_amount = old_amount
+        self.calculated_amount = new_amount
+
+    @fields.depends('calculated_amount')
+    def on_change_deferal(self):
+        old_amount = self.payment_amount
+        super(LoanIncrement, self).on_change_deferal()
+        new_amount = self.payment_amount
+        if old_amount is not None and self.calculated_amount != old_amount:
+            self.payment_amount = old_amount
+        self.calculated_amount = new_amount
+
+    @fields.depends('calculated_amount')
+    def on_change_number_of_payments(self):
+        old_amount = self.payment_amount
+        super(LoanIncrement, self).on_change_number_of_payments()
+        new_amount = self.payment_amount
+        if old_amount is not None and self.calculated_amount != old_amount:
+            self.payment_amount = old_amount
+        self.calculated_amount = new_amount
+
+    @fields.depends('calculated_amount')
+    def on_change_payment_frequency(self):
+        old_amount = self.payment_amount
+        super(LoanIncrement, self).on_change_payment_frequency()
+        new_amount = self.payment_amount
+        if old_amount is not None and self.calculated_amount != old_amount:
+            self.payment_amount = old_amount
+        self.calculated_amount = new_amount
+
+    @fields.depends('calculated_amount')
+    def on_change_rate(self):
+        old_amount = self.payment_amount
+        super(LoanIncrement, self).on_change_rate()
+        new_amount = self.payment_amount
+        if old_amount is not None and self.calculated_amount != old_amount:
+            self.payment_amount = old_amount
+        self.calculated_amount = new_amount
 
 
 class LoanPayment:
@@ -590,7 +697,8 @@ class EndorsementLoanIncrement(relation_mixin(
     def _ignore_fields_for_matching(cls):
         return super(EndorsementLoanIncrement,
             cls)._ignore_fields_for_matching() | {'loan', 'number',
-                'number_of_payments'}
+                'number_of_payments', 'calculated_amount', 'payment_amount',
+                'end_date', 'begin_balance'}
 
 
 class EndorsementContractLoan(relation_mixin(

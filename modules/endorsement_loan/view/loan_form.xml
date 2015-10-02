@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='main']/field[@name='display_warning']" position="after">
+        <field name="previous_frequency" invisible="1"/>
+        <field name="previous_release_date" invisible="1"/>
+    </xpath>
+</data>

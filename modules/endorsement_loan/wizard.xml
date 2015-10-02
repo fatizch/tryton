@@ -62,6 +62,30 @@
             <field name="type">tree</field>
             <field name="name">loan_change_displayer_list</field>
         </record>
+        <!-- ########################## -->
+        <!-- # Loan (previous fields) # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="loan_view_form">
+            <field name="model">loan</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="loan.loan_view_form"/>
+            <field name="name">loan_form</field>
+        </record>
+        <record model="ir.ui.view" id="loan_simple_view_form">
+            <field name="model">loan</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="loan.loan_simple_view_form"/>
+            <field name="name">loan_simple_form</field>
+        </record>
+        <!-- ################################# -->
+        <!-- # Increment (calculated amount) # -->
+        <!-- ################################# -->
+        <record model="ir.ui.view" id="loan_increment_view_tree">
+            <field name="model">loan.increment</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="loan.loan_increment_view_tree"/>
+            <field name="name">loan_increment_tree</field>
+        </record>
         <!-- ############### -->
         <!-- # Change Loan # -->
         <!-- ############### -->

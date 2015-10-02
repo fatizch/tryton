@@ -67,6 +67,14 @@ msgstr ""
 "Les garanties suivantes n'ont pas de quotités :\n"
 "  %s"
 
+msgctxt "field:loan,previous_frequency:"
+msgid "Previous Frequency"
+msgstr "Fréquence précédente"
+
+msgctxt "field:loan,previous_release_date:"
+msgid "Previous Release Date"
+msgstr "Date de déblocage des fonds précédente"
+
 msgctxt ""
 "field:contract.covered_element.add_option.loan_share_selector,contract:"
 msgid "Contract"

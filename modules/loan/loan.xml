@@ -108,6 +108,9 @@
             <field name="type">tree</field>
             <field name="name">loan_payment_tree</field>
         </record>
+        <!-- ################### -->
+        <!-- # Loan Increments # -->
+        <!-- ################### -->
         <record model="ir.ui.view" id="loan_increment_view_tree">
             <field name="model">loan.increment</field>
             <field name="type">tree</field>
