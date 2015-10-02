@@ -14,10 +14,7 @@ class Event:
         contracts = super(Event, cls).get_contracts_from_object(object_)
         if object_.__name__ == 'contract.set':
             contracts.extend(object_.contracts)
-        res = []
-        for contract in contracts:
-            res.extend(contract.contract_set.contracts)
-        return list(set(res))
+        return contracts
 
     @classmethod
     def get_contract_sets_from_object(cls, object_):
