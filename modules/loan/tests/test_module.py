@@ -485,7 +485,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @test_framework.prepare_test(
         'loan.test0010loan_basic_data',
-        'loan.test0037loan_creation',
         'contract_insurance.test0001_testPersonCreation',
         )
     def test0048_insured_outstanding_loan_balance_wizard(self):
@@ -525,10 +524,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 code=code,
                 name=name,
                 company=company,
-                item_descr=item_desc,
+                item_desc=item_desc,
                 start_date=start_date,
                 account_for_billing=account,
                 insurer=insurer,
+                family='loan',
                 insurance_kind=insurance_kind)
             coverage.save()
             return coverage
@@ -572,13 +572,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 start_date=start_date,
                 )
             contract.save()
-            contract.activation_history[0].end_date = start_date + \
-                datetime.timedelta(weeks=3000)
-            contract.activation_history[0].save()
             contract.account_for_billing = account
             contract.subscriber = subscriber
-            contract.activate_contract()
-            self.assertEqual(contract.status, 'active')
             return contract
 
         def create_option(coverage, covered_element, base_date):
@@ -620,10 +615,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 base_date)
         loan1 = create_loan(100000, base_date)
         loan2 = create_loan(200000, base_date)
+        product.coverages = [death_ins1, dis_ins1, temp_dis_ins2]
+        product.save()
 
         account_contract = create_account()
         contract1 = create_contract(account_contract, product, john)
         contract2 = create_contract(account_contract, product, john)
+
         covered_element1 = self.CoveredElement()
         covered_element1.contract = contract1
         covered_element1.item_desc = item_desc
@@ -647,11 +645,24 @@ class ModuleTestCase(test_framework.CoopTestCase):
         create_loan_share('0.8', option_death_ins1, loan2)
         create_loan_share('0.3333', option_dis_ins1, loan1)
         create_loan_share('0.3333', option_temp_dis_ins2, loan1)
+        contract1.loans = [loan1, loan2]
+        contract1.save()
 
         # on contract 2
         option_temp_dis_ins2_2 = create_option(temp_dis_ins2,
                 covered_element2, base_date)
         create_loan_share('0.8', option_temp_dis_ins2_2, loan2)
+        contract2.loans = [loan2]
+        contract2.save()
+
+        for contract in (contract1, contract2):
+            contract.activate_contract()
+            contract.save()
+            self.assertEqual(contract.status, 'active')
+
+        self.assertEqual(contract1.end_date, max([x.end_date
+                    for x in (loan1, loan2)]))
+        self.assertEqual(contract2.end_date, loan2.end_date)
 
         def run_wizard(at_date, currency):
             with Transaction().set_context(active_id=john.id,
@@ -726,15 +737,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 self.assertEqual(line['amount'], Decimal('88726.16') +
                     Decimal('71472.62'))
 
-        test_date = base_date + datetime.timedelta(weeks=2000)
-        res = run_wizard(test_date, currency)
-        insurers = set([x['name'] for x in res])
-        self.assertEqual(insurers, set(['Total', insurer1.rec_name,
-                    insurer2.rec_name]))
-        for line in res:
-            self.assertEqual(line['amount'], 0)
-
-        test_date = base_date + datetime.timedelta(weeks=3200)
+        test_date = contract.end_date + datetime.timedelta(days=1)
         res = run_wizard(test_date, currency)
         insurers = set([x['name'] for x in res])
         self.assertEqual(insurers, set(['Total']))
