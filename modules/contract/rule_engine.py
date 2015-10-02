@@ -34,6 +34,10 @@ class RuleEngineRuntime:
         return args['contract'].initial_start_date
 
     @classmethod
+    def _re_product_code(cls, args):
+        return args['contract'].product.code
+
+    @classmethod
     def _re_get_contract_start_date(cls, args):
         return args['contract'].start_date
 

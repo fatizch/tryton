@@ -32,6 +32,16 @@
             <field name="name">_re_get_contract_initial_start_date</field>
             <field name="parent" ref="te_contract"/>
         </record>
+        <record model="rule_engine.function" id="code_produit">
+            <field name="translated_technical_name">code_du_produit</field>
+            <field name="description">Code du produit</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_product_code</field>
+            <field name="long_description">Code du produit</field>
+            <field name="parent" ref="te_contract"/>
+        </record>
         <record model="rule_engine.function" id="date_debut_terme_courant_contrat">
             <field name="translated_technical_name">date_debut_terme_courant_contrat</field>
             <field name="description">Date de début du terme courant du contrat</field>
