@@ -434,6 +434,8 @@ class ContractOption:
             contract else self.start_date)
 
     def on_change_with_icon(self, name=None):
+        if getattr(self, 'status', '') in ('terminated', 'void'):
+            return 'umbrella-grey'
         return 'umbrella-black'
 
     @fields.depends('covered_element')
