@@ -2530,3 +2530,19 @@ msgstr "Précédent"
 msgctxt "wizard_button:endorsement.start,void_contract,void_contract_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
+
+msgctxt "model:event.type,name:event_unhold_contract"
+msgid "Unhold Contract"
+msgstr "Fin de suspension du contrat"
+
+msgctxt "model:event.type,name:event_apply_endorsement"
+msgid "Apply Endorsement"
+msgstr "Application de l'avenant"
+
+msgctxt "model:event.type,name:event_decline_endorsement"
+msgid "Decline Endorsement"
+msgstr "Déclinaison de l'avenant"
+
+msgctxt "model:event.type,name:event_cancel_endorsement"
+msgid "Cancel Endorsement"
+msgstr "Annulation de l'avenant"

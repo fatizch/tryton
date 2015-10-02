@@ -1569,3 +1569,35 @@ msgctxt ""
 "wizard_button:contract.wizard.option_subscription,select_package,options_displayer:"
 msgid "Next"
 msgstr "Suivant"
+
+msgctxt "model:event.type,name:event_activate_contract"
+msgid "Activate Contract"
+msgstr "Activation du contrat"
+
+msgctxt "model:event.type,name:event_reactivate_contract"
+msgid "Reactivate Contract"
+msgstr "Réactivation du contrat"
+
+msgctxt "model:event.type,name:event_decline_contract"
+msgid "Decline Contract"
+msgstr "Déclinaison du contrat"
+
+msgctxt "model:event.type,name:event_plan_contract_termination"
+msgid "Plan Contract Termination"
+msgstr "Planification de la résiliation du contrat"
+
+msgctxt "model:event.type,name:event_terminate_contract"
+msgid "Terminate Contract"
+msgstr "Résiliation du contrat"
+
+msgctxt "model:event.type,name:event_void_contract"
+msgid "Void Contract"
+msgstr "Contrat sans effet"
+
+msgctxt "model:event.type,name:event_hold_contract"
+msgid "Hold Contract"
+msgstr "Suspension du contrat"
+
+msgctxt "model:event.type,name:event_unhold_contract"
+msgid "Unhold Contract"
+msgstr "Fin de suspension du contrat"

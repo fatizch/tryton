@@ -159,3 +159,7 @@ msgstr "Appliquer"
 msgctxt "wizard_button:contract.set.decline,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "model:event.type,name:event_activate_contract_set"
+msgid "Activate Contract Set"
+msgstr "Activation de l'ensemble de contrats"

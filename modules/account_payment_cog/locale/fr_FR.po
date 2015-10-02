@@ -532,3 +532,15 @@ msgstr "À recevoir"
 msgctxt "selection:account.payment,kind:account_payment."
 msgid "Payable"
 msgstr "À payer"
+
+msgctxt "model:event.type,name:event_process_payment"
+msgid "Process Payment"
+msgstr "Traitement du paiment"
+
+msgctxt "model:event.type,name:event_fail_payment"
+msgid "Fail Payment"
+msgstr "Échec du paiement"
+
+msgctxt "model:event.type,name:event_succeed_payment"
+msgid "Succeed payment"
+msgstr "Succès du paiement"
