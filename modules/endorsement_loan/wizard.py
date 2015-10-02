@@ -1384,17 +1384,22 @@ class StartEndorsement:
             to_delete[contract_endorsement.contract.id] = \
                 contract_endorsement
         for displayer in self.loan_select_contracts.selected_contracts:
-            if not displayer.to_update:
-                continue
-            elif displayer.contract in to_delete:
-                endorsement = to_delete.pop(displayer.contract)
-                to_write.append(endorsement)
+            if displayer.contract.id in to_delete:
+                endorsement = to_delete.pop(displayer.contract.id)
+                if not displayer.to_update:
+                    endorsement.values.pop('end_date', None)
+                    if endorsement.is_null():
+                        to_delete[displayer.contract.id] = endorsement
+                    else:
+                        to_write.append(endorsement)
+                    continue
+                else:
+                    to_write.append(endorsement)
             else:
                 endorsement = ContractEndorsement(
                     endorsement=self.endorsement.id,
                     contract=displayer.contract.id, values={})
                 to_create.append(endorsement)
-            endorsement.values['start_date'] = displayer.new_start_date
             endorsement.values['end_date'] = displayer.new_end_date
         if to_delete:
             ContractEndorsement.delete(to_delete.values())
