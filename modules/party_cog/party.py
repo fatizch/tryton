@@ -144,11 +144,12 @@ class Party(export.ExportImportMixin):
     def add_func_key(cls, values):
         if 'code' in values:
             values['_func_key'] = values['code']
-        elif (values.get('is_person', False) and values.get('name', False) and
-                values.get('first_name', False) and
+        elif (values.get('name', False) and values.get('first_name', False) and
                 values.get('birth_date', False)):
             values['_func_key'] = '%s|%s|%s' % (values['name'],
                 values['first_name'], values['birth_date'])
+        else:
+            super(Party, cls).add_func_key(values)
 
     def get_func_key(self, name):
         if not self.is_person:
