@@ -32,6 +32,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Coverage': 'offered.option.description',
             'CoveredElement': 'contract.covered_element',
             'RuleEngineRuntime': 'rule_engine.runtime',
+            'SubStatus': 'contract.sub_status',
             }
 
     def test0001_testPersonCreation(self):
@@ -565,6 +566,34 @@ class ModuleTestCase(test_framework.CoopTestCase):
         res = self.Option.search([('start_date', '<', contract.start_date +
                     relativedelta(weeks=4))])
         self.assertEqual(len(res), 3)
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0012_testContractCreation',
+        'contract_insurance.test0001_testPersonCreation',
+        )
+    def test0040_testContractTermination(self):
+        coverage = self.Coverage.search([])[0]
+        contract, = self.Contract.search([])
+        sub_status = self.SubStatus.search([('code', '=',
+                    'reached_end_date')])[0]
+        covered_element = self.CoveredElement()
+        covered_element.contract = contract
+        covered_element.item_desc = coverage.item_desc
+        covered_element.product = covered_element.on_change_with_product()
+        party = self.Party.search([('is_person', '=', True)])[0]
+        covered_element.party = party
+        covered_element.save()
+        contract.covered_elements = [covered_element.id]
+        contract.covered_elements[0].options = [self.Option(status='active',
+                coverage=coverage) for x in range(2)]
+        contract.activation_history[0].termination_reason = sub_status
+        contract.activation_history = list(contract.activation_history)
+        contract.save()
+        self.assertEqual(len(contract.covered_elements[0].options), 2)
+        self.Contract.do_terminate([contract])
+        for option in contract.covered_elements[0].options:
+            self.assertEqual(option.status, 'terminated')
+            self.assertEqual(option.sub_status, sub_status)
 
 
 def suite():

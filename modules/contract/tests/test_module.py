@@ -110,10 +110,20 @@ class ModuleTestCase(test_framework.CoopTestCase):
         )
     def test0011_testContractTermination(self):
         contract, = self.Contract.search([])
+        coverage, = self.Coverage.search([])
+        contract.options = [self.Option(status='active',
+                coverage=coverage) for _ in range(2)]
+        contract.save()
+
+        sub_status = self.SubStatus.search([('code', '=',
+                    'reached_end_date')])[0]
         self.Contract.do_terminate([contract])
         self.assertEqual(contract.status, 'terminated')
-        self.assertEqual(contract.sub_status, self.SubStatus.search(
-                [('code', '=', 'reached_end_date')])[0])
+        self.assertEqual(contract.sub_status, sub_status)
+        self.assertEqual(len(contract.options), 2)
+        for option in contract.options:
+            self.assertEqual(option.status, 'terminated')
+            self.assertEqual(option.sub_status, sub_status)
 
     @test_framework.prepare_test(
         'contract.test0010_testContractCreation',

@@ -1105,6 +1105,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return
         pool = Pool()
         Event = pool.get('event')
+        Option = pool.get('contract.option')
         sub_status_contracts = defaultdict(list)
         for contract in contracts:
             sub_status_contracts[contract.activation_history[-1].
@@ -1116,6 +1117,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                     'sub_status': sub_status,
                     }]
         cls.write(*to_write)
+        options_to_write = Option.search([('parent_contract', 'in',
+                    [x.id for x in contracts])])
+        Option.write(options_to_write, {'status': 'terminated',
+                'sub_status': sub_status})
         Event.notify_events(contracts, 'terminate_contract')
 
     @classmethod
