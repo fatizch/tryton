@@ -25,7 +25,7 @@ sudo apt-get install gcc ghostscript libxml2-dev libxslt-dev libldap2-dev \
 libsasl2-dev lib32z1-dev
 echo $SEP
 echo Installing client packages
-sudo apt-get install python-gtk2
+sudo apt-get install python-gtk2 libsrvg2-bin
 echo $SEP
 echo Installing optional dependencies
 echo $SEP
