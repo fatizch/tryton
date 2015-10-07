@@ -277,6 +277,17 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     def default_funds_release_date():
         return Transaction().context.get('start_date', None)
 
+    @classmethod
+    def default_first_payment_date(cls):
+        funds_release = cls.default_funds_release_date()
+        if not funds_release:
+            return None
+        unit = cls.default_payment_frequency()
+        if not unit:
+            return None
+        return coop_date.add_duration(funds_release, unit,
+            stick_to_end_of_month=True)
+
     @staticmethod
     def default_order():
         return Transaction().context.get('nb_of_loans', 0) + 1
