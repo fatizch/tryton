@@ -584,9 +584,8 @@ class ChangeLoan(EndorsementWizardStepMixin):
                 'previous_release_date'],
             'loan.increment': ['number', 'begin_balance', 'start_date',
                 'end_date', 'loan', 'number_of_payments', 'rate',
-                'payment_amount', 'payment_frequency',
-                'payment_frequency_string', 'deferal', 'deferal_string',
-                'manual', 'id', 'loan_state', 'calculated_amount'],
+                'payment_amount', 'payment_frequency', 'deferal', 'manual',
+                'id', 'loan_state', 'calculated_amount'],
             }
 
     @classmethod
