@@ -14,7 +14,7 @@ from trytond.rpc import RPC
 from trytond.pool import PoolMeta
 from trytond.model import Workflow, Model, fields as tryton_fields, \
     ModelSingleton, Unique
-from trytond.pyson import Eval, PYSONEncoder, PYSON, Bool, Len, Or
+from trytond.pyson import Eval, PYSONEncoder, PYSON, Bool, Len, Or, If
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
@@ -1063,8 +1063,6 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                 ('in_progress', 'draft'),
                 ('in_progress', 'applied'),
                 ('applied', 'canceled'),
-                ('canceled', 'applied'),
-                ('canceled', 'in_progress'),
                 ('declined', 'draft'),
                 ))
         cls._buttons.update(
@@ -1106,6 +1104,12 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
             ('number_uniq', Unique(t, t.number),
                 'The endorsement number must be unique.')
         ]
+
+    @classmethod
+    def view_attributes(cls):
+        return super(Endorsement, cls).view_attributes() + [
+            ('/tree', 'colors', If(Eval('state') == 'applied', 'green',
+                    If(Eval('state') == 'canceled', 'grey', 'black')))]
 
     @classmethod
     def create(cls, vlist):
