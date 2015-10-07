@@ -643,18 +643,24 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         self.first_payment_date = self.on_change_with_first_payment_date()
         self.init_increments()
 
-    @fields.depends('increments', 'state', 'payment_frequency', 'rate')
+    @fields.depends('currency', 'currency_digits', 'currency_symbol',
+        'increments', 'payment_frequency', 'state', 'rate')
     def on_change_increments(self):
         new_increments = []
         sorted_increments = sorted(self.increments,
             key=lambda x: getattr(x, 'start_date', None) or datetime.date.max)
         for idx, increment in enumerate(sorted_increments):
             new_increments.append(increment)
+            is_new = False
             if not getattr(increment, 'loan_state', None):
                 # We may assume a new increment
                 increment.loan_state = self.state
                 increment.payment_frequency = self.payment_frequency
                 increment.rate = self.rate
+                increment.currency = self.currency
+                increment.currency_symbol = self.currency_symbol
+                increment.currency_digits = self.currency_digits
+                is_new = True
             if idx == 0:
                 continue
             previous_end = sorted_increments[idx - 1].on_change_with_end_date()
@@ -662,6 +668,8 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 continue
             previous_end = coop_date.add_duration(previous_end,
                 sorted_increments[idx - 1].payment_frequency, 1)
+            if is_new:
+                increment.start_date = previous_end
             if increment.begin_balance or (increment.start_date and
                     increment.start_date < previous_end):
                 increment.manual = True
@@ -830,28 +838,28 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
             # forces the focus on the field in form view
             self.raise_user_error('invalid_number_of_payments')
 
-    @fields.depends('begin_balance', 'number_of_payments', 'deferal',
-        'loan', 'payment_amount', 'payment_frequency', 'rate')
+    @fields.depends('begin_balance', 'currency', 'number_of_payments',
+        'deferal', 'loan', 'payment_amount', 'payment_frequency', 'rate')
     def on_change_begin_balance(self):
         self.payment_amount = self.calculate_payment_amount()
 
-    @fields.depends('begin_balance', 'number_of_payments', 'deferal',
-        'loan', 'payment_amount', 'payment_frequency', 'rate')
+    @fields.depends('begin_balance', 'currency', 'number_of_payments',
+        'deferal', 'loan', 'payment_amount', 'payment_frequency', 'rate')
     def on_change_deferal(self):
         self.payment_amount = self.calculate_payment_amount()
 
-    @fields.depends('begin_balance', 'number_of_payments', 'deferal',
-        'loan', 'payment_amount', 'payment_frequency', 'rate')
+    @fields.depends('begin_balance', 'currency', 'number_of_payments',
+        'deferal', 'loan', 'payment_amount', 'payment_frequency', 'rate')
     def on_change_number_of_payments(self):
         self.payment_amount = self.calculate_payment_amount()
 
-    @fields.depends('begin_balance', 'number_of_payments', 'deferal',
-        'loan', 'payment_amount', 'payment_frequency', 'rate')
+    @fields.depends('begin_balance', 'currency', 'number_of_payments',
+        'deferal', 'loan', 'payment_amount', 'payment_frequency', 'rate')
     def on_change_payment_frequency(self):
         self.payment_amount = self.calculate_payment_amount()
 
-    @fields.depends('begin_balance', 'number_of_payments', 'deferal',
-        'loan', 'payment_amount', 'payment_frequency', 'rate')
+    @fields.depends('begin_balance', 'currency', 'number_of_payments',
+        'deferal', 'loan', 'payment_amount', 'payment_frequency', 'rate')
     def on_change_rate(self):
         self.payment_amount = self.calculate_payment_amount()
 
@@ -868,7 +876,8 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
                 and self.payment_frequency):
             return self.loan.calculate_payment_amount(self.rate,
                 self.number_of_payments, self.begin_balance,
-                self.loan.currency, self.payment_frequency, self.deferal)
+                self.currency or self.loan.currency, self.payment_frequency,
+                self.deferal)
         return None
 
     def get_func_key(self, name):

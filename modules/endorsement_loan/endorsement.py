@@ -698,7 +698,8 @@ class EndorsementLoanIncrement(relation_mixin(
         return super(EndorsementLoanIncrement,
             cls)._ignore_fields_for_matching() | {'loan', 'number',
                 'number_of_payments', 'calculated_amount', 'payment_amount',
-                'end_date', 'begin_balance'}
+                'end_date', 'begin_balance', 'currency', 'currency_symbol',
+                'currency_digits'}
 
 
 class EndorsementContractLoan(relation_mixin(

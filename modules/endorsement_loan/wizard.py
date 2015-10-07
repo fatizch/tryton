@@ -443,6 +443,11 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
             self.current_loan.payment_frequency
         self.new_increments[-1].rate = new_rate
         self.new_increments[-1].start_date = new_start
+        self.new_increments[-1].currency = self.current_loan.currency
+        self.new_increments[-1].currency_digits = \
+            self.current_loan.currency_digits
+        self.new_increments[-1].currency_symbol = \
+            self.current_loan.currency_symbol
         self.new_increments[-1].manual = len(self.new_increments) == 1
         self.new_increments[-1].loan_state = 'draft'
         self.new_increments = list(self.new_increments)
@@ -507,7 +512,8 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
     def _increments_fields_to_extract(cls):
         return {'loan.increment': ['number', 'begin_balance', 'start_date',
                 'end_date', 'loan', 'number_of_payments', 'rate',
-                'payment_amount', 'payment_frequency',
+                'payment_amount', 'payment_frequency', 'currency',
+                'currency_symbol', 'currency_digits',
                 'payment_frequency_string', 'deferal', 'deferal_string',
                 'manual', 'id', 'loan_state', 'calculated_amount']}
 
@@ -574,11 +580,13 @@ class ChangeLoan(EndorsementWizardStepMixin):
                 'first_payment_date', 'funds_release_date',
                 'kind', 'amount', 'number', 'company', 'increments',
                 'duration', 'duration_unit', 'currency_symbol',
-                'currency_digits'],
-            'loan.increment': ['number_of_payments', 'deferal', 'end_date',
-                'number', 'rate', 'payment_amount', 'start_date',
-                'begin_balance', 'currency_symbol', 'currency',
-                'currency_digits'],
+                'currency_digits', 'previous_frequency',
+                'previous_release_date'],
+            'loan.increment': ['number', 'begin_balance', 'start_date',
+                'end_date', 'loan', 'number_of_payments', 'rate',
+                'payment_amount', 'payment_frequency',
+                'payment_frequency_string', 'deferal', 'deferal_string',
+                'manual', 'id', 'loan_state', 'calculated_amount'],
             }
 
     @classmethod
@@ -594,7 +602,15 @@ class ChangeLoan(EndorsementWizardStepMixin):
                 cur_changes = loan_endorsements[loan_id]
                 loan_change.update(cur_changes.values)
                 loan_change['increments'] = [x.values for x in
-                    cur_changes.increments]
+                    cur_changes.increments if x.action == 'add']
+            for increment in loan_change['increments']:
+                increment['end_date'] = coop_date.add_duration(
+                    increment['start_date'], increment['payment_frequency'],
+                    increment['number_of_payments'] - 1,
+                    stick_to_end_of_month=True)
+                increment['currency'] = loan_change['currency']
+                increment['currency_symbol'] = loan_change['currency_symbol']
+                increment['currency_digits'] = loan_change['currency_digits']
             loan_change['previous_frequency'] = loan_change[
                 'payment_frequency']
             loan_change['previous_release_date'] = loan_change[
