@@ -296,6 +296,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             number_of_payments=229,
             rate=Decimal('0.024'),
             payment_frequency='month',
+            currency=loan.currency,
             loan=loan,
             deferal='',
             manual=True)
@@ -319,6 +320,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             rate=Decimal('0.024'),
             payment_frequency='month',
             loan=loan,
+            currency=loan.currency,
             deferal=None,
             manual=True)
         increment.payment_amount = increment.calculate_payment_amount()
