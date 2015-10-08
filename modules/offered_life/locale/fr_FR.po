@@ -1,18 +1,10 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:offered.item.description,kind:"
 msgid "Kind"
 msgstr "Type"
-
-msgctxt "field:offered.option.description,coverage_amount_rules:"
-msgid "Coverage Amount Rules"
-msgstr "Règles de montant de couverture"
-
-msgctxt "field:offered.option.description,is_coverage_amount_needed:"
-msgid "Coverage Amount Needed"
-msgstr "Montant de Couverture Nécessaire"
 
 msgctxt "field:salary_range,ceiling:"
 msgid "Current Ceiling"
@@ -185,10 +177,6 @@ msgstr "Perte Totale et Irréversible d'Autonomie"
 msgctxt "selection:offered.option.description,insurance_kind:"
 msgid "Total Disability"
 msgstr "Invalidité totale"
-
-msgctxt "view:offered.option.description:"
-msgid "Coverage Amount"
-msgstr "Montant de Couverture"
 
 msgctxt "view:salary_range.version:"
 msgid "Salary Range Version"

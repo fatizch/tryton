@@ -1,0 +1,1 @@
+- **Gestion d'un montant de couverture libre (avec validation à posteriori du montant) ou parmi un choix prédéfini**

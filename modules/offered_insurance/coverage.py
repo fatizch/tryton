@@ -93,40 +93,6 @@ class OptionDescription:
                     res.append((covered, option))
         return res, []
 
-    def give_me_allowed_amounts(self, args):
-        try:
-            return self.get_result(
-                'allowed_amounts',
-                args,
-                kind='coverage_amount')
-        except offered.NonExistingRuleKindException:
-            return [], []
-
-    def give_me_must_have_coverage_amount(self, args):
-        result = self.get_good_rule_at_date(args, 'coverage_amount')
-
-        if not result:
-            return False, []
-        return True, []
-
-    def give_me_coverage_amount_validity(self, args):
-        try:
-            return self.get_result(
-                'coverage_amount_validity',
-                args,
-                kind='coverage_amount')
-        except offered.NonExistingRuleKindException:
-            return (True, []), []
-
-    def give_me_dependant_amount_coverage(self, args):
-        try:
-            return self.get_result(
-                'dependant_amount_coverage',
-                args,
-                kind='coverage_amount')
-        except offered.NonExistingRuleKindException:
-            return None, []
-
     def get_currency(self):
         return self.currency
 

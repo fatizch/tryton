@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='main_data']/field[@name='coverage']" position="after">
+        <newline/>
+        <label name="current_coverage_amount"/>
+        <field name="current_coverage_amount"/>
+        <newline/>
+        <label name="current_coverage_amount_selection"/>
+        <field name="current_coverage_amount_selection"/>
+        <newline/>
+        <field name="has_coverage_amount" invisible="1"/>
+        <field name="free_coverage_amount" invisible="1"/>
+        <field name="currency" invisible="1"/>
+    </xpath>
+</data>

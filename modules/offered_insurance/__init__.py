@@ -33,8 +33,6 @@ def register():
         RuleEngine,
         # From business_rule
         BusinessRuleRoot,
-        # From business_rule.documents_rule
-        CoverageAmountRule,
         # From business_rule.exclusion
         ExclusionKind,
         # From business_rule.extra_premium

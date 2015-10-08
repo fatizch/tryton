@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="coverage_view_form">
+            <field name="model">offered.option.description</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered.coverage_view_form"/>
+            <field name="name">option_description_form</field>
+        </record>
+        <record model="ir.ui.view" id="coverage_amount_rule_view_form">
+            <field name="model">offered.coverage_amount.rule</field>
+            <field name="type">form</field>
+            <field name="name">coverage_amount_rule_form</field>
+        </record>
+        <record model="ir.ui.view" id="coverage_amount_rule_view_list">
+            <field name="model">offered.coverage_amount.rule</field>
+            <field name="type">tree</field>
+            <field name="name">coverage_amount_rule_list</field>
+        </record>
+    </data>
+</tryton>

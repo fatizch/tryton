@@ -2,7 +2,6 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields
 
 STATE_LIFE = (
     Eval('_parent_offered', {}).get('family') != 'life')
@@ -16,13 +15,6 @@ __all__ = [
 class OptionDescription:
     __name__ = 'offered.option.description'
 
-    coverage_amount_rules = fields.One2Many('offered.coverage_amount.rule',
-        'offered', 'Coverage Amount Rules',
-        states={'invisible': Eval('family') != 'life'}, delete_missing=True)
-    is_coverage_amount_needed = fields.Function(
-        fields.Boolean('Coverage Amount Needed', states={'invisible': True}),
-        'get_is_coverage_amount_needed')
-
     @classmethod
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
@@ -35,14 +27,3 @@ class OptionDescription:
                     'Total And Irreversible Autonomy Loss'),
                 ('death', 'Death'),
                 ])
-
-    @classmethod
-    def view_attributes(cls):
-        return super(OptionDescription, cls).view_attributes() + [
-            ('/form/notebook/page[@id="managers"]/notebook'
-                '/page[@id="coverage_amount"]',
-                'states', {'invisible': Eval('family') != 'life'}),
-            ]
-
-    def get_is_coverage_amount_needed(self, name=None):
-        return self.family == 'life'

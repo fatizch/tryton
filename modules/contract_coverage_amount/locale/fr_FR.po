@@ -1,0 +1,115 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.option:"
+msgid ""
+"Coverage amount \"%(coverage_amount)s\" is invalid for coverage "
+"\"%(coverage)s\""
+msgstr ""
+"Le montant de couverture \"%(coverage_amount)s\" n'est pas valide pour la "
+"garantie \"%(coverage)s\""
+
+msgctxt "field:contract.option,current_coverage_amount:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
+
+msgctxt "field:contract.option,current_coverage_amount_selection:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
+
+msgctxt "field:contract.option,free_coverage_amount:"
+msgid "Free Coverage Amount"
+msgstr "Montant de couverture libre"
+
+msgctxt "field:contract.option,has_coverage_amount:"
+msgid "Has Coverage Amount"
+msgstr "Avec montant de couverture"
+
+msgctxt "field:contract.option.version,coverage_amount:"
+msgid "Coverage Amount"
+msgstr "Montant de couverture"
+
+msgctxt "field:offered.coverage_amount.rule,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:offered.coverage_amount.rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.coverage_amount.rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.coverage_amount.rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.coverage_amount.rule,free_input:"
+msgid "Free Input"
+msgstr "Saisie libre"
+
+msgctxt "field:offered.coverage_amount.rule,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:offered.coverage_amount.rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.coverage_amount.rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.coverage_amount.rule,rule:"
+msgid "Rule Engine"
+msgstr "Règle"
+
+msgctxt "field:offered.coverage_amount.rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de règle"
+
+msgctxt "field:offered.coverage_amount.rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.coverage_amount.rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.coverage_amount.rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.option.description,coverage_amount_rules:"
+msgid "Coverage Amount Rules"
+msgstr "Règles de montant de couverture"
+
+msgctxt "help:offered.coverage_amount.rule,free_input:"
+msgid ""
+"If True, the rule must return a boolean to validate the entry, otherwise the"
+" rule must return a list of possible values"
+msgstr ""
+"Si Vrai, la règle doit retourner un booléen pour valider la saisie, "
+"autrement la règle doit retourner une liste de valeurs possibles"
+
+msgctxt "model:offered.coverage_amount.rule,name:"
+msgid "Coverage Amount Rule"
+msgstr "Règle de montant de couverture"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Coverage Amount Selection"
+msgstr "Sélection montant de couverture"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Coverage Amount Validation"
+msgstr "Validation montant de couverture"
+
+msgctxt "view:offered.coverage_amount.rule:"
+msgid "Coverage Amount Rule"
+msgstr "Règle de montant de couverture"
+
+msgctxt "view:offered.coverage_amount.rule:"
+msgid "Coverage Amount Rules"
+msgstr "Règles de montant de couverture"

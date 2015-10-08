@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="/form/notebook/page[@id='main_data']/field[@name='coverage_amount_selection']" position="after">
+    <xpath expr="/form/notebook/page[@id='main_data']" position="inside">
         <newline/>
         <label name="cash_value_collection_amount"/>
         <field name="cash_value_collection_amount"/>

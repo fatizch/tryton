@@ -1726,7 +1726,7 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def init_dict_for_rule_engine(self, args):
         args['option'] = self
         self.coverage.init_dict_for_rule_engine(args)
-        self.contract.init_dict_for_rule_engine(args)
+        self.parent_contract.init_dict_for_rule_engine(args)
 
     def get_version_at_date(self, at_date):
         for version in sorted(self.versions,
@@ -1926,6 +1926,10 @@ class ContractOptionVersion(model.CoopSQL, model.CoopView):
             'start': None,
             'extra_data': {},
             }
+
+    def init_dict_for_rule_engine(self, cur_dict):
+        cur_dict['extra_data'] = self.extra_data
+        self.option.init_dict_for_rule_engine(cur_dict)
 
 
 class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,

@@ -1,5 +1,4 @@
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, And, Not, In
 from trytond.modules.cog_utils import fields, model
 from trytond.modules.offered_insurance import BusinessRuleRoot
 
@@ -62,21 +61,9 @@ class OptionDescription:
         'Cash Value Rules', delete_missing=True)
 
     @classmethod
-    def view_attributes(cls):
-        return [('/form/notebook/page/notebook/string[@id="cash_value"]',
-                'states', {'invisible': Eval('family') != 'cash_value'}),
-            ('/form/notebook/page/notebook/page[@id="coverage_amount"]',
-                'states', {'invisible': Not(In(Eval('family'),
-                    ['cash_value', 'life']))})
-            ]
-
-    @classmethod
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
         cls.family.selection.append(('cash_value', 'Cash Value'))
-        cls.coverage_amount_rules.states['invisible'] = And(
-            cls.coverage_amount_rules.states['invisible'],
-            Eval('family') != 'cash_value')
 
     def get_is_cash_value_coverage(self, name):
         return self.family == 'cash_value'

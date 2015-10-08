@@ -5,7 +5,4 @@
             <field name="cash_value_rules" colspan="4"/>
         </page>
     </xpath>
-    <xpath expr="/form/notebook/page/notebook/page[@id='coverage_amount']" position="replace_attributes">
-        <page string="Coverage Amount" id="coverage_amount"/>
-    </xpath>
 </data>

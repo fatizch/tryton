@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -29,18 +29,6 @@ msgstr "Date de mise à jour"
 msgctxt "field:contract.covered_element-party,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
-
-msgctxt "field:contract.option,coverage_amount:"
-msgid "Coverage Amount"
-msgstr "Montant de Couverture"
-
-msgctxt "field:contract.option,coverage_amount_selection:"
-msgid "Coverage Amount"
-msgstr "Montant de Couverture"
-
-msgctxt "field:contract.option,has_coverage_amount:"
-msgid "Has Coverage Amount"
-msgstr "Montant de couverture défini"
 
 msgctxt "field:contract.option,person:"
 msgid "Person"

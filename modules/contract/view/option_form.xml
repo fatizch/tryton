@@ -23,4 +23,5 @@
             <field name="versions"/>
         </page>
     </notebook>
+    <field name="parent_contract" invisible="1"/>
 </form>
