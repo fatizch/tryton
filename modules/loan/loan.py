@@ -239,6 +239,10 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         return super(Loan, cls)._export_light() | {'company', 'currency'}
 
     @classmethod
+    def is_master_object(cls):
+        return True
+
+    @classmethod
     def add_func_key(cls, values):
         values['_func_key'] = values['number']
 
