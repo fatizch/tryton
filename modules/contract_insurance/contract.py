@@ -721,19 +721,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     multi_mixed_view = options
 
     @classmethod
-    def copy(cls, instances, default=None):
-        default = {} if default is None else default.copy()
-        if Transaction().context.get('copy_mode', '') == 'functional':
-            skips = cls._export_skips() | cls.functional_skips_for_duplicate()
-            for x in skips:
-                default.setdefault(x, None)
-        return super(CoveredElement, cls).copy(instances, default=default)
-
-    @classmethod
-    def functional_skips_for_duplicate(cls):
-        return set([])
-
-    @classmethod
     def view_attributes(cls):
         return super(CoveredElement, cls).view_attributes() + [(
                 '/form/notebook/page[@id="covered_relations"]',
@@ -746,22 +733,19 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 {'invisible': Eval('item_kind') == 'person'}
                 )]
 
-    def get_party_code(self, name):
-        return self.party.code
-
     @classmethod
-    def search_party_code(cls, name, clause):
-        return [('party.code',) + tuple(clause[1:])]
-
-    @classmethod
-    def _export_skips(cls):
-        return (super(CoveredElement, cls)._export_skips() |
-            set(['multi_mixed_view']))
+    def functional_skips_for_duplicate(cls):
+        return set([])
 
     @classmethod
     def _export_light(cls):
         return (super(CoveredElement, cls)._export_light() |
             set(['item_desc', 'product', 'contract', 'covered_relations']))
+
+    @classmethod
+    def _export_skips(cls):
+        return (super(CoveredElement, cls)._export_skips() |
+            set(['multi_mixed_view']))
 
     @classmethod
     def add_func_key(cls, values):
@@ -774,6 +758,26 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             values['_func_key'] = parties[0].code
         else:
             cls.raise_user_error('too_many_party')
+
+    @classmethod
+    def write(cls, cov_elements, vals, *_args):
+        # TODO : apply treatment to all parameters, not just the first ones
+        if 'sub_covered_elements' in vals:
+            for cov_element in cov_elements:
+                for val in vals['sub_covered_elements']:
+                    if val[0] == 'create':
+                        for sub_cov_elem in val[1]:
+                            sub_cov_elem['contract'] = cov_element.contract.id
+        super(CoveredElement, cls).write(cov_elements, vals, *_args)
+
+    @classmethod
+    def copy(cls, instances, default=None):
+        default = {} if default is None else default.copy()
+        if Transaction().context.get('copy_mode', '') == 'functional':
+            skips = cls._export_skips() | cls.functional_skips_for_duplicate()
+            for x in skips:
+                default.setdefault(x, None)
+        return super(CoveredElement, cls).copy(instances, default=default)
 
     @classmethod
     def default_all_extra_datas(cls):
@@ -906,21 +910,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             return self.item_desc.kind
         return ''
 
-    def get_party_extra_data(self, name=None):
-        res = {}
-        if not getattr(self, 'party', None) or not (self.item_desc
-                and self.item_desc.kind in ['party', 'person', 'company']):
-            return res
-        for extra_data_def in self.item_desc.extra_data_def:
-            if (self.party and getattr(self.party, 'extra_data', None)
-                    and extra_data_def.name in self.party.extra_data):
-                res[extra_data_def.name] = self.party.extra_data[
-                    extra_data_def.name]
-            else:
-                res[extra_data_def.name] = extra_data_def.get_default_value(
-                    None)
-        return res
-
     @fields.depends('contract', 'parent')
     def on_change_with_main_contract(self, name=None):
         contract = getattr(self, 'contract', None)
@@ -942,6 +931,36 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             return self.parent.product.id
         return Transaction().context.get('product', None)
 
+    def get_party_code(self, name):
+        return self.party.code
+
+    def get_party_extra_data(self, name=None):
+        res = {}
+        if not getattr(self, 'party', None) or not (self.item_desc
+                and self.item_desc.kind in ['party', 'person', 'company']):
+            return res
+        for extra_data_def in self.item_desc.extra_data_def:
+            if (self.party and getattr(self.party, 'extra_data', None)
+                    and extra_data_def.name in self.party.extra_data):
+                res[extra_data_def.name] = self.party.extra_data[
+                    extra_data_def.name]
+            else:
+                res[extra_data_def.name] = extra_data_def.get_default_value(
+                    None)
+        return res
+
+    def get_rec_name(self, name):
+        if self.party:
+            res = self.party.full_name
+            relations = self.get_relation_with_subscriber()
+            if relations:
+                return '%s (%s)' % (res, relations)
+            return res
+        names = [super(CoveredElement, self).get_rec_name(name)]
+        names.append(self.item_desc.rec_name if self.item_desc else None)
+        names.append(self.name)
+        return ' '.join([x for x in names if x])
+
     @classmethod
     def set_party_extra_data(cls, instances, name, vals):
         Party = Pool().get('party.party')
@@ -956,15 +975,11 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 covered.party.save()
 
     @classmethod
-    def write(cls, cov_elements, vals, *_args):
-        # TODO : apply treatment to all parameters, not just the first ones
-        if 'sub_covered_elements' in vals:
-            for cov_element in cov_elements:
-                for val in vals['sub_covered_elements']:
-                    if val[0] == 'create':
-                        for sub_cov_elem in val[1]:
-                            sub_cov_elem['contract'] = cov_element.contract.id
-        super(CoveredElement, cls).write(cov_elements, vals, *_args)
+    def search_party_code(cls, name, clause):
+        return [('party.code',) + tuple(clause[1:])]
+
+    def get_currency(self):
+        return self.main_contract.currency if self.main_contract else None
 
     def clean_up_versions(self, contract):
         Option = Pool().get('contract.option')
@@ -995,18 +1010,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         kinds = [rel.type.name for rel in self.party.relations
             if rel.to.id == subscriber.id]
         return ', '.join(kinds)
-
-    def get_rec_name(self, value):
-        if self.party:
-            res = self.party.full_name
-            relations = self.get_relation_with_subscriber()
-            if relations:
-                return '%s (%s)' % (res, relations)
-            return res
-        names = [super(CoveredElement, self).get_rec_name(value)]
-        names.append(self.item_desc.rec_name if self.item_desc else None)
-        names.append(self.name)
-        return ' '.join([x for x in names if x])
 
     @classmethod
     def get_coverages(cls, product, item_desc):
@@ -1122,9 +1125,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             domain.append(
                 ('contract.company', '=', Transaction().context['company']))
         return cls.search([domain])
-
-    def get_currency(self):
-        return self.main_contract.currency if self.main_contract else None
 
     def match_key(self, from_name=None, party=None):
         if (from_name and self.name == from_name
