@@ -683,6 +683,15 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         'Status')
     status_string = status.translated('status')
     type_ = fields.Selection([('', '')], 'Type')
+    result_type = fields.Function(
+        fields.Selection([
+            ('', ''),
+            ('boolean', 'Boolean'),
+            ('decimal', 'Numeric'),
+            ('date', 'Date'),
+            ('list', 'List'),
+            ], 'Result Type'),
+        'on_change_with_result_type')
     debug_mode = fields.Boolean('Debug Mode')
     exec_logs = fields.One2Many('rule_engine.log', 'rule', 'Execution Logs',
         states={'readonly': True, 'invisible': ~Eval('debug_mode')},
@@ -834,6 +843,10 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         if self.short_name:
             return self.short_name
         return coop_string.slugify(self.name)
+
+    @fields.depends('type_')
+    def on_change_with_result_type(self, name=None):
+        return ''
 
     @classmethod
     def get_passing_test_cases(cls, instances, name):

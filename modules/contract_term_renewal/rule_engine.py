@@ -13,3 +13,8 @@ class RuleEngine:
     def __setup__(cls):
         super(RuleEngine, cls).__setup__()
         cls.type_.selection.append(('renewal', 'Renewal'))
+
+    def on_change_with_result_type(self, name=None):
+        if self.type_ == 'renewal':
+            return 'date'
+        return super(RuleEngine, self).on_change_with_result_type(name)
