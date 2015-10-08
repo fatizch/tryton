@@ -27,6 +27,7 @@ from trytond.modules.cog_utils import coop_string, UnionMixin
 __metaclass__ = PoolMeta
 __all__ = [
     'Party',
+    'PartyIdentifier',
     'SynthesisMenuAddress',
     'SynthesisMenuPartyInteraction',
     'SynthesisMenuContact',
@@ -56,6 +57,7 @@ class Party(export.ExportImportMixin):
     is_person = fields.Boolean('Person')
     is_company = fields.Boolean('Company')
 
+    identifiers = fields.One2Many('party.identifier', 'party', 'Identifiers')
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     main_address = fields.Function(
         fields.Many2One('party.address', 'Main Address'),
@@ -387,11 +389,15 @@ class Party(export.ExportImportMixin):
 
     @classmethod
     def search_rec_name(cls, name, clause):
-        return [
-            'OR',
+        if clause[1].startswith('!') or clause[1].startswith('not '):
+            bool_op = 'AND'
+        else:
+            bool_op = 'OR'
+        return [bool_op
             ('first_name',) + tuple(clause[1:]),
             ('name',) + tuple(clause[1:]),
             ('code',) + tuple(clause[1:]),
+            ('identifiers.code',) + tuple(clause[1:]),
         ]
 
     @classmethod
@@ -541,6 +547,32 @@ class Party(export.ExportImportMixin):
     @classmethod
     @model.CoopView.button_action('party_cog.start_synthesis_menu')
     def button_start_synthesis_menu(cls, parties):
+        pass
+
+
+class PartyIdentifier(model.CoopSQL, model.CoopView):
+    'Party Identifier'
+    __name__ = 'party.identifier'
+    _rec_name = 'code'
+
+    party = fields.Many2One('party.party', 'Party', ondelete='CASCADE',
+        required=True, select=True)
+    type = fields.Selection('get_types', 'Type')
+    code = fields.Char('Code', required=True)
+
+    @classmethod
+    def get_types(cls):
+        return [
+            (None, ''),
+            ]
+
+    @classmethod
+    def validate(cls, identifiers):
+        super(PartyIdentifier, cls).validate(identifiers)
+        for identifier in identifiers:
+            identifier.check_code()
+
+    def check_code(self):
         pass
 
 

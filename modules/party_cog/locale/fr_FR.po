@@ -116,6 +116,50 @@ msgctxt "field:party.contact_mechanism,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:party.identifier,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:party.identifier,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.identifier,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.identifier,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.identifier,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.identifier,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:party.identifier,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.identifier,type:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:party.identifier,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.identifier,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.identifier,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:party.interaction,address:"
 msgid "Address"
 msgstr "Adresse"
@@ -215,6 +259,10 @@ msgstr "Prénom"
 msgctxt "field:party.party,gender:"
 msgid "Gender"
 msgstr "Genre"
+
+msgctxt "field:party.party,identifiers:"
+msgid "Identifiers"
+msgstr "Identifiants"
 
 msgctxt "field:party.party,is_company:"
 msgid "Company"
@@ -724,6 +772,10 @@ msgctxt "model:ir.ui.menu,name:menu_person_form"
 msgid "Persons"
 msgstr "Personnes"
 
+msgctxt "model:party.identifier,name:"
+msgid "Party Identifier"
+msgstr "Identifiant de tiers"
+
 msgctxt "model:party.interaction,name:"
 msgid "Party Interaction"
 msgstr "Historique des Contacts"
@@ -831,6 +883,14 @@ msgstr "Mme"
 msgctxt "view:party.address:"
 msgid "Addresses"
 msgstr "Adresses"
+
+msgctxt "view:party.identifier:"
+msgid "Party Identifier"
+msgstr "Identifiant de tiers"
+
+msgctxt "view:party.identifier:"
+msgid "Party Identifiers"
+msgstr "Identifiants de tiers"
 
 msgctxt "view:party.interaction:"
 msgid "Communication Log"
