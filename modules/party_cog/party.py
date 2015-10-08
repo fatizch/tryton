@@ -393,7 +393,7 @@ class Party(export.ExportImportMixin):
             bool_op = 'AND'
         else:
             bool_op = 'OR'
-        return [bool_op
+        return [bool_op,
             ('first_name',) + tuple(clause[1:]),
             ('name',) + tuple(clause[1:]),
             ('code',) + tuple(clause[1:]),
