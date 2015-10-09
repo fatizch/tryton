@@ -31,6 +31,16 @@ class EndorsementFindProcess(ProcessStart):
         Model = pool.get('ir.model')
         return Model.search([('model', '=', 'endorsement')])[0].id
 
+    @classmethod
+    def default_contracts(cls):
+        pool = Pool()
+        Contract = pool.get('contract')
+        context_ = Transaction().context
+        if context_.get('active_model', None) == 'contract':
+            return [x.id for x in Contract.search([('id', 'in',
+                            context_.get('active_ids', []))])]
+        return []
+
 
 class EndorsementStartProcess(ProcessFinder):
     'Endorsement Start Process'
