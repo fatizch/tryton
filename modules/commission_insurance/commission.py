@@ -306,6 +306,7 @@ class Agent(export.ExportImportMixin):
         cls.plan.depends = ['type_']
         cls.plan.required = True
         cls.plan.select = True
+        cls.party.select = True
 
     @classmethod
     def is_master_object(cls):
