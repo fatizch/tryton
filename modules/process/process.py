@@ -747,7 +747,7 @@ class ProcessTransition(ModelSQL, ModelView):
         if self.methods:
             for method in self.methods:
                 method.execute(target)
-        if self.kind == 'standard' and self.is_forward and \
+        if self.kind == 'standard' and self.is_forward() and \
                 self.method_kind == 'add':
             result = (self.to_step.execute_before(target)
                 if not result else result)
@@ -756,7 +756,8 @@ class ProcessTransition(ModelSQL, ModelView):
                 self.to_step, target.current_state.process.technical_name)
         else:
             target.set_state(None)
-            result = 'close'
+            if not result:
+                result = 'close'
         return result
 
     @classmethod
