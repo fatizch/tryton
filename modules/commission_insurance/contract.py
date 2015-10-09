@@ -33,10 +33,7 @@ class Contract:
         domain=[
             ('type_', '=', 'agent'),
             ('plan.commissioned_products', '=', Eval('product')),
-            If(~Eval('broker_party'),
-                (),
-                ('party', '=', Eval('broker_party')),
-                ),
+            ('party', '=', Eval('broker_party')),
             ['OR',
                 ('end_date', '>=', Eval('start_date')),
                 ('end_date', '=', None),
