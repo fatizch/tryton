@@ -20,11 +20,11 @@ msgstr "Type de préjudice"
 
 msgctxt "field:claim.loss.health,act_date:"
 msgid "Date of Medical Act"
-msgstr "Date de l'acte médical"
+msgstr "Date de l'acte"
 
 msgctxt "field:claim.loss.health,act_description:"
 msgid "Medical Act Description"
-msgstr "Description de l'acte médical"
+msgstr "Acte"
 
 msgctxt "field:claim.loss.health,act_end_date:"
 msgid "End Date of Medical Act"

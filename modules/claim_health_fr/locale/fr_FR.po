@@ -32,15 +32,15 @@ msgstr "Code de l'acte CCAM"
 
 msgctxt "field:claim.loss.health,is_care_access_contract:"
 msgid "Belongs To Care Access Contract"
-msgstr "Fait partie du contrat d'accès aux soins"
+msgstr "Contrat d'accès aux soins"
 
 msgctxt "field:claim.loss.health,is_off_care_pathway:"
 msgid "Is Off Care Pathway"
-msgstr "Hors parcours de soin"
+msgstr "Hors parcours"
 
 msgctxt "field:claim.loss.health,ss_agreement_price:"
 msgid "Social Security Agreement Price"
-msgstr "Montant de convention"
+msgstr "TC"
 
 msgctxt "field:claim.loss.health,ss_agreement_rate:"
 msgid "Social Security Agreement Rate"
