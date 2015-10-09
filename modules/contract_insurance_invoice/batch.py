@@ -1,3 +1,4 @@
+import logging
 from sql.aggregate import Max
 
 from trytond.pool import Pool
@@ -9,6 +10,7 @@ from trytond.modules.cog_utils import batch, coop_string
 __all__ = [
     'CreateInvoiceContractBatch',
     'PostInvoiceContractBatch',
+    'SetNumberInvoiceContractBatch',
     ]
 
 
@@ -61,11 +63,6 @@ class PostInvoiceContractBatch(batch.BatchRoot):
     logger = batch.get_logger(__name__)
 
     @classmethod
-    def __setup__(cls):
-        super(PostInvoiceContractBatch, cls).__setup__()
-        cls._default_config_items.update({'split_size': 1})
-
-    @classmethod
     def get_batch_main_model_name(cls):
         return 'account.invoice'
 
@@ -90,3 +87,33 @@ class PostInvoiceContractBatch(batch.BatchRoot):
     def execute(cls, objects, ids, treatment_date, extra_args):
         Pool().get('account.invoice').post(objects)
         cls.logger.info('%d invoices posted' % len(objects))
+
+
+class SetNumberInvoiceContractBatch(batch.BatchRoot):
+    'Set Contract Invoice Number Batch'
+
+    __name__ = 'contract.invoice.set_number'
+
+    logger = batch.get_logger(__name__)
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'account.invoice'
+
+    @classmethod
+    def select_ids(cls, treatment_date, extra_args):
+        split_mode = cls.get_conf_item('split_mode')
+        split_size = cls.get_conf_item('split_size')
+        if split_mode != 'divide' or int(split_size) != 1:
+            logging.getLogger(__name__).error('Can not scale out, mode: %s, \
+                size: %s' % (split_mode, split_size))
+            raise Exception('Can not scale out')
+        pool = Pool()
+        post_batch = pool.get('contract.invoice.post')
+        return post_batch.select_ids(treatment_date, extra_args)
+
+    @classmethod
+    def execute(cls, objects, ids, treatment_date, extra_args):
+        for obj in objects:
+            obj.set_number()
+        cls.logger.info('%d invoices numbers set' % len(objects))

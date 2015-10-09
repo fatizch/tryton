@@ -40,6 +40,7 @@ def register():
         InvoiceContractStart,
         CreateInvoiceContractBatch,
         PostInvoiceContractBatch,
+        SetNumberInvoiceContractBatch,
         PaymentTerm,
         PaymentTermLine,
         PaymentTermLineRelativeDelta,
