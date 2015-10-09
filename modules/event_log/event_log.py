@@ -19,7 +19,7 @@ class EventLog(model.CoopSQL, model.CoopView):
     __name__ = 'event.log'
     _func_key = 'id'
 
-    description = fields.Char('Description', readonly=True)
+    description = fields.Text('Description', readonly=True)
     description_str = fields.Function(
         fields.Char('Description'),
         'on_change_with_description_str')
