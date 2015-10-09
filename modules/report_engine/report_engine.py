@@ -620,7 +620,7 @@ class ReportGenerateFromFile(Report):
                 os.path.basename(data['output_report_filepath']))[0])
 
     @classmethod
-    def generate_single_attachment(cls, input_paths, output_report_filepath):
+    def convert_single_attachment(cls, input_paths, output_report_filepath):
         pdf_paths = cls.unoconv(input_paths, 'odt', 'pdf')
         if len(pdf_paths) > 1:
             if os.path.splitext(output_report_filepath)[1] == '.pdf':
@@ -716,14 +716,16 @@ class ReportCreate(Wizard):
         'report_engine.document_create_preview_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Previous', 'select_model', 'tryton-go-previous'),
-            Button('Mail', 'mail', 'tryton-go-next', default=True)
+            Button('Mail', 'mail', 'tryton-print-email', default=True),
+            Button('Open', 'open_document', 'tryton-print-open')
             ])
     open_document = StateAction('report_engine.generate_file_report')
     mail = StateAction('report_engine.generate_file_report')
     attach = StateView('report.create.attach',
         'report_engine.document_create_attach_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Complete', 'post_generation', 'tryton-ok', default=True)])
+            Button('Save', 'post_generation', 'tryton-save',
+                default=True)])
     post_generation = StateTransition()
     attach_to_contact = StateTransition()
 
@@ -812,9 +814,9 @@ class ReportCreate(Wizard):
     def open_or_mail_report(self, action, email_print):
         pool = Pool()
         Report = pool.get('report.generate_from_file', type='report')
-        if email_print and all([x.template.convert_to_pdf
-                    for x in self.preview_document.reports]):
-            Report.generate_single_attachment(
+        if all([x.template.convert_to_pdf
+                for x in self.preview_document.reports]):
+            Report.convert_single_attachment(
                 [d.server_filepath for d in self.preview_document.reports],
                 self.preview_document.output_report_filepath)
             filename = self.preview_document.output_report_filepath
@@ -829,6 +831,12 @@ class ReportCreate(Wizard):
     def do_open_document(self, action):
         return self.open_or_mail_report(action,
             Transaction().context.get('email_print'))
+
+    def transition_open_document(self):
+        if all([not model.format_for_internal_edm
+                for model in self.select_model.models]):
+            return 'end'
+        return 'attach'
 
     def do_mail(self, action):
         return self.open_or_mail_report(action, True)
