@@ -66,8 +66,12 @@ class EventLog(model.CoopSQL, model.CoopView):
     def create_event_logs(cls, objects, event_type, description=None,
             **kwargs):
         user_id = Transaction().user
+        if 'date' in kwargs:
+            date = kwargs['date']
+        else:
+            date = datetime.datetime.now()
         return cls.create([{
-                    'date': datetime.datetime.now(),
+                    'date': date,
                     'object_': '%s,%s' % (object_.__name__, object_.id),
                     'user': user_id,
                     'event_type': event_type,
