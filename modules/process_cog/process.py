@@ -424,6 +424,7 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
     @classmethod
     def button_next_states(cls, process, data):
         clause_invisible = []
+        button_states = {}
         for step_relation in process.all_steps:
             step = step_relation.step
             step_pyson, auth_pyson = step.get_pyson_for_display(step_relation)
@@ -432,8 +433,9 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
                     'And(%s, %s)' % (step_pyson, auth_pyson))
             else:
                 clause_invisible.append('%s' % step_pyson)
-        button_states = {'invisible': utils.pyson_encode(
-                'Not(Or(%s))' % ', '.join(clause_invisible), True)}
+        if len(clause_invisible) > 1:
+            button_states = {'invisible': utils.pyson_encode(
+                    'Not(Or(%s))' % ', '.join(clause_invisible), True)}
         pre_validate = []
         for step_relation in process.all_steps:
             step = step_relation.step
