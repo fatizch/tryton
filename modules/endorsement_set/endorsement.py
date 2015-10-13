@@ -117,8 +117,8 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
         summaries = []
         for endorsement in self.endorsements:
             summary = "<p align='center'> <span size='12'> <b>" + \
-                    '\n'.join([x.contract_number + ', ' +
-                        x.subscriber.full_name
+                    '\n'.join([x.contract_number + ' - ' + x.product.rec_name
+                            + ', ' + x.subscriber.full_name
                             for x in endorsement.contracts]) + \
                     "</b> </span> </p>\n\n" + endorsement.endorsement_summary
             summaries.append(summary)

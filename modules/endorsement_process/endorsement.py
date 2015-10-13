@@ -92,7 +92,8 @@ class EndorsementPartUnion(model.CoopSQL, model.CoopView):
                 })
 
     def get_contracts_name(self, name):
-        return '\n'.join([x.rec_name for x in self.endorsement.contracts])
+        return '\n'.join([x.contract_number + ' - ' + x.product.rec_name
+                for x in self.endorsement.contracts])
 
     def get_subscribers_name(self, name):
         return self.endorsement.get_subscribers_name(None)
