@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -11,6 +11,14 @@ msgid "No broker define on contract %s for broker fee %s"
 msgstr ""
 "Pas de courtier défini sur le contrat %s pour facturer le frais d'apporteur "
 "%s"
+
+msgctxt "error:commission.plan.date:"
+msgid "Invalid Month (%s) Day (%s) Combination"
+msgstr "La combinaison Mois (%s) Jour (%s) n'est pas valide"
+
+msgctxt "error:commission.plan.date:"
+msgid "Some date fields must be set"
+msgstr "Au moins un champ de date doit être renseigné"
 
 msgctxt "error:commission.plan:"
 msgid "The code must be unique!"
@@ -64,17 +72,17 @@ msgctxt "field:commission,commissioned_option:"
 msgid "Commissioned Option"
 msgstr "Option commissionnée"
 
-msgctxt "field:commission,parent_line_end:"
-msgid "Line End"
+msgctxt "field:commission,end:"
+msgid "End"
 msgstr "Date de fin"
-
-msgctxt "field:commission,parent_line_start:"
-msgid "Line Start"
-msgstr "Date de début"
 
 msgctxt "field:commission,party:"
 msgid "Party"
 msgstr "Tiers"
+
+msgctxt "field:commission,start:"
+msgid "Start"
+msgstr "Date de début"
 
 msgctxt "field:commission.agent,end_date:"
 msgid "End Date"
@@ -152,6 +160,10 @@ msgctxt "field:commission.plan,commissioned_products_name:"
 msgid "Commissioned Products"
 msgstr "Produits commissionés"
 
+msgctxt "field:commission.plan,computation_dates:"
+msgid "Computation Dates"
+msgstr "Dates de calcul"
+
 msgctxt "field:commission.plan,insurer_plan:"
 msgid "Insurer Plan"
 msgstr "Plan lié"
@@ -171,6 +183,70 @@ msgstr "Type"
 msgctxt "field:commission.plan,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:commission.plan.date,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.plan.date,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.plan.date,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.plan.date,day:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "field:commission.plan.date,first_match_only:"
+msgid "First Match Only"
+msgstr "Première occurence uniquement"
+
+msgctxt "field:commission.plan.date,frequency:"
+msgid "Frequency"
+msgstr "Fréquence"
+
+msgctxt "field:commission.plan.date,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.plan.date,month:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "field:commission.plan.date,plan:"
+msgid "Plan"
+msgstr "Plan"
+
+msgctxt "field:commission.plan.date,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:commission.plan.date,reference_date:"
+msgid "Reference Date"
+msgstr "Date de référence"
+
+msgctxt "field:commission.plan.date,type_:"
+msgid "Rule Type"
+msgstr "Type de règle"
+
+msgctxt "field:commission.plan.date,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission.plan.date,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:commission.plan.date,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:commission.plan.date,year:"
+msgid "Year"
+msgstr "Année"
 
 msgctxt "field:commission.plan.line,options:"
 msgid "Options"
@@ -270,7 +346,7 @@ msgstr "Agence"
 
 msgctxt "field:contract,agent:"
 msgid "Agent"
-msgstr "Protocole de commissionnement"
+msgstr "Gestion"
 
 msgctxt "field:contract,broker:"
 msgid "Broker"
@@ -312,6 +388,10 @@ msgctxt "field:product.uom,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:commission.plan.date,first_match_only:"
+msgid "If True, only the first matching date will be considered."
+msgstr "Si 'Vrai', seule la première occurence sera prise en compte"
+
 msgctxt "model:commission.create_agents.ask,name:"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
@@ -327,6 +407,10 @@ msgstr "Batch de génération des bordereaux de commission"
 msgctxt "model:commission.invoice.post,name:"
 msgid "Post Commission Invoice Batch"
 msgstr "Batch d'émission des bordereaux de commission"
+
+msgctxt "model:commission.plan.date,name:"
+msgid "Plan Calculation Date"
+msgstr "Date de calcul du plan de commissionnement"
 
 msgctxt "model:commission.plan.lines-offered.option.description,name:"
 msgid "Commission Plan Line - Offered Option Description"
@@ -412,6 +496,262 @@ msgctxt "selection:commission.plan,type_:"
 msgid "Insurer"
 msgstr "Assureur"
 
+msgctxt "selection:commission.plan.date,day:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "0"
+msgstr "0"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "1"
+msgstr "1"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "10"
+msgstr "10"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "11"
+msgstr "11"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "12"
+msgstr "12"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "13"
+msgstr "13"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "14"
+msgstr "14"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "15"
+msgstr "15"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "16"
+msgstr "16"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "17"
+msgstr "17"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "18"
+msgstr "18"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "19"
+msgstr "19"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "2"
+msgstr "2"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "20"
+msgstr "20"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "21"
+msgstr "21"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "22"
+msgstr "22"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "23"
+msgstr "23"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "24"
+msgstr "24"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "25"
+msgstr "25"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "26"
+msgstr "26"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "27"
+msgstr "27"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "28"
+msgstr "28"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "29"
+msgstr "29"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "3"
+msgstr "3"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "30"
+msgstr "30"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "4"
+msgstr "4"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "5"
+msgstr "5"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "6"
+msgstr "6"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "7"
+msgstr "7"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "8"
+msgstr "8"
+
+msgctxt "selection:commission.plan.date,day:"
+msgid "9"
+msgstr "9"
+
+msgctxt "selection:commission.plan.date,frequency:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:commission.plan.date,frequency:"
+msgid "Monthly"
+msgstr "Mensuel"
+
+msgctxt "selection:commission.plan.date,frequency:"
+msgid "Yearly"
+msgstr "Annuel"
+
+msgctxt "selection:commission.plan.date,month:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:commission.plan.date,month:"
+msgid "0"
+msgstr "0"
+
+msgctxt "selection:commission.plan.date,month:"
+msgid "1"
+msgstr "1"
+
+msgctxt "selection:commission.plan.date,month:"
+msgid "10"
+msgstr "10"
+
+msgctxt "selection:commission.plan.date,month:"
+msgid "11"
+msgstr "11"
+
+msgctxt "selection:commission.plan.date,month:"
+msgid "2"
+msgstr "2"
+
+msgctxt "selection:commission.plan.date,month:"
+msgid "3"
+msgstr "3"
+
+msgctxt "selection:commission.plan.date,month:"
+msgid "4"
+msgstr "4"
+
+msgctxt "selection:commission.plan.date,month:"
+msgid "5"
+msgstr "5"
+
+msgctxt "selection:commission.plan.date,month:"
+msgid "6"
+msgstr "6"
+
+msgctxt "selection:commission.plan.date,month:"
+msgid "7"
+msgstr "7"
+
+msgctxt "selection:commission.plan.date,month:"
+msgid "8"
+msgstr "8"
+
+msgctxt "selection:commission.plan.date,month:"
+msgid "9"
+msgstr "9"
+
+msgctxt "selection:commission.plan.date,reference_date:"
+msgid "Contract Signature"
+msgstr "Signature du contrat"
+
+msgctxt "selection:commission.plan.date,reference_date:"
+msgid "Contract Start"
+msgstr "Début du contrat"
+
+msgctxt "selection:commission.plan.date,reference_date:"
+msgid "Option Start"
+msgstr "Début de la garantie"
+
+msgctxt "selection:commission.plan.date,type_:"
+msgid "Absolute Date"
+msgstr "Abolue"
+
+msgctxt "selection:commission.plan.date,type_:"
+msgid "Relative Date"
+msgstr "Relatif"
+
+msgctxt "selection:commission.plan.date,year:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:commission.plan.date,year:"
+msgid "0"
+msgstr "0"
+
+msgctxt "selection:commission.plan.date,year:"
+msgid "1"
+msgstr "1"
+
+msgctxt "selection:commission.plan.date,year:"
+msgid "2"
+msgstr "2"
+
+msgctxt "selection:commission.plan.date,year:"
+msgid "3"
+msgstr "3"
+
+msgctxt "selection:commission.plan.date,year:"
+msgid "4"
+msgstr "4"
+
+msgctxt "selection:commission.plan.date,year:"
+msgid "5"
+msgstr "5"
+
+msgctxt "selection:commission.plan.date,year:"
+msgid "6"
+msgstr "6"
+
+msgctxt "selection:commission.plan.date,year:"
+msgid "7"
+msgstr "7"
+
+msgctxt "selection:commission.plan.date,year:"
+msgid "8"
+msgstr "8"
+
+msgctxt "selection:commission.plan.date,year:"
+msgid "9"
+msgstr "9"
+
 msgctxt "view:account.configuration:"
 msgid "Commission"
 msgstr "Commission"
@@ -423,6 +763,10 @@ msgstr "Créer les protocoles de commissionnement"
 msgctxt "view:commission.create_agents.parties:"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
+
+msgctxt "view:commission.plan.date:"
+msgid "Calculation Dates"
+msgstr "Dates de calcul"
 
 msgctxt "view:commission.plan:"
 msgid "Administration"
@@ -483,12 +827,12 @@ msgid "Product Template - Commission Agent"
 msgstr "Modèle produit - Protocole de commissionnement"
 
 msgctxt "selection:commission.agent,type_:commission."
-msgid "Principal Of"
-msgstr "Commissionne"
-
-msgctxt "selection:commission.agent,type_:commission."
 msgid "Agent Of"
 msgstr "Est commissioné par"
+
+msgctxt "selection:commission.agent,type_:commission."
+msgid "Principal Of"
+msgstr "Commissionne"
 
 msgctxt "view:commission.agent:commission."
 msgid "Agent"

@@ -10,6 +10,10 @@
       peuvent être liées à des produits différents) la formule de commission à
       appliquer. Selon le paramétrage de la formule il est possible de calculer
       une commission linéaire ou en escompte (taux variant au fil du temps).
+    - Les *Dates de calcul* permettent de spécifier à quelles dates le taux de
+      commissionnement est susceptible de changer pour les différentes lignes,
+      afin de retrouver les changements de taux aux bonnes dates dans les
+      lignes de commission.
 
 - Le **Protocole de commissionnement** est le lien entre un intermédiaire
   d'assurance (un assureur ou un courtier) et un plan de commissionnement

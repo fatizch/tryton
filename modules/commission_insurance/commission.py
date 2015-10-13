@@ -1,3 +1,9 @@
+import datetime
+from dateutil import rrule
+
+from sql import Cast
+from sql.operators import Concat
+
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
@@ -8,7 +14,8 @@ from trytond.wizard import StateAction
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
 
-from trytond.modules.cog_utils import fields, model, export, coop_string, utils
+from trytond.modules.cog_utils import fields, model, export, coop_string, \
+    coop_date, utils
 
 __all__ = [
     'PlanLines',
@@ -16,6 +23,7 @@ __all__ = [
     'Commission',
     'Plan',
     'PlanRelation',
+    'PlanCalculationDate',
     'Agent',
     'CreateAgents',
     'CreateAgentsParties',
@@ -40,20 +48,17 @@ class Commission:
         fields.Many2One('distribution.network', 'Broker'),
         'get_broker', searcher='search_broker')
     commission_rate = fields.Numeric('Commission Rate')
-    parent_line_start = fields.Function(
-        fields.Date('Line Start'),
-        'get_parent_line_start')
-    parent_line_end = fields.Function(
-        fields.Date('Line End'),
-        'get_parent_line_end')
+    start = fields.Date('Start')
+    end = fields.Date('End')
 
     @classmethod
     def __register__(cls, module_name):
-        # Migration from 1.4: add commissioned_option
+        # Migration from 1.4: add commissioned_option, start, end
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().cursor
         commission = TableHandler(cursor, cls)
         has_column = commission.column_exist('template_extension')
+        has_start_column = commission.column_exist('start')
         super(Commission, cls).__register__(module_name)
         if not has_column:
             cursor.execute("UPDATE commission "
@@ -72,6 +77,20 @@ class Commission:
                 "WHERE Cast(substring(c.origin,22) as int) = d.invoice_line "
                 "AND d.extra_premium is not NULL "
                 "AND c.origin LIKE 'account.invoice.line%'")
+        if not has_start_column:
+            commission = cls.__table__()
+            line = Pool().get('account.invoice.line').__table__()
+            update_table = commission.join(line,
+                condition=(Concat('account.invoice.line,', Cast(line.id,
+                            'VARCHAR')) == commission.origin)
+                ).select(commission.id, line.coverage_start.as_('start'),
+                    line.coverage_end.as_('end'))
+            commission_up = cls.__table__()
+            cursor.execute(*commission_up.update(
+                    columns=[commission_up.start, commission_up.end],
+                    values=[update_table.start, update_table.end],
+                    from_=[update_table],
+                    where=(commission_up.id == update_table.id)))
 
     @classmethod
     def __setup__(cls):
@@ -94,16 +113,6 @@ class Commission:
     def get_broker(self, name):
         return (self.agent.party.network[0].id
             if self.agent and self.agent.party.network else None)
-
-    def get_parent_line_end(self, name):
-        if not self.origin or self.origin.__name__ != 'account.invoice.line':
-            return None
-        return self.origin.coverage_end
-
-    def get_parent_line_start(self, name):
-        if not self.origin or self.origin.__name__ != 'account.invoice.line':
-            return None
-        return self.origin.coverage_start
 
     def _group_to_invoice_key(self):
         direction = {
@@ -166,6 +175,8 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
         states={'invisible': Eval('type_') != 'principal'},
         domain=[('type_', '=', 'agent')],
         depends=['type_'])
+    computation_dates = fields.One2Many('commission.plan.date', 'plan',
+        'Computation Dates', delete_missing=True)
     commissioned_products = fields.Function(
         fields.Many2Many('offered.product', None, None,
             'Commissioned Products'),
@@ -247,6 +258,24 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
     def search_commissioned_products(cls, name, clause):
         return [('lines.options.products',) + tuple(clause[1:])]
 
+    def get_commission_periods(self, invoice_line):
+        periods = []
+        all_dates = self.get_commission_dates(invoice_line)
+        for idx, date in enumerate(all_dates[:-1]):
+            if idx == len(all_dates) - 2:
+                # Last date must be inside
+                periods.append((date, all_dates[-1]))
+            else:
+                periods.append((date,
+                        coop_date.add_day(all_dates[idx + 1], -1)))
+        return periods
+
+    def get_commission_dates(self, invoice_line):
+        all_dates = {invoice_line.coverage_start, invoice_line.coverage_end}
+        for date_line in self.computation_dates:
+            all_dates |= date_line.get_dates(invoice_line)
+        return sorted(list(all_dates))
+
 
 class PlanLines(export.ExportImportMixin):
     __name__ = 'commission.plan.line'
@@ -288,6 +317,121 @@ class PlanRelation(model.CoopSQL, model.CoopView):
 
     from_ = fields.Many2One('commission.plan', 'Plan', ondelete='CASCADE')
     to = fields.Many2One('commission.plan', 'Plan', ondelete='RESTRICT')
+
+
+class PlanCalculationDate(model.CoopSQL, model.CoopView):
+    'Plan Calculation Date'
+
+    __name__ = 'commission.plan.date'
+
+    plan = fields.Many2One('commission.plan', 'Plan', ondelete='CASCADE',
+        required=True, select=True)
+    type_ = fields.Selection([
+            ('absolute', 'Absolute Date'),
+            ('relative', 'Relative Date'),
+            ], 'Rule Type')
+    frequency = fields.Selection([
+            ('', ''),
+            ('yearly', 'Yearly'),
+            ('monthly', 'Monthly'),
+            ], 'Frequency', states={
+            'invisible': Eval('type_') != 'absolute',
+            'required': Eval('type_') == 'absolute',
+            }, depends=['type_'])
+    first_match_only = fields.Boolean('First Match Only',
+        help='If True, only the first matching date will be considered.')
+    reference_date = fields.Selection([
+            ('contract_start', 'Contract Start'),
+            ('contract_signature', 'Contract Signature'),
+            ('option_start', 'Option Start'),
+            ], 'Reference Date')
+    year = fields.Selection([('', '')] + [
+            (str(x), str(x)) for x in range(10)], 'Year', states={
+            'invisible': Eval('type_') != 'relative',
+            }, depends=['type_'])
+    month = fields.Selection([('', '')] + [
+            (str(x), str(x)) for x in range(12)], 'Month')
+    day = fields.Selection([('', '')] + [
+            (str(x), str(x)) for x in range(31)], 'Day')
+
+    @classmethod
+    def __setup__(cls):
+        super(PlanCalculationDate, cls).__setup__()
+        cls._error_messages.update({
+                'need_date_field_set': 'Some date fields must be set',
+                'invalid_month_day_combination':
+                'Invalid Month (%s) Day (%s) Combination',
+                })
+
+    @classmethod
+    def validate(cls, dates):
+        for date in dates:
+            if date.type_ == 'relative':
+                if not date.day and not date.month and not date.year:
+                    cls.raise_user_error('need_date_field_set')
+            elif date.type_ == 'absolute':
+                try:
+                    date = datetime.date(2000, int(date.month), int(date.day))
+                except ValueError:
+                    cls.raise_user_error('invalid_month_day_combination',
+                        (date.month, date.day))
+
+    @classmethod
+    def default_first_match_only(cls):
+        return True
+
+    @classmethod
+    def default_reference_date(cls):
+        return 'contract_start'
+
+    @classmethod
+    def default_type_(cls):
+        return 'relative'
+
+    @fields.depends('frequency', 'nb_day', 'nb_month', 'nb_year', 'type_')
+    def on_change_type_(self):
+        if self.type_ == 'absolute':
+            self.frequency = ''
+        elif self.type_ == 'relative':
+            self.frequency = 'yearly'
+
+    def get_dates(self, invoice_line):
+        base_date = self.get_reference_date(invoice_line)
+        if not base_date:
+            return set()
+        if self.type_ == 'absolute':
+            values = [x.date() for x in rrule.rrule(self.get_rrule_frequency(),
+                    bymonth=int(self.month), bymonthday=int(self.day),
+                    dtstart=base_date, until=invoice_line.coverage_end)]
+        elif self.type_ == 'relative':
+            values = []
+            date = base_date
+            while date < invoice_line.coverage_end:
+                for fname in ('year', 'month', 'day'):
+                    value = getattr(self, fname, None)
+                    if not value:
+                        continue
+                    date = getattr(coop_date, 'add_%s' % fname)(date,
+                        int(value))
+                values.append(date)
+        if self.first_match_only:
+            values = [values[0]]
+        return {x for x in values if x > invoice_line.coverage_start
+            and x < invoice_line.coverage_end}
+
+    def get_rrule_frequency(self):
+        if self.frequency == 'yearly':
+            return rrule.YEARLY
+        if self.frequency == 'monthly':
+            return rrule.MONTHLY
+
+    def get_reference_date(self, invoice_line):
+        if self.reference_date == 'contract_start':
+            return invoice_line.invoice.contract.start_date
+        if self.reference_date == 'contract_signature':
+            return invoice_line.invoice.contract.dignature_date
+        if self.reference_date == 'option_start':
+            return invoice_line.details[0].get_option().start_date
 
 
 class Agent(export.ExportImportMixin):

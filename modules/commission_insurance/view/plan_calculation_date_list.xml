@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tree string="Calculation Dates" editable="bottom">
+    <field name="reference_date"/>
+    <field name="first_match_only"/>
+    <field name="type_"/>
+    <field name="year"/>
+    <field name="month"/>
+    <field name="day"/>
+    <field name="frequency"/>
+</tree>

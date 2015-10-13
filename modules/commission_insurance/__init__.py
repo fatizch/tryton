@@ -16,6 +16,7 @@ def register():
         Plan,
         PlanRelation,
         PlanLinesCoverageRelation,
+        PlanCalculationDate,
         Agent,
         InvoiceLine,
         Invoice,

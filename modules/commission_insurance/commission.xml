@@ -59,6 +59,14 @@
             <field name="inherit" ref="commission.plan_view_list"/>
             <field name="name">plan_list</field>
         </record>
+        <!-- ######################### -->
+        <!-- # Plan Calculation Date # -->
+        <!-- ######################### -->
+        <record model="ir.ui.view" id="plan_calculation_date_view_list">
+            <field name="model">commission.plan.date</field>
+            <field name="type">tree</field>
+            <field name="name">plan_calculation_date_list</field>
+        </record>
         <record model="ir.action.wizard" id="act_commission_create_agents">
             <field name="name">Create Agents</field>
             <field name="wiz_name">commission.create_agents</field>

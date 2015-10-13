@@ -7,7 +7,7 @@ from trytond.transaction import Transaction
 from trytond.model import ModelView, Workflow
 from trytond.tools import grouped_slice
 
-from trytond.modules.cog_utils import utils, fields
+from trytond.modules.cog_utils import utils, fields, coop_date
 
 __all__ = [
     'InvoiceLine',
@@ -35,38 +35,63 @@ class InvoiceLine:
     def get_commissions(self):
         # Total override of tryton method just to add the agent parameter to
         # _get_commission_amount and to set commissioned_option
+        if not self.details or not self.details[0].get_option():
+            # Not a contract line
+            return super(InvoiceLine, self).get_commissions()
+
+        if self.type != 'line':
+            return []
+
+        commissions = []
+        for agent, plan in self.agent_plans_used:
+            if not plan:
+                continue
+            commissions += self.get_commissions_for_agent(agent, plan)
+        return commissions
+
+    def get_commissions_for_agent(self, agent, plan):
         pool = Pool()
         Commission = pool.get('commission')
         Currency = pool.get('currency.currency')
         Date = pool.get('ir.date')
 
-        if self.type != 'line':
-            return []
-
         today = Date.today()
-        commissions = []
-        for agent, plan in self.agent_plans_used:
-            if not plan:
-                continue
-            with Transaction().set_context(date=self.invoice.currency_date):
-                amount = Currency.compute(self.invoice.currency,
-                    self.amount, agent.currency, round=False)
-            if self.invoice.type == 'out_credit_note':
-                amount *= -1
+        with Transaction().set_context(date=self.invoice.currency_date):
+            base_amount = Currency.compute(self.invoice.currency,
+                self.amount, agent.currency, round=False)
+        if self.invoice.type == 'out_credit_note':
+            base_amount *= -1
+        commission_data = []
+        for start, end in plan.get_commission_periods(self):
+            amount = base_amount * (Decimal((end - start).days + 1) /
+                Decimal((self.coverage_end - self.coverage_start).days + 1))
             commission_amount = self._get_commission_amount(amount, plan,
-                agent=agent)
-            if commission_amount:
-                commission_rate = (commission_amount / amount * 100).quantize(
-                    Decimal('.01'))
-                commission_amount = commission_amount.quantize(Decimal(str(
-                            10.0 ** -self.currency_digits)))
+                pattern={'agent': agent, 'date_start': start, 'date_end': end})
             if not commission_amount:
                 continue
+            commission_rate = (commission_amount / amount * 100).quantize(
+                Decimal('.01'))
+            if (commission_data and commission_data[-1][3] == commission_rate
+                    and commission_data[-1][1] == coop_date.add_day(
+                        start, -1)):
+                # Same rate => extend previous line
+                commission_data[-1][1] = end
+                commission_data[-1][2] += commission_amount
+            else:
+                commission_data.append([start, end, commission_amount,
+                        commission_rate])
 
+        commissions = []
+        for start, end, commission_amount, commission_rate in commission_data:
+            # Add two extra digits to limit rounding errors
+            commission_amount = commission_amount.quantize(Decimal(str(
+                        10.0 ** -self.currency_digits)))
             commission = Commission()
             commission.origin = self
             if plan.commission_method == 'posting':
                 commission.date = today
+            commission.start = start
+            commission.end = end
             commission.agent = agent
             commission.product = plan.commission_product
             commission.amount = commission_amount
@@ -75,21 +100,20 @@ class InvoiceLine:
             commissions.append(commission)
         return commissions
 
-    def _get_commission_amount(self, amount, plan, pattern=None, agent=None):
-        pattern = {}
-        if getattr(self, 'details', None):
+    def _get_commission_amount(self, amount, plan, pattern=None):
+        if self.details:
             option = self.details[0].get_option()
             if option:
-                delta = relativedelta(self.coverage_start,
+                assert pattern and 'date_start' in pattern
+                delta = relativedelta(pattern['date_start'],
                     option.start_date)
-                pattern = {
-                    'coverage': option.coverage,
-                    'option': option,
-                    'nb_years': delta.years,
-                    'agent': agent,
-                    'plan': plan,
-                    }
-        pattern['invoice_line'] = self
+                pattern.update({
+                        'coverage': option.coverage,
+                        'option': option,
+                        'nb_years': delta.years,
+                        'plan': plan,
+                        'invoice_line': self,
+                        })
         commission_amount = plan.compute(amount, self.product, pattern)
         return commission_amount
 

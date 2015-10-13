@@ -17,7 +17,7 @@
     </xpath>
     <xpath expr="/tree/field[@name='amount']" position="after">
         <field name="commission_rate"/>
-        <field name="parent_line_start"/>
-        <field name="parent_line_end"/>
+        <field name="start"/>
+        <field name="end"/>
     </xpath>
 </data>
