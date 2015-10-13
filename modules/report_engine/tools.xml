@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ################################### -->
+        <!-- # Select Templates For Conversion # -->
+        <!-- ################################### -->
+        <record model="ir.ui.view" id="convert_select_templates_view_form">
+            <field name="model">report.convert.select_templates</field>
+            <field name="type">form</field>
+            <field name="name">convert_select_templates_form</field>
+        </record>
+        <!-- ################### -->
+        <!-- # Match Displayer # -->
+        <!-- ################### -->
+        <record model="ir.ui.view" id="convert_match_displayer_view_list">
+            <field name="model">report.convert.match</field>
+            <field name="type">tree</field>
+            <field name="name">convert_match_displayer_list</field>
+        </record>
+        <!-- ################## -->
+        <!-- # Report Convert # -->
+        <!-- ################## -->
+        <record model="ir.action.wizard" id="act_convert_templates">
+            <field name="name">Convert Templates</field>
+            <field name="wiz_name">report.convert</field>
+        </record>
+        <menuitem parent="report_engine.menu_report" sequence="30" action="act_convert_templates" id="menu_convert_templates"/>
+    </data>
+</tryton>

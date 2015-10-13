@@ -2,6 +2,16 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:report.convert:"
+msgid "%i occurences were converted"
+msgstr "%i occurences ont été remplacées"
+
+msgctxt "error:report.convert:"
+msgid "Nothing is set for search, are you sure you want to do this ?"
+msgstr ""
+"Aucune valeur n'a été saisie pour la recherche, êtes-vous sûr de vouloir "
+"continuer ?"
+
 msgctxt "error:report.create:"
 msgid ""
 "Error while generating the letter:\n"
@@ -36,6 +46,62 @@ msgstr "Le code du modèle de courrier doit être unique"
 msgctxt "field:ir.model,printable:"
 msgid "Printable"
 msgstr "Imprimable"
+
+msgctxt "field:report.convert.select_templates,changes_calculated:"
+msgid "Changes calculated"
+msgstr "Changements calculés"
+
+msgctxt "field:report.convert.select_templates,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:report.convert.select_templates,matches:"
+msgid "Matches"
+msgstr "Occurences"
+
+msgctxt "field:report.convert.select_templates,message:"
+msgid "Completion Message"
+msgstr "Message de validation"
+
+msgctxt "field:report.convert.select_templates,replace_with:"
+msgid "Replace With"
+msgstr "Remplacer par"
+
+msgctxt "field:report.convert.select_templates,search_for:"
+msgid "Search For"
+msgstr "Rechercher"
+
+msgctxt "field:report.convert.select_templates,templates:"
+msgid "Templates"
+msgstr "Modèles"
+
+msgctxt "field:report.convert.match,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:report.convert.match,language:"
+msgid "Language"
+msgstr "Langue"
+
+msgctxt "field:report.convert.match,model_name:"
+msgid "Model Name"
+msgstr "Nom du modèle"
+
+msgctxt "field:report.convert.match,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report.convert.match,match:"
+msgid "Match"
+msgstr "Occurence"
+
+msgctxt "field:report.convert.match,new_value:"
+msgid "New Value"
+msgstr "Nouvelle valeur"
+
+msgctxt "field:report.convert.match,template_id:"
+msgid "Template Id"
+msgstr "Id du modèle"
 
 msgctxt "field:report.create.attach,attachment:"
 msgid "Data File"
@@ -371,6 +437,10 @@ msgstr ""
 "Si coché, un document sera produit pour chaque objet. Si décoché, un seul "
 "document sera produit pour plusieurs objets."
 
+msgctxt "model:ir.action,name:act_convert_templates"
+msgid "Convert Templates"
+msgstr "Convertir des modèles"
+
 msgctxt "model:ir.action,name:act_doc_template"
 msgid "Document Templates"
 msgstr "Modèles de courriers"
@@ -387,6 +457,10 @@ msgctxt "model:ir.action,name:letter_generation_wizard"
 msgid "Letter Generation"
 msgstr "Impression du Courrier"
 
+msgctxt "model:ir.ui.menu,name:menu_convert_templates"
+msgid "Convert Templates"
+msgstr "Convertir des modèles"
+
 msgctxt "model:ir.ui.menu,name:menu_doc_template"
 msgid "Document Templates"
 msgstr "Modèles de Lettre"
@@ -394,6 +468,14 @@ msgstr "Modèles de Lettre"
 msgctxt "model:ir.ui.menu,name:menu_report"
 msgid "Report"
 msgstr "Rapports/Courriers"
+
+msgctxt "model:report.convert.select_templates,name:"
+msgid "Select Templates for Conversion"
+msgstr "Sélection des conversions à exécuter"
+
+msgctxt "model:report.convert.match,name:"
+msgid "Match Displayer"
+msgstr "Occurence"
 
 msgctxt "model:report.create.attach,name:"
 msgid "Report Create Attach"
@@ -471,6 +553,18 @@ msgctxt "selection:report.template.version,type:"
 msgid "Link"
 msgstr "Lien"
 
+msgctxt "view:report.convert.select_templates:"
+msgid "Check for Matches"
+msgstr "Rechercher des occurences"
+
+msgctxt "view:report.convert.select_templates:"
+msgid "Update Templates"
+msgstr "Mise à jour des modèles de courriers"
+
+msgctxt "view:report.convert.match:"
+msgid "Matches"
+msgstr "Occurences"
+
 msgctxt "view:report.create.attach:"
 msgid "Attachment"
 msgstr "Pièce jointe"
@@ -514,6 +608,14 @@ msgstr "Modèles de courrier"
 msgctxt "view:report.template:"
 msgid "Versions"
 msgstr "Versions"
+
+msgctxt "wizard_button:report.convert,select_templates,convert_templates:"
+msgid "Convert"
+msgstr "Convertir"
+
+msgctxt "wizard_button:report.convert,select_templates,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt "wizard_button:report.create,attach,end:"
 msgid "Cancel"

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<form string="Update Templates">
+    <field name="message" colspan="4"/>
+    <label name="search_for"/>
+    <field name="search_for"/>
+    <button string="Check for Matches" name="recalculate_matches" colspan="2"/>
+    <label name="replace_with"/>
+    <field name="replace_with"/>
+    <field name="changes_calculated"/>
+    <field name="matches"  colspan="4" mode="tree"/>
+    <field name="changes_calculated"/>
+    <field name="templates" invisible="1"/>
+</form>

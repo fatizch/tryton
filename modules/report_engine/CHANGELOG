@@ -1,3 +1,4 @@
+* Add wizard to ease migration of names in report templates
 * Allow to define report templates to be printed at given event
 * Add option to export the document on generation to the server filesystem
 * Add option to store the original generated document in the internal edm even if the final output is converted to pdf
