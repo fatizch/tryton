@@ -13,10 +13,10 @@ class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
 
     @classmethod
-    @check_args('contract')
+    @check_args('contract', 'date')
     def _re_number_of_covered_elements(cls, args):
         contract = args['contract']
-        return len(getattr(contract, 'covered_elements', []))
+        return len(contract.get_covered_elements_at_date(args['date']))
 
     @classmethod
     @check_args('elem', 'contract', 'coverage')
