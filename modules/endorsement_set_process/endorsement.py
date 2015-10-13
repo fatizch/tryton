@@ -61,9 +61,8 @@ class EndorsementSet(CogProcessFramework):
     created_attachments = fields.Function(
         fields.One2Many('ir.attachment', 'origin',
             'Created Attachments'), 'get_created_attachments')
-    attachments = fields.Function(
-        fields.One2Many('ir.attachment', 'resource',
-            'Attachments'), 'get_attachments')
+    attachments = fields.One2Many('ir.attachment', 'resource',
+        'Attachments')
 
     @classmethod
     def __setup__(cls):
@@ -104,17 +103,6 @@ class EndorsementSet(CogProcessFramework):
         return [x.id for x in Attachment.search(
             ['OR', [('resource', 'in', endorsements)],
                 [('origin', 'in', endorsements_and_set)]])]
-
-    def get_attachments(self, name):
-        pool = Pool()
-        Attachment = pool.get('ir.attachment')
-
-        operand = ['%s,%s' % (endorsement.__name__, endorsement.id)
-            for endorsement in self.endorsements]
-        operand.append('%s,%s' % (self.__name__, self.id))
-
-        return [x.id for x in Attachment.search(
-                [('resource', 'in', operand)])]
 
 
 class EndorsementPartUnion:
