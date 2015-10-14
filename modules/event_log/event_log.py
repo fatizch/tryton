@@ -21,7 +21,7 @@ class EventLog(model.CoopSQL, model.CoopView):
 
     description = fields.Text('Description', readonly=True)
     description_str = fields.Function(
-        fields.Char('Description'),
+        fields.Text('Description'),
         'on_change_with_description_str')
     object_ = fields.Reference('Object', selection='models_get', readonly=True,
         required=True)
