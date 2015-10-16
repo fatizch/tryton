@@ -45,5 +45,14 @@
             <field name="kind">extra_premium</field>
             <field name="view">manage_extra_premium</field>
         </record>
+        <!-- ######################################## -->
+        <!-- # Modify Covered Element Configuration # -->
+        <!-- ######################################## -->
+        <record model="endorsement.part" id="modify_covered_elements_revision_part">
+            <field name="code">modify_covered_elements</field>
+            <field name="name">Modify Covered Elements</field>
+            <field name="kind">covered_element</field>
+            <field name="view">modify_covered_element</field>
+        </record>
     </data>
 </tryton>

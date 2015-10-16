@@ -1194,6 +1194,10 @@ msgctxt "model:endorsement.part,name:manage_extra_premiums_revision_part"
 msgid "Manage Extra Premiums"
 msgstr "Gérer les surprimes"
 
+msgctxt "model:endorsement.part,name:modify_covered_elements_revision_part"
+msgid "Modify Covered Elements"
+msgstr "Modifier les risques couverts"
+
 msgctxt "selection:contract.covered_element.modify.displayer,action:"
 msgid ""
 msgstr " "
