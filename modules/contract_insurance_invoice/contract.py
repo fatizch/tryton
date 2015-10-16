@@ -597,7 +597,8 @@ class Contract:
                 from_date=datetime.date.min)
             contract_invoices = []
             for contract in contracts:
-                invoices = cls.invoice([contract], contract.start_date)
+                invoices = cls.invoice([contract], max(contract.start_date,
+                        utils.today()))
                 for invoice in invoices:
                     # We need to update the function field as the
                     # contract has not been stored since it has been activated
