@@ -38,6 +38,7 @@ def register():
         RuleGroup,
         Action,
         ActionKeyword,
+        IrModule,
         IrModel,
         IrModelField,
         IrModelFieldAccess,

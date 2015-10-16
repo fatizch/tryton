@@ -48,6 +48,10 @@ def get_trytond_modules():
     return trytond_modules
 
 
+def is_module_installed(module_name):
+    return Pool().get('ir.module').is_module_installed(module_name)
+
+
 def to_list(data):
     if type(data) == list:
         return data

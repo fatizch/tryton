@@ -4,6 +4,7 @@ from sql.operators import Concat
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
+from trytond.cache import Cache
 from trytond.pyson import Eval, PYSONEncoder
 from trytond.transaction import Transaction
 from trytond.model import fields as tryton_fields, ModelView
@@ -26,6 +27,7 @@ __all__ = [
     'RuleGroup',
     'Action',
     'ActionKeyword',
+    'IrModule',
     'IrModel',
     'IrModelField',
     'IrModelFieldAccess',
@@ -291,6 +293,29 @@ class Action(ExportImportMixin):
 
 class ActionKeyword(ExportImportMixin):
     __name__ = 'ir.action.keyword'
+
+
+class IrModule:
+    __name__ = 'ir.module'
+
+    _is_module_installed_cache = Cache('is_module_installed')
+
+    @classmethod
+    def is_module_installed(cls, module_name):
+        module_installed = cls._is_module_installed_cache.get(module_name,
+            default=-1)
+        if module_installed != -1:
+            return module_installed
+        if cls._is_module_installed_cache.get('_check_initialized', False):
+            # Cache was initialized, module does not exist
+            return False
+        cls._is_module_installed_cache.clear()
+        modules = cls.search([])
+        for module in modules:
+            cls._is_module_installed_cache.set(module.name,
+                module.state == 'installed')
+        cls._is_module_installed_cache.set('_check_initialized', True)
+        return cls._is_module_installed_cache.get(module_name, False)
 
 
 class IrModel(ExportImportMixin):
