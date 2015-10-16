@@ -316,7 +316,9 @@ class Contract:
         previous_date = datetime.date.max
         today = utils.today()
         for billing_info in reversed(self.billing_informations):
-            if previous_date > today:
+            # If the contract start_date is in the future, we must not validate
+            # anything before it
+            if previous_date > max(today, self.start_date):
                 res.append(billing_info.id)
             previous_date = billing_info.date
         return res
