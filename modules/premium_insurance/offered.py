@@ -28,6 +28,9 @@ class Product:
     def get_covered_element_dates(self, dates, covered_element):
         for data in covered_element.options:
             self.get_option_dates(dates, data)
+        for version in covered_element.versions:
+            if version.start:
+                dates.add(version.start)
         if hasattr(covered_element, 'sub_covered_elements'):
             for sub_elem in covered_element.sub_covered_elements:
                 self.get_covered_element_dates(dates, sub_elem)

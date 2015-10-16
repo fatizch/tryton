@@ -1,6 +1,7 @@
 # encoding: utf-8
 from sql import Column
 from sql.conditionals import Coalesce
+from sql.aggregate import Max
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
@@ -13,10 +14,12 @@ from trytond.modules.endorsement import relation_mixin
 __all__ = [
     'ContractOptionVersion',
     'CoveredElement',
+    'CoveredElementVersion',
     'ExtraPremium',
     'Endorsement',
     'EndorsementContract',
     'EndorsementCoveredElement',
+    'EndorsementCoveredElementVersion',
     'EndorsementCoveredElementOption',
     'EndorsementCoveredElementOptionVersion',
     'EndorsementExtraPremium',
@@ -57,6 +60,53 @@ class CoveredElement(object):
     __metaclass__ = PoolMeta
     _history = True
     __name__ = 'contract.covered_element'
+
+
+class CoveredElementVersion(object):
+    __metaclass__ = PoolMeta
+    _history = True
+    __name__ = 'contract.covered_element.version'
+
+    @classmethod
+    def __register__(cls, module):
+        pool = Pool()
+        CoveredElement = pool.get('contract.covered_element')
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        covered_element_hist = CoveredElement.__table_history__()
+        version_hist = cls.__table_history__()
+
+        # Migration from 1.4 : Create default contract.covered_element.version
+        covered_h = TableHandler(cursor, CoveredElement, module, history=True)
+        to_migrate = covered_h.column_exist('extra_data')
+        super(CoveredElementVersion, cls).__register__(module)
+
+        if to_migrate:
+            version_h = TableHandler(cursor, cls, module, history=True)
+            # Delete previously created history, to have full control
+            cursor.execute(*version_hist.delete())
+            cursor.execute(*version_hist.insert(
+                    columns=[
+                        version_hist.create_date, version_hist.create_uid,
+                        version_hist.write_date, version_hist.write_uid,
+                        version_hist.extra_data, version_hist.covered_element,
+                        version_hist.id, Column(version_hist, '__id')],
+                    values=covered_element_hist.select(
+                        covered_element_hist.create_date,
+                        covered_element_hist.create_uid,
+                        covered_element_hist.write_date,
+                        covered_element_hist.write_uid,
+                        covered_element_hist.extra_data,
+                        covered_element_hist.id.as_('covered_element'),
+                        covered_element_hist.id.as_('id'),
+                        Column(covered_element_hist, '__id').as_('__id'))))
+            cursor.execute(*version_hist.select(
+                    Max(Column(version_hist, '__id'))))
+            cursor.setnextid(version_h.table_name + '__',
+                cursor.fetchone()[0] or 0 + 1)
+            covered_history_h = TableHandler(cursor, CoveredElement, module,
+                history=True)
+            covered_history_h.drop_column('extra_data')
 
 
 class ExtraPremium(object):
@@ -106,6 +156,7 @@ class EndorsementContract:
         order = super(EndorsementContract, cls)._get_restore_history_order()
         contract_idx = order.index('contract')
         order.insert(contract_idx + 1, 'contract.covered_element')
+        order.insert(contract_idx + 2, 'contract.covered_element.version')
         option_idx = order.index('contract.option')
         order.insert(option_idx + 1, 'contract.option.extra_premium')
         return order
@@ -117,6 +168,8 @@ class EndorsementContract:
         for contract in instances['contract']:
             instances['contract.covered_element'] += contract.covered_elements
             for covered_element in contract.covered_elements:
+                instances['contract.covered_element.version'] += \
+                    covered_element.versions
                 instances['contract.option'] += covered_element.options
                 for option in covered_element.options:
                     instances['contract.option.version'] += option.versions
@@ -176,6 +229,8 @@ class EndorsementCoveredElement(relation_mixin(
 
     contract_endorsement = fields.Many2One('endorsement.contract',
         'Endorsement', required=True, select=True, ondelete='CASCADE')
+    versions = fields.One2Many('endorsement.contract.covered_element.version',
+        'covered_element_endorsement', 'Versions', delete_missing=True)
     options = fields.One2Many('endorsement.contract.covered_element.option',
         'covered_element_endorsement', 'Options', delete_missing=True)
     definition = fields.Function(
@@ -196,6 +251,7 @@ class EndorsementCoveredElement(relation_mixin(
         cls._error_messages.update({
                 'new_covered_element': 'New Covered Element',
                 'mes_option_modifications': 'Option Modification',
+                'mes_version_modifications': 'Version Modification',
                 })
 
     @classmethod
@@ -216,6 +272,13 @@ class EndorsementCoveredElement(relation_mixin(
             base_object)
         if self.action == 'remove':
             return result
+        version_summary = [x.get_summary('contract.covered_element.version',
+                x.version)
+            for x in self.versions]
+        if version_summary:
+            result.append(['covered_element_version_change_section', '%s :' % (
+                        self.raise_user_error('mes_version_modifications',
+                            raise_exception=False)), version_summary])
         option_summary = [x.get_summary('contract.option', x.option)
             for x in self.options]
         if option_summary:
@@ -226,6 +289,14 @@ class EndorsementCoveredElement(relation_mixin(
 
     def apply_values(self):
         values = super(EndorsementCoveredElement, self).apply_values()
+        version_values = []
+        for version in self.versions:
+            version_values.append(version.apply_values())
+        if version_values:
+            if self.action == 'add':
+                values[1][0]['versions'] = version_values
+            elif self.action == 'update':
+                values[2]['versions'] = version_values
         option_values = []
         for option in self.options:
             option_values.append(option.apply_values())
@@ -282,6 +353,48 @@ class EndorsementCoveredElement(relation_mixin(
     @classmethod
     def _ignore_fields_for_matching(cls):
         return {'options'}
+
+
+class EndorsementCoveredElementVersion(relation_mixin(
+            'endorsement.contract.covered_element.version.field', 'version',
+            'contract.covered_element.version', 'Versions'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Covered Element Version'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.contract.covered_element.version'
+
+    covered_element_endorsement = fields.Many2One(
+        'endorsement.contract.covered_element', 'Endorsement', required=True,
+        select=True, ondelete='CASCADE')
+    definition = fields.Function(
+        fields.Many2One('endorsement.definition', 'Definition'),
+        'get_definition')
+    extra_data = fields.Dict('extra_data', 'Extra Data')
+
+    @classmethod
+    def __setup__(cls):
+        super(EndorsementCoveredElementVersion, cls).__setup__()
+        cls.values.domain = [('definition', '=', Eval('definition'))]
+        cls.values.depends = ['definition']
+        cls._error_messages.update({
+                'new_covered_element_version': 'New Covered Element Version',
+                })
+        cls._endorsed_dicts = {'extra_data': 'extra_data'}
+
+    @classmethod
+    def default_definition(cls):
+        return Transaction().context.get('definition', None)
+
+    def get_definition(self, name):
+        return self.covered_element_endorsement.definition.id
+
+    def get_rec_name(self, name):
+        return '%s' % (self.raise_user_error('new_covered_element_version',
+                raise_exception=False))
+
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return {'covered_element'}
 
 
 class EndorsementCoveredElementOption(relation_mixin(

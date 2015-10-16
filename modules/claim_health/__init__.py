@@ -11,5 +11,6 @@ def register():
         Claim,
         ClaimService,
         CoveredElement,
-        ModifyCoveredElementInformation,
+        ModifyCoveredElement,
+        CoveredElementDisplayer,
         module='claim_health', type_='model')

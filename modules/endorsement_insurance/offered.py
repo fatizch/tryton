@@ -10,6 +10,7 @@ __all__ = [
     'EndorsementPart',
     'EndorsementCoveredElementField',
     'EndorsementExtraPremiumField',
+    'EndorsementCoveredElementVersionField',
     ]
 
 
@@ -85,6 +86,14 @@ class EndorsementCoveredElementField(field_mixin('contract.covered_element'),
     'Endorsement Covered Element Field'
 
     __name__ = 'endorsement.contract.covered_element.field'
+
+
+class EndorsementCoveredElementVersionField(
+        field_mixin('contract.covered_element.version'), model.CoopSQL,
+        model.CoopView):
+    'Endorsement Covered Element Version Field'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.contract.covered_element.version.field'
 
 
 class EndorsementExtraPremiumField(field_mixin(

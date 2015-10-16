@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -18,18 +18,16 @@ msgctxt "error:contract.manage_extra_premium:"
 msgid "There may be only one coverage selected for this action"
 msgstr "Une seule garantie doit être sélectionnée pour continuer"
 
+msgctxt "error:contract.option.extra_premium.create:"
+msgid "An option must be subscribed on the contract before going on"
+msgstr "Au moins une garantie doit être souscrite avant de continuer"
+
 msgctxt "error:contract.option.extra_premium:"
 msgid ""
 "Extra premium %s start date (%s) should be greater than the coverage's (%s)"
 msgstr ""
 "Sur la surprime %s, la date de début (%s) doit être postérieure à celle de "
 "la garantie (%s)"
-
-msgctxt "error:contract.option.extra_premium.create:"
-msgid ""
-"An option must be subscribed on the contract before going on"
-msgstr ""
-"Au moins une garantie doit être souscrite avant de continuer"
 
 msgctxt "error:contract:"
 msgid ""
@@ -46,10 +44,6 @@ msgstr "Erreurs lors du calcul de la date de renouvellement : %s"
 msgctxt "error:contract:"
 msgid "Invalid file format"
 msgstr "Format de fichier non valide"
-
-msgctxt "error:contract:"
-msgid "Select at least one option for %s"
-msgstr "Veuillez sélectionner au moins une option pour %s"
 
 msgctxt "field:contract,contract_number:"
 msgid "Contract Number"
@@ -143,10 +137,6 @@ msgctxt "field:contract,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.covered_element,all_extra_datas:"
-msgid "All Extra Datas"
-msgstr "Toutes les données complémentaires"
-
 msgctxt "field:contract.covered_element,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -183,17 +173,17 @@ msgctxt "field:contract.covered_element,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
+msgctxt "field:contract.covered_element,current_extra_data:"
+msgid "Current Extra Data"
+msgstr "Données complémentaires courantes"
+
+msgctxt "field:contract.covered_element,current_version:"
+msgid "Current Version"
+msgstr "Version Courante"
+
 msgctxt "field:contract.covered_element,declined_options:"
 msgid "Declined Options"
 msgstr "Options déclinées"
-
-msgctxt "field:contract.covered_element,extra_data:"
-msgid "Contract Extra Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:contract.covered_element,extra_data_summary:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
 
 msgctxt "field:contract.covered_element,icon:"
 msgid "Icon"
@@ -263,6 +253,10 @@ msgctxt "field:contract.covered_element,sub_covered_elements:"
 msgid "Sub Covered Elements"
 msgstr "Sous Risques Couverts"
 
+msgctxt "field:contract.covered_element,versions:"
+msgid "Versions"
+msgstr "Versions"
+
 msgctxt "field:contract.covered_element,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -312,6 +306,54 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:contract.covered_element-party,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.covered_element.version,covered_element:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt "field:contract.covered_element.version,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.covered_element.version,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.covered_element.version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.covered_element.version,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:contract.covered_element.version,extra_data_as_string:"
+msgid "Extra Data as String"
+msgstr "Données Complémentaires"
+
+msgctxt "field:contract.covered_element.version,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.covered_element.version,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:contract.covered_element.version,start:"
+msgid "Start"
+msgstr "Début"
+
+msgctxt "field:contract.covered_element.version,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.covered_element.version,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.covered_element.version,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -776,6 +818,10 @@ msgctxt "model:contract.covered_element-party,name:"
 msgid "Relation between Covered Element and Covered Relations"
 msgstr "Relation de l'élément couvert"
 
+msgctxt "model:contract.covered_element.version,name:"
+msgid "Contract Covered Element Version"
+msgstr "Version de risque couvert"
+
 msgctxt "model:contract.manage_exclusion.select,name:"
 msgid "Exclusion Display"
 msgstr "Exclusion"
@@ -920,6 +966,10 @@ msgctxt "selection:report.template,kind:"
 msgid "Contract Documents"
 msgstr "Documents du contrat"
 
+msgctxt "view:contract.covered_element.version:"
+msgid "Versions"
+msgstr "Versions"
+
 msgctxt "view:contract.covered_element:"
 msgid "Covered Element"
 msgstr "Risque Couvert"
@@ -990,7 +1040,7 @@ msgstr "Prestation Fournie"
 
 msgctxt "view:contract:"
 msgid "Covered Elements"
-msgstr "Risques Couverts"
+msgstr "Risques couverts"
 
 msgctxt "view:expense:"
 msgid "Expense"

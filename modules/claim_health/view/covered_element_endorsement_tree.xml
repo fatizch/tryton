@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<data>
-    <xpath expr="/tree/field[@name='extra_data_summary']" position="after">
-        <field name="claim_bank_account"/>
-        <field name="claim_default_bank_account" tree_invisible="1"/>
-        <field name="possible_claim_bank_accounts" tree_invisible="1"/>
-    </xpath>
-</data>

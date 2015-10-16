@@ -59,6 +59,19 @@
             <field name="field_childs">multi_mixed_view</field>
             <field name="name">covered_elements_clean_tree</field>
         </record>
+        <!-- ########################### -->
+        <!-- # Covered Element Version # -->
+        <!-- ########################### -->
+        <record model="ir.ui.view" id="covered_element_version_view_form">
+            <field name="model">contract.covered_element.version</field>
+            <field name="type">form</field>
+            <field name="name">covered_element_version_form</field>
+        </record>
+        <record model="ir.ui.view" id="covered_element_version_view_list">
+            <field name="model">contract.covered_element.version</field>
+            <field name="type">tree</field>
+            <field name="name">covered_element_version_list</field>
+        </record>
         <!-- ############################################################ -->
         <!-- ########### Wizard ########### -->
         <!-- ############################################################ -->

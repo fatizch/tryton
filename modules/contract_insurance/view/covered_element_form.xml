@@ -17,8 +17,11 @@
     <newline/>
     <notebook>
         <page id="details" string="Details">
-            <field name="extra_data" colspan="4" no_command="1"/>
+            <field name="current_extra_data" colspan="4" no_command="1"/>
             <field name="options" colspan="4"/>
+        </page>
+        <page name="versions">
+            <field name="versions"/>
         </page>
         <page id="covered_relations" string="Covered Relations">
             <field name="covered_relations" colspan="4"/>

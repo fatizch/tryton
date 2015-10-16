@@ -1,17 +1,23 @@
 <?xml version="1.0"?>
 <tryton>
     <data depends="endorsement_insurance">
-        <record model="ir.ui.view" id="covered_element_endorsement_view_form">
-            <field name="model">contract.covered_element</field>
+        <!-- ########################## -->
+        <!-- # Modify Covered Element # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="contract_modify_covered_element_view_form">
+            <field name="model">contract.covered_element.modify</field>
             <field name="type">form</field>
-            <field name="inherit" ref="endorsement_insurance.covered_element_endorsement_view_form"/>
-            <field name="name">covered_element_endorsement_form</field>
+            <field name="inherit" ref="endorsement_insurance.contract_modify_covered_element_view_form"/>
+            <field name="name">contract_modify_covered_element_form</field>
         </record>
-        <record model="ir.ui.view" id="covered_element_endorsement_view_tree">
-            <field name="model">contract.covered_element</field>
-            <field name="type">tree</field>
-            <field name="inherit" ref="endorsement_insurance.covered_element_endorsement_view_tree"/>
-            <field name="name">covered_element_endorsement_tree</field>
+        <!-- ############################# -->
+        <!-- # Covered Element Displayer # -->
+        <!-- ############################# -->
+        <record model="ir.ui.view" id="covered_element_modify_view_form">
+            <field name="model">contract.covered_element.modify.displayer</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="endorsement_insurance.covered_element_modify_view_form"/>
+            <field name="name">covered_element_modify_form</field>
         </record>
     </data>
 </tryton>

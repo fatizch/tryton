@@ -1,4 +1,6 @@
+import datetime
 from collections import defaultdict
+
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
 from trytond.pyson import Eval, Len, Bool, If, Equal
@@ -17,7 +19,8 @@ __all__ = [
     'ManageOptions',
     'OptionDisplayer',
     'RemoveOptionSelector',
-    'ModifyCoveredElementInformation',
+    'ModifyCoveredElement',
+    'CoveredElementDisplayer',
     'RemoveOption',
     'OptionSelector',
     'CoveredElementSelector',
@@ -500,117 +503,296 @@ class NewOptionOnCoveredElement(EndorsementWizardStepMixin):
         good_endorsement.save()
 
 
-class ModifyCoveredElementInformation(EndorsementWizardStepMixin):
-    'Modify Covered Element Information'
+class ModifyCoveredElement(EndorsementWizardStepMixin):
+    'Modify Covered Element'
 
-    __name__ = 'endorsement.contract.covered_element.modify'
+    __name__ = 'contract.covered_element.modify'
 
-    covered_elements = fields.One2Many('contract.covered_element', None,
-        'Covered Elements')
-    existing_covered_elements = fields.One2Many('contract.covered_element',
-        None, 'Covered Elements')
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    current_parent = fields.Selection('get_possible_parents',
+        'Parent')
+    all_covered = fields.One2Many('contract.covered_element.modify.displayer',
+        None, 'All Covered Elements')
+    current_covered = fields.One2Many(
+        'contract.covered_element.modify.displayer', None,
+        'Current Covered Elements')
+    possible_parents = fields.Text('Possible Parents', readonly=True)
 
     @classmethod
-    def _covered_element_fields_to_extract(cls):
-        return ['extra_data']
+    def view_attributes(cls):
+        return super(ModifyCoveredElement, cls).view_attributes() + [(
+                '/form/group[@id="invisible"]',
+                'states',
+                {'invisible': True})]
 
-    def init_covered_default_value(self, covered):
-        return model.dictionarize(covered,
-            self._covered_element_fields_to_extract() +
-            ['contract', 'party', 'item_desc'])
+    @property
+    def _parent(self):
+        if not getattr(self, 'current_parent', None):
+            return None
+        parent_model, parent_id = self.current_parent.split(',')
+        return Pool().get(parent_model)(int(parent_id))
 
-    def step_default(self, name):
-        pool = Pool()
-        Contract = pool.get('contract')
-        defaults = super(ModifyCoveredElementInformation, self).step_default()
-        contracts = self._get_contracts()
-        defaults['covered_elements'] = []
-        defaults['existing_covered_elements'] = []
-        effective_date = self.wizard.endorsement.effective_date
-        for contract_id, endorsement in contracts.iteritems():
-            contract = Contract(contract_id)
-            covered_elements = [c for c in contract.covered_elements
-                if c.is_covered_at_date(effective_date)]
-            for covered in covered_elements:
-                values = self.init_covered_default_value(covered)
-                for endorsed_covered in endorsement.covered_elements:
-                    if endorsed_covered.action == 'remove':
-                        continue
-                    if endorsed_covered.relation == covered.id:
-                        values.update(endorsed_covered.values)
-                values['start_date'] = effective_date
-                defaults['covered_elements'].append(values)
-                defaults['existing_covered_elements'].append(covered.id)
+    @fields.depends('possible_parents')
+    def get_possible_parents(self):
+        if not self.possible_parents:
+            return []
+        return [tuple(x.split('|', 1))
+            for x in self.possible_parents.split('\n')]
+
+    @fields.depends('all_covered', 'contract', 'current_covered',
+        'current_parent', 'effective_date')
+    def on_change_current_parent(self):
+        self.update_contract()
+        self.update_all_covered()
+        self.update_current_covered()
+
+    def calculate_possible_parents(self):
+        return list(self.wizard.endorsement.contract_endorsements)
+
+    def update_contract(self):
+        if isinstance(self._parent, Pool().get('endorsement.contract')):
+            self.contract = self._parent.contract
+        else:
+            raise NotImplementedError
+
+    def update_all_covered(self):
+        if not self.current_covered:
+            return
+        new_covered_elements = list(self.current_covered)
+        for covered_element in self.all_covered:
+            if covered_element.parent == new_covered_elements[0].parent:
+                continue
+            new_covered_elements.append(covered_element)
+        self.all_covered = new_covered_elements
+
+    def update_current_covered(self):
+        new_covered_elements = []
+        for covered_element in sorted(self.all_covered,
+                key=lambda x: x.party.name if x.party else ''):
+            if covered_element.parent == self.current_parent:
+                new_covered_elements.append(covered_element)
+        self.current_covered = new_covered_elements
+
+    def step_default(self, field_names):
+        defaults = super(ModifyCoveredElement, self).step_default()
+        possible_parents = self.calculate_possible_parents()
+        defaults['possible_parents'] = '\n'.join(
+            [str(x) + '|' + self.get_parent_name(x) for x in possible_parents])
+        per_parent = {x: self.get_covered_from_parent(x)
+            for x in possible_parents}
+
+        all_covered = []
+        for possible_parent, covered_elements in per_parent.iteritems():
+            for covered_element in covered_elements:
+                all_covered += self.generate_displayers(possible_parent,
+                    covered_element)
+        defaults['all_covered'] = [x._changed_values for x in all_covered]
+        if defaults['all_covered']:
+            defaults['current_parent'] = defaults['all_covered'][0]['parent']
         return defaults
 
     def step_update(self):
-        pool = Pool()
-        EndorsementCoveredElement = pool.get(
-            'endorsement.contract.covered_element')
-        contract_id, endorsement = self._get_contracts().items()[0]
+        self.update_all_covered()
+        endorsement = self.wizard.endorsement
+        per_parent = defaultdict(list)
+        for covered_element in self.all_covered:
+            per_parent[covered_element.parent].append(covered_element)
 
-        def get_save_values(covered, prev_covered):
-            # calculate value to update according current covered
-            res = {}
-            save_values = covered._save_values
-            if not save_values:
-                return
-            for field in self._covered_element_fields_to_extract():
-                if (hasattr(prev_covered, field) and
-                        field in covered._save_values and
-                        getattr(covered, field, False) !=
-                        getattr(prev_covered, field, False) or
-                        not prev_covered and field in covered._save_values):
-                    res[field] = covered._save_values[field]
-            return res
+        contract_endorsements = {}
+        for contract_endorsement in endorsement.contract_endorsements:
+            contract = contract_endorsement.contract
+            utils.apply_dict(contract, contract_endorsement.apply_values())
+            contract_endorsements[contract.id] = contract
 
-        existing_covered_endorsement, new_covered_elements = {}, []
-        # build a dictionnary with the covered element and the matching
-        # endorsement object
-        for covered_endorsement in endorsement.covered_elements:
-            if not covered_endorsement.covered_element:
-                # if a covered was added keep it like it was
-                new_covered_elements.append(covered_endorsement)
-            existing_covered_endorsement[
-                covered_endorsement.covered_element] = covered_endorsement
+        for parent, new_covered_elements in per_parent.iteritems():
+            self.current_parent = parent
+            parent = self.get_parent_endorsed(self._parent,
+                contract_endorsements)
+            self.update_endorsed_covered(new_covered_elements, parent)
+            parent.covered_elements = list(parent.covered_elements)
 
-        for i, covered in enumerate(self.covered_elements):
-            if (self.existing_covered_elements[i] in
-                    existing_covered_endorsement):
-                matching_endorsement = existing_covered_endorsement[
-                    self.existing_covered_elements[i]]
+        new_endorsements = []
+        for contract_endorsement in endorsement.contract_endorsements:
+            self._update_endorsement(contract_endorsement,
+                contract_endorsement.contract._save_values)
+            if not contract_endorsement.clean_up():
+                new_endorsements.append(contract_endorsement)
+        endorsement.contract_endorsements = new_endorsements
+
+    def get_parent_endorsed(self, parent, contract_endorsements):
+        if isinstance(parent, Pool().get('endorsement.contract')):
+            return contract_endorsements[parent.contract.id]
+        else:
+            raise NotImplementedError
+
+    def update_endorsed_covered(self, new_covered_elements, parent):
+        per_id = {x.id: x for x in parent.covered_elements}
+        for new_covered in new_covered_elements:
+            if new_covered.action == 'nothing':
+                self._update_nothing(new_covered, parent, per_id)
+            elif new_covered.action == 'modified':
+                self._update_modified(new_covered, parent, per_id)
+
+    def _update_nothing(self, new_covered_element, parent, per_id):
+        # Cancel modifications
+        assert new_covered_element.cur_covered_id
+        CoveredElement = Pool().get('contract.covered_element')
+        prev_covered = CoveredElement(new_covered_element.cur_covered_id)
+        covered = per_id[new_covered_element.cur_covered_id]
+        covered.versions = prev_covered.versions
+
+    def _update_modified(self, new_covered_element, parent, per_id):
+        assert new_covered_element.cur_covered_id
+        good_covered = per_id[new_covered_element.cur_covered_id]
+        new_versions = sorted([v for v in good_covered.versions
+                if not v.start or
+                v.start <= new_covered_element.effective_date],
+            key=lambda x: x.start or datetime.date.min)
+        current_version = new_versions[-1]
+        if not current_version.start or (current_version.start !=
+                new_covered_element.effective_date):
+            current_version = new_covered_element.to_version(
+                previous_version=new_versions[-1])
+            new_versions.append(current_version)
+        good_covered.versions = new_versions
+
+    def get_covered_from_parent(self, parent):
+        if isinstance(parent, Pool().get('endorsement.contract')):
+            contract = parent.contract
+            utils.apply_dict(contract, parent.apply_values())
+            return contract.covered_elements
+        else:
+            raise NotImplementedError
+
+    def generate_displayers(self, parent, covered_element):
+        Displayer = Pool().get('contract.covered_element.modify.displayer')
+        save_values = covered_element._save_values
+        displayer = Displayer.new_displayer(covered_element,
+            self.effective_date)
+        displayer.parent = str(parent)
+        displayer.parent_rec_name = self.get_parent_name(parent)
+        if not save_values:
+            # Not modified covered
+            displayer.action = 'nothing'
+        elif covered_element.id:
+            # covered existed before, either modification or resiliation
+            if (covered_element.get_version_at_date(self.effective_date).start
+                    == self.effective_date):
+                displayer.action = 'modified'
             else:
-                matching_endorsement = None
-            new_values = get_save_values(covered,
-                self.existing_covered_elements[i])
-            if new_values:
-                if matching_endorsement:
-                    matching_endorsement.values.update(
-                            model.dictionarize(covered,
-                                self._covered_element_fields_to_extract()))
-                    new_covered_elements.append(matching_endorsement)
-                else:
-                    covered_endorsement = EndorsementCoveredElement(
-                        contract_endorsement=endorsement,
-                        definition=self.endorsement_definition,
-                        action='update',
-                        covered_element=self.existing_covered_elements[i],
-                        relation=self.existing_covered_elements[i].id,
-                        values=new_values)
-                    new_covered_elements.append(covered_endorsement)
-            elif matching_endorsement:
-                for field in self._covered_element_fields_to_extract():
-                    if field in matching_endorsement.values:
-                        matching_endorsement.values.pop(field)
-                if not matching_endorsement.is_null():
-                    new_covered_elements.append(existing_covered_endorsement)
-        endorsement.covered_elements = new_covered_elements
-        endorsement.save()
+                # Only covered, resiliation
+                displayer.action = 'nothing'
+        return [displayer]
+
+    def get_parent_name(self, parent):
+        if isinstance(parent, Pool().get('endorsement.contract')):
+            return parent.contract.rec_name
+        else:
+            return parent.rec_name
 
     @classmethod
     def state_view_name(cls):
-        return 'endorsement_insurance.'\
-            'endorsement_modify_covered_element_view_form'
+        return 'endorsement_insurance.' + \
+            'contract_modify_covered_element_view_form'
+
+
+class CoveredElementDisplayer(model.CoopView):
+    'Covered Element Displayer'
+
+    __name__ = 'contract.covered_element.modify.displayer'
+
+    action = fields.Selection([('nothing', ''), ('modified', 'Modified')],
+        'Action')
+    parent = fields.Char('Parent Reference', readonly=True)
+    parent_rec_name = fields.Char('Parent', readonly=True)
+    extra_data = fields.Dict('extra_data', 'Extra Data', states={
+            'invisible': ~Eval('extra_data')})
+    extra_data_as_string = fields.Text('Extra Data', readonly=True, states={
+            'invisible': ~Eval('extra_data')})
+    display_name = fields.Char('Name', readonly=True)
+    cur_covered_id = fields.Integer('Existing Covered Element', readonly=True)
+    effective_date = fields.Date('Effective Date', readonly=True)
+    party = fields.Many2One('party.party', 'Party', readonly=True)
+
+    @property
+    def _parent(self):
+        if hasattr(self, '__parent'):
+            return self.__parent
+        if not getattr(self, 'parent', None):
+            self.__parent = None
+            return None
+        parent_model, parent_id = self.parent.split(',')
+        self.__parent = Pool().get(parent_model)(int(parent_id))
+        return self.__parent
+
+    @fields.depends('action', 'cur_covered_id', 'effective_date', 'extra_data',
+        'extra_data_as_string')
+    def on_change_action(self):
+        pool = Pool()
+        if self.cur_covered_id and self.action == 'nothing':
+            self.extra_data = pool.get('contract.covered_element')(
+                self.cur_covered_id).get_version_at_date(
+                self.effective_date).extra_data
+        self.update_extra_data_string()
+
+    @fields.depends('action', 'cur_covered_id', 'effective_date',
+        'extra_data', 'extra_data_as_string')
+    def on_change_extra_data(self):
+        self.update_extra_data_string()
+        if self.check_modified():
+            self.action = 'modified'
+        else:
+            self.action = 'nothing'
+
+    def check_modified(self):
+        if not self.cur_covered_id:
+            return True
+        previous_extra_data = Pool().get('contract.covered_element')(
+            self.cur_covered_id).get_version_at_date(
+            self.effective_date).extra_data
+        return self.extra_data != previous_extra_data
+
+    def update_extra_data_string(self):
+        self.extra_data_as_string = Pool().get(
+            'extra_data').get_extra_data_summary([self], 'extra_data')[self.id]
+
+    @classmethod
+    def new_displayer(cls, covered_element, effective_date):
+        displayer = cls()
+        displayer.effective_date = effective_date
+        if getattr(covered_element, 'id', None):
+            displayer.cur_covered_id = covered_element.id
+            displayer.display_name = covered_element.rec_name
+        else:
+            displayer.cur_covered_id = None
+            displayer.display_name = 'New Covered Element (%s)' % (
+                covered_element.party.rec_name)
+        if getattr(covered_element, 'versions', None) is None:
+            covered_element.versions = [Pool().get(
+                    'contract.covered_element.version').get_default_version()]
+        displayer.action = 'nothing'
+        displayer.extra_data = covered_element.get_version_at_date(
+            effective_date).extra_data
+        displayer.party = covered_element.party
+        return displayer
+
+    def to_version(self, previous_version=None):
+        Version = Pool().get('contract.covered_element.version')
+        if previous_version is None:
+            version = Version(start=None)
+        else:
+            version = Version(**model.dictionarize(previous_version,
+                    self._covered_element_fields_to_extract()))
+            version.start = self.effective_date
+        version.extra_data = self.extra_data
+        return version
+
+    @classmethod
+    def _covered_element_fields_to_extract(cls):
+        return {
+            'contract.covered_element': [],
+            'contract.covered_element.version': ['extra_data'],
+            }
 
 
 class ExtraPremiumDisplayer(model.CoopView):
@@ -1424,5 +1606,6 @@ class StartEndorsement:
         self.end_current_part('remove_option')
         return self.get_state_before('remove_option')
 
-add_endorsement_step(StartEndorsement, ModifyCoveredElementInformation,
+
+add_endorsement_step(StartEndorsement, ModifyCoveredElement,
     'modify_covered_element')

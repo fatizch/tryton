@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -93,6 +93,14 @@ msgstr "Compte bancaire spécifique pour le virement des prestations"
 msgctxt "field:contract.covered_element,possible_claim_bank_accounts:"
 msgid "Possible Claim Bank Account"
 msgstr "Comptes bancaires disponibles"
+
+msgctxt "field:contract.covered_element.modify,possible_claim_bank_accounts:"
+msgid "Possible Claim Bank Accounts"
+msgstr "Comptes bancaires possibles"
+
+msgctxt "field:contract.covered_element.modify.displayer,claim_bank_account:"
+msgid "Claim Bank Account"
+msgstr "Compte bancaire pour le virement des prestations"
 
 msgctxt "model:claim.loss.health,name:"
 msgid "Health Loss"

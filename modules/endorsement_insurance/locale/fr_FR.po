@@ -1,6 +1,30 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.covered_element.add_option:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
+
+msgctxt "error:contract.covered_element.modify:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
+
+msgctxt "error:contract.covered_element.new:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
 
 msgctxt "error:contract.covered_element.option.remove:"
 msgid ""
@@ -9,6 +33,14 @@ msgid ""
 msgstr ""
 "Toutes les options d'un élément couvert doivent être supprimées si une "
 "garantie obligatoire est supprimée"
+
+msgctxt "error:contract.covered_element.option.remove:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
 
 msgctxt "error:contract.covered_element.option.remove:"
 msgid ""
@@ -76,6 +108,22 @@ msgctxt "error:endorsement.contract.covered_element.option:"
 msgid "Versions Modifications"
 msgstr "Modification des versions"
 
+msgctxt "error:endorsement.contract.covered_element.version:"
+msgid "New Covered Element Version"
+msgstr "Nouvelle version de risque couvert"
+
+msgctxt "error:endorsement.contract.covered_element.version:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.contract.covered_element.version:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.contract.covered_element.version:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
 msgctxt "error:endorsement.contract.covered_element:"
 msgid "New Covered Element"
 msgstr "Nouvel élément couvert"
@@ -96,6 +144,10 @@ msgctxt "error:endorsement.contract.covered_element:"
 msgid "Update %s"
 msgstr "Mise à jour de %s"
 
+msgctxt "error:endorsement.contract.covered_element:"
+msgid "Version Modification"
+msgstr "Modification de version"
+
 msgctxt "error:endorsement.contract.extra_premium:"
 msgid "New Extra Premium: %s"
 msgstr "Nouvelle surprime : %s"
@@ -111,6 +163,14 @@ msgstr "Suppression de la version"
 msgctxt "error:endorsement.contract.extra_premium:"
 msgid "Update %s"
 msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract.manage_extra_premium:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
 
 msgctxt "error:endorsement.contract:"
 msgid "Activation History Modifications"
@@ -163,6 +223,83 @@ msgstr "Garanties disponibles"
 msgctxt "field:contract.covered_element.add_option,possible_covered_elements:"
 msgid "Possible Covered Elements"
 msgstr "Eléments couverts disponibles"
+
+msgctxt "field:contract.covered_element.modify,all_covered:"
+msgid "All Covered Elements"
+msgstr "Tous les risques couverts"
+
+msgctxt "field:contract.covered_element.modify,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.covered_element.modify,current_covered:"
+msgid "Current Covered Elements"
+msgstr "Risques couverts"
+
+msgctxt "field:contract.covered_element.modify,current_parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:contract.covered_element.modify,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:contract.covered_element.modify,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:contract.covered_element.modify,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:contract.covered_element.modify,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.covered_element.modify,possible_parents:"
+msgid "Possible Parents"
+msgstr "Parents possibles"
+
+msgctxt "field:contract.covered_element.modify.displayer,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:contract.covered_element.modify.displayer,cur_covered_id:"
+msgid "Existing Covered Element"
+msgstr "Risque couvert existant"
+
+msgctxt "field:contract.covered_element.modify.displayer,display_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.covered_element.modify.displayer,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:contract.covered_element.modify.displayer,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt ""
+"field:contract.covered_element.modify.displayer,extra_data_as_string:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:contract.covered_element.modify.displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.covered_element.modify.displayer,parent:"
+msgid "Parent Reference"
+msgstr "Parent"
+
+msgctxt "field:contract.covered_element.modify.displayer,parent_rec_name:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:contract.covered_element.modify.displayer,party:"
+msgid "Party"
+msgstr "Tiers"
 
 msgctxt "field:contract.covered_element.new,contract:"
 msgid "Contract"
@@ -357,6 +494,10 @@ msgctxt "field:endorsement.contract.covered_element,values:"
 msgid "Values"
 msgstr "Valeurs"
 
+msgctxt "field:endorsement.contract.covered_element,versions:"
+msgid "Versions"
+msgstr "Versions"
+
 msgctxt "field:endorsement.contract.covered_element,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -416,32 +557,6 @@ msgstr "Mis à jour par"
 msgctxt "field:endorsement.contract.covered_element.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
-
-msgctxt "field:endorsement.contract.covered_element.modify,covered_elements:"
-msgid "Covered Elements"
-msgstr "Risques couverts"
-
-msgctxt "field:endorsement.contract.covered_element.modify,effective_date:"
-msgid "Effective Date"
-msgstr "Date d'effet"
-
-msgctxt ""
-"field:endorsement.contract.covered_element.modify,endorsement_definition:"
-msgid "Endorsement Definition"
-msgstr "Définition d'avenant"
-
-msgctxt "field:endorsement.contract.covered_element.modify,endorsement_part:"
-msgid "Endorsement Part"
-msgstr "Avenant unitaire"
-
-msgctxt ""
-"field:endorsement.contract.covered_element.modify,existing_covered_elements:"
-msgid "Covered Elements"
-msgstr "Risques couverts"
-
-msgctxt "field:endorsement.contract.covered_element.modify,id:"
-msgid "ID"
-msgstr "ID"
 
 msgctxt "field:endorsement.contract.covered_element.option,action:"
 msgid "Action"
@@ -601,6 +716,127 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:endorsement.contract.covered_element.option.version,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.covered_element.version,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.contract.covered_element.version,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.version,covered_element_endorsement:"
+msgid "Endorsement"
+msgstr "Modèle d'Avenant"
+
+msgctxt "field:endorsement.contract.covered_element.version,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.covered_element.version,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.covered_element.version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.covered_element.version,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.contract.covered_element.version,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:endorsement.contract.covered_element.version,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.contract.covered_element.version,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.covered_element.version,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.covered_element.version,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.contract.covered_element.version,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.contract.covered_element.version,version:"
+msgid "Versions"
+msgstr "Versions"
+
+msgctxt "field:endorsement.contract.covered_element.version,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.covered_element.version,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.covered_element.version,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.version.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.version.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.covered_element.version.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.version.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.version.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.covered_element.version.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.contract.covered_element.version.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.covered_element.version.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.covered_element.version.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.covered_element.version.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.covered_element.version.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.covered_element.version.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -882,6 +1118,14 @@ msgctxt "model:contract.covered_element.add_option,name:"
 msgid "New Covered Element Option"
 msgstr "Nouvelle garantie souscrite"
 
+msgctxt "model:contract.covered_element.modify,name:"
+msgid "Modify Covered Element"
+msgstr "Modification des risques couverts"
+
+msgctxt "model:contract.covered_element.modify.displayer,name:"
+msgid "Covered Element Displayer"
+msgstr "Risque couvert"
+
 msgctxt "model:contract.covered_element.new,name:"
 msgid "New Covered Element"
 msgstr "Nouvel élément couvert"
@@ -902,10 +1146,6 @@ msgctxt "model:endorsement.contract.covered_element.field,name:"
 msgid "Endorsement Covered Element Field"
 msgstr "Champs des éléments couverts"
 
-msgctxt "model:endorsement.contract.covered_element.modify,name:"
-msgid "Modify Covered Element Information"
-msgstr "Modifier les informations des risques couverts"
-
 msgctxt "model:endorsement.contract.covered_element.option,name:"
 msgid "Endorsement Option"
 msgstr "Champs de la garantie souscrite"
@@ -913,6 +1153,14 @@ msgstr "Champs de la garantie souscrite"
 msgctxt "model:endorsement.contract.covered_element.option.version,name:"
 msgid "Endorsement Option Version"
 msgstr "Modification de version de garantie"
+
+msgctxt "model:endorsement.contract.covered_element.version,name:"
+msgid "Endorsement Covered Element Version"
+msgstr "Avenant de version de risque couvert"
+
+msgctxt "model:endorsement.contract.covered_element.version.field,name:"
+msgid "Endorsement Covered Element Version Field"
+msgstr "Champ de version de risque couvert"
 
 msgctxt "model:endorsement.contract.extra_premium,name:"
 msgid "Endorsement Extra Premium"
@@ -945,6 +1193,14 @@ msgstr "Garantie"
 msgctxt "model:endorsement.part,name:manage_extra_premiums_revision_part"
 msgid "Manage Extra Premiums"
 msgstr "Gérer les surprimes"
+
+msgctxt "selection:contract.covered_element.modify.displayer,action:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:contract.covered_element.modify.displayer,action:"
+msgid "Modified"
+msgstr "Modifié"
 
 msgctxt ""
 "selection:contract.covered_element.option.remove.option_selector,action:"
@@ -1000,6 +1256,18 @@ msgctxt ""
 msgid "Update"
 msgstr "Mise à jour"
 
+msgctxt "selection:endorsement.contract.covered_element.version,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.contract.covered_element.version,action:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:endorsement.contract.covered_element.version,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
 msgctxt "selection:endorsement.contract.extra_premium,action:"
 msgid "Add"
 msgstr "Compléter"
@@ -1027,6 +1295,18 @@ msgstr "Surprime"
 msgctxt "view:contract.covered_element.add_option:"
 msgid "Add Option"
 msgstr "Souscrire une garantie"
+
+msgctxt "view:contract.covered_element.modify.displayer:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt "view:contract.covered_element.modify.displayer:"
+msgid "Covered Elements"
+msgstr "Risques Couverts"
+
+msgctxt "view:contract.covered_element.modify:"
+msgid "Manage Covered Elements"
+msgstr "Gérer les risques couverts"
 
 msgctxt "view:contract.covered_element.new:"
 msgid "New Covered Element"
@@ -1059,10 +1339,6 @@ msgstr "Champs des éléments couverts"
 msgctxt "view:endorsement.contract.covered_element.field:"
 msgid "Endorsement Fields"
 msgstr "Champs de l'avenant"
-
-msgctxt "view:endorsement.contract.covered_element.modify:"
-msgid "Modify Covered Element"
-msgstr "Modifier les risques couverts"
 
 msgctxt "view:endorsement.contract.covered_element.option:"
 msgid "Endorsement Covered Element Option"

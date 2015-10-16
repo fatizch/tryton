@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="Covered Element" col="2">
+    <label name="parent_rec_name"/>
+    <field name="parent_rec_name"/>
+    <newline/>
+    <field name="extra_data" no_command="1" colspan="2"/>
+    <newline/>
+    <field name="action" invisible="1"/>
+</form>

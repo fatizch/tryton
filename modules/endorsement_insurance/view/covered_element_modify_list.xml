@@ -1,14 +1,11 @@
 <?xml version="1.0"?>
-<tree string="Options">
+<tree string="Covered Elements">
     <field name="action"/>
-    <field name="start_date"/>
-    <field name="end_date"/>
-    <field name="sub_status" widget="selection"/>
     <field name="display_name"/>
     <field name="extra_data_as_string" expand="1"/>
     <field name="parent" tree_invisible="1"/>
-    <field name="cur_option_id" tree_invisible="1"/>
+    <field name="cur_covered_id" tree_invisible="1"/>
     <field name="effective_date" tree_invisible="1"/>
     <field name="parent_rec_name" tree_invisible="1"/>
-    <field name="coverage_id" tree_invisible="1"/>
+    <field name="party" tree_invisible="1"/>
 </tree>

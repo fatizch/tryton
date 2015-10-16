@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<data>
-    <xpath expr="/form/field[@name='extra_data']" position="after">
-        <label name="claim_default_bank_account"/>
-        <field name="claim_default_bank_account"/>
-        <label name="claim_specific_bank_account"/>
-        <field name="claim_specific_bank_account"/>
-    </xpath>
-</data>

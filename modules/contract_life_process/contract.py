@@ -26,11 +26,12 @@ class Contract:
             CoveredElement = Pool().get('contract.covered_element')
             covered_element = CoveredElement()
             covered_element.party = subscriber
-            covered_element.start_date = self.start_date
             covered_element.item_desc = item_desc
-            covered_element.main_contract = self
-            covered_element.product = self.product
-            covered_element.on_change_item_desc()
+            covered_element.contract = self
+            covered_element.parent = None
+            covered_element.versions = [Pool().get(
+                    'contract.covered_element.version').get_default_version()]
+            covered_element.recalculate()
             covered_elements.append(covered_element)
         self.covered_elements = covered_elements
         return True
