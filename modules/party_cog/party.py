@@ -114,7 +114,7 @@ class Party(export.ExportImportMixin):
              'The SSN of the party must be unique.')
         ]
         cls._error_messages.update({
-                'duplicate_party': ('Duplicate(s) already exist(s) : \n%s'),
+                'duplicate_party': ('Duplicate(s) already exist(s) : %s'),
                 })
         cls.__rpc__.update({'ws_create_person': RPC(readonly=False)})
         cls._buttons.update({
@@ -189,6 +189,23 @@ class Party(export.ExportImportMixin):
                     field_name)
 
     @classmethod
+    def domain_duplicate_for_person(cls, party):
+        return [
+            ('id', '!=', party.id),
+            ('name', 'ilike', party.name),
+            ('first_name', 'ilike', party.first_name),
+            ('birth_date', '=', party.birth_date),
+            ]
+
+    @classmethod
+    def domain_duplicate_for_company(cls, party):
+        return [
+            ('id', '!=', party.id),
+            ('name', 'ilike', party.name),
+            ('short_name', 'ilike', party.short_name),
+            ]
+
+    @classmethod
     def check_duplicates(cls, parties):
         cursor = Transaction().cursor
         in_max = cursor.IN_MAX
@@ -196,32 +213,25 @@ class Party(export.ExportImportMixin):
             sub_parties = [p for p in parties[i:i + in_max]]
             domain = ['OR']
             for party in sub_parties:
-                if (getattr(party, 'first_name', None)
-                        and getattr(party, 'birth_date', None)):
-                    domain.append([
-                            ('id', '!=', party.id),
-                            ('name', 'ilike', party.name),
-                            ('first_name', 'ilike', party.first_name),
-                            ('birth_date', '=', party.birth_date),
-                            ])
-                elif getattr(party, 'short_name', None):
-                    domain.append([
-                            ('id', '!=', party.id),
-                            ('name', 'ilike', party.name),
-                            ('short_name', 'ilike', party.short_name),
-                            ])
+                if party.is_person:
+                    domain.append(cls.domain_duplicate_for_person(party))
+                else:
+                    domain.append(cls.domain_duplicate_for_company(party))
             if len(domain) == 1:
                 continue
             duplicate_parties = cls.search(domain)
-            message = ''
+            messages = []
             for party in duplicate_parties:
                 if party.is_person:
-                    message += '%s %s %s \n' % (party.name, party.first_name,
-                        Pool().get('ir.date').date_as_string(party.birth_date))
-                elif party.is_company:
-                    message += '%s %s\n' % (party.name, party.short_name)
-            if message:
-                cls.raise_user_warning(message, 'duplicate_party', message)
+                    messages.append(
+                        '%s %s %s \n' % (party.name, party.first_name,
+                            Pool().get('ir.date').date_as_string(
+                                party.birth_date)))
+                else:
+                    messages.append('%s %s\n' % (party.name, party.short_name))
+            if messages:
+                cls.raise_user_warning('Duplicate Party', 'duplicate_party',
+                    ','.join(messages))
 
     @classmethod
     def validate(cls, parties):
