@@ -600,8 +600,9 @@ def relation_mixin(value_model, field, model, name):
         def read(cls, ids, fields_names=None):
             BaseModel = Pool().get(model)
             relation_fields_to_read = [fname for fname in fields_names
-                if isinstance(cls._fields[fname], tryton_fields.Function) and
-                fname in BaseModel._fields and not cls._fields[fname].getter]
+                if fname in cls._fields and isinstance(cls._fields[fname],
+                    tryton_fields.Function) and fname in BaseModel._fields
+                and not cls._fields[fname].getter]
             if relation_fields_to_read:
                 result = super(Mixin, cls).read(ids, list(set(fields_names) -
                         set(relation_fields_to_read)) + ['relation', 'values'])
