@@ -358,6 +358,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
             pool_get.assert_called_with(
                 'cog_utils.test_model_method_definition')
 
+        method.id = 10
+        with mock.patch.object(self.MethodDefinition, 'search') as search:
+            search.return_value = [method]
+            self.assertEqual(self.MethodDefinition.get_method(
+                    'cog_utils.test_model_method_definition', 'good_on'),
+                method)
+            search.assert_called_with([
+                    ('model.model', '=',
+                        'cog_utils.test_model_method_definition'),
+                    ('method_name', '=', 'good_on')])
+
     def test0050_export_import_key_not_unique(self):
         to_export = self.ExportTestTarget(char="sometext")
         to_export.save()

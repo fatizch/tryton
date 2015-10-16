@@ -13,6 +13,7 @@ from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.model import UnionMixin as TrytonUnionMixin, Unique
 from trytond.exceptions import UserError
 from trytond.pool import Pool, PoolMeta
+from trytond.cache import Cache
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction
 from trytond.rpc import RPC
@@ -703,10 +704,33 @@ class MethodDefinition(CoopSQL, CoopView):
         fields.Text('Code Preview'),
         'on_change_with_code_preview')
 
+    _get_method_cache = Cache('get_method')
+
     @classmethod
     def __setup__(cls):
         super(MethodDefinition, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_uniq', Unique(t, t.model, t.method_name),
+                'The method name must be unique for a given model!'),
+            ]
         cls._order = [('priority', 'ASC')]
+
+    @classmethod
+    def create(cls, vlist):
+        created = super(MethodDefinition, cls).create(vlist)
+        cls._get_method_cache.clear()
+        return created
+
+    @classmethod
+    def delete(cls, ids):
+        super(MethodDefinition, cls).delete(ids)
+        cls._get_method_cache.clear()
+
+    @classmethod
+    def write(cls, *args):
+        super(MethodDefinition, cls).write(*args)
+        cls._get_method_cache.clear()
 
     @fields.depends('method_name', 'model')
     def on_change_with_code_preview(self, name=None):
@@ -748,6 +772,17 @@ class MethodDefinition(CoopSQL, CoopView):
                 continue
             allowed_methods.append((elem, elem))
         return allowed_methods
+
+    @classmethod
+    def get_method(cls, model_name, method_name):
+        method_id = cls._get_method_cache.get((model_name, method_name),
+            default=-1)
+        if method_id != -1:
+            return cls(method_id)
+        instance = cls.search([('model.model', '=', model_name),
+                ('method_name', '=', method_name)])[0]
+        cls._get_method_cache.set((model_name, method_name), instance.id)
+        return instance
 
     def execute(self, caller, callees):
         method = getattr(Pool().get(self.model.model), self.method_name)
