@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<tree string="Fee Description">
-    <field name="name"/>
-    <field name="code"/>
-    <field name="current_rec_name"/>
-</tree>

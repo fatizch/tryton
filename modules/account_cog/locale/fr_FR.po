@@ -1,14 +1,6 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
-
-msgctxt "error:account.fee.description:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique"
-
-msgctxt "error:account.tax.description:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique"
 
 msgctxt "field:account.account,xml_id:"
 msgid "XML Id"
@@ -31,110 +23,6 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "field:account.configuration,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:account.fee.description,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:account.fee.description,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:account.fee.description,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:account.fee.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:account.fee.description,current_rec_name:"
-msgid "Current Value"
-msgstr "Valeur Courante"
-
-msgctxt "field:account.fee.description,description:"
-msgid "Description"
-msgstr "Description"
-
-msgctxt "field:account.fee.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:account.fee.description,name:"
-msgid "Fee Name"
-msgstr "Nom du Frais"
-
-msgctxt "field:account.fee.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:account.fee.description,versions:"
-msgid "Versions"
-msgstr "Versions"
-
-msgctxt "field:account.fee.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:account.fee.description,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:account.fee.description,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:account.fee.description.version,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:account.fee.description.version,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:account.fee.description.version,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:account.fee.description.version,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:account.fee.description.version,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:account.fee.description.version,kind:"
-msgid "Rating mode"
-msgstr "Type"
-
-msgctxt "field:account.fee.description.version,main_elem:"
-msgid "Descriptor"
-msgstr "Descripteur"
-
-msgctxt "field:account.fee.description.version,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:account.fee.description.version,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:account.fee.description.version,value:"
-msgid "Value"
-msgstr "Valeur"
-
-msgctxt "field:account.fee.description.version,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:account.fee.description.version,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:account.fee.description.version,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -259,110 +147,6 @@ msgctxt "field:account.tax.code.template,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:account.tax.description,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:account.tax.description,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:account.tax.description,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:account.tax.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:account.tax.description,current_rec_name:"
-msgid "Current Value"
-msgstr "Valeur Courante"
-
-msgctxt "field:account.tax.description,description:"
-msgid "Description"
-msgstr "Description"
-
-msgctxt "field:account.tax.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:account.tax.description,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:account.tax.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:account.tax.description,versions:"
-msgid "Versions"
-msgstr "Versions"
-
-msgctxt "field:account.tax.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:account.tax.description,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:account.tax.description,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:account.tax.description.version,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:account.tax.description.version,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:account.tax.description.version,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:account.tax.description.version,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:account.tax.description.version,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:account.tax.description.version,kind:"
-msgid "Rating mode"
-msgstr "Type"
-
-msgctxt "field:account.tax.description.version,main_elem:"
-msgid "Descriptor"
-msgstr "Descripteur"
-
-msgctxt "field:account.tax.description.version,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:account.tax.description.version,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:account.tax.description.version,value:"
-msgid "Value"
-msgstr "Valeur"
-
-msgctxt "field:account.tax.description.version,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:account.tax.description.version,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:account.tax.description.version,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
 msgctxt "field:account.tax.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -455,14 +239,6 @@ msgctxt "field:party.synthesis.menu.move.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "model:account.fee.description,name:"
-msgid "Fee Description"
-msgstr "Descripteur de Frais"
-
-msgctxt "model:account.fee.description.version,name:"
-msgid "Fee Description Version"
-msgstr "Version de Frais"
-
 msgctxt "model:account.journal,name:journal_split"
 msgid "Move Line Reconciliation Split Journal"
 msgstr "Journal des mouvements de découpage des lettrages"
@@ -470,14 +246,6 @@ msgstr "Journal des mouvements de découpage des lettrages"
 msgctxt "model:account.journal.type,name:journal_type_split"
 msgid "Split"
 msgstr "Découpage"
-
-msgctxt "model:account.tax.description,name:"
-msgid "Tax Description"
-msgstr "Descripteur de Taxe"
-
-msgctxt "model:account.tax.description.version,name:"
-msgid "Tax Version"
-msgstr "Version de Taxe"
 
 msgctxt "model:ir.action,name:act_fee_form"
 msgid "Fees"
@@ -539,14 +307,6 @@ msgctxt "model:party.synthesis.menu.move.line,name:"
 msgid "Party Synthesis Menu Move line"
 msgstr "Menu Paiement Synthèse Tiers "
 
-msgctxt "selection:account.fee.description.version,kind:"
-msgid "Flat"
-msgstr "Fixe"
-
-msgctxt "selection:account.fee.description.version,kind:"
-msgid "Rate"
-msgstr "Taux"
-
 msgctxt "selection:account.move,kind:"
 msgid ""
 msgstr " "
@@ -560,18 +320,6 @@ msgctxt ""
 "selection:account.open_third_party_balance.start,third_party_balance_option:"
 msgid "Only Unbalanced Party"
 msgstr "Seulement les tiers non balancés"
-
-msgctxt "selection:account.tax.description.version,kind:"
-msgid "Flat"
-msgstr "Fixe"
-
-msgctxt "selection:account.tax.description.version,kind:"
-msgid "Rate"
-msgstr "Taux"
-
-msgctxt "selection:account.tax.description.version,kind:"
-msgid "Rule"
-msgstr "Règle"
 
 msgctxt "selection:ir.test_case,fiscal_year_periods_frequency:"
 msgid "Half yearly"
@@ -588,14 +336,6 @@ msgstr "Trimestriel"
 msgctxt "selection:ir.test_case,fiscal_year_periods_frequency:"
 msgid "Yearly"
 msgstr "Annuel"
-
-msgctxt "view:account.fee.description.version:"
-msgid "Fee Description Version"
-msgstr "Version"
-
-msgctxt "view:account.fee.description:"
-msgid "Fee Description"
-msgstr "Descripteur de Frais"
 
 msgctxt "view:account.move.line:"
 msgid "Balance"
@@ -624,14 +364,6 @@ msgstr "Paiements"
 msgctxt "view:account.move.line:"
 msgid "Reconciliation"
 msgstr "Lettrage"
-
-msgctxt "view:account.tax.description.version:"
-msgid "Tax Description Version"
-msgstr "Version de Taxe"
-
-msgctxt "view:account.tax.description:"
-msgid "Tax Description"
-msgstr "Taxe"
 
 msgctxt "view:party.party:"
 msgid "Account"

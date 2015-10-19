@@ -138,26 +138,6 @@ class TestCaseModel:
         account_config.save()
 
     @classmethod
-    def create_tax_from_line(cls, tax_data):
-        translater = cls.get_translater(MODULE_NAME)
-        TaxDescription = Pool().get('account.tax.description')
-        TaxDescriptionVersion = Pool().get('account.tax.description.version')
-        tax = TaxDescription()
-        tax.code = tax_data[0]
-        tax.name = tax_data[1]
-        tax.description = tax_data[5]
-        version = TaxDescriptionVersion()
-        version.kind = tax_data[4]
-        version.value = Decimal(tax_data[3])
-        version.start_date = datetime.datetime.strptime(tax_data[2],
-            '%d/%m/%Y').date()
-        tax.versions = [version]
-        tax.account_for_billing = cls.create_account(translater(
-                'Account for %s') % tax.code,
-            'other', translater('Tax Account'))
-        return tax
-
-    @classmethod
     def tax_test_case(cls):
         cls.load_resources(MODULE_NAME)
         tax_file = cls.read_data_file('taxes', MODULE_NAME, ';')

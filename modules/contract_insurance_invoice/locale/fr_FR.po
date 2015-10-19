@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -29,10 +29,6 @@ msgstr "Le code doit être unique"
 msgctxt "field:account.fee,product:"
 msgid "Product"
 msgstr "Produit"
-
-msgctxt "field:account.fee.description,account_for_billing:"
-msgid "Account for billing"
-msgstr "Compte pour le quittancement"
 
 msgctxt "field:account.invoice,base_amount:"
 msgid "Base amount"
@@ -225,10 +221,6 @@ msgstr "Contrat"
 msgctxt "field:account.reconcile.show,remaining_repartition_method:"
 msgid "Remaining Repartition Method"
 msgstr "Répartition du reste"
-
-msgctxt "field:account.tax.description,tax:"
-msgid "Tax"
-msgstr "Taxe"
 
 msgctxt "field:contract,account_invoices:"
 msgid "Invoices"

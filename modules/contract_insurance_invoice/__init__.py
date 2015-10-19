@@ -35,8 +35,6 @@ def register():
         MoveLine,
         ReconcileShow,
         InvoiceLineDetail,
-        FeeDesc,
-        TaxDesc,
         InvoiceContractStart,
         CreateInvoiceContractBatch,
         PostInvoiceContractBatch,

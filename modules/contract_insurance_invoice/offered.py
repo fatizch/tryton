@@ -22,8 +22,6 @@ __all__ = [
     'BillingModePaymentTermRelation',
     'OptionDescription',
     'OptionDescriptionPremiumRule',
-    'FeeDesc',
-    'TaxDesc',
     'PaymentTerm',
     'PaymentTermLine',
     'PaymentTermLineRelativeDelta',
@@ -450,24 +448,3 @@ class OptionDescriptionPremiumRule:
                 continue
             line.frequency = new_frequency
             line.amount = line.amount / factor
-
-
-class FeeDesc:
-    __name__ = 'account.fee.description'
-
-    account_for_billing = fields.Many2One('account.account',
-        'Account for billing', domain=[
-            ('kind', '=', 'revenue'),
-            ('company', '=', Eval('context', {}).get('company'))],
-        required=True, ondelete='RESTRICT')
-
-    @classmethod
-    def _export_light(cls):
-        return (super(FeeDesc, cls)._export_light() |
-            set(['account_for_billing']))
-
-
-class TaxDesc:
-    __name__ = 'account.tax.description'
-
-    tax = fields.Many2One('account.tax', 'Tax', ondelete='RESTRICT')

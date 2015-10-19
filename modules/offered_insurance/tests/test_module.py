@@ -24,10 +24,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return {
             'Product': 'offered.product',
             'OptionDescription': 'offered.option.description',
-            'Tax': 'account.tax.description',
-            'TaxVersion': 'account.tax.description.version',
-            'Fee': 'account.fee.description',
-            'FeeVersion': 'account.fee.description.version',
             'Sequence': 'ir.sequence',
             'Lang': 'ir.lang',
             'ItemDesc': 'offered.item.description',
@@ -149,40 +145,6 @@ return True'''
                 res,
                 {'report': 'Test ... SUCCESS\n\nTest1 ... SUCCESS'})
 
-    def test0002_testTaxCreation(self):
-        def create_tax(code, amount):
-            tax_v = self.TaxVersion()
-            tax_v.kind = 'rate'
-            tax_v.value = Decimal(amount)
-            tax_v.start_date = datetime.date.today()
-            tax = self.Tax()
-            tax.name = 'Test Tax %s' % code
-            tax.code = code
-            tax.versions = [tax_v]
-            tax.save()
-            return tax
-
-        tax = create_tax('TT', 14)
-        self.assert_(tax.id)
-        tax = create_tax('TTA', 27)
-        self.assert_(tax.id)
-
-    def test0003_testFeeCreation(self):
-        def create_fee(code, amount):
-            fee_v = self.FeeVersion()
-            fee_v.kind = 'flat'
-            fee_v.value = Decimal(amount)
-            fee_v.start_date = datetime.date.today()
-            fee = self.Fee()
-            fee.name = 'Test Fee %s' % code
-            fee.code = code
-            fee.versions = [fee_v]
-            fee.save()
-            return fee
-
-        fee = create_fee('FEE', 20)
-        self.assert_(fee.id)
-
     def test0005_testItemDescCreation(self):
         item_desc = self.ItemDesc()
         item_desc.kind = 'person'
@@ -201,8 +163,6 @@ return True'''
 
     @test_framework.prepare_test(
         'offered_insurance.test0001_testFunctionalRuleCreation',
-        'offered_insurance.test0002_testTaxCreation',
-        'offered_insurance.test0003_testFeeCreation',
         'offered.test0001_testNumberGeneratorCreation',
         'offered_insurance.test0005_testItemDescCreation',
         'company_cog.test0001_testCompanyCreation',

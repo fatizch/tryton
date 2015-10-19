@@ -27,10 +27,6 @@
             <field name="name">Account Test Case</field>
             <field name="method_name">account_test_case</field>
         </record>
-        <record model="ir.test_case.instance" id="tax_test_case">
-            <field name="name">Tax Test Case</field>
-            <field name="method_name">tax_test_case</field>
-        </record>
         <record model="ir.test_case.instance" id="fiscal_year_test_case">
             <field name="name">Fiscal Year Test Case</field>
             <field name="method_name">fiscal_year_test_case</field>
@@ -54,10 +50,6 @@
         <record model="ir.test_case.instance-ir.test_case.instance" id="account_account_kind_requirement">
             <field name="child" ref="account_kind_test_case"/>
             <field name="parent" ref="account_test_case"/>
-        </record>
-        <record model="ir.test_case.instance-ir.test_case.instance" id="tax_account_kind_requirement">
-            <field name="child" ref="account_kind_test_case"/>
-            <field name="parent" ref="tax_test_case"/>
         </record>
         <record model="ir.test_case.instance-ir.test_case.instance" id="configuration_account_requirement">
             <field name="child" ref="account_test_case"/>

@@ -3,7 +3,6 @@ from trytond.pool import Pool
 from .account import *
 from .company import *
 from .tax import *
-from .fee import *
 from .test_case import *
 from .party import *
 from .move import *
@@ -24,17 +23,11 @@ def register():
         Configuration,
         # From company
         Company,
-        # From tax
-        TaxDescription,
-        TaxDescriptionVersion,
         Tax,
         TaxTemplate,
         TaxCodeTemplate,
         TaxCode,
         TaxGroup,
-        # From fee
-        FeeDescription,
-        FeeDescriptionVersion,
         # From test_case
         TestCaseModel,
         Party,
