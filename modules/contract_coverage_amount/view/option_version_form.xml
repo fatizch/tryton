@@ -3,6 +3,9 @@
     <xpath expr="/form" position="inside">
         <newline/>
         <label name="coverage_amount"/>
-        <field name="coverage_amount"/>
+        <group id="amount">
+            <field name="coverage_amount" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+        </group>
     </xpath>
 </data>

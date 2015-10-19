@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -632,7 +632,7 @@ msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:contract.option.version,extra_data_as_string:"
-msgid "Extra Data as String"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:contract.option.version,id:"

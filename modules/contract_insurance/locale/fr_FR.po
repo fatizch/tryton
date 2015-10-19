@@ -330,7 +330,7 @@ msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:contract.covered_element.version,extra_data_as_string:"
-msgid "Extra Data as String"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:contract.covered_element.version,id:"

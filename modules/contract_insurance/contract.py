@@ -1213,7 +1213,7 @@ class CoveredElementVersion(model.CoopSQL, model.CoopView):
             },
         depends=['extra_data'])
     extra_data_as_string = fields.Function(
-        fields.Char('Extra Data as String'),
+        fields.Char('Extra Data'),
         'on_change_with_extra_data_as_string')
     extra_data_string = extra_data.translated('extra_data')
 
