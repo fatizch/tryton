@@ -14,7 +14,7 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
     __name__ = 'distribution.network'
     _func_key = 'code'
 
-    name = fields.Char('Name')
+    name = fields.Char('Name', translate=True)
     code = fields.Char('Code')
     full_name = fields.Function(
         fields.Char('Name'),

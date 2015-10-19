@@ -13,9 +13,9 @@ class ExclusionKind(model.CoopSQL, model.CoopView):
 
     __name__ = 'offered.exclusion'
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
-    text = fields.Text('Text')
+    text = fields.Text('Text', translate=True)
 
     @classmethod
     def __setup__(cls):

@@ -16,7 +16,7 @@ class Package(model.CoopSQL, model.CoopView):
     _func_key = 'code'
 
     code = fields.Char('Code', required=True)
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     options = fields.Many2Many('offered.package-option.description',
         'package', 'option', 'Options')
 

@@ -616,7 +616,7 @@ class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
     _rec_name = 'package_name'
 
     code = fields.Char('Code')
-    package_name = fields.Char('Package Name', required=True)
+    package_name = fields.Char('Package Name', required=True, translate=True)
     instances_to_export = fields.One2Many('ir.export_package.item', 'package',
         'Instances to export')
 
@@ -664,7 +664,7 @@ class ExportConfiguration(ModelSQL, ModelView, ExportImportMixin):
     __name__ = 'ir.export.configuration'
     _func_key = 'code'
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     models_configuration = fields.Many2Many(
         'ir.export_configuration-export_model', 'configuration', 'model',
@@ -707,7 +707,7 @@ class ExportModelConfiguration(ModelSQL, ModelView, ExportImportMixin):
     'Export Model Configuration'
     __name__ = 'ir.export.configuration.model'
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     model = fields.Function(fields.Many2One('ir.model', 'Model',
             required=True),

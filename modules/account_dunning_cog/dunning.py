@@ -45,7 +45,7 @@ class Dunning(export.ExportImportMixin):
 class Level(export.ExportImportMixin):
     __name__ = 'account.dunning.level'
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     event_log_type = fields.Many2One('event.type', 'Event Log Type',
         ondelete='RESTRICT')
     days_from_previous_step = fields.Boolean('Days Defined From Previous Step',

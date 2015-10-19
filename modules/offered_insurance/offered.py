@@ -128,7 +128,7 @@ class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
     _func_key = 'code'
 
     code = fields.Char('Code', required=True)
-    name = fields.Char('Name')
+    name = fields.Char('Name', translate=True)
     extra_data_def = fields.Many2Many(
         'offered.item.description-extra_data',
         'item_desc', 'extra_data_def', 'Extra Data',

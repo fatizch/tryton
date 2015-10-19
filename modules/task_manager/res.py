@@ -111,7 +111,7 @@ class Team(model.CoopSQL, model.CoopView):
 
     __name__ = 'res.team'
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     users = fields.Many2Many('res.user-res.team', 'team', 'user', 'Users')
     users_links = fields.One2Many('res.user-res.team', 'team', 'Users',

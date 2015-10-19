@@ -71,7 +71,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
     __name__ = 'table'
     _func_key = 'code'
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     type_ = fields.Selection(TYPE, 'Type', required=True, sort=False)
     type_string = type_.translated('type_')
@@ -361,7 +361,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
 
     __name__ = 'table.dimension.value'
 
-    name = fields.Char('Name', select=True)
+    name = fields.Char('Name', select=True, translate=True)
     sequence = fields.Integer('Sequence',
         states={
             'invisible': Eval('dimension_order') == 'alpha',

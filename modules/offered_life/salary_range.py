@@ -16,7 +16,7 @@ class SalaryRange(CoopSQL, VersionedObject):
     __name__ = 'salary_range'
 
     code = fields.Char('Code', required=True)
-    name = fields.Char('Name')
+    name = fields.Char('Name', translate=True)
     floor = fields.Function(fields.Numeric('Current Floor'), 'get_floor')
     ceiling = fields.Function(fields.Numeric('Current Ceiling'), 'get_ceiling')
 

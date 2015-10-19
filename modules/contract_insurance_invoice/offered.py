@@ -57,7 +57,7 @@ class BillingMode(model.CoopSQL, model.CoopView):
     __name__ = 'offered.billing_mode'
     _func_key = 'code'
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     frequency = fields.Selection(FREQUENCIES, 'Invoice Frequency',
         required=True, sort=False)

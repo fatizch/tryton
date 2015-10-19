@@ -17,7 +17,7 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
     _func_key = 'code'
 
     active = fields.Boolean('Active')
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     is_discount = fields.Boolean('Is Discount')
     max_value = fields.Numeric('Max Value')

@@ -15,11 +15,11 @@ class Clause(model.CoopSQL, model.CoopView):
     _func_key = 'code'
 
     code = fields.Char('Code', required=True)
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     kind = fields.Selection([('specific', 'Specific')], 'Kind')
     kind_string = kind.translated('kind')
     customizable = fields.Boolean('Customizable')
-    content = fields.Text('Content')
+    content = fields.Text('Content', translate=True)
 
     @classmethod
     def __setup__(cls):

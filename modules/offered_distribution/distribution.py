@@ -68,9 +68,9 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
         'com_product', 'dist_network', 'Distribution Networks')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
-    description = fields.Text('Description')
+    description = fields.Text('Description', translate=True)
 
     @classmethod
     def copy(cls, products, default=None):

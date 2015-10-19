@@ -31,7 +31,7 @@ class CommissionRecoveryRule(model.CoopSQL, model.CoopView, RuleMixin):
     _func_key = 'code'
 
     code = fields.Char('Code', required=True)
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
 
     @classmethod
     def __setup__(cls):

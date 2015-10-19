@@ -18,7 +18,7 @@ class ExpenseKind(model.CoopSQL, model.CoopView):
             ], 'Kind')
     kind_string = kind.translated('kind')
     code = fields.Char('Code', required=True)
-    name = fields.Char('Name')
+    name = fields.Char('Name', translate=True)
     short_name = fields.Char('Short Name')
 
     @fields.depends('code', 'name')

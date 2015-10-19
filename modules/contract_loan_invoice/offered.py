@@ -54,7 +54,7 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
     __name__ = 'loan.average_premium_rule'
 
     code = fields.Char('Code', required=True)
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     use_default_rule = fields.Boolean('Use default Rule')
     default_fee_action = fields.Selection(FEE_ACTIONS, 'Default Fee Action',
         states={'invisible': ~Eval('use_default_rule')},
