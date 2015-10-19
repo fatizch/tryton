@@ -329,7 +329,7 @@ msgid "Options Required"
 msgstr "Options Requises"
 
 msgctxt "field:offered.option.description,products:"
-msgid "OptionDescriptions"
+msgid "Option Descriptions"
 msgstr "Garanties"
 
 msgctxt "field:offered.option.description,products_name:"
@@ -649,7 +649,7 @@ msgid "Contract Number Generator"
 msgstr "Générateur de N° de Contrat"
 
 msgctxt "field:offered.product,coverages:"
-msgid "OptionDescriptions"
+msgid "Option Descriptions"
 msgstr "Garanties"
 
 msgctxt "field:offered.product,create_date:"
@@ -945,7 +945,7 @@ msgid "Offered Configuration"
 msgstr "Administration produit"
 
 msgctxt "model:ir.action,name:act_coverage_form"
-msgid "OptionDescriptions"
+msgid "Option Descriptions"
 msgstr "Garanties"
 
 msgctxt "model:ir.action,name:act_model_extra_data"
@@ -973,7 +973,7 @@ msgid "Contract Configuration"
 msgstr "Configuration Contrat"
 
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
-msgid "OptionDescriptions"
+msgid "Option Descriptions"
 msgstr "Garanties"
 
 msgctxt "model:ir.ui.menu,name:menu_model_extra_data"
@@ -1257,7 +1257,7 @@ msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "view:offered.product:"
-msgid "OptionDescriptions"
+msgid "Option Descriptions"
 msgstr "Garanties"
 
 msgctxt "view:offered.product:"

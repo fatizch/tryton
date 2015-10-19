@@ -284,7 +284,7 @@ class Product(model.CoopSQL, Offered):
     _func_key = 'code'
 
     coverages = fields.Many2Many('offered.product-option.description',
-        'product', 'coverage', 'OptionDescriptions', domain=[
+        'product', 'coverage', 'Option Descriptions', domain=[
             ('currency', '=', Eval('currency')),
             ('company', '=', Eval('company')),
             ], depends=['currency', 'company'],
@@ -546,7 +546,7 @@ class OptionDescription(model.CoopSQL, Offered):
             ('id', 'not in', Eval('options_required')),
             ], depends=['id', 'options_required'])
     products = fields.Many2Many('offered.product-option.description',
-        'coverage', 'product', 'OptionDescriptions', domain=[
+        'coverage', 'product', 'Products', domain=[
             ('currency', '=', Eval('currency')),
             ('company', '=', Eval('company')),
             ], depends=['currency', 'company'])

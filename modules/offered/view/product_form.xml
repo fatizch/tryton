@@ -9,7 +9,7 @@
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='managers']" position="before">
-        <page string="OptionDescriptions" id="option">
+        <page string="Option Descriptions" id="option">
             <label name="change_coverages_order"/>
             <field name="change_coverages_order"/>
             <newline/>
