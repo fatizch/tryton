@@ -3,7 +3,8 @@ from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 from trytond.rpc import RPC
 
-from trytond.modules.cog_utils import fields, utils
+from trytond.modules.cog_utils import fields, utils, model
+from trytond.modules.currency_cog import ModelCurrency
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -40,6 +41,7 @@ class ContractOption:
                     Eval('free_coverage_amount')),
                 'required': (Eval('contract_status') == 'active') & Bool(
                     Eval('has_coverage_amount')),
+                'readonly': Eval('contract_status') == 'active',
             },
             depends=['has_coverage_amount', 'free_coverage_amount',
                 'contract_status']),
@@ -52,6 +54,7 @@ class ContractOption:
                 'required': ((Eval('contract_status') == 'active') &
                     Bool(Eval('has_coverage_amount')) & ~(
                     Eval('free_coverage_amount'))),
+                'readonly': Eval('contract_status') == 'active',
                 },
             depends=['free_coverage_amount', 'contract_status',
                 'has_coverage_amount'],
@@ -146,7 +149,7 @@ class ContractOption:
         return self.coverage.coverage_amount_rules[0].free_input
 
 
-class ContractOptionVersion:
+class ContractOptionVersion(model.CoopSQL, model.CoopView, ModelCurrency):
     __name__ = 'contract.option.version'
 
     coverage_amount = fields.Numeric('Coverage Amount',
@@ -155,3 +158,6 @@ class ContractOptionVersion:
                 'has_coverage_amount', False)
             },
         depends=['option'])
+
+    def get_currency(self):
+        return self.option.currency
