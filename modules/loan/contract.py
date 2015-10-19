@@ -512,6 +512,12 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
 class OptionSubscription:
     __name__ = 'contract.wizard.option_subscription'
 
+    def default_options_displayer(self, values):
+        res = super(OptionSubscription, self).default_options_displayer(values)
+        contract = self.get_contract()
+        res['is_loan'] = contract.is_loan if contract else False
+        return res
+
     @classmethod
     def init_default_childs(cls, contract, coverage, option, parent_dict):
         res = super(OptionSubscription, cls).init_default_childs(contract,
@@ -548,7 +554,17 @@ class OptionSubscription:
 class OptionsDisplayer:
     __name__ = 'contract.wizard.option_subscription.options_displayer'
 
-    default_share = fields.Numeric('Default Loan Share', digits=(16, 4))
+    is_loan = fields.Boolean('Is Loan')
+    default_share = fields.Numeric('Default Loan Share', digits=(16, 4),
+        states={'invisible': ~Eval('is_loan')})
+
+    @classmethod
+    def view_attributes(cls):
+        return super(OptionsDisplayer, cls).view_attributes() + [(
+                '//label[@id="percent"]',
+                'states',
+                {'invisible': ~Eval('is_loan')}
+                )]
 
     @fields.depends('default_share', 'options')
     def on_change_default_share(self):
@@ -575,7 +591,10 @@ class WizardOption:
     __name__ = 'contract.wizard.option_subscription.options_displayer.option'
 
     share = fields.Numeric('Loan Share', digits=(16, 4),
-        states={'readonly': ~Eval('loan')})
+        states={
+            'readonly': ~Eval('loan'),
+            'invisible': ~Eval('_parent_displayer', {}).get('is_loan'),
+            })
     loan = fields.Many2One('loan', 'Loan')
     order = fields.Integer('Order')
 

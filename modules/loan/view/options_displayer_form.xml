@@ -6,5 +6,8 @@
             <field name="default_share" factor="100" xexpand="0"/>
             <label string="%" id="percent" xexpand="0" xalign="0"/>
         </group>
+        <newline/>
+        <field name="is_loan" invisible="1"/>
+        <newline/>
     </xpath>
 </data>
