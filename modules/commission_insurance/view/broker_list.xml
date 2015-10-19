@@ -4,7 +4,6 @@
     <field name="broker_code"/>
     <field name="short_name"/>
     <field name="name"/>
-    <field name="siren"/>
     <field name="negative_payable_today" icon="payable_today_icon"/>
     <field name="is_broker"/>
 </tree>
