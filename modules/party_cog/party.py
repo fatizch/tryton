@@ -15,6 +15,7 @@ from sql.conditionals import Coalesce
 from trytond.model import Unique
 from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
+from trytond.tools import grouped_slice
 
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
@@ -454,8 +455,39 @@ class Party(export.ExportImportMixin):
             ).replace(microsecond=0)
 
     @classmethod
+    def get_identifier(cls, parties, names):
+        cursor = Transaction().cursor
+        pool = Pool()
+        Identifier = pool.get('party.identifier')
+        identifier = Identifier.__table__()
+        values = {}
+        for name in names:
+            values[name] = {x.id: None for x in parties}
+        for party_slice in grouped_slice(parties):
+            query = identifier.select(
+                identifier.party,
+                identifier.type,
+                identifier.code,
+                where=(
+                    identifier.type.in_(names)
+                    & identifier.party.in_([x.id for x in party_slice])
+                    )
+                )
+            cursor.execute(*query)
+            for elem in cursor.dictfetchall():
+                values[elem['type']][elem['party']] = elem['code']
+        return values
+
+    @classmethod
     def search_main_address(cls, name, clause):
         return [('addresses.rec_name', ) + tuple(clause[1:])]
+
+    @classmethod
+    def search_identifier(cls, name, clause):
+        return [
+            ('identifiers.code',) + tuple(clause[1:]),
+            ('identifiers.type', '=', name),
+            ]
 
     @classmethod
     def default_lang(cls):

@@ -1,0 +1,27 @@
+from trytond.pool import PoolMeta
+from trytond.pyson import Eval
+
+from trytond.modules.cog_utils import fields
+
+__metaclass__ = PoolMeta
+__all__ = [
+    'Party',
+    'PartyIdentifier',
+    ]
+
+
+class Party:
+    __name__ = 'party.party'
+
+    orias = fields.Function(
+        fields.Char('ORIAS', states={'invisible': ~Eval('is_broker')},
+            depends=['is_broker']),
+        'get_identifier', searcher='search_identifier')
+
+
+class PartyIdentifier:
+    __name__ = 'party.identifier'
+
+    @classmethod
+    def get_types(cls):
+        return super(PartyIdentifier, cls).get_types() + [('orias', 'ORIAS')]

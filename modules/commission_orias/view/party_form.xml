@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="//group[@id='company']" position="inside">
+        <label name="orias"/>
+        <field name="orias"/>
+    </xpath>
+</data>
