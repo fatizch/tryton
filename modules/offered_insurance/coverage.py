@@ -27,6 +27,7 @@ class OptionDescription:
         states={'required': ~Eval('is_service')}, ondelete='RESTRICT',
         depends=['is_service'])
     family = fields.Selection([('generic', 'Generic')], 'Family')
+    family_string = family.translated('family')
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         ondelete='RESTRICT', states={'required': ~Eval('is_service')},
         depends=['is_service'], select=True)
