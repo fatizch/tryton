@@ -41,14 +41,19 @@ class ModuleTestCase(test_framework.CoopTestCase):
         covered_element.is_person = True
         covered_element.options = []
         covered_element.sub_covered_elements = []
+
+        covered_version = Mock()
+        covered_version.start = datetime.date(2014, 12, 31)
+        covered_element.versions = [covered_version]
+
         contract.covered_elements = []
         contract.covered_elements.append(covered_element)
 
         dates = product.get_dates(contract)
         dates = sorted(list(set(dates)))
         self.assertEqual(dates, [datetime.date(2014, 03, 01),
-                datetime.date(2014, 10, 21), datetime.date(2015, 10, 21),
-                datetime.date(2016, 10, 21)])
+                datetime.date(2014, 10, 21), datetime.date(2014, 12, 31),
+                datetime.date(2015, 10, 21), datetime.date(2016, 10, 21)])
 
 
 def suite():
