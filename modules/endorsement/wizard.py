@@ -653,8 +653,8 @@ class ManageOptions(EndorsementWizardStepMixin):
         self.new_coverage = None
         current_coverages = {
             x.coverage for x in self.current_options
-            if x.start_date <= self.effective_date
-            and x.action != 'void'
+            if x.action != 'void'
+            and x.start_date <= self.effective_date
             and (not x.end_date or x.end_date >= self.effective_date)}
         exclusions = set(sum([
                     list(x.options_excluded) for x in current_coverages], []))
@@ -830,10 +830,11 @@ class ManageOptions(EndorsementWizardStepMixin):
             for idx, option in enumerate(sorted(options,
                         key=lambda x: x.manual_start_date or x.start_date)):
                 save_values = option._save_values
-                if not save_values and self.effective_date > (
-                        getattr(option, 'manual_end_date',
-                            getattr(option, 'end_date', None))
-                        or datetime.date.max):
+                if not save_values and (self.effective_date > (
+                            getattr(option, 'manual_end_date',
+                                getattr(option, 'end_date', None))
+                            or datetime.date.max)
+                        or getattr(option, 'status', '') == 'void'):
                     continue
                 displayer = Displayer.new_displayer(option,
                     self.effective_date)
@@ -913,8 +914,13 @@ class OptionDisplayer(model.CoopView):
     action = fields.Selection(OPTION_ACTIONS, 'Action',
         domain=[If(Eval('action') == 'modified',
                 ('action', 'in', ('modified', 'nothing')),
-                If(Eval('action') == 'added', ('action', '=', 'added'),
-                    ('action', 'not in', ('added', 'modified'))))])
+                If(Eval('action') == 'added',
+                    ('action', '=', 'added'),
+                    If(Eval('start_date') == Eval('effective_date'),
+                        ('action', 'not in',
+                            ('added', 'modified', 'terminated')),
+                        ('action', 'not in', ('added', 'modified')))))],
+        depends=['action', 'effective_date', 'start_date'])
     coverage_id = fields.Integer('Coverage Id', readonly=True)
     parent = fields.Char('Parent Reference', readonly=True)
     parent_rec_name = fields.Char('Parent', readonly=True)
