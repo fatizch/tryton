@@ -306,7 +306,12 @@ class Payment(export.ExportImportMixin, Printable):
                     actions['fail_%s' % action[0]].extend(payments_list)
 
         for action, payments in actions.iteritems():
+            if action == 'fail_print':
+                # treat print at the end once all action are done
+                continue
             getattr(cls, action)(payments)
+        if 'fail_print' in actions:
+            getattr(cls, 'fail_print')(actions['fail_print'])
 
     @classmethod
     def fail_manual(cls, payments):
