@@ -218,6 +218,8 @@ New Endorsement::
 
 Test options restauration::
 
+    >>> good_endorsement.state = 'draft'
+    >>> good_endorsement.save()
     >>> Endorsement.apply([good_endorsement.id], config._context)
     >>> contract = Contract(contract.id)
     >>> Option.delete([contract.options[0]])

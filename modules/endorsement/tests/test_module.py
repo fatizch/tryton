@@ -302,12 +302,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
         contract = endorsement.contracts[0]
         self.assertEqual(endorsement.state, 'canceled')
         self.assertEqual(contract.contract_number, previous_contract_number)
-        endorsement.in_progress([endorsement])
-        Transaction().cursor.commit()
-        endorsement.draft([endorsement])
+
+        # Canceled state is final (no outgoing transition), force it to 'draft'
+        # to keep on testing
+        endorsement.state = 'draft'
+        endorsement.save()
         Transaction().cursor.commit()
 
-        self.assertEqual(endorsement.state, 'draft')
         self.assertEqual(endorsement.rollback_date, None)
         endorsement.in_progress([endorsement])
         Transaction().cursor.commit()
@@ -320,7 +321,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
             [contract])
         endorsement.cancel([endorsement])
         Transaction().cursor.commit()
+
+        endorsement.state = 'draft'
+        endorsement.save()
         endorsement.in_progress([endorsement])
+        Transaction().cursor.commit()
+
         contract.revert_current_endorsement([contract])
 
         # revert_current_endorsement deletes the current "in_progress"
