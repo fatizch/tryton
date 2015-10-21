@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.cog_utils import fields, coop_string, export
@@ -62,7 +63,9 @@ class PartyRelation(export.ExportImportMixin):
                 ]
 
     def get_rec_name(self, name):
-        return '%s to %s' % (self.type.name, self.to.rec_name)
+        if self.type and self.to:
+            return '%s %s %s' % (self.type.name, u'→', self.to.rec_name)
+        return ''
 
 
 class PartyRelationAll(PartyRelation):
