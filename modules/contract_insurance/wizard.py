@@ -45,7 +45,8 @@ class OptionSubscription:
         if covered_element:
             res = self.init_default_options(contract, covered_element.options)
             res['covered_element'] = covered_element.id
-            res['party'] = covered_element.party.id
+            res['party'] = (covered_element.party.id
+                if covered_element.party else None)
             res['hide_covered_element'] = True
         else:
             res = {}
