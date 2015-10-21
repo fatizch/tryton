@@ -476,6 +476,17 @@ class Agent(export.ExportImportMixin):
                 party_code, plan_code = clause[2].split('|')
                 return [('party.code', clause[1], party_code),
                     ('plan.code', clause[1], plan_code)]
+            elif len(operands) == 3:
+                party_code, plan_code, product_code = clause[2].split('|')
+                domain = []
+                if party_code:
+                    domain.append(('party.code', clause[1], party_code))
+                if plan_code:
+                    domain.append(('plan.code', clause[1], plan_code))
+                if product_code:
+                    domain.append(('plan.commissioned_products.code', clause[1],
+                        product_code))
+                return domain
             else:
                 return [('id', '=', None)]
         else:
