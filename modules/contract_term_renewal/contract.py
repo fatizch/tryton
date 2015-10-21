@@ -95,8 +95,6 @@ class Contract:
     def renew(cls, contracts):
         pool = Pool()
         Event = pool.get('event')
-        ActivationHistory = pool.get('contract.activation_history')
-        new_activation_histories = []
         renewed_contracts = []
         for contract in list(contracts):
             if contract.activation_history[-1].final_renewal:
@@ -107,17 +105,20 @@ class Contract:
             new_start_date = contract.end_date + relativedelta(days=1)
             if contract.activation_history[-1].start_date == new_start_date:
                 continue
+            contract.do_renew(new_start_date)
             renewed_contracts.append(contract)
-            new_act_history = ActivationHistory(contract=contract,
-                start_date=new_start_date)
-            contract.activation_history = list(contract.activation_history
-                ) + [new_act_history]
-            new_act_history.end_date = \
-                contract.get_end_date_from_given_start_date(new_start_date)
-            new_activation_histories.append(new_act_history)
-        ActivationHistory.save(new_activation_histories)
+        cls.save(renewed_contracts)
         Event.notify_events(renewed_contracts, 'renew_contract')
         return renewed_contracts
+
+    def do_renew(self, new_start_date):
+        ActivationHistory = Pool().get('contract.activation_history')
+        new_act_history = ActivationHistory(contract=self,
+            start_date=new_start_date)
+        self.activation_history = list(self.activation_history
+            ) + [new_act_history]
+        new_act_history.end_date = self.get_end_date_from_given_start_date(
+            new_start_date)
 
     @classmethod
     def decline_renewal(cls, contracts, reason):

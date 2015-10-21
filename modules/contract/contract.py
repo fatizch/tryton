@@ -1833,6 +1833,19 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         self.versions = list(self.versions)
         return current_version
 
+    def new_version_at_date(self, at_date):
+        # Should be merged with update_current_version?
+        Version = Pool().get('contract.option.version')
+        prev_version = self.get_version_at_date(at_date)
+        if prev_version.start == at_date:
+            return prev_version
+        version = Version(**Version.get_default_version())
+        version.start = at_date
+        version.extra_data = self.recalculate_extra_data(
+            prev_version.extra_data)
+        self.versions = list(self.versions) + [version]
+        return version
+
     def recalculate_extra_data(self, extra_data):
         if not self.coverage or not self.product:
             return {}
