@@ -253,6 +253,8 @@ class OptionDescriptionPremiumRule:
         # there is a new share for the same loan
         if rule_dict['_rated_instance'].__name__ == 'loan.share':
             share = rule_dict['_rated_instance']
+            if share.start_date and share.start_date > date:
+                return []
             shares = [x for x in share.option.loan_shares
                 if x.loan == share.loan and x.start_date and x.start_date > (
                     share.start_date or datetime.date.min)]
