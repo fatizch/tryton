@@ -5,8 +5,9 @@ Contract Start Date Endorsement Scenario
 Imports::
 
     >>> import datetime
-    >>> from proteus import config, Model, Wizard
+    >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
+    >>> from proteus import config, Model, Wizard
 
 Init Database::
 
@@ -256,10 +257,11 @@ Test invoicing::
 
     >>> Contract.first_invoice([contract.id], config.context)
     >>> all_invoices = ContractInvoice.find([('contract', '=', contract.id)])
-    >>> len(all_invoices)
-    2
-    >>> first_invoice, = ContractInvoice.find([('contract', '=', contract.id),
-    ...         ('invoice.state', '=', 'validated')])
+    >>> len(all_invoices) == 2 + relativedelta(datetime.date.today(),
+    ...     contract.start_date).years
+    True
+    >>> first_invoice = ContractInvoice.find([('contract', '=', contract.id),
+    ...         ('invoice.state', '=', 'validated')])[1]
     >>> first_invoice.invoice.total_amount
     Decimal('297.81')
     >>> [(x.rec_name, x.unit_price, x.coverage_start, x.coverage_end)
@@ -272,14 +274,15 @@ Test invoicing::
     ...         datetime.date(2014, 5, 20), datetime.date(2015, 4, 9))]
     True
     >>> Contract.first_invoice([contract.id], config.context)
-    >>> second_invoice, = ContractInvoice.find([('contract', '=', contract.id),
-    ...             ('invoice.state', '=', 'validated')])
+    >>> second_invoice = ContractInvoice.find([('contract', '=', contract.id),
+    ...             ('invoice.state', '=', 'validated')])[0]
     >>> AccountInvoice.post([second_invoice.invoice.id], config.context)
     >>> second_invoice.invoice.state
     u'posted'
     >>> Contract.first_invoice([contract.id], config.context)
     >>> all_invoices = ContractInvoice.find([('contract', '=', contract.id)])
-    >>> len(all_invoices) == 3
+    >>> len(all_invoices) == 3 + relativedelta(datetime.date.today(),
+    ...     contract.start_date).years
     True
     >>> all_invoices[0].invoice.total_amount
     Decimal('800.00')

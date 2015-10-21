@@ -1,8 +1,9 @@
 # #Title# #Contract Start Date Endorsement Scenario
 # #Comment# #Imports
 import datetime
-from proteus import config, Model, Wizard
+from dateutil.relativedelta import relativedelta
 from decimal import Decimal
+from proteus import config, Model, Wizard
 
 # #Comment# #Init Database
 config = config.set_trytond()
@@ -246,11 +247,13 @@ all_invoices[0].invoice.state
 # #Comment# #Test invoicing
 Contract.first_invoice([contract.id], config.context)
 all_invoices = ContractInvoice.find([('contract', '=', contract.id)])
-len(all_invoices)
-# #Res# #2
+# 2 is for : non periodic invoice + a one year difference means two invoices
+len(all_invoices) == 2 + relativedelta(datetime.date.today(),
+    contract.start_date).years
+# #Res# #True
 
-first_invoice, = ContractInvoice.find([('contract', '=', contract.id),
-        ('invoice.state', '=', 'validated')])
+first_invoice = ContractInvoice.find([('contract', '=', contract.id),
+        ('invoice.state', '=', 'validated')])[1]
 first_invoice.invoice.total_amount
 # #Res# #Decimal('297.81')
 [(x.rec_name, x.unit_price, x.coverage_start, x.coverage_end)
@@ -263,14 +266,17 @@ first_invoice.invoice.total_amount
         datetime.date(2014, 5, 20), datetime.date(2015, 4, 9))]
 # #Res# #True
 Contract.first_invoice([contract.id], config.context)
-second_invoice, = ContractInvoice.find([('contract', '=', contract.id),
-            ('invoice.state', '=', 'validated')])
+second_invoice = ContractInvoice.find([('contract', '=', contract.id),
+            ('invoice.state', '=', 'validated')])[0]
 AccountInvoice.post([second_invoice.invoice.id], config.context)
 second_invoice.invoice.state
 # #Res# #u'posted'
 Contract.first_invoice([contract.id], config.context)
 all_invoices = ContractInvoice.find([('contract', '=', contract.id)])
-len(all_invoices) == 3
+# 3 is for : non periodic invoice + a one year difference means two invoices +
+# one of the two was posted, so recalling first_invoice canceled it
+len(all_invoices) == 3 + relativedelta(datetime.date.today(),
+    contract.start_date).years
 # #Res# #True
 all_invoices[0].invoice.total_amount
 # #Res# #Decimal('800.00')

@@ -718,44 +718,40 @@ class Contract:
             lines.extend(premium.get_invoice_lines(start, end))
         return lines
 
-    def get_rebill_end_date(self, start_date):
-        return self.end_date or start_date
+    def get_rebill_end_date(self):
+        return self.end_date
 
-    def get_rebill_post_end(self, start_date):
+    def get_rebill_post_end(self, rebill_end):
         ContractInvoice = Pool().get('contract.invoice')
         last_posted = ContractInvoice.search([
                 ('contract', '=', self.id),
-                ('end', '>=', start_date),
+                ('end', '>=', rebill_end),
                 ('invoice_state', 'not in', ('cancel', 'draft', 'validated')),
                 ], order=[('start', 'DESC')], limit=1)
-        return last_posted[0].start if last_posted else datetime.date.min
+        return last_posted[0].start if last_posted else utils.today()
 
-    def rebill(self, at_date=None):
+    def rebill(self, start, end=None, post_end=None):
         pool = Pool()
         Invoice = pool.get('account.invoice')
 
-        if at_date is None:
-            at_date = datetime.date.min
-
-        # Recalculate prices
-        self.calculate_prices([self], at_date)
-
         # Store the end date of the last invoice to be able to know up til when
         # we should rebill
-        rebill_end = self.get_rebill_end_date(at_date)
+        rebill_end = end or self.get_rebill_end_date() or utils.today()
 
         # Calculate the date until which we will repost invoices
-        post_end = self.get_rebill_post_end(at_date)
+        post_end = post_end or self.get_rebill_post_end(
+            rebill_end) or utils.today()
 
         # Delete or cancel overlapping invoices
-        self.clean_up_contract_invoices([self], from_date=at_date)
+        self.clean_up_contract_invoices([self], from_date=start)
 
         # Rebill
-        if rebill_end:
-            self.invoice([self], rebill_end)
+        if not rebill_end:
+            return
+        self.invoice([self], rebill_end)
 
         # Post
-        if post_end < at_date:
+        if not post_end:
             return
         invoices_to_post = Invoice.search([
                 ('contract', '=', self.id),
@@ -763,7 +759,6 @@ class Contract:
                 ('state', '=', 'validated')], order=[('start', 'ASC')])
         if invoices_to_post:
             Invoice.post(invoices_to_post)
-        self.reconcile()
 
     @classmethod
     def get_lines_to_reconcile(cls, contracts):
@@ -926,22 +921,27 @@ class Contract:
     @classmethod
     def terminate(cls, contracts, at_date, termination_reason):
         super(Contract, cls).terminate(contracts, at_date, termination_reason)
+        cls.calculate_prices(contracts, at_date)
         for contract in contracts:
             contract.rebill(at_date)
+        cls.reconcile(contracts)
 
     @classmethod
     def reactivate(cls, contracts):
         previous_dates = {x.id: x.end_date for x in contracts}
         super(Contract, cls).reactivate(contracts)
         for contract in contracts:
+            cls.calculate_prices([contract], previous_dates[contract.id])
             contract.rebill(previous_dates[contract.id])
-        cls.invoice(contracts, utils.today())
+        cls.reconcile(contracts)
 
     @classmethod
     def void(cls, contracts, void_reason):
         super(Contract, cls).void(contracts, void_reason)
+        cls.calculate_prices(contracts, datetime.date.min)
         for contract in contracts:
             contract.rebill(datetime.date.min)
+        cls.reconcile(contracts)
 
 
 class ContractFee:

@@ -291,7 +291,7 @@ Create Test Contract::
     >>> contract.save()
     >>> Wizard('contract.activate', models=[contract]).execute('apply')
     >>> Contract.first_invoice([contract.id], config.context)
-    >>> contract_invoice, = ContractInvoice.find([('contract', '=', contract.id)])
+    >>> contract_invoice = ContractInvoice.find([('contract', '=', contract.id)])[0]
     >>> contract_invoice.invoice.total_amount == Decimal('100')
     True
     >>> premium = contract.options[0].premiums[0]
@@ -301,7 +301,8 @@ Create Test Contract::
     ...         Decimal(1) / 100)
     ...     premium.save()
     ...     Contract.first_invoice([contract.id], config.context)
-    ...     contract_invoice, = ContractInvoice.find([('contract', '=', contract.id)])
+    ...     contract_invoice = ContractInvoice.find([('contract', '=', contract.id)])[
+    ...         0]
     ...     res.append(contract_invoice.invoice.total_amount == premium.amount)
     >>> all(res)
     True
