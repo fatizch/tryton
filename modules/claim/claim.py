@@ -199,7 +199,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             'readonly': True,
             })
     claimant = fields.Many2One('party.party', 'Claimant', ondelete='RESTRICT',
-        required=True)
+        required=True, select=True)
     losses = fields.One2Many('claim.loss', 'claim',
         'Losses', states={'readonly': Eval('status') == 'closed'},
         delete_missing=True)

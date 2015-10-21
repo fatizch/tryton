@@ -23,4 +23,9 @@ def register():
         PartyInteraction,
         OptionDescription,
         TestCaseModel,
+        SynthesisMenuClaim,
+        SynthesisMenu,
         module='claim', type_='model')
+    Pool.register(
+        SynthesisMenuOpen,
+        module='claim', type_='wizard')

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="claim_icon">
+            <field name="name">claim</field>
+            <field name="path">icons/claim.svg</field>
+        </record>
+    </data>
+</tryton>
+
