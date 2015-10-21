@@ -1280,6 +1280,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
             ModelClass.draft(endorsements_per_model[model_name])
             for value_endorsement in endorsements_per_model[model_name]:
                 value_endorsement.update_after_cancellation()
+        cls.run_methods(endorsements, 'draft')
 
     @classmethod
     @model.CoopView.button
@@ -1376,19 +1377,8 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                     })
         cls.write(endorsements, {'state': 'applied'})
 
-        # Force reload endorsement list
-        for idx, endorsement in enumerate(cls.browse(
-                    [x.id for x in endorsements])):
-            endorsements[idx] = endorsement
-        endorsements_per_model = cls.group_per_model(endorsements)
-        for model_name in cls.apply_order():
-            for endorsement in endorsements_per_model.get(model_name, []):
-                instance = endorsement.get_endorsed_record()
-                methods = endorsement.definition.get_methods_for_model(
-                    instance.__name__)
-                for method in methods:
-                    method.execute(endorsement, instance)
-                instance.save()
+        cls.run_methods(endorsements, 'apply')
+
         if not Transaction().context.get('will_be_rollbacked', False):
             Event.notify_events(endorsements, 'apply_endorsement')
 
@@ -1406,6 +1396,34 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                     for x in tmp_contracts])
             endorsement.effective_date = None
             endorsement.save()
+
+    @classmethod
+    def run_methods(cls, endorsements, kind):
+        Method = Pool().get('ir.model.method')
+        if kind == 'apply':
+            method_name = 'get_methods_for_model'
+        elif kind == 'draft':
+            method_name = 'get_draft_methods_for_model'
+        else:
+            raise NotImplementedError
+        # Force reload endorsement list
+        for idx, endorsement in enumerate(cls.browse(
+                    [x.id for x in endorsements])):
+            endorsements[idx] = endorsement
+        endorsements_per_model = cls.group_per_model(endorsements)
+        for model_name in cls.apply_order():
+            for endorsement in endorsements_per_model.get(model_name, []):
+                instance = endorsement.get_endorsed_record()
+                method_names = getattr(endorsement.definition, method_name)(
+                    instance.__name__)
+                methods = [Method.get_method(instance.__name__, x)
+                    for x in method_names]
+                if not methods:
+                    continue
+                methods.sort(key=lambda x: x.priority)
+                for method in methods:
+                    method.execute(endorsement, instance)
+                instance.save()
 
     @classmethod
     @model.CoopView.button_action('endorsement.act_decline_endorsement')

@@ -176,10 +176,6 @@
             <field name="endorsement_part" ref="stop_contract_revision_part"/>
             <field name="order">1</field>
         </record>
-        <record model="endorsement.part-method" id="terminate_contract_to_plan_termination">
-            <field name="method" ref="contract_plan_termination"/>
-            <field name="endorsement_part" ref="stop_contract_revision_part"/>
-        </record>
         <record model="endorsement.contract.field" id="status_date_contract_stop_field">
             <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'status')]"/>
             <field name="endorsement_part" ref="stop_contract_revision_part"/>

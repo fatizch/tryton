@@ -12,7 +12,6 @@ def register():
         EndorsementDefinition,
         EndorsementPart,
         EndorsementDefinitionPartRelation,
-        EndorsementPartMethodRelation,
         Product,
         EndorsementDefinitionProductRelation,
         Contract,

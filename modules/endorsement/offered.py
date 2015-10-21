@@ -15,7 +15,6 @@ __all__ = [
     'EndorsementDefinition',
     'EndorsementPart',
     'EndorsementDefinitionPartRelation',
-    'EndorsementPartMethodRelation',
     'EndorsementContractField',
     'EndorsementOptionField',
     'EndorsementOptionVersionField',
@@ -150,13 +149,17 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
         return [(k, v) for k, v in result.iteritems()] + [('', '')]
 
     def get_methods_for_model(self, model_name):
-        result = {}
+        method_names = set()
         for endorsement_part in self.endorsement_parts:
-            for method in endorsement_part.post_apply_actions:
-                if method.model.model != model_name:
-                    continue
-                result[method.method_name] = method
-        return sorted(result.values(), key=lambda x: x.priority)
+            method_names |= endorsement_part.get_methods_for_model(model_name)
+        return method_names
+
+    def get_draft_methods_for_model(self, model_name):
+        method_names = set()
+        for endorsement_part in self.endorsement_parts:
+            method_names |= endorsement_part.get_draft_methods_for_model(
+                model_name)
+        return method_names
 
 
 class EndorsementPart(model.CoopSQL, model.CoopView):
@@ -191,10 +194,6 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
             'invisible': Eval('kind', '') != 'option',
             }, depends=['kind'], delete_missing=True)
     view = fields.Selection('get_possible_views', 'View')
-    post_apply_actions = fields.Many2Many('endorsement.part-method',
-        'endorsement_part', 'method', 'Post Apply Actions',
-        domain=[('model', '=', Eval('endorsed_model', None))],
-        depends=['endorsed_model'])
     endorsed_model = fields.Function(
         fields.Many2One('ir.model', 'Endorsed Model'),
         'on_change_with_endorsed_model')
@@ -230,6 +229,20 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
         EndorsementWizard = Pool().get('endorsement.start', type='wizard')
         return [(k, v) for k, v in
             EndorsementWizard.get_endorsement_states().iteritems()]
+
+    def get_methods_for_model(self, model_name):
+        pool = Pool()
+        EndorsementStart = pool.get('endorsement.start', type='wizard')
+        possible_states = EndorsementStart.get_endorsement_states()
+        Target = pool.get(possible_states[self.view])
+        return Target.get_methods_for_model(model_name)
+
+    def get_draft_methods_for_model(self, model_name):
+        pool = Pool()
+        EndorsementStart = pool.get('endorsement.start', type='wizard')
+        possible_states = EndorsementStart.get_endorsement_states()
+        Target = pool.get(possible_states[self.view])
+        return Target.get_draft_methods_for_model(model_name)
 
     def clean_up(self, endorsement):
         # Cleans up the current endorsement of all data relative to the
@@ -274,17 +287,6 @@ class EndorsementDefinitionPartRelation(model.CoopSQL, model.CoopView):
     def __setup__(cls):
         super(EndorsementDefinitionPartRelation, cls).__setup__()
         cls._order.append(('order', 'ASC'))
-
-
-class EndorsementPartMethodRelation(model.CoopSQL):
-    'Endorsement Part Method Relation'
-
-    __name__ = 'endorsement.part-method'
-
-    endorsement_part = fields.Many2One('endorsement.part', 'Endorsement Part',
-        required=True, select=1, ondelete='CASCADE')
-    method = fields.Many2One('ir.model.method', 'Method', required=True,
-        select=1, ondelete='RESTRICT')
 
 
 class EndorsementContractField(field_mixin('contract'), model.CoopSQL,

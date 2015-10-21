@@ -120,6 +120,14 @@ class EndorsementWizardStepMixin(model.CoopView):
     def is_multi_instance(cls):
         return True
 
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        return set()
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        return set()
+
     @property
     def step_name(self):
         return self._step_name
@@ -430,6 +438,14 @@ class ChangeContractStartDate(EndorsementWizardStepMixin):
     @classmethod
     def allow_effective_date_before_contract(cls, select_screen):
         return True
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ChangeContractStartDate, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods.add('update_start_date')
+        return methods
 
     @classmethod
     def is_multi_instance(cls):
@@ -1073,10 +1089,6 @@ class TerminateContract(EndorsementWizardStepMixin):
         domain=[('status', '=', 'terminated')])
 
     @classmethod
-    def is_multi_instance(cls):
-        return False
-
-    @classmethod
     def __setup__(cls):
         super(TerminateContract, cls).__setup__()
         cls._error_messages.update({
@@ -1085,6 +1097,18 @@ class TerminateContract(EndorsementWizardStepMixin):
                 'termination_date_must_be_posterior': 'The termination date '
                 'must be posterior to the contract start date: %s',
                 })
+
+    @classmethod
+    def is_multi_instance(cls):
+        return False
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(TerminateContract, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods.add('plan_termination_or_terminate')
+        return methods
 
     def endorsement_values(self):
         return {'termination_reason': self.termination_reason.id}

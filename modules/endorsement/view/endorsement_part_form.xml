@@ -25,8 +25,5 @@
                 </page>
             </notebook>
         </page>
-        <page name="post_apply_actions">
-            <field name="post_apply_actions"/>
-        </page>
     </notebook>
 </form>
