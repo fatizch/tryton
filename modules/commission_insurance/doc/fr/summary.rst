@@ -12,3 +12,4 @@ l'assurance.
   commissionnement
 - Génération simplifiée des bordereaux des courtiers
 - Gestion des frais d'apporteur
+- Transfert de portefeuille

@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
+        <!-- ######### -->
+        <!-- # Agent # -->
+        <!-- ######### -->
         <record model="ir.ui.view" id="agent_view_form">
             <field name="model">commission.agent</field>
             <field name="type">form</field>
@@ -13,6 +16,9 @@
             <field name="inherit" ref="commission.agent_view_list"/>
             <field name="name">agent_list</field>
         </record>
+        <!-- ############# -->
+        <!-- # Plan Line # -->
+        <!-- ############# -->
         <record model="ir.ui.view" id="plan_line_view_form">
             <field name="model">commission.plan.line</field>
             <field name="inherit" ref="commission.plan_line_view_form"/>
@@ -23,6 +29,9 @@
             <field name="inherit" ref="commission.plan_line_view_list_sequence"/>
             <field name="name">plan_line_list_sequence</field>
         </record>
+        <!-- ############## -->
+        <!-- # Commission # -->
+        <!-- ############## -->
         <record model="ir.ui.view" id="commission_view_form">
             <field name="model">commission</field>
             <field name="type">form</field>
@@ -47,6 +56,9 @@
             <field name="domain" eval="[('type_', '=', 'in')]" pyson="1"/>
             <field name="act_window" ref="commission.act_commission_form"/>
         </record>
+        <!-- ######## -->
+        <!-- # Plan # -->
+        <!-- ######## -->
         <record model="ir.ui.view" id="plan_view_form">
             <field name="model">commission.plan</field>
             <field name="type">form</field>
@@ -67,6 +79,9 @@
             <field name="type">tree</field>
             <field name="name">plan_calculation_date_list</field>
         </record>
+        <!-- ################# -->
+        <!-- # Create Agents # -->
+        <!-- ################# -->
         <record model="ir.action.wizard" id="act_commission_create_agents">
             <field name="name">Create Agents</field>
             <field name="wiz_name">commission.create_agents</field>
@@ -82,11 +97,30 @@
             <field name="name">commission_create_agents_ask_form</field>
         </record>
         <menuitem parent="commission.menu_commission" action="act_commission_create_agents" id="menu_commission_create_agents" sequence="30"/>
+        <!-- ################## -->
+        <!-- # Create Invoice # -->
+        <!-- ################## -->
         <record model="ir.ui.view" id="commission_create_invoice_ask_view_form">
             <field name="model">commission.create_invoice.ask</field>
             <field name="type">form</field>
             <field name="inherit" ref="commission.commission_create_invoice_ask_view_form"/>
             <field name="name">commission_create_invoice_ask_form</field>
+        </record>
+        <!-- ################# -->
+        <!-- # Change Broker # -->
+        <!-- ################# -->
+        <record model="ir.action.wizard" id="act_change_broker">
+            <field name="name">Change Broker</field>
+            <field name="wiz_name">commission.change_broker</field>
+        </record>
+        <menuitem parent="commission.menu_commission" action="act_change_broker" id="menu_commission_change_broker" sequence="31"/>
+        <!-- ##################### -->
+        <!-- # Select New Broker # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="select_new_broker_view_form">
+            <field name="model">commission.change_broker.select_new_broker</field>
+            <field name="type">form</field>
+            <field name="name">select_new_broker_form</field>
         </record>
     </data>
 </tryton>

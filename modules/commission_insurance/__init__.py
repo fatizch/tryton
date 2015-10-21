@@ -24,6 +24,7 @@ def register():
         CreateAgentsParties,
         CreateAgentsAsk,
         CreateInvoiceAsk,
+        SelectNewBroker,
         Configuration,
         Fee,
         MoveLine,
@@ -33,4 +34,5 @@ def register():
     Pool.register(
         CreateInvoice,
         CreateAgents,
+        ChangeBroker,
         module='commission_insurance', type_='wizard')

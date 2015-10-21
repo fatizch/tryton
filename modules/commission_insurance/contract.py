@@ -1,7 +1,9 @@
+from collections import defaultdict
+
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
 
-from trytond.modules.cog_utils import fields, utils
+from trytond.modules.cog_utils import fields, utils, model
 from trytond.modules.contract import _STATES, _DEPENDS
 
 __all__ = [
@@ -118,3 +120,26 @@ class Contract:
     @fields.depends('broker_party')
     def on_change_with_agent(self):
         return utils.auto_complete_with_domain(self, 'agent')
+
+    @classmethod
+    def update_commission_lines(cls, contracts, new_broker, at_date,
+            update_contracts=False, agency=None):
+        pool = Pool()
+        Commission = pool.get('commission')
+        Agent = pool.get('commission.agent')
+        per_agent = defaultdict(list)
+        [per_agent[contract.agent].append(contract) for contract in contracts]
+
+        with model.error_manager():
+            agent_matches = Agent.find_matches(per_agent.keys(), new_broker)
+        for from_agent, to_agent in agent_matches.iteritems():
+            if update_contracts:
+                cls.write(per_agent[from_agent], {'agent': to_agent.id,
+                        'agency': agency})
+            Commission.modify_agent(Commission.search([
+                        ('commissioned_contract', 'in',
+                            per_agent[from_agent]),
+                        ('agent', '=', from_agent),
+                        ('origin.coverage_start', '>=', at_date,
+                            'account.invoice.line')]),
+                to_agent)

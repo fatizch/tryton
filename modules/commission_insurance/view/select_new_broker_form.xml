@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<form string="Select New Agent">
+    <label name="from_broker"/>
+    <field name="from_broker"/>
+    <newline/>
+    <label name="to_broker"/>
+    <field name="to_broker"/>
+    <label name="new_agency"/>
+    <field name="new_agency"/>
+    <newline/>
+    <label name="at_date"/>
+    <field name="at_date"/>
+    <label name="all_contracts"/>
+    <field name="all_contracts"/>
+    <field name="contracts" colspan="4"/>
+</form>

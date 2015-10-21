@@ -3,7 +3,7 @@ from decimal import Decimal
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Not, Or
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, coop_string
 from trytond.modules.rule_engine import RuleMixin
 
 __metaclass__ = PoolMeta
@@ -108,3 +108,14 @@ class Agent:
     def get_extra_data_summary(cls, agents, name):
         return Pool().get('extra_data').get_extra_data_summary(agents,
             'extra_data')
+
+    @classmethod
+    def format_hash(cls, hash_dict):
+        return super(Agent, cls).format_hash(hash_dict) + '\n' + \
+            coop_string.translate_label(cls, 'extra_data') + ' : ' + \
+            str(hash_dict['extra_data'])
+
+    def get_hash(self):
+        return super(Agent, self).get_hash() + (
+            ('extra_data', tuple([x for x in sorted(self.extra_data.items(),
+                            key=lambda x: x[0])])),)

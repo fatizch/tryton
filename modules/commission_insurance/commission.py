@@ -30,6 +30,8 @@ __all__ = [
     'CreateAgentsAsk',
     'CreateInvoice',
     'CreateInvoiceAsk',
+    'ChangeBroker',
+    'SelectNewBroker',
     ]
 __metaclass__ = PoolMeta
 
@@ -154,6 +156,27 @@ class Commission:
             conf = AccountConfiguration(1)
             invoice.payment_term = conf.commission_invoice_payment_term
         return invoice
+
+    @classmethod
+    def modify_agent(cls, commissions, new_agent):
+        assert new_agent
+        to_update, to_cancel = [], []
+        for commission in commissions:
+            if not commission.date:
+                to_update.append(commission)
+            else:
+                to_cancel.append(commission)
+        if to_update:
+            cls.write(to_update, {'agent': new_agent.id})
+        if to_cancel:
+            to_save = []
+            for line in cls.copy(to_cancel):
+                line.amount *= -1
+                to_save.append(line)
+            for line in cls.copy(to_cancel):
+                line.agent = new_agent
+                to_save.append(line)
+            cls.save(to_save)
 
 
 class Plan(export.ExportImportMixin, model.TaggedMixin):
@@ -434,7 +457,7 @@ class PlanCalculationDate(model.CoopSQL, model.CoopView):
             return invoice_line.details[0].get_option().start_date
 
 
-class Agent(export.ExportImportMixin):
+class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
     __name__ = 'commission.agent'
     _func_key = 'func_key'
 
@@ -451,6 +474,9 @@ class Agent(export.ExportImportMixin):
         cls.plan.required = True
         cls.plan.select = True
         cls.party.select = True
+        cls._error_messages.update({
+                'agent_not_found': 'Cannot find matching agent for %s :\n\n%s',
+                })
 
     @classmethod
     def is_master_object(cls):
@@ -494,6 +520,29 @@ class Agent(export.ExportImportMixin):
                 [('party.code',) + tuple(clause[1:])],
                 [('plan.code',) + tuple(clause[1:])],
                 ]
+
+    @classmethod
+    def find_matches(cls, agents, target_broker):
+        source_keys = {agent: agent.get_hash() for agent in agents}
+        target_keys = {agent.get_hash(): agent
+            for agent in target_broker.agents}
+        matches = {}
+        for source_agent, source_key in source_keys.iteritems():
+            if source_key in target_keys:
+                matches[source_agent] = target_keys[source_key]
+            else:
+                cls.append_functional_error('agent_not_found', (
+                        target_broker.rec_name,
+                        cls.format_hash(dict(source_key))))
+        return matches
+
+    @classmethod
+    def format_hash(cls, hash_dict):
+        return coop_string.translate_label(cls, 'plan') + ' : ' + \
+            hash_dict['plan'].rec_name
+
+    def get_hash(self):
+        return (('plan', self.plan),)
 
 
 class CreateAgents(Wizard):
@@ -678,3 +727,91 @@ class CreateInvoiceAsk:
     @staticmethod
     def default_type_():
         return 'out'
+
+
+class ChangeBroker(Wizard):
+    'Change Broker'
+
+    __name__ = 'commission.change_broker'
+
+    start_state = 'select_new_broker'
+    select_new_broker = StateView('commission.change_broker.select_new_broker',
+        'commission_insurance.select_new_broker_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Next', 'change', 'tryton-go-next', default=True),
+            ])
+    change = StateTransition()
+
+    def default_select_new_broker(self, name):
+        pool = Pool()
+        cur_model = Transaction().context.get('active_model')
+        cur_id = Transaction().context.get('active_id')
+        defaults = {
+            'at_date': utils.today(),
+            }
+        if cur_model == 'party.party':
+            party = pool.get(cur_model)(cur_id)
+            if party.is_broker:
+                defaults['from_broker'] = party.id
+        elif cur_model == 'distribution.network':
+            party = pool.get(cur_model)(cur_id).party
+            defaults['from_broker'] = party.id
+        return defaults
+
+    def transition_change(self):
+        pool = Pool()
+        Contract = pool.get('contract')
+        if self.select_new_broker.all_contracts:
+            contracts = Contract.search([
+                    ('agent.party', '=',
+                        self.select_new_broker.from_broker.id),
+                    ('end_date', '>=', self.select_new_broker.at_date)])
+        else:
+            contracts = self.select_new_broker.contracts
+
+        agency_id = None
+        if self.select_new_broker.new_agency:
+            agency_id = self.select_new_broker.new_agency.id
+        Contract.update_commission_lines(contracts,
+            self.select_new_broker.to_broker, self.select_new_broker.at_date,
+            update_contracts=True, agency=agency_id)
+        return 'end'
+
+
+class SelectNewBroker(model.CoopView):
+    'Select New Broker'
+
+    __name__ = 'commission.change_broker.select_new_broker'
+
+    at_date = fields.Date('At Date', required=True)
+    from_broker = fields.Many2One('party.party', 'From Broker',
+        domain=[('is_broker', '=', True)], required=True)
+    to_broker = fields.Many2One('party.party', 'To Broker',
+        domain=[('is_broker', '=', True), ('id', '!=', Eval('from_broker'))],
+        depends=['from_broker'], required=True)
+    all_contracts = fields.Boolean('Change All Contracts')
+    contracts = fields.Many2Many('contract', None, None, 'Contracts',
+        domain=[('agent.party', '=', Eval('from_broker'))],
+        states={'invisible': Eval('all_contracts', False),
+            'required': ~Eval('all_contracts')},
+        depends=['all_contracts', 'from_broker'])
+    new_agency = fields.Many2One('distribution.network', 'New Agency',
+        domain=[('party', '=', None),
+            ('parent_party', '=', Eval('to_broker'))],
+        states={'readonly': ~Eval('to_broker')}, depends=['to_broker'],)
+
+    @fields.depends('all_contracts', 'contracts')
+    def on_change_all_contracts(self):
+        if self.all_contracts:
+            self.contracts = []
+
+    @fields.depends('all_contracts', 'from_broker', 'new_agency', 'to_broker')
+    def on_change_from_broker(self):
+        self.contracts = []
+        if self.from_broker == self.to_broker:
+            self.to_broker = None
+            self.new_agency = None
+
+    @fields.depends('new_agency')
+    def on_change_to_broker(self):
+        self.new_agency = None

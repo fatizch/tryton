@@ -3,7 +3,7 @@ from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, coop_string
 
 __all__ = [
     'Agent',
@@ -57,6 +57,17 @@ class Agent:
 
     def get_second_level_commission(self, name):
         return self.plan.second_level_commission if self.plan else None
+
+    @classmethod
+    def format_hash(cls, hash_dict):
+        return super(Agent, cls).format_hash(hash_dict) + '\n' + \
+            coop_string.translate_label(cls, 'commissioned_agents') + ' : ' + \
+            ', '.join([x.rec_name for x in hash_dict['commissioned_agents']])
+
+    def get_hash(self):
+        return super(Agent, self).get_hash() + (
+            ('commissioned_agents', tuple([x.id
+                        for x in self.commissioned_agents])),)
 
 
 class AgentAgentRelation(model.CoopSQL, model.CoopView):

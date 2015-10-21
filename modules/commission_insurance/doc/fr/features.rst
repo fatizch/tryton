@@ -32,3 +32,10 @@
   niveau du frais. A la génération du bordereaux de l'apporteur, une ligne dans
   le bordereau sera généré pour tous les frais dont les quittances ont été
   payées.
+
+- **Transfert de portefeuille**: Un point d'entrée dans l'application permet de
+  transférer le portefeuille d'un courtier vers un autre. Ce transfert peut
+  concerner la totalité des contrats, ou juste un sous-ensemble. Le transfert
+  vérifie la compatibilité des protocoles de commissionnement entre le courtier
+  d'origine et le nouveau courtier, et bloque les modifications en cas
+  d'incompatibilité.
