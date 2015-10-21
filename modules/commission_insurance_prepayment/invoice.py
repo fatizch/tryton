@@ -1,4 +1,5 @@
 from itertools import groupby
+from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
 from trytond.model import ModelView, Workflow
@@ -38,23 +39,35 @@ class Invoice:
         key = lambda c: c._group_to_agent_option_key()
         commissions.sort(key=key)
         agent_options = {}
+        all_options = {}
+
         for key, comms in groupby(commissions, key=key):
             key = dict(key)
             agent_options[(key['agent'].id, key['option'].id)] = list(comms)
+            all_options[key['option'].id] = (key['option'],
+                key['option'].parent_contract, key['option'].coverage.insurer)
 
         if not agent_options:
             return commissions
         outstanding_prepayment = Agent.outstanding_prepayment(
             agent_options.keys())
-        for k, v in agent_options.iteritems():
-            for commission in v:
-                if k not in outstanding_prepayment:
+
+        outstanding_prepayment_per_contract = defaultdict(lambda: 0)
+        for (agent_id, option_id), amount in \
+                outstanding_prepayment.iteritems():
+            outstanding_prepayment_per_contract[all_options[option_id]] += \
+                amount
+
+        for (agent_id, option_id), comms in agent_options.iteritems():
+            key = all_options[option_id]
+            for commission in comms:
+                if key not in outstanding_prepayment_per_contract:
                     continue
-                prepayment_used = min(outstanding_prepayment[k],
+                prepayment_used = min(outstanding_prepayment_per_contract[key],
                     commission.amount)
                 commission.amount -= prepayment_used
                 commission.redeemed_prepayment = prepayment_used
-                outstanding_prepayment[k] -= prepayment_used
+                outstanding_prepayment_per_contract[key] -= prepayment_used
         return commissions
 
     @classmethod

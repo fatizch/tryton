@@ -141,13 +141,15 @@ class Agent:
         Commission = pool.get('commission')
         commission = Commission.__table__()
 
+        result = {}
+        if not agents:
+            return result
+
         cursor = Transaction().cursor
         agent_column = Column(commission, 'agent')
         origin_column = Column(commission, 'origin')
         prepayment_column = Column(commission, 'is_prepayment')
         invoice_line = Column(commission, 'invoice_line')
-
-        result = {}
 
         where_clause = Or()
         for agent in agents:
