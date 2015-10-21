@@ -2,7 +2,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.endorsement import EndorsementWizardStepMixin, \
     add_endorsement_step
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.cog_utils import utils, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -28,6 +28,26 @@ class ContractRenew(EndorsementWizardStepMixin):
                 'not_renewable': 'The contract %s is not renewable ',
                 'already_renewed': 'The contract %s is already renewed ',
                 })
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ContractRenew, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract' and utils.is_module_installed(
+                'endorsement_insurance_invoice'):
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(ContractRenew, cls).get_draft_methods_for_model(
+            model_name)
+        if model_name == 'contract' and utils.is_module_installed(
+                'endorsement_insurance_invoice'):
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
 
     def step_default(self, name):
         pool = Pool()

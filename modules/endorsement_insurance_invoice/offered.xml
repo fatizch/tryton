@@ -1,21 +1,6 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <!-- ########################## -->
-        <!-- # Endorsement Definition # -->
-        <!-- ########################## -->
-        <record model="ir.ui.view" id="endorsement_definition_view_form">
-            <field name="model">endorsement.definition</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="endorsement.endorsement_definition_view_form"/>
-            <field name="name">endorsement_definition_form</field>
-        </record>
-        <record model="ir.ui.view" id="endorsement_definition_view_list">
-            <field name="model">endorsement.definition</field>
-            <field name="type">tree</field>
-            <field name="inherit" ref="endorsement.endorsement_definition_view_list"/>
-            <field name="name">endorsement_definition_list</field>
-        </record>
         <!-- #################### -->
         <!-- # Endorsement Part # -->
         <!-- #################### -->
@@ -41,11 +26,23 @@
         <!-- ###################### -->
         <!-- # Method Definitions # -->
         <!-- ###################### -->
+        <record model="ir.model.method" id="contract_recalculate_premium_after_endorsement_method">
+            <field name="method_name">recalculate_premium_after_endorsement</field>
+            <field name="name">Recalculate Premiums After Endorsement</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">1900</field>
+        </record>
         <record model="ir.model.method" id="contract_rebill_after_endorsement_method">
             <field name="method_name">rebill_after_endorsement</field>
             <field name="name">Rebill After Endorsement</field>
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="priority">2000</field>
+        </record>
+        <record model="ir.model.method" id="contract_reconcile_after_endorsement_method">
+            <field name="method_name">reconcile_after_endorsement</field>
+            <field name="name">Reconcile After Endorsement</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">2100</field>
         </record>
         <!-- ############################################## -->
         <!-- # Billing Information Endorsement Definition # -->
@@ -58,7 +55,6 @@
             <field name="code">change_billing_information</field>
             <field name="name">Change Billing Information</field>
             <field name="kind">billing_information</field>
-            <field name="requires_contract_rebill" eval="True"/>
             <field name="view">change_billing_information</field>
         </record>
         <record model="endorsement.definition-endorsement.part" id="change_billing_information_relation">
@@ -115,27 +111,6 @@
         <record model="endorsement.contract.billing_information.field" id="direct_debit_account_field_1">
             <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'direct_debit_account')]"/>
             <field name="endorsement_part" ref="change_direct_debit_account_endorsement_part"/>
-        </record>
-        <!-- ####################### -->
-        <!-- # Set Requires Rebill # -->
-        <!-- ####################### -->
-        <record model="endorsement.part" id="endorsement.change_contract_start_date_revision_part">
-            <field name="requires_contract_rebill" eval="True"/>
-        </record>
-        <record model="endorsement.part" id="endorsement.change_contract_subscriber_revision_part">
-            <field name="requires_contract_rebill" eval="True"/>
-        </record>
-        <record model="endorsement.part" id="endorsement.manage_options_revision_part">
-            <field name="requires_contract_rebill" eval="True"/>
-        </record>
-        <record model="endorsement.part" id="endorsement.stop_contract_revision_part">
-            <field name="requires_contract_rebill" eval="True"/>
-        </record>
-        <record model="endorsement.part" id="endorsement.void_contract_revision_part">
-            <field name="requires_contract_rebill" eval="True"/>
-        </record>
-        <record model="endorsement.part" id="endorsement.reactivate_contract_revision_part">
-            <field name="requires_contract_rebill" eval="True"/>
         </record>
     </data>
 </tryton>

@@ -304,17 +304,9 @@ msgctxt "field:endorsement.contract.billing_information.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:endorsement.definition,requires_contract_rebill:"
-msgid "Requires Contract Rebill"
-msgstr "Nécessite de requittancer"
-
 msgctxt "field:endorsement.part,billing_information_fields:"
 msgid "Billing Information Fields"
 msgstr "Champs des paramètres de quittancement"
-
-msgctxt "field:endorsement.part,requires_contract_rebill:"
-msgid "Requires Contract Rebill"
-msgstr "Nécessite de requittancer"
 
 msgctxt "field:endorsement.start.preview_changes,currency_digits:"
 msgid "Currency Digits"

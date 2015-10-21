@@ -19,7 +19,15 @@ def register():
         ChangeDirectDebitAccount,
         ContractDisplayer,
         BasicPreview,
+        NewCoveredElement,
+        NewOptionOnCoveredElement,
         RemoveOption,
+        ModifyCoveredElementInformation,
+        ManageExtraPremium,
+        ChangeContractStartDate,
+        ChangeContractExtraData,
+        ChangeContractSubscriber,
+        ManageOptions,
         Configuration,
         module='endorsement_insurance_invoice', type_='model')
 

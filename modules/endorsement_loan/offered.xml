@@ -57,7 +57,6 @@
             <field name="name">Add / Remove Loans</field>
             <field name="kind">contract</field>
             <field name="view">loan_add_remove</field>
-            <field name="requires_contract_rebill" eval="True"/>
         </record>
         <!-- ####################################### -->
         <!-- # Endorsement Change Loan At Any Date # -->
@@ -67,7 +66,6 @@
             <field name="name">Change Loan at any Date</field>
             <field name="kind">loan</field>
             <field name="view">change_loan_any_date</field>
-            <field name="requires_contract_rebill" eval="True"/>
         </record>
     </data>
 </tryton>

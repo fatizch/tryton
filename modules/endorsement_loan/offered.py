@@ -1,3 +1,5 @@
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
@@ -26,6 +28,14 @@ class EndorsementDefinition:
     @fields.depends('endorsement_parts')
     def on_change_with_is_loan(self, name=None):
         return any([x.kind == 'loan' for x in self.endorsement_parts])
+
+    def get_rebill_end(self, contract_endorsement):
+        contract = contract_endorsement.contract
+        if not contract.is_loan or contract.status == 'void':
+            return super(EndorsementDefinition, self).get_rebill_end(
+                contract_endorsement)
+        return max(contract_endorsement.contract.last_invoice_end or
+            datetime.date.min, contract_endorsement.endorsement.effective_date)
 
 
 class EndorsementPart:

@@ -2,7 +2,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
 from trytond.pyson import Eval, If, Bool
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, utils
 from trytond.modules.endorsement import EndorsementWizardStepMixin
 
 __metaclass__ = PoolMeta
@@ -61,6 +61,26 @@ class ChangeContractCommission(EndorsementWizardStepMixin):
         return self.broker.party.id if self.broker else None
 
     @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ChangeContractCommission, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract' and utils.is_module_installed(
+                'endorsement_insurance_invoice'):
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(ChangeContractCommission,
+            cls).get_draft_methods_for_model(model_name)
+        if model_name == 'contract' and utils.is_module_installed(
+                'endorsement_insurance_invoice'):
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
     def _contract_fields_to_extract(cls):
         return {
             'contract': ['agency', 'agent', 'broker', 'broker_party',
@@ -114,6 +134,15 @@ class ChangeContractBroker(ChangeContractCommission):
         if self.broker:
             self.agent = [x.id for x in self.broker.party.agents
                 if x.plan == self.current_plan][0]
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ChangeContractBroker, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract' and utils.is_module_installed(
+                'endorsement_insurance_invoice'):
+            methods.discard('recalculate_premium_after_endorsement')
+        return methods
 
     @classmethod
     def update_default_values(cls, wizard, endorsement, default_values):

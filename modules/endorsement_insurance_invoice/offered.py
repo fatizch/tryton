@@ -1,5 +1,9 @@
+import datetime
+
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, model
 from trytond.modules.endorsement import field_mixin
@@ -16,37 +20,42 @@ __all__ = [
 class EndorsementDefinition:
     __name__ = 'endorsement.definition'
 
-    requires_contract_rebill = fields.Function(
-        fields.Boolean('Requires Contract Rebill'),
-        'get_requires_contract_rebill')
+    def requires_rebill(self):
+        return 'recalculate_premium_after_endorsement' in \
+            self.get_methods_for_model('contract')
 
-    def get_methods_for_model(self, model_name):
-        methods = super(EndorsementDefinition, self).get_methods_for_model(
-            model_name)
-        if model_name == 'contract' and self.requires_contract_rebill:
-            methods += Pool().get('ir.model.method').search([
-                    ('xml_id', '=', 'endorsement_insurance_invoice.'
-                        'contract_rebill_after_endorsement_method')])
-        return methods
+    def get_premium_computation_start(self, contract_endorsement):
+        if (contract_endorsement.endorsement.effective_date ==
+                contract_endorsement.contract.start_date):
+            # Recalcul whole contract (datetime.date.min rather than
+            # contract.start_date to manage start date modification)
+            return datetime.date.min
+        return contract_endorsement.endorsement.effective_date
 
-    def get_requires_contract_rebill(self, name):
-        return any((endorsement_part.requires_contract_rebill
-                for endorsement_part in self.endorsement_parts))
+    def get_rebill_end(self, contract_endorsement):
+        if (contract_endorsement.endorsement.effective_date ==
+                contract_endorsement.contract.start_date):
+            # Recalcul whole contract (datetime.date.min rather than
+            # contract.start_date to manage start date modification)
+            return datetime.date.min
+        return contract_endorsement.contract.end_date or max(
+            contract_endorsement.contract.last_invoice_end or
+            datetime.date.min, contract_endorsement.endorsement.effective_date)
 
-    def get_rebill_date_from_parts(self, contract_endorsement):
-        pool = Pool()
-        StartEndorsement = pool.get('endorsement.start', type='wizard')
-        dates = []
-        for view in [x.view for x in self.endorsement_parts]:
-            step_mixin_name = getattr(StartEndorsement, view).model_name
-            StepMixin = pool.get(step_mixin_name)
-            if hasattr(StepMixin, 'get_date_for_rebill'):
-                rebill_date = StepMixin.get_date_for_rebill(
-                    contract_endorsement)
-                if rebill_date:
-                    dates.append(rebill_date)
-        if dates:
-            return min(dates)
+    def get_rebill_post_end(self, contract_endorsement):
+        ContractInvoice = Pool().get('contract.invoice')
+        last_posted = ContractInvoice.search([
+                ('contract', '=', contract_endorsement.contract.id),
+                ('end', '>=', contract_endorsement.endorsement.effective_date),
+                ('invoice_state', 'not in', ('cancel', 'draft', 'validated')),
+                ], order=[('start', 'DESC')], limit=1)
+        if not last_posted:
+            return None
+        if (last_posted[0].start <
+                contract_endorsement.endorsement.effective_date <=
+                last_posted[0].end):
+            return contract_endorsement.endorsement.effective_date
+        return last_posted[0].start
 
 
 class EndorsementPart:
@@ -57,13 +66,22 @@ class EndorsementPart:
         'Billing Information Fields', states={
             'invisible': Eval('kind', '') != 'billing_information'},
         depends=['kind'], delete_missing=True)
-    requires_contract_rebill = fields.Boolean('Requires Contract Rebill')
 
     @classmethod
     def __setup__(cls):
         super(EndorsementPart, cls).__setup__()
         cls.kind.selection.append(
             ('billing_information', 'Billing Information'))
+
+    @classmethod
+    def __register__(cls, module):
+        cursor = Transaction().cursor
+        TableHandler = backend.get('TableHandler')
+        super(EndorsementPart, cls).__register__(module)
+        # Migration from 1.4 : remove requires_contract_rebill
+        part_h = TableHandler(cursor, cls, module)
+        if part_h.column_exist('requires_contract_rebill'):
+            part_h.drop_column('requires_contract_rebill')
 
     def on_change_with_endorsed_model(self, name=None):
         if self.kind == 'billing_information':

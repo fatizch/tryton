@@ -20,9 +20,4 @@
             <field name="order">1</field>
         </record>
     </data>
-    <data depends="endorsement_insurance_invoice">
-        <record model="endorsement.part" id="endorsement_renewal.renew_contract_part">
-            <field name="requires_contract_rebill" eval="True"/>
-        </record>
-    </data>
 </tryton>

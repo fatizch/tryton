@@ -385,10 +385,9 @@ class Contract:
             methods.remove(('contract', 'calculate_prices'))
         return methods
 
-    def get_rebill_end_date(self, start_date):
-        date = super(Contract, self).get_rebill_end_date(start_date)
-        if not self.is_loan or self.status == 'void':
-            return date
+    def get_rebill_end_date(self):
+        if not self.is_loan:
+            return super(Contract, self).get_rebill_end_date()
         return max(utils.today(), self.start_date)
 
 

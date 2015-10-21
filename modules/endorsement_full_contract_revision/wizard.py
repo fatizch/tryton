@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.cog_utils import model, fields, utils
 from trytond.modules.endorsement import (EndorsementWizardStepMixin,
     add_endorsement_step)
 
@@ -19,6 +19,26 @@ class StartFullContractRevision(EndorsementWizardStepMixin):
 
     current_start_date = fields.Date('Current Start Date', readonly=True)
     start_date = fields.Date('New Start Date', readonly=True)
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(StartFullContractRevision, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract' and utils.is_module_installed(
+                'endorsement_insurance_invoice'):
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(StartFullContractRevision,
+            cls).get_draft_methods_for_model(model_name)
+        if model_name == 'contract' and utils.is_module_installed(
+                'endorsement_insurance_invoice'):
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
 
     @classmethod
     def state_view_name(cls):

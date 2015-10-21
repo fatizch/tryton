@@ -12,31 +12,17 @@ __all__ = [
     'ChangeBillingInformation',
     'ChangeDirectDebitAccount',
     'ContractDisplayer',
-    'StartEndorsement',
+    'NewCoveredElement',
+    'NewOptionOnCoveredElement',
     'RemoveOption',
+    'ModifyCoveredElementInformation',
+    'ManageExtraPremium',
+    'ChangeContractStartDate',
+    'ChangeContractExtraData',
+    'ChangeContractSubscriber',
+    'ManageOptions',
+    'StartEndorsement',
     ]
-
-
-class RemoveOption:
-
-    __name__ = 'contract.covered_element.option.remove'
-
-    @classmethod
-    def get_date_for_rebill(cls, contract_endorsement):
-        end_dates = []
-        for option in contract_endorsement.options:
-            end_date = option.values.get('manual_end_date',
-                None)
-            if end_date:
-                end_dates.append(end_date)
-        for covered_element in contract_endorsement.covered_elements:
-            for option in covered_element.options:
-                end_date = option.values.get('manual_end_date',
-                    None)
-                if end_date:
-                    end_dates.append(end_date)
-        if end_dates:
-            return min(end_dates)
 
 
 class BasicPreview:
@@ -173,6 +159,24 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
     def state_view_name(cls):
         return 'endorsement_insurance_invoice.' + \
             'change_billing_information_view_form'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ChangeBillingInformation, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(ChangeBillingInformation,
+            cls).get_draft_methods_for_model(model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
 
     @classmethod
     def billing_information_fields(cls):
@@ -413,6 +417,14 @@ class ChangeDirectDebitAccount(ChangeBillingInformation):
             'change_direct_debit_account_view_form'
 
     @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ChangeDirectDebitAccount, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods.discard('recalculate_premium_after_endorsement')
+        return methods
+
+    @classmethod
     def check_before_start(cls, select_screen):
         super(ChangeDirectDebitAccount, cls).check_before_start(select_screen)
         cls.pop_functional_error('no_matching_invoice_date')
@@ -443,6 +455,208 @@ class ContractDisplayer(model.CoopView):
             ('/tree', 'colors', If(Eval('to_propagate', '') == 'bank_account',
                     'green', If(Eval('to_propagate', '') == 'everything',
                         'blue', 'black')))]
+
+
+class NewCoveredElement:
+    __name__ = 'contract.covered_element.new'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(NewCoveredElement, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(NewCoveredElement, cls).get_draft_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
+
+class NewOptionOnCoveredElement:
+    'New Covered Element Option'
+
+    __name__ = 'contract.covered_element.add_option'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(NewOptionOnCoveredElement, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(NewOptionOnCoveredElement,
+            cls).get_draft_methods_for_model(model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
+
+class RemoveOption:
+    __name__ = 'contract.covered_element.option.remove'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(RemoveOption, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(RemoveOption, cls).get_draft_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
+
+class ModifyCoveredElementInformation:
+    __name__ = 'endorsement.contract.covered_element.modify'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ModifyCoveredElementInformation,
+            cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(ModifyCoveredElementInformation,
+            cls).get_draft_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
+
+class ManageExtraPremium:
+    __name__ = 'endorsement.contract.manage_extra_premium'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ManageExtraPremium, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(ManageExtraPremium, cls).get_draft_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
+
+class ChangeContractStartDate:
+    __name__ = 'endorsement.contract.change_start_date'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ChangeContractStartDate, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(ChangeContractStartDate,
+            cls).get_draft_methods_for_model(model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
+
+class ChangeContractExtraData:
+    __name__ = 'endorsement.contract.change_extra_data'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ChangeContractExtraData, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(ChangeContractExtraData,
+            cls).get_draft_methods_for_model(model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
+
+class ChangeContractSubscriber:
+    __name__ = 'endorsement.contract.subscriber_change'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ChangeContractSubscriber, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(ChangeContractSubscriber,
+            cls).get_draft_methods_for_model(model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
+
+class ManageOptions:
+    __name__ = 'contract.manage_options'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ManageOptions, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(ManageOptions,
+            cls).get_draft_methods_for_model(model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
 
 
 class StartEndorsement:

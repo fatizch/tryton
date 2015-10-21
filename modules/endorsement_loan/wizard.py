@@ -226,6 +226,24 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
         self.loan_actions = displayers
         self.new_loan = None
 
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(AddRemoveLoan, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(AddRemoveLoan, cls).get_draft_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
     def step_default(self, field_names):
         pool = Pool()
         Contract = pool.get('contract')
@@ -452,6 +470,24 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
         self.new_increments[-1].loan_state = 'draft'
         self.new_increments = list(self.new_increments)
 
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ChangeLoanAtDate, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(ChangeLoanAtDate, cls).get_draft_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
     def step_default(self, field_names):
         defaults = super(ChangeLoanAtDate, self).step_default()
         updated_loans = self.updated_loans(self.get_default_loans())
@@ -572,6 +608,24 @@ class ChangeLoan(EndorsementWizardStepMixin):
             ('/form/group[@id="multiple_loan"]', 'states',
                 {'invisible': Len(Eval('loan_changes', [])) == 1}),
             ]
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ChangeLoan, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(ChangeLoan, cls).get_draft_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
 
     @classmethod
     def _loan_fields_to_extract(cls):
@@ -801,6 +855,24 @@ class SelectLoanShares(EndorsementWizardStepMixin):
                 if selector.new_share != share_per_loan.share:
                     selector.new_share = share_per_loan.share
             share_per_loan.share = None
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(SelectLoanShares, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(SelectLoanShares, cls).get_draft_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
 
     @staticmethod
     def update_dict(to_update, key, value):
