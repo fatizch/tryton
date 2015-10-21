@@ -47,6 +47,10 @@ class User(ExportImportMixin):
             status += ' - %s' % env
         return status
 
+    @classmethod
+    def _export_light(cls):
+        return super(User, cls)._export_light() | {'groups', 'rule_groups'}
+
 
 class ResUserWarning(ExportImportMixin):
     __name__ = 'res.user.warning'

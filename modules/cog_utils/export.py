@@ -614,6 +614,7 @@ class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
 
     __name__ = 'ir.export_package'
     _rec_name = 'package_name'
+    _func_key = 'code'
 
     code = fields.Char('Code')
     package_name = fields.Char('Package Name', required=True, translate=True)
@@ -625,6 +626,10 @@ class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
         if self.code:
             return self.code
         return coop_string.slugify(self.package_name)
+
+    @classmethod
+    def add_func_key(cls, values):
+        values['_func_key'] = values['package_name']
 
 
 class Add2ExportPackageWizardStart(ModelView):

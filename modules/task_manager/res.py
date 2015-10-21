@@ -94,6 +94,10 @@ class Priority(model.CoopSQL, model.CoopView):
         return '%s - %s' % (self.process_step.process.fancy_name,
             self.process_step.step.fancy_name)
 
+    @classmethod
+    def _export_light(cls):
+        return super(Priority, cls)._export_light() | {'process_step'}
+
 
 class TeamGroupRelation(model.CoopSQL):
     'Team - Group Relation'
@@ -135,9 +139,7 @@ class Team(model.CoopSQL, model.CoopView):
 
     @classmethod
     def _export_skips(cls):
-        result = super(Team, cls)._export_skips()
-        result.add('users')
-        return result
+        return super(Team, cls)._export_skips() | {'users', 'users_links'}
 
     @classmethod
     @model.CoopView.button_action('task_manager.wizard_add_user')

@@ -145,6 +145,14 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
             ('full_name',) + tuple(clause[1:]),
             ]
 
+    @classmethod
+    def _export_light(cls):
+        return super(DistributionNetwork, cls)._export_light() | {'parent'}
+
+    @classmethod
+    def _export_skips(cls):
+        return super(DistributionNetwork, cls)._export_skips() | {'childs'}
+
 
 class DistributionNetworkContactMechanism(model.CoopSQL):
     'Relation Distribution Network - Contact Mechanism'

@@ -2,15 +2,14 @@ from trytond.pool import Pool
 from .company import *
 from .res import *
 from .test_case import *
+from .ir import *
 
 
 def register():
     Pool.register(
-        # From company
         Company,
-        # From res
         User,
         Employee,
-        # From test_case
+        Sequence,
         TestCaseModel,
         module='company_cog', type_='model')

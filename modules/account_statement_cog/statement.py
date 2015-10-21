@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, export
 
 __metaclass__ = PoolMeta
 
@@ -54,8 +54,9 @@ class Line:
         return move_line
 
 
-class Statement:
+class Statement(export.ExportImportMixin):
     __name__ = 'account.statement'
+    _func_key = 'name'
 
     in_bank_deposit_ticket = fields.Function(
         fields.Boolean('In Bank Deposit Ticket'),

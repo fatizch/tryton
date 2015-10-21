@@ -271,18 +271,12 @@ class Party(export.ExportImportMixin):
 
     @classmethod
     def _export_skips(cls):
-        res = super(Party, cls)._export_skips()
-        res.add('code_length')
-        res.add('synthesis')
-        res.add('account_payable')
-        res.add('account_receivable')
-        return res
+        return super(Party, cls)._export_skips() | {'code_length', 'synthesis'}
 
     @classmethod
     def _export_light(cls):
-        res = super(Party, cls)._export_light()
-        res.add('lang')
-        return res
+        return super(Party, cls)._export_light() | {
+            'lang', 'account_payable', 'account_receivable'}
 
     @staticmethod
     def get_actor_var_name(var_name):

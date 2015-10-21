@@ -81,7 +81,7 @@ class Sequence(ExportImportMixin, model.TaggedMixin):
         return True
 
 
-class SequenceStrict(ExportImportMixin):
+class SequenceStrict(ExportImportMixin, model.TaggedMixin):
     __name__ = 'ir.sequence.strict'
 
     @classmethod

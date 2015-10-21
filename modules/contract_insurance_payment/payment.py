@@ -24,6 +24,10 @@ class Journal:
         domain=[('direct_debit', '=', False)],
         depends=['process_method'])
 
+    @classmethod
+    def _export_light(cls):
+        return super(Journal, cls)._export_light() | {'failure_billing_mode'}
+
 
 class JournalFailureAction:
     __name__ = 'account.payment.journal.failure_action'

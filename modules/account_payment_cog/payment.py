@@ -115,7 +115,7 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
     @classmethod
     def _export_light(cls):
         return super(JournalFailureAction, cls)._export_light() | {
-            'reject_reason', 'rejected_payment_fee'}
+            'reject_reason', 'rejected_payment_fee', 'report_template'}
 
     @classmethod
     def get_rejected_payment_fee(cls, code):

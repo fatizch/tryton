@@ -383,3 +383,8 @@ class Journal:
         else:
             sync_date = max(line['maturity_date'], utils.today())
         return coop_date.get_next_date_in_sync_with(sync_date, day)
+
+    @classmethod
+    def _export_light(cls):
+        return super(Journal, cls)._export_light() | {
+            'sepa_bank_account_number'}

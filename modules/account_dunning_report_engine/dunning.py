@@ -49,3 +49,7 @@ class Level:
         if self.report_template:
             self.process_report_template(dunnings)
         super(Level, self).process_dunnings(dunnings)
+
+    @classmethod
+    def _export_light(cls):
+        return (super(Level, cls)._export_light() | set(['report_template']))

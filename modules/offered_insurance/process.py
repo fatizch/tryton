@@ -28,5 +28,5 @@ class Process:
         'process', 'product', 'Products')
 
     @classmethod
-    def _export_light(cls):
-        return super(Process, cls)._export_light() | {'for_products'}
+    def _export_skips(cls):
+        return (super(Process, cls)._export_skips() | set(['for_products']))

@@ -42,6 +42,8 @@ class Product:
         fields.Many2Many('offered.item.description', None, None,
             'Item Descriptions'),
         'on_change_with_item_descriptors')
+    processes = fields.Many2Many('process-offered.product',
+        'product', 'process', 'Processes')
 
     @classmethod
     def __setup__(cls):
@@ -111,6 +113,10 @@ class Product:
         res = super(Product, cls).get_var_names_for_full_extract()
         res.extend(['item_descriptors'])
         return res
+
+    @classmethod
+    def _export_light(cls):
+        return super(Product, cls)._export_light() | {'processes'}
 
 
 class OfferedProduct(Offered):
