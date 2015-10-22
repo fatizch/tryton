@@ -319,6 +319,15 @@ class Contract(Printable):
         return [covered for covered in self.covered_elements
             if covered.is_covered_at_date(at_date)]
 
+    def decline_options(self, reason):
+        super(Contract, self).decline_options(reason)
+        for covered_element in self.covered_elements:
+            for option in covered_element.options:
+                option.decline_option(reason)
+            covered_element.options = covered_element.options
+        self.covered_elements = self.covered_elements
+
+
 
 class ContractOption:
     __name__ = 'contract.option'
@@ -1093,7 +1102,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def is_covered_at_date(self, at_date, coverage=None):
         for option in self.options:
             if ((not coverage or option.coverage == coverage) and
-                    option.status != 'void' and
+                    option.status not in ['void', 'declined'] and
                     utils.is_effective_at_date(option, at_date)):
                 return True
         return any((sub_elem.is_covered_at_date(at_date, coverage)

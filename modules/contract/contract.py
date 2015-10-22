@@ -1052,11 +1052,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             option.status = 'active'
         self.options = options
 
+    def decline_options(self, reason):
+        for option in self.options:
+            option.decline_option(reason)
+        self.options = self.options
+
     def decline_contract(self, reason):
         pool = Pool()
         Event = pool.get('event')
         self.status = 'declined'
         self.sub_status = reason
+        self.decline_options(reason)
         self.save()
         Event.notify_events([self], 'decline_contract',
             description=reason.name)
@@ -1859,6 +1865,9 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             res.update(self.contract.get_all_extra_data(at_date))
         return res
 
+    def decline_option(self, reason):
+        self.status = 'declined'
+        self.sub_status = reason
 
 class ContractOptionVersion(model.CoopSQL, model.CoopView):
     'Contract Option Version'

@@ -68,8 +68,7 @@ class EndorsementStartProcess:
                     state='draft',
                     contract_endorsements=[ContractEndorsement(
                             contract=contract)])
-                    for contract in
-                    process_param.contracts[0].contract_set.contracts]
+                    for contract in process_param.contracts]
             obj.effective_date = process_param.effective_date
             return True, []
         return super(EndorsementStartProcess,

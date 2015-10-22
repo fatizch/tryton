@@ -65,7 +65,13 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
             'no_sequence_defined': 'No sequence defined in configuration '
             'for contracts set number',
             'same_contract_in_set': 'the contract %s is already defined in the'
-            ' contract set %s'
+            ' contract set %s',
+            'activate_with_non_quote': ('You are activating a contract set'
+                    ' with non quote contracts. The following contracts'
+                    ' will not be activated : \n%s'),
+            'decline_with_non_quote': ('You are declining a contract set'
+                    ' with non quote contracts. The following contracts'
+                    ' will not be declined : \n%s'),
             })
 
     @classmethod
@@ -118,15 +124,32 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
     def add_func_key(cls, values):
         values['_func_key'] = values['number']
 
+    def get_quote_non_quote_contracts(self):
+        quote, non_quote = [], []
+        for contract in self.contracts:
+            quote.append(contract) if contract.status == 'quote' \
+                else non_quote.append(contract)
+        return quote, non_quote
+
     def activate_set(self):
         pool = Pool()
         Event = pool.get('event')
-        for contract in self.contracts:
+        quote, non_quote = self.get_quote_non_quote_contracts()
+        if non_quote:
+            message = ', '.join([x.rec_name for x in non_quote])
+            self.raise_user_warning(message, 'activate_with_non_quote',
+                message)
+        for contract in quote:
             contract.activate_contract()
         Event.notify_events([self], 'activate_contract_set')
 
     def decline_set(self, reason):
-        for contract in self.contracts:
+        quote, non_quote = self.get_quote_non_quote_contracts()
+        if non_quote:
+            message = ', '.join([x.rec_name for x in non_quote])
+            self.raise_user_warning(message, 'decline_with_non_quote',
+                message)
+        for contract in quote:
             contract.decline_contract(reason)
 
     def get_contact(self):

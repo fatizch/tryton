@@ -13,6 +13,22 @@ msgid "The contract set number must be unique."
 msgstr "Le numéro de l'ensemble de contrat sdoit être unique."
 
 msgctxt "error:contract.set:"
+msgid ""
+"You are activating a contract set with non quote contracts. The following contracts will not be activated : \n"
+"%s"
+msgstr ""
+"Vous êtes en train d'activer un ensemble de contrats contenant des contrats qui ne sont pas en devis. Les contrats suivants ne seront pas activés :\n"
+"%s"
+
+msgctxt "error:contract.set:"
+msgid ""
+"You are declining a contract set with non quote contracts. The following contracts will not be declined : \n"
+"%s"
+msgstr ""
+"Vous êtes en train de décliner un ensemble de contrats contenant des contrats qui ne sont pas en devis. Les contrats suivants ne seront pas déclinés :\n"
+"%s"
+
+msgctxt "error:contract.set:"
 msgid "the contract %s is already defined in the contract set %s"
 msgstr "Le contrat %s est déjà défini dans l'ensemble de contrats %s"
 
