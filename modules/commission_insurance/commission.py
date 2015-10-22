@@ -193,11 +193,6 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
         states={'invisible': Eval('type_') != 'agent'},
         domain=[('type_', '=', 'principal')],
         depends=['type_'])
-    broker_plan = fields.One2One('commission_plan-commission_plan',
-        'to', 'from_', 'Broker Plan',
-        states={'invisible': Eval('type_') != 'principal'},
-        domain=[('type_', '=', 'agent')],
-        depends=['type_'])
     computation_dates = fields.One2Many('commission.plan.date', 'plan',
         'Computation Dates', delete_missing=True)
     commissioned_products = fields.Function(
@@ -216,10 +211,6 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
-
-    @classmethod
-    def _export_skips(cls):
-        return super(Plan, cls)._export_skips() | {'broker_plan'}
 
     @classmethod
     def _export_light(cls):

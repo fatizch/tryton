@@ -25,7 +25,5 @@
         <label name="insurer_plan"/>
         <field name="insurer_plan"/>
         <newline/>
-        <label name="broker_plan"/>
-        <field name="broker_plan"/>
     </xpath>
 </data>
