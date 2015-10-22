@@ -170,6 +170,31 @@ class ModuleTestCase(test_framework.CoopTestCase):
         address2.save()
         self.assertTrue(address2.zip == "3")
 
+    def test0040set_contact(self):
+        marty = self.Party(name="Marty")
+        marty.save()
+
+        marty.set_contact([marty], 'phone', '0164091187')
+        self.assertEqual(marty.phone, '0164091187')
+        self.assertEqual(marty.mobile, '')
+
+        marty.set_contact([marty], 'phone', '')
+        self.assertEqual(marty.phone, '')
+        self.assertEqual(marty.mobile, '')
+
+        marty.set_contact([marty], 'mobile', '0683162994')
+        self.assertEqual(marty.mobile, '0683162994')
+        self.assertEqual(marty.phone, '')
+
+        marty.set_contact([marty], 'mobile', '0679511857')
+        self.assertEqual(marty.mobile, '0679511857')
+        self.assertEqual(marty.phone, '')
+
+        marty.set_contact([marty], 'mobile', '0657511879')
+        marty.set_contact([marty], 'phone', '0164091187')
+        self.assertEqual(marty.mobile, '0657511879')
+        self.assertEqual(marty.phone, '0164091187')
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()

@@ -506,23 +506,26 @@ class Party(export.ExportImportMixin):
     def set_contact(cls, ids, name, value):
         pool = Pool()
         Contact = pool.get('party.contact_mechanism')
+        contact_to_save = []
         for party in ids:
-            updated = False
-            if value:
-                for contact in party.contact_mechanisms:
-                    if contact.type == name and not updated:
-                        contact.value = value
-                        contact.save()
-                        updated = True
-                if not updated:
-                    pool = Pool()
-                    Contact = pool.get('party.contact_mechanism')
+            for contact in party.contact_mechanisms:
+                if contact.type != name:
+                    continue
+                if value:
+                    contact.value = value
+                else:
+                    contact.active = False
+                contact_to_save.append(contact)
+                break
+            else:
+                if value:
                     Contact.create([{
-                        'type': name,
-                        'value': value,
-                        'party': party.id,
-                        'active': 'True',
-                        }])
+                                'type': name,
+                                'value': value,
+                                'party': party.id,
+                                'active': True
+                                }])
+            Contact.save(contact_to_save)
 
     def get_publishing_values(self):
         result = super(Party, self).get_publishing_values()
