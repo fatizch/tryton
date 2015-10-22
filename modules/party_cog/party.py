@@ -503,11 +503,11 @@ class Party(export.ExportImportMixin):
         return res
 
     @classmethod
-    def set_contact(cls, ids, name, value):
+    def set_contact(cls, parties, name, value):
         pool = Pool()
         Contact = pool.get('party.contact_mechanism')
         contact_to_save = []
-        for party in ids:
+        for party in parties:
             for contact in party.contact_mechanisms:
                 if contact.type != name:
                     continue
@@ -519,13 +519,9 @@ class Party(export.ExportImportMixin):
                 break
             else:
                 if value:
-                    Contact.create([{
-                                'type': name,
-                                'value': value,
-                                'party': party.id,
-                                'active': True
-                                }])
-            Contact.save(contact_to_save)
+                    contact_to_save.append(Contact(type=name,
+                            value=value, party=party, active=True))
+        Contact.save(contact_to_save)
 
     def get_publishing_values(self):
         result = super(Party, self).get_publishing_values()

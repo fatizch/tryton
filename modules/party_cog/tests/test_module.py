@@ -171,29 +171,34 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertTrue(address2.zip == "3")
 
     def test0040set_contact(self):
+
+        def test_value_length_and_type(expected_values, expected_types,
+                expected_length, party):
+            values = [c.value for c in party.contact_mechanisms]
+            types = [c.type for c in party.contact_mechanisms]
+            self.assertTrue(all([x in values for x in expected_values]))
+            self.assertTrue(all([x in types for x in expected_types]))
+            self.assertEqual(len(party.contact_mechanisms), expected_length)
+
         marty = self.Party(name="Marty")
         marty.save()
 
         marty.set_contact([marty], 'phone', '0164091187')
-        self.assertEqual(marty.phone, '0164091187')
-        self.assertEqual(marty.mobile, '')
+        test_value_length_and_type(['0164091187'], ['phone'], 1, marty)
 
         marty.set_contact([marty], 'phone', '')
-        self.assertEqual(marty.phone, '')
-        self.assertEqual(marty.mobile, '')
+        test_value_length_and_type('', '', 0, marty)
 
         marty.set_contact([marty], 'mobile', '0683162994')
-        self.assertEqual(marty.mobile, '0683162994')
-        self.assertEqual(marty.phone, '')
+        test_value_length_and_type(['0683162994'], ['mobile'], 1, marty)
 
         marty.set_contact([marty], 'mobile', '0679511857')
-        self.assertEqual(marty.mobile, '0679511857')
-        self.assertEqual(marty.phone, '')
+        test_value_length_and_type(['0679511857'], ['mobile'], 1, marty)
 
         marty.set_contact([marty], 'mobile', '0657511879')
         marty.set_contact([marty], 'phone', '0164091187')
-        self.assertEqual(marty.mobile, '0657511879')
-        self.assertEqual(marty.phone, '0164091187')
+        test_value_length_and_type(['0657511879', '0164091187'], [
+                'mobile', 'phone'], 2, marty)
 
 
 def suite():
