@@ -139,8 +139,6 @@ change_start_date_part.contract_fields.append(
     EndorsementContractField(field=Field.find([
                 ('model.model', '=', 'contract'),
                 ('name', '=', 'start_date')])[0].id))
-change_start_date_part.post_apply_actions.extend(MethodDefinition.find([
-            ('xml_id', '=', 'endorsement.contract_update_start_date')]))
 change_start_date_part.save()
 change_start_date = EndorsementDefinition()
 change_start_date.name = 'Change Start Date'

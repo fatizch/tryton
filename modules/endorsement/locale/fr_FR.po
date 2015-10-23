@@ -1609,10 +1609,6 @@ msgctxt "field:endorsement.part,option_fields:"
 msgid "Option fields"
 msgstr "Champs des garanties souscrites"
 
-msgctxt "field:endorsement.part,post_apply_actions:"
-msgid "Post Apply Actions"
-msgstr "Actions post-application"
-
 msgctxt "field:endorsement.part,rec_name:"
 msgid "Name"
 msgstr "Nom"
