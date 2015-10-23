@@ -275,6 +275,9 @@ Create Full Revision Process::
     >>> step.main_model = contract_model
     >>> step_action = step.code_after.new()
     >>> step_action.technical_kind = 'step_after'
+    >>> step_action.method_name = 'activate_contract'
+    >>> step_action = step.code_after.new()
+    >>> step_action.technical_kind = 'step_after'
     >>> step_action.method_name = 'apply_in_progress_endorsement'
     >>> step.save()
     >>> process = Process()
@@ -336,6 +339,8 @@ Create Test Contract::
     >>> loan_share.loan = loan
     >>> loan_share.share = Decimal('0.95')
     >>> contract.end_date = datetime.date(2030, 12, 1)
+    >>> contract.billing_informations.append(BillingInformation(
+    ...         billing_mode=freq_monthly, payment_term=payment_term))
     >>> contract.save()
 
 Start Endorsement::

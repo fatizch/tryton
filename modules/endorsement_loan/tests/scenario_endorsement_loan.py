@@ -316,6 +316,8 @@ loan_share.loan = loan
 loan_share.share = Decimal('0.95')
 contract.end_date = datetime.date(2030, 12, 1)
 contract.loans.append(loan)
+contract.billing_informations.append(BillingInformation(
+        billing_mode=freq_monthly, payment_term=payment_term))
 contract.save()
 
 # #Comment# #New Endorsement

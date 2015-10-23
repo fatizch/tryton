@@ -1413,6 +1413,10 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         endorsements_per_model = cls.group_per_model(endorsements)
         for model_name in cls.apply_order():
             for endorsement in endorsements_per_model.get(model_name, []):
+                if kind == 'draft' and endorsement.state == 'in_progress':
+                    # Was never applied, so application methods were not
+                    # called, so no need to cancel them
+                    continue
                 instance = endorsement.get_endorsed_record()
                 method_names = getattr(endorsement.definition, method_name)(
                     instance.__name__)
@@ -1432,7 +1436,8 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
 
     @classmethod
     def soft_apply(cls, endorsements):
-        with Transaction().set_context(endorsement_soft_apply=True):
+        with Transaction().set_context(endorsement_soft_apply=True,
+                will_be_rollbacked=True):
             cls.apply(endorsements)
 
     @classmethod

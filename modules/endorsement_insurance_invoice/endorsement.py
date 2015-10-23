@@ -91,6 +91,8 @@ class Contract:
 
     @classmethod
     def recalculate_premium_after_endorsement(cls, contracts, caller=None):
+        if Transaction().context.get('endorsement_soft_apply', False):
+            return
         if not isinstance(caller, (tuple, list)):
             caller = [caller]
         if caller[0].__name__ != 'endorsement.contract':
@@ -106,7 +108,7 @@ class Contract:
 
     @classmethod
     def rebill_after_endorsement(cls, contracts, caller=None):
-        if Transaction().context.get('endorsement_soft_apply', False):
+        if Transaction().context.get('will_be_rollbacked', False):
             return
         if not isinstance(caller, (tuple, list)):
             caller = [caller]
@@ -125,7 +127,7 @@ class Contract:
 
     @classmethod
     def reconcile_after_endorsement(cls, contracts, caller=None):
-        if Transaction().context.get('endorsement_soft_apply', False):
+        if Transaction().context.get('will_be_rollbacked', False):
             return
         if not isinstance(caller, (tuple, list)):
             caller = [caller]
