@@ -116,6 +116,30 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ):
             self.assertEqual(premium_signature.get_amount(*period), amount)
 
+        premium_once_per_year = self.Premium(
+            frequency='once_per_year',
+            amount=Decimal(100),
+            main_contract=contract,
+            )
+        for period, amount in (
+                ((date(2015, 10, 1), date(2015, 10, 22)), Decimal(100)),
+                ((date(2015, 10, 1), date(2015, 10, 21)), Decimal(100)),
+                ((date(2015, 10, 1), date(2015, 10, 20)), Decimal(0)),
+                ((date(2015, 10, 1), date(2017, 10, 21)), Decimal(300)),
+                ):
+            self.assertEqual(premium_once_per_year.get_amount(*period), amount)
+
+        contract.start_date = date(2012, 2, 29)
+        for period, amount in (
+                ((date(2015, 2, 1), date(2015, 3, 1)), Decimal(100)),
+                ((date(2015, 2, 1), date(2015, 2, 28)), Decimal(100)),
+                ((date(2015, 2, 1), date(2015, 2, 27)), Decimal(0)),
+                ((date(2016, 2, 1), date(2016, 3, 1)), Decimal(100)),
+                ((date(2016, 2, 1), date(2016, 2, 29)), Decimal(100)),
+                ((date(2016, 2, 1), date(2016, 2, 28)), Decimal(0)),
+                ):
+            self.assertEqual(premium_once_per_year.get_amount(*period), amount)
+
     def test_contract_get_invoice_periods(self):
         'Test Contract get_invoice_periods'
 

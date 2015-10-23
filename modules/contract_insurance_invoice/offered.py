@@ -420,9 +420,11 @@ class OptionDescriptionPremiumRule:
 
     @classmethod
     def convert_premium_frequency(cls, src_frequency, dest_frequency):
-        if src_frequency in ('once_per_invoice', 'once_per_contract'):
+        if src_frequency in ('once_per_invoice', 'once_per_contract',
+                'once_per_year'):
             return
-        if dest_frequency in ('once_per_invoice', 'once_per_contract'):
+        if dest_frequency in ('once_per_invoice', 'once_per_contract',
+                'once_per_year'):
             return
         return CONVERSION_TABLE[src_frequency] / CONVERSION_TABLE[
             dest_frequency]

@@ -997,6 +997,10 @@ msgid "Once per Invoice"
 msgstr "Une fois par quittance"
 
 msgctxt "selection:account.invoice.line.detail,frequency:"
+msgid "Once per Year"
+msgstr "Une fois par an"
+
+msgctxt "selection:account.invoice.line.detail,frequency:"
 msgid "Quarterly"
 msgstr "Trimestriel"
 

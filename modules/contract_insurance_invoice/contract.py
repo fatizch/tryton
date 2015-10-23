@@ -1254,6 +1254,16 @@ class Premium:
                 else 0
         elif self.frequency == 'at_contract_signature':
             return 0
+        elif self.frequency == 'once_per_year':
+            start_date = self.main_contract.start_date
+            stick = (start_date.month, start_date.day) == (2, 29)
+            amount = 0
+            for year in xrange(end.year - start.year + 1):
+                new_date = coop_date.add_year(start_date, start.year -
+                        start_date.year + year, stick)
+                if start <= new_date <= end:
+                    amount += self.amount
+            return amount
         # For yearly frequencies, only use the date to calculate the prorata on
         # the remaining days, after taking the full years out.
         #

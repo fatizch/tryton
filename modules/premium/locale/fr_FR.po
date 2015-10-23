@@ -666,6 +666,10 @@ msgctxt "selection:account.fee,frequency:"
 msgid "Once per Invoice"
 msgstr "Une fois par quittance"
 
+msgctxt "selection:account.fee,frequency:"
+msgid "Once per Year"
+msgstr "Une fois par an"
+
 msgctxt "selection:account.fee,type:"
 msgid "Fixed"
 msgstr "Fixe"
@@ -701,6 +705,10 @@ msgstr "Une fois par contrat"
 msgctxt "selection:contract.premium,frequency:"
 msgid "Once per Invoice"
 msgstr "Une fois par quittance"
+
+msgctxt "selection:contract.premium,frequency:"
+msgid "Once per Year"
+msgstr "Une fois par an"
 
 msgctxt "selection:contract.premium,frequency:"
 msgid "Quarterly"
@@ -737,6 +745,10 @@ msgstr "Une fois par contrat"
 msgctxt "selection:offered.option.description.premium_rule,frequency:"
 msgid "Once per Invoice"
 msgstr "Une fois par quittance"
+
+msgctxt "selection:offered.option.description.premium_rule,frequency:"
+msgid "Once per Year"
+msgstr "Une fois par an"
 
 msgctxt "selection:offered.option.description.premium_rule,frequency:"
 msgid "Quarterly"

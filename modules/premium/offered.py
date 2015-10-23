@@ -20,6 +20,7 @@ PREMIUM_FREQUENCY = [
     ('monthly', 'Monthly'),
     ('once_per_contract', 'Once per Contract'),
     ('once_per_invoice', 'Once per Invoice'),
+    ('once_per_year', 'Once per Year'),
     ('at_contract_signature', 'At contract signature'),
     ]
 
