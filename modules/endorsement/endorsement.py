@@ -1039,7 +1039,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         fields.Many2Many('contract', '', '', 'Contracts'),
         'get_contracts', searcher='search_contracts')
     endorsement_summary = fields.Function(
-        fields.Text('Endorsement Summary'),
+        fields.Text('Endorsement Summary', readonly=True),
         'get_endorsement_summary')
     attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments',
         target_not_required=True)
@@ -1168,6 +1168,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         inc = 2
         res = ''
         if type(summary) in (str, unicode):
+            if not summary:
+                # Empty line, no styling
+                return '\n'
             if summary.endswith('section'):
                 return '\n'
             elif u'→' in summary:
