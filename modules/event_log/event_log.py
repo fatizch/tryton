@@ -21,7 +21,7 @@ class EventLog(model.CoopSQL, model.CoopView):
 
     description = fields.Text('Description', readonly=True)
     description_str = fields.Function(
-        fields.Text('Description'),
+        fields.Char('Description'),
         'on_change_with_description_str')
     object_ = fields.Reference('Object', selection='models_get', readonly=True,
         required=True)
@@ -45,7 +45,8 @@ class EventLog(model.CoopSQL, model.CoopView):
 
     @fields.depends('description')
     def on_change_with_description_str(self, name=None):
-        return self.description or self.object_.rec_name
+        return self.description.split('\n')[0] if self.description else \
+            self.object_.rec_name
 
     @staticmethod
     def order_date_str(tables):

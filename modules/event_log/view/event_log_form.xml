@@ -8,5 +8,5 @@
     <field name="event_type"/>
     <label name="object_"/>
     <field name="object_"/>
-    <field name="description_str" colspan="4"/>
+    <field name="description" colspan="4"/>
 </form>
