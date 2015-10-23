@@ -312,6 +312,9 @@ class Contract:
     def get_valid_billing_informations(self, name):
         # apply domain only on current and future version
         # in order to manage subscriber change
+        if not self.start_date:
+            # Void contracts may be fully invalid
+            return []
         res = []
         previous_date = datetime.date.max
         today = utils.today()
