@@ -71,6 +71,19 @@ class Move(export.ExportImportMixin):
             return self.description
         return self.get_rec_name(name)
 
+    def _cancel_default(self):
+        defaults = super(Move, self)._cancel_default()
+        if 'date' in defaults or self.date >= utils.today():
+            return defaults
+        date = utils.today()
+        period_id = Pool().get('account.period').find(self.company.id,
+            date=date)
+        defaults.update({
+                'date': date,
+                'period': period_id,
+                })
+        return defaults
+
 
 class Line(export.ExportImportMixin):
     'Account Move Line'
