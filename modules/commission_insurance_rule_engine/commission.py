@@ -77,6 +77,9 @@ class PlanLines(RuleMixin, model.CoopSQL, model.CoopView):
     def check_formula(self):
         return True
 
+    def get_func_key(self, name):
+        return self.options_extract
+
 
 class Agent:
     __name__ = 'commission.agent'
