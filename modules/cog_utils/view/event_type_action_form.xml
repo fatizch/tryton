@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Event Type Action">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="priority"/>
+    <field name="priority"/>
+    <label name="action"/>
+    <field name="action"/>
+</form>

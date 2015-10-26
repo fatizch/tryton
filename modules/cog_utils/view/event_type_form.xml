@@ -4,4 +4,5 @@
     <field name="name"/>
     <label name="code"/>
     <field name="code"/>
+    <field name="actions" colspan="4"/>
 </form>

@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:event.type.action:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
 msgctxt "error:event.type:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
@@ -71,6 +75,10 @@ msgctxt "field:event,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:event.type,actions:"
+msgid "Actions"
+msgstr "Actions"
+
 msgctxt "field:event.type,code:"
 msgid "Code"
 msgstr "Code"
@@ -108,6 +116,98 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:event.type,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:event.type.action,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:event.type.action,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:event.type.action,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:event.type.action,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:event.type.action,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:event.type.action,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:event.type.action,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:event.type.action,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:event.type.action,priority:"
+msgid "Priority"
+msgstr "Priorité"
+
+msgctxt "field:event.type.action,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:event.type.action,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:event.type.action,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:event.type.action-event.type,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:event.type.action-event.type,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:event.type.action-event.type,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:event.type.action-event.type,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:event.type.action-event.type,event_type:"
+msgid "Event Type"
+msgstr "Type d'événement"
+
+msgctxt "field:event.type.action-event.type,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:event.type.action-event.type,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:event.type.action-event.type,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:event.type.action-event.type,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:event.type.action-event.type,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:event.type.action-event.type,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -946,6 +1046,14 @@ msgctxt "model:event.type,name:"
 msgid "Event Type"
 msgstr "Type d'événement"
 
+msgctxt "model:event.type.action,name:"
+msgid "Event Type Action"
+msgstr "Action par type d'événement"
+
+msgctxt "model:event.type.action-event.type,name:"
+msgid "Action Event Type Relation"
+msgstr "Relation type d'événement action par type d'événement"
+
 msgctxt "model:export.export_configuration_selection,name:"
 msgid "Export Configuration Selection"
 msgstr "Sélection de la configuration de lexport"
@@ -957,6 +1065,10 @@ msgstr "Résumé de l'export"
 msgctxt "model:export.fields.select,name:"
 msgid "Select Export Fields"
 msgstr "Sélectionner les champs pour l'export"
+
+msgctxt "model:ir.action,name:act_event_type_action_form"
+msgid "Event Type Action"
+msgstr "Action par type d'événement"
 
 msgctxt "model:ir.action,name:act_event_type_form"
 msgid "Event Types"
@@ -1086,6 +1198,10 @@ msgctxt "model:ir.ui.menu,name:event_type"
 msgid "Event Type"
 msgstr "Type d'événement"
 
+msgctxt "model:ir.ui.menu,name:event_type_action"
+msgid "Event Type Action"
+msgstr "Action par type d'événement"
+
 msgctxt "model:ir.ui.menu,name:menu_event"
 msgid "Event"
 msgstr "Evénement"
@@ -1177,6 +1293,10 @@ msgstr "Client"
 msgctxt "selection:ir.translation.override.start,export_kind:"
 msgid "Product"
 msgstr "Produit"
+
+msgctxt "view:event.type.action:"
+msgid "Event Type Action"
+msgstr "Action par type d'événement"
 
 msgctxt "view:event.type:"
 msgid "Event Type"

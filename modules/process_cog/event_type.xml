@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="event.type" id="event_process_not_initiated">
+            <field name="name">Process Not Initiated</field>
+            <field name="code">process_not_initiated</field>
+        </record>
+    </data>
+</tryton>

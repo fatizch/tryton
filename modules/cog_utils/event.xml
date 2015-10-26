@@ -15,6 +15,20 @@
             <field name="name">Event Types</field>
             <field name="res_model">event.type</field>
         </record>
+        <record model="ir.ui.view" id="event_type_action_view_form">
+            <field name="model">event.type.action</field>
+            <field name="type">form</field>
+            <field name="name">event_type_action_form</field>
+        </record>
+        <record model="ir.ui.view" id="event_type_action_view_list">
+            <field name="model">event.type.action</field>
+            <field name="type">tree</field>
+            <field name="name">event_type_action_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_event_type_action_form">
+            <field name="name">Event Type Action</field>
+            <field name="res_model">event.type.action</field>
+        </record>
         <record model="ir.action.act_window.view" id="act_event_type_view_list">
             <field name="sequence" eval="10"/>
             <field name="view" ref="event_type_view_list"/>
@@ -25,7 +39,18 @@
             <field name="view" ref="event_type_view_form"/>
             <field name="act_window" ref="act_event_type_form"/>
         </record>
+        <record model="ir.action.act_window.view" id="act_event_type_action_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="event_type_action_view_list"/>
+            <field name="act_window" ref="act_event_type_action_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_event_type_action_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="event_type_action_view_form"/>
+            <field name="act_window" ref="act_event_type_action_form"/>
+        </record>
         <menuitem name="Event" id="menu_event" sequence="100" parent="ir.menu_administration"/>
         <menuitem name="Event Type" id="event_type" sequence="1" parent="menu_event" action="act_event_type_form"/>
+        <menuitem name="Event Type Action" id="event_type_action" sequence="1" parent="menu_event" action="act_event_type_action_form"/>
     </data>
 </tryton>

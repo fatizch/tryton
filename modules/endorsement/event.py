@@ -4,7 +4,7 @@ from trytond.modules.cog_utils import fields, model
 __metaclass__ = PoolMeta
 __all__ = [
     'EndorsementDefinitionReportTemplate',
-    'Event',
+    'EventTypeAction',
     ]
 
 
@@ -19,30 +19,29 @@ class EndorsementDefinitionReportTemplate(model.CoopSQL, model.CoopView):
         ondelete='RESTRICT', required=True, select=True)
 
 
-class Event:
-    __name__ = 'event'
+class EventTypeAction:
+    __name__ = 'event.type.action'
 
-    @classmethod
-    def get_contracts_from_object(cls, object_):
-        contracts = super(Event, cls).get_contracts_from_object(object_)
+    def get_contracts_from_object(self, object_):
+        contracts = super(EventTypeAction,
+            self).get_contracts_from_object(object_)
         if object_.__name__ == 'endorsement':
             contracts.extend(object_.contracts)
         return contracts
 
-    @classmethod
-    def get_endorsements_from_object(cls, object_):
+    def get_endorsements_from_object(self, object_):
         endorsements = []
         if object_.__name__ == 'endorsement':
             endorsements = [object_]
         return endorsements
 
-    @classmethod
-    def get_filtering_objects_from_event_object(cls, event_object):
-        return super(Event, cls).get_filtering_objects_from_event_object(
-            event_object) + cls.get_endorsements_from_object(event_object)
+    def get_filtering_objects_from_event_object(self, event_object):
+        return super(EventTypeAction,
+            self).get_filtering_objects_from_event_object(
+                event_object) + self.get_endorsements_from_object(event_object)
 
-    @classmethod
-    def get_templates_list(cls, filtering_object):
+    def get_templates_list(self, filtering_object):
         if filtering_object.__name__ == 'endorsement':
             return filtering_object.definition.report_templates
-        return super(Event, cls).get_templates_list(filtering_object)
+        return super(EventTypeAction, self).get_templates_list(
+            filtering_object)

@@ -63,6 +63,8 @@ def register():
         MethodDefinition,
         Event,
         EventType,
+        EventTypeAction,
+        ActionEventTypeRelation,
         ExportSummary,
         ExportConfigurationSelection,
         Translation,

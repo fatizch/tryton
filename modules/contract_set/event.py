@@ -2,22 +2,21 @@ from trytond.pool import PoolMeta
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'Event',
+    'EventTypeAction',
     ]
 
 
-class Event:
-    __name__ = 'event'
+class EventTypeAction:
+    __name__ = 'event.type.action'
 
-    @classmethod
-    def get_contracts_from_object(cls, object_):
-        contracts = super(Event, cls).get_contracts_from_object(object_)
+    def get_contracts_from_object(self, object_):
+        contracts = super(EventTypeAction,
+            self).get_contracts_from_object(object_)
         if object_.__name__ == 'contract.set':
             contracts.extend(object_.contracts)
         return contracts
 
-    @classmethod
-    def get_contract_sets_from_object(cls, object_):
+    def get_contract_sets_from_object(self, object_):
         contract_sets = []
         if object_.__name__ == 'contract.set':
             contract_sets = [object_]
@@ -25,18 +24,18 @@ class Event:
             if object_.contract_set:
                 contract_sets = [object_.contract_set]
         else:
-            contracts = cls.get_contracts_from_object(object_)
+            contracts = self.get_contracts_from_object(object_)
             if contracts:
-                contract_sets = cls.get_contract_sets_from_object(contracts[0])
+                contract_sets = self.get_contract_sets_from_object(
+                    contracts[0])
         return contract_sets
 
-    @classmethod
-    def get_targets_and_origin_from_object_and_template(cls,
+    def get_targets_and_origin_from_object_and_template(self,
             object_, template):
         if template.on_model and template.on_model.model == 'contract.set':
-            contract_sets = cls.get_contract_sets_from_object(object_)
+            contract_sets = self.get_contract_sets_from_object(object_)
             if contract_sets:
                 return contract_sets, object_
-        return super(Event,
-            cls).get_targets_and_origin_from_object_and_template(object_,
+        return super(EventTypeAction,
+            self).get_targets_and_origin_from_object_and_template(object_,
                 template)

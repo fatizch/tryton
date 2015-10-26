@@ -2,6 +2,7 @@ from trytond.pool import Pool
 from trytond.config import config
 from .process import *
 from .models_for_test import *
+from .event import *
 
 
 def register():
@@ -16,6 +17,7 @@ def register():
         ViewDescription,
         ProcessStep,
         ProcessStart,
+        EventTypeAction,
         module='process_cog', type_='model')
 
     Pool.register(

@@ -82,8 +82,8 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     split_reports = fields.Boolean('Split Reports', help="If checked,"
         " one document will be produced for each object. If not checked"
         " a single document will be produced for several objects.")
-    event_types = fields.Many2Many('event.type-report.template',
-            'report_template', 'event_type', 'Event Types')
+    event_type_actions = fields.Many2Many('event.type.action-report.template',
+            'report_template', 'event_type_action', 'Event Type Actions')
 
     @classmethod
     def __setup__(cls):

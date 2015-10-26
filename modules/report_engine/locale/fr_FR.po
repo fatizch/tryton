@@ -43,6 +43,50 @@ msgctxt "error:report.template:"
 msgid "The document template code must be unique"
 msgstr "Le code du modèle de courrier doit être unique"
 
+msgctxt "field:event.type.action,report_templates:"
+msgid "Report Templates"
+msgstr "Modèles de courrier"
+
+msgctxt "field:event.type.action-report.template,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:event.type.action-report.template,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:event.type.action-report.template,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:event.type.action-report.template,event_type_action:"
+msgid "Event Type Action"
+msgstr "Action par type d'événement"
+
+msgctxt "field:event.type.action-report.template,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:event.type.action-report.template,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:event.type.action-report.template,report_template:"
+msgid "Report Template"
+msgstr "Modèle de courrier"
+
+msgctxt "field:event.type.action-report.template,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:event.type.action-report.template,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:event.type.action-report.template,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:ir.model,printable:"
 msgid "Printable"
 msgstr "Imprimable"
@@ -202,6 +246,10 @@ msgstr "Créé par"
 msgctxt "field:report.template,document_desc:"
 msgid "Document Description"
 msgstr "Descripteur de Document"
+
+msgctxt "field:report.template,event_type_actions:"
+msgid "Event Type Actions"
+msgstr "Actions par type d'événement"
 
 msgctxt "field:report.template,export_dir:"
 msgid "Export Directory"
@@ -436,6 +484,10 @@ msgid ""
 msgstr ""
 "Si coché, un document sera produit pour chaque objet. Si décoché, un seul "
 "document sera produit pour plusieurs objets."
+
+msgctxt "model:event.type.action-report.template,name:"
+msgid "Event Type Action Template Relation"
+msgstr "Relation action par type d'événement modèle de lettre"
 
 msgctxt "model:ir.action,name:act_convert_templates"
 msgid "Convert Templates"

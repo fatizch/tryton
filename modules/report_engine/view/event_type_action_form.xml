@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='action']" position="after">
+        <field name="report_templates" colspan="4"/>
+    </xpath>
+</data>

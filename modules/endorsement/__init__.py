@@ -45,7 +45,7 @@ def register():
         EndorsementSelectDeclineReason,
         EndorsementDefinitionReportTemplate,
         ReportTemplate,
-        Event,
+        EventTypeAction,
         module='endorsement', type_='model')
 
     Pool.register(

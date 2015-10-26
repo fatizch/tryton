@@ -12,7 +12,7 @@ def register():
         ContractSetSelectDeclineReason,
         ReportTemplate,
         Configuration,
-        Event,
+        EventTypeAction,
         module='contract_set', type_='model')
     Pool.register(
         ContractSetDecline,

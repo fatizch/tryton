@@ -64,7 +64,7 @@ class EventLog(model.CoopSQL, model.CoopView):
         return res
 
     @classmethod
-    def create_event_logs(cls, objects, event_type, description=None,
+    def create_event_logs(cls, objects, event_type_id, description=None,
             **kwargs):
         user_id = Transaction().user
         if 'date' in kwargs:
@@ -75,13 +75,14 @@ class EventLog(model.CoopSQL, model.CoopView):
                     'date': date,
                     'object_': '%s,%s' % (object_.__name__, object_.id),
                     'user': user_id,
-                    'event_type': event_type,
+                    'event_type': event_type_id,
                     'description': description}
                 for object_ in objects])
 
     @classmethod
     def create_event_logs_from_trigger(cls, objects, trigger):
-        return cls.create_event_logs(objects, trigger.event_type, trigger.name)
+        return cls.create_event_logs(objects, trigger.event_type.id,
+            trigger.name)
 
     @classmethod
     def add_func_key(cls, values):
@@ -99,9 +100,8 @@ class Event:
             **kwargs)
         pool = Pool()
         EventLog = pool.get('event.log')
-        EventType = pool.get('event.type')
-        event_type, = EventType.search([('code', '=', event_code)])
-        EventLog.create_event_logs(objects, event_type,
+        event_type_id = cls.get_event_type_data_from_code(event_code)['id']
+        EventLog.create_event_logs(objects, event_type_id,
             description, **kwargs)
 
 

@@ -29,6 +29,10 @@ msgstr ""
 "L'enregistrement courant (%s) sera supprimé, êtes-vous certain de vouloir "
 "continuer ?"
 
+msgctxt "field:event.type.action,process_to_initiate:"
+msgid "Process To Initiate"
+msgstr "Processus à initier"
+
 msgctxt "field:ir.ui.view.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -416,3 +420,7 @@ msgstr "Démarrer le processus (_k)"
 msgctxt "wizard_button:ProcessFinder,process_parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "model:event.type,name:event_process_not_initiated"
+msgid "Process Not Initiated"
+msgstr "Processus non initié"

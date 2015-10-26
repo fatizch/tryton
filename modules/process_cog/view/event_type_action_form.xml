@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='action']" position="after">
+        <label name="process_to_initiate"/>
+        <field name="process_to_initiate"/>
+    </xpath>
+</data>

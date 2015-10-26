@@ -27,8 +27,8 @@
         <page string="Versions" id="versions">
             <field name="versions"/>
         </page>
-        <page name="event_types">
-            <field name="event_types" colspan="4"/>
+        <page name="event_type_actions">
+            <field name="event_type_actions" colspan="4"/>
         </page>
         <page string="Mail" id="Mail" col="2">
             <label name="mail_subject"/>

@@ -1,3 +1,4 @@
+* Add list of actions on event type
 * Add generic version getter
 * Add ws_create_objects web service
 * Add tags to sequence
