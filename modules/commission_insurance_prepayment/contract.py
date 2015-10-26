@@ -31,8 +31,8 @@ class Contract:
 
         Commission.save(commissions)
 
-    def rebill(self, at_date=None):
-        super(Contract, self).rebill(at_date)
+    def rebill(self, start=None, end=None, post_end=None):
+        super(Contract, self).rebill(start, end, post_end)
         self.create_prepayment_commissions(adjustement=True)
 
 
