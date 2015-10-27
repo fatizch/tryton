@@ -93,6 +93,8 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
         dates = []
         with Transaction().set_context(contract_set_get_dates=True):
             for contract in self.contracts:
+                if contract.status == 'void':
+                    continue
                 dates.extend(contract.get_dates())
         return dates
 
