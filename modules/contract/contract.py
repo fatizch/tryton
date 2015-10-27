@@ -466,7 +466,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return [self]
         elif model_type == 'contract_options':
             self.options = self.options
-            return list(self.options)
+            return [option for option in self.options
+                if option.status in ('active', 'quote')]
         return []
 
     @classmethod

@@ -92,7 +92,8 @@ class Contract(Printable):
         if model_type in ('options', 'covered_element_options'):
             self.covered_elements = self.covered_elements
             for covered_element in self.covered_elements:
-                instances += list(covered_element.options)
+                instances += [option for option in covered_element.options
+                    if option.status in ('active', 'quote')]
                 covered_element.options = covered_element.options
         return instances
 
