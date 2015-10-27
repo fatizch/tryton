@@ -645,22 +645,23 @@ class Process(model.CoopSQL, model.TaggedMixin):
 
     def get_xml_footer(self, colspan=4):
         xml = ''
+        middle_buttons = self.get_middle_buttons()
+        xml += '<group id="group_prevnext" colspan="4" col="%s">' % (
+            8 + len(middle_buttons))
         if self.with_prev_next:
-            middle_buttons = self.get_middle_buttons()
-            xml += '<group id="group_prevnext" colspan="4" col="%s">' % (
-                8 + len(middle_buttons))
             xml += '<button string="Previous  (_j)"'
             xml += ' name="_button_previous_%s"/>' % self.id
-            if middle_buttons:
-                xml += '<group id="void_l" colspan="3"/>'
-                xml += ''.join(middle_buttons)
-                xml += '<group id="void_r" colspan="3"/>'
-            else:
-                xml += '<group id="void" colspan="6"/>'
+        if middle_buttons:
+            xml += '<group id="void_l" colspan="3"/>'
+            xml += ''.join(middle_buttons)
+            xml += '<group id="void_r" colspan="3"/>'
+        else:
+            xml += '<group id="void" colspan="6"/>'
+        if self.with_prev_next:
             xml += '<button string="Next (_k)" '
             xml += 'name="_button_next_%s"/>' % self.id
-            xml += '</group>'
-            xml += '<newline/>'
+        xml += '</group>'
+        xml += '<newline/>'
         xml += super(Process, self).get_xml_footer(colspan)
         return xml
 
