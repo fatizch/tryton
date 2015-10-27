@@ -387,8 +387,9 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
     loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT', required=True,
         domain=[('state', '=', 'calculated')], states=_STATES,
         depends=_DEPENDS)
-    share = fields.Numeric('Loan Share', digits=(16, 4), states=_STATES,
-        depends=_DEPENDS)
+    share = fields.Numeric('Loan Share', digits=(16, 4),
+        domain=[('share', '>', 0), ('share', '<=', 1)],
+        states=_STATES, depends=_DEPENDS)
     person = fields.Function(
         fields.Many2One('party.party', 'Person'),
         'on_change_with_person', searcher='search_person')
@@ -558,6 +559,9 @@ class OptionsDisplayer:
 
     is_loan = fields.Boolean('Is Loan')
     default_share = fields.Numeric('Default Loan Share', digits=(16, 4),
+        domain=[If(Bool(Eval('default_share')),
+                [('default_share', '>', 0), ('default_share', '<=', 1)],
+                [])],
         states={'invisible': ~Eval('is_loan')})
 
     @classmethod
@@ -593,10 +597,14 @@ class WizardOption:
     __name__ = 'contract.wizard.option_subscription.options_displayer.option'
 
     share = fields.Numeric('Loan Share', digits=(16, 4),
+        domain=[If(Bool(Eval('loan', None)),
+                [('share', '>', 0), ('share', '<=', 1)],
+                [])],
         states={
             'readonly': ~Eval('loan'),
             'invisible': ~Eval('_parent_displayer', {}).get('is_loan'),
-            })
+            },
+        depends=['loan'])
     loan = fields.Many2One('loan', 'Loan')
     order = fields.Integer('Order')
 
