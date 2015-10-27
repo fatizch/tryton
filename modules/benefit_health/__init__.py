@@ -5,6 +5,6 @@ from .benefit import *
 def register():
     Pool.register(
         LossDescription,
-        MedicalActDescription,
         MedicalActFamily,
+        MedicalActDescription,
         module='benefit_health', type_='model')
