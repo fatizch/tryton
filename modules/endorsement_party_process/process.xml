@@ -5,6 +5,11 @@
             <field name="name">Start Party Endorsement Process</field>
             <field name="wiz_name">endorsement_party.start_process</field>
         </record>
+        <record model="ir.action.keyword" id="endorsement_party_process_launcher_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="endorsement_party_process_launcher"/>
+        </record>
         <menuitem parent="contract.menu_contract" sequence="1" action="endorsement_party_process_launcher" id="menu_start_party_endorsement_process"/>
         <record model="ir.ui.view" id="endorsement_party_start_process_find_process_view_form">
             <field name="model">endorsement_party.start.find_process</field>

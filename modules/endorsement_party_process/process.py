@@ -1,3 +1,4 @@
+from trytond.transaction import Transaction
 from trytond.modules.process_cog import ProcessFinder, ProcessStart
 from trytond.modules.cog_utils import fields, model
 from trytond.pool import Pool, PoolMeta
@@ -46,6 +47,13 @@ class EndorsementPartyFindProcess(ProcessStart):
     def build_process_domain(cls):
         return [('on_model', '=', Eval('model')),
             ('kind', '=', 'party_endorsement')]
+
+    @classmethod
+    def default_parties(cls):
+        context_ = Transaction().context
+        if context_.get('active_model', None) == 'party.party':
+            return context_.get('active_ids', [])
+        return []
 
 
 class EndorsementPartyStartProcess(ProcessFinder):
