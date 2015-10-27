@@ -92,7 +92,8 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
                         self._health_complement_fields_to_extract() and
                         v != getattr(self.current_health_complement[0], k)}
                 dates = [x.date for x in party.health_complement]
-                action = 'update' if new_values['date'] in dates else 'add'
+                action = 'update' if 'date' not in new_values or \
+                    new_values['date'] in dates else 'add'
                 new_values.pop('party', None)
                 if (action == 'update' and 'hc_system' in new_values and
                         self.current_health_complement[0].hc_system and
@@ -116,7 +117,7 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
                     party_endorsement=party_endorsement,
                     health_complement=self.current_health_complement[i],
                     relation=self.current_health_complement[i].id if
-                    new_values['date'] in dates else None,
+                    action == 'update' else None,
                     definition=self.endorsement_definition,
                     values=new_values,
                     )
