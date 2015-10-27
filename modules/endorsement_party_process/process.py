@@ -1,5 +1,5 @@
 from trytond.modules.process_cog import ProcessFinder, ProcessStart
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, model
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 
@@ -10,6 +10,7 @@ __all__ = [
     'EndorsementPartyFindProcess',
     'EndorsementPartyStartProcess',
     'EndorsementFindProcess',
+    'Party',
     ]
 
 
@@ -91,3 +92,20 @@ class EndorsementFindProcess:
     def __setup__(cls):
         super(EndorsementFindProcess, cls).__setup__()
         cls.definition.domain.extend([('is_party', '=', False)])
+
+
+class Party:
+    __name__ = 'party.party'
+
+    @classmethod
+    def __setup__(cls):
+        super(Party, cls).__setup__()
+        cls._buttons.update({
+                'button_start_endorsement_process': {},
+                })
+
+    @classmethod
+    @model.CoopView.button_action(
+        'endorsement_party_process.endorsement_party_process_launcher')
+    def button_start_endorsement_process(cls, parties):
+        pass

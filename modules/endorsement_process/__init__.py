@@ -10,6 +10,7 @@ def register():
         Endorsement,
         EndorsementFindProcess,
         EndorsementPartUnion,
+        Contract,
         module='endorsement_process', type_='model')
     Pool.register(
         StartEndorsement,
