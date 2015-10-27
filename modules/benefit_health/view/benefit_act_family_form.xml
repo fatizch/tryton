@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form string="Medical Act Family">
+    <label name="code"/>
+    <field name="code"/>
+    <label name="name"/>
+    <field name="name"/>
+    <field name="act_descriptions" colspan="4" widget="many2many"/>
+</form>

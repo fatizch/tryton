@@ -29,5 +29,30 @@
             <field name="act_window" ref="act_medical_act_desc_form"/>
         </record>
         <menuitem parent="health.menu_health_configuration" sequence="1" id="menu_medical_act" icon="tryton-list" action="act_medical_act_desc_form"/>
+        <record model="ir.ui.view" id="medical_act_family_view_form">
+            <field name="model">benefit.act.family</field>
+            <field name="type">form</field>
+            <field name="name">benefit_act_family_form</field>
+        </record>
+        <record model="ir.ui.view" id="medical_act_family_view_list">
+            <field name="model">benefit.act.family</field>
+            <field name="type">tree</field>
+            <field name="name">benefit_act_family_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_medical_act_family_form">
+            <field name="name">Medical Act Families</field>
+            <field name="res_model">benefit.act.family</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_medical_act_family_list_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="medical_act_family_view_list"/>
+            <field name="act_window" ref="act_medical_act_family_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_medical_act_family_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="medical_act_family_view_form"/>
+            <field name="act_window" ref="act_medical_act_family_form"/>
+        </record>
+        <menuitem parent="health.menu_health_configuration" id="menu_medical_act_family" icon="tryton-list" action="act_medical_act_family_form"/>
     </data>
 </tryton>

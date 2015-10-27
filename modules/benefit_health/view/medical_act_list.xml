@@ -2,4 +2,5 @@
 <tree>
     <field name="name"/>
     <field name="code"/>
+    <field name="family"/>
 </tree>

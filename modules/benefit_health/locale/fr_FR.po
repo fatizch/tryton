@@ -65,3 +65,76 @@ msgstr "Santé"
 msgctxt "view:benefit.act.description:"
 msgid "Medical Act Description"
 msgstr "Description d'acte médical"
+
+msgctxt "error:benefit.act.family:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
+msgctxt "error:contract.service.counter:"
+msgid "The number must be unique"
+msgstr "Le numéro doit être unique"
+
+msgctxt "field:benefit.act.description,family:"
+msgid "Medical Act Family"
+msgstr "Famille d'actes"
+
+msgctxt "field:benefit.act.family,act_descriptions:"
+msgid "Medical Act Descriptions"
+msgstr "Descriptions d'acte médical"
+
+msgctxt "field:benefit.act.family,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:benefit.act.family,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.act.family,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.act.family,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit.act.family,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:benefit.act.family,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.act.family,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.act.family,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:benefit.act.family,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:benefit.act.family,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:benefit.act.family,name:"
+msgid "Medical Act Family"
+msgstr "Famille d'actes"
+
+msgctxt "model:ir.action,name:act_medical_act_family_form"
+msgid "Medical Act Families"
+msgstr "Familles d'actes"
+
+msgctxt "model:ir.ui.menu,name:menu_medical_act_family"
+msgid "Medical Act Families"
+msgstr "Familles d'actes"
+
+msgctxt "view:benefit.act.family:"
+msgid "Medical Act Family"
+msgstr "Famille d'actes"
+

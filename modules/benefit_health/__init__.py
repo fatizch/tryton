@@ -6,4 +6,5 @@ def register():
     Pool.register(
         LossDescription,
         MedicalActDescription,
+        MedicalActFamily,
         module='benefit_health', type_='model')
