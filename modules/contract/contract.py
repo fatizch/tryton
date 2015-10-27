@@ -220,7 +220,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         ondelete='RESTRICT')
     parties = fields.Function(
         fields.Many2Many('party.party', None, None, 'Parties'),
-        'get_parties', searcher='search_parties')
+        'get_parties', searcher='search_parties', setter='setter_void')
     current_policy_owner = fields.Function(
         fields.Many2One('party.party', 'Current Policy Owner'),
         'on_change_with_current_policy_owner')
