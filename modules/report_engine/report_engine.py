@@ -507,15 +507,35 @@ class ReportGenerate(Report):
         SelectedModel = pool.get(data['model'])
         selected_obj = SelectedModel(data['id'])
         selected_party = pool.get('party.party')(data['party'])
-        Date = pool.get('ir.date')
-        filename = '%s - %s - %s' % (selected_letter.name,
-            selected_obj.get_rec_name(''),
-            coop_string.slugify(
-                Date.date_as_string(utils.today(), selected_party.lang)))
+        filename = cls.get_filename(selected_letter, selected_obj,
+            selected_party)
         report_context = cls.get_context(records, data)
         oext, content = cls.convert(action_report,
             cls.render(action_report, report_context))
         return (oext, bytearray(content), action_report.direct_print, filename)
+
+    @classmethod
+    def get_filename_separator(cls):
+        return ' - '
+
+    @classmethod
+    def get_date_suffix(cls, language):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        return coop_string.slugify(
+            Date.date_as_string(utils.today(), language))
+
+    @classmethod
+    def get_time_suffix(cls):
+        return datetime.utcnow().strftime('%X')
+
+    @classmethod
+    def get_filename(cls, template, object_, party):
+        separator = cls.get_filename_separator()
+        date_suffix = cls.get_date_suffix(party.lang)
+        time_suffix = cls.get_time_suffix()
+        return separator.join([x for x in [template.name, object_.rec_name,
+                    date_suffix, time_suffix] if x])
 
     @classmethod
     def get_context(cls, records, data):
