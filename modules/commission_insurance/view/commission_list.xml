@@ -5,6 +5,7 @@
     </xpath>
     <xpath expr="/tree" position="inside">
         <field name="commissioned_contract"/>
+        <field name="commissioned_subscriber"/>
         <field name="commissioned_option"/>
         <field name="broker" tree_invisible="1"/>
     </xpath>

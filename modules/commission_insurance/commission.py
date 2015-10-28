@@ -50,6 +50,10 @@ class Commission:
         fields.Many2One('distribution.network', 'Broker'),
         'get_broker', searcher='search_broker')
     commission_rate = fields.Numeric('Commission Rate')
+    commissioned_subscriber = fields.Function(
+        fields.Many2One('party.party', 'Contract Subscriber'),
+        'get_commissioned_subscriber',
+        searcher='search_commissioned_subscriber')
     start = fields.Date('Start')
     end = fields.Date('End')
 
@@ -107,6 +111,15 @@ class Commission:
     @classmethod
     def search_commissioned_contract(cls, name, clause):
         return [('commissioned_option.parent_contract',) +
+            tuple(clause[1:])]
+
+    def get_commissioned_subscriber(self, name):
+        if self.commissioned_option:
+            return self.commissioned_option.parent_contract.subscriber.id
+
+    @classmethod
+    def search_commissioned_subscriber(cls, name, clause):
+        return [('commissioned_option.parent_contract.subscriber',) +
             tuple(clause[1:])]
 
     def get_party(self, name):

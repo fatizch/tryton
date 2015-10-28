@@ -485,10 +485,19 @@ class ContractOption:
 
     @classmethod
     def search_parent_contract(cls, name, clause):
-        return ['OR',
-            ('contract',) + tuple(clause[1:]),
-            ('covered_element.contract',) + tuple(clause[1:]),
-            ]
+        columns = clause[0].split('.')
+        if len(columns) == 1:
+            return ['OR',
+                ('contract',) + tuple(clause[1:]),
+                ('covered_element.contract',) + tuple(clause[1:]),
+                ]
+        else:
+            columns_to_add = '.'.join(columns[1:])
+            return ['OR',
+                ('contract.' + columns_to_add,) + tuple(clause[1:]),
+                ('covered_element.contract.' + columns_to_add,) +
+                tuple(clause[1:]),
+                ]
 
     @classmethod
     def searcher_start_date(cls, name, clause):
