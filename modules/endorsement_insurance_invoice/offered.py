@@ -33,11 +33,6 @@ class EndorsementDefinition:
         return contract_endorsement.endorsement.effective_date
 
     def get_rebill_end(self, contract_endorsement):
-        if (contract_endorsement.endorsement.effective_date ==
-                contract_endorsement.contract.start_date):
-            # Recalcul whole contract (datetime.date.min rather than
-            # contract.start_date to manage start date modification)
-            return datetime.date.min
         return contract_endorsement.contract.end_date or max(
             contract_endorsement.contract.last_invoice_end or
             datetime.date.min, contract_endorsement.endorsement.effective_date)
