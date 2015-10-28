@@ -11,7 +11,8 @@ from trytond.modules.cog_utils import batch, coop_string
 
 __all__ = [
     'PaymentTreatmentBatch',
-    'PaymentCreationBatch'
+    'PaymentCreationBatch',
+    'PaymentAcknowledgeBatch',
     ]
 
 PAYMENT_KINDS = ['receivable', 'payable']
@@ -153,4 +154,61 @@ class PaymentCreationBatch(batch.BatchRoot):
         MoveLine = pool.get('account.move.line')
         MoveLine.create_payments(objects)
         cls.logger.info('%s created' %
+            coop_string.get_print_infos([x.id for x in objects], 'payment'))
+
+
+class PaymentAcknowledgeBatch(batch.BatchRoot):
+    'Payment Acknowledge Batch'
+    __name__ = 'account.payment.acknowledge'
+
+    logger = batch.get_logger(__name__)
+
+    @classmethod
+    def __setup__(cls):
+        super(PaymentAcknowledgeBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'payment_kind': '',
+                })
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'account.payment'
+
+    @classmethod
+    def get_batch_search_model(cls):
+        return 'account.payment'
+
+    @classmethod
+    def select_ids(cls, treatment_date, extra_args):
+        pool = Pool()
+        Group = pool.get('account.payment.group')
+        Payment = pool.get('account.payment')
+        if 'group_reference' in extra_args:
+            groups = Group.search([
+                    ('reference', '=', extra_args['group_reference'])])
+            if len(groups) != 1:
+                msg = "Payment Group Reference %s invalid" % \
+                    extra_args['group_reference']
+                cls.logger.error('%s. Aborting' % msg)
+                raise Exception(msg)
+            return [[payment.id] for payment in groups[0].processing_payments]
+
+        payment_kind = extra_args.get('payment_kind',
+            cls.get_conf_item('payment_kind'))
+        if payment_kind and payment_kind not in PAYMENT_KINDS:
+            msg = "ignoring payment_kind: '%s' not in %s" % (payment_kind,
+                PAYMENT_KINDS)
+            cls.logger.error('%s. Aborting' % msg)
+            raise Exception(msg)
+        return [[payment.id] for payment in Payment.search([
+                    ('state', '=', 'processing'),
+                    ('kind', '=', payment_kind),
+                ])]
+
+    @classmethod
+    def execute(cls, objects, ids, treatment_date, extra_args):
+        pool = Pool()
+        Payment = pool.get('account.payment')
+        Payment.succeed(objects)
+        cls.logger.info('%s succeed' %
             coop_string.get_print_infos([x.id for x in objects], 'payment'))

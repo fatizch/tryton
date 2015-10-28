@@ -15,6 +15,7 @@ Les paiements sont créés avec le statut "Approuvé".
 - *Date de traitement à fournir:* prochaine date de prélèvement postérieure à
   la date du jour
 
+
 Batch de traitement de paiements [account.payment.process]
 ==========================================================
 
@@ -28,3 +29,17 @@ banque.
 Ce batch possède les paramétrages suivants à définir dans une section
 ``account.payment.process`` du fichier de configuration batch.
 
+
+Batch de validation des paiements [account.payment.acknowledge]
+===============================================================
+
+Ce batch passe le statut des paiements de l'état 'Traité' à l'état 'Validé'.
+
+Les paramètres suivants sont disponibles:
+
+- *group_reference'*: permet de spécifier l'identifiant précis d'un groupe de
+paiement.
+- *kind* (receivable ou payable) : définit quel type de paiements seront
+validés. Tous les paiement de ce type à l'état traitement seront validés.
+
+Si les deux paramètres sont spécifiés, seul group_reference sera utilisé.

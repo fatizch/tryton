@@ -24,6 +24,7 @@ def register():
         PaymentFailInformation,
         PaymentTreatmentBatch,
         PaymentCreationBatch,
+        PaymentAcknowledgeBatch,
         Configuration,
         Group,
         Party,

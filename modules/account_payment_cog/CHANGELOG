@@ -1,3 +1,4 @@
+* Add Acknowledge Batch
 * Add fail payment wizard in order to select the reject reason
 * Display information on the invoice if a payment is planned
 * Allow to generate a report when payment is rejected
