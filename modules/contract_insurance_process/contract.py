@@ -116,50 +116,6 @@ class Contract(CogProcessFramework):
             result.save()
             return result
 
-    def generate_and_attach_reports(self, template_codes, creator=None):
-        """template_codes should be a comma separated list
-        of document template codes between single quotes,
-        i.e : 'template1', 'template2', etc.
-        """
-        pool = Pool()
-        Template = pool.get('report.template')
-        Attachment = pool.get('ir.attachment')
-        Report = pool.get('report.generate', type='report')
-        Date = pool.get('ir.date')
-
-        template_instances = Template.search([('code', 'in', template_codes),
-                ('format_for_internal_edm', '=', 'pdf')])
-
-        for template_instance in template_instances:
-            _, filedata, _, file_basename = Report.execute(
-                [self.id], {
-                    'id': self.id,
-                    'ids': [self.id],
-                    'model': 'contract',
-                    'doc_template': [template_instance],
-                    'party': self.subscriber.id,
-                    'address': self.subscriber.addresses[0].id,
-                    'sender': None,
-                    'sender_address': None,
-                    })
-            report = Report()
-            report.template_extension = 'odt'
-            report.extension = 'pdf'
-            _, data = Report.convert(report, filedata)
-
-            attachment = Attachment()
-            attachment.resource = 'contract,%s' % self.id
-            attachment.data = data
-            date_string = Date.date_as_string(utils.today(),
-                    self.company.party.lang)
-            date_string_underscore = ''.join([c if c.isdigit() else "_"
-                    for c in date_string])
-            attachment.name = '%s_%s_%s.pdf' % (template_instance.name,
-                self.rec_name, date_string_underscore)
-            attachment.document_desc = template_instance.document_desc
-            attachment.origin = creator or self
-            attachment.save()
-
 
 class ContractOption:
     __name__ = 'contract.option'

@@ -15,24 +15,6 @@ Boutons
   Ce bouton, utilisé dans la vue d'une étape, permet de lancer
   l'assistant de prévisualisation des changements.
 
-Méthodes
---------
-
-- Génération des documents
-
-  .. code:: python
-
-      generate_and_attach_reports_in_endorsement
-
-  Cette méthode permet de générer et d'attacher des documents sur les
-  contrats de l'avenant. Les paramètres doivent être définis ainsi ::
-
-  .. code:: python
-
-      [['modele1', 'modele2']]
-
-  Où ``modele1`` et ``modele2`` sont des codes de modèles de lettre.
-
 Champs
 ------
 
