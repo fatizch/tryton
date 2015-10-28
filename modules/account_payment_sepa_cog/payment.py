@@ -7,6 +7,7 @@ from dateutil.relativedelta import relativedelta
 import genshi
 import genshi.template
 
+from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.cog_utils import fields, export, coop_date, utils
 
@@ -282,7 +283,7 @@ class Payment:
         pool = Pool()
         Payment = pool.get('account.payment')
         if reject_reason.process_method != 'sepa':
-            super(Payment, cls).manual_set_reject_reason(payments,
+            return super(Payment, cls).manual_set_reject_reason(payments,
                 reject_reason)
         sepa_merged_ids = set([p.sepa_merged_id for p in payments])
         all_payments = Payment.search([
@@ -370,7 +371,9 @@ class Journal:
     __name__ = 'account.payment.journal'
 
     last_sepa_receivable_payment_creation_date = fields.Date(
-        'Last Receivable Payment SEPA Creation')
+        'Last Receivable Payment SEPA Creation',
+        states={'invisible': Eval('process_method') != 'sepa'},
+        depends=['process_method'])
 
     def get_next_possible_payment_date(self, line, day):
         if self.process_method != 'sepa':

@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Create Payments">
-    <image name="tryton-dialog-information" xexpand="0" xfill="0"/>
-    <label string="Payments will be created for selected lines" id="create" yalign="0.0" xalign="0.0" xexpand="1"/>
+    <label name="party"/>
+    <field name="party"/>
     <newline/>
+    <label name="kind"/>
+    <field name="kind"/>
+    <label name="total_amount"/>
+    <field name="total_amount"/>
+    <label name="payment_date"/>
+    <field name="payment_date"/>
+    <label name="journal"/>
+    <field name="journal"   widget="selection"/>
+    <label name="description"/>
+    <field name="description" colspan="3"/>
+    <newline/>
+    <label name="process_validate_payment"/>
+    <field name="process_validate_payment"/>
+    <newline/>
+    <field name="lines_to_pay" colspan="4"/>
 </form>

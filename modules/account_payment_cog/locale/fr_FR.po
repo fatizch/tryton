@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.payment.creation:"
+msgid "Selected lines are incompatible: some are payable lines some are receivable."
+msgstr "Les lignes sélectionnées sont incompatibles: certaines sont des lignes à payer d'autres des lignes à recevoir"
+
+msgctxt "error:account.payment.creation:"
+msgid "Selected lines are incompatible with selected kind"
+msgstr "Les lignes sélectionnées sont incompatibles avec le type de paiement sélectionné."
+
 msgctxt "error:account.payment.journal.failure_action:"
 msgid "Unknown reject code : %s"
 msgstr "Motif de rejet inconnu : %s"
@@ -23,11 +31,6 @@ msgctxt "error:account.payment:"
 msgid "Payments blocked for party %s"
 msgstr "Paiements bloqués pour le tiers %s"
 
-#, fuzzy
-msgctxt "field:account.configuration,default_customer_payment_term:"
-msgid "Default Customer Payment Term"
-msgstr "Conditions de paiement client par défaut"
-
 msgctxt "field:account.configuration,direct_debit_journal:"
 msgid "Direct Debit Journal"
 msgstr "Journal de prélèvement"
@@ -35,20 +38,6 @@ msgstr "Journal de prélèvement"
 msgctxt "field:account.configuration,reject_fee_journal:"
 msgid "Reject Fee Journal"
 msgstr "Journal des frais de rejet"
-
-#, fuzzy
-msgctxt "field:account.invoice,credit_reconciliation_lines:"
-msgid "Payment Lines"
-msgstr "Lignes de paiement"
-
-#, fuzzy
-msgctxt "field:account.invoice,payments:"
-msgid "Payments"
-msgstr "Paiements"
-
-msgctxt "field:account.invoice,pending_payment:"
-msgid "Pending Payment"
-msgstr ""
 
 msgctxt "field:account.move.line,payment_date:"
 msgid "Payment Date"
@@ -109,10 +98,6 @@ msgstr "Frais par défaut"
 msgctxt "field:account.payment.journal,failure_actions:"
 msgid "Failure Actions"
 msgstr "Actions en cas de rejet"
-
-msgctxt "field:account.payment.journal,sepa_bank_account_number:"
-msgid "Bank Account"
-msgstr "Compte Bancaire"
 
 msgctxt "field:account.payment.journal,xml_id:"
 msgid "XML Id"
@@ -226,9 +211,50 @@ msgctxt "field:account.payment.journal.reject_reason,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.payment.payment_creation.start,description:"
+msgid "Description"
+msgstr "Description"
+
 msgctxt "field:account.payment.payment_creation.start,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:account.payment.payment_creation.start,journal:"
+msgid "Payment Journal"
+msgstr "Journal de paiement"
+
+msgctxt "field:account.payment.payment_creation.start,kind:"
+msgid "Payment Kind"
+msgstr "Type de paiement"
+
+msgctxt "field:account.payment.payment_creation.start,lines_to_pay:"
+msgid "Lines To Pay"
+msgstr "Lignes à payer"
+
+msgctxt "field:account.payment.payment_creation.start,multiple_parties:"
+msgid "Payments For Multiple Parties"
+msgstr "Paiements pour plusieurs tiers"
+
+msgctxt "field:account.payment.payment_creation.start,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:account.payment.payment_creation.start,payment_date:"
+msgid "Payment Date"
+msgstr "Date de paiement"
+
+msgctxt "field:account.payment.payment_creation.start,process_method:"
+msgid "Process Method"
+msgstr "Méthode de traitement"
+
+msgctxt ""
+"field:account.payment.payment_creation.start,process_validate_payment:"
+msgid "Process and Validate Payments"
+msgstr "Traiter et valider les paiements"
+
+msgctxt "field:account.payment.payment_creation.start,total_amount:"
+msgid "Total Amount"
+msgstr "Montant total"
 
 msgctxt "field:account.payment.payment_information_selection,id:"
 msgid "ID"
@@ -290,6 +316,10 @@ msgctxt "field:party.synthesis.menu.payment,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:report.template,export_dir:"
+msgid "Export Directory"
+msgstr "Répertoire d'export"
+
 msgctxt "help:account.payment.journal.failure_action,reject_number:"
 msgid ""
 "Filter the action according to the number of rejects for a given payment. If"
@@ -297,6 +327,12 @@ msgid ""
 msgstr ""
 "Filtre l'action en fonction du nombre de rejets pour un paiement donné. Si "
 "vide, l'action sera utilisée pour tous les rejets"
+
+msgctxt "help:report.template,export_dir:"
+msgid "Store a copy of each generated document in specified server directory"
+msgstr ""
+"Répertoire serveur dans lequel sauvegarder une copie de chaque document "
+"généré."
 
 msgctxt "model:account.payment.create,name:"
 msgid "Payment Creation Batch"
@@ -326,6 +362,18 @@ msgctxt "model:account.payment.process,name:"
 msgid "Payment Treatment Batch"
 msgstr "Batch de traitement des paiements"
 
+msgctxt "model:event.type,name:event_fail_payment"
+msgid "Fail Payment"
+msgstr "Échec du paiement"
+
+msgctxt "model:event.type,name:event_process_payment"
+msgid "Process Payment"
+msgstr "Traitement du paiment"
+
+msgctxt "model:event.type,name:event_succeed_payment"
+msgid "Succeed payment"
+msgstr "Succès du paiement"
+
 msgctxt "model:ir.action,name:"
 msgid "Receivable Payments"
 msgstr "Paiements à recevoir"
@@ -333,10 +381,6 @@ msgstr "Paiements à recevoir"
 msgctxt "model:ir.action,name:act_payment_fail_status_form"
 msgid "Payments Rejected"
 msgstr "Paiements rejetés"
-
-msgctxt "model:ir.action,name:act_process_payments"
-msgid "Process Payments"
-msgstr "Traiter les paiements"
 
 msgctxt "model:ir.action,name:act_process_payments_button"
 msgid "Process Payments"
@@ -361,6 +405,10 @@ msgstr "Modifier les informations de prélèvement"
 msgctxt "model:ir.ui.menu,name:"
 msgid "Create Receivable Payment"
 msgstr "Créer les prélèvements"
+
+msgctxt "model:ir.ui.menu,name:menu_create_payments"
+msgid "Create Payments"
+msgstr "Créer les paiements"
 
 msgctxt "model:ir.ui.menu,name:menu_fail_payment_status_form"
 msgid "Payments Rejected"
@@ -410,6 +458,14 @@ msgctxt "selection:account.payment.journal.failure_action,action:"
 msgid "Retry"
 msgstr "Réessayer"
 
+msgctxt "selection:account.payment.payment_creation.start,kind:"
+msgid "Payable"
+msgstr "À payer "
+
+msgctxt "selection:account.payment.payment_creation.start,kind:"
+msgid "Receivable"
+msgstr "À recevoir"
+
 msgctxt "view:account.move.line:"
 msgid "Payments"
 msgstr "Paiements"
@@ -442,10 +498,6 @@ msgctxt "view:account.payment.payment_creation.start:"
 msgid "Create Payments"
 msgstr "Créer les paiements"
 
-msgctxt "view:account.payment.payment_creation.start:"
-msgid "Payments will be created for selected lines"
-msgstr "Les paiements seront créés pour les lignes sélectionnées"
-
 msgctxt "view:account.payment.payment_information_selection:"
 msgid "Payment Date Modification"
 msgstr "Modification de la date de paiement"
@@ -458,7 +510,6 @@ msgctxt "view:account.payment:"
 msgid "Draft"
 msgstr "Brouillon"
 
-#, fuzzy
 msgctxt "view:account.payment:"
 msgid "Fail"
 msgstr "Échouer"
@@ -526,21 +577,9 @@ msgid "Payable"
 msgstr "À payer"
 
 msgctxt "selection:account.payment,kind:account_payment."
-msgid "Receivable"
-msgstr "À recevoir"
-
-msgctxt "selection:account.payment,kind:account_payment."
 msgid "Payable"
 msgstr "À payer"
 
-msgctxt "model:event.type,name:event_process_payment"
-msgid "Process Payment"
-msgstr "Traitement du paiment"
-
-msgctxt "model:event.type,name:event_fail_payment"
-msgid "Fail Payment"
-msgstr "Échec du paiement"
-
-msgctxt "model:event.type,name:event_succeed_payment"
-msgid "Succeed payment"
-msgstr "Succès du paiement"
+msgctxt "selection:account.payment,kind:account_payment."
+msgid "Receivable"
+msgstr "À recevoir"

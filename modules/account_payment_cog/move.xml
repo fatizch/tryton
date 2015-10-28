@@ -50,5 +50,11 @@
             <field name="model">account.move.line,-1</field>
             <field name="action" ref="create_payments_wizard"/>
         </record>
+        <record model="ir.action.keyword" id="act_create_payments_from_party_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="create_payments_wizard"/>
+        </record>
+        <menuitem parent="account_payment.menu_payments" sequence="40" action="create_payments_wizard" id="menu_create_payments"/>
     </data>
 </tryton>

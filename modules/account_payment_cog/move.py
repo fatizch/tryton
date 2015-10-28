@@ -4,12 +4,13 @@ from sql.aggregate import Sum
 from sql.conditionals import Coalesce
 from sql.operators import Not
 from decimal import Decimal
+from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool, If
 from trytond.wizard import StateView, Button, StateTransition
 from trytond.transaction import Transaction
-
+from trytond.modules.account_payment.payment import KINDS
 from trytond.modules.cog_utils import fields, model, utils
 
 __metaclass__ = PoolMeta
@@ -226,6 +227,46 @@ class PaymentCreationStart(model.CoopView):
     'Payment Creation Start'
     __name__ = 'account.payment.payment_creation.start'
 
+    party = fields.Many2One('party.party', 'Party', states={
+            'invisible': Bool(Eval('multiple_parties'))})
+    multiple_parties = fields.Boolean('Payments For Multiple Parties')
+    lines_to_pay = fields.Many2Many('account.move.line', None, None,
+        'Lines To Pay', required=True, domain=[
+            ('account.kind', 'in', ['payable', 'receivable']),
+            If(Bool(Eval('party')),
+                [('party', '=', Eval('party')), ], []),
+            If(Eval('kind', '') == 'receivable',
+                ['OR',
+                    [('credit', '<', 0)],
+                    [('debit', '>', 0)]],
+                ['OR',
+                    [('credit', '>', 0)],
+                    [('debit', '<', 0)]]),
+            ('reconciliation', '=', None),
+            ('payment_amount', '!=', 0)],
+        depends=['party', 'kind'])
+    payment_date = fields.Date('Payment Date')
+    journal = fields.Many2One('account.payment.journal', 'Payment Journal',
+        required=True)
+    kind = fields.Selection(KINDS, 'Payment Kind')
+    process_method = fields.Char('Process Method', states={'invisible': True})
+    description = fields.Char('Description')
+    process_validate_payment = fields.Boolean('Process and Validate Payments',
+        states={'invisible': Eval('process_method') != 'manual'},
+        depends=['process_method'])
+    total_amount = fields.Numeric('Total Amount', readonly=True)
+
+    @fields.depends('journal')
+    def on_change_with_process_method(self, name=None):
+        return self.journal.process_method if self.journal else ''
+
+    @fields.depends('lines_to_pay', 'kind')
+    def on_change_with_total_amount(self, name=None):
+        total = sum([(line.credit - line.debit) for line in self.lines_to_pay])
+        if self.kind == 'receivable':
+            total = -total
+        return total
+
 
 class PaymentCreation(model.CoopWizard):
     'Payment Creation'
@@ -238,10 +279,85 @@ class PaymentCreation(model.CoopWizard):
         ])
     create_payments = StateTransition()
 
+    @classmethod
+    def __setup__(cls):
+        super(PaymentCreation, cls).__setup__()
+        cls._error_messages.update({
+                'incompatible_lines': 'Selected lines are incompatible. Some '
+                'are payable lines some are receivable.',
+                'incompatible_lines_with_kind': 'Selected lines are '
+                'incompatible with selected kind',
+                })
+
+    def get_lines_amount_per_kind(self, lines):
+        # lines must be same type
+        res = defaultdict(lambda: 0)
+        for line in lines:
+            if (line.debit > 0) or (line.credit < 0):
+                res['receivable'] += line.debit - line.credit
+            else:
+                res['payable'] += line.debit - line.credit
+        if len(res) != 1:
+            self.raise_user_error('incompatible_lines')
+        return res
+
+    def default_start(self, values):
+        pool = Pool()
+        Line = pool.get('account.move.line')
+        model = Transaction().context.get('active_model')
+        if model == 'account.move.line':
+            active_ids = Transaction().context.get('active_ids', [])
+            lines = Line.browse(active_ids)
+            kind = self.get_lines_amount_per_kind(lines)
+            parties = list(set([l.party for l in lines]))
+            return {
+                'lines_to_pay': active_ids,
+                'total_amount': kind.values()[0],
+                'kind': kind.keys()[0],
+                'multiple_parties': len(parties) != 1,
+                'party': parties[0].id if len(parties) == 1 else None
+                }
+        elif model == 'party.party':
+            active_id = Transaction().context.get('active_id', None)
+            lines = Line.search([
+                ('account.kind', 'in', ['payable', 'receivable']),
+                ['OR',
+                    [('credit', '>', 0)],
+                    [('debit', '<', 0)]],
+                ('party', '=', active_id),
+                ('reconciliation', '=', None),
+                ('payment_amount', '!=', 0)])
+            return {
+                'kind': 'payable',
+                'multiple_parties': False,
+                'party': active_id,
+                'lines_to_pay': [l.id for l in lines],
+                }
+        return {'kind': 'payable'}
+
     def transition_create_payments(self):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
-        active_ids = Transaction().context.get('active_ids')
-        lines = MoveLine.search([('id', 'in', active_ids)])
-        MoveLine.create_payments(lines)
+        Payment = pool.get('account.payment')
+
+        kind = self.get_lines_amount_per_kind(self.start.lines_to_pay)
+        if kind.keys()[0] != self.start.kind:
+            self.raise_user_error('incompatible_lines_with_kind')
+        MoveLine.write(list(self.start.lines_to_pay),
+            {'payment_date': self.start.payment_date})
+        payments = MoveLine.init_payments(self.start.lines_to_pay,
+            self.start.journal)
+        if self.start.description:
+            for payment in payments:
+                payment['description'] = self.start.description
+        payments = Payment.create(payments)
+        if self.start.process_validate_payment:
+            def group():
+                Group = pool.get('account.payment.group')
+                group = Group(journal=self.start.journal.id,
+                    kind=self.start.kind)
+                group.save()
+                return group
+            Payment.process(payments, group)
+            Payment.succeed(payments)
         return 'end'
