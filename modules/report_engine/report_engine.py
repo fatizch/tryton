@@ -239,6 +239,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 'address': objects[0].get_address(),
                 'sender': objects[0].get_sender(),
                 'sender_address': objects[0].get_sender_address(),
+                'origin': origin,
                 })
         report = Report()
         report.template_extension = self.template_extension
@@ -542,6 +543,8 @@ class ReportGenerate(Report):
             if lang is None:
                 lang = report_context['Party'].lang
             return pool.get('ir.lang').strftime(value, lang.code, lang.date)
+
+        report_context['origin'] = data.get('origin', None)
 
         report_context['Date'] = pool.get('ir.date').today()
         report_context['FDate'] = format_date
