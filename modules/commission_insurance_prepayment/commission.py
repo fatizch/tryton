@@ -175,19 +175,19 @@ class Agent:
         """
         pool = Pool()
         Commission = pool.get('commission')
-        Details = pool.get('account.invoice.line.detail')
         commission = Commission.__table__()
-        details = Details.__table__()
 
         cursor = Transaction().cursor
         agent_column = Column(commission, 'agent')
-        option_column = Column(details, 'option')
+        option_column = Column(commission, 'commissioned_option')
         origin_column = Column(commission, 'origin')
         prepayment_column = Column(commission, 'is_prepayment')
+        reedemed_column = Column(commission, 'redeemed_prepayment')
         where_redeemed = Or()
         where_prepayment = Or()
         for agent in agents:
             where_redeemed.append(((agent_column == agent[0]) &
+                    (reedemed_column != Null) &
                     (option_column == agent[1])))
             where_prepayment.append(((agent_column == agent[0]) &
                     (prepayment_column == True) &
@@ -199,8 +199,7 @@ class Agent:
         cursor.execute(*commission.select(commission.agent,
                 commission.commissioned_option,
                 Sum(commission.redeemed_prepayment),
-                where=(where_redeemed and
-                    commission.redeemed_prepayment != Null),
+                where=where_redeemed,
                 group_by=[commission.agent, commission.commissioned_option]))
         for agent, option, amount in cursor.fetchall():
             result[(agent, option)] = -amount
