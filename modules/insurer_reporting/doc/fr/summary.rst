@@ -1,0 +1,1 @@
+Ce module permet de générer les rapports assureurs.

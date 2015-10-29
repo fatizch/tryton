@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<form string="Configure Contract Reporting">
+    <label name="insurer"/>
+    <field name="insurer" widget="selection"/>
+    <newline/>
+    <label name="template"/>
+    <field name="template" widget="selection"/>
+</form>

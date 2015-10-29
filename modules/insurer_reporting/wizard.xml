@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tryton>
+    <data>
+        <!-- ############################ -->
+        <!-- # Insurer Reporting Result # -->
+        <!-- ############################ -->
+        <record model="ir.ui.view" id="insurer_reporting_result_view_form">
+            <field name="model">insurer_reporting.result</field>
+            <field name="type">form</field>
+            <field name="name">reporting_result_form</field>
+        </record>
+        <!-- ##################################### -->
+        <!-- # Insurer Report Contract Configure # -->
+        <!-- ##################################### -->
+        <record model="ir.ui.view" id="configure_insurer_contract_reporting_view_form">
+            <field name="model">insurer_reporting.contract.configure</field>
+            <field name="type">form</field>
+            <field name="name">contract_reporting_configure_form</field>
+        </record>
+        <!-- ################################## -->
+        <!-- # Insurer Report Contract Wizard # -->
+        <!-- ################################## -->
+        <record model="ir.action.wizard" id="act_insurer_report_contract">
+            <field name="name">Insurer Report Contract</field>
+            <field name="wiz_name">insurer_reporting.contract</field>
+        </record>
+        <menuitem parent="report_engine.menu_report" sequence="1" id="menu_report_insurer" name="Insurer Report"/>
+        <menuitem parent="menu_report_insurer" sequence="1" id="menu_report_insurer_contract" action="act_insurer_report_contract"/>
+    </data>
+</tryton>
