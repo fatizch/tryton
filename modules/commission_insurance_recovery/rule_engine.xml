@@ -10,5 +10,14 @@
             <field name="name">re_commission_sum_for_option</field>
             <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
         </record>
+        <record model="rule_engine.function" id="paid_invoice_end_date">
+            <field name="translated_technical_name">date_derniere_quittance_payee</field>
+            <field name="description">Date de la dernière quittance payee</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">re_last_paid_invoice_end_date</field>
+            <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
+        </record>
     </data>
 </tryton>
