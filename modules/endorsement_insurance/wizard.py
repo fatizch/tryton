@@ -67,10 +67,13 @@ class NewCoveredElement(EndorsementWizardStepMixin):
         pool = Pool()
         EndorsementCoveredElementOption = pool.get(
             'endorsement.contract.covered_element.option')
+        EndorsementCoveredElementVersion = pool.get(
+            'endorsement.contract.covered_element.version')
         wizard.update_add_to_list_endorsement(self, endorsement,
             'covered_elements')
         endorsement.save()
-        vlist = []
+        vlist_options = []
+        vlist_versions = []
         for i, covered_element in enumerate(self.covered_elements):
             for option in covered_element.options:
                 template = {
@@ -86,8 +89,17 @@ class NewCoveredElement(EndorsementWizardStepMixin):
                     template['values'][field.name] = new_value
                     template['values']['manual_start_date'] = \
                         wizard.endorsement.effective_date
-                vlist.append(template)
-        EndorsementCoveredElementOption.create(vlist)
+                vlist_options.append(template)
+            for version in covered_element.versions:
+                vlist_versions.append({
+                        'action': 'add',
+                        'values': {'start': version.start},
+                        'extra_data': version.extra_data,
+                        'covered_element_endorsement':
+                        endorsement.covered_elements[i],
+                        })
+        EndorsementCoveredElementOption.create(vlist_options)
+        EndorsementCoveredElementVersion.create(vlist_versions)
 
 
 class RemoveOption(EndorsementWizardStepMixin):
@@ -1448,6 +1460,7 @@ class StartEndorsement:
                 'start_date': endorsement_date,
                 'item_desc': (result['possible_item_desc'] or [None])[0],
                 'main_contract': contract.id,
+                'contract': contract.id,
                 'product': result['product'],
                 } for _ in xrange(num_covered_elements)]
         for covered_elem in result['covered_elements']:
