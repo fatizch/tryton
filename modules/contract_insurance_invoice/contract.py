@@ -342,7 +342,8 @@ class Contract:
                     amount_per_date[line.payment_date or line.date] +=\
                         line.amount
             else:
-                amount_per_date[invoice.planned_payment_date] += \
+                amount_per_date[invoice.planned_payment_date
+                    or invoice.start or invoice.invoice_date] += \
                     invoice.invoice.total_amount
         invoices = [{
                 'total_amount': amount_per_date[key],
