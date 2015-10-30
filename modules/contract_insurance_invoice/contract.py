@@ -516,6 +516,8 @@ class Contract:
         billing_informations = iter(self.billing_informations)
         billing_information = billing_informations.next()
         for next_billing_information in billing_informations:
+            if billing_information.same_rule(next_billing_information):
+                continue
             if (next_billing_information.date or datetime.date.min) > start:
                 break
             else:
@@ -542,7 +544,8 @@ class Contract:
             return []
         periods = []
         while (up_to_date and start < up_to_date) or len(periods) < 1:
-            rule, until, billing_information =\
+            original_start = start
+            rule, until, billing_information = \
                 self._get_invoice_rrule_and_billing_information(start)
             for date in rule:
                 if hasattr(date, 'date'):
@@ -563,6 +566,14 @@ class Contract:
                     end = until + relativedelta(days=-1)
                     periods.append((start, end, billing_information))
                     start = until
+                continue
+            if start == original_start:
+                if until and start <= until:
+                    end = until + relativedelta(days=-1)
+                    periods.append((start, end, billing_information))
+                    start = until
+                else:
+                    raise NotImplementedError
         return periods
 
     @classmethod
@@ -1179,6 +1190,10 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         payment_journal = curline.get_payment_journal()
         return payment_journal.get_next_possible_payment_date(line,
             self.direct_debit_day)
+
+    def same_rule(self, other):
+        return self.billing_mode == other.billing_mode and \
+            self.payment_term == other.payment_term
 
     @classmethod
     def add_func_key(cls, values):

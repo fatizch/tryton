@@ -202,7 +202,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         product, = self.Product.create([{'company': company.id,
                     'name': 'Test Product',
                     'code': 'test_product',
-                    'start_date': date(2014, 4, 1),
+                    'start_date': date(2014, 1, 1),
                     'billing_modes': [
                         ('add', [freq_month.id, freq_quart.id,
                                 freq_once.id])],
@@ -252,6 +252,39 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(contract.get_invoice_periods(date(2014, 4, 16)),
             [(date(2014, 4, 15), date.max + relativedelta(days=-1),
                 contract.billing_informations[0])])
+
+        contract = self.Contract(company=company,
+            start_date=date(2014, 1, 1),
+            product=product,
+            billing_informations=[
+                self.BillingInformation(date=None,
+                    billing_mode=freq_quart,
+                    direct_debit_day=5,
+                    payment_term=payment_term),
+                self.BillingInformation(date=date(2014, 1, 5),
+                    billing_mode=freq_month,
+                    payment_term=payment_term),
+                ])
+        contract.save()
+        self.assertEqual(contract.get_invoice_periods(date(2014, 1, 1)), [(
+                    date(2014, 1, 1), date(2014, 1, 4),
+                    contract.billing_informations[0])])
+
+        contract = self.Contract(company=company,
+            start_date=date(2014, 1, 1),
+            product=product,
+            billing_informations=[
+                self.BillingInformation(date=None,
+                    billing_mode=freq_month,
+                    payment_term=payment_term),
+                self.BillingInformation(date=date(2014, 1, 5),
+                    billing_mode=freq_month,
+                    payment_term=payment_term),
+                ])
+        contract.save()
+        self.assertEqual(contract.get_invoice_periods(date(2014, 1, 1)), [(
+                    date(2014, 1, 1), date(2014, 1, 31),
+                    contract.billing_informations[0])])
 
     def test_get_direct_debit_day(self):
         current_date = date(2014, 9, 1)
