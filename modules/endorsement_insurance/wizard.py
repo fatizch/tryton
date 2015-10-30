@@ -1235,6 +1235,8 @@ class NewExtraPremium(model.CoopView):
     new_extra_premium = fields.One2Many('contract.option.extra_premium', None,
         'New Extra Premium')
     options = fields.One2Many('endorsement.option.selector', None, 'Options')
+    option_selected = fields.Boolean('Option Selected', states={
+            'invisible': True})
     covered_elements = fields.One2Many('endorsement.covered_element.selector',
         None, 'Covered Elements')
 
@@ -1247,7 +1249,7 @@ class NewExtraPremium(model.CoopView):
                 {'invisible': Len(Eval('covered_elements', [])) == 1}),
         ]
 
-    @fields.depends('covered_elements', 'options')
+    @fields.depends('covered_elements', 'option_selected', 'options')
     def on_change_covered_elements(self):
         for covered_element in self.covered_elements:
             for option in self.options:
@@ -1257,12 +1259,14 @@ class NewExtraPremium(model.CoopView):
                         covered_element.covered_element_endorsement_id):
                     option.selected = covered_element.selected
         self.options = self.options
+        self.option_selected = any([x.selected for x in self.options])
 
-    @fields.depends('covered_elements')
+    @fields.depends('covered_elements', 'option_selected', 'options')
     def on_change_options(self):
         for covered_element in self.covered_elements:
             covered_element.selected = False
         self.covered_elements = self.covered_elements
+        self.option_selected = any((x.selected for x in self.options))
 
     @classmethod
     def _extra_premium_fields_to_extract(cls):
