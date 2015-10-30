@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -30,9 +30,9 @@ msgctxt "field:health.party_complement,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:health.party_complement,func_key:"
-msgid "Functional Key"
-msgstr "Clé fonctionnelle"
+msgctxt "field:health.party_complement,date:"
+msgid "Date"
+msgstr "Date"
 
 msgctxt "field:health.party_complement,id:"
 msgid "ID"
@@ -73,10 +73,6 @@ msgstr "Complément Santé"
 msgctxt "field:party.party,health_contract:"
 msgid "Health Contract"
 msgstr "Contrat Santé"
-
-msgctxt "field:party.party,is_health:"
-msgid "Is Health"
-msgstr "Santé"
 
 msgctxt "model:health.party_complement,name:"
 msgid "Health Party Complement"

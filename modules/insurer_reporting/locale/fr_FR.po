@@ -2,41 +2,25 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:account.invoice,report_commissions:"
+msgid "Commissions To Report"
+msgstr "Commissions incluses dans le rapport"
+
+msgctxt "field:account.invoice.line,tax_amount:"
+msgid "Tax Amount"
+msgstr "Montant de la taxe"
+
+msgctxt "field:account.invoice.line,tax_rate:"
+msgid "Tax Rate"
+msgstr "Taux de taxe"
+
+msgctxt "field:account.invoice.line,taxed_amount:"
+msgid "Taxed Amount"
+msgstr "Montant taxé"
+
 msgctxt "field:commission,commission_rate:"
 msgid "Commission Rate"
 msgstr "Taux de commission"
-
-msgctxt "field:insurer_reporting.broker.configure,broker:"
-msgid "Broker"
-msgstr "Courtier"
-
-msgctxt "field:insurer_reporting.broker.configure,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:insurer_reporting.broker.configure,invoice:"
-msgid "Invoice"
-msgstr "Quittance"
-
-msgctxt "field:insurer_reporting.broker.configure,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:insurer_reporting.commission.configure,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:insurer_reporting.commission.configure,insurer:"
-msgid "Insurer"
-msgstr "Assureur"
-
-msgctxt "field:insurer_reporting.commission.configure,invoice:"
-msgid "Invoice"
-msgstr "Quittance"
-
-msgctxt "field:insurer_reporting.commission.configure,template:"
-msgid "Template"
-msgstr "Modèle"
 
 msgctxt "field:insurer_reporting.contract.configure,id:"
 msgid "ID"
@@ -58,14 +42,6 @@ msgctxt "field:insurer_reporting.result,reports:"
 msgid "Reports"
 msgstr "Rapports"
 
-msgctxt "model:insurer_reporting.broker.configure,name:"
-msgid "Configure Broker Reporting"
-msgstr "Configurer le rapport courtier"
-
-msgctxt "model:insurer_reporting.commission.configure,name:"
-msgid "Configure Insurer Commission Reporting"
-msgstr "Configurer le rapport assureur de commissions"
-
 msgctxt "model:insurer_reporting.contract.configure,name:"
 msgid "Configure Insurer Contract Reporting"
 msgstr "Configurer le rapport assureur de contrat"
@@ -74,19 +50,15 @@ msgctxt "model:insurer_reporting.result,name:"
 msgid "Insurer Reporting Result"
 msgstr "Résultat de rapport assureur"
 
-msgctxt "model:ir.action,name:act_broker_report"
+msgctxt "model:ir.action,name:"
 msgid "Broker Report"
 msgstr "Rapport courtier"
-
-msgctxt "model:ir.action,name:act_insurer_report_commission"
-msgid "Insurer Report Commission"
-msgstr "Rapport assureur : commissions"
 
 msgctxt "model:ir.action,name:act_insurer_report_contract"
 msgid "Insurer Report Contract"
 msgstr "Rapport assureur : contrats"
 
-msgctxt "model:ir.ui.menu,name:menu_report_broker"
+msgctxt "model:ir.ui.menu,name:"
 msgid "Broker Report"
 msgstr "Rapport courtier"
 
@@ -94,21 +66,9 @@ msgctxt "model:ir.ui.menu,name:menu_report_insurer"
 msgid "Insurer Report"
 msgstr "Rapport assureur"
 
-msgctxt "model:ir.ui.menu,name:menu_report_insurer_commission"
-msgid "Insurer Report Commission"
-msgstr "Rapport assureur : commissions"
-
 msgctxt "model:ir.ui.menu,name:menu_report_insurer_contract"
 msgid "Insurer Report Contract"
 msgstr "Rapport assureur : contrats"
-
-msgctxt "view:insurer_reporting.broker.configure:"
-msgid "Configure Broker Reporting"
-msgstr "Configurer le rapport courtier"
-
-msgctxt "view:insurer_reporting.commission.configure:"
-msgid "Configure Commission Reporting"
-msgstr "Configurer le rapport de commissions"
 
 msgctxt "view:insurer_reporting.contract.configure:"
 msgid "Configure Contract Reporting"
@@ -117,30 +77,6 @@ msgstr "Configurer le rapport de contrat"
 msgctxt "view:insurer_reporting.result:"
 msgid "Reporting Result"
 msgstr "Résultat du rapport"
-
-msgctxt "wizard_button:insurer_reporting.broker,configure_report,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:insurer_reporting.broker,configure_report,result:"
-msgid "Report"
-msgstr "Report"
-
-msgctxt "wizard_button:insurer_reporting.broker,result,end:"
-msgid "Ok"
-msgstr "Ok"
-
-msgctxt "wizard_button:insurer_reporting.commission,configure_report,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:insurer_reporting.commission,configure_report,result:"
-msgid "Report"
-msgstr "Report"
-
-msgctxt "wizard_button:insurer_reporting.commission,result,end:"
-msgid "Ok"
-msgstr "Ok"
 
 msgctxt "wizard_button:insurer_reporting.contract,configure_report,end:"
 msgid "Cancel"

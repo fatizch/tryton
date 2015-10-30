@@ -1,10 +1,10 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:commission.create_invoice_principal:"
-msgid "Wholesale broker reimbursement"
-msgstr "Remboursement du courtier grossiste"
+msgid "Wholesale broker reimbursement %s"
+msgstr "Remboursement du courtier grossiste %s"
 
 msgctxt "field:commission.agent,delegation_of_payment:"
 msgid "Delegation of Commission Payment"

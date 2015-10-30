@@ -100,6 +100,14 @@ msgctxt "model:contract_term_renewal.decline_renewal.select_reason,name:"
 msgid "Reason selector to decline renewal"
 msgstr "Sélecteur de raison pour la déclinaison de renouvellement"
 
+msgctxt "model:event.type,name:event_decline_contract_renewal"
+msgid "Decline Contract Renewal"
+msgstr "Refus du renouvellement du contrat"
+
+msgctxt "model:event.type,name:event_renew_contract"
+msgid "Renew Contract"
+msgstr "Renouvellement du contrat"
+
 msgctxt "model:ir.action,name:act_decline_renewal"
 msgid "Decline Contract Renewal"
 msgstr "Décliner le renouvellement de contrat"
@@ -255,11 +263,3 @@ msgctxt ""
 "wizard_button:contract_term_renewal.decline_renewal,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
-
-msgctxt "model:event.type,name:event_renew_contract"
-msgid "Renew Contract"
-msgstr "Renouvellement du contrat"
-
-msgctxt "model:event.type,name:event_decline_contract_renewal"
-msgid "Decline Contract Renewal"
-msgstr "Refus du renouvellement du contrat"

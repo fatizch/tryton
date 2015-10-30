@@ -91,6 +91,38 @@ msgctxt "field:ir.model,printable:"
 msgid "Printable"
 msgstr "Imprimable"
 
+msgctxt "field:report.convert.match,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:report.convert.match,language:"
+msgid "Language"
+msgstr "Langue"
+
+msgctxt "field:report.convert.match,match:"
+msgid "Match"
+msgstr "Occurence"
+
+msgctxt "field:report.convert.match,model_name:"
+msgid "Model Name"
+msgstr "Nom du modèle"
+
+msgctxt "field:report.convert.match,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report.convert.match,new_value:"
+msgid "New Value"
+msgstr "Nouvelle valeur"
+
+msgctxt "field:report.convert.match,template_id:"
+msgid "Template Id"
+msgstr "Id du modèle"
+
+msgctxt "field:report.convert.match,to_update:"
+msgid "To Update"
+msgstr "A mettre à jour"
+
 msgctxt "field:report.convert.select_templates,changes_calculated:"
 msgid "Changes calculated"
 msgstr "Changements calculés"
@@ -118,34 +150,6 @@ msgstr "Rechercher"
 msgctxt "field:report.convert.select_templates,templates:"
 msgid "Templates"
 msgstr "Modèles"
-
-msgctxt "field:report.convert.match,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:report.convert.match,language:"
-msgid "Language"
-msgstr "Langue"
-
-msgctxt "field:report.convert.match,model_name:"
-msgid "Model Name"
-msgstr "Nom du modèle"
-
-msgctxt "field:report.convert.match,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:report.convert.match,match:"
-msgid "Match"
-msgstr "Occurence"
-
-msgctxt "field:report.convert.match,new_value:"
-msgid "New Value"
-msgstr "Nouvelle valeur"
-
-msgctxt "field:report.convert.match,template_id:"
-msgid "Template Id"
-msgstr "Id du modèle"
 
 msgctxt "field:report.create.attach,attachment:"
 msgid "Data File"
@@ -521,13 +525,13 @@ msgctxt "model:ir.ui.menu,name:menu_report"
 msgid "Report"
 msgstr "Rapports/Courriers"
 
-msgctxt "model:report.convert.select_templates,name:"
-msgid "Select Templates for Conversion"
-msgstr "Sélection des conversions à exécuter"
-
 msgctxt "model:report.convert.match,name:"
 msgid "Match Displayer"
 msgstr "Occurence"
+
+msgctxt "model:report.convert.select_templates,name:"
+msgid "Select Templates for Conversion"
+msgstr "Sélection des conversions à exécuter"
 
 msgctxt "model:report.create.attach,name:"
 msgid "Report Create Attach"
@@ -605,6 +609,10 @@ msgctxt "selection:report.template.version,type:"
 msgid "Link"
 msgstr "Lien"
 
+msgctxt "view:report.convert.match:"
+msgid "Templates"
+msgstr "Modèles"
+
 msgctxt "view:report.convert.select_templates:"
 msgid "Check for Matches"
 msgstr "Rechercher des occurences"
@@ -612,10 +620,6 @@ msgstr "Rechercher des occurences"
 msgctxt "view:report.convert.select_templates:"
 msgid "Update Templates"
 msgstr "Mise à jour des modèles de courriers"
-
-msgctxt "view:report.convert.match:"
-msgid "Matches"
-msgstr "Occurences"
 
 msgctxt "view:report.create.attach:"
 msgid "Attachment"
@@ -677,6 +681,10 @@ msgctxt "wizard_button:report.create,attach,post_generation:"
 msgid "Complete"
 msgstr "Terminer"
 
+msgctxt "wizard_button:report.create,attach,post_generation:"
+msgid "Save"
+msgstr "Sauvegarder"
+
 msgctxt "wizard_button:report.create,preview_document,end:"
 msgid "Cancel"
 msgstr "Annuler"
@@ -684,6 +692,10 @@ msgstr "Annuler"
 msgctxt "wizard_button:report.create,preview_document,mail:"
 msgid "Mail"
 msgstr "Courrier Electronique"
+
+msgctxt "wizard_button:report.create,preview_document,open_document:"
+msgid "Open"
+msgstr "Ouvrir"
 
 msgctxt "wizard_button:report.create,preview_document,select_model:"
 msgid "Previous"

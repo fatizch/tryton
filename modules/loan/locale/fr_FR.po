@@ -148,6 +148,10 @@ msgctxt ""
 msgid "Default Loan Share"
 msgstr "Quotité par défaut"
 
+msgctxt "field:contract.wizard.option_subscription.options_displayer,is_loan:"
+msgid "Is Loan"
+msgstr "Emprunteur"
+
 msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer.option,loan:"
 msgid "Loan"

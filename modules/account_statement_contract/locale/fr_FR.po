@@ -15,8 +15,12 @@ msgid "#"
 msgstr "N°"
 
 msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid ")"
-msgstr ""
+msgid "(Cancelled)"
+msgstr "(Annulé)"
+
+msgctxt "odt:account.statement.bank_deposit_ticket_report:"
+msgid "(Draft)"
+msgstr "(Brouillon)"
 
 msgctxt "odt:account.statement.bank_deposit_ticket_report:"
 msgid ":"
@@ -27,7 +31,7 @@ msgid "Ban"
 msgstr ""
 
 msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "Bordereau de remise de ch"
+msgid "Bordereau de remise de chèque"
 msgstr ""
 
 msgctxt "odt:account.statement.bank_deposit_ticket_report:"
@@ -59,6 +63,10 @@ msgid "Phone:"
 msgstr "Téléphone :"
 
 msgctxt "odt:account.statement.bank_deposit_ticket_report:"
+msgid "Relevé"
+msgstr ""
+
+msgctxt "odt:account.statement.bank_deposit_ticket_report:"
 msgid "Total"
 msgstr "Total"
 
@@ -71,17 +79,5 @@ msgid "que"
 msgstr ""
 
 msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "que (Annul"
-msgstr ""
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "que (Brouillon)"
-msgstr ""
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
 msgid "è"
-msgstr ""
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "é"
 msgstr ""

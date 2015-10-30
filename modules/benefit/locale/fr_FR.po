@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:benefit.event.description:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
+msgctxt "error:benefit.loss.description:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
 msgctxt "error:benefit.reserve.rule:"
 msgid "You can not have 2 business rules that overlap!"
 msgstr "Vous ne pouvez pas avoir 2 règles métiers qui se chevauchent"
@@ -333,6 +341,10 @@ msgstr "ID"
 msgctxt "field:benefit.loss.description,item_kind:"
 msgid "Kind"
 msgstr "Type"
+
+msgctxt "field:benefit.loss.description,loss_kind:"
+msgid "Loss Kind"
+msgstr "Type de préjudice"
 
 msgctxt "field:benefit.loss.description,name:"
 msgid "Name"
@@ -885,6 +897,10 @@ msgstr "Remplacer"
 msgctxt "selection:benefit.loss.description,item_kind:"
 msgid ""
 msgstr " "
+
+msgctxt "selection:benefit.loss.description,loss_kind:"
+msgid "Generic"
+msgstr "Générique"
 
 msgctxt "selection:benefit.reserve.rule,config_kind:"
 msgid "Advanced"

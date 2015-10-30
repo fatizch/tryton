@@ -1,14 +1,19 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:account.payment.creation:"
-msgid "Selected lines are incompatible: some are payable lines some are receivable."
-msgstr "Les lignes sélectionnées sont incompatibles: certaines sont des lignes à payer d'autres des lignes à recevoir"
+msgid "Selected lines are incompatible with selected kind"
+msgstr ""
+"Les lignes sélectionnées sont incompatibles avec le type de paiement "
+"sélectionné."
 
 msgctxt "error:account.payment.creation:"
-msgid "Selected lines are incompatible with selected kind"
-msgstr "Les lignes sélectionnées sont incompatibles avec le type de paiement sélectionné."
+msgid ""
+"Selected lines are incompatible. Some are payable lines some are receivable."
+msgstr ""
+"Les lignes sélectionnées sont incompatibles: certaines sont des lignes à "
+"payer d'autres des lignes à recevoir"
 
 msgctxt "error:account.payment.journal.failure_action:"
 msgid "Unknown reject code : %s"
@@ -39,6 +44,18 @@ msgctxt "field:account.configuration,reject_fee_journal:"
 msgid "Reject Fee Journal"
 msgstr "Journal des frais de rejet"
 
+msgctxt "field:account.invoice,credit_reconciliation_lines:"
+msgid "Payment Lines"
+msgstr "Lignes de paiement"
+
+msgctxt "field:account.invoice,payments:"
+msgid "Payments"
+msgstr "Paiements"
+
+msgctxt "field:account.invoice,pending_payment:"
+msgid "Pending Payment"
+msgstr "Paiement en attente"
+
 msgctxt "field:account.move.line,payment_date:"
 msgid "Payment Date"
 msgstr "Date de paiement"
@@ -62,6 +79,10 @@ msgstr "Description du rejet"
 msgctxt "field:account.payment,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:account.payment.acknowledge,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:account.payment.create,id:"
 msgid "ID"
@@ -333,6 +354,10 @@ msgid "Store a copy of each generated document in specified server directory"
 msgstr ""
 "Répertoire serveur dans lequel sauvegarder une copie de chaque document "
 "généré."
+
+msgctxt "model:account.payment.acknowledge,name:"
+msgid "Payment Acknowledge Batch"
+msgstr "Batch de validation des paiements"
 
 msgctxt "model:account.payment.create,name:"
 msgid "Payment Creation Batch"

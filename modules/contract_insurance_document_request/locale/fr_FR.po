@@ -26,8 +26,8 @@ msgid "Documents"
 msgstr "Documents"
 
 msgctxt "field:document.receive.request,tmp_0:"
-msgid "Contract"
-msgstr "Contrat"
+msgid "Claim"
+msgstr "Sinistre"
 
 msgctxt "field:document.rule,create_date:"
 msgid "Create Date"

@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -290,6 +290,10 @@ msgctxt "field:contract,receivable_today:"
 msgid "Receivable Today"
 msgstr "À recevoir aujourd'hui"
 
+msgctxt "field:contract,valid_billing_informations:"
+msgid "Valid Billing Informations"
+msgstr "Paramètres de quittancement valides"
+
 msgctxt "field:contract.billing_information,billing_mode:"
 msgid "Billing Mode"
 msgstr "Mode de quittancement"
@@ -443,6 +447,10 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:contract.invoice.post,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.invoice.set_number,id:"
 msgid "ID"
 msgstr "ID"
 
@@ -899,6 +907,10 @@ msgstr "Batch de quittancement"
 msgctxt "model:contract.invoice.post,name:"
 msgid "Post Contract Invoice Batch"
 msgstr "Batch d'émission des quittances"
+
+msgctxt "model:contract.invoice.set_number,name:"
+msgid "Set Contract Invoice Number Batch"
+msgstr "Batch de numérotation des quittances"
 
 msgctxt "model:contract.premium,name:"
 msgid "Premium"

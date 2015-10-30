@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -847,6 +847,10 @@ msgstr "Formules"
 msgctxt "field:offered.product,premium_dates:"
 msgid "Premium Dates"
 msgstr "Dates de calcul"
+
+msgctxt "field:offered.product,processes:"
+msgid "Processes"
+msgstr "Processus"
 
 msgctxt "field:offered.product,rec_name:"
 msgid "Name"

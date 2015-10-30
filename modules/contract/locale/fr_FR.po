@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -32,6 +32,10 @@ msgstr "Pas de date de fin défini"
 msgctxt "error:contract.reactivate:"
 msgid "No contract found"
 msgstr "Pas de contrat trouvé"
+
+msgctxt "error:contract.sub_status:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
 
 msgctxt "error:contract:"
 msgid "Activation Periods \"%(first)s\" and \"%(second)s\" overlap."
@@ -86,6 +90,10 @@ msgstr "Historique d'activation"
 msgctxt "field:contract,appliable_conditions_date:"
 msgid "Appliable Conditions Date"
 msgstr "Date de Conditions"
+
+msgctxt "field:contract,color:"
+msgid "Color"
+msgstr "Couleur"
 
 msgctxt "field:contract,company:"
 msgid "Company"
@@ -147,6 +155,10 @@ msgctxt "field:contract,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
 
+msgctxt "field:contract,icon:"
+msgid "Icon"
+msgstr "Icône"
+
 msgctxt "field:contract,id:"
 msgid "ID"
 msgstr "ID"
@@ -186,10 +198,6 @@ msgstr "Numéro de devis"
 msgctxt "field:contract,rec_name:"
 msgid "Number"
 msgstr "Numéro"
-
-msgctxt "field:contract,related_attachments:"
-msgid "Related Attachments"
-msgstr "Pièces jointes liées"
 
 msgctxt "field:contract,signature_date:"
 msgid "Signature Date"
@@ -1071,6 +1079,38 @@ msgctxt "model:contract.wizard.option_subscription.select_package,name:"
 msgid "Select Package"
 msgstr "Choisir la formule"
 
+msgctxt "model:event.type,name:event_activate_contract"
+msgid "Activate Contract"
+msgstr "Activation du contrat"
+
+msgctxt "model:event.type,name:event_decline_contract"
+msgid "Decline Contract"
+msgstr "Déclinaison du contrat"
+
+msgctxt "model:event.type,name:event_hold_contract"
+msgid "Hold Contract"
+msgstr "Suspension du contrat"
+
+msgctxt "model:event.type,name:event_plan_contract_termination"
+msgid "Plan Contract Termination"
+msgstr "Planification de la résiliation du contrat"
+
+msgctxt "model:event.type,name:event_reactivate_contract"
+msgid "Reactivate Contract"
+msgstr "Réactivation du contrat"
+
+msgctxt "model:event.type,name:event_terminate_contract"
+msgid "Terminate Contract"
+msgstr "Résiliation du contrat"
+
+msgctxt "model:event.type,name:event_unhold_contract"
+msgid "Unhold Contract"
+msgstr "Remise en vigueur après suspension"
+
+msgctxt "model:event.type,name:event_void_contract"
+msgid "Void Contract"
+msgstr "Contrat sans effet"
+
 msgctxt "model:ir.action,name:"
 msgid "Devis"
 msgstr "Devis"
@@ -1102,6 +1142,10 @@ msgstr "Décliner"
 msgctxt "model:ir.action,name:act_end"
 msgid "End Contract"
 msgstr "Terminer Contrat"
+
+msgctxt "model:ir.action,name:act_event_log_relate_form"
+msgid "Event Logs"
+msgstr "Logs d'événements"
 
 msgctxt "model:ir.action,name:act_hold_contract"
 msgid "Hold Contract"
@@ -1569,35 +1613,3 @@ msgctxt ""
 "wizard_button:contract.wizard.option_subscription,select_package,options_displayer:"
 msgid "Next"
 msgstr "Suivant"
-
-msgctxt "model:event.type,name:event_activate_contract"
-msgid "Activate Contract"
-msgstr "Activation du contrat"
-
-msgctxt "model:event.type,name:event_reactivate_contract"
-msgid "Reactivate Contract"
-msgstr "Réactivation du contrat"
-
-msgctxt "model:event.type,name:event_decline_contract"
-msgid "Decline Contract"
-msgstr "Déclinaison du contrat"
-
-msgctxt "model:event.type,name:event_plan_contract_termination"
-msgid "Plan Contract Termination"
-msgstr "Planification de la résiliation du contrat"
-
-msgctxt "model:event.type,name:event_terminate_contract"
-msgid "Terminate Contract"
-msgstr "Résiliation du contrat"
-
-msgctxt "model:event.type,name:event_void_contract"
-msgid "Void Contract"
-msgstr "Contrat sans effet"
-
-msgctxt "model:event.type,name:event_hold_contract"
-msgid "Hold Contract"
-msgstr "Suspension du contrat"
-
-msgctxt "model:event.type,name:event_unhold_contract"
-msgid "Unhold Contract"
-msgstr "Fin de suspension du contrat"

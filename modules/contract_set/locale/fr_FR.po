@@ -1,12 +1,12 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.set:"
 msgid "No sequence defined in configuration for contracts set number"
 msgstr ""
-"Pas de séquence définie dans la configuration pour les numéros d'ensemble"
-" de contrats"
+"Pas de séquence définie dans la configuration pour les numéros d'ensemble de"
+" contrats"
 
 msgctxt "error:contract.set:"
 msgid "The contract set number must be unique."
@@ -116,6 +116,10 @@ msgctxt "model:contract.set.decline.select_reason,name:"
 msgid "Reason selector to decline contract set"
 msgstr ""
 
+msgctxt "model:event.type,name:event_activate_contract_set"
+msgid "Activate Contract Set"
+msgstr "Activation de l'ensemble de contrats"
+
 msgctxt "model:ir.action,name:act_contract_set_form"
 msgid "Contract Sets"
 msgstr "Ensembles de contrats"
@@ -175,7 +179,3 @@ msgstr "Appliquer"
 msgctxt "wizard_button:contract.set.decline,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
-
-msgctxt "model:event.type,name:event_activate_contract_set"
-msgid "Activate Contract Set"
-msgstr "Activation de l'ensemble de contrats"

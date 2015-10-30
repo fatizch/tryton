@@ -30,6 +30,18 @@ msgctxt "field:contract.option.version,coverage_amount:"
 msgid "Coverage Amount"
 msgstr "Montant de couverture"
 
+msgctxt "field:contract.option.version,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:contract.option.version,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:contract.option.version,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
 msgctxt "field:offered.coverage_amount.rule,coverage:"
 msgid "Coverage"
 msgstr "Garantie"

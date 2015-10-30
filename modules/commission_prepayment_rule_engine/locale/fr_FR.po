@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -93,6 +93,14 @@ msgstr "Règles de calcul de la date de paiement du précompte"
 msgctxt "model:ir.ui.menu,name:menu_prepayment_payment_rule_form"
 msgid "Prepayment Payment Date Rules"
 msgstr "Règles de calcul de la date de paiement du précompte"
+
+msgctxt "model:rule_engine,name:commission_precompte"
+msgid "Precompte sur la prime de la premiere annee"
+msgstr ""
+
+msgctxt "model:rule_engine.rule_parameter,string:escompte_premiere_annee"
+msgid "Pourcentage du précompte"
+msgstr ""
 
 msgctxt "view:commission.plan.prepayment.payment_rule:"
 msgid "Prepayment Payment Date Rule"

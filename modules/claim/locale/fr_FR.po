@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -20,6 +20,10 @@ msgstr ""
 msgctxt "error:claim:"
 msgid "The number must be unique!"
 msgstr "Le numéro doit être unique"
+
+msgctxt "field:claim,attachments:"
+msgid "Attachments"
+msgstr "Pièces jointes"
 
 msgctxt "field:claim,claimant:"
 msgid "Claimant"
@@ -502,6 +506,10 @@ msgctxt "field:document.receive.request,tmp_0:"
 msgid "Claim"
 msgstr "Sinistre"
 
+msgctxt "field:document.receive.request,tmp_1:"
+msgid "Contract"
+msgstr "Contrat"
+
 msgctxt "field:expense,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -526,10 +534,6 @@ msgctxt "field:expense,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.option.description,is_coverage_amount_needed:"
-msgid "Coverage Amount Needed"
-msgstr "Montant de Couverture Nécessaire"
-
 msgctxt "field:party.party,claims:"
 msgid "Claims"
 msgstr "Sinistres"
@@ -541,6 +545,46 @@ msgstr "Dernier sinistre"
 msgctxt "field:party.party,number_of_claims:"
 msgid "Number Of Claims"
 msgstr "Nombre de sinistres"
+
+msgctxt "field:party.synthesis.menu.claim,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.claim,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.claim,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.synthesis.menu.claim,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.synthesis.menu.claim,name:"
+msgid "Claims"
+msgstr "Sinistres"
+
+msgctxt "field:party.synthesis.menu.claim,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:party.synthesis.menu.claim,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.synthesis.menu.claim,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.synthesis.menu.claim,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.synthesis.menu.claim,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "model:claim,name:"
 msgid "Claim"
@@ -613,6 +657,10 @@ msgstr "Sinistre"
 msgctxt "model:ir.ui.menu,name:menu_claim_form"
 msgid "Claims"
 msgstr "Sinistres"
+
+msgctxt "model:party.synthesis.menu.claim,name:"
+msgid "Party Synthesis Menu Claim"
+msgstr "Synthèse acteur - Sinistres"
 
 msgctxt "model:tag,name:tag_claim"
 msgid "Claim"
@@ -849,6 +897,10 @@ msgstr "Prestation fournie"
 msgctxt "view:claim:"
 msgid "Claim"
 msgstr "Sinistre"
+
+msgctxt "view:claim:"
+msgid "Claims"
+msgstr "Sinistres"
 
 msgctxt "view:claim:"
 msgid "Documents"

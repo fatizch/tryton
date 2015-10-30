@@ -98,6 +98,10 @@ msgctxt ""
 msgid "Posted"
 msgstr "Emis"
 
+msgctxt "model:ir.action,name:account_invoice.print"
+msgid "Invoice"
+msgstr "Quittance"
+
 msgctxt "model:ir.action,name:account_invoice.act_invoice_form"
 msgid "Invoices"
 msgstr "Quittances"
@@ -105,10 +109,6 @@ msgstr "Quittances"
 msgctxt "model:ir.action,name:account_invoice.act_invoice_out_invoice_form"
 msgid "Invoices"
 msgstr "Quittances"
-
-msgctxt "model:ir.action,name:account_invoice.print"
-msgid "Invoice"
-msgstr "Quittance"
 
 msgctxt "model:ir.action,name:account_invoice.report_invoice"
 msgid "Invoice"

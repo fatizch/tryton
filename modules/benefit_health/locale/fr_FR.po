@@ -6,6 +6,10 @@ msgctxt "error:benefit.act.description:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
 
+msgctxt "error:benefit.act.family:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
 msgctxt "field:benefit.act.description,code:"
 msgid "Code"
 msgstr "Code"
@@ -21,6 +25,10 @@ msgstr "Date de Création"
 msgctxt "field:benefit.act.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:benefit.act.description,family:"
+msgid "Medical Act Family"
+msgstr "Famille d'actes"
 
 msgctxt "field:benefit.act.description,id:"
 msgid "ID"
@@ -45,38 +53,6 @@ msgstr "Mis à jour par"
 msgctxt "field:benefit.act.description,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
-
-msgctxt "model:benefit.act.description,name:"
-msgid "Medical Act Description"
-msgstr "Description de l'acte médical"
-
-msgctxt "model:ir.action,name:act_medical_act_desc_form"
-msgid "Medical Act Descriptions"
-msgstr "Descriptions d'acte médical"
-
-msgctxt "model:ir.ui.menu,name:menu_medical_act"
-msgid "Medical Act Descriptions"
-msgstr "Descriptions d'acte médical"
-
-msgctxt "selection:benefit.loss.description,loss_kind:"
-msgid "Health"
-msgstr "Santé"
-
-msgctxt "view:benefit.act.description:"
-msgid "Medical Act Description"
-msgstr "Description d'acte médical"
-
-msgctxt "error:benefit.act.family:"
-msgid "The code must be unique"
-msgstr "Le code doit être unique"
-
-msgctxt "error:contract.service.counter:"
-msgid "The number must be unique"
-msgstr "Le numéro doit être unique"
-
-msgctxt "field:benefit.act.description,family:"
-msgid "Medical Act Family"
-msgstr "Famille d'actes"
 
 msgctxt "field:benefit.act.family,act_descriptions:"
 msgid "Medical Act Descriptions"
@@ -122,19 +98,38 @@ msgctxt "field:benefit.act.family,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "model:benefit.act.description,name:"
+msgid "Medical Act Description"
+msgstr "Description de l'acte médical"
+
 msgctxt "model:benefit.act.family,name:"
 msgid "Medical Act Family"
 msgstr "Famille d'actes"
+
+msgctxt "model:ir.action,name:act_medical_act_desc_form"
+msgid "Medical Act Descriptions"
+msgstr "Descriptions d'acte médical"
 
 msgctxt "model:ir.action,name:act_medical_act_family_form"
 msgid "Medical Act Families"
 msgstr "Familles d'actes"
 
+msgctxt "model:ir.ui.menu,name:menu_medical_act"
+msgid "Medical Act Descriptions"
+msgstr "Descriptions d'acte médical"
+
 msgctxt "model:ir.ui.menu,name:menu_medical_act_family"
 msgid "Medical Act Families"
 msgstr "Familles d'actes"
 
+msgctxt "selection:benefit.loss.description,loss_kind:"
+msgid "Health"
+msgstr "Santé"
+
+msgctxt "view:benefit.act.description:"
+msgid "Medical Act Description"
+msgstr "Description d'acte médical"
+
 msgctxt "view:benefit.act.family:"
 msgid "Medical Act Family"
 msgstr "Famille d'actes"
-

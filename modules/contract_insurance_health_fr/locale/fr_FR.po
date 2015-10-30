@@ -122,6 +122,10 @@ msgctxt "field:health.insurance_fund,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:health.party_complement,birth_order:"
+msgid "Birth Order"
+msgstr "Rang de naissance"
+
 msgctxt "field:health.party_complement,department:"
 msgid "Department"
 msgstr "Département"

@@ -167,6 +167,18 @@ msgctxt "wizard_button:endorsement.start,basic_preview,end:"
 msgid "Ok"
 msgstr "Ok"
 
+msgctxt "wizard_button:endorsement.start,preview_contract_payments,end:"
+msgid "Ok"
+msgstr "Ok"
+
+msgctxt "wizard_button:endorsement.start,preview_contract_premiums,end:"
+msgid "Ok"
+msgstr "Ok"
+
+msgctxt "wizard_button:endorsement.start,preview_loan,end:"
+msgid "Ok"
+msgstr "Ok"
+
 msgctxt "wizard_button:endorsement.start_process,process_parameters,action:"
 msgid "Start Process (_k)"
 msgstr "Démarrer le processus (_k)"

@@ -6,6 +6,10 @@ msgctxt "error:contract:"
 msgid "No premium found for this contract !"
 msgstr "Pas de prime trouvé pour ce contrat"
 
+msgctxt "field:account.invoice.line,loan:"
+msgid "Loan"
+msgstr "Prêt"
+
 msgctxt "field:account.invoice.line.detail,loan:"
 msgid "Loan"
 msgstr "Prêt"

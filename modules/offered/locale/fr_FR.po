@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -329,8 +329,8 @@ msgid "Options Required"
 msgstr "Options Requises"
 
 msgctxt "field:offered.option.description,products:"
-msgid "Option Descriptions"
-msgstr "Garanties"
+msgid "Products"
+msgstr "Produits"
 
 msgctxt "field:offered.option.description,products_name:"
 msgid "Products"

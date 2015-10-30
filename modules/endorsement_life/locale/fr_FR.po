@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:endorsement.contract.beneficiary.manage:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
+
 msgctxt "error:endorsement.contract.beneficiary:"
 msgid "New Beneficiary: %s"
 msgstr "Nouveau bénéficiaire : %s"

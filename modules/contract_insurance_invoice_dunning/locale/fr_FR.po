@@ -18,6 +18,10 @@ msgctxt "field:account.dunning.level,name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:account.dunning.level,skip_level_for_payment:"
+msgid "Skip Level For Payment"
+msgstr "Ignorer le niveau si la facture est en prélèvement."
+
 msgctxt "field:account.dunning.level,termination_mode:"
 msgid "Termination Mode"
 msgstr "Mode de résiliation"
@@ -45,6 +49,10 @@ msgstr "Date de fin de la dernière quittance émise"
 msgctxt "field:offered.product,dunning_procedure:"
 msgid "Dunning Procedure"
 msgstr "Procédure de relance"
+
+msgctxt "help:account.dunning.level,skip_level_for_payment:"
+msgid "Skip level if line is paid by payment"
+msgstr "Ignorer le niveau si la ligne est payée par un prélèvement"
 
 msgctxt "model:account.dunning.create,name:"
 msgid "Dunning Creation Batch"

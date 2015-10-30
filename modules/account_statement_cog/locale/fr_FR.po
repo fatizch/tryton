@@ -10,6 +10,10 @@ msgctxt "field:account.statement,total_statement_amount:"
 msgid "Total Amount"
 msgstr "Montant Total"
 
+msgctxt "field:account.statement,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:account.statement.journal,bank_deposit_ticket_statement:"
 msgid "Bank Deposit Ticket Statement"
 msgstr "Bordereaux de chèques"
@@ -17,6 +21,10 @@ msgstr "Bordereaux de chèques"
 msgctxt "field:account.statement.journal,sequence:"
 msgid "Statement Sequence"
 msgstr "Sequence des relevés"
+
+msgctxt "field:account.statement.journal,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:account.statement.line,in_bank_deposit_ticket:"
 msgid "In Bank Deposit Ticket"

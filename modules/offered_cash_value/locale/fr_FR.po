@@ -133,7 +133,3 @@ msgstr "Règle d'Epargne"
 msgctxt "view:offered.option.description:"
 msgid "Cash Value"
 msgstr "Epargne"
-
-msgctxt "view:offered.option.description:"
-msgid "Coverage Amount"
-msgstr "Montant de Couverture"

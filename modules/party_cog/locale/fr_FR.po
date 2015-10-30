@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -7,10 +7,8 @@ msgid "Invalid Email !"
 msgstr "e-Mail Invalide"
 
 msgctxt "error:party.party:"
-msgid ""
-"Duplicate(s) already exist(s) : \n"
-"%s"
-msgstr "Des doublons existent déjà:"
+msgid "Duplicate(s) already exist(s) : %s"
+msgstr "Des doublon(s) existe(nt) déjà : %s"
 
 msgctxt "error:party.party:"
 msgid "The SSN of the party must be unique."
@@ -947,5 +945,5 @@ msgid "Street"
 msgstr "Rue (Ligne 4)"
 
 msgctxt "field:party.address,streetbis:party."
-msgid "Street (bis)"
+msgid "Post Office (Line 5)"
 msgstr "Boîte Postale (Ligne 5)"

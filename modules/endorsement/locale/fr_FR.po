@@ -1629,46 +1629,6 @@ msgctxt "field:endorsement.part,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:endorsement.part-method,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:endorsement.part-method,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:endorsement.part-method,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:endorsement.part-method,endorsement_part:"
-msgid "Endorsement Part"
-msgstr "Avenant unitaire"
-
-msgctxt "field:endorsement.part-method,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:endorsement.part-method,method:"
-msgid "Method"
-msgstr "Méthode"
-
-msgctxt "field:endorsement.part-method,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:endorsement.part-method,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:endorsement.part-method,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:endorsement.part-method,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
 msgctxt "field:endorsement.start.dummy_step,effective_date:"
 msgid "Effective Date"
 msgstr "Date d'effet"
@@ -1931,10 +1891,6 @@ msgctxt "model:endorsement.part,name:void_contract_revision_part"
 msgid "void Contract"
 msgstr "Contrat sans effet"
 
-msgctxt "model:endorsement.part-method,name:"
-msgid "Endorsement Part Method Relation"
-msgstr "Relation avenant unitaire - Méthods"
-
 msgctxt "model:endorsement.start.dummy_step,name:"
 msgid "Dummy Step"
 msgstr "Etape technique"
@@ -1950,6 +1906,22 @@ msgstr "Sélection de l'avenant"
 msgctxt "model:endorsement.sub_state,name:"
 msgid "Endorsement SubState"
 msgstr "Sous état d'avenant"
+
+msgctxt "model:event.type,name:"
+msgid "Unhold Contract"
+msgstr "Fin de suspension du contrat"
+
+msgctxt "model:event.type,name:event_apply_endorsement"
+msgid "Apply Endorsement"
+msgstr "Application de l'avenant"
+
+msgctxt "model:event.type,name:event_cancel_endorsement"
+msgid "Cancel Endorsement"
+msgstr "Annulation de l'avenant"
+
+msgctxt "model:event.type,name:event_decline_endorsement"
+msgid "Decline Endorsement"
+msgstr "Déclinaison de l'avenant"
 
 msgctxt "model:ir.action,name:act_configuration_form"
 msgid "Endorsement Configuration"
@@ -2375,18 +2347,6 @@ msgctxt "wizard_button:endorsement.decline,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:endorsement.start,basic_preview,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt "wizard_button:endorsement.start,basic_preview,cancel:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:endorsement.start,basic_preview,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
 msgid "Next"
@@ -2471,10 +2431,6 @@ msgctxt ""
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
 
-msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
-
 msgctxt "wizard_button:endorsement.start,summary,cancel:"
 msgid "Cancel"
 msgstr "Annuler"
@@ -2526,19 +2482,3 @@ msgstr "Précédent"
 msgctxt "wizard_button:endorsement.start,void_contract,void_contract_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
-
-msgctxt "model:event.type,name:event_unhold_contract"
-msgid "Unhold Contract"
-msgstr "Fin de suspension du contrat"
-
-msgctxt "model:event.type,name:event_apply_endorsement"
-msgid "Apply Endorsement"
-msgstr "Application de l'avenant"
-
-msgctxt "model:event.type,name:event_decline_endorsement"
-msgid "Decline Endorsement"
-msgstr "Déclinaison de l'avenant"
-
-msgctxt "model:event.type,name:event_cancel_endorsement"
-msgid "Cancel Endorsement"
-msgstr "Annulation de l'avenant"

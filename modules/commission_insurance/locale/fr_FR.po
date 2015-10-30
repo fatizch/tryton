@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -81,6 +81,10 @@ msgstr "Contrat commissionné"
 msgctxt "field:commission,commissioned_option:"
 msgid "Commissioned Option"
 msgstr "Option commissionnée"
+
+msgctxt "field:commission,commissioned_subscriber:"
+msgid "Contract Subscriber"
+msgstr "Souscripteur du contrat"
 
 msgctxt "field:commission,end:"
 msgid "End"
@@ -802,6 +806,10 @@ msgctxt "view:account.configuration:"
 msgid "Commission"
 msgstr "Commission"
 
+msgctxt "view:commission.change_broker.select_new_broker:"
+msgid "Select New Agent"
+msgstr "Sélectionner un nouveau courtier"
+
 msgctxt "view:commission.create_agents.ask:"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
@@ -825,6 +833,10 @@ msgstr "Montant"
 msgctxt "view:party.party:"
 msgid "Broker Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "view:party.party:"
+msgid "Brokers"
+msgstr "Courtiers"
 
 msgctxt "wizard_button:commission.change_broker,select_new_broker,change:"
 msgid "Next"

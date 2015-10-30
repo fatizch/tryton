@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -247,10 +247,6 @@ msgctxt "model:account.journal.type,name:journal_type_split"
 msgid "Split"
 msgstr "Découpage"
 
-msgctxt "model:ir.action,name:act_fee_form"
-msgid "Fees"
-msgstr "Frais"
-
 msgctxt "model:ir.action,name:act_move_line_party_balance"
 msgid "Party Balance"
 msgstr "Balance de tiers"
@@ -258,10 +254,6 @@ msgstr "Balance de tiers"
 msgctxt "model:ir.action,name:act_move_reconciliation_form"
 msgid "Reconciliation"
 msgstr "Lettrage"
-
-msgctxt "model:ir.action,name:act_tax_form"
-msgid "Taxes"
-msgstr "Taxes"
 
 msgctxt "model:ir.test_case.instance,name:account_kind_test_case"
 msgid "Account Kind Test Case"
@@ -283,10 +275,6 @@ msgctxt "model:ir.test_case.instance,name:journal_test_case"
 msgid "Journal Creation"
 msgstr "Jeux d'essai: Création des journaux"
 
-msgctxt "model:ir.test_case.instance,name:tax_test_case"
-msgid "Tax Test Case"
-msgstr "Jeux d'essai : taxes"
-
 msgctxt "model:ir.ui.menu,name:menu_account"
 msgid "Accounting"
 msgstr "Comptabilité"
@@ -294,14 +282,6 @@ msgstr "Comptabilité"
 msgctxt "model:ir.ui.menu,name:menu_move_reconciliation_form"
 msgid "Reconciliation"
 msgstr "Lettrage"
-
-msgctxt "model:ir.ui.menu,name:menu_product_fees"
-msgid "Fees"
-msgstr "Frais"
-
-msgctxt "model:ir.ui.menu,name:menu_product_taxes"
-msgid "Taxes"
-msgstr "Taxes"
 
 msgctxt "model:party.synthesis.menu.move.line,name:"
 msgid "Party Synthesis Menu Move line"
@@ -443,34 +423,10 @@ msgstr ""
 "%(credit)s » diffèrent."
 
 msgctxt "error:account.move.reconciliation:account."
-msgid ""
-"You can not reconcile line \"%(line)s\" because it's account \"%(account)s\""
-" is configured as not reconcilable."
-msgstr ""
-"Vous ne pouvez lettrer la ligne « %(line)s » car son compte « %(account)s » "
-"est configuré comme non-lettrable."
-
-msgctxt "error:account.move.reconciliation:account."
-msgid ""
-"You can not reconcile line \"%(line)s\" because it's account "
-"\"%(account1)s\" is different from \"%(account2)s\"."
-msgstr ""
-"Vous ne pouvez lettrer la ligne « %(line)s »  car son compte  « %(account1)s"
-" » est différent de « %(account2)s »."
-
-msgctxt "error:account.move.reconciliation:account."
 msgid "You can not reconcile line \"%s\" because it is not in valid state."
 msgstr ""
 "Vous ne pouvez lettrer la ligne « %s » car elle n'est pas dans un état "
 "valide."
-
-msgctxt "error:account.move.reconciliation:account."
-msgid ""
-"You can not reconcile line \"%(line)s\" because it's party \"%(party1)s\" is"
-" different from \"%(party2)s\"."
-msgstr ""
-"Vous ne pouvez lettrer la ligne « %(line)s »  car son tiers « %(party1)s » "
-"est différent de « %(party2)s »."
 
 msgctxt "error:account.period:account."
 msgid ""
