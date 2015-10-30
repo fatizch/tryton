@@ -83,6 +83,7 @@ class Contract:
                 'selected for %s',
                 'loan_not_calculated': 'Loan %s must be calculated before'
                 ' proceeding',
+                'no_option_for_loan': 'Loan %s does not have an option',
                 })
 
     @classmethod
@@ -159,6 +160,14 @@ class Contract:
                         option.check_at_least_one_loan():
                     self.append_functional_error('no_loan_on_option',
                         (option.get_rec_name('')))
+
+    def check_no_loan_without_option(self):
+        orphans = set(self.loans) - set(self.used_loans)
+        if not orphans:
+            return
+        for orphan in orphans:
+            self.append_functional_error('no_option_for_loan',
+                (orphan.rec_name,))
 
     def get_show_premium(self, name):
         if not self.is_loan:

@@ -7,6 +7,10 @@ msgid "At least one loan must be selected for %s"
 msgstr "Au moins un prêt doit être sélectionné pour %s"
 
 msgctxt "error:contract:"
+msgid "Loan %s does not have an option"
+msgstr "Le prêt %s n'a aucune garantie sélectionnée"
+
+msgctxt "error:contract:"
 msgid "Loan %s must be calculated before proceeding"
 msgstr ""
 "La table d'amortissement du prêt %s doit être calculé avant de continuer"
