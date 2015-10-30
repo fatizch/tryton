@@ -7,6 +7,7 @@ from .wizard import *
 def register():
     Pool.register(
         EndorsementPart,
+        Contract,
         Endorsement,
         ChangeContractCommission,
         ChangeContractBroker,

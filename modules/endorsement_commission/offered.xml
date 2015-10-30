@@ -1,6 +1,21 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
+        <!-- ###################### -->
+        <!-- # Method Definitions # -->
+        <!-- ###################### -->
+        <record model="ir.model.method" id="update_commissions_after_endorsement_application_method">
+            <field name="method_name">update_commissions_after_endorsement_application</field>
+            <field name="name">Update Commissions after Endorsement Application</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">1950</field>
+        </record>
+        <record model="ir.model.method" id="update_commissions_after_endorsement_cancellation_method">
+            <field name="method_name">update_commissions_after_endorsement_cancellation</field>
+            <field name="name">Update Commissions after Endorsement Cancellation</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">1950</field>
+        </record>
         <!-- ########################## -->
         <!-- # Change Commission Data # -->
         <!-- ########################## -->

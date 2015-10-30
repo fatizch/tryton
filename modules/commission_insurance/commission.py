@@ -514,8 +514,8 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
                 if plan_code:
                     domain.append(('plan.code', clause[1], plan_code))
                 if product_code:
-                    domain.append(('plan.commissioned_products.code', clause[1],
-                        product_code))
+                    domain.append(('plan.commissioned_products.code',
+                            clause[1], product_code))
                 return domain
             else:
                 return [('id', '=', None)]

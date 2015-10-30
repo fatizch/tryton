@@ -92,10 +92,10 @@ class ChangeContractCommission(EndorsementWizardStepMixin):
         updated_values = getattr(endorsement, 'values', {})
         new_defaults = {}
         for fname in cls._contract_fields_to_extract()['contract']:
-            new_defaults[fname] = updated_values.get(fname, getattr(
-                    endorsement.contract, fname).id)
-            new_defaults['current_%s' % fname] = getattr(
-                endorsement.contract, fname).id
+            cur_value = getattr(endorsement.contract, fname)
+            cur_value = cur_value.id if cur_value else cur_value
+            new_defaults[fname] = updated_values.get(fname, cur_value)
+            new_defaults['current_%s' % fname] = cur_value
         return new_defaults
 
     def update_endorsement(self, base_endorsement, wizard):
@@ -137,12 +137,11 @@ class ChangeContractBroker(ChangeContractCommission):
 
     @classmethod
     def get_methods_for_model(cls, model_name):
-        methods = super(ChangeContractBroker, cls).get_methods_for_model(
-            model_name)
-        if model_name == 'contract' and utils.is_module_installed(
-                'endorsement_insurance_invoice'):
-            methods.discard('recalculate_premium_after_endorsement')
-        return methods
+        return {'update_commissions_after_endorsement_application'}
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        return {'update_commissions_after_endorsement_cancellation'}
 
     @classmethod
     def update_default_values(cls, wizard, endorsement, default_values):
