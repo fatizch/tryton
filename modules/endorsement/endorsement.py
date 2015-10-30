@@ -788,6 +788,7 @@ class Contract(CogProcessFramework):
                     'invisible': Eval('status') == 'quote',
                     }
                 })
+        cls._buttons['button_stop']['invisible'] = True
 
     @classmethod
     def view_attributes(cls):
