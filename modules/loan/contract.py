@@ -360,6 +360,8 @@ class ExtraPremium:
         if not self.calculation_kind == 'capital_per_mil':
             return super(ExtraPremium, self).calculate_premium_amount(args,
                 base)
+        if args['share'].loan.end_date <= args['date']:
+            return 0
         return args['loan'].amount * self.capital_per_mil_rate * \
             args['share'].share
 
