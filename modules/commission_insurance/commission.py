@@ -288,6 +288,8 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
     def get_commission_periods(self, invoice_line):
         periods = []
         all_dates = self.get_commission_dates(invoice_line)
+        if len(all_dates) == 1:
+            return [(all_dates[0], all_dates[0])]
         for idx, date in enumerate(all_dates[:-1]):
             if idx == len(all_dates) - 2:
                 # Last date must be inside
