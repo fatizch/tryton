@@ -27,6 +27,8 @@ def register():
         ChangeContractStartDate,
         ChangeContractExtraData,
         ChangeContractSubscriber,
+        TerminateContract,
+        VoidContract,
         ManageOptions,
         Configuration,
         module='endorsement_insurance_invoice', type_='model')

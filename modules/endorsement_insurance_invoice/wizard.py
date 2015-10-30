@@ -20,6 +20,8 @@ __all__ = [
     'ChangeContractStartDate',
     'ChangeContractExtraData',
     'ChangeContractSubscriber',
+    'TerminateContract',
+    'VoidContract',
     'ManageOptions',
     'StartEndorsement',
     ]
@@ -608,6 +610,54 @@ class ChangeContractExtraData:
     @classmethod
     def get_draft_methods_for_model(cls, model_name):
         methods = super(ChangeContractExtraData,
+            cls).get_draft_methods_for_model(model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
+
+class TerminateContract:
+    'Terminate Contract'
+
+    __name__ = 'endorsement.contract.terminate'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(TerminateContract, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(TerminateContract,
+            cls).get_draft_methods_for_model(model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
+
+
+class VoidContract:
+    'Void Contract'
+
+    __name__ = 'endorsement.contract.void'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(VoidContract, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(VoidContract,
             cls).get_draft_methods_for_model(model_name)
         if model_name == 'contract':
             methods |= {'rebill_after_endorsement',
