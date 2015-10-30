@@ -144,8 +144,14 @@ class RuleEngine:
         if kind != 'compl':
             return
         technical_name = self.get_translated_name(elem, kind)
-        base_context[technical_name] = functools.partial(
-            self.get_external_extra_data_def, elem.id)
+        base_context[technical_name] = ('compl', elem.id)
+
+    def deflat_element(self, element):
+        if element[0] == 'compl':
+            return functools.partial(self.get_external_extra_data_def,
+                element[1])
+        else:
+            return super(RuleEngine, self).deflat_element(element)
 
     def add_rule_parameters_to_context(self, base_context):
         super(RuleEngine, self).add_rule_parameters_to_context(base_context)

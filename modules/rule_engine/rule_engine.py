@@ -952,14 +952,11 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     def as_context(self, elem, kind, base_context):
         technical_name = self.get_translated_name(elem, kind)
         if kind == 'rule':
-            base_context[technical_name] = functools.partial(
-                self.execute_rule, elem.id)
+            base_context[technical_name] = ('rule', elem.id)
         elif kind == 'table':
-            base_context[technical_name] = functools.partial(
-                self.execute_table, elem.id)
+            base_context[technical_name] = ('table', elem.id)
         elif kind == 'param':
-            base_context[technical_name] = functools.partial(
-                self.execute_param, elem.id)
+            base_context[technical_name] = ('param', elem.id)
 
     def add_rule_parameters_to_context(self, base_context):
         for elem in self.parameters:
@@ -969,8 +966,20 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         for elem in self.rules_used:
             self.as_context(elem, 'rule', base_context)
 
-    def prepare_context(self, evaluation_context, execution_kwargs):
-        debug = Transaction().context.get('debug', True)
+    def deflat_element(self, element):
+        kind = element[0]
+        if kind == 'param':
+            return functools.partial(self.execute_param, element[1])
+        elif kind == 'rule':
+            return functools.partial(self.execute_rule, element[1])
+        elif kind == 'table':
+            return functools.partial(self.execute_table, element[1])
+        elif kind == 'function':
+            return getattr(Pool().get(element[1]), element[2])
+        else:
+            raise Exception('unknown context element')
+
+    def build_context(self, debug):
         pre_context = None
         if self.id >= 0 and not debug:
             pre_context = self._prepare_context_cache.get(self.id)
@@ -978,6 +987,12 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
             pre_context = self.get_full_context_for_execution()
             if self.id >= 0 and not debug:
                 self._prepare_context_cache.set(self.id, pre_context)
+        return {k: self.deflat_element(v) for
+            k, v in pre_context.iteritems()}
+
+    def prepare_context(self, evaluation_context, execution_kwargs):
+        debug = Transaction().context.get('debug', True)
+        pre_context = self.build_context(debug)
         exec_context = {'evaluation_context': evaluation_context}
         for k, v in pre_context.iteritems():
             if k in execution_kwargs:
@@ -1346,11 +1361,9 @@ class RuleFunction(ModelView, ModelSQL):
     def as_context(self, base_context):
         if self.translated_technical_name in base_context:
             return base_context
-        pool = Pool()
         if self.type == 'function':
-            namespace_obj = pool.get(self.namespace)
-            base_context[self.translated_technical_name] = getattr(
-                namespace_obj, self.name)
+            base_context[self.translated_technical_name] = ('function',
+                self.namespace, self.name)
         for element in self.children:
             element.as_context(base_context)
         return base_context
