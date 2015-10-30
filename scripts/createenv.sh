@@ -47,8 +47,11 @@ else
     pip install lxml polib genshi==0.6 relatorio python-ldap pywebdav vobject \
     pydot argcomplete python-stdnum python-sql raven Mock simpleeval \
     unidecode
-    # Install celery-tryton without trytond dependency (others deps are already satisfied)
 
+    # Install redis cache deps
+    pip install msgpack-python redis hiredis
+
+    # Install celery-tryton without trytond dependency (others deps are already satisfied)
     pip install --no-deps celery-tryton
     # Install latest relatorio version
     hg clone https://code.google.com/p/python-relatorio /tmp/relatorio_source
