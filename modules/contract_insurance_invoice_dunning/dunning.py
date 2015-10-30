@@ -55,6 +55,7 @@ class Level:
     contract_action = fields.Selection([
             ('', ''),
             ('terminate', 'Terminate Contract'),
+            ('hold_invoicing', 'Hold Invoicing'),
             ('hold', 'Hold Contract')], 'Contract Action')
     termination_mode = fields.Selection([
             ('at_last_posted_invoice', 'At Last Posted Invoice'),
