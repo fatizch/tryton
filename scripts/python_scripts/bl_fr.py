@@ -9,16 +9,23 @@ from collections import defaultdict
 REDMINE_URL = 'https://redmine.coopengo.com'
 
 try:
-    _, redmine_api_key, project_name, version_name = sys.argv
+    _, redmine_api_key, project_name, version_name, test_version = sys.argv
 except ValueError:
-    sys.stderr.write('''
+    try:
+        _, redmine_api_key, project_name, version_name = sys.argv
+        test_version = None
+    except ValueError:
+        sys.stderr.write('''
 Usage :
-    bl.py <redmine_api_key> <project_name> <version_name>
+    bl.py <redmine_api_key> <project_name> <version_name> [<test_version>]
 
 Example :
-    bl.py dwde0df0f2dd6invalid_api_key Coog sprint
+    bl.py <valid_api_key> Coog sprint a
+
+    Will output html with all closed issues of test version "a" (if applicable,
+    else all versions) of production version "sprint" of project "Coog".
 ''')
-    sys.exit()
+        sys.exit()
 
 r = requests.get(REDMINE_URL + '/projects.json',
     auth=(redmine_api_key, ''), verify=False)
@@ -74,6 +81,8 @@ features, bugs, params, scripts = defaultdict(list), defaultdict(list), [], []
 for issue in parsed:
     issue['custom_fields'] = {x['id']: x.get('value', '').encode('utf-8')
         for x in issue['custom_fields']}
+    if test_version and issue['custom_fields'][11] != test_version:
+        continue
     issue['subject'] = issue['subject'].encode('utf-8')
     issue['updated_on'] = datetime.datetime.strptime(issue['updated_on'],
         '%Y-%m-%dT%H:%M:%SZ')
@@ -95,6 +104,7 @@ def get_issue_id(issue):
 
 print '<html>'
 print '<head>'
+print '<meta charset="utf-8"/>'
 print '<style>'
 print '''
 h1 {
@@ -131,7 +141,7 @@ tr td:first-child {
     width: 70px;
 }
 tr td:last-child {
-    width: 80px
+    width: 40px;
 }
 '''
 print '</style>'
@@ -142,45 +152,51 @@ count = 1
 if features:
     print '<h1>%i. Features</h1>' % count
     count += 1
+    print '<table>'
+    print '    <tr><th>#</th><th>Priorité</th><th>Sujet</th>' + \
+        '<th>Version</th></tr>'
     for priority in ('Immediate', 'High', 'Normal', 'Low'):
         issues = features[priority]
         if not issues:
             continue
-        print '<table>'
-        print '<tr><th colspan="3">' + priority + ' (%s) :' % len(issues) + \
-            '</th></tr>'
-        for issue in issues:
-            print '    <tr><td>' + get_issue_id(issue) + '</td><td>' + \
-                issue['subject'] + '</td><td>%s</td></tr>' % (
-                    issue['updated_on'])
-        print '</table>'
+        for issue in sorted(issues, key=lambda x: x['custom_fields'][11]):
+            print '    <tr><td>' + '</td><td>'.join([get_issue_id(issue),
+                    issue['priority']['name'].encode('utf-8'),
+                    issue['subject'],
+                    issue['custom_fields'][11],
+                    ]) + '</td></tr>'
+    print '</table>'
 
 if bugs:
     print '<h1>%i. Bugs</h1>' % count
     count += 1
+    print '<table>'
+    print '    <tr><th>#</th><th>Priorité</th><th>Sujet</th>' + \
+        '<th>Version</th></tr>'
     for priority in ('Immediate', 'High', 'Normal', 'Low'):
         issues = bugs[priority]
         if not issues:
             continue
-        print '<table>'
-        print '<tr><th colspan="3">' + priority + ' (%s) :' % len(issues) + \
-            '</th></tr>'
-        for issue in issues:
-            print '    <tr><td>' + get_issue_id(issue) + '</td><td>' + \
-                issue['subject'] + '</td><td>%s</td></tr>' % (
-                    issue['updated_on'])
-        print '</table>'
+        for issue in sorted(issues, key=lambda x: x['custom_fields'][11]):
+            print '    <tr><td>' + '</td><td>'.join([get_issue_id(issue),
+                    issue['priority']['name'].encode('utf-8'),
+                    issue['subject'],
+                    issue['custom_fields'][11],
+                    ]) + '</td></tr>'
+    print '</table>'
 
 
 if params:
     print '<h1>%i. Params</h1>' % count
     count += 1
     print '<table>'
-    print '    <tr><th>#</th><th>Subject</th><th width="200">Param</th></tr>'
-    for issue in params:
+    print '    <tr><th>#</th><th>Subject</th><th width="200">Param</th> ' + \
+        '<th>Version</th></tr>'
+    for issue in sorted(params, key=lambda x: x['custom_fields'][11]):
         print '    <tr><td>' + get_issue_id(issue) + '</td><td>' + \
             issue['subject'] + '</td><td>' + \
-            issue['custom_fields'][7] + '</td></tr>'
+            issue['custom_fields'][7] + '</td><td>' + \
+            issue['custom_fields'][11] + '</td></tr>'
     print '</table>'
 
 
@@ -188,11 +204,13 @@ if scripts:
     print '<h1>%i. Scripts</h1>' % count
     count += 1
     print '<table>'
-    print '    <tr><th>#</th><th>Subject</th><th width="200">Script</th></tr>'
-    for issue in scripts:
+    print '    <tr><th>#</th><th>Subject</th><th width="200">Script</th>' + \
+        '<th>Version</th></tr>'
+    for issue in sorted(scripts, key=lambda x: x['custom_fields'][11]):
         print '    <tr><td>' + get_issue_id(issue) + '</td><td>' + \
             issue['subject'] + '</td><td>' + \
-            issue['custom_fields'][9] + '</td></tr>'
+            issue['custom_fields'][9] + '</td><td>' + \
+            issue['custom_fields'][11] + '</td></tr>'
     print '</table>'
 print '</body>'
 print '</html>'
