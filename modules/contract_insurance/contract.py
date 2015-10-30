@@ -329,7 +329,6 @@ class Contract(Printable):
         self.covered_elements = self.covered_elements
 
 
-
 class ContractOption:
     __name__ = 'contract.option'
 
@@ -1183,7 +1182,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def get_all_extra_data(self, at_date):
         current_version = self.get_version_at_date(at_date)
         res = current_version.extra_data if current_version else {}
-        res.update(self.party_extra_data)
         if self.contract:
             res.update(self.contract.get_all_extra_data(at_date))
         return res

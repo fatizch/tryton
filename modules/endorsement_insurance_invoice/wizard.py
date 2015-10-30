@@ -528,7 +528,7 @@ class RemoveOption:
 
 
 class ModifyCoveredElementInformation:
-    __name__ = 'endorsement.contract.covered_element.modify'
+    __name__ = 'contract.covered_element.modify'
 
     @classmethod
     def get_methods_for_model(cls, model_name):

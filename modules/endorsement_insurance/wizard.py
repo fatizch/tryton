@@ -674,6 +674,8 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             current_version = new_covered_element.to_version(
                 previous_version=new_versions[-1])
             new_versions.append(current_version)
+        else:
+            current_version.extra_data = new_covered_element.extra_data
         good_covered.versions = new_versions
 
     def get_covered_from_parent(self, parent):
