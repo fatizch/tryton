@@ -744,3 +744,12 @@ def version_getter(instances, names, version_model, reverse_fname,
                     v = json.loads(v, object_hook=JSONDecoder())
                 result[field_map[k]][base_id] = v
     return result
+
+
+def clear_transaction_cache(model_name, ids):
+    # Copied from ModelStorage::write
+    for cache in Transaction().cursor.cache.itervalues():
+        if model_name in cache:
+            for id_ in ids:
+                if id_ in cache[model_name]:
+                    cache[model_name][id_].clear()

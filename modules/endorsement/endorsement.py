@@ -1715,9 +1715,10 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         for model_name in models_to_restore:
             if not restore_dict[model_name]:
                 continue
-            pool.get(model_name).restore_history_before(
-                list(set([x.id for x in restore_dict[model_name]])),
+            all_ids = list(set([x.id for x in restore_dict[model_name]]))
+            pool.get(model_name).restore_history_before(all_ids,
                 self.endorsement.rollback_date)
+            utils.clear_transaction_cache(model_name, all_ids)
 
     @classmethod
     def _prepare_restore_history(cls, instances, at_date):
