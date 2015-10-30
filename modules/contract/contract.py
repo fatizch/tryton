@@ -1503,6 +1503,9 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def copy(cls, options, default=None):
         default = {} if default is None else default.copy()
         if Transaction().context.get('copy_mode', '') == 'functional':
+            options = [x for x in options if x.status != 'void']
+            if not options:
+                return []
             skips = cls._export_skips() | cls.functional_skips_for_duplicate()
             for x in skips:
                 default.setdefault(x, None)
@@ -1870,6 +1873,7 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def decline_option(self, reason):
         self.status = 'declined'
         self.sub_status = reason
+
 
 class ContractOptionVersion(model.CoopSQL, model.CoopView):
     'Contract Option Version'
