@@ -116,7 +116,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:commission.change_broker.select_new_broker,all_contracts:"
 msgid "Change All Contracts"
-msgstr "Modifier tout les contrats"
+msgstr "Modifier tous les contrats"
 
 msgctxt "field:commission.change_broker.select_new_broker,at_date:"
 msgid "At Date"
@@ -140,7 +140,7 @@ msgstr "Nouvelle agence"
 
 msgctxt "field:commission.change_broker.select_new_broker,to_broker:"
 msgid "To Broker"
-msgstr "Nouvel aopprteur"
+msgstr "Nouvel apporteur"
 
 msgctxt "field:commission.create_agents.ask,brokers:"
 msgid "Brokers"
