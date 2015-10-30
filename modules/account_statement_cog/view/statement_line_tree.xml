@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/tree/field[@name='party']" position="replace"/>
+    <xpath expr="/tree/field[@name='number']" position="replace"/>
+    <xpath expr="/tree/field[@name='date']" position="before">
+        <field name="party_payer"/>
+        <field name="party"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='amount']" position="after">
+        <field name="number"/>
+    </xpath>
+</data>

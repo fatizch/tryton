@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/label[@name='party']" position="before">
+        <label name="party_payer"/>
+        <field name="party_payer"/>
+    </xpath>
+</data>

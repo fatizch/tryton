@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="/tree/field[@name='party']" position="replace"/>
-    <xpath expr="/tree/field[@name='number']" position="replace"/>
-    <xpath expr="/tree/field[@name='date']" position="before">
-        <field name="party"/>
+    <xpath expr="/tree/field[@name='party']" position="after">
         <field name="contract"/>
-    </xpath>
-    <xpath expr="/tree/field[@name='amount']" position="after">
-        <field name="number"/>
     </xpath>
 </data>

@@ -30,6 +30,10 @@ msgctxt "field:account.statement.line,in_bank_deposit_ticket:"
 msgid "In Bank Deposit Ticket"
 msgstr "Bordereau de chèque"
 
+msgctxt "field:account.statement.line,party_payer:"
+msgid "Payer"
+msgstr "Payeur"
+
 msgctxt "model:ir.action,name:act_statement_bank_deposit_form"
 msgid "Bank Deposit Ticket"
 msgstr "Bordereaux de chèques"
@@ -83,6 +87,10 @@ msgstr "Manuelle"
 msgctxt "field:account.statement.line,invoice:account_statement."
 msgid "Invoice"
 msgstr "Quittance"
+
+msgctxt "field:account.statement.line,party:account_statement."
+msgid "Beneficiary"
+msgstr "Bénéficiaire"
 
 msgctxt ""
 "model:ir.action.act_window.domain,name:account_statement.act_statement_form_domain_posted"

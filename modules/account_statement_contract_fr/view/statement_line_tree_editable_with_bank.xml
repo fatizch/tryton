@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <tree string="Statement Lines" editable="bottom" sequence="sequence">
+    <field name="party_payer"/>
     <field name="party"/>
     <field name="contract"/>
     <field name="date"/>

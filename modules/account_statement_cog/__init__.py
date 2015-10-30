@@ -9,6 +9,7 @@ def register():
     Pool.register(
         Line,
         Statement,
+        LineGroup,
         TestCaseModel,
         Journal,
         Move,
