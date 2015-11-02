@@ -360,7 +360,6 @@ class RuleTools(ModelView):
             raise Exception(cls.raise_user_error('key_not_available',
                     (master_key,), raise_exception=False))
         data = args[master_key]
-        data = Pool().get('contract')(data)
 
         def iterate(data, path):
             if not path or not data:
