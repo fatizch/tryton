@@ -89,6 +89,8 @@ class NewCoveredElement(EndorsementWizardStepMixin):
                     template['values'][field.name] = new_value
                     template['values']['manual_start_date'] = \
                         wizard.endorsement.effective_date
+                    if 'start_date' in template['values']:
+                        template['values'].pop('start_date')
                 vlist_options.append(template)
             for version in covered_element.versions:
                 vlist_versions.append({
@@ -1463,7 +1465,6 @@ class StartEndorsement:
             num_covered_elements = len(
                 self.endorsement.contract_endorsements[0].covered_elements)
         result['covered_elements'] = [{
-                'start_date': endorsement_date,
                 'item_desc': (result['possible_item_desc'] or [None])[0],
                 'main_contract': contract.id,
                 'contract': contract.id,

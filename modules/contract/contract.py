@@ -621,7 +621,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             if elem.subscription_behaviour == 'optional':
                 continue
             options.append(Option.new_option_from_coverage(elem,
-                    self.product, start_date=self.start_date))
+                    self.product, self.start_date))
         self.options = options
         extra_vals = {}
         if self.extra_datas:
@@ -1792,22 +1792,19 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         return [('coverage', 'light'), 'start_date', 'end_date']
 
     @classmethod
-    def new_option_from_coverage(cls, coverage, product, start_date,
-            end_date=None):
-        assert(start_date)
-        if utils.is_effective_at_date(coverage, start_date):
-            new_option = cls()
-            new_option.coverage = coverage.id
-            new_option.product = product.id
-            new_option.status = 'active'
-            new_option.start_date = start_date
-            new_option.appliable_conditions_date = start_date
-            Version = Pool().get('contract.option.version')
-            new_option.versions = [Version(**Version.get_default_version())]
-            return new_option
-        else:
+    def new_option_from_coverage(cls, coverage, product,
+            start_date, end_date=None):
+        assert start_date
+        if not utils.is_effective_at_date(coverage, start_date):
             cls.raise_user_error('inactive_coverage_at_date', (coverage.name,
                     start_date))
+        new_option = cls()
+        new_option.coverage = coverage.id
+        new_option.product = product.id
+        new_option.status = 'active'
+        Version = Pool().get('contract.option.version')
+        new_option.versions = [Version(**Version.get_default_version())]
+        return new_option
 
     def get_possible_end_date(self):
         dates = {}

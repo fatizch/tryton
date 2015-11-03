@@ -299,7 +299,6 @@ class Contract(Printable):
         for cov_dict in contract_dict['covered_elements']:
             covered_element = CoveredElement()
             covered_element.main_contract = self
-            covered_element.start_date = contract_dict['start_date']
             covered_element.init_covered_element(product, item_desc, cov_dict)
             self.covered_elements.append(covered_element)
 
@@ -808,13 +807,13 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     @fields.depends('contract', 'item_desc', 'item_kind', 'main_contract',
         'options', 'parent', 'party', 'party_extra_data', 'product',
-        'start_date', 'versions')
+        'versions')
     def on_change_contract(self):
         self.main_contract = self.contract
         self.recalculate()
 
     @fields.depends('current_extra_data', 'item_desc', 'party',
-        'party_extra_data', 'product', 'start_date', 'versions')
+        'party_extra_data', 'product', 'versions')
     def on_change_current_extra_data(self):
         current_version = self.get_version_at_date(utils.today())
         if not current_version:
@@ -828,19 +827,19 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     @fields.depends('contract', 'current_extra_data', 'item_desc',
         'item_kind', 'main_contract', 'options', 'parent', 'party',
-        'party_extra_data', 'product', 'start_date', 'versions')
+        'party_extra_data', 'product', 'versions')
     def on_change_item_desc(self):
         self.recalculate()
 
     @fields.depends('contract', 'current_extra_data', 'item_desc', 'item_kind',
         'main_contract', 'options', 'parent', 'party', 'party_extra_data',
-        'product', 'start_date', 'versions')
+        'product', 'versions')
     def on_change_parent(self):
         self.recalculate()
 
     @fields.depends('contract', 'current_extra_data', 'item_desc', 'item_kind',
         'main_contract', 'options', 'parent', 'party', 'party_extra_data',
-        'product', 'start_date', 'versions')
+        'product', 'versions')
     def on_change_party(self):
         self.recalculate()
 
@@ -978,12 +977,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             self.contract
         if not self.main_contract:
             self.product = None
-            self.start_date = None
             return
-        if self.parent:
-            self.start_date = self.parent.start_date
-        else:
-            self.start_date = self.main_contract.start_date
         self.product = self.main_contract.product
 
     def update_item_desc(self):
@@ -1032,8 +1026,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             if elem.subscription_behaviour == 'optional':
                 continue
             new_options.append(Option.new_option_from_coverage(elem,
-                    self.product, item_desc=self.item_desc,
-                    start_date=self.start_date))
+                    self.product, self.main_contract.start_date,
+                    item_desc=self.item_desc))
         self.options = new_options
 
     def update_extra_data(self, version):
@@ -1045,7 +1039,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             if k not in version.extra_data:
                 version.extra_data[k] = v
         version.extra_data = self.product.get_extra_data_def('covered_element',
-            version.extra_data, self.start_date, item_desc=self.item_desc)
+            version.extra_data, self.main_contract.start_date,
+            item_desc=self.item_desc)
         if self.party:
             self.party_extra_data = {k: v
                 for k, v in version.extra_data.iteritems()}
