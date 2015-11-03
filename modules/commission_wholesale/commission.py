@@ -63,21 +63,19 @@ class Commission:
                 key['delegation_of_payment']):
             return super(Commission, cls)._get_invoice(key)
         insurer = key['insurer']
-        agent = key['agent']
         if key['type'].startswith('out'):
             payment_term = insurer.party.customer_payment_term
         else:
             payment_term = insurer.party.supplier_payment_term
         return Invoice(
-            company=agent.company,
+            company=key['company'],
             type=key['type'],
             journal=cls.get_journal(),
             party=insurer.party,
             invoice_address=insurer.party.address_get(type='invoice'),
-            currency=agent.currency,
-            account=agent.account,
-            payment_term=payment_term,
-            description=agent.rec_name)
+            currency=key['currency'],
+            account=key['account'],
+            payment_term=payment_term)
 
 
 class CreateInvoicePrincipal:

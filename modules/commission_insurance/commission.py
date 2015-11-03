@@ -129,15 +129,47 @@ class Commission:
         return (self.agent.party.network[0].id
             if self.agent and self.agent.party.network else None)
 
+    @classmethod
+    def _get_invoice(cls, key):
+        pool = Pool()
+        Invoice = pool.get('account.invoice')
+        AccountConfiguration = pool.get('account.configuration')
+
+        party = key['party']
+        if key['type'].startswith('out'):
+            payment_term = party.customer_payment_term
+        else:
+            payment_term = party.supplier_payment_term
+        if not payment_term:
+            conf = AccountConfiguration(1)
+            payment_term = conf.commission_invoice_payment_term
+        return Invoice(
+            company=key['company'],
+            type=key['type'],
+            journal=cls.get_journal(),
+            party=party,
+            invoice_address=party.address_get(type='invoice'),
+            currency=key['currency'],
+            account=key['account'],
+            payment_term=payment_term,
+            )
+
     def _group_to_invoice_key(self):
         direction = {
             'in': 'out',
             'out': 'in',
             }.get(self.type_)
         document = 'invoice'
-        return (('agent', self.agent),
+        return (('party', self.agent.party),
             ('type', '%s_%s' % (direction, document)),
+            ('company', self.agent.company),
+            ('currency', self.agent.currency),
+            ('account', self.agent.account),
             )
+
+    def _group_to_invoice_line_key(self):
+        return super(Commission, self)._group_to_invoice_line_key() + (
+            ('agent', self.agent),)
 
     @classmethod
     def invoice(cls, commissions):
@@ -146,6 +178,13 @@ class Commission:
         super(Commission, cls).invoice(commissions)
         invoices = list(set([c.invoice_line.invoice for c in commissions]))
         Fee.add_broker_fees_to_invoice(invoices)
+
+    @classmethod
+    def _get_invoice_line(cls, key, invoice, commissions):
+        invoice_line = super(Commission, cls)._get_invoice_line(key, invoice,
+            commissions)
+        invoice_line.description = key['agent'].rec_name
+        return invoice_line
 
     @classmethod
     def search_type_(cls, name, clause):
@@ -159,16 +198,6 @@ class Commission:
     @classmethod
     def search_broker(cls, name, clause):
         return [('agent.party.network',) + tuple(clause[1:])],
-
-    @classmethod
-    def _get_invoice(cls, key):
-        pool = Pool()
-        AccountConfiguration = pool.get('account.configuration')
-        invoice = super(Commission, cls)._get_invoice(key)
-        if not invoice.payment_term:
-            conf = AccountConfiguration(1)
-            invoice.payment_term = conf.commission_invoice_payment_term
-        return invoice
 
     @classmethod
     def modify_agent(cls, commissions, new_agent):
