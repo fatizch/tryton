@@ -399,7 +399,7 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
         domain=[('state', '=', 'calculated')], states=_STATES,
         depends=_DEPENDS)
     share = fields.Numeric('Loan Share', digits=(16, 4),
-        domain=[('share', '>', 0), ('share', '<=', 1)],
+        domain=[('share', '>=', 0), ('share', '<=', 1)],
         states=_STATES, depends=_DEPENDS)
     person = fields.Function(
         fields.Many2One('party.party', 'Person'),
@@ -570,10 +570,10 @@ class OptionsDisplayer:
 
     is_loan = fields.Boolean('Is Loan')
     default_share = fields.Numeric('Default Loan Share', digits=(16, 4),
-        domain=[If(Bool(Eval('default_share')),
-                [('default_share', '>', 0), ('default_share', '<=', 1)],
-                [])],
-        states={'invisible': ~Eval('is_loan')})
+        domain=['OR',
+            [('default_share', '=', None)],
+            [('default_share', '>', 0), ('default_share', '<=', 1)],
+            ], states={'invisible': ~Eval('is_loan')})
 
     @classmethod
     def view_attributes(cls):
