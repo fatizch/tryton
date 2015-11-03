@@ -136,8 +136,8 @@ class Statement(export.ExportImportMixin):
 
     def _group_key(self, line):
         keys = dict(super(Statement, self)._group_key(line))
-        del keys['party']
-        keys['party_payer'] = line.party_payer
+        # Keep party key as it us used in the odt report
+        keys['party'] = line.party_payer
         return tuple([(k, v) for (k, v) in keys.iteritems()])
 
 
