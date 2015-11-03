@@ -32,6 +32,12 @@ class ContractSet(CogProcessFramework):
     contracts_processes_over = fields.Function(
         fields.Boolean('All Processes On Contracts Are Over', readonly=True),
         'getter_contracts_processes_over')
+    has_quote_contracts = fields.Function(
+        fields.Boolean('Has Quote Contracts'),
+        'get_has_quote_contracts')
+
+    def get_has_quote_contracts(self, name):
+        return any([(x.status == 'quote') for x in self.contracts])
 
     def getter_contracts_processes_over(self, name):
         return all([not x.current_state for x in self.contracts])
