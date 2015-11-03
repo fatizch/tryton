@@ -31,6 +31,7 @@ class Plan:
         if pattern and 'option' in pattern:
             context['names']['option'] = pattern['option']
         if pattern and 'agent' in pattern:
+            context['names']['agent'] = pattern['agent']
             context['names']['extra_data'] = pattern['agent'].extra_data or {}
         return context
 
