@@ -119,6 +119,7 @@ class StartEndorsement:
         candidates = Process.search([
                 ('on_model.model', '=', 'contract'),
                 ('kind', '=', 'full_contract_revision'),
+                ('for_products', '=', contract.product.id),
                 ])
         if not candidates:
             candidates = Process.search([
