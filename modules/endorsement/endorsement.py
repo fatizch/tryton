@@ -1746,8 +1746,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             contract = contract_endorsement.contract
             if contract.current_state and (
                     contract_endorsement.endorsement.state != 'in_progress'):
-                cls.raise_user_error('process_in_progress', (
-                        contract.rec_name,
+                cls.raise_user_warning('Process in progress',
+                    'process_in_progress', (contract.rec_name,
                         contract.current_state.process.fancy_name))
 
             contract_endorsement.do_restore_history()
@@ -1763,8 +1763,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             contract = contract_endorsement.contract
             if contract.current_state and (
                     contract_endorsement.endorsement.state != 'in_progress'):
-                cls.raise_user_error('process_in_progress', (
-                        contract.rec_name,
+                cls.raise_user_warning('Process in progress',
+                    'process_in_progress', (contract.rec_name,
                         contract.current_state.process.fancy_name))
             if contract_endorsement.endorsement.rollback_date:
                 contract_endorsement.set_applied_on(
