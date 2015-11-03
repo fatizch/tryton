@@ -743,7 +743,8 @@ class Contract:
                 ('end', '>=', rebill_end),
                 ('invoice_state', 'not in', ('cancel', 'draft', 'validated')),
                 ], order=[('start', 'DESC')], limit=1)
-        return last_posted[0].start if last_posted else utils.today()
+        if last_posted:
+            return max(last_posted[0].start, utils.today())
 
     def rebill(self, start, end=None, post_end=None):
         pool = Pool()
