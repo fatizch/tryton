@@ -498,15 +498,7 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
         for loan in updated_loans.itervalues():
             for increment in sorted(loan.increments,
                     key=lambda x: x.start_date):
-                # Force set for new increments
-                if not getattr(increment, 'loan', None):
-                    increment.loan = loan
-                if not getattr(increment, 'id', None):
-                    increment.id = None
-                if not getattr(increment, 'loan_state', None):
-                    increment.loan_state = 'draft'
-                increment.calculated_amount = \
-                    increment.calculate_payment_amount()
+                self.update_increment_displayer(increment, loan)
                 all_increments.append(increment)
         increments_fields = self._increments_fields_to_extract()
         defaults['all_increments'] = [model.dictionarize(x, increments_fields)
@@ -543,6 +535,21 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
     def step_next(self):
         super(ChangeLoanAtDate, self).step_next()
         return 'display_updated_payments'
+
+    def update_increment_displayer(self, increment, loan):
+        # Force set for new increments
+        if not getattr(increment, 'loan', None):
+            increment.loan = loan
+        if not getattr(increment, 'id', None):
+            increment.id = None
+        if not getattr(increment, 'loan_state', None):
+            increment.loan_state = 'draft'
+        if not getattr(increment, 'currency', None):
+            increment.currency = loan.currency
+            increment.currency_digits = loan.currency_digits
+            increment.currency_symbol = loan.currency_symbol
+        increment.calculated_amount = \
+            increment.calculate_payment_amount()
 
     @classmethod
     def _increments_fields_to_extract(cls):
