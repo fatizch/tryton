@@ -127,6 +127,25 @@ class Endorsement:
         fields.Many2Many('party.party', '', '', 'Parties'),
         'get_parties', searcher='search_parties')
 
+    def get_contact(self):
+        if not self.parties:
+            return super(Endorsement, self).get_contact()
+        return self.parties[0]
+
+    def get_sender(self):
+        pool = Pool()
+        if not self.parties:
+            return super(Endorsement, self).get_contact()
+        company_id = Transaction().context.get('company', None)
+        if company_id:
+            return pool.get('company.company')(company_id).party
+        raise NotImplementedError
+
+    def get_object_for_contact(self):
+        if not self.parties:
+            return super(Endorsement, self).get_object_for_contact()
+        return self.parties[0]
+
     def get_parties(self, name):
         return [x.party.id for x in self.party_endorsements]
 
