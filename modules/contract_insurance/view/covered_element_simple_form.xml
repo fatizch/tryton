@@ -17,4 +17,5 @@
     <field name="party_extra_data" invisible="1"/>
     <field name="versions" invisible="1"/>
     <field name="product" invisible="1"/>
+    <field name="options" invisible="1"/>
 </form>
