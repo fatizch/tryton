@@ -32,13 +32,25 @@ class ContractOption:
     customized_beneficiary_clause = fields.Text(
         'Customized Beneficiary Clause',
         states={
-            'invisible': ~Eval('has_beneficiary_clause'),
+            'invisible': (~Eval('has_beneficiary_clause')
+                | (~Eval('customized_beneficiary_clause')
+                    & (Eval('contract_status') != 'quote'))),
             'required': (Eval('has_beneficiary_clause')
                 & ~Eval('beneficiary_clause')),
             'readonly': Eval('contract_status') != 'quote',
             },
         depends=['has_beneficiary_clause', 'contract_status',
             'beneficiary_clause'])
+    beneficiary_clause_text = fields.Function(
+        fields.Text('Beneficiary Clause',
+            states={
+                'invisible': ((Eval('contract_status') == 'quote')
+                    | ~Eval('has_beneficiary_clause')
+                    | Bool(Eval('customized_beneficiary_clause'))),
+                },
+            depends=['has_beneficiary_clause',
+                'customized_beneficiary_clause']),
+        'get_beneficiary_clause_text')
     beneficiaries = fields.One2Many('contract.option.beneficiary', 'option',
         'Beneficiaries', delete_missing=True,
         states={
@@ -128,6 +140,12 @@ class ContractOption:
         super(ContractOption, cls).validate(options)
         for option in options:
             option.check_beneficiaries()
+
+    def get_beneficiary_clause_text(self, name):
+        if self.customized_beneficiary_clause:
+            return self.customized_beneficiary_clause
+        elif self.beneficiary_clause:
+            return self.beneficiary_clause.content
 
 
 class Beneficiary(model.CoopSQL, model.CoopView):

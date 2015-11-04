@@ -5,6 +5,7 @@
             <label name="beneficiary_clause"/>
             <field name="beneficiary_clause"/>
             <field name="customized_beneficiary_clause" colspan="4"/>
+            <field name="beneficiary_clause_text" colspan="4"/>
             <field name="beneficiaries" colspan="4"/>
         </page>
     </xpath>
