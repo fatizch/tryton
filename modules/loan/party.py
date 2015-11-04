@@ -162,8 +162,9 @@ class DisplayInsuredOutstandingLoanBalance(Wizard):
                 currencies.append(loan.currency.id)
                 if loan.currency == company.currency:
                     default_currency = loan.currency.id
+        currencies.append(company.currency.id)
         if not default_currency and currencies:
-            default_currency = currencies[0].id
+            default_currency = currencies[0]
         return {
             'date': datetime.date.today(),
             'party': selected_party.id,
