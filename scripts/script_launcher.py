@@ -85,8 +85,7 @@ def start(arguments, config, work_data):
             elif arguments.mode == 'debug':
                 base_line += ['--dev', '--verbose']
             try:
-                server_process = subprocess.Popen(base_line + ['-s',
-                        config.get('parameters', 'sentry_dsn')])
+                server_process = subprocess.Popen(base_line)
             except ConfigParser.NoOptionError:
                 server_process = subprocess.Popen(base_line)
             print 'Server started, pid %s' % server_process.pid
