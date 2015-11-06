@@ -2,6 +2,7 @@
 import unittest
 import doctest
 import datetime
+from dateutil.relativedelta import relativedelta
 
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import doctest_setup, doctest_teardown
@@ -384,6 +385,87 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     ]):
             test_value(test_endorsement.options[idx], action, relation,
                 values)
+
+    def test0080_getter_activation_history(self):
+        cursor = Transaction().cursor
+        product, = self.Product.search([
+                ('code', '=', 'AAA'),
+                ])
+        years = (2010, 2011, 2012, 2013)
+        contract = self.Contract(
+            product=product.id,
+            company=product.company.id,
+            )
+        contract.activation_history = [self.ActivationHistory(start_date=x,
+                end_date=x + relativedelta(years=1, days=-1)) for x in
+            (datetime.date(y, 1, 1) for y in years)]
+        contract.save()
+        cursor.execute('delete from contract_activation_history where '
+            'contract = %s' % contract.id)
+        cursor.commit()
+
+        # test consultation with no matching entry in history table
+        with Transaction().set_context(
+                client_defined_date=datetime.date(2010, 6, 1),
+                _datetime=datetime.datetime.min):
+            contract = self.Contract(contract.id)
+            self.assertEqual(contract.activation_history, ())
+            self.assertEqual(contract.start_date, None)
+
+        _datetime = datetime.datetime.now()
+        # test consultation in middle of periods
+        contract = self.Contract(contract.id)
+        for y in years:
+            with Transaction().set_context(
+                    client_defined_date=datetime.date(y, 6, 1),
+                    _datetime=_datetime):
+                contract = self.Contract(contract.id)
+                self.assertEqual(contract.start_date,
+                    datetime.date(y, 1, 1))
+                self.assertEqual(contract.end_date,
+                    datetime.date(y, 12, 31))
+
+        # test consultation on last day of periods
+        for y in years:
+            with Transaction().set_context(
+                    client_defined_date=datetime.date(y, 12, 31),
+                    _datetime=_datetime):
+                contract = self.Contract(contract.id)
+                self.assertEqual(contract.start_date,
+                    datetime.date(y, 1, 1))
+                self.assertEqual(contract.end_date,
+                    datetime.date(y, 12, 31))
+
+        # test consultation on first day of periods
+        for y in years:
+            with Transaction().set_context(
+                    client_defined_date=datetime.date(y, 1, 1),
+                    _datetime=_datetime):
+                contract = self.Contract(contract.id)
+                self.assertEqual(contract.start_date,
+                    datetime.date(y, 1, 1))
+                self.assertEqual(contract.end_date,
+                    datetime.date(y, 12, 31))
+
+        # test consultation before first periods
+        with Transaction().set_context(
+                client_defined_date=datetime.date(2009, 6, 1),
+                _datetime=_datetime):
+            contract = self.Contract(contract.id)
+            self.assertEqual(contract.start_date,
+                datetime.date(2010, 1, 1))
+            self.assertEqual(contract.end_date,
+                datetime.date(2010, 12, 31))
+
+        # test consultation after last period
+        with Transaction().set_context(
+                client_defined_date=datetime.date(2014, 6, 1),
+                _datetime=_datetime):
+            contract = self.Contract(contract.id)
+            self.assertEqual(contract.start_date,
+                datetime.date(2013, 1, 1))
+            self.assertEqual(contract.end_date,
+                datetime.date(2013, 12, 31))
 
 
 def suite():

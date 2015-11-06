@@ -791,6 +791,28 @@ class Contract(CogProcessFramework):
         cls._buttons['button_stop']['invisible'] = True
 
     @classmethod
+    def getter_activation_history(cls, contracts, names):
+        today = utils.today()
+        values = cls.activation_history_base_values(contracts)
+
+        if Transaction().context.get('_datetime', None):
+            # TODO: handle __history__ with sql
+            for contract in contracts:
+                if not contract.activation_history:
+                    continue
+                period = utils.get_value_at_date(contract.activation_history,
+                    today, date_field='start_date')
+                if not period:
+                    period = contract.activation_history[0]
+                values['start_date'][contract.id] = period['start_date']
+                values['end_date'][contract.id] = period['end_date']
+                values['termination_reason'][contract.id] = period[
+                    'termination_reason']
+            return values
+        return super(Contract, cls).getter_activation_history(contracts,
+            names)
+
+    @classmethod
     def view_attributes(cls):
         return super(Contract, cls).view_attributes() + [(
                 '/form/group[@id="endorsement_buttons"]',

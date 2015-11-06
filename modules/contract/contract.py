@@ -525,10 +525,23 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return 'person'
 
     @classmethod
+    def activation_history_base_values(cls, contracts):
+        base_values = {x.id: None for x in contracts}
+        return {
+            'start_date': base_values,
+            'end_date': dict(base_values),
+            'termination_reason': dict(base_values),
+            }
+
+    @classmethod
     def getter_activation_history(cls, contracts, names):
         cursor = Transaction().cursor
         pool = Pool()
         ActivationHistory = pool.get('contract.activation_history')
+
+        today = utils.today()
+        values = cls.activation_history_base_values(contracts)
+
         activation_history = ActivationHistory.__table__()
         column_end = NullIf(Coalesce(activation_history.end_date,
                 datetime.date.max), datetime.date.max).as_('end_date')
@@ -544,14 +557,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 return value
             return value
 
-        base_values = {x.id: None for x in contracts}
-        values = {
-            'start_date': base_values,
-            'end_date': dict(base_values),
-            'termination_reason': dict(base_values),
-            }
-
-        today = utils.today()
         max_date = datetime.date.max
         for contract_slice in grouped_slice(contracts):
             win_query = activation_history.select(
