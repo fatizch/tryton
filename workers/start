@@ -1,0 +1,13 @@
+#!/bin/bash
+pushd `dirname $0` >> /dev/null
+
+source ./coogw
+
+[ -n "$1" ] && start_worker $1 && exit
+
+for ((W=1; W<=$WORKERS; W++))
+do
+        start_worker $W
+done
+
+popd >> /dev/null
