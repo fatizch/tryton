@@ -4,6 +4,7 @@
     <field name="number"/>
     <field name="definition"/>
     <field name="state"/>
+    <field name="generated_by"/>
     <field name="application_date_str"/>
     <field name="applied_by"/>
     <field name="contracts_name"/>

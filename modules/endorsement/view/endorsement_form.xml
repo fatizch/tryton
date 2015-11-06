@@ -8,6 +8,8 @@
     <field name="definition"/>
     <label name="state"/>
     <field name="state"/>
+    <label name="generated_by"/>
+    <field name="generated_by"/>
     <label name="applicant"/>
     <field name="applicant"/>
     <newline/>
