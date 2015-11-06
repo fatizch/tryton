@@ -16,7 +16,7 @@
     <field name="end_date" xexpand="0"/>
     <notebook>
         <page string="Summary" id="summary">
-            <field name="description" widget="richtext" colspan="4"/>
+            <field name="description" colspan="4"/>
             <field name="summary" widget="richtext" colspan="4"/>
         </page>
         <page string="Rules" id="managers">
