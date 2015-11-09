@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import export, fields
@@ -72,3 +72,24 @@ class Invoice(export.ExportImportMixin, Printable):
         elif self.state == 'posted':
             return 'blue'
         return 'black'
+
+    @classmethod
+    def post(cls, invoices):
+        pool = Pool()
+        Event = pool.get('event')
+        super(Invoice, cls).post(invoices)
+        Event.notify_events(invoices, 'post_invoice')
+
+    @classmethod
+    def cancel(cls, invoices):
+        pool = Pool()
+        Event = pool.get('event')
+        super(Invoice, cls).cancel(invoices)
+        Event.notify_events(invoices, 'cancel_invoice')
+
+    @classmethod
+    def paid(cls, invoices):
+        pool = Pool()
+        Event = pool.get('event')
+        super(Invoice, cls).paid(invoices)
+        Event.notify_events(invoices, 'pay_invoice')

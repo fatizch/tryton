@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="event.type" id="event_post_invoice">
+            <field name="name">Post Invoice</field>
+            <field name="code">post_invoice</field>
+        </record>
+        <record model="event.type" id="event_cancel_invoice">
+            <field name="name">Cancel Invoice</field>
+            <field name="code">cancel_invoice</field>
+        </record>
+        <record model="event.type" id="event_pay_invoice">
+            <field name="name">Pay Invoice</field>
+            <field name="code">pay_invoice</field>
+        </record>
+    </data>
+</tryton>
