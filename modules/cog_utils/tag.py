@@ -11,6 +11,7 @@ class Tag(model.CoopSQL, model.CoopView):
     'Tag'
 
     __name__ = 'tag'
+    _func_key = 'code'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
