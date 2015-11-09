@@ -160,6 +160,8 @@ contract = Contract()
 contract.company = company
 contract.start_date = contract_start_date
 contract.product = product
+contract.contract_number = '1111'
+contract.status = 'active'
 contract.save()
 
 contract.extra_datas[0].extra_data_values = {'formula': 1}
