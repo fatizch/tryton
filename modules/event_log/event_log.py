@@ -46,7 +46,7 @@ class EventLog(model.CoopSQL, model.CoopView):
     @fields.depends('description')
     def on_change_with_description_str(self, name=None):
         return self.description.split('\n')[0] if self.description else \
-            self.object_.rec_name
+            self.object_.rec_name if self.object_ else ''
 
     @staticmethod
     def order_date_str(tables):
