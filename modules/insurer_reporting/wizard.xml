@@ -24,7 +24,7 @@
             <field name="name">Insurer Report Contract</field>
             <field name="wiz_name">insurer_reporting.contract</field>
         </record>
-        <menuitem parent="report_engine.menu_report" sequence="1" id="menu_report_insurer" name="Insurer Report"/>
+        <menuitem parent="report_engine.menu_report" sequence="50" id="menu_report_insurer" name="Insurer Report"/>
         <menuitem parent="menu_report_insurer" sequence="1" id="menu_report_insurer_contract" action="act_insurer_report_contract"/>
     </data>
 </tryton>
