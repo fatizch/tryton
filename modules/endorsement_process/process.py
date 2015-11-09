@@ -1,5 +1,7 @@
+from trytond.pyson import Eval, Bool, In
 from trytond.pool import PoolMeta
 from trytond.modules.cog_utils import model
+from trytond.modules.endorsement import STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -24,7 +26,10 @@ class Contract:
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls._buttons.update({
-                'button_start_endorsement_process': {},
+                'button_start_endorsement_process': {
+                    'invisible': Bool(In(Eval('status'),
+                            STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS)),
+                    },
                 })
 
     @classmethod

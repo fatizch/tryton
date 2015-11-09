@@ -25,6 +25,7 @@ from trytond.modules.process_cog import CogProcessFramework
 from trytond.modules.report_engine import Printable
 
 _STATES_WITH_SUBSTATES = ['declined']
+STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS = ['quote', 'declined', 'void']
 
 __all__ = [
     'field_mixin',
@@ -1646,6 +1647,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 'mes_extra_data_modifications':
                 'Extra Datas Modifications',
                 'mes_contact_modifications': 'Contacts Modifications',
+                'status_incompatible': 'The status %s of contract %s does not '
+                'allow endorsements.',
                 })
         cls.values.states = {
             'readonly': Eval('state') == 'applied',
@@ -1784,6 +1787,9 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         Contract = pool.get('contract')
         for contract_endorsement in contract_endorsements:
             contract = contract_endorsement.contract
+            if contract.status in STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS:
+                cls.raise_user_error('status_incompatible',
+                    (contract.status, contract.rec_name))
             if contract.current_state and (
                     contract_endorsement.endorsement.state != 'in_progress'):
                 cls.raise_user_warning('Process in progress',

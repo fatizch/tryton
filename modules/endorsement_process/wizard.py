@@ -4,6 +4,7 @@ from trytond.wizard import Button, Wizard, StateAction, StateView
 
 from trytond.modules.process_cog import ProcessFinder, ProcessStart
 from trytond.modules.cog_utils import fields, model
+from trytond.modules.endorsement import STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -23,7 +24,8 @@ class EndorsementFindProcess(ProcessStart):
     definition = fields.Many2One('endorsement.definition',
         'Endorsement Definition', required=True)
     contracts = fields.Many2Many('contract', None, None,
-        'Contracts', required=True, domain=[('status', '=', 'active')])
+        'Contracts', required=True, domain=[('status', 'not in',
+                STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS)])
 
     @classmethod
     def default_model(cls):

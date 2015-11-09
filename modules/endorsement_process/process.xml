@@ -5,11 +5,6 @@
             <field name="name">Start Endorsement Process</field>
             <field name="wiz_name">endorsement.start_process</field>
         </record>
-        <record model="ir.action.keyword" id="endorsement_process_launcher_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">contract,-1</field>
-            <field name="action" ref="endorsement_process_launcher"/>
-        </record>
         <menuitem parent="contract.menu_contract" sequence="1" action="endorsement_process_launcher" id="menu_start_endorsement_process"/>
     </data>
 </tryton>

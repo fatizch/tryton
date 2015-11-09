@@ -151,6 +151,10 @@ msgctxt "selection:process,kind:"
 msgid "Contract Endorsement"
 msgstr "Avenant au contrat"
 
+msgctxt "view:contract:"
+msgid "Start Endorsement Process"
+msgstr "Démarrer le processus d'avenant"
+
 msgctxt "view:endorsement.contract:"
 msgid "Modify"
 msgstr "Modifier"

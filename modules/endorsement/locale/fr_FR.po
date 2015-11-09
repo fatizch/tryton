@@ -181,6 +181,10 @@ msgid "Endorsement \"%s\" is not the latest applied."
 msgstr "L'avenant \"%s\" n'est pas le plus récent appliqué"
 
 msgctxt "error:endorsement.contract:"
+msgid "The status %s of contract %s does not allow endorsements."
+msgstr "Le statut %s du contrat %s n'autorise pas les avenants."
+
+msgctxt "error:endorsement.contract:"
 msgid "Extra Datas Modifications"
 msgstr "Modifications des données complémentaires"
 
