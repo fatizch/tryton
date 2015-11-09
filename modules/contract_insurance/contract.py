@@ -1215,6 +1215,7 @@ class CoveredElementVersion(model.CoopSQL, model.CoopView):
     'Contract Covered Element Version'
 
     __name__ = 'contract.covered_element.version'
+    _func_key = 'start'
 
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', required=True, ondelete='CASCADE', select=True)
@@ -1275,6 +1276,10 @@ class CoveredElementVersion(model.CoopSQL, model.CoopView):
     def order_start(cls, tables):
         table, _ = tables[None]
         return [Coalesce(table.start, datetime.date.min)]
+
+    @classmethod
+    def add_func_key(cls, values):
+        values['_func_key'] = values.get('start', None)
 
     @classmethod
     def get_default_version(cls):
