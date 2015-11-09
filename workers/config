@@ -1,3 +1,4 @@
-WORKERS=4
+WORKERS=`nproc`
 WORKERS_DIR=/tmp/
 JSON_PORT=8000
+# DB_NAME=coog

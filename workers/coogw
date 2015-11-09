@@ -17,30 +17,52 @@ start_worker ()
         local OUT_FILE=$(file_name out $1)
         sed -e "s,JSON_PORT,$PORT,g" ./trytond.conf > $CNF_FILE
         sed -e "s,LOG_FILE,$OUT_FILE,g" ./logging.conf > $LOG_FILE
-        trytond -c $CNF_FILE --logconf $LOG_FILE &>> /dev/null &
-        local PID=$!
+        if [ -z $DB_NAME ]
+        then
+                trytond -c $CNF_FILE --logconf $LOG_FILE --pidfile $PID_FILE &>> $OUT_FILE &
+        else
+                trytond -c $CNF_FILE -d $DB_NAME --logconf $LOG_FILE --pidfile $PID_FILE &>> $OUT_FILE &
+        fi
         disown
-        echo $PID > $PID_FILE
-        echo coogw-$1 started - listening on port $PORT - $PID
+        echo coogw-$1 started - listening on port $PORT
+}
+
+restart_worker ()
+{
+        local PID_FILE=$(file_name pid $1)
+        [ ! -e $PID_FILE ] && echo coogw-$1 not running && return
+        local PID=$(<$PID_FILE)
+        kill -SIGUSR1 $PID
+        echo coogw-$1 restarted - $PID
 }
 
 stop_worker ()
 {
         local PID_FILE=$(file_name pid $1)
         [ ! -e $PID_FILE ] && echo coogw-$1 not running && return
-        local CNF_FILE=$(file_name cnf $1)
-        local LOG_FILE=$(file_name log $1)
         local PID=$(<$PID_FILE)
         kill -TERM $PID
         echo coogw-$1 stopped - $PID
-        rm $PID_FILE $CNF_FILE $LOG_FILE
+        local CNF_FILE=$(file_name cnf $1)
+        local LOG_FILE=$(file_name log $1)
+        rm $CNF_FILE $LOG_FILE
+        local OUT_FILE=$(file_name out $1)
+        local BAK_FILE=$(file_name bak $PID)
+        mv $OUT_FILE $BAK_FILE
 }
 
-list_workers ()
+info_worker ()
 {
-        for PID_FILE in $(file_name pid "*")
-        do
-                local PID=$(<$PID_FILE)
-                echo $PID_FILE is running - $PID
-        done
+        local PID_FILE=$(file_name pid $1)
+        [ ! -e $PID_FILE ] && echo coogw-$1 not running && return
+        local PID=$(<$PID_FILE)
+        local WORKER_TIME=$(ps -p $PID -o time=)
+        local WORKER_ETIME=$(ps -p $PID -o etime=)
+        local WORKER_MEM=$(ps -p $PID -o vsz=)
+        local OUT_FILE=$(file_name out $1)
+        local WORKER_CRI=$(grep -c "\bCRITICAL:\b" $OUT_FILE)
+        local WORKER_ERR=$(grep -c "\bERROR:\b" $OUT_FILE)
+        local WORKER_WRN=$(grep -c "\bWARNING:\b" $OUT_FILE)
+        local WORKER_INF=$(grep -c "\bINFO:\b" $OUT_FILE)
+        echo coogw-$1 running for $WORKER_ETIME \(time:$WORKER_TIME mem:$WORKER_MEM critical:$WORKER_CRI error:$WORKER_ERR warning:$WORKER_WRN info:$WORKER_INF\)
 }

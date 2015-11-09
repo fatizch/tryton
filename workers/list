@@ -1,8 +1,0 @@
-#!/bin/bash
-pushd `dirname $0` >> /dev/null
-
-source ./coogw
-
-list_workers
-
-popd >> /dev/null
