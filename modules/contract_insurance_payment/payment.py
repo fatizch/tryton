@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+import datetime
 from itertools import groupby
 from dateutil.relativedelta import relativedelta
 
@@ -66,7 +67,7 @@ class Payment:
         payments = sorted(payments, key=cls._group_per_contract_key)
         for contract, _grouped_payments in groupby(payments,
                 key=cls._group_per_contract_key):
-            if contract is None:
+            if contract is None or contract.status != 'active':
                 continue
             grouped_payments = list(_grouped_payments)
             current_billing_mode = contract.billing_information.billing_mode
@@ -79,11 +80,17 @@ class Payment:
                 raise Exception('no failure_billing_mode on journal %s'
                     % (grouped_payments[0].journal.rec_name))
 
-            next_invoice_date = max(payment.line.move.origin.end
+            next_invoice_dates = [payment.line.move.origin.end
                 for payment in grouped_payments
                 if (payment.line.move.origin and
-                    getattr(payment.line.move.origin, 'end', None)))
-            next_invoice_date += relativedelta(days=1)
+                    getattr(payment.line.move.origin, 'end', None))]
+            if next_invoice_dates:
+                next_invoice_date = max(next_invoice_dates)
+                next_invoice_date += relativedelta(days=1)
+            else:
+                # case when only non periodic invoice payment is failed
+                next_invoice_date = max(contract.start_date,
+                    contract.last_paid_invoice_end or datetime.date.min)
 
             new_billing_information = ContractBillingInformation(
                 date=max(Date.today(), next_invoice_date),
