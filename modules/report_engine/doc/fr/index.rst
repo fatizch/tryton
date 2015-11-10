@@ -21,3 +21,4 @@ Aide utilisateur
     :hidden:
 
     summary.rst
+    features.rst

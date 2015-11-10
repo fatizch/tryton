@@ -27,3 +27,9 @@
 
 - **Outils de développement :** Un ensemble d'outils sont mis à disposition
   des développeurs pour faciliter l'écriture de nouveaux avenants.
+
+- **Modèles de lettre :**  Permet de paramétrer, depuis les modèles d'avenants,
+  des modèles de lettres à générer lors de l'application ou l'annulation de
+  l'avenant. Pour être généré, le modèle de lettre doit aussi être référencé
+  depuis le type d'évènement (application / annulation d'avenant) et le
+  produit du contrat concerné.
