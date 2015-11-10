@@ -124,8 +124,6 @@ class Invoice:
 
     @classmethod
     def search_contract_invoice(cls, name, clause):
-        cursor = Transaction().cursor
-
         _, operator, value = clause
         Operator = fields.SQL_OPERATORS[operator]
 
@@ -135,11 +133,11 @@ class Invoice:
         query_table = invoice.join(contract_invoice, type_='LEFT',
             condition=(contract_invoice.invoice == invoice.id))
 
-        cursor.execute(*query_table.select(invoice.id,
+        query = query_table.select(invoice.id,
                 where=Operator(getattr(contract_invoice, name),
-                    getattr(cls, name).sql_format(value))))
+                    getattr(cls, name).sql_format(value)))
 
-        return [('id', 'in', [x[0] for x in cursor.fetchall()])]
+        return [('id', 'in', query)]
 
     def _order_contract_invoice_field(name):
         def order_field(tables):
