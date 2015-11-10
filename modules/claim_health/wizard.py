@@ -14,7 +14,7 @@ __all__ = [
 class ModifyCoveredElement:
     __name__ = 'contract.covered_element.modify'
 
-    possible_claim_bank_accounts = fields.Many2Many('bank.account', None, None,
+    possible_claim_bank_owners = fields.Many2Many('party.party', None, None,
         'Possible Claim Bank Accounts', readonly=True)
 
     @classmethod
@@ -22,11 +22,11 @@ class ModifyCoveredElement:
         super(ModifyCoveredElement, cls).__setup__()
         cls.current_covered.domain = [cls.current_covered.domain, ['OR',
                 ('claim_bank_account', '=', None),
-                ('claim_bank_account', 'in',
-                    Eval('possible_claim_bank_accounts'))]]
-        cls.current_covered.depends += ['possible_claim_bank_accounts']
+                ('claim_bank_account.owners', 'in',
+                    Eval('possible_claim_bank_owners'))]]
+        cls.current_covered.depends += ['possible_claim_bank_owners']
 
-    @fields.depends('possible_claim_bank_accounts')
+    @fields.depends('possible_claim_bank_owners')
     def on_change_current_parent(self):
         super(ModifyCoveredElement, self).on_change_current_parent()
 
@@ -34,8 +34,7 @@ class ModifyCoveredElement:
         super(ModifyCoveredElement, self).update_contract()
         if not self.contract:
             return
-        self.possible_claim_bank_accounts = self.contract.covered_elements[
-            0].get_possible_claim_bank_accounts()
+        self.possible_claim_bank_owners = self.contract.parties
 
     def _update_nothing(self, new_covered_element, parent, per_id):
         super(ModifyCoveredElement, self)._update_nothing(new_covered_element,

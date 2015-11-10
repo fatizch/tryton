@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <data>
     <xpath expr="/form/group[@id='invisible']" position="inside">
-        <field name="possible_claim_bank_accounts"/>
+        <field name="possible_claim_bank_owners"/>
     </xpath>
 </data>
