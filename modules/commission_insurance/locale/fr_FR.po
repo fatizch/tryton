@@ -192,11 +192,11 @@ msgstr "Code"
 
 msgctxt "field:commission.plan,commissioned_products:"
 msgid "Commissioned Products"
-msgstr "Produits commissionés"
+msgstr "Produits commissionnés"
 
 msgctxt "field:commission.plan,commissioned_products_name:"
 msgid "Commissioned Products"
-msgstr "Produits commissionés"
+msgstr "Produits commissionnés"
 
 msgctxt "field:commission.plan,computation_dates:"
 msgid "Computation Dates"
@@ -894,7 +894,7 @@ msgstr "Modèle produit - Protocole de commissionnement"
 
 msgctxt "selection:commission.agent,type_:commission."
 msgid "Agent Of"
-msgstr "Est commissioné par"
+msgstr "Est commissionné par"
 
 msgctxt "selection:commission.agent,type_:commission."
 msgid "Principal Of"
