@@ -331,7 +331,7 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
 
 def pyson_result(pyson_expr, target):
     encoder = PYSONEncoder()
-    if isinstance(pyson_expr, str):
+    if isinstance(pyson_expr, basestring):
         the_pyson = encoder.encode(eval(pyson_expr, CONTEXT))
     else:
         the_pyson = encoder.encode(pyson_expr)
