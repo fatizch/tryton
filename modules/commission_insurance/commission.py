@@ -472,6 +472,10 @@ class PlanCalculationDate(model.CoopSQL, model.CoopView):
                     date = getattr(coop_date, 'add_%s' % fname)(date,
                         int(value))
                 values.append(date)
+        if not values:
+            # invoice_line in the past following a start_date modification for
+            # instance
+            return set()
         if self.first_match_only:
             values = [values[0]]
         return {x for x in values if x > invoice_line.coverage_start
