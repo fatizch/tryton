@@ -167,6 +167,10 @@ msgctxt "field:contract,initial_start_date:"
 msgid "Initial Start Date"
 msgstr "Date d'effet initiale"
 
+msgctxt "field:contract,final_end_date:"
+msgid "Initial Start Date"
+msgstr "Dernière date de fin"
+
 msgctxt "field:contract,is_sub_status_required:"
 msgid "Is Sub Status Required"
 msgstr "Sous statut nécessaire"

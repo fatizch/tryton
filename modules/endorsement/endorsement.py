@@ -805,10 +805,8 @@ class Contract(CogProcessFramework):
                     today, date_field='start_date')
                 if not period:
                     period = contract.activation_history[0]
-                values['start_date'][contract.id] = period['start_date']
-                values['end_date'][contract.id] = period['end_date']
-                values['termination_reason'][contract.id] = period[
-                    'termination_reason']
+                values['start_date'][contract.id] = period.start_date
+                values['end_date'][contract.id] = period.end_date
             return values
         return super(Contract, cls).getter_activation_history(contracts,
             names)

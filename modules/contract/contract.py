@@ -13,7 +13,7 @@ from trytond.tools import grouped_slice
 from trytond.rpc import RPC
 from trytond.cache import Cache
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, If, Bool, And
+from trytond.pyson import Eval, If, Bool, And, Or
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.pool import Pool
 from trytond.model import dualmethod, Unique
@@ -187,6 +187,13 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'invisible': Eval('initial_start_date') == Eval('start_date'),
                 }),
         'get_initial_start_date')
+    final_end_date = fields.Function(
+        fields.Date('Final End Date',
+            states={
+                'invisible': Or(~Bool(Eval('final_end_date')),
+                    Eval('final_end_date') == Eval('end_date')),
+                }),
+        'getter_last_period')
     start_date = fields.Function(
         fields.Date('Start Date', states={
                 'readonly': Eval('status') != 'quote',
@@ -246,7 +253,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     termination_reason = fields.Function(
         fields.Many2One('contract.sub_status', 'Termination Reason',
             domain=[('status', '=', 'terminated')]),
-        'getter_activation_history')
+        'getter_last_period')
     subscriber_kind = fields.Function(
         fields.Selection(
             [x for x in offered.SUBSCRIBER_KIND if x != ('all', 'All')],
@@ -361,12 +368,18 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_func_key(self, name):
         return '%s|%s' % ((self.quote_number, self.contract_number))
 
-    def get_initial_start_date(self, name):
+    def get_all_periods(self, limit=0):
+        kwargs = {'order': [('start_date', 'ASC')]}
+        if limit:
+            kwargs['limit'] = limit
         pool = Pool()
         History = pool.get('contract.activation_history')
-        all_periods = History.search([('active', 'in', [True, False]),
-                ('contract', '=', self.id)])
-        all_periods.sort(key=lambda x: x.start_date)
+        all_periods = History.search([('contract', '=', self.id),
+                ('active', 'in', [True, False])], **kwargs)
+        return all_periods
+
+    def get_initial_start_date(self, name):
+        all_periods = self.get_all_periods(limit=1)
         if all_periods:
             return all_periods[0].start_date
 
@@ -524,13 +537,21 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def default_subscriber_kind(cls):
         return 'person'
 
+    def getter_last_period(self, name):
+        if not self.activation_history:
+            return
+        last_period = self.activation_history[-1]
+        if name == 'final_end_date':
+            return last_period.end_date
+        if last_period.termination_reason:
+            return last_period.termination_reason.id
+
     @classmethod
     def activation_history_base_values(cls, contracts):
         base_values = {x.id: None for x in contracts}
         return {
             'start_date': base_values,
             'end_date': dict(base_values),
-            'termination_reason': dict(base_values),
             }
 
     @classmethod
@@ -546,8 +567,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         column_end = NullIf(Coalesce(activation_history.end_date,
                 datetime.date.max), datetime.date.max).as_('end_date')
         column_start = activation_history.start_date.as_('start_date')
-        column_term_reason = activation_history.termination_reason.as_(
-            'termination_reason')
         contract_window = Window([activation_history.contract])
 
         def convert(value):
@@ -561,8 +580,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         for contract_slice in grouped_slice(contracts):
             win_query = activation_history.select(
                 activation_history.contract.as_('id'),
-                column_start, column_end, column_term_reason, Min(
-                    activation_history.start_date,
+                column_start, column_end, Min(activation_history.start_date,
                     window=contract_window).as_('min_start'),
                 Max(activation_history.start_date,
                     window=contract_window).as_('max_start'),
@@ -572,7 +590,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             query = win_query.select(win_query.id,
                 win_query.start_date,
                 win_query.end_date,
-                win_query.termination_reason,
                 where=(
                     # case 1: today is inside a period
                     ((win_query.start_date <= today) &
@@ -590,8 +607,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             for elem in cursor.dictfetchall():
                 values['start_date'][elem['id']] = elem['start_date']
                 values['end_date'][elem['id']] = elem['end_date']
-                values['termination_reason'][elem['id']] = elem[
-                    'termination_reason']
 
         if backend.name() == 'sqlite':
             for fname in ('start_date', 'end_date'):

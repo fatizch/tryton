@@ -31,6 +31,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'EndorsementOptionField': 'endorsement.contract.option.field',
             'Field': 'ir.model.field',
             'SubState': 'endorsement.sub_state',
+            'SubStatus': 'contract.sub_status',
             }
 
     @classmethod
@@ -386,7 +387,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             test_value(test_endorsement.options[idx], action, relation,
                 values)
 
-    def test0080_getter_activation_history(self):
+    def test0080_activation_history_getters(self):
         cursor = Transaction().cursor
         product, = self.Product.search([
                 ('code', '=', 'AAA'),
@@ -399,6 +400,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         contract.activation_history = [self.ActivationHistory(start_date=x,
                 end_date=x + relativedelta(years=1, days=-1)) for x in
             (datetime.date(y, 1, 1) for y in years)]
+        sub_status, = self.SubStatus.search([
+                ('code', '=', 'reached_end_date')])
+        contract.activation_history[-1].termination_reason = sub_status
         contract.save()
         cursor.execute('delete from contract_activation_history where '
             'contract = %s' % contract.id)
@@ -424,6 +428,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     datetime.date(y, 1, 1))
                 self.assertEqual(contract.end_date,
                     datetime.date(y, 12, 31))
+                self.assertEqual(contract.termination_reason,
+                    sub_status)
 
         # test consultation on last day of periods
         for y in years:

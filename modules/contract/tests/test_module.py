@@ -365,12 +365,15 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @test_framework.prepare_test(
         'contract.test0010_testContractCreation',
         )
-    def test0060_getter_activation_history(self):
+    def test0060_activation_history_getters(self):
         years = (2010, 2011, 2012, 2013)
         contract, = self.Contract.search([])
         contract.activation_history = [self.ActivationHistory(start_date=x,
                 end_date=x + relativedelta(years=1, days=-1)) for x in
             (datetime.date(y, 1, 1) for y in years)]
+        sub_status, = self.SubStatus.search([
+                ('code', '=', 'reached_end_date')])
+        contract.activation_history[-1].termination_reason = sub_status
         contract.save()
         self.assertEqual(len(contract.activation_history), 4)
 
@@ -385,6 +388,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 contract = self.Contract(contract.id)
                 self.assertEqual(contract.start_date, datetime.date(y, 1, 1))
                 self.assertEqual(contract.end_date, datetime.date(y, 12, 31))
+                self.assertEqual(contract.termination_reason,
+                    sub_status)
 
         # test consultation on last day of periods
         for y in years:
