@@ -98,6 +98,8 @@ class Event:
     def notify_events(cls, objects, event_code, description=None, **kwargs):
         super(Event, cls).notify_events(objects, event_code, description,
             **kwargs)
+        if not objects:
+            return
         pool = Pool()
         EventLog = pool.get('event.log')
         event_type_id = cls.get_event_type_data_from_code(event_code)['id']
