@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="Report Production Request">
+    <label name="report_template"/>
+    <field name="report_template"/>
+    <label name="treated"/>
+    <field name="treated"/>
+    <label name="object_"/>
+    <field name="object_"/>
+</form>

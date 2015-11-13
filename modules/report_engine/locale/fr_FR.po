@@ -47,6 +47,10 @@ msgctxt "field:event.type.action,report_templates:"
 msgid "Report Templates"
 msgstr "Modèles de courrier"
 
+msgctxt "field:event.type.action,treatment_kind:"
+msgid "Treatment kind"
+msgstr "Type de traitement"
+
 msgctxt "field:event.type.action-report.template,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -291,10 +295,6 @@ msgctxt "field:report.template,on_model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:report.template,products:"
-msgid "Products"
-msgstr "Produits"
-
 msgctxt "field:report.template,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -328,46 +328,6 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:report.template,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:report.template-offered.product,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:report.template-offered.product,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:report.template-offered.product,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:report.template-offered.product,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:report.template-offered.product,product:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "field:report.template-offered.product,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:report.template-offered.product,report_template:"
-msgid "Document"
-msgstr "Document"
-
-msgctxt "field:report.template-offered.product,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:report.template-offered.product,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:report.template-offered.product,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -459,6 +419,70 @@ msgctxt "field:report.template.version,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:report_production.request,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:report_production.request,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:report_production.request,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:report_production.request,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:report_production.request,object_:"
+msgid "Object To Report"
+msgstr "Objet"
+
+msgctxt "field:report_production.request,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report_production.request,report_template:"
+msgid "Report Template"
+msgstr "Modèle de courrier"
+
+msgctxt "field:report_production.request,treated:"
+msgid "Treated"
+msgstr "Traitée"
+
+msgctxt "field:report_production.request,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:report_production.request,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:report_production.request,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:report_production.request.batch_treat,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:report_production.request.treat.confirm,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:report_production.request.treat.confirm,requests:"
+msgid "Report Production Requests"
+msgstr "Demandes de production de document"
+
+msgctxt "field:report_production.request.treat.result,attachments:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgctxt "field:report_production.request.treat.result,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "help:report.template,export_dir:"
 msgid "Store a copy of each generated document in specified server directory"
 msgstr ""
@@ -501,6 +525,14 @@ msgctxt "model:ir.action,name:act_doc_template"
 msgid "Document Templates"
 msgstr "Modèles de courriers"
 
+msgctxt "model:ir.action,name:act_report_production_request_form"
+msgid "Report Production Requests"
+msgstr "Demande de production de document"
+
+msgctxt "model:ir.action,name:act_treat_report_production_request"
+msgid "Treat Report Production Request"
+msgstr "Traiter les demandes de production de document"
+
 msgctxt "model:ir.action,name:generate_file_report"
 msgid "Document From Filename"
 msgstr "Document à partir d'un fichier"
@@ -524,6 +556,10 @@ msgstr "Modèles de Lettre"
 msgctxt "model:ir.ui.menu,name:menu_report"
 msgid "Report"
 msgstr "Rapports/Courriers"
+
+msgctxt "model:ir.ui.menu,name:menu_report_production_requests"
+msgid "Report Production Requests"
+msgstr "Demandes de production de document"
 
 msgctxt "model:report.convert.match,name:"
 msgid "Match Displayer"
@@ -553,13 +589,25 @@ msgctxt "model:report.template,name:"
 msgid "Report Template"
 msgstr "Modèle de courrier"
 
-msgctxt "model:report.template-offered.product,name:"
-msgid "Report template to Product relation"
-msgstr "Relation Modèle - Produit"
-
 msgctxt "model:report.template.version,name:"
 msgid "Report Template Version"
 msgstr "Version d'un modèle de courrier"
+
+msgctxt "model:report_production.request,name:"
+msgid "Report Production Request"
+msgstr "Demande de production de document"
+
+msgctxt "model:report_production.request.batch_treat,name:"
+msgid "Report Production Request Treatment Batch"
+msgstr "Batch de traitement des demandes de production de document"
+
+msgctxt "model:report_production.request.treat.confirm,name:"
+msgid "Confirm Report Request Production Treatment"
+msgstr "Confirmer le traitement des demandes de production de document"
+
+msgctxt "model:report_production.request.treat.result,name:"
+msgid "Report Request Production Treatment Result"
+msgstr "Résultat du traitement des demandes de production de document"
 
 msgctxt "model:res.group,name:group_report"
 msgid "Report"
@@ -568,6 +616,18 @@ msgstr "Rapport"
 msgctxt "model:res.group,name:group_report_admin"
 msgid "Report Administration"
 msgstr "Administration des courriers/rapports"
+
+msgctxt "selection:event.type.action,treatment_kind:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:event.type.action,treatment_kind:"
+msgid "Asynchronous"
+msgstr "Asynchrone"
+
+msgctxt "selection:event.type.action,treatment_kind:"
+msgid "Synchronous"
+msgstr "Synchrone"
 
 msgctxt "selection:report.template,format_for_internal_edm:"
 msgid ""
@@ -665,6 +725,22 @@ msgctxt "view:report.template:"
 msgid "Versions"
 msgstr "Versions"
 
+msgctxt "view:report_production.request.treat.confirm:"
+msgid "Are you sure you want to treat these requests ?"
+msgstr "Êtes-vous sûr de vouloir traiter ces demandes ?"
+
+msgctxt "view:report_production.request.treat.confirm:"
+msgid "Confirm Report Production Request Treatment"
+msgstr "Confirmer le traitement des demandes de production de document"
+
+msgctxt "view:report_production.request.treat.result:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgctxt "view:report_production.request:"
+msgid "Report Production Request"
+msgstr "Demande de production de document"
+
 msgctxt "wizard_button:report.convert,select_templates,convert_templates:"
 msgid "Convert"
 msgstr "Convertir"
@@ -683,7 +759,7 @@ msgstr "Terminer"
 
 msgctxt "wizard_button:report.create,attach,post_generation:"
 msgid "Save"
-msgstr "Sauvegarder"
+msgstr "Enregister"
 
 msgctxt "wizard_button:report.create,preview_document,end:"
 msgid "Cancel"
@@ -708,3 +784,17 @@ msgstr "Annuler"
 msgctxt "wizard_button:report.create,select_model,generate_reports:"
 msgid "Generate"
 msgstr "Générer"
+
+msgctxt ""
+"wizard_button:report_production.request.treat,confirm_production,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:report_production.request.treat,confirm_production,result:"
+msgid "Confirm"
+msgstr "Confirmer"
+
+msgctxt "wizard_button:report_production.request.treat,result,end:"
+msgid "Ok"
+msgstr "Ok"

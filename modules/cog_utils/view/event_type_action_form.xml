@@ -6,6 +6,11 @@
     <field name="code"/>
     <label name="priority"/>
     <field name="priority"/>
+    <label name="pyson_condition"/>
+    <field name="pyson_condition"/>
     <label name="action"/>
     <field name="action"/>
+    <label name="treatment_kind"/>
+    <field name="treatment_kind"/>
+    <field name="handles_asynchronous" colspan="4"/>
 </form>

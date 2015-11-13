@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<form string="Attachments">
+    <field name="attachments" expand_toolbar="0"/>
+</form>

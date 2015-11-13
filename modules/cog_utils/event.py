@@ -1,3 +1,4 @@
+from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Model, Unique
 from trytond.rpc import RPC
@@ -6,6 +7,7 @@ from trytond.cache import Cache
 import model
 import fields
 import coop_string
+import utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -39,9 +41,11 @@ class Event(Model):
         EventTypeAction = pool.get('event.type.action')
         event_type_data = cls.get_event_type_data_from_code(event_code)
         actions = [EventTypeAction(**x) for x in event_type_data['actions']]
-        if actions:
+        if actions and objects:
             for action in actions:
-                action.execute(objects)
+                filtered = action.filter_objects(objects)
+                if filtered:
+                    action.execute(filtered)
 
     @classmethod
     def get_event_type_data_from_code(cls, event_code):
@@ -157,6 +161,27 @@ class EventTypeAction(model.CoopSQL, model.CoopView):
     code = fields.Char('Code', required=True)
     action = fields.Selection('get_action_types', 'Action', select=True)
     priority = fields.Integer('Priority', required=True)
+    pyson_condition = fields.Char('Pyson Condition', help="A Pyson expression "
+        "to filter the objects of the event. If not set, no filter will be "
+        "applied. If the expression evaluates to True for an object, "
+        "the action will be taken on it. Otherwise, it "
+        "will be ignored. Example expression :\n Eval('status') == 'active'")
+    handles_asynchronous = fields.Function(
+        fields.Boolean('Handles asynchronous treatment', states={
+            'invisible': True}),
+        'on_change_with_handles_asynchronous')
+    treatment_kind = fields.Selection([('synchronous', 'Synchronous'),
+            ('asynchronous', 'Asynchronous')], 'Treatment kind', states={
+                'invisible': ~Eval('handles_asynchronous')})
+
+    @classmethod
+    def __setup__(cls):
+        super(EventTypeAction, cls).__setup__()
+        cls._order.insert(0, ('priority', 'ASC'))
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
+            ]
 
     @classmethod
     def write(cls, *args):
@@ -174,20 +199,33 @@ class EventTypeAction(model.CoopSQL, model.CoopView):
         return super(EventTypeAction, cls).create(vlist)
 
     @classmethod
+    def default_treatment_kind(cls):
+        return 'synchronous'
+
+    @fields.depends('treatment_kind')
+    def on_change_action(self):
+        self.treatment_kind = 'synchronous'
+
+    @classmethod
     def get_action_types(cls):
         return [('', '')]
 
+    @classmethod
+    def possible_asynchronous_actions(cls):
+        return []
+
+    @fields.depends('action')
+    def on_change_with_handles_asynchronous(self, name=None):
+        return self.action in self.possible_asynchronous_actions()
+
+    def filter_objects(self, objects):
+        if not self.pyson_condition:
+            return objects
+        return [x for x in objects if utils.pyson_result(
+                self.pyson_condition, x) is True]
+
     def execute(self, objects):
         pass
-
-    @classmethod
-    def __setup__(cls):
-        super(EventTypeAction, cls).__setup__()
-        cls._order.insert(0, ('priority', 'ASC'))
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
-            ]
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tree string="Report Production Request">
+    <field name="report_template"/>
+    <field name="treated"/>
+    <field name="object_"/>
+    <field name="create_date_" widget="date"/>
+    <field name="create_date_" widget="time" string=""/>
+</tree>

@@ -4,6 +4,7 @@ from .report_engine import *
 from .ir import *
 from .event import *
 from .tools import *
+from .batch import *
 
 
 def register():
@@ -19,6 +20,10 @@ def register():
         Model,
         SelectTemplatesForConversion,
         MatchDisplayer,
+        ReportProductionRequest,
+        ConfirmReportProductionRequestTreat,
+        ReportProductionRequestTreatResult,
+        ReportProductionRequestTreatmentBatch,
         module='report_engine', type_='model')
     Pool.register(
         ReportGenerate,
@@ -27,4 +32,5 @@ def register():
     Pool.register(
         ReportCreate,
         ConvertTemplate,
+        TreatReportProductionRequest,
         module='report_engine', type_='wizard')

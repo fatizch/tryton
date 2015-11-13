@@ -1,3 +1,4 @@
+* Handle asynchronous report production
 * Add wizard to ease migration of names in report templates
 * Allow to define report templates to be printed at given event
 * Add option to export the document on generation to the server filesystem

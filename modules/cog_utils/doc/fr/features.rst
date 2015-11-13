@@ -29,7 +29,9 @@
 - **Evènements :** Outils permettant de gérer des notifications d'évènements
   dans le code afin de brancher certains actions si souhaité. Ces actions
   sont définies dans d'autres modules, et peuvent aller de la simple écriture
-  de log à une notification d'un web-service extérieur.
+  de log à une notification d'un web-service extérieur. Chaque action sur
+  des objets métiers peut être dotée d'un filtre (une expression Pyson) pour
+  déterminer plus précisément quels objets doivent être traités.
 
 - **Framework de batchs :** Ajout d'un framework de batchs, permettant de
   disposer d'une structure unifiée pour écrire / manipuler des batchs.

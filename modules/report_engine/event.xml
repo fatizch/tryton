@@ -7,5 +7,55 @@
             <field name="inherit" ref="cog_utils.event_type_action_view_form"/>
             <field name="name">event_type_action_form</field>
         </record>
+        <!-- ############################# -->
+        <!-- # Report Production Request # -->
+        <!-- ############################# -->
+        <record model="ir.ui.view" id="report_production_request_view_list">
+            <field name="model">report_production.request</field>
+            <field name="type">tree</field>
+            <field name="name">report_production_request_list</field>
+        </record>
+        <record model="ir.ui.view" id="report_production_request_view_form">
+            <field name="model">report_production.request</field>
+            <field name="type">form</field>
+            <field name="name">report_production_request_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_report_production_request_form">
+            <field name="name">Report Production Requests</field>
+            <field name="res_model">report_production.request</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_report_production_request_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="report_production_request_view_list"/>
+            <field name="act_window" ref="act_report_production_request_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_report_production_request_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="report_production_request_view_form"/>
+            <field name="act_window" ref="act_report_production_request_form"/>
+        </record>
+        <!-- #################################### -->
+        <!-- # Treat Report Production Requests # -->
+        <!-- #################################### -->
+        <record model="ir.ui.view" id="confirm_report_production_request_treatment_view_form">
+            <field name="model">report_production.request.treat.confirm</field>
+            <field name="type">form</field>
+            <field name="name">confirm_report_production_request_treatment_form</field>
+        </record>
+        <record model="ir.action.wizard" id="act_treat_report_production_request">
+            <field name="name">Treat Report Production Request</field>
+            <field name="wiz_name">report_production.request.treat</field>
+        </record>
+        <record model="ir.ui.view" id="report_production_request_treatment_result_view_form">
+            <field name="model">report_production.request.treat.result</field>
+            <field name="type">form</field>
+            <field name="name">report_production_request_treat_result_form</field>
+        </record>
+        <record model="ir.action.keyword" id="act_treat_report_production_request_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">report_production.request,-1</field>
+            <field name="action" ref="report_engine.act_treat_report_production_request"/>
+        </record>
+        <menuitem parent="report_engine.menu_report" sequence="40" id="menu_report_production_requests" icon="tryton-list" action="act_report_production_request_form"/>
     </data>
 </tryton>
