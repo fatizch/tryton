@@ -8,6 +8,7 @@ from trytond.modules.cog_utils import fields, model
 from trytond.modules.endorsement import (EndorsementWizardStepMixin,
     add_endorsement_step)
 from trytond.modules.party_relationship import PartyRelationAll
+from trytond.modules.party_cog import PartyRelationAll as PartyRelationAllCoog
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -415,7 +416,7 @@ class ChangePartyName(EndorsementWizardStepMixin):
             party_endorsement.save()
 
 
-class RelationDisplayer(PartyRelationAll):
+class RelationDisplayer(PartyRelationAll, PartyRelationAllCoog):
     'Relation Displayer'
 
     __name__ = 'endorsement.party.change_relation_displayer'

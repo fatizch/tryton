@@ -495,9 +495,17 @@ msgctxt "field:endorsement.party.change_relation_displayer,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:endorsement.party.change_relation_displayer,end_date:"
+msgid "End Date"
+msgstr "Date de fin"
+
 msgctxt "field:endorsement.party.change_relation_displayer,from_:"
 msgid "From"
 msgstr "De"
+
+msgctxt "field:endorsement.party.change_relation_displayer,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
 
 msgctxt "field:endorsement.party.change_relation_displayer,id:"
 msgid "ID"
@@ -520,6 +528,10 @@ msgctxt ""
 msgid "Relation Endorsement"
 msgstr "Avenant de modifications des relations"
 
+msgctxt "field:endorsement.party.change_relation_displayer,start_date:"
+msgid "Start Date"
+msgstr "Date de début"
+
 msgctxt "field:endorsement.party.change_relation_displayer,to:"
 msgid "To"
 msgstr "de"
@@ -535,6 +547,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:endorsement.party.change_relation_displayer,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.party.change_relation_displayer,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:endorsement.party.change_relations,displayers:"
 msgid "Relations"
