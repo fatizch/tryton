@@ -298,7 +298,8 @@ class Product(model.CoopSQL, Offered):
         states={'invisible': ~Eval('change_coverages_order')},
         delete_missing=True)
     packages = fields.Many2Many('offered.product-package', 'product',
-        'package', 'Packages')
+        'package', 'Packages', domain=[('options', 'in', Eval('coverages'))],
+        depends=['coverages'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True,
         ondelete='RESTRICT')
     contract_generator = fields.Many2One('ir.sequence',
