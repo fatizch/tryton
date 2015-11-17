@@ -153,6 +153,12 @@ class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
     coverages = fields.One2Many('offered.option.description', 'item_desc',
         'Coverages', target_not_required=True)
 
+    @classmethod
+    def copy(cls, items, default=None):
+        default = {} if default is None else default.copy()
+        default.setdefault('coverages', None)
+        return super(ItemDescription, cls).copy(items, default=default)
+
     @fields.depends('name', 'code')
     def on_change_with_code(self):
         if self.code:
