@@ -1,5 +1,7 @@
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
+from sql.operators import Concat
+from sql import Cast
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
@@ -202,6 +204,48 @@ class Invoice:
             return [('party.insurer_role', '!=', None)]
         else:
             return [('party.insurer_role', '=', None)]
+
+    @classmethod
+    def _get_commissions_to_delete(cls, ids):
+        # Temporary and dummy fix: the domain resolution of the
+        # field reference `origin` is not optimized for big databases
+        # and takes a while to be executed as query.
+        pool = Pool()
+        Commission = pool.get('commission')
+        InvoiceLine = pool.get('account.invoice.line')
+        commission = Commission.__table__()
+        invoice_line = InvoiceLine.__table__()
+        cursor = Transaction().cursor
+
+        sub_query = invoice_line.select(
+            Concat('account.invoice.line,', Cast(invoice_line.id, 'VARCHAR')),
+            where=invoice_line.invoice.in_(ids))
+
+        cursor.execute(*commission.select(commission.id, where=
+                (commission.invoice_line == None)
+                & commission.origin.in_(sub_query)))
+        return Commission.browse([x[0] for x in cursor.fetchall()])
+
+    @classmethod
+    def _get_commissions_to_cancel(cls, ids):
+        # Temporary and dummy fix: the domain resolution of the
+        # field reference `origin` is not optimized for big databases
+        # and takes a while to be executed as query.
+        pool = Pool()
+        Commission = pool.get('commission')
+        InvoiceLine = pool.get('account.invoice.line')
+        commission = Commission.__table__()
+        invoice_line = InvoiceLine.__table__()
+        cursor = Transaction().cursor
+
+        sub_query = invoice_line.select(
+            Concat('account.invoice.line,', Cast(invoice_line.id, 'VARCHAR')),
+            where=invoice_line.invoice.in_(ids))
+
+        cursor.execute(*commission.select(commission.id, where=
+                (commission.invoice_line != None)
+                & commission.origin.in_(sub_query)))
+        return Commission.browse([x[0] for x in cursor.fetchall()])
 
     @classmethod
     @ModelView.button
