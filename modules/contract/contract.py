@@ -352,6 +352,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'states',
                 {'invisible': True}
                 ), (
+                '/form/group[@id="left"]/group[@id="status"]/'
+                'group[@id="termination_reason"]',
+                'states',
+                {'invisible': Or(~Eval('termination_reason'),
+                        Bool(Eval('sub_status')))}
+                ), (
                 '/tree', 'colors', Eval('color', 'black')
                 )]
 

@@ -1617,3 +1617,7 @@ msgctxt ""
 "wizard_button:contract.wizard.option_subscription,select_package,options_displayer:"
 msgid "Next"
 msgstr "Suivant"
+
+msgctxt "view:contract:"
+msgid "Will be terminated for:"
+msgstr "Sera résilié pour:"

@@ -7,6 +7,10 @@
         <group id="status">
             <field name="status"/>
             <field name="sub_status"/>
+            <group id="termination_reason">
+                <label name="termination_reason" string="Will be terminated for:" id="termination_reason_label"/>
+                <field name="termination_reason"/>
+            </group>
         </group>
         <label name="product"/>
         <field name="product"/>
