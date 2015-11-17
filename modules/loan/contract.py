@@ -255,18 +255,6 @@ class ContractOption:
         if not self.is_loan:
             self.loan_shares = []
 
-    @fields.depends('start_date', 'end_date', 'loan_shares')
-    def on_change_with_loan_shares(self):
-        to_update = []
-        for share in self.loan_shares:
-            res = {'id': share.id}
-            if share.start_date or datetime.date.min < self.start_date:
-                res['start_date'] = self.start_date
-            if len(res) > 1:
-                to_update.append(res)
-        if to_update:
-            return {'update': to_update}
-
     def get_is_loan(self, name):
         return self.coverage_family == 'loan'
 
