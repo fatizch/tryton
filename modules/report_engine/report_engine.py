@@ -269,8 +269,10 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
             reports.append(self._generate_report(objects, origin, resource))
         return reports
 
-    def produce_reports(self, objects, direct_print=False, origin=None):
-        reports = self._generate_reports(objects, origin=origin)
+    def produce_reports(self, objects, direct_print=False, origin=None,
+            resource=None):
+        reports = self._generate_reports(objects, origin=origin,
+            resource=resource)
         if direct_print:
             self.print_reports(reports)
         attachments = []

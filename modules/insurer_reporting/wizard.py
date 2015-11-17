@@ -56,7 +56,7 @@ class InsurerReportContract(model.CoopWizard):
                     ('options.coverage.insurer', '=', insurer)]])
         template = self.configure_report.template
         _, attachments = template.produce_reports(all_contracts,
-            origin=insurer)
+            origin=insurer, resource=insurer)
         return {
             'reports': [x.id for x in attachments],
             }
