@@ -142,6 +142,12 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         return result
 
     @classmethod
+    def delete(cls, tables):
+        Cell = Pool().get('table.cell')
+        Cell.delete(sum([list(x.cells) for x in tables], []))
+        super(TableDefinition, cls).delete(tables)
+
+    @classmethod
     def is_master_object(cls):
         return True
 
