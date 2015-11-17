@@ -176,6 +176,10 @@ class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
     def _export_light(cls):
         return super(ItemDescription, cls)._export_light() | {'tags'}
 
+    @classmethod
+    def is_master_object(cls):
+        return True
+
 
 class ItemDescSubItemDescRelation(model.CoopSQL):
     'Relation between Item Desc and Sub Item Desc'
