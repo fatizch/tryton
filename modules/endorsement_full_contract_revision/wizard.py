@@ -116,11 +116,13 @@ class StartEndorsement:
         contract = Contract(self.select_endorsement.contract.id)
 
         # Find suitable process
-        candidates = Process.search([
-                ('on_model.model', '=', 'contract'),
-                ('kind', '=', 'full_contract_revision'),
-                ('for_products', '=', contract.product.id),
-                ])
+        candidates = []
+        if utils.is_module_installed('offered_insurance'):
+            candidates = Process.search([
+                    ('on_model.model', '=', 'contract'),
+                    ('kind', '=', 'full_contract_revision'),
+                    ('for_products', '=', contract.product.id),
+                    ])
         if not candidates:
             candidates = Process.search([
                     ('on_model.model', '=', 'contract'),
