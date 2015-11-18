@@ -24,7 +24,7 @@ msgstr "Date de fin actuelle"
 
 msgctxt "field:endorsement.contract.renew,current_start_date:"
 msgid "Current Start Date"
-msgstr "Date de fin actuelle"
+msgstr "Date d'effet actuelle"
 
 msgctxt "field:endorsement.contract.renew,effective_date:"
 msgid "Effective Date"
