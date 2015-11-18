@@ -407,8 +407,9 @@ class Configuration:
         return self.direct_debit_journal
 
 
-class Group:
+class Group(export.ExportImportMixin):
     __name__ = 'account.payment.group'
+    _func_key = 'reference'
 
     processing_payments = fields.One2ManyDomain('account.payment', 'group',
         'Processing Payments',
@@ -424,6 +425,15 @@ class Group:
                     'invisible': ~Eval('has_processing_payment'),
                     },
                 })
+
+    @classmethod
+    def _export_skips(cls):
+        return super(Group, cls)._export_skips() | {'payments',
+            'processing_payments'}
+
+    @classmethod
+    def _export_light(cls):
+        return super(Group, cls)._export_light() | {'journal', 'company'}
 
     @classmethod
     @ModelView.button

@@ -61,6 +61,10 @@ class Mandate(export.ExportImportMixin):
 class Group:
     __name__ = 'account.payment.group'
 
+    @classmethod
+    def _export_skips(cls):
+        return super(Group, cls)._export_skips() | {'sepa_messages'}
+
     def sepa_merge_payment_key(self, payment):
         return (('party', payment.party),
             ('sepa_mandate', payment.sepa_mandate),
