@@ -224,6 +224,8 @@ new_endorsement.execute('full_contract_revision_next')
 # #Comment# #Modify Contract
 contract = Contract(contract.id)
 contract.quote_number = 'New Number'
+contract.contract_number = 'New Number'
+contract.status = 'active'
 contract.save()
 end_process, = Action.find([
         ('xml_id', '=', 'process_cog.act_end_process')])
