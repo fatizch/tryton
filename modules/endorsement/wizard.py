@@ -122,7 +122,12 @@ class EndorsementWizardStepMixin(model.CoopView):
 
     @classmethod
     def get_methods_for_model(cls, model_name):
-        return set()
+        pool = Pool()
+        Contract = pool.get('contract')
+        methods = set()
+        if model_name == 'contract':
+            methods = methods | Contract._calculate_methods_after_endorsement()
+        return methods
 
     @classmethod
     def get_draft_methods_for_model(cls, model_name):

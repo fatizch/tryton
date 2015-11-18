@@ -128,17 +128,17 @@
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="priority">1</field>
         </record>
-        <record model="ir.model.method" id="contract_calculate_after_endorsement_method">
-            <field name="method_name">calculate_after_endorsement</field>
-            <field name="name">Calculate After Endorsement</field>
+        <record model="ir.model.method" id="contract_calculate_activation_dates">
+            <field name="method_name">calculate_activation_dates</field>
+            <field name="name">Calculate Activation Dates</field>
             <field name="model" search="[('model', '=', 'contract')]"/>
-            <field name="priority">1000</field>
+            <field name="priority">2</field>
         </record>
         <record model="ir.model.method" id="contract_plan_termination">
             <field name="method_name">plan_termination_or_terminate</field>
             <field name="name">Plan Termination</field>
             <field name="model" search="[('model', '=', 'contract')]"/>
-            <field name="priority">2</field>
+            <field name="priority">3</field>
         </record>
         <!-- ################################### -->
         <!-- # Change Start Date Configuration # -->

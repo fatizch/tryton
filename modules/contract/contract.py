@@ -438,13 +438,15 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         # by default a contract has no end date
         return None
 
-    def calculate_activation_dates(self):
-        if self.status == 'void':
-            return
-        dates = [self.get_date_used_for_contract_end_date()]
-        dates.append(self.get_maximum_end_date())
-        dates = [x for x in dates if x] or [None]
-        self.end_date = min(dates)
+    @classmethod
+    def calculate_activation_dates(cls, contracts, caller=None):
+        for contract in contracts:
+            if contract.status == 'void':
+                return
+            dates = [contract.get_date_used_for_contract_end_date()]
+            dates.append(contract.get_maximum_end_date())
+            dates = [x for x in dates if x] or [None]
+            contract.end_date = min(dates)
 
     def notify_end_date_change(self, value):
         for option in self.options:

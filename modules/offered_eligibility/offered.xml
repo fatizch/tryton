@@ -18,5 +18,14 @@
             <field name="type">form</field>
             <field name="name">option_description_eligibility_rule_form</field>
         </record>
+        <!-- ###################### -->
+        <!-- # Method Definitions # -->
+        <!-- ###################### -->
+        <record model="ir.model.method" id="contract_check_eligibility">
+            <field name="method_name">check_eligibility</field>
+            <field name="name">Check Eligibility</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">4</field>
+        </record>
     </data>
 </tryton>

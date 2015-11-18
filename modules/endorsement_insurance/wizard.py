@@ -55,14 +55,6 @@ class NewCoveredElement(EndorsementWizardStepMixin):
     product = fields.Many2One('offered.product', 'Product')
     start_date = fields.Date('Start Date')
 
-    @classmethod
-    def get_methods_for_model(cls, model_name):
-        methods = super(NewCoveredElement, cls).get_methods_for_model(
-            model_name)
-        if model_name == 'contract':
-            methods.add('calculate_after_endorsement')
-        return methods
-
     def update_endorsement(self, endorsement, wizard):
         pool = Pool()
         EndorsementCoveredElementOption = pool.get(

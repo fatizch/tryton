@@ -487,7 +487,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         contract.options = []
         build_contract_covered_elements(end_option1, end_option2)
-        contract.calculate_activation_dates()
+        self.Contract.calculate_activation_dates([contract])
         contract.save()
         self.assertEqual(contract.end_date, max(end_option1, end_option2))
 
@@ -496,7 +496,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         end_option1 = current_end + datetime.timedelta(weeks=2)
         end_option2 = current_end + datetime.timedelta(weeks=4)
         build_contract_covered_elements(end_option1, end_option2)
-        contract.calculate_activation_dates()
+        self.Contract.calculate_activation_dates([contract])
         contract.save()
         self.assertEqual(contract.end_date, max(end_option1, end_option2))
 

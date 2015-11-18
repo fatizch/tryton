@@ -33,6 +33,13 @@ Contract = Model.get('contract')
 Country = Model.get('country.country')
 Currency = Model.get('currency.currency')
 CurrencyRate = Model.get('currency.currency.rate')
+Endorsement = Model.get('endorsement')
+EndorsementContract = Model.get('endorsement.contract')
+EndorsementContractField = Model.get('endorsement.contract.field')
+EndorsementDefinition = Model.get('endorsement.definition')
+EndorsementDefinitionPartRelation = Model.get(
+    'endorsement.definition-endorsement.part')
+EndorsementPart = Model.get('endorsement.part')
 Field = Model.get('ir.model.field')
 Insurer = Model.get('insurer')
 ItemDescription = Model.get('offered.item.description')
@@ -205,6 +212,24 @@ subscriber.account_payable = payable_account
 subscriber.birth_date = datetime.date(1980, 10, 14)
 subscriber.save()
 
+# #Comment# #Create Change Start Date Endorsement
+change_start_date_part = EndorsementPart()
+change_start_date_part.name = 'Change Start Date'
+change_start_date_part.code = 'change_start_date'
+change_start_date_part.kind = 'contract'
+change_start_date_part.view = 'change_start_date'
+change_start_date_part.contract_fields.append(
+    EndorsementContractField(field=Field.find([
+                ('model.model', '=', 'contract'),
+                ('name', '=', 'start_date')])[0].id))
+change_start_date_part.save()
+change_start_date = EndorsementDefinition()
+change_start_date.name = 'Change Start Date'
+change_start_date.code = 'change_start_date'
+change_start_date.ordered_endorsement_parts.append(
+    EndorsementDefinitionPartRelation(endorsement_part=change_start_date_part))
+change_start_date.save()
+
 
 # #Comment# #Create Test Contract
 contract = Contract()
@@ -223,6 +248,38 @@ contract.start_date == contract_start_date
 # #Res# #True
 contract.end_date
 # #Res# #datetime.date(2014, 4, 9)
+
+new_contract_start_date = contract_start_date + relativedelta(years=1)
+
+# #Comment# #New Endorsement
+new_endorsement = Wizard('endorsement.start')
+new_endorsement.form.contract = contract
+new_endorsement.form.endorsement_definition = change_start_date
+new_endorsement.form.endorsement = None
+new_endorsement.form.applicant = None
+new_endorsement.form.effective_date = new_contract_start_date
+new_endorsement.execute('start_endorsement')
+new_endorsement.form.current_start_date == contract_start_date
+# #Res# #True
+new_endorsement.form.new_start_date == new_contract_start_date
+# #Res# #True
+new_endorsement.execute('change_start_date_next')
+new_endorsement.execute('suspend')
+good_endorsement, = Endorsement.find([
+        ('contracts', '=', contract.id)])
+Endorsement.apply([good_endorsement.id], config._context)
+contract = Contract(contract.id)
+contract.start_date == new_contract_start_date
+# #Res# #True
+contract.end_date == new_contract_start_date + relativedelta(years=1, days=-1)
+# #Res# #True
+
+
+# #Comment# #Cancel Endorsement
+Endorsement.cancel([good_endorsement.id], config._context)
+contract = Contract(contract.id)
+contract.start_date == contract_start_date
+# #Res# #True
 
 # #Comment# #Renew Contract
 renew = Wizard('contract_term_renewal.renew', models=[contract])

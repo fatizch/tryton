@@ -881,8 +881,9 @@ class Contract(CogProcessFramework):
         self.start_date = caller.values['start_date']
         self.save()
 
-    def calculate_after_endorsement(self, caller=None):
-        self.calculate()
+    @classmethod
+    def _calculate_methods_after_endorsement(cls):
+        return {'calculate_activation_dates'}
 
     @classmethod
     def terminate(cls, contracts, at_date, termination_reason):
