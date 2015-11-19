@@ -507,6 +507,9 @@ class ReportGenerate(Report):
         records = None
         records = cls._get_records(ids, data['model'], data)
         selected_letter = data['doc_template'][0]
+        action_report.template_extension = selected_letter.template_extension
+        if selected_letter.format_for_internal_edm not in ('', 'original'):
+            action_report.extension = selected_letter.format_for_internal_edm
         SelectedModel = pool.get(data['model'])
         name_giver = data.get('resource', None) or SelectedModel(data['id'])
         selected_party = pool.get('party.party')(data['party'])
