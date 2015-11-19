@@ -23,7 +23,7 @@ class Dunning:
     def _overdue_line_domain(cls, date):
         domain = super(Dunning, cls)._overdue_line_domain(date)
         domain.extend([
-                ('payment_date', '=', None),
+                ('payment_amount', '>', 0),
                 ('contract', '!=', None)
                 ])
         return domain

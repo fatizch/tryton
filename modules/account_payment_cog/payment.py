@@ -227,6 +227,7 @@ class Payment(export.ExportImportMixin, Printable):
     @classmethod
     def __setup__(cls):
         super(Payment, cls).__setup__()
+        cls.line.select = True
         cls._error_messages.update({
                 'payments_blocked_for_party': 'Payments blocked for party %s',
                 })
