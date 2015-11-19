@@ -784,14 +784,14 @@ class MethodDefinition(CoopSQL, CoopView):
         cls._get_method_cache.set((model_name, method_name), instance.id)
         return instance
 
-    def execute(self, caller, callees):
+    def execute(self, caller, callees, **kwargs):
         method = getattr(Pool().get(self.model.model), self.method_name)
         if not hasattr(method, 'im_self') or method.im_self:
             if not isinstance(callees, (list, tuple)):
                 callees = [callees]
-            return method(callees, caller=caller)
+            return method(callees, caller=caller, **kwargs)
         else:
             if isinstance(callees, (list, tuple)):
-                return [method(x, caller=caller) for x in callees]
+                return [method(x, caller=caller, **kwargs) for x in callees]
             else:
-                return method(callees, caller=caller)
+                return method(callees, caller=caller, **kwargs)
