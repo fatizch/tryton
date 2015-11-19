@@ -240,6 +240,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 'sender': objects[0].get_sender(),
                 'sender_address': objects[0].get_sender_address(),
                 'origin': origin,
+                'resource': resource,
                 })
         report = Report()
         report.template_extension = self.template_extension
@@ -507,9 +508,9 @@ class ReportGenerate(Report):
         records = cls._get_records(ids, data['model'], data)
         selected_letter = data['doc_template'][0]
         SelectedModel = pool.get(data['model'])
-        selected_obj = SelectedModel(data['id'])
+        name_giver = data.get('resource', None) or SelectedModel(data['id'])
         selected_party = pool.get('party.party')(data['party'])
-        filename = cls.get_filename(selected_letter, selected_obj,
+        filename = cls.get_filename(selected_letter, name_giver,
             selected_party)
         report_context = cls.get_context(records, data)
         oext, content = cls.convert(action_report,
