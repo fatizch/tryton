@@ -1107,7 +1107,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         for option in self.options:
             if ((not coverage or option.coverage == coverage) and
                     option.status not in ['void', 'declined'] and
-                    utils.is_effective_at_date(option, at_date)):
+                    utils.is_effective_at_date(option, at_date,
+                        end_var_name='final_end_date')):
                 return True
         return any((sub_elem.is_covered_at_date(at_date, coverage)
                 for sub_elem in self.sub_covered_elements))
@@ -1117,7 +1118,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         if party in self.get_covered_parties(at_date):
             for option in self.options:
                 if option.status != 'void' and utils.is_effective_at_date(
-                        option, at_date):
+                        option, at_date, end_var_name='final_end_date'):
                     return True
         if hasattr(self, 'sub_covered_elements'):
             for sub_elem in self.sub_covered_elements:
@@ -1316,6 +1317,9 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         depends=['time_limited']),
         'get_end_date')
     manual_end_date = fields.Date('Manual End Date')
+    final_end_date = fields.Function(
+        fields.Date('Final End Date'),
+        'get_final_end_date')
     duration = fields.Integer('Duration', states={
             'invisible': ~Eval('time_limited')}, depends=['time_limited'])
     duration_unit = fields.Selection(
@@ -1549,6 +1553,11 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         if self.manual_end_date:
             return min(self.manual_end_date, self.calculate_end_date())
         return self.calculate_end_date()
+
+    def get_final_end_date(self, name):
+        return self.manual_end_date or (self.option.final_end_date
+            if not self.duration and getattr(self, 'option', None)
+            else self.end_date)
 
     def notify_contract_end_date_change(self, new_end_date):
         if (new_end_date and self.manual_end_date and

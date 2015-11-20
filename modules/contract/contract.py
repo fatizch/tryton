@@ -1461,6 +1461,9 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         fields.Date('Start Date', states=_CONTRACT_STATUS_STATES,
             depends=_CONTRACT_STATUS_DEPENDS),
         'get_start_date', searcher="searcher_start_date")
+    final_end_date = fields.Function(
+        fields.Date('Final End Date'),
+        'get_final_end_date')
     manual_start_date = fields.Date('Manual Start Date',
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     status = fields.Selection(OPTIONSTATUS, 'Status',
@@ -1663,6 +1666,10 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         if self.parent_contract.end_date:
             dates.append(self.parent_contract.end_date)
         return min(dates) if dates else None
+
+    def get_final_end_date(self, name):
+        return self.manual_end_date or self.automatic_end_date or \
+            self.parent_contract.final_end_date
 
     def get_initial_start_date(self, name):
         if self.parent_contract.initial_start_date:

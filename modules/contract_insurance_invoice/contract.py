@@ -534,6 +534,7 @@ class Contract:
         return (invoice_rrule, until_date, billing_information)
 
     def get_invoice_periods(self, up_to_date, from_date=None):
+        contract_end_date = self.activation_history[-1].end_date
         if from_date:
             start = max(from_date, self.start_date)
         elif self.last_invoice_end:
@@ -553,15 +554,15 @@ class Contract:
                 if date <= start:
                     continue
                 end = date + relativedelta(days=-1)
-                periods.append((start, min(end, self.end_date or
+                periods.append((start, min(end, contract_end_date or
                             datetime.date.max), billing_information))
                 start = date
                 if (up_to_date and start >= up_to_date) or not up_to_date:
                     break
             if until and (up_to_date and until < up_to_date):
-                if self.end_date and self.end_date < up_to_date:
-                    if until > self.end_date:
-                        until = self.end_date
+                if contract_end_date and contract_end_date < up_to_date:
+                    if until > contract_end_date:
+                        until = contract_end_date
                 if start != until:
                     end = until + relativedelta(days=-1)
                     periods.append((start, end, billing_information))
@@ -640,7 +641,8 @@ class Contract:
                 continue
             cls._invoices_cache.set(contract.id, None)
             for period in contract.get_invoice_periods(min(up_to_date,
-                        contract.end_date or datetime.date.max)):
+                        contract.activation_history[-1].end_date or
+                        datetime.date.max)):
                 periods[period].append(contract)
 
         return cls.invoice_periods(periods)

@@ -558,9 +558,10 @@ class Premium(model.CoopSQL, model.CoopView):
             return None
         new_instance.rated_entity = line.rated_entity
         new_instance.start = start_date
-        if getattr(new_instance.parent, 'end_date', None) and (not end_date
-                or new_instance.parent.end_date < end_date):
-            new_instance.end = new_instance.parent.end_date
+        if getattr(new_instance.parent, 'final_end_date', None) and \
+                (not end_date or new_instance.parent.final_end_date
+                    < end_date):
+            new_instance.end = new_instance.parent.final_end_date
         else:
             new_instance.end = end_date
         new_instance.amount = line.amount
