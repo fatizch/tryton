@@ -79,7 +79,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'options': [{
                             'start_date': datetime.date(2014, 1, 1),
                             'status': 'active',
-                            'end_date': datetime.date(2014, 1, 31)}],
+                            'final_end_date': datetime.date(2014, 1, 31)}],
                     'sub_covered_elements': [],
                     }])
         args = {'contract': contract, 'person': party_child1,

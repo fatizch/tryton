@@ -83,7 +83,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         parent_1 = self.Contract()
         parent_1.id = 100
-        parent_1.end_date = None
+        parent_1.final_end_date = None
         some_previous_line = self.Premium()
         some_previous_line.rated_entity = rated_entity_1
         some_previous_line.start = datetime.date(1999, 12, 14)
@@ -96,7 +96,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         parent_2 = self.Option()
         parent_2.id = 200
-        parent_2.end_date = datetime.date(2002, 4, 16)
+        parent_2.final_end_date = datetime.date(2002, 4, 16)
         parent_2.premiums = []
 
         parent_3 = self.ContractFee()

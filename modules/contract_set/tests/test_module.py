@@ -25,6 +25,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             }
 
     def test001_test_rule_engine_function(self):
+
         relation_spouse = self.PartyRelationType(name='Spouse', code='spouse')
         relation_spouse.save()
         relation_spouse.reverse = relation_spouse
@@ -85,12 +86,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'party': party_child2,
                     'options': [{
                             'start_date': datetime.date(2014, 1, 1),
-                            'end_date': datetime.date(2014, 1, 31),
+                            'final_end_date': datetime.date(2014, 1, 31),
                             'status': 'active',
                             }],
                     'sub_covered_elements': [],
                     }])
-
         contract_set = self.ContractSet()
         contract_set.contracts = [contract1, contract2]
 
