@@ -6,4 +6,5 @@ Tutoriels
    :maxdepth: 1
    :glob:
 
-   ./../../../*/*_tuto
+   ./../../../modules/*/doc/fr/*_tuto
+
