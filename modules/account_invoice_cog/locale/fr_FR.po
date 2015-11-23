@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -166,3 +166,15 @@ msgstr "Quittances"
 msgctxt "view:account.invoice.line:account_invoice."
 msgid "Invoice Lines"
 msgstr "Lignes de quittance"
+
+msgctxt "model:event.type,name:event_pay_invoice"
+msgid "Pay Invoice"
+msgstr "Paiement d'une quittance"
+
+msgctxt "model:event.type,name:event_post_invoice"
+msgid "Post Invoice"
+msgstr "Emission d'une quittance"
+
+msgctxt "model:event.type,name:event_cancel_invoice"
+msgid "Cancel Invoice"
+msgstr "Annulation d'une quittance"

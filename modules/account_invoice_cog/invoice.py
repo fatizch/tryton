@@ -1,5 +1,6 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import export, fields
 from trytond.modules.report_engine import Printable
@@ -85,7 +86,8 @@ class Invoice(export.ExportImportMixin, Printable):
         pool = Pool()
         Event = pool.get('event')
         super(Invoice, cls).cancel(invoices)
-        Event.notify_events(invoices, 'cancel_invoice')
+        if not Transaction().context.get('deleting_invoice', None):
+            Event.notify_events(invoices, 'cancel_invoice')
 
     @classmethod
     def paid(cls, invoices):
@@ -93,3 +95,10 @@ class Invoice(export.ExportImportMixin, Printable):
         Event = pool.get('event')
         super(Invoice, cls).paid(invoices)
         Event.notify_events(invoices, 'pay_invoice')
+
+    @classmethod
+    def delete(cls, invoices):
+        # use deleting_invoice context to allow different behavior in cancel
+        # invoice method (as delete call cancel)
+        with Transaction().set_context(deleting_invoice=True):
+            super(Invoice, cls).delete(invoices)
