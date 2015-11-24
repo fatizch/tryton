@@ -15,6 +15,7 @@ from .event import *
 def register():
     Pool.register(
         BillingMode,
+        BillingModeFeeRelation,
         ProductBillingModeRelation,
         Product,
         BillingModePaymentTermRelation,

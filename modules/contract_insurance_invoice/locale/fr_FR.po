@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -25,6 +25,10 @@ msgstr "Pas de contrat trouver dans le contexte"
 msgctxt "error:offered.billing_mode:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
+
+msgctxt "field:account.fee,coverages:"
+msgid "Coverages"
+msgstr "Garanties"
 
 msgctxt "field:account.fee,product:"
 msgid "Product"
@@ -693,6 +697,10 @@ msgctxt "field:offered.billing_mode,direct_debit:"
 msgid "Direct Debit Payment"
 msgstr "Prélèvement"
 
+msgctxt "field:offered.billing_mode,fees:"
+msgid "Fees"
+msgstr "Frais"
+
 msgctxt "field:offered.billing_mode,frequency:"
 msgid "Invoice Frequency"
 msgstr "Fréquence de facturation"
@@ -734,6 +742,46 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:offered.billing_mode,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.billing_mode-account.fee,billing_mode:"
+msgid "Billing Mode"
+msgstr "Mode de quittancement"
+
+msgctxt "field:offered.billing_mode-account.fee,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.billing_mode-account.fee,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.billing_mode-account.fee,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.billing_mode-account.fee,fee:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "field:offered.billing_mode-account.fee,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.billing_mode-account.fee,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.billing_mode-account.fee,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.billing_mode-account.fee,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.billing_mode-account.fee,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -979,6 +1027,10 @@ msgstr "Mode de quittancement et condition de paiement"
 msgctxt "model:offered.billing_mode,name:"
 msgid "Billing Mode"
 msgstr "Mode de quittancement"
+
+msgctxt "model:offered.billing_mode-account.fee,name:"
+msgid "Billing Mode Fee Relation"
+msgstr "Relation paramètres de quittancement - frais"
 
 msgctxt "model:offered.product-offered.billing_mode,name:"
 msgid "Product Billing Mode Relation"

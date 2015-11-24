@@ -18,9 +18,12 @@
     <label name="allowed_direct_debit_days"/>
     <field name="allowed_direct_debit_days"/>
     <newline/>
-    <field name="ordered_payment_terms" colspan="4"/>
-    <field name="allowed_payment_terms" colspan="4"/>
-    <newline/>
-    <label name="change_payment_terms_order"/>
-    <field name="change_payment_terms_order"/>
+    <group id="payment_terms" string="" col="2" colspan="2" yexpand="1" yfill="1">
+        <field name="ordered_payment_terms" colspan="2"/>
+        <field name="allowed_payment_terms" colspan="2"/>
+        <newline/>
+        <label name="change_payment_terms_order"/>
+        <field name="change_payment_terms_order"/>
+    </group>
+    <field name="fees" colspan="2"/>
 </form>

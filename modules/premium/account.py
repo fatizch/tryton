@@ -53,10 +53,16 @@ class Fee(model.CoopSQL, model.CoopView, ModelCurrency):
             'invisible': Eval('type') != 'percentage',
             }, depends=['type'])
     allow_override = fields.Boolean('Allow Override')
+    coverages = fields.Many2Many('offered.option.description-account.fee',
+        'fee', 'coverage', 'Coverages')
 
     @classmethod
     def _export_light(cls):
         return super(Fee, cls)._export_light() | {'company'}
+
+    @classmethod
+    def _export_skips(cls):
+        return super(Fee, cls)._export_skips() | {'coverages'}
 
     @classmethod
     def is_master_object(cls):
@@ -111,7 +117,11 @@ class Fee(model.CoopSQL, model.CoopView, ModelCurrency):
         return (self.frequency == 'at_contract_signature') == (not date)
 
     def get_base_amount_from_line(self, line):
-        if self not in getattr(line.rated_entity, 'fees', []):
+        # If self only applies on some coverages, filter by coverage
+        if self.coverages and line.rated_entity not in self.coverages:
+            return 0
+        # Do not apply fees on fees
+        if line.rated_entity.__name__ == 'account.fee':
             return 0
         return line.amount
 

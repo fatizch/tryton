@@ -148,6 +148,14 @@ class Contract:
                 new_billing_information.direct_debit_account = None
         self.billing_informations = [new_billing_information]
 
+    def appliable_fees(self):
+        all_fees = super(Contract, self).appliable_fees()
+        if self.billing_informations:
+            if self.billing_informations[-1].billing_mode:
+                all_fees |= set(
+                    self.billing_informations[-1].billing_mode.fees)
+        return all_fees
+
     def get_current_term_invoices(self, name):
         pool = Pool()
         ContractInvoice = pool.get('contract.invoice')

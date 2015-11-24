@@ -26,6 +26,10 @@ msgctxt "field:account.fee,company:"
 msgid "Company"
 msgstr "Société"
 
+msgctxt "field:account.fee,coverages:"
+msgid "Coverages"
+msgstr "Garanties"
+
 msgctxt "field:account.fee,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"

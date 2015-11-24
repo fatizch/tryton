@@ -1,3 +1,4 @@
+* Allow to define specific fees for billing modes
 * Add set_number batch to let invoice.post be out scalable
 * Allow other uses for remainder when reconciling
 * Allow to configure premium with tax included

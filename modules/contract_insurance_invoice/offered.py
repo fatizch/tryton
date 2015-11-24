@@ -17,6 +17,7 @@ __metaclass__ = PoolMeta
 
 __all__ = [
     'BillingMode',
+    'BillingModeFeeRelation',
     'Product',
     'ProductBillingModeRelation',
     'BillingModePaymentTermRelation',
@@ -92,6 +93,8 @@ class BillingMode(model.CoopSQL, model.CoopView):
     products = fields.Many2Many(
         'offered.product-offered.billing_mode',
         'billing_mode', 'product', 'Products', readonly=True)
+    fees = fields.Many2Many('offered.billing_mode-account.fee', 'billing_mode',
+        'fee', 'Fees')
 
     @classmethod
     def __setup__(cls):
@@ -182,6 +185,17 @@ class BillingMode(model.CoopSQL, model.CoopView):
 
     def get_change_payment_term_order(self, name):
         return False
+
+
+class BillingModeFeeRelation(model.CoopSQL):
+    'Billing Mode Fee Relation'
+
+    __name__ = 'offered.billing_mode-account.fee'
+
+    billing_mode = fields.Many2One('offered.billing_mode', 'Billing Mode',
+        ondelete='CASCADE', select=True, required=True)
+    fee = fields.Many2One('account.fee', 'Fee', ondelete='RESTRICT',
+        select=True, required=True)
 
 
 class PaymentTerm(export.ExportImportMixin):
