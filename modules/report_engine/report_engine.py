@@ -244,21 +244,16 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         if functional_date:
             with Transaction().set_context(
                     client_defined_date=functional_date):
-                report_type, data, _, report_name = ReportModel.execute(
-                    objects_ids, reporting_data)
+                extension, data, _, report_name = ReportModel.execute(
+                    objects_ids, reporting_data, immediate_conversion=True)
         else:
-            report_type, data, _, report_name = ReportModel.execute(
-                objects_ids, reporting_data)
-        report = Report()
-        report.template_extension = self.template_extension
-        report.extension = ('pdf' if self.convert_to_pdf
-            else self.template_extension)
-        oext, data = Report.convert(report, data)
+            extension, data, _, report_name = ReportModel.execute(
+                objects_ids, reporting_data, immediate_conversion=True)
         return {
                 'object': objects[0],
-                'report_type': report_type,
+                'report_type': extension,
                 'data': data,
-                'report_name': '%s.%s' % (report_name, oext),
+                'report_name': '%s.%s' % (report_name, extension),
                 'origin': context_.get('origin', None),
                 'resource': context_.get('resource', None),
                 }
@@ -501,7 +496,7 @@ class ReportGenerate(Report):
     __name__ = 'report.generate'
 
     @classmethod
-    def execute(cls, ids, data):
+    def execute(cls, ids, data, immediate_conversion=False):
         pool = Pool()
         ActionReport = pool.get('ir.action.report')
         action_reports = ActionReport.search([
@@ -519,6 +514,10 @@ class ReportGenerate(Report):
         filename = cls.get_filename(selected_letter, name_giver,
             selected_party)
         report_context = cls.get_context(records, data)
+        action_report.template_extension = selected_letter.template_extension
+        if immediate_conversion and selected_letter.format_for_internal_edm \
+                not in ('', 'original'):
+            action_report.extension = selected_letter.format_for_internal_edm
         oext, content = cls.convert(action_report,
             cls.render(action_report, report_context))
         return (oext, bytearray(content), action_report.direct_print, filename)
