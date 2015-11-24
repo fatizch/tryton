@@ -18,6 +18,15 @@ msgctxt "field:account.journal,aggregate_posting:"
 msgid "Aggregate Posting"
 msgstr "Agréger à l'émission"
 
+msgctxt "field:account.fiscalyear,export_moves:"
+msgid "Export Moves"
+msgstr "Exporter les mouvements comptables"
+
+msgctxt "help:account.fiscalyear,export_moves:"
+msgid "If not ticked, will filter all moves on this fiscal year out of snapshot creations"
+msgstr "Si non cochée,  les mouvements comptables de cette année fiscale ne "
+"seront pas pris en compte lors de la création des instantanés"
+
 msgctxt "field:account.move,snapshot:"
 msgid "Snapshot"
 msgstr "Instantané"

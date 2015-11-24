@@ -5,6 +5,7 @@ from .batch import *
 
 def register():
     Pool.register(
+        FiscalYear,
         Journal,
         Snapshot,
         Move,

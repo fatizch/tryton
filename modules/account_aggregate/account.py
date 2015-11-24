@@ -6,19 +6,59 @@ from sql.conditionals import Coalesce, Case
 from sql.functions import ToChar, CurrentTimestamp
 from sql.operators import Concat
 
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, PYSONEncoder
 from trytond.wizard import Wizard, StateView, StateTransition, StateAction, \
     Button
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, utils
 
-__all__ = ['Journal', 'Move', 'Line', 'Configuration', 'Snapshot',
-    'TakeSnapshot', 'SnapshotStart', 'SnapshotDone',
-    'LineAggregated',
-    'OpenLineAggregated', 'OpenLine']
 __metaclass__ = PoolMeta
+__all__ = [
+    'FiscalYear',
+    'Journal',
+    'Move',
+    'Line',
+    'Configuration',
+    'Snapshot',
+    'TakeSnapshot',
+    'SnapshotStart',
+    'SnapshotDone',
+    'LineAggregated',
+    'OpenLineAggregated',
+    'OpenLine',
+    ]
+
+
+class FiscalYear:
+    __name__ = 'account.fiscalyear'
+
+    export_moves = fields.Boolean('Export Moves',
+        help='If not ticked, will filter all moves on this fiscal year out of '
+        'snapshot creations')
+
+    @classmethod
+    def __register__(cls, module_name):
+        # Migration from 1.4 : add export_moves field : Set current fiscal year
+        # to export its moves
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        do_migrate = False
+        table_handler = TableHandler(cursor, cls)
+        if not table_handler.column_exist('export_moves'):
+            do_migrate = True
+        super(FiscalYear, cls).__register__(module_name)
+        if not do_migrate:
+            return
+        table = cls.__table__()
+        cursor.execute(*table.update(columns=[table.export_moves],
+                values=[Literal(True)], where=(
+                    table.start_date <= utils.today())
+                & (table.end_date >= utils.today())))
+        cursor.execute(*table.update(columns=[table.export_moves],
+                values=[Literal(False)], where=(table.export_moves == Null)))
 
 
 class Journal:
@@ -147,6 +187,9 @@ class Snapshot(model.CoopSQL, model.CoopView):
     def take_snapshot(cls):
         pool = Pool()
         Move = pool.get('account.move')
+        Period = pool.get('account.period')
+        allowed_periods = Period.search([
+                ('fiscalyear.export_moves', '=', True)])
 
         snapshot, = cls.create([{}])
         move = Move.__table__()
@@ -155,7 +198,8 @@ class Snapshot(model.CoopSQL, model.CoopView):
                 [move.snapshot, move.write_date, move.write_uid],
                 [snapshot.id, CurrentTimestamp(), Transaction().user],
                 where=(move.snapshot == Null)
-                & (move.post_date != Null)))
+                & (move.post_date != Null)
+                & move.period.in_([x.id for x in allowed_periods])))
         return snapshot.id
 
 

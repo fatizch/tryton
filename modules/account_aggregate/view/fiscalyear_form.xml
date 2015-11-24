@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/field[@name='state']" position="after">
+        <label name="export_moves"/>
+        <field name="export_moves"/>
+    </xpath>
+</data>
