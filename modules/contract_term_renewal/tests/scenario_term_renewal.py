@@ -22,6 +22,8 @@ config.pool.test = True
 Module = Model.get('ir.module')
 renewal_module = Module.find([('name', '=', 'contract_term_renewal')])[0]
 Module.install([renewal_module.id], config.context)
+endorsement_module = Module.find([('name', '=', 'endorsement')])[0]
+Module.install([endorsement_module.id], config.context)
 wizard = Wizard('ir.module.install_upgrade')
 wizard.execute('upgrade')
 
