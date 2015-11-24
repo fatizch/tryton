@@ -902,7 +902,9 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         if not getattr(self, 'party', None) or not (self.item_desc
                 and self.item_desc.kind in ['party', 'person', 'company']):
             return res
-        for extra_data_def in self.item_desc.extra_data_def:
+        for extra_data_def in set(list(self.item_desc.extra_data_def) +
+                [x for x in self.product.extra_data_def
+                    if x.kind == 'covered_element']):
             if self.party and extra_data_def.name in self.party.extra_data:
                 res[extra_data_def.name] = self.party.extra_data[
                     extra_data_def.name]
