@@ -16,4 +16,5 @@
         <field name="overriden_rate" factor="100" xexpand="0"/>
         <label name="overriden_rate" string="%" xexpand="0" xalign="0"/>
     </group>
+    <field name="manual"/>
 </form>

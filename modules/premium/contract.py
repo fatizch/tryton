@@ -220,9 +220,12 @@ class Contract:
 
         to_delete = []
         for fee in current_fees - required_fees:
-            to_delete.append(contract_fees.pop(fee))
+            if not contract_fees[fee].manual:
+                to_delete.append(contract_fees.pop(fee))
         for fee in required_fees - current_fees:
             contract_fees[fee] = ContractFee.new_fee(fee)
+        for fee in current_fees & required_fees:
+            contract_fees[fee].manual = False
 
         self.fees = sorted(contract_fees.values(), key=lambda x: x.fee)
         if to_delete:
@@ -270,6 +273,7 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
             'readonly': ~Eval('fee_allow_override', False),
             'invisible': Eval('fee_type', '') != 'percentage'},
         depends=['fee_allow_override', 'fee_type'])
+    manual = fields.Boolean('Added Manually', states={'invisible': True})
     amount_as_string = fields.Function(
         fields.Char('Amount'),
         'on_change_with_amount_as_string')
@@ -305,6 +309,10 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def default_accept_fee(cls):
         # Workaround for bug https://bugs.tryton.org/issue4524
+        return True
+
+    @classmethod
+    def default_manual(cls):
         return True
 
     @classmethod
@@ -382,6 +390,7 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
     def new_fee(cls, fee_desc):
         new_fee = cls()
         new_fee.fee = fee_desc
+        new_fee.manual = False
         new_fee.on_change_fee()
         return new_fee
 

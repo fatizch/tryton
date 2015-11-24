@@ -158,6 +158,10 @@ msgctxt "field:contract.fee,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.fee,manual:"
+msgid "Added Manually"
+msgstr "Ajouté manuellement"
+
 msgctxt "field:contract.fee,overriden_amount:"
 msgid "Amount"
 msgstr "Montant"

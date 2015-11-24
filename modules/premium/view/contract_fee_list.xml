@@ -5,4 +5,5 @@
     <field name="amount_as_string"/>
     <field name="overriden_rate" tree_invisible="1"/>
     <field name="overriden_amount" tree_invisible="1"/>
+    <field name="manual" tree_invisible="1"/>
 </tree>
