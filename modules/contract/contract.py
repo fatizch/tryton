@@ -75,7 +75,7 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
     _func_key = 'func_key'
 
     func_key = fields.Function(fields.Char('Functional Key'),
-        'get_func_key', searcher='search_func_key')
+        'get_func_key')
     contract = fields.Many2One('contract', 'Contract', required=True,
         ondelete='CASCADE', select=True)
     start_date = fields.Date('Start Date')
@@ -110,15 +110,11 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
         cls._order = [('contract', 'ASC'), ('start_date', 'DESC')]
 
     def get_func_key(self, name):
-        return self.contract.quote_number
+        return self.start_date
 
     @staticmethod
     def default_active():
         return True
-
-    @classmethod
-    def search_func_key(cls, name, clause):
-        return [('contract.quote_number',) + tuple(clause[1:])]
 
     def clean_before_reactivate(self):
         self.termination_reason = None
