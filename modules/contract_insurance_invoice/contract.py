@@ -361,7 +361,7 @@ class Contract:
             sum([x['total_amount'] for x in invoices])]
 
     def invoice_to_end_date(self):
-        Contract.invoice([self], self.end_date)
+        Contract.invoice([self], self.final_end_date)
 
     def get_non_periodic_payment_date(self):
         return self.product.get_non_periodic_payment_date(self)
@@ -968,6 +968,25 @@ class Contract:
         for contract in contracts:
             contract.rebill(datetime.date.min)
         cls.reconcile(contracts)
+
+    @classmethod
+    def calculate_prices_after_renewal(cls, contracts,
+            new_start_date=None, caller=None):
+        pool = Pool()
+        Contract = pool.get('contract')
+        Contract.calculate_prices(contracts, start=new_start_date)
+
+    @classmethod
+    def _post_renew_methods(cls):
+        methods = super(Contract, cls)._post_renew_methods()
+        methods |= {'calculate_prices_after_renewal'}
+        methods |= {'rebill_after_renewal'}
+        return methods
+
+    @classmethod
+    def rebill_after_renewal(cls, contracts, new_start_date=None, caller=None):
+        for contract in contracts:
+            contract.invoice_to_end_date()
 
 
 class ContractFee:

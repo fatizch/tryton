@@ -1,4 +1,3 @@
-from dateutil.relativedelta import relativedelta
 from trytond.pool import PoolMeta, Pool
 
 __metaclass__ = PoolMeta
@@ -11,19 +10,19 @@ class Contract:
     __name__ = 'contract'
 
     @classmethod
-    def renew(cls, contracts):
+    def do_renew(cls, contracts, new_start_date):
         pool = Pool()
         RenewalEndorsement = pool.get('endorsement.contract.renew')
         Endorsement = pool.get('endorsement')
-        to_renew = []
-        for contract in contracts:
-            if not contract.is_renewable:
-                continue
-            new_start_date = contract.end_date + relativedelta(days=1)
-            if contract.activation_history[-1].start_date == new_start_date:
-                continue
-            to_renew.append(contract)
-        if to_renew:
-            endorsements = RenewalEndorsement.renew_contracts(to_renew)
-            Endorsement.apply(endorsements)
-        return to_renew
+        endorsements = RenewalEndorsement.renew_contracts(contracts)
+        Endorsement.apply(endorsements)
+        cls.save(contracts)
+
+    @classmethod
+    def _post_renew_methods(cls):
+        methods = super(Contract, cls)._post_renew_methods()
+        for method in ['calculate_prices_after_renewal',
+                'rebill_after_renewal']:
+            if method in methods:
+                methods -= {method}
+        return methods

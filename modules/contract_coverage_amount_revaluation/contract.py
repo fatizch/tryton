@@ -1,3 +1,4 @@
+from dateutil.relativedelta import relativedelta
 from trytond.pool import PoolMeta
 
 __metaclass__ = PoolMeta
@@ -10,9 +11,18 @@ __all__ = [
 class Contract:
     __name__ = 'contract'
 
-    def do_renew(self, new_start_date):
-        self.calculate_revaluated_coverage_amount(new_start_date)
-        super(Contract, self).do_renew(new_start_date)
+    @classmethod
+    def _pre_renew_methods(cls):
+        return super(Contract, cls)._pre_renew_methods() | \
+            {'calculate_revaluated_coverage_amount_for_renewal'}
+
+    @classmethod
+    def calculate_revaluated_coverage_amount_for_renewal(cls, contracts,
+            new_start_date=None, caller=None):
+        for contract in contracts:
+            contract.calculate_revaluated_coverage_amount(new_start_date or
+                contract.activation_history[-1].end_date +
+                relativedelta(days=1))
 
     def calculate_revaluated_coverage_amount(self, at_date):
         covered_elements = list(self.covered_elements)

@@ -115,5 +115,20 @@
             <field name="model">contract,-1</field>
             <field name="action" ref="act_invoice"/>
         </record>
+        <!-- ###################### -->
+        <!-- # Method Definitions # -->
+        <!-- ###################### -->
+        <record model="ir.model.method" id="calculate_prices_after_renewal">
+            <field name="method_name">calculate_prices_after_renewal</field>
+            <field name="name">Calculate Prices After Renewal</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">10</field>
+        </record>
+        <record model="ir.model.method" id="rebill_after_renewal">
+            <field name="method_name">rebill_after_renewal</field>
+            <field name="name">Rebill After Renewal</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">15</field>
+        </record>
     </data>
 </tryton>

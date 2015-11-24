@@ -6,7 +6,6 @@ from .party import *
 from .offered import *
 from .contract import *
 from .account import *
-from .wizard import *
 from .move import *
 from .rule_engine import *
 from .event import *
@@ -52,6 +51,5 @@ def register():
         InvoiceContract,
         SynthesisMenuOpen,
         DisplayContractPremium,
-        Renew,
         Reconcile,
         module='contract_insurance_invoice', type_='wizard')

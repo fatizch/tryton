@@ -92,33 +92,80 @@ class Contract:
         ActivationHistory.write(activation_histories, {'final_renewal': True})
 
     @classmethod
+    def filter_and_sort_contracts_to_renew(cls, contracts):
+        res = {}
+        keyfunc = lambda x: x.activation_history[-1].end_date
+        contracts = sorted(contracts, key=keyfunc)
+        for end_date, contracts in groupby(contracts, key=keyfunc):
+            new_start_date = end_date + relativedelta(days=1)
+            to_renew = [x for x in contracts if x.is_renewable]
+            if to_renew:
+                res[new_start_date] = to_renew
+        return res
+
+    @classmethod
     def renew(cls, contracts):
         pool = Pool()
         Event = pool.get('event')
         renewed_contracts = []
-        for contract in list(contracts):
-            if contract.activation_history[-1].final_renewal:
-                continue
-            if contract.product.term_renewal_rule and not \
-                    contract.product.term_renewal_rule[-1].allow_renewal:
-                continue
-            new_start_date = contract.end_date + relativedelta(days=1)
-            if contract.activation_history[-1].start_date == new_start_date:
-                continue
-            contract.do_renew(new_start_date)
-            renewed_contracts.append(contract)
-        cls.save(renewed_contracts)
-        Event.notify_events(renewed_contracts, 'renew_contract')
+        for new_start_date, contracts_to_renew in \
+                cls.filter_and_sort_contracts_to_renew(contracts).iteritems():
+            cls.before_renew(contracts_to_renew, new_start_date)
+            cls.do_renew(contracts_to_renew, new_start_date)
+            cls.after_renew(contracts_to_renew, new_start_date)
+            Event.notify_events(contracts_to_renew, 'renew_contract')
+            renewed_contracts.extend(contracts_to_renew)
         return renewed_contracts
 
-    def do_renew(self, new_start_date):
+    @classmethod
+    def do_renew(cls, contracts, new_start_date):
         ActivationHistory = Pool().get('contract.activation_history')
-        new_act_history = ActivationHistory(contract=self,
-            start_date=new_start_date)
-        self.activation_history = list(self.activation_history
-            ) + [new_act_history]
-        new_act_history.end_date = self.get_end_date_from_given_start_date(
-            new_start_date)
+        for contract in contracts:
+            new_act_history = ActivationHistory(contract=contract,
+                start_date=new_start_date,
+                end_date=contract.get_end_date_from_given_start_date(
+                    new_start_date))
+            contract.activation_history = list(contract.activation_history
+                ) + [new_act_history]
+        cls.save(contracts)
+
+    @classmethod
+    def _pre_renew_methods(cls):
+        return set([])
+
+    @classmethod
+    def _post_renew_methods(cls):
+        return set([])
+
+    @classmethod
+    def before_renew(cls, contracts, new_start_date):
+        cls.execute_renewal_methods(contracts, new_start_date=new_start_date,
+            kind='before')
+
+    @classmethod
+    def after_renew(cls, contracts, new_start_date):
+        cls.execute_renewal_methods(contracts, new_start_date=new_start_date,
+            kind='after')
+
+    @classmethod
+    def execute_renewal_methods(cls, contracts, new_start_date=None,
+            kind=None):
+        Method = Pool().get('ir.model.method')
+        if kind == 'before':
+            methods_kind = '_pre_renew_methods'
+        elif kind == 'after':
+            methods_kind = '_post_renew_methods'
+        else:
+            raise NotImplementedError
+        method_names = getattr(cls, methods_kind)()
+        methods = [Method.get_method('contract', x)
+            for x in method_names]
+        if not methods:
+            return
+        methods.sort(key=lambda x: x.priority)
+        for method in methods:
+            method.execute(None, contracts, new_start_date=new_start_date)
+        cls.save(contracts)
 
     @classmethod
     def decline_renewal(cls, contracts, reason):
@@ -218,13 +265,4 @@ class Renew(model.CoopWizard):
         pool = Pool()
         Contract = pool.get('contract')
         renewed_contracts = Contract.renew(contracts)
-
-        keyfunc = lambda c: c.activation_history[-1].start_date
-        renewed_contracts.sort(key=keyfunc)
-        for new_start_date, contracts in groupby(renewed_contracts, keyfunc):
-            contracts = list(contracts)
-            with Transaction().set_context(
-                    client_defined_date=new_start_date):
-                Contract.produce_reports(contracts, 'renewal')
-
         return renewed_contracts

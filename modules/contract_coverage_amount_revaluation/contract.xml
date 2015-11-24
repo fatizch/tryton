@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ###################### -->
+        <!-- # Method Definitions # -->
+        <!-- ###################### -->
+        <record model="ir.model.method" id="calculate_revaluated_coverage_amount_for_renewal">
+            <field name="method_name">calculate_revaluated_coverage_amount_for_renewal</field>
+            <field name="name">Calculate Revaluated Coverage Amount For Renewal</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">500</field>
+        </record>
+    </data>
+</tryton>

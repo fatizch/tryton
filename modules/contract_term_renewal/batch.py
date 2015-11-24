@@ -29,7 +29,7 @@ class RenewContracts(batch.BatchRoot):
             ('end_date', '!=', None),
             ('product', 'in', renewable_products),
             ('activation_history.final_renewal', '!=', True),
-            ('end_date', '>=', treatment_date)]
+            ('end_date', '<=', treatment_date)]
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):

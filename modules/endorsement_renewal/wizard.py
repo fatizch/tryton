@@ -37,6 +37,7 @@ class ContractRenew(EndorsementWizardStepMixin):
                 'endorsement_insurance_invoice'):
             methods |= {'recalculate_premium_after_endorsement',
                 'rebill_after_endorsement', 'reconcile_after_endorsement'}
+            methods -= {'calculate_activation_dates'}
         return methods
 
     @classmethod
