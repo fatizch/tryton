@@ -154,6 +154,11 @@ class Contract:
     def button_renew(cls, contracts):
         pass
 
+    def get_report_functional_date(self, event_code):
+        if event_code == 'renew_contract':
+            return self.activation_history[-1].start_date
+        return super(Contract, self).get_report_functional_date(event_code)
+
 
 class SelectDeclineRenewalReason(model.CoopView):
     'Reason selector to decline renewal'

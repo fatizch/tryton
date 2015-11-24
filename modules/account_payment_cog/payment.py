@@ -327,7 +327,7 @@ class Payment(export.ExportImportMixin, Printable):
     @classmethod
     def fail_print(cls, to_prints):
         for report, payments in to_prints:
-            report.produce_reports(payments, direct_print=True)
+            report.produce_reports(payments)
 
     @fields.depends('line')
     def on_change_line(self):

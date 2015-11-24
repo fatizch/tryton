@@ -170,7 +170,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
             return self.code
         return coop_string.slugify(self.name)
 
-    def print_reports(self, reports):
+    def print_reports(self, reports, context_):
         """ Reports is a list of dicts with keys:
             object, origin, report type, data, report name"""
         if self.export_dir:
@@ -225,12 +225,11 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         Attachment.save(attachments)
         return attachments
 
-    def _generate_report(self, objects, origin, resource):
+    def _generate_report(self, objects, context_):
         pool = Pool()
         ReportModel = pool.get('report.generate', type='report')
         objects_ids = [x.id for x in objects]
-        report_type, data, _, report_name = ReportModel.execute(
-            objects_ids, {
+        reporting_data = {
                 'id': objects_ids[0],
                 'ids': objects_ids,
                 'model': objects[0].__name__,
@@ -239,9 +238,17 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 'address': objects[0].get_address(),
                 'sender': objects[0].get_sender(),
                 'sender_address': objects[0].get_sender_address(),
-                'origin': origin,
-                'resource': resource,
-                })
+                }
+        reporting_data.update(context_ or {})
+        functional_date = context_.get('functional_date')
+        if functional_date:
+            with Transaction().set_context(
+                    client_defined_date=functional_date):
+                report_type, data, _, report_name = ReportModel.execute(
+                    objects_ids, reporting_data)
+        else:
+            report_type, data, _, report_name = ReportModel.execute(
+                objects_ids, reporting_data)
         report = Report()
         report.template_extension = self.template_extension
         report.extension = ('pdf' if self.convert_to_pdf
@@ -252,11 +259,11 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 'report_type': report_type,
                 'data': data,
                 'report_name': '%s.%s' % (report_name, oext),
-                'origin': origin,
-                'resource': resource,
+                'origin': context_.get('origin', None),
+                'resource': context_.get('resource', None),
                 }
 
-    def _generate_reports(self, objects, origin=None, resource=None):
+    def _generate_reports(self, objects, context_):
         """ Return a list of dictionnary with:
             object, report_type, data, report_name"""
         if not objects:
@@ -265,17 +272,14 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         if self.split_reports:
             for _object in objects:
                 reports.append(
-                    self._generate_report([_object], origin, resource))
+                    self._generate_report([_object], context_))
         else:
-            reports.append(self._generate_report(objects, origin, resource))
+            reports.append(self._generate_report(objects, context_))
         return reports
 
-    def produce_reports(self, objects, direct_print=False, origin=None,
-            resource=None):
-        reports = self._generate_reports(objects, origin=origin,
-            resource=resource)
-        if direct_print:
-            self.print_reports(reports)
+    def produce_reports(self, objects, context_):
+        reports = self._generate_reports(objects, context_)
+        self.print_reports(reports, context_)
         attachments = []
         if self.format_for_internal_edm:
             attachments = self.save_reports_in_edm(reports)
@@ -359,6 +363,7 @@ class ReportTemplateVersion(Attachment, export.ExportImportMixin):
 
 
 class Printable(Model):
+
     @classmethod
     def __register__(cls, module_name):
         # We need to store the fact that this class is a Printable class in the
@@ -453,12 +458,14 @@ class Printable(Model):
             'Today': utils.today(),
             }
 
+    def get_report_functional_date(self, event_code):
+        return utils.today()
+
     def get_document_filename(self):
         return self.rec_name
 
     @classmethod
-    def produce_reports(cls, objects, template_kind, direct_print=False,
-            origin=None):
+    def produce_reports(cls, objects, template_kind, context_):
         all_reports, all_attachments = [], []
         pool = Pool()
         Template = pool.get('report.template')
@@ -467,8 +474,7 @@ class Printable(Model):
         templates = Template.find_templates_for_objects_and_kind(objects,
             cls.__name__, template_kind)
         for template, group_objects in templates.iteritems():
-            reports, attachments = template.produce_reports(objects,
-                direct_print, origin=origin)
+            reports, attachments = template.produce_reports(objects, context_)
             all_reports.extend(reports)
             all_attachments.extend(attachments)
         return all_reports, all_attachments
@@ -567,11 +573,11 @@ class ReportGenerate(Report):
                 lang = report_context['Party'].lang
             return pool.get('ir.lang').strftime(value, lang.code, lang.date)
 
-        report_context['origin'] = data.get('origin', None)
+        report_context.update({k: v for k, v in data.iteritems() if k not in
+                ['party', 'address', 'sender', 'sender_address']})
 
         report_context['Date'] = pool.get('ir.date').today()
         report_context['FDate'] = format_date
-        # report_context['Logo'] = data['logo']
         SelectedModel = pool.get(data['model'])
         selected_obj = SelectedModel(data['id'])
         report_context.update(selected_obj.get_publishing_context(

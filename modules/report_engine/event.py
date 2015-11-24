@@ -1,11 +1,18 @@
-from itertools import groupby
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
+from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
 from trytond.cache import Cache
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.cog_utils import fields, model
+from trytond.model import Model as TrytonModel
 from trytond.wizard import StateView, Button
+
+from .report_engine import Printable
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -60,19 +67,34 @@ class EventTypeAction:
         return super(EventTypeAction, cls)._export_light() | {
             'report_templates'}
 
-    def execute(self, objects):
+    def execute(self, objects, event_code):
         pool = Pool()
         ReportProductionRequest = pool.get('report_production.request')
         if self.action != 'generate_documents':
-            return super(EventTypeAction, self).execute(objects)
-        if self.treatment_kind == 'synchronous':
-            objects_origins_templates = \
-                self.get_objects_origins_templates_for_event(objects)
-            for objects_, origin, template in objects_origins_templates:
-                template.produce_reports(objects_, origin=origin)
+            return super(EventTypeAction, self).execute(objects, event_code)
+
+        objects_origins_templates = \
+            self.get_objects_origins_templates_for_event(objects)
+
+        for objects_to_report, origin, template in objects_origins_templates:
+            context_ = self.build_context(objects_to_report, origin,
+                event_code)
+            if self.treatment_kind == 'synchronous':
+                template.produce_reports(objects_to_report, context_)
+            else:
+                ReportProductionRequest.create_report_production_requests(
+                    template, objects_to_report, context_)
+
+    def build_context(self, objects_to_report, origin, event_code):
+        context_ = {'origin': origin}
+        if origin and isinstance(origin, Printable):
+            functional_date = origin.get_report_functional_date(event_code)
         else:
-            ReportProductionRequest.create_report_production_requests(
-                self.report_templates, objects)
+            functional_date = objects_to_report[0].get_report_functional_date(
+                event_code)
+        if functional_date:
+            context_.update({'functional_date': functional_date})
+        return context_
 
     def get_targets_and_origin_from_object_and_template(self, object_,
             template):
@@ -125,11 +147,11 @@ class EventTypeAction:
                 res.append(event_object)
         return res
 
-    def get_objects_origins_templates_for_event(self, objects):
+    def get_objects_origins_templates_for_event(self, event_objects):
         obj_orig_templates = []
         for template, objs in \
                 self.get_templates_and_objs_for_event_type(
-                    objects).iteritems():
+                    event_objects).iteritems():
             for obj in objs:
                 to_print, origin = \
                     self.get_targets_and_origin_from_object_and_template(
@@ -154,7 +176,7 @@ class ReportProductionRequest(model.CoopSQL, model.CoopView):
     object_ = fields.Reference('Object To Report',
         'get_all_printable_models', readonly=True, select=True)
     treated = fields.Boolean('Treated', readonly=True, select=True)
-
+    context_ = fields.Char('Reporting Context')
     _get_all_printable_models_cache = Cache('get_all_printable_models')
 
     @classmethod
@@ -178,23 +200,39 @@ class ReportProductionRequest(model.CoopSQL, model.CoopView):
         return res
 
     @classmethod
-    def create_report_production_requests(cls, report_templates, objects):
-        cls.create([{'report_template': template, 'object_': str(x)}
-                for template in report_templates for x in objects])
+    def create_report_production_requests(cls, report_template, objects,
+            context_):
+        cls.make_json_serializable(context_)
+        cls.create([{'report_template': report_template, 'object_': str(x),
+                    'context_': json.dumps(context_, cls=JSONEncoder)}
+                for x in objects])
 
     @classmethod
     def treat_requests(cls, report_production_requests):
         all_reports, all_attachments = [], []
-        keyfunc = lambda x: x.report_template
-        sorted_requests = sorted(list(report_production_requests), key=keyfunc)
-
-        for template, requests in groupby(sorted_requests, key=keyfunc):
-            reports, attachments = template.produce_reports([
-                    x.object_ for x in requests])
+        for request in report_production_requests:
+            context_ = json.loads(request.context_, object_hook=JSONDecoder())
+            cls.instantiate_from_dict(context_)
+            reports, attachments = request.report_template.produce_reports([
+                    request.object_], context_)
             all_reports.extend(reports)
             all_attachments.extend(attachments)
-        cls.write(sorted_requests, {'treated': True})
+        cls.write(list(report_production_requests), {'treated': True})
         return all_reports, all_attachments
+
+    @classmethod
+    def make_json_serializable(cls, to_jsonize):
+        for name in ('origin', 'resource'):
+            if name in to_jsonize:
+                to_jsonize[name] = str(to_jsonize[name])
+
+    @classmethod
+    def instantiate_from_dict(cls, values):
+        pool = Pool()
+        for name in ('origin', 'resource'):
+            if name in values:
+                model_name, id_ = values[name].split(',')
+                values[name] = pool.get(model_name)(id_)
 
 
 class ConfirmReportProductionRequestTreat(model.CoopView):

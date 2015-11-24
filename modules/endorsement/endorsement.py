@@ -1174,6 +1174,11 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     def get_sender(self):
         return self.contracts[0].company.party
 
+    def get_report_functional_date(self, event_code):
+        if event_code == 'apply_endorsement':
+            return self.effective_date
+        return super(Endorsement, self).get_report_functional_date(event_code)
+
     @fields.depends('application_date')
     def on_change_with_application_date_str(self, name=None):
         if self.application_date:

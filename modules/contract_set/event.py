@@ -35,7 +35,7 @@ class EventTypeAction:
         if template.on_model and template.on_model.model == 'contract.set':
             contract_sets = self.get_contract_sets_from_object(object_)
             if contract_sets:
-                return contract_sets, object_
+                return contract_sets, self.get_report_origin(object_, template)
         return super(EventTypeAction,
             self).get_targets_and_origin_from_object_and_template(object_,
                 template)

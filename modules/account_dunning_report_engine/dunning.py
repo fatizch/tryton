@@ -43,7 +43,7 @@ class Level:
         ondelete='RESTRICT')
 
     def process_report_template(self, dunnings):
-        self.report_template.produce_reports(dunnings, direct_print=True)
+        self.report_template.produce_reports(dunnings)
 
     def process_dunnings(self, dunnings):
         if self.report_template:

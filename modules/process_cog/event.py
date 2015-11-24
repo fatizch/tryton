@@ -27,12 +27,12 @@ class EventTypeAction:
         return super(EventTypeAction, cls)._export_light() | {
             'process_to_initiate'}
 
-    def execute(self, objects):
+    def execute(self, objects, event_code):
         pool = Pool()
         Event = pool.get('event')
         Process = pool.get('process')
         if self.action != 'initiate_process':
-            return super(EventTypeAction, self).execute(objects)
+            return super(EventTypeAction, self).execute(objects, event_code)
         process_id = self.process_to_initiate
         if not process_id:
             return
