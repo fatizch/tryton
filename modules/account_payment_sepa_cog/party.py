@@ -35,6 +35,12 @@ class Party:
                 )]
 
     @classmethod
+    def copy(cls, parties, default=None):
+        default = {} if default is None else default.copy()
+        default.setdefault('sepa_mandates', None)
+        return super(Party, cls).copy(parties, default=default)
+
+    @classmethod
     def _export_light(cls):
         return super(Party, cls)._export_light() | {'sepa_mandates'}
 
