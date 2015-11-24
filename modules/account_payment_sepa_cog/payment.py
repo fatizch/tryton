@@ -284,17 +284,18 @@ class Payment:
 
     @classmethod
     def manual_set_reject_reason(cls, payments, reject_reason):
-        pool = Pool()
-        Payment = pool.get('account.payment')
-        if reject_reason.process_method != 'sepa':
-            return super(Payment, cls).manual_set_reject_reason(payments,
-                reject_reason)
-        sepa_merged_ids = set([p.sepa_merged_id for p in payments])
-        all_payments = Payment.search([
-                ('sepa_merged_id', 'in', sepa_merged_ids)])
-        if len(all_payments) != len(payments):
-            cls.raise_user_error('missing_payments')
-        cls.write(payments, {'sepa_return_reason_code': reject_reason.code})
+        super(Payment, cls).manual_set_reject_reason(payments, reject_reason)
+        if reject_reason.process_method == 'sepa':
+            sepa_merged_ids = set([p.sepa_merged_id for p in payments
+                if p.sepa_merged_id])
+            if sepa_merged_ids:
+                all_payments = cls.search([
+                        ('sepa_merged_id', 'in', sepa_merged_ids)])
+                if len(all_payments) != len(
+                        [x for x in payments if x.sepa_merged_id]):
+                    cls.raise_user_error('missing_payments')
+            cls.write(payments, {'sepa_return_reason_code': reject_reason.code}
+                )
 
     @classmethod
     def get_contract_id(cls, payments):

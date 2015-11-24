@@ -51,7 +51,8 @@ class Payment:
         pool = Pool()
         Move = pool.get('account.move')
         clearing_moves = ['account.move,%s' % payment.clearing_move.id
-            for payment in payments if payment.journal.post_clearing_move]
+            for payment in payments
+            if payment.clearing_move and payment.journal.post_clearing_move]
         super(Payment, cls).fail(payments)
         cancel_moves = Move.search([
                 ('origin', 'in', clearing_moves),
