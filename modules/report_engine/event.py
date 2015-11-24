@@ -185,6 +185,11 @@ class ReportProductionRequest(model.CoopSQL, model.CoopView):
         cls._order.insert(0, ('create_date', 'DESC'))
 
     @classmethod
+    def _export_light(cls):
+        return (super(ReportProductionRequest, cls)._export_light() |
+            {'object_', 'report_template'})
+
+    @classmethod
     def default_treated(cls):
         return False
 
@@ -203,7 +208,8 @@ class ReportProductionRequest(model.CoopSQL, model.CoopView):
     def create_report_production_requests(cls, report_template, objects,
             context_):
         cls.make_json_serializable(context_)
-        cls.create([{'report_template': report_template, 'object_': str(x),
+        return cls.create([{'report_template': report_template,
+                    'object_': str(x),
                     'context_': json.dumps(context_, cls=JSONEncoder)}
                 for x in objects])
 
@@ -211,6 +217,8 @@ class ReportProductionRequest(model.CoopSQL, model.CoopView):
     def treat_requests(cls, report_production_requests):
         all_reports, all_attachments = [], []
         for request in report_production_requests:
+            if not request.report_template:
+                continue
             context_ = json.loads(request.context_, object_hook=JSONDecoder())
             cls.instantiate_from_dict(context_)
             reports, attachments = request.report_template.produce_reports([
