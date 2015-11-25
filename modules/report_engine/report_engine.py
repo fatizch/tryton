@@ -239,7 +239,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 'sender': objects[0].get_sender(),
                 'sender_address': objects[0].get_sender_address(),
                 }
-        reporting_data.update(context_ or {})
+        reporting_data.update(context_)
         functional_date = context_.get('functional_date')
         if functional_date:
             with Transaction().set_context(
@@ -272,7 +272,9 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
             reports.append(self._generate_report(objects, context_))
         return reports
 
-    def produce_reports(self, objects, context_):
+    def produce_reports(self, objects, context_=None):
+        if context_ is None:
+            context_ = {}
         reports = self._generate_reports(objects, context_)
         self.print_reports(reports, context_)
         attachments = []
@@ -460,7 +462,7 @@ class Printable(Model):
         return self.rec_name
 
     @classmethod
-    def produce_reports(cls, objects, template_kind, context_):
+    def produce_reports(cls, objects, template_kind, context_=None):
         all_reports, all_attachments = [], []
         pool = Pool()
         Template = pool.get('report.template')
