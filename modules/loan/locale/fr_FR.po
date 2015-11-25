@@ -678,7 +678,7 @@ msgstr "Identifiant XML"
 
 msgctxt "help:loan,duration:"
 msgid "Deferal included"
-msgstr "Différé inclu"
+msgstr "Différé inclus"
 
 msgctxt "model:contract-loan,name:"
 msgid "Contract Loan"
