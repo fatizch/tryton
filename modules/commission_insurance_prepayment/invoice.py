@@ -44,7 +44,7 @@ class Invoice:
         for key, comms in groupby(commissions, key=key):
             key = dict(key)
             agent_options[(key['agent'].id, key['option'].id)] = list(comms)
-            all_options[key['option'].id] = (key['option'],
+            all_options[(key['option'].id, key['agent'].id)] = (key['agent'],
                 key['option'].parent_contract, key['option'].coverage.insurer)
 
         if not agent_options:
@@ -55,11 +55,11 @@ class Invoice:
         outstanding_prepayment_per_contract = defaultdict(lambda: 0)
         for (agent_id, option_id), amount in \
                 outstanding_prepayment.iteritems():
-            outstanding_prepayment_per_contract[all_options[option_id]] += \
-                amount
+            outstanding_prepayment_per_contract[
+                all_options[(option_id, agent_id)]] += amount
 
         for (agent_id, option_id), comms in agent_options.iteritems():
-            key = all_options[option_id]
+            key = all_options[(option_id, agent_id)]
             for commission in comms:
                 if key not in outstanding_prepayment_per_contract:
                     continue
