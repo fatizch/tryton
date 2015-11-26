@@ -55,7 +55,7 @@ class ContractContact(model._RevisionMixin, model.CoopSQL, model.CoopView):
             return utils.get_value_at_date(instances, utils.today(),
                 'start_date')
 
-    @fields.depends('party')
+    @fields.depends('party', 'address')
     def on_change_with_address(self):
         if not self.party or not self.address:
             address = self.get_default_address_from_party()
