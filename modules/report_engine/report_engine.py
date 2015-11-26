@@ -67,6 +67,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
             ('', ''),
             ('original', 'Original'),
             ('pdf', 'Pdf'),
+            ('xls95', 'xls'),
             ], 'Format for internal EDM', help="If no format is specified, "
             "the document will not be stored in the internal EDM")
     document_desc = fields.Many2One('document.description',
