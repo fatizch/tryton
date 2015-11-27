@@ -134,7 +134,12 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     @classmethod
     def _export_light(cls):
         return super(ReportTemplate, cls)._export_light() | {'products',
-            'document_desc', 'on_model', 'event_types'}
+            'document_desc', 'on_model'}
+
+    @classmethod
+    def _export_skips(cls):
+        return super(ReportTemplate, cls)._export_skips() | {
+            'event_type_actions'}
 
     @classmethod
     def default_convert_to_pdf(cls):
