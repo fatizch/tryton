@@ -124,6 +124,17 @@ class EventType(model.CoopSQL, model.CoopView):
         super(EventType, cls).write(*args)
 
     @classmethod
+    def _allow_update_links_on_xml_rec(cls):
+        return True
+
+    def export_json(self, skip_fields=None, already_exported=None,
+            output=None, main_object=None, configuration=None):
+        if not EventType.check_xml_record([self], None):
+            skip_fields = set(self._fields.keys()) - {'actions'}
+        return super(EventType, self).export_json(skip_fields,
+            already_exported, output, main_object, configuration)
+
+    @classmethod
     def delete(cls, instances):
         Pool().get('event')._event_type_cache.clear()
         super(EventType, cls).delete(*instances)

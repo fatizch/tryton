@@ -102,6 +102,10 @@ class ExportImportMixin(Model):
         return [('id', 'in', [x[0] for x in cursor.fetchall()])]
 
     @classmethod
+    def _allow_update_links_on_xml_rec(cls):
+        return False
+
+    @classmethod
     def _export_format_result(cls, result):
         return (result[0], json.dumps(result[1], cls=JSONEncoder, indent=4,
                 sort_keys=True, separators=(',', ': ')), result[2])
@@ -307,7 +311,8 @@ class ExportImportMixin(Model):
         if value['imported']:
             return value['record']
         record = value['record']
-        if record and not cls.check_xml_record([record], None):
+        if record and (not cls.check_xml_record([record], None) and
+                not cls._allow_update_links_on_xml_rec()):
             return record
         new_values = cls._import_json(value['data'], record)
         value['imported'] = True
