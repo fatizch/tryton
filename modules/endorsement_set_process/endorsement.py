@@ -75,6 +75,10 @@ class EndorsementSet(CogProcessFramework):
                 })
 
     @classmethod
+    def _export_skips(cls):
+        return super(EndorsementSet, cls)._export_skips() | {'attachments'}
+
+    @classmethod
     @model.CoopView.button_action('process_cog.act_resume_process')
     def button_resume_process(cls, endorsement_sets):
         pass

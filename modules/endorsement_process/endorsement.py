@@ -27,6 +27,8 @@ class Endorsement(CogProcessFramework):
     created_attachments = fields.Function(
         fields.One2Many('ir.attachment', 'origin',
             'Created Attachments'), 'get_created_attachments')
+    attachments = fields.One2Many('ir.attachment', 'resource',
+        'Attachments')
 
     @classmethod
     def __setup__(cls):
@@ -37,8 +39,8 @@ class Endorsement(CogProcessFramework):
 
     @classmethod
     def _export_skips(cls):
-        return (super(Endorsement, cls)._export_skips() |
-            set(['endorsement_parts_union']))
+        return super(Endorsement, cls)._export_skips() | {
+            'endorsement_parts_union', 'attachments'}
 
     def get_created_attachments(self, name):
         pool = Pool()
