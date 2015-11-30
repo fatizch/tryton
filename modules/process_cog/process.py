@@ -301,18 +301,20 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
 
     @classmethod
     def write(cls, *args):
+        Log = Pool().get('process.log')
         actions = iter(args)
-        for instances, values in zip(actions, actions):
+        zipped = zip(actions, actions)
+        for instances, _ in zipped:
             for instance in instances:
                 if instance.current_log and instance.current_log.locked:
                     if instance.current_log.user.id != Transaction().user:
                         cls.raise_user_error('lock_fault', (
                                 instance.get_rec_name(None),
                                 instance.current_log.user.get_rec_name(None)))
-            super(CogProcessFramework, cls).write(*args)
-            Log = Pool().get('process.log')
-            good_session = Transaction().context.get('session')
+        super(CogProcessFramework, cls).write(*args)
 
+        good_session = Transaction().context.get('session')
+        for instances, _ in zipped:
             for instance in instances:
                 good_log = instance.current_log
                 if not good_log:
