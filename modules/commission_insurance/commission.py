@@ -13,6 +13,7 @@ from trytond.wizard import StateAction
 
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
+from trytond.cache import Cache
 
 from trytond.modules.cog_utils import fields, model, export, coop_string, \
     coop_date, utils
@@ -343,10 +344,36 @@ class PlanLines(export.ExportImportMixin):
         'option', 'Options')
     options_extract = fields.Function(fields.Text('Options'),
         'get_options_extract')
+    _get_matching_cache = Cache('get_matching_cache')
+
+    @classmethod
+    def create(cls, vlist):
+        super(PlanLines, cls).create(vlist)
+        cls._get_matching_cache.clear()
+
+    @classmethod
+    def write(cls, *args):
+        super(PlanLines, cls).write(*args)
+        cls._get_matching_cache.clear()
+
+    @classmethod
+    def delete(cls, plan_lines):
+        super(PlanLines, cls).delete(plan_lines)
+        cls._get_matching_cache.clear()
 
     def match(self, pattern):
-        if 'coverage' in pattern:
-            return pattern['coverage'] in self.options
+        if 'coverage' not in pattern:
+            return False
+        coverage_id = pattern['coverage'].id
+        key = (self.id, coverage_id)
+        option_ids = self._get_matching_cache.get(key, -1)
+
+        if option_ids != -1:
+            return coverage_id in option_ids
+
+        option_ids = {o.id for o in self.options}
+        self._get_matching_cache.set(key, option_ids)
+        return coverage_id in option_ids
 
     def get_options_extract(self, name):
         return ' \n'.join((option.name for option in self.options))

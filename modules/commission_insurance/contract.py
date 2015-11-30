@@ -90,9 +90,10 @@ class Contract:
         if not domain:
             return
         agents = Agent.search(domain)
+        pattern = self.get_insurer_pattern(coverage, line)
         for agent in agents:
             for plan_line in agent.plan.lines:
-                if plan_line.match(self.get_insurer_pattern(coverage, line)):
+                if plan_line.match(pattern):
                     return agent
 
     def finalize_invoices_lines(self, lines):
