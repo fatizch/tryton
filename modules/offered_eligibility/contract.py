@@ -41,6 +41,8 @@ class ContractOption:
                 })
 
     def check_eligibility(self):
+        if self.status == 'void':
+            return True
         exec_context = {'date': self.start_date}
         self.init_dict_for_rule_engine(exec_context)
         if not self.coverage.check_eligibility(exec_context):
