@@ -127,6 +127,15 @@ class BillingMode(model.CoopSQL, model.CoopView):
     def is_master_object(cls):
         return True
 
+    @classmethod
+    def _export_skips(cls):
+        return super(BillingMode, cls)._export_skips() | {'products',
+            'allowed_payment_terms'}
+
+    @classmethod
+    def _export_light(cls):
+        return super(BillingMode, cls)._export_light() | {'fees'}
+
     def get_allowed_direct_debit_days(self):
         if not self.direct_debit:
             return [('', '')]
@@ -146,12 +155,6 @@ class BillingMode(model.CoopSQL, model.CoopView):
     @staticmethod
     def default_sync_month():
         return ''
-
-    @classmethod
-    def _export_skips(cls):
-        result = super(BillingMode, cls)._export_skips()
-        result.add('products')
-        return result
 
     def get_rrule(self, start, until=None):
         bymonthday = int(self.sync_day) if self.sync_day else None
@@ -381,6 +384,11 @@ class BillingModePaymentTermRelation(model.CoopSQL, model.CoopView):
                 '"offered_product-account_invoice_payment_term" as p,'
                 '"offered_product-offered_billing_mode" as b '
                 'where p.product=b.product')
+
+    @classmethod
+    def _export_light(cls):
+        return super(BillingModePaymentTermRelation, cls)._export_light() | {
+            'payment_term'}
 
 
 class OptionDescription:
