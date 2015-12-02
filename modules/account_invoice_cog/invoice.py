@@ -1,3 +1,4 @@
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
@@ -8,7 +9,30 @@ from trytond.modules.report_engine import Printable
 __metaclass__ = PoolMeta
 __all__ = [
     'Invoice',
+    'InvoiceLine',
     ]
+
+
+class InvoiceLine:
+    __name__ = 'account.invoice.line'
+
+    @classmethod
+    def __setup__(cls):
+        super(InvoiceLine, cls).__setup__()
+        cls.company.select = False
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(InvoiceLine, cls).__register__(module_name)
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor()
+        table = TableHandler(cursor, cls, module_name)
+
+        # These indexes optimizes invoice generation
+        # And certainly other coog services
+        table.index_action('company', 'remove')
+        table.index_action(['company', 'id'], 'add')
+        table.index_action(['invoice', 'company'], 'add')
 
 
 class Invoice(export.ExportImportMixin, Printable):
@@ -21,6 +45,14 @@ class Invoice(export.ExportImportMixin, Printable):
     color = fields.Function(
         fields.Char('Color'),
         'get_color')
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(Invoice, cls).__register__(module_name)
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor()
+        table = TableHandler(cursor, cls, module_name)
+        table.index_action(['state', 'company'], 'add')
 
     @classmethod
     def __setup__(cls):

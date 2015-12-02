@@ -8,6 +8,7 @@ from sql.aggregate import Sum, Max
 from sql.conditionals import Case, Coalesce
 from sql.functions import Round
 
+from trytond import backend
 from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import PoolMeta, Pool
 from trytond.tools import grouped_slice, reduce_ids
@@ -399,7 +400,7 @@ class PremiumAmount(model.CoopSQL, model.CoopView):
         ondelete='CASCADE')
     # XXX duplicate with premium but it is not possible with current design to
     # search via premium
-    contract = fields.Many2One('contract', 'Contract', select=True,
+    contract = fields.Many2One('contract', 'Contract', select=False,
         ondelete='CASCADE', required=True)
     period_start = fields.Date('Period Start', select=True)
     period_end = fields.Date('Period End', select=True)
@@ -416,6 +417,17 @@ class PremiumAmount(model.CoopSQL, model.CoopView):
     loan = fields.Function(
         fields.Many2One('loan', 'Loan'),
         'get_loan')
+
+    def __register__(cls, module_name):
+        super(PremiumAmount, cls).__register__(module_name)
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor()
+        table = TableHandler(cursor, cls, module_name)
+
+        # These indexes optimizes invoice generation
+        # And certainly other coog services
+        table.index_action('contract', 'remove')
+        table.index_action(['contract', 'period_start', 'period_end'], 'add')
 
     def get_type(self, name=None):
         if self.premium:

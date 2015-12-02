@@ -1,3 +1,5 @@
+from trytond import backend
+from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.modules.cog_utils import export, fields, utils, coop_string
@@ -123,6 +125,23 @@ class Line(export.ExportImportMixin):
     post_date = fields.Function(
         fields.Date('Post Date'),
         'get_move_field', searcher='search_move_field')
+
+    @classmethod
+    def __setup__(cls):
+        super(Line, cls).__setup__()
+        cls.account.select = False
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(Line, cls).__register__(module_name)
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor()
+        table = TableHandler(cursor, cls, module_name)
+
+        # These indexes optimizes invoice generation
+        # And certainly other coog services
+        table.index_action('account', 'remove')
+        table.index_action(['account', 'reconciliation'], 'add')
 
     @classmethod
     def view_attributes(cls):

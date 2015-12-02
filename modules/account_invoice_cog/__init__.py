@@ -9,6 +9,7 @@ from .configuration import *
 
 def register():
     Pool.register(
+        InvoiceLine,
         Invoice,
         TestCaseModel,
         Party,
