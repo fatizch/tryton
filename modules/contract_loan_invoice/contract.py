@@ -423,7 +423,7 @@ class PremiumAmount(model.CoopSQL, model.CoopView):
         super(PremiumAmount, cls).__register__(module_name)
 
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor()
+        cursor = Transaction().cursor
         table = TableHandler(cursor, cls, module_name)
 
         # These indexes optimizes invoice generation
