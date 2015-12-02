@@ -458,7 +458,7 @@ class Printable(Model):
 
     def get_publishing_context(self, cur_context):
         return {
-            'Today': utils.today(),
+            'Today': datetime.now().date(),
             }
 
     def get_report_functional_date(self, event_code):
