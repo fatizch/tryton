@@ -779,11 +779,25 @@ class CreateInvoice:
         action['pyson_search_value'] = encoder.encode([])
         return action, {}
 
+    def get_domain(self):
+        domain = super(CreateInvoice, self).get_domain()
+        if not self.ask.all_brokers:
+            domain.append(('agent.party', 'in', self.ask.brokers))
+        return domain
+
 
 class CreateInvoiceAsk:
     __name__ = 'commission.create_invoice.ask'
 
     post_invoices = fields.Boolean('Post Invoices')
+    all_brokers = fields.Boolean('All brokers')
+    brokers = fields.Many2Many('party.party', None, None, 'Brokers',
+        states={
+            'required': ~Eval('all_brokers'),
+            'invisible': Bool(Eval('all_brokers')),
+            },
+        depends=['all_brokers'],
+        domain=[('is_broker', '=', True)])
 
     @classmethod
     def __setup__(cls):
@@ -793,6 +807,10 @@ class CreateInvoiceAsk:
     @staticmethod
     def default_type_():
         return 'out'
+
+    @staticmethod
+    def default_all_brokers():
+        return True
 
 
 class ChangeBroker(Wizard):

@@ -3,5 +3,8 @@
     <xpath expr="/form" position="inside">
         <label name="post_invoices"/>
         <field name="post_invoices"/>
+        <label name="all_brokers"/>
+        <field name="all_brokers"/>
+        <field name="brokers" colspan="4" view_ids="commission_insurance.broker_view_list"/>
     </xpath>
 </data>

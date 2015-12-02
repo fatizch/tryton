@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -173,6 +173,14 @@ msgstr "ID"
 msgctxt "field:commission.create_agents.parties,parties:"
 msgid "Parties"
 msgstr "Tiers"
+
+msgctxt "field:commission.create_invoice.ask,all_brokers:"
+msgid "All brokers"
+msgstr "Tout courtier"
+
+msgctxt "field:commission.create_invoice.ask,brokers:"
+msgid "Brokers"
+msgstr "Courtiers"
 
 msgctxt "field:commission.create_invoice.ask,post_invoices:"
 msgid "Post Invoices"
@@ -880,13 +888,25 @@ msgctxt "model:commission.agent,name:commission."
 msgid "Commission Agent"
 msgstr "Protocole de commissionnement"
 
+msgctxt "model:commission.create_invoice.ask,name:commission."
+msgid "Create Commission Invoice"
+msgstr "Générer les bordereaux de commission"
+
 msgctxt "model:ir.action,name:commission.act_agent_form"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
 
+msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
+msgid "Create Commission Invoices"
+msgstr "Générer les bordereaux de commission"
+
 msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "model:ir.ui.menu,name:commission.menu_commission_create_invoice"
+msgid "Create Commission Invoices"
+msgstr "Générer les bordereaux de commission"
 
 msgctxt "model:product.template-commission.agent,name:commission."
 msgid "Product Template - Commission Agent"
@@ -907,3 +927,7 @@ msgstr "Protocole de commissionnement"
 msgctxt "view:commission.agent:commission."
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "view:commission.create_invoice.ask:commission."
+msgid "Create Commission Invoice"
+msgstr "Générer les bordereaux de commission"
