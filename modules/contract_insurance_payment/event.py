@@ -7,23 +7,8 @@ from trytond.transaction import Transaction
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'Event',
     'EventLog',
     ]
-
-
-class Event:
-    __name__ = 'event'
-
-    @classmethod
-    def notify_events(cls, objects, event_code, description=None, **kwargs):
-        pool = Pool()
-        Contract = pool.get('contract')
-        if event_code == 'activate_contract':
-            Contract.invoice_non_periodic_premiums(objects,
-                'at_contract_signature')
-        super(Event, cls).notify_events(objects, event_code, description,
-            **kwargs)
 
 
 class EventLog:
@@ -43,14 +28,15 @@ class EventLog:
             pool = Pool()
             event_log = cls.__table__()
             to_update = cls.__table__()
-            contract_invoice = pool.get('contract.invoice').__table__()
-            update_data = event_log.join(contract_invoice, condition=(
+            payment = pool.get('account.payment').__table__()
+            move_line = pool.get('account.move.line').__table__()
+            update_data = event_log.join(payment, condition=(
                     Cast(Substring(event_log.object_, Position(',',
                                 event_log.object_) + Literal(1)),
-                    cls.id.sql_type().base) == contract_invoice.invoice)
-                ).select(contract_invoice.contract.as_('contract_id'),
-                    event_log.id,
-                where=event_log.object_.like('account.invoice,%'))
+                    cls.id.sql_type().base) == payment.id)
+                ).join(move_line, condition=(payment.line == move_line.id)
+                ).select(move_line.contract.as_('contract_id'), event_log.id,
+                where=event_log.object_.like('account.payment,%'))
             cursor.execute(*to_update.update(
                     columns=[to_update.contract],
                     values=[update_data.contract_id],
@@ -59,6 +45,6 @@ class EventLog:
 
     @classmethod
     def get_related_instances(cls, object_, model_name):
-        if model_name == 'contract' and object_.__name__ == 'account.invoice':
-            return [object_.contract] if object_.contract else []
+        if model_name == 'contract' and object_.__name__ == 'account.payment':
+            return [object_.line.contract] if object_.line else []
         return super(EventLog, cls).get_related_instances(object_, model_name)

@@ -13,6 +13,7 @@ def register():
         ReportTemplate,
         Configuration,
         EventTypeAction,
+        EventLog,
         module='contract_set', type_='model')
     Pool.register(
         ContractSetDecline,

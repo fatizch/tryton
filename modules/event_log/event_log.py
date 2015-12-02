@@ -71,18 +71,32 @@ class EventLog(model.CoopSQL, model.CoopView):
             date = kwargs['date']
         else:
             date = datetime.datetime.now()
-        return cls.create([{
+        log_keys = cls.get_event_keys(objects)
+        log_dicts = []
+        for key in sum(log_keys.values(), []):
+            key.update({
                     'date': date,
-                    'object_': '%s,%s' % (object_.__name__, object_.id),
                     'user': user_id,
                     'event_type': event_type_id,
-                    'description': description}
-                for object_ in objects])
+                    'description': description})
+            log_dicts.append(key)
+        return cls.create(log_dicts)
 
     @classmethod
     def create_event_logs_from_trigger(cls, objects, trigger):
         return cls.create_event_logs(objects, trigger.event_type.id,
             trigger.name)
+
+    @classmethod
+    def get_event_keys(cls, objects):
+        return {object_: [{'object_': str(object_)}]
+            for object_ in objects}
+
+    @classmethod
+    def get_related_instances(cls, object_, model_name):
+        # Empty now, will be overriden for example in contract module to define
+        # relations between objects
+        return []
 
     @classmethod
     def add_func_key(cls, values):

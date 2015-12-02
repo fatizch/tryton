@@ -4,6 +4,7 @@ from .payment import *
 from .configuration import *
 from .offered import *
 from .move import *
+from .event import *
 
 
 def register():
@@ -15,4 +16,5 @@ def register():
         JournalFailureAction,
         BillingMode,
         MoveLine,
+        EventLog,
         module='contract_insurance_payment', type_='model')

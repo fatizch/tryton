@@ -1,8 +1,14 @@
-from trytond.pool import PoolMeta
+from sql import Cast, Literal
+from sql.functions import Substring, Position
+
+from trytond import backend
+from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 
 __metaclass__ = PoolMeta
 __all__ = [
     'EventTypeAction',
+    'EventLog',
     ]
 
 
@@ -39,3 +45,40 @@ class EventTypeAction:
         return super(EventTypeAction,
             self).get_targets_and_origin_from_object_and_template(object_,
                 template)
+
+
+class EventLog:
+    __name__ = 'event.log'
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        event_h = TableHandler(cursor, cls, module_name)
+        to_migrate = event_h.column_exist('contract')
+
+        super(EventLog, cls).__register__(module_name)
+
+        # Migration from 1.4 : Set contract field
+        if to_migrate:
+            pool = Pool()
+            event_log = cls.__table__()
+            to_update = cls.__table__()
+            contract = pool.get('contract').__table__()
+            update_data = event_log.join(contract, condition=(
+                    Cast(Substring(event_log.object_, Position(',',
+                                event_log.object_) + Literal(1)),
+                    cls.id.sql_type().base) == contract.contract_set)
+                ).select(contract.id.as_('contract_id'), event_log.id,
+                where=event_log.object_.like('contract.set,%'))
+            cursor.execute(*to_update.update(
+                    columns=[to_update.contract],
+                    values=[update_data.contract_id],
+                    from_=[update_data],
+                    where=update_data.id == to_update.id))
+
+    @classmethod
+    def get_related_instances(cls, object_, model_name):
+        if model_name == 'contract' and object_.__name__ == 'contract.set':
+            return list(object_.contracts)
+        return super(EventLog, cls).get_related_instances(object_, model_name)

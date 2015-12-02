@@ -41,6 +41,9 @@ class Dunning(export.ExportImportMixin):
                 'last_process_date': utils.today(),
                 })
 
+    def get_rec_name(self, name):
+        return self.level.rec_name
+
 
 class Level(export.ExportImportMixin):
     __name__ = 'account.dunning.level'

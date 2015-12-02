@@ -46,6 +46,7 @@ def register():
         SynthesisMenu,
         RuleEngineRuntime,
         Event,
+        EventLog,
         module='contract_insurance_invoice', type_='model')
     Pool.register(
         InvoiceContract,

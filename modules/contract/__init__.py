@@ -44,6 +44,7 @@ def register():
         ContractSelectHoldReason,
         ContractReactivateCheck,
         EventTypeAction,
+        EventLog,
         module='contract', type_='model')
     Pool.register(
         OptionSubscription,
