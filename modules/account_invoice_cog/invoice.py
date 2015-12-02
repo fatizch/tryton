@@ -25,7 +25,7 @@ class InvoiceLine:
     def __register__(cls, module_name):
         super(InvoiceLine, cls).__register__(module_name)
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor()
+        cursor = Transaction().cursor
         table = TableHandler(cursor, cls, module_name)
 
         # These indexes optimizes invoice generation
@@ -50,7 +50,7 @@ class Invoice(export.ExportImportMixin, Printable):
     def __register__(cls, module_name):
         super(Invoice, cls).__register__(module_name)
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor()
+        cursor = Transaction().cursor
         table = TableHandler(cursor, cls, module_name)
         table.index_action(['state', 'company'], 'add')
 
