@@ -135,7 +135,7 @@ class Line(export.ExportImportMixin):
     def __register__(cls, module_name):
         super(Line, cls).__register__(module_name)
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor()
+        cursor = Transaction().cursor
         table = TableHandler(cursor, cls, module_name)
 
         # These indexes optimizes invoice generation
