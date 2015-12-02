@@ -418,8 +418,10 @@ class PremiumAmount(model.CoopSQL, model.CoopView):
         fields.Many2One('loan', 'Loan'),
         'get_loan')
 
+    @classmethod
     def __register__(cls, module_name):
         super(PremiumAmount, cls).__register__(module_name)
+
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().cursor()
         table = TableHandler(cursor, cls, module_name)
