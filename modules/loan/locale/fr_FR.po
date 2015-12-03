@@ -19,6 +19,14 @@ msgctxt "error:contract:"
 msgid "There must be at least one loan"
 msgstr "Il doit y avoir au moins un prêt"
 
+msgctxt "error:contract.option.extra_premium:"
+msgid "Initial Capital Per Mil"
+msgstr "Pourmillage sur capital initial"
+
+msgctxt "error:contract.option.extra_premium:"
+msgid "Remaining Capital Per Mil"
+msgstr "Pourmillage sur capital restant dû"
+
 msgctxt "error:loan.increment:"
 msgid "Number of payments must be > 0"
 msgstr "Le nombre de paiements doit être > 0"

@@ -2,12 +2,13 @@
 import datetime
 from collections import defaultdict
 
+from sql import Literal
 from sql.conditionals import Coalesce
 
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool, If, Len
+from trytond.pyson import Eval, Bool, If, Len, Not, In
 
 from trytond.modules.cog_utils import fields, model, coop_string, coop_date, \
     utils
@@ -320,18 +321,46 @@ class ExtraPremium:
     __name__ = 'contract.option.extra_premium'
 
     capital_per_mil_rate = fields.Numeric('Rate on Capital', states={
-            'invisible': Eval('calculation_kind', '') != 'capital_per_mil',
-            'required': Eval('calculation_kind', '') == 'capital_per_mil'},
+            'invisible': Not(In(Eval('calculation_kind', ''), [
+                        'initial_capital_per_mil',
+                        'remaining_capital_per_mil'])),
+            'required': In(Eval('calculation_kind', ''), [
+                    'initial_capital_per_mil',
+                    'remaining_capital_per_mil'])},
         digits=(16, 5), depends=['calculation_kind'])
     is_loan = fields.Function(
         fields.Boolean('Is Loan'),
         'on_change_with_is_loan')
 
     @classmethod
+    def __setup__(cls):
+        super(ExtraPremium, cls).__setup__()
+        cls._error_messages.update({
+                'initial_capital_per_mil_label': 'Initial Capital Per Mil',
+                'remaining_capital_per_mil_label': 'Remaining Capital Per Mil',
+                })
+
+    @classmethod
+    def __register__(cls, module_name):
+        cursor = Transaction().cursor
+
+        super(ExtraPremium, cls).__register__(module_name)
+
+        # Migration from 1.4 : Convert 'capital_per_mil' to
+        # 'initial_capital_per_mil'
+        extra_table = cls.__table__()
+        cursor.execute(*extra_table.update(
+                columns=[extra_table.calculation_kind],
+                values=[Literal('initial_capital_per_mil')],
+                where=(extra_table.calculation_kind == 'capital_per_mil')))
+
+    @classmethod
     def view_attributes(cls):
         return super(ExtraPremium, cls).view_attributes() + [(
                 '/form/group[@id="capital_per_mil"]', 'states',
-                {'invisible': Eval('calculation_kind') != 'capital_per_mil'})]
+                {'invisible': Not(In(Eval('calculation_kind'),
+                            ['initial_capital_per_mil',
+                                'remaining_capital_per_mil']))})]
 
     @fields.depends('option')
     def on_change_with_is_loan(self, name=None):
@@ -341,21 +370,33 @@ class ExtraPremium:
     def get_possible_extra_premiums_kind(self):
         result = super(ExtraPremium, self).get_possible_extra_premiums_kind()
         if self.is_loan:
-            result.append(('capital_per_mil', 'Pourmillage'))
+            result.append(('initial_capital_per_mil',
+                    self.raise_user_error('initial_capital_per_mil_label',
+                        raise_exception=False)))
+            result.append(('remaining_capital_per_mil',
+                    self.raise_user_error('remaining_capital_per_mil_label',
+                        raise_exception=False)))
         return result
 
     def calculate_premium_amount(self, args, base):
-        if not self.calculation_kind == 'capital_per_mil':
+        if self.calculation_kind == 'initial_capital_per_mil':
+            if args['share'].loan.end_date <= args['date']:
+                return 0
+            return args['loan'].amount * self.capital_per_mil_rate * \
+                args['share'].share
+        elif self.calculation_kind == 'remaining_capital_per_mil':
+            if args['share'].loan.end_date <= args['date']:
+                return 0
+            return args['loan'].get_outstanding_loan_balance(
+                at_date=args['date']) * self.capital_per_mil_rate * \
+                args['share'].share
+        else:
             return super(ExtraPremium, self).calculate_premium_amount(args,
                 base)
-        if args['share'].loan.end_date <= args['date']:
-            return 0
-        return args['loan'].amount * self.capital_per_mil_rate * \
-            args['share'].share
 
     def get_value_as_string(self, name):
-        if (self.calculation_kind == 'capital_per_mil'
-                and self.capital_per_mil_rate):
+        if self.calculation_kind in ('initial_capital_per_mil',
+                'remaining_capital_per_mil') and self.capital_per_mil_rate:
             return u'%s ‰' % coop_string.format_number('%.2f',
                 self.capital_per_mil_rate * 1000)
         return super(ExtraPremium, self).get_value_as_string(name)

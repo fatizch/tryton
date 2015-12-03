@@ -12,7 +12,7 @@ from trytond import backend
 from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import PoolMeta, Pool
 from trytond.tools import grouped_slice, reduce_ids
-from trytond.pyson import Eval, And, Or
+from trytond.pyson import Eval, And, Or, Not, In
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, model, utils
@@ -63,10 +63,12 @@ class ExtraPremium:
         super(ExtraPremium, cls).__setup__()
         cls.flat_amount_frequency.states['invisible'] = And(
             cls.flat_amount_frequency.states['invisible'],
-            Eval('calculation_kind', '') != 'capital_per_mil')
+            Not(In(Eval('calculation_kind', ''), ['initial_capital_per_mil',
+                        'remaining_capital_per_mil'])))
         cls.flat_amount_frequency.states['required'] = Or(
             cls.flat_amount_frequency.states['required'],
-            Eval('calculation_kind', '') == 'capital_per_mil')
+            In(Eval('calculation_kind', ''), ['initial_capital_per_mil',
+                    'remaining_capital_per_mil']))
 
 
 class Premium:

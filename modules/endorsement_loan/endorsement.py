@@ -2,7 +2,7 @@ import datetime
 from collections import defaultdict
 from sql.functions import CurrentTimestamp
 
-from sql import Null, Column
+from sql import Null, Column, Literal
 from sql.conditionals import Coalesce
 
 from trytond import backend
@@ -204,6 +204,20 @@ class PremiumAmount:
 class ExtraPremium:
     __metaclass__ = PoolMeta
     __name__ = 'contract.option.extra_premium'
+
+    @classmethod
+    def __register__(cls, module_name):
+        cursor = Transaction().cursor
+
+        super(ExtraPremium, cls).__register__(module_name)
+
+        # Migration from 1.4 : Convert 'capital_per_mil' to
+        # 'initial_capital_per_mil'
+        extra_table = cls.__table_history__()
+        cursor.execute(*extra_table.update(
+                columns=[extra_table.calculation_kind],
+                values=[Literal('initial_capital_per_mil')],
+                where=(extra_table.calculation_kind == 'capital_per_mil')))
 
     @fields.depends('option')
     def on_change_with_is_loan(self, name=None):

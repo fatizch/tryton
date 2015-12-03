@@ -1,3 +1,4 @@
+* Manage extra premium depending on remaining capital amount
 * Allow to insert manual increments to modify the loan at effective date (reimbursement, rate modification...)
 * Add warning on loan if last payment is way different from last increment payment amount
 * Allow to have different payment frequency during the life of the loan (one per increment)
