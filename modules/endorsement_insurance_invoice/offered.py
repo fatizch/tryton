@@ -33,6 +33,8 @@ class EndorsementDefinition:
         return contract_endorsement.endorsement.effective_date
 
     def get_rebill_end(self, contract_endorsement):
+        if contract_endorsement.contract.status == 'void':
+            return None
         return contract_endorsement.contract.activation_history[-1].end_date \
             or max(contract_endorsement.contract.last_invoice_end or
             datetime.date.min, contract_endorsement.endorsement.effective_date)
