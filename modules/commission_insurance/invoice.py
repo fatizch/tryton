@@ -105,6 +105,7 @@ class InvoiceLine:
         return commissions
 
     def _get_commission_amount(self, amount, plan, pattern=None):
+        product = self.product
         if self.details:
             option = self.details[0].get_option()
             if option:
@@ -118,7 +119,9 @@ class InvoiceLine:
                         'plan': plan,
                         'invoice_line': self,
                         })
-        commission_amount = plan.compute(amount, self.product, pattern)
+            elif self.details[0].fee and not product:
+                product = self.details[0].fee.product
+        commission_amount = plan.compute(amount, product, pattern)
         return commission_amount
 
     def get_move_line(self):

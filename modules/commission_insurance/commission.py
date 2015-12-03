@@ -363,7 +363,10 @@ class PlanLines(export.ExportImportMixin):
 
     def match(self, pattern):
         if 'coverage' not in pattern:
-            return False
+            if 'product' in pattern and self.product:
+                return pattern['product'] == self.product.id
+            else:
+                return False
         coverage_id = pattern['coverage'].id
         key = (self.id, coverage_id)
         option_ids = self._get_matching_cache.get(key, -1)

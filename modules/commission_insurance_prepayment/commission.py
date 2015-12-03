@@ -68,7 +68,8 @@ class Commission:
         return invoice_line
 
     def _group_to_agent_option_key(self):
-        return (('agent', self.agent), ('option', self.commissioned_option))
+        return (('agent', self.agent), ('option',
+                getattr(self, 'commissioned_option', None)))
 
     @classmethod
     def copy(cls, commissions, default=None):

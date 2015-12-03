@@ -43,6 +43,8 @@ class Invoice:
 
         for key, comms in groupby(commissions, key=key):
             key = dict(key)
+            if not key['option']:
+                continue
             agent_options[(key['agent'].id, key['option'].id)] = list(comms)
             all_options[(key['option'].id, key['agent'].id)] = (key['agent'],
                 key['option'].parent_contract, key['option'].coverage.insurer)
