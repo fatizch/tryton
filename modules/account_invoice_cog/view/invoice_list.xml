@@ -10,6 +10,6 @@
     </xpath>
     <xpath expr="/tree/field[@name='type']" position="replace"/>
     <xpath expr="/tree" position="inside">
-        <field name="type" invisible="1"/>
+        <field name="type" tree_invisible="1"/>
     </xpath>
 </data>
