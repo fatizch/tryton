@@ -546,6 +546,14 @@ msgctxt "model:ir.ui.menu,name:menu_invoice_insurer_invoice"
 msgid "Insurer Invoices"
 msgstr "Bordereaux assureurs"
 
+msgctxt "selection:account.invoice,business_type:"
+msgid "Broker Invoice"
+msgstr "Bordereau courtier"
+
+msgctxt "selection:account.invoice,business_type:"
+msgid "Insurer Invoice"
+msgstr "Bordereau assureur"
+
 msgctxt "selection:commission.plan,type_:"
 msgid "Broker"
 msgstr "Courtier"

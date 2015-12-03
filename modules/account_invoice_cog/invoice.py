@@ -3,6 +3,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
+from trytond.modules.account_invoice.invoice import _TYPE
 from trytond.modules.cog_utils import export, fields
 from trytond.modules.report_engine import Printable
 
@@ -45,6 +46,9 @@ class Invoice(export.ExportImportMixin, Printable):
     color = fields.Function(
         fields.Char('Color'),
         'get_color')
+    business_type = fields.Function(
+        fields.Selection(_TYPE, 'Type'),
+        'get_business_type')
 
     @classmethod
     def __register__(cls, module_name):
@@ -105,6 +109,9 @@ class Invoice(export.ExportImportMixin, Printable):
         elif self.state == 'posted':
             return 'blue'
         return 'black'
+
+    def get_business_type(self, name):
+        return self.type
 
     @classmethod
     def post(cls, invoices):

@@ -1040,6 +1040,10 @@ msgctxt "model:party.synthesis.menu.invoice,name:"
 msgid "Party Synthesis Menu Invoice"
 msgstr "Synthèse quittance"
 
+msgctxt "selection:account.invoice,business_type:"
+msgid "Contract Invoice"
+msgstr "Quittance"
+
 msgctxt "selection:account.invoice.line.detail,frequency:"
 msgid "At contract signature"
 msgstr "A la signature du contrat"

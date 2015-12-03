@@ -70,6 +70,10 @@ class Invoice:
                     'invisible': (~Eval('state').in_(['draft', 'validated',
                         'posted']))
                     }})
+        cls.business_type.selection += [
+            ('contract_invoice', 'Contract Invoice'),
+            ]
+        cls.business_type.depends += ['contract_invoice']
 
     def get_base_amount(self, name):
         return self.untaxed_amount - self.fees
@@ -121,6 +125,12 @@ class Invoice:
             for invoice_id, total in cursor.fetchall():
                 result[invoice_id] = total
         return result
+
+    def get_business_type(self, name):
+        if self.contract_invoice:
+            return 'contract_invoice'
+        else:
+            return super(Invoice, self).get_business_type(name)
 
     @classmethod
     def search_contract_invoice(cls, name, clause):

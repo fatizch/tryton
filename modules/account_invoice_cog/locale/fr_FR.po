@@ -10,6 +10,10 @@ msgctxt "field:account.invoice,color:"
 msgid "Color"
 msgstr "Couleur"
 
+msgctxt "field:account.invoice,business_type:"
+msgid "Type"
+msgstr "Type"
+
 msgctxt "field:account.invoice,icon:"
 msgid "Icon"
 msgstr "Icône"
@@ -37,6 +41,23 @@ msgstr "Jeux de Test"
 msgctxt "model:res.group,name:group_invoice_read"
 msgid "Invoice consultation"
 msgstr "Consultation des quittances"
+
+msgctxt "selection:account.invoice,business_type:"
+msgid "Credit Note"
+msgstr "Note de Crédit"
+
+msgctxt "selection:account.invoice,business_type:"
+msgid "Invoice"
+msgstr "Facture"
+
+msgctxt "selection:account.invoice,business_type:"
+msgid "Supplier Credit Note"
+msgstr "Note de crédit fournisseur"
+
+msgctxt "selection:account.invoice,business_type:"
+msgid "Supplier Invoice"
+msgstr "Facture fournisseur"
+
 
 # Custom translations below
 

@@ -149,6 +149,15 @@ class Invoice:
         fields.Boolean('Is Insurer Invoice'),
         'get_is_insurer_invoice', searcher='search_is_insurer_invoice')
 
+    @classmethod
+    def __setup__(cls):
+        super(Invoice, cls).__setup__()
+        cls.business_type.selection += [
+            ('broker_invoice', 'Broker Invoice'),
+            ('insurer_invoice', 'Insurer Invoice'),
+            ]
+        cls.business_type.depends += ['is_broker_invoice', 'is_insurer_invoice']
+
     def _get_move_line(self, date, amount):
         line = super(Invoice, self)._get_move_line(date, amount)
         if (getattr(self, 'is_broker_invoice', None) and
@@ -173,6 +182,14 @@ class Invoice:
         for invoice_id, in cursor.fetchall():
             result[invoice_id] = True
         return result
+
+    def get_business_type(self, name):
+        if self.is_broker_invoice:
+            return 'broker_invoice'
+        elif self.is_insurer_invoice:
+            return 'insurer_invoice'
+        else:
+            return super(Invoice, self).get_business_type(name)
 
     @classmethod
     def search_is_broker_invoice(cls, name, clause):
