@@ -506,6 +506,7 @@ class ExportImportMixin(Model):
                     'values': object_values,
                     }
             except UserError as exc:
+                Transaction().cursor.rollback()
                 message[ext_id] = {
                     'return': False,
                     'error': exc.message}
@@ -531,6 +532,7 @@ class ExportImportMixin(Model):
             try:
                 entity = cls.import_json(to_create)
             except UserError as exc:
+                Transaction().cursor.rollback()
                 return {ext_id: {
                         'return': False,
                         'messages': {'error': exc.message},
