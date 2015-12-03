@@ -49,18 +49,24 @@ class ContractContact(model._RevisionMixin, model.CoopSQL, model.CoopView):
         fields.Boolean('Is Address Required', depends=['type']),
         'on_change_with_is_address_required')
 
-    def get_default_address_from_party(self):
-        instances = utils.get_domain_instances(self, 'address')
-        if len(instances) >= 1:
-            return utils.get_value_at_date(instances, utils.today(),
-                'start_date')
+    def _on_change(self):
+        if self.type and self.type.code == 'subscriber':
+            self.party = self.contract.subscriber
+        addresses = utils.filter_list_at_date(
+            utils.get_domain_instances(self, 'address'),
+            self.date or self.contract.start_date)
+        if len(addresses) == 1:
+            self.address = addresses[0]
+        elif self.address not in addresses:
+            self.address = None
 
-    @fields.depends('party', 'address')
-    def on_change_with_address(self):
-        if not self.party or not self.address:
-            address = self.get_default_address_from_party()
-            if address:
-                return address.id
+    @fields.depends('party', 'address', 'type', 'contract', 'date')
+    def on_change_type(self):
+        self._on_change()
+
+    @fields.depends('party', 'address', 'type', 'contract', 'date')
+    def on_change_party(self):
+        self._on_change()
 
     @fields.depends('type')
     def on_change_with_is_address_required(self, name=None):

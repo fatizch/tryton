@@ -175,6 +175,17 @@ def is_effective_at_date(instance, at_date=None, start_var_name='start_date',
     return start_date <= at_date <= end_date
 
 
+def filter_list_at_date(list_, at_date=None, start_var_name='start_date',
+        end_var_name='end_date'):
+    if not at_date:
+        at_date = today()
+    res = set()
+    for elem in reversed(list_):
+        if is_effective_at_date(elem, at_date, start_var_name, end_var_name):
+            res.add(elem)
+    return list(set(res))
+
+
 def get_good_versions_at_date(instance, var_name, at_date=None,
         start_var_name='start_date', end_var_name='end_date'):
     '''This method looks for the elements in the list which are effective at
@@ -188,11 +199,8 @@ def get_good_versions_at_date(instance, var_name, at_date=None,
         'get_good_versions_at_date', None)
     if get_good_versions_at_date:
         return get_good_versions_at_date(var_name, at_date)
-    res = set()
-    for elem in reversed(getattr(instance, var_name, [])):
-        if is_effective_at_date(elem, at_date, start_var_name, end_var_name):
-            res.add(elem)
-    return list(set(res))
+    return filter_list_at_date(getattr(instance, var_name, []), at_date,
+        start_var_name, end_var_name)
 
 
 def get_good_version_at_date(instance, var_name, at_date=None):

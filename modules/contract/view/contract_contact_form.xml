@@ -9,7 +9,7 @@
     <field name="end_date"/>
     <newline/>
     <label name="type"/>
-    <field name="type"/>
+    <field name="type" widget="selection"/>
     <label name="party"/>
     <field name="party"/>
     <label name="address"/>
