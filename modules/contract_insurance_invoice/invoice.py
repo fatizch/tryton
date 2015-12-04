@@ -136,6 +136,8 @@ class Invoice:
     def search_contract_invoice(cls, name, clause):
         _, operator, value = clause
         if operator == 'ilike':
+            # Search using contract fitler crashes, does not support search on
+            # contract.rec_name
             return []
         Operator = fields.SQL_OPERATORS[operator]
 
