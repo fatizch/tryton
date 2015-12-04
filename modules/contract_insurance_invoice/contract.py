@@ -1101,8 +1101,8 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
                 'required': And(Eval('direct_debit', False),
                     (Eval('_parent_contract', {}).get('status', '') ==
                         'active'))},
-            sort=False, depends=['direct_debit']),
-        'get_direct_debit_day_selector', 'set_direct_debit_day_selector')
+            sort=False, depends=['direct_debit', 'direct_debit_day']),
+        'get_direct_debit_day_selector', 'setter_void')
     direct_debit_day = fields.Integer('Direct Debit Day')
     direct_debit_account = fields.Many2One('bank.account',
         'Direct Debit Account',
@@ -1169,16 +1169,25 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
             return [('', '')]
         return self.billing_mode.get_allowed_direct_debit_days()
 
-    def get_direct_debit_day_selector(self, name):
+    def get_direct_debit_day_selector(self, name=None):
         if not self.direct_debit:
             return ''
         return str(self.direct_debit_day)
 
-    @classmethod
-    def set_direct_debit_day_selector(cls, ids, name, value):
-        if not value:
+    @fields.depends('billing_mode', 'direct_debit_day',
+        'direct_debit_day_selector', 'direct_debit_account')
+    def on_change_billing_mode(self):
+        if not self.billing_mode or not self.billing_mode.direct_debit:
+            self.direct_debit_day = None
+            self.direct_debit_day_selector = ''
+            self.direct_debit_account = None
             return
-        cls.write(ids, {'direct_debit_day': int(value)})
+        if (self.billing_mode.direct_debit and str(self.direct_debit_day)
+                not in self.billing_mode.get_allowed_direct_debit_days()):
+                self.direct_debit_day = int(
+                    self.billing_mode.get_allowed_direct_debit_days()[0][0])
+                self.direct_debit_day_selector = \
+                    self.get_direct_debit_day_selector()
 
     @fields.depends('billing_mode')
     def on_change_with_direct_debit(self, name=None):
