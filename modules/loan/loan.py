@@ -148,7 +148,8 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             states={
                 'invisible': ~Eval('deferal') | ~Eval('kind').in_(
                     ['fixed_rate', 'interest_free']),
-                'required': Bool(Eval('deferal', '')),
+                'required': Bool(Eval('deferal', '')) & Eval('kind').in_(
+                    ['fixed_rate', 'interest_free']),
                 'readonly': Eval('state') != 'draft'
                 },
             depends=['deferal', 'kind', 'state']),
@@ -665,6 +666,8 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         sorted_increments = sorted(self.increments,
             key=lambda x: getattr(x, 'start_date', None) or datetime.date.max)
         for idx, increment in enumerate(sorted_increments):
+            if not increment.manual:
+                increment.begin_balance = None
             new_increments.append(increment)
             is_new = False
             if not getattr(increment, 'loan_state', None):
@@ -772,9 +775,11 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
         'get_func_key', searcher='search_func_key')
     number = fields.Integer('Number')
     begin_balance = fields.Numeric('Begin Balance',
-        states=_STATES_INCREMENT,
+        states={
+            'required': Eval('loan_state') == 'calculated',
+            'readonly': ~Eval('manual')},
         digits=(16, Eval('currency_digits', 2)),
-        depends=['currency_digits', 'loan_state'])
+        depends=['currency_digits', 'loan_state', 'manual'])
     start_date = fields.Date('Start Date',
         states=_STATES_INCREMENT, depends=['loan_state'])
     end_date = fields.Function(
