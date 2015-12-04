@@ -47,7 +47,7 @@ class Line:
                 and self.party != self.contract.subscriber):
             self.contract = None
 
-    @fields.depends('contract', 'party', 'invoice')
+    @fields.depends('contract', 'party', 'invoice', 'party_payer')
     def on_change_contract(self):
         if self.contract:
             if self.invoice:
@@ -58,6 +58,8 @@ class Line:
                     self.party = None
             else:
                 self.party = self.contract.subscriber
+            if not self.party_payer and self.party:
+                self.party_payer = self.party
 
     def get_move_line(self):
         result = super(Line, self).get_move_line()
