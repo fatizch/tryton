@@ -292,6 +292,7 @@ Cancel Endorsement::
 Renew Contract::
 
     >>> renew = Wizard('contract_term_renewal.renew', models=[contract])
+    >>> renew.execute('renew')
     >>> contract.save()
 
 Check that new period is correctly created::

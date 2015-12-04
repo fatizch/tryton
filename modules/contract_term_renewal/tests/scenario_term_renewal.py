@@ -285,6 +285,7 @@ contract.start_date == contract_start_date
 
 # #Comment# #Renew Contract
 renew = Wizard('contract_term_renewal.renew', models=[contract])
+renew.execute('renew')
 contract.save()
 
 # #Comment# #Check that new period is correctly created
