@@ -263,3 +263,17 @@ msgctxt ""
 "wizard_button:contract_term_renewal.decline_renewal,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "view:contract_term_renewal.renew.confirm:"
+msgid "Are you sure you want to renew these contracts ?"
+msgstr "Êtes-vous sûr de vouloir renouveler ces contrats ?"
+
+msgctxt ""
+"wizard_button:contract_term_renewal.renew,confirm_renew,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:contract_term_renewal.renew,confirm_renew,renew:"
+msgid "Confirm"
+msgstr "Confirmer"

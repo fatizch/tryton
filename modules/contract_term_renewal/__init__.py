@@ -18,6 +18,7 @@ def register():
         RenewContracts,
         ReportTemplate,
         TerminateContract,
+        ConfirmRenew,
         module='contract_term_renewal', type_='model')
     Pool.register(
         DeclineRenewal,

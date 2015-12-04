@@ -26,5 +26,10 @@
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
+        <record model="ir.ui.view" id="confirm_contract_renewal_view_form">
+            <field name="model">contract_term_renewal.renew.confirm</field>
+            <field name="type">form</field>
+            <field name="name">confirm_contract_renewal_form</field>
+        </record>
     </data>
 </tryton>

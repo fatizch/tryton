@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+    <image name="tryton-dialog-information" xexpand="0" xfill="0"/>
+    <label string="Are you sure you want to renew these contracts ?" id="confirm_contract_renewal_dialog" yalign="0.0" xalign="0.0" xexpand="1"/>
+    <field name="contracts" colspan="4" expand_toolbar="0"/>
+</form>

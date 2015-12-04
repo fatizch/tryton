@@ -14,6 +14,7 @@ __all__ = [
     'SelectDeclineRenewalReason',
     'DeclineRenewal',
     'Renew',
+    'ConfirmRenew',
 ]
 
 
@@ -245,12 +246,27 @@ class DeclineRenewal(model.CoopWizard):
         return 'end'
 
 
+class ConfirmRenew(model.CoopView):
+    'Confirm Contract Renewal'
+    __name__ = 'contract_term_renewal.renew.confirm'
+
+    contracts = fields.One2Many('contract', None, 'Contracts', readonly=True)
+
+
 class Renew(model.CoopWizard):
     'Renewal Wizard'
 
     __name__ = 'contract_term_renewal.renew'
-    start_state = 'renew'
+    start_state = 'confirm_renew'
+    confirm_renew = StateView('contract_term_renewal.renew.confirm',
+        'contract_term_renewal.confirm_contract_renewal_view_form',
+        [Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Confirm', 'renew', 'tryton-go-next', default=True)])
     renew = StateTransition()
+
+    def default_confirm_renew(self, name):
+        assert Transaction().context.get('active_model') == 'contract'
+        return {'contracts': Transaction().context.get('active_ids')}
 
     def transition_renew(self):
         pool = Pool()
