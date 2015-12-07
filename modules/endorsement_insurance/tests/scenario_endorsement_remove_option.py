@@ -220,6 +220,17 @@ subscriber.account_payable = payable_account
 subscriber.birth_date = datetime.date(1980, 10, 14)
 subscriber.save()
 
+# #Comment# #Create Other Insured
+luigi = Party()
+luigi.name = 'Vercotti'
+luigi.first_name = 'Luigi'
+luigi.is_person = True
+luigi.gender = 'male'
+luigi.account_receivable = receivable_account
+luigi.account_payable = payable_account
+luigi.birth_date = datetime.date(1965, 10, 14)
+luigi.save()
+
 # #Comment# #Create Test Contract
 contract = Contract()
 contract.company = company
@@ -232,13 +243,17 @@ covered_element.party = subscriber
 covered_element.item_desc = item_description
 option = covered_element.options.new()
 option.coverage = coverage
-option2 = covered_element.options.new()
+covered_element2 = contract.covered_elements.new()
+covered_element2.party = luigi
+covered_element2.item_desc = item_description
+option2 = covered_element2.options.new()
 option2.coverage = coverage
 contract.subscriber = subscriber
 contract.save()
 
-# #Comment# #Start Testing
 contract.covered_elements[0].options[0].end_date == None
+# #Res# #True
+contract.covered_elements[1].options[0].end_date == None
 # #Res# #True
 
 # #Comment# #New Endorsement
@@ -250,21 +265,38 @@ new_endorsement.form.applicant = None
 new_endorsement.form.effective_date = endorsement_effective_date
 new_endorsement.execute('start_endorsement')
 my_option = new_endorsement.form.options[0].option
-new_endorsement.form.options[0].action = 'terminated'
-new_endorsement.form.options[0].sub_status = termination_status
+len(new_endorsement.form.options) == 2
+# #Res# #True
+to_remove, = [x for x in new_endorsement.form.options if
+    x.covered_element.party.name == 'Vercotti']
+to_remove.action = 'terminated'
+to_remove.sub_status = termination_status
 new_endorsement.execute('remove_option_next')
 new_endorsement.execute('apply_endorsement')
 contract.save()
 
-contract.covered_elements[0].options[1].end_date == endorsement_effective_date
+option, = Option.find([('covered_element.party.name', '=', 'Doe')])
+option2, = Option.find([('covered_element.party.name', '=', 'Vercotti')])
+option2.end_date == endorsement_effective_date
 # #Res# #True
-contract.covered_elements[0].options[1].sub_status == \
-    termination_status
+option2.sub_status == termination_status
+# #Res# #True
+option.end_date == None
+# #Res# #True
+option.sub_status == None
 # #Res# #True
 
 good_endorsement, = Endorsement.find([
         ('contracts', '=', contract.id)])
 Endorsement.cancel([good_endorsement.id], config._context)
 contract.save()
-contract.covered_elements[0].options[0].end_date == None
+option, = Option.find([('covered_element.party.name', '=', 'Doe')])
+option2, = Option.find([('covered_element.party.name', '=', 'Vercotti')])
+option2.end_date == None
+# #Res# #True
+option2.sub_status == None
+# #Res# #True
+option.end_date == None
+# #Res# #True
+option.sub_status == None
 # #Res# #True
