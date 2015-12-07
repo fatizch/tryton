@@ -11,5 +11,6 @@ def register():
         User,
         Employee,
         Sequence,
+        SequenceStrict,
         TestCaseModel,
         module='company_cog', type_='model')
