@@ -150,9 +150,7 @@ class FiscalYear(export.ExportImportMixin):
 
     @classmethod
     def _export_skips(cls):
-        result = super(FiscalYear, cls)._export_skips()
-        result.add('close_lines', 'periods')
-        return result
+        return super(FiscalYear, cls)._export_skips() | {'close_lines'}
 
 
 class Period(export.ExportImportMixin):
