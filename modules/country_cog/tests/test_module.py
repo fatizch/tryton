@@ -47,6 +47,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
             replace_city_name_with_support_for_french_sna(u"%ab saint cd%"),
             u"AB ST CD")
 
+        self.assertEqual(zipcode.ZipCode.
+            replace_city_name_with_support_for_french_sna(
+                u"%SAINT JUST SAINTE MARIÉ%"), u"ST JUST STE MARIE")
+
+        self.assertEqual(zipcode.ZipCode.
+            replace_city_name_with_support_for_french_sna(
+                u"%SAINT SAINT%"), u"ST SAINT")
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()

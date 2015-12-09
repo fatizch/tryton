@@ -43,10 +43,18 @@ class ZipCode(model.CoopSQL, model.CoopView):
         city = coop_string.slugify(city, ' ', lower=False).upper().\
             replace('-', ' ').strip()
         city = re.compile(r'([^\s\w]|_)+').sub('', city)  # remove ponctuations
-        regex = r'(?P<before>(.* )?)SAINT(?P<e>E?) (?P<after>.*)'
-        m = re.match(regex, city)
-        return u'%sST%s %s' % (m.group('before'), m.group('e'),
-            m.group('after')) if m else city
+        regex = r'(?P<before>(.* )?)SAINT(?P<e_letter>E?) (?P<after>.*)'
+
+        def replace(city):
+            m = re.match(regex, city)
+            if m:
+                city = u'%sST%s %s' % (m.group('before'), m.group('e_letter'),
+                    m.group('after'))
+                return replace(city)
+            return city
+
+        city = replace(city)
+        return city
 
     @classmethod
     def search_rec_name(cls, name, clause):
