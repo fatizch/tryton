@@ -218,6 +218,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         attachment.name = report['report_name']
         attachment.document_desc = self.document_desc
         attachment.origin = report['origin']
+        attachment.origin = report.get('origin', None)
         return attachment
 
     def save_reports_in_edm(self, reports):

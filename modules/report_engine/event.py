@@ -86,7 +86,10 @@ class EventTypeAction:
                     template, objects_to_report, context_)
 
     def build_context(self, objects_to_report, origin, event_code):
-        context_ = {'origin': origin}
+        if origin:
+            context_ = {'origin': origin}
+        else:
+            context_ = {}
         if origin and isinstance(origin, Printable):
             functional_date = origin.get_report_functional_date(event_code)
         else:
@@ -231,7 +234,7 @@ class ReportProductionRequest(model.CoopSQL, model.CoopView):
     @classmethod
     def make_json_serializable(cls, to_jsonize):
         for name in ('origin', 'resource'):
-            if name in to_jsonize:
+            if name in to_jsonize and to_jsonize[name]:
                 to_jsonize[name] = str(to_jsonize[name])
 
     @classmethod
