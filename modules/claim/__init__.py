@@ -6,6 +6,7 @@ from .rule_engine import *
 from .party import *
 from .test_case import *
 from .document import *
+from .report_engine import *
 
 
 def register():
@@ -25,6 +26,7 @@ def register():
         TestCaseModel,
         SynthesisMenuClaim,
         SynthesisMenu,
+        ReportTemplate,
         module='claim', type_='model')
     Pool.register(
         SynthesisMenuOpen,

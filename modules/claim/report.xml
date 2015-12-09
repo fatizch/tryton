@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tryton>
+    <record model="ir.action.keyword" id="report_claim_keyword">
+        <field name="keyword">form_print</field>
+        <field name="model">claim,-1</field>
+        <field name="action" ref="report_engine.letter_generation_wizard"/>
+    </record>
+</tryton>
