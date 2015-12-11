@@ -8,3 +8,5 @@
   changer le numéro de sécurité sociale d'une personne
 - **Avenant de changement de nom:** Permet de changer le nom, le prénom
   et le nom de naissance d'une personne.
+- **Avenant de changement de relations:** Permet de changer les relations
+  d'une personne (ex: relations familiales).
