@@ -1,3 +1,4 @@
 Ce module permet de gérer le paramétrage des prestations santé
 
-- Gestion des descripteurs d'acte médicaux
+- Descripteurs d'actes médicaux
+- Descripteurs de famille d'actes médicaux
