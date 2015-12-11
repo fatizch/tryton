@@ -666,7 +666,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         sorted_increments = sorted(self.increments,
             key=lambda x: getattr(x, 'start_date', None) or datetime.date.max)
         for idx, increment in enumerate(sorted_increments):
-            if not increment.manual:
+            if not getattr(increment, 'manual', False):
                 increment.begin_balance = None
             new_increments.append(increment)
             is_new = False
@@ -678,6 +678,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 increment.currency = self.currency
                 increment.currency_symbol = self.currency_symbol
                 increment.currency_digits = self.currency_digits
+                increment.manual = False
                 is_new = True
             if idx == 0:
                 continue
