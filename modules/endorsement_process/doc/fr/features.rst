@@ -1,3 +1,3 @@
 - **Prévisualisation des changements de l'avenant depuis le processus**
 
-- **Génération des documents depuis le processus sur avenant**
+- **Affichage dans le processus des documents générés par l'avenant**
