@@ -1,0 +1,68 @@
+#!/bin/bash
+
+source ./config
+
+file_name ()
+{
+        echo $WORKERS_DIR"coogw-"$2"."$1
+}
+
+start_worker ()
+{
+        local PID_FILE=$(file_name pid $1)
+        [ -e $PID_FILE ] && echo coogw-$1 is already running && return
+        local PORT=$[JSON_PORT+$1]
+        local CNF_FILE=$(file_name cnf $1)
+        local LOG_FILE=$(file_name log $1)
+        local OUT_FILE=$(file_name out $1)
+        sed -e "s,JSON_PORT,$PORT,g" ./trytond.conf > $CNF_FILE
+        sed -e "s,LOG_FILE,$OUT_FILE,g" ./logging.conf > $LOG_FILE
+        if [ -z $DB_NAME ]
+        then
+                trytond -c $CNF_FILE --logconf $LOG_FILE --pidfile $PID_FILE &>> $OUT_FILE &
+        else
+                trytond -c $CNF_FILE -d $DB_NAME --logconf $LOG_FILE --pidfile $PID_FILE &>> $OUT_FILE &
+        fi
+        disown
+        echo coogw-$1 started - listening on port $PORT
+}
+
+restart_worker ()
+{
+        local PID_FILE=$(file_name pid $1)
+        [ ! -e $PID_FILE ] && echo coogw-$1 not running && return
+        local PID=$(<$PID_FILE)
+        kill -SIGUSR1 $PID
+        echo coogw-$1 restarted - $PID
+}
+
+stop_worker ()
+{
+        local PID_FILE=$(file_name pid $1)
+        [ ! -e $PID_FILE ] && echo coogw-$1 not running && return
+        local PID=$(<$PID_FILE)
+        kill -TERM $PID
+        echo coogw-$1 stopped - $PID
+        local CNF_FILE=$(file_name cnf $1)
+        local LOG_FILE=$(file_name log $1)
+        rm $CNF_FILE $LOG_FILE
+        local OUT_FILE=$(file_name out $1)
+        local BAK_FILE=$(file_name bak $PID)
+        mv $OUT_FILE $BAK_FILE
+}
+
+info_worker ()
+{
+        local PID_FILE=$(file_name pid $1)
+        [ ! -e $PID_FILE ] && echo coogw-$1 not running && return
+        local PID=$(<$PID_FILE)
+        local WORKER_TIME=$(ps -p $PID -o time=)
+        local WORKER_ETIME=$(ps -p $PID -o etime=)
+        local WORKER_MEM=$(ps -p $PID -o vsz=)
+        local OUT_FILE=$(file_name out $1)
+        local WORKER_CRI=$(grep -c "\bCRITICAL:\b" $OUT_FILE)
+        local WORKER_ERR=$(grep -c "\bERROR:\b" $OUT_FILE)
+        local WORKER_WRN=$(grep -c "\bWARNING:\b" $OUT_FILE)
+        local WORKER_INF=$(grep -c "\bINFO:\b" $OUT_FILE)
+        echo coogw-$1 running for $WORKER_ETIME \(time:$WORKER_TIME mem:$WORKER_MEM critical:$WORKER_CRI error:$WORKER_ERR warning:$WORKER_WRN info:$WORKER_INF\)
+}

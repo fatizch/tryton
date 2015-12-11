@@ -1,0 +1,133 @@
+# vim: set ft=sh:
+# server management - start, stop, log, status, etc
+
+_coog_server_file() { # get file name
+        if [ $# -eq 1 ]
+        then
+                echo $COOG_TMP"/"$COOG_SRV_FILE"."$1
+        fi
+        if [ $# -eq 2 ]
+        then
+                echo $COOG_TMP"/"$COOG_SRV_FILE"-"$2"."$1
+        fi
+}
+
+_coog_server_pid() { # retrieve pid from pidfile, delete pidfile if arg=1
+        local pid_file
+        pid_file=`_coog_server_file pid`
+        [ ! -e $pid_file ] && return
+        cat $pid_file
+        [ $1 = 1 ] && rm -f $pid_file
+}
+
+_coog_server_bak() { # backup log file (mv to pid if exists or rm)
+        local out_file
+        out_file=`_coog_server_file out`
+        [ ! -e $out_file ] && echo no server log && return
+        [ -z $1 ] && rm $out_file && return
+        local bak_file
+        bak_file=`_coog_server_file out $1`
+        mv $out_file $bak_file
+}
+
+coog_server_start() { # start server
+        local pid_file
+        pid_file=`_coog_server_file pid`
+        [ -e $pid_file ] && echo 'server already running -> stop or restart' && return
+        local out_file
+        out_file=`_coog_server_file out`
+        [ -e $out_file ] && echo 'server log file exists -> clean manually' && return
+
+        # TODO: begin: needs review (conf in pathpath is not safe)
+        local conf_path
+        conf_path=`readlink -f ../../conf`
+        export PYTHONPATH=$conf_path:$PYTHONPATH
+        # end
+        nohup trytond --dev \
+                -c $COOG_SRV_CONF \
+                --logconf $COOG_LOG_CONF \
+                -d $PGDATABASE \
+                --pidfile $pid_file > $out_file &
+        echo server started
+
+}
+
+coog_server_debug() { # start server in pdb
+        # TODO: begin: needs review (conf in pathpath is not safe)
+        local conf_path
+        conf_path=`readlink -f ../../conf`
+        export PYTHONPATH=$conf_path:$PYTHONPATH
+        # end
+        local trytond
+        trytond=`which trytond | xargs readlink -f`
+        python -m pdb $trytond \
+                -c $COOG_SRV_CONF \
+                --logconf $COOG_LOG_CONF \
+                -d $PGDATABASE
+}
+
+coog_server_stop() { # stop server (gracefully)
+        local pid
+        pid=`_coog_server_pid 0`
+        [ -z $pid ] && echo no server running && return
+        kill -TERM $pid && echo server stopped
+        _coog_server_bak $pid
+}
+
+coog_server_kill() { # kill server process
+        local pid
+        pid=`_coog_server_pid 1`
+        [ -z $pid ] && echo no server running
+        [ ! -z $pid ] && kill -9 $pid && echo server killed
+        _coog_server_bak $pid
+}
+
+coog_server_restart() { # restart server (purge application inside the same process)
+        local pid
+        pid=`_coog_server_pid 0`
+        [ -z $pid ] && echo no server running && return
+        kill -USR1 $pid && echo server restarted
+}
+
+coog_server_ps() { # print server process info (based on ps)
+        local pid
+        pid=`_coog_server_pid 0`
+        [ -z $pid ] && echo no server running && return
+        ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
+}
+
+coog_server_log() { # less server logs
+        local out_file
+        out_file=`_coog_server_file out`
+        [ ! -e $out_file ] && echo no server log && return
+        less $* $out_file
+}
+
+coog_server_head() { # head server logs
+        local out_file
+        out_file=`_coog_server_file out`
+        [ ! -e $out_file ] && echo no server log && return
+        head $* $out_file
+}
+
+coog_server_tail() { # tail server logs
+        local out_file
+        out_file=`_coog_server_file out`
+        [ ! -e $out_file ] && echo no server log && return
+        tail $* $out_file
+}
+
+coog_server_st () { # print server status (errors based on logs)
+        local out_file
+        out_file=`_coog_server_file out`
+        local cri
+        local err
+        local wrn
+        local inf
+        [ ! -e $out_file ] && echo no server log && return
+        cri=`grep -c "\bCRITICAL:\b" $out_file`
+        err=`grep -c "\bERROR:\b" $out_file`
+        wrn=`grep -c "\bWARNING:\b" $out_file`
+        inf=`grep -c "\bINFO:\b" $out_file`
+        echo server exec info \(critical:$cri error:$err warning:$wrn info:$inf\)
+}

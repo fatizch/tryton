@@ -1,0 +1,102 @@
+# vim: set ft=sh:
+# client management - start, stop, log, etc
+
+_coog_client_file() { # get file name
+        if [ $# -eq 1 ]
+        then
+                echo $COOG_TMP"/"$COOG_CLI_FILE"."$1
+        fi
+        if [ $# -eq 2 ]
+        then
+                echo $COOG_TMP"/"$COOG_CLI_FILE"-"$2"."$1
+        fi
+}
+
+_coog_client_pid() { # retrieve pid from pidfile, delete pidfile if arg=1
+        local pid_file
+        pid_file=`_coog_client_file pid`
+        [ ! -e $pid_file ] && return
+        cat $pid_file
+        [ $1 = 1 ] && rm -f $pid_file
+}
+
+_coog_client_bak() { # backup log file (mv to pid if exists or rm)
+        local out_file
+        out_file=`_coog_client_file out`
+        [ ! -e $out_file ] && echo no client log && return
+        [ -z $1 ] && rm $out_file && return
+        local bak_file
+        bak_file=`_coog_client_file out $1`
+        mv $out_file $bak_file
+}
+
+coog_client_start() { # start client
+        local pid_file
+        pid_file=`_coog_client_file pid`
+        [ -e $pid_file ] && echo 'client already running -> stop or restart' && return
+        local out_file
+        out_file=`_coog_client_file out`
+        [ -e $out_file ] && echo 'client log file exists -> clean manually' && return
+        nohup tryton -c $COOG_CLI_CONF -l $COOG_LOG_LEVEL > $out_file &
+        echo $! > $pid_file
+        echo client started
+}
+
+coog_client_debug() { # start client in pdb
+        local tryton
+        tryton=`which tryton | xargs readlink -f`
+        python -m pdb $tryton -c $COOG_CLI_CONF -l $COOG_LOG_LEVEL
+}
+
+coog_client_stop() { # stop client (gracefully)
+        local pid
+        pid=`_coog_client_pid 1`
+        [ -z $pid ] && echo no client running && return
+        kill -TERM $pid && echo client stopped
+        _coog_client_bak $pid
+}
+
+coog_client_kill() { # kill client process
+        local pid
+        pid=`_coog_client_pid 1`
+        [ -z $pid ] && echo no client running
+        [ ! -z $pid ] && kill -9 $pid && echo client killed
+        _coog_client_bak $pid
+}
+
+coog_client_ps() { # print client process info (based on ps)
+        local pid
+        pid=`_coog_client_pid 0`
+        [ -z $pid ] && echo no client running && return
+        ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
+}
+
+coog_client_log() { # less client logs
+        local out_file
+        out_file=`_coog_client_file out`
+        [ ! -e $out_file ] && echo no client log && return
+        less $* $out_file
+}
+
+coog_client_head() { # head client logs
+        local out_file
+        out_file=`_coog_client_file out`
+        [ ! -e $out_file ] && echo no client log && return
+        head $* $out_file
+}
+
+coog_client_tail() { # tail client logs
+        local out_file
+        out_file=`_coog_client_file out`
+        [ ! -e $out_file ] && echo no client log && return
+        tail $* $out_file
+}
+
+coog_client_mo() { # generates mo file in client (language in param)
+        [ -z $1 ] && echo needs language to generate - example: fr_FR && return
+        local wd
+        wd=`pwd`
+        cd ../../tryton
+        python2 ./setup.py compile_catalog --locale $1
+        cd $wd
+}

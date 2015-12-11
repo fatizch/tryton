@@ -1,0 +1,34 @@
+# vim: set ft=sh:
+# modules management - install, update, etc
+
+_coog_module_list() { # list installed modules
+        echo `psql -w -t -c "select name from ir_module where state='installed'"`
+}
+
+coog_module_main() { # list installed modules
+        local module
+        for module in `_coog_module_list`
+        do
+                echo $module
+        done
+}
+
+coog_module_update() { # update installed modules <args> - default: all
+        local modules
+        if [ $# -eq 0 ]
+        then
+                modules=`_coog_module_list`
+        else
+                modules=$*
+        fi
+        # TODO: begin: needs review (conf in pathpath is not safe)
+        local conf_path
+        conf_path=`readlink -f ../../conf`
+        export PYTHONPATH=$conf_path:$PYTHONPATH
+        # end
+        trytond \
+                -c $COOG_SRV_CONF \
+                --logconf $COOG_LOG_CONF \
+                -d $PGDATABASE \
+                -u $modules
+}

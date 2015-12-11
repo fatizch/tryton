@@ -1,0 +1,8 @@
+# vim: set ft=sh:
+# dev kill shortcut (server and client)
+
+coog_kill_main() { # kill all
+        coog_server_kill
+        sleep 0.1
+        coog_client_kill
+}

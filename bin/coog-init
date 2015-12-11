@@ -1,0 +1,26 @@
+# vim: set ft=sh:
+# init new environment
+
+coog_init_bin() { # link useful bin to venv (tryton, coog, upload.py, etc)
+        local wd
+        wd=`pwd`
+        cd $VIRTUAL_ENV/bin
+        [ -h trytond ] && rm trytond
+        [ -h tryton ] && rm tryton
+        [ -h coog ] && rm coog
+        [ -h upload.py ] && rm upload.py
+        [ -h git-cl ] && rm git-cl
+        ln -s `readlink -f $wd/../../trytond/bin/trytond` .
+        ln -s `readlink -f $wd/../../tryton/bin/tryton` .
+        ln -s $wd/coog .
+        ln -s $wd/vendor/upload.py
+        ln -s $wd/vendor/git-cl
+        cd $wd
+}
+
+coog_init_conf() { # set default conf
+        [ ! -d ../../conf ] && mkdir ../../conf
+        cp .conf/trytond.conf ../../conf
+        cp .conf/tryton.conf ../../conf
+        cp .conf/logging.conf ../../conf
+}

@@ -1,0 +1,51 @@
+# vim: set ft=sh:
+# repositories/projects management - link, git actions, etc
+
+_coog_repo_enter() { # move to trytond modules folder
+        _coog_repo_wd=`pwd`
+        cd ../../trytond/trytond/modules
+}
+
+_coog_repo_leave() { # move back to initial wd
+        cd $_coog_repo_wd
+}
+
+_coog_repo_rm() { # remove all links from wd
+        find -type l -delete
+}
+
+_coog_repo_list() { # list repositories
+        local f
+        for f in ../../*
+        do
+                [ -d $f ] && [ -d $f/modules ] && echo `echo $f | cut -d '/' -f 3`
+        done
+}
+
+coog_repo_main() { # list repositories
+        _coog_repo_list
+}
+
+coog_repo_link() { # link repositories <args> - default: all
+        local modules
+        local module
+        if [ $# -eq 0 ]
+        then
+                modules=`_coog_repo_list`
+        else
+                modules=$@
+        fi
+        _coog_repo_enter
+        _coog_repo_rm
+        for module in $modules
+        do
+                ln -s ../../../$module/modules/* .
+        done
+        _coog_repo_leave
+}
+
+coog_repo_unlink() { # unlink all repositories
+        _coog_repo_enter
+        _coog_repo_rm
+        _coog_repo_leave
+}

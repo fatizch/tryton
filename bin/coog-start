@@ -1,0 +1,8 @@
+# vim: set ft=sh:
+# dev start shortcut (server and client)
+
+coog_start_main() { # start all
+        coog_server_start
+        sleep 0.1
+        coog_client_start
+}

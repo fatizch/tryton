@@ -1,0 +1,8 @@
+# vim: set ft=sh:
+# dev stop shortcut (server and client)
+
+coog_stop_main() { # stop all
+        coog_server_stop
+        sleep 0.1
+        coog_client_stop
+}
