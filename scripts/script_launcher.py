@@ -524,6 +524,10 @@ def configure(target_env):
         if not os.path.islink(target):
             continue
         os.unlink(target)
+    # if for backward compatibility
+    # TODO: remove if
+    if os.path.isdir('../../../trytond-modules'):
+        os.system('ln -s ../../../trytond-modules/modules/* . 2> /dev/null')
     os.system('ln -s ../../../coopbusiness/modules/* . 2> /dev/null')
     if not os.path.exists(os.path.join(workspace, 'logs')):
         os.makedirs(os.path.join(workspace, 'logs'))

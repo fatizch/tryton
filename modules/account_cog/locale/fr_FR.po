@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -436,25 +436,6 @@ msgstr ""
 "Vous ne pouvez changer la séquence des mouvements émis de la période « %s » "
 "car elle contient déjà des mouvements émis."
 
-msgctxt "model:account.account.template,name:account.account_template_payable"
-msgid "Main Payable"
-msgstr "Compte à payer"
-
-msgctxt ""
-"model:account.account.template,name:account.account_template_receivable"
-msgid "Main Receivable"
-msgstr "Compte à recevoir"
-
-msgctxt ""
-"model:account.account.type.template,name:account.account_type_template_asset_current_receivable"
-msgid "Receivable"
-msgstr "À recevoir"
-
-msgctxt ""
-"model:account.account.type.template,name:account.account_type_template_liability_current_payable"
-msgid "Payable"
-msgstr "À payer"
-
 msgctxt "model:account.move.reconcile_lines.writeoff,name:account."
 msgid "Reconcile Lines Write-Off"
 msgstr "Lettrer les lignes de pertes et profits"
@@ -491,10 +472,6 @@ msgctxt ""
 "model:ir.sequence.type,name:account.sequence_type_account_move_reconciliation"
 msgid "Account Move Reconciliation"
 msgstr "Lettrage de mouvements comptables"
-
-msgctxt "model:ir.ui.menu,name:account."
-msgid "Reconcile Lines"
-msgstr "Lettrer les lignes"
 
 msgctxt "model:ir.ui.menu,name:account.menu_reconcile"
 msgid "Reconcile Accounts"

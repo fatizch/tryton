@@ -24,7 +24,6 @@
             <field name="model">account.statement</field>
             <field name="report_name">account.statement.bank_deposit_ticket_report</field>
             <field name="report">account_statement_contract/bank_deposit_ticket.odt</field>
-            <field name="style">company/header_A4.odt</field>
         </record>
         <record model="ir.action.keyword" id="report_bank_deposit_ticket_keyword">
             <field name="keyword">form_print</field>

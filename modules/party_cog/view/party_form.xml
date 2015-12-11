@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="//separator[@id='vat']" position="replace"/>
     <!-- form header -->
     <xpath expr="/form/group[@id='checkboxes']" position="replace_attributes">
         <group id="checkboxes" colspan="5"/>

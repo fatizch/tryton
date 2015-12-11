@@ -30,7 +30,6 @@
             <field name="model">account.statement</field>
             <field name="report_name">account.statement.bank_deposit_ticket_report</field>
             <field name="report">account_statement_contract_fr/bank_deposit_ticket_fr.odt</field>
-            <field name="style">company/header_A4.odt</field>
         </record>
     </data>
 </tryton>

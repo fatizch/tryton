@@ -177,10 +177,6 @@ msgid "Invoice"
 msgstr "Quittance"
 
 msgctxt "view:account.invoice:account_invoice."
-msgid "_Post"
-msgstr "Emettre"
-
-msgctxt "view:account.invoice:account_invoice."
 msgid "Invoices"
 msgstr "Quittances"
 
