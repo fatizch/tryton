@@ -1170,7 +1170,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         return self.billing_mode.get_allowed_direct_debit_days()
 
     def get_direct_debit_day_selector(self, name=None):
-        if not self.direct_debit:
+        if not self.billing_mode.direct_debit:
             return ''
         return str(self.direct_debit_day)
 
