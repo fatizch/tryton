@@ -471,7 +471,7 @@ def CmdIssue(args):
 
 def UserEditedLog(starting_text):
   """Given some starting text, let the user edit it and return the result."""
-  editor = os.getenv('EDITOR', 'vi')
+  editor = os.getenv('EDITOR', 'nano')
 
   (file_handle, filename) = tempfile.mkstemp()
   file = os.fdopen(file_handle, 'w')
