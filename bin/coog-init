@@ -20,7 +20,11 @@ coog_init_bin() { # link useful bin to venv (tryton, coog, upload.py, etc)
 
 coog_init_conf() { # set default conf
         [ ! -d ../../conf ] && mkdir ../../conf
-        cp .conf/trytond.conf ../../conf
-        cp .conf/tryton.conf ../../conf
-        cp .conf/logging.conf ../../conf
+        cp -b .conf/trytond.conf ../../conf
+        cp -b .conf/tryton.conf ../../conf
+        cp -b .conf/logging.conf ../../conf
+        # TODO: begin: cleaning batch
+        cp -b .conf/batch.conf ../../conf
+        cp -b .conf/celeryconfig.py ../../conf
+        # TODO: end
 }

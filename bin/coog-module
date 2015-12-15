@@ -25,7 +25,7 @@ coog_module_update() { # update installed modules <args> - default: all
         local conf_path
         conf_path=`readlink -f ../../conf`
         export PYTHONPATH=$conf_path:$PYTHONPATH
-        # end
+        # TODO: end
         trytond \
                 -c $COOG_SRV_CONF \
                 --logconf $COOG_LOG_CONF \

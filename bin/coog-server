@@ -42,7 +42,7 @@ coog_server_start() { # start server
         local conf_path
         conf_path=`readlink -f ../../conf`
         export PYTHONPATH=$conf_path:$PYTHONPATH
-        # end
+        # TODO: end
         nohup trytond --dev \
                 -c $COOG_SRV_CONF \
                 --logconf $COOG_LOG_CONF \
@@ -57,7 +57,7 @@ coog_server_debug() { # start server in pdb
         local conf_path
         conf_path=`readlink -f ../../conf`
         export PYTHONPATH=$conf_path:$PYTHONPATH
-        # end
+        # TODO: end
         local trytond
         trytond=`which trytond | xargs readlink -f`
         python -m pdb $trytond \
