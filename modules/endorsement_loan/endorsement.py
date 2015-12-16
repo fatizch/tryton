@@ -341,7 +341,7 @@ class EndorsementContract:
 
     def get_endorsement_summary(self, name):
         result = super(EndorsementContract, self).get_endorsement_summary(name)
-        contract_loans_summary = [x.get_summary('contract-loan',
+        contract_loans_summary = [x.get_diff('contract-loan',
                 x.contract_loan) for x in self.ordered_loans]
         if contract_loans_summary:
             result[2] += ['contract_loan_changes_section', '%s :' %
@@ -421,11 +421,11 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
 
     def get_endorsement_summary(self, name):
         result = ['definition_section', self.definition.name, []]
-        loan_summary = self.get_summary('loan', self.base_instance)
+        loan_summary = self.get_diff('loan', self.base_instance)
         if loan_summary:
             result[2] += ['loan_change_section', loan_summary]
 
-        increment_summary = [x.get_summary('loan.increment', x.increment)
+        increment_summary = [x.get_diff('loan.increment', x.increment)
             for x in self.increments]
         if increment_summary:
             result[2] += ['increment_change_section',
@@ -531,12 +531,12 @@ class EndorsementCoveredElementOption:
                 'mes_loan_share_modifications': 'Loan Share Modifications',
                 })
 
-    def get_summary(self, model, base_object=None):
-        result = super(EndorsementCoveredElementOption, self).get_summary(
+    def get_diff(self, model, base_object=None):
+        result = super(EndorsementCoveredElementOption, self).get_diff(
             model, base_object)
         if self.action == 'remove':
             return result
-        loan_shares_summary = [x.get_summary('loan.share', x.loan_share)
+        loan_shares_summary = [x.get_diff('loan.share', x.loan_share)
             for x in self.loan_shares]
         if loan_shares_summary:
             result += ['loan_share_change_section', '%s :'

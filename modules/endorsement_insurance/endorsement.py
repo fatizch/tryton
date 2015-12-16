@@ -178,7 +178,7 @@ class EndorsementContract:
 
     def get_endorsement_summary(self, name):
         result = super(EndorsementContract, self).get_endorsement_summary(name)
-        covered_element_summary = [x.get_summary('contract.covered_element',
+        covered_element_summary = [x.get_diff('contract.covered_element',
                 x.covered_element) for x in self.covered_elements]
         if covered_element_summary:
             result[2] += ['cov_change_section', '%s :' % self.raise_user_error(
@@ -267,19 +267,19 @@ class EndorsementCoveredElement(relation_mixin(
         return self.raise_user_error('new_covered_element',
             raise_exception=False)
 
-    def get_summary(self, model, base_object=None):
-        result = super(EndorsementCoveredElement, self).get_summary(model,
+    def get_diff(self, model, base_object=None):
+        result = super(EndorsementCoveredElement, self).get_diff(model,
             base_object)
         if self.action == 'remove':
             return result
-        version_summary = [x.get_summary('contract.covered_element.version',
+        version_summary = [x.get_diff('contract.covered_element.version',
                 x.version)
             for x in self.versions]
         if version_summary:
             result.append(['covered_element_version_change_section', '%s :' % (
                         self.raise_user_error('mes_version_modifications',
                             raise_exception=False)), version_summary])
-        option_summary = [x.get_summary('contract.option', x.option)
+        option_summary = [x.get_diff('contract.option', x.option)
             for x in self.options]
         if option_summary:
             result.append(['option_change_section', '%s :' % (
@@ -460,18 +460,18 @@ class EndorsementCoveredElementOption(relation_mixin(
         return self.raise_user_error('new_coverage', (self.coverage.rec_name),
             raise_exception=False)
 
-    def get_summary(self, model, base_object=None):
-        result = super(EndorsementCoveredElementOption, self).get_summary(
+    def get_diff(self, model, base_object=None):
+        result = super(EndorsementCoveredElementOption, self).get_diff(
             model, base_object)
         if self.action == 'remove':
             return result
-        option_summary = [x.get_summary('contract.option.version', x.version)
+        option_summary = [x.get_diff('contract.option.version', x.version)
             for x in self.versions]
         if option_summary:
             result.append(['option_version_change_section', '%s :' % (
                         self.raise_user_error('mes_option_modifications',
                             raise_exception=False)), option_summary])
-        extra_premium_summary = [x.get_summary('contract.option.extra_premium',
+        extra_premium_summary = [x.get_diff('contract.option.extra_premium',
                 x.extra_premium) for x in self.extra_premiums]
         if extra_premium_summary:
             result += ['extra_premium_change_section', '%s :' % (

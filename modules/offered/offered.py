@@ -200,13 +200,6 @@ class Offered(model.CoopView, GetResult, Templated, model.TaggedMixin):
     def default_company(cls):
         return Transaction().context.get('company') or None
 
-    @classmethod
-    def get_summary(cls, offereds, name=None, at_date=None, lang=None):
-        res = {}
-        for offered in offereds:
-            res[offered.id] = ''
-        return res
-
     def get_currency_digits(self, name):
         if hasattr(self, 'currency') and self.currency:
             return self.currency.digits

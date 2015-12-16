@@ -171,7 +171,7 @@ class EndorsementContract:
     def get_endorsement_summary(self, name):
         result = super(EndorsementContract, self).get_endorsement_summary(name)
         previous_billing_information = self.base_instance.billing_information
-        billing_summary = [billing_information.get_summary(
+        billing_summary = [billing_information.get_diff(
                 'contract.billing_information', previous_billing_information)
             for billing_information in self.billing_informations]
         if billing_summary:

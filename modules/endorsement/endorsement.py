@@ -417,7 +417,7 @@ def values_mixin(value_model):
         def get_endorsed_record(self):
             raise NotImplementedError
 
-        def get_summary(self, model, base_object=None):
+        def get_diff(self, model, base_object=None):
             pool = Pool()
             Date = pool.get('ir.date')
             lang = pool.get('res.user')(Transaction().user).language
@@ -699,7 +699,7 @@ def relation_mixin(value_model, field, model, name):
                     _datetime_exclude=True):
                 return Pool().get(model)(self.relation)
 
-        def get_summary(self, model, base_object=None):
+        def get_diff(self, model, base_object=None):
             if self.action == 'remove':
                 return ['remove_section', '%s %s' % (self.raise_user_error(
                         'mes_remove_version', raise_exception=False),
@@ -707,15 +707,15 @@ def relation_mixin(value_model, field, model, name):
             elif self.action == 'add':
                 result = ['new_section', '%s:' % self.raise_user_error(
                     'mes_new_version', raise_exception=False)]
-                result += [super(Mixin, self).get_summary(model, base_object)]
+                result += [super(Mixin, self).get_diff(model, base_object)]
                 return result
             elif self.action == 'update':
                 result = ['update_section', '%s: ' % self.raise_user_error(
                     'mes_update_version', (base_object.rec_name),
                     raise_exception=False)]
-                result += [super(Mixin, self).get_summary(model, base_object)]
+                result += [super(Mixin, self).get_diff(model, base_object)]
                 return result
-            return super(Mixin, self).get_summary(model, base_object)
+            return super(Mixin, self).get_diff(model, base_object)
 
         def get_func_key(self, name):
             return getattr(self, field).func_key if getattr(self, field) and \
@@ -1195,17 +1195,17 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     @classmethod
     def format_summary(cls, summary, indent=0, style=None):
         inc = 2
-        res = ''
+        res = u'<div>'
         if type(summary) in (str, unicode):
             if not summary:
                 # Empty line, no styling
-                return '\n'
+                return ''
             if summary.endswith('section'):
-                return '\n'
+                return ''
             elif u'→' in summary:
                 elems = summary.split(u'→')
                 return ' ' * indent + elems[0] + u'→' + "<b>" + elems[1] +\
-                    "</b>" + '\n'
+                    "</b>" + '</div>\n'
             elif not style:
                 style = 'italic'
 
@@ -1216,11 +1216,11 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
             elif style == 'underline':
                 pre, post = '<u>', '</u>'
             elif style == 'center':
-                pre, post = "<p align='center'> <span size='12'> <b>", \
-                    "</b> </span> </p>"
+                res = u'<div align="center">'
+                pre, post = "<b>", "</b>"
             else:
                 pre = post = ''
-            res += ' ' * indent + pre + summary + post + '\n'
+            res += ' ' * indent + pre + summary + post + '</div>\n'
         else:
             for i, item in enumerate(summary):
                 if i == 1 and summary[0] == 'definition_section':
@@ -1683,12 +1683,12 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
 
     def get_endorsement_summary(self, name):
         result = ['definition_section', self.definition.name, []]
-        contract_summary = self.get_summary('contract', self.base_instance)
+        contract_summary = self.get_diff('contract', self.base_instance)
 
         if contract_summary:
             result[2] += ['contract_change_section', contract_summary]
 
-        option_summary = [x.get_summary('contract.option', x.option)
+        option_summary = [x.get_diff('contract.option', x.option)
             for x in self.options]
         if option_summary:
             result[2] += ['option_change_section',
@@ -1696,7 +1696,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                     'mes_option_modifications', raise_exception=False),
                 option_summary]
 
-        activation_summary = [x.get_summary(
+        activation_summary = [x.get_diff(
                 'contract.activation_history', x.activation_history)
             for x in self.activation_history]
         if activation_summary:
@@ -1705,7 +1705,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                     'mes_activation_history_modifications',
                     raise_exception=False), activation_summary]
 
-        extra_data_summary = [x.get_summary('contract.extra_data',
+        extra_data_summary = [x.get_diff('contract.extra_data',
                 x.extra_data) for x in self.extra_datas]
         if extra_data_summary:
             result[2] += ['extra_data_change_section',
@@ -1713,7 +1713,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                     'mes_extra_data_modifications', raise_exception=False),
                 extra_data_summary]
 
-        contact_summary = [x.get_summary('contract.contact', x.contact)
+        contact_summary = [x.get_diff('contract.contact', x.contact)
             for x in self.contacts]
         if contact_summary:
             result[2] += ['contact_change_section',
@@ -2033,12 +2033,12 @@ class EndorsementOption(relation_mixin(
                 values[2]['versions'] = version_values
         return values
 
-    def get_summary(self, model, base_object=None):
-        result = super(EndorsementOption, self).get_summary(model,
+    def get_diff(self, model, base_object=None):
+        result = super(EndorsementOption, self).get_diff(model,
             base_object)
         if self.action == 'remove':
             return result
-        option_summary = [x.get_summary('contract.option.version', x.version)
+        option_summary = [x.get_diff('contract.option.version', x.version)
             for x in self.versions]
         if option_summary:
             result.append(['option_version_change_section', '%s :' % (
@@ -2207,11 +2207,11 @@ class EndorsementExtraData(relation_mixin(
             apply_values = ('write', apply_values[1], values)
         return apply_values
 
-    def get_summary(self, model, base_object=None):
+    def get_diff(self, model, base_object=None):
         endorsement_state = self.contract_endorsement.endorsement.state
         # We want to present each extra data entry like a field
         new_data_values = self.values.pop('extra_data_values', None)
-        res = super(EndorsementExtraData, self).get_summary(model, base_object)
+        res = super(EndorsementExtraData, self).get_diff(model, base_object)
         self.values['extra_data_values'] = new_data_values
         if not new_data_values:
             new_data_values = self.new_extra_data_values

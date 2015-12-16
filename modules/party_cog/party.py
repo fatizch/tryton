@@ -21,7 +21,7 @@ from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateTransition, StateView
 from trytond.pyson import PYSONEncoder
-from trytond.modules.cog_utils import utils, fields, model, export
+from trytond.modules.cog_utils import utils, fields, model, export, summary
 from trytond.modules.cog_utils import coop_string, UnionMixin
 
 
@@ -51,7 +51,7 @@ STATES_PERSON = Bool(Eval('is_person'))
 STATES_COMPANY = Bool(Eval('is_company'))
 
 
-class Party(export.ExportImportMixin):
+class Party(export.ExportImportMixin, summary.SummaryMixin):
     __name__ = 'party.party'
     _func_key = 'code'
 
@@ -371,24 +371,20 @@ class Party(export.ExportImportMixin):
     def get_gender_as_int(self):
         return self.gender_as_int(self.gender)
 
-    @classmethod
-    def get_summary(cls, parties, name=None, at_date=None, lang=None):
-        res = {}
-        for party in parties:
-            res[party.id] = "<b>%s</b>\n" % party.get_rec_name(name)
-            if party.is_person:
-                res[party.id] = coop_string.get_field_as_summary(party, 'ssn')
-                res[party.id] += coop_string.get_field_as_summary(
-                    party, 'birth_date')
-                res[party.id] += coop_string.get_field_as_summary(
-                    party, 'birth_name')
-            if party.is_company:
-                pass
-            # res[party.id] += coop_string.get_field_as_summary(
-            #    party, 'extra_data', True, at_date, lang=lang)
-            res[party.id] += coop_string.get_field_as_summary(
-                party, 'addresses', True, at_date, lang=lang)
-        return res
+    def get_summary_content(self, label, at_date=None, lang=None):
+        if label is True:
+            label = self.rec_name
+        value = []
+        if self.is_person:
+            value.append(coop_string.get_field_summary(self, 'ssn', True,
+                at_date, lang))
+            value.append(coop_string.get_field_summary(self, 'birth_date', True,
+                at_date, lang))
+            value.append(coop_string.get_field_summary(self, 'birth_name', True,
+                at_date, lang))
+        value.append(coop_string.get_field_summary(self, 'addresses', True,
+            at_date, lang))
+        return (label, value)
 
     @classmethod
     def search_rec_name(cls, name, clause):

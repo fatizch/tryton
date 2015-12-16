@@ -145,13 +145,9 @@ class BankAccount(export.ExportImportMixin):
     def default_start_date():
         return utils.today()
 
-    @classmethod
-    def get_summary(cls, bank_accounts, name=None, at_date=None, lang=None):
-        res = {}
-        for bank_acc in bank_accounts:
-            res[bank_acc.id] = coop_string.get_field_as_summary(bank_acc,
-                'numbers', False, at_date, lang=lang)
-        return res
+    def get_summary_content(self, label, at_date=None, lang=None):
+        return coop_string.get_field_summary(self, 'numbers', True, at_date,
+            lang)
 
     def get_numbers_as_char(self, name):
         return ', '.join([x.rec_name for x in self.numbers])
@@ -222,10 +218,8 @@ class BankAccountNumber(export.ExportImportMixin):
     def default_type():
         return 'iban'
 
-    @classmethod
-    def get_summary(cls, numbers, name=None, at_date=None, lang=None):
-        return dict([(nb.id, '%s : %s' % (nb.type, nb.rec_name))
-            for nb in numbers])
+    def get_summary_content(self, label, at_date=None, lang=None):
+        return (self.type, self.rec_name)
 
     @classmethod
     def get_var_names_for_full_extract(cls):

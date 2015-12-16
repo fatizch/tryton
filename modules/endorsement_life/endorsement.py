@@ -60,12 +60,12 @@ class EndorsementCoveredElementOption:
                 'msg_beneficiary_modifications': 'Beneficiaries Modification',
                 })
 
-    def get_summary(self, model, base_object=None):
-        result = super(EndorsementCoveredElementOption, self).get_summary(
+    def get_diff(self, model, base_object=None):
+        result = super(EndorsementCoveredElementOption, self).get_diff(
             model, base_object)
         if self.action == 'remove':
             return result
-        beneficiary_summary = [x.get_summary('contract.option.beneficiary',
+        beneficiary_summary = [x.get_diff('contract.option.beneficiary',
                 x.beneficiary) for x in self.beneficiaries]
         if beneficiary_summary:
             result += ['beneficiary_change_section', '%s :'

@@ -52,16 +52,13 @@ class Party:
     def on_change_is_bank(self):
         self._on_change_is_actor('is_bank')
 
-    @classmethod
-    def get_summary(cls, parties, name=None, at_date=None, lang=None):
-        res = super(Party, cls).get_summary(
-            parties, name=name, at_date=at_date, lang=lang)
-        for party in parties:
-            if party.bank_role:
-                res[party.id] += coop_string.get_field_as_summary(
-                    party, 'bank_role', True, at_date, lang=lang)
-            res[party.id] += coop_string.get_field_as_summary(
-                party, 'bank_accounts', True, at_date, lang=lang)
+    def get_summary_content(self, label, at_date=None, lang=None):
+        res = super(Party, self).get_summary_content(label, at_date, lang)
+        res[1].append(coop_string.get_field_summary(self, 'bank_accounts', True,
+            at_date, lang))
+        if self.bank_role:
+            res[1].append(coop_string.get_field_summary(self, 'bank_role', True,
+                at_date, lang))
         return res
 
     def get_bank_accounts(self, at_date=None):

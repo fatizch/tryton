@@ -38,15 +38,8 @@ class Address(export.ExportImportMixin):
     def _export_light(cls):
         return set(['country'])
 
-    @classmethod
-    def get_summary(cls, addresses, name=None, at_date=None, lang=None):
-        res = {}
-        for address in addresses:
-            res[address.id] = ''
-            indent = 0
-            res[address.id] += coop_string.re_indent_text(
-                address.get_full_address(name), indent)
-        return res
+    def get_summary_content(self, label, at_date=None, lang=None):
+        return (None, ' '.join(self.full_address.splitlines()))
 
     @staticmethod
     def get_cities_from_zip(zipcode, country):

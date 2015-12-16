@@ -80,12 +80,10 @@ class Party:
     def open_quotes(cls, objs):
         pass
 
-    @classmethod
-    def get_summary(cls, parties, name=None, at_date=None, lang=None):
-        res = super(Party, cls).get_summary(parties, name, at_date, lang)
-        for party in parties:
-            res[party.id] += coop_string.get_field_as_summary(
-                party, 'contracts', True, at_date, lang=lang)
+    def get_summary_content(self, label, at_date=None, lang=None):
+        res = super(Party, self).get_summary_content(label, at_date, lang)
+        res[1].append(coop_string.get_field_summary(self, 'contracts', True,
+            at_date, lang))
         return res
 
 

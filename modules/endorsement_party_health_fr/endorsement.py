@@ -85,7 +85,7 @@ class EndorsementParty:
 
     def get_endorsement_summary(self, name):
         result = super(EndorsementParty, self).get_endorsement_summary(name)
-        health_complement_summary = [health_complement.get_summary(
+        health_complement_summary = [health_complement.get_diff(
             'health.party_complement', health_complement.health_complement)
                 for health_complement in self.health_complement]
         if health_complement_summary:

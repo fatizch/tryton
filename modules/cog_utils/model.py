@@ -22,7 +22,7 @@ from trytond.tools import reduce_ids
 import utils
 import fields
 import export
-
+import summary
 
 __all__ = [
     'error_manager',
@@ -154,7 +154,8 @@ class FunctionalErrorMixIn(object):
         return Transaction().context.get('error_manager', None)
 
 
-class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn):
+class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
+        summary.SummaryMixin):
     create_date_ = fields.Function(
         fields.DateTime('Creation date'),
         '_get_creation_date')

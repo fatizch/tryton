@@ -6,9 +6,16 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 
 import utils
+import model
+from summary import SummaryMixin
 
+import logging
+LOG = logging.getLogger(__name__)
 
 __all__ = []
+
+
+FMT = {0: 'b', 1: 'u', 2: 'i'}
 
 
 def format_number(percent, value, lang=None):
@@ -27,45 +34,56 @@ def zfill(the_instance, val_name):
         return val.zfill(size)
 
 
-def re_indent_text(src, indent):
-    return '%s\n' % '\n'.join((4 * ' ' * indent) + i for i in src.splitlines())
+def get_instance_summary(instance, label, at_date, lang):
+    if not hasattr(instance, 'get_summary_content'):
+        return None
+    return instance.get_summary_content(label, at_date, lang)
 
 
-def get_field_as_summary(instance, var_name, with_label=True, at_date=None,
-        lang=None):
-    if not getattr(instance, var_name):
-        return ''
-    res = ''
-    if type(getattr(instance, var_name)) is tuple:
-        list_at_date = utils.get_good_versions_at_date(
-            instance, var_name, at_date)
-        for element in list_at_date:
-            if not hasattr(element.__class__, 'get_summary'):
-                continue
-            sub_indent = 0
-            if res != '':
-                res += '\n'
-            if with_label:
-                if res == '':
-                    res = '<b>%s :</b>\n' % translate_label(
-                        instance, var_name, lang=lang)
-                sub_indent = 1
-            summary_dict = element.get_summary(
-                [element], name=var_name, at_date=at_date, lang=lang)
-            if summary_dict and element.id in summary_dict:
-                res += re_indent_text(
-                    '%s\n' % summary_dict[element.id], sub_indent)
+def get_field_summary(instance, var_name, label, at_date=None, lang=None):
+    value = getattr(instance, var_name)
+    if value is None:
+        return None
+    if type(value) is tuple:
+        if not isinstance(label, basestring):
+            label = translate_label(instance, var_name, lang)
+            values = utils.get_good_versions_at_date(instance, var_name,
+                                                     at_date)
+        return (label, [get_instance_summary(i, None, at_date, lang)
+                        for i in values])
     else:
-        if with_label:
-            res = '%s : ' % translate_label(instance, var_name, lang=lang)
-        if hasattr(getattr(instance, var_name).__class__, 'get_summary'):
-            summary_dict = getattr(instance, var_name).__class__.get_summary(
-                [instance], at_date=at_date, lang=lang)
-            value = summary_dict[instance.id]
+        if label is True:
+            label = translate_label(instance, var_name, lang)
+        instance_summary = get_instance_summary(value, label, at_date, lang)
+
+        if instance_summary is not None:
+            return instance_summary
+    return (label, translate_value(instance, var_name, lang))
+
+
+def generate_summary(desc, level=0):
+    global FMT
+    level_fmt = FMT.get(level, None)
+    node_types = (tuple, list)
+    assert type(desc) in node_types and len(desc) == 2, desc
+    label, value = desc
+    assert not (label is None and type(value) in node_types)
+    res = u'<div>%s' % (max(level - 1, 0) * 4 * ' ')
+    if label is not None:
+        if FMT is None:
+            res += label
         else:
-            value = translate_value(instance, var_name)
-        res += '%s\n' % value
-    return re_indent_text(res, 0)
+            res += u'<%s>%s</%s>' % (level_fmt, label, level_fmt)
+
+    if not (label is None or type(value) in node_types):
+        res += u': '
+    if type(value) in node_types:
+        res += u'</div>\n%s' % '\n'.join([generate_summary(i, level + 1)
+                for i in value if i is not None])
+
+    else:
+        res += u'%s</div>' % value
+    return res
 
 
 def translate_label(instance, var_name, lang=None):

@@ -34,14 +34,11 @@ class Party:
     def on_change_is_insurer(self):
         self._on_change_is_actor('is_insurer')
 
-    @classmethod
-    def get_summary(cls, parties, name=None, at_date=None, lang=None):
-        res = super(Party, cls).get_summary(
-            parties, name=name, at_date=at_date, lang=lang)
-        for party in parties:
-            if party.insurer_role:
-                res[party.id] += coop_string.get_field_as_summary(party,
-                    'insurer_role', True, at_date, lang=lang)
+    def get_summary_content(self, label, at_date=None, lang=None):
+        res = super(Party, self).get_summary_content(label, at_date, lang)
+        if self.insurer_role:
+            res[1].append(coop_string.get_field_summary(self, 'insurer_role',
+                True, at_date, lang))
         return res
 
     def get_rec_name(self, name):
@@ -74,9 +71,8 @@ class Insurer(model.CoopView, model.CoopSQL):
     def search_func_key(cls, name, clause):
         return [('party.code',) + tuple(clause[1:])]
 
-    @classmethod
-    def get_summary(cls, insurers, name=None, at_date=None, lang=None):
-        return dict([(insurer.id, 'X') for insurer in insurers])
+    def get_summary_content(self, labelTrue, at_date=None, lang=None):
+        return (self.rec_name, 'X')
 
     def get_rec_name(self, name):
         return (self.party.rec_name
