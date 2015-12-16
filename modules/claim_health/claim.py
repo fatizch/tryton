@@ -28,6 +28,11 @@ class HealthLoss(model.CoopSQL, model.CoopView):
     act_end_date = fields.Date('End Date of Medical Act')
     quantity = fields.Integer('Quantity')
     total_charges = fields.Numeric('Total Charges')
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key')
+
+    def get_func_key(self, name):
+        return ''
 
     def get_rec_name(self, name=None):
         return '[%s] ' % self.act_date + self.covered_person.full_name
@@ -42,8 +47,7 @@ class HealthLoss(model.CoopSQL, model.CoopView):
 
     @classmethod
     def add_func_key(cls, values):
-        # Update without func_key is not handled for now
-        values['_func_key'] = None
+        values['_func_key'] = ''
 
 
 class Loss(model.CoopSQL, model.CoopView):
