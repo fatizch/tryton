@@ -168,6 +168,22 @@ Create Void Endorsement::
     ...     EndorsementDefinitionPartRelation(endorsement_part=void_contract_part))
     >>> void_contract.save()
 
+Create Terminate Endorsement::
+
+    >>> terminate_contract_part = EndorsementPart()
+    >>> terminate_contract_part.name = 'Change Start Date'
+    >>> terminate_contract_part.code = 'terminate_contract'
+    >>> terminate_contract_part.kind = 'contract'
+    >>> terminate_contract_part.view = 'terminate_contract'
+    >>> terminate_contract_part.save()
+    >>> terminate_contract = EndorsementDefinition()
+    >>> terminate_contract.name = 'Terminate Contract'
+    >>> terminate_contract.code = 'teminate_contract'
+    >>> terminate_contract.ordered_endorsement_parts.append(
+    ...     EndorsementDefinitionPartRelation(
+    ...         endorsement_part=terminate_contract_part))
+    >>> terminate_contract.save()
+
 Create Test Contract::
 
     >>> contract = Contract()
@@ -229,6 +245,47 @@ Test options restauration::
     >>> Endorsement.cancel([good_endorsement.id], config._context)
     >>> contract = Contract(contract.id)
     >>> len(contract.options) == 1
+    True
+
+Test Terminate Endorsement::
+
+    >>> SubStatus = Model.get('contract.sub_status')
+    >>> terminated_status, = SubStatus.find([('code', '=', 'terminated')])
+
+New Endorsement::
+
+    >>> new_endorsement = Wizard('endorsement.start')
+    >>> new_endorsement.form.contract = contract
+    >>> new_endorsement.form.endorsement_definition = terminate_contract
+    >>> new_endorsement.form.endorsement = None
+    >>> new_endorsement.form.applicant = None
+    >>> new_endorsement.form.effective_date = contract_start_date + \
+    ...     relativedelta(months=3)
+    >>> new_endorsement.execute('start_endorsement')
+    >>> new_endorsement.form.termination_reason = terminated_status
+    >>> new_endorsement.execute('terminate_contract_next')
+    >>> new_endorsement.execute('apply_endorsement')
+    >>> contract = Contract(contract.id)
+    >>> contract.start_date == contract_start_date
+    True
+    >>> contract.initial_start_date == contract_start_date
+    True
+    >>> contract.status == 'terminated'
+    True
+    >>> contract.end_date == contract_start_date + relativedelta(months=3)
+    True
+    >>> contract.termination_reason == terminated_status
+    True
+    >>> good_endorsement, = Endorsement.find([
+    ...         ('contracts', '=', contract.id),
+    ...         ('state', '=', 'applied')])
+    >>> Endorsement.cancel([good_endorsement.id], config._context)
+    >>> contract = Contract(contract.id)
+    >>> contract.start_date == contract_start_date
+    True
+    >>> contract.end_date == None
+    True
+    >>> contract.termination_reason == None
     True
 
 Test Void Endorsement::

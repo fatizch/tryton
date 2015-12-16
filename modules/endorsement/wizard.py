@@ -1112,6 +1112,7 @@ class TerminateContract(EndorsementWizardStepMixin):
         methods = super(TerminateContract, cls).get_methods_for_model(
             model_name)
         if model_name == 'contract':
+            methods -= {'calculate_activation_dates'}
             methods.add('plan_termination_or_terminate')
         return methods
 
@@ -1153,7 +1154,7 @@ class TerminateContract(EndorsementWizardStepMixin):
 
         # first case : we are terminating a contract after its current
         # term
-        if self.termination_date > contract.end_date:
+        if self.termination_date > (contract.end_date or datetime.date.max):
             if last_period.end_date == contract.end_date or \
                     self.termination_date > last_period.end_date:
                 self.raise_user_error('termination_date_must_be_anterior',
