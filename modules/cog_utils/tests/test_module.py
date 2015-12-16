@@ -36,6 +36,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'VersionedObject': 'cog_utils.test_version',
             'Version': 'cog_utils.test_version.version',
             'Version1': 'cog_utils.test_version.version1',
+            'EventTypeAction': 'event.type.action',
             }
 
     def test0020get_module_path(self):
@@ -797,6 +798,25 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(coop_string.slugify(s), u'cafe-the_20_')
         self.assertEqual(coop_string.asciify(s), u'cafe-THE:20$')
         self.assertEqual(coop_string.slugify(s, '-'), u'cafe-the-20-')
+
+    def test_event_type_action_pyson(self):
+        good_obj = self.ExportTest(char='bingo',
+            integer=12, boolean=True)
+        bad_obj = self.ExportTest(char='booh', integer=2,
+            boolean=False)
+        empty_obj = self.ExportTest()
+
+        conditions = ["Eval('char') == 'bingo'",
+            "Eval('integer', 0) == 12",
+            "Eval('integer', 0) > 10",
+            "Eval('boolean', False) == True",
+            "And(Eval('boolean', False) == True, Eval('integer', 0) == 12)"]
+
+        for condition in conditions:
+            action = self.EventTypeAction(
+                pyson_condition=condition)
+            res = action.filter_objects([good_obj, bad_obj, empty_obj])
+            self.assertEqual(res, [good_obj], condition)
 
 
 def suite():
