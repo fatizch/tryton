@@ -90,7 +90,8 @@ class CoopTestCase(ModuleTestCase):
                 test_function._is_ready) and not (self._testMethodName in (
                         'test_view', 'test_depends', 'test_menu_action',
                         'test_model_access', 'test9999_launch_test_cases',
-                        'test_rec_name', 'test_workflow_transitions')):
+                        'test_rec_name', 'test_workflow_transitions',
+                        'test_field_methods')):
             good_function = functools.partial(
                 prepare_test()(test_function, True), self)
             setattr(self, self._testMethodName, good_function)
