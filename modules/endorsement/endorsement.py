@@ -1204,8 +1204,8 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                 return ''
             elif u'→' in summary:
                 elems = summary.split(u'→')
-                return ' ' * indent + elems[0] + u'→' + "<b>" + elems[1] +\
-                    "</b>" + '</div>\n'
+                return res + ' ' * indent + elems[0] + u'→' + "<b>" + \
+                    elems[1] + "</b>" + '</div>'
             elif not style:
                 style = 'italic'
 
@@ -1220,7 +1220,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                 pre, post = "<b>", "</b>"
             else:
                 pre = post = ''
-            res += ' ' * indent + pre + summary + post + '</div>\n'
+            res += ' ' * indent + pre + summary + post + '</div>'
         else:
             for i, item in enumerate(summary):
                 if i == 1 and summary[0] == 'definition_section':
@@ -1229,6 +1229,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                     res += cls.format_summary(item, indent, style='center')
                 else:
                     res += cls.format_summary(item, indent=indent + inc)
+            res += '</div>'
         return res
 
     def raw_endorsement_summary(self):
