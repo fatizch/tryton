@@ -3,8 +3,6 @@
 
 coog_joke_main() { # brings a smile (fair attitude requested)
         local joke
-        local victim
         joke=`curl -s "http://api.icndb.com/jokes/random" | python2 .py/joke-parse.py`
-        victim=`hg log --template "{author}\n" | grep -P "(coopengo|b2ck)" | grep -P "\w+ \w+\s<" | sort -R | head -1 | cut -d '<' -f 1 | rev | cut -c 2- | rev`
-        echo `echo $joke | sed -e "s/Chuck Norris/$victim/g"`
+        echo $joke
 }

@@ -1,0 +1,8 @@
+# vim: set ft=sh:
+# some git hacks (not possible via aliases)
+
+coog_git_noremote() { # list local branches with no remotes
+        git branch -l | sed 's/* master//' > /tmp/gitlocal.txt
+        git branch -r  | sed 's/origin\///' > /tmp/gitremote.txt
+        grep -Fxv -f /tmp/gitremote.txt /tmp/gitlocal.txt
+}
