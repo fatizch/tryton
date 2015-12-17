@@ -518,12 +518,27 @@ def CmdPresubmit(args):
   RunHook(PREDCOMMIT_HOOK, error_ok=True)
 
 
+def diff_to_log_options(args):
+  # Construct a description for this change from the log.
+  # We need to convert diff options to log options.
+  log_args = []
+  if len(args) == 1 and not args[0].endswith('.'):
+    log_args = [args[0] + '..']
+  elif len(args) == 2:
+    log_args = [args[0] + '..' + args[1]]
+  else:
+    log_args = args[:]  # Hope for the best!
+  return log_args
+
+
 def CmdUpload(args):
   parser = optparse.OptionParser(
       usage='git cl upload [options] [args to "git diff"]')
   parser.add_option('--bypass-hooks', action='store_true', dest='bypass_hooks',
                     help='bypass upload presubmit hook')
   parser.add_option('-m', dest='message', help='message for patch')
+  parser.add_option('-u', '--use_commit_message', action='store_true', 
+    dest='use_commit_message', help='use commit message as patch message')
   parser.add_option('-r', '--reviewers',
                     help='reviewer email addresses')
   parser.add_option('-c', '--cc',
@@ -573,16 +588,12 @@ def CmdUpload(args):
     upload_args.extend(['--issue', cl.GetIssue()])
     print ("This branch is associated with issue %s. "
            "Adding patch to that issue." % cl.GetIssue())
+    if not options.message and options.use_commit_message:
+      log_args = diff_to_log_options(args)
+      desc = RunGit(['log', '--pretty=format:%s\n\n%b'] + log_args)
+      upload_args.extend(['--message', desc.splitlines()[0]])
   else:
-    # Construct a description for this change from the log.
-    # We need to convert diff options to log options.
-    log_args = []
-    if len(args) == 1 and not args[0].endswith('.'):
-      log_args = [args[0] + '..']
-    elif len(args) == 2:
-      log_args = [args[0] + '..' + args[1]]
-    else:
-      log_args = args[:]  # Hope for the best!
+    log_args = diff_to_log_options(args)
     desc = RunGit(['log', '--pretty=format:%s\n\n%b'] + log_args)
     initial_text = """# Enter a description of the change.
 # This will displayed on the codereview site.
