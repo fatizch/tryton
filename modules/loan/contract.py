@@ -546,7 +546,9 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
         return result
 
     def get_rec_name(self, name):
-        return '%s (%s%%)' % (self.loan.rec_name, self.share * 100)
+        with Transaction().set_context(contract=self.contract.id if
+                self.contract else None):
+            return '%s (%s%%)' % (self.loan.rec_name, self.share * 100)
 
     def _expand_tree(self, name):
         return True
