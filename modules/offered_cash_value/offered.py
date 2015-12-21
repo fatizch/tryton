@@ -25,10 +25,6 @@ class CashValueRule(BusinessRuleRoot, model.CoopSQL):
     def give_me_actualized_cash_value(self, args):
         return self.get_rule_result(args)
 
-    @classmethod
-    def default_kind(cls):
-        return 'advanced'
-
     def give_me_saving_account(self, args):
         return self.saving_account
 

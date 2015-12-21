@@ -220,7 +220,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         return table
 
     @classmethod
-    def default_dimension_order(cls):
+    def _default_dimension_order(cls):
         return 'alpha'
 
     @staticmethod
@@ -346,7 +346,7 @@ for i in range(1, DIMENSION_MAX + 1):
                 }))
 
     setattr(TableDefinition, 'default_dimension_order%s' % i,
-        TableDefinition.default_dimension_order)
+        TableDefinition._default_dimension_order)
 
     setattr(TableDefinition, 'dimension%s' % i,
         fields.One2ManyDomain('table.dimension.value', 'definition',
@@ -909,7 +909,7 @@ class TableOpen2DAskDimensions(ModelView):
         return Transaction().context.get('active_id')
 
     @staticmethod
-    def default_dimension_required(dimension=0):
+    def _default_dimension_required(dimension=0):
         TableDefinition = Pool().get('table')
         definition_id = Transaction().context.get('active_id')
         if definition_id:
@@ -964,7 +964,7 @@ for i in range(3, DIMENSION_MAX + 1):
 
     setattr(TableOpen2DAskDimensions, 'default_dimension%s_required' % i,
         staticmethod(partial(
-                TableOpen2DAskDimensions.default_dimension_required,
+                TableOpen2DAskDimensions._default_dimension_required,
                 dimension=i)))
 
 

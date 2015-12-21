@@ -539,10 +539,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def default_company(cls):
         return Transaction().context.get('company', None)
 
-    @classmethod
-    def default_extra_data(cls):
-        return {}
-
     @staticmethod
     def default_status():
         return 'quote'

@@ -85,7 +85,7 @@ class ClassAttr(PoolMeta):
                 self.__allowed_buttons__):
             name = name[len(self.__allowed_buttons__):]
             # We return the methods computed with the generic method.
-            return self.default_button_method(name)
+            return self._default_button_method(name)
         return super(ClassAttr, self).__getattr__(name)
 
 
@@ -145,7 +145,7 @@ class ProcessFramework(ModelView):
         return button_transition_generic
 
     @classmethod
-    def default_button_method(cls, button_name):
+    def _default_button_method(cls, button_name):
         def void(works):
             return
         button_data = button_name.split('_')

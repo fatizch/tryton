@@ -152,7 +152,7 @@ class Address(export.ExportImportMixin):
 
     @staticmethod
     def default_country():
-        return country.Country.default_country().id
+        return country.Country._default_country().id
 
     @classmethod
     def search_rec_name(cls, name, clause):

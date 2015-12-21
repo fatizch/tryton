@@ -188,7 +188,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
                     field_name)
 
     @classmethod
-    def domain_duplicate_for_person(cls, party):
+    def _domain_duplicate_for_person(cls, party):
         return [
             ('id', '!=', party.id),
             ('name', 'ilike', party.name),
@@ -197,7 +197,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             ]
 
     @classmethod
-    def domain_duplicate_for_company(cls, party):
+    def _domain_duplicate_for_company(cls, party):
         return [
             ('id', '!=', party.id),
             ('name', 'ilike', party.name),
@@ -213,9 +213,9 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             domain = ['OR']
             for party in sub_parties:
                 if party.is_person:
-                    domain.append(cls.domain_duplicate_for_person(party))
+                    domain.append(cls._domain_duplicate_for_person(party))
                 else:
-                    domain.append(cls.domain_duplicate_for_company(party))
+                    domain.append(cls._domain_duplicate_for_company(party))
             if len(domain) == 1:
                 continue
             duplicate_parties = cls.search(domain)

@@ -59,7 +59,7 @@ class ContractOption:
             depends=['free_coverage_amount', 'contract_status',
                 'has_coverage_amount'],
             sort=False),
-        'on_change_with_coverage_amount_selection', 'setter_void')
+        'on_change_with_current_coverage_amount_selection', 'setter_void')
     has_coverage_amount = fields.Function(
         fields.Boolean('Has Coverage Amount'),
         'on_change_with_has_coverage_amount')
@@ -132,7 +132,7 @@ class ContractOption:
         self.on_change_current_coverage_amount()
 
     @fields.depends('coverage_amount', 'coverage', 'free_coverage_amount')
-    def on_change_with_coverage_amount_selection(self, name=None):
+    def on_change_with_current_coverage_amount_selection(self, name=None):
         return (str(self.current_coverage_amount)
             if self.current_coverage_amount and not self.free_coverage_amount
             else '')
