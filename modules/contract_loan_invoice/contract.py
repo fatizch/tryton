@@ -212,7 +212,7 @@ class Contract:
             premiums_to_delete.extend(PremiumAmount.search([
                         ('contract', 'in', sub_contracts),
                         ['OR',
-                            ('end', '>=', limit or datetime.date.max),
+                            ('period_end', '>=', limit or datetime.date.max),
                             ('contract.status', '=', 'void')]]))
         PremiumAmount.delete(premiums_to_delete)
 
