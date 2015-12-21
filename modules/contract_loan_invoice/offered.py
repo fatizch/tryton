@@ -125,15 +125,57 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             loan_insured[cur_loan.id] = cur_loan.amount * max([
                     x.share for x in cur_loan.current_loan_shares])
             max_insured = max(max_insured, loan_insured[cur_loan.id])
-        biggest = max_insured == loan_insured[loan.id]
-        longest = max([coop_date.number_of_days_between(
-                    x.funds_release_date,
-                    x.end_date)
-                for x in contract.used_loans]
-            ) == coop_date.number_of_days_between(loan.funds_release_date,
-                        loan.end_date)
         prorata_ratio = loan_insured[loan.id] / sum(loan_insured.values())
         fee_amount = 0
+
+        # Weird algorithm. Fees can be affected to 'biggest' loan, 'longest'
+        # loan, or proratized accross loans depending on insurance amount.
+        #
+        # In case of 'duplicates' (i.e. : two loans with the same duration),
+        # the secondary rule is used (i.e. : discriminate on amount). In case
+        # of another duplicate (tough luck...) the first loan in order on the
+        # contract is used.
+        biggest_loans = {k for k, v in loan_insured.items()
+            if max_insured == v}
+        longest_duration = max([coop_date.number_of_days_between(
+                    x.funds_release_date,
+                    x.end_date)
+                for x in contract.used_loans])
+        longest_loans = {x.id for x in contract.used_loans
+            if coop_date.number_of_days_between(x.funds_release_date,
+                x.end_date) == longest_duration}
+        top_loans = longest_loans & biggest_loans
+        biggest, longest = None, None
+        if top_loans and loan.id in top_loans:
+            if len(top_loans) == 1:
+                is_top = True
+            else:
+                is_top = loan.id == [x.loan.id
+                    for x in contract.ordered_loans
+                    if x.loan.id in top_loans][0]
+            biggest, longest = is_top, is_top
+        elif top_loans:
+            biggest, longest = False, False
+        if biggest is None:
+            if loan.id in biggest_loans:
+                if len(biggest_loans) == 1:
+                    biggest = True
+                else:
+                    biggest = loan.id == [x.loan.id
+                        for x in contract.ordered_loans
+                        if x.loan.id in biggest_loans][0]
+            else:
+                biggest = False
+        if longest is None:
+            if loan.id in longest_loans:
+                if len(longest_loans) == 1:
+                    longest = True
+                else:
+                    longest = loan.id == [x.loan.id
+                        for x in contract.ordered_loans
+                        if x.loan.id in longest_loans][0]
+            else:
+                longest = False
         ratios = {
             'longest': longest,
             'biggest': biggest,
@@ -168,15 +210,51 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             loan_insured[cur_share.loan.id] = cur_share.loan.amount * \
                 cur_share.share
             max_insured = max(max_insured, loan_insured[cur_share.loan.id])
-        biggest = max_insured == loan_insured[loan.id]
-        longest = max([coop_date.number_of_days_between(
-                    x.funds_release_date,
-                    x.end_date)
-                for x in contract.used_loans]
-            ) == coop_date.number_of_days_between(loan.funds_release_date,
-                        loan.end_date)
         prorata_ratio = loan_insured[loan.id] / sum(loan_insured.values())
         fee_amount = 0
+
+        # Same algorithm than for contract-wide average premium rate
+        biggest_loans = {k for k, v in loan_insured.items()
+            if max_insured == v}
+        longest_duration = max([coop_date.number_of_days_between(
+                    x.funds_release_date,
+                    x.end_date)
+                for x in contract.used_loans])
+        longest_loans = {x.id for x in contract.used_loans
+            if coop_date.number_of_days_between(x.funds_release_date,
+                x.end_date) == longest_duration}
+        top_loans = longest_loans & biggest_loans
+        biggest, longest = None, None
+        if top_loans and loan.id in top_loans:
+            if len(top_loans) == 1:
+                is_top = True
+            else:
+                is_top = loan.id == [x.loan.id
+                    for x in contract.ordered_loans
+                    if x.loan.id in top_loans][0]
+            biggest, longest = is_top, is_top
+        elif top_loans:
+            biggest, longest = False, False
+        if biggest is None:
+            if loan.id in biggest_loans:
+                if len(biggest_loans) == 1:
+                    biggest = True
+                else:
+                    biggest = loan.id == [x.loan.id
+                        for x in contract.ordered_loans
+                        if x.loan.id in biggest_loans][0]
+            else:
+                biggest = False
+        if longest is None:
+            if loan.id in longest_loans:
+                if len(longest_loans) == 1:
+                    longest = True
+                else:
+                    longest = loan.id == [x.loan.id
+                        for x in contract.ordered_loans
+                        if x.loan.id in longest_loans][0]
+            else:
+                longest = False
         ratios = {
             'longest': longest,
             'biggest': biggest,
