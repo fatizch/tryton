@@ -116,7 +116,8 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             for share in option.loan_shares:
                 if share.loan == loan and share.share:
                     loan_amount += v[loan.id]
-                    insured_amount = loan.amount * share.share
+                    insured_amount = max(insured_amount,
+                        loan.amount * share.share)
                     break
 
         loan_insured, max_insured = {}, 0
