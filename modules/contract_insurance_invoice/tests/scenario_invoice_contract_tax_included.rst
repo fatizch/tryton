@@ -7,6 +7,7 @@ Imports::
     >>> import datetime
     >>> from proteus import config, Model, Wizard
     >>> from decimal import Decimal
+    >>> from trytond.modules.company.tests.tools import create_company, get_company
 
 Init Database::
 
@@ -72,19 +73,8 @@ Create or fetch Country::
 
 Create Company::
 
-    >>> company_config = Wizard('company.company.config')
-    >>> company_config.execute('company')
-    >>> company = company_config.form
-    >>> party = Party(name='World Company')
-    >>> party.save()
-    >>> company.party = party
-    >>> company.currency = currency
-    >>> company_config.execute('add')
-    >>> company, = Company.find([])
-    >>> user = User(1)
-    >>> user.main_company = company
-    >>> user.company = company
-    >>> user.save()
+    >>> _ = create_company(currency=currency)
+    >>> company = get_company()
 
 Reload the context::
 
