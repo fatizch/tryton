@@ -1,3 +1,4 @@
+Version 1.6 - 2015-12-23
 * Allow to define specific fees for billing modes
 * Add set_number batch to let invoice.post be out scalable
 * Allow other uses for remainder when reconciling

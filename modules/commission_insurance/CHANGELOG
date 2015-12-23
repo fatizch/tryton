@@ -1,3 +1,4 @@
+Version 1.6 - 2015-12-23
 * Allow to create commission for fees
 * Allow to filter by broker for invoice commission generation
 * Group commission invoice by broker and not by agent

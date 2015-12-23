@@ -1,3 +1,4 @@
+Version 1.6 - 2015-12-23
 * Add contract field on event logs
 * Display contract in different colors in tree view according to state.
 * Add contract icon on tree view

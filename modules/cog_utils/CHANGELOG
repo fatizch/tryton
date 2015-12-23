@@ -1,3 +1,4 @@
+Version 1.6 - 2015-12-23
 * Add pyson filtering for actions on event type
 * Add list of actions on event type
 * Add generic version getter
