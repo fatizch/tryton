@@ -1,3 +1,5 @@
+* Add sepa bank payment reject date on a payment
+
 Version 1.6 - 2015-12-23
 * Display SEPA Merged id in list view to facilitate search when manually rejecting paiements
 

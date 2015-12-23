@@ -7,9 +7,10 @@ from dateutil.relativedelta import relativedelta
 import genshi
 import genshi.template
 
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.cog_utils import fields, export, coop_date, utils
+from .sepa_handler import CAMT054Coog
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -18,6 +19,7 @@ __all__ = [
     'Payment',
     'InvoiceLine',
     'Journal',
+    'Message',
     ]
 
 
@@ -182,6 +184,11 @@ class Payment:
     __name__ = 'account.payment'
 
     sepa_merged_id = fields.Char('SEPA Merged ID')
+    sepa_bank_reject_date = fields.Date('SEPA Bank Reject Date',
+        states={'invisible': Or(
+                Eval('state') != 'failed',
+                Eval('journal.process_method') != 'sepa')
+                })
 
     def get_sepa_end_to_end_id(self, name):
         value = super(Payment, self).get_sepa_end_to_end_id(name)
@@ -294,8 +301,10 @@ class Payment:
                 if len(all_payments) != len(
                         [x for x in payments if x.sepa_merged_id]):
                     cls.raise_user_error('missing_payments')
-            cls.write(payments, {'sepa_return_reason_code': reject_reason.code}
-                )
+            cls.write(payments, {
+                    'sepa_return_reason_code': reject_reason.code,
+                    'sepa_bank_reject_date': utils.today()
+                    })
 
     @classmethod
     def get_contract_id(cls, payments):
@@ -396,3 +405,22 @@ class Journal:
     def _export_light(cls):
         return super(Journal, cls)._export_light() | {
             'sepa_bank_account_number'}
+
+
+class Message:
+    __name__ = 'account.payment.sepa.message'
+
+    @staticmethod
+    def _get_handlers():
+        pool = Pool()
+        Payment = pool.get('account.payment')
+        return {
+            'urn:iso:std:iso:20022:tech:xsd:camt.054.001.01':
+            lambda f: CAMT054Coog(f, Payment),
+            'urn:iso:std:iso:20022:tech:xsd:camt.054.001.02':
+            lambda f: CAMT054Coog(f, Payment),
+            'urn:iso:std:iso:20022:tech:xsd:camt.054.001.03':
+            lambda f: CAMT054Coog(f, Payment),
+            'urn:iso:std:iso:20022:tech:xsd:camt.054.001.04':
+            lambda f: CAMT054Coog(f, Payment),
+            }

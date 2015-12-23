@@ -23,4 +23,5 @@ def register():
         # Test case
         TestCaseModel,
         Configuration,
+        Message,
         module='account_payment_sepa_cog', type_='model')

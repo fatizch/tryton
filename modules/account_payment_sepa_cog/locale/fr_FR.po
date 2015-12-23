@@ -12,6 +12,10 @@ msgctxt "error:account.payment:"
 msgid "Unknown amount invoice line : %s %s"
 msgstr "Montant de ligne de quittance inconnu : %s %s"
 
+msgctxt "field:account.payment,sepa_bank_reject_date:"
+msgid "SEPA Bank Reject Date"
+msgstr "Date de rejet de la banque"
+
 msgctxt "field:account.payment,sepa_merged_id:"
 msgid "SEPA Merged ID"
 msgstr "ID regroupement SEPA"
