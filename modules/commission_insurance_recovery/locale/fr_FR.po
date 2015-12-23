@@ -6,6 +6,10 @@ msgctxt "error:commission.plan.recovery_rule:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
 
+msgctxt "error:commission:"
+msgid "Recovery Commission"
+msgstr "Reprise de commissions"
+
 msgctxt "field:commission,is_recovery:"
 msgid "Is Recovery Commission"
 msgstr "Est une commission de reprise"

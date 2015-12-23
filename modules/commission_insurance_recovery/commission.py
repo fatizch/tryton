@@ -60,5 +60,25 @@ class Commission:
     is_recovery = fields.Boolean('Is Recovery Commission')
 
     @classmethod
+    def __setup__(cls):
+        super(Commission, cls).__setup__()
+        cls._error_messages.update({
+                'recovery_commission': 'Recovery Commission',
+                })
+
+    @classmethod
     def _get_origin(cls):
         return super(Commission, cls)._get_origin() + ['contract.option']
+
+    def _group_to_invoice_line_key(self):
+        key = super(Commission, self)._group_to_invoice_line_key()
+        return key + (('is_recovery', self.is_recovery),)
+
+    @classmethod
+    def _get_invoice_line(cls, key, invoice, commissions):
+        invoice_line = super(Commission, cls)._get_invoice_line(key, invoice,
+            commissions)
+        if invoice_line and key['is_recovery']:
+            invoice_line.description = cls.raise_user_error(
+                    'recovery_commission', raise_exception=False)
+        return invoice_line
