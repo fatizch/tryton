@@ -18,15 +18,6 @@ class Contract:
     __name__ = 'contract'
 
     @classmethod
-    def terminate(cls, contracts, at_date, termination_reason):
-        pool = Pool()
-        Option = pool.get('contract.option')
-        super(Contract, cls).terminate(contracts, at_date, termination_reason)
-        options = [option for contract in contracts
-            for option in contract.options + contract.covered_element_options]
-        Option._compute_commission_recovery(options)
-
-    @classmethod
     def reactivate(cls, contracts):
         pool = Pool()
         Option = pool.get('contract.option')
@@ -42,39 +33,36 @@ class Contract:
         Option._compute_commission_recovery(
             self.options + self.covered_element_options)
 
+    def rebill(self, start=None, end=None, post_end=None):
+        super(Contract, self).rebill(start, end, post_end)
+        if self.termination_reason or self.status == 'void':
+            self.calculate_commission_recovery()
+
 
 class ContractOption:
     __name__ = 'contract.option'
 
     def recovery_agent_plans_used(self):
         'List of agent, plan tuples'
-        used = []
-        if self.parent_contract.agent:
-            used.append((self.parent_contract.agent,
-                self.parent_contract.agent.plan))
-        insurer = self.parent_contract.find_insurer_agent(
-            coverage=self.coverage)
-        if insurer:
-            used.append((insurer, insurer.plan))
-        return used
+        return self.agent_plans_used()
 
     @classmethod
     def sum_of_existing_commission_recoveries(cls, options):
         pool = Pool()
         cursor = Transaction().cursor
         commission = pool.get('commission').__table__()
-        origin_column = Column(commission, 'origin')
+        commissioned_option_column = Column(commission, 'commissioned_option')
 
-        where_origin = Or()
+        where_option = Or()
         for option in options:
-            where_origin.append((origin_column == 'contract.option,' +
-                    str(option.id)))
+            where_option.append((commissioned_option_column == option.id))
 
         cursor.execute(*commission.select(
-            Sum(commission.amount), commission.agent, commission.origin,
+            Sum(commission.amount), commission.agent,
+            commission.commissioned_option,
             where=commission.is_recovery == True,
-            having=where_origin,
-            group_by=[commission.agent, commission.origin]))
+            having=where_option,
+            group_by=[commission.agent, commission.commissioned_option]))
 
         res = {}
         for amount, agent, origin in cursor.fetchall():
@@ -103,7 +91,7 @@ class ContractOption:
         for option in terminated_options:
             for agent, plan in option.recovery_agent_plans_used():
                 existing_recovery_amount = recoveries.get((agent.id,
-                        'contract.option,' + str(option.id)), 0)
+                    option.id), 0)
                 recovery_amount = plan.compute_recovery(option, agent)
                 if (recovery_amount and
                         existing_recovery_amount != recovery_amount):
@@ -119,15 +107,18 @@ class ContractOption:
                     commissions.append(commission)
         Commission.save(commissions)
 
-        where_origin = ['contract.option,' + str(option.id) for option in
-            active_options]
+        if not active_options:
+            return
+        where_option = [option.id for option in active_options]
         to_delete = Commission.search([
-                ('origin', 'in', where_origin),
-                ('invoice_line', '=', None)
+                ('commissioned_option', 'in', where_option),
+                ('invoice_line', '=', None),
+                ('is_recovery', '=', True)
                 ])
         to_cancel = Commission.search([
-                ('origin', 'in', where_origin),
-                ('invoice_line', '!=', None)
+                ('commissioned_option', 'in', where_option),
+                ('invoice_line', '!=', None),
+                ('is_recovery', '=', True)
                 ])
         Commission.delete(to_delete)
         for commission in Commission.copy(to_cancel):

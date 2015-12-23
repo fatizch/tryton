@@ -23,7 +23,8 @@ class RuleEngineRuntime:
 
         cursor.execute(*commission.select(Sum(commission.amount),
             where=((commission.commissioned_option == args['option'].id) &
-                (commission.agent == args['agent'].id))))
+                (commission.agent == args['agent'].id) &
+                (commission.is_recovery == False))))
         res = cursor.fetchall()
         return res[0][0] or Decimal(0)
 
