@@ -10,7 +10,6 @@ import tempfile
 
 from time import sleep
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 
 from trytond import backend
 from trytond.pool import Pool
@@ -587,7 +586,6 @@ class ReportGenerate(Report):
 
         report_context['Date'] = pool.get('ir.date').today()
         report_context['FDate'] = format_date
-        report_context['relativedelta'] = relativedelta
         SelectedModel = pool.get(data['model'])
         selected_obj = SelectedModel(data['id'])
         report_context.update(selected_obj.get_publishing_context(

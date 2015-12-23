@@ -250,9 +250,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Many2One('contract.sub_status', 'Termination Reason',
             domain=[('status', '=', 'terminated')]),
         'getter_last_period')
-    sub_status_code = fields.Function(
-        fields.Char('Sub Status Code'),
-        'get_sub_status_code')
     subscriber_kind = fields.Function(
         fields.Selection(
             [x for x in offered.SUBSCRIBER_KIND if x != ('all', 'All')],
@@ -549,9 +546,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def default_subscriber_kind(cls):
         return 'person'
-
-    def get_sub_status_code(self, name):
-        return self.sub_status.code if self.sub_status else ''
 
     def getter_last_period(self, name):
         if not self.activation_history:

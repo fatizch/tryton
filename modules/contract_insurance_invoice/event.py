@@ -9,7 +9,6 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Event',
     'EventLog',
-    'EventTypeAction',
     ]
 
 
@@ -63,28 +62,3 @@ class EventLog:
         if model_name == 'contract' and object_.__name__ == 'account.invoice':
             return [object_.contract] if object_.contract else []
         return super(EventLog, cls).get_related_instances(object_, model_name)
-
-
-class EventTypeAction:
-    __name__ = 'event.type.action'
-
-    @classmethod
-    def get_action_types(cls):
-        return super(EventTypeAction, cls).get_action_types() + [
-            ('cancel_or_delete_non_periodic_invoices',
-                'Cancel or Delete Non Periodic Invoices')]
-
-    def filter_objects(self, objects):
-        if self.action != 'cancel_or_delete_non_periodic_invoices':
-            return super(EventTypeAction, self).filter_objects(objects)
-        contracts = []
-        for o in objects:
-            contracts.extend(self.get_contracts_from_object(o))
-        return super(EventTypeAction, self).filter_objects(contracts)
-
-    def execute(self, objects, event_code):
-        pool = Pool()
-        Contract = pool.get('contract')
-        if self.action != 'cancel_or_delete_non_periodic_invoices':
-            return super(EventTypeAction, self).execute(objects, event_code)
-        Contract.clean_up_contract_invoices(objects, non_periodic=True)

@@ -47,7 +47,6 @@ def register():
         RuleEngineRuntime,
         Event,
         EventLog,
-        EventTypeAction,
         module='contract_insurance_invoice', type_='model')
     Pool.register(
         InvoiceContract,
