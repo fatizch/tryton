@@ -520,6 +520,11 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
         self.current_log.to_state = self.current_state
         self.current_log.save()
 
+    @classmethod
+    def notify_events(cls, objects, event_code, description=None, **kwargs):
+        Pool().get('event').notify_events(objects, event_code, description,
+            **kwargs)
+
 
 class Process(model.CoopSQL, model.TaggedMixin):
     __name__ = 'process'
