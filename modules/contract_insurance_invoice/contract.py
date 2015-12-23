@@ -587,7 +587,7 @@ class Contract:
 
     @classmethod
     def clean_up_contract_invoices(cls, contracts, from_date=None,
-            to_date=None):
+            to_date=None, non_periodic=False):
         pool = Pool()
         ContractInvoice = pool.get('contract.invoice')
         contract_invoices = []
@@ -605,6 +605,8 @@ class Contract:
             'delete': [],
             }
         for contract_invoice in contract_invoices:
+            if contract_invoice.non_periodic and not non_periodic:
+                continue
             actions[contract_invoice.cancel_or_delete()].append(
                 contract_invoice)
         if actions['delete']:
