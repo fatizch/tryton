@@ -1,5 +1,4 @@
-- **Génération des documents sur les contrats dans le processus**
+- **Prévisualisation des changements de chaque avenant depuis le processus**
 
-- **Génération des documents sur l'ensemble de contrats dans le procesuss**
-
-- **Affichage des documents générés dans le procesuss**
+- **Affichage dans le processus des documents générés par l'ensemble
+  d'avenants**
