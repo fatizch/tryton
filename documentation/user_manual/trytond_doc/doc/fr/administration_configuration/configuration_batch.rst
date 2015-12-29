@@ -56,6 +56,12 @@ Les valeurs possibles sont :
 - ``divide``: charge globale divisée en ``split_size`` groupes de tailles égales
 - ``number``: charge globale divisée en groupes de ``split_size`` objets
 
+Ces valeurs peuvent être préfixées de ``mono_`` (ex : ``mono_divide``). Dans ce
+cas, le traitement sera executé par un seul process, qui lui-même découpera les
+tâches au sein de transactions séparées. Cela permet de traiter le cas de
+certains batchs forcément séquentiels sans avoir à reconfigurer celery pour
+n'utiliser qu'un seul worker
+
 Défaut : ``divide``
 
 split_size
