@@ -734,18 +734,34 @@ class DebugModelInstance(ModelSQL, ModelView):
                 for x in cur_data['__instance'].fields_}
             for field in model_instance.fields_:
                 if field.on_change_method:
-                    field.on_change_fields = [
-                        fields[x.split('.')[0]]
-                        for x in getattr(getattr(Model,
-                                field.on_change_method.name), 'depends', [])
-                        if not x.startswith('_parent_')]
+                    on_change_fields = []
+                    for fname in getattr(getattr(Model,
+                                field.on_change_method.name), 'depends', []):
+                        if fname.startswith('_parent_'):
+                            continue
+                        fname = fname.split('.')[0]
+                        if fname not in fields:
+                            logging.getLogger().warning(
+                                'Cannot find field %s on %s for on_change_%s' %
+                                (fname, model_instance.name, field.name))
+                        else:
+                            on_change_fields.append(fields[fname])
+                    field.on_change_fields = on_change_fields
                 if field.on_change_with_method:
-                    field.on_change_with_fields = [
-                        fields[x.split('.')[0]]
-                        for x in getattr(getattr(Model,
-                                field.on_change_with_method.name), 'depends',
-                            [])
-                        if not x.startswith('_parent_')]
+                    on_change_with_fields = []
+                    for fname in getattr(getattr(Model,
+                                field.on_change_with_method.name),
+                            'depends', []):
+                        if fname.startswith('_parent_'):
+                            continue
+                        fname = fname.split('.')[0]
+                        if fname not in fields:
+                            logging.getLogger().warning('Cannot find field %s '
+                                'on %s for on_change_with_%s' % (
+                                    fname, model_instance.name, field.name))
+                        else:
+                            on_change_with_fields.append(fields[fname])
+                    field.on_change_with_fields = on_change_with_fields
             model_instance.fields_ = list(model_instance.fields_)
 
 
