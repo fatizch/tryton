@@ -64,26 +64,26 @@ class Commission:
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().cursor
         commission = TableHandler(cursor, cls)
-        has_column = commission.column_exist('template_extension')
+        has_column = commission.column_exist('commissioned_option')
         has_start_column = commission.column_exist('start')
         super(Commission, cls).__register__(module_name)
         if not has_column:
             cursor.execute("UPDATE commission "
                 "SET commissioned_option = Cast(substring(origin,17) as int) "
-                "WHERE origin LIKE 'contract.option%'")
+                "WHERE origin LIKE 'contract.option,%'")
             cursor.execute("UPDATE commission c "
                 "SET commissioned_option = d.option "
                 "FROM account_invoice_line_detail d "
                 "WHERE Cast(substring(c.origin,22) as int) = d.invoice_line "
                 "AND d.option is not NULL "
-                "AND c.origin LIKE 'account.invoice.line%'")
+                "AND c.origin LIKE 'account.invoice.line,%'")
             cursor.execute("UPDATE commission c "
                 "SET commissioned_option = e.option "
                 "FROM contract_option_extra_premium e INNER JOIN "
                 "account_invoice_line_detail d on d.extra_premium = e.id "
                 "WHERE Cast(substring(c.origin,22) as int) = d.invoice_line "
                 "AND d.extra_premium is not NULL "
-                "AND c.origin LIKE 'account.invoice.line%'")
+                "AND c.origin LIKE 'account.invoice.line,%'")
         if not has_start_column:
             commission = cls.__table__()
             line = Pool().get('account.invoice.line').__table__()
