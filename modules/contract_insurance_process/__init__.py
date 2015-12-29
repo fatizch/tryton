@@ -2,6 +2,7 @@ from trytond.pool import Pool
 
 from .process import *
 from .contract import *
+from .event import *
 
 
 def register():
@@ -10,6 +11,7 @@ def register():
         ContractOption,
         Process,
         ContractSubscribeFindProcess,
+        EventTypeAction,
         module='contract_insurance_process', type_='model')
 
     Pool.register(

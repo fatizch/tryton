@@ -1,4 +1,4 @@
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.cog_utils import fields
 
@@ -14,8 +14,15 @@ class EventTypeAction:
     __name__ = 'event.type.action'
 
     process_to_initiate = fields.Many2One('process', 'Process To Initiate',
-        ondelete='RESTRICT', states={'invisible': Eval('action') !=
-            'initiate_process'})
+        ondelete='RESTRICT', states={
+            'invisible': Eval('action') != 'initiate_process',
+            'required': Eval('action') == 'initiate_process'})
+    filter_on_event_object = fields.Boolean('Filter On Event Object',
+        help="If checked, the pyson condition will apply on the original"
+        " object of the event. Otherwise, the condition will apply on the"
+        " object of the process.", states={
+            'invisible': Or(~Eval('pyson_condition'),
+                Eval('action') != 'initiate_process')})
 
     @classmethod
     def get_action_types(cls):
@@ -27,24 +34,39 @@ class EventTypeAction:
         return super(EventTypeAction, cls)._export_light() | {
             'process_to_initiate'}
 
+    def get_objects_for_process(self, objects, target_model_name):
+        raise NotImplementedError
+
+    def filter_objects(self, objects):
+        if self.action != 'initiate_process':
+            return super(EventTypeAction, self).filter_objects(objects)
+        event_obj_name = objects[0].__name__
+        process_model_name = self.process_to_initiate.on_model.model
+        if event_obj_name != process_model_name:
+            if self.filter_on_event_object:
+                objects = super(EventTypeAction, self).filter_objects(objects)
+            process_objects = self.get_objects_for_process(objects,
+                process_model_name)
+            if self.filter_on_event_object:
+                return process_objects
+        else:
+            process_objects = objects
+        return super(EventTypeAction, self).filter_objects(process_objects)
+
     def execute(self, objects, event_code):
         pool = Pool()
         Event = pool.get('event')
-        Process = pool.get('process')
         if self.action != 'initiate_process':
             return super(EventTypeAction, self).execute(objects, event_code)
-        process_id = self.process_to_initiate
-        if not process_id:
-            return
-        process = Process(process_id)
+        process = self.process_to_initiate
+        process_model_name = process.on_model.model
         state = process.first_step()
-        Model = pool.get(objects[0].__name__)
-        assert Model.__name__ == process.on_model.model
         ok, not_ok = [], []
         [ok.append(x) if not x.current_state else not_ok.append(x)
             for x in objects]
         if ok:
-            Model.write(ok, {'current_state': state})
+            ProcessModel = pool.get(process_model_name)
+            ProcessModel.write(ok, {'current_state': state})
         if not_ok:
             Event.notify_events(not_ok, 'process_not_initiated',
                 description=process.technical_name)

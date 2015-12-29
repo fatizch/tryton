@@ -3,5 +3,7 @@
     <xpath expr="/form/field[@name='action']" position="after">
         <label name="process_to_initiate"/>
         <field name="process_to_initiate"/>
+        <label name="filter_on_event_object"/>
+        <field name="filter_on_event_object"/>
     </xpath>
 </data>

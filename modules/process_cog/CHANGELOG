@@ -1,3 +1,5 @@
+* Pyson condition on process initiation can apply on original or event object
+
 Version 1.6 - 2015-12-23
 * Allow to initiate process from event
 * Add confirmation message on automatically generated button
