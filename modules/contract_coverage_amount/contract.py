@@ -131,7 +131,7 @@ class ContractOption:
             if self.current_coverage_amount_selection else None)
         self.on_change_current_coverage_amount()
 
-    @fields.depends('coverage_amount', 'coverage', 'free_coverage_amount')
+    @fields.depends('current_coverage_amount', 'free_coverage_amount')
     def on_change_with_current_coverage_amount_selection(self, name=None):
         return (str(self.current_coverage_amount)
             if self.current_coverage_amount and not self.free_coverage_amount
