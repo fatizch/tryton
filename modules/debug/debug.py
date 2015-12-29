@@ -1,9 +1,11 @@
+import os
 from collections import defaultdict
 import pprint
+import logging
 
 from trytond.wizard import Wizard, StateTransition, StateView, Button
 from trytond.rpc import RPC
-from trytond.model import ModelView, fields
+from trytond.model import ModelSQL, ModelView, fields
 from trytond.transaction import Transaction
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
@@ -16,7 +18,44 @@ __all__ = [
     'DebugModel',
     'VisualizeDebug',
     'Debug',
+    'DebugModelInstance',
+    'DebugMROInstance',
+    'DebugFieldInstance',
+    'DebugMethodInstance',
+    'DebugMethodMROInstance',
+    'DebugViewInstance',
+    'DebugOnChangeRelation',
+    'DebugOnChangeWithRelation',
+    'RefreshDebugData',
+    'OpenInitialFrame',
     ]
+
+
+def open_path(rel_path, patterns):
+    import trytond
+    new_path = [trytond.__file__, '..', '..'] + [x for x in rel_path]
+    new_path = os.path.abspath(os.path.join(*new_path))
+    editor = os.environ.get('EDITOR', None)
+    if editor is None:
+        logging.getLogger().warning('No editor found, feature disabled')
+    if editor == 'nvim':
+        from neovim import attach
+        nvim = attach('socket', path='/tmp/nvim_test')
+        nvim.command('tabnew')
+        nvim.command('edit %s' % new_path)
+        prev_pos = nvim.eval("getpos('.')")[1]
+        for pattern_group in patterns:
+            for pattern in pattern_group:
+                nvim.command("execute search('%s', 'w')" % pattern)
+                new_pos = nvim.eval("getpos('.')")[1]
+                if new_pos != prev_pos:
+                    prev_pos = new_pos
+                    break
+                prev_pos = new_pos
+        nvim.command('execute "normal zOz+"')
+    else:
+        os.system(editor + ' ' + new_path + ' &')
+    return
 
 
 class FieldInfo(ModelView):
@@ -83,6 +122,7 @@ class ModelInfo(ModelView):
                 pool._pool[pool.database_name]['model'].iterkeys()])
 
     def get_field_info(self, field, field_name):
+
         info = Pool().get('ir.model.debug.model_info.field_info')()
         info.name = field_name
         info.string = field.string
@@ -464,7 +504,7 @@ class Debug(Wizard):
             return self.transform_pyson()
 
     def transform_pyson(self):
-        from trytond.pyson import Eval, Bool, Or, PYSONEncoder, And, Not
+        from trytond.pyson import Eval, Bool, Or, PYSONEncoder, And, Not  # NOQA
         encoded = PYSONEncoder().encode(eval(self.display.pyson))
         return ''.join([x if x != '"' else '&quot;' for x in encoded])
 
@@ -487,3 +527,454 @@ class Debug(Wizard):
             return res
         res.update({'result': self.run_code()})
         return res
+
+
+class DebugModelInstance(ModelSQL, ModelView):
+    'Model for debug'
+
+    __name__ = 'debug.model'
+
+    name = fields.Char('Name', select=True, readonly=True)
+    string = fields.Char('String', readonly=True)
+    mro = fields.One2Many('debug.model.mro', 'model', 'MRO',
+        order=[('order', 'ASC')])
+    fields_ = fields.One2Many('debug.model.field', 'model', 'Fields',
+        order=[('name', 'ASC')])
+    methods = fields.One2Many('debug.model.method', 'model', 'Methods',
+        order=[('name', 'ASC')])
+    views = fields.One2Many('debug.model.view', 'model', 'Views',
+        order=[('order', 'ASC')])
+    initial_module = fields.Function(
+        fields.Char('Declared in'),
+        'get_initial_module')
+    initial_frame = fields.Function(
+        fields.Many2One('debug.model.mro', 'Initial Frame'),
+        'get_initial_frame')
+
+    @classmethod
+    def __setup__(cls):
+        super(DebugModelInstance, cls).__setup__()
+        cls._order.insert(0, ('name', 'ASC'))
+        cls.__rpc__.update({'refresh': RPC(readonly=False)})
+        cls._buttons.update({'open_initial': {}})
+
+    def get_initial_frame(self, name):
+        return [x.id for x in self.mro if x.kind == 'initial'][0]
+
+    def get_initial_module(self, name):
+        return [x.module for x in self.mro if x.kind == 'initial'][0]
+
+    @classmethod
+    @ModelView.button_action('debug.act_open_initial')
+    def open_initial(cls, models):
+        pass
+
+    @classmethod
+    def refresh(cls, name):
+        Model = Pool().get('debug.model')
+
+        # Delete all existing instances
+        cls.delete(cls.search([]))
+
+        # Fetch current data
+        base_data = Pool().get('ir.model.debug.model_info').raw_field_infos()
+
+        # Import Models, MRO, Methods
+        for model_name, data in base_data.iteritems():
+            cls.import_model(model_name, data)
+        Model.save([x['__instance'] for x in base_data.values()])
+
+        # Import Fields
+        for model_name, data in base_data.iteritems():
+            cls.import_fields(model_name, data, base_data)
+        Model.save([x['__instance'] for x in base_data.values()])
+
+        # Import Views
+        for model_name, data in base_data.iteritems():
+            cls.import_views(model_name, data, base_data)
+        Model.save([x['__instance'] for x in base_data.values()])
+
+        # Finalize fields
+        cls.finalize_fields(base_data)
+        Model.save([x['__instance'] for x in base_data.values()])
+
+    @classmethod
+    def import_model(cls, model_name, data):
+        pool = Pool()
+        Model = pool.get('debug.model')
+        MRO = pool.get('debug.model.mro')
+        Method = pool.get('debug.model.method')
+        MethodMRO = pool.get('debug.model.method.mro')
+        new_model = Model()
+        new_model.name = model_name
+        new_model.string = data['string']
+
+        mro_lines = []
+        for order, mro_data in data['mro'].items():
+            mro = MRO()
+            mro.order = int(order.replace(' ', ''))
+            mro.base_name = mro_data['base_name']
+            mro.module = mro_data['module']
+            if mro_data['override']:
+                mro.kind = 'override'
+            elif mro_data['initial']:
+                mro.kind = 'initial'
+            else:
+                mro.kind = ''
+            mro.path = mro_data['path']
+            mro_lines.append(mro)
+        new_model.mro = mro_lines
+
+        methods = []
+        for method_name, method_data in data['methods'].items():
+            method = Method()
+            method.name = method_name
+
+            mro_lines = []
+            for order, mro_data in method_data['mro'].items():
+                mro = MethodMRO()
+                mro.order = int(order.replace(' ', ''))
+                mro.base_name = mro_data['base_name']
+                mro.module = mro_data['module']
+                if mro_data['override']:
+                    mro.kind = 'override'
+                elif mro_data['initial']:
+                    mro.kind = 'initial'
+                else:
+                    mro.kind = ''
+                mro.path = mro_data['path']
+                mro_lines.append(mro)
+            method.mro = mro_lines
+            methods.append(method)
+        new_model.methods = methods
+        data['__instance'] = new_model
+
+    @classmethod
+    def import_fields(cls, model_name, data, full_data):
+        model = full_data[model_name]['__instance']
+        methods = {x.name: x for x in model.methods}
+
+        Field = Pool().get('debug.model.field')
+        fields = []
+        for field_name, field_data in data['fields'].items():
+            field = Field()
+            field.name = field_name
+            field.string = field_data['string']
+            field.kind = field_data['kind']
+            field.function = field_data['is_function']
+            if field_data.get('target_model', None):
+                field.target_model = full_data[
+                    field_data['target_model']]['__instance']
+            field.default_method = methods.get(
+                'default_%s' % field_name, None)
+            field.on_change_method = methods.get(
+                'on_change_%s' % field_name, None)
+            field.on_change_with_method = methods.get(
+                'on_change_with_%s' % field_name, None)
+            field.order_method = methods.get(
+                'order_%s' % field_name, None)
+            field.selection_method = methods.get(
+                field_data.get('selection_method', None), None)
+            field.getter = methods.get(
+                field_data.get('getter', None), None)
+            field.setter = methods.get(
+                field_data.get('setter', None), None)
+            field.searcher = methods.get(
+                field_data.get('searcher', None), None)
+            if field_data.get('selection_values', None):
+                field.selection_values = '\n'.join(
+                    ['%s :%s' % (k, v)
+                        for k, v in field_data['selection_values'].items()])
+            field.domain = field_data.get('domain', '')
+            field.invisible = field_data.get('state_invisible', '')
+            field.required = 'True' if field_data['is_required'] else \
+                field_data.get('state_required')
+            field.readonly = 'True' if field_data['is_readonly'] else \
+                field_data.get('state_readonly')
+            fields.append(field)
+        full_data[model_name]['__instance'].fields_ = fields
+
+    @classmethod
+    def import_views(cls, model_name, data, full_data):
+        View = Pool().get('debug.model.view')
+        model = full_data[model_name]['__instance']
+        fields = {x.name: x for x in model.fields_}
+
+        def import_view(view_data):
+            view = View()
+            view.module = view_data['module']
+            view.name = view_data['name']
+            view.functional_id = view_data['functional_id']
+            view.kind = view_data['type'] or 'inherit'
+            view.priority = view_data['priority']
+            if view_data.get('field_childs', None):
+                view.field_childs = fields[view_data['field_childs']]
+            sub_views = []
+            for order, sub_view in view_data.get('inherit', {}).items():
+                sub_views.append(import_view(sub_view))
+                sub_views[-1].order = int(order.replace(' ', ''))
+            view.inherit = sub_views
+            return view
+
+        views = []
+        for order, view_data in data['views'].items():
+            views.append(import_view(view_data))
+            views[-1].order = int(order.replace(' ', ''))
+        full_data[model_name]['__instance'].views = views
+
+    @classmethod
+    def finalize_fields(cls, full_data):
+        pool = Pool()
+        Field = pool.get('debug.model.field')
+
+        for model_instance in [x['__instance'] for x in full_data.values()]:
+            Model = pool.get(model_instance.name)
+            cur_data = full_data[model_instance.name]
+            fields = {x.name: Field(x.id)
+                for x in cur_data['__instance'].fields_}
+            for field in model_instance.fields_:
+                if field.on_change_method:
+                    field.on_change_fields = [
+                        fields[x.split('.')[0]]
+                        for x in getattr(getattr(Model,
+                                field.on_change_method.name), 'depends', [])
+                        if not x.startswith('_parent_')]
+                if field.on_change_with_method:
+                    field.on_change_with_fields = [
+                        fields[x.split('.')[0]]
+                        for x in getattr(getattr(Model,
+                                field.on_change_with_method.name), 'depends',
+                            [])
+                        if not x.startswith('_parent_')]
+            model_instance.fields_ = list(model_instance.fields_)
+
+
+class DebugMROInstance(ModelSQL, ModelView):
+    'Model MRO for debug'
+
+    __name__ = 'debug.model.mro'
+
+    model = fields.Many2One('debug.model', 'model', select=True, required=True,
+        ondelete='CASCADE')
+    order = fields.Integer('Order', readonly=True)
+    base_name = fields.Char('Base Name', readonly=True)
+    module = fields.Char('Module', readonly=True)
+    kind = fields.Selection([('', ''), ('initial', 'Initial'),
+            ('override', 'Override')], 'Kind', readonly=True)
+    path = fields.Char('Path', readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(DebugMROInstance, cls).__setup__()
+        cls._buttons.update({'open_file': {}})
+
+    @classmethod
+    @ModelView.button
+    def open_file(cls, mros):
+        assert len(mros) == 1
+        file_path = mros[0].path.split('.')
+        file_path[-1] += '.py'
+        open_path(file_path, [('^class ' + mros[0].base_name,
+                    '^ *__name__ = .%s.' % mros[0].model.name)])
+
+
+class DebugFieldInstance(ModelSQL, ModelView):
+    'Model field for debug'
+
+    __name__ = 'debug.model.field'
+
+    model = fields.Many2One('debug.model', 'model', select=True, required=True,
+        ondelete='CASCADE')
+    name = fields.Char('Name', select=True, readonly=True)
+    string = fields.Char('String', readonly=True)
+    kind = fields.Char('Kind', readonly=True)
+    function = fields.Boolean('Function', readonly=True)
+    target_model = fields.Many2One('debug.model', 'Target Model',
+        ondelete='SET NULL', states={'invisible': ~Eval('target_model')},
+        depends=['target_model'], readonly=True)
+    selection_method = fields.Many2One('debug.model.method',
+        'Selection Method', ondelete='SET NULL',
+        states={'invisible': ~Eval('selection_method')},
+        depends=['selection_method'], readonly=True)
+    selection_values = fields.Text('Selection Values', states={'invisible':
+            ~Eval('selection_values')}, depends=['selection_values'],
+        readonly=True)
+    domain = fields.Text('Domain', readonly=True)
+    invisible = fields.Text('Invisible', readonly=True)
+    readonly = fields.Text('Readonly', readonly=True)
+    required = fields.Text('Required', readonly=True)
+    default_method = fields.Many2One('debug.model.method', 'Default Method',
+        ondelete='SET NULL', readonly=True)
+    on_change_method = fields.Many2One('debug.model.method',
+        'On Change Method', ondelete='SET NULL', readonly=True)
+    on_change_with_method = fields.Many2One('debug.model.method',
+        'On Change With Method', ondelete='SET NULL', readonly=True)
+    order_method = fields.Many2One('debug.model.method', 'Order Method',
+        ondelete='SET NULL', readonly=True)
+    getter = fields.Many2One('debug.model.method', 'Getter',
+        ondelete='SET NULL', states={'invisible': ~Eval('getter')},
+        depends=['getter'], readonly=True)
+    setter = fields.Many2One('debug.model.method', 'Setter',
+        ondelete='SET NULL', states={'invisible': ~Eval('setter')},
+        depends=['setter'], readonly=True)
+    searcher = fields.Many2One('debug.model.method', 'Searcher',
+        ondelete='SET NULL', states={'invisible': ~Eval('searcher')},
+        depends=['searcher'], readonly=True)
+    on_change_fields = fields.Many2Many('debug.model.field.on_change',
+        'from_field', 'to_field', 'On Change Fields', readonly=True)
+    on_change_with_fields = fields.Many2Many(
+        'debug.model.field.on_change_with', 'from_field', 'to_field',
+        'On Change With Fields', readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(DebugFieldInstance, cls).__setup__()
+        cls._order.insert(0, ('name', 'ASC'))
+
+
+class DebugMethodInstance(ModelSQL, ModelView):
+    'Model method for debug'
+
+    __name__ = 'debug.model.method'
+
+    model = fields.Many2One('debug.model', 'name', select=True, required=True,
+        ondelete='CASCADE')
+    name = fields.Char('Name', select=True, readonly=True)
+    mro = fields.One2Many('debug.model.method.mro', 'method', 'MRO',
+        order=[('order', 'ASC')])
+    initial_frame = fields.Function(
+        fields.Many2One('debug.model.method.mro', 'Initial Frame'),
+        'get_initial_frame')
+
+    @classmethod
+    def __setup__(cls):
+        super(DebugMethodInstance, cls).__setup__()
+        cls._order.insert(0, ('name', 'ASC'))
+        cls._buttons.update({'open_initial': {}})
+
+    def get_initial_frame(self, name):
+        return [x.id for x in self.mro if x.kind == 'initial'][0]
+
+    @classmethod
+    @ModelView.button_action('debug.act_open_initial')
+    def open_initial(cls, models):
+        pass
+
+
+class DebugMethodMROInstance(ModelSQL, ModelView):
+    'Method MRO for debug'
+
+    __name__ = 'debug.model.method.mro'
+
+    method = fields.Many2One('debug.model.method', 'method', select=True,
+        required=True, ondelete='CASCADE')
+    order = fields.Integer('Order', readonly=True)
+    base_name = fields.Char('Base Name', readonly=True)
+    module = fields.Char('Module', readonly=True)
+    kind = fields.Selection([('', ''), ('initial', 'Initial'),
+            ('override', 'Override')], 'Kind', readonly=True)
+    path = fields.Char('Path', readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(DebugMethodMROInstance, cls).__setup__()
+        cls._buttons.update({'open_file': {}})
+
+    @classmethod
+    @ModelView.button
+    def open_file(cls, mros):
+        assert len(mros) == 1
+        file_path = mros[0].path.split('.')
+        file_path[-1] += '.py'
+        open_path(file_path, [('^class ' + mros[0].base_name,
+                    '^ *__name__ = .%s.' % mros[0].method.model.name),
+                ('^ *def ' + mros[0].method.name,)])
+
+
+class DebugViewInstance(ModelSQL, ModelView):
+    'Model view for debug'
+
+    __name__ = 'debug.model.view'
+
+    model = fields.Many2One('debug.model', 'model', select=True,
+        ondelete='CASCADE')
+    parent_view = fields.Many2One('debug.model.view', 'Parent View',
+        select=True, ondelete='CASCADE', readonly=True)
+    name = fields.Char('File Name', select=True, readonly=True)
+    functional_id = fields.Char('Functional Id', readonly=True)
+    module = fields.Char('Module', readonly=True)
+    kind = fields.Selection([('form', 'Form'), ('tree', 'Tree'),
+            ('board', 'Board'), ('inherit', 'Inherit'), ('graph', 'Graph')],
+        'Kind', readonly=True)
+    priority = fields.Integer('Priority', readonly=True)
+    order = fields.Integer('Order', readonly=True)
+    field_childs = fields.Many2One('debug.model.field', 'Fields Childs',
+        ondelete='SET NULL', readonly=True)
+    inherit = fields.One2Many('debug.model.view', 'parent_view', 'Inherit',
+        order=[('order', 'ASC')], readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(DebugViewInstance, cls).__setup__()
+        cls._order.insert(0, ('name', 'ASC'))
+        cls._buttons.update({'open_file': {}})
+
+    @classmethod
+    @ModelView.button
+    def open_file(cls, views):
+        assert len(views) == 1
+        open_path(['trytond', 'modules', views[0].module, 'view',
+                views[0].name + '.xml'], [])
+
+
+class DebugOnChangeRelation(ModelSQL, ModelView):
+    'On Change Relation for debug'
+
+    __name__ = 'debug.model.field.on_change'
+
+    from_field = fields.Many2One('debug.model.field', 'From Field',
+        required=True, select=True, ondelete='CASCADE')
+    to_field = fields.Many2One('debug.model.field', 'From Field',
+        required=True, select=True, ondelete='CASCADE')
+
+
+class DebugOnChangeWithRelation(ModelSQL, ModelView):
+    'On Change With Relation for debug'
+
+    __name__ = 'debug.model.field.on_change_with'
+
+    from_field = fields.Many2One('debug.model.field', 'From Field',
+        required=True, select=True, ondelete='CASCADE')
+    to_field = fields.Many2One('debug.model.field', 'From Field',
+        required=True, select=True, ondelete='CASCADE')
+
+
+class RefreshDebugData(Wizard):
+    'Refresh Debug Data'
+
+    __name__ = 'debug.refresh'
+
+    start_state = 'refresh'
+    refresh = StateTransition()
+
+    def transition_refresh(self):
+        with Transaction().set_user(0):
+            Pool().get('debug.model').refresh(None)
+        return 'end'
+
+
+class OpenInitialFrame(Wizard):
+    'Open Initial Frame'
+
+    __name__ = 'debug.open_initial'
+
+    start_state = 'open_frame'
+    open_frame = StateTransition()
+
+    def transition_open_frame(self):
+        active_model = Transaction().context.get('active_model')
+        assert active_model in ('debug.model', 'debug.model.method')
+        Model = Pool().get(active_model)
+        instance = Model(Transaction().context.get('active_id'))
+        instance.initial_frame.open_file([instance.initial_frame])
+        return 'end'

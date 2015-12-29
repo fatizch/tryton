@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Methods">
+    <field name="name"/>
+    <field name="model"/>
+    <button string="Open Definition" name="open_initial"/>
+</tree>

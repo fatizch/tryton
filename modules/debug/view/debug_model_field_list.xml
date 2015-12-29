@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tree string="Fields">
+    <field name="name"/>
+    <field name="string"/>
+    <field name="model"/>
+    <field name="kind"/>
+    <field name="function"/>
+</tree>

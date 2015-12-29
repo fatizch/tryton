@@ -476,7 +476,7 @@ class PlanCalculationDate(model.CoopSQL, model.CoopView):
     def default_type_(cls):
         return 'relative'
 
-    @fields.depends('frequency', 'nb_day', 'nb_month', 'nb_year', 'type_')
+    @fields.depends('frequency', 'day', 'month', 'year', 'type_')
     def on_change_type_(self):
         if self.type_ == 'absolute':
             self.frequency = ''

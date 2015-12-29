@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tree string="Views">
+    <field name="module"/>
+    <field name="functional_id"/>
+    <field name="model"/>
+    <field name="kind"/>
+    <field name="field_childs"/>
+    <button string="Open" name="open_file"/>
+</tree>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tree string="MROs">
+    <field name="order"/>
+    <field name="kind"/>
+    <field name="module"/>
+    <field name="base_name"/>
+    <field name="path"/>
+    <button string="Open" name="open_file"/>
+</tree>

@@ -63,9 +63,9 @@ class Contract(CogProcessFramework):
                 clone.save()
         return clones
 
-    @fields.depends('com_product')
+    @fields.depends('product')
     def on_change_with_product_desc(self, name=None):
-        return self.com_product.description if self.com_product else ''
+        return self.product.description if self.product else ''
 
     @fields.depends('subscriber')
     def on_change_with_subscriber_desc(self, name=None):

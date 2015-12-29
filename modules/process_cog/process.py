@@ -186,11 +186,11 @@ class ProcessLog(model.CoopSQL, model.CoopView):
     def default_latest(cls):
         return True
 
-    @fields.depends('end_date')
+    @fields.depends('end_time')
     def on_change_with_end_time_str(self, name=None):
         return Pool().get('ir.date').datetime_as_string(self.end_time)
 
-    @fields.depends('start_date')
+    @fields.depends('start_time')
     def on_change_with_start_time_str(self, name=None):
         return Pool().get('ir.date').datetime_as_string(self.start_time)
 

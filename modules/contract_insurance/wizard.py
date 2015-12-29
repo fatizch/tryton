@@ -160,7 +160,7 @@ class ExtraPremiumDisplay(model.CoopView):
     def get_extra_premiums(cls, option):
         return ", ".join([x.rec_name for x in option.extra_premiums])
 
-    @fields.depends('covered_element', 'extra_premiums', 'coverages',
+    @fields.depends('covered_element', 'extra_premiums',
         'options', 'option', 'extra_premium')
     def on_change_covered_element(self):
         pool = Pool()

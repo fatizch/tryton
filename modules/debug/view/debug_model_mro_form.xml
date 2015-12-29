@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form string="MRO">
+    <label name="base_name"/>
+    <field name="base_name"/>
+    <label name="path"/>
+    <field name="path"/>
+    <label name="module"/>
+    <field name="module"/>
+    <label name="kind"/>
+    <field name="kind"/>
+</form>

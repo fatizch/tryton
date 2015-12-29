@@ -556,7 +556,7 @@ class ClaimIndemnificationValidateSelect(model.CoopView):
                     [(field_name, operator, operand)]])
         return domain
 
-    @fields.depends('indemnifications', 'modified', 'apply', 'global_value')
+    @fields.depends('indemnifications', 'modified', 'global_value')
     def on_change_global_value(self):
         for elem in self.indemnifications:
             elem.selection = self.global_value
