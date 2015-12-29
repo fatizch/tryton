@@ -126,19 +126,25 @@
             <field name="method_name">update_start_date</field>
             <field name="name">Update Start Date</field>
             <field name="model" search="[('model', '=', 'contract')]"/>
-            <field name="priority">1</field>
+            <field name="priority">100</field>
+        </record>
+        <record model="ir.model.method" id="contract_set_options_automatic_end_date">
+            <field name="method_name">update_options_automatic_end_date</field>
+            <field name="name">Update Automatic End Date of Options</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">200</field>
         </record>
         <record model="ir.model.method" id="contract_calculate_activation_dates">
             <field name="method_name">calculate_activation_dates</field>
             <field name="name">Calculate Activation Dates</field>
             <field name="model" search="[('model', '=', 'contract')]"/>
-            <field name="priority">2</field>
+            <field name="priority">300</field>
         </record>
         <record model="ir.model.method" id="contract_plan_termination">
             <field name="method_name">plan_termination_or_terminate</field>
             <field name="name">Plan Termination</field>
             <field name="model" search="[('model', '=', 'contract')]"/>
-            <field name="priority">3</field>
+            <field name="priority">400</field>
         </record>
         <!-- ################################### -->
         <!-- # Change Start Date Configuration # -->
