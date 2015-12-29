@@ -1038,8 +1038,10 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     contract_endorsements = fields.One2Many('endorsement.contract',
         'endorsement', 'Contract Endorsement', delete_missing=True)
     definition = fields.Many2One('endorsement.definition', 'Definition',
-        required=True, ondelete='RESTRICT')
-    effective_date = fields.Date('Effective Date')
+        required=True, ondelete='RESTRICT',
+        states={'readonly': Eval('state') != 'draft'})
+    effective_date = fields.Date('Effective Date',
+        states={'readonly': Eval('state') != 'draft'})
     state = fields.Selection([
             ('draft', 'Draft'),
             ('in_progress', 'In Progress'),
