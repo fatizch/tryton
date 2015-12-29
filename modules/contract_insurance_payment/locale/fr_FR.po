@@ -21,3 +21,15 @@ msgstr "Si aucun journal n'est défini, la configuration gloable sera utilisée"
 msgctxt "selection:account.payment.journal.failure_action,action:"
 msgid "Move to manual payment"
 msgstr "Basculer en paiement manuel"
+
+msgctxt "field:contract.processing_payments:"
+msgid "Processing Payments"
+msgstr "Paiements traités"
+
+msgctxt "field:contract.succeeded_payments:"
+msgid "Succeeded Payments"
+msgstr "Paiements réussis"
+
+msgctxt "field:contract.failed_payments:"
+msgid "Failed Payments"
+msgstr "Paiements échoués"

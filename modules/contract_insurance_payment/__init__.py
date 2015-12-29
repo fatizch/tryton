@@ -5,6 +5,7 @@ from .configuration import *
 from .offered import *
 from .move import *
 from .event import *
+from .contract import *
 
 
 def register():
@@ -17,4 +18,5 @@ def register():
         BillingMode,
         MoveLine,
         EventLog,
+        Contract,
         module='contract_insurance_payment', type_='model')
