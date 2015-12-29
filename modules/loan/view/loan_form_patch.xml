@@ -35,7 +35,10 @@
         <label name="funds_release_date"/>
         <field name="funds_release_date"/>
         <label name="first_payment_date"/>
-        <field name="first_payment_date"/>
+        <group id="first_payment_date_group" string="" col="2">
+            <field name="first_payment_date"/>
+            <button name="propagate_first_payment_date" string="_Propagate Dates" icon="tryton-executable"/>
+        </group>
         <newline/>
         <label name="deferal"/>
         <field name="deferal"/>

@@ -32,6 +32,10 @@ msgid "Number of payments must be > 0"
 msgstr "Le nombre de paiements doit être > 0"
 
 msgctxt "error:loan:"
+msgid "Increment start date cannot be before first payment date !"
+msgstr "La date de début des paliers doit être antérieure à la date de premier paiement !"
+
+msgctxt "error:loan:"
 msgid "No loan sequence defined"
 msgstr "Pas de séquence de prêt définie"
 
@@ -996,6 +1000,10 @@ msgstr "Quotité"
 msgctxt "view:loan:"
 msgid "_Modify"
 msgstr "_Modifier"
+
+msgctxt "view:loan:"
+msgid "_Propagate Dates"
+msgstr "_Propager les dates"
 
 msgctxt "view:party.display_insured_outstanding_loan_balance.line_view:"
 msgid "Insurer"

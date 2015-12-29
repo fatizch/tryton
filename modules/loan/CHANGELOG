@@ -1,3 +1,5 @@
+* Allow to recalculate increment dates from first payment date
+
 Version 1.6 - 2015-12-23
 * Manage extra premium depending on remaining capital amount
 * Allow to insert manual increments to modify the loan at effective date (reimbursement, rate modification...)

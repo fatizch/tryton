@@ -71,6 +71,7 @@ def add_duration(date, duration_unit, duration=1, stick_to_end_of_month=False):
     Returns the first day of the begining of the next period
     for example : 01/01/Y + 1 year = 01/01/Y+1
     '''
+    duration = int(duration)
     if duration_unit in ['day', 'dayly']:
         res = add_day(date, duration)
     elif duration_unit in ['week', 'weekly']:

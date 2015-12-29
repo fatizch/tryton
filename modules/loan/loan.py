@@ -124,10 +124,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         order=[('start_date', 'ASC')],
         readonly=True, delete_missing=True)
     increments = fields.One2Many('loan.increment', 'loan', 'Increments',
-        domain=['OR',
-            [('start_date', '>=', Eval('first_payment_date'))],
-            [('start_date', '=', None)],
-            ],
         states={
             'readonly': (
                 Eval('state') != 'draft'),
@@ -189,6 +185,8 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                     'The loan "%(loan)s" is used on '
                     'the contract(s) "%(contract)s". '
                     'Are you sure you want to continue?'),
+                'bad_increment_start': 'Increment start date cannot be before '
+                'first payment date !',
                 })
         cls._transitions |= set((
                 ('draft', 'calculated'),
@@ -203,6 +201,10 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                     },
                 'add_manual_increment': {
                     'invisible': Eval('state') != 'draft',
+                    },
+                'propagate_first_payment_date': {
+                    'invisible': Eval('state') != 'draft',
+                    'readonly': ~Eval('first_payment_date', False),
                     },
                 })
 
@@ -322,6 +324,12 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             res = Decimal(0)
         return currency.round(res)
 
+    def check_increments(self):
+        for increment in self.increments:
+            if hasattr(increment, 'start_date') and (increment.start_date <
+                    self.first_payment_date):
+                self.raise_user_error('bad_increment_start')
+
     def init_increments(self):
         if self.kind == 'graduated' or any([getattr(x, 'manual', None)
                     for x in getattr(self, 'increments', [])]):
@@ -425,6 +433,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
 
     def calculate(self):
         self.init_increments()
+        self.check_increments()
         self.update_increments_and_calculate_payments()
         self.state = 'calculated'
 
@@ -760,6 +769,20 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         for loan in loans:
             loan.calculate()
             loan.save()
+
+    @model.CoopView.button_change('first_payment_date', 'increments')
+    def propagate_first_payment_date(self):
+        if not self.increments:
+            return
+        self.increments[0].start_date = self.first_payment_date
+        self.increments[0].end_date = \
+            self.increments[0].on_change_with_end_date()
+        for idx, increment in enumerate(self.increments[1:]):
+            increment.start_date = coop_date.add_duration(
+                self.increments[idx].end_date,
+                self.increments[idx].payment_frequency, 1)
+            increment.end_date = increment.on_change_with_end_date()
+        self.increments = list(self.increments)
 
     @classmethod
     @model.CoopView.button_action('loan.act_add_manual_increment')
