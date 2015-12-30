@@ -184,19 +184,19 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
             self.export_reports(reports)
 
     def export_reports(self, reports):
-        export_dir_basename = os.path.basename(self.export_dir)
-        if export_dir_basename != self.export_dir:
-            logger.warning("Keep only '%s' part of '%s' export_dir setting" %
-                (export_dir_basename, self.export_dir))
         export_root_dir = config.get('report', 'export_root_dir')
         if not export_root_dir:
             raise Exception('Error', "No 'export_root_dir' configuration "
                 'setting specified.')
-        export_dirname = os.path.join(
-            export_root_dir, export_dir_basename)
+        # authorize entering dirpath starting with '/' relative to the root
+        export_dirname = os.path.realpath(os.path.join(export_root_dir,
+            self.export_dir.lstrip(os.sep)))
+        # prevent user entering '..' to escape from root
+        if not export_dirname.startswith(os.path.realpath(export_root_dir)):
+            raise Exception('Error', ('Export directory outside of configured '
+                'root directory'))
         if not os.path.exists(export_dirname):
-            raise Exception('Error', 'Export directory does not exist: %s' %
-                export_dir_basename)
+            os.makedirs(export_dirname)
         for report in reports:
             filename, ext = os.path.splitext(report['report_name'])
             out_path = os.path.join(

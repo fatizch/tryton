@@ -1,3 +1,5 @@
+* Authorize entering paths with subfolders as export destination
+
 Version 1.6 - 2015-12-23
 * Handle asynchronous report production
 * Add wizard to ease migration of names in report templates
