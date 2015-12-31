@@ -1,9 +1,14 @@
 # vim: set ft=sh:
 # repositories/projects management - link, git actions, etc
 
-_coog_repo_enter() { # move to trytond modules folder
+_coog_repo_enter_modules() { # move to trytond modules folder
         _coog_repo_wd=`pwd`
         cd ../../trytond/trytond/modules
+}
+
+_coog_repo_enter_plugins() { # move to tryton plugins folder
+        _coog_repo_wd=`pwd`
+        cd ../../tryton/tryton/plugins
 }
 
 _coog_repo_leave() { # move back to initial wd
@@ -27,25 +32,35 @@ coog_repo_main() { # list repositories
 }
 
 coog_repo_link() { # link repositories <args> - default: all
-        local modules
-        local module
+        local repos
+        local repo
         if [ $# -eq 0 ]
         then
-                modules=`_coog_repo_list`
+                repos=`_coog_repo_list`
         else
-                modules=$@
+                repos=$@
         fi
-        _coog_repo_enter
+        _coog_repo_enter_modules
         _coog_repo_rm
-        for module in $modules
+        for repo in $repos
         do
-                ln -s ../../../$module/modules/* .
+                ln -s ../../../$repo/modules/* .
+        done
+        _coog_repo_leave
+        _coog_repo_enter_plugins
+        _coog_repo_rm
+        for repo in $repos
+        do
+                [ -d ../../../$repo/plugins ] && ln -s ../../../$repo/plugins/* .
         done
         _coog_repo_leave
 }
 
 coog_repo_unlink() { # unlink all repositories
-        _coog_repo_enter
+        _coog_repo_enter_modules
+        _coog_repo_rm
+        _coog_repo_leave
+        _coog_repo_enter_plugins
         _coog_repo_rm
         _coog_repo_leave
 }
