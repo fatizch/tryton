@@ -16,6 +16,10 @@ _coog_env_paths() { # set paths
         COOG_LOG_LEVEL=`python2 .py/env-config.py $COOG_LOG_CONF logger_root level str`
 }
 
+_coog_env_python() { # set python paths
+        export PYTHONUNBUFFERED=1
+}
+
 _coog_env_pg() { # set pg vars
         local vars
         vars=`python2 .py/env-config.py $COOG_SRV_CONF database uri url`
@@ -28,21 +32,23 @@ _coog_env_pg() { # set pg vars
 
 _coog_env_files
 _coog_env_paths
+_coog_env_python
 _coog_env_pg
 
 coog_env_main() { # print meaningful vars for coog execution
         echo Environment variables:
         echo
-        echo "    COOG_SRV_FILE   "$COOG_SRV_FILE
-        echo "    COOG_CLI_FILE   "$COOG_CLI_FILE
-        echo "    COOG_TMP        "$COOG_TMP
-        echo "    COOG_SRV_CONF   "$COOG_SRV_CONF
-        echo "    COOG_CLI_CONF   "$COOG_CLI_CONF
-        echo "    COOG_LOG_CONF   "$COOG_LOG_CONF
-        echo "    COOG_LOG_LEVEL  "$COOG_LOG_LEVEL
-        echo "    PGHOST          "$PGHOST
-        echo "    PGPORT          "$PGPORT
-        echo "    PGUSER          "$PGUSER
-        echo "    PGPASSWORD      "$PGPASSWORD
-        echo "    PGDATABASE      "$PGDATABASE
+        echo "    COOG_SRV_FILE     "$COOG_SRV_FILE
+        echo "    COOG_CLI_FILE     "$COOG_CLI_FILE
+        echo "    COOG_TMP          "$COOG_TMP
+        echo "    COOG_SRV_CONF     "$COOG_SRV_CONF
+        echo "    COOG_CLI_CONF     "$COOG_CLI_CONF
+        echo "    COOG_LOG_CONF     "$COOG_LOG_CONF
+        echo "    COOG_LOG_LEVEL    "$COOG_LOG_LEVEL
+        echo "    PYTHONUNBUFFERED  "$PYTHONUNBUFFERED
+        echo "    PGHOST            "$PGHOST
+        echo "    PGPORT            "$PGPORT
+        echo "    PGUSER            "$PGUSER
+        echo "    PGPASSWORD        "$PGPASSWORD
+        echo "    PGDATABASE        "$PGDATABASE
 }
