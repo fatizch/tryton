@@ -107,7 +107,8 @@ class Contract:
     __name__ = 'contract'
 
     premium_amounts = fields.One2Many('contract.premium.amount', 'contract',
-        'Premium Amounts', readonly=True, delete_missing=True)
+        'Premium Amounts', readonly=True, delete_missing=True,
+        target_not_indexed=True)
     premium_amounts_per_period = fields.One2Many(
         'contract.premium.amount.per_period', 'contract',
         'Premium amounts per period', readonly=True)
