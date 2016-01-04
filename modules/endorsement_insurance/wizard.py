@@ -647,17 +647,23 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             elif new_covered.action == 'modified':
                 self._update_modified(new_covered, parent, per_id)
 
-    def _update_nothing(self, new_covered_element, parent, per_id):
-        # Cancel modifications
-        assert new_covered_element.cur_covered_id
+    def cancel_versions_changes(self, new_covered_element, per_id):
         CoveredElement = Pool().get('contract.covered_element')
         prev_covered = CoveredElement(new_covered_element.cur_covered_id)
         covered = per_id[new_covered_element.cur_covered_id]
         covered.versions = prev_covered.versions
 
+    def _update_nothing(self, new_covered_element, parent, per_id):
+        # Cancel modifications
+        assert new_covered_element.cur_covered_id
+        self.cancel_versions_changes(new_covered_element, per_id)
+
     def _update_modified(self, new_covered_element, parent, per_id):
         assert new_covered_element.cur_covered_id
         good_covered = per_id[new_covered_element.cur_covered_id]
+        if not new_covered_element.check_versions_modified():
+            self.cancel_versions_changes(new_covered_element, per_id)
+            return
         new_versions = sorted([v for v in good_covered.versions
                 if not v.start or
                 v.start <= new_covered_element.effective_date],
@@ -692,8 +698,9 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             displayer.action = 'nothing'
         elif covered_element.id:
             # covered existed before, either modification or resiliation
-            if (covered_element.get_version_at_date(self.effective_date).start
-                    == self.effective_date):
+            version_date = covered_element.get_version_at_date(
+                self.effective_date).start
+            if not version_date or version_date == self.effective_date:
                 displayer.action = 'modified'
             else:
                 # Only covered, resiliation
@@ -760,13 +767,16 @@ class CoveredElementDisplayer(model.CoopView):
         else:
             self.action = 'nothing'
 
-    def check_modified(self):
-        if not self.cur_covered_id:
-            return True
+    def check_versions_modified(self):
         previous_extra_data = Pool().get('contract.covered_element')(
             self.cur_covered_id).get_version_at_date(
             self.effective_date).extra_data
         return self.extra_data != previous_extra_data
+
+    def check_modified(self):
+        if not self.cur_covered_id:
+            return True
+        return self.check_versions_modified()
 
     def update_extra_data_string(self):
         self.extra_data_as_string = Pool().get(
