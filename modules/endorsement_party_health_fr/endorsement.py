@@ -83,6 +83,18 @@ class EndorsementParty:
         depends=['state', 'party', 'definition'],
         context={'definition': Eval('definition')}, delete_missing=True)
 
+    @classmethod
+    def _get_restore_history_order(cls):
+        return super(EndorsementParty, cls)._get_restore_history_order() + \
+            ['health.party_complement']
+
+    @classmethod
+    def _prepare_restore_history(cls, instances, at_date):
+        super(EndorsementParty, cls)._prepare_restore_history(instances,
+            at_date)
+        for party in instances['party.party']:
+            instances['health.party_complement'] += party.health_complement
+
     def get_endorsement_summary(self, name):
         result = super(EndorsementParty, self).get_endorsement_summary(name)
         health_complement_summary = [health_complement.get_diff(

@@ -11,8 +11,8 @@ def register():
         EndorsementPartyHealthComplement,
         EndorsementParty,
         ChangePartyHealthComplement,
-        module='endorsement_party', type_='model')
+        module='endorsement_party_health_fr', type_='model')
 
     Pool.register(
         StartEndorsement,
-        module='endorsement_party', type_='wizard')
+        module='endorsement_party_health_fr', type_='wizard')
