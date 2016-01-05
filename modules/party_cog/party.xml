@@ -224,16 +224,5 @@
         <record model="ir.action.wizard" id="party.wizard_check_vies">
             <field name="active" eval="False"/>
         </record>
-
-        <record model="ir.ui.view" id="identifier_form">
-            <field name="model">party.identifier</field>
-            <field name="type">form</field>
-            <field name="name">identifier_form</field>
-        </record>
-        <record model="ir.ui.view" id="identifier_list">
-            <field name="model">party.identifier</field>
-            <field name="type">tree</field>
-            <field name="name">identifier_list</field>
-        </record>
     </data>
 </tryton>
