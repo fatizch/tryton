@@ -822,6 +822,7 @@ class ReportCreate(Wizard):
                     'sender': sender.id if sender else None,
                     'sender_address': sender_address.id if sender_address
                     else None,
+                    'origin': None,
                     })
             client_filepath, server_filepath = \
                 ReportModel.edm_write_tmp_report(filedata,

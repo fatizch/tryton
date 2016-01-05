@@ -923,3 +923,7 @@ msgctxt ""
 "wizard_button:claim.indemnification.validate,select_indemnifications,reload_selection:"
 msgid "Continue"
 msgstr "Continuer"
+
+msgctxt "field:contract,claims:"
+msgid "Claims"
+msgstr "Sinistres"

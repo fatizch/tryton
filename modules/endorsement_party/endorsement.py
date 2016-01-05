@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, utils
 from trytond.modules.endorsement import values_mixin, relation_mixin
 from trytond.model import Workflow
 
@@ -302,7 +302,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
 
     @classmethod
     def _get_restore_history_order(cls):
-        return ['party.party']
+        return ['party.party', 'party.address', 'party.relation.all']
 
     def do_restore_history(self):
         pool = Pool()
@@ -315,13 +315,16 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
         for model_name in models_to_restore:
             if not restore_dict[model_name]:
                 continue
-            pool.get(model_name).restore_history_before(
-                list(set([x.id for x in restore_dict[model_name]])),
+            all_ids = list(set([x.id for x in restore_dict[model_name]]))
+            pool.get(model_name).restore_history_before(all_ids,
                 self.endorsement.rollback_date)
+            utils.clear_transaction_cache(model_name, all_ids)
 
     @classmethod
     def _prepare_restore_history(cls, instances, at_date):
-        pass
+        for party in instances['party.party']:
+            instances['party.address'] += party.addresses
+            instances['party.relation.all'] += party.relations
 
     @classmethod
     def draft(cls, party_endorsements):

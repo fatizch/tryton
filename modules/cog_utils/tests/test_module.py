@@ -818,6 +818,23 @@ class ModuleTestCase(test_framework.CoopTestCase):
             res = action.filter_objects([good_obj, bad_obj, empty_obj])
             self.assertEqual(res, [good_obj], condition)
 
+    def test_filter_at_date(self):
+        def create_version_since(since_days):
+            return self.Version(val=str(since_days),
+                start_date=coop_date.add_day(utils.today(), since_days),
+                end_date=utils.today())
+
+        l = [create_version_since(-2),
+            create_version_since(-10),
+            create_version_since(-1),
+        ]
+        self.assertEqual(utils.filter_list_at_date(l,
+            at_date=coop_date.add_day(utils.today(), -2)), l[:-1])
+        self.assertEqual(utils.filter_list_at_date(l,
+            at_date=coop_date.add_day(utils.today(), -11)), [])
+        self.assertEqual(utils.filter_list_at_date(l,
+            at_date=utils.today()), l)
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()

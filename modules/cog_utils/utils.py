@@ -179,11 +179,8 @@ def filter_list_at_date(list_, at_date=None, start_var_name='start_date',
         end_var_name='end_date'):
     if not at_date:
         at_date = today()
-    res = set()
-    for elem in reversed(list_):
-        if is_effective_at_date(elem, at_date, start_var_name, end_var_name):
-            res.add(elem)
-    return list(set(res))
+    return [x for x in list_ if is_effective_at_date(x, at_date,
+        start_var_name, end_var_name)]
 
 
 def get_good_versions_at_date(instance, var_name, at_date=None,

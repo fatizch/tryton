@@ -9,9 +9,16 @@ from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT, ModuleTestCase
 __all__ = [
     'get_module_test_case',
     'launch_function',
+    'test_values_against_model',
     'prepare_test',
     'CoopTestCase',
     ]
+
+
+def test_values_against_model(model_, expected_values):
+    for k, v in expected_values.iteritems():
+        value = getattr(model_, k)
+        assert value == v, '"%s" should be "%s"' % (value, v)
 
 
 def get_module_test_case(module_name):

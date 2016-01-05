@@ -42,8 +42,10 @@ class ModifyCoveredElement:
         CoveredElement = Pool().get('contract.covered_element')
         prev_covered = CoveredElement(new_covered_element.cur_covered_id)
         covered = per_id[new_covered_element.cur_covered_id]
-        covered.claim_specific_bank_account = \
-            prev_covered.claim_specific_bank_account
+        if covered.claim_specific_bank_account != \
+                prev_covered.claim_specific_bank_account:
+            covered.claim_specific_bank_account = \
+                prev_covered.claim_specific_bank_account
 
     def _update_modified(self, new_covered_element, parent, per_id):
         super(ModifyCoveredElement, self)._update_modified(new_covered_element,

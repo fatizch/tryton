@@ -1577,7 +1577,7 @@ class StartEndorsement(Wizard):
             endorsement.definition = self.definition
             if self.select_endorsement.applicant:
                 endorsement.applicant = self.select_endorsement.applicant
-            if self.select_endorsement.contract:
+            if getattr(self.select_endorsement, 'contract', None):
                 endorsement.contract_endorsements = [{
                         'contract': self.select_endorsement.contract.id,
                         'values': {},
