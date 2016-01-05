@@ -36,7 +36,7 @@ msgstr "Le code doit être unique !"
 
 msgctxt "field:account.configuration,broker_bank_transfer_journal:"
 msgid "Broker Bank Transfer Journal"
-msgstr "Journal de virement des courtiers"
+msgstr "Journal de paiement automatique des courtiers"
 
 msgctxt "field:account.configuration,broker_check_journal:"
 msgid "Broker Check Journal"
@@ -411,8 +411,8 @@ msgid "Agents"
 msgstr "Protocoles de commissionnement"
 
 msgctxt "field:party.party,automatic_wire_transfer:"
-msgid "Automatic Wire Transfer"
-msgstr "Virement automatique"
+msgid "Use Broker Bank Transfer Journal"
+msgstr "Utiliser le journal de paiement automatique courtier"
 
 msgctxt "field:party.party,broker_code:"
 msgid "Broker Code"

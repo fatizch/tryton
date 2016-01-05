@@ -38,7 +38,7 @@ msgstr "Paiements bloqués pour le tiers %s"
 
 msgctxt "field:account.configuration,direct_debit_journal:"
 msgid "Direct Debit Journal"
-msgstr "Journal de prélèvement"
+msgstr "Journal de paiement automatique"
 
 msgctxt "field:account.configuration,reject_fee_journal:"
 msgid "Reject Fee Journal"

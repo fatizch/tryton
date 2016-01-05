@@ -28,7 +28,8 @@ class Party:
                 [('type_', '=', 'agent')], []),
             If(Bool(Eval('is_insurer')),
                 [('type_', '=', 'principal')], [])])
-    automatic_wire_transfer = fields.Boolean('Automatic Wire Transfer',
+    automatic_wire_transfer = fields.Boolean(
+        'Use Broker Bank Transfer Journal',
         depends=['is_broker'], states={'invisible': ~Eval('is_broker')})
 
     @classmethod
