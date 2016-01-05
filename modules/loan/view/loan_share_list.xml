@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tree editable="bottom">
-    <field name="loan"/>
+    <field name="loan" icon="icon"/>
     <field name="person"/>
     <field name="option"/>
     <field name="share" factor="100">

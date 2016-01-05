@@ -5,5 +5,13 @@
             <field name="name">loan-interest</field>
             <field name="path">icons/home-loan-interest-rate.svg</field>
         </record>
+        <record model="ir.ui.icon" id="loan-interest-grey-cancel">
+            <field name="name">loan-interest-grey-cancel</field>
+            <field name="path">icons/home-loan-interest-rate-grey-cancel.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="loan-interest-grey-green">
+            <field name="name">loan-interest-green</field>
+            <field name="path">icons/home-loan-interest-rate-green.svg</field>
+        </record>
     </data>
 </tryton>

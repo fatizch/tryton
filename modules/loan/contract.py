@@ -484,6 +484,13 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
         return 1
 
     def on_change_with_icon(self, name=None):
+        if self.share == 0 or self.option.status in ['terminated', 'void']:
+            return 'loan-interest-grey-cancel'
+        elif (self.start_date or datetime.date.min) <= utils.today() <= (
+                self.end_date or datetime.date.max):
+            return 'loan-interest-green'
+        elif self.end_date and utils.today() > self.end_date:
+            return 'loan-interest-grey-cancel'
         return 'loan-interest'
 
     @fields.depends('option')

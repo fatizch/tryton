@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tree string="Loan Shares" editable="bottom">
-    <field name="loan"/>
+    <field name="loan" icon="icon"/>
     <field name="share" factor="100">
         <suffix string="%"/>
     </field>

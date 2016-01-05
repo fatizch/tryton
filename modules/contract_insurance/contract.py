@@ -442,7 +442,9 @@ class ContractOption:
 
     def on_change_with_icon(self, name=None):
         if getattr(self, 'status', '') in ('terminated', 'void'):
-            return 'umbrella-grey'
+            return 'umbrella-grey-cancel'
+        elif getattr(self, 'status', '') == 'active':
+            return 'umbrella-green'
         return 'umbrella-black'
 
     @fields.depends('covered_element')
@@ -522,9 +524,6 @@ class ContractOption:
     @ModelView.button_action('contract_insurance.act_manage_exclusion')
     def propagate_exclusions(cls, options):
         pass
-
-    def get_rec_name(self, name):
-        return self.coverage.name
 
     def get_extra_data_def(self):
         return self.coverage.get_extra_data_def(

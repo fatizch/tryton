@@ -1689,8 +1689,13 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         return self.rec_name
 
     def get_rec_name(self, name):
+        names = []
         if self.coverage:
-            return self.coverage.get_rec_name(name)
+            names.append(self.coverage.rec_name)
+        if self.status != 'active':
+            names.append('[%s]' % self.status_string)
+        if names:
+            return ' '.join(names)
         return super(ContractOption, self).get_rec_name(name)
 
     def get_currency(self):
