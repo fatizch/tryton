@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.cog_utils import utils, fields
 
@@ -11,6 +11,15 @@ __all__ = [
 
 class Contract:
     __name__ = 'contract'
+
+    claims = fields.Function(
+        fields.Many2Many('claim', None, None, 'Claims'),
+        'get_claims')
+
+    def get_claims(self, name):
+        Service = Pool().get('claim.service')
+        services = Service.search(['contract', '=', self.id])
+        return [service.loss.claim.id for service in services]
 
     def get_possible_benefits(self, loss):
         res = []
