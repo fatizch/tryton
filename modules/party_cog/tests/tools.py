@@ -64,7 +64,7 @@ def create_party_person(name=None, first_name=None, birth_date=None,
         is_person=True,
         gender='male',
         birth_date=birth_date)
-    if hasattr(person, 'account_payable'):
+    if hasattr(person, 'account_payable') and company:
         add_accounts(person, company)
     person.save()
     return person
