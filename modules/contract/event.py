@@ -102,4 +102,6 @@ class EventLog:
             return [object_]
         if object_.__name__ == 'contract.option':
             return [object_.parent_contract]
+        if object_.__name__ == 'report_production.request':
+            return cls.get_related_instances(object_.object_, 'contract')
         raise NotImplementedError
