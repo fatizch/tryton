@@ -57,7 +57,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
     is_person = fields.Boolean('Person')
     is_company = fields.Boolean('Company')
 
-    identifiers = fields.One2Many('party.identifier', 'party', 'Identifiers')
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     main_address = fields.Function(
         fields.Many2One('party.address', 'Main Address'),
