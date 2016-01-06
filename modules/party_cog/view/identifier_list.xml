@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<tree string="Party Identifiers">
-    <field name="party"/>
-    <field name="type"/>
-    <field name="code" expand="1"/>
-</tree>
