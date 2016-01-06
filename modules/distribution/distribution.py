@@ -70,10 +70,12 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
 
     @classmethod
     def _export_skips(cls):
-        res = super(DistributionNetwork, cls)._export_skips()
-        res.add('left')
-        res.add('right')
-        return res
+        return super(DistributionNetwork, cls)._export_skips() | {'left',
+            'right', 'childs'}
+
+    @classmethod
+    def _export_light(cls):
+        return super(DistributionNetwork, cls)._export_light() | {'parent'}
 
     def get_rec_name(self, name=None):
         if self.code:
@@ -144,14 +146,6 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
             ('code',) + tuple(clause[1:]),
             ('full_name',) + tuple(clause[1:]),
             ]
-
-    @classmethod
-    def _export_light(cls):
-        return super(DistributionNetwork, cls)._export_light() | {'parent'}
-
-    @classmethod
-    def _export_skips(cls):
-        return super(DistributionNetwork, cls)._export_skips() | {'childs'}
 
 
 class DistributionNetworkContactMechanism(model.CoopSQL):
