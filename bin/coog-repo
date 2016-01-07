@@ -41,14 +41,14 @@ coog_repo_link() { # link repositories <args> - default: all
                 repos=$@
         fi
         _coog_repo_enter_modules
-        _coog_repo_rm
+        [ $# -eq 0 ] && _coog_repo_rm
         for repo in $repos
         do
                 ln -s ../../../$repo/modules/* .
         done
         _coog_repo_leave
         _coog_repo_enter_plugins
-        _coog_repo_rm
+        [ $# -eq 0 ] && _coog_repo_rm
         for repo in $repos
         do
                 [ -d ../../../$repo/plugins ] && ln -s ../../../$repo/plugins/* .
