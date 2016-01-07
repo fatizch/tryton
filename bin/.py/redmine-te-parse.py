@@ -4,7 +4,11 @@ import HTMLParser
 h = HTMLParser.HTMLParser()
 
 data = sys.stdin.read()
-entries = json.loads(data)['time_entries']
+try:
+    entries = json.loads(data)['time_entries']
+except:
+    print 'Error occured !'
+    sys.exit(1)
 total = 0
 for entry in entries:
     hours = entry['hours']

@@ -20,14 +20,31 @@ coog_init_bin() { # link useful bin to venv (tryton, coog, upload.py, etc)
         cd $wd
 }
 
+_coog_init_conf_cp() {
+        if [ -f ../../conf/$1 ]
+        then
+                cp .conf/$1 ../../conf/$1".ini"
+        else
+                cp .conf/$1 ../../conf/
+        fi
+}
+
 coog_init_conf() { # set default conf
         [ ! -d ../../conf ] && mkdir ../../conf
-        cp -b .conf/trytond.conf ../../conf
-        cp -b .conf/test.conf ../../conf
-        cp -b .conf/tryton.conf ../../conf
-        cp -b .conf/logging.conf ../../conf
+        _coog_init_conf_cp trytond.conf
+        _coog_init_conf_cp test.conf
+        _coog_init_conf_cp tryton.conf
+        _coog_init_conf_cp logging.conf
         # TODO: begin: cleaning batch
-        cp -b .conf/batch.conf ../../conf
-        cp -b .conf/celeryconfig.py ../../conf
+        _coog_init_conf_cp batch.conf
+        _coog_init_conf_cp celeryconfig.py
         # TODO: end
+}
+
+coog_init_redmine() {
+        local username
+        read -p "Enter Redmine username: " username
+        local password
+        read -p "Enter Redmine password: " password
+        echo "export COOG_REDMINE_CRED=$username:$password" >> ~/.profile
 }

@@ -8,5 +8,6 @@ coog_ts_main() { # print today's logged time
                 echo "  "It should be in this format username:password && \
                 echo "  "Could be set in '~'/.\[z\]profile && \
                 return
-        curl -s -k -u $COOG_REDMINE_CRED $url | python2 .py/redmine-te-parse.py
+        curl -s -k -u $COOG_REDMINE_CRED $url | python2 .py/redmine-te-parse.py || \
+                curl -I -k -u $COOG_REDMINE_CRED $url
 }
