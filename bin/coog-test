@@ -29,8 +29,12 @@ coog_test_dropdb() { # drop db <args> from test database. default: all test_*
         export PGPORT=`echo "$vars" | sed -n 2p`
         export PGUSER=`echo "$vars" | sed -n 3p`
         export PGPASSWORD=`echo "$vars" | sed -n 4p`
-        [ $# -gt 0 ] && dropdb $* && return
-        psql -l | grep "test_" | cut -f1 -d "|" | xargs dropdb
+        [ $# -gt 0 ] && dropdb -e $* && return
+        local db
+        for db in `psql -l | grep "test_" | cut -f1 -d "|"`
+        do
+                dropdb -e $db
+        done
 
 }
 
