@@ -33,6 +33,7 @@ __all__ = [
     'CreateInvoiceAsk',
     'ChangeBroker',
     'SelectNewBroker',
+    'FilterCommissions'
     ]
 __metaclass__ = PoolMeta
 
@@ -814,6 +815,33 @@ class CreateInvoiceAsk:
     @staticmethod
     def default_all_brokers():
         return True
+
+
+class FilterCommissions(Wizard):
+    'Commissions'
+
+    __name__ = 'commission.filter_commission'
+
+    start_state = 'filter_commission'
+    filter_commission = StateAction('commission.act_commission_form')
+
+    def do_filter_commission(self, action):
+        assert Transaction().context.get('active_model') == 'account.invoice'
+        ids = Transaction().context.get('active_ids')
+        AccountInvoice = Pool().get('account.invoice')
+        in_domain = [('invoice_line.invoice', 'in', ids)]
+        out_domain = [('origin.invoice', 'in', ids, 'account.invoice.line')]
+        types = set([x.type for x in AccountInvoice.browse(ids)])
+        if len(types) != 1:
+            domain = ['OR', in_domain[0], out_domain[0]]
+        elif types == {'in_invoice'}:
+            domain = in_domain
+        else:
+            domain = out_domain
+        action.update({
+                'pyson_domain': PYSONEncoder().encode(domain)
+                })
+        return action, {}
 
 
 class ChangeBroker(Wizard):

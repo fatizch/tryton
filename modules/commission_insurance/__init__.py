@@ -35,4 +35,5 @@ def register():
         CreateInvoice,
         CreateAgents,
         ChangeBroker,
+        FilterCommissions,
         module='commission_insurance', type_='wizard')

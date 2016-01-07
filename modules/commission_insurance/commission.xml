@@ -122,5 +122,13 @@
             <field name="type">form</field>
             <field name="name">select_new_broker_form</field>
         </record>
+        <!-- ##################### -->
+        <!-- # Filter commission # -->
+        <!-- ##################### -->
+        <record model="ir.action.wizard" id="act_filter_commission">
+            <field name="name">Commissions</field>
+            <field name="wiz_name">commission.filter_commission</field>
+            <field name="model">account.invoice</field>
+        </record>
     </data>
 </tryton>
