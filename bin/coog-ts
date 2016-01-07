@@ -1,0 +1,12 @@
+# vim: set ft=sh:
+# check your timesheet on Redmine
+
+coog_ts_main() { # print today's logged time
+        local url
+        url='https://redmine.coopengo.com/time_entries.json?user_id=me&spent_on=t'
+        [ -z $COOG_REDMINE_CRED ] && echo COOG_REDMINE_CRED not defined && \
+                echo "  "It should be in this format username:password && \
+                echo "  "Could be set in '~'/.\[z\]profile && \
+                return
+        curl -s -k -u $COOG_REDMINE_CRED $url | python2 .py/redmine-te-parse.py
+}
