@@ -17,6 +17,7 @@ coog_dep_base() { # install base deps
         pip install Mock
         pip install simpleeval
         pip install unidecode
+        pip install argcomplete
 }
 
 coog_dep_extra() { # install extra deps (interfaces, deployment extras)
@@ -31,6 +32,7 @@ coog_dep_extra() { # install extra deps (interfaces, deployment extras)
         pip install flower                       # batch
         pip install sphinx                       # doc
         pip install sphinxcontrib-inheritance    # doc
+        pip install pytest
 }
 
 coog_dep_main() { # install all deps

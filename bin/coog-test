@@ -1,0 +1,59 @@
+# vim: set ft=sh:
+# test management
+
+_coog_test_enter() { # set test context
+        local trytond_path
+        trytond_path=`readlink -f ../../trytond`
+        export PYTHONPATH="$trytond_path":$PYTHONPATH
+        # TODO: begin: needs review (conf in pathpath is not safe)
+        local conf_path
+        conf_path=`readlink -f ../../conf`
+        export PYTHONPATH="$conf_path":$PYTHONPATH
+        # TODO: end
+        export TRYTOND_CONFIG=$COOG_TEST_CONF
+        # TODO: begin: to be removed when py.test is fixed (info in config)
+        export TRYTOND_DATABASE_URI=`python2 .py/env-config.py $TRYTOND_CONFIG database uri str`
+        # TODO: end
+        export DB_NAME="test_"`date +%s%N`
+        export DO_NOT_TEST_CASES=1
+}
+
+_coog_test_leave() { # clean test config
+        coog_test_dropdb $DB_NAME
+}
+
+coog_test_dropdb() { # drop db <args> from test database. default: all test_*
+        local vars
+        vars=`python2 .py/env-config.py $COOG_TEST_CONF database uri url`
+        export PGHOST=`echo "$vars" | sed -n 1p`
+        export PGPORT=`echo "$vars" | sed -n 2p`
+        export PGUSER=`echo "$vars" | sed -n 3p`
+        export PGPASSWORD=`echo "$vars" | sed -n 4p`
+        [ $# -gt 0 ] && dropdb $* && return
+        psql -l | grep "test_" | cut -f1 -d "|" | xargs dropdb
+
+}
+
+coog_test_py() { # launch py.test on a single module <arg>. all further args are fwded to py.test
+        [ $# -eq 0 ] && echo needs module name to test && return
+        _coog_test_enter
+        local old_wd
+        old_wd=`pwd`
+        cd ../../trytond/trytond/modules
+        local module
+        module=$1
+        shift 1
+        if [ ! -d $module ]
+        then
+                echo module not found && cd $old_wd && return
+        fi
+        py.test $module --ignore=$module/test_case.py --doctest-glob=scenario*.rst $*
+        cd $old_wd
+        _coog_test_leave
+}
+
+coog_test_main() { # launch unit tests on module <arg> - default: all
+        _coog_test_enter
+        run-tests.py -c $TRYTOND_CONFIG -vv -m $*
+        _coog_test_leave
+}

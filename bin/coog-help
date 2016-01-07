@@ -37,6 +37,10 @@ _coog_help_command() { # list sub-commands
         grep "^coog_" coog-$1 | while read -r line
         do
                 com=`echo $line | cut -d '_' -f 3 | cut -d '(' -f 1`
+                if [ "$com" = main ]
+                then
+                        com=--
+                fi
                 msg=`echo $line | cut -d '#' -f 2`
                 _coog_help_item $com $msg
         done

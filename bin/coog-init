@@ -6,14 +6,16 @@ coog_init_bin() { # link useful bin to venv (tryton, coog, upload.py, etc)
         wd=`pwd`
         cd $VIRTUAL_ENV/bin
         [ -h trytond ] && rm trytond
-        [ -h tryton ] && rm tryton
-        [ -h coog ] && rm coog
-        [ -h upload.py ] && rm upload.py
-        [ -h git-cl ] && rm git-cl
         ln -s `readlink -f $wd/../../trytond/bin/trytond` .
+        [ -h run-tests.py ] && rm run-tests.py
+        ln -s `readlink -f $wd/../../trytond/trytond/tests/run-tests.py` .
+        [ -h tryton ] && rm tryton
         ln -s `readlink -f $wd/../../tryton/bin/tryton` .
+        [ -h coog ] && rm coog
         ln -s $wd/coog .
+        [ -h upload.py ] && rm upload.py
         ln -s $wd/vendor/upload.py
+        [ -h git-cl ] && rm git-cl
         ln -s $wd/vendor/git-cl
         cd $wd
 }
@@ -21,6 +23,7 @@ coog_init_bin() { # link useful bin to venv (tryton, coog, upload.py, etc)
 coog_init_conf() { # set default conf
         [ ! -d ../../conf ] && mkdir ../../conf
         cp -b .conf/trytond.conf ../../conf
+        cp -b .conf/test.conf ../../conf
         cp -b .conf/tryton.conf ../../conf
         cp -b .conf/logging.conf ../../conf
         # TODO: begin: cleaning batch

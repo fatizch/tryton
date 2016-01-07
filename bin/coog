@@ -35,7 +35,7 @@ _main() { # parse params and call fn
         local com=$1
         local sub
         local fn
-        if [ $# -eq 1 ] || [ $com = help ]
+        if [ $# -eq 1 ] || [ "$com" = help ]
         then
                 # implicit sub-command (no args possible)
                 sub=main
@@ -44,6 +44,10 @@ _main() { # parse params and call fn
                 # explicit sub-command
                 sub=$2
                 shift 2
+                if [ "$sub" = -- ] # a way to pass args to main
+                then
+                        sub=main
+                fi
         fi
         fn="coog_"$com"_"$sub
         _source

@@ -11,6 +11,7 @@ _coog_env_paths() { # set paths
         conf=`readlink -f ../../conf`
         COOG_TMP=/tmp
         COOG_SRV_CONF=$conf/trytond.conf
+        COOG_TEST_CONF=$conf/test.conf
         COOG_CLI_CONF=$conf/tryton.conf
         COOG_LOG_CONF=$conf/logging.conf
         COOG_LOG_LEVEL=`python2 .py/env-config.py $COOG_LOG_CONF logger_root level str`
@@ -42,6 +43,7 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    COOG_CLI_FILE     "$COOG_CLI_FILE
         echo "    COOG_TMP          "$COOG_TMP
         echo "    COOG_SRV_CONF     "$COOG_SRV_CONF
+        echo "    COOG_TEST_CONF    "$COOG_TEST_CONF
         echo "    COOG_CLI_CONF     "$COOG_CLI_CONF
         echo "    COOG_LOG_CONF     "$COOG_LOG_CONF
         echo "    COOG_LOG_LEVEL    "$COOG_LOG_LEVEL
