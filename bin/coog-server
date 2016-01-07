@@ -30,7 +30,7 @@ _coog_server_bak() { # backup log file (mv to pid if exists or rm)
         mv $out_file $bak_file
 }
 
-coog_server_start() { # start server
+coog_server_start() { # start server, [args] passed to trytond, logconf NOT set when args
         local pid_file
         pid_file=`_coog_server_file pid`
         [ -e $pid_file ] && echo 'server already running -> stop or restart' && return
@@ -43,16 +43,23 @@ coog_server_start() { # start server
         conf_path=`readlink -f ../../conf`
         export PYTHONPATH=$conf_path:$PYTHONPATH
         # TODO: end
+        local args
+        if [ $# -eq 0 ]
+        then
+                args="--logconf $COOG_LOG_CONF"
+        else
+                args=$*
+        fi
         nohup trytond --dev \
+                $args \
                 -c $COOG_SRV_CONF \
-                --logconf $COOG_LOG_CONF \
                 -d $PGDATABASE \
                 --pidfile $pid_file > $out_file &
         echo server started
 
 }
 
-coog_server_debug() { # start server in pdb
+coog_server_debug() { # start server in pdb, [args] passed to trytond
         # TODO: begin: needs review (conf in pathpath is not safe)
         local conf_path
         conf_path=`readlink -f ../../conf`
@@ -60,9 +67,8 @@ coog_server_debug() { # start server in pdb
         # TODO: end
         local trytond
         trytond=`which trytond | xargs readlink -f`
-        python -m pdb $trytond \
+        python -m pdb $trytond $* \
                 -c $COOG_SRV_CONF \
-                --logconf $COOG_LOG_CONF \
                 -d $PGDATABASE
 }
 
