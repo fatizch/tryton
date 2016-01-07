@@ -326,8 +326,8 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
 
     def check_increments(self):
         for increment in self.increments:
-            if hasattr(increment, 'start_date') and (increment.start_date <
-                    self.first_payment_date):
+            if getattr(increment, 'start_date', None) and (
+                    increment.start_date < self.first_payment_date):
                 self.raise_user_error('bad_increment_start')
 
     def init_increments(self):
