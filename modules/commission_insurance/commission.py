@@ -51,7 +51,10 @@ class Commission:
     broker = fields.Function(
         fields.Many2One('distribution.network', 'Broker'),
         'get_broker', searcher='search_broker')
-    commission_rate = fields.Numeric('Commission Rate')
+    commission_rate = fields.Numeric('Commission Rate', digits=(16, 4))
+    base_amount = fields.Function(
+        fields.Numeric('Base Amount'),
+        'get_base_amount')
     commissioned_subscriber = fields.Function(
         fields.Many2One('party.party', 'Contract Subscriber'),
         'get_commissioned_subscriber',
@@ -65,10 +68,11 @@ class Commission:
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().cursor
         commission = TableHandler(cursor, cls)
-        has_column = commission.column_exist('commissioned_option')
+        has_option_column = commission.column_exist('commissioned_option')
         has_start_column = commission.column_exist('start')
+
         super(Commission, cls).__register__(module_name)
-        if not has_column:
+        if not has_option_column:
             cursor.execute("UPDATE commission "
                 "SET commissioned_option = Cast(substring(origin,17) as int) "
                 "WHERE origin LIKE 'contract.option,%'")
@@ -99,6 +103,17 @@ class Commission:
                     values=[update_table.start, update_table.end],
                     from_=[update_table],
                     where=(commission_up.id == update_table.id)))
+        # Migration from 1.6: store commission_rate as percent
+        commission = cls.__table__()
+        rate_not_as_percent_query = commission.select(commission.id,
+            where=(commission.commission_rate >= 1), limit=1)
+        cursor.execute(*rate_not_as_percent_query)
+        if len(cursor.fetchall()):
+            commission = cls.__table__()
+            cursor.execute(*commission.update(
+                    columns=[commission.commission_rate],
+                    values=[Cast(commission.commission_rate / 100,
+                        'DECIMAL (16,4)')]))
 
     @classmethod
     def __setup__(cls):
@@ -109,6 +124,9 @@ class Commission:
     def get_commissioned_contract(self, name):
         if self.commissioned_option:
             return self.commissioned_option.parent_contract.id
+
+    def get_base_amount(self, name):
+        return getattr(self.origin, 'amount', 0)
 
     @classmethod
     def search_commissioned_contract(cls, name, clause):

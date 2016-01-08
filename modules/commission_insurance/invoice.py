@@ -71,8 +71,8 @@ class InvoiceLine:
                 pattern={'agent': agent, 'date_start': start, 'date_end': end})
             if not commission_amount:
                 continue
-            commission_rate = (commission_amount / amount * 100).quantize(
-                Decimal('.01'))
+            commission_rate = (commission_amount / amount).quantize(
+                Decimal('.0001'))
             if (commission_data and commission_data[-1][3] == commission_rate
                     and commission_data[-1][1] == coop_date.add_day(
                         start, -1)):
@@ -156,7 +156,8 @@ class Invoice:
             ('broker_invoice', 'Broker Invoice'),
             ('insurer_invoice', 'Insurer Invoice'),
             ]
-        cls.business_type.depends += ['is_broker_invoice', 'is_insurer_invoice']
+        cls.business_type.depends += ['is_broker_invoice',
+            'is_insurer_invoice']
 
     def _get_move_line(self, date, amount):
         line = super(Invoice, self)._get_move_line(date, amount)
@@ -241,9 +242,9 @@ class Invoice:
             Concat('account.invoice.line,', Cast(invoice_line.id, 'VARCHAR')),
             where=invoice_line.invoice.in_(ids))
 
-        cursor.execute(*commission.select(commission.id, where=
-                (commission.invoice_line == None)
-                & commission.origin.in_(sub_query)))
+        cursor.execute(*commission.select(commission.id, where=(
+                    (commission.invoice_line == None) &
+                    commission.origin.in_(sub_query))))
         return Commission.browse([x[0] for x in cursor.fetchall()])
 
     @classmethod
@@ -262,9 +263,9 @@ class Invoice:
             Concat('account.invoice.line,', Cast(invoice_line.id, 'VARCHAR')),
             where=invoice_line.invoice.in_(ids))
 
-        cursor.execute(*commission.select(commission.id, where=
-                (commission.invoice_line != None)
-                & commission.origin.in_(sub_query)))
+        cursor.execute(*commission.select(commission.id, where=(
+                    (commission.invoice_line != None) &
+                    commission.origin.in_(sub_query))))
         return Commission.browse([x[0] for x in cursor.fetchall()])
 
     @classmethod

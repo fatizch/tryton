@@ -210,8 +210,8 @@ len(line.commissions)
 # #Res# #2
 set([(x.amount, x.commission_rate, x.agent.party.name)
     for x in line.commissions]) == set([
-            (Decimal('10'), Decimal('10'), u'Broker'),
-            (Decimal('60'), Decimal('60'), u'Insurer')])
+            (Decimal('10'), Decimal('.1'), u'Broker'),
+            (Decimal('60'), Decimal('.6'), u'Insurer')])
 # #Res# #True
 
 # #Comment# #Pay invoice

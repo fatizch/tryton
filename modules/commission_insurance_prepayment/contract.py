@@ -76,8 +76,8 @@ class ContractOption:
             }
         amount = plan.compute_prepayment(self.product, pattern=pattern)
         if amount:
-            rate = (amount / pattern['first_year_premium'] * 100).quantize(
-                Decimal('.01'))
+            rate = (amount / pattern['first_year_premium']).quantize(
+                Decimal('.0001'))
         else:
             rate = None
         return amount, rate

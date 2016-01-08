@@ -82,7 +82,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                                 'date_end': datetime.date(2000, 1, 31)}}),
                     ])
             self.assertEqual(len(commissions), 1)
-            self.assertEqual(commissions[0].commission_rate, Decimal('10'))
+            self.assertEqual(commissions[0].commission_rate, Decimal('.1'))
             self.assertEqual(commissions[0].start, datetime.date(2000, 1, 1))
             self.assertEqual(commissions[0].end, datetime.date(2000, 1, 31))
             self.assertEqual(commissions[0].amount, Decimal('31'))
@@ -105,11 +105,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
                                 'date_end': datetime.date(2000, 1, 31)}}),
                     ])
             self.assertEqual(len(commissions), 2)
-            self.assertEqual(commissions[0].commission_rate, Decimal('50'))
+            self.assertEqual(commissions[0].commission_rate, Decimal('.5'))
             self.assertEqual(commissions[0].start, datetime.date(2000, 1, 1))
             self.assertEqual(commissions[0].end, datetime.date(2000, 1, 15))
             self.assertEqual(commissions[0].amount, Decimal('75'))
-            self.assertEqual(commissions[1].commission_rate, Decimal('10'))
+            self.assertEqual(commissions[1].commission_rate, Decimal('.1'))
             self.assertEqual(commissions[1].start, datetime.date(2000, 1, 16))
             self.assertEqual(commissions[1].end, datetime.date(2000, 1, 31))
             self.assertEqual(commissions[1].amount, Decimal('16'))

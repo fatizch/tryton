@@ -10,6 +10,6 @@
     <xpath expr="/form/field[@name='amount']" position="after">
         <newline/>
         <label name="commission_rate"/>
-        <field name="commission_rate"/>
+        <field name="commission_rate" factor="100"/>
     </xpath>
 </data>

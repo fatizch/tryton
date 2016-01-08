@@ -2,23 +2,23 @@
 <data>
     <xpath expr="/tree/field[@name='type_']" position="after">
         <field name="party"/>
-    </xpath>
-    <xpath expr="/tree" position="inside">
         <field name="commissioned_contract"/>
         <field name="commissioned_subscriber"/>
         <field name="commissioned_option"/>
         <field name="broker" tree_invisible="1"/>
     </xpath>
+    <xpath expr="/tree/field[@name='amount']" position="replace"/>
+    <xpath expr="/tree/field[@name='date']" position="before">
+        <field name="start"/>
+        <field name="end"/>
+        <field name="base_amount"/>
+        <field name="commission_rate" factor="100">
+            <suffix string="%"/>
+        </field>
+        <field name="amount" sum="Amount"/>
+    </xpath>
     <xpath expr="/tree/field[@name='currency']" position="replace"/>
     <xpath expr="/tree/field[@name='type_']" position="replace_attributes">
         <field name="type_" tree_invisible="1"/>
-    </xpath>
-    <xpath expr="/tree/field[@name='amount']" position="replace_attributes">
-        <field name="amount" sum="Amount"/>
-    </xpath>
-    <xpath expr="/tree/field[@name='amount']" position="after">
-        <field name="commission_rate"/>
-        <field name="start"/>
-        <field name="end"/>
     </xpath>
 </data>

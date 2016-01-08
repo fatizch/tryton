@@ -74,6 +74,10 @@ msgctxt "field:commission,commission_rate:"
 msgid "Commission Rate"
 msgstr "Taux de commissions"
 
+msgctxt "field:commission,base_amount:"
+msgid "Base Amount"
+msgstr "Assiette"
+
 msgctxt "field:commission,commissioned_contract:"
 msgid "Commissioned Contract"
 msgstr "Contrat commissionné"
@@ -939,3 +943,9 @@ msgstr "Protocoles de commissionnement"
 msgctxt "view:commission.create_invoice.ask:commission."
 msgid "Create Commission Invoice"
 msgstr "Générer les bordereaux de commission"
+
+# Custom translations below
+
+msgctxt "field:commission,amount:commission."
+msgid "Amount"
+msgstr "Commission"
