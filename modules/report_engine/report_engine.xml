@@ -132,5 +132,38 @@
             <field name="type">tree</field>
             <field name="name">report_template_version_list</field>
         </record>
+        <!-- ############## -->
+        <!-- # Parameters # -->
+        <!-- ############## -->
+        <record model="ir.ui.view" id="template_parameter_view_list">
+            <field name="model">report.template.parameter</field>
+            <field name="type">tree</field>
+            <field name="name">report_template_parameter_list</field>
+        </record>
+        <record model="ir.ui.view" id="template_parameter_view_form">
+            <field name="model">report.template.parameter</field>
+            <field name="type">form</field>
+            <field name="name">report_template_parameter_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_report_template_parameter_form">
+            <field name="name">Template Parameters</field>
+            <field name="res_model">report.template.parameter</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_report_template_parameter_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="template_parameter_view_list"/>
+            <field name="act_window" ref="act_report_template_parameter_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_report_template_parameter_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="template_parameter_view_form"/>
+            <field name="act_window" ref="act_report_template_parameter_form"/>
+        </record>
+        <menuitem parent="menu_report" sequence="50" action="act_report_template_parameter_form" id="menu_template_parameter"/>
+        <record model="ir.ui.view" id="report_input_parameters_view_form">
+            <field name="model">report.create.input_parameters</field>
+            <field name="type">form</field>
+            <field name="name">report_create_input_parameters_form</field>
+        </record>
     </data>
 </tryton>

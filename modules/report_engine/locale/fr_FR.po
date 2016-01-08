@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -167,6 +167,14 @@ msgctxt "field:report.create.attach,name:"
 msgid "Filename"
 msgstr "Nom du Fichier"
 
+msgctxt "field:report.create.input_parameters,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:report.create.input_parameters,parameters:"
+msgid "Parameters"
+msgstr "Paramètres"
+
 msgctxt "field:report.create.preview,email:"
 msgid "eMail"
 msgstr "Courrier Electronique"
@@ -295,6 +303,10 @@ msgctxt "field:report.template,on_model:"
 msgid "Model"
 msgstr "Modèle"
 
+msgctxt "field:report.template,parameters:"
+msgid "Parameters"
+msgstr "Paramètres"
+
 msgctxt "field:report.template,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -328,6 +340,106 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:report.template,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:report.template-report.template.parameter,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template-report.template.parameter,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template-report.template.parameter,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:report.template-report.template.parameter,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:report.template-report.template.parameter,parameter:"
+msgid "Parameter"
+msgstr "Paramètre"
+
+msgctxt "field:report.template-report.template.parameter,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report.template-report.template.parameter,report_template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:report.template-report.template.parameter,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:report.template-report.template.parameter,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:report.template-report.template.parameter,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:report.template.parameter,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template.parameter,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template.parameter,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:report.template.parameter,digits:"
+msgid "Digits"
+msgstr "Précision"
+
+msgctxt "field:report.template.parameter,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:report.template.parameter,name:"
+msgid "Name"
+msgstr "Code"
+
+msgctxt "field:report.template.parameter,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report.template.parameter,selection:"
+msgid "Selection"
+msgstr "Sélection"
+
+msgctxt "field:report.template.parameter,selection_json:"
+msgid "Selection JSON"
+msgstr "Sélection JSON"
+
+msgctxt "field:report.template.parameter,selection_sorted:"
+msgid "Selection Sorted"
+msgstr "Sélection Triée"
+
+msgctxt "field:report.template.parameter,string:"
+msgid "String"
+msgstr "Nom"
+
+msgctxt "field:report.template.parameter,type_:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:report.template.parameter,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:report.template.parameter,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:report.template.parameter,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -418,6 +530,10 @@ msgstr "Mis à jour par"
 msgctxt "field:report.template.version,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:report_production.request,context_:"
+msgid "Reporting Context"
+msgstr "Contexte de rapport"
 
 msgctxt "field:report_production.request,create_date:"
 msgid "Create Date"
@@ -513,6 +629,14 @@ msgstr ""
 "Si coché, un document sera produit pour chaque objet. Si décoché, un seul "
 "document sera produit pour plusieurs objets."
 
+msgctxt "help:report.template.parameter,selection:"
+msgid "A couple of key and label separated by \":\" per line"
+msgstr "Un couple de clé, valeur séparé par un \\\":\\\" par ligne"
+
+msgctxt "help:report.template.parameter,selection_sorted:"
+msgid "If the selection must be sorted on label"
+msgstr "Si la sélection doit être triée par le libéllé"
+
 msgctxt "model:event.type.action-report.template,name:"
 msgid "Event Type Action Template Relation"
 msgstr "Relation action par type d'événement modèle de lettre"
@@ -528,6 +652,10 @@ msgstr "Modèles de courriers"
 msgctxt "model:ir.action,name:act_report_production_request_form"
 msgid "Report Production Requests"
 msgstr "Demande de production de document"
+
+msgctxt "model:ir.action,name:act_report_template_parameter_form"
+msgid "Template Parameters"
+msgstr "Paramètres de courrier"
 
 msgctxt "model:ir.action,name:act_treat_report_production_request"
 msgid "Treat Report Production Request"
@@ -561,6 +689,10 @@ msgctxt "model:ir.ui.menu,name:menu_report_production_requests"
 msgid "Report Production Requests"
 msgstr "Demandes de production de document"
 
+msgctxt "model:ir.ui.menu,name:menu_template_parameter"
+msgid "Template Parameters"
+msgstr "Paramètres de courrier"
+
 msgctxt "model:report.convert.match,name:"
 msgid "Match Displayer"
 msgstr "Occurence"
@@ -572,6 +704,10 @@ msgstr "Sélection des conversions à exécuter"
 msgctxt "model:report.create.attach,name:"
 msgid "Report Create Attach"
 msgstr "Création de l'attachement"
+
+msgctxt "model:report.create.input_parameters,name:"
+msgid "Report Input Parameters"
+msgstr "Entrer les paramètres de courrier"
 
 msgctxt "model:report.create.preview,name:"
 msgid "Report Create Preview"
@@ -588,6 +724,14 @@ msgstr "Sélection du modèle"
 msgctxt "model:report.template,name:"
 msgid "Report Template"
 msgstr "Modèle de courrier"
+
+msgctxt "model:report.template-report.template.parameter,name:"
+msgid "Relation between Report Template and Template Parameter"
+msgstr "Relation entre modèle de courrier et paramètres de modèle"
+
+msgctxt "model:report.template.parameter,name:"
+msgid "Template Parameter"
+msgstr "Paramètre de courrier"
 
 msgctxt "model:report.template.version,name:"
 msgid "Report Template Version"
@@ -618,10 +762,6 @@ msgid "Report Administration"
 msgstr "Administration des courriers/rapports"
 
 msgctxt "selection:event.type.action,treatment_kind:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:event.type.action,treatment_kind:"
 msgid "Asynchronous"
 msgstr "Asynchrone"
 
@@ -641,6 +781,10 @@ msgctxt "selection:report.template,format_for_internal_edm:"
 msgid "Pdf"
 msgstr "Pdf"
 
+msgctxt "selection:report.template,format_for_internal_edm:"
+msgid "xls"
+msgstr "xls"
+
 msgctxt "selection:report.template,template_extension:"
 msgid "Open Document Graphics (.odg)"
 msgstr "Dessin Open Document"
@@ -656,6 +800,38 @@ msgstr "Tableau Open Document"
 msgctxt "selection:report.template,template_extension:"
 msgid "Open Document Text (.odt)"
 msgstr "Texte Open Document"
+
+msgctxt "selection:report.template.parameter,type_:"
+msgid "Boolean"
+msgstr "Booléen"
+
+msgctxt "selection:report.template.parameter,type_:"
+msgid "Char"
+msgstr "Alphanumérique"
+
+msgctxt "selection:report.template.parameter,type_:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "selection:report.template.parameter,type_:"
+msgid "DateTime"
+msgstr "Date-Heure"
+
+msgctxt "selection:report.template.parameter,type_:"
+msgid "Float"
+msgstr "Numérique (Virgule flottante)"
+
+msgctxt "selection:report.template.parameter,type_:"
+msgid "Integer"
+msgstr "Entier"
+
+msgctxt "selection:report.template.parameter,type_:"
+msgid "Numeric"
+msgstr "Numérique"
+
+msgctxt "selection:report.template.parameter,type_:"
+msgid "Selection"
+msgstr "Sélection"
 
 msgctxt "selection:report.template.version,resource:"
 msgid "Document Template"
@@ -685,6 +861,10 @@ msgctxt "view:report.create.attach:"
 msgid "Attachment"
 msgstr "Pièce jointe"
 
+msgctxt "view:report.create.input_parameters:"
+msgid "Input Templates Parameters"
+msgstr "Entrer les paramètres de courrier"
+
 msgctxt "view:report.create.preview.line:"
 msgid "Report Preview"
 msgstr "Prévisualisation du courrier"
@@ -696,6 +876,14 @@ msgstr "Rapports"
 msgctxt "view:report.create.select_template:"
 msgid "Document Templates"
 msgstr "Modèles de Lettre"
+
+msgctxt "view:report.template.parameter:"
+msgid "Parameter"
+msgstr "Paramètre"
+
+msgctxt "view:report.template.parameter:"
+msgid "Parameters"
+msgstr "Paramètres"
 
 msgctxt "view:report.template.version:"
 msgid "Report Template Version"
@@ -761,6 +949,14 @@ msgctxt "wizard_button:report.create,attach,post_generation:"
 msgid "Save"
 msgstr "Enregister"
 
+msgctxt "wizard_button:report.create,input_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:report.create,input_parameters,generate_reports:"
+msgid "Generate"
+msgstr "Générer"
+
 msgctxt "wizard_button:report.create,preview_document,end:"
 msgid "Cancel"
 msgstr "Annuler"
@@ -781,7 +977,8 @@ msgctxt "wizard_button:report.create,select_model,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:report.create,select_model,generate_reports:"
+msgctxt ""
+"wizard_button:report.create,select_model,generate_reports_or_input_parameters:"
 msgid "Generate"
 msgstr "Générer"
 

@@ -39,5 +39,8 @@
         <page name="tags">
             <field name="tags" colspan="4"/>
         </page>
+        <page name="parameters">
+            <field name="parameters" colspan="4"/>
+        </page>
     </notebook>
 </form>

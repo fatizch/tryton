@@ -10,6 +10,8 @@ from .batch import *
 def register():
     Pool.register(
         ReportTemplate,
+        TemplateParameter,
+        TemplateTemplateParameterRelation,
         ReportTemplateVersion,
         ReportCreateSelectTemplate,
         ReportCreatePreview,
@@ -24,6 +26,7 @@ def register():
         ConfirmReportProductionRequestTreat,
         ReportProductionRequestTreatResult,
         ReportProductionRequestTreatmentBatch,
+        ReportInputParameters,
         module='report_engine', type_='model')
     Pool.register(
         ReportGenerate,

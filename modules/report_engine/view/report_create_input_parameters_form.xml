@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Input Templates Parameters">
+    <field name="parameters" no_command="1"/>
+</form>

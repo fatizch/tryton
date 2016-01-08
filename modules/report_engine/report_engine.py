@@ -23,12 +23,15 @@ from trytond.ir import Attachment
 from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
+from trytond.model import DictSchemaMixin
 
 from trytond.modules.cog_utils import fields, model, utils, coop_string, export
 
 logger = logging.getLogger(__name__)
 
 __all__ = [
+    'TemplateParameter',
+    'TemplateTemplateParameterRelation',
     'ReportTemplate',
     'ReportTemplateVersion',
     'Printable',
@@ -37,6 +40,7 @@ __all__ = [
     'ReportCreatePreviewLine',
     'ReportGenerate',
     'ReportGenerateFromFile',
+    'ReportInputParameters',
     'ReportCreate',
     'ReportCreateAttach',
     ]
@@ -47,6 +51,40 @@ FILE_EXTENSIONS = [
     ('ods', 'Open Document Spreadsheet (.ods)'),
     ('odg', 'Open Document Graphics (.odg)'),
     ]
+
+
+class TemplateParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
+    'Template Parameter'
+
+    __name__ = 'report.template.parameter'
+
+    @classmethod
+    def __setup__(cls):
+        super(TemplateParameter, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_unique', Unique(t, t.name), 'The code must be unique'),
+            ]
+        cls._order.insert(0, ('name', 'ASC'))
+
+    @property
+    def name_in_template(self):
+        return 'param_' + str(self.name)
+
+    @classmethod
+    def get_data_for_report(cls, parameters):
+        return {'param_' + k: v for k, v in parameters.iteritems()}
+
+
+class TemplateTemplateParameterRelation(model.CoopSQL):
+    'Relation between Report Template and Template Parameter'
+
+    __name__ = 'report.template-report.template.parameter'
+
+    report_template = fields.Many2One('report.template', 'Template',
+        ondelete='CASCADE')
+    parameter = fields.Many2One('report.template.parameter', 'Parameter',
+        ondelete='RESTRICT')
 
 
 class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
@@ -86,6 +124,8 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         " a single document will be produced for several objects.")
     event_type_actions = fields.Many2Many('event.type.action-report.template',
             'report_template', 'event_type_action', 'Event Type Actions')
+    parameters = fields.Many2Many('report.template-report.template.parameter',
+        'report_template', 'parameter', 'Parameters')
 
     @classmethod
     def __setup__(cls):
@@ -249,6 +289,9 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 'origin': None,
                 }
         reporting_data.update(context_)
+        if self.parameters:
+            reporting_data.update({x.name_in_template: None
+                    for x in self.parameters})
         functional_date = context_.get('functional_date')
         if functional_date:
             with Transaction().set_context(
@@ -743,6 +786,14 @@ class ReportCreateAttach(model.CoopView):
     name = fields.Char('Filename')
 
 
+class ReportInputParameters(model.CoopView):
+    'Report Input Parameters'
+
+    __name__ = 'report.create.input_parameters'
+
+    parameters = fields.Dict('report.template.parameter', 'Parameters')
+
+
 class ReportCreate(Wizard):
     __name__ = 'report.create'
 
@@ -751,10 +802,17 @@ class ReportCreate(Wizard):
     select_model = StateView('report.create.select_template',
         'report_engine.document_create_select_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Generate', 'generate_reports', 'tryton-go-next',
-                states={'readonly': ~Eval('models')}, default=True),
+            Button('Generate', 'generate_reports_or_input_parameters',
+                'tryton-go-next', states={'readonly': ~Eval('models')},
+                default=True),
+            ])
+    input_parameters = StateView('report.create.input_parameters',
+        'report_engine.report_input_parameters_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Generate', 'generate_reports', 'tryton-go-next'),
             ])
     generate_reports = StateTransition()
+    generate_reports_or_input_parameters = StateTransition()
     preview_document = StateView('report.create.preview',
         'report_engine.document_create_preview_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
@@ -795,25 +853,35 @@ class ReportCreate(Wizard):
             self.select_model.good_address = addresses[0].id
             if len(addresses) == 1 and getattr(self.select_model, 'models',
                     []):
-                return 'generate_reports'
+                return 'generate_reports_or_input_parameters'
         return 'select_model'
 
     def default_select_model(self, fields):
         return self.select_model._default_values
+
+    def default_input_parameters(self, name):
+        return {'parameters': {str(x.name): None for x in [x for template in
+                    self.select_model.models for x in template.parameters
+                    if template.parameters]}}
+
+    def transition_generate_reports_or_input_parameters(self):
+        if any([x.parameters for x in self.select_model.models]):
+            return 'input_parameters'
+        return 'generate_reports'
 
     def transition_generate_reports(self):
         self.remove_edm_temp_files()
         pool = Pool()
         ReportModel = pool.get('report.generate', type='report')
         ContactMechanism = pool.get('party.contact_mechanism')
+        TemplateParameter = pool.get('report.template.parameter')
         ActiveModel = pool.get(Transaction().context.get('active_model'))
         printable_inst = ActiveModel(Transaction().context.get('active_id'))
         sender = printable_inst.get_sender()
         sender_address = printable_inst.get_sender_address()
         reports = []
         for doc_template in self.select_model.models:
-            ext, filedata, _, file_basename = ReportModel.execute(
-                [Transaction().context.get('active_id')], {
+            report_context = {
                     'id': Transaction().context.get('active_id'),
                     'ids': Transaction().context.get('active_ids'),
                     'model': Transaction().context.get('active_model'),
@@ -824,7 +892,12 @@ class ReportCreate(Wizard):
                     'sender_address': sender_address.id if sender_address
                     else None,
                     'origin': None,
-                    })
+                    }
+            if doc_template.parameters:
+                report_context.update(TemplateParameter.get_data_for_report(
+                        self.input_parameters.parameters))
+            ext, filedata, _, file_basename = ReportModel.execute(
+                [Transaction().context.get('active_id')], report_context)
             client_filepath, server_filepath = \
                 ReportModel.edm_write_tmp_report(filedata,
                     '%s.%s' % (file_basename, ext))
