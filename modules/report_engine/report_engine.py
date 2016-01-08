@@ -246,6 +246,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 'address': objects[0].get_address(),
                 'sender': objects[0].get_sender(),
                 'sender_address': objects[0].get_sender_address(),
+                'origin': None,
                 }
         reporting_data.update(context_)
         functional_date = context_.get('functional_date')
