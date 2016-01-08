@@ -44,7 +44,7 @@ coog_client_start() { # start client, [args] passed to tryton, loglevel NOT set 
         else
                 args=$*
         fi
-        nohup tryton $args -c $COOG_CLI_CONF > $out_file &
+        nohup tryton --dev $args -c $COOG_CLI_CONF > $out_file &
         echo $! > $pid_file
         echo client started
 }
