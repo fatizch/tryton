@@ -49,6 +49,7 @@ class Invoice(export.ExportImportMixin, Printable):
     business_type = fields.Function(
         fields.Selection(_TYPE, 'Type'),
         'get_business_type')
+    business_type_string = business_type.translated('business_type')
 
     @classmethod
     def __register__(cls, module_name):
@@ -64,6 +65,7 @@ class Invoice(export.ExportImportMixin, Printable):
         cls.move.select = True
         cls.cancel_move.select = True
         cls.cancel_move.states['invisible'] = ~Eval('cancel_move')
+        cls.state_string = cls.state.translated('state')
 
     @classmethod
     def view_attributes(cls):

@@ -9,7 +9,7 @@ from trytond.wizard import StateView, Button, StateTransition
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Not, In
 
-from trytond.modules.cog_utils import coop_string, export, fields, model
+from trytond.modules.cog_utils import export, fields, model
 from trytond.modules.cog_utils import coop_date, utils
 from trytond.modules.report_engine import Printable
 
@@ -242,6 +242,7 @@ class Payment(export.ExportImportMixin, Printable):
                     'icon': 'tryton-go-next'
                 }
         })
+        cls.state_string = cls.state.translated('state')
 
     def get_icon(self, name=None):
         return 'payment'
@@ -256,12 +257,12 @@ class Payment(export.ExportImportMixin, Printable):
             return '%s - %s - %s - [%s]' % (self.journal.rec_name,
                 Date.date_as_string(self.date),
                 self.currency.amount_as_string(self.amount),
-                coop_string.translate_value(self, 'state'))
+                self.state_string)
         else:
             return '%s - %s - [%s]' % (
                 Date.date_as_string(self.date),
                 self.currency.amount_as_string(self.amount),
-                coop_string.translate_value(self, 'state'))
+                self.state_string)
 
     def _get_transaction_key(self):
         """
@@ -339,6 +340,9 @@ class Payment(export.ExportImportMixin, Printable):
     def is_master_object(cls):
         return True
 
+    def get_description(self, lang=None):
+        return self.description
+
     @classmethod
     def approve(cls, payments):
         for payment in payments:
@@ -353,6 +357,13 @@ class Payment(export.ExportImportMixin, Printable):
         pool = Pool()
         Event = pool.get('event')
         group = super(Payment, cls).process(payments, group)
+        to_write = []
+        for payment in payments:
+            description = payment.get_description()
+            if description != payment.description:
+                to_write += [[payment], {'description': description}]
+        if to_write:
+            cls.write(*to_write)
         Event.notify_events(payments, 'process_payment')
         return group
 

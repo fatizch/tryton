@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -196,3 +196,11 @@ msgstr "Regroupement de paiement"
 msgctxt "model:ir.ui.menu,name:menu_reject_message_form"
 msgid "SEPA Reject Messages"
 msgstr "Messages de rejet SEPA"
+
+msgctxt "error:account.payment:"
+msgid "Direct Debit Payment of"
+msgstr "Prélèvement du"
+
+msgctxt "error:account.payment:"
+msgid "Direct Debit Disbursment of"
+msgstr "Virement du"

@@ -71,6 +71,8 @@ class Move(export.ExportImportMixin):
                     self.journal, 'type'), self.description)
         elif self.description:
             return self.description
+        elif self.journal:
+            return self.journal.rec_name
         return self.get_rec_name(name)
 
     def _cancel_default(self):

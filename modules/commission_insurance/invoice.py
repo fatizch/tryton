@@ -200,6 +200,14 @@ class Invoice:
         else:
             return [('party.network', '=', None)]
 
+    def get_synthesis_rec_name(self, name):
+        Date = Pool().get('ir.date')
+        if not self.is_broker_invoice and not self.is_insurer_invoice:
+            return super(Invoice, self).get_synthesis_rec_name(name)
+        return '%s %s [%s]' % (self.business_type_string,
+            Date.date_as_string(self.invoice_date),
+            self.state_string)
+
     @classmethod
     def get_is_insurer_invoice(cls, invoices, name):
         pool = Pool()

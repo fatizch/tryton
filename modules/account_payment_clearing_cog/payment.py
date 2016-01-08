@@ -24,12 +24,19 @@ class Journal:
 class Payment:
     __name__ = 'account.payment'
 
+    @classmethod
+    def __setup__(cls):
+        super(Payment, cls).__setup__()
+        cls._error_messages.update({
+                'reject_of': 'Reject of %s',
+                })
+
     def create_clearing_move(self, date=None):
         if date is None:
             date = self.date
         move = super(Payment, self).create_clearing_move(date)
         if move:
-            move.description = self.journal.rec_name
+            move.description = self.description or self.journal.rec_name
         return move
 
     @classmethod
@@ -58,4 +65,15 @@ class Payment:
                 ('origin', 'in', clearing_moves),
                 ('state', '=', 'draft')])
         if cancel_moves:
+            to_write = []
+            for cancel_move in cancel_moves:
+                to_write += [[cancel_move],
+                    {'description': cls.get_move_reject_description(
+                            cancel_move.description)}]
+            Move.write(*to_write)
             Move.post(cancel_moves)
+
+    @classmethod
+    def get_move_reject_description(cls, move_description):
+        return cls.raise_user_error('reject_of', (move_description,),
+            raise_exception=False)

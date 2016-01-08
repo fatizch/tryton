@@ -201,7 +201,9 @@ class Payment:
                 'unknown_amount_invoice_line':
                 'Unknown amount invoice line : %s %s',
                 'missing_payments': 'Payments with same sepa_merged_id must '
-                'be failed at the same time.'
+                'be failed at the same time.',
+                'direct_debit_payment': 'Direct Debit Payment of',
+                'direct_debit_disbursment': 'Direct Debit Disbursment of',
                 })
 
     def _get_transaction_key(self):
@@ -326,6 +328,24 @@ class Payment:
             if payment.line.contract:
                 return payment.line.contract
         return None
+
+    def get_description(self, lang=None):
+        description = super(Payment, self).get_description(lang)
+        if description or (not self.journal
+                or self.journal.process_method != 'sepa'):
+            return description
+        if not lang:
+            lang = self.journal.company.party.lang
+        descriptions = []
+        if self.kind == 'payable':
+            descriptions.append(self.raise_user_error(
+                    'direct_debit_disbursment', raise_exception=False))
+        elif self.kind == 'receivable':
+            descriptions.append(self.raise_user_error(
+                    'direct_debit_payment', raise_exception=False))
+        descriptions.append(lang.strftime(self.date, lang.code, lang.date)
+            if self.date else '')
+        return ' '.join(descriptions)
 
     def create_fee_invoice(self, fee_amount, journal, account_for_billing,
             name_for_billing, sepa_mandate):

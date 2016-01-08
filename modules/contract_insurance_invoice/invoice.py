@@ -7,7 +7,7 @@ from trytond.rpc import RPC
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import coop_string, utils, model, fields
+from trytond.modules.cog_utils import utils, model, fields
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
 
 __metaclass__ = PoolMeta
@@ -181,11 +181,11 @@ class Invoice:
                     self.currency.amount_as_string(self.total_amount),
                     Date.date_as_string(self.start),
                     Date.date_as_string(self.end),
-                    coop_string.translate_value(self, 'state'))
+                    self.state_string)
             else:
                 return '%s - %s [%s]' % (self.contract.rec_name,
                     self.currency.amount_as_string(self.total_amount),
-                    coop_string.translate_value(self, 'state'))
+                    self.state_string)
         else:
             if self.start and self.end:
                 return '%s - %s - (%s - %s) [%s]' % (
@@ -193,11 +193,11 @@ class Invoice:
                     self.currency.amount_as_string(self.total_amount),
                     Date.date_as_string(self.start),
                     Date.date_as_string(self.end),
-                    coop_string.translate_value(self, 'state'))
+                    self.state_string)
             else:
                 return '%s - %s [%s]' % (self.description,
                     self.currency.amount_as_string(self.total_amount),
-                    coop_string.translate_value(self, 'state'))
+                    self.state_string)
 
     def get_icon(self, name=None):
         if self.reconciled:

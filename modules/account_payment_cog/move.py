@@ -61,6 +61,19 @@ class Move:
             return 'payment_auto_out_cancel'
         return super(Move, self).get_icon(name)
 
+    def get_synthesis_rec_name(self, name):
+        name = super(Move, self).get_synthesis_rec_name(name)
+        if (not self.origin_item
+                or self.origin_item.__name__ != 'account.payment'):
+            return name
+        if self.origin_item.state == 'succeeded' and self.description:
+            return self.description
+        elif self.description:
+            return '%s [%s]' % (self.description,
+                self.origin_item.state_string)
+        else:
+            return name
+
 
 class MoveLine:
     __name__ = 'account.move.line'

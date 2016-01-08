@@ -585,21 +585,26 @@ msgstr "Suivant"
 
 # Custom translations below
 
+msgctxt ""
+"model:ir.action.act_window.domain,name:account_payment.act_payment_form_domain_failed"
+msgid "Failed"
+msgstr "Rejeté"
+
+msgctxt "selection:account.move.line,payment_kind:account_payment."
+msgid "Payable"
+msgstr "À payer"
+
 msgctxt "selection:account.move.line,payment_kind:account_payment."
 msgid "Receivable"
 msgstr "À recevoir"
 
-msgctxt "selection:account.move.line,payment_kind:account_payment."
+msgctxt "selection:account.payment.group,kind:account_payment."
 msgid "Payable"
 msgstr "À payer"
 
 msgctxt "selection:account.payment.group,kind:account_payment."
 msgid "Receivable"
 msgstr "À recevoir"
-
-msgctxt "selection:account.payment.group,kind:account_payment."
-msgid "Payable"
-msgstr "À payer"
 
 msgctxt "selection:account.payment,kind:account_payment."
 msgid "Payable"
@@ -608,3 +613,7 @@ msgstr "À payer"
 msgctxt "selection:account.payment,kind:account_payment."
 msgid "Receivable"
 msgstr "À recevoir"
+
+msgctxt "selection:account.payment,state:account_payment."
+msgid "Failed"
+msgstr "Rejeté"

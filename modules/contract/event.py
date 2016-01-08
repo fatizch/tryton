@@ -86,7 +86,7 @@ class EventLog:
                 continue
             new_dicts = []
             for log_dict in log_dicts:
-                for contract in contracts:
+                for contract in [x for x in contracts if x]:
                     new_dict = log_dict.copy()
                     new_dict['contract'] = contract.id
                     new_dicts.append(new_dict)
