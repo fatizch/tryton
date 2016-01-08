@@ -17,7 +17,8 @@
         <separator name="errors"/>
         <field name="errors"/>
     </group>
-    <group id="debug" colspan="2" yexpand="1" yfill="1">
+    <group id="debug" colspan="2" col="1" yexpand="1" yfill="1">
         <field name="low_level_debug"/>
+        <field name="exec_context"/>
     </group>
 </form>

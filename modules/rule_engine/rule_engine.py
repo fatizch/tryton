@@ -1,5 +1,6 @@
 # encoding: utf-8
 import sys
+import pprint
 import traceback
 import ast
 import _ast
@@ -286,6 +287,7 @@ class RuleExecutionLog(ModelSQL, ModelView):
     result = fields.Char('Result', states={'readonly': True})
     calls = fields.Text('Calls', states={'readonly': True})
     calculation_date = fields.Date('Calculation Date', readonly=True)
+    context = fields.Text('Context', readonly=True)
 
     @classmethod
     def __setup__(cls):
@@ -300,6 +302,7 @@ class RuleExecutionLog(ModelSQL, ModelView):
         self.low_level_debug = '\n'.join(result.low_level_debug)
         self.result = result.print_result()
         self.calls = '\n'.join(['|&|'.join(x) for x in result.calls])
+        self.context = result.context
 
     @classmethod
     @ModelView.button_action('rule_engine.act_test_case_init')
@@ -989,6 +992,21 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         return {k: self.deflat_element(v) for
             k, v in pre_context.iteritems()}
 
+    @classmethod
+    def format_context(cls, context):
+        result = ['Execution context :', '']
+        for k, v in context.iteritems():
+            if k == '__result__':
+                continue
+            result.append(k)
+            if isinstance(v, Model) and getattr(v, 'id', None):
+                result.append('    [%s (%s)] %s' % (v.__name__, v.id,
+                        v.rec_name))
+            else:
+                result.append('    ' + pprint.pformat(v))
+            result.append('')
+        return '\n'.join(result)
+
     def prepare_context(self, evaluation_context, execution_kwargs):
         debug = Transaction().context.get('debug', True)
         pre_context = self.build_context(debug)
@@ -1055,11 +1073,14 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
                     stack_info += '\n'
                     stack_info += str(exc)
                     the_result.low_level_debug.append(stack_info)
+
+                # Override context just in case it changed
+                the_result.context = self.format_context(evaluation_context)
                 self.add_debug_log(the_result,
                     evaluation_context.get('date', None), exc)
                 if self.debug_mode:
                     the_result.result = str(exc)
-                    return the_result
+                    raise
                 self.raise_user_error('bad_rule_computation', (self.name,
                         str(exc.args)))
         return the_result
@@ -1197,6 +1218,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         for k, v in (parameters or {}).iteritems():
             parameters_as_func[k] = v if callable(v) else kwarg_function(v)
         result = self.compute(arguments, parameters_as_func)
+        result.context = self.format_context(arguments)
         self.add_debug_log(result, arguments.get('date', None))
         return result
 
