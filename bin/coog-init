@@ -2,6 +2,7 @@
 # init new environment
 
 coog_init_bin() { # link useful bin to venv (tryton, coog, upload.py, etc)
+        [ -z $VIRTUAL_ENV ] && echo not in a virtual env, nothing to do && return
         local wd
         wd=`pwd`
         cd $VIRTUAL_ENV/bin
