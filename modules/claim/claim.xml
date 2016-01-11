@@ -108,6 +108,10 @@
             <field name="sequence_type" ref="sequence_type_claim_number"/>
             <field name="group" ref="res.group_admin"/>
         </record>
+        <record model="ir.sequence.type-res.group" id="sequence_type_number_group_offered_admin">
+            <field name="sequence_type" ref="sequence_type_claim_number"/>
+            <field name="group" ref="offered.group_offered_admin"/>
+        </record>
         <record model="ir.sequence" id="claim_sequence">
             <field name="name">Claim Sequence</field>
             <field name="code">claim</field>

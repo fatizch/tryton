@@ -159,6 +159,10 @@
             <field name="sequence_type" ref="sequence_type_contract_number"/>
             <field name="group" ref="res.group_admin"/>
         </record>
+        <record model="ir.sequence.type-res.group" id="sequence_type_contract_number_group_offered_admin">
+            <field name="sequence_type" ref="sequence_type_contract_number"/>
+            <field name="group" ref="group_offered_admin"/>
+        </record>
         <!-- ################################## -->
         <!-- # Option Description Ending Rule # -->
         <!-- ################################## -->
