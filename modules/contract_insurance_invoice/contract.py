@@ -722,6 +722,7 @@ class Contract:
             account=self.subscriber.account_receivable,
             payment_term=billing_information.payment_term,
             state='validated',
+            invoice_date=start,
             description='%s (%s - %s)' % (
                 self.rec_name,
                 lang.strftime(start, lang.code, lang.date) if start else '',
