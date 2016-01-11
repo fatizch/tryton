@@ -85,11 +85,6 @@ class InvoiceLine:
 
         commissions = []
         for start, end, commission_amount, commission_rate in commission_data:
-            # Add two extra digits to limit rounding errors
-            commission_amount = commission_amount.quantize(Decimal(str(
-                        10.0 ** -self.currency_digits)))
-            if not commission_amount:
-                continue
             commission = Commission()
             commission.origin = self
             if plan.commission_method == 'posting':

@@ -118,6 +118,7 @@ class Commission:
     @classmethod
     def __setup__(cls):
         super(Commission, cls).__setup__()
+        cls.amount.digits = None
         cls.invoice_line.select = True
         cls.type_.searcher = 'search_type_'
 
