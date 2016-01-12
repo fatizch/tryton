@@ -81,12 +81,13 @@ class EventLog:
     def get_event_keys(cls, objects):
         cur_dicts = super(EventLog, cls).get_event_keys(objects)
         for object_, log_dicts in cur_dicts.items():
-            contracts = cls.get_related_instances(object_, 'contract')
+            contracts = [x for x in
+                cls.get_related_instances(object_, 'contract') if x]
             if not contracts:
                 continue
             new_dicts = []
             for log_dict in log_dicts:
-                for contract in [x for x in contracts if x]:
+                for contract in contracts:
                     new_dict = log_dict.copy()
                     new_dict['contract'] = contract.id
                     new_dicts.append(new_dict)
