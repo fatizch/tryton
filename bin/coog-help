@@ -47,7 +47,7 @@ _coog_help_command() { # list sub-commands
         echo
 }
 
-coog_help_main() { # help on command <arg> - default: list commands
+coog_help_main() { # help on command - <command> - default: list commands
         if [ $# -eq 0 ]
         then
                 _coog_help_commands

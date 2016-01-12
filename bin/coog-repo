@@ -31,36 +31,61 @@ coog_repo_main() { # list repositories
         _coog_repo_list
 }
 
-coog_repo_link() { # link repositories <args> - default: all
-        local repos
-        local repo
+_coog_repo_link_repos() { # guess modules list from link args
         if [ $# -eq 0 ]
         then
-                repos=`_coog_repo_list`
+                echo `_coog_repo_list`
         else
-                repos=$@
+                echo $@
         fi
+}
+
+coog_repo_linkm() { # link repos modules - <repos> - default: all
+        local repos
+        local repo
+        repos=`_coog_repo_link_repos $*`
         _coog_repo_enter_modules
         [ $# -eq 0 ] && _coog_repo_rm
         for repo in $repos
         do
+                echo $repo
                 ln -s ../../../$repo/modules/* .
         done
         _coog_repo_leave
+}
+
+coog_repo_linkp() { # link repos plugins - <repos> - default: all
+        local repos
+        local repo
+        repos=`_coog_repo_link_repos $*`
         _coog_repo_enter_plugins
         [ $# -eq 0 ] && _coog_repo_rm
         for repo in $repos
         do
+                echo $repo
                 [ -d ../../../$repo/plugins ] && ln -s ../../../$repo/plugins/* .
         done
         _coog_repo_leave
 }
 
-coog_repo_unlink() { # unlink all repositories
+coog_repo_link() { # link repos - <repos> - default: all
+        coog_repo_linkm $*
+        coog_repo_linkp $*
+}
+
+coog_repo_unlinkm() { # unlink all repos modules
         _coog_repo_enter_modules
         _coog_repo_rm
         _coog_repo_leave
+}
+
+coog_repo_unlinkp() { # unlink all repos plugins
         _coog_repo_enter_plugins
         _coog_repo_rm
         _coog_repo_leave
+}
+
+coog_repo_unlink() { # unlink all repos
+        coog_repo_unlinkm
+        coog_repo_unlinkp
 }

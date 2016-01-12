@@ -1,34 +1,36 @@
 # vim: set ft=sh:
 # modules management - install, update, etc
 
-_coog_module_list() { # list installed modules
-        echo `psql -w -t -c "select name from ir_module where state='installed'"`
-}
-
-coog_module_main() { # list installed modules
+coog_module_main() { # list installed modules - <db> - default: db uri
+        [ ! -z $1 ] && export PGDATABASE=$1
         local module
-        for module in `_coog_module_list`
+        for module in `psql -w -t -c "select name from ir_module where state='installed'"`
         do
                 echo $module
         done
 }
 
-coog_module_update() { # update installed modules <args> - default: all
+coog_module_update() { # install / update modules - <modules> - default: all
+        [ -z $PGDATABASE ] && echo no database defined && return
         local modules
         if [ $# -eq 0 ]
         then
-                modules=`_coog_module_list`
+                modules=ir
         else
                 modules=$*
         fi
-        # TODO: begin: needs review (conf in pathpath is not safe)
-        local conf_path
-        conf_path=`readlink -f ../../conf`
-        export PYTHONPATH=$conf_path:$PYTHONPATH
-        # TODO: end
-        trytond \
+        coog_env_celery
+        trytond -v \
                 -c $COOG_SRV_CONF \
-                --logconf $COOG_LOG_CONF \
                 -d $PGDATABASE \
                 -u $modules
+}
+
+coog_module_updatedb() { # install / update all modules - <database> - no default
+        [ -z $1 ] && echo no given database && return
+        coog_env_celery
+        trytond -v \
+                -c $COOG_SRV_CONF \
+                -d $1 \
+                --all
 }

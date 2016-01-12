@@ -2,8 +2,8 @@
 # environment informations
 
 _coog_env_files() { # set file names
-        COOG_SRV_FILE=coog-srv
-        COOG_CLI_FILE=coog-cli
+        COOG_SRV_FILE=coog-srv-$USER
+        COOG_CLI_FILE=coog-cli-$USER
 }
 
 _coog_env_paths() { # set paths
@@ -35,6 +35,13 @@ _coog_env_files
 _coog_env_paths
 _coog_env_python
 _coog_env_pg
+
+coog_env_celery() { # set celery config in pythonpath (TBD)
+        # TODO: review - batch
+        local conf_path
+        conf_path=`readlink -f ../../conf`
+        export PYTHONPATH=$conf_path:$PYTHONPATH
+}
 
 coog_env_main() { # print meaningful vars for coog execution
         echo Environment variables:

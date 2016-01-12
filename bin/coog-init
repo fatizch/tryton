@@ -36,16 +36,16 @@ coog_init_conf() { # set default conf
         _coog_init_conf_cp test.conf
         _coog_init_conf_cp tryton.conf
         _coog_init_conf_cp logging.conf
-        # TODO: begin: cleaning batch
+        # TODO: review - batch
         _coog_init_conf_cp batch.conf
         _coog_init_conf_cp celeryconfig.py
-        # TODO: end
 }
 
-coog_init_redmine() {
+coog_init_redmine() { # init redmine credentials
         local username
         read -p "Enter Redmine username: " username
         local password
         read -p "Enter Redmine password: " password
         echo "export COOG_REDMINE_CRED=$username:$password" >> ~/.profile
+        echo "now restart your session or source ~/.profile"
 }

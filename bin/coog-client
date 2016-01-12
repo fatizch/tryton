@@ -30,7 +30,7 @@ _coog_client_bak() { # backup log file (mv to pid if exists or rm)
         mv $out_file $bak_file
 }
 
-coog_client_start() { # start client, [args] passed to tryton, loglevel NOT set when args
+coog_client_start() { # start client - [args] passed to tryton, loglevel NOT set when args
         local pid_file
         pid_file=`_coog_client_file pid`
         [ -e $pid_file ] && echo 'client already running -> stop or restart' && return
@@ -38,21 +38,22 @@ coog_client_start() { # start client, [args] passed to tryton, loglevel NOT set 
         out_file=`_coog_client_file out`
         [ -e $out_file ] && echo 'client log file exists -> clean manually' && return
         local args
+        args=--dev
         if [ $# -eq 0 ]
         then
-                args="-l $COOG_LOG_LEVEL"
+                args="$args -l $COOG_LOG_LEVEL"
         else
-                args=$*
+                args="$args $*"
         fi
-        nohup tryton --dev $args -c $COOG_CLI_CONF > $out_file &
+        nohup tryton -c $COOG_CLI_CONF $args > $out_file &
         echo $! > $pid_file
         echo client started
 }
 
-coog_client_debug() { # start client in pdb, [args] passed to tryton
+coog_client_debug() { # start client in pdb - [args] passed to tryton
         local tryton
         tryton=`which tryton | xargs readlink -f`
-        python -m pdb $tryton -c $COOG_CLI_CONF
+        python -m pdb $tryton -c $COOG_CLI_CONF $*
 }
 
 coog_client_stop() { # stop client (gracefully)
