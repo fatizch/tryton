@@ -1,4 +1,6 @@
 from itertools import groupby
+from collections import defaultdict
+from sql import Null
 
 from trytond.wizard import Wizard, StateView, StateAction, Button
 from trytond.model import ModelView
@@ -22,64 +24,85 @@ class CreateInvoicePrincipal(Wizard):
             ])
     create_ = StateAction('account_invoice.act_invoice_form')
 
-    def get_domain(self, account):
-        domain = [
-            ('account', '=', account.id),
-            ('principal_invoice_line', '=', None),
-            ('journal.type', '!=', 'commission'),
-            ['OR',
-                [('origin.id', '!=', None, 'account.invoice')],
-                [('origin.id', '!=', None, 'account.move')]
-            ]]
-        if self.ask.until_date:
-            domain.append(('date', '<=', self.ask.until_date))
-        return domain
+    @classmethod
+    def select_lines(cls, account, max_date=None):
+        pool = Pool()
+        Invoice = pool.get('account.invoice')
+        invoice = Invoice.__table__()
+        move = pool.get('account.move').__table__()
+        move_line = pool.get('account.move.line').__table__()
+        journal = pool.get('account.journal').__table__()
+        cursor = Transaction().cursor
+
+        query_table = move_line.join(move, condition=move_line.move == move.id
+            ).join(invoice,
+            condition=move.id.in_([invoice.move, invoice.cancel_move])
+            ).join(journal, condition=(move.journal == journal.id))
+
+        where_clause = (
+            (move_line.account == account.id)
+            & (move_line.principal_invoice_line == Null)
+            & (move.state == 'posted')
+            & invoice.state.in_(['paid', 'cancel'])
+            & (journal.type != 'commission'))
+        if max_date is not None:
+            where_clause &= (move.date <= max_date)
+
+        cursor.execute(*query_table.select(invoice.id.as_('invoice'),
+                move_line.id.as_('move_line'), move_line.credit.as_('credit'),
+                move_line.debit.as_('debit'),
+                where=where_clause, order=[invoice.id]))
+
+        invoices_data = defaultdict(list)
+        for invoice, line, credit, debit in cursor.fetchall():
+            invoices_data[invoice].append((line, credit, debit))
+
+        return Invoice.browse(invoices_data.keys()), invoices_data
 
     def create_insurer_notice(self, party):
         pool = Pool()
         Line = pool.get('account.move.line')
-        Move = pool.get('account.move')
         Commission = pool.get('commission')
         Invoice = pool.get('account.invoice')
 
         account = party.insurer_role[0].waiting_account
         if not account:
             return
-        commission_invoice = self.get_invoice(party)
-        commission_invoice.save()
 
-        lines = Line.search(self.get_domain(account))
+        invoices, invoices_data = self.select_lines(account,
+            self.ask.until_date)
 
-        commissions = []
-        selected = []
-        for line in lines:
-            if isinstance(line.origin, Move):
-                if isinstance(line.origin.origin, Invoice):
-                    invoice = line.origin.origin
-                else:
-                    continue
-            else:
-                invoice = line.origin
-            if invoice.state != 'paid' and invoice.state != 'cancel':
-                continue
-            skip_line = False
+        commissions, lines, amount = [], [], 0
+        for invoice in invoices:
+            invoice_coms = []
             for i_line in invoice.lines:
                 for commission in [x for x in i_line.commissions
                         if (x.agent.party == party and not x.invoice_line)]:
                     if (not self.ask.until_date
                             or commission.date <= self.ask.until_date):
-                        commissions.append(commission)
+                        invoice_coms.append(commission)
                     else:
-                        skip_line = True
-            if not skip_line:
-                selected.append(line)
-        commissions = list(set(commissions))
+                        break
+                else:
+                    continue
+                break
+            else:
+                commissions += invoice_coms
+                for line, credit, debit in invoices_data[invoice.id]:
+                    lines.append(line)
+                    amount += (credit or 0) - (debit or 0)
+                continue
 
-        amount = sum(l.credit - l.debit for l in selected)
+        commission_invoice = self.get_invoice(party)
+        commission_invoice.save()
+        if not lines and not commissions:
+            return commission_invoice
         invoice_line = self.get_invoice_line(amount, account)
-        invoice_line.invoice = commission_invoice
-        invoice_line.save()
-        Line.write(selected, {
+        commission_invoice.lines = list(commission_invoice.lines) + [
+            invoice_line]
+        commission_invoice.save()
+
+        Line.write(lines, {
                 'principal_invoice_line': invoice_line.id,
                 })
 

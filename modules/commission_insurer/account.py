@@ -1,4 +1,6 @@
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.tools import grouped_slice
 from trytond.model import ModelView, Workflow
@@ -15,13 +17,23 @@ __all__ = [
 
 class MoveLine:
     __name__ = 'account.move.line'
+
     principal_invoice_line = fields.Many2One('account.invoice.line',
-        'Principal Invoice Line', readonly=True, select=True)
+        'Principal Invoice Line', readonly=True)
 
     @classmethod
     def __setup__(cls):
         super(MoveLine, cls).__setup__()
         cls._check_modify_exclude.add('principal_invoice_line')
+
+    @classmethod
+    def __register__(cls, module):
+        super(MoveLine, cls).__register__(module)
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        table = TableHandler(cursor, cls, module)
+        table.index_action('principal_invoice_line', 'remove')
+        table.index_action(['principal_invoice_line', 'account'], 'add')
 
     @classmethod
     def copy(cls, lines, default=None):
@@ -32,6 +44,7 @@ class MoveLine:
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'
+
     principal_lines = fields.One2Many('account.move.line',
         'principal_invoice_line', 'Principal Lines', readonly=True,
         states={'invisible': ~Eval('principal_lines')})
