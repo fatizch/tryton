@@ -674,8 +674,10 @@ def relation_mixin(value_model, field, model, name):
                             target, = Target.search([('id', '=', value)])
                             export = []
                             target.export_json(output=export,
+                                already_exported=already_exported,
                                 configuration=configuration)
                             new_values_field[key] = export[-1]
+                            output.extend(export[:-1])
                         else:
                             new_values_field[key] = value
                     values['values'] = new_values_field
