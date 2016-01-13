@@ -31,6 +31,7 @@ def register():
         VoidContract,
         ManageOptions,
         Configuration,
+        Product,
         module='endorsement_insurance_invoice', type_='model')
 
     Pool.register(

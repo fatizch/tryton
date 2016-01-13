@@ -69,22 +69,26 @@ class BillingInformation(object):
 class Contract:
     __name__ = 'contract'
 
+    def rebill_endorsement_dates(self):
+        pool = Pool()
+        Endorsement = pool.get('endorsement')
+        return sorted([datetime.datetime.combine(
+                    endorsement.effective_date, datetime.time()) or
+            endorsement.application_date
+            for endorsement in Endorsement.search([
+                    ('contracts', '=', self.id),
+                    ('state', '=', 'applied')])
+            if endorsement.definition.requires_rebill()])
+
     def _get_invoice_rrule_and_billing_information(self, start):
         pool = Pool()
         Configuration = pool.get('offered.configuration')
-        Endorsement = pool.get('endorsement')
         config = Configuration(1)
         invoice_rrule = super(Contract,
             self)._get_invoice_rrule_and_billing_information(start)
         if not config.split_invoices_on_endorsement_dates:
             return invoice_rrule
-        endorsement_dates = [datetime.datetime.combine(
-                endorsement.effective_date, datetime.time()) or
-            endorsement.application_date
-            for endorsement in Endorsement.search([
-                        ('contracts', '=', self.id),
-                        ('state', '=', 'applied')])
-            if endorsement.definition.requires_rebill()]
+        endorsement_dates = self.rebill_endorsement_dates()
         if endorsement_dates:
             invoice_rrule[0].rrule(endorsement_dates)
         return invoice_rrule

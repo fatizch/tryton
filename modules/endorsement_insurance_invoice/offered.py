@@ -14,6 +14,7 @@ __all__ = [
     'EndorsementDefinition',
     'EndorsementPart',
     'EndorsementBillingInformationField',
+    'Product',
     ]
 
 
@@ -99,3 +100,11 @@ class EndorsementBillingInformationField(
     'Endorsement Billing Information Field'
 
     __name__ = 'endorsement.contract.billing_information.field'
+
+
+class Product:
+    __name__ = 'offered.product'
+
+    def get_contract_dates(self, dates, contract):
+        super(Product, self).get_contract_dates(dates, contract)
+        dates |= set([x.date() for x in contract.rebill_endorsement_dates()])

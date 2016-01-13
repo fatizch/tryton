@@ -49,5 +49,4 @@ class RuleEngineRuntime:
             person = args['contract'].subscriber
         else:
             person = cls.get_person(args)
-        hc = cls.get_health_complement(args, person)
-        return hc.department if hc else ''
+        return person.address_get(at_date=args['date']).get_department()
