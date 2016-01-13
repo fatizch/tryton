@@ -2510,26 +2510,28 @@ def FormatSubversionPropertyChanges(filename, props):
 
 
 def check_title_message(title, message, options):
-    while not re.match('^(\[.*\] )?([A-Za-z_][\w\.-]+)+ ?:', title):
-        if title:
+    if not options.issue:
+        while not re.match('^(\[.*\] )?([A-Za-z_][\w\.-]+)+ ?:', title):
             print("Title does not match pattern 'module: text': %s" % title)
-        if options.issue:
-            prompt = "Title describing this patch set: "
-            break
+            title = raw_input("New issue title: ").strip()
+            message = ''.join([title] + message.splitlines()[1:])
+        pattern = r"(close|closes|fix|fixes|ref) #([0-9]+)"
+        matches = re.findall(re.compile(pattern, re.IGNORECASE), title)
+        if matches:
+            redmine_root = 'https://redmine.coopengo.com/issues/%s'
+            redmine_links = 'Redmine: ' + ', '.join(redmine_root % id
+              for (kw, id) in matches)
+            if message:
+                message += '\n\n' + redmine_links
+            else:
+                message = redmine_links
+    else:
+        prompt = "Title describing this patch set: "
+        if title:
+            print('%s%s' % (prompt, title))
         else:
-            prompt = "New issue title: "
-        title = raw_input(prompt).strip()
-        message = ''.join([title] + message.splitlines()[1:])
-    pattern = r"(close|closes|fix|fixes|ref) #([0-9]+)"
-    matches = re.findall(re.compile(pattern, re.IGNORECASE), title)
-    if matches:
-        redmine_root = 'https://redmine.coopengo.com/issues/%s'
-        redmine_links = 'Redmine: ' + ', '.join(redmine_root % id
-          for (kw, id) in matches)
-        if message:
-            message += '\n\n' + redmine_links
-        else:
-            message = redmine_links
+            title = raw_input(prompt).strip()
+
     return title, message
 
 
