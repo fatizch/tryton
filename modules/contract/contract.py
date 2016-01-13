@@ -1286,8 +1286,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             assert len(contacts) == 1
             if contacts[0].address:
                 return contacts[0].address
-        return utils.get_good_version_at_date(self.subscriber, 'addresses',
-            at_date)
+        addresses = utils.get_good_versions_at_date(self.subscriber,
+            'addresses', at_date)
+        if len(addresses) >= 1:
+            return addresses[0]
 
     def get_appliable_logo(self, kind=''):
         if self.company:
