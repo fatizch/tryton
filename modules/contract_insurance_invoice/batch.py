@@ -73,9 +73,12 @@ class PostInvoiceContractBatch(batch.BatchRoot):
 
         account_invoice = pool.get('account.invoice').__table__()
         contract_invoice = pool.get('contract.invoice').__table__()
+        contract = pool.get('contract').__table__()
 
         query_table = contract_invoice.join(account_invoice, 'LEFT',
-            condition=(account_invoice.id == contract_invoice.invoice))
+            condition=(account_invoice.id == contract_invoice.invoice)
+            ).join(contract, condition=((contract.status != 'hold')
+                    & (contract.id == contract_invoice.contract)))
 
         cursor.execute(*query_table.select(account_invoice.id,
                 where=((contract_invoice.start <= treatment_date)
