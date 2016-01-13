@@ -673,11 +673,14 @@ def relation_mixin(value_model, field, model, name):
                             Target = field.get_target()
                             target, = Target.search([('id', '=', value)])
                             export = []
-                            target.export_json(output=export,
+                            exported = target.export_json(output=export,
                                 already_exported=already_exported,
                                 configuration=configuration)
-                            new_values_field[key] = export[-1]
-                            output.extend(export[:-1])
+                            if export:
+                                new_values_field[key] = export[-1]
+                                output.extend(export[:-1])
+                            else:  # target was already exported
+                                new_values_field[key] = exported
                         else:
                             new_values_field[key] = value
                     values['values'] = new_values_field
