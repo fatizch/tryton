@@ -1,5 +1,6 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.model import ModelView, Workflow
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields
 
@@ -27,6 +28,8 @@ class Payment:
     @classmethod
     def __setup__(cls):
         super(Payment, cls).__setup__()
+        cls.line.states.update({'required': Eval('state', '') != 'draft'})
+        cls.line.depends.append('state')
         cls._error_messages.update({
                 'reject_of': 'Reject of %s',
                 })
