@@ -51,7 +51,7 @@ class CreateInvoicePrincipal(Wizard):
         cursor.execute(*query_table.select(invoice.id.as_('invoice'),
                 move_line.id.as_('move_line'), move_line.credit.as_('credit'),
                 move_line.debit.as_('debit'),
-                where=where_clause, order=[invoice.id]))
+                where=where_clause, order_by=invoice.id))
 
         invoices_data = defaultdict(list)
         for invoice, line, credit, debit in cursor.fetchall():
@@ -98,11 +98,10 @@ class CreateInvoicePrincipal(Wizard):
         if not lines and not commissions:
             return commission_invoice
         invoice_line = self.get_invoice_line(amount, account)
-        commission_invoice.lines = list(commission_invoice.lines) + [
-            invoice_line]
-        commission_invoice.save()
+        invoice_line.invoice = commission_invoice
+        invoice_line.save()
 
-        Line.write(lines, {
+        Line.write(Line.browse(lines), {
                 'principal_invoice_line': invoice_line.id,
                 })
 
