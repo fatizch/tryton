@@ -85,6 +85,8 @@ class Contract:
                 'loan_not_calculated': 'Loan %s must be calculated before'
                 ' proceeding',
                 'no_option_for_loan': 'Loan %s does not have an option',
+                'bad_loan_dates': 'Loans fund release dates should be synced '
+                'with the contract start date :\n\n\t%s',
                 })
 
     @classmethod
@@ -169,6 +171,13 @@ class Contract:
         for orphan in orphans:
             self.append_functional_error('no_option_for_loan',
                 (orphan.rec_name,))
+
+    def check_loan_dates(self):
+        bad_loans = [x for x in self.loans
+            if x.funds_release_date != self.initial_start_date]
+        if bad_loans:
+            self.raise_user_warning(self.rec_name, 'bad_loan_dates',
+                ('\t\n'.join(x.rec_name for x in bad_loans),))
 
     def get_show_premium(self, name):
         if not self.is_loan:

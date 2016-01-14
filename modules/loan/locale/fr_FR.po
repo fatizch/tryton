@@ -19,6 +19,10 @@ msgctxt "error:contract:"
 msgid "There must be at least one loan"
 msgstr "Il doit y avoir au moins un prêt"
 
+msgctxt "error:contract:"
+msgid "Loans fund release dates should be synced with the contract start date :\n\n\t%s"
+msgstr "Les dates de déblocages des fonds doivent être synchrone avec la date d'effet du contrat :\n\n\t%s"
+
 msgctxt "error:contract.option.extra_premium:"
 msgid "Initial Capital Per Mil"
 msgstr "Pourmillage sur capital initial"

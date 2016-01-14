@@ -683,6 +683,20 @@ class ChangeLoan(EndorsementWizardStepMixin):
         LoanEndorsement = pool.get('endorsement.loan')
         IncrementEndorsement = pool.get('endorsement.loan.increment')
         Loan = pool.get('loan')
+
+        # Check modifier loan dates, use contract.check_loan_dates once
+        # we use the "standard" approach of modifying the instance
+        ctr_endorsement = wizard.endorsement.contract_endorsements[0]
+        base_date = ctr_endorsement.values.get('start_date',
+            ctr_endorsement.contract.initial_start_date)
+        bad_loans = [loan.loan_rec_name
+            for loan in self.loan_changes
+            if loan.new_values[0].funds_release_date != base_date]
+        if bad_loans:
+            ctr_endorsement.contract.raise_user_warning(
+                ctr_endorsement.contract.rec_name, 'bad_loan_dates',
+                ('\t\n'.join(bad_loans),))
+
         to_delete, to_save, increment_to_delete = [], [], []
         for loan_change in self.loan_changes:
             base_loan = Loan(loan_change.loan_id)
@@ -1367,7 +1381,7 @@ class StartEndorsement:
         super(StartEndorsement, cls).__setup__()
         cls._error_messages.update({
                 'no_loan_share_on_new_coverage':
-                'The following coverages have no loan share :\n  %s',
+                'The following coverages have no loan share :\n\t%s',
                 })
 
     def default_select_endorsement(self, name):
@@ -1554,7 +1568,7 @@ class StartEndorsement:
         bad_options = all_new_coverages - shares_per_new_coverage
         if bad_options:
             self.raise_user_error('no_loan_share_on_new_coverage', (
-                    '  \n'.join([x.rec_name for x in bad_options])))
+                    '\t\n'.join([x.rec_name for x in bad_options])))
         self.end_current_part('loan_share_update')
         return self.get_next_state('loan_share_update')
 
