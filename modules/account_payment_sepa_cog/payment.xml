@@ -50,5 +50,10 @@
             <field name="act_window" ref="act_message_form"/>
         </record>
         <menuitem parent="account_payment.menu_payments" sequence="50" action="act_message_form" id="menu_reject_message_form" icon="tryton-list"/>
+        <record model="ir.ui.view" id="group_list">
+            <field name="model">account.payment.group</field>
+            <field name="inherit" ref="account_payment.payment_group_view_list"/>
+            <field name="name">payment_group_list</field>
+        </record>
     </data>
 </tryton>

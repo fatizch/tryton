@@ -104,13 +104,25 @@ msgctxt "field:account.payment.fail_information,reject_reason:"
 msgid "Reject Reason"
 msgstr "Motif de rejet"
 
+msgctxt "field:account.payment.group,amount:"
+msgid "Amount"
+msgstr "Montant"
+
 msgctxt "field:account.payment.group,has_processing_payment:"
 msgid "Has Processing Payment"
 msgstr "A des paiements en cours"
 
+msgctxt "field:account.payment.group,payment_dates:"
+msgid "Payment Dates"
+msgstr "Dates de paiement"
+
 msgctxt "field:account.payment.group,processing_payments:"
 msgid "Processing Payments"
 msgstr "Traitement des paiements"
+
+msgctxt "field:account.payment.group,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:account.payment.journal,default_reject_fee:"
 msgid "Default Fee"
@@ -503,6 +515,10 @@ msgctxt "view:account.payment.group:"
 msgid "Acknowledge"
 msgstr "Accuser réception"
 
+msgctxt "view:account.payment.group:"
+msgid "Payment Groups"
+msgstr "Groupes de paiements"
+
 msgctxt "view:account.payment.journal.failure_action:"
 msgid "Payment Journal Failure Action"
 msgstr "Action suite à rejet"
@@ -591,14 +607,10 @@ msgid "Failed"
 msgstr "Rejeté"
 
 msgctxt "selection:account.move.line,payment_kind:account_payment."
-msgid "Payable"
-msgstr "À payer"
+msgid "Receivable"
+msgstr "À recevoir"
 
 msgctxt "selection:account.move.line,payment_kind:account_payment."
-msgid "Receivable"
-msgstr "À recevoir"
-
-msgctxt "selection:account.payment.group,kind:account_payment."
 msgid "Payable"
 msgstr "À payer"
 
@@ -606,13 +618,17 @@ msgctxt "selection:account.payment.group,kind:account_payment."
 msgid "Receivable"
 msgstr "À recevoir"
 
-msgctxt "selection:account.payment,kind:account_payment."
+msgctxt "selection:account.payment.group,kind:account_payment."
 msgid "Payable"
 msgstr "À payer"
 
 msgctxt "selection:account.payment,kind:account_payment."
 msgid "Receivable"
 msgstr "À recevoir"
+
+msgctxt "selection:account.payment,kind:account_payment."
+msgid "Payable"
+msgstr "À payer"
 
 msgctxt "selection:account.payment,state:account_payment."
 msgid "Failed"

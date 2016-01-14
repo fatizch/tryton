@@ -1,17 +1,19 @@
 # -*- coding:utf-8 -*-
 from collections import defaultdict
 from itertools import groupby
+from sql.aggregate import Sum
 
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.model import ModelView, Unique
 from trytond.wizard import StateView, Button, StateTransition
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Not, In
+from trytond.pyson import Eval, Not, In, Bool, If
 
 from trytond.modules.cog_utils import export, fields, model
 from trytond.modules.cog_utils import coop_date, utils
 from trytond.modules.report_engine import Printable
+from trytond.modules.currency_cog import ModelCurrency
 
 __metaclass__ = PoolMeta
 
@@ -419,7 +421,7 @@ class Configuration:
         return self.direct_debit_journal
 
 
-class Group(export.ExportImportMixin):
+class Group(ModelCurrency, export.ExportImportMixin):
     __name__ = 'account.payment.group'
     _func_key = 'reference'
 
@@ -428,6 +430,13 @@ class Group(export.ExportImportMixin):
         domain=[('state', '=', 'processing')])
     has_processing_payment = fields.Function(fields.Boolean(
         'Has Processing Payment'), 'get_has_processing_payment')
+    amount = fields.Function(
+        fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_amount')
+    payment_dates = fields.Function(
+        fields.Char('Payment Dates'),
+        'get_payment_dates')
 
     @classmethod
     def __setup__(cls):
@@ -437,6 +446,15 @@ class Group(export.ExportImportMixin):
                     'invisible': ~Eval('has_processing_payment'),
                     },
                 })
+
+    @classmethod
+    def view_attributes(cls):
+        return super(Group, cls).view_attributes() + [
+            ('/tree', 'colors', If(
+                    Bool(Eval('has_processing_payment')),
+                    'blue',
+                    'black')),
+            ]
 
     @classmethod
     def _export_skips(cls):
@@ -456,6 +474,9 @@ class Group(export.ExportImportMixin):
             payments.extend(group.processing_payments)
         Payment.succeed(payments)
 
+    def get_currency(self):
+        return self.journal.currency if self.journal else None
+
     @classmethod
     def get_has_processing_payment(cls, groups, name):
         pool = Pool()
@@ -464,11 +485,47 @@ class Group(export.ExportImportMixin):
         result = {x.id: False for x in groups}
 
         cursor.execute(*account_payment.select(account_payment.group,
-                where=(account_payment.state == 'processing'),
+                where=((account_payment.state == 'processing')
+                    & (account_payment.group.in_([x.id for x in groups]))),
                 group_by=[account_payment.group]))
 
         for group_id, in cursor.fetchall():
             result[group_id] = True
+        return result
+
+    @classmethod
+    def get_amount(cls, groups, name):
+        pool = Pool()
+        cursor = Transaction().cursor
+        account_payment = pool.get('account.payment').__table__()
+        result = {x.id: None for x in groups}
+
+        cursor.execute(*account_payment.select(
+                account_payment.group, Sum(account_payment.amount),
+                where=account_payment.group.in_([x.id for x in groups]),
+                group_by=[account_payment.group]))
+
+        for group_id, amount in cursor.fetchall():
+            result[group_id] = amount
+        return result
+
+    @classmethod
+    def get_payment_dates(cls, groups, name):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        cursor = Transaction().cursor
+        account_payment = pool.get('account.payment').__table__()
+        result = {x.id: '' for x in groups}
+
+        cursor.execute(*account_payment.select(
+                account_payment.group, account_payment.date,
+                where=account_payment.group.in_([x.id for x in groups]),
+                group_by=[account_payment.group, account_payment.date]))
+
+        for group_id, date in cursor.fetchall():
+            if result[group_id]:
+                result[group_id] += ', '
+            result[group_id] += Date.date_as_string(date)
         return result
 
 

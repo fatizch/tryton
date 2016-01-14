@@ -63,6 +63,23 @@ class Mandate(export.ExportImportMixin):
 class Group:
     __name__ = 'account.payment.group'
 
+    main_sepa_message = fields.Function(
+        fields.Many2One('account.payment.sepa.message', 'SEPA Message'),
+        'get_main_sepa_message')
+    main_sepa_message_state = fields.Function(
+        fields.Selection([
+                ('draft', 'Draft'),
+                ('waiting', 'Waiting'),
+                ('done', 'Done'),
+                ('canceled', 'Canceled'),
+                ], 'State'),
+        'get_main_sepa_message_state')
+
+    @classmethod
+    def __setup__(cls):
+        super(Group, cls).__setup__()
+        cls._order.insert(0, ('id', 'DESC'))
+
     @classmethod
     def _export_skips(cls):
         return super(Group, cls)._export_skips() | {'sepa_messages'}
@@ -179,6 +196,18 @@ class Group:
             else:
                 yield key, grouped_payments
 
+    def get_main_sepa_message(self, name):
+        for state in ['done', 'waiting']:
+            for message in reversed(self.sepa_messages):
+                if message.state == state:
+                    return message.id
+        if self.sepa_messages:
+            return self.sepa_messages[-1].id
+
+    def get_main_sepa_message_state(self, name):
+        return (self.main_sepa_message.state
+            if self.main_sepa_message else None)
+
 
 class Payment:
     __name__ = 'account.payment'
@@ -203,7 +232,7 @@ class Payment:
                 'missing_payments': 'Payments with same sepa_merged_id must '
                 'be failed at the same time.',
                 'direct_debit_payment': 'Direct Debit Payment of',
-                'direct_debit_disbursment': 'Direct Debit Disbursment of',
+                'direct_debit_disbursement': 'Direct Debit Disbursement of',
                 })
 
     def _get_transaction_key(self):
@@ -339,7 +368,7 @@ class Payment:
         descriptions = []
         if self.kind == 'payable':
             descriptions.append(self.raise_user_error(
-                    'direct_debit_disbursment', raise_exception=False))
+                    'direct_debit_disbursement', raise_exception=False))
         elif self.kind == 'receivable':
             descriptions.append(self.raise_user_error(
                     'direct_debit_payment', raise_exception=False))

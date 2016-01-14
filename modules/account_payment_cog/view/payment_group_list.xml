@@ -1,7 +1,16 @@
 <?xml version="1.0"?>
 <data>
+    <xpath expr="/tree" position="replace_attributes">
+        <tree string="Payment Groups" keyword_open="0"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='reference']" position="before">
+        <field name="payment_dates"/>
+        <field name="amount">
+            <suffix name="currency_symbol"/>
+        </field>
+    </xpath>
     <xpath expr="/tree/field[@name='kind']" position="after">
-        <button string="Acknowledge" name="acknowledge"/>
-        <field name="has_processing_payment" tree_invisible="1"/>
+        <button string="Acknowledge" name="acknowledge" tree_invisible="1"/>
+        <field name="has_processing_payment"/>
     </xpath>
 </data>

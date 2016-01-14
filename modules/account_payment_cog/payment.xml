@@ -131,5 +131,11 @@
             <field name="wiz_name">account.payment.process</field>
             <field name="model">account.payment</field>
         </record>
+        <!-- ############################################################ -->
+        <!-- ########### Relate Payments Group to Payments ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.action.keyword" id="account_payment.act_payment_form_group_relate_keyword1">
+            <field name="keyword">form_relate</field>
+        </record>
     </data>
 </tryton>

@@ -1,3 +1,5 @@
+* UI enhancement on payment group list view (add amount and payment dates)
+
 Version 1.6 - 2015-12-23
 * Add Acknowledge Batch
 * Add fail payment wizard in order to select the reject reason
