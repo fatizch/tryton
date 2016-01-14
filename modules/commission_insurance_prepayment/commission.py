@@ -27,7 +27,7 @@ class Commission:
     is_prepayment = fields.Boolean('Is Prepayment',
         states=TrytonCommission._readonly_states,
         depends=TrytonCommission._readonly_depends)
-    redeemed_prepayment = fields.Numeric('Redeemed Prepayment', digits=(16, 4),
+    redeemed_prepayment = fields.Numeric('Redeemed Prepayment',
         states=TrytonCommission._readonly_states,
         depends=TrytonCommission._readonly_depends)
 
@@ -155,7 +155,7 @@ class Agent:
         where_clause = Or()
         for agent in agents:
             where_clause.append(((agent_column == agent[0]) &
-                    (prepayment_column == True) &
+                    (prepayment_column == True) &  # NOQA
                     (origin_column == 'contract.option,' + str(agent[1])) &
                     (invoice_line != None)))
         cursor.execute(*commission.select(commission.agent, commission.origin,
@@ -191,7 +191,7 @@ class Agent:
                     (reedemed_column != Null) &
                     (option_column == agent[1])))
             where_prepayment.append(((agent_column == agent[0]) &
-                    (prepayment_column == True) &
+                    (prepayment_column == True) &  # NOQA
                     (origin_column == 'contract.option,' + str(agent[1]))))
 
         result = {}
