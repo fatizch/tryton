@@ -85,6 +85,8 @@ def register():
             TestVersionedObject,
             TestVersion,
             TestVersion1,
+            TestHistoryTable,
+            TestHistoryChildTable,
             module='cog_utils', type_='model')
 
     Pool.register(

@@ -6,7 +6,7 @@ import json
 
 from sql.aggregate import Max
 from sql.conditionals import Coalesce
-from sql import Union, Column, Literal
+from sql import Union, Column, Literal, Window, Null
 from contextlib import contextmanager
 
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
@@ -239,6 +239,57 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
             TargetModel = Pool().get(model_name)
             TargetModel.delete(TargetModel.search(
                 [(field_name, 'in', instance_list)]))
+
+    @classmethod
+    def _get_history_table(cls):
+        '''
+            This method returns a query that can be used as a substitute for
+            the "real" table from an history point of view.
+
+            The aim is to seemlessly replace __table__ in function fields
+            (typical use case) which use queries.
+        '''
+        pool = Pool()
+        ModelAccess = pool.get('ir.model.access')
+        history_table = cls.__table_history__()
+
+        # Mandatory, crash if not in context
+        _datetime = Transaction().context.get('_datetime')
+        assert _datetime
+
+        columns = []
+        for field_name in cls._fields.keys():
+            field = cls._fields.get(field_name)
+            if not field or hasattr(field, 'get'):
+                continue
+            if ModelAccess.check_relation(cls.__name__, field_name,
+                    mode='read'):
+                columns.append(field.sql_column(history_table).as_(field_name))
+
+        window_id = Window([Column(history_table, 'id')])
+        window_date = Window([Coalesce(history_table.write_date,
+                    history_table.create_date)])
+        columns.append(Column(history_table, '__id').as_('__id'))
+        columns.append(Max(Coalesce(history_table.write_date,
+                    history_table.create_date), window=window_id
+                ).as_('__max_start'))
+        columns.append(Max(Column(history_table, '__id'), window=window_date
+                ).as_('__max__id'))
+
+        if Transaction().context.get('_datetime_exclude', False):
+            where = Coalesce(history_table.write_date,
+                history_table.create_date) < _datetime
+        else:
+            where = Coalesce(history_table.write_date,
+                history_table.create_date) <= _datetime
+
+        tmp_table = history_table.select(*columns, where=where)
+        return tmp_table.select(where=(
+                (Column(tmp_table, '__max_start') == Coalesce(
+                        tmp_table.write_date, tmp_table.create_date))
+                & (Column(tmp_table, '__id') == Column(tmp_table, '__max__id'))
+                # create_date = Null => Elem deleted
+                & (tmp_table.create_date != Null)))
 
     @classmethod
     def search(cls, domain, offset=0, limit=None, order=None, count=False,

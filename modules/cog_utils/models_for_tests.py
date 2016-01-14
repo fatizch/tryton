@@ -24,6 +24,8 @@ __all__ = [
     'TestVersionedObject',
     'TestVersion',
     'TestVersion1',
+    'TestHistoryTable',
+    'TestHistoryChildTable',
     ]
 
 
@@ -260,3 +262,25 @@ class TestVersion1(model.CoopSQL):
             'start_1': None,
             'version_field': 'Default Value 1',
             }
+
+
+class TestHistoryTable(model.CoopSQL):
+    'Test History'
+
+    __name__ = 'cog_utils.test_history'
+    _history = True
+
+    foo = fields.Char('Foo')
+    childs = fields.One2Many('cog_utils.test_history.child', 'parent',
+        'Childs', delete_missing=True)
+
+
+class TestHistoryChildTable(model.CoopSQL):
+    'Test History Child Table'
+
+    __name__ = 'cog_utils.test_history.child'
+    _history = True
+
+    parent = fields.Many2One('cog_utils.test_history', 'Parent',
+        ondelete='CASCADE', required=True, select=True)
+    bar = fields.Char('Bar')

@@ -6,6 +6,7 @@ from decimal import Decimal
 
 import trytond.tests.test_tryton
 from trytond.model import ModelSQL, fields
+from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 
 from trytond.modules.cog_utils import test_framework
@@ -37,6 +38,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Version': 'cog_utils.test_version.version',
             'Version1': 'cog_utils.test_version.version1',
             'EventTypeAction': 'event.type.action',
+            'TestHistoryTable': 'cog_utils.test_history',
+            'TestHistoryChildTable': 'cog_utils.test_history.child',
             }
 
     def test0020get_module_path(self):
@@ -790,6 +793,75 @@ class ModuleTestCase(test_framework.CoopTestCase):
         master.on_change_current_version_1_version_field()
         self.assertEqual(master.get_version_1_at_date(
                 utils.today()).version_field, 'Updated Child 1')
+
+    def test_0110_history_table(self):
+        cursor = Transaction().cursor
+
+        master = self.TestHistoryTable(foo='1')
+        master.save()
+        cursor.commit()
+
+        master.foo = '2'
+        master.save()
+        cursor.commit()
+
+        self.assertRaises(AssertionError,
+            self.TestHistoryTable._get_history_table)
+
+        with Transaction().set_context(_datetime=datetime.datetime(2000, 1, 1,
+                    0, 0, 0)):
+            test_table = self.TestHistoryTable._get_history_table()
+            cursor.execute(*test_table.select(test_table.id, test_table.foo,
+                    where=test_table.id == master.id))
+            self.assertEqual(cursor.fetchall(), [])
+
+        with Transaction().set_context(_datetime=master.create_date):
+            test_table = self.TestHistoryTable._get_history_table()
+            cursor.execute(*test_table.select(test_table.id, test_table.foo,
+                    where=test_table.id == master.id))
+            self.assertEqual(cursor.fetchall(), [(master.id, u'1')])
+
+        with Transaction().set_context(_datetime=master.write_date):
+            test_table = self.TestHistoryTable._get_history_table()
+            cursor.execute(*test_table.select(test_table.id, test_table.foo,
+                    where=test_table.id == master.id))
+            self.assertEqual(cursor.fetchall(), [(master.id, u'2')])
+
+        child_1 = self.TestHistoryChildTable(bar='1', parent=master)
+        child_1.save()
+        cursor.commit()
+        child_date = child_1.create_date
+
+        master.childs = []
+        master.save()
+        cursor.commit()
+
+        with Transaction().set_context(_datetime=master.create_date):
+            test_table = self.TestHistoryTable._get_history_table()
+            child_table = self.TestHistoryChildTable._get_history_table()
+            cursor.execute(*test_table.join(child_table, type_='LEFT OUTER',
+                    condition=(child_table.parent == test_table.id)
+                ).select(test_table.id, test_table.foo, child_table.bar,
+                    where=test_table.id == master.id))
+            self.assertEqual(cursor.fetchall(), [(master.id, u'1', None)])
+
+        with Transaction().set_context(_datetime=child_date):
+            test_table = self.TestHistoryTable._get_history_table()
+            child_table = self.TestHistoryChildTable._get_history_table()
+            cursor.execute(*test_table.join(child_table, type_='LEFT OUTER',
+                    condition=(child_table.parent == test_table.id)
+                ).select(test_table.id, test_table.foo, child_table.bar,
+                    where=test_table.id == master.id))
+            self.assertEqual(cursor.fetchall(), [(master.id, u'2', u'1')])
+
+        with Transaction().set_context(_datetime=master.write_date):
+            test_table = self.TestHistoryTable._get_history_table()
+            child_table = self.TestHistoryChildTable._get_history_table()
+            cursor.execute(*test_table.join(child_table, type_='LEFT OUTER',
+                    condition=(child_table.parent == test_table.id)
+                ).select(test_table.id, test_table.foo, child_table.bar,
+                    where=test_table.id == master.id))
+            self.assertEqual(cursor.fetchall(), [(master.id, u'2', None)])
 
     def test_string_replace(self):
         s = u'café-THÉ:20$'
