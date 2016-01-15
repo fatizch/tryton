@@ -1,0 +1,42 @@
+# vim: set ft=sh:
+# docker utils for coog server
+
+coog_docker_env() { # build docker env image
+        [ -d .cache ] && rm -rf .cache
+        docker build -t coog/env -f .conf/env.df .
+}
+
+coog_docker_build() { # build docker image
+        [ $# -lt 3 ] && \
+                echo needs at least trytond, trytond-modules and coog to build && \
+                return
+        [ -d .cache ] && rm -rf .cache
+        mkdir .cache
+        local component
+        for component in $*
+        do
+                local repo
+                local tree
+                repo=`echo $component | cut -d ":" -f 1`
+                tree=`echo $component | cut -d ":" -f 2`
+                [ ! -d ../../$repo ] && echo repo $repo does not exist && return
+                local wd
+                wd=`pwd`
+                cd ../../$repo
+                echo $repo:$tree:`git rev-parse $tree` >> $wd/.cache/.version || \
+                        (echo bad revision $tree from $repo && return)
+                git archive --format tar $tree | \
+                        (mkdir $wd/.cache/$repo && cd $wd/.cache/$repo && tar xf -)
+                cd $wd
+        done
+        cp .conf/coog.df .cache
+        docker build -t coog/$1 -f .cache/coog.df .cache
+}
+
+coog_docker_clean() { # clean images and volumes
+        docker rmi `docker images -q -f dangling=true`
+        docker run -v /var/run/docker.sock:/var/run/docker.sock \
+                -v /var/lib/docker:/var/lib/docker \
+                --rm \
+                martin/docker-cleanup-volumes
+}

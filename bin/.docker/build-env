@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# This command builds an env Docker image
+# This image contains the OS and some hard dependencies
+
+sudo ../coog/bin/coog docker env

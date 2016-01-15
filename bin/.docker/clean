@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# This command cleans images and volumes
+#
+# Based on https://www.calazan.com/docker-cleanup-commands/
+
+sudo ../coog/bin/coog docker clean

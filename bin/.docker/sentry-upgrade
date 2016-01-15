@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# This command upgrades sentry database via sentry image
+#
+# More informations: https://hub.docker.com/_/sentry/
+
+sentry_db_user=postgres
+sentry_db_password=postgres
+sentry_db_name=sentry
+sentry_redis_db=9
+
+sudo docker run \
+        -ti --rm \
+        --link postgres:postgres \
+        -e "SENTRY_DB_USER=$sentry_db_user" \
+        -e "SENTRY_DB_PASSWORD=$sentry_db_password" \
+        -e "SENTRY_DB_NAME=$sentry_db_name" \
+        --link redis:redis \
+        -e "SENTRY_REDIS_DB=$sentry_redis_db" \
+        sentry \
+        sentry upgrade

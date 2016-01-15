@@ -49,3 +49,8 @@ coog_init_redmine() { # init redmine credentials
         echo "export COOG_REDMINE_CRED=$username:$password" >> ~/.profile
         echo "now restart your session or source ~/.profile"
 }
+
+coog_init_docker() { # provide helpful scripts to manage docker
+        [ -d ../../docker ] && mv ../../docker ../../docker.old
+        cp -fr .docker ../../docker
+}

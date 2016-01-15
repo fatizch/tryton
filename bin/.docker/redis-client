@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# This command launches redis client from redis image
+#
+# More informations: https://hub.docker.com/_/redis/
+
+sudo docker run \
+        -ti --rm \
+        --link redis:redis \
+        redis:3.0 \
+        sh -c 'exec redis-cli -h "$REDIS_PORT_6379_TCP_ADDR" -p "$REDIS_PORT_6379_TCP_PORT"'

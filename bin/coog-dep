@@ -40,9 +40,14 @@ coog_dep_extra() { # install extra deps (interfaces, deployment extras)
         pip install $proxy_opt --no-deps celery-tryton      # batch
         pip install $proxy_opt celery                       # batch
         pip install $proxy_opt flower                       # batch
+}
+
+coog_dep_specific() { # install specific tasks deps
+        local proxy_opt
+	proxy_opt=`_coog_dep_proxy_opt`
         pip install $proxy_opt sphinx                       # doc
         pip install $proxy_opt sphinxcontrib-inheritance    # doc
-        pip install $proxy_opt pytest
+        pip install $proxy_opt pytest                       # test
 }
 
 coog_dep_main() { # install all deps

@@ -1,0 +1,17 @@
+FROM coog/env
+MAINTAINER Coopengo <dev@coopengo.com>
+
+RUN mkdir /opt/coog && mkdir /opt/coog/data
+
+COPY . /opt/coog/
+
+RUN ln -s /opt/coog/coog/bin/coog /usr/local/bin
+RUN ln -s /opt/coog/trytond/bin/trytond /usr/local/bin
+
+RUN /opt/coog/coog/bin/coog dep
+RUN /opt/coog/coog/bin/coog repo linkm
+
+VOLUME ["/opt/coog/data"]
+EXPOSE 8000 8069
+
+ENTRYPOINT ["coog", "worker"]
