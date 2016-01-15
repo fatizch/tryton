@@ -36,11 +36,13 @@ _coog_env_paths
 _coog_env_python
 _coog_env_pg
 
-coog_env_celery() { # set celery config in pythonpath (TBD)
+coog_env_celery() { # set trytond and celery config in pythonpath
         # TODO: review - batch
         local conf_path
         conf_path=`readlink -f ../../conf`
-        export PYTHONPATH=$conf_path:$PYTHONPATH
+        local trytond_path
+        trytond_path=`readlink -f ../../trytond`
+        export PYTHONPATH=$trytond_path:$conf_path:$PYTHONPATH
 }
 
 coog_env_main() { # print meaningful vars for coog execution
