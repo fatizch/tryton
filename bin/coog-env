@@ -2,8 +2,10 @@
 # environment informations
 
 _coog_env_files() { # set file names
-        COOG_SRV_FILE=coog-srv-$USER
-        COOG_CLI_FILE=coog-cli-$USER
+        local venv
+        venv=`basename $VIRTUAL_ENV`
+        COOG_SRV_FILE=coog-srv-$USER-$venv
+        COOG_CLI_FILE=coog-cli-$USER-$venv
 }
 
 _coog_env_paths() { # set paths
