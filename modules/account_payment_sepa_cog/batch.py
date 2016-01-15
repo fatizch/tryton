@@ -19,6 +19,16 @@ class PaymentTreatmentBatch:
                 })
 
     @classmethod
+    def _group_payment_key(cls, payment):
+        res = super(PaymentTreatmentBatch, cls)._group_payment_key(payment)
+        journal = payment.journal
+        if journal.process_method == 'sepa' and \
+                journal.split_sepa_messages_by_sequence_type:
+            res = res + (('sequence_type', payment.sepa_mandate_sequence_type
+                    or payment.sepa_mandate.sequence_type),)
+        return res
+
+    @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):
         groups = super(PaymentTreatmentBatch, cls).execute(
             objects, ids, treatment_date, extra_args)

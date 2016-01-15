@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -217,7 +217,7 @@ msgctxt "selection:account.payment.group,main_sepa_message_state:"
 msgid "Canceled"
 msgstr "Annulé"
 
-msgctxt "selection:account.payment.group,main_sepa_message_state:"
+jsgctxt "selection:account.payment.group,main_sepa_message_state:"
 msgid "Done"
 msgstr "Fait"
 
@@ -228,3 +228,11 @@ msgstr "Brouillon"
 msgctxt "selection:account.payment.group,main_sepa_message_state:"
 msgid "Waiting"
 msgstr "En attente"
+
+msgctxt "error:account.payment:"
+msgid "Direct Debit Disbursment of"
+msgstr "Virement du"
+
+msgctxt "field:account.payment.journal,split_sepa_messages_by_sequence_type:"
+msgid "Split Sepa Messages By Sequence Type (FRST-RCUR)"
+msgstr "Découper les messages SEPA par type de sequence (FRST-RCUR)"

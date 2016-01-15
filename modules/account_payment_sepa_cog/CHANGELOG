@@ -1,3 +1,4 @@
+* Allow to split sepa messages by RECUR vs FIRST
 * Add sepa bank payment reject date on a payment
 
 Version 1.6 - 2015-12-23

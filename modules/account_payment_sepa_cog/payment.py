@@ -437,6 +437,10 @@ class Journal:
         'Last Receivable Payment SEPA Creation',
         states={'invisible': Eval('process_method') != 'sepa'},
         depends=['process_method'])
+    split_sepa_messages_by_sequence_type = fields.Boolean(
+        'Split Sepa Messages By Sequence Type (FRST-RCUR)',
+        states={'invisible': Eval('process_method') != 'sepa'},
+        depends=['process_method'])
 
     def get_next_possible_payment_date(self, line, day):
         if self.process_method != 'sepa':
