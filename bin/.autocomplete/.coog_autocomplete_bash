@@ -1,0 +1,34 @@
+#!/user/bin env bash
+
+coog_autocomplete_update_bash() { # Set up tab completion for bash
+        _completion_list() { # Bash Completion List
+                local cur=${COMP_WORDS[COMP_CWORD]}
+                local completion=""
+                case "$COMP_CWORD" in
+                1)
+                        # managing 'coog'
+                        for fn in ./coog-*; do
+                                completion="$completion \
+                                `(echo $fn | cut -d'-' -f 2)`"
+                        done
+                        ;;
+                2)
+                        # managing 'coog help'
+                        local prev=${COMP_WORDS[COMP_CWORD-1]}
+                        if [ $prev = 'help' ] ; then
+                            for fn in ./coog-*; do
+                                    completion="$completion \
+                                    `(echo $fn | cut -d'-' -f 2)`"
+                            done
+                        fi
+                        ;;
+                esac
+                COMPREPLY=( $(compgen -W "$completion" -- $cur) )
+                cd $_wd
+        }
+        complete -F _completion_list coog
+}
+
+if [ -n "$BASH" ] ; then
+        _autocomplete_update_bash
+fi

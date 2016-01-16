@@ -54,3 +54,36 @@ coog_init_docker() { # provide helpful scripts to manage docker
         [ -d ../../docker ] && mv ../../docker ../../docker.old
         cp -fr .docker ../../docker
 }
+
+ coog_init_autocomplete() { # add coog completion scripts to current virtual env
+         [ -z $VIRTUAL_ENV ] && echo not in a virtual env, nothing to do && return
+         local command_path=`which coog`
+         local script_path=`readlink -f $command_path`
+         local script_dir=`dirname $script_path`
+         local file_path_activate=$VIRTUAL_ENV"/bin/postactivate"
+         local file_path_deactivate=$VIRTUAL_ENV"/bin/postdeactivate"
+         local command_line="source $script_dir/.autocomplete/.coog_autocomplete_"
+ 
+         local my_shell=`basename $SHELL`
+         if $my_shell in ${ ("bash" "zsh") } ; then
+                 command_line=$command_line$my_shell
+ 
+                 if `grep -q "$command_line" $file_path_activate` ; then
+                         echo "Autocompletion already initialized."
+                 else
+                         echo "" >> $file_path_activate
+                         echo $command_line >> $file_path_activate
+                         echo "Autocompletion initialized for $my_shell. Relaunch it."
+                 fi
+                 local undo_complete_command="complete -o default coog"
+                 if ! `grep -q "$undo_complete_command" $file_path_deactivate` ; then
+                         if [ $my_shell == "bash" ] ; then
+                                 echo "" >> $file_path_deactivate
+                                 echo "complete -o default coog" >> $file_path_deactivate
+                         elif [ $my_shell == "zsh" ] ; then
+                                 echo "complete -o default coog" >> $file_path_deactivate
+                         fi
+                 fi
+         fi
+ }
+ 

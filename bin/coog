@@ -17,7 +17,7 @@ _usage() { # print usage message
         echo
         echo Usage: coog \<command\> \[\<sub-command\> \[\<args\>\]\]
         echo
-        echo "  "For help: coog help
+        echo "  "For help: coog help [\<command\>]
         echo "  "For support: support@coopengo.com
         echo
 }
