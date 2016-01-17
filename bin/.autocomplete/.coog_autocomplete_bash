@@ -30,5 +30,5 @@ coog_autocomplete_update_bash() { # Set up tab completion for bash
 }
 
 if [ -n "$BASH" ] ; then
-        _autocomplete_update_bash
+        coog_autocomplete_update_bash
 fi
