@@ -65,7 +65,7 @@ coog_init_docker() { # provide helpful scripts to manage docker
          local command_line="source $script_dir/.autocomplete/.coog_autocomplete_"
  
          local my_shell=`basename $SHELL`
-         if $my_shell in ${ ("bash" "zsh") } ; then
+         if [ $my_shell = "bash" ] || [ $my_shell = "zsh" ] ; then
                  command_line=$command_line$my_shell
  
                  if `grep -q "$command_line" $file_path_activate` ; then
@@ -77,10 +77,10 @@ coog_init_docker() { # provide helpful scripts to manage docker
                  fi
                  local undo_complete_command="complete -o default coog"
                  if ! `grep -q "$undo_complete_command" $file_path_deactivate` ; then
-                         if [ $my_shell == "bash" ] ; then
+                         if [ $my_shell = "bash" ] ; then
                                  echo "" >> $file_path_deactivate
                                  echo "complete -o default coog" >> $file_path_deactivate
-                         elif [ $my_shell == "zsh" ] ; then
+                         elif [ $my_shell = "zsh" ] ; then
                                  echo "complete -o default coog" >> $file_path_deactivate
                          fi
                  fi
