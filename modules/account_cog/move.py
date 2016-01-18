@@ -7,9 +7,17 @@ from trytond.modules.cog_utils import export, fields, utils, coop_string
 __metaclass__ = PoolMeta
 
 __all__ = [
+    'MoveTemplate',
     'Move',
     'Line',
+    'CreateMove',
     ]
+
+
+class MoveTemplate(export.ExportImportMixin):
+    __name__ = 'account.move.template'
+
+    auto_post_moves = fields.Boolean('Auto Post Generated Moves')
 
 
 class Move(export.ExportImportMixin):
@@ -272,3 +280,25 @@ class Line(export.ExportImportMixin):
             return field.convert_order(name, move_tables, Move)
         return staticmethod(order_field)
     order_post_date = _order_move_field('post_date')
+
+
+class CreateMove:
+    __name__ = 'account.move.template.create'
+
+    def create_move(self):
+        move = super(CreateMove, self).create_move()
+
+        if self.template.template.auto_post_moves:
+            move.post([move])
+        return move
+
+    def transition_create_(self):
+        # By pass trytond version which never opened the new move
+        model = Transaction().context.get('active_model')
+        with Transaction().set_context(
+                active_model=model if model == 'account.move' else None):
+            return super(CreateMove, self).transition_create_()
+
+    def end(self):
+        if Transaction().context.get('active_model') == 'account.move':
+            return 'reload'

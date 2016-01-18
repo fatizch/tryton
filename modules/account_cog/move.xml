@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
+        <!-- ################# -->
+        <!-- # Move Template # -->
+        <!-- ################# -->
+        <record model="ir.ui.view" id="move_template_view_form">
+            <field name="model">account.move.template</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="account.move_template_view_form"/>
+            <field name="name">move_template_form</field>
+        </record>
         <!-- Synthesis -->
         <record model="ir.ui.view" id="move_line_view_synthesis_form">
             <field name="model">account.move.line</field>

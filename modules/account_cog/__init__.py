@@ -10,7 +10,7 @@ from .move import *
 
 def register():
     Pool.register(
-        # From account
+        MoveTemplate,
         Move,
         Line,
         Account,
@@ -21,14 +21,12 @@ def register():
         FiscalYear,
         Period,
         Configuration,
-        # From company
         Company,
         Tax,
         TaxTemplate,
         TaxCodeTemplate,
         TaxCode,
         TaxGroup,
-        # From test_case
         TestCaseModel,
         Party,
         SynthesisMenuMoveLine,
@@ -38,6 +36,7 @@ def register():
     Pool.register(
         SynthesisMenuOpen,
         OpenThirdPartyBalance,
+        CreateMove,
         module='account_cog', type_='wizard')
     Pool.register(
         ThirdPartyBalance,

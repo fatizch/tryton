@@ -118,6 +118,14 @@ msgctxt "field:account.move.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.move.template,xml_id:"
+msgid "Auto Post Generated Moves"
+msgstr "Emettre les mouvements automatiquement"
+
+msgctxt "field:account.move.template,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:account.open_third_party_balance.start,account:"
 msgid "Account"
 msgstr "Compte"
