@@ -87,5 +87,12 @@
         </record>
         <menuitem parent="account.menu_entries" id="menu_move_reconciliation_form"
             icon="coopengo-reconciliation" action="act_move_reconciliation_form"/>
+        <!-- ######################################## -->
+        <!-- # Override Party -> Lines to reconcile # -->
+        <!-- ######################################## -->
+        <!-- Filter out draft lines -->
+        <record model="ir.action.act_window" id="account.act_move_line_payable_receivable">
+            <field name="domain" eval="[('state', '!=', 'draft'), ('party', 'in', Eval('active_ids')), ('account.kind', 'in', ['payable', 'receivable'])]" pyson="1"/>
+        </record>
     </data>
 </tryton>

@@ -14,9 +14,12 @@ __all__ = [
     'MoveTemplate',
     'Move',
     'Line',
+<<<<<<< HEAD
     'CreateMove',
+=======
     'Reconcile',
     'ReconcileShow',
+>>>>>>> 3277/ignore_draft_lines
     ]
 
 
@@ -288,6 +291,7 @@ class Line(export.ExportImportMixin):
     order_post_date = _order_move_field('post_date')
 
 
+<<<<<<< HEAD
 class CreateMove:
     __name__ = 'account.move.template.create'
 
@@ -308,8 +312,7 @@ class CreateMove:
     def end(self):
         if Transaction().context.get('active_model') == 'account.move':
             return 'reload'
-
-
+=======
 class Reconcile:
     __name__ = 'account.reconcile'
 
@@ -375,3 +378,4 @@ class ReconcileShow:
         super(ReconcileShow, cls).__setup__()
         cls.lines.domain = ['AND', cls.lines.domain,
             [('state', '!=', 'draft')]]
+>>>>>>> 3277/ignore_draft_lines
