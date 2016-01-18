@@ -1,5 +1,6 @@
 import unittest
 import doctest
+import datetime
 import mock
 
 from decimal import Decimal
@@ -23,6 +24,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_models(cls):
         return {
+            'Party': 'party.party',
             'Contract': 'contract',
             'Premium': 'contract.premium',
             'Sequence': 'ir.sequence',
@@ -37,7 +39,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'MoveLine': 'account.move.line',
             'User': 'res.user',
             'Configuration': 'account.configuration',
-            'PaymentJournal': 'account.payment.journal'
+            'PaymentJournal': 'account.payment.journal',
+            'Reconciliation': 'account.move.reconciliation',
             }
 
     def test_premium_get_amount(self):
@@ -378,6 +381,225 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'reconciliation': 4,
                     'something': 31,
                     'contract': 4})
+
+    def test0060_test_reconciliation(self):
+        contract = self.Contract(123)
+        subscriber = self.Party(456)
+        account = self.Account(789)
+        contract.subscriber = subscriber
+        contract.subscriber.account_receivable = account
+
+        line_invoice_1 = mock.Mock()
+        line_invoice_1.origin = mock.Mock()
+        line_invoice_1.origin.__name__ = 'account.invoice'
+        line_invoice_1.origin.start = datetime.date(2020, 1, 1)
+        line_invoice_1.debit = 10
+        line_invoice_1.credit = 0
+        line_invoice_1.contract = contract
+
+        line_invoice_2 = mock.Mock()
+        line_invoice_2.origin = mock.Mock()
+        line_invoice_2.origin.__name__ = 'account.invoice'
+        line_invoice_2.origin.start = datetime.date(2020, 2, 1)
+        line_invoice_2.date = datetime.date(2020, 1, 1)
+        line_invoice_2.debit = 10
+        line_invoice_2.credit = 0
+        line_invoice_2.contract = contract
+
+        line_to_pay = mock.Mock()
+        line_to_pay.origin = mock.Mock()
+        line_to_pay.origin.__name__ = 'random'
+        line_to_pay.date = datetime.date(2020, 1, 15)
+        line_to_pay.debit = 10
+        line_to_pay.credit = 0
+        line_to_pay.contract = contract
+
+        line_pay_1 = mock.Mock()
+        line_pay_1.origin = mock.Mock()
+        line_pay_1.origin.__name__ = 'random'
+        line_pay_1.date = datetime.date(2020, 1, 1)
+        line_pay_1.debit = 0
+        line_pay_1.credit = 10
+        line_pay_1.contract = contract
+
+        line_pay_2 = mock.Mock()
+        line_pay_2.origin = mock.Mock()
+        line_pay_2.origin.__name__ = 'random'
+        line_pay_2.date = datetime.date(2020, 2, 1)
+        line_pay_2.debit = 0
+        line_pay_2.credit = 10
+        line_pay_2.contract = contract
+
+        line_pay_3 = mock.Mock()
+        line_pay_3.origin = mock.Mock()
+        line_pay_3.origin.__name__ = 'random'
+        line_pay_3.date = datetime.date(2019, 12, 1)
+        line_pay_3.debit = 0
+        line_pay_3.credit = 5
+        line_pay_3.contract = contract
+
+        patched_search = mock.MagicMock(return_value=[
+                line_invoice_1, line_invoice_2, line_to_pay, line_pay_1,
+                line_pay_2, line_pay_3])
+        patched_split = mock.MagicMock()
+
+        with mock.patch.object(self.MoveLine, 'search', patched_search), \
+                mock.patch.object(self.MoveLine, 'split_lines', patched_split):
+            # Basic check : nothing to reconcile, check perfect reconciliation
+            # is properly handled. ([1, 2], 0) is an arbitrary result, which is
+            # expected to be returned "as is" by get_lines_to_reconcile
+            contract.reconcile_perfect_lines = mock.MagicMock(
+                return_value=([([1, 2], 0)], [line_invoice_1]))
+            self.assertEqual([[1, 2]], self.Contract.get_lines_to_reconcile(
+                    [contract]))
+            contract.reconcile_perfect_lines.assert_called_with(
+                [line_invoice_1, line_invoice_2, line_to_pay, line_pay_1,
+                    line_pay_2, line_pay_3])
+            patched_search.assert_called_with([
+                    ('reconciliation', '=', None),
+                    ('date', '<=', datetime.date.today()),
+                    ('move_state', 'not in', ('draft', 'validated')),
+                    ['OR', [
+                            ('party', '=', 456),
+                            ('account', '=', 789),
+                            ('contract', 'in', [123])]]],
+                order=[('contract', 'ASC')])
+
+            def test_reco(lines, reconciliations):
+                contract.reconcile_perfect_lines = mock.MagicMock(
+                    return_value=([], lines))
+                self.assertEqual(reconciliations,
+                    self.Contract.get_lines_to_reconcile([contract]))
+
+            # Test perfectly matched lines are reconciled
+            test_reco([line_invoice_1, line_pay_1],
+                [[line_invoice_1, line_pay_1]])
+
+            # Check ordering on invoice effective dates
+            test_reco([line_invoice_1, line_invoice_2, line_pay_1],
+                [[line_invoice_1, line_pay_1]])
+            test_reco([line_invoice_2, line_invoice_1, line_pay_1],
+                [[line_invoice_1, line_pay_1]])
+
+            # Check multiple line reconciliation
+            test_reco([line_invoice_1, line_pay_1, line_pay_2],
+                [[line_invoice_1, line_pay_1]])
+            test_reco([line_invoice_1, line_invoice_2, line_pay_1, line_pay_2],
+                [[line_invoice_1, line_invoice_2, line_pay_1, line_pay_2]])
+
+            # Check that line_to_pay is reconciled before line_invoice_2
+            test_reco([line_invoice_1, line_invoice_2, line_pay_1, line_pay_2,
+                    line_to_pay],
+                [[line_invoice_1, line_to_pay, line_pay_1, line_pay_2]])
+
+            # Check payment splitting
+            remaining = mock.Mock()
+            compensation = mock.Mock()
+            patched_split.return_value = {
+                line_pay_1: (line_pay_1, remaining, compensation)}
+
+            test_reco([line_invoice_1, line_pay_1, line_pay_3],
+                [[line_invoice_1, line_pay_3, line_pay_1, remaining,
+                        compensation]])
+
+            # Check splits applies on right line
+            test_reco([line_invoice_1, line_pay_1, line_pay_3, line_invoice_2],
+                [[line_invoice_1, line_pay_3, line_pay_1, remaining,
+                        compensation]])
+
+            # Check no splits on debit lines
+            test_reco([line_invoice_1, line_pay_3], [])
+
+    def test0070_test_perfect_reconciliation(self):
+        contract = self.Contract()
+
+        invoice_1 = mock.Mock()
+        invoice_1.__name__ = 'account.invoice'
+
+        base_move = mock.Mock()
+        base_move.__name__ = 'account.move'
+        base_move.origin = invoice_1
+
+        cancel_move = mock.Mock()
+        cancel_move.__name__ = 'account.move'
+        cancel_move.origin = base_move
+
+        invoice_1.move = base_move
+        invoice_1.cancel_move = cancel_move
+
+        payment = mock.Mock()
+        payment.__name__ = 'account.payment'
+        payment.line = mock.Mock()
+        payment.line.origin = invoice_1
+
+        line_no_origin = mock.Mock()
+        line_no_origin.origin = None
+
+        line_random_origin = mock.Mock()
+        line_random_origin.origin = mock.Mock()
+        line_random_origin.origin.__name__ = 'random'
+
+        line_base = mock.Mock()
+        line_base.origin = invoice_1
+        line_base.amount = 10
+        line_base.move = base_move
+
+        line_cancel_1 = mock.Mock()
+        line_cancel_1.origin = base_move
+        line_cancel_1.amount = -10
+        line_cancel_1.move = cancel_move
+
+        line_cancel_2 = mock.Mock()
+        line_cancel_2.origin = base_move
+        line_cancel_2.amount = -20
+        line_cancel_2.move = cancel_move
+
+        line_payment = mock.Mock()
+        line_payment.origin = payment
+        line_payment.amount = -10
+        line_payment.origin.line = line_base
+
+        def test_perfect(original_lines, expected):
+            self.assertEqual(expected,
+                contract.reconcile_perfect_lines(original_lines))
+
+        # Test non affected lines are not used, base is reconciled with
+        # cancellation
+        test_perfect(
+            [line_no_origin, line_random_origin, line_base, line_cancel_1],
+            ([([line_base, line_cancel_1], 0)],
+                [line_no_origin, line_random_origin]))
+
+        # Test payment is not affected if line is reconciled with cancellation
+        test_perfect([line_base, line_cancel_1, line_payment],
+            ([([line_base, line_cancel_1], 0)], [line_payment]))
+
+        # Test nothing happens if only payment and cancellation
+        test_perfect([line_cancel_1, line_payment],
+            ([], [line_cancel_1, line_payment]))
+
+        # Test reconciliation for line and payment
+        test_perfect([line_base, line_payment],
+            ([([line_base, line_payment], 0)], []))
+
+        # Test error if cancel amount does not match base amount
+        self.assertRaises(AssertionError,
+            lambda: contract.reconcile_perfect_lines([line_base, line_cancel_1,
+                    line_cancel_2]))
+
+        # Test that base lines which only look like base lines are properly
+        # filtered
+        invoice_1.move = None
+        test_perfect([line_base, line_cancel_1],
+            ([], [line_base, line_cancel_1]))
+        invoice_1.move = base_move
+
+        # Test that cancel lines which only look like cancel lines are properly
+        # filtered
+        invoice_1.cancel_move = None
+        test_perfect([line_base, line_cancel_1],
+            ([], [line_cancel_1, line_base]))
+        invoice_1.cancel_move = cancel_move
 
 
 def suite():

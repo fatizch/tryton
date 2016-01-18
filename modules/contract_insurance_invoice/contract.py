@@ -810,15 +810,22 @@ class Contract:
                     ])
         clause.append(subscriber_clause)
         may_be_reconciled = MoveLine.search(clause,
-            order=[('contract', 'ASC'), ('date', 'ASC')])
+            order=[('contract', 'ASC')])
 
         per_contract = defaultdict(list)
         for line in may_be_reconciled:
             per_contract[line.contract].append(line)
 
         reconciliations = {}
-
         for contract, possible_lines in per_contract.iteritems():
+            reconciliations[contract], possible_lines = \
+                contract.reconcile_perfect_lines(possible_lines)
+
+            if not possible_lines:
+                continue
+
+            possible_lines.sort(key=cls.key_func_for_reconciliation_order())
+
             # Split lines in available amount / amount to pay
             available, to_pay, total_available = [], [], Decimal(0)
             for line in possible_lines:
@@ -848,25 +855,76 @@ class Contract:
                 total_to_reconcile -= line.credit - line.debit
                 to_reconcile.append(line)
 
-            reconciliations[contract] = (to_reconcile, max(0,
-                    -total_to_reconcile))
+            reconciliations[contract].append((to_reconcile,
+                    max(0, -total_to_reconcile)))
 
         # Split lines if necessary
         splits = MoveLine.split_lines([(lines[-1], split_amount)
-                for _, (lines, split_amount) in reconciliations.iteritems()
+                for (lines, split_amount) in sum(reconciliations.values(), [])
                 if split_amount != 0])
 
         reconciliation_lines = []
-        for contract, (lines, split_amount) in reconciliations.iteritems():
-            reconciliation_lines.append(lines)
-            if split_amount == 0:
-                continue
+        for contract, groups in reconciliations.iteritems():
+            for lines, split_amount in groups:
+                reconciliation_lines.append(lines)
+                if split_amount == 0:
+                    continue
 
-            # If a line was split, add the matching line to the reconciliation
-            _, remaining, compensation = splits[lines[-1]]
-            lines += [remaining, compensation]
+                # If a line was split, add the matching line to the
+                # reconciliation
+                _, remaining, compensation = splits[lines[-1]]
+                lines += [remaining, compensation]
 
         return reconciliation_lines
+
+    def reconcile_perfect_lines(self, possible_lines):
+        per_invoice = defaultdict(
+            lambda: {'base': None, 'paid': None, 'canceled': None})
+        unmatched = []
+        for line in possible_lines:
+            if not line.origin:
+                unmatched.append(line)
+                continue
+            if (line.origin.__name__ == 'account.invoice' and
+                    line.origin.move == line.move):
+                per_invoice[line.origin]['base'] = line
+                continue
+            if (line.origin.__name__ == 'account.move' and
+                    line.origin.origin.__name__ == 'account.invoice' and
+                    line.origin.origin.cancel_move == line.move):
+                per_invoice[line.origin.origin]['canceled'] = line
+                continue
+            if (line.origin.__name__ == 'account.payment' and
+                    line.origin.line and
+                    line.origin.line.origin.__name__ == 'account.invoice' and
+                    line.origin.line.origin.move == line.origin.line.move):
+                per_invoice[line.origin.line.origin]['paid'] = line
+                continue
+            unmatched.append(line)
+        matched = []
+        for data in per_invoice.values():
+            if data['base'] and data['canceled']:
+                assert data['base'].amount + data['canceled'].amount == 0
+                matched.append(([data['base'], data['canceled']], 0))
+                if data['paid']:
+                    unmatched.append(data['paid'])
+                continue
+            if data['base'] and data['paid'] and \
+                    data['base'].amount + data['paid'].amount == 0:
+                matched.append(([data['base'], data['paid']], 0))
+                if data['canceled']:
+                    unmatched.append(data['canceled'])
+                continue
+            unmatched += [x for x in data.values() if x is not None]
+        return (matched, unmatched)
+
+    @classmethod
+    def key_func_for_reconciliation_order(cls):
+        def get_key(x):
+            if x.origin.__name__ == 'account.invoice':
+                return x.origin.start
+            return x.date
+        return get_key
 
     @dualmethod
     def reconcile(cls, contracts):
