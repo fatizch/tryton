@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="event.type" id="event_contract_broker_changed">
+            <field name="name">Broker Changed</field>
+            <field name="code">broker_changed</field>
+        </record>
+    </data>
+</tryton>

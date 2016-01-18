@@ -12,5 +12,8 @@
     <field name="at_date"/>
     <label name="all_contracts"/>
     <field name="all_contracts"/>
+    <label name="auto_create_agents"/>
+    <field name="auto_create_agents"/>
+    <newline/>
     <field name="contracts" colspan="4"/>
 </form>

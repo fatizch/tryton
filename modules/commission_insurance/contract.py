@@ -123,16 +123,33 @@ class Contract:
         return utils.auto_complete_with_domain(self, 'agent')
 
     @classmethod
-    def update_commission_lines(cls, contracts, new_broker, at_date,
-            update_contracts=False, agency=None):
+    def change_broker(cls, contracts, new_broker, at_date,
+            update_contracts=False, agency=None, create_missing=False):
         pool = Pool()
         Commission = pool.get('commission')
         Agent = pool.get('commission.agent')
+        Event = pool.get('event')
         per_agent = defaultdict(list)
         [per_agent[contract.agent].append(contract) for contract in contracts]
 
+        agent_matches = Agent.find_matches(per_agent.keys(), new_broker)
+
+        to_create = []
         with model.error_manager():
-            agent_matches = Agent.find_matches(per_agent.keys(), new_broker)
+            for src_agent, dest_agent in agent_matches.items():
+                if dest_agent:
+                    continue
+                if not create_missing:
+                    Agent.append_functional_error('agent_not_found', (
+                            new_broker.rec_name,
+                            Agent.format_hash(dict(src_agent.get_hash()))))
+                    continue
+                to_create.append(src_agent)
+        if to_create:
+            agent_matches.update({
+                    src_agent: src_agent.copy_to_broker(new_broker)
+                    for src_agent in to_create})
+
         for from_agent, to_agent in agent_matches.iteritems():
             if update_contracts:
                 cls.write(per_agent[from_agent], {'agent': to_agent.id,
@@ -144,3 +161,4 @@ class Contract:
                         ('origin.coverage_start', '>=', at_date,
                             'account.invoice.line')]),
                 to_agent)
+        Event.notify_events(contracts, 'broker_changed')

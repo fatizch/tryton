@@ -617,12 +617,7 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
             for agent in target_broker.agents}
         matches = {}
         for source_agent, source_key in source_keys.iteritems():
-            if source_key in target_keys:
-                matches[source_agent] = target_keys[source_key]
-            else:
-                cls.append_functional_error('agent_not_found', (
-                        target_broker.rec_name,
-                        cls.format_hash(dict(source_key))))
+            matches[source_agent] = target_keys.get(source_key, None)
         return matches
 
     @classmethod
@@ -632,6 +627,9 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
 
     def get_hash(self):
         return (('plan', self.plan),)
+
+    def copy_to_broker(self, target_broker):
+        return self.copy([self], default={'party': target_broker.id})[0]
 
 
 class CreateAgents(Wizard):
@@ -906,9 +904,10 @@ class ChangeBroker(Wizard):
         agency_id = None
         if self.select_new_broker.new_agency:
             agency_id = self.select_new_broker.new_agency.id
-        Contract.update_commission_lines(contracts,
-            self.select_new_broker.to_broker, self.select_new_broker.at_date,
-            update_contracts=True, agency=agency_id)
+        Contract.change_broker(contracts, self.select_new_broker.to_broker,
+            self.select_new_broker.at_date, update_contracts=True,
+            agency=agency_id,
+            create_missing=self.select_new_broker.auto_create_agents)
         return 'end'
 
 
@@ -933,6 +932,7 @@ class SelectNewBroker(model.CoopView):
         domain=[('party', '=', None),
             ('parent_party', '=', Eval('to_broker'))],
         states={'readonly': ~Eval('to_broker')}, depends=['to_broker'],)
+    auto_create_agents = fields.Boolean('Auto Create Missing Agents')
 
     @fields.depends('all_contracts', 'contracts')
     def on_change_all_contracts(self):

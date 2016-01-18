@@ -126,6 +126,10 @@ msgctxt "field:commission.change_broker.select_new_broker,at_date:"
 msgid "At Date"
 msgstr "Date d'effet"
 
+msgctxt "field:commission.change_broker.select_new_broker,auto_create_agents:"
+msgid "Auto Create Missing Agents"
+msgstr "Créer les protocoles manquants automatiquement"
+
 msgctxt "field:commission.change_broker.select_new_broker,contracts:"
 msgid "Contracts"
 msgstr "Contrats"
@@ -895,6 +899,10 @@ msgstr "Protocole de commissionnement"
 msgctxt "field:product.template-commission.agent,agent:commission."
 msgid "Agent"
 msgstr "Protocole de commissionnement"
+
+msgctxt "model:event.type,name:event_contract_broker_changed"
+msgid "Broker Changed"
+msgstr "Transfert de portefeuille"
 
 msgctxt "model:commission.agent,name:commission."
 msgid "Commission Agent"
