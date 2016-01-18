@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tree string="Lines">
+    <field name="rated_entity" expand="1"/>
+    <field name="base_amount" sum="Base">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="tax_amount" sum="Tax">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="total_amount" sum="Total">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="currency_digits" tree_invisible="1"/>
+</tree>

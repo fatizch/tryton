@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from sql.aggregate import Sum, Max
 from sql.operators import Concat
 
@@ -6,6 +8,7 @@ from trytond.tools import grouped_slice
 from trytond.rpc import RPC
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool
+from trytond.wizard import Wizard, StateView, Button
 
 from trytond.modules.cog_utils import utils, model, fields
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
@@ -15,6 +18,9 @@ __all__ = [
     'Invoice',
     'InvoiceLine',
     'InvoiceLineDetail',
+    'InvoiceLineAggregates',
+    'InvoiceLineAggregatesDisplay',
+    'InvoiceLineAggregatesDisplayLine',
     '_STATES',
     '_DEPENDS',
     ]
@@ -550,3 +556,77 @@ class InvoiceLineDetail(model.CoopSQL, model.CoopView):
             return self.option
         if getattr(self, 'extra_premium', None):
             return self.extra_premium.option
+
+
+class InvoiceLineAggregates(Wizard):
+    'Calculate Invoice Line Aggregates'
+
+    __name__ = 'account.invoice.aggregate_lines'
+
+    start_state = 'display'
+    display = StateView('account.invoice.aggregate_lines.display',
+        'contract_insurance_invoice.invoice_aggregate_lines_view_form', [
+            Button('Ok', 'end', 'tryton-ok')])
+
+    def default_display(self, name):
+        assert Transaction().context.get('active_model') == 'account.invoice'
+        invoice = Pool().get('account.invoice')(
+            Transaction().context.get('active_id'))
+        lines = defaultdict(lambda: {
+                'base_amount': 0,
+                'tax_amount': 0,
+                'currency_digits': invoice.currency.digits,
+                'currency_symbol': invoice.currency.symbol,
+                })
+        for line in invoice.lines:
+            lines[line.detail.rated_entity]['base_amount'] += line.amount
+            lines[line.detail.rated_entity]['tax_amount'] += sum(
+                    [x['amount'] for x in line._get_taxes().values()], 0)
+
+        for k, v in lines.iteritems():
+            v['rated_entity'] = k.rec_name
+            v['total_amount'] = v['base_amount'] + v['tax_amount']
+
+        def order_lines(key):
+            # Weird order method, tries to ensure lines are ordered as follows:
+            #   - Product lines first
+            #   - Then coverage lines
+            #   - Then fees
+            #   - Then others
+            if key.__name__ == 'account.fee':
+                return '5_' + key.rec_name
+            if key.__name__ == 'offered.option.description':
+                return '3_' + key.rec_name
+            if key.__name__ == 'offered.product':
+                return '1_' + key.rec_name
+            return '9_' + key.rec_name
+
+        return {
+            'lines': [lines[x] for x in sorted(lines.keys(),
+                    key=order_lines)]}
+
+
+class InvoiceLineAggregatesDisplay(model.CoopView):
+    'Display Invoice Line Aggregates'
+
+    __name__ = 'account.invoice.aggregate_lines.display'
+
+    lines = fields.One2Many('account.invoice.aggregate_lines.display.line',
+        None, 'Lines', readonly=True)
+
+
+class InvoiceLineAggregatesDisplayLine(model.CoopView):
+    'Invoice Line Aggregates Displayer'
+
+    __name__ = 'account.invoice.aggregate_lines.display.line'
+
+    rated_entity = fields.Char('Rated Entity')
+    base_amount = fields.Numeric('Base Amount', digits=(16,
+            Eval('currency_digits', 2)), readonly=True)
+    tax_amount = fields.Numeric('Tax Amount', digits=(16,
+            Eval('currency_digits', 2)), readonly=True)
+    total_amount = fields.Numeric('Total Amount', digits=(16,
+            Eval('currency_digits', 2)), readonly=True)
+    currency_digits = fields.Integer('Currency Digits',
+        states={'invisible': True})
+    currency_symbol = fields.Char('Currency Symbol', readonly=True)

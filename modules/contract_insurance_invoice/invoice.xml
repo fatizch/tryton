@@ -49,5 +49,33 @@
             <field name="type">tree</field>
             <field name="name">invoice_line_detail_list</field>
         </record>
+        <!-- ################################## -->
+        <!-- # Invoice Line Aggregate Display # -->
+        <!-- ################################## -->
+        <record model="ir.ui.view" id="invoice_aggregate_lines_view_form">
+            <field name="model">account.invoice.aggregate_lines.display</field>
+            <field name="type">form</field>
+            <field name="name">invoice_aggregate_lines_form</field>
+        </record>
+        <!-- ####################################### -->
+        <!-- # Invoice Line Aggregate Display Line # -->
+        <!-- ####################################### -->
+        <record model="ir.ui.view" id="invoice_aggregate_displayer_view_list">
+            <field name="model">account.invoice.aggregate_lines.display.line</field>
+            <field name="type">tree</field>
+            <field name="name">invoice_aggregate_displayer_list</field>
+        </record>
+        <!-- ########################### -->
+        <!-- # Invoice Line Aggregates # -->
+        <!-- ########################### -->
+        <record model="ir.action.wizard" id="act_invoice_aggregate_lines">
+            <field name="name">Display Line Aggregates</field>
+            <field name="wiz_name">account.invoice.aggregate_lines</field>
+        </record>
+        <record model="ir.action.keyword" id="act_invoice_aggregate_lines_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">account.invoice,-1</field>
+            <field name="action" ref="act_invoice_aggregate_lines"/>
+        </record>
     </data>
 </tryton>

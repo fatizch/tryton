@@ -35,6 +35,8 @@ def register():
         MoveLine,
         ReconcileShow,
         InvoiceLineDetail,
+        InvoiceLineAggregatesDisplay,
+        InvoiceLineAggregatesDisplayLine,
         InvoiceContractStart,
         CreateInvoiceContractBatch,
         PostInvoiceContractBatch,
@@ -54,4 +56,5 @@ def register():
         SynthesisMenuOpen,
         DisplayContractPremium,
         Reconcile,
+        InvoiceLineAggregates,
         module='contract_insurance_invoice', type_='wizard')

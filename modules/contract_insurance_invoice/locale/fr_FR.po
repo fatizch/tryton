@@ -80,6 +80,38 @@ msgctxt "field:account.invoice,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.invoice.aggregate_lines.display,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.invoice.aggregate_lines.display,lines:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "field:account.invoice.aggregate_lines.display.line,base_amount:"
+msgid "Base Amount"
+msgstr "Montant de base"
+
+msgctxt "field:account.invoice.aggregate_lines.display.line,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:account.invoice.aggregate_lines.display.line,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:account.invoice.aggregate_lines.display.line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.invoice.aggregate_lines.display.line,rated_entity:"
+msgid "Rated Entity"
+msgstr "Elément tarifé"
+
+msgctxt "field:account.invoice.aggregate_lines.display.line,tax_amount:"
+msgid "Tax Amount"
+msgstr "Taxe"
+
 msgctxt "field:account.invoice.line,coverage_end:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -938,6 +970,14 @@ msgctxt "help:offered.product,taxes_included_in_premium:"
 msgid "Taxes Included In Premium"
 msgstr "Taxes incluses dans le tarif"
 
+msgctxt "model:account.invoice.aggregate_lines.display,name:"
+msgid "Display Invoice Line Aggregates"
+msgstr "Aggrégat par élément tarifé"
+
+msgctxt "model:account.invoice.aggregate_lines.display.line,name:"
+msgid "Invoice Line Aggregates Displayer"
+msgstr "Ligne"
+
 msgctxt "model:account.invoice.line.detail,name:"
 msgid "Invoice Line Detail"
 msgstr "Détail de ligne de quittance"
@@ -989,6 +1029,10 @@ msgstr "Fréquences de quittancement"
 msgctxt "model:ir.action,name:act_invoice"
 msgid "Invoice Contracts"
 msgstr "Génération des quittances"
+
+msgctxt "model:ir.action,name:act_invoice_aggregate_lines"
+msgid "Display Line Aggregates"
+msgstr "Lignes aggrégées"
 
 msgctxt "model:ir.action,name:act_move_line_contract_balance"
 msgid "Contract Balance"
@@ -1206,6 +1250,26 @@ msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "September"
 msgstr "Septembre"
 
+msgctxt "view:account.invoice.aggregate_lines.display.line:"
+msgid "Base"
+msgstr "Base"
+
+msgctxt "view:account.invoice.aggregate_lines.display.line:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "view:account.invoice.aggregate_lines.display.line:"
+msgid "Tax"
+msgstr "Taxe"
+
+msgctxt "view:account.invoice.aggregate_lines.display.line:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "view:account.invoice.aggregate_lines.display:"
+msgid "Aggregated Lines"
+msgstr "Lignes aggrégées"
+
 msgctxt "view:account.invoice.line.detail:"
 msgid "Invoice Line Detail"
 msgstr "Détail de ligne de quittance"
@@ -1313,6 +1377,10 @@ msgstr "Mode de quittancement"
 msgctxt "view:offered.product:"
 msgid "Billing Modes"
 msgstr "Modes de quittancement"
+
+msgctxt "wizard_button:account.invoice.aggregate_lines,display,end:"
+msgid "Ok"
+msgstr "Ok"
 
 msgctxt "wizard_button:contract.do_invoice,start,end:"
 msgid "Cancel"
