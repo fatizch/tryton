@@ -60,6 +60,9 @@ class Invoice:
                 'post_on_non_active_contract': 'Impossible to post invoice '
                 '"%(invoice)s" on contract "%(contract)s" which is '
                 '"%(status)s"',
+                'previous_invoices_not_posted': 'There are %s invoices with '
+                'a start date before %s on contract %s. Proceeding further '
+                'will post those as well.\n\n\t%s',
                 })
         cls.untaxed_amount.states = {
             'invisible': Bool(Eval('contract_invoice')),
@@ -247,8 +250,29 @@ class Invoice:
             'accounting_date': self.accounting_date,
             }
 
+    def check_previous_invoices_posted(self, at_date):
+        old_invoices = self.__class__.search([
+                ('contract', '=', self.id),
+                ('start', '<', at_date),
+                ('state', 'in', ('draft', 'validated'))],
+            order=[('start', 'ASC')])
+        if old_invoices:
+            self.raise_user_warning('%s_%s' % (self.rec_name, at_date),
+                'previous_invoices_not_posted', (str(len(old_invoices)),
+                    str(at_date), self.rec_name,
+                    '\n\t'.join([x.description for x in old_invoices])))
+            return old_invoices
+        return []
+
     @classmethod
     def post(cls, invoices):
+        if Transaction().user != 0 and len(invoices) == 1 and \
+                invoices[0].contract and invoices[0].start:
+            # A user clicked the "Post" button, check that all previous
+            # invoices were posted
+            invoices += invoices[0].contract.check_previous_invoices_posted(
+                invoices[0].start)
+
         for invoice in invoices:
             if invoice.state in ('posted', 'paid'):
                 continue

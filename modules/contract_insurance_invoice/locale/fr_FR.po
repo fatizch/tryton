@@ -18,6 +18,12 @@ msgstr ""
 "Impossible d'émettre la quittance \"%(invoice)s\" pour contract "
 "\"%(contract)s\" au statut \"%(status)s\""
 
+msgctxt "error:account.invoice:"
+msgid "There are %s invoices with a start date before %s on contract %s. "
+"Proceeding further will post those as well.\n\n\t%s"
+msgstr "Il y a %s quittances ayant une date d'effet antérieure à %s sur le "
+"contrat %s. Continuer déclenchera leur émission.\n\n\t%s"
+
 msgctxt "error:contract.premium.display:"
 msgid "No contract found in context"
 msgstr "Pas de contrat trouver dans le contexte"
