@@ -40,7 +40,9 @@ def open_path(rel_path, patterns):
         logging.getLogger().warning('No editor found, feature disabled')
     if editor == 'nvim':
         from neovim import attach
-        nvim = attach('socket', path='/tmp/nvim_test')
+        path = '/tmp/nvim_' + os.path.basename(os.environ.get('VIRTUAL_ENV',
+                os.environ.get('NVIM_LISTEN_ADDRESS', 'root'))) + '.sock'
+        nvim = attach('socket', path=path)
         nvim.command('tabnew')
         nvim.command('edit %s' % new_path)
         prev_pos = nvim.eval("getpos('.')")[1]
