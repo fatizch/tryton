@@ -231,30 +231,17 @@ class Invoice:
 
     @classmethod
     def _get_commissions_to_delete(cls, ids):
-        # Temporary and dummy fix: the domain resolution of the
-        # field reference `origin` is not optimized for big databases
-        # and takes a while to be executed as query.
-        pool = Pool()
-        Commission = pool.get('commission')
-        InvoiceLine = pool.get('account.invoice.line')
-        commission = Commission.__table__()
-        invoice_line = InvoiceLine.__table__()
-        cursor = Transaction().cursor
-
-        sub_query = invoice_line.select(
-            Concat('account.invoice.line,', Cast(invoice_line.id, 'VARCHAR')),
-            where=invoice_line.invoice.in_(ids))
-
-        cursor.execute(*commission.select(commission.id, where=(
-                    (commission.invoice_line == None) &
-                    commission.origin.in_(sub_query))))
-        return Commission.browse([x[0] for x in cursor.fetchall()])
+        # Never delete commissions, #3261
+        return []
 
     @classmethod
     def _get_commissions_to_cancel(cls, ids):
-        # Temporary and dummy fix: the domain resolution of the
+        # Override for performance : the domain resolution of the
         # field reference `origin` is not optimized for big databases
         # and takes a while to be executed as query.
+        #
+        # All commissions should be canceled, even though they are not yet in
+        # an invoice #3261
         pool = Pool()
         Commission = pool.get('commission')
         InvoiceLine = pool.get('account.invoice.line')
@@ -267,7 +254,6 @@ class Invoice:
             where=invoice_line.invoice.in_(ids))
 
         cursor.execute(*commission.select(commission.id, where=(
-                    (commission.invoice_line != None) &
                     commission.origin.in_(sub_query))))
         return Commission.browse([x[0] for x in cursor.fetchall()])
 
