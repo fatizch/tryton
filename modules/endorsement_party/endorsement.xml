@@ -25,7 +25,7 @@
         </record>
         <!-- Entry Point -->
         <record model="ir.action.act_window" id="act_endorsement">
-            <field name="name">Endorsement</field>
+            <field name="name">Endorsements</field>
             <field name="res_model">endorsement</field>
             <field name="domain" eval="[('parties', '=', Eval('active_id'))]" pyson="1"/>
         </record>

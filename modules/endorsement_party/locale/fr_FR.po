@@ -945,8 +945,8 @@ msgid "Endorsement Relations Field"
 msgstr "Champs de l'avenant"
 
 msgctxt "model:ir.action,name:act_endorsement"
-msgid "Endorsement"
-msgstr "Avenant"
+msgid "Endorsements"
+msgstr "Avenants"
 
 msgctxt "selection:endorsement.part,kind:"
 msgid "Party"
