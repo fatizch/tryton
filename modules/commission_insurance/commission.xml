@@ -130,5 +130,23 @@
             <field name="wiz_name">commission.filter_commission</field>
             <field name="model">account.invoice</field>
         </record>
+        <!-- ###################################### -->
+        <!-- # Display Commissions Synthesis View # -->
+        <!-- ###################################### -->
+        <record model="ir.ui.view" id="synthesis_start_view_form">
+            <field name="model">commission.synthesis.start</field>
+            <field name="type">form</field>
+            <field name="name">commission_synthesis_start_form</field>
+        </record>
+        <record model="ir.ui.view" id="synthesis_show_view_form">
+            <field name="model">commission.synthesis.show</field>
+            <field name="type">form</field>
+            <field name="name">commission_synthesis_show_form</field>
+        </record>
+        <record model="ir.ui.view" id="synthesis_year_line_list">
+            <field name="model">commission.synthesis.year_line</field>
+            <field name="type">tree</field>
+            <field name="name">commission_synthesis_year_line_list</field>
+        </record>
     </data>
 </tryton>

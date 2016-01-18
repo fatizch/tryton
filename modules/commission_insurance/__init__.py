@@ -28,6 +28,9 @@ def register():
         Configuration,
         Fee,
         MoveLine,
+        OpenCommissionsSynthesisStart,
+        OpenCommissionsSynthesisShow,
+        OpenCommissionSynthesisYearLine,
         CreateCommissionInvoiceBatch,
         PostCommissionInvoiceBatch,
         module='commission_insurance', type_='model')
@@ -36,4 +39,5 @@ def register():
         CreateAgents,
         ChangeBroker,
         FilterCommissions,
+        OpenCommissionsSynthesis,
         module='commission_insurance', type_='wizard')

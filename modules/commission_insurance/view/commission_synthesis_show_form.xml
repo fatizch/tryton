@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<form string="Commissions synthesis">
+    <label name="broker_fees_paid"/>
+    <group id="broker_fees_paid">
+        <field name="broker_fees_paid" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+    <label name="broker_fees_to_pay"/>
+    <group id="broker_fees_to_pay">
+        <field name="broker_fees_to_pay" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+    <label name="commissions_paid"/>
+    <group id="commissions_paid">
+        <field name="commissions_paid" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+    <label name="commissions_to_pay"/>
+    <group id="commissions_to_pay">
+        <field name="commissions_to_pay" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+
+    <separator string="Commissions paid by year" colspan="4" id="commissions_paid_details"/>
+    <field name="commissions_paid_details" mode="tree" expand_toolbar="0" colspan="4"/>
+
+    <field name="currency" invisible="1"/>
+</form>
+

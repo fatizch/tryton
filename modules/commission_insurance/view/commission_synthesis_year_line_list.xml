@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree string="Commissions years">
+    <field name="year" expand="1"/>
+    <field name="amount">
+            <suffix name="currency_symbol"/>
+    </field>
+</tree>

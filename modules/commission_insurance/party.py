@@ -3,8 +3,9 @@ from trytond.pyson import Not, Eval, Bool, If
 from trytond.transaction import Transaction
 from trytond import backend
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, model
 from trytond.modules.party_cog.party import STATES_COMPANY
+
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -33,6 +34,15 @@ class Party:
         depends=['is_broker'], states={'invisible': ~Eval('is_broker')})
 
     @classmethod
+    def __setup__(cls):
+        super(Party, cls).__setup__()
+        cls._buttons.update({
+                'button_commissions_synthesis': {
+                    'invisible': ~Eval('is_broker'),
+                    },
+                })
+
+    @classmethod
     def __register__(cls, module_name):
         super(Party, cls).__register__(module_name)
         # Migration from 1.3: Drop broker table
@@ -43,11 +53,18 @@ class Party:
 
     @classmethod
     def view_attributes(cls):
-        return super(Party, cls).view_attributes() + [(
-                '/form/notebook/page[@id="role"]/notebook/page[@id="broker"]',
-                'states',
-                {'invisible': Bool(~Eval('is_broker'))}
-                )]
+        return super(Party, cls).view_attributes() + [
+            ('/form/notebook/page[@id="role"]/notebook/page[@id="broker"]',
+            'states', {'invisible': Bool(~Eval('is_broker'))}),
+            (('/form/notebook/page[@id="role"]/group[@id="role_group"]/'
+                'group[@id="invisible"]'), 'states', {'invisible': True}),
+            ]
+
+    @classmethod
+    @model.CoopView.button_action(
+        'commission_insurance.act_commission_synthesis_display')
+    def button_commissions_synthesis(cls, contracts):
+        pass
 
     @fields.depends('broker_code')
     def get_is_broker(self, name=None):

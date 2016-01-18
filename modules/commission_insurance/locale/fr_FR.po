@@ -394,6 +394,35 @@ msgctxt "field:commission_plan-commission_plan,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt ""
+"field:commission.synthesis.show,broker_fees_paid:"
+msgid "Broker fees paid"
+msgstr "Frais courtier payés"
+
+msgctxt ""
+"field:commission.synthesis.show,broker_fees_to_pay:"
+msgid "Broker fees to pay"
+msgstr "Frais courtier à payer"
+
+msgctxt ""
+"field:commission.synthesis.show,commissions_paid:"
+msgid "Commissions paid"
+msgstr "Commissions payées"
+
+msgctxt ""
+"field:commission.synthesis.show,commissions_to_pay:"
+msgid "Commissions to pay"
+msgstr "Commissions à payer"
+
+msgctxt ""
+"field:commission.synthesis.start,broker_fees_account:"
+msgid "Broker fees account"
+msgstr "Compte de frais courtier"
+
+msgctxt "field:commission.synthesis.year_line,year:"
+msgid "Year"
+msgstr "Année"
+
 msgctxt "field:contract,agency:"
 msgid "Agency"
 msgstr "Agence"
@@ -473,6 +502,11 @@ msgstr "Date de calcul du plan de commissionnement"
 msgctxt "model:commission.plan.lines-offered.option.description,name:"
 msgid "Commission Plan Line - Offered Option Description"
 msgstr "Lien Ligne de plan de commissionnement - Garantie offerte"
+
+msgctxt ""
+"model:ir.action,name:act_commission_synthesis_display"
+msgid "Show Commission Synthesis"
+msgstr "Synthèse des commissions"
 
 msgctxt "model:commission_plan-commission_plan,name:"
 msgid "Commission Plan - Commission Plan"
@@ -850,6 +884,18 @@ msgctxt "view:commission.plan:"
 msgid "Administration"
 msgstr "Administration"
 
+msgctxt "view:commission.synthesis.show:"
+msgid "Commissions synthesis"
+msgstr "Synthèse des commissions"
+
+msgctxt "view:commission.synthesis.show:"
+msgid "Commissions paid by year"
+msgstr "Commissions payées par année"
+
+msgctxt "view:commission.synthesis.start:"
+msgid "Select broker fees account"
+msgstr "Sélectionner le compte de frais courtier"
+
 msgctxt "view:commission:"
 msgid "Amount"
 msgstr "Montant"
@@ -861,6 +907,10 @@ msgstr "Protocoles de commissionnement"
 msgctxt "view:party.party:"
 msgid "Brokers"
 msgstr "Courtiers"
+
+msgctxt "view:party.party:"
+msgid "Show commissions synthesis"
+msgstr "Synthèse des commissions"
 
 msgctxt "wizard_button:commission.change_broker,select_new_broker,change:"
 msgid "Next"
@@ -885,6 +935,14 @@ msgstr "Suivant"
 msgctxt "wizard_button:commission.create_agents,parties,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "wizard_button:commission.synthesis,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:commission.synthesis,start,show:"
+msgid "Show"
+msgstr "Afficher"
 
 # Custom translations below
 

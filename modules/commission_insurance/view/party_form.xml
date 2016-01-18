@@ -3,6 +3,9 @@
     <xpath expr="/form/notebook/page[@id='role']/group[@id='role_group']" position="inside">
         <label name="is_broker"/>
         <field name="is_broker" xexpand="0" width="25"/>
+        <group id="invisible" string="">
+            <button name="button_commissions_synthesis" string="Show commissions synthesis" />
+        </group>
     </xpath>
     <xpath expr="/form/notebook/page[@id='role']/notebook" position="inside">
         <page id="broker" string="Broker Agents">

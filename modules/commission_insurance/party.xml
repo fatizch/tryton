@@ -60,5 +60,12 @@
         </record>
         <menuitem parent="commission.menu_commission" action="act_broker_form"
             id="menu_broker" sequence="19" icon="coog-broker"/>
+        <!-- ######################################## -->
+        <!-- # Display Commissions Synthesis Wizard # -->
+        <!-- ######################################## -->
+        <record model="ir.action.wizard" id="act_commission_synthesis_display">
+            <field name="name">Commissions Synthesis</field>
+            <field name="wiz_name">commission.synthesis</field>
+        </record>
     </data>
 </tryton>

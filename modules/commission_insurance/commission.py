@@ -1,5 +1,6 @@
 import datetime
 from dateutil import rrule
+from itertools import groupby
 
 from sql import Cast
 from sql.operators import Concat
@@ -10,13 +11,13 @@ from trytond.model import Unique
 from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.wizard import StateAction
-
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
 from trytond.cache import Cache
 
-from trytond.modules.cog_utils import fields, model, export, coop_string, \
-    coop_date, utils
+from trytond.modules.cog_utils import (fields, model, export, coop_string,
+    coop_date, utils)
+from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
     'PlanLines',
@@ -33,7 +34,11 @@ __all__ = [
     'CreateInvoiceAsk',
     'ChangeBroker',
     'SelectNewBroker',
-    'FilterCommissions'
+    'FilterCommissions',
+    'OpenCommissionsSynthesis',
+    'OpenCommissionsSynthesisStart',
+    'OpenCommissionsSynthesisShow',
+    'OpenCommissionSynthesisYearLine',
     ]
 __metaclass__ = PoolMeta
 
@@ -832,6 +837,140 @@ class CreateInvoiceAsk:
     @staticmethod
     def default_all_brokers():
         return True
+
+
+class OpenCommissionsSynthesis(Wizard):
+    'Open Commissions Synthesis'
+
+    __name__ = 'commission.synthesis'
+
+    start_state = 'start'
+    start = StateView('commission.synthesis.start',
+        'commission_insurance.synthesis_start_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Show', 'show', 'tryton-go-next', default=True),
+            ])
+    show = StateView('commission.synthesis.show',
+        'commission_insurance.synthesis_show_view_form', [
+            Button('Ok', 'end', 'tryton-ok', default=True),
+            ])
+
+    def get_broker_fees_paid(self, broker_party):
+        MoveLine = Pool().get('account.move.line')
+        move_lines = MoveLine.search([
+                ('broker_fee_invoice_line.invoice.state', '=', 'paid'),
+                ('party', '=', broker_party.id),
+                ('account', '=', self.start.broker_fees_account.id),
+                ])
+        return -1 * sum([x.amount for x in move_lines])
+
+    def get_broker_fees_to_pay(self, broker_party):
+        MoveLine = Pool().get('account.move.line')
+        move_lines = MoveLine.search([
+                (['OR', ('broker_fee_invoice_line', '=', None),
+                        ('broker_fee_invoice_line.invoice.state', '=',
+                            'posted'),
+                        ]),
+                ('party', '=', broker_party.id),
+                ('account', '=', self.start.broker_fees_account.id),
+                ])
+        return -1 * sum([x.amount for x in move_lines])
+
+    def get_commissions_paid(self, broker_party, currency):
+        commissions = Pool().get('commission').search([
+                ('broker', '=', broker_party.network[0].id),
+                ('invoice_line.invoice.state', '=', 'paid'),
+                ], order=[('date', 'DESC')])
+        res = []
+        for year, commissions in groupby([c for c in commissions if c.date],
+                key=lambda c: str(c.date.year)):
+            res.append({
+                    'year': year,
+                    'amount': sum([c.amount for c in commissions]),
+                    'currency_symbol': currency.symbol,
+                    'currency_digits': currency.digits,
+                    })
+        total = [{
+                'year': 'Total',
+                'amount': sum([x['amount'] for x in res]),
+                'currency_symbol': currency.symbol,
+                'currency_digits': currency.digits,
+                }]
+        return total + res
+
+    def get_commissions_to_pay(self, broker_party):
+        commissions = Pool().get('commission').search([
+                ('broker', '=', broker_party.network[0].id),
+                ['OR', ('invoice_line', '=', None),
+                    ('invoice_line.invoice.state', '=', 'posted')],
+                ])
+        return sum([c.amount for c in commissions])
+
+    def default_show(self, name):
+        Party = Pool().get('party.party')
+        assert Transaction().context.get('active_model') == 'party.party'
+        broker_party = Party(Transaction().context.get('active_id'))
+        currency = self.start.broker_fees_account.currency
+        commissions_paid = self.get_commissions_paid(broker_party, currency)
+        return {
+            'broker_fees_paid': self.get_broker_fees_paid(broker_party),
+            'broker_fees_to_pay': self.get_broker_fees_to_pay(broker_party),
+            'commissions_paid': commissions_paid[0]['amount'],
+            'commissions_to_pay': self.get_commissions_to_pay(broker_party),
+            'commissions_paid_details': commissions_paid,
+            'currency': currency.id,
+        }
+
+
+class OpenCommissionsSynthesisStart(model.CoopView):
+    'Open Commissions Synthesis Start'
+
+    __name__ = 'commission.synthesis.start'
+
+    broker_fees_account = fields.Many2One('account.account',
+        'Broker fees account', required=True,
+        domain=[('company', '=', Eval('company'))], depends=['company'],
+    )
+    company = fields.Many2One('company.company', 'Company', required=True,
+        states={'invisible': True})
+
+    @staticmethod
+    def default_company():
+        return Transaction().context.get('company')
+
+
+class OpenCommissionsSynthesisShow(model.CoopView, ModelCurrency):
+    'Open Commissions Synthesis Show'
+
+    __name__ = 'commission.synthesis.show'
+
+    broker_fees_paid = fields.Numeric('Broker fees paid',
+        digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'], readonly=True)
+    broker_fees_to_pay = fields.Numeric('Broker fees to pay',
+        digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'], readonly=True)
+    commissions_paid = fields.Numeric('Commissions paid',
+        digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'], readonly=True)
+    commissions_to_pay = fields.Numeric('Commissions to pay',
+        digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'], readonly=True)
+    commissions_paid_details = fields.One2Many(
+        'commission.synthesis.year_line', None, 'Commissions paid by year',
+        readonly=True)
+
+
+class OpenCommissionSynthesisYearLine(model.CoopView):
+    'Open Commissions Synthesis Year Line'
+
+    __name__ = 'commission.synthesis.year_line'
+
+    year = fields.Char('Year')
+    amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
+         depends=['currency_digits'], readonly=True)
+    currency_symbol = fields.Char('Symbol')
+    currency_digits = fields.Integer('Currency Digits')
 
 
 class FilterCommissions(Wizard):
