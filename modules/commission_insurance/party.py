@@ -16,13 +16,16 @@ __all__ = [
 class Party:
     __name__ = 'party.party'
 
+    broker = fields.Function(
+        fields.Many2One('distribution.network', 'Broker Distribution Network'),
+        'get_broker')
     is_broker = fields.Function(
         fields.Boolean('Is Broker',
             states={'invisible': Not(STATES_COMPANY)}),
-        'get_is_broker', searcher='search_is_broker')
+        'get_broker', searcher='search_is_broker')
     broker_code = fields.Function(
         fields.Char('Broker Code'),
-        'get_broker_code', searcher='search_broker_code')
+        'get_broker', searcher='search_broker_code')
     agents = fields.One2Many('commission.agent', 'party', 'Agents',
         depends=['is_broker', 'is_insurer'],
         domain=[If(Bool(Eval('is_broker')),
@@ -66,10 +69,6 @@ class Party:
     def button_commissions_synthesis(cls, contracts):
         pass
 
-    @fields.depends('broker_code')
-    def get_is_broker(self, name=None):
-        return self.broker_code is not None
-
     @classmethod
     def search_is_broker(cls, name, clause):
         clause = list(clause)
@@ -84,19 +83,27 @@ class Party:
         return (super(Party, cls)._export_skips() | set(['agents']))
 
     @classmethod
-    def get_broker_code(cls, parties, name):
+    def get_broker(cls, parties, names):
         cursor = Transaction().cursor
         pool = Pool()
         Network = pool.get('distribution.network')
         party = cls.__table__()
         network = Network.__table__()
+        values = {}
+        values['broker'] = {x.id: None for x in parties}
+        values['broker_code'] = {x.id: None for x in parties}
+        values['is_broker'] = {x.id: False for x in parties}
         select = party.join(network, 'LEFT OUTER',
             condition=party.id == network.party,
-            ).select(party.id, network.code,
+            ).select(party.id, network.id, network.code,
             where=(party.id.in_([x.id for x in parties]))
             )
         cursor.execute(*select)
-        return {x[0]: x[1] for x in cursor.fetchall()}
+        for party_id, network_id, code in cursor.fetchall():
+            values['broker'][party_id] = network_id
+            values['broker_code'][party_id] = code
+            values['is_broker'][party_id] = network_id is not None
+        return values
 
     def get_rec_name(self, name):
         if self.is_broker:

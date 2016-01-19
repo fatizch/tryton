@@ -455,9 +455,13 @@ msgctxt "field:party.party,broker_code:"
 msgid "Broker Code"
 msgstr "Code Courtier"
 
-msgctxt "field:party.party,is_broker:"
-msgid "Is Broker"
-msgstr "Courtier"
+msgctxt "field:party.party,broker_code:"
+msgid "Broker Code"
+msgstr "Code Courtier"
+
+msgctxt "field:party.party,broker:"
+msgid "Broker Distribution Network"
+msgstr "Réseau de distribution du courtier"
 
 msgctxt "field:product.product,xml_id:"
 msgid "XML Id"
@@ -901,8 +905,8 @@ msgid "Amount"
 msgstr "Montant"
 
 msgctxt "view:party.party:"
-msgid "Broker Agents"
-msgstr "Protocoles de commissionnement"
+msgid "Broker"
+msgstr "Courtier"
 
 msgctxt "view:party.party:"
 msgid "Brokers"

@@ -8,7 +8,9 @@
         </group>
     </xpath>
     <xpath expr="/form/notebook/page[@id='role']/notebook" position="inside">
-        <page id="broker" string="Broker Agents">
+        <page id="broker" string="Broker">
+            <label name="broker"/>
+            <field name="broker"/>
             <field name="agents" colspan="4"/>
         </page>
     </xpath>
