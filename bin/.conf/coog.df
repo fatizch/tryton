@@ -1,6 +1,9 @@
 FROM coog/env
 MAINTAINER Coopengo <dev@coopengo.com>
 
+RUN apt-get update && \
+    apt-get -y -q upgrade
+
 RUN mkdir /opt/coog && mkdir /opt/coog/data
 
 COPY . /opt/coog/
