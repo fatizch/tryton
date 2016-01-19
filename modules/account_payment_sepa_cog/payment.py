@@ -135,18 +135,18 @@ class Group:
                 if mandate.id not in mandate_type:
                     mandate_type[mandate.id] = mandate.sequence_type
             Payment.write(*to_write)
-            keyfunc = self.sepa_merge_payment_key
-            payments = sorted(self.payments, key=keyfunc)
-            to_write = []
-            for key, merged_payments in groupby(payments, key=keyfunc):
-                payments = list(merged_payments)
-                to_write += [payments, {
-                        'sepa_merged_id': Sequence.get(
-                            'account.payment.merged'),
-                        'sepa_mandate_sequence_type': mandate_type[
-                            payments[0].sepa_mandate.id],
-                        }]
-            Payment.write(*to_write)
+
+        keyfunc = self.sepa_merge_payment_key
+        payments = sorted(self.payments, key=keyfunc)
+        to_write = []
+        for key, merged_payments in groupby(payments, key=keyfunc):
+            payments = list(merged_payments)
+            values = {'sepa_merged_id': Sequence.get('account.payment.merged')}
+            if self.kind == 'receivable':
+                values['sepa_mandate_sequence_type'] = mandate_type[
+                    payments[0].sepa_mandate.id]
+            to_write += [payments, values]
+        Payment.write(*to_write)
         self.generate_message(_save=False)
         self.update_last_sepa_receivable_date()
 
@@ -177,27 +177,24 @@ class Group:
                 ])
         keyfunc = self.sepa_merge_payment_key
         for key, grouped_payments in super(Group, self).sepa_payments:
-            if self.kind == 'receivable':
-                merged_payments = []
-                grouped_payments = sorted(grouped_payments, key=keyfunc)
-                for mkey, payments in groupby(grouped_payments, key=keyfunc):
-                    mkey = dict(mkey)
-                    amount = sum(p.amount for p in payments)
-                    payment = Payment(
-                        sepa_instruction_id=mkey['sepa_merged_id'],
-                        sepa_end_to_end_id=mkey['sepa_merged_id'],
-                        currency=mkey['currency'],
-                        amount=amount,
-                        sepa_mandate=mkey['sepa_mandate'],
-                        sepa_bank_account_number=mkey[
-                            'sepa_bank_account_number'],
-                        party=mkey['party'],
-                        sepa_remittance_information='',  # TODO
-                        )
-                    merged_payments.append(payment)
+            merged_payments = []
+            grouped_payments = sorted(grouped_payments, key=keyfunc)
+            for mkey, payments in groupby(grouped_payments, key=keyfunc):
+                mkey = dict(mkey)
+                amount = sum(p.amount for p in payments)
+                payment = Payment(
+                    sepa_instruction_id=mkey['sepa_merged_id'],
+                    sepa_end_to_end_id=mkey['sepa_merged_id'],
+                    currency=mkey['currency'],
+                    amount=amount,
+                    sepa_mandate=mkey.get('sepa_mandate', None),
+                    sepa_bank_account_number=mkey[
+                        'sepa_bank_account_number'],
+                    party=mkey['party'],
+                    sepa_remittance_information='',  # TODO
+                    )
+                merged_payments.append(payment)
                 yield key, merged_payments
-            else:
-                yield key, grouped_payments
 
     def get_main_sepa_message(self, name):
         for state in ['done', 'waiting']:
