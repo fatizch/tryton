@@ -3,6 +3,7 @@ import datetime
 from itertools import groupby
 from collections import namedtuple
 from dateutil.relativedelta import relativedelta
+from collections import defaultdict
 
 import genshi
 import genshi.template
@@ -223,6 +224,10 @@ class Payment:
                 Eval('state') != 'failed',
                 Eval('journal.process_method') != 'sepa')
                 })
+    reject_fee_amount = fields.Function(
+        fields.Numeric('Reject Fee Amount',
+            digits=(16, Eval('currency_digits', 2))),
+        'get_reject_fee_amount')
 
     @classmethod
     def __setup__(cls):
@@ -273,6 +278,19 @@ class Payment:
     def search_sepa_instruction_id(cls, name, clause):
         return cls.search_end_to_end_id(name, clause)
 
+    def get_reject_fee_amount(cls, payments, name):
+        pool = Pool()
+        InvoiceLine = pool.get('account.invoice.line')
+        payments_filter = ['account.payment,%s' % payment.id
+            for payment in payments]
+        lines = InvoiceLine.search([
+                ('origin', 'in', payments_filter),
+                ('invoice.state', '!=', 'cancel')])
+        res = defaultdict(lambda: 0)
+        for line in lines:
+            res[line.origin.id] += line.amount
+        return res
+
     @property
     def fail_code(self):
         code = super(Payment, self).fail_code
@@ -291,15 +309,13 @@ class Payment:
         MoveLine = pool.get('account.move.line')
         config = Configuration(1)
 
-        super(Payment, cls).fail(payments)
-
         invoices_to_create = []
         contract_invoices_to_create = []
         payment_date_to_update = []
         payments_keys = [(x._get_transaction_key(), x) for x in payments]
         payments_keys = sorted(payments_keys, key=lambda x: x[0])
-        for key, payments in groupby(payments_keys, key=lambda x: x[0]):
-            payments_list = [payment[1] for payment in payments]
+        for key, payments_by_key in groupby(payments_keys, key=lambda x: x[0]):
+            payments_list = [payment[1] for payment in payments_by_key]
             payment = payments_list[0]
             sepa_mandate = None
             payment_date = None
@@ -338,6 +354,8 @@ class Payment:
             lines_to_write += [list(i.lines_to_pay), p]
         if lines_to_write:
             MoveLine.write(*lines_to_write)
+
+        super(Payment, cls).fail(payments)
 
     @classmethod
     def manual_set_reject_reason(cls, payments, reject_reason):
