@@ -2,10 +2,17 @@
 # environment informations
 
 _coog_env_files() { # set file names
-        local venv
-        venv=`basename $VIRTUAL_ENV`
-        COOG_SRV_FILE=coog-srv-$USER-$venv
-        COOG_CLI_FILE=coog-cli-$USER-$venv
+        COOG_SRV_FILE=coog-srv-$USER
+        COOG_CLI_FILE=coog-cli-$USER
+        if [ ! -z $VIRTUAL_ENV ]
+        then
+                local venv
+                venv=`basename $VIRTUAL_ENV`
+                COOG_SRV_FILE=$COOG_SRV_FILE-$venv
+                COOG_CLI_FILE=$COOG_CLI_FILE-$venv
+        else
+                echo warn: running outside a virtual env
+        fi
 }
 
 _coog_env_paths() { # set paths
