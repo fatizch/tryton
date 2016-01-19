@@ -48,7 +48,6 @@ coog_repo_linkm() { # link repos modules - <repos> - default: all
         [ $# -eq 0 ] && _coog_repo_rm
         for repo in $repos
         do
-                echo $repo
                 ln -s ../../../$repo/modules/* .
         done
         _coog_repo_leave
@@ -62,7 +61,6 @@ coog_repo_linkp() { # link repos plugins - <repos> - default: all
         [ $# -eq 0 ] && _coog_repo_rm
         for repo in $repos
         do
-                echo $repo
                 [ -d ../../../$repo/plugins ] && ln -s ../../../$repo/plugins/* .
         done
         _coog_repo_leave
