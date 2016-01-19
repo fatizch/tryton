@@ -254,6 +254,10 @@ class Payment:
                 ]
             ]
 
+    @classmethod
+    def search_sepa_instruction_id(cls, name, clause):
+        return cls.search_end_to_end_id(name, clause)
+
     @property
     def fail_code(self):
         code = super(Payment, self).fail_code
