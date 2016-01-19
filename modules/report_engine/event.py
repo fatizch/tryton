@@ -172,6 +172,7 @@ class EventTypeAction:
 class ReportProductionRequest(model.CoopSQL, model.CoopView):
     'Report Production Request'
 
+    _func_key = 'id'
     __name__ = 'report_production.request'
 
     report_template = fields.Many2One('report.template', 'Report Template',
