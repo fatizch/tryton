@@ -1,9 +1,10 @@
 from collections import defaultdict
+from itertools import groupby
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -64,6 +65,9 @@ class Level:
             states={'invisible': Eval('contract_action') != 'terminate'})
     skip_level_for_payment = fields.Boolean('Skip Level For Payment',
         help='Skip level if line is paid by payment')
+    dunning_fee = fields.Many2One('account.fee', 'Fee', ondelete='RESTRICT',
+        domain=[('type', '=', 'fixed')],
+        help="A fee invoice will be created. Only for dunnings on contracts.")
 
     def process_hold_contracts(self, dunnings):
         pool = Pool()
@@ -98,7 +102,65 @@ class Level:
         for date, contracts in to_terminate.iteritems():
             Contract.terminate(contracts, date, termination_reason)
 
+    def get_fee_invoice_lines(self, fee, contract):
+        pool = Pool()
+        InvoiceLine = pool.get('account.invoice.line')
+        return [InvoiceLine(
+                type='line',
+                description=fee.name,
+                origin=contract,
+                quantity=1,
+                unit=None,
+                unit_price=contract.currency.round(fee.amount),
+                taxes=0,
+                invoice_type='out_invoice',
+                account=fee.product.account_revenue_used,
+                )]
+
+    def get_fee_journal(self):
+        pool = Pool()
+        Journal = pool.get('account.journal')
+        journal, = Journal.search([
+                ('type', '=', 'revenue'),
+                ], limit=1)
+        return journal
+
+    def get_contract_from_dunning(self):
+        return lambda x: x.contract
+
+    def create_and_post_fee_invoices(self, dunnings):
+        pool = Pool()
+        Invoice = pool.get('account.invoice')
+        ContractInvoice = pool.get('contract.invoice')
+        journal = self.get_fee_journal()
+        fee = self.dunning_fee
+        invoices_to_create = []
+        contract_invoices_to_create = []
+        keyfunc = self.get_contract_from_dunning()
+        sorted_dunnings = sorted(dunnings, key=keyfunc)
+        for contract, _ in groupby(sorted_dunnings, key=keyfunc):
+            if not contract:
+                continue
+            billing_info = contract.billing_information
+            invoice = contract.get_invoice(None, None, billing_info)
+            invoice.journal = journal
+            invoice.invoice_date = utils.today()
+            if not invoice.invoice_address:
+                invoice.invoice_address = contract.get_contract_address(
+                    invoice.invoice_date)
+            invoice.lines = self.get_fee_invoice_lines(fee, contract)
+            contract_invoice = ContractInvoice(contract=contract,
+                invoice=invoice, non_periodic=True)
+            invoices_to_create.append(invoice)
+            contract_invoices_to_create.append(contract_invoice)
+        if invoices_to_create:
+            Invoice.save(invoices_to_create)
+            ContractInvoice.save(contract_invoices_to_create)
+            Invoice.post(invoices_to_create)
+
     def process_dunnings(self, dunnings):
+        if self.dunning_fee:
+            self.create_and_post_fee_invoices(dunnings)
         if self.contract_action == 'terminate':
             self.process_terminate_contracts(dunnings)
         elif self.contract_action == 'hold':

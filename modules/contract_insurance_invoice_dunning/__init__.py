@@ -4,6 +4,7 @@ from .dunning import *
 from .offered import *
 from .contract import *
 from .account import *
+from .event import *
 
 
 def register():
@@ -13,4 +14,5 @@ def register():
         Contract,
         Product,
         MoveLine,
+        EventLog,
         module='contract_insurance_invoice_dunning', type_='model')

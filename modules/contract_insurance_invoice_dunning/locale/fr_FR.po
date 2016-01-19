@@ -106,3 +106,12 @@ msgstr "A la dernière quittance postée"
 msgctxt "view:contract:"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "field:account.dunning.level,dunning_fee:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "help:account.dunning.level,dunning_fee:"
+msgid "A fee invoice will be created. Only for dunnings on contracts."
+msgstr "Une quittance de frais sera créée. Seulement pour les relances "
+"portant sur des quittances de contrats."

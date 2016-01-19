@@ -6,6 +6,7 @@ Imports::
 
     >>> import datetime
     >>> from dateutil.relativedelta import relativedelta
+    >>> from decimal import Decimal
     >>> from proteus import config, Model, Wizard
     >>> from trytond.modules.currency.tests.tools import get_currency
     >>> from trytond.modules.company.tests.tools import create_company, get_company
@@ -61,6 +62,50 @@ Create chart of accounts::
     >>> _ = create_chart(company)
     >>> accounts = get_accounts(company)
 
+Create Fee::
+
+    >>> AccountKind = Model.get('account.account.type')
+    >>> dunning_fee_kind = AccountKind()
+    >>> dunning_fee_kind.name = 'Dunning Fee Account Kind'
+    >>> dunning_fee_kind.company = company
+    >>> dunning_fee_kind.save()
+    >>> Account = Model.get('account.account')
+    >>> dunning_fee_account = Account()
+    >>> dunning_fee_account.name = 'Dunning Fee Account'
+    >>> dunning_fee_account.code = 'dunning_fee_account'
+    >>> dunning_fee_account.kind = 'revenue'
+    >>> dunning_fee_account.party_required = True
+    >>> dunning_fee_account.type = dunning_fee_kind
+    >>> dunning_fee_account.company = company
+    >>> dunning_fee_account.save()
+    >>> Product = Model.get('product.product')
+    >>> Template = Model.get('product.template')
+    >>> template = Template()
+    >>> Uom = Model.get('product.uom')
+    >>> unit, = Uom.find([('name', '=', 'Unit')])
+    >>> template.default_uom = unit
+    >>> template.name = 'Dunning Fee Template'
+    >>> template.type = 'service'
+    >>> template.list_price = Decimal(0)
+    >>> template.cost_price = Decimal(0)
+    >>> template.account_revenue = dunning_fee_account
+    >>> template.save()
+    >>> product_product = Product()
+    >>> product_product.name = 'Dunning Fee Product'
+    >>> product_product.template = template
+    >>> product_product.default_uom = template.default_uom
+    >>> product_product.type = 'service'
+    >>> product_product.save()
+    >>> Fee = Model.get('account.fee')
+    >>> fee = Fee()
+    >>> fee.name = 'Test Fee'
+    >>> fee.code = 'test_fee'
+    >>> fee.type = 'fixed'
+    >>> fee.amount = Decimal('22')
+    >>> fee.frequency = 'once_per_invoice'
+    >>> fee.product = product_product
+    >>> fee.save()
+
 Create dunning procedure::
 
     >>> Procedure = Model.get('account.dunning.procedure')
@@ -78,6 +123,7 @@ Create dunning procedure::
     >>> level.sequence = 2
     >>> level.days = 90
     >>> level.contract_action = 'hold'
+    >>> level.dunning_fee = fee
     >>> level = procedure.levels.new()
     >>> level.name = 'Terminate contract'
     >>> level.sequence = 3
@@ -180,6 +226,10 @@ Process dunnning::
     True
     >>> contract.status == 'hold'
     True
+    >>> fee_invoice, = ContractInvoice.find([('contract', '=', contract.id),
+    ...         ('non_periodic', '=', True)])
+    >>> fee_invoice.invoice.total_amount == Decimal('22')
+    True
 
 Create dunnings at 100 days::
 
@@ -187,7 +237,7 @@ Create dunnings at 100 days::
     >>> create_dunning.form.date = contract_start_date + relativedelta(days=100)
     >>> create_dunning.execute('create_')
     >>> Dunning = Model.get('account.dunning')
-    >>> dunning, = Dunning.find(['state', '=', 'draft'])
+    >>> dunning = Dunning.find([('state', '=', 'draft')])[0]
 
 Process dunnning::
 
