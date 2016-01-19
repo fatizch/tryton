@@ -14,15 +14,11 @@ class CAMT054Coog(CAMT054):
         payment.sepa_bank_reject_date = date_value
 
     def date_value(self, element):
-        # Override method until correction in tryton
-        # https://bugs.tryton.org/issue5181: missing .date()
+        date = super(CAMT054Coog, self).date_value(element)
+        if date:
+            return date
         tag = etree.QName(element)
-        date = element.find('./{%(ns)s}ValDt/{%(ns)s}Dt'
+        date = element.find('./{%(ns)s}BookgDt/{%(ns)s}Dt'
             % {'ns': tag.namespace})
         if date is not None:
             return parse(date.text).date()
-        else:
-            datetime = element.find('./{%(ns)s}ValDt/{%(ns)s}DtTm'
-                % {'ns': tag.namespace})
-            if datetime:
-                return parse(datetime.text).date()
