@@ -15,6 +15,7 @@ def register():
         RejectReason,
         JournalFailureAction,
         Payment,
+        PaymentMotive,
         SynthesisMenuPayment,
         SynthesisMenu,
         Company,

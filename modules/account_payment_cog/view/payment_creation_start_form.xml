@@ -2,20 +2,26 @@
 <form string="Create Payments">
     <label name="party"/>
     <field name="party"/>
-    <newline/>
     <label name="kind"/>
     <field name="kind"/>
-    <label name="total_amount"/>
-    <field name="total_amount"/>
     <label name="payment_date"/>
     <field name="payment_date"/>
     <label name="journal"/>
     <field name="journal"   widget="selection"/>
-    <label name="description"/>
-    <field name="description" colspan="3"/>
     <newline/>
+    <label name="free_motive"/>
+    <field name="free_motive"/>
+    <label string="Motive" id="desc"/>
+    <group id="description" col="99">
+        <field name="description"/>
+        <field name="motive"/>
+    </group>
     <label name="process_validate_payment"/>
     <field name="process_validate_payment"/>
     <newline/>
+    <label name="total_amount"/>
+    <field name="total_amount"/>
     <field name="lines_to_pay" colspan="4"/>
+    <newline/>
+    <field name="multiple_parties" invisible="1"/>
 </form>

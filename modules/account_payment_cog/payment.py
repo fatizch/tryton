@@ -11,7 +11,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Not, In, Bool, If
 
 from trytond.modules.cog_utils import export, fields, model
-from trytond.modules.cog_utils import coop_date, utils
+from trytond.modules.cog_utils import coop_date, utils, coop_string
 from trytond.modules.report_engine import Printable
 from trytond.modules.currency_cog import ModelCurrency
 
@@ -26,6 +26,7 @@ __all__ = [
     'Group',
     'PaymentFailInformation',
     'ManualPaymentFail',
+    'PaymentMotive',
     ]
 
 
@@ -527,6 +528,30 @@ class Group(ModelCurrency, export.ExportImportMixin):
                 result[group_id] += ', '
             result[group_id] += Date.date_as_string(date)
         return result
+
+
+class PaymentMotive(model.CoopSQL, model.CoopView):
+    'Payment Motive'
+
+    __name__ = 'account.payment.motive'
+    _func_key = 'code'
+
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name', required=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(PaymentMotive, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
+            ]
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.slugify(self.name)
 
 
 class PaymentFailInformation(model.CoopView):

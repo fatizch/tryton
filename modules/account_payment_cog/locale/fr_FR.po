@@ -244,9 +244,49 @@ msgctxt "field:account.payment.journal.reject_reason,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.payment.motive,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.payment.motive,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.payment.motive,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.payment.motive,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.payment.motive,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.payment.motive,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.payment.motive,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.payment.motive,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:account.payment.motive,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:account.payment.payment_creation.start,description:"
 msgid "Description"
 msgstr "Description"
+
+msgctxt "field:account.payment.payment_creation.start,free_motive:"
+msgid "Free motive"
+msgstr "Motif libre"
 
 msgctxt "field:account.payment.payment_creation.start,id:"
 msgid "ID"
@@ -263,6 +303,10 @@ msgstr "Type de paiement"
 msgctxt "field:account.payment.payment_creation.start,lines_to_pay:"
 msgid "Lines To Pay"
 msgstr "Lignes à payer"
+
+msgctxt "field:account.payment.payment_creation.start,motive:"
+msgid "Motive"
+msgstr "Motif"
 
 msgctxt "field:account.payment.payment_creation.start,multiple_parties:"
 msgid "Payments For Multiple Parties"
@@ -387,6 +431,10 @@ msgctxt "model:account.payment.journal.reject_reason,name:"
 msgid "Payment Journal Reject Reason"
 msgstr "Motif de Rejet"
 
+msgctxt "model:account.payment.motive,name:"
+msgid "Payment Motive"
+msgstr "Motif de paiement"
+
 msgctxt "model:account.payment.payment_creation.start,name:"
 msgid "Payment Creation Start"
 msgstr "Création des paiements"
@@ -419,6 +467,10 @@ msgctxt "model:ir.action,name:act_payment_fail_status_form"
 msgid "Payments Rejected"
 msgstr "Paiements rejetés"
 
+msgctxt "model:ir.action,name:act_payment_motive_form"
+msgid "Payment Motive"
+msgstr "Motif de paiement"
+
 msgctxt "model:ir.action,name:act_process_payments_button"
 msgid "Process Payments"
 msgstr "Traiter les paiements"
@@ -450,6 +502,10 @@ msgstr "Créer les paiements"
 msgctxt "model:ir.ui.menu,name:menu_fail_payment_status_form"
 msgid "Payments Rejected"
 msgstr "Paiements rejetés"
+
+msgctxt "model:ir.ui.menu,name:menu_payment_motive_form"
+msgid "Payment Motive"
+msgstr "Motif de paiement"
 
 msgctxt "model:ir.ui.menu,name:menu_reject_reason_form"
 msgid "Reject reasons"
@@ -535,9 +591,17 @@ msgctxt "view:account.payment.journal.reject_reason:"
 msgid "Reject Reason"
 msgstr "Motif de rejet"
 
+msgctxt "view:account.payment.motive:"
+msgid "Payment Motive"
+msgstr "Motif de paiement"
+
 msgctxt "view:account.payment.payment_creation.start:"
 msgid "Create Payments"
 msgstr "Créer les paiements"
+
+msgctxt "view:account.payment.payment_creation.start:"
+msgid "Motive"
+msgstr "Motif"
 
 msgctxt "view:account.payment.payment_information_selection:"
 msgid "Payment Date Modification"
@@ -629,6 +693,10 @@ msgstr "À recevoir"
 msgctxt "selection:account.payment,kind:account_payment."
 msgid "Payable"
 msgstr "À payer"
+
+msgctxt "selection:account.payment,kind:account_payment."
+msgid "Receivable"
+msgstr "À recevoir"
 
 msgctxt "selection:account.payment,state:account_payment."
 msgid "Failed"

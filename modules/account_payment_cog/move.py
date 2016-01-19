@@ -7,8 +7,8 @@ from decimal import Decimal
 from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool, If
-from trytond.wizard import StateView, Button, StateTransition
+from trytond.pyson import Eval, Bool, If, PYSONEncoder
+from trytond.wizard import StateView, Button, StateTransition, StateAction
 from trytond.transaction import Transaction
 from trytond.modules.account_payment.payment import KINDS
 from trytond.modules.cog_utils import fields, model, utils
@@ -130,6 +130,18 @@ class MoveLine:
         value = cursor.fetchone()[0] or Decimal(0)
         return value
 
+    def new_payment(self, journal, kind, amount):
+        return {
+            'company': self.account.company.id,
+            'kind': kind,
+            'journal': journal.id,
+            'party': self.party.id,
+            'amount': amount,
+            'line': self.id,
+            'date': self.payment_date,
+            'state': 'approved',
+            }
+
     @classmethod
     def init_payments(cls, lines, journal):
         payments = []
@@ -154,16 +166,7 @@ class MoveLine:
             else:
                 # Can't reduce amount if kind are different
                 amount = line.payment_amount
-            payments.append({
-                    'company': line.account.company.id,
-                    'kind': kind,
-                    'journal': journal.id,
-                    'party': line.party.id,
-                    'amount': amount,
-                    'line': line.id,
-                    'date': line.payment_date,
-                    'state': 'approved',
-                    })
+            payments.append(line.new_payment(journal, kind, amount))
         return payments
 
     def get_payment_journal(self):
@@ -241,7 +244,9 @@ class PaymentCreationStart(model.CoopView):
     __name__ = 'account.payment.payment_creation.start'
 
     party = fields.Many2One('party.party', 'Party', states={
-            'invisible': Bool(Eval('multiple_parties'))})
+            'readonly': Bool(Eval('multiple_parties')),
+            'required': ~Eval('multiple_parties'),
+            })
     multiple_parties = fields.Boolean('Payments For Multiple Parties')
     lines_to_pay = fields.Many2Many('account.move.line', None, None,
         'Lines To Pay', required=True, domain=[
@@ -258,12 +263,21 @@ class PaymentCreationStart(model.CoopView):
             ('reconciliation', '=', None),
             ('payment_amount', '!=', 0)],
         depends=['party', 'kind'])
-    payment_date = fields.Date('Payment Date')
+    payment_date = fields.Date('Payment Date', required=True)
     journal = fields.Many2One('account.payment.journal', 'Payment Journal',
         required=True)
     kind = fields.Selection(KINDS, 'Payment Kind')
     process_method = fields.Char('Process Method', states={'invisible': True})
-    description = fields.Char('Description')
+    motive = fields.Many2One('account.payment.motive', 'Motive',
+        states={
+            'invisible': Bool(Eval('free_motive')),
+            'required': ~Eval('free_motive') & ~Eval('multiple_parties'),
+            })
+    free_motive = fields.Boolean('Free motive')
+    description = fields.Char('Description', states={
+            'required': ~Eval('multiple_parties'),
+            'invisible': ~Eval('free_motive'),
+            })
     process_validate_payment = fields.Boolean('Process and Validate Payments',
         states={'invisible': Eval('process_method') != 'manual'},
         depends=['process_method'])
@@ -280,6 +294,14 @@ class PaymentCreationStart(model.CoopView):
             total = -total
         return total
 
+    @fields.depends('motive')
+    def on_change_with_description(self):
+        return self.motive.name if self.motive else None
+
+    @staticmethod
+    def default_payment_date():
+        return utils.today()
+
 
 class PaymentCreation(model.CoopWizard):
     'Payment Creation'
@@ -290,7 +312,7 @@ class PaymentCreation(model.CoopWizard):
         Button('Cancel', 'end', 'tryton-cancel'),
         Button('Create Payments', 'create_payments', 'tryton-ok', default=True)
         ])
-    create_payments = StateTransition()
+    create_payments = StateAction('account_payment.act_payment_form')
 
     @classmethod
     def __setup__(cls):
@@ -320,7 +342,10 @@ class PaymentCreation(model.CoopWizard):
         model = Transaction().context.get('active_model')
         if model == 'account.move.line':
             active_ids = Transaction().context.get('active_ids', [])
-            lines = Line.browse(active_ids)
+            lines = [l for l in Line.browse(active_ids)
+                if l.reconciliation is None and l.payment_amount != 0]
+            if not lines:
+                return {}
             kind = self.get_lines_amount_per_kind(lines)
             parties = list(set([l.party for l in lines]))
             return {
@@ -333,13 +358,14 @@ class PaymentCreation(model.CoopWizard):
         elif model == 'party.party':
             active_id = Transaction().context.get('active_id', None)
             lines = Line.search([
-                ('account.kind', 'in', ['payable', 'receivable']),
-                ['OR',
-                    [('credit', '>', 0)],
-                    [('debit', '<', 0)]],
-                ('party', '=', active_id),
-                ('reconciliation', '=', None),
-                ('payment_amount', '!=', 0)])
+                    ('account.kind', 'in', ['payable', 'receivable']),
+                    ['OR',
+                        [('credit', '>', 0)],
+                        [('debit', '<', 0)]],
+                    ('party', '=', active_id),
+                    ('reconciliation', '=', None),
+                    ('payment_amount', '!=', 0),
+                    ])
             return {
                 'kind': 'payable',
                 'multiple_parties': False,
@@ -348,7 +374,11 @@ class PaymentCreation(model.CoopWizard):
                 }
         return {'kind': 'payable'}
 
-    def transition_create_payments(self):
+    def init_payment(self, payment):
+        if self.start.description:
+            payment['description'] = self.start.description
+
+    def do_create_payments(self, action):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         Payment = pool.get('account.payment')
@@ -360,9 +390,8 @@ class PaymentCreation(model.CoopWizard):
             {'payment_date': self.start.payment_date})
         payments = MoveLine.init_payments(self.start.lines_to_pay,
             self.start.journal)
-        if self.start.description:
-            for payment in payments:
-                payment['description'] = self.start.description
+        for payment in payments:
+            self.init_payment(payment)
         payments = Payment.create(payments)
         if self.start.process_validate_payment:
             def group():
@@ -373,4 +402,8 @@ class PaymentCreation(model.CoopWizard):
                 return group
             Payment.process(payments, group)
             Payment.succeed(payments)
-        return 'end'
+        encoder = PYSONEncoder()
+        action['pyson_domain'] = encoder.encode(
+            [('id', 'in', [p.id for p in payments])])
+        action['pyson_search_value'] = encoder.encode([])
+        return action, {}

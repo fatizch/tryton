@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 import genshi
 import genshi.template
 
-from trytond.pyson import Eval, Or
+from trytond.pyson import Eval, Or, Bool
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.cog_utils import fields, export, coop_date, utils
 from .sepa_handler import CAMT054Coog
@@ -20,6 +20,8 @@ __all__ = [
     'InvoiceLine',
     'Journal',
     'Message',
+    'PaymentCreationStart',
+    'PaymentCreation',
     ]
 
 
@@ -212,16 +214,15 @@ class Group:
 class Payment:
     __name__ = 'account.payment'
 
+    bank_account = fields.Many2One('bank.account', 'Bank Account',
+        ondelete='RESTRICT', domain=[('owners', '=', Eval('party'))],
+        depends=['party'])
     sepa_merged_id = fields.Char('SEPA Merged ID')
     sepa_bank_reject_date = fields.Date('SEPA Bank Reject Date',
         states={'invisible': Or(
                 Eval('state') != 'failed',
                 Eval('journal.process_method') != 'sepa')
                 })
-
-    def get_sepa_end_to_end_id(self, name):
-        value = super(Payment, self).get_sepa_end_to_end_id(name)
-        return self.sepa_merged_id or value
 
     @classmethod
     def __setup__(cls):
@@ -234,11 +235,25 @@ class Payment:
                 'direct_debit_payment': 'Direct Debit Payment of',
                 'direct_debit_disbursement': 'Direct Debit Disbursement of',
                 })
+        cls.sepa_mandate.states = {'invisible': Eval('kind') == 'payable'}
+        cls.sepa_mandate.depends = ['kind']
+
+    def get_sepa_end_to_end_id(self, name):
+        value = super(Payment, self).get_sepa_end_to_end_id(name)
+        return self.sepa_merged_id or value
 
     def _get_transaction_key(self):
         if self.sepa_end_to_end_id:
             return (self.sepa_end_to_end_id, self.journal)
         return super(Payment, self)._get_transaction_key()
+
+    @property
+    def sepa_bank_account_number(self):
+        if self.kind == 'receivable' or not self.bank_account:
+            return super(Payment, self).sepa_bank_account_number()
+        for number in self.bank_account.numbers:
+            if number.type == 'iban':
+                return number
 
     @classmethod
     def search_end_to_end_id(cls, name, domain):
@@ -481,3 +496,32 @@ class Message:
             'urn:iso:std:iso:20022:tech:xsd:camt.054.001.04':
             lambda f: CAMT054Coog(f, Payment),
             }
+
+
+class PaymentCreationStart:
+    __name__ = 'account.payment.payment_creation.start'
+
+    bank_account = fields.Many2One('bank.account', 'Bank Account',
+        domain=[
+            ('owners', '=', Eval('party')),
+            ['OR', ('end_date', '>=', Eval('payment_date')),
+                ('end_date', '=', None)],
+            ['OR', ('start_date', '<=', Eval('payment_date')),
+                ('start_date', '=', None)],
+            ],
+        states={
+            'invisible': (~Bool(Eval('process_method')) |
+                (Eval('process_method') == 'manual')),
+            'required': (Eval('process_method') != 'manual') & Bool(
+                Eval('party')),
+            },
+        depends=['party', 'process_method', 'payment_date'])
+
+
+class PaymentCreation:
+    __name__ = 'account.payment.creation'
+
+    def init_payment(self, payment):
+        super(PaymentCreation, self).init_payment(payment)
+        if self.start.bank_account:
+            payment['bank_account'] = self.start.bank_account

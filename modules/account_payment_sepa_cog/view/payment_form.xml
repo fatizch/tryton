@@ -6,5 +6,8 @@
         <field name="sepa_mandate"/>
         <label name="sepa_bank_reject_date"/>
         <field name="sepa_bank_reject_date"/>
+        <newline/>
+        <label name="bank_account"/>
+        <field name="bank_account"/>
     </xpath>
 </data>
