@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ################################# -->
+        <!-- # Report                        # -->
+        <!-- ################################# -->
+        <record model="ir.action.report" id="report_move_line_aggregated_product">
+            <field name="name">Move Lines Aggregated Report</field>
+            <field name="model"></field>
+            <field name="report_name">account.move_line_aggregated.report</field>
+            <field name="report">account_reporting/move_line_aggregated.ods</field>
+        </record>
+        <!-- ################################# -->
+        <!-- # Invoices Report Start View    # -->
+        <!-- ################################# -->
+        <record model="ir.ui.view" id="reporting_start_view_form">
+            <field name="model">account.move_line_aggregated_report.print.start</field>
+            <field name="type">form</field>
+            <field name="name">report_start_form</field>
+        </record>
+        <!-- ################################# -->
+        <!-- # Invoices Report Wizard        # -->
+        <!-- ################################# -->
+        <record model="ir.action.wizard" id="wizard_move_line_aggregated_report">
+            <field name="name">Print Move Lines Aggregated by Product Report</field>
+            <field name="wiz_name">account.move_line_aggregated_report.print</field>
+        </record>
+        <menuitem parent="account.menu_reporting" action="wizard_move_line_aggregated_report" id="menu_print_invoice_report" icon="tryton-print"/>
+    </data>
+</tryton>

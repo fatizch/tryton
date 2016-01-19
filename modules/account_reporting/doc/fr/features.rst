@@ -1,0 +1,1 @@
+- Rapport de revenus agrégés par produit et période
