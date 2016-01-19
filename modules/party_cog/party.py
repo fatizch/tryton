@@ -28,6 +28,7 @@ from trytond.modules.cog_utils import coop_string, UnionMixin
 __metaclass__ = PoolMeta
 __all__ = [
     'Party',
+    'PartyIdentifier',
     'SynthesisMenuAddress',
     'SynthesisMenuPartyInteraction',
     'SynthesisMenuContact',
@@ -575,6 +576,11 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
     @model.CoopView.button_action('party_cog.start_synthesis_menu')
     def button_start_synthesis_menu(cls, parties):
         pass
+
+
+class PartyIdentifier(export.ExportImportMixin):
+    __name__ = 'party.identifier'
+    _func_key = 'code'
 
 
 class SynthesisMenuActionCloseSynthesis(model.CoopSQL):

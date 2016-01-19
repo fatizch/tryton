@@ -15,6 +15,7 @@ def register():
     Pool.register(
         User,
         Party,
+        PartyIdentifier,
         PartyCategory,
         Address,
         ContactMechanism,
