@@ -256,16 +256,17 @@ class Invoice:
             'accounting_date': self.accounting_date,
             }
 
-    def check_previous_invoices_posted(self, at_date):
+    def check_previous_invoices_posted(self):
         old_invoices = self.__class__.search([
-                ('contract', '=', self.id),
-                ('start', '<', at_date),
+                ('contract', '=', self.contract.id),
+                ('start', '<', self.start),
                 ('state', 'in', ('draft', 'validated'))],
             order=[('start', 'ASC')])
         if old_invoices:
-            self.raise_user_warning('%s_%s' % (self.rec_name, at_date),
+            self.raise_user_warning('%s_%s' % (self.contract.rec_name,
+                    self.start),
                 'previous_invoices_not_posted', (str(len(old_invoices)),
-                    str(at_date), self.rec_name,
+                    str(self.start), self.contract.rec_name,
                     '\n\t'.join([x.description for x in old_invoices])))
             return old_invoices
         return []
@@ -276,8 +277,7 @@ class Invoice:
                 invoices[0].contract and invoices[0].start:
             # A user clicked the "Post" button, check that all previous
             # invoices were posted
-            invoices += invoices[0].contract.check_previous_invoices_posted(
-                invoices[0].start)
+            invoices += invoices[0].check_previous_invoices_posted()
 
         for invoice in invoices:
             if invoice.state in ('posted', 'paid'):
@@ -622,11 +622,14 @@ class InvoiceLineAggregatesDisplayLine(model.CoopView):
 
     rated_entity = fields.Char('Rated Entity')
     base_amount = fields.Numeric('Base Amount', digits=(16,
-            Eval('currency_digits', 2)), readonly=True)
+            Eval('currency_digits', 2)), readonly=True,
+        depends=['currency_digits'])
     tax_amount = fields.Numeric('Tax Amount', digits=(16,
-            Eval('currency_digits', 2)), readonly=True)
+            Eval('currency_digits', 2)), readonly=True,
+        depends=['currency_digits'])
     total_amount = fields.Numeric('Total Amount', digits=(16,
-            Eval('currency_digits', 2)), readonly=True)
+            Eval('currency_digits', 2)), readonly=True,
+        depends=['currency_digits'])
     currency_digits = fields.Integer('Currency Digits',
         states={'invisible': True})
     currency_symbol = fields.Char('Currency Symbol', readonly=True)

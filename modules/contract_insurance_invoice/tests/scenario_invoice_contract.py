@@ -5,6 +5,7 @@ from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 from proteus import config, Model, Wizard
 
+from trytond.error import UserWarning
 from trytond.modules.company.tests.tools import create_company, get_company
 
 # #Comment# #Init Database
@@ -257,13 +258,26 @@ first_invoice.invoice.total_amount
         datetime.date(2014, 5, 20), datetime.date(2015, 4, 9))]
 # #Res# #True
 Contract.first_invoice([contract.id], config.context)
-second_invoice = ContractInvoice.find([('contract', '=', contract.id),
-            ('invoice.state', '=', 'validated')])[0]
-AccountInvoice.post([second_invoice.invoice.id], config.context)
-second_invoice.invoice.state
+all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
+            ('invoice.state', '=', 'validated')]),
+    key=lambda x: x.invoice.start)
+
+
+# Cannot use try catch directly in a docttest :'(
+def test_posting(ids_to_test):
+    try:
+        AccountInvoice.post(ids_to_test, config.context)
+        raise Exception('Failed example, expected to raise UserWarning')
+    except UserWarning:
+        pass
+
+test_posting([all_invoices[-1].invoice.id])
+AccountInvoice.post([all_invoices[0].invoice.id], config.context)
+all_invoices[0].invoice.state
 # #Res# #u'posted'
 Contract.first_invoice([contract.id], config.context)
-all_invoices = ContractInvoice.find([('contract', '=', contract.id)])
+all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id)]),
+    key=lambda x: (x.start or datetime.date.min, x.create_date))
 # 3 is for : non periodic invoice + a one year difference means two invoices +
 # one of the two was posted, so recalling first_invoice canceled it
 len(all_invoices) == 3 + relativedelta(datetime.date.today(),
