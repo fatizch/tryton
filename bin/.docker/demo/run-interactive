@@ -1,0 +1,9 @@
+#!/bin/sh
+
+docker run \
+        -ti --rm \
+        --link postgres:postgres \
+        -e "COOG_DB_USER=postgres" \
+        -e "COOG_DB_PASSWORD=postgres" \
+        coog/coog \
+        app -v $*
