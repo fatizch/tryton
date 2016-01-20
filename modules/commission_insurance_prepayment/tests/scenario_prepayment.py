@@ -226,5 +226,7 @@ line, = last_invoice.invoice.lines
 [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.agent.party.name)
     for x in line.commissions] == [
     (Decimal('0.0000'), False, Decimal('60.0000'), u'Broker'),
+    (Decimal('0.0000'), False, Decimal('30.0000'), u'Insurer'),
+    (Decimal('0.0000'), False, Decimal('-30.0000'), u'Insurer'),
     (Decimal('0.0000'), False, Decimal('-60.0000'), u'Broker')]
 # #Res# #True
