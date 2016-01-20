@@ -588,23 +588,10 @@ def CmdUpload(args):
         upload_args.extend(['--issue', cl.GetIssue()])
         print ("This branch is associated with issue %s. "
                "Adding patch to that issue." % cl.GetIssue())
-        if options.use_commit_message:
-            log_args = diff_to_log_options(args)
-            desc = RunGit(['log', '--pretty=format:%s\n\n%b'] + log_args)
-            upload_args.extend(['--title', desc.splitlines()[0]])
-    else:
+    if options.use_commit_message:
         log_args = diff_to_log_options(args)
         desc = RunGit(['log', '--pretty=format:%s\n\n%b'] + log_args)
-        initial_text = """# Enter a description of the change.
-    # This will displayed on the codereview site.
-    # The first line will also be used as the subject of the review."""
-        desc = UserEditedLog(initial_text + '\n' + desc)
-        if not desc:
-            print "Description empty; aborting."
-            return 1
-        subject = desc.splitlines()[0]
-        upload_args.extend(['--title', subject])
-        upload_args.extend(['--message', desc])
+        upload_args.extend(['--title', desc.splitlines()[0]])
     issue, patchset = upload.RealMain(['upload'] + upload_args + args)
     if not cl.GetIssue():
         cl.SetIssue(issue)

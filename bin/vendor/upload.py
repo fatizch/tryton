@@ -2512,7 +2512,8 @@ def FormatSubversionPropertyChanges(filename, props):
 def check_title_message(title, message, options):
     if not options.issue:
         while not re.match('^(\[.*\] )?([A-Za-z_][\w\.-]+)+ ?:', title):
-            print("Title does not match pattern 'module: text': %s" % title)
+            if title:
+                print("Title does not match pattern 'module: text': %s" % title)
             title = raw_input("New issue title: ").strip()
             message = ''.join([title] + message.splitlines()[1:])
         pattern = r"(close|closes|fix|fixes|ref) #([0-9]+)"
