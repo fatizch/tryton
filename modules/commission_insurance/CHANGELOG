@@ -1,3 +1,4 @@
+* Add related view from invoice which summarize commissions by agents
 * Add a wizard to view paid/to pay commissions and fees for broker parties
 * Allow to auto-create missing agents when transferring contracts
 

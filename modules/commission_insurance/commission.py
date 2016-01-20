@@ -2,8 +2,9 @@ import datetime
 from dateutil import rrule
 from itertools import groupby
 
-from sql import Cast
+from sql import Cast, Literal
 from sql.operators import Concat
+from sql.aggregate import Sum, Max
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
@@ -23,6 +24,7 @@ __all__ = [
     'PlanLines',
     'PlanLinesCoverageRelation',
     'Commission',
+    'CommissionPerAgent',
     'Plan',
     'PlanRelation',
     'PlanCalculationDate',
@@ -39,6 +41,7 @@ __all__ = [
     'OpenCommissionsSynthesisStart',
     'OpenCommissionsSynthesisShow',
     'OpenCommissionSynthesisYearLine',
+    'FilterCommissionsPerAgent',
     ]
 __metaclass__ = PoolMeta
 
@@ -245,6 +248,49 @@ class Commission:
                 line.agent = new_agent
                 to_save.append(line)
             cls.save(to_save)
+
+
+class CommissionPerAgent(model.CoopSQL, model.CoopView):
+    'Commission Per Invoice Party'
+
+    __name__ = 'commission.per_agent'
+
+    agent = fields.Many2One('commission.agent', 'Agent', readonly=True)
+    party = fields.Many2One('party.party', 'Party', readonly=True)
+    invoice = fields.Many2One('account.invoice', 'Invoice', readonly=True)
+    total = fields.Numeric('Total', readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(CommissionPerAgent, cls).__setup__()
+        cls._order = [('total', 'DESC')]
+
+    @staticmethod
+    def table_query():
+        pool = Pool()
+        Agent = pool.get('commission.agent')
+        InvoiceLine = pool.get('account.invoice.line')
+        commission = pool.get('commission').__table__()
+        agent = Agent.__table__()
+        invoice_line = InvoiceLine.__table__()
+
+        commission_agent = commission.join(agent,
+            condition=commission.agent == agent.id)
+
+        return commission_agent.join(invoice_line, condition=(
+                commission.origin == Concat('account.invoice.line,',
+                    Cast(invoice_line.id, 'VARCHAR')))
+            ).select(
+            Max(commission.id).as_('id'),
+            agent.party.as_('party'),
+            invoice_line.invoice.as_('invoice'),
+            Literal(0).as_('create_uid'),
+            Literal(0).as_('create_date'),
+            Literal(0).as_('write_uid'),
+            Literal(0).as_('write_date'),
+            commission.agent.as_('agent'),
+            Sum(commission.amount).as_('total'),
+            group_by=[commission.agent, invoice_line.invoice, agent.party])
 
 
 class Plan(export.ExportImportMixin, model.TaggedMixin):
@@ -997,6 +1043,28 @@ class FilterCommissions(Wizard):
         action.update({
                 'pyson_domain': PYSONEncoder().encode(domain)
                 })
+        return action, {}
+
+
+class FilterCommissionsPerAgent(Wizard):
+    'Filter Commissions Per Agent'
+
+    __name__ = 'commission.per_agent.open_detail'
+
+    start_state = 'filter_commission'
+    filter_commission = StateAction('commission.act_commission_form')
+
+    def do_filter_commission(self, action):
+        # The following active_id represents the max commission id and the
+        # intermediate sql-view object id (See CommissionPerAgent.table_query).
+        commission = Pool().get('commission')(
+            Transaction().context.get('active_id'))
+        invoice = commission.origin.invoice
+
+        domain = [('agent', '=', commission.agent.id),
+            ('origin', 'in', [str(line) for line in invoice.lines])]
+
+        action.update({'pyson_domain': PYSONEncoder().encode(domain)})
         return action, {}
 
 

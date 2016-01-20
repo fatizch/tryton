@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Commission per party" keyword_open="1">
+    <field name="party"/>
+    <field name="agent"/>
+    <field name="total" sum="Total"/>
+</tree>
