@@ -223,7 +223,8 @@ class Payment:
                 })
     reject_fee_amount = fields.Function(
         fields.Numeric('Reject Fee Amount',
-            digits=(16, Eval('currency_digits', 2))),
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
         'get_reject_fee_amount')
 
     @classmethod
@@ -238,7 +239,7 @@ class Payment:
                 'direct_debit_disbursement': 'Direct Debit Disbursement of',
                 })
         cls.sepa_mandate.states = {'invisible': Eval('kind') == 'payable'}
-        cls.sepa_mandate.depends = ['kind']
+        cls.sepa_mandate.depends += ['kind']
 
     def get_sepa_end_to_end_id(self, name):
         value = super(Payment, self).get_sepa_end_to_end_id(name)
@@ -275,6 +276,7 @@ class Payment:
     def search_sepa_instruction_id(cls, name, clause):
         return cls.search_end_to_end_id(name, clause)
 
+    @classmethod
     def get_reject_fee_amount(cls, payments, name):
         pool = Pool()
         InvoiceLine = pool.get('account.invoice.line')
