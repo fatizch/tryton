@@ -17,6 +17,9 @@ class Invoice:
         'Sepa Mandate', states={'readonly': Eval('state') != 'draft'},
         domain=[('party', '=', Eval('party'))], depends=['state', 'party'],
         ondelete='RESTRICT')
+    bank_account = fields.Function(
+        fields.Many2One('bank.account', 'Bank Account'),
+        'get_bank_account')
 
     def update_invoice_before_post(self):
         invoice = super(Invoice, self).update_invoice_before_post()
@@ -31,3 +34,7 @@ class Invoice:
                 invoice['sepa_mandate'] = \
                     self.contract.billing_information.sepa_mandate
             return invoice
+
+    def get_bank_account(self, name):
+        return (self.sepa_mandate.account_number.account.id
+            if self.sepa_mandate else None)

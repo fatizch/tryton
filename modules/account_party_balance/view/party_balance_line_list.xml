@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tree string="Party Balance Line">
+    <field name="description" icon="icon" expand="1"/>
+    <field name="contract"/>
+    <field name="amount" sum="Balance"/>
+    <field name="reconciliations_string"/>
+    <field name="date"/>
+</tree>

@@ -1,0 +1,147 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.move.line,bank_account:"
+msgid "Bank Account"
+msgstr "Compte Bancaire"
+
+msgctxt "field:account.party_balance,all_lines:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "field:account.party_balance,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:account.party_balance,contracts:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "field:account.party_balance,from_date:"
+msgid "From Date"
+msgstr "Depuis le"
+
+msgctxt "field:account.party_balance,hide_canceled_invoices:"
+msgid "Hide Canceled Invoices"
+msgstr "Cacher les quittances annulées"
+
+msgctxt "field:account.party_balance,hide_reconciled_lines:"
+msgid "Hide Reconciled Lines"
+msgstr "Cacher les lignes lettrées"
+
+msgctxt "field:account.party_balance,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.party_balance,is_balance_positive:"
+msgid "Balance Positive"
+msgstr "Balance Positive"
+
+msgctxt "field:account.party_balance,lines:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "field:account.party_balance,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:account.party_balance,balance_today:"
+msgid "Balance Today"
+msgstr "Balance à aujourd'hui"
+
+msgctxt "field:account.party_balance.line,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:account.party_balance.line,bank_account:"
+msgid "Bank Account"
+msgstr "Compte Bancaire"
+
+msgctxt "field:account.party_balance.line,childs:"
+msgid "Childs"
+msgstr "Enfants"
+
+msgctxt "field:account.party_balance.line,color:"
+msgid "Color"
+msgstr "Couleur"
+
+msgctxt "field:account.party_balance.line,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:account.party_balance.line,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:account.party_balance.line,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:account.party_balance.line,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:account.party_balance.line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.party_balance.line,move:"
+msgid "Move"
+msgstr "Mouvement"
+
+msgctxt "field:account.party_balance.line,move_line:"
+msgid "Move Line"
+msgstr "Ligne de mouvement"
+
+msgctxt "field:account.party_balance.line,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:account.party_balance.line,reconciliations:"
+msgid "Reconciliations"
+msgstr "Lettrages"
+
+msgctxt "model:account.party_balance,name:"
+msgid "Party Balance"
+msgstr "Compte tiers"
+
+msgctxt "model:account.party_balance.line,name:"
+msgid "Party Balance Line"
+msgstr "Ligne de compte tiers"
+
+msgctxt "model:ir.action,name:act_open_contract_balance"
+msgid "Contract Balance"
+msgstr "Balance contrat"
+
+msgctxt "model:ir.action,name:act_open_party_balance"
+msgid "Party Balance"
+msgstr "Compte tiers"
+
+msgctxt "view:account.move.line:"
+msgid "Balance"
+msgstr "Balance"
+
+msgctxt "view:account.move.line:"
+msgid "Party Balance"
+msgstr "Compte tiers"
+
+msgctxt "view:account.party_balance.line:"
+msgid "Balance"
+msgstr "Compte tiers"
+
+msgctxt "view:account.party_balance.line:"
+msgid "Party Balance Line"
+msgstr "Ligne de compte tiers"
+
+msgctxt "view:account.party_balance:"
+msgid "Balance"
+msgstr "Compte tiers"
+
+msgctxt "view:account.party_balance:"
+msgid "_Refresh"
+msgstr "_Rafraichir"
+
+msgctxt "wizard_button:account.open_party_balance,balance,end:"
+msgid "End"
+msgstr "Terminer"

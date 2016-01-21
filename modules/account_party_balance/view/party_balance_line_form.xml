@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<form string="Party Balance Line">
+    <label name="description"/>
+    <field name="description"/>
+    <label name="amount"/>
+    <field name="amount"/>
+    <label name="date"/>
+    <field name="date"/>
+    <label name="move"/>
+    <field name="move"/>
+    <label name="bank_account"/>
+    <field name="bank_account"/>
+</form>

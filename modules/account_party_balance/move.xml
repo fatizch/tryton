@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- ########### Party Balance ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="party_balance_view_form">
+            <field name="model">account.party_balance</field>
+            <field name="type">form</field>
+            <field name="name">party_balance_form</field>
+        </record>
+        <record model="ir.action.wizard" id="act_open_party_balance">
+            <field name="name">Party Balance</field>
+            <field name="wiz_name">account.open_party_balance</field>
+        </record>
+        <record model="ir.action.keyword" id="act_open_party_balance_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="act_open_party_balance"/>
+        </record>
+        <record model="ir.action.wizard" id="act_open_contract_balance">
+            <field name="name">Contract Balance</field>
+            <field name="wiz_name">account.open_party_balance</field>
+        </record>
+        <record model="ir.action.keyword" id="act_open_contract_balance_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_open_contract_balance"/>
+        </record>
+        <record model="ir.ui.view" id="party_balance_line_form_view_form">
+            <field name="model">account.party_balance.line</field>
+            <field name="type">form</field>
+            <field name="name">party_balance_line_form</field>
+        </record>
+        <record model="ir.ui.view" id="party_balance_line_view_list">
+            <field name="model">account.party_balance.line</field>
+            <field name="type">tree</field>
+            <field name="field_childs">childs</field>
+            <field name="name">party_balance_line_list</field>
+        </record>
+    </data>
+</tryton>
