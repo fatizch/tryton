@@ -13,4 +13,5 @@
     <label name="treatment_kind"/>
     <field name="treatment_kind"/>
     <field name="handles_asynchronous" colspan="4"/>
+    <field name="event_types" colspan="4"/>
 </form>

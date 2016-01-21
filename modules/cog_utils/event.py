@@ -184,6 +184,8 @@ class EventTypeAction(model.CoopSQL, model.CoopView):
     treatment_kind = fields.Selection([('synchronous', 'Synchronous'),
             ('asynchronous', 'Asynchronous')], 'Treatment kind', states={
                 'invisible': ~Eval('handles_asynchronous')})
+    event_types = fields.Many2Many('event.type.action-event.type', 'action',
+        'event_type', 'Event Types')
 
     @classmethod
     def __setup__(cls):
@@ -193,6 +195,11 @@ class EventTypeAction(model.CoopSQL, model.CoopView):
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
+
+    @classmethod
+    def _export_skips(cls):
+        return (super(EventTypeAction, cls)._export_skips() |
+            set(['event_types']))
 
     @classmethod
     def write(cls, *args):
