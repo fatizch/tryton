@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -577,6 +577,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:process.transition-group,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "help:process.action,parameters:"
+msgid "Write parameters separated by \",\""
+msgstr "Ecrire les paramètres séparés par des \",\""
 
 msgctxt "model:ir.action,name:act_process_desc"
 msgid "Processes"

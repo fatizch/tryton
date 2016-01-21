@@ -638,7 +638,8 @@ class Code(ModelSQL, ModelView):
     parent_transition = fields.Many2One('process.transition',
         'Parent Transition', ondelete='CASCADE', select=True)
     sequence = fields.Integer('Sequence', states={'invisible': True})
-    parameters = fields.Char('Parameters')
+    parameters = fields.Char('Parameters',
+        help='Write parameters separated by ","')
 
     @classmethod
     def __setup__(cls):
