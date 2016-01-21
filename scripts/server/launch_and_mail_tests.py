@@ -22,12 +22,8 @@ This script can for example be launched by a mercurical hook
 in the coopbusiness repository, and/or by a cron job.
 
 If you want to launch the tests when changes are pushed to your repo,
-you can add the following in the .hg/hgrc file of your test repo:
-
-[hooks]
-changegroup = python /path/to/launch_and_mail_tests.py
-
-And add a cronjob to regularly update your test repo from a central repository.
+you can add a hook on the repos.  and add a cronjob to regularly update
+your test repo from a central repository.
 
 This script uses an empty "running" file to record the state of the tests.
 If the tests are running, the "running file" contains 1, else
@@ -53,7 +49,7 @@ from tendo import singleton
 
 me = singleton.SingleInstance()
 
-config = ConfigParser.ConfiParser()
+config = ConfigParser.ConfigParser()
 
 
 try:
@@ -64,13 +60,13 @@ except:
     sys.exit(1)
 
 path_to_running = config.get('tests', 'path_to_running_file')
-path_to_workspace = config.get('tests', 'workspace')
+path_to_workspace = config.get('tests', 'path_to_workspace')
 repo_url = config.get('tests', 'repo_url')
 email = config.get('mailing', 'email')
 password = config.get('mailing', 'password')
 recipients = config.get('mailing', 'recipients').split(',')
 smtp_server = config.get('mailing', 'smtp_server')
-smtp_port = config.get('mailing', 'port')
+smtp_port = config.get('mailing', 'smtp_port')
 
 
 os.chdir(path_to_running)
@@ -78,24 +74,8 @@ with open('running', 'w') as f:
     f.write('1')
 
 try:
-    os.chdir(os.path.join(path_to_workspace, 'trytond'))
-    updater = subprocess.Popen(['hg', 'pull',
-        repo_url + 'trytond', '--insecure'])
-    updater.communicate()
-    updater = subprocess.Popen(['hg', 'update', 'coog'])
-    updater.communicate()
-
-    os.chdir(os.path.join(path_to_workspace, 'tryton'))
-    updater = subprocess.Popen(['hg', 'pull',
-        repo_url + 'tryton', '--insecure'])
-    updater.communicate()
-    updater = subprocess.Popen(['hg', 'update', 'coog'])
-    updater.communicate()
 
     os.chdir(os.path.join(path_to_workspace, 'coopbusiness', 'scripts'))
-    updater = subprocess.Popen(['hg', 'update', 'coog'])
-    updater.communicate()
-
     updater = subprocess.Popen(['./script_launcher.py', 'configure'])
     updater.communicate()
 
@@ -128,13 +108,19 @@ try:
     smtpserver.ehlo()
     smtpserver.login(email, password)
 
-    p = subprocess.Popen(['date', '+%d/%m/%Y\ %H:%M:%S'],
+    p = subprocess.Popen(['date', '+%d/%m/%Y %H:%M:%S'],
         stdout=subprocess.PIPE)
     date = p.communicate()[0]
-    msg['Subject'] = '[TEST] %s, %s' % (summary, date)
+
+    os.chdir(os.path.join(path_to_workspace, 'coopbusiness'))
+    p = subprocess.Popen(['git', 'rev-parse', '--short', 'HEAD'],
+        stdout=subprocess.PIPE)
+    commit_info = p.communicate()[0]
+    msg['Subject'] = '[TEST] %s, %s, %s' % (summary, date, commit_info)
 
     smtpserver.sendmail(email, recipients, msg.as_string())
     smtpserver.close()
+
 
 finally:
     os.chdir(path_to_running)
