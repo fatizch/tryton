@@ -101,3 +101,9 @@ class Fee:
                 invoices_updated.append(invoice)
         Invoice.update_taxes(invoices_updated)
         return invoices_updated
+
+    def get_account_for_billing(self, line):
+        if self.broker_fee:
+            return self.product.template.account_expense_used
+        else:
+            return super(Fee, self).get_account_for_billing(line)
