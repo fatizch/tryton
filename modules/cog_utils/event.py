@@ -65,7 +65,7 @@ class Event(Model):
     def ws_notify_events(cls, events):
         '''
             Web service to notify coog of an external event
-            Objects is a structure like
+            :param events: a structure like :
                 [
                     object_: {
                         __name__: 'class_name',
