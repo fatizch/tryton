@@ -921,8 +921,8 @@ class Contract:
     @classmethod
     def key_func_for_reconciliation_order(cls):
         def get_key(x):
-            if x.origin.__name__ == 'account.invoice':
-                return x.origin.start
+            if x.origin and x.origin.__name__ == 'account.invoice':
+                return x.origin.start or x.date
             return x.date
         return get_key
 
