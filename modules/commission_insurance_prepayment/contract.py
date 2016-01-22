@@ -112,6 +112,8 @@ class ContractOption:
                     paid_prepayments:
                 amount = amount - paid_prepayments[(agent.id, '%s,%s' % (
                             self.__name__, self.id))]
+                digits = Commission.amount.digits
+                amount = amount.quantize(Decimal(str(10.0 ** -digits[1])))
             if not amount:
                 continue
 

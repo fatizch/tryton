@@ -27,7 +27,7 @@ class Commission:
     is_prepayment = fields.Boolean('Is Prepayment',
         states=TrytonCommission._readonly_states,
         depends=TrytonCommission._readonly_depends)
-    redeemed_prepayment = fields.Numeric('Redeemed Prepayment',
+    redeemed_prepayment = fields.Numeric('Redeemed Prepayment', digits=(16, 8),
         states=TrytonCommission._readonly_states,
         depends=TrytonCommission._readonly_depends)
 

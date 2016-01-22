@@ -84,7 +84,12 @@ class InvoiceLine:
                         commission_rate])
 
         commissions = []
+        digits = Commission.amount.digits
         for start, end, commission_amount, commission_rate in commission_data:
+            commission_amount = commission_amount.quantize(
+                Decimal(str(10.0 ** -digits[1])))
+            if not commission_amount:
+                continue
             commission = Commission()
             commission.origin = self
             if plan.commission_method == 'posting':
