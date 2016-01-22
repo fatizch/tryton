@@ -423,6 +423,10 @@ msgctxt "field:endorsement,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:endorsement,definition_code:"
+msgid "Definition Code"
+msgstr "Code de l'avenant"
+
 msgctxt "field:endorsement,rollback_date:"
 msgid "Rollback Date"
 msgstr "Date de restauration"

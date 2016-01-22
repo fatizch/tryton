@@ -1086,6 +1086,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         states={'invisible': ~Eval('generated_by')})
     generated_endorsements = fields.One2Many('endorsement', 'generated_by',
         'Generated Endorsements', target_not_required=True)
+    definition_code = fields.Function(
+        fields.Char('Definition Code'),
+        'get_definition_code')
 
     @classmethod
     def __setup__(cls):
@@ -1164,6 +1167,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     @classmethod
     def default_state(cls):
         return 'draft'
+
+    def get_definition_code(self, name):
+        return '%s' % self.definition.code
 
     def get_rec_name(self, name):
         return '%s' % self.definition.name
