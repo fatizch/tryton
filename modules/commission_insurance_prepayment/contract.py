@@ -31,9 +31,25 @@ class Contract:
 
         Commission.save(commissions)
 
+    @dualmethod
+    def adjust_prepayment_commissions_once_terminated(cls, contracts):
+        pool = Pool()
+        Commission = pool.get('commission')
+        commissions = []
+        options = []
+        for contract in contracts:
+            options.extend(list(contract.covered_element_options +
+                contract.options))
+        for option in options:
+            commissions.extend(option.adjust_prepayment_once_terminated())
+        Commission.save(commissions)
+
     def rebill(self, start=None, end=None, post_end=None):
         super(Contract, self).rebill(start, end, post_end)
-        self.create_prepayment_commissions(adjustement=True)
+        if self.termination_reason or self.status == 'void':
+            self.adjust_prepayment_commissions_once_terminated()
+        else:
+            self.create_prepayment_commissions(adjustement=True)
 
 
 class ContractOption:
@@ -88,15 +104,19 @@ class ContractOption:
         Agent = pool.get('commission.agent')
 
         commissions = []
-        agents_plans_to_compute = []
+        agents_plans_to_compute = self.agent_plans_used()
         to_delete = []
-        for agent_plan in self.agent_plans_used():
-            if (adjustment and agent_plan[1].adjust_prepayment or
-                    not adjustment):
-                agents_plans_to_compute.append(agent_plan)
+
+        if not agents_plans_to_compute:
+            return []
         paid_prepayments = Agent.paid_prepayments([(x[0].id, self.id)
                 for x in agents_plans_to_compute])
         for agent, plan in agents_plans_to_compute:
+            if ((agent.id, self.id) in paid_prepayments and
+                    not plan.adjust_prepayment and adjustment):
+                # if configuration "no adjustement" is selected adjust only
+                # if no prepayment paid
+                continue
             amount, rate = self._get_prepayment_amount_and_rate(agent, plan)
             if amount is None:
                 continue
@@ -108,12 +128,10 @@ class ContractOption:
                     ('agent', '=', agent.id)
                     ])
 
-            if (agent.id, '%s,%s' % (self.__name__, self.id)) in \
-                    paid_prepayments:
-                amount = amount - paid_prepayments[(agent.id, '%s,%s' % (
-                            self.__name__, self.id))]
-                digits = Commission.amount.digits
-                amount = amount.quantize(Decimal(str(10.0 ** -digits[1])))
+            if (agent.id, self.id) in paid_prepayments:
+                amount = amount - paid_prepayments[(agent.id, self.id)]
+            digits = Commission.amount.digits
+            amount = amount.quantize(Decimal(str(10.0 ** -digits[1])))
             if not amount:
                 continue
 
@@ -130,5 +148,42 @@ class ContractOption:
                 commission.commissioned_option = self
                 commissions.append(commission)
 
+        Commission.delete(to_delete)
+        return commissions
+
+    def adjust_prepayment_once_terminated(self):
+        pool = Pool()
+        Commission = pool.get('commission')
+        Agent = pool.get('commission.agent')
+
+        commissions = []
+        agents_plans_to_compute = self.agent_plans_used()
+        outstanding_prepayment = Agent.outstanding_paid_prepayment(
+            [(x[0].id, self.id) for x in agents_plans_to_compute])
+        for agent, plan in agents_plans_to_compute:
+            if (agent.id, self.id) not in outstanding_prepayment:
+                continue
+            amount = outstanding_prepayment[(agent.id, self.id)]
+            digits = Commission.amount.digits
+            amount = amount.quantize(Decimal(str(10.0 ** -digits[1])))
+            if not amount:
+                continue
+
+            commission = Commission()
+            commission.is_prepayment = True
+            commission.date = self.end_date
+            commission.origin = self
+            commission.agent = agent
+            commission.product = plan.commission_product
+            commission.amount = -amount
+            commission.commissioned_option = self
+            commissions.append(commission)
+        to_delete = []
+        to_delete += Commission.search([
+                ('invoice_line', '=', None),
+                ('commissioned_option', '=', self.id),
+                ('is_prepayment', '=', True),
+                ('agent', 'in', [a[0].id for a in agents_plans_to_compute])
+                ])
         Commission.delete(to_delete)
         return commissions

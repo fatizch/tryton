@@ -54,10 +54,11 @@ Reload the context::
 
 Create Fiscal Year::
 
-    >>> fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company))
+    >>> fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
+    ...         today=datetime.date(2015, 1, 1)))
     >>> fiscalyear.click('create_period')
     >>> fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
-    ...         today=datetime.date.today() + relativedelta(years=1)))
+    ...         today=datetime.date(2015, 1, 1) + relativedelta(years=1)))
     >>> fiscalyear.click('create_period')
 
 Create chart of accounts::
@@ -155,7 +156,7 @@ Create Subscriber::
 
 Create Test Contract::
 
-    >>> contract_start_date = datetime.date.today()
+    >>> contract_start_date = datetime.date(2015, 1, 1)
     >>> Contract = Model.get('contract')
     >>> ContractPremium = Model.get('contract.premium')
     >>> BillingInformation = Model.get('contract.billing_information')
@@ -255,4 +256,124 @@ Cancel invoice::
     ...     (Decimal('0.0000'), False, Decimal('30.0000'), u'Insurer'),
     ...     (Decimal('0.0000'), False, Decimal('-30.0000'), u'Insurer'),
     ...     (Decimal('0.0000'), False, Decimal('-60.0000'), u'Broker')]
+    True
+
+Terminate Contract::
+
+    >>> end_date = contract_start_date + relativedelta(months=7, days=-1)
+    >>> config._context['client_defined_date'] = end_date + relativedelta(days=1)
+    >>> SubStatus = Model.get('contract.sub_status')
+    >>> sub_status = SubStatus()
+    >>> sub_status.name = 'Client termination'
+    >>> sub_status.code = 'client_termination'
+    >>> sub_status.status = 'terminated'
+    >>> sub_status.save()
+    >>> end_contract = Wizard('contract.stop', models=[contract])
+    >>> end_contract.form.status = 'terminated'
+    >>> end_contract.form.at_date = end_date
+    >>> end_contract.form.sub_status = sub_status
+    >>> end_contract.execute('stop')
+
+Check commission once terminated::
+
+    >>> commissions = Commission.find([('is_prepayment', '=', True)],
+    ...     order=[('amount', 'ASC')])
+
+commission explanation::
+-300 : 12months * 60 - 7months*60::
+210 : 7months * 30::
+720 : 12months * 60::
+
+    >>> [(x.amount, x.agent.party.name) for x in commissions] == [
+    ...     (Decimal('-300.0000'), u'Broker'),
+    ...     (Decimal('210.0000'), u'Insurer'),
+    ...     (Decimal('720.0000'), u'Broker')]
+    True
+
+Reactivate Contract::
+
+    >>> Wizard('contract.reactivate', models=[contract]).execute('reactivate')
+    >>> commissions = Commission.find([('is_prepayment', '=', True)],
+    ...     order=[('amount', 'ASC')])
+    >>> [(x.amount, x.agent.party.name) for x in commissions] == [
+    ...     (Decimal('360.0000'), u'Insurer'),
+    ...     (Decimal('720.0000'), u'Broker')]
+    True
+
+Add new premium version::
+
+    >>> new_premium_date = contract_start_date + relativedelta(months=9, days=-1)
+    >>> contract.options[0].premiums[0].end = contract_start_date + \
+    ...     relativedelta(months=9, days=-1)
+    >>> contract.options[0].premiums[0].save()
+    >>> contract.options[0].premiums.append(ContractPremium(
+    ...         start=contract_start_date + relativedelta(months=9),
+    ...         amount=Decimal('110'), frequency='monthly',
+    ...         account=accounts['revenue'], rated_entity=Coverage(coverage)))
+    >>> contract.save()
+
+Invoice contract and post::
+
+    >>> generate_invoice = Wizard('contract.do_invoice', models=[contract])
+    >>> generate_invoice.form.up_to_date = until_date
+    >>> generate_invoice.execute('invoice')
+    >>> for contract_invoice in contract.invoices[::-1]:
+    ...     if contract_invoice.invoice.state == 'validated':
+    ...         contract_invoice.invoice.click('post')
+
+Check invoice amount and commission::
+
+    >>> Invoice = Model.get('account.invoice')
+    >>> last_year_invoice, = Invoice.find([
+    ...         ('start', '=', datetime.date(2015, 12, 1)),
+    ...         ('state', '=', 'posted')
+    ...         ])
+    >>> last_year_invoice.total_amount
+    Decimal('110.00')
+
+commission explanation::
+18 : (12 -9)*(110-100)*0.6::
+48 : (110*0.6)-18::
+9 : (12 -9)*(110-100)*0.3::
+24 : (110*0.3)-9::
+
+    >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.agent.party.name)
+    ...     for x in last_year_invoice.lines[0].commissions] == [
+    ...     (Decimal('18.0000'), False, Decimal('48.0000'), u'Broker'),
+    ...     (Decimal('9.0000'), False, Decimal('24.0000'), u'Insurer')]
+    True
+    >>> last_invoice, = Invoice.find([
+    ...         ('start', '=', datetime.date(2016, 1, 1)),
+    ...         ('state', '=', 'posted')
+    ...         ])
+    >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.agent.party.name)
+    ...     for x in last_invoice.lines[0].commissions] == [
+    ...     (Decimal('66.0000'), False, Decimal('0.0000'), u'Broker'),
+    ...     (Decimal('33.0000'), False, Decimal('0.0000'), u'Insurer')]
+    True
+
+Terminate Contract::
+
+    >>> end_date = contract_start_date + relativedelta(months=11, days=-1)
+    >>> config._context['client_defined_date'] = end_date + relativedelta(days=1)
+    >>> end_contract = Wizard('contract.stop', models=[contract])
+    >>> end_contract.form.status = 'terminated'
+    >>> end_contract.form.at_date = end_date
+    >>> end_contract.form.sub_status = sub_status
+    >>> end_contract.execute('stop')
+
+Check commission once terminated::
+
+    >>> commissions = Commission.find([('is_prepayment', '=', True)],
+    ...     order=[('amount', 'ASC')])
+
+commission explanation::
+-48 : 12*100*0.6 - (11-9)*110*0.6 - 9 *100 *0.6::
+336 : 9*100*0.3 + (11-9)*110*0.3::
+720 : 12*100*0.6::
+
+    >>> [(x.amount, x.agent.party.name) for x in commissions] == [
+    ...     (Decimal('-48.0000'), u'Broker'),
+    ...     (Decimal('336.0000'), u'Insurer'),
+    ...     (Decimal('720.0000'), u'Broker')]
     True

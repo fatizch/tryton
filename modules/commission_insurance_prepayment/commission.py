@@ -3,6 +3,7 @@ from simpleeval import simple_eval
 from sql import Column, Null
 from sql.operators import Or
 from sql.aggregate import Sum
+from collections import defaultdict
 
 from trytond.tools import decistmt
 from trytond.pool import PoolMeta, Pool
@@ -51,7 +52,7 @@ class Commission:
 
     def _group_to_invoice_line_key(self):
         key = super(Commission, self)._group_to_invoice_line_key()
-        with_prepayment = bool(self.redeemed_prepayment)
+        with_prepayment = self.redeemed_prepayment and not self.amount
         return key + (('is_prepayment', self.is_prepayment),
             ('with_prepayment', with_prepayment))
 
@@ -148,7 +149,7 @@ class Agent:
 
         cursor = Transaction().cursor
         agent_column = Column(commission, 'agent')
-        origin_column = Column(commission, 'origin')
+        option_column = Column(commission, 'commissioned_option')
         prepayment_column = Column(commission, 'is_prepayment')
         invoice_line = Column(commission, 'invoice_line')
 
@@ -156,23 +157,23 @@ class Agent:
         for agent in agents:
             where_clause.append(((agent_column == agent[0]) &
                     (prepayment_column == True) &  # NOQA
-                    (origin_column == 'contract.option,' + str(agent[1])) &
+                    (option_column == agent[1]) &
                     (invoice_line != None)))
         cursor.execute(*commission.select(commission.agent, commission.origin,
                 Sum(commission.amount),
                 where=where_clause,
                 group_by=[commission.agent, commission.origin]))
         for agent, option, amount in cursor.fetchall():
-            result[(agent, option)] = amount
+            result[(agent, int(option.split(',')[1]))] = amount
 
         return result
 
     @classmethod
-    def outstanding_prepayment(cls, agents):
+    def sum_of_redeemed_prepayment(cls, agents):
         """
-            agents is a list of tuple (agent_id, coverage_id)
-            Return a dictionnary with (agent, coverage) as key
-                and outstanding amount as value
+            agents is a list of tuple (agent_id, option_id)
+            Return a dictionnary with (agent_id, option_id) as key
+                and sum of redeemed amount as value
         """
         pool = Pool()
         Commission = pool.get('commission')
@@ -181,39 +182,85 @@ class Agent:
         cursor = Transaction().cursor
         agent_column = Column(commission, 'agent')
         option_column = Column(commission, 'commissioned_option')
-        origin_column = Column(commission, 'origin')
-        prepayment_column = Column(commission, 'is_prepayment')
-        reedemed_column = Column(commission, 'redeemed_prepayment')
+        redeemed_column = Column(commission, 'redeemed_prepayment')
         where_redeemed = Or()
-        where_prepayment = Or()
-        for agent in agents:
-            where_redeemed.append(((agent_column == agent[0]) &
-                    (reedemed_column != Null) &
-                    (option_column == agent[1])))
-            where_prepayment.append(((agent_column == agent[0]) &
-                    (prepayment_column == True) &  # NOQA
-                    (origin_column == 'contract.option,' + str(agent[1]))))
 
         result = {}
+        if not agents:
+            return result
 
-        # sum of redeemed prepayment
+        for agent in agents:
+            where_redeemed.append(((agent_column == agent[0]) &
+                    (redeemed_column != Null) &
+                    (option_column == agent[1])))
+
         cursor.execute(*commission.select(commission.agent,
                 commission.commissioned_option,
                 Sum(commission.redeemed_prepayment),
                 where=where_redeemed,
                 group_by=[commission.agent, commission.commissioned_option]))
         for agent, option, amount in cursor.fetchall():
-            result[(agent, option)] = -amount
+            result[(agent, option)] = amount
+        return result
 
-        # sum of prepayment
+    @classmethod
+    def sum_of_prepayment(cls, agents):
+        """
+            agents is a list of tuple (agent_id, option_id)
+            Return a dictionnary with (agent_id, option_id) as key
+                and sum of prepayment amount as value
+        """
+        pool = Pool()
+        Commission = pool.get('commission')
+        commission = Commission.__table__()
+
+        cursor = Transaction().cursor
+        agent_column = Column(commission, 'agent')
+        origin_column = Column(commission, 'origin')
+        prepayment_column = Column(commission, 'is_prepayment')
+        where_prepayment = Or()
+
+        result = {}
+        if not agents:
+            return result
+
+        for agent in agents:
+            where_prepayment.append(((agent_column == agent[0]) &
+                    (prepayment_column == True) &
+                    (origin_column == 'contract.option,' + str(agent[1]))))
+
         cursor.execute(*commission.select(commission.agent, commission.origin,
                 Sum(commission.amount),
                 where=where_prepayment,
                 group_by=[commission.agent, commission.origin]))
         for agent, option, amount in cursor.fetchall():
-            option_id = int(option.split(',')[1])
-            if (agent, option_id) in result:
-                result[(agent, option_id)] += amount
-            else:
-                result[(agent, option_id)] = amount
+            result[(agent, int(option.split(',')[1]))] = amount
+        return result
+
+    @classmethod
+    def outstanding_prepayment(cls, agents):
+        """
+            agents is a list of tuple (agent_id, option_id)
+            Return a dictionnary with (agent_id, option_id) as key
+                and outstanding amount as value
+        """
+        result = defaultdict(int)
+        result.update(cls.sum_of_prepayment(agents))
+        for key, prepayment_amount in \
+                cls.sum_of_redeemed_prepayment(agents).iteritems():
+            result[key] -= prepayment_amount
+        return result
+
+    @classmethod
+    def outstanding_paid_prepayment(cls, agents):
+        """
+            agents is a list of tuple (agent_id, option_id)
+            Return a dictionnary with (agent_id, option_id) as key
+                and outstanding amount as value based on paid prepayment
+        """
+        result = defaultdict(lambda: 0)
+        result.update(cls.paid_prepayments(agents))
+        for key, prepayment_amount in \
+                cls.sum_of_redeemed_prepayment(agents).iteritems():
+            result[key] -= prepayment_amount
         return result

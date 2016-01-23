@@ -1,5 +1,6 @@
 # #Title# #Commission Prepayment Scenario
 # #Comment# #Imports
+
 import datetime
 from dateutil.relativedelta import relativedelta
 from proteus import config, Model, Wizard
@@ -19,6 +20,7 @@ from trytond.modules.party_cog.tests.tools import create_party_person
 from trytond.modules.contract.tests.tools import add_quote_number_generator
 from trytond.modules.premium.tests.tools import add_premium_rules
 from trytond.modules.country_cog.tests.tools import create_country
+
 
 config = config.set_trytond()
 config.pool.test = True
@@ -45,10 +47,11 @@ User = Model.get('res.user')
 config._context = User.get_preferences(True, config.context)
 
 # #Comment# #Create Fiscal Year
-fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company))
+fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
+        today=datetime.date(2015, 1, 1)))
 fiscalyear.click('create_period')
 fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
-        today=datetime.date.today() + relativedelta(years=1)))
+        today=datetime.date(2015, 1, 1) + relativedelta(years=1)))
 fiscalyear.click('create_period')
 
 # #Comment# #Create chart of accounts
@@ -137,7 +140,7 @@ agent.save()
 subscriber = create_party_person()
 
 # #Comment# #Create Test Contract
-contract_start_date = datetime.date.today()
+contract_start_date = datetime.date(2015, 1, 1)
 Contract = Model.get('contract')
 ContractPremium = Model.get('contract.premium')
 BillingInformation = Model.get('contract.billing_information')
@@ -229,4 +232,112 @@ line, = last_invoice.invoice.lines
     (Decimal('0.0000'), False, Decimal('30.0000'), u'Insurer'),
     (Decimal('0.0000'), False, Decimal('-30.0000'), u'Insurer'),
     (Decimal('0.0000'), False, Decimal('-60.0000'), u'Broker')]
+# #Res# #True
+
+# #Comment# #Terminate Contract
+end_date = contract_start_date + relativedelta(months=7, days=-1)
+config._context['client_defined_date'] = end_date + relativedelta(days=1)
+SubStatus = Model.get('contract.sub_status')
+sub_status = SubStatus()
+sub_status.name = 'Client termination'
+sub_status.code = 'client_termination'
+sub_status.status = 'terminated'
+sub_status.save()
+
+end_contract = Wizard('contract.stop', models=[contract])
+end_contract.form.status = 'terminated'
+end_contract.form.at_date = end_date
+end_contract.form.sub_status = sub_status
+end_contract.execute('stop')
+
+# #Comment# #Check commission once terminated
+commissions = Commission.find([('is_prepayment', '=', True)],
+    order=[('amount', 'ASC')])
+# #Comment# #commission explanation
+# #Comment# #-300 : 12months * 60 - 7months*60
+# #Comment# #210 : 7months * 30
+# #Comment# #720 : 12months * 60
+[(x.amount, x.agent.party.name) for x in commissions] == [
+    (Decimal('-300.0000'), u'Broker'),
+    (Decimal('210.0000'), u'Insurer'),
+    (Decimal('720.0000'), u'Broker')]
+# #Res# #True
+
+# #Comment# #Reactivate Contract
+Wizard('contract.reactivate', models=[contract]).execute('reactivate')
+commissions = Commission.find([('is_prepayment', '=', True)],
+    order=[('amount', 'ASC')])
+[(x.amount, x.agent.party.name) for x in commissions] == [
+    (Decimal('360.0000'), u'Insurer'),
+    (Decimal('720.0000'), u'Broker')]
+# #Res# #True
+
+# #Comment# #Add new premium version
+new_premium_date = contract_start_date + relativedelta(months=9, days=-1)
+contract.options[0].premiums[0].end = contract_start_date + \
+    relativedelta(months=9, days=-1)
+contract.options[0].premiums[0].save()
+contract.options[0].premiums.append(ContractPremium(
+        start=contract_start_date + relativedelta(months=9),
+        amount=Decimal('110'), frequency='monthly',
+        account=accounts['revenue'], rated_entity=Coverage(coverage)))
+contract.save()
+
+# #Comment# #Invoice contract and post
+generate_invoice = Wizard('contract.do_invoice', models=[contract])
+generate_invoice.form.up_to_date = until_date
+generate_invoice.execute('invoice')
+
+for contract_invoice in contract.invoices[::-1]:
+    if contract_invoice.invoice.state == 'validated':
+        contract_invoice.invoice.click('post')
+
+# #Comment# #Check invoice amount and commission
+Invoice = Model.get('account.invoice')
+last_year_invoice, = Invoice.find([
+        ('start', '=', datetime.date(2015, 12, 1)),
+        ('state', '=', 'posted')
+        ])
+last_year_invoice.total_amount
+# #Res# #Decimal('110.00')
+# #Comment# #commission explanation
+# #Comment# #18 : (12 -9)*(110-100)*0.6
+# #Comment# #48 : (110*0.6)-18
+# #Comment# #9 : (12 -9)*(110-100)*0.3
+# #Comment# #24 : (110*0.3)-9
+[(x.amount, x.is_prepayment, x.redeemed_prepayment, x.agent.party.name)
+    for x in last_year_invoice.lines[0].commissions] == [
+    (Decimal('18.0000'), False, Decimal('48.0000'), u'Broker'),
+    (Decimal('9.0000'), False, Decimal('24.0000'), u'Insurer')]
+# #Res# #True
+last_invoice, = Invoice.find([
+        ('start', '=', datetime.date(2016, 1, 1)),
+        ('state', '=', 'posted')
+        ])
+[(x.amount, x.is_prepayment, x.redeemed_prepayment, x.agent.party.name)
+    for x in last_invoice.lines[0].commissions] == [
+    (Decimal('66.0000'), False, Decimal('0.0000'), u'Broker'),
+    (Decimal('33.0000'), False, Decimal('0.0000'), u'Insurer')]
+# #Res# #True
+
+# #Comment# #Terminate Contract
+end_date = contract_start_date + relativedelta(months=11, days=-1)
+config._context['client_defined_date'] = end_date + relativedelta(days=1)
+end_contract = Wizard('contract.stop', models=[contract])
+end_contract.form.status = 'terminated'
+end_contract.form.at_date = end_date
+end_contract.form.sub_status = sub_status
+end_contract.execute('stop')
+
+# #Comment# #Check commission once terminated
+commissions = Commission.find([('is_prepayment', '=', True)],
+    order=[('amount', 'ASC')])
+# #Comment# #commission explanation
+# #Comment# #-48 : 12*100*0.6 - (11-9)*110*0.6 - 9 *100 *0.6
+# #Comment# #336 : 9*100*0.3 + (11-9)*110*0.3
+# #Comment# #720 : 12*100*0.6
+[(x.amount, x.agent.party.name) for x in commissions] == [
+    (Decimal('-48.0000'), u'Broker'),
+    (Decimal('336.0000'), u'Insurer'),
+    (Decimal('720.0000'), u'Broker')]
 # #Res# #True
