@@ -11,7 +11,8 @@ COPY . /opt/coog/
 RUN ln -s /opt/coog/coog/bin/coog /usr/local/bin
 RUN ln -s /opt/coog/trytond/bin/trytond /usr/local/bin
 
-RUN /opt/coog/coog/bin/coog dep
+RUN /opt/coog/coog/bin/coog dep base
+RUN /opt/coog/coog/bin/coog dep extend
 RUN /opt/coog/coog/bin/coog repo linkm
 
 VOLUME ["/opt/coog/data"]

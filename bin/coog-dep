@@ -28,7 +28,7 @@ coog_dep_base() { # install base deps
         pip install $proxy_opt argcomplete
 }
 
-coog_dep_extra() { # install extra deps (interfaces, deployment extras)
+coog_dep_extend() { # install extended deps (interfaces, deployment extras)
         local proxy_opt
 	proxy_opt=`_coog_dep_proxy_opt`
         pip install $proxy_opt python-ldap                  # ldap
@@ -42,7 +42,7 @@ coog_dep_extra() { # install extra deps (interfaces, deployment extras)
         pip install $proxy_opt flower                       # batch
 }
 
-coog_dep_specific() { # install specific tasks deps
+coog_dep_extra() { # install specific tasks deps
         local proxy_opt
 	proxy_opt=`_coog_dep_proxy_opt`
         pip install $proxy_opt sphinx                       # doc
@@ -52,5 +52,6 @@ coog_dep_specific() { # install specific tasks deps
 
 coog_dep_main() { # install all deps
         coog_dep_base
+        coog_dep_extend
         coog_dep_extra
 }

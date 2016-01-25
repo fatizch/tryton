@@ -51,7 +51,9 @@ coog_env_celery() { # set trytond and celery config in pythonpath
         conf_path=`readlink -f ../../conf`
         local trytond_path
         trytond_path=`readlink -f ../../trytond`
-        export PYTHONPATH=$trytond_path:$conf_path:$PYTHONPATH
+        local proteus_path
+        proteus_path=`readlink -f ../../proteus`
+        export PYTHONPATH=$conf_path:$trytond_path:$proteus_path:$PYTHONPATH
 }
 
 coog_env_main() { # print meaningful vars for coog execution
