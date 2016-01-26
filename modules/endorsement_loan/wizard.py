@@ -1486,38 +1486,29 @@ class StartEndorsement:
 
     def transition_loan_endorse_selected_contracts(self):
         ContractEndorsement = Pool().get('endorsement.contract')
-        to_create, to_write, to_delete = [], [], {}
 
-        for contract_endorsement in self.endorsement.contract_endorsements:
-            to_delete[contract_endorsement.contract.id] = \
-                contract_endorsement
+        per_contract = {x.contract.id: x for x in
+            self.endorsement.contract_endorsements}
+        to_save = []
         for displayer in self.loan_select_contracts.selected_contracts:
-            if displayer.contract.id in to_delete:
-                endorsement = to_delete.pop(displayer.contract.id)
+            if displayer.contract.id in per_contract:
+                endorsement = per_contract[displayer.contract.id]
                 if not displayer.to_update:
                     endorsement.values.pop('end_date', None)
-                    if endorsement.is_null():
-                        to_delete[displayer.contract.id] = endorsement
-                    else:
-                        to_write.append(endorsement)
-                    continue
+                    if not endorsement.clean_up():
+                        to_save.append(endorsement)
                 else:
-                    to_write.append(endorsement)
+                    to_save.append(endorsement)
             else:
+                if not displayer.to_update:
+                    continue
                 endorsement = ContractEndorsement(
                     endorsement=self.endorsement.id,
                     contract=displayer.contract.id, values={})
-                to_create.append(endorsement)
+                to_save.append(endorsement)
             endorsement.values['end_date'] = displayer.new_end_date
-        if to_delete:
-            ContractEndorsement.delete(to_delete.values())
-        if to_create:
-            ContractEndorsement.create([x._save_values for x in to_create])
-        if to_write:
-            ContractEndorsement.write(*[x
-                    for values in [[[instance], instance._save_values]
-                        for instance in to_write]
-                    for x in values])
+        self.endorsement.contract_endorsements = to_save
+        self.endorsement.save()
         return 'change_loan_data_next'
 
     def transition_change_loan_data_next(self):
