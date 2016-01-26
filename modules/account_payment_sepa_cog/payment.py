@@ -470,6 +470,10 @@ class Payment:
                 account=account_for_billing,
                 )]
 
+    def get_grouping_key(self):
+        return self.sepa_merged_id if self.sepa_merged_id else super(Payment,
+            self).get_grouping_key()
+
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'

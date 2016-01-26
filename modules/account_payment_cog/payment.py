@@ -395,6 +395,9 @@ class Payment(export.ExportImportMixin, Printable):
     def button_fail_payments(cls, payments):
         pass
 
+    def get_grouping_key(self):
+        return self.id
+
 
 class Configuration:
     __name__ = 'account.configuration'

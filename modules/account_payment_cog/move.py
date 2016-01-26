@@ -74,6 +74,30 @@ class Move:
         else:
             return name
 
+    @classmethod
+    def group_moves_for_snapshots(cls, moves):
+        move_groups = []
+        for move_group in super(Move, cls).group_moves_for_snapshots(moves):
+            if len(move_group) == 1:
+                move_groups.append(move_group)
+                continue
+            move_group.sort(key=cls.get_payment_from_move)
+            for _, group in groupby(move_group, cls.get_payment_from_move):
+                move_groups.append(list(group))
+        return move_groups
+
+    @classmethod
+    def get_payment_from_move(cls, move):
+        if not move.origin:
+            return None
+        if move.origin.__name__ == 'account.payment':
+            return move.origin.get_grouping_key()
+        if move.origin.__name__ == 'account.move':
+            # Payment Rejection : Make sure the key is different than that of
+            # original payment
+            res = cls.get_payment_from_move(move.origin), 'canceled'
+            return res
+
 
 class MoveLine:
     __name__ = 'account.move.line'

@@ -99,16 +99,27 @@ class Move:
 
         super(Move, cls).post(moves)
 
+        move_groups = cls.group_moves_for_snapshots(moves)
+        if not move_groups:
+            return
+
+        snapshots = Snapshot.create([{} for _ in xrange(len(move_groups))])
+        to_write = sum([[move_group, {'snapshot': snapshot.id}]
+            for move_group, snapshot in zip(move_groups, snapshots)], [])
+
+        cls.write(*to_write)
+
+    @classmethod
+    def group_moves_for_snapshots(cls, moves):
         keyfunc = lambda m: m.journal
         moves = cls.browse(sorted(moves, key=keyfunc))
 
+        groups = []
         for journal, moves in groupby(moves, keyfunc):
-            moves = list(moves)
             if journal.aggregate and journal.aggregate_posting:
-                snapshot, = Snapshot.create([{}])
-                cls.write(moves, {
-                        'snapshot': snapshot.id,
-                        })
+                moves = list(moves)
+                groups.append(moves)
+        return groups
 
 
 class Line:
