@@ -61,5 +61,15 @@
             <field name="inherit" ref="account_payment.payment_group_view_list"/>
             <field name="name">payment_group_list</field>
         </record>
+        <record model="ir.action.act_window" id="act_payment_relate_form">
+            <field name="name">Payments</field>
+            <field name="res_model">account.payment</field>
+            <field name="domain" eval="[('sepa_mandate', '=', Eval('active_id'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_payment_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">account.payment.sepa.mandate,-1</field>
+            <field name="action" ref="act_payment_relate_form"/>
+        </record>
     </data>
 </tryton>

@@ -4,6 +4,8 @@
         <newline/>
         <label name="sepa_mandate"/>
         <field name="sepa_mandate"/>
+        <label name="sepa_mandate_sequence_type"/>
+        <field name="sepa_mandate_sequence_type"/>
         <label name="sepa_bank_reject_date"/>
         <field name="sepa_bank_reject_date"/>
         <newline/>

@@ -62,6 +62,20 @@ class Mandate(export.ExportImportMixin):
         return (super(Mandate, cls)._export_light() |
             set(['company', 'account_number']))
 
+    @property
+    def sequence_type(self):
+        seq_type = super(Mandate, self).sequence_type
+        if seq_type != 'RCUR':
+            return seq_type
+        payments = [p for p in self.payments
+            if p.state not in ['draft', 'approved']]
+        if (not payments
+                or all(not p.sepa_mandate_sequence_type for p in payments)
+                or all(p.rejected for p in payments)):
+            return 'FRST'
+        else:
+            return seq_type
+
 
 class Group:
     __name__ = 'account.payment.group'
