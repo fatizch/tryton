@@ -1,9 +1,12 @@
 from trytond.pool import PoolMeta
 
+from trytond.modules.cog_utils import fields
+
 
 __all__ = [
     'ContractFee',
     'Premium',
+    'PremiumTax',
     'EndorsementContract',
     ]
 
@@ -19,6 +22,19 @@ class Premium:
     __metaclass__ = PoolMeta
     __name__ = 'contract.premium'
 
+    tax_list = fields.One2Many('contract.premium-account.tax', 'premium',
+        'Tax List')
+
+    @classmethod
+    def _export_skips(cls):
+        return super(Premium, cls)._export_skips() | {'tax_list'}
+
+
+class PremiumTax:
+    _history = True
+    __metaclass__ = PoolMeta
+    __name__ = 'contract.premium-account.tax'
+
 
 class EndorsementContract:
     __metaclass__ = PoolMeta
@@ -30,6 +46,7 @@ class EndorsementContract:
         contract_idx = order.index('contract')
         order.insert(contract_idx + 1, 'contract.fee')
         order.append('contract.premium')
+        order.append('contract.premium-account.tax')
         return order
 
     @classmethod
@@ -44,3 +61,5 @@ class EndorsementContract:
                 instances['contract.premium'] += fee.premiums
             for option in contract.options:
                 instances['contract.premium'] += option.premiums
+        for premium in instances['contract.premium']:
+            instances['contract.premium-account.tax'] += premium.tax_list

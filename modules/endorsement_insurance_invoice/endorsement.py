@@ -198,13 +198,17 @@ class EndorsementContract:
         for contract in instances['contract']:
             instances['contract.billing_information'] += \
                 contract.billing_informations
+        new_premiums = []
         for option in instances['contract.option']:
             if option.covered_element:
-                instances['contract.premium'] += option.premiums
+                new_premiums += option.premiums
         for covered_element in instances['contract.covered_element']:
-            instances['contract.premium'] += covered_element.premiums
+            new_premiums += covered_element.premiums
         for extra_premium in instances['contract.option.extra_premium']:
-            instances['contract.premium'] += extra_premium.premiums
+            new_premiums += extra_premium.premiums
+        instances['contract.premium'] += new_premiums
+        for premium in new_premiums:
+            instances['contract.premium-account.tax'] += premium.tax_list
 
     def apply_values(self):
         values = super(EndorsementContract, self).apply_values()
