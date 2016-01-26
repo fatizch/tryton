@@ -664,10 +664,12 @@ class ChangeLoan(EndorsementWizardStepMixin):
                 loan_change['increments'] = [x.values for x in
                     cur_changes.increments if x.action == 'add']
             for increment in loan_change['increments']:
-                increment['end_date'] = coop_date.add_duration(
-                    increment['start_date'], increment['payment_frequency'],
-                    increment['number_of_payments'] - 1,
-                    stick_to_end_of_month=True)
+                if increment.get('start_date', None) is not None:
+                    increment['end_date'] = coop_date.add_duration(
+                        increment['start_date'],
+                        increment['payment_frequency'],
+                        increment['number_of_payments'] - 1,
+                        stick_to_end_of_month=True)
                 increment['currency'] = loan_change['currency']
                 increment['currency_symbol'] = loan_change['currency_symbol']
                 increment['currency_digits'] = loan_change['currency_digits']
@@ -681,7 +683,6 @@ class ChangeLoan(EndorsementWizardStepMixin):
             for x in wizard.endorsement.loan_endorsements}
         pool = Pool()
         LoanEndorsement = pool.get('endorsement.loan')
-        IncrementEndorsement = pool.get('endorsement.loan.increment')
         Loan = pool.get('loan')
 
         # Check modifier loan dates, use contract.check_loan_dates once
@@ -697,7 +698,7 @@ class ChangeLoan(EndorsementWizardStepMixin):
                 ctr_endorsement.contract.rec_name, 'bad_loan_dates',
                 ('\t\n'.join(bad_loans),))
 
-        to_delete, to_save, increment_to_delete = [], [], []
+        endorsements_to_save = []
         for loan_change in self.loan_changes:
             base_loan = Loan(loan_change.loan_id)
             if loan_change.loan_id in all_endorsements:
@@ -706,47 +707,20 @@ class ChangeLoan(EndorsementWizardStepMixin):
                 loan_endorsement = LoanEndorsement(values={},
                     loan=base_loan.id, endorsement=wizard.endorsement.id,
                     increments=[])
-            new_values, new_increments = {}, []
-            for k, v in loan_change.new_values[0]._save_values.iteritems():
-                if k == 'increments':
-                    new_increments = v
-                    continue
-                if getattr(base_loan, k) == v or k in ('state',
-                        'payments', 'loan_shares'):
-                    continue
-                if k == 'deferal' and (base_loan.deferal or None) == (
-                        v or None):
-                    # deferal may be None or ''
-                    continue
-                new_values[k] = v
-            if base_loan.kind != 'graduated' and not new_values:
-                # Nothing changed, remove endorsement
-                if loan_endorsement.id:
-                    to_delete.append(loan_endorsement)
-                continue
-            if base_loan.kind != 'graduated':
-                loan_endorsement.values = new_values
-                to_save.append(loan_endorsement)
-                continue
-            # Worst case scenario : we need to manually save the increments
-            increment_to_delete += list(loan_endorsement.increments)
-            increments_to_create = []
-            for increment_action in new_increments:
-                if increment_action[0] == 'create':
-                    increments_to_create += increment_action[1]
-            loan_endorsement.values = new_values
-            loan_endorsement.increments = [
-                IncrementEndorsement(action='remove', increment=increment.id)
-                for increment in base_loan.increments] + [
-                IncrementEndorsement(action='add', values=increment_dict)
-                for increment_dict in increments_to_create]
-            to_save.append(loan_endorsement)
-        if increment_to_delete:
-            IncrementEndorsement.delete(increment_to_delete)
-        if to_delete:
-            LoanEndorsement.delete(to_delete)
-        if to_save:
-            utils.save_all(to_save)
+            to_apply = loan_change.new_values[0]._save_values
+            self.pop_loan_fields(to_apply)
+            base_loan.increments = []
+            utils.apply_dict(base_loan, to_apply)
+            self._update_endorsement(loan_endorsement, base_loan._save_values)
+            if not loan_endorsement.clean_up():
+                endorsements_to_save.append(loan_endorsement)
+        wizard.endorsement.loan_endorsements = endorsements_to_save
+        wizard.endorsement.save()
+
+    def pop_loan_fields(self, loan_dict):
+        loan_dict.pop('state', None)
+        loan_dict.pop('payments', None)
+        loan_dict.pop('loan_shares', None)
 
 
 class ChangeLoanUpdatedPayments(model.CoopView):
