@@ -538,6 +538,8 @@ def values_mixin(value_model):
                         return False
                     elif getattr(record, k) and not getattr(record, k).id == v:
                         return False
+                elif isinstance(field, tryton_fields.Boolean):
+                    return (v or False) == (getattr(record, k) or False)
                 else:
                     if not getattr(record, k) == v:
                         return False
