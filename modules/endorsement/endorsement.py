@@ -285,6 +285,7 @@ def values_mixin(value_model):
                         'datetime_field': 'applied_on',
                         'depends': (['values', 'applied_on'] +
                             cls.values.depends),
+                        'loading': 'lazy',
                         }
                     used_ids.append(vfield.field.id)
             return fields

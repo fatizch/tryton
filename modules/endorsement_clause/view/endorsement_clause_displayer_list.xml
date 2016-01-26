@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tree string="Clauses">
+    <field name="display_name" expand="1"/>
+    <field name="action"/>
+    <field name="contract" tree_invisible="1"/>
+    <field name="contract_rec_name" tree_invisible="1"/>
+    <field name="clause" tree_invisible="1"/>
+    <field name="clause_id" tree_invisible="1"/>
+    <field name="customizable" tree_invisible="1"/>
+    <field name="text" tree_invisible="1"/>
+</tree>

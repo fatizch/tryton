@@ -1,0 +1,321 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.manage_clauses:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
+
+msgctxt "error:endorsement.contract.clause:"
+msgid "New Clause: %s"
+msgstr "Nouvelle clause : %s"
+
+msgctxt "error:endorsement.contract.clause:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.contract.clause:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.contract.clause:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract:"
+msgid "Clauses Modification"
+msgstr "Modification des clauses"
+
+msgctxt "field:contract.manage_clauses,all_clauses:"
+msgid "All Clauses"
+msgstr "Toutes les clauses"
+
+msgctxt "field:contract.manage_clauses,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.manage_clauses,current_clauses:"
+msgid "Current Clauses"
+msgstr "Clauses"
+
+msgctxt "field:contract.manage_clauses,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:contract.manage_clauses,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:contract.manage_clauses,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:contract.manage_clauses,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_clauses,possible_clauses:"
+msgid "Possible Clauses"
+msgstr "Clauses possibles"
+
+msgctxt "field:contract.manage_clauses,possible_contracts:"
+msgid "Possible Contracts"
+msgstr "Contrats disponibles"
+
+msgctxt "field:contract.manage_clauses.clause,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:contract.manage_clauses.clause,clause:"
+msgid "Clause"
+msgstr "Clause"
+
+msgctxt "field:contract.manage_clauses.clause,clause_id:"
+msgid "Clause Id"
+msgstr "Id de la clause"
+
+msgctxt "field:contract.manage_clauses.clause,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.manage_clauses.clause,contract_rec_name:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.manage_clauses.clause,customizable:"
+msgid "Customizable"
+msgstr "Personnalisable"
+
+msgctxt "field:contract.manage_clauses.clause,display_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.manage_clauses.clause,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_clauses.clause,text:"
+msgid "Text"
+msgstr "Texte"
+
+msgctxt "field:endorsement.contract,clauses:"
+msgid "Clause Endorsement"
+msgstr "Avenant de clause"
+
+msgctxt "field:endorsement.contract.clause,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.contract.clause,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.contract.clause,clause:"
+msgid "Clause"
+msgstr "Clause"
+
+msgctxt "field:endorsement.contract.clause,contract_endorsement:"
+msgid "Contract Endorsement"
+msgstr "Avenant au contrat"
+
+msgctxt "field:endorsement.contract.clause,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.clause,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.clause,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.clause,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.contract.clause,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.contract.clause,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.clause,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.clause,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.contract.clause,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.contract.clause,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.clause,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.clause,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.clause.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.clause.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.clause.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.clause.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.contract.clause.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.clause.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.contract.clause.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.clause.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.clause.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.clause.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.clause.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.clause.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.part,clause_fields:"
+msgid "Clause Fields"
+msgstr "Champs de clause"
+
+msgctxt "model:contract.manage_clauses,name:"
+msgid "Manage Clauses"
+msgstr "Gérer les clauses"
+
+msgctxt "model:contract.manage_clauses.clause,name:"
+msgid "Clause Displayer"
+msgstr "Clause"
+
+msgctxt "model:endorsement.contract.clause,name:"
+msgid "Endorsement Clause"
+msgstr "Clause"
+
+msgctxt "model:endorsement.contract.clause.field,name:"
+msgid "Endorsement Clause Field"
+msgstr "Champ d'avenant de clause"
+
+msgctxt "model:endorsement.part,name:change_clause_revision_part"
+msgid "Change Clauses"
+msgstr "Modifier les clauses"
+
+msgctxt "selection:contract.manage_clauses.clause,action:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:contract.manage_clauses.clause,action:"
+msgid "Added"
+msgstr "Ajoutée"
+
+msgctxt "selection:contract.manage_clauses.clause,action:"
+msgid "Modified"
+msgstr "Modifiée"
+
+msgctxt "selection:contract.manage_clauses.clause,action:"
+msgid "Removed"
+msgstr "Supprimée"
+
+msgctxt "selection:endorsement.contract.clause,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.contract.clause,action:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:endorsement.contract.clause,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
+msgctxt "view:contract.manage_clauses.clause:"
+msgid "Clause"
+msgstr "Clause"
+
+msgctxt "view:contract.manage_clauses.clause:"
+msgid "Clauses"
+msgstr "Clauses"
+
+msgctxt "view:contract.manage_clauses:"
+msgid "Add Clause"
+msgstr "Ajouter la clause"
+
+msgctxt "view:contract.manage_clauses:"
+msgid "Add Text Clause"
+msgstr "Ajouter une clause libre"
+
+msgctxt "view:contract.manage_clauses:"
+msgid "Manage Clauses"
+msgstr "Gérer les clauses"
+
+msgctxt "view:endorsement.contract.clause.field:"
+msgid "Endorsement Field"
+msgstr "Champ d'avenant"
+
+msgctxt "view:endorsement.contract.clause.field:"
+msgid "Endorsement Fields"
+msgstr "Champs d'avenant"
+
+msgctxt "view:endorsement.contract.clause:"
+msgid "Endorsement Clause"
+msgstr "Modification de clause"
+
+msgctxt "wizard_button:endorsement.start,manage_clauses,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,manage_clauses,manage_clauses_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_clauses,manage_clauses_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_clauses,manage_clauses_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"

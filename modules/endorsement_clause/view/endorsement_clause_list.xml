@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Endorsement Clause">
+    <field name="contract_endorsement"/>
+    <field name="action"/>
+    <field name="clause"/>
+</tree>

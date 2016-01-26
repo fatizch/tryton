@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="Clause" col="2">
+    <label name="action"/>
+    <field name="action"/>
+    <label name="clause"/>
+    <field name="clause"/>
+    <separator name="text" colspan="2"/>
+    <field name="text" colspan="2"/>
+</form>

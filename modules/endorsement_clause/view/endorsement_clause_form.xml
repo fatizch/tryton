@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form string="Endorsement Clause">
+    <label name="contract_endorsement"/>
+    <field name="contract_endorsement"/>
+    <newline/>
+    <label name="action"/>
+    <field name="action"/>
+    <label name="clause"/>
+    <field name="clause"/>
+    <field name="values" colspan="4"/>
+</form>

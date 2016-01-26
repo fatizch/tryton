@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<form string="Manage Clauses">
+    <label name="contract"/>
+    <field name="contract" colspan="3" widget="selection"/>
+    <group id="clauses" string="" colspan="4" col="2" yexpand="1" yfill="1">
+        <field name="current_clauses" group="clauses" mode="tree" expand_toolbar="0"/>
+        <field name="current_clauses" group="clauses" mode="form" expand_toolbar="0"/>
+    </group>
+    <label name="new_clause"/>
+    <field name="new_clause" widget="selection"/>
+    <button name="add_clause" string="Add Clause" icon="tryton-new"/>
+    <button name="add_text_clause" string="Add Text Clause" icon="tryton-new"/>
+    <newline/>
+    <group id="invisible" string="">
+        <field name="endorsement_definition"/>
+        <field name="possible_clauses"/>
+        <field name="possible_contracts"/>
+        <field name="all_clauses"/>
+        <field name="effective_date"/>
+    </group>
+</form>

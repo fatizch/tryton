@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<form string="Endorsement Field">
+    <label name="field"/>
+    <field name="field"/>
+</form>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ######################## -->
+        <!-- # Endorsement Contract # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="endorsement_contract_view_form">
+            <field name="model">endorsement.contract</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="endorsement.endorsement_contract_view_form"/>
+            <field name="name">endorsement_contract_form</field>
+        </record>
+        <!-- ###################### -->
+        <!-- # Endorsement Clause # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="endorsement_clause_view_form">
+            <field name="model">endorsement.contract.clause</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_clause_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_clause_view_list">
+            <field name="model">endorsement.contract.clause</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_clause_list</field>
+        </record>
+    </data>
+</tryton>
