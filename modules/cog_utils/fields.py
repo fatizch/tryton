@@ -1,3 +1,5 @@
+import copy
+
 from itertools import chain
 
 from sql import Column, Literal, operators, functions
@@ -167,7 +169,24 @@ class Many2Many(tryton_fields.Many2Many):
 
 
 class Function(tryton_fields.Function):
-    pass
+    def __init__(self, field, getter=None, setter=None, searcher=None,
+            loading='lazy', loader=None, updater=None):
+        object.__setattr__(self, 'loader', loader)
+        object.__setattr__(self, 'updater', updater)
+        if loader and not getter:
+            getter = loader
+        return super(Function, self).__init__(field, getter, setter, searcher,
+            loading)
+
+    def __copy__(self):
+        return Function(copy.copy(self._field), self.getter,
+            setter=self.setter, searcher=self.searcher, loading=self.loading,
+            loader=self.loader, updater=self.updater)
+
+    def __deepcopy__(self, memo):
+        return Function(copy.deepcopy(self._field, memo), self.getter,
+            setter=self.setter, searcher=self.searcher, loading=self.loading,
+            loader=self.loader, updater=self.updater)
 
 
 class Property(tryton_fields.Property):

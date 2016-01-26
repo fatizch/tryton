@@ -40,6 +40,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'EventTypeAction': 'event.type.action',
             'TestHistoryTable': 'cog_utils.test_history',
             'TestHistoryChildTable': 'cog_utils.test_history.child',
+            'TestLoaderUpdater': 'cog_utils.test_loader_updater',
             }
 
     def test0020get_module_path(self):
@@ -793,6 +794,45 @@ class ModuleTestCase(test_framework.CoopTestCase):
         master.on_change_current_version_1_version_field()
         self.assertEqual(master.get_version_1_at_date(
                 utils.today()).version_field, 'Updated Child 1')
+
+    def test0100_loader_updater(self):
+        test_instance = self.TestLoaderUpdater(real_field='foo')
+        self.assertRaises(AttributeError,
+            lambda: test_instance.normal_function)
+        self.assertEqual('foo', test_instance.loader_field)
+        self.assertEqual('foo', test_instance.loader_mixt_field)
+        self.assertEqual('foo', test_instance.updater_field)
+        test_instance.save()
+
+        self.assertEqual('bar', test_instance.normal_function)
+        self.assertEqual([{'id': 1, 'loader_mixt_field': 'bar'}],
+            self.TestLoaderUpdater.read(
+                [test_instance.id], ['loader_mixt_field']))
+        self.assertEqual('foo', test_instance.loader_field)
+        self.assertEqual('foo', test_instance.loader_mixt_field)
+        self.assertEqual('foo', test_instance.updater_field)
+
+        test_instance.updater_field = 'honey'
+        self.assertEqual('bar', test_instance.normal_function)
+        self.assertEqual([{'id': 1, 'loader_mixt_field': 'bar'}],
+            self.TestLoaderUpdater.read(
+                [test_instance.id], ['loader_mixt_field']))
+        self.assertEqual('honey', test_instance.loader_field)
+        self.assertEqual('honey', test_instance.loader_mixt_field)
+        self.assertEqual('honey', test_instance.updater_field)
+        self.assertEqual('honey', test_instance.real_field)
+
+        test_instance.save()
+
+        # get_field is a fake getter, so no surprise here
+        self.assertEqual('bar', test_instance.normal_function)
+        self.assertEqual([{'id': 1, 'loader_mixt_field': 'bar'}],
+            self.TestLoaderUpdater.read(
+                [test_instance.id], ['loader_mixt_field']))
+        self.assertEqual('honey', test_instance.loader_field)
+        self.assertEqual('honey', test_instance.loader_mixt_field)
+        self.assertEqual('honey', test_instance.updater_field)
+        self.assertEqual('honey', test_instance.real_field)
 
     def test_0110_history_table(self):
         cursor = Transaction().cursor

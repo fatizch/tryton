@@ -216,6 +216,20 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
                     fvalues[idx] = ('delete', action[1])
         return values
 
+    def __getattr__(self, name):
+        cls = self.__class__
+        field = cls._fields.get(name, None)
+        if isinstance(field, fields.Function) and field.loader:
+            return getattr(cls, field.loader)(self)
+        return super(CoopSQL, self).__getattr__(name)
+
+    def __setattr__(self, name, value):
+        cls = self.__class__
+        field = cls._fields.get(name, None)
+        super(CoopSQL, self).__setattr__(name, value)
+        if isinstance(field, fields.Function) and field.updater:
+            getattr(cls, field.updater)(self, value)
+
     @classmethod
     def delete(cls, instances):
         # Do not remove, needed to avoid infinite recursion in case a model

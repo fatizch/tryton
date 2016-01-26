@@ -26,6 +26,7 @@ __all__ = [
     'TestVersion1',
     'TestHistoryTable',
     'TestHistoryChildTable',
+    'TestLoaderUpdater',
     ]
 
 
@@ -284,3 +285,32 @@ class TestHistoryChildTable(model.CoopSQL):
     parent = fields.Many2One('cog_utils.test_history', 'Parent',
         ondelete='CASCADE', required=True, select=True)
     bar = fields.Char('Bar')
+
+
+class TestLoaderUpdater(model.CoopSQL):
+    'Test Loader Updater'
+
+    __name__ = 'cog_utils.test_loader_updater'
+
+    real_field = fields.Char('Real Field')
+    normal_function = fields.Function(
+        fields.Char('Normal Function'),
+        'get_field')
+    loader_field = fields.Function(
+        fields.Char('Loader Field'),
+        loader='load_field')
+    loader_mixt_field = fields.Function(
+        fields.Char('Loader Field'),
+        getter='get_field', loader='load_field')
+    updater_field = fields.Function(
+        fields.Char('Updater Field'),
+        loader='load_field', updater='update_field')
+
+    def get_field(self, name):
+        return 'bar'
+
+    def load_field(self):
+        return self.real_field
+
+    def update_field(self, value):
+        self.real_field = value

@@ -87,6 +87,7 @@ def register():
             TestVersion1,
             TestHistoryTable,
             TestHistoryChildTable,
+            TestLoaderUpdater,
             module='cog_utils', type_='model')
 
     Pool.register(

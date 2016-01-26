@@ -1,3 +1,4 @@
+* Add loader and updater functions for function fields
 * Add table view for history
 * Manage mono process batches
 
