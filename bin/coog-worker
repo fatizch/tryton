@@ -124,7 +124,7 @@ coog_worker_app() { # start trytond app worker inside container
         _coog_worker_conf || ( echo "!!! Failed to build configuration file !!!" && return )
 
         # TODO: review - batch
-        cp .conf/celeryconfig.py ../../trytond
+        cp conf/celeryconfig.py ../../trytond
 
         echo
         echo Staring worker...

@@ -2,9 +2,9 @@
 # third party softs configuration
 
 coog_conf_ngx() { # print nginx recommanded conf
-        cat .conf/nginx.conf
+        cat conf/nginx.conf
 }
 
 coog_conf_redis() { # print redis recommanded conf
-        cat .conf/redis.conf
+        cat conf/redis.conf
 }

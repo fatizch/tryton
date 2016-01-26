@@ -24,9 +24,9 @@ coog_init_bin() { # link useful bin to venv (tryton, coog, upload.py, etc)
 _coog_init_conf_cp() {
         if [ -f ../../conf/$1 ]
         then
-                cp .conf/$1 ../../conf/$1".ini"
+                cp conf/$1 ../../conf/$1".ini"
         else
-                cp .conf/$1 ../../conf/
+                cp conf/$1 ../../conf/
         fi
 }
 
@@ -52,7 +52,7 @@ coog_init_redmine() { # init redmine credentials
 
 coog_init_docker() { # provide helpful scripts to manage docker
         [ -d ../../docker ] && mv ../../docker ../../docker.old
-        cp -fr .docker ../../docker
+        cp -fr docker ../../docker
 }
 
  coog_init_autocomplete() { # add coog completion scripts to current virtual env
@@ -63,11 +63,11 @@ coog_init_docker() { # provide helpful scripts to manage docker
          local file_path_activate=$VIRTUAL_ENV"/bin/postactivate"
          local file_path_deactivate=$VIRTUAL_ENV"/bin/postdeactivate"
          local command_line="source $script_dir/.autocomplete/.coog_autocomplete_"
- 
+
          local my_shell=`basename $SHELL`
          if [ $my_shell = "bash" ] || [ $my_shell = "zsh" ] ; then
                  command_line=$command_line$my_shell
- 
+
                  if `grep -q "$command_line" $file_path_activate` ; then
                          echo "Autocompletion already initialized."
                  else
@@ -86,4 +86,4 @@ coog_init_docker() { # provide helpful scripts to manage docker
                  fi
          fi
  }
- 
+

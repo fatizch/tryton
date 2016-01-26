@@ -3,7 +3,7 @@
 
 coog_docker_env() { # build docker env image
         [ -d .cache ] && rm -rf .cache
-        docker build -t coog/env -f .conf/env.df .
+        docker build -t coog/env -f conf/env.df .
 }
 
 coog_docker_build() { # build docker image
@@ -29,7 +29,7 @@ coog_docker_build() { # build docker image
                         (mkdir $wd/.cache/$repo && cd $wd/.cache/$repo && tar xf -)
                 cd $wd
         done
-        cp .conf/coog.df .cache
+        cp conf/coog.df .cache
         docker build -t coog/$1 -f .cache/coog.df .cache
 }
 
