@@ -1,0 +1,30 @@
+# vim: set ft=sh:
+# generate stats about coog
+
+_coog_stats_lines() { # count code lines - <file extension>
+        find -name "*.$1" -exec wc -l {} \; | cut -d " " -f 1 | paste -s -d "+" | bc
+}
+
+coog_stats_lines() { # count code lines - <repository>
+        [ -z $1 ] && echo need a repo to calculate stats
+        local modules
+        modules="../../$1/modules"
+        [ ! -d "$modules" ] && echo bad repo name
+        local wd
+        wd=`pwd`
+        cd "$modules"
+        echo module,python,xml
+        local module
+        for module in *
+        do
+                [ ! -d $module ] && continue
+                cd $module
+                local py
+                py=`_coog_stats_lines py`
+                local xml
+                xml=`_coog_stats_lines xml`
+                echo $module,$py,$xml
+                cd ..
+        done
+        cd "$wd"
+}
