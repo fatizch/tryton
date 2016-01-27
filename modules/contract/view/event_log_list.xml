@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/tree/field[@name='event_type']" position="after">
+        <field name="contract"/>
+    </xpath>
+</data>

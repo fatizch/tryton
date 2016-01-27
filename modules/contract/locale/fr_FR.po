@@ -1621,3 +1621,7 @@ msgstr "Suivant"
 msgctxt "view:contract:"
 msgid "Will be terminated for:"
 msgstr "Sera résilié pour:"
+
+msgctxt "field:event.log,contract:"
+msgid "Contract"
+msgstr "Contrat"
