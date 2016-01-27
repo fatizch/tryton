@@ -67,7 +67,7 @@ Account = Model.get('account.account')
 broker_fee_account = Account()
 broker_fee_account.name = 'Broker Fee Account'
 broker_fee_account.code = 'broker_fee_account'
-broker_fee_account.kind = 'expense'
+broker_fee_account.kind = 'revenue'
 broker_fee_account.party_required = True
 broker_fee_account.type = broker_fee_kind
 broker_fee_account.company = company
@@ -78,7 +78,7 @@ Product = Model.get('product.product')
 Template = Model.get('product.template')
 template = Template()
 template.name = 'Broker Fee Template'
-template.account_expense = broker_fee_account
+template.account_revenue = broker_fee_account
 template.save()
 product = Product()
 product.name = 'Broker Fee Product'
