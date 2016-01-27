@@ -15,8 +15,8 @@
     <field name="start_date"/>
     <label name="end_date"/>
     <field name="end_date"/>
-    <label name="deferal"/>
-    <field name="deferal"/>
+    <label name="deferral"/>
+    <field name="deferral"/>
     <field name="loan" invisible="1"/>
     <field name="loan_state" invisible="1"/>
     <field name="manual" invisible="1"/>

@@ -27,7 +27,7 @@ LOAN_KIND = [
     ('balloon', 'Balloon'),
     ]
 
-DEFERALS = [
+DEFERRALS = [
     ('', ''),
     ('partially', 'Partially Deferred'),
     ('fully', 'Fully deferred'),
@@ -36,8 +36,8 @@ DEFERALS = [
 _STATES = {'readonly': Eval('state') != 'draft'}
 _DEPENDS = ['state']
 _STATES_INCREMENT = {'required': Eval('loan_state') == 'calculated'}
-LOAN_FIELDS_FOR_INCREMENTS = ['kind', 'deferal', 'duration', 'duration_unit',
-    'deferal_duration', 'increments', 'rate', 'payment_frequency',
+LOAN_FIELDS_FOR_INCREMENTS = ['kind', 'deferral', 'duration', 'duration_unit',
+    'deferral_duration', 'increments', 'rate', 'payment_frequency',
     'first_payment_date', 'funds_release_date']
 
 
@@ -68,7 +68,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         'on_change_with_currency_symbol')
     duration = fields.Function(
         fields.Integer('Duration', required=True, states=_STATES,
-             depends=_DEPENDS, help='Deferal included'),
+             depends=_DEPENDS, help='Deferral included'),
         'get_duration', 'setter_void')
     duration_unit = fields.Function(
         fields.Selection([('month', 'Month'), ('year', 'Year')], 'Unit',
@@ -83,7 +83,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 ('year', 'Year')],
             'Payment Frequency', sort=False, required=True,
             states=_STATES, depends=_DEPENDS),
-        'get_non_deferal_increment_field', 'setter_void')
+        'get_non_deferral_increment_field', 'setter_void')
     payment_frequency_string = payment_frequency.translated(
         'payment_frequency')
     amount = fields.Numeric('Amount',
@@ -129,8 +129,8 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 Eval('state') != 'draft'),
             },
         depends=['state', 'first_payment_date', 'kind'], delete_missing=True)
-    deferal = fields.Function(
-        fields.Selection(DEFERALS, 'Deferal',
+    deferral = fields.Function(
+        fields.Selection(DEFERRALS, 'Deferral',
             states={
                 'invisible': ~Eval('kind').in_(
                     ['fixed_rate', 'interest_free']),
@@ -138,18 +138,18 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 },
             depends=['kind', 'state']),
         'get_first_increment_field', 'setter_void')
-    deferal_string = deferal.translated('deferal')
-    deferal_duration = fields.Function(
-        fields.Integer('Deferal Duration',
+    deferral_string = deferral.translated('deferral')
+    deferral_duration = fields.Function(
+        fields.Integer('Deferral Duration',
             states={
-                'invisible': ~Eval('deferal') | ~Eval('kind').in_(
+                'invisible': ~Eval('deferral') | ~Eval('kind').in_(
                     ['fixed_rate', 'interest_free']),
-                'required': Bool(Eval('deferal', '')) & Eval('kind').in_(
+                'required': Bool(Eval('deferral', '')) & Eval('kind').in_(
                     ['fixed_rate', 'interest_free']),
                 'readonly': Eval('state') != 'draft'
                 },
-            depends=['deferal', 'kind', 'state']),
-        'get_deferal_duration', 'setter_void')
+            depends=['deferral', 'kind', 'state']),
+        'get_deferral_duration', 'setter_void')
     end_date = fields.Function(
         fields.Date('End Date'),
         'get_end_date')
@@ -273,7 +273,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         return 'month'
 
     @staticmethod
-    def default_deferal():
+    def default_deferral():
         return ''
 
     @staticmethod
@@ -308,19 +308,19 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
 
     @staticmethod
     def calculate_payment_amount(annual_rate, number_of_payments, amount,
-            currency, payment_frequency, deferal=None):
+            currency, payment_frequency, deferral=None):
         if not number_of_payments:
             return
         rate = Loan.calculate_rate(annual_rate, payment_frequency)
-        if not deferal:
+        if not deferral:
             if rate:
                 den = Decimal((1 - (1 + rate) ** (-number_of_payments)))
                 res = amount * rate / den
             else:
                 res = amount / Decimal(number_of_payments)
-        elif deferal == 'partially':
+        elif deferral == 'partially':
             res = amount * rate
-        elif deferal == 'fully':
+        elif deferral == 'fully':
             res = Decimal(0)
         return currency.round(res)
 
@@ -336,19 +336,19 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             # Nothing to do, we keep current increments
             return
         elif self.kind in ['intermediate', 'balloon']:
-            deferal = 'partially'
+            deferral = 'partially'
             coeff = Decimal(coop_date.convert_frequency(self.duration_unit,
                     self.payment_frequency))
-            deferal_duration = (self.duration / coeff - 1
+            deferral_duration = (self.duration / coeff - 1
                 if self.duration else None)
-            deferal_duration_unit = self.payment_frequency
+            deferral_duration_unit = self.payment_frequency
         else:
-            deferal = getattr(self, 'deferal', None)
-            deferal_duration = getattr(self, 'deferal_duration', None)
-            deferal_duration_unit = self.payment_frequency
-        if deferal and deferal_duration:
-            self.increments = self.create_increments_from_deferal(
-                deferal_duration, deferal_duration_unit, deferal)
+            deferral = getattr(self, 'deferral', None)
+            deferral_duration = getattr(self, 'deferral_duration', None)
+            deferral_duration_unit = self.payment_frequency
+        if deferral and deferral_duration:
+            self.increments = self.create_increments_from_deferral(
+                deferral_duration, deferral_duration_unit, deferral)
         elif self.duration:
             coeff = Decimal(coop_date.convert_frequency(self.duration_unit,
                     self.payment_frequency))
@@ -362,7 +362,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             increment.manual = getattr(increment, 'manual', None)
             increment.start_date = getattr(increment, 'start_date', None)
             increment.number = getattr(increment, 'number', None)
-            increment.deferal = getattr(increment, 'deferal', None)
+            increment.deferral = getattr(increment, 'deferral', None)
 
         manual_increments = [x for x in increments
             if x.start_date and x.manual and not x.number]
@@ -405,7 +405,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                     increment.rate, increment.number_of_payments,
                     increment.begin_balance, self.currency,
                     increment.payment_frequency,
-                    increment.deferal
+                    increment.deferral
                     )
             if not begin_balance:
                 continue
@@ -457,20 +457,21 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         return increments_to_keep + increments_added_after_manual_increments
 
     def create_increment(self, duration, payment_frequency,
-            payment_amount=None, deferal=None):
+            payment_amount=None, deferral=None):
         Increment = Pool().get('loan.increment')
         return Increment(
             number_of_payments=duration,
             payment_frequency=payment_frequency,
             rate=self.rate,
             payment_amount=payment_amount,
-            deferal=deferal,
+            deferral=deferral,
             )
 
-    def create_increments_from_deferal(self, duration, duration_unit, deferal):
+    def create_increments_from_deferral(self, duration, duration_unit,
+            deferral):
         result = [self.create_increment(duration, duration_unit,
-                deferal=deferal)]
-        if deferal is None:
+                deferral=deferral)]
+        if deferral is None:
             return result
         coeff = Decimal(coop_date.convert_frequency(self.duration_unit,
                 self.payment_frequency))
@@ -534,16 +535,17 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         return 'month'
 
     def get_first_increment_field(self, name):
-        if name == 'deferal_duration':
+        if name == 'deferral_duration':
             name = 'number_of_payments'
         if self.increments:
             return getattr(self.increments[0], name)
 
-    def get_deferal_duration(self, name):
-        return self.increments[0].number_of_payments if self.deferal else None
+    def get_deferral_duration(self, name):
+        return (self.increments[0].number_of_payments
+            if self.deferral else None)
 
-    def get_non_deferal_increment_field(self, name):
-        increments = [x for x in self.increments if not x.deferal]
+    def get_non_deferral_increment_field(self, name):
+        increments = [x for x in self.increments if not x.deferral]
         if increments:
             return getattr(increments[0], name)
 
@@ -635,7 +637,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         self.init_increments()
 
     @fields.depends(*LOAN_FIELDS_FOR_INCREMENTS)
-    def on_change_deferal(self):
+    def on_change_deferral(self):
         self.init_increments()
 
     @fields.depends(*LOAN_FIELDS_FOR_INCREMENTS)
@@ -647,7 +649,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         self.init_increments()
 
     @fields.depends(*LOAN_FIELDS_FOR_INCREMENTS)
-    def on_change_deferal_duration(self):
+    def on_change_deferral_duration(self):
         self.init_increments()
 
     @fields.depends(*LOAN_FIELDS_FOR_INCREMENTS)
@@ -822,8 +824,8 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
                 ['month', 'quarter', 'half_year', 'year'])])
     payment_frequency_string = payment_frequency.translated(
         'payment_frequency')
-    deferal = fields.Selection(DEFERALS, 'Deferal', sort=False)
-    deferal_string = deferal.translated('deferal')
+    deferral = fields.Selection(DEFERRALS, 'Deferral', sort=False)
+    deferral_string = deferral.translated('deferral')
     manual = fields.Boolean('Manual')
     loan_state = fields.Function(
         fields.Char('Loan State'),
@@ -849,6 +851,13 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
 
         increment_h = TableHandler(cursor, cls, module_name)
         inexisting_start_date = not increment_h.column_exist('start_date')
+        # Migration from 1.6: fix typo in deferral
+        increment_h.column_rename('deferal', 'deferral')
+        if TableHandler.table_exist(cursor, 'loan_increment__history'):
+            increment_history_h = TableHandler(cursor, cls, module_name,
+                history=True)
+            increment_history_h.column_rename('deferal', 'deferral')
+
         super(LoanIncrement, cls).__register__(module_name)
 
         loan_h = TableHandler(cursor, Loan, module_name)
@@ -883,27 +892,27 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
             self.raise_user_error('invalid_number_of_payments')
 
     @fields.depends('begin_balance', 'currency', 'number_of_payments',
-        'deferal', 'loan', 'payment_amount', 'payment_frequency', 'rate')
+        'deferral', 'loan', 'payment_amount', 'payment_frequency', 'rate')
     def on_change_begin_balance(self):
         self.payment_amount = self.calculate_payment_amount()
 
     @fields.depends('begin_balance', 'currency', 'number_of_payments',
-        'deferal', 'loan', 'payment_amount', 'payment_frequency', 'rate')
-    def on_change_deferal(self):
+        'deferral', 'loan', 'payment_amount', 'payment_frequency', 'rate')
+    def on_change_deferral(self):
         self.payment_amount = self.calculate_payment_amount()
 
     @fields.depends('begin_balance', 'currency', 'number_of_payments',
-        'deferal', 'loan', 'payment_amount', 'payment_frequency', 'rate')
+        'deferral', 'loan', 'payment_amount', 'payment_frequency', 'rate')
     def on_change_number_of_payments(self):
         self.payment_amount = self.calculate_payment_amount()
 
     @fields.depends('begin_balance', 'currency', 'number_of_payments',
-        'deferal', 'loan', 'payment_amount', 'payment_frequency', 'rate')
+        'deferral', 'loan', 'payment_amount', 'payment_frequency', 'rate')
     def on_change_payment_frequency(self):
         self.payment_amount = self.calculate_payment_amount()
 
     @fields.depends('begin_balance', 'currency', 'number_of_payments',
-        'deferal', 'loan', 'payment_amount', 'payment_frequency', 'rate')
+        'deferral', 'loan', 'payment_amount', 'payment_frequency', 'rate')
     def on_change_rate(self):
         self.payment_amount = self.calculate_payment_amount()
 
@@ -921,7 +930,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
             return self.loan.calculate_payment_amount(self.rate,
                 self.number_of_payments, self.begin_balance,
                 self.currency or self.loan.currency, self.payment_frequency,
-                self.deferal)
+                self.deferral)
         return None
 
     def get_func_key(self, name):
@@ -1023,11 +1032,11 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
             interest=(currency.round(begin_balance * rate) if rate else None),
             )
         interest = payment.interest or Decimal(0)
-        if getattr(increment, 'deferal', None):
-            if increment.deferal == 'partially':
+        if getattr(increment, 'deferral', None):
+            if increment.deferral == 'partially':
                 payment.principal = Decimal(0)
                 payment.interest = payment.amount
-            elif increment.deferal == 'fully':
+            elif increment.deferral == 'fully':
                 payment.principal = (-interest)
         else:
             if payment.begin_balance > payment.amount and not is_last_payment:

@@ -14,7 +14,7 @@
     </field>
     <field name="start_date"/>
     <field name="end_date"/>
-    <field name="deferal"/>
+    <field name="deferral"/>
     <field name="loan" tree_invisible="1"/>
     <field name="loan_state" tree_invisible="1"/>
     <field name="manual" tree_invisible="1"/>

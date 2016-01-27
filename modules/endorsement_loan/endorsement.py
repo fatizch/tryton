@@ -131,7 +131,7 @@ class LoanIncrement:
         return self.calculate_payment_amount()
 
     @fields.depends('begin_balance', 'calculated_amount', 'number_of_payments',
-        'deferal', 'loan', 'payment_amount', 'payment_frequency', 'rate')
+        'deferral', 'loan', 'payment_amount', 'payment_frequency', 'rate')
     def on_change_payment_amount(self):
         if self.payment_amount is None:
             self.payment_amount = self.calculate_payment_amount()
@@ -147,9 +147,9 @@ class LoanIncrement:
         self.calculated_amount = new_amount
 
     @fields.depends('calculated_amount')
-    def on_change_deferal(self):
+    def on_change_deferral(self):
         old_amount = self.payment_amount
-        super(LoanIncrement, self).on_change_deferal()
+        super(LoanIncrement, self).on_change_deferral()
         new_amount = self.payment_amount
         if old_amount is not None and self.calculated_amount != old_amount:
             self.payment_amount = old_amount

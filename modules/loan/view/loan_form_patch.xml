@@ -40,10 +40,10 @@
             <button name="propagate_first_payment_date" string="_Propagate Dates" icon="tryton-executable"/>
         </group>
         <newline/>
-        <label name="deferal"/>
-        <field name="deferal"/>
-        <label name="deferal_duration"/>
-        <field name="deferal_duration"/>
+        <label name="deferral"/>
+        <field name="deferral"/>
+        <label name="deferral_duration"/>
+        <field name="deferral_duration"/>
         <newline/>
         <group id="warning" string="" colspan="2">
             <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>

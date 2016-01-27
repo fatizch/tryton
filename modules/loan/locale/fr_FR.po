@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -227,12 +227,12 @@ msgctxt "field:loan,current_loan_shares:"
 msgid "Current Loan Share"
 msgstr "Quotité courante"
 
-msgctxt "field:loan,deferal:"
-msgid "Deferal"
+msgctxt "field:loan,deferral:"
+msgid "Deferral"
 msgstr "Différé"
 
-msgctxt "field:loan,deferal_duration:"
-msgid "Deferal Duration"
+msgctxt "field:loan,deferral_duration:"
+msgid "Deferral Duration"
 msgstr "Durée du Différé"
 
 msgctxt "field:loan,display_warning:"
@@ -355,8 +355,8 @@ msgctxt "field:loan.increment,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:loan.increment,deferal:"
-msgid "Deferal"
+msgctxt "field:loan.increment,deferral:"
+msgid "Deferral"
 msgstr "Différé"
 
 msgctxt "field:loan.increment,end_date:"
@@ -693,7 +693,7 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "help:loan,duration:"
-msgid "Deferal included"
+msgid "Deferral included"
 msgstr "Différé inclus"
 
 msgctxt "model:contract-loan,name:"
@@ -773,15 +773,15 @@ msgctxt "model:tag,name:tag_loan"
 msgid "Loan"
 msgstr "Prêt"
 
-msgctxt "selection:loan,deferal:"
+msgctxt "selection:loan,deferral:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:loan,deferal:"
+msgctxt "selection:loan,deferral:"
 msgid "Fully deferred"
 msgstr "Différé Total"
 
-msgctxt "selection:loan,deferal:"
+msgctxt "selection:loan,deferral:"
 msgid "Partially Deferred"
 msgstr "Différé Partiel"
 
@@ -837,15 +837,15 @@ msgctxt "selection:loan,state:"
 msgid "Draft"
 msgstr "Brouillon"
 
-msgctxt "selection:loan.increment,deferal:"
+msgctxt "selection:loan.increment,deferral:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:loan.increment,deferal:"
+msgctxt "selection:loan.increment,deferral:"
 msgid "Fully deferred"
 msgstr "Différé Total"
 
-msgctxt "selection:loan.increment,deferal:"
+msgctxt "selection:loan.increment,deferral:"
 msgid "Partially Deferred"
 msgstr "Différé Partiel"
 
