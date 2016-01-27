@@ -2,6 +2,7 @@ from trytond.pool import Pool
 from .endorsement import *
 from .offered import *
 from .wizard import *
+from .event import *
 
 
 def register():
@@ -26,6 +27,7 @@ def register():
         ChangePartyRelationship,
         RelationDisplayer,
         SelectEndorsement,
+        EventTypeAction,
         module='endorsement_party', type_='model')
 
     Pool.register(
