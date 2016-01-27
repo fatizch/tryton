@@ -54,7 +54,7 @@ def open_path(rel_path, patterns):
                     prev_pos = new_pos
                     break
                 prev_pos = new_pos
-        nvim.command('execute "normal zOz+"')
+        nvim.command('execute "normal zO"')
     else:
         os.system(editor + ' ' + new_path + ' &')
     return
@@ -906,7 +906,7 @@ class DebugMethodMROInstance(ModelSQL, ModelView):
         file_path[-1] += '.py'
         open_path(file_path, [('^class ' + mros[0].base_name,
                     '^ *__name__ = .%s.' % mros[0].method.model.name),
-                ('^ *def ' + mros[0].method.name,)])
+                ('^ *def ' + mros[0].method.name + '\((\|$\)',)])
 
 
 class DebugViewInstance(ModelSQL, ModelView):
