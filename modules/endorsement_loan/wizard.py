@@ -1566,7 +1566,7 @@ class StartEndorsement:
             return result
         result['increments'] = [dict([
                     (fname, getattr(x, fname))
-                    for fname in ('number_of_payments', 'deferal',
+                    for fname in ('number_of_payments', 'deferral',
                         'number', 'rate', 'payment_amount', 'start_date',
                         'begin_balance', 'currency_symbol',
                         'currency_digits')])
