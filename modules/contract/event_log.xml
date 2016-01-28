@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tryton>
-    <data>
+    <data depends="event_log">
         <record model="ir.ui.view" id="event_log_view_form">
             <field name="model">event.log</field>
             <field name="type">form</field>
