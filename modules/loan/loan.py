@@ -72,7 +72,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         'get_duration', 'setter_void')
     duration_unit = fields.Function(
         fields.Selection([('month', 'Month'), ('year', 'Year')], 'Unit',
-            sort=False, required=True),
+            sort=False, required=True, states=_STATES, depends=_DEPENDS),
         'get_duration_unit', 'setter_void')
     duration_unit_string = duration_unit.translated('duration_unit')
     payment_frequency = fields.Function(
@@ -132,18 +132,15 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     deferral = fields.Function(
         fields.Selection(DEFERRALS, 'Deferral',
             states={
-                'invisible': ~Eval('kind').in_(
-                    ['fixed_rate', 'interest_free']),
                 'readonly': Eval('state') != 'draft',
                 },
-            depends=['kind', 'state']),
-        'get_first_increment_field', 'setter_void')
+            depends=['state']),
+        'get_deferral', 'setter_void')
     deferral_string = deferral.translated('deferral')
     deferral_duration = fields.Function(
         fields.Integer('Deferral Duration',
             states={
-                'invisible': ~Eval('deferral') | ~Eval('kind').in_(
-                    ['fixed_rate', 'interest_free']),
+                'invisible': ~Eval('deferral'),
                 'required': Bool(Eval('deferral', '')) & Eval('kind').in_(
                     ['fixed_rate', 'interest_free']),
                 'readonly': Eval('state') != 'draft'
@@ -331,29 +328,44 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 self.raise_user_error('bad_increment_start')
 
     def init_increments(self):
-        if self.kind == 'graduated' or any([getattr(x, 'manual', None)
-                    for x in getattr(self, 'increments', [])]):
-            # Nothing to do, we keep current increments
+        if any([getattr(x, 'manual', None)
+                for x in getattr(self, 'increments', [])]):
             return
-        elif self.kind in ['intermediate', 'balloon']:
-            deferral = 'partially'
-            coeff = Decimal(coop_date.convert_frequency(self.duration_unit,
-                    self.payment_frequency))
-            deferral_duration = (self.duration / coeff - 1
-                if self.duration else None)
-            deferral_duration_unit = self.payment_frequency
-        else:
-            deferral = getattr(self, 'deferral', None)
-            deferral_duration = getattr(self, 'deferral_duration', None)
-            deferral_duration_unit = self.payment_frequency
+        increments = []
+        coeff = Decimal(coop_date.convert_frequency(self.duration_unit,
+                self.payment_frequency))
+        duration = int((self.duration or 0) / coeff)
+
+        if self.kind == 'graduated':
+            # We keep all but first increment if it is the increment linked
+            # to the deferral
+            for i, increment in enumerate(self.increments):
+                if i != 0 or not getattr(increment, 'deferral', None):
+                    new_increment = increment.__class__()
+                    for field in ['number_of_payments', 'rate',
+                            'payment_amount', 'payment_frequency', 'deferral']:
+                        setattr(new_increment, field,
+                            getattr(increment, field, None))
+                    increments.append(new_increment)
+
+        deferral = getattr(self, 'deferral', None)
+        deferral_duration = (getattr(self, 'deferral_duration', 0)
+            if deferral else 0)
         if deferral and deferral_duration:
-            self.increments = self.create_increments_from_deferral(
-                deferral_duration, deferral_duration_unit, deferral)
-        elif self.duration:
-            coeff = Decimal(coop_date.convert_frequency(self.duration_unit,
-                    self.payment_frequency))
-            self.increments = [self.create_increment(self.duration / coeff,
+            increments = [self.create_increment(deferral_duration,
+                self.payment_frequency, deferral=deferral)] + increments
+            duration -= deferral_duration
+
+        if self.kind in ['intermediate', 'balloon']:
+            increments += [self.create_increment(duration - 1,
+                    self.payment_frequency, deferral='partially')]
+            duration = 1
+
+        if self.kind != 'graduated' and duration > 0:
+            increments += [self.create_increment(duration,
                     self.payment_frequency)]
+
+        self.increments = increments
 
     def update_increments_and_calculate_payments(self):
         increments = list(self.increments)
@@ -467,21 +479,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             deferral=deferral,
             )
 
-    def create_increments_from_deferral(self, duration, duration_unit,
-            deferral):
-        result = [self.create_increment(duration, duration_unit,
-                deferral=deferral)]
-        if deferral is None:
-            return result
-        coeff = Decimal(coop_date.convert_frequency(self.duration_unit,
-                self.payment_frequency))
-        coeff2 = Decimal(coop_date.convert_frequency(duration_unit,
-                self.payment_frequency))
-        result.append(self.create_increment(
-                self.duration / coeff - duration / coeff2,
-                self.payment_frequency))
-        return result
-
     def get_current_loan_shares(self, name):
         contract_id = Transaction().context.get('contract', None)
         if contract_id is None:
@@ -534,15 +531,24 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     def get_duration_unit(self, name):
         return 'month'
 
-    def get_first_increment_field(self, name):
-        if name == 'deferral_duration':
-            name = 'number_of_payments'
-        if self.increments:
-            return getattr(self.increments[0], name)
+    def get_deferral_increment(self):
+        increment = None
+        if self.kind in ['intermediate', 'balloon']:
+            # we must not look at the first increment with deferral if it is
+            # the technical one intrisic to the balloon definition
+            if len(self.increments) > 1 and self.increments[1].deferral:
+                increment = self.increments[0]
+        elif self.increments:
+            increment = self.increments[0]
+        return increment if increment and increment.deferral else None
+
+    def get_deferral(self, name):
+        increment = self.get_deferral_increment()
+        return increment.deferral if increment else None
 
     def get_deferral_duration(self, name):
-        return (self.increments[0].number_of_payments
-            if self.deferral else None)
+        increment = self.get_deferral_increment()
+        return increment.number_of_payments if increment else None
 
     def get_non_deferral_increment_field(self, name):
         increments = [x for x in self.increments if not x.deferral]

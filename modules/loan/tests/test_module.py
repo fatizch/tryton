@@ -226,6 +226,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         increment_1 = loan.increments[0]
         self.assert_(increment_1)
         self.assertEqual(increment_1.deferral, 'partially')
+        self.assertIsNone(loan.deferral)
         self.assertEqual(increment_1.number_of_payments, 29)
         self.assertEqual(increment_1.start_date, datetime.date(2014, 9, 5))
         self.assertEqual(increment_1.begin_balance, loan.amount)
@@ -234,6 +235,47 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(increment_2.number_of_payments, 1)
         self.assertEqual(increment_2.start_date, datetime.date(2029, 3, 5))
         self.assertEqual(increment_2.begin_balance, loan.amount)
+
+        self.assert_payment(loan, datetime.date(2022, 3, 5), 16, loan.amount,
+            Decimal('8240.95'), Decimal(0), Decimal('8240.95'), loan.amount)
+        self.assert_payment(loan, datetime.date(2029, 3, 5), 30, loan.amount,
+            Decimal('251695.95'), loan.amount, Decimal('8240.95'),
+            Decimal('0'))
+
+        loan = self.Loan(
+            kind='balloon',
+            rate=Decimal('0.0677'),
+            funds_release_date=datetime.date(2014, 3, 5),
+            payment_frequency='half_year',
+            currency=currency,
+            company=company,
+            deferral='partially',
+            deferral_duration=2)
+        loan.first_payment_date = loan.on_change_with_first_payment_date()
+        loan.duration = 30
+        loan.duration_unit = 'half_year'
+        loan.amount = Decimal(243455)
+        loan.calculate()
+        loan.save()
+        self.assertEqual(loan.get_payment_amount(loan.first_payment_date),
+            Decimal('8240.95'))
+        self.assertEqual(len(loan.increments), 3)
+        increment_1 = loan.increments[0]
+        self.assert_(increment_1)
+        self.assertEqual(increment_1.deferral, 'partially')
+        self.assertEqual(loan.deferral, 'partially')
+        self.assertEqual(loan.deferral_duration, 2)
+        self.assertEqual(increment_1.start_date, datetime.date(2014, 9, 5))
+        self.assertEqual(increment_1.begin_balance, loan.amount)
+        increment_2 = loan.increments[1]
+        self.assert_(increment_2)
+        self.assertEqual(increment_2.number_of_payments, 27)
+        self.assertEqual(increment_2.begin_balance, loan.amount)
+        increment_3 = loan.increments[-1]
+        self.assert_(increment_3)
+        self.assertEqual(increment_3.number_of_payments, 1)
+        self.assertEqual(increment_3.start_date, datetime.date(2029, 3, 5))
+        self.assertEqual(increment_3.begin_balance, loan.amount)
 
         self.assert_payment(loan, datetime.date(2022, 3, 5), 16, loan.amount,
             Decimal('8240.95'), Decimal(0), Decimal('8240.95'), loan.amount)
@@ -345,13 +387,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
             duration=Decimal('312'),
             duration_unit='month',
             currency=currency,
-            company=company)
+            company=company,
+            deferral='partially',
+            deferral_duration=12)
         loan.increments = [
             self.LoanIncrement(
-                number_of_payments=12,
                 deferral='partially',
                 rate=loan.rate,
-                payment_amount=Decimal('206.12'),
                 payment_frequency=loan.payment_frequency,
                 ),
             self.LoanIncrement(
@@ -362,7 +404,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ),
             self.LoanIncrement(
                 number_of_payments=60,
-                begin_balance=Decimal('64724.40'),
                 rate=loan.rate,
                 payment_amount=Decimal('1186.20'),
                 payment_frequency=loan.payment_frequency,
