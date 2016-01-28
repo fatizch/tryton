@@ -36,6 +36,13 @@ class PrintMoveLineAggregatedReportStart(model.CoopView):
         return utils.today()
 
     @staticmethod
+    def default_account():
+        AccountConfiguration = Pool().get('account.configuration')
+        account_config, = AccountConfiguration.search([], limit=1)
+        if account_config and account_config.default_account_receivable:
+            return account_config.default_account_receivable.id
+
+    @staticmethod
     def default_company():
         return Transaction().context.get('company')
 
