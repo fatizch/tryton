@@ -208,7 +208,7 @@ class Group:
                     sepa_remittance_information='',  # TODO
                     )
                 merged_payments.append(payment)
-                yield key, merged_payments
+            yield key, merged_payments
 
     def get_main_sepa_message(self, name):
         for state in ['done', 'waiting']:
