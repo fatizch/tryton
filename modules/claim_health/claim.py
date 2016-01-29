@@ -19,11 +19,11 @@ class HealthLoss(model.CoopSQL, model.CoopView):
     _func_key = 'func_key'
 
     loss = fields.Many2One('claim.loss', 'Loss', required=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     covered_person = fields.Many2One('party.party', 'Covered Person',
         ondelete='RESTRICT', required=True)
     act_description = fields.Many2One('benefit.act.description',
-        'Medical Act Description')
+        'Medical Act Description', ondelete='RESTRICT')
     act_date = fields.Date('Date of Medical Act', required=True)
     act_end_date = fields.Date('End Date of Medical Act')
     quantity = fields.Integer('Quantity')
@@ -57,7 +57,7 @@ class Loss(model.CoopSQL, model.CoopView):
 
     health_loss = fields.One2Many('claim.loss.health', 'loss', 'Health Loss',
         size=1, states={"invisible": ~Bool(Equal(Eval('loss_kind'),
-                    'health'))}, depends=['loss_kind'])
+                    'health'))}, depends=['loss_kind'], delete_missing=True)
     loss_kind = fields.Function(
         fields.Char('Loss Kind'), 'get_loss_kind')
 

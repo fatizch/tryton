@@ -176,7 +176,7 @@ class ReportProductionRequest(model.CoopSQL, model.CoopView):
     __name__ = 'report_production.request'
 
     report_template = fields.Many2One('report.template', 'Report Template',
-        readonly=True)
+        readonly=True, ondelete='RESTRICT')
     object_ = fields.Reference('Object To Report',
         'get_all_printable_models', readonly=True, select=True)
     treated = fields.Boolean('Treated', readonly=True, select=True)
