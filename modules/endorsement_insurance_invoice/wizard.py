@@ -424,6 +424,17 @@ class ChangeDirectDebitAccount(ChangeBillingInformation):
             model_name)
         if model_name == 'contract':
             methods.discard('recalculate_premium_after_endorsement')
+            methods.discard('rebill_after_endorsement')
+            methods.discard('reconcile_after_endorsement')
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(ChangeDirectDebitAccount,
+            cls).get_draft_methods_for_model(model_name)
+        if model_name == 'contract':
+            methods.discard('rebill_after_endorsement')
+            methods.discard('reconcile_after_endorsement')
         return methods
 
     @classmethod

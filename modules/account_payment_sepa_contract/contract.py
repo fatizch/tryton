@@ -1,9 +1,11 @@
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, And, If, Bool
 from trytond.transaction import Transaction
 from trytond import backend
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -62,6 +64,33 @@ class Contract:
         super(Contract, cls).update_contract_after_import(contracts)
         for contract in contracts:
             contract.init_sepa_mandate()
+
+    @classmethod
+    def update_mandates_from_date(cls, contracts, date):
+        # Update sepa mandate on already generated invoices from a given start
+        # date. The basic idea is to modify existing validated or posted
+        # invoices for which there is a planned payment after the date.
+        Invoice = Pool().get('account.invoice')
+        update_data = {contract.id: utils.get_value_at_date(
+                contract.billing_informations, date).sepa_mandate
+            for contract in contracts}
+        clause = ['OR'] + [
+            [('contract', '=', contract), ('state', '=', 'posted')]
+            for contract in update_data.keys()]
+
+        invoices = Invoice.search(clause)
+        to_save = []
+        for invoice in invoices:
+            if not invoice.sepa_mandate:
+                continue
+            if invoice.state == 'posted' and max(
+                    [x.payment_date or x.maturity_date for x in
+                        invoice.lines_to_pay] or [datetime.date.min]) < date:
+                continue
+            invoice.sepa_mandate = update_data[invoice.contract.id]
+            to_save.append(invoice)
+        if to_save:
+            Invoice.save(to_save)
 
 
 class ContractBillingInformation:

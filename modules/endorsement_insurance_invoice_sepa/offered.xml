@@ -15,5 +15,14 @@
             <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'sepa_mandate')]"/>
             <field name="endorsement_part" ref="endorsement_insurance_invoice.change_direct_debit_account_endorsement_part"/>
         </record>
+        <!-- ###################### -->
+        <!-- # Method Definitions # -->
+        <!-- ###################### -->
+        <record model="ir.model.method" id="contract_update_sepa_mandates">
+            <field name="method_name">update_sepa_mandates</field>
+            <field name="name">Update Sepa Mandates</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">3000</field>
+        </record>
     </data>
 </tryton>

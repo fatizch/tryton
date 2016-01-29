@@ -93,3 +93,19 @@ class ChangeBillingInformation:
 
 class ChangeDirectDebitAccount(ChangeBillingInformation):
     __name__ = 'contract.direct_debit_account.change'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = super(ChangeDirectDebitAccount, cls).get_methods_for_model(
+            model_name)
+        if model_name == 'contract':
+            methods.add('update_sepa_mandates')
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        methods = super(ChangeDirectDebitAccount,
+            cls).get_draft_methods_for_model(model_name)
+        if model_name == 'contract':
+            methods.add('update_sepa_mandates')
+        return methods
