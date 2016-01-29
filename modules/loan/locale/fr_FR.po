@@ -79,6 +79,10 @@ msgctxt "field:contract,ordered_loans:"
 msgid "Ordered Loans"
 msgstr "Prêts ordonnés"
 
+msgctxt "field:contract,shares_per_loan:"
+msgid "Shares per Loan"
+msgstr "Quotités ordonnées par prêt"
+
 msgctxt "field:contract,show_ordered_loans:"
 msgid "Show Ordered Loans"
 msgstr "Afficher les prêts ordonnés"

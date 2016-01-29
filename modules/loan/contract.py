@@ -66,6 +66,10 @@ class Contract:
         fields.Many2Many('loan', None, None, 'Used Loans',
             context={'contract': Eval('id')}, depends=['id']),
         'get_used_loans')
+    shares_per_loan = fields.Function(
+        fields.Many2Many('loan.share', None, None, 'Shares per Loan',
+            context={'contract': Eval('id')}),
+        'get_shares_per_loan')
 
     @classmethod
     def __setup__(cls):
@@ -125,6 +129,17 @@ class Contract:
     @fields.depends('product')
     def on_change_with_is_loan(self, name=None):
         return self.product.is_loan if self.product else False
+
+    def get_shares_per_loan(self, name=None):
+        with Transaction().set_context(contract=self.id):
+            per_loan = defaultdict(list)
+            [per_loan[share.loan].append(share)
+                for covered_element in self.covered_elements
+                for option in covered_element.options
+                for share in option.loan_shares]
+            return [share.id
+                for loan in sorted(per_loan.keys(), key=lambda x: x.order)
+                for share in per_loan[loan]]
 
     @classmethod
     def setter_void(cls, objects, name, values):
