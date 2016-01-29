@@ -189,7 +189,8 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
 
     @classmethod
     def direct_debit_account_only_fields(cls):
-        return ['direct_debit_account']
+        return ['direct_debit_account', 'direct_debit_day',
+            'direct_debit_day_selector']
 
     def step_default(self, name):
         defaults = super(ChangeBillingInformation, self).step_default()
@@ -300,7 +301,8 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
         values.pop('direct_debit_account_selector', None)
         values.pop('search_all_direct_debit_account', None)
         if not new_info.billing_mode.direct_debit:
-            values.pop('direct_debit_day_selector', None)
+            for fname in self.direct_debit_account_only_fields():
+                values.pop(fname, None)
         new_endorsements = []
         for contract, action in [(master_contract, 'everything')] + [
                 (x.contract, x.to_propagate) for x in self.other_contracts]:
