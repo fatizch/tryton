@@ -306,7 +306,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     @staticmethod
     def calculate_payment_amount(annual_rate, number_of_payments, amount,
             currency, payment_frequency, deferral=None):
-        if not number_of_payments:
+        if not number_of_payments or not amount or not payment_frequency:
             return
         rate = Loan.calculate_rate(annual_rate, payment_frequency)
         if not deferral:
@@ -812,6 +812,12 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
             'readonly': ~Eval('manual')},
         digits=(16, Eval('currency_digits', 2)),
         depends=['currency_digits', 'loan_state', 'manual'])
+    first_payment_end_balance = fields.Function(
+        fields.Numeric('First Payment End Balance',
+            states={'readonly': ~Eval('manual')},
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits', 'manual']),
+        'get_first_payment_end_balance', 'setter_void')
     start_date = fields.Date('Start Date',
         states=_STATES_INCREMENT, depends=['loan_state'])
     end_date = fields.Function(
@@ -897,30 +903,43 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
             # forces the focus on the field in form view
             self.raise_user_error('invalid_number_of_payments')
 
-    @fields.depends('begin_balance', 'currency', 'number_of_payments',
-        'deferral', 'loan', 'payment_amount', 'payment_frequency', 'rate')
+    @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
+        'deferral', 'loan', 'number_of_payments', 'payment_amount',
+        'payment_frequency', 'rate')
     def on_change_begin_balance(self):
-        self.payment_amount = self.calculate_payment_amount()
+        self.first_payment_end_balance = None
+        self.update_payment_data()
 
-    @fields.depends('begin_balance', 'currency', 'number_of_payments',
-        'deferral', 'loan', 'payment_amount', 'payment_frequency', 'rate')
+    @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
+        'deferral', 'loan', 'number_of_payments', 'payment_amount',
+        'payment_frequency', 'rate')
     def on_change_deferral(self):
-        self.payment_amount = self.calculate_payment_amount()
+        self.update_payment_data()
 
-    @fields.depends('begin_balance', 'currency', 'number_of_payments',
-        'deferral', 'loan', 'payment_amount', 'payment_frequency', 'rate')
+    @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
+        'deferral', 'loan', 'number_of_payments', 'payment_amount',
+        'payment_frequency', 'rate')
+    def on_change_first_payment_end_balance(self):
+        self.begin_balance = None
+        self.update_payment_data()
+
+    @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
+        'deferral', 'loan', 'number_of_payments', 'payment_amount',
+        'payment_frequency', 'rate')
     def on_change_number_of_payments(self):
-        self.payment_amount = self.calculate_payment_amount()
+        self.update_payment_data()
 
-    @fields.depends('begin_balance', 'currency', 'number_of_payments',
-        'deferral', 'loan', 'payment_amount', 'payment_frequency', 'rate')
+    @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
+        'deferral', 'loan', 'number_of_payments', 'payment_amount',
+        'payment_frequency', 'rate')
     def on_change_payment_frequency(self):
-        self.payment_amount = self.calculate_payment_amount()
+        self.update_payment_data()
 
-    @fields.depends('begin_balance', 'currency', 'number_of_payments',
-        'deferral', 'loan', 'payment_amount', 'payment_frequency', 'rate')
+    @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
+        'deferral', 'loan', 'number_of_payments', 'payment_amount',
+        'payment_frequency', 'rate')
     def on_change_rate(self):
-        self.payment_amount = self.calculate_payment_amount()
+        self.update_payment_data()
 
     @fields.depends('number_of_payments', 'payment_frequency', 'start_date')
     def on_change_with_end_date(self, name=None):
@@ -930,14 +949,49 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
                 self.payment_frequency, self.number_of_payments - 1,
                 stick_to_end_of_month=True)
 
-    def calculate_payment_amount(self):
+    def get_first_payment_end_balance(self, name=None):
+        if not self.begin_balance:
+            return self.begin_balance
+        Loan = Pool().get('loan')
+        rate = Loan.calculate_rate(self.rate, self.payment_frequency)
+        if self.deferral == 'partially':
+            return self.begin_balance
+        elif self.deferral == 'fully':
+            return self.currency.round(self.begin_balance * (1 + rate))
+        return self.currency.round(
+            self.begin_balance * (1 + rate) - self.payment_amount)
+
+    def update_payment_data(self):
+        if (self.begin_balance is None and self.first_payment_end_balance and
+                self.rate and self.number_of_payments and
+                self.payment_frequency):
+            self.begin_balance = \
+                self.get_begin_balance_from_first_payment_end_balance()
         if (self.begin_balance and self.rate and self.number_of_payments
                 and self.payment_frequency):
-            return self.loan.calculate_payment_amount(self.rate,
-                self.number_of_payments, self.begin_balance,
-                self.currency or self.loan.currency, self.payment_frequency,
-                self.deferral)
-        return None
+            self.first_payment_end_balance = None
+            self.payment_amount = self.calculate_payment_amount()
+            self.first_payment_end_balance = \
+                self.get_first_payment_end_balance()
+
+    def calculate_payment_amount(self):
+        return self.loan.calculate_payment_amount(self.rate,
+            self.number_of_payments, self.begin_balance,
+            self.currency or self.loan.currency, self.payment_frequency,
+            self.deferral)
+
+    def get_begin_balance_from_first_payment_end_balance(self):
+        if self.deferral == 'partially':
+            return self.first_payment_end_balance
+        Loan = Pool().get('loan')
+        rate = Loan.calculate_rate(self.rate, self.payment_frequency)
+        if self.deferral == 'fully':
+            return self.currency.round(
+                self.first_payment_end_balance / (1 + rate))
+        return self.currency.round(
+            self.first_payment_end_balance / (1 + rate - (
+                    rate * (1 + rate) ** self.number_of_payments) /
+                ((1 + rate) ** self.number_of_payments - 1)))
 
     def get_func_key(self, name):
         return '|'.join([self.loan.number, str(self.number)])

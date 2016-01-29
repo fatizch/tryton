@@ -25,8 +25,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_test_cases_to_run(cls):
         return []
-        return ['fiscal_year_test_case', 'extra_premium_kind_test_case',
-            'configure_accounting_test_case']
 
     @classmethod
     def get_models(cls):
@@ -787,6 +785,32 @@ class ModuleTestCase(test_framework.CoopTestCase):
         insurers = set([x['name'] for x in res])
         self.assertEqual(insurers, set(['Total']))
         self.assertEqual(res[0]['amount'], Decimal('0'))
+
+    @test_framework.prepare_test(
+        'company_cog.test0001_testCompanyCreation')
+    def test0050_compute_begin_balance(self):
+        currency, = self.Currency.search([], limit=1)
+
+        def test_balances(begin, end, deferral, payment_amount):
+            test_increment = self.LoanIncrement(currency=currency, loan=None,
+                payment_amount=None, begin_balance=None,
+                rate=Decimal('0.0187'), payment_frequency='month',
+                number_of_payments=157, deferral=deferral,
+                first_payment_end_balance=end)
+            self.assertEqual(begin,
+                test_increment
+                .get_begin_balance_from_first_payment_end_balance())
+            test_increment.first_payment_end_balance = None
+            test_increment.begin_balance = begin
+            test_increment.payment_amount = payment_amount
+            self.assertEqual(end,
+                test_increment.get_first_payment_end_balance())
+
+        test_balances(Decimal('190569.67'), Decimal('189497.35'), '',
+            Decimal('1369.29'))
+        test_balances(Decimal('189497.35'), Decimal('189497.35'), 'partially',
+            Decimal('295.30'))
+        test_balances(Decimal('189202.51'), Decimal('189497.35'), 'fully', 0)
 
 
 def suite():

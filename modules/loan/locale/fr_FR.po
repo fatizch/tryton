@@ -363,6 +363,10 @@ msgctxt "field:loan.increment,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:loan.increment,first_payment_end_balance:"
+msgid "First Payment End Balance"
+msgstr "CRD après la première échéance"
+
 msgctxt "field:loan.increment,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"

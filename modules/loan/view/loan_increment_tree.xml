@@ -4,6 +4,9 @@
     <field name="begin_balance">
         <suffix name="currency_symbol"/>
     </field>
+    <field name="first_payment_end_balance">
+        <suffix name="currency_symbol"/>
+    </field>
     <field name="rate" factor="100">
         <suffix string="%"/>
     </field>
