@@ -5,8 +5,6 @@ from trytond.pyson import Eval
 from trytond.modules.cog_utils import model, utils, fields
 from trytond.modules.cog_utils import coop_string
 
-from trytond.modules.offered import NonExistingRuleKindException
-
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -71,11 +69,6 @@ class Product:
                 instance.raise_user_error('missing_covered_element_extra_data',
                     (', '.join((extra_data.string
                                 for extra_data in remaining))))
-
-    @classmethod
-    def delete(cls, entities):
-        cls.delete_rules(entities)
-        super(Product, cls).delete(entities)
 
     def get_sub_elem_data(self):
         # This method is used by the get_result method to know where to look

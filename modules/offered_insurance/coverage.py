@@ -66,11 +66,6 @@ class OptionDescription:
         return not self.item_desc
 
     @classmethod
-    def delete(cls, entities):
-        cls.delete_rules(entities)
-        super(OptionDescription, cls).delete(entities)
-
-    @classmethod
     def get_possible_coverages_clause(cls, instance, at_date):
         clause = super(OptionDescription, cls).get_possible_coverages_clause(
             instance, at_date)
