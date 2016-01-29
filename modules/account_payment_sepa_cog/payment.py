@@ -314,8 +314,6 @@ class Payment:
     @classmethod
     def fail(cls, payments):
         pool = Pool()
-        JournalFailureAction = pool.get(
-            'account.payment.journal.failure_action')
         Invoice = pool.get('account.invoice')
         ContractInvoice = pool.get('contract.invoice')
         Configuration = pool.get('account.configuration')
@@ -332,13 +330,8 @@ class Payment:
             payment = payments_list[0]
             sepa_mandate = None
             payment_date = None
-            # one reject invoice per different end_to_end_id only
-            reject_fee = JournalFailureAction.get_rejected_payment_fee(
-                payment.sepa_return_reason_code)
-            if not reject_fee:
-                continue
-            fee_amount = reject_fee.amount
-            if fee_amount == 0:
+            reject_fee = cls.get_reject_fee(payments_list)
+            if not reject_fee or not reject_fee.amount:
                 continue
             if 'retry' in [action[0] for action in
                     key[1].get_fail_actions(payments_list)]:
@@ -349,9 +342,9 @@ class Payment:
             account = reject_fee.product.template.account_revenue_used
             name_for_billing = reject_fee.name
             invoice = payment.create_fee_invoice(
-                fee_amount, journal, account, name_for_billing,
+                reject_fee.amount, journal, account, name_for_billing,
                 sepa_mandate)
-            contract = cls.get_contract(payments_list)
+            contract = cls.get_contract_for_reject_invoice(payments_list)
             if contract is not None:
                 contract_invoice = ContractInvoice(
                     contract=contract, invoice=invoice, non_periodic=True)
@@ -371,6 +364,16 @@ class Payment:
         super(Payment, cls).fail(payments)
 
     @classmethod
+    def get_reject_fee(cls, payments):
+        pool = Pool()
+        JournalFailureAction = pool.get(
+            'account.payment.journal.failure_action')
+        # One reject invoice per different end_to_end_id only
+        reject_fee = JournalFailureAction.get_rejected_payment_fee(
+            payments[0].sepa_return_reason_code)
+        return reject_fee
+
+    @classmethod
     def manual_set_reject_reason(cls, payments, reject_reason):
         super(Payment, cls).manual_set_reject_reason(payments, reject_reason)
         if reject_reason.process_method == 'sepa':
@@ -388,25 +391,21 @@ class Payment:
                     })
 
     @classmethod
-    def get_contract_id(cls, payments):
-        # contract to attach invoice fee
-        contract_id = None
+    def get_contract_for_reject_invoice(cls, payments):
+        # Contract to attach invoice fee
+        contract = None
         for payment in payments:
-            contract = payment.line.contract
-            if not contract:
+            if not payment.line.contract or \
+                    payment.line.contract.status == 'void':
+                # Void contracts cannot be invoiced anyway
                 continue
-            if contract_id and contract_id != contract.id:
-                return None
-            contract_id = contract.id
-        return contract_id
-
-    @classmethod
-    def get_contract(cls, payments):
-        # contract to attach invoice fee
-        for payment in payments:
-            if payment.line.contract:
-                return payment.line.contract
-        return None
+            if not contract:
+                contract = payment.line.contract
+                continue
+            if contract == payment.line.contract:
+                continue
+            return None
+        return contract
 
     def get_description(self, lang=None):
         description = super(Payment, self).get_description(lang)
