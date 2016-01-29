@@ -26,6 +26,9 @@ __all__ = [
     'CoveredElementSelector',
     'NewExtraPremium',
     'VoidContract',
+    'ManageExclusions',
+    'ManageExclusionsOptionDisplayer',
+    'ManageExclusionsDisplayer',
     'StartEndorsement',
     ]
 
@@ -1353,6 +1356,212 @@ class NewExtraPremium(model.CoopView):
         ContractEndorsement.save(all_endorsements.values())
 
 
+class ManageExclusions(EndorsementWizardStepMixin):
+    'Manage Exclusions'
+
+    __name__ = 'contract.manage_exclusions'
+
+    contract = fields.Many2One('endorsement.contract', 'Contract',
+        domain=[('id', 'in', Eval('possible_contracts', []))],
+        states={'invisible': Len(Eval('possible_contracts', [])) <= 1},
+        depends=['possible_contracts'])
+    possible_contracts = fields.Many2Many('endorsement.contract', None, None,
+        'Possible Contracts')
+    current_options = fields.One2Many('contract.manage_exclusions.option',
+        None, 'Options')
+    all_options = fields.One2Many('contract.manage_exclusions.option',
+        None, 'Options')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(ManageExclusions, cls).view_attributes() + [
+            ('/form/group[@id="invisible"]', 'states',
+                {'invisible': True}),
+            ]
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement_insurance.endorsement_manage_exclusions_view_form'
+
+    @fields.depends('all_options', 'contract', 'current_options')
+    def on_change_contract(self):
+        self.update_all_options()
+        self.update_current_options()
+
+    def update_all_options(self):
+        if not self.current_options:
+            return
+        new_options = list(self.current_options)
+        for option in self.all_options:
+            if option.contract == new_options[0].contract:
+                continue
+            new_options.append(option)
+        self.all_options = new_options
+
+    def update_current_options(self):
+        new_options = []
+        for option in self.all_options:
+            if option.contract == self.contract.id:
+                new_options.append(option)
+        self.current_options = new_options
+
+    def step_default(self, name):
+        defaults = super(ManageExclusions, self).step_default()
+        possible_contracts = self.wizard.endorsement.contract_endorsements
+        defaults['possible_contracts'] = [x.id for x in possible_contracts]
+        per_contract = {x: self.get_updated_options_from_contract(x)
+            for x in possible_contracts}
+
+        all_options = []
+        for contract, options in per_contract.iteritems():
+            all_options += self.generate_displayers(contract, options)
+        defaults['all_options'] = [model.serialize_this(x)
+            for x in all_options]
+        if defaults['possible_contracts']:
+            defaults['contract'] = defaults['possible_contracts'][0]
+        return defaults
+
+    def step_update(self):
+        EndorsementContract = Pool().get('endorsement.contract')
+        self.update_all_options()
+        endorsement = self.wizard.endorsement
+        per_contract = defaultdict(list)
+        for option in self.all_options:
+            per_contract[EndorsementContract(option.contract)].append(option)
+
+        for contract, options in per_contract.iteritems():
+            utils.apply_dict(contract.contract,
+                contract.apply_values())
+            self.update_endorsed_options(contract, options)
+            for covered_element in contract.contract.covered_elements:
+                covered_element.options = list(covered_element.options)
+            contract.contract.covered_elements = list(
+                contract.contract.covered_elements)
+
+        new_endorsements = []
+        for contract_endorsement in per_contract.keys():
+            self._update_endorsement(contract_endorsement,
+                contract_endorsement.contract._save_values)
+            if not contract_endorsement.clean_up():
+                new_endorsements.append(contract_endorsement)
+        endorsement.contract_endorsements = new_endorsements
+        endorsement.save()
+
+    def update_endorsed_options(self, contract_endorsement, options):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        Displayer = pool.get('contract.manage_exclusions.option')
+        Exclusion = pool.get('contract.option-exclusion.kind')
+        per_key = {Displayer.get_parent_key(x): x
+            for covered in contract_endorsement.contract.covered_elements
+            for x in covered.options}
+        for option in options:
+            patched_option = per_key[option.parent]
+            if option.option_id:
+                old_exclusions = {x.exclusion: x
+                    for x in Option(option.option_id).exclusion_list}
+            else:
+                old_exclusions = {}
+            exclusions = []
+            for exclusion in option.exclusions:
+                if exclusion.action == 'removed':
+                    continue
+                if exclusion.action == 'added':
+                    exclusions.append(Exclusion(exclusion=exclusion.exclusion))
+                    continue
+                # action == 'nothing' => already existed
+                exclusions.append(old_exclusions[exclusion.exclusion])
+            patched_option.exclusion_list = exclusions
+
+    def get_updated_options_from_contract(self, contract_endorsement):
+        contract = contract_endorsement.contract
+        utils.apply_dict(contract, contract_endorsement.apply_values())
+        return self.get_contract_options(contract)
+
+    def get_contract_options(self, contract):
+        return [x for covered in contract.covered_elements
+            for x in covered.options]
+
+    def generate_displayers(self, contract_endorsement, options):
+        pool = Pool()
+        Option = pool.get('contract.manage_exclusions.option')
+        all_options = []
+        for option in options:
+            displayer = Option.new_displayer(option)
+            displayer.contract = contract_endorsement.id
+            all_options.append(displayer)
+        return all_options
+
+
+class ManageExclusionsOptionDisplayer(model.CoopView):
+    'Manage Exclusions Option Displayer'
+
+    __name__ = 'contract.manage_exclusions.option'
+
+    parent_name = fields.Char('Parent', readonly=True)
+    parent = fields.Char('Parent', readonly=True)
+    contract = fields.Integer('Contract', readonly=True)
+    option_id = fields.Integer('Option', readonly=True)
+    display_name = fields.Char('Option', readonly=True)
+    exclusions = fields.One2Many('contract.manage_exclusions.exclusion', None,
+        'Exclusions')
+
+    @classmethod
+    def new_displayer(cls, option):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        Exclusion = pool.get('contract.manage_exclusions.exclusion')
+        displayer = cls()
+        displayer.parent_name = (option.covered_element
+            or option.contract).rec_name
+        displayer.parent = cls.get_parent_key(option)
+        displayer.option_id = getattr(option, 'id', None)
+        displayer.display_name = option.get_rec_name(None)
+
+        new_exclusions = {x.exclusion for x in getattr(option,
+                'exclusion_list', [])}
+        if displayer.option_id:
+            current_exclusions = {x.exclusion
+                for x in Option(displayer.option_id).exclusion_list}
+        else:
+            current_exclusions = set([])
+
+        exclusions = [Exclusion(exclusion=x, action='nothing')
+            for x in current_exclusions & new_exclusions]
+        exclusions += [Exclusion(exclusion=x, action='added')
+            for x in new_exclusions - current_exclusions]
+        exclusions += [Exclusion(exclusion=x, action='removed')
+            for x in current_exclusions - new_exclusions]
+        exclusions.sort(key=lambda x: x.exclusion.rec_name)
+        displayer.exclusions = exclusions
+        return displayer
+
+    @classmethod
+    def get_parent_key(cls, option):
+        if option.id:
+            return str(option)
+        if option.covered_element:
+            return str(option.covered_element.party)
+        if option.contract:
+            return str(option.contract)
+        raise NotImplementedError
+
+
+class ManageExclusionsDisplayer(model.CoopView):
+    'Manage Exclusions Displayer'
+
+    __name__ = 'contract.manage_exclusions.exclusion'
+
+    exclusion = fields.Many2One('offered.exclusion', 'Exclusion Kind',
+        required=True)
+    action = fields.Selection([('nothing', 'Nothing'),
+            ('added', 'Added'), ('removed', 'Removed')], 'Action')
+
+    @classmethod
+    def default_action(cls):
+        return 'added'
+
+
 class VoidContract:
     __name__ = 'endorsement.contract.void'
 
@@ -1639,3 +1848,5 @@ class StartEndorsement:
 
 add_endorsement_step(StartEndorsement, ModifyCoveredElement,
     'modify_covered_element')
+
+add_endorsement_step(StartEndorsement, ManageExclusions, 'manage_exclusions')

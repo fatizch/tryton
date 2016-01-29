@@ -1,4 +1,4 @@
-# #Title# #Remove Option Endorsement Scenario
+# #Title# #Endorsement Insurance Scenario
 # #Comment# #Imports
 import datetime
 from proteus import config, Model, Wizard
@@ -40,9 +40,11 @@ EndorsementDefinition = Model.get('endorsement.definition')
 EndorsementDefinitionPartRelation = Model.get(
     'endorsement.definition-endorsement.part')
 EndorsementPart = Model.get('endorsement.part')
+ExclusionKind = Model.get('offered.exclusion')
 Field = Model.get('ir.model.field')
 Insurer = Model.get('insurer')
 ItemDescription = Model.get('offered.item.description')
+ManageExclusionDisplayer = Model.get( 'contract.manage_exclusions.exclusion')
 MethodDefinition = Model.get('ir.model.method')
 Option = Model.get('contract.option')
 OptionDescription = Model.get('offered.option.description')
@@ -195,7 +197,7 @@ product.save()
 # #Comment# #Create SubStatus
 termination_status, = SubStatus.find([('code', '=', 'terminated')])
 
-# #Comment# #Create Change Start Date Endorsement
+# #Comment# #Create Remove Option Endorsement
 remove_option_part = EndorsementPart()
 remove_option_part.name = 'Remove Option'
 remove_option_part.code = 'remove_option'
@@ -208,6 +210,23 @@ remove_option.code = 'remove_option'
 remove_option.ordered_endorsement_parts.append(
     EndorsementDefinitionPartRelation(endorsement_part=remove_option_part))
 remove_option.save()
+
+# #Comment# #Create Manage Exclusions Endorsement
+exclusion_part, = EndorsementPart.find([('code', '=', 'manage_exclusions')])
+manage_exclusions = EndorsementDefinition()
+manage_exclusions.name = 'Manage Exclusions'
+manage_exclusions.code = 'manage_exclusions'
+manage_exclusions.ordered_endorsement_parts.append(
+    EndorsementDefinitionPartRelation(endorsement_part=exclusion_part))
+manage_exclusions.save()
+
+# #Comment# #Create exclusion kinds
+exclusion_1 = ExclusionKind(name='Exclusion 1', code='exclusion_1',
+    text='Exclusion 1')
+exclusion_1.save()
+exclusion_2 = ExclusionKind(name='Exclusion 2', code='exclusion_2',
+    text='Exclusion 2')
+exclusion_2.save()
 
 # #Comment# #Create Subscriber
 subscriber = Party()
@@ -248,6 +267,7 @@ covered_element2.party = luigi
 covered_element2.item_desc = item_description
 option2 = covered_element2.options.new()
 option2.coverage = coverage
+option2.exclusions.append(exclusion_1)
 contract.subscriber = subscriber
 contract.save()
 
@@ -256,7 +276,63 @@ contract.covered_elements[0].options[0].end_date == None
 contract.covered_elements[1].options[0].end_date == None
 # #Res# #True
 
-# #Comment# #New Endorsement
+# #Comment# #New Manage Exclusions Endorsement
+new_endorsement = Wizard('endorsement.start')
+new_endorsement.form.contract = contract
+new_endorsement.form.endorsement_definition = manage_exclusions
+new_endorsement.form.endorsement = None
+new_endorsement.form.applicant = None
+new_endorsement.form.effective_date = endorsement_effective_date
+new_endorsement.execute('start_endorsement')
+new_endorsement.form.contract.contract.id == contract.id
+# #Res# #True
+len(new_endorsement.form.current_options) == 2
+# #Res# #True
+len(new_endorsement.form.current_options[0].exclusions) == 0
+# #Res# #True
+len(new_endorsement.form.current_options[1].exclusions) == 1
+# #Res# #True
+new_endorsement.form.current_options[1].exclusions[0].action = 'removed'
+new_endorsement.form.current_options[0].exclusions.append(
+    ManageExclusionDisplayer(exclusion=exclusion_2.id))
+new_endorsement.form.current_options[0].exclusions[0].action == 'added'
+# #Res# #True
+new_endorsement.form.current_options[0].exclusions.append(
+    ManageExclusionDisplayer(exclusion=exclusion_1.id, action='removed'))
+new_endorsement.execute('manage_exclusions_next')
+new_endorsement.execute('summary_previous')
+new_endorsement.form.contract.contract.id == contract.id
+# #Res# #True
+len(new_endorsement.form.current_options) == 2
+# #Res# #True
+len(new_endorsement.form.current_options[0].exclusions) == 1
+# #Res# #True
+len(new_endorsement.form.current_options[1].exclusions) == 1
+# #Res# #True
+new_endorsement.form.current_options[0].exclusions[0].action == 'added'
+# #Res# #True
+new_endorsement.form.current_options[1].exclusions[0].action == 'removed'
+# #Res# #True
+new_endorsement.execute('manage_exclusions_next')
+new_endorsement.execute('apply_endorsement')
+
+contract = Contract(contract.id)
+[x.code for x in contract.covered_elements[0].options[0].exclusions] == [
+    'exclusion_2']
+# #Res# #True
+len(contract.covered_elements[1].options[0].exclusions) == 0
+# #Res# #True
+endorsement_last, = Endorsement.find([], order=[('create_date', 'DESC')],
+    limit=1)
+endorsement_last.click('cancel')
+contract = Contract(contract.id)
+len(contract.covered_elements[0].options[0].exclusions) == 0
+# #Res# #True
+[x.code for x in contract.covered_elements[1].options[0].exclusions] == [
+    'exclusion_1']
+# #Res# #True
+
+# #Comment# #New Remove Option Endorsement
 new_endorsement = Wizard('endorsement.start')
 new_endorsement.form.contract = contract
 new_endorsement.form.endorsement_definition = remove_option
@@ -286,10 +362,10 @@ option.end_date == None
 option.sub_status == None
 # #Res# #True
 
-good_endorsement, = Endorsement.find([
-        ('contracts', '=', contract.id)])
-Endorsement.cancel([good_endorsement.id], config._context)
-contract.save()
+endorsement_last, = Endorsement.find([], order=[('create_date', 'DESC')],
+    limit=1)
+endorsement_last.click('cancel')
+contract = Contract(contract.id)
 option, = Option.find([('covered_element.party.name', '=', 'Doe')])
 option2, = Option.find([('covered_element.party.name', '=', 'Vercotti')])
 option2.end_date == None

@@ -11,6 +11,7 @@ __all__ = [
     'EndorsementCoveredElementField',
     'EndorsementExtraPremiumField',
     'EndorsementCoveredElementVersionField',
+    'EndorsementExclusionField',
     ]
 
 
@@ -31,6 +32,11 @@ class EndorsementPart:
         'endorsement.contract.extra_premium.field', 'endorsement_part',
         'Extra Premium Fields', states={
             'invisible': Eval('kind', '') != 'extra_premium'},
+        depends=['kind'], delete_missing=True)
+    exclusion_fields = fields.One2Many(
+        'endorsement.contract.option.exclusion.field', 'endorsement_part',
+        'Exclusion Fields', states={
+            'invisible': Eval('kind', '') != 'option'},
         depends=['kind'], delete_missing=True)
 
     @classmethod
@@ -101,3 +107,10 @@ class EndorsementExtraPremiumField(field_mixin(
     'Endorsement Extra Premium Field'
 
     __name__ = 'endorsement.contract.extra_premium.field'
+
+
+class EndorsementExclusionField(field_mixin(
+            'contract.option-exclusion.kind'), model.CoopSQL, model.CoopView):
+    'Endorsement Exclusion Field'
+
+    __name__ = 'endorsement.contract.option.exclusion.field'

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tree string="Options">
+    <field name="parent_name"/>
+    <field name="display_name"/>
+    <field name="contract" tree_invisible="1"/>
+    <field name="parent" tree_invisible="1"/>
+    <field name="option_id" tree_invisible="1"/>
+</tree>

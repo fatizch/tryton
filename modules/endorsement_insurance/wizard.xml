@@ -104,5 +104,34 @@
             <field name="type">form</field>
             <field name="name">new_extra_premium_form</field>
         </record>
+        <!-- ##################### -->
+        <!-- # Manage Exclusions # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="endorsement_manage_exclusions_view_form">
+            <field name="model">contract.manage_exclusions</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_manage_exclusions_form</field>
+        </record>
+        <!-- ###################################### -->
+        <!-- # Manage Exclusions Option Displayer # -->
+        <!-- ###################################### -->
+        <record model="ir.ui.view" id="endorsement_manage_exclusions_option_view_form">
+            <field name="model">contract.manage_exclusions.option</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_manage_exclusions_option_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_manage_exclusions_option_view_list">
+            <field name="model">contract.manage_exclusions.option</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_manage_exclusions_option_list</field>
+        </record>
+        <!-- ############################### -->
+        <!-- # Manage Exclusions Displayer # -->
+        <!-- ############################### -->
+        <record model="ir.ui.view" id="endorsement_manage_exclusions_exclusion_view_list">
+            <field name="model">contract.manage_exclusions.exclusion</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_manage_exclusions_exclusion_list</field>
+        </record>
     </data>
 </tryton>

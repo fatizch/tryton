@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<form string="Manage Exclusions">
+    <label name="contract"/>
+    <field name="contract" colspan="3" widget="selection"/>
+    <group id="options" string="" colspan="4" col="2" yexpand="1" yfill="1">
+        <field name="current_options" group="options" mode="tree" expand_toolbar="0"/>
+        <field name="current_options" group="options" mode="form" expand_toolbar="0"/>
+    </group>
+    <group id="invisible" string="">
+        <field name="endorsement_definition"/>
+        <field name="possible_contracts"/>
+        <field name="all_options"/>
+        <field name="effective_date"/>
+    </group>
+</form>

@@ -10,6 +10,7 @@ def register():
         CoveredElement,
         CoveredElementVersion,
         ExtraPremium,
+        OptionExclusionRelation,
         Endorsement,
         EndorsementContract,
         EndorsementCoveredElement,
@@ -20,6 +21,8 @@ def register():
         EndorsementCoveredElementOptionVersion,
         EndorsementExtraPremium,
         EndorsementExtraPremiumField,
+        EndorsementExclusion,
+        EndorsementExclusionField,
         EndorsementPart,
         NewCoveredElement,
         RemoveOptionSelector,
@@ -35,6 +38,9 @@ def register():
         CoveredElementSelector,
         NewExtraPremium,
         VoidContract,
+        ManageExclusions,
+        ManageExclusionsOptionDisplayer,
+        ManageExclusionsDisplayer,
         module='endorsement_insurance', type_='model')
 
     Pool.register(

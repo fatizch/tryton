@@ -18,7 +18,7 @@ def suite():
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
         ModuleTestCase))
     suite.addTests(doctest.DocFileSuite(
-            'scenario_endorsement_remove_option.rst',
+            'scenario_endorsement_insurance.rst',
             setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

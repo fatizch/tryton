@@ -36,6 +36,19 @@
             <field name="type">tree</field>
             <field name="name">endorsement_field_list</field>
         </record>
+        <!-- ############################### -->
+        <!-- # Endorsement Exclusion Field # -->
+        <!-- ############################### -->
+         <record model="ir.ui.view" id="endorsement_exclusion_field_view_form">
+            <field name="model">endorsement.contract.option.exclusion.field</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_field_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_exclusion_field_view_list">
+            <field name="model">endorsement.contract.option.exclusion.field</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_field_list</field>
+        </record>
         <!-- ###################################### -->
         <!-- # Manage Extra Premium Configuration # -->
         <!-- ###################################### -->
@@ -53,6 +66,15 @@
             <field name="name">Modify Covered Elements</field>
             <field name="kind">covered_element</field>
             <field name="view">modify_covered_element</field>
+        </record>
+        <!-- ##################### -->
+        <!-- # Manage Exclusions # -->
+        <!-- ##################### -->
+        <record model="endorsement.part" id="manage_exclusions_revision_part">
+            <field name="code">manage_exclusions</field>
+            <field name="name">Manage Exclusions</field>
+            <field name="kind">option</field>
+            <field name="view">manage_exclusions</field>
         </record>
     </data>
 </tryton>

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<form string="Option">
+    <field name="exclusions" product="exclusion" mode="tree"/>
+</form>

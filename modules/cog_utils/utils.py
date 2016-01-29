@@ -667,6 +667,7 @@ def apply_dict(instance, data_dict):
                     for data_dict in action_data[1]:
                         new_instance = pool.get(field.model_name)()
                         apply_dict(new_instance, data_dict)
+                        setattr(new_instance, field.field, instance)
                         new_values.append(new_instance)
                 elif action_data[0] == 'remove' and isinstance(field,
                         tryton_fields.Many2Many):

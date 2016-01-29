@@ -340,6 +340,11 @@ class ContractOption:
     exclusions = fields.Many2Many('contract.option-exclusion.kind',
         'option', 'exclusion', 'Exclusions',
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
+    # O2M field to the M2M "exclusions" field table. This is for instance used
+    # in endorsements
+    exclusion_list = fields.One2Many('contract.option-exclusion.kind',
+        'option', 'Exclusion List', delete_missing=True,
+        order=[('exclusion', 'ASC')])
     extra_data_summary = fields.Function(
         fields.Text('Extra Data Summary'),
         'get_extra_data_summary')
@@ -417,8 +422,8 @@ class ContractOption:
 
     @classmethod
     def _export_skips(cls):
-        return (super(ContractOption, cls)._export_skips() |
-            set(['extra_premium_discounts', 'extra_premium_increases']))
+        return super(ContractOption, cls)._export_skips() | {'exclusion_list',
+            'extra_premium_discounts', 'extra_premium_increases'}
 
     @fields.depends('item_desc')
     def on_change_coverage(self):
@@ -1587,6 +1592,7 @@ class OptionExclusionKindRelation(model.CoopSQL):
 
     __name__ = 'contract.option-exclusion.kind'
 
-    option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE')
+    option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
+        required=True, select=True)
     exclusion = fields.Many2One('offered.exclusion', 'Exclusion',
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', required=True, select=True)
