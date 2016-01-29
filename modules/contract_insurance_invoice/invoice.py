@@ -282,13 +282,19 @@ class Invoice:
         for invoice in invoices:
             if invoice.state in ('posted', 'paid'):
                 continue
-            if invoice.contract and invoice.contract.status not in ('active'
-                    'terminated'):
+            if invoice.contract and invoice.contract.status != 'active':
+                contract = invoice.contract
+                if contract.status == 'terminated' and (not invoice.start or (
+                            invoice.start >= contract.initial_start_date and
+                            invoice.end <= contract.end_date)):
+                    # No problem as long as the invoice is within the contract
+                    # activated period
+                    continue
                 cls.raise_user_error(
                     'post_on_non_active_contract', {
                         'invoice': invoice.rec_name,
-                        'contract': invoice.contract.rec_name,
-                        'status': invoice.contract.status_string,
+                        'contract': contract.rec_name,
+                        'status': contract.status_string,
                         })
         updated_invoices = []
         for invoice in invoices:
