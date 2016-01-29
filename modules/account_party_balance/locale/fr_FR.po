@@ -50,6 +50,10 @@ msgctxt "field:account.party_balance,balance_today:"
 msgid "Balance Today"
 msgstr "Balance à aujourd'hui"
 
+msgctxt "field:account.party_balance,hide_scheduled_terms:"
+msgid "Hide Scheduled Terms"
+msgstr "Cacher les échéances futures"
+
 msgctxt "field:account.party_balance.line,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -145,3 +149,11 @@ msgstr "_Rafraichir"
 msgctxt "wizard_button:account.open_party_balance,balance,end:"
 msgid "End"
 msgstr "Terminer"
+
+msgctxt "error:account.party_balance.line:"
+msgid "Scheduled Term"
+msgstr "Échéance future"
+
+msgctxt "error:account.party_balance.line:"
+msgid "Overpayment Substraction"
+msgstr "Utilisation d'un trop perçu"

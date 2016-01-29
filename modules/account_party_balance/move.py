@@ -1,4 +1,5 @@
 import datetime
+from itertools import groupby
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Bool, Eval
@@ -16,6 +17,7 @@ __all__ = [
 
 _FIELDS = ['all_lines', 'lines', 'hide_reconciled_lines',
     'from_date', 'contract', 'hide_canceled_invoices', 'party',
+    'hide_scheduled_terms',
     ]
 
 
@@ -61,20 +63,28 @@ class PartyBalanceLine(model.CoopView):
     move = fields.Char('Move')
 
     @classmethod
+    def __setup__(cls):
+        super(PartyBalanceLine, cls).__setup__()
+        cls._error_messages.update({
+                'overpayment_substraction': 'Overpayment Substraction',
+                })
+
+    @classmethod
     def view_attributes(cls):
         return super(PartyBalanceLine, cls).view_attributes() + [(
                 '/tree',
                 'colors',
                 Eval('color', 'black'))]
 
-    def init_from_move_line(self, line):
+    def init_from_move_line(self, line, scheduled=False):
         self.move_line = line
         self.date = line.post_date
         self.icon = line.icon
-        self.color = line.color
+        self.color = line.color if not scheduled else 'blue'
         self.amount = line.amount
         self.party = line.party.rec_name
-        self.description = line.synthesis_rec_name
+        if not scheduled:
+            self.description = line.synthesis_rec_name
         self.bank_account = (line.bank_account.rec_name if line.bank_account
             else None)
         self.reconciliations = (set([line.reconciliation])
@@ -83,6 +93,66 @@ class PartyBalanceLine(model.CoopView):
             [x.rec_name for x in self.reconciliations])
         self.contract = line.contract.rec_name if line.contract else None
         self.move = line.move.rec_name
+
+    def add_childs_to_scheduled_term_line(self, components):
+        Line = Pool().get('account.party_balance.line')
+        childs = []
+        for component in components:
+            new_line = Line(amount=component['amount'], date=self.date,
+                contract=self.contract)
+            if component['kind'] == 'line_to_pay':
+                move_line = component['line']
+                new_line.init_from_move_line(move_line, scheduled=True)
+            new_line.description = new_line.get_scheduled_child_description(
+                component)
+            childs.append(new_line)
+        self.childs = childs
+
+    def get_scheduled_term_parent_description(self, components):
+        Date = Pool().get('ir.date')
+
+        components_synthesis = []
+
+        def keyfunc(x):
+            invoice = x.get('invoice', None)
+            if invoice:
+                return (invoice.start or datetime.date.min, invoice.contract)
+            return None
+
+        sorted_components = sorted(components, key=keyfunc, reverse=True)
+
+        for _, grouped_components in groupby(sorted_components, key=keyfunc):
+            component = list(grouped_components)[0]
+            synthesis = ''
+            invoice = component.get('invoice', None)
+            line = component.get('line', None)
+            if not invoice:
+                # This is an overpayment substraction
+                # No need to mention it in description
+                continue
+            synthesis += invoice.contract.rec_name
+            date = invoice.start or (line.maturity_date if line else None)
+            if date:
+                synthesis += ' - ' + Date.date_as_string(date)
+            if synthesis:
+                components_synthesis.append(synthesis)
+        return ', '.join(components_synthesis)
+
+    def get_scheduled_child_description(self, component):
+        if component['kind'] == 'line_to_pay':
+            move_line = component['line']
+            description = ' | '.join([
+                    move_line.synthesis_rec_name,
+                    component['term'].rec_name])
+        elif component['kind'] == 'overpayment_substraction':
+            description = self.raise_user_error(
+                'overpayment_substraction', raise_exception=False)
+        else:
+            description = ' | '.join([
+                    component['invoice'].invoice.get_synthesis_rec_name(
+                        None),
+                    component['term'].rec_name])
+        return description
 
 
 class PartyBalance(model.CoopView):
@@ -95,6 +165,7 @@ class PartyBalance(model.CoopView):
     lines = fields.One2Many('account.party_balance.line', None,
         'Lines', readonly=True)
     balance_today = fields.Numeric('Balance Today', readonly=True)
+    balance = fields.Numeric('Balance ', readonly=True)
     is_balance_positive = fields.Boolean('Balance Positive',
         states={'invisible': True})
     hide_reconciled_lines = fields.Boolean('Hide Reconciled Lines')
@@ -105,12 +176,16 @@ class PartyBalance(model.CoopView):
     contract = fields.Many2One('contract', 'Contract',
         domain=[('id', 'in', Eval('contracts'))], depends=['contracts'])
     hide_canceled_invoices = fields.Boolean('Hide Canceled Invoices')
+    hide_scheduled_terms = fields.Boolean('Hide Scheduled Terms')
 
     @classmethod
     def __setup__(cls):
         super(PartyBalance, cls).__setup__()
         cls._buttons.update({
                 'refresh': {},
+                })
+        cls._error_messages.update({
+                'scheduled_term': 'Scheduled Term',
                 })
 
     @classmethod
@@ -124,6 +199,9 @@ class PartyBalance(model.CoopView):
                 'states',
                 {'invisible': Bool(Eval('is_balance_positive'))},
                 )]
+
+    def invoices_report_for_balance(self, contract):
+        return contract.invoices_report()[0]
 
     def show_line(self, line):
         return (not line.reconciliation or not self.hide_reconciled_lines
@@ -189,13 +267,37 @@ class PartyBalance(model.CoopView):
                 and (x.move_line.post_date or x.create_date) == date]
             self.add_parent_line(sub_lines, lines)
 
+        # add scheduled payment
+        if self.contract and not self.hide_scheduled_terms:
+            terms = self.invoices_report_for_balance(self.contract)
+            for term in terms:
+                fake_line = Line(contract=self.contract.rec_name,
+                    color='blue', icon='future_blue')
+                fake_line.amount = term['total_amount']
+                fake_line.date = term['planned_payment_date']
+                fake_line.description = \
+                    fake_line.get_scheduled_term_parent_description(
+                        term['components'])
+                fake_line.add_childs_to_scheduled_term_line(
+                    term['components'])
+                lines.append(fake_line)
+
+        def keyfunc(x):
+            max_date = datetime.date.max
+            move_line = getattr(x, 'move_line', None)
+            if move_line:
+                return (x.move_line.post_date or datetime.date.max,
+                    x.move_line.create_date.date(), x.date)
+            else:
+                return (max_date, max_date, x.date)
+
         lines = [x for x in lines if not getattr(x, 'parent', None)]
-        lines.sort(key=lambda x: (x.move_line.post_date or datetime.date.max,
-                x.move_line.create_date, x.date), reverse=True)
+        lines.sort(key=keyfunc, reverse=True)
 
         self.lines = lines
         if self.contract:
             self.balance_today = self.contract.balance_today
+            self.balance = self.contract.balance
         else:
             # TODO Does not work for broker or insurer
             self.balance_today = self.party.receivable_today

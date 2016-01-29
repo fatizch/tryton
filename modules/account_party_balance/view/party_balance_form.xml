@@ -9,6 +9,8 @@
         </group>
         <label name="contract"/>
         <field name="contract" widget="selection"/>
+        <label name="balance"/>
+        <field name="balance"/>
     </group>
     <group id="right">
         <label name="hide_reconciled_lines"/>
@@ -17,6 +19,8 @@
         <field name="from_date"/>
         <label name="hide_canceled_invoices"/>
         <field name="hide_canceled_invoices"/>
+        <label name="hide_scheduled_terms"/>
+        <field name="hide_scheduled_terms"/>
     </group>
     <button name="refresh" string="_Refresh" icon="tryton-executable"/>
     <field name="lines" colspan="4" expand_toolbar="0"/>

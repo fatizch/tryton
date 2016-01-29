@@ -38,5 +38,9 @@
             <field name="field_childs">childs</field>
             <field name="name">party_balance_line_list</field>
         </record>
+        <record model="ir.ui.icon" id="future_blue">
+            <field name="name">future_blue</field>
+            <field name="path">icons/future_blue.svg</field>
+        </record>
     </data>
 </tryton>

@@ -1,5 +1,5 @@
 import operator
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from itertools import groupby
 
 from trytond.pool import Pool, PoolMeta
@@ -136,3 +136,24 @@ class ContractSet:
         aggregated['billing_mode'] = bill_info.billing_mode.name
 
         return aggregated
+
+    def invoices_report(self):
+        all_reports = [report for contract in self.contracts for report in
+            contract.invoices_report()[0]]
+
+        keyfunc = lambda x: x['planned_payment_date']
+        sorted_reports = sorted(all_reports, key=keyfunc)
+        reports_per_date = defaultdict(lambda:
+            {'total_amount': 0, 'components': []})
+
+        total = 0
+        for planned_date, reports in groupby(sorted_reports, key=keyfunc):
+            for report in reports:
+                reports_per_date[planned_date]['total_amount'] += \
+                    report['total_amount']
+                reports_per_date[planned_date]['components'] += \
+                    report['components']
+                reports_per_date[planned_date][
+                    'planned_payment_date'] = planned_date
+                total += report['total_amount']
+        return [sorted(reports_per_date.values(), key=keyfunc), total]

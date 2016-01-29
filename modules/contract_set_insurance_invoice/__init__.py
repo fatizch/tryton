@@ -3,6 +3,7 @@ from .contract import *
 from .account import *
 from .wizard import *
 from .dunning import *
+from .move import *
 
 
 def register():
@@ -11,6 +12,7 @@ def register():
         ContractSet,
         Fee,
         Level,
+        PartyBalance,
         module='contract_set_insurance_invoice', type_='model')
     Pool.register(
         DisplayContractSetPremium,
