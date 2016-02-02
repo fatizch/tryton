@@ -897,7 +897,9 @@ class ReportCreate(Wizard):
                 report_context.update(TemplateParameter.get_data_for_report(
                         self.input_parameters.parameters))
             ext, filedata, _, file_basename = ReportModel.execute(
-                [Transaction().context.get('active_id')], report_context)
+                [Transaction().context.get('active_id')], report_context,
+                immediate_conversion=(not doc_template.convert_to_pdf and
+                    not doc_template.modifiable_before_printing))
             client_filepath, server_filepath = \
                 ReportModel.edm_write_tmp_report(filedata,
                     '%s.%s' % (file_basename, ext))
