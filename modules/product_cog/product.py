@@ -15,12 +15,6 @@ class Template(export.ExportImportMixin):
     _func_key = 'name'
 
     @classmethod
-    def view_attributes(cls):
-        return super(Template, cls).view_attributes() + [
-            ('/form/notebook', 'states', {'invisible': True}),
-            ]
-
-    @classmethod
     def _export_light(cls):
         return (super(Template, cls)._export_light() |
             set(['default_uom', 'account_expense', 'account_revenue']))

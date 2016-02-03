@@ -7,6 +7,5 @@
     <xpath expr="/tree/field[@name='list_price']" position="replace"/>
     <xpath expr="/tree/field[@name='cost_price']" position="replace"/>
     <xpath expr="/tree/field[@name='type']" position="replace"/>
-    <xpath expr="/tree/field[@name='category']" position="replace"/>
     <xpath expr="/tree/field[@name='default_uom']" position="replace"/>
 </data>

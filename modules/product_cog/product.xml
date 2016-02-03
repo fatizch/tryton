@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
+        <!-- ##################### -->
+        <!-- # Product template  # -->
+        <!-- ##################### -->
         <record model="ir.ui.view" id="template_view_form">
             <field name="model">product.template</field>
             <field name="type">form</field>
@@ -27,6 +30,9 @@
             <field name="view" ref="product.template_view_form"/>
             <field name="act_window" ref="act_template_form"/>
         </record>
+        <!-- ##################### -->
+        <!-- # Product           # -->
+        <!-- ##################### -->
         <menuitem parent="account.menu_account_configuration" id="menu_template" action="act_template_form"/>
         <record model="ir.action.act_window" id="act_product_form">
             <field name="name">Accounting Variants</field>
