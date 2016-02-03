@@ -1,6 +1,7 @@
 * Allow user to select a specific bank account during creation payment wizard
 * Allow to split sepa messages by RECUR vs FIRST
 * Add sepa bank payment reject date on a payment
+* Moving sepa_merged_id to account_payment_cog as merged_id
 
 Version 1.6 - 2015-12-23
 * Display SEPA Merged id in list view to facilitate search when manually rejecting paiements

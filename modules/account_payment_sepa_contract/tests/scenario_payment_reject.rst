@@ -307,10 +307,10 @@ Create payment for second and third invoice::
 Fail payments::
 
     >>> payment_second_invoice.sepa_return_reason_code = 'AM04'
-    >>> payment_second_invoice.sepa_merged_id = '123456'
+    >>> payment_second_invoice.merged_id = '123456'
     >>> payment_second_invoice.save()
     >>> payment_third_invoice.sepa_return_reason_code = 'AM04'
-    >>> payment_third_invoice.sepa_merged_id = '123456'
+    >>> payment_third_invoice.merged_id = '123456'
     >>> payment_third_invoice.save()
     >>> config._context['client_defined_date'] = initial_payment_date + \
     ...     relativedelta(days=10)

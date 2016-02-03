@@ -218,6 +218,18 @@ class Payment(export.ExportImportMixin, Printable):
         fields.Char('Reject Description', states={
                 'invisible': ~Eval('reject_description')}),
         'get_reject_description')
+    merged_id = fields.Char('Merged ID', select=True)
+
+    @classmethod
+    def __register__(cls, module_name):
+        # Migration from 1.6: Renaming column
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        payment_h = TableHandler(cursor, cls, module_name)
+
+        if payment_h.column_exist('sepa_merged_id'):
+            payment_h.column_rename('sepa_merged_id', 'merged_id')
+        super(Payment, cls).__register__(module_name)
 
     def get_reject_description(self, name):
         pool = Pool()
@@ -233,6 +245,8 @@ class Payment(export.ExportImportMixin, Printable):
         cls.line.select = True
         cls._error_messages.update({
                 'payments_blocked_for_party': 'Payments blocked for party %s',
+                'missing_payments': 'Payments with same merged_id must '
+                'be failed at the same time.',
                 })
         cls._buttons.update({
                 'button_fail_payments': {
@@ -387,16 +401,28 @@ class Payment(export.ExportImportMixin, Printable):
         return self.company.party
 
     @classmethod
+    def payments_fields_to_update_after_fail(cls, reject_reason):
+        return {}
+
+    def get_grouping_key(self):
+        return self.merged_id if self.merged_id else self.id
+
+    @classmethod
     def manual_set_reject_reason(cls, payments, reject_reason):
-        pass
+        merged_ids = set([p.merged_id for p in payments if p.merged_id])
+        if merged_ids:
+            all_payments = cls.search([
+                    ('merged_id', 'in', merged_ids)])
+            if len(all_payments) != len(
+                    [x for x in payments if x.merged_id]):
+                cls.raise_user_error('missing_payments')
+            fields = cls.payments_fields_to_update_after_fail(reject_reason)
+            cls.write(payments, fields)
 
     @classmethod
     @ModelView.button_action('account_payment_cog.manual_payment_fail_wizard')
     def button_fail_payments(cls, payments):
         pass
-
-    def get_grouping_key(self):
-        return self.id
 
 
 class Configuration:
@@ -531,6 +557,12 @@ class Group(ModelCurrency, export.ExportImportMixin):
                 result[group_id] += ', '
             result[group_id] += Date.date_as_string(date)
         return result
+
+    def merge_payment_key(self, payment):
+        return (('merged_id', payment.merged_id),
+            ('party', payment.party),
+            ('currency', payment.currency),
+            )
 
 
 class PaymentMotive(model.CoopSQL, model.CoopView):

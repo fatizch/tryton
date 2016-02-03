@@ -36,6 +36,16 @@ msgctxt "error:account.payment:"
 msgid "Payments blocked for party %s"
 msgstr "Paiements bloqués pour le tiers %s"
 
+msgctxt "error:account.payment:"
+msgid "Payments with same merged_id must be failed at the same time."
+msgstr ""
+"Les paiements avec le même identifiant regroupement doivent être "
+"rejetés en même temps."
+
+msgctxt "field:account.payment,merged_id:"
+msgid "Merged ID"
+msgstr "ID regroupement"
+
 msgctxt "field:account.configuration,direct_debit_journal:"
 msgid "Direct Debit Journal"
 msgstr "Journal de paiement automatique"

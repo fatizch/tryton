@@ -253,17 +253,17 @@ class PartyBalance(model.CoopView):
 
         # 3rd Pass for grouped payments
         tuples = set([
-                (x.move_line.origin_item.sepa_merged_id,
+                (x.move_line.origin_item.merged_id,
                     x.move_line.post_date or x.move_line.create_date)
                 for x in lines
                 if getattr(x.move_line, 'origin_item', None)
                 and x.move_line.origin_item.__name__ == 'account.payment'
-                and x.move_line.origin_item.sepa_merged_id])
-        for (sepa_merged_id, date) in tuples:
+                and x.move_line.origin_item.merged_id])
+        for (merged_id, date) in tuples:
             sub_lines = [x for x in lines
                 if getattr(x.move_line, 'origin_item', None)
                 and x.move_line.origin_item.__name__ == 'account.payment'
-                and x.move_line.origin_item.sepa_merged_id == sepa_merged_id
+                and x.move_line.origin_item.merged_id == merged_id
                 and (x.move_line.post_date or x.create_date) == date]
             self.add_parent_line(sub_lines, lines)
 

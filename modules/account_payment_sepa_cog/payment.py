@@ -101,12 +101,10 @@ class Group:
     def _export_skips(cls):
         return super(Group, cls)._export_skips() | {'sepa_messages'}
 
-    def sepa_merge_payment_key(self, payment):
-        return (('party', payment.party),
+    def merge_payment_key(self, payment):
+        return super(Group, self).merge_payment_key(payment) + (
             ('sepa_mandate', payment.sepa_mandate),
             ('sepa_bank_account_number', payment.sepa_bank_account_number),
-            ('sepa_merged_id', payment.sepa_merged_id),
-            ('currency', payment.currency),
             )
 
     def update_last_sepa_receivable_date(self):
@@ -150,12 +148,12 @@ class Group:
                     mandate_type[mandate.id] = mandate.sequence_type
             Payment.write(*to_write)
 
-        keyfunc = self.sepa_merge_payment_key
+        keyfunc = self.merge_payment_key
         payments = sorted(self.payments, key=keyfunc)
         to_write = []
         for key, merged_payments in groupby(payments, key=keyfunc):
             payments = list(merged_payments)
-            values = {'sepa_merged_id': Sequence.get('account.payment.merged')}
+            values = {'merged_id': Sequence.get('account.payment.merged')}
             if self.kind == 'receivable':
                 values['sepa_mandate_sequence_type'] = mandate_type[
                     payments[0].sepa_mandate.id]
@@ -189,7 +187,7 @@ class Group:
                 'party',
                 'sepa_remittance_information',
                 ])
-        keyfunc = self.sepa_merge_payment_key
+        keyfunc = self.merge_payment_key
         for key, grouped_payments in super(Group, self).sepa_payments:
             merged_payments = []
             grouped_payments = sorted(grouped_payments, key=keyfunc)
@@ -197,8 +195,8 @@ class Group:
                 mkey = dict(mkey)
                 amount = sum(p.amount for p in payments)
                 payment = Payment(
-                    sepa_instruction_id=mkey['sepa_merged_id'],
-                    sepa_end_to_end_id=mkey['sepa_merged_id'],
+                    sepa_instruction_id=mkey['merged_id'],
+                    sepa_end_to_end_id=mkey['merged_id'],
                     currency=mkey['currency'],
                     amount=amount,
                     sepa_mandate=mkey.get('sepa_mandate', None),
@@ -229,7 +227,6 @@ class Payment:
     bank_account = fields.Many2One('bank.account', 'Bank Account',
         ondelete='RESTRICT', domain=[('owners', '=', Eval('party'))],
         depends=['party'])
-    sepa_merged_id = fields.Char('SEPA Merged ID')
     sepa_bank_reject_date = fields.Date('SEPA Bank Reject Date',
         states={'invisible': Or(
                 Eval('state') != 'failed',
@@ -247,8 +244,6 @@ class Payment:
         cls._error_messages.update({
                 'unknown_amount_invoice_line':
                 'Unknown amount invoice line : %s %s',
-                'missing_payments': 'Payments with same sepa_merged_id must '
-                'be failed at the same time.',
                 'direct_debit_payment': 'Direct Debit Payment of',
                 'direct_debit_disbursement': 'Direct Debit Disbursement of',
                 })
@@ -257,7 +252,7 @@ class Payment:
 
     def get_sepa_end_to_end_id(self, name):
         value = super(Payment, self).get_sepa_end_to_end_id(name)
-        return self.sepa_merged_id or value
+        return self.merged_id or value
 
     def _get_transaction_key(self):
         if self.sepa_end_to_end_id:
@@ -278,11 +273,11 @@ class Payment:
         return [
             'OR',
             [
-                ('sepa_merged_id', '=', None),
+                ('merged_id', '=', None),
                 result,
                 ],
             [
-                ('sepa_merged_id',) + tuple(domain[1:]),
+                ('merged_id',) + tuple(domain[1:]),
                 ]
             ]
 
@@ -374,21 +369,14 @@ class Payment:
         return reject_fee
 
     @classmethod
-    def manual_set_reject_reason(cls, payments, reject_reason):
-        super(Payment, cls).manual_set_reject_reason(payments, reject_reason)
-        if reject_reason.process_method == 'sepa':
-            sepa_merged_ids = set([p.sepa_merged_id for p in payments
-                if p.sepa_merged_id])
-            if sepa_merged_ids:
-                all_payments = cls.search([
-                        ('sepa_merged_id', 'in', sepa_merged_ids)])
-                if len(all_payments) != len(
-                        [x for x in payments if x.sepa_merged_id]):
-                    cls.raise_user_error('missing_payments')
-            cls.write(payments, {
-                    'sepa_return_reason_code': reject_reason.code,
-                    'sepa_bank_reject_date': utils.today()
-                    })
+    def payments_fields_to_update_after_fail(cls, reject_reason):
+        fields = super(Payment, cls).payments_fields_to_update_after_fail(
+            reject_reason)
+        fields.update({
+            'sepa_return_reason_code': reject_reason.code,
+            'sepa_bank_reject_date': utils.today(),
+        })
+        return fields
 
     @classmethod
     def get_contract_for_reject_invoice(cls, payments):
@@ -468,10 +456,6 @@ class Payment:
                 invoice_type='out_invoice',
                 account=account_for_billing,
                 )]
-
-    def get_grouping_key(self):
-        return self.sepa_merged_id if self.sepa_merged_id else super(Payment,
-            self).get_grouping_key()
 
 
 class InvoiceLine:

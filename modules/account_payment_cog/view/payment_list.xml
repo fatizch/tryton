@@ -19,4 +19,7 @@
         <field name="reject_description"/>
         <button string="Process Payments" name="process_payments" tree_invisible="1"/>
     </xpath>
+    <xpath expr="/tree" position="inside">
+        <field name="merged_id"/>
+    </xpath>
 </data>
