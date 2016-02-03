@@ -18,4 +18,4 @@ RUN /opt/coog/coog/bin/coog repo linkm
 VOLUME ["/opt/coog/data"]
 EXPOSE 8000 8069
 
-ENTRYPOINT ["coog", "worker"]
+ENTRYPOINT ["coog", "ep"]

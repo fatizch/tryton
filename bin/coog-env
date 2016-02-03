@@ -3,12 +3,14 @@
 
 _coog_env_files() { # set file names
         COOG_SRV_FILE=coog-srv-$USER
+        COOG_WRK_FILE=coog-wrk-$USER
         COOG_CLI_FILE=coog-cli-$USER
         if [ ! -z $VIRTUAL_ENV ]
         then
                 local venv
                 venv=`basename $VIRTUAL_ENV`
                 COOG_SRV_FILE=$COOG_SRV_FILE-$venv
+                COOG_WRK_FILE=$COOG_WRK_FILE-$venv
                 COOG_CLI_FILE=$COOG_CLI_FILE-$venv
         else
                 echo warn: running outside a virtual env
@@ -60,6 +62,7 @@ coog_env_main() { # print meaningful vars for coog execution
         echo Environment variables:
         echo
         echo "    COOG_SRV_FILE     "$COOG_SRV_FILE
+        echo "    COOG_WRK_FILE     "$COOG_WRK_FILE
         echo "    COOG_CLI_FILE     "$COOG_CLI_FILE
         echo "    COOG_TMP          "$COOG_TMP
         echo "    COOG_SRV_CONF     "$COOG_SRV_CONF

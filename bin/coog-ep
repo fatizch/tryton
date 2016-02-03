@@ -1,0 +1,149 @@
+# vim: set ft=sh:
+# docker entrypoint
+
+_coog_ep_conf_file() {
+        echo `readlink -f ../../coog.conf`
+}
+
+_coog_ep_data_folder() {
+        echo `readlink -f ../../data`
+}
+
+_coog_ep_conf_jsonrpc() {
+        local file
+        file=`_coog_ep_conf_file`
+        echo "[jsonrpc]" >> $file
+        echo "listen = 0.0.0.0:8000" >> $file
+}
+
+_coog_ep_conf_xmlrpc() {
+        local file
+        file=`_coog_ep_conf_file`
+        echo "[xmlrpc]" >> $file
+        echo "listen = 0.0.0.0:8069" >> $file
+}
+
+_coog_ep_conf_database() {
+        local file
+        file=`_coog_ep_conf_file`
+        echo "[database]" >> $file
+        local db_system
+        [ ! -z $COOG_DB_SYS ] && db_system=$COOG_DB_SYS
+        [ -z $db_system ] && db_system=postgresql
+        local db_host
+        [ ! -z $COOG_DB_HOST ] && db_host=$COOG_DB_HOST
+        [ -z $db_host ] && \
+                [ $db_system = postgresql ] && \
+                [ ! -z $POSTGRES_PORT_5432_TCP_ADDR ] && \
+                db_host=$POSTGRES_PORT_5432_TCP_ADDR
+        [ -z $db_host ] && echo "  no db host defined" && return 1
+        local db_port
+        [ ! -z $COOG_DB_PORT ] && db_port=$COOG_DB_PORT
+        [ -z $db_port ] && \
+                [ $db_system = postgresql ] && \
+                [ ! -z $POSTGRES_PORT_5432_TCP_PORT ] && \
+                db_port=$POSTGRES_PORT_5432_TCP_PORT
+        [ -z $db_port ] && \
+                [ $db_system = postgresql ] && \
+                db_port=5432
+        [ -z $db_port ] && echo "  no db port defined" && return 1
+        local db_user
+        [ ! -z $COOG_DB_USER ] && db_user=$COOG_DB_USER
+        [ -z $db_user ] && echo "  no db user defined" && return 1
+        local db_password
+        [ ! -z $COOG_DB_PASSWORD ] && db_password=$COOG_DB_PASSWORD
+        [ -z $db_password ] && echo "  no db password defined" && return 1
+        echo "uri = $db_system://$db_user:$db_password@$db_host:$db_port" >> $file
+        local db_data
+        db_data=`_coog_ep_data_folder`
+        echo "path = $db_data" >> $file
+}
+
+_coog_ep_conf_cache() {
+        local file
+        file=`_coog_ep_conf_file`
+        echo "[cache]" >> $file
+        local cache_host
+        [ ! -z $COOG_CACHE_HOST ] && cache_host=$COOG_CACHE_HOST
+        [ -z $cache_host ] && \
+                [ ! -z $REDIS_PORT_6379_TCP_ADDR ] && \
+                cache_host=$REDIS_PORT_6379_TCP_ADDR
+        [ -z $cache_host ] && return
+        local cache_port
+        [ ! -z $COOG_CACHE_PORT ] && cache_port=$COOG_CACHE_PORT
+        [ -z $cache_port ] && \
+                [ ! -z $REDIS_PORT_6379_TCP_PORT ] && \
+                cache_port=$REDIS_PORT_6379_TCP_PORT
+        [ -z $cache_port ] && cache_port=6379
+        local cache_db
+        [ ! -z $COOG_CACHE_DB ] && cache_db=$COOG_CACHE_DB
+        [ -z $cache_db ] && echo "  no cache db defined" && return 1
+        echo "redis = redis://$cache_host:$cache_port/$cache_db" >> $file
+}
+
+_coog_ep_conf_sentry() {
+        local file
+        file=`_coog_ep_conf_file`
+        echo "[sentry]" >> $file
+        local sentry_host
+        [ ! -z $COOG_SENTRY_HOST ] && sentry_host=$COOG_SENTRY_HOST
+        [ -z $sentry_host ] && return
+        local sentry_protocol
+        [ ! -z $COOG_SENTRY_PROTOCOL ] && sentry_protocol=$COOG_SENTRY_PROTOCOL
+        [ -z $sentry_protocol ] && sentry_protocol=http
+        local sentry_port
+        [ ! -z $COOG_SENTRY_PORT ] && sentry_port=$COOG_SENTRY_PORT
+        [ -z $sentry_port ] && sentry_port=9000
+        local sentry_pub
+        [ ! -z $COOG_SENTRY_PUB ] && sentry_pub=$COOG_SENTRY_PUB
+        [ -z $sentry_pub ] && echo no sentry dsn pub key defined && return -1
+        local sentry_sec
+        [ ! -z $COOG_SENTRY_SEC ] && sentry_sec=$COOG_SENTRY_SEC
+        [ -z $sentry_sec ] && echo no sentry dsn sec key defined && return -1
+        local sentry_project
+        [ ! -z $COOG_SENTRY_PROJECT ] && sentry_project=$COOG_SENTRY_PROJECT
+        [ -z $sentry_project ] && echo no sentry dsn project defined && return -1
+        echo "dsn = $sentry_protocol://$sentry_pub:$sentry_sec@$sentry_host:$sentry_port/$sentry_project" >> $file
+}
+
+_coog_ep_conf() {
+        local file
+        file=`_coog_ep_conf_file`
+        echo "# Coog configuration" > $file
+        _coog_ep_conf_jsonrpc && \
+                _coog_ep_conf_xmlrpc && \
+                _coog_ep_conf_database && \
+                _coog_ep_conf_cache && \
+                _coog_ep_conf_sentry
+}
+
+coog_ep_app() { # start Coog app inside container
+        echo Welcome on board, Coog is getting started
+        echo
+        echo Building configuration file...
+        _coog_ep_conf || ( echo "!!! Failed to build configuration file !!!" && return )
+
+        # TODO: review - batch
+        cp conf/celeryconfig.py ../../trytond
+
+        echo
+        echo Staring Coog...
+        local file
+        file=`_coog_ep_conf_file`
+        trytond -c $file $*
+}
+
+coog_ep_config() { # print container built config file
+        echo Building configuration file...
+        _coog_ep_conf || ( echo "!!! Failed to build configuration file !!!" && return )
+
+        echo
+        echo Built configuration:
+        local file
+        file=`_coog_ep_conf_file`
+        cat $file
+}
+
+coog_ep_version() { # print image repos versions
+        cat ../../.version
+}

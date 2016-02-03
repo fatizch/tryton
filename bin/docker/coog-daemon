@@ -1,15 +1,12 @@
 #!/bin/sh
 
-# This command starts a Coog worker
+# This command starts a Coog container
 #
 # Options explanations:
 #     -d: as daemon
-#     --name: name of the container. in case of multi-workers => coog-1, ...
+#     --name: name of the container. in case of multi-containers => coog-n
 #     --link: to link to database (container-name:internal-reference)
-#     -v: we map a fs volume to set conf (./conf for this example)
-#         this folder should contain at least worker.conf and celeryconfig.py
-#         note that no need to set db url and redis url since we get them
-#         from the linked containers
+#     -v: we map a fs volume to hold data (i.e. attachments)
 #     -e: to set variables inside the container
 #
 # Coog image variables:

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# This command starts a Coog worker in interactive mode
+# This command starts a Coog container in interactive mode
 #
 # This is useful for example to see server logs, to upgrade modules, etc.
 #

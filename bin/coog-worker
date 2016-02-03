@@ -1,149 +1,141 @@
 # vim: set ft=sh:
-# docker entrypoint
+# worker management - start, stop, log, status, etc
 
-_coog_worker_conf_file() {
-        echo `readlink -f ../../worker.conf`
+_coog_worker_file() { # get file name - <wid> <ext> [pid]
+        [ $# -eq 2 ] && echo $COOG_TMP"/"$COOG_WRK_FILE"-"$1"."$2
+        [ $# -eq 3 ] && echo $COOG_TMP"/"$COOG_WRK_FILE"-"$1"-"$3"."$2
+        return 1
 }
 
-_coog_worker_data_folder() {
-        echo `readlink -f ../../data`
+_coog_worker_pid() { # retrieve pid from pidfile - <wid> [delete]
+        local pid_file
+        pid_file=`_coog_worker_file $1 pid`
+        [ ! -e $pid_file ] && return
+        cat $pid_file
+        [ $2 = 1 ] && rm -f $pid_file
 }
 
-_coog_worker_conf_jsonrpc() {
-        local file
-        file=`_coog_worker_conf_file`
-        echo "[jsonrpc]" >> $file
-        echo "listen = 0.0.0.0:8000" >> $file
+_coog_worker_bak() { # backup runtime files - <wid> [pid]
+        local out_file
+        out_file=`_coog_worker_file $1 out`
+        if [ -e $out_file ]
+        then
+                [ -z $2 ] && rm $out_file && return
+                local bak_file
+                bak_file=`_coog_worker_file $1 out $2`
+                mv $out_file $bak_file
+        else
+                echo no worker out
+        fi
+        local conf_file
+        conf_file=`_coog_worker_file $1 conf`
+        if [ -e $conf_file ]
+        then
+                [ -z $2 ] && rm $conf_file && return
+                local bak_file
+                bak_file=`_coog_worker_file $1 conf $2`
+                mv $conf_file $bak_file
+        else
+                echo no worker conf
+        fi
+
 }
 
-_coog_worker_conf_xmlrpc() {
-        local file
-        file=`_coog_worker_conf_file`
-        echo "[xmlrpc]" >> $file
-        echo "listen = 0.0.0.0:8069" >> $file
+coog_worker_start() { # start worker - <wid>
+        local pid_file
+        pid_file=`_coog_worker_file $1 pid`
+        [ -e $pid_file ] && echo 'worker already running -> stop or restart' && return 1
+        local conf_file
+        conf_file=`_coog_worker_file $1 conf`
+        [ -e $conf_file ] && echo 'worker conf file exists -> clean manually' && return 1
+        local out_file
+        out_file=`_coog_worker_file $1 out`
+        [ -e $out_file ] && echo 'worker out file exists -> clean manually' && return 1
+        local old_port
+        old_port=`python2 .py/env-config.py $COOG_SRV_CONF jsonrpc listen str | cut -d ":" -f 2`
+        new_port=`echo "$old_port+$1" | bc`
+        sed -e "s,$old_port,$new_port,g" $COOG_SRV_CONF > $conf_file
+        coog_env_celery
+        local args
+        args="--logconf $COOG_LOG_CONF"
+        [ ! -z $PGDATABASE ] && args="$args -d $PGDATABASE"
+        nohup trytond -c $conf_file --pidfile $pid_file $args > $out_file &
+        echo worker $1 started
 }
 
-_coog_worker_conf_database() {
-        local file
-        file=`_coog_worker_conf_file`
-        echo "[database]" >> $file
-        local db_system
-        [ ! -z $COOG_DB_SYS ] && db_system=$COOG_DB_SYS
-        [ -z $db_system ] && db_system=postgresql
-        local db_host
-        [ ! -z $COOG_DB_HOST ] && db_host=$COOG_DB_HOST
-        [ -z $db_host ] && \
-                [ $db_system = postgresql ] && \
-                [ ! -z $POSTGRES_PORT_5432_TCP_ADDR ] && \
-                db_host=$POSTGRES_PORT_5432_TCP_ADDR
-        [ -z $db_host ] && echo "  no db host defined" && return 1
-        local db_port
-        [ ! -z $COOG_DB_PORT ] && db_port=$COOG_DB_PORT
-        [ -z $db_port ] && \
-                [ $db_system = postgresql ] && \
-                [ ! -z $POSTGRES_PORT_5432_TCP_PORT ] && \
-                db_port=$POSTGRES_PORT_5432_TCP_PORT
-        [ -z $db_port ] && \
-                [ $db_system = postgresql ] && \
-                db_port=5432
-        [ -z $db_port ] && echo "  no db port defined" && return 1
-        local db_user
-        [ ! -z $COOG_DB_USER ] && db_user=$COOG_DB_USER
-        [ -z $db_user ] && echo "  no db user defined" && return 1
-        local db_password
-        [ ! -z $COOG_DB_PASSWORD ] && db_password=$COOG_DB_PASSWORD
-        [ -z $db_password ] && echo "  no db password defined" && return 1
-        echo "uri = $db_system://$db_user:$db_password@$db_host:$db_port" >> $file
-        local db_data
-        db_data=`_coog_worker_data_folder`
-        echo "path = $db_data" >> $file
+coog_worker_stop() { # stop worker (gracefully) - <wid>
+        local pid
+        pid=`_coog_worker_pid $1 0`
+        [ -z $pid ] && echo no worker running && return
+        kill -TERM $pid && echo worker $1 stopped
+        _coog_worker_bak $1 $pid
 }
 
-_coog_worker_conf_cache() {
-        local file
-        file=`_coog_worker_conf_file`
-        echo "[cache]" >> $file
-        local cache_host
-        [ ! -z $COOG_CACHE_HOST ] && cache_host=$COOG_CACHE_HOST
-        [ -z $cache_host ] && \
-                [ ! -z $REDIS_PORT_6379_TCP_ADDR ] && \
-                cache_host=$REDIS_PORT_6379_TCP_ADDR
-        [ -z $cache_host ] && return
-        local cache_port
-        [ ! -z $COOG_CACHE_PORT ] && cache_port=$COOG_CACHE_PORT
-        [ -z $cache_port ] && \
-                [ ! -z $REDIS_PORT_6379_TCP_PORT ] && \
-                cache_port=$REDIS_PORT_6379_TCP_PORT
-        [ -z $cache_port ] && cache_port=6379
-        local cache_db
-        [ ! -z $COOG_CACHE_DB ] && cache_db=$COOG_CACHE_DB
-        [ -z $cache_db ] && echo "  no cache db defined" && return 1
-        echo "redis = redis://$cache_host:$cache_port/$cache_db" >> $file
+coog_worker_kill() { # kill worker process - <wid>
+        local pid
+        pid=`_coog_worker_pid $1 1`
+        [ -z $pid ] && echo no worker running
+        [ ! -z $pid ] && kill -9 $pid && echo worker $1 killed
+        _coog_worker_bak $1 $pid
 }
 
-_coog_worker_conf_sentry() {
-        local file
-        file=`_coog_worker_conf_file`
-        echo "[sentry]" >> $file
-        local sentry_host
-        [ ! -z $COOG_SENTRY_HOST ] && sentry_host=$COOG_SENTRY_HOST
-        [ -z $sentry_host ] && return
-        local sentry_protocol
-        [ ! -z $COOG_SENTRY_PROTOCOL ] && sentry_protocol=$COOG_SENTRY_PROTOCOL
-        [ -z $sentry_protocol ] && sentry_protocol=http
-        local sentry_port
-        [ ! -z $COOG_SENTRY_PORT ] && sentry_port=$COOG_SENTRY_PORT
-        [ -z $sentry_port ] && sentry_port=9000
-        local sentry_pub
-        [ ! -z $COOG_SENTRY_PUB ] && sentry_pub=$COOG_SENTRY_PUB
-        [ -z $sentry_pub ] && echo no sentry dsn pub key defined && return -1
-        local sentry_sec
-        [ ! -z $COOG_SENTRY_SEC ] && sentry_sec=$COOG_SENTRY_SEC
-        [ -z $sentry_sec ] && echo no sentry dsn sec key defined && return -1
-        local sentry_project
-        [ ! -z $COOG_SENTRY_PROJECT ] && sentry_project=$COOG_SENTRY_PROJECT
-        [ -z $sentry_project ] && echo no sentry dsn project defined && return -1
-        echo "dsn = $sentry_protocol://$sentry_pub:$sentry_sec@$sentry_host:$sentry_port/$sentry_project" >> $file
+coog_worker_restart() { # restart worker - <wid>
+        local pid
+        pid=`_coog_worker_pid $1 0`
+        [ -z $pid ] && echo no worker running && return
+        kill -USR1 $pid && echo worker $1 restarted
 }
 
-_coog_worker_conf() {
-        local file
-        file=`_coog_worker_conf_file`
-        echo "# worker configuration" > $file
-        _coog_worker_conf_jsonrpc && \
-                _coog_worker_conf_xmlrpc && \
-                _coog_worker_conf_database && \
-                _coog_worker_conf_cache && \
-                _coog_worker_conf_sentry
+coog_worker_log() { # less worker logs - <wid>
+        local out_file
+        out_file=`_coog_worker_file $1 out`
+        [ ! -e $out_file ] && echo no worker out && return
+        less $* $out_file
 }
 
-coog_worker_app() { # start trytond app worker inside container
-        echo Welcome on board, Coog is getting started
-        echo
-        echo Building configuration file...
-        _coog_worker_conf || ( echo "!!! Failed to build configuration file !!!" && return )
-
-        # TODO: review - batch
-        cp conf/celeryconfig.py ../../trytond
-
-        echo
-        echo Staring worker...
-        local file
-        file=`_coog_worker_conf_file`
-        trytond -c $file $*
+coog_worker_head() { # head worker logs - <wid>
+        local out_file
+        out_file=`_coog_worker_file $1 out`
+        [ ! -e $out_file ] && echo no worker out && return
+        head $* $out_file
 }
 
-coog_worker_config() { # print container built config file
-        echo Building configuration file...
-        _coog_worker_conf || ( echo "!!! Failed to build configuration file !!!" && return )
-
-        echo
-        echo Built configuration:
-        local file
-        file=`_coog_worker_conf_file`
-        cat $file
+coog_worker_tail() { # tail worker logs - <wid>
+        local out_file
+        out_file=`_coog_worker_file $1 out`
+        [ ! -e $out_file ] && echo no worker out && return
+        tail $* $out_file
 }
 
-coog_worker_version() { # print image repos versions
-        cat ../../.version
+coog_worker_st () { # print worker status - <wid>
+        local out_file
+        out_file=`_coog_worker_file $1 out`
+        local cri
+        local err
+        local wrn
+        local inf
+        [ ! -e $out_file ] && echo no worker out && return
+        cri=`grep -c "\bCRITICAL:\b" $out_file`
+        err=`grep -c "\bERROR:\b" $out_file`
+        wrn=`grep -c "\bWARNING:\b" $out_file`
+        inf=`grep -c "\bINFO:\b" $out_file`
+        echo worker $1 \(critical:$cri error:$err warning:$wrn info:$inf\)
+}
+
+coog_worker_ps() { # print worker process info - <wid>
+        local pid
+        pid=`_coog_worker_pid $1 0`
+        [ -z $pid ] && echo no worker running && return
+        local line
+        line=`ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem | sed -n 2p` || return
+        echo worker $1 $line
+}
+
+coog_worker_multi() { # execution action on multi workers - <act> <nb>
+        local wid=0
+        while [ $wid -lt $2 ]
+        do
+                wid=$((wid+1))
+                coog_worker_$1 $wid
+        done
 }
