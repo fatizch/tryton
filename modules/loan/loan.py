@@ -1,6 +1,7 @@
 import datetime
 import bisect
 from decimal import Decimal
+from sql.conditionals import Coalesce
 
 from trytond import backend
 from trytond.pool import Pool
@@ -171,11 +172,13 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     display_warning = fields.Function(
         fields.Boolean('Warning'),
         'on_change_with_display_warning')
+    last_modification = fields.Function(fields.DateTime('Last Modification'),
+        'get_last_modification')
 
     @classmethod
     def __setup__(cls):
         super(Loan, cls).__setup__()
-        cls._order.insert(0, ('number', 'ASC'))
+        cls._order.insert(0, ('last_modification', 'DESC'))
         cls._error_messages.update({
                 'no_sequence': 'No loan sequence defined',
                 'used_on_non_project_contract': (
@@ -245,6 +248,11 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     @classmethod
     def add_func_key(cls, values):
         values['_func_key'] = values['number']
+
+    @staticmethod
+    def order_last_modification(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.write_date, table.create_date)]
 
     @staticmethod
     def default_company():
@@ -615,6 +623,10 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         increment = utils.get_value_at_date(self.increments, at_date,
             'start_date')
         return increment.payment_amount if increment else 0
+
+    def get_last_modification(self, name):
+        return (self.write_date if self.write_date else self.create_date
+            ).replace(microsecond=0)
 
     @fields.depends('currency')
     def on_change_with_currency_digits(self, name=None):
