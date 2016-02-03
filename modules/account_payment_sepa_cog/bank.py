@@ -1,11 +1,12 @@
 from trytond.pyson import Eval
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Bank',
+    'BankAccount',
     'BankAccountNumber',
     ]
 
@@ -19,6 +20,20 @@ class Bank:
         cls.bic.required = True
 
 
+class BankAccount:
+    __name__ = 'bank.account'
+
+    def objects_using_me_for_party(self, party=None):
+        objects = super(BankAccount, self).objects_using_me_for_party(party)
+        if objects:
+            return objects
+        Payment = Pool().get('account.payment')
+        domain = [('bank_account', '=', self)]
+        if party:
+            domain.append(('party', '=', party))
+        return Payment.search(domain)
+
+
 class BankAccountNumber:
     'Bank Account Number'
     __name__ = 'bank.account.number'
@@ -29,3 +44,13 @@ class BankAccountNumber:
             'readonly': True},
         domain=[('party.bank_accounts', '=', Eval('account'))],
         depends=['account'])
+
+    def objects_using_me_for_party(self, party=None):
+        objects = super(BankAccountNumber, self).objects_using_me_for_party(
+            party)
+        if objects:
+            return objects
+        for m in self.mandates:
+            objects = m.objects_using_me_for_party(party)
+            if objects:
+                return objects

@@ -1,6 +1,10 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:bank.account-party.party:"
+msgid "Bank account \"%(bank_account)s\" is used on \"%(object)s\""
+msgstr "Le compte bancaire \"%(bank_account)s\" est utilisé par \"%(object)s\""
 
 msgctxt "error:bank.account.number:"
 msgid "The number must be unique!"

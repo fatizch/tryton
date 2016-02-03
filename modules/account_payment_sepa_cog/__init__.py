@@ -17,6 +17,7 @@ def register():
         Mandate,
         Group,
         Bank,
+        BankAccount,
         BankAccountNumber,
         InvoiceLine,
         Journal,

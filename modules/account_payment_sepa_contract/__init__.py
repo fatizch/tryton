@@ -2,6 +2,7 @@ from trytond.pool import Pool
 from .contract import *
 from .invoice import *
 from .move import *
+from .payment import *
 
 
 def register():
@@ -10,4 +11,5 @@ def register():
         ContractBillingInformation,
         Invoice,
         MoveLine,
+        Mandate,
         module='account_payment_sepa_contract', type_='model')

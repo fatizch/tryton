@@ -201,6 +201,12 @@ class BankAccount(export.ExportImportMixin):
         for number in self.numbers:
             number.pre_validate()
 
+    def objects_using_me_for_party(self, for_party=None):
+        for n in self.numbers:
+            objects = n.objects_using_me_for_party(for_party)
+            if objects:
+                return objects
+
 
 class BankAccountNumber(export.ExportImportMixin):
     __name__ = 'bank.account.number'
@@ -240,10 +246,21 @@ class BankAccountNumber(export.ExportImportMixin):
     def add_func_key(cls, values):
         values['_func_key'] = values['number']
 
+    def objects_using_me_for_party(self, for_party=None):
+        return None
+
 
 class BankAccountParty:
     'Bank Account - Party'
     __name__ = 'bank.account-party.party'
+
+    @classmethod
+    def __setup__(cls):
+        super(BankAccountParty, cls).__setup__()
+        cls._error_messages.update({
+                'bank_account_used': ('Bank account "%(bank_account)s" is '
+                    'used on "%(object)s"'),
+                })
 
     def get_synthesis_rec_name(self, name):
         if self.account:
@@ -251,3 +268,16 @@ class BankAccountParty:
 
     def get_icon(self, name=None):
         return 'coopengo-bank_account'
+
+    @classmethod
+    def delete(cls, records):
+        for r in records:
+            objects = r.account.objects_using_me_for_party(r.owner)
+            if objects:
+                cls.raise_user_error('bank_account_used', {
+                    'bank_account': r.account.rec_name,
+                    'object': ', '.join(['%s %s' % (
+                                o.__class__.__name__,
+                                o.rec_name)
+                            for o in objects]), })
+        super(BankAccountParty, cls).delete(records)

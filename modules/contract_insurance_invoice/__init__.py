@@ -9,6 +9,7 @@ from .account import *
 from .move import *
 from .rule_engine import *
 from .event import *
+from .bank import *
 
 
 def register():
@@ -50,6 +51,7 @@ def register():
         Event,
         EventLog,
         EventTypeAction,
+        BankAccount,
         module='contract_insurance_invoice', type_='model')
     Pool.register(
         InvoiceContract,

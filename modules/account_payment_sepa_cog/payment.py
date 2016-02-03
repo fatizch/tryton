@@ -76,6 +76,13 @@ class Mandate(export.ExportImportMixin):
         else:
             return seq_type
 
+    def objects_using_me_for_party(self, party=None):
+        Payment = Pool().get('account.payment')
+        domain = [('sepa_mandate', '=', self)]
+        if party:
+            domain.append(('party', '=', party))
+        return Payment.search(domain)
+
 
 class Group:
     __name__ = 'account.payment.group'
