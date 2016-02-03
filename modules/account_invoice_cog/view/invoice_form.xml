@@ -4,6 +4,15 @@
         <label name="business_type"/>
         <field name="business_type"/>
     </xpath>
+    <xpath expr="/form/label[@name='party']" position="before">
+        <newline/>
+    </xpath>
+    <xpath expr="//field[@name='lines']" position="replace">
+        <group id="invoice_lines" colspan="6" yexpand="1" yfill="1">
+            <field name="lines" colspan="6"
+                view_ids="account_invoice.invoice_line_view_tree_sequence"/>
+        </group>
+    </xpath>
     <xpath expr="/form/label[@name='type']" position="replace"/>
     <xpath expr="/form/field[@name='type']" position="replace"/>
 </data>

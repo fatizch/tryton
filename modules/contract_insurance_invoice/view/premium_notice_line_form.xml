@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<form string="Invoice Line">
+    <label name="invoice"/>
+    <field name="invoice" colspan="3"/>
+    <label name="type"/>
+    <field name="type"/>
+    <notebook colspan="4">
+        <page string="General" id="general">
+            <label name="detail"/>
+            <field name="detail"/>
+            <label name="account"/>
+            <field name="account"/>
+            <newline/>
+            <label name="description"/>
+            <field name="description" colspan="3" yexpand="0"/>
+            <label name="amount"/>
+            <field name="amount"/>
+            <field name="taxes" colspan="4"/>
+        </page>
+        <page string="Notes" id="notes">
+            <separator name="note" colspan="4"/>
+            <field name="note" colspan="4"/>
+        </page>
+    </notebook>
+    <field name="party_lang" invisible="1" colspan="4"/>
+</form>
+
+

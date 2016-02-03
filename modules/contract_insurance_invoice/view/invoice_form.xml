@@ -8,6 +8,12 @@
         <label name="end"/>
         <field name="end"/>
     </xpath>
+    <xpath expr="//group[@id='invoice_lines']" position="after">
+        <group id="invoice_lines_insurance" colspan="6" yexpand="1" yfill="1">
+            <field name="lines" colspan="6"
+                view_ids="contract_insurance_invoice.invoice_line_sequence_view_list,contract_insurance_invoice.invoice_line_view_form"/>
+        </group>
+    </xpath>
     <xpath expr="//label[@name='tax_amount']" position="before">
         <label name="base_amount" xalign="1.0" xexpand="1"/>
         <field name="base_amount" xalign="1.0" xexpand="0"/>

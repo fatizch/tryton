@@ -7,7 +7,7 @@ from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
 from trytond.rpc import RPC
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Not
 from trytond.wizard import Wizard, StateView, Button
 
 from trytond.modules.cog_utils import utils, model, fields
@@ -84,6 +84,20 @@ class Invoice:
             ]
         cls.business_type.depends += ['contract_invoice']
 
+    @classmethod
+    def view_attributes(cls):
+        is_contract_type = (Bool(Eval('business_type') == 'contract_invoice'))
+        return super(Invoice, cls).view_attributes() + [
+            ('//group[@id="invoice_lines"]',
+                'states', {
+                    'invisible': is_contract_type,
+                    }),
+            ('//group[@id="invoice_lines_insurance"]',
+                'states', {
+                    'invisible': Not(is_contract_type),
+                    })
+            ]
+
     def get_base_amount(self, name):
         return self.untaxed_amount - self.fees
 
@@ -136,7 +150,7 @@ class Invoice:
         return result
 
     def get_business_type(self, name):
-        if self.contract_invoice:
+        if self.type == 'out_invoice' and self.contract_invoice:
             return 'contract_invoice'
         else:
             return super(Invoice, self).get_business_type(name)

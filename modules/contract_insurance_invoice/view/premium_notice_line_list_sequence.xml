@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<tree string="Invoice Lines" sequence="sequence">
+    <field name="invoice"/>
+    <field name="coverage_start"/>
+    <field name="coverage_end"/>
+    <field name="covered_element"/>
+    <field name="type_"/>
+    <field name="amount">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="description" expand="1"/>
+</tree>
