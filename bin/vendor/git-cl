@@ -545,6 +545,9 @@ def CmdUpload(args):
                       help='CC email addresses')
     parser.add_option('--send-mail', action='store_true',
                       help='send email to reviewer immediately')
+    parser.add_option("--no_oauth2_webbrowser", action="store_false",
+                     dest="open_oauth2_local_webbrowser", default=True,
+                     help="Don't open a browser window to get an access token.")
     (options, args) = parser.parse_args(args)
 
     if RunGit(['diff-index', 'HEAD']):
@@ -584,6 +587,8 @@ def CmdUpload(args):
         if not options.reviewers:
             DieWithError("Must specify reviewers to send email.")
         upload_args.append('--send_mail')
+    if not options.open_oauth2_local_webbrowser:
+        upload_args.append('--no_oauth2_webbrowser')
     if cl.GetIssue():
         upload_args.extend(['--issue', cl.GetIssue()])
         print ("This branch is associated with issue %s. "
