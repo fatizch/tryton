@@ -7,9 +7,13 @@
         <label name="commissioned_option"/>
         <field name="commissioned_option"/>
     </xpath>
-    <xpath expr="/form/field[@name='amount']" position="after">
-        <newline/>
+    <xpath expr="/form/field[@name='currency']" position="after">
+        <label name="base_amount" xexpand="0"/>
+        <field name="base_amount"/>
         <label name="commission_rate"/>
-        <field name="commission_rate" factor="100"/>
+        <group id="commission_rate">
+            <field name="commission_rate" factor="100" xexpand="0"/>
+            <label string="%" id="rate" xexpand="0" xalign="0"/>
+        </group>
     </xpath>
 </data>

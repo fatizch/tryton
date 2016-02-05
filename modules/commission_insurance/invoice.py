@@ -4,7 +4,7 @@ from sql.operators import Concat
 from sql import Cast
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool, Or
 from trytond.transaction import Transaction
 from trytond.model import ModelView, Workflow
 from trytond.tools import grouped_slice
@@ -158,6 +158,14 @@ class Invoice:
             ]
         cls.business_type.depends += ['is_broker_invoice',
             'is_insurer_invoice']
+        for field in ('taxes', 'tax_amount', 'untaxed_amount'):
+            getattr(cls, field).states = {
+                'invisible': Or(Bool(Eval('is_broker_invoice')),
+                    Bool(Eval('is_insurer_invoice')),
+                    getattr(cls, field).states.get('invisible', False)),
+                }
+            getattr(cls, field).depends = ['is_broker_invoice',
+                'is_insurer_invoice']
 
     def _get_move_line(self, date, amount):
         line = super(Invoice, self)._get_move_line(date, amount)

@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <tree string="Party Balance">
     <field name="synthesis_rec_name" icon="icon"/>
+    <field name="party"/>
     <field name="amount" sum="Balance">
         <suffix name="currency_symbol"/>
     </field>
-    <field name="reconciliation"/>
     <field name="post_date"/>
-    <field name="party"/>
+    <field name="reconciliation"/>
     <field name="is_reconciled" tree_invisible="1"/>
     <field name="color" tree_invisible="1"/>
 </tree>
