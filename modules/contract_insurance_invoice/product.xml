@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<tryton>
-    <data>
-        <record model="ir.ui.menu" id="product.menu_main_product">
-            <field name="active" eval="True"/>
-        </record>
-    </data>
-</tryton>

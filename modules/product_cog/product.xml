@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
+        <record model="ir.ui.menu" id="product.menu_main_product">
+            <field name="active" eval="False"/>
+        </record>
+        <menuitem parent="account.menu_account_configuration" id="menu_main_product" name="Accounting Products"/>
         <!-- ##################### -->
         <!-- # Product template  # -->
         <!-- ##################### -->
@@ -33,7 +37,7 @@
         <!-- ##################### -->
         <!-- # Product           # -->
         <!-- ##################### -->
-        <menuitem parent="account.menu_account_configuration" id="menu_template" action="act_template_form"/>
+        <menuitem parent="menu_main_product" id="menu_template" action="act_template_form"/>
         <record model="ir.action.act_window" id="act_product_form">
             <field name="name">Accounting Variants</field>
             <field name="res_model">product.product</field>
@@ -48,7 +52,7 @@
             <field name="view" ref="product.product_view_form"/>
             <field name="act_window" ref="act_product_form"/>
         </record>
-        <menuitem parent="account.menu_account_configuration" id="menu_product" action="act_product_form"/>
+        <menuitem parent="menu_main_product" id="menu_product" action="act_product_form"/>
         <record model="ir.property" id="property_product_list_price">
             <field name="field" search="[('model.model', '=', 'product.template'), ('name', '=', 'list_price')]"/>
             <field name="value">,1</field>
@@ -57,5 +61,6 @@
             <field name="field" search="[('model.model', '=', 'product.template'), ('name', '=', 'cost_price')]"/>
             <field name="value">,1</field>
         </record>
+        <menuitem parent="menu_main_product" sequence="10" id="menu_category_list" action="product.act_category_list"/>
     </data>
 </tryton>
