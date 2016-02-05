@@ -34,6 +34,7 @@ def register():
         EndorsementExtraDataField,
         SelectEndorsement,
         DummyStep,
+        RecalculateContract,
         ChangeContractStartDate,
         ChangeContractExtraData,
         ManageOptions,

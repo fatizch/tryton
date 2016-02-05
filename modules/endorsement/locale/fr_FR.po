@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -126,6 +126,14 @@ msgctxt "error:endorsement.contract.option:"
 msgid "Versions Modifications"
 msgstr "Modification des versions"
 
+msgctxt "error:endorsement.contract.recalculate:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
+
 msgctxt "error:endorsement.contract.subscriber_change:"
 msgid ""
 "The endorsement's effective date must be posterior to the contracts' start "
@@ -181,16 +189,16 @@ msgid "Endorsement \"%s\" is not the latest applied."
 msgstr "L'avenant \"%s\" n'est pas le plus récent appliqué"
 
 msgctxt "error:endorsement.contract:"
-msgid "The status %s of contract %s does not allow endorsements."
-msgstr "Le statut %s du contrat %s n'autorise pas les avenants."
-
-msgctxt "error:endorsement.contract:"
 msgid "Extra Datas Modifications"
 msgstr "Modifications des données complémentaires"
 
 msgctxt "error:endorsement.contract:"
 msgid "Options Modifications"
 msgstr "Modifications des options"
+
+msgctxt "error:endorsement.contract:"
+msgid "The status %s of contract %s does not allow endorsements."
+msgstr "Le statut %s du contrat %s n'autorise pas les avenants."
 
 msgctxt "error:endorsement.contract:"
 msgid ""
@@ -395,6 +403,10 @@ msgctxt "field:endorsement,definition:"
 msgid "Definition"
 msgstr "Définition"
 
+msgctxt "field:endorsement,definition_code:"
+msgid "Definition Code"
+msgstr "Code de l'avenant"
+
 msgctxt "field:endorsement,effective_date:"
 msgid "Effective Date"
 msgstr "Date d'effet"
@@ -422,10 +434,6 @@ msgstr "Numéro"
 msgctxt "field:endorsement,rec_name:"
 msgid "Name"
 msgstr "Nom"
-
-msgctxt "field:endorsement,definition_code:"
-msgid "Definition Code"
-msgstr "Code de l'avenant"
 
 msgctxt "field:endorsement,rollback_date:"
 msgid "Rollback Date"
@@ -1265,6 +1273,22 @@ msgctxt "field:endorsement.contract.option.version.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:endorsement.contract.recalculate,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.contract.recalculate,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.contract.recalculate,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.recalculate,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:endorsement.contract.subscriber_change,all_parties:"
 msgid "Display All Parties"
 msgstr "Afficher tous les tiers"
@@ -1827,6 +1851,10 @@ msgctxt "model:endorsement.contract.option.version.field,name:"
 msgid "Endorsement Option Version Field"
 msgstr "Champ de version de garantie"
 
+msgctxt "model:endorsement.contract.recalculate,name:"
+msgid "Recalculate Contract after endorsement"
+msgstr "Recalcule le contrat après avenant"
+
 msgctxt "model:endorsement.contract.subscriber_change,name:"
 msgid "Change Contract Subscriber"
 msgstr "Changement de souscripteur"
@@ -1850,6 +1878,10 @@ msgstr "Définition d'avenant"
 msgctxt "model:endorsement.definition,name:reactivate_contract_definition"
 msgid "reactivate Contract"
 msgstr "Réactiver le contrat"
+
+msgctxt "model:endorsement.definition,name:recalculate_contract_definition"
+msgid "Recalculate Contract"
+msgstr "Recalculer le contrat"
 
 msgctxt "model:endorsement.definition,name:stop_contract_definition"
 msgid "Stop Contract"
@@ -1890,6 +1922,10 @@ msgstr "Gérer les options"
 msgctxt "model:endorsement.part,name:reactivate_contract_revision_part"
 msgid "reactivate Contract"
 msgstr "Réactiver le contrat"
+
+msgctxt "model:endorsement.part,name:recalculate_contract_revision_part"
+msgid "Recalculate Contract"
+msgstr "Recalculer le contrat"
 
 msgctxt "model:endorsement.part,name:stop_contract_revision_part"
 msgid "Stop Contract"
@@ -2225,6 +2261,10 @@ msgctxt "view:endorsement.contract.option:"
 msgid "Endorsement Options"
 msgstr "Modifications de la garantie souscrite"
 
+msgctxt "view:endorsement.contract.recalculate:"
+msgid "Recalculate Contract"
+msgstr "Recalculer le contrat"
+
 msgctxt "view:endorsement.contract.subscriber_change:"
 msgid "Change Contract Subscriber"
 msgstr "Changement de souscripteur"
@@ -2355,6 +2395,18 @@ msgctxt "wizard_button:endorsement.decline,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
+msgctxt "wizard_button:endorsement.start,basic_preview,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:endorsement.start,basic_preview,cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,basic_preview,summary:"
+msgid "Summary"
+msgstr "Synthèse"
+
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
 msgid "Next"
@@ -2430,6 +2482,25 @@ msgctxt ""
 msgid "Suspend"
 msgstr "Suspendre"
 
+msgctxt "wizard_button:endorsement.start,recalculate_contract,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,recalculate_contract,recalculate_contract_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,recalculate_contract,recalculate_contract_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,recalculate_contract,recalculate_contract_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
 msgctxt "wizard_button:endorsement.start,select_endorsement,cancel:"
 msgid "Cancel"
 msgstr "Annuler"
@@ -2438,6 +2509,10 @@ msgctxt ""
 "wizard_button:endorsement.start,select_endorsement,start_endorsement:"
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
+
+msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
 
 msgctxt "wizard_button:endorsement.start,summary,cancel:"
 msgid "Cancel"

@@ -23,6 +23,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'add_endorsement_step',
     'DummyStep',
+    'RecalculateContract',
     'SelectEndorsement',
     'BasicPreview',
     'StartEndorsement',
@@ -37,6 +38,7 @@ __all__ = [
     'EndorsementWizardStepMixin',
     'EndorsementWizardStepBasicObjectMixin',
     'EndorsementWizardStepVersionedObjectMixin',
+    'EndorsementRecalculateMixin',
     'EndorsementWizardPreviewMixin',
     'EndorsementSelectDeclineReason',
     'EndorsementDecline',
@@ -320,6 +322,25 @@ class DummyStep(EndorsementWizardStepMixin):
     __name__ = 'endorsement.start.dummy_step'
 
 
+class EndorsementRecalculateMixin(EndorsementWizardStepMixin):
+    '''
+        Used to easily create new steps to trigger method calls on endorsed
+        objects. Only possible modification is the effective_date of the
+        endorsement
+    '''
+    def step_update(self):
+        self.wizard.endorsement.effective_date = self.effective_date
+        self.wizard.endorsement.save()
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        return set()
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        return set()
+
+
 class EndorsementWizardStepBasicObjectMixin(EndorsementWizardStepMixin):
     '''
         Mixin used for modifying an object. It displays the current instance
@@ -430,6 +451,25 @@ class EndorsementWizardPreviewMixin(object):
     @classmethod
     def extract_endorsement_preview(cls, instance):
         raise NotImplementedError
+
+
+class RecalculateContract(EndorsementRecalculateMixin):
+    'Recalculate Contract after endorsement'
+
+    __name__ = 'endorsement.contract.recalculate'
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement.recalculate_contract_view_form'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        pool = Pool()
+        Contract = pool.get('contract')
+        methods = set()
+        if model_name == 'contract':
+            methods = methods | Contract._calculate_methods_after_endorsement()
+        return methods
 
 
 class ChangeContractStartDate(EndorsementWizardStepMixin):
@@ -1826,6 +1866,10 @@ class StartEndorsement(Wizard):
                 endorsement, endorsed_field_name)
         result['new_value'][0]['date'] = endorsement_date
         return result
+
+
+add_endorsement_step(StartEndorsement, RecalculateContract,
+    'recalculate_contract')
 
 add_endorsement_step(StartEndorsement, ChangeContractExtraData,
     'change_contract_extra_data')

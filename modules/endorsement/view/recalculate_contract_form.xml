@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<form string="Recalculate Contract">
+    <label name="endorsement_definition"/>
+    <field name="endorsement_definition"/>
+    <newline/>
+    <label name="effective_date"/>
+    <field name="effective_date"/>
+</form>

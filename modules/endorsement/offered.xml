@@ -146,6 +146,24 @@
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="priority">400</field>
         </record>
+        <!-- ######################## -->
+        <!-- # Recalculate Contract # -->
+        <!-- ######################## -->
+        <record model="endorsement.definition" id="recalculate_contract_definition">
+            <field name="code">recalculate_contract</field>
+            <field name="name">Recalculate Contract</field>
+        </record>
+        <record model="endorsement.part" id="recalculate_contract_revision_part">
+            <field name="code">recalculate_contract</field>
+            <field name="name">Recalculate Contract</field>
+            <field name="kind">contract</field>
+            <field name="view">recalculate_contract</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="recalculate_contract_relation">
+            <field name="definition" ref="recalculate_contract_definition"/>
+            <field name="endorsement_part" ref="recalculate_contract_revision_part"/>
+            <field name="order">1</field>
+        </record>
         <!-- ################################### -->
         <!-- # Change Start Date Configuration # -->
         <!-- ################################### -->
