@@ -15,6 +15,20 @@ class Template(export.ExportImportMixin):
     _func_key = 'name'
 
     @classmethod
+    def __setup__(cls):
+        super(Template, cls).__setup__()
+        cls.account_expense.domain = cls.account_expense.domain[1:] + [[
+                'OR',
+                [('kind', '=', 'expense')],
+                [('kind', '=', 'other')],
+                ]]
+        cls.account_revenue.domain = cls.account_revenue.domain[1:] + [[
+                'OR',
+                [('kind', '=', 'revenue')],
+                [('kind', '=', 'other')],
+                ]]
+
+    @classmethod
     def _export_light(cls):
         return (super(Template, cls)._export_light() |
             set(['default_uom', 'account_expense', 'account_revenue']))

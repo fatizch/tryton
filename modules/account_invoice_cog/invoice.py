@@ -35,6 +35,14 @@ class InvoiceLine:
         table.index_action(['company', 'id'], 'add')
         table.index_action(['invoice', 'company'], 'add')
 
+    @classmethod
+    def _account_domain(cls, type_):
+        # Allow to use 'other' type for invoice line accounts
+        result = super(InvoiceLine, cls)._account_domain(type_)
+        if 'other' not in result:
+            result.append('other')
+        return result
+
 
 class Invoice(export.ExportImportMixin, Printable):
     __name__ = 'account.invoice'
