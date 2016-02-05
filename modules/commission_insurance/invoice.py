@@ -164,7 +164,7 @@ class Invoice:
                     Bool(Eval('is_insurer_invoice')),
                     getattr(cls, field).states.get('invisible', False)),
                 }
-            getattr(cls, field).depends = ['is_broker_invoice',
+            getattr(cls, field).depends += ['is_broker_invoice',
                 'is_insurer_invoice']
 
     def _get_move_line(self, date, amount):
