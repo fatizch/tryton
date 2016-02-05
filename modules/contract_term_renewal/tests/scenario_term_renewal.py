@@ -269,7 +269,7 @@ new_endorsement.execute('change_start_date_next')
 new_endorsement.execute('suspend')
 good_endorsement, = Endorsement.find([
         ('contracts', '=', contract.id)])
-Endorsement.apply([good_endorsement.id], config._context)
+_ = Endorsement.apply([good_endorsement.id], config._context)
 contract = Contract(contract.id)
 contract.start_date == new_contract_start_date
 # #Res# #True

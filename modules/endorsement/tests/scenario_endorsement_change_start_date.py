@@ -207,7 +207,7 @@ contract.start_date == contract_start_date
 # #Res# #True
 contract.options[0].start_date == contract_start_date
 # #Res# #True
-Endorsement.apply([good_endorsement.id], config._context)
+_ = Endorsement.apply([good_endorsement.id], config._context)
 contract = Contract(contract.id)
 contract.start_date == new_contract_start_date
 # #Res# #True
@@ -223,7 +223,7 @@ contract.options[0].start_date == contract_start_date
 # #Comment# #Test options restauration
 good_endorsement.state = 'draft'
 good_endorsement.save()
-Endorsement.apply([good_endorsement.id], config._context)
+_ = Endorsement.apply([good_endorsement.id], config._context)
 contract = Contract(contract.id)
 Option.delete([contract.options[0]])
 contract = Contract(contract.id)
