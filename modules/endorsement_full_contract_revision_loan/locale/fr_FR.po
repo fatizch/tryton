@@ -1,0 +1,7 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:loan:"
+msgid "The loan is currently used on contract %(contract)s, which is being modified by user %(user)s"
+msgstr "Le prêt est utilisé sur le contrat %(contract)s, qui est en cours de modification par %(user)s."
