@@ -1433,6 +1433,10 @@ msgctxt "field:endorsement.definition,name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:endorsement.definition,next_endorsement:"
+msgid "Next Endorsement"
+msgstr "Avenant suivant"
+
 msgctxt "field:endorsement.definition,ordered_endorsement_parts:"
 msgid "Endorsement Parts"
 msgstr "Avenants unitaires"
@@ -1998,6 +2002,10 @@ msgstr "Sous état d'avenant"
 msgctxt "model:ir.action,name:act_open_contract_at_date"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "model:ir.action,name:act_open_generated"
+msgid "Open Generated Endorsements"
+msgstr "Ouvrir les avenants générés automatiquement"
 
 msgctxt "model:ir.action,name:act_resume_endorsement"
 msgid "Resume Endorsement"

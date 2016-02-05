@@ -17,6 +17,7 @@ from trytond.model import Workflow, Model, fields as tryton_fields, \
 from trytond.pyson import Eval, PYSONEncoder, PYSON, Bool, Len, Or, If
 from trytond.pool import Pool
 from trytond.transaction import Transaction
+from trytond.wizard import Wizard, StateAction, StateTransition
 
 from trytond.modules.cog_utils import model, fields, coop_string, utils, \
     coop_date
@@ -45,6 +46,7 @@ __all__ = [
     'EndorsementContact',
     'Configuration',
     'ReportTemplate',
+    'OpenGeneratedEndorsements',
     ]
 
 
@@ -1382,7 +1384,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         cls.write(endorsements, {'rollback_date': CurrentTimestamp()})
 
     @classmethod
-    @model.CoopView.button
+    @model.CoopView.button_action('endorsement.act_open_generated')
     @Workflow.transition('applied')
     def apply(cls, endorsements):
         pool = Pool()
@@ -1430,6 +1432,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
 
         cls.run_methods(endorsements, 'apply')
 
+        cls.generate_next_endorsements(endorsements)
         if not Transaction().context.get('will_be_rollbacked', False):
             Event.notify_events(endorsements, 'apply_endorsement')
 
@@ -1447,6 +1450,18 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                     for x in tmp_contracts])
             endorsement.effective_date = None
             endorsement.save()
+
+    @classmethod
+    def generate_next_endorsements(cls, endorsements):
+        for endorsement in endorsements:
+            if not endorsement.definition.next_endorsement:
+                continue
+            to_endorse = endorsement.get_next_endorsement_contracts()
+            cls.endorse_contracts(to_endorse,
+                endorsement.definition.next_endorsement, origin=endorsement)
+
+    def get_next_endorsement_contracts(self):
+        return set(self.contracts)
 
     @classmethod
     def run_methods(cls, endorsements, kind):
@@ -2274,3 +2289,31 @@ class ReportTemplate:
         if self.on_model and self.on_model.model == 'endorsement':
             result.append(('endorsement', 'Endorsement'))
         return result
+
+
+class OpenGeneratedEndorsements(Wizard):
+    'Open Generated Endorsements'
+
+    __name__ = 'endorsement.open_generated'
+
+    start = StateTransition()
+    open_generated = StateAction('endorsement.act_endorsement')
+
+    def transition_start(self):
+        Endorsement = Pool().get('endorsement')
+        # Look for possibly created endorsements
+        next_endorsements = Endorsement.search([
+                ('generated_by', 'in',
+                    Transaction().context.get('active_ids'))])
+        if not next_endorsements:
+            return 'end'
+        return 'open_generated'
+
+    def do_open_generated(self, action):
+        Endorsement = Pool().get('endorsement')
+        # Look for possibly created endorsements
+        next_endorsements = Endorsement.search([
+                ('generated_by', 'in',
+                    Transaction().context.get('active_ids'))])
+        action['domains'] = []
+        return action, {'res_id': [x.id for x in next_endorsements]}

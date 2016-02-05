@@ -1521,6 +1521,7 @@ class StartEndorsement(Wizard):
             Button('Apply', 'apply_endorsement', 'tryton-go-next',
                 default=True)])
     apply_endorsement = StateTransition()
+    open_endorsement = StateAction('endorsement.act_endorsement')
     summary_previous = StateTransition()
     preview_changes = StateTransition()
     dummy_step = StateView('endorsement.start.dummy_step', '', [])
@@ -1652,8 +1653,22 @@ class StartEndorsement(Wizard):
         return BasicPreview.init_from_preview_values(preview_values)
 
     def transition_apply_endorsement(self):
-        Pool().get('endorsement').apply([self.endorsement])
-        return 'end'
+        Endorsement = Pool().get('endorsement')
+        Endorsement.apply([self.endorsement])
+        # Look for possibly created endorsements
+        next_endorsements = Endorsement.search([
+                ('generated_by', '=', self.endorsement)])
+        if not next_endorsements:
+            return 'end'
+        return 'open_endorsement'
+
+    def do_open_endorsement(self, action):
+        Endorsement = Pool().get('endorsement')
+        # Look for possibly created endorsements
+        next_endorsements = Endorsement.search([
+                ('generated_by', '=', self.endorsement)])
+        action['domains'] = []
+        return action, {'res_id': [x.id for x in next_endorsements]}
 
     def transition_change_start_date_previous(self):
         self.end_current_part('change_start_date')

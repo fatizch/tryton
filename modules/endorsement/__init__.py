@@ -54,4 +54,5 @@ def register():
         StartEndorsement,
         OpenContractAtApplicationDate,
         EndorsementDecline,
+        OpenGeneratedEndorsements,
         module='endorsement', type_='wizard')

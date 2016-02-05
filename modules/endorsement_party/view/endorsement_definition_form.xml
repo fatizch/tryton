@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 <data>
     <xpath expr="/form/field[@name='preview_state']" position="after">
-        <label name="generate_contract_endorsements"/>
-        <field name="generate_contract_endorsements"/>
-        <label name="definition_for_contracts"/>
-        <field name="definition_for_contracts"/>
+        <newline/>
+        <label name="next_endorsement"/>
+        <field name="next_endorsement"/>
         <field name="is_party" invisible="1"/>
         <newline/>
         <label name="is_multi_instance"/>

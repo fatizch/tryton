@@ -1,5 +1,7 @@
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool
+from trytond.transaction import Transaction
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields, model
 from trytond.modules.endorsement import field_mixin
@@ -21,34 +23,20 @@ class EndorsementDefinition:
     is_party = fields.Function(
         fields.Boolean('Is Party'),
         'get_is_party', searcher='search_is_party')
-    generate_contract_endorsements = fields.Function(
-        fields.Boolean('Generate Contract Endorsements',
-            states={'invisible': ~Bool(Eval('is_party'))},
-            depends=['is_party']),
-        'on_change_with_generate_contract_endorsements',
-        )
-    definition_for_contracts = fields.Many2One('endorsement.definition',
-        'Endorsement Definition For Contracts',
-        states={
-            'required': Bool(Eval('generate_contract_endorsements')),
-            'invisible': ~Bool(Eval('generate_contract_endorsements')),
-            },
-        depends=['generate_contract_endorsements'],
-        ondelete='RESTRICT',
-        domain=[('is_party', '=', False)])
+
+    @classmethod
+    def __register__(cls, module):
+        TableHandler = backend.get('TableHandler')
+
+        # Migration from 1.6 : Rename definition_for_contracts to
+        # next_endorsement, defined in endorsement module
+        table = TableHandler(Transaction().cursor, cls, module)
+        if table.column_exist('definition_for_contracts'):
+            table.column_rename('definition_for_contracts', 'next_endorsement')
+        super(EndorsementDefinition, cls).__register__(module)
 
     def get_is_party(self, name):
         return any([x.is_party for x in self.endorsement_parts])
-
-    @fields.depends('ordered_endorsement_parts')
-    def on_change_with_generate_contract_endorsements(self, name=None):
-        ordered_parts = self.ordered_endorsement_parts
-        parts = []
-        for ordered in ordered_parts:
-            if ordered.endorsement_part:
-                parts.append(ordered.endorsement_part)
-        return any([x.generate_contract_endorsements is True
-                for x in parts])
 
     @classmethod
     def search_is_party(cls, name, clause):
@@ -66,19 +54,11 @@ class EndorsementPart:
         'endorsement.party.field', 'endorsement_part', 'Party Fields', states={
             'invisible': Eval('kind', '') != 'party'},
         depends=['kind'], delete_missing=True)
-    generate_contract_endorsements = fields.Boolean(
-        'Generate Contract Endorsements',
-        states={'invisible': Eval('kind') != 'party'},
-        depends=['kind'])
 
     @classmethod
     def __setup__(cls):
         super(EndorsementPart, cls).__setup__()
         cls.kind.selection.append(('party', 'Party'))
-
-    @classmethod
-    def default_generate_contract_endorsements(cls):
-        return False
 
     def on_change_with_endorsed_model(self, name=None):
         if self.kind == 'party':

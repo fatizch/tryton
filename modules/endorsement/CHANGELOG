@@ -1,4 +1,5 @@
 * Add recalculate contract step
+* Allow to properly chain endorsements
 
 Version 1.6 - 2015-12-23
 * Add Manage options endorsement

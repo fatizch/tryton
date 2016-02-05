@@ -115,14 +115,6 @@ msgctxt "field:endorsement,party_endorsements:"
 msgid "Party Endorsements"
 msgstr "Avenants sur tiers"
 
-msgctxt "field:endorsement.definition,definition_for_contracts:"
-msgid "Endorsement Definition For Contracts"
-msgstr "Définition d'avenant pour les contrats"
-
-msgctxt "field:endorsement.definition,generate_contract_endorsements:"
-msgid "Generate Contract Endorsements"
-msgstr "Générer les avenants aux contrats"
-
 msgctxt "field:endorsement.definition,is_party:"
 msgid "Is Party"
 msgstr "Est un avenant de type tiers"
@@ -130,10 +122,6 @@ msgstr "Est un avenant de type tiers"
 msgctxt "field:endorsement.definition,is_technical:"
 msgid "Is technical"
 msgstr "Est technique"
-
-msgctxt "field:endorsement.part,generate_contract_endorsements:"
-msgid "Generate Contract Endorsements"
-msgstr "Générer les avenants aux contrats"
 
 msgctxt "field:endorsement.part,is_party:"
 msgid "Is Party"

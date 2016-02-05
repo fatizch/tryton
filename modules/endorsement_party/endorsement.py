@@ -6,7 +6,6 @@ from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields, model, utils
 from trytond.modules.endorsement import values_mixin, relation_mixin
-from trytond.model import Workflow
 
 
 __metaclass__ = PoolMeta
@@ -179,21 +178,12 @@ class Endorsement:
         result.insert(0, 'endorsement.party')
         return result
 
-    @classmethod
-    @model.CoopView.button
-    @Workflow.transition('applied')
-    def apply(cls, endorsements):
-        super(Endorsement, cls).apply(endorsements)
-        for endorsement in endorsements:
-            contracts = []
-            for p_endors in endorsement.party_endorsements:
-                contracts.extend(p_endors.contracts_to_update)
-            contracts = list(set(contracts))
-            if endorsement.definition.generate_contract_endorsements:
-                cls.endorse_contracts(
-                    contracts,
-                    endorsement.definition.definition_for_contracts,
-                    origin=endorsement)
+    def get_next_endorsement_contracts(self):
+        contracts = super(Endorsement, self).get_next_endorsement_contracts()
+        for party_endorsement in self.party_endorsements:
+            for contract in party_endorsement.contracts_to_update:
+                contracts.add(contract)
+        return contracts
 
 
 class EndorsementParty(values_mixin('endorsement.party.field'),

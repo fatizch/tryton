@@ -190,6 +190,18 @@
             <field name="act_window" ref="act_endorsement_sub_state_form"/>
         </record>
         <menuitem parent="offered.menu_contract_configuration" id="endorsement_sub_state_form" icon="tryton-tree" action="act_endorsement_sub_state_form"/>
+        <!-- ############################### -->
+        <!-- # Open Generated Endorsements # -->
+        <!-- ############################### -->
+        <record model="ir.action.wizard" id="act_open_generated">
+            <field name="name">Open Generated Endorsements</field>
+            <field name="wiz_name">endorsement.open_generated</field>
+        </record>
+        <record model="ir.action.keyword" id="act_open_generated_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">endorsement,-1</field>
+            <field name="action" ref="act_open_generated"/>
+        </record>
         <!-- ################# -->
         <!-- # Configuration # -->
         <!-- ################# -->
