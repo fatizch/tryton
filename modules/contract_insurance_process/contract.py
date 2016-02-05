@@ -63,6 +63,16 @@ class Contract(CogProcessFramework):
                 clone.save()
         return clones
 
+    def get_task_name(self, name):
+        names = []
+        if self.product:
+            names.append(self.product.rec_name)
+        if self.subscriber:
+            names.append(self.subscriber.rec_name)
+        if not names:
+            return super(Contract, self).get_task_name(name)
+        return ' - '.join(names)
+
     @fields.depends('product')
     def on_change_with_product_desc(self, name=None):
         return self.product.description if self.product else ''

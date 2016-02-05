@@ -100,6 +100,9 @@ class ProcessFramework(ModelView):
     # executed and which step is the current step
     current_state = fields.Many2One('process-process.step', 'Current State',
         ondelete='RESTRICT', states={'readonly': True})
+    task_name = fields.Function(
+        fields.Char('Task Name'),
+        'get_task_name')
 
     @classmethod
     def _export_light(cls):
@@ -230,6 +233,13 @@ class ProcessFramework(ModelView):
             result.append(error)
         # We display the resulting list of strings
         raise UserError('\n'.join(result))
+
+    def get_task_name(self, name=None):
+        if hasattr(self, 'synthesis_rec_name'):
+            return self.synthesis_rec_name
+        elif hasattr(self, 'get_synthesis_rec_name'):
+            return self.get_synthesis_rec_name(name)
+        return self.rec_name
 
     def button_is_active(self, button_name):
         good_button = self._buttons[button_name]

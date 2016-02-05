@@ -20,6 +20,8 @@ __all__ = [
 class ProcessLog:
     __name__ = 'process.log'
 
+    user_name = fields.Function(
+        fields.Char('User'), 'get_user_name')
     task_start = fields.Function(
         fields.DateTime('Task Start'),
         'on_change_with_task_start')
@@ -32,6 +34,9 @@ class ProcessLog:
     task_nb = fields.Function(
         fields.Integer('Task Number'),
         'get_task_nb')
+    task_name = fields.Function(
+        fields.Char('Name'),
+        'get_task_name')
 
     @classmethod
     def view_attributes(cls):
@@ -39,6 +44,11 @@ class ProcessLog:
             ('/tree', 'colors', If(Bool(Eval('locked')), 'red',
                     If(Bool(Eval('is_current_user')), 'blue', 'black'))),
             ]
+
+    @staticmethod
+    def order_user_name(tables):
+        table, _ = tables[None]
+        return [table.user]
 
     @fields.depends('task')
     def on_change_with_task_start(self, name=None):
@@ -66,6 +76,12 @@ class ProcessLog:
     def get_task_nb(self, name):
         # used by graph presenter
         return 1
+
+    def get_user_name(self, name=None):
+        return self.user.rec_name if self.user else None
+
+    def get_task_name(self, name=None):
+        return self.task.task_name if self.task else None
 
 
 class TaskDispatcher(Wizard):
