@@ -233,10 +233,19 @@ class LineAggregated(model.CoopSQL, model.CoopView):
         depends=['currency_digits'])
     currency_digits = fields.Function(fields.Integer('Currency Digits'),
         'get_currency_digits')
-    description = fields.Char('Description')
+    description = fields.Function(
+        fields.Char('Description'),
+        'get_description')
+    move_description = fields.Char('Move Description')
+    move_line_description = fields.Char('Move Line Description')
+
 
     def get_currency_digits(self, name):
         return self.account.currency_digits
+
+    def get_description(self, name):
+        return (self.move_line_description
+            if self.move_line_description else self.move_description)
 
     @staticmethod
     def table_query():
@@ -258,7 +267,10 @@ class LineAggregated(model.CoopSQL, model.CoopView):
                 Literal(0).as_('write_date'),
                 Case((journal.aggregate and not journal.aggregate_posting,
                     Literal('')),
-                    else_=Max(move.description)).as_('description'),
+                    else_=Max(move.description)).as_('move_description'),
+                Case((journal.aggregate and not journal.aggregate_posting,
+                    Literal('')),
+                    else_=Max(line.description)).as_('move_line_description'),
                 Case((journal.aggregate,
                     Concat(ToChar(move.post_date, 'YYYYMMDD'),
                     Cast(move.snapshot, 'VARCHAR'))),

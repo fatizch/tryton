@@ -1,3 +1,5 @@
+* Add move line description to aggregate if only one
+
 Version 1.6 - 2015-12-23
 * Allow to configure which fiscal years are exported
 
