@@ -207,6 +207,7 @@ class Commission:
         super(Commission, cls).invoice(commissions)
         invoices = list(set([c.invoice_line.invoice for c in commissions]))
         Fee.add_broker_fees_to_invoice(invoices)
+        return invoices
 
     @classmethod
     def _get_invoice_line(cls, key, invoice, commissions):
@@ -462,6 +463,7 @@ class PlanLines(export.ExportImportMixin):
 
 class PlanLinesCoverageRelation(model.CoopSQL, model.CoopView):
     'Commission Plan Line - Offered Option Description'
+
     __name__ = 'commission.plan.lines-offered.option.description'
 
     plan_line = fields.Many2One('commission.plan.line', 'Plan Line',
@@ -472,6 +474,7 @@ class PlanLinesCoverageRelation(model.CoopSQL, model.CoopView):
 
 class PlanRelation(model.CoopSQL, model.CoopView):
     'Commission Plan - Commission Plan'
+
     __name__ = 'commission_plan-commission_plan'
 
     from_ = fields.Many2One('commission.plan', 'Plan', ondelete='CASCADE')
@@ -840,10 +843,9 @@ class CreateInvoice:
         Commission = pool.get('commission')
         commissions = Commission.search(self.get_domain(),
             order=[('agent', 'DESC'), ('date', 'DESC')])
-        Commission.invoice(commissions)
-        invoices = list(set([c.invoice_line.invoice for c in commissions]))
+        invoices = Commission.invoice(commissions)
+        Invoice.write(invoices, {'invoice_date': self.ask.to})
         if self.ask.post_invoices:
-            Invoice.write(invoices, {'invoice_date': utils.today()})
             Invoice.post(invoices)
         encoder = PYSONEncoder()
         action['pyson_domain'] = encoder.encode(

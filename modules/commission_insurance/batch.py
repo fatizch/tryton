@@ -59,6 +59,7 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
     def execute(cls, objects, ids, treatment_date, extra_args):
         pool = Pool()
         Commission = pool.get('commission')
+        Invoice = pool.get('account.invoice')
         if 'agent_type' not in extra_args:
             cls.logger.warning('No agent_type defined. '
                 'Batch execution aborted')
@@ -66,7 +67,8 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
         commissions = Commission.search(cls.commission_domain(
             treatment_date, ids),
             order=[('agent', 'DESC'), ('date', 'DESC')])
-        Commission.invoice(commissions)
+        invoices = Commission.invoice(commissions)
+        Invoice.write(invoices, {'invoice_date': treatment_date})
         cls.logger.info('Commissions invoices created for %s' %
             coop_string.get_print_infos(ids,
                 'brokers' if extra_args['agent_type'] == 'agent'
@@ -94,7 +96,11 @@ class PostCommissionInvoiceBatch(batch.BatchRoot):
                 'Batch execution aborted')
             return
 
-        domain = [('state', '=', 'validated')]
+        status = ['validated']
+        if extra_args.get('with_draft', False):
+            status += ['draft']
+        domain = [('state', 'in', status)]
+
         if extra_args['agent_type'] == 'agent':
             domain.append(('is_broker_invoice', '=', True),)
         elif extra_args['agent_type'] == 'principal':

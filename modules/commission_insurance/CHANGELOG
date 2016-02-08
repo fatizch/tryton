@@ -1,3 +1,4 @@
+* Add extra parameter 'with_draft' to commission.invoice.post to post even draft invoices
 * Add relate to display received premiums
 * Add related view from invoice which summarize commissions by agents
 * Add a wizard to view paid/to pay commissions and fees for broker parties
