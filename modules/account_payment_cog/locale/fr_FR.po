@@ -32,6 +32,10 @@ msgctxt "error:account.payment.manual_payment_fail:"
 msgid "Selected payments status must be succeeded or processing"
 msgstr "Le statut des paiements sélectionnés doit être 'réussi' ou 'traité'"
 
+msgctxt "error:account.payment.motive:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
 msgctxt "error:account.payment:"
 msgid "Payments blocked for party %s"
 msgstr "Paiements bloqués pour le tiers %s"
@@ -117,6 +121,18 @@ msgstr "Motif de rejet"
 msgctxt "field:account.payment.group,amount:"
 msgid "Amount"
 msgstr "Montant"
+
+msgctxt "field:account.payment.group,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:account.payment.group,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:account.payment.group,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
 
 msgctxt "field:account.payment.group,has_processing_payment:"
 msgid "Has Processing Payment"
@@ -253,6 +269,10 @@ msgstr "Mis à jour par"
 msgctxt "field:account.payment.journal.reject_reason,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:account.payment.motive,code:"
+msgid "Code"
+msgstr "Code"
 
 msgctxt "field:account.payment.motive,create_date:"
 msgid "Create Date"
@@ -501,6 +521,10 @@ msgctxt "model:ir.action,name:modify_payment_information_wizard"
 msgid "Modify Payment Information"
 msgstr "Modifier les informations de prélèvement"
 
+msgctxt "model:ir.action,name:process_manual_payment_fail_wizard"
+msgid "Process Manual Fail Payment"
+msgstr "Traiter manuellement les paiements rejetés"
+
 msgctxt "model:ir.ui.menu,name:"
 msgid "Create Receivable Payment"
 msgstr "Créer les prélèvements"
@@ -630,8 +654,8 @@ msgid "Fail"
 msgstr "Échouer"
 
 msgctxt "view:account.payment:"
-msgid "Failed Payments"
-msgstr "Paiements rejetés"
+msgid "Process Manual Fail Payment"
+msgstr "Traiter manuellement les paiements rejetés"
 
 msgctxt "view:account.payment:"
 msgid "Process Payments"
@@ -703,10 +727,6 @@ msgstr "À recevoir"
 msgctxt "selection:account.payment,kind:account_payment."
 msgid "Payable"
 msgstr "À payer"
-
-msgctxt "selection:account.payment,kind:account_payment."
-msgid "Receivable"
-msgstr "À recevoir"
 
 msgctxt "selection:account.payment,state:account_payment."
 msgid "Failed"

@@ -72,19 +72,15 @@
         <!-- ####################################### -->
         <!-- ########### Rejected Payment########### -->
         <!-- ####################################### -->
-        <record model="ir.ui.view" id="payment_fail_status_view_list">
-            <field name="model">account.payment</field>
-            <field name="type">tree</field>
-            <field name="name">payment_fail_status_list</field>
-        </record>
         <record model="ir.action.act_window" id="act_payment_fail_status_form">
             <field name="name">Payments Rejected</field>
             <field name="res_model">account.payment</field>
             <field name="domain" eval="[('manual_fail_status', '!=', '')]" pyson="1"/>
+            <field name="search_value" eval="[('manual_fail_status', '=', 'pending')]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_payment_fail_status_form_view1">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="payment_fail_status_view_list"/>
+            <field name="view" ref="payment_view_list"/>
             <field name="act_window" ref="act_payment_fail_status_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_payment_fail_status_form_view2">
@@ -119,6 +115,13 @@
         <record model="ir.action.wizard" id="manual_payment_fail_wizard">
             <field name="name">Fail Payment</field>
             <field name="wiz_name">account.payment.manual_payment_fail</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Process Manual Payment Fail Wizard ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.action.wizard" id="process_manual_payment_fail_wizard">
+            <field name="name">Process Manual Fail Payment</field>
+            <field name="wiz_name">account.payment.process_manual_fail_payment</field>
         </record>
         <!-- ############################################################ -->
         <!-- ########### Process Payments Wizard ########### -->

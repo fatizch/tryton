@@ -38,4 +38,5 @@ def register():
         PaymentInformationModification,
         PaymentCreation,
         ManualPaymentFail,
+        ProcessManualFailPament,
         module='account_payment_cog', type_='wizard')

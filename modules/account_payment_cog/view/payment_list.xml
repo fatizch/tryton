@@ -17,7 +17,9 @@
     </xpath>
     <xpath expr="/tree" position="inside">
         <field name="reject_description"/>
+        <field name="manual_fail_status"/>
         <button string="Process Payments" name="process_payments" tree_invisible="1"/>
+        <button string="Process Manual Fail Payment" name="button_process_fail_payments" tree_invisible="1"/>
     </xpath>
     <xpath expr="/tree" position="inside">
         <field name="merged_id"/>

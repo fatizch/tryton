@@ -27,6 +27,7 @@ __all__ = [
     'PaymentFailInformation',
     'ManualPaymentFail',
     'PaymentMotive',
+    'ProcessManualFailPament',
     ]
 
 
@@ -213,7 +214,8 @@ class Payment(export.ExportImportMixin, Printable):
         ('', ''),
         ('pending', 'Pending'),
         ('done', 'Done')
-        ], 'Manual Fail Status')
+        ], 'Manual Fail Status', states={
+            'invisible': ~Bool(Eval('manual_fail_status'))})
     reject_description = fields.Function(
         fields.Char('Reject Description', states={
                 'invisible': ~Eval('reject_description')}),
@@ -256,6 +258,10 @@ class Payment(export.ExportImportMixin, Printable):
                 },
                 'process_payments': {
                     'invisible': Eval('state') != 'approved',
+                    'icon': 'tryton-go-next'
+                },
+                'button_process_fail_payments': {
+                    'invisible': Eval('manual_fail_status') != 'pending',
                     'icon': 'tryton-go-next'
                 }
         })
@@ -422,6 +428,11 @@ class Payment(export.ExportImportMixin, Printable):
     @classmethod
     @ModelView.button_action('account_payment_cog.manual_payment_fail_wizard')
     def button_fail_payments(cls, payments):
+        pass
+
+    @classmethod
+    @ModelView.button_action('account_payment_cog.process_manual_payment_fail_wizard')
+    def button_process_fail_payments(cls, payments):
         pass
 
 
@@ -652,4 +663,20 @@ class ManualPaymentFail(model.CoopWizard):
         Payment.manual_set_reject_reason(list(self.fail_information.payments),
             self.fail_information.reject_reason)
         Payment.fail(list(self.fail_information.payments))
+        return 'end'
+
+
+class ProcessManualFailPament(model.CoopWizard):
+    'Process Manual Fail Payment'
+    __name__ = 'account.payment.process_manual_fail_payment'
+
+    start_state = 'set_fail_status'
+    set_fail_status = StateTransition()
+
+    def transition_set_fail_status(self):
+        pool = Pool()
+        Payment = pool.get('account.payment')
+        active_ids = Transaction().context.get('active_ids')
+        Payment.write(Payment.browse(active_ids),
+            {'manual_fail_status': 'done'})
         return 'end'

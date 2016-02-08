@@ -3,6 +3,8 @@
     <xpath expr="/form/notebook/page[@id='description']/field[@name='description']" position="after">
         <label name="reject_description"/>
         <field name="reject_description"/>
+        <label name="manual_fail_status"/>
+        <field name="manual_fail_status"/>
     </xpath>
     <xpath expr="/form/group/group[@id='buttons']/button[@name='fail']" position="replace">
         <button string="Fail" name="button_fail_payments"/>
