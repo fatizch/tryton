@@ -312,5 +312,6 @@ class ThirdPartyBalance:
         report_context['total_credit'] = sum((x['credit'] for x in objects))
         report_context['total_solde'] = sum((x['solde'] for x in objects))
         report_context['records'] = objects
+        report_context['at_date'] = data['at_date']
 
         return report_context
