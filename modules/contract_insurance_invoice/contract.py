@@ -12,12 +12,12 @@ from dateutil.relativedelta import relativedelta
 
 from trytond.pool import Pool, PoolMeta
 from trytond.model import dualmethod
-from trytond.pyson import Eval, And, Len, If, Bool
+from trytond.pyson import Eval, And, Len, If, Bool, PYSONEncoder
 from trytond.error import UserError
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.tools import reduce_ids, grouped_slice
-from trytond.wizard import Wizard, StateView, StateTransition, Button
+from trytond.wizard import Wizard, StateView, Button, StateAction
 from trytond.rpc import RPC
 from trytond.cache import Cache
 
@@ -1006,9 +1006,9 @@ class Contract:
     @classmethod
     def ws_rate_contracts(cls, contract_dict):
         '''
-            This methods uses the ws_subscribe_contracts methods to create a
-            contract, rate it, extract data to return, then rollback
-            everything.
+        This methods uses the ws_subscribe_contracts methods to create a
+        contract, rate it, extract data to return, then rollback
+        everything.
         '''
         with Transaction().new_cursor():
             try:
@@ -1173,6 +1173,7 @@ class ExtraPremium:
 class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         model.CoopView):
     'Contract Billing Information'
+
     __name__ = 'contract.billing_information'
     _parent_name = 'contract'
     _func_key = 'date'
@@ -1500,6 +1501,7 @@ class Premium:
 
 class ContractInvoice(model.CoopSQL, model.CoopView):
     'Contract Invoice'
+
     __name__ = 'contract.invoice'
     _rec_name = 'invoice'
 
@@ -1628,19 +1630,23 @@ class ContractInvoice(model.CoopSQL, model.CoopView):
 
 class InvoiceContractStart(model.CoopView):
     'Invoice Contract'
+
     __name__ = 'contract.do_invoice.start'
+
     up_to_date = fields.Date('Up To Date', required=True)
 
 
 class InvoiceContract(Wizard):
     'Invoice Contract'
+
     __name__ = 'contract.do_invoice'
+
     start = StateView('contract.do_invoice.start',
         'contract_insurance_invoice.invoice_start_view_form', [
             Button('Cancel', 'end', icon='tryton-cancel'),
             Button('Ok', 'invoice', icon='tryton-ok', default=True),
             ])
-    invoice = StateTransition()
+    invoice = StateAction('contract_insurance_invoice.act_premium_notice_form')
 
     def default_start(self, name):
         if Transaction().context.get('active_model', '') != 'contract':
@@ -1659,12 +1665,16 @@ class InvoiceContract(Wizard):
                 'up_to_date': contract.start_date,
                 }
 
-    def transition_invoice(self):
+    def do_invoice(self, action):
         pool = Pool()
         Contract = pool.get('contract')
         contracts = Contract.browse(Transaction().context['active_ids'])
-        Contract.invoice(contracts, self.start.up_to_date)
-        return 'end'
+        invoices = Contract.invoice(contracts, self.start.up_to_date)
+        encoder = PYSONEncoder()
+        action['pyson_domain'] = encoder.encode(
+            [('id', 'in', [i.invoice.id for i in invoices])])
+        action['pyson_search_value'] = encoder.encode([])
+        return action, {}
 
 
 class DisplayContractPremium:
