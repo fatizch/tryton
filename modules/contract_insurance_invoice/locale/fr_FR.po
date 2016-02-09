@@ -1034,10 +1034,6 @@ msgctxt "model:ir.action,name:act_invoice_aggregate_lines"
 msgid "Display Line Aggregates"
 msgstr "Lignes aggrégées"
 
-msgctxt "model:ir.action,name:act_move_line_contract_balance"
-msgid "Contract Balance"
-msgstr "Balance contrat"
-
 msgctxt "model:ir.action,name:act_offered_billing_mode"
 msgid "Billing Modes"
 msgstr "Modes de quittancement"

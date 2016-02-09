@@ -46,29 +46,6 @@
             <field name="name">move_line_party_balance_list</field>
             <field name="inherit" ref="account_cog.move_line_party_balance_view_list"/>
         </record>
-        <!-- Entry Point -->
-        <record model="ir.action.act_window" id="act_move_line_contract_balance">
-            <field name="name">Contract Balance</field>
-            <field name="res_model">account.move.line</field>
-            <field name="domain" eval="[('contract', '=', Eval('active_id')), ('account.kind', 'in', ['payable', 'receivable'])]" pyson="1"/>
-            <field name="search_value" eval="[('is_reconciled', '=', False)]" pyson="1"/>
-            <field name="order" eval="[('post_date', 'DESC'), ('create_date', 'DESC'), ('date', 'DESC')]" pyson="1"/>
-        </record>
-        <record model="ir.action.act_window.view" id="act_move_line_contract_balance_form_view_list">
-            <field name="sequence" eval="10"/>
-            <field name="view" ref="account_cog.move_line_party_balance_view_list"/>
-            <field name="act_window" ref="act_move_line_contract_balance"/>
-        </record>
-        <record model="ir.action.act_window.view" id="act_move_line_party_balannce_form_view_form">
-            <field name="sequence" eval="20"/>
-            <field name="view" ref="account_cog.move_line_party_balance_view_form"/>
-            <field name="act_window" ref="act_move_line_contract_balance"/>
-        </record>
-        <record model="ir.action.keyword" id="act_move_line_contract_balance_keyword">
-            <field name="keyword">form_relate</field>
-            <field name="model">contract,-1</field>
-            <field name="action" ref="act_move_line_contract_balance"/>
-        </record>
         <!-- ################## -->
         <!-- # Reconcile Show # -->
         <!-- ################## -->
