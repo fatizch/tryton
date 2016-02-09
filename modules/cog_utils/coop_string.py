@@ -78,9 +78,11 @@ def generate_summary(desc, level=0):
     if not (label is None or type(value) in node_types):
         res += u': '
     if type(value) in node_types:
-        res += u'</div>\n%s' % '\n'.join([generate_summary(i, level + 1)
-                for i in value if i is not None])
-
+        if len(value) > 0:
+            res += u'</div>\n%s' % '\n'.join([generate_summary(i, level + 1)
+                    for i in value if i is not None])
+        else:
+            res += u'</div>'
     else:
         res += u'%s</div>' % value
     return res
