@@ -6,4 +6,6 @@
     <field name="code"/>
     <label name="status"/>
     <field name="status"/>
+    <label name="active"/>
+    <field name="active"/>
 </form>

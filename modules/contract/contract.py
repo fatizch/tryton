@@ -2191,6 +2191,8 @@ class ContractSubStatus(model.CoopSQL, model.CoopView):
     name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     status = fields.Selection(CONTRACTSTATUSES, 'Status', required=True)
+    active = fields.Boolean('Active')
+
     _get_sub_status_cache = Cache('get_sub_status')
 
     @classmethod
@@ -2208,6 +2210,10 @@ class ContractSubStatus(model.CoopSQL, model.CoopView):
     def write(cls, *args):
         super(ContractSubStatus, cls).write(*args)
         cls._get_sub_status_cache.clear()
+
+    @classmethod
+    def default_active(cls):
+        return True
 
     @classmethod
     def __setup__(cls):
