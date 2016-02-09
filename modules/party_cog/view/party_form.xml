@@ -83,9 +83,6 @@
             <label name="logo" xalign="0"/>
             <field name="logo" colspan="3"/>
         </page>
-        <page name="identifiers">
-            <field name="identifiers" colspan="4"/>
-        </page>
         <page string="Roles" id="role">
             <group id="role_group" colspan="4">
             </group>
