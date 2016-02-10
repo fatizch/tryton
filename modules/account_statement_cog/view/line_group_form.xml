@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form" position="inside">
+        <group id="cancel_button" col="4" colspan="4">
+            <button name="start_cancel" string="Cancel" invisible="1"/>
+	</group>
+    </xpath>
+</data>

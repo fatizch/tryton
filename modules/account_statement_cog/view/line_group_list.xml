@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/tree/field[@name='move']" position="after">
+        <field name="cancel_motive"/>
+        <field name="is_cancelled" tree_invisible="1"/>
+    </xpath>
+    <xpath expr="/tree" position="inside">
+        <button name="start_cancel" string="Cancel" tree_invisible="1"/>
+    </xpath>
+</data>

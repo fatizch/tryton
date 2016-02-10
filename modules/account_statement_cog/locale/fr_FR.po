@@ -1,6 +1,19 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:account.move:"
+msgid "The statement is already cancelled"
+msgstr "Le relevé est déja annulé"
+
+msgctxt "error:account.statement.journal.cancel_motive:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
+msgctxt "error:account.statement.journal:"
+msgid "You can not cancel two statements with different statement journals"
+msgstr ""
+"Vous ne pouvez pas annuler deux relevés avec differents journaux de relevé"
 
 msgctxt "field:account.statement,in_bank_deposit_ticket:"
 msgid "In Bank Deposit Ticket"
@@ -18,11 +31,55 @@ msgctxt "field:account.statement.journal,bank_deposit_ticket_statement:"
 msgid "Bank Deposit Ticket Statement"
 msgstr "Bordereaux de chèques"
 
+msgctxt "field:account.statement.journal,cancel_motives:"
+msgid "Cancel Motives"
+msgstr "Motifs d'annulation"
+
 msgctxt "field:account.statement.journal,sequence:"
 msgid "Statement Sequence"
 msgstr "Sequence des relevés"
 
 msgctxt "field:account.statement.journal,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.statement.journal.cancel_motive,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:account.statement.journal.cancel_motive,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.statement.journal.cancel_motive,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.statement.journal.cancel_motive,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.statement.journal.cancel_motive,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.statement.journal.cancel_motive,name:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:account.statement.journal.cancel_motive,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.statement.journal.cancel_motive,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.statement.journal.cancel_motive,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:account.statement.journal.cancel_motive,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -34,9 +91,94 @@ msgctxt "field:account.statement.line,party_payer:"
 msgid "Payer"
 msgstr "Payeur"
 
+msgctxt "field:account.statement.line.group,is_cancelled:"
+msgid "Is cancelled"
+msgstr "Est annulé"
+
+msgctxt "field:account.statement.line.group,cancel_motive:"
+msgid "Cancel motive"
+msgstr "Motif d'annulation"
+
+msgctxt "field:account.statement.line.group.cancel.start,available_motives:"
+msgid "Available motives"
+msgstr "Motifs valables"
+
+msgctxt "field:account.statement.line.group.cancel.start,cancel_motive:"
+msgid "Cancel Motive"
+msgstr "Motif d'annulation"
+
+msgctxt "field:account.statement.line.group.cancel.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.statement.line.group.cancel.start,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:account.statement.line.group.cancel.start,moves:"
+msgid "Moves"
+msgstr "Mouvements"
+
+msgctxt "field:statement.journal-statement.journal.cancel_motive,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:statement.journal-statement.journal.cancel_motive,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:statement.journal-statement.journal.cancel_motive,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:statement.journal-statement.journal.cancel_motive,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:statement.journal-statement.journal.cancel_motive,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:statement.journal-statement.journal.cancel_motive,motive:"
+msgid "Cancel motive"
+msgstr "Motif d'annulation"
+
+msgctxt "field:statement.journal-statement.journal.cancel_motive,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:statement.journal-statement.journal.cancel_motive,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:statement.journal-statement.journal.cancel_motive,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:statement.journal-statement.journal.cancel_motive,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:account.statement.journal.cancel_motive,name:"
+msgid "Statement Journal Cancel Motives"
+msgstr "Motif Annulation Journal Relevé"
+
+msgctxt "model:account.statement.line.group.cancel.start,name:"
+msgid "Cancel Line Group Start"
+msgstr "Lancement Annulation Groupe de Lignes"
+
+msgctxt "model:ir.action,name:act_cancel_line_group"
+msgid "Cancel"
+msgstr "Annuler"
+
 msgctxt "model:ir.action,name:act_statement_bank_deposit_form"
 msgid "Bank Deposit Ticket"
 msgstr "Bordereaux de chèques"
+
+msgctxt "model:ir.action,name:act_statement_journal_cancel_motive_form"
+msgid "Cancel motives"
+msgstr "Motifs d'annulation"
 
 msgctxt "model:ir.action.act_window.domain,name:"
 msgid "Posted"
@@ -70,6 +212,14 @@ msgctxt "model:ir.ui.menu,name:menu_statement_bank_deposit_form"
 msgid "Bank Deposit Ticket"
 msgstr "Bordereaux de chèques"
 
+msgctxt "model:ir.ui.menu,name:menu_statement_journal_cancel_motive_form"
+msgid "Cancel motives"
+msgstr "Motifs d'annulation"
+
+msgctxt "model:statement.journal-statement.journal.cancel_motive,name:"
+msgid "Journal - Statement Journal Cancel Motives"
+msgstr "Journal - Motifs Annulation Journal de Relevé"
+
 msgctxt "selection:account.move,kind:"
 msgid "Manual Payment"
 msgstr "Paiement manuel"
@@ -82,11 +232,29 @@ msgctxt "selection:account.statement.journal,validation:"
 msgid "Manual"
 msgstr "Manuelle"
 
-# Custom translations below
+msgctxt "view:account.statement.journal.cancel_motive:"
+msgid "Cancel Motive"
+msgstr "Motif d'annulation"
 
-msgctxt "field:account.statement.line,invoice:account_statement."
-msgid "Invoice"
-msgstr "Quittance"
+msgctxt "view:account.statement.journal.cancel_motive:"
+msgid "Cancel motives"
+msgstr "Motifs d'annulation"
+
+msgctxt "view:account.statement.line.group.cancel.start:"
+msgid "Cancel line group"
+msgstr "Annulation Groupe de ligne"
+
+msgctxt "view:account.statement.line.group:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:account.statement.line.group.cancel,start,cancel:"
+msgid "Ok"
+msgstr "Ok"
+
+msgctxt "wizard_button:account.statement.line.group.cancel,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt "field:account.statement.line,party:account_statement."
 msgid "Beneficiary"
@@ -104,3 +272,9 @@ msgstr "Emis"
 msgctxt "view:account.statement:account_statement."
 msgid "Post"
 msgstr "Emettre"
+
+# Custom translations below
+
+msgctxt "field:account.statement.line,invoice:account_statement."
+msgid "Invoice"
+msgstr "Quittance"

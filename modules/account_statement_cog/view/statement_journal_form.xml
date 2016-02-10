@@ -5,5 +5,6 @@
         <field name="sequence"/>
         <label name="bank_deposit_ticket_statement"/>
         <field name="bank_deposit_ticket_statement"/>
+        <field name="cancel_motives" colspan="4"/>
     </xpath>
 </data>

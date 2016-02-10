@@ -7,5 +7,48 @@
             <field name="inherit" ref="account_statement.statement_journal_view_form"/>
             <field name="name">statement_journal_form</field>
         </record>
+        <!-- ################################### -->
+        <!-- # Statement Journal Cancel Motive # -->
+        <!-- ################################### -->
+        <record model="ir.ui.view" id="statement_journal_cancel_motive_view_form">
+            <field name="model">account.statement.journal.cancel_motive</field>
+            <field name="type">form</field>
+            <field name="name">statement_journal_motive_form</field>
+        </record>
+        <record model="ir.ui.view" id="statement_journal_cancel_motive_view_tree">
+            <field name="model">account.statement.journal.cancel_motive</field>
+            <field name="type">tree</field>
+            <field name="name">statement_journal_motive_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_statement_journal_cancel_motive_form">
+            <field name="name">Cancel motives</field>
+            <field name="res_model">account.statement.journal.cancel_motive</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_statement_journal_cancel_motive_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="statement_journal_cancel_motive_view_tree"/>
+            <field name="act_window" ref="act_statement_journal_cancel_motive_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_statement_journal_form_view1">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="statement_journal_cancel_motive_view_form"/>
+            <field name="act_window" ref="act_statement_journal_cancel_motive_form"/>
+        </record>
+	<menuitem parent="account_statement.menu_statement_configuration" sequence="2" action="act_statement_journal_cancel_motive_form" id="menu_statement_journal_cancel_motive_form"/>
+        <record model="ir.model.access" id="default_access_cancel_motives">
+            <field name="model" search="[('model', '=', 'account.statement.journal.cancel_motive')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="admin_access_cancel_motives">
+            <field name="model" search="[('model', '=', 'account.statement.journal.cancel_motive')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
     </data>
 </tryton>

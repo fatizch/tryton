@@ -69,5 +69,29 @@
             <field name="inherit" ref="account_statement.statement_line_view_form"/>
             <field name="name">statement_line_form</field>
         </record>
+        <record model="ir.ui.view" id="line_group_view_list">
+            <field name="model">account.statement.line.group</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="account_statement.line_group_view_list"/>
+            <field name="name">line_group_list</field>
+        </record>
+        <record model="ir.ui.view" id="line_group_view_form">
+            <field name="model">account.statement.line.group</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="account_statement.line_group_view_form"/>
+            <field name="name">line_group_form</field>
+        </record>
+        <!-- ####################################### -->
+        <!-- # Account Statement Line Group Cancel # -->
+        <!-- ####################################### -->
+	<record model="ir.action.wizard" id="act_cancel_line_group">
+	    <field name="name">Cancel</field>
+	    <field name="wiz_name">account.statement.line.group.cancel</field>
+	</record>
+	<record model="ir.ui.view" id="line_group_cancel_start_view_form">
+	    <field name="model">account.statement.line.group.cancel.start</field>
+	    <field name="type">form</field>
+	    <field name="name">line_group_cancel_start_view_form</field>
+	</record>
     </data>
 </tryton>

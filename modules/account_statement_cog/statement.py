@@ -3,9 +3,11 @@ from sql.aggregate import Max, Sum
 from trytond.transaction import Transaction
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, If
+from trytond.wizard import Wizard, StateView, Button, StateAction
+from trytond.model import ModelView
 
-from trytond.modules.cog_utils import fields, export
+from trytond.modules.cog_utils import fields, export, model
 
 __metaclass__ = PoolMeta
 
@@ -13,6 +15,8 @@ __all__ = [
     'Line',
     'Statement',
     'LineGroup',
+    'CancelLineGroup',
+    'CancelLineGroupStart',
     ]
 
 
@@ -144,6 +148,45 @@ class Statement(export.ExportImportMixin):
 class LineGroup:
     __name__ = 'account.statement.line.group'
 
+    cancel_motive = fields.Function(fields.Char('Cancel motive',
+            readonly=True),
+        'get_cancel_motive')
+    is_cancelled = fields.Function(fields.Boolean('Is cancelled',
+            states={'invisible': True}, readonly=True),
+        'get_is_cancelled')
+
+    @classmethod
+    def __setup__(cls):
+        super(LineGroup, cls).__setup__()
+        cls._buttons.update({
+            'start_cancel': {
+                'invisible': Eval('is_cancelled')},
+            })
+
+    @classmethod
+    def view_attributes(cls):
+        return super(LineGroup, cls).view_attributes() + [(
+                '/tree', 'colors', If(~Eval('is_cancelled'),
+                    'black', 'red'),
+                ),(
+               '/form/group[@id="cancel_button"]', 'states',
+                    {'invisible': True})
+                ]
+
+    @classmethod
+    @model.CoopView.button_action('account_statement_cog.act_cancel_line_group')
+    def start_cancel(cls, LineGroups):
+        pass
+
+    def get_is_cancelled(self, name=None):
+        ret = bool(self.move.cancel_move)
+        return ret
+
+    def get_cancel_motive(self, name=None):
+        if self.move and self.move.cancel_move:
+            return self.move.cancel_move.description
+        return ''
+
     @classmethod
     def _grouped_columns(cls, line):
         return [
@@ -153,3 +196,65 @@ class LineGroup:
             Sum(line.amount).as_('amount'),
             Max(line.party_payer).as_('party'),
             ]
+
+
+class CancelLineGroupStart(ModelView):
+    'Cancel Line Group Start'
+
+    __name__ = 'account.statement.line.group.cancel.start'
+
+    available_motives = fields.One2Many(
+        'account.statement.journal.cancel_motive', None, 'Available motives',
+        states={'invisible': True}, readonly=True)
+    journal = fields.Many2One('account.journal', 'Journal',
+        states={'invisible': True}, readonly=True)
+    moves = fields.One2Many('account.move', None, 'Moves',
+        states={'invisible': True}, readonly=True)
+    cancel_motive = fields.Many2One('account.statement.journal.cancel_motive',
+        'Cancel Motive', domain=[(
+                'id', 'in', Eval('available_motives')
+        )], depends=['available_motives'], required=True)
+
+
+class CancelLineGroup(Wizard):
+    'Cancel Line Group'
+
+    __name__ = 'account.statement.line.group.cancel'
+
+    start = StateView('account.statement.line.group.cancel.start',
+        'account_statement_cog.line_group_cancel_start_view_form', [
+            Button('Cancel', 'end', icon='tryton-cancel'),
+            Button('Ok', 'cancel', icon='tryton-ok', default=True),
+            ])
+    cancel = StateAction('account_statement.act_line_group_form')
+
+    def default_start(self, fields):
+        pool = Pool()
+        move_ids = Transaction().context.get('active_ids')
+        moves = pool.get('account.move').browse(move_ids)
+        Journal = pool.get('account.statement.journal')
+        journals = set()
+        for move in moves:
+            if move.cancel_move:
+                move.raise_user_error('already_cancelled')
+            statement_line = pool.get('account.statement.line').search(
+                [('move', '=', move.id)], limit=1)[0]
+            journals |= set([statement_line.statement.journal.id])
+        if len(journals) > 1:
+            Journal.raise_user_error('cancel_journal_mixin')
+        cancel_motives = statement_line.statement.journal.cancel_motives
+
+        return {
+            'journal': move.journal.id,
+            'moves': move_ids,
+            'available_motives': [x.id for x in cancel_motives],
+            'cancel_motive': None,
+            }
+
+    def do_cancel(self, action):
+        moves = self.start.moves
+        for move in moves:
+            cancel_motive = self.start.cancel_motive.name
+            move.cancel_and_reconcile({'description': cancel_motive})
+            move.post([move.cancel_move])
+        return action, {}

@@ -16,6 +16,9 @@ class Move:
         cls.kind.selection.append(('manual_payment', 'Manual Payment'))
         cls.kind.selection.append(
             ('rejected_manual_payment', 'Rejected Manual Payment'))
+        cls._error_messages.update({
+                'already_cancelled': 'The statement is already cancelled'
+                })
 
     def get_kind(self, name):
         if self.origin:

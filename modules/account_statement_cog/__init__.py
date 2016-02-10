@@ -14,4 +14,10 @@ def register():
         Journal,
         Move,
         MoveLine,
+        CancelLineGroupStart,
+        CancelMotive,
+        JournalCancelMotiveRelation,
         module='account_statement_cog', type_='model')
+    Pool.register(
+        CancelLineGroup,
+        module='account_statement_cog', type_='wizard')

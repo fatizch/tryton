@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<form string="Cancel line group">
+    <label name="cancel_motive"/>
+    <field name="cancel_motive"/>
+    <field name="moves"/>
+    <field name="available_motives"/>
+    <field name="journal"/>
+</form>
