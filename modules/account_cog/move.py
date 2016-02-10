@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from sql import Null
 from sql.aggregate import Sum
 from sql.conditionals import Case
@@ -101,6 +103,22 @@ class Move(export.ExportImportMixin):
                 'period': period_id,
                 })
         return defaults
+
+    def cancel_and_reconcile(self, description):
+        pool = Pool()
+        Line = pool.get('account.move.line')
+        Reconciliation = pool.get('account.move.reconciliation')
+        reconciliations = [x.reconciliation for x in self.lines
+            if x.reconciliation]
+        if reconciliations:
+            Reconciliation.delete(reconciliations)
+        cancel_move = self.cancel(default=description)
+        to_reconcile = defaultdict(list)
+        for line in self.lines + cancel_move.lines:
+            if line.account.reconcile:
+                to_reconcile[line.account].append(line)
+        for lines in to_reconcile.itervalues():
+            Line.reconcile(lines)
 
 
 class Line(export.ExportImportMixin):
