@@ -105,6 +105,7 @@ class Move(export.ExportImportMixin):
 
 class Line(export.ExportImportMixin):
     'Account Move Line'
+
     __name__ = 'account.move.line'
 
     kind = fields.Function(
@@ -321,13 +322,15 @@ class Reconcile:
         Account = pool.get('account.account')
         account = Account.__table__()
         cursor = Transaction().cursor
-
         balance = line.debit - line.credit
+        cond = ((line.reconciliation == Null) & account.reconcile &
+            (line.state != 'draft'))
+        if Transaction().context['active_model'] == 'party.party':
+            cond &= (line.party == Transaction().context['active_id'])
         cursor.execute(*line.join(account,
                 condition=line.account == account.id).select(
                 account.id,
-                where=(line.reconciliation == Null) & account.reconcile &
-                (line.state != 'draft'),
+                where=cond,
                 group_by=account.id,
                 having=(
                     Sum(Case((balance > 0, 1), else_=0)) > 0)
@@ -343,10 +346,13 @@ class Reconcile:
         cursor = Transaction().cursor
 
         balance = line.debit - line.credit
+        cond = ((line.reconciliation == Null) & (line.state != 'draft')
+            & (line.account == account.id))
+        if Transaction().context['active_model'] == 'party.party':
+            cond &= (line.party == Transaction().context['active_id'])
+
         cursor.execute(*line.select(line.party,
-                where=(line.reconciliation == Null)
-                & (line.state != 'draft')
-                & (line.account == account.id),
+                where=cond,
                 group_by=line.party,
                 having=(
                     Sum(Case((balance > 0, 1), else_=0)) > 0)
