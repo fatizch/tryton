@@ -14,8 +14,10 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
     __name__ = 'distribution.network'
     _func_key = 'code'
 
-    name = fields.Char('Name', translate=True)
-    code = fields.Char('Code')
+    name = fields.Char('Name', translate=True,
+        states={'required': ~Eval('party')},
+        depends=['party'])
+    code = fields.Char('Code', required=True)
     full_name = fields.Function(
         fields.Char('Name'),
         'get_full_name', searcher='search_full_name')
@@ -28,7 +30,9 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
     parents = fields.Function(
         fields.Many2Many('distribution.network', None, None, 'Parents'),
         'get_parents', searcher='search_parents')
-    party = fields.Many2One('party.party', 'Party', ondelete='CASCADE')
+    party = fields.Many2One('party.party', 'Party', ondelete='CASCADE',
+        states={'required': ~Eval('name')},
+        depends=['name'])
     parent_party = fields.Function(
         fields.Many2One('party.party', 'Parent Party'),
         'get_parent_party', searcher='search_parent_party')
@@ -95,7 +99,10 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
         return ''
 
     def get_full_name(self, name):
-        return self.party.name if self.party else self.name
+        if self.name:
+            return self.name
+        elif self.party:
+            return self.party.name
 
     def get_parent_party(self, name):
         if self.party:
