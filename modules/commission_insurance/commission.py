@@ -263,7 +263,9 @@ class AggregatedCommission(model.CoopSQL, model.CoopView):
     date = fields.Date('Date', readonly=True)
     contract = fields.Function(
         fields.Many2One('contract', 'Contract', readonly=True),
-        'get_commissioned_contract')
+        'get_commissioned_contract', searcher='search_commissioned_contract')
+    commissioned_option = fields.Many2One('contract.option',
+        'Commissioned Option', readonly=True, states={'invisible': True})
     broker = fields.Function(
         fields.Many2One('distribution.network', 'Broker', readonly=True),
         'get_broker', searcher='search_broker')
@@ -289,10 +291,15 @@ class AggregatedCommission(model.CoopSQL, model.CoopView):
         'get_invoice_state')
 
     def get_commissioned_contract(self, name=None):
-        commission = Pool().get('commission')(self.id)
-        if commission.commissioned_option:
-            return commission.commissioned_option.parent_contract.id
+        if self.commissioned_option:
+            return self.commissioned_option.parent_contract.id
         return None
+
+    @classmethod
+    def search_commissioned_contract(cls, name, clause):
+        return [('commissioned_option.parent_contract',) +
+            tuple(clause[1:])]
+
 
     def get_currency_digits(self, name):
         return self.invoice.currency_digits
@@ -347,6 +354,7 @@ class AggregatedCommission(model.CoopSQL, model.CoopView):
             Literal(0).as_('write_uid'),
             Literal(0).as_('write_date'),
             commission.agent.as_('agent'),
+            Max(commission.commissioned_option).as_('commissioned_option'),
             Max(commission.start).as_('start'),
             Max(commission.end).as_('end'),
             Max(commission.date).as_('date'),

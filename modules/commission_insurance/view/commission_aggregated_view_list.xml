@@ -10,4 +10,5 @@
     <field name="total_commission" sum="Total"/>
     <field name="invoice_state"/>
     <field name="currency_digits" tree_invisible="1"/>
+    <field name="commissioned_option" tree_invisible="1"/>
 </tree>
