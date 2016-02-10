@@ -34,7 +34,6 @@ class Payment:
                 'with other payments types',
                 'cheque_number_sequence_broken': 'You must select sequencial '
                 'cheque letters numbers: jump from %s to %s',
-                'state to processing with a non cheque cheque letter payment.'
             })
 
     @fields.depends('journal')
