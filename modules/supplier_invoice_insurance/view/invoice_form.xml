@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/label[@name='description']" position="before">
+        <newline/>
+        <label name="insurer"/>
+        <field name="insurer"/>
+        <label name="related_party"/>
+        <field name="related_party"/>
+        <label name="related_contract"/>
+        <field name="related_contract"/>
+        <newline/>
+    </xpath>
+</data>

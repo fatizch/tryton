@@ -1,0 +1,32 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:account.invoice.line:"
+msgid "Amount exceeds %s which is the maximum allowed for product '%s'."
+msgstr ""
+"Le montant excède %s qui est le maximum autorisé pour le produit '%s'."
+
+msgctxt "field:account.invoice,insurer:"
+msgid "Insurer"
+msgstr "Assureur"
+
+msgctxt "field:account.invoice,possible_related_contracts:"
+msgid "Possible Related Contracts"
+msgstr "Contrats liés possibles"
+
+msgctxt "field:account.invoice,possible_related_parties:"
+msgid "Covered Persons"
+msgstr ""
+
+msgctxt "field:account.invoice,related_contract:"
+msgid "Related contract"
+msgstr "Contrat lié"
+
+msgctxt "field:account.invoice,related_party:"
+msgid "Related party"
+msgstr "Tiers lié"
+
+msgctxt "field:product.product,capped_amount:"
+msgid "Capped amount"
+msgstr "Plafond"

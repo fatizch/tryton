@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/tree/field[@name='description']" position="before">
+        <field name="insurer" tree_invisible="1"/>
+        <field name="related_party" tree_invisible="1"/>
+    </xpath>
+</data>
