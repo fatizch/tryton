@@ -170,7 +170,7 @@ class PartyBalance(model.CoopView):
         states={'invisible': True})
     hide_reconciled_lines = fields.Boolean('Hide Reconciled Lines')
     from_date = fields.Date('From Date')
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party', readonly=True)
     contracts = fields.Many2Many('contract', None, None, 'Contracts',
         states={'invisible': True})
     contract = fields.Many2One('contract', 'Contract',

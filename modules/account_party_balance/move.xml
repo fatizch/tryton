@@ -12,6 +12,7 @@
         <record model="ir.action.wizard" id="act_open_party_balance">
             <field name="name">Party Balance</field>
             <field name="wiz_name">account.open_party_balance</field>
+            <field name="window" eval="True"/>
         </record>
         <record model="ir.action.keyword" id="act_open_party_balance_keyword">
             <field name="keyword">form_action</field>

@@ -1,29 +1,33 @@
 <?xml version="1.0"?>
-<form string="Balance">
+<form string="Balance" col="5">
     <group id="left" colspan="2">
+        <label name="party"/>
+        <field name="party"/>
+        <label name="contract"/>
+        <field name="contract" widget="selection"/>
         <label name="balance_today"/>
         <group id="balance_today" col="99">
             <field name="balance_today" xexpand="0" xfill="0"/>
             <image name="traffic_light_red" xexpand="0" xfill="0"/>
             <image name="traffic_light_green" xfill="0" xexpand="0"/>
         </group>
-        <label name="contract"/>
-        <field name="contract" widget="selection"/>
         <label name="balance"/>
         <field name="balance"/>
     </group>
-    <group id="right">
+    <group id="right" col="2">
         <label name="hide_reconciled_lines"/>
         <field name="hide_reconciled_lines"/>
-        <label name="from_date"/>
-        <field name="from_date"/>
         <label name="hide_canceled_invoices"/>
         <field name="hide_canceled_invoices"/>
         <label name="hide_scheduled_terms"/>
         <field name="hide_scheduled_terms"/>
     </group>
-    <button name="refresh" string="_Refresh" icon="tryton-executable"/>
-    <field name="lines" colspan="4" expand_toolbar="0"/>
+    <group id="button" col="2">
+        <label name="from_date"/>
+        <field name="from_date"/>
+        <button name="refresh" string="_Refresh" icon="tryton-executable" yfill="1" colspan="2"/>
+    </group>
+    <field name="lines" colspan="5" expand_toolbar="0"/>
     <field name="all_lines"/>
     <field name="is_balance_positive"/>
     <field name="contracts"/>
