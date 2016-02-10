@@ -986,6 +986,15 @@ class OpenCommissionsSynthesisStart(model.CoopView):
     def default_company():
         return Transaction().context.get('company')
 
+    @staticmethod
+    def default_broker_fees_account():
+        Fee = Pool().get('account.fee')
+        fees = Fee.search([('broker_fee', '=', True)])
+        for f in fees:
+            if f.product and f.product.template and \
+                    f.product.template.account_expense_used:
+                return f.product.template.account_expense_used.id
+
 
 class OpenCommissionsSynthesisShow(model.CoopView, ModelCurrency):
     'Open Commissions Synthesis Show'
