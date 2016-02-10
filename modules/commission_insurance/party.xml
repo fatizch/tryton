@@ -29,15 +29,16 @@
             <field name="model">distribution.network,-1</field>
             <field name="action" ref="act_broker_commissioned_contract_relate_form"/>
         </record>
-        <record model="ir.action.act_window" id="act_commission_relate_form">
-            <field name="name">Commission</field>
-            <field name="res_model">commission</field>
-            <field name="domain" eval="[('broker', '=', Eval('active_id'))]" pyson="1"/>
-        </record>
+	<record model="ir.action.act_window" id="act_commission_aggregated_distribution_relate_form">
+	    <field name="name">Aggregated commissions</field>
+	    <field name="res_model">commission.aggregated</field>
+	    <field name="domain" eval="[('broker', 'in', Eval('active_ids'))]" pyson="1"/>
+	</record>
+
         <record model="ir.action.keyword" id="act_commission_relate_keyword">
             <field name="keyword">form_relate</field>
             <field name="model">distribution.network,-1</field>
-            <field name="action" ref="act_commission_relate_form"/>
+            <field name="action" ref="act_commission_aggregated_distribution_relate_form"/>
         </record>
         <!-- ############################################################ -->
         <!-- ########### Broker entry point ########### -->

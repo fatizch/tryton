@@ -66,6 +66,10 @@ msgctxt "field:account.move.line,broker_fee_invoice_line:"
 msgid "Broker Fee Invoice Line"
 msgstr "Lignes de frais d'apporteur"
 
+msgctxt "field:commission,base_amount:"
+msgid "Base Amount"
+msgstr "Assiette"
+
 msgctxt "field:commission,broker:"
 msgid "Broker"
 msgstr "Courtier"
@@ -73,10 +77,6 @@ msgstr "Courtier"
 msgctxt "field:commission,commission_rate:"
 msgid "Commission Rate"
 msgstr "Taux de commissions"
-
-msgctxt "field:commission,base_amount:"
-msgid "Base Amount"
-msgstr "Assiette"
 
 msgctxt "field:commission,commissioned_contract:"
 msgid "Commissioned Contract"
@@ -115,6 +115,82 @@ msgid "Start Date"
 msgstr "Date de début"
 
 msgctxt "field:commission.agent,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:commission.aggregated,agent:"
+msgid "Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "field:commission.aggregated,broker:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "field:commission.aggregated,subscriber:"
+msgid "Contract Subscriber"
+msgstr "Souscripteur du contrat"
+
+msgctxt "field:commission.aggregated,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:commission.aggregated,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.aggregated,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.aggregated,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.aggregated,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:commission.aggregated,end:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:commission.aggregated,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.aggregated,invoice:"
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "field:commission.aggregated,invoice_state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:commission.aggregated,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:commission.aggregated,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission.aggregated,start:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:commission.aggregated,total_commission:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "field:commission.aggregated,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission.aggregated,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:commission.aggregated,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -276,7 +352,7 @@ msgstr "Plan"
 
 msgctxt "field:commission.plan.date,rec_name:"
 msgid "Name"
-msgstr "Numéro"
+msgstr "Nom"
 
 msgctxt "field:commission.plan.date,reference_date:"
 msgid "Reference Date"
@@ -354,6 +430,74 @@ msgctxt "field:commission.plan.lines-offered.option.description,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:commission.synthesis.show,broker_fees_paid:"
+msgid "Broker fees paid"
+msgstr "Frais courtier payés"
+
+msgctxt "field:commission.synthesis.show,broker_fees_to_pay:"
+msgid "Broker fees to pay"
+msgstr "Frais courtier à payer"
+
+msgctxt "field:commission.synthesis.show,commissions_paid:"
+msgid "Commissions paid"
+msgstr "Commissions payées"
+
+msgctxt "field:commission.synthesis.show,commissions_paid_details:"
+msgid "Commissions paid by year"
+msgstr "Commissions payées par année"
+
+msgctxt "field:commission.synthesis.show,commissions_to_pay:"
+msgid "Commissions to pay"
+msgstr "Commissions à payer"
+
+msgctxt "field:commission.synthesis.show,currency:"
+msgid "Currency"
+msgstr "Devise"
+
+msgctxt "field:commission.synthesis.show,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:commission.synthesis.show,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:commission.synthesis.show,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.synthesis.start,broker_fees_account:"
+msgid "Broker fees account"
+msgstr "Compte de frais courtier"
+
+msgctxt "field:commission.synthesis.start,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:commission.synthesis.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.synthesis.year_line,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:commission.synthesis.year_line,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:commission.synthesis.year_line,currency_symbol:"
+msgid "Symbol"
+msgstr "Symbole"
+
+msgctxt "field:commission.synthesis.year_line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.synthesis.year_line,year:"
+msgid "Year"
+msgstr "Année"
+
 msgctxt "field:commission_plan-commission_plan,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -394,35 +538,6 @@ msgctxt "field:commission_plan-commission_plan,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt ""
-"field:commission.synthesis.show,broker_fees_paid:"
-msgid "Broker fees paid"
-msgstr "Frais courtier payés"
-
-msgctxt ""
-"field:commission.synthesis.show,broker_fees_to_pay:"
-msgid "Broker fees to pay"
-msgstr "Frais courtier à payer"
-
-msgctxt ""
-"field:commission.synthesis.show,commissions_paid:"
-msgid "Commissions paid"
-msgstr "Commissions payées"
-
-msgctxt ""
-"field:commission.synthesis.show,commissions_to_pay:"
-msgid "Commissions to pay"
-msgstr "Commissions à payer"
-
-msgctxt ""
-"field:commission.synthesis.start,broker_fees_account:"
-msgid "Broker fees account"
-msgstr "Compte de frais courtier"
-
-msgctxt "field:commission.synthesis.year_line,year:"
-msgid "Year"
-msgstr "Année"
-
 msgctxt "field:contract,agency:"
 msgid "Agency"
 msgstr "Agence"
@@ -451,17 +566,17 @@ msgctxt "field:party.party,automatic_wire_transfer:"
 msgid "Use Broker Bank Transfer Journal"
 msgstr "Utiliser le journal de paiement automatique courtier"
 
-msgctxt "field:party.party,broker_code:"
-msgid "Broker Code"
-msgstr "Code Courtier"
-
-msgctxt "field:party.party,broker_code:"
-msgid "Broker Code"
-msgstr "Code Courtier"
-
 msgctxt "field:party.party,broker:"
 msgid "Broker Distribution Network"
 msgstr "Réseau de distribution du courtier"
+
+msgctxt "field:party.party,broker_code:"
+msgid "Broker Code"
+msgstr "Code Courtier"
+
+msgctxt "field:party.party,is_broker:"
+msgid "Is Broker"
+msgstr "Est courtier"
 
 msgctxt "field:product.product,xml_id:"
 msgid "XML Id"
@@ -478,6 +593,10 @@ msgstr "Identifiant XML"
 msgctxt "help:commission.plan.date,first_match_only:"
 msgid "If True, only the first matching date will be considered."
 msgstr "Si 'Vrai', seule la première occurence sera prise en compte"
+
+msgctxt "model:commission.aggregated,name:"
+msgid "Commission Aggregated"
+msgstr "Commission agrégée"
 
 msgctxt "model:commission.change_broker.select_new_broker,name:"
 msgid "Select New Broker"
@@ -507,14 +626,25 @@ msgctxt "model:commission.plan.lines-offered.option.description,name:"
 msgid "Commission Plan Line - Offered Option Description"
 msgstr "Lien Ligne de plan de commissionnement - Garantie offerte"
 
-msgctxt ""
-"model:ir.action,name:act_commission_synthesis_display"
-msgid "Show Commission Synthesis"
-msgstr "Synthèse des commissions"
+msgctxt "model:commission.synthesis.show,name:"
+msgid "Open Commissions Synthesis Show"
+msgstr ""
+
+msgctxt "model:commission.synthesis.start,name:"
+msgid "Open Commissions Synthesis Start"
+msgstr ""
+
+msgctxt "model:commission.synthesis.year_line,name:"
+msgid "Open Commissions Synthesis Year Line"
+msgstr ""
 
 msgctxt "model:commission_plan-commission_plan,name:"
 msgid "Commission Plan - Commission Plan"
 msgstr "Lien entre plans de commissionnement"
+
+msgctxt "model:event.type,name:event_contract_broker_changed"
+msgid "Broker Changed"
+msgstr "Transfert de portefeuille"
 
 msgctxt "model:ir.action,name:"
 msgid "Brokers"
@@ -524,10 +654,6 @@ msgctxt "model:ir.action,name:act_broker_commissioned_contract_relate_form"
 msgid "Commissioned Contracts"
 msgstr "Contrats commissionnés"
 
-msgctxt "model:ir.action,name:act_received_premiums_relate"
-msgid "Received Premiums"
-msgstr "Primes reçues"
-
 msgctxt "model:ir.action,name:act_broker_form"
 msgid "Brokers"
 msgstr "Courtiers"
@@ -536,17 +662,38 @@ msgctxt "model:ir.action,name:act_change_broker"
 msgid "Change Broker"
 msgstr "Changement d'apporteur"
 
-msgctxt "model:ir.action,name:act_commission_contract_relate_form"
-msgid "Commissions"
-msgstr "Commissions"
+msgctxt "model:ir.action,name:act_commission_aggregated_contract_relate_form1"
+msgid "Aggregated Commissions"
+msgstr "Commission agrégées"
+
+msgctxt ""
+"model:ir.action,name:act_commission_aggregated_distribution_relate_form"
+msgid "Aggregated commissions"
+msgstr "Commissions agrégées"
+
+msgctxt "model:ir.action,name:act_commission_aggregated_form_relate"
+msgid "Aggregated commissions"
+msgstr "Commissions agrégées"
+
+msgctxt "model:ir.action,name:act_commission_aggregated_form_relate2"
+msgid "Aggregated commissions"
+msgstr "Commissions agrégées"
+
+msgctxt "model:ir.action,name:act_commission_aggregated_relate_details"
+msgid "Filtering wizard"
+msgstr ""
 
 msgctxt "model:ir.action,name:act_commission_create_agents"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
 
-msgctxt "model:ir.action,name:act_commission_relate_form"
-msgid "Commission"
-msgstr "Commission"
+msgctxt "model:ir.action,name:act_commission_synthesis_display"
+msgid "Commissions Synthesis"
+msgstr "Synthèse des commissions"
+
+msgctxt "model:ir.action,name:act_filter_commission"
+msgid "Commissions"
+msgstr "Commissions"
 
 msgctxt "model:ir.action,name:act_invoice_broker_invoice_form"
 msgid "Broker Invoices"
@@ -555,6 +702,10 @@ msgstr "Bordereaux courtiers"
 msgctxt "model:ir.action,name:act_invoice_insurer_invoice_form"
 msgid "Insurer Invoices"
 msgstr "Bordereaux assureurs"
+
+msgctxt "model:ir.action,name:act_received_premiums_relate"
+msgid "Received Premiums"
+msgstr "Primes reçues"
 
 msgctxt "model:ir.action.act_window.domain,name:act_commission_domain_broker"
 msgid "Broker"
@@ -571,6 +722,10 @@ msgstr "Courtiers"
 msgctxt "model:ir.ui.menu,name:menu_broker"
 msgid "Brokers"
 msgstr "Courtiers"
+
+msgctxt "model:ir.ui.menu,name:menu_commission_aggregated_commissions"
+msgid "Aggregated commissions"
+msgstr "Commissions agrégées"
 
 msgctxt "model:ir.ui.menu,name:menu_commission_change_broker"
 msgid "Change Broker"
@@ -603,6 +758,26 @@ msgstr "Bordereau courtier"
 msgctxt "selection:account.invoice,business_type:"
 msgid "Insurer Invoice"
 msgstr "Bordereau assureur"
+
+msgctxt "selection:commission.aggregated,invoice_state:"
+msgid "Canceled"
+msgstr "Annulée"
+
+msgctxt "selection:commission.aggregated,invoice_state:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:commission.aggregated,invoice_state:"
+msgid "Paid"
+msgstr "Payée"
+
+msgctxt "selection:commission.aggregated,invoice_state:"
+msgid "Posted"
+msgstr "Emise"
+
+msgctxt "selection:commission.aggregated,invoice_state:"
+msgid "Validated"
+msgstr "Validée"
 
 msgctxt "selection:commission.plan,type_:"
 msgid "Broker"
@@ -872,6 +1047,14 @@ msgctxt "view:account.configuration:"
 msgid "Commission"
 msgstr "Commission"
 
+msgctxt "view:commission.aggregated:"
+msgid "Aggregated Commissions"
+msgstr "Commissions agrégées"
+
+msgctxt "view:commission.aggregated:"
+msgid "Total"
+msgstr "Total"
+
 msgctxt "view:commission.change_broker.select_new_broker:"
 msgid "Select New Agent"
 msgstr "Sélectionner un nouveau courtier"
@@ -893,16 +1076,24 @@ msgid "Administration"
 msgstr "Administration"
 
 msgctxt "view:commission.synthesis.show:"
-msgid "Commissions synthesis"
-msgstr "Synthèse des commissions"
-
-msgctxt "view:commission.synthesis.show:"
 msgid "Commissions paid by year"
 msgstr "Commissions payées par année"
+
+msgctxt "view:commission.synthesis.show:"
+msgid "Commissions synthesis"
+msgstr "Synthèse des commissions"
 
 msgctxt "view:commission.synthesis.start:"
 msgid "Select broker fees account"
 msgstr "Sélectionner le compte de frais courtier"
+
+msgctxt "view:commission.synthesis.year_line:"
+msgid "Commissions years"
+msgstr ""
+
+msgctxt "view:commission:"
+msgid "%"
+msgstr "%"
 
 msgctxt "view:commission:"
 msgid "Amount"
@@ -944,6 +1135,10 @@ msgctxt "wizard_button:commission.create_agents,parties,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
+msgctxt "wizard_button:commission.synthesis,show,end:"
+msgid "Ok"
+msgstr "Ok"
+
 msgctxt "wizard_button:commission.synthesis,start,end:"
 msgid "Cancel"
 msgstr "Annuler"
@@ -962,13 +1157,13 @@ msgctxt "field:commission,agent:commission."
 msgid "Agent"
 msgstr "Protocole de commissionnement"
 
+msgctxt "field:commission,amount:commission."
+msgid "Amount"
+msgstr "Commission"
+
 msgctxt "field:product.template-commission.agent,agent:commission."
 msgid "Agent"
 msgstr "Protocole de commissionnement"
-
-msgctxt "model:event.type,name:event_contract_broker_changed"
-msgid "Broker Changed"
-msgstr "Transfert de portefeuille"
 
 msgctxt "model:commission.agent,name:commission."
 msgid "Commission Agent"
@@ -978,21 +1173,21 @@ msgctxt "model:commission.create_invoice.ask,name:commission."
 msgid "Create Commission Invoice"
 msgstr "Générer les bordereaux de commission"
 
-msgctxt "model:ir.action,name:commission.act_agent_form"
-msgid "Agents"
-msgstr "Protocoles de commissionnement"
-
 msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
 msgid "Create Commission Invoices"
 msgstr "Générer les bordereaux de commission"
 
-msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
+msgctxt "model:ir.action,name:commission.act_agent_form"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
 
 msgctxt "model:ir.ui.menu,name:commission.menu_commission_create_invoice"
 msgid "Create Commission Invoices"
 msgstr "Générer les bordereaux de commission"
+
+msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "model:product.template-commission.agent,name:commission."
 msgid "Product Template - Commission Agent"
@@ -1019,7 +1214,6 @@ msgid "Create Commission Invoice"
 msgstr "Générer les bordereaux de commission"
 
 # Custom translations below
-
 msgctxt "field:commission,amount:commission."
 msgid "Amount"
 msgstr "Commission"

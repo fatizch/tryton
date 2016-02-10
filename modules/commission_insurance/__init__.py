@@ -11,7 +11,7 @@ from .batch import *
 def register():
     Pool.register(
         Contract,
-        CommissionPerAgent,
+        AggregatedCommission,
         Commission,
         PlanLines,
         Plan,
@@ -41,5 +41,5 @@ def register():
         ChangeBroker,
         FilterCommissions,
         OpenCommissionsSynthesis,
-        FilterCommissionsPerAgent,
+        FilterAggregatedCommissions,
         module='commission_insurance', type_='wizard')

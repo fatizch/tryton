@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<tree string="Aggregated Commissions" keyword_open="1">
+    <field name="party"/>
+    <field name="contract"/>
+    <field name="subscriber"/>
+    <field name="start"/>
+    <field name="end"/>
+    <field name="agent"/>
+    <field name="date"/>
+    <field name="total_commission" sum="Total"/>
+    <field name="invoice_state"/>
+    <field name="currency_digits" tree_invisible="1"/>
+</tree>

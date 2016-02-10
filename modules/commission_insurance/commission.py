@@ -5,6 +5,7 @@ from itertools import groupby
 from sql import Cast, Literal
 from sql.operators import Concat
 from sql.aggregate import Sum, Max
+from sql.conditionals import Coalesce
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
@@ -24,7 +25,7 @@ __all__ = [
     'PlanLines',
     'PlanLinesCoverageRelation',
     'Commission',
-    'CommissionPerAgent',
+    'AggregatedCommission',
     'Plan',
     'PlanRelation',
     'PlanCalculationDate',
@@ -41,7 +42,7 @@ __all__ = [
     'OpenCommissionsSynthesisStart',
     'OpenCommissionsSynthesisShow',
     'OpenCommissionSynthesisYearLine',
-    'FilterCommissionsPerAgent',
+    'FilterAggregatedCommissions',
     ]
 __metaclass__ = PoolMeta
 
@@ -251,20 +252,74 @@ class Commission:
             cls.save(to_save)
 
 
-class CommissionPerAgent(model.CoopSQL, model.CoopView):
-    'Commission Per Invoice Party'
+class AggregatedCommission(model.CoopSQL, model.CoopView):
+    'Commission Aggregated'
 
-    __name__ = 'commission.per_agent'
+    __name__ = 'commission.aggregated'
 
     agent = fields.Many2One('commission.agent', 'Agent', readonly=True)
     party = fields.Many2One('party.party', 'Party', readonly=True)
     invoice = fields.Many2One('account.invoice', 'Invoice', readonly=True)
-    total = fields.Numeric('Total', readonly=True)
+    date = fields.Date('Date', readonly=True)
+    contract = fields.Function(
+        fields.Many2One('contract', 'Contract', readonly=True),
+        'get_commissioned_contract')
+    broker = fields.Function(
+        fields.Many2One('distribution.network', 'Broker', readonly=True),
+        'get_broker', searcher='search_broker')
+    subscriber = fields.Function(
+        fields.Many2One('party.party', 'Contract Subscriber', readonly=True),
+        'get_subscriber',
+        searcher='search_commissioned_subscriber')
+    start = fields.Date('Start Date', readonly=True)
+    end = fields.Date('End Date', readonly=True)
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits', states={'invisible': True}),
+        'get_currency_digits')
+    total_commission = fields.Numeric('Total', readonly=True,
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digit'])
+    invoice_state = fields.Function(
+        fields.Selection([
+                ('draft', 'Draft'),
+                ('validated', 'Validated'),
+                ('posted', 'Posted'),
+                ('paid', 'Paid'),
+                ('cancel', 'Canceled'),
+                ], 'State', readonly=True),
+        'get_invoice_state')
+
+    def get_commissioned_contract(self, name=None):
+        commission = Pool().get('commission')(self.id)
+        if commission.commissioned_option:
+            return commission.commissioned_option.parent_contract.id
+        return None
+
+    def get_currency_digits(self, name):
+        return self.invoice.currency_digits
 
     @classmethod
     def __setup__(cls):
-        super(CommissionPerAgent, cls).__setup__()
-        cls._order = [('total', 'DESC')]
+        super(AggregatedCommission, cls).__setup__()
+        cls._order = [('total_commission', 'DESC')]
+
+    def get_broker(self, name):
+        return (self.agent.party.network[0].id
+            if self.agent and self.agent.party.network else None)
+
+    @classmethod
+    def search_broker(cls, name, clause):
+        return [('agent.party.network',) + tuple(clause[1:])],
+
+    def get_subscriber(self, name):
+        if self.contract:
+            return self.contract.subscriber.id
+
+    @classmethod
+    def search_commissioned_subscriber(cls, name, clause):
+        return [('contract.subscriber',) + tuple(clause[1:])]
+
+    def get_invoice_state(self, name=None):
+        return self.invoice.state if self.invoice else None
 
     @staticmethod
     def table_query():
@@ -278,10 +333,12 @@ class CommissionPerAgent(model.CoopSQL, model.CoopView):
         commission_agent = commission.join(agent,
             condition=commission.agent == agent.id)
 
-        return commission_agent.join(invoice_line, condition=(
+        per_agent = commission_agent.join(invoice_line, condition=(
                 commission.origin == Concat('account.invoice.line,',
-                    Cast(invoice_line.id, 'VARCHAR')))
-            ).select(
+                Cast(invoice_line.id, 'VARCHAR')))
+                )
+
+        return per_agent.select(
             Max(commission.id).as_('id'),
             agent.party.as_('party'),
             invoice_line.invoice.as_('invoice'),
@@ -290,7 +347,10 @@ class CommissionPerAgent(model.CoopSQL, model.CoopView):
             Literal(0).as_('write_uid'),
             Literal(0).as_('write_date'),
             commission.agent.as_('agent'),
-            Sum(commission.amount).as_('total'),
+            Max(commission.start).as_('start'),
+            Max(commission.end).as_('end'),
+            Max(commission.date).as_('date'),
+            Sum(commission.amount).as_('total_commission'),
             group_by=[commission.agent, invoice_line.invoice, agent.party])
 
 
@@ -1057,17 +1117,17 @@ class FilterCommissions(Wizard):
         return action, {}
 
 
-class FilterCommissionsPerAgent(Wizard):
-    'Filter Commissions Per Agent'
+class FilterAggregatedCommissions(Wizard):
+    'Filter Commissions aggregated'
 
-    __name__ = 'commission.per_agent.open_detail'
+    __name__ = 'commission.aggregated.open_detail'
 
     start_state = 'filter_commission'
     filter_commission = StateAction('commission.act_commission_form')
 
     def do_filter_commission(self, action):
         # The following active_id represents the max commission id and the
-        # intermediate sql-view object id (See CommissionPerAgent.table_query).
+        # intermediate sql-view object id (See AggregatedCommission.table_query).
         commission = Pool().get('commission')(
             Transaction().context.get('active_id'))
         invoice = commission.origin.invoice
