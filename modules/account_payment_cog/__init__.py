@@ -15,6 +15,7 @@ def register():
         RejectReason,
         JournalFailureAction,
         Payment,
+        MergedPayments,
         PaymentMotive,
         SynthesisMenuPayment,
         SynthesisMenu,
@@ -37,6 +38,7 @@ def register():
         SynthesisMenuOpen,
         PaymentInformationModification,
         PaymentCreation,
+        FilterPaymentsPerMergedId,
         ManualPaymentFail,
         ProcessManualFailPament,
         module='account_payment_cog', type_='wizard')

@@ -1,14 +1,16 @@
 # -*- coding:utf-8 -*-
 from collections import defaultdict
 from itertools import groupby
-from sql.aggregate import Sum
+from sql.aggregate import Sum, Max
+from sql import Literal, Null
 
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.model import ModelView, Unique
-from trytond.wizard import StateView, Button, StateTransition
+from trytond.wizard import StateView, Button, StateTransition, Wizard
+from trytond.wizard import StateAction
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Not, In, Bool, If
+from trytond.pyson import Eval, Not, In, Bool, If, PYSONEncoder
 
 from trytond.modules.cog_utils import export, fields, model
 from trytond.modules.cog_utils import coop_date, utils, coop_string
@@ -19,6 +21,8 @@ __metaclass__ = PoolMeta
 
 __all__ = [
     'Payment',
+    'MergedPayments',
+    'FilterPaymentsPerMergedId',
     'Configuration',
     'Journal',
     'JournalFailureAction',
@@ -201,6 +205,81 @@ class RejectReason(model.CoopSQL, model.CoopView):
             ('code',) + tuple(clause[1:]),
             ('description',) + tuple(clause[1:])
             ]
+
+
+class FilterPaymentsPerMergedId(Wizard):
+    'Filter Payments per cheque'
+
+    __name__ = 'account.payment.merged.open_detail'
+
+    start_state = 'filter_payments'
+    filter_payments = StateAction('account_payment.act_payment_form')
+
+    def do_filter_payments(self, action):
+        # The following active_id represents the max commission id and the
+        # intermediate sql-view object id (See CommissionPerAgent.table_query).
+        payment = Pool().get('account.payment')(
+            Transaction().context.get('active_id'))
+        merged_id = payment.merged_id
+
+        domain = [('merged_id', '=', merged_id)]
+        action.update({'pyson_domain': PYSONEncoder().encode(domain)})
+        action.update({'sequence': 40})
+        return action, {}
+
+
+class MergedPayments(model.CoopSQL, model.CoopView, ModelCurrency,
+                     Printable):
+    'Merged payments'
+
+    __name__ = 'account.payment.merged'
+
+    merged_id = fields.Char('Merged id', readonly=True)
+    amount = fields.Numeric('Amount', readonly=True)
+    journal = fields.Many2One('account.payment.journal', 'Journal',
+        readonly=True)
+    party = fields.Many2One('party.party', 'Party', readonly=True)
+    state = fields.Selection([
+            ('draft', 'Draft'),
+            ('approved', 'Approved'),
+            ('processing', 'Processing'),
+            ('succeeded', 'Succeeded'),
+            ('failed', 'Failed'),
+            ], 'State', readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(MergedPayments, cls).__setup__()
+        cls._order = [('merged_id', 'DESC')]
+
+    def get_currency(self, name=None):
+        return self.journal.currency if self.journal else None
+
+    def get_contact(self):
+        return self.party
+
+    def get_sender(self):
+        return self.journal.company.party
+
+    @staticmethod
+    def table_query():
+        pool = Pool()
+        payment = pool.get('account.payment').__table__()
+
+        return payment.select(
+            Max(payment.id).as_('id'),
+            payment.merged_id.as_('merged_id'),
+            payment.journal.as_('journal'),
+            payment.party.as_('party'),
+            payment.state.as_('state'),
+            Literal(0).as_('create_uid'),
+            Literal(0).as_('create_date'),
+            Literal(0).as_('write_uid'),
+            Literal(0).as_('write_date'),
+            Sum(payment.amount).as_('amount'),
+            where=(payment.merged_id != Null),
+            group_by=[payment.merged_id, payment.journal,
+                      payment.party, payment.state])
 
 
 class Payment(export.ExportImportMixin, Printable):

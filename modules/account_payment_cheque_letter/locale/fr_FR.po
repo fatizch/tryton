@@ -1,0 +1,70 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:account.payment.group:"
+msgid "Missing begin cheque number"
+msgstr "Le numéro de chèque de départ est manquant"
+
+msgctxt "error:account.payment.group:"
+msgid "Missing max available cheque number"
+msgstr "Nombre maximum de chèque manquant"
+
+msgctxt "error:account.payment.group:"
+msgid "No cheque has been processed"
+msgstr "Aucune lèttre chèque n'a été traitée"
+
+msgctxt "error:account.payment.group:"
+msgid ""
+"The amount of processed payments exceed the given number of available "
+"cheques: %s/%s (%s ignored)"
+msgstr ""
+"Le nombre de paiement traité (lettre chèque) excède le nombre maximum de "
+"chèque à disposition: %s/%s (%s ignoré)"
+
+msgctxt "error:account.payment:"
+msgid "You can not print cheque letters with other payments types"
+msgstr ""
+"Vous ne pouvez pas lancer l'impression de lèttres chèques avec d'autres "
+"types de paiment"
+
+msgctxt "error:account.payment:"
+msgid "You must select sequencial cheque letters numbers: jump from %s to %s"
+msgstr ""
+"Vous devez sélectionner des lèttres cheques qui se suivent: saut de %s à %s"
+
+msgctxt "field:account.payment,is_cheque_letter:"
+msgid "Is Cheque Letter"
+msgstr "Est une lettre chèque"
+
+msgctxt "field:account.payment.journal,validate_process:"
+msgid "Validate on processing"
+msgstr "Valider lors du traitement"
+
+msgctxt "field:account.payment.process.start,first_cheque_number:"
+msgid "Cheque number to start with"
+msgstr "Numéro de chèque de début"
+
+msgctxt "field:account.payment.process.start,is_cheque_letter:"
+msgid "Cheque letter payment"
+msgstr "Paiement lettre chèque"
+
+msgctxt "field:account.payment.process.start,number_of_cheques:"
+msgid "Number of available cheque"
+msgstr "Nombre de chèques à disposition"
+
+msgctxt "help:account.payment.journal,validate_process:"
+msgid "Automatically validate payment on processing"
+msgstr "Valider automatiquement lors du traitement"
+
+msgctxt "selection:account.payment.journal,process_method:"
+msgid "Cheque Letter"
+msgstr "Lettre chèque"
+
+msgctxt "view:account.payment.process.start:"
+msgid "A cheque letter payment has been found"
+msgstr "Un paiement par lettre chèque a été trouvé "
+
+msgctxt "wizard_button:account.payment.process,start,pre_process:"
+msgid "Process"
+msgstr "Traiter"

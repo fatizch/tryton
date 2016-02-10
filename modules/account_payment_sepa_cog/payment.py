@@ -536,9 +536,9 @@ class PaymentCreationStart:
             ],
         states={
             'invisible': (~Bool(Eval('process_method')) |
-                (Eval('process_method') == 'manual')),
-            'required': (Eval('process_method') != 'manual') & Bool(
-                Eval('party')),
+                (Eval('process_method') != 'sepa')),
+            'required': (Eval('process_method') == 'sepa') & Bool(
+                Eval('Party')),
             },
         depends=['party', 'process_method', 'payment_date'])
 

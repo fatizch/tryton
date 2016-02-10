@@ -43,8 +43,6 @@ class Payment:
         return move
 
     @classmethod
-    @ModelView.button
-    @Workflow.transition('succeeded')
     def succeed(cls, payments):
         pool = Pool()
         Move = pool.get('account.move')

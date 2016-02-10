@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tree string="Cheque letters" keyword_open="1">
+    <field name="journal"/>
+    <field name="merged_id"/>
+    <field name="party"/>
+    <field name="state"/>
+    <field name="amount" sum="Total">
+        <suffix name="currency_symbol"/>
+    </field>
+</tree>

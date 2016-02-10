@@ -43,12 +43,8 @@ msgstr "Paiements bloqués pour le tiers %s"
 msgctxt "error:account.payment:"
 msgid "Payments with same merged_id must be failed at the same time."
 msgstr ""
-"Les paiements avec le même identifiant regroupement doivent être "
-"rejetés en même temps."
-
-msgctxt "field:account.payment,merged_id:"
-msgid "Merged ID"
-msgstr "ID regroupement"
+"Les paiements avec le même identifiant regroupement doivent être rejetés en "
+"même temps."
 
 msgctxt "field:account.configuration,direct_debit_journal:"
 msgid "Direct Debit Journal"
@@ -85,6 +81,10 @@ msgstr "Icône"
 msgctxt "field:account.payment,manual_fail_status:"
 msgid "Manual Fail Status"
 msgstr "Statut du rejet manuel"
+
+msgctxt "field:account.payment,merged_id:"
+msgid "Merged ID"
+msgstr "ID regroupement"
 
 msgctxt "field:account.payment,reject_description:"
 msgid "Reject Description"
@@ -124,7 +124,7 @@ msgstr "Montant"
 
 msgctxt "field:account.payment.group,currency:"
 msgid "Currency"
-msgstr "Devises"
+msgstr "Devise"
 
 msgctxt "field:account.payment.group,currency_digits:"
 msgid "Currency Digits"
@@ -267,6 +267,70 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:account.payment.journal.reject_reason,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.payment.merged,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:account.payment.merged,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.payment.merged,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.payment.merged,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.payment.merged,currency:"
+msgid "Currency"
+msgstr "Devise"
+
+msgctxt "field:account.payment.merged,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:account.payment.merged,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:account.payment.merged,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.payment.merged,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:account.payment.merged,merged_id:"
+msgid "Merged id"
+msgstr "Identifiant de regroupement"
+
+msgctxt "field:account.payment.merged,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:account.payment.merged,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.payment.merged,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:account.payment.merged,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.payment.merged,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:account.payment.merged,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -461,6 +525,10 @@ msgctxt "model:account.payment.journal.reject_reason,name:"
 msgid "Payment Journal Reject Reason"
 msgstr "Motif de Rejet"
 
+msgctxt "model:account.payment.merged,name:"
+msgid "Merged payments"
+msgstr "Paiements regroupés"
+
 msgctxt "model:account.payment.motive,name:"
 msgid "Payment Motive"
 msgstr "Motif de paiement"
@@ -493,9 +561,17 @@ msgctxt "model:ir.action,name:"
 msgid "Receivable Payments"
 msgstr "Paiements à recevoir"
 
+msgctxt "model:ir.action,name:act_merged_form_relate_details"
+msgid "Related payments"
+msgstr "Paiements associés"
+
 msgctxt "model:ir.action,name:act_payment_fail_status_form"
 msgid "Payments Rejected"
 msgstr "Paiements rejetés"
+
+msgctxt "model:ir.action,name:act_payment_group_merged_form"
+msgid "Merged payments"
+msgstr "Paiements regroupés"
 
 msgctxt "model:ir.action,name:act_payment_motive_form"
 msgid "Payment Motive"
@@ -536,6 +612,10 @@ msgstr "Créer les paiements"
 msgctxt "model:ir.ui.menu,name:menu_fail_payment_status_form"
 msgid "Payments Rejected"
 msgstr "Paiements rejetés"
+
+msgctxt "model:ir.ui.menu,name:menu_merged_payment_form"
+msgid "Merged payments"
+msgstr "Paiements regroupés"
 
 msgctxt "model:ir.ui.menu,name:menu_payment_motive_form"
 msgid "Payment Motive"
@@ -584,6 +664,26 @@ msgstr "Manuelle"
 msgctxt "selection:account.payment.journal.failure_action,action:"
 msgid "Retry"
 msgstr "Réessayer"
+
+msgctxt "selection:account.payment.merged,state:"
+msgid "Approved"
+msgstr "Approuvé"
+
+msgctxt "selection:account.payment.merged,state:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:account.payment.merged,state:"
+msgid "Failed"
+msgstr "Rejeté"
+
+msgctxt "selection:account.payment.merged,state:"
+msgid "Processing"
+msgstr "Traitement"
+
+msgctxt "selection:account.payment.merged,state:"
+msgid "Succeeded"
+msgstr "Réussi"
 
 msgctxt "selection:account.payment.payment_creation.start,kind:"
 msgid "Payable"
