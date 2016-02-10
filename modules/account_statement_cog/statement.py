@@ -179,8 +179,7 @@ class LineGroup:
         pass
 
     def get_is_cancelled(self, name=None):
-        ret = bool(self.move.cancel_move)
-        return ret
+        return bool(self.move.cancel_move)
 
     def get_cancel_motive(self, name=None):
         if self.move and self.move.cancel_move:
