@@ -2,7 +2,7 @@
 <data>
     <xpath expr="/form" position="inside">
         <group id="cancel_button" col="4" colspan="4">
-            <button name="start_cancel" string="Cancel" invisible="1"/>
+            <button name="start_cancel" string="Cancel"/>
 	</group>
     </xpath>
 </data>
