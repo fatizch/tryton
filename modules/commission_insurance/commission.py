@@ -279,7 +279,7 @@ class AggregatedCommission(model.CoopSQL, model.CoopView):
         fields.Integer('Currency Digits', states={'invisible': True}),
         'get_currency_digits')
     total_commission = fields.Numeric('Total', readonly=True,
-        digits=(16, Eval('currency_digits', 2)), depends=['currency_digit'])
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     invoice_state = fields.Function(
         fields.Selection([
                 ('draft', 'Draft'),
