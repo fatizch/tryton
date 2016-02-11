@@ -5,6 +5,7 @@ from .invoice import *
 from .report_engine import *
 from .move import *
 from .configuration import *
+from .payment_term import *
 
 
 def register():
@@ -18,4 +19,5 @@ def register():
         Move,
         MoveLine,
         Configuration,
+        PaymentTerm,
         module='account_invoice_cog', type_='model')

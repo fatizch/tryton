@@ -63,6 +63,7 @@ class PartyBalanceLine(model.CoopView):
         super(PartyBalanceLine, cls).__setup__()
         cls._error_messages.update({
                 'overpayment_substraction': 'Overpayment Substraction',
+                'scheduled_term_of': 'Scheduled Term Of',
                 })
 
     @classmethod
@@ -106,48 +107,25 @@ class PartyBalanceLine(model.CoopView):
 
     def get_scheduled_term_parent_description(self, components):
         Date = Pool().get('ir.date')
-
-        components_synthesis = []
-
-        def keyfunc(x):
-            invoice = x.get('invoice', None)
-            if invoice:
-                return (invoice.start or datetime.date.min, invoice.contract)
-            return None
-
-        sorted_components = sorted(components, key=keyfunc, reverse=True)
-
-        for _, grouped_components in groupby(sorted_components, key=keyfunc):
-            component = list(grouped_components)[0]
-            synthesis = ''
-            invoice = component.get('invoice', None)
-            line = component.get('line', None)
-            if not invoice:
-                # This is an overpayment substraction
-                # No need to mention it in description
-                continue
-            synthesis += invoice.contract.rec_name
-            date = invoice.start or (line.maturity_date if line else None)
-            if date:
-                synthesis += ' - ' + Date.date_as_string(date)
-            if synthesis:
-                components_synthesis.append(synthesis)
-        return ', '.join(components_synthesis)
+        return '%s %s' % (
+            self.raise_user_error('scheduled_term_of', raise_exception=False),
+            Date.date_as_string(self.date)
+            )
 
     def get_scheduled_child_description(self, component):
+        term = None
         if component['kind'] == 'line_to_pay':
-            move_line = component['line']
-            description = ' | '.join([
-                    move_line.synthesis_rec_name,
-                    component['term'].rec_name])
+            description = component['line'].synthesis_rec_name
+            term = component['term']
         elif component['kind'] == 'overpayment_substraction':
             description = self.raise_user_error(
                 'overpayment_substraction', raise_exception=False)
         else:
-            description = ' | '.join([
-                    component['invoice'].invoice.get_synthesis_rec_name(
-                        None),
-                    component['term'].rec_name])
+            description = component['invoice'].invoice.get_synthesis_rec_name(
+                None)
+            term = component['term']
+        if term and not term.is_one_shot:
+            description += ' | %s' % term.rec_name
         return description
 
 
@@ -184,9 +162,6 @@ class PartyBalance(ModelCurrency, model.CoopView):
         super(PartyBalance, cls).__setup__()
         cls._buttons.update({
                 'refresh': {},
-                })
-        cls._error_messages.update({
-                'scheduled_term': 'Scheduled Term',
                 })
 
     @classmethod
