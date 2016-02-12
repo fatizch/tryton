@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<tree string="Contacts" editable="bottom">
+    <field name="automatic"/>
+    <field name="kind"/>
+    <field name="party"/>
+    <field name="old_address"/>
+    <field name="end_date"/>
+    <field name="action"/>
+    <field name="new_address" expand="1"/>
+    <field name="contract" tree_invisible="1"/>
+    <field name="contact_id" tree_invisible="1"/>
+    <field name="effective_date" tree_invisible="1"/>
+</tree>

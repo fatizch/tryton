@@ -135,5 +135,21 @@
             <field name="name">Decline Endorsement</field>
             <field name="wiz_name">endorsement.decline</field>
         </record>
+        <!-- ################### -->
+        <!-- # Manage Contacts # -->
+        <!-- ################### -->
+        <record model="ir.ui.view" id="manage_contacts_view_form">
+            <field name="model">endorsement.manage_contacts</field>
+            <field name="type">form</field>
+            <field name="name">manage_contacts_form</field>
+        </record>
+        <!-- ############################# -->
+        <!-- # Manage Contacts Displayer # -->
+        <!-- ############################# -->
+        <record model="ir.ui.view" id="manage_contacts_displayer_view_list">
+            <field name="model">endorsement.manage_contacts.contact</field>
+            <field name="type">tree</field>
+            <field name="name">manage_contacts_displayer_list</field>
+        </record>
     </data>
 </tryton>

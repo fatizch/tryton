@@ -277,5 +277,14 @@
             <field name="kind">contract</field>
             <field name="view">manage_options</field>
         </record>
+        <!-- ################### -->
+        <!-- # Manage Contacts # -->
+        <!-- ################### -->
+        <record model="endorsement.part" id="manage_contacts_endorsement_part">
+            <field name="code">manage_contacts</field>
+            <field name="name">Manage Contacts</field>
+            <field name="kind">contract</field>
+            <field name="view">manage_contacts</field>
+        </record>
     </data>
 </tryton>

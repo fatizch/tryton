@@ -35,6 +35,8 @@ __all__ = [
     'TerminateContract',
     'VoidContract',
     'ChangeContractSubscriber',
+    'ManageContacts',
+    'ContactDisplayer',
     'EndorsementWizardStepMixin',
     'EndorsementWizardStepBasicObjectMixin',
     'EndorsementWizardStepVersionedObjectMixin',
@@ -1403,6 +1405,251 @@ class ChangeContractSubscriber(EndorsementWizardStepMixin):
         return 'endorsement.endorsement_change_contract_subscriber_view_form'
 
 
+class ManageContacts(EndorsementWizardStepMixin, model.CoopView):
+    'Manage Contacts'
+
+    __name__ = 'endorsement.manage_contacts'
+
+    contract = fields.Many2One('endorsement.contract', 'Contract',
+        domain=[('id', 'in', Eval('possible_contracts', []))],
+        states={'invisible': Len(Eval('possible_contracts', [])) == 1},
+        depends=['possible_contracts'])
+    possible_contracts = fields.Many2Many('endorsement.contract', None, None,
+        'Possible Contracts')
+    all_contacts = fields.One2Many('endorsement.manage_contacts.contact',
+        None, 'All contacts')
+    current_contacts = fields.One2Many(
+        'endorsement.manage_contacts.contact', None, 'Current Contacts')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(ManageContacts, cls).view_attributes() + [(
+                '/form/group[@id="invisible"]',
+                'states',
+                {'invisible': True})]
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement.manage_contacts_view_form'
+
+    @fields.depends('all_contacts', 'contract', 'current_contacts',
+        'possible_contacts')
+    def on_change_contract(self):
+        self.update_all_contacts()
+        self.update_current_contacts()
+
+    def update_all_contacts(self):
+        if not self.current_contacts:
+            return
+        new_contacts = list(self.current_contacts)
+        for contact in self.all_contacts:
+            if contact.contract == new_contacts[0].contract:
+                continue
+            new_contacts.append(contact)
+        self.all_contacts = new_contacts
+
+    def update_current_contacts(self):
+        new_contacts = []
+        for contact in self.all_contacts:
+            if contact.contract == self.contract:
+                new_contacts.append(contact)
+        self.current_contacts = new_contacts
+
+    def step_default(self, field_names):
+        defaults = super(ManageContacts, self).step_default()
+        possible_contracts = self.wizard.endorsement.contract_endorsements
+        defaults['possible_contracts'] = [x.id for x in possible_contracts]
+        per_contract = {x: self.get_updated_contacts_from_contract(x)
+            for x in possible_contracts}
+
+        all_contacts = []
+        for contract, contacts in per_contract.iteritems():
+            all_contacts += self.generate_displayers(contract, contacts)
+        defaults['all_contacts'] = [x._changed_values for x in all_contacts]
+        if defaults['possible_contracts']:
+            defaults['contract'] = defaults['possible_contracts'][0]
+        return defaults
+
+    def step_update(self):
+        self.update_all_contacts()
+        endorsement = self.wizard.endorsement
+        per_contract = defaultdict(list)
+        for contact in self.all_contacts:
+            per_contract[contact.contract].append(contact)
+
+        for contract, contacts in per_contract.iteritems():
+            self.update_endorsed_contacts(contract, contacts)
+
+        new_endorsements = []
+        for contract_endorsement in per_contract.keys():
+            self._update_endorsement(contract_endorsement,
+                contract_endorsement.contract._save_values)
+            if not contract_endorsement.clean_up():
+                new_endorsements.append(contract_endorsement)
+        endorsement.contract_endorsements = new_endorsements
+        endorsement.save()
+
+    def update_endorsed_contacts(self, contract_endorsement, contacts):
+        per_id = {x.id: x for x in contract_endorsement.contract.contacts}
+        for contact in contacts:
+            if contact.action == 'nothing':
+                self._update_nothing(contract_endorsement.contract, contact,
+                    per_id)
+                continue
+            if contact.action == 'ended':
+                self._update_ended(contract_endorsement.contract, contact,
+                    per_id)
+                continue
+            if contact.action == 'added':
+                self._update_added(contract_endorsement.contract, contact,
+                    per_id)
+                continue
+            if contact.action == 'new_address':
+                self._update_modified(contract_endorsement.contract, contact,
+                    per_id)
+                continue
+
+    def _update_nothing(self, contract, contact, per_id):
+        # Cancel modifications
+        if contact.automatic:
+            return
+        assert contact.contact_id
+        Contact = Pool().get('contract.contact')
+        prev_contact = Contact(contact.contact_id)
+        contact = per_id[contact.contact_id]
+        contact.address = prev_contact.address
+        contact.end_date = prev_contact.end_date
+
+    def _update_ended(self, contract, contact, per_id):
+        if not contact.contact_id:
+            return
+        old_contact = per_id[contact.contact_id]
+        old_contact.end_date = contact.end_date
+
+    def _update_added(self, contract, contact, per_id):
+        contract.contacts += (contact.to_contact(),)
+
+    def _update_modified(self, contract, contact, per_id):
+        if contact.contact_id:
+            self._update_ended(contract, contact, per_id)
+        contract.contacts += (contact.to_contact(),)
+
+    def get_updated_contacts_from_contract(self, contract_endorsement):
+        contract = contract_endorsement.contract
+        contacts = {(x.type, x.party): [x, None]
+            for x in self.get_contract_contacts(contract)}
+        utils.apply_dict(contract, contract_endorsement.apply_values())
+
+        for new_contact in self.get_contract_contacts(contract):
+            key = (new_contact.type, new_contact.party)
+            if key in contacts:
+                contacts[key][1] = new_contact
+            else:
+                contacts[key] = [None, new_contact]
+        return contacts
+
+    def get_contract_contacts(self, contract):
+        return [contact
+            for type_ in Pool().get('contract.contact.type').search([])
+            for contact in contract.get_contacts_of_type_at_date(type_.code,
+                date=self.effective_date)]
+
+    def generate_displayers(self, contract_endorsement, contacts):
+        all_contacts = []
+        for (kind, party), (old, new) in contacts.items():
+            contact_displayer = self.new_contact_displayer(kind, party, old,
+                new)
+            contact_displayer.contract = contract_endorsement
+            contact_displayer.contract_rec_name = \
+                contract_endorsement.contract.rec_name
+            contact_displayer.effective_date = self.effective_date
+            all_contacts.append(contact_displayer)
+        return all_contacts
+
+    def new_contact_displayer(self, kind, party, old, new):
+        Contact = Pool().get('endorsement.manage_contacts.contact')
+        new_contact = Contact()
+        new_contact.kind = kind
+        new_contact.party = party
+        new_contact.end_date = None
+        new_contact.old_address = old.address
+        new_contact.contact_id = getattr(old, 'id', None)
+        new_contact.automatic = new_contact.contact_id is None
+        if getattr(new, 'id', None) is None and not new_contact.automatic:
+            new_contact.end_date = coop_date.add_day(self.effective_date, -1)
+            new_contact.action = 'ended'
+            return new_contact
+        if new.address and new.address != old.address:
+            new_contact.new_address = new.address
+            new_contact.action = 'new_address'
+            new_contact.end_date = coop_date.add_day(self.effective_date, -1)
+            return new_contact
+        new_contact.action = 'nothing'
+        return new_contact
+
+
+class ContactDisplayer(model.CoopView):
+    'Contact Displayer'
+
+    __name__ = 'endorsement.manage_contacts.contact'
+
+    action = fields.Selection([('nothing', ''), ('ended', 'Ended'),
+        ('added', 'Added'), ('new_address', 'New Address')], 'Action',
+        domain=[If(Eval('action') in ('ended', 'new_address'),
+                ('action', 'in', ('ended', 'new_address', 'nothing')),
+                If(Eval('action') == 'added',
+                    ('action', 'in', ('added', 'removed')),
+                    ('action', 'in', ('ended', 'new_address', 'nothing'))))],
+        depends=['action'])
+    contract = fields.Many2One('endorsement.contract', 'Contract',
+        readonly=True)
+    contract_rec_name = fields.Char('Contract', readonly=True)
+    party = fields.Many2One('party.party', 'Party', readonly=True)
+    kind = fields.Many2One('contract.contact.type', 'Kind', readonly=True)
+    old_address = fields.Many2One('party.address', 'Old Address',
+        readonly=True)
+    new_address = fields.Many2One('party.address', 'New Address',
+        domain=[('party', '=', Eval('party')),
+            ['OR', ('end_date', '=', None), ('end_date', '>=',
+                    Eval('effective_date'))],
+            ['OR', ('start_date', '=', None), ('start_date', '<=',
+                    Eval('effective_date'))],
+            ],
+        states={'readonly': Eval('action', '') == 'ended'},
+        depends=['action', 'effective_date', 'party'])
+    contact_id = fields.Integer('Contact Id', readonly=True)
+    end_date = fields.Date('End Date', readonly=True)
+    automatic = fields.Boolean('Calculated Automatically', readonly=True)
+    effective_date = fields.Date('Effective Date', readonly=True)
+
+    @fields.depends('action', 'contact_id', 'effective_date', 'end_date',
+        'new_address')
+    def on_change_action(self):
+        if self.action == 'nothing':
+            self.new_address = None
+            if self.contact_id:
+                self.end_date = Pool().get('contract.contact')(
+                    self.contact_id).end_date
+            else:
+                self.end_date = None
+        elif self.action == 'ended' and self.contact_id:
+            self.end_date = coop_date.add_day(self.effective_date, -1)
+            self.new_address = None
+
+    @fields.depends('action', 'contact_id', 'new_address', 'old_address')
+    def on_change_new_address(self):
+        if (self.old_address and self.new_address and
+                self.old_address == self.new_address):
+            self.action = 'nothing'
+        elif self.action == 'nothing':
+            self.action = 'new_address'
+
+    def to_contact(self):
+        return Pool().get('contract.contact')(
+            type=self.kind, party=self.party, date=self.effective_date,
+            address=self.new_address, end_date=None)
+
+
 class SelectEndorsement(model.CoopView):
     'Select Endorsement'
 
@@ -1902,6 +2149,8 @@ add_endorsement_step(StartEndorsement, ManageOptions, 'manage_options')
 
 add_endorsement_step(StartEndorsement, ChangeContractSubscriber,
     'change_contract_subscriber')
+
+add_endorsement_step(StartEndorsement, ManageContacts, 'manage_contacts')
 
 
 class OpenContractAtApplicationDate(Wizard):

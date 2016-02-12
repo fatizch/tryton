@@ -36,6 +36,7 @@ __all__ = [
     'ContractOption',
     'ContractOptionVersion',
     'ContractExtraData',
+    'ContractContact',
     'ContractActivationHistory',
     'Endorsement',
     'EndorsementContract',
@@ -1026,6 +1027,12 @@ class ContractExtraData(object):
     __name__ = 'contract.extra_data'
 
 
+class ContractContact(object):
+    __metaclass__ = PoolMeta
+    _history = True
+    __name__ = 'contract.contact'
+
+
 class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     'Endorsement'
 
@@ -1767,7 +1774,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
     @classmethod
     def _get_restore_history_order(cls):
         return ['contract', 'contract.activation_history', 'contract.option',
-            'contract.extra_data', 'contract.option.version']
+            'contract.extra_data', 'contract.option.version',
+            'contract.contact']
 
     def do_restore_history(self):
         pool = Pool()
@@ -1789,10 +1797,10 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
     def _prepare_restore_history(cls, instances, at_date):
         for contract in instances['contract']:
             instances['contract.option'] += contract.options
+            instances['contract.extra_data'] += contract.extra_datas
+            instances['contract.contact'] += contract.contacts
             instances['contract.activation_history'] += \
                 contract.activation_history
-            instances['contract.extra_data'] += \
-                contract.extra_datas
         for option in contract.options:
             instances['contract.option.version'] += option.versions
 

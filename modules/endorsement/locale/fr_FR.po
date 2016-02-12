@@ -207,6 +207,14 @@ msgstr ""
 "Il ne peut y avoir qu'un seul avenant en cours de saisie sur un contrat "
 "donné."
 
+msgctxt "error:endorsement.manage_contacts:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
+
 msgctxt "error:endorsement.start.dummy_step:"
 msgid ""
 "The endorsement's effective date must be posterior to the contracts' start "
@@ -1593,6 +1601,86 @@ msgctxt "field:endorsement.definition-report.template,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:endorsement.manage_contacts,all_contacts:"
+msgid "All contacts"
+msgstr "Tous les contacts"
+
+msgctxt "field:endorsement.manage_contacts,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:endorsement.manage_contacts,current_contacts:"
+msgid "Current Contacts"
+msgstr "Contacts"
+
+msgctxt "field:endorsement.manage_contacts,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.manage_contacts,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.manage_contacts,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.manage_contacts,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.manage_contacts,possible_contracts:"
+msgid "Possible Contracts"
+msgstr "Contrats disponibles"
+
+msgctxt "field:endorsement.manage_contacts.contact,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.manage_contacts.contact,automatic:"
+msgid "Calculated Automatically"
+msgstr "Calculé automatiquement"
+
+msgctxt "field:endorsement.manage_contacts.contact,contact_id:"
+msgid "Contact Id"
+msgstr "Id du contact"
+
+msgctxt "field:endorsement.manage_contacts.contact,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:endorsement.manage_contacts.contact,contract_rec_name:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:endorsement.manage_contacts.contact,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.manage_contacts.contact,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:endorsement.manage_contacts.contact,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.manage_contacts.contact,kind:"
+msgid "Kind"
+msgstr "Type de contact"
+
+msgctxt "field:endorsement.manage_contacts.contact,new_address:"
+msgid "New Address"
+msgstr "Nouvelle adresse"
+
+msgctxt "field:endorsement.manage_contacts.contact,old_address:"
+msgid "Old Address"
+msgstr "Adresse précédente"
+
+msgctxt "field:endorsement.manage_contacts.contact,party:"
+msgid "Party"
+msgstr "Tiers"
+
 msgctxt "field:endorsement.part,activation_history_fields:"
 msgid "ActivationHistory fields"
 msgstr "Modification des périodes d'activation"
@@ -1905,7 +1993,15 @@ msgstr "Relation entre définition d'avenant et produit"
 
 msgctxt "model:endorsement.definition-report.template,name:"
 msgid "Endorsement Definition Report Template Relation"
-msgstr ""
+msgstr "Relation avenant - Modèle de courrier"
+
+msgctxt "model:endorsement.manage_contacts,name:"
+msgid "Manage Contacts"
+msgstr "Gérer les contacts"
+
+msgctxt "model:endorsement.manage_contacts.contact,name:"
+msgid "Contact Displayer"
+msgstr "Contact"
 
 msgctxt "model:endorsement.part,name:"
 msgid "Endorsement Part"
@@ -1918,6 +2014,10 @@ msgstr "Modifier la date d'effet du contrat"
 msgctxt "model:endorsement.part,name:change_contract_subscriber_revision_part"
 msgid "Change Contract Subscriber"
 msgstr "Changement de souscripteur"
+
+msgctxt "model:endorsement.part,name:manage_contacts_endorsement_part"
+msgid "Manage Contacts"
+msgstr "Gérer les contacts"
 
 msgctxt "model:endorsement.part,name:manage_options_revision_part"
 msgid "Manage Options"
@@ -2071,7 +2171,7 @@ msgstr "Super gestionnaire avenant"
 
 msgctxt "selection:contract.manage_options.option_displayer,action:"
 msgid ""
-msgstr " "
+msgstr ""
 
 msgctxt "selection:contract.manage_options.option_displayer,action:"
 msgid "Added"
@@ -2176,6 +2276,18 @@ msgstr "Supprimer"
 msgctxt "selection:endorsement.contract.option.version,action:"
 msgid "Update"
 msgstr "Mise à jour"
+
+msgctxt "selection:endorsement.manage_contacts.contact,action:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:endorsement.manage_contacts.contact,action:"
+msgid "Added"
+msgstr "Ajouté"
+
+msgctxt "selection:endorsement.manage_contacts.contact,action:"
+msgid "Ended"
+msgstr "Terminé"
 
 msgctxt "selection:endorsement.part,kind:"
 msgid "Activation Dates"
@@ -2320,6 +2432,14 @@ msgstr "Définition d'avenant"
 msgctxt "view:endorsement.definition:"
 msgid "Endorsement Definitions"
 msgstr "Définitions d'avenant"
+
+msgctxt "view:endorsement.manage_contacts.contact:"
+msgid "Contacts"
+msgstr "Contacts"
+
+msgctxt "view:endorsement.manage_contacts:"
+msgid "Manage Contacts"
+msgstr "Gérer les contacts"
 
 msgctxt "view:endorsement.part:"
 msgid "Definition"
@@ -2471,6 +2591,25 @@ msgstr "Suspendre"
 msgctxt "wizard_button:endorsement.start,change_start_date,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,manage_contacts,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_contacts,manage_contacts_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_contacts,manage_contacts_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_contacts,manage_contacts_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
 
 msgctxt "wizard_button:endorsement.start,manage_options,end:"
 msgid "Cancel"

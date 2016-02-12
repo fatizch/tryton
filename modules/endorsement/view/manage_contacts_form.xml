@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form string="Manage Contacts">
+    <label name="contract"/>
+    <field name="contract" widget="selection" colspan="3"/>
+    <field name="current_contacts" colspan="4"/>
+    <group id="invisible" string="">
+        <field name="possible_contracts"/>
+        <field name="all_contacts"/>
+        <field name="effective_date"/>
+    </group>
+</form>

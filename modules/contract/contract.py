@@ -831,9 +831,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         ContactType = pool.get('contract.contact.type')
         if not self.subscriber:
             return []
-        subscriber_type, = ContactType.search([('code', '=', 'subscriber')])
+        type_, = ContactType.search([('code', '=', type_)])
         return [Contact(
-                type=subscriber_type,
+                type=type_,
                 party=self.subscriber,
                 address=utils.get_good_version_at_date(self.subscriber,
                     'addresses', at_date))]
