@@ -79,5 +79,14 @@
             <field name="type">tree</field>
             <field name="name">endorsement_loan_increment_list</field>
         </record>
+        <!-- ######## -->
+        <!-- # Loan # -->
+        <!-- ######## -->
+        <record model="ir.ui.view" id="ordered_loan_view_list">
+            <field name="model">loan</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="loan.ordered_loan_view_list"/>
+            <field name="name">ordered_loan_list</field>
+        </record>
     </data>
 </tryton>

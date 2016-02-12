@@ -1067,6 +1067,14 @@ msgctxt "field:endorsement.start.preview_loan,old_payments:"
 msgid "Current Payments"
 msgstr "Echéancier actuel"
 
+msgctxt "field:loan,applied_endorsements:"
+msgid "Applied Endorsements"
+msgstr "Avenants appliqués"
+
+msgctxt "field:loan,last_endorsement_balance:"
+msgid "Last Endorsement Balance"
+msgstr "CRD au dernier avenant"
+
 msgctxt "field:loan,previous_frequency:"
 msgid "Previous Frequency"
 msgstr "Fréquence précédente"

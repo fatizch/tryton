@@ -504,8 +504,11 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         if self.kind:
             name.append(coop_string.translate_value(self, 'kind'))
         if self.amount:
-            name.append(self.currency.amount_as_string(self.amount))
+            name.append(self.currency.amount_as_string(self.get_loan_amount()))
         return ' '.join(name)
+
+    def get_loan_amount(self):
+        return self.amount
 
     @classmethod
     def get_order(cls, loans, name=None):

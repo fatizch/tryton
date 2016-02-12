@@ -43,6 +43,19 @@ class Loan:
     previous_release_date = fields.Function(
         fields.Date('Previous Fund Release Date'),
         'get_previous_release_date')
+    applied_endorsements = fields.One2ManyDomain('endorsement.loan', 'loan',
+        'Applied Endorsements', domain=[('state', '=', 'applied')],
+        readonly=True, delete_missing=True, target_not_indexed=True,
+        order=[('endorsement.effective_date', 'ASC')])
+    last_endorsement_balance = fields.Function(
+        fields.Numeric('Last Endorsement Balance',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_last_endorsement_balance')
+
+    @classmethod
+    def _export_skips(cls):
+        return super(Loan, cls)._export_skips() | {'applied_endorsements'}
 
     @classmethod
     def default_previous_frequency(cls):
@@ -77,11 +90,21 @@ class Loan:
             return self.first_payment_date
         return super(Loan, self).on_change_with_first_payment_date()
 
+    def get_last_endorsement_balance(self, name):
+        if not self.applied_endorsements:
+            return self.amount
+        payment = self.get_payment(
+            self.applied_endorsements[-1].endorsement.effective_date)
+        return payment.outstanding_balance if payment else self.amount
+
     def get_previous_frequency(self, name):
         return self.payment_frequency
 
     def get_previous_release_date(self, name):
         return self.funds_release_date
+
+    def get_loan_amount(self):
+        return self.last_endorsement_balance
 
 
 class LoanIncrement:
