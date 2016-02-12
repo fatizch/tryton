@@ -6,6 +6,7 @@ from trytond.pyson import Bool, Eval
 from trytond.wizard import Wizard, StateView, Button
 from trytond.transaction import Transaction
 from trytond.modules.cog_utils import fields, model, coop_date, utils
+from trytond.modules.currency_cog import ModelCurrency
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -31,15 +32,10 @@ class MoveLine:
 
     def get_bank_account(self, name):
         if self.origin_item:
-            if self.origin_item.__name__ == 'account.invoice':
-                return (self.origin_item.bank_account.id
-                    if self.origin_item.bank_account else None)
-            elif self.origin_item.__name__ == 'account.payment':
-                if self.origin_item.sepa_mandate:
-                    mandate = self.origin_item.sepa_mandate
-                    return mandate.account_number.account.id
-            elif getattr(self.origin_item, 'bank_account', None):
+            if getattr(self.origin_item, 'bank_account', None):
                 return self.origin_item.bank_account.id
+            elif getattr(self.origin_item, 'sepa_mandate', None):
+                return self.origin_item.sepa_mandate.account_number.account.id
 
 
 class PartyBalanceLine(model.CoopView):
@@ -155,7 +151,7 @@ class PartyBalanceLine(model.CoopView):
         return description
 
 
-class PartyBalance(model.CoopView):
+class PartyBalance(ModelCurrency, model.CoopView):
     'Party Balance'
 
     __name__ = 'account.party_balance'
@@ -164,8 +160,12 @@ class PartyBalance(model.CoopView):
         'Lines', states={'invisible': True})
     lines = fields.One2Many('account.party_balance.line', None,
         'Lines', readonly=True)
-    balance_today = fields.Numeric('Balance Today', readonly=True)
-    balance = fields.Numeric('Balance ', readonly=True)
+    balance_today = fields.Numeric('Balance Today',
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
+        readonly=True)
+    balance = fields.Numeric('Balance ',
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
+        readonly=True)
     is_balance_positive = fields.Boolean('Balance Positive',
         states={'invisible': True})
     hide_reconciled_lines = fields.Boolean('Hide Reconciled Lines')
@@ -177,6 +177,7 @@ class PartyBalance(model.CoopView):
         domain=[('id', 'in', Eval('contracts'))], depends=['contracts'])
     hide_canceled_invoices = fields.Boolean('Hide Canceled Invoices')
     hide_scheduled_terms = fields.Boolean('Hide Scheduled Terms')
+    currency = fields.Many2One('currency.currency', 'Currency')
 
     @classmethod
     def __setup__(cls):
@@ -301,6 +302,7 @@ class PartyBalance(model.CoopView):
         else:
             # TODO Does not work for broker or insurer
             self.balance_today = self.party.receivable_today
+            self.balance = self.party.receivable
         self.is_balance_positive = self.balance_today > 0
         for line in lines:
             line.move_line = None
@@ -310,6 +312,9 @@ class PartyBalance(model.CoopView):
     @fields.depends(*_FIELDS)
     def on_change_contract(self):
         self.refresh()
+
+    def get_currency(self, name=None):
+        return self.currency
 
 
 class OpenPartyBalance(Wizard):
@@ -327,6 +332,8 @@ class OpenPartyBalance(Wizard):
         MoveLine = pool.get('account.move.line')
         Party = pool.get('party.party')
         Contract = pool.get('contract')
+        Company = pool.get('company.company')
+        company = Company(Transaction().context['company'])
         if Transaction().context.get('active_model') == 'contract':
             contract = Contract(Transaction().context.get('active_id'))
             contract_id = contract.id
@@ -353,5 +360,6 @@ class OpenPartyBalance(Wizard):
                         ('status', '!=', 'quote'),
                         ])],
             'contract': contract_id,
-            'party': party.id
+            'party': party.id,
+            'currency': company.currency.id,
             }

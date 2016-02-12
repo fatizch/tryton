@@ -32,4 +32,5 @@
     <field name="is_balance_positive"/>
     <field name="contracts"/>
     <field name="party" invisible="1"/>
+    <field name="currency" invisible="1"/>
 </form>
