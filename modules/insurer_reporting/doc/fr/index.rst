@@ -1,7 +1,7 @@
 .. contract
 
-Insurer Reporting
-=================
+Rapports Assureurs
+==================
 
 Résumé
 ------
