@@ -1,10 +1,10 @@
 import datetime
 from dateutil import rrule
-from itertools import groupby
 
 from sql import Cast, Literal
 from sql.operators import Concat
 from sql.aggregate import Sum, Max
+from sql.functions import ToChar
 from sql.conditionals import Coalesce
 
 from trytond import backend
@@ -993,16 +993,35 @@ class OpenCommissionsSynthesis(Wizard):
         return -1 * sum([x.amount for x in move_lines])
 
     def get_commissions_paid(self, broker_party, currency):
-        commissions = Pool().get('commission').search([
-                ('broker', '=', broker_party.network[0].id),
-                ('invoice_line.invoice.state', '=', 'paid'),
-                ], order=[('date', 'DESC')])
+        cursor = Transaction().cursor
+        pool = Pool()
+        Commission = pool.get('commission')
+        Invoice = pool.get('account.invoice')
+        InvoiceLine = pool.get('account.invoice.line')
+        Agent = pool.get('commission.agent')
+
+        commission = Commission.__table__()
+        invoice = Invoice.__table__()
+        invoice_line = InvoiceLine.__table__()
+        agent = Agent.__table__()
+
+        query = commission.join(invoice_line,
+            condition=commission.invoice_line == invoice_line.id
+            ).join(invoice, condition=invoice_line.invoice == invoice.id
+            ).join(agent, condition=commission.agent == agent.id
+            ).select(
+                ToChar(invoice.invoice_date, 'YYYY').as_('year'),
+                Sum(commission.amount),
+                where=((invoice.state == 'paid')
+                    & (agent.party == broker_party.id)),
+                group_by=[ToChar(invoice.invoice_date, 'YYYY')],
+                order_by=[ToChar(invoice.invoice_date, 'YYYY').desc])
+        cursor.execute(*query)
         res = []
-        for year, commissions in groupby([c for c in commissions if c.date],
-                key=lambda c: str(c.date.year)):
+        for year, amount in cursor.fetchall():
             res.append({
                     'year': year,
-                    'amount': sum([c.amount for c in commissions]),
+                    'amount': amount,
                     'currency_symbol': currency.symbol,
                     'currency_digits': currency.digits,
                     })
