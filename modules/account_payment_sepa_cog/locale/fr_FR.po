@@ -11,6 +11,10 @@ msgid "Direct Debit Payment of"
 msgstr "Prélèvement du"
 
 msgctxt "error:account.payment:"
+msgid "Missing bank account for \"%(party)s\" at \"%(date)s\""
+msgstr "Compte bancaire manquant pour  \"%(party)s\" au \"%(date)s\""
+
+msgctxt "error:account.payment:"
 msgid "Unknown amount invoice line : %s %s"
 msgstr "Montant de ligne de quittance inconnu : %s %s"
 
@@ -18,9 +22,29 @@ msgctxt "field:account.payment,bank_account:"
 msgid "Bank Account"
 msgstr "Compte Bancaire"
 
+msgctxt "field:account.payment,reject_fee_amount:"
+msgid "Reject Fee Amount"
+msgstr "Montant frais de rejet"
+
 msgctxt "field:account.payment,sepa_bank_reject_date:"
 msgid "SEPA Bank Reject Date"
 msgstr "Date de rejet de la banque"
+
+msgctxt "field:account.payment.group,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:account.payment.group,currency:"
+msgid "Currency"
+msgstr "Devise"
+
+msgctxt "field:account.payment.group,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:account.payment.group,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
 
 msgctxt "field:account.payment.group,main_sepa_message:"
 msgid "SEPA Message"
@@ -30,10 +54,18 @@ msgctxt "field:account.payment.group,main_sepa_message_state:"
 msgid "State"
 msgstr "État"
 
+msgctxt "field:account.payment.group,payment_dates:"
+msgid "Payment Dates"
+msgstr "Dates de paiement"
+
 msgctxt ""
 "field:account.payment.journal,last_sepa_receivable_payment_creation_date:"
 msgid "Last Receivable Payment SEPA Creation"
 msgstr "Date de la dernière génération des prélèvements SEPA"
+
+msgctxt "field:account.payment.journal,split_sepa_messages_by_sequence_type:"
+msgid "Split Sepa Messages By Sequence Type (FRST-RCUR)"
+msgstr "Découper les messages SEPA par type de sequence (FRST-RCUR)"
 
 msgctxt "field:account.payment.payment_creation.start,bank_account:"
 msgid "Bank Account"
@@ -199,6 +231,10 @@ msgctxt "model:ir.action,name:act_message_form"
 msgid "SEPA Reject Messages"
 msgstr "Messages de rejet SEPA"
 
+msgctxt "model:ir.action,name:act_payment_relate_form"
+msgid "Payments"
+msgstr "Paiements"
+
 msgctxt "model:ir.sequence,name:sequence_account_payment_merged"
 msgid "Default Account Payment Merged"
 msgstr "Regroupement de paiement par défaut"
@@ -226,7 +262,3 @@ msgstr "Brouillon"
 msgctxt "selection:account.payment.group,main_sepa_message_state:"
 msgid "Waiting"
 msgstr "En attente"
-
-msgctxt "field:account.payment.journal,split_sepa_messages_by_sequence_type:"
-msgid "Split Sepa Messages By Sequence Type (FRST-RCUR)"
-msgstr "Découper les messages SEPA par type de sequence (FRST-RCUR)"

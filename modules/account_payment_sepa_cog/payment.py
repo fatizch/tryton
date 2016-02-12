@@ -145,6 +145,16 @@ class Group:
         Sequence = pool.get('ir.sequence')
         mandate_type = {}
         to_write = []
+        for payment in [p for p in self.payments
+                if p.kind == 'payable' and not p.bank_account]:
+            bank_accounts = payment.party.get_bank_accounts(payment['date'])
+            if bank_accounts:
+                to_write += [[payment],
+                    {'bank_account': bank_accounts[0]}]
+        if to_write:
+            Payment.write(*to_write)
+
+        to_write = []
         if self.kind == 'receivable':
             mandates = Payment.get_sepa_mandates(self.payments)
             for payment, mandate in zip(self.payments, mandates):
@@ -165,6 +175,7 @@ class Group:
                 values['sepa_mandate_sequence_type'] = mandate_type[
                     payments[0].sepa_mandate.id]
             to_write += [payments, values]
+
         Payment.write(*to_write)
         self.generate_message(_save=False)
         self.update_last_sepa_receivable_date()
@@ -253,6 +264,8 @@ class Payment:
                 'Unknown amount invoice line : %s %s',
                 'direct_debit_payment': 'Direct Debit Payment of',
                 'direct_debit_disbursement': 'Direct Debit Disbursement of',
+                'missing_bank_acount': ('Missing bank account for "%(party)s" '
+                    'at "%(date)s"'),
                 })
         cls.sepa_mandate.states = {'invisible': Eval('kind') == 'payable'}
         cls.sepa_mandate.depends += ['kind']
@@ -268,8 +281,17 @@ class Payment:
 
     @property
     def sepa_bank_account_number(self):
-        if self.kind == 'receivable' or not self.bank_account:
+        if self.kind == 'receivable':
             return super(Payment, self).sepa_bank_account_number
+        elif not self.bank_account:
+            bank_accounts = self.party.get_bank_accounts(self.date)
+            if not bank_accounts:
+                self.raise_user_error('missing_bank_acount', {
+                        'party': self.party.rec_name,
+                        'date': self.date,
+                        })
+            self.bank_account = bank_accounts[0]
+
         for number in self.bank_account.numbers:
             if number.type == 'iban':
                 return number
