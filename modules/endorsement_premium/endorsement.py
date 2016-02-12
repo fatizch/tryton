@@ -23,7 +23,7 @@ class Premium:
     __name__ = 'contract.premium'
 
     tax_list = fields.One2Many('contract.premium-account.tax', 'premium',
-        'Tax List')
+        'Tax List', delete_missing=True)
 
     @classmethod
     def _export_skips(cls):
