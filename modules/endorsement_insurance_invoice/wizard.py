@@ -4,11 +4,13 @@ from trytond.pyson import Eval, Len, If
 
 from trytond.modules.cog_utils import model, fields, utils
 from trytond.modules.endorsement import EndorsementWizardStepMixin
+from trytond.modules.endorsement import EndorsementRecalculateMixin
 from trytond.modules.endorsement import add_endorsement_step
 
 __metaclass__ = PoolMeta
 __all__ = [
     'BasicPreview',
+    'RecalculateAndReinvoiceContract',
     'ChangeBillingInformation',
     'ChangeDirectDebitAccount',
     'ContractDisplayer',
@@ -61,6 +63,34 @@ class BasicPreview:
         result['currency_digits'] = changes_new['currency_digits']
         result['currency_symbol'] = changes_new['currency_symbol']
         return result
+
+
+class RecalculateAndReinvoiceContract(EndorsementRecalculateMixin):
+    'Recalculate and Reinvoice Contract'
+
+    __name__ = 'endorsement.contract.recalculate_and_reinvoice'
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement.recalculate_contract_view_form'
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        Recalculate = Pool().get('endorsement.contract.recalculate')
+        methods = Recalculate.get_methods_for_model(model_name)
+        if model_name == 'contract':
+            methods |= {'recalculate_premium_after_endorsement',
+                'rebill_after_endorsement', 'reconcile_after_endorsement'}
+        return methods
+
+    @classmethod
+    def get_draft_methods_for_model(cls, model_name):
+        Recalculate = Pool().get('endorsement.contract.recalculate')
+        methods = Recalculate.get_draft_methods_for_model(model_name)
+        if model_name == 'contract':
+            methods |= {'rebill_after_endorsement',
+                'reconcile_after_endorsement'}
+        return methods
 
 
 class ChangeBillingInformation(EndorsementWizardStepMixin):
@@ -730,3 +760,5 @@ add_endorsement_step(StartEndorsement, ChangeBillingInformation,
     'change_billing_information')
 add_endorsement_step(StartEndorsement, ChangeDirectDebitAccount,
     'change_direct_debit_account')
+add_endorsement_step(StartEndorsement, RecalculateAndReinvoiceContract,
+    'recalculate_and_reinvoice_contract')

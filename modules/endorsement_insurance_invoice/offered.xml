@@ -44,6 +44,24 @@
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="priority">2100</field>
         </record>
+        <!-- ###################################### -->
+        <!-- # Recalculate and Reinvoice Contract # -->
+        <!-- ###################################### -->
+        <record model="endorsement.definition" id="recalculate_and_reinvoice_contract_definition">
+            <field name="code">recalculate_and_reinvoice_contract</field>
+            <field name="name">Recalculate and Reinvoice Contract</field>
+        </record>
+        <record model="endorsement.part" id="recalculate_and_reinvoice_contract_revision_part">
+            <field name="code">recalculate_and_reinvoice_contract</field>
+            <field name="name">Recalculate and Reinvoice Contract</field>
+            <field name="kind">contract</field>
+            <field name="view">recalculate_and_reinvoice_contract</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="recalculate_and_reinvoice_contract_relation">
+            <field name="definition" ref="recalculate_and_reinvoice_contract_definition"/>
+            <field name="endorsement_part" ref="recalculate_and_reinvoice_contract_revision_part"/>
+            <field name="order">1</field>
+        </record>
         <!-- ############################################## -->
         <!-- # Billing Information Endorsement Definition # -->
         <!-- ############################################## -->

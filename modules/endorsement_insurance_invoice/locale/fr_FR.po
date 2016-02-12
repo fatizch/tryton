@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -81,6 +81,14 @@ msgstr "Suppression de la version"
 msgctxt "error:endorsement.contract.billing_information:"
 msgid "Update %s"
 msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract.recalculate_and_reinvoice:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
 
 msgctxt "error:endorsement.contract:"
 msgid "Billing Modifications"
@@ -320,6 +328,24 @@ msgctxt "field:endorsement.contract.billing_information.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:endorsement.contract.recalculate_and_reinvoice,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt ""
+"field:endorsement.contract.recalculate_and_reinvoice,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt ""
+"field:endorsement.contract.recalculate_and_reinvoice,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.recalculate_and_reinvoice,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:endorsement.part,billing_information_fields:"
 msgid "Billing Information Fields"
 msgstr "Champs des paramètres de quittancement"
@@ -365,6 +391,10 @@ msgctxt "model:endorsement.contract.billing_information.field,name:"
 msgid "Endorsement Billing Information Field"
 msgstr "Champs des paramètres de quittancement"
 
+msgctxt "model:endorsement.contract.recalculate_and_reinvoice,name:"
+msgid "Recalculate and Reinvoice Contract"
+msgstr "Recalculer et requittancer le contrat"
+
 msgctxt "model:endorsement.definition,name:"
 msgid "Change Bank Account"
 msgstr "Changement du compte bancaire"
@@ -379,6 +409,11 @@ msgctxt ""
 msgid "Change Direct Debit Account"
 msgstr "Modification des coordonnées bancaires"
 
+msgctxt ""
+"model:endorsement.definition,name:recalculate_and_reinvoice_contract_definition"
+msgid "Recalculate and Reinvoice Contract"
+msgstr "Recalculer et requittancer le contrat"
+
 msgctxt "model:endorsement.part,name:"
 msgid "Change Bank Account"
 msgstr "Changement du compte bancaire"
@@ -392,6 +427,11 @@ msgctxt ""
 "model:endorsement.part,name:change_direct_debit_account_endorsement_part"
 msgid "Change Direct Debit Account"
 msgstr "Modification des coordonnées bancaires"
+
+msgctxt ""
+"model:endorsement.part,name:recalculate_and_reinvoice_contract_revision_part"
+msgid "Recalculate and Reinvoice Contract"
+msgstr "Recalculer et requittancer le contrat"
 
 msgctxt ""
 "selection:contract.billing_information.change.contract_displayer,to_propagate:"
@@ -489,3 +529,23 @@ msgstr "Suspendre"
 msgctxt "wizard_button:endorsement.start,change_direct_debit_account,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,recalculate_and_reinvoice_contract,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,recalculate_and_reinvoice_contract,recalculate_and_reinvoice_contract_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,recalculate_and_reinvoice_contract,recalculate_and_reinvoice_contract_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,recalculate_and_reinvoice_contract,recalculate_and_reinvoice_contract_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"

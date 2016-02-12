@@ -19,6 +19,7 @@ def register():
         ChangeDirectDebitAccount,
         ContractDisplayer,
         BasicPreview,
+        RecalculateAndReinvoiceContract,
         NewCoveredElement,
         NewOptionOnCoveredElement,
         RemoveOption,

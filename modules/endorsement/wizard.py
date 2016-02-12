@@ -157,7 +157,7 @@ class EndorsementWizardStepMixin(model.CoopView):
                 Button('Next', step_name + '_next', 'tryton-go-next',
                     default=True)])
 
-    def step_default(self):
+    def step_default(self, name=None):
         self.endorsement_definition = self.wizard.definition
         self.endorsement_part = self.wizard.get_endorsement_part_for_state(
             self.step_name)
@@ -328,6 +328,11 @@ class EndorsementRecalculateMixin(EndorsementWizardStepMixin):
         objects. Only possible modification is the effective_date of the
         endorsement
     '''
+    @classmethod
+    def __setup__(cls):
+        super(EndorsementRecalculateMixin, cls).__setup__()
+        cls.effective_date.states['readonly'] = False
+
     def step_update(self):
         self.wizard.endorsement.effective_date = self.effective_date
         self.wizard.endorsement.save()
