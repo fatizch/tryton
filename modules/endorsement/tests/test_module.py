@@ -128,7 +128,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 'dummy_step', 'change_start_date', 'void_contract',
                 'change_contract_extra_data', 'terminate_contract',
                 'change_contract_subscriber', 'manage_options',
-                'recalculate_contract'})
+                'manage_contacts', 'recalculate_contract'})
 
     @test_framework.prepare_test(
         'endorsement.test0001_check_possible_views',
