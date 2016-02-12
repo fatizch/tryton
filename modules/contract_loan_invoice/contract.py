@@ -393,7 +393,7 @@ class Contract:
     def get_rebill_end_date(self):
         if not self.is_loan:
             return super(Contract, self).get_rebill_end_date()
-        return max(utils.today(), self.start_date)
+        return max(utils.today(), self.start_date or datetime.date.min)
 
 
 class PremiumAmount(model.CoopSQL, model.CoopView):
