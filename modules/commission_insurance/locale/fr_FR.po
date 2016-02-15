@@ -126,9 +126,9 @@ msgctxt "field:commission.aggregated,broker:"
 msgid "Broker"
 msgstr "Courtier"
 
-msgctxt "field:commission.aggregated,subscriber:"
-msgid "Contract Subscriber"
-msgstr "Souscripteur du contrat"
+msgctxt "field:commission.aggregated,commissioned_option:"
+msgid "Commissioned Option"
+msgstr "Option commissionnée"
 
 msgctxt "field:commission.aggregated,contract:"
 msgid "Contract"
@@ -145,6 +145,10 @@ msgstr "Date de Création"
 msgctxt "field:commission.aggregated,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:commission.aggregated,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
 
 msgctxt "field:commission.aggregated,date:"
 msgid "Date"
@@ -177,6 +181,10 @@ msgstr "Nom"
 msgctxt "field:commission.aggregated,start:"
 msgid "Start Date"
 msgstr "Date d'Effet"
+
+msgctxt "field:commission.aggregated,subscriber:"
+msgid "Contract Subscriber"
+msgstr "Souscripteur du contrat"
 
 msgctxt "field:commission.aggregated,total_commission:"
 msgid "Total"
@@ -628,15 +636,15 @@ msgstr "Lien Ligne de plan de commissionnement - Garantie offerte"
 
 msgctxt "model:commission.synthesis.show,name:"
 msgid "Open Commissions Synthesis Show"
-msgstr ""
+msgstr "Ouvrir la synthèse des commissions - Affichage"
 
 msgctxt "model:commission.synthesis.start,name:"
 msgid "Open Commissions Synthesis Start"
-msgstr ""
+msgstr "Ouvrir la synthèse des commissions - Début"
 
 msgctxt "model:commission.synthesis.year_line,name:"
 msgid "Open Commissions Synthesis Year Line"
-msgstr ""
+msgstr "Ouvrir la synthèse des commissions - Ligne par année"
 
 msgctxt "model:commission_plan-commission_plan,name:"
 msgid "Commission Plan - Commission Plan"
@@ -663,8 +671,8 @@ msgid "Change Broker"
 msgstr "Changement d'apporteur"
 
 msgctxt "model:ir.action,name:act_commission_aggregated_contract_relate_form1"
-msgid "Aggregated Commissions"
-msgstr "Commission agrégées"
+msgid "Aggregated commissions"
+msgstr "Commissions agrégées"
 
 msgctxt ""
 "model:ir.action,name:act_commission_aggregated_distribution_relate_form"
@@ -681,7 +689,7 @@ msgstr "Commissions agrégées"
 
 msgctxt "model:ir.action,name:act_commission_aggregated_relate_details"
 msgid "Filtering wizard"
-msgstr ""
+msgstr "Assistant de filtrage"
 
 msgctxt "model:ir.action,name:act_commission_create_agents"
 msgid "Create Agents"
@@ -1089,7 +1097,7 @@ msgstr "Sélectionner le compte de frais courtier"
 
 msgctxt "view:commission.synthesis.year_line:"
 msgid "Commissions years"
-msgstr ""
+msgstr "Années de commission"
 
 msgctxt "view:commission:"
 msgid "%"
@@ -1202,12 +1210,12 @@ msgid "Principal Of"
 msgstr "Commissionne"
 
 msgctxt "view:commission.agent:commission."
-msgid "Agent"
-msgstr "Protocole de commissionnement"
-
-msgctxt "view:commission.agent:commission."
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "view:commission.agent:commission."
+msgid "Agent"
+msgstr "Protocole de commissionnement"
 
 msgctxt "view:commission.create_invoice.ask:commission."
 msgid "Create Commission Invoice"

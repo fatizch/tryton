@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -151,6 +151,10 @@ msgctxt "field:contract,extra_datas:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
+msgctxt "field:contract,final_end_date:"
+msgid "Final End Date"
+msgstr "Date de fin définitive"
+
 msgctxt "field:contract,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
@@ -166,10 +170,6 @@ msgstr "ID"
 msgctxt "field:contract,initial_start_date:"
 msgid "Initial Start Date"
 msgstr "Date d'effet initiale"
-
-msgctxt "field:contract,final_end_date:"
-msgid "Initial Start Date"
-msgstr "Dernière date de fin"
 
 msgctxt "field:contract,is_sub_status_required:"
 msgid "Is Sub Status Required"
@@ -222,6 +222,10 @@ msgstr "Statut"
 msgctxt "field:contract,sub_status:"
 msgid "Details on status"
 msgstr "Détails du statut"
+
+msgctxt "field:contract,sub_status_code:"
+msgid "Sub Status Code"
+msgstr "Code du sous statut"
 
 msgctxt "field:contract,subscriber:"
 msgid "Subscriber"
@@ -559,6 +563,10 @@ msgctxt "field:contract.option,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:contract.option,final_end_date:"
+msgid "Final End Date"
+msgstr "Date de fin définitive"
+
 msgctxt "field:contract.option,full_name:"
 msgid "Full Name"
 msgstr "Nom complet"
@@ -794,6 +802,10 @@ msgstr "Statut"
 msgctxt "field:contract.stop.select_contracts,sub_status:"
 msgid "Sub Status"
 msgstr "Sous Statut"
+
+msgctxt "field:contract.sub_status,active:"
+msgid "Active"
+msgstr "Actif"
 
 msgctxt "field:contract.sub_status,code:"
 msgid "Code"
@@ -1538,6 +1550,10 @@ msgctxt "view:contract:"
 msgid "Stop Contract"
 msgstr "Terminer contrat"
 
+msgctxt "view:contract:"
+msgid "Will be terminated for:"
+msgstr "Sera résilié pour :"
+
 msgctxt "view:party.party:"
 msgid "+"
 msgstr "+"
@@ -1617,11 +1633,3 @@ msgctxt ""
 "wizard_button:contract.wizard.option_subscription,select_package,options_displayer:"
 msgid "Next"
 msgstr "Suivant"
-
-msgctxt "view:contract:"
-msgid "Will be terminated for:"
-msgstr "Sera résilié pour:"
-
-msgctxt "field:event.log,contract:"
-msgid "Contract"
-msgstr "Contrat"

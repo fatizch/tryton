@@ -155,6 +155,14 @@ msgctxt "field:event.type.action,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:event.type.action,event_types:"
+msgid "Event Types"
+msgstr "Types d'événement"
+
+msgctxt "field:event.type.action,handles_asynchronous:"
+msgid "Handles asynchronous treatment"
+msgstr "Gère les traitements asynchrones"
+
 msgctxt "field:event.type.action,id:"
 msgid "ID"
 msgstr "ID"
@@ -167,9 +175,17 @@ msgctxt "field:event.type.action,priority:"
 msgid "Priority"
 msgstr "Priorité"
 
+msgctxt "field:event.type.action,pyson_condition:"
+msgid "Pyson Condition"
+msgstr "Condition Pyson"
+
 msgctxt "field:event.type.action,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:event.type.action,treatment_kind:"
+msgid "Treatment kind"
+msgstr "Type de traitement"
 
 msgctxt "field:event.type.action,write_date:"
 msgid "Write Date"
@@ -182,10 +198,6 @@ msgstr "Mis à jour par"
 msgctxt "field:event.type.action,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
-
-msgctxt "field:event.type.action,event_types:"
-msgid "Event Types"
-msgstr "Types d'événement"
 
 msgctxt "field:event.type.action-event.type,action:"
 msgid "Action"
@@ -1035,6 +1047,14 @@ msgctxt "field:utils.versionned_object,versions:"
 msgid "Versions"
 msgstr "Versions"
 
+msgctxt "help:event.type.action,pyson_condition:"
+msgid ""
+"A Pyson expression to filter the objects of the event. If not set, no filter will be applied. If the expression evaluates to True for an object, the action will be taken on it. Otherwise, it will be ignored. Example expression :\n"
+" Eval('status') == 'active'"
+msgstr ""
+"Expression pyson pour filtrer les objets de l'évenement. Si non renseigné aucun filtre ne sera appliqué. Si l'expression est évaluée à Vrai pour un objet, l'action sera effectuée sur ce dernier, autrement elle sera ignorée. Exemple d'expression :\n"
+" Eval('status') == 'active'"
+
 msgctxt "help:ir.test_case.instance,test_method_name:"
 msgid ""
 "The name of the method that will be used to decide whether the Test Case "
@@ -1297,6 +1317,14 @@ msgstr "Version d'Objet"
 msgctxt "model:utils.versionned_object,name:"
 msgid "Versionned Object"
 msgstr "Objet Versionné"
+
+msgctxt "selection:event.type.action,treatment_kind:"
+msgid "Asynchronous"
+msgstr "Asynchrone"
+
+msgctxt "selection:event.type.action,treatment_kind:"
+msgid "Synchronous"
+msgstr "Synchrone"
 
 msgctxt "selection:ir.test_case.run.select.method,selection:"
 msgid "Automatic"

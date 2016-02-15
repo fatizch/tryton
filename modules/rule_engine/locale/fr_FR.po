@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -484,6 +484,10 @@ msgstr "Date de calcul"
 msgctxt "field:rule_engine.log,calls:"
 msgid "Calls"
 msgstr "Appels"
+
+msgctxt "field:rule_engine.log,context:"
+msgid "Context"
+msgstr "Contexte"
 
 msgctxt "field:rule_engine.log,create_date:"
 msgid "Create Date"

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -477,6 +477,10 @@ msgctxt "field:contract.option,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:contract.option,exclusion_list:"
+msgid "Exclusion List"
+msgstr "Liste des exclusions"
+
 msgctxt "field:contract.option,exclusions:"
 msgid "Exclusions"
 msgstr "Exclusions"
@@ -624,6 +628,10 @@ msgstr "Unité de la Durée"
 msgctxt "field:contract.option.extra_premium,end_date:"
 msgid "End date"
 msgstr "Date de Fin"
+
+msgctxt "field:contract.option.extra_premium,final_end_date:"
+msgid "Final End Date"
+msgstr "Date de fin définitive"
 
 msgctxt "field:contract.option.extra_premium,flat_amount:"
 msgid "Flat amount"

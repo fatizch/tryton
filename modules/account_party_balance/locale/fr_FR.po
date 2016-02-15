@@ -102,6 +102,10 @@ msgctxt "field:account.party_balance.line,party:"
 msgid "Party"
 msgstr "Tiers"
 
+msgctxt "field:account.party_balance.line,reconciled_with:"
+msgid "Reconciled with"
+msgstr "Lettrée avec"
+
 msgctxt "field:account.party_balance.line,reconciliations_string:"
 msgid "Reconciliations"
 msgstr "Lettrages"
@@ -116,7 +120,7 @@ msgstr "Ligne de compte tiers"
 
 msgctxt "model:ir.action,name:act_open_contract_balance"
 msgid "Contract Balance"
-msgstr "Balance contrat"
+msgstr "Compte contrat"
 
 msgctxt "model:ir.action,name:act_open_party_balance"
 msgid "Party Balance"

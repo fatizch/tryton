@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<tree string="Cheque letters" keyword_open="1">
+<tree string="Merged payments" keyword_open="1">
     <field name="journal"/>
     <field name="merged_id"/>
     <field name="party"/>

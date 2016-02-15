@@ -118,9 +118,9 @@ msgctxt "field:account.move.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:account.move.template,xml_id:"
+msgctxt "field:account.move.template,auto_post_moves:"
 msgid "Auto Post Generated Moves"
-msgstr "Emettre les mouvements automatiquement"
+msgstr "Emettre automatiquement les mouvements générés"
 
 msgctxt "field:account.move.template,xml_id:"
 msgid "XML Id"
@@ -193,19 +193,19 @@ msgstr "À payer aujourd'hui"
 
 msgctxt "field:party.party,payable_icon:"
 msgid "Payable Icon"
-msgstr ""
+msgstr "Icône de à payer"
 
 msgctxt "field:party.party,payable_today_icon:"
 msgid "Payable Today Icon"
-msgstr ""
+msgstr "Icône de à payer ajourd'hui"
 
 msgctxt "field:party.party,receivable_icon:"
 msgid "Receivable Icon"
-msgstr ""
+msgstr "Icône de à recevoir"
 
 msgctxt "field:party.party,receivable_today_icon:"
 msgid "Receivable Today Icon"
-msgstr ""
+msgstr "Icône de à recevoir aujourd'hui"
 
 msgctxt "field:party.synthesis.menu.move.line,create_date:"
 msgid "Create Date"
@@ -352,6 +352,10 @@ msgstr "Paiements"
 msgctxt "view:account.move.line:"
 msgid "Reconciliation"
 msgstr "Lettrage"
+
+msgctxt "view:account.reconcile.show:"
+msgid "Candidates"
+msgstr "Candidats"
 
 msgctxt "view:party.party:"
 msgid "Account"

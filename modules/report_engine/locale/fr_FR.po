@@ -30,6 +30,10 @@ msgstr ""
 "  Erreur:\n"
 "%s"
 
+msgctxt "error:report.template.parameter:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
 msgctxt "error:report.template.version:"
 msgid "The  names of attachments must be unique by resource!"
 msgstr ""

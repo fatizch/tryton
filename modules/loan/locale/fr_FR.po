@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.option.extra_premium:"
+msgid "Initial Capital Per Mil"
+msgstr "Pourmillage sur capital initial"
+
+msgctxt "error:contract.option.extra_premium:"
+msgid "Remaining Capital Per Mil"
+msgstr "Pourmillage sur capital restant dû"
+
 msgctxt "error:contract:"
 msgid "At least one loan must be selected for %s"
 msgstr "Au moins un prêt doit être sélectionné pour %s"
@@ -16,20 +24,18 @@ msgstr ""
 "La table d'amortissement du prêt %s doit être calculé avant de continuer"
 
 msgctxt "error:contract:"
-msgid "There must be at least one loan"
-msgstr "Il doit y avoir au moins un prêt"
+msgid ""
+"Loans fund release dates should be synced with the contract start date :\n"
+"\n"
+"\t%s"
+msgstr ""
+"Attention : la date d'effet du contrat est différente de la date d'effet du(des) prêt(s) :\n"
+"\n"
+"\t%s"
 
 msgctxt "error:contract:"
-msgid "Loans fund release dates should be synced with the contract start date :\n\n\t%s"
-msgstr "Attention : la date d'effet du contrat est différente de la date d'effet du(des) prêt(s) :\n\n\t%s"
-
-msgctxt "error:contract.option.extra_premium:"
-msgid "Initial Capital Per Mil"
-msgstr "Pourmillage sur capital initial"
-
-msgctxt "error:contract.option.extra_premium:"
-msgid "Remaining Capital Per Mil"
-msgstr "Pourmillage sur capital restant dû"
+msgid "There must be at least one loan"
+msgstr "Il doit y avoir au moins un prêt"
 
 msgctxt "error:loan.increment:"
 msgid "Number of payments must be > 0"
@@ -282,6 +288,10 @@ msgstr "Personnes assurées"
 msgctxt "field:loan,kind:"
 msgid "Kind"
 msgstr "Type"
+
+msgctxt "field:loan,last_modification:"
+msgid "Last Modification"
+msgstr "Dernière modification"
 
 msgctxt "field:loan,loan_shares:"
 msgid "Loan Shares"
@@ -711,6 +721,10 @@ msgstr "Prêt du contrat"
 msgctxt "model:ir.action,name:"
 msgid "Loan Share Propagation"
 msgstr "Propager Quotité"
+
+msgctxt "model:ir.action,name:act_contract_relate_form"
+msgid "Contracts"
+msgstr "Contrats"
 
 msgctxt "model:ir.action,name:act_display_insured_outstanding_loan_balance"
 msgid "Insured Outstanding Loan Balances"

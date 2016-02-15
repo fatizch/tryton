@@ -725,6 +725,14 @@ msgctxt "view:account.payment.journal.reject_reason:"
 msgid "Reject Reason"
 msgstr "Motif de rejet"
 
+msgctxt "view:account.payment.merged:"
+msgid "Merged payments"
+msgstr "Paiements regroupés"
+
+msgctxt "view:account.payment.merged:"
+msgid "Total"
+msgstr "Total"
+
 msgctxt "view:account.payment.motive:"
 msgid "Payment Motive"
 msgstr "Motif de paiement"
