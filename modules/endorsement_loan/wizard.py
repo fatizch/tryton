@@ -722,6 +722,7 @@ class ChangeLoan(EndorsementWizardStepMixin):
         loan_dict.pop('payments', None)
         loan_dict.pop('loan_shares', None)
         loan_dict.pop('contracts', None)
+        loan_dict.pop('applied_endorsements', None)
 
 
 class ChangeLoanUpdatedPayments(model.CoopView):
