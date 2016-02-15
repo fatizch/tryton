@@ -51,7 +51,7 @@ msgstr "Paiement lettre chèque"
 
 msgctxt "field:account.payment.process.start,number_of_cheques:"
 msgid "Number of available cheque"
-msgstr "Nombre de chèques à disposition"
+msgstr "Nombre de chèques disponibles"
 
 msgctxt "help:account.payment.journal,validate_process:"
 msgid "Automatically validate payment on processing"

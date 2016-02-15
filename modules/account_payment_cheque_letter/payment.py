@@ -4,7 +4,7 @@ from trytond.pool import Pool
 from trytond.model import fields
 from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, Equal, PYSONEncoder
+from trytond.pyson import Eval, Equal, PYSONEncoder, Bool
 from trytond.wizard import StateAction, StateTransition
 
 __metaclass__ = PoolMeta
@@ -112,7 +112,7 @@ class Group:
                 'missing_begin_cheque_number': 'Missing begin cheque number',
                 'missing_available_cheque_number':
                 'Missing max available cheque number',
-            })
+                })
 
     def process_cheque_letter(self):
         Payment = Pool().get('account.payment')
@@ -169,12 +169,14 @@ class ProcessPaymentStart:
         states={'invisible': True})
     first_cheque_number = fields.Char(
         'Cheque number to start with',
-        states={'invisible': ~Eval('is_cheque_letter')},
-        required=True, depends=['is_cheque_letter'])
+        states={'invisible': ~Eval('is_cheque_letter'),
+            'required': Bool(Eval('is_cheque_letter', False))},
+        depends=['is_cheque_letter'])
     number_of_cheques = fields.Integer(
         'Number of available cheque',
-        states={'invisible': ~Eval('is_cheque_letter')},
-        required=True, depends=['is_cheque_letter'])
+        states={'invisible': ~Eval('is_cheque_letter'),
+            'required': Bool(Eval('is_cheque_letter', False))},
+        depends=['is_cheque_letter'])
 
     @classmethod
     def view_attributes(cls):
@@ -196,7 +198,7 @@ class ProcessPayment:
         for button in cls.start.buttons:
             if button.state == 'process':
                 button.state = 'pre_process'
-                return
+                break
 
     def do_process_with_cheque_letter(self, action):
         Payment = Pool().get('account.payment')
@@ -224,4 +226,4 @@ class ProcessPayment:
                     ], limit=1))
         return {
             'is_cheque_letter': is_cheque_letter,
-        }
+            }

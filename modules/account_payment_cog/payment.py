@@ -216,8 +216,8 @@ class FilterPaymentsPerMergedId(Wizard):
     filter_payments = StateAction('account_payment.act_payment_form')
 
     def do_filter_payments(self, action):
-        # The following active_id represents the max commission id and the
-        # intermediate sql-view object id (See CommissionPerAgent.table_query).
+        # The following active_id represents the max payment id and the
+        # intermediate sql-view object id.
         payment = Pool().get('account.payment')(
             Transaction().context.get('active_id'))
         merged_id = payment.merged_id
