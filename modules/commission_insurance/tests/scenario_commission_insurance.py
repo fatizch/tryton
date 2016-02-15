@@ -79,6 +79,7 @@ Template = Model.get('product.template')
 template = Template()
 template.name = 'Broker Fee Template'
 template.account_expense = broker_fee_account
+template.account_revenue = broker_fee_account
 template.save()
 product = Product()
 product.name = 'Broker Fee Product'
