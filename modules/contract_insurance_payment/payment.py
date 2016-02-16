@@ -3,6 +3,7 @@ import datetime
 from itertools import groupby
 from dateutil.relativedelta import relativedelta
 
+from trytond.tools import grouped_slice
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
@@ -42,6 +43,34 @@ class JournalFailureAction:
 
 class Payment:
     __name__ = 'account.payment'
+
+    contract = fields.Function(
+        fields.Many2One('contract', 'Contract'),
+        'get_contract', searcher='search_contract')
+
+    @classmethod
+    def get_contract(cls, payments, name):
+        pool = Pool()
+        payment = cls.__table__()
+        line = pool.get('account.move.line').__table__()
+        cursor = Transaction().cursor
+
+        result = {x.id: None for x in payments}
+        for payments_slice in grouped_slice(payments):
+            query = payment.join(line,
+                condition=(payment.line == line.id)
+                ).select(payment.id, line.contract,
+                where=(payment.id.in_([x.id for x in payments_slice])),
+                )
+            cursor.execute(*query)
+            for k, v in cursor.fetchall():
+                result[k] = v
+        return result
+
+    @classmethod
+    def search_contract(cls, name, clause):
+        return [('line.contract',) + tuple(clause[1:])]
+
 
     def get_reference_object_for_edm(self, template):
         if not self.line.contract:

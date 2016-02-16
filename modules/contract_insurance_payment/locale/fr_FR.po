@@ -1,10 +1,22 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:account.payment.journal,failure_billing_mode:"
 msgid "Failure Billing Mode"
 msgstr "Mode de quittancement en cas d'échec"
+
+msgctxt "field:contract,failed_payments:"
+msgid "Failed Payments"
+msgstr "Paiements échoués"
+
+msgctxt "field:contract,processing_payments:"
+msgid "Processing Payments"
+msgstr "Paiements traités"
+
+msgctxt "field:contract,succeeded_payments:"
+msgid "Succeeded Payments"
+msgstr "Paiements réussis"
 
 msgctxt "field:offered.billing_mode,failure_billing_mode:"
 msgid "Failure Billing Mode"
@@ -18,18 +30,10 @@ msgctxt "help:offered.product,payment_journal:"
 msgid "If no journal defined the global configuration will be used"
 msgstr "Si aucun journal n'est défini, la configuration gloable sera utilisée"
 
+msgctxt "model:ir.action,name:act_payments_relate_form"
+msgid "Payments"
+msgstr "Paiements"
+
 msgctxt "selection:account.payment.journal.failure_action,action:"
 msgid "Move to manual payment"
 msgstr "Basculer en paiement manuel"
-
-msgctxt "field:contract.processing_payments:"
-msgid "Processing Payments"
-msgstr "Paiements traités"
-
-msgctxt "field:contract.succeeded_payments:"
-msgid "Succeeded Payments"
-msgstr "Paiements réussis"
-
-msgctxt "field:contract.failed_payments:"
-msgid "Failed Payments"
-msgstr "Paiements échoués"
