@@ -25,7 +25,7 @@ class MoveLine:
     @classmethod
     def copy(cls, lines, default=None):
         default.setdefault('broker_fee_invoice_line', None)
-        super(MoveLine, cls).copy(lines, default)
+        return super(MoveLine, cls).copy(lines, default)
 
 
 class Fee:

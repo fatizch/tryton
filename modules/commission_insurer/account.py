@@ -39,7 +39,7 @@ class MoveLine:
     def copy(cls, lines, default=None):
         default = {} if default is None else default
         default.setdefault('principal_invoice_line', None)
-        super(MoveLine, cls).copy(lines, default)
+        return super(MoveLine, cls).copy(lines, default)
 
 
 class InvoiceLine:
