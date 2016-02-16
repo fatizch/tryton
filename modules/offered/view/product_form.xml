@@ -31,6 +31,8 @@
     <xpath expr="/form/notebook/page[@id='admin']" position="before">
         <page string="Report Templates" id="report_templates">
             <field name="report_templates" colspan="4"/>
+            <label name="report_style_template"/>
+            <field name="report_style_template" colspan="3"/>
         </page>
     </xpath>
 </data>

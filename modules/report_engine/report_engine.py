@@ -1,12 +1,21 @@
 # -*- coding:utf-8 -*-
+try:
+    import cStringIO as StringIO
+except ImportError:
+    import StringIO
 import sys
+import zipfile
 import traceback
 import logging
 import os
 import subprocess
-import StringIO
 import shutil
 import tempfile
+import lxml.etree
+try:
+    from relatorio.templates.opendocument import Manifest, MANIFEST
+except ImportError:
+    Manifest, MANIFEST = None, None
 
 from time import sleep
 from datetime import datetime
@@ -348,6 +357,11 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
             res[template] = objects
         return res
 
+    def get_style_content(self, at_date, _object):
+        style_method = getattr(_object, 'get_report_style_content', None)
+        if style_method:
+            return style_method(at_date, self)
+
 
 class ReportTemplateVersion(Attachment, export.ExportImportMixin):
     'Report Template Version'
@@ -646,6 +660,9 @@ class ReportGenerate(Report):
         selected_letter = report_context['data']['doc_template'][0]
         report.report_content = selected_letter.get_selected_version(
             utils.today(), selected_obj.get_lang()).data
+        report.style_content = selected_letter.get_style_content(
+            utils.today(), selected_obj)
+
         try:
             return super(ReportGenerate, cls).render(
                 report, report_context)
@@ -692,6 +709,96 @@ class ReportGenerate(Report):
         with open(server_filepath, 'w') as f:
             f.write(report_data)
             return(client_filepath, server_filepath)
+
+    @classmethod
+    def _prepare_template_file(cls, report):
+        '''
+        Override the trytond method in order to apply template style
+        if style_content defined in report
+        '''
+        # Convert to str as value from DB is not supported by StringIO
+
+        style_content = getattr(report, 'style_content', None)
+        if not style_content:
+            return super(ReportGenerate, cls)._prepare_template_file(report)
+
+        report_content = (bytes(report.report_content) if report.report_content
+            else None)
+        if not report_content:
+            raise Exception('Error', 'Missing report file!')
+
+        style_content = bytes(style_content)
+
+        fd, path = tempfile.mkstemp(
+            suffix=(os.extsep + report.template_extension),
+            prefix='trytond_')
+        outzip = zipfile.ZipFile(path, mode='w')
+
+        content_io = StringIO.StringIO()
+        content_io.write(report_content)
+        content_z = zipfile.ZipFile(content_io, mode='r')
+
+        style_info = None
+        style_xml = None
+        manifest = None
+        for f in content_z.infolist():
+            if f.filename == 'styles.xml' and style_content:
+                style_info = f
+                style_xml = content_z.read(f.filename)
+                continue
+            elif Manifest and f.filename == MANIFEST:
+                manifest = Manifest(content_z.read(f.filename))
+                continue
+            outzip.writestr(f, content_z.read(f.filename))
+
+        if style_content:
+            pictures = []
+
+            # cStringIO difference:
+            # calling StringIO() with a string parameter creates a read-only
+            # object
+            new_style_io = StringIO.StringIO()
+            new_style_io.write(style_content)
+            new_style_z = zipfile.ZipFile(new_style_io, mode='r')
+            new_style_xml = new_style_z.read('styles.xml')
+            for file in new_style_z.namelist():
+                if file.startswith('Pictures'):
+                    picture = new_style_z.read(file)
+                    pictures.append((file, picture))
+                    if manifest:
+                        manifest.add_file_entry(file)
+            new_style_z.close()
+            new_style_io.close()
+
+            style_tree = lxml.etree.parse(StringIO.StringIO(style_xml))
+            style_root = style_tree.getroot()
+
+            new_style_tree = lxml.etree.parse(StringIO.StringIO(new_style_xml))
+            new_style_root = new_style_tree.getroot()
+
+            for style in ('master-styles', 'automatic-styles', 'styles'):
+                node, = style_tree.xpath(
+                        '/office:document-styles/office:%s' % style,
+                        namespaces=style_root.nsmap)
+                new_node, = new_style_tree.xpath(
+                        '/office:document-styles/office:%s' % style,
+                        namespaces=new_style_root.nsmap)
+                node.getparent().replace(node, new_node)
+
+            outzip.writestr(style_info,
+                    lxml.etree.tostring(style_tree, encoding='utf-8',
+                        xml_declaration=True))
+
+            for file, picture in pictures:
+                outzip.writestr(file, picture)
+
+        if manifest:
+            outzip.writestr(MANIFEST, bytes(manifest))
+
+        content_z.close()
+        content_io.close()
+        outzip.close()
+        return fd, path
 
 
 class ReportGenerateFromFile(Report):

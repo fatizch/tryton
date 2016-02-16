@@ -305,6 +305,7 @@ class Product(model.CoopSQL, Offered):
     subscriber_kind = fields.Selection(SUBSCRIBER_KIND, 'Subscriber Kind')
     report_templates = fields.Many2Many('report.template-offered.product',
         'product', 'report_template', 'Report Templates')
+    report_style_template = fields.Binary('Report Style')
 
     @classmethod
     def __setup__(cls):
@@ -513,6 +514,10 @@ class Product(model.CoopSQL, Offered):
         result['name'] = self.name
         result['code'] = self.code
         return result
+
+    def get_report_style_content(self, at_date, template, contract=None):
+        if template.template_extension == 'odt':
+            return self.report_style_template
 
 
 class OptionDescription(model.CoopSQL, Offered):

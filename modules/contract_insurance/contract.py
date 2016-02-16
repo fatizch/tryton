@@ -327,6 +327,11 @@ class Contract(Printable):
             covered_element.options = covered_element.options
         self.covered_elements = self.covered_elements
 
+    def get_report_style_content(self, at_date, template):
+        if self.product:
+            return self.product.get_report_style_content(at_date, template,
+                self)
+
 
 class ContractOption:
     __name__ = 'contract.option'

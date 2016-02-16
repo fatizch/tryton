@@ -19,3 +19,14 @@ class ReportTemplate:
             result.append(('quote_contract', 'Quote Documents'))
 
         return result
+
+    def get_style_content(self, at_date, _object):
+        res = super(ReportTemplate, self).get_style_content(at_date, _object)
+        if res:
+            return res
+        contract = getattr(_object, 'contract', None)
+        if contract:
+            return contract.get_report_style_content(at_date, self)
+        contracts = getattr(_object, 'contracts', None)
+        if contracts:
+            return contracts[0].get_report_style_content(at_date, self)

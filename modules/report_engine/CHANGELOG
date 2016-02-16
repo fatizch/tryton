@@ -1,3 +1,4 @@
+* Allow to generate reports with a style template
 * Add custom input parameters to report template
 * Authorize entering paths with subfolders as export destination
 
