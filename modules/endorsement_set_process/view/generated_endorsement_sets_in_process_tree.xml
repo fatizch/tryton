@@ -1,6 +1,11 @@
-<?xml version="1.0"?>
-<data>
-    <xpath expr="/tree/field[@name='number']" position="after">
-        <button name="button_resume_process" string="Resume Current Process"/>
-    </xpath>
-</data>
+<?xml version="1.0" encoding="utf-8"?>
+<tree>
+    <field name="number"/>
+    <button name="button_resume_process" string="Resume Current Process"/>
+    <field name="state"/>
+    <field name="state"/>
+    <field name="subscribers_summary"/>
+    <field name="contracts_summary"/>
+    <field name="contracts_endorsements_summary"/>
+    <field name="contract_set"/>
+</tree>

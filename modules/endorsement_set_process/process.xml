@@ -19,7 +19,6 @@
         <record model="ir.ui.view" id="generated_endorsement_sets_in_process_view_tree">
             <field name="model">endorsement.set</field>
             <field name="type">tree</field>
-            <field name="inherit" ref="endorsement_set.endorsement_set_view_list"/>
             <field name="name">generated_endorsement_sets_in_process_tree</field>
         </record>
     </data>
