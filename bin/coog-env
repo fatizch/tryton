@@ -1,79 +1,137 @@
 # vim: set ft=sh:
 # environment informations
 
+_coog_env_python() { # set python vars
+        export PYTHONUNBUFFERED=1
+}
+
 _coog_env_files() { # set file names
-        COOG_SRV_FILE=coog-srv-$USER
-        COOG_WRK_FILE=coog-wrk-$USER
-        COOG_CLI_FILE=coog-cli-$USER
+        COOG_FILE_CLI=coog-cli-$USER
+        COOG_FILE_SRV=coog-srv-$USER
+        COOG_FILE_WRK=coog-wrk-$USER
+        COOG_FILE_RQ=coog-rq-$USER
+        COOG_FILE_CEL=coog-cel-$USER
+        COOG_FILE_BAT=coog-bat
         if [ ! -z $VIRTUAL_ENV ]
         then
                 local venv
                 venv=`basename $VIRTUAL_ENV`
-                COOG_SRV_FILE=$COOG_SRV_FILE-$venv
-                COOG_WRK_FILE=$COOG_WRK_FILE-$venv
-                COOG_CLI_FILE=$COOG_CLI_FILE-$venv
+                COOG_FILE_CLI=$COOG_FILE_CLI-$venv
+                COOG_FILE_SRV=$COOG_FILE_SRV-$venv
+                COOG_FILE_WRK=$COOG_FILE_WRK-$venv
+                COOG_FILE_RQ=$COOG_FILE_RQ-$venv
+                COOG_FILE_CEL=$COOG_FILE_CEL-$venv
         else
                 echo warn: running outside a virtual env
         fi
 }
 
 _coog_env_paths() { # set paths
-        local conf
-        conf=`readlink -f ../../conf`
         COOG_TMP=/tmp
-        COOG_SRV_CONF=$conf/trytond.conf
-        COOG_TEST_CONF=$conf/test.conf
-        COOG_CLI_CONF=$conf/tryton.conf
-        COOG_LOG_CONF=$conf/logging.conf
-        COOG_LOG_LEVEL=`python2 .py/env-config.py $COOG_LOG_CONF logger_root level str`
+        COOG_TRYTON=`readlink -f ../../tryton`
+        COOG_TRYTOND=`readlink -f ../../trytond`
+        COOG_PROTEUS=`readlink -f ../../proteus`
+        COOG_CONF=`readlink -f ../../conf`
+        COOG_LIB=`readlink -f ./lib`
 }
 
-_coog_env_python() { # set python paths
-        export PYTHONUNBUFFERED=1
+_coog_env_conf() { # set conf vars
+        COOG_CONF_CLI="$COOG_CONF/tryton.conf"
+        COOG_CONF_SRV="$COOG_CONF/trytond.conf"
+        COOG_CONF_BAT="$COOG_CONF/batch.conf"
+        COOG_CONF_TEST="$COOG_CONF/test.conf"
+        COOG_CONF_LOG="$COOG_CONF/logging.conf"
 }
 
-_coog_env_pg() { # set pg vars
-        local vars
-        vars=`python2 .py/env-config.py $COOG_SRV_CONF database uri url`
-        export PGHOST=`echo "$vars" | sed -n 1p`
-        export PGPORT=`echo "$vars" | sed -n 2p`
-        export PGUSER=`echo "$vars" | sed -n 3p`
-        export PGPASSWORD=`echo "$vars" | sed -n 4p`
-        export PGDATABASE=`echo "$vars" | sed -n 5p`
+_coog_env_postgres() { # set postgres vars
+        local db_conf
+        db_conf=`cat $COOG_CONF_SRV | python2 .py/parse-config.py database uri | python2 .py/parse-url.py` || return $?
+        PGHOST=`echo "$db_conf" | sed -n 2p`
+        [ ! -z $PGHOST ] && export PGHOST
+        PGPORT=`echo "$db_conf" | sed -n 3p`
+        [ ! -z $PGPORT ] && export PGPORT
+        PGUSER=`echo "$db_conf" | sed -n 4p`
+        [ ! -z $PGUSER ] && export PGUSER
+        PGPASSWORD=`echo "$db_conf" | sed -n 5p`
+        [ ! -z $PGPASSWORD ] && export PGPASSWORD
+        PGDATABASE=`echo "$db_conf" | sed -n 6p`
+        [ ! -z $PGDATABASE ] && export PGDATABASE
+        return 0
 }
 
-_coog_env_files
-_coog_env_paths
-_coog_env_python
-_coog_env_pg
+_coog_env_common() { # set common vars
+        LOG_LEVEL=`cat $COOG_CONF_LOG | python2 .py/parse-config.py logger_root level` || return $?
+        [ ! -z $LOG_LEVEL ] && export LOG_LEVEL
+        return 0
+}
 
-coog_env_celery() { # set trytond and celery config in pythonpath
-        # TODO: review - batch
-        local conf_path
-        conf_path=`readlink -f ../../conf`
-        local trytond_path
-        trytond_path=`readlink -f ../../trytond`
-        local proteus_path
-        proteus_path=`readlink -f ../../proteus`
-        export PYTHONPATH=$conf_path:$trytond_path:$proteus_path:$PYTHONPATH
+_coog_env_server() { # set server vars
+        export PYTHONPATH="$COOG_LIB:$COOG_TRYTOND:$COOG_PROTEUS:$PYTHONPATH"
+        TRYTOND_CONFIG="$COOG_CONF_SRV"
+        [ ! -z $TRYTOND_CONFIG ] && export TRYTOND_CONFIG
+        TRYTOND_DATABASE_NAME=`cat $COOG_CONF_SRV | python2 .py/parse-config.py database uri | python2 .py/parse-url.py | sed -n 6p` || return $?
+        [ ! -z $TRYTOND_DATABASE_NAME ] && export TRYTOND_DATABASE_NAME
+        TRYTOND_CACHE_REDIS=`cat $COOG_CONF_SRV | python2 .py/parse-config.py cache redis 2> /dev/null`
+        [ ! -z $TRYTOND_CACHE_REDIS ] && export TRYTOND_CACHE_REDIS
+        TRYTOND_ASYNC_RQ=`cat $COOG_CONF_SRV | python2 .py/parse-config.py async rq 2> /dev/null`
+        [ ! -z $TRYTOND_ASYNC_RQ ] && export TRYTOND_ASYNC_RQ
+        TRYTOND_ASYNC_CELERY=`cat $COOG_CONF_SRV | python2 .py/parse-config.py async celery 2> /dev/null`
+        [ ! -z $TRYTOND_ASYNC_CELERY ] && export TRYTOND_ASYNC_CELERY
+        return 0
+}
+
+_coog_env_batch() { # set batch vars
+        TRYTOND_BATCH_CONFIG="$COOG_CONF_BAT"
+        [ ! -z $TRYTOND_BATCH_CONFIG ] && export TRYTOND_BATCH_CONFIG
+        return 0
+}
+
+coog_env_init() { # set coog vars
+        _coog_env_python &&
+                _coog_env_files &&
+                _coog_env_paths &&
+                _coog_env_conf &&
+                _coog_env_postgres &&
+                _coog_env_common &&
+                _coog_env_server &&
+                _coog_env_batch
 }
 
 coog_env_main() { # print meaningful vars for coog execution
         echo Environment variables:
         echo
-        echo "    COOG_SRV_FILE     "$COOG_SRV_FILE
-        echo "    COOG_WRK_FILE     "$COOG_WRK_FILE
-        echo "    COOG_CLI_FILE     "$COOG_CLI_FILE
-        echo "    COOG_TMP          "$COOG_TMP
-        echo "    COOG_SRV_CONF     "$COOG_SRV_CONF
-        echo "    COOG_TEST_CONF    "$COOG_TEST_CONF
-        echo "    COOG_CLI_CONF     "$COOG_CLI_CONF
-        echo "    COOG_LOG_CONF     "$COOG_LOG_CONF
-        echo "    COOG_LOG_LEVEL    "$COOG_LOG_LEVEL
-        echo "    PYTHONUNBUFFERED  "$PYTHONUNBUFFERED
-        echo "    PGHOST            "$PGHOST
-        echo "    PGPORT            "$PGPORT
-        echo "    PGUSER            "$PGUSER
-        echo "    PGPASSWORD        "$PGPASSWORD
-        echo "    PGDATABASE        "$PGDATABASE
+        echo "  Local variables"
+        echo "    COOG_FILE_CLI          "$COOG_FILE_CLI
+        echo "    COOG_FILE_SRV          "$COOG_FILE_SRV
+        echo "    COOG_FILE_WRK          "$COOG_FILE_WRK
+        echo "    COOG_FILE_RQ           "$COOG_FILE_RQ
+        echo "    COOG_FILE_CEL          "$COOG_FILE_CEL
+        echo "    COOG_FILE_BAT          "$COOG_FILE_BAT
+        echo "    COOG_TMP               "$COOG_TMP
+        echo "    COOG_TRYTON            "$COOG_TRYTON
+        echo "    COOG_TRYTOND           "$COOG_TRYTOND
+        echo "    COOG_PROTEUS           "$COOG_PROTEUS
+        echo "    COOG_CONF              "$COOG_CONF
+        echo "    COOG_LIB               "$COOG_LIB
+        echo "    COOG_CONF_CLI          "$COOG_CONF_CLI
+        echo "    COOG_CONF_SRV          "$COOG_CONF_SRV
+        echo "    COOG_CONF_BAT          "$COOG_CONF_BAT
+        echo "    COOG_CONF_TEST         "$COOG_CONF_TEST
+        echo "    COOG_CONF_LOG          "$COOG_CONF_LOG
+        echo
+        echo "  Exported variables"
+        echo "    PYTHONUNBUFFERED       "$PYTHONUNBUFFERED
+        echo "    PYTHONPATH             "$PYTHONPATH
+        echo "    PGHOST                 "$PGHOST
+        echo "    PGPORT                 "$PGPORT
+        echo "    PGUSER                 "$PGUSER
+        echo "    PGPASSWORD             "$PGPASSWORD
+        echo "    PGDATABASE             "$PGDATABASE
+        echo "    LOG_LEVEL              "$LOG_LEVEL
+        echo "    TRYTOND_CONFIG         "$TRYTOND_CONFIG
+        echo "    TRYTOND_DATABASE_NAME  "$TRYTOND_DATABASE_NAME
+        echo "    TRYTOND_CACHE_REDIS    "$TRYTOND_CACHE_REDIS
+        echo "    TRYTOND_ASYNC_RQ       "$TRYTOND_ASYNC_RQ
+        echo "    TRYTOND_ASYNC_CELERY   "$TRYTOND_ASYNC_CELERY
+        echo "    TRYTOND_BATCH_CONFIG   "$TRYTOND_BATCH_CONFIG
 }

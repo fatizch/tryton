@@ -123,9 +123,6 @@ coog_ep_app() { # start Coog app inside container
         echo Building configuration file...
         _coog_ep_conf || ( echo "!!! Failed to build configuration file !!!" && return )
 
-        # TODO: review - batch
-        cp conf/celeryconfig.py ../../trytond
-
         echo
         echo Staring Coog...
         local file

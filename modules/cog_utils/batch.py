@@ -3,9 +3,6 @@ import logging
 import ConfigParser
 from datetime import datetime
 
-from celeryconfig import CELERYD_CONCURRENCY, CELERYD_TASK_LOG_FORMAT
-from celery.utils.log import get_task_logger
-
 from trytond.config import config
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -20,30 +17,6 @@ __all__ = [
     ]
 
 
-class BatchLogger(logging.LoggerAdapter):
-    def init(self, logger, extra):
-        super(BatchLogger, self).__init__(logger, extra)
-
-    def success(self, msg, *args, **kwargs):
-        self.info('[SUCCESS] ' + msg, *args, **kwargs)
-
-    def failure(self, msg, *args, **kwargs):
-        self.info('[FAILURE] ' + msg, *args, **kwargs)
-
-
-def get_logger(batch_name):
-    logger = get_task_logger(batch_name)
-    log_dir = config.get('batch', 'log_dir', default='')
-    if log_dir and len(logger.handlers) < 2:
-        handler = logging.FileHandler(os.path.join(
-            log_dir, batch_name + '.log'), delay=True)
-        format_string = CELERYD_TASK_LOG_FORMAT.replace('[%(name)s]', '')
-        formatter = logging.Formatter(format_string)
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-    return BatchLogger(logger, {})
-
-
 class BatchRoot(ModelView):
     'Root class for batches'
 
@@ -54,11 +27,11 @@ class BatchRoot(ModelView):
             'root_dir': config.get('batch', 'log_dir', default=''),
             'filepath_template': u'%{BATCHNAME}/%{FILENAME}',
             'filepath_timestamp_format': u'%Y%m%d_%Hh%Mm%Ss',
-            'split_mode': u'divide',
-            'split_size': str(CELERYD_CONCURRENCY),
+            'job_size': '1000',
+            'transaction_size': '0'
         }
         cls._config = ConfigParser.RawConfigParser()
-        config_file = config.get('batch', 'config_file')
+        config_file = os.environ.get('TRYTOND_BATCH_CONFIG')
         if config_file:
             try:
                 with open(config_file, 'r') as fconf:
@@ -166,7 +139,7 @@ class BatchRootNoSelect(BatchRoot):
     @classmethod
     def __setup__(cls):
         super(BatchRootNoSelect, cls).__setup__()
-        cls._default_config_items.update({'split_size': 1})
+        cls._default_config_items.update({'job_size': '0'})
 
     @classmethod
     def convert_to_instances(cls, ids):
@@ -209,7 +182,7 @@ class ViewValidationBatch(BatchRoot):
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):
-        logger = get_logger(cls.__name__)
+        logger = logging.getLogger(cls.__name__)
         for view in objects:
             full_xml_id = view.xml_id
             if full_xml_id == '':
@@ -221,4 +194,4 @@ class ViewValidationBatch(BatchRoot):
                     logger.warning('View %s inherits from %s but has '
                         'different id !' % (full_xml_id,
                             full_inherited_xml_id))
-        logger.success('%d views checked' % len(objects))
+        logger.info('%d views checked' % len(objects))

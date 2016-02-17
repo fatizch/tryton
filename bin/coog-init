@@ -6,14 +6,14 @@ coog_init_bin() { # link useful bin to venv (tryton, coog, upload.py, etc)
         local wd
         wd=`pwd`
         cd $VIRTUAL_ENV/bin
-        [ -h trytond ] && rm trytond
-        ln -s `readlink -f $wd/../../trytond/bin/trytond` .
-        [ -h run-tests.py ] && rm run-tests.py
-        ln -s `readlink -f $wd/../../trytond/trytond/tests/run-tests.py` .
         [ -h tryton ] && rm tryton
-        ln -s `readlink -f $wd/../../tryton/bin/tryton` .
+        ln -s "$COOG_TRYTON/bin/tryton"
+        [ -h trytond ] && rm trytond
+        ln -s "$COOG_TRYTOND/bin/trytond"
+        [ -h run-tests.py ] && rm run-tests.py
+        ln -s "$COOG_TRYTOND/trytond/tests/run-tests.py"
         [ -h coog ] && rm coog
-        ln -s $wd/coog .
+        ln -s $wd/coog
         [ -h upload.py ] && rm upload.py
         ln -s $wd/vendor/upload.py
         [ -h git-cl ] && rm git-cl
@@ -22,23 +22,21 @@ coog_init_bin() { # link useful bin to venv (tryton, coog, upload.py, etc)
 }
 
 _coog_init_conf_cp() {
-        if [ -f ../../conf/$1 ]
+        if [ -f "$COOG_CONF/$1" ]
         then
-                cp conf/$1 ../../conf/$1".ini"
+                cp conf/$1 "$COOG_CONF/$1".ini
         else
-                cp conf/$1 ../../conf/
+                cp conf/$1 "$COOG_CONF"
         fi
 }
 
 coog_init_conf() { # set default conf
-        [ ! -d ../../conf ] && mkdir ../../conf
+        [ ! -d "$COOG_CONF" ] && mkdir "$COOG_CONF"
         _coog_init_conf_cp trytond.conf
         _coog_init_conf_cp test.conf
         _coog_init_conf_cp tryton.conf
         _coog_init_conf_cp logging.conf
-        # TODO: review - batch
         _coog_init_conf_cp batch.conf
-        _coog_init_conf_cp celeryconfig.py
 }
 
 coog_init_redmine() { # init redmine credentials
@@ -55,35 +53,34 @@ coog_init_docker() { # provide helpful scripts to manage docker
         cp -fr docker ../../docker
 }
 
- coog_init_autocomplete() { # add coog completion scripts to current virtual env
-         [ -z $VIRTUAL_ENV ] && echo not in a virtual env, nothing to do && return
-         local command_path=`which coog`
-         local script_path=`readlink -f $command_path`
-         local script_dir=`dirname $script_path`
-         local file_path_activate=$VIRTUAL_ENV"/bin/postactivate"
-         local file_path_deactivate=$VIRTUAL_ENV"/bin/postdeactivate"
-         local command_line="source $script_dir/.autocomplete/.coog_autocomplete_"
+coog_init_autocomplete() { # add coog completion scripts to current virtual env
+        [ -z $VIRTUAL_ENV ] && echo not in a virtual env, nothing to do && return
+        local command_path=`which coog`
+        local script_path=`readlink -f $command_path`
+        local script_dir=`dirname $script_path`
+        local file_path_activate=$VIRTUAL_ENV"/bin/postactivate"
+        local file_path_deactivate=$VIRTUAL_ENV"/bin/postdeactivate"
+        local command_line="source $script_dir/.autocomplete/.coog_autocomplete_"
 
-         local my_shell=`basename $SHELL`
-         if [ $my_shell = "bash" ] || [ $my_shell = "zsh" ] ; then
-                 command_line=$command_line$my_shell
+        local my_shell=`basename $SHELL`
+        if [ $my_shell = "bash" ] || [ $my_shell = "zsh" ] ; then
+                command_line=$command_line$my_shell
 
-                 if `grep -q "$command_line" $file_path_activate` ; then
-                         echo "Autocompletion already initialized."
-                 else
-                         echo "" >> $file_path_activate
-                         echo $command_line >> $file_path_activate
-                         echo "Autocompletion initialized for $my_shell. Relaunch it."
-                 fi
-                 local undo_complete_command="complete -o default coog"
-                 if ! `grep -q "$undo_complete_command" $file_path_deactivate` ; then
-                         if [ $my_shell = "bash" ] ; then
-                                 echo "" >> $file_path_deactivate
-                                 echo "complete -o default coog" >> $file_path_deactivate
-                         elif [ $my_shell = "zsh" ] ; then
-                                 echo "complete -o default coog" >> $file_path_deactivate
-                         fi
-                 fi
-         fi
- }
-
+                if `grep -q "$command_line" $file_path_activate` ; then
+                        echo "Autocompletion already initialized."
+                else
+                        echo "" >> $file_path_activate
+                        echo $command_line >> $file_path_activate
+                        echo "Autocompletion initialized for $my_shell. Relaunch it."
+                fi
+                local undo_complete_command="complete -o default coog"
+                if ! `grep -q "$undo_complete_command" $file_path_deactivate` ; then
+                        if [ $my_shell = "bash" ] ; then
+                                echo "" >> $file_path_deactivate
+                                echo "complete -o default coog" >> $file_path_deactivate
+                        elif [ $my_shell = "zsh" ] ; then
+                                echo "complete -o default coog" >> $file_path_deactivate
+                        fi
+                fi
+        fi
+}

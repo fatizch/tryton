@@ -2,13 +2,10 @@
 # test management
 
 _coog_test_enter() { # set test context
-        local trytond_path
-        trytond_path=`readlink -f ../../trytond`
-        export PYTHONPATH="$trytond_path":$PYTHONPATH
-        coog_env_celery
-        export TRYTOND_CONFIG=$COOG_TEST_CONF
+        # very specific vars for test (overriding TRYTOND_CONFIG)
+        export TRYTOND_CONFIG=$COOG_CONF_TEST
         # TODO: review - already in config
-        export TRYTOND_DATABASE_URI=`python2 .py/env-config.py $TRYTOND_CONFIG database uri str`
+        export TRYTOND_DATABASE_URI=`python2 .py/parse-config.py $COOG_CONF_TEST database uri`
         export DB_NAME="test_"`date +%s%N`
         export DO_NOT_TEST_CASES=1
 }
@@ -19,7 +16,7 @@ _coog_test_leave() { # clean test config
 
 coog_test_dropdb() { # drop db from test database - <db> - default: test_*
         local vars
-        vars=`python2 .py/env-config.py $COOG_TEST_CONF database uri url`
+        vars=`python2 .py/parse-config.py $COOG_CONF_TEST database uri | python2 .py/parse-url.py`
         export PGHOST=`echo "$vars" | sed -n 1p`
         export PGPORT=`echo "$vars" | sed -n 2p`
         export PGUSER=`echo "$vars" | sed -n 3p`

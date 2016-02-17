@@ -1,3 +1,5 @@
+import logging
+
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
@@ -13,7 +15,7 @@ class DunningCreationBatch(batch.BatchRoot):
     'Dunning Creation Batch'
     __name__ = 'account.dunning.create'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -34,7 +36,7 @@ class DunningTreatmentBatch(batch.BatchRoot):
     'Process Dunning Batch'
     __name__ = 'account.dunning.treat'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):

@@ -1,0 +1,34 @@
+# vim: set ft=sh:
+# python-redis - redis-cli wrapper (using conf)
+
+_coog_redis_params() { # get redis connection string - <uri>
+        [ -z $1 ] && echo redis_params: missing args && return 1
+        local all; all=`python2 .py/parse-url.py $1`
+        local host; host=`echo "$all" | sed -n 2p`
+        local port; port=`echo "$all" | sed -n 3p`
+        local db; db=`echo "$all" | sed -n 6p`
+        echo "-h $host -p $port -n $db"
+}
+
+_coog_redis_uri() { # guess redis uri - <context>
+        [ -z $1 ] && echo redis_server: missing args && return 1
+        [ $1 == 'rq' ] && echo $TRYTOND_ASYNC_RQ && return
+        [ $1 == 'celery' ] && echo $TRYTOND_ASYNC_CELERY && return
+        [ $1 == 'cache' ] && echo $TRYTOND_CACHE_REDIS && return
+        return 1
+}
+
+coog_redis_eval() { # eval redis script - <context> <script> [args]
+        [ $# -lt 2 ] && echo missing args && return 1
+        local context; context=$1; shift
+        local script; script=$1; shift
+        local uri; uri=`_coog_redis_uri $context` || return $?
+        local args; args=`_coog_redis_params $uri` || return $?
+        redis-cli --raw $args --eval $script , $*
+}
+
+coog_redis_count() { # count eval script results - <context> <script> [args]
+        [ $# -lt 2 ] && echo missing script && return 1
+        local res; res=`coog_redis_eval $* | sed '/^\s*$/d' | wc -l`
+        echo $((res-1))
+}

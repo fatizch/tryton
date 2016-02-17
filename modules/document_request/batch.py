@@ -1,3 +1,5 @@
+import logging
+
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
@@ -13,7 +15,7 @@ class DocumentRequestBatch(batch.BatchRoot):
 
     __name__ = 'document.request.process'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):

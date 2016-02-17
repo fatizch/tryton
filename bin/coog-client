@@ -2,14 +2,8 @@
 # client management - start, stop, log, etc
 
 _coog_client_file() { # get file name
-        if [ $# -eq 1 ]
-        then
-                echo $COOG_TMP"/"$COOG_CLI_FILE"."$1
-        fi
-        if [ $# -eq 2 ]
-        then
-                echo $COOG_TMP"/"$COOG_CLI_FILE"-"$2"."$1
-        fi
+        [ $# -eq 1 ] && echo $COOG_TMP"/"$COOG_FILE_CLI"."$1
+        [ $# -eq 2 ] && echo $COOG_TMP"/"$COOG_FILE_CLI"-"$2"."$1
 }
 
 _coog_client_pid() { # retrieve pid from pidfile, delete pidfile if arg=1
@@ -33,7 +27,7 @@ _coog_client_bak() { # backup log file (mv to pid if exists or rm)
 coog_client_start() { # start client - [args] passed to tryton, loglevel NOT set when args
         local pid_file
         pid_file=`_coog_client_file pid`
-        [ -e $pid_file ] && echo 'client already running -> stop or restart' && return
+        [ -e $pid_file ] && echo 'client already running -> stop or kill' && return
         local out_file
         out_file=`_coog_client_file out`
         [ -e $out_file ] && echo 'client log file exists -> clean manually' && return
@@ -41,19 +35,17 @@ coog_client_start() { # start client - [args] passed to tryton, loglevel NOT set
         args=--dev
         if [ $# -eq 0 ]
         then
-                args="$args -l $COOG_LOG_LEVEL"
+                args="$args -l $LOG_LEVEL"
         else
                 args="$args $*"
         fi
-        nohup tryton -c $COOG_CLI_CONF $args > $out_file &
+        nohup tryton -c $COOG_CONF_CLI $args > $out_file &
         echo $! > $pid_file
         echo client started
 }
 
 coog_client_debug() { # start client in pdb - [args] passed to tryton
-        local tryton
-        tryton=`which tryton | xargs readlink -f`
-        python -m pdb $tryton -c $COOG_CLI_CONF $*
+        python -m pdb "$COOG_TRYTON/bin/tryton" -c $COOG_CONF_CLI $*
 }
 
 coog_client_stop() { # stop client (gracefully)
@@ -77,6 +69,21 @@ coog_client_ps() { # print client process info (based on ps)
         pid=`_coog_client_pid 0`
         [ -z $pid ] && echo no client running && return
         ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
+}
+
+coog_client_status() { # print client status (errors based on logs)
+        local out_file
+        out_file=`_coog_client_file out`
+        local cri
+        local err
+        local wrn
+        local inf
+        [ ! -e $out_file ] && echo no client log && return
+        cri=`grep -c "\bCRITICAL:\b" $out_file`
+        err=`grep -c "\bERROR:\b" $out_file`
+        wrn=`grep -c "\bWARNING:\b" $out_file`
+        inf=`grep -c "\bINFO:\b" $out_file`
+        echo client status \(critical:$cri error:$err warning:$wrn info:$inf\)
 }
 
 coog_client_log() { # less client logs

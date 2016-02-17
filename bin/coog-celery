@@ -1,0 +1,115 @@
+# vim: set ft=sh:
+# celery - workers and queues management
+
+_coog_celery_file() { # get file name - <ext> [pid]
+        [ $# -lt 1 ] && echo celery_file: missing args && return 1
+        [ $# -eq 1 ] && echo $COOG_TMP"/"$COOG_FILE_CEL"."$1
+        [ $# -eq 2 ] && echo $COOG_TMP"/"$COOG_FILE_CEL"-"$2"."$1
+}
+
+_coog_celery_pid() { # retrieve pid from pidfile
+        local pid_file
+        pid_file=`_coog_celery_file pid`
+        [ ! -e $pid_file ] && return
+        cat $pid_file
+        [ $1 = 1 ] && rm -f $pid_file
+}
+
+_coog_celery_bak() { # backup log file - [pid]
+        local out_file
+        out_file=`_coog_celery_file out`
+        [ ! -e $out_file ] && echo no celery log && return
+        [ -z $1 ] && rm $out_file && return
+        local bak_file
+        bak_file=`_coog_celery_file out $1`
+        mv $out_file $bak_file
+}
+
+coog_celery_start() { # start celery workers - <concurrency>
+        local pid_file
+        pid_file=`_coog_celery_file pid`
+        [ -e $pid_file ] && echo 'workers already running -> stop or kill' && return
+        local out_file
+        out_file=`_coog_celery_file out`
+        [ -e $out_file ] && echo 'celery log file exists -> clean manually' && return
+        nohup celery worker \
+                --app=async.broker_celery \
+                --concurrency=$1
+                --pidfile=$pid_file \
+                --loglevel=$LOG_LEVEL \
+                --logfile=$out_file > $out_file &
+}
+
+coog_celery_stop() { # stop celery workers
+        local pid
+        pid=`_coog_celery_pid 0`
+        [ -z $pid ] && echo no workers running && return
+        kill -TERM $pid && echo workers stopped
+        _coog_celery_bak $pid
+}
+
+coog_celery_status() { # celery status - [celery statis args]
+        celery --app=async.broker_celery status
+}
+
+coog_celery_inspect() { # inspect celery - [celery inspect args]
+        celery --app=async.broker_celery inspect $*
+}
+
+coog_celery_log() { # less celery logs [less args]
+        local out_file
+        out_file=`_coog_celery_file out`
+        [ ! -e $out_file ] && echo no celery log && return
+        less $* $out_file
+}
+
+coog_celery_head() { # head celery logs [head args]
+        local out_file
+        out_file=`_coog_celery_file out`
+        [ ! -e $out_file ] && echo no celery log && return
+        head $* $out_file
+}
+
+coog_celery_tail() { # tail celery logs [tail args]
+        local out_file
+        out_file=`_coog_celery_file out`
+        [ ! -e $out_file ] && echo no celery log && return
+        tail $* $out_file
+}
+
+coog_celery_qstart() { # start queue workers - <name> <out> <concurrency>
+        [ $# -lt 3 ] && echo missing args && return 1
+        local pid_file
+        pid_file="$2".pid
+        [ -e "$pid_file" ] && echo workers already running -">" stop && return 1
+        local out_file
+        out_file="$2".out
+        nohup celery worker \
+                --app=async.broker_celery \
+                --queues=$1 \
+                --concurrency=$3 \
+                --pidfile=$pid_file \
+                --loglevel=$LOG_LEVEL \
+                --logfile=$2 > $out_file &
+}
+
+coog_celery_qstop() { # stop queue workers - <file>
+        [ -z "$1" ] && echo missing file && return 1
+        local pid_file
+        pid_file="$1".pid
+        [ ! -e "$pid_file" ] && echo inexisting pid file && return 1
+        local pid
+        pid=`cat $pid_file`
+        kill -TERM $pid && echo workers stopped
+        rm -f "$pid_file"
+}
+
+coog_celery_qlist() { # list queue jobs - <queue> [filter]
+        [ $# -lt 1 ] && echo missing queue && return 1
+        coog_redis_eval celery celery/job.lua $*
+}
+
+coog_celery_qinfo() { # get queue info - <queue> [filter]
+        [ $# -lt 1 ] && echo missing queue && return 1
+        coog_redis_count celery celery/job.lua $*
+}

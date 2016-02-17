@@ -1,13 +1,31 @@
 # vim: set ft=sh:
 # check your timesheet on Redmine
 
-coog_ts_main() { # print today's logged time
+_coog_ts_iterate() {
+        local entry
+        local sum=0
+        while read entry
+        do
+                local line
+                line=`echo $entry | python2 .py/parse-json.py hours project.name comments issue.id | paste`
+                sum=$sum+`echo $line | cut -d " " -f 1`
+                echo " "$line
+        done
+        echo
+        echo Total: `echo $sum | bc`
+}
+
+coog_ts_main() { # print logged time
+        local when
+        [ $# -eq 0 ] && when=t
+        [ -z $when ] && when=ld
         local url
-        url='https://redmine.coopengo.com/time_entries.json?user_id=me&spent_on=t'
-        [ -z $COOG_REDMINE_CRED ] && echo COOG_REDMINE_CRED not defined && \
-                echo "  "It should be in this format username:password && \
-                echo "  "Could be set in '~'/.\[z\]profile && \
+        url="https://redmine.coopengo.com/time_entries.json?user_id=me&spent_on=$when"
+        [ -z $COOG_REDMINE_CRED ] && echo COOG_REDMINE_CRED not defined &&
+                echo "  "It should be in this format username:password &&
+                echo "  "Could be set in '~'/.\[z\]profile &&
                 return
-        curl -s -k -u $COOG_REDMINE_CRED $url | python2 .py/redmine-te-parse.py || \
-                curl -I -k -u $COOG_REDMINE_CRED $url
+        curl -s -k -u $COOG_REDMINE_CRED $url \
+                | python2 .py/parse-json.py time_entries \
+                | _coog_ts_iterate
 }

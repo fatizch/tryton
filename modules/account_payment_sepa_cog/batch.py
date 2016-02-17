@@ -14,8 +14,7 @@ class PaymentTreatmentBatch:
     def __setup__(cls):
         super(PaymentTreatmentBatch, cls).__setup__()
         cls._default_config_items.update({
-                'split_mode': 'divide',
-                'split_size': 1,
+                'job_size': '0',
                 })
 
     @classmethod

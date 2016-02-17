@@ -1,4 +1,6 @@
 # -*- coding:utf-8 -*-
+import logging
+
 from trytond.pool import Pool
 from trytond.modules.cog_utils import batch
 
@@ -8,7 +10,7 @@ class ContractEndDateTerminationBatch(batch.BatchRoot):
 
     __name__ = 'contract.termination.process'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):

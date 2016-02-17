@@ -2,14 +2,8 @@
 # server management - start, stop, log, status, etc
 
 _coog_server_file() { # get file name
-        if [ $# -eq 1 ]
-        then
-                echo $COOG_TMP"/"$COOG_SRV_FILE"."$1
-        fi
-        if [ $# -eq 2 ]
-        then
-                echo $COOG_TMP"/"$COOG_SRV_FILE"-"$2"."$1
-        fi
+        [ $# -eq 1 ] && echo $COOG_TMP"/"$COOG_FILE_SRV"."$1
+        [ $# -eq 2 ] && echo $COOG_TMP"/"$COOG_FILE_SRV"-"$2"."$1
 }
 
 _coog_server_pid() { # retrieve pid from pidfile, delete pidfile if arg=1
@@ -33,32 +27,28 @@ _coog_server_bak() { # backup log file (mv to pid if exists or rm)
 coog_server_start() { # start server - [args] passed to trytond, logconf NOT set when args
         local pid_file
         pid_file=`_coog_server_file pid`
-        [ -e $pid_file ] && echo 'server already running -> stop or restart' && return
+        [ -e $pid_file ] && echo 'server already running -> stop or kill' && return
         local out_file
         out_file=`_coog_server_file out`
         [ -e $out_file ] && echo 'server log file exists -> clean manually' && return
-        coog_env_celery
         local args
         args=--dev
         if [ $# -eq 0 ]
         then
-                args="$args --logconf $COOG_LOG_CONF"
+                args="$args --logconf $COOG_CONF_LOG"
         else
                 args="$args $*"
         fi
-        [ ! -z $PGDATABASE ] && args="$args -d $PGDATABASE"
-        nohup trytond -c $COOG_SRV_CONF --pidfile $pid_file $args > $out_file &
+        [ ! -z $TRYTOND_DATABASE_NAME ] && args="$args -d $TRYTOND_DATABASE_NAME"
+        nohup trytond -c $COOG_CONF_SRV --pidfile $pid_file $args > $out_file &
         echo server started
 }
 
 coog_server_debug() { # start server in pdb - [args] passed to trytond
-        coog_env_celery
         local args
         args=$*
-        [ ! -z $PGDATABASE ] && args="$args -d $PGDATABASE"
-        local trytond
-        trytond=`which trytond | xargs readlink -f`
-        python -m pdb $trytond -c $COOG_SRV_CONF $args
+        [ ! -z $TRYTOND_DATABASE_NAME ] && args="$args -d $TRYTOND_DATABASE_NAME"
+        python -m pdb "$COOG_TRYTOND/bin/trytond" -c $COOG_CONF_SRV $args
 }
 
 coog_server_stop() { # stop server (gracefully)
@@ -91,6 +81,21 @@ coog_server_ps() { # print server process info (based on ps)
         ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
 }
 
+coog_server_status() { # print server status (errors based on logs)
+        local out_file
+        out_file=`_coog_server_file out`
+        local cri
+        local err
+        local wrn
+        local inf
+        [ ! -e $out_file ] && echo no server log && return
+        cri=`grep -c "\bCRITICAL:\b" $out_file`
+        err=`grep -c "\bERROR:\b" $out_file`
+        wrn=`grep -c "\bWARNING:\b" $out_file`
+        inf=`grep -c "\bINFO:\b" $out_file`
+        echo server status \(critical:$cri error:$err warning:$wrn info:$inf\)
+}
+
 coog_server_log() { # less server logs
         local out_file
         out_file=`_coog_server_file out`
@@ -110,19 +115,4 @@ coog_server_tail() { # tail server logs
         out_file=`_coog_server_file out`
         [ ! -e $out_file ] && echo no server log && return
         tail $* $out_file
-}
-
-coog_server_st () { # print server status (errors based on logs)
-        local out_file
-        out_file=`_coog_server_file out`
-        local cri
-        local err
-        local wrn
-        local inf
-        [ ! -e $out_file ] && echo no server log && return
-        cri=`grep -c "\bCRITICAL:\b" $out_file`
-        err=`grep -c "\bERROR:\b" $out_file`
-        wrn=`grep -c "\bWARNING:\b" $out_file`
-        inf=`grep -c "\bINFO:\b" $out_file`
-        echo server exec info \(critical:$cri error:$err warning:$wrn info:$inf\)
 }

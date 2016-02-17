@@ -1,3 +1,5 @@
+import logging
+
 from trytond.pool import Pool
 
 from trytond.modules.cog_utils import batch
@@ -13,7 +15,7 @@ class ReportProductionRequestTreatmentBatch(batch.BatchRoot):
 
     __name__ = 'report_production.request.batch_treat'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):

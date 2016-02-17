@@ -19,7 +19,7 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
 
     __name__ = 'contract.invoice.create'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -60,7 +60,7 @@ class PostInvoiceContractBatch(batch.BatchRoot):
 
     __name__ = 'contract.invoice.post'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -98,7 +98,7 @@ class SetNumberInvoiceContractBatch(batch.BatchRoot):
 
     __name__ = 'contract.invoice.set_number'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -106,12 +106,8 @@ class SetNumberInvoiceContractBatch(batch.BatchRoot):
 
     @classmethod
     def select_ids(cls, treatment_date, extra_args):
-        split_mode = cls.get_conf_item('split_mode')
-        split_size = cls.get_conf_item('split_size')
-        if split_mode != 'divide' or int(split_size) != 1:
-            logging.getLogger(__name__).error('Can not scale out, mode: %s, \
-                size: %s' % (split_mode, split_size))
-            raise Exception('Can not scale out')
+        job_size = cls.get_conf_item('job_size')
+        assert job_size == 0, 'Can not scale out'
         pool = Pool()
         post_batch = pool.get('contract.invoice.post')
         return post_batch.select_ids(treatment_date, extra_args)

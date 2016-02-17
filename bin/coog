@@ -1,4 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+
+# This is the only reason why we use bash (not simply sh)
+set -o pipefail
 
 _enter() { # move to bin directory
         local script_path
@@ -50,10 +53,11 @@ _main() { # parse params and call fn
                 fi
         fi
         fn="coog_"$com"_"$sub
-        _source
-        $fn $*
+        _source && coog_env_init && $fn $*
 }
 
 _enter
 _main $*
+_r=$?
 _leave
+exit $_r

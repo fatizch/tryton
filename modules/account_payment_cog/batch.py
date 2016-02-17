@@ -1,4 +1,6 @@
+import logging
 from itertools import groupby
+
 from sql.operators import Equal
 from sql.aggregate import Count
 from sql import Null
@@ -23,14 +25,13 @@ class PaymentTreatmentBatch(batch.BatchRoot):
 
     __name__ = 'account.payment.process'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def __setup__(cls):
         super(PaymentTreatmentBatch, cls).__setup__()
         cls._default_config_items.update({
-                'split_mode': 'divide',
-                'split_size': 1,
+                'job_size': 0,
                 'payment_kind': '',
                 })
 
@@ -92,7 +93,7 @@ class PaymentCreationBatch(batch.BatchRoot):
     "Payment Creation Batch"
     __name__ = 'account.payment.create'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def __setup__(cls):
@@ -161,7 +162,7 @@ class PaymentAcknowledgeBatch(batch.BatchRoot):
     'Payment Acknowledge Batch'
     __name__ = 'account.payment.acknowledge'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def __setup__(cls):

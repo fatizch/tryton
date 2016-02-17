@@ -11,7 +11,7 @@ coog_module_main() { # list installed modules - <db> - default: db uri
 }
 
 coog_module_update() { # install / update modules - <modules> - default: all
-        [ -z $PGDATABASE ] && echo no database defined && return
+        [ -z $TRYTOND_DATABASE_NAME ] && echo no database defined && return
         local modules
         if [ $# -eq 0 ]
         then
@@ -19,18 +19,16 @@ coog_module_update() { # install / update modules - <modules> - default: all
         else
                 modules=$*
         fi
-        coog_env_celery
         trytond -v \
-                -c $COOG_SRV_CONF \
-                -d $PGDATABASE \
+                -c $COOG_CONF_SRV \
+                -d $TRYTOND_DATABASE_NAME \
                 -u $modules
 }
 
 coog_module_updatedb() { # install / update all modules - <database> - no default
         [ -z $1 ] && echo no given database && return
-        coog_env_celery
         trytond -v \
-                -c $COOG_SRV_CONF \
+                -c $COOG_CONF_SRV \
                 -d $1 \
                 --all
 }

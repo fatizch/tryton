@@ -1,3 +1,4 @@
+import logging
 
 from trytond.pool import Pool
 from trytond.modules.cog_utils import batch
@@ -13,7 +14,7 @@ class SnapshotTakeBatch(batch.BatchRootNoSelect):
 
     __name__ = 'account.move.snapshot.take'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):

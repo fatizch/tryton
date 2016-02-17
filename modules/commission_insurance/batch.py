@@ -1,3 +1,4 @@
+import logging
 from sql import Null
 
 from trytond.pool import Pool
@@ -17,7 +18,7 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
 
     __name__ = 'commission.invoice.create'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -80,7 +81,7 @@ class PostCommissionInvoiceBatch(batch.BatchRoot):
 
     __name__ = 'commission.invoice.post'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):

@@ -1,3 +1,5 @@
+import logging
+
 from trytond.modules.cog_utils import batch
 from trytond.pool import Pool
 
@@ -11,7 +13,7 @@ class ValidateRuleBatch(batch.BatchRoot):
 
     __name__ = 'rule_engine.validate'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):

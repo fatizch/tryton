@@ -1,0 +1,70 @@
+# vim: set ft=sh:
+# batch management
+
+_coog_batch_file() { # get file name - <name>
+        [ -z $1 ] && echo batch_file: missing args && return 1
+        echo $COOG_TMP/$COOG_FILE_BAT-$1
+}
+
+_coog_batch_broker() { # get batch broker
+        [ ! -z $TRYTOND_ASYNC_RQ ] && echo rq && return
+        [ ! -z $TRYTOND_ASYNC_CELERY ] && echo celery && return
+        >&2 echo no async broker configured && return 1
+}
+
+coog_batch_generate() { # generate batch jobs - <name> [args]
+        [ $# -lt 1 ] && echo missing at least batch name && return 1
+        local broker; broker=`_coog_batch_broker` || return $?
+        local name; name=$1; shift
+        python2 -m "batch" -b $broker -n $name $*
+}
+
+coog_batch_start() { # start batch execution - <name> <concurrency>
+        [ $# -lt 2 ] && echo missing batch name and workers number && return 1
+        local broker; broker=`_coog_batch_broker` || return $?
+        local out_file; out_file=`_coog_batch_file $1` || return $?
+        coog_"$broker"_qstart $1 "$out_file" $2
+}
+
+coog_batch_stop() { # stop batch execution - <name>
+        [ -z $1 ] && echo mission batch name && return 1
+        local broker; broker=`_coog_batch_broker` || return $?
+        local out_file; out_file=`_coog_batch_file $1` || return $?
+        coog_"$broker"_qstop "$out_file"
+}
+
+coog_batch_wait() { # wait for batch exec - <name>
+        [ $# -lt 1 ] && echo missing batch name && return 1
+        local broker; broker=`_coog_batch_broker` || return $?
+        while [ true ]
+        do
+                local waiting
+                waiting=`coog_"$broker"_qinfo $1 waiting` || return $?
+                [ $waiting -eq 0 ] && break
+                echo `date +%X` still have jobs to eat \($waiting\)
+                sleep 10
+        done
+        coog_batch_stop $1
+        local failed; failed=`coog_"$broker"_qinfo $1 failed`
+        [ $failed -eq 0 ] && echo batch exec succeeded && return 0
+        echo batch exec failed - $failed jobs in fail && return 1
+}
+
+coog_batch_report() { # print batch report - <name> [filters]
+        [ $# -lt 1 ] && echo missing batch name && return 1
+        local broker; broker=`_coog_batch_broker` || return $?
+        coog_"$broker"_qlist $*
+}
+
+coog_batch_log() { # cat batch out - <name> [cat args]
+        [ -z $1 ] && echo missing batch name && return 1
+        local out_file; out_file=`_coog_batch_file $1` || return 1
+        shift
+        local fs
+        local f
+        for f in $out_file"*"
+        do
+                fs="$fs $f"
+        done
+        cat $* $fs
+}

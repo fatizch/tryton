@@ -3,6 +3,6 @@
 
 coog_joke_main() { # brings a smile (fair attitude requested)
         local joke
-        joke=`curl -s "http://api.icndb.com/jokes/random" | python2 .py/joke-parse.py`
+        joke=`curl -s "http://api.icndb.com/jokes/random" | python2 .py/parse-json.py value.joke`
         echo $joke
 }
