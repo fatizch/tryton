@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -164,11 +164,11 @@ msgstr "Montant de la taxe"
 
 msgctxt "field:contract.premium.amount.per_period,total:"
 msgid "Total"
-msgstr "Total"
+msgstr "Total TTC"
 
 msgctxt "field:contract.premium.amount.per_period,untaxed_amount:"
 msgid "Untaxed Amount"
-msgstr "Total"
+msgstr "Total HT"
 
 msgctxt "field:contract.premium.amount.per_period,write_date:"
 msgid "Write Date"
