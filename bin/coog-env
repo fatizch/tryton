@@ -135,3 +135,7 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    TRYTOND_ASYNC_CELERY   "$TRYTOND_ASYNC_CELERY
         echo "    TRYTOND_BATCH_CONFIG   "$TRYTOND_BATCH_CONFIG
 }
+
+coog_env_python() { # launches python in coog context
+        python2 $*
+}

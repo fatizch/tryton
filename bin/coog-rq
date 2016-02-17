@@ -89,7 +89,7 @@ coog_rq_qstart() { # start queue workers - <queue> <file> <concurrency>
         pid_file="$2".pid
         [ -e "$pid_file" ] && echo workers already running -">" stop && return 1
         local i=0
-        while [ $i -lt 4 ]
+        while [ $i -lt $3 ]
         do
                 local out_file
                 out_file="$2"-"$i".out
