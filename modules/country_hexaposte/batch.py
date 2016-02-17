@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+import logging
 from trytond.pool import Pool
 from trytond.modules.cog_utils import batch
 
@@ -10,7 +11,7 @@ class UpdateZipCodesFromHexaPost(batch.BatchRoot):
 
     __name__ = 'country.zipcode.update_from_hexapost'
 
-    logger = batch.get_logger(__name__)
+    logger = logging.getLogger(__name__)
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):
