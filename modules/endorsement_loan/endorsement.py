@@ -104,8 +104,8 @@ class Loan:
         return self.funds_release_date
 
     def get_loan_amount(self):
-        return self.last_endorsement_balance or \
-            super(Loan, self).get_loan_amount()
+        return getattr(self, 'last_endorsement_balance',
+            super(Loan, self).get_loan_amount())
 
 
 class LoanIncrement:
