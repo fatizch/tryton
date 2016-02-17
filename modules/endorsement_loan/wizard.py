@@ -642,7 +642,7 @@ class ChangeLoan(EndorsementWizardStepMixin):
                 'kind', 'amount', 'number', 'company', 'increments',
                 'duration', 'duration_unit', 'currency_symbol',
                 'currency_digits', 'previous_frequency',
-                'previous_release_date'],
+                'previous_release_date', 'deferral', 'deferral_duration'],
             'loan.increment': ['number', 'begin_balance', 'start_date',
                 'end_date', 'loan', 'number_of_payments', 'rate',
                 'payment_amount', 'payment_frequency', 'deferral', 'manual',
