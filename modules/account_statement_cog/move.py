@@ -36,5 +36,8 @@ class MoveLine:
         if (not self.origin_item
                 or self.origin_item.__name__ != 'account.statement'):
             return super(MoveLine, self).get_synthesis_rec_name(name)
-        return '%s (%s)' % (self.origin_item.journal.rec_name,
+        name = '%s - %s' % (self.origin_item.journal.rec_name,
             self.description)
+        if self.move.description:
+            name += ' [%s]' % self.move.description
+        return name
