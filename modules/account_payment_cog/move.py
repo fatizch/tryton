@@ -253,13 +253,11 @@ class PaymentInformationModification(model.CoopWizard):
             }
 
     def transition_finalize(self):
-        move_line = self.payment_information_selection.move_line
-        if (self.payment_information_selection.new_date and
-                (self.payment_information_selection.new_date !=
-                    move_line.payment_date)):
-            move_line.payment_date =\
-                self.payment_information_selection.new_date
-            move_line.save()
+        line = self.payment_information_selection.move_line
+        if self.payment_information_selection.new_date != line.payment_date:
+            # Allow to write off existing payment date
+            line.payment_date = self.payment_information_selection.new_date
+            line.save()
         return 'end'
 
 

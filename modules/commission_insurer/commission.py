@@ -79,7 +79,8 @@ class CreateInvoicePrincipal(Wizard):
                 for commission in [x for x in i_line.commissions
                         if (x.agent.party == party and not x.invoice_line)]:
                     if (not self.ask.until_date
-                            or commission.date <= self.ask.until_date):
+                            or commission.date
+                            and commission.date <= self.ask.until_date):
                         invoice_coms.append(commission)
                     else:
                         break

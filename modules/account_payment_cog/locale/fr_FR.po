@@ -437,7 +437,7 @@ msgstr "Ligne de mouvement"
 
 msgctxt "field:account.payment.payment_information_selection,new_date:"
 msgid "New Payment Date"
-msgstr "Nouvelle date de prélèvement"
+msgstr "Nouvelle date de paiement"
 
 msgctxt "field:account.payment.process,id:"
 msgid "ID"
@@ -465,7 +465,7 @@ msgstr "ID"
 
 msgctxt "field:party.synthesis.menu.payment,name:"
 msgid "Outstanding/Failed Payments"
-msgstr "Prélèvements en cours / Rejet"
+msgstr "Paiements en cours / Rejet"
 
 msgctxt "field:party.synthesis.menu.payment,party:"
 msgid "Party"
