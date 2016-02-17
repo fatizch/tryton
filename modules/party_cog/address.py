@@ -1,8 +1,7 @@
 # -*- coding:utf-8 -*-
 from collections import OrderedDict
 from trytond.pool import Pool, PoolMeta
-from trytond.modules.cog_utils import utils
-from trytond.modules.cog_utils import coop_string, fields, export
+from trytond.modules.cog_utils import fields, export
 from trytond.modules.country_cog import country
 
 __metaclass__ = PoolMeta
@@ -73,6 +72,16 @@ class Address(export.ExportImportMixin):
             else:
                 self.zip = None
 
+    @fields.depends('zip', 'city', 'country', 'zip_and_city', 'streetbis')
+    def on_change_streetbis(self):
+        if not self.city or not self.zip:
+            return
+        self.zip_and_city = self.find_zip_and_city(self.zip,
+            self.city, self.streetbis, self.country)
+        if self.zip_and_city:
+            self.city = self.zip_and_city.city
+            self.zip = self.zip_and_city.zip
+
     @fields.depends('zip', 'country')
     def autocomplete_city(self):
         if self.zip and self.country:
@@ -90,12 +99,14 @@ class Address(export.ExportImportMixin):
             return ['']
 
     @classmethod
-    def find_zip_and_city(cls, zip, city, country=None):
+    def get_domain_for_find_zip_and_city(cls, zip_, city, streetbis):
+        return [('city', '=', city), ('zip', '=', zip_)]
+
+    @classmethod
+    def find_zip_and_city(cls, zip_, city, streetbis, country=None):
         Zip = Pool().get('country.zipcode')
-        domain = [
-            ('city', '=', city),
-            ('zip', '=', zip),
-            ]
+        domain = cls.get_domain_for_find_zip_and_city(zip_, city,
+                streetbis)
         if country:
             domain.append(('country', '=', country.id))
         zips = Zip.search(domain, limit=1)
@@ -104,11 +115,11 @@ class Address(export.ExportImportMixin):
 
     def get_zip_and_city(self, name):
         zip_and_city = self.find_zip_and_city(self.zip, self.city,
-            self.country)
+            self.streetbis, self.country)
         if zip_and_city:
             return zip_and_city.id
 
-    @fields.depends('zip', 'country', 'city', 'zip_and_city')
+    @fields.depends('zip', 'country', 'city', 'zip_and_city', 'streetbis')
     def on_change_zip_and_city(self):
         self.city = self.zip_and_city.city if self.zip_and_city else ''
         self.zip = self.zip_and_city.zip if self.zip_and_city else ''
@@ -209,10 +220,22 @@ class Address(export.ExportImportMixin):
                 values['street'] or ''))
 
     @classmethod
+    def _get_address_zipcode_equivalent_for_import(cls):
+        # careful : the order must be that of args to
+        # find_zip_and_city
+        res = OrderedDict()
+        for fname in ('zip', 'city'):
+            res[fname] = fname
+        return res
+
+    @classmethod
     def _import_json(cls, values, main_object=None):
-        if 'zip' in values and 'city' in values:
-            zip_and_city = cls.find_zip_and_city(values['zip'], values['city'])
-            if zip_and_city:
-                values['zip'] = zip_and_city.zip
-                values['city'] = zip_and_city.city
+        # Update the address with zipcode repository
+        equivalents = cls._get_address_zipcode_equivalent_for_import()
+        address_fnames = equivalents.keys()
+        if all([x in values for x in equivalents.keys()]):
+            zip_and_city = cls.find_zip_and_city(
+                *[values.get(f, None) for f in address_fnames])
+            for f in address_fnames:
+                values[f] = getattr(zip_and_city, equivalents[f], None)
         return super(Address, cls)._import_json(values, main_object)

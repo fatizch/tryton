@@ -1,0 +1,19 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:country.zipcode,hexa_post_id:"
+msgid "Hexa Post Id"
+msgstr "Identifiant hexaposte"
+
+msgctxt "field:country.zipcode.update_from_hexapost,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "model:country.zipcode.update_from_hexapost,name:"
+msgid "Update Zip Codes From Hexa Post Files"
+msgstr "Mettre à jour les codes postaux depuis des fichiers hexaposte"
+
+msgctxt "model:ir.test_case.instance,name:hexa_post_test_case"
+msgid "Hexa Post Test Case"
+msgstr "Jeux d'essai Hexaposte"

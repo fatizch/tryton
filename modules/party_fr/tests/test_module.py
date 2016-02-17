@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import unittest
 from datetime import date
 
@@ -15,13 +15,16 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_models(cls):
         return {
-            'Person': 'party.party',
+            'Party': 'party.party',
+            'Address': 'party.address',
+            'Country': 'country.country',
+            'ZipCode': 'country.zipcode',
         }
 
     def createPerson(
             self, birth_date, ssn, expected_return, gender='male', i=0):
         try:
-            person, = self.Person.create([{
+            person, = self.Party.create([{
                 'is_person': True,
                 'name': 'Person %s' % i,
                 'first_name': 'first name %s' % i,
@@ -61,6 +64,49 @@ class ModuleTestCase(test_framework.CoopTestCase):
             if value[0:1] == '2':
                 gender = 'female'
             self.createPerson(birth_date, value, test, gender, i)
+
+    def test0020addresses_on_change(self):
+        country = self.Country(name="Oz", code='OZ')
+        country.save()
+
+        zip_code1 = self.ZipCode(zip="1", city="Emerald", country=country,
+            hexa_post_id='11')
+        zip_code1.save()
+        zip_code1_bis = self.ZipCode(zip="1", city="Emerald", country=country,
+            line5='THE HILL', hexa_post_id='111')
+        zip_code1_bis.save()
+        zip_code2 = self.ZipCode(zip="2", city="Ruby", country=country,
+            hexa_post_id='12')
+        zip_code2.save()
+
+        dorothy = self.Party(name="Dorothy")
+        dorothy.save()
+        address1 = self.Address(party=dorothy, zip="2", country=country,
+            city="Ruby")
+        address1.save()
+
+        address1.zip_and_city = zip_code1
+        address1.on_change_zip_and_city()
+        address1.save()
+        self.assertEqual(address1.zip_and_city, zip_code1)
+        self.assertEqual(address1.zip, "1")
+        self.assertEqual(address1.city, "Emerald")
+
+        address1.streetbis = "THE HILL"
+        address1.on_change_streetbis()
+        address1.save()
+        self.assertEqual(address1.zip_and_city, zip_code1_bis)
+        self.assertEqual(address1.zip, "1")
+        self.assertEqual(address1.city, "Emerald")
+        self.assertEqual(address1.streetbis, "THE HILL")
+
+        address1.streetbis = None
+        address1.on_change_streetbis()
+        address1.save()
+        self.assertEqual(address1.zip_and_city, zip_code1)
+        self.assertEqual(address1.zip, "1")
+        self.assertEqual(address1.city, "Emerald")
+        self.assertEqual(address1.streetbis, None)
 
 
 def suite():

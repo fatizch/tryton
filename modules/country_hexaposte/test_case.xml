@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <!-- ###################### -->
+        <!-- # Test Case Instance # -->
+        <!-- ###################### -->
+        <record model="ir.test_case.instance" id="hexa_post_test_case">
+            <field name="name">Hexa Post Test Case</field>
+            <field name="method_name">hexa_post_test_case</field>
+        </record>
+    </data>
+</tryton>

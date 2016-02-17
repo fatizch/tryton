@@ -53,7 +53,9 @@ class Address:
     @fields.depends('streetbis')
     def on_change_streetbis(self):
         # AFNOR rule, line 5 should be in uppercase
-        self.streetbis = self.streetbis.upper()
+        if self.streetbis:
+            self.streetbis = self.streetbis.upper()
+        super(Address, self).on_change_streetbis()
 
     @fields.depends('city')
     def on_change_city(self):
@@ -91,4 +93,21 @@ class Address:
     def get_var_names_for_full_extract(cls):
         res = super(Address, cls).get_var_names_for_full_extract()
         res.extend(['name', 'line3'])
+        return res
+
+    @classmethod
+    def get_domain_for_find_zip_and_city(cls, zip, city, streetbis):
+        return super(Address, cls).get_domain_for_find_zip_and_city(
+            zip, city, streetbis) + [('line5', '=', streetbis)]
+
+    @fields.depends('zip', 'country', 'city', 'zip_and_city', 'streetbis')
+    def on_change_zip_and_city(self):
+        super(Address, self).on_change_zip_and_city()
+        self.streetbis = (self.zip_and_city.line5) if self.zip_and_city \
+            else None
+
+    @classmethod
+    def _get_address_zipcode_equivalent_for_import(cls):
+        res = super(Address, cls)._get_address_zipcode_equivalent_for_import()
+        res.update({'streetbis': 'line5'})
         return res

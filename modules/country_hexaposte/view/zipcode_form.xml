@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='city']" position="after">
+        <label name="hexa_post_id"/>
+        <field name="hexa_post_id"/>
+    </xpath>
+</data>

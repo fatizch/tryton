@@ -1,0 +1,24 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:country.zipcode:"
+msgid "This city, zipcode, line5 combination already exists for this country!"
+msgstr ""
+"Cette combinaison de commune, code postale, ligne 5 existe déjà pour ce pays"
+" !"
+
+msgctxt "field:country.zipcode,line5:"
+msgid "Line 5"
+msgstr "Ligne 5"
+
+msgctxt "help:country.zipcode,line5:"
+msgid ""
+"AFNOR - Line 5\n"
+"            Delivery Service\n"
+"            Identification Thoroughfare Complement BP (P.O box)\n"
+"            and Locality (if different from the distribution area indicator)"
+msgstr ""
+"AFNOR - Ligne 5\n"
+"        LES SERVICES POSTAUX SPÉCIFIQUES : BP (Boite Postale), TSA (Tri Service Arrivée), CS (Course Spéciale), Autorisation\n"
+"        LE LIEU-DIT"
