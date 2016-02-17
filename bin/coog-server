@@ -39,7 +39,7 @@ coog_server_start() { # start server - [args] passed to trytond, logconf NOT set
         else
                 args="$args $*"
         fi
-        [ ! -z $TRYTOND_DATABASE_NAME ] && args="$args -d $TRYTOND_DATABASE_NAME"
+        [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
         nohup trytond -c $COOG_CONF_SRV --pidfile $pid_file $args > $out_file &
         echo server started
 }
@@ -47,7 +47,7 @@ coog_server_start() { # start server - [args] passed to trytond, logconf NOT set
 coog_server_debug() { # start server in pdb - [args] passed to trytond
         local args
         args=$*
-        [ ! -z $TRYTOND_DATABASE_NAME ] && args="$args -d $TRYTOND_DATABASE_NAME"
+        [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
         python -m pdb "$COOG_TRYTOND/bin/trytond" -c $COOG_CONF_SRV $args
 }
 

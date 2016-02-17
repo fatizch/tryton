@@ -11,7 +11,7 @@ coog_module_main() { # list installed modules - <db> - default: db uri
 }
 
 coog_module_update() { # install / update modules - <modules> - default: all
-        [ -z $TRYTOND_DATABASE_NAME ] && echo no database defined && return
+        [ -z $DB_NAME ] && echo no database defined && return
         local modules
         if [ $# -eq 0 ]
         then
@@ -21,8 +21,37 @@ coog_module_update() { # install / update modules - <modules> - default: all
         fi
         trytond -v \
                 -c $COOG_CONF_SRV \
-                -d $TRYTOND_DATABASE_NAME \
+                -d $DB_NAME \
                 -u $modules
+}
+
+coog_module_check() { # check if module is installed - <module>
+        psql -w -t -c "select name from ir_module where name='$1' and state='installed'" | sed '/^\s*$/d' | wc -l
+}
+
+coog_module_list() { # list installed module from repo - <repo>
+        local modules_folder
+        modules_folder=`readlink -f ../../$1/modules`
+        for module in $modules_folder/*
+        do
+                [ ! -d $module ] && continue
+                local m
+                m=`basename "$module"`
+                local i
+                i=`coog_module_check $m`
+                [ $i -eq 1 ] && echo $m
+        done
+}
+
+coog_module_translate() { # generate module translations
+        local args
+        if [ -z $1 ]
+        then
+                args="-m "`coog_module_list coog`
+        else
+                args=$*
+        fi
+        python2 .py/translate.py -c $COOG_CONF_SRV -p `readlink -f $COOG_TRYTOND/trytond/modules` $args
 }
 
 coog_module_updatedb() { # install / update all modules - <database> - no default

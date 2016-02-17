@@ -16,7 +16,7 @@ config_file = os.environ.get('TRYTOND_CONFIG', None)
 assert config_file, 'TRYTOND_CONFIG variable should be set'
 config.update_etc(config_file)
 
-database = os.environ.get('TRYTOND_DATABASE_NAME', None)
-assert database, 'TRYTOND_DATABASE_NAME variable should be set'
+database = os.environ.get('DB_NAME', None)
+assert database, 'DB_NAME variable should be set'
 with Transaction().start(database, 0, readonly=True):
     Pool(database).init()
