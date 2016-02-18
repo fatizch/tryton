@@ -319,6 +319,7 @@ class OpenPartyBalance(Wizard):
         lines = MoveLine.search([
                 ('party', '=', party),
                 ('account.kind', 'in', ['payable', 'receivable']),
+                ('move_state', '!=', 'draft'),
                 ],
                 order=[
                     ('post_date', 'DESC'),
