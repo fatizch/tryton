@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<data>
-    <xpath expr="/tree/field[@name='kind']" position="after">
-        <field name="main_sepa_message_state"/>
-    </xpath>
-</data>

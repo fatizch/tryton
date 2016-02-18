@@ -10,7 +10,7 @@
         </field>
     </xpath>
     <xpath expr="/tree/field[@name='kind']" position="after">
+        <field name="state"/>
         <button string="Acknowledge" name="acknowledge" tree_invisible="1"/>
-        <field name="has_processing_payment"/>
     </xpath>
 </data>

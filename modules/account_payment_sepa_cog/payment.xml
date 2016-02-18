@@ -50,11 +50,6 @@
             <field name="inherit" ref="account_payment_cog.payment_creation_start_view_form"/>
             <field name="name">payment_creation_start_form</field>
         </record>
-        <record model="ir.ui.view" id="group_list">
-            <field name="model">account.payment.group</field>
-            <field name="inherit" ref="account_payment.payment_group_view_list"/>
-            <field name="name">payment_group_list</field>
-        </record>
         <record model="ir.action.act_window" id="act_payment_relate_form">
             <field name="name">Payments</field>
             <field name="res_model">account.payment</field>

@@ -134,10 +134,6 @@ msgctxt "field:account.payment.group,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:account.payment.group,has_processing_payment:"
-msgid "Has Processing Payment"
-msgstr "A des paiements en cours"
-
 msgctxt "field:account.payment.group,payment_dates:"
 msgid "Payment Dates"
 msgstr "Dates de paiement"
@@ -804,6 +800,14 @@ msgctxt ""
 "wizard_button:account.payment.payment_information_modification,payment_information_selection,finalize:"
 msgid "Next"
 msgstr "Suivant"
+
+msgctxt "field:account.payment.group,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "selection:account.payment.group,state:"
+msgid "Processing"
+msgstr "En traitement"
 
 # Custom translations below
 

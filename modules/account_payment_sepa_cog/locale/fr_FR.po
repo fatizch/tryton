@@ -50,10 +50,6 @@ msgctxt "field:account.payment.group,main_sepa_message:"
 msgid "SEPA Message"
 msgstr "Message SEPA"
 
-msgctxt "field:account.payment.group,main_sepa_message_state:"
-msgid "State"
-msgstr "État"
-
 msgctxt "field:account.payment.group,payment_dates:"
 msgid "Payment Dates"
 msgstr "Dates de paiement"
@@ -247,18 +243,18 @@ msgctxt "model:ir.ui.menu,name:menu_reject_message_form"
 msgid "SEPA Reject Messages"
 msgstr "Messages de rejet SEPA"
 
-msgctxt "selection:account.payment.group,main_sepa_message_state:"
+msgctxt "selection:account.payment.group,state:"
 msgid "Canceled"
 msgstr "Annulé"
 
-msgctxt "selection:account.payment.group,main_sepa_message_state:"
+msgctxt "selection:account.payment.group,state:"
 msgid "Done"
 msgstr "Fait"
 
-msgctxt "selection:account.payment.group,main_sepa_message_state:"
+msgctxt "selection:account.payment.group,state:"
 msgid "Draft"
 msgstr "Brouillon"
 
-msgctxt "selection:account.payment.group,main_sepa_message_state:"
+msgctxt "selection:account.payment.group,state:"
 msgid "Waiting"
 msgstr "En attente"

@@ -90,19 +90,17 @@ class Group:
     main_sepa_message = fields.Function(
         fields.Many2One('account.payment.sepa.message', 'SEPA Message'),
         'get_main_sepa_message')
-    main_sepa_message_state = fields.Function(
-        fields.Selection([
-                ('draft', 'Draft'),
-                ('waiting', 'Waiting'),
-                ('done', 'Done'),
-                ('canceled', 'Canceled'),
-                ], 'State'),
-        'get_main_sepa_message_state')
 
     @classmethod
     def __setup__(cls):
         super(Group, cls).__setup__()
         cls._order.insert(0, ('id', 'DESC'))
+        cls.state.selection += [
+            ('draft', 'Draft'),
+            ('waiting', 'Waiting'),
+            ('done', 'Done'),
+            ('canceled', 'Canceled'),
+            ]
 
     @classmethod
     def _export_skips(cls):
@@ -234,9 +232,15 @@ class Group:
         if self.sepa_messages:
             return self.sepa_messages[-1].id
 
-    def get_main_sepa_message_state(self, name):
-        return (self.main_sepa_message.state
-            if self.main_sepa_message else None)
+    @classmethod
+    def get_state(cls, groups, name):
+        result = super(Group, cls).get_state(groups, name)
+        for group in groups:
+            state = result.get(group.id, None)
+            if state != 'processing':
+                result[group.id] = (group.main_sepa_message.state
+                    if group.main_sepa_message else None)
+        return result
 
 
 class Payment:

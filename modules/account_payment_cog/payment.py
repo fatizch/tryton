@@ -548,8 +548,9 @@ class Group(ModelCurrency, export.ExportImportMixin):
     processing_payments = fields.One2ManyDomain('account.payment', 'group',
         'Processing Payments',
         domain=[('state', '=', 'processing')])
-    has_processing_payment = fields.Function(fields.Boolean(
-        'Has Processing Payment'), 'get_has_processing_payment')
+    state = fields.Function(
+        fields.Selection([('', ''), ('processing', 'Processing')], 'State'),
+        'get_state')
     amount = fields.Function(
         fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
@@ -563,7 +564,7 @@ class Group(ModelCurrency, export.ExportImportMixin):
         super(Group, cls).__setup__()
         cls._buttons.update({
                 'acknowledge': {
-                    'invisible': ~Eval('has_processing_payment'),
+                    'invisible': Eval('state') != 'processing',
                     },
                 })
 
@@ -571,7 +572,7 @@ class Group(ModelCurrency, export.ExportImportMixin):
     def view_attributes(cls):
         return super(Group, cls).view_attributes() + [
             ('/tree', 'colors', If(
-                    Bool(Eval('has_processing_payment')),
+                    Eval('state') == 'processing',
                     'blue',
                     'black')),
             ]
@@ -598,7 +599,7 @@ class Group(ModelCurrency, export.ExportImportMixin):
         return self.journal.currency if self.journal else None
 
     @classmethod
-    def get_has_processing_payment(cls, groups, name):
+    def get_state(cls, groups, name):
         pool = Pool()
         cursor = Transaction().cursor
         account_payment = pool.get('account.payment').__table__()
@@ -610,7 +611,7 @@ class Group(ModelCurrency, export.ExportImportMixin):
                 group_by=[account_payment.group]))
 
         for group_id, in cursor.fetchall():
-            result[group_id] = True
+            result[group_id] = 'processing'
         return result
 
     @classmethod
