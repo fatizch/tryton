@@ -8,6 +8,7 @@
             <field name="status"/>
             <field name="sub_status"/>
             <group id="termination_reason">
+                <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
                 <label string="Will be terminated for:" id="termination_reason_label"/>
                 <field name="termination_reason"/>
             </group>
