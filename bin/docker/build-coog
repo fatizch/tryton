@@ -12,6 +12,7 @@
 #
 # This script will read its informations from `tags` file
 
+super_pass=secret
 repos=`cat ./tags | xargs echo`
 
-sudo ../coog/bin/coog docker build "$repos"
+sudo ../coog/bin/coog docker build "$super_pass" "$repos"

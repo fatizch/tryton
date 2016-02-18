@@ -6,12 +6,18 @@ coog_docker_env() { # build docker env image
         docker build -t coog/env -f conf/env.df .
 }
 
-coog_docker_build() { # build docker image
-        [ $# -lt 3 ] && \
+coog_docker_hashpwd() { # hash trytond super pwd - <pwd>
+        python2 -c "import crypt,random,string; print crypt.crypt('$1', ''.join(random.sample(string.ascii_letters + string.digits, 8)))"
+}
+
+coog_docker_build() { # build docker image - <pwd> [image*]
+        [ $# -lt 4 ] && \
                 echo needs at least trytond, trytond-modules and coog to build && \
-                return
+                return 1
         [ -d .cache ] && rm -rf .cache
         mkdir .cache
+        local pass; pass=$1; shift
+        coog_docker_hashpwd $pass > .cache/.password
         local component
         for component in $*
         do

@@ -37,6 +37,7 @@ data=`pwd`/data/coog
 
 coog_db_user=postgres
 coog_db_password=postgres
+coog_db_lang=fr_FR
 coog_cache_db=0
 coog_sentry_host=`./ip sentry`
 coog_sentry_pub=pub            # part of the dsn (open sentry admin to get one)
@@ -49,6 +50,7 @@ sudo docker run \
         --link postgres:postgres \
         -e "COOG_DB_USER=$coog_db_user" \
         -e "COOG_DB_PASSWORD=$coog_db_password" \
+        -e "COOG_DB_LANG=$coog_db_lang" \
         --link redis:redis \
         -e "COOG_CACHE_DB=$coog_cache_db" \
         --link sentry:sentry \

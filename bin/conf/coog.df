@@ -4,18 +4,19 @@ MAINTAINER Coopengo <dev@coopengo.com>
 RUN apt-get update && \
     apt-get -y -q upgrade
 
+RUN pip install -U pip
+
 RUN mkdir /opt/coog && mkdir /opt/coog/data
 
 COPY . /opt/coog/
 
-RUN ln -s /opt/coog/coog/bin/coog /usr/local/bin
 RUN ln -s /opt/coog/trytond/bin/trytond /usr/local/bin
+RUN ln -s /opt/coog/coog/bin/docker-ep /usr/local/bin/ep
 
-RUN /opt/coog/coog/bin/coog dep base
-RUN /opt/coog/coog/bin/coog dep extend
-RUN /opt/coog/coog/bin/coog repo linkm
+RUN ep dep
+RUN ep link
 
 VOLUME ["/opt/coog/data"]
 EXPOSE 8000 8069
 
-ENTRYPOINT ["coog", "ep"]
+ENTRYPOINT ["ep"]
