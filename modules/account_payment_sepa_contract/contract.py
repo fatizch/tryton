@@ -177,3 +177,8 @@ class ContractBillingInformation:
     @classmethod
     def functional_skips_for_duplicate(cls):
         return set(['sepa_mandate'])
+
+    @fields.depends('direct_debit_account')
+    def on_change_direct_debit_account(self):
+        if not self.direct_debit_account:
+            self.sepa_mandate = None
