@@ -15,6 +15,13 @@ def generate_async(name, connection_date, treatment_date, extra_args):
         treatment_date, extra_args))
 
 
+def parse_extra_args(extra_args):
+    extra_args = [x.split('=', 1) for x in extra_args]
+    extra_args = [x for sublist in extra_args for x in sublist]
+    return dict(zip([x.lstrip('-') for x in extra_args[0::2]],
+        extra_args[1::2]))
+
+
 def main():
     parser = argparse.ArgumentParser(description='Coog batch command')
 
@@ -32,6 +39,7 @@ def main():
         help='Batch treatment date')
 
     arguments, extra_args = parser.parse_known_args()
+    extra_args = parse_extra_args(extra_args)
 
     # set broker (rq or celery) based on args
     async_broker.set_module(arguments.broker)
