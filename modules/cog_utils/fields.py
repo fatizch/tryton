@@ -100,7 +100,9 @@ class One2ManyDomain(One2Many):
             source.size, source.help, source.required, source.readonly,
             source.domain, source.states, source.on_change,
             source.on_change_with, source.depends, source.context,
-            source.loading)
+            source.loading, delete_missing=source._delete_missing,
+            target_not_required=source._target_not_required,
+            target_not_indexed=source._target_not_indexed)
 
     def get(self, ids, model, name, values=None):
         '''
