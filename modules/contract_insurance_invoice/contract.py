@@ -601,7 +601,7 @@ class Contract:
                 periods.append((start, min(end, contract_end_date or
                             datetime.date.max), billing_information))
                 start = date
-                if (up_to_date and start >= up_to_date) or not up_to_date:
+                if not up_to_date or start > up_to_date:
                     break
             if until and (up_to_date and until < up_to_date):
                 if contract_end_date and contract_end_date < up_to_date:
