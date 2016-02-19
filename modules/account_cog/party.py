@@ -5,8 +5,11 @@ from sql import Literal
 from trytond.modules.cog_utils import UnionMixin
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard
-from trytond.pyson import PYSONEncoder
+from trytond.pyson import PYSONEncoder, Eval
+from trytond.transaction import Transaction
+
 from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.currency_cog import ModelCurrency
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -17,7 +20,7 @@ __all__ = [
     ]
 
 
-class Party:
+class Party(ModelCurrency, model.CoopView):
     __name__ = 'party.party'
 
     payable_icon = fields.Function(
@@ -32,10 +35,34 @@ class Party:
     receivable_today_icon = fields.Function(
         fields.Char('Receivable Today Icon'),
         'get_payable_receivable_icon')
-    negative_payable = fields.Function(fields.Numeric('Payable'),
-            'get_negative_payable', searcher='search_negative_payable')
-    negative_payable_today = fields.Function(fields.Numeric('Payable Today'),
-            'get_negative_payable', searcher='search_negative_payable')
+    negative_payable = fields.Function(
+        fields.Numeric('Payable',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_negative_payable', searcher='search_negative_payable')
+    negative_payable_today = fields.Function(
+        fields.Numeric('Payable Today',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_negative_payable', searcher='search_negative_payable')
+
+    @classmethod
+    def __setup__(cls):
+        super(Party, cls).__setup__()
+        cls.payable.digits = (16, Eval('currency_digits', 2))
+        cls.payable.depends += ['currency_digits']
+        cls.payable_today.digits = (16, Eval('currency_digits', 2))
+        cls.payable_today.depends += ['currency_digits']
+        cls.receivable.digits = (16, Eval('currency_digits', 2))
+        cls.receivable.depends += ['currency_digits']
+        cls.receivable_today.digits = (16, Eval('currency_digits', 2))
+        cls.receivable_today.depends += ['currency_digits']
+
+    def get_currency(self):
+        Company = Pool().get('company.company')
+        company_id = Transaction().context.get('company', None)
+        if company_id:
+            return Company(company_id).currency.id
 
     def get_negative_payable(self, name):
         amount = getattr(self, name[9:])
@@ -71,7 +98,9 @@ class Party:
 
 class SynthesisMenuMoveLine(model.CoopSQL):
     'Party Synthesis Menu Move line'
+
     __name__ = 'party.synthesis.menu.move.line'
+
     name = fields.Char('Payments')
     party = fields.Many2One('party.party', 'Party', ondelete='SET NULL')
 
@@ -103,6 +132,7 @@ class SynthesisMenuMoveLine(model.CoopSQL):
 
 class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
     'Party Synthesis Menu'
+
     __name__ = 'party.synthesis.menu'
 
     @classmethod
@@ -153,6 +183,7 @@ class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
 
 class SynthesisMenuOpen(Wizard):
     'Open Party Synthesis Menu'
+
     __name__ = 'party.synthesis.menu.open'
 
     def get_action(self, record):

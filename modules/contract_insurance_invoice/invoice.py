@@ -38,7 +38,9 @@ class Invoice:
         fields.Date('End Date', states=_STATES, depends=_DEPENDS),
         'get_contract_invoice_field', searcher='search_contract_invoice')
     base_amount = fields.Function(
-        fields.Numeric('Base amount', states=_STATES, depends=_DEPENDS),
+        fields.Numeric('Base amount', states=_STATES,
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits', 'contract_invoice']),
         'get_base_amount')
     contract = fields.Function(
         fields.Many2One('contract', 'Contract', states=_STATES,
@@ -52,7 +54,9 @@ class Invoice:
         fields.Char('Currency Symbol'),
         'get_currency_symbol')
     fees = fields.Function(
-        fields.Numeric('Fees', states=_STATES, depends=_DEPENDS),
+        fields.Numeric('Fees', states=_STATES,
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits', 'contract_invoice']),
         'get_fees')
     reconciliation_date = fields.Function(
         fields.Date('Reconciliation Date',

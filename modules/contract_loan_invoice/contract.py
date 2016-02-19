@@ -16,6 +16,7 @@ from trytond.pyson import Eval, And, Or, Not, In
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.currency_cog import ModelCurrency
 
 
 __metaclass__ = PoolMeta
@@ -396,9 +397,11 @@ class Contract:
         return max(utils.today(), self.start_date or datetime.date.min)
 
 
-class PremiumAmount(model.CoopSQL, model.CoopView):
+class PremiumAmount(ModelCurrency, model.CoopSQL, model.CoopView):
     'Premium Amount'
+
     __name__ = 'contract.premium.amount'
+
     premium = fields.Many2One('contract.premium', 'Premium', select=True,
         ondelete='CASCADE')
     # XXX duplicate with premium but it is not possible with current design to
@@ -409,8 +412,10 @@ class PremiumAmount(model.CoopSQL, model.CoopView):
     period_end = fields.Date('Period End', select=True)
     start = fields.Date('Start')
     end = fields.Date('End')
-    amount = fields.Numeric('Amount')
-    tax_amount = fields.Numeric('Tax Amount')
+    amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])
+    tax_amount = fields.Numeric('Tax Amount',
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     covered_element = fields.Function(
         fields.Many2One('contract.covered_element', 'Covered element'),
         'get_covered_element')
@@ -434,6 +439,9 @@ class PremiumAmount(model.CoopSQL, model.CoopView):
         table.index_action('contract', 'remove')
         table.index_action(['contract', 'period_start', 'period_end'], 'add')
 
+    def get_currency(self):
+        return self.contract.currency
+
     def get_type(self, name=None):
         if self.premium:
             model, = Pool().get('ir.model').search(
@@ -454,15 +462,22 @@ class PremiumAmount(model.CoopSQL, model.CoopView):
                 return loan.id
 
 
-class PremiumAmountPerPeriod(model.CoopSQL, model.CoopView):
+class PremiumAmountPerPeriod(ModelCurrency, model.CoopSQL, model.CoopView):
     'Premium Amount per Period'
+
     __name__ = 'contract.premium.amount.per_period'
+
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
-    amount = fields.Numeric('Amount')
-    fees = fields.Numeric('Fees')
-    untaxed_amount = fields.Numeric('Untaxed Amount')
-    tax_amount = fields.Numeric('Tax Amount')
-    total = fields.Numeric('Total')
+    amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])
+    fees = fields.Numeric('Fees', digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])
+    untaxed_amount = fields.Numeric('Untaxed Amount',
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
+    tax_amount = fields.Numeric('Tax Amount',
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
+    total = fields.Numeric('Total',
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     period_start = fields.Date('Period Start')
     period_end = fields.Date('Period End')
     premium_amounts = fields.Function(
@@ -534,6 +549,9 @@ class PremiumAmountPerPeriod(model.CoopSQL, model.CoopView):
                 return super(PremiumAmountPerPeriod, cls).read(ids,
                     fields_names)
         return super(PremiumAmountPerPeriod, cls).read(ids, fields_names)
+
+    def get_currency(self):
+        return self.contract.currency
 
     def get_premium_amounts(self, name):
         pool = Pool()
