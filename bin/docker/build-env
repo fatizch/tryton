@@ -4,5 +4,5 @@
 # This image contains the OS and some hard dependencies
 
 # when behind a proxy
-# sudo ../coog/bin/coog docker env -- --build-arg http_proxy=http://myproxy.domain.com:8080
+# sudo ../coog/bin/coog docker env --build-arg http_proxy=http://myproxy.domain.com:8080
 sudo ../coog/bin/coog docker env
