@@ -40,6 +40,10 @@ class ZipCode:
         TableHandler(cursor, cls, module_name).drop_constraint(
             'zip_uniq')
 
+    @classmethod
+    def default_line5(cls):
+        return ''
+
     def get_rec_name(self, name=None):
         base = super(ZipCode, self).get_rec_name(None)
         if not self.line5:
