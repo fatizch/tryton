@@ -21,8 +21,8 @@ class Contract:
             depends=_DEPENDS),
         'on_change_with_broker', 'setter_void')
     broker_party = fields.Function(
-        fields.Many2One('party.party', 'Broker Party'),
-        'on_change_with_broker_party')
+        fields.Many2One('party.party', 'Broker'),
+        'on_change_with_broker_party', searcher='search_broker_party')
     agency = fields.Many2One('distribution.network', 'Agency',
         domain=[If(Bool(Eval('broker', False)),
                    ('parents', '=', Eval('broker')),
@@ -162,3 +162,7 @@ class Contract:
                             'account.invoice.line')]),
                 to_agent)
         Event.notify_events(contracts, 'broker_changed')
+
+    @classmethod
+    def search_broker_party(cls, name, clause):
+        return [('agent.party',) + tuple(clause[1:])]

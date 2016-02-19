@@ -559,8 +559,8 @@ msgid "Broker"
 msgstr "Courtier"
 
 msgctxt "field:contract,broker_party:"
-msgid "Broker Party"
-msgstr "Tiers du courtier"
+msgid "Broker"
+msgstr "Courtier"
 
 msgctxt "field:contract,show_premium:"
 msgid "Show Premium"
