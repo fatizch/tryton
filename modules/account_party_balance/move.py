@@ -1,5 +1,4 @@
 import datetime
-from itertools import groupby
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Bool, Eval
@@ -137,7 +136,9 @@ class PartyBalance(ModelCurrency, model.CoopView):
     all_lines = fields.Many2Many('account.move.line', None, None,
         'Lines', states={'invisible': True})
     lines = fields.One2Many('account.party_balance.line', None,
-        'Lines', readonly=True)
+        'Accounting Lines', readonly=True)
+    scheduled_lines = fields.One2Many('account.party_balance.line', None,
+        'Scheduled Lines', readonly=True)
     balance_today = fields.Numeric('Balance Today',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
         readonly=True)
@@ -154,7 +155,6 @@ class PartyBalance(ModelCurrency, model.CoopView):
     contract = fields.Many2One('contract', 'Contract',
         domain=[('id', 'in', Eval('contracts'))], depends=['contracts'])
     hide_canceled_invoices = fields.Boolean('Hide Canceled Invoices')
-    hide_scheduled_terms = fields.Boolean('Hide Scheduled Terms')
     currency = fields.Many2One('currency.currency', 'Currency')
 
     @classmethod
@@ -210,6 +210,7 @@ class PartyBalance(ModelCurrency, model.CoopView):
     def refresh(self):
         Line = Pool().get('account.party_balance.line')
         lines = []
+        scheduled_lines = []
         for x in self.all_lines:
             if not self.show_line(x):
                 continue
@@ -244,7 +245,7 @@ class PartyBalance(ModelCurrency, model.CoopView):
             self.add_parent_line(sub_lines, lines)
 
         # add scheduled payment
-        if self.contract and not self.hide_scheduled_terms:
+        if self.contract:
             terms = self.invoices_report_for_balance(self.contract)
             for term in terms:
                 fake_line = Line(contract=self.contract.rec_name,
@@ -256,7 +257,7 @@ class PartyBalance(ModelCurrency, model.CoopView):
                         term['components'])
                 fake_line.add_childs_to_scheduled_term_line(
                     term['components'])
-                lines.append(fake_line)
+                scheduled_lines.append(fake_line)
 
         def keyfunc(x):
             max_date = datetime.date.max
@@ -269,8 +270,12 @@ class PartyBalance(ModelCurrency, model.CoopView):
 
         lines = [x for x in lines if not getattr(x, 'parent', None)]
         lines.sort(key=keyfunc, reverse=True)
+        scheduled_lines = [x for x in scheduled_lines
+            if not getattr(x, 'parent', None)]
+        scheduled_lines.sort(key=keyfunc, reverse=True)
 
         self.lines = lines
+        self.scheduled_lines = scheduled_lines
         if self.contract:
             self.balance_today = self.contract.balance_today
             self.balance = self.contract.balance

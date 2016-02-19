@@ -39,8 +39,12 @@ msgid "Balance Positive"
 msgstr "Balance Positive"
 
 msgctxt "field:account.party_balance,lines:"
-msgid "Lines"
-msgstr "Lignes"
+msgid "Accounting Lines"
+msgstr "Lignes comptables"
+
+msgctxt "field:account.party_balance,scheduled_lines:"
+msgid "Scheduled Lines"
+msgstr "Lignes d'échéances"
 
 msgctxt "field:account.party_balance,party:"
 msgid "Party"
@@ -49,10 +53,6 @@ msgstr "Tiers"
 msgctxt "field:account.party_balance,balance_today:"
 msgid "Balance Today"
 msgstr "Balance à aujourd'hui"
-
-msgctxt "field:account.party_balance,hide_scheduled_terms:"
-msgid "Hide Scheduled Terms"
-msgstr "Cacher les échéances futures"
 
 msgctxt "field:account.party_balance.line,amount:"
 msgid "Amount"
