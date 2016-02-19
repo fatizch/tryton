@@ -1804,6 +1804,8 @@ class StartEndorsement(Wizard):
                 'on a non-active contract !',
                 'cannot_resume_applied': 'It is not possible to resume an '
                 'already applied endorsement',
+                'erase_endorsement': 'Going on will erase all data on the '
+                'endorsement.'
                 })
 
     @property
@@ -1816,7 +1818,7 @@ class StartEndorsement(Wizard):
     def endorsement(self):
         if not self.select_endorsement:
             return None
-        return self.select_endorsement.endorsement
+        return getattr(self.select_endorsement, 'endorsement', None)
 
     def transition_start(self):
         if Transaction().context.get('active_model') != 'endorsement':
@@ -1836,6 +1838,11 @@ class StartEndorsement(Wizard):
         return 'start_endorsement'
 
     def default_select_endorsement(self, name):
+        if self.endorsement:
+            self.raise_user_warning(str(self.endorsement.id),
+                'erase_endorsement')
+            self.endorsement.delete([self.endorsement])
+            self.select_endorsement.endorsement = None
         if self.select_endorsement._default_values:
             return self.select_endorsement._default_values
         pool = Pool()
