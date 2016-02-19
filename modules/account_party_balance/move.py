@@ -78,6 +78,8 @@ class PartyBalanceLine(model.CoopView):
         self.icon = line.icon
         self.color = line.color if not scheduled else 'blue'
         self.amount = line.amount
+        if line.account.kind == 'payable':
+            self.amount *= -1
         self.party = line.party.rec_name
         if not scheduled:
             self.description = line.synthesis_rec_name
@@ -153,6 +155,7 @@ class PartyBalance(ModelCurrency, model.CoopView):
     contracts = fields.Many2Many('contract', None, None, 'Contracts',
         states={'invisible': True})
     contract = fields.Many2One('contract', 'Contract',
+        states={'invisible': ~Eval('contracts')},
         domain=[('id', 'in', Eval('contracts'))], depends=['contracts'])
     hide_canceled_invoices = fields.Boolean('Hide Canceled Invoices')
     currency = fields.Many2One('currency.currency', 'Currency')
@@ -280,10 +283,14 @@ class PartyBalance(ModelCurrency, model.CoopView):
             self.balance_today = self.contract.balance_today
             self.balance = self.contract.balance
         else:
-            # TODO Does not work for broker or insurer
-            self.balance_today = self.party.receivable_today
-            self.balance = self.party.receivable
-        self.is_balance_positive = self.balance_today > 0
+            if self.party.receivable or self.party.receivable_today:
+                self.balance_today = self.party.receivable_today
+                self.balance = self.party.receivable
+                self.is_balance_positive = self.balance_today > 0
+            else:
+                self.balance_today = self.party.negative_payable_today
+                self.balance = self.party.negative_payable
+                self.is_balance_positive = self.balance_today < 0
         for line in lines:
             line.move_line = None
             for sub_line in getattr(line, 'childs', []):

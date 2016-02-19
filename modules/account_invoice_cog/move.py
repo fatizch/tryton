@@ -30,4 +30,6 @@ class MoveLine:
     def get_color(self, name):
         if self.is_invoice_canceled:
             return 'grey'
-        return super(MoveLine, self).get_color(name)
+        color = super(MoveLine, self).get_color(name)
+        amount = getattr(self.move.origin_item, 'total_amount', None)
+        return 'red' if color == 'black' and amount < 0 else color

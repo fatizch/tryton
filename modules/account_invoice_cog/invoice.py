@@ -93,7 +93,7 @@ class Invoice(export.ExportImportMixin, Printable):
             return 'invoice_paid'
         elif self.state == 'draft':
             return 'invoice_draft'
-        elif self.amount_to_pay_today > 0:
+        elif self.amount_to_pay_today > 0 or self.total_amount < 0:
             return 'invoice_unpaid'
         elif self.state == 'posted':
             return 'invoice_post'
@@ -114,7 +114,7 @@ class Invoice(export.ExportImportMixin, Printable):
             return 'green'
         elif self.state == 'cancel':
             return 'grey'
-        elif self.amount_to_pay_today > 0:
+        elif self.amount_to_pay_today > 0 or self.total_amount < 0:
             return 'red'
         elif self.state == 'posted':
             return 'blue'
