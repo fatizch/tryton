@@ -8,6 +8,9 @@
             <field name="name">invoice_line_form</field>
         </record>
         <menuitem parent="commission.menu_commission" name="Commission Invoices" id="menu_commission_invoice" sequence="25"/>
+        <record model="ir.action.act_window" id="account_invoice.act_invoice_in_invoice_form">
+            <field name="domain" eval="[('type', '=', 'in_invoice'), ('is_insurer_invoice', '=', False), ('is_broker_invoice', '=', False)]" pyson="1"/>
+        </record>
         <!-- ############################################################ -->
         <!-- ########### Broker Invoices ########### -->
         <!-- ############################################################ -->

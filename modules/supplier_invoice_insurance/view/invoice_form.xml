@@ -2,12 +2,16 @@
 <data>
     <xpath expr="/form/label[@name='description']" position="before">
         <newline/>
-        <label name="insurer"/>
-        <field name="insurer"/>
         <label name="related_party"/>
-        <field name="related_party"/>
+        <field name="related_party" view_ids="party_cog.person_view_tree"/>
         <label name="related_contract"/>
         <field name="related_contract"/>
+        <label name="insurer"/>
+        <field name="insurer"/>
         <newline/>
+    </xpath>
+    <xpath expr="/form" position="inside">
+        <newline/>
+        <field name="possible_related_contracts"/>
     </xpath>
 </data>

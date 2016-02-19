@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -30,3 +30,11 @@ msgstr "Tiers lié"
 msgctxt "field:product.product,capped_amount:"
 msgid "Capped amount"
 msgstr "Plafond"
+
+msgctxt "model:product.category,name:in_invoice_insurance"
+msgid "Supplier Invoice Insurance"
+msgstr "Facture fournisseur assurance"
+
+msgctxt "selection:account.invoice,business_kind:"
+msgid "Supplier Invoice Insurance"
+msgstr "Facture fournisseur assurance"

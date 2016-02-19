@@ -1,12 +1,13 @@
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import export
+from trytond.modules.cog_utils import export, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Template',
     'Product',
     'Uom',
+    'Category',
     ]
 
 
@@ -56,3 +57,10 @@ class Product(export.ExportImportMixin):
 class Uom(export.ExportImportMixin):
     __name__ = 'product.uom'
     _func_key = 'name'
+
+
+class Category(export.ExportImportMixin):
+    __name__ = 'product.category'
+    _func_key = 'code'
+
+    code = fields.Char('Code', required=True)

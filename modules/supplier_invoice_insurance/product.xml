@@ -7,5 +7,9 @@
             <field name="inherit" ref="product.product_view_form"/>
             <field name="name">product_form</field>
         </record>
+        <record model="product.category" id="in_invoice_insurance">
+            <field name="name">Supplier Invoice Insurance</field>
+            <field name="code">in_invoice_insurance</field>
+        </record>
     </data>
 </tryton>

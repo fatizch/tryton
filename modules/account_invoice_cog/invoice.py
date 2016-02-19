@@ -54,6 +54,9 @@ class Invoice(export.ExportImportMixin, Printable):
     color = fields.Function(
         fields.Char('Color'),
         'get_color')
+    business_kind = fields.Selection([('', '')], 'Business Kind',
+        states={'readonly': Eval('state') != 'draft'}, depends=['state'])
+    business_kind_string = business_kind.translated('business_kind')
     business_type = fields.Function(
         fields.Selection(_TYPE, 'Type'),
         'get_business_type')
@@ -121,7 +124,7 @@ class Invoice(export.ExportImportMixin, Printable):
         return 'black'
 
     def get_business_type(self, name):
-        return self.type
+        return self.business_kind if self.business_kind else self.type
 
     @classmethod
     def post(cls, invoices):
