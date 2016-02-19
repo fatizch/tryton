@@ -70,7 +70,7 @@ def generate_summary(desc, level=0):
     assert not (label is None and type(value) in node_types)
     res = u'<div>%s' % (max(level - 1, 0) * 4 * ' ')
     if label is not None:
-        if FMT is None:
+        if level_fmt is None:
             res += label
         else:
             res += u'<%s>%s</%s>' % (level_fmt, label, level_fmt)
@@ -79,7 +79,7 @@ def generate_summary(desc, level=0):
         res += u': '
     if type(value) in node_types:
         if len(value) > 0:
-            res += u'</div>\n%s' % '\n'.join([generate_summary(i, level + 1)
+            res += u'</div>%s' % ''.join([generate_summary(i, level + 1)
                     for i in value if i is not None])
         else:
             res += u'</div>'
