@@ -46,6 +46,8 @@ class PartyBalanceLine(model.CoopView):
     contract = fields.Char('Contract')
     amount = fields.Numeric('Amount', digits=(16, 2))
     reconciliations_string = fields.Char('Reconciliations')
+    reconciled_with = fields.Many2Many('account.move.line', None, None,
+        'Reconciled with')
     date = fields.Date('Date')
     party = fields.Char('Party')
     color = fields.Char('Color')
@@ -85,10 +87,10 @@ class PartyBalanceLine(model.CoopView):
             self.description = line.synthesis_rec_name
         self.bank_account = (line.bank_account.rec_name if line.bank_account
             else None)
-        self.reconciliations = (set([line.reconciliation])
-            if line.reconciliation else set([]))
-        self.reconciliations_string = ', '.join(
-            [x.rec_name for x in self.reconciliations])
+        if line.reconciliation:
+            self.reconciliations_string = line.reconciliation.rec_name
+            self.reconciled_with = [x for x in line.reconciliation.lines
+                if x != line]
         self.contract = line.contract.rec_name if line.contract else None
         self.move = line.move.rec_name
 
@@ -198,9 +200,15 @@ class PartyBalance(ModelCurrency, model.CoopView):
         if len(sub_lines) > 1:
             parent_line = Line(**sub_lines[0]._values)
             parent_line.amount = sum(x.amount for x in sub_lines)
-            parent_line.reconciliations_string = ', '.join(set(
-                    [x.move_line.reconciliation.rec_name for x in sub_lines
-                        if x.move_line and x.move_line.reconciliation]))
+            reconciliations = set([x.move_line.reconciliation
+                    for x in sub_lines
+                    if x.move_line and x.move_line.reconciliation])
+            parent_line.reconciliations_string = ', '.join(
+                [r.rec_name for r in reconciliations])
+            reconciled_with = []
+            for line in sub_lines:
+                reconciled_with += line.reconciled_with
+            parent_line.reconciled_with = list(set(reconciled_with))
             contracts = set([x.contract for x in sub_lines if x.contract])
             parent_line.contract = (list(contracts)[0]
                 if len(contracts) == 1 else None)
@@ -291,10 +299,6 @@ class PartyBalance(ModelCurrency, model.CoopView):
                 self.balance_today = self.party.negative_payable_today
                 self.balance = self.party.negative_payable
                 self.is_balance_positive = self.balance_today < 0
-        for line in lines:
-            line.move_line = None
-            for sub_line in getattr(line, 'childs', []):
-                sub_line.move_line = None
 
     @fields.depends(*_FIELDS)
     def on_change_contract(self):
@@ -330,6 +334,7 @@ class OpenPartyBalance(Wizard):
             contract_id = None
         lines = MoveLine.search([
                 ('party', '=', party),
+                ('move_state', '!=', 'draft'),
                 ('account.kind', 'in', ['payable', 'receivable']),
                 ('move_state', '!=', 'draft'),
                 ],
