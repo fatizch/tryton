@@ -15,4 +15,6 @@
 super_pass=secret
 repos=`cat ./tags | xargs echo`
 
+# when behind a proxy
+# sudo ../coog/bin/coog docker build "$super_pass" "$repos" -- --build-arg http_proxy=http://myproxy.domain.com:8080
 sudo ../coog/bin/coog docker build "$super_pass" "$repos"

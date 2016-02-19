@@ -1,16 +1,16 @@
 # vim: set ft=sh:
 # docker utils for coog server
 
-coog_docker_env() { # build docker env image
+coog_docker_env() { # build docker env image - [docker-build-arg*]
         [ -d .cache ] && rm -rf .cache
-        docker build -t coog/env -f conf/env.df .
+        docker build -t coog/env -f conf/env.df $* .
 }
 
 coog_docker_hashpwd() { # hash trytond super pwd - <pwd>
         python2 -c "import crypt,random,string; print crypt.crypt('$1', ''.join(random.sample(string.ascii_letters + string.digits, 8)))"
 }
 
-coog_docker_build() { # build docker image - <pwd> [image*]
+coog_docker_build() { # build docker image - <pwd> [image*] -- [docker-build-arg*]
         [ $# -lt 4 ] && \
                 echo needs at least trytond, trytond-modules and coog to build && \
                 return 1
@@ -18,9 +18,11 @@ coog_docker_build() { # build docker image - <pwd> [image*]
         mkdir .cache
         local pass; pass=$1; shift
         coog_docker_hashpwd $pass > .cache/.password
-        local component
-        for component in $*
+        local image; image=$1
+        while [ ! -z $1 ]
         do
+                [ $1 = "--" ] && shift && break
+                local component; component=$1; shift
                 local repo
                 local tree
                 repo=`echo $component | cut -d ":" -f 1`
@@ -36,7 +38,7 @@ coog_docker_build() { # build docker image - <pwd> [image*]
                 cd $wd
         done
         cp conf/coog.df .cache
-        docker build -t coog/$1 -f .cache/coog.df .cache
+        docker build -t coog/$image -f .cache/coog.df $* .cache
 }
 
 coog_docker_clean() { # clean images and volumes
