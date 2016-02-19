@@ -2,5 +2,5 @@
 <form string="Payment Date Modification">
     <label name="new_date"/>
     <field name="new_date"/>
-    <field name="move_line" invisible="1"/>
+    <field name="move_lines" colspan="4"/>
 </form>

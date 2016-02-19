@@ -221,7 +221,8 @@ class PaymentInformationSelection(model.CoopView):
     __name__ = 'account.payment.payment_information_selection'
 
     new_date = fields.Date('New Payment Date')
-    move_line = fields.Many2One('account.move.line', 'Move Line')
+    move_lines = fields.Many2Many('account.move.line', None, None,
+        'Move Line')
 
 
 class PaymentInformationModification(model.CoopWizard):
@@ -246,18 +247,26 @@ class PaymentInformationModification(model.CoopWizard):
         cur_model = Transaction().context.get('active_model')
         if cur_model != 'account.move.line':
             raise TypeError
-        move_line = MoveLine(Transaction().context.get('active_id'))
+        dates = [l.payment_date for l in MoveLine.search(
+                [('id', 'in', Transaction().context.get('active_ids'))])]
+        date = dates[0] if len(set(dates)) == 1 else None
+
         return {
-            'new_date': move_line.payment_date,
-            'move_line': move_line.id,
+            'new_date': date,
+            'move_lines': Transaction().context.get('active_ids'),
             }
 
     def transition_finalize(self):
-        line = self.payment_information_selection.move_line
-        if self.payment_information_selection.new_date != line.payment_date:
-            # Allow to write off existing payment date
-            line.payment_date = self.payment_information_selection.new_date
-            line.save()
+        lines = []
+        new_date = self.payment_information_selection.new_date
+        for line in self.payment_information_selection.move_lines:
+            if new_date != line.payment_date:
+                # Allow to write off existing payment date
+                lines.append(line)
+
+        if lines:
+            Line = Pool().get('account.move.line')
+            Line.write(lines, {'payment_date': new_date})
         return 'end'
 
 
