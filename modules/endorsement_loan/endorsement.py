@@ -2,8 +2,9 @@ import datetime
 from collections import defaultdict
 from sql.functions import CurrentTimestamp
 
-from sql import Null, Column, Literal
+from sql import Null, Column, Literal, Window
 from sql.conditionals import Coalesce
+from sql.aggregate import Max
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
@@ -43,19 +44,11 @@ class Loan:
     previous_release_date = fields.Function(
         fields.Date('Previous Fund Release Date'),
         'get_previous_release_date')
-    applied_endorsements = fields.One2ManyDomain('endorsement.loan', 'loan',
-        'Applied Endorsements', domain=[('state', '=', 'applied')],
-        readonly=True, delete_missing=True, target_not_indexed=True,
-        order=[('endorsement.effective_date', 'ASC')])
     last_endorsement_balance = fields.Function(
         fields.Numeric('Last Endorsement Balance',
             digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
         'get_last_endorsement_balance')
-
-    @classmethod
-    def _export_skips(cls):
-        return super(Loan, cls)._export_skips() | {'applied_endorsements'}
 
     @classmethod
     def default_previous_frequency(cls):
@@ -90,12 +83,35 @@ class Loan:
             return self.first_payment_date
         return super(Loan, self).on_change_with_first_payment_date()
 
-    def get_last_endorsement_balance(self, name):
-        if not self.applied_endorsements:
-            return self.amount
-        payment = self.get_payment(
-            self.applied_endorsements[-1].endorsement.effective_date)
-        return payment.outstanding_balance if payment else self.amount
+    @classmethod
+    def get_last_endorsement_balance(cls, instances, name):
+        pool = Pool()
+        payment = pool.get('loan.payment').__table__()
+        endorsement = pool.get('endorsement').__table__()
+        endorsement_loan = pool.get('endorsement.loan').__table__()
+        cursor = Transaction().cursor
+
+        # Browse instances once to get amount for those without endorsement
+        res = {x.id: x.amount for x in instances}
+
+        endorsement_table = endorsement_loan.join(endorsement,
+            condition=(endorsement.id == endorsement_loan.endorsement)
+            & endorsement_loan.loan.in_([x.id for x in instances])
+            ).join(payment, condition=(endorsement_loan.loan == payment.loan)
+            & (payment.start_date <= endorsement.effective_date))
+
+        payment_view = endorsement_table.select(
+            payment.loan, payment.start_date, payment.outstanding_balance,
+            Max(payment.start_date,
+                window=Window([payment.loan])).as_('_max_start'))
+
+        cursor.execute(*payment_view.select(payment_view.loan,
+                payment_view.outstanding_balance, where=(
+                    (payment_view.start_date == payment_view._max_start))))
+
+        for loan_id, loan_amount in cursor.fetchall():
+            res[loan_id] = loan_amount
+        return res
 
     def get_previous_frequency(self, name):
         return self.payment_frequency
@@ -391,7 +407,8 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     __name__ = 'endorsement.loan'
 
     loan = fields.Many2One('loan', 'Loan', required=True, ondelete='CASCADE',
-        states={'readonly': Eval('state') == 'applied'}, depends=['state'])
+        states={'readonly': Eval('state') == 'applied'}, depends=['state'],
+        select=True)
     endorsement = fields.Many2One('endorsement', 'Endorsement', required=True,
         ondelete='CASCADE', select=True)
     increments = fields.One2Many('endorsement.loan.increment',
