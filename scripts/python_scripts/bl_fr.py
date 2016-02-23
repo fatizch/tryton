@@ -67,18 +67,29 @@ else:
     sys.stderr.write('\n')
     sys.exit()
 
-search_url = REDMINE_URL + '/issues.json?' \
-    'offset=0&limit=2000&' \
-    'project_id=%s&' % project_id + \
-    'fixed_version_id=%i&' % fixed_version_id + \
-    'status_id=closed&' \
-    'sort=priority,updated_on'
 
-r = requests.get(search_url, auth=(redmine_api_key, ''), verify=False)
-parsed = r.json()['issues']
+def get_issues():
+    offset = 0
+    end = False
+    while not end:
+        search_url = REDMINE_URL + '/issues.json?' \
+            'offset=%s&limit=100&' % offset + \
+            'project_id=%s&' % project_id + \
+            'fixed_version_id=%i&' % fixed_version_id + \
+            'status_id=closed&' \
+            'sort=priority,updated_on'
+
+        r = requests.get(search_url, auth=(redmine_api_key, ''), verify=False)
+        parsed = r.json()['issues']
+        if not parsed:
+            end = True
+        else:
+            for issue in parsed:
+                yield issue
+            offset += 100
 
 features, bugs, params, scripts = defaultdict(list), defaultdict(list), [], []
-for issue in parsed:
+for issue in get_issues():
     issue['custom_fields'] = {x['id']: x.get('value', '').encode('utf-8')
         for x in issue['custom_fields']}
     if test_version and issue['custom_fields'][11] != test_version:
