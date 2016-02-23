@@ -526,6 +526,8 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
             endorsement = endorsement_data[loan]
             if endorsement is None:
                 endorsement = LoanEndorsement(loan=loan)
+            if loan.first_payment_date > self.effective_date:
+                loan.first_payment_date = self.effective_date
             self._update_endorsement(endorsement, loan._save_values)
             loan_endorsements.append(endorsement)
         if loan_endorsements:
