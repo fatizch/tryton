@@ -50,6 +50,13 @@ coog_batch_wait() { # wait for batch exec - <name>
         echo batch exec failed - $failed jobs in fail && return 1
 }
 
+coog_batch_exec() { # execute batch (generate && start && wait) - <name> <concurrency> [generate_extra_arg*]
+        [ $# -lt 2 ] && echo missing batch name and workers number && return 1
+        local name; name=$1; shift
+        local nb; nb=$1; shift
+        coog_batch_generate $name $* && coog_batch_start $name $nb && coog_batch_wait $name
+}
+
 coog_batch_report() { # print batch report - <name> [filters]
         [ $# -lt 1 ] && echo missing batch name && return 1
         local broker; broker=`_coog_batch_broker` || return $?
