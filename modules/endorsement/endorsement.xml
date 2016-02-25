@@ -52,6 +52,23 @@
             <field name="model">contract,-1</field>
             <field name="action" ref="act_endorsement"/>
         </record>
+        <!-- Draft endorsements entry point -->
+        <record model="ir.action.act_window" id="act_all_endorsements">
+            <field name="name">Endorsements</field>
+            <field name="res_model">endorsement</field>
+            <field name="search_value" eval="[('state', 'not in', ('applied', 'canceled'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_all_endorsement_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="endorsement_view_list"/>
+            <field name="act_window" ref="act_all_endorsements"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_all_endorsement_view2">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="endorsement_view_form"/>
+            <field name="act_window" ref="act_all_endorsements"/>
+        </record>
+        <menuitem name="Endorsements" parent="offered.menu_contract_configuration" id="menu_all_endorsements" action="act_all_endorsements" sequence="100"/>
         <!-- ##################### -->
         <!-- # Endorsement Group # -->
         <!-- ##################### -->
@@ -239,5 +256,12 @@
             <field name="act_window" ref="act_configuration_form"/>
         </record>
         <menuitem parent="offered.menu_contract_configuration" action="act_configuration_form" id="menuitem_endorsement_configuration" sequence="0" icon="tryton-preferences"/>
+    </data>
+    <data depends="task_manager">
+        <menuitem name="Endorsements" id="menu_endorsement_tasks" sequence="100" action="act_all_endorsements" parent="task_manager.menu_task"/>
+        <record model="ir.ui.menu-res.group" id="group_endorsement_admin_menu_all">
+            <field name="group" ref="group_endorsement_admin"/>
+            <field name="menu" ref="menu_endorsement_tasks"/>
+        </record>
     </data>
 </tryton>

@@ -2087,6 +2087,10 @@ msgctxt "model:ir.action,name:act_decline_endorsement"
 msgid "Decline Endorsement"
 msgstr "Abandonner l'avenant"
 
+msgctxt "model:ir.action,name:act_all_endorsements"
+msgid "Endorsements"
+msgstr "Avenants"
+
 msgctxt "model:ir.action,name:act_endorsement"
 msgid "Endorsement"
 msgstr "Avenants"
@@ -2153,6 +2157,10 @@ msgctxt "model:ir.ui.menu,name:menu_configuration"
 msgid "Endorsement Configuration"
 msgstr "Configuration d'avenant"
 
+msgctxt "model:ir.ui.menu,name:menu_all_endorsements"
+msgid "Endorsements"
+msgstr "Avenants"
+
 msgctxt "model:ir.ui.menu,name:menu_endorsement_definition"
 msgid "Endorsement Definition"
 msgstr "Définition d'avenant"
@@ -2160,6 +2168,10 @@ msgstr "Définition d'avenant"
 msgctxt "model:ir.ui.menu,name:menu_endorsement_part"
 msgid "Endorsement Part"
 msgstr "Avenant unitaire"
+
+msgctxt "model:ir.ui.menu,name:menu_endorsement_tasks"
+msgid "Endorsements"
+msgstr "Avenants"
 
 msgctxt "model:ir.ui.menu,name:menuitem_endorsement_configuration"
 msgid "Endorsement Configuration"
@@ -2175,7 +2187,7 @@ msgstr "Super gestionnaire avenant"
 
 msgctxt "selection:contract.manage_options.option_displayer,action:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:contract.manage_options.option_displayer,action:"
 msgid "Added"
@@ -2283,7 +2295,7 @@ msgstr "Mise à jour"
 
 msgctxt "selection:endorsement.manage_contacts.contact,action:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:endorsement.manage_contacts.contact,action:"
 msgid "Added"
@@ -2292,6 +2304,10 @@ msgstr "Ajouté"
 msgctxt "selection:endorsement.manage_contacts.contact,action:"
 msgid "Ended"
 msgstr "Terminé"
+
+msgctxt "selection:endorsement.manage_contacts.contact,action:"
+msgid "New Address"
+msgstr "Nouvelle adresse"
 
 msgctxt "selection:endorsement.part,kind:"
 msgid "Activation Dates"
