@@ -222,6 +222,10 @@ msgctxt "field:process-process.step,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:process.action,content:"
+msgid "Content"
+msgstr "Contenu"
+
 msgctxt "field:process.action,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -229,6 +233,14 @@ msgstr "Date de création"
 msgctxt "field:process.action,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:process.action,exec_parameters:"
+msgid "Execution Parameters"
+msgstr "Paramètres"
+
+msgctxt "field:process.action,exec_rec_name:"
+msgid "Execution Name"
+msgstr "Nom"
 
 msgctxt "field:process.action,id:"
 msgid "ID"
@@ -329,6 +341,10 @@ msgstr "Etat Courant"
 msgctxt "field:process.process_framework,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:process.process_framework,task_name:"
+msgid "Task Name"
+msgstr "Nom de la tâche"
 
 msgctxt "field:process.status,code:"
 msgid "Code"
@@ -635,8 +651,8 @@ msgid "Process to Step relation"
 msgstr "Relation Processus - Etape"
 
 msgctxt "model:process.action,name:"
-msgid "Code"
-msgstr "Code"
+msgid "Process Action"
+msgstr "Action de processus"
 
 msgctxt "model:process.process-act_window,name:"
 msgid "Process to Action Window Relation"
@@ -682,6 +698,10 @@ msgctxt "selection:process,step_button_group_position:"
 msgid "Right"
 msgstr "Droite"
 
+msgctxt "selection:process.action,content:"
+msgid "Method"
+msgstr "Méthode"
+
 msgctxt "selection:process.action,technical_kind:"
 msgid "After"
 msgstr "Après"
@@ -715,154 +735,6 @@ msgid "Replace Step Methods"
 msgstr "Remplacer les Méthodes de l'Etape"
 
 msgctxt "view:contract:"
-msgid " "
-msgstr ""
-
-msgctxt "view:contract:"
-msgid "==> Brouillard"
-msgstr "==> Brouillard"
-
-msgctxt "view:contract:"
-msgid "==> Clauses"
-msgstr "==> Clauses"
-
-msgctxt "view:contract:"
-msgid "==> Courtier"
-msgstr "==> Courtier"
-
-msgctxt "view:contract:"
-msgid "==> Garantie"
-msgstr "==> Garantie"
-
-msgctxt "view:contract:"
-msgid "==> Garanties"
-msgstr "==> Garanties"
-
-msgctxt "view:contract:"
-msgid "==> Personnes Couvertes"
-msgstr "==> Personnes Couvertes"
-
-msgctxt "view:contract:"
-msgid "==> Prélèvement"
-msgstr "==> Prélèvement"
-
-msgctxt "view:contract:"
-msgid "==> Prêt"
-msgstr "==> Prêt"
-
-msgctxt "view:contract:"
-msgid "==> Quittance"
-msgstr "==> Quittance"
-
-msgctxt "view:contract:"
-msgid "==> Souscripteur"
-msgstr "==> Souscripteur"
-
-msgctxt "view:contract:"
-msgid "==> Validation RIC"
-msgstr "==> Validation RIC"
-
-msgctxt "view:contract:"
-msgid "==> Validation du contrat"
-msgstr "==> Validation du contrat"
-
-msgctxt "view:contract:"
-msgid "Annuler l'avenant"
-msgstr "Annuler l'avenant"
-
-msgctxt "view:contract:"
-msgid "Brouillard"
-msgstr "Brouillard"
-
-msgctxt "view:contract:"
-msgid "Change start date"
-msgstr "Modifier la date d'effet"
-
-msgctxt "view:contract:"
-msgid "Clauses"
-msgstr "Clauses"
-
-msgctxt "view:contract:"
-msgid "Complementary Data"
-msgstr "Données complémentaires"
-
-msgctxt "view:contract:"
-msgid "Complete"
-msgstr "Terminer"
-
-msgctxt "view:contract:"
-msgid "Courtier"
-msgstr "Courtier"
-
-msgctxt "view:contract:"
-msgid "Covered Elements"
-msgstr "Risques Couverts"
-
-msgctxt "view:contract:"
-msgid "Garantie"
-msgstr "Garantie"
-
-msgctxt "view:contract:"
-msgid "Garanties"
-msgstr "Garanties"
-
-msgctxt "view:contract:"
-msgid "Gérer les options"
-msgstr "Gérer les options"
-
-msgctxt "view:contract:"
-msgid "Impression"
-msgstr "Impression"
-
-msgctxt "view:contract:"
-msgid "Invoicing"
-msgstr "Quittancement"
-
-msgctxt "view:contract:"
-msgid "Next (_k)"
-msgstr "Suivant (_k)"
-
-msgctxt "view:contract:"
-msgid "Nouvelle Surprime"
-msgstr "Nouvelle surprime"
-
-msgctxt "view:contract:"
-msgid "Personnes Couvertes"
-msgstr "Personnes Couvertes"
-
-msgctxt "view:contract:"
-msgid "Previous  (_j)"
-msgstr "Précédent (_j)"
-
-msgctxt "view:contract:"
-msgid "Prélèvement"
-msgstr "Prélèvement"
-
-msgctxt "view:contract:"
-msgid "Prêt"
-msgstr "Prêt"
-
-msgctxt "view:contract:"
-msgid "Quittance"
-msgstr "Quittance"
-
-msgctxt "view:contract:"
-msgid "Reprise Intégrale de Contrat"
-msgstr "Reprise Intégrale de Contrat"
-
-msgctxt "view:contract:"
-msgid "Souscripteur"
-msgstr "Souscripteur"
-
-msgctxt "view:contract:"
-msgid "Souscription Emprunteur"
-msgstr "Souscription Emprunteur"
-
-msgctxt "view:contract:"
-msgid "Souscription Perte d'Emploi"
-msgstr "Souscription Perte d'Emploi"
-
-msgctxt "view:contract:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
@@ -887,8 +759,8 @@ msgid "Process Steps"
 msgstr "Etapes"
 
 msgctxt "view:process.action:"
-msgid "Code"
-msgstr "Code"
+msgid "Process Action"
+msgstr "Action de processus"
 
 msgctxt "view:process.status:"
 msgid "Status"

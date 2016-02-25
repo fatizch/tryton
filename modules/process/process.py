@@ -19,7 +19,7 @@ __all__ = [
     'ProcessMenuRelation',
     'Process',
     'TransitionAuthorization',
-    'Code',
+    'ProcessAction',
     'ProcessTransition',
     'ProcessStep',
     'StepGroupRelation',
@@ -616,8 +616,8 @@ class TransitionAuthorization(ModelSQL):
     group = fields.Many2One('res.group', 'Group', ondelete='CASCADE')
 
 
-class Code(ModelSQL, ModelView):
-    'Code'
+class ProcessAction(ModelSQL, ModelView):
+    'Process Action'
 
     __name__ = 'process.action'
 
@@ -626,31 +626,52 @@ class Code(ModelSQL, ModelView):
             ('step_after', 'After'),
             ('transition', 'Transition')],
         'Kind', states={'invisible': True})
+    content = fields.Selection([
+            ('method', 'Method'),
+            ], 'Content')
     source_code = fields.Function(
-        fields.Text('Source Code'),
+        fields.Text('Source Code', states={
+                'invisible': Eval('content', '') != 'method'},
+            depends=['content']),
         'on_change_with_source_code')
     on_model = fields.Function(
-        fields.Many2One('ir.model', 'On Model'),
+        fields.Many2One('ir.model', 'On Model', states={
+                'invisible': Eval('content', '') != 'method'},
+            depends=['content']),
         'get_on_model')
-    method_name = fields.Char('Method Name', required=True)
+    method_name = fields.Char('Method Name', states={
+            'required': Eval('content', '') == 'method',
+            'invisible': Eval('content', '') != 'method'},
+        depends=['content'])
     parent_step = fields.Many2One('process.step', 'Parent Step',
         ondelete='CASCADE', select=True)
     parent_transition = fields.Many2One('process.transition',
         'Parent Transition', ondelete='CASCADE', select=True)
     sequence = fields.Integer('Sequence', states={'invisible': True})
     parameters = fields.Char('Parameters',
-        help='Write parameters separated by ","')
+        states={'invisible': Eval('content', '') != 'method'},
+        depends=['content'], help='Write parameters separated by ","')
+    exec_rec_name = fields.Function(
+        fields.Char('Execution Name'),
+        'on_change_with_exec_rec_name')
+    exec_parameters = fields.Function(
+        fields.Char('Execution Parameters'),
+        'on_change_with_exec_parameters')
 
     @classmethod
     def __setup__(cls):
-        super(Code, cls).__setup__()
+        super(ProcessAction, cls).__setup__()
         cls._error_messages.update({
                 'non_matching_method': 'Method %s does not exist on model %s'})
 
+    @classmethod
+    def default_content(cls):
+        return 'method'
+
     def pre_validate(self):
-        if not (hasattr(self, 'on_model') and self.on_model):
+        if getattr(self, 'on_model', None) is None:
             return
-        if not (hasattr(self, 'method_name') and self.method_name):
+        if not getattr(self, 'method_name', None):
             return
         TargetModel = Pool().get(self.on_model.model)
         if not (self.method_name in dir(TargetModel) and callable(
@@ -666,6 +687,9 @@ class Code(ModelSQL, ModelView):
             else:
                 result = method(target)
             return result
+
+        if self.content != 'method':
+            raise NotImplementedError
         if not target.__name__ == self.on_model.model:
             raise Exception('Bad models ! Expected %s got %s' % (
                     self.on_model.model, target.__name__))
@@ -680,6 +704,14 @@ class Code(ModelSQL, ModelView):
         res, errs = result
         if not res or errs:
             target.raise_user_error(errs)
+
+    @fields.depends('parameters')
+    def on_change_with_exec_parameters(self, name=None):
+        return self.parameters
+
+    @fields.depends('method_name')
+    def on_change_with_exec_rec_name(self, name=None):
+        return self.method_name
 
     @fields.depends('method_name', 'on_model')
     def on_change_with_source_code(self, name=None):

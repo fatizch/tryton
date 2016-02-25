@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Code" col="2">
+<form string="Process Action" col="2">
+    <label name="content"/>
+    <field name="content"/>
     <label name="on_model"/>
     <field name="on_model"/>
     <label name="method_name"/>

@@ -11,7 +11,7 @@ def register():
         ProcessStep,
         Process,
         ProcessTransition,
-        Code,
+        ProcessAction,
         TransitionAuthorization,
         ProcessMenuRelation,
         ProcessStepRelation,
