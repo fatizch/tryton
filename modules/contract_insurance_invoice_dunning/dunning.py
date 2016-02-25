@@ -98,6 +98,9 @@ class Level:
                 date = dunning.contract.last_posted_invoice_end
             elif self.termination_mode == 'at_last_paid_invoice':
                 date = dunning.contract.last_paid_invoice_end
+            if (dunning.contract.termination_reason == termination_reason and
+                    dunning.contract.end_date == date):
+                continue
             to_terminate[date].append(dunning.contract)
         for date, contracts in to_terminate.iteritems():
             Contract.terminate(contracts, date, termination_reason)
