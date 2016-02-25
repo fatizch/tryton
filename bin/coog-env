@@ -27,7 +27,7 @@ _coog_env_files() { # set file names
 }
 
 _coog_env_paths() { # set paths
-        COOG_TMP=/tmp
+        [ -z $COOG_TMP ] && COOG_TMP=/tmp
         COOG_TRYTON=`readlink -f ../../tryton`
         COOG_TRYTOND=`readlink -f ../../trytond`
         COOG_PROTEUS=`readlink -f ../../proteus`
