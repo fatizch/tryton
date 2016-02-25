@@ -92,6 +92,9 @@ features, bugs, params, scripts = defaultdict(list), defaultdict(list), [], []
 for issue in get_issues():
     issue['custom_fields'] = {x['id']: x.get('value', '').encode('utf-8')
         for x in issue['custom_fields']}
+    if issue['status']['id'] == 6:
+        # Rejected => ignored
+        continue
     if test_version and issue['custom_fields'][11] != test_version:
         continue
     issue['subject'] = issue['subject'].encode('utf-8')
