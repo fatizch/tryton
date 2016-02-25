@@ -116,6 +116,31 @@ class Invoice:
         else:
             super(Invoice, self).__get_account_payment_term()
 
+    @classmethod
+    def set_description(cls, invoices):
+        invoices_to_save = []
+        for invoice in invoices:
+            if (invoice.description
+                    or invoice.business_kind != 'in_invoice_insurance'):
+                continue
+            products = set([x.product.template for x in invoice.lines
+                    if x.product and x.product.template])
+            if len(products) == 1:
+                invoice.description = list(products)[0].name
+                invoices_to_save.append(invoice)
+        if invoices_to_save:
+            cls.save(invoices_to_save)
+
+    @classmethod
+    def validate_invoice(cls, invoices):
+        cls.set_description(invoices)
+        super(Invoice, cls).validate_invoice(invoices)
+
+    @classmethod
+    def post(cls, invoices):
+        cls.set_description(invoices)
+        super(Invoice, cls).post(invoices)
+
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'

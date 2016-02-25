@@ -31,5 +31,15 @@
             <field name="inherit" ref="account_invoice.invoice_view_form"/>
             <field name="name">invoice_form</field>
         </record>
+        <record model="ir.action.act_window" id="act_supplier_invoice_insurance_relate_form">
+            <field name="name">Supplier Invoice Insurance</field>
+            <field name="res_model">account.invoice</field>
+            <field name="domain" eval="('business_kind', '=', 'in_invoice_insurance'), ['OR', ('related_party', '=', Eval('active_id')), ('party', '=', Eval('active_id'))]" pyson="1"></field>
+        </record>
+        <record model="ir.action.keyword" id="act_supplier_invoice_insurance_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="act_supplier_invoice_insurance_relate_form"/>
+        </record>
     </data>
 </tryton>
