@@ -390,9 +390,34 @@ class Reconcile:
                 ('state', '!=', 'draft'),
                 ])
 
+    def default_show(self, fields):
+        defaults = super(Reconcile, self).default_show(fields)
+        defaults['post_leftovers'] = True
+        return defaults
+
+    def transition_reconcile(self):
+        next_state = super(Reconcile, self).transition_reconcile()
+        if not self.show.post_leftovers:
+            return next_state
+
+        # Find new moves which were created for profit / loss lines and post
+        # those
+        new_moves = list(set(x.move
+                for origin_line in self.show.lines
+                for x in origin_line.reconciliation.lines
+                if x.move.state == 'draft'
+                and x.move.journal == self.show.journal
+                and x.move.date == self.show.date
+                ))
+        if new_moves:
+            Pool().get('account.move').post(new_moves)
+        return next_state
+
 
 class ReconcileShow:
     __name__ = 'account.reconcile.show'
+
+    post_leftovers = fields.Boolean('Post Left Over Moves')
 
     @classmethod
     def __setup__(cls):

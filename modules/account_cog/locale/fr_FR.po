@@ -143,6 +143,10 @@ msgctxt "field:account.period,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.reconcile.show,post_leftovers:"
+msgid "Post Left Over Moves"
+msgstr "Émettre les mouvements d'ajustement"
+
 msgctxt "field:account.tax,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
