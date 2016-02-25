@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.pool import PoolMeta, Pool
 from trytond.model import dualmethod
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, utils
 
 
 __metaclass__ = PoolMeta
@@ -171,7 +171,7 @@ class ContractOption:
 
             commission = Commission()
             commission.is_prepayment = True
-            commission.date = self.end_date
+            commission.date = utils.today()
             commission.origin = self
             commission.agent = agent
             commission.product = plan.commission_product
