@@ -1,0 +1,51 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:process.action:"
+msgid "Invalid field \"%(field_name)s\" for model %(model_name)s"
+msgstr "Le champ \"%(field_name)s\" n'existe pas sur le modèle %(model_name)s"
+
+msgctxt "error:process.action:"
+msgid "Invalid field type \"%(field_type)s\" for node \"%(node)s\""
+msgstr ""
+"Le type de champ  \"%(field_type)s\" n'est pas valide pour l'élément "
+"\"%(node)s\""
+
+msgctxt "error:process.action:"
+msgid "Target path \"%s\" must start with \"object.\""
+msgstr "Le chemin \"%s\" doit commencer par \"object.\""
+
+msgctxt "field:process.action,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:process.action,rule:"
+msgid "Rule Engine"
+msgstr "Règle"
+
+msgctxt "field:process.action,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de règle"
+
+msgctxt "field:process.action,target_path:"
+msgid "Target Path"
+msgstr "Chemin des données"
+
+msgctxt "help:process.action,target_path:"
+msgid ""
+"A path from the processed object to the data on which to execute the rule\n"
+"\n"
+"Example : for a contract, \"object.options\" will run the rule on all contract options"
+msgstr ""
+"Un chemin permettant de retrouver les données sur lesquelles exécuter la règle à partir de l'objet du processus.\n"
+"\n"
+"Exemple : pour un contrat, \"object.options\" permettra d'exécuter la règle sur les garanties du contrat."
+
+msgctxt "selection:process.action,content:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Process Check"
+msgstr "Vérification sur un processus"
