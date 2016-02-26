@@ -329,6 +329,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 ' max end date reached',
                 'cannot_reactivate_non_terminated': 'Cannot reactivate a not '
                 'yet terminated contract',
+                'no_contacts_of_type': 'No contact defined for %s',
+                'bad_first_contact_start_date': 'Invalid start date for '
+                'first %s contact',
+                'bad_last_contact_end_date': 'Invalid end date for last '
+                '%s contact',
+                'invalid_contact_start_date': 'Contact start date (%s) '
+                'incompatible with associated address (%s) start (%s)',
+                'invalid_contact_end_date': 'Contact end date (%s) '
+                'incompatible with associated address (%s) end (%s)',
+                'bad_contact_follow_up': 'There are dates for which no '
+                '%s address is defined',
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
 
@@ -1432,6 +1443,84 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             self.append_functional_error('cannot_reactivate_max_end_date')
             return None
         return new_end_date
+
+    def init_contacts(self, party, type_code):
+        # Clean contacts
+        contacts = [x for x in self.contacts if x.type.code != type_code]
+        if len(contacts) != len(self.contacts):
+            existing = [x for x in self.contacts
+                if x.type.code == type_code]
+            if existing[0].party == party:
+                # Already init'ed, or manually managed
+                return
+        next_start = None
+        for address in sorted(party.addresses,
+                key=lambda x: x.start_date or datetime.date.min):
+            if address.end_date and address.end_date < self.initial_start_date:
+                continue
+            if (next_start and address.start_date
+                    and address.start_date > next_start):
+                # There is a hole in the addresses, let the user manage
+                return
+            contacts.append(self.create_contact(type_code, party=party,
+                    address=address, date=next_start,
+                    end_date=address.end_date))
+            if not address.end_date or address.end_date >= self.end_date:
+                break
+            next_start = coop_date.add_day(address.end_date, 1)
+        self.contacts = contacts
+        self.save()
+
+    def create_contact(self, type_, **kwargs):
+        pool = Pool()
+        contact_type = pool.get('contract.contact.type').search([
+                ('code', '=', type_)])[0]
+        return pool.get('contract.contact')(type=contact_type, **kwargs)
+
+    def init_subscriber_contacts(self):
+        self.init_contacts(self.subscriber, 'subscriber')
+
+    def check_contacts(self, party, type_code):
+        contact_type = Pool().get('contract.contact.type').search([
+                ('code', '=', type_code)])[0]
+        contacts = [x for x in self.contacts if x.type.code == type_code]
+        if not contacts:
+            self.append_functional_error('no_contacts_of_type',
+                (contact_type.rec_name,))
+            return
+        contacts.sort(key=lambda x: x.date or datetime.date.min)
+
+        # Check boundaries
+        if (contacts[0].date
+                and contacts[0].date > self.initial_start_date):
+            self.append_functional_error('bad_first_contact_start_date',
+                (contact_type.rec_name,))
+        if (contacts[-1].end_date
+                and contacts[-1].end_date < self.end_date):
+            self.append_functional_error('bad_last_contact_end_date',
+                (contact_type.rec_name,))
+
+        # Check for holes
+        for idx, contact in enumerate(contacts):
+            if (contact.address.start_date or datetime.date.min) > (
+                    contact.date or datetime.date.min):
+                self.append_functional_error('invalid_contact_start_date',
+                    (contact.date, contact.address.rec_name,
+                        contact.address.start_date))
+            if (contact.address.end_date or datetime.date.max) < (
+                    contact.end_date or datetime.date.max):
+                self.append_functional_error('invalid_contact_end_date',
+                    (contact.end_date, contact.address.rec_name,
+                        contact.address.end_date))
+            if idx == 0 or not contacts[idx - 1].end_date or not contact.date:
+                continue
+            if (coop_date.add_day(contacts[idx - 1].end_date, 1)
+                    != contact.date):
+                self.append_functional_error('bad_contact_follow_up',
+                    (contact_type.rec_name,))
+
+    def check_subscriber_contacts(self):
+        self.check_contacts(self.subscriber, 'subscriber')
 
 
 class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,

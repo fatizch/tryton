@@ -72,8 +72,28 @@ msgid "Cannot set end date anterior to start date"
 msgstr "La date de fin ne peut être antérieure à la date de début"
 
 msgctxt "error:contract:"
+msgid "Contact end date (%s) incompatible with associated address (%s) end (%s)"
+msgstr "La date de fin du contact (%s) n'est pas compatible avec celle de l'adresse (%s) associée (%s)"
+
+msgctxt "error:contract:"
+msgid "Contact start date (%s) incompatible with associated address (%s) start (%s)"
+msgstr "La date de début du contact (%s) n'est pas compatible avec celle de l'adresse (%s) associée (%s)"
+
+msgctxt "error:contract:"
+msgid "Invalid end date for last %s contact"
+msgstr "Date de fin invalide pour la dernière adresse du %s"
+
+msgctxt "error:contract:"
 msgid "Invalid file format"
 msgstr "Format de fichier non valide"
+
+msgctxt "error:contract:"
+msgid "Invalid start date for first %s contact"
+msgstr "Date de début invalide pour la première adresse du %s"
+
+msgctxt "error:contract:"
+msgid "No contact defined for %s"
+msgstr "Aucune adresse de contact définie pour le %s"
 
 msgctxt "error:contract:"
 msgid "No quote sequence defined"
@@ -82,6 +102,10 @@ msgstr "Pas de séqunce de dévis définie"
 msgctxt "error:contract:"
 msgid "Product %s is inactive at date %s"
 msgstr "Le produit %s est inactif le %s"
+
+msgctxt "error:contract:"
+msgid "There are dates for which no %s address is defined"
+msgstr "Il y a des dates pour lesquelles le %s n'a pas d'adresse renseignée"
 
 msgctxt "field:contract,activation_history:"
 msgid "Activation History"
