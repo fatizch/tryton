@@ -77,3 +77,7 @@ msgstr "Agences"
 msgctxt "view:bank.agency:"
 msgid "Agency"
 msgstr "Agence"
+
+msgctxt "error:bank.account:"
+msgid "The IBAN and bank do not match"
+msgstr "L'IBAN et la banque ne correspondent pas."

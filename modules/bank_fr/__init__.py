@@ -7,5 +7,6 @@ def register():
     Pool.register(
         Bank,
         Agency,
+        BankAccount,
         TestCaseModel,
         module='bank_fr', type_='model')

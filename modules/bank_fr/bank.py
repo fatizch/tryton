@@ -1,6 +1,6 @@
 import re
 
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.cog_utils import fields, model
 
@@ -8,6 +8,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Bank',
     'Agency',
+    'BankAccount',
     ]
 
 
@@ -61,3 +62,49 @@ class Agency(model.CoopSQL, model.CoopView):
     @fields.depends('branch_code')
     def on_change_branch_code(self):
         self.branch_code = self.branch_code.zfill(5)
+
+
+class BankAccount:
+    __name__ = 'bank.account'
+
+    @classmethod
+    def __setup__(cls):
+        super(BankAccount, cls).__setup__()
+        cls._error_messages.update({'iban_bank_mismatch':
+                'The IBAN and bank do not match'})
+
+    @fields.depends('number', 'numbers', 'bank')
+    def on_change_number(self):
+        if not self.number:
+            return
+        self.bank = self.get_bank_from_number()
+
+    def get_bank_identifier_fr(self, number):
+        if not number or not number.startswith('FR') or len(number) < 10:
+            return
+        return number[4:9]
+
+    def get_bank_from_number(self):
+        pool = Pool()
+        Agency = pool.get('bank.agency')
+        number = self.number
+        if not number:
+            return
+        number = number.replace(' ', '')
+        bank_identifier_fr = self.get_bank_identifier_fr(number)
+        if not bank_identifier_fr:
+            return
+        agencies = Agency.search([('bank_code', '=', bank_identifier_fr)],
+                limit=1)
+        return agencies[0].bank if agencies else None
+
+    def check_iban_matches_bank(self):
+        bank_from_iban = self.get_bank_from_number()
+        if bank_from_iban and self.bank != bank_from_iban:
+            self.raise_user_warning('iban_bank_mismatch', 'iban_bank_mismatch')
+
+    @classmethod
+    def validate(cls, accounts):
+        super(BankAccount, cls).validate(accounts)
+        for account in accounts:
+            account.check_iban_matches_bank()
