@@ -3,15 +3,20 @@ from trytond.pool import Pool
 from .commission import *
 from .account import *
 from .party import *
+from .batch import *
 
 
 def register():
     Pool.register(
+        Commission,
         CreateInvoicePrincipalAsk,
         MoveLine,
         InvoiceLine,
         Invoice,
         Insurer,
+        CreateEmptyInvoicePrincipalBatch,
+        LinkInvoicePrincipalBatch,
+        FinalizeInvoicePrincipalBatch,
         module='commission_insurer', type_='model')
     Pool.register(
         CreateInvoicePrincipal,

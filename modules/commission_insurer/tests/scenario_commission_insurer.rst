@@ -219,6 +219,7 @@ Recreate insurer commission invoice::
     ...         ('state', '!=', 'cancel')])
     >>> invoice.total_amount == Decimal('40')
     True
+    >>> invoice.click('post')
 
 Cancel Invoice::
 

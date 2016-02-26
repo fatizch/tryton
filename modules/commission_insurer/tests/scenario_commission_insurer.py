@@ -196,6 +196,7 @@ invoice, = Invoice.find([('type', '=', 'in_invoice'),
         ('state', '!=', 'cancel')])
 invoice.total_amount == Decimal('40')
 # #Res# #True
+invoice.click('post')
 
 # #Comment# #Cancel Invoice
 Contract.first_invoice([contract.id], config.context)
