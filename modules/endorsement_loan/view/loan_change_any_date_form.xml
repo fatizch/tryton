@@ -4,7 +4,7 @@
     <field name="effective_date"/>
     <label name="current_loan"/>
     <field name="current_loan" widget="selection"/>
-    <field name="new_increments" colspan="2" mode="tree,form"/>
+    <field name="new_increments" colspan="2" mode="tree" pre_validate="1"/>
     <field name="current_increments" colspan="2"/>
     <group id="invisible" string="">
         <field name="all_increments"/>

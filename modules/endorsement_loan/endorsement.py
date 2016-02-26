@@ -171,8 +171,9 @@ class LoanIncrement:
     def get_calculated_amount(self, name):
         return self.calculate_payment_amount()
 
-    @fields.depends('begin_balance', 'calculated_amount', 'number_of_payments',
-        'deferral', 'loan', 'payment_amount', 'payment_frequency', 'rate')
+    @fields.depends('begin_balance', 'calculated_amount', 'currency',
+        'deferral', 'number_of_payments', 'loan', 'payment_amount',
+        'payment_frequency', 'rate')
     def on_change_payment_amount(self):
         if self.payment_amount is None:
             self.payment_amount = self.calculate_payment_amount()

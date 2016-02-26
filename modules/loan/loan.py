@@ -864,6 +864,9 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
         cls._order.insert(0, ('number', 'ASC'))
         cls._error_messages.update({
                 'invalid_number_of_payments': 'Number of payments must be > 0',
+                'incoherent_balances': 'Incoherent begin balance (%(begin)s) '
+                'and end balance (%(end)s) regarding payment amount '
+                '(%(payment)s).',
                 })
 
     @classmethod
@@ -917,12 +920,26 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
             # domain=[('number_of_payments', '>', 0)]
             # forces the focus on the field in form view
             self.raise_user_error('invalid_number_of_payments')
+        if not self.first_payment_end_balance:
+            return
+        if self.begin_balance:
+            # Check begin balance and first_payment_end_balance are coherent.
+            # We accept a (very) small difference to handle rounding
+            if abs(self.get_first_payment_end_balance()
+                    - self.first_payment_end_balance) > 1:
+                self.raise_user_error('incoherent_balances', {
+                        'begin': self.begin_balance,
+                        'end': self.first_payment_end_balance,
+                        'payment': self.payment_amount or
+                        self.calculate_payment_amount(),
+                        })
 
     @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
         'deferral', 'loan', 'number_of_payments', 'payment_amount',
         'payment_frequency', 'rate')
     def on_change_begin_balance(self):
-        self.first_payment_end_balance = None
+        if self.begin_balance is not None:
+            self.first_payment_end_balance = None
         self.update_payment_data()
 
     @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
@@ -935,7 +952,8 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
         'deferral', 'loan', 'number_of_payments', 'payment_amount',
         'payment_frequency', 'rate')
     def on_change_first_payment_end_balance(self):
-        self.begin_balance = None
+        if self.first_payment_end_balance is not None:
+            self.begin_balance = None
         self.update_payment_data()
 
     @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
@@ -977,15 +995,16 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
             self.begin_balance * (1 + rate) - self.payment_amount)
 
     def update_payment_data(self):
+        can_calculate = (self.rate and self.number_of_payments and
+            self.payment_frequency)
         if (self.begin_balance is None and self.first_payment_end_balance and
-                self.rate and self.number_of_payments and
-                self.payment_frequency):
+                can_calculate):
             self.begin_balance = \
                 self.get_begin_balance_from_first_payment_end_balance()
         if (self.begin_balance and self.rate and self.number_of_payments
                 and self.payment_frequency):
-            self.first_payment_end_balance = None
-            self.payment_amount = self.calculate_payment_amount()
+            if self.payment_amount is None:
+                self.payment_amount = self.calculate_payment_amount()
             self.first_payment_end_balance = \
                 self.get_first_payment_end_balance()
 
@@ -1003,6 +1022,10 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
         if self.deferral == 'fully':
             return self.currency.round(
                 self.first_payment_end_balance / (1 + rate))
+        if self.payment_amount is not None:
+            return self.currency.round(
+                (self.first_payment_end_balance + self.payment_amount) /
+                (1 + rate))
         return self.currency.round(
             self.first_payment_end_balance / (1 + rate - (
                     rate * (1 + rate) ** self.number_of_payments) /

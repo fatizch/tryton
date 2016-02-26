@@ -425,6 +425,8 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
         'effective_date', 'new_increments')
     def on_change_current_loan(self):
         if self.new_increments:
+            for increment in self.new_increments:
+                increment.pre_validate()
             self.all_increments = [x for x in self.all_increments
                 if x.loan != self.new_increments[0].loan
                 or x.number is not None] + list(self.new_increments)

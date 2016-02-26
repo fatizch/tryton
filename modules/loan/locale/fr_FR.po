@@ -41,6 +41,10 @@ msgctxt "error:loan.increment:"
 msgid "Number of payments must be > 0"
 msgstr "Le nombre de paiements doit être > 0"
 
+msgctxt "error:loan.increment:"
+msgid "Incoherent begin balance (%(begin)s) and end balance (%(end)s) regarding payment amount (%(payment)s)."
+msgstr "Le CRD en début de période (%(begin)s) et celui de fin (%(end)s) sont incohérents au regard du montant des échéances (%(payment)s)"
+
 msgctxt "error:loan:"
 msgid "Increment start date cannot be before first payment date !"
 msgstr "La date de début des paliers doit être antérieure à la date de premier paiement !"

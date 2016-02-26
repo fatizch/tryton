@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Loan Increments" editable="bottom">
     <field name="number" readonly="1"/>
+    <field name="number_of_payments"/>
+    <field name="payment_frequency"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
+    <field name="deferral"/>
+    <field name="payment_amount">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="rate" factor="100">
+        <suffix string="%"/>
+    </field>
     <field name="begin_balance">
         <suffix name="currency_symbol"/>
     </field>
     <field name="first_payment_end_balance">
         <suffix name="currency_symbol"/>
     </field>
-    <field name="rate" factor="100">
-        <suffix string="%"/>
-    </field>
-    <field name="number_of_payments"/>
-    <field name="payment_frequency"/>
-    <field name="payment_amount">
-        <suffix name="currency_symbol"/>
-    </field>
-    <field name="start_date"/>
-    <field name="end_date"/>
-    <field name="deferral"/>
     <field name="loan" tree_invisible="1"/>
     <field name="loan_state" tree_invisible="1"/>
     <field name="manual" tree_invisible="1"/>
+    <field name="currency" tree_invisible="1"/>
 </tree>
