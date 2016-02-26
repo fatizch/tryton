@@ -16,6 +16,8 @@ def register():
         Product,
         # from contract
         Contract,
+        CoveredElement,
+        Beneficiary,
         # from test_case
         TestCaseModel,
         module='offered_distribution', type_='model')

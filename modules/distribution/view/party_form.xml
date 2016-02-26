@@ -5,4 +5,8 @@
             <field name="network" mode="form"/>
         </page>
     </xpath>
+    <xpath expr="/form/group[@id='checkboxes']/field[@name='code']" position="after">
+        <label name="portfolio"/>
+        <field name="portfolio"  widget="selection"/>
+    </xpath>
 </data>

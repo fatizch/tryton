@@ -4,6 +4,7 @@ from .distribution import *
 from .res import *
 from .test_case import *
 from .party import *
+from .configuration import *
 
 
 def register():
@@ -13,4 +14,5 @@ def register():
         DistributionNetworkContactMechanism,
         User,
         TestCaseModel,
+        Configuration,
         module='distribution', type_='model')

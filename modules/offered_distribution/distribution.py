@@ -25,7 +25,7 @@ class DistributionNetwork:
         'get_parent_com_products_id')
     all_com_products = fields.Function(
         fields.Many2Many('distribution.commercial_product', None, None,
-            'All Comercial Products'),
+            'All Commercial Products'),
         'get_all_commercial_products_id')
     company = fields.Many2One('company.company', 'Company',
         ondelete='RESTRICT', depends=['commercial_products'])

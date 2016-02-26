@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/label[@name='product']" position="before">
+        <label name="distributor"/>
+        <field name="distributor"/>
+        <newline/>
+        <label name="commercial_product"/>
+        <field name="commercial_product"/>
+        <newline/>
+        <group id="invisible" string="" colspan="4">
+            <field name="authorized_distributors"/>
+            <field name="party_portfolio"/>
+        </group>
+    </xpath>
+</data>

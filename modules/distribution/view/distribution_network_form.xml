@@ -4,6 +4,10 @@
     <field name="name"/>
     <label name="code"/>
     <field name="code"/>
+    <label name="is_portfolio"/>
+    <field name="is_portfolio"/>
+    <label name="is_distributor"/>
+    <field name="is_distributor"/>
     <label name="party"/>
     <field name="party"/>
     <label name="address"/>
