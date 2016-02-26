@@ -46,6 +46,7 @@ class Fee:
             ('account', 'in', accounts),
             ('party', 'in', parties),
             ('broker_fee_invoice_line', '=', None),
+            ('journal.type', '!=', 'commission'),
             ['OR',
                 [('origin.id', '!=', None, 'account.invoice')],
                 [('origin.id', '!=', None, 'account.move')]
