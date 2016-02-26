@@ -89,7 +89,8 @@ class CreateInvoicePrincipal:
                 'Wholesale broker reimbursement %s'
                 })
 
-    def get_wholesale_brokers_line_domain(self, account, party):
+    @classmethod
+    def get_wholesale_brokers_line_domain(cls, account, party, until_date):
         domain = [
             ('account', '=', account.id),
             ('principal_invoice_line', '=', None),
@@ -97,43 +98,50 @@ class CreateInvoicePrincipal:
             ('party', '!=', party.id),
             ('origin.id', '!=', None, 'account.invoice')
             ]
-        if self.ask.until_date:
-            domain.append(('date', '<=', self.ask.until_date))
+        if until_date:
+            domain.append(('date', '<=', until_date))
         return domain
 
-    def create_insurer_notice(self, party):
+    @classmethod
+    def finalize_invoices_and_lines(cls, insurers, company, journal,
+            date, description):
         '''
         This method adds the commission amount paid to wholesale brokers to the
         insurer invoice
         '''
+
         pool = Pool()
         Line = pool.get('account.move.line')
         Invoice = pool.get('account.invoice')
 
-        commission_invoice = super(CreateInvoicePrincipal, self).\
-            create_insurer_notice(party)
-        account = party.insurer_role[0].waiting_account
-        if not commission_invoice or not account:
-            return commission_invoice
+        commission_invoices = super(CreateInvoicePrincipal, cls).\
+            finalize_invoices_and_lines(insurers, company, journal,
+                date, description)
+        for commission_invoice in commission_invoices:
+            account = commission_invoice.party.insurer_role[0].waiting_account
+            if not account:
+                return commission_invoice
 
-        lines = Line.search(
-            self.get_wholesale_brokers_line_domain(account, party),
-            order=[('party', 'ASC')])
-        if not lines:
-            return commission_invoice
-        for party, party_lines in groupby(lines, key=lambda x: x.party):
-            amount = sum(-l.amount for l in lines)
-            invoice_line = self.get_wholesale_brokers_line(amount, account,
-                party)
-            invoice_line.invoice = commission_invoice
-            invoice_line.save()
-            Line.write(list(party_lines), {
-                    'principal_invoice_line': invoice_line.id,
-                    })
-        Invoice.update_taxes([commission_invoice])
-        return commission_invoice
+            lines = Line.search(
+                cls.get_wholesale_brokers_line_domain(account,
+                    commission_invoice.party, date),
+                order=[('party', 'ASC')])
+            if not lines:
+                continue
+            for party, party_lines in groupby(lines, key=lambda x: x.party):
+                amount = sum(-l.amount for l in lines)
+                invoice_line = cls.get_wholesale_brokers_line(amount, account,
+                    party)
+                invoice_line.invoice = commission_invoice
+                invoice_line.save()
+                Line.write(list(party_lines), {
+                        'principal_invoice_line': invoice_line.id,
+                        })
+        Invoice.update_taxes(commission_invoices)
+        return commission_invoices
 
-    def get_wholesale_brokers_line(self, amount, account, party):
+    @classmethod
+    def get_wholesale_brokers_line(cls, amount, account, party):
         pool = Pool()
         Line = pool.get('account.invoice.line')
 
@@ -142,7 +150,7 @@ class CreateInvoicePrincipal:
         line.quantity = 1
         line.unit_price = amount
         line.account = account
-        line.description = self.raise_user_error(
+        line.description = cls.raise_user_error(
             'wholesale_broker_reimbursement', party.rec_name,
             raise_exception=False)
         return line
