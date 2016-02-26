@@ -107,7 +107,7 @@ class SetNumberInvoiceContractBatch(batch.BatchRoot):
     @classmethod
     def select_ids(cls, treatment_date, extra_args):
         job_size = cls.get_conf_item('job_size')
-        assert job_size == 0, 'Can not scale out'
+        assert job_size == '0', 'Can not scale out'
         pool = Pool()
         post_batch = pool.get('contract.invoice.post')
         return post_batch.select_ids(treatment_date, extra_args)
