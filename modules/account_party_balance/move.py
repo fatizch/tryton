@@ -57,7 +57,8 @@ class PartyBalanceLine(model.CoopView):
         states={'invisible': ~Eval('bank_account')})
     childs = fields.One2Many('account.party_balance.line', None,
         'Childs')
-    move = fields.Char('Move')
+    origin = fields.Reference('Origin', selection='get_origin',
+        readonly=True)
 
     @classmethod
     def __setup__(cls):
@@ -92,7 +93,7 @@ class PartyBalanceLine(model.CoopView):
             self.reconciled_with = [x for x in line.reconciliation.lines
                 if x != line]
         self.contract = line.contract.rec_name if line.contract else None
-        self.move = line.move.rec_name
+        self.origin = line.origin
 
     def add_childs_to_scheduled_term_line(self, components):
         Line = Pool().get('account.party_balance.line')
@@ -130,6 +131,11 @@ class PartyBalanceLine(model.CoopView):
         if term and not term.is_one_shot:
             description += ' | %s' % term.rec_name
         return description
+
+    @classmethod
+    def get_origin(cls):
+        Move = Pool().get('account.move')
+        return Move.get_origin()
 
 
 class PartyBalance(ModelCurrency, model.CoopView):

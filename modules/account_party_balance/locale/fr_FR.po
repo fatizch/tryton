@@ -90,9 +90,9 @@ msgctxt "field:account.party_balance.line,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:account.party_balance.line,move:"
-msgid "Move"
-msgstr "Mouvement"
+msgctxt "field:account.party_balance.line,origin:"
+msgid "Origin"
+msgstr "Origine"
 
 msgctxt "field:account.party_balance.line,move_line:"
 msgid "Move Line"

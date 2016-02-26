@@ -8,8 +8,8 @@
     <field name="date"/>
     <label name="move_line"/>
     <field name="move_line"/>
-    <label name="move"/>
-    <field name="move"/>
+    <label name="origin"/>
+    <field name="origin"/>
     <label name="bank_account"/>
     <field name="bank_account"/>
     <field name="reconciled_with" colspan="4"/>
