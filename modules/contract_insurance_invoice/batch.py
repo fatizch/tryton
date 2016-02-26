@@ -1,5 +1,6 @@
 import logging
 from sql.aggregate import Max
+from sql.operators import Not
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -78,7 +79,7 @@ class PostInvoiceContractBatch(batch.BatchRoot):
         query_table = contract_invoice.join(account_invoice, 'LEFT',
             condition=(account_invoice.id == contract_invoice.invoice)
             ).join(contract,
-                condition=((contract.status not in ['hold', 'quote'])
+                condition=(Not(contract.status.in_(['hold', 'quote']))
                     & (contract.id == contract_invoice.contract)))
 
         cursor.execute(*query_table.select(account_invoice.id,
