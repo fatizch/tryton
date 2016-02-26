@@ -318,6 +318,9 @@ Create Test Contract::
     >>> contract.product = product
     >>> contract.status = 'active'
     >>> contract.contract_number = '123456'
+    >>> ordered_loan = contract.ordered_loans.new()
+    >>> ordered_loan.loan = loan
+    >>> ordered_loan.number = 1
     >>> covered_element = contract.covered_elements.new()
     >>> covered_element.party = subscriber
     >>> option = covered_element.options[0]
