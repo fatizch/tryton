@@ -25,7 +25,6 @@ class Address(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Address, cls).__setup__()
-
         if not cls.city.states:
             cls.city.states = {}
         cls.city.states['invisible'] = True
@@ -104,6 +103,8 @@ class Address(export.ExportImportMixin):
 
     @classmethod
     def find_zip_and_city(cls, zip_, city, streetbis, country=None):
+        if streetbis is None:
+            streetbis = ''
         Zip = Pool().get('country.zipcode')
         domain = cls.get_domain_for_find_zip_and_city(zip_, city,
                 streetbis)
