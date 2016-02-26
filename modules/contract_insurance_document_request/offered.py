@@ -1,5 +1,5 @@
 from trytond import backend
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, model
@@ -25,8 +25,8 @@ class DocumentRule(RuleMixin, model.CoopSQL, model.CoopView):
         ondelete='CASCADE', select=True)
     option = fields.Many2One('offered.option.description',
         'Option Description', ondelete='CASCADE', select=True)
-    documents = fields.Many2Many('document.rule-document.description', 'rule',
-        'document', 'Documents')
+    documents = fields.One2Many('document.rule-document.description', 'rule',
+        'Documents')
 
     @classmethod
     def __register__(cls, module_name):
@@ -57,26 +57,27 @@ class DocumentRule(RuleMixin, model.CoopSQL, model.CoopView):
     def __setup__(cls):
         super(DocumentRule, cls).__setup__()
         cls._error_messages.update({
-                'wrong_documents_rule': 'The return of the document rule must '
-                'be a list with required document code.',
+                'wrong_documents_rule': 'The return value of the document '
+                'rule must be a dictionnary with document description code '
+                'as keys.',
                 })
         cls.rule.required = False
-        cls.rule.help = 'The rule must return a list of documents code.'
+        cls.rule.help = ('The rule must return a dictionnary '
+        'with document description codes as keys, and dictionnaries as values.'
+        ' The possible keys for these sub dictionnaries are : %s ' %
+            str(RuleDocumentDescriptionRelation.rule_result_fields))
+
+    def format_as_rule_result(self):
+        return {x.document.code: x.to_dict() for x in self.documents}
 
     def calculate_required_documents(self, args):
-        pool = Pool()
-        DocumentDescription = pool.get('document.description')
         if not self.rule:
-            return list(self.documents)
-        documents_in_rules = []
-        documents_code = self.calculate(args)
-        if type(documents_code) == list:
-            if documents_code:
-                documents_in_rules = DocumentDescription.search(
-                    [('code', 'in', documents_code)])
-        else:
+            return self.format_as_rule_result()
+        result = self.calculate(args)
+        if type(result) is not dict:
             self.raise_user_error('wrong_documents_rule')
-        return list(set(documents_in_rules + list(self.documents)))
+        result.update(self.format_as_rule_result())
+        return result
 
     def get_func_key(self, name):
         if self.product:
@@ -85,14 +86,22 @@ class DocumentRule(RuleMixin, model.CoopSQL, model.CoopView):
             return getattr(self.option, self.option._func_key)
 
 
-class RuleDocumentDescriptionRelation(model.CoopSQL):
+class RuleDocumentDescriptionRelation(model.CoopSQL, model.CoopView):
     'Rule to Document Description Relation'
 
     __name__ = 'document.rule-document.description'
 
-    rule = fields.Many2One('document.rule', 'Rule', ondelete='CASCADE')
+    rule = fields.Many2One('document.rule', 'Rule', ondelete='CASCADE',
+        required=True, select=True)
     document = fields.Many2One('document.description', 'Document',
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', required=True, select=True)
+    blocking = fields.Boolean('Blocking')
+
+    # This should match fields of document request lines
+    rule_result_fields = ['blocking']
+
+    def to_dict(self):
+        return {x: getattr(self, x) for x in self.rule_result_fields}
 
 
 class Product:

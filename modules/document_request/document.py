@@ -25,10 +25,11 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
 
     document_desc = fields.Many2One('document.description',
         'Document Definition', required=True, ondelete='RESTRICT')
-    for_object = fields.Reference('Needed For', [('', '')],
+    for_object = fields.Reference('Needed For', selection='models_get',
         states={'readonly': ~~Eval('for_object')}, required=True, select=True)
     send_date = fields.Date('Send Date')
     reception_date = fields.Date('Reception Date')
+    first_reception_date = fields.Date('First Reception Date')
     request_date = fields.Date('Request Date', states={'readonly': True})
     received = fields.Function(
         fields.Boolean('Received', depends=['attachment', 'reception_date']),
@@ -36,8 +37,9 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
     request = fields.Many2One('document.request', 'Document Request',
         ondelete='CASCADE', select=True)
     attachment = fields.Many2One('ir.attachment', 'Attachment',
-        domain=[('resource', '=', Eval('for_object'))],
-        depends=['for_object'], ondelete='RESTRICT')
+        domain=[('resource', '=', Eval('for_object')),
+            ('document_desc', '=', Eval('document_desc'))],
+        depends=['for_object', 'document_desc'], ondelete='RESTRICT')
     attachment_name = fields.Function(fields.Char('Attachment Name',
             depends=['attachment']),
         'get_attachment_info')
@@ -45,52 +47,55 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
         fields.Binary('Data', filename='attachment_name',
             depends=['attachment']),
         'get_attachment_info')
+    matching_attachments = fields.Function(
+        fields.Many2Many('ir.attachment', None, None, 'Matching Attachments'),
+        'get_matching_attachments')
+    blocking = fields.Boolean('Blocking', readonly=True)
+
+    @staticmethod
+    def models_get():
+        Attachment = Pool().get('ir.attachment')
+        return Attachment.models_get() + [('', '')]
 
     @fields.depends('attachment', 'reception_date', 'received',
         'attachment_name', 'attachment_data')
     def on_change_attachment(self):
-        if not (hasattr(self, 'attachment') and self.attachment):
-            self.attachment_name = ''
-            self.attachment_data = None
-            return
-        self.attachment_name = self.attachment.name
-        self.attachment_data = self.attachment.data
-        self.received = True
-        if not self.reception_date:
-            self.reception_date = utils.today()
+        if self.attachment:
+            if self.attachment.is_conform:
+                self.attachment_name = self.attachment.name
+                self.attachment_data = self.attachment.data
+                self.received = True
+                if not self.reception_date:
+                    self.reception_date = utils.today()
+            else:
+                self.received = False
+                self.reception_date = None
+            if not self.first_reception_date:
+                self.first_reception_date = utils.today()
 
     @fields.depends('reception_date')
     def on_change_with_received(self, name=None):
-        if not (hasattr(self, 'reception_date') and self.reception_date):
+        if self.attachment and not self.attachment.is_conform:
             return False
-        else:
-            return True
+        return bool(self.reception_date)
 
-    @fields.depends('received', 'reception_date')
+    @fields.depends('received', 'reception_date', 'first_reception_date')
     def on_change_received(self):
         if self.received:
             if not self.reception_date:
                 self.reception_date = utils.today()
+            if not self.first_reception_date:
+                self.first_reception_date = utils.today()
         else:
             self.reception_date = None
 
     @fields.depends('attachment', 'reception_date')
     def on_change_with_reception_date(self, name=None):
-        if (hasattr(self, 'attachment') and self.attachment):
-            if (hasattr(self, 'reception_date') and self.reception_date):
-                return self.reception_date
-            else:
-                return utils.today()
+        return self.reception_date if (self.reception_date and
+            self.attachment) else utils.today()
 
     def get_rec_name(self, name=None):
-        if not (hasattr(self, 'document_desc') and self.document_desc):
-            return ''
-
-        if not (hasattr(self, 'for_object') and self.for_object):
-            return self.document_desc.name
-
-        return self.document_desc.name + ' - ' + \
-            self.for_object.get_rec_name(name)
+        return self.document_desc.name if self.document_desc else ''
 
     @classmethod
     def default_request_date(cls):
@@ -102,13 +107,10 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
             return ''
 
         needed_by = Transaction().context.get('request_owner')
-
         the_model, the_id = needed_by.split(',')
-
         if the_model not in [
                 k for k, v in cls._fields['for_object'].selection]:
             return ''
-
         return needed_by
 
     @classmethod
@@ -121,6 +123,12 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
     def get_attachment_info(self, name):
         if self.attachment:
             return getattr(self.attachment, name.split('_')[1])
+
+    def get_matching_attachments(self, name):
+        Attachment = Pool().get('ir.attachment')
+        return [x.id for x in Attachment.search([
+                    ('resource', '=', str(self.for_object)),
+                    ('document_desc', '=', self.document_desc)])]
 
 
 class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
@@ -158,28 +166,16 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
         return 'Document Request for %s' % self.needed_by.get_rec_name(name)
 
     def get_contact(self, name=None):
-        if not (hasattr(self, 'needed_by') and self.needed_by):
-            return None
-        try:
-            return self.needed_by.get_main_contact()
-        except AttributeError:
-            return None
+        return self.needed_by.get_main_contact() if self.needed_by else None
 
     @fields.depends('needed_by')
     def on_change_with_needed_by_str(self, name=None):
-        if not (hasattr(self, 'needed_by') and self.needed_by):
-            return ''
-
-        return utils.convert_to_reference(self.needed_by)
+        return utils.convert_to_reference(self.needed_by) if \
+            self.needed_by else None
 
     @fields.depends('documents')
     def on_change_with_is_complete(self, name=None):
-        if not (hasattr(self, 'documents') and self.documents):
-            return True
-        for doc in self.documents:
-            if not doc.received:
-                return False
-        return True
+        return all([x.received for x in self.documents])
 
     @fields.depends('documents', 'is_complete')
     def on_change_documents(self):
@@ -195,18 +191,11 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
                 document.reception_date = utils.today()
         self.documents = self.documents
 
-    @classmethod
-    def setter_void(cls, docs, values, name):
-        pass
-
     def get_current_docs(self):
-        if not (hasattr(self, 'documents') and self.documents):
-            return {}
         res = {}
         for elem in self.documents:
-            res[(
-                elem.document_desc.id,
-                utils.convert_to_reference(elem.for_object))] = elem
+            res[(elem.document_desc.id, utils.convert_to_reference(
+                        elem.for_object))] = elem
         return res
 
     def add_documents(self, date, docs):

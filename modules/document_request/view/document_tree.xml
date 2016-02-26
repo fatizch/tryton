@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Documents" editable="bottom">
     <field name="received"/>
+    <field name="blocking"/>
     <field name="request_date"/>
     <field name="send_date"/>
     <field name="reception_date"/>

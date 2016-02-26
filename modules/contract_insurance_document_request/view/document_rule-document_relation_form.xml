@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<form string="Documents">
+    <label name="document"/>
+    <field name="document"/>
+    <label name="blocking"/>
+    <field name="blocking"/>
+</form>

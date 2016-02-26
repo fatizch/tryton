@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <form string="Required Documents Rule">
-    <field name="documents" colspan="4"/>
+    <field name="documents" product="document" colspan="4"/>
     <label name="rule"/>
     <field name="rule"/>
     <newline/>

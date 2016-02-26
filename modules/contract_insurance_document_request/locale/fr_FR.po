@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -8,10 +8,11 @@ msgstr "Des documents requis sont manquants."
 
 msgctxt "error:document.rule:"
 msgid ""
-"The return of the document rule must be a list with required document code."
+"The return value of the document rule must be a dictionnary with document "
+"description code as keys."
 msgstr ""
-"Le retour de la règle doit être une liste avec les codes des documents "
-"requis"
+"La valeur de retour de la règle de document doit être un dictionnaire dont "
+"les clés sont des codes de descripteur de document."
 
 msgctxt "field:contract,attachments:"
 msgid "Attachments"
@@ -26,8 +27,8 @@ msgid "Documents"
 msgstr "Documents"
 
 msgctxt "field:document.receive.request,tmp_0:"
-msgid "Claim"
-msgstr "Sinistre"
+msgid "Contract"
+msgstr "Contrat"
 
 msgctxt "field:document.rule,create_date:"
 msgid "Create Date"
@@ -85,6 +86,10 @@ msgctxt "field:document.rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:document.rule-document.description,blocking:"
+msgid "Blocking"
+msgstr "Bloquant"
+
 msgctxt "field:document.rule-document.description,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -134,8 +139,14 @@ msgid "Document Rules"
 msgstr "Règles de gestion des documents"
 
 msgctxt "help:document.rule,rule:"
-msgid "The rule must return a list of documents code."
-msgstr "Le retour de la règle doit être une liste de codes document"
+msgid ""
+"The rule must return a dictionnary with document description codes as keys, "
+"and dictionnaries as values. The possible keys for these sub dictionnaries "
+"are : ['blocking'] "
+msgstr ""
+"La règle doit retourner un dictionnaire dont clés sont des codes de "
+"descripteur de documents, et dont les valeurs sont des dictionnaires. Les "
+"clés possibles pour ces sous-dictionnaires sont : ['bloquant']"
 
 msgctxt "model:document.rule,name:"
 msgid "Document Managing Rule"
@@ -168,6 +179,10 @@ msgstr "Option"
 msgctxt "view:contract:"
 msgid "Requested Documents"
 msgstr "Documents demandés"
+
+msgctxt "view:document.rule-document.description:"
+msgid "Documents"
+msgstr "Documents"
 
 msgctxt "view:document.rule:"
 msgid "Required Documents Rule"

@@ -2,8 +2,8 @@
 import unittest
 
 import trytond.tests.test_tryton
-
 from trytond.modules.cog_utils import test_framework
+from trytond.exceptions import UserError
 
 
 class ModuleTestCase(test_framework.CoopTestCase):
@@ -23,6 +23,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'DocumentDesc': 'document.description',
             'RuleEngine': 'rule_engine',
             'RuleContext': 'rule_engine.context',
+            'RuleToDocDescRelation': 'document.rule-document.description',
             }
 
     @test_framework.prepare_test('contract.test0010_testContractCreation')
@@ -38,22 +39,33 @@ class ModuleTestCase(test_framework.CoopTestCase):
         rule_engine = self.RuleEngine()
         rule_engine.name = 'Document Rule'
         rule_engine.short_name = 'doc_rule'
-        rule_engine.algorithm = "return ['document3', 'document2']"
+        rule_engine.algorithm = "return {'document3': {}, 'document2': {}}"
         rule_engine.status = 'validated'
         rule_engine.context, = self.RuleContext.search([], limit=1)
         rule_engine.save()
         rule = self.DocumentRule()
-        rule.documents = [document_desc1.id, document_desc2.id]
+        rule.documents = [self.RuleToDocDescRelation(
+                document=document_desc1),
+            self.RuleToDocDescRelation(document=document_desc2,
+                blocking=True)]
         rule.product = product
         rule.rule = rule_engine
         rule.save()
 
         contract, = self.Contract.search([])
         contract.init_subscription_document_request()
-        self.assertEqual(set([d.document_desc.code
+        self.assertEqual(set([(d.document_desc.code, d.blocking)
                     for d in contract.document_request_lines]),
-            set(['document1', 'document2', 'document3']))
-        self.assertFalse(contract.doc_received, False)
+            set([('document1', False), ('document2', True),
+                ('document3', False)]))
+        self.assertRaises(UserError, contract.check_required_documents)
+
+        doc2_request_line, = [x for x in contract.document_request_lines if
+            x.document_desc == document_desc2]
+        doc2_request_line.received = True
+        contract.save()
+        self.assertRaises(UserError, contract.check_required_documents)
+        self.assertTrue(contract.check_required_documents(only_blocking=True))
 
 
 def suite():

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -110,6 +110,10 @@ msgctxt "field:document.request.line,attachment_name:"
 msgid "Attachment Name"
 msgstr "Nom de la pièce jointe"
 
+msgctxt "field:document.request.line,blocking:"
+msgid "Blocking"
+msgstr "Bloquant"
+
 msgctxt "field:document.request.line,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -126,6 +130,10 @@ msgctxt "field:document.request.line,document_desc:"
 msgid "Document Definition"
 msgstr "Définition des documents"
 
+msgctxt "field:document.request.line,first_reception_date:"
+msgid "First Reception Date"
+msgstr "Date de première réception"
+
 msgctxt "field:document.request.line,for_object:"
 msgid "Needed For"
 msgstr "Requis pour"
@@ -133,6 +141,10 @@ msgstr "Requis pour"
 msgctxt "field:document.request.line,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:document.request.line,matching_attachments:"
+msgid "Matching Attachments"
+msgstr "Pièces jointes correspondantes"
 
 msgctxt "field:document.request.line,rec_name:"
 msgid "Name"
@@ -173,6 +185,14 @@ msgstr "Identifiant XML"
 msgctxt "field:document.request.process,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ir.attachment,is_conform:"
+msgid "Conform"
+msgstr "Conforme"
+
+msgctxt "field:ir.attachment,status:"
+msgid "Status"
+msgstr "Statut"
 
 msgctxt "model:document.receive.attach,name:"
 msgid "Document Receive Attach"

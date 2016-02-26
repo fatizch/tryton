@@ -13,7 +13,6 @@ def register():
         Product,
         OptionDescription,
         Contract,
-        DocumentRequestLine,
         DocumentRequest,
         DocumentReceiveRequest,
         module='contract_insurance_document_request', type_='model')

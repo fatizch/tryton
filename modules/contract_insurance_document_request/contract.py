@@ -41,15 +41,13 @@ class Contract:
 
     @fields.depends('document_request_lines')
     def on_change_with_doc_received(self, name=None):
-        for doc in self.document_request_lines:
-            if not doc.received:
-                return False
-        return True
+        return all((x.received for x in self.document_request_lines))
 
     def init_subscription_document_request(self):
         pool = Pool()
         DocumentRequestLine = pool.get('document.request.line')
-        documents = []
+        DocumentDesc = pool.get('document.description')
+        documents = {}
         main_args = {
             'date': self.start_date,
             'appliable_conditions_date': self.appliable_conditions_date
@@ -57,14 +55,14 @@ class Contract:
         args = main_args.copy()
         self.init_dict_for_rule_engine(args)
         product_docs = self.product.calculate_required_documents(args)
-        documents.extend(product_docs)
+        documents.update(product_docs)
         for option in self.options:
             if not option.status == 'active':
                 continue
             args = main_args.copy()
             option.init_dict_for_rule_engine(args)
             option_docs = option.coverage.calculate_required_documents(args)
-            documents.extend(option_docs)
+            documents.update(option_docs)
         for elem in self.covered_elements:
             for option in elem.options:
                 if not option.status == 'active':
@@ -72,20 +70,25 @@ class Contract:
                 args = main_args.copy()
                 elem.init_dict_for_rule_engine(args)
                 sub_docs = option.coverage.calculate_required_documents(args)
-                documents.extend(sub_docs)
-        existing_document_desc = [request.document_desc
+                documents.update(sub_docs)
+
+        existing_document_desc_code = [request.document_desc.code
             for request in self.document_request_lines]
-        for desc in documents:
-            if desc in existing_document_desc:
-                existing_document_desc.remove(desc)
+        rule_doc_descs_by_code = {x.code: x for x in
+            DocumentDesc.search([('code', 'in', documents.keys())])}
+        for code, rule_result_values in documents.iteritems():
+            if code in existing_document_desc_code:
+                existing_document_desc_code.remove(code)
                 continue
             line = DocumentRequestLine()
-            line.document_desc = desc
+            line.document_desc = rule_doc_descs_by_code[code]
             line.for_object = '%s,%s' % (self.__name__, self.id)
+            for k, v in rule_result_values.iteritems():
+                setattr(line, k, v)
             line.save()
         to_delete = []
         for request in self.document_request_lines:
-            if (request.document_desc in existing_document_desc and
+            if (request.document_desc.code in existing_document_desc_code and
                     not request.send_date and not request.reception_date):
                 to_delete.append(request)
         DocumentRequestLine.delete(to_delete)
@@ -108,9 +111,16 @@ class Contract:
             contract.init_subscription_document_request()
             contract.link_attachments_to_requests()
 
-    def check_required_documents(self):
-        if not self.doc_received:
+    def check_required_documents(self, only_blocking=False):
+        must_raise = False
+        if not only_blocking and not self.doc_received:
+            must_raise = True
+        elif not all((x.received for x in self.document_request_lines
+                if x.blocking)):
+            must_raise = True
+        if must_raise:
             self.raise_user_error('missing_required_document')
+        return True
 
     def before_activate(self):
         self.check_required_documents()
