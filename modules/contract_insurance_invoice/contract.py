@@ -1381,9 +1381,12 @@ class Premium:
         elif self.frequency == 'yearly':
             freq = DAILY
             # Get current year contract start_date
+            month, day = start.month, start.day
+            if month == 2 and day == 29:
+                # Handle leap year...
+                month, day = 3, 1
             rule_start = datetime.datetime.combine(
-                datetime.date(start.year - 1, start.month, start.day),
-                datetime.time())
+                datetime.date(start.year - 1, month, day), datetime.time())
             rule = rrule(DAILY, bymonth=self.main_contract.start_date.month,
                 bymonthday=self.main_contract.start_date.day,
                 dtstart=rule_start)
