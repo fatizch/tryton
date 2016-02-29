@@ -109,7 +109,9 @@ coog_rq_qstop() { # stop queue workers - <file>
         local pid
         while read -r pid
         do
-                kill -TERM $pid && echo worker $pid stopped
+                local alive; alive=`ps -p $pid --no-headers | wc -l`
+                [ $alive -eq 0 ] && continue
+                kill -TERM $pid && echo WARNING: worker $pid stopped - burst option not working
         done < "$pid_file"
         rm -f "$pid_file"
 }

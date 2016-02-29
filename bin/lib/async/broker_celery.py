@@ -12,6 +12,7 @@ from async.tasks import tasks
 broker_url = os.environ.get('TRYTOND_ASYNC_CELERY')
 assert broker_url, 'TRYTOND_ASYNC_CELERY should be set'
 app = Celery('coog', broker=broker_url, backend=broker_url)
+app.conf.CELERY_RESULT_SERIALIZER = 'json'
 
 broker_url = urlparse(broker_url)
 broker_host = broker_url.hostname
@@ -23,13 +24,14 @@ for name, func in tasks.iteritems():
     app.task(func, name=name, serializer='json')
 
 
-def log_job(job_id, queue, fname, args):
-    broker.setex('coog:job:%s' % job_id, config.JOB_RESULT_TTL, json.dumps(
+def log_job(job, queue, fname, args):
+    # not stored by celery
+    broker.setex('coog:job:%s' % str(job), config.JOB_RESULT_TTL, json.dumps(
             {'queue': queue, 'func': fname, 'args': args}))
 
 
 def enqueue(queue, fname, args):
     task = app.tasks[fname]
-    res = task.apply_async(queue=queue, args=args, expires=config.JOB_TTL,
+    job = task.apply_async(queue=queue, args=args, expires=config.JOB_TTL,
         retry=False)
-    log_job(str(res), queue, fname, args)
+    log_job(job, queue, fname, args)

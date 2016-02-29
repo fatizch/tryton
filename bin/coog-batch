@@ -60,7 +60,7 @@ coog_batch_exec() { # execute batch (generate && start && wait) - <name> <concur
 coog_batch_report() { # print batch report - <name> [filters]
         [ $# -lt 1 ] && echo missing batch name && return 1
         local broker; broker=`_coog_batch_broker` || return $?
-        coog_"$broker"_qlist $*
+        coog_"$broker"_qlist $* | column -t | less
 }
 
 coog_batch_log() { # cat batch out - <name> [cat args]

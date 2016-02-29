@@ -23,7 +23,7 @@ end
 
 local result = {}
 local header = {'task', 'job', 'enqueued', 'ended', 'status', 'connect',
-'treat', 'ids' , 'extra'}
+    'treat', 'ids' , 'extra'}
 table.insert(result, table.concat(header, '\t'))
 
 local function insert_job(key)
@@ -32,16 +32,13 @@ local function insert_job(key)
     o.status = redis.call('HGET', key, 'status')
     o.enqueued = redis.call('HGET', key, 'enqueued_at')
     o.ended = redis.call('HGET', key, 'ended_at') or '-'
-    local desc = redis.call('HGET', key, 'description')
-    local i = desc:find('%(')
-    desc = desc:sub(i + 1, #desc - 1)
-    desc = desc:gsub("'", '"')
-    desc = cjson.decode('[' .. desc .. ']')
-    o.task = desc[1]
-    o.ids = table.concat(desc[2], ',')
-    o.connect = desc[3]
-    o.treat = desc[4]
-    o.extra = table.concat(desc[5], ' ')
+    local job = cjson.decode(redis.call('HGET', key, 'coog'))
+    local args = job.args
+    o.task = args[1]
+    o.ids = table.concat(args[2], ',')
+    o.connect = args[3]
+    o.treat = args[4]
+    o.extra = cjson.encode(args[5])
     -- format raw according to header
     local item = {}
     for _, k in ipairs(header) do
