@@ -14,7 +14,6 @@ def register():
         Claim,
         Loss,
         ClaimService,
-        Document,
         DocumentRequest,
         RequestFinder,
         Contract,
