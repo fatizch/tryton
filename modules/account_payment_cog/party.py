@@ -7,6 +7,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
 from trytond.modules.cog_utils import model, fields, coop_string, utils
+from trytond.modules.cog_utils import coop_date
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -90,9 +91,7 @@ class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
         if model != 'account.payment':
             return super(SynthesisMenu, cls).build_sub_query(model, table,
                 columns)
-        filter_date = utils.today()
-        filter_date = filter_date.replace(
-            year=filter_date.year - 1)
+        filter_date = coop_date.add_year(utils.today(), -1)
         return table.select(*columns,
             where=(((table.state == 'processing') | (table.state == 'failed'))
                 & (table.date >= filter_date)))
