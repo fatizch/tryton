@@ -2,12 +2,23 @@
 # test management
 
 _coog_test_enter() { # set test context
-        # very specific vars for test (overriding TRYTOND_CONFIG)
-        export TRYTOND_CONFIG=$COOG_CONF_TEST
+
+        TRYTOND_CONFIG=$COOG_CONF_TEST
+        [ ! -z $TRYTOND_CONFIG ] &&
+                export TRYTOND_CONFIG ||
+                { echo "Missing configuration file." && return 1; }
         # TODO: review - already in config
-        export TRYTOND_DATABASE_URI=`python2 .py/parse-config.py $COOG_CONF_TEST database uri`
+        TRYTOND_DATABASE_URI=`python2 .py/parse-config.py database uri < $COOG_CONF_TEST 2>/dev/null` ||
+                { echo "Failed to parse configuration file." && return $?; }
+        [ ! -z $TRYTOND_DATABASE_URI ] &&
+                export TRYTOND_DATABASE_URI ||
+                { echo "Database URI is empty." && return 1; }
         export DB_NAME="test_"`date +%s%N`
         export DO_NOT_TEST_CASES=1
+}
+
+_coog_test_exec() {
+        run-tests.py -c $TRYTOND_CONFIG -vv -m $*
 }
 
 _coog_test_leave() { # clean test config
@@ -16,18 +27,31 @@ _coog_test_leave() { # clean test config
 
 coog_test_dropdb() { # drop db from test database - <db> - default: test_*
         local vars
-        vars=`python2 .py/parse-config.py $COOG_CONF_TEST database uri | python2 .py/parse-url.py`
-        export PGHOST=`echo "$vars" | sed -n 1p`
-        export PGPORT=`echo "$vars" | sed -n 2p`
-        export PGUSER=`echo "$vars" | sed -n 3p`
-        export PGPASSWORD=`echo "$vars" | sed -n 4p`
-        [ $# -gt 0 ] && dropdb -e $* && return
-        local db
-        for db in `psql -lX | grep "test_" | cut -f1 -d "|"`
-        do
-                dropdb -e $db
-        done
-
+        vars=`python2 .py/parse-config.py database uri < $COOG_CONF_TEST 2>/dev/null | python2 .py/parse-url.py` ||
+                { echo "Failed to parse configuration file." && return $?; }
+        db=`echo "$vars" | sed -n 1p`
+        if [ "$db" = "sqlite" ]; then
+                local db_path
+                db_path=`python2 .py/parse-config.py database path < $COOG_CONF_TEST 2> /dev/null` ||
+                        { echo "Failed to parse configuriation file." && return $?; }
+                db_fullpath="$db_path$1.sqlite"
+                [ -f $db_fullpath ] && rm -vf $db_fullpath
+        elif [ "$db" = "postgresql" ]; then
+                PGHOST=`echo "$vars" | sed -n 2p`
+                [ ! -z $PGHOST ] && export PGHOST
+                PGPORT=`echo "$vars" | sed -n 3p`
+                [ ! -z $PGPORT ] && export PGPORT
+                PGUSER=`echo "$vars" | sed -n 4p`
+                [ ! -z $PGUSER ] && export PGUSER
+                PGPASSWORD=`echo "$vars" | sed -n 5p`
+                [ ! -z $PGPASSWORD ] && export PGPASSWORD
+                [ $# -gt 0 ] && dropdb -e $* && return
+                local db
+                for db in `psql -lX | grep "test_" | cut -f1 -d "|"`
+                do
+                        dropdb -e $db
+                done
+        fi
 }
 
 coog_test_py() { # launch py.test on a module - <module> - all (further args are fwded to py.test)
@@ -49,7 +73,7 @@ coog_test_py() { # launch py.test on a module - <module> - all (further args are
 }
 
 coog_test_main() { # launch unit tests on a module - <module> - default: all
-        _coog_test_enter
-        run-tests.py -c $TRYTOND_CONFIG -vv -m $*
+        _coog_test_enter && _coog_test_exec
+        # new command so we always pass through 'leave' to cleanup
         _coog_test_leave
 }
