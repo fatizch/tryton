@@ -257,11 +257,4 @@
         </record>
         <menuitem parent="offered.menu_contract_configuration" action="act_configuration_form" id="menuitem_endorsement_configuration" sequence="0" icon="tryton-preferences"/>
     </data>
-    <data depends="task_manager">
-        <menuitem name="Endorsements" id="menu_endorsement_tasks" sequence="100" action="act_all_endorsements" parent="task_manager.menu_task"/>
-        <record model="ir.ui.menu-res.group" id="group_endorsement_admin_menu_all">
-            <field name="group" ref="group_endorsement_admin"/>
-            <field name="menu" ref="menu_endorsement_tasks"/>
-        </record>
-    </data>
 </tryton>

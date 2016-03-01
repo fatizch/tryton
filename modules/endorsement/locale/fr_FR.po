@@ -2169,10 +2169,6 @@ msgctxt "model:ir.ui.menu,name:menu_endorsement_part"
 msgid "Endorsement Part"
 msgstr "Avenant unitaire"
 
-msgctxt "model:ir.ui.menu,name:menu_endorsement_tasks"
-msgid "Endorsements"
-msgstr "Avenants"
-
 msgctxt "model:ir.ui.menu,name:menuitem_endorsement_configuration"
 msgid "Endorsement Configuration"
 msgstr "Configuration d'avenant"
