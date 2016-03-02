@@ -106,6 +106,7 @@ class BankAccount(export.ExportImportMixin):
         searcher='search_main_bank_account_number')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
+    icon = fields.Function(fields.Char('Icon'), 'get_icon')
 
     @classmethod
     def _export_light(cls):
@@ -173,6 +174,9 @@ class BankAccount(export.ExportImportMixin):
 
     def get_func_key(self, name):
         return self.numbers[0].number_compact
+
+    def get_icon(self, name):
+        return 'coopengo-bank_account'
 
     @classmethod
     def search_func_key(cls, name, clause):
