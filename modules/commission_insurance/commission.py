@@ -300,9 +300,8 @@ class AggregatedCommission(model.CoopSQL, model.CoopView):
         return [('commissioned_option.parent_contract',) +
             tuple(clause[1:])]
 
-
     def get_currency_digits(self, name):
-        return self.invoice.currency_digits
+        return self.invoice.currency_digits if self.invoice else 2
 
     @classmethod
     def __setup__(cls):
@@ -340,8 +339,8 @@ class AggregatedCommission(model.CoopSQL, model.CoopView):
         commission_agent = commission.join(agent,
             condition=commission.agent == agent.id)
 
-        per_agent = commission_agent.join(invoice_line, condition=(
-                commission.origin == Concat('account.invoice.line,',
+        per_agent = commission_agent.join(invoice_line, type_='LEFT OUTER',
+                condition=(commission.origin == Concat('account.invoice.line,',
                 Cast(invoice_line.id, 'VARCHAR')))
                 )
 
