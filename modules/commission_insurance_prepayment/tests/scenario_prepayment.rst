@@ -189,7 +189,7 @@ Check prepayment commission creation::
 Create invoices::
 
     >>> ContractInvoice = Model.get('contract.invoice')
-    >>> until_date = contract_start_date + relativedelta(years=1, months=1)
+    >>> until_date = contract_start_date + relativedelta(years=1)
     >>> generate_invoice = Wizard('contract.do_invoice', models=[contract])
     >>> generate_invoice.form.up_to_date = until_date
     >>> generate_invoice.execute('invoice')
@@ -280,8 +280,14 @@ Check commission once terminated::
     ...     order=[('amount', 'ASC')])
 
 commission explanation::
+
+
 -300 : 12months * 60 - 7months*60::
+
+
 210 : 7months * 30::
+
+
 720 : 12months * 60::
 
     >>> [(x.amount, x.agent.party.name) for x in commissions] == [
@@ -332,9 +338,17 @@ Check invoice amount and commission::
     Decimal('110.00')
 
 commission explanation::
+
+
 18 : (12 -9)*(110-100)*0.6::
+
+
 48 : (110*0.6)-18::
+
+
 9 : (12 -9)*(110-100)*0.3::
+
+
 24 : (110*0.3)-9::
 
     >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.agent.party.name)
@@ -368,8 +382,14 @@ Check commission once terminated::
     ...     order=[('amount', 'ASC')])
 
 commission explanation::
+
+
 -48 : 12*100*0.6 - (11-9)*110*0.6 - 9 *100 *0.6::
+
+
 336 : 9*100*0.3 + (11-9)*110*0.3::
+
+
 720 : 12*100*0.6::
 
     >>> [(x.amount, x.agent.party.name) for x in commissions] == [

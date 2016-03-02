@@ -171,7 +171,7 @@ commissions = Commission.find([()])
 
 # #Comment# #Create invoices
 ContractInvoice = Model.get('contract.invoice')
-until_date = contract_start_date + relativedelta(years=1, months=1)
+until_date = contract_start_date + relativedelta(years=1)
 generate_invoice = Wizard('contract.do_invoice', models=[contract])
 generate_invoice.form.up_to_date = until_date
 generate_invoice.execute('invoice')
