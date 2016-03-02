@@ -44,10 +44,14 @@ class Product:
         'product', 'process', 'Processes')
 
     @classmethod
+    def kind_list_for_extra_data_domain(cls):
+        return ['contract', 'covered_element', 'option']
+
+    @classmethod
     def __setup__(cls):
         super(Product, cls).__setup__()
         cls.extra_data_def.domain = [
-            ('kind', 'in', ['contract', 'covered_element', 'option'])]
+            ('kind', 'in', cls.kind_list_for_extra_data_domain())]
         cls._error_messages.update({
                 'missing_covered_element_extra_data': 'The following covered '
                 'element extra data should be set on the product: %s',

@@ -33,10 +33,14 @@ class OptionDescription:
         depends=['is_service'], select=True)
 
     @classmethod
+    def kind_list_for_extra_data_domain(cls):
+        return ['contract', 'covered_element', 'option']
+
+    @classmethod
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
         cls.extra_data_def.domain = [
-            ('kind', 'in', ['contract', 'covered_element', 'option'])]
+            ('kind', 'in', cls.kind_list_for_extra_data_domain())]
         for field_name in (mgr for mgr in dir(cls) if mgr.endswith('_mgr')):
             cur_attr = copy.copy(getattr(cls, field_name))
             if not hasattr(cur_attr, 'context') or not isinstance(

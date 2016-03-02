@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Contract Underwriting Decision">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="status"/>
+    <field name="status"/>
+    <label name="with_exclusion"/>
+    <field name="with_exclusion"/>
+    <label name="with_subscriber_validation"/>
+    <field name="with_subscriber_validation"/>
+</form>

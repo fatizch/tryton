@@ -1,0 +1,279 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.underwriting:"
+msgid "The Underwriting process is still in progress"
+msgstr "Le processus d'analyse de risques est toujours en cours"
+
+msgctxt "error:contract:"
+msgid "There is no underwritings for contract %s"
+msgstr "Il n'y a pas d'analyse de risque pour le contrat %s"
+
+msgctxt "error:underwriting.decision:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
+msgctxt "field:contract,underwritings:"
+msgid "Underwritings"
+msgstr "Analyse de risques"
+
+msgctxt "field:contract.underwriting,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.underwriting,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.underwriting,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.underwriting,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.underwriting,decision:"
+msgid "Underwriting Decision"
+msgstr "Décision d'analyse de risques"
+
+msgctxt "field:contract.underwriting,decision_date:"
+msgid "Decision Date"
+msgstr "Date de décision"
+
+msgctxt "field:contract.underwriting,decision_with_exclusion:"
+msgid "Decision With Exclusion"
+msgstr "Décision avec exclusion"
+
+msgctxt "field:contract.underwriting,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:contract.underwriting,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.underwriting,needs_subscriber_validation:"
+msgid "Needs Subscriber Validation"
+msgstr "Avec validation du souscripteur"
+
+msgctxt "field:contract.underwriting,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.underwriting,subscriber_decision:"
+msgid "Subscriber Underwriting Decision"
+msgstr "Décision du souscripteur"
+
+msgctxt "field:contract.underwriting,subscriber_decision_date:"
+msgid "Subscriber Underwriting Decision Date"
+msgstr "Date de décision du souscripteur"
+
+msgctxt "field:contract.underwriting,underwriting_options:"
+msgid "Options Underwriting"
+msgstr "Analyse de risques - garanties"
+
+msgctxt "field:contract.underwriting,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.underwriting,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.underwriting,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.underwriting.option,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.underwriting.option,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.underwriting.option,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.underwriting.option,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.underwriting.option,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:contract.underwriting.option,extra_data_summary:"
+msgid "Extra Data Summary"
+msgstr "Résumé des données complémentaires"
+
+msgctxt "field:contract.underwriting.option,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.underwriting.option,option:"
+msgid "Option"
+msgstr "Garantie"
+
+msgctxt "field:contract.underwriting.option,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.underwriting.option,underwriting:"
+msgid "Underwriting"
+msgstr "Analyse de risque"
+
+msgctxt "field:contract.underwriting.option,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.underwriting.option,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.underwriting.option,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.option.description,with_underwriting:"
+msgid "With Underwriting"
+msgstr "Avec analyse de risques"
+
+msgctxt "field:underwriting.decision,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:underwriting.decision,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:underwriting.decision,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:underwriting.decision,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:underwriting.decision,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:underwriting.decision,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:underwriting.decision,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:underwriting.decision,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:underwriting.decision,with_exclusion:"
+msgid "With Exclusion"
+msgstr "Avec exclusion"
+
+msgctxt "field:underwriting.decision,with_subscriber_validation:"
+msgid "With Subscriber Validation"
+msgstr "Avec validation du souscripteur"
+
+msgctxt "field:underwriting.decision,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:underwriting.decision,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:underwriting.decision,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:contract.underwriting,name:"
+msgid "Contract Underwriting"
+msgstr "Analyse de risques - contrat"
+
+msgctxt "model:contract.underwriting.option,name:"
+msgid "Contract Option Underwriting"
+msgstr "Analyse de risques - garanties"
+
+msgctxt "model:ir.action,name:act_underwriting_decision_form"
+msgid "Underwriting Decision"
+msgstr "Décision d'analyse risques"
+
+msgctxt "model:ir.ui.menu,name:menu_underwriting_decision_form"
+msgid "Underwriting Decision"
+msgstr "Décision d'analyse de risques"
+
+msgctxt "model:underwriting.decision,name:"
+msgid "Underwriting Decision"
+msgstr "Décision d'analyse de risques"
+
+msgctxt "selection:contract.underwriting,subscriber_decision:"
+msgid "Accepted"
+msgstr "Accepté"
+
+msgctxt "selection:contract.underwriting,subscriber_decision:"
+msgid "Pending"
+msgstr "En attente"
+
+msgctxt "selection:contract.underwriting,subscriber_decision:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:extra_data,kind:"
+msgid "Contract Underwriting"
+msgstr "Anayse de risques - contract"
+
+msgctxt "selection:extra_data,kind:"
+msgid "Option Underwriting"
+msgstr "Analyse de risques - garantie"
+
+msgctxt "selection:offered.option.description,with_underwriting:"
+msgid "Always underwrite"
+msgstr "Toujours analyser les risques"
+
+msgctxt "selection:offered.option.description,with_underwriting:"
+msgid "Never underwrite"
+msgstr "Ne jamais analyser les risques"
+
+msgctxt "selection:underwriting.decision,status:"
+msgid "Accepted"
+msgstr "Accepté"
+
+msgctxt "selection:underwriting.decision,status:"
+msgid "Denied"
+msgstr "Refusé"
+
+msgctxt "selection:underwriting.decision,status:"
+msgid "Pending"
+msgstr "En attente"
+
+msgctxt "selection:underwriting.decision,status:"
+msgid "PostPoned"
+msgstr "Reporté"
+
+msgctxt "view:contract.underwriting.option:"
+msgid "Option Underwriting"
+msgstr "Analyse de risques - garantie"
+
+msgctxt "view:contract.underwriting.option:"
+msgid "Option Underwritings"
+msgstr "Analyse de risques - garanties"
+
+msgctxt "view:contract.underwriting:"
+msgid "Contract Underwriting"
+msgstr "Analyse de risques - contrat"
+
+msgctxt "view:offered.option.description:"
+msgid "Underwriting"
+msgstr "Analyse de risques"
+
+msgctxt "view:underwriting.decision:"
+msgid "Contract Underwriting Decision"
+msgstr "Décision d'analyse de risques"

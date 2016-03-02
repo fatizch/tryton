@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Option Underwriting">
+    <label name="option"/>
+    <field name="option"/>
+    <field name="extra_data" colspan="4" no_command="1"/>
+    <field name="contract" colspan="4"/>
+</form>

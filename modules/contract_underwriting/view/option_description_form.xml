@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
+        <page string="Underwriting" id="underwriting">
+            <label name="with_underwriting"/>
+            <field name="with_underwriting"/>
+        </page>
+    </xpath>
+</data>
