@@ -1,3 +1,4 @@
+* Allow to skip irrelevant endorsement parts
 * Add endorsements entry point
 * Add Manage Contacts endorsement
 * Add recalculate contract step

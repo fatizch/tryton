@@ -194,12 +194,6 @@ class EndorsementWizardStepMixin(model.CoopView):
             endorsement state. The first parameter is the
             endorsement.start.select record from the wizard.
         '''
-        data_dict = {}
-        if not cls.must_skip_step(select_screen.init_dict(data_dict)):
-            if len(select_screen.endorsement_definition.endorsement_parts) > 1:
-                # Check errors if this is the only state, this is the place
-                # where the motive will be raised to the user.
-                return
         error_manager = Transaction().context.get('error_manager', None)
         if error_manager and 'effective_date_before_start_date' in [x[0] for
                 x in error_manager._errors]:
@@ -1745,7 +1739,8 @@ class SelectEndorsement(model.CoopView):
         data_dict.update({
                 'contract': self.contract,
                 'applicant': self.applicant,
-                'endorsement_effective_date': self.effective_date,
+                'date': self.effective_date,
+                'endorsement_date': self.effective_date,
                 'endorsement_definition': self.endorsement_definition,
                 })
 
@@ -1916,8 +1911,15 @@ class StartEndorsement(Wizard):
     def check_before_start(self):
         definition = self.select_endorsement.endorsement_definition
         for part in definition.endorsement_parts:
-            getattr(self, part.view).check_before_start(
-                self.select_endorsement)
+            view = getattr(self, part.view)
+            data_dict = {}
+            self.select_endorsement.init_dict(data_dict)
+            if view.must_skip_step(data_dict):
+                if len(definition.endorsement_parts) > 1:
+                    # Check errors only if this is the only state, to display
+                    # something to the user
+                    continue
+            view.check_before_start(self.select_endorsement)
 
     def default_summary(self, name):
         result = self.select_endorsement._default_values
