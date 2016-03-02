@@ -18,6 +18,10 @@ msgctxt "field:bank.agency,bank:"
 msgid "Bank"
 msgstr "Banque"
 
+msgctxt "field:bank.agency,address:"
+msgid "Address"
+msgstr "Adresse"
+
 msgctxt "field:bank.agency,bank_code:"
 msgid "Bank Code"
 msgstr "Code Banque"

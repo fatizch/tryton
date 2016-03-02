@@ -6,7 +6,7 @@
     </xpath>
     <xpath expr="/form/notebook/page[@id='role']/notebook" position="inside">
         <page id="bank" string="Bank">
-            <field name="bank_role" mode="form"/>
+            <field name="bank_role"/>
         </page>
     </xpath>
     <xpath expr="//field[@name='relations']" position="after">

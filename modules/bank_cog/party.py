@@ -25,8 +25,7 @@ __all__ = [
 class Party:
     __name__ = 'party.party'
 
-    bank_role = fields.One2Many(
-        'bank', 'party', 'Bank', size=1, states={
+    bank_role = fields.One2Many('bank', 'party', 'Bank', states={
             'invisible': ~Eval('is_bank', False) | Not(STATES_COMPANY)},
         depends=['is_bank', 'is_company'])
     is_bank = fields.Function(
@@ -54,11 +53,11 @@ class Party:
 
     def get_summary_content(self, label, at_date=None, lang=None):
         res = super(Party, self).get_summary_content(label, at_date, lang)
-        res[1].append(coop_string.get_field_summary(self, 'bank_accounts', True,
-            at_date, lang))
+        res[1].append(coop_string.get_field_summary(self, 'bank_accounts',
+                True, at_date, lang))
         if self.bank_role:
-            res[1].append(coop_string.get_field_summary(self, 'bank_role', True,
-                at_date, lang))
+            res[1].append(coop_string.get_field_summary(self, 'bank_role',
+                    True, at_date, lang))
         return res
 
     def get_bank_accounts(self, at_date=None):

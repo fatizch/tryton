@@ -1,5 +1,6 @@
 import re
 
+from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.cog_utils import fields, model
@@ -34,6 +35,12 @@ class Agency(model.CoopSQL, model.CoopView):
     name = fields.Char('Name')
     bank_code = fields.Char('Bank Code', size=5)
     branch_code = fields.Char('Branch Code', size=5)
+    address = fields.Many2One('party.address', 'Address', domain=[
+            ('party', '=', Eval('bank_party'))], depends=['bank_party'],
+        ondelete='RESTRICT')
+    bank_party = fields.Function(
+        fields.Many2One('party.party', 'Bank Party'),
+        'get_bank_party')
 
     @classmethod
     def __setup__(cls):
@@ -62,6 +69,9 @@ class Agency(model.CoopSQL, model.CoopView):
     @fields.depends('branch_code')
     def on_change_branch_code(self):
         self.branch_code = self.branch_code.zfill(5)
+
+    def get_bank_party(self, name):
+        return self.bank.party.id if self.bank else None
 
 
 class BankAccount:

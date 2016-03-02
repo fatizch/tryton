@@ -9,4 +9,6 @@
     <field name="bank_code"/>
     <label name="branch_code"/>
     <field name="branch_code"/>
+    <label name="address"/>
+    <field name="address"/>
 </form>
