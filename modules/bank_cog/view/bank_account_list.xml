@@ -4,13 +4,15 @@
         <tree editable="bottom"/>
     </xpath>
     <xpath expr="/tree/field[@name='rec_name']" position="replace"/>
+    <xpath expr="/tree/field[@name='currency']" position="replace"/>
     <xpath expr="/tree/field[@name='bank']" position="before">
+        <field name="currency" readonly="1" icon="coopengo-bank_account"/>
         <field name="number" expand="1"/>
     </xpath>
     <xpath expr="/tree/field[@name='bank']" position="replace_attributes">
         <field name="bank" expand="1"/>
     </xpath>
-    <xpath expr="/tree/field[@name='currency']" position="before">
+    <xpath expr="/tree/field[@name='bank']" position="after">
         <field name="start_date"/>
         <field name="end_date"/>
     </xpath>
