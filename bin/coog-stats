@@ -8,12 +8,12 @@ _coog_stats_lines() { # count code lines - <file extension>
 coog_stats_lines() { # count code lines - <repository>
         [ -z $1 ] && echo need a repo to calculate stats
         local modules
-        modules="../../$1/modules"
+        modules="$COOG_ROOT/$1/modules"
         [ ! -d "$modules" ] && echo bad repo name
         local wd
         wd=`pwd`
         cd "$modules"
-        echo module,python,xml
+        echo module python xml
         local module
         for module in *
         do
@@ -23,7 +23,7 @@ coog_stats_lines() { # count code lines - <repository>
                 py=`_coog_stats_lines py`
                 local xml
                 xml=`_coog_stats_lines xml`
-                echo $module,$py,$xml
+                echo $module $py $xml
                 cd ..
         done
         cd "$wd"

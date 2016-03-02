@@ -111,7 +111,7 @@ coog_client_mo() { # generates mo file in client (language in param)
         [ -z $1 ] && echo needs language to generate - example: fr_FR && return
         local wd
         wd=`pwd`
-        cd ../../tryton
+        cd $COOG_TRYTON
         python2 ./setup.py compile_catalog --locale $1
         cd $wd
 }

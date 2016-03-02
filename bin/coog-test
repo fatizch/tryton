@@ -54,7 +54,7 @@ coog_test_py() { # launch py.test on a module - <module> - all (further args are
         _coog_test_enter
         local old_wd
         old_wd=`pwd`
-        cd ../../trytond/trytond/modules
+        cd $COOG_TRYTOND/trytond/modules
         local module
         module=$1
         shift 1

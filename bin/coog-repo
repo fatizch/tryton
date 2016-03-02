@@ -3,12 +3,12 @@
 
 _coog_repo_enter_modules() { # move to trytond modules folder
         _coog_repo_wd=`pwd`
-        cd ../../trytond/trytond/modules
+        cd $COOG_TRYTOND/trytond/modules
 }
 
 _coog_repo_enter_plugins() { # move to tryton plugins folder
         _coog_repo_wd=`pwd`
-        cd ../../tryton/tryton/plugins
+        cd $COOG_TRYTON/tryton/plugins
 }
 
 _coog_repo_leave() { # move back to initial wd
@@ -21,9 +21,9 @@ _coog_repo_rm() { # remove all links from wd
 
 _coog_repo_list() { # list repositories
         local f
-        for f in ../../*
+        for f in $COOG_ROOT/*
         do
-                [ -d $f ] && [ -d $f/modules ] && echo `echo $f | cut -d '/' -f 3`
+                [ -d $f ] && [ -d $f/modules ] && basename $f
         done
 }
 
@@ -48,7 +48,7 @@ coog_repo_linkm() { # link repos modules - <repos> - default: all
         [ $# -eq 0 ] && _coog_repo_rm
         for repo in $repos
         do
-                ln -s ../../../$repo/modules/* .
+                [ -d $COOG_ROOT/$repo/modules ] && ln -s $COOG_ROOT/$repo/modules/* .
         done
         _coog_repo_leave
 }
@@ -61,7 +61,7 @@ coog_repo_linkp() { # link repos plugins - <repos> - default: all
         [ $# -eq 0 ] && _coog_repo_rm
         for repo in $repos
         do
-                [ -d ../../../$repo/plugins ] && ln -s ../../../$repo/plugins/* .
+                [ -d $COOG_ROOT/$repo/plugins ] && ln -s $COOG_ROOT/$repo/plugins/* .
         done
         _coog_repo_leave
 }

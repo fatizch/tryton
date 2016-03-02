@@ -116,3 +116,15 @@ coog_server_tail() { # tail server logs
         [ ! -e $out_file ] && echo no server log && return
         tail $* $out_file
 }
+
+coog_server_ping() { # call coog server - [curl args]
+        local uri
+        uri=`python2 .py/parse-config.py jsonrpc listen < $COOG_CONF_SRV`
+        [ $? -ne 0 ] && echo no rpc url && return 1
+        curl "$*" \
+                -X POST \
+                -H "Content-Type: application/json" \
+                -d '{"method": "common.list", "params": [null, null]}' \
+                "$uri"
+        echo
+}

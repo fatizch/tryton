@@ -12,9 +12,9 @@ _coog_redis_params() { # get redis connection string - <uri>
 
 _coog_redis_uri() { # guess redis uri - <context>
         [ -z $1 ] && echo redis_server: missing args && return 1
-        [ $1 == 'rq' ] && echo $TRYTOND_ASYNC_RQ && return
-        [ $1 == 'celery' ] && echo $TRYTOND_ASYNC_CELERY && return
-        [ $1 == 'cache' ] && echo $TRYTOND_CACHE_REDIS && return
+        [ $1 == rq ] && echo $TRYTOND_ASYNC_RQ && return
+        [ $1 == celery ] && echo $TRYTOND_ASYNC_CELERY && return
+        [ $1 == cache ] && echo $TRYTOND_CACHE_REDIS && return
         return 1
 }
 

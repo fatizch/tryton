@@ -27,10 +27,10 @@ coog_docker_build() { # build docker image - <pwd> [image*] -- [docker-build-arg
                 local tree
                 repo=`echo $component | cut -d ":" -f 1`
                 tree=`echo $component | cut -d ":" -f 2`
-                [ ! -d ../../$repo ] && echo repo $repo does not exist && return
+                [ ! -d $COOG_ROOT/$repo ] && echo repo $repo does not exist && return
                 local wd
                 wd=`pwd`
-                cd ../../$repo
+                cd $COOG_ROOT/$repo
                 echo $repo:$tree:`git rev-parse $tree` >> $wd/.cache/.version || \
                         (echo bad revision $tree from $repo && return)
                 git archive --format tar $tree | \

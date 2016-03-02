@@ -28,10 +28,12 @@ _coog_env_files() { # set file names
 
 _coog_env_paths() { # set paths
         [ -z $COOG_TMP ] && COOG_TMP=/tmp
-        COOG_TRYTON=`readlink -f ../../tryton`
-        COOG_TRYTOND=`readlink -f ../../trytond`
-        COOG_PROTEUS=`readlink -f ../../proteus`
-        COOG_CONF=`readlink -f ../../conf`
+        COOG_ROOT=`readlink -f ../..`
+        COOG_TRYTON=$COOG_ROOT/tryton
+        COOG_TRYTOND=$COOG_ROOT/trytond
+        COOG_PROTEUS=$COOG_ROOT/proteus
+        COOG_CONF=$COOG_ROOT/conf
+        COOG_DOCKER=$COOG_ROOT/docker
         COOG_LIB=`readlink -f ./lib`
 }
 
@@ -45,7 +47,7 @@ _coog_env_conf() { # set conf vars
 
 _coog_env_postgres() { # set postgres vars
         local db_conf
-        db_conf=`cat $COOG_CONF_SRV | python2 .py/parse-config.py database uri | python2 .py/parse-url.py` || return $?
+        db_conf=`python2 .py/parse-config.py database uri < $COOG_CONF_SRV | python2 .py/parse-url.py` || return $?
         PGHOST=`echo "$db_conf" | sed -n 2p`
         [ ! -z $PGHOST ] && export PGHOST
         PGPORT=`echo "$db_conf" | sed -n 3p`
@@ -60,7 +62,7 @@ _coog_env_postgres() { # set postgres vars
 }
 
 _coog_env_common() { # set common vars
-        LOG_LEVEL=`cat $COOG_CONF_LOG | python2 .py/parse-config.py logger_root level` || return $?
+        LOG_LEVEL=`python2 .py/parse-config.py logger_root level < $COOG_CONF_LOG` || return $?
         [ ! -z $LOG_LEVEL ] && export LOG_LEVEL
         return 0
 }
@@ -69,13 +71,13 @@ _coog_env_server() { # set server vars
         export PYTHONPATH="$COOG_LIB:$COOG_TRYTOND:$COOG_PROTEUS:$PYTHONPATH"
         TRYTOND_CONFIG="$COOG_CONF_SRV"
         [ ! -z $TRYTOND_CONFIG ] && export TRYTOND_CONFIG
-        DB_NAME=`cat $COOG_CONF_SRV | python2 .py/parse-config.py database uri | python2 .py/parse-url.py | sed -n 6p` || return $?
+        DB_NAME=`python2 .py/parse-config.py database uri < $COOG_CONF_SRV | python2 .py/parse-url.py | sed -n 6p` || return $?
         [ ! -z $DB_NAME ] && export DB_NAME
-        TRYTOND_CACHE_REDIS=`cat $COOG_CONF_SRV | python2 .py/parse-config.py cache redis 2> /dev/null`
+        TRYTOND_CACHE_REDIS=`python2 .py/parse-config.py cache redis < $COOG_CONF_SRV 2> /dev/null`
         [ ! -z $TRYTOND_CACHE_REDIS ] && export TRYTOND_CACHE_REDIS
-        TRYTOND_ASYNC_RQ=`cat $COOG_CONF_SRV | python2 .py/parse-config.py async rq 2> /dev/null`
+        TRYTOND_ASYNC_RQ=`python2 .py/parse-config.py async rq < $COOG_CONF_SRV 2> /dev/null`
         [ ! -z $TRYTOND_ASYNC_RQ ] && export TRYTOND_ASYNC_RQ
-        TRYTOND_ASYNC_CELERY=`cat $COOG_CONF_SRV | python2 .py/parse-config.py async celery 2> /dev/null`
+        TRYTOND_ASYNC_CELERY=`python2 .py/parse-config.py async celery < $COOG_CONF_SRV 2> /dev/null`
         [ ! -z $TRYTOND_ASYNC_CELERY ] && export TRYTOND_ASYNC_CELERY
         return 0
 }
@@ -108,10 +110,12 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    COOG_FILE_CEL          "$COOG_FILE_CEL
         echo "    COOG_FILE_BAT          "$COOG_FILE_BAT
         echo "    COOG_TMP               "$COOG_TMP
+        echo "    COOG_ROOT              "$COOG_ROOT
         echo "    COOG_TRYTON            "$COOG_TRYTON
         echo "    COOG_TRYTOND           "$COOG_TRYTOND
         echo "    COOG_PROTEUS           "$COOG_PROTEUS
         echo "    COOG_CONF              "$COOG_CONF
+        echo "    COOG_DOCKER            "$COOG_DOCKER
         echo "    COOG_LIB               "$COOG_LIB
         echo "    COOG_CONF_CLI          "$COOG_CONF_CLI
         echo "    COOG_CONF_SRV          "$COOG_CONF_SRV
