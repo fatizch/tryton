@@ -194,6 +194,12 @@ class EndorsementWizardStepMixin(model.CoopView):
             endorsement state. The first parameter is the
             endorsement.start.select record from the wizard.
         '''
+        data_dict = {}
+        if not cls.must_skip_step(select_screen.init_dict(data_dict)):
+            if len(select_screen.endorsement_definition.endorsement_parts) > 1:
+                # Check errors if this is the only state, this is the place
+                # where the motive will be raised to the user.
+                return
         error_manager = Transaction().context.get('error_manager', None)
         if error_manager and 'effective_date_before_start_date' in [x[0] for
                 x in error_manager._errors]:
@@ -204,6 +210,17 @@ class EndorsementWizardStepMixin(model.CoopView):
                     endorsement.effective_date
                     for x in endorsement.contract_endorsements]):
             cls.append_functional_error('effective_date_before_start_date')
+
+    @classmethod
+    def must_skip_step(cls, data_dict):
+        '''
+            Override this method to automatically skip this step if some
+            conditions are met.
+            This check is performed once when starting the endorsement, with
+            the data available in the endorsement selection screen, then
+            everytime the step should be displayed.
+        '''
+        return False
 
     @classmethod
     def allow_effective_date_before_contract(cls, select_screen):
@@ -1723,6 +1740,15 @@ class SelectEndorsement(model.CoopView):
         self.effective_date_before_today = self.effective_date < utils.today()
         self.on_change_contract()
 
+    def init_dict(self, data_dict):
+        # Use rule engine API for future improved implementation
+        data_dict.update({
+                'contract': self.contract,
+                'applicant': self.applicant,
+                'endorsement_effective_date': self.effective_date,
+                'endorsement_definition': self.endorsement_definition,
+                })
+
 
 class BasicPreview(EndorsementWizardPreviewMixin, model.CoopView):
     'Basic Preview State View'
@@ -1828,6 +1854,7 @@ class StartEndorsement(Wizard):
         if endorsement.state == 'applied':
             self.raise_user_error('cannot_resume_applied')
         self.select_endorsement.endorsement = endorsement
+        self.select_endorsement.applicant = endorsement.applicant
         if endorsement.contracts:
             self.select_endorsement.contract = endorsement.contracts[0].id
             self.select_endorsement.product = \
@@ -1961,19 +1988,31 @@ class StartEndorsement(Wizard):
         return self.get_next_state('change_start_date')
 
     def get_state_before(self, state_name):
+        pool = Pool()
+        all_states = self.get_endorsement_states()
+        data_dict = {}
+        self.select_endorsement.init_dict(data_dict)
         for part in reversed(self.definition.endorsement_parts):
             if not state_name:
+                if pool.get(all_states[part.view]).must_skip_step(data_dict):
+                    continue
                 return part.view
             if part.view == state_name:
                 state_name = ''
         return 'start'
 
     def get_next_state(self, current_state):
+        pool = Pool()
+        all_states = self.get_endorsement_states()
+        data_dict = {}
+        self.select_endorsement.init_dict(data_dict)
         found = False
         for part in self.definition.endorsement_parts:
             if part.view == current_state:
                 found = True
             elif found:
+                if pool.get(all_states[part.view]).must_skip_step(data_dict):
+                    continue
                 return part.view
         return 'summary'
 

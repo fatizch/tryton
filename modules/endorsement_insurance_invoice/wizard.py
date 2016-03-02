@@ -482,6 +482,17 @@ class ChangeDirectDebitAccount(ChangeBillingInformation):
         if select_screen.effective_date < utils.today():
             cls.append_functional_error('no_past_date')
 
+    @classmethod
+    def must_skip_step(cls, data_dict):
+        contract = data_dict.get('contract', None)
+        if not contract:
+            return False
+        if not utils.get_good_versions_at_date(contract,
+                'billing_informations', data_dict['endorsement_date'],
+                'date')[0].direct_debit:
+            return True
+        return False
+
 
 class ContractDisplayer(model.CoopView):
     'Contract Displayer'
