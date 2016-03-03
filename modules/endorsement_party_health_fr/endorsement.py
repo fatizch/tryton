@@ -101,10 +101,9 @@ class EndorsementParty:
             'health.party_complement', health_complement.health_complement)
                 for health_complement in self.health_complement]
         if health_complement_summary:
-            result[1].append(['%s :' % self.raise_user_error(
-                        'msg_hc_modifications',
-                        raise_exception=False),
-                    health_complement_summary])
+            result[2] += ['party_complement_change_section',
+                '%s :' % self.raise_user_error('msg_hc_modifications',
+                    raise_exception=False), health_complement_summary]
         return result
 
     @property
