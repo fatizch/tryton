@@ -68,8 +68,7 @@ class EndorsementCoveredElementOption:
         beneficiary_summary = [x.get_diff('contract.option.beneficiary',
                 x.beneficiary) for x in self.beneficiaries]
         if beneficiary_summary:
-            result += ['beneficiary_change_section', '%s :'
-                % (self.raise_user_error('msg_beneficiary_modifications',
+            result += ['%s :' % (self.raise_user_error('msg_beneficiary_modifications',
                         raise_exception=False)), beneficiary_summary]
         return result
 

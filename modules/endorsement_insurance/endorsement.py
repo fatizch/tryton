@@ -192,9 +192,10 @@ class EndorsementContract:
         covered_element_summary = [x.get_diff('contract.covered_element',
                 x.covered_element) for x in self.covered_elements]
         if covered_element_summary:
-            result[2] += ['cov_change_section', '%s :' % self.raise_user_error(
-                    'mes_covered_element_modifications',
-                    raise_exception=False), covered_element_summary]
+            result[1].append(['%s :' % self.raise_user_error(
+                            'mes_covered_element_modifications',
+                            raise_exception=False),
+                    covered_element_summary])
         return result
 
     def apply_values(self):
@@ -287,15 +288,17 @@ class EndorsementCoveredElement(relation_mixin(
                 x.version)
             for x in self.versions]
         if version_summary:
-            result.append(['covered_element_version_change_section', '%s :' % (
-                        self.raise_user_error('mes_version_modifications',
-                            raise_exception=False)), version_summary])
+            result += ['%s :' % (self.raise_user_error(
+                        'mes_version_modifications',
+                        raise_exception=False)),
+                version_summary]
         option_summary = [x.get_diff('contract.option', x.option)
             for x in self.options]
         if option_summary:
-            result.append(['option_change_section', '%s :' % (
-                        self.raise_user_error('mes_option_modifications',
-                            raise_exception=False)), option_summary])
+            result += ['%s :' % (self.raise_user_error(
+                        'mes_option_modifications',
+                        raise_exception=False)),
+                option_summary]
         return result
 
     def apply_values(self):
@@ -484,22 +487,25 @@ class EndorsementCoveredElementOption(relation_mixin(
         option_summary = [x.get_diff('contract.option.version', x.version)
             for x in self.versions]
         if option_summary:
-            result.append(['option_version_change_section', '%s :' % (
-                        self.raise_user_error('mes_option_modifications',
-                            raise_exception=False)), option_summary])
+            result += ['%s :' % (self.raise_user_error(
+                        'mes_option_modifications',
+                        raise_exception=False)),
+                option_summary]
         extra_premium_summary = [x.get_diff('contract.option.extra_premium',
                 x.extra_premium) for x in self.extra_premiums]
         if extra_premium_summary:
-            result += ['extra_premium_change_section', '%s :' % (
-                    self.raise_user_error('mes_extra_premium_modifications',
-                        raise_exception=False)), extra_premium_summary]
+            result += ['%s :' % (self.raise_user_error(
+                        'mes_extra_premium_modifications',
+                        raise_exception=False)),
+                extra_premium_summary]
         exclusion_summary = [x.get_diff('contract.option-exclusion.kind',
                 x.option_exclusion)
             for x in self.exclusion_list]
         if exclusion_summary:
-            result.append(['option_exclusions_change_section', '%s :' % (
-                        self.raise_user_error('mes_exclusion_modifications',
-                            raise_exception=False)), exclusion_summary])
+            result += ['%s :' % (self.raise_user_error(
+                        'mes_exclusion_modifications',
+                        raise_exception=False)),
+                exclusion_summary]
         return result
 
     def apply_values(self):

@@ -258,27 +258,28 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
             return Pool().get('party.party')(self.party.id)
 
     def get_endorsement_summary(self, name):
-        result = ['definition_section', self.definition.name, []]
+        result = [self.definition.name, []]
         party_summary = self.get_diff('party.party', self.base_instance)
         if party_summary:
-            result[2] += ['party_change_section', party_summary]
+            result[1].appens(party_summary)
 
         address_summary = [address.get_diff('party.address',
                 address.address) for address in self.addresses]
         if address_summary:
-            result[2].append(['address_change_section',
-                '%s :' % self.raise_user_error('msg_address_modifications',
-                    raise_exception=False), address_summary])
+            result[1].append(['%s :' % self.raise_user_error(
+                        'msg_address_modifications',
+                        raise_exception=False),
+                    address_summary])
 
         relation_summary = [relation.get_diff('party.relation.all',
                 relation.relationship) for relation in self.relations]
         if relation_summary:
-            result[2].append(['relation_change_section',
-                    '%s :' % self.raise_user_error(
-                        'msg_relations_modifications', raise_exception=False),
+            result[1].append(['%s :' % self.raise_user_error(
+                        'msg_relations_modifications',
+                        raise_exception=False),
                     relation_summary])
 
-        return ['title_section', self.party.full_name, result]
+        return [self.party.full_name, result]
 
     def get_definition(self, name):
         return self.endorsement.definition.id if self.endorsement else None
