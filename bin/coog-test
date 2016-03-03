@@ -5,10 +5,8 @@ _coog_test_enter() { # set test context
         TRYTOND_CONFIG=$COOG_CONF_TEST
         [ -z $TRYTOND_CONFIG ] && echo "missing conf file" && return 1
         export TRYTOND_CONFIG
-        TRYTOND_DATABASE_URI=`python2 .py/parse-config.py database uri < $COOG_CONF_TEST`
-        [ $? -ne 0 ] && echo "failed to parse conf file" && return 1
-        [ -z $TRYTOND_DATABASE_URI ] && echo "db uri is empty" && return 1
-        export TRYTOND_DATABASE_URI
+        TRYTOND_DATABASE_URI=`python2 .py/parse-config.py database uri < $COOG_CONF_TEST 2> /dev/null`
+        [ $? -eq 0 ] && [ ! -z "$TRYTOND_DATABASE_URI" ] && export TRYTOND_DATABASE_URI
         export DB_NAME="test_"`date +%s%N`
         export DO_NOT_TEST_CASES=1
 }
@@ -23,6 +21,7 @@ _coog_test_leave() { # clean test config
 
 coog_test_dropdb() { # drop db from test database - <db>
         local db_vars
+        [ -z "$TRYTOND_DATABASE_URI" ] && TRYTOND_DATABASE_URI="sqlite://"
         db_vars=`echo $TRYTOND_DATABASE_URI | python2 .py/parse-url.py`
         [ $? -ne 0 ] && echo "failed to parse db uri" && return 1
         local db_sys
