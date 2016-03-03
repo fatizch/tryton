@@ -2,7 +2,8 @@
 * Aggregate payment moves per group key if available
 * UI enhancement on payment group list view (add amount and payment dates)
 * Add predefined motive on creation payment wizard
-* adding merged_id from account_payment_sepa_cog
+* Adding merged_id from account_payment_sepa_cog
+* Adding payment merged reject
 
 Version 1.6 - 2015-12-23
 * Add Acknowledge Batch

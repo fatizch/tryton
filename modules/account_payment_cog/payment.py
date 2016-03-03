@@ -727,7 +727,13 @@ class ManualPaymentFail(model.CoopWizard):
     def default_fail_information(self, values):
         pool = Pool()
         Payment = pool.get('account.payment')
+        active_model = Transaction().context.get('active_model')
         active_ids = Transaction().context.get('active_ids')
+        if active_model == 'account.payment.merged':
+            payments = Payment.browse(active_ids)
+            merged_ids = [x.merged_id for x in payments]
+            active_ids = [x.id for x in Payment.search(
+                    [('merged_id', 'in', merged_ids)])]
         if any([x.state not in ('succeeded', 'processing')
                 for x in Payment.browse(active_ids)]):
             self.raise_user_error('payment_must_be_succeed_processing')

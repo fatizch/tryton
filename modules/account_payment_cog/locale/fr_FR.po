@@ -561,6 +561,10 @@ msgctxt "model:ir.action,name:act_merged_form_relate_details"
 msgid "Related payments"
 msgstr "Paiements associés"
 
+msgctxt "model:ir.action,name:manual_merged_payments_fail_wizard"
+msgid "Fail merged payments"
+msgstr "Échouer le groupe de paiement"
+
 msgctxt "model:ir.action,name:act_payment_fail_status_form"
 msgid "Payments Rejected"
 msgstr "Paiements rejetés"
