@@ -30,6 +30,7 @@ def register():
         Configuration,
         Group,
         Party,
+        PartyInteraction,
         PaymentCreationStart,
         ReportTemplate,
         Invoice,
