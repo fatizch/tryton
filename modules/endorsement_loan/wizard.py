@@ -434,15 +434,15 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
             self.current_increments = []
             self.new_increments = []
             return
-        current_increments, new_increments = [], []
+        new_increments = []
         for increment in self.all_increments:
             if increment.loan != self.current_loan:
                 continue
-            if increment.number is not None:
-                current_increments.append(increment)
-            else:
+            if increment.number is None:
                 new_increments.append(increment)
-        self.current_increments = current_increments
+        self.current_increments = [
+            model.dictionarize(x, self._increments_fields_to_extract())
+            for x in self.current_loan.increments]
         self.new_increments = new_increments
 
     @fields.depends('current_loan', 'effective_date', 'new_increments')
