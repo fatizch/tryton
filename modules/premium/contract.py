@@ -337,7 +337,8 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
         self.overriden_amount = self.fee.amount if self.fee else None
         self.accept_fee = True
 
-    @fields.depends('fee', 'accept_fee', 'overriden_amount', 'overriden_rate')
+    @fields.depends('fee', 'fee_type', 'fee_allow_override', 'overriden_rate',
+        'overriden_amount', 'accept_fee')
     def on_change_accept_fee(self):
         if self.accept_fee:
             self.on_change_fee()
