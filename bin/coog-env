@@ -79,6 +79,8 @@ _coog_env_server() { # set server vars
         [ ! -z $TRYTOND_ASYNC_RQ ] && export TRYTOND_ASYNC_RQ
         TRYTOND_ASYNC_CELERY=`python2 .py/parse-config.py async celery < $COOG_CONF_SRV 2> /dev/null`
         [ ! -z $TRYTOND_ASYNC_CELERY ] && export TRYTOND_ASYNC_CELERY
+        TRYTOND_PERF_BROKER=`python2 .py/parse-config.py perf broker < $COOG_CONF_SRV 2> /dev/null`
+        [ ! -z $TRYTOND_PERF_BROKER ] && export TRYTOND_PERF_BROKER
         return 0
 }
 
@@ -137,6 +139,7 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    TRYTOND_CACHE_REDIS    "$TRYTOND_CACHE_REDIS
         echo "    TRYTOND_ASYNC_RQ       "$TRYTOND_ASYNC_RQ
         echo "    TRYTOND_ASYNC_CELERY   "$TRYTOND_ASYNC_CELERY
+        echo "    TRYTOND_PERF_BROKER    "$TRYTOND_PERF_BROKER
         echo "    TRYTOND_BATCH_CONFIG   "$TRYTOND_BATCH_CONFIG
 }
 

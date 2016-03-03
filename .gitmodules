@@ -1,0 +1,4 @@
+[submodule "bin/vendor/tryton-perf-analyzer"]
+	path = bin/vendor/tryton-perf-analyzer
+	url = git@github.com:coopengo/tryton-perf-analyzer.git
+	branch = master
