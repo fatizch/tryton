@@ -1737,8 +1737,8 @@ class SelectEndorsement(model.CoopView):
     def init_dict(self, data_dict):
         # Use rule engine API for future improved implementation
         data_dict.update({
-                'contract': self.contract,
-                'applicant': self.applicant,
+                'contract': getattr(self, 'contract', None),
+                'applicant': getattr(self, 'applicant', None),
                 'date': self.effective_date,
                 'endorsement_date': self.effective_date,
                 'endorsement_definition': self.endorsement_definition,
