@@ -668,10 +668,11 @@ class ProcessAction(ModelSQL, ModelView):
     def default_content(cls):
         return 'method'
 
+    @fields.depends('method_name', 'on_model')
     def pre_validate(self):
-        if getattr(self, 'on_model', None) is None:
+        if not self.on_model:
             return
-        if not getattr(self, 'method_name', None):
+        if not self.method_name:
             return
         TargetModel = Pool().get(self.on_model.model)
         if not (self.method_name in dir(TargetModel) and callable(

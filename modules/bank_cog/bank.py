@@ -49,6 +49,7 @@ class Bank(export.ExportImportMixin):
         for bank in banks:
             cls.check_bic(bank)
 
+    @fields.depends('bic')
     def pre_validate(self):
         super(Bank, self).pre_validate()
         self.check_bic()

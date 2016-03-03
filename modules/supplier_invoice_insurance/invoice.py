@@ -157,6 +157,7 @@ class InvoiceLine:
     def default_quantity():
         return 1
 
+    @fields.depends('product', 'unit_price')
     def pre_validate(self):
         super(InvoiceLine, self).pre_validate()
         if self.product and self.product.capped_amount and (self.unit_price >

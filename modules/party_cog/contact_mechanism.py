@@ -49,6 +49,7 @@ class ContactMechanism(export.ExportImportMixin):
                 return False
         return True
 
+    @fields.depends('email', 'type')
     def pre_validate(self):
         if not self.check_email():
             self.raise_user_error('invalid_email')

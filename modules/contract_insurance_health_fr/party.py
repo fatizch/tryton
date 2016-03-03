@@ -285,6 +285,7 @@ class HealthPartyComplement:
             self.raise_user_error('wrong_insurance_fund_number',
                 self.insurance_fund_number)
 
+    @fields.depends('hc_system', 'insurance_fund_number')
     def pre_validate(self):
         super(HealthPartyComplement, self).pre_validate()
         self.check_insurance_fund_number()

@@ -914,6 +914,9 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
                     increments.append(increment)
                 cls.save(increments)
 
+    @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
+        'deferral', 'loan', 'number_of_payments', 'payment_amount',
+        'payment_frequency', 'rate')
     def pre_validate(self):
         if self.number_of_payments <= 0:
             # We need to raise an error, because the domain validation record
