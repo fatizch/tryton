@@ -8,8 +8,12 @@ DATE_FORMAT = '%Y-%m-%d'           # 2000-12-31
 
 
 def _batch_split(l, n):
-    for i in xrange(0, len(l), n):
-        yield l[i:i + n]
+    assert n >= 0, 'Negative split size'
+    if n == 0 or n >= len(l):
+        yield l
+    else:
+        for i in xrange(0, len(l), n):
+            yield l[i:i + n]
 
 
 def batch_generate(name, connection_date, treatment_date, extra_args):
@@ -56,8 +60,6 @@ def batch_generate(name, connection_date, treatment_date, extra_args):
                 logger.info('job_size: %s', job_size)
                 ids = [x[0] for x in BatchModel.select_ids(treat_on,
                         extra_args)]
-                if job_size == 0:
-                    job_size = len(ids)
                 for l in _batch_split(ids, job_size):
                     broker.enqueue(name, 'batch_exec', (name, l,
                         connection_date, treatment_date, extra_args))
@@ -73,7 +75,7 @@ def batch_generate(name, connection_date, treatment_date, extra_args):
 
 def batch_exec(name, ids, connection_date, treatment_date, extra_args):
     assert name, 'Batch name is required'
-    assert ids, 'Ids list is required'
+    assert type(ids) is list, 'Ids list is required'
     assert connection_date, 'Connection date is required'
     assert treatment_date, 'Treatment date is required'
 
@@ -104,8 +106,6 @@ def batch_exec(name, ids, connection_date, treatment_date, extra_args):
             Cache.clean(database)
             transaction_size = int(BatchModel.get_conf_item('transaction_size'))
             logger.info('transaction_size: %s', transaction_size)
-            if transaction_size == 0:
-                transaction_size = len(ids)
             try:
                 for l in _batch_split(ids, transaction_size):
                     to_treat = BatchModel.convert_to_instances(l)
