@@ -1101,6 +1101,8 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     definition_code = fields.Function(
         fields.Char('Definition Code'),
         'get_definition_code')
+    last_modification = fields.Function(fields.DateTime('Last Modification'),
+        'get_last_modification')
 
     @classmethod
     def __setup__(cls):
@@ -1142,7 +1144,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                     'invisible': ~Eval('state').in_(['draft'])
                     },
                 })
-        cls._order = [('application_date', 'DESC'), ('create_date', 'DESC')]
+        cls._order.insert(0, ('last_modification', 'DESC'))
         cls.__rpc__.update({'ws_create_endorsements': RPC(readonly=False)})
         cls._error_messages.update({
                 'invalid_format': 'Invalid file format',
@@ -1176,6 +1178,11 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                     config.endorsement_number_sequence.id)
         return super(Endorsement, cls).create(vlist)
 
+    @staticmethod
+    def order_last_modification(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.write_date, table.create_date)]
+
     @classmethod
     def default_state(cls):
         return 'draft'
@@ -1187,10 +1194,10 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         return '%s' % self.definition.name
 
     def get_contracts_name(self, name):
-        return '\n'.join([x.rec_name for x in self.contracts])
+        return ', '.join([x.rec_name for x in self.contracts])
 
     def get_subscribers_name(self, name):
-        return '\n'.join([x.subscriber.rec_name for x in self.contracts])
+        return ', '.join([x.subscriber.rec_name for x in self.contracts])
 
     def get_object_for_contact(self):
         return self.contracts[0]
@@ -1205,6 +1212,10 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         if event_code == 'apply_endorsement':
             return self.effective_date
         return super(Endorsement, self).get_report_functional_date(event_code)
+
+    def get_last_modification(self, name):
+        return (self.write_date if self.write_date else self.create_date
+            ).replace(microsecond=0)
 
     @fields.depends('application_date')
     def on_change_with_application_date_str(self, name=None):
