@@ -2,5 +2,6 @@
 <data>
     <xpath expr="/tree" position="inside">
         <field name="is_reconciled" tree_invisible="1"/>
+        <field name="color" tree_invisible="1"/>
     </xpath>
 </data>

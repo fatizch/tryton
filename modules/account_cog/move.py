@@ -185,6 +185,11 @@ class Line(export.ExportImportMixin):
                 'colors',
                 Eval('color', 'black'))]
 
+    @classmethod
+    def query_get(cls, table):
+        with Transaction().set_context(posted=True):
+            return super(Line, cls).query_get(table)
+
     def get_reconciled_with(self, name):
         if self.reconciliation is None:
             return
@@ -200,6 +205,8 @@ class Line(export.ExportImportMixin):
             return 'coopengo-reconciliation'
 
     def get_color(self, name):
+        if self.move_state == 'draft':
+            return 'orange'
         if self.is_origin_canceled:
             return 'red'
         elif self.is_reconciled:
@@ -337,16 +344,20 @@ class Reconcile:
         pool = Pool()
         Line = pool.get('account.move.line')
         line = Line.__table__()
+        Move = pool.get('account.move')
+        move = Move.__table__()
         Account = pool.get('account.account')
         account = Account.__table__()
         cursor = Transaction().cursor
         balance = line.debit - line.credit
         cond = ((line.reconciliation == Null) & account.reconcile &
-            (line.state != 'draft'))
+            (move.state != 'draft'))
         if Transaction().context['active_model'] == 'party.party':
             cond &= (line.party == Transaction().context['active_id'])
         cursor.execute(*line.join(account,
-                condition=line.account == account.id).select(
+                condition=line.account == account.id
+                ).join(move, condition=line.move == move.id
+                ).select(
                 account.id,
                 where=cond,
                 group_by=account.id,
@@ -361,15 +372,18 @@ class Reconcile:
         pool = Pool()
         Line = pool.get('account.move.line')
         line = Line.__table__()
+        Move = pool.get('account.move')
+        move = Move.__table__()
         cursor = Transaction().cursor
 
         balance = line.debit - line.credit
-        cond = ((line.reconciliation == Null) & (line.state != 'draft')
+        cond = ((line.reconciliation == Null) & (move.state != 'draft')
             & (line.account == account.id))
         if Transaction().context['active_model'] == 'party.party':
             cond &= (line.party == Transaction().context['active_id'])
 
-        cursor.execute(*line.select(line.party,
+        cursor.execute(*line.join(move, condition=(line.move == move.id)
+                ).select(line.party,
                 where=cond,
                 group_by=line.party,
                 having=(
@@ -387,7 +401,7 @@ class Reconcile:
                 ('party', '=',
                     self.show.party.id if self.show.party else None),
                 ('reconciliation', '=', None),
-                ('state', '!=', 'draft'),
+                ('move_state', '!=', 'draft'),
                 ])
 
     def default_show(self, fields):
@@ -423,4 +437,4 @@ class ReconcileShow:
     def __setup__(cls):
         super(ReconcileShow, cls).__setup__()
         cls.lines.domain = ['AND', cls.lines.domain,
-            [('state', '!=', 'draft')]]
+            [('move_state', '!=', 'draft')]]
