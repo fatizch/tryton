@@ -220,7 +220,8 @@ class Line(export.ExportImportMixin):
         return self.reconciliation is not None
 
     def get_synthesis_rec_name(self, name):
-        return self.move.synthesis_rec_name
+        return (self.description if self.description
+            else self.move.synthesis_rec_name)
 
     def get_kind_string(self, name):
         return coop_string.translate(self.move, 'kind')
