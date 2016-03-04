@@ -1771,6 +1771,8 @@ class StartEndorsement:
         default_values = {
             'new_extra_premium': [{
                     'start_date': self.select_endorsement.effective_date,
+                    'manual_start_date':
+                    self.select_endorsement.effective_date,
                     'duration_unit': pool.get(
                         'contract.option.extra_premium').default_duration_unit(
                         ),
