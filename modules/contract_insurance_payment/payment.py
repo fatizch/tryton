@@ -128,6 +128,8 @@ class Payment:
             contract.billing_informations = contract.billing_informations + \
                 (new_billing_information,)
             contract.save()
+            Contract.calculate_prices([contract],
+                start=new_billing_information.date)
 
             invoices.extend(Contract.invoice([contract],
                 up_to_date=next_invoice_date))
