@@ -61,22 +61,17 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
         'attachment_name', 'attachment_data')
     def on_change_attachment(self):
         if self.attachment:
-            if self.attachment.is_conform:
-                self.attachment_name = self.attachment.name
-                self.attachment_data = self.attachment.data
-                self.received = True
-                if not self.reception_date:
-                    self.reception_date = utils.today()
-            else:
-                self.received = False
-                self.reception_date = None
-            if not self.first_reception_date:
-                self.first_reception_date = utils.today()
+            self.attachment_name = self.attachment.name
+            self.attachment_data = self.attachment.data
+            self.received = True
+            if not self.reception_date:
+                self.reception_date = utils.today()
+        else:
+            self.received = False
+            self.reception_date = None
 
     @fields.depends('reception_date')
     def on_change_with_received(self, name=None):
-        if self.attachment and not self.attachment.is_conform:
-            return False
         return bool(self.reception_date)
 
     @fields.depends('received', 'reception_date', 'first_reception_date')

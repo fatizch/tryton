@@ -195,3 +195,7 @@ msgstr "Documents"
 msgctxt "view:offered.product:"
 msgid "Documents"
 msgstr "Documents"
+
+msgctxt "error:contract:"
+msgid "Some required documents are not conform."
+msgstr "Des documents requis ne sont pas conformes."

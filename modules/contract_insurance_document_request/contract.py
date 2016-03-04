@@ -32,6 +32,8 @@ class Contract:
         cls._error_messages.update({
                 'missing_required_document':
                 'Some required documents are missing.',
+                'non_conform_documents':
+                'Some required documents are not conform.',
                 })
 
     @classmethod
@@ -112,15 +114,23 @@ class Contract:
             contract.link_attachments_to_requests()
 
     def check_required_documents(self, only_blocking=False):
-        must_raise = False
+        missing = False
+        non_conform = False
         if not only_blocking and not self.doc_received:
-            must_raise = True
+            missing = True
         elif not all((x.received for x in self.document_request_lines
                 if x.blocking)):
-            must_raise = True
-        if must_raise:
+            missing = True
+        elif not only_blocking and not all((line.attachment.is_conform for line
+                    in self.document_request_lines)):
+            non_conform = True
+        elif not all((line.attachment.is_conform for line
+                    in self.document_request_lines if line.blocking)):
+            non_conform = True
+        if missing:
             self.raise_user_error('missing_required_document')
-        return True
+        if non_conform:
+            self.raise_user_error('non_conform_documents')
 
     def before_activate(self):
         self.check_required_documents()
