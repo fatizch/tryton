@@ -735,6 +735,34 @@ msgid "Replace Step Methods"
 msgstr "Remplacer les Méthodes de l'Etape"
 
 msgctxt "view:contract:"
+msgid "Change start date"
+msgstr "Modifier la date d'effet"
+
+msgctxt "view:contract:"
+msgid "Complementary Data"
+msgstr "Données complémentaires"
+
+msgctxt "view:contract:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "view:contract:"
+msgid "Covered Elements"
+msgstr "Risques Couverts"
+
+msgctxt "view:contract:"
+msgid "Invoicing"
+msgstr "Quittancement"
+
+msgctxt "view:contract:"
+msgid "Next (_k)"
+msgstr "Suivant (_k)"
+
+msgctxt "view:contract:"
+msgid "Previous  (_j)"
+msgstr "Précédent (_j)"
+
+msgctxt "view:contract:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
