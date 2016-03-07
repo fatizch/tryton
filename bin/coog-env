@@ -11,7 +11,7 @@ _coog_env_files() { # set file names
         COOG_FILE_WRK=coog-wrk-$USER
         COOG_FILE_RQ=coog-rq-$USER
         COOG_FILE_CEL=coog-cel-$USER
-        COOG_FILE_BAT=coog-bat
+        COOG_FILE_BAT=coog-bat-$USER
         if [ ! -z $VIRTUAL_ENV ]
         then
                 local venv
@@ -21,6 +21,7 @@ _coog_env_files() { # set file names
                 COOG_FILE_WRK=$COOG_FILE_WRK-$venv
                 COOG_FILE_RQ=$COOG_FILE_RQ-$venv
                 COOG_FILE_CEL=$COOG_FILE_CEL-$venv
+                COOG_FILE_BAT=$COOG_FILE_BAT-$venv
         else
                 echo warn: running outside a virtual env
         fi

@@ -26,7 +26,7 @@ coog_test_dropdb() { # drop db from test database - <db>
         [ $? -ne 0 ] && echo "failed to parse db uri" && return 1
         local db_sys
         db_sys=`echo "$db_vars" | sed -n 1p`
-        if [ "$db_sys" == "sqlite" ]
+        if [ "$db_sys" = "sqlite" ]
         then
                 local db_path
                 db_path=`python2 .py/parse-config.py database path < $COOG_CONF_TEST`
@@ -34,7 +34,7 @@ coog_test_dropdb() { # drop db from test database - <db>
                 local db_full_path
                 db_full_path="$db_path"/"$1".sqlite
                 [ -f $db_full_path ] && rm -vf $db_full_path
-        elif [ "$db_sys" == "postgresql" ]
+        elif [ "$db_sys" = "postgresql" ]
         then
                 PGHOST=`echo "$db_vars" | sed -n 2p`
                 [ ! -z $PGHOST ] && export PGHOST
