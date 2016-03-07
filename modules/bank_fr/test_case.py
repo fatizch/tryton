@@ -1,4 +1,5 @@
 from trytond.pool import Pool, PoolMeta
+from .agency_loader import AgenciesLoader
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -39,3 +40,10 @@ class TestCaseModel:
                     })
         if to_create:
             Agency.create(to_create)
+
+    @classmethod
+    def agencies_test_case(cls):
+        logger = cls.get_logger()
+        cls.load_resources('bank_fr')
+        file_path = cls._loaded_resources['bank_fr']['files']['agencies.csv']
+        AgenciesLoader.execute(file_path, logger)

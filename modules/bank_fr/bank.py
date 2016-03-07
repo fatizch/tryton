@@ -40,7 +40,7 @@ class Agency(model.CoopSQL, model.CoopView):
         ondelete='RESTRICT')
     bank_party = fields.Function(
         fields.Many2One('party.party', 'Bank Party'),
-        'get_bank_party')
+        'on_change_with_bank_party')
 
     @classmethod
     def __setup__(cls):
@@ -70,7 +70,8 @@ class Agency(model.CoopSQL, model.CoopView):
     def on_change_branch_code(self):
         self.branch_code = self.branch_code.zfill(5)
 
-    def get_bank_party(self, name):
+    @fields.depends('bank')
+    def on_change_with_bank_party(self, name):
         return self.bank.party.id if self.bank else None
 
 

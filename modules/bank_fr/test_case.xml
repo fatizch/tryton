@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="ir.test_case.instance" id="agencies_test_case">
+            <field name="name">Agencies Test Case</field>
+            <field name="method_name">agencies_test_case</field>
+        </record>
+    </data>
+</tryton>
