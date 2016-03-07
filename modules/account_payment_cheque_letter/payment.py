@@ -32,7 +32,7 @@ class MergedPayments:
 
     def get_formatted_string_amount(self, name=None, lang=None):
         if self.amount:
-            return self.currency.format_string_amount(self.amount, lang=lang)
+            return self.currency.format_string_amount(self.amount, lang_code=lang)
         return ''
 
     @classmethod
