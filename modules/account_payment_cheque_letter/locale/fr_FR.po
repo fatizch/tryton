@@ -41,6 +41,10 @@ msgctxt "field:account.payment.merged,formatted_string_amount:"
 msgid "Formatted amount"
 msgstr "Montant en toutes lettres"
 
+msgctxt "field:account.payment.merged,description:"
+msgid "Description"
+msgstr "Description"
+
 msgctxt "field:account.payment,is_cheque_letter:"
 msgid "Is Cheque Letter"
 msgstr "Est une lettre chèque"

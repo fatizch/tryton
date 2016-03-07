@@ -26,11 +26,23 @@ class MergedPayments:
     formatted_string_amount = fields.Function(
         fields.Char('Formatted amount'),
         'get_formatted_string_amount')
+    description = fields.Function(
+        fields.Char('Description'),
+        'get_description')
 
     def get_formatted_string_amount(self, name=None, lang=None):
         if self.amount:
             return self.currency.format_string_amount(self.amount, lang=lang)
         return ''
+
+    @classmethod
+    def get_description(cls, instances, name=None):
+        ids = [x.id for x in instances]
+        Payment = Pool().get('account.payment')
+        payments = Payment.search([('id', 'in', ids)])
+        return {x.id: x.description
+            if x.journal.process_method == 'cheque_letter' else None
+            for x in  payments}
 
 
 class Payment:
@@ -167,7 +179,8 @@ class Group:
 
     @classmethod
     def cheque_letter_payment_key(cls, payment):
-        return (('party', payment.party), ('currency', payment.currency))
+        return (('party', payment.party), ('currency', payment.currency),
+            ('description', payment.description))
 
     @property
     def cheque_letter_payments(self):

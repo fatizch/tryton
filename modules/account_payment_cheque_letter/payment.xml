@@ -19,6 +19,12 @@
             <field name="type">form</field>
             <field name="inherit" ref="account_payment.payment_process_start_view_form"/>
             <field name="name">payment_process_start_view_form</field>
-	</record>
+        </record>
+        <record model="ir.ui.view" id="payment_group_merged_view_list">
+            <field name="model">account.payment.merged</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="account_payment_cog.payment_group_merged_view_list"/>
+            <field name="name">payment_group_merged_view_list</field>
+        </record>
     </data>
 </tryton>

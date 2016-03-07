@@ -50,6 +50,10 @@ class PaymentTreatmentBatch(batch.BatchRoot):
             ('date', '<=', treatment_date)]
         payment_kind = extra_args.get('payment_kind',
             cls.get_conf_item('payment_kind'))
+        journal_methods = extra_args.get('journal_methods', None)
+        if journal_methods:
+            journal_methods = [x.strip() for x in journal_methods.split(',')]
+            res.append(('journal.process_method', 'in', journal_methods))
         if payment_kind:
             if payment_kind in PAYMENT_KINDS:
                 res.append(('kind', '=', payment_kind))
@@ -196,15 +200,17 @@ class PaymentAcknowledgeBatch(batch.BatchRoot):
 
         payment_kind = extra_args.get('payment_kind',
             cls.get_conf_item('payment_kind'))
+        journal_methods = extra_args.get('journal_methods', None)
         if payment_kind and payment_kind not in PAYMENT_KINDS:
             msg = "ignoring payment_kind: '%s' not in %s" % (payment_kind,
                 PAYMENT_KINDS)
             cls.logger.error('%s. Aborting' % msg)
             raise Exception(msg)
-        return [[payment.id] for payment in Payment.search([
-                    ('state', '=', 'processing'),
-                    ('kind', '=', payment_kind),
-                ])]
+        domain = [('state', '=', 'processing'), ('kind', '=', payment_kind)]
+        if journal_methods:
+            journal_methods = [x.strip() for x in journal_methods.split(',')]
+            domain.append(('journal.process_method', 'in', journal_methods))
+        return [[payment.id] for payment in Payment.search(domain)]
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):

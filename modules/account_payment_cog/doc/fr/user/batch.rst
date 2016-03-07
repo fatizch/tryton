@@ -14,6 +14,10 @@ Les paiements sont créés avec le statut "Approuvé".
 - *Fréquence suggérée:* quotidienne
 - *Date de traitement à fournir:* prochaine date de prélèvement postérieure à
   la date du jour
+- *Méthodes de traitement à fournir*: Méthode de traitement des journaux pour
+  les paiements à traiter, séparés par des virgules.
+  exemple: sepa,manual
+  Afin de traiter les paiement SEPA et chèques.
 
 
 Batch de traitement de paiements [account.payment.process]
@@ -41,5 +45,9 @@ Les paramètres suivants sont disponibles:
 paiement.
 - *kind* (receivable ou payable) : définit quel type de paiements seront
 validés. Tous les paiement de ce type à l'état traitement seront validés.
+- *Méthodes de traitement à fournir*: Méthode de traitement des journaux pour
+  les paiements à traiter, séparés par des virgules.
+  exemple: sepa,manual
+  Afin de traiter les paiement SEPA et chèques.
 
 Si les deux paramètres sont spécifiés, seul group_reference sera utilisé.
