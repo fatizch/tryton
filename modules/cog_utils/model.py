@@ -170,6 +170,9 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
         super(CoopSQL, cls).__post_setup__()
         if cls.table_query != ModelSQL.table_query:
             return
+        if cls._table and len(cls._table) > 64:
+            logging.getLogger(__name__).warning('Length of table_name' +
+                ' > 64 => ' + cls._table)
         pool = Pool()
         for field_name, field in cls._fields.iteritems():
             if isinstance(field, fields.Many2One):
