@@ -13,9 +13,24 @@ __all__ = [
     'Journal',
     'Group',
     'Payment',
+    'MergedPayments',
     'ProcessPayment',
     'ProcessPaymentStart',
     ]
+
+
+class MergedPayments:
+
+    __name__ = 'account.payment.merged'
+
+    formatted_string_amount = fields.Function(
+        fields.Char('Formatted amount'),
+        'get_formatted_string_amount')
+
+    def get_formatted_string_amount(self, name=None, lang=None):
+        if self.amount:
+            return self.currency.format_string_amount(self.amount, lang=lang)
+        return ''
 
 
 class Payment:

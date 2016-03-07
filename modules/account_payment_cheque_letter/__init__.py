@@ -2,11 +2,14 @@ from trytond.pool import Pool
 from .payment import *
 from .report import *
 from .report_engine import *
+from .currency import *
 
 
 def register():
     Pool.register(
+        Currency,
         Payment,
+        MergedPayments,
         Journal,
         Group,
         ProcessPaymentStart,
