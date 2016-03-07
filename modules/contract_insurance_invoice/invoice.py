@@ -498,7 +498,7 @@ class InvoiceLineDetail(model.CoopSQL, model.CoopView):
         fields.Reference('Rated Entity', 'get_rated_entity_models'),
         'get_rated_entity', 'set_reference_field')
     premium = fields.Many2One('contract.premium', 'Premium',
-        ondelete='SET NULL', readonly=True)
+        ondelete='SET NULL', readonly=True, select=True)
 
     @classmethod
     def __setup__(cls):
