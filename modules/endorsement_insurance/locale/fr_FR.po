@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -68,6 +68,14 @@ msgstr ""
 "Vous ne pouvez pas enlever toutes les options de tous les éléments couverts "
 "du contrat. Vous devez résilier le contrat."
 
+msgctxt "error:contract.manage_exclusions:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
+
 msgctxt "error:endorsement.contract.covered_element.option.version:"
 msgid "New Option Version"
 msgstr "Nouvelle version de la garantie"
@@ -83,6 +91,10 @@ msgstr "Suppression de la version"
 msgctxt "error:endorsement.contract.covered_element.option.version:"
 msgid "Update %s"
 msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract.covered_element.option:"
+msgid "Exclusion Modifications"
+msgstr "Modification des exclusions"
 
 msgctxt "error:endorsement.contract.covered_element.option:"
 msgid "Extra Premium Modification"
@@ -171,6 +183,22 @@ msgid ""
 msgstr ""
 "La date d'effet de l'avenant doit être postérieure à la date d'effet des "
 "contrats"
+
+msgctxt "error:endorsement.contract.option.exclusion:"
+msgid "New Exclusion: %s"
+msgstr "Nouvelle exclusion : %s"
+
+msgctxt "error:endorsement.contract.option.exclusion:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.contract.option.exclusion:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.contract.option.exclusion:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
 
 msgctxt "error:endorsement.contract:"
 msgid "Activation History Modifications"
@@ -418,6 +446,78 @@ msgctxt ""
 msgid "Sub Status"
 msgstr "Sous Statut"
 
+msgctxt "field:contract.manage_exclusions,all_options:"
+msgid "Options"
+msgstr "Garanties"
+
+msgctxt "field:contract.manage_exclusions,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.manage_exclusions,current_options:"
+msgid "Options"
+msgstr "Garanties"
+
+msgctxt "field:contract.manage_exclusions,effective_date:"
+msgid "Effective Date"
+msgstr "Date d'effet"
+
+msgctxt "field:contract.manage_exclusions,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:contract.manage_exclusions,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:contract.manage_exclusions,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_exclusions,possible_contracts:"
+msgid "Possible Contracts"
+msgstr "Contrats disponibles"
+
+msgctxt "field:contract.manage_exclusions.exclusion,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:contract.manage_exclusions.exclusion,exclusion:"
+msgid "Exclusion Kind"
+msgstr "Type d'exclusion"
+
+msgctxt "field:contract.manage_exclusions.exclusion,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_exclusions.option,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.manage_exclusions.option,display_name:"
+msgid "Option"
+msgstr "Garantie"
+
+msgctxt "field:contract.manage_exclusions.option,exclusions:"
+msgid "Exclusions"
+msgstr "Exclusions"
+
+msgctxt "field:contract.manage_exclusions.option,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_exclusions.option,option_id:"
+msgid "Option"
+msgstr "Garantie"
+
+msgctxt "field:contract.manage_exclusions.option,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:contract.manage_exclusions.option,parent_name:"
+msgid "Parent"
+msgstr "Parent"
+
 msgctxt "field:endorsement,application_date_str:"
 msgid "Application Date"
 msgstr "Date d'application"
@@ -590,6 +690,10 @@ msgstr "Créé par"
 msgctxt "field:endorsement.contract.covered_element.option,definition:"
 msgid "Definition"
 msgstr "Définition"
+
+msgctxt "field:endorsement.contract.covered_element.option,exclusion_list:"
+msgid "Exclusion Endorsements"
+msgstr "Modification des exclusions"
 
 msgctxt "field:endorsement.contract.covered_element.option,extra_premiums:"
 msgid "Extra Premium Endorsement"
@@ -1045,9 +1149,130 @@ msgctxt "field:endorsement.contract.new_extra_premium,new_extra_premium:"
 msgid "New Extra Premium"
 msgstr "Nouvelle surprime"
 
+msgctxt "field:endorsement.contract.new_extra_premium,option_selected:"
+msgid "Option Selected"
+msgstr "Garantie sélectionnée"
+
 msgctxt "field:endorsement.contract.new_extra_premium,options:"
 msgid "Options"
 msgstr "Options"
+
+msgctxt "field:endorsement.contract.option.exclusion,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.contract.option.exclusion,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt ""
+"field:endorsement.contract.option.exclusion,covered_option_endorsement:"
+msgid "Option Endorsement"
+msgstr "Modification de garantie souscrite"
+
+msgctxt "field:endorsement.contract.option.exclusion,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.option.exclusion,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.option.exclusion,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.option.exclusion,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.contract.option.exclusion,exclusion:"
+msgid "Exclusion"
+msgstr "Exclusion"
+
+msgctxt "field:endorsement.contract.option.exclusion,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.contract.option.exclusion,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.option.exclusion,option_exclusion:"
+msgid "Exclusion"
+msgstr "Exclusion"
+
+msgctxt "field:endorsement.contract.option.exclusion,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.option.exclusion,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.contract.option.exclusion,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.contract.option.exclusion,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.option.exclusion,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.option.exclusion,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.option.exclusion.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.option.exclusion.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.option.exclusion.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.option.exclusion.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.contract.option.exclusion.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.option.exclusion.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.contract.option.exclusion.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.option.exclusion.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.option.exclusion.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.option.exclusion.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.option.exclusion.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.option.exclusion.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt ""
 "field:endorsement.covered_element.selector,covered_element_endorsement_id:"
@@ -1106,6 +1331,10 @@ msgctxt "field:endorsement.part,covered_elements_fields:"
 msgid "Covered Element Fields"
 msgstr "Champs des éléments couverts"
 
+msgctxt "field:endorsement.part,exclusion_fields:"
+msgid "Exclusion Fields"
+msgstr "Champs des exclusions"
+
 msgctxt "field:endorsement.part,extra_premium_fields:"
 msgid "Extra Premium Fields"
 msgstr "Modification des surprimes"
@@ -1137,6 +1366,18 @@ msgstr "Résiliation des garanties"
 msgctxt "model:contract.covered_element.option.remove.option_selector,name:"
 msgid "Remove Option Selector"
 msgstr "Garanties"
+
+msgctxt "model:contract.manage_exclusions,name:"
+msgid "Manage Exclusions"
+msgstr "Gérer les exclusions"
+
+msgctxt "model:contract.manage_exclusions.exclusion,name:"
+msgid "Manage Exclusions Displayer"
+msgstr "Gestion des exclusion - Exclusion"
+
+msgctxt "model:contract.manage_exclusions.option,name:"
+msgid "Manage Exclusions Option Displayer"
+msgstr "Gestion des exclusions - Garantie"
 
 msgctxt "model:endorsement.contract.covered_element,name:"
 msgid "Endorsement Covered Element"
@@ -1182,6 +1423,14 @@ msgctxt "model:endorsement.contract.new_extra_premium,name:"
 msgid "New Extra Premium"
 msgstr "Nouvelle surprime"
 
+msgctxt "model:endorsement.contract.option.exclusion,name:"
+msgid "Endorsement Exclusion"
+msgstr "Modification des exclusions"
+
+msgctxt "model:endorsement.contract.option.exclusion.field,name:"
+msgid "Endorsement Exclusion Field"
+msgstr "Champ de modification des exclusions"
+
 msgctxt "model:endorsement.covered_element.selector,name:"
 msgid "Covered Element Selector"
 msgstr "Elément couvert"
@@ -1189,6 +1438,10 @@ msgstr "Elément couvert"
 msgctxt "model:endorsement.option.selector,name:"
 msgid "Option Selector"
 msgstr "Garantie"
+
+msgctxt "model:endorsement.part,name:manage_exclusions_revision_part"
+msgid "Manage Exclusions"
+msgstr "Gérer les exclusions"
 
 msgctxt "model:endorsement.part,name:manage_extra_premiums_revision_part"
 msgid "Manage Extra Premiums"
@@ -1220,6 +1473,18 @@ msgctxt ""
 "selection:contract.covered_element.option.remove.option_selector,action:"
 msgid "Void"
 msgstr "Sans Effet"
+
+msgctxt "selection:contract.manage_exclusions.exclusion,action:"
+msgid "Added"
+msgstr "Ajoutée"
+
+msgctxt "selection:contract.manage_exclusions.exclusion,action:"
+msgid "Nothing"
+msgstr "Rien"
+
+msgctxt "selection:contract.manage_exclusions.exclusion,action:"
+msgid "Removed"
+msgstr "Retirée"
 
 msgctxt "selection:endorsement.contract.covered_element,action:"
 msgid "Add"
@@ -1284,6 +1549,18 @@ msgctxt "selection:endorsement.contract.extra_premium,action:"
 msgid "Update"
 msgstr "Mise à jour"
 
+msgctxt "selection:endorsement.contract.option.exclusion,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.contract.option.exclusion,action:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:endorsement.contract.option.exclusion,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
 msgctxt "selection:endorsement.part,kind:"
 msgid "Covered Element"
 msgstr "Risque Couvert"
@@ -1336,6 +1613,22 @@ msgctxt "view:contract.covered_element:"
 msgid "Covered Elements"
 msgstr "Risques couverts"
 
+msgctxt "view:contract.manage_exclusions.exclusion:"
+msgid "Exclusions"
+msgstr "Exclusions"
+
+msgctxt "view:contract.manage_exclusions.option:"
+msgid "Option"
+msgstr "Garantie"
+
+msgctxt "view:contract.manage_exclusions.option:"
+msgid "Options"
+msgstr "Garanties"
+
+msgctxt "view:contract.manage_exclusions:"
+msgid "Manage Exclusions"
+msgstr "Gérer les exclusions"
+
 msgctxt "view:endorsement.contract.covered_element.field:"
 msgid "Endorsement Field"
 msgstr "Champs des éléments couverts"
@@ -1384,6 +1677,14 @@ msgctxt "view:endorsement.contract.new_extra_premium:"
 msgid "New Extra Premium"
 msgstr "Nouvelle surprime"
 
+msgctxt "view:endorsement.contract.option.exclusion.field:"
+msgid "Endorsement Field"
+msgstr "Champ d'exclusion"
+
+msgctxt "view:endorsement.contract.option.exclusion.field:"
+msgid "Endorsement Fields"
+msgstr "Champs d'exclusions"
+
 msgctxt "view:endorsement.contract:"
 msgid "Covered Elements"
 msgstr "Risques Couverts"
@@ -1414,6 +1715,25 @@ msgstr "Suspendre"
 msgctxt "wizard_button:endorsement.start,change_contract_extra_data,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,manage_exclusions,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_exclusions,manage_exclusions_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_exclusions,manage_exclusions_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_exclusions,manage_exclusions_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
 
 msgctxt "wizard_button:endorsement.start,manage_extra_premium,end:"
 msgid "Cancel"
