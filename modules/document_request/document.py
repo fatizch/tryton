@@ -66,6 +66,8 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
             self.received = True
             if not self.reception_date:
                 self.reception_date = utils.today()
+            if not self.first_reception_date:
+                self.first_reception_date = utils.today()
         else:
             self.received = False
             self.reception_date = None

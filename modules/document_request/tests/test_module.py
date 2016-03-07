@@ -52,21 +52,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         line.attachment.is_conform = \
             line.attachment.on_change_with_is_conform('')
         line.on_change_attachment()
-        self.assertFalse(line.received)
-        self.assertEqual(line.reception_date, None)
-        self.assertEqual(line.first_reception_date, utils.today())
-
-        # test that invalid attachment does set the first_reception
-        # date. But not reception_date and received.
-        line, doc_desc, test_object = self.create_doc_request_line('new_doc')
-        attachment = self.Attachment(resource=test_object,
-            document_desc=doc_desc, name='test', data='', status='invalid')
-        attachment.save()
-        line.attachment = attachment
-        line.on_change_attachment()
-        line.save()
-        self.assertFalse(line.received)
-        self.assertEqual(line.reception_date, None)
+        self.assertTrue(line.received)
+        self.assertEqual(line.reception_date, utils.today())
         self.assertEqual(line.first_reception_date, utils.today())
 
     def test03_attachment_domain(self):

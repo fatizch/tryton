@@ -2,7 +2,7 @@
 import unittest
 
 import trytond.tests.test_tryton
-from trytond.modules.cog_utils import test_framework
+from trytond.modules.cog_utils import test_framework, utils
 from trytond.exceptions import UserError
 
 
@@ -24,6 +24,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'RuleEngine': 'rule_engine',
             'RuleContext': 'rule_engine.context',
             'RuleToDocDescRelation': 'document.rule-document.description',
+            'Attachment': 'ir.attachment',
             }
 
     @test_framework.prepare_test('contract.test0010_testContractCreation')
@@ -63,9 +64,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         doc2_request_line, = [x for x in contract.document_request_lines if
             x.document_desc == document_desc2]
         doc2_request_line.received = True
-        contract.save()
         self.assertRaises(UserError, contract.check_required_documents)
-        self.assertTrue(contract.check_required_documents(only_blocking=True))
+        contract.check_required_documents(only_blocking=True)
 
 
 def suite():

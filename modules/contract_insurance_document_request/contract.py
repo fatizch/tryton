@@ -121,11 +121,13 @@ class Contract:
         elif not all((x.received for x in self.document_request_lines
                 if x.blocking)):
             missing = True
-        elif not only_blocking and not all((line.attachment.is_conform for line
-                    in self.document_request_lines)):
+        elif not only_blocking and not all((line.attachment.is_conform
+                for line in self.document_request_lines
+                if line.attachment)):
             non_conform = True
-        elif not all((line.attachment.is_conform for line
-                    in self.document_request_lines if line.blocking)):
+        elif not all((line.attachment.is_conform
+                for line in self.document_request_lines
+                if line.blocking and line.attachment)):
             non_conform = True
         if missing:
             self.raise_user_error('missing_required_document')
