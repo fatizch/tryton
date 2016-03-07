@@ -6,8 +6,6 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 
 import utils
-import model
-from summary import SummaryMixin
 
 import logging
 LOG = logging.getLogger(__name__)
@@ -62,7 +60,6 @@ def get_field_summary(instance, var_name, label, at_date=None, lang=None):
 
 
 def generate_summary(desc, level=0):
-    global FMT
     level_fmt = FMT.get(level, None)
     node_types = (tuple, list)
     assert type(desc) in node_types and len(desc) == 2, desc
