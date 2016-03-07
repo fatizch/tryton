@@ -3,8 +3,12 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.underwriting:"
-msgid "The Underwriting process is still in progress"
+msgid "The underwriting process is still in progress"
 msgstr "Le processus d'analyse de risques est toujours en cours"
+
+msgctxt "error:contract.underwriting:"
+msgid "The underwriting is refused by the subscriber"
+msgstr "L'analyse de risques est refusée par le souscripteur"
 
 msgctxt "error:contract:"
 msgid "There is no underwritings for contract %s"
@@ -17,6 +21,10 @@ msgstr "Le code doit être unique"
 msgctxt "field:contract,underwritings:"
 msgid "Underwritings"
 msgstr "Analyse de risques"
+
+msgctxt "field:contract,needs_underwriting:"
+msgid "Needs underwriting"
+msgstr "Avec analyse de risques"
 
 msgctxt "field:contract.underwriting,contract:"
 msgid "Contract"

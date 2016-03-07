@@ -52,16 +52,18 @@ class ContractUnderwriting(model.CoopSQL, model.CoopView):
         states={'invisible': ~Eval('decision_with_exclusion')},
         depends=['decision_with_exclusion'])
     extra_data = fields.Dict('extra_data', 'Extra Data',
-        states={'invisible': Or(~Eval('extra_data'),
-                ~Bool(Eval('decision')))},
-        domain=[('kind', '=', 'contract_underwriting')])
+        states={'invisible': ~Eval('decision_with_exclusion')},
+        domain=[('kind', '=', 'contract_underwriting')],
+        depends=['decision_with_exclusion'])
 
     @classmethod
     def __setup__(cls):
         super(ContractUnderwriting, cls).__setup__()
         cls._error_messages.update({
-                'underwriting_still_in_progress': 'The Underwriting '
+                'underwriting_still_in_progress': 'The underwriting '
                 'process is still in progress',
+                'refused_by_subscriber': 'The underwriting is refused '
+                'by the subscriber',
                 })
 
     @fields.depends('decision', 'needs_subscriber_validation')
@@ -113,14 +115,17 @@ class ContractUnderwriting(model.CoopSQL, model.CoopView):
             instance.underwriting_options = instance.underwriting_options
 
     def check_decision(self):
-        should_raise = False
+        in_progress = False
         decision = self.decision
         if not decision or decision.status == 'pending':
-            should_raise = True
-        else:
-            should_raise = decision.with_subscriber_validation and \
-                self.subscriber_decision != 'accepted'
-        if should_raise:
+            in_progress = True
+        elif decision.with_subscriber_validation:
+            in_progress = (not self.subscriber_decision or
+                self.subscriber_decision == 'pending')
+            if not in_progress:
+                if self.subscriber_decision == 'refused':
+                    self.raise_user_error('refused_by_subscriber')
+        if in_progress:
             self.raise_user_error('underwriting_still_in_progress')
 
 
@@ -179,26 +184,24 @@ class Contract:
     underwritings = fields.One2Many('contract.underwriting',
         'contract', 'Underwritings', delete_missing=True,
         states=CONTRACT_STATES)
-
-    @classmethod
-    def __setup__(cls):
-        super(Contract, cls).__setup__()
-        cls._error_messages.update({
-                'no_underwritings': 'There is no '
-                'underwritings for contract %s',
-                })
+    needs_underwriting = fields.Function(
+        fields.Boolean('Needs Underwriting'),
+        'on_change_with_needs_underwriting')
 
     def check_underwriting_complete(self):
-        if not self.underwritings:
-            self.raise_user_error('no_underwritings', self.rec_name)
-        self.underwritings[-1].check_decision()
+        if self.underwritings:
+            self.underwritings[-1].check_decision()
+
+    @fields.depends('options', 'covered_elements')
+    def on_change_with_needs_underwriting(self, name):
+        all_options = self.options + self.covered_element_options
+        return any([x.coverage.with_underwriting != 'never_underwrite'
+                for x in all_options])
 
     def update_underwritings(self):
         pool = Pool()
         ContractUnderwriting = pool.get('contract.underwriting')
-        all_options = self.options + self.covered_element_options
-        if not any([x.coverage.with_underwriting != 'never_underwrite' for
-                    x in all_options]):
+        if not self.needs_underwriting:
             return
         if not self.underwritings:
             self.create_underwritings()
