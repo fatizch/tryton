@@ -1,34 +1,47 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <!-- #################### -->
-        <!-- # Option Displayer # -->
-        <!-- #################### -->
-        <record model="ir.ui.view" id="endorsement_option_beneficiary_view_form">
-            <field name="model">contract.option</field>
+        <!-- ###################### -->
+        <!-- # Manage Beneficiary # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="endorsement_contract_beneficiary_manage_view_form">
+            <field name="model">contract.manage_beneficiaries</field>
             <field name="type">form</field>
-            <field name="name">endorsement_option_beneficiary_form</field>
+            <field name="name">endorsement_contract_beneficiary_manage_form</field>
         </record>
         <!-- ################################ -->
         <!-- # Option Beneficiary Displayer # -->
         <!-- ################################ -->
         <record model="ir.ui.view" id="endorsement_beneficiary_manage_option_view_form">
-            <field name="model">endorsement.contract.beneficiary.manage.option</field>
+            <field name="model">contract.manage_beneficiaries.option</field>
             <field name="type">form</field>
             <field name="name">endorsement_beneficiary_manage_option_form</field>
         </record>
         <record model="ir.ui.view" id="endorsement_beneficiary_manage_option_view_list">
-            <field name="model">endorsement.contract.beneficiary.manage.option</field>
+            <field name="model">contract.manage_beneficiaries.option</field>
             <field name="type">tree</field>
             <field name="name">endorsement_beneficiary_manage_option_list</field>
         </record>
-        <!-- ###################### -->
-        <!-- # Manage Beneficiary # -->
-        <!-- ###################### -->
-        <record model="ir.ui.view" id="endorsement_contract_beneficiary_manage_view_form">
-            <field name="model">endorsement.contract.beneficiary.manage</field>
+        <!-- ######################### -->
+        <!-- # Beneficiary Displayer # -->
+        <!-- ######################### -->
+        <record model="ir.ui.view" id="endorsement_beneficiary_displayer_view_form">
+            <field name="model">contract.manage_beneficiaries.beneficiary</field>
             <field name="type">form</field>
-            <field name="name">endorsement_contract_beneficiary_manage_form</field>
+            <field name="name">endorsement_beneficiary_displayer_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_beneficiary_displayer_view_list">
+            <field name="model">contract.manage_beneficiaries.beneficiary</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_beneficiary_displayer_list</field>
+        </record>
+        <!-- #################### -->
+        <!-- # Beneficiary View # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="beneficiary_no_option_view_form">
+            <field name="model">contract.option.beneficiary</field>
+            <field name="type">form</field>
+            <field name="name">beneficiary_no_option_form</field>
         </record>
     </data>
 </tryton>

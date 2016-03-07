@@ -1,8 +1,8 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:endorsement.contract.beneficiary.manage:"
+msgctxt "error:contract.manage_beneficiaries:"
 msgid ""
 "The endorsement's effective date must be posterior to the contracts' start "
 "date"
@@ -29,6 +29,86 @@ msgstr "Mise à jour de %s"
 msgctxt "error:endorsement.contract.covered_element.option:"
 msgid "Beneficiaries Modification"
 msgstr "Modification des bénéficiaires"
+
+msgctxt "field:contract.manage_beneficiaries,all_options:"
+msgid "Options"
+msgstr "Garanties"
+
+msgctxt "field:contract.manage_beneficiaries,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.manage_beneficiaries,current_options:"
+msgid "Options"
+msgstr "Garanties"
+
+msgctxt "field:contract.manage_beneficiaries,effective_date:"
+msgid "Effective Date"
+msgstr "Date d'effet"
+
+msgctxt "field:contract.manage_beneficiaries,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:contract.manage_beneficiaries,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:contract.manage_beneficiaries,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_beneficiaries,possible_contracts:"
+msgid "Possible Contracts"
+msgstr "Contrats disponibles"
+
+msgctxt "field:contract.manage_beneficiaries.beneficiary,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:contract.manage_beneficiaries.beneficiary,beneficiary:"
+msgid "Beneficiary"
+msgstr "Bénéficiaire"
+
+msgctxt "field:contract.manage_beneficiaries.beneficiary,beneficiary_id:"
+msgid "Beneficiary Id"
+msgstr "Id du bénéficiaire"
+
+msgctxt "field:contract.manage_beneficiaries.beneficiary,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_beneficiaries.beneficiary,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.manage_beneficiaries.option,beneficiaries:"
+msgid "Beneficiaries"
+msgstr "Bénéficiaires"
+
+msgctxt "field:contract.manage_beneficiaries.option,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.manage_beneficiaries.option,display_name:"
+msgid "Option"
+msgstr "Garantie"
+
+msgctxt "field:contract.manage_beneficiaries.option,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_beneficiaries.option,option_id:"
+msgid "Option"
+msgstr "Garantie"
+
+msgctxt "field:contract.manage_beneficiaries.option,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:contract.manage_beneficiaries.option,parent_name:"
+msgid "Parent"
+msgstr "Parent"
 
 msgctxt "field:endorsement.contract.beneficiary,action:"
 msgid "Action"
@@ -142,67 +222,6 @@ msgctxt "field:endorsement.contract.beneficiary.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:endorsement.contract.beneficiary.manage,effective_date:"
-msgid "Effective Date"
-msgstr "Date d'effet"
-
-msgctxt ""
-"field:endorsement.contract.beneficiary.manage,endorsement_definition:"
-msgid "Endorsement Definition"
-msgstr "Définition d'avenant"
-
-msgctxt "field:endorsement.contract.beneficiary.manage,endorsement_part:"
-msgid "Endorsement Part"
-msgstr "Avenant unitaire"
-
-msgctxt "field:endorsement.contract.beneficiary.manage,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:endorsement.contract.beneficiary.manage,options:"
-msgid "Options with Beneficiaries"
-msgstr "Garanties avec bénéficiaires"
-
-msgctxt "field:endorsement.contract.beneficiary.manage.option,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt ""
-"field:endorsement.contract.beneficiary.manage.option,covered_element:"
-msgid "Covered Element"
-msgstr "Risque Couvert"
-
-msgctxt ""
-"field:endorsement.contract.beneficiary.manage.option,covered_element_endorsement:"
-msgid "Covered Element"
-msgstr "Risque Couvert"
-
-msgctxt ""
-"field:endorsement.contract.beneficiary.manage.option,covered_element_name:"
-msgid "Covered Element"
-msgstr "Risque Couvert"
-
-msgctxt "field:endorsement.contract.beneficiary.manage.option,current_option:"
-msgid "Current Version"
-msgstr "Version courante"
-
-msgctxt "field:endorsement.contract.beneficiary.manage.option,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:endorsement.contract.beneficiary.manage.option,new_option:"
-msgid "New Version"
-msgstr "Nouvelle version"
-
-msgctxt ""
-"field:endorsement.contract.beneficiary.manage.option,option_endorsement:"
-msgid "Option Endorsement"
-msgstr "Avenant de modification de garantie"
-
-msgctxt "field:endorsement.contract.beneficiary.manage.option,option_name:"
-msgid "Option"
-msgstr "Option"
-
 msgctxt "field:endorsement.contract.covered_element.option,beneficiaries:"
 msgid "Beneficiary Endorsement"
 msgstr "Bénéficiaire"
@@ -210,6 +229,18 @@ msgstr "Bénéficiaire"
 msgctxt "field:endorsement.part,beneficiary_fields:"
 msgid "Beneficiary Fields"
 msgstr "Champs bénéficiaire"
+
+msgctxt "model:contract.manage_beneficiaries,name:"
+msgid "Manage Beneficiaries"
+msgstr "Gérer les bénéficiaires"
+
+msgctxt "model:contract.manage_beneficiaries.beneficiary,name:"
+msgid "Manage Beneficiaries Displayer"
+msgstr "Bénéficiaire"
+
+msgctxt "model:contract.manage_beneficiaries.option,name:"
+msgid "Manage Beneficiaries Option Displayer"
+msgstr "Garantie pour gestion des bénéficiaires"
 
 msgctxt "model:endorsement.contract.beneficiary,name:"
 msgid "Endorsement Beneficiary"
@@ -219,17 +250,21 @@ msgctxt "model:endorsement.contract.beneficiary.field,name:"
 msgid "Endorsement Beneficiary Field"
 msgstr "Champ bénéficiaire"
 
-msgctxt "model:endorsement.contract.beneficiary.manage,name:"
-msgid "Manage Beneficiaries"
-msgstr "Gestion des bénéficiaires"
-
-msgctxt "model:endorsement.contract.beneficiary.manage.option,name:"
-msgid "Option Beneficiary Displayer"
-msgstr "Présenteur de bénéficiaire"
-
 msgctxt "model:endorsement.part,name:change_beneficiary_revision_part"
 msgid "Change Beneficiaries"
 msgstr "Modifier les bénéficiaires"
+
+msgctxt "selection:contract.manage_beneficiaries.beneficiary,action:"
+msgid "Added"
+msgstr "Ajouté"
+
+msgctxt "selection:contract.manage_beneficiaries.beneficiary,action:"
+msgid "Modified"
+msgstr "Modifié"
+
+msgctxt "selection:contract.manage_beneficiaries.beneficiary,action:"
+msgid "Removed"
+msgstr "Retiré"
 
 msgctxt "selection:endorsement.contract.beneficiary,action:"
 msgid "Add"
@@ -243,6 +278,34 @@ msgctxt "selection:endorsement.contract.beneficiary,action:"
 msgid "Update"
 msgstr "Mise à jour"
 
+msgctxt "view:contract.manage_beneficiaries.beneficiary:"
+msgid "Beneficiaries"
+msgstr "Bénéficiaires"
+
+msgctxt "view:contract.manage_beneficiaries.beneficiary:"
+msgid "Beneficiary"
+msgstr "Bénéficiaire"
+
+msgctxt "view:contract.manage_beneficiaries.option:"
+msgid "Option"
+msgstr "Garantie"
+
+msgctxt "view:contract.manage_beneficiaries.option:"
+msgid "Options"
+msgstr "Garanties"
+
+msgctxt "view:contract.manage_beneficiaries:"
+msgid "Manage Beneficiaries"
+msgstr "Gérer les bénéficiaires"
+
+msgctxt "view:contract.option.beneficiary:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:contract.option.beneficiary:"
+msgid "Beneficiary"
+msgstr "Bénéficiaire"
+
 msgctxt "view:contract.option:"
 msgid "Option Beneficiary"
 msgstr "Bénéficiaire"
@@ -254,18 +317,6 @@ msgstr "Champ du bénéficiaire"
 msgctxt "view:endorsement.contract.beneficiary.field:"
 msgid "Endorsement Fields"
 msgstr "Champs des bénéficiaire"
-
-msgctxt "view:endorsement.contract.beneficiary.manage.option:"
-msgid "Option"
-msgstr "Option"
-
-msgctxt "view:endorsement.contract.beneficiary.manage.option:"
-msgid "Options"
-msgstr "Options"
-
-msgctxt "view:endorsement.contract.beneficiary.manage:"
-msgid "Manage Beneficiaries"
-msgstr "Gestion des bénéficiaires"
 
 msgctxt "view:endorsement.contract.beneficiary:"
 msgid "Endorsement Beneficiary"

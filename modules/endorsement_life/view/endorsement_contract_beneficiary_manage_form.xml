@@ -1,10 +1,15 @@
 <?xml version="1.0"?>
 <form string="Manage Beneficiaries">
-    <group id="one_option" yexpand="1" yfill="1">
-        <field name="options" expand_toolbar="0" mode="form"/>
+    <label name="contract"/>
+    <field name="contract" colspan="3"/>
+    <group id="options" string="" colspan="4" col="2" yexpand="1" yfill="1">
+        <field name="current_options" group="options" mode="tree" expand_toolbar="0"/>
+        <field name="current_options" group="options" mode="form" expand_toolbar="0"/>
     </group>
-    <group id="multiple_options" yexpand="1" yfill="1">
-        <field name="options" mode="tree,form"/>
+    <group id="invisible" string="">
+        <field name="endorsement_definition"/>
+        <field name="possible_contracts"/>
+        <field name="all_options"/>
+        <field name="effective_date"/>
     </group>
-    <field name="endorsement_part"/>
 </form>

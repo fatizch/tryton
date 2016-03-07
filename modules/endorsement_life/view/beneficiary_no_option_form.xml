@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<form string="Beneficiary" col="2">
+    <label name="accepting"/>
+    <field name="accepting"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="address"/>
+    <field name="address"/>
+    <label name="reference"/>
+    <field name="reference"/>
+    <label name="share"/>
+    <group id="share">
+        <field name="share" factor="100" xexpand="0"/>
+        <label name="share" string="%" xalign="0.0" xexpand="1"/>
+    </group>
+</form>

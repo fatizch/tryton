@@ -1,245 +1,307 @@
-from trytond.pyson import Eval, Len
+from collections import defaultdict
+
+from trytond.pyson import Eval, Len, If
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.cog_utils import model, fields, utils
 from trytond.modules.endorsement import (EndorsementWizardStepMixin,
     add_endorsement_step)
 
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'OptionBeneficiaryDisplayer',
     'ManageBeneficiaries',
+    'ManageBeneficiariesOptionDisplayer',
+    'ManageBeneficiariesDisplayer',
     'StartEndorsement',
     ]
-
-
-class OptionBeneficiaryDisplayer(model.CoopView):
-    'Option Beneficiary Displayer'
-
-    __name__ = 'endorsement.contract.beneficiary.manage.option'
-
-    contract = fields.Many2One('contract', 'Contract', readonly=True)
-    covered_element = fields.Many2One('contract.covered_element',
-        'Covered Element', readonly=True)
-    covered_element_endorsement = fields.Many2One(
-        'endorsement.contract.covered_element', 'Covered Element',
-        readonly=True)
-    covered_element_name = fields.Char('Covered Element', readonly=True)
-    option_endorsement = fields.Many2One(
-        'endorsement.contract.covered_element.option', 'Option Endorsement',
-        readonly=True)
-    option_name = fields.Char('Option', readonly=True)
-    current_option = fields.One2Many('contract.option', None,
-        'Current Version', readonly=True)
-    new_option = fields.One2Many('contract.option', None, 'New Version')
 
 
 class ManageBeneficiaries(EndorsementWizardStepMixin):
     'Manage Beneficiaries'
 
-    __name__ = 'endorsement.contract.beneficiary.manage'
+    __name__ = 'contract.manage_beneficiaries'
 
-    options = fields.One2Many('endorsement.contract.beneficiary.manage.option',
-        None, 'Options with Beneficiaries')
+    contract = fields.Many2One('endorsement.contract', 'Contract',
+        domain=[('id', 'in', Eval('possible_contracts', []))],
+        states={'invisible': Len(Eval('possible_contracts', [])) <= 1},
+        depends=['possible_contracts'])
+    possible_contracts = fields.Many2Many('endorsement.contract', None, None,
+        'Possible Contracts')
+    current_options = fields.One2Many('contract.manage_beneficiaries.option',
+        None, 'Options')
+    all_options = fields.One2Many('contract.manage_beneficiaries.option',
+        None, 'Options')
 
     @classmethod
     def view_attributes(cls):
         return super(ManageBeneficiaries, cls).view_attributes() + [
-            ('/form/group[@id="one_option"]', 'states',
-                {'invisible': Len(Eval('options', [])) != 1}),
-            ('/form/group[@id="multiple_options"]', 'states',
-                {'invisible': Len(Eval('options', [])) == 1}),
+            ('/form/group[@id="invisible"]', 'states',
+                {'invisible': True}),
             ]
 
     @classmethod
     def state_view_name(cls):
-        return 'endorsement_life.' \
+        return 'endorsement_life.' + \
             'endorsement_contract_beneficiary_manage_view_form'
 
-    @staticmethod
-    def update_dict(to_update, key, value):
-        # TODO : find a cleaner endorsement class detection
-        to_update[key] = to_update[key + '_endorsement'] = None
-        if hasattr(value, 'get_endorsed_record'):
-            to_update[key + '_endorsement'] = value.id
-            to_update[key] = value.relation
-        else:
-            to_update[key] = value.id
-        to_update[key + '_name'] = value.rec_name
+    @fields.depends('all_options', 'contract', 'current_options')
+    def on_change_contract(self):
+        self.update_all_options()
+        self.update_current_options()
 
-    @classmethod
-    def _option_fields_to_extract(cls):
-        return {
-            'contract.option': ['coverage', 'has_beneficiary_clause',
-                'beneficiary_clause', 'beneficiaries',
-                'customized_beneficiary_clause', 'contract_status'],
-            'contract.option.beneficiary': ['accepting', 'party', 'address',
-                'reference', 'share', 'rec_name'],
-            }
-
-    @classmethod
-    def create_displayer(cls, option, template):
-        pool = Pool()
-        Option = pool.get('contract.option')
-        Beneficiary = pool.get('contract.option.beneficiary')
-        displayer = template.copy()
-        if option.__name__ == 'endorsement.contract.covered_element.option':
-            displayer['option_endorsement'] = option.id
-            if option.action == 'add':
-                instance = Option(**option.values)
-                displayer['current_option'] = []
-            elif option.action == 'update':
-                instance = option.option
-                displayer['current_option'] = [instance.id]
-                for fname, fvalue in option.values.iteritems():
-                    setattr(instance, fname, fvalue)
-            elif option.action == 'remove':
-                return
-            if option.beneficiaries:
-                old_beneficiaries = list(instance.beneficiaries)
-                instance.beneficiaries = []
-                for beneficiary in option.beneficiaries:
-                    if beneficiary.action == 'add':
-                        instance.beneficiaries = list(
-                            instance.beneficiaries) + [Beneficiary(
-                                **beneficiary.values)]
-                    elif beneficiary.action == 'remove':
-                        old_beneficiaries.remove(beneficiary.beneficiary)
-                    else:
-                        old_beneficiaries.remove(beneficiary.beneficiary)
-                        instance.beneficiaries = list(instance.beneficiaries) +\
-                            [beneficiary.beneficiary]
-                        for k, v in beneficiary.values.iteritems():
-                            setattr(beneficiary.beneficiary, k, v)
-        else:
-            instance = option
-            displayer['current_option'] = [option.id]
-            displayer['option_endorsement'] = None
-        if not instance.on_change_with_has_beneficiary_clause():
+    def update_all_options(self):
+        if not self.current_options:
             return
-        displayer['option_name'] = instance.get_rec_name(None)
-        # Make sure the instance will be editable
-        instance.contract_status = 'quote'
-        displayer['new_option'] = [model.dictionarize(instance,
-                cls._option_fields_to_extract())]
-        displayer['new_option'][0]['rec_name'] = instance.rec_name
-        return displayer
+        new_options = list(self.current_options)
+        for option in self.all_options:
+            if option.contract == new_options[0].contract:
+                continue
+            new_options.append(option)
+        self.all_options = new_options
+
+    def update_current_options(self):
+        new_options = []
+        for option in self.all_options:
+            if option.contract == self.contract.id:
+                new_options.append(option)
+        self.current_options = new_options
 
     def step_default(self, name):
         defaults = super(ManageBeneficiaries, self).step_default()
-        contracts = self._get_contracts()
-        displayers, template = [], {}
-        for contract_id, endorsement in contracts.iteritems():
-            updated_struct = endorsement.updated_struct
-            template['contract'] = endorsement.contract.id
-            for covered_element, values in (
-                    updated_struct['covered_elements'].iteritems()):
-                self.update_dict(template, 'covered_element', covered_element)
-                for option, o_values in values['options'].iteritems():
-                    new_displayer = self.create_displayer(option, template)
-                    if new_displayer:
-                        displayers.append(new_displayer)
-        defaults['options'] = displayers
+        possible_contracts = self.wizard.endorsement.contract_endorsements
+        defaults['possible_contracts'] = [x.id for x in possible_contracts]
+        per_contract = {x: self.get_updated_options_from_contract(x)
+            for x in possible_contracts}
+
+        all_options = []
+        for contract, options in per_contract.iteritems():
+            all_options += self.generate_displayers(contract, options)
+        defaults['all_options'] = [model.serialize_this(x)
+            for x in all_options]
+        if defaults['possible_contracts']:
+            defaults['contract'] = defaults['possible_contracts'][0]
         return defaults
 
     def step_update(self):
-        contracts = self._get_contracts()
+        EndorsementContract = Pool().get('endorsement.contract')
+        self.update_all_options()
+        endorsement = self.wizard.endorsement
+        per_contract = defaultdict(list)
+        for option in self.all_options:
+            per_contract[EndorsementContract(option.contract)].append(option)
+
+        for contract, options in per_contract.iteritems():
+            utils.apply_dict(contract.contract,
+                contract.apply_values())
+            self.update_endorsed_options(contract, options)
+            for covered_element in contract.contract.covered_elements:
+                covered_element.options = list(covered_element.options)
+            contract.contract.covered_elements = list(
+                contract.contract.covered_elements)
+
+        new_endorsements = []
+        for contract_endorsement in per_contract.keys():
+            self._update_endorsement(contract_endorsement,
+                contract_endorsement.contract._save_values)
+            if not contract_endorsement.clean_up():
+                new_endorsements.append(contract_endorsement)
+        endorsement.contract_endorsements = new_endorsements
+        endorsement.save()
+
+    def update_endorsed_options(self, contract_endorsement, options):
         pool = Pool()
-        CoveredElementEndorsement = pool.get(
-            'endorsement.contract.covered_element')
-        OptionEndorsement = pool.get(
-            'endorsement.contract.covered_element.option')
-        BeneficiaryEndorsement = pool.get(
-            'endorsement.contract.beneficiary')
-        fields_to_extract = self._option_fields_to_extract()
-        new_covered_elements, new_options, to_create = {}, {}, []
-        for elem in self.options:
-            cur_option = None
-            if elem.current_option:
-                cur_option = elem.current_option[0]
-            new_values = model.dictionarize(elem.new_option[0],
-                fields_to_extract)
-            new_values.pop('contract_status', None)
-            beneficiary_values = {x['party'] or x['reference']: x
-                for x in new_values.pop('beneficiaries', [])}
-            if not (elem.option_endorsement or cur_option.id in new_options):
-                option_endorsement = OptionEndorsement(action='update',
-                    option=cur_option.id, beneficiaries=[], values={})
-                new_options[cur_option.id] = option_endorsement
-                if not(elem.covered_element_endorsement or
-                        elem.covered_element.id in new_covered_elements):
-                    ce_endorsement = CoveredElementEndorsement(action='update',
-                        options=[option_endorsement],
-                        relation=elem.covered_element.id)
-                    ctr_endorsement = contracts[elem.contract.id]
-                    if not ctr_endorsement.id:
-                        ctr_endorsement.covered_elements = list(
-                            ctr_endorsement.covered_elements) + [
-                                ce_endorsement]
-                    else:
-                        ce_endorsement.contract_endorsement = \
-                            ctr_endorsement.id
-                    new_covered_elements[elem.covered_element.id] = \
-                        ce_endorsement
-                else:
-                    ce_endorsement = (elem.covered_element_endorsement or
-                        new_covered_elements[elem.covered_element.id])
-                    if ce_endorsement.id:
-                        option_endorsement.covered_element_endorsement = \
-                            ce_endorsement.id
-                    else:
-                        ce_endorsement.options = list(
-                            ce_endorsement.options) + [option_endorsement]
+        Option = pool.get('contract.option')
+        Displayer = pool.get('contract.manage_beneficiaries.option')
+        per_key = {Displayer.get_parent_key(x): x
+            for covered in contract_endorsement.contract.covered_elements
+            for x in covered.options}
+        for option in options:
+            patched_option = per_key[option.parent]
+            if option.option_id:
+                old_beneficiaries = {x.id: x
+                    for x in Option(option.option_id).beneficiaries}
             else:
-                option_endorsement = (elem.option_endorsement or
-                    new_options[cur_option.id])
-            option_endorsement.values.update(new_values)
-            if cur_option is None:
-                option_endorsement.beneficiaries = [
-                    BeneficiaryEndorsement(**benef_values)
-                    for benef_values in beneficiary_values.itervalues()]
+                old_beneficiaries = {}
+            beneficiaries = []
+            for displayer in option.beneficiaries:
+                if displayer.action in ('nothing', 'modified'):
+                    # Same behaviour for both cases since we need to rewrite
+                    # the 'nothing' displayer in case they were previously
+                    # modified
+                    to_modify = old_beneficiaries[displayer.beneficiary_id]
+                    for fname in Displayer.get_beneficiary_fields():
+                        old_value = getattr(to_modify, fname, None)
+                        new_value = getattr(displayer.beneficiary[0], fname,
+                            None)
+                        if old_value != new_value:
+                            setattr(to_modify, fname, new_value)
+                    beneficiaries.append(to_modify)
+                elif displayer.action == 'added':
+                    beneficiaries.append(displayer.beneficiary[0])
+
+            patched_option.beneficiaries = beneficiaries
+
+    def get_updated_options_from_contract(self, contract_endorsement):
+        contract = contract_endorsement.contract
+        utils.apply_dict(contract, contract_endorsement.apply_values())
+        return self.get_contract_options(contract)
+
+    def get_contract_options(self, contract):
+        return [x for covered in contract.covered_elements
+            for x in covered.options]
+
+    def generate_displayers(self, contract_endorsement, options):
+        pool = Pool()
+        Option = pool.get('contract.manage_beneficiaries.option')
+        all_options = []
+        for option in options:
+            displayer = Option.new_displayer(option)
+            displayer.contract = contract_endorsement.id
+            all_options.append(displayer)
+        return all_options
+
+
+class ManageBeneficiariesOptionDisplayer(model.CoopView):
+    'Manage Beneficiaries Option Displayer'
+
+    __name__ = 'contract.manage_beneficiaries.option'
+
+    parent_name = fields.Char('Parent', readonly=True)
+    parent = fields.Char('Parent', readonly=True)
+    contract = fields.Integer('Contract', readonly=True)
+    option_id = fields.Integer('Option', readonly=True)
+    display_name = fields.Char('Option', readonly=True)
+    beneficiaries = fields.One2Many(
+        'contract.manage_beneficiaries.beneficiary', None, 'Beneficiaries')
+
+    @classmethod
+    def new_displayer(cls, option):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        Beneficiary = pool.get('contract.manage_beneficiaries.beneficiary')
+        displayer = cls()
+        displayer.parent_name = (option.covered_element
+            or option.contract).rec_name
+        displayer.parent = cls.get_parent_key(option)
+        displayer.option_id = getattr(option, 'id', None)
+        displayer.display_name = option.get_rec_name(None)
+
+        beneficiaries = []
+        if displayer.option_id:
+            old_option = Option(displayer.option_id)
+            existing_beneficiaries = {x.id: x
+                for x in old_option.beneficiaries}
+        else:
+            existing_beneficiaries = {}
+        for beneficiary in getattr(option, 'beneficiaries', []):
+            new_displayer = Beneficiary.init_from_beneficiary(beneficiary)
+            if new_displayer.beneficiary_id:
+                existing_beneficiaries.pop(new_displayer.beneficiary_id)
+            beneficiaries.append(new_displayer)
+        for removed in existing_beneficiaries.values():
+            new_displayer = Beneficiary.init_from_beneficiary(removed)
+            new_displayer.action = 'removed'
+            beneficiaries.append(new_displayer)
+        displayer.beneficiaries = beneficiaries
+        return displayer
+
+    @classmethod
+    def get_parent_key(cls, option):
+        if option.id:
+            return str(option)
+        if option.covered_element:
+            return str(option.covered_element.party)
+        if option.contract:
+            return str(option.contract)
+        raise NotImplementedError
+
+    @classmethod
+    def get_beneficiary_fields(cls):
+        return ('accepting', 'address', 'party', 'reference', 'share')
+
+
+class ManageBeneficiariesDisplayer(model.CoopView):
+    'Manage Beneficiaries Displayer'
+
+    __name__ = 'contract.manage_beneficiaries.beneficiary'
+
+    beneficiary = fields.One2Many('contract.option.beneficiary', None,
+        'Beneficiary', states={'readonly': Eval('action', '') == 'removed'})
+    beneficiary_id = fields.Integer('Beneficiary Id', readonly=True)
+    name = fields.Char('Name', readonly=True)
+    action = fields.Selection([('nothing', ''), ('removed', 'Removed'),
+        ('modified', 'Modified'), ('added', 'Added')], 'Action',
+        domain=[If(Eval('action') == 'modified',
+                ('action', 'in', ('modified', 'nothing')),
+                If(Eval('action') == 'added',
+                    ('action', 'in', ('added', 'removed')),
+                    ('action', 'in', ('removed', 'nothing'))))],
+        depends=['action'])
+
+    @classmethod
+    def default_action(cls):
+        return 'added'
+
+    @classmethod
+    def default_beneficiary(cls):
+        return [{}]
+
+    @fields.depends('action', 'beneficiary', 'beneficiary_id', 'name')
+    def on_change_action(self):
+        pool = Pool()
+        Beneficiary = pool.get('contract.option.beneficiary')
+        OptionDisplayer = pool.get('contract.manage_beneficiaries.option')
+        if self.beneficiary_id and self.action == 'nothing':
+            old_version = Beneficiary(self.beneficiary_id)
+            for fname in OptionDisplayer.get_beneficiary_fields():
+                setattr(self.beneficiary[0], fname,
+                    getattr(old_version, fname))
+            self.beneficiary = list(self.beneficiary)
+            self.name = self.beneficiary[0].on_change_with_rec_name()
+
+    @fields.depends('action', 'beneficiary', 'beneficiary_id', 'name')
+    def on_change_beneficiary(self):
+        self.name = self.beneficiary[0].on_change_with_rec_name()
+        if not self.beneficiary_id or self.action == 'removed':
+            return
+        if self.value_changed():
+            self.action = 'modified'
+        else:
+            self.action = 'nothing'
+
+    def value_changed(self):
+        pool = Pool()
+        Beneficiary = pool.get('contract.option.beneficiary')
+        OptionDisplayer = pool.get('contract.manage_beneficiaries.option')
+        old_version = Beneficiary(self.beneficiary_id)
+        for fname in OptionDisplayer.get_beneficiary_fields():
+            old_value = getattr(old_version, fname, None)
+            new_value = getattr(self.beneficiary[0], fname, None)
+            if old_value != new_value:
+                return True
+        return False
+
+    @classmethod
+    def init_from_beneficiary(cls, beneficiary):
+        pool = Pool()
+        Beneficiary = pool.get('contract.option.beneficiary')
+        OptionDisplayer = pool.get('contract.manage_beneficiaries.option')
+        new_displayer = cls()
+        new_displayer.beneficiary_id = getattr(beneficiary, 'id', None)
+        fake_beneficiary = Beneficiary()
+        for fname in OptionDisplayer.get_beneficiary_fields():
+            setattr(fake_beneficiary, fname, getattr(beneficiary, fname, None))
+        new_displayer.name = fake_beneficiary.on_change_with_rec_name()
+        new_displayer.beneficiary = [fake_beneficiary]
+        if new_displayer.beneficiary_id is None:
+            new_displayer.action = 'added'
+        else:
+            if beneficiary._save_values:
+                new_displayer.action = 'modified'
             else:
-                current_beneficiaries = {
-                    x.party.id if x.party else x.reference: x
-                    for x in cur_option.beneficiaries}
-                deleted = set(current_beneficiaries.keys()) - set(
-                    beneficiary_values.keys())
-                modified = set(current_beneficiaries.keys()) & set(
-                    beneficiary_values.keys())
-                created = set(beneficiary_values.keys()) - modified
-                benef_endorsements = [BeneficiaryEndorsement(
-                        action='remove', relation=current_beneficiaries[x].id)
-                    for x in deleted] + [BeneficiaryEndorsement(
-                        action='add', values=beneficiary_values[x])
-                    for x in created]
-                for party_id in modified:
-                    beneficiary_instance = current_beneficiaries[party_id]
-                    for k, v in beneficiary_values[party_id].iteritems():
-                        setattr(beneficiary_instance, k, v)
-                    update_values = beneficiary_instance._save_values
-                    if update_values:
-                        benef_endorsements.append(BeneficiaryEndorsement(
-                                action='update',
-                                relation=beneficiary_instance.id,
-                                values=update_values))
-                if option_endorsement.id:
-                    [setattr(x, 'covered_option_endorsement',
-                            option_endorsement.id)
-                        for x in benef_endorsements]
-                    to_create += benef_endorsements
-                else:
-                    option_endorsement.beneficiaries = benef_endorsements
-        if to_create:
-            BeneficiaryEndorsement.create([x._save_values for x in to_create])
-        if new_options:
-            OptionEndorsement.create([x._save_values
-                    for x in new_options.itervalues()
-                    if getattr(x, 'covered_element_endorsement', None)])
-        if new_covered_elements:
-            CoveredElementEndorsement.create([x._save_values
-                    for x in new_covered_elements.itervalues()
-                    if getattr(x, 'contract_endorsement', None)])
+                new_displayer.action = 'nothing'
+        return new_displayer
 
 
 class StartEndorsement:

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<form string="Beneficiary">
+    <field name="beneficiary" mode="form" view_ids="endorsement_life.beneficiary_no_option_view_form" expand_toolbar="0"/>
+</form>

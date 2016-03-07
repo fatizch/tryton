@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <tree string="Options">
-    <field name="covered_element_name"/>
-    <field name="option_name"/>
+    <field name="parent_name" expand="1"/>
+    <field name="display_name" expand="1"/>
     <field name="contract" tree_invisible="1"/>
-    <field name="covered_element" tree_invisible="1"/>
-    <field name="covered_element_endorsement" tree_invisible="1"/>
-    <field name="option_endorsement" tree_invisible="1"/>
+    <field name="parent" tree_invisible="1"/>
+    <field name="option_id" tree_invisible="1"/>
 </tree>

@@ -160,3 +160,7 @@ class EndorsementBeneficiary(relation_mixin(
     @classmethod
     def updated_struct(cls, beneficiary):
         return {}
+
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return {'option'}

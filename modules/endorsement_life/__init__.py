@@ -12,8 +12,9 @@ def register():
         EndorsementContract,
         EndorsementCoveredElementOption,
         EndorsementBeneficiary,
-        OptionBeneficiaryDisplayer,
         ManageBeneficiaries,
+        ManageBeneficiariesOptionDisplayer,
+        ManageBeneficiariesDisplayer,
         module='endorsement_life', type_='model')
 
     Pool.register(
