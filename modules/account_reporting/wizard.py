@@ -65,7 +65,7 @@ class PrintMoveLineAggregatedReport(Wizard):
             'start_date': self.start.start_date,
             'end_date': self.start.end_date,
             'account': self.start.account.id,
-            'product_codes': [p.code for p in self.start.products],
+            'product_ids': [p.id for p in self.start.products],
             }
         return action, data
 
@@ -84,7 +84,7 @@ class MoveLineAggregatedReport(Report):
         records = []
         all_dates = [coop_date.add_month(start_date, n)
             for n in range(coop_date.number_of_months_between(
-                start_date, end_date) + 1)]
+                    start_date, end_date) + 1)]
         month_sum = {month(m): 0 for m in all_dates}
         # Workaround 'Incoherent column repetition found' error that occurs at
         # document generation  when trying to create header row "properly",
@@ -98,9 +98,9 @@ class MoveLineAggregatedReport(Report):
                 })
         for product, _recs in groupby(records_src,
                 key=lambda rec: rec['product']):
-            recs = sorted(list(_recs), key=lambda x: x['month'])
+            recs = sorted(list(_recs), key=lambda x: x['_month'])
             for r in recs:
-                month_sum[month(r['month'])] += r['amount']
+                month_sum[month(r['_month'])] += r['amount']
             records.append({
                     'product': product,
                     'total': sum([r['amount'] for r in recs]),
@@ -111,8 +111,8 @@ class MoveLineAggregatedReport(Report):
             recs = prod_rec['by_month'][:]
             all_recs = []
             for d in all_dates:
-                if not recs or month(d) != month(recs[0]['month']):
-                    all_recs.append({'amount': 0, 'month': d})
+                if not recs or month(d) != month(recs[0]['_month']):
+                    all_recs.append({'amount': 0, '_month': d})
                 else:
                     all_recs.append(recs.pop(0))
             prod_rec['by_month'] = all_recs
@@ -126,36 +126,79 @@ class MoveLineAggregatedReport(Report):
         return records
 
     @classmethod
-    def aggregated_move_lines(cls, product_codes, start_date, end_date):
+    def get_query_table(cls):
         pool = Pool()
         account_move_line = pool.get('account.move.line').__table__()
         account_move = pool.get('account.move').__table__()
         contract = pool.get('contract').__table__()
         product = pool.get('offered.product').__table__()
-        query = account_move_line.join(contract, condition=(
-                account_move_line.contract == contract.id)
+        account = pool.get('account.account').__table__()
+        invoice = pool.get('account.invoice').__table__()
+        contract_invoice = pool.get('contract.invoice').__table__()
+
+        # TODO: perfs
+        query = invoice.join(contract_invoice, condition=(
+                 invoice.id == contract_invoice.invoice)
+            ).join(contract, condition=(
+                contract_invoice.contract == contract.id)
             ).join(product, condition=(
                 contract.product == product.id)
+            ).join(account, condition=(
+                account.id == invoice.account)
+            ).join(account_move_line, condition=(
+                contract.id == account_move_line.contract)
             ).join(account_move, condition=(
                 account_move_line.move == account_move.id)
             )
+
+        return query, {
+            'account.move.line': account_move_line,
+            'account.move': account_move,
+            'contract': contract,
+            'product': product,
+            'invoice': invoice,
+            'account': account,
+            }
+
+    @classmethod
+    def get_where_clause(cls, tables, values):
+        product_ids = values.get('product_ids', None)
+        where_clause = (tables['account.move'].state == values.get('state'))
+        if product_ids:
+            where_clause &= tables['product'].id.in_(product_ids)
+        return where_clause
+
+    @classmethod
+    def get_columns(cls, tables):
+        account_move_line = tables['account.move.line']
+        product = tables['product']
+        invoice = tables['invoice']
         columns = [
             Sum(Coalesce(account_move_line.credit, 0) -
                 Coalesce(account_move_line.debit, 0)).as_('amount'),
             product.name.as_('product'),
-            DateTrunc('month', account_move.date).as_('month'),
-        ]
-        where_clause = (
-            (account_move.state == 'posted') &
-            (account_move.date >= start_date) &
-            (account_move.date <= end_date))
-        if product_codes:
-            where_clause &= (product.code.in_(product_codes))
+            DateTrunc('month', invoice.create_date).as_('_month'),
+            ]
+        return columns
+
+    @classmethod
+    def get_group_by(cls, tables):
+        return [tables['product'].name,
+            DateTrunc('month', tables['invoice'].create_date)]
+
+    @classmethod
+    def aggregated_move_lines(cls, **kwargs):
+        query, tables = cls.get_query_table()
+        product = tables['product']
+        columns = cls.get_columns(tables)
+        where_clause = cls.get_where_clause(tables, {
+                'product_ids': kwargs.get('product_ids'),
+                'state': 'posted',
+                })
         cursor = Transaction().cursor
         cursor.execute(*query.select(*columns,
                 where=where_clause,
-                group_by=(product.name,
-                    DateTrunc('month', account_move.date)),
+                group_by=cls.get_group_by(tables),
                 order_by=(product.name)))
         return cursor.dictfetchall()
 
@@ -164,8 +207,7 @@ class MoveLineAggregatedReport(Report):
         report_context = super(MoveLineAggregatedReport,
             cls).get_context(records, data)
         Company = Pool().get('company.company')
-        records = cls.aggregated_move_lines(data['product_codes'],
-            data['start_date'], data['end_date'])
+        records = cls.aggregated_move_lines(**data)
         report_context['records'] = cls.format_records(records,
             data['start_date'], data['end_date'])
         report_context['company'] = Company(data['company'])
