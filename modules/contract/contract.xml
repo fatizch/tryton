@@ -22,6 +22,11 @@
             <field name="type">tree</field>
             <field name="name">contract_tree</field>
         </record>
+        <record model="ir.ui.view" id="quote_view_list">
+            <field name="model">contract</field>
+            <field name="type">tree</field>
+            <field name="name">quote_tree</field>
+        </record>
         <record model="ir.ui.view" id="contract_view_form">
             <field name="model">contract</field>
             <field name="type">form</field>
@@ -39,10 +44,11 @@
         <!-- ############################################################ -->
         <!-- ########### Contract ########### -->
         <!-- ############################################################ -->
+        <!-- Contract Entry Point-->
         <record model="ir.action.act_window" id="act_contract_form">
             <field name="name">Contracts</field>
             <field name="res_model">contract</field>
-            <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', -1))]" pyson="1"/>
+            <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', -1)),(('status', '!=', 'quote'))]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_contract_form_view1">
             <field name="sequence" eval="10"/>
@@ -52,12 +58,6 @@
         <record model="ir.action.act_window.view" id="act_contract_form_view2">
             <field name="sequence" eval="20"/>
             <field name="view" ref="contract_view_form"/>
-            <field name="act_window" ref="act_contract_form"/>
-        </record>
-        <record model="ir.action.act_window.domain" id="act_contract_domain_quote">
-            <field name="name">Quote</field>
-            <field name="sequence" eval="10"/>
-            <field name="domain" eval="[('status', '=', 'quote')]" pyson="1"/>
             <field name="act_window" ref="act_contract_form"/>
         </record>
         <record model="ir.action.act_window.domain" id="act_contract_domain_active">
@@ -83,6 +83,34 @@
             <field name="sequence" eval="50"/>
             <field name="domain" eval="['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]" pyson="1"/>
             <field name="act_window" ref="act_contract_form"/>
+        </record>
+        <!-- Quote Entry Point -->
+        <record model="ir.action.act_window" id="act_quote_form">
+            <field name="name">Quotes</field>
+            <field name="res_model">contract</field>
+            <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', -1)),(('status', '=', 'quote'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_quote_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="quote_view_list"/>
+            <field name="act_window" ref="act_quote_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_quote_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="contract_view_form"/>
+            <field name="act_window" ref="act_quote_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_quote_domain_all">
+            <field name="name">Quote</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain" eval="[]" pyson="1"/>
+            <field name="act_window" ref="act_quote_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_quote_domain_recent">
+            <field name="name">Recent</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]" pyson="1"/>
+            <field name="act_window" ref="act_quote_form"/>
         </record>
         <!-- ############################ -->
         <!-- # Contract Select End Date # -->
@@ -133,6 +161,7 @@
         <!-- ########### Menu ########### -->
         <!-- ############################################################ -->
         <menuitem name="Contract" id="menu_contract" sequence="10" icon="contract"/>
+        <menuitem parent="contract.menu_contract" sequence="19" id="menu_quote_form" icon="contract" action="act_quote_form"/>
         <menuitem parent="menu_contract" sequence="20" id="menu_contract_form" icon="contract" action="act_contract_form"/>
         <menuitem name="Batch" parent="menu_contract" sequence="99" id="menu_contract_batch" icon="batch"/>
         <!--################################################################ -->

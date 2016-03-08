@@ -103,6 +103,9 @@ class ProcessFramework(ModelView):
     task_name = fields.Function(
         fields.Char('Task Name'),
         'get_task_name')
+    task_status = fields.Function(
+        fields.Char('Task Status'),
+        'get_task_status', searcher='search_task_status')
 
     @classmethod
     def _export_light(cls):
@@ -240,6 +243,48 @@ class ProcessFramework(ModelView):
         elif hasattr(self, 'get_synthesis_rec_name'):
             return self.get_synthesis_rec_name(name)
         return self.rec_name
+
+    def get_task_status(self, name=None):
+        if self.current_state and self.current_state.status:
+            return self.current_state.status.rec_name
+
+    @classmethod
+    def search_task_status(cls, name, clause):
+        if clause[1] in ['=', 'ilike']:
+            status = clause[2]
+            return [('current_state.status.name', clause[1], status)]
+        elif clause[1] == 'in':
+            statuses = clause[2]
+            clause = ['OR']
+            for status in statuses:
+                clause[0].append([('current_state.status.name', '=', status)])
+            return clause
+        else:
+            raise NotImplementedError
+
+    @staticmethod
+    def order_task_status(tables):
+        task_status_order = tables.get('process.status')
+        if task_status_order:
+            return [task_status_order[None][0].name]
+        pool = Pool()
+        table, _ = tables[None]
+        contract = tables.get('contract')
+        if contract is None:
+            contract = pool.get('contract').__table__()
+        step_relation = pool.get('process-process.step').__table__()
+        status_relation = pool.get('process.status').__table__()
+        query_table_1 = contract.join(step_relation, condition=(
+                contract.current_state == step_relation.id)).select(
+            contract.id.as_('contract'), step_relation.status.as_('status'))
+        query_table = query_table_1.join(status_relation, condition=(
+                query_table_1.status == status_relation.id)).select(
+            status_relation.name.as_('status_name'), query_table_1.contract)
+        tables['process.status'] = {
+            None: (query_table,
+                (query_table.contract == table.id)
+                )}
+        return [query_table.status_name]
 
     def button_is_active(self, button_name):
         good_button = self._buttons[button_name]

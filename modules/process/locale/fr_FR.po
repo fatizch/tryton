@@ -346,6 +346,10 @@ msgctxt "field:process.process_framework,task_name:"
 msgid "Task Name"
 msgstr "Nom de la tâche"
 
+msgctxt "field:process.process_framework,task_status:"
+msgid "Task Status"
+msgstr "Statut du processus"
+
 msgctxt "field:process.status,code:"
 msgid "Code"
 msgstr "Code"
@@ -733,46 +737,6 @@ msgstr "Exécuter entre les Etapes"
 msgctxt "selection:process.transition,method_kind:"
 msgid "Replace Step Methods"
 msgstr "Remplacer les Méthodes de l'Etape"
-
-msgctxt "view:contract:"
-msgid "Change start date"
-msgstr "Modifier la date d'effet"
-
-msgctxt "view:contract:"
-msgid "Complementary Data"
-msgstr "Données complémentaires"
-
-msgctxt "view:contract:"
-msgid "Complete"
-msgstr "Terminer"
-
-msgctxt "view:contract:"
-msgid "Covered Elements"
-msgstr "Risques Couverts"
-
-msgctxt "view:contract:"
-msgid "Invoicing"
-msgstr "Quittancement"
-
-msgctxt "view:contract:"
-msgid "Next (_k)"
-msgstr "Suivant (_k)"
-
-msgctxt "view:contract:"
-msgid "Previous  (_j)"
-msgstr "Précédent (_j)"
-
-msgctxt "view:contract:"
-msgid "The current record completed the current process, please go ahead"
-msgstr "Processus Terminé. Commencez une nouvelle tâche"
-
-msgctxt "view:contract:"
-msgid "Validation RIC"
-msgstr "Validation RIC"
-
-msgctxt "view:contract:"
-msgid "Validation du contrat"
-msgstr "Validation du contrat"
 
 msgctxt "view:endorsement:"
 msgid "The current record completed the current process, please go ahead"
