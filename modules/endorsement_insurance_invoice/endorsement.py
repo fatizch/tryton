@@ -179,9 +179,10 @@ class EndorsementContract:
                 'contract.billing_information', previous_billing_information)
             for billing_information in self.billing_informations]
         if billing_summary:
-            result[2] += ['billing_change_section', '%s :'
-                % self.raise_user_error('mes_billing_modifications',
-                    raise_exception=False), billing_summary]
+            result[1].append(['%s :' % self.raise_user_error(
+                   'mes_billing_modifications',
+                    raise_exception=False),
+                billing_summary])
         return result
 
     @classmethod

@@ -386,9 +386,9 @@ class EndorsementContract:
         contract_loans_summary = [x.get_diff('contract-loan',
                 x.contract_loan) for x in self.ordered_loans]
         if contract_loans_summary:
-            result[2] += ['contract_loan_changes_section', '%s :' %
-                self.raise_user_error('msg_contract_loan_changes',
-                    raise_exception=False), contract_loans_summary]
+            result[1].append(['%s :' % self.raise_user_error(
+                            'msg_contract_loan_changes', raise_exception=False),
+                    contract_loans_summary])
         return result
 
     def apply_values(self):
@@ -463,18 +463,17 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         return self.endorsement.definition.id if self.endorsement else None
 
     def get_endorsement_summary(self, name):
-        result = ['definition_section', self.definition.name, []]
+        result = [self.definition.name, []]
         loan_summary = self.get_diff('loan', self.base_instance)
         if loan_summary:
-            result[2] += ['loan_change_section', loan_summary]
+            result[1] += loan_summary
 
         increment_summary = [x.get_diff('loan.increment', x.increment)
             for x in self.increments]
         if increment_summary:
-            result[2] += ['increment_change_section',
-                '%s :' % self.raise_user_error(
-                    'msg_increment_modifications', raise_exception=False),
-                increment_summary]
+            result[1].append(['%s :' % self.raise_user_error(
+                'msg_increment_modifications', raise_exception=False),
+                increment_summary])
         return result
 
     def get_state(self, name):
@@ -582,8 +581,7 @@ class EndorsementCoveredElementOption:
         loan_shares_summary = [x.get_diff('loan.share', x.loan_share)
             for x in self.loan_shares]
         if loan_shares_summary:
-            result += ['loan_share_change_section', '%s :'
-                % (self.raise_user_error('mes_loan_share_modifications',
+            result += ['%s :' % (self.raise_user_error('mes_loan_share_modifications',
                         raise_exception=False)), loan_shares_summary]
         return result
 

@@ -216,9 +216,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ('contracts', '=', contract.id),
                 ])
         self.assertEqual(endorsement.endorsement_summary,
-            u'<div><div><div>  <u>Change Contract Number</u></div>'
-            u'<div><div><div>        Contract Number : %s →<b> 1234</b>'
-            u'</div></div></div></div></div>' % contract.contract_number)
+            u'<div><b>Change Contract Number</b></div>'
+            u'<div><u>Contract Number</u>: %s → 1234</div>'
+                         % contract.contract_number)
 
     @test_framework.prepare_test(
         'endorsement.test0030_create_endorsement',

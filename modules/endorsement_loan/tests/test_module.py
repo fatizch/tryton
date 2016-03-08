@@ -134,9 +134,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ('loans', '=', loan.id),
                 ])
         self.assertEqual(endorsement.endorsement_summary,
-            u'<div><div><div>  <u>Change Loan Amount</u></div>'
-            u'<div><div><div>        Amount : %s →<b> 150000</b>'
-            u'</div></div></div></div></div>' % loan.amount)
+            u'<div><b>Change Loan Amount</b></div>'
+            u'<div><u>Amount</u>: %s → 150000</div>' % loan.amount)
 
     @test_framework.prepare_test(
         'endorsement_loan.test0030_create_endorsement',

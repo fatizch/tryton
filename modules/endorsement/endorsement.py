@@ -431,7 +431,7 @@ def values_mixin(value_model):
                 if self.action == 'update':
                     base_object = self.base_instance
             if not self.values:
-                return ''
+                return []
             for k, v in self.values.iteritems():
                 if base_object and hasattr(base_object, k):
                     prev_value = getattr(base_object, k, '') or ''
@@ -469,13 +469,21 @@ def values_mixin(value_model):
                 if prev_value != new_value:
                     vals.append((target_fname, getattr(ValueModel,
                                 target_fname), prev_value, new_value))
+            result = []
             if hasattr(self, 'action') and self.action == 'add':
-                return [u'%s : → %s' % (coop_string.translate(
-                        ValueModel, fname, ffield.string, 'field'), new)
-                for fname, ffield, _, new in vals]
-            return [u'%s : %s → %s' % (coop_string.translate(
-                        ValueModel, fname, ffield.string, 'field'), old, new)
-                for fname, ffield, old, new in vals if old != new]
+                for fname, ffield, _, new in vals:
+                    label = u'%s' % coop_string.translate(
+                        ValueModel, fname, ffield.string, 'field')
+                    value = u' → %s' % new
+                    result.append((label, value))
+            else:
+                for fname, ffield, old, new in vals:
+                    if old != new:
+                        label = u'%s' % coop_string.translate(
+                            ValueModel, fname, ffield.string, 'field')
+                        value = u'%s → %s' % (old, new)
+                        result.append((label, value))
+            return result
 
         def get_records_before_application(self, current_records,
                 parent_endorsed_record=None):
@@ -708,20 +716,21 @@ def relation_mixin(value_model, field, model, name):
 
         def get_diff(self, model, base_object=None):
             if self.action == 'remove':
-                return ['remove_section', '%s %s' % (self.raise_user_error(
-                        'mes_remove_version', raise_exception=False),
-                    self.base_instance.rec_name)]
+                label = '%s: ' % self.raise_user_error(
+                    'mes_remove_version', raise_exception=False)
+                value = self.base_instance.rec_name
+                return (label, value)
             elif self.action == 'add':
-                result = ['new_section', '%s:' % self.raise_user_error(
+                result = ['%s:' % self.raise_user_error(
                     'mes_new_version', raise_exception=False)]
                 result += [super(Mixin, self).get_diff(model, base_object)]
                 return result
             elif self.action == 'update':
-                result = ['update_section', '%s: ' % self.raise_user_error(
+                label = '%s: ' % self.raise_user_error(
                     'mes_update_version', (base_object.rec_name),
-                    raise_exception=False)]
-                result += [super(Mixin, self).get_diff(model, base_object)]
-                return result
+                    raise_exception=False)
+                value = super(Mixin, self).get_diff(model, base_object)
+                return [label, value]
             return super(Mixin, self).get_diff(model, base_object)
 
         def get_func_key(self, name):
@@ -1230,78 +1239,14 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     def get_contracts(self, name):
         return [x.contract.id for x in self.contract_endorsements]
 
-    @classmethod
-    def format_summary(cls, summary, indent=0, style=None):
-        inc = 2
-        res = u'<div>'
-        if type(summary) in (str, unicode):
-            if not summary:
-                # Empty line, no styling
-                return ''
-            if summary.endswith('section'):
-                return ''
-            elif u'→' in summary:
-                elems = summary.split(u'→')
-                return res + ' ' * indent + elems[0] + u'→' + "<b>" + \
-                    elems[1] + "</b>" + '</div>'
-            elif not style:
-                style = 'italic'
-
-            if style == 'italic':
-                pre, post = '<i>', '</i>'
-            elif style == 'bold':
-                pre, post = '<b>', '</b>'
-            elif style == 'underline':
-                pre, post = '<u>', '</u>'
-            elif style == 'center':
-                res = u'<div align="center">'
-                pre, post = "<b>", "</b>"
-            else:
-                pre = post = ''
-            res += ' ' * indent + pre + summary + post + '</div>'
-        else:
-            for i, item in enumerate(summary):
-                if i == 1 and summary[0] == 'definition_section':
-                    res += cls.format_summary(item, indent, style='underline')
-                elif i == 1 and summary[0] == 'title_section':
-                    res += cls.format_summary(item, indent, style='center')
-                else:
-                    res += cls.format_summary(item, indent=indent + inc)
-            res += '</div>'
-        return res
-
     def raw_endorsement_summary(self):
         return [x.get_endorsement_summary(None)
             for x in self.all_endorsements()]
 
     def get_endorsement_summary(self, name):
-        """The get_endorsement_summary method of all objects returned by
-        self.all_endorsements returns a list structured like so:
-
-        [
-            'definition_section',
-            u'some_endorsement_definition_name',
-            [
-                'some_element_change_section',
-                u'Some Elements Modifications: ',
-                [
-                    [
-                        'new_section',
-                        u'New Version: ',
-                        [
-                            u'bar:  → spam',
-                            u'foo: → spam'
-                        ]]]]]
-
-        Optionnaly, such structure can be included in a higer level
-        title section like so : ['title_section, 'Some Title', the_structure]
-        The list of such structures is then parsed recursively by
-        format_summary to produce an indented and formatted text,
-        according to the names of the sections.
-        """
         result = [x.get_endorsement_summary(name)
                 for x in self.all_endorsements()]
-        return self.format_summary(result)
+        return coop_string.generate_summary(result[0])
 
     @classmethod
     def search_contracts(cls, name, clause):
@@ -1734,45 +1679,41 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         return self.endorsement.definition.id if self.endorsement else None
 
     def get_endorsement_summary(self, name):
-        result = ['definition_section', self.definition.name, []]
+        result = [self.definition.name, []]
         contract_summary = self.get_diff('contract', self.base_instance)
 
         if contract_summary:
-            result[2] += ['contract_change_section', contract_summary]
+            result[1] += contract_summary
 
         option_summary = [x.get_diff('contract.option', x.option)
             for x in self.options]
         if option_summary:
-            result[2] += ['option_change_section',
-                '%s :' % self.raise_user_error(
+            result[1].append(['%s :' % self.raise_user_error(
                     'mes_option_modifications', raise_exception=False),
-                option_summary]
+                option_summary])
 
         activation_summary = [x.get_diff(
                 'contract.activation_history', x.activation_history)
             for x in self.activation_history]
         if activation_summary:
-            result[2] += ['activation_change_section',
-                '%s :' % self.raise_user_error(
+            result[1].append(['%s :' % self.raise_user_error(
                     'mes_activation_history_modifications',
-                    raise_exception=False), activation_summary]
+                    raise_exception=False),
+                activation_summary])
 
         extra_data_summary = [x.get_diff('contract.extra_data',
                 x.extra_data) for x in self.extra_datas]
         if extra_data_summary:
-            result[2] += ['extra_data_change_section',
-                '%s :' % self.raise_user_error(
+            result[1].append(['%s :' % self.raise_user_error(
                     'mes_extra_data_modifications', raise_exception=False),
-                extra_data_summary]
+                extra_data_summary])
 
         contact_summary = [x.get_diff('contract.contact', x.contact)
             for x in self.contacts]
         if contact_summary:
-            result[2] += ['contact_change_section',
-                '%s :' % self.raise_user_error(
+            result[1].append(['%s :' % self.raise_user_error(
                     'mes_contact_modifications', raise_exception=False),
-                contact_summary]
-
+                contact_summary])
         return result
 
     def get_state(self, name):
@@ -2094,9 +2035,9 @@ class EndorsementOption(relation_mixin(
         option_summary = [x.get_diff('contract.option.version', x.version)
             for x in self.versions]
         if option_summary:
-            result.append(['option_version_change_section', '%s :' % (
-                        self.raise_user_error('mes_option_modifications',
-                            raise_exception=False)), option_summary])
+            result += ['%s :' % (self.raise_user_error(
+                        'mes_option_modifications',
+                        raise_exception=False)), option_summary]
         return result
 
     @classmethod
@@ -2274,16 +2215,19 @@ class EndorsementExtraData(relation_mixin(
         else:
             cur_data_values = None
 
-        if not res[2]:
-            res[2] = []
+        if not res[1]:
+            res[1] = []
         if cur_data_values and not endorsement_state == 'applied':
             for k, v in cur_data_values.iteritems():
                 if new_data_values[k] != v:
-                    res[2].append(k + ': ' + str(v) + u' → ' + str(
-                            new_data_values[k]))
+                    label = '%s: ' % k
+                    value = str(v) + u' → ' + str(new_data_values[k])
+                    res[1].append((label, value))
         else:
             for k, v in new_data_values.iteritems():
-                res[2].append(k + ': ' + u' → ' + str(v))
+                label = '%s: ' % k
+                value = u' → ' + str(v)
+                res[1].append((label, value))
         return res
 
     def is_null(self):

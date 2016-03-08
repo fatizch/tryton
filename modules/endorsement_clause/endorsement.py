@@ -52,9 +52,10 @@ class EndorsementContract:
         clause_summary = [x.get_diff('contract.clause', x.clause)
             for x in self.clauses]
         if clause_summary:
-            result += ['clause_change_section', '%s :'
-                % (self.raise_user_error('msg_clause_modifications',
-                        raise_exception=False)), clause_summary]
+            result[1].append(['%s :' % (self.raise_user_error(
+                            'msg_clause_modifications',
+                            raise_exception=False)),
+                    clause_summary])
         return result
 
     def apply_values(self):
