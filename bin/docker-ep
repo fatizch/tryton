@@ -1,6 +1,9 @@
 #!/bin/sh
 # docker entrypoint
 
+COOG_ROOT=/opt/coog
+COOG_TRYTOND=$COOG_ROOT/trytond
+
 ep_conf_file() {
         echo `readlink -f ../../coog.conf`
 }
