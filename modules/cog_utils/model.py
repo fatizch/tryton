@@ -234,6 +234,15 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
             getattr(cls, field.updater)(self, value)
 
     @classmethod
+    def update_values_before_create(cls, vlist):
+        pass
+
+    @classmethod
+    def create(cls, vlist):
+        cls.update_values_before_create(vlist)
+        return super(CoopSQL, cls).create(vlist)
+
+    @classmethod
     def delete(cls, instances):
         # Do not remove, needed to avoid infinite recursion in case a model
         # has a O2Ref which can lead to itself.

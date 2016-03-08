@@ -527,15 +527,19 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return True
 
     @classmethod
-    def create(cls, vlist):
+    def update_values_before_create(cls, vlist):
+        super(Contract, cls).update_values_before_create(vlist)
         pool = Pool()
         Sequence = pool.get('ir.sequence')
         Product = pool.get('offered.product')
         product_ids = [x.get('product') for x in vlist]
         products = Product.search([('id', 'in', product_ids)])
         product_dict = dict([(x.id, x) for x in products])
-        vlist = [x.copy() for x in vlist]
+        rank = 0
         for vals in vlist:
+            vals = vals.copy()
+            vlist[rank] = vals
+            rank += 1
             if (vals.get('status', '') == 'quote'
                     and not vals.get('quote_number')):
                 sequence = product_dict[
@@ -543,7 +547,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 if not sequence:
                     cls.raise_user_error('no_quote_sequence')
                 vals['quote_number'] = Sequence.get_id(sequence.id)
-        return super(Contract, cls).create(vlist)
 
     def get_icon(self, name=None):
         if self.status == 'active':
