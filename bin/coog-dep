@@ -26,6 +26,7 @@ coog_dep_base() { # install base deps
         pip install $proxy_opt simpleeval
         pip install $proxy_opt unidecode
         pip install $proxy_opt argcomplete
+        pip install $proxy_opt num2words
 }
 
 coog_dep_extend() { # install extended deps (interfaces, deployment extras)
