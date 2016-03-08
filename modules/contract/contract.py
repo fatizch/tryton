@@ -2008,6 +2008,7 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         res = current_version.extra_data if current_version else {}
         if self.contract:
             res.update(self.contract.get_all_extra_data(at_date))
+        res.update(self.coverage.get_all_extra_data(at_date))
         return res
 
     def decline_option(self, reason):
