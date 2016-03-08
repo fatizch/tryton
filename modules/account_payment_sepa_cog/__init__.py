@@ -13,6 +13,7 @@ def register():
     Pool.register(
         Party,
         PaymentTreatmentBatch,
+        PaymentFailBatch,
         Payment,
         Mandate,
         Group,

@@ -1,9 +1,16 @@
-from trytond.pool import PoolMeta
+import codecs
+import os
+import shutil
 
+from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
+
+from trytond.modules.cog_utils import batch
 
 __metaclass__ = PoolMeta
 __all__ = [
     'PaymentTreatmentBatch',
+    'PaymentFailBatch',
     ]
 
 
@@ -43,3 +50,41 @@ class PaymentTreatmentBatch:
                 raise Exception("Multiple sepa messages with "
                     "'waiting' status for  %s" % payments_group)
         return groups
+
+
+class PaymentFailBatch(batch.BatchRootNoSelect):
+    'Payment Fail Batch'
+
+    __name__ = 'account.payment.fail'
+
+    @classmethod
+    def execute(cls, object, ids, treatment_date, extra_args):
+        in_directory = extra_args.get('file', None) or cls.get_conf_item('in')
+        out_directory = cls.get_conf_item('out')
+        if not in_directory or not out_directory:
+            raise Exception("'in' [or 'file'] and 'out' are required")
+        if os.path.isfile(in_directory):
+            files = [(os.path.basename(in_directory), in_directory)]
+        else:
+            files = [(f, os.path.join(in_directory, f)) for f in os.listdir(
+                    in_directory) if os.path.isfile(os.path.join(
+                                in_directory, f))]
+        Message = Pool().get('account.payment.sepa.message')
+        messages = []
+        for file_name, file_path in files:
+            message = Message()
+            message.state = 'draft'
+            message.company = Transaction().context.get('company')
+            message.type = 'in'
+            with codecs.open(file_path, 'r', 'utf-8') as _file:
+                message.message = _file.read().decode('utf-8')
+                messages.append(message)
+        if messages:
+            Message.save(messages)
+            Message.wait(messages)
+            Message.do(messages)
+        for file_name, file_path in files:
+            treated_file_name = 'treated_%s_%s' % (
+                str(treatment_date), file_name)
+            shutil.move(file_path, os.path.join(out_directory,
+                    treated_file_name))
