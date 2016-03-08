@@ -52,3 +52,11 @@ class OptionDescriptionEligibilityRule(RuleMixin, model.CoopSQL,
     @classmethod
     def search_func_key(cls, name, clause):
         return [('coverage.code',) + tuple(clause[1:])]
+
+    def calculate(self, args):
+        rule_result = self.rule.execute(args, self.rule_extra_data)
+        result = rule_result.result
+        for error_message in rule_result.errors:
+            self.append_functional_error(error_message)
+            result = False
+        return result
