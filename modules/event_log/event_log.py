@@ -3,7 +3,7 @@ from sql.conditionals import Coalesce
 
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.cog_utils import model, fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -55,13 +55,7 @@ class EventLog(model.CoopSQL, model.CoopView):
 
     @staticmethod
     def models_get():
-        pool = Pool()
-        Model = pool.get('ir.model')
-        models = Model.search([])
-        res = []
-        for cur_model in models:
-            res.append([cur_model.model, cur_model.name])
-        return res
+        return utils.models_get()
 
     @classmethod
     def create_event_logs(cls, objects, event_type_id, description=None,

@@ -47,6 +47,8 @@ def get_trytond_modules():
             trytond_modules.append(module.name)
     return trytond_modules
 
+def models_get():
+    return Pool().get('ir.property').models_get()
 
 def is_module_installed(module_name):
     return Pool().get('ir.module').is_module_installed(module_name)

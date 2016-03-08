@@ -1,5 +1,5 @@
 from trytond.pool import Pool
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.cog_utils import model, fields, coop_string, utils
 
 __all__ = [
     'Tag',
@@ -50,10 +50,4 @@ class TagObjectRelation(model.CoopSQL, model.CoopView):
 
     @staticmethod
     def models_get():
-        pool = Pool()
-        Model = pool.get('ir.model')
-        models = Model.search([])
-        res = []
-        for cur_model in models:
-            res.append([cur_model.model, cur_model.name])
-        return res
+        return utils.models_get()
