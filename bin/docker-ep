@@ -5,11 +5,11 @@ COOG_ROOT=/opt/coog
 COOG_TRYTOND=$COOG_ROOT/trytond
 
 ep_conf_file() {
-        echo `readlink -f ../../coog.conf`
+        echo `readlink -f $COOG_ROOT/coog.conf`
 }
 
 ep_data_folder() {
-        echo `readlink -f ../../data`
+        echo `readlink -f $COOG_ROOT/data`
 }
 
 ep_conf_jsonrpc() {
@@ -91,7 +91,7 @@ ep_conf_session() {
         file=`ep_conf_file`
         echo "[session]" >> $file
         local password
-        password=`cat ../../.password`
+        password=`cat $COOG_ROOT/.password`
         echo "super_pwd = $password" >> $file
 }
 
@@ -155,7 +155,7 @@ app() { # start Coog app inside container
 }
 
 version() { # print image repos versions
-        cat ../../.version
+        cat $COOG_ROOT/.version
 }
 
 dep() {
