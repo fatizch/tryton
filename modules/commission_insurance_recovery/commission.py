@@ -44,6 +44,8 @@ class CommissionRecoveryRule(model.CoopSQL, model.CoopView, RuleMixin):
     def compute_recovery(self, option, agent):
         args = {}
         option.init_dict_for_rule_engine(args)
+        # initial_start_date used if contract is never in force
+        args['date'] = option.end_date or option.initial_start_date
         args['agent'] = agent
         return self.calculate(args)
 
