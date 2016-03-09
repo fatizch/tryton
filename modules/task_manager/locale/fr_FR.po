@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -14,6 +14,10 @@ msgctxt "field:process.log,is_current_user:"
 msgid "Is current user"
 msgstr "Est l'utisateur courant"
 
+msgctxt "field:process.log,task_name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:process.log,task_nb:"
 msgid "Task Number"
 msgstr "Nombre de tâches"
@@ -25,6 +29,10 @@ msgstr "Début de la Tâche"
 msgctxt "field:process.log,task_start_date:"
 msgid "Task Start"
 msgstr "Début de la Tâche"
+
+msgctxt "field:process.log,user_name:"
+msgid "User"
+msgstr "Utilisateur"
 
 msgctxt "field:res.team,code:"
 msgid "Code"
