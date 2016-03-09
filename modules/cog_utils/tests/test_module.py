@@ -397,6 +397,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'date': datetime.date(2012, 12, 3),
             'datetime': datetime.datetime(2014, 11, 3, 2, 3, 1),
             'selection': 'select1',
+            'some_dict': {},
         }
 
         to_export = self.ExportTest(**values)
