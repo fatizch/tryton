@@ -2,6 +2,7 @@
 # dev start shortcut (server and client)
 
 coog_start_main() { # start all, [args] passed to server and client, eg. coog start -- -v
+        coog_unoconv_start
         coog_server_start $*
         sleep 0.1 # for nohup messages
         coog_client_start $*

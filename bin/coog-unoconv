@@ -1,0 +1,34 @@
+# vim: set ft=sh:
+# manage unoconv daemon process
+
+_coog_unoconv_connection() {
+        local c
+        c=`python2 .py/parse-config.py report unoconv < $COOG_CONF_SRV 2> /dev/null`
+        [ ! -z $c ] && echo $c && return
+        echo "pipe,name=trytond;urp;StarOffice.ComponentContext"
+}
+
+coog_unoconv_start() { # start unoconv listener - [unoconv args]
+        local connection
+        connection=`_coog_unoconv_connection` || return $?
+        nohup unoconv --listener -c $connection &>> /dev/null &
+        echo unoconv started
+}
+
+coog_unoconv_stop() { # stop unoconv listener
+        local connection
+        connection=`_coog_unoconv_connection` || return $?
+        pkill --signal TERM -f "$connection"
+}
+
+coog_unoconv_kill() { # kill unoconv listener
+        local connection
+        connection=`_coog_unoconv_connection` || return $?
+        pkill --signal 9 -f "$connection"
+}
+
+coog_unoconv_ps() { # print unoconv process info
+        local connection
+        connection=`_coog_unoconv_connection` || return $?
+        pgrep -a -f "$connection"
+}

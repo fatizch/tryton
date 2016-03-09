@@ -831,17 +831,12 @@ class ReportGenerateFromFile(Report):
     def unoconv(cls, filepaths, input_format, output_format):
         from trytond.report import FORMAT2EXT
         oext = FORMAT2EXT.get(output_format, output_format)
-        cmd = ['unoconv', '--connection=%s' % config.get('report', 'unoconv'),
-            '-f', oext] + filepaths
-        for num_try in range(3):
-            # unoconv crashes randomly, re-running it usually suffices to
-            # resolve the problem
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        cmd = ['unoconv', '--no-launch', '--connection=%s' % config.get(
+                'report', 'unoconv'), '-f', oext] + filepaths
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, close_fds=True)
+        if proc.wait() != 0:
             stdoutdata, stderrdata = proc.communicate()
-            if proc.wait() == 0:
-                break
-            sleep(.5)
-        else:
             raise Exception(stderrdata)
         output_paths = [os.path.splitext(f)[0] + '.' + output_format for
             f in filepaths]
