@@ -74,6 +74,7 @@ def register():
 
     if config.get('env', 'testing') == 'True':
         Pool.register(
+            TestDictSchema,
             ExportTestTarget,
             ExportTestTargetSlave,
             ExportTest,

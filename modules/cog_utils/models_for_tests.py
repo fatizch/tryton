@@ -4,6 +4,7 @@ import datetime
 from sql.conditionals import Coalesce
 
 from trytond.pool import PoolMeta, Pool
+from trytond.model import DictSchemaMixin
 
 import model
 import export
@@ -13,6 +14,7 @@ import utils
 __metaclass__ = PoolMeta
 
 __all__ = [
+    'TestDictSchema',
     'ExportTestTarget',
     'ExportTestTarget2',
     'ExportTestTargetSlave',
@@ -28,6 +30,11 @@ __all__ = [
     'TestHistoryChildTable',
     'TestLoaderUpdater',
     ]
+
+
+class TestDictSchema(DictSchemaMixin, model.CoopSQL):
+    'Test Dict Schema'
+    __name__ = 'cog_utils.test.dict.schema'
 
 
 class ExportTestTarget(model.CoopSQL, export.ExportImportMixin):
@@ -84,6 +91,7 @@ class ExportTest(model.CoopSQL, export.ExportImportMixin):
             ('select1', 'Select 1'),
             ('select2', 'Select 2'),
             ], 'Property Selection'))
+    some_dict = fields.Dict('cog_utils.test.dict.schema', 'Dict')
 
     @classmethod
     def _export_light(cls):

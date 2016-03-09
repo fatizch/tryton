@@ -913,16 +913,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     def test_event_type_action_pyson(self):
         good_obj = self.ExportTest(char='bingo',
-            integer=12, boolean=True)
+            integer=12, boolean=True, some_dict={'one_value': 2})
         bad_obj = self.ExportTest(char='booh', integer=2,
-            boolean=False)
+            boolean=False, some_dict={'one_value': 3})
         empty_obj = self.ExportTest()
 
         conditions = ["Eval('char') == 'bingo'",
             "Eval('integer', 0) == 12",
             "Eval('integer', 0) > 10",
             "Eval('boolean', False) == True",
-            "And(Eval('boolean', False) == True, Eval('integer', 0) == 12)"]
+            "And(Eval('boolean', False) == True, Eval('integer', 0) == 12)",
+            "Eval('some_dict', {}).get('one_value', 0) == 2"]
 
         for condition in conditions:
             action = self.EventTypeAction(
