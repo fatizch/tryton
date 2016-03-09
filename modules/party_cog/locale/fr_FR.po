@@ -686,7 +686,7 @@ msgctxt "model:ir.action,name:act_company_form"
 msgid "Companies"
 msgstr "Sociétés"
 
-msgctxt "model:ir.action,name:act_contact_history_relate_form"
+msgctxt "model:ir.action,name:act_contact_history_relate_form1"
 msgid "Party Interaction"
 msgstr "Historique des Contacts"
 
