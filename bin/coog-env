@@ -69,6 +69,10 @@ _coog_env_common() { # set common vars
         return 0
 }
 
+_coog_env_client() { # set client vars
+        export PYTHONPATH="$COOG_TRYTON:$PYTHONPATH"
+}
+
 _coog_env_server() { # set server vars
         export PYTHONPATH="$COOG_LIB:$COOG_TRYTOND:$COOG_PROTEUS:$PYTHONPATH"
         TRYTOND_CONFIG="$COOG_CONF_SRV"
@@ -101,6 +105,7 @@ coog_env_init() { # set coog vars
                 _coog_env_conf &&
                 _coog_env_postgres &&
                 _coog_env_common &&
+                _coog_env_client &&
                 _coog_env_server &&
                 _coog_env_batch
 }
