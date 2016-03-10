@@ -213,7 +213,8 @@ class PartyBalance(ModelCurrency, model.CoopView):
                 [r.rec_name for r in reconciliations])
             reconciled_with = []
             for line in sub_lines:
-                reconciled_with += line.reconciled_with
+                if hasattr(line, 'reconciled_with'):
+                    reconciled_with += line.reconciled_with
             parent_line.reconciled_with = list(set(reconciled_with))
             contracts = set([x.contract for x in sub_lines if x.contract])
             parent_line.contract = (list(contracts)[0]
