@@ -203,7 +203,7 @@ msgstr "Quotité"
 
 msgctxt "field:loan,amount:"
 msgid "Amount"
-msgstr "Montant"
+msgstr "Montant initial"
 
 msgctxt "field:loan,company:"
 msgid "Company"
