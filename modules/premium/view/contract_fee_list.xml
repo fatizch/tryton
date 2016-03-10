@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<tree string="Contract Fees">
+<tree string="Contract Fees" editable="bottom">
     <field name="accept_fee"/>
     <field name="rec_name"/>
     <field name="amount_as_string"/>
