@@ -387,7 +387,7 @@ class EndorsementContract:
                 x.contract_loan) for x in self.ordered_loans]
         if contract_loans_summary:
             result[1].append(['%s :' % self.raise_user_error(
-                            'msg_contract_loan_changes', raise_exception=False),
+                        'msg_contract_loan_changes', raise_exception=False),
                     contract_loans_summary])
         return result
 
@@ -581,8 +581,9 @@ class EndorsementCoveredElementOption:
         loan_shares_summary = [x.get_diff('loan.share', x.loan_share)
             for x in self.loan_shares]
         if loan_shares_summary:
-            result += ['%s :' % (self.raise_user_error('mes_loan_share_modifications',
-                        raise_exception=False)), loan_shares_summary]
+            result[1].append(['%s :' % (self.raise_user_error(
+                            'mes_loan_share_modifications',
+                            raise_exception=False)), loan_shares_summary])
         return result
 
     @property
