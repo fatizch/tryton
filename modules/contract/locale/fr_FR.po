@@ -1230,10 +1230,6 @@ msgctxt "model:ir.action,name:option_subscription_wizard_launcher"
 msgid "Option Subscription Launcher"
 msgstr "Souscription des options"
 
-msgctxt "model:ir.action.act_window.domain,name:"
-msgid "Quote"
-msgstr "Devis"
-
 msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_active"
 msgid "Active"
 msgstr "Actif"
