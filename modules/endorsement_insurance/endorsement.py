@@ -654,6 +654,10 @@ class EndorsementExtraPremium(relation_mixin(
     def updated_struct(cls, option):
         return {}
 
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return {'option'}
+
 
 class EndorsementExclusion(relation_mixin(
             'endorsement.contract.option.exclusion.field', 'option_exclusion',
