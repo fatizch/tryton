@@ -284,10 +284,16 @@ class ContractOption:
         return self.coverage_family == 'loan'
 
     def get_latest_loan_shares(self, name):
-        shares_per_loan = self.get_shares_per_loan()
-        return [shares_per_loan[loan.loan.id][-1].id
+        all_shares_per_loan = self.get_shares_per_loan()
+        shares = [all_shares_per_loan[loan.loan.id][-1]
             for loan in self.parent_contract.ordered_loans
-            if loan.loan.id in shares_per_loan]
+            if loan.loan.id in all_shares_per_loan]
+        active_loans = [x.loan.id for x in shares]
+        for loan_id, cur_shares in all_shares_per_loan.items():
+            if loan_id in active_loans:
+                continue
+            shares.append(cur_shares[-1])
+        return [x.id for x in shares]
 
     def get_shares_at_date(self, at_date):
         result = []
