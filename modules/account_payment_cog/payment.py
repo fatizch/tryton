@@ -503,8 +503,8 @@ class Payment(export.ExportImportMixin, Printable):
             if len(all_payments) != len(
                     [x for x in payments if x.merged_id]):
                 cls.raise_user_error('missing_payments')
-            fields = cls.payments_fields_to_update_after_fail(reject_reason)
-            cls.write(payments, fields)
+        fields = cls.payments_fields_to_update_after_fail(reject_reason)
+        cls.write(payments, fields)
 
     @classmethod
     @ModelView.button_action('account_payment_cog.manual_payment_fail_wizard')
