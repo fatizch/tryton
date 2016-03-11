@@ -209,6 +209,8 @@ class OpenThirdPartyBalanceStart:
     def __setup__(cls):
         super(OpenThirdPartyBalanceStart, cls).__setup__()
         cls.fiscalyear.required = False
+        # We force to use posted moves only
+        cls.posted.states.update({'invisible': True})
 
     @staticmethod
     def default_posted():
@@ -234,7 +236,7 @@ class OpenThirdPartyBalance:
         # Do not call super to avoid trying to set fiscalyear
         data = {
             'company': self.start.company.id,
-            'posted': self.start.posted,
+            'posted': True,
             'fiscalyear':
                 self.start.fiscalyear.id if self.start.fiscalyear else None,
             }
@@ -249,69 +251,15 @@ class ThirdPartyBalance:
     __name__ = 'account.third_party_balance'
 
     @classmethod
-    def get_context(cls, records, data):
-        report_context = super(ThirdPartyBalance, cls).get_context(records,
-            data)
-        if data['third_party_balance_option'] == 'all':
-            return report_context
-        pool = Pool()
-        Party = pool.get('party.party')
-        MoveLine = pool.get('account.move.line')
-        Move = pool.get('account.move')
-        Account = pool.get('account.account')
-        Company = pool.get('company.company')
-        cursor = Transaction().cursor
-
-        line = MoveLine.__table__()
-        move = Move.__table__()
-        account = Account.__table__()
-
-        company = Company(data['company'])
-        report_context['company'] = company
-        report_context['digits'] = company.currency.digits
-        report_context['fiscalyear'] = data['fiscalyear']
-        with Transaction().set_context(context=report_context):
-            line_query, _ = MoveLine.query_get(line)
-        if data['posted']:
-            posted_clause = move.state == 'posted'
-        else:
-            posted_clause = Literal(True)
-
-        if data['account']:
-            account_clause = account.id == data['account']
-        else:
-            account_clause = Literal(True)
-
-        cursor.execute(*line.join(move, condition=line.move == move.id
-                ).join(account, condition=line.account == account.id
-                ).select(line.party, Sum(line.debit), Sum(line.credit),
-                where=(line.party != Null)
-                & account.active
-                & account.kind.in_(('payable', 'receivable'))
-                & (account.company == data['company'])
-                & ((line.maturity_date <= data['at_date'])
-                    | (line.maturity_date == Null))
-                & (line.reconciliation == Null)
-                & line_query & posted_clause
-                & account_clause,
-                group_by=line.party,
-                having=(((Sum(line.debit) != 0) | (Sum(line.credit) != 0)))))
-
-        res = cursor.fetchall()
-        id2party = {}
-        for party in Party.browse([x[0] for x in res]):
-            id2party[party.id] = party
-        objects = [{
-            'name': id2party[x[0]].rec_name,
-            'debit': x[1],
-            'credit': x[2],
-            'solde': x[1] - x[2],
-            } for x in res]
-        objects.sort(lambda x, y: cmp(x['name'], y['name']))
-        report_context['total_debit'] = sum((x['debit'] for x in objects))
-        report_context['total_credit'] = sum((x['credit'] for x in objects))
-        report_context['total_solde'] = sum((x['solde'] for x in objects))
-        report_context['records'] = objects
-        report_context['at_date'] = data['at_date']
-
-        return report_context
+    def get_query_where(cls, tables, report_context):
+        # Force date to defined date to properly filter maturity dates
+        with Transaction().set_context(client_defined_date=report_context.get(
+                    'at_date', utils.today())):
+            where = super(ThirdPartyBalance, cls).get_query_where(tables,
+                report_context)
+        if report_context['account']:
+            where &= (
+                tables['account.account'].id == report_context['account'])
+        if report_context['third_party_balance_option'] == 'only_unbalanced':
+            where &= (tables['account.move.line'].reconciliation == Null)
+        return where
