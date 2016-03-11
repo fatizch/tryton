@@ -3,7 +3,7 @@ from dateutil import rrule
 
 from sql import Cast, Literal
 from sql.operators import Concat
-from sql.aggregate import Sum, Max
+from sql.aggregate import Sum, Max, Min
 from sql.functions import ToChar
 from sql.conditionals import Coalesce
 
@@ -354,7 +354,7 @@ class AggregatedCommission(model.CoopSQL, model.CoopView):
             Literal(0).as_('write_date'),
             commission.agent.as_('agent'),
             Max(commission.commissioned_option).as_('commissioned_option'),
-            Max(commission.start).as_('start'),
+            Min(commission.start).as_('start'),
             Max(commission.end).as_('end'),
             Max(commission.date).as_('date'),
             Sum(commission.amount).as_('total_commission'),
