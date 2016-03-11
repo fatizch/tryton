@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, coop_date
 from trytond.modules.endorsement import field_mixin
 
 
@@ -26,12 +26,28 @@ class EndorsementDefinition:
             self.get_methods_for_model('contract')
 
     def get_premium_computation_start(self, contract_endorsement):
-        if (contract_endorsement.endorsement.effective_date ==
-                contract_endorsement.contract.start_date):
-            # Recalcul whole contract (datetime.date.min rather than
+        contract = contract_endorsement.contract
+        effective_date = contract_endorsement.endorsement.effective_date
+
+        if effective_date == contract.start_date:
+            # Recalculate whole contract (datetime.date.min rather than
             # contract.start_date to manage start date modification)
             return datetime.date.min
-        return contract_endorsement.endorsement.effective_date
+
+        pool = Pool()
+        config = pool.get('offered.configuration')(1)
+        if not config.split_invoices_on_endorsement_dates:
+            return effective_date
+
+        # Special case : We must recompute one day before the effective date,
+        # unless the effective date is synced with a billing date
+        periods = contract.get_invoice_periods(
+            coop_date.add_day(effective_date, 1),
+            coop_date.add_day(effective_date, -1))
+        if effective_date in [x[0] for x in periods]:
+            # There was a planned billing anyway
+            return effective_date
+        return coop_date.add_day(effective_date, -1)
 
     def get_rebill_end(self, contract_endorsement):
         if contract_endorsement.contract.status == 'void':
