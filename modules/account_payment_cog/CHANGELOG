@@ -4,6 +4,7 @@
 * Add predefined motive on creation payment wizard
 * Adding merged_id from account_payment_sepa_cog
 * Adding payment merged reject
+* Hide fail button on merged payments tree view if merged payment already failed
 
 Version 1.6 - 2015-12-23
 * Add Acknowledge Batch

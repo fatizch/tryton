@@ -142,15 +142,10 @@
             <field name="wiz_name">account.payment.manual_payment_fail</field>
         </record>
         <record model="ir.action.wizard" id="manual_merged_payments_fail_wizard">
-        <field name="name">Fail merged payments</field>
-        <field name="wiz_name">account.payment.manual_payment_fail</field>
-    </record>
-    <record model="ir.action.keyword" id="manual_merged_payments_fail_keyword">
-        <field name="keyword">form_action</field>
-        <field name="model">account.payment.merged,-1</field>
-        <field name="action" ref="manual_merged_payments_fail_wizard"/>
-    </record>
-    <!-- ############################################################ -->
+            <field name="name">Fail Merged Payments</field>
+            <field name="wiz_name">account.payment.manual_payment_fail</field>
+        </record>
+        <!-- ############################################################ -->
         <!-- ########### Process Manual Payment Fail Wizard ########### -->
         <!-- ############################################################ -->
         <record model="ir.action.wizard" id="process_manual_payment_fail_wizard">

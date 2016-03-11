@@ -253,6 +253,13 @@ class MergedPayments(model.CoopSQL, model.CoopView, ModelCurrency,
     def __setup__(cls):
         super(MergedPayments, cls).__setup__()
         cls._order = [('merged_id', 'DESC')]
+        cls._buttons.update({
+                'button_fail_merged_payments': {
+                    'invisible': Not(In(Eval('state'),
+                            ['processing', 'succeeded'])),
+                    'icon': 'tryton-cancel',
+                    }
+                })
 
     def get_currency(self, name=None):
         return self.journal.currency if self.journal else None
@@ -282,6 +289,13 @@ class MergedPayments(model.CoopSQL, model.CoopView, ModelCurrency,
             where=(payment.merged_id != Null),
             group_by=[payment.merged_id, payment.journal,
                       payment.party, payment.state])
+
+
+    @classmethod
+    @ModelView.button_action(
+        'account_payment_cog.manual_merged_payments_fail_wizard')
+    def button_fail_merged_payments(cls, merged_payments):
+        pass
 
 
 class Payment(export.ExportImportMixin, Printable):

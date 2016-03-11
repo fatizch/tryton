@@ -7,4 +7,5 @@
     <field name="amount" sum="Total">
         <suffix name="currency_symbol"/>
     </field>
+    <button name="button_fail_merged_payments" string="Fail payments" tree_invisible="1"/>
 </tree>
