@@ -63,20 +63,10 @@ class ProductPremiumDate(model.CoopSQL, model.CoopView):
         TableHandler(cursor, cls, module_name).drop_constraint(
             'offered_product_premium_date_rule_uniq')
 
-    @classmethod
-    def create(cls, values):
-        for value in values:
-            if value['type_'] != 'yearly_custom_date':
-                value['custom_date'] = None
-        return super(ProductPremiumDate, cls).create(values)
-
-    @classmethod
-    def write(cls, *args):
-        actions = iter(args)
-        for instances, values in zip(actions, actions):
-            if 'type_' in values and values['type_'] != 'yearly_custom_date':
-                values['custom_date'] = None
-        super(ProductPremiumDate, cls).write(*args)
+    @fields.depends('type_', 'custom_date')
+    def on_change_type_(self):
+        if self.type_ != 'yearly_custom_date':
+            self.custom_date = None
 
     def get_rule_for_contract(self, contract):
         max_date = contract.end_date
