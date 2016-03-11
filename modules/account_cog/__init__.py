@@ -14,6 +14,7 @@ def register():
         Move,
         Line,
         ReconcileShow,
+        ReconcileLinesWriteOff,
         Account,
         AccountTemplate,
         AccountTypeTemplate,
@@ -36,6 +37,7 @@ def register():
         module='account_cog', type_='model')
     Pool.register(
         Reconcile,
+        ReconcileLines,
         SynthesisMenuOpen,
         OpenThirdPartyBalance,
         CreateMove,

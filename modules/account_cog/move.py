@@ -19,6 +19,8 @@ __all__ = [
     'CreateMove',
     'Reconcile',
     'ReconcileShow',
+    'ReconcileLines',
+    'ReconcileLinesWriteOff',
     ]
 
 
@@ -439,3 +441,37 @@ class ReconcileShow:
         super(ReconcileShow, cls).__setup__()
         cls.lines.domain = ['AND', cls.lines.domain,
             [('move_state', '!=', 'draft')]]
+
+
+class ReconcileLines:
+    __name__ = 'account.move.reconcile_lines'
+
+    def transition_reconcile(self):
+        next_state = super(ReconcileLines, self).transition_reconcile()
+        if not getattr(self.writeoff, 'post_writeoff', None):
+            return next_state
+
+        # Find new moves which were created for profit / loss lines and post
+        # those
+        lines = Pool().get('account.move.line').browse(
+            Transaction().context.get('active_ids'))
+        new_moves = list(set(x.move
+                for origin_line in lines
+                for x in origin_line.reconciliation.lines
+                if x.move.state == 'draft'
+                and x.move.journal == self.writeoff.journal
+                and x.move.date == self.writeoff.date
+                ))
+        if new_moves:
+            Pool().get('account.move').post(new_moves)
+        return next_state
+
+
+class ReconcileLinesWriteOff:
+    __name__ = 'account.move.reconcile_lines.writeoff'
+
+    post_writeoff = fields.Boolean('Post Writeoff Move')
+
+    @classmethod
+    def default_post_writeoff(cls):
+        return True

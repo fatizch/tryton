@@ -147,6 +147,10 @@ msgctxt "field:account.reconcile.show,post_leftovers:"
 msgid "Post Left Over Moves"
 msgstr "Émettre les mouvements d'ajustement"
 
+msgctxt "field:account.move.reconcile_lines.writeoff,post_writeoff:"
+msgid "Post Writeoff Move"
+msgstr "Emettre le mouvement d'ajustement"
+
 msgctxt "field:account.tax,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
