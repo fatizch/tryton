@@ -3,4 +3,5 @@
     <field name="action"/>
     <field name="name" expand="1"/>
     <field name="beneficiary_id" tree_invisible="1"/>
+    <field name="beneficiary" tree_invisible="1"/>
 </tree>
