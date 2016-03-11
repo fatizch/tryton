@@ -1296,7 +1296,6 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
             ModelClass.draft(endorsements_per_model[model_name])
             for value_endorsement in endorsements_per_model[model_name]:
                 value_endorsement.update_after_cancellation()
-        cls.run_methods(endorsements, 'draft')
 
     @classmethod
     @model.CoopView.button
@@ -1309,6 +1308,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                 'rollback_date': None,
                 'state': 'canceled',
                 })
+        cls.run_methods(endorsements, 'draft')
         Event.notify_events(endorsements, 'cancel_endorsement')
 
     @classmethod
@@ -1336,6 +1336,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                 'state': 'draft',
                 'sub_state': None,
                 })
+        cls.run_methods(endorsements, 'draft')
 
     @classmethod
     @Workflow.transition('in_progress')
