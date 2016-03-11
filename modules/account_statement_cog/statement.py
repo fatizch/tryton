@@ -202,17 +202,14 @@ class CancelLineGroupStart(ModelView):
 
     __name__ = 'account.statement.line.group.cancel.start'
 
-    available_motives = fields.One2Many(
-        'account.statement.journal.cancel_motive', None, 'Available motives',
-        states={'invisible': True}, readonly=True)
-    journal = fields.Many2One('account.journal', 'Journal',
+    journal = fields.Many2One('account.statement.journal', 'Journal',
         states={'invisible': True}, readonly=True)
     moves = fields.One2Many('account.move', None, 'Moves',
         states={'invisible': True}, readonly=True)
     cancel_motive = fields.Many2One('account.statement.journal.cancel_motive',
-        'Cancel Motive', domain=[(
-                'id', 'in', Eval('available_motives')
-        )], depends=['available_motives'], required=True)
+        'Cancel Motive', domain=[
+            ('journals', '=', Eval('journal')),
+            ], depends=['journal'], required=True)
 
 
 class CancelLineGroup(Wizard):
@@ -232,21 +229,19 @@ class CancelLineGroup(Wizard):
         move_ids = Transaction().context.get('active_ids')
         moves = pool.get('account.move').browse(move_ids)
         Journal = pool.get('account.statement.journal')
-        journals = set()
+        journals = []
+
         for move in moves:
             if move.cancel_move:
                 move.raise_user_error('already_cancelled')
             statement_line = pool.get('account.statement.line').search(
                 [('move', '=', move.id)], limit=1)[0]
-            journals |= set([statement_line.statement.journal.id])
-        if len(journals) > 1:
+            journals.append(statement_line.statement.journal.id)
+        if len(set(journals)) > 1:
             Journal.raise_user_error('cancel_journal_mixin')
-        cancel_motives = statement_line.statement.journal.cancel_motives
-
         return {
-            'journal': move.journal.id,
+            'journal': journals[0],
             'moves': move_ids,
-            'available_motives': [x.id for x in cancel_motives],
             'cancel_motive': None,
             }
 

@@ -45,6 +45,9 @@ class CancelMotive(model.CoopSQL, model.CoopView):
 
     code = fields.Char('Code', required=True, select=True)
     name = fields.Char('Description', required=True, translate=True)
+    journals = fields.Many2Many(
+        'statement.journal-statement.journal.cancel_motive',
+        'motive', 'journal', 'journals')
 
     @classmethod
     def __setup__(cls):
@@ -53,6 +56,10 @@ class CancelMotive(model.CoopSQL, model.CoopView):
         cls._sql_constraints += [('code_unique', Unique(t, t.code),
                 'The code must be unique'),
                 ]
+
+    @classmethod
+    def _export_skips(cls):
+        return super(CancelMotive, cls)._export_skips() | {'journals'}
 
     @fields.depends('name', 'code')
     def on_change_with_code(self):

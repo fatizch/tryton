@@ -2,4 +2,5 @@
 <tree string="Cancel motives">
     <field name="code"/>
     <field name="name"/>
+    <field name="journals" tree_invisible="1"/>
 </tree>
