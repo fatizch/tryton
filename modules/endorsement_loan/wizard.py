@@ -301,7 +301,9 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
         for ctr_endorsement in endorsement.contract_endorsements:
             contract = ctr_endorsement.contract
             endorsements[contract.id] = ctr_endorsement
-            utils.apply_dict(contract, ctr_endorsement.apply_values())
+            update_values = ctr_endorsement.apply_values()
+            update_values.pop('ordered_loans', None)
+            utils.apply_dict(contract, update_values)
             contracts[contract.id] = contract
         for contract in self.possible_contracts:
             if contract.id not in contracts:
@@ -1039,6 +1041,8 @@ class SelectLoanShares(EndorsementWizardStepMixin):
                 new_shares.append(loan_share)
             if option_endorsement.id:
                 loan_share.option_endorsement = option_endorsement.id
+                if loan_share.id:
+                    loan_share.save()
             else:
                 option_endorsement.loan_shares = list(
                     option_endorsement.loan_shares) + [loan_share]
