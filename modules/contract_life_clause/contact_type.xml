@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<tryton>
-    <data>
-        <record model="contract.contact.type" id="accepting_benef">
-            <field name="code">accepting_beneficiary</field>
-            <field name="name">Accepting Beneficiary</field>
-        </record>
-    </data>
-</tryton>

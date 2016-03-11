@@ -1246,7 +1246,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     def get_endorsement_summary(self, name):
         result = [x.get_endorsement_summary(name)
                 for x in self.all_endorsements()]
-        return coop_string.generate_summary(result[0])
+        return coop_string.generate_summary(result[0]) if result else None
 
     @classmethod
     def search_contracts(cls, name, clause):

@@ -39,6 +39,9 @@ class ContractContact(model._RevisionMixin, model.CoopSQL, model.CoopView):
         required=True, select=True)
     type = fields.Many2One('contract.contact.type', 'Type',
         ondelete='RESTRICT', required=True)
+    type_code = fields.Function(
+        fields.Char('Type Code'),
+        'on_change_with_type_code')
     party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT',
         required=True)
     address = fields.Many2One('party.address', 'Address', ondelete='RESTRICT',
@@ -74,6 +77,10 @@ class ContractContact(model._RevisionMixin, model.CoopSQL, model.CoopView):
             return self.type.code in ('subscriber', 'accepting_beneficiary')
         return False
 
+    @fields.depends('type')
+    def on_change_with_type_code(self, name=None):
+        return self.type.code if self.type else None
+
     @staticmethod
     def revision_columns():
         return ['type', 'party', 'address']
@@ -81,3 +88,10 @@ class ContractContact(model._RevisionMixin, model.CoopSQL, model.CoopView):
     @classmethod
     def get_reverse_field_name(cls):
         return 'contact'
+
+    def set_default_address(self, date=None):
+        if not date:
+            date = self.start
+        if self.party and not getattr(self, 'address', None):
+            self.address = utils.get_good_version_at_date(self.party,
+                'addresses', date)

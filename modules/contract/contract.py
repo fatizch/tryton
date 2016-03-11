@@ -836,32 +836,41 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             Date.today())
         return ContractRevision.get_values(contracts, names=names, date=date)
 
-    def get_default_contacts(self, type_, at_date):
-        '''
-            This methods calculate defaults contacts
-        '''
-        pool = Pool()
-        Contact = pool.get('contract.contact')
-        ContactType = pool.get('contract.contact.type')
-        if not self.subscriber:
-            return []
-        type_, = ContactType.search([('code', '=', type_)])
-        return [Contact(
-                type=type_,
-                party=self.subscriber,
-                address=utils.get_good_version_at_date(self.subscriber,
-                    'addresses', at_date))]
+    def get_default_contacts(self, type_=None, at_date=None):
+        contacts = []
+        if not type_ or type_ == 'subscriber':
+            contacts.append(Pool().get('contract.contact')(
+                    party=self.subscriber,
+                    type_code='subscriber',
+                    ))
+        return contacts
 
-    def get_contacts_of_type_at_date(self, type_, date=None):
+    def get_contacts(self, date=None, type_=None, only_existing=False):
         if not date:
             date = utils.today()
-        contacts = [c for c in self.contacts
-            if (c.type.code == type_ and (not date or (
+        existing_contacts = [c for c in self.contacts
+            if ((not type_ or c.type_code == type_) and (not date or (
                         date >= (c.date or datetime.date.min) and
                         date <= (c.end_date or datetime.date.max))))]
-        if not contacts:
-            contacts = self.get_default_contacts(type_, date)
-        return contacts
+        if only_existing:
+            return existing_contacts
+
+        ContactType = Pool().get('contract.contact.type')
+        # TODO: Add cache
+        contact_types = dict((c.code, c) for c in ContactType.search([]))
+        contacts = []
+        for contact in self.get_default_contacts(type_, date):
+            if (contact.type_code in [c.type_code for c in existing_contacts]
+                    or not contact.party):
+                continue
+            contact.set_default_address(date)
+            if not getattr(contact, 'type', None):
+                contact.type = contact_types.get(contact.type_code, None)
+            contacts.append(contact)
+        return existing_contacts + contacts
+
+    def get_contract_address(self, at_date=None):
+        return self.get_contacts('subscriber', at_date)[0].address
 
     def check_activation_dates(self):
         previous_period = None
@@ -1293,17 +1302,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 where=(contract.company == company_id) if company_id else
                 None))
         return cls.browse([x['id'] for x in cursor.dictfetchall()])
-
-    def get_contract_address(self, at_date=None, role='subscriber'):
-        contacts = self.get_contacts_of_type_at_date(role, at_date)
-        if contacts:
-            assert len(contacts) == 1
-            if contacts[0].address:
-                return contacts[0].address
-        addresses = utils.get_good_versions_at_date(self.subscriber,
-            'addresses', at_date)
-        if len(addresses) >= 1:
-            return addresses[0]
 
     def get_appliable_logo(self, kind=''):
         if self.company:

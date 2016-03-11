@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, Or
 
 from trytond.modules.cog_utils import fields, model
@@ -8,9 +8,28 @@ from trytond.modules.cog_utils import fields, model
 __metaclass__ = PoolMeta
 
 __all__ = [
+    'Contract',
     'ContractOption',
     'Beneficiary',
     ]
+
+
+class Contract:
+    __name__ = 'contract'
+
+    def get_default_contacts(self, type_=None, at_date=None):
+        Contact = Pool().get('contract.contact')
+        contacts = super(Contract, self).get_default_contacts(type_, at_date)
+        if type_ and type_ != 'accepting_beneficiary':
+            return contacts
+        for option in self.covered_element_options:
+            for beneficiary in option.beneficiaries:
+                contacts.append(Contact(
+                        party=beneficiary.party,
+                        address=beneficiary.address,
+                        type_code='accepting_beneficiary',
+                        ))
+        return contacts
 
 
 class ContractOption:

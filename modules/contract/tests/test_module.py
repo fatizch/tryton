@@ -422,7 +422,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             self.assertEqual(contract.end_date, datetime.date(2013, 12, 31))
 
     @test_framework.prepare_test('contract.test0001_testPersonCreation')
-    def test0060_get_contacts_of_type_at_date(self):
+    def test0060_get_contacts(self):
         party, = self.Party.search([('name', '=', 'DOE')])
         subscriber_type, = self.ContactType.search(
             [('code', '=', 'subscriber')])
@@ -433,34 +433,46 @@ class ModuleTestCase(test_framework.CoopTestCase):
         today = datetime.date.today()
         contract = self.Contract(subscriber=party)
         contact1 = self.Contact(
+            party=party,
+            address=None,
             date=None,
             end_date=today + relativedelta(days=-30),
             type=subscriber_type)
+        contact1.type_code = contact1.on_change_with_type_code()
         contact2 = self.Contact(
+            party=party,
+            address=None,
             date=today + relativedelta(days=-29),
             end_date=today + relativedelta(days=-5),
             type=subscriber_type)
+        contact2.type_code = contact2.on_change_with_type_code()
         contact3 = self.Contact(
+            party=party,
+            address=None,
             date=None,
             end_date=None,
             type=covered_party_type.id)
+        contact3.type_code = contact3.on_change_with_type_code()
         contract.contacts = (contact1, contact2, contact3)
-        contacts = contract.get_contacts_of_type_at_date('subscriber',
-            today + relativedelta(days=-100))
+        contacts = contract.get_contacts(type_='subscriber',
+            date=today + relativedelta(days=-100))
         self.assertEqual(contacts, [contact1])
-        contacts = contract.get_contacts_of_type_at_date('subscriber',
-            today + relativedelta(days=-25))
+        contacts = contract.get_contacts(type_='subscriber',
+            date=today + relativedelta(days=-25))
         self.assertEqual(contacts, [contact2])
-        contacts = contract.get_contacts_of_type_at_date('covered_party')
+        contacts = contract.get_contacts(type_='covered_party')
         self.assertEqual(contacts, [contact3])
-        contacts = contract.get_contacts_of_type_at_date('subscriber')
+        contacts = contract.get_contacts(type_='subscriber')
         self.assertEqual(contacts[0].party, party)
         contact4 = self.Contact(
+            party=party,
+            address=None,
             date=today,
             end_date=None,
             type=subscriber_type)
+        contact4.type_code = contact4.on_change_with_type_code()
         contract.contacts = (contact1, contact2, contact3, contact4)
-        contacts = contract.get_contacts_of_type_at_date('subscriber')
+        contacts = contract.get_contacts(type_='subscriber')
         self.assertEqual(contacts, [contact4])
 
     @test_framework.prepare_test(

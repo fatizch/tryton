@@ -36,6 +36,23 @@ class Contract:
         CoveredElement = Pool().get('contract.covered_element')
         return CoveredElement.get_possible_covered_elements(party, at_date)
 
+    def get_default_contacts(self, type_=None, at_date=None):
+        Contact = Pool().get('contract.contact')
+        contacts = super(Contract, self).get_default_contacts(type_, at_date)
+        if type_ and type_ != 'covered_party':
+            return contacts
+        parties = set([])
+        for covered_element in [x for x in self.covered_elements if x.party]:
+            for option in covered_element.options:
+                if option.start_date <= at_date and option.end_date > at_date:
+                    parties.add(covered_element.party)
+        for p in parties:
+            contacts.append(Contact(
+                    party=p,
+                    type_code='covered_party',
+                    ))
+        return contacts
+
 
 class ContractOption:
     __name__ = 'contract.option'

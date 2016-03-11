@@ -1560,10 +1560,12 @@ class ManageContacts(EndorsementWizardStepMixin, model.CoopView):
         return contacts
 
     def get_contract_contacts(self, contract):
-        return [contact
-            for type_ in Pool().get('contract.contact.type').search([])
-            for contact in contract.get_contacts_of_type_at_date(type_.code,
-                date=self.effective_date)]
+        contacts = contract.get_contacts(date=self.effective_date,
+            only_existing=True)
+        if len([c for c in contacts if c.type_code == 'subscriber']) == 0:
+            contacts += contract.get_contacts(date=self.effective_date,
+                type_='subscriber')
+        return contacts
 
     def generate_displayers(self, contract_endorsement, contacts):
         all_contacts = []
