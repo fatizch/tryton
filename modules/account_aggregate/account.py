@@ -239,6 +239,11 @@ class LineAggregated(model.CoopSQL, model.CoopView):
     move_description = fields.Char('Move Description')
     move_line_description = fields.Char('Move Line Description')
 
+    @classmethod
+    def __setup__(cls):
+        super(LineAggregated, cls).__setup__()
+        cls._order.insert(0, ('snapshot', 'DESC'))
+        cls._order.insert(1, ('create_date', 'DESC'))
 
     def get_currency_digits(self, name):
         return self.account.currency_digits
