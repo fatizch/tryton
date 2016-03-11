@@ -189,7 +189,7 @@ class Contract:
         'on_change_with_needs_underwriting')
 
     def check_underwriting_complete(self):
-        if self.underwritings:
+        if self.needs_underwriting and self.underwritings:
             self.underwritings[-1].check_decision()
 
     @fields.depends('options', 'covered_elements')
