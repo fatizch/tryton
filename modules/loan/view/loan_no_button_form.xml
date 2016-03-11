@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Loan">
+    <notebook>
+        <page id="main" string="Loan Parameters">
+            <label id="main_view_placeholder"/>
+        </page>
+        <page id="table" string="Amortization Table">
+            <field name="payments" colspan="4" mode="tree"/>
+        </page>
+        <page id="quota_share" string="Quota share">
+            <field name="loan_shares" colspan="4" mode="tree,form" view_ids="loan.loan_share_view_tree_editable,loan.loan_share_view_form"/>
+        </page>
+    </notebook>
+</form>

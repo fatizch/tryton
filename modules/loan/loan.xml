@@ -15,6 +15,11 @@
             <field name="type">form</field>
             <field name="name">loan_form</field>
         </record>
+        <record model="ir.ui.view" id="loan_no_button_view_form">
+            <field name="model">loan</field>
+            <field name="type">form</field>
+            <field name="name">loan_no_button_form</field>
+        </record>
         <record model="ir.ui.view" id="loan_simple_view_form">
             <field name="model">loan</field>
             <field name="type">form</field>
@@ -24,6 +29,12 @@
             <field name="model">loan</field>
             <field name="type">form</field>
             <field name="inherit" ref="loan.loan_view_form"/>
+            <field name="name">loan_form_patch</field>
+        </record>
+        <record model="ir.ui.view" id="loan_no_button_view_form_patcher">
+            <field name="model">loan</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="loan.loan_no_button_view_form"/>
             <field name="name">loan_form_patch</field>
         </record>
         <record model="ir.ui.view" id="loan_simple_view_form_patcher">
@@ -53,7 +64,7 @@
         </record>
         <record model="ir.action.act_window.view" id="act_loan_form_view_form">
             <field name="sequence" eval="20"/>
-            <field name="view" ref="loan_view_form"/>
+            <field name="view" ref="loan_no_button_view_form"/>
             <field name="act_window" ref="act_loan_form"/>
         </record>
         <menuitem id="menu_loan_form" icon="loan-interest" action="act_loan_form"/>
@@ -90,7 +101,6 @@
             <field name="model">loan,-1</field>
             <field name="action" ref="act_contract_relate_form"/>
         </record>
-
         <!-- ############################################################ -->
         <!-- ########### Loan Share ########### -->
         <!-- ############################################################ -->

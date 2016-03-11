@@ -4,7 +4,7 @@
         <newline/>
         <label name="show_ordered_loans"/>
         <field name="show_ordered_loans"/>
-        <field name="loans" colspan="4" view_ids="loan.ordered_loan_view_list,loan.loan_view_form"/>
+        <field name="loans" colspan="4" mode="tree,form" view_ids="loan.ordered_loan_view_list,loan.loan_no_button_view_form"/>
         <field name="ordered_loans" colspan="4"/>
     </xpath>
     <xpath expr="//page[@id='cov_elements']/hpaned/child[@id='form']" position="inside">
