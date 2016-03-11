@@ -144,6 +144,11 @@ class Statement(export.ExportImportMixin):
         keys['party'] = line.party_payer
         return tuple([(k, v) for (k, v) in keys.iteritems()])
 
+    def _get_move(self, key):
+        move = super(Statement, self)._get_move(key)
+        move.description = self.name
+        return move
+
 
 class LineGroup:
     __name__ = 'account.statement.line.group'
