@@ -870,7 +870,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return existing_contacts + contacts
 
     def get_contract_address(self, at_date=None):
-        return self.get_contacts('subscriber', at_date)[0].address
+        return self.get_contacts(date=at_date, type_='subscriber')[0].address
 
     def check_activation_dates(self):
         previous_period = None
