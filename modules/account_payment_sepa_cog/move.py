@@ -14,7 +14,7 @@ class MoveLine:
         payment = super(MoveLine, self).new_payment(journal, kind, amount)
         if kind != 'payable' or journal.process_method == 'manual':
             return payment
-        bank_accounts = self.party.get_bank_accounts(payment['date'])
-        if bank_accounts:
-            payment['bank_account'] = bank_accounts[0]
+        bank_account = self.party.get_bank_account(payment['date'])
+        if bank_account:
+            payment['bank_account'] = bank_account
         return payment

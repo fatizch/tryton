@@ -187,25 +187,29 @@ def filter_list_at_date(list_, at_date=None, start_var_name='start_date',
 
 def get_good_versions_at_date(instance, var_name, at_date=None,
         start_var_name='start_date', end_var_name='end_date'):
-    '''This method looks for the elements in the list which are effective at
+    '''
+    This method looks for the elements in the list which are effective at
     the date. By default, it will check that the at_date is between the start
-    date and the end_date, otherwise it will check if there is already a
-    specific method on the object'''
+    date and the end_date
+    '''
 
     if not at_date:
         at_date = today()
-    get_good_versions_at_date = getattr(instance,
-        'get_good_versions_at_date', None)
-    if get_good_versions_at_date:
-        return get_good_versions_at_date(var_name, at_date)
     return filter_list_at_date(getattr(instance, var_name, []), at_date,
         start_var_name, end_var_name)
 
 
-def get_good_version_at_date(instance, var_name, at_date=None):
-    res = get_good_versions_at_date(instance, var_name, at_date)
-    if len(res) == 1:
-        return res[0]
+def get_good_version_at_date(instance, var_name, at_date=None,
+        start_var_name='start_date', end_var_name='end_date'):
+    if not at_date:
+        at_date = today()
+    versions = get_good_versions_at_date(instance, var_name, at_date,
+        start_var_name, end_var_name)
+    for version in sorted(versions, key=lambda v: getattr(v, start_var_name,
+            None) or datetime.date.min, reverse=True):
+        if ((getattr(version, start_var_name, None) or datetime.date.min)
+                <= at_date):
+            return version
 
 
 def find_date(list_to_filter, date):

@@ -60,8 +60,8 @@ class Party:
                     True, at_date, lang))
         return res
 
-    def get_bank_accounts(self, at_date=None):
-        return utils.get_good_versions_at_date(self, 'bank_accounts', at_date)
+    def get_bank_account(self, at_date=None):
+        return utils.get_good_version_at_date(self, 'bank_accounts', at_date)
 
     @classmethod
     def get_var_names_for_full_extract(cls):

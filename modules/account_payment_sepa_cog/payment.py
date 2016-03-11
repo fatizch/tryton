@@ -145,10 +145,9 @@ class Group:
         to_write = []
         for payment in [p for p in self.payments
                 if p.kind == 'payable' and not p.bank_account]:
-            bank_accounts = payment.party.get_bank_accounts(payment['date'])
-            if bank_accounts:
-                to_write += [[payment],
-                    {'bank_account': bank_accounts[0]}]
+            bank_account = payment.party.get_bank_account(payment['date'])
+            if bank_account:
+                to_write += [[payment], {'bank_account': bank_account}]
         if to_write:
             Payment.write(*to_write)
 
@@ -288,13 +287,13 @@ class Payment:
         if self.kind == 'receivable':
             return super(Payment, self).sepa_bank_account_number
         elif not self.bank_account:
-            bank_accounts = self.party.get_bank_accounts(self.date)
-            if not bank_accounts:
+            bank_account = self.party.get_bank_account(self.date)
+            if not bank_account:
                 self.raise_user_error('missing_bank_acount', {
                         'party': self.party.rec_name,
                         'date': self.date,
                         })
-            self.bank_account = bank_accounts[0]
+            self.bank_account = bank_account
 
         for number in self.bank_account.numbers:
             if number.type == 'iban':

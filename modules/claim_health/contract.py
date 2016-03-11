@@ -40,6 +40,6 @@ class CoveredElement:
         return res
 
     def get_claim_default_bank_account(self, name=None):
-        accounts = self.contract.subscriber.get_bank_accounts(utils.today())
-        if accounts:
-            return accounts[0].id
+        account = self.contract.subscriber.get_bank_account(utils.today())
+        if account:
+            return account.id
