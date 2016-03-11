@@ -81,22 +81,25 @@ class Move:
             if len(move_group) == 1:
                 move_groups.append(move_group)
                 continue
-            move_group.sort(key=cls.get_payment_from_move)
-            for _, group in groupby(move_group, cls.get_payment_from_move):
+            move_group.sort(key=cls.group_for_payment_cancellation)
+            for _, group in groupby(move_group,
+                    cls.group_for_payment_cancellation):
                 move_groups.append(list(group))
         return move_groups
 
     @classmethod
-    def get_payment_from_move(cls, move):
+    def group_for_payment_cancellation(cls, move):
+        '''
+            Used to find moves which are payment cancellations, since they
+            should be merged together when cancelled.
+        '''
         if not move.origin:
             return None
-        if move.origin.__name__ == 'account.payment':
-            return move.origin.get_grouping_key()
-        if move.origin.__name__ == 'account.move':
-            # Payment Rejection : Make sure the key is different than that of
-            # original payment
-            res = cls.get_payment_from_move(move.origin), 'canceled'
-            return res
+        if move.origin.__name__ != 'account.move':
+            return None
+        if getattr(move.origin.origin, '__name__', '') != 'account.payment':
+            return None
+        return move.origin.origin.merged_id
 
 
 class MoveLine:
