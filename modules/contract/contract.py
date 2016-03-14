@@ -586,19 +586,15 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             }
 
     @classmethod
-    def getter_activation_history(cls, contracts, names):
-        cursor = Transaction().cursor
-        pool = Pool()
-        ActivationHistory = pool.get('contract.activation_history')
-
-        today = utils.today()
-        values = cls.activation_history_base_values(contracts)
-
-        activation_history = ActivationHistory.__table__()
-        column_end = NullIf(Coalesce(activation_history.end_date,
-                datetime.date.max), datetime.date.max).as_('end_date')
-        column_start = activation_history.start_date.as_('start_date')
-        contract_window = Window([activation_history.contract])
+    def basic_periods_getter(cls, contracts, names, values, today):
+        '''
+        This method is used by the activation history getter
+        when the backend is sqlite (e.g in tests), because
+        sqlite does not support the Window functions.
+        It can also be used if activation history is overloaded
+        with _history = True, to manage request on history
+        tables
+        '''
 
         def convert(value):
             if value:
@@ -606,6 +602,40 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                     return datetime.date(*map(int, value.split('-')))
                 return value
             return value
+
+        for contract in contracts:
+            if not contract.activation_history:
+                continue
+            period = utils.get_value_at_date(contract.activation_history,
+                today, date_field='start_date')
+            if not period:
+                period = contract.activation_history[0]
+            values['start_date'][contract.id] = period.start_date
+            values['end_date'][contract.id] = period.end_date
+
+        if backend.name() == 'sqlite':
+            for fname in ('start_date', 'end_date'):
+                values[fname] = {x: convert(y)
+                    for x, y in values[fname].iteritems()}
+        return values
+
+    @classmethod
+    def getter_activation_history(cls, contracts, names):
+        cursor = Transaction().cursor
+        pool = Pool()
+        ActivationHistory = pool.get('contract.activation_history')
+
+        today = utils.today()
+        values = cls.activation_history_base_values(contracts)
+        if backend.name() == 'sqlite':
+            return cls.basic_periods_getter(contracts, names, values,
+                today)
+
+        activation_history = ActivationHistory.__table__()
+        column_end = NullIf(Coalesce(activation_history.end_date,
+                datetime.date.max), datetime.date.max).as_('end_date')
+        column_start = activation_history.start_date.as_('start_date')
+        contract_window = Window([activation_history.contract])
 
         max_date = datetime.date.max
         for contract_slice in grouped_slice(contracts):
@@ -638,11 +668,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             for elem in cursor.dictfetchall():
                 values['start_date'][elem['id']] = elem['start_date']
                 values['end_date'][elem['id']] = elem['end_date']
-
-        if backend.name() == 'sqlite':
-            for fname in ('start_date', 'end_date'):
-                values[fname] = {x: convert(y)
-                    for x, y in values[fname].iteritems()}
         return values
 
     @fields.depends('product', 'options', 'start_date', 'extra_datas',
