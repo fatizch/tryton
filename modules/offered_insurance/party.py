@@ -57,7 +57,7 @@ class Insurer(model.CoopView, model.CoopSQL):
 
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
-    party = fields.Many2One('party.party', 'Insurer', ondelete='CASCADE',
+    party = fields.Many2One('party.party', 'Insurer', ondelete='RESTRICT',
         required=True)
 
     def get_func_key(self, name):

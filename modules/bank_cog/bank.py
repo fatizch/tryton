@@ -26,6 +26,7 @@ class Bank(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Bank, cls).__setup__()
+        cls.party.ondelete = 'RESTRICT'
         t = cls.__table__()
         cls._sql_constraints += [
             ('bic_uniq', Unique(t, t.bic), 'The bic must be unique!'),

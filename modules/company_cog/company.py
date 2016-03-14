@@ -16,6 +16,11 @@ class Company(export.ExportImportMixin):
         'get_func_key', searcher='search_func_key')
 
     @classmethod
+    def __setup__(cls):
+        super(Company, cls).__setup__()
+        cls.party.ondelete = 'RESTRICT'
+
+    @classmethod
     def _export_light(cls):
         return super(Company, cls)._export_light() | {'currency'}
 
