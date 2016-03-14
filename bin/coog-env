@@ -98,6 +98,12 @@ _coog_env_batch() { # set batch vars
         return 0
 }
 
+coog_env_bootstrap() { # set coog vars on bootstrap
+        _coog_env_files &&
+                _coog_env_paths &&
+                _coog_env_conf
+}
+
 coog_env_init() { # set coog vars
         _coog_env_python &&
                 _coog_env_files &&
