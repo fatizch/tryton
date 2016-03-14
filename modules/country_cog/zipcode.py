@@ -2,7 +2,7 @@
 import re
 from trytond.model import Unique
 
-from trytond.modules.cog_utils import coop_string, fields, model
+from trytond.modules.cog_utils import coop_string, fields, model, utils
 
 
 __all__ = [
@@ -28,6 +28,12 @@ class ZipCode(model.CoopSQL, model.CoopView):
         cls._order.insert(1, ('zip', 'ASC'))
         cls._order.insert(2, ('city', 'ASC'))
         t = cls.__table__()
+        # country_fr removes the 'zip_uniq' constraint
+        # but there is apparently no way to prevent
+        # its creation by overloading __setup__
+        # or __register__ in country_fr
+        if utils.is_module_installed('country_fr'):
+            return
         cls._sql_constraints += [
             ('zip_uniq', Unique(t, t.zip, t.city, t.country),
                 'This city and this zipcode already exist for this country!'),
