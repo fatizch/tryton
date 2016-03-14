@@ -28,7 +28,7 @@ msgstr "Jours définis par rapport au précédent niveau"
 
 msgctxt "field:account.dunning.level,event_log_type:"
 msgid "Event Log Type"
-msgstr "Type d'évènements"
+msgstr "Type de log d'évènements"
 
 msgctxt "field:account.dunning.level,name:"
 msgid "Name"
