@@ -2,6 +2,7 @@ from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
+from trytond.cache import Cache
 
 from trytond.modules.cog_utils import fields, utils, model
 from trytond.modules.contract import _STATES, _DEPENDS
@@ -47,6 +48,7 @@ class Contract:
             ],
         states=_STATES, depends=_DEPENDS + ['broker_party', 'product',
             'start_date'])
+    insurer_agent_cache = Cache('contract_insurer_agent')
 
     @classmethod
     def _export_light(cls):
@@ -91,9 +93,13 @@ class Contract:
             return
         agents = Agent.search(domain)
         pattern = self.get_insurer_pattern(coverage, line)
+        cached = self.insurer_agent_cache.get((pattern, self.id), default=False)
+        if cached is not False:
+            return cached
         for agent in agents:
             for plan_line in agent.plan.lines:
                 if plan_line.match(pattern):
+                    self.insurer_agent_cache.set((pattern, id), agent)
                     return agent
 
     def finalize_invoices_lines(self, lines):

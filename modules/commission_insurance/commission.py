@@ -395,6 +395,18 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
             ]
 
     @classmethod
+    def create(cls, vlist):
+        Contract = Pool().get('contract')
+        Contract.insurer_agent_cache.clear()
+        super(Plan, cls).create(vlist)
+
+    @classmethod
+    def write(cls, *args):
+        Contract = Pool().get('contract')
+        Contract.insurer_agent_cache.clear()
+        super(Plan, cls).write(*args)
+
+    @classmethod
     def _export_light(cls):
         return super(Plan, cls)._export_light() | {'commission_product'}
 
@@ -687,6 +699,18 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
         cls._error_messages.update({
                 'agent_not_found': 'Cannot find matching agent for %s :\n\n%s',
                 })
+
+    @classmethod
+    def create(cls, vlist):
+        Contract = Pool().get('contract')
+        Contract.insurer_agent_cache.clear()
+        super(Agent, cls).create(vlist)
+
+    @classmethod
+    def write(cls, *args):
+        Contract = Pool().get('contract')
+        Contract.insurer_agent_cache.clear()
+        super(Agent, cls).write(*args)
 
     @classmethod
     def is_master_object(cls):

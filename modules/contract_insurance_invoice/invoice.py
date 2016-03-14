@@ -493,10 +493,10 @@ class InvoiceLineDetail(model.CoopSQL, model.CoopView):
     taxes = fields.Char('Taxes', readonly=True)
     parent = fields.Function(
         fields.Reference('Parent Entity', 'get_parent_models'),
-        'get_parent', 'set_reference_field')
+        'get_parent', updater='update_parent_field')
     rated_entity = fields.Function(
         fields.Reference('Rated Entity', 'get_rated_entity_models'),
-        'get_rated_entity', 'set_reference_field')
+        'get_rated_entity', updater='update_rated_entity_field')
     premium = fields.Many2One('contract.premium', 'Premium',
         ondelete='SET NULL', readonly=True, select=True)
 
@@ -526,17 +526,31 @@ class InvoiceLineDetail(model.CoopSQL, model.CoopView):
         return '%s : %s %s' % (self.rated_entity.rec_name, self.rate,
             self.frequency)
 
-    @classmethod
-    def set_reference_field(cls, detail_ids, name, value):
-        value_model, value_id = value.split(',')
-        for fname in getattr(cls, 'get_possible_%s_field' % name)():
-            if cls._fields[fname].model_name == value_model:
-                break
-        else:
-            raise Exception('%s field does not accept %s model as value' % (
-                    name, value_model))
-        for detail_slice in grouped_slice(detail_ids):
-            cls.write(cls.browse(detail_slice), {fname: value_id})
+    def update_parent_field(self, value):
+        value_model = value.__name__
+        not_set = True
+        for fname in self.get_possible_parent_field():
+            if self._fields[fname].model_name == value_model:
+                setattr(self, fname, value)
+                not_set = False
+            else:
+                setattr(self, fname, None)
+        if not_set:
+            raise Exception('parent field does not accept %s model as value' %
+                value_model)
+
+    def update_rated_entity_field(self, value):
+        value_model = value.__name__
+        not_set = True
+        for fname in self.get_possible_rated_entity_field():
+            if self._fields[fname].model_name == value_model:
+                setattr(self, fname, value)
+                not_set = False
+            else:
+                setattr(self, fname, None)
+        if not_set:
+            raise Exception('rated_entity field does not accept'
+                ' %s model as value' % value_model)
 
     @classmethod
     def get_possible_parent_field(cls):
