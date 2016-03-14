@@ -2,6 +2,7 @@ from trytond import backend
 from trytond.pyson import Bool, Eval, If
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
+from trytond.config import config
 
 from trytond.modules.cog_utils import fields, utils
 
@@ -65,6 +66,10 @@ class MoveLine:
         super(MoveLine, cls).__register__(module)
         # Migrate from 1.3 : second step
         if not do_migrate:
+            return
+        if config.get('env', 'testing') == 'True':
+            # necessary because the migration script
+            # uses Window function not supported by sqlite
             return
         # Do migrate
         cursor.execute('''
