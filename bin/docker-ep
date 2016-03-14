@@ -151,6 +151,8 @@ app() { # start Coog app inside container
         echo Staring Coog...
         local file
         file=`ep_conf_file`
+        export PYTHONUNBUFFERED=1
+        export PYTHONPATH="$COOG_TRYTOND:$PYTHONPATH"
         trytond -c $file $*
 }
 
