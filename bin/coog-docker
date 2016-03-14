@@ -6,8 +6,41 @@ coog_docker_env() { # build docker env image - [docker-build-arg*]
         docker build -t coog/env -f conf/env.df $* .
 }
 
-coog_docker_hashpwd() { # hash trytond super pwd - <pwd>
+_coog_docker_hashpwd() { # hash trytond super pwd - <pwd>
         python2 -c "import crypt,random,string; print crypt.crypt('$1', ''.join(random.sample(string.ascii_letters + string.digits, 8)))"
+}
+
+_coog_docker_archive() { # archive repo - <repo> <tree>
+        local wd; wd=`pwd`
+        local repo; repo=$1
+        local tree; tree=$2
+        cd $COOG_ROOT/$repo
+        echo $repo:$tree:`git rev-parse $tree` >> "$wd"/.cache/.version
+        [ $? -ne 0 ] && echo bad revision $tree from $repo && return 1
+        local base; base="$wd"/.cache/"$repo"
+        local submodules; submodules=`git submodule | wc -l`
+        if [ $submodules -eq 0 ]
+        then
+                git archive --format tar -o "$base".tar $tree
+        else
+                local current; current=`git rev-parse --abbrev-ref HEAD`
+                [ -z $current ] && echo $repo: branch is $current && return 1
+                [ "$current" = HEAD ] && echo $repo: branch is $current && return 1
+                local dirty; dirty=`git diff $current | wc -l`
+                [ "$dirty" -ne 0 ] && echo repo $repo is not clean && return 1
+                git checkout $tree
+                [ $? -ne 0 ] && echo "checkout $tree ko" && return 1
+                git submodule update
+                [ $? -ne 0 ] && echo "sub update $tree ko" && return 1
+                git archive --format tar -o "$base".tar HEAD
+                git submodule foreach "git archive --prefix="'$path'"/ --format tar -o "$base"-"'$sha1'".tar HEAD"
+                git submodule foreach "tar A -f "$base".tar "$base"-"'$sha1'".tar"
+                git submodule foreach "rm -f "$base"-"'$sha1'".tar"
+                git checkout "$current"
+                git submodule update
+        fi
+        mkdir $base && tar x -f "$base".tar -C $base && rm "$base".tar
+        cd "$wd"
 }
 
 coog_docker_build() { # build docker image - <pwd> [image*] -- [docker-build-arg*]
@@ -17,7 +50,7 @@ coog_docker_build() { # build docker image - <pwd> [image*] -- [docker-build-arg
         [ -d .cache ] && rm -rf .cache
         mkdir .cache
         local pass; pass=$1; shift
-        coog_docker_hashpwd $pass > .cache/.password
+        _coog_docker_hashpwd $pass > .cache/.password
         local image; image=$1
         while [ ! -z $1 ]
         do
@@ -27,24 +60,9 @@ coog_docker_build() { # build docker image - <pwd> [image*] -- [docker-build-arg
                 local tree
                 repo=`echo $component | cut -d ":" -f 1`
                 tree=`echo $component | cut -d ":" -f 2`
-                [ ! -d $COOG_ROOT/$repo ] && echo repo $repo does not exist && return
-                local wd
-                wd=`pwd`
-                cd $COOG_ROOT/$repo
-                echo $repo:$tree:`git rev-parse $tree` >> $wd/.cache/.version || \
-                        (echo bad revision $tree from $repo && return)
-                git archive --format tar $tree | \
-                        (mkdir $wd/.cache/$repo && cd $wd/.cache/$repo && tar xf -)
-                cd $wd
+                [ ! -d $COOG_ROOT/$repo ] && echo repo $repo does not exist && return 1
+                _coog_docker_archive $repo $tree || return 1
         done
         cp conf/coog.df .cache
         docker build -t coog/$image -f .cache/coog.df $* .cache
-}
-
-coog_docker_clean() { # clean images and volumes
-        docker rmi `docker images -q -f dangling=true`
-        docker run -v /var/run/docker.sock:/var/run/docker.sock \
-                -v /var/lib/docker:/var/lib/docker \
-                --rm \
-                martin/docker-cleanup-volumes
 }
