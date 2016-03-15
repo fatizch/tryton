@@ -1156,7 +1156,8 @@ class ProcessEnd(Wizard):
         good_values[0]['views'] = [
             view for view in good_values[0]['views'] if view[1] == 'form']
         return good_values[0], {
-            'res_id': Transaction().context.get('active_ids')}
+            'res_id': Transaction().context.get('active_ids'),
+            'extra_context': {'running_process': ''}}
 
     def end(self):
         return 'close'
