@@ -1955,10 +1955,14 @@ class StartEndorsement(Wizard):
     def do_open_endorsement(self, action):
         Endorsement = Pool().get('endorsement')
         # Look for possibly created endorsements
-        next_endorsements = Endorsement.search([
-                ('generated_by', '=', self.endorsement)])
+        next_endorsements = [x.id
+            for x in Endorsement.search([
+                    ('generated_by', '=', self.endorsement)])]
         action['domains'] = []
-        return action, {'res_id': [x.id for x in next_endorsements]}
+        encoder = PYSONEncoder()
+        action['pyson_domain'] = encoder.encode(
+            [('id', 'in', next_endorsements)])
+        return action, {'res_id': next_endorsements}
 
     def transition_change_start_date_previous(self):
         self.end_current_part('change_start_date')

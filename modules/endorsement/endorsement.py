@@ -2268,8 +2268,12 @@ class OpenGeneratedEndorsements(Wizard):
     def do_open_generated(self, action):
         Endorsement = Pool().get('endorsement')
         # Look for possibly created endorsements
-        next_endorsements = Endorsement.search([
-                ('generated_by', 'in',
-                    Transaction().context.get('active_ids'))])
+        next_endorsements = [x.id
+            for x in Endorsement.search([
+                    ('generated_by', 'in',
+                        Transaction().context.get('active_ids'))])]
         action['domains'] = []
-        return action, {'res_id': [x.id for x in next_endorsements]}
+        encoder = PYSONEncoder()
+        action['pyson_domain'] = encoder.encode(
+            [('id', 'in', next_endorsements)])
+        return action, {'res_id': next_endorsements}
