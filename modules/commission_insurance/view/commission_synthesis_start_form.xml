@@ -2,4 +2,6 @@
 <form string="Select broker fees account">
     <label name="broker_fees_account"/>
     <field name="broker_fees_account"/>
+    <newline/>
+    <field name="broker_fees_accounts" invisible="1"/>
 </form>

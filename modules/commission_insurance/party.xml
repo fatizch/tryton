@@ -67,6 +67,7 @@
         <record model="ir.action.wizard" id="act_commission_synthesis_display">
             <field name="name">Commissions Synthesis</field>
             <field name="wiz_name">commission.synthesis</field>
+            <field name="window" eval="True"/>
         </record>
     </data>
 </tryton>

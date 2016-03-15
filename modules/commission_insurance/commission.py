@@ -983,7 +983,8 @@ class OpenCommissionsSynthesis(Wizard):
 
     __name__ = 'commission.synthesis'
 
-    start_state = 'start'
+    start_state = 'select_account'
+    select_account = StateTransition()
     start = StateView('commission.synthesis.start',
         'commission_insurance.synthesis_start_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
@@ -994,12 +995,27 @@ class OpenCommissionsSynthesis(Wizard):
             Button('Ok', 'end', 'tryton-ok', default=True),
             ])
 
+    def transition_select_account(self):
+        Fee = Pool().get('account.fee')
+        fees = Fee.search([('broker_fee', '=', True)])
+        accounts = set([])
+        for f in fees:
+            if f.product and f.product.template and \
+                    f.product.template.account_expense_used:
+                accounts.add(f.product.template.account_expense_used)
+        self.start.broker_fees_accounts = list(accounts)
+        if len(self.start.broker_fees_accounts) == 1:
+            self.start.broker_fees_account = self.start.broker_fees_accounts[0]
+            return 'show'
+        return 'start'
+
     def get_broker_fees_paid(self, broker_party):
         MoveLine = Pool().get('account.move.line')
         move_lines = MoveLine.search([
                 ('broker_fee_invoice_line.invoice.state', '=', 'paid'),
                 ('party', '=', broker_party.id),
                 ('account', '=', self.start.broker_fees_account.id),
+                ('journal.type', '!=', 'commission',)
                 ])
         return -1 * sum([x.amount for x in move_lines])
 
@@ -1012,6 +1028,7 @@ class OpenCommissionsSynthesis(Wizard):
                         ]),
                 ('party', '=', broker_party.id),
                 ('account', '=', self.start.broker_fees_account.id),
+                ('journal.type', '!=', 'commission',)
                 ])
         return -1 * sum([x.amount for x in move_lines])
 
@@ -1087,23 +1104,16 @@ class OpenCommissionsSynthesisStart(model.CoopView):
 
     broker_fees_account = fields.Many2One('account.account',
         'Broker fees account', required=True,
-        domain=[('company', '=', Eval('company'))], depends=['company'],
-    )
+        domain=[('id', 'in', Eval('broker_fees_accounts'))],
+        depends=['broker_fees_accounts'])
+    broker_fees_accounts = fields.Many2Many('account.account', None, None,
+        'Broker Fees Accounts')
     company = fields.Many2One('company.company', 'Company', required=True,
         states={'invisible': True})
 
     @staticmethod
     def default_company():
         return Transaction().context.get('company')
-
-    @staticmethod
-    def default_broker_fees_account():
-        Fee = Pool().get('account.fee')
-        fees = Fee.search([('broker_fee', '=', True)])
-        for f in fees:
-            if f.product and f.product.template and \
-                    f.product.template.account_expense_used:
-                return f.product.template.account_expense_used.id
 
 
 class OpenCommissionsSynthesisShow(model.CoopView, ModelCurrency):
