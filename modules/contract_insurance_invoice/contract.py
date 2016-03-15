@@ -1359,6 +1359,11 @@ class Premium:
         result = super(Premium, self).same_value(other)
         return result and self.account == other.account
 
+    @property
+    def prorate_premiums(self):
+        return Pool().get(
+            'offered.configuration').get_cached_prorate_premiums()
+
     @classmethod
     def new_line(cls, line, start_date, end_date):
         new_line = super(Premium, cls).new_line(line, start_date, end_date)
@@ -1457,11 +1462,15 @@ class Premium:
                 return self.amount
             else:
                 return 0
+
         if next_date and (next_date - end).days > 1:
             if (next_date - last_date).days != 0:
-                ratio = (Decimal((end - last_date).days + 1)
-                    / Decimal((next_date - last_date).days))
-                amount += self.amount * ratio
+                if self.prorate_premiums:
+                    ratio = (Decimal((end - last_date).days + 1)
+                        / Decimal((next_date - last_date).days))
+                    amount += self.amount * ratio
+                elif (end - last_date).days + 1 != 0:
+                    amount += self.amount
         return amount
 
     def get_invoice_lines(self, start, end):

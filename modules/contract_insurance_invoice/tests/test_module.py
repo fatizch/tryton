@@ -39,6 +39,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'MoveLine': 'account.move.line',
             'User': 'res.user',
             'Configuration': 'account.configuration',
+            'OfferedConfiguration': 'offered.configuration',
             'PaymentJournal': 'account.payment.journal',
             'Reconciliation': 'account.move.reconciliation',
             }
@@ -48,6 +49,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         company, = self.Company.search([
                 ('rec_name', '=', 'Dunder Mifflin'),
                 ])
+        config = self.OfferedConfiguration(1)
         contract = self.Contract()
         contract.start_date = date(2011, 10, 21)
         contract.company = company
@@ -59,6 +61,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         for period, amount in (
                 ((date(2014, 1, 1), date(2014, 1, 31)), Decimal(100)),
+                ((date(2014, 1, 16), date(2014, 1, 31)), Decimal(100) *
+                    Decimal(16) / Decimal(31)),
                 ((date(2014, 1, 1), date(2014, 2, 28)), Decimal(200)),
                 ((date(2014, 1, 1), date(2014, 3, 31)), Decimal(300)),
                 ((date(2014, 1, 1), date(2014, 12, 31)), Decimal(1200)),
@@ -67,6 +71,20 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ):
             self.assertEqual(premium_monthly.get_amount(*period), amount)
 
+        config._prorate_cache.set('prorate', False)
+        for period, expected in (
+                ((date(2014, 1, 1), date(2014, 1, 31)), Decimal(100)),
+                ((date(2014, 1, 16), date(2014, 1, 31)), Decimal(100)),
+                ((date(2014, 1, 1), date(2014, 2, 28)), Decimal(200)),
+                ((date(2014, 1, 1), date(2014, 3, 31)), Decimal(300)),
+                ((date(2014, 1, 1), date(2014, 12, 31)), Decimal(1200)),
+                ((date(2014, 1, 15), date(2014, 2, 23)), Decimal(200)),
+                ):
+            res = premium_monthly.get_amount(*period)
+            self.assertEqual(res, expected, 'Expected %s , got %s '
+                    'for period %s ' % (expected, res, period))
+
+        config._prorate_cache.set('prorate', True)
         premium_yearly = self.Premium(
             frequency='yearly',
             amount=Decimal(100),
@@ -79,6 +97,18 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ((date(2014, 1, 1), date(2015, 12, 31)), Decimal(200)),
                 ):
             self.assertEqual(premium_yearly.get_amount(*period), amount)
+
+        config._prorate_cache.set('prorate', False)
+        for period, expected in (
+                ((date(2014, 1, 1), date(2014, 12, 31)), Decimal(100)),
+                ((date(2014, 1, 1), date(2014, 1, 31)), Decimal(100)),
+                ((date(2014, 1, 1), date(2015, 1, 1)), Decimal(200)),
+                ((date(2014, 1, 1), date(2015, 6, 1)), Decimal(200)),
+                ):
+            res = premium_yearly.get_amount(*period)
+            self.assertEqual(res, expected, 'Expected %s , got %s '
+                    'for period %s ' % (expected, res, period))
+        config._prorate_cache.set('prorate', True)
 
         # Test leap years
         for period, amount in (
