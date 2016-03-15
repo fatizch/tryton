@@ -255,6 +255,10 @@ msgid "Change Beneficiaries"
 msgstr "Modifier les bénéficiaires"
 
 msgctxt "selection:contract.manage_beneficiaries.beneficiary,action:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:contract.manage_beneficiaries.beneficiary,action:"
 msgid "Added"
 msgstr "Ajouté"
 

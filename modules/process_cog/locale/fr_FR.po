@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -29,23 +29,13 @@ msgstr ""
 "L'enregistrement courant (%s) sera supprimé, êtes-vous certain de vouloir "
 "continuer ?"
 
-msgctxt "field:event.type.action,process_to_initiate:"
-msgid "Process To Initiate"
-msgstr "Processus à initier"
-
 msgctxt "field:event.type.action,filter_on_event_object:"
 msgid "Filter On Event Object"
 msgstr "Filter sur l'objet de l'événement"
 
-msgctxt "help:event.type.action,filter_on_event_object:"
-msgid ""
-"If checked, the pyson condition will apply on the original"
-" object of the event. Otherwise, the condition will apply on the"
-" object of the process."
-msgstr ""
-"Si coché, la condition pyson s'applique sur l'objet original"
-" de l'événement. Sinon, la condition s'applique sur l'objet "
-" du processus."
+msgctxt "field:event.type.action,process_to_initiate:"
+msgid "Process To Initiate"
+msgstr "Processus à initier"
 
 msgctxt "field:ir.ui.view.description,create_date:"
 msgid "Create Date"
@@ -354,6 +344,14 @@ msgstr "Descriptin Pyson"
 msgctxt "field:process.transition,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "help:event.type.action,filter_on_event_object:"
+msgid ""
+"If checked, the pyson condition will apply on the original object of the "
+"event. Otherwise, the condition will apply on the object of the process."
+msgstr ""
+"Si coché, la condition pyson s'applique sur l'objet original de l'événement."
+" Sinon, la condition s'applique sur l'objet  du processus."
 
 msgctxt "help:process,complete_message:"
 msgid ""

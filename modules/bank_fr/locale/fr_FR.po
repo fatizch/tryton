@@ -1,6 +1,10 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:bank.account:"
+msgid "The IBAN and bank do not match"
+msgstr "L'IBAN et la banque ne correspondent pas."
 
 msgctxt "error:bank.agency:"
 msgid "The bank code %s must contain 5 numeric chars."
@@ -14,17 +18,21 @@ msgctxt "field:bank,agencies:"
 msgid "Agencies"
 msgstr "Agences"
 
-msgctxt "field:bank.agency,bank:"
-msgid "Bank"
-msgstr "Banque"
-
 msgctxt "field:bank.agency,address:"
 msgid "Address"
 msgstr "Adresse"
 
+msgctxt "field:bank.agency,bank:"
+msgid "Bank"
+msgstr "Banque"
+
 msgctxt "field:bank.agency,bank_code:"
 msgid "Bank Code"
 msgstr "Code Banque"
+
+msgctxt "field:bank.agency,bank_party:"
+msgid "Bank Party"
+msgstr "Tiers de la banque"
 
 msgctxt "field:bank.agency,branch_code:"
 msgid "Branch Code"
@@ -74,6 +82,10 @@ msgctxt "model:ir.action,name:act_agency_relate_form"
 msgid "Agencies"
 msgstr "Agences"
 
+msgctxt "model:ir.test_case.instance,name:agencies_test_case"
+msgid "Agencies Test Case"
+msgstr "Jeu d'essai d'agences bancaires"
+
 msgctxt "view:bank.agency:"
 msgid "Agencies"
 msgstr "Agences"
@@ -81,7 +93,3 @@ msgstr "Agences"
 msgctxt "view:bank.agency:"
 msgid "Agency"
 msgstr "Agence"
-
-msgctxt "error:bank.account:"
-msgid "The IBAN and bank do not match"
-msgstr "L'IBAN et la banque ne correspondent pas."

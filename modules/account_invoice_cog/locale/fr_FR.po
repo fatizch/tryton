@@ -34,6 +34,10 @@ msgctxt "field:account.move,is_invoice_canceled:"
 msgid "Invoice Canceled"
 msgstr "Quittance annulée"
 
+msgctxt "field:account.move.line,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
 msgctxt "field:account.move.line,is_invoice_canceled:"
 msgid "Invoice Canceled"
 msgstr "Quittance annulée"
@@ -100,6 +104,14 @@ msgctxt "field:account.invoice.line,invoice:account_invoice."
 msgid "Invoice"
 msgstr "Quittance"
 
+msgctxt "field:account.invoice.line,party:account_invoice."
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:account.invoice,party:account_invoice."
+msgid "Party"
+msgstr "Tiers"
+
 msgctxt "field:account.invoice.pay.ask,invoice:account_invoice."
 msgid "Invoice"
 msgstr "Quittance"
@@ -131,16 +143,6 @@ msgid "Invoice"
 msgstr "Quittance"
 
 msgctxt ""
-"model:ir.action.act_window.domain,name:account_invoice.act_invoice_out_credit_note_domain_posted"
-msgid "Posted"
-msgstr "Emis"
-
-msgctxt ""
-"model:ir.action.act_window.domain,name:account_invoice.act_invoice_in_invoice_domain_posted"
-msgid "Posted"
-msgstr "Emis"
-
-msgctxt ""
 "model:ir.action.act_window.domain,name:account_invoice.act_invoice_in_credit_note_domain_posted"
 msgid "Posted"
 msgstr "Emis"
@@ -150,9 +152,19 @@ msgctxt ""
 msgid "Posted"
 msgstr "Emis"
 
-msgctxt "model:ir.action,name:account_invoice.act_invoice_form"
-msgid "Invoices"
-msgstr "Quittances"
+msgctxt ""
+"model:ir.action.act_window.domain,name:account_invoice.act_invoice_in_invoice_domain_posted"
+msgid "Posted"
+msgstr "Emis"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:account_invoice.act_invoice_out_credit_note_domain_posted"
+msgid "Posted"
+msgstr "Emis"
+
+msgctxt "model:ir.action,name:account_invoice.report_invoice"
+msgid "Invoice"
+msgstr "Quittance"
 
 msgctxt "model:ir.action,name:account_invoice.print"
 msgid "Invoice"
@@ -162,11 +174,11 @@ msgctxt "model:ir.action,name:account_invoice.act_invoice_out_invoice_form"
 msgid "Invoices"
 msgstr "Quittances"
 
-msgctxt "model:ir.action,name:account_invoice.report_invoice"
-msgid "Invoice"
-msgstr "Quittance"
-
 msgctxt "model:ir.action,name:account_invoice.act_invoice_form2"
+msgid "Invoices"
+msgstr "Quittances"
+
+msgctxt "model:ir.action,name:account_invoice.act_invoice_form"
 msgid "Invoices"
 msgstr "Quittances"
 
@@ -175,11 +187,11 @@ msgctxt ""
 msgid "Invoice"
 msgstr "Quittance"
 
-msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoices"
+msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoice_out_invoice_form"
 msgid "Invoices"
 msgstr "Quittances"
 
-msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoice_out_invoice_form"
+msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoices"
 msgid "Invoices"
 msgstr "Quittances"
 
@@ -188,12 +200,12 @@ msgid "Invoice"
 msgstr "Quittance"
 
 msgctxt "selection:account.invoice,state:account_invoice."
-msgid "Posted"
-msgstr "Emise"
-
-msgctxt "selection:account.invoice,state:account_invoice."
 msgid "Canceled"
 msgstr "Annulée"
+
+msgctxt "selection:account.invoice,state:account_invoice."
+msgid "Posted"
+msgstr "Emise"
 
 msgctxt "selection:account.invoice,state:account_invoice."
 msgid "Validated"
@@ -204,17 +216,17 @@ msgid "Invoice"
 msgstr "Quittance"
 
 msgctxt "view:account.invoice:account_invoice."
+msgid "Invoices"
+msgstr "Quittances"
+
+msgctxt "view:account.invoice:account_invoice."
 msgid "Invoice"
 msgstr "Quittance"
 
 msgctxt "view:account.invoice:account_invoice."
-msgid "Invoices"
-msgstr "Quittances"
+msgid "Post"
+msgstr "Emettre"
 
 msgctxt "view:account.invoice.line:account_invoice."
 msgid "Invoice Lines"
 msgstr "Lignes de quittance"
-
-msgctxt "view:account.invoice:account_invoice."
-msgid "Post"
-msgstr "Emettre"

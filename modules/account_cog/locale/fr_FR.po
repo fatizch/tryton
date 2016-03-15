@@ -118,6 +118,10 @@ msgctxt "field:account.move.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.move.reconcile_lines.writeoff,post_writeoff:"
+msgid "Post Writeoff Move"
+msgstr "Emettre le mouvement d'ajustement"
+
 msgctxt "field:account.move.template,auto_post_moves:"
 msgid "Auto Post Generated Moves"
 msgstr "Emettre automatiquement les mouvements générés"
@@ -146,10 +150,6 @@ msgstr "Identifiant XML"
 msgctxt "field:account.reconcile.show,post_leftovers:"
 msgid "Post Left Over Moves"
 msgstr "Émettre les mouvements d'ajustement"
-
-msgctxt "field:account.move.reconcile_lines.writeoff,post_writeoff:"
-msgid "Post Writeoff Move"
-msgstr "Emettre le mouvement d'ajustement"
 
 msgctxt "field:account.tax,xml_id:"
 msgid "XML Id"
@@ -257,7 +257,7 @@ msgstr "Identifiant XML"
 
 msgctxt "model:account.journal,name:journal_split"
 msgid "Move Line Reconciliation Split Journal"
-msgstr "Journal des mouvements de découpage des lettrages"
+msgstr "Journal de mouvements de découpage"
 
 msgctxt "model:account.journal.type,name:journal_type_split"
 msgid "Split"
@@ -410,6 +410,10 @@ msgctxt "field:account.create_chart.properties,account_receivable:account."
 msgid "Default Receivable Account"
 msgstr "Compte à recevoir par défaut"
 
+msgctxt "field:account.move.line,party:account."
+msgid "Party"
+msgstr "Tiers"
+
 msgctxt "field:account.move.line,reconciliation:account."
 msgid "Reconciliation"
 msgstr "Lettrage"
@@ -423,12 +427,12 @@ msgid "Account Receivable"
 msgstr "Compte à recevoir"
 
 msgctxt "error:account.move.line:account."
-msgid "Line \"%s\" (%d) already reconciled."
-msgstr "La ligne \"%s\" (%d) est déjà  lettrée."
-
-msgctxt "error:account.move.line:account."
 msgid "You can not modify line \"%s\" because it is reconciled."
 msgstr "Vous ne pouvez modifier la ligne « %s » car elle est lettrée."
+
+msgctxt "error:account.move.line:account."
+msgid "Line \"%s\" (%d) already reconciled."
+msgstr "La ligne \"%s\" (%d) est déjà  lettrée."
 
 msgctxt "error:account.move.reconciliation:account."
 msgid "You can not modify a reconciliation."
@@ -468,21 +472,21 @@ msgctxt "model:account.reconcile.show,name:account."
 msgid "Reconcile"
 msgstr "Lettrer"
 
-msgctxt "model:ir.action,name:account.act_reconcile"
-msgid "Reconcile Accounts"
-msgstr "Lettrer les comptes"
-
-msgctxt "model:ir.action,name:account.act_reconcile_lines"
-msgid "Reconcile Lines"
-msgstr "Lettrer les lignes"
-
 msgctxt "model:ir.action,name:account.act_move_reconciliation_lines"
 msgid "Reconciliation Lines"
 msgstr "Lignes de lettrage"
 
+msgctxt "model:ir.action,name:account.act_reconcile"
+msgid "Reconcile Accounts"
+msgstr "Lettrer les comptes"
+
 msgctxt "model:ir.action,name:account.act_unreconcile_lines"
 msgid "Unreconcile Lines"
 msgstr "Dé-lettrer les lignes"
+
+msgctxt "model:ir.action,name:account.act_reconcile_lines"
+msgid "Reconcile Lines"
+msgstr "Lettrer les lignes"
 
 msgctxt "model:ir.sequence,name:account.sequence_account_move_reconciliation"
 msgid "Default Account Move Reconciliation"
@@ -497,25 +501,33 @@ msgctxt "model:ir.ui.menu,name:account.menu_reconcile"
 msgid "Reconcile Accounts"
 msgstr "Lettrer les comptes"
 
+msgctxt "odt:account.aged_balance:account."
+msgid "Party"
+msgstr "Tiers"
+
 msgctxt "odt:account.move.general_journal:account."
 msgid "Posted"
 msgstr "Emis"
 
-msgctxt "selection:account.account,kind:account."
-msgid "Payable"
-msgstr "À payer"
+msgctxt "odt:account.third_party_balance:account."
+msgid "Party"
+msgstr "Tiers"
 
 msgctxt "selection:account.account,kind:account."
 msgid "Receivable"
 msgstr "À recevoir"
 
-msgctxt "selection:account.account.template,kind:account."
-msgid "Receivable"
-msgstr "À recevoir"
+msgctxt "selection:account.account,kind:account."
+msgid "Payable"
+msgstr "À payer"
 
 msgctxt "selection:account.account.template,kind:account."
 msgid "Payable"
 msgstr "À payer"
+
+msgctxt "selection:account.account.template,kind:account."
+msgid "Receivable"
+msgstr "À recevoir"
 
 msgctxt "selection:account.move.line,move_state:account."
 msgid "Posted"

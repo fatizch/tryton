@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -15,6 +15,10 @@ msgid "Beneficiaries"
 msgstr "Bénéficiaires"
 
 msgctxt "field:contract.option,beneficiary_clause:"
+msgid "Beneficiary Clause"
+msgstr "Clause bénéficiaire"
+
+msgctxt "field:contract.option,beneficiary_clause_text:"
 msgid "Beneficiary Clause"
 msgstr "Clause bénéficiaire"
 
@@ -81,10 +85,6 @@ msgstr "Mis à jour par"
 msgctxt "field:contract.option.beneficiary,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
-
-msgctxt "model:contract.contact.type,name:accepting_benef"
-msgid "Accepting Beneficiary"
-msgstr "Bénéficiaire acceptant"
 
 msgctxt "model:contract.option.beneficiary,name:"
 msgid "Contract Beneficiary"

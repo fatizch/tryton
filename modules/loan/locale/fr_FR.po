@@ -38,16 +38,22 @@ msgid "There must be at least one loan"
 msgstr "Il doit y avoir au moins un prêt"
 
 msgctxt "error:loan.increment:"
+msgid ""
+"Incoherent begin balance (%(begin)s) and end balance (%(end)s) regarding "
+"payment amount (%(payment)s)."
+msgstr ""
+"Le CRD en début de période (%(begin)s) et celui de fin (%(end)s) sont "
+"incohérents au regard du montant des échéances (%(payment)s)"
+
+msgctxt "error:loan.increment:"
 msgid "Number of payments must be > 0"
 msgstr "Le nombre de paiements doit être > 0"
 
-msgctxt "error:loan.increment:"
-msgid "Incoherent begin balance (%(begin)s) and end balance (%(end)s) regarding payment amount (%(payment)s)."
-msgstr "Le CRD en début de période (%(begin)s) et celui de fin (%(end)s) sont incohérents au regard du montant des échéances (%(payment)s)"
-
 msgctxt "error:loan:"
 msgid "Increment start date cannot be before first payment date !"
-msgstr "La date de début des paliers doit être antérieure à la date de premier paiement !"
+msgstr ""
+"La date de début des paliers doit être antérieure à la date de premier "
+"paiement !"
 
 msgctxt "error:loan:"
 msgid "No loan sequence defined"
@@ -347,7 +353,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:loan.increment,begin_balance:"
 msgid "Begin Balance"
-msgstr "Balance Initiale"
+msgstr "Balance initiale"
 
 msgctxt "field:loan.increment,create_date:"
 msgid "Create Date"
@@ -411,7 +417,7 @@ msgstr "Numéro"
 
 msgctxt "field:loan.increment,number_of_payments:"
 msgid "Number of Payments"
-msgstr "Nombre d'Echéances"
+msgstr "Nombre d'échéances"
 
 msgctxt "field:loan.increment,payment_amount:"
 msgid "Payment Amount"
@@ -451,7 +457,7 @@ msgstr "Montant"
 
 msgctxt "field:loan.payment,begin_balance:"
 msgid "Begin Balance"
-msgstr "Balance Initiale"
+msgstr "Balance initiale"
 
 msgctxt "field:loan.payment,create_date:"
 msgid "Create Date"

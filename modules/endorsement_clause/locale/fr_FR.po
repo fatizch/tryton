@@ -58,6 +58,10 @@ msgctxt "field:contract.manage_clauses,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.manage_clauses,new_clause:"
+msgid "New Clause"
+msgstr "Nouvelle clause"
+
 msgctxt "field:contract.manage_clauses,possible_clauses:"
 msgid "Possible Clauses"
 msgstr "Clauses possibles"

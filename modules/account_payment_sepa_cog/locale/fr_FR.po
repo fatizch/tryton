@@ -30,6 +30,10 @@ msgctxt "field:account.payment,sepa_bank_reject_date:"
 msgid "SEPA Bank Reject Date"
 msgstr "Date de rejet de la banque"
 
+msgctxt "field:account.payment.fail,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:account.payment.group,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -78,6 +82,10 @@ msgstr "Mandats SEPA"
 msgctxt "field:party.party,is_sepa_creditor_identifier_needed:"
 msgid "Need SEPA Creditor Identifier"
 msgstr "SEPA Creditor Identifier nécessaire"
+
+msgctxt "model:account.payment.fail,name:"
+msgid "Payment Fail Batch"
+msgstr "Batch de rejets de paiements"
 
 msgctxt "model:account.payment.journal.reject_reason,description:sepa_AC01"
 msgid "Account identifier incorrect"

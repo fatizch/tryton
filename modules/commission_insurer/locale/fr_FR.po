@@ -2,21 +2,29 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:received_premiums:"
-msgid "Received Premium"
-msgstr "Primes reçues"
+msgctxt "error:commission:"
+msgid ""
+"An error occured while looking for previously generated invoice (%s result "
+"found, 1 expected)"
+msgstr ""
+"Une erreur est survenue lors de la recherche de la quittance précédemment "
+"générée (%s résultat(s) trouvé(s), 1 attendu)"
 
 msgctxt "error:commission:"
-msgid "An error occured while looking for previously generated invoice (%s result found, 1 expected)"
-msgstr "Une erreur est survenue lors de la recherche de la quittance précédemment générée (%s résultat(s) trouvé(s), 1 attendu)"
-
-msgctxt "error:commission:"
-msgid "An error occured while looking for previously generated invoice line (%s result found, 1 expected)"
-msgstr "Une erreur est survenue lors de la recherhe de la ligne de quittance précédemment générée (%s résultat(s) trouvé(s), 1 attendu)"
+msgid ""
+"An error occured while looking for previously generated invoice line (%s "
+"result found, 1 expected)"
+msgstr ""
+"Une erreur est survenue lors de la recherhe de la ligne de quittance "
+"précédemment générée (%s résultat(s) trouvé(s), 1 attendu)"
 
 msgctxt "error:commission:"
 msgid "An insurer notice has already been generated today for (%s)"
-msgstr "Un bordereur assureur a déja été généré aujourd'hui pour (%s)"
+msgstr "Un bordereau assureur a déja été généré aujourd'hui pour (%s)"
+
+msgctxt "error:received_premiums:"
+msgid "Received Premium"
+msgstr "Primes reçues"
 
 msgctxt "field:account.invoice.line,principal_lines:"
 msgid "Principal Lines"
@@ -25,6 +33,10 @@ msgstr "Lignes "
 msgctxt "field:account.move.line,principal_invoice_line:"
 msgid "Principal Invoice Line"
 msgstr "Ligne de facturation assureur"
+
+msgctxt "field:account.move.line,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:commission.create_invoice_principal.ask,company:"
 msgid "Company"
@@ -54,6 +66,18 @@ msgctxt "field:commission.create_invoice_principal.ask,until_date:"
 msgid "Until Date"
 msgstr "Jusqu'au"
 
+msgctxt "field:commission.invoice_principal.create_empty,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.invoice_principal.finalize,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.invoice_principal.link,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:insurer,waiting_account:"
 msgid "Waiting Account"
 msgstr "Compte d'attente"
@@ -61,6 +85,18 @@ msgstr "Compte d'attente"
 msgctxt "model:commission.create_invoice_principal.ask,name:"
 msgid "Create Invoice Principal"
 msgstr "Génération des bordereaux"
+
+msgctxt "model:commission.invoice_principal.create_empty,name:"
+msgid "Insurer Empty Invoice Principal Creation Batch"
+msgstr "Batch de création des bordereaux assureur"
+
+msgctxt "model:commission.invoice_principal.finalize,name:"
+msgid "Insurer Invoice Principal Finalize Batch"
+msgstr "Batch de finalisation des bordereaux assureur"
+
+msgctxt "model:commission.invoice_principal.link,name:"
+msgid "Insurer Invoice Principal Link Batch"
+msgstr "Batch de constitution des bordereaux assureur"
 
 msgctxt "model:ir.action,name:act_commission_create_invoice_principal"
 msgid "Create Commission Invoice Principal"

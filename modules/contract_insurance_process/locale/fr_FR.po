@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -37,10 +37,6 @@ msgstr "Trace Courante"
 msgctxt "field:contract,current_state:"
 msgid "Current State"
 msgstr "Etat courant"
-
-msgctxt "field:contract,doc_received:"
-msgid "All Documents Received"
-msgstr "Tous les documents sont reçus"
 
 msgctxt "field:contract,logs:"
 msgid "Task"

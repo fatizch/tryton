@@ -18,6 +18,10 @@ msgctxt "field:debug.model,id:"
 msgid "ID"
 msgstr "Id"
 
+msgctxt "field:debug.model,initial_frame:"
+msgid "Initial Frame"
+msgstr "Définition initiale"
+
 msgctxt "field:debug.model,initial_module:"
 msgid "Declared in"
 msgstr "Déclaré dans"
@@ -190,7 +194,6 @@ msgctxt "field:debug.model.field.on_change,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-#, fuzzy
 msgctxt "field:debug.model.field.on_change,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
@@ -238,6 +241,10 @@ msgstr "Créé par"
 msgctxt "field:debug.model.method,id:"
 msgid "ID"
 msgstr "Id"
+
+msgctxt "field:debug.model.method,initial_frame:"
+msgid "Initial Frame"
+msgstr "Définition initiale"
 
 msgctxt "field:debug.model.method,model:"
 msgid "name"
@@ -607,6 +614,18 @@ msgctxt "model:ir.action,name:act_model_debug"
 msgid "Debug Model"
 msgstr "Modèles"
 
+msgctxt "model:ir.action,name:act_open_initial"
+msgid "Open Initial Frame"
+msgstr "Ouvrir la définition"
+
+msgctxt "model:ir.action,name:act_open_model_method_mro"
+msgid "Open MRO"
+msgstr "Ouvrir le MRO"
+
+msgctxt "model:ir.action,name:act_open_model_mro"
+msgid "Open MRO"
+msgstr "Ouvrir le MRO"
+
 msgctxt "model:ir.action,name:act_refresh"
 msgid "Refresh Debug Data"
 msgstr "Rafraîchir les informations de debug"
@@ -652,12 +671,12 @@ msgid "Debug"
 msgstr "Debug"
 
 msgctxt "model:ir.ui.menu,name:menu_model_debug"
-msgid "Model Debug"
-msgstr "Modèle"
+msgid "Debug Instance"
+msgstr "Déboguer une instance"
 
 msgctxt "selection:debug.model.method.mro,kind:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:debug.model.method.mro,kind:"
 msgid "Initial"
@@ -669,7 +688,7 @@ msgstr "Surcharge"
 
 msgctxt "selection:debug.model.mro,kind:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:debug.model.mro,kind:"
 msgid "Initial"
@@ -719,6 +738,10 @@ msgctxt "view:debug.model.field:"
 msgid "Fields"
 msgstr "Champs"
 
+msgctxt "view:debug.model.field:"
+msgid "States"
+msgstr "États"
+
 msgctxt "view:debug.model.method.mro:"
 msgid "MRO"
 msgstr "Héritage"
@@ -726,6 +749,10 @@ msgstr "Héritage"
 msgctxt "view:debug.model.method.mro:"
 msgid "MROs"
 msgstr "Héritages"
+
+msgctxt "view:debug.model.method.mro:"
+msgid "Open"
+msgstr "Ouvrir"
 
 msgctxt "view:debug.model.method:"
 msgid "Method"
@@ -735,6 +762,10 @@ msgctxt "view:debug.model.method:"
 msgid "Methods"
 msgstr "Méthodes"
 
+msgctxt "view:debug.model.method:"
+msgid "Open Definition"
+msgstr "Ouvrir la définition"
+
 msgctxt "view:debug.model.mro:"
 msgid "MRO"
 msgstr "Héritage"
@@ -742,6 +773,14 @@ msgstr "Héritage"
 msgctxt "view:debug.model.mro:"
 msgid "MROs"
 msgstr "Héritages"
+
+msgctxt "view:debug.model.mro:"
+msgid "Open"
+msgstr "Ouvrir"
+
+msgctxt "view:debug.model.view:"
+msgid "Open"
+msgstr "Ouvrir"
 
 msgctxt "view:debug.model.view:"
 msgid "View"
@@ -762,6 +801,10 @@ msgstr "Modèle"
 msgctxt "view:debug.model:"
 msgid "Models"
 msgstr "Modèles"
+
+msgctxt "view:debug.model:"
+msgid "Open Definition"
+msgstr "Ouvrir la définition"
 
 msgctxt "view:debug.visualize:"
 msgid "Debug Result"

@@ -1,30 +1,40 @@
-msgctxt ""
-"field:account.move_line_aggregated_report.print.start,account:"
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.move_line_aggregated_report.print.start,account:"
 msgid "Account"
 msgstr "Compte"
 
-msgctxt ""
-"field:account.move_line_aggregated_report.print.start,company:"
+msgctxt "field:account.move_line_aggregated_report.print.start,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt ""
-"field:account.move_line_aggregated_report.print.start,end_date:"
+msgctxt "field:account.move_line_aggregated_report.print.start,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt ""
-"field:account.move_line_aggregated_report.print.start,products:"
+msgctxt "field:account.move_line_aggregated_report.print.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.move_line_aggregated_report.print.start,products:"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt ""
-"field:account.move_line_aggregated_report.print.start,start_date:"
+msgctxt "field:account.move_line_aggregated_report.print.start,start_date:"
 msgid "Start Date"
 msgstr "Date de début"
 
-msgctxt ""
-"model:ir.action,name:wizard_move_line_aggregated_report"
+msgctxt "model:account.move_line_aggregated_report.print.start,name:"
+msgid "Print Aggregated Move Lines Report Start"
+msgstr "Rapport des lignes comptables agrégées"
+
+msgctxt "model:ir.action,name:report_move_line_aggregated_product"
+msgid "Move Lines Aggregated Report"
+msgstr "Rapport des ligne comptables agrégées"
+
+msgctxt "model:ir.action,name:wizard_move_line_aggregated_report"
 msgid "Print Move Lines Aggregated by Product Report"
 msgstr "Imprimer le rapport des lignes comptables agrégées par produit"
 
@@ -32,13 +42,11 @@ msgctxt "model:ir.ui.menu,name:menu_print_invoice_report"
 msgid "Print Move Lines Aggregated by Product Report"
 msgstr "Imprimer le rapport des lignes comptables agrégées par produit"
 
-msgctxt ""
-"view:account.move_line_aggregated_report.print.start:"
+msgctxt "view:account.move_line_aggregated_report.print.start:"
 msgid "Print Move Lines Aggregated by Product Report"
 msgstr "Imprimer le rapport des lignes comptables agrégées par produit"
 
-msgctxt ""
-"wizard_button:account.move_line_aggregated_report.print,start,end:"
+msgctxt "wizard_button:account.move_line_aggregated_report.print,start,end:"
 msgid "Cancel"
 msgstr "Annuler"
 

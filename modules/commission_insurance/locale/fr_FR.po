@@ -1189,13 +1189,13 @@ msgctxt "model:ir.action,name:commission.act_agent_form"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
 
-msgctxt "model:ir.ui.menu,name:commission.menu_commission_create_invoice"
-msgid "Create Commission Invoices"
-msgstr "Générer les bordereaux de commission"
-
 msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "model:ir.ui.menu,name:commission.menu_commission_create_invoice"
+msgid "Create Commission Invoices"
+msgstr "Générer les bordereaux de commission"
 
 msgctxt "model:product.template-commission.agent,name:commission."
 msgid "Product Template - Commission Agent"

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -9,75 +9,3 @@ msgstr "Contrat"
 msgctxt "model:ir.action,name:report_bank_deposit_ticket"
 msgid "Bank Deposit Ticket"
 msgstr "Bordereaux de chèques"
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "#"
-msgstr "N°"
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "(Cancelled)"
-msgstr "(Annulé)"
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "(Draft)"
-msgstr "(Brouillon)"
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid ":"
-msgstr ":"
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "Ban"
-msgstr ""
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "Bordereau de remise de chèque"
-msgstr ""
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "Ch"
-msgstr ""
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "Compte"
-msgstr ""
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "Date:"
-msgstr "Date :"
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "E-Mail:"
-msgstr "Email :"
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "Montant"
-msgstr ""
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "Personne"
-msgstr ""
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "Phone:"
-msgstr "Téléphone :"
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "Relevé"
-msgstr ""
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "Total"
-msgstr "Total"
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "VAT Number:"
-msgstr "Numéro TVA :"
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "que"
-msgstr ""
-
-msgctxt "odt:account.statement.bank_deposit_ticket_report:"
-msgid "è"
-msgstr ""

@@ -106,6 +106,10 @@ msgctxt "field:distribution.network,right:"
 msgid "Right"
 msgstr "Droite"
 
+msgctxt "field:distribution.network,visible_portfolios:"
+msgid "Visible Portfolios"
+msgstr "Portefeuilles accessibles"
+
 msgctxt "field:distribution.network,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"

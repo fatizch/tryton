@@ -62,6 +62,18 @@ msgctxt "field:contract.premium.amount,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:contract.premium.amount,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:contract.premium.amount,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:contract.premium.amount,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
 msgctxt "field:contract.premium.amount,end:"
 msgid "End"
 msgstr "Fin"
@@ -133,6 +145,18 @@ msgstr "Date de Création"
 msgctxt "field:contract.premium.amount.per_period,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:contract.premium.amount.per_period,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:contract.premium.amount.per_period,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:contract.premium.amount.per_period,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
 
 msgctxt "field:contract.premium.amount.per_period,fees:"
 msgid "Fees"

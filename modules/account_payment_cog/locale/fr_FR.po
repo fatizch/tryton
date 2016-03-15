@@ -142,6 +142,10 @@ msgctxt "field:account.payment.group,processing_payments:"
 msgid "Processing Payments"
 msgstr "Traitement des paiements"
 
+msgctxt "field:account.payment.group,state:"
+msgid "State"
+msgstr "État"
+
 msgctxt "field:account.payment.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -427,7 +431,7 @@ msgctxt "field:account.payment.payment_information_selection,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:account.payment.payment_information_selection,move_line:"
+msgctxt "field:account.payment.payment_information_selection,move_lines:"
 msgid "Move Line"
 msgstr "Ligne de mouvement"
 
@@ -561,10 +565,6 @@ msgctxt "model:ir.action,name:act_merged_form_relate_details"
 msgid "Related payments"
 msgstr "Paiements associés"
 
-msgctxt "view:account.payment.merged:"
-msgid "Fail payments"
-msgstr "Échouer les paiements"
-
 msgctxt "model:ir.action,name:act_payment_fail_status_form"
 msgid "Payments Rejected"
 msgstr "Paiements rejetés"
@@ -592,10 +592,6 @@ msgstr "Créer les paiements"
 msgctxt "model:ir.action,name:manual_payment_fail_wizard"
 msgid "Fail Payment"
 msgstr "Rejeter des paiements"
-
-msgctxt "model:ir.action,name:manual_merged_payment_fail_wizard"
-msgid "Fail Merged Payment"
-msgstr "Rejeter le groupe de paiement"
 
 msgctxt "model:ir.action,name:modify_payment_information_wizard"
 msgid "Modify Payment Information"
@@ -661,6 +657,14 @@ msgctxt "selection:account.payment,manual_fail_status:"
 msgid "Pending"
 msgstr "En cours"
 
+msgctxt "selection:account.payment.group,state:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:account.payment.group,state:"
+msgid "Processing"
+msgstr "En cours de traitement"
+
 msgctxt "selection:account.payment.journal.failure_action,action:"
 msgid "Manual"
 msgstr "Manuelle"
@@ -697,6 +701,10 @@ msgctxt "selection:account.payment.payment_creation.start,kind:"
 msgid "Receivable"
 msgstr "À recevoir"
 
+msgctxt "selection:party.interaction,for_object_ref:"
+msgid "Payment"
+msgstr "Paiement"
+
 msgctxt "view:account.move.line:"
 msgid "Payments"
 msgstr "Paiements"
@@ -728,6 +736,10 @@ msgstr "Motifs de rejet"
 msgctxt "view:account.payment.journal.reject_reason:"
 msgid "Reject Reason"
 msgstr "Motif de rejet"
+
+msgctxt "view:account.payment.merged:"
+msgid "Fail payments"
+msgstr "Échouer les paiements"
 
 msgctxt "view:account.payment.merged:"
 msgid "Merged payments"
@@ -809,15 +821,11 @@ msgctxt ""
 msgid "Next"
 msgstr "Suivant"
 
-msgctxt "field:account.payment.group,state:"
-msgid "State"
-msgstr "État"
-
-msgctxt "selection:account.payment.group,state:"
-msgid "Processing"
-msgstr "En traitement"
-
 # Custom translations below
+
+msgctxt "field:account.payment,party:account_payment."
+msgid "Party"
+msgstr "Tiers"
 
 msgctxt ""
 "model:ir.action.act_window.domain,name:account_payment.act_payment_form_domain_failed"
@@ -841,12 +849,12 @@ msgid "Payable"
 msgstr "À payer"
 
 msgctxt "selection:account.payment,kind:account_payment."
-msgid "Receivable"
-msgstr "À recevoir"
-
-msgctxt "selection:account.payment,kind:account_payment."
 msgid "Payable"
 msgstr "À payer"
+
+msgctxt "selection:account.payment,kind:account_payment."
+msgid "Receivable"
+msgstr "À recevoir"
 
 msgctxt "selection:account.payment,state:account_payment."
 msgid "Failed"

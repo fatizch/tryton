@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -1488,3 +1488,28 @@ msgstr "Précédent"
 msgctxt "wizard_button:endorsement.start,loan_share_update,suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
+
+msgctxt ""
+"wizard_button:endorsement.start,preview_contract_payments,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:endorsement.start,preview_contract_payments,cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,preview_contract_payments,summary:"
+msgid "Summary"
+msgstr "Synthèse"
+
+msgctxt "wizard_button:endorsement.start,preview_loan,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:endorsement.start,preview_loan,cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,preview_loan,summary:"
+msgid "Summary"
+msgstr "Synthèse"

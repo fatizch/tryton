@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.party_balance.line:"
+msgid "Overpayment Substraction"
+msgstr "Utilisation d'un trop perçu"
+
+msgctxt "error:account.party_balance.line:"
+msgid "Scheduled Term Of"
+msgstr "Échéance planifiée du"
+
 msgctxt "field:account.move.line,bank_account:"
 msgid "Bank Account"
 msgstr "Compte Bancaire"
@@ -10,6 +18,14 @@ msgctxt "field:account.party_balance,all_lines:"
 msgid "Lines"
 msgstr "Lignes"
 
+msgctxt "field:account.party_balance,balance:"
+msgid "Balance "
+msgstr "Solde"
+
+msgctxt "field:account.party_balance,balance_today:"
+msgid "Balance Today"
+msgstr "Balance à aujourd'hui"
+
 msgctxt "field:account.party_balance,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -17,6 +33,18 @@ msgstr "Contrat"
 msgctxt "field:account.party_balance,contracts:"
 msgid "Contracts"
 msgstr "Contrats"
+
+msgctxt "field:account.party_balance,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:account.party_balance,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:account.party_balance,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
 
 msgctxt "field:account.party_balance,from_date:"
 msgid "From Date"
@@ -42,17 +70,13 @@ msgctxt "field:account.party_balance,lines:"
 msgid "Accounting Lines"
 msgstr "Lignes comptables"
 
-msgctxt "field:account.party_balance,scheduled_lines:"
-msgid "Scheduled Lines"
-msgstr "Lignes d'échéances"
-
 msgctxt "field:account.party_balance,party:"
 msgid "Party"
 msgstr "Tiers"
 
-msgctxt "field:account.party_balance,balance_today:"
-msgid "Balance Today"
-msgstr "Balance à aujourd'hui"
+msgctxt "field:account.party_balance,scheduled_lines:"
+msgid "Scheduled Lines"
+msgstr "Lignes d'échéances"
 
 msgctxt "field:account.party_balance.line,amount:"
 msgid "Amount"
@@ -90,13 +114,13 @@ msgctxt "field:account.party_balance.line,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:account.party_balance.line,origin:"
-msgid "Origin"
-msgstr "Origine"
-
 msgctxt "field:account.party_balance.line,move_line:"
 msgid "Move Line"
 msgstr "Ligne de mouvement"
+
+msgctxt "field:account.party_balance.line,origin:"
+msgid "Origin"
+msgstr "Origine"
 
 msgctxt "field:account.party_balance.line,party:"
 msgid "Party"
@@ -153,11 +177,3 @@ msgstr "_Rafraichir"
 msgctxt "wizard_button:account.open_party_balance,balance,end:"
 msgid "End"
 msgstr "Terminer"
-
-msgctxt "error:account.party_balance.line:"
-msgid "Scheduled Term Of"
-msgstr "Échéance planifiée du"
-
-msgctxt "error:account.party_balance.line:"
-msgid "Overpayment Substraction"
-msgstr "Utilisation d'un trop perçu"

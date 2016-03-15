@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -24,16 +24,16 @@ msgstr ""
 msgctxt "error:export_not_found:"
 msgid "Cannot import : no object %s with functionnal key : \"%s\" were found."
 msgstr ""
-"Impossible d'importer : aucun objet %s avec la clé fonctionnelle \"%s\" n'a "
-"été trouvé."
+"Impossible d'importer : Aucun object %s avec la clé fonctionnelle : \"%s\" "
+"n'a été trouvé."
 
 msgctxt "error:export_not_unique:"
 msgid ""
 "Cannot import : the following objects:\\n%s\\n share the same functional "
 "key:\\n\"%s\"."
 msgstr ""
-"Impossible d'importer : les objets suivants:\\n%s\\n ont la même clé "
-"fonctionnelle :\\n\"%s\""
+"Impossible d'importer : Les objets suivants \\n%s\\n ont la même clé "
+"fonctionnelle :\\n\"%s\"."
 
 msgctxt "error:ir.attachment:"
 msgid "Can't decode attachment %s in base 64"
@@ -65,7 +65,7 @@ msgstr "Impossible de charger le jeu d'essai du fichier %s"
 
 msgctxt "error:missing_export_configuration:"
 msgid "Can't find configuration for code %s."
-msgstr "Impossible de trouver la configuration pour le code %s"
+msgstr "Impossible de trouver une configuration avec le code %s."
 
 msgctxt "field:account.account,id:"
 msgid ""

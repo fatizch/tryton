@@ -1,6 +1,18 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:party.party,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:party.party,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:party.party,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
 
 msgctxt "field:party.party,orias:"
 msgid "ORIAS"

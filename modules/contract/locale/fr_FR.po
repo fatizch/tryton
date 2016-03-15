@@ -393,6 +393,10 @@ msgctxt "field:contract.contact,type:"
 msgid "Type"
 msgstr "Type"
 
+msgctxt "field:contract.contact,type_code:"
+msgid "Type Code"
+msgstr "Type de contact"
+
 msgctxt "field:contract.contact,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -763,7 +767,7 @@ msgstr "Nouvelle date de conditions"
 
 msgctxt "field:contract.select_start_date,new_start_date:"
 msgid "New start date"
-msgstr "Nouvel date d'effet"
+msgstr "Nouvelle date d'effet"
 
 msgctxt "field:contract.service,contract:"
 msgid "Contract"
@@ -956,7 +960,6 @@ msgctxt ""
 msgid "Possible Packages"
 msgstr "Formules possibles"
 
-#, fuzzy
 msgctxt "field:event.log,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -1230,6 +1233,10 @@ msgctxt "model:ir.action,name:option_subscription_wizard_launcher"
 msgid "Option Subscription Launcher"
 msgstr "Souscription des options"
 
+msgctxt "model:ir.action.act_window.domain,name:"
+msgid "Quote"
+msgstr "Devis"
+
 msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_active"
 msgid "Active"
 msgstr "Actif"
@@ -1247,11 +1254,10 @@ msgctxt ""
 msgid "Terminated"
 msgstr "Terminé"
 
-msgctxt "model:ir.action.act_window.domain,name:act_quote_domain"
+msgctxt "model:ir.action.act_window.domain,name:act_quote_domain_all"
 msgid "Quote"
 msgstr "Devis"
 
-#, fuzzy
 msgctxt "model:ir.action.act_window.domain,name:act_quote_domain_recent"
 msgid "Recent"
 msgstr "Mon historique"
@@ -1528,7 +1534,7 @@ msgstr "Prestation Fournie"
 
 msgctxt "view:contract.stop.select_contracts:"
 msgid "Select contracts to stop"
-msgstr "Sélectionner les contrats à terminer"
+msgstr "Résiliation"
 
 msgctxt "view:contract.stop.select_contracts:"
 msgid ""
@@ -1600,7 +1606,7 @@ msgstr "Réactiver le contrat"
 
 msgctxt "view:contract:"
 msgid "Stop Contract"
-msgstr "Terminer contrat"
+msgstr "Résilier contrat"
 
 msgctxt "view:contract:"
 msgid "Will be terminated for:"

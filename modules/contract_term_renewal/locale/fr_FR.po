@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -35,6 +35,14 @@ msgstr "ID"
 msgctxt "field:contract_term_renewal.decline_renewal.select_reason,reason:"
 msgid "Reason"
 msgstr "Raison"
+
+msgctxt "field:contract_term_renewal.renew.confirm,contracts:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "field:contract_term_renewal.renew.confirm,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:offered.product,term_renewal_rule:"
 msgid "Term Renewal Rule"
@@ -99,6 +107,10 @@ msgstr "Batch de renouvellement de contrats"
 msgctxt "model:contract_term_renewal.decline_renewal.select_reason,name:"
 msgid "Reason selector to decline renewal"
 msgstr "Sélecteur de raison pour la déclinaison de renouvellement"
+
+msgctxt "model:contract_term_renewal.renew.confirm,name:"
+msgid "Confirm Contract Renewal"
+msgstr "Confirmer le renouvellement"
 
 msgctxt "model:event.type,name:event_decline_contract_renewal"
 msgid "Decline Contract Renewal"
@@ -246,6 +258,10 @@ msgctxt "view:contract_term_renewal.decline_renewal.select_reason:"
 msgid "Select Renewal Declination Reason"
 msgstr "Choisir la raison de déclinaison"
 
+msgctxt "view:contract_term_renewal.renew.confirm:"
+msgid "Are you sure you want to renew these contracts ?"
+msgstr "Êtes-vous sûr de vouloir renouveler ces contrats ?"
+
 msgctxt "view:offered.product.term_renewal_rule:"
 msgid "Rule"
 msgstr "Règle"
@@ -264,16 +280,10 @@ msgctxt ""
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "view:contract_term_renewal.renew.confirm:"
-msgid "Are you sure you want to renew these contracts ?"
-msgstr "Êtes-vous sûr de vouloir renouveler ces contrats ?"
-
-msgctxt ""
-"wizard_button:contract_term_renewal.renew,confirm_renew,end:"
+msgctxt "wizard_button:contract_term_renewal.renew,confirm_renew,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt ""
-"wizard_button:contract_term_renewal.renew,confirm_renew,renew:"
+msgctxt "wizard_button:contract_term_renewal.renew,confirm_renew,renew:"
 msgid "Confirm"
 msgstr "Confirmer"

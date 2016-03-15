@@ -951,7 +951,7 @@ msgstr "Terminer"
 
 msgctxt "wizard_button:report.create,attach,post_generation:"
 msgid "Save"
-msgstr "Enregister"
+msgstr "Sauvegarder"
 
 msgctxt "wizard_button:report.create,input_parameters,end:"
 msgid "Cancel"

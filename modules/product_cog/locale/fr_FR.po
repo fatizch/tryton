@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:product.category,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:product.category,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:product.product,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"

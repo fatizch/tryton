@@ -271,6 +271,14 @@ msgctxt "field:contract,logs:"
 msgid "Task"
 msgstr "Tâche"
 
+msgctxt "field:contract,task_name:"
+msgid "Task Name"
+msgstr "Nom de la tâche"
+
+msgctxt "field:contract,task_status:"
+msgid "Task Status"
+msgstr "Statut du processus"
+
 msgctxt "field:contract.manage_options,all_options:"
 msgid "All Options"
 msgstr "Toutes les garanties"
@@ -438,6 +446,10 @@ msgstr "Avenants générés"
 msgctxt "field:endorsement,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:endorsement,last_modification:"
+msgid "Last Modification"
+msgstr "Dernière modification"
 
 msgctxt "field:endorsement,number:"
 msgid "Number"
@@ -2075,6 +2087,10 @@ msgctxt "model:event.type,name:event_decline_endorsement"
 msgid "Decline Endorsement"
 msgstr "Déclinaison de l'avenant"
 
+msgctxt "model:ir.action,name:act_all_endorsements"
+msgid "Endorsements"
+msgstr "Avenants"
+
 msgctxt "model:ir.action,name:act_configuration_form"
 msgid "Endorsement Configuration"
 msgstr "Configuration d'avenant"
@@ -2086,10 +2102,6 @@ msgstr "Ouvrir le Contrat"
 msgctxt "model:ir.action,name:act_decline_endorsement"
 msgid "Decline Endorsement"
 msgstr "Abandonner l'avenant"
-
-msgctxt "model:ir.action,name:act_all_endorsements"
-msgid "Endorsements"
-msgstr "Avenants"
 
 msgctxt "model:ir.action,name:act_endorsement"
 msgid "Endorsement"
@@ -2153,13 +2165,13 @@ msgctxt "model:ir.ui.menu,name:endorsement_sub_state_form"
 msgid "Endorsement Sub-state"
 msgstr "Sous état d'avenant"
 
-msgctxt "model:ir.ui.menu,name:menu_configuration"
-msgid "Endorsement Configuration"
-msgstr "Configuration d'avenant"
-
 msgctxt "model:ir.ui.menu,name:menu_all_endorsements"
 msgid "Endorsements"
 msgstr "Avenants"
+
+msgctxt "model:ir.ui.menu,name:menu_configuration"
+msgid "Endorsement Configuration"
+msgstr "Configuration d'avenant"
 
 msgctxt "model:ir.ui.menu,name:menu_endorsement_definition"
 msgid "Endorsement Definition"

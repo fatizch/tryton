@@ -38,6 +38,10 @@ msgctxt "field:bank.account,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
 
+msgctxt "field:bank.account,icon:"
+msgid "Icon"
+msgstr "Icône"
+
 msgctxt "field:bank.account,number:"
 msgid "Number"
 msgstr "Numéro"
