@@ -93,13 +93,14 @@ class Contract:
             return
         agents = Agent.search(domain)
         pattern = self.get_insurer_pattern(coverage, line)
-        cached = self.insurer_agent_cache.get((pattern, self.id), default=False)
+        cached = self.insurer_agent_cache.get((pattern, self.id),
+            default=False)
         if cached is not False:
-            return cached
+            return Agent(cached)
         for agent in agents:
             for plan_line in agent.plan.lines:
                 if plan_line.match(pattern):
-                    self.insurer_agent_cache.set((pattern, id), agent)
+                    self.insurer_agent_cache.set((pattern, id), agent.id)
                     return agent
 
     def finalize_invoices_lines(self, lines):
