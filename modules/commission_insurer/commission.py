@@ -3,6 +3,7 @@ from sql import Null, Cast
 from sql.conditionals import Coalesce
 from sql.operators import Concat
 from sql.aggregate import Sum
+from decimal import Decimal
 
 from trytond.wizard import Wizard, StateView, StateAction, Button
 from trytond.model import ModelView
@@ -404,6 +405,8 @@ class CreateInvoicePrincipal(Wizard):
                 new_invoice_line.unit_price = amount * -1
             else:
                 new_invoice_line.unit_price = amount
+            new_invoice_line.unit_price = Decimal(new_invoice_line.unit_price
+                ).quantize(Decimal(10) ** -Line.unit_price.digits[1])
             new_invoice_line.product = product
             new_invoice_line.on_change_product()
             to_save.append(new_invoice_line)
