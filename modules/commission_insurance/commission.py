@@ -995,6 +995,10 @@ class OpenCommissionsSynthesis(Wizard):
             Button('Ok', 'end', 'tryton-ok', default=True),
             ])
 
+    def default_start(self, name):
+        if self.start._default_values:
+            return self.start._default_values
+
     def transition_select_account(self):
         Fee = Pool().get('account.fee')
         fees = Fee.search([('broker_fee', '=', True)])
