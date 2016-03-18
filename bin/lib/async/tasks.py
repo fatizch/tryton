@@ -9,14 +9,14 @@ DATE_FORMAT = '%Y-%m-%d'           # 2000-12-31
 
 def _batch_split(l, n):
     assert n >= 0, 'Negative split size'
-    if n == 0 or n >= len(l):
+    if n == 0 or len(l) == 0 or n >= len(l):
         yield l
     else:
         for i in xrange(0, len(l), n):
             yield l[i:i + n]
 
 
-def batch_generate(name, connection_date, treatment_date, extra_args):
+def batch_generate(name, connection_date, treatment_date, args):
     assert name, 'Batch name is required'
 
     from trytond.cache import Cache
@@ -42,7 +42,7 @@ def batch_generate(name, connection_date, treatment_date, extra_args):
         treat_on = datetime.strptime(treatment_date, DATE_FORMAT).date()
 
     logger.info('generate with c_dt: %s, t_dt: %s, args: %s', connection_date,
-        treatment_date, extra_args)
+        treatment_date, args)
 
     with Transaction().start(database, 0, readonly=True):
         User = Pool().get('res.user')
@@ -58,11 +58,10 @@ def batch_generate(name, connection_date, treatment_date, extra_args):
             try:
                 job_size = int(BatchModel.get_conf_item('job_size'))
                 logger.info('job_size: %s', job_size)
-                ids = [x[0] for x in BatchModel.select_ids(treat_on,
-                        extra_args)]
+                ids = [x[0] for x in BatchModel.select_ids(treat_on, args)]
                 for l in _batch_split(ids, job_size):
-                    broker.enqueue(name, 'batch_exec', (name, l,
-                        connection_date, treatment_date, extra_args))
+                    broker.enqueue(name, 'batch_exec', (name, connection_date,
+                            treatment_date, args, l))
                     res.append(len(l))
                     logger.info('created a job for %s ids', len(l))
             except Exception:
@@ -73,7 +72,7 @@ def batch_generate(name, connection_date, treatment_date, extra_args):
     return res
 
 
-def batch_exec(name, ids, connection_date, treatment_date, extra_args):
+def batch_exec(name, connection_date, treatment_date, args, ids):
     assert name, 'Batch name is required'
     assert type(ids) is list, 'Ids list is required'
     assert connection_date, 'Connection date is required'
@@ -88,7 +87,7 @@ def batch_exec(name, ids, connection_date, treatment_date, extra_args):
     logger = logging.getLogger(name)
 
     logger.info('exec %s items with c_dt: %s, t_dat: %s, args: %s', len(ids),
-        connection_date, treatment_date, extra_args)
+        connection_date, treatment_date, args)
 
     connect_on = datetime.strptime(connection_date, DATE_FORMAT).date()
     treat_on = datetime.strptime(treatment_date, DATE_FORMAT).date()
@@ -109,7 +108,7 @@ def batch_exec(name, ids, connection_date, treatment_date, extra_args):
             try:
                 for l in _batch_split(ids, transaction_size):
                     to_treat = BatchModel.convert_to_instances(l)
-                    r = BatchModel.execute(to_treat, l, treat_on, extra_args)
+                    r = BatchModel.execute(to_treat, l, treat_on, args)
                     res.append(r or len(l))
                     Transaction().cursor.commit()
                     logger.info('committed %s items', len(l))

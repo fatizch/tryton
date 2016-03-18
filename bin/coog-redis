@@ -27,9 +27,3 @@ coog_redis_eval() { # eval redis script - <context> <script> [args]
         local args; args=`_coog_redis_params $uri` || return $?
         redis-cli --raw $args --eval $script , $*
 }
-
-coog_redis_count() { # count eval script results - <context> <script> [args]
-        [ $# -lt 2 ] && echo missing script && return 1
-        local res; res=`coog_redis_eval $* | sed '/^\s*$/d' | wc -l`
-        echo $((res-1))
-}

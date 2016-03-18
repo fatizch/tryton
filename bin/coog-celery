@@ -77,7 +77,7 @@ coog_celery_tail() { # tail celery logs [tail args]
         tail $* $out_file
 }
 
-coog_celery_qstart() { # start queue workers - <name> <out> <concurrency>
+coog_celery_qstart() { # start queue workers - <name> <file> <concurrency>
         [ $# -lt 3 ] && echo missing args && return 1
         local pid_file
         pid_file="$2".pid
@@ -90,7 +90,8 @@ coog_celery_qstart() { # start queue workers - <name> <out> <concurrency>
                 --concurrency=$3 \
                 --pidfile=$pid_file \
                 --loglevel=$LOG_LEVEL \
-                --logfile=$2 > $out_file &
+                --logfile=$out_file > $out_file &
+        sleep 1  # be sure that pidfile is filled
 }
 
 coog_celery_qstop() { # stop queue workers - <file>
@@ -102,14 +103,4 @@ coog_celery_qstop() { # stop queue workers - <file>
         pid=`cat $pid_file`
         kill -TERM $pid && echo workers stopped
         rm -f "$pid_file"
-}
-
-coog_celery_qlist() { # list queue jobs - <queue> [filter]
-        [ $# -lt 1 ] && echo missing queue && return 1
-        coog_redis_eval celery celery/job.lua $*
-}
-
-coog_celery_qinfo() { # get queue info - <queue> [filter]
-        [ $# -lt 1 ] && echo missing queue && return 1
-        coog_redis_count celery celery/job.lua $*
 }

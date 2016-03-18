@@ -115,29 +115,3 @@ coog_rq_qstop() { # stop queue workers - <file>
         done < "$pid_file"
         rm -f "$pid_file"
 }
-
-coog_rq_qlist() { # list queue jobs - queue [filters]
-        [ $# -lt 1 ] && echo missing queue && return 1
-        local queue
-        queue=$1
-        shift
-        # patch to work for batch
-        local filter
-        filter=$1
-        shift
-        [ "$filter" == waiting ] && filter="started queued"
-        coog_redis_eval rq rq/job.lua $queue $filter $*
-}
-
-coog_rq_qinfo() { # get queue info - queue [filters]
-        [ $# -lt 1 ] && echo missing queue && return 1
-        local queue
-        queue=$1
-        shift
-        # patch to work for batch
-        local filter
-        filter=$1
-        shift
-        [ "$filter" == waiting ] && filter="started queued"
-        coog_redis_count rq rq/job.lua $queue $filter $*
-}

@@ -1,2 +1,3 @@
 - check inter-calls (kill, start, stop)
 - _ funcs could stop exec
+- avoid for file in dir/*

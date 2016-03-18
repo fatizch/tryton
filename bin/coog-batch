@@ -12,66 +12,117 @@ _coog_batch_broker() { # get batch broker
         >&2 echo no async broker configured && return 1
 }
 
-coog_batch_generate() { # generate batch jobs - <name> [args]
+coog_batch_query() { # query batch redis - <cmd> [cmd-arg*]
+        [ $# -lt 1 ] && echo missing cmd && return 1
+        local cmd; cmd=$1; shift
+        local broker; broker=`_coog_batch_broker` || return $?
+        coog_redis_eval $broker redis/batch.lua $cmd $broker $*
+}
+
+coog_batch_generate() { # generate batch jobs - <name> [batch-arg*]
         [ $# -lt 1 ] && echo missing at least batch name && return 1
         local broker; broker=`_coog_batch_broker` || return $?
         local name; name=$1; shift
+        local nb; nb=`coog_batch_query count $name` || return $?
+        [ $nb -gt 0 ] && echo queue not empty, archive or clear before generating && return 1
         python2 -m "batch" -b $broker -n $name $*
 }
 
 coog_batch_start() { # start batch execution - <name> <concurrency>
         [ $# -lt 2 ] && echo missing batch name and workers number && return 1
         local broker; broker=`_coog_batch_broker` || return $?
-        local out_file; out_file=`_coog_batch_file $1` || return $?
-        coog_"$broker"_qstart $1 "$out_file" $2
+        local base_file; base_file=`_coog_batch_file $1` || return $?
+        coog_"$broker"_qstart $1 "$base_file" $2
 }
 
 coog_batch_stop() { # stop batch execution - <name>
         [ -z $1 ] && echo mission batch name && return 1
         local broker; broker=`_coog_batch_broker` || return $?
-        local out_file; out_file=`_coog_batch_file $1` || return $?
-        coog_"$broker"_qstop "$out_file"
+        local base_file; base_file=`_coog_batch_file $1` || return $?
+        coog_"$broker"_qstop "$base_file"
 }
 
 coog_batch_wait() { # wait for batch exec - <name>
         [ $# -lt 1 ] && echo missing batch name && return 1
-        local broker; broker=`_coog_batch_broker` || return $?
         while [ true ]
         do
                 local waiting
-                waiting=`coog_"$broker"_qinfo $1 waiting` || return $?
+                waiting=`coog_batch_query count $1 'wait'` || return $?
                 [ $waiting -eq 0 ] && break
                 echo `date +%X` still have jobs to eat \($waiting\)
                 sleep 10
         done
         coog_batch_stop $1
-        local failed; failed=`coog_"$broker"_qinfo $1 failed`
+        local failed; failed=`coog_batch_query count $1 fail`
         [ $failed -eq 0 ] && echo batch exec succeeded && return 0
         echo batch exec failed - $failed jobs in fail && return 1
 }
 
-coog_batch_exec() { # execute batch (generate && start && wait) - <name> <concurrency> [generate_extra_arg*]
+coog_batch_exec() { # execute batch (generate && start && wait) - <name> <concurrency> [batch-arg*]
         [ $# -lt 2 ] && echo missing batch name and workers number && return 1
         local name; name=$1; shift
         local nb; nb=$1; shift
         coog_batch_generate $name $* && coog_batch_start $name $nb && coog_batch_wait $name
 }
 
-coog_batch_report() { # print batch report - <name> [filters]
-        [ $# -lt 1 ] && echo missing batch name && return 1
-        local broker; broker=`_coog_batch_broker` || return $?
-        coog_"$broker"_qlist $* | column -t | less
+coog_batch_q() { # print batch queue summary - <name>
+        [ $# -ne 1 ] && echo needs only batch name && return 1
+        coog_batch_query summary $1
 }
 
-coog_batch_log() { # cat batch out - <name> [cat args]
+coog_batch_qlist() { # list batch queue - <name> [filter*]
+        [ $# -lt 1 ] && echo missing batch name && return 1
+        coog_batch_query list $* | column -t | less
+}
+
+coog_batch_qcount() { # count batch queue - <name> [filter*]
+        [ $# -lt 1 ] && echo missing batch name && return 1
+        coog_batch_query count $*
+}
+
+coog_batch_qarchive() { # archive batch queue - <name> [filter*]
+        [ $# -lt 1 ] && echo missing batch name && return 1
+        coog_batch_query backup $*
+}
+
+coog_batch_qclear() { # clear batch queue - <name> [filter*]
+        [ $# -lt 1 ] && echo missing batch name && return 1
+        coog_batch_query clear $*
+}
+
+coog_batch_j() { # show batch job - <id>
+        [ $# -ne 1 ] && echo needs only job id && return 1
+        coog_batch_query show $1
+}
+
+coog_batch_jarchive() { # archive batch job - <id>
+        [ $# -ne 1 ] && echo needs only job id && return 1
+        coog_batch_query archive $1
+}
+
+coog_batch_jremove() { # remove batch job - <id>
+        [ $# -ne 1 ] && echo needs only job id && return 1
+        coog_batch_query remove $1
+}
+
+coog_batch_log() { # print batch logs - <name> [cat-arg*]
         [ -z $1 ] && echo missing batch name && return 1
-        local out_file; out_file=`_coog_batch_file $1` || return 1
+        local base_file; base_file=`_coog_batch_file $1` || return 1
         shift
+        local args
         local fs
+        fs=`ls "$base_file"*.out 2> /dev/null`
+        [ $? -ne 0 ] && echo no logs && return
         local f
-        for f in $out_file"*"
+        for f in "$fs"
         do
-                fs="$fs $f"
+                args="$args $f"
         done
-        cat $* $fs
+        cat $* $args
+}
+
+coog_batch_logclear() { # clear batch logs - <name>
+        [ -z $1 ] && echo missing batch name && return 1
+        local base_file; base_file=`_coog_batch_file $1` || return 1
+        rm -vf "$base_file"*.out
 }

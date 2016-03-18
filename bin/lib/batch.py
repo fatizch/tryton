@@ -5,14 +5,14 @@ import async.broker as async_broker
 from async.tasks import batch_generate
 
 
-def generate(name, connection_date, treatment_date, extra_args):
-    batch_generate(name, connection_date, treatment_date, extra_args)
+def generate(name, connection_date, treatment_date, args):
+    batch_generate(name, connection_date, treatment_date, args)
 
 
-def generate_async(name, connection_date, treatment_date, extra_args):
+def generate_async(name, connection_date, treatment_date, args):
     broker = async_broker.get_module()
     broker.enqueue(name, 'batch_generate', (name, connection_date,
-        treatment_date, extra_args))
+        treatment_date, args))
 
 
 def parse_extra_args(extra_args):
