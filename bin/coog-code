@@ -11,6 +11,7 @@ _coog_code_status() {
         cd $COOG_ROOT
         local repos; repos=`ls -1`
         echo "repo branch master remote stage dirty"
+        echo "---- ------ ------ ------ ----- -----"
         for repo in $repos
         do
                 local folder; folder=$COOG_ROOT/$repo
@@ -20,7 +21,13 @@ _coog_code_status() {
                 fi
                 cd $folder
                 local branch; branch=`git rev-parse --abbrev-ref HEAD`
-                local master; master=`git diff --shortstat master` && master=`_coog_code_st $master`
+                local master
+                if [ $branch = master ]
+                then
+                        master=X
+                else
+                        master=`git diff --shortstat master` && master=`_coog_code_st $master`
+                fi
                 local rbranch; rbranch=`git branch -r --list origin/$branch`
                 local remote
                 if [ -z $rbranch ]
@@ -39,6 +46,26 @@ _coog_code_status() {
 
 coog_code_status() { # status of all repos
         _coog_code_status | column -t
+}
+
+coog_code_fetch() { # fetch all repos
+        local wd; wd=`pwd`
+        cd $COOG_ROOT
+        local repos; repos=`ls -1`
+        for repo in $repos
+        do
+                local folder; folder=$COOG_ROOT/$repo
+                if [ ! -d $folder ] || [ ! -d $folder/.git ]
+                then
+                        continue
+                fi
+                cd $folder
+                echo entering $repo
+                git fetch -p
+                echo
+        done
+        cd $wd
+
 }
 
 coog_code_norem() { # list local branches with no remotes - <repo>
