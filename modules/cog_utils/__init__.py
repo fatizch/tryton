@@ -16,7 +16,7 @@ from .models_for_tests import *
 from .tag import *
 from .event import *
 from .attachment import *
-
+from .note import *
 
 def register():
     Pool.register(
@@ -70,6 +70,7 @@ def register():
         Translation,
         TranslationOverrideStart,
         Attachment,
+        Note,
         module='cog_utils', type_='model')
 
     if config.get('env', 'testing') == 'True':
