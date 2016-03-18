@@ -2,6 +2,8 @@
 <form string="Payment Journal Failure Action">
     <label name="journal"/>
     <field name="journal" colspan="3"/>
+    <label name="payment_kind"/>
+    <field name="payment_kind"/>
     <label name="reject_reason"/>
     <field name="reject_reason"/>
     <label name="action"/>

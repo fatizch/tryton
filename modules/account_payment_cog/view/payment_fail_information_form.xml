@@ -5,4 +5,5 @@
     <newline/>
     <field name="payments" colspan="4" expand_toolbar="0"/>
     <field name="process_method" invisible="1"/>
+    <field name="payment_kind" invisible="1"/>
 </form>

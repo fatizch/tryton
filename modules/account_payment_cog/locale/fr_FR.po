@@ -15,6 +15,18 @@ msgstr ""
 "Les lignes sélectionnées sont incompatibles: certaines sont des lignes à "
 "payer d'autres des lignes à recevoir"
 
+msgctxt "error:account.payment.fail_information:"
+msgid "Trying to fail different payment kinds at the same time"
+msgstr ""
+"Ne pas essayer de faire échouer en même temps des paiements de différents "
+"types"
+
+msgctxt "error:account.payment.fail_information:"
+msgid "Trying to fail different payment methods at the same time"
+msgstr ""
+"Ne pas essayer de faire échouer en même temps des paiements de différentes "
+"méthodes"
+
 msgctxt "error:account.payment.journal.failure_action:"
 msgid "Unknown reject code : %s"
 msgstr "Motif de rejet inconnu : %s"
@@ -22,6 +34,12 @@ msgstr "Motif de rejet inconnu : %s"
 msgctxt "error:account.payment.journal.reject_reason:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
+
+msgctxt "error:account.payment.journal:"
+msgid "Trying to fail different kind of payments at the same time"
+msgstr ""
+"Ne pas essayer de faire échouer en même temps des paiements de différents "
+"types"
 
 msgctxt "error:account.payment.manual_payment_fail:"
 msgid "Selected payments must have the same payment method."
@@ -105,6 +123,10 @@ msgstr "ID"
 msgctxt "field:account.payment.fail_information,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:account.payment.fail_information,payment_kind:"
+msgid "Payment Kind"
+msgstr "Type de paiement"
 
 msgctxt "field:account.payment.fail_information,payments:"
 msgid "Payments"
@@ -194,6 +216,10 @@ msgctxt "field:account.payment.journal.failure_action,journal:"
 msgid "Journal"
 msgstr "Journal"
 
+msgctxt "field:account.payment.journal.failure_action,payment_kind:"
+msgid "Payment Kind"
+msgstr "Type de paiement"
+
 msgctxt "field:account.payment.journal.failure_action,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -249,6 +275,10 @@ msgstr "Description"
 msgctxt "field:account.payment.journal.reject_reason,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:account.payment.journal.reject_reason,payment_kind:"
+msgid "Payment Kind"
+msgstr "Type de paiement"
 
 msgctxt "field:account.payment.journal.reject_reason,process_method:"
 msgid "Process method"
@@ -659,7 +689,7 @@ msgstr "En cours"
 
 msgctxt "selection:account.payment.group,state:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:account.payment.group,state:"
 msgid "Processing"
@@ -672,6 +702,22 @@ msgstr "Manuelle"
 msgctxt "selection:account.payment.journal.failure_action,action:"
 msgid "Retry"
 msgstr "Réessayer"
+
+msgctxt "selection:account.payment.journal.failure_action,payment_kind:"
+msgid "Payable"
+msgstr "À payer "
+
+msgctxt "selection:account.payment.journal.failure_action,payment_kind:"
+msgid "Receivable"
+msgstr "À recevoir"
+
+msgctxt "selection:account.payment.journal.reject_reason,payment_kind:"
+msgid "Payable"
+msgstr "À payer "
+
+msgctxt "selection:account.payment.journal.reject_reason,payment_kind:"
+msgid "Receivable"
+msgstr "À recevoir"
 
 msgctxt "selection:account.payment.merged,state:"
 msgid "Approved"
@@ -823,22 +869,18 @@ msgstr "Suivant"
 
 # Custom translations below
 
-msgctxt "field:account.payment,party:account_payment."
-msgid "Party"
-msgstr "Tiers"
-
 msgctxt ""
 "model:ir.action.act_window.domain,name:account_payment.act_payment_form_domain_failed"
 msgid "Failed"
 msgstr "Rejeté"
 
 msgctxt "selection:account.move.line,payment_kind:account_payment."
-msgid "Receivable"
-msgstr "À recevoir"
+msgid "Payable"
+msgstr "À payer"
 
 msgctxt "selection:account.move.line,payment_kind:account_payment."
-msgid "Payable"
-msgstr "À payer"
+msgid "Receivable"
+msgstr "À recevoir"
 
 msgctxt "selection:account.payment.group,kind:account_payment."
 msgid "Receivable"
@@ -849,12 +891,12 @@ msgid "Payable"
 msgstr "À payer"
 
 msgctxt "selection:account.payment,kind:account_payment."
-msgid "Payable"
-msgstr "À payer"
-
-msgctxt "selection:account.payment,kind:account_payment."
 msgid "Receivable"
 msgstr "À recevoir"
+
+msgctxt "selection:account.payment,kind:account_payment."
+msgid "Payable"
+msgstr "À payer"
 
 msgctxt "selection:account.payment,state:account_payment."
 msgid "Failed"

@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <tree string="Payment Journal Failure Actions" editable="bottom">
     <field name="journal"/>
+    <field name="payment_kind"/>
     <field name="reject_reason"/>
     <field name="is_fee_required"/>
     <field name="rejected_payment_fee"/>

@@ -397,7 +397,7 @@ class Payment:
             'account.payment.journal.failure_action')
         # One reject invoice per different end_to_end_id only
         reject_fee = JournalFailureAction.get_rejected_payment_fee(
-            payments[0].sepa_return_reason_code)
+            payments[0].sepa_return_reason_code, payments[0].kind)
         return reject_fee
 
     @classmethod

@@ -12,6 +12,7 @@ from trytond.wizard import StateAction
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Not, In, Bool, If, PYSONEncoder
 
+from trytond.modules.account_payment.payment import KINDS
 from trytond.modules.cog_utils import export, fields, model
 from trytond.modules.cog_utils import coop_date, utils, coop_string
 from trytond.modules.report_engine import Printable
@@ -46,16 +47,28 @@ class Journal(export.ExportImportMixin):
     default_reject_fee = fields.Many2One('account.fee',
         'Default Fee', ondelete='RESTRICT')
 
+    @classmethod
+    def __setup__(cls):
+        super(Journal, cls).__setup__()
+        cls._error_messages.update({
+                'fail_payment_kind': 'Trying to fail different kind of'
+                ' payments at the same time',
+                })
+
     def get_fail_actions(self, payments):
         """
-            Payments is a list of payments processed in the same payment
-            transaction
+        Payments is a list of payments processed in the same payment
+        transaction
         """
         reject_code = payments[0].fail_code
         payment_reject_number = max(len(payment.line.payments) for payment in
             payments)
+        if len(set([p.kind for p in payments])) != 1:
+            self.raise_user_error('fail_payment_kind')
+        kind = payments[0].kind
         possible_actions = [action for action in self.failure_actions
-            if action.reject_reason.code == reject_code]
+            if action.reject_reason.code == reject_code
+            and action.payment_kind == kind]
         possible_actions.sort(key=lambda x: x.reject_number, reverse=True)
         for action in possible_actions:
             if (not action.reject_number or
@@ -103,6 +116,9 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
     report_template = fields.Many2One('report.template', 'Report Template',
         domain=[('kind', '=', 'reject_payment')],
         ondelete='RESTRICT')
+    payment_kind = fields.Function(
+        fields.Selection(KINDS, 'Payment Kind'),
+        'on_change_with_payment_kind', searcher='search_payment_kind')
 
     @classmethod
     def __register__(cls, module_name):
@@ -126,13 +142,14 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
             'reject_reason', 'rejected_payment_fee', 'report_template'}
 
     @classmethod
-    def get_rejected_payment_fee(cls, code):
+    def get_rejected_payment_fee(cls, code, payment_kind='receivable'):
         if not code:
             return
         JournalFailureAction = Pool().get(
             'account.payment.journal.failure_action')
         failure_actions = JournalFailureAction.search([
-                ('reject_reason.code', '=', code)
+                ('reject_reason.code', '=', code),
+                ('payment_kind', '=', payment_kind),
                 ])
         if len(failure_actions) == 0:
             cls.raise_user_error('unknown_reject_reason_code', (code))
@@ -150,6 +167,10 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
         else:
             self.rejected_payment_fee = Transaction().context.get(
                 'default_fee_id', None)
+
+    @fields.depends('reject_reason')
+    def on_change_with_payment_kind(self, name=None):
+        return self.reject_reason.payment_kind if self.reject_reason else None
 
     def get_func_key(self, name):
         return '%s|%s|%s' % (self.journal.name, self.reject_reason.code,
@@ -173,6 +194,10 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
                 [('reject_reason.code',) + tuple(clause[1:])],
                 ]
 
+    @classmethod
+    def search_payment_kind(cls, name, clause):
+        return [('reject_reason.payment_kind',) + tuple(clause[1:])]
+
 
 class RejectReason(model.CoopSQL, model.CoopView):
     'Payment Journal Reject Reason'
@@ -181,16 +206,34 @@ class RejectReason(model.CoopSQL, model.CoopView):
 
     code = fields.Char('Code', required=True)
     description = fields.Char('Description', required=True, translate=True)
-    process_method = fields.Char('Process method', required=True)
+    process_method = fields.Selection('get_process_method',
+        'Process method', required=True)
+    payment_kind = fields.Selection(KINDS, 'Payment Kind')
 
     @classmethod
     def __setup__(cls):
         super(RejectReason, cls).__setup__()
         t = cls.__table__()
         cls._sql_constraints += [
-            ('code_unique', Unique(t, t.code), 'The code must be unique'),
+            ('code_unique_per_kind', Unique(t, t.code, t.payment_kind),
+                'The code must be unique'),
             ]
         cls._order = [('process_method', 'ASC'), ('code', 'ASC')]
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        super(RejectReason, cls).__register__(module_name)
+
+        cursor = Transaction().cursor
+        table = TableHandler(cursor, cls, module_name)
+
+        # Migration from 1.6 constraint code_unique has been renamed
+        table.drop_constraint('code_unique')
+
+    @staticmethod
+    def default_payment_kind():
+        return 'receivable'
 
     @classmethod
     def is_master_object(cls):
@@ -198,6 +241,11 @@ class RejectReason(model.CoopSQL, model.CoopView):
 
     def get_rec_name(self, name):
         return '[%s] %s' % (self.code, self.description)
+
+    @classmethod
+    def get_process_method(cls):
+        Journal = Pool().get('account.payment.journal')
+        return Journal.process_method.selection
 
     @classmethod
     def search_rec_name(cls, name, clause):
@@ -290,7 +338,6 @@ class MergedPayments(model.CoopSQL, model.CoopView, ModelCurrency,
             group_by=[payment.merged_id, payment.journal,
                       payment.party, payment.state])
 
-
     @classmethod
     @ModelView.button_action(
         'account_payment_cog.manual_merged_payments_fail_wizard')
@@ -333,7 +380,10 @@ class Payment(export.ExportImportMixin, Printable):
         RejectReason = pool.get('account.payment.journal.reject_reason')
         if not self.fail_code:
             return ''
-        reject_reason, = RejectReason.search([('code', '=', self.fail_code)])
+        reject_reason, = RejectReason.search([
+                ('code', '=', self.fail_code),
+                ('payment_kind', '=', self.kind),
+                ])
         return reject_reason.description
 
     @classmethod
@@ -384,8 +434,8 @@ class Payment(export.ExportImportMixin, Printable):
 
     def _get_transaction_key(self):
         """
-            Return the key to identify payments processed in one transaction
-            Overriden in account_payment_sepa_cog
+        Return the key to identify payments processed in one transaction
+        Overriden in account_payment_sepa_cog
         """
         return (self, self.journal)
 
@@ -702,21 +752,39 @@ class PaymentFailInformation(model.CoopView):
     __name__ = 'account.payment.fail_information'
 
     reject_reason = fields.Many2One('account.payment.journal.reject_reason',
-        'Reject Reason', depends=['process_method'],
-        domain=[('process_method', '=', Eval('process_method'))],
+        'Reject Reason', depends=['process_method', 'payment_kind'],
+        domain=[
+            ('process_method', '=', Eval('process_method')),
+            ('payment_kind', '=', Eval('payment_kind')),
+            ],
         required=True)
     payments = fields.One2Many('account.payment', None, 'Payments',
         readonly=True)
     process_method = fields.Char('Process Method')
+    payment_kind = fields.Char('Payment Kind')
+
+    @classmethod
+    def __setup__(cls):
+        super(PaymentFailInformation, cls).__setup__()
+        cls._error_messages.update({
+                'mixing_payment_methods': 'Trying to fail different payment'
+                ' methods at the same time',
+                'mixing_payment_kinds': 'Trying to fail different payment'
+                ' kinds at the same time',
+                })
 
     @fields.depends('payments')
-    def on_change_with_process_method(self, name=None):
-        methods = [p.journal.process_method for p in self.payments]
-        methods = list(set(methods))
+    def on_change_payments(self, name=None):
+        methods = set([p.journal.process_method for p in self.payments])
         if len(methods) == 1:
-            return methods[0]
+            self.process_method = list(methods)[0]
         else:
-            return ''
+            self.raise_user_error('mixing_payment_methods')
+        kinds = set([p.kind for p in self.payments])
+        if len(kinds) == 1:
+            self.payment_kind = list(kinds)[0]
+        else:
+            self.raise_user_error('mixing_payment_kinds')
 
 
 class ManualPaymentFail(model.CoopWizard):

@@ -2,5 +2,6 @@
 <tree string="Payment Journal Reject Reasons">
     <field name="code"/>
     <field name="description"/>
+    <field name="payment_kind"/>
     <field name="process_method"/>
 </tree>
