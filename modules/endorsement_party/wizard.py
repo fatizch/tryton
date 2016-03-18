@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, If
 
 from trytond.modules.cog_utils import fields, model
 from trytond.modules.endorsement import (EndorsementWizardStepMixin,
@@ -586,7 +586,25 @@ class SelectEndorsement(model.CoopView):
 
     __name__ = 'endorsement.start.select_endorsement'
 
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party',
+        states={'invisible': ~Eval('party', False)})
+
+    @classmethod
+    def __setup__(cls):
+        super(SelectEndorsement, cls).__setup__()
+        cls.endorsement_definition.domain = ['AND',
+            cls.endorsement_definition.domain,
+            If(~Eval('party', False),
+                [('ordered_endorsement_parts.endorsement_part.kind', '!=',
+                        'party')],
+                If(~Eval('contract', False),
+                    [('ordered_endorsement_parts.endorsement_part.kind', '=',
+                            'party')],
+                    []))]
+
+    @fields.depends('applicant', 'party')
+    def on_change_party(self):
+        self.applicant = self.party
 
 
 class StartEndorsement:

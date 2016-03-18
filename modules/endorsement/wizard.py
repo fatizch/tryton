@@ -1684,7 +1684,8 @@ class SelectEndorsement(model.CoopView):
                 [('products', '=', None)]]],
         depends=['product'])
     endorsement_summary = fields.Text('Endorsement Summary')
-    product = fields.Many2One('offered.product', 'Product', readonly=True)
+    product = fields.Many2One('offered.product', 'Product', readonly=True,
+        states={'invisible': True})
     has_preview = fields.Boolean('Has Preview', readonly=True,
         states={'invisible': True})
     contract_in_process = fields.Boolean('Contract in Progress',
