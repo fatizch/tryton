@@ -323,6 +323,7 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
             contract.ordered_loans = [x for x in contract.ordered_loans
                 if x.loan.id not in added and x.loan.id not in removed] + [
                 OrderedLoan(loan=x) for x in added]
+            final_loans = [x.loan.id for x in contract.ordered_loans]
 
             # Sync loan shares
             for covered in contract.covered_elements:
@@ -357,7 +358,9 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
                                 new_shares.append(Share(share=0, loan=loan_id,
                                         start_date=self.effective_date))
                     previous_shares = previous_shares - set(new_shares)
-                    option.loan_shares = new_shares + list(previous_shares)
+                    option.loan_shares = [x
+                        for x in new_shares + list(previous_shares)
+                        if getattr(x, 'id', None) or x.loan.id in final_loans]
                 covered.options = list(covered.options)
             contract.covered_elements = list(contract.covered_elements)
             if contract_id not in endorsements:
