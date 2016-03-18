@@ -750,6 +750,7 @@ class Contract:
         return Invoice(
             company=self.company,
             type='out_invoice',
+            business_kind='contract_invoice',
             journal=None,
             party=self.subscriber,
             invoice_address=self.get_contract_address(

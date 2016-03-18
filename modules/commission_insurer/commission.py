@@ -61,6 +61,7 @@ class Commission:
             account=party.account_payable,
             payment_term=party.supplier_payment_term,
             invoice_date=date,
+            business_kind='insurer_invoice',
             )
 
     @classmethod

@@ -1,8 +1,8 @@
 from collections import defaultdict
 
+from sql import Null, Literal
 from sql.aggregate import Sum, Max
 from sql.operators import Concat
-
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
 from trytond.rpc import RPC
@@ -83,14 +83,33 @@ class Invoice:
                     'invisible': (~Eval('state').in_(['draft', 'validated',
                         'posted']))
                     }})
-        cls.business_type.selection += [
+        cls.business_kind.selection += [
             ('contract_invoice', 'Contract Invoice'),
             ]
-        cls.business_type.depends += ['contract_invoice']
+        cls.business_kind.depends += ['contract_invoice']
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(Invoice, cls).__register__(module_name)
+        # Migration from 1.6 Store Bsuiness Kind
+        cursor = Transaction().cursor
+        invoice = cls.__table__()
+        to_update = cls.__table__()
+        contract_invoice = Pool().get('contract.invoice').__table__()
+
+        query = invoice.join(contract_invoice,
+            condition=contract_invoice.invoice == invoice.id
+            ).select(invoice.id,
+            where=((invoice.business_kind == Null)
+                & (invoice.type == 'out_invoice')))
+        cursor.execute(*to_update.update(
+                columns=[to_update.business_kind],
+                values=[Literal('contract_invoice')],
+                where=to_update.id.in_(query)))
 
     @classmethod
     def view_attributes(cls):
-        is_contract_type = (Bool(Eval('business_type') == 'contract_invoice'))
+        is_contract_type = (Bool(Eval('business_kind') == 'contract_invoice'))
         return super(Invoice, cls).view_attributes() + [
             ('//group[@id="invoice_lines"]',
                 'states', {
@@ -156,12 +175,6 @@ class Invoice:
             for invoice_id, total in cursor.fetchall():
                 result[invoice_id] = total
         return result
-
-    def get_business_type(self, name):
-        if self.type == 'out_invoice' and self.contract_invoice:
-            return 'contract_invoice'
-        else:
-            return super(Invoice, self).get_business_type(name)
 
     @classmethod
     def search_contract_invoice(cls, name, clause):

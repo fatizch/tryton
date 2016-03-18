@@ -1112,7 +1112,7 @@ msgctxt "model:party.synthesis.menu.invoice,name:"
 msgid "Party Synthesis Menu Invoice"
 msgstr "Synthèse quittance"
 
-msgctxt "selection:account.invoice,business_type:"
+msgctxt "selection:account.invoice,business_kind:"
 msgid "Contract Invoice"
 msgstr "Quittance"
 

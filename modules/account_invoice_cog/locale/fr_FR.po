@@ -10,10 +10,6 @@ msgctxt "field:account.invoice,business_kind:"
 msgid "Business Kind"
 msgstr "Type métier"
 
-msgctxt "field:account.invoice,business_type:"
-msgid "Type"
-msgstr "Type"
-
 msgctxt "field:account.invoice,color:"
 msgid "Color"
 msgstr "Couleur"
@@ -73,22 +69,6 @@ msgstr "Consultation des quittances"
 msgctxt "selection:account.invoice,business_kind:"
 msgid ""
 msgstr " "
-
-msgctxt "selection:account.invoice,business_type:"
-msgid "Credit Note"
-msgstr "Note de Crédit"
-
-msgctxt "selection:account.invoice,business_type:"
-msgid "Invoice"
-msgstr "Facture"
-
-msgctxt "selection:account.invoice,business_type:"
-msgid "Supplier Credit Note"
-msgstr "Note de crédit fournisseur"
-
-msgctxt "selection:account.invoice,business_type:"
-msgid "Supplier Invoice"
-msgstr "Facture fournisseur"
 
 msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Invoice"

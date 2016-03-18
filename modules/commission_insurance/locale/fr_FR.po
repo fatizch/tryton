@@ -50,14 +50,6 @@ msgctxt "field:account.fee,broker_fee:"
 msgid "Broker Fee"
 msgstr "Frais d'apporteur"
 
-msgctxt "field:account.invoice,is_broker_invoice:"
-msgid "Is Broker Invoice"
-msgstr "Est un bordereau courtier"
-
-msgctxt "field:account.invoice,is_insurer_invoice:"
-msgid "Is Insurer Invoice"
-msgstr "Est un bordereau assureur"
-
 msgctxt "field:account.invoice.line,broker_fee_lines:"
 msgid "Broker Fee Lines"
 msgstr "Lignes de frais d'apporteur"
@@ -759,11 +751,11 @@ msgctxt "model:ir.ui.menu,name:menu_invoice_insurer_invoice"
 msgid "Insurer Invoices"
 msgstr "Bordereaux assureurs"
 
-msgctxt "selection:account.invoice,business_type:"
+msgctxt "selection:account.invoice,business_kind:"
 msgid "Broker Invoice"
 msgstr "Bordereau courtier"
 
-msgctxt "selection:account.invoice,business_type:"
+msgctxt "selection:account.invoice,business_kind:"
 msgid "Insurer Invoice"
 msgstr "Bordereau assureur"
 

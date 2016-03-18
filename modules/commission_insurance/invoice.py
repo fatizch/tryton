@@ -1,10 +1,10 @@
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 from sql.operators import Concat
-from sql import Cast
+from sql import Cast, Null, Literal
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool, Or
+from trytond.pyson import Eval, Or, In
 from trytond.transaction import Transaction
 from trytond.model import ModelView, Workflow
 from trytond.tools import grouped_slice
@@ -142,106 +142,67 @@ class InvoiceLine:
 class Invoice:
     __name__ = 'account.invoice'
 
-    is_broker_invoice = fields.Function(
-        fields.Boolean('Is Broker Invoice'),
-        'get_is_broker_invoice', searcher='search_is_broker_invoice')
-    is_insurer_invoice = fields.Function(
-        fields.Boolean('Is Insurer Invoice'),
-        'get_is_insurer_invoice', searcher='search_is_insurer_invoice')
-
     @classmethod
     def __setup__(cls):
         super(Invoice, cls).__setup__()
-        cls.business_type.selection += [
+        cls.business_kind.selection += [
             ('broker_invoice', 'Broker Invoice'),
             ('insurer_invoice', 'Insurer Invoice'),
             ]
-        cls.business_type.depends += ['is_broker_invoice',
-            'is_insurer_invoice']
         for field in ('taxes', 'tax_amount', 'untaxed_amount'):
             getattr(cls, field).states = {
-                'invisible': Or(Bool(Eval('is_broker_invoice')),
-                    Bool(Eval('is_insurer_invoice')),
+                'invisible': Or(In(Eval('business_kind'),
+                        ['insurer_invoice', 'broker_invoice']),
                     getattr(cls, field).states.get('invisible', False)),
                 }
-            getattr(cls, field).depends += ['is_broker_invoice',
-                'is_insurer_invoice']
+            getattr(cls, field).depends += ['business_kind']
+
+    @classmethod
+    def __register__(cls, module_name):
+        pool = Pool()
+        super(Invoice, cls).__register__(module_name)
+        # Migration from 1.6 Store Business Kind
+        cursor = Transaction().cursor
+        invoice = cls.__table__()
+        to_update = cls.__table__()
+        insurer = pool.get('insurer').__table__()
+        network = pool.get('distribution.network').__table__()
+
+        query = invoice.join(insurer,
+            condition=invoice.party == insurer.party
+            ).select(invoice.id,
+            where=((invoice.business_kind == Null)
+                & (invoice.type == 'in_invoice')))
+        cursor.execute(*to_update.update(
+                columns=[to_update.business_kind],
+                values=[Literal('insurer_invoice')],
+                where=to_update.id.in_(query)))
+
+        query2 = invoice.join(network,
+            condition=invoice.party == network.party
+            ).select(invoice.id,
+            where=((invoice.business_kind == Null)
+                & (invoice.type == 'in_invoice')))
+        cursor.execute(*to_update.update(
+                columns=[to_update.business_kind],
+                values=[Literal('broker_invoice')],
+                where=to_update.id.in_(query2)))
 
     def _get_move_line(self, date, amount):
         line = super(Invoice, self)._get_move_line(date, amount)
-        if ((getattr(self, 'is_broker_invoice', None) or
-            getattr(self, 'is_insurer_invoice', None)) and
+        if (getattr(self, 'business_kind', None) in
+                ['insurer_invoice', 'broker_invoice'] and
                 self.type == 'in_invoice' and self.total_amount > 0):
             line['payment_date'] = utils.today()
         return line
 
-    @classmethod
-    def get_is_broker_invoice(cls, invoices, name):
-        pool = Pool()
-        cursor = Transaction().cursor
-        invoice = pool.get('account.invoice').__table__()
-        network = pool.get('distribution.network').__table__()
-        result = {x.id: False for x in invoices}
-
-        cursor.execute(*invoice.join(network,
-                condition=invoice.party == network.party
-                ).select(invoice.id,
-                where=(invoice.id.in_([x.id for x in invoices])),
-                group_by=[invoice.id]))
-
-        for invoice_id, in cursor.fetchall():
-            result[invoice_id] = True
-        return result
-
-    def get_business_type(self, name):
-        if self.is_broker_invoice:
-            return 'broker_invoice'
-        elif self.is_insurer_invoice:
-            return 'insurer_invoice'
-        else:
-            return super(Invoice, self).get_business_type(name)
-
-    @classmethod
-    def search_is_broker_invoice(cls, name, clause):
-        if (clause[1] == '=' and clause[2] or
-                clause[1] == ':=' and not clause[2]):
-            return [('party.network', '!=', None)]
-        else:
-            return [('party.network', '=', None)]
-
     def get_synthesis_rec_name(self, name):
         Date = Pool().get('ir.date')
-        if not self.is_broker_invoice and not self.is_insurer_invoice:
+        if self.business_kind not in ['insurer_invoice', 'broker_invoice']:
             return super(Invoice, self).get_synthesis_rec_name(name)
-        return '%s %s [%s]' % (self.business_type_string,
+        return '%s %s [%s]' % (self.business_kind_string,
             Date.date_as_string(self.invoice_date),
             self.state_string)
-
-    @classmethod
-    def get_is_insurer_invoice(cls, invoices, name):
-        pool = Pool()
-        cursor = Transaction().cursor
-        invoice = pool.get('account.invoice').__table__()
-        insurer = pool.get('insurer').__table__()
-        result = {x.id: False for x in invoices}
-
-        cursor.execute(*invoice.join(insurer,
-                condition=invoice.party == insurer.party
-                ).select(invoice.id,
-                where=(invoice.id.in_([x.id for x in invoices])),
-                group_by=[invoice.id]))
-
-        for invoice_id, in cursor.fetchall():
-            result[invoice_id] = True
-        return result
-
-    @classmethod
-    def search_is_insurer_invoice(cls, name, clause):
-        if (clause[1] == '=' and clause[2] or
-                clause[1] == ':=' and not clause[2]):
-            return [('party.insurer_role', '!=', None)]
-        else:
-            return [('party.insurer_role', '=', None)]
 
     @classmethod
     def _get_commissions_to_delete(cls, ids):

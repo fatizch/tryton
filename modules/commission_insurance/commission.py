@@ -5,7 +5,6 @@ from sql import Cast, Literal
 from sql.operators import Concat
 from sql.aggregate import Sum, Max, Min
 from sql.functions import ToChar
-from sql.conditionals import Coalesce
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
@@ -182,6 +181,7 @@ class Commission:
             currency=key['currency'],
             account=key['account'],
             payment_term=payment_term,
+            business_kind='broker_invoice',
             )
 
     def _group_to_invoice_key(self):
@@ -966,8 +966,10 @@ class CreateInvoiceAsk:
 
     @classmethod
     def __setup__(cls):
-        cls.type_.states = {'invisible': True}
         super(CreateInvoiceAsk, cls).__setup__()
+        cls.type_.states = {'invisible': True}
+        cls.to.states = {'required': Bool(Eval('post_invoices'))}
+        cls.to.depends += ['post_invoices']
 
     @staticmethod
     def default_type_():
@@ -1191,7 +1193,7 @@ class FilterAggregatedCommissions(Wizard):
 
     def do_filter_commission(self, action):
         # The following active_id represents the max commission id and the
-        # intermediate sql-view object id (See AggregatedCommission.table_query).
+        # intermediate sql-view object id. See AggregatedCommission.table_query
         commission = Pool().get('commission')(
             Transaction().context.get('active_id'))
         invoice = commission.origin.invoice

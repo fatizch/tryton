@@ -3,7 +3,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.account_invoice.invoice import _TYPE
 from trytond.modules.cog_utils import export, fields
 from trytond.modules.report_engine import Printable
 
@@ -57,10 +56,6 @@ class Invoice(export.ExportImportMixin, Printable):
     business_kind = fields.Selection([('', '')], 'Business Kind',
         states={'readonly': Eval('state') != 'draft'}, depends=['state'])
     business_kind_string = business_kind.translated('business_kind')
-    business_type = fields.Function(
-        fields.Selection(_TYPE, 'Type'),
-        'get_business_type')
-    business_type_string = business_type.translated('business_type')
 
     @classmethod
     def __register__(cls, module_name):
@@ -122,9 +117,6 @@ class Invoice(export.ExportImportMixin, Printable):
         elif self.state == 'posted':
             return 'blue'
         return 'black'
-
-    def get_business_type(self, name):
-        return self.business_kind if self.business_kind else self.type
 
     @classmethod
     def post(cls, invoices):

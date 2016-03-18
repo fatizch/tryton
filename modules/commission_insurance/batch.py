@@ -103,9 +103,9 @@ class PostCommissionInvoiceBatch(batch.BatchRoot):
         domain = [('state', 'in', status)]
 
         if extra_args['agent_type'] == 'agent':
-            domain.append(('is_broker_invoice', '=', True),)
+            domain.append(('business_kind', '=', 'broker_invoice'),)
         elif extra_args['agent_type'] == 'principal':
-            domain.append(('is_insurer_invoice', '=', True),)
+            domain.append(('business_kind', '=', 'insurer_invoice'),)
 
         invoices = AccountInvoice.search(domain)
         return [[invoice.id] for invoice in invoices]
