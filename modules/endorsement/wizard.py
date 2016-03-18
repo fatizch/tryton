@@ -1449,6 +1449,18 @@ class ManageContacts(EndorsementWizardStepMixin, model.CoopView):
         self.update_all_contacts()
         self.update_current_contacts()
 
+    @fields.depends('current_contacts', 'contract', 'effective_date')
+    def on_change_current_contacts(self):
+        for contact in self.current_contacts:
+            if getattr(contact, 'action', None):
+                continue
+            contact.effective_date = self.effective_date
+            contact.contract = self.contract
+            contact.contract_rec_name = self.contract.contract.rec_name
+            contact.action = 'added'
+            self.current_contacts = list(self.current_contacts)
+            return
+
     def update_all_contacts(self):
         if not self.current_contacts:
             return
@@ -1469,6 +1481,14 @@ class ManageContacts(EndorsementWizardStepMixin, model.CoopView):
     def step_default(self, field_names):
         defaults = super(ManageContacts, self).step_default()
         possible_contracts = self.wizard.endorsement.contract_endorsements
+
+        if not possible_contracts and self.wizard.select_endorsement.contract:
+            contract_endorsement = Pool().get('endorsement.contract')(
+                contract=self.wizard.select_endorsement.contract,
+                endorsement=self.wizard.endorsement)
+            contract_endorsement.save()
+            possible_contracts = [contract_endorsement]
+
         defaults['possible_contracts'] = [x.id for x in possible_contracts]
         per_contract = {x: self.get_updated_contacts_from_contract(x)
             for x in possible_contracts}
@@ -1519,6 +1539,8 @@ class ManageContacts(EndorsementWizardStepMixin, model.CoopView):
                 self._update_modified(contract_endorsement.contract, contact,
                     per_id)
                 continue
+        contract_endorsement.contract.contacts = list(
+            contract_endorsement.contract.contacts)
 
     def _update_nothing(self, contract, contact, per_id):
         # Cancel modifications
@@ -1529,7 +1551,8 @@ class ManageContacts(EndorsementWizardStepMixin, model.CoopView):
         prev_contact = Contact(contact.contact_id)
         contact = per_id[contact.contact_id]
         contact.address = prev_contact.address
-        contact.end_date = prev_contact.end_date
+        if contact.end_date != prev_contact.end_date:
+            contact.end_date = prev_contact.end_date
 
     def _update_ended(self, contract, contact, per_id):
         if not contact.contact_id:
@@ -1562,6 +1585,9 @@ class ManageContacts(EndorsementWizardStepMixin, model.CoopView):
     def get_contract_contacts(self, contract):
         contacts = contract.get_contacts(date=self.effective_date,
             only_existing=True)
+        for contact in contacts:
+            if getattr(contact, 'type_code', None) is None:
+                contact.type_code = contact.type.code if contact.type else ''
         if len([c for c in contacts if c.type_code == 'subscriber']) == 0:
             contacts += contract.get_contacts(date=self.effective_date,
                 type_='subscriber')
@@ -1577,18 +1603,26 @@ class ManageContacts(EndorsementWizardStepMixin, model.CoopView):
                 contract_endorsement.contract.rec_name
             contact_displayer.effective_date = self.effective_date
             all_contacts.append(contact_displayer)
+        all_contacts.sort(key=lambda x: (x.contract, 0 if x.contact_id else 1,
+                x.effective_date))
         return all_contacts
 
     def new_contact_displayer(self, kind, party, old, new):
         Contact = Pool().get('endorsement.manage_contacts.contact')
         new_contact = Contact()
         new_contact.kind = kind
+        new_contact.type_code = kind.code if kind else ''
         new_contact.party = party
         new_contact.end_date = None
-        new_contact.old_address = old.address
+        new_contact.old_address = getattr(old, 'address', None)
         new_contact.contact_id = getattr(old, 'id', None)
         new_contact.automatic = new_contact.contact_id is None
-        if getattr(new, 'id', None) is None and not new_contact.automatic:
+        if not new_contact.old_address:
+            new_contact.new_address = new.address
+            new_contact.action = 'added'
+            return new_contact
+        if (getattr(old, 'id', None) is None and not new_contact.automatic
+                and not getattr(new, 'address', None)):
             new_contact.end_date = coop_date.add_day(self.effective_date, -1)
             new_contact.action = 'ended'
             return new_contact
@@ -1608,17 +1642,25 @@ class ContactDisplayer(model.CoopView):
 
     action = fields.Selection([('nothing', ''), ('ended', 'Ended'),
         ('added', 'Added'), ('new_address', 'New Address')], 'Action',
-        domain=[If(Eval('action') in ('ended', 'new_address'),
+        domain=[If(In(Eval('action', ''), ['ended', 'new_address']),
                 ('action', 'in', ('ended', 'new_address', 'nothing')),
                 If(Eval('action') == 'added',
                     ('action', 'in', ('added', 'removed')),
-                    ('action', 'in', ('ended', 'new_address', 'nothing'))))],
-        depends=['action'])
+                    If(~Eval('contact_id', False),
+                        ('action', 'in', ('new_address', 'nothing')),
+                        If(~Eval('party', False),
+                            ('action', '=', 'added'),
+                            ('action', 'in',
+                                ('ended', 'new_address', 'nothing'))))
+                    ))],
+        depends=['action', 'contact_id', 'party'])
     contract = fields.Many2One('endorsement.contract', 'Contract',
         readonly=True)
     contract_rec_name = fields.Char('Contract', readonly=True)
-    party = fields.Many2One('party.party', 'Party', readonly=True)
-    kind = fields.Many2One('contract.contact.type', 'Kind', readonly=True)
+    party = fields.Many2One('party.party', 'Party', states={
+            'readonly': Eval('action', '') != 'added'})
+    kind = fields.Many2One('contract.contact.type', 'Kind', states={
+            'readonly': Eval('action', '') != 'added'})
     old_address = fields.Many2One('party.address', 'Old Address',
         readonly=True)
     new_address = fields.Many2One('party.address', 'New Address',
@@ -1627,8 +1669,11 @@ class ContactDisplayer(model.CoopView):
                     Eval('effective_date'))],
             ['OR', ('start_date', '=', None), ('start_date', '<=',
                     Eval('effective_date'))],
+            If(~Eval('old_address', False), [],
+                ['OR', ('id', '=', None), ('id', '!=', Eval('old_address'))]),
             ],
-        states={'readonly': Eval('action', '') == 'ended'},
+        states={'readonly': Eval('action', '') == 'ended',
+            'required': In(Eval('action', ''), ['added', 'new_address'])},
         depends=['action', 'effective_date', 'party'])
     contact_id = fields.Integer('Contact Id', readonly=True)
     end_date = fields.Date('End Date', readonly=True)
@@ -1648,14 +1693,20 @@ class ContactDisplayer(model.CoopView):
         elif self.action == 'ended' and self.contact_id:
             self.end_date = coop_date.add_day(self.effective_date, -1)
             self.new_address = None
+        elif self.action == 'added':
+            self.end_date = None
+        elif self.action == 'new_address':
+            self.end_date = coop_date.add_day(self.effective_date, -1)
 
-    @fields.depends('action', 'contact_id', 'new_address', 'old_address')
+    @fields.depends('action', 'contact_id', 'effective_date', 'new_address',
+        'old_address')
     def on_change_new_address(self):
         if (self.old_address and self.new_address and
                 self.old_address == self.new_address):
             self.action = 'nothing'
         elif self.action == 'nothing':
             self.action = 'new_address'
+        self.on_change_action()
 
     def to_contact(self):
         return Pool().get('contract.contact')(
