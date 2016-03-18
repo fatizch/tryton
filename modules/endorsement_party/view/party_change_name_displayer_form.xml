@@ -1,15 +1,23 @@
 <?xml version="1.0"?>
 <form string="Change Party Name">
     <label name="current_name"/>
-    <field name="current_name" readonly="1"/>
-    <label name="new_name"/>
-    <field name="new_name"/>
+    <field name="current_name"/>
+    <label name="name"/>
+    <field name="name"/>
     <label name="current_first_name"/>
-    <field name="current_first_name" readonly="1"/>
-    <label name="new_first_name"/>
-    <field name="new_first_name"/>
+    <field name="current_first_name"/>
+    <label name="first_name"/>
+    <field name="first_name"/>
     <label name="current_birth_name"/>
-    <field name="current_birth_name" readonly="1"/>
-    <label name="new_birth_name"/>
-    <field name="new_birth_name"/>
+    <field name="current_birth_name"/>
+    <label name="birth_name"/>
+    <field name="birth_name"/>
+    <label name="current_gender"/>
+    <field name="current_gender"/>
+    <label name="gender"/>
+    <field name="gender"/>
+    <label name="current_email"/>
+    <field name="current_email"/>
+    <label name="email"/>
+    <field name="email"/>
 </form>

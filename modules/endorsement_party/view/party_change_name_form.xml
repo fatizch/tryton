@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <form string="Change Party Name">
-    <label name="effective_date"/>
-    <field name="effective_date"/>
-    <label name="endorsement_part"/>
-    <field name="endorsement_part"/>
-    <field name="endorsement_definition" invisible="1"/>
-    <newline/>
-    <field name="parties" expand_toolbar="0" colspan="4"/>
+    <group id="parties" string="" colspan="4" col="1" yexpand="1" yfill="1">
+        <field name="parties" group="parties" mode="tree" expand_toolbar="0" yexpand="0" yfill="1"/>
+        <field name="parties" group="parties" mode="form" expand_toolbar="0"/>
+    </group>
+    <group id="invisible" string="">
+        <field name="endorsement_definition"/>
+        <field name="effective_date"/>
+        <field name="endorsement_part"/>
+    </group>
 </form>

@@ -4,7 +4,7 @@ from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, If
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, coop_string
 from trytond.modules.endorsement import (EndorsementWizardStepMixin,
     add_endorsement_step)
 from trytond.modules.party_relationship import PartyRelationAll
@@ -347,12 +347,25 @@ class PartyNameDisplayer(model.CoopView):
 
     __name__ = 'endorsement.party.change_name.displayer'
 
+    party_rec_name = fields.Char('Party', readonly=True)
     current_name = fields.Char('Current Name', readonly=True)
     current_first_name = fields.Char('Current First Name', readonly=True)
     current_birth_name = fields.Char('Current Birth Name', readonly=True)
-    new_name = fields.Char('New Name')
-    new_first_name = fields.Char('New First Name')
-    new_birth_name = fields.Char('New Birth Name')
+    current_email = fields.Char('Current Email', readonly=True)
+    current_gender = fields.Selection('get_possible_genders', 'Current Gender',
+        readonly=True)
+    name = fields.Char('New Name')
+    first_name = fields.Char('New First Name')
+    birth_name = fields.Char('New Birth Name')
+    email = fields.Char('New Email')
+    gender = fields.Selection('get_possible_genders', 'New Gender')
+
+    @classmethod
+    def get_possible_genders(cls):
+        Party = Pool().get('party.party')
+        return [
+            (x, coop_string.translate(Party, 'gender', y, ttype='selection'))
+            for x, y in Party._fields['gender'].selection]
 
 
 class ChangePartyName(EndorsementWizardStepMixin):
@@ -364,13 +377,20 @@ class ChangePartyName(EndorsementWizardStepMixin):
         'endorsement.party.change_name.displayer', None, 'Parties')
 
     @classmethod
+    def view_attributes(cls):
+        return super(ChangePartyName, cls).view_attributes() + [
+            ('/form/group[@id="invisible"]', 'states',
+                {'invisible': True}),
+            ]
+
+    @classmethod
     def state_view_name(cls):
         return 'endorsement_party.' \
             'party_change_name_view_form'
 
     @classmethod
     def _party_fields_to_extract(cls):
-        return {}
+        return {'birth_name', 'email', 'first_name', 'gender', 'name'}
 
     def _get_parties(self):
         res = OrderedDict()
@@ -385,16 +405,11 @@ class ChangePartyName(EndorsementWizardStepMixin):
         defaults = super(ChangePartyName, self).step_default()
         for party, party_endorsement in zip(Party.browse(
                     self._get_parties().keys()), self._get_parties().values()):
-            displayer = {}
+            displayer = {'party_rec_name': party.rec_name}
             values = party_endorsement.values
-            displayer['new_name'] = values.get('name', party.name)
-            displayer['new_first_name'] = values.get('first_name',
-                party.first_name)
-            displayer['new_birth_name'] = values.get('birth_name',
-                party.birth_name)
-            displayer['current_name'] = party.name
-            displayer['current_first_name'] = party.first_name
-            displayer['current_birth_name'] = party.birth_name
+            for fname in self._party_fields_to_extract():
+                displayer[fname] = values.get(fname, getattr(party, fname))
+                displayer['current_' + fname] = getattr(party, fname)
             displayers.append(displayer)
         defaults['parties'] = displayers
         return defaults
@@ -406,12 +421,10 @@ class ChangePartyName(EndorsementWizardStepMixin):
                 Party.browse(self._get_parties().keys()),
                 self._get_parties().values(), self.parties):
             new_values = {}
-            if displayer.new_name or party.name:
-                new_values.update({'name': displayer.new_name})
-            if displayer.new_birth_name or party.birth_name:
-                new_values.update({'birth_name': displayer.new_birth_name})
-            if displayer.new_first_name or party.first_name:
-                new_values.update({'first_name': displayer.new_first_name})
+            for fname in self._party_fields_to_extract():
+                if getattr(displayer, fname) != getattr(
+                        displayer, 'current_' + fname):
+                    new_values[fname] = getattr(displayer, fname)
             party_endorsement.values = new_values
             party_endorsement.save()
 
