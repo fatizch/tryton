@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:diff_blame.revision_blame_wizard:"
-msgid "The model %s has no revisions."
-msgstr "L'historique n'est pas disponible"
-
 msgctxt "error:event.type.action:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
@@ -90,46 +86,6 @@ msgstr " "
 msgctxt "field:country.subdivision,id:"
 msgid ""
 msgstr " "
-
-msgctxt "field:diff_blame.revision_blame,blame_text:"
-msgid "Blame"
-msgstr "Blâme"
-
-msgctxt "field:diff_blame.revision_blame,current_page:"
-msgid "Current Page"
-msgstr "Page actuelle"
-
-msgctxt "field:diff_blame.revision_blame,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:diff_blame.revision_blame,model_id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:diff_blame.revision_blame,model_name:"
-msgid "Model Name"
-msgstr "Numéro"
-
-msgctxt "field:diff_blame.revision_blame,record_name:"
-msgid "Record Name"
-msgstr "Nom de l' enregistrement"
-
-msgctxt "field:diff_blame.revision_blame,total_pages:"
-msgid "Total Pages"
-msgstr "Nombre de pages"
-
-msgctxt "field:diff_blame.revision_format_translator,author_label:"
-msgid "AUTHOR"
-msgstr "AUTEUR"
-
-msgctxt "field:diff_blame.revision_format_translator,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:diff_blame.revision_format_translator,target_label:"
-msgid "target"
-msgstr "cible"
 
 msgctxt "field:event,id:"
 msgid "ID"
@@ -1126,14 +1082,6 @@ msgctxt "model:country.subdivision,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:diff_blame.revision_blame,name:"
-msgid "Revision Blame View"
-msgstr "Historique des révisions"
-
-msgctxt "model:diff_blame.revision_format_translator,name:"
-msgid "Revision Translator"
-msgstr "Traducteur de révision"
-
 msgctxt "model:event,name:"
 msgid "Event"
 msgstr "Evénement"
@@ -1217,10 +1165,6 @@ msgstr "Exporter dans un fichier"
 msgctxt "model:ir.action,name:import_wizard"
 msgid "Import File"
 msgstr "Importer le Fichier"
-
-msgctxt "model:ir.action,name:revision_blame"
-msgid "Diff Blame Revision"
-msgstr "Différence dé Révisions"
 
 msgctxt "model:ir.export.configuration,name:"
 msgid "Export Configuration"
@@ -1402,18 +1346,6 @@ msgctxt "selection:ir.translation.override.start,export_kind:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "view:diff_blame.revision_blame:"
-msgid "Next"
-msgstr "Suivant"
-
-msgctxt "view:diff_blame.revision_blame:"
-msgid "Prev"
-msgstr "Précédent"
-
-msgctxt "view:diff_blame.revision_blame:"
-msgid "Revision Blame"
-msgstr "Historique des révisions"
-
 msgctxt "view:event.type.action:"
 msgid "Event Type Action"
 msgstr "Action par type d'événement"
@@ -1533,10 +1465,6 @@ msgstr "Version d'Objet"
 msgctxt "view:utils.versionned_object:"
 msgid "Versionned Object"
 msgstr "Objet Versionné"
-
-msgctxt "wizard_button:diff_blame.revision_blame_wizard,revision_blame,end:"
-msgid "Done"
-msgstr "Fait"
 
 msgctxt "wizard_button:export.export_to_file,conf_selection,end:"
 msgid "Cancel"

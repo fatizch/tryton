@@ -16,7 +16,6 @@ from .models_for_tests import *
 from .tag import *
 from .event import *
 from .attachment import *
-from .diff_blame import *
 from .note import *
 
 def register():
@@ -71,8 +70,6 @@ def register():
         Translation,
         TranslationOverrideStart,
         Attachment,
-        RevisionBlame,
-        RevisionFormatTranslator,
         Note,
         module='cog_utils', type_='model')
 
@@ -102,5 +99,4 @@ def register():
         ExportFieldsSelection,
         ExportToFile,
         TranslationOverride,
-        RevisionBlameWizard,
         module='cog_utils', type_='wizard')
