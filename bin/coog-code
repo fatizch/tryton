@@ -1,0 +1,57 @@
+# vim: set ft=sh:
+# source code informations
+
+_coog_code_st() {
+        [ -z $1 ] && echo 0 && return
+        echo $1 | cut -d " " -f 1
+}
+
+_coog_code_status() {
+        local wd; wd=`pwd`
+        cd $COOG_ROOT
+        local repos; repos=`ls -1`
+        echo "repo branch master remote stage dirty"
+        for repo in $repos
+        do
+                local folder; folder=$COOG_ROOT/$repo
+                if [ ! -d $folder ] || [ ! -d $folder/.git ]
+                then
+                        continue
+                fi
+                cd $folder
+                local branch; branch=`git rev-parse --abbrev-ref HEAD`
+                local master; master=`git diff --shortstat master` && master=`_coog_code_st $master`
+                local rbranch; rbranch=`git branch -r --list origin/$branch`
+                local remote
+                if [ -z $rbranch ]
+                then
+                        remote=X
+                else
+                        remote=`git diff --shortstat $rbranch $branch`
+                        remote=`_coog_code_st $remote`
+                fi
+                local stage; stage=`git diff --shortstat --cached` && stage=`_coog_code_st $stage`
+                local dirty; dirty=`git diff --shortstat` && dirty=`_coog_code_st $dirty`
+                echo $repo $branch $master $remote $stage $dirty
+        done
+        cd $wd
+}
+
+coog_code_status() { # status of all repos
+        _coog_code_status | column -t
+}
+
+coog_code_norem() { # list local branches with no remotes - <repo>
+        [ -z $1 ] && echo missing repo && return 1
+        local wd; wd=`pwd`
+        local folder; folder=$COOG_ROOT/$1
+        if [ ! -d $folder ] || [ ! -d $folder/.git ]
+        then
+                echo not a repo && return 1
+        fi
+        cd $folder
+        git branch -l | sed 's/* master//' > /tmp/gitlocal.txt
+        git branch -r  | sed 's/origin\///' > /tmp/gitremote.txt
+        grep -Fxv -f /tmp/gitremote.txt /tmp/gitlocal.txt
+        cd $wd
+}
