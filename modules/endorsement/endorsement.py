@@ -1161,7 +1161,11 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     def view_attributes(cls):
         return super(Endorsement, cls).view_attributes() + [
             ('/tree', 'colors', If(Eval('state') == 'applied', 'green',
-                    If(Eval('state') == 'canceled', 'grey', 'black')))]
+                    If(Eval('state') == 'canceled', 'grey', 'black'))),
+            ('/form/group[@id="invisible"]',
+                'states',
+                {'invisible': True}
+                )]
 
     @classmethod
     def create(cls, vlist):

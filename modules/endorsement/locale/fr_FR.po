@@ -2536,8 +2536,8 @@ msgid "Endorsement Groups"
 msgstr "Avenants"
 
 msgctxt "view:endorsement:"
-msgid "Open Contract"
-msgstr "Ouvrir le Contrat"
+msgid "Open Contract before Application"
+msgstr "Ouvrir le contrat avant application"
 
 msgctxt "view:offered.product:"
 msgid "Endorsements"

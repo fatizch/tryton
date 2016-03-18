@@ -22,7 +22,6 @@
         <group id="application_buttons" yfill="1">
             <button string="Apply" name="apply"/>
             <button string="Cancel" name="cancel"/>
-            <button string="Open Contract" name="open_contract"/>
         </group>
         <group id="application_info" xfill="0">
             <label name="application_date"/>
@@ -31,5 +30,8 @@
             <label name="applied_by"/>
             <field name="applied_by"/>
         </group>
+    </group>
+    <group id="invisible" string="">
+        <button string="Open Contract before Application" name="open_contract"/>
     </group>
 </form>
