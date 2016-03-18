@@ -1,5 +1,4 @@
-from sql import Literal, Null
-from sql.aggregate import Sum
+from sql import Null
 
 from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
@@ -253,10 +252,11 @@ class ThirdPartyBalance:
     @classmethod
     def get_query_where(cls, tables, report_context):
         # Force date to defined date to properly filter maturity dates
-        with Transaction().set_context(client_defined_date=report_context.get(
-                    'at_date', utils.today())):
+        at_date = report_context.get('at_date', utils.today())
+        with Transaction().set_context(client_defined_date=at_date):
             where = super(ThirdPartyBalance, cls).get_query_where(tables,
                 report_context)
+        where &= (tables['account.move'].date <= at_date)
         if report_context['account']:
             where &= (
                 tables['account.account'].id == report_context['account'])
