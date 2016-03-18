@@ -77,6 +77,12 @@
             <field name="inherit" ref="loan.loan_simple_view_form"/>
             <field name="name">loan_simple_form</field>
         </record>
+        <record model="ir.ui.view" id="loan_no_button_view_form">
+            <field name="model">loan</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="loan.loan_no_button_view_form"/>
+            <field name="name">loan_form</field>
+        </record>
         <!-- ################################# -->
         <!-- # Increment (calculated amount) # -->
         <!-- ################################# -->
