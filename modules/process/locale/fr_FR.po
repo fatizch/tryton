@@ -739,6 +739,10 @@ msgid "Replace Step Methods"
 msgstr "Remplacer les Méthodes de l'Etape"
 
 msgctxt "view:contract:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "view:contract:"
 msgid "Next (_k)"
 msgstr "Suivant (_k)"
 
