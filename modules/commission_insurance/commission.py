@@ -1161,8 +1161,23 @@ class FilterCommissions(Wizard):
 
     __name__ = 'commission.filter_commission'
 
-    start_state = 'filter_commission'
+    start_state = 'choose_action'
+    choose_action = StateTransition()
     filter_commission = StateAction('commission.act_commission_form')
+    aggregated_commissions = StateAction(
+        'commission_insurance.act_commission_aggregated_form_relate')
+
+    def transition_choose_action(self):
+        assert Transaction().context.get('active_model') == 'account.invoice'
+        ids = Transaction().context.get('active_ids')
+        AccountInvoice = Pool().get('account.invoice')
+        types = set([x.type for x in AccountInvoice.browse(ids)])
+        if len(types) != 1:
+            return 'filter_commission'
+        elif types == {'in_invoice'}:
+            return 'filter_commission'
+        else:
+            return 'aggregated_commissions'
 
     def do_filter_commission(self, action):
         assert Transaction().context.get('active_model') == 'account.invoice'
@@ -1181,6 +1196,13 @@ class FilterCommissions(Wizard):
                 'pyson_domain': PYSONEncoder().encode(domain)
                 })
         return action, {}
+
+    def do_aggregated_commissions(self, action):
+        return action, {
+            'ids': Transaction().context.get('active_ids'),
+            'id': Transaction().context.get('active_id'),
+            'model': Transaction().context.get('active_model'),
+            }
 
 
 class FilterAggregatedCommissions(Wizard):
