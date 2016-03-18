@@ -70,6 +70,14 @@ class ManageBeneficiaries(EndorsementWizardStepMixin):
     def step_default(self, name):
         defaults = super(ManageBeneficiaries, self).step_default()
         possible_contracts = self.wizard.endorsement.contract_endorsements
+
+        if not possible_contracts and self.wizard.select_endorsement.contract:
+            contract_endorsement = Pool().get('endorsement.contract')(
+                contract=self.wizard.select_endorsement.contract,
+                endorsement=self.wizard.endorsement)
+            contract_endorsement.save()
+            possible_contracts = [contract_endorsement]
+
         defaults['possible_contracts'] = [x.id for x in possible_contracts]
         per_contract = {x: self.get_updated_options_from_contract(x)
             for x in possible_contracts}
