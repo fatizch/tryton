@@ -267,7 +267,6 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         attachment.data = report['data']
         attachment.name = report['report_name']
         attachment.document_desc = self.document_desc
-        attachment.origin = report['origin']
         attachment.origin = report.get('origin', None)
         return attachment
 

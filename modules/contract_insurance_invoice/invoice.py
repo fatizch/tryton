@@ -130,6 +130,10 @@ class Invoice:
     def get_currency_symbol(self, name):
         return self.currency.symbol if self.currency else ''
 
+    def get_reference_object_for_edm(self, template):
+        return self.contract or super(Invoice,
+            self).get_reference_object_for_edm(template)
+
     @classmethod
     def get_fees(cls, invoices, name):
         pool = Pool()
