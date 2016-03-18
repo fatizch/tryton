@@ -29,7 +29,7 @@ class EndorsementDefinition:
         contract = contract_endorsement.contract
         effective_date = contract_endorsement.endorsement.effective_date
 
-        if effective_date == contract.start_date:
+        if not contract.start_date or effective_date == contract.start_date:
             # Recalculate whole contract (datetime.date.min rather than
             # contract.start_date to manage start date modification)
             return datetime.date.min
