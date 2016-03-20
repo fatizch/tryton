@@ -10,7 +10,7 @@ _coog_code_status() {
         local wd; wd=`pwd`
         cd $COOG_ROOT
         local repos; repos=`ls -1`
-        echo "repo branch master remote stage dirty"
+        echo "repo master branch commit stage dirty"
         echo "---- ------ ------ ------ ----- -----"
         for repo in $repos
         do
@@ -20,26 +20,27 @@ _coog_code_status() {
                         continue
                 fi
                 cd $folder
-                local branch; branch=`git rev-parse --abbrev-ref HEAD`
                 local master
+                master=`git diff --shortstat origin/master master`
+                master=`_coog_code_st $master`
+                local branch
+                branch=`git rev-parse --abbrev-ref HEAD`
+                [ $branch = HEAD ] && branch=X
+                local commit
                 if [ $branch = master ]
                 then
-                        master=X
+                        commit=X
                 else
-                        master=`git diff --shortstat master` && master=`_coog_code_st $master`
+                        commit=`git diff --shortstat master`
+                        commit=`_coog_code_st $master`
                 fi
-                local rbranch; rbranch=`git branch -r --list origin/$branch`
-                local remote
-                if [ -z $rbranch ]
-                then
-                        remote=X
-                else
-                        remote=`git diff --shortstat $rbranch $branch`
-                        remote=`_coog_code_st $remote`
-                fi
-                local stage; stage=`git diff --shortstat --cached` && stage=`_coog_code_st $stage`
-                local dirty; dirty=`git diff --shortstat` && dirty=`_coog_code_st $dirty`
-                echo $repo $branch $master $remote $stage $dirty
+                local stage
+                stage=`git diff --shortstat --cached`
+                stage=`_coog_code_st $stage`
+                local dirty
+                dirty=`git diff --shortstat`
+                dirty=`_coog_code_st $dirty`
+                echo $repo $master $branch $commit $stage $dirty
         done
         cd $wd
 }
@@ -60,7 +61,7 @@ coog_code_fetch() { # fetch all repos
                         continue
                 fi
                 cd $folder
-                echo entering $repo
+                echo fetching $repo
                 git fetch -p
                 echo
         done
@@ -81,4 +82,36 @@ coog_code_norem() { # list local branches with no remotes - <repo>
         git branch -r  | sed 's/origin\///' > /tmp/gitremote.txt
         grep -Fxv -f /tmp/gitremote.txt /tmp/gitlocal.txt
         cd $wd
+}
+
+_coog_code_lines() {
+        find -name "*.$1" -exec wc -l {} \; | cut -d " " -f 1 | paste -s -d "+" | bc
+}
+
+_coog_code_stats() {
+        [ -z $1 ] && echo need a repo to calculate stats && return 1
+        local modules
+        modules="$COOG_ROOT/$1/modules"
+        [ ! -d "$modules" ] && echo bad repo name && return 1
+        local wd
+        wd=`pwd`
+        cd "$modules"
+        echo module python xml
+        local module
+        for module in `ls -1`
+        do
+                [ ! -d $module ] && continue
+                cd $module
+                local py
+                py=`_coog_code_lines py`
+                local xml
+                xml=`_coog_code_lines xml`
+                echo $module $py $xml
+                cd ..
+        done
+        cd "$wd"
+}
+
+coog_code_stats() { # generate code stats - <repo>
+        _coog_code_stats $* | column -t
 }
