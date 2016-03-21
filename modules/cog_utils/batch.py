@@ -50,7 +50,7 @@ class BatchRoot(ModelView):
         elif cls._config.has_option('default', key):
             item = cls._config.get('default', key)
         else:
-            item = cls._default_config_items[key]
+            item = cls._default_config_items.get(key, None)
         return item
 
     @classmethod
