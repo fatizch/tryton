@@ -9,7 +9,7 @@ _coog_dep_proxy_opt() {
 
 coog_dep_base() { # install base deps
         local proxy_opt
-	proxy_opt=`_coog_dep_proxy_opt`
+        proxy_opt=`_coog_dep_proxy_opt`
         pip install $proxy_opt pyflakes==0.5.0  # check rules syntax (client and server)
         pip install $proxy_opt dateutils
         pip install $proxy_opt lxml
@@ -31,7 +31,7 @@ coog_dep_base() { # install base deps
 
 coog_dep_extend() { # install extended deps (interfaces, deployment extras)
         local proxy_opt
-	proxy_opt=`_coog_dep_proxy_opt`
+        proxy_opt=`_coog_dep_proxy_opt`
         pip install $proxy_opt python-ldap                  # ldap
         pip install $proxy_opt vobject                      # vcalendar
         pip install $proxy_opt raven                        # sentry
@@ -40,11 +40,17 @@ coog_dep_extend() { # install extended deps (interfaces, deployment extras)
         pip install $proxy_opt msgpack-python               # multi-worker
 }
 
-coog_dep_extra() { # install specific tasks deps
+coog_dep_batch() { # install batch deps
         local proxy_opt
-	proxy_opt=`_coog_dep_proxy_opt`
+        proxy_opt=`_coog_dep_proxy_opt`
         pip install $proxy_opt rq                           # batch
         pip install $proxy_opt celery                       # batch
+}
+
+coog_dep_extra() { # install specific tasks deps
+        coog_dep_batch
+        local proxy_opt
+        proxy_opt=`_coog_dep_proxy_opt`
         pip install $proxy_opt sphinx                       # doc
         pip install $proxy_opt sphinxcontrib-inheritance    # doc
         pip install $proxy_opt pytest                       # test

@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # This command builds a Coog Docker image
 #
 # The script uses `coog docker` command which requires
@@ -12,9 +11,8 @@
 #
 # This script will read its informations from `tags` file
 
-super_pass=secret
 repos=`cat ./tags | xargs echo`
 
 # when behind a proxy
-# sudo ../coog/bin/coog docker build "$super_pass" "$repos" -- --build-arg http_proxy=http://myproxy.domain.com:8080
-sudo ../coog/bin/coog docker build "$super_pass" "$repos"
+# coog docker build "$repos" -- --build-arg http_proxy=http://myproxy.domain.com:8080
+coog docker build "$repos"

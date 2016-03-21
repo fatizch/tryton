@@ -1,23 +1,29 @@
 # vim: set ft=sh:
 # docker utils for coog server
 
-coog_docker_env() { # build docker env image - [docker-build-arg*]
-        [ -d .cache ] && rm -rf .cache
-        docker build -t coog/env -f conf/env.df $* .
+_coog_docker_enter() {
+        _coog_docker_wd=`pwd`
+        _coog_docker_gd="/tmp/docker-$1-"`date +"%y%m%d-%H%M%S"`
+        mkdir $_coog_docker_gd && cd $_
 }
 
-_coog_docker_hashpwd() { # hash trytond super pwd - <pwd>
-        python2 -c "import crypt,random,string; print crypt.crypt('$1', ''.join(random.sample(string.ascii_letters + string.digits, 8)))"
+_coog_docker_leave() {
+        cd $_coog_docker_wd
+}
+
+coog_docker_env() { # build docker env image - [docker-build-arg*]
+        _coog_docker_enter env
+        cp $_coog_docker_wd/conf/env.df Dockerfile
+        docker build -t coog/env -f Dockerfile $* .
+        _coog_docker_leave
 }
 
 _coog_docker_archive() { # archive repo - <repo> <tree>
-        local wd; wd=`pwd`
         local repo; repo=$1
         local tree; tree=$2
-        cd $COOG_ROOT/$repo
-        echo $repo:$tree:`git rev-parse $tree` >> "$wd"/.cache/.version
+        echo $repo:$tree:`git rev-parse $tree` >> "$_coog_docker_gd"/.version
         [ $? -ne 0 ] && echo bad revision $tree from $repo && return 1
-        local base; base="$wd"/.cache/"$repo"
+        local base; base="$_coog_docker_gd"/"$repo"
         local submodules; submodules=`git submodule | wc -l`
         if [ $submodules -eq 0 ]
         then
@@ -28,41 +34,43 @@ _coog_docker_archive() { # archive repo - <repo> <tree>
                 [ "$current" = HEAD ] && echo $repo: branch is $current && return 1
                 local dirty; dirty=`git diff $current | wc -l`
                 [ "$dirty" -ne 0 ] && echo repo $repo is not clean && return 1
+                git archive --format tar -o "$base".tar $tree
+                # need to checkout to get submodules @ right commit
                 git checkout $tree
                 [ $? -ne 0 ] && echo "checkout $tree ko" && return 1
-                git submodule update
-                [ $? -ne 0 ] && echo "sub update $tree ko" && return 1
-                git archive --format tar -o "$base".tar HEAD
-                git submodule foreach "git archive --prefix="'$path'"/ --format tar -o "$base"-"'$sha1'".tar HEAD"
+                git submodule foreach "git archive --prefix="'$path'"/ --format tar -o "$base"-"'$sha1'".tar "'$sha1'
                 git submodule foreach "tar A -f "$base".tar "$base"-"'$sha1'".tar"
                 git submodule foreach "rm -f "$base"-"'$sha1'".tar"
                 git checkout "$current"
-                git submodule update
         fi
         mkdir $base && tar x -f "$base".tar -C $base && rm "$base".tar
-        cd "$wd"
 }
 
-coog_docker_build() { # build docker image - <pwd> [image*] -- [docker-build-arg*]
-        [ $# -lt 4 ] && \
+coog_docker_build() { # build docker image - [image*] -- [docker-build-arg*]
+        [ $# -lt 3 ] && \
                 echo needs at least trytond, trytond-modules and coog to build && \
                 return 1
-        [ -d .cache ] && rm -rf .cache
-        mkdir .cache
-        local pass; pass=$1; shift
-        _coog_docker_hashpwd $pass > .cache/.password
+        _coog_docker_enter coog
+        local ret; ret=0
         local image; image=$1
         while [ ! -z $1 ]
         do
                 [ $1 = "--" ] && shift && break
                 local component; component=$1; shift
-                local repo
-                local tree
-                repo=`echo $component | cut -d ":" -f 1`
-                tree=`echo $component | cut -d ":" -f 2`
-                [ ! -d $COOG_ROOT/$repo ] && echo repo $repo does not exist && return 1
-                _coog_docker_archive $repo $tree || return 1
+                local repo; repo=`echo $component | cut -d ":" -f 1`
+                local tree; tree=`echo $component | cut -d ":" -f 2`
+                [ ! -d $COOG_ROOT/$repo ] && echo repo $repo does not exist && ret=1 && break
+                local wd; wd=`pwd`
+                cd $COOG_ROOT/$repo
+                _coog_docker_archive $repo $tree
+                ret=$?
+                cd "$wd"
+                [ $ret -ne 0 ] && break
         done
-        cp conf/coog.df .cache
-        docker build -t coog/$image -f .cache/coog.df $* .cache
+        if [ $ret -eq 0 ]
+        then
+                cp $_coog_docker_wd/conf/coog.df Dockerfile
+                docker build -t coog/$image -f Dockerfile $* .
+        fi
+        _coog_docker_leave
 }

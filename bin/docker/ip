@@ -3,4 +3,4 @@
 # This command prints the ip address of a running container
 # The only argument is the container identifier
 
-sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' $1
+docker inspect --format '{{ .NetworkSettings.IPAddress }}' $1

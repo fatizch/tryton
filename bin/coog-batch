@@ -49,7 +49,7 @@ coog_batch_wait() { # wait for batch exec - <name>
                 local waiting
                 waiting=`coog_batch_query count $1 'wait'` || return $?
                 [ $waiting -eq 0 ] && break
-                echo `date +%X` still have jobs to eat \($waiting\)
+                echo "wait @ "`date +"%H:%M:%S"`" - $waiting"
                 sleep 10
         done
         coog_batch_stop $1

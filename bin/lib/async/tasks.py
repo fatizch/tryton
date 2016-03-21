@@ -56,7 +56,10 @@ def batch_generate(name, connection_date, treatment_date, args):
                 client_defined_date=connect_on):
             Cache.clean(database)
             try:
-                job_size = int(BatchModel.get_conf_item('job_size'))
+                job_size = args.get('job_size', None)
+                if job_size is None:
+                    job_size = BatchModel.get_conf_item('job_size')
+                job_size = int(job_size)
                 logger.info('job_size: %s', job_size)
                 ids = [x[0] for x in BatchModel.select_ids(treat_on, args)]
                 for l in _batch_split(ids, job_size):
@@ -103,7 +106,10 @@ def batch_exec(name, connection_date, treatment_date, args, ids):
         with Transaction().set_context(User.get_preferences(context_only=True),
                 client_defined_date=connect_on):
             Cache.clean(database)
-            transaction_size = int(BatchModel.get_conf_item('transaction_size'))
+            transaction_size = args.get('transaction_size', None)
+            if transaction_size is None:
+                transaction_size = BatchModel.get_conf_item('transaction_size')
+            transaction_size = int(transaction_size)
             logger.info('transaction_size: %s', transaction_size)
             try:
                 for l in _batch_split(ids, transaction_size):

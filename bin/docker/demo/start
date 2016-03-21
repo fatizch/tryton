@@ -1,5 +1,0 @@
-#!/bin/sh
-
-docker start postgres
-sleep 3
-docker start coog

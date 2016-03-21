@@ -48,12 +48,8 @@ coog_celery_stop() { # stop celery workers
         _coog_celery_bak $pid
 }
 
-coog_celery_status() { # celery status - [celery statis args]
-        celery --app=async.broker_celery status
-}
-
-coog_celery_inspect() { # inspect celery - [celery inspect args]
-        celery --app=async.broker_celery inspect $*
+coog_celery_cli() { # celery cli wrapper - [celery args]
+        celery --app=async.broker_celery $*
 }
 
 coog_celery_log() { # less celery logs [less args]

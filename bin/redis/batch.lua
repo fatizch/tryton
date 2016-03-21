@@ -260,11 +260,17 @@ api.list = function(broker, queue, ...)
     end
     local filter = check_filter({0, 1}, ...)
 
-    local header = {'queue', 'id', 'status', 'task', 'connect', 'treat', 'args',
+    local header = {'queue', 'id', 'status', 'connect', 'treat', 'args',
         'records', 'result'}
     local result = {table.concat(header, '\t')}
 
     local function insert(job)
+        job.id = job.id:sub(1, 8)
+        if #job.records > 20 then
+            local head = job.records:sub(1, 9)
+            local tail = job.records:sub(-9, -1)
+            job.records =  head .. '..' .. tail
+        end
         local item = {}
         for _, k in ipairs(header) do
             item[#item+1] = job[k]
@@ -308,7 +314,7 @@ end
 api.backup = function(broker, queue, ...)
     broker = check_broker(broker)
     assert(queue, 'missing queue')
-    local filter = check_filter({1, 1}, ...)
+    local filter = check_filter({1, 2}, ...)
     assert(not filter[STATUS[1]], 'archiving waiting jobs: no sense')
 
     local result = 0

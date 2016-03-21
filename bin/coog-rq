@@ -50,10 +50,9 @@ coog_rq_stop() { # stop rq worker - <wid>
         _coog_rq_bak $1 $pid
 }
 
-coog_rq_info() { # rq info - [rq info args]
-        rq info \
-                -u $TRYTOND_ASYNC_RQ \
-                $*
+coog_rq_cli() { # rq cli wrapper - [rq args]
+        local cmd; cmd=$1; shift
+        rq $cmd -u $TRYTOND_ASYNC_RQ $*
 }
 
 coog_rq_log() { # less rq out - <wid> [less args]
