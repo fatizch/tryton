@@ -32,7 +32,7 @@ _coog_code_status() {
                         commit=X
                 else
                         commit=`git diff --shortstat master`
-                        commit=`_coog_code_st $master`
+                        commit=`_coog_code_st $commit`
                 fi
                 local stage
                 stage=`git diff --shortstat --cached`
