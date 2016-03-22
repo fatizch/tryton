@@ -1316,7 +1316,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         query_table = contract.join(history, condition=(
                 (contract.id == history.contract)
                 & (contract.subscriber == party.id)
-                & (contract.status == 'active')
+                & (
+                    (contract.status == 'active')
+                    | (contract.status == 'hold'))
                 & (history.start_date <= at_date)
                 & (
                     (history.end_date == Null)
