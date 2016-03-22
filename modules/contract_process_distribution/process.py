@@ -17,9 +17,8 @@ class ContractSubscribeFindProcess:
 
     authorized_distributors = fields.Many2Many('distribution.network', None,
         None, 'Authorized Distributors for party', states={'invisible': True})
-    party_portfolio = fields.Many2Many('distribution.network', None,
-        None, 'Party Portfolio',
-        states={'invisible': True})
+    party_portfolio = fields.Many2One('distribution.network',
+        'Party Portfolio', states={'invisible': True})
     distributor = fields.Many2One('distribution.network', 'Distributor',
         required=True, domain=[('is_distributor', '=', True),
             If(Bool(Eval('party_portfolio')),
@@ -68,7 +67,8 @@ class ContractSubscribeFindProcess:
             if party_id:
                 party = pool.get('party.party')(party_id)
                 if party.portfolio:
-                    return [x.id for x in party.portfolio.visible_portfolios]
+                    return [x.id for x in party.portfolio.all_children
+                        if x.is_distributor]
             else:
                 return []
 
