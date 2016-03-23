@@ -1,12 +1,13 @@
 import os
 import logging
 import ConfigParser
-from datetime import datetime
+from datetime import datetime, date
 
 from trytond.config import config
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.model import ModelView
+from trytond.perf_analyzer import PerfLog, profile, logger as perf_logger
 
 import coop_string
 
@@ -15,6 +16,29 @@ __all__ = [
     'BatchRootNoSelect',
     'ViewValidationBatch',
     ]
+
+
+def analyze(meth):
+    def wrap(cls, *args, **kwargs):
+        m = meth
+        try:
+            p = PerfLog()
+            p.method = cls.__name__ + '.' + m.__name__
+            p.on_enter(Pool().get('res.user')(Transaction().user),
+                date.today().strftime('%y%m%d'))
+            wrapped_meth = profile(m)
+        except:
+            perf_logger.exception('batch: error on enter')
+        else:
+            m = wrapped_meth
+        ret = m(cls, *args, **kwargs)
+        try:
+            PerfLog().on_leave(unicode({'args': args, 'kwargs': kwargs}),
+                unicode(ret))
+        except:
+            perf_logger.exception('batch: error on leave')
+        return ret
+    return wrap
 
 
 class BatchRoot(ModelView):
@@ -181,6 +205,7 @@ class ViewValidationBatch(BatchRoot):
         return [('module', 'in', coop_modules)]
 
     @classmethod
+    @analyze
     def execute(cls, objects, ids, treatment_date, extra_args):
         logger = logging.getLogger(cls.__name__)
         for view in objects:
