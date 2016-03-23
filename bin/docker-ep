@@ -167,6 +167,9 @@ conf() {
                 conf_sentry && \
                 conf_batch
         [ $? -ne 0 ] && echo "!!! Failed to build configuration file !!!" && return 1
+        local override
+        override=$COOG_DATA/coog.conf
+        [ -f $override ] && cat $override >> $COOG_CONF
         return 0
 }
 
@@ -189,6 +192,10 @@ version() {
 }
 
 print_env() {
+        echo before conf
+        printenv
+        conf || return $?
+        echo before conf
         printenv
 }
 
