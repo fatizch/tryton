@@ -38,7 +38,7 @@ Batch de génération des bordereaux assureurs partie III [commission.invoice_pr
 Termine les bordereaux assureurs en assignant les montants sur les lignes des quittances.
 Supprime les lignes intermédiaires temporaires.
 
-- *Fréquence suggérée:* quotidienne, le dernier jour du mois
+- *Fréquence suggérée:* mensuelle, le dernier jour du mois
 - *premium_line_description (fichier de configuration):* Doit être la même
   valeur que celle de la première partie du traitement.
 - *job_size (fichier de configuration):* 0
