@@ -398,7 +398,7 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
     def create(cls, vlist):
         Contract = Pool().get('contract')
         Contract.insurer_agent_cache.clear()
-        super(Plan, cls).create(vlist)
+        return super(Plan, cls).create(vlist)
 
     @classmethod
     def write(cls, *args):
@@ -499,8 +499,8 @@ class PlanLines(export.ExportImportMixin):
 
     @classmethod
     def create(cls, vlist):
-        super(PlanLines, cls).create(vlist)
         cls._get_matching_cache.clear()
+        return super(PlanLines, cls).create(vlist)
 
     @classmethod
     def write(cls, *args):
@@ -704,7 +704,7 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
     def create(cls, vlist):
         Contract = Pool().get('contract')
         Contract.insurer_agent_cache.clear()
-        super(Agent, cls).create(vlist)
+        return super(Agent, cls).create(vlist)
 
     @classmethod
     def write(cls, *args):
