@@ -1,4 +1,3 @@
-from profilehooks import profile
 import datetime
 import calendar
 from collections import defaultdict
@@ -680,7 +679,6 @@ class Contract:
         cls._first_invoice(contracts, and_post=True)
 
     @classmethod
-    @profile(immediate=True)
     def invoice(cls, contracts, up_to_date):
         'Invoice contracts up to the date'
         periods = defaultdict(list)
