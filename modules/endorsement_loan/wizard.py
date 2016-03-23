@@ -270,7 +270,7 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
         for loan in all_loans:
             if len(displayers):
                 displayers.append(Displayer(name=''))
-            new_displayer = Displayer(loan=loan, contract=None, checked=True,
+            new_displayer = Displayer(loan=loan, contract=None, checked=False,
                 existed_before=False)
             displayers.append(new_displayer)
             for contract in all_contracts:
@@ -297,9 +297,12 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
         Option = pool.get('contract.option')
         Share = pool.get('loan.share')
         endorsement = self.wizard.endorsement
+        existing_loans = {}
         contracts, endorsements = {}, {}
         for ctr_endorsement in endorsement.contract_endorsements:
             contract = ctr_endorsement.contract
+            existing_loans[contract.id] = {x.loan.id
+                for x in contract.ordered_loans}
             endorsements[contract.id] = ctr_endorsement
             update_values = ctr_endorsement.apply_values()
             update_values.pop('ordered_loans', None)
@@ -323,30 +326,27 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
             contract.ordered_loans = [x for x in contract.ordered_loans
                 if x.loan.id not in added and x.loan.id not in removed] + [
                 OrderedLoan(loan=x) for x in added]
-            final_loans = [x.loan.id for x in contract.ordered_loans]
+            final_loans = {x.loan.id for x in contract.ordered_loans}
 
             # Sync loan shares
             for covered in contract.covered_elements:
                 for option in covered.options:
-                    if not getattr(option, 'id', None):
-                        previous_shares = set({})
-                    else:
-                        previous_shares = {
-                            x for x in Option(option.id).loan_shares
-                            if x.loan.id not in removed}
-                    new_shares = []
                     per_loan = defaultdict(list)
                     for share in option.loan_shares:
                         per_loan[share.loan.id].append(share)
-                    for loan_id, shares in per_loan.iteritems():
-                        if loan_id not in removed:
-                            # Remove previously deleted loans
-                            new_shares += [x for x in shares
-                                if x.share
-                                or x.start_date != self.effective_date]
-                        else:
-                            # Check the share is properly ended
-                            zero_found = False
+                    if getattr(option, 'id', None):
+                        prev_option = Option(option.id)
+                        for loan_id in existing_loans[contract_id]:
+                            if loan_id in per_loan:
+                                continue
+                            per_loan[loan_id] = prev_option.loan_shares
+                    new_shares = []
+                    for loan_id, shares in per_loan.items():
+                        if loan_id in final_loans:
+                            new_shares += {x for x in shares if x.share}
+                            continue
+                        if loan_id in existing_loans[contract_id]:
+                            zero_found = None
                             for share in shares:
                                 if share.start_date == self.effective_date:
                                     share.share = 0
@@ -357,10 +357,8 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
                             if not zero_found:
                                 new_shares.append(Share(share=0, loan=loan_id,
                                         start_date=self.effective_date))
-                    previous_shares = previous_shares - set(new_shares)
-                    option.loan_shares = [x
-                        for x in new_shares + list(previous_shares)
-                        if getattr(x, 'id', None) or x.loan.id in final_loans]
+
+                    option.loan_shares = list(new_shares)
                 covered.options = list(covered.options)
             contract.covered_elements = list(contract.covered_elements)
             if contract_id not in endorsements:
