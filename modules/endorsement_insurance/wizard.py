@@ -859,6 +859,25 @@ class ExtraPremiumDisplayer(model.CoopView):
                         If(Eval('to_update', False), 'blue', 'grey'))))
             ]
 
+    @fields.depends('extra_premium', 'extra_premium_id', 'extra_premium_name',
+        'to_add', 'to_remove', 'to_update')
+    def on_change_extra_premium(self):
+        if self.to_add or self.to_remove or not self.extra_premium_id:
+            return
+        pool = Pool()
+        ExtraPremium = pool.get('contract.option.extra_premium')
+        ManageExtraPremium = pool.get(
+            'endorsement.contract.manage_extra_premium')
+        original = ExtraPremium(self.extra_premium_id)
+        for fname in ManageExtraPremium._extra_premium_fields_to_extract():
+            if fname in ('end_date', 'option', 'start_date'):
+                continue
+            if getattr(self.extra_premium[0], fname, None) != getattr(original,
+                    fname, None):
+                self.to_update = True
+                return
+        self.to_update = False
+
 
 class ManageExtraPremium(EndorsementWizardStepMixin):
     'Manage Extra Premium'
@@ -1048,11 +1067,11 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
             ExtraPremiumEndorsement.create([x._save_values for x in to_create])
         if new_options:
             OptionEndorsement.create([x._save_values
-                    for x in new_options.itervalues()
+                    for x in new_options.values()
                     if getattr(x, 'covered_element_endorsement', None)])
         if new_covered_elements:
             CoveredElementEndorsement.create([x._save_values
-                    for x in new_covered_elements
+                    for x in new_covered_elements.values()
                     if getattr(x, 'contract_endorsement', None)])
         for endorsement in all_endorsements.itervalues():
             endorsement.clean_up()
