@@ -264,17 +264,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             depends=['status', 'product_subscriber_kind']),
         'on_change_with_subscriber_kind', 'setter_void')
     contacts = fields.One2Many('contract.contact', 'contract', 'Contacts',
-        states=_STATES, delete_missing=True,
-        domain=[
-            ['OR', ('date', '>=', Eval('initial_start_date')),
-                ('date', '=', None)],
-            ['OR', ('date', '<=', Eval('final_end_date')),
-                ('date', '=', None)],
-            ['OR', ('end_date', '>=', Eval('initial_start_date')),
-                ('end_date', '=', None)],
-            ['OR', ('end_date', '<=', Eval('final_end_date')),
-                ('end_date', '=', None)],
-        ], depends=['status', 'initial_start_date', 'final_end_date'])
+        states=_STATES, delete_missing=True)
     last_modification = fields.Function(fields.DateTime('Last Modification'),
         'get_last_modification')
     icon = fields.Function(fields.Char('Icon'), 'get_icon')
