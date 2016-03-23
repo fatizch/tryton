@@ -1,9 +1,14 @@
 <?xml version="1.0"?>
 <tree string="Contract Fees" editable="bottom">
     <field name="accept_fee"/>
-    <field name="rec_name"/>
+    <field name="fee"/>
     <field name="amount_as_string"/>
     <field name="overriden_rate" tree_invisible="1"/>
     <field name="overriden_amount" tree_invisible="1"/>
     <field name="manual" tree_invisible="1"/>
+    <field name="currency" tree_invisible="1"/>
+    <field name="currency_symbol" tree_invisible="1"/>
+    <field name="currency_digits" tree_invisible="1"/>
+    <field name="contract" tree_invisible="1"/>
+    <field name="used_fees" tree_invisible="1"/>
 </tree>

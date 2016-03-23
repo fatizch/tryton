@@ -261,7 +261,8 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
     contract = fields.Many2One('contract', 'Contract', required=True,
         ondelete='CASCADE', select=True)
     fee = fields.Many2One('account.fee', 'Fee', required=True,
-        ondelete='RESTRICT')
+        domain=[('id', 'not in', Eval('used_fees', []))],
+        depends=['used_fees'], ondelete='RESTRICT')
     premiums = fields.One2Many('contract.premium', 'fee', 'Premiums',
         delete_missing=True, target_not_required=True)
     overriden_amount = fields.Numeric('Amount', states={
@@ -291,6 +292,9 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
             'readonly': ~Eval('fee_allow_override', False)},
             depends=['fee_allow_override']),
         'on_change_with_accept_fee', 'set_accept_fee')
+    used_fees = fields.Function(
+        fields.Many2Many('account.fee', None, None, 'Used Fees'),
+        loader='load_used_fees')
 
     @classmethod
     def __setup__(cls):
@@ -346,10 +350,11 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
             self.overriden_amount = 0
             self.overriden_rate = 0
 
-    @fields.depends('contract', 'currency', 'currency_symbol')
+    @fields.depends('contract', 'currency', 'currency_symbol', 'used_fees')
     def on_change_contract(self):
         self.currency = self.contract.currency
         self.currency_symbol = self.currency.symbol
+        self.used_fees = list(self.used_fees)
 
     @fields.depends('fee_type', 'fee', 'currency', 'overriden_amount',
         'overriden_rate', 'accept_fee', 'currency_symbol')
@@ -380,6 +385,12 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_rec_name(self, name):
         return self.fee.rec_name if self.fee else ''
+
+    def load_used_fees(self, name=None):
+        fees = [x.fee for x in self.contract.fees if x.id != self.id]
+        if name:
+            return [x.id for x in fees]
+        return fees
 
     @classmethod
     def set_accept_fee(cls, instances, name, value):
