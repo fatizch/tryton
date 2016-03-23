@@ -1848,7 +1848,7 @@ class StartEndorsement(Wizard):
             Button('Apply', 'apply_endorsement', 'tryton-go-next',
                 default=True)])
     apply_endorsement = StateTransition()
-    open_endorsement = StateAction('endorsement.act_endorsement')
+    open_endorsement = StateAction('endorsement.act_generated_endorsement')
     summary_previous = StateTransition()
     preview_changes = StateTransition()
     dummy_step = StateView('endorsement.start.dummy_step', '', [])

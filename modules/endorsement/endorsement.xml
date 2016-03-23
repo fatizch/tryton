@@ -18,6 +18,11 @@
             <field name="type">tree</field>
             <field name="name">endorsement_list</field>
         </record>
+        <record model="ir.ui.view" id="generated_endorsement_view_list">
+            <field name="model">endorsement</field>
+            <field name="type">tree</field>
+            <field name="name">generated_endorsement_list</field>
+        </record>
         <!-- Entry Point -->
         <record model="ir.action.act_window" id="act_endorsement">
             <field name="name">Endorsement</field>
@@ -64,11 +69,26 @@
             <field name="act_window" ref="act_all_endorsements"/>
         </record>
         <record model="ir.action.act_window.view" id="act_all_endorsement_view2">
-            <field name="sequence" eval="10"/>
+            <field name="sequence" eval="11"/>
             <field name="view" ref="endorsement_view_form"/>
             <field name="act_window" ref="act_all_endorsements"/>
         </record>
         <menuitem name="Endorsements" parent="offered.menu_contract_configuration" id="menu_all_endorsements" action="act_all_endorsements" sequence="100"/>
+        <!-- Auto generated endorsement act window -->
+        <record model="ir.action.act_window" id="act_generated_endorsement">
+            <field name="name">Generated Endorsements</field>
+            <field name="res_model">endorsement</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_generated_endorsement_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="generated_endorsement_view_list"/>
+            <field name="act_window" ref="act_generated_endorsement"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_generated_endorsement_view2">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="endorsement_view_form"/>
+            <field name="act_window" ref="act_generated_endorsement"/>
+        </record>
         <!-- ##################### -->
         <!-- # Endorsement Group # -->
         <!-- ##################### -->

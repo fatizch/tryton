@@ -2,13 +2,11 @@
 <tree string="Endorsement Groups">
     <field name="effective_date"/>
     <field name="number"/>
-    <field name="definition"/>
+    <field name="definition" expand="1"/>
     <field name="state"/>
-    <field name="generated_by"/>
-    <field name="application_date_str"/>
-    <field name="applied_by"/>
-    <field name="contracts_name"/>
-    <field name="subscribers_name"/>
+    <field name="generated_by" expand="1"/>
+    <field name="contracts_name" expand="1"/>
+    <field name="subscribers_name" expand="1"/>
     <button string="Cancel" name="cancel" tree_invisible="1"/>
     <button string="Apply" name="apply" tree_invisible="1"/>
     <button string="Open Contract" name="open_contract" tree_invisible="1"/>

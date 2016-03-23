@@ -1144,6 +1144,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                 'button_decline_endorsement': {
                     'invisible': ~Eval('state').in_(['draft'])
                     },
+                'button_delete': {
+                    'readonly': ~Eval('state').in_(['draft']),
+                    }
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
         cls.__rpc__.update({'ws_create_endorsements': RPC(readonly=False)})
@@ -1395,6 +1398,11 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         cls.generate_next_endorsements(endorsements)
         if not Transaction().context.get('will_be_rollbacked', False):
             Event.notify_events(endorsements, 'apply_endorsement')
+
+    @classmethod
+    @model.CoopView.button
+    def button_delete(cls, instances):
+        return 'delete'
 
     @classmethod
     @model.CoopView.button
@@ -2257,7 +2265,7 @@ class OpenGeneratedEndorsements(Wizard):
     __name__ = 'endorsement.open_generated'
 
     start = StateTransition()
-    open_generated = StateAction('endorsement.act_endorsement')
+    open_generated = StateAction('endorsement.act_generated_endorsement')
 
     def transition_start(self):
         Endorsement = Pool().get('endorsement')

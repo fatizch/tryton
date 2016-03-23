@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<tree string="Generated Endorsements">
+    <field name="effective_date"/>
+    <field name="number"/>
+    <field name="definition"/>
+    <field name="state"/>
+    <field name="generated_by"/>
+    <field name="contracts_name"/>
+    <field name="subscribers_name"/>
+    <button string="Apply" name="apply"/>
+    <button string="Delete" name="button_delete"/>
+</tree>

@@ -2119,6 +2119,10 @@ msgctxt "model:ir.action,name:act_endorsement_sub_state_form"
 msgid "Endorsement Sub-state"
 msgstr "Sous état d'avenant"
 
+msgctxt "model:ir.action,name:act_generated_endorsement"
+msgid "Generated Endorsements"
+msgstr "Avenants générés"
+
 msgctxt "model:ir.action,name:act_open_contract_at_date"
 msgid "Contract"
 msgstr "Contrat"
@@ -2528,12 +2532,24 @@ msgid "Cancel"
 msgstr "Annuler"
 
 msgctxt "view:endorsement:"
+msgid "Delete"
+msgstr "Supprimer"
+
+msgctxt "view:endorsement:"
 msgid "Endorsement Group"
 msgstr "Avenant"
 
 msgctxt "view:endorsement:"
 msgid "Endorsement Groups"
 msgstr "Avenants"
+
+msgctxt "view:endorsement:"
+msgid "Generated Endorsements"
+msgstr "Avenants générés"
+
+msgctxt "view:endorsement:"
+msgid "Open Contract"
+msgstr "Ouvrir le Contrat"
 
 msgctxt "view:endorsement:"
 msgid "Open Contract before Application"
