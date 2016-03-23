@@ -97,7 +97,8 @@ class Level:
             if self.termination_mode == 'at_last_posted_invoice':
                 date = dunning.contract.last_posted_invoice_end
             elif self.termination_mode == 'at_last_paid_invoice':
-                date = dunning.contract.last_paid_invoice_end
+                date = dunning.contract.last_paid_invoice_end or \
+                    dunning.contract.last_posted_invoice_end
             if (dunning.contract.termination_reason == termination_reason and
                     dunning.contract.end_date == date):
                 continue
