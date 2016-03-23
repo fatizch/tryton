@@ -11,6 +11,7 @@ Usage: only ARGV are used (no KEYS). Possible commands are:
   - backup: archive queue jobs - <broker> <queue> [filters]
   - clear: clear queue jobs - <broker> <queue> [filters]
   - summary: print queue summary - <broker> <queue>
+  - key: print job key - <broker> <id>
   - show: show job - <broker> <id>
   - archive: archive job - <broker> <id>
   - remove: remove job - <broker> <id>
@@ -36,7 +37,7 @@ broker_api.rq.dequeue = function(q)
 end
 
 broker_api.rq.show = function(id)
-    local ret = {}
+    local ret = {id}
     local ret_pattern = '%s: %s'
     local res = redis.call('HGETALL', broker_api.rq.patterns[1] .. id)
     local key
@@ -119,7 +120,7 @@ broker_api.celery.dequeue = function(q)
 end
 
 broker_api.celery.show = function(id)
-    local ret = {}
+    local ret = {id}
     ret[#ret+1] = redis.call('GET', broker_api.celery.patterns[1] .. id)
     ret[#ret+1] = redis.call('GET', broker_api.celery.patterns[2] .. id)
     if not ret[#ret] then
@@ -396,6 +397,16 @@ api.summary = function(broker, queue)
     fail       %d jobs
     time       %dh %dm %ds]]
     return ret_pattern:format(wait, success, fail, hr, mn, se)
+end
+
+api.key = function(broker, id)
+    local broker = check_broker(broker)
+    assert(id, 'missing job id')
+    local pattern = broker.patterns[1]
+    local keys = redis.call('KEYS', pattern .. id .. '*')
+    if #keys == 1 then
+        return keys[1]
+    end
 end
 
 api.show = generate_job_api('show')

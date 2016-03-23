@@ -208,7 +208,12 @@ class ViewValidationBatch(BatchRoot):
     @analyze
     def execute(cls, objects, ids, treatment_date, extra_args):
         logger = logging.getLogger(cls.__name__)
+        # Extra arg to make batch crash for test
+        crash_on = extra_args.get('crash', None)
+        crash_on = crash_on and int(crash_on)
         for view in objects:
+            if crash_on and view.id == crash_on:
+                raise Exception('Crash for fun')
             full_xml_id = view.xml_id
             if full_xml_id == '':
                 continue

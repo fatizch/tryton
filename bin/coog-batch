@@ -25,7 +25,7 @@ coog_batch_generate() { # generate batch jobs - <name> [batch-arg*]
         local name; name=$1; shift
         local nb; nb=`coog_batch_query count $name` || return $?
         [ $nb -gt 0 ] && echo queue not empty, archive or clear before generating && return 1
-        python2 -m "batch" -b $broker -n $name $*
+        python2 -m "batch-generate" -b $broker -n $name $*
 }
 
 coog_batch_start() { # start batch execution - <name> <concurrency>
@@ -53,7 +53,7 @@ coog_batch_wait() { # wait for batch exec - <name>
                 sleep 10
         done
         coog_batch_stop $1
-        local failed; failed=`coog_batch_query count $1 fail`
+        local failed; failed=`coog_batch_query count $1 fail` || return $?
         [ $failed -eq 0 ] && echo batch exec succeeded && return 0
         echo batch exec failed - $failed jobs in fail && return 1
 }
@@ -103,6 +103,15 @@ coog_batch_jarchive() { # archive batch job - <id>
 coog_batch_jremove() { # remove batch job - <id>
         [ $# -ne 1 ] && echo needs only job id && return 1
         coog_batch_query remove $1
+}
+
+coog_batch_jsplit() { # split batch job - <id>
+        [ $# -ne 1 ] && echo needs only job id && return 1
+        local broker; broker=`_coog_batch_broker` || return $?
+        local id; id=$1
+        local key; key=`coog_batch_query key $id` || return $?
+        [ -z $key ] && echo bad job id && return 1
+        python2 -m "batch-split" $broker $key && coog_batch_jarchive $id
 }
 
 coog_batch_log() { # print batch logs - <name> [cat-arg*]

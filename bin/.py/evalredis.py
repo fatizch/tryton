@@ -14,4 +14,9 @@ client = redis.StrictRedis(host=host, port=port, db=db)
 lua = sys.stdin.read()
 query = client.register_script(lua)
 
-print query(args=sys.argv[1:])
+res = query(args=sys.argv[1:])
+if type(res) is list:
+    for line in res:
+        print line
+else:
+    print res

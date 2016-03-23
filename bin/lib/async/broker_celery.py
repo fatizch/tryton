@@ -39,3 +39,13 @@ def enqueue(queue, fname, args):
     job = task.apply_async(queue=queue, args=args, expires=config.JOB_TTL,
         retry=False)
     log_job(job, queue, fname, args)
+
+
+def split(job_key):
+    job = broker.get(job_key)
+    job = json.loads(job)
+    args = job['args']
+    ids = args[4]
+    args_list = [[args[0], args[1], args[2], args[3], [id]] for id in ids]
+    for args in args_list:
+        enqueue(job['queue'], job['func'], args)

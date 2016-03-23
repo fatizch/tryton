@@ -31,3 +31,13 @@ def enqueue(queue, fname, args):
     job = q.enqueue_call(func=func, args=args, timeout=config.JOB_TIMEOUT,
         ttl=config.JOB_TTL, result_ttl=config.JOB_RESULT_TTL)
     log_job(job, queue, fname, args)
+
+
+def split(job_key):
+    job = broker.hget(job_key, 'coog')
+    job = json.loads(job)
+    args = job['args']
+    ids = args[4]
+    args_list = [[args[0], args[1], args[2], args[3], [id]] for id in ids]
+    for args in args_list:
+        enqueue(job['queue'], job['func'], args)
