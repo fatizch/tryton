@@ -3,7 +3,7 @@ import datetime
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, utils
 from trytond.modules.endorsement import field_mixin
 
 
@@ -35,7 +35,8 @@ class EndorsementDefinition:
             return super(EndorsementDefinition, self).get_rebill_end(
                 contract_endorsement)
         return max(contract_endorsement.contract.last_invoice_end or
-            datetime.date.min, contract_endorsement.endorsement.effective_date)
+            datetime.date.min, contract_endorsement.endorsement.effective_date,
+            utils.today())
 
 
 class EndorsementPart:
