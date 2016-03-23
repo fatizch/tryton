@@ -118,7 +118,7 @@ class Move(export.ExportImportMixin):
         to_reconcile = defaultdict(list)
         for line in self.lines + cancel_move.lines:
             if line.account.reconcile:
-                to_reconcile[line.account].append(line)
+                to_reconcile[(line.account, line.party)].append(line)
         for lines in to_reconcile.itervalues():
             Line.reconcile(lines)
 
