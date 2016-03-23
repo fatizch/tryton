@@ -357,27 +357,32 @@ end
 api.summary = function(broker, queue)
     broker = check_broker(broker)
     assert(queue, 'missing queue')
+    local filter = check_filter({0, 1})
+
     local wait = 0
     local success = 0
     local fail = 0
     local time = 0
+
     local pattern = broker.patterns[1]
     local keys = redis.call('KEYS', pattern .. '*')
     for _, key in ipairs(keys) do
         local id = key:sub(#pattern+1)
         local job = broker.prepare(id)
-        local tm = -1
-        if job.status == STATUS[1] then
-            wait = wait + 1
-        elseif job.status == STATUS[2] then
-            success = success + 1
-            tm = broker.time(id)
-        elseif job.status == STATUS[3] then
-            fail = fail + 1
-            tm = broker.time(id)
-        end
-        if tm > time then
-            time = tm
+        if is_eligible(job, queue, filter) then
+            local tm = -1
+            if job.status == STATUS[1] then
+                wait = wait + 1
+            elseif job.status == STATUS[2] then
+                success = success + 1
+                tm = broker.time(id)
+            elseif job.status == STATUS[3] then
+                fail = fail + 1
+                tm = broker.time(id)
+            end
+            if tm > time then
+                time = tm
+            end
         end
     end
 
