@@ -233,6 +233,21 @@ class Invoice:
         return Commission.browse([x[0] for x in cursor.fetchall()])
 
     @classmethod
+    def update_commission_before_cancel(cls, commissions):
+        # before cancelling a commission, set the date to today
+        # in order to be include the commission and his cancellation
+        # in the next invoice broker
+        pool = Pool()
+        Commission = pool.get('commission')
+        commission = Commission.__table__()
+        cursor = Transaction().cursor
+        cursor.execute(*commission.select(commission.id, where=(
+                    (commission.id.in_([c.id for c in commissions])) &
+                    (commission.date == Null))))
+        to_update = Commission.browse([x[0] for x in cursor.fetchall()])
+        Commission.write(to_update, {'date': utils.today()})
+
+    @classmethod
     @ModelView.button
     @Workflow.transition('cancel')
     def cancel(cls, invoices):
