@@ -38,7 +38,7 @@ class PaymentTreatmentBatch:
     def execute(cls, objects, ids, treatment_date, extra_args):
         groups = super(PaymentTreatmentBatch, cls).execute(
             objects, ids, treatment_date, extra_args)
-        dirpath = cls.generate_filepath()
+        dirpath = extra_args.get('out', None) or cls.generate_filepath()
         for payments_group in groups:
             out_filepaths = payments_group.dump_sepa_messages(dirpath)
             log_msg = "SEPA message of %s written to '%s'" % (
@@ -59,10 +59,10 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
 
     @classmethod
     def execute(cls, object, ids, treatment_date, extra_args):
-        in_directory = extra_args.get('file', None) or cls.get_conf_item('in')
-        out_directory = cls.get_conf_item('out')
+        in_directory = extra_args.get('in', None) or cls.get_conf_item('in')
+        out_directory = extra_args.get('out', None) or cls.get_conf_item('out')
         if not in_directory or not out_directory:
-            raise Exception("'in' [or 'file'] and 'out' are required")
+            raise Exception("'in' and 'out' are required")
         if os.path.isfile(in_directory):
             files = [(os.path.basename(in_directory), in_directory)]
         else:
