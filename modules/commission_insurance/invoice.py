@@ -237,6 +237,8 @@ class Invoice:
         # before cancelling a commission, set the date to today
         # in order to be include the commission and his cancellation
         # in the next invoice broker
+        if not commissions:
+            return
         pool = Pool()
         Commission = pool.get('commission')
         commission = Commission.__table__()
