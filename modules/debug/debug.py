@@ -1037,10 +1037,12 @@ setattr(klass, method_name, %s)'''
         patched_name = method_name + '__' + re.sub(
             r'[^A-Za-z0-9]+', '_', klass.__name__)
         exec(template % (patched_name, method_name, patched_name),
-            {'klass': klass, 'method_name': method_name})
+            {'klass': klass, 'method_name': method_name}) in {}, {}
 
     original_init(self, *args, **kwargs)
     for meth_name in (config.get('debug', 'methods') or '').split(','):
+        logging.getLogger().warning(
+            'Patching %s for profiling, not recommanded for prod!' % meth_name)
         for klass in self._pool[self.database_name].get('model', {}).values():
             change_method_name_for_profiling(klass, meth_name)
 
