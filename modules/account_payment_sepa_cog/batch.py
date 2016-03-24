@@ -1,6 +1,5 @@
 import codecs
 import os
-import shutil
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -63,6 +62,7 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
         out_directory = extra_args.get('out', None) or cls.get_conf_item('out')
         if not in_directory or not out_directory:
             raise Exception("'in' and 'out' are required")
+        files = cls.get_file_names_and_paths(in_directory)
         if os.path.isfile(in_directory):
             files = [(os.path.basename(in_directory), in_directory)]
         else:
@@ -83,8 +83,4 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
             Message.save(messages)
             Message.wait(messages)
             Message.do(messages)
-        for file_name, file_path in files:
-            treated_file_name = 'treated_%s_%s' % (
-                str(treatment_date), file_name)
-            shutil.move(file_path, os.path.join(out_directory,
-                    treated_file_name))
+        cls.archive_treated_files(files, out_directory, treatment_date)

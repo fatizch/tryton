@@ -1,4 +1,5 @@
 import os
+import shutil
 import logging
 import ConfigParser
 from datetime import datetime, date
@@ -155,6 +156,25 @@ class BatchRoot(ModelView):
         batch_outpath = cls.generate_filepath(filename)
         with open(batch_outpath, 'w') as f:
             f.write(_buffer)
+
+    @classmethod
+    def archive_treated_files(cls, files, archive_path, treatment_date,
+            prefix='treated'):
+        assert isinstance(prefix, basestring)
+        for file_name, file_path in files:
+            treated_file_name = '%s_%s_%s' % (prefix, str(treatment_date),
+                file_name)
+            shutil.move(file_path, os.path.join(archive_path,
+                    treated_file_name))
+
+    @classmethod
+    def get_file_names_and_paths(cls, path):
+        if os.path.isfile(path):
+            files = [(os.path.basename(path), path)]
+        else:
+            files = [(f, os.path.join(path, f)) for f in os.listdir(path)
+                if os.path.isfile(os.path.join(path, f))]
+        return files
 
 
 class BatchRootNoSelect(BatchRoot):

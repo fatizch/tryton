@@ -6,7 +6,7 @@ from trytond.modules.cog_utils import batch
 from .hexa_post import HexaPostLoader
 
 
-class UpdateZipCodesFromHexaPost(batch.BatchRoot):
+class UpdateZipCodesFromHexaPost(batch.BatchRootNoSelect):
     'Update Zip Codes From Hexa Post Files'
 
     __name__ = 'country.zipcode.update_from_hexapost'
@@ -18,6 +18,7 @@ class UpdateZipCodesFromHexaPost(batch.BatchRoot):
         Zip = Pool().get('country.zipcode')
         hexa_post_file_path = extra_args.get('hexa_post_file_path',
             cls.get_conf_item('hexa_post_file_path'))
+        archive_path = extra_args.get('archive')
         if not hexa_post_file_path:
             raise Exception('Hexapost file path missing in '
                 'either arguments or batch configuration file')
@@ -34,3 +35,5 @@ class UpdateZipCodesFromHexaPost(batch.BatchRoot):
                 str(len(to_write) / 2))
         else:
             cls.logger.info('No zipcode to update')
+        files = cls.get_file_names_and_paths(hexa_post_file_path)
+        cls.archive_treated_files(files, archive_path, treatment_date)
