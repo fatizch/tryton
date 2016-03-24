@@ -21,7 +21,7 @@
         <record model="ir.action.act_window" id="act_contact_history_relate_form1">
             <field name="name">Party Interaction</field>
             <field name="res_model">party.interaction</field>
-            <field name="domain" eval="[('party', 'in', Eval('active_ids'))]" pyson="1"></field>
+            <field name="domain" eval="[('party', '=', Eval('active_id'))]" pyson="1"></field>
         </record>
         <record model="ir.action.keyword" id="act_contact_history_relate_keyword1">
             <field name="keyword">form_relate</field>
