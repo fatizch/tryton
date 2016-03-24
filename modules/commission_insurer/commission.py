@@ -158,6 +158,8 @@ class Commission:
         journal = pool.get('account.journal').__table__()
         cursor = Transaction().cursor
 
+        if invoice_ids is not None and len(invoice_ids) == 0:
+            return [], []
         query_table = move_line.join(move, condition=move_line.move == move.id
             ).join(invoice,
             condition=move.id.in_([invoice.move, invoice.cancel_move])
@@ -360,6 +362,8 @@ class CreateInvoicePrincipal(Wizard):
         # Retrieve invoices & invoices_data for the insurers accounts
         invoices, invoices_data = Commission.select_lines(accounts,
             with_data=True, max_date=until_date, invoice_ids=invoice_ids)
+        if not invoices:
+            return
         # Instanciate invoices
         invoices = Invoice.browse(invoices)
 
