@@ -1,8 +1,11 @@
+import inspect
+import re
 import os
 from collections import defaultdict
 import pprint
 import logging
 
+from trytond.config import config
 from trytond.wizard import Wizard, StateTransition, StateView, Button
 from trytond.rpc import RPC
 from trytond.model import ModelSQL, ModelView, fields
@@ -996,3 +999,50 @@ class OpenInitialFrame(Wizard):
         instance = Model(Transaction().context.get('active_id'))
         instance.initial_frame.open_file([instance.initial_frame])
         return 'end'
+
+
+original_init = Pool.init
+
+
+def patched_pool_init(self, *args, **kwargs):
+    '''
+        Patches the pool initialization to separate given methods per model in
+        @profile reports.
+
+        Methods to patch are set in trytond.conf :
+
+            [debug]
+            methods=read,_validate,search,create,delete
+    '''
+
+    def change_method_name_for_profiling(klass, method_name):
+        '''
+            Override method_name in klass to use "<method_name>__<model_name>"
+            as name in order to appear as a different line when profiling.
+        '''
+        if not hasattr(klass, method_name):
+            return
+        if method_name in klass.__dict__:
+            return
+        method = getattr(klass, method_name)
+        if inspect.ismethod(method) and method.__self__ is klass:
+            template = '@classmethod'
+        else:
+            template = ''
+        template += '''
+def %s(*args, **kwargs):
+    return super(klass, args[0]).%s(
+        *args[1:], **kwargs)
+setattr(klass, method_name, %s)'''
+        patched_name = method_name + '__' + re.sub(
+            r'[^A-Za-z0-9]+', '_', klass.__name__)
+        exec(template % (patched_name, method_name, patched_name),
+            {'klass': klass, 'method_name': method_name})
+
+    original_init(self, *args, **kwargs)
+    for meth_name in (config.get('debug', 'methods') or '').split(','):
+        for klass in self._pool[self.database_name].get('model', {}).values():
+            change_method_name_for_profiling(klass, meth_name)
+
+
+Pool.init = patched_pool_init
