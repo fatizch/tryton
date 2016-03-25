@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # This script helps doing with Coog image.
 #
 # Options explanations:
@@ -89,10 +89,6 @@ link_redis() {
         [ ! -z $redis ] && echo "--link $redis:redis"
 }
 
-link_sentry() {
-        [ ! -z $sentry ] && echo "--link $sentry:sentry"
-}
-
 set_db() {
         local ret
         [ ! -z $COOG_DB_SYS ] && ret="$ret -e COOG_DB_SYS=$COOG_DB_SYS"
@@ -102,7 +98,7 @@ set_db() {
         [ ! -z $COOG_DB_PASSWORD ] && ret="$ret -e COOG_DB_PASSWORD=$COOG_DB_PASSWORD"
         [ ! -z $COOG_DB_NAME ] && ret="$ret -e COOG_DB_NAME=$COOG_DB_NAME"
         [ ! -z $COOG_DB_LANG ] && ret="$ret -e COOG_DB_LANG=$COOG_DB_LANG"
-        echo $ret
+        echo "$ret"
 }
 
 set_cache() {
@@ -115,7 +111,7 @@ set_cache() {
         [ ! -z $COOG_CACHE_HOST ] && ret="$ret -e COOG_CACHE_HOST=$COOG_CACHE_HOST"
         [ ! -z $COOG_CACHE_PORT ] && ret="$ret -e COOG_CACHE_PORT=$COOG_CACHE_PORT"
         [ ! -z $COOG_CACHE_DB ] && ret="$ret -e COOG_CACHE_DB=$COOG_CACHE_DB"
-        echo $ret
+        echo "$ret"
 }
 
 set_async() {
@@ -124,7 +120,7 @@ set_async() {
         [ ! -z $COOG_ASYNC_HOST ] && ret="$ret -e COOG_ASYNC_HOST=$COOG_ASYNC_HOST"
         [ ! -z $COOG_ASYNC_PORT ] && ret="$ret -e COOG_ASYNC_PORT=$COOG_ASYNC_PORT"
         [ ! -z $COOG_ASYNC_DB ] && ret="$ret -e COOG_ASYNC_DB=$COOG_ASYNC_DB"
-        echo $ret
+        echo "$ret"
 }
 
 set_session() {
@@ -140,7 +136,7 @@ set_sentry() {
         [ ! -z $COOG_SENTRY_PUB ] && ret="$ret -e COOG_SENTRY_PUB=$COOG_SENTRY_PUB"
         [ ! -z $COOG_SENTRY_SEC ] && ret="$ret -e COOG_SENTRY_SEC=$COOG_SENTRY_SEC"
         [ ! -z $COOG_SENTRY_PROJECT ] && ret="$ret -e COOG_SENTRY_PROJECT=$COOG_SENTRY_PROJECT"
-        echo $ret
+        echo "$ret"
 }
 
 run() {
@@ -161,7 +157,6 @@ app() {
         args="$args "`link_redis`
         args="$args "`set_cache`
         args="$args "`set_session`
-        args="$args "`link_sentry`
         args="$args "`set_sentry`
         docker run \
                 -d \
@@ -179,8 +174,6 @@ batch() {
         args="$args "`link_redis`
         args="$args "`set_cache`
         args="$args "`set_async`
-        args="$args "`link_sentry`
-        args="$args "`set_sentry`
         docker run \
                 -ti --rm \
                 -v $data:/opt/coog/data \

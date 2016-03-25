@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # This command builds a Coog Docker image
 #
 # The script uses `coog docker` command which requires

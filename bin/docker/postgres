@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # This script helps doing with postgres docker image.
 # More informations: https://hub.docker.com/_/postgres/
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # This command builds an env Docker image
 # This image contains the OS and some hard dependencies
 
