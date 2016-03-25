@@ -22,7 +22,12 @@ class UpdateZipCodesFromHexaPost(batch.BatchRootNoSelect):
         if not hexa_post_file_path:
             raise Exception('Hexapost file path missing in '
                 'either arguments or batch configuration file')
-        with open(hexa_post_file_path) as f:
+        files = cls.get_file_names_and_paths(hexa_post_file_path)
+        if not files:
+            cls.logger.info('No file at %s' % hexa_post_file_path)
+            return
+        file_path = files[0][1]
+        with open(file_path) as f:
             hexa_data = HexaPostLoader.get_hexa_post_data_from_file(f)
         to_create, to_write = HexaPostLoader.get_hexa_post_updates(hexa_data)
         if to_create:
@@ -35,5 +40,4 @@ class UpdateZipCodesFromHexaPost(batch.BatchRootNoSelect):
                 str(len(to_write) / 2))
         else:
             cls.logger.info('No zipcode to update')
-        files = cls.get_file_names_and_paths(hexa_post_file_path)
         cls.archive_treated_files(files, archive_path, treatment_date)
