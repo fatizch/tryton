@@ -156,7 +156,6 @@ conf_batch() {
 }
 
 conf() {
-        echo Building configuration file...
         conf_jsonrpc && \
                 conf_xmlrpc && \
                 conf_database && \
@@ -195,7 +194,8 @@ print_env() {
         echo before conf
         printenv
         conf || return $?
-        echo before conf
+        echo
+        echo after conf
         printenv
 }
 
@@ -205,14 +205,14 @@ print_conf() {
 }
 
 app() {
-        echo Welcome on board, Coog App is preparing to start
+        echo Welcome on board, Coog is preparing to start
         conf || return $?
-        echo Starting unoconv...
+        echo Starting unoconv
         # done twice - unoconv issue - https://github.com/dagwieers/unoconv/issues/326
         unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
         sleep 3
         unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
-        echo Starting app...
+        echo Starting app
         export PYTHONUNBUFFERED=1
         export PYTHONPATH="$COOG_TRYTOND:$PYTHONPATH"
         local args
@@ -293,42 +293,43 @@ batch_wait() {
 }
 
 batch() {
-        echo Welcome on board, Coog Batch is preparing to start
         conf || return $?
         [ -z $COOG_ASYNC_SYS ] && echo "no async broker defined" && return 1
-        echo Starting unoconv...
-        # done twice - unoconv issue - https://github.com/dagwieers/unoconv/issues/326
-        unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
-        sleep 3
-        unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
-        echo Starting batch...
         export PYTHONUNBUFFERED=1
-        export PYTHONPATH="$COOG_BIN/lib:$COOG_TRYTOND:$PYTHONPATH"
-        export TRYTOND_CONFIG="$COOG_CONF"
-        export DB_NAME=$COOG_DB_NAME
-        export LOG_LEVEL=WARNING
+        [ -z $1 ] && echo missing action && return 1
         local action; action=$1; shift
-        local name; name=$1; shift
-        local nb; nb=$1; shift
         local gen_api;
-        if [ $action = exec ]
+        if [ $action = query ]
+        then
+                [ -z $1 ] && echo missing command && return 1
+                local cmd; cmd=$1; shift
+                batch_redis $cmd $COOG_ASYNC_SYS $*
+                return $?
+        elif [ $action = exec ]
         then
                 gen_api=generate
         elif [ $action = retry ]
         then
                 gen_api=split
         else
-                echo "possible actions: exec - retry" && return 1
+                echo "possible actions: exec - retry - query" && return 1
         fi
-        if [ $COOG_ASYNC_SYS = rq ]
-        then
-                batch_$gen_api rq $name $* && batch_rq $name $nb && batch_wait rq $name
-        elif [ $COOG_ASYNC_SYS = celery ]
-        then
-                batch_$gen_api celery $name $* && batch_celery $name $nb && batch_wait celery $name
-        else
-                echo "unknonw async sys" && return 1
-        fi
+        echo Welcome on board, Coog is preparing to start
+        echo Starting unoconv
+        # done twice - unoconv issue - https://github.com/dagwieers/unoconv/issues/326
+        unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
+        sleep 3
+        unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
+        echo Starting batch
+        export PYTHONPATH="$COOG_BIN/lib:$COOG_TRYTOND:$PYTHONPATH"
+        export TRYTOND_CONFIG="$COOG_CONF"
+        export DB_NAME=$COOG_DB_NAME
+        export LOG_LEVEL=WARNING
+        [ -z $1 ] && echo missing batch name && return 1
+        local name; name=$1; shift
+        [ -z $1 ] && echo missing workers number && return 1
+        local nb; nb=$1; shift
+        batch_$gen_api $COOG_ASYNC_SYS $name $* && batch_$COOG_ASYNC_SYS $name $nb && batch_wait $COOG_ASYNC_SYS $name
 }
 
 ########
