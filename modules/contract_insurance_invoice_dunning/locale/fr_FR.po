@@ -18,10 +18,6 @@ msgctxt "field:account.dunning.level,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:account.dunning.level,skip_level_for_payment:"
-msgid "Skip Level For Payment"
-msgstr "Ignorer le niveau si la facture est en prélèvement."
-
 msgctxt "field:account.dunning.level,termination_mode:"
 msgid "Termination Mode"
 msgstr "Mode de résiliation"
@@ -115,3 +111,23 @@ msgctxt "help:account.dunning.level,dunning_fee:"
 msgid "A fee invoice will be created. Only for dunnings on contracts."
 msgstr "Une quittance de frais sera créée. Seulement pour les relances "
 "portant sur des quittances de contrats."
+
+msgctxt "field:account.dunning.level,apply_for:"
+msgid "Apply For"
+msgstr "Appliquer pour"
+
+msgctxt "selection:account.dunning.level,apply_for:"
+msgid "Direct Debit"
+msgstr "Prélèvement"
+
+msgctxt "selection:account.dunning.level,apply_for:"
+msgid "Manual"
+msgstr "Manuel"
+
+msgctxt "selection:account.dunning.level,apply_for:"
+msgid "All"
+msgstr "Tous"
+
+msgctxt "help:account.dunning.level,apply_for:"
+msgid "The kind of billing mode to which this level is applied"
+msgstr "Le type de quittancement pour lequel ce niveau est appliqué"

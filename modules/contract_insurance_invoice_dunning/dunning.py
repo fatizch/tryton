@@ -1,6 +1,9 @@
 from collections import defaultdict
 from itertools import groupby
+from sql import Literal
 
+from trytond.transaction import Transaction
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
@@ -63,11 +66,40 @@ class Level:
             ('at_last_paid_invoice', 'At Last Paid Invoice')],
             'Termination Mode', depends=['contract_action'],
             states={'invisible': Eval('contract_action') != 'terminate'})
-    skip_level_for_payment = fields.Boolean('Skip Level For Payment',
-        help='Skip level if line is paid by payment')
+    apply_for = fields.Selection([
+            ('direct_debit', 'Direct Debit'),
+            ('manual', 'Manual'),
+            ('all', 'All')], 'Apply For', help='The kind of billing mode '
+        'to which this level is applied')
     dunning_fee = fields.Many2One('account.fee', 'Fee', ondelete='RESTRICT',
         domain=[('type', '=', 'fixed')],
         help="A fee invoice will be created. Only for dunnings on contracts.")
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+
+        handler = TableHandler(cursor, cls, module_name)
+        table = cls.__table__()
+        # Migration from 1.4
+        migrate = False
+        if not handler.column_exist('apply_for'):
+            migrate = True
+        super(Level, cls).__register__(module_name)
+        if migrate:
+            cursor.execute(*table.update(columns=[table.apply_for],
+                    values=['manual'], where=(
+                        table.skip_level_for_payment == Literal(True))))
+            handler.drop_column('skip_level_for_payment')
+
+    @staticmethod
+    def default_termination_mode():
+        return 'at_last_posted_invoice'
+
+    @staticmethod
+    def default_apply_for():
+        return 'all'
 
     def process_hold_contracts(self, dunnings):
         pool = Pool()
@@ -171,15 +203,13 @@ class Level:
             self.process_hold_contracts(dunnings)
         super(Level, self).process_dunnings(dunnings)
 
-    @staticmethod
-    def default_termination_mode():
-        return 'at_last_posted_invoice'
-
     def test(self, line, date):
         res = super(Level, self).test(line, date)
         if not res:
             return res
-        if self.skip_level_for_payment and line.payments:
+        if self.apply_for == 'direct_debit' and not line.payments:
+            return False
+        if self.apply_for == 'manual' and line.payments:
             return False
         if line.contract and line.contract.current_dunning:
             # Do not generate a new dunning for an invoice on a contract

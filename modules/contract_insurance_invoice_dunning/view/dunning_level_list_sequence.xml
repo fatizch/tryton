@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <data>
     <xpath expr="/tree/field[@name='not_mandatory']" position="after">
-        <field name="skip_level_for_payment"/>
+        <field name="apply_for"/>
         <field name="contract_action"/>
     </xpath>
 </data>

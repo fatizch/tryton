@@ -6,8 +6,8 @@
         <field name="contract_action"/>
         <label name="termination_mode"/>
         <field name="termination_mode"/>
-        <label name="skip_level_for_payment"/>
-        <field name="skip_level_for_payment"/>
+        <label name="apply_for"/>
+        <field name="apply_for"/>
         <label name="dunning_fee"/>
         <field name="dunning_fee"/>
     </xpath>
