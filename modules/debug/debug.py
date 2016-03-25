@@ -1036,8 +1036,8 @@ def %s(*args, **kwargs):
 setattr(klass, method_name, %s)'''
         patched_name = method_name + '__' + re.sub(
             r'[^A-Za-z0-9]+', '_', klass.__name__)
-        exec(template % (patched_name, method_name, patched_name),
-            {'klass': klass, 'method_name': method_name}) in {}, {}
+        exec template % (patched_name, method_name, patched_name) in \
+            {'klass': klass, 'method_name': method_name}, {}
 
     original_init(self, *args, **kwargs)
     for meth_name in (config.get('debug', 'methods') or '').split(','):

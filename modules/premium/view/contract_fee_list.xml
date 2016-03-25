@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <tree string="Contract Fees" editable="bottom">
     <field name="accept_fee"/>
-    <field name="fee"/>
+    <field name="fee" widget="selection"/>
     <field name="amount_as_string"/>
     <field name="overriden_rate" tree_invisible="1"/>
     <field name="overriden_amount" tree_invisible="1"/>
