@@ -190,6 +190,9 @@ class Group:
         Message.do(sepa_messages_waiting)
         return output_paths
 
+    def get_remittance_info(self):
+        return ''
+
     @property
     def sepa_payments(self):
         Payment = namedtuple('Payment', [
@@ -218,7 +221,7 @@ class Group:
                     sepa_bank_account_number=mkey[
                         'sepa_bank_account_number'],
                     party=mkey['party'],
-                    sepa_remittance_information='',  # TODO
+                    sepa_remittance_information=self.get_remittance_info(),
                     )
                 merged_payments.append(payment)
             yield key, merged_payments
