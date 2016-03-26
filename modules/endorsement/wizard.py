@@ -1674,7 +1674,7 @@ class ContactDisplayer(model.CoopView):
             ],
         states={'readonly': Eval('action', '') == 'ended',
             'required': In(Eval('action', ''), ['added', 'new_address'])},
-        depends=['action', 'effective_date', 'party'])
+        depends=['action', 'effective_date', 'old_address', 'party'])
     contact_id = fields.Integer('Contact Id', readonly=True)
     end_date = fields.Date('End Date', readonly=True)
     automatic = fields.Boolean('Calculated Automatically', readonly=True)
