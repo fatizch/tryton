@@ -84,7 +84,7 @@ class Level:
         table = cls.__table__()
         # Migration from 1.4
         migrate = False
-        if not handler.column_exist('apply_for'):
+        if handler.column_exist('skip_level_for_payment'):
             migrate = True
         super(Level, cls).__register__(module_name)
         if migrate:
