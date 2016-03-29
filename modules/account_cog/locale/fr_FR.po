@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.move.line:"
+msgid "Automatic Split Move"
+msgstr "Découpage automatique"
+
 msgctxt "field:account.account,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"

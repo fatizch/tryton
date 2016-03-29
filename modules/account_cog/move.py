@@ -167,6 +167,9 @@ class Line(export.ExportImportMixin):
     def __setup__(cls):
         super(Line, cls).__setup__()
         cls.account.select = False
+        cls._error_messages.update({
+                'split_move_description': 'Automatic Split Move',
+                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -251,6 +254,8 @@ class Line(export.ExportImportMixin):
         for line, amount_to_split in splits:
             split_amounts[line] = amount_to_split
             split_moves[line] = line.split(amount_to_split, journal)
+            split_moves[line].description = cls.get_split_move_description(
+                line)
         Move.save(split_moves.values())
         Move.post(split_moves.values())
         split_lines = {}
@@ -298,6 +303,11 @@ class Line(export.ExportImportMixin):
         setattr(compensation, dest, base)
         split_move.lines = [split, remaining, compensation]
         return split_move
+
+    @classmethod
+    def get_split_move_description(cls, line):
+        return cls.raise_user_error('split_move_description',
+            raise_exception=False)
 
     def _order_move_field(name):
         def order_field(tables):
