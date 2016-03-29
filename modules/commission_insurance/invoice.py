@@ -157,6 +157,14 @@ class Invoice:
                 }
             getattr(cls, field).depends += ['business_kind']
 
+        cls._buttons.update({
+                'draft': {
+                    'invisible': (~Eval('business_kind').in_(
+                            ['broker_invoice', 'insurer_invoice'])
+                        | cls._buttons['draft']['invisible'])
+                    },
+                })
+
     @classmethod
     def __register__(cls, module_name):
         pool = Pool()
