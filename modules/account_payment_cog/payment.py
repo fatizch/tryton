@@ -277,7 +277,7 @@ class FilterPaymentsPerMergedId(Wizard):
 
 
 class MergedPayments(model.CoopSQL, model.CoopView, ModelCurrency,
-                     Printable):
+        Printable):
     'Merged payments'
 
     __name__ = 'account.payment.merged'
@@ -317,6 +317,10 @@ class MergedPayments(model.CoopSQL, model.CoopView, ModelCurrency,
 
     def get_sender(self):
         return self.journal.company.party
+
+    def get_object_for_contact(self):
+        # Do not reference a virtual model
+        return None
 
     @staticmethod
     def table_query():

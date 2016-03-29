@@ -17,7 +17,6 @@ try:
 except ImportError:
     Manifest, MANIFEST = None, None
 
-from time import sleep
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -1095,16 +1094,17 @@ class ReportCreate(Wizard):
         contact.address = self.select_model.good_address
         contact.title = self.select_model.models[0].name
         contact.for_object_ref = good_obj.get_object_for_contact()
-        if (hasattr(self, 'attach') and self.attach):
+        if getattr(self, 'attach', None):
             Attachment = Pool().get('ir.attachment')
             attachment = Attachment()
-            attachment.resource = contact.for_object_ref
+            attachment.resource = contact.for_object_ref or contact.party
             attachment.data = self.attach.attachment
             attachment.name = self.attach.name
             attachment.document_desc = \
                 self.select_model.models[0].document_desc
             attachment.save()
-            contact.attachment = attachment
+            if contact.for_object_ref:
+                contact.attachment = attachment
         contact.save()
         return 'end'
 

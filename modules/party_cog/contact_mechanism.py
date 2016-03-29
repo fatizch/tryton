@@ -101,7 +101,8 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
     for_object = fields.Function(
         fields.Char('For Object', states={'invisible': True}),
         'on_change_with_for_object')
-    for_object_ref = fields.Reference('For Object', [('party.party', 'Party')],
+    for_object_ref = fields.Reference('For Object', [('', ''),
+            ('party.party', 'Party')],
         states={'readonly': True})
 
     @staticmethod
