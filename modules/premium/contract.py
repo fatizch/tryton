@@ -53,6 +53,13 @@ class Contract:
     def _export_skips(cls):
         return super(Contract, cls)._export_skips() | {'all_premiums'}
 
+    @fields.depends('fees')
+    def on_change_fees(self):
+        for fee in self.fees:
+            fee.contract = self
+            fee.used_fees = list(fee.used_fees)
+        self.fees = list(self.fees)
+
     @classmethod
     @model.CoopView.button
     def button_calculate_prices(cls, contracts):
@@ -350,11 +357,10 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
             self.overriden_amount = 0
             self.overriden_rate = 0
 
-    @fields.depends('contract', 'currency', 'currency_symbol', 'used_fees')
+    @fields.depends('contract', 'currency', 'currency_symbol')
     def on_change_contract(self):
         self.currency = self.contract.currency
         self.currency_symbol = self.currency.symbol
-        self.used_fees = list(self.used_fees)
 
     @fields.depends('fee_type', 'fee', 'currency', 'overriden_amount',
         'overriden_rate', 'accept_fee', 'currency_symbol')
