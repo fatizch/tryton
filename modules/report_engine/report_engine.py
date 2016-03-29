@@ -996,22 +996,24 @@ class ReportCreate(Wizard):
             if doc_template.parameters:
                 report_context.update(TemplateParameter.get_data_for_report(
                         self.input_parameters.parameters))
-            ids = [Transaction().context.get('active_id')] \
-                if doc_template.split_reports \
-                else Transaction().context.get('active_ids')
-            ext, filedata, _, file_basename = ReportModel.execute(ids,
-                report_context, immediate_conversion=(
-                    not doc_template.convert_to_pdf and
-                    not doc_template.modifiable_before_printing))
-            client_filepath, server_filepath = \
-                ReportModel.edm_write_tmp_report(filedata,
-                    '%s.%s' % (file_basename, ext))
-            reports.append({
-                    'generated_report': client_filepath,
-                    'server_filepath': server_filepath,
-                    'file_basename': file_basename,
-                    'template': doc_template,
-                    })
+            if doc_template.split_reports:
+                groups = [[x] for x in Transaction().context.get('active_ids')]
+            else:
+                groups = [Transaction().context.get('active_ids')]
+            for ids in groups:
+                ext, filedata, _, file_basename = ReportModel.execute(ids,
+                    report_context, immediate_conversion=(
+                        not doc_template.convert_to_pdf and
+                        not doc_template.modifiable_before_printing))
+                client_filepath, server_filepath = \
+                    ReportModel.edm_write_tmp_report(filedata,
+                        '%s.%s' % (file_basename, ext))
+                reports.append({
+                        'generated_report': client_filepath,
+                        'server_filepath': server_filepath,
+                        'file_basename': file_basename,
+                        'template': doc_template,
+                        })
         self.preview_document.reports = reports
         email = ContactMechanism.search([
                 ('party', '=', self.select_model.party.id),
@@ -1025,7 +1027,7 @@ class ReportCreate(Wizard):
         self.preview_document.output_report_filepath = \
             self.preview_document.on_change_with_output_report_filepath()
         self.preview_document.party = self.select_model.party.id
-        if all([x.template.modifiable_before_printing
+        if len(reports) > 1 or all([x.template.modifiable_before_printing
                 for x in self.preview_document.reports]):
             return 'preview_document'
         return 'open_document'

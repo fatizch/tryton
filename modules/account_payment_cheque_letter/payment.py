@@ -32,7 +32,8 @@ class MergedPayments:
 
     def get_formatted_string_amount(self, name=None, lang=None):
         if self.amount:
-            return self.currency.format_string_amount(self.amount, lang_code=lang)
+            return self.currency.format_string_amount(self.amount,
+                lang_code=lang)
         return ''
 
     @classmethod
@@ -42,7 +43,7 @@ class MergedPayments:
         payments = Payment.search([('id', 'in', ids)])
         return {x.id: x.description
             if x.journal.process_method == 'cheque_letter' else None
-            for x in  payments}
+            for x in payments}
 
 
 class Payment:
@@ -57,11 +58,11 @@ class Payment:
     def __setup__(cls):
         super(Payment, cls).__setup__()
         cls._error_messages.update({
-                'journal_mixin_not_allowed': 'You can not print cheque letters '
-                'with other payments types',
+                'journal_mixin_not_allowed': 'You can not print cheque letters'
+                ' with other payments types',
                 'cheque_number_sequence_broken': 'You must select sequencial '
                 'cheque letters numbers: jump from %s to %s',
-            })
+                })
 
     @fields.depends('journal')
     def on_change_with_is_cheque_letter(self, name=None):
