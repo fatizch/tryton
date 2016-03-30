@@ -1,3 +1,4 @@
+import intervaltree
 import datetime
 import calendar
 from collections import defaultdict
@@ -23,6 +24,7 @@ from trytond.cache import Cache
 
 from trytond.modules.cog_utils import (coop_date, coop_string, utils, model,
     fields)
+from trytond.modules.cog_utils.cache import CoogCache, get_cache_holder
 from trytond.modules.contract import _STATES
 
 __metaclass__ = PoolMeta
@@ -122,6 +124,7 @@ class Contract:
         'get_balance_today', searcher='search_balance_today')
 
     _invoices_cache = Cache('invoices_report')
+    _premium_intervals_cache = Cache('premium_intervals')
 
     @classmethod
     def _export_skips(cls):
@@ -743,6 +746,34 @@ class Contract:
         Invoice.update_taxes(new_invoices)
         return contracts_invoices
 
+    @classmethod
+    def premium_intervals_cache(cls):
+        cache_holder = get_cache_holder()
+        interval_cache = cache_holder.get('premium_intervals_cache')
+        if interval_cache is None:
+            interval_cache = CoogCache()
+            cache_holder['premium_intervals_cache'] = interval_cache
+        return interval_cache
+
+    @classmethod
+    def _search_premium_intervals(cls, contract, start, end):
+        cache = cls.premium_intervals_cache()
+        tree = cache.get(contract.id)
+        if tree is None:
+            tree = intervaltree.IntervalTree((
+                    intervaltree.Interval(p.start or datetime.date.min,
+                        p.end or datetime.date.max, idx)
+                    for idx, p in enumerate(contract.all_premiums)))
+            cache[contract.id] = tree
+        if tree is not None:
+            return [contract.all_premiums[x.data]
+                for x in tree.search(start, end)]
+
+    @classmethod
+    def calculate_prices(cls, contracts, start=None, end=None):
+        cls.premium_intervals_cache().clear()
+        return super(Contract, cls).calculate_prices(contracts, start, end)
+
     def get_invoice(self, start, end, billing_information):
         pool = Pool()
         Invoice = pool.get('account.invoice')
@@ -777,9 +808,7 @@ class Contract:
 
     def compute_invoice_lines(self, start, end):
         lines = []
-        for premium in self.all_premiums:
-            if end < (premium.start or datetime.date.min):
-                break
+        for premium in self._search_premium_intervals(self, start, end):
             lines.extend(premium.get_invoice_lines(start, end))
         return lines
 

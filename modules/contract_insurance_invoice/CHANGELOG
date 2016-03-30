@@ -1,3 +1,4 @@
+* Use intervaltree to speed up premium filtering
 * Allow to not prorate premiums
 * Add wizard to show aggregated lines on invoices
 
