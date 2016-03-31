@@ -146,6 +146,11 @@
         <!-- ############################# -->
         <!-- # Manage Contacts Displayer # -->
         <!-- ############################# -->
+        <record model="ir.ui.view" id="manage_contacts_displayer_view_form">
+            <field name="model">endorsement.manage_contacts.contact</field>
+            <field name="type">form</field>
+            <field name="name">manage_contacts_displayer_form</field>
+        </record>
         <record model="ir.ui.view" id="manage_contacts_displayer_view_list">
             <field name="model">endorsement.manage_contacts.contact</field>
             <field name="type">tree</field>

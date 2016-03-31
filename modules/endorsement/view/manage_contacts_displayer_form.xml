@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<form string="Contact">
+    <label name="automatic"/>
+    <field name="automatic"/>
+    <label name="kind"/>
+    <field name="kind"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="old_address"/>
+    <field name="old_address"/>
+    <label name="new_address"/>
+    <field name="new_address"/>
+    <label name="action"/>
+    <field name="action"/>
+</form>

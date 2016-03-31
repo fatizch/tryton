@@ -2466,6 +2466,10 @@ msgid "Endorsement Definitions"
 msgstr "Définitions d'avenant"
 
 msgctxt "view:endorsement.manage_contacts.contact:"
+msgid "Contact"
+msgstr "Contact"
+
+msgctxt "view:endorsement.manage_contacts.contact:"
 msgid "Contacts"
 msgstr "Contacts"
 
