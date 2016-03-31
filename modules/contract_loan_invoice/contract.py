@@ -83,6 +83,13 @@ class Premium:
         # Make sure premiums are properly ordered per loan
         cls._order.insert(0, ('loan', 'ASC'))
 
+    @classmethod
+    def get_main_contract(cls, premiums, name):
+        cur_contract = Transaction().context.get('current_contract', None)
+        if cur_contract:
+            return {x.id: cur_contract for x in premiums}
+        return super(Premium, cls).get_main_contract(premiums, name)
+
     def duplicate_sort_key(self):
         key = super(Premium, self).duplicate_sort_key()
         return tuple([self.loan.id if self.loan else None] + list(key))
@@ -353,34 +360,36 @@ class Contract:
             if contract.status == 'void':
                 continue
             assert contract.end_date
-            generation_start = contract.start_date
-            if contract.last_generated_premium_end:
-                generation_start = contract.last_generated_premium_end + \
-                    relativedelta(days=+1)
-            for period in contract.get_invoice_periods(contract.end_date,
-                    generation_start):
-                period = period[:2]  # XXX there is billing information
-                invoice_lines = contract.compute_invoice_lines(*period)
-                for invoice_line in invoice_lines:
-                    taxes = Tax.compute(invoice_line.taxes,
-                        invoice_line.unit_price, invoice_line.quantity,
-                        date=period[0])
-                    if config.tax_rounding == 'line':
-                        tax_amount = sum(contract.currency.round(t['amount'])
-                            for t in taxes)
-                    else:
-                        tax_amount = sum(t['amount'] for t in taxes)
-                    amount = Amount(
-                        premium=invoice_line.details[0].premium,
-                        period_start=period[0],
-                        period_end=period[1],
-                        start=invoice_line.coverage_start,
-                        end=invoice_line.coverage_end,
-                        amount=invoice_line.unit_price,
-                        tax_amount=tax_amount,
-                        contract=contract,
-                        )
-                    amounts.append(amount)
+            with Transaction().set_context(current_contract=contract.id):
+                generation_start = contract.start_date
+                if contract.last_generated_premium_end:
+                    generation_start = contract.last_generated_premium_end + \
+                        relativedelta(days=+1)
+                for period in contract.get_invoice_periods(contract.end_date,
+                        generation_start):
+                    period = period[:2]  # XXX there is billing information
+                    invoice_lines = contract.compute_invoice_lines(*period)
+                    for invoice_line in invoice_lines:
+                        taxes = Tax.compute(invoice_line.taxes,
+                            invoice_line.unit_price, invoice_line.quantity,
+                            date=period[0])
+                        if config.tax_rounding == 'line':
+                            tax_amount = sum(
+                                contract.currency.round(t['amount'])
+                                for t in taxes)
+                        else:
+                            tax_amount = sum(t['amount'] for t in taxes)
+                        amount = Amount(
+                            premium=invoice_line.details[0].premium,
+                            period_start=period[0],
+                            period_end=period[1],
+                            start=invoice_line.coverage_start,
+                            end=invoice_line.coverage_end,
+                            amount=invoice_line.unit_price,
+                            tax_amount=tax_amount,
+                            contract=contract,
+                            )
+                        amounts.append(amount)
         Amount.create([a._save_values for a in amounts])
 
     @classmethod
@@ -397,7 +406,7 @@ class Contract:
         return max(utils.today(), self.start_date or datetime.date.min)
 
 
-class PremiumAmount(ModelCurrency, model.CoopSQL, model.CoopView):
+class PremiumAmount(model.CoopSQL, model.CoopView):
     'Premium Amount'
 
     __name__ = 'contract.premium.amount'
@@ -425,6 +434,16 @@ class PremiumAmount(ModelCurrency, model.CoopSQL, model.CoopView):
     loan = fields.Function(
         fields.Many2One('loan', 'Loan'),
         'get_loan')
+    currency = fields.Function(
+        fields.Many2One('currency.currency', 'Currency', states={
+                'invisible': True}),
+        'get_currency')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'get_currency')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'get_currency')
 
     @classmethod
     def __register__(cls, module_name):
@@ -439,14 +458,31 @@ class PremiumAmount(ModelCurrency, model.CoopSQL, model.CoopView):
         table.index_action('contract', 'remove')
         table.index_action(['contract', 'period_start', 'period_end'], 'add')
 
-    def get_currency(self):
-        return self.contract.currency
+    @classmethod
+    def get_currency(cls, amounts, names):
+        for name in names:
+            assert name in ('currency', 'currency_digits', 'currency_symbols')
+        contracts = defaultdict(list)
+        for amount in amounts:
+            contracts[amount.contract].append(amount.id)
+
+        values = {fname: {} for fname in names}
+        for contract, cur_amounts in contracts.items():
+            if 'currency' in names:
+                values['currency'].update({p: contract.currency.id
+                        for p in cur_amounts})
+            if 'currency_digits' in names:
+                values['currency_digits'].update({p: contract.currency.digits
+                        for p in cur_amounts})
+            if 'currency_symbol' in names:
+                values['currency_symbol'].update({p: contract.currency.symbol
+                        for p in cur_amounts})
+        return values
 
     def get_type(self, name=None):
         if self.premium:
-            model, = Pool().get('ir.model').search(
-                [('model', '=', self.premium.parent.__name__)])
-            return model.id
+            return Pool().get('ir.model').model_id_per_name(
+                self.premium.parent.__name__)
 
     def get_covered_element(self, name=None):
         if self.premium:

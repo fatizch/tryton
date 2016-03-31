@@ -68,12 +68,12 @@ class Premium:
     extra_premium = fields.Many2One('contract.option.extra_premium',
         'Extra Premium', select=True, ondelete='CASCADE')
 
-    def get_main_contract(self, name=None):
+    def _get_main_contract(self):
         if self.covered_element:
             return self.covered_element.main_contract.id
         elif self.extra_premium:
             return self.extra_premium.option.parent_contract.id
-        return super(Premium, self).get_main_contract(name)
+        return super(Premium, self)._get_main_contract()
 
     @classmethod
     def get_possible_parent_field(cls):

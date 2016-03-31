@@ -249,13 +249,15 @@ first_invoice = ContractInvoice.find([('contract', '=', contract.id),
 first_invoice.invoice.total_amount
 # #Res# #Decimal('297.81')
 [(x.rec_name, x.unit_price, x.coverage_start, x.coverage_end)
-    for x in first_invoice.invoice.lines] == [
+    for x in sorted(first_invoice.invoice.lines, key=lambda x: x.unit_price)
+    ] == [
+    (u'1', Decimal('17.81'),
+        datetime.date(2014, 5, 20), datetime.date(2015, 4, 9)),
     (u'Test Coverage', Decimal('100.00'),
         datetime.date(2014, 4, 10), datetime.date(2015, 4, 9)),
     (u'1', Decimal('180.00'),
         datetime.date(2014, 4, 10), datetime.date(2015, 4, 9)),
-    (u'1', Decimal('17.81'),
-        datetime.date(2014, 5, 20), datetime.date(2015, 4, 9))]
+    ]
 # #Res# #True
 Contract.first_invoice([contract.id], config.context)
 all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),

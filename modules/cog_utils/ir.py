@@ -322,11 +322,24 @@ class IrModel(ExportImportMixin):
     __name__ = 'ir.model'
     _func_key = 'model'
 
+    _models_per_name = Cache('models_per_name')
+
     @classmethod
     def _export_skips(cls):
         result = super(IrModel, cls)._export_skips()
         result.add('fields')
         return result
+
+    @classmethod
+    def model_id_per_name(cls, model_name):
+        model_id = cls._models_per_name.get(model_name, default=-1)
+        if model_id != -1:
+            return model_id
+        cls._models_per_name.clear()
+        models = cls.search([])
+        for cur_model in models:
+            cls._models_per_name.set(cur_model.model, cur_model.id)
+        return cls._models_per_name.get(model_name)
 
 
 class IrModelField(ExportImportMixin):
