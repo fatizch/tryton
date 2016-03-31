@@ -762,7 +762,8 @@ class Contract:
         if tree is None:
             tree = intervaltree.IntervalTree((
                     intervaltree.Interval(p.start or datetime.date.min,
-                        p.end or datetime.date.max, idx)
+                        coop_date.add_day(p.end, 1) if p.end
+                        else datetime.date.max, idx)
                     for idx, p in enumerate(contract.all_premiums)))
             cache[contract.id] = tree
         if tree is not None:
