@@ -53,7 +53,7 @@ _main() { # parse params and call fn
                 fi
         fi
         fn="coog_"$com"_"$sub
-        if [ $com = init ]
+        if [ $com = init ] || [ $com = help ]
         then
                 _source && coog_env_bootstrap && $fn $*
         else
