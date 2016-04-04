@@ -765,37 +765,3 @@ def clear_transaction_cache(model_name, ids):
             for id_ in ids:
                 if id_ in cache[model_name]:
                     cache[model_name][id_].clear()
-
-
-def name_for_profiling(Class, method_name):
-    if not isinstance(Class, Model) or not hasattr(Class, method_name):
-        return
-    if method_name in Class.__dict__:
-        template = '''
-@classmethod
-def %s(cls, *args, **kwargs):
-    return getattr(cls, method_name)()
-setattr(Class, method_name, %s)'''
-    else:
-        template = '''
-@classmethod
-def %s(cls, *args, **kwargs):
-    return getattr(super(cls, Class), method_name)()
-setattr(Class, method_name, %s)'''
-    patched_name = method_name + '_' + Class.__name__
-    exec(template % (patched_name, patched_name),
-        {'Class': Class, 'method_name': method_name})
-
-
-original_setup = Pool.setup
-
-
-def patched_pool_setup(self, *args, **kwargs):
-    classes = original_setup(self, *args, **kwargs)
-    for meth_name in ('read',):
-        for Class in self.classes['model']:
-            name_for_profiling(Class, meth_name)
-    return classes
-
-
-Pool.setup = patched_pool_setup

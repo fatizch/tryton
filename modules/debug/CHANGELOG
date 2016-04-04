@@ -1,3 +1,4 @@
+* Use post_init hooks on pool
 * Add method patcher for per model method profiling
 
 Version 1.6 - 2015-12-23
