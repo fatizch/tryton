@@ -285,3 +285,7 @@ msgstr "Analyse de risques"
 msgctxt "view:underwriting.decision:"
 msgid "Contract Underwriting Decision"
 msgstr "Décision d'analyse de risques"
+
+msgctxt "view:contract:"
+msgid "Underwritings"
+msgstr "Analyse de risques"

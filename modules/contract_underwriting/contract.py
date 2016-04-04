@@ -1,6 +1,6 @@
 # encoding: utf-8
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool, Or
+from trytond.pyson import Eval, Bool
 from trytond.model import dualmethod
 
 from trytond.modules.cog_utils import model, fields
@@ -187,6 +187,14 @@ class Contract:
     needs_underwriting = fields.Function(
         fields.Boolean('Needs Underwriting'),
         'on_change_with_needs_underwriting')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(Contract, cls).view_attributes() + [(
+                '/form/notebook/page[@id="underwritings"]',
+                'states',
+                {'invisible': ~Eval('needs_underwriting')}
+                )]
 
     def check_underwriting_complete(self):
         if self.needs_underwriting and self.underwritings:
