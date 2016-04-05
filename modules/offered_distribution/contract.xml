@@ -9,4 +9,12 @@
             <field name="name">contract_form</field>
         </record>
     </data>
+    <data depends="contract_life_clause">
+        <record model="ir.ui.view" id="beneficiary_view_form">
+            <field name="model">contract.option.beneficiary</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="contract_life_clause.beneficiary_view_form"/>
+            <field name="name">beneficiary_form</field>
+        </record>
+    </data>
 </tryton>

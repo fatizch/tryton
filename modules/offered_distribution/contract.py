@@ -117,14 +117,19 @@ class Beneficiary:
                 ('portfolio', 'in', Eval('allowed_portfolios')),
                 ('portfolio', '=', None)]]
 
-    def get_allowed_portfolios(self, name=None):
-        if not self.main_contract or not self.main_contract.dist_network:
-            return []
-        else:
-            return [x.id for x in
-                self.main_contract.dist_network.visible_portfolios]
+    @classmethod
+    def view_attributes(cls):
+        return super(Beneficiary, cls).view_attributes() + [(
+                '/form/group[@id="invisible"]', 'invisible', True)]
 
-    @fields.depends('allowed_portfolios')
+    @fields.depends('option')
+    def get_allowed_portfolios(self, name=None):
+        if not self.option.covered_element.contract.dist_network:
+            return []
+        return [x.id for x in
+            self.option.covered_element.contract.dist_network.
+            visible_portfolios]
+
+    @fields.depends('allowed_portfolios', 'option')
     def on_change_option(self):
-        super(Beneficiary,self).on_change_option()
         self.allowed_portfolios = self.get_allowed_portfolios()
