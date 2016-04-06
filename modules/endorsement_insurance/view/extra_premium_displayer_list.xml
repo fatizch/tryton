@@ -12,5 +12,4 @@
     <field name="extra_premium_id" tree_invisible="1"/>
     <field name="extra_premium" tree_invisible="1"/>
     <field name="to_add" tree_invisible="1"/>
-    <field name="to_update" tree_invisible="1"/>
 </tree>

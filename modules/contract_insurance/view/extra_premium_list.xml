@@ -2,5 +2,7 @@
 <tree string="Extra Premium">
     <field name="value_as_string"/>
     <field name="motive"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
     <button string="Propagate" name="propagate"/>
 </tree>

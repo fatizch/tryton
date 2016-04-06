@@ -6,7 +6,7 @@ from trytond.wizard import StateView, StateTransition, Button
 from trytond.pyson import Eval, Len, Bool, If, Equal
 from trytond.model import Model
 
-from trytond.modules.cog_utils import model, fields, utils
+from trytond.modules.cog_utils import model, fields, utils, coop_date
 from trytond.modules.endorsement import EndorsementWizardStepMixin, \
     add_endorsement_step
 
@@ -842,12 +842,12 @@ class ExtraPremiumDisplayer(model.CoopView):
         readonly=True)
     option_name = fields.Char('Option', readonly=True)
     extra_premium = fields.One2Many('contract.option.extra_premium',
-        None, 'Extra Premium')
+        None, 'Extra Premium', states={'readonly': ~Eval('to_add')},
+        depends=['to_add'])
     extra_premium_id = fields.Integer('Extra Premium Id')
-    extra_premium_name = fields.Char('Extra Premium')
+    extra_premium_name = fields.Char('Extra Premium', readonly=True)
     to_delete = fields.Boolean('To Delete')
     to_add = fields.Boolean('To Add')
-    to_update = fields.Boolean('To Update')
 
     @classmethod
     def view_attributes(cls):
@@ -855,28 +855,8 @@ class ExtraPremiumDisplayer(model.CoopView):
             ('/form/group[@id="invisible"]', 'states',
                 {'invisible': True}),
             ('/tree', 'colors', If(Eval('to_delete', False), 'red',
-                    If(Eval('to_add', False), 'green',
-                        If(Eval('to_update', False), 'blue', 'grey'))))
+                    If(Eval('to_add', False), 'green', 'grey'))),
             ]
-
-    @fields.depends('extra_premium', 'extra_premium_id', 'extra_premium_name',
-        'to_add', 'to_remove', 'to_update')
-    def on_change_extra_premium(self):
-        if self.to_add or self.to_remove or not self.extra_premium_id:
-            return
-        pool = Pool()
-        ExtraPremium = pool.get('contract.option.extra_premium')
-        ManageExtraPremium = pool.get(
-            'endorsement.contract.manage_extra_premium')
-        original = ExtraPremium(self.extra_premium_id)
-        for fname in ManageExtraPremium._extra_premium_fields_to_extract():
-            if fname in ('end_date', 'option', 'start_date'):
-                continue
-            if getattr(self.extra_premium[0], fname, None) != getattr(original,
-                    fname, None):
-                self.to_update = True
-                return
-        self.to_update = False
 
 
 class ManageExtraPremium(EndorsementWizardStepMixin):
@@ -921,16 +901,10 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
                 instance = ExtraPremium(**extra_premium.values)
                 displayer['extra_premium_id'] = None
                 displayer['to_add'] = True
-            elif extra_premium.action == 'remove':
-                instance = extra_premium.extra_premium
-                displayer['extra_premium_id'] = instance.id
-                displayer['to_delete'] = True
             elif extra_premium.action == 'update':
                 instance = extra_premium.extra_premium
                 displayer['extra_premium_id'] = instance.id
-                for fname, fvalue in extra_premium.values.iteritems():
-                    setattr(instance, fname, fvalue)
-                displayer['to_update'] = True
+                displayer['to_delete'] = True
         else:
             instance = extra_premium
             displayer['extra_premium_id'] = extra_premium.id
@@ -952,8 +926,7 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
             all_endorsements = [base_endorsement]
         else:
             all_endorsements = list(wizard.endorsement.contract_endorsements)
-        displayers, template = [], {'to_delete': False, 'to_add': False,
-            'to_update': False}
+        displayers, template = [], {'to_add': False, 'to_delete': False}
         # Set fake option to bypass required rule
         contract = all_endorsements[0].contract
         template['fake_option'] = (contract.options +
@@ -977,11 +950,6 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
         # Base_endorsement may be the current new endorsement. But we also have
         # to look in wizard.endorsement.contract_endorsements to detect other
         # contracts that may be modified
-        if not base_endorsement.id:
-            all_endorsements = {base_endorsement.contract.id: base_endorsement}
-        else:
-            all_endorsements = {x.contract.id: x
-                for x in wizard.endorsement.contract_endorsements}
         pool = Pool()
         ContractEndorsement = pool.get('endorsement.contract')
         CoveredElementEndorsement = pool.get(
@@ -990,33 +958,35 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
             'endorsement.contract.covered_element.option')
         ExtraPremiumEndorsement = pool.get(
             'endorsement.contract.extra_premium')
-        ExtraPremium = pool.get('contract.option.extra_premium')
+        if not base_endorsement.id:
+            all_endorsements = {base_endorsement.contract.id: base_endorsement}
+        else:
+            all_endorsements = {x.contract.id: x
+                for x in wizard.endorsement.contract_endorsements}
+        for endorsement in all_endorsements.values():
+            for covered_endorsement in endorsement.covered_elements:
+                for option_endorsement in covered_endorsement.options:
+                    option_endorsement.extra_premiums = []
+                covered_endorsement.options = list(covered_endorsement.options)
+            endorsement.covered_elements = list(endorsement.covered_elements)
+            endorsement.save()
         new_covered_elements, new_options, to_create = {}, {}, []
         for elem in self.extra_premiums:
-            values = elem.extra_premium[0]._save_values
-            values.pop('option', None)
             if elem.to_delete:
                 if elem.extra_premium_id:
-                    ex_endorsement = ExtraPremiumEndorsement(action='remove',
-                        extra_premium=elem.extra_premium_id)
+                    ex_endorsement = ExtraPremiumEndorsement(action='update',
+                        extra_premium=elem.extra_premium_id,
+                        values={'manual_end_date': coop_date.add_day(
+                                self.effective_date, -1)})
                 else:
                     continue
             elif elem.to_add:
+                values = elem.extra_premium[0]._save_values
+                values.pop('option', None)
                 ex_endorsement = ExtraPremiumEndorsement(action='add',
                     values=values)
                 ex_endorsement.values['manual_start_date'] = \
                     self.effective_date
-            elif elem.to_update:
-                base_instance = ExtraPremium(elem.extra_premium_id)
-                update_values = {
-                    k: v for k, v in values.iteritems()
-                    if getattr(base_instance, k, None) != v}
-                if update_values:
-                    ex_endorsement = ExtraPremiumEndorsement(action='update',
-                        extra_premium=elem.extra_premium_id,
-                        values=update_values)
-                else:
-                    continue
             else:
                 continue
             if not (elem.option_endorsement or elem.option.id in new_options):
