@@ -43,7 +43,7 @@ class EventLog(model.CoopSQL, model.CoopView):
     def on_change_with_date_str(self, name=None):
         return Pool().get('ir.date').datetime_as_string(self.date)
 
-    @fields.depends('description')
+    @fields.depends('object_', 'description')
     def on_change_with_description_str(self, name=None):
         if self.description:
             return self.description.split('\n')[0]
