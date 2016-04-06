@@ -74,7 +74,7 @@ class TestCaseModel:
         if result:
             return result
         result = Pool().get('country.country').search([
-                ('name', 'ilike', country_name.upper())], limit=1)[0]
+                ('name', 'ilike', country_name.upper())], limit=1)[0].id
         cls._get_country_cache.set(country_name, result)
         return result
 
@@ -87,7 +87,7 @@ class TestCaseModel:
                 ('code', '=', country_code.upper())], limit=1)
         if not countries:
             return None
-        result = countries[0]
+        result = countries[0].id
         cls._get_country_code_cache.set(country_code, result)
         return result
 
