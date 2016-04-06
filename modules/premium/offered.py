@@ -106,7 +106,9 @@ class Product:
         dates.add(option.start_date)
         if option.end_date:
             dates.add(coop_date.add_day(option.end_date, 1))
-        (dates.add(x.start) for x in option.versions if x.start is not None)
+        for version in option.versions:
+            if version.start is not None:
+                dates.add(version.start)
 
     def get_dates(self, contract):
         dates = set()
