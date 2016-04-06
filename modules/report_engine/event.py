@@ -3,6 +3,8 @@ try:
 except ImportError:
     import json
 
+import datetime
+
 from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
 from trytond.cache import Cache
 from trytond.pyson import Eval
@@ -246,6 +248,19 @@ class ReportProductionRequest(model.CoopSQL, model.CoopView):
                 model_name, id_ = values[name].split(',')
                 values[name] = pool.get(model_name)(id_)
 
+    def get_rec_name(self, name):
+        try:
+            start = json.loads(self.context_)['validity_start']
+            end = json.loads(self.context_)['validity_end']
+            start_date = datetime.date(
+                start['year'], start['month'], start['day'])
+            end_date = datetime.date(
+                end['year'], end['month'], end['day'])
+            start_str = start_date.strftime('%Y-%m-%d')
+            end_str = end_date.strftime('%Y-%m-%d')
+            return '%s/%s' % (start_str, end_str)
+        except KeyError:
+            return ''
 
 class ConfirmReportProductionRequestTreat(model.CoopView):
     'Confirm Report Request Production Treatment'
