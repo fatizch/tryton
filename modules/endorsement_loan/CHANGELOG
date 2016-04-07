@@ -1,3 +1,4 @@
+* Rewrite loan share endorsement to leverage latest technical tools
 * Add field on loan to get endorsement balance at last endorsement
 
 Version 1.6 - 2015-12-23

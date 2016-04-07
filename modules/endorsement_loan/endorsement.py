@@ -1,4 +1,3 @@
-import datetime
 from collections import defaultdict
 from sql.functions import CurrentTimestamp
 
@@ -11,7 +10,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model, coop_date, utils
+from trytond.modules.cog_utils import fields, model, utils
 from trytond.modules.endorsement import values_mixin, relation_mixin
 
 
@@ -605,38 +604,15 @@ class EndorsementCoveredElementOption:
         return existing
 
     def apply_values(self):
-        EndorsementLoanShare = Pool().get('endorsement.loan.share')
         values = super(EndorsementCoveredElementOption, self).apply_values()
-        shares_per_loan = defaultdict(list)
-        for elem in self.new_shares:
-            shares_per_loan[(elem.loan, elem.option)].append(elem)
-        for share_values in shares_per_loan.itervalues():
-            share_values.sort(key=lambda x: x.start_date or datetime.date.min)
-
-        loan_share_values = []
-        for loan_shares in shares_per_loan.itervalues():
-            for idx, loan_share in enumerate(loan_shares):
-                if not isinstance(loan_share, EndorsementLoanShare):
-                    continue
-                loan_share_values.append(loan_share.apply_values())
-                if idx != 0:
-                    previous = loan_shares[idx - 1]
-                    previous_end = coop_date.add_day(loan_share.start_date, -1)
-                    if (isinstance(previous, EndorsementLoanShare) and
-                            previous.action in ('add', 'update')):
-                        loan_share_values[-2][-1]['end_date'] = previous_end
-                    else:
-                        if ((previous.start_date or datetime.date.min) <
-                                loan_share.start_date):
-                            loan_share_values.append(('write', [previous.id],
-                                    {'end_date': previous_end}))
-                        else:
-                            loan_share_values.append(('remove', [previous.id]))
-        if loan_share_values:
+        loan_shares = []
+        for share in self.loan_shares:
+            loan_shares.append(share.apply_values())
+        if loan_shares:
             if self.action == 'add':
-                values[1][0]['loan_shares'] = loan_share_values
+                values[1][0]['loan_shares'] = loan_shares
             elif self.action == 'update':
-                values[2]['loan_shares'] = loan_share_values
+                values[2]['loan_shares'] = loan_shares
         return values
 
     @classmethod

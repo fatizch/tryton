@@ -1,22 +1,14 @@
 <?xml version="1.0"?>
 <tree string="Loan Shares" editable="bottom">
-    <field name="contract"/>
-    <field name="covered_element_name"/>
-    <field name="option_name"/>
-    <field name="loan"/>
+    <field name="parent_name" expand="1"/>
+    <field name="loan" expand="1"/>
     <field name="previous_share" factor="100">
         <suffix string="%"/>
     </field>
     <field name="new_share" factor="100">
         <suffix string="%"/>
     </field>
-    <field name="future_share" factor="100">
-        <suffix string="%"/>
-    </field>
-    <field name="override_future"/>
-    <field name="covered_element" tree_invisible="1"/>
-    <field name="covered_element_endorsement" tree_invisible="1"/>
-    <field name="loan_share_endorsement" tree_invisible="1"/>
-    <field name="option" tree_invisible="1"/>
-    <field name="option_endorsement" tree_invisible="1"/>
+    <field name="share_id" tree_invisible="1"/>
+    <field name="parent" tree_invisible="1"/>
+    <field name="contract_endorsement" tree_invisible="1"/>
 </tree>

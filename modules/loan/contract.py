@@ -295,20 +295,27 @@ class ContractOption:
             shares.append(cur_shares[-1])
         return [x.id for x in shares]
 
-    def get_shares_at_date(self, at_date):
-        result = []
-        shares_per_loan = self.get_shares_per_loan()
-        for loan in self.parent_contract.ordered_loans:
-            for share in reversed(shares_per_loan.get(loan.loan.id, [])):
-                if not share.start_date or share.start_date <= at_date:
-                    result.append(share)
+    def get_shares_at_date(self, at_date, include_removed=False):
+        shares = []
+        current_loans = {x.loan.id: x.number
+            for x in self.parent_contract.ordered_loans}
+        for loan, cur_shares in self.get_shares_per_loan().items():
+            if not include_removed and loan not in current_loans:
+                continue
+            for share in reversed(cur_shares):
+                if (getattr(share, 'start_date', None)
+                        or datetime.date.min) <= at_date:
+                    shares.append(share)
                     break
-        return result
+        shares.sort(key=lambda x: (x.loan.id in current_loans,
+                current_loans.get(x.loan.id, None)))
+        return shares
 
     def get_shares_per_loan(self):
         result = defaultdict(list)
         for share in sorted(self.loan_shares,
-                key=lambda x: x.start_date or datetime.date.min):
+                key=lambda x: getattr(x, 'start_date', None)
+                or datetime.date.min):
             result[share.loan.id].append(share)
         return result
 
