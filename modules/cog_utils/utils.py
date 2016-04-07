@@ -6,6 +6,7 @@ import string
 import random
 import json
 from collections import defaultdict
+from filelock import FileLock
 
 from sql import Column, Window
 from sql.conditionals import Coalesce
@@ -24,6 +25,29 @@ from trytond.model.modelstorage import EvalEnvironment
 from .model import fields
 
 __all__ = []
+
+
+class FileLocker:
+    'Class that secure open file access'
+
+    def __init__(self, path, *args):
+        self.path = path
+        self.locker = FileLock(self.path + '.lck')
+        self.args = args
+        self.file_obj = None
+
+    def __enter__(self):
+        self.locker.acquire(timeout=20)
+        self.file_obj = open(self.path, *self.args)
+        return self.file_obj
+
+    def __exit__(self, type, value, traceback):
+        self.file_obj.close()
+        self.locker.release()
+
+
+def safe_open(filepath, *args):
+    return FileLocker(filepath, *args)
 
 
 def get_module_name(cls):

@@ -28,6 +28,7 @@ coog_dep_base() { # install base deps
         pip install $proxy_opt argcomplete
         pip install $proxy_opt num2words
         pip install $proxy_opt intervaltree
+        pip install $proxy_opt filelock
 }
 
 coog_dep_extend() { # install extended deps (interfaces, deployment extras)
