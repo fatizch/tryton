@@ -8,6 +8,9 @@
     <field name="on_model" colspan="3" widget="selection"/>
     <label name="kind" xalign="0"/>
     <field name="kind" colspan="3"/>
+    <label name="output_kind"/>
+    <field name="output_kind" colspan="1"/>
+    <newline/>
     <label name="format_for_internal_edm" xalign="0"/>
     <field name="format_for_internal_edm"/>
     <label name="document_desc"/>

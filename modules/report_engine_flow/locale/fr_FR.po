@@ -1,0 +1,241 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:report.template:"
+msgid "You cannot print a flow and a model at the same time"
+msgstr ""
+"Vous ne pouvez pas lancer l'impression d'un modèle et générer un flux en "
+"même temps"
+
+msgctxt "field:report.flow.variable,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:report.flow.variable,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:report.flow.variable,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:report.flow.variable,data:"
+msgid "Data"
+msgstr "Donnée"
+
+msgctxt "field:report.flow.variable,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:report.flow.variable,else_reverse:"
+msgid "Else Reverse"
+msgstr "Sinon (champs inverse)"
+
+msgctxt "field:report.flow.variable,else_statement:"
+msgid "Else"
+msgstr "Sinon"
+
+msgctxt "field:report.flow.variable,for_object_statement:"
+msgid "For"
+msgstr "Pour chaque"
+
+msgctxt "field:report.flow.variable,for_objects_statement:"
+msgid "In"
+msgstr "Dans"
+
+msgctxt "field:report.flow.variable,generated_code:"
+msgid "Generated Code"
+msgstr "Code généré"
+
+msgctxt "field:report.flow.variable,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:report.flow.variable,if_statement:"
+msgid "If"
+msgstr "Si"
+
+msgctxt "field:report.flow.variable,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:report.flow.variable,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report.flow.variable,order:"
+msgid "Order"
+msgstr "Ordre"
+
+msgctxt "field:report.flow.variable,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report.flow.variable,separator:"
+msgid "Separator"
+msgstr "Séparateur"
+
+msgctxt "field:report.flow.variable,variable:"
+msgid "Variable"
+msgstr "Variable"
+
+msgctxt "field:report.flow.variable,variables:"
+msgid "Variables"
+msgstr "Variables"
+
+msgctxt "field:report.flow.variable,write_date:"
+msgid "Write Date"
+msgstr "Date de modification"
+
+msgctxt "field:report.flow.variable,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:report.flow.variable,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:report.template,generated_code:"
+msgid "Generated code"
+msgstr "Code généré"
+
+msgctxt "field:report.template,output_method:"
+msgid "Output method"
+msgstr "Méthode de sortie"
+
+msgctxt "field:report.template,variables_relation:"
+msgid "Flow Variables Relation"
+msgstr "Variables de flux"
+
+msgctxt "field:report.template.flow_variable.relation,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:report.template.flow_variable.relation,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:report.template.flow_variable.relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:report.template.flow_variable.relation,data:"
+msgid "Data"
+msgstr "Donnée"
+
+msgctxt "field:report.template.flow_variable.relation,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:report.template.flow_variable.relation,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:report.template.flow_variable.relation,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:report.template.flow_variable.relation,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report.template.flow_variable.relation,order:"
+msgid "Order"
+msgstr "Ordre"
+
+msgctxt "field:report.template.flow_variable.relation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report.template.flow_variable.relation,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:report.template.flow_variable.relation,variable:"
+msgid "Variable"
+msgstr "Variable"
+
+msgctxt "field:report.template.flow_variable.relation,write_date:"
+msgid "Write Date"
+msgstr "Date de modification"
+
+msgctxt "field:report.template.flow_variable.relation,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:report.template.flow_variable.relation,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:ir.action,name:"
+msgid "Flow variable relation"
+msgstr "Relation modèle de lettre - Variable de flux"
+
+msgctxt "model:ir.action,name:act_flow_variable"
+msgid "Flow Variables"
+msgstr "Variable de flux"
+
+msgctxt "model:ir.ui.menu,name:menu_flow_variables"
+msgid "Flow Variables"
+msgstr "Variables de flux"
+
+msgctxt "model:report.flow.variable,name:"
+msgid "Flow Variable"
+msgstr "Variable de flux"
+
+msgctxt "model:report.template.flow_variable.relation,name:"
+msgid "Template Variable Relation"
+msgstr "Intermédiaire relation modèle de lettre - variable de flux"
+
+msgctxt "selection:report.flow.variable,kind:"
+msgid "Data"
+msgstr "Donnée"
+
+msgctxt "selection:report.flow.variable,kind:"
+msgid "For"
+msgstr "Boucle"
+
+msgctxt "selection:report.flow.variable,kind:"
+msgid "Free"
+msgstr "Entrée libre"
+
+msgctxt "selection:report.flow.variable,kind:"
+msgid "Function"
+msgstr "Fonction"
+
+msgctxt "selection:report.flow.variable,kind:"
+msgid "If"
+msgstr "Condition"
+
+msgctxt "selection:report.template,output_kind:"
+msgid "From Variables"
+msgstr "Depuis des variables"
+
+msgctxt "selection:report.template,output_method:"
+msgid "Default"
+msgstr "Défaut"
+
+msgctxt "view:report.flow.variable:"
+msgid "Flow variable"
+msgstr "Variable de flux"
+
+msgctxt "view:report.flow.variable:"
+msgid "Flow variables"
+msgstr "Variables du flux"
+
+msgctxt "view:report.template.flow_variable.relation:"
+msgid "Flow Variable Relation"
+msgstr "Relation modèle de lettre - Variable de flux"
+
+msgctxt "view:report.template.flow_variable.relation:"
+msgid "Flow variables"
+msgstr "Variables du flux"
+
+msgctxt "view:report.template:"
+msgid "Flow data"
+msgstr "Donnée de flux"
+
+msgctxt "view:report.template:"
+msgid "Generated Code"
+msgstr "Code généré"

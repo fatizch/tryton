@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ##################### -->
+        <!-- # Report Template   # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="report_template_form">
+            <field name="model">report.template</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="report_engine.report_template_form"/>
+            <field name="name">report_template_form</field>
+        </record>
+        <!-- ##################### -->
+        <!-- #   Flow Variable   # -->
+        <!-- ##################### -->
+        <record model="ir.action.act_window" id="act_flow_variable">
+            <field name="name">Flow Variables</field>
+            <field name="res_model">report.flow.variable</field>
+        </record>
+        <record model="ir.ui.view" id="flow_variable_view_list">
+            <field name="model">report.flow.variable</field>
+            <field name="type">tree</field>
+            <field name="name">flow_variable_view_list</field>
+        </record>
+        <record model="ir.ui.view" id="flow_variable_view_form">
+            <field name="model">report.flow.variable</field>
+            <field name="type">form</field>
+            <field name="name">flow_variable_view_form</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_flow_variable_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="flow_variable_view_list"/>
+            <field name="act_window" ref="act_flow_variable"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_flow_variable_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="flow_variable_view_form"/>
+            <field name="act_window" ref="act_flow_variable"/>
+        </record>
+        <menuitem parent="report_engine.menu_doc_template" sequence="30" action="act_flow_variable" id="menu_flow_variables"/>
+        <record model="ir.ui.view" id="flow_variable_relation_view_list">
+            <field name="model">report.template.flow_variable.relation</field>
+            <field name="type">tree</field>
+            <field name="name">flow_variable_relation_view_list</field>
+        </record>
+        <record model="ir.ui.view" id="flow_variable_relation_view_form">
+            <field name="model">report.template.flow_variable.relation</field>
+            <field name="type">form</field>
+            <field name="name">flow_variable_relation_view_form</field>
+        </record>
+    </data>
+</tryton>

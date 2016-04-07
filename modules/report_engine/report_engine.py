@@ -17,6 +17,7 @@ try:
 except ImportError:
     Manifest, MANIFEST = None, None
 
+from sql import Null, Literal
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -108,6 +109,8 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     versions = fields.One2Many('report.template.version', 'resource',
         'Versions', delete_missing=True)
     kind = fields.Selection('get_possible_kinds', 'Kind')
+    output_kind = fields.Selection('get_possible_output_kinds',
+        'Output kind', required=True)
     mail_subject = fields.Char('eMail Subject')
     mail_body = fields.Text('eMail Body')
     format_for_internal_edm = fields.Selection([
@@ -160,6 +163,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         has_column_template_extension = report_template.column_exist(
             'template_extension')
         has_column_internal_edm = report_template.column_exist('internal_edm')
+        has_column_output_kind = report_template.column_exist('output_kind')
         super(ReportTemplate, cls).__register__(module_name)
         if not has_column_template_extension:
             # Migration from 1.4 : set default values for new columns
@@ -179,6 +183,20 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 "SET format_for_internal_edm = 'original' "
                 "WHERE internal_edm = 'TRUE' and convert_to_pdf = 'FALSE'")
             report_template.drop_column('internal_edm')
+        if not has_column_output_kind:
+            to_update = cls.__table__()
+            cursor.execute(*to_update.update(columns=[to_update.output_kind],
+                    values=[Literal(cls.default_output_kind())],
+                    where=to_update.output_kind == Null
+                    ))
+
+    @classmethod
+    def default_output_kind(cls):
+        return 'model'
+
+    @classmethod
+    def get_possible_output_kinds(cls):
+        return [('model', 'From Model')]
 
     @classmethod
     def _export_light(cls):
@@ -969,11 +987,46 @@ class ReportCreate(Wizard):
             return 'input_parameters'
         return 'generate_reports'
 
+    def report_execute(self, ids, doc_template, report_context, reports):
+        ReportModel = Pool().get('report.generate', type='report')
+        ext, filedata, prnt, file_basename = ReportModel.execute(ids,
+            report_context, immediate_conversion=(
+                not doc_template.convert_to_pdf and
+                not doc_template.modifiable_before_printing))
+        client_filepath, server_filepath = \
+            ReportModel.edm_write_tmp_report(filedata,
+                '%s.%s' % (file_basename, ext))
+        reports.append({
+                'generated_report': client_filepath,
+                'server_filepath': server_filepath,
+                'file_basename': file_basename,
+                'template': doc_template,
+                })
+        return ext, filedata, prnt, file_basename
+
+    def finalize_reports(self, reports, printable_inst):
+        ContactMechanism = Pool().get('party.contact_mechanism')
+        self.preview_document.reports = reports
+        email = ContactMechanism.search([
+                ('party', '=', self.select_model.party.id),
+                ('type', '=', 'email'),
+                ])
+        if email:
+            self.preview_document.email = email[0].value
+        output = printable_inst.get_document_filename()
+        self.preview_document.output_report_name = coop_string.slugify(output,
+            lower=False)
+        self.preview_document.output_report_filepath = \
+            self.preview_document.on_change_with_output_report_filepath()
+        self.preview_document.party = self.select_model.party.id
+        if len(reports) > 1 or all([x.template.modifiable_before_printing
+                for x in self.preview_document.reports]):
+            return 'preview_document'
+        return 'open_document'
+
     def transition_generate_reports(self):
         self.remove_edm_temp_files()
         pool = Pool()
-        ReportModel = pool.get('report.generate', type='report')
-        ContactMechanism = pool.get('party.contact_mechanism')
         TemplateParameter = pool.get('report.template.parameter')
         ActiveModel = pool.get(Transaction().context.get('active_model'))
         printable_inst = ActiveModel(Transaction().context.get('active_id'))
@@ -1001,36 +1054,8 @@ class ReportCreate(Wizard):
             else:
                 groups = [Transaction().context.get('active_ids')]
             for ids in groups:
-                ext, filedata, _, file_basename = ReportModel.execute(ids,
-                    report_context, immediate_conversion=(
-                        not doc_template.convert_to_pdf and
-                        not doc_template.modifiable_before_printing))
-                client_filepath, server_filepath = \
-                    ReportModel.edm_write_tmp_report(filedata,
-                        '%s.%s' % (file_basename, ext))
-                reports.append({
-                        'generated_report': client_filepath,
-                        'server_filepath': server_filepath,
-                        'file_basename': file_basename,
-                        'template': doc_template,
-                        })
-        self.preview_document.reports = reports
-        email = ContactMechanism.search([
-                ('party', '=', self.select_model.party.id),
-                ('type', '=', 'email'),
-                ])
-        if email:
-            self.preview_document.email = email[0].value
-        output = printable_inst.get_document_filename()
-        self.preview_document.output_report_name = coop_string.slugify(output,
-            lower=False)
-        self.preview_document.output_report_filepath = \
-            self.preview_document.on_change_with_output_report_filepath()
-        self.preview_document.party = self.select_model.party.id
-        if len(reports) > 1 or all([x.template.modifiable_before_printing
-                for x in self.preview_document.reports]):
-            return 'preview_document'
-        return 'open_document'
+                self.report_execute(ids, doc_template, report_context, reports)
+        return self.finalize_reports(reports, printable_inst)
 
     def default_preview_document(self, fields):
         return self.preview_document._default_values

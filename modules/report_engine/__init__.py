@@ -28,10 +28,12 @@ def register():
         ReportProductionRequestTreatmentBatch,
         ReportInputParameters,
         module='report_engine', type_='model')
+
     Pool.register(
         ReportGenerate,
         ReportGenerateFromFile,
         module='report_engine', type_='report')
+
     Pool.register(
         ReportCreate,
         ConvertTemplate,

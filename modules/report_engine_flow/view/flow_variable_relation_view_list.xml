@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tree string="Flow variables" editable="bottom" sequence="order">
+    <field name="variable"/>
+    <field name="kind"/>
+    <field name="data"/>
+    <field name="order" tree_invisible="1"/>
+</tree>

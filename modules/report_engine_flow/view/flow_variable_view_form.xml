@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Flow variable" col="4">
+    <label name="description"/>
+    <field name="description" colspan="3"/>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="kind"/>
+    <field name="kind"/>
+    <label name="separator"/>
+    <field name="separator" colspan="3"/>
+    <label name="data"/>
+    <field name="data" colspan="3"/>
+    <label name="if_statement"/>
+    <field name="if_statement" colspan="3"/>
+    <label name="for_object_statement"/>
+    <field name="for_object_statement"/>
+    <label name="for_objects_statement"/>
+    <field name="for_objects_statement"/>
+    <field name="variables" colspan="4"/>
+    <field name="else_statement" colspan="4"/>
+    <label name="generated_code"/>
+    <field name="generated_code" colspan="4"/>
+</form>

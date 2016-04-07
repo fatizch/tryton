@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Flow Variable Relation">
+    <label name="variable"/>
+    <field name="variable"/>
+    <newline/>
+    <label name="name"/>
+    <field name="name" colspan="3"/>
+    <newline/>
+    <label name="kind"/>
+    <field name="kind"/>
+    <newline/>
+    <label name="data"/>
+    <field name="data"/>
+    <field name="order" invisible="1"/>
+</form>

@@ -287,6 +287,14 @@ msgctxt "field:report.template,kind:"
 msgid "Kind"
 msgstr "Type de donnée"
 
+msgctxt "field:report.template,output_kind:"
+msgid "Output kind"
+msgstr "Type de sortie"
+
+msgctxt "selection:report.template,output_kind:"
+msgid "From Model"
+msgstr "Depuis un modèle"
+
 msgctxt "field:report.template,mail_body:"
 msgid "eMail Body"
 msgstr "Corps du courrier électronique"
