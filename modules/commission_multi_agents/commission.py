@@ -5,13 +5,23 @@ from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, model, coop_string
 
+__metaclass__ = PoolMeta
 __all__ = [
+    'Commission',
     'Agent',
     'AgentAgentRelation',
     'Plan',
     'PlanAgentRelation',
     ]
-__metaclass__ = PoolMeta
+
+
+class Commission:
+    __name__ = 'commission'
+
+    def update_agent_from_contract(self):
+        if self.agent.second_level_commission:
+            return
+        super(Commission, self).update_agent_from_contract()
 
 
 class Agent:

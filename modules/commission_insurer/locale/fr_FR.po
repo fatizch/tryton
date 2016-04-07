@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.move.line:"
+msgid "Automatic Split Move"
+msgstr "Découpage automatique"
+
 msgctxt "error:commission:"
 msgid ""
 "An error occured while looking for previously generated invoice (%s result "
@@ -21,6 +25,10 @@ msgstr ""
 msgctxt "error:commission:"
 msgid "An insurer notice has already been generated today for (%s)"
 msgstr "Un bordereau assureur a déja été généré aujourd'hui pour (%s)"
+
+msgctxt "error:account_invoice:"
+msgid "Commission Reset following unreconciliation of invoice %s"
+msgstr "Annulation de commission suite à délettrage de la quittance %s"
 
 msgctxt "error:received_premiums:"
 msgid "Received Premium"
@@ -81,6 +89,14 @@ msgstr "ID"
 msgctxt "field:insurer,waiting_account:"
 msgid "Waiting Account"
 msgstr "Compte d'attente"
+
+msgctxt "model:account.journal,name:journal_commission_reset"
+msgid "Commission Reset Journal"
+msgstr "Journal de reprise de prime suite à délettrage"
+
+msgctxt "model:account.journal.type,name:journal_type_commission_reset"
+msgid "Commission Reset"
+msgstr "Reprise de prime suite à délettrage"
 
 msgctxt "model:commission.create_invoice_principal.ask,name:"
 msgid "Create Invoice Principal"

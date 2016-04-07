@@ -6,6 +6,7 @@ from .contract import *
 
 def register():
     Pool.register(
+        Commission,
         Agent,
         AgentAgentRelation,
         Plan,

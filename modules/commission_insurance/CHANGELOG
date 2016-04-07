@@ -1,3 +1,4 @@
+* Properly handle invoice de-reconciliation
 * Remove commission relate: use aggregated commission instead
 * Add extra parameter 'with_draft' to commission.invoice.post to post even draft invoices
 * Add relate to display received premiums

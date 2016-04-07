@@ -211,6 +211,32 @@ class Commission:
         return invoices
 
     @classmethod
+    def cancel(cls, commissions):
+        # Force date for commissions which are going to be canceled, so
+        # they are properly fetched in broker invoice generation
+        to_write = []
+        for commission in commissions:
+            if not commission.date:
+                to_write.append(commission)
+        if to_write:
+            cls.write(to_write, {'date': utils.today()})
+        return super(Commission, cls).cancel(commissions)
+
+    def update_cancel_copy(self):
+        super(Commission, self).update_cancel_copy()
+        self.date = utils.today()
+        self.update_agent_from_contract()
+
+    def update_agent_from_contract(self):
+        if self.agent.type_ != 'agent':
+            return
+        if not self.commissioned_contract:
+            return
+        new_agent = self.commissioned_contract.agent
+        if new_agent != self.agent:
+            self.agent = self.commissioned_contract.agent
+
+    @classmethod
     def _get_invoice_line(cls, key, invoice, commissions):
         invoice_line = super(Commission, cls)._get_invoice_line(key, invoice,
             commissions)

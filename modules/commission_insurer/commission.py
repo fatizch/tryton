@@ -161,16 +161,19 @@ class Commission:
         if invoice_ids is not None and len(invoice_ids) == 0:
             return [], []
         query_table = move_line.join(move, condition=move_line.move == move.id
+            ).join(journal, condition=(move.journal == journal.id)
             ).join(invoice,
-            condition=move.id.in_([invoice.move, invoice.cancel_move])
-            ).join(journal, condition=(move.journal == journal.id))
+            condition=(move.id.in_([invoice.move, invoice.cancel_move])
+                & invoice.state.in_(['paid', 'cancel'])
+                & (journal.type != 'commission'))
+            | ((move.origin == Concat('account.invoice,',
+                        Cast(invoice.id, 'VARCHAR')))
+                & (journal.type == 'commission_reset')))
 
         where_clause = (
             move_line.account.in_(accounts)
             & (move_line.principal_invoice_line == Null)
-            & (move.state == 'posted')
-            & invoice.state.in_(['paid', 'cancel'])
-            & (journal.type != 'commission'))
+            & (move.state == 'posted'))
         if max_date is not None:
             where_clause &= (move.date <= max_date)
         if invoice_ids is not None:
@@ -230,6 +233,7 @@ class Commission:
         per_insurer = defaultdict(lambda: [[], []])
         to_ignore = defaultdict(list)
         to_sum = defaultdict(lambda: defaultdict(list))
+        per_id = {x.id: x for x in invoices}
         remains = {x.id for x in invoices}
 
         for invoice_id, commission_id, date, insurer_account in \
@@ -238,6 +242,10 @@ class Commission:
             if invoice_id in remains:
                 remains.remove(invoice_id)
             if not date or not until_date or date <= until_date:
+                # Ignore lines without date if invoice state is posted : we are
+                # handling an unreconciled invoice
+                if not date and per_id[invoice_id].state == 'posted':
+                    continue
                 to_sum[insurer_account][invoice_id].append(commission_id)
             else:
                 to_ignore[insurer_account].append(invoice_id)

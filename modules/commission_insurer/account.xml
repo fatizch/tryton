@@ -1,11 +1,32 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
+        <!-- ################ -->
+        <!-- # Invoice Line # -->
+        <!-- ################ -->
         <record model="ir.ui.view" id="invoice_line_view_form">
             <field name="model">account.invoice.line</field>
             <field name="type">form</field>
             <field name="inherit" ref="account_invoice.invoice_line_view_form"/>
             <field name="name">invoice_line_form</field>
+        </record>
+        <!-- ################ -->
+        <!-- # Journal Type # -->
+        <!-- ################ -->
+        <record model="account.journal.type" id="journal_type_commission_reset">
+            <field name="name">Commission Reset</field>
+            <field name="code">commission_reset</field>
+        </record>
+    </data>
+    <data noupdate="1">
+        <!-- ########### -->
+        <!-- # Journal # -->
+        <!-- ########### -->
+        <record model="account.journal" id="journal_commission_reset">
+            <field name="name">Commission Reset Journal</field>
+            <field name="code">COMRESET</field>
+            <field name="type">commission_reset</field>
+            <field name="sequence" ref="account.sequence_account_journal"/>
         </record>
     </data>
 </tryton>

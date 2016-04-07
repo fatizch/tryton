@@ -241,21 +241,49 @@ class Invoice:
         return Commission.browse([x[0] for x in cursor.fetchall()])
 
     @classmethod
-    def update_commission_before_cancel(cls, commissions):
-        # before cancelling a commission, set the date to today
-        # in order to be include the commission and his cancellation
-        # in the next invoice broker
-        if not commissions:
-            return
+    @ModelView.button
+    @Workflow.transition('posted')
+    def post(cls, invoices):
+        # Cancel and recreate commissions for invoices that were paid
+        paid_invoices = [i for i in invoices if i.state == 'paid']
+        super(Invoice, cls).post(invoices)
+
+        if paid_invoices:
+            cls.reset_commissions(paid_invoices)
+
+    @classmethod
+    def reset_commissions(cls, invoices):
         pool = Pool()
         Commission = pool.get('commission')
-        commission = Commission.__table__()
-        cursor = Transaction().cursor
-        cursor.execute(*commission.select(commission.id, where=(
-                    (commission.id.in_([c.id for c in commissions])) &
-                    (commission.date == Null))))
-        to_update = Commission.browse([x[0] for x in cursor.fetchall()])
-        Commission.write(to_update, {'date': utils.today()})
+        clear_date, cancel = [], []
+        for invoice in invoices:
+            for line in invoice.lines:
+                for commission in line.commissions:
+                    if commission.date and not commission.invoice_line:
+                        clear_date.append(commission)
+                    elif commission.invoice_line:
+                        # TODO : Somehow manage to filter out already reset /
+                        # canceled lines. Right now, unpaying will generate two
+                        # lines (3 with the original line), unpaying again will
+                        # generate 9, unpaying again 27 etc...
+                        cancel.append(commission)
+
+        # Reset date of not paid commissions, so that they will not be paid
+        # until the invoice is properly paid again
+        if clear_date:
+            Commission.write(clear_date, {'date': None})
+        if not cancel:
+            return
+
+        # Cancel commissions
+        cancel_commissions = Commission.cancel(cancel)
+
+        # Make another copy which will be available to be paid, once the
+        # client invoice is re-paid.
+        new_commissions = Commission.copy(cancel_commissions, {'date': None})
+        for com in new_commissions:
+            com.amount *= -1
+        Commission.save(new_commissions)
 
     @classmethod
     @ModelView.button
