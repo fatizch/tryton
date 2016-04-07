@@ -458,6 +458,8 @@ class Payment(export.ExportImportMixin, Printable):
         pool = Pool()
         Line = pool.get('account.move.line')
         Event = pool.get('event')
+        payments = [pm for pm in payments if pm.state != 'failed']
+
         super(Payment, cls).fail(payments)
         Event.notify_events(payments, 'fail_payment')
 
