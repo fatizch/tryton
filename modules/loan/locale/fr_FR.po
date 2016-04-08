@@ -383,6 +383,10 @@ msgctxt "field:loan.increment,deferral:"
 msgid "Deferral"
 msgstr "Différé"
 
+msgctxt "field:loan.increment,early_repayment:"
+msgid "Early Repayment"
+msgstr "Remboursement anticipé"
+
 msgctxt "field:loan.increment,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"

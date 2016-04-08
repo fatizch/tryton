@@ -2,6 +2,7 @@ import datetime
 import bisect
 from decimal import Decimal
 from sql.conditionals import Coalesce
+from dateutil.relativedelta import relativedelta
 
 from trytond import backend
 from trytond.pool import Pool
@@ -450,6 +451,21 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                         stick_to_end_of_month=True)
         self.increments = increments
         self.payments = payments
+        self.set_early_payment_amounts()
+
+    def set_early_payment_amounts(self):
+        for increment in self.increments[1:]:
+            if not increment.manual:
+                continue
+            previous_payment = self.get_payment(
+                increment.start_date - relativedelta(days=1))
+            early_repayment = previous_payment.outstanding_balance - \
+                increment.begin_balance
+            if early_repayment and early_repayment > (10 **
+                    (- self.on_change_with_currency_digits() + 2)):
+                increment.early_repayment = self.currency.round(
+                    early_repayment)
+        self.increments = self.increments
 
     def calculate(self):
         self.init_increments()
@@ -812,6 +828,11 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     def add_manual_increment(cls, loans):
         pass
 
+    def get_early_repayments_amount(self, at_date):
+        return sum([x.early_repayment
+                for x in self.increments if x.early_repayment
+                and x.start_date and x.start_date <= at_date])
+
 
 class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     'Loan Increment'
@@ -854,6 +875,9 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     deferral = fields.Selection(DEFERRALS, 'Deferral', sort=False)
     deferral_string = deferral.translated('deferral')
     manual = fields.Boolean('Manual')
+    early_repayment = fields.Numeric('Early Repayment', readonly=True,
+        digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])
     loan_state = fields.Function(
         fields.Char('Loan State'),
         'get_loan_state')

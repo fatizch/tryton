@@ -115,5 +115,14 @@
             <field name="fct_args">taux_annuel</field>
             <field name="parent" ref="pret"/>
         </record>
+        <record model="rule_engine.function" id="montant_remboursement_anticipes">
+            <field name="translated_technical_name">montant_remboursement_anticipes</field>
+            <field name="description">Montant des remboursements anticipés</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_early_repayments_amount</field>
+            <field name="parent" ref="pret"/>
+        </record>
     </data>
 </tryton>

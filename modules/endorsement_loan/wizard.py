@@ -573,8 +573,7 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
         return {'loan.increment': ['number', 'begin_balance', 'start_date',
                 'end_date', 'loan', 'number_of_payments', 'rate',
                 'payment_amount', 'payment_frequency', 'currency',
-                'currency_symbol', 'currency_digits',
-                'payment_frequency_string', 'deferral', 'deferral_string',
+                'currency_symbol', 'currency_digits', 'deferral',
                 'manual', 'id', 'loan_state', 'calculated_amount']}
 
     def get_default_loans(self):

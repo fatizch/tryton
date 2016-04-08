@@ -67,7 +67,7 @@ Get Models::
 Constants::
 
     >>> today = datetime.date.today()
-    >>> product_start_date = datetime.date(2014, 1, 1)
+    >>> product_start_date = datetime.date(2010, 1, 1)
     >>> contract_start_date = datetime.date(2014, 4, 10)
 
 Create or fetch Currency::
@@ -270,6 +270,22 @@ Create Change First Payment Date::
     ...         endorsement_part=change_first_payment_date_part))
     >>> change_first_payment_date.save()
 
+Create Change Any Date::
+
+    >>> change_any_date_part = EndorsementPart()
+    >>> change_any_date_part.name = 'Change Any Date Date'
+    >>> change_any_date_part.code = 'change_any_date'
+    >>> change_any_date_part.kind = 'loan'
+    >>> change_any_date_part.view = 'change_loan_any_date'
+    >>> change_any_date_part.save()
+    >>> change_any_date = EndorsementDefinition()
+    >>> change_any_date.name = 'Change Any Date Date'
+    >>> change_any_date.code = 'change_any_date'
+    >>> change_any_date.ordered_endorsement_parts.append(
+    ...     EndorsementDefinitionPartRelation(
+    ...         endorsement_part=change_any_date_part))
+    >>> change_any_date.save()
+
 Create Subscriber::
 
     >>> subscriber = Party()
@@ -387,4 +403,74 @@ Test cancellation::
     >>> Endorsement.cancel([endorsement.id], config._context)
     >>> increments = LoanIncrement.find([('loan', '=', loan.id)])
     >>> len(increments) == 1
+    True
+
+ TEST CHANGE ANY DATE::
+
+
+Create Loan::
+
+    >>> funds_release_date = loan_payment_date = contract_start_date = datetime.date(
+    ...     2013, 3, 22)
+    >>> loan = Loan()
+    >>> loan.company = company
+    >>> loan.kind = 'fixed_rate'
+    >>> loan.funds_release_date = contract_start_date
+    >>> loan.currency = currency
+    >>> loan.first_payment_date = loan_payment_date
+    >>> loan.rate = Decimal('0.01')
+    >>> loan.amount = Decimal('200000')
+    >>> loan.duration = 360
+    >>> loan.save()
+    >>> Loan.calculate_loan([loan.id], {})
+    >>> loan.state == 'calculated'
+    True
+
+Create Test Contract::
+
+    >>> contract = Contract()
+    >>> contract.company = company
+    >>> contract.subscriber = subscriber
+    >>> contract.start_date = contract_start_date
+    >>> contract.product = product
+    >>> contract.status = 'active'
+    >>> contract.contract_number = 'abcd'
+    >>> covered_element = contract.covered_elements.new()
+    >>> covered_element.party = subscriber
+    >>> option = covered_element.options[0]
+    >>> option.coverage = coverage
+    >>> loan_share = option.loan_shares.new()
+    >>> loan_share.loan = loan
+    >>> loan_share.share = Decimal('1.0')
+    >>> contract.loans.append(loan)
+    >>> contract.billing_informations.append(BillingInformation(
+    ...         billing_mode=freq_monthly, payment_term=payment_term))
+    >>> contract.save()
+
+New Endorsement::
+
+    >>> new_increment_date = datetime.date(2023, 3, 22)
+    >>> new_endorsement = Wizard('endorsement.start')
+    >>> new_endorsement.form.contract = contract
+    >>> new_endorsement.form.endorsement_definition = change_any_date
+    >>> new_endorsement.form.endorsement = None
+    >>> new_endorsement.form.applicant = None
+    >>> new_endorsement.form.effective_date = new_increment_date
+    >>> new_endorsement.execute('start_endorsement')
+    >>> new_increment = new_endorsement.form.new_increments.new()
+    >>> new_increment.begin_balance = Decimal('105335.09')
+    >>> new_increment.number_of_payments = 240
+    >>> new_increment.rate = Decimal('0.01')
+    >>> new_endorsement.execute('change_loan_any_date_next')
+    >>> new_endorsement.execute('loan_select_contracts')
+    >>> len(new_endorsement.form.selected_contracts)
+    1
+    >>> contract_displayer = new_endorsement.form.selected_contracts[0]
+    >>> contract_displayer.contract == contract
+    True
+    >>> contract_displayer.to_update is True
+    True
+    >>> new_endorsement.execute('loan_endorse_selected_contracts')
+    >>> new_endorsement.execute('apply_endorsement')
+    >>> loan.increments[-1].early_repayment == Decimal('35066.54')
     True

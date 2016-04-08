@@ -812,6 +812,44 @@ class ModuleTestCase(test_framework.CoopTestCase):
             Decimal('295.30'))
         test_balances(Decimal('189202.51'), Decimal('189497.35'), 'fully', 0)
 
+    @test_framework.prepare_test(
+        'loan.test0010loan_basic_data',
+        )
+    def test0051_compute_early_payment(self):
+        currency, = self.Currency.search([], limit=1)
+        company, = self.Company().search([], limit=1)
+
+        loan = self.Loan(
+            kind='fixed_rate',
+            funds_release_date=datetime.date(2013, 3, 22),
+            first_payment_date=datetime.date(2013, 3, 22),
+            rate=Decimal('0.01'),
+            amount=Decimal(200000),
+            duration=360,
+            duration_unit='month',
+            payment_frequency='month',
+            currency=currency,
+            company=company)
+        increment_1 = self.LoanIncrement(
+            number=1,
+            start_date=datetime.date(2013, 3, 22),
+            payment_amount=loan.currency.round(Decimal('600')),
+            rate=Decimal('0.01'),
+            number_of_payments=120,
+            payment_frequency='month')
+        increment_2 = self.LoanIncrement(
+            rate=Decimal('0.01'),
+            manual=True,
+            payment_amount=None,
+            start_date=datetime.date(2023, 3, 22),
+            begin_balance=loan.currency.round(Decimal('105335.09')),
+            number_of_payments=240,
+            payment_frequency='month')
+        loan.increments = [increment_1, increment_2]
+        loan.calculate()
+        loan.save()
+        self.assertEqual(loan.increments[1].early_repayment, Decimal('40000'))
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()

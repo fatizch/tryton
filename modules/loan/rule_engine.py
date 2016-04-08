@@ -77,3 +77,9 @@ class RuleEngineRuntime:
     @check_args('loan')
     def _re_get_loan_payment_frequency(cls, args):
         return args['loan'].payment_frequency
+
+    @classmethod
+    @check_args('loan')
+    def _re_get_early_repayments_amount(cls, args):
+        loan = args['loan']
+        return loan.get_early_repayments_amount(args['date'])
