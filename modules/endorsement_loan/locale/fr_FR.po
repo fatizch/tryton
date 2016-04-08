@@ -1070,7 +1070,7 @@ msgstr "Champs de relation contrat - prêt"
 
 msgctxt "model:endorsement.definition,name:"
 msgid "Change Loan at any Date"
-msgstr "Modification du prêt à date d'effet"
+msgstr "Modification du prêt à une date donnée"
 
 msgctxt "model:endorsement.loan,name:"
 msgid "Endorsement Loan"
@@ -1138,7 +1138,7 @@ msgstr "Ajout / suppression de prêts"
 
 msgctxt "model:endorsement.part,name:change_loan_any_date_revision_part"
 msgid "Change Loan at any Date"
-msgstr "Modification du prêt à date d'effet"
+msgstr "Modification du prêt à une date donnée"
 
 msgctxt "model:endorsement.start.preview_contract_payments,name:"
 msgid "Preview Contract Payments"
