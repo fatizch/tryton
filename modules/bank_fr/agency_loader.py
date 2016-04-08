@@ -40,25 +40,42 @@ class AgenciesLoader:
         with open(agencies_file_path, 'rb') as f:
             reader = csv.reader(f, delimiter=';')
             for row in reader:
-                bank_code, branch_code, bic, agency_name, _, street, \
-                    streetbis, zip_and_city = [x.strip() for x in row]
-                zip_, city = zip_and_city.split(None, 1)
+                try:
+                    bank_code, branch_code, bic, agency_name, _, street, \
+                        streetbis, zip_and_city = [x.strip() for x in row]
+                except ValueError:
+                    if logger:
+                        logger.info('Missing data on following row: %s'
+                            % str(row))
+                    continue
+                if not all([bank_code, branch_code, bic, agency_name]):
+                    if logger:
+                        logger.info('Missing data on following row: %s'
+                            % str(row))
+                    continue
+
                 agency_id = bic + branch_code + bank_code
                 if bic not in existing_banks:
                     continue
                 bank = existing_banks[bic]
-                address_values = {'street': street, 'streetbis': streetbis,
-                    'zip': zip_, 'city': city, 'name': agency_name,
-                    'party': bank.party.id}
+
+                address_values = None
+                if zip_and_city:
+                    zip_, city = zip_and_city.split(None, 1)
+                    address_values = {'street': street, 'streetbis': streetbis,
+                        'zip': zip_, 'city': city, 'name': agency_name,
+                        'party': bank.party.id}
+
                 if agency_id not in agencies_ids:
                     agencies_to_create.append({'bank_code': bank_code,
                             'name': agency_name, 'bank': bank.id,
                             'branch_code': branch_code})
-                    addresses_to_create.append(address_values)
+                    if address_values:
+                        addresses_to_create.append(address_values)
                 else:
                     agency = existing_agencies[agency_id]
                     old_address = agency.address
-                    if old_address:
+                    if old_address and address_values:
                         address_values.pop('party')
                         identical = all([getattr(old_address, k, None) == v
                                 for k, v in address_values.iteritems()])
@@ -76,7 +93,8 @@ class AgenciesLoader:
                     else:
                         agency.name = agency_name
                         agencies_to_link.append(agency)
-                        addresses_to_create.append(address_values)
+                        if address_values:
+                            addresses_to_create.append(address_values)
             if addresses_to_create:
                 created_address = Address.create(addresses_to_create)
                 if logger:
@@ -97,8 +115,11 @@ class AgenciesLoader:
                         str(len(addresses_to_update) / 2))
             if agencies_to_link:
                 for agency in agencies_to_link:
-                    agency.address = addresses_by_name_and_party_bank[
-                        (agency.name, agency.bank.party.id)]
+                    address = addresses_by_name_and_party_bank.get(
+                        (agency.name, agency.bank.party.id), None)
+                    if address:
+                        agency.address = address
+
             to_save = agencies_to_rename + agencies_to_link
             if to_save:
                 Agency.save(to_save)
