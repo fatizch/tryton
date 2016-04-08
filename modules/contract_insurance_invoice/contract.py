@@ -39,6 +39,7 @@ __all__ = [
     'InvoiceContract',
     'InvoiceContractStart',
     'DisplayContractPremium',
+    'ContractSubStatus',
     ]
 
 FREQUENCIES = [
@@ -687,7 +688,9 @@ class Contract:
         periods = defaultdict(list)
         for contract in contracts:
             if contract.status not in ('active', 'quote', 'terminated'):
-                continue
+                if not (contract.status == 'hold' and contract.sub_status and
+                        not contract.sub_status.hold_billing):
+                    continue
             cls._invoices_cache.set(contract.id, None)
             for period in contract.get_invoice_periods(min(up_to_date,
                         contract.activation_history[-1].end_date or
@@ -1730,3 +1733,10 @@ class DisplayContractPremium:
         children['contract.covered_element'] = ['options']
         children['options'].append('extra_premiums')
         return children
+
+
+class ContractSubStatus:
+    __name__ = 'contract.sub_status'
+
+    hold_billing = fields.Boolean('Hold Billing', depends=['status'],
+        states={'invisible': Eval('status') != 'hold'})

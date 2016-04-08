@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -663,6 +663,10 @@ msgstr "Prime"
 msgctxt "field:contract.premium.display.premiums.line,premiums:"
 msgid "Premium"
 msgstr "Prime"
+
+msgctxt "field:contract.sub_status,hold_billing:"
+msgid "Hold Billing"
+msgstr "Suspend la facturation"
 
 msgctxt "field:event.type.action,event_types:"
 msgid "Event Types"

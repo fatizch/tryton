@@ -28,6 +28,7 @@ def register():
         Configuration,
         Fee,
         Contract,
+        ContractSubStatus,
         ContractFee,
         ContractOption,
         ExtraPremium,

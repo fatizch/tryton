@@ -325,6 +325,9 @@ class Invoice:
                     # No problem as long as the invoice is within the contract
                     # activated period
                     continue
+                if (contract.status == 'hold' and contract.sub_status and
+                        not contract.sub_status.hold_billing):
+                    continue
                 cls.raise_user_error(
                     'post_on_non_active_contract', {
                         'invoice': invoice.rec_name,

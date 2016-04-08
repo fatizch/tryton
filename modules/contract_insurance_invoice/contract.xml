@@ -10,6 +10,15 @@
             <field name="type">form</field>
             <field name="name">contract_form</field>
         </record>
+        <!-- ################################## -->
+        <!-- ########### sub status ########### -->
+        <!-- ################################## -->
+        <record model="ir.ui.view" id="sub_status_view_form">
+            <field name="model">contract.sub_status</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="contract.sub_status_view_form"/>
+            <field name="name">sub_status_form</field>
+        </record>
         <!-- ################################ -->
         <!-- # Contract Billing Information # -->
         <!-- ################################ -->
