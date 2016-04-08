@@ -44,6 +44,10 @@ coog_client_start() { # start client - [args] passed to tryton, loglevel NOT set
         echo client started
 }
 
+coog_client_interact() { # interact client - [args] passed to tryton
+        tryton -c $COOG_CONF_CLI $*
+}
+
 coog_client_debug() { # start client in pdb - [args] passed to tryton
         python -m pdb "$COOG_TRYTON/bin/tryton" -c $COOG_CONF_CLI $*
 }

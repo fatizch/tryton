@@ -44,6 +44,13 @@ coog_server_start() { # start server - [args] passed to trytond, logconf NOT set
         echo server started
 }
 
+coog_server_interact() { # interact server - [args] passed to trytond
+        local args
+        args=$*
+        [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
+        trytond -c $COOG_CONF_SRV $args
+}
+
 coog_server_debug() { # start server in pdb - [args] passed to trytond
         local args
         args=$*
