@@ -240,6 +240,96 @@ class ModuleTestCase(test_framework.CoopTestCase):
             test_matching_premium(new_line_8, expected_end=None)
             test_matching_premium(new_line_9, expected_end=None)
 
+    def test011_store_prices_with_holes(self):
+        # Note : setting "id" is required so that object comparison work as
+        # expected
+        rated_entity_1 = self.Product()
+        rated_entity_1.id = 10
+
+        parent_1 = self.Contract()
+        parent_1.id = 100
+        parent_1.final_end_date = datetime.date(2003, 12, 31)
+        existing1 = self.Premium()
+        existing1.rated_entity = rated_entity_1
+        existing1.start = datetime.date(2000, 1, 1)
+        existing1.amount = 100
+        existing1.end = datetime.date(2000, 3, 31)
+        existing1.frequency = 'monthly'
+        existing1.parent = parent_1
+        existing1.taxes = []
+
+        # hole here
+
+        existing2 = self.Premium()
+        existing2.rated_entity = rated_entity_1
+        existing2.start = datetime.date(2000, 6, 1)
+        existing2.amount = 100
+        existing2.end = datetime.date(2000, 9, 1)
+        existing2.frequency = 'monthly'
+        existing2.parent = parent_1
+        existing2.taxes = []
+
+        parent_1.premiums = [existing1, existing2]
+
+        new_line1 = mock.Mock()
+        new_line1.rated_entity = rated_entity_1
+        new_line1.rated_instance = parent_1
+        new_line1.amount = 100
+        new_line1.frequency = 'monthly'
+        new_line1.taxes = []
+
+        null_line = mock.Mock()
+        null_line.rated_entity = rated_entity_1
+        null_line.rated_instance = parent_1
+        null_line.amount = 0
+        null_line.frequency = 'monthly'
+        null_line.taxes = []
+
+        new_line2 = mock.Mock()
+        new_line2.rated_entity = rated_entity_1
+        new_line2.rated_instance = parent_1
+        new_line2.amount = 100
+        new_line2.frequency = 'monthly'
+        new_line2.taxes = []
+
+        test_data = {
+            # hole here between existing2 and new_line1
+            datetime.date(2001, 1, 1): [new_line1],
+            # null_line is a hole too (amount = 0)
+            datetime.date(2001, 6, 1): [null_line],
+            datetime.date(2001, 9, 1): [new_line2],
+            }
+
+        with mock.patch.object(self.Premium, 'save') as patched_save:
+            self.Contract.store_prices(test_data)
+
+            save_args = patched_save.call_args[0][0]
+
+            def premium_matches(premium, input_line):
+                for fname in ['rated_entity', 'amount', 'frequency']:
+                    if getattr(premium, fname) != getattr(input_line, fname):
+                        return False
+                return True
+
+            def get_matching_premium(line, start):
+                res, = [x for x in save_args if premium_matches(x, line)
+                    if x.start == start]
+                return res
+
+            def test_matching_premium(line, expected_end=None, start=None):
+                premium = get_matching_premium(line, start)
+                self.assertEqual(premium.end, expected_end)
+
+            self.assertEqual(len(save_args), 2)
+
+            test_matching_premium(new_line1,
+                expected_end=datetime.date(2001, 5, 31),
+                start=datetime.date(2001, 1, 1))
+
+            test_matching_premium(new_line1,
+                expected_end=datetime.date(2003, 12, 31),
+                start=datetime.date(2001, 9, 1))
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()

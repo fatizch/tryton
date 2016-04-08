@@ -3,6 +3,7 @@ import logging
 from collections import defaultdict
 from sql import Column
 from sql.conditionals import Coalesce
+from dateutil.relativedelta import relativedelta
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If
@@ -173,8 +174,26 @@ class Contract:
             # successive elements concerns the same rated_entity, with
             # an ascending start date)
 
-            new_list = sorted(list(parent.premiums) + premiums,
-                key=lambda x: x._get_key())
+            # We should not update an existing premium in the past
+            # except if it ends right before, or after the new premiums
+            # or if it has no end
+            min_date = datetime.date.max
+            new_dated_premiums = [x for x in premiums if x.start]
+            if new_dated_premiums:
+                min_date = min([x.start for x in new_dated_premiums])
+            to_update, to_ignore = [], []
+            for premium in parent.premiums:
+                if not premium.start:
+                    to_ignore.append(premium)
+                    continue
+                if premium.end and premium.end < min_date - relativedelta(
+                        days=1):
+                    to_ignore.append(premium)
+                else:
+                    to_update.append(premium)
+
+            new_list = sorted(to_update + premiums, key=lambda x: x._get_key())
+
             final_list, prev_value, cur_end = [], None, None
             for elem in new_list:
                 cur_end = elem.end
@@ -202,7 +221,7 @@ class Contract:
                 prev_value.end = cur_end
                 to_save.append(prev_value)
                 final_list.append(prev_value)
-            parent.premiums = final_list
+            parent.premiums = to_ignore + final_list
 
         if to_save:
             Premium.save(to_save)
