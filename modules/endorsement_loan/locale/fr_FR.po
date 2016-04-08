@@ -95,6 +95,10 @@ msgid "Increments Modifications"
 msgstr "Modification des paliers"
 
 msgctxt "error:endorsement.loan:"
+msgid "Loan Modifications"
+msgstr "Modification du prêt"
+
+msgctxt "error:endorsement.loan:"
 msgid "There may only be one endorsement in_progress at a given time per loan"
 msgstr ""
 "Il ne peut y avoir qu'un seul avenant en cours de saisie sur un prêt donné."

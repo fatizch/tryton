@@ -436,6 +436,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
                 'only_one_endorsement_in_progress': 'There may only be one '
                 'endorsement in_progress at a given time per loan',
                 'msg_increment_modifications': 'Increments Modifications',
+                'msg_loan_modifications': 'Loan Modifications',
                 })
         cls.values.states = {
             'readonly': Eval('state') == 'applied',
@@ -465,14 +466,16 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         result = [self.definition.name, []]
         loan_summary = self.get_diff('loan', self.base_instance)
         if loan_summary:
-            result[1] += loan_summary
+            result[1].append(['%s :' % self.raise_user_error(
+                        'msg_loan_modifications', raise_exception=False),
+                    loan_summary])
 
         increment_summary = [x.get_diff('loan.increment', x.increment)
             for x in self.increments]
         if increment_summary:
             result[1].append(['%s :' % self.raise_user_error(
-                'msg_increment_modifications', raise_exception=False),
-                increment_summary])
+                        'msg_increment_modifications', raise_exception=False),
+                    increment_summary])
         return result
 
     def get_state(self, name):

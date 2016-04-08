@@ -59,6 +59,11 @@ def get_field_summary(instance, var_name, label, at_date=None, lang=None):
     return (label, translate_value(instance, var_name, lang))
 
 
+def generate_summaries(to_format):
+    summaries = [generate_summary(elem) for elem in to_format]
+    return '\n\n'.join(summaries)
+
+
 def generate_summary(desc, level=0):
     level_fmt = FMT.get(level, None)
     node_types = (tuple, list)
