@@ -244,8 +244,8 @@ len(all_invoices) == 2 + relativedelta(datetime.date.today(),
     contract.start_date).years
 # #Res# #True
 
-first_invoice = ContractInvoice.find([('contract', '=', contract.id),
-        ('invoice.state', '=', 'validated')])[1]
+first_invoice = sorted(ContractInvoice.find([('contract', '=', contract.id),
+            ('invoice.state', '=', 'validated')]), key=lambda x: x.start)[0]
 first_invoice.invoice.total_amount
 # #Res# #Decimal('297.81')
 [(x.rec_name, x.unit_price, x.coverage_start, x.coverage_end)
