@@ -68,13 +68,21 @@
         <record model="ir.action.wizard" id="act_end_process">
             <field name="name">End Process</field>
             <field name="wiz_name">process.end</field>
-        </record>j
+        </record>
         <!-- ################## -->
         <!-- # Process Resume # -->
         <!-- ################## -->
         <record model="ir.action.wizard" id="act_resume_process">
             <field name="name">Resume Current Process</field>
             <field name="wiz_name">process.resume</field>
+        </record>
+        <record model="ir.model.access" id="access_ir_model_data_admin_process">
+            <field name="model" search="[('model', '=', 'ir.model.data')]"/>
+            <field name="group" ref="process.group_process_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
         </record>
     </data>
 </tryton>
