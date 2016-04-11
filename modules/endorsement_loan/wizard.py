@@ -333,9 +333,11 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
             contract = contracts[contract_id]
             removed = set(existing_loans[contract_id]) - new_loans[contract_id]
             added = new_loans[contract_id] - set(existing_loans[contract_id])
+            max_number = max([x.number for x in contract.ordered_loans])
             contract.ordered_loans = [x for x in contract.ordered_loans
                 if x.loan.id not in added and x.loan.id not in removed] + [
-                OrderedLoan(loan=x) for x in added]
+                OrderedLoan(loan=x, number=i)
+                for i, x in enumerate(added, max_number + 1)]
             final_loans = {x.loan.id for x in contract.ordered_loans}
 
             # Sync loan shares
