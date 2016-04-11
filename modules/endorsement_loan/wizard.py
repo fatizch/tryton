@@ -1448,6 +1448,8 @@ class StartEndorsement:
                     'new_end_date': contract_endorsement.values.get(
                         'end_date', contract.end_date),
                     })
+            if not possible_contracts:
+                continue
             possible_contracts.remove(contract)
         for contract in possible_contracts:
             contract_displayers.append({
