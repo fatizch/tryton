@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<form string="Revision Blame" col="6">
+    <group  col="6" rowspan="1" id="info">
+        <label name="record_name" xfill="1" colspan="1"/>
+        <field name="record_name" xexpand="0" readonly="1" colspan="1"/>
+        <label name="model_id" xfill="1" colspan="1" />
+        <field name="model_id" xexpand="0" readonly="1" colspan="1" />
+        <label name="model_name" xfill="1" colspan="1"/>
+        <field name="model_name" xexpand="0" readonly="1" colspan="1"/>
+    </group>
+    <newline/>
+    <group col="8" colspan="4" id="pages">
+	<group id="buttons" colspan="4" rowspan="1" xexpand="0">
+            <button name="prev_revisions" string="Prev" icon="tryton-go-previous"/>
+            <button name="next_revisions" string="Next" icon="tryton-go-next"/>
+	</group>
+        <field name="current_page" xexpand="0" />
+        <field name="total_pages" xexpand="0" />
+    </group>
+    <field name="blame_text" colspan="6" widget="richtext"/>
+    <newline/>
+</form>

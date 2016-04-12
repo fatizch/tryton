@@ -121,6 +121,11 @@ class ExportImportMixin(Model):
         # A list of fields which will not be recursively exported.
         return set()
 
+    @classmethod
+    def _diff_skip(cls):
+        # A list of fields which will not be exported during diff
+        return cls._export_skips()
+
     def _export_filename(self):
         if (hasattr(self, 'code') and self.code):
             return self.code

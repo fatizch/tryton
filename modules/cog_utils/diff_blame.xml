@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="revision_blame_view_form">
+            <field name="model">diff_blame.revision_blame</field>
+            <field name="type">form</field>
+            <field name="name">revision_blame_view_form</field>
+        </record>
+        <record model="ir.action.wizard" id="revision_blame">
+            <field name="name">Diff Blame Revision</field>
+            <field name="wiz_name">diff_blame.revision_blame_wizard</field>
+            <field name="window">True</field>
+        </record>
+    </data>
+</tryton>
