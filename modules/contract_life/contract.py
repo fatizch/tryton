@@ -27,7 +27,8 @@ class Contract:
             if (contract and contract.status == 'active'
                     and contract.start_date <= at_date <= (
                         contract.end_date or datetime.date.max)):
-                res.append(contract)
+                if contract not in res:
+                    res.append(contract)
         return res
 
     @classmethod

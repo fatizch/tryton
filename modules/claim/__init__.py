@@ -7,6 +7,7 @@ from .party import *
 from .test_case import *
 from .document import *
 from .report_engine import *
+from .event import *
 
 
 def register():
@@ -26,6 +27,7 @@ def register():
         SynthesisMenuClaim,
         SynthesisMenu,
         ReportTemplate,
+        EventLog,
         module='claim', type_='model')
     Pool.register(
         SynthesisMenuOpen,

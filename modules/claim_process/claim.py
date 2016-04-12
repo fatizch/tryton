@@ -247,6 +247,10 @@ class ClaimDeclare(ProcessFinder):
         if res:
             if process_param.party:
                 obj.claimant = process_param.party
+                obj.declaration_date = obj.default_declaration_date()
+                possible_contracts = obj.get_possible_contracts()
+                if len(possible_contracts) == 1:
+                    obj.main_contract = possible_contracts[0]
         return res, errs
 
     def search_main_object(self):

@@ -212,12 +212,13 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     # not be used for other reason than initiating sub elements on claim.
     # Otherwise use claim.get_contract()
     main_contract = fields.Many2One('contract', 'Main Contract',
-        ondelete='RESTRICT', domain=[('id', 'in', Eval('possible_contracts')),
+        ondelete='RESTRICT', domain=[
+            ('id', 'in', Eval('possible_contracts')),
             ('company', '=', Eval('company'))],
         depends=['possible_contracts', 'company'])
     possible_contracts = fields.Function(
-        fields.One2Many('contract', None, 'Contracts'),
-        'on_change_with_possible_contracts')
+        fields.Many2Many('contract', None, None, 'Contracts'),
+        'getter_possible_contracts')
     attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments',
         target_not_required=True)
     _claim_number_generator_cache = Cache('claim_number_generator')
@@ -358,20 +359,20 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         """ Assigns a unique name attribute to each item.
         :param items a list of dictionnaries or claim instances
         """
-        good_gen = cls._claim_number_generator_cache.get('generator',
+        Generator = Pool().get('ir.sequence')
+        gen_id = cls._claim_number_generator_cache.get('generator',
             default=None)
-        if not good_gen:
-            Generator = Pool().get('ir.sequence')
-            good_gen, = Generator.search([('code', '=', 'claim')], limit=1)
-            cls._claim_number_generator_cache.set('generator', good_gen)
+        if not gen_id:
+            gen_id = Generator.search([('code', '=', 'claim')], limit=1)[0].id
+            cls._claim_number_generator_cache.set('generator', gen_id)
 
         for i in items:
             if isinstance(i, dict):
                 if not i.get('name', None):
-                    i['name'] = good_gen.get_id(good_gen.id)
+                    i['name'] = Generator.get_id(gen_id)
             elif isinstance(i, cls):
                 if not i.name:
-                    i.name = good_gen.get_id(good_gen.id)
+                    i.name = Generator.get_id(gen_id)
 
     def get_contact(self):
         return self.claimant
@@ -410,6 +411,14 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             self.end_date = None
         return True, []
 
+    @fields.depends('claimant', 'possible_contracts')
+    def on_change_claimant(self, name=None):
+        self.possible_contracts = self.get_possible_contracts()
+        main_contract = None
+        if len(self.possible_contracts) == 1:
+            main_contract = self.possible_contracts[0]
+        self.main_contract = main_contract
+
     def get_possible_contracts(self, at_date=None):
         if not at_date:
             at_date = self.declaration_date
@@ -417,9 +426,9 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         return Contract.get_possible_contracts_from_party(self.claimant,
             at_date)
 
-    @fields.depends('claimant', 'declaration_date')
-    def on_change_with_possible_contracts(self, name=None):
-        return [x.id for x in self.get_possible_contracts()]
+    def getter_possible_contracts(self, name=None):
+        possible_contracts = self.get_possible_contracts()
+        return [x.id for x in possible_contracts]
 
     def get_contracts(self):
         res = []
