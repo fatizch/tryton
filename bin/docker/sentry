@@ -27,6 +27,7 @@ run() {
         then
                 args="-d --name=$1"
                 shift
+                [ $# -eq 0 ] && args="$args -p 9000:9000"
         elif [ $mode = i ]
         then
                 args="-ti --rm"
@@ -51,7 +52,7 @@ upgrade() {
 
 daemon() {
         run d $container-celery-worker sentry celery worker && \
-                run d $container-celery-beat sentry celery worker && \
+                run d $container-celery-beat sentry celery beat && \
                 run d $container
 
 }
