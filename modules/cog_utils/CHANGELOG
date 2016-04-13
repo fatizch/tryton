@@ -1,3 +1,4 @@
+* Add script to easily create dev databases
 * Add safe_open function for concurrent file operations
 * Add loader and updater functions for function fields
 * Add table view for history
