@@ -1,4 +1,5 @@
 import csv
+from collections import defaultdict
 
 from trytond.pool import Pool
 
@@ -34,28 +35,35 @@ class AgenciesLoader:
         agencies_to_rename = []
         addresses_to_create = []
         addresses_to_update = []
+        row_errors = 0
         already_treated = set([])
         addresses_by_name_and_party_bank = {}
 
         with open(agencies_file_path, 'rb') as f:
             reader = csv.reader(f, delimiter=';')
+            missing_bics = defaultdict(int)
             for row in reader:
                 try:
                     bank_code, branch_code, bic, agency_name, _, street, \
                         streetbis, zip_and_city = [x.strip() for x in row]
                 except ValueError:
+                    row_errors += 1
                     if logger:
                         logger.info('Missing data on following row: %s'
                             % str(row))
                     continue
                 if not all([bank_code, branch_code, bic, agency_name]):
+                    row_errors += 1
                     if logger:
                         logger.info('Missing data on following row: %s'
                             % str(row))
                     continue
 
+                bic = bic.ljust(11, 'X')
                 agency_id = bic + branch_code + bank_code
+
                 if bic not in existing_banks:
+                    missing_bics[bic] += 1
                     continue
                 bank = existing_banks[bic]
 
@@ -125,3 +133,11 @@ class AgenciesLoader:
                 Agency.save(to_save)
                 if logger:
                     logger.info('Updated %s agencies', str(len(to_save)))
+            if missing_bics:
+                for bic, number in missing_bics.iteritems():
+                    logger.info('Bic %s is missing, %s agencie(s) not created'
+                        % (bic, number))
+                logger.info('%s bics missing, %s agencies not created' %
+                    (len(missing_bics), sum(missing_bics.values())))
+            if row_errors:
+                    logger.info('Missing data on %s rows', row_errors)
