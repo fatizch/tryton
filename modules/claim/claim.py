@@ -411,8 +411,8 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             self.end_date = None
         return True, []
 
-    @fields.depends('claimant', 'possible_contracts')
-    def on_change_claimant(self, name=None):
+    @fields.depends('claimant', 'declaration_date', 'possible_contracts')
+    def on_change_claimant(self):
         self.possible_contracts = self.get_possible_contracts()
         main_contract = None
         if len(self.possible_contracts) == 1:
