@@ -1,0 +1,88 @@
+#!/bin/bash
+
+TRYTON_VERSION=3.8
+
+sync_flat() {
+        local diff
+        diff=`git diff HEAD | wc -l`
+        [ $diff -ne 0 ] && echo repo not clean && return 1
+        git fetch -p &&
+                git checkout $TRYTON_VERSION &&
+                git rebase origin/$TRYTON_VERSION &&
+                git checkout master &&
+                git rebase origin/master &&
+                git merge $TRYTON_VERSION --no-edit &&
+                git push origin master
+}
+
+sync_tryton() {
+        cd tryton && sync_flat
+        cd ..
+}
+
+sync_trytond() {
+        local branch
+        branch=perf-analyzer
+        cd trytond && sync_flat && git checkout $branch && git rebase origin/$branch && git merge $TRYTON_VERSION --no-edit && git push origin $branch
+        git checkout master
+        cd ..
+}
+
+sync_sao() {
+        cd sao && sync_flat
+        cd ..
+}
+
+sync_proteus() {
+        cd proteus && sync_flat
+        cd ..
+}
+
+_sync_modules() {
+        local diff
+        diff=`git diff HEAD | wc -l`
+        [ $diff -ne 0 ] && echo repo not clean && return 1
+        local nb
+        nb=`ls -1 modules | wc -l`
+        diff=`git submodule foreach "git diff HEAD" | wc -l`
+        [ $diff -ne $nb ] && echo sub not clean && return 1
+        echo "### !!! FETCH ROOT !!! ###"
+        git fetch -p &&
+                git checkout $TRYTON_VERSION &&
+                git rebase origin/$TRYTON_VERSION &&
+                git checkout master &&
+                git rebase origin/master
+        [ $? -ne 0 ] && return 1
+        echo "### !!! FETCH SUB !!! ###"
+        git submodule foreach "git fetch -p && git checkout $TRYTON_VERSION && git rebase origin/$TRYTON_VERSION && git checkout master && git rebase origin/master"
+        [ $? -ne 0 ] && return 1
+        echo "### !!! MERGE SUB !!! ###"
+        git submodule foreach "git checkout master && git merge --no-edit $TRYTON_VERSION && git push origin master"
+        [ $? -ne 0 ] && return 1
+        echo "### !!! COMMIT ROOT - $TRYTON_VERSION !!! ###"
+        git checkout $TRYTON_VERSION && git submodule foreach "git checkout $TRYTON_VERSION" && git add . && git commit -m "modules updated" && git push origin $TRYTON_VERSION
+        echo "### !!! COMMIT ROOT - master !!! ###"
+        git checkout master && git submodule foreach "git checkout master" && git add . && git commit -m "modules updated" && git push origin master
+}
+
+sync_modules() {
+        cd trytond-modules && _sync_modules
+        cd ..
+}
+
+main() {
+        if [ ! -z $1 ]
+        then
+                sync_$1
+        else
+                echo missing repo && return 1
+        fi
+}
+
+_target=`readlink -f $0 | xargs dirname`/../..
+_source=`pwd`
+cd $_target
+main $*
+_ret=$?
+cd $_source
+exit $_ret
