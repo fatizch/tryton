@@ -4,10 +4,11 @@ import logging
 import ConfigParser
 from datetime import datetime, date
 
+from trytond import backend
 from trytond.config import config
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.model import ModelView
+from trytond.model import ModelView, ModelSQL, fields
 from trytond.perf_analyzer import PerfLog, profile, logger as perf_logger
 
 import coop_string
@@ -16,6 +17,7 @@ __all__ = [
     'BatchRoot',
     'BatchRootNoSelect',
     'ViewValidationBatch',
+    'CleanDatabaseBatch',
     ]
 
 
@@ -245,3 +247,98 @@ class ViewValidationBatch(BatchRoot):
                         'different id !' % (full_xml_id,
                             full_inherited_xml_id))
         logger.info('%d views checked' % len(objects))
+
+
+class CleanDatabaseBatch(BatchRoot):
+    'Clean Database Batch'
+
+    __name__ = 'ir.model.cleandb'
+    logger = logging.getLogger(__name__)
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'ir.model'
+
+    @classmethod
+    def get_batch_search_model(cls):
+        return 'ir.model'
+
+    @classmethod
+    def get_batch_domain(cls, treatment_date, extra_args={}):
+        module = extra_args.get('module', None)
+        return module and [('module', '=', module)]
+
+    @classmethod
+    def check_field(cls, field):
+        return not isinstance(field, (fields.Function, fields.Many2Many,
+                fields.One2Many, fields.Property))
+
+    @classmethod
+    def check_model(cls, buf, model, fields, table):
+        fields = set(fields)
+        columns = set(table._columns.keys())
+        diff = columns - fields
+        if diff:
+            for col in diff:
+                buf.append('ALTER TABLE "%s" DROP COLUMN "%s";' %
+                    (table.table_name, col))
+        else:
+            cls.logger.debug('model: %s, table: %s => ok', model,
+                table.table_name)
+
+    @classmethod
+    def drop_constraints(cls, buf, table):
+        for const in table._constraints:
+            buf.append('ALTER TABLE "%s" DROP CONSTRAINT "%s";' %
+                (table.table_name, const))
+
+    @classmethod
+    def drop_indexes(cls, buf, table):
+        for index in table._indexes:
+            buf.append('DROP INDEX "%s";' % index)
+
+    @classmethod
+    def create_pk(cls, buf, table):
+        buf.append('ALTER TABLE "%s" ADD PRIMARY KEY(id);' % table.table_name)
+
+    @classmethod
+    def execute(cls, objects, ids, treatment_date, extra_args):
+        tables = []
+        buf = []
+        TableHandler = backend.get('TableHandler')
+        pool = Pool()
+        for model in objects:
+            try:
+                c = pool.get(model.model)
+            except:
+                buf.append('DROP TABLE "%s";' % model.model.replace('.', '_'))
+                buf.append('DROP TABLE "%s_id_seq";' %
+                    model.model.replace('.', '_'))
+                buf.append('DROP TABLE "%s__history__";' %
+                    model.model.replace('.', '_'))
+                buf.append('DROP TABLE "%s__history___id_seq";' %
+                    model.model.replace('.', '_'))
+                continue
+            if not issubclass(c, ModelSQL):
+                cls.logger.debug('not SQL model: %s' % model)
+                continue
+            if c.table_query():
+                cls.logger.debug('model is table_query: %s' % model)
+                continue
+            fields = [k for k, v in c._fields.iteritems()
+                if cls.check_field(v)]
+            table = TableHandler(Transaction().cursor, c)
+            cls.check_model(buf, model.model, fields, table)
+            tables.append(table)
+        const = extra_args.get('drop_const', None)
+        if const is not None:
+            for table in tables:
+                cls.drop_constraints(buf, table)
+        index = extra_args.get('drop_index', None)
+        if index is not None:
+            for table in tables:
+                cls.drop_indexes(buf, table)
+        if const is not None or index is not None:
+            for table in tables:
+                cls.create_pk(buf, table)
+        cls.write_batch_output('\n'.join(buf), 'clean.sql')

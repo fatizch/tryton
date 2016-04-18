@@ -54,6 +54,7 @@ def register():
         VersionedObject,
         VersionObject,
         ViewValidationBatch,
+        CleanDatabaseBatch,
         TestCaseModel,
         TestCaseInstance,
         TestCaseRequirementRelation,
