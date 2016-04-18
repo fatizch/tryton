@@ -53,7 +53,7 @@ coog_worker_start() { # start worker - <wid>
         out_file=`_coog_worker_file $1 out`
         [ -e $out_file ] && echo worker $1: out file exists "->" clean manually && return 1
         local old_port
-        old_port=`python2 .py/parse-config.py jsonrpc listen < $COOG_CONF_SRV | cut -d ":" -f 2` || return $?
+        old_port=`python2 $COOG_BIN/parse-config.py jsonrpc listen < $COOG_CONF_SRV | cut -d ":" -f 2` || return $?
         new_port=`echo "$old_port+$1" | bc`
         sed -e "s,$old_port,$new_port,g" $COOG_CONF_SRV > $conf_file
         local args

@@ -222,7 +222,7 @@ app() {
 }
 
 batch_redis() {
-        python2 $COOG_BIN/.py/evalredis.py $* < $COOG_BIN/redis/batch.lua
+        python2 $COOG_BIN/bin/evalredis.py $* < $COOG_BIN/redis/batch.lua
 }
 
 batch_generate() {
@@ -231,7 +231,7 @@ batch_generate() {
         local name; name=$1; shift
         local waiting; waiting=`batch_redis count $broker $name 'wait'` || return 1
         [ $waiting -ne 0 ] && echo queue not empty && return 1
-        python2 -m "batch-generate" -b $broker -n $name $*
+        python2 $COOG_BIN/bin/batch-generate.py -b $broker -n $name $*
 }
 
 batch_split() {
@@ -248,7 +248,7 @@ batch_split() {
                 [ $head -eq 1 ] && head=0 && continue
                 local id; id=`echo $fail | cut -d " " -f 2`
                 local key; key=`batch_redis key $broker $id` || return 1
-                python2 -m "batch-split" $broker $key && batch_redis archive $broker $id
+                python2 $COOG_BIN/bin/batch-split.py $broker $key && batch_redis archive $broker $id
                 [ $? -ne 0 ] && return $?
         done
         return 0

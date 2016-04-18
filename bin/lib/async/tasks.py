@@ -23,7 +23,7 @@ def batch_generate(name, connection_date, treatment_date, args):
     from trytond.pool import Pool
     from trytond.transaction import Transaction
 
-    from async.context import database
+    from tryton_init import database
 
     logger = logging.getLogger(name)
 
@@ -85,7 +85,7 @@ def batch_exec(name, connection_date, treatment_date, args, ids):
     from trytond.pool import Pool
     from trytond.transaction import Transaction
 
-    from async.context import database
+    from tryton_init import database
 
     logger = logging.getLogger(name)
 

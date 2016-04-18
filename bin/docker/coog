@@ -129,7 +129,7 @@ set_session() {
 
 set_sentry() {
         local ret
-        COOG_SENTRY_HOST=`./ip $sentry`
+        [ ! -z $sentry ] && COOG_SENTRY_HOST=`./ip $sentry`
         [ ! -z $COOG_SENTRY_PROTOCOL ] && ret="$ret -e COOG_SENTRY_PROTOCOL=$COOG_SENTRY_PROTOCOL"
         [ ! -z $COOG_SENTRY_HOST ] && ret="$ret -e COOG_SENTRY_HOST=$COOG_SENTRY_HOST"
         [ ! -z $COOG_SENTRY_PORT ] && ret="$ret -e COOG_SENTRY_PORT=$COOG_SENTRY_PORT"

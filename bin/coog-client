@@ -49,7 +49,7 @@ coog_client_interact() { # interact client - [args] passed to tryton
 }
 
 coog_client_debug() { # start client in pdb - [args] passed to tryton
-        python -m pdb "$COOG_TRYTON/bin/tryton" -c $COOG_CONF_CLI $*
+        python2 -m pdb "$COOG_TRYTON/bin/tryton" -c $COOG_CONF_CLI $*
 }
 
 coog_client_stop() { # stop client (gracefully)
@@ -111,7 +111,18 @@ coog_client_tail() { # tail client logs
         tail $* $out_file
 }
 
-coog_client_mo() { # generates mo file in client (language in param)
+coog_client_po() { # update client po file from source code [lang]
+        [ -z $1 ] && echo needs language to update - example: fr_FR && return
+        local wd
+        wd=`pwd`
+        cd $COOG_TRYTON
+        python2 ./setup.py extract_messages --no-location --omit-header &&
+                python2 ./setup.py update_catalog --ignore-obsolete=true -l $1
+        find -name "*.pot" -delete
+        cd $wd
+}
+
+coog_client_mo() { # generates mo file in client [lang]
         [ -z $1 ] && echo needs language to generate - example: fr_FR && return
         local wd
         wd=`pwd`
