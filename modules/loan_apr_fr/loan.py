@@ -1,3 +1,4 @@
+from collections import defaultdict
 from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
@@ -50,37 +51,47 @@ class Loan:
         # TODO : Use increments to properly populate the list
         capitals = [(0, self.amount)]
 
-        payment_dict, payments = {}, []
+        payment_dict = defaultdict(lambda: {
+                'nb_years': None, 'payment_amount': 0, 'insurance_amount': 0})
         for premium_data in premiums['per_period']:
             if premium_data['loan'] != self.id and not fee_ratios.get(
                     premium_data['fee'], 0):
                 continue
-            if premium_data['period_start'] not in payment_dict:
-                cur_payment = {
-                    'nb_years': coop_date.number_of_years_between(
-                        self.funds_release_date, premium_data['period_start'],
-                        prorata_method=coop_date.prorata_365),
-                    'payment_amount': 0,
-                    'insurance_amount': 0,
-                    }
-                payments.append(cur_payment)
-                payment_dict[premium_data['period_start']] = cur_payment
-            else:
-                cur_payment = payment_dict[premium_data['period_start']]
+            cur_payment = payment_dict[premium_data['period_start']]
+            if cur_payment['nb_years'] is None:
+                cur_payment['nb_years'] = coop_date.number_of_years_between(
+                    self.funds_release_date, premium_data['period_start'],
+                    prorata_method=coop_date.prorata_365)
             if premium_data['loan']:
-                cur_payment['payment_amount'] += premium_data['payment_amount']
                 cur_payment['insurance_amount'] += premium_data['amount']
                 cur_payment['insurance_amount'] += premium_data['tax']
             else:
                 cur_payment['insurance_amount'] += (premium_data['amount'] +
                     premium_data['tax']) * fee_ratios[premium_data['fee']]
 
+        for payment in self.payments:
+            if not payment.amount:
+                continue
+            cur_payment = payment_dict[payment['start_date']]
+            if cur_payment['nb_years'] is None:
+                cur_payment['nb_years'] = coop_date.number_of_years_between(
+                    self.funds_release_date, payment['start_date'],
+                    prorata_method=coop_date.prorata_365)
+            cur_payment['payment_amount'] += payment.amount
+
+        payments = [payment_dict[x] for x in sorted(payment_dict.keys())]
         payments[0]['payment_amount'] += self.bank_fees
+
+        return self.calculate_taea(capitals, payments)
+
+    def calculate_taea(self, capitals, payments):
         base_apr = self._calculate_annual_percentage_rate(capitals, [
-                [x['nb_years'], x['payment_amount']] for x in payments])
+                [x['nb_years'], x['payment_amount']] for x in payments
+                if x['payment_amount']])
         insurance_apr = self._calculate_annual_percentage_rate(capitals, [
                 [x['nb_years'], x['payment_amount'] + x['insurance_amount']]
-                for x in payments])
+                for x in payments
+                if x['payment_amount'] or x['insurance_amount']])
         return insurance_apr - base_apr
 
     @classmethod

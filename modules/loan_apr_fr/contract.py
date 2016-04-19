@@ -39,7 +39,6 @@ class Contract:
 
         premium_amount = pool.get('contract.premium.amount').__table__()
         premium = pool.get('contract.premium').__table__()
-        payment = pool.get('loan.payment').__table__()
 
         premium_query = premium_amount.join(premium, condition=(
                 premium_amount.premium == premium.id)
@@ -51,17 +50,9 @@ class Contract:
                 group_by=[premium.loan, premium.fee,
                     premium_amount.period_start, premium_amount.period_end])
 
-        full_query = premium_query.join(payment, type_='LEFT OUTER',
-            condition=((payment.loan == premium_query.loan)
-                & (payment.start_date >= premium_query.period_start)
-                & (payment.start_date <= premium_query.period_end))
-            )
-
-        cursor.execute(*full_query.select(premium_query.loan,
+        cursor.execute(*premium_query.select(premium_query.loan,
                 premium_query.fee, premium_query.period_start,
                 premium_query.amount, premium_query.tax,
-                Sum(Coalesce(payment.amount,
-                        Literal(0))).as_('payment_amount'),
                 group_by=[premium_query.loan, premium_query.fee,
                     premium_query.period_start, premium_query.amount,
                     premium_query.tax],
