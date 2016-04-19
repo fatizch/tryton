@@ -19,6 +19,15 @@ _coog_redis_uri() { # guess redis uri - <context>
         >&2 echo 'no redis config for '$1 && return 1
 }
 
+coog_redis_exec() { # execute redis command -- <context> <command> [args]
+        [ $# -lt 2 ] && echo missing args && return 1
+        local context; context=$1; shift
+        local com; com=$1; shift
+        local uri; uri=`_coog_redis_uri $context` || return $?
+        local args; args=`_coog_redis_params $uri` || return $?
+        redis-cli --raw $args $com $*
+}
+
 coog_redis_eval() { # eval redis script - <context> <script> [args]
         [ $# -lt 2 ] && echo missing args && return 1
         local context; context=$1; shift

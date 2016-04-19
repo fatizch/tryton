@@ -24,6 +24,12 @@ _coog_server_bak() { # backup log file (mv to pid if exists or rm)
         mv $out_file $bak_file
 }
 
+_coog_server_cleancache() {
+        local ret
+        ret=`coog_redis_exec cache flushdb`
+        [ $? -eq 0 ] && echo redis cache cleaned
+}
+
 coog_server_start() { # start server - [args] passed to trytond, logconf NOT set when args
         local pid_file
         pid_file=`_coog_server_file pid`
@@ -40,6 +46,7 @@ coog_server_start() { # start server - [args] passed to trytond, logconf NOT set
                 args="$args $*"
         fi
         [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
+        _coog_server_cleancache
         nohup trytond -c $COOG_CONF_SRV --pidfile $pid_file $args > $out_file &
         echo server started
 }
@@ -48,6 +55,7 @@ coog_server_interact() { # interact server - [args] passed to trytond
         local args
         args=$*
         [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
+        _coog_server_cleancache
         trytond -c $COOG_CONF_SRV $args
 }
 
@@ -55,6 +63,7 @@ coog_server_debug() { # start server in pdb - [args] passed to trytond
         local args
         args=$*
         [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
+        _coog_server_cleancache
         python2 -m pdb "$COOG_TRYTOND/bin/trytond" -c $COOG_CONF_SRV $args
 }
 
