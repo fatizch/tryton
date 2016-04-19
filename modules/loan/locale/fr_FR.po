@@ -261,7 +261,7 @@ msgstr "Avertissement"
 
 msgctxt "field:loan,duration:"
 msgid "Duration"
-msgstr "Durée"
+msgstr "Durée totale"
 
 msgctxt "field:loan,duration_unit:"
 msgid "Unit"

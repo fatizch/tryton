@@ -57,7 +57,7 @@ msgstr ""
 
 msgctxt "error:contract:"
 msgid "Cannot reactivate a not yet terminated contract"
-msgstr "Réactivation impossible car le contrat n'est pas encore terminé"
+msgstr "Réactivation impossible car le contrat n'est pas encore résilié"
 
 msgctxt "error:contract:"
 msgid "Cannot reactivate contract, end reached"
@@ -267,7 +267,7 @@ msgstr "Type de souscripteur"
 
 msgctxt "field:contract,termination_reason:"
 msgid "Termination Reason"
-msgstr "Motif de terminaison"
+msgstr "Motif de résiliation"
 
 msgctxt "field:contract,write_date:"
 msgid "Write Date"
@@ -331,7 +331,7 @@ msgstr "Date d'Effet"
 
 msgctxt "field:contract.activation_history,termination_reason:"
 msgid "Termination Reason"
-msgstr "Motif de terminaison"
+msgstr "Motif de résiliation"
 
 msgctxt "field:contract.activation_history,write_date:"
 msgid "Write Date"
@@ -471,7 +471,7 @@ msgstr "ID"
 
 msgctxt "field:contract.end.select_date,termination_reason:"
 msgid "Termination Reason"
-msgstr "Motif de terminaison"
+msgstr "Motif de résiliation"
 
 msgctxt "field:contract.extra_data,contract:"
 msgid "Contract"
@@ -739,11 +739,11 @@ msgstr "Date de fin précédente"
 
 msgctxt "field:contract.reactivate.check_contracts,termination_reason:"
 msgid "Termination Reason"
-msgstr "Motif de terminaison"
+msgstr "Motif de résiliation"
 
 msgctxt "field:contract.reactivate.check_contracts,will_be_terminated:"
 msgid "Will be terminated"
-msgstr "Sera terminé"
+msgstr "Sera résilié"
 
 msgctxt "field:contract.select_start_date,contract:"
 msgid "Contract"
@@ -823,7 +823,7 @@ msgstr "A cette date"
 
 msgctxt "field:contract.stop.select_contracts,contracts:"
 msgid "Contracts to stop"
-msgstr "Contrats à terminer"
+msgstr "Contrats à résilier"
 
 msgctxt "field:contract.stop.select_contracts,id:"
 msgid "ID"
@@ -1094,7 +1094,7 @@ msgstr "Service délivré"
 
 msgctxt "model:contract.stop.select_contracts,name:"
 msgid "Select Contract to stop"
-msgstr "Sélectionner le contrat à terminer"
+msgstr "Sélectionner le contrat à résilier"
 
 msgctxt "model:contract.sub_status,name:"
 msgid "Contract SubStatus"
@@ -1114,11 +1114,11 @@ msgstr "Terme atteint"
 
 msgctxt "model:contract.sub_status,name:sub_status_terminated"
 msgid "Terminated"
-msgstr "Terminé"
+msgstr "Résilié"
 
 msgctxt "model:contract.termination.process,name:"
 msgid "Contract end date termination batch"
-msgstr "Batch de terminaison de contrat"
+msgstr "Batch de résiliation de contrat"
 
 msgctxt "model:contract.wizard.option_subscription.options_displayer,name:"
 msgid "Select Covered Element"
@@ -1195,7 +1195,7 @@ msgstr "Décliner"
 
 msgctxt "model:ir.action,name:act_end"
 msgid "End Contract"
-msgstr "Terminer Contrat"
+msgstr "Résilier Contrat"
 
 msgctxt "model:ir.action,name:act_event_log_relate_form"
 msgid "Event Logs"
@@ -1219,7 +1219,7 @@ msgstr "Pièces jointes liées"
 
 msgctxt "model:ir.action,name:act_stop"
 msgid "Stop Contract"
-msgstr "Terminer contrat"
+msgstr "Résilier contrat"
 
 msgctxt "model:ir.action,name:act_sub_status_form"
 msgid "Sub-status"
@@ -1252,7 +1252,7 @@ msgstr "Mon historique"
 msgctxt ""
 "model:ir.action.act_window.domain,name:act_contract_domain_terminated"
 msgid "Terminated"
-msgstr "Terminé"
+msgstr "Résilié"
 
 msgctxt "model:ir.action.act_window.domain,name:act_quote_domain_all"
 msgid "Quote"
@@ -1336,7 +1336,7 @@ msgstr "Devis"
 
 msgctxt "selection:contract,status:"
 msgid "Terminated"
-msgstr "Terminé"
+msgstr "Résilié"
 
 msgctxt "selection:contract,status:"
 msgid "Void"
@@ -1372,7 +1372,7 @@ msgstr "Refusé"
 
 msgctxt "selection:contract.option,status:"
 msgid "Terminated"
-msgstr "Terminé"
+msgstr "Résiliée"
 
 msgctxt "selection:contract.option,status:"
 msgid "Void"
@@ -1396,7 +1396,7 @@ msgstr "Non Eligible"
 
 msgctxt "selection:contract.stop.select_contracts,status:"
 msgid "Terminated"
-msgstr "Terminé"
+msgstr "Résilié"
 
 msgctxt "selection:contract.stop.select_contracts,status:"
 msgid "Void"
@@ -1420,7 +1420,7 @@ msgstr "Devis"
 
 msgctxt "selection:contract.sub_status,status:"
 msgid "Terminated"
-msgstr "Terminé"
+msgstr "Résilié"
 
 msgctxt "selection:contract.sub_status,status:"
 msgid "Void"

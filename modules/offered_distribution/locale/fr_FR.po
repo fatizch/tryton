@@ -146,10 +146,6 @@ msgctxt "field:offered.product,com_products:"
 msgid "Commercial Products"
 msgstr "Produits Commerciaux"
 
-msgctxt "field:offered.product,report_style_template:"
-msgid "Report Style"
-msgstr ""
-
 msgctxt "model:distribution.commercial_product,name:"
 msgid "Commercial Product"
 msgstr "Produit commercial"

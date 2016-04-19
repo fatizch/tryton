@@ -298,7 +298,7 @@ msgstr "Date de Fin"
 
 msgctxt "field:offered.option.description,ending_rule:"
 msgid "Ending Rule"
-msgstr "Règle de terminaison"
+msgstr "Règle de résiliation"
 
 msgctxt "field:offered.option.description,extra_data:"
 msgid "Offered Kind"
@@ -707,6 +707,10 @@ msgstr "Formules"
 msgctxt "field:offered.product,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:offered.product,report_style_template:"
+msgid "Report Style"
+msgstr "Style du rapport"
 
 msgctxt "field:offered.product,report_templates:"
 msgid "Report Templates"
@@ -1194,7 +1198,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:rule_engine,type_:"
 msgid "Ending"
-msgstr "Terminaison"
+msgstr "Résiliation"
 
 msgctxt "view:extra_data-sub_extra_data:"
 msgid "Relation"

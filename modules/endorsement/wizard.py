@@ -663,6 +663,9 @@ class ManageOptions(EndorsementWizardStepMixin):
         cls._buttons.update({'add_option': {
                     'readonly': ~Eval('new_coverage'),
                     'invisible': ~Eval('new_coverage')}})
+        cls._error_messages.update({
+                'new_option': 'New Option (%s)',
+                })
 
     @classmethod
     def view_attributes(cls):
@@ -972,8 +975,8 @@ class ManageOptions(EndorsementWizardStepMixin):
         new_option.parent_rec_name = self.get_parent_name(self._parent)
         new_option.start_date = self.effective_date
         new_option.effective_date = self.effective_date
-        new_option.display_name = 'New Option (%s)' % (
-            self.new_coverage.rec_name)
+        new_option.display_name = self.raise_user_error('new_option', (
+                self.new_coverage.rec_name,), raise_exception=False)
         new_option.end_date = None
         new_option.sub_status = None
         new_option.extra_data = self.get_default_extra_data(self.new_coverage)
@@ -1024,6 +1027,13 @@ class OptionDisplayer(model.CoopView):
         domain=[If(In(Eval('action'), ['terminated', 'void']),
                 [('status', '=', Eval('action'))],
                 [])], depends=['action'])
+
+    @classmethod
+    def __setup__(cls):
+        super(OptionDisplayer, cls).__setup__()
+        cls._error_messages.update({
+                'new_option': 'New Option (%s)',
+                })
 
     @property
     def _parent(self):
@@ -1088,8 +1098,8 @@ class OptionDisplayer(model.CoopView):
             displayer.cur_option_id = option.id
             displayer.display_name = option.rec_name
         else:
-            displayer.display_name = 'New Option (%s)' % (
-                option.coverage.rec_name)
+            displayer.display_name = cls.raise_user_error('new_option', (
+                    option.coverage.rec_name,), raise_exception=False)
         if getattr(option, 'versions', None) is None:
             option.versions = [Pool().get(
                     'contract.option.version').get_default_version()]

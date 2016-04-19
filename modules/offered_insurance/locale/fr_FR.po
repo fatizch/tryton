@@ -1162,7 +1162,7 @@ msgstr "Relation Processus Produit"
 
 msgctxt "model:rule_engine,name:option_end_date_rule"
 msgid "Option End Date Rule"
-msgstr "Règle de terminaison d'une garantie"
+msgstr "Règle de résiliation d'une garantie"
 
 msgctxt "model:rule_engine-extra_data,name:"
 msgid "Rule Engine - Extra Data"

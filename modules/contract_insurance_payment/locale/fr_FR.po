@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:account.payment,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
 msgctxt "field:account.payment.journal,failure_billing_mode:"
 msgid "Failure Billing Mode"
 msgstr "Mode de quittancement en cas d'échec"

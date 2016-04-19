@@ -127,7 +127,7 @@ msgstr "Souscripteur"
 
 msgctxt "field:contract,termination_reason:"
 msgid "Termination Reason"
-msgstr "Motif de terminaison"
+msgstr "Motif de résiliation"
 
 msgctxt "field:contract,write_date:"
 msgid "Write Date"
@@ -840,7 +840,7 @@ msgstr "Exclusion"
 
 msgctxt "model:contract.manage_extra_premium.select,name:"
 msgid "Extra Premium Display"
-msgstr "Surprime"
+msgstr "Surprime / Réduction"
 
 msgctxt "model:contract.manage_extra_premium.select.extra,name:"
 msgid "Extra Premium"
@@ -912,7 +912,7 @@ msgstr "Devis"
 
 msgctxt "selection:contract,status:"
 msgid "Terminated"
-msgstr "Terminé"
+msgstr "Résilié"
 
 msgctxt "selection:contract.manage_extra_premium.select,kind:"
 msgid "Contract"
@@ -944,7 +944,7 @@ msgstr "Refusé"
 
 msgctxt "selection:contract.option,status:"
 msgid "Terminated"
-msgstr "Terminé"
+msgstr "Résiliée"
 
 msgctxt "selection:contract.option.extra_premium,duration_unit:"
 msgid "Month"

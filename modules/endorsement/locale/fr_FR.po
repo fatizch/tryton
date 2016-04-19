@@ -30,6 +30,14 @@ msgctxt "error:contract:"
 msgid "Select a date that is not in the future for field(s): %s"
 msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
 
+msgctxt "error:contract.manage_options:"
+msgid "New Option (%s)"
+msgstr "Nouvelle garantie (%s)"
+
+msgctxt "error:contract.manage_options.option_displayer:"
+msgid "New Option (%s)"
+msgstr "Nouvelle garantie (%s)"
+
 msgctxt "error:endorsement.contract.activation_history:"
 msgid "New version"
 msgstr "Nouvelle version"
@@ -1375,7 +1383,7 @@ msgstr "Date de résiliation"
 
 msgctxt "field:endorsement.contract.terminate,termination_reason:"
 msgid "Termination Reason"
-msgstr "Motif de terminaison"
+msgstr "Motif de résiliation"
 
 msgctxt "field:endorsement.contract.void,contract:"
 msgid "Contract"
@@ -1969,7 +1977,7 @@ msgstr "Changement de souscripteur"
 
 msgctxt "model:endorsement.contract.terminate,name:"
 msgid "Terminate Contract"
-msgstr "Terminer le contrat"
+msgstr "Résilier le contrat"
 
 msgctxt "model:endorsement.contract.void,name:"
 msgid "Void Contract"
@@ -1993,7 +2001,7 @@ msgstr "Recalculer le contrat"
 
 msgctxt "model:endorsement.definition,name:stop_contract_definition"
 msgid "Stop Contract"
-msgstr "Terminer contrat"
+msgstr "Résilier contrat"
 
 msgctxt "model:endorsement.definition,name:void_contract_definition"
 msgid "void Contract"
@@ -2049,7 +2057,7 @@ msgstr "Recalculer le contrat"
 
 msgctxt "model:endorsement.part,name:stop_contract_revision_part"
 msgid "Stop Contract"
-msgstr "Terminer contrat"
+msgstr "Résilier contrat"
 
 msgctxt "model:endorsement.part,name:void_contract_revision_part"
 msgid "void Contract"
@@ -2423,7 +2431,7 @@ msgstr "Changement de souscripteur"
 
 msgctxt "view:endorsement.contract.terminate:"
 msgid "Terminate Contract"
-msgstr "Terminer le contrat"
+msgstr "Résilier le contrat"
 
 msgctxt "view:endorsement.contract.void:"
 msgid "Void Contract"
