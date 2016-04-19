@@ -5,6 +5,7 @@ COOG_ROOT=/opt/coog
 COOG_TRYTOND=$COOG_ROOT/trytond
 COOG_BIN=$COOG_ROOT/coog/bin
 COOG_CONF=$COOG_ROOT/coog.conf
+COOG_BATCH_CONF=$COOG_ROOT/batch.conf
 COOG_DATA=$COOG_ROOT/data
 
 ###########
@@ -169,6 +170,14 @@ conf() {
         local override
         override=$COOG_DATA/coog.conf
         [ -f $override ] && cat $override >> $COOG_CONF
+        local batch_conf
+        batch_conf=$COOG_DATA/batch.conf
+        if [ -f $batch_conf ]
+        then
+                cp $COOG_DATA/batch.conf $COOG_BATCH_CONF
+        else
+                touch $COOG_BATCH_CONF
+        fi
         return 0
 }
 
@@ -201,7 +210,10 @@ print_env() {
 
 print_conf() {
         conf || return $?
+        echo '# COOG_CONF'
         cat $COOG_CONF
+        echo '# COOG_BATCH_CONF'
+        cat $COOG_BATCH_CONF
 }
 
 app() {
@@ -324,6 +336,7 @@ batch() {
         echo Starting batch
         export PYTHONPATH="$COOG_BIN/lib:$COOG_TRYTOND:$PYTHONPATH"
         export TRYTOND_CONFIG="$COOG_CONF"
+        export TRYTOND_BATCH_CONFIG="$COOG_BATCH_CONF"
         export DB_NAME=$COOG_DB_NAME
         export LOG_LEVEL=WARNING
         [ -z $1 ] && echo missing batch name && return 1
