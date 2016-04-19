@@ -76,6 +76,8 @@ class Move:
 
     @classmethod
     def group_moves_for_snapshots(cls, moves):
+        if Transaction().context.get('disable_auto_aggregate', False):
+            return []
         move_groups = []
         for move_group in super(Move, cls).group_moves_for_snapshots(moves):
             if len(move_group) == 1:

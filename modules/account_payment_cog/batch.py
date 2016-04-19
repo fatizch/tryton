@@ -1,9 +1,9 @@
 import logging
 from itertools import groupby
 
+from sql import Null, Literal
 from sql.operators import Equal
 from sql.aggregate import Count
-from sql import Null
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -133,7 +133,7 @@ class PaymentCreationBatch(batch.BatchRoot):
             (move_line.account == account.id)
             & ((account.kind == 'receivable') |
                 ((account.kind == 'payable') &
-                    (party.block_payable_payments == False)))
+                    (party.block_payable_payments == Literal(False))))
             & (move_line.reconciliation == Null)
             & (move_line.payment_date <= treatment_date))
         if payment_kind == 'receivable':
@@ -216,6 +216,7 @@ class PaymentAcknowledgeBatch(batch.BatchRoot):
     def execute(cls, objects, ids, treatment_date, extra_args):
         pool = Pool()
         Payment = pool.get('account.payment')
-        Payment.succeed(objects)
+        with Transaction().set_context(disable_auto_aggregate=True):
+            Payment.succeed(objects)
         cls.logger.info('%s succeed' %
             coop_string.get_print_infos([x.id for x in objects], 'payment'))
