@@ -131,10 +131,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         return ''
 
     @staticmethod
-    def default_default_value_selection():
-        return ''
-
-    @staticmethod
     def default_sub_data_config_kind():
         return 'simple'
 
