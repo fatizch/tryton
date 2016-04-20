@@ -321,7 +321,11 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                     instance.__class__)
                 vals = []
                 for k, v in getattr(instance, var_name).iteritems():
-                    vals.append((trans_keys[k], trans_vals[k]))
+                    if type(v) == bool:
+                        vals.append((trans_keys[k], coop_string.translate_bool(
+                                    v, lang)))
+                    else:
+                        vals.append((trans_keys[k], trans_vals[k]))
                     cls._translation_cache.set((k, v), vals[-1])
                 break
             res[instance.id] = '\n'.join(('%s : %s' % (x, y) for x, y in vals))
