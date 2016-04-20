@@ -1,4 +1,5 @@
 import os
+import re
 import datetime
 from itertools import groupby
 from collections import namedtuple
@@ -25,6 +26,7 @@ __all__ = [
     'PaymentCreation',
     ]
 
+PARTY_PLACEHOLDER = re.compile(r'{party_(\w*)}')
 
 loader = genshi.template.TemplateLoader(
     os.path.join(os.path.dirname(__file__), 'template'),
@@ -46,6 +48,11 @@ class Mandate(export.ExportImportMixin):
     def __setup__(cls):
         super(Mandate, cls).__setup__()
         cls.identification.select = True
+        cls._error_messages.update({
+                'bad_place_holders': 'Bad placeholders in SEPA Sequence. '
+                "The following fields do not exist on Party model:\n\t%s\n"
+                "Please check the sequence's prefix and suffix."
+                })
 
     def get_rec_name(self, name):
         if self.identification is None or self.party is None:
@@ -82,6 +89,43 @@ class Mandate(export.ExportImportMixin):
         if party:
             domain.append(('party', '=', party))
         return Payment.search(domain)
+
+    @classmethod
+    def create(cls, vlist):
+        pool = Pool()
+        Configuration = pool.get('account.configuration')
+        config = Configuration(1)
+        sepa_sequence = config.sepa_mandate_sequence
+        if sepa_sequence:
+            cls.complete_identification_on_create(sepa_sequence, vlist)
+        return super(Mandate, cls).create(vlist)
+
+    @classmethod
+    def complete_identification_on_create(cls, sepa_sequence, vlist):
+        pool = Pool()
+        Party = pool.get('party.party')
+        Sequence = pool.get('ir.sequence')
+        suffix_and_prefix = sepa_sequence.prefix or '' \
+            + sepa_sequence.suffix or ''
+        matches = PARTY_PLACEHOLDER.findall(suffix_and_prefix)
+        if not matches:
+            return
+        bad_names = [name for name in matches if name not in Party._fields]
+        if bad_names:
+            cls.raise_user_error('bad_place_holders', ', '.join(bad_names))
+        to_update = []
+        for vals in vlist:
+            identification = vals.get('identification', None)
+            party = vals.get('party', None)
+            if not identification and party:
+                to_update.append((party, vals))
+        for party, vals in zip(Party.browse([x[0] for x in to_update]),
+                [x[1] for x in to_update]):
+            identification = Sequence.get_id(sepa_sequence.id)
+            for name in matches:
+                identification = identification.replace(
+                    '{party_%s}' % name, str(getattr(party, name)))
+            vals['identification'] = identification
 
 
 class Group:
