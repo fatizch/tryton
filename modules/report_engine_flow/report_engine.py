@@ -111,12 +111,17 @@ class FlowVariable(model.CoopSQL, model.CoopView):
                 '{%%choose%%}{%%when %s%%}'% this.if_statement,
                 '{%%end%%}{%%otherwise%%}%s{%%end%%}%s{%%end%%}'
                 % (this.get_else_generated_code(this), separator)),
-            'data': lambda this, separator: ('${%s}%s' % (
-                this.data, separator), ''),
+            'data': lambda this, separator: ('${%s if (%s) else %s}%s' % (
+                this.data, this.data, cls.default_not_data(this), separator),
+                ''),
             'free': lambda this, separator: (this.data + separator, ''),
             'function': lambda this, separator: ('${%s}%s' % (
                 this.data, separator), ''),
             }
+
+    @classmethod
+    def default_not_data(cls, node):
+        return '""'
 
     @classmethod
     def default_separator(cls):
@@ -228,14 +233,11 @@ class ReportGenerate:
             immediate_conversion)
 
     @classmethod
-    def _get_data_ctx(cls, ids, data):
-        ctx = {
-            'records': cls._get_records(ids, data['model'], data)
-            }
-        ctx.update({x[0]: getattr(func_library, 'eval_%s' % x[0])
+    def get_context(cls, records, data):
+        report_context = super(ReportGenerate, cls).get_context(records, data)
+        report_context.update({x[0]: getattr(func_library, 'eval_%s' % x[0])
                 for x in func_library.EVAL_METHODS})
-        ctx.update(data)
-        return ctx
+        return report_context
 
     @classmethod
     def process_default(cls, ids, data):
@@ -243,9 +245,10 @@ class ReportGenerate:
         timestamp = datetime.datetime.fromtimestamp(time.time()
             ).strftime('%Y%m%d%H%f')
         selected_template = data['doc_template'][0]
+        records = cls._get_records(ids, data['model'], data)
         template_content = selected_template.generated_code
         tmpl = NewTextTemplate(template_content)
-        result = tmpl.generate(**cls._get_data_ctx(ids, data)).render()
+        result = tmpl.generate(**cls.get_context(records, data)).render()
         return 'txt', bytearray(result), False, 'COOG_%s' % timestamp
 
 
