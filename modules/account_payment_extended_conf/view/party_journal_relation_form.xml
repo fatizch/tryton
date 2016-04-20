@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Party Journal Relation">
+    <label name="party"/>
+    <field name="party"/>
+    <label name="journal"/>
+    <field name="journal"/>
+</form>
