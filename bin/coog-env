@@ -162,6 +162,46 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    TRYTOND_BATCH_CONFIG   "$TRYTOND_BATCH_CONFIG
 }
 
+coog_env_conf() { # print conf file <client|server|batch|test|log>
+        [ -z $1 ] && echo missing requested conf && return 1
+        if [ $1 = client ]
+        then
+                echo '# '"conf file: $COOG_CONF_CLI"
+                echo
+                cat $COOG_CONF_CLI
+                return
+        fi
+        if [ $1 = server ]
+        then
+                echo '# '"conf file: $COOG_CONF_SRV"
+                echo
+                cat $COOG_CONF_SRV
+                return
+        fi
+        if [ $1 = batch ]
+        then
+                echo '# '"conf file: $COOG_CONF_BAT"
+                echo
+                cat $COOG_CONF_BAT
+                return
+        fi
+        if [ $1 = test ]
+        then
+                echo '# '"conf file: $COOG_CONF_TEST"
+                echo
+                cat $COOG_CONF_TEST
+                return
+        fi
+        if [ $1 = log ]
+        then
+                echo '# '"conf file: $COOG_CONF_LOG"
+                echo
+                cat $COOG_CONF_LOG
+                return
+        fi
+        echo unknown conf: $1 && return 1
+}
+
 coog_env_run() { # launches python in coog context
         $*
 }
