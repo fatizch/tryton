@@ -2,6 +2,7 @@
 <tree string="Options">
     <field name="parent_name" expand="1"/>
     <field name="display_name" expand="1"/>
+    <field name="beneficiary_clause" expand="1"/>
     <field name="contract" tree_invisible="1"/>
     <field name="parent" tree_invisible="1"/>
     <field name="option_id" tree_invisible="1"/>

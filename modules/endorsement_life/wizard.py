@@ -126,11 +126,18 @@ class ManageBeneficiaries(EndorsementWizardStepMixin):
             for x in covered.options}
         for option in options:
             patched_option = per_key[option.parent]
-            if option.option_id:
-                old_beneficiaries = {x.id: x
-                    for x in Option(option.option_id).beneficiaries}
-            else:
-                old_beneficiaries = {}
+            old_option = Option(option.option_id) if option.option_id else None
+
+            if (getattr(old_option, 'beneficiary_clause', None) !=
+                    option.beneficiary_clause):
+                patched_option.beneficiary_clause = option.beneficiary_clause
+            if (getattr(old_option, 'customized_beneficiary_clause', None) !=
+                    option.customized_beneficiary_clause):
+                patched_option.customized_beneficiary_clause = \
+                    option.customized_beneficiary_clause
+
+            old_beneficiaries = {x.id: x
+                for x in getattr(old_option, 'beneficiaries', [])}
             beneficiaries = []
             for displayer in option.beneficiaries:
                 if displayer.action in ('nothing', 'modified'):
@@ -164,6 +171,9 @@ class ManageBeneficiaries(EndorsementWizardStepMixin):
         Option = pool.get('contract.manage_beneficiaries.option')
         all_options = []
         for option in options:
+            if (not option.coverage.beneficiaries_clauses and
+                    not option.beneficiaries):
+                continue
             displayer = Option.new_displayer(option)
             displayer.contract = contract_endorsement.id
             all_options.append(displayer)
@@ -180,8 +190,27 @@ class ManageBeneficiariesOptionDisplayer(model.CoopView):
     contract = fields.Integer('Contract', readonly=True)
     option_id = fields.Integer('Option', readonly=True)
     display_name = fields.Char('Option', readonly=True)
+    coverage = fields.Many2One('offered.option.description', 'Coverage',
+        readonly=True)
+    beneficiary_clause = fields.Many2One('clause', 'Beneficiary Clause',
+        states={'required': ~Eval('customized_beneficiary_clause')},
+        domain=[('coverages', '=', Eval('coverage'))],
+        depends=['coverage', 'customized_beneficiary_clause'])
+    customized_beneficiary_clause = fields.Text(
+        'Customized Beneficiary Clause',
+        states={
+            'required': ~Eval('beneficiary_clause'),
+            }, depends=['beneficiary_clause'],
+        )
     beneficiaries = fields.One2Many(
         'contract.manage_beneficiaries.beneficiary', None, 'Beneficiaries')
+
+    @fields.depends('beneficiary_clause', 'customized_beneficiary_clause')
+    def on_change_with_customized_beneficiary_clause(self):
+        if (self.beneficiary_clause and
+                self.customized_beneficiary_clause == ''):
+            return self.beneficiary_clause.content
+        return self.customized_beneficiary_clause
 
     @classmethod
     def new_displayer(cls, option):
@@ -194,6 +223,11 @@ class ManageBeneficiariesOptionDisplayer(model.CoopView):
         displayer.parent = cls.get_parent_key(option)
         displayer.option_id = getattr(option, 'id', None)
         displayer.display_name = option.get_rec_name(None)
+        displayer.coverage = option.coverage
+        displayer.beneficiary_clause = getattr(option, 'beneficiary_clause',
+            None)
+        displayer.customized_beneficiary_clause = getattr(option,
+            'customized_beneficiary_clause', '')
 
         beneficiaries = []
         if displayer.option_id:

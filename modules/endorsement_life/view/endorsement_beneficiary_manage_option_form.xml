@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
-<form string="Option" cursor="beneficiaries">
-    <group id="beneficiaries" string="" colspan="4" col="1" yexpand="1" yfill="1">
+<form string="Option" cursor="beneficiaries" col="2">
+    <label name="coverage"/>
+    <field name="coverage"/>
+    <label name="beneficiary_clause"/>
+    <field name="beneficiary_clause"/>
+    <field name="customized_beneficiary_clause" colspan="2"/>
+    <group id="beneficiaries" string="" colspan="2" col="1" yexpand="1" yfill="1">
         <field name="beneficiaries" group="beneficiaries" mode="tree" yexpand="0"/>
         <field name="beneficiaries" group="beneficiaries" mode="form" expand_toolbar="0"/>
     </group>

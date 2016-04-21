@@ -86,9 +86,21 @@ msgctxt "field:contract.manage_beneficiaries.option,beneficiaries:"
 msgid "Beneficiaries"
 msgstr "Bénéficiaires"
 
+msgctxt "field:contract.manage_beneficiaries.option,beneficiary_clause:"
+msgid "Beneficiary Clause"
+msgstr "Clause bénéficiaire"
+
 msgctxt "field:contract.manage_beneficiaries.option,contract:"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "field:contract.manage_beneficiaries.option,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:contract.manage_beneficiaries.option,customized_beneficiary_clause:"
+msgid "Customized Beneficiary Clause"
+msgstr "Clause bénéficiaire spécifique"
 
 msgctxt "field:contract.manage_beneficiaries.option,display_name:"
 msgid "Option"
