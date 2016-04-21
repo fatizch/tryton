@@ -771,7 +771,7 @@ class Contract:
             cache[contract.id] = tree
         if tree is not None:
             return [contract.all_premiums[x.data]
-                for x in tree.search(start, end)]
+                for x in tree.search(start, coop_date.add_day(end, 1))]
 
     @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
