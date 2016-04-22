@@ -31,6 +31,7 @@ def register():
         module='debug', type_='wizard')
 
     Pool.register_post_init_hooks(set_method_names_for_profiling,
+        name_one2many_gets,
         module='debug')
 
 
@@ -77,3 +78,28 @@ setattr(klass, method_name, %s)'''
         for klass in pool._pool[pool.database_name].get(
                 'model', {}).values():
             change_method_name_for_profiling(klass, meth_name)
+
+
+def name_one2many_gets(pool):
+    from trytond.config import config
+    from trytond.model import ModelSQL
+    if config.get('debug', 'fields_get') != 'True':
+        return
+
+    logging.getLogger().warning(
+        'Patching fields getters for profiling, not recommanded for prod!')
+    for klass in pool._pool[pool.database_name].get(
+            'model', {}).values():
+        if not issubclass(klass, ModelSQL):
+            continue
+        for fname, field in klass._fields.items():
+            if not hasattr(field, 'get'):
+                continue
+            template = '''
+def %s(*args, **kwargs):
+    return field.__class__.get(field, *args, **kwargs)
+setattr(field, 'get', %s)'''
+            patched_name = '__field_getter__' + re.sub(
+                r'[^A-Za-z0-9]+', '_', klass.__name__) + '__' + fname
+            exec template % (patched_name, patched_name) in \
+                {'field': field}, {}
