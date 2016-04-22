@@ -71,7 +71,10 @@ setattr(klass, method_name, %s)'''
         exec template % (patched_name, method_name, patched_name) in \
             {'klass': klass, 'method_name': method_name}, {}
 
-    for meth_name in (config.get('debug', 'methods') or '').split(','):
+    meth_names = config.get('debug', 'methods')
+    if not meth_names:
+        return
+    for meth_name in meth_names.split(','):
         logging.getLogger().warning(
             'Patching %s for profiling, not recommanded for prod!'
             % meth_name)
