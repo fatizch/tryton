@@ -35,8 +35,9 @@ class PaymentTreatmentBatch:
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):
-        groups = super(PaymentTreatmentBatch, cls).execute(
-            objects, ids, treatment_date, extra_args)
+        Group = Pool().get('account.payment.group')
+        groups = Group.browse(super(PaymentTreatmentBatch, cls).execute(
+                objects, ids, treatment_date, extra_args))
         dirpath = extra_args.get('out', None) or cls.generate_filepath()
         for payments_group in groups:
             out_filepaths = payments_group.dump_sepa_messages(dirpath)
@@ -48,7 +49,7 @@ class PaymentTreatmentBatch:
                 cls.logger.warning('Only last ' + log_msg)
                 raise Exception("Multiple sepa messages with "
                     "'waiting' status for  %s" % payments_group)
-        return groups
+        return [group.id for group in groups]
 
 
 class PaymentFailBatch(batch.BatchRootNoSelect):

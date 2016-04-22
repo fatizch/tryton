@@ -90,7 +90,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
             Payment.process(grouped_payments, group_func)
         cls.logger.info('%s processed' %
             coop_string.get_print_infos(groups, 'payments group'))
-        return groups
+        return [group.id for group in groups]
 
 
 class PaymentCreationBatch(batch.BatchRoot):
