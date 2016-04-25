@@ -10,7 +10,7 @@ coog_module_main() { # list installed modules - <db> - default: db uri
         done
 }
 
-coog_module_update() { # install / update modules - <modules> - default: all
+coog_module_update() { # install / update modules - [modules] - default: all
         [ -z $DB_NAME ] && echo no database defined && return
         local modules
         if [ $# -eq 0 ]
@@ -54,10 +54,18 @@ coog_module_translate() { # generate module translations
         python2 $COOG_BIN/translate.py -c $COOG_CONF_SRV -p $COOG_TRYTOND/trytond/modules $args
 }
 
-coog_module_updatedb() { # install / update all modules - <database> - no default
+coog_module_updatedb() { # install / update database modules - <database> [modules] - default is all
         [ -z $1 ] && echo no given database && return
+        local db; db=$1; shift
+        local args
+        if [ -z $1 ]
+        then
+                args='--all'
+        else
+                args='-u '$*
+        fi
         trytond -v \
                 -c $COOG_CONF_SRV \
-                -d $1 \
-                --all
+                -d $db \
+                $args
 }
