@@ -376,6 +376,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return 'grey'
         return 'black'
 
+    @classmethod
+    def order_rec_name(cls, tables):
+        table, _ = tables[None]
+        return [Coalesce(table.contract_number, table.quote_number)]
+
     @staticmethod
     def order_last_modification(tables):
         table, _ = tables[None]
@@ -610,49 +615,80 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return values
 
     @classmethod
-    def getter_activation_history(cls, contracts, names):
-        cursor = Transaction().cursor
-        pool = Pool()
-        ActivationHistory = pool.get('contract.activation_history')
+    def add_activation_history_tables(cls, tables):
+        if 'activation_history' in tables:
+            return
+        table, _ = tables[None]
+        activation_history = tables.get('activation_history', None)
+        if activation_history is None:
+            activation_history = Pool().get(
+                'contract.activation_history').__table__()
+        where_clause = (activation_history.active == Literal(True))
+        query = cls.build_activation_history_query(activation_history,
+            where_clause)
+        tables['activation_history'] = {
+            None: (query, (
+                query.id == table.id))}
 
+    @classmethod
+    def order_start_date(cls, tables):
+        cls.add_activation_history_tables(tables)
+        return [tables['activation_history'][None][0].start_date]
+
+    @classmethod
+    def order_end_date(cls, tables):
+        cls.add_activation_history_tables(tables)
+        return [tables['activation_history'][None][0].end_date]
+
+    @classmethod
+    def build_activation_history_query(cls, activation_history,
+            where_clause=None):
         today = utils.today()
-        values = cls.activation_history_base_values(contracts)
-        if backend.name() == 'sqlite':
-            return cls.basic_periods_getter(contracts, names, values,
-                today)
-
-        activation_history = ActivationHistory.__table__()
         column_end = NullIf(Coalesce(activation_history.end_date,
                 datetime.date.max), datetime.date.max).as_('end_date')
         column_start = activation_history.start_date.as_('start_date')
         contract_window = Window([activation_history.contract])
 
         max_date = datetime.date.max
-        for contract_slice in grouped_slice(contracts):
-            win_query = activation_history.select(
-                activation_history.contract.as_('id'),
-                column_start, column_end, Min(activation_history.start_date,
-                    window=contract_window).as_('min_start'),
-                Max(activation_history.start_date,
-                    window=contract_window).as_('max_start'),
-                where=(activation_history.contract.in_(
-                    [x.id for x in contract_slice]) &
-                    (activation_history.active == Literal(True))))
-            query = win_query.select(win_query.id,
-                win_query.start_date,
-                win_query.end_date,
-                where=(
-                    # case 1: today is inside a period
-                    ((win_query.start_date <= today) &
-                        (Coalesce(win_query.end_date, max_date) >= today))
-                    # case 2: today is after last period
-                    | ((win_query.start_date <= today) &
-                        (win_query.start_date == win_query.max_start))
-                    # case 3: today is before first period
-                    | ((win_query.start_date > today) &
-                        (win_query.start_date == win_query.min_start))
-                    ))
+        win_query = activation_history.select(
+            activation_history.contract.as_('id'),
+            column_start, column_end, Min(activation_history.start_date,
+                window=contract_window).as_('min_start'),
+            Max(activation_history.start_date,
+                window=contract_window).as_('max_start'),
+            where=where_clause)
+        query = win_query.select(win_query.id,
+            win_query.start_date,
+            win_query.end_date,
+            where=(
+                # case 1: today is inside a period
+                ((win_query.start_date <= today) &
+                    (Coalesce(win_query.end_date, max_date) >= today))
+                # case 2: today is after last period
+                | ((win_query.start_date <= today) &
+                    (win_query.start_date == win_query.max_start))
+                # case 3: today is before first period
+                | ((win_query.start_date > today) &
+                    (win_query.start_date == win_query.min_start))
+                ))
+        return query
 
+    @classmethod
+    def getter_activation_history(cls, contracts, names):
+        ActivationHistory = Pool().get('contract.activation_history')
+        activation_history = ActivationHistory.__table__()
+        cursor = Transaction().cursor
+        values = cls.activation_history_base_values(contracts)
+        if backend.name() == 'sqlite':
+            return cls.basic_periods_getter(contracts, names, values,
+                today)
+
+        for contract_slice in grouped_slice(contracts):
+            where_clause = (activation_history.contract.in_(
+                    [x.id for x in contract_slice]) &
+                (activation_history.active == Literal(True)))
+            query = cls.build_activation_history_query(activation_history,
+                where_clause)
             cursor.execute(*query)
 
             for elem in cursor.dictfetchall():
