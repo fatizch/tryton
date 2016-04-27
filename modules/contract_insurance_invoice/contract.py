@@ -1571,7 +1571,7 @@ class ContractInvoice(model.CoopSQL, model.CoopView):
         super(ContractInvoice, cls).__setup__()
         cls._order.insert(0, ('start', 'DESC'))
         cls._buttons.update({
-                'reinvoice': {
+                'button_reinvoice': {
                     'invisible': Eval('invoice_state') == 'cancel',
                     },
                 'cancel': {
@@ -1628,7 +1628,6 @@ class ContractInvoice(model.CoopSQL, model.CoopView):
                     & (invoice.state != 'cancel')))
 
     @classmethod
-    @model.CoopView.button
     def reinvoice(cls, contract_invoices):
         pool = Pool()
         Invoice = pool.get('account.invoice')
@@ -1640,9 +1639,15 @@ class ContractInvoice(model.CoopSQL, model.CoopView):
         Invoice.cancel(invoices)
         periods = defaultdict(list)
         for contract_invoice in contract_invoices:
-            period = contract_invoice.start, contract_invoice.end
-            periods[period].append(contract_invoice.contract)
-        Contract.invoice_periods(periods)
+            for period in contract_invoice.contract.get_invoice_periods(
+                    contract_invoice.end, contract_invoice.start):
+                periods[period].append(contract_invoice.contract)
+        return Contract.invoice_periods(periods)
+
+    @classmethod
+    @model.CoopView.button
+    def button_reinvoice(cls, contract_invoices):
+        cls.reinvoice(contract_invoices)
 
     @classmethod
     @model.CoopView.button
