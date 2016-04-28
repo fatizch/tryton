@@ -202,6 +202,6 @@ coog_env_conf() { # print conf file <client|server|batch|test|log>
         echo unknown conf: $1 && return 1
 }
 
-coog_env_run() { # launches python in coog context
+coog_env_run() { # execute command in coog context
         $*
 }
