@@ -35,6 +35,8 @@ class ContractUnderwriting(model.CoopSQL, model.CoopView):
             'invisible': ~Eval('needs_subscriber_validation')
             },
         depends=['needs_subscriber_validation'])
+    subscriber_decision_translated = subscriber_decision.translated(
+        'subscriber_decision')
     decision_with_exclusion = fields.Function(
         fields.Boolean('Decision With Exclusion', states={'invisible': True}),
         'on_change_with_decision_with_exclusion')
@@ -55,6 +57,9 @@ class ContractUnderwriting(model.CoopSQL, model.CoopView):
         states={'invisible': ~Eval('decision_with_exclusion')},
         domain=[('kind', '=', 'contract_underwriting')],
         depends=['decision_with_exclusion'])
+    extra_data_summary = fields.Function(
+        fields.Text('Extra Data Summary'),
+        'get_extra_data_summary')
 
     @classmethod
     def __setup__(cls):
@@ -81,6 +86,11 @@ class ContractUnderwriting(model.CoopSQL, model.CoopView):
     @staticmethod
     def default_subscriber_decision():
         return 'pending'
+
+    @classmethod
+    def get_extra_data_summary(cls, extra_datas, name):
+        return Pool().get('extra_data').get_extra_data_summary(extra_datas,
+            'extra_data')
 
     @dualmethod
     def update_extra_data(cls, instances):
