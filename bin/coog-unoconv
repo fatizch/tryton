@@ -32,3 +32,15 @@ coog_unoconv_ps() { # print unoconv process info
         connection=`_coog_unoconv_connection` || return $?
         pgrep -a -f "$connection"
 }
+
+coog_unoconv_test() { # test a pdf conversion with unoconv
+        [ -z $1 ] && echo no input file && return 1
+        local connection
+        connection=`_coog_unoconv_connection` || return $?
+        local out_file
+        out_file="/tmp/pdf_"`date +%s%N`".pdf"
+        unoconv --no-launch -c $connection -f pdf -o $out_file $1
+        [ $? -ne 0 ] && echo test ko && return 1
+        echo generated file: $out_file
+        echo test ok
+}
