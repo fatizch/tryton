@@ -556,7 +556,7 @@ def CmdUpload(args):
 
     cl = Changelist()
     if args:
-        base_branch = args[0]
+        base_branch = args[-1]
     else:
         # Default to diffing against the "upstream" branch.
         base_branch = cl.GetUpstreamBranch()
@@ -571,7 +571,7 @@ def CmdUpload(args):
     env = os.environ.copy()
     if 'GIT_EXTERNAL_DIFF' in env: del env['GIT_EXTERNAL_DIFF']
     subprocess.call(['git', 'diff', '--no-ext-diff', '--stat', '-M'] + args,
-                    env=env)
+        env=env)
 
     upload_args = ['--assume_yes']  # Don't ask about untracked files.
     upload_args.extend(['--server', settings.GetServer()])
@@ -594,10 +594,10 @@ def CmdUpload(args):
         print ("This branch is associated with issue %s. "
                "Adding patch to that issue." % cl.GetIssue())
     if options.use_commit_message:
-        log_args = diff_to_log_options(args)
+        log_args = diff_to_log_options([args[-1]])
         desc = RunGit(['log', '--pretty=format:%s\n\n%b'] + log_args)
         upload_args.extend(['--title', desc.splitlines()[0]])
-    issue, patchset = upload.RealMain(['upload'] + upload_args + args)
+    issue, patchset = upload.RealMain(['upload'] + upload_args + [args[-1]])
     if not cl.GetIssue():
         cl.SetIssue(issue)
     cl.SetPatchset(patchset)
