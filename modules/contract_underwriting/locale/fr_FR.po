@@ -236,7 +236,7 @@ msgstr "Refusé"
 
 msgctxt "selection:extra_data,kind:"
 msgid "Contract Underwriting"
-msgstr "Anayse de risques - contract"
+msgstr "Analyse de risques - contrat"
 
 msgctxt "selection:extra_data,kind:"
 msgid "Option Underwriting"
