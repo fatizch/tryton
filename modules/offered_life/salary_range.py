@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
-from trytond.pool import Pool
 
-from trytond.modules.cog_utils.model import CoopSQL, utils, fields
+from trytond.modules.cog_utils.model import CoopSQL, fields
 from trytond.modules.cog_utils.model import VersionedObject, VersionObject
 
 __all__ = [
@@ -23,11 +22,6 @@ class SalaryRange(CoopSQL, VersionedObject):
     @classmethod
     def version_model(cls):
         return 'salary_range.version'
-
-    @staticmethod
-    def default_versions():
-        return utils.create_inst_with_default_val(
-            Pool().get('salary_range'), 'versions')
 
     def get_salary_range_value(self, value, at_date=None):
         version = self.get_version_at_date(at_date)

@@ -1,6 +1,7 @@
 import random
+import re
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.cog_utils import fields, coop_string
+from trytond.modules.cog_utils import fields
 
 
 MODULE_NAME = 'bank_cog'
@@ -18,6 +19,14 @@ class TestCaseModel:
 
     @classmethod
     def add_address(cls, line, bank):
+        def check_for_pattern(s, pattern):
+            if s is not None:
+                s = s.strip()
+                matchObj = re.match(pattern, s)
+                if matchObj:
+                    return matchObj.group()
+                return False
+
         Address = Pool().get('party.address')
         address = Address()
         address.name = line[11:49].strip()
@@ -26,8 +35,7 @@ class TestCaseModel:
         address.streetbis = line[152:184].strip().upper()
         address.zip = line[184:189].strip().upper()
         address.city = line[190:216].strip().upper()
-        country_code = coop_string.check_for_pattern(line[240:242],
-            r'^[A-Z]{2}')
+        country_code = check_for_pattern(line[240:242], r'^[A-Z]{2}')
         if country_code:
             address.country = cls.get_country_by_code(country_code)
         else:

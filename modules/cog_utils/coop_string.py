@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import re
-
 from unidecode import unidecode
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -21,15 +20,6 @@ def format_number(percent, value, lang=None):
     if not lang:
         lang = utils.get_user_language()
     return Lang.format(lang, percent, value)
-
-
-def zfill(the_instance, val_name):
-    size = utils.get_field_size(the_instance, val_name)
-    if size:
-        val = getattr(the_instance, val_name)
-        if not val:
-            val = ''
-        return val.zfill(size)
 
 
 def get_instance_summary(instance, label, at_date, lang):
@@ -154,18 +144,6 @@ def translate_model_name(model, lang=None):
         lang=lang)
 
 
-def get_descendents_name(from_class):
-    result = []
-    for model_name, model in Pool().iterobject():
-        if issubclass(model, from_class):
-            if model.__doc__:
-                result.append((model_name, translate_model_name(model)))
-            else:
-                raise Exception('Model %s does not have a docstring !' %
-                    model_name)
-    return result
-
-
 def selection_as_string(cls, var_name, value):
     field = getattr(cls, var_name)
     if hasattr(field, '_field'):
@@ -194,23 +172,6 @@ def is_ascii(s):
         return True
     except UnicodeEncodeError:
         return False
-
-
-def check_for_pattern(s, pattern):
-    if s is not None:
-        s = s.strip()
-        matchObj = re.match(pattern, s)
-        if matchObj:
-            return matchObj.group()
-        return False
-
-
-def coerce_to_bool(s):
-    if s.lower() in ['1', 'yes', 'true', 'on']:
-        return True
-    if s.lower() in ['0', 'no', 'false', 'off']:
-        return False
-    raise ValueError('Not a boolean: %s' % s)
 
 
 def get_print_infos(lst, obj_name=None):

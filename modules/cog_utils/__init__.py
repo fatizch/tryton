@@ -10,7 +10,6 @@ from .ir import *
 from .res import *
 from .model import *
 from .many2one_form import *
-from .business import *
 from .test_case_framework import *
 from .models_for_tests import *
 from .tag import *

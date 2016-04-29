@@ -3,7 +3,7 @@ from trytond.pyson import Eval
 from trytond.pool import PoolMeta
 from trytond.pyson import If, Bool
 
-from trytond.modules.cog_utils import fields, utils
+from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -20,13 +20,15 @@ class Contract:
 
     @classmethod
     def __setup__(cls):
-        utils.update_domain(cls, 'subscriber', [If(
+        super(Contract, cls).__setup__()
+        cls.subscriber.domain = ['AND', cls.subscriber.domain,
+            [If(
                     Bool(Eval('is_group')),
                     ('is_company', '=', True),
                     (),
-                    )])
-        utils.update_depends(cls, 'subscriber', ['is_group'])
-        super(Contract, cls).__setup__()
+                    )]
+            ]
+        cls.subscriber.depends += ['is_group']
 
     def get_is_group(self, name):
         return self.product.is_group if self.product else False

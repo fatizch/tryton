@@ -2,7 +2,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import utils, fields
+from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -18,10 +18,11 @@ class Product:
 
     @classmethod
     def __setup__(cls):
-        utils.update_domain(
-            cls, 'coverages', [('is_group', '=', Eval('is_group'))])
-        cls.coverages.depends.append('is_group')
         super(Product, cls).__setup__()
+        cls.coverages.domain = ['AND', cls.coverages.domain,
+            [('is_group', '=', Eval('is_group'))]
+            ]
+        cls.coverages.depends.append('is_group')
 
 
 class OptionDescription:

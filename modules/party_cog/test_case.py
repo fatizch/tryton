@@ -2,7 +2,7 @@ import random
 import datetime
 from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
-from trytond.modules.cog_utils import fields, coop_date
+from trytond.modules.cog_utils import fields
 from trytond.modules.cog_utils import coop_string
 
 
@@ -190,13 +190,22 @@ class TestCaseModel:
 
     @classmethod
     def new_person(cls, sex='male', with_address=True):
+        def calculate_date_interval(age_min, age_max):
+            start_date = datetime.date.today()
+            start_date = start_date.replace(year=start_date.year -
+                int(age_max)).toordinal()
+            end_date = datetime.date.today()
+            end_date = end_date.replace(year=end_date.year -
+                int(age_min)).toordinal()
+            return [start_date, end_date]
+
         Configuration = cls.get_instance()
         if sex == 'child':
             sex = random.choice(['male', 'female'])
-            date_interval = coop_date.calculate_date_interval(1,
+            date_interval = calculate_date_interval(1,
                 Configuration.adult_age_min)
         else:
-            date_interval = coop_date.calculate_date_interval(
+            date_interval = calculate_date_interval(
                 Configuration.adult_age_min, Configuration.adult_age_max)
         files = cls._loaded_resources[MODULE_NAME]['files']
         person = cls.create_party(is_person=True,

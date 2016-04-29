@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, utils
+from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -17,10 +17,10 @@ class ContractSubscribeFindProcess:
 
     @classmethod
     def __setup__(cls):
-        utils.update_domain(cls, 'product',
-            [('is_group', '=', Eval('is_group'))])
-        utils.update_depends(cls, 'product', ['is_group'])
         super(ContractSubscribeFindProcess, cls).__setup__()
+        cls.lines.product = ['AND', cls.lines.product,
+            [('is_group', '=', Eval('is_group'))]]
+        cls.product.depends += ['is_group']
 
 
 class ContractSubscribe:

@@ -183,8 +183,7 @@ class Offered(model.CoopView, GetResult, Templated, model.TaggedMixin):
             field.context['currency_digits'] = Eval('currency_digits')
             if field.depends is None:
                 field.depends = []
-            utils.extend_inexisting(
-                field.depends, ['start_date', 'currency_digits'])
+            field.depends += ['start_date', 'currency_digits']
             if field.states is None:
                 field.states = {}
             field.states['readonly'] = ~Bool(Eval('start_date'))

@@ -11,7 +11,6 @@ __all__ = [
     'add_year',
     'add_duration',
     'get_end_of_period',
-    'convert_to_periods',
     'number_of_days_between',
     'number_of_years_between',
     'number_of_months_between',
@@ -108,17 +107,6 @@ def get_end_of_period(date, duration_unit, duration=1):
     return add_day(res, -1)
 
 
-def convert_to_periods(dates):
-    tmp_dates = dates
-    tmp_dates.sort()
-    res = []
-    for i in range(0, len(tmp_dates) - 1):
-        res.append((tmp_dates[i], tmp_dates[i + 1] -
-                datetime.timedelta(days=1)))
-    res[-1][1] = res[-1][1] + datetime.timedelta(days=1)
-    return res
-
-
 def number_of_days_between(start_date, end_date):
     return end_date.toordinal() - start_date.toordinal() + 1
 
@@ -188,24 +176,6 @@ def duration_between_and_is_it_exact(date1, date2, duration_unit):
     return res, end_date == date2
 
 
-def add_frequency(frequency, to_date):
-    if frequency == 'biyearly':
-        return add_duration(to_date, 'year', 2)
-    return add_duration(to_date, frequency[:-2])
-
-
-def get_good_period_from_frequency(for_date, frequency, from_date=None):
-    if not from_date:
-        from_date = datetime.date(for_date.year, 1, 1)
-    if frequency == 'quarterly':
-        month = (for_date.month - 1) / 3 * 3 + 1
-    elif frequency == 'monthly':
-        month = for_date.month
-    from_date = datetime.date(for_date.year, month, 1)
-    end_date = get_end_of_period(from_date, frequency)
-    return from_date, end_date
-
-
 def convert_frequency(from_frequency, to_frequency):
     unsupported_freq = ['day', 'dayly', 'week', 'weekly']
     if from_frequency in unsupported_freq or to_frequency in unsupported_freq:
@@ -222,15 +192,6 @@ def convert_frequency(from_frequency, to_frequency):
             return 12
     return (convert_frequency_to_month(to_frequency) /
         float(convert_frequency_to_month(from_frequency)))
-
-
-def calculate_date_interval(age_min, age_max):
-    start_date = datetime.date.today()
-    start_date = start_date.replace(year=start_date.year -
-        int(age_max)).toordinal()
-    end_date = datetime.date.today()
-    end_date = end_date.replace(year=end_date.year - int(age_min)).toordinal()
-    return [start_date, end_date]
 
 
 def get_next_date_in_sync_with(date, day):

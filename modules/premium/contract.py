@@ -129,9 +129,16 @@ class Contract:
         return True, ()
 
     def calculate_prices_between_dates(self, start=None, end=None):
+        def limit_dates(dates, start=None, end=None):
+            res = set([x for x in dates
+                    if (not start or x >= start) and (not end or x < end)])
+            if end:
+                res.add(end)
+            return sorted(res)
+
         if not start or start == datetime.date.min:
             start = self.start_date
-        dates = utils.limit_dates(self.get_dates(), start)
+        dates = limit_dates(self.get_dates(), start)
         lines = self.product.calculate_premiums(self, dates)
         return lines
 

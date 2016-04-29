@@ -363,13 +363,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             return kind[0]
         return None
 
-    @staticmethod
-    def gender_as_int(gender):
-        return utils.tuple_index(gender, GENDER) + 1
-
-    def get_gender_as_int(self):
-        return self.gender_as_int(self.gender)
-
     def get_summary_content(self, label, at_date=None, lang=None):
         if label is True:
             label = self.rec_name
@@ -377,10 +370,10 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         if self.is_person:
             value.append(coop_string.get_field_summary(self, 'ssn', True,
                 at_date, lang))
-            value.append(coop_string.get_field_summary(self, 'birth_date', True,
-                at_date, lang))
-            value.append(coop_string.get_field_summary(self, 'birth_name', True,
-                at_date, lang))
+            value.append(coop_string.get_field_summary(self, 'birth_date',
+                True, at_date, lang))
+            value.append(coop_string.get_field_summary(self, 'birth_name',
+                True, at_date, lang))
         value.append(coop_string.get_field_summary(self, 'addresses', True,
             at_date, lang))
         return (label, value)
