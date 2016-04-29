@@ -1,0 +1,11 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.payment.journal,outstandings_waiting_account:"
+msgid "Outstandings Waiting Account"
+msgstr "Compte d'attente des impayés"
+
+msgctxt "field:account.payment.journal,outstandings_journal:"
+msgid "Outstandings Journal"
+msgstr "Journal des impayés"
