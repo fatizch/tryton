@@ -625,7 +625,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'contract.activation_history').__table__()
         where_clause = (activation_history.active == Literal(True))
         query = cls.build_activation_history_query(activation_history,
-            where_clause)
+            where_clause=where_clause)
         tables['activation_history'] = {
             None: (query, (
                 query.id == table.id))}
@@ -642,8 +642,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def build_activation_history_query(cls, activation_history,
-            where_clause=None):
-        today = utils.today()
+            today=None, where_clause=None):
+        today = today or utils.today()
         column_end = NullIf(Coalesce(activation_history.end_date,
                 datetime.date.max), datetime.date.max).as_('end_date')
         column_start = activation_history.start_date.as_('start_date')
@@ -675,6 +675,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def getter_activation_history(cls, contracts, names):
+        today = utils.today()
         ActivationHistory = Pool().get('contract.activation_history')
         activation_history = ActivationHistory.__table__()
         cursor = Transaction().cursor
@@ -687,8 +688,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             where_clause = (activation_history.contract.in_(
                     [x.id for x in contract_slice]) &
                 (activation_history.active == Literal(True)))
-            query = cls.build_activation_history_query(activation_history,
-                where_clause)
+            query = cls.build_activation_history_query(
+                activation_history, today, where_clause)
             cursor.execute(*query)
 
             for elem in cursor.dictfetchall():
