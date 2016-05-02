@@ -93,7 +93,7 @@ class TestCaseModel:
 
     @classmethod
     def create_zip_code(cls, **kwargs):
-        Zip = Pool().get('country.zipcode')
+        Zip = Pool().get('country.zip')
         return Zip(**kwargs)
 
     @classmethod
@@ -105,7 +105,7 @@ class TestCaseModel:
     def create_zip_code_if_necessary(cls, address):
         if not (address.zip and address.country and address.city):
             return
-        Zip = Pool().get('country.zipcode')
+        Zip = Pool().get('country.zip')
         domain = [
             ('city', '=', address.city),
             ('zip', '=', address.zip),

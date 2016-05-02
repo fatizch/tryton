@@ -42,7 +42,7 @@ Get Models::
     >>> EndorsementPart = Model.get('endorsement.part')
     >>> Party = Model.get('party.party')
     >>> User = Model.get('res.user')
-    >>> ZipCode = Model.get('country.zipcode')
+    >>> ZipCode = Model.get('country.zip')
 
 Constants::
 

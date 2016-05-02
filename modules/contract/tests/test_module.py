@@ -26,7 +26,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Address': 'party.address',
             'Country': 'country.country',
             'Contact': 'contract.contact',
-            'ZipCode': 'country.zipcode',
+            'ZipCode': 'country.zip',
             'Party': 'party.party',
             'Contract': 'contract',
             'Option': 'contract.option',

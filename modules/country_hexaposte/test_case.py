@@ -15,7 +15,7 @@ class TestCaseModel:
 
     @classmethod
     def hexa_post_test_case(cls):
-        Zip = Pool().get('country.zipcode')
+        Zip = Pool().get('country.zip')
         if Transaction().context.get('TESTING', False):
             return
         hexa_data = cls.load_hexa_post_data_from_file(

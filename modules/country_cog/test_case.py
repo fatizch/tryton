@@ -22,7 +22,7 @@ class TestCaseModel:
         if Transaction().context.get('TESTING', False):
             return
         Country = Pool().get('country.country')
-        Zip = Pool().get('country.zipcode')
+        Zip = Pool().get('country.zip')
         country = Country.search([
                 ('code', '=', cls.get_language().code[-2:])])[0]
         cls.load_resources(MODULE_NAME)

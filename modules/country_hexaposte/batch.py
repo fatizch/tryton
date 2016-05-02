@@ -15,7 +15,7 @@ class UpdateZipCodesFromHexaPost(batch.BatchRootNoSelect):
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):
-        Zip = Pool().get('country.zipcode')
+        Zip = Pool().get('country.zip')
         hexa_post_file_path = extra_args.get('hexa_post_file_path',
             cls.get_conf_item('hexa_post_file_path'))
         archive_path = extra_args.get('archive')

@@ -18,7 +18,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Party': 'party.party',
             'Address': 'party.address',
             'Country': 'country.country',
-            'ZipCode': 'country.zipcode',
+            'ZipCode': 'country.zip',
         }
 
     def createPerson(

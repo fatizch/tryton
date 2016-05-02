@@ -21,7 +21,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'PartyRelation': 'party.relation',
             'Address': 'party.address',
             'Country': 'country.country',
-            'ZipCode': 'country.zipcode',
+            'ZipCode': 'country.zip',
         }
 
     def test0001_createParties(self):

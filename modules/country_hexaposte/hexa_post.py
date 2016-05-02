@@ -13,7 +13,7 @@ class HexaPostLoader(object):
     @classmethod
     def get_hexa_post_updates(cls, hexa_data):
         Country = Pool().get('country.country')
-        Zip = Pool().get('country.zipcode')
+        Zip = Pool().get('country.zip')
 
         france = Country.search([('code', '=', 'FR')])[0]
 

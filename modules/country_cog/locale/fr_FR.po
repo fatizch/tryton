@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:country.zipcode:"
-msgid "This city and this zipcode already exist for this country!"
-msgstr "Cette ville et ce code postal existe déjà pour ce pays!"
-
 msgctxt "field:country.country,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -13,50 +9,6 @@ msgstr "Identifiant XML"
 msgctxt "field:country.subdivision,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
-
-msgctxt "field:country.zipcode,city:"
-msgid "City"
-msgstr "Ville"
-
-msgctxt "field:country.zipcode,country:"
-msgid "Country"
-msgstr "Pays"
-
-msgctxt "field:country.zipcode,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:country.zipcode,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:country.zipcode,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:country.zipcode,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:country.zipcode,rec_name:"
-msgid "Name"
-msgstr "Nom "
-
-msgctxt "field:country.zipcode,write_date:"
-msgid "Write Date"
-msgstr " Date d'écriture"
-
-msgctxt "field:country.zipcode,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:country.zipcode,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:country.zipcode,zip:"
-msgid "Zip"
-msgstr "Code Postal"
 
 msgctxt "field:ir.test_case,load_all_zipcodes:"
 msgid "Load all Zip Codes"
@@ -66,12 +18,8 @@ msgctxt "field:ir.test_case,main_zip:"
 msgid "Main Zip"
 msgstr "Code postal principal"
 
-msgctxt "model:country.zipcode,name:"
-msgid "ZipCode"
-msgstr "Code Postal"
-
-msgctxt "model:ir.action,name:act_zipcode_form"
-msgid "ZipCode"
+msgctxt "model:ir.action,name:act_zip_form"
+msgid "Zip"
 msgstr "Code Postal"
 
 msgctxt "model:ir.test_case.instance,name:zip_code_test_case"
@@ -79,5 +27,5 @@ msgid "Zip Code Test Case"
 msgstr "Jeux d'essai : codes postaux"
 
 msgctxt "model:ir.ui.menu,name:menu_zipcode_form"
-msgid "ZipCode"
+msgid "Zip"
 msgstr "Code Postal"

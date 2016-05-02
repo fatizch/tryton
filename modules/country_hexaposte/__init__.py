@@ -6,7 +6,7 @@ from .batch import *
 
 def register():
     Pool.register(
-        ZipCode,
+        Zip,
         TestCaseModel,
         UpdateZipCodesFromHexaPost,
         module='country_hexaposte', type_='model')

@@ -101,7 +101,7 @@ class ChangePartyAddress(EndorsementWizardStepMixin):
     def step_default(self, name):
         pool = Pool()
         Address = pool.get('party.address')
-        Zip = pool.get('country.zipcode')
+        Zip = pool.get('country.zip')
 
         def set_zip_and_city(values):
             if set(['city', 'country', 'zip']).issubset(set(

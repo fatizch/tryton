@@ -17,7 +17,7 @@ class Address(export.ExportImportMixin):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     zip_and_city = fields.Function(
-        fields.Many2One('country.zipcode', 'Zip'),
+        fields.Many2One('country.zip', 'Zip'),
         'get_zip_and_city', 'set_zip_and_city', searcher='search_zip_and_city')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
@@ -41,12 +41,12 @@ class Address(export.ExportImportMixin):
 
     @staticmethod
     def get_cities_from_zip(zipcode, country):
-        return Pool().get('country.zipcode').search([
+        return Pool().get('country.zip').search([
                 ('zip', '=', zipcode), ('country', '=', country)])
 
     @staticmethod
     def get_zips_from_city(city, country):
-        return Pool().get('country.zipcode').search([
+        return Pool().get('country.zip').search([
                 ('city', '=', city), ('country', '=', country)])
 
     @fields.depends('zip', 'country', 'zip_and_city')
@@ -105,7 +105,7 @@ class Address(export.ExportImportMixin):
     def find_zip_and_city(cls, zip_, city, streetbis, country=None):
         if streetbis is None:
             streetbis = ''
-        Zip = Pool().get('country.zipcode')
+        Zip = Pool().get('country.zip')
         domain = cls.get_domain_for_find_zip_and_city(zip_, city,
                 streetbis)
         if country:
