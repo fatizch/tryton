@@ -18,7 +18,7 @@ class ContractSubscribeFindProcess:
     @classmethod
     def __setup__(cls):
         super(ContractSubscribeFindProcess, cls).__setup__()
-        cls.lines.product = ['AND', cls.lines.product,
+        cls.product = ['AND', cls.product,
             [('is_group', '=', Eval('is_group'))]]
         cls.product.depends += ['is_group']
 
