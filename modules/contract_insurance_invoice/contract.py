@@ -1634,14 +1634,15 @@ class ContractInvoice(model.CoopSQL, model.CoopView):
         Contract = pool.get('contract')
         invoices = []
         for contract_invoice in contract_invoices:
-            assert contract_invoice.invoice_state != 'cancel'
+            assert contract_invoice.invoice_state not in ('cancel', 'paid')
             invoices.append(contract_invoice.invoice)
         Invoice.cancel(invoices)
         periods = defaultdict(list)
         for contract_invoice in contract_invoices:
-            for period in contract_invoice.contract.get_invoice_periods(
-                    contract_invoice.end, contract_invoice.start):
-                periods[period].append(contract_invoice.contract)
+            contract = contract_invoice.contract
+            for period in contract.get_invoice_periods(contract_invoice.end,
+                    contract_invoice.start):
+                periods[period].append(contract)
         return Contract.invoice_periods(periods)
 
     @classmethod
