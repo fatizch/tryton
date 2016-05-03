@@ -1,29 +1,16 @@
 import re
 
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import PoolMeta
 from trytond.model import Unique
 from trytond import backend
 from trytond.transaction import Transaction
-from trytond.config import config
 
 from trytond.modules.cog_utils import coop_string, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'Country',
     'Zip',
     ]
-
-
-class Country:
-    __name__ = 'country.country'
-
-    @staticmethod
-    def _default_country():
-        Country = Pool().get('country.country')
-        code = config.get('options', 'default_country', default='FR')
-        country, = Country.search([('code', '=', code)])
-        return country
 
 
 class Zip:
