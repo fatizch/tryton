@@ -314,6 +314,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 'origin': None,
                 }
         reporting_data.update(context_)
+        context_['reporting_data'] = reporting_data
         if self.parameters:
             reporting_data.update({x.name_in_template: None
                     for x in self.parameters})

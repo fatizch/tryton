@@ -323,6 +323,13 @@ class ReportTemplate:
             self.split_reports = False
             self.convert_to_pdf = False
 
+    def print_reports(self, reports, context_):
+        if self.output_kind != 'flow':
+            return super(ReportTemplate, self).print_reports(reports, context_)
+        ReportModel = Pool().get('report.create', type='wizard')
+        for report in reports:
+            ReportModel.create_flow_file(report['report_name'], report['data'])
+
 
 class ReportCreate:
     __name__ = 'report.create'
@@ -335,7 +342,8 @@ class ReportCreate:
             ReportModel = Pool().get('report.generate', type='report')
             ext, filedata, prnt, file_basename = ReportModel.execute(ids,
                 report_context, immediate_conversion=False)
-            created_file = self.create_flow_file(file_basename, filedata)
+            filename = '%s.%s' % (file_basename, ext)
+            created_file = self.create_flow_file(filename, filedata)
             reports.append({
                     'generated_report': created_file,
                     'server_filepath': created_file,
