@@ -26,15 +26,17 @@ __all__ = []
 class FileLocker:
     'Class that secure open file access'
 
-    def __init__(self, path, *args):
+    def __init__(self, path, *args, **kwargs):
         self.path = path
-        self.locker = FileLock(self.path + '.lck')
+        self.lock_extension = kwargs.pop('lock_extension', 'lck')
+        self.locker = FileLock(self.path + '.' + self.lock_extension)
         self.args = args
+        self.kwargs = kwargs
         self.file_obj = None
 
     def __enter__(self):
         self.locker.acquire(timeout=20)
-        self.file_obj = open(self.path, *self.args)
+        self.file_obj = open(self.path, *self.args,  **self.kwargs)
         return self.file_obj
 
     def __exit__(self, type, value, traceback):
@@ -42,8 +44,18 @@ class FileLocker:
         self.locker.release()
 
 
-def safe_open(filepath, *args):
-    return FileLocker(filepath, *args)
+def safe_open(filepath, *args, **kwargs):
+    return FileLocker(filepath, *args, **kwargs)
+
+def remove_lockfile(filepath, lock_extension='lck', silent=True):
+    lock_filepath = filepath + '.' + lock_extension
+    try:
+        os.remove(lock_filepath)
+    except OSError:
+        if silent:
+            pass
+        else:
+            raise
 
 
 def get_trytond_modules():
