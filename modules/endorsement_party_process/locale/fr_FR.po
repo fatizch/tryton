@@ -50,8 +50,8 @@ msgstr "Avenant sur tiers"
 
 msgctxt ""
 "wizard_button:endorsement_party.start_process,process_parameters,action:"
-msgid "Start Process (_k)"
-msgstr "Démarrer le processus (_k)"
+msgid "Start Process"
+msgstr "Démarrer le processus"
 
 msgctxt ""
 "wizard_button:endorsement_party.start_process,process_parameters,end:"

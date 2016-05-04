@@ -656,7 +656,7 @@ class Process(model.CoopSQL, model.TaggedMixin):
         xml += '<group id="group_prevnext" colspan="4" col="%s">' % (
             8 + len(middle_buttons))
         if self.with_prev_next:
-            xml += '<button string="Previous  (_j)"'
+            xml += '<button string="Previous "'
             xml += ' name="_button_previous_%s"/>' % self.id
         if middle_buttons:
             xml += '<group id="void_l" colspan="3"/>'
@@ -665,7 +665,7 @@ class Process(model.CoopSQL, model.TaggedMixin):
         else:
             xml += '<group id="void" colspan="6"/>'
         if self.with_prev_next:
-            xml += '<button string="Next (_k)" '
+            xml += '<button string="Next" '
             xml += 'name="_button_next_%s"/>' % self.id
         xml += '</group>'
         xml += '<newline/>'
@@ -1063,7 +1063,7 @@ class ProcessFinder(Wizard):
     process_parameters = StateView('process.start',
         'process_cog.process_parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Start Process (_k)', 'action', 'tryton-go-next',
+            Button('Start Process', 'action', 'tryton-go-next',
                 default=True)])
     action = VoidStateAction()
 

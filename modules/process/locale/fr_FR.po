@@ -743,12 +743,12 @@ msgid "Complete"
 msgstr "Terminer"
 
 msgctxt "view:contract:"
-msgid "Next (_k)"
-msgstr "Suivant (_k)"
+msgid "Next"
+msgstr "Suivant"
 
 msgctxt "view:contract:"
-msgid "Previous  (_j)"
-msgstr "Précédent (_j)"
+msgid "Previous "
+msgstr "Précédent"
 
 msgctxt "view:contract:"
 msgid ""
