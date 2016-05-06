@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- Benefit -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="benefit_view_form">
+            <field name="model">benefit</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="claim.benefit_view_form"/>
+            <field name="name">benefit_form</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- Loss Description -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="loss_desc_view_form">
+            <field name="model">benefit.loss.description</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="claim.loss_desc_view_form"/>
+            <field name="name">loss_description_form</field>
+        </record>
+    </data>
+</tryton>

@@ -1,0 +1,103 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:benefit,documents_rules:"
+msgid "Document Rules"
+msgstr "Règles de gestion des documents"
+
+msgctxt "field:benefit.loss.description,documents:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "field:benefit.loss.description-document.description,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.loss.description-document.description,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.loss.description-document.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit.loss.description-document.description,document:"
+msgid "Document"
+msgstr "Document"
+
+msgctxt "field:benefit.loss.description-document.description,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:benefit.loss.description-document.description,loss:"
+msgid "Loss"
+msgstr "Préjudice"
+
+msgctxt "field:benefit.loss.description-document.description,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.loss.description-document.description,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:benefit.loss.description-document.description,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:benefit.loss.description-document.description,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:claim,attachments:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgctxt "field:claim,doc_received:"
+msgid "All Documents Received"
+msgstr "Tous les documents requis sont reçus"
+
+msgctxt "field:claim,document_request:"
+msgid "Document Request"
+msgstr "Demande de Documents"
+
+msgctxt "field:claim,document_request_lines:"
+msgid "Required Documents"
+msgstr "Documents requis"
+
+msgctxt "field:document.receive.request,tmp_1:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:document.rule,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "model:benefit.loss.description-document.description,name:"
+msgid "Loss Description to Document Description Relation"
+msgstr ""
+
+msgctxt "selection:document.receive.request,kind:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "selection:document.request,needed_by:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "selection:document.request,needed_by:"
+msgid "Claim Service"
+msgstr "Prestation fournie"
+
+msgctxt "view:benefit.loss.description:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:benefit:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:claim:"
+msgid "Documents"
+msgstr "Documents"

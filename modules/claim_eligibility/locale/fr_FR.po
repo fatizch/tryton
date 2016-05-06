@@ -1,0 +1,71 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:benefit,eligibility_rules:"
+msgid "Benefit Eligibility Rules"
+msgstr "Règles d'éligibilité"
+
+msgctxt "field:benefit.eligibility.rule,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:benefit.eligibility.rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.eligibility.rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.eligibility.rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit.eligibility.rule,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:benefit.eligibility.rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:benefit.eligibility.rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.eligibility.rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:benefit.eligibility.rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:benefit.eligibility.rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:benefit.eligibility.rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:benefit.eligibility.rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:benefit.eligibility.rule,name:"
+msgid "Benefit Eligibility Rule"
+msgstr "Règle d'éligibilité"
+
+msgctxt "view:benefit.eligibility.rule:"
+msgid "Benefit Eligibility Rule"
+msgstr "Règle d'éligibilité"
+
+msgctxt "view:benefit.eligibility.rule:"
+msgid "Benefit Eligibility Rules"
+msgstr "Règles d'éligibilité"
+
+msgctxt "view:benefit:"
+msgid "Eligibility"
+msgstr "Eligibilité"

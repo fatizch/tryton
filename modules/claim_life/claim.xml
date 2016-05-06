@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tryton>
     <data>
-        <record model="ir.ui.view" id="claim_view_form">
-            <field name="model">claim</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="claim.claim_view_form"/>
-            <field name="name">claim_form</field>
-        </record>
         <record model="ir.ui.view" id="loss_view_form">
             <field name="model">claim.loss</field>
             <field name="type">form</field>
             <field name="inherit" ref="claim.loss_view_form"/>
             <field name="name">loss_form</field>
         </record>
+        <record model="ir.ui.view" id="loss_without_service_view_form">
+            <field name="model">claim.loss</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="claim.loss_without_service_view_form"/>
+            <field name="name">loss_without_service_form</field>
+	</record>
         <!--################################################################ -->
         <!-- Claim Service -->
         <!--################################################################ -->
@@ -22,67 +22,5 @@
             <field name="inherit" ref="claim.claim_service_view_form"/>
             <field name="name">service_form</field>
         </record>
-        <!--################################################################ -->
-        <!-- Indemnification -->
-        <!--################################################################ -->
-        <record model="ir.ui.view" id="indemnification_view_form">
-            <field name="model">claim.indemnification</field>
-            <field name="type">form</field>
-            <field name="name">indemnification_form</field>
-        </record>
-        <record model="ir.ui.view" id="indemnification_view_tree">
-            <field name="model">claim.indemnification</field>
-            <field name="type">tree</field>
-            <field name="name">indemnification_tree</field>
-        </record>
-        <!--################################################################ -->
-        <!-- Indemnification Detail -->
-        <!--################################################################ -->
-        <record model="ir.ui.view" id="indemnification_detail_view_form">
-            <field name="model">claim.indemnification.detail</field>
-            <field name="type">form</field>
-            <field name="name">indemnification_detail_form</field>
-        </record>
-        <record model="ir.ui.view" id="indemnification_detail_view_tree">
-            <field name="model">claim.indemnification.detail</field>
-            <field name="type">tree</field>
-            <field name="name">indemnification_detail_tree</field>
-        </record>
-        <!--################################################################ -->
-        <!-- Relate -->
-        <!--################################################################ -->
-        <record model="ir.action.act_window" id="act_indemnification_relate_form">
-            <field name="name">Indemnifications</field>
-            <field name="res_model">claim.indemnification</field>
-            <field name="domain" eval="[('customer', '=', Eval('active_id'))]" pyson="1"/>
-        </record>
-        <record model="ir.action.keyword" id="act_indemnification_relate_keyword">
-            <field name="keyword">form_relate</field>
-            <field name="model">party.party,-1</field>
-            <field name="action" ref="act_indemnification_relate_form"/>
-        </record>
-        <!-- Claim Indemnification Validate Display -->
-        <record model="ir.ui.view" id="indemnification_validate_display_form">
-            <field name="model">claim.indemnification.validate.display</field>
-            <field name="type">form</field>
-            <field name="name">indemnification_validate_display_form</field>
-        </record>
-        <record model="ir.ui.view" id="indemnification_validate_display_list">
-            <field name="model">claim.indemnification.validate.display</field>
-            <field name="type">tree</field>
-            <field name="name">indemnification_validate_display_list</field>
-        </record>
-        <!-- Claim Indemnification Validate Select -->
-        <record model="ir.ui.view" id="indemnification_validate_select_form">
-            <field name="model">claim.indemnification.validate.select</field>
-            <field name="type">form</field>
-            <field name="name">indemnification_validate_select_form</field>
-        </record>
-        <!-- Claim Indemnification Validate -->
-        <record model="ir.action.wizard" id="indemnification_validation_wizard">
-            <field name="name">Claim Indemnification Validate</field>
-            <field name="wiz_name">claim.indemnification.validate</field>
-        </record>
-        <menuitem name="Validate Indemnifications" id="menu_validate_indemnification" sequence="15" parent="claim.menu_claim" action="indemnification_validation_wizard"/>
     </data>
 </tryton>

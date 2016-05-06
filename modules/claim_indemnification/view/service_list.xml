@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/tree/field[@name='benefit']" position="after">
+        <button string="Fill extra data informations" name="fill_extra_datas"/>
+    </xpath>
+</data>

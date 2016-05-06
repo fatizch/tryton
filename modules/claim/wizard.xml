@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- ########### Deliver wizard ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="benefit_to_deliver_view_form">
+            <field name="model">claim.benefit_to_deliver</field>
+            <field name="type">form</field>
+            <field name="name">benefit_to_deliver_form</field>
+        </record>
+        <record model="ir.ui.view" id="benefit_to_deliver_view_list">
+            <field name="model">claim.benefit_to_deliver</field>
+            <field name="type">tree</field>
+            <field name="name">benefit_to_deliver_list</field>
+        </record>
+        <record model="ir.ui.view" id="select_benefit_view_form">
+            <field name="model">claim.select_benefits</field>
+            <field name="type">form</field>
+            <field name="name">select_benefit_form</field>
+        </record>
+        <record model="ir.action.wizard" id="act_deliver_wizard">
+            <field name="name">Deliver Benefits</field>
+            <field name="wiz_name">claim.deliver_benefits</field>
+        </record>
+    </data>
+</tryton>

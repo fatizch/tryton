@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Indemnification Detail">
+    <label name="indemnification"/>
+    <field name="indemnification"/>
+    <newline/>
+    <label name="kind"/>
+    <field name="kind"/>
+    <newline/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <newline/>
+    <label name="nb_of_unit"/>
+    <field name="nb_of_unit"/>
+    <label name="unit"/>
+    <field name="unit"/>
+    <label name="amount_per_unit"/>
+    <group id="amount_per_unit">
+        <field name="amount_per_unit" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+    <newline/>
+    <label name="amount"/>
+    <group id="amount">
+        <field name="amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+    <newline/>
+    <field name="description" colspan="4"/>
+</form>

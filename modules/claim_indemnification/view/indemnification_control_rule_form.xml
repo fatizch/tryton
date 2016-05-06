@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Control Indemnification Rule form">
+    <label name="rule"/>
+    <field name="rule"/>
+    <field name="rule_extra_data" no_command="1" colspan="4"/>
+</form>

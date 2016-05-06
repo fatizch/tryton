@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
+        <page string="Benefit" id="benefit">
+            <field name="benefit_rules" colspan="4"/>
+        </page>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']/field[@name='beneficiary_kind']" position="after">
+        <label name="indemnification_kind"/>
+        <field name="indemnification_kind"/>
+        <label name="account_product"/>
+        <field name="account_product"/>
+        <label name="automatic_period_calculation"/>
+        <field name="automatic_period_calculation"/>
+    </xpath>
+</data>

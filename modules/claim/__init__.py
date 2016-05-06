@@ -5,18 +5,28 @@ from .contract import *
 from .rule_engine import *
 from .party import *
 from .test_case import *
-from .document import *
 from .report_engine import *
+from .benefit import *
+from .wizard import *
 from .event import *
-
+from .configuration import *
 
 def register():
     Pool.register(
+        EventDescription,
+        LossDescription,
+        Benefit,
+        InsuranceBenefit,
+        EventDescriptionLossDescriptionRelation,
+        BenefitLossDescriptionRelation,
+        OptionDescriptionBenefitRelation,
+        LossDescriptionExtraDataRelation,
+        BenefitExtraDataRelation,
+        ClaimSubStatus,
         Claim,
         Loss,
         ClaimService,
-        DocumentRequest,
-        RequestFinder,
+        ClaimServiceExtraDataRevision,
         Contract,
         Option,
         RuleEngineRuntime,
@@ -24,11 +34,15 @@ def register():
         PartyInteraction,
         OptionDescription,
         TestCaseModel,
+        BenefitToDeliver,
+        SelectBenefits,
         SynthesisMenuClaim,
         SynthesisMenu,
         ReportTemplate,
         EventLog,
+        Configuration,
         module='claim', type_='model')
     Pool.register(
+        DeliverBenefits,
         SynthesisMenuOpen,
         module='claim', type_='wizard')

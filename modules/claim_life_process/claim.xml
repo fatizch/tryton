@@ -7,5 +7,20 @@
             <field name="priority" eval="40"/>
             <field name="name">loss_indemnification_form</field>
         </record>
+        <!-- ############################################################ -->
+        <!-- ########### service process view ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="claim_service_process_view_form">
+            <field name="model">claim.service</field>
+            <field name="type">form</field>
+            <field name="priority" eval="40"/>
+            <field name="name">service_for_process_form</field>
+        </record>
+        <record model="ir.ui.view" id="claim_service_process_view_list">
+            <field name="model">claim.service</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="30"/>
+            <field name="name">service_for_process_list</field>
+        </record>
     </data>
 </tryton>

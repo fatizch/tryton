@@ -45,10 +45,10 @@ class Option:
         res = []
         if not self.is_item_covered(loss):
             return res
-        loss_desc = loss.loss_desc if hasattr(loss, 'loss_desc') else None
-        event_desc = loss.event_desc if hasattr(loss, 'event_desc') else None
-        return self.coverage.get_possible_benefits(loss_desc, event_desc,
-            loss.get_date())
+        for benefit in self.coverage.get_possible_benefits(
+                loss.loss_desc, loss.event_desc, loss.get_date()):
+            res.append((benefit, self))
+        return res
 
     def get_benefits_ids(self, name):
         return [x.id for x in self.coverage.benefits] if self.coverage else []

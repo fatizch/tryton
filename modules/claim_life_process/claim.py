@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import PoolMeta
 from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
@@ -20,6 +20,10 @@ class Claim:
     is_pending_indemnification = fields.Function(
         fields.Boolean('Pending Indemnification', states={'invisible': True}),
         'get_is_pending_indemnification')
+    indemnifications_to_schedule = fields.Function(
+        fields.One2Many('claim.indemnification', None,
+            'Indemnification To Schedule'),
+        'get_indemnifications_to_schedule', setter='setter_void')
 
     def get_indemnifications(self, name=None):
         res = []
@@ -36,6 +40,10 @@ class Claim:
                     if indemn.status == 'calculated':
                         return True
         return False
+
+    def get_indemnifications_to_schedule(self, name):
+        return [indemnification.id for indemnification in self.indemnifications
+            if indemnification.status in ('calculated', 'scheduled')]
 
 
 class Loss:

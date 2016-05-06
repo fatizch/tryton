@@ -10,9 +10,6 @@ msgstr "Arrêt de Travail"
 msgid "Death Certificate"
 msgstr "Acte de Décès"
 
-msgid "Amortization Table"
-msgstr "Echéancier du Prêt"
-
 msgid "Death"
 msgstr "Décès"
 

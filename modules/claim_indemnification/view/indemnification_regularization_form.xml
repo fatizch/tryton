@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Regularization">
+    <label name="amount_available_for_regularization"/>
+    <field name="amount_available_for_regularization"/>
+    <label name="amount_selected_for_regularisation"/>
+    <field name="amount_selected_for_regularisation"/>
+    <field name="indemnification"/>
+</form>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="rule_engine" id="simple_claim_rule">
+            <field name="name">Simple Claim Rule</field>
+            <field name="short_name">simple_claim_rule</field>
+            <field name="algorithm">return param_claim_amount()</field>
+            <field name="status">validated</field>
+            <field name="type_">benefit</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="claim_amount">
+            <field name="name">claim_amount</field>
+            <field name="type_">numeric</field>
+            <field name="string">Claim Amount</field>
+            <field name="parent_rule" ref="simple_claim_rule"/>
+        </record>
+    </data>
+</tryton>

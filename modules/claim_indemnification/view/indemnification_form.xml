@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Indemnification">
+    <label name="service"/>
+    <field name="service"/>
+    <newline/>
+    <label name="status"/>
+    <field name="status"/>
+    <button string="Calculate" name="calculate"/>
+    <button string="Cancel" name="cancel_indemnification"/>
+    <newline/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <newline/>
+    <label name="customer"/>
+    <field name="customer"/>
+    <newline/>
+    <label name="beneficiary"/>
+    <field name="beneficiary"/>
+    <newline/>
+    <label name="amount"/>
+    <group id="amount">
+        <field name="amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+    <label name="manual"/>
+    <field name="manual"/>
+    <label name="local_currency_amount"/>
+    <group id="local_amount">
+        <field name="local_currency_amount"/>
+        <field name="local_currency"/>
+    </group>
+    <field name="details" colspan="4"/>
+    <field name="kind" invisible="1"/>
+</form>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tree string="Substatus">
+    <field name="name"/>
+    <field name="status"/>
+    <field name="active" tree_invisible="1"/>
+</tree>

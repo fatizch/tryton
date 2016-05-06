@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Loss Descriptor">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="company"/>
+    <field name="company"/>
+    <label name="item_kind"/>
+    <field name="item_kind"/>
+    <newline/>
+    <label name="loss_kind"/>
+    <field name="loss_kind"/>
+    <newline/>
+    <notebook>
+        <page string="Events" id="events">
+            <field name="event_descs"/>
+        </page>
+        <page string="Extra Data" id="extra_data">
+            <field name="extra_data_def"/>
+        </page>
+    </notebook>
+</form>

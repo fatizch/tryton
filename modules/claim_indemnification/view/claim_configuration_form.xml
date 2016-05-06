@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<form string="Claim Configuration">
+  <label name="control_rule"/>
+  <field name="control_rule"/>
+</form>

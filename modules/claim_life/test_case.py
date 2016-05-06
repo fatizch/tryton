@@ -21,8 +21,6 @@ class TestCaseModel:
                     'Work Incapacity')))
         documents.append(cls.create_document(code='DH', name=translater(
                     'Death Certificate')))
-        documents.append(cls.create_document(code='AT', name=translater(
-                    'Amortization Table')))
         documents.append(cls.create_document(code='DY', name=translater(
                     'Disability Justification')))
         Document.create([x._save_values for x in documents])

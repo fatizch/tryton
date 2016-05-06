@@ -1,7 +1,0 @@
-# 
-msgid ""
-msgstr "Content-Type: text/plain; charset=utf-8\n"
-
-msgctxt "selection:benefit.loss.description,item_kind:"
-msgid "Person"
-msgstr "Personne Physique"

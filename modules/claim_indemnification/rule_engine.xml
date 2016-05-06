@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="date_debut_periode_indemnisation">
+            <field name="translated_technical_name">date_debut_periode_indemnisation</field>
+            <field name="description">Date de début de la période d'indémnisation</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_indemnification_start_date</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="date_fin_periode_indemnisation">
+            <field name="translated_technical_name">date_fin_periode_indemnisation</field>
+            <field name="description">Date de fin de la période d'indémnisation</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_indemnification_end_date</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="nb_jour_franchise">
+            <field name="translated_technical_name">nb_jour_franchise</field>
+            <field name="description">Nombre de jours de franchise sur une periode</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_number_of_deductible_days</field>
+            <field name="fct_args">Date debut periode, Date fin periode</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="liste_des_dates_pivots_sur_la_periode">
+            <field name="translated_technical_name">liste_des_dates_pivots_sur_la_periode</field>
+            <field name="description">Liste des dates pivots sur la période</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_detail_period_start_date</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="somme_montants_journaliers">
+            <field name="translated_technical_name">somme_montants_journaliers</field>
+            <field name="description">Somme des montants journaliers</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_sum_of_unit_amount</field>
+            <field name="fct_args">Date</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="period_frequency">
+            <field name="translated_technical_name">frequence_des_periodes</field>
+            <field name="description">Fréquence des périodes</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_service_period_frequency</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+	<record model="rule_engine.function" id="indemnification_amount">
+	  <field name="translated_technical_name">indemnisation_somme</field>
+	  <field name="description">Somme d'un indemnisation</field>
+	  <field name="type">function</field>
+	  <field name="language" ref="ir.lang_fr"/>
+	  <field name="namespace">rule_engine.runtime</field>
+	  <field name="name">_re_amount</field>
+	  <field name="parent" ref="claim.dossier_sinistre"/>
+	</record>
+    </data>
+</tryton>

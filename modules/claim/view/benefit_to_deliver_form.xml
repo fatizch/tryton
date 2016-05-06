@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Benefit">
+    <label name="to_deliver"/>
+    <field name="to_deliver"/>
+    <label name="benefit"/>
+    <field name="benefit"/>
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="option"/>
+    <field name="option"/>
+    <field name="benefit_description" colspan="4" widget="richtext"/>
+</form>

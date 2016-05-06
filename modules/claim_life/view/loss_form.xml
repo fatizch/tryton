@@ -2,8 +2,6 @@
 <data>
     <xpath expr="/form/field[@name='start_date']" position="after">
         <newline/>
-        <label name="end_date"/>
-        <field name="end_date"/>
         <label name="covered_person"/>
         <field name="covered_person"/>
     </xpath>

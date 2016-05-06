@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='losses']/field[@name='losses']" position="after">
+            <field name="losses" group="multi_losses" mode="form" relation="claim.indemnification" relation_field="service" view_ids="claim_indemnification.indemnification_view_form"/>
+    </xpath>
+</data>

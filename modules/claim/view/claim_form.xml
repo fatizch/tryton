@@ -5,10 +5,8 @@
     <label name="status"/>
     <group id="status" col="5">
         <field name="status"/>
-        <label name="reopened_reason"/>
-        <field name="reopened_reason"/>
         <label name="sub_status"/>
-        <field name="sub_status"/>
+        <field name="sub_status" widget="selection"/>
     </group>
     <newline/>
     <label name="declaration_date"/>
@@ -23,12 +21,9 @@
     <newline/>
     <notebook>
         <page string="Losses" id="losses">
-            <field name="losses" group="multi_losses" mode="tree" view_ids="claim.loss_simple_tree" xexpand="0" xfill="0"/>
+            <field name="losses" group="multi_losses" mode="tree" view_ids="claim.loss_simple_list" xexpand="0" xfill="0"/>
             <field name="losses" group="multi_losses" mode="form" relation="claim.loss" relation_field="claim" view_ids="claim.loss_view_form"/>
             <field name="losses" group="multi_losses" mode="form" relation="claim.service" relation_field="loss" view_ids="claim.claim_service_view_form"/>
-        </page>
-        <page string="Documents" id="documents">
-            <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>
         </page>
     </notebook>
     <group id="contracts">

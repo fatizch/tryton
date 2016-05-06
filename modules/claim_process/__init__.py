@@ -8,6 +8,7 @@ def register():
         Claim,
         Loss,
         Process,
+        ProcessLossDescRelation,
         ClaimDeclareFindProcess,
         module='claim_process', type_='model')
 

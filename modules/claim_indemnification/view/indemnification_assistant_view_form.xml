@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Indemnifications Assistant" col="4">
+    <group id="control_group" colspan="2" col="4">
+        <label name="global_setter"/>
+        <field name="global_setter"/>
+        <newline/>
+        <label name="field_sort"/>
+        <field name="field_sort"/>
+        <label name="order_sort"/>
+        <field name="order_sort"/>
+    </group>
+    <newline/>
+    <group id="indemnification_list" colspan="4" yexpand="1" yfill="1">
+        <field name="validate" mode="tree" group="validate"/>
+        <field name="control" mode="tree" group="control"/>
+        <newline/>
+        <field name="validate" mode="form" group="validate" expand_toolbar="0"/>
+        <field name="control" mode="form" group="control" expand_toolbar="0"/>
+    </group>
+</form>

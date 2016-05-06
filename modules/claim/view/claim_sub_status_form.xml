@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Substatus">
+    <label name="name" xalign="0"/>
+    <field name="name"/>
+    <label name="code" xalign="0"/>
+    <field name="code"/>
+    <label name="status"/>
+    <field name="status"/>
+    <label name="active"/>
+    <field name="active"/>
+</form>

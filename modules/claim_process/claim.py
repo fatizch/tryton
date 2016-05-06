@@ -1,8 +1,9 @@
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Bool
+from trytond.transaction import Transaction
 
 from trytond.modules.process import ClassAttr
-from trytond.modules.cog_utils import utils, fields
+from trytond.modules.cog_utils import utils, fields, model
 from trytond.modules.process_cog import CogProcessFramework
 from trytond.modules.process_cog import ProcessFinder, ProcessStart
 
@@ -12,6 +13,7 @@ __all__ = [
     'Claim',
     'Loss',
     'Process',
+    'ProcessLossDescRelation',
     'ClaimDeclareFindProcess',
     'ClaimDeclare',
     ]
@@ -23,13 +25,16 @@ class Claim(CogProcessFramework):
     __metaclass__ = ClassAttr
     __name__ = 'claim'
 
-    doc_received = fields.Function(
-        fields.Boolean('All Documents Received', depends=['documents']),
-        'on_change_with_doc_received')
     contact_history = fields.Function(
         fields.One2Many('party.interaction', '', 'History',
             depends=['claimant']),
         'on_change_with_contact_history')
+    main_loss_description = fields.Function(
+        fields.Char('Loss Description'),
+        'get_main_loss_description')
+    delivered_services = fields.Function(
+        fields.One2Many('claim.service', None, 'Claim Services'),
+        'get_delivered_services', setter='set_delivered_services')
 
     @fields.depends('claimant')
     def on_change_with_contact_history(self, name=None):
@@ -39,60 +44,93 @@ class Claim(CogProcessFramework):
         return [x.id for x in ContactHistory.search(
                 [('party', '=', self.claimant)])]
 
+    def get_main_loss_description(self, name):
+        pool = Pool()
+        Lang = pool.get('ir.lang')
+        lang = Transaction().language
+        if not self.losses:
+            return ''
+        loss = self.losses[0]
+        return '%s (%s - %s)' % (loss.loss_desc.name, Lang.strftime(
+                loss.start_date, lang, '%d/%m/%Y') if loss.start_date else '',
+            Lang.strftime(loss.end_date, lang, '%d/%m/%Y')
+            if loss.end_date else '')
+
+    def get_delivered_services(self, name):
+        return [d.id for loss in self.losses for d in loss.services]
+
+    @classmethod
+    def set_delivered_services(cls, claims, name, value):
+        pool = Pool()
+        Service = pool.get('claim.service')
+        for action in value:
+            if action[0] == 'write':
+                objects = [Service(id_) for id_ in action[1]]
+                Service.write(objects, action[2])
+            elif action[0] == 'delete':
+                objects = [Service(id_) for id_ in action[1]]
+                Service.delete(objects)
+
     def init_declaration_document_request(self):
-        DocRequest = Pool().get('document.request')
-        if not (hasattr(self, 'documents') and self.documents):
-            good_req = DocRequest()
-            good_req.needed_by = self
-            good_req.save()
-        else:
-            good_req = self.documents[0]
+        pool = Pool()
+        DocumentRequestLine = pool.get('document.request.line')
         documents = []
         for loss in self.losses:
             if not loss.loss_desc:
                 continue
             loss_docs = loss.loss_desc.get_documents()
-            if loss_docs:
-                documents.extend([(doc_desc, self) for doc_desc in loss_docs])
+            documents.extend(loss_docs)
             for delivered in loss.services:
                 if not (hasattr(delivered, 'benefit') and delivered.benefit):
                     continue
-                contract = delivered.contract
-                product = contract.product
-                if not product:
-                    continue
-                benefit_docs, errs = delivered.benefit.get_result(
-                    'documents', {
-                        'product': product,
-                        'contract': contract,
-                        'loss': loss,
-                        'claim': self,
-                        'date': loss.get_date(),
-                        'appliable_conditions_date':
-                        contract.appliable_conditions_date,
-                    })
-                if errs:
-                    return False, errs
-                if not benefit_docs:
-                    continue
-                documents.extend([
-                    (doc_desc, delivered) for doc_desc in benefit_docs])
-        good_req.add_documents(utils.today(), documents)
-        return True, ()
-
-    @fields.depends('documents')
-    def on_change_with_doc_received(self, name=None):
-        if not (hasattr(self, 'documents') and self.documents):
-            return False
-        for doc in self.documents:
-            if not doc.is_complete:
-                return False
-        return True
+                args = {}
+                delivered.init_dict_for_rule_engine(args)
+                docs = delivered.benefit.calculate_required_documents(args)
+                documents.extend(docs)
+        existing_document_desc = [request.document_desc
+            for request in self.document_request_lines]
+        documents = list(set(documents))
+        for desc in documents:
+            if desc in existing_document_desc:
+                existing_document_desc.remove(desc)
+                continue
+            line = DocumentRequestLine()
+            line.document_desc = desc
+            line.for_object = '%s,%s' % (self.__name__, self.id)
+            line.save()
 
     def reject_and_close_claim(self):
         self.status = 'closed'
         self.end_date = utils.today()
         return True
+
+    def init_first_loss(self):
+        pool = Pool()
+        Loss = pool.get('claim.loss')
+        LossDesc = pool.get('benefit.loss.description')
+        if self.losses:
+            return
+        loss_descs = LossDesc.search([])
+        if loss_descs:
+            loss_desc = loss_descs[0]
+            event_desc = loss_desc.event_descs[0]
+            self.losses = [Loss(loss_desc=loss_desc, event_desc=event_desc)]
+
+    def deliver_services(self):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        Services = pool.get('claim.service')
+        to_save = []
+        for loss in self.losses:
+            if loss.services:
+                continue
+            option_benefit = loss.get_possible_benefits()
+            for option_id, benefits in option_benefit.iteritems():
+                for benefit in benefits:
+                    loss.init_services(Option(option_id), [benefit])
+                    to_save.extend(loss.services)
+        if to_save:
+            Services.save(to_save)
 
 
 class Loss:
@@ -102,7 +140,7 @@ class Loss:
     # creation. it should not be used once a service has been created
     benefit_to_deliver = fields.Function(
         fields.Many2One('benefit', 'Benefit',
-            domain=[('id', 'in', Eval('benefits'))],
+            # domain=[('id', 'in', Eval('benefits'))],
             depends=['benefits']),
         'get_benefit_to_deliver', 'setter_void')
     benefits = fields.Function(
@@ -178,12 +216,26 @@ class Loss:
 class Process:
     __name__ = 'process'
 
+    for_loss_descs = fields.Many2Many('process-benefit.loss.description',
+        'process', 'loss_desc', 'Loss Description')
+
     @classmethod
     def __setup__(cls):
         super(Process, cls).__setup__()
         cls.kind.selection.append(('claim_declaration', 'Claim Declaration'))
         cls.kind.selection.append(('claim_reopening', 'Claim Reopening'))
         cls.kind.selection[:] = list(set(cls.kind.selection))
+
+
+class ProcessLossDescRelation(model.CoopSQL):
+    'Process Loss Desc Relation'
+
+    __name__ = 'process-benefit.loss.description'
+
+    loss_desc = fields.Many2One('benefit.loss.description', 'Loss Description',
+        ondelete='CASCADE', required=True, select=True)
+    process = fields.Many2One('process', 'Process', ondelete='RESTRICT',
+        required=True)
 
 
 class ClaimDeclareFindProcess(ProcessStart):
@@ -195,6 +247,7 @@ class ClaimDeclareFindProcess(ProcessStart):
     claim = fields.Many2One('claim', 'Claim',
         domain=[('id', 'in', Eval('claims'))], depends=['claims'],
         ondelete='SET NULL')
+    loss_desc = fields.Many2One('benefit.loss.description', 'Loss Description')
     claims = fields.Function(
         fields.One2Many('claim', None, 'Claims'),
         'on_change_with_claims')
@@ -202,9 +255,9 @@ class ClaimDeclareFindProcess(ProcessStart):
     @classmethod
     def build_process_domain(cls):
         res = super(ClaimDeclareFindProcess, cls).build_process_domain()
-        res += [If(
-                Bool(Eval('claim')),
-                ('kind', 'in', ['claim_reopening', 'claim_declaration']),
+        res += [('for_loss_descs', '=', Eval('loss_desc')),
+            If(Bool(Eval('claim')),
+                ('kind', '=', 'claim_reopening'),
                 ('kind', '=', 'claim_declaration')
                 )]
         return res
@@ -212,7 +265,7 @@ class ClaimDeclareFindProcess(ProcessStart):
     @classmethod
     def build_process_depends(cls):
         res = super(ClaimDeclareFindProcess, cls).build_process_depends()
-        res += ['claim']
+        res += ['claim', 'party', 'loss_desc']
         return res
 
     @classmethod
@@ -224,6 +277,11 @@ class ClaimDeclareFindProcess(ProcessStart):
     def on_change_with_claims(self, name=None):
         Claim = Pool().get('claim')
         return [x.id for x in Claim.search([('claimant', '=', self.party)])]
+
+    @fields.depends('claim', 'party', 'loss_desc')
+    def on_change_with_good_process(self):
+        return super(ClaimDeclareFindProcess,
+            self).on_change_with_good_process()
 
 
 class ClaimDeclare(ProcessFinder):
@@ -242,6 +300,8 @@ class ClaimDeclare(ProcessFinder):
             'declaration_process_parameters_form')
 
     def init_main_object_from_process(self, obj, process_param):
+        pool = Pool()
+        Loss = pool.get('claim.loss')
         res, errs = super(ClaimDeclare,
             self).init_main_object_from_process(obj, process_param)
         if res:
@@ -251,7 +311,21 @@ class ClaimDeclare(ProcessFinder):
                 possible_contracts = obj.get_possible_contracts()
                 if len(possible_contracts) == 1:
                     obj.main_contract = possible_contracts[0]
+            if len(process_param.good_process.for_loss_descs) == 1:
+                loss_desc = process_param.good_process.for_loss_descs[0]
+                event_desc = loss_desc.event_descs[0]
+                obj.losses = [Loss(loss_desc=loss_desc,
+                        event_desc=event_desc,
+                        covered_person=process_param.party
+                        if (process_param.party and
+                            process_param.party.is_person)
+                        else None)]
         return res, errs
 
     def search_main_object(self):
         return self.process_parameters.claim
+
+    def update_main_object(self, main_obj):
+        if main_obj.status == 'closed':
+            main_obj.status = 'open'
+        return main_obj

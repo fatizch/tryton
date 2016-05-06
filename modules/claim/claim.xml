@@ -2,6 +2,37 @@
 <tryton>
     <data>
         <!-- ############################################################ -->
+        <!-- ########### User group ##################################### -->
+        <!-- ############################################################ -->
+        <record model="res.group" id="group_claim_admin">
+            <field name="name">Claim Administration</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_claim_admin">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_claim_admin"/>
+        </record>
+        <record model="res.user-res.group" id="user_trigger_group_claim_admin">
+            <field name="user" ref="res.user_trigger"/>
+            <field name="group" ref="group_claim_admin"/>
+        </record>
+        <record model="res.group" id="group_claim">
+            <field name="name">claim</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_claim">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_claim"/>
+        </record>
+        <record model="res.user-res.group" id="user_trigger_group_claim">
+            <field name="user" ref="res.user_trigger"/>
+            <field name="group" ref="group_claim"/>
+        </record>
+        <menuitem name="Claim" id="menu_claim" sequence="15"/>
+        <menuitem name="Configuration" parent="menu_claim" sequence="20" id="menu_claim_configuration" icon="tryton-preferences"/>
+        <record model="ir.ui.menu-res.group" id="menu_configuration_group_claim_admin">
+            <field name="menu" ref="menu_claim_configuration"/>
+            <field name="group" ref="group_claim_admin"/>
+        </record>
+        <!-- ############################################################ -->
         <!-- Claim -->
         <!-- ############################################################ -->
         <record model="ir.ui.view" id="claim_view_form">
@@ -9,10 +40,10 @@
             <field name="type">form</field>
             <field name="name">claim_form</field>
         </record>
-        <record model="ir.ui.view" id="claim_view_tree">
+        <record model="ir.ui.view" id="claim_view_list">
             <field name="model">claim</field>
             <field name="type">tree</field>
-            <field name="name">claim_tree</field>
+            <field name="name">claim_list</field>
         </record>
         <!-- Read / Write rule -->
         <record model="ir.rule.group" id="rule_group_claim">
@@ -29,9 +60,9 @@
             <field name="res_model">claim</field>
             <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', False))]" pyson="1"/>
         </record>
-        <record model="ir.action.act_window.view" id="act_claim_view_tree">
+        <record model="ir.action.act_window.view" id="act_claim_view_list">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="claim_view_tree"/>
+            <field name="view" ref="claim_view_list"/>
             <field name="act_window" ref="act_claim_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_claim_view_form">
@@ -39,15 +70,42 @@
             <field name="view" ref="claim_view_form"/>
             <field name="act_window" ref="act_claim_form"/>
         </record>
-        <menuitem name="Claim" id="menu_claim" sequence="15"/>
         <menuitem parent="menu_claim" sequence="4" id="menu_claim_form" icon="tryton-list" action="act_claim_form"/>
+        <!-- ############################################################ -->
+        <!-- Claim Substatus -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="sub_status_view_list">
+            <field name="model">claim.sub_status</field>
+            <field name="type">tree</field>
+            <field name="name">claim_sub_status_list</field>
+        </record>
+        <record model="ir.ui.view" id="sub_status_view_form">
+            <field name="model">claim.sub_status</field>
+            <field name="type">form</field>
+            <field name="name">claim_sub_status_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_sub_status_form">
+            <field name="name">Sub-status</field>
+            <field name="res_model">claim.sub_status</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_sub_status_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="sub_status_view_list"/>
+            <field name="act_window" ref="act_sub_status_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_sub_status_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="sub_status_view_form"/>
+            <field name="act_window" ref="act_sub_status_form"/>
+        </record>
+        <menuitem parent="claim.menu_claim_configuration" id="sub_status_form" icon="tryton-tree" action="act_sub_status_form"/>
         <!-- ############################################################ -->
         <!-- Loss -->
         <!-- ############################################################ -->
-        <record model="ir.ui.view" id="loss_view_tree">
+        <record model="ir.ui.view" id="loss_view_list">
             <field name="model">claim.loss</field>
             <field name="type">tree</field>
-            <field name="name">loss_tree</field>
+            <field name="name">loss_list</field>
         </record>
         <record model="ir.ui.view" id="loss_view_form">
             <field name="model">claim.loss</field>
@@ -55,11 +113,16 @@
             <field name="priority" eval="10"/>
             <field name="name">loss_form</field>
         </record>
-        <record model="ir.ui.view" id="loss_simple_tree">
+        <record model="ir.ui.view" id="loss_without_service_view_form">
+            <field name="model">claim.loss</field>
+            <field name="type">form</field>
+            <field name="name">loss_without_service_form</field>
+        </record>
+        <record model="ir.ui.view" id="loss_simple_list">
             <field name="model">claim.loss</field>
             <field name="type">tree</field>
             <field name="field_childs">multi_level_view</field>
-            <field name="name">loss_simple_tree</field>
+            <field name="name">loss_simple_list</field>
         </record>
         <!--################################################################ -->
         <!-- Claim Service -->
@@ -69,10 +132,23 @@
             <field name="type">form</field>
             <field name="name">service_form</field>
         </record>
-        <record model="ir.ui.view" id="claim_service_view_tree">
+        <record model="ir.ui.view" id="claim_service_view_list">
             <field name="model">claim.service</field>
             <field name="type">tree</field>
             <field name="name">service_list</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Claim Service Extra_data ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="claim_service_extra_data_view_list">
+            <field name="model">claim.service.extra_data</field>
+            <field name="type">tree</field>
+            <field name="name">claim_service_extra_data_list</field>
+        </record>
+        <record model="ir.ui.view" id="contract_extra_data_view_form">
+            <field name="model">claim.service.extra_data</field>
+            <field name="type">form</field>
+            <field name="name">claim_service_extra_data_form</field>
         </record>
         <!--################################################################ -->
         <!-- Relate -->
@@ -86,18 +162,6 @@
             <field name="keyword">form_relate</field>
             <field name="model">party.party,-1</field>
             <field name="action" ref="act_claim_relate_form"/>
-        </record>
-        <!-- Receive Documents -->
-        <record model="ir.action.keyword" id="receive_documents_wizard_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">claim,-1</field>
-            <field name="action" ref="document_request.receive_documents_wizard"/>
-        </record>
-        <!-- Send Document -->
-        <record model="ir.action.keyword" id="letter_generation_claim_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">claim,-1</field>
-            <field name="action" ref="report_engine.letter_generation_wizard"/>
         </record>
         <!-- Claim Number Generator -->
         <record model="ir.sequence.type" id="sequence_type_claim_number">

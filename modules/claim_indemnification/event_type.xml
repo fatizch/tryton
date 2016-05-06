@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="event.type" id="event_post_invoice">
+            <field name="name">Validate Indemnification</field>
+            <field name="code">validate_indemnification</field>
+        </record>
+        <record model="event.type" id="event_cancel_invoice">
+            <field name="name">Reject Indemnification</field>
+            <field name="code">reject_indemnification</field>
+        </record>
+        <record model="event.type" id="event_pay_invoice">
+            <field name="name">Schedule Indemnification</field>
+            <field name="code">schedule_indemnification</field>
+        </record>
+    </data>
+</tryton>

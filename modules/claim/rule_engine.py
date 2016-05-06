@@ -29,3 +29,23 @@ class RuleEngineRuntime:
     def _re_service_total_expenses(cls, args):
         del_service = args['service']
         return del_service.get_total_expense(args['currency'])
+
+    @classmethod
+    @check_args('claim')
+    def _re_claim_declaration_date(cls, args):
+        return args['claim'].declaration_date
+
+    @classmethod
+    @check_args('loss')
+    def _re_loss_start_date(cls, args):
+        return args['loss'].start_date
+
+    @classmethod
+    @check_args('loss')
+    def _re_loss_desc_code(cls, args):
+        return args['loss'].loss_desc.code
+
+    @classmethod
+    @check_args('loss')
+    def _re_event_desc_code(cls, args):
+        return args['loss'].event_desc.code

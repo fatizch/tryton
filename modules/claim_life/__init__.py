@@ -4,20 +4,13 @@ from .contract import *
 from .test_case import *
 from .benefit import *
 
-
 def register():
     Pool.register(
+        Benefit,
         LossDescription,
         ContractOption,
         ClaimService,
+        ClaimServiceExtraDataRevision,
         Loss,
-        Claim,
-        Indemnification,
-        IndemnificationDetail,
-        ClaimIndemnificationValidateDisplay,
-        ClaimIndemnificationValidateSelect,
         TestCaseModel,
         module='claim_life', type_='model')
-    Pool.register(
-        ClaimIndemnificationValidate,
-        module='claim_life', type_='wizard')

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tree string="Control Indemnifications" editable="bottom">
+    <field name="action"/>
+    <field name="covered_person" width="200"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
+    <field name="amount">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="loss_date"/>
+    <field name="contract"/>
+    <field name="benefit" width="200"/>
+    <field name="reason" expand="1" width="150"/>
+    <field name="note" expand="1"/>
+</tree>

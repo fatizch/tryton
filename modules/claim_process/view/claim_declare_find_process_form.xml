@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form/label[@name='good_process']" position="before">
+        <label name="loss_desc"/>
+        <field name="loss_desc" widget="selection"/>
+        <newline/>
         <label name="party"/>
         <field name="party"/>
         <label name="claim"/>

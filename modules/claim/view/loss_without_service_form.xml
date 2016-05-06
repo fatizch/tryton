@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Loss">
+    <label name="loss_desc"/>
+    <field name="loss_desc" widget="selection"/>
+    <label name="event_desc"/>
+    <field name="event_desc" widget="selection"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <newline/>
+    <field name="extra_data" colspan="2" no_command="1"/>
+    <field name="claim"/>
+</form>

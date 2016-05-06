@@ -1,9 +1,9 @@
-Ce module permet de gérer les sinistres d'un contrat d'assurance
+Ce module permet de gérer le paramétrage des prestations et les
+sinistres d'un contrat d'assurance
 
+* Gestion des événements couverts
+* Gestion des descripteurs de préjudice
 * Ouverture de sinistre
 * Enregistrement des événements
-* Calcul des prestations éligibles
-* Calcul des documents requis
-* Calcul de l'indemnisation
 * Clotûre de sinistre
 * Réouverture de sinistre

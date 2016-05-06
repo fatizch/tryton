@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Fill Extra Datas">
+    <label name="date"/>
+    <field name="date"/>
+    <newline/>
+    <field name="extra_data" colspan="4" no_command="1"/>
+    <field name="service" invisible="1"/>
+</form>

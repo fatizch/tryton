@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- ########### displayer ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="extra_data_displayer_view_form">
+            <field name="model">claim.extra_data_value_displayer</field>
+            <field name="type">form</field>
+            <field name="name">extra_data_diplayer_form</field>
+        </record>
+        <record model="ir.ui.view" id="extra_data_diplayer_view_list">
+            <field name="model">claim.extra_data_value_displayer</field>
+            <field name="type">tree</field>
+            <field name="name">extra_data_diplayer_list</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ######## Indemnification Control & Validate Display ######## -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="indemnification_validate_tree_view">
+            <field name="model">claim.indemnification.assistant.validate.element</field>
+            <field name="type">tree</field>
+            <field name="name">indemnification_validate_tree</field>
+        </record>
+        <record model="ir.ui.view" id="indemnification_control_tree_view">
+            <field name="model">claim.indemnification.assistant.control.element</field>
+            <field name="type">tree</field>
+            <field name="name">indemnification_control_tree</field>
+        </record>
+        <record model="ir.ui.view" id="indemnification_validate_form_view">
+            <field name="model">claim.indemnification.assistant.validate.element</field>
+            <field name="type">form</field>
+            <field name="name">indemnification_element_form</field>
+        </record>
+        <record model="ir.ui.view" id="indemnification_control_form_view">
+            <field name="model">claim.indemnification.assistant.control.element</field>
+            <field name="type">form</field>
+            <field name="name">indemnification_element_form</field>
+        </record>
+        <record model="ir.ui.view" id="indemnification_assistant_view_form">
+            <field name="model">claim.indemnification.assistant.view</field>
+            <field name="type">form</field>
+            <field name="name">indemnification_assistant_view_form</field>
+        </record>
+        <record model="ir.action.wizard" id="indemnification_validate_wizard">
+            <field name="name">Indemnification Validation Wizard</field>
+            <field name="wiz_name">claim.indemnification.assistant</field>
+        </record>
+        <record model="ir.action.wizard" id="indemnification_control_wizard">
+            <field name="name">Indemnification Control Wizard</field>
+            <field name="wiz_name">claim.indemnification.assistant</field>
+        </record>
+        <menuitem name="Controler les Indemnifications" id="menu_control_indemnification"
+                  sequence="5" parent="claim.menu_claim" action="indemnification_control_wizard"/>
+        <menuitem name="Validate Indemnifications" id="menu_validate_indemnification"
+                  sequence="6" parent="claim.menu_claim" action="indemnification_validate_wizard"/>
+        <!-- ############################################################ -->
+        <!-- ########### Fill extra datas wizard ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="extra_data_displayers_view_form">
+            <field name="model">claim.extra_datas_displayers</field>
+            <field name="type">form</field>
+            <field name="name">extra_data_displayers_form</field>
+        </record>
+        <record model="ir.action.wizard" id="act_fill_extra_data_wizard">
+            <field name="name">Fill Extra Datas</field>
+            <field name="wiz_name">claim.fill_extra_datas</field>
+        </record>
+        <record model="ir.model.button" id="claim_fill_extra_datas_button">
+            <field name="name">fill_extra_datas</field>
+            <field name="model" search="[('model', '=', 'claim.service')]"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Indemnification Creation Wizard ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="indemnification_definition_view_form">
+            <field name="model">claim.indemnification_definition</field>
+            <field name="type">form</field>
+            <field name="name">indemnification_definition_form</field>
+        </record>
+        <record model="ir.ui.view" id="indemnification_regularization_view_form">
+            <field name="model">claim.indemnification_regularization</field>
+            <field name="type">form</field>
+            <field name="name">indemnification_regularization_form</field>
+        </record>
+        <record model="ir.ui.view" id="indemnification_calculation_result_view_form">
+            <field name="model">claim.indemnification_calculation_result</field>
+            <field name="type">form</field>
+            <field name="name">indemnification_calculation_result_form</field>
+        </record>
+        <record model="ir.action.wizard" id="act_create_indemnification_wizard">
+            <field name="name">Create Indemnification</field>
+            <field name="wiz_name">claim.create_indemnification</field>
+        </record>
+        <record model="ir.model.button" id="claim_create_indemnification_button">
+            <field name="name">create_indemnification</field>
+            <field name="model" search="[('model', '=', 'claim.service')]"/>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="invoice_validate_button_group_account">
+            <field name="button" ref="claim_create_indemnification_button"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+    </data>
+</tryton>

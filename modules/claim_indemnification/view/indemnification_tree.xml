@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tree>
+    <field name="benefit_description"/>
+    <field name="status"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
+    <field name="amount">
+        <suffix name="currency_symbol"/>
+    </field>
+    <button string="Validate" name="validate_indemnification"/>
+</tree>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/notebook" position="inside">
+        <page string="Documents" id="document">
+            <field name="documents" colspan="4"/>
+        </page>
+    </xpath>
+</data>

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -10,6 +10,26 @@ msgctxt "field:claim,indemnifications_consult:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
 
+msgctxt "field:claim,indemnifications_to_schedule:"
+msgid "Indemnification To Schedule"
+msgstr "Indémnisations ordonnancées"
+
 msgctxt "field:claim,is_pending_indemnification:"
 msgid "Pending Indemnification"
 msgstr "Indemnisation en attente"
+
+msgctxt "view:claim.service:"
+msgid "Add New Indemnification"
+msgstr "Nouvelle période"
+
+msgctxt "view:claim.service:"
+msgid "Claim Service"
+msgstr "Prestation fournie"
+
+msgctxt "view:claim.service:"
+msgid "Indemnisations"
+msgstr "Indémnisations"
+
+msgctxt "view:claim.service:"
+msgid "Informations"
+msgstr "Informations"

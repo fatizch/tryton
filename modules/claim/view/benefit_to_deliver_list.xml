@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tree string="Benefit" editable="bottom">
+    <field name="to_deliver"/>
+    <field name="benefit"/>
+    <field name="contract"/>
+    <field name="covered_element"/>
+</tree>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<form string="Benefit Eligibility Rule">
+    <label name="rule"/>
+    <field name="rule"/>
+    <field name="rule_extra_data" no_command="1" colspan="4"/>
+</form>

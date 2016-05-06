@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Claim Service">
+    <notebook>
+        <page string="Indemnisations" id="indemnifications">
+            <field name="indemnifications" colspan="4" no_command="1" view_ids="claim_indemnification.indemnification_simple_view_list,claim_indemnification.indemnification_view_form"/>
+            <newline/>
+            <label name="period_frequency"/>
+            <field name="period_frequency"/>
+            <label name="payment_accepted_until_date"/>
+            <field name="payment_accepted_until_date"/>
+            <newline/>
+        </page>
+        <page string="Informations" id="informations">
+            <label name="contract"/>
+            <field name="contract"/>
+            <label name="option"/>
+            <field name="option"/>
+            <label name="loss"/>
+            <field name="loss"/>
+            <label name="benefit"/>
+            <field name="benefit"/>
+            <field name="extra_datas" colspan="4"/>
+        </page>
+    </notebook>
+</form>

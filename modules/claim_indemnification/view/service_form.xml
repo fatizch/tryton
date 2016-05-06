@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='extra_datas']" position="after">
+        <newline/>
+        <label name="period_frequency"/>
+        <field name="period_frequency"/>
+        <label name="payment_accepted_until_date"/>
+        <field name="payment_accepted_until_date"/>
+        <label name="paid_until_date"/>
+        <field name="paid_until_date"/>
+    </xpath>
+</data>

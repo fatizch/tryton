@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- Claim -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="claim_view_form">
+            <field name="model">claim</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="claim.claim_view_form"/>
+            <field name="name">claim_form</field>
+        </record>
+        <!-- Receive Documents -->
+        <record model="ir.action.keyword" id="receive_documents_wizard_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">claim,-1</field>
+            <field name="action" ref="document_request.receive_documents_wizard"/>
+        </record>
+        <!-- Send Document -->
+        <record model="ir.action.keyword" id="letter_generation_claim_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">claim,-1</field>
+            <field name="action" ref="report_engine.letter_generation_wizard"/>
+        </record>
+    </data>
+</tryton>

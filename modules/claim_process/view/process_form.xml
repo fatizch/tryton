@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='products']" position="after">
+        <page string="Loss Description" id="loss_desc">
+            <field name="for_loss_descs" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
+        </page>
+    </xpath>
+</data>
