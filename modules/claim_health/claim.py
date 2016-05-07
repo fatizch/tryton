@@ -90,6 +90,9 @@ class Claim:
 class ClaimService:
     __name__ = 'claim.service'
 
+    delivered_amount = fields.Numeric('Delivered Amount', readonly=True,
+        states={'invisible': ~Eval('delivered_amount')})
+
     def get_covered_person(self):
         if self.loss.loss_desc.loss_kind == 'health':
             return self.loss.health_loss.covered_person
