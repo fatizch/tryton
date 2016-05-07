@@ -178,38 +178,6 @@ class ClaimService:
                 cur_date = max(cur_date, indemnification.end_date)
         return cur_date
 
-    def create_indemnification_details(self, cur_dict):
-        IndemnificationDetail = Pool().get('claim.indemnification.detail')
-        details_dict, _ = self.benefit.get_result('indemnification', cur_dict)
-        return IndemnificationDetail.create_details_from_dict(details_dict,
-            cur_dict['currency'])
-
-    def create_indemnification(self, cur_dict):
-        pool = Pool()
-        Indemnification = pool.get('claim.indemnification')
-
-        indemnifications = list(getattr(self, 'indemnifications', []))
-        indemnifications = [x for x in indemnifications
-            if x.status != 'calculated']
-
-        indemnification = Indemnification()
-        indemnification.init_from_service(self)
-        details = self.create_indemnification_details(cur_dict)
-
-        if 'end_date' in cur_dict:
-            while details[-1].end_date < cur_dict['end_date']:
-                cur_dict = cur_dict.copy()
-                cur_dict['date'] = coop_date.add_day(
-                    details[-1].end_date, 1)
-                details += self.create_indemnification_details(cur_dict)
-        indemnification.start_date = details[0].start_date
-        indemnification.details = details
-        indemnification.calculate_amount_and_end_date_from_details(self,
-            cur_dict['currency'])
-        indemnifications.append(indemnification)
-        self.indemnifications = indemnifications
-        return True, []
-
     def regularize_indemnification(self, indemnification, details_dict,
             currency):
         amount = sum([x.amount for x in self.indemnifications
@@ -220,14 +188,6 @@ class ClaimService:
                     'amount_per_unit': amount,
                     'nb_of_unit': -1,
                 }]
-
-    def get_indemnification_being_calculated(self, cur_dict):
-        for indemnification in self.indemnifications:
-            if (indemnification.status == 'calculated'
-                    and (not getattr(indemnification, 'local_currency', None)
-                        or indemnification.local_currency ==
-                        cur_dict['currency'])):
-                return indemnification
 
     @classmethod
     @ModelView.button_action(

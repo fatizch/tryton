@@ -305,9 +305,9 @@ class ExtraDataValueDisplayer(model.CoopView):
     'Extra Data Value Displayer'
     __name__ = 'claim.extra_data_value_displayer'
 
-    name = fields.Char('Name', depends=['childs'])
-    key = fields.Char('Key', depends=['childs'])
-    value = fields.Numeric('Value', depends=['childs'])
+    name = fields.Char('Name')
+    key = fields.Char('Key')
+    value = fields.Numeric('Value')
 
 
 class ExtraDatasDisplayers(model.CoopView):
