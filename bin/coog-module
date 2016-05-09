@@ -70,12 +70,18 @@ coog_module_updatedb() { # install / update database modules - <database> [modul
                 $args
 }
 
-coog_module_create() { # creates a new module in the modules folder - <module_name> <main_file>
+coog_module_create() { # creates a new module in the modules folder - <module_name> <file_1> [file_2] etc.
         [ -z $1 ] && echo No module name && return 1
         [ -z $2 ] && echo No main file && return 1
         local module_folder
         module_folder=$COOG_BIN/../../modules/$1
         [ -d $module_folder ] && echo Module $1 already exists && return 1
+
+        local module_name
+        module_name=$1
+        shift
+        local filenames
+        filenames=$*
 
         # Create folders
         mkdir $module_folder
@@ -95,30 +101,42 @@ coog_module_create() { # creates a new module in the modules folder - <module_na
         echo "    res" >> $module_folder/tryton.cfg
         echo "    cog_utils" >> $module_folder/tryton.cfg
         echo "xml:" >> $module_folder/tryton.cfg
-        echo "    $2.xml" >> $module_folder/tryton.cfg
+        for filename in $filenames
+        do
+            echo "    $filename.xml" >> $module_folder/tryton.cfg
+        done
 
         # Init __init__.py
         echo "from trytond.pool import Pool" > $module_folder/__init__.py
-        echo "from .$2 import *" >> $module_folder/__init__.py
+        for filename in $filenames
+        do
+            echo "from .$filename import *" >> $module_folder/__init__.py
+        done
         echo "" >> $module_folder/__init__.py
         echo "" >> $module_folder/__init__.py
         echo "def register():" >> $module_folder/__init__.py
         echo "    Pool.register(" >> $module_folder/__init__.py
-        echo "        module='$1', type_='model')" >> $module_folder/__init__.py
+        echo "        module='$module_name', type_='model')" >> $module_folder/__init__.py
 
         # Init xml
-        echo "<?xml version=\"1.0\"?>" > $module_folder/$2.xml
-        echo "<tryton>" >> $module_folder/$2.xml
-        echo "    <data>" >> $module_folder/$2.xml
-        echo "    </data>" >> $module_folder/$2.xml
-        echo "</tryton>" >> $module_folder/$2.xml
+        for filename in $filenames
+        do
+            echo "<?xml version=\"1.0\"?>" > $module_folder/$filename.xml
+            echo "<tryton>" >> $module_folder/$filename.xml
+            echo "    <data>" >> $module_folder/$filename.xml
+            echo "    </data>" >> $module_folder/$filename.xml
+            echo "</tryton>" >> $module_folder/$filename.xml
+        done
 
         # Init py
-        echo "from trytond.pool import PoolMeta" > $module_folder/$2.py
-        echo "" >> $module_folder/$2.py
-        echo "__metaclass__ = PoolMeta" >> $module_folder/$2.py
-        echo "__all__ = [" >> $module_folder/$2.py
-        echo "    ]" >> $module_folder/$2.py
+        for filename in $filenames
+        do
+            echo "from trytond.pool import PoolMeta" > $module_folder/$filename.py
+            echo "" >> $module_folder/$filename.py
+            echo "__metaclass__ = PoolMeta" >> $module_folder/$filename.py
+            echo "__all__ = [" >> $module_folder/$filename.py
+            echo "    ]" >> $module_folder/$filename.py
+        done
 
         # Init CHANGELOG
         echo "* Module creation" > $module_folder/CHANGELOG
@@ -134,7 +152,7 @@ coog_module_create() { # creates a new module in the modules folder - <module_na
         echo "class ModuleTestCase(test_framework.CoopTestCase):" >> $module_folder/tests/test_module.py
         echo "    'Module Test Case'" >> $module_folder/tests/test_module.py
         echo "" >> $module_folder/tests/test_module.py
-        echo "    module = '$1'" >> $module_folder/tests/test_module.py
+        echo "    module = '$module_name'" >> $module_folder/tests/test_module.py
         echo "" >> $module_folder/tests/test_module.py
         echo "" >> $module_folder/tests/test_module.py
         echo "def suite():" >> $module_folder/tests/test_module.py
