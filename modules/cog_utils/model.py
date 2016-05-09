@@ -40,25 +40,29 @@ __all__ = [
     ]
 
 
-def serialize_this(the_data, from_field=None):
+def serialize_this(data, from_field=None, set_rec_names=False):
     res = None
-    if (isinstance(the_data, (tuple, list)) and the_data and
-            isinstance(the_data[0], Model)):
+    if (isinstance(data, (tuple, list)) and data and
+            isinstance(data[0], Model)):
         res = []
-        for elem in the_data:
+        for elem in data:
             res.append(serialize_this(elem))
-    elif isinstance(the_data, Model):
-        if isinstance(the_data, Model) and the_data.id > 0:
-            res = the_data.id
+    elif isinstance(data, Model):
+        if isinstance(data, Model) and data.id > 0:
+            res = data.id
             if isinstance(from_field, tryton_fields.Reference):
-                res = '%s,%s' % (the_data.__name__, the_data.id)
+                res = '%s,%s' % (data.__name__, data.id)
         else:
             res = {}
-            if the_data._values is not None:
-                for key, value in the_data._values.iteritems():
-                    res[key] = serialize_this(value, the_data._fields[key])
+            if data._values is not None:
+                for key, value in data._values.iteritems():
+                    res[key] = serialize_this(value, data._fields[key],
+                        set_rec_names=set_rec_names)
+                    if set_rec_names and isinstance(data._fields[key],
+                            (tryton_fields.Many2One, tryton_fields.Reference)):
+                        res[key + '.rec_name'] = getattr(value, 'rec_name', '')
     else:
-        res = the_data
+        res = data
     return res
 
 
