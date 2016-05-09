@@ -50,7 +50,7 @@ _coog_env_conf() { # set conf vars
 
 _coog_env_postgres() { # set postgres vars
         local db_conf
-        db_conf=`python2 $COOG_BIN/parse-config.py database uri < $COOG_CONF_SRV | python2 $COOG_BIN/parse-url.py` || return $?
+        db_conf=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_SRV | python $COOG_BIN/parse-url.py` || return $?
         PGHOST=`echo "$db_conf" | sed -n 2p`
         [ ! -z $PGHOST ] && export PGHOST
         PGPORT=`echo "$db_conf" | sed -n 3p`
@@ -65,7 +65,7 @@ _coog_env_postgres() { # set postgres vars
 }
 
 _coog_env_common() { # set common vars
-        LOG_LEVEL=`python2 $COOG_BIN/parse-config.py logger_root level < $COOG_CONF_LOG` || return $?
+        LOG_LEVEL=`python $COOG_BIN/parse-config.py logger_root level < $COOG_CONF_LOG` || return $?
         [ ! -z $LOG_LEVEL ] && export LOG_LEVEL
         return 0
 }
@@ -80,15 +80,15 @@ _coog_env_server() { # set server vars
         [ ! -z $TRYTOND_CONFIG ] && export TRYTOND_CONFIG
         TRYTOND_JSONRPC_DATA="$COOG_SAO"
         [ ! -z $TRYTOND_JSONRPC_DATA ] && export TRYTOND_JSONRPC_DATA
-        DB_NAME=`python2 $COOG_BIN/parse-config.py database uri < $COOG_CONF_SRV | python2 $COOG_BIN/parse-url.py | sed -n 6p` || return $?
+        DB_NAME=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_SRV | python $COOG_BIN/parse-url.py | sed -n 6p` || return $?
         [ ! -z $DB_NAME ] && export DB_NAME
-        TRYTOND_CACHE_REDIS=`python2 $COOG_BIN/parse-config.py cache redis < $COOG_CONF_SRV 2> /dev/null`
+        TRYTOND_CACHE_REDIS=`python $COOG_BIN/parse-config.py cache redis < $COOG_CONF_SRV 2> /dev/null`
         [ ! -z $TRYTOND_CACHE_REDIS ] && export TRYTOND_CACHE_REDIS
-        TRYTOND_ASYNC_RQ=`python2 $COOG_BIN/parse-config.py async rq < $COOG_CONF_SRV 2> /dev/null`
+        TRYTOND_ASYNC_RQ=`python $COOG_BIN/parse-config.py async rq < $COOG_CONF_SRV 2> /dev/null`
         [ ! -z $TRYTOND_ASYNC_RQ ] && export TRYTOND_ASYNC_RQ
-        TRYTOND_ASYNC_CELERY=`python2 $COOG_BIN/parse-config.py async celery < $COOG_CONF_SRV 2> /dev/null`
+        TRYTOND_ASYNC_CELERY=`python $COOG_BIN/parse-config.py async celery < $COOG_CONF_SRV 2> /dev/null`
         [ ! -z $TRYTOND_ASYNC_CELERY ] && export TRYTOND_ASYNC_CELERY
-        TRYTOND_PERF_BROKER=`python2 $COOG_BIN/parse-config.py perf broker < $COOG_CONF_SRV 2> /dev/null`
+        TRYTOND_PERF_BROKER=`python $COOG_BIN/parse-config.py perf broker < $COOG_CONF_SRV 2> /dev/null`
         [ ! -z $TRYTOND_PERF_BROKER ] && export TRYTOND_PERF_BROKER
         return 0
 }

@@ -51,7 +51,7 @@ coog_module_translate() { # generate module translations
         else
                 args=$*
         fi
-        python2 $COOG_BIN/translate.py -c $COOG_CONF_SRV -p $COOG_TRYTOND/trytond/modules $args
+        python $COOG_BIN/translate.py -c $COOG_CONF_SRV -p $COOG_TRYTOND/trytond/modules $args
 }
 
 coog_module_updatedb() { # install / update database modules - <database> [modules] - default is all

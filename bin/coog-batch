@@ -25,7 +25,7 @@ coog_batch_generate() { # generate batch jobs - <name> [batch-arg*]
         local name; name=$1; shift
         local nb; nb=`coog_batch_query count $name` || return $?
         [ $nb -gt 0 ] && echo queue not empty, archive or clear before generating && return 1
-        python2 $COOG_BIN/batch-generate.py -b $broker -n $name $*
+        python $COOG_BIN/batch-generate.py -b $broker -n $name $*
 }
 
 coog_batch_start() { # start batch execution - <name> <concurrency>
@@ -111,7 +111,7 @@ coog_batch_jsplit() { # split batch job - <id>
         local id; id=$1
         local key; key=`coog_batch_query key $id` || return $?
         [ -z $key ] && echo bad job id && return 1
-        python2 $COOG_BIN/batch-split.py $broker $key && coog_batch_jarchive $id
+        python $COOG_BIN/batch-split.py $broker $key && coog_batch_jarchive $id
 }
 
 coog_batch_log() { # print batch logs - <name> [cat-arg*]

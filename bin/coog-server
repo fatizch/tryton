@@ -64,7 +64,7 @@ coog_server_debug() { # start server in pdb - [args] passed to trytond
         args=$*
         [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
         _coog_server_cleancache
-        python2 -m pdb "$COOG_TRYTOND/bin/trytond" -c $COOG_CONF_SRV $args
+        python -m pdb "$COOG_TRYTOND/bin/trytond" -c $COOG_CONF_SRV $args
 }
 
 coog_server_stop() { # stop server (gracefully)
@@ -135,7 +135,7 @@ coog_server_tail() { # tail server logs
 
 coog_server_ping() { # call coog server - [curl args]
         local uri
-        uri=`python2 $COOG_BIN/parse-config.py jsonrpc listen < $COOG_CONF_SRV`
+        uri=`python $COOG_BIN/parse-config.py jsonrpc listen < $COOG_CONF_SRV`
         [ $? -ne 0 ] && echo no rpc url && return 1
         curl "$*" \
                 -X POST \

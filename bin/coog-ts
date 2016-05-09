@@ -7,7 +7,7 @@ _coog_ts_iterate() {
         while read entry
         do
                 local line
-                line=`echo $entry | python2 $COOG_BIN/parse-json.py hours project.name comments issue.id | paste`
+                line=`echo $entry | python $COOG_BIN/parse-json.py hours project.name comments issue.id | paste`
                 sum=$sum+`echo $line | cut -d " " -f 1`
                 echo " "$line
         done
@@ -26,6 +26,6 @@ coog_ts_main() { # print logged time
                 echo "  "Could be set in '~'/.\[z\]profile &&
                 return
         curl -s -k -u $COOG_REDMINE_CRED $url \
-                | python2 $COOG_BIN/parse-json.py time_entries \
+                | python $COOG_BIN/parse-json.py time_entries \
                 | _coog_ts_iterate
 }

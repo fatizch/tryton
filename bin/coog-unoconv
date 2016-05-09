@@ -3,7 +3,7 @@
 
 _coog_unoconv_connection() {
         local c
-        c=`python2 $COOG_BIN/parse-config.py report unoconv < $COOG_CONF_SRV 2> /dev/null`
+        c=`python $COOG_BIN/parse-config.py report unoconv < $COOG_CONF_SRV 2> /dev/null`
         [ ! -z $c ] && echo $c && return
         echo "pipe,name=trytond;urp;StarOffice.ComponentContext"
 }
