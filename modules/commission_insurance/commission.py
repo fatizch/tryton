@@ -129,6 +129,7 @@ class Commission:
         cls.amount.digits = (16, 8)
         cls.invoice_line.select = True
         cls.type_.searcher = 'search_type_'
+        cls.agent.select = True
 
     def get_commissioned_contract(self, name):
         if self.commissioned_option:
@@ -332,7 +333,22 @@ class AggregatedCommission(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(AggregatedCommission, cls).__setup__()
-        cls._order = [('total_commission', 'DESC')]
+        cls._order = [('agent', 'DESC'), ('start', 'ASC'),
+            ('total_commission', 'DESC')]
+
+    @classmethod
+    def read(cls, ids, fields_names=None):
+        if 'origins' not in Transaction().context and ids:
+            cursor = Transaction().cursor
+            commission = Pool().get('commission').__table__()
+            cursor.execute(*commission.select(commission.origin,
+                    where=commission.id.in_(ids),
+                    group_by=[commission.origin]))
+            origins = [x[0] for x in cursor.fetchall()]
+            with Transaction().set_context(origins=origins):
+                return super(AggregatedCommission, cls).read(ids,
+                    fields_names)
+        return super(AggregatedCommission, cls).read(ids, fields_names)
 
     def get_broker(self, name):
         return (self.agent.party.network[0].id
@@ -362,6 +378,11 @@ class AggregatedCommission(model.CoopSQL, model.CoopView):
         agent = Agent.__table__()
         invoice_line = InvoiceLine.__table__()
 
+        where_clause = None
+        if 'origins' in Transaction().context:
+            where_clause = (commission.origin.in_(
+                    Transaction().context.get('origins')))
+
         commission_agent = commission.join(agent,
             condition=commission.agent == agent.id)
 
@@ -383,7 +404,7 @@ class AggregatedCommission(model.CoopSQL, model.CoopView):
             Min(commission.start).as_('start'),
             Max(commission.end).as_('end'),
             Max(commission.date).as_('date'),
-            Sum(commission.amount).as_('total_commission'),
+            Sum(commission.amount).as_('total_commission'), where=where_clause,
             group_by=[commission.agent, invoice_line.invoice, agent.party])
 
 
@@ -1224,10 +1245,15 @@ class FilterCommissions(Wizard):
         return action, {}
 
     def do_aggregated_commissions(self, action):
+        invoices = Pool().get('account.invoice').browse(
+            Transaction().context.get('active_ids'))
         return action, {
             'ids': Transaction().context.get('active_ids'),
             'id': Transaction().context.get('active_id'),
             'model': Transaction().context.get('active_model'),
+            'extra_context': {
+                'origins': [str(x) for invoice in invoices
+                    for x in invoice.lines]},
             }
 
 
