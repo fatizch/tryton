@@ -49,7 +49,7 @@ class ProcessAction(model.CoopView, RuleMixin):
         if self.target_path:
             data.append(self.target_path)
         if self.rule_extra_data:
-            data.append(self.rule_extra_data_string)
+            data.append(unicode(self.rule_extra_data_string))
         return '\n'.join(data)
 
     @fields.depends('content', 'rule')
