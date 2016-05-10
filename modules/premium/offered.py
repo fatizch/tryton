@@ -5,6 +5,7 @@ from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
+from trytond.cache import Cache
 from trytond.model import MatchMixin
 
 from trytond.modules.cog_utils import fields, model, coop_date
@@ -180,7 +181,6 @@ class OptionDescriptionPremiumRule(RuleMixin, MatchMixin, model.CoopSQL,
                 self.rated_instance = data_dict['_rated_instance']
                 self.rated_entity = data_dict['_rated_entity']
                 self.date = data_dict['date']
-                self.taxes = []
                 self.frequency = None
 
             def __repr__(self):
@@ -221,8 +221,7 @@ class OptionDescriptionPremiumRule(RuleMixin, MatchMixin, model.CoopSQL,
             line.frequency = self.frequency
 
     def finalize_lines(self, lines):
-        for line in lines:
-            line.taxes = list(self.coverage.taxes)
+        pass
 
     def calculate(self, rated_instance, lines):
         rule_dict_template = self.get_base_premium_dict(rated_instance)
@@ -261,9 +260,21 @@ class OptionDescription:
     taxes = fields.Many2Many('offered.option.description-account.tax',
         'coverage', 'tax', 'Taxes')
 
+    _taxes_per_coverage_cache = Cache('taxes_per_coverage')
+
     @classmethod
     def _export_light(cls):
         return super(OptionDescription, cls)._export_light() | {'taxes'}
+
+    def _get_taxes(self):
+        taxes = self.__class__._taxes_per_coverage_cache.get(self.id, None)
+        if taxes is not None:
+            return taxes
+        # Small table, load it fully
+        for option_description in self.__class__.search([]):
+            self.__class__._taxes_per_coverage_cache.set(option_description.id,
+                [x.id for x in option_description.taxes])
+        return self._get_taxes()
 
     def get_rated_instances(self, base_instance):
         pool = Pool()
@@ -311,3 +322,15 @@ class OptionDescriptionTaxRelation(model.CoopSQL):
         ondelete='CASCADE', required=True)
     tax = fields.Many2One('account.tax', 'Tax', ondelete='RESTRICT',
         required=True)
+
+    @classmethod
+    def create(cls, *args):
+        OptionDescription = Pool().get('offered.option.description')
+        OptionDescription._taxes_per_coverage_cache.clear()
+        return super(OptionDescriptionTaxRelation, cls).create(*args)
+
+    @classmethod
+    def delete(cls, *args):
+        OptionDescription = Pool().get('offered.option.description')
+        OptionDescription._taxes_per_coverage_cache.clear()
+        super(OptionDescriptionTaxRelation, cls).delete(*args)

@@ -7,7 +7,6 @@ def register():
     Pool.register(
         ContractFee,
         Premium,
-        PremiumTax,
         EndorsementContract,
         PreviewContractPremiums,
         ContractPreview,

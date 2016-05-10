@@ -6,6 +6,7 @@ from sql.conditionals import Coalesce
 from dateutil.relativedelta import relativedelta
 
 from trytond.pool import PoolMeta, Pool
+from trytond import backend
 from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
@@ -460,15 +461,9 @@ class Premium(model.CoopSQL, model.CoopView):
     amount = fields.Numeric('Amount', required=True)
     frequency = fields.Selection(PREMIUM_FREQUENCY, 'Frequency', sort=False)
     frequency_string = frequency.translated('frequency')
-    taxes = fields.Many2Many('contract.premium-account.tax',
-        'premium', 'tax', 'Taxes',
-        domain=[
-            ('parent', '=', None),
-            ['OR',
-                ('group', '=', None),
-                ('group.kind', 'in', ['sale', 'both']),
-                ],
-            ])
+    taxes = fields.Function(
+        fields.Many2Many('account.tax', None, None, 'Taxes'),
+        'get_taxes')
     main_contract = fields.Function(
         fields.Many2One('contract', 'Contract'),
         'get_main_contract', searcher='search_main_contract')
@@ -484,6 +479,17 @@ class Premium(model.CoopSQL, model.CoopView):
         cls._order = [('rated_entity', 'ASC'), ('start', 'ASC')]
         cls.__rpc__.update({'get_parent_models': RPC()})
 
+    @classmethod
+    def __register__(cls, module_name):
+        super(Premium, cls).__register__(module_name)
+
+        # Migrate from 1.6 : Remove premium-tax relation
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        if TableHandler.table_exist(cursor, 'contract_premium-account_tax'):
+            TableHandler.drop_table(cursor, 'contract.premium-account.tax',
+                'contract_premium-account_tax', cascade=True)
+
     @dualmethod
     def save(cls, records):
         if not records:
@@ -496,7 +502,7 @@ class Premium(model.CoopSQL, model.CoopView):
 
     @classmethod
     def _export_light(cls):
-        return super(Premium, cls)._export_light() | {'rated_entity', 'taxes'}
+        return super(Premium, cls)._export_light() | {'rated_entity'}
 
     @classmethod
     def get_main_contract(cls, premiums, name):
@@ -570,6 +576,11 @@ class Premium(model.CoopSQL, model.CoopView):
     def get_rec_name(self, name):
         return self.parent.rec_name
 
+    def get_taxes(self, name):
+        if self.rated_entity.__name__ != 'offered.option.description':
+            return []
+        return self.rated_entity._get_taxes()
+
     @classmethod
     def search_main_contract(cls, name, clause):
         # Assumes main_contract cannot be null (which, even though it is not
@@ -622,7 +633,6 @@ class Premium(model.CoopSQL, model.CoopView):
         else:
             new_instance.end = end_date
         new_instance.amount = line.amount
-        new_instance.taxes = line.taxes
         new_instance.frequency = line.frequency
         return new_instance
 
@@ -644,8 +654,6 @@ class Premium(model.CoopSQL, model.CoopView):
         for elem in ident_fields:
             if getattr(self, elem) != getattr(other, elem):
                 return False
-        if set(self.taxes) != set(other.taxes):
-            return False
         return True
 
     def _get_key(self, no_date=False):

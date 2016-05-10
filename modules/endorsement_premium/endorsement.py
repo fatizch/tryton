@@ -1,12 +1,11 @@
 from trytond.pool import PoolMeta
-
-from trytond.modules.cog_utils import fields
+from trytond import backend
+from trytond.transaction import Transaction
 
 
 __all__ = [
     'ContractFee',
     'Premium',
-    'PremiumTax',
     'EndorsementContract',
     ]
 
@@ -22,18 +21,17 @@ class Premium:
     __metaclass__ = PoolMeta
     __name__ = 'contract.premium'
 
-    tax_list = fields.One2Many('contract.premium-account.tax', 'premium',
-        'Tax List', delete_missing=True)
-
     @classmethod
-    def _export_skips(cls):
-        return super(Premium, cls)._export_skips() | {'tax_list'}
+    def __register__(cls, module_name):
+        super(Premium, cls).__register__(module_name)
 
-
-class PremiumTax:
-    _history = True
-    __metaclass__ = PoolMeta
-    __name__ = 'contract.premium-account.tax'
+        # Migrate from 1.6 : Remove premium-tax relation
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        if TableHandler.table_exist(cursor,
+                'contract_premium-account_tax__history'):
+            TableHandler.drop_table(cursor, 'contract.premium-account.tax',
+                'contract_premium-account_tax__history', cascade=True)
 
 
 class EndorsementContract:
@@ -46,7 +44,6 @@ class EndorsementContract:
         contract_idx = order.index('contract')
         order.insert(contract_idx + 1, 'contract.fee')
         order.append('contract.premium')
-        order.append('contract.premium-account.tax')
         return order
 
     @classmethod
@@ -61,5 +58,3 @@ class EndorsementContract:
                 instances['contract.premium'] += fee.premiums
             for option in contract.options:
                 instances['contract.premium'] += option.premiums
-        for premium in instances['contract.premium']:
-            instances['contract.premium-account.tax'] += premium.tax_list

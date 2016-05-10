@@ -238,6 +238,9 @@ Create Product::
     >>> coverage.start_date = product_start_date
     >>> coverage.account_for_billing = product_account
     >>> coverage.taxes_included_in_premium = True
+    >>> coverage.taxes.append(tax1)
+    >>> coverage.taxes.append(tax2)
+    >>> coverage.taxes.append(tax3)
     >>> coverage.save()
     >>> product = Product()
     >>> product.company = company
@@ -277,7 +280,7 @@ Create Test Contract::
     >>> contract.options[0].premiums.append(ContractPremium(start=None,
     ...         amount=Decimal('100'), frequency='monthly',
     ...         account=product_account, rated_entity=coverage,
-    ...         taxes=[tax1, tax2, tax3]))
+    ...         ))
     >>> contract.save()
     >>> Wizard('contract.activate', models=[contract]).execute('apply')
     >>> Contract.first_invoice([contract.id], config.context)

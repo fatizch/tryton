@@ -1,3 +1,5 @@
+* Remove premium-tax relation, recompute dynamically
+
 Version 1.6 - 2015-12-23
 * Allow "Once per Year" fee frequency
 * Restrict default fee permissions to read only
