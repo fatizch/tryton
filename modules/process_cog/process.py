@@ -414,10 +414,6 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
             result = None
             for work in works:
                 result = target.execute(work)
-                if work.current_state.step.technical_name == 'quittance':
-                    work.write([work], {
-                            'current_state': work.current_state.id})
-                    continue
                 work.save()
             return result
 
