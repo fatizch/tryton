@@ -48,11 +48,6 @@ coog_init_redmine() { # init redmine credentials
         echo "now restart your session or source ~/.profile"
 }
 
-coog_init_docker() { # provide helpful scripts to manage docker
-        [ -d $COOG_DOCKER ] && mv $COOG_DOCKER $COOG_DOCKER".old"
-        cp -fr docker $COOG_DOCKER
-}
-
 coog_init_autocomplete() { # add coog completion scripts to current virtual env
         [ -z $VIRTUAL_ENV ] && echo not in a virtual env, nothing to do && return
         local command_path=`which coog`

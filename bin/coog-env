@@ -35,7 +35,6 @@ _coog_env_paths() { # set paths
         COOG_PROTEUS=$COOG_ROOT/proteus
         COOG_SAO=$COOG_ROOT/sao
         COOG_CONF=$COOG_ROOT/conf
-        COOG_DOCKER=$COOG_ROOT/docker
         COOG_BIN=`readlink -f ./bin`
         COOG_LIB=`readlink -f ./lib`
 }
@@ -134,7 +133,6 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    COOG_PROTEUS           "$COOG_PROTEUS
         echo "    COOG_SAO               "$COOG_SAO
         echo "    COOG_CONF              "$COOG_CONF
-        echo "    COOG_DOCKER            "$COOG_DOCKER
         echo "    COOG_BIN               "$COOG_BIN
         echo "    COOG_LIB               "$COOG_LIB
         echo "    COOG_CONF_CLI          "$COOG_CONF_CLI
