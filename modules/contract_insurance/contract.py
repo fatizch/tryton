@@ -552,7 +552,9 @@ class ContractOption:
         self.covered_element = covered_element
 
     def get_currency(self):
-        return self.covered_element.currency if self.covered_element else None
+        if self.covered_element:
+            return self.covered_element.currency
+        return super(ContractOption, self).get_currency()
 
     def get_covered_element(self, from_name=None, party=None):
         # TODO : move to claim ?
