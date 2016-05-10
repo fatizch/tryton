@@ -180,8 +180,7 @@ class EndorsementContract:
             for billing_information in self.billing_informations]
         if billing_summary:
             result[1].append(['%s :' % self.raise_user_error(
-                   'mes_billing_modifications',
-                    raise_exception=False),
+                   'mes_billing_modifications', raise_exception=False),
                 billing_summary])
         return result
 
@@ -208,8 +207,6 @@ class EndorsementContract:
         for extra_premium in instances['contract.option.extra_premium']:
             new_premiums += extra_premium.premiums
         instances['contract.premium'] += new_premiums
-        for premium in new_premiums:
-            instances['contract.premium-account.tax'] += premium.tax_list
 
     def apply_values(self):
         values = super(EndorsementContract, self).apply_values()

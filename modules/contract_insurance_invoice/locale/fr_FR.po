@@ -600,38 +600,6 @@ msgctxt "field:contract.premium,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:contract.premium-account.tax,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:contract.premium-account.tax,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.premium-account.tax,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.premium-account.tax,premium:"
-msgid "Premium"
-msgstr "Prime"
-
-msgctxt "field:contract.premium-account.tax,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.premium-account.tax,tax:"
-msgid "Tax"
-msgstr "Taxe"
-
-msgctxt "field:contract.premium-account.tax,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.premium-account.tax,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:contract.premium.display.premiums,id:"
 msgid "ID"
 msgstr "ID"
@@ -1039,10 +1007,6 @@ msgstr "Batch de numérotation des quittances"
 msgctxt "model:contract.premium,name:"
 msgid "Premium"
 msgstr "Prime"
-
-msgctxt "model:contract.premium-account.tax,name:"
-msgid "Premium - Tax"
-msgstr "Relation Prime - Taxe"
 
 msgctxt "model:contract.premium.display.premiums,name:"
 msgid "Display Contract Premium Displayer"

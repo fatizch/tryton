@@ -25,7 +25,6 @@ __all__ = [
     'ContractOption',
     'ContractFee',
     'Premium',
-    'PremiumTax',
     ]
 
 
@@ -661,14 +660,3 @@ class Premium(model.CoopSQL, model.CoopView):
             return (self.rated_entity,)
         else:
             return (self.rated_entity, self.start or datetime.date.min)
-
-
-class PremiumTax(model.CoopSQL):
-    'Premium - Tax'
-
-    __name__ = 'contract.premium-account.tax'
-
-    premium = fields.Many2One('contract.premium', 'Premium',
-        ondelete='CASCADE', select=True, required=True)
-    tax = fields.Many2One('account.tax', 'Tax', ondelete='RESTRICT',
-        required=True)

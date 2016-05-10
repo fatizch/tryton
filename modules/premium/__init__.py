@@ -21,7 +21,6 @@ def register():
         ContractFee,
         RuleEngine,
         Premium,
-        PremiumTax,
         DisplayContractPremiumDisplayer,
         DisplayContractPremiumDisplayerPremiumLine,
         module='premium', type_='model')
