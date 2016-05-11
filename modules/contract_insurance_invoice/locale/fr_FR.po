@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -115,6 +115,10 @@ msgstr "Elément tarifé"
 msgctxt "field:account.invoice.aggregate_lines.display.line,tax_amount:"
 msgid "Tax Amount"
 msgstr "Taxe"
+
+msgctxt "field:contract,processing_payments_amount:"
+msgid "Processing Payments Amount"
+msgstr "Montant des paiements en cours"
 
 msgctxt "field:account.invoice.aggregate_lines.display.line,total_amount:"
 msgid "Total Amount"

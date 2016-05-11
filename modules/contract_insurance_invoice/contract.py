@@ -123,6 +123,11 @@ class Contract:
             digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
         'get_balance_today', searcher='search_balance_today')
+    processing_payments_amount = fields.Function(
+        fields.Numeric('Processing Payments Amount',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_processing_payments_amount')
 
     _invoices_cache = Cache('invoices_report')
     _premium_intervals_cache = Cache('premium_intervals')
@@ -321,6 +326,30 @@ class Contract:
     def get_balance_at_date(self, at_date):
         return self.get_balance([self], 'balance', date=at_date)[self.id]
 
+    @classmethod
+    def get_processing_payments_amount(cls, contracts, name):
+        pool = Pool()
+        payment = pool.get('account.payment').__table__()
+        line = pool.get('account.move.line').__table__()
+        cursor = Transaction().cursor
+
+        result = {x.id: Decimal(0) for x in contracts}
+        for contracts_slice in grouped_slice(contracts):
+            query = payment.join(line,
+                condition=(payment.line == line.id)
+                ).select(line.contract, payment.kind, Sum(payment.amount),
+                where=(line.contract.in_([x.id for x in contracts_slice])) &
+                    (payment.state == 'processing'),
+                group_by=[line.contract, payment.kind]
+                )
+            cursor.execute(*query)
+            for contract, kind, amount in cursor.fetchall():
+                if kind == 'receivable':
+                    result[contract] -= amount
+                elif kind == 'payable':
+                    result[contract] += amount
+        return result
+
     def get_valid_billing_informations(self, name):
         # apply domain only on current and future version
         # in order to manage subscriber change
@@ -382,6 +411,11 @@ class Contract:
 
     def substract_balance_from_invoice_reports(self, invoice_reports):
         balance = self.balance
+        processing_payment = self.processing_payments_amount
+        if balance >= 0 and processing_payment < 0:
+            balance = processing_payment
+        elif balance < 0:
+            balance += processing_payment
         if balance >= 0:
             return invoice_reports
         for report in invoice_reports:
