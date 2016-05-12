@@ -453,10 +453,6 @@ msgctxt "wizard_button:ProcessFinder,process_parameters,action:"
 msgid "Start Process"
 msgstr "Démarrer le processus"
 
-msgctxt "wizard_button:ProcessFinder,process_parameters,action:"
-msgid "Start Process"
-msgstr "Démarrer le processus"
-
 msgctxt "wizard_button:ProcessFinder,process_parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"
