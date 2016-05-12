@@ -22,6 +22,7 @@ def register():
         ClaimInvoiceLineDetail,
         RuleEngine,
         RuleEngineRuntime,
+        EventLog,
         ExtraDataValueDisplayer,
         ExtraDatasDisplayers,
         IndemnificationDefinition,

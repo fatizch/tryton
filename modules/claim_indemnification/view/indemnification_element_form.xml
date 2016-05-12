@@ -2,5 +2,5 @@
 <form string="Indemnification">
     <field name="claim"/>
     <newline/>
-    <field name="indemnification_details" colspan="2" mode="form" expand_toolbar="0"/>
+    <field name="indemnification_details" colspan="2" mode="form" widget="one2many" expand_toolbar="0"/>
 </form>

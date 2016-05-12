@@ -55,12 +55,10 @@ class IndemnificationElement(model.CoopView):
         'claim.indemnification', 'Indemnification',
         states={'invisible': True, 'readonly': True})
     loss_date = fields.Date('Loss Date', readonly=True)
-    covered_person = fields.Many2One(
-        'party.party', 'Covered Person', readonly=True)
     benefit = fields.Many2One('benefit', 'Benefit', readonly=True)
     contract = fields.Many2One('contract', 'Contract', readonly=True)
-    indemnification_details = fields.One2Many(
-        'claim.indemnification', '', 'Details',
+    indemnification_details = fields.Many2Many(
+        'claim.indemnification', '', None, 'Details',
         states={'readonly': True})
 
     @classmethod
@@ -77,13 +75,12 @@ class IndemnificationElement(model.CoopView):
             'end_date': indemnification.end_date,
             'claim': service.loss.claim.id,
             'loss_date': service.loss.start_date,
-            'covered_person': service.get_covered_person().id,
             'indemnification_details': [indemnification.id]
             }
 
 
 class IndemnificationValidateElement(IndemnificationElement):
-    'Claim Indemnification Control Element'
+    'Claim Indemnification Validate Element'
 
     __name__ = 'claim.indemnification.assistant.validate.element'
 
@@ -113,12 +110,12 @@ class IndemnificationAssistantView(model.CoopView):
         'claim.indemnification.assistant.validate.element',
         '', 'Indemnifications to validate',
         states={'invisible': Equal(Eval('mode'), 'control')},
-        depends=['mode'])
+        depends=['mode'], delete_missing=True)
     control = fields.One2Many(
         'claim.indemnification.assistant.control.element',
         '', 'Indemnifications to control',
         states={'invisible': Equal(Eval('mode'), 'validate')},
-        depends=['mode'])
+        depends=['mode'], delete_missing=True)
     field_sort = fields.Selection('get_field_names', 'Sort By')
     order_sort = fields.Selection([
             ('ASC', 'Ascending'),
@@ -129,18 +126,6 @@ class IndemnificationAssistantView(model.CoopView):
             ('validate', 'Validate'),
             ('refuse', 'Refuse')],
         'Global value')
-
-    @classmethod
-    def default_global_setter(cls):
-        return 'nothing'
-
-    @classmethod
-    def default_field_sort(cls):
-        return 'amount'
-
-    @classmethod
-    def default_order_sort(cls):
-        return 'DESC'
 
     @classmethod
     def get_field_names(cls):
@@ -156,10 +141,6 @@ class IndemnificationAssistantView(model.CoopView):
 
     @fields.depends('control', 'field_sort', 'order_sort', 'mode', 'validate')
     def on_change_field_sort(self):
-        # for some reason this function breaks the detailed view form
-        # when selecting a indemnification
-        return
-        # so we just nope out of here until i fix it
         pool = Pool()
         field = self.field_sort
         if not field:
@@ -177,8 +158,9 @@ class IndemnificationAssistantView(model.CoopView):
             order=[(field, self.order_sort)])
         sorted_elements = []
         for result in results:
-            sorted_elements.append(Element.from_indemnification(result))
-        setattr(self, self.mode, sorted_elements)
+            sorted_elements.append(
+                Element.from_indemnification(result))
+        self.validate = sorted_elements
 
     @fields.depends('global_setter', 'validate', 'control')
     def on_change_global_setter(self):
@@ -233,7 +215,10 @@ class IndemnificationAssistant(Wizard):
         for res in result:
             elements.append(
                 Element.from_indemnification(res))
-        return {'validate': elements, 'mode': 'validate'}
+        return {
+            'validate': elements, 'mode': 'validate',
+            'global_setter': 'nothing', 'field_sort': 'amount',
+            'order_sort': 'DESC'}
 
     def default_control_view_state(self, fields):
         pool = Pool()

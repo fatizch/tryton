@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+  <xpath expr="/tree/field[@name='action']" position="after">
+    <field name="covered_person" width="200"/>
+  </xpath>
+</data>

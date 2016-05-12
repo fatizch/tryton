@@ -287,7 +287,7 @@ class Loss(model.CoopSQL, model.CoopView):
                 'End Date is smaller than start date',
                 })
 
-    @fields.depends('claim')
+    @fields.depends('claim', 'event_desc', 'loss_desc', 'start_date')
     def on_change_with_possible_loss_descs(self, name=None):
         pool = Pool()
         LossDesc = pool.get('benefit.loss.description')

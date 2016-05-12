@@ -2,6 +2,7 @@ from trytond.pool import PoolMeta
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'EventLog',
     'EventTypeAction',
     ]
 
@@ -17,3 +18,16 @@ class EventTypeAction:
         for object_ in objects:
             process_objects.append(object_.service.claim)
         return process_objects
+
+
+class EventLog:
+    __name__ = 'event.log'
+
+    @classmethod
+    def get_related_instances(cls, object_, model_name):
+        # TODO: use claim details to calculate the contract
+        if model_name == 'contract':
+            if (object_.__name__ == 'account.invoice' and
+                    not hasattr(object_, 'contract')):
+                return []
+        return super(EventLog, cls).get_related_instances(object_, model_name)

@@ -149,9 +149,6 @@ class ClaimService:
         return self.benefit.has_automatic_period_calculation() \
             if self.benefit else False
 
-    def get_paid_until_date(self, name):
-        return None
-
     @classmethod
     def default_period_frequency(cls):
         return 'quarterly'

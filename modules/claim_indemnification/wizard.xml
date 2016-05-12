@@ -7,12 +7,12 @@
         <record model="ir.ui.view" id="extra_data_displayer_view_form">
             <field name="model">claim.extra_data_value_displayer</field>
             <field name="type">form</field>
-            <field name="name">extra_data_diplayer_form</field>
+            <field name="name">extra_data_displayer_form</field>
         </record>
         <record model="ir.ui.view" id="extra_data_diplayer_view_list">
             <field name="model">claim.extra_data_value_displayer</field>
             <field name="type">tree</field>
-            <field name="name">extra_data_diplayer_list</field>
+            <field name="name">extra_data_displayer_list</field>
         </record>
         <!-- ############################################################ -->
         <!-- ######## Indemnification Control & Validate Display ######## -->

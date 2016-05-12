@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Control Indemnifications" editable="bottom">
     <field name="action"/>
-    <field name="covered_person" width="200"/>
     <field name="start_date"/>
     <field name="end_date"/>
     <field name="amount">

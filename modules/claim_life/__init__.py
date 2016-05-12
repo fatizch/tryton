@@ -3,6 +3,7 @@ from .claim import *
 from .contract import *
 from .test_case import *
 from .benefit import *
+from .wizard import *
 
 def register():
     Pool.register(
@@ -13,4 +14,6 @@ def register():
         ClaimServiceExtraDataRevision,
         Loss,
         TestCaseModel,
+        IndemnificationValidateElement,
+        IndemnificationControlElement,
         module='claim_life', type_='model')

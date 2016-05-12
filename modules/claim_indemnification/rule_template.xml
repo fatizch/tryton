@@ -4,7 +4,18 @@
         <record model="rule_engine" id="simple_claim_rule">
             <field name="name">Simple Claim Rule</field>
             <field name="short_name">simple_claim_rule</field>
-            <field name="algorithm">return param_claim_amount()</field>
+            <field name="algorithm">
+date_debut = date_debut_periode_indemnisation()
+date_fin = date_fin_periode_indemnisation()
+return [{
+    'start_date': date_debut,
+    'end_date': date_fin,
+    'nb_of_unit': (date_fin - date_debut).days + 1,
+    'unit': 'day',
+    'amount': ((date_fin - date_debut).days + 1) * param_claim_amount(),
+    'amount_per_unit': param_claim_amount()
+    }]
+	    </field>
             <field name="status">validated</field>
             <field name="type_">benefit</field>
             <field name="context" ref="rule_engine.default_context"/>
