@@ -1486,6 +1486,7 @@ class StartEndorsement:
                     contract=displayer.contract.id, values={})
                 to_save.append(endorsement)
             endorsement.values['end_date'] = displayer.new_end_date
+            endorsement.values = dict(endorsement.values)
         self.endorsement.contract_endorsements = to_save
         self.endorsement.save()
         return 'change_loan_data_next'
