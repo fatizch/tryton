@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tryton>
-    <data>
+    <data depends="claim_indemnification">
         <record model="ir.ui.view" id="indemnification_validate_tree_view">
             <field name="model">claim.indemnification.assistant.validate.element</field>
             <field name="type">tree</field>
