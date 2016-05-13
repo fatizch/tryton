@@ -94,8 +94,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
             ]
         cls.__rpc__.update({'get_default_value_selection': RPC(instantiate=0)})
         cls._error_messages.update({
-                'invalid_value': 'Invalid value %s for key %s in field %s of '
-                '%s',
+                'invalid_value': 'Invalid value for key %s in field %s of %s',
                 'expected_value': 'Expected key %s to be set in field %s of '
                 '%s',
                 })
@@ -217,6 +216,9 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         if expected_values is not None:
             expected_values = expected_values()
         res, errs = True, []
+        translated_keys = TranslatedDict(name=field_name, type_='keys')
+        trans_keys = translated_keys.__get__(instance,
+            instance.__class__)
         for k, v in field_value.items():
             if expected_values is not None:
                 if k in expected_values:
@@ -226,7 +228,8 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
             key, = cls.search([('name', '=', k)])
             if not key.validate_value(v):
                 res = False
-                cls.append_functional_error('invalid_value', (v, k, field_name,
+                cls.append_functional_error('invalid_value', (trans_keys[k],
+                        coop_string.translate_label(instance, field_name),
                         instance.get_rec_name(None)))
         if expected_values is not None:
             for k, v in expected_values.iteritems():

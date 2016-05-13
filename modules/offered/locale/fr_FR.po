@@ -7,8 +7,8 @@ msgid "Expected key %s to be set in field %s of %s"
 msgstr "%s doit être renseigné dans le champ %s de %s"
 
 msgctxt "error:extra_data:"
-msgid "Invalid value %s for key %s in field %s of %s"
-msgstr "Valeur invalide %s pour %s du champ %s de %s"
+msgid "Invalid value for key %s in field %s of %s"
+msgstr "Valeur invalide pour la donnée %s du champ %s de %s"
 
 msgctxt "error:extra_data:"
 msgid "The code must be unique!"
