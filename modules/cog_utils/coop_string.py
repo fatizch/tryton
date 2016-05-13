@@ -158,6 +158,8 @@ def selection_as_string(cls, var_name, value):
 
 
 def asciify(text):
+    if type(text) == str:
+        return text
     return unicode(unidecode(text)) if text else ''
 
 
