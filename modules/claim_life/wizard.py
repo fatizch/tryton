@@ -19,7 +19,7 @@ class IndemnificationValidateElement:
     def from_indemnification(cls, indemnification):
         res = super(
             IndemnificationValidateElement, cls).from_indemnification(
-                indemnification)
+            indemnification)
         covered_person = indemnification.service.get_covered_person()
         if covered_person:
             res['covered_person'] = covered_person.id
@@ -36,9 +36,8 @@ class IndemnificationControlElement:
     def from_indemnification(cls, indemnification):
         res = super(
             IndemnificationControlElement, cls).from_indemnification(
-                indemnification)
+            indemnification)
         covered_person = indemnification.service.get_covered_person()
         if covered_person:
             res['covered_person'] = covered_person.id
         return res
-

@@ -15,7 +15,7 @@ return [{
     'amount': ((date_fin - date_debut).days + 1) * param_claim_amount(),
     'amount_per_unit': param_claim_amount()
     }]
-	    </field>
+            </field>
             <field name="status">validated</field>
             <field name="type_">benefit</field>
             <field name="context" ref="rule_engine.default_context"/>
