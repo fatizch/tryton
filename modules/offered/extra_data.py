@@ -217,7 +217,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         if expected_values is not None:
             expected_values = expected_values()
         res, errs = True, []
-        for k, v in field_value.iteritems():
+        for k, v in field_value.items():
             if expected_values is not None:
                 if k in expected_values:
                     del expected_values[k]

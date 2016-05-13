@@ -233,6 +233,10 @@ msgctxt "field:contract.covered_element,party:"
 msgid "Actor"
 msgstr "Tiers"
 
+msgctxt "error:party.party:"
+msgid "Missing extra data for : %s"
+msgstr "Il manque des données complémentaires pour %s"
+
 msgctxt "field:contract.covered_element,party_code:"
 msgid "Party Code"
 msgstr "Code du tiers"

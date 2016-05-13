@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, model
 
 __metaclass__ = PoolMeta
 
@@ -19,6 +19,13 @@ class Party:
         'Covered Elements')
 
     @classmethod
+    def __setup__(cls):
+        super(Party, cls).__setup__()
+        cls._error_messages.update({
+                'missing_extra_data': 'Missing extra data for : %s',
+                })
+
+    @classmethod
     def view_attributes(cls):
         return super(Party, cls).view_attributes() + [(
                 '/form/group[@id="party_extra_data"]',
@@ -31,6 +38,18 @@ class Party:
         default = default.copy() if default else {}
         default.setdefault('covered_elements', None)
         return super(Party, cls).copy(parties, default=default)
+
+    @classmethod
+    def validate(cls, parties):
+        super(Party, cls).validate(parties)
+        cls.check_extra_data(parties)
+
+    @classmethod
+    def check_extra_data(cls, parties):
+        ExtraData = Pool().get('extra_data')
+        with model.error_manager():
+            for party in parties:
+                ExtraData.check_extra_data(party, 'extra_data')
 
     def get_subscribed_contracts(self):
         Contract = Pool().get('contract')
