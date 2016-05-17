@@ -64,7 +64,6 @@
             <field name="view" ref="coverage_view_form"/>
             <field name="act_window" ref="act_coverage_form"/>
         </record>
-        <menuitem parent="contract.menu_contract" name="Group" id="menu_group" sequence="20"/>
         <menuitem parent="offered.menu_product" sequence="20" id="menu_coverage_form" icon="tryton-list" action="act_coverage_form"/>
     </data>
 </tryton>

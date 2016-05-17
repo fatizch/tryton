@@ -16,26 +16,62 @@
             <field name="name">contract_form</field>
         </record>
         <!-- View for the main menu and the event -->
-        <record model="ir.action.act_window" id="act_contract_form">
-            <field name="name">Group Contract</field>
+        <record model="ir.action.act_window" id="act_contract_group_form">
+            <field name="name">Group Contracts</field>
             <field name="res_model">contract</field>
             <field name="domain" eval="[('is_group', '=', True)]" pyson="1"/>
         </record>
-        <record model="ir.action.act_window" id="contract.act_contract_form">
-            <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', False)), ('is_group', '=', False)]" pyson="1"/>
+        <record model="ir.action.act_window.domain" id="act_contract_domain_active">
+            <field name="name">Active</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[('status', '=', 'active')]" pyson="1"/>
+            <field name="act_window" ref="act_contract_group_form"/>
         </record>
+        <record model="ir.action.act_window.domain" id="act_contract_domain_terminated">
+            <field name="name">Terminated</field>
+            <field name="sequence" eval="30"/>
+            <field name="domain"
+		   eval="['OR', ('status', '=', 'terminated'), ('status', '=', 'void')]" pyson="1"/>
+            <field name="act_window" ref="act_contract_group_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_contract_domain_all">
+            <field name="name">All</field>
+            <field name="sequence" eval="40"/>
+            <field name="domain" eval="[]" pyson="1"/>
+            <field name="act_window" ref="act_contract_group_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_contract_domain_recent">
+            <field name="name">Recent</field>
+            <field name="sequence" eval="50"/>
+            <field name="domain"
+		   eval="['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]" pyson="1"/>
+            <field name="act_window" ref="act_contract_group_form"/>
+        </record>
+	<record model="ir.action.act_window" id="contract.act_contract_form">
+          <field name="domain"
+		 eval="[('company', '=', Eval('context', {}).get('company', False)), ('is_group', '=', False)]"
+		 pyson="1"/>
+        </record>
+	<!-- View for Group Contract Quotes -->
+	<record model="ir.action.act_window" id="act_contract_quote_form">
+	  <field name="name">Quotes</field>
+	  <field name="res_model">contract</field>
+	  <field name="domain" eval="[('is_group', '=', True), ('status', '=', 'quote')]" pyson="1"/>
+	</record>
         <!-- View that connect the form in the tree with the specification -->
         <record model="ir.action.act_window.view" id="act_contract_form_view1">
             <field name="sequence" eval="30"/>
             <field name="view" ref="contract_view_tree"/>
-            <field name="act_window" ref="act_contract_form"/>
+            <field name="act_window" ref="act_contract_group_form"/>
         </record>
         <!-- View for the edition or the Form of product -->
         <record model="ir.action.act_window.view" id="act_contract_form_view2">
             <field name="sequence" eval="40"/>
             <field name="view" ref="contract_view_form"/>
-            <field name="act_window" ref="act_contract_form"/>
+            <field name="act_window" ref="act_contract_group_form"/>
         </record>
-        <menuitem parent="menu_group" sequence="3" id="menu_contract_form" icon="tryton-list" action="act_contract_form"/>
+        <menuitem name="Group Contract" id="menu_group_contract" sequence="10" icon="contract"/>
+        <menuitem parent="menu_group_contract" sequence="10" id="menu_group_contract_quotes" icon="contract" action="act_contract_quote_form"/>
+        <menuitem parent="menu_group_contract" sequence="20" id="menu_group_contract_active" icon="contract" action="act_contract_group_form"/>
     </data>
 </tryton>

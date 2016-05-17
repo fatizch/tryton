@@ -37,7 +37,7 @@ class ContractSubscribeFindProcess(ProcessStart):
             ['OR',
                 [('start_date', '<=', Eval('effective_date'))],
                 [('start_date', '=', None)],
-                ],
+                ]
             ], depends=['effective_date'], required=True)
     party = fields.Many2One('party.party', 'Party', states={'invisible': True})
 

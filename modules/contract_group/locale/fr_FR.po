@@ -1,50 +1,87 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:contract,is_group:"
 msgid "Group Contract"
-msgstr "Contrat Groupe"
+msgstr "Contrat Collectif"
 
 msgctxt "field:offered.option.description,is_group:"
 msgid "Group Coverage"
-msgstr "Garanties Groupe"
+msgstr "Garanties Collectif"
 
 msgctxt "field:offered.product,is_group:"
 msgid "Group Product"
-msgstr "Produits Groupe"
+msgstr "Produits Collectif"
 
-msgctxt "model:ir.action,name:act_contract_form"
-msgid "Group Contract"
-msgstr "Contrat Groupe"
+msgctxt "model:ir.action,name:None"
+msgid "Contrat Group"
+msgstr "Contrat Collectif"
+
+msgctxt "model:ir.action,name:act_contract_group_form"
+msgid "Group Contracts"
+msgstr "Contrats Collectifs"
+
+msgctxt "model:ir.action,name:act_contract_quote_form"
+msgid "Quotes"
+msgstr "Devis"
 
 msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Group Coverages"
-msgstr "Garanties Groupe"
+msgstr "Garanties Collectives"
 
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Group Products"
-msgstr "Produits Groupe"
+msgstr "Produits Collectif"
 
-msgctxt "model:ir.ui.menu,name:menu_contract_form"
+msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_active"
+msgid "Active"
+msgstr "Active"
+
+msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_all"
+msgid "All"
+msgstr "Toutes"
+
+msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_recent"
+msgid "Recent"
+msgstr "Mon historique"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_contract_domain_terminated"
+msgid "Terminated"
+msgstr "Résiliée"
+
+msgctxt "model:ir.ui.menu,name:"
 msgid "Group Contract"
-msgstr "Contrat Groupe"
+msgstr "Contrat Collectif"
+
+msgctxt "model:ir.ui.menu,name:None"
+msgid "Group Contracts"
+msgstr "Contrats Collectifs"
 
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
 msgid "Group Coverages"
-msgstr "Garanties Groupe"
+msgstr "Garanties Collectif"
 
-msgctxt "model:ir.ui.menu,name:menu_group"
-msgid "Group"
-msgstr "Groupe"
+msgctxt "model:ir.ui.menu,name:menu_group_contract"
+msgid "Group Contract"
+msgstr "Contrat Collectif"
+
+msgctxt "model:ir.ui.menu,name:menu_group_contract_form"
+msgid "Group Contracts"
+msgstr "Contrats Collectifs"
+
+msgctxt "model:ir.ui.menu,name:menu_group_contract_quotes"
+msgid "Quotes"
+msgstr "Devis"
 
 msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Group Products"
-msgstr "Produits Groupe"
+msgstr "Produits Collectif"
 
 msgctxt "model:tag,name:tag_group"
 msgid "Group"
-msgstr "Groupe"
+msgstr "Collectif"
 
 msgctxt "view:contract.covered_element:"
 msgid "Covered Element"

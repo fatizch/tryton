@@ -1,33 +1,47 @@
-from trytond.pool import PoolMeta
-from trytond.pyson import Eval
+from trytond.modules.contract_insurance_process.process import (
+    ContractSubscribeFindProcess, ContractSubscribe)
 
-from trytond.modules.cog_utils import fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'ContractSubscribeFindProcess',
-    'ContractSubscribe',
+    'ContractGroupSubscribeFindProcess',
+    'ContractGroupSubscribe',
     ]
 
 
-class ContractSubscribeFindProcess:
-    __name__ = 'contract.subscribe.find_process'
+class ContractGroupSubscribeFindProcess(ContractSubscribeFindProcess):
+    'Contract Group Subscribe Find Process'
 
-    is_group = fields.Boolean('Group')
+    __name__ = 'contract_group.subscribe.find_process'
 
     @classmethod
     def __setup__(cls):
-        super(ContractSubscribeFindProcess, cls).__setup__()
-        cls.product.domain = ['AND', cls.product.domain,
-            [('is_group', '=', Eval('is_group'))]]
-        cls.product.depends += ['is_group']
+        super(ContractGroupSubscribeFindProcess, cls).__setup__()
+        cls.product.domain = [
+            'AND',
+            cls.product.domain,
+            [('is_group', '=', True)]]
 
 
-class ContractSubscribe:
-    __name__ = 'contract.subscribe'
+class ContractGroupSubscribe(ContractSubscribe):
+    __name__ = 'contract_group.subscribe'
+
+    @classmethod
+    def get_parameters_model(cls):
+        return 'contract_group.subscribe.find_process'
 
     @classmethod
     def get_parameters_view(cls):
-        return '%s.%s' % (
-            'contract_group_process',
-            'contract_subscribe_find_process_form')
+        return (
+            'contract_insurance_process.contract_subscribe_find_process_form')
+
+    def init_main_object_from_process(self, obj, process_param):
+        res, err = super(
+            ContractGroupSubscribe, self).init_main_object_from_process(
+            obj, process_param)
+        if res:
+            obj.init_from_product(
+                process_param.product, process_param.effective_date)
+            obj.subscriber = process_param.party
+            obj.is_group = True
+        return res, err
