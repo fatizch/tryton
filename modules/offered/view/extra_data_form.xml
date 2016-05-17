@@ -22,6 +22,7 @@
                 <field name="with_default_value" xexpand="0"/>
                 <field name="default_value_boolean" xexpand="0"/>
                 <field name="default_value_selection"/>
+                <field name="default_value"/>
             </group>
         </page>
         <page id="sub_data" string="Sub Data">

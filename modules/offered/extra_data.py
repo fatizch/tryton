@@ -38,7 +38,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                     Eval('type_') != 'boolean'),
                 },
             depends=['type_', 'with_default_value']),
-        'get_default_value', 'set_default_value')
+        'get_default_value', 'setter_void')
     default_value_selection = fields.Function(
         fields.Selection('get_default_value_selection', 'Default Value',
             states={
@@ -49,8 +49,8 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                 },
             depends=['type_', 'selection', 'with_default_value'],
             ),
-        'get_default_value', 'set_default_value')
-    default_value = fields.Char('Default Value')
+        'get_default_value', 'setter_void')
+    default_value = fields.Char('Default Value', states={'invisible': True})
     kind = fields.Selection([
             ('', ''),
             ('contract', 'Contract'),
@@ -164,6 +164,14 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
     def on_change_with_tags_name(self, name=None):
         return ', '.join([x.name for x in self.tags])
 
+    @fields.depends('default_value_boolean', 'default_value')
+    def on_change_default_value_boolean(self):
+        self.default_value = str(self.default_value_boolean)
+
+    @fields.depends('default_value_selection', 'default_value')
+    def on_change_default_value_selection(self):
+        self.default_value = self.default_value_selection
+
     @fields.depends('type_', 'selection', 'with_default_value')
     def get_default_value_selection(self):
         selection = [('', '')]
@@ -181,20 +189,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         if name_type == 'selection':
             return self.default_value if self.type_ == 'selection' else None
         return None
-
-    @classmethod
-    def set_default_value(cls, schemas, name, value):
-        name_type = name[14:]
-        for schema in schemas:
-            if not name_type == schema.type_:
-                continue
-            if name_type == 'boolean':
-                if isinstance(value, bool) and value:
-                    cls.write(schemas, {'default_value': 'True'})
-                else:
-                    cls.write(schemas, {'default_value': 'False'})
-            elif name_type == 'selection':
-                cls.write(schemas, {'default_value': value})
 
     def validate_value(self, value):
         if self.type_ == 'selection':
