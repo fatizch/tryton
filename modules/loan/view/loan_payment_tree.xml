@@ -8,4 +8,5 @@
     <field name="principal" sum="Total Principal"/>
     <field name="interest" sum="Total Interest"/>
     <field name="outstanding_balance"/>
+    <field name="currency_digits" tree_invisible="1"/>
 </tree>

@@ -12,7 +12,8 @@ from trytond.modules.endorsement import EndorsementWizardStepMixin, \
     add_endorsement_step
 
 PAYMENT_FIELDS = ['kind', 'number', 'start_date', 'begin_balance',
-    'amount', 'principal', 'interest', 'outstanding_balance']
+    'amount', 'principal', 'interest', 'outstanding_balance',
+    'currency_digits']
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -1416,6 +1417,8 @@ class StartEndorsement:
             new_loan = old_loan.__class__(old_loan.id)
             utils.apply_dict(new_loan, endorsement.apply_values())
             new_loan.calculate()
+            for payment in new_loan.payments:
+                payment.currency_digits = new_loan.currency_digits
             default_values.append({
                     'loan_id': old_loan.id,
                     'loan_rec_name': new_loan.rec_name,
