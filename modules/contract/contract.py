@@ -54,8 +54,6 @@ __all__ = [
     'ContractOption',
     'ContractOptionVersion',
     'ContractExtraDataRevision',
-    'ContractSelectEndDate',
-    'ContractEnd',
     'ContractSelectStartDate',
     'ContractChangeStartDate',
     'ContractSelectHoldReason',
@@ -2189,50 +2187,6 @@ class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,
             values['_func_key'] = values['date']
         else:
             values['_func_key'] = None
-
-
-class ContractSelectEndDate(model.CoopView):
-    'End date selector for contract'
-
-    __name__ = 'contract.end.select_date'
-
-    end_date = fields.Date('End date', required=True)
-    termination_reason = fields.Many2One('contract.sub_status',
-        'Termination Reason', domain=[('status', '=', 'terminated')],
-        required=True)
-
-
-class ContractEnd(Wizard):
-    'End Contract wizard'
-
-    __name__ = 'contract.end'
-
-    start_state = 'select_date'
-    select_date = StateView('contract.end.select_date',
-        'contract.contract_end_select_date_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Apply', 'apply', 'tryton-go-next')])
-    apply = StateTransition()
-
-    def default_select_date(self, name):
-        return {'end_date': utils.today()}
-
-    def transition_apply(self):
-        pool = Pool()
-        Contract = pool.get('contract')
-        ActivationHistory = pool.get('contract.activation_history')
-        contracts = Contract.browse(Transaction().context.get('active_ids'))
-        to_write = []
-        for contract in contracts:
-            contract.end_date = self.select_date.end_date
-            to_write.append([contract])
-            to_write.append(contract._save_values)
-        Contract.write(*to_write)
-        activation_histories = [contract.activation_history[-1]
-            for contract in contracts]
-        ActivationHistory.write(activation_histories, {
-                'termination_reason': self.select_date.termination_reason})
-        return 'end'
 
 
 class ContractSelectHoldReason(model.CoopView):

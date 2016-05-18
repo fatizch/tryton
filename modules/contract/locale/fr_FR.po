@@ -461,18 +461,6 @@ msgctxt "field:contract.decline.select_reason,reason:"
 msgid "Reason"
 msgstr "Raison"
 
-msgctxt "field:contract.end.select_date,end_date:"
-msgid "End date"
-msgstr "Date de Fin"
-
-msgctxt "field:contract.end.select_date,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.end.select_date,termination_reason:"
-msgid "Termination Reason"
-msgstr "Motif de résiliation"
-
 msgctxt "field:contract.extra_data,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -1060,10 +1048,6 @@ msgctxt "model:contract.decline.select_reason,name:"
 msgid "Reason selector to decline contract"
 msgstr "Motif pour décliner le contrat"
 
-msgctxt "model:contract.end.select_date,name:"
-msgid "End date selector for contract"
-msgstr "Choix de la date de fin pour le contrat"
-
 msgctxt "model:contract.extra_data,name:"
 msgid "Contract Extra Data"
 msgstr "Données Complémentaires"
@@ -1480,10 +1464,6 @@ msgctxt "view:contract.decline.select_reason:"
 msgid "Select Declination Reason"
 msgstr "Choisir le motif pour décliner"
 
-msgctxt "view:contract.end.select_date:"
-msgid "Select End Date"
-msgstr "Séléctionner la date de fin"
-
 msgctxt "view:contract.extra_data:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
@@ -1637,14 +1617,6 @@ msgid "Apply"
 msgstr "Appliquer"
 
 msgctxt "wizard_button:contract.decline,select_reason,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:contract.end,select_date,apply:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt "wizard_button:contract.end,select_date,end:"
 msgid "Cancel"
 msgstr "Annuler"
 

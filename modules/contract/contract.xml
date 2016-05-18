@@ -113,21 +113,6 @@
             <field name="act_window" ref="act_quote_form"/>
         </record>
         <!-- ############################ -->
-        <!-- # Contract Select End Date # -->
-        <!-- ############################ -->
-        <record model="ir.ui.view" id="contract_end_select_date_view_form">
-            <field name="model">contract.end.select_date</field>
-            <field name="type">form</field>
-            <field name="name">contract_end_select_date_form</field>
-        </record>
-        <!-- ####################### -->
-        <!-- # Contract End Wizard # -->
-        <!-- ####################### -->
-        <record model="ir.action.wizard" id="act_end">
-            <field name="name">End Contract</field>
-            <field name="wiz_name">contract.end</field>
-        </record>
-        <!-- ############################ -->
         <!-- # Hold contract            # -->
         <!-- ############################ -->
         <record model="ir.ui.view" id="contract_select_hold_status_view_form">
