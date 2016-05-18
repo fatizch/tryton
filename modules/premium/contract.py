@@ -136,7 +136,7 @@ class Contract:
                 res.add(end)
             return sorted(res)
 
-        if not start or start == datetime.date.min:
+        if not start or start < self.start_date:
             start = self.start_date
         dates = limit_dates(self.get_dates(), start)
         lines = self.product.calculate_premiums(self, dates)

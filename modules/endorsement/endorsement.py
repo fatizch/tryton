@@ -1564,8 +1564,8 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         ContractEndorsement = pool.get('endorsement.contract')
         endorsements = []
         for contract in contracts:
-            date = (origin.effective_date if (origin and origin.effective_date)
-                else contract.start_date)
+            date = max(getattr(origin, 'effective_date', datetime.date.min),
+                contract.start_date)
             endorsement = Endorsement(definition=endorsement_definition,
                 effective_date=date)
             endorsements.append(endorsement)
