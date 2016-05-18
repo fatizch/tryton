@@ -1223,10 +1223,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         pool = Pool()
         Event = pool.get('event')
         Option = pool.get('contract.option')
+        SubStatus = pool.get('contract.sub_status')
+        reached_end_date = SubStatus.get_sub_status('reached_end_date')
         sub_status_contracts = defaultdict(list)
         for contract in contracts:
             sub_status_contracts[contract.activation_history[-1].
-                termination_reason].append(contract)
+                termination_reason or reached_end_date].append(contract)
         to_write = []
         for sub_status, contracts in sub_status_contracts.iteritems():
             to_write += [contracts, {
