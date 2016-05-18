@@ -209,7 +209,7 @@ class EventTypeAction(model.CoopSQL, model.CoopView):
     @classmethod
     def delete(cls, instances):
         Pool().get('event')._event_type_cache.clear()
-        super(EventTypeAction, cls).delete(*instances)
+        super(EventTypeAction, cls).delete(instances)
 
     @classmethod
     def create(cls, vlist):
