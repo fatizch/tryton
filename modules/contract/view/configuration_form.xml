@@ -3,5 +3,11 @@
     <xpath expr="/form" position="inside">
         <label name="default_quote_number_sequence"/>
         <field name="default_quote_number_sequence"/>
+        <newline/>
+        <label name="inactivity_delay"/>
+        <field name="inactivity_delay"/>
+        <newline/>
+        <label name="automatic_decline_reason"/>
+        <field name="automatic_decline_reason"/>
     </xpath>
 </data>

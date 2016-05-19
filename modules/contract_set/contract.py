@@ -146,13 +146,13 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
         Event.notify_events([self], 'activate_contract_set')
 
     def decline_set(self, reason):
+        Contract = Pool().get('contract')
         quote, non_quote = self.get_quote_non_quote_contracts()
         if non_quote:
             message = ', '.join([x.rec_name for x in non_quote])
             self.raise_user_warning(message, 'decline_with_non_quote',
                 message)
-        for contract in quote:
-            contract.decline_contract(reason)
+        Contract.decline_contract(quote, reason)
 
     def get_contact(self):
         return self.contracts[0].subscriber

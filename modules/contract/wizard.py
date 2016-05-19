@@ -372,7 +372,7 @@ class ContractDecline(model.CoopWizard):
         reason = self.select_reason.reason
         active_id = Transaction().context.get('active_id')
         selected_contract = Contract(active_id)
-        selected_contract.decline_contract(reason)
+        Contract.decline_contract([selected_contract], reason)
         return 'end'
 
 

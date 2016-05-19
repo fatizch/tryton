@@ -1168,14 +1168,19 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             option.decline_option(reason)
         self.options = self.options
 
-    def decline_contract(self, reason):
-        pool = Pool()
-        Event = pool.get('event')
+    def decline(self, reason):
         self.status = 'declined'
         self.sub_status = reason
         self.decline_options(reason)
-        self.save()
-        Event.notify_events([self], 'decline_contract',
+        self.current_state = None
+
+    @classmethod
+    def decline_contract(cls, contracts, reason):
+        Event = Pool().get('event')
+        for contract in contracts:
+            contract.decline(reason)
+        cls.save(contracts)
+        Event.notify_events(contracts, 'decline_contract',
             description=reason.name)
 
     def clean_up_versions(self):

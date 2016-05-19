@@ -952,6 +952,24 @@ msgctxt "field:event.log,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:offered.configuration,inactivity_delay:"
+msgid "Inactivity Delay"
+msgstr "Délai d'inactivité"
+
+msgctxt "field:offered.configuration,automatic_decline_reason:"
+msgid "Automatic Decline Reason"
+msgstr "Raison de la déclinaison automatique"
+
+msgctxt "help:offered.configuration,inactivity_delay:"
+msgid "All quotes inactive since stricly more than this period (in days) will be declined."
+msgstr ""
+"Tous les devis qui sont inactifs depuis strictement plus que cette période (en jours) "
+"seront declinés automatiquement"
+
+msgctxt "model:contract.decline.inactive_quotes,name:"
+msgid "Decline Inactive Quotes Contracts"
+msgstr "Declinaison devis inactifs"
+
 msgctxt "field:offered.configuration,default_quote_number_sequence:"
 msgid "Default quote number sequence"
 msgstr "Sequence de numéro de devis par défaut"
