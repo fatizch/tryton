@@ -1,13 +1,13 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.option:"
 msgid "Option %s is not eligible"
-msgstr "Option %s n'est pas éligible"
+msgstr "La garantie %s n'est pas éligible"
 
-msgctxt "field:offered.option.description,eligibility_rule:"
-msgid "Eligibility Rule"
+msgctxt "field:offered.option.description,eligibility_rules:"
+msgid "Eligibility Rules"
 msgstr "Eligibilité"
 
 msgctxt "field:offered.option.description.eligibility_rule,coverage:"
@@ -60,7 +60,7 @@ msgstr "Identifiant XML"
 
 msgctxt "model:offered.option.description.eligibility_rule,name:"
 msgid "Option Description Eligibility Rule"
-msgstr "Règle d'éligbilité à l'option"
+msgstr "Règle d'éligbilité à la garantie"
 
 msgctxt "model:rule_engine,name:option_eligibility_on_age"
 msgid "Option Eligibility Rule"
@@ -192,4 +192,8 @@ msgstr "Eligibilité"
 
 msgctxt "view:offered.option.description.eligibility_rule:"
 msgid "Eligibility Rule"
+msgstr "Eligibilité"
+
+msgctxt "view:offered.option.description.eligibility_rule:"
+msgid "Eligibility Rules"
 msgstr "Eligibilité"

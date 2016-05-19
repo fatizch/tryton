@@ -13,15 +13,14 @@ __all__ = [
 class OptionDescription:
     __name__ = 'offered.option.description'
 
-    eligibility_rule = fields.One2Many(
+    eligibility_rules = fields.One2Many(
         'offered.option.description.eligibility_rule', 'coverage',
-        'Eligibility Rule', delete_missing=True)
+        'Eligibility Rules', delete_missing=True)
 
     def check_eligibility(self, exec_context):
-        # TODO : Manage multiple eligibility rules
-        if not self.eligibility_rule:
+        if not self.eligibility_rules:
             return True
-        return self.eligibility_rule[0].calculate(exec_context)
+        return all([x.calculate(exec_context) for x in self.eligibility_rules])
 
 
 class OptionDescriptionEligibilityRule(RuleMixin, model.CoopSQL,

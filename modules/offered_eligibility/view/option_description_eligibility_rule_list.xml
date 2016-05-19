@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<tree string="Eligibility Rules">
+    <field name="rule"/>
+</tree>

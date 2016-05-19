@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
-        <page name="eligibility_rule">
-            <field name="eligibility_rule" mode="form"/>
+        <page name="eligibility_rules">
+            <field name="eligibility_rules"/>
         </page>
     </xpath>
 </data>

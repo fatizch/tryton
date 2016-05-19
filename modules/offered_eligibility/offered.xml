@@ -18,6 +18,11 @@
             <field name="type">form</field>
             <field name="name">option_description_eligibility_rule_form</field>
         </record>
+        <record model="ir.ui.view" id="option_description_eligibility_rule_view_liste">
+            <field name="model">offered.option.description.eligibility_rule</field>
+            <field name="type">tree</field>
+            <field name="name">option_description_eligibility_rule_list</field>
+        </record>
         <!-- ###################### -->
         <!-- # Method Definitions # -->
         <!-- ###################### -->
