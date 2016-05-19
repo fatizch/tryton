@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="premium_waiver_view_list">
+            <field name="model">contract.waiver_premium</field>
+            <field name="type">tree</field>
+            <field name="name">premium_waiver_list</field>
+        </record>
+        <record model="ir.ui.view" id="premium_waiver_view_form">
+            <field name="model">contract.waiver_premium</field>
+            <field name="type">form</field>
+            <field name="name">premium_waiver_form</field>
+        </record>
+    </data>
+</tryton>

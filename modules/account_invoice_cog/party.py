@@ -1,4 +1,5 @@
 from trytond.pool import PoolMeta
+from trytond.pyson import Eval
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -14,6 +15,17 @@ class Party:
     def _export_light(cls):
         return (super(Party, cls)._export_light() |
             set(['supplier_payment_term', 'customer_payment_term']))
+
+    @classmethod
+    def __setup__(cls):
+        super(Party, cls).__setup__()
+        original_domain = cls.account_payable.domain
+        assert original_domain == [
+                ('kind', '=', 'payable'),
+                ('company', '=', Eval('context', {}).get('company', -1)),
+                ]
+        cls.account_payable.domain = [['OR', ('kind', '=', 'other'),
+                original_domain[0]], original_domain[1]]
 
 
 class PartyInteraction:

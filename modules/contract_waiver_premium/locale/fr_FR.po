@@ -1,0 +1,283 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.waiver_premium.create:"
+msgid "You are trying to create overlapping waivers"
+msgstr "Vous essayez de créer des exonérations qui se chevauchent."
+
+msgctxt "error:contract:"
+msgid "Waiver of Premium"
+msgstr "Exonération"
+
+msgctxt "field:account.invoice.line.detail,waiver:"
+msgid "Waiver Of Premium"
+msgstr "Exonération"
+
+msgctxt "field:contract,with_waiver_of_premium:"
+msgid "With Waiver Of Premium"
+msgstr "Avec exonération"
+
+msgctxt "field:contract.option,waivers:"
+msgid "Waivers"
+msgstr "Exonérations"
+
+msgctxt "field:contract.option,with_waiver_of_premium:"
+msgid "With Waiver Of Premium"
+msgstr "Avec exonération"
+
+msgctxt "field:contract.waiver_premium,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.waiver_premium,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.waiver_premium,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.waiver_premium,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.waiver_premium,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:contract.waiver_premium,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.waiver_premium,options:"
+msgid "Options"
+msgstr "Garanties"
+
+msgctxt "field:contract.waiver_premium,options_names:"
+msgid "Options Names"
+msgstr "Garanties"
+
+msgctxt "field:contract.waiver_premium,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.waiver_premium,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:contract.waiver_premium,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.waiver_premium,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.waiver_premium,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.waiver_premium-contract.option,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.waiver_premium-contract.option,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.waiver_premium-contract.option,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.waiver_premium-contract.option,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.waiver_premium-contract.option,option:"
+msgid "Option"
+msgstr "Garantie"
+
+msgctxt "field:contract.waiver_premium-contract.option,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.waiver_premium-contract.option,waiver:"
+msgid "Waiver"
+msgstr "Exonération"
+
+msgctxt "field:contract.waiver_premium-contract.option,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.waiver_premium-contract.option,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.waiver_premium-contract.option,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.waiver_premium.create.choice,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.waiver_premium.create.choice,contract_parties:"
+msgid "Contract Parties"
+msgstr "Tiers du contrat"
+
+msgctxt "field:contract.waiver_premium.create.choice,covered_party:"
+msgid "Covered Party"
+msgstr "Assuré"
+
+msgctxt "field:contract.waiver_premium.create.choice,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:contract.waiver_premium.create.choice,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.waiver_premium.create.choice,options:"
+msgid "Options"
+msgstr "Garanties"
+
+msgctxt "field:contract.waiver_premium.create.choice,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:contract.waiver_premium.set_end_date.choice,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.waiver_premium.set_end_date.choice,new_end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:contract.waiver_premium.set_end_date.choice,waivers:"
+msgid "Waiver"
+msgstr "Exonération"
+
+msgctxt "field:coverage-account.tax-for_waiver,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:coverage-account.tax-for_waiver,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:coverage-account.tax-for_waiver,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:coverage-account.tax-for_waiver,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:coverage-account.tax-for_waiver,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:coverage-account.tax-for_waiver,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:coverage-account.tax-for_waiver,tax:"
+msgid "Tax"
+msgstr "Taxe"
+
+msgctxt "field:coverage-account.tax-for_waiver,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:coverage-account.tax-for_waiver,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:coverage-account.tax-for_waiver,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.option.description,taxes_for_waiver:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "field:offered.option.description,with_waiver_of_premium:"
+msgid "With Waiver Of Premium"
+msgstr "Avec exonération"
+
+msgctxt "model:contract.waiver_premium,name:"
+msgid "Premium Waiver"
+msgstr "Exonération"
+
+msgctxt "model:contract.waiver_premium-contract.option,name:"
+msgid "Premium Waiver - Contract Option Relation"
+msgstr "Relation exonération - option"
+
+msgctxt "model:contract.waiver_premium.create.choice,name:"
+msgid "Create Waiver Choice"
+msgstr "Choix de l'exonération"
+
+msgctxt "model:contract.waiver_premium.set_end_date.choice,name:"
+msgid "Create Waiver Choice"
+msgstr "Choix de l'exonération"
+
+msgctxt "model:coverage-account.tax-for_waiver,name:"
+msgid "Option Description Tax Relation For Waiver"
+msgstr "Relation garantie offerte - taxes pour l'exonération"
+
+msgctxt "model:ir.action,name:act_create_waiver_wizard"
+msgid "Create Waiver"
+msgstr "Créer une exonération"
+
+msgctxt "model:ir.action,name:act_set_waiver_end_date_wizard"
+msgid "Set Waiver End Date"
+msgstr "Définir la date de fin"
+
+msgctxt "model:ir.action,name:act_show_waivers_of_premium"
+msgid "Waivers Of Premiums"
+msgstr "Exonérations"
+
+msgctxt "selection:offered.option.description,with_waiver_of_premium:"
+msgid "With Waiver Of Premium"
+msgstr "Avec exonération"
+
+msgctxt "selection:offered.option.description,with_waiver_of_premium:"
+msgid "Without Waiver Of Premium"
+msgstr "Sans exonération"
+
+msgctxt "view:contract.waiver_premium.create.choice:"
+msgid "New Waivers Of Premiums"
+msgstr "Nouvelles exonérations"
+
+msgctxt "view:contract.waiver_premium.set_end_date.choice:"
+msgid "New Waivers Of Premiums"
+msgstr "Nouvelles exonérations"
+
+msgctxt "view:contract.waiver_premium:"
+msgid "Waivers Of Premiums"
+msgstr "Exonérations"
+
+msgctxt "view:contract:"
+msgid "Create Waiver"
+msgstr "Créer une exonération"
+
+msgctxt "view:offered.option.description:"
+msgid "Waiver of Premium"
+msgstr "Exonération"
+
+msgctxt "wizard_button:contract.waiver_premium.create,choice,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:contract.waiver_premium.create,choice,reinvoice:"
+msgid "Ok"
+msgstr "Ok"
+
+msgctxt "wizard_button:contract.waiver_premium.set_end_date,choice,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:contract.waiver_premium.set_end_date,choice,reinvoice:"
+msgid "Ok"
+msgstr "Ok"

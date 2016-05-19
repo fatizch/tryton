@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="create_waiver_choice_view">
+            <field name="model">contract.waiver_premium.create.choice</field>
+            <field name="type">form</field>
+            <field name="name">create_waiver_choice</field>
+        </record>
+        <record model="ir.action.wizard" id="act_create_waiver_wizard">
+            <field name="name">Create Waiver</field>
+            <field name="wiz_name">contract.waiver_premium.create</field>
+        </record>
+        <record model="ir.ui.view" id="set_waiver_end_date_choice_view">
+            <field name="model">contract.waiver_premium.set_end_date.choice</field>
+            <field name="type">form</field>
+            <field name="name">set_waiver_end_date_choice</field>
+        </record>
+        <record model="ir.action.wizard" id="act_set_waiver_end_date_wizard">
+            <field name="name">Set Waiver End Date</field>
+            <field name="wiz_name">contract.waiver_premium.set_end_date</field>
+        </record>
+        <record model="ir.action.keyword" id="act_set_waiver_end_date_wizard_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">contract.waiver_premium,-1</field>
+            <field name="action" ref="act_set_waiver_end_date_wizard"/>
+        </record>
+    </data>
+</tryton>

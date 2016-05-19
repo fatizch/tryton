@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="contract_view_form">
+            <field name="model">contract</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="contract.contract_view_form"/>
+            <field name="name">contract_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_view_list">
+            <field name="model">contract</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="contract.contract_view_tree"/>
+            <field name="name">contract_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_show_waivers_of_premium">
+            <field name="name">Waivers Of Premiums</field>
+            <field name="res_model">contract.waiver_premium</field>
+            <field name="domain" eval="[('contract', 'in', Eval('active_ids'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_show_waivers_of_premium_keyword1">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_show_waivers_of_premium"/>
+        </record>
+    </data>
+</tryton>

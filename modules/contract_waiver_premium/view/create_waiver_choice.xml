@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?> <form string="New Waivers Of Premiums">
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <label name="covered_party"/>
+    <field name="covered_party" colspan="3"/>
+    <field name="options" colspan="4"/>
+    <field name="contract" invisible="1" colspan="4"/>
+</form>

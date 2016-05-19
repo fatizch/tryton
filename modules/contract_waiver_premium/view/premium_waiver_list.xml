@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tree string="Waivers Of Premiums">
+    <field name="start_date"/>
+    <field name="end_date"/>
+    <field name="options_names"/>
+</tree>
