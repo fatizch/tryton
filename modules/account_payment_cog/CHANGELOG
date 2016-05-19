@@ -1,3 +1,4 @@
+* Group payment creation batch per party
 * Add payment kind on payment reject reason to differentiate actions and letters when failing
 * Wizard to modify payment date from a move line can now work with several lines
 * Aggregate payment moves per group key if available

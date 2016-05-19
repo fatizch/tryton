@@ -108,7 +108,7 @@ class PaymentCreationBatch(batch.BatchRoot):
 
     @classmethod
     def get_batch_main_model_name(cls):
-        return 'account.move.line'
+        return 'party.party'
 
     @classmethod
     def get_batch_search_model(cls):
@@ -117,6 +117,15 @@ class PaymentCreationBatch(batch.BatchRoot):
     @classmethod
     def select_ids(cls, treatment_date, extra_args):
         cursor = Transaction().cursor
+        tables, query_table, where_clause = cls.get_query(treatment_date,
+            extra_args)
+        move_line = tables['move_line']
+        cursor.execute(*query_table.select(move_line.party,
+            where=where_clause, group_by=move_line.party))
+        return cursor.fetchall()
+
+    @classmethod
+    def get_query(cls, treatment_date, extra_args):
         pool = Pool()
         payment = pool.get('account.payment').__table__()
         move_line = pool.get('account.move.line').__table__()
@@ -129,6 +138,11 @@ class PaymentCreationBatch(batch.BatchRoot):
                 PAYMENT_KINDS)
             cls.logger.error('%s. Aborting' % msg)
             raise Exception(msg)
+        tables = {
+            'move_line': move_line,
+            'party': party,
+            'account': account,
+            }
         join_acc_cond = (
             (move_line.account == account.id)
             & ((account.kind == 'receivable') |
@@ -144,22 +158,28 @@ class PaymentCreationBatch(batch.BatchRoot):
             condition=(move_line.party == party.id)
         ).join(account, condition=join_acc_cond)
 
-        cursor.execute(*query_table.select(move_line.id,
-            where=Equal(
-                payment.select(Count(payment.id), where=(
-                        (payment.state != 'failed')
-                        & (payment.line == move_line.id))), 0),
-            group_by=move_line.id))
-
-        return cursor.fetchall()
+        where_clause = Equal(payment.select(Count(payment.id),
+                where=((payment.state != 'failed')
+                    & (payment.line == move_line.id))), 0)
+        return tables, query_table, where_clause
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
-        MoveLine.create_payments(objects)
+
+        cursor = Transaction().cursor
+        tables, query_table, where_clause = cls.get_query(treatment_date,
+            extra_args)
+        move_line = tables['move_line']
+        cursor.execute(*query_table.select(move_line.id,
+                where=where_clause & move_line.party.in_(ids),
+                group_by=move_line.id))
+
+        move_lines = MoveLine.browse([x[0] for x in cursor.fetchall()])
+        MoveLine.create_payments(move_lines)
         cls.logger.info('%s created' %
-            coop_string.get_print_infos([x.id for x in objects], 'payment'))
+            coop_string.get_print_infos([x.id for x in move_lines], 'payment'))
 
 
 class PaymentAcknowledgeBatch(batch.BatchRoot):
