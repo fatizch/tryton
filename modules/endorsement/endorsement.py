@@ -2,12 +2,17 @@
 import copy
 import datetime
 from itertools import groupby
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 from sql import Literal, Column
 from sql.functions import CurrentTimestamp
 from sql.conditionals import Coalesce
 from sql.aggregate import Max
 
+from trytond.cache import Cache
 from trytond import backend
 from trytond.error import UserError
 from trytond.rpc import RPC
@@ -438,6 +443,8 @@ def values_mixin(value_model):
                 else:
                     prev_value = ''
                 field = ValueModel._fields[k]
+                if isinstance(field, tryton_fields.Function):
+                    field = field._field
                 if isinstance(field, tryton_fields.Many2One):
                     if v:
                         vals.append((k, field,
@@ -446,14 +453,44 @@ def values_mixin(value_model):
                     else:
                         vals.append((k, field,
                                 prev_value.rec_name if prev_value else '', ''))
-                elif isinstance(field, tryton_fields.Date) or \
-                    (isinstance(field, tryton_fields.Function) and (isinstance(
-                                field._field, tryton_fields.Date))):
+                elif isinstance(field, tryton_fields.Date):
                     if prev_value:
                         prev_value = Date.date_as_string(prev_value, lang)
                     if v:
                         v = Date.date_as_string(v, lang)
+                    vals.append((k or '', field, prev_value, v or ''))
+                elif isinstance(field, tryton_fields.Boolean):
+                    v = coop_string.translate_bool(v)
+                    prev_value = coop_string.translate_bool(prev_value)
                     vals.append((k, field, prev_value, v))
+                elif isinstance(field, tryton_fields.Selection):
+                    def _translate_selection(prev_value, v):
+                        if isinstance(field.selection, basestring):
+                            prev_translated, v_translated = prev_value, v
+                            if not base_object:
+                                return prev_translated, v_translated
+                            selection_original = dict(getattr(base_object,
+                                    field.selection)())
+                            selection_new = dict(getattr(ValueModel(
+                                        self.relation), field.selection)())
+                            prev_translated = coop_string.translate(ValueModel,
+                                k, selection_original[prev_value], 'selection')
+                            v_translated = coop_string.translate(ValueModel, k,
+                                selection_new[v], 'selection')
+                        else:
+                            selection = dict(field.selection)
+                            prev_translated = coop_string.translate(ValueModel,
+                                k, selection[prev_value], 'selection')
+                            v_translated = coop_string.translate(ValueModel, k,
+                                selection[v], 'selection')
+                        return prev_translated, v_translated
+                    try:
+                        prev_translated, v_translated = _translate_selection(
+                            prev_value, v)
+                    except:
+                        prev_translated, v_translated = prev_value, v
+                    vals.append((k, field, prev_translated or '',
+                            v_translated or ''))
                 else:
                     vals.append((k, field, prev_value, v if v is not None
                             else ''))
@@ -2162,6 +2199,7 @@ class EndorsementExtraData(relation_mixin(
     new_extra_data_values = fields.Dict('extra_data', 'Extra Data Values')
     new_extra_data_values_string = new_extra_data_values.translated(
         'extra_data_values')
+    _extra_data_def_cache = Cache('extra_data_defs')
 
     @classmethod
     def __setup__(cls):
@@ -2169,6 +2207,18 @@ class EndorsementExtraData(relation_mixin(
         cls._error_messages.update({
                 'new_extra_data': 'New Extra Data',
                 })
+
+    @classmethod
+    def get_extra_data_def_cache(cls, name):
+        pool = Pool()
+        ExtraData = pool.get('extra_data')
+        extra_data_id = cls._extra_data_def_cache.get(name, None)
+        if not extra_data_id:
+            extra_data, = ExtraData.search([('name', '=', name),
+                    ('kind', '=', 'contract')])
+            extra_data_id = extra_data.id
+            cls._extra_data_def_cache.set(name, extra_data_id)
+        return ExtraData(extra_data_id)
 
     @classmethod
     def default_definition(cls):
@@ -2222,16 +2272,32 @@ class EndorsementExtraData(relation_mixin(
 
         if not res[1]:
             res[1] = []
+
+        def _translate(value, name):
+            if value is None:
+                return ''
+            extra_data = self.__class__.get_extra_data_def_cache(name)
+            if extra_data.type_ == 'boolean':
+                return coop_string.translate_bool(value)
+            elif extra_data.type_ == 'selection':
+                selection = dict(json.loads(extra_data.selection_json))
+                return selection[value]
+            return str(value)
+
+        def _get_name(name):
+            return self.__class__.get_extra_data_def_cache(name).string
+
         if cur_data_values and not endorsement_state == 'applied':
             for k, v in cur_data_values.iteritems():
                 if new_data_values[k] != v:
-                    label = '%s: ' % k
-                    value = str(v) + u' → ' + str(new_data_values[k])
+                    label = '%s ' % _get_name(k)
+                    value = _translate(v, k) + u' → ' + _translate(
+                        new_data_values[k], k)
                     res[1].append((label, value))
         else:
             for k, v in new_data_values.iteritems():
-                label = '%s: ' % k
-                value = u' → ' + str(v)
+                label = '%s ' % _get_name(k)
+                value = u' → ' + _translate(v, k)
                 res[1].append((label, value))
         return res
 
