@@ -15,9 +15,9 @@ from .event import *
 
 def register():
     Pool.register(
-        Configuration,
         Product,
         ContractSubStatus,
+        Configuration,
         Contract,
         ActivationHistory,
         ContractOption,
