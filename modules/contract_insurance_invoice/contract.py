@@ -410,29 +410,27 @@ class Contract:
         return [invoices, sum([x['total_amount'] for x in invoices])]
 
     def substract_balance_from_invoice_reports(self, invoice_reports):
-        balance = self.balance
-        processing_payment = self.processing_payments_amount
-        if balance >= 0 and processing_payment < 0:
-            balance = processing_payment
-        elif balance < 0:
-            balance += processing_payment
-        if balance >= 0:
+        outstanding_amount = self.balance_today - self.receivable_today
+        outstanding_amount = min(0, outstanding_amount)
+        outstanding_amount += self.processing_payments_amount
+        if outstanding_amount >= 0:
             return invoice_reports
         for report in invoice_reports:
-            if not balance:
+            if not outstanding_amount:
                 break
-            if abs(balance) > report['total_amount']:
-                balance += report['total_amount']
+            if abs(outstanding_amount) > report['total_amount']:
+                outstanding_amount += report['total_amount']
                 report['components'].append({
                         'kind': 'overpayment_substraction',
                         'amount': - report['total_amount']})
                 report['total_amount'] = 0
             else:
-                report['total_amount'] += balance
+                report['total_amount'] += outstanding_amount
                 report['components'].append(
-                    {'kind': 'overpayment_substraction', 'amount': balance})
-                balance = 0
-        return [x for x in invoice_reports]
+                    {'kind': 'overpayment_substraction', 'amount':
+                        outstanding_amount})
+                outstanding_amount = 0
+        return invoice_reports
 
     def invoice_to_end_date(self):
         Contract.invoice([self], self.final_end_date)
