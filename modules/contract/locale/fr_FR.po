@@ -1322,7 +1322,7 @@ msgstr "Personne Physique"
 
 msgctxt "selection:contract,status:"
 msgid "Active"
-msgstr "Active"
+msgstr "Actif"
 
 msgctxt "selection:contract,status:"
 msgid "Declined"
