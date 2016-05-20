@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form/label[@name='good_process']" position="before">
-        <label name="loss_desc"/>
-        <field name="loss_desc" widget="selection"/>
-        <newline/>
-        <label name="party"/>
-        <field name="party"/>
-        <label name="claim"/>
-        <field name="claim" widget="selection"/>
-    </xpath>
-    <xpath expr="/form" position="inside">
+        <group id="info_group" colspan="2" col="4">
+            <label name="party"/>
+            <field name="party"/>
+            <newline/>
+            <label name="loss_desc"/>
+            <field name="loss_desc" widget="selection"/>
+        </group>
         <field name="claims" colspan="4"/>
     </xpath>
 </data>

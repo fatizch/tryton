@@ -4,8 +4,11 @@ from trytond.transaction import Transaction
 from trytond.modules.cog_utils import model, fields
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 
+
 __metaclass__ = PoolMeta
 __all__ = [
+    'CloseClaim',
+    'ClaimCloseReasonView',
     'BenefitToDeliver',
     'SelectBenefits',
     'DeliverBenefits',
@@ -104,4 +107,38 @@ class DeliverBenefits(Wizard):
                 [to_deliver.benefit])
             to_save.extend(to_deliver.loss.services)
         Services.save(to_save)
+        return 'end'
+
+
+class ClaimCloseReasonView(model.CoopView):
+    'Claim Close Reason View'
+
+    __name__ = 'claim.close_reason_view'
+
+    claims = fields.Many2Many('claim', '', '', 'Claims', readonly=True)
+    sub_status = fields.Many2One(
+        'claim.sub_status', 'Substatus', required=True)
+
+
+class CloseClaim(Wizard):
+    'Close Claims'
+    __name__ = 'claim.close'
+
+    start_state = 'close_reason'
+    close_reason = StateView(
+        'claim.close_reason_view',
+        'claim.close_reason_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Apply', 'apply_sub_status', 'tryton-go-next',
+                default=True)])
+    apply_sub_status = StateTransition()
+
+    def default_close_reason(self, fields):
+        context = Transaction().context
+        assert context.get('active_model') == 'claim'
+        return {'claims': context.get('active_ids')}
+
+    def transition_apply_sub_status(self):
+        Claim = Pool().get('claim')
+        Claim.close(self.close_reason.claims, self.close_reason.sub_status)
         return 'end'

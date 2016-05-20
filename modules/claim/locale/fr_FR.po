@@ -585,6 +585,19 @@ msgctxt "field:claim.benefit_to_deliver,to_deliver:"
 msgid "To Deliver"
 msgstr "Délivrer"
 
+msgctxt "field:claim.close_reason_view,claims:"
+msgid "Claims"
+msgstr "Sinistres"
+
+#, fuzzy
+msgctxt "field:claim.close_reason_view,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:claim.close_reason_view,sub_status:"
+msgid "Substatus"
+msgstr "Sous statut"
+
 msgctxt "field:claim.configuration,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -1237,6 +1250,10 @@ msgctxt "model:claim.benefit_to_deliver,name:"
 msgid "Benefit To Deliver"
 msgstr "Prestation à délivrer"
 
+msgctxt "model:claim.close_reason_view,name:"
+msgid "Claim Close Reason View"
+msgstr "Clore les sinistres"
+
 msgctxt "model:claim.configuration,name:"
 msgid "Claim Configuration"
 msgstr "Configuration"
@@ -1292,6 +1309,10 @@ msgstr "Sinistres"
 msgctxt "model:ir.action,name:act_claims_button"
 msgid "Claims"
 msgstr "Sinistres"
+
+msgctxt "model:ir.action,name:act_close_claim_wizard"
+msgid "Close Claim"
+msgstr "Clore les sinistres"
 
 msgctxt "model:ir.action,name:act_deliver_wizard"
 msgid "Deliver Benefits"
@@ -1573,6 +1594,10 @@ msgctxt "view:claim.benefit_to_deliver:"
 msgid "Benefit"
 msgstr "Prestation"
 
+msgctxt "view:claim.close_reason_view:"
+msgid "Close Claim"
+msgstr "Clore les sinistres"
+
 msgctxt "view:claim.indemnification.detail:"
 msgid "Indemnification Detail"
 msgstr "Détail de l'indemnisation"
@@ -1628,6 +1653,14 @@ msgstr "Prestations"
 msgctxt "view:party.party:"
 msgid "+"
 msgstr "+"
+
+msgctxt "wizard_button:claim.close,close_reason,apply_sub_status:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:claim.close,close_reason,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt "wizard_button:claim.deliver_benefits,benefits,deliver:"
 msgid "Deliver"

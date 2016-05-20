@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Close Claim" col="4">
+    <label name="sub_status" />
+    <field name="sub_status" widget="selection"/>
+    <field name="claims" colspan="4" expand_toolbar="0"/>
+</form>

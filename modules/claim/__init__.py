@@ -41,8 +41,10 @@ def register():
         ReportTemplate,
         EventLog,
         Configuration,
+        ClaimCloseReasonView,
         module='claim', type_='model')
     Pool.register(
+        CloseClaim,
         DeliverBenefits,
         SynthesisMenuOpen,
         module='claim', type_='wizard')

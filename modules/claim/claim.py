@@ -111,8 +111,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         return res
 
     def on_change_with_is_sub_status_required(self, name=None):
-        return False
-        return self.status in ('closed', 'reopened')
+        return self.status == 'closed'
 
     @classmethod
     def add_func_key(cls, values):
@@ -178,17 +177,22 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def default_status():
         return 'open'
 
-    def close_claim(self, sub_status=None):
+    @classmethod
+    def close(cls, claims, sub_status):
+        for claim in claims:
+            claim.close_claim(sub_status)
+        cls.save(claims)
+
+    def close_claim(self, sub_status):
         self.status = 'closed'
         self.sub_status = sub_status
         self.end_date = utils.today()
-        return True, []
 
     def reopen_claim(self):
         if self.status == 'closed':
             self.status = 'reopened'
+            self.sub_status = None
             self.end_date = None
-        return True, []
 
     @fields.depends('claimant', 'declaration_date', 'possible_contracts')
     def on_change_claimant(self):

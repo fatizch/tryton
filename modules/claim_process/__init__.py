@@ -8,10 +8,12 @@ def register():
         Claim,
         Loss,
         Process,
+        ClaimDeclarationElement,
         ProcessLossDescRelation,
         ClaimDeclareFindProcess,
         module='claim_process', type_='model')
 
     Pool.register(
+        CloseClaim,
         ClaimDeclare,
         module='claim_process', type_='wizard')

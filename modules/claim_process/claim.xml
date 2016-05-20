@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
+        <record model="ir.ui.view" id="claim_process_tree_view">
+	    <field name="model">claim</field>
+	    <field name="type">tree</field>
+	    <field name="name">claim_list</field>
+	    <field name="inherit" ref="claim.claim_view_list"/>
+	</record>
         <record model="ir.ui.view" id="loss_services_view_form">
             <field name="model">claim.loss</field>
             <field name="type">form</field>
@@ -12,6 +18,20 @@
             <field name="type">form</field>
             <field name="name">claim_declare_find_process_form</field>
             <field name="inherit" ref="process_cog.process_parameters_form"/>
+        </record>
+        <record model="ir.ui.view" id="claim_declare_element_tree">
+            <field name="model">claim.declare.element</field>
+            <field name="type">tree</field>
+            <field name="name">claim_declare_element_view_tree</field>
+        </record>
+        <record model="ir.ui.view" id="close_reason_view_form">
+            <field name="model">claim.close_reason_view</field>
+            <field name="type">form</field>
+            <field name="name">close_reason_view_form</field>
+        </record>
+        <record model="ir.action.wizard" id="act_close_claim_wizard">
+            <field name="name">Close Claims</field>
+            <field name="wiz_name">claim.close</field>
         </record>
         <record model="ir.action.wizard" id="declaration_process_launcher">
             <field name="name">Start Declaration</field>

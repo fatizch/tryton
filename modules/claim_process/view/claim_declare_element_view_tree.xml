@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tree editable="bottom">
+    <field name="select"/>
+    <field name="name"/>
+    <field name="declaration_date"/>
+    <field name="end_date"/>
+    <field name="status"/>
+    <field name="sub_status"/>
+</tree>
