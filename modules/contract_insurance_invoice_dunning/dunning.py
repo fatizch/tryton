@@ -12,6 +12,7 @@ from trytond.modules.cog_utils import fields, utils
 __metaclass__ = PoolMeta
 __all__ = [
     'Dunning',
+    'Procedure',
     'Level',
     ]
 
@@ -51,6 +52,13 @@ class Dunning:
         if not self.contract:
             return super(Dunning, self).get_reference_object_for_edm(template)
         return self.contract
+
+
+class Procedure:
+    __name__ = 'account.dunning.procedure'
+
+    from_payment_date = fields.Boolean('Maturity Date From Payment Date',
+        help='Maturity date is equal to payment date if defined')
 
 
 class Level:

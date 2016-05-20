@@ -11,6 +11,12 @@
             <field name="inherit" ref="account_dunning.dunning_level_view_list"/>
             <field name="name">dunning_level_list</field>
         </record>
+        <record model="ir.ui.view" id="dunning_procedure_view_form">
+            <field name="model">account.dunning.procedure</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="account_dunning.dunning_procedure_view_form"/>
+            <field name="name">dunning_procedure_form</field>
+        </record>
         <record model="ir.ui.view" id="dunning_level_view_list_sequence">
             <field name="model">account.dunning.level</field>
             <field name="inherit" ref="account_dunning.dunning_level_view_list_sequence"/>

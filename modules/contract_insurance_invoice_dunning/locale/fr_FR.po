@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -127,6 +127,16 @@ msgstr "Manuel"
 msgctxt "selection:account.dunning.level,apply_for:"
 msgid "All"
 msgstr "Tous"
+
+msgctxt "field:account.dunning.procedure,from_payment_date:"
+msgid "Maturity Date From Payment Date"
+msgstr "Date d'échéance initialisée avec la date de paiement"
+
+msgctxt "help:account.dunning.procedure,from_payment_date:"
+msgid "Maturity date is equal to payment date if defined"
+msgstr ""
+"Date d'échéance sera initialisée avec la date de paiement. La procédure de "
+"relance dépendra de la date de paiement planifiée."
 
 msgctxt "help:account.dunning.level,apply_for:"
 msgid "The kind of billing mode to which this level is applied"
