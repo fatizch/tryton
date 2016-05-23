@@ -299,7 +299,7 @@ class ClaimDeclareFindProcess(ProcessStart):
     @classmethod
     def build_process_depends(cls):
         res = super(ClaimDeclareFindProcess, cls).build_process_depends()
-        res += ['claims', 'party', 'loss_desc']
+        res += ['claims', 'party', 'loss_desc', 'reopen_process']
         return res
 
     @classmethod

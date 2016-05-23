@@ -24,11 +24,6 @@
             <field name="type">tree</field>
             <field name="name">claim_declare_element_view_tree</field>
         </record>
-        <record model="ir.ui.view" id="close_reason_view_form">
-            <field name="model">claim.close_reason_view</field>
-            <field name="type">form</field>
-            <field name="name">close_reason_view_form</field>
-        </record>
         <record model="ir.action.wizard" id="act_close_claim_wizard">
             <field name="name">Close Claims</field>
             <field name="wiz_name">claim.close</field>
