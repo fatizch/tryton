@@ -69,6 +69,9 @@ class ContractUnderwriting(model.CoopSQL, model.CoopView):
                 'process is still in progress',
                 'refused_by_subscriber': 'The underwriting is refused '
                 'by the subscriber',
+                'underwriting_denied': 'The underwriting is denied by '
+                'the insurer',
+                'postponed': 'The underwriting decision is postponed',
                 })
 
     @fields.depends('decision', 'needs_subscriber_validation')
@@ -127,8 +130,14 @@ class ContractUnderwriting(model.CoopSQL, model.CoopView):
     def check_decision(self):
         in_progress = False
         decision = self.decision
-        if not decision or decision.status == 'pending':
+        if not decision:
             in_progress = True
+        elif decision.status == 'postponed':
+            self.raise_user_error('postponed')
+        elif decision.status == 'pending':
+            in_progress = True
+        elif decision.status == 'denied':
+            self.raise_user_error('underwriting_denied')
         elif decision.with_subscriber_validation:
             in_progress = (not self.subscriber_decision or
                 self.subscriber_decision == 'pending')

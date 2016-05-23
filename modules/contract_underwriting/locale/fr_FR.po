@@ -10,6 +10,14 @@ msgctxt "error:contract.underwriting:"
 msgid "The underwriting is refused by the subscriber"
 msgstr "L'analyse de risques est refusée par le souscripteur"
 
+msgctxt "error:contract.underwriting:"
+msgid "The underwriting is denied by the insurer"
+msgstr "L'analyse de risques est refusée par l'assureur"
+
+msgctxt "error:contract.underwriting:"
+msgid "The underwriting decision is postponed"
+msgstr "La décision d'analyse de risques est reportée"
+
 msgctxt "error:contract:"
 msgid "There is no underwritings for contract %s"
 msgstr "Il n'y a pas d'analyse de risque pour le contrat %s"
