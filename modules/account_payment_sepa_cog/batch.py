@@ -39,10 +39,13 @@ class PaymentTreatmentBatch:
         groups = Group.browse(super(PaymentTreatmentBatch, cls).execute(
                 objects, ids, treatment_date, extra_args))
         dirpath = extra_args.get('out', None) or cls.generate_filepath()
+        out_filepaths = []
         for payments_group in groups:
-            out_filepaths = payments_group.dump_sepa_messages(dirpath)
-            log_msg = "SEPA message of %s written to '%s'" % (
-                    payments_group, out_filepaths[0])
+            if payments_group.journal.process_method == 'sepa':
+                out_filepaths = payments_group.dump_sepa_messages(dirpath)
+                if out_filepaths:
+                    log_msg = "SEPA message of %s written to '%s'" % (
+                        payments_group, out_filepaths[0])
             if len(out_filepaths) == 1:
                 cls.logger.info(log_msg)
             if len(out_filepaths) > 1:
