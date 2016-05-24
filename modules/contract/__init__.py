@@ -48,7 +48,6 @@ def register():
         module='contract', type_='model')
     Pool.register(
         OptionSubscription,
-        OptionSubscriptionWizardLauncher,
         SynthesisMenuOpen,
         ContractChangeStartDate,
         ContractActivate,

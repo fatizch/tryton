@@ -23,7 +23,6 @@ __all__ = [
     'OptionSubscription',
     'OptionsDisplayer',
     'WizardOption',
-    'OptionSubscriptionWizardLauncher',
     'DisplayContractPremium',
     ]
 
@@ -736,18 +735,6 @@ class WizardOption:
             LoanShare.delete([existing_loan_share])
         option.loan_shares = loan_shares
         option.save()
-
-
-class OptionSubscriptionWizardLauncher:
-    __name__ = 'contract.wizard.option_subscription_launcher'
-
-    def skip_wizard(self, contract):
-        for covered_element in contract.covered_elements:
-            for option in covered_element.options:
-                for loan_share in option.loan_shares:
-                    return True
-        return super(OptionSubscriptionWizardLauncher, self).skip_wizard(
-            contract)
 
 
 class DisplayContractPremium:

@@ -13,7 +13,6 @@ __all__ = [
     'PackageSelection',
     'OptionsDisplayer',
     'WizardOption',
-    'OptionSubscriptionWizardLauncher',
     'ContractActivateConfirm',
     'ContractActivate',
     'ContractSelectDeclineReason',
@@ -247,33 +246,6 @@ class WizardOption(model.CoopView):
     @staticmethod
     def default_selection():
         return 'manual'
-
-
-class OptionSubscriptionWizardLauncher(model.CoopWizard):
-    'Option Susbcription Wizard Launcher'
-
-    __name__ = 'contract.wizard.option_subscription_launcher'
-
-    start = StateTransition()
-    start_wizard = StateAction('contract.option_subscription_wizard')
-
-    def skip_wizard(self, contract):
-        return bool(contract.options)
-
-    def transition_start(self):
-        Contract = Pool().get('contract')
-        contract = Contract(Transaction().context.get('active_id'))
-        if self.skip_wizard(contract):
-            return 'end'
-        else:
-            return 'start_wizard'
-
-    def do_start_wizard(self, action):
-        return action, {
-            'model': Transaction().context.get('active_model'),
-            'id': Transaction().context.get('active_id'),
-            'ids': [Transaction().context.get('active_id')],
-            }
 
 
 class ContractActivateConfirm(model.CoopView):

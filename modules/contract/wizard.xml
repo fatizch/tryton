@@ -5,10 +5,6 @@
             <field name="name">Option Subscription</field>
             <field name="wiz_name">contract.wizard.option_subscription</field>
         </record>
-        <record model="ir.action.wizard" id="option_subscription_wizard_launcher">
-            <field name="name">Option Subscription Launcher</field>
-            <field name="wiz_name">contract.wizard.option_subscription_launcher</field>
-        </record>
         <record model="ir.ui.view" id="options_displayer_view_form">
             <field name="model">contract.wizard.option_subscription.options_displayer</field>
             <field name="type">form</field>

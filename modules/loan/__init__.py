@@ -34,7 +34,6 @@ def register():
         module='loan', type_='model')
     Pool.register(
         OptionSubscription,
-        OptionSubscriptionWizardLauncher,
         DisplayContractPremium,
         CreateExtraPremium,
         SynthesisMenuOpen,
