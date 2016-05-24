@@ -24,6 +24,10 @@
             <field name="name">Convert Templates</field>
             <field name="wiz_name">report.convert</field>
         </record>
-        <menuitem parent="report_engine.menu_report" sequence="30" action="act_convert_templates" id="menu_convert_templates"/>
+        <record model="ir.action.keyword" id="act_convert_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">report.template,-1</field>
+            <field name="action" ref="act_convert_templates"/>
+        </record>
     </data>
 </tryton>

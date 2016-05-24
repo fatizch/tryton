@@ -5,6 +5,7 @@ from collections import defaultdict
 
 from trytond.pool import Pool
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
 from trytond.modules.cog_utils import model, fields
@@ -55,10 +56,9 @@ class ConvertTemplate(Wizard):
                     for x in self.select_templates.templates])
             defaults['message'] = self.raise_user_error('convert_ok_message',
                 (matches,), raise_exception=False)
-        templates = []
-        for template in Pool().get('report.template.version').search([]):
-            templates.append(template.id)
-        defaults['templates'] = templates
+        if Transaction().context.get('active_model') == 'report.template':
+            defaults['templates'] = Transaction().context.get('active_ids')
+
         return defaults
 
     def transition_convert_templates(self):
@@ -146,7 +146,7 @@ class SelectTemplatesForConversion(model.CoopView):
         super(SelectTemplatesForConversion, cls).__setup__()
         cls._buttons.update({
                 'recalculate_matches': {
-                    'invisible': ~Eval('search_for')}})
+                    'readonly': ~Eval('search_for')}})
 
     @model.CoopView.button_change('changes_calculated', 'matches',
         'replace_with', 'search_for', 'templates')
@@ -157,6 +157,8 @@ class SelectTemplatesForConversion(model.CoopView):
         new_matches = []
         for template in self.templates:
             for version in template.versions:
+                if not version.data:
+                    continue
                 all_matches = Converter.find_in_file(StringIO(version.data),
                     self.search_for)
                 for match in set(all_matches):
