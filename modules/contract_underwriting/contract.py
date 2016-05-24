@@ -60,6 +60,7 @@ class ContractUnderwriting(model.CoopSQL, model.CoopView):
     extra_data_summary = fields.Function(
         fields.Text('Extra Data Summary'),
         'get_extra_data_summary')
+    underwriting_submission_date = fields.Date('Underwriting Submission Date')
 
     @classmethod
     def __setup__(cls):

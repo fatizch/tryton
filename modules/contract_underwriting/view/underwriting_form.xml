@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Contract Underwriting">
+    <label name="underwriting_submission_date"/>
+    <field name="underwriting_submission_date"/>
     <field name="contract" colspan="4"/>
     <label name="decision"/>
     <field name="decision" widget="selection"/>

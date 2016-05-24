@@ -58,6 +58,10 @@ msgctxt "field:contract.underwriting,decision_date:"
 msgid "Decision Date"
 msgstr "Date de décision"
 
+msgctxt "field:contract.underwriting,underwriting_submission_date:"
+msgid "Underwriting Submission Date"
+msgstr "Date d'envoi de l'analyse de risques"
+
 msgctxt "field:contract.underwriting,decision_with_exclusion:"
 msgid "Decision With Exclusion"
 msgstr "Décision avec exclusion"
