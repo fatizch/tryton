@@ -48,6 +48,19 @@ coog_init_redmine() { # init redmine credentials
         echo "now restart your session or source ~/.profile"
 }
 
+coog_init_project() { # init project configuration
+        local remote_url
+        local remote_name
+        echo "remote base url examples: "
+        echo "(https) | https://username@bitbucket.org/project/"
+        echo "(ssh)   | git@bitbucket.org:project_or_username/"
+        read -p "Type your project's remote base url: " remote_url
+        read -p "Type your project's remote name (alias): " remote_name
+        echo "export COOG_GITPROJ_URL='$remote_url'" >> ~/.profile
+        echo "export COOG_GITPROJ_NAME='$remote_name'" >> ~/.profile
+        echo "now restart your session or source ~/.profile"
+}
+
 coog_init_autocomplete() { # add coog completion scripts to current virtual env
         [ -z $VIRTUAL_ENV ] && echo not in a virtual env, nothing to do && return
         local command_path=`which coog`
