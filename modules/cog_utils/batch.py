@@ -81,7 +81,7 @@ class BatchRoot(ModelView):
         return item
 
     @classmethod
-    def execute(cls, objects, ids, extra_args=None):
+    def execute(cls, objects, ids, treatment_date, extra_args=None):
         raise NotImplementedError
 
     @classmethod
