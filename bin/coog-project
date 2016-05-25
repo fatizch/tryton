@@ -28,6 +28,7 @@ coog_project_link() { # Add a remote repository (inputs) - [repositories name] -
         for repo in $*
         do
                  pushd $COOG_ROOT/$repo > /dev/null
+                 [ $? -ne 0 ] && echo "Ignoring "$repo": directory does not exist" && continue
                  echo "Checking wether the built url is valid..."
                  final_url=$COOG_GITPROJ_URL$repo".git"
                  final_url=$(_coog_check_git_url $final_url $repo)
@@ -46,6 +47,7 @@ coog_project_tag() { # Tag branch (input) - [repositories name] - default is emp
         for repo in $*
         do
                  pushd $COOG_ROOT/$repo > /dev/null
+                 [ $? -ne 0 ] && echo "Ignoring "$repo": directory does not exist" && continue
                  git tag -a $new_tag -m '"$(new_tag)"'
                  git push --tags $remote_alias master
                  popd > /dev/null
@@ -66,6 +68,7 @@ coog_project_rebase() { # Rebase branch (input) - [repositories name] - default 
         for repo in $*
         do
                  pushd $COOG_ROOT/$repo > /dev/null
+                 [ $? -ne 0 ] && echo "Ignoring "$repo": directory does not exist" && continue
                  local prev_branch="$(git branch | sed -n '/\* /s///p')"
                  git checkout $branch_to_rebase &&
                  git rebase $version_to_go &&
