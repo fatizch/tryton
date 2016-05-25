@@ -90,12 +90,6 @@ class Address:
         return self.zip[0:2]
 
     @classmethod
-    def get_var_names_for_full_extract(cls):
-        res = super(Address, cls).get_var_names_for_full_extract()
-        res.extend(['name', 'line3'])
-        return res
-
-    @classmethod
     def get_domain_for_find_zip_and_city(cls, zip, city, streetbis):
         return super(Address, cls).get_domain_for_find_zip_and_city(
             zip, city, streetbis) + [('line5', '=', streetbis)]

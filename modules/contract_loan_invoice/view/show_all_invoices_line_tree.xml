@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<tree string="Premiums">
+    <field name="name"/>
+    <field name="loan"/>
+    <field name="start"/>
+    <field name="end"/>
+    <field name="amount">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="tax_amount">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="total_amount">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="currency_digits" tree_invisible="1"/>
+</tree>

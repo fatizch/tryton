@@ -2,35 +2,17 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, utils, fields
+from trytond.modules.cog_utils import model, fields
 from trytond.modules.cog_utils import coop_string
 
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'Offered',
     'Product',
-    'OfferedProduct',
     'ItemDescription',
     'ItemDescSubItemDescRelation',
     'ItemDescriptionExtraDataRelation',
     ]
-
-
-class Offered:
-    __name__ = 'offered'
-
-    def get_name_for_billing(self):
-        return self.name
-
-    @classmethod
-    def delete_rules(cls, entities):
-        for field_name in (r for r in dir(cls) if r.endswith('_rules')):
-            field = getattr(cls, field_name)
-            if not hasattr(field, 'model_name'):
-                continue
-            utils.delete_reference_backref(
-                entities, field.model_name, field.field)
 
 
 class Product:
@@ -74,24 +56,6 @@ class Product:
                     (', '.join((extra_data.string
                                 for extra_data in remaining))))
 
-    def get_sub_elem_data(self):
-        # This method is used by the get_result method to know where to look
-        # for sub-elements to parse and what fields can be used for key
-        # matching
-        #
-        # Here it states that Product objects have a list of 'coverages' which
-        # implements the GetResult class, and on which we might use 'code' or
-        # 'name' as keys.
-        return ('coverages', ['code', 'name'])
-
-    def give_me_families(self, args):
-        self.update_args(args)
-        result = []
-        errors = []
-        for coverage in self.get_valid_coverages():
-            result.append(coverage.family)
-        return (result, errors)
-
     @fields.depends('coverages')
     def on_change_with_item_descriptors(self, name=None):
         res = set()
@@ -106,22 +70,8 @@ class Product:
         return super(Product, self).get_cmpl_data_looking_for_what(args)
 
     @classmethod
-    def get_var_names_for_full_extract(cls):
-        res = super(Product, cls).get_var_names_for_full_extract()
-        res.extend(['item_descriptors'])
-        return res
-
-    @classmethod
     def _export_light(cls):
         return super(Product, cls)._export_light() | {'processes'}
-
-
-class OfferedProduct(Offered):
-    'Offered Product'
-
-    __name__ = 'offered.product'
-    # This empty override is necessary to have in the product, the fields added
-    # in the override of offered
 
 
 class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
@@ -162,12 +112,6 @@ class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
             return self.code
         elif self.name:
             return coop_string.slugify(self.name)
-
-    @classmethod
-    def get_var_names_for_full_extract(cls):
-        res = super(ItemDescription, cls).get_var_names_for_full_extract()
-        res.extend(['extra_data_def', 'kind', 'sub_item_descs'])
-        return res
 
     @classmethod
     def _export_skips(cls):

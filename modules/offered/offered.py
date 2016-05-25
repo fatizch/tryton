@@ -3,16 +3,13 @@ from trytond.model import Unique
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
+from trytond import backend
 
 from trytond.modules.cog_utils import model, utils, fields
 from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
-from trytond.modules.rule_engine import RuleEngineResult
 
 __all__ = [
-    'NonExistingRuleKindException',
-    'GetResult',
-    'Offered',
     'Product',
     'OptionDescription',
     'OptionDescriptionExtraDataRelation',
@@ -20,11 +17,6 @@ __all__ = [
     'ProductExtraDataRelation',
     'OptionDescriptionRequired',
     'OptionDescriptionExcluded',
-    ]
-
-CONFIG_KIND = [
-    ('simple', 'Simple'),
-    ('advanced', 'Advanced')
     ]
 
 SUBSCRIBER_KIND = [
@@ -40,241 +32,23 @@ SUBSCRIPTION_BEHAVIOUR = [
     ]
 
 
-class Templated(object):
-    'Templated'
-
-    __name__ = 'offered.template'
-
-    template = fields.Many2One(None, 'Template',
-        domain=[('id', '!=', Eval('id'))], depends=['id'], ondelete='RESTRICT')
-    template_behaviour = fields.Selection([
-            ('', ''),
-            ('pass', 'Add'),
-            ('override', 'Remove'),
-            ], 'Template Behaviour',
-        states={'invisible': ~Eval('template')},
-        depends=['template'])
-
-    @fields.depends('template')
-    def on_change_template(self):
-        if self.template:
-            if not self.template_behaviour:
-                self.template_behaviour = 'pass'
-        else:
-            self.template_behaviour = None
-
-
-class NonExistingRuleKindException(Exception):
-    pass
-
-
-class GetResult(object):
-    def get_result(self, target='result', args=None, kind='', path=''):
-        # This method is a generic entry point for getting parameters.
-        #
-        # Arguments are :
-        #  - The target value to compute. It is a key which will be used to
-        #    decide which data is asked for
-        #  - The dict of arguments which will be used by the rule to compute.
-        #    Another way to do this would be a link to a method on the caller
-        #    which would provide said args on demand.
-        #  - The kind will usually be filled, it is a key to finding where
-        #    the required data is stored. So if the target is "price", the
-        #    kind should be set to "pricing".
-        #  - We can use the 'path' arg to specify the way to our data.
-        #    Basically, we try to match the first part of path (which looks
-        #    like a '.' delimited string ('alpha1.beta3.gamma2')) to one of the
-        #    sub-elements of self, then iterate.
-
-        if path:
-            # If a path is set, the data we look for is not set on self. So we
-            # need to iterate on self's sub-elems.
-            #
-            # First of all, we need the sub-elems descriptor. This is the
-            # result of the get_sub_elem_data method, which returns a tuple
-            # with the field name to iterate on as the first element, and
-            # this field's field on which to try to match the value.
-            sub_elem_data = self.get_sub_elem_data()
-
-            if not sub_elem_data:
-                # If it does not exist, someone failed...
-                return (None, ['Object %s does not have any sub_data.' % (
-                    self.name)])
-
-            path_elems = path.split('.')
-
-            for elem in getattr(self, sub_elem_data[0]):
-                # Now we iterate on the specified field
-                if path_elems[0] in (
-                        getattr(elem, attr) for attr in sub_elem_data[1]):
-                    if isinstance(elem, GetResult):
-                        return elem.get_result(
-                            target, args, kind, '.'.join(path_elems[1:]))
-                    return (
-                        None, ['Sub element %s of %s cannot get_result !' % (
-                            elem.name, self.name)])
-            return (None, ['Could not find %s sub element in %s' % (
-                path_elems[0], self.name)])
-
-        if kind:
-            try:
-                good_rule = self.get_good_rule_at_date(args, kind)
-            except Exception:
-                good_rule = None
-            if not good_rule:
-                # We did not found any rule matching the specified name
-                raise NonExistingRuleKindException
-            return good_rule.get_result(target, args)
-
-        # Now we look for our target, as it is at our level
-        target_func = getattr(self, 'give_me_' + target)
-
-        result = target_func(args)
-        if isinstance(result, RuleEngineResult):
-            return result
-        if not isinstance(result, tuple) and result is not None:
-            return (result, [])
-        return result
-
-    def get_sub_elem_data(self):
-        # Should be overridden
-        return None
-
-
-class Offered(model.CoopView, GetResult, Templated, model.TaggedMixin):
-    'Offered'
-
-    __name__ = 'offered'
-    _func_key = 'code'
-
-    code = fields.Char('Code', required=True)
-    name = fields.Char('Name', required=True, translate=True)
-    start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End Date')
-    description = fields.Text('Description', translate=True)
-    summary = fields.Function(
-        fields.Text(
-            'Summary', states={'invisible': ~Eval('summary',)}),
-        'get_summary')
-    currency_digits = fields.Function(
-        fields.Integer('Currency Digits'),
-        'get_currency_digits')
-    extra_data = fields.Dict('extra_data', 'Offered Kind',
-        context={'extra_data_kind': 'product'},
-        domain=[('kind', '=', 'product')])
-    extra_data_string = extra_data.translated('extra_data')
-    company = fields.Many2One('company.company', 'Company', required=True,
-        ondelete='RESTRICT')
-
-    @classmethod
-    def __setup__(cls):
-        super(Offered, cls).__setup__()
-        cls.template.model_name = cls.__name__
-
-        for field_name in (r for r in dir(cls) if r.endswith('_rules')):
-            field = getattr(cls, field_name)
-            if not hasattr(field, 'model_name'):
-                continue
-            if not hasattr(field, 'context'):
-                continue
-            if field.context is None:
-                field.context = {}
-            field.context['start_date'] = Eval('start_date')
-            field.context['currency_digits'] = Eval('currency_digits')
-            if field.depends is None:
-                field.depends = []
-            field.depends += ['start_date', 'currency_digits']
-            if field.states is None:
-                field.states = {}
-            field.states['readonly'] = ~Bool(Eval('start_date'))
-
-    @staticmethod
-    def default_start_date():
-        res = Transaction().context.get('start_date')
-        if not res:
-            res = utils.today()
-        return res
-
-    @classmethod
-    def default_company(cls):
-        return Transaction().context.get('company') or None
-
-    def get_currency_digits(self, name):
-        if hasattr(self, 'currency') and self.currency:
-            return self.currency.digits
-        else:
-            return Transaction().context.get('currency_digits')
-
-    @staticmethod
-    def default_extra_data():
-        good_se = Pool().get('extra_data').search([
-                ('kind', '=', 'product')])
-        res = {}
-        for se in good_se:
-            res[se.name] = se.get_default_value(None)
-        return res
-
-    def get_good_rule_at_date(self, data, kind):
-        # First we got to check that the fields that we will need to calculate
-        # which rule is appliable are available in the data dictionnary
-        try:
-            the_date = data['appliable_conditions_date']
-        except KeyError:
-            return None
-
-        try:
-            # We use the date field from the data argument to search for
-            # the good rule.
-            # (This is a given way to get a rule from a list, using the
-            # applicable date, it could be anything)
-            return utils.get_good_version_at_date(
-                self, '%s_rules' % kind, the_date)
-        except ValueError:
-            return None
-
-    @fields.depends('code', 'name')
-    def on_change_with_code(self):
-        if self.code:
-            return self.code
-        return coop_string.slugify(self.name)
-
-    def init_dict_for_rule_engine(self, args):
-        pass
-
-    @classmethod
-    def get_dated_fields(cls):
-        return [x for x in cls._fields.keys() if x.endswith('rules')]
-
-    @classmethod
-    def validate(cls, instances):
-        # Builds a virtual list of all business versions of the offered to be
-        # able to validate possible rule dependencies in all possible
-        # combinations
-        versioned_fields = cls.get_dated_fields()
-        for instance in instances:
-            values = []
-            for field in versioned_fields:
-                values += getattr(instance, field)
-            dates = set(map(lambda x: x.start_date, values))
-            for date in dates:
-                data = dict([
-                        (x, utils.get_good_version_at_date(instance, x, date))
-                        for x in versioned_fields])
-                instance.validate_consistency(data)
-
-    def validate_consistency(self, data):
-        pass
-
-    def get_all_extra_data(self, at_date):
-        return getattr(self, 'extra_data', {})
-
-
-class Product(model.CoopSQL, Offered):
+class Product(model.CoopSQL, model.CoopView, model.TaggedMixin):
     'Product'
 
     __name__ = 'offered.product'
     _func_key = 'code'
 
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name', required=True, translate=True)
+    company = fields.Many2One('company.company', 'Company', required=True,
+        ondelete='RESTRICT')
+    start_date = fields.Date('Start Date', required=True)
+    end_date = fields.Date('End Date')
+    description = fields.Text('Description', translate=True)
+    extra_data = fields.Dict('extra_data', 'Offered Kind',
+        context={'extra_data_kind': 'product'},
+        domain=[('kind', '=', 'product')])
+    extra_data_string = extra_data.translated('extra_data')
     coverages = fields.Many2Many('offered.product-option.description',
         'product', 'coverage', 'Option Descriptions', domain=[
             ('currency', '=', Eval('currency')),
@@ -294,6 +68,9 @@ class Product(model.CoopSQL, Offered):
         depends=['coverages'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True,
         ondelete='RESTRICT')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'on_change_with_currency_digits')
     contract_generator = fields.Many2One('ir.sequence',
         'Contract Number Generator', context={'code': 'offered.product'},
         ondelete='RESTRICT', required=True,
@@ -319,6 +96,19 @@ class Product(model.CoopSQL, Offered):
                 'missing_contract_extra_data': 'The following contract extra'
                 'data should be set on the product: %s',
                 })
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        table = TableHandler(cursor, cls, module_name)
+
+        super(Product, cls).__register__(module_name)
+
+        # Migration from 1.6 Drop Offered inheritance
+        if table.column_exist('template'):
+            table.drop_column('template')
+            table.drop_column('template_behaviour')
 
     @classmethod
     def copy(cls, products, default=None):
@@ -367,15 +157,40 @@ class Product(model.CoopSQL, Offered):
             [(u'code',) + tuple(clause[1:])]
             ]
 
+    @classmethod
+    def default_currency(cls):
+        return ModelCurrency.default_currency()
+
+    @staticmethod
+    def default_subscriber_kind():
+        return 'all'
+
+    @staticmethod
+    def default_start_date():
+        return Transaction().context.get('start_date', None) or utils.today()
+
+    @classmethod
+    def default_company(cls):
+        return Transaction().context.get('company', None)
+
+    @staticmethod
+    def default_extra_data():
+        res = {}
+        for e_d in Pool().get('extra_data').search([('kind', '=', 'product')]):
+            res[e_d.name] = e_d.get_default_value(None)
+        return res
+
     def get_valid_coverages(self):
         for coverage in self.coverages:
             if coverage.is_valid():
                 yield coverage
 
     def init_dict_for_rule_engine(self, args):
-        super(Product, self).init_dict_for_rule_engine(args)
         if 'product' not in args:
             args['product'] = self
+
+    def get_all_extra_data(self, at_date):
+        return getattr(self, 'extra_data', {})
 
     def get_extra_data_def(self, type_, existing_data, condition_date,
             item_desc=None, coverage=None):
@@ -396,82 +211,12 @@ class Product(model.CoopSQL, Offered):
             existing_data)
         return result
 
-    @classmethod
-    def default_currency(cls):
-        return ModelCurrency.default_currency()
-
-    def give_me_new_contract_number(self, args=None):
+    def new_contract_number(self):
         return (self.contract_generator.get_id(self.contract_generator.id)
             if self.contract_generator else '')
 
-    def give_me_extra_data_ids_aggregate(self, args):
-        if 'dd_args' not in args:
-            return [], []
-        res = set()
-        errs = []
-        for opt in self.coverages:
-            result, errors = opt.get_result(
-                'extra_data_ids_aggregate',
-                args)
-            map(lambda x: res.add(x), result)
-            errs += errors
-        return list(res), errs
-
-    def give_me_extra_data_getter(self, args):
-        if 'dd_args' not in args:
-            return [], []
-        dd_args = args['dd_args']
-        if 'path' not in dd_args:
-            if 'options' not in dd_args:
-                return self.give_me_extra_data_ids(args)
-            dd_args['path'] = 'all'
-        return self.give_me_extra_data_ids_aggregate(args)
-
     def get_currency(self):
         return self.currency
-
-    def give_me_calculated_extra_datas(self, args):
-        # We prepare the call to the 'calculate_value_set' API.
-        # It needs the following parameters:
-        #  - The list of the schemas it must look for
-        #  - The list of all the schemas in the tree. This list should
-        #    contain all the schemas from the first list
-        #  - All the values available for all relevent schemas
-        if 'contract' not in args or 'date' not in args:
-            raise Exception('Expected contract and date in args, got %s' % (
-                str([k for k in args.iterkeys()])))
-        all_schemas, possible_schemas = self.get_extra_data_for_exec(args)
-        if 'sub_elem' not in args:
-            for option in args['contract'].options:
-                if not option.coverage:
-                    continue
-                coverage_all, coverage_possible = \
-                    option.coverage.get_extra_data_for_exec(args)
-                all_schemas |= coverage_all
-                possible_schemas |= coverage_possible
-        else:
-            coverage = args['coverage']
-            coverage_all, coverage_possible = \
-                coverage.get_extra_data_for_exec(args)
-            all_schemas |= coverage_all
-            possible_schemas |= coverage_possible
-        existing_data = {}
-        if args['contract'].extra_data:
-            existing_data.update(args['contract'].extra_data)
-        key = None
-        if 'option' in args:
-            key = 'option'
-        elif 'sub_elem' in args:
-            key = 'sub_elem'
-        elif 'contract' in args:
-            key = 'contract'
-        if key:
-            existing_data.update(args[key].get_all_extra_data(
-                args['date']))
-        ExtraData = Pool().get('extra_data')
-        result = ExtraData.calculate_value_set(
-            possible_schemas, all_schemas, existing_data, args)
-        return result, ()
 
     def check_subscriber_kind(self, args):
         # We define a match_table which will tell what data to look for
@@ -486,18 +231,6 @@ class Product(model.CoopSQL, Offered):
             return (False, ['Subscriber must be a %s'
                     % dict(SUBSCRIBER_KIND)[self.subscriber_kind]])
         return True, []
-
-    @staticmethod
-    def default_subscriber_kind():
-        return 'all'
-
-    @classmethod
-    def get_var_names_for_full_extract(cls):
-        res = super(Product, cls).get_var_names_for_full_extract()
-        res.extend(['extra_data_def',
-            'coverages', 'description', 'subscriber_kind',
-            ('currency', 'light')])
-        return res
 
     @classmethod
     def get_product_def(cls, code):
@@ -518,15 +251,32 @@ class Product(model.CoopSQL, Offered):
         if template.template_extension == 'odt':
             return self.report_style_template
 
+    def on_change_with_currency_digits(self, name):
+        return self.currency.digits if self.currency else 2
 
-class OptionDescription(model.CoopSQL, Offered):
+
+class OptionDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
     'OptionDescription'
 
     __name__ = 'offered.option.description'
     _func_key = 'code'
 
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name', required=True, translate=True)
+    company = fields.Many2One('company.company', 'Company', required=True,
+        ondelete='RESTRICT')
+    start_date = fields.Date('Start Date', required=True)
+    end_date = fields.Date('End Date')
+    description = fields.Text('Description', translate=True)
+    extra_data = fields.Dict('extra_data', 'Offered Kind',
+        context={'extra_data_kind': 'product'},
+        domain=[('kind', '=', 'product')])
+    extra_data_string = extra_data.translated('extra_data')
     currency = fields.Many2One('currency.currency', 'Currency', required=True,
         ondelete='RESTRICT')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'on_change_with_currency_digits')
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
         'Subscription Behaviour', sort=False)
     extra_data_def = fields.Many2Many(
@@ -558,9 +308,26 @@ class OptionDescription(model.CoopSQL, Offered):
     ending_rule = fields.One2Many('offered.option.description.ending_rule',
         'coverage', 'Ending Rule', size=1, delete_missing=True)
 
-    def calculate_end_date(self, exec_context):
-        if self.ending_rule:
-            return self.ending_rule[0].calculate(exec_context)
+    @classmethod
+    def __setup__(cls):
+        super(OptionDescription, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
+            ]
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        table = TableHandler(cursor, cls, module_name)
+
+        super(OptionDescription, cls).__register__(module_name)
+
+        # Migration from 1.6 Drop Offered inheritance
+        if table.column_exist('template'):
+            table.drop_column('template')
+            table.drop_column('template_behaviour')
 
     @classmethod
     def is_master_object(cls):
@@ -577,18 +344,37 @@ class OptionDescription(model.CoopSQL, Offered):
             set(['products']))
 
     @classmethod
-    def __setup__(cls):
-        super(OptionDescription, cls).__setup__()
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
-            ]
-
-    @classmethod
     def copy(cls, options, default=None):
         default = {} if default is None else default.copy()
         default.setdefault('products', None)
         return super(OptionDescription, cls).copy(options, default=default)
+
+    @classmethod
+    def default_currency(cls):
+        return ModelCurrency.default_currency()
+
+    @staticmethod
+    def default_subscription_behaviour():
+        return 'mandatory'
+
+    @staticmethod
+    def default_is_service():
+        return True
+
+    @staticmethod
+    def default_start_date():
+        return Transaction().context.get('start_date', None) or utils.today()
+
+    @classmethod
+    def default_company(cls):
+        return Transaction().context.get('company', None)
+
+    @staticmethod
+    def default_extra_data():
+        res = {}
+        for e_d in Pool().get('extra_data').search([('kind', '=', 'product')]):
+            res[e_d.name] = e_d.get_default_value(None)
+        return res
 
     @classmethod
     def get_possible_coverages_clause(cls, instance, at_date):
@@ -602,9 +388,17 @@ class OptionDescription(model.CoopSQL, Offered):
             return [('products', '=', instance.product.id)] + date_clause
         return date_clause
 
-    @classmethod
-    def default_currency(cls):
-        return ModelCurrency.default_currency()
+    def get_currency(self):
+        return self.currency
+
+    def get_all_extra_data(self, at_date):
+        return getattr(self, 'extra_data', {})
+
+    def get_publishing_values(self):
+        result = super(OptionDescription, self).get_publishing_values()
+        result['name'] = self.name
+        result['code'] = self.code
+        return result
 
     @classmethod
     def search_rec_name(cls, name, clause):
@@ -625,40 +419,6 @@ class OptionDescription(model.CoopSQL, Offered):
             return False
         return True
 
-    def give_me_extra_data_ids_aggregate(self, args):
-        if 'dd_args' not in args:
-            return [], []
-        dd_args = args['dd_args']
-        if not('options' in dd_args and dd_args['options'] != '' and
-                self.code in dd_args['options'].split(';')):
-            return [], []
-        return self.get_extra_data_def(
-            [dd_args['kind']], args['date']), []
-
-    @staticmethod
-    def default_subscription_behaviour():
-        return 'mandatory'
-
-    def get_currency(self):
-        return self.currency
-
-    @classmethod
-    def get_var_names_for_full_extract(cls):
-        res = super(OptionDescription, cls).get_var_names_for_full_extract()
-        res.extend(['extra_data_def', 'description',
-            'subscription_behaviour'])
-        return res
-
-    def init_dict_for_rule_engine(self, args):
-        super(OptionDescription, self).init_dict_for_rule_engine(args)
-        args['coverage'] = self
-
-    def get_publishing_values(self):
-        result = super(OptionDescription, self).get_publishing_values()
-        result['name'] = self.name
-        result['code'] = self.code
-        return result
-
     def on_change_with_is_service(self, name=None):
         return True
 
@@ -666,9 +426,19 @@ class OptionDescription(model.CoopSQL, Offered):
     def on_change_with_products_name(self, name=None):
         return ', '.join([x.name for x in self.products])
 
-    @staticmethod
-    def default_is_service():
-        return True
+    def on_change_with_currency_digits(self, name):
+        return self.currency.digits if self.currency else 2
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        return self.code if self.code else coop_string.slugify(self.name)
+
+    def init_dict_for_rule_engine(self, args):
+        args['coverage'] = self
+
+    def calculate_end_date(self, exec_context):
+        if self.ending_rule:
+            return self.ending_rule[0].calculate(exec_context)
 
 
 class OptionDescriptionExtraDataRelation(model.CoopSQL):

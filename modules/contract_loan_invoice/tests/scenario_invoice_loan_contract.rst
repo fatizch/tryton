@@ -34,7 +34,6 @@ Get Models::
     >>> Contract = Model.get('contract')
     >>> ContractInvoice = Model.get('contract.invoice')
     >>> ContractPremium = Model.get('contract.premium')
-    >>> ContractPremiumAmount = Model.get('contract.premium.amount')
     >>> Country = Model.get('country.country')
     >>> Currency = Model.get('currency.currency')
     >>> CurrencyRate = Model.get('currency.currency.rate')
@@ -42,7 +41,6 @@ Get Models::
     >>> FiscalYear = Model.get('account.fiscalyear')
     >>> ItemDescription = Model.get('offered.item.description')
     >>> Loan = Model.get('loan')
-    >>> LoanAveragePremiumRule = Model.get('loan.average_premium_rule')
     >>> LoanShare = Model.get('loan.share')
     >>> OptionDescription = Model.get('offered.option.description')
     >>> Party = Model.get('party.party')
@@ -201,17 +199,6 @@ Create Fee::
     >>> fee.product = product
     >>> fee.save()
 
-Create Loan Average Premium Rule::
-
-    >>> loan_average_rule = LoanAveragePremiumRule()
-    >>> loan_average_rule.name = 'Test Average Rule'
-    >>> loan_average_rule.code = 'test_average_rule'
-    >>> loan_average_rule.use_default_rule = True
-    >>> fee_rule = loan_average_rule.fee_rules.new()
-    >>> fee_rule.fee = fee
-    >>> fee_rule.action = 'longest'
-    >>> loan_average_rule.save()
-
 Create Item Description::
 
     >>> item_description = ItemDescription()
@@ -274,7 +261,6 @@ Create Product::
     >>> product.start_date = product_start_date
     >>> product.billing_modes.append(freq_monthly)
     >>> product.billing_modes.append(freq_yearly)
-    >>> product.average_loan_premium_rule = loan_average_rule
     >>> product.coverages.append(coverage)
     >>> product.save()
 
@@ -385,72 +371,3 @@ Test loan_share end_date calculation::
     >>> loan_share_3.end_date == loan_1.end_date
     True
     >>> LoanShare.delete([loan_share_3])
-
-Create Premium Amounts::
-
-    >>> contract = Contract(contract.id)
-    >>> option = contract.covered_elements[0].options[0]
-    >>> premium_amounts = [
-    ...     ContractPremiumAmount(contract=contract, premium=contract.premiums[0],
-    ...         start=contract_start_date, end=contract_start_date,
-    ...         amount=Decimal(100)),
-    ...     ContractPremiumAmount(contract=contract, premium=option.premiums[0],
-    ...         start=contract_start_date, end=contract_start_date,
-    ...         amount=Decimal(20)),
-    ...     ContractPremiumAmount(contract=contract, premium=option.premiums[0],
-    ...         start=contract_start_date, end=contract_start_date,
-    ...         amount=Decimal(100)),
-    ...     ContractPremiumAmount(contract=contract, premium=option.premiums[1],
-    ...         start=contract_start_date, end=contract_start_date,
-    ...         amount=Decimal(200)),
-    ...     ]
-    >>> void_val = [x.save() for x in premium_amounts]
-
-Test Average Premium Rate Wizard, fee => longest::
-
-    >>> loan_average = Wizard('loan.average_premium_rate.display', models=[contract])
-    >>> loans = loan_average.form.loan_displayers
-    >>> abs(loans[0].average_premium_rate - Decimal('0.00428571')) <= Decimal('1e-8')
-    True
-    >>> abs(loans[1].average_premium_rate - Decimal('0.01851851')) <= Decimal('1e-8')
-    True
-    >>> abs(loans[0].current_loan_shares[0].average_premium_rate -
-    ...     Decimal('0.00428571')) <= Decimal('1e-8')
-    True
-    >>> loans[0].base_premium_amount == 120
-    True
-    >>> loans[1].base_premium_amount == 300
-    True
-    >>> loan_average.execute('end')
-
-Test Average Premium Rate Wizard, fee => biggest::
-
-    >>> loan_average_rule.fee_rules[0].action = 'biggest'
-    >>> loan_average_rule.save()
-    >>> loan_average = Wizard('loan.average_premium_rate.display', models=[contract])
-    >>> loans = loan_average.form.loan_displayers
-    >>> abs(loans[0].average_premium_rate - Decimal('0.00785714')) <= Decimal('1e-8')
-    True
-    >>> abs(loans[1].average_premium_rate - Decimal('0.01234567')) <= Decimal('1e-8')
-    True
-    >>> loans[0].base_premium_amount == 220
-    True
-    >>> loans[1].base_premium_amount == 200
-    True
-    >>> loan_average.execute('end')
-
-Test Average Premium Rate Wizard, fee => prorata::
-
-    >>> loan_average_rule.fee_rules[0].action = 'prorata'
-    >>> loan_average_rule.save()
-    >>> loan_average = Wizard('loan.average_premium_rate.display', models=[contract])
-    >>> loans = loan_average.form.loan_displayers
-    >>> abs(loans[0].average_premium_rate - Decimal('0.00664420')) <= Decimal('1e-8')
-    True
-    >>> abs(loans[1].average_premium_rate - Decimal('0.01444211')) <= Decimal('1e-8')
-    True
-    >>> abs(loans[0].base_premium_amount - Decimal('186.037735')) <= Decimal('1e-6')
-    True
-    >>> abs(loans[1].base_premium_amount - Decimal('233.962264')) <= Decimal('1e-6')
-    True
-    >>> loan_average.execute('end')

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
+        <!-- ############################################################ -->
+        <!-- Rule Engine -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="rule_engine_form">
+            <field name="model">rule_engine</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="rule_engine.rule_view_form"/>
+            <field name="name">rule_engine_form</field>
+        </record>
         <record model="rule_engine.function" id="dossier_personne_couverte">
             <field name="translated_technical_name">dossier_personne_couverte</field>
             <field name="description">Personne Couverte</field>

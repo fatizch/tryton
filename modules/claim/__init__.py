@@ -16,7 +16,6 @@ def register():
         EventDescription,
         LossDescription,
         Benefit,
-        InsuranceBenefit,
         EventDescriptionLossDescriptionRelation,
         BenefitLossDescriptionRelation,
         OptionDescriptionBenefitRelation,

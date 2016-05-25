@@ -38,7 +38,6 @@ __all__ = [
     'PreviewLoanEndorsement',
     'PreviewContractPayments',
     'ContractPreview',
-    'ContractPreviewPayment',
     'StartEndorsement',
     ]
 
@@ -1208,25 +1207,26 @@ class PreviewContractPayments(EndorsementWizardPreviewMixin,
         pool = Pool()
         Loan = pool.get('loan')
         Contract = pool.get('contract')
-        PremiumAmountPerPeriod = pool.get('contract.premium.amount.per_period')
-        ContractPreviewPayment = pool.get(
-            'endorsement.start.preview_contract_payments.payment')
+        LineDisplayer = pool.get('contract.invoice.show_all.line')
         if isinstance(instance, Loan):
             return {}
         if isinstance(instance, Contract):
-            payments = []
-            for payment in PremiumAmountPerPeriod.search([
-                        ('contract', '=', instance.id)]):
-                new_payment = {x: getattr(payment, x)
-                    for x in ContractPreviewPayment.fields_to_extract()}
-                new_payment['contract'] = instance.id
-                payments.append(new_payment)
-            return {
+            # Manually clear the cache
+            Contract._future_invoices_cache.set(instance.id, None)
+            payments = Contract.get_future_invoices(instance)
+
+            # Force update before cursor is closed
+            [LineDisplayer.update_detail_for_display(x) for x in payments]
+            preview_values = {
                 'id': instance.id,
                 'currency_digits': instance.currency_digits,
                 'currency_symbol': instance.currency_symbol,
                 'payments': payments,
                 }
+
+            # Manually reset the cache
+            Contract._future_invoices_cache.set(instance.id, None)
+            return preview_values
 
     @classmethod
     def init_from_preview_values(cls, preview_values):
@@ -1255,7 +1255,7 @@ class PreviewContractPayments(EndorsementWizardPreviewMixin,
                     contract_preview['%s_contract_payments' % kind].append(
                         elem)
                     contract_preview['%s_contract_amount' % kind] += \
-                        elem['total']
+                        elem['total_amount']
         return {'contract_previews': contracts.values()}
 
 
@@ -1274,10 +1274,10 @@ class ContractPreview(model.CoopView):
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
         readonly=True)
     new_contract_payments = fields.One2Many(
-        'endorsement.start.preview_contract_payments.payment', None,
+        'contract.invoice.show_all.line', None,
         'New Contract Payments', readonly=True)
     old_contract_payments = fields.One2Many(
-        'endorsement.start.preview_contract_payments.payment', None,
+        'contract.invoice.show_all.line', None,
         'Current Contract Payments', readonly=True)
     all_new_payments = fields.One2Many(
         'endorsement.start.preview_contract_payments.payment', None,
@@ -1285,33 +1285,6 @@ class ContractPreview(model.CoopView):
     all_old_payments = fields.One2Many(
         'endorsement.start.preview_contract_payments.payment', None,
         'All Old Payments', readonly=True, states={'invisible': True})
-
-
-class ContractPreviewPayment(model.CoopView):
-    'Contract Preview Payment'
-
-    __name__ = 'endorsement.start.preview_contract_payments.payment'
-
-    amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
-        depends=['currency_digits'])
-    contract = fields.Integer('Contract')
-    fees = fields.Numeric('Fees', digits=(16, Eval('currency_digits', 2)),
-        depends=['currency_digits'])
-    untaxed_amount = fields.Numeric('Total', digits=(16,
-            Eval('currency_digits', 2)), depends=['currency_digits'])
-    tax_amount = fields.Numeric('Tax Amount', digits=(16,
-            Eval('currency_digits', 2)), depends=['currency_digits'])
-    total = fields.Numeric('Total', digits=(16, Eval('currency_digits', 2)),
-        depends=['currency_digits'])
-    period_start = fields.Date('Period Start')
-    period_end = fields.Date('Period End')
-    currency_digits = fields.Integer('Currency Digits')
-    currency_symbol = fields.Char('Currency Symbol')
-
-    @classmethod
-    def fields_to_extract(cls):
-        return ['amount', 'fees', 'untaxed_amount', 'tax_amount', 'total',
-            'period_start', 'period_end', 'contract']
 
 
 class StartEndorsement:

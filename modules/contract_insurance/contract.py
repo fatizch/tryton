@@ -79,11 +79,6 @@ class Contract(Printable):
                 'need_option': 'Select at least one option for %s',
                 })
 
-    @classmethod
-    def get_var_names_for_full_extract(cls):
-        return super(Contract, cls).get_var_names_for_full_extract() + \
-            ['covered_elements']
-
     def _get_calculate_targets(self, model_type):
         if model_type == 'covered_elements':
             self.covered_elements = self.covered_elements
@@ -1057,11 +1052,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         if self.party:
             self.party_extra_data = {k: v
                 for k, v in version.extra_data.iteritems()}
-
-    @classmethod
-    def get_var_names_for_full_extract(cls):
-        return ['name', 'sub_covered_elements', 'extra_data', 'party',
-            'covered_relations']
 
     def get_relation_with_subscriber(self):
         if not self.party:

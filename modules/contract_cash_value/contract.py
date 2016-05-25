@@ -63,8 +63,8 @@ class CashValueCollection(model.CoopView, model.CoopSQL):
             elem.init_dict_for_rule_engine(the_dict)
             good_data.init_dict_for_rule_engine(the_dict)
             the_dict['date'] = date
-            elem.updated_amount = good_coverage.get_result(
-                'actualized_cash_value', the_dict).result
+            # elem.updated_amount = good_coverage.get_result(
+            #     'actualized_cash_value', the_dict).result
             elem.last_update = date
             result += elem.updated_amount
             if save:

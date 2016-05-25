@@ -1,24 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="/form" position="replace_attributes">
-        <form string="Coverage"/>
-    </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
         <label name="item_desc"/>
         <field name="item_desc"/>
-        <newline/>
         <label name="insurer"/>
         <field name="insurer"/>
-        <newline/>
     </xpath>
-    <xpath expr="/form/label[@name='template']" position="before">
+    <xpath expr="/form/field[@name='end_date']" position="after">
         <label name="family"/>
-        <field name="family" xexpand="1"/>
-        <newline/>
-    </xpath>
-    <xpath expr="/form/field[@name='family']" position="after">
+        <field name="family"/>
         <label name="insurance_kind"/>
         <field name="insurance_kind"/>
-        <newline/>
     </xpath>
 </data>

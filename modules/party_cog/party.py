@@ -480,15 +480,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         self.birth_name = ''
 
     @classmethod
-    def get_var_names_for_full_extract(cls):
-        res = super(Party, cls).get_var_names_for_full_extract()
-        res.extend(['is_person', 'is_company', 'gender', 'first_name',
-            'birth_name', 'birth_date', 'ssn', 'short_name', 'addresses',
-            'contact_mechanisms',
-            ('lang', 'light')])
-        return res
-
-    @classmethod
     def set_contact(cls, parties, name, value):
         pool = Pool()
         Contact = pool.get('party.contact_mechanism')

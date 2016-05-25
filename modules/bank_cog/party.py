@@ -64,12 +64,6 @@ class Party:
         return utils.get_good_version_at_date(self, 'bank_accounts', at_date)
 
     @classmethod
-    def get_var_names_for_full_extract(cls):
-        res = super(Party, cls).get_var_names_for_full_extract()
-        res.extend(['bank_accounts'])
-        return res
-
-    @classmethod
     def ws_create_person(cls, person_dict):
         Bank = Pool().get('bank')
         Currency = Pool().get('currency.currency')

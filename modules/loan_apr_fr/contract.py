@@ -1,11 +1,8 @@
 from decimal import Decimal
 from collections import defaultdict
-from sql import Literal
-from sql.aggregate import Sum
-from sql.conditionals import Coalesce
 
-from trytond.pool import PoolMeta, Pool
-from trytond.transaction import Transaction
+from trytond.pool import PoolMeta
+from trytond.cache import Cache
 
 from trytond.modules.cog_utils import coop_date
 
@@ -19,62 +16,46 @@ __all__ = [
 class Contract:
     __name__ = 'contract'
 
-    @property
-    def _premium_per_loan_cache(self):
-        if hasattr(self, '__premium_per_loan_cache'):
-            return self.__premium_per_loan_cache
-        self.__premium_per_loan_cache = {}
-        return self.__premium_per_loan_cache
-
-    def _clear_premium_aggregates_cache(self):
-        super(Contract, self)._clear_premium_aggregates_cache()
-        self.__premium_per_loan_cache = {}
+    _premium_per_loan_cache = Cache('premiums_per_loan')
 
     def calculate_premium_per_loan(self):
-        cached_values = self._premium_per_loan_cache.get(self.id, None)
-        if cached_values:
-            return cached_values
-        cursor = Transaction().cursor
-        pool = Pool()
-
-        premium_amount = pool.get('contract.premium.amount').__table__()
-        premium = pool.get('contract.premium').__table__()
-
-        premium_query = premium_amount.join(premium, condition=(
-                premium_amount.premium == premium.id)
-            ).select(premium.loan, premium.fee, premium_amount.period_start,
-                premium_amount.period_end,
-                Sum(Coalesce(premium_amount.amount, Literal(0))).as_('amount'),
-                Sum(Coalesce(premium_amount.tax_amount, Literal(0))).as_(
-                    'tax'), where=(premium_amount.contract == self.id),
-                group_by=[premium.loan, premium.fee,
-                    premium_amount.period_start, premium_amount.period_end])
-
-        cursor.execute(*premium_query.select(premium_query.loan,
-                premium_query.fee, premium_query.period_start,
-                premium_query.amount, premium_query.tax,
-                group_by=[premium_query.loan, premium_query.fee,
-                    premium_query.period_start, premium_query.amount,
-                    premium_query.tax],
-                order_by=premium_query.period_start))
-
+        premiums = self.__class__._premium_per_loan_cache.get(self.id, None)
+        if premiums is not None:
+            return premiums
+        futures = self.get_future_invoices(self)
+        per_period = defaultdict(lambda: {'amount': 0, 'tax': 0})
         premiums = {
-            'per_period': cursor.dictfetchall(),
+            'per_period': [],
             'loan_totals': defaultdict(lambda: {
                     'amount': Decimal(0), 'tax': Decimal(0)}),
             'fee_totals': defaultdict(lambda: {
                     'amount': Decimal(0), 'tax': Decimal(0)}),
             }
 
-        for data_dict in premiums['per_period']:
-            if data_dict['loan']:
-                data = premiums['loan_totals'][data_dict['loan']]
-            elif data_dict['fee']:
-                data = premiums['fee_totals'][data_dict['fee']]
-            data['amount'] += data_dict['amount']
-            data['tax'] += data_dict['tax']
+        for invoice in futures:
+            for line in invoice['details']:
+                premium = line['premium']
+                data = per_period[(line['start'], premium.loan, premium.fee)]
+                data['amount'] += line['amount']
+                data['tax'] += line['tax_amount']
+                specific_data = None
+                if premium.loan:
+                    specific_data = premiums['loan_totals'][premium.loan.id]
+                elif premium.fee:
+                    specific_data = premiums['fee_totals'][premium.fee.id]
+                if specific_data is not None:
+                    specific_data['amount'] += line['amount']
+                    specific_data['tax'] += line['tax_amount']
 
-        self._premium_per_loan_cache[self.id] = premiums
+        for (period_start, loan, fee), data in per_period.iteritems():
+            premiums['per_period'].append({
+                    'loan': loan.id if loan else None,
+                    'fee': fee.id if fee else None,
+                    'period_start': period_start,
+                    'amount': data['amount'],
+                    'tax': data['tax']})
+
+        self.__class__._premium_per_loan_cache.set(self.id, premiums)
         return premiums
 
     def get_used_loans_ratios(self):

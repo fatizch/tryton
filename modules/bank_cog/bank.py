@@ -59,10 +59,6 @@ class Bank(export.ExportImportMixin):
         if self.bic and not self.valid_BIC(self.bic):
             self.raise_user_error('invalid_bic', (self.bic))
 
-    @classmethod
-    def get_var_names_for_light_extract(cls):
-        return ['bic']
-
     def get_rec_name(self, name):
         res = '[%s] %s' % (self.bic, self.party.name if self.party else '')
         return res
@@ -155,14 +151,6 @@ class BankAccount(export.ExportImportMixin):
     def get_numbers_as_char(self, name):
         return ', '.join([x.rec_name for x in self.numbers])
 
-    @classmethod
-    def get_var_names_for_light_extract(cls):
-        return ['number']
-
-    @classmethod
-    def get_var_names_for_full_extract(cls):
-        return ['numbers', ('bank', 'light'), ('currency', 'light')]
-
     def get_main_bank_account_number(self, name):
         ibans = [x for x in self.numbers if x.type == 'iban']
         if ibans:
@@ -232,14 +220,6 @@ class BankAccountNumber(export.ExportImportMixin):
 
     def get_summary_content(self, label, at_date=None, lang=None):
         return (self.type, self.rec_name)
-
-    @classmethod
-    def get_var_names_for_full_extract(cls):
-        return ['kind', 'number', ]
-
-    @classmethod
-    def get_var_names_for_light_extract(cls):
-        return ['number']
 
     @classmethod
     def search_rec_name(cls, name, clause):

@@ -96,10 +96,6 @@ msgctxt "field:extra_data,string:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:extra_data,sub_data_config_kind:"
-msgid "Sub Data Config Kind"
-msgstr "Configuration de la sous donnée"
-
 msgctxt "field:extra_data,sub_datas:"
 msgid "Sub Data"
 msgstr "Sous Donnée"
@@ -1091,14 +1087,6 @@ msgstr "Option"
 msgctxt "selection:extra_data,kind:"
 msgid "Product"
 msgstr "Produit"
-
-msgctxt "selection:extra_data,sub_data_config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:extra_data,sub_data_config_kind:"
-msgid "Simple"
-msgstr "Simple"
 
 msgctxt "selection:extra_data,type_:"
 msgid ""

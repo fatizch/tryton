@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<data>
-    <xpath expr="/form" position="replace_attributes">
-        <form string="Product"/>
-    </xpath>
-    <xpath expr="/form/notebook/page[@id='summary']" position="after">
+<form string="Product">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <notebook colspan="4">
+        <page string="Summary" id="summary">
+            <field name="description" colspan="4"/>
+        </page>
         <page string="Extra Data" id="extra_data">
             <field name="extra_data_def" colspan="4"/>
         </page>
-    </xpath>
-    <xpath expr="/form/notebook/page[@id='managers']" position="before">
         <page string="Option Descriptions" id="option">
             <label name="change_coverages_order"/>
             <field name="change_coverages_order"/>
@@ -17,22 +23,33 @@
             <field name="ordered_coverages" colspan="4" mode="tree"/>
             <field name="packages" colspan="4"/>
         </page>
-    </xpath>
-    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
-        <label name="contract_generator"/>
-        <field name="contract_generator"/>
-        <newline/>
-        <label name="currency"/>
-        <field name="currency"/>
-        <newline/>
-        <label name="subscriber_kind"/>
-        <field name="subscriber_kind"/>
-    </xpath>
-    <xpath expr="/form/notebook/page[@id='admin']" position="before">
+        <page string="Rules" id="managers">
+            <notebook>
+            </notebook>
+        </page>
         <page string="Report Templates" id="report_templates">
             <field name="report_templates" colspan="4"/>
             <label name="report_style_template"/>
             <field name="report_style_template" colspan="3"/>
         </page>
-    </xpath>
-</data>
+        <page string="Administration" id="admin" col="2">
+            <group id="left">
+                <label name="contract_generator"/>
+                <field name="contract_generator"/>
+                <newline/>
+                <label name="currency"/>
+                <field name="currency"/>
+                <newline/>
+                <label name="subscriber_kind"/>
+                <field name="subscriber_kind"/>
+            </group>
+            <group id="right" col="2">
+                <label name="company"/>
+                <field name="company"/>
+                <newline/>
+                <field name="extra_data" colspan="2"/>
+            </group>
+            <field name="tags" colspan="4"/>
+        </page>
+    </notebook>
+</form>

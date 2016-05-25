@@ -576,10 +576,6 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
     def search_person(cls, name, clause):
         return [('option.covered_element.party',) + tuple(clause[1:])]
 
-    def get_name_for_billing(self):
-        return '%s %s%% %s' % (self.person.get_rec_name(None),
-            str(self.share * 100), self.loan.get_rec_name(None))
-
     def init_dict_for_rule_engine(self, current_dict):
         self.loan.init_dict_for_rule_engine(current_dict)
         self.option.init_dict_for_rule_engine(current_dict)

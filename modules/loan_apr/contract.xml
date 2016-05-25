@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ####################################### -->
+        <!-- # Average Premium Rate Loan Displayer # -->
+        <!-- ####################################### -->
+        <record model="ir.ui.view" id="loan_average_premium_view_tree">
+            <field name="model">loan.average_premium_rate.loan_displayer</field>
+            <field name="type">tree</field>
+            <field name="field_childs">current_loan_shares</field>
+            <field name="name">loan_average_premium_tree</field>
+            <field name="priority" eval="99"/>
+        </record>
+        <!-- #################################### -->
+        <!-- # Display Loan Average Premium Values # -->
+        <!-- #################################### -->
+        <record model="ir.ui.view" id="display_average_premium_values_view_form">
+            <field name="model">loan.average_premium_rate.display.values</field>
+            <field name="type">form</field>
+            <field name="name">display_average_premium_values_form</field>
+        </record>
+        <!-- ############################# -->
+        <!-- # Display Loan Average Premium # -->
+        <!-- ############################# -->
+        <record model="ir.action.wizard" id="act_loan_average_premium_display">
+            <field name="name">Show Loan Average Premium</field>
+            <field name="wiz_name">loan.average_premium_rate.display</field>
+        </record>
+        <record model="ir.action.keyword" id="act_loan_average_premium_display_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_loan_average_premium_display"/>
+        </record>
+    </data>
+</tryton>

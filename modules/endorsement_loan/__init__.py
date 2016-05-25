@@ -16,7 +16,6 @@ def register():
         LoanIncrement,
         LoanPayment,
         LoanShare,
-        PremiumAmount,
         ExtraPremium,
         ContractLoan,
         Endorsement,
@@ -47,7 +46,6 @@ def register():
         PreviewLoanEndorsement,
         PreviewContractPayments,
         ContractPreview,
-        ContractPreviewPayment,
         module='endorsement_loan', type_='model')
 
     Pool.register(

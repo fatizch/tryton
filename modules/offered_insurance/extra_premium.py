@@ -78,6 +78,3 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
         if self.max_rate:
             ceiling_rate = str(abs(self.max_rate * 100)) + ' %'
         return ceiling_value + ' ' + ceiling_rate
-
-    def get_name_for_billing(self):
-        return self.name

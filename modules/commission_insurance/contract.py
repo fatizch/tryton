@@ -103,11 +103,14 @@ class Contract:
                     self.insurer_agent_cache.set((pattern, id), agent.id)
                     return agent
 
-    def finalize_invoices_lines(self, lines):
-        super(Contract, self).finalize_invoices_lines(lines)
-        for line in lines:
-            line.principal = self.find_insurer_agent(line=line)
-        return lines
+    @classmethod
+    def _finalize_invoices(cls, contract_invoices):
+        super(Contract, cls)._finalize_invoices(contract_invoices)
+        for contract_invoice in contract_invoices:
+            invoice = contract_invoice.invoice
+            for line in invoice.lines:
+                line.principal = contract_invoice.contract.find_insurer_agent(
+                    line=line)
 
     @fields.depends('agent')
     def on_change_with_broker(self, name=None):

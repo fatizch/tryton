@@ -20,20 +20,12 @@
         <!-- Moving existing Entry Points -->
         <menuitem parent="menu_product_configuration" name="Rule Engine" id="rule_engine.menu_rule_engine" sequence="100"/>
         <!-- ############################################################ -->
-        <!-- Offered -->
-        <!-- ############################################################ -->
-        <record model="ir.ui.view" id="offered_view_form">
-            <field name="model">offered</field>
-            <field name="type">form</field>
-            <field name="name">offered_form</field>
-        </record>
-        <!-- ############################################################ -->
         <!-- Product -->
         <!-- ############################################################ -->
         <record model="ir.ui.view" id="product_view_form">
             <field name="model">offered.product</field>
             <field name="type">form</field>
-            <field name="inherit" ref="offered_view_form"/>
+            <field name="inherit" eval="None"/>
             <field name="name">product_form</field>
         </record>
         <record model="ir.ui.view" id="product_view_tree">
@@ -90,7 +82,7 @@
         <record model="ir.ui.view" id="coverage_view_form">
             <field name="model">offered.option.description</field>
             <field name="type">form</field>
-            <field name="inherit" ref="offered_view_form"/>
+            <field name="inherit" eval="None"/>
             <field name="name">option_description_form</field>
         </record>
         <record model="ir.ui.view" id="coverage_view_tree">

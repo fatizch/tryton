@@ -7,14 +7,7 @@
         <record model="ir.ui.view" id="cash_value_rule_form">
             <field name="model">cash_value.cash_value_rule</field>
             <field name="type">form</field>
-            <field name="inherit" ref="offered_insurance.businessruleroot_view_form"/>
             <field name="name">cash_value_rule_form</field>
-        </record>
-        <record model="ir.ui.view" id="cash_value_rule_tree">
-            <field name="model">cash_value.cash_value_rule</field>
-            <field name="type">tree</field>
-            <field name="inherit" ref="offered_insurance.businessruleroot_view_tree"/>
-            <field name="arch" type="xml"/>
         </record>
         <!-- ############################################################ -->
         <!-- OptionDescription -->

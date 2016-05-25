@@ -1,0 +1,255 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:loan,average_premium_rate:"
+msgid "Average Premium Rate"
+msgstr "Taux moyen prêt"
+
+msgctxt "field:loan,base_premium_amount:"
+msgid "Base Premium Amount"
+msgstr "Prime pure"
+
+msgctxt "field:loan.average_premium_rate.display.values,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:loan.average_premium_rate.display.values,loan_displayers:"
+msgid "Loans"
+msgstr "Prêts"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,average_premium_rate:"
+msgid "Average Premium Rate"
+msgstr "Taux moyen prêt"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,base_premium_amount:"
+msgid "Base Premium Amount"
+msgstr "Prime pure"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,current_loan_shares:"
+msgid "Current Loan Shares"
+msgstr "Quotités actuelles"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:loan.average_premium_rule,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:loan.average_premium_rule,contract_rule:"
+msgid "Contract rule"
+msgstr "Règle"
+
+msgctxt "field:loan.average_premium_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:loan.average_premium_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:loan.average_premium_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:loan.average_premium_rule,default_fee_action:"
+msgid "Default Fee Action"
+msgstr "Gestion des frais par défaut"
+
+msgctxt "field:loan.average_premium_rule,fee_rules:"
+msgid "Fee Rules"
+msgstr "Règles de frais"
+
+msgctxt "field:loan.average_premium_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:loan.average_premium_rule,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:loan.average_premium_rule,option_rule:"
+msgid "Option rule"
+msgstr "Règle pour la garantie"
+
+msgctxt "field:loan.average_premium_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:loan.average_premium_rule,use_default_rule:"
+msgid "Use default Rule"
+msgstr "Utiliser la règle par défaut"
+
+msgctxt "field:loan.average_premium_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:loan.average_premium_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:loan.average_premium_rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:loan.average_premium_rule.fee_rule,action:"
+msgid "Behaviour"
+msgstr "Comportement"
+
+msgctxt "field:loan.average_premium_rule.fee_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:loan.average_premium_rule.fee_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:loan.average_premium_rule.fee_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:loan.average_premium_rule.fee_rule,fee:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "field:loan.average_premium_rule.fee_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:loan.average_premium_rule.fee_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:loan.average_premium_rule.fee_rule,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:loan.average_premium_rule.fee_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:loan.average_premium_rule.fee_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:loan.average_premium_rule.fee_rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:loan.share,average_premium_rate:"
+msgid "Average Premium Rate"
+msgstr "Taux moyen prêt"
+
+msgctxt "field:loan.share,base_premium_amount:"
+msgid "Base Premium Amount"
+msgstr "Prime pure"
+
+msgctxt "field:offered.product,average_loan_premium_rule:"
+msgid "Average Loan Premium Rule"
+msgstr "Règle de taux moyen prêt"
+
+msgctxt "model:ir.action,name:act_average_premium_rule"
+msgid "Loan Average Premium Rule"
+msgstr "Règle de taux moyen prêt"
+
+msgctxt "model:ir.action,name:act_loan_average_premium_display"
+msgid "Show Loan Average Premium"
+msgstr "Afficher le taux moyen prêt"
+
+msgctxt "model:ir.ui.menu,name:menu_average_premium_rule"
+msgid "Loan Average Premium Rule"
+msgstr "Règle de taux moyen prêt"
+
+msgctxt "model:loan.average_premium_rate.display.values,name:"
+msgid "Display Loan Average Premium Values"
+msgstr "Afficher taux moyen prêt"
+
+msgctxt "model:loan.average_premium_rate.loan_displayer,name:"
+msgid "Average Premium Rate Loan Displayer"
+msgstr "Présenteur de taux moyen prêt"
+
+msgctxt "model:loan.average_premium_rule,name:"
+msgid "Loan Average Premium Rule"
+msgstr "Règle de taux moyen prêt"
+
+msgctxt "model:loan.average_premium_rule.fee_rule,name:"
+msgid "Fee Rule"
+msgstr "Règle de frais"
+
+msgctxt "selection:loan.average_premium_rule,default_fee_action:"
+msgid "Apply a prorata on loan amount"
+msgstr "Appliquer au prorata du montant"
+
+msgctxt "selection:loan.average_premium_rule,default_fee_action:"
+msgid "Apply on biggest loan"
+msgstr "Appliquer au prêt le plus important"
+
+msgctxt "selection:loan.average_premium_rule,default_fee_action:"
+msgid "Apply on longest loan"
+msgstr "Appliquer au prêt le plus long"
+
+msgctxt "selection:loan.average_premium_rule,default_fee_action:"
+msgid "Do not use fee"
+msgstr "Ne pas prendre en compte les frais"
+
+msgctxt "selection:loan.average_premium_rule.fee_rule,action:"
+msgid "Apply a prorata on loan amount"
+msgstr "Appliquer au prorata du montant"
+
+msgctxt "selection:loan.average_premium_rule.fee_rule,action:"
+msgid "Apply on biggest loan"
+msgstr "Appliquer au prêt le plus important"
+
+msgctxt "selection:loan.average_premium_rule.fee_rule,action:"
+msgid "Apply on longest loan"
+msgstr "Appliquer au prêt le plus long"
+
+msgctxt "selection:loan.average_premium_rule.fee_rule,action:"
+msgid "Do not use fee"
+msgstr "Ne pas prendre en compte les frais"
+
+msgctxt "view:loan.average_premium_rate.display.values:"
+msgid "Contract Loans"
+msgstr "Prêts"
+
+msgctxt "view:loan.average_premium_rate.loan_displayer:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:loan.average_premium_rate.loan_displayer:"
+msgid "Loans"
+msgstr "Prêts"
+
+msgctxt "view:loan.average_premium_rule.fee_rule:"
+msgid "Fee Rule"
+msgstr "Règle de frais"
+
+msgctxt "view:loan.average_premium_rule.fee_rule:"
+msgid "Fee Rules"
+msgstr "Règles de frais"
+
+msgctxt "view:loan.average_premium_rule:"
+msgid "Loan Average Premium Rule"
+msgstr "Règle de taux moyen prêt"
+
+msgctxt "view:loan.average_premium_rule:"
+msgid "Loan Average Premium Rules"
+msgstr "Règles de taux moyen prêt"
+
+msgctxt "wizard_button:loan.average_premium_rate.display,display_loans,end:"
+msgid "Cancel"
+msgstr "Annuler"

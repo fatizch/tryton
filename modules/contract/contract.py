@@ -1119,11 +1119,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         cur_dict['subscriber'] = self.get_policy_owner()
 
     def get_new_contract_number(self):
-        return self.product.get_result(
-            'new_contract_number', {
-                'appliable_conditions_date': self.appliable_conditions_date,
-                'date': self.start_date,
-                })[0]
+        return self.product.new_contract_number()
 
     def after_activate(self):
         if not getattr(self, 'contract_number', None):
@@ -1367,11 +1363,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             if self.company.party.logo:
                 return self.company.party.logo
         return ''
-
-    @classmethod
-    def get_var_names_for_full_extract(cls):
-        return ['subscriber', ('product', 'light'), 'extra_data_values',
-            'options', 'start_date', 'end_date']
 
     def get_publishing_context(self, cur_context):
         Lang = Pool().get('ir.lang')
@@ -1986,10 +1977,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     def clean_up_versions(self, contract):
         pass
-
-    @classmethod
-    def get_var_names_for_full_extract(cls):
-        return [('coverage', 'light'), 'start_date', 'end_date']
 
     @classmethod
     def new_option_from_coverage(cls, coverage, product,

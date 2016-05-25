@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract:"
-msgid "No premium found for this contract !"
-msgstr "Pas de prime trouvé pour ce contrat"
-
 msgctxt "field:account.invoice.line,loan:"
 msgid "Loan"
 msgstr "Prêt"
@@ -14,197 +10,69 @@ msgctxt "field:account.invoice.line.detail,loan:"
 msgid "Loan"
 msgstr "Prêt"
 
-msgctxt "field:contract,last_generated_premium_end:"
-msgid "Last Generated Premium End Date"
-msgstr "Date de fin de la dernière quittance générée"
-
-msgctxt "field:contract,premium_amounts:"
-msgid "Premium Amounts"
-msgstr "Lignes d'échéancier de quittance"
-
-msgctxt "field:contract,premium_amounts_per_period:"
-msgid "Premium amounts per period"
-msgstr "Montant de prime par période"
-
-msgctxt "field:contract,total_premium_amount:"
-msgid "Total Premium Amount"
-msgstr "Montant total des primes"
-
 msgctxt "field:contract,used_loans:"
 msgid "Used Loans"
 msgstr "Prêts rattachés au contrat"
 
-msgctxt "field:contract.premium,loan:"
-msgid "Loan"
-msgstr "Prêt"
-
-msgctxt "field:contract.premium.amount,amount:"
+msgctxt "field:contract.invoice.show_all.line,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:contract.premium.amount,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:contract.premium.amount,covered_element:"
-msgid "Covered element"
-msgstr "Elément couvert"
-
-msgctxt "field:contract.premium.amount,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:contract.premium.amount,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:contract.premium.amount,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.premium.amount,currency:"
-msgid "Currency"
-msgstr "Devises"
-
-msgctxt "field:contract.premium.amount,currency_digits:"
+msgctxt "field:contract.invoice.show_all.line,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:contract.premium.amount,currency_symbol:"
+msgctxt "field:contract.invoice.show_all.line,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:contract.premium.amount,end:"
-msgid "End"
-msgstr "Fin"
+msgctxt "field:contract.invoice.show_all.line,details:"
+msgid "Details"
+msgstr "Détails"
 
-msgctxt "field:contract.premium.amount,id:"
+msgctxt "field:contract.invoice.show_all.line,end:"
+msgid "End"
+msgstr "Terminer"
+
+msgctxt "field:contract.invoice.show_all.line,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.premium.amount,loan:"
+msgctxt "field:contract.invoice.show_all.line,loan:"
 msgid "Loan"
 msgstr "Prêt"
 
-msgctxt "field:contract.premium.amount,period_end:"
-msgid "Period End"
-msgstr "Fin de la période"
-
-msgctxt "field:contract.premium.amount,period_start:"
-msgid "Period Start"
-msgstr "Début de la période"
-
-msgctxt "field:contract.premium.amount,premium:"
-msgid "Premium"
-msgstr "Prime"
-
-msgctxt "field:contract.premium.amount,rec_name:"
+msgctxt "field:contract.invoice.show_all.line,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:contract.premium.amount,start:"
+msgctxt "field:contract.invoice.show_all.line,premium:"
+msgid "Premium"
+msgstr "Prime"
+
+msgctxt "field:contract.invoice.show_all.line,start:"
 msgid "Start"
 msgstr "Début"
 
-msgctxt "field:contract.premium.amount,tax_amount:"
+msgctxt "field:contract.invoice.show_all.line,tax_amount:"
 msgid "Tax Amount"
-msgstr "Montant de la taxe"
+msgstr "Taxe"
 
-msgctxt "field:contract.premium.amount,type_:"
-msgid "Type"
-msgstr "Type"
+msgctxt "field:contract.invoice.show_all.line,total_amount:"
+msgid "Total Amount"
+msgstr "Montant Total"
 
-msgctxt "field:contract.premium.amount,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.premium.amount,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:contract.premium.amount,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:contract.premium.amount.per_period,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:contract.premium.amount.per_period,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:contract.premium.amount.per_period,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:contract.premium.amount.per_period,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:contract.premium.amount.per_period,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.premium.amount.per_period,currency:"
-msgid "Currency"
-msgstr "Devises"
-
-msgctxt "field:contract.premium.amount.per_period,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
-
-msgctxt "field:contract.premium.amount.per_period,currency_symbol:"
-msgid "Currency Symbol"
-msgstr "Symbole de la Devise"
-
-msgctxt "field:contract.premium.amount.per_period,fees:"
-msgid "Fees"
-msgstr "Frais"
-
-msgctxt "field:contract.premium.amount.per_period,id:"
+msgctxt "field:contract.invoice.show_all.show,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.premium.amount.per_period,period_end:"
-msgid "Period End"
-msgstr "Fin de la période"
+msgctxt "field:contract.invoice.show_all.show,premiums:"
+msgid "Invoices"
+msgstr "Échéances"
 
-msgctxt "field:contract.premium.amount.per_period,period_start:"
-msgid "Period Start"
-msgstr "Début de la période"
-
-msgctxt "field:contract.premium.amount.per_period,premium_amounts:"
-msgid "Premium Amounts"
-msgstr "Lignes d'échéancier de quittance"
-
-msgctxt "field:contract.premium.amount.per_period,rec_name:"
-msgid "Name"
-msgstr "Name"
-
-msgctxt "field:contract.premium.amount.per_period,tax_amount:"
-msgid "Tax Amount"
-msgstr "Montant de la taxe"
-
-msgctxt "field:contract.premium.amount.per_period,total:"
-msgid "Total"
-msgstr "Total TTC"
-
-msgctxt "field:contract.premium.amount.per_period,untaxed_amount:"
-msgid "Untaxed Amount"
-msgstr "Total HT"
-
-msgctxt "field:contract.premium.amount.per_period,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.premium.amount.per_period,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:contract.premium.amount.per_period,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
+msgctxt "field:contract.premium,loan:"
+msgid "Loan"
+msgstr "Prêt"
 
 msgctxt "field:loan,average_premium_rate:"
 msgid "Average Premium Rate"
@@ -366,27 +234,23 @@ msgctxt "field:offered.product,average_loan_premium_rule:"
 msgid "Average Loan Premium Rule"
 msgstr "Règle de taux moyen prêt"
 
-msgctxt "model:contract.premium.amount,name:"
-msgid "Premium Amount"
-msgstr "Montant de la prime"
+msgctxt "model:contract.invoice.show_all.line,name:"
+msgid "Show All Invoices - Line"
+msgstr "Ligne d'échéance"
 
-msgctxt "model:contract.premium.amount.per_period,name:"
-msgid "Premium Amount per Period"
-msgstr "Echéancier des quittances"
+msgctxt "model:contract.invoice.show_all.show,name:"
+msgid "Show All Invoices - Main"
+msgstr "Échéancier"
 
-msgctxt "model:ir.action,name:act_average_premium_rule"
+msgctxt "model:ir.action,name:"
 msgid "Loan Average Premium Rule"
 msgstr "Règle de taux moyen prêt"
 
-msgctxt "model:ir.action,name:act_loan_average_premium_display"
-msgid "Show Loan Average Premium"
-msgstr "Afficher taux moyen prêt"
+msgctxt "model:ir.action,name:act_show_all_invoices"
+msgid "Show All Invoices"
+msgstr "Afficher l'échéancier"
 
-msgctxt "model:ir.action,name:act_premium_amount_per_period_form"
-msgid "Premium Amounts per Period"
-msgstr "Echéancier des quittances"
-
-msgctxt "model:ir.ui.menu,name:menu_average_premium_rule"
+msgctxt "model:ir.ui.menu,name:"
 msgid "Loan Average Premium Rule"
 msgstr "Règle de taux moyen prêt"
 
@@ -446,33 +310,17 @@ msgctxt "selection:offered.product.premium_date,type_:"
 msgid "On Each Loan Payment"
 msgstr "A chaque échéance"
 
-msgctxt "view:contract.premium.amount.per_period:"
-msgid "Amount"
-msgstr "Montant"
+msgctxt "view:contract.invoice.show_all.line:"
+msgid "Premium"
+msgstr "Prime"
 
-msgctxt "view:contract.premium.amount.per_period:"
-msgid "Fees"
-msgstr "Frais"
+msgctxt "view:contract.invoice.show_all.line:"
+msgid "Premiums"
+msgstr "Primes"
 
-msgctxt "view:contract.premium.amount.per_period:"
-msgid "Premium Amounts per Period"
-msgstr "Echéancier des quittances"
-
-msgctxt "view:contract.premium.amount.per_period:"
-msgid "Tax Amount"
-msgstr "Montant taxé"
-
-msgctxt "view:contract.premium.amount.per_period:"
-msgid "Total"
-msgstr "Total"
-
-msgctxt "view:contract.premium.amount:"
-msgid "Premium Amount"
-msgstr "Montant de la prime"
-
-msgctxt "view:contract.premium.amount:"
-msgid "Premium Amounts"
-msgstr "Lignes d'échéancier de quittance"
+msgctxt "view:contract.invoice.show_all.show:"
+msgid "All Invoices"
+msgstr "Échéancier"
 
 msgctxt "view:loan.average_premium_rate.display.values:"
 msgid "Contract Loans"
@@ -509,6 +357,10 @@ msgstr "%"
 msgctxt "view:loan:"
 msgid "Loans"
 msgstr "Prêts"
+
+msgctxt "wizard_button:contract.invoice.show_all,all_invoices,end:"
+msgid "End"
+msgstr "Terminer"
 
 msgctxt "wizard_button:loan.average_premium_rate.display,display_loans,end:"
 msgid "Cancel"

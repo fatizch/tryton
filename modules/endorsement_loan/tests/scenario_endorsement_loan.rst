@@ -52,7 +52,6 @@ Get Models::
     >>> Loan = Model.get('loan')
     >>> LoanIncrement = Model.get('loan.increment')
     >>> LoanShare = Model.get('loan.share')
-    >>> LoanAveragePremiumRule = Model.get('loan.average_premium_rule')
     >>> Party = Model.get('party.party')
     >>> PaymentTerm = Model.get('account.invoice.payment_term')
     >>> PaymentTermLine = Model.get('account.invoice.payment_term.line')
@@ -174,15 +173,6 @@ Create billing modes::
     >>> freq_yearly.allowed_payment_terms.append(PaymentTerm.find([])[0])
     >>> freq_yearly.save()
 
-Create Average Premium Rule::
-
-    >>> loan_average_rule = LoanAveragePremiumRule()
-    >>> loan_average_rule.name = 'Default Rule'
-    >>> loan_average_rule.code = 'default_rule'
-    >>> loan_average_rule.use_default_rule = True
-    >>> loan_average_rule.default_fee_action = 'longest'
-    >>> loan_average_rule.save()
-
 Create Item Description::
 
     >>> item_description = ItemDescription()
@@ -247,7 +237,6 @@ Create Product::
     >>> product.billing_modes.append(freq_monthly)
     >>> product.billing_modes.append(freq_yearly)
     >>> product.coverages.append(coverage)
-    >>> product.average_loan_premium_rule = loan_average_rule
     >>> product.save()
 
 Create Change First Payment Date::

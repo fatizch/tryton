@@ -26,8 +26,6 @@
             </group>
         </page>
         <page id="sub_data" string="Sub Data">
-            <label name="sub_data_config_kind"/>
-            <field name="sub_data_config_kind"/>
             <label name="rule"/>
             <field name="rule"/>
             <newline/>

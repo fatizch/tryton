@@ -190,13 +190,5 @@
             <field name="type">tree</field>
             <field name="name">contract_preview_list</field>
         </record>
-        <!-- ############################ -->
-        <!-- # Contract Preview Payment # -->
-        <!-- ############################ -->
-        <record model="ir.ui.view" id="contract_preview_payment_view_list">
-            <field name="model">endorsement.start.preview_contract_payments.payment</field>
-            <field name="type">tree</field>
-            <field name="name">contract_preview_payment_list</field>
-        </record>
     </data>
 </tryton>

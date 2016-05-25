@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ##################### -->
+        <!-- # Show All Invoices # -->
+        <!-- ##################### -->
+        <record model="ir.action.wizard" id="act_show_all_invoices">
+            <field name="name">Show All Invoices</field>
+            <field name="wiz_name">contract.invoice.show_all</field>
+        </record>
+        <record model="ir.action.keyword" id="act_show_all_invoices_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_show_all_invoices"/>
+        </record>
+        <!-- ########################## -->
+        <!-- # Show All Invoices Main # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="show_all_invoices_main_view_form">
+            <field name="model">contract.invoice.show_all.show</field>
+            <field name="type">form</field>
+            <field name="name">show_all_invoices_main_form</field>
+        </record>
+        <!-- ########################## -->
+        <!-- # Show All Invoices Line # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="show_all_invoices_line_view_form">
+            <field name="model">contract.invoice.show_all.line</field>
+            <field name="type">form</field>
+            <field name="name">show_all_invoices_line_form</field>
+        </record>
+        <record model="ir.ui.view" id="show_all_invoices_line_view_tree">
+            <field name="model">contract.invoice.show_all.line</field>
+            <field name="type">tree</field>
+            <field name="field_childs">details</field>
+            <field name="name">show_all_invoices_line_tree</field>
+        </record>
+    </data>
+</tryton>

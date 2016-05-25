@@ -155,10 +155,6 @@ class Address(export.ExportImportMixin):
         sep = '\n' if with_return_carriage else ' '
         return sep.join(x for x in full_address.values() if x)
 
-    @classmethod
-    def get_var_names_for_full_extract(cls):
-        return['street', 'streetbis', 'zip', 'city', ('country', 'light')]
-
     def get_rec_name(self, name):
         return self.get_address_as_char(name)
 

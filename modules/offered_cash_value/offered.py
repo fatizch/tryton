@@ -1,6 +1,5 @@
 from trytond.pool import PoolMeta
 from trytond.modules.cog_utils import fields, model
-from trytond.modules.offered_insurance import BusinessRuleRoot
 
 __metaclass__ = PoolMeta
 
@@ -11,22 +10,13 @@ __all__ = [
     ]
 
 
-class CashValueRule(BusinessRuleRoot, model.CoopSQL):
+class CashValueRule(model.CoopSQL):
     'Cash Value Rule'
 
     __name__ = 'cash_value.cash_value_rule'
 
     saving_account = fields.Many2One('account.account', 'saving_account',
         ondelete='RESTRICT')
-
-    def give_me_computed_cash_values(self, args):
-        return self.computation_rule.execute(args)
-
-    def give_me_actualized_cash_value(self, args):
-        return self.get_rule_result(args)
-
-    def give_me_saving_account(self, args):
-        return self.saving_account
 
 
 class Product:
@@ -63,10 +53,3 @@ class OptionDescription:
 
     def get_is_cash_value_coverage(self, name):
         return self.family == 'cash_value'
-
-    def give_me_actualized_cash_value(self, args):
-        return self.get_result('actualized_cash_value', args,
-            kind='cash_value')
-
-    def give_me_saving_account(self, args):
-        return self.get_result('saving_account', args, kind='cash_value')
