@@ -100,3 +100,14 @@ coog_celery_qstop() { # stop queue workers - <file>
         kill -TERM $pid && echo workers stopped
         rm -f "$pid_file"
 }
+
+coog_celery_qps() { # ps queue workers process - <file>
+        [ -z "$1" ] && echo missing file && return 1
+        local pid_file
+        pid_file="$1".pid
+        [ ! -e "$pid_file" ] && echo no workers running && return 0
+        local pid
+        pid=`cat $pid_file`
+        [ ! -e /proc/$pid ] && rm $pid_file && echo workers down && return 0
+        ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
+}

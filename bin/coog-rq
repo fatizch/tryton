@@ -114,3 +114,19 @@ coog_rq_qstop() { # stop queue workers - <file>
         done < "$pid_file"
         rm -f "$pid_file"
 }
+
+coog_rq_qps() { # ps queue workers process - <file>
+        [ -z "$1" ] && echo missing file && return 1
+        local pid_file
+        pid_file="$1".pid
+        [ ! -e "$pid_file" ] && echo workers down && return 0
+        local one_alive=0
+        local pid
+        while read -r pid
+        do
+                [ ! -e /proc/$pid ] && echo worker $pid down
+                one_alive=1
+                ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
+        done < "$pid_file"
+        [ $one_alive -eq 0 ] && rm $pid_file
+}

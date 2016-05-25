@@ -42,6 +42,13 @@ coog_batch_stop() { # stop batch execution - <name>
         coog_"$broker"_qstop "$base_file"
 }
 
+coog_batch_ps() { # ps batch workers - <name>
+        [ -z $1 ] && echo mission batch name && return 1
+        local broker; broker=`_coog_batch_broker` || return $?
+        local base_file; base_file=`_coog_batch_file $1` || return $?
+        coog_"$broker"_qps "$base_file"
+}
+
 coog_batch_wait() { # wait for batch exec - <name>
         [ $# -lt 1 ] && echo missing batch name && return 1
         while [ true ]
