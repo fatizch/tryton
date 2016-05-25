@@ -1,4 +1,0 @@
-<?xml version="1.0"?>
-<form string="Contract Loans">
-    <field name="loan_displayers" mode="list" view_ids="contract_loan_invoice.loan_average_premium_view_tree"/>
-</form>

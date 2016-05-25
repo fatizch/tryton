@@ -131,6 +131,7 @@ class Contract:
 
     _invoices_cache = Cache('invoices_report')
     _premium_intervals_cache = Cache('premium_intervals')
+    _future_invoices_cache = Cache('future_invoices')
 
     @classmethod
     def _export_skips(cls):
@@ -446,12 +447,33 @@ class Contract:
         ContractInvoice = pool.get('contract.invoice')
         AccountInvoice = pool.get('account.invoice')
         MoveLine = pool.get('account.move.line')
+
+        account_invoices, contract_invoices, payment_dates = \
+            cls._calculate_aperiodic_invoices(contracts, frequency)
+
+        cls._finalize_invoices(contract_invoices)
+
+        AccountInvoice.save(account_invoices)
+        ContractInvoice.save(contract_invoices)
+        AccountInvoice.post(account_invoices)
+        lines_to_write = []
+        for i, p in zip(account_invoices, payment_dates):
+            lines_to_write += [list(i.lines_to_pay), p]
+        if lines_to_write:
+            MoveLine.write(*lines_to_write)
+        return contract_invoices
+
+    @classmethod
+    def _calculate_aperiodic_invoices(cls, contracts, frequency):
+        pool = Pool()
+        ContractInvoice = pool.get('contract.invoice')
         Journal = pool.get('account.journal')
         journal, = Journal.search([
                 ('type', '=', 'revenue'),
                 ], limit=1)
 
-        invoices_to_save = []
+        account_invoices = []
+        contract_invoices = []
         payment_dates = []
 
         for contract in contracts:
@@ -466,28 +488,17 @@ class Contract:
             new_invoice = contract.get_invoice(None, None, billing_info)
             new_invoice.journal = journal
             new_invoice.invoice_date = utils.today()
-            if not new_invoice.invoice_address:
-                new_invoice.invoice_address = contract.get_contract_address(
-                    new_invoice.invoice_date)
             lines = []
             for premium in premiums:
                 lines.extend(premium.get_invoice_lines(None, None))
             contract.finalize_invoices_lines(lines)
             new_invoice.lines = lines
             contract_invoice = ContractInvoice(non_periodic=True,
-                invoice=new_invoice, contract=contract)
-            invoices_to_save.append(contract_invoice)
+                invoice=new_invoice, contract=contract, start=None, end=None)
+            contract_invoices.append(contract_invoice)
+            account_invoices.append(new_invoice)
             payment_dates.append({'payment_date': payment_date})
-
-        AccountInvoice.save([x.invoice for x in invoices_to_save])
-        ContractInvoice.save(invoices_to_save)
-        AccountInvoice.post([x.invoice for x in invoices_to_save])
-        lines_to_write = []
-        for i, p in zip([x.invoice for x in invoices_to_save], payment_dates):
-            lines_to_write += [list(i.lines_to_pay), p]
-        if lines_to_write:
-            MoveLine.write(*lines_to_write)
-        return invoices_to_save
+        return account_invoices, contract_invoices, payment_dates
 
     def check_billing_information(self):
         for billing in self.billing_informations:
@@ -686,6 +697,9 @@ class Contract:
         if actions['cancel']:
             ContractInvoice.cancel(actions['cancel'])
 
+    def get_first_invoices_date(self):
+        return max(self.start_date, utils.today())
+
     @classmethod
     def _first_invoice(cls, contracts, and_post=False):
         with Transaction().set_user(0, set_context=True):
@@ -695,8 +709,8 @@ class Contract:
                 from_date=datetime.date.min)
             contract_invoices = []
             for contract in contracts:
-                invoices = cls.invoice([contract], max(contract.start_date,
-                        utils.today()))
+                invoices = cls.invoice([contract],
+                    contract.get_first_invoices_date())
                 for invoice in invoices:
                     # We need to update the function field as the
                     # contract has not been stored since it has been activated
@@ -737,7 +751,18 @@ class Contract:
         pool = Pool()
         Invoice = pool.get('account.invoice')
         ContractInvoice = pool.get('contract.invoice')
+        account_invoices, contract_invoices = cls._calculate_invoices(periods)
+        cls._finalize_invoices(contract_invoices)
+
+        Invoice.save(account_invoices)
+        ContractInvoice.save(contract_invoices)
+        return contract_invoices
+
+    @classmethod
+    def _calculate_invoices(cls, periods):
+        pool = Pool()
         Journal = pool.get('account.journal')
+        ContractInvoice = pool.get('contract.invoice')
         journals = Journal.search([
                 ('type', '=', 'revenue'),
                 ], limit=1)
@@ -746,40 +771,32 @@ class Contract:
         else:
             journal = None
 
-        invoices = defaultdict(list)
+        account_invoices = []
+        contract_invoices = []
         for period in sorted(periods.iterkeys(), key=lambda x: x[0]):
             for contract in periods[period]:
                 invoice = contract.get_invoice(*period)
                 if not invoice.journal:
                     invoice.journal = journal
-                if not invoice.invoice_address:
-                    invoice.invoice_address = contract.get_contract_address(
-                        period[0])
                 invoice.lines = contract.get_invoice_lines(*period[0:2])
-                invoices[period].append((contract, invoice))
-        new_invoices = Invoice.create([i._save_values
-                 for contract_invoices in invoices.itervalues()
-                 for c, i in contract_invoices])
-
-        # Set the new ids
-        old_invoices = (i for ci in invoices.itervalues() for c, i in ci)
-        for invoice, new_invoice in zip(old_invoices, new_invoices):
-            invoice.id = new_invoice.id
-        contract_invoices_to_create = []
-        for period, contract_invoices in invoices.iteritems():
-            start, end, billing_information = period
-            for contract, invoice in contract_invoices:
-                contract_invoices_to_create.append(ContractInvoice(
+                account_invoices.append(invoice)
+                contract_invoices.append(ContractInvoice(
                         contract=contract,
                         invoice=invoice,
-                        start=start,
-                        end=end))
-        contracts_invoices = ContractInvoice.create([c._save_values
-                for c in contract_invoices_to_create])
+                        start=period[0],
+                        end=period[1]))
+        return account_invoices, contract_invoices
 
-        # Update taxes once contract_invoice are created
-        Invoice.update_taxes(new_invoices)
-        return contracts_invoices
+    @classmethod
+    def _finalize_invoices(cls, contract_invoices):
+        for contract_invoice in contract_invoices:
+            invoice = contract_invoice.invoice
+            invoice.taxes = [x for x in invoice._compute_taxes().values()]
+            if getattr(invoice, 'invoice_address', None) is None:
+                invoice.invoice_address = \
+                    contract_invoice.contract.get_contract_address(
+                        max(contract_invoice.start or datetime.date.min,
+                            utils.today()))
 
     @classmethod
     def premium_intervals_cache(cls):
@@ -808,6 +825,8 @@ class Contract:
     @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
         cls.premium_intervals_cache().clear()
+        for contract in contracts:
+            cls._future_invoices_cache.set(contract.id, None)
         return super(Contract, cls).calculate_prices(contracts, start, end)
 
     def get_invoice(self, start, end, billing_information):
@@ -815,23 +834,24 @@ class Contract:
         Invoice = pool.get('account.invoice')
         lang = self.company.party.lang
         return Invoice(
+            contract=self,
             company=self.company,
             type='out_invoice',
             business_kind='contract_invoice',
             journal=None,
             party=self.subscriber,
-            invoice_address=self.get_contract_address(
-                max(start or datetime.date.min, utils.today())),
-            currency=self.get_currency(),
+            currency=self.currency,
             account=self.subscriber.account_receivable,
             payment_term=billing_information.payment_term,
             state='validated',
             invoice_date=start,
+            accounting_date=None,
             description='%s (%s - %s)' % (
                 self.rec_name,
                 lang.strftime(start, lang.code, lang.date) if start else '',
                 lang.strftime(end, lang.code, lang.date) if end else '',
-            ))
+                ),
+            )
 
     def finalize_invoices_lines(self, lines):
         for line in lines:
@@ -845,6 +865,8 @@ class Contract:
     def compute_invoice_lines(self, start, end):
         lines = []
         for premium in self._search_premium_intervals(self, start, end):
+            # Force set main_contract to avoid the getter cost
+            premium.main_contract = self
             lines.extend(premium.get_invoice_lines(start, end))
         return lines
 
@@ -1150,6 +1172,113 @@ class Contract:
     def rebill_after_renewal(cls, contracts, new_start_date=None, caller=None):
         for contract in contracts:
             contract.invoice_to_end_date()
+
+    ###########################################################################
+    # Cached invoices calculation to speed up future payments wizard,         #
+    # report generation, & co                                                 #
+    ###########################################################################
+    @classmethod
+    def get_future_invoices(cls, contract, from_date=None, to_date=None):
+        cached = cls._future_invoices_cache.get(contract.id, None)
+        if cached is not None:
+            invoices = cls.load_from_cached_invoices(cached)
+        else:
+            periods = {x: [contract]
+                for x in contract.get_invoice_periods(contract.end_date,
+                    contract.start_date)}
+            _, contract_invoices = contract._calculate_invoices(periods)
+            invoices = contract.dump_future_invoices(contract_invoices)
+            cls._future_invoices_cache.set(contract.id,
+                cls.dump_to_cached_invoices(invoices))
+        return [x for x in invoices
+            if x['end'] >= (from_date or datetime.date.min)
+            and x['start'] <= (to_date or datetime.date.max)]
+
+    @classmethod
+    def load_from_cached_invoices(cls, cache):
+        ContractPremium = Pool().get('contract.premium')
+        invoices, premium_ids = cache['invoices'], cache['premium_ids']
+        premium_per_id = {x.id: x for x in ContractPremium.browse(premium_ids)}
+        for invoice in invoices:
+            for line in invoice['details']:
+                if line['premium'] is None:
+                    continue
+                if not isinstance(line['premium'], int):
+                    continue
+                line['premium'] = premium_per_id[line['premium']]
+        return invoices
+
+    @classmethod
+    def dump_to_cached_invoices(cls, future_invoices):
+        premium_ids = set([])
+        invoices_copy = []
+        for invoice in future_invoices:
+            invoice_copy = invoice.copy()
+            invoices_copy.append(invoice_copy)
+            invoice_copy['details'] = []
+            for line in invoice['details']:
+                line_copy = line.copy()
+                if line_copy['premium'] is not None:
+                    line_copy['premium'] = line_copy['premium'].id
+                    premium_ids.add(line_copy['premium'])
+                invoice_copy['details'].append(line_copy)
+        return {'invoices': invoices_copy, 'premium_ids': list(premium_ids)}
+
+    def dump_future_invoices(self, contract_invoices):
+        lines = []
+        for contract_invoice in contract_invoices:
+            lines.append(self.new_future_invoice(contract_invoice))
+            self.set_future_invoice_lines(contract_invoice, lines[-1])
+        return lines
+
+    def new_future_invoice(self, contract_invoice):
+        invoice = contract_invoice.invoice
+        return {
+            'name': invoice.description,
+            'start': contract_invoice.start,
+            'end': contract_invoice.end,
+            'currency_digits': invoice.currency.digits,
+            'currency_symbol': invoice.currency.symbol,
+            'premium': None,
+            'amount': 0,
+            'tax_amount': 0,
+            'total_amount': 0,
+            'details': [],
+            }
+
+    def set_future_invoice_lines(self, contract_invoice, displayer):
+        pool = Pool()
+        Tax = pool.get('account.tax')
+        config = pool.get('account.configuration')(1)
+        invoice = contract_invoice.invoice
+        for line in sorted(invoice.lines, key=lambda x: (
+                    getattr(x.details[0].premium, 'rec_name', ''),
+                    x.coverage_start)):
+            taxes = Tax.compute(line.taxes, line.unit_price, line.quantity,
+                date=contract_invoice.start)
+            if config._tax_rounding == 'line':
+                tax_amount = sum(
+                    invoice.currency.round(t['amount'])
+                    for t in taxes)
+            else:
+                tax_amount = sum(t['amount'] for t in taxes)
+            displayer['details'].append({
+                    'name': line.details[0].premium.rec_name,
+                    'start': line.coverage_start,
+                    'end': line.coverage_end,
+                    'premium': line.details[0].premium,
+                    'currency_digits': invoice.currency.digits,
+                    'currency_symbol': invoice.currency.symbol,
+                    'amount': line.unit_price,
+                    'tax_amount': tax_amount,
+                    'total_amount': line.unit_price + tax_amount,
+                    })
+            displayer['amount'] += line.unit_price
+            displayer['tax_amount'] += tax_amount
+            displayer['total_amount'] += line.unit_price + tax_amount
+    ###########################################################################
+    # End calculation cache                                                   #
+    ###########################################################################
 
 
 class ContractFee:

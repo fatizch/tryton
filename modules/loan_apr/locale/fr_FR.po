@@ -2,78 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:account.invoice.line,loan:"
-msgid "Loan"
-msgstr "Prêt"
-
-msgctxt "field:account.invoice.line.detail,loan:"
-msgid "Loan"
-msgstr "Prêt"
-
-msgctxt "field:contract,used_loans:"
-msgid "Used Loans"
-msgstr "Prêts rattachés au contrat"
-
-msgctxt "field:contract.invoice.show_all.line,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:contract.invoice.show_all.line,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
-
-msgctxt "field:contract.invoice.show_all.line,currency_symbol:"
-msgid "Currency Symbol"
-msgstr "Symbole de la Devise"
-
-msgctxt "field:contract.invoice.show_all.line,details:"
-msgid "Details"
-msgstr "Détails"
-
-msgctxt "field:contract.invoice.show_all.line,end:"
-msgid "End"
-msgstr "Terminer"
-
-msgctxt "field:contract.invoice.show_all.line,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.invoice.show_all.line,loan:"
-msgid "Loan"
-msgstr "Prêt"
-
-msgctxt "field:contract.invoice.show_all.line,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.invoice.show_all.line,premium:"
-msgid "Premium"
-msgstr "Prime"
-
-msgctxt "field:contract.invoice.show_all.line,start:"
-msgid "Start"
-msgstr "Début"
-
-msgctxt "field:contract.invoice.show_all.line,tax_amount:"
-msgid "Tax Amount"
-msgstr "Taxe"
-
-msgctxt "field:contract.invoice.show_all.line,total_amount:"
-msgid "Total Amount"
-msgstr "Montant Total"
-
-msgctxt "field:contract.invoice.show_all.show,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.invoice.show_all.show,premiums:"
-msgid "Invoices"
-msgstr "Échéances"
-
-msgctxt "field:contract.premium,loan:"
-msgid "Loan"
-msgstr "Prêt"
-
 msgctxt "field:loan,average_premium_rate:"
 msgid "Average Premium Rate"
 msgstr "Taux moyen prêt"
@@ -224,7 +152,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:loan.share,average_premium_rate:"
 msgid "Average Premium Rate"
-msgstr "taux moyen prêt"
+msgstr "Taux moyen prêt"
 
 msgctxt "field:loan.share,base_premium_amount:"
 msgid "Base Premium Amount"
@@ -234,23 +162,15 @@ msgctxt "field:offered.product,average_loan_premium_rule:"
 msgid "Average Loan Premium Rule"
 msgstr "Règle de taux moyen prêt"
 
-msgctxt "model:contract.invoice.show_all.line,name:"
-msgid "Show All Invoices - Line"
-msgstr "Ligne d'échéance"
-
-msgctxt "model:contract.invoice.show_all.show,name:"
-msgid "Show All Invoices - Main"
-msgstr "Échéancier"
-
-msgctxt "model:ir.action,name:"
+msgctxt "model:ir.action,name:act_average_premium_rule"
 msgid "Loan Average Premium Rule"
 msgstr "Règle de taux moyen prêt"
 
-msgctxt "model:ir.action,name:act_show_all_invoices"
-msgid "Show All Invoices"
-msgstr "Afficher l'échéancier"
+msgctxt "model:ir.action,name:act_loan_average_premium_display"
+msgid "Show Loan Average Premium"
+msgstr "Afficher le taux moyen prêt"
 
-msgctxt "model:ir.ui.menu,name:"
+msgctxt "model:ir.ui.menu,name:menu_average_premium_rule"
 msgid "Loan Average Premium Rule"
 msgstr "Règle de taux moyen prêt"
 
@@ -302,26 +222,6 @@ msgctxt "selection:loan.average_premium_rule.fee_rule,action:"
 msgid "Do not use fee"
 msgstr "Ne pas prendre en compte les frais"
 
-msgctxt "selection:offered.option.description.premium_rule,premium_base:"
-msgid "Loan"
-msgstr "Prêt"
-
-msgctxt "selection:offered.product.premium_date,type_:"
-msgid "On Each Loan Payment"
-msgstr "A chaque échéance"
-
-msgctxt "view:contract.invoice.show_all.line:"
-msgid "Premium"
-msgstr "Prime"
-
-msgctxt "view:contract.invoice.show_all.line:"
-msgid "Premiums"
-msgstr "Primes"
-
-msgctxt "view:contract.invoice.show_all.show:"
-msgid "All Invoices"
-msgstr "Échéancier"
-
 msgctxt "view:loan.average_premium_rate.display.values:"
 msgid "Contract Loans"
 msgstr "Prêts"
@@ -349,18 +249,6 @@ msgstr "Règle de taux moyen prêt"
 msgctxt "view:loan.average_premium_rule:"
 msgid "Loan Average Premium Rules"
 msgstr "Règles de taux moyen prêt"
-
-msgctxt "view:loan:"
-msgid "%"
-msgstr "%"
-
-msgctxt "view:loan:"
-msgid "Loans"
-msgstr "Prêts"
-
-msgctxt "wizard_button:contract.invoice.show_all,all_invoices,end:"
-msgid "End"
-msgstr "Terminer"
 
 msgctxt "wizard_button:loan.average_premium_rate.display,display_loans,end:"
 msgid "Cancel"

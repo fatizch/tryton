@@ -8,6 +8,7 @@ Imports::
     >>> from proteus import config, Model, Wizard
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
+    >>> from trytond.modules.company.tests.tools import create_company, get_company
 
 Init Database::
 
@@ -17,8 +18,8 @@ Init Database::
 Install Modules::
 
     >>> Module = Model.get('ir.module')
-    >>> loan_invoice_module = Module.find([('name', '=', 'contract_loan_invoice')])[0]
-    >>> Module.install([loan_invoice_module.id], config.context)
+    >>> loan_apr = Module.find([('name', '=', 'loan_apr')])[0]
+    >>> Module.install([loan_apr.id], config.context)
     >>> wizard = Wizard('ir.module.install_upgrade')
     >>> wizard.execute('upgrade')
 
@@ -41,6 +42,7 @@ Get Models::
     >>> FiscalYear = Model.get('account.fiscalyear')
     >>> ItemDescription = Model.get('offered.item.description')
     >>> Loan = Model.get('loan')
+    >>> LoanAveragePremiumRule = Model.get('loan.average_premium_rule')
     >>> LoanShare = Model.get('loan.share')
     >>> OptionDescription = Model.get('offered.option.description')
     >>> Party = Model.get('party.party')
@@ -78,19 +80,13 @@ Create or fetch Country::
 
 Create Company::
 
-    >>> company_config = Wizard('company.company.config')
-    >>> company_config.execute('company')
-    >>> company = company_config.form
-    >>> party = Party(name='World Company')
-    >>> party.save()
-    >>> company.party = party
-    >>> company.currency = currency
-    >>> company_config.execute('add')
-    >>> company, = Company.find([])
-    >>> user = User(1)
-    >>> user.main_company = company
-    >>> user.company = company
-    >>> user.save()
+    >>> _ = create_company(currency=currency)
+    >>> company = get_company()
+
+Reload the context::
+
+    >>> config._context = User.get_preferences(True, config.context)
+    >>> config._context['company'] = company.id
 
 Reload the context::
 
@@ -199,6 +195,17 @@ Create Fee::
     >>> fee.product = product
     >>> fee.save()
 
+Create Loan Average Premium Rule::
+
+    >>> loan_average_rule = LoanAveragePremiumRule()
+    >>> loan_average_rule.name = 'Test Average Rule'
+    >>> loan_average_rule.code = 'test_average_rule'
+    >>> loan_average_rule.use_default_rule = True
+    >>> fee_rule = loan_average_rule.fee_rules.new()
+    >>> fee_rule.fee = fee
+    >>> fee_rule.action = 'prorata'
+    >>> loan_average_rule.save()
+
 Create Item Description::
 
     >>> item_description = ItemDescription()
@@ -261,6 +268,7 @@ Create Product::
     >>> product.start_date = product_start_date
     >>> product.billing_modes.append(freq_monthly)
     >>> product.billing_modes.append(freq_yearly)
+    >>> product.average_loan_premium_rule = loan_average_rule
     >>> product.coverages.append(coverage)
     >>> product.save()
 
@@ -371,3 +379,53 @@ Test loan_share end_date calculation::
     >>> loan_share_3.end_date == loan_1.end_date
     True
     >>> LoanShare.delete([loan_share_3])
+    >>> contract = Contract(contract.id)
+
+Test Average Premium Rate Wizard, fee => prorata::
+
+    >>> loan_average = Wizard('loan.average_premium_rate.display', models=[contract])
+    >>> loans = loan_average.form.loan_displayers
+    >>> abs(loans[0].average_premium_rate - Decimal('0.00913746')) <= Decimal('1e-8')
+    True
+    >>> abs(loans[1].average_premium_rate - Decimal('0.14865129')) <= Decimal('1e-8')
+    True
+    >>> abs(loans[0].current_loan_shares[0].average_premium_rate -
+    ...     Decimal('0.00913746')) <= Decimal('1e-8')
+    True
+    >>> abs(loans[0].base_premium_amount - Decimal('255.85')) <= Decimal('1e-2')
+    True
+    >>> abs(loans[1].base_premium_amount - Decimal('2408.15')) <= Decimal('1e-2')
+    True
+    >>> loan_average.execute('end')
+
+Test Average Premium Rate Wizard, fee => biggest::
+
+    >>> loan_average_rule.fee_rules[0].action = 'biggest'
+    >>> loan_average_rule.save()
+    >>> loan_average = Wizard('loan.average_premium_rate.display', models=[contract])
+    >>> loans = loan_average.form.loan_displayers
+    >>> abs(loans[0].average_premium_rate - Decimal('0.00942857')) <= Decimal('1e-8')
+    True
+    >>> abs(loans[1].average_premium_rate - Decimal('0.14814814')) <= Decimal('1e-8')
+    True
+    >>> abs(loans[0].base_premium_amount - Decimal('264.00')) <= Decimal('1e-2')
+    True
+    >>> abs(loans[1].base_premium_amount - Decimal('2400.00')) <= Decimal('1e-2')
+    True
+    >>> loan_average.execute('end')
+
+Test Average Premium Rate Wizard, fee => longest::
+
+    >>> loan_average_rule.fee_rules[0].action = 'longest'
+    >>> loan_average_rule.save()
+    >>> loan_average = Wizard('loan.average_premium_rate.display', models=[contract])
+    >>> loans = loan_average.form.loan_displayers
+    >>> abs(loans[0].average_premium_rate - Decimal('0.00857142')) <= Decimal('1e-8')
+    True
+    >>> abs(loans[1].average_premium_rate - Decimal('0.14962962')) <= Decimal('1e-8')
+    True
+    >>> abs(loans[0].base_premium_amount - Decimal('240.00')) <= Decimal('1e-2')
+    True
+    >>> abs(loans[1].base_premium_amount - Decimal('2424.00')) <= Decimal('1e-2')
+    True
+    >>> loan_average.execute('end')

@@ -19,7 +19,6 @@ __all__ = [
     'LoanIncrement',
     'LoanPayment',
     'LoanShare',
-    'PremiumAmount',
     'ExtraPremium',
     'ContractLoan',
     'Endorsement',
@@ -236,12 +235,6 @@ class LoanShare:
     __name__ = 'loan.share'
 
 
-class PremiumAmount:
-    _history = True
-    __metaclass__ = PoolMeta
-    __name__ = 'contract.premium.amount'
-
-
 class ExtraPremium:
     __metaclass__ = PoolMeta
     __name__ = 'contract.option.extra_premium'
@@ -366,8 +359,6 @@ class EndorsementContract:
         order.insert(order.index('contract'), 'contract-loan')
         option_idx = order.index('contract.option')
         order.insert(option_idx + 1, 'loan.share')
-        order.insert(order.index('contract.premium') + 1,
-            'contract.premium.amount')
         return order
 
     @classmethod
@@ -375,7 +366,6 @@ class EndorsementContract:
         super(EndorsementContract, cls)._prepare_restore_history(instances,
             at_date)
         for contract in instances['contract']:
-            instances['contract.premium.amount'] += contract.premium_amounts
             instances['contract-loan'] += contract.ordered_loans
         for option in instances['contract.option']:
             instances['loan.share'] += option.loan_shares

@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<tree string="Premium Amounts per Period">
-    <field name="period_start"/>
-    <field name="period_end"/>
-    <field name="amount" sum="Amount"/>
-    <field name="fees" sum="Fees"/>
-    <field name="tax_amount" sum="Tax Amount"/>
-    <field name="total" sum="Total"/>
-</tree>
