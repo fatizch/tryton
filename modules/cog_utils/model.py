@@ -399,23 +399,6 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
     def get_rec_name(self, name=None):
         return super(CoopSQL, self).get_rec_name(name)
 
-    @classmethod
-    def get_var_names_for_full_extract(cls):
-        'returns a list of varname or tuple varname extract_kind (full, light)'
-        return ['code', 'name']
-
-    @classmethod
-    def get_var_names_for_light_extract(cls):
-        'returns a list of varname or tuple varname extract_kind (full, light)'
-        return ['code']
-
-    def extract_object(self, extract_kind='full'):
-        if extract_kind == 'full':
-            var_names = self.get_var_names_for_full_extract()
-        elif extract_kind == 'light':
-            var_names = self.get_var_names_for_light_extract()
-        return utils.extract_object(self, var_names)
-
 
 class CoopView(ModelView, FunctionalErrorMixIn):
     @classmethod

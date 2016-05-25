@@ -11,7 +11,6 @@ from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, model, coop_string
-from trytond.modules.offered.offered import CONFIG_KIND
 
 __metaclass__ = PoolMeta
 
@@ -62,25 +61,9 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
             ], 'Kind', required=True)
     sub_datas = fields.One2Many('extra_data-sub_extra_data', 'master',
         'Sub Data', context={'kind': Eval('kind')},
-        states={'invisible': Eval('sub_data_config_kind') != 'simple'},
         target_not_required=True)
-    sub_data_config_kind = fields.Selection(CONFIG_KIND,
-        'Sub Data Config Kind')
-    rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT',
-        states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
+    rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT')
     _translation_cache = Cache('_get_extra_data_summary_cache')
-
-    @classmethod
-    def __register__(cls, module_name):
-        super(ExtraData, cls).__register__(module_name)
-        # Migration from 1.3: Drop start_date, end_date column
-        TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        extra_data = TableHandler(cursor, cls)
-        if extra_data.column_exist('start_date'):
-            extra_data.drop_column('start_date')
-        if extra_data.column_exist('end_date'):
-            extra_data.drop_column('end_date')
 
     @classmethod
     def __setup__(cls):
@@ -98,6 +81,22 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                 'expected_value': 'Expected key %s to be set in field %s of '
                 '%s',
                 })
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(ExtraData, cls).__register__(module_name)
+        # Migration from 1.3: Drop start_date, end_date column
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        extra_data = TableHandler(cursor, cls)
+        if extra_data.column_exist('start_date'):
+            extra_data.drop_column('start_date')
+        if extra_data.column_exist('end_date'):
+            extra_data.drop_column('end_date')
+
+        # Migration from 1.6 Drop sub_data_config_kind
+        if extra_data.column_exist('sub_data_config_kind'):
+            extra_data.drop_column('sub_data_config_kind')
 
     @classmethod
     def create(cls, vlist):
@@ -128,10 +127,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         if 'extra_data_kind' in Transaction().context:
             return Transaction().context['extra_data_kind']
         return ''
-
-    @staticmethod
-    def default_sub_data_config_kind():
-        return 'simple'
 
     @fields.depends('default_value_selection', 'type_', 'selection',
         'with_default_value')
@@ -268,13 +263,13 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         # We set a boolean to know if the value is forced through rule engine
         new_vals[self.name] = (cur_value, False)
         args = {'extra_data': init_dict}
-        if self.sub_data_config_kind == 'advanced' and self.rule:
+        if self.rule:
             rule_engine_result = self.rule.execute(args)
             if (not rule_engine_result.errors
                     and type(rule_engine_result.result) is dict):
                 for key, value in rule_engine_result.result.items():
                     new_vals[key] = (value, True)
-        elif self.sub_data_config_kind == 'simple':
+        else:
             for sub_data in self.sub_datas:
                 if sub_data.child not in valid_schemas:
                     continue
@@ -344,10 +339,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
     @classmethod
     def search_tags(cls, name, clause):
         return [('tags.name',) + tuple(clause[1:])]
-
-    @classmethod
-    def get_var_names_for_full_extract(cls):
-        return ['name', 'string', 'type_', 'selection_json']
 
 
 class ExtraDataSubExtraDataRelation(model.CoopSQL, model.CoopView):

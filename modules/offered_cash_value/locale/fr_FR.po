@@ -1,14 +1,10 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:cash_value.cash_value_rule:"
 msgid "You can not have 2 business rules that overlap!"
 msgstr "Vous ne pouvez pas avoir 2 règles métiers qui se chevauchent"
-
-msgctxt "field:cash_value.cash_value_rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
 
 msgctxt "field:cash_value.cash_value_rule,create_date:"
 msgid "Create Date"
@@ -93,14 +89,6 @@ msgstr "Est de type Epargne"
 msgctxt "model:cash_value.cash_value_rule,name:"
 msgid "Cash Value Rule"
 msgstr "Règle d'Epargne"
-
-msgctxt "selection:cash_value.cash_value_rule,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:cash_value.cash_value_rule,config_kind:"
-msgid "Simple"
-msgstr "Simple"
 
 msgctxt "selection:cash_value.cash_value_rule,offered:"
 msgid "Option Description"

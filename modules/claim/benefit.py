@@ -3,10 +3,9 @@ from trytond.pyson import Eval
 from trytond.pool import Pool, PoolMeta
 from trytond.model import Unique
 from trytond.transaction import Transaction
+from trytond import backend
 
-from trytond.modules.cog_utils import model, fields, coop_string
-from trytond.modules.offered import offered
-from trytond.modules.offered_insurance import offered as product
+from trytond.modules.cog_utils import model, fields, coop_string, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -14,7 +13,6 @@ __all__ = [
     'LossDescription',
     'EventDescriptionLossDescriptionRelation',
     'Benefit',
-    'InsuranceBenefit',
     'BenefitLossDescriptionRelation',
     'OptionDescriptionBenefitRelation',
     'LossDescriptionExtraDataRelation',
@@ -139,12 +137,23 @@ class EventDescriptionLossDescriptionRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class Benefit(model.CoopSQL, offered.Offered):
+class Benefit(model.CoopSQL, model.CoopView, model.TaggedMixin):
     'Benefit'
 
     __name__ = 'benefit'
     _func_key = 'code'
 
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name', required=True, translate=True)
+    company = fields.Many2One('company.company', 'Company', required=True,
+        ondelete='RESTRICT')
+    start_date = fields.Date('Start Date', required=True)
+    end_date = fields.Date('End Date')
+    description = fields.Text('Description', translate=True)
+    extra_data = fields.Dict('extra_data', 'Offered Kind',
+        context={'extra_data_kind': 'product'},
+        domain=[('kind', '=', 'product')])
+    extra_data_string = extra_data.translated('extra_data')
     loss_descs = fields.Many2Many('benefit-loss.description', 'benefit',
         'loss_desc', 'Loss Descriptions',
         domain=[('company', '=', Eval('company'))], depends=['company'],
@@ -163,6 +172,19 @@ class Benefit(model.CoopSQL, offered.Offered):
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        table = TableHandler(cursor, cls, module_name)
+
+        super(Benefit, cls).__register__(module_name)
+
+        # Migration from 1.6 Drop Offered inheritance
+        if table.column_exist('template'):
+            table.drop_column('template')
+            table.drop_column('template_behaviour')
 
     @classmethod
     def delete(cls, entities):
@@ -184,8 +206,15 @@ class Benefit(model.CoopSQL, offered.Offered):
     def default_beneficiary_kind():
         return 'subscriber'
 
+    @staticmethod
+    def default_start_date():
+        return Transaction().context.get('start_date', None) or utils.today()
+
+    @classmethod
+    def default_company(cls):
+        return Transaction().context.get('company', None)
+
     def init_dict_for_rule_engine(self, args):
-        super(Benefit, self).init_dict_for_rule_engine(args)
         args['benefit'] = self
 
     def get_extra_data_for_exec(self, args):
@@ -204,13 +233,9 @@ class Benefit(model.CoopSQL, offered.Offered):
     def is_master_object(cls):
         return True
 
-
-class InsuranceBenefit(product.Offered):
-    'Insurance Benefit'
-
-    __name__ = 'benefit'
-    # This empty override is necessary to have in the benefit the fields added
-    # in the override of offered
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        return self.code if self.code else coop_string.slugify(self.name)
 
 
 class BenefitLossDescriptionRelation(model.CoopSQL):

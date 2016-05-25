@@ -54,10 +54,6 @@ class ContactMechanism(export.ExportImportMixin):
         if not self.check_email():
             self.raise_user_error('invalid_email')
 
-    @classmethod
-    def get_var_names_for_full_extract(cls):
-        return ['type', 'value']
-
     def get_icon(self):
         if self.type == 'phone' or self.type == 'mobile':
             return 'coopengo-phone'

@@ -10,10 +10,6 @@ msgctxt "error:extra_premium.kind:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
-msgctxt "error:offered.business_rule_root:"
-msgid "You can not have 2 business rules that overlap!"
-msgstr "Vous ne pouvez pas avoir 2 règles métiers qui se chevauchent"
-
 msgctxt "error:offered.exclusion:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
@@ -355,46 +351,6 @@ msgstr "Modèle"
 msgctxt "field:offered,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
-
-msgctxt "field:offered.business_rule_root,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:offered.business_rule_root,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:offered.business_rule_root,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.business_rule_root,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:offered.business_rule_root,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:offered.business_rule_root,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Règle"
-
-msgctxt "field:offered.business_rule_root,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:offered.business_rule_root,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered.business_rule_root,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:offered.business_rule_root,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
 
 msgctxt "field:offered.exclusion,code:"
 msgid "Code"
@@ -1108,10 +1064,6 @@ msgctxt "model:offered,name:"
 msgid "Offered"
 msgstr "Offre"
 
-msgctxt "model:offered.business_rule_root,name:"
-msgid "Business Rule Root"
-msgstr "Règle Métier Racine"
-
 msgctxt "model:offered.exclusion,name:"
 msgid "Exclusion Kind"
 msgstr "Type d'exclusion"
@@ -1352,34 +1304,6 @@ msgctxt "selection:offered,template_behaviour:"
 msgid "Remove"
 msgstr "Supprimer"
 
-msgctxt "selection:offered.business_rule_root,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:offered.business_rule_root,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:offered.business_rule_root,offered:"
-msgid "Option Description"
-msgstr "Garantie"
-
-msgctxt "selection:offered.business_rule_root,offered:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "selection:offered.business_rule_root,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered.business_rule_root,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered.business_rule_root,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
 msgctxt "selection:offered.item.description,kind:"
 msgid ""
 msgstr " "
@@ -1475,10 +1399,6 @@ msgstr "Types de surprime"
 msgctxt "view:insurer:"
 msgid "Insurer"
 msgstr "Assureur"
-
-msgctxt "view:offered.business_rule_root:"
-msgid "Business Rule Root"
-msgstr "Règle Métier Racine"
 
 msgctxt "view:offered.exclusion:"
 msgid "Exclusion Kind"

@@ -12,7 +12,6 @@ from .report_engine import *
 def register():
     Pool.register(
         Configuration,
-        Offered,
         OptionDescription,
         Product,
         ProductOptionDescriptionRelation,
