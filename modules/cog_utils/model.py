@@ -208,6 +208,12 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
                         'should be selected since it is used as a reverse ' +
                         'field for field %s of %s' % (
                             field_name, cls.__name__))
+            elif isinstance(field, tryton_fields.Property):
+                if getattr(cls, 'default_' + field_name, None) is not None:
+                    logging.getLogger('fields').warning(
+                        'Field %s of %s ' % (field_name, field.model_name) +
+                        'has a default method but it is useless since '
+                        'Property fields ignore defaults')
 
     @property
     def _save_values(self):
