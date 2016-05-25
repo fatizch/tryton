@@ -96,7 +96,9 @@ class Contract:
             time_clause = ['OR', ('start', '>=', limit),
                 ('main_contract', 'in', void_contracts)]
         else:
-            time_clause = ('start', '>=', limit)
+            time_clause = [('start', '>=', limit)]
+        if limit == datetime.date.min:
+            time_clause = ['OR', [('start', '=', None)], time_clause]
         Premium.delete(Premium.search([
                     ('main_contract', 'in', ids),
                     time_clause,
