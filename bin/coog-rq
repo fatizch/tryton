@@ -126,7 +126,7 @@ coog_rq_qps() { # ps queue workers process - <file>
         do
                 [ ! -e /proc/$pid ] && echo worker $pid down
                 one_alive=1
-                ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
+                ps -h -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
         done < "$pid_file"
         [ $one_alive -eq 0 ] && rm $pid_file
 }
