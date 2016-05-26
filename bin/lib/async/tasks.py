@@ -9,7 +9,9 @@ DATE_FORMAT = '%Y-%m-%d'           # 2000-12-31
 
 def _batch_split(l, n):
     assert n >= 0, 'Negative split size'
-    if n == 0 or len(l) == 0 or n >= len(l):
+    if len(l) == 0:
+        return
+    if n == 0 or n >= len(l):
         yield l
     else:
         for i in xrange(0, len(l), n):
