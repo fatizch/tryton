@@ -1,12 +1,11 @@
 # -*- coding:utf-8 -*-
 import logging
+from dateutil.relativedelta import relativedelta
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.modules.cog_utils import batch
 
-from sql import Cast
-from sql.functions import CurrentDate
 
 __all__ = [
     'ContractEndDateTerminationBatch',
@@ -63,10 +62,15 @@ class ContractDeclineInactiveQuotes(batch.BatchRoot):
             'Required product configuration is not specified.'
         contract = pool.get('contract').__table__()
         inactivity_delay = configuration.inactivity_delay
-        sql_delay = (CurrentDate() - Cast(contract.write_date, 'DATE'))
+        if configuration.delay_unit == 'month':
+            maturity_date = treatment_date - relativedelta(
+                months=+inactivity_delay)
+        else:
+            maturity_date = treatment_date - relativedelta(
+                days=+inactivity_delay)
         where_clause = (
             (contract.status == 'quote') &
-            (sql_delay > inactivity_delay))
+            (contract.write_date < maturity_date))
         cursor.execute(*contract.select(contract.id, where=where_clause))
         return cursor.fetchall()
 

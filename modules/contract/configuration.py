@@ -25,11 +25,19 @@ class Configuration:
                 }, depends=['automatic_decline_reason'],
         help='All quotes inactive since stricly more than this period '
         '(in days) will be declined.')
+    delay_unit = fields.Selection([
+            ('month', 'Months'),
+            ('day', 'Days')
+            ], 'Delay Unit')
     automatic_decline_reason = fields.Many2One('contract.sub_status',
         'Automatic Decline Reason', states={
             'required': Bool(Eval('inactivity_delay')),
             }, depends=['inactivity_delay'],
             ondelete='RESTRICT')
+
+    @staticmethod
+    def default_delay_unit():
+        return 'day'
 
     def get_sequence(self, name):
         return self.get_field('offered.product', name[8:])

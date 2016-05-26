@@ -1308,6 +1308,18 @@ msgctxt "model:res.group,name:group_contract_admin"
 msgid "Contract Administration"
 msgstr "Administration des contrats"
 
+msgctxt "field:offered.configuration,delay_unit:"
+msgid "Delay Unit"
+msgstr "Unité du délai"
+
+msgctxt "selection:offered.configuration,delay_unit:"
+msgid "Months"
+msgstr "Mois"
+
+msgctxt "selection:offered.configuration,delay_unit:"
+msgid "Days"
+msgstr "Jours"
+
 msgctxt "selection:contract,product_subscriber_kind:"
 msgid "All"
 msgstr "Toutes"
