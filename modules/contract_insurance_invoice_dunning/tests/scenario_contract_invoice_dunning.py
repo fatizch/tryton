@@ -102,6 +102,7 @@ level = procedure.levels.new()
 level.name = 'Reminder'
 level.sequence = 1
 level.days = 30
+level.apply_for = 'manual'
 level = procedure.levels.new()
 level.name = 'Formal Demand'
 level.sequence = 2
@@ -149,6 +150,8 @@ contract.billing_informations.append(BillingInformation(date=None,
 contract.contract_number = '123456789'
 contract.save()
 Wizard('contract.activate', models=[contract]).execute('apply')
+contract.billing_information.direct_debit == False
+# #Res# #True
 
 # #Comment# #Create first invoice
 ContractInvoice = Model.get('contract.invoice')

@@ -114,6 +114,7 @@ Create dunning procedure::
     >>> level.name = 'Reminder'
     >>> level.sequence = 1
     >>> level.days = 30
+    >>> level.apply_for = 'manual'
     >>> level = procedure.levels.new()
     >>> level.name = 'Formal Demand'
     >>> level.sequence = 2
@@ -163,6 +164,8 @@ Create Contract::
     >>> contract.contract_number = '123456789'
     >>> contract.save()
     >>> Wizard('contract.activate', models=[contract]).execute('apply')
+    >>> contract.billing_information.direct_debit == False
+    True
 
 Create first invoice::
 

@@ -176,6 +176,7 @@ class Level:
         pool = Pool()
         Invoice = pool.get('account.invoice')
         ContractInvoice = pool.get('contract.invoice')
+        Contract = pool.get('contract')
         journal = self.get_fee_journal()
         fee = self.dunning_fee
         invoices_to_create = []
@@ -189,7 +190,7 @@ class Level:
             invoice = contract.get_invoice(None, None, billing_info)
             invoice.journal = journal
             invoice.invoice_date = utils.today()
-            if not invoice.invoice_address:
+            if invoice.invoice_address is None:
                 invoice.invoice_address = contract.get_contract_address(
                     invoice.invoice_date)
             invoice.lines = self.get_fee_invoice_lines(fee, contract)
@@ -198,6 +199,7 @@ class Level:
             invoices_to_create.append(invoice)
             contract_invoices_to_create.append(contract_invoice)
         if invoices_to_create:
+            Contract._finalize_invoices(contract_invoices_to_create)
             Invoice.save(invoices_to_create)
             ContractInvoice.save(contract_invoices_to_create)
             Invoice.post(invoices_to_create)
@@ -213,11 +215,12 @@ class Level:
 
     def test(self, line, date):
         res = super(Level, self).test(line, date)
+        direct_debit = line.payment_date or line.payments
         if not res:
             return res
-        if self.apply_for == 'direct_debit' and not line.payments:
+        if self.apply_for == 'direct_debit' and not direct_debit:
             return False
-        if self.apply_for == 'manual' and line.payments:
+        if self.apply_for == 'manual' and direct_debit:
             return False
         if line.contract and line.contract.current_dunning:
             # Do not generate a new dunning for an invoice on a contract

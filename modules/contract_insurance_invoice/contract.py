@@ -834,6 +834,7 @@ class Contract:
         Invoice = pool.get('account.invoice')
         lang = self.company.party.lang
         return Invoice(
+            invoice_address=None,  # Will be really set in finalize invoice
             contract=self,
             company=self.company,
             type='out_invoice',
