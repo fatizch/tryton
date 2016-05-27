@@ -30,11 +30,6 @@ class ContractGroupSubscribe(ContractSubscribe):
     def get_parameters_model(cls):
         return 'contract_group.subscribe.find_process'
 
-    @classmethod
-    def get_parameters_view(cls):
-        return (
-            'contract_insurance_process.contract_subscribe_find_process_form')
-
     def init_main_object_from_process(self, obj, process_param):
         res, err = super(
             ContractGroupSubscribe, self).init_main_object_from_process(
