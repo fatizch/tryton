@@ -167,6 +167,11 @@ class PaymentCreationBatch(batch.BatchRoot):
     def execute(cls, objects, ids, treatment_date, extra_args):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
+        # TODO : handle generically
+        # If no ids: log that there is nothing to do
+        # and manage the "no select" batch case
+        if not ids:
+            return
 
         cursor = Transaction().cursor
         tables, query_table, where_clause = cls.get_query(treatment_date,
