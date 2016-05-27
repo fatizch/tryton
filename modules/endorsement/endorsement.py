@@ -50,7 +50,8 @@ __all__ = [
     'EndorsementActivationHistory',
     'EndorsementExtraData',
     'EndorsementContact',
-    'Configuration',
+    'EndorsementConfiguration',
+    'OfferedConfiguration',
     'ReportTemplate',
     'OpenGeneratedEndorsements',
     ]
@@ -942,12 +943,13 @@ class Contract(CogProcessFramework):
         pool = Pool()
         ContractEndorsement = pool.get('endorsement.contract')
         endorsement = ContractEndorsement.new_rollback_point(contracts,
-            at_date, 'endorsement.stop_contract_definition', {'values': {
+            at_date, 'automatic_termination_endorsement', {'values': {
                     'status': 'terminated',
                     'sub_status': termination_reason.id,
                     'end_date': at_date,
                     }})
-        endorsement.save()
+        if endorsement:
+            endorsement.save()
 
         return super(Contract, cls).terminate(contracts, at_date,
             termination_reason)
@@ -958,12 +960,13 @@ class Contract(CogProcessFramework):
         pool = Pool()
         ContractEndorsement = pool.get('endorsement.contract')
         endorsement = ContractEndorsement.new_rollback_point(contracts,
-            contracts[0].start_date, 'endorsement.void_contract_definition',
+            contracts[0].start_date, 'automatic_void_endorsement',
             {'values': {
                     'status': 'void',
                     'sub_status': void_reason.id,
                     }})
-        endorsement.save()
+        if endorsement:
+            endorsement.save()
 
         super(Contract, cls).void(contracts, void_reason)
 
@@ -981,13 +984,13 @@ class Contract(CogProcessFramework):
                 lambda x: (previous_dates[x.id], new_dates[x.id])):
             endorsements.append(ContractEndorsement.new_rollback_point(
                     list(contract_group), coop_date.add_day(dates[0], 1),
-                    'endorsement.reactivate_contract_definition',
+                    'automatic_reactivation_endorsement',
                     {'values': {
                             'status': 'active',
                             'end_date': dates[1],
                             'sub_status': None,
                             }}))
-        Endorsement.save(endorsements)
+        Endorsement.save([x for x in endorsements if x is not None])
 
 
 class ContractOption(object):
@@ -1980,10 +1983,12 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             init_dict=None):
         pool = Pool()
         Endorsement = pool.get('endorsement')
+        Configuration = pool.get('offered.configuration')
         ContractEndorsement = pool.get('endorsement.contract')
         if isinstance(definition, basestring):
-            Definition = pool.get('endorsement.definition')
-            definition = Definition.search([('xml_id', '=', definition)])[0]
+            definition = Configuration.get_auto_definition(definition)
+            if not definition:
+                return
         init_dict = init_dict or {}
         endorsement = Endorsement()
         contract_endorsements = []
@@ -2306,12 +2311,43 @@ class EndorsementExtraData(relation_mixin(
             self.new_extra_data_values
 
 
-class Configuration(ModelSingleton, model.CoopSQL, model.CoopView):
+class EndorsementConfiguration(ModelSingleton, model.CoopSQL, model.CoopView):
     'Endorsement Configuration'
     __name__ = 'endorsement.configuration'
 
     endorsement_number_sequence = fields.Property(
         fields.Many2One('ir.sequence', 'Endorsement Number Sequence'))
+
+
+class OfferedConfiguration:
+    __name__ = 'offered.configuration'
+    __metaclass__ = PoolMeta
+
+    automatic_termination_endorsement = fields.Many2One(
+        'endorsement.definition', 'Automatic Termination Endorsement',
+        ondelete='RESTRICT')
+    automatic_void_endorsement = fields.Many2One('endorsement.definition',
+        'Automatic Void Endorsement', ondelete='RESTRICT')
+    automatic_reactivation_endorsement = fields.Many2One(
+        'endorsement.definition', 'Automatic Reactivation Endorsement',
+        ondelete='RESTRICT')
+    _get_auto_definition_cache = Cache('auto_definition')
+
+    @classmethod
+    def get_auto_definition(cls, name):
+        Config = Pool().get('offered.configuration')
+        result = cls._get_auto_definition_cache.get(name, None)
+        if result is not None:
+            return result or None
+        config = Config(1)
+        result = getattr(config, name)
+        cls._get_auto_definition_cache.set(name, result.id if result else 0)
+        return result
+
+    @classmethod
+    def write(cls, *args):
+        cls._get_auto_definition_cache.clear()
+        super(OfferedConfiguration, cls).write(*args)
 
 
 class ReportTemplate:

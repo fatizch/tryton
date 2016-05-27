@@ -261,10 +261,16 @@
             <field name="sequence_type" ref="sequence_type_number"/>
             <field name="group" ref="group_endorsement_admin"/>
         </record>
-        <record model="ir.ui.view" id="configuration_view_form">
+        <record model="ir.ui.view" id="endorsement_configuration_view_form">
             <field name="model">endorsement.configuration</field>
             <field name="type">form</field>
-            <field name="name">configuration_form</field>
+            <field name="name">endorsement_configuration_form</field>
+        </record>
+        <record model="ir.ui.view" id="configuration_view_form">
+            <field name="model">offered.configuration</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered.configuration_view_form"/>
+            <field name="name">offered_configuration_form</field>
         </record>
         <record model="ir.action.act_window" id="act_configuration_form">
             <field name="name">Endorsement Configuration</field>

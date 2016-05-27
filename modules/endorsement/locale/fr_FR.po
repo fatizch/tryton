@@ -515,6 +515,18 @@ msgctxt "field:endorsement.configuration,endorsement_number_sequence:"
 msgid "Endorsement Number Sequence"
 msgstr "Séquence de numéro d'avenant"
 
+msgctxt "field:offered.configuration,automatic_termination_endorsement:"
+msgid "Automatic Termination Endorsement"
+msgstr "Avenant de résiliation automatique"
+
+msgctxt "field:offered.configuration,automatic_void_endorsement:"
+msgid "Automatic Void Endorsement"
+msgstr "Avenant de résiliation sans effet automatique"
+
+msgctxt "field:offered.configuration,automatic_reactivation_endorsement:"
+msgid "Automatic Reactivation Endorsement"
+msgstr "Avenant de réactivation automatique"
+
 msgctxt "field:endorsement.configuration,id:"
 msgid "ID"
 msgstr "ID"

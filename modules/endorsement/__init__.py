@@ -7,9 +7,10 @@ from .event import *
 
 def register():
     Pool.register(
-        Configuration,
+        EndorsementConfiguration,
         EndorsementSubState,
         EndorsementDefinition,
+        OfferedConfiguration,
         EndorsementPart,
         EndorsementDefinitionPartRelation,
         Product,

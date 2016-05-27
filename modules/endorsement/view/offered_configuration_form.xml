@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form" position="inside">
+        <newline/>
+        <label name="automatic_termination_endorsement"/>
+        <field name="automatic_termination_endorsement"/>
+        <newline/>
+        <label name="automatic_void_endorsement"/>
+        <field name="automatic_void_endorsement"/>
+        <newline/>
+        <label name="automatic_reactivation_endorsement"/>
+        <field name="automatic_reactivation_endorsement"/>
+    </xpath>
+</data>
