@@ -1,7 +1,6 @@
 import logging
 
 from trytond.pool import Pool
-from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import batch
 
@@ -47,14 +46,12 @@ class DunningTreatmentBatch(batch.BatchRoot):
         return 'account.dunning'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args):
-        cursor = Transaction().cursor
-        pool = Pool()
-        dunning = pool.get('account.dunning').__table__()
-        cursor.execute(*dunning.select(dunning.id,
-            where=(dunning.state == 'draft'),
-            order_by=dunning.level))
-        return cursor.fetchall()
+    def get_batch_domain(cls, treatment_date, extra_args):
+        return [('state', '=', 'draft')]
+
+    @classmethod
+    def get_batch_ordering(cls):
+        return [('level', 'DESC')]
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):
