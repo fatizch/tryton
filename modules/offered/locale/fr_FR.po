@@ -1225,6 +1225,10 @@ msgid "Coverages"
 msgstr "Garanties"
 
 msgctxt "view:offered.option.description:"
+msgid "Rules"
+msgstr "Règles"
+
+msgctxt "view:offered.option.description:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
