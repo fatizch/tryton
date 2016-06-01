@@ -523,6 +523,12 @@ class RuleTools(ModelView):
         return args['date'] if 'date' in args else cls._re_today(args)
 
     @classmethod
+    def _re_date_as_string(cls, args, date):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        return Date.date_as_string(date)
+
+    @classmethod
     def _re_round(cls, args, amount, rounding_factor):
         assert rounding_factor != 0
         return (amount / rounding_factor).quantize(Decimal('1.'),
@@ -1035,6 +1041,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
                 execution_kwargs)
             the_result = context['evaluation_context']['__result__']
             localcontext = {}
+
             try:
                 comp = _compile_source_exec(self.execution_code)
                 exec comp in context, localcontext

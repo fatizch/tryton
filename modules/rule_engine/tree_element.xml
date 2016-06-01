@@ -132,6 +132,17 @@
             <field name="long_description">Ajouter des semestres à une date.</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
+        <record model="rule_engine.function" id="formater_date">
+            <field name="translated_technical_name">formater_date</field>
+            <field name="description">Formater une date</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_date_as_string</field>
+            <field name="fct_args">date</field>
+            <field name="long_description">Formate une date dans la langue de l utilisateur</field>
+            <field name="parent" ref="dossier_outils"/>
+        </record>
         <record model="rule_engine.function" id="ajouter_erreur">
             <field name="translated_technical_name">ajouter_erreur</field>
             <field name="description">Ajouter Erreur</field>
