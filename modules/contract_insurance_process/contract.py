@@ -126,6 +126,19 @@ class Contract(CogProcessFramework):
             result.save()
             return result
 
+    def init_first_covered_elements(self):
+        pool = Pool()
+        Covered = pool.get('contract.covered_element')
+        if self.covered_elements:
+            return
+        covered = Covered(contract=self)
+        if len(self.possible_item_desc) == 1:
+            with Transaction().set_context(start_date=self.start_date):
+                covered.init_covered_element(self.product,
+                    self.possible_item_desc[0], {})
+        self.covered_elements = [covered]
+        self.save()
+
 
 class ContractOption:
     __name__ = 'contract.option'
