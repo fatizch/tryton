@@ -503,7 +503,7 @@ class Translation:
         # cog_utils
         from trytond.ir.translation import TrytonPOFile
         # first pass: extract plain module translations
-        res = super(Translation, cls).translation_export(lang, module)
+        res = super(Translation, cls).translation_export(lang, module) or ''
 
         # second pass: append translations overwritten by this module
         pool = Pool()
