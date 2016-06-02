@@ -955,6 +955,8 @@ class ReportCreate(Wizard):
         cls._error_messages.update({
                 'parsing_error': 'Error while generating the letter:\n\n'
                 '  Expression:\n%s\n\n  Error:\n%s',
+                'contact_not_provided': 'Report is impossible: '
+                'No contact available.',
                 })
 
     def transition_select_model_needed(self):
@@ -966,6 +968,8 @@ class ReportCreate(Wizard):
             instance.get_available_doc_templates()]
         if len(self.select_model.available_models) == 1:
             self.select_model.models = self.select_model.available_models
+        if not instance.get_contact():
+            self.raise_user_error('contact_not_provided')
         self.select_model.party = instance.get_contact().id
         if instance.get_contact().addresses:
             addresses = instance.get_contact().addresses

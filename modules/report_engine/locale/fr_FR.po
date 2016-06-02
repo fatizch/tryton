@@ -13,6 +13,10 @@ msgstr ""
 "continuer ?"
 
 msgctxt "error:report.create:"
+msgid "Report is impossible: No contact available"
+msgstr "Impression impossible: pas de contact disponible"
+
+msgctxt "error:report.create:"
 msgid ""
 "Error while generating the letter:\n"
 "\n"
