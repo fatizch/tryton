@@ -628,10 +628,17 @@ class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
     _rec_name = 'package_name'
     _func_key = 'code'
 
-    code = fields.Char('Code')
+    code = fields.Char('Code', required=True, select=True)
     package_name = fields.Char('Package Name', required=True, translate=True)
     instances_to_export = fields.One2Many('ir.export_package.item', 'package',
         'Instances to export')
+
+    @classmethod
+    def __setup__(cls):
+        super(ExportPackage, cls).__setup__()
+        cls._order = [
+            ('code', 'ASC'),
+            ]
 
     @fields.depends('code', 'package_name')
     def on_change_with_code(self):
