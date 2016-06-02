@@ -102,6 +102,9 @@ class Statement(export.ExportImportMixin):
         super(Statement, cls).__setup__()
         cls.lines.depends.append('in_bank_deposit_ticket')
         cls.name.readonly = True
+        cls._error_messages.update({
+                'empty_lines': 'No lines associated to the statement(s) %s',
+                })
 
     @classmethod
     def create(cls, vlist):
@@ -149,6 +152,15 @@ class Statement(export.ExportImportMixin):
         move.description = self.name
         return move
 
+    @classmethod
+    def validate_statement(cls, statements):
+        errors = []
+        for statement in statements:
+            if not statement.lines:
+                errors.append(statement.name)
+        if errors:
+            cls.raise_user_error('empty_lines', ', '.join(errors))
+        super(Statement, cls).validate_statement(statements)
 
 class LineGroup:
     __name__ = 'account.statement.line.group'

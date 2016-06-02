@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.statement:"
+msgid "No lines associated to the statement(s) %s"
+msgstr "Pas de lignes associées au(x) relevé(s) %s"
+
 msgctxt "error:account.move:"
 msgid "The statement is already cancelled"
 msgstr "Le relevé est déja annulé"
