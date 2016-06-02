@@ -1215,7 +1215,10 @@ class FilterCommissions(Wizard):
         'commission_insurance.act_commission_aggregated_form_relate')
 
     def transition_choose_action(self):
-        assert Transaction().context.get('active_model') == 'account.invoice'
+        active_model = Transaction().context.get('active_model')
+        assert active_model in ['account.invoice', 'contract']
+        if active_model == 'contract':
+            return 'aggregated_commissions'
         ids = Transaction().context.get('active_ids')
         AccountInvoice = Pool().get('account.invoice')
         types = set([x.type for x in AccountInvoice.browse(ids)])
@@ -1245,12 +1248,19 @@ class FilterCommissions(Wizard):
         return action, {}
 
     def do_aggregated_commissions(self, action):
-        invoices = Pool().get('account.invoice').browse(
-            Transaction().context.get('active_ids'))
+        pool = Pool()
+        Invoice = pool.get('account.invoice')
+        active_model = Transaction().context.get('active_model')
+        active_ids = Transaction().context.get('active_ids')
+        if active_model == 'contract':
+            invoices = Invoice.search([
+                    ('contract', 'in', active_ids)])
+        else:
+            invoices = Invoice.browse(active_ids)
         return action, {
-            'ids': Transaction().context.get('active_ids'),
-            'id': Transaction().context.get('active_id'),
-            'model': Transaction().context.get('active_model'),
+            'ids': [x.id for x in invoices],
+            'id': invoices[0].id,
+            'model': 'account.invoice',
             'extra_context': {
                 'origins': [str(x) for invoice in invoices
                     for x in invoice.lines]},

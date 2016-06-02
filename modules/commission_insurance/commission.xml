@@ -128,7 +128,7 @@
         <record model="ir.action.wizard" id="act_filter_commission">
             <field name="name">Commissions</field>
             <field name="wiz_name">commission.filter_commission</field>
-            <field name="model">account.invoice</field>
+            <field name="model"></field>
         </record>
         <!-- ###################################### -->
         <!-- # Display Commissions Synthesis View # -->
