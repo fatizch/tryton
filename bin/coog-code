@@ -112,6 +112,16 @@ _coog_code_stats() {
         cd "$wd"
 }
 
+coog_code_changelog() { # Generate changelog between two branches - <previous> <new>
+        [ $# -ne 2 ] && echo two branches are required to generate changelog && return 1
+        git diff $1 $2 -- $COOG_ROOT/coog/modules/*/CHANGELOG | \
+                grep -v "^ " | grep -v "^+$" | grep -v "^index" | \
+                grep -v "^new file" | grep -v "^@@" | grep -v "^---" | \
+                grep -v "^+++" | \
+                sed -e "s/^diff .* b\/modules\/\(.*\)\/CHANGELOG/\n\1/" | \
+                sed -e  "s/^+//"
+}
+
 coog_code_stats() { # generate code stats - <repo>
         _coog_code_stats $* | column -t
 }
