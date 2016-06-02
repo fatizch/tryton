@@ -46,11 +46,24 @@ class OptionDescriptionEligibilityRule(RuleMixin, model.CoopSQL,
             'rule'}
 
     def get_func_key(self, name):
-        return self.coverage.code
+        return self.coverage.code + '|' + self.rule.short_name
 
     @classmethod
     def search_func_key(cls, name, clause):
-        return [('coverage.code',) + tuple(clause[1:])]
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            if len(operands) == 2:
+                coverage_code, short_name = clause[2].split('|')
+                return [('coverage.code', clause[1], coverage_code),
+                    ('rule.short_name', clause[1], short_name)]
+            else:
+                return [('id', '=', None)]
+        else:
+            return ['OR',
+                [('coverage.code',) + tuple(clause[1:])],
+                [('rule.short_name',) + tuple(clause[1:])],
+                ]
 
     def calculate(self, args):
         rule_result = self.rule.execute(args, self.rule_extra_data)
