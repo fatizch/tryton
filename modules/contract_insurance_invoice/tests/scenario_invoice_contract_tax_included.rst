@@ -277,12 +277,13 @@ Create Test Contract::
     >>> contract.status = 'quote'
     >>> contract.billing_informations.append(BillingInformation(date=None,
     ...         billing_mode=freq_monthly, payment_term=payment_term))
-    >>> contract.options[0].premiums.append(ContractPremium(start=None,
+    >>> contract.save()
+    >>> Wizard('contract.activate', models=[contract]).execute('apply')
+    >>> contract.options[0].premiums.append(ContractPremium(start=contract_start_date,
     ...         amount=Decimal('100'), frequency='monthly',
     ...         account=product_account, rated_entity=coverage,
     ...         ))
     >>> contract.save()
-    >>> Wizard('contract.activate', models=[contract]).execute('apply')
     >>> Contract.first_invoice([contract.id], config.context)
     >>> contract_invoice = ContractInvoice.find([('contract', '=', contract.id)])[0]
     >>> contract_invoice.invoice.total_amount == Decimal('100')

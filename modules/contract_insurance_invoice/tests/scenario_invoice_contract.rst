@@ -10,6 +10,7 @@ Imports::
     >>> from proteus import config, Model, Wizard
     >>> from trytond.error import UserWarning
     >>> from trytond.modules.company.tests.tools import create_company, get_company
+    >>> from trytond.modules.account.tests.tools import get_accounts, create_chart
 
 Init Database::
 
@@ -188,6 +189,37 @@ Create Product::
     >>> coverage.start_date = product_start_date
     >>> coverage.account_for_billing = product_account
     >>> coverage.save()
+    >>> _ = create_chart(company)
+    >>> accounts = get_accounts(company)
+
+Create Contract Fee::
+
+    >>> Uom = Model.get('product.uom')
+    >>> unit, = Uom.find([('name', '=', 'Unit')])
+    >>> AccountProduct = Model.get('product.product')
+    >>> Template = Model.get('product.template')
+    >>> template = Template()
+    >>> template.name = 'contract Fee Template'
+    >>> template.default_uom = unit
+    >>> template.account_expense = accounts['expense']
+    >>> template.account_revenue = accounts['revenue']
+    >>> template.type = 'service'
+    >>> template.list_price = Decimal(0)
+    >>> template.cost_price = Decimal(0)
+    >>> template.save()
+    >>> fee_product = AccountProduct()
+    >>> fee_product.name = 'contract Fee Product'
+    >>> fee_product.template = template
+    >>> fee_product.save()
+    >>> Fee = Model.get('account.fee')
+    >>> contract_fee = Fee()
+    >>> contract_fee.name = 'contract Fee'
+    >>> contract_fee.code = 'contract_fee'
+    >>> contract_fee.frequency = 'at_contract_signature'
+    >>> contract_fee.type = 'fixed'
+    >>> contract_fee.amount = Decimal('800.0')
+    >>> contract_fee.product = fee_product
+    >>> contract_fee.save()
     >>> product = Product()
     >>> product.company = company
     >>> product.name = 'Test Product'
@@ -198,6 +230,7 @@ Create Product::
     >>> product.billing_modes.append(freq_monthly)
     >>> product.billing_modes.append(freq_yearly)
     >>> product.coverages.append(coverage)
+    >>> product.fees.append(contract_fee)
     >>> product.save()
 
 Create Subscriber::
@@ -222,9 +255,6 @@ Create Test Contract::
     >>> contract.status = 'quote'
     >>> contract.billing_informations.append(BillingInformation(date=None,
     ...         billing_mode=freq_yearly, payment_term=payment_term))
-    >>> contract.options[0].premiums.append(ContractPremium(start=None,
-    ...         amount=Decimal('800'), frequency='at_contract_signature',
-    ...         account=product_account, rated_entity=coverage))
     >>> contract.save()
     >>> Wizard('contract.activate', models=[contract]).execute('apply')
     >>> contract.options[0].premiums.append(ContractPremium(start=contract_start_date,
