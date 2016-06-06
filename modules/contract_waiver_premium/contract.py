@@ -1,4 +1,3 @@
-from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or
 from trytond.modules.cog_utils import fields, model, utils
@@ -50,6 +49,7 @@ class Contract:
         return any((x.with_waiver_of_premium for x in all_options))
 
     def finalize_invoices_lines(self, lines):
+        super(Contract, self).finalize_invoices_lines(lines)
         self.add_waiver_invoice_lines(lines)
 
     def add_waiver_invoice_lines(self, lines):
