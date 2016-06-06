@@ -86,7 +86,7 @@ class Migrator(batch.BatchRootNoSelect):
         return rows
 
     @classmethod
-    def sanitize(cls, row, parent=None):
+    def sanitize(cls, row):
         """Reformat row to match target expected format and perform
            sanity checks.
            Set row func key to None to flag a row that must not be migrated.
@@ -166,7 +166,7 @@ class Migrator(batch.BatchRootNoSelect):
             except tools.MigrateError as e:
                 cls.logger.error(e)
                 continue
-            to_create[row[cls.columns[cls.func_key]]] = {k: row[k]
+            to_create[row[cls.func_key]] = {k: row[k]
                 for k in row if k in Model._fields}
         if to_create:
             Model.create(to_create.values())
