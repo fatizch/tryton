@@ -1,4 +1,5 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
+from trytond.model import ModelView, Workflow
 
 
 __metaclass__ = PoolMeta
@@ -17,3 +18,21 @@ class Payment:
                 if getattr(line, 'party', None):
                     line.contract = self.line.contract
         return move
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('succeeded')
+    def succeed(cls, payments):
+        '''
+        Launch contract reconcile if payment line invoice is cancelled
+        '''
+        Contract = Pool().get('contract')
+
+        super(Payment, cls).succeed(payments)
+
+        contracts = [p.line.contract for p in payments if p.line
+            and p.line.contract and p.line.move.invoice and
+            p.line.move.invoice.state == 'cancel']
+        contracts = list(set(contracts))
+        if contracts:
+            Contract.reconcile(contracts)

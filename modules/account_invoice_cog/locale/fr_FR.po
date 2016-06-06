@@ -26,6 +26,10 @@ msgctxt "field:account.invoice.payment_term,is_one_shot:"
 msgid "One Shot"
 msgstr "En une fois"
 
+msgctxt "field:account.move,invoice:"
+msgid "Invoice"
+msgstr "Quittance"
+
 msgctxt "field:account.move,is_invoice_canceled:"
 msgid "Invoice Canceled"
 msgstr "Quittance annulée"
