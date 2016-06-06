@@ -11,7 +11,7 @@ _coog_unoconv_connection() {
 coog_unoconv_start() { # start unoconv listener - [unoconv args]
         local connection
         connection=`_coog_unoconv_connection` || return $?
-        nohup unoconv --listener -c $connection &>> /dev/null &
+        HOME=$COOG_TMP/unoconv nohup unoconv --listener -c $connection &>> /dev/null &
         echo unoconv started
 }
 
