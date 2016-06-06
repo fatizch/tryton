@@ -6,7 +6,6 @@
         <!-- ########################## -->
         <record model="ir.ui.view" id="contract_modify_covered_element_view_form">
             <field name="model">contract.covered_element.modify</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement_insurance.contract_modify_covered_element_view_form"/>
             <field name="name">contract_modify_covered_element_form</field>
         </record>
@@ -15,7 +14,6 @@
         <!-- ############################# -->
         <record model="ir.ui.view" id="covered_element_modify_view_form">
             <field name="model">contract.covered_element.modify.displayer</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement_insurance.covered_element_modify_view_form"/>
             <field name="name">covered_element_modify_form</field>
         </record>

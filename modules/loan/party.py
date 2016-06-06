@@ -173,7 +173,7 @@ class DisplayInsuredOutstandingLoanBalance(Wizard):
             }
 
     def get_insured_outstanding_loan_balances(self, party, date, currency):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         pool = Pool()
         Loan = pool.get('loan')
         Insurer = pool.get('insurer')

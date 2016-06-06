@@ -111,11 +111,11 @@ class ContractBillingInformation:
         pool = Pool()
         migrate = False
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
-        the_table = TableHandler(cursor, cls, module_name)
+        the_table = TableHandler(cls, module_name)
         Contract = pool.get('contract')
-        contract_table = TableHandler(cursor, Contract, module_name)
+        contract_table = TableHandler(Contract, module_name)
         if (not the_table.column_exist('sepa_mandate') and
                 contract_table.column_exist('sepa_mandate')):
             migrate = True

@@ -3,7 +3,6 @@ from dateutil import rrule
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
-from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.cache import Cache
 from trytond.model import MatchMixin
@@ -60,8 +59,7 @@ class ProductPremiumDate(model.CoopSQL, model.CoopView):
         # Migration from 1.3 : Remove constraint on triplet product / type_ /
         # custom_date
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        TableHandler(cursor, cls, module_name).drop_constraint(
+        TableHandler(cls, module_name).drop_constraint(
             'offered_product_premium_date_rule_uniq')
 
     @fields.depends('type_', 'custom_date')

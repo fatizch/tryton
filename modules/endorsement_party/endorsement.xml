@@ -19,7 +19,6 @@
         <!-- ############### -->
         <record model="ir.ui.view" id="endorsement_view_form">
             <field name="model">endorsement</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement.endorsement_view_form"/>
             <field name="name">endorsement_form</field>
         </record>

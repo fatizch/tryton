@@ -3,7 +3,6 @@
     <data>
         <record model="ir.ui.view" id="bank_account_number_view_form">
             <field name="model">bank.account.number</field>
-            <field name="type">form</field>
             <field name="inherit" ref="bank.bank_account_number_view_form"/>
             <field name="name">bank_account_number_form</field>
         </record>

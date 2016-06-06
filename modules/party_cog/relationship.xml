@@ -3,19 +3,16 @@
     <data>
         <record model="ir.ui.view" id="relation_type_view_form">
             <field name="model">party.relation.type</field>
-            <field name="type">form</field>
             <field name="inherit" ref="party_relationship.relation_type_view_form"/>
             <field name="name">relation_type_form</field>
         </record>
         <record model="ir.ui.view" id="relation_type_view_tree">
             <field name="model">party.relation.type</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="party_relationship.relation_type_view_tree"/>
             <field name="name">relation_type_tree</field>
         </record>
         <record model="ir.ui.view" id="relation_view_form">
             <field name="model">party.relation.all</field>
-            <field name="type">form</field>
             <field name="inherit" ref="party_relationship.relation_view_form"/>
             <field name="name">relation_form</field>
         </record>

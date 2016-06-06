@@ -6,13 +6,11 @@
         <!-- ########################### -->
         <record model="ir.ui.view" id="extra_premium_displayer_view_form">
             <field name="model">endorsement.contract.extra_premium.displayer</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement_insurance.extra_premium_displayer_view_form"/>
             <field name="name">extra_premium_displayer_form</field>
         </record>
         <record model="ir.ui.view" id="extra_premium_displayer_view_list">
             <field name="model">endorsement.contract.extra_premium.displayer</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="endorsement_insurance.extra_premium_displayer_view_list"/>
             <field name="name">extra_premium_displayer_list</field>
         </record>
@@ -21,7 +19,6 @@
         <!-- ##################### -->
         <record model="ir.ui.view" id="new_extra_premium_view_form">
             <field name="model">endorsement.contract.new_extra_premium</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement_insurance.new_extra_premium_view_form"/>
             <field name="name">new_extra_premium_form</field>
         </record>
@@ -67,19 +64,16 @@
         <!-- ########################## -->
         <record model="ir.ui.view" id="loan_view_form">
             <field name="model">loan</field>
-            <field name="type">form</field>
             <field name="inherit" ref="loan.loan_view_form"/>
             <field name="name">loan_form</field>
         </record>
         <record model="ir.ui.view" id="loan_simple_view_form">
             <field name="model">loan</field>
-            <field name="type">form</field>
             <field name="inherit" ref="loan.loan_simple_view_form"/>
             <field name="name">loan_simple_form</field>
         </record>
         <record model="ir.ui.view" id="loan_no_button_view_form">
             <field name="model">loan</field>
-            <field name="type">form</field>
             <field name="inherit" ref="loan.loan_no_button_view_form"/>
             <field name="name">loan_form</field>
         </record>
@@ -88,7 +82,6 @@
         <!-- ################################# -->
         <record model="ir.ui.view" id="loan_increment_view_tree">
             <field name="model">loan.increment</field>
-            <field name="type">form</field>
             <field name="inherit" ref="loan.loan_increment_view_tree"/>
             <field name="name">loan_increment_tree</field>
         </record>

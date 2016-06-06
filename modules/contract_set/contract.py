@@ -164,7 +164,7 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
     def get_status(cls, contract_sets, name):
         pool = Pool()
         contract = pool.get('contract').__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         result = {x.id: None for x in contract_sets}
 
         cursor.execute(*contract.select(

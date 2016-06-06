@@ -1339,10 +1339,6 @@ msgctxt "field:endorsement.part,extra_premium_fields:"
 msgid "Extra Premium Fields"
 msgstr "Modification des surprimes"
 
-msgctxt "field:endorsement.part,extra_premium_fields_:"
-msgid "Extra Premium Fields"
-msgstr "Modification des surprimes"
-
 msgctxt "model:contract.covered_element.add_option,name:"
 msgid "New Covered Element Option"
 msgstr "Nouvelle garantie souscrite"

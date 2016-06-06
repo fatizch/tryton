@@ -618,7 +618,7 @@ class ContractOptionVersion:
         pool = Pool()
         Option = pool.get('contract.option')
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         option = Option.__table__()
         version = cls.__table__()
 
@@ -626,7 +626,7 @@ class ContractOptionVersion:
 
         # Migration from 1.4 : Move contract.option->extra_data in
         # contract.option.version->extra_data
-        option_h = TableHandler(cursor, Option, module)
+        option_h = TableHandler(Option, module)
         if option_h.column_exist('extra_data'):
             update_data = option.select(option.id.as_('option'),
                 Coalesce(option.extra_data, '{}').as_('extra_data'))
@@ -1239,18 +1239,19 @@ class CoveredElementVersion(model.CoopSQL, model.CoopView):
         pool = Pool()
         CoveredElement = pool.get('contract.covered_element')
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        transaction = Transaction()
+        cursor = transaction.connection.cursor()
         covered_element = CoveredElement.__table__()
         version = cls.__table__()
 
         # Migration from 1.4 : Create default contract.covered_element.version
-        covered_h = TableHandler(cursor, CoveredElement, module)
+        covered_h = TableHandler(CoveredElement, module)
         to_migrate = covered_h.column_exist('extra_data')
 
         super(CoveredElementVersion, cls).__register__(module)
 
         if to_migrate:
-            version_h = TableHandler(cursor, cls, module)
+            version_h = TableHandler(cls, module)
             cursor.execute(*version.insert(
                     columns=[
                         version.create_date, version.create_uid,
@@ -1264,9 +1265,9 @@ class CoveredElementVersion(model.CoopSQL, model.CoopView):
                         covered_element.id.as_('covered_element'),
                         covered_element.id.as_('id'))))
             cursor.execute(*version.select(Max(version.id)))
-            cursor.setnextid(version_h.table_name,
-                cursor.fetchone()[0] or 0 + 1)
-            covered_h = TableHandler(cursor, CoveredElement, module)
+            transaction.database.setnextid(transaction.connection,
+                version_h.table_name, cursor.fetchone()[0] or 0 + 1)
+            covered_h = TableHandler(CoveredElement, module)
             covered_h.drop_column('extra_data')
 
     @fields.depends('extra_data')

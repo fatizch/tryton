@@ -6,7 +6,6 @@
         <!-- ################# -->
         <record model="ir.ui.view" id="extra_premium_view_form">
             <field name="model">contract.option.extra_premium</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract_insurance.extra_premium_view_form"/>
             <field name="name">extra_premium_form</field>
         </record>

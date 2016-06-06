@@ -3,7 +3,6 @@
     <data>
         <record model="ir.ui.view" id="plan_view_form">
             <field name="model">commission.plan</field>
-            <field name="type">form</field>
             <field name="inherit" ref="commission.plan_view_form"/>
             <field name="name">plan_form</field>
         </record>

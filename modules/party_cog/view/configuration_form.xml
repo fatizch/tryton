@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='party_sequence']" position="before">
+        <label name="party_lang" />
+        <field name="party_lang" widget="selection" />
+    </xpath>
+</data>

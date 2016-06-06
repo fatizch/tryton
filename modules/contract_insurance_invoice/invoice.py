@@ -92,7 +92,7 @@ class Invoice:
     def __register__(cls, module_name):
         super(Invoice, cls).__register__(module_name)
         # Migration from 1.6 Store Bsuiness Kind
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         invoice = cls.__table__()
         to_update = cls.__table__()
         contract_invoice = Pool().get('contract.invoice').__table__()
@@ -101,7 +101,7 @@ class Invoice:
             condition=contract_invoice.invoice == invoice.id
             ).select(invoice.id,
             where=((invoice.business_kind == Null)
-                & (invoice.type == 'out_invoice')))
+                & (invoice.type == 'out')))
         cursor.execute(*to_update.update(
                 columns=[to_update.business_kind],
                 values=[Literal('contract_invoice')],
@@ -127,7 +127,7 @@ class Invoice:
     @classmethod
     def get_contract_invoice_field(cls, instances, name):
         res = {}
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         contract_invoice = Pool().get('contract.invoice').__table__()
         invoice = cls.__table__()
@@ -156,7 +156,7 @@ class Invoice:
     @classmethod
     def get_fees(cls, invoices, name):
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         invoice_line = pool.get('account.invoice.line').__table__()
         invoice_line_detail = pool.get(
             'account.invoice.line.detail').__table__()
@@ -358,7 +358,7 @@ class Invoice:
     @classmethod
     def get_reconciliation_date(cls, invoices, name):
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         reconciliation = pool.get('account.move.reconciliation').__table__()
         line = pool.get('account.move.line').__table__()
         move = pool.get('account.move').__table__()
@@ -392,6 +392,12 @@ class Invoice:
             context['tax_included'] = True
         return context
 
+    @classmethod
+    def _compute_tax_line(cls, amount, base, tax):
+        line = super(Invoice, cls)._compute_tax_line(amount, base, tax)
+        line['initial_base'] = base
+        return line
+
     def _round_taxes(self, taxes):
         '''
             Tax included option is only available if taxes are rounded per line
@@ -407,7 +413,7 @@ class Invoice:
         for taxline in taxes.itervalues():
             if expected_amount_non_rounded == 0:
                 # Add base amount only for the first tax
-                expected_amount_non_rounded = taxline['base']
+                expected_amount_non_rounded = taxline['initial_base']
             expected_amount_non_rounded += taxline['amount']
             for attribute in ('base', 'amount'):
                 taxline[attribute] = self.currency.round(taxline[attribute])
@@ -447,7 +453,7 @@ class InvoiceLine:
     @classmethod
     def get_detail(cls, lines, name):
         result = {x.id: None for x in lines}
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         detail_table = Pool().get('account.invoice.line.detail').__table__()
 
         for line_slice in grouped_slice(lines):

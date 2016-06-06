@@ -82,10 +82,22 @@ coog_rq_tail() { # tail rq out - <wid> [tail args]
         tail $* "$out_file"
 }
 
+_coog_rq_cleanpid() { # check if workers running, clean pid file - <file>
+        [ -z "$1" ] && echo missing pid file && return 1
+        [ ! -e "$1" ] && return 0
+        local pid
+        while read -r pid
+        do
+                [ -e /proc/$pid ] && return 0
+        done < "$1"
+        rm -f "$1"
+}
+
 coog_rq_qstart() { # start queue workers - <queue> <file> <concurrency>
         [ $# -lt 3 ] && echo missing args && return 1
         local pid_file
         pid_file="$2".pid
+        _coog_rq_cleanpid $pid_file
         [ -e "$pid_file" ] && echo workers already running -">" stop && return 1
         local i=0
         while [ $i -lt $3 ]
@@ -108,8 +120,7 @@ coog_rq_qstop() { # stop queue workers - <file>
         local pid
         while read -r pid
         do
-                local alive; alive=`ps -p $pid --no-headers | wc -l`
-                [ $alive -eq 0 ] && continue
+                [ ! -e /proc/$pid ] && continue
                 kill -TERM $pid && echo WARNING: worker $pid stopped - burst option not working
         done < "$pid_file"
         rm -f "$pid_file"

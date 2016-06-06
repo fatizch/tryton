@@ -1,4 +1,5 @@
-    >>> import os
+Init::
+
     >>> import datetime
     >>> from decimal import Decimal
     >>> from dateutil.relativedelta import relativedelta
@@ -191,8 +192,9 @@ Create indemnifications::
 
     >>> Action = Model.get('ir.action')
     >>> action, = Action.find([('name', '=', 'Indemnification Control Wizard')])
+    >>> action = Action.read([action.id], config.context)[0]
     >>> validation = Wizard('claim.indemnification.assistant',
-    ...                     models=indemnifications, action=action)
+    ...     models=indemnifications, action=action)
     >>> validation.form.control[0].action = 'validate'
     >>> validation.execute('control_state')
     >>> indemnifications[0].control_reason == control_reason
@@ -200,8 +202,9 @@ Create indemnifications::
     >>> indemnifications[0].status == 'controlled'
     True
     >>> action, = Action.find(['name', '=', 'Indemnification Validation Wizard'])
+    >>> action = Action.read([action.id], config.context)[0]
     >>> validation = Wizard('claim.indemnification.assistant',
-    ...                     models=indemnifications, action=action)
+    ...     models=indemnifications, action=action)
     >>> validation.form.validate[0].action = 'validate'
     >>> validation.execute('validation_state')
     >>> indemnifications[0].status == 'paid'

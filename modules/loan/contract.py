@@ -382,7 +382,7 @@ class ExtraPremium:
 
     @classmethod
     def __register__(cls, module_name):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         super(ExtraPremium, cls).__register__(module_name)
 
@@ -490,8 +490,7 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
         super(LoanShare, cls).__register__(module_name)
         # Migration from 1.3: Drop end_date column
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        share_table = TableHandler(cursor, cls)
+        share_table = TableHandler(cls)
         if share_table.column_exist('end_date'):
             share_table.drop_column('end_date')
 

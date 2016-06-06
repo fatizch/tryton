@@ -6,7 +6,6 @@
         <!-- ######################### -->
         <record model="ir.ui.view" id="options_displayer_view_form">
             <field name="model">contract.wizard.option_subscription.options_displayer</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract.options_displayer_view_form"/>
             <field name="name">options_displayer_form</field>
         </record>

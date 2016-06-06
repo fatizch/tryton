@@ -15,7 +15,7 @@ from sql.conditionals import Coalesce
 from trytond.model import Unique
 from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
-from trytond.tools import grouped_slice
+from trytond.tools import grouped_slice, cursor_dict
 
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
@@ -113,6 +113,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             ('SSN_uniq', Unique(t, t.ssn),
              'The SSN of the party must be unique.')
         ]
+        cls.name.required = True
         cls._error_messages.update({
                 'duplicate_party': ('Duplicate(s) already exist(s) : %s'),
                 })
@@ -205,8 +206,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
 
     @classmethod
     def check_duplicates(cls, parties):
-        cursor = Transaction().cursor
-        in_max = cursor.IN_MAX
+        in_max = Transaction().database.IN_MAX
         for i in range(0, len(parties), in_max):
             sub_parties = [p for p in parties[i:i + in_max]]
             domain = ['OR']
@@ -436,7 +436,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
 
     @classmethod
     def get_identifier(cls, parties, names):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         pool = Pool()
         Identifier = pool.get('party.identifier')
         identifier = Identifier.__table__()
@@ -454,7 +454,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
                     )
                 )
             cursor.execute(*query)
-            for elem in cursor.dictfetchall():
+            for elem in cursor_dict(cursor):
                 values[elem['type']][elem['party']] = elem['code']
         return values
 
@@ -468,10 +468,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             ('identifiers.code',) + tuple(clause[1:]),
             ('identifiers.type', '=', name),
             ]
-
-    @classmethod
-    def default_lang(cls):
-        return utils.get_user_language().id
 
     @fields.depends('gender')
     def on_change_gender(self):

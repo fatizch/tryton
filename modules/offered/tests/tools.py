@@ -1,6 +1,7 @@
 import datetime
 from proteus import Model
 from trytond.modules.company.tests.tools import get_company
+from trytond.modules.currency.tests.tools import get_currency
 
 __all__ = ['create_contract_generator', 'init_product', 'init_coverage']
 
@@ -40,6 +41,7 @@ def init_coverage(name=None, start_date=None, company=None):
         code=name,
         company=company,
         start_date=start_date,
+        currency=get_currency(code='EUR'),
         subscription_behaviour='mandatory')
 
 
@@ -58,6 +60,7 @@ def init_product(name=None, start_date=None, company=None):
         name=name,
         code=name,
         company=company,
+        currency=get_currency(code='EUR'),
         contract_generator=contract_sequence,
         start_date=start_date)
     coverage = init_coverage(start_date=start_date, company=company)

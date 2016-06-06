@@ -36,14 +36,9 @@ hash_pwd() {
 # build config #
 ################
 
-conf_jsonrpc() {
-        echo "[jsonrpc]" >> $COOG_CONF
-        echo "listen = 0.0.0.0:8000" >> $COOG_CONF
-}
-
-conf_xmlrpc() {
-        echo "[xmlrpc]" >> $COOG_CONF
-        echo "listen = 0.0.0.0:8069" >> $COOG_CONF
+conf_web() {
+        echo "[web]" >> $COOG_CONF
+        echo "listen = 0.0.0.0:7999" >> $COOG_CONF
 }
 
 conf_database() {
@@ -157,8 +152,7 @@ conf_batch() {
 }
 
 conf() {
-        conf_jsonrpc && \
-                conf_xmlrpc && \
+        conf_web && \
                 conf_database && \
                 conf_cache && \
                 conf_async && \
@@ -219,18 +213,23 @@ print_conf() {
 app() {
         echo Welcome on board, Coog is preparing to start
         conf || return $?
-        echo Starting unoconv
-        # done twice - unoconv issue - https://github.com/dagwieers/unoconv/issues/326
-        unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
-        sleep 3
-        unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
-        echo Starting app
+        local cmd; cmd=$1; shift
+        local uno; uno=$1; shift
+        if [ $uno -ne 0 ]
+        then
+                echo Starting unoconv
+                # done twice - unoconv issue - https://github.com/dagwieers/unoconv/issues/326
+                unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
+                sleep 3
+                unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
+        fi
+        echo Starting
         export PYTHONUNBUFFERED=1
         export PYTHONPATH="$COOG_TRYTOND:$PYTHONPATH"
         local args
         args="-c $COOG_CONF"
         [ ! -z $COOG_DB_NAME ] && args="$args -d $COOG_DB_NAME"
-        trytond $args $*
+        $cmd $args $*
 }
 
 batch_redis() {
@@ -351,13 +350,15 @@ batch() {
 ########
 
 main() {
-        [ -z $1 ] && echo Possible commands: version - env - config - app - batch && return 1
+        [ -z $1 ] && echo Possible commands: version - env - config - admin - server - cron - batch && return 1
         [ $1 = dep ] && { shift; dep $*; return $?; }
         [ $1 = link ] && { shift; link $*; return $?; }
         [ $1 = version ] && { shift; version $*; return $?; }
         [ $1 = env ] && { shift; print_env $*; return $?; }
         [ $1 = config ] && { shift; print_conf $*; return $?; }
-        [ $1 = app ] && { shift; app $*; return $?; }
+        [ $1 = admin ] && { shift; app trytond-admin 0 $*; return $?; }
+        [ $1 = server ] && { shift; app trytond 1 $*; return $?; }
+        [ $1 = cron ] && { shift; app trytond-cron 1 $*; return $?; }
         [ $1 = batch ] && { shift; batch $*; return $?; }
         echo Not supported command && return 1
 }

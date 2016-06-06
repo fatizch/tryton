@@ -27,19 +27,16 @@
         </record>
         <record model="ir.ui.view" id="loan_view_form_patcher">
             <field name="model">loan</field>
-            <field name="type">form</field>
             <field name="inherit" ref="loan.loan_view_form"/>
             <field name="name">loan_form_patch</field>
         </record>
         <record model="ir.ui.view" id="loan_no_button_view_form_patcher">
             <field name="model">loan</field>
-            <field name="type">form</field>
             <field name="inherit" ref="loan.loan_no_button_view_form"/>
             <field name="name">loan_form_patch</field>
         </record>
         <record model="ir.ui.view" id="loan_simple_view_form_patcher">
             <field name="model">loan</field>
-            <field name="type">form</field>
             <field name="inherit" ref="loan.loan_simple_view_form"/>
             <field name="name">loan_form_patch</field>
         </record>

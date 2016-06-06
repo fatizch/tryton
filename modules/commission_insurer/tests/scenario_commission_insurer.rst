@@ -195,7 +195,7 @@ Create insurer commission invoice::
     >>> create_invoice.form.insurers.append(agent.party)
     >>> create_invoice.form.until_date = None
     >>> create_invoice.execute('create_')
-    >>> invoice, = Invoice.find([('type', '=', 'in_invoice')])
+    >>> invoice, = Invoice.find([('type', '=', 'in')])
     >>> invoice.total_amount == Decimal('40')
     True
 
@@ -215,7 +215,7 @@ Recreate insurer commission invoice::
     >>> create_invoice.form.insurers.append(agent.party)
     >>> create_invoice.form.until_date = None
     >>> create_invoice.execute('create_')
-    >>> invoice, = Invoice.find([('type', '=', 'in_invoice'),
+    >>> invoice, = Invoice.find([('type', '=', 'in'),
     ...         ('state', '!=', 'cancel')])
     >>> invoice.total_amount == Decimal('40')
     True
@@ -236,7 +236,7 @@ Create commission invoice::
     >>> create_invoice.form.insurers.append(agent.party)
     >>> create_invoice.form.until_date = None
     >>> create_invoice.execute('create_')
-    >>> invoice = Invoice.find([('type', '=', 'in_invoice'),
+    >>> invoice = Invoice.find([('type', '=', 'in'),
     ...         ('state', '!=', 'cancel')])[0]
     >>> invoice.total_amount == Decimal('-40')
     True

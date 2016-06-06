@@ -48,7 +48,7 @@ class Invoice:
         cls.type.domain = ['AND',
             cls.type.domain,
             If(Eval('business_kind') == 'in_invoice_insurance',
-                ('type', '=', 'in_invoice'),
+                ('type', '=', 'in'),
                 (),
                 )]
         cls.type.depends += ['business_kind']

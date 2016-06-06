@@ -33,8 +33,8 @@ class EventLog:
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        event_h = TableHandler(cursor, cls, module_name)
+        cursor = Transaction().connection.cursor()
+        event_h = TableHandler(cls, module_name)
         to_migrate = event_h.column_exist('contract')
 
         super(EventLog, cls).__register__(module_name)

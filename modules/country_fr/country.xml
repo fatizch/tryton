@@ -6,7 +6,6 @@
               *******************************************-->
         <record model="ir.ui.view" id="zip_view_form">
             <field name="model">country.zip</field>
-            <field name="type">form</field>
             <field name="inherit" ref="country.zip_view_form"/>
             <field name="name">zip_form</field>
         </record>

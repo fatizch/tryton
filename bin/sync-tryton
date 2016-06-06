@@ -1,72 +1,63 @@
 #!/bin/bash
 
-TRYTON_VERSION=3.8
+COOG_BRANCH=merge
+TRYTON_BRANCH=4.0
 
-sync_flat() {
+sync() {
         local diff
         diff=`git diff HEAD | wc -l`
         [ $diff -ne 0 ] && echo repo not clean && return 1
         git fetch -p &&
-                git checkout $TRYTON_VERSION &&
-                git rebase origin/$TRYTON_VERSION &&
-                git checkout master &&
-                git rebase origin/master &&
-                git merge $TRYTON_VERSION --no-edit &&
-                git push origin master
+                git checkout $TRYTON_BRANCH &&
+                git rebase origin/$TRYTON_BRANCH &&
+                git checkout $COOG_BRANCH &&
+                git rebase origin/$COOG_BRANCH
 }
 
-sync_tryton() {
-        cd tryton && sync_flat
-        cd ..
+merge() {
+        git checkout $COOG_BRANCH &&
+                git merge $TRYTON_BRANCH --no-edit &&
+                git push origin $COOG_BRANCH
 }
 
-sync_trytond() {
-        local branch
-        branch=perf-analyzer
-        cd trytond && sync_flat && git checkout $branch && git rebase origin/$branch && git merge $TRYTON_VERSION --no-edit && git push origin $branch
-        git checkout master
+sync_proteus() {
+        cd proteus && sync && merge
         cd ..
 }
 
 sync_sao() {
-        cd sao && sync_flat
+        cd sao && sync && merge
         cd ..
 }
 
-sync_proteus() {
-        cd proteus && sync_flat
+sync_tryton() {
+        cd tryton && sync && merge
         cd ..
 }
 
-_sync_modules() {
-        local diff
-        diff=`git diff HEAD | wc -l`
-        [ $diff -ne 0 ] && echo repo not clean && return 1
-        local nb
-        nb=`ls -1 modules | wc -l`
-        diff=`git submodule foreach "git diff HEAD" | wc -l`
-        [ $diff -ne $nb ] && echo sub not clean && return 1
-        echo "### !!! FETCH ROOT !!! ###"
-        git fetch -p &&
-                git checkout $TRYTON_VERSION &&
-                git rebase origin/$TRYTON_VERSION &&
-                git checkout master &&
-                git rebase origin/master
-        [ $? -ne 0 ] && return 1
-        echo "### !!! FETCH SUB !!! ###"
-        git submodule foreach "git fetch -p && git checkout $TRYTON_VERSION && git rebase origin/$TRYTON_VERSION && git checkout master && git rebase origin/master"
-        [ $? -ne 0 ] && return 1
-        echo "### !!! MERGE SUB !!! ###"
-        git submodule foreach "git checkout master && git merge --no-edit $TRYTON_VERSION && git push origin master"
-        [ $? -ne 0 ] && return 1
-        echo "### !!! COMMIT ROOT - $TRYTON_VERSION !!! ###"
-        git checkout $TRYTON_VERSION && git submodule foreach "git checkout $TRYTON_VERSION" && git add . && git commit -m "modules updated" && git push origin $TRYTON_VERSION
-        echo "### !!! COMMIT ROOT - master !!! ###"
-        git checkout master && git submodule foreach "git checkout master" && git add . && git commit -m "modules updated" && git push origin master
+sync_trytond() {
+        cd trytond && sync && merge
+        cd ..
 }
 
 sync_modules() {
-        cd trytond-modules && _sync_modules
+        cd trytond-modules && sync
+        [ $? -ne 0 ] && cd .. && return 1
+        local st=0
+        for repo in modules/*
+        do
+                if [ -d $repo ] && [ -e $repo/.git ]
+                then
+                        echo
+                        echo Work on $repo
+                        cd $repo && sync && merge
+                        [ $? -ne 0 ] && st=1 && echo Error on $repo
+                        cd ../..
+                fi
+        done
+        [ $st -ne 0 ] && cd .. && return 1
+        git checkout $TRYTON_BRANCH && git submodule foreach git checkout $TRYTON_BRANCH && git add . && git commit -m "update modules" && git push origin $TRYTON_BRANCH
+        git checkout $COOG_BRANCH && git submodule foreach git checkout $COOG_BRANCH && git add . && git commit -m "update modules" && git push origin $COOG_BRANCH
         cd ..
 }
 

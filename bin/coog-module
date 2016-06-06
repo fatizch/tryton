@@ -2,7 +2,7 @@
 # modules management - install, update, etc
 
 coog_module_main() { # list installed modules - <db> - default: db uri
-        [ ! -z $1 ] && export PGDATABASE=$1
+        [ ! -z $1 ] && PGDATABASE=$1
         local module
         for module in `psql -w -t -c "select name from ir_module where state='installed'"`
         do
@@ -19,10 +19,12 @@ coog_module_update() { # install / update modules - [modules] - default: all
         else
                 modules=$*
         fi
-        trytond -v \
+        _coog_server_cleancache
+        trytond-admin -v \
                 -c $COOG_CONF_SRV \
                 -d $DB_NAME \
                 -u $modules
+        coog_server_restart
 }
 
 coog_module_check() { # check if module is installed - <module>
@@ -64,7 +66,7 @@ coog_module_updatedb() { # install / update database modules - <database> [modul
         else
                 args='-u '$*
         fi
-        trytond -v \
+        trytond-admin -v \
                 -c $COOG_CONF_SRV \
                 -d $db \
                 $args

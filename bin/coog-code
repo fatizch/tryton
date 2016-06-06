@@ -49,7 +49,7 @@ coog_code_status() { # status of all repos
         _coog_code_status | column -t
 }
 
-coog_code_fetch() { # fetch all repos
+coog_code_foreach() { # exec command on each repo <command>
         local wd; wd=`pwd`
         cd $COOG_ROOT
         local repos; repos=`ls -1`
@@ -61,12 +61,15 @@ coog_code_fetch() { # fetch all repos
                         continue
                 fi
                 cd $folder
-                echo fetching $repo
-                git fetch -p
+                echo $repo
+                $*
                 echo
         done
         cd $wd
+}
 
+coog_code_fetch() { # fetch all repos
+        coog_code_foreach git fetch -p
 }
 
 coog_code_norem() { # list local branches with no remotes - <repo>

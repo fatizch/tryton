@@ -3,25 +3,21 @@
     <data>
         <record model="ir.ui.view" id="option_view_form">
             <field name="model">contract.option</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract.option_view_form"/>
             <field name="name">option_form</field>
         </record>
         <record model="ir.ui.view" id="option_view_list">
             <field name="model">contract.option</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="contract.option_view_list"/>
             <field name="name">option_list</field>
         </record>
         <record model="ir.ui.view" id="option_version_view_form">
             <field name="model">contract.option.version</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract.option_version_view_form"/>
             <field name="name">option_version_form</field>
         </record>
         <record model="ir.ui.view" id="option_version_view_list">
             <field name="model">contract.option.version</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="contract.option_version_view_list"/>
             <field name="name">option_version_list</field>
         </record>

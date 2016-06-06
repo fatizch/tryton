@@ -8,6 +8,7 @@ Imports::
     >>> from proteus import config, Model, Wizard
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
+    >>> from trytond.modules.currency.tests.tools import get_currency
 
 Init Database::
 
@@ -29,8 +30,6 @@ Get Models::
     >>> Company = Model.get('company.company')
     >>> Contract = Model.get('contract')
     >>> Country = Model.get('country.country')
-    >>> Currency = Model.get('currency.currency')
-    >>> CurrencyRate = Model.get('currency.currency.rate')
     >>> FiscalYear = Model.get('account.fiscalyear')
     >>> Insurer = Model.get('insurer')
     >>> ItemDescription = Model.get('offered.item.description')
@@ -51,9 +50,7 @@ Constants::
 
 Create or fetch Currency::
 
-    >>> currency, = Currency.find([('code', '=', 'EUR')])
-    >>> CurrencyRate(date=product_start_date, rate=Decimal('1.0'),
-    ...     currency=currency).save()
+    >>> currency = get_currency(code='EUR')
 
 Create or fetch Country::
 
@@ -149,6 +146,7 @@ Create Coverage::
 
     >>> coverage = OptionDescription()
     >>> coverage.company = company
+    >>> coverage.currency = currency
     >>> coverage.name = 'Test Coverage'
     >>> coverage.code = 'test_coverage'
     >>> coverage.family = 'loan'
@@ -181,6 +179,7 @@ Create Product::
     >>> quote_sequence.save()
     >>> product = Product()
     >>> product.company = company
+    >>> product.currency = currency
     >>> product.name = 'Test Product'
     >>> product.code = 'test_product'
     >>> product.contract_generator = contract_sequence

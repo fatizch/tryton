@@ -3,7 +3,6 @@
     <data>
         <record model="ir.ui.view" id="payment_view_form">
             <field name="model">account.payment</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account_payment.payment_view_form"/>
             <field name="name">payment_form</field>
         </record>
@@ -46,7 +45,6 @@
         <menuitem parent="account_payment.menu_payments" sequence="50" action="act_message_form" id="menu_reject_message_form" icon="tryton-list"/>
         <record model="ir.ui.view" id="payment_creation_start_view_form">
             <field name="model">account.payment.payment_creation.start</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account_payment_cog.payment_creation_start_view_form"/>
             <field name="name">payment_creation_start_form</field>
         </record>

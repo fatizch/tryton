@@ -18,6 +18,7 @@ from .attachment import *
 from .diff_blame import *
 from .note import *
 
+
 def register():
     Pool.register(
         ExportPackage,
@@ -78,6 +79,7 @@ def register():
 
     if config.get('env', 'testing') == 'True':
         Pool.register(
+            TestMethodDefinitions,
             TestDictSchema,
             ExportTestTarget,
             ExportTestTargetSlave,

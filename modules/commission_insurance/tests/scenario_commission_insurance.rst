@@ -251,7 +251,7 @@ Create commission invoice::
     >>> create_invoice.form.from_ = None
     >>> create_invoice.form.to = None
     >>> create_invoice.execute('create_')
-    >>> invoice, = Invoice.find([('type', '=', 'in_invoice')])
+    >>> invoice, = Invoice.find([('type', '=', 'in')])
     >>> invoice.description = 'first'
     >>> invoice.save()
     >>> invoice.total_amount == Decimal('30')
@@ -272,7 +272,7 @@ Recreate commission invoice::
     >>> create_invoice.form.from_ = None
     >>> create_invoice.form.to = None
     >>> create_invoice.execute('create_')
-    >>> invoice, = Invoice.find([('type', '=', 'in_invoice'),
+    >>> invoice, = Invoice.find([('type', '=', 'in'),
     ...         ('state', '!=', 'cancel')])
     >>> invoice.description = 'first'
     >>> invoice.save()
@@ -292,7 +292,7 @@ Create commission invoice::
     >>> create_invoice.form.from_ = None
     >>> create_invoice.form.to = None
     >>> create_invoice.execute('create_')
-    >>> invoices = Invoice.find([('type', '=', 'in_invoice')])
+    >>> invoices = Invoice.find([('type', '=', 'in')])
     >>> invoices[0].total_amount == Decimal('-30')
     True
     >>> len(invoices[0].lines[1].broker_fee_lines)

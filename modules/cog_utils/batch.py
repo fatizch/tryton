@@ -106,7 +106,7 @@ class BatchRoot(ModelView):
 
     @classmethod
     def select_ids(cls, treatment_date, extra_args=None):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         SearchModel = Pool().get(cls.get_batch_search_model())
         tables, expression = SearchModel.search_domain(
             cls.get_batch_domain(treatment_date, extra_args))
@@ -312,11 +312,11 @@ class CleanDatabaseBatch(BatchRoot):
                 c = pool.get(model.model)
             except:
                 buf.append('DROP TABLE "%s";' % model.model.replace('.', '_'))
-                buf.append('DROP TABLE "%s_id_seq";' %
+                buf.append('DROP SEQUENCE "%s_id_seq";' %
                     model.model.replace('.', '_'))
-                buf.append('DROP TABLE "%s__history__";' %
+                buf.append('DROP TABLE "%s__history";' %
                     model.model.replace('.', '_'))
-                buf.append('DROP TABLE "%s__history___id_seq";' %
+                buf.append('DROP SEQUENCE "%s__history___id_seq";' %
                     model.model.replace('.', '_'))
                 continue
             if not issubclass(c, ModelSQL):
@@ -327,7 +327,7 @@ class CleanDatabaseBatch(BatchRoot):
                 continue
             fields = [k for k, v in c._fields.iteritems()
                 if cls.check_field(v)]
-            table = TableHandler(Transaction().cursor, c)
+            table = TableHandler(c)
             cls.check_model(buf, model.model, fields, table)
             tables.append(table)
         const = extra_args.get('drop_const', None)

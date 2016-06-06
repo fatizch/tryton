@@ -6,13 +6,11 @@
             ******************************************* -->
         <record model="ir.ui.view" id="salary_range_view_tree">
             <field name="model">salary_range</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="cog_utils.versionned_object_view_tree"/>
             <field name="name">salary_range_tree</field>
         </record>
         <record model="ir.ui.view" id="salary_range_view_form">
             <field name="model">salary_range</field>
-            <field name="type">form</field>
             <field name="inherit" ref="cog_utils.versionned_object_view_form"/>
             <field name="name">salary_range_form</field>
         </record>
@@ -36,13 +34,11 @@
             ******************************************* -->
         <record model="ir.ui.view" id="salary_range_version_view_tree">
             <field name="model">salary_range.version</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="cog_utils.version_object_view_tree"/>
             <field name="name">salary_range_version_tree</field>
         </record>
         <record model="ir.ui.view" id="salary_range_version_view_form">
             <field name="model">salary_range.version</field>
-            <field name="type">form</field>
             <field name="inherit" ref="cog_utils.version_object_view_form"/>
             <field name="name">salary_range_version_form</field>
         </record>

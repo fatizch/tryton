@@ -39,7 +39,7 @@ class User:
 
     def search_next_priority_task(self):
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         Log = pool.get('process.log')
         log = Log.__table__()
         priority = pool.get('res.team.priority').__table__()
@@ -154,7 +154,7 @@ class Team(model.CoopSQL, model.CoopView):
 
     def get_tasks_team(self, name):
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         Log = pool.get('process.log')
         log = Log.__table__()
         priority = pool.get('res.team.priority').__table__()
@@ -178,7 +178,7 @@ class Team(model.CoopSQL, model.CoopView):
 
     def search_next_priority_task_for_team(self):
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         Log = pool.get('process.log')
         log = Log.__table__()
         priority = pool.get('res.team.priority').__table__()

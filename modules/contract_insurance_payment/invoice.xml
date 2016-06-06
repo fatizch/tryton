@@ -3,7 +3,6 @@
     <data>
         <record model="ir.ui.view" id="premium_notice_view_list">
             <field name="model">account.invoice</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="contract_insurance_invoice.premium_notice_view_list"/>
             <field name="name">premium_notice_view_list</field>
         </record>

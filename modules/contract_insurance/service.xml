@@ -3,7 +3,6 @@
     <data>
         <record model="ir.ui.view" id="contract_service_view_form">
             <field name="model">contract.service</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract.contract_service_view_form"/>
             <field name="name">service_form</field>
         </record>

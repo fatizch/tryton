@@ -160,7 +160,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         # Note: test pass only with a database configured as postgresql
         # WARNING: No dependency, commit required for the history / write dates
         # to kick in properly
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         loan = self.get_loan()
         endorsement, = self.Endorsement.search([
@@ -168,7 +168,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ])
         previous_loan_amount = loan.amount
         endorsement.apply([endorsement])
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         loan = endorsement.loans[0]
         loan_endorsement, = endorsement.loan_endorsements
@@ -180,7 +180,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             previous_loan_amount)
         self.assert_(endorsement.rollback_date)
         endorsement.cancel([endorsement])
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         loan = endorsement.loans[0]
         self.assertEqual(loan_endorsement.state, 'canceled')

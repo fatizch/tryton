@@ -6,12 +6,14 @@ RUN mkdir /opt/coog && mkdir /opt/coog/data
 COPY . /opt/coog/
 
 RUN ln -s /opt/coog/trytond/bin/trytond /usr/local/bin
+RUN ln -s /opt/coog/trytond/bin/trytond-admin /usr/local/bin
+RUN ln -s /opt/coog/trytond/bin/trytond-cron /usr/local/bin
 RUN ln -s /opt/coog/coog/bin/docker-ep /usr/local/bin/ep
 
 RUN ep dep
 RUN ep link
 
 VOLUME ["/opt/coog/data"]
-EXPOSE 8000 8069
+EXPOSE 7999
 
 ENTRYPOINT ["ep"]

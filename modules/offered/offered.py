@@ -100,8 +100,7 @@ class Product(model.CoopSQL, model.CoopView, model.TaggedMixin):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        table = TableHandler(cursor, cls, module_name)
+        table = TableHandler(cls, module_name)
 
         super(Product, cls).__register__(module_name)
 
@@ -319,8 +318,7 @@ class OptionDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        table = TableHandler(cursor, cls, module_name)
+        table = TableHandler(cls, module_name)
 
         super(OptionDescription, cls).__register__(module_name)
 

@@ -3,7 +3,6 @@
     <data>
         <record model="ir.ui.view" id="plan_view_form">
             <field name="model">commission.plan</field>
-            <field name="type">form</field>
             <field name="name">plan_form</field>
             <field name="inherit" ref="commission.plan_view_form"/>
         </record>
@@ -12,13 +11,11 @@
         <!-- ############################################################ -->
         <record model="ir.ui.view" id="commission_view_form">
             <field name="model">commission</field>
-            <field name="type">form</field>
             <field name="inherit" ref="commission.commission_view_form"/>
             <field name="name">commission_form</field>
         </record>
         <record model="ir.ui.view" id="commission_view_list">
             <field name="model">commission</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="commission.commission_view_list"/>
             <field name="name">commission_list</field>
         </record>

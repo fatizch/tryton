@@ -569,10 +569,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
         rule.debug_mode = True
         rule.save()
 
-        Transaction().cursor.commit()
+        Transaction().commit()
         rule.execute({})
 
-        with Transaction().new_cursor():
+        with Transaction().new_transaction():
             self.assertEqual(len(self.Log.search([('rule', '=', rule.id)])), 1)
 
         # Check execution errors raise UserErrors

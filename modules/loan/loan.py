@@ -532,7 +532,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         contract_id = Transaction().context.get('contract', None)
         if contract_id is None:
             return ret
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         ctr_loan = Pool().get('contract-loan').__table__()
         for loan_slice in grouped_slice(loans):
             ids = [x.id for x in loan_slice]
@@ -589,7 +589,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         loan_share = pool.get('loan.share').__table__()
         contract_option = pool.get('contract.option').__table__()
         covered_element = pool.get('contract.covered_element').__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         query_table = covered_element.join(contract_option, condition=(
                 contract_option.covered_element == covered_element.id)
             ).join(loan_share, condition=(
@@ -899,22 +899,22 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
         pool = Pool()
         Loan = pool.get('loan')
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         loan = Loan.__table__()
         loan_increment = cls.__table__()
 
-        increment_h = TableHandler(cursor, cls, module_name)
+        increment_h = TableHandler(cls, module_name)
         inexisting_start_date = not increment_h.column_exist('start_date')
         # Migration from 1.6: fix typo in deferral
         increment_h.column_rename('deferal', 'deferral')
-        if TableHandler.table_exist(cursor, 'loan_increment__history'):
-            increment_history_h = TableHandler(cursor, cls, module_name,
+        if TableHandler.table_exist('loan_increment__history'):
+            increment_history_h = TableHandler(cls, module_name,
                 history=True)
             increment_history_h.column_rename('deferal', 'deferral')
 
         super(LoanIncrement, cls).__register__(module_name)
 
-        loan_h = TableHandler(cursor, Loan, module_name)
+        loan_h = TableHandler(Loan, module_name)
         if loan_h.column_exist('payment_frequency'):
             loan_increments = []
             cursor.execute(*loan_increment.join(loan,

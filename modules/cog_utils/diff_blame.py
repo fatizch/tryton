@@ -1,14 +1,14 @@
 import logging
 import math
 
-from trytond.pool import Pool, PoolBase
+from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.wizard import Wizard, StateTransition, StateView, Button
+from trytond.wizard import Wizard, StateView, Button
 from trytond.model import fields as tryton_fields
-from trytond import pyson
 from trytond.pyson import Eval, Equal
+from trytond.tools import cursor_dict
 
-from sql import Column, Desc
+from sql import Desc
 from sql.conditionals import Coalesce
 from sql.aggregate import Count
 
@@ -18,7 +18,7 @@ import model
 import fields
 
 # CHANGELOG
-# 11/04/2016 - Changed method name _export_diff() to _diff_skip() 
+# 11/04/2016 - Changed method name _export_diff() to _diff_skip()
 
 
 LOG = logging.getLogger(__name__)
@@ -182,7 +182,7 @@ class Revisions(object):
     def __init__(self, instance, current_page, total_pages, per_page):
         self._instance = instance
         history = self._instance.__table_history__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         # select create_uid to retrieve a username
         # select create date so we can find the right revision
         cursor.execute(*history.select(
@@ -192,11 +192,12 @@ class Revisions(object):
                 Coalesce(history.write_date,
                          history.create_date).as_('create_date'),
                 where=(history.id == instance.id),
-                order_by=Desc(Coalesce(history.write_date, history.create_date)),
+                order_by=Desc(Coalesce(history.write_date,
+                        history.create_date)),
                 limit=per_page,
                 offset=((current_page - 1) * per_page)
                 ))
-        self._revisions = cursor.dictfetchall()
+        self._revisions = cursor_dict(cursor)
         self._index = 0
 
     def __iter__(self):
@@ -215,7 +216,7 @@ class Revisions(object):
                 self._revisions[self._index + 1])
         except IndexError:
             raise StopIteration
-        except Exception as e:
+        except Exception:
             LOG.error('An error occured while iterating revisions.')
             raise StopIteration
         else:
@@ -294,7 +295,8 @@ def generate_diff(instance, current_page, total_pages, per_page=10):
     generate a text summary of differeneces similiary to Git.
     '''
     lines = []
-    for base, other in Revisions(instance, current_page, total_pages, per_page):
+    for base, other in Revisions(instance, current_page, total_pages,
+            per_page):
         difflist = difference(base, other)
         if len(difflist) > 0:
             lines += Formatter.header(base)
@@ -389,10 +391,10 @@ class RevisionBlameWizard(Wizard):
 
     def has_history(self, instance):
         if bool(instance._history) is False:
-            self.raise_user_error('active_model_no_history', active)
+            self.raise_user_error('active_model_no_history')
 
     def get_total_pages(self, instance, model_id, per_page=10):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         history = instance.__table_history__()
         cursor.execute(*history.select(
                 Count(history.id),
@@ -412,11 +414,10 @@ class RevisionBlameWizard(Wizard):
         current_page = 1
         total_pages = self.get_total_pages(instance, model_id)
         return {
-            'model_id' : model_id,
+            'model_id': model_id,
             'model_name': model_name,
             'record_name': instance.rec_name,
             'blame_text': generate_diff(instance, current_page, total_pages),
             'current_page': current_page,
             'total_pages': total_pages,
         }
-

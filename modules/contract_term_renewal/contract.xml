@@ -16,13 +16,11 @@
         </record>
         <record model="ir.ui.view" id="activation_history_view_form">
             <field name="model">contract.activation_history</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract.activation_history_view_form"/>
             <field name="name">activation_history_form</field>
         </record>
         <record model="ir.ui.view" id="contract_view_form">
             <field name="model">contract</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>

@@ -2,7 +2,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.pyson import Eval, Or, Bool
 from trytond.transaction import Transaction
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, model
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog import CogProcessFramework
@@ -14,7 +14,7 @@ __all__ = [
     ]
 
 
-class Contract(CogProcessFramework):
+class Contract(model.CoopSQL, CogProcessFramework):
     __name__ = 'contract'
     __metaclass__ = ClassAttr
 

@@ -890,10 +890,6 @@ msgctxt "field:endorsement.part,loan_increment_fields:"
 msgid "Endorsement Loan Increment Field"
 msgstr "Modification des paliers"
 
-msgctxt "field:endorsement.part,loan_increment_fields_:"
-msgid "Endorsement Loan Increment Field"
-msgstr "Modification des paliers"
-
 msgctxt "field:endorsement.part,loan_share_fields:"
 msgid "Endorsement Loan Share Fields"
 msgstr "Champs de la quotité"

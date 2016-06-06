@@ -3,7 +3,6 @@
     <data>
         <record model="ir.ui.view" id="endorsement_start_process_find_process_form">
             <field name="model">endorsement.start.find_process</field>
-            <field name="type">form</field>
             <field name="inherit" ref="process_cog.process_parameters_form"/>
             <field name="name">endorsement_find_process_form</field>
         </record>

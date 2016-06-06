@@ -27,7 +27,7 @@ class CreateEmptyInvoicePrincipalBatch(batch.BatchRoot):
     @classmethod
     def select_ids(cls, treatment_date, extra_args):
         insurer = Pool().get('insurer').__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         cursor.execute(*insurer.select(insurer.id,
                 where=(insurer.waiting_account != Null)))
@@ -106,7 +106,7 @@ class FinalizeInvoicePrincipalBatch(batch.BatchRoot):
     @classmethod
     def select_ids(cls, treatment_date, extra_args):
         insurer = Pool().get('insurer').__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         cursor.execute(*insurer.select(insurer.id,
             where=(insurer.waiting_account != Null)))

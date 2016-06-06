@@ -6,7 +6,6 @@
         <!-- ############################## -->
         <record model="ir.ui.view" id="change_billing_information_view_form">
             <field name="model">contract.billing_information.change</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement_insurance_invoice.change_billing_information_view_form"/>
             <field name="name">change_billing_information_form</field>
         </record>
@@ -15,7 +14,6 @@
         <!-- ############################### -->
         <record model="ir.ui.view" id="change_direct_debit_account_view_form">
             <field name="model">contract.direct_debit_account.change</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement_insurance_invoice.change_direct_debit_account_view_form"/>
             <field name="name">change_billing_information_form</field>
         </record>
@@ -24,13 +22,11 @@
         <!-- ####################### -->
         <record model="ir.ui.view" id="endorsement_billing_information_view_form">
             <field name="model">contract.billing_information</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement_insurance_invoice.endorsement_billing_information_view_form"/>
             <field name="name">endorsement_billing_information_form</field>
         </record>
         <record model="ir.ui.view" id="endorsement_direct_debit_account_view_form">
             <field name="model">contract.billing_information</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement_insurance_invoice.endorsement_direct_debit_account_view_form"/>
             <field name="name">endorsement_billing_information_form</field>
         </record>

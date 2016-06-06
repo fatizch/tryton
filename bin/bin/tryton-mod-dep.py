@@ -30,5 +30,5 @@ with Transaction().start(database, 0, readonly=True):
         modules_with_deps.update((m for m in get_parents(module)
                 if m.state == 'uninstalled'))
     for module in modules_with_deps:
-        print module.name
+        print(module.name)
 

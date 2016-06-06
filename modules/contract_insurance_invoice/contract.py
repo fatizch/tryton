@@ -182,7 +182,7 @@ class Contract:
         MoveLine = pool.get('account.move.line')
         Account = pool.get('account.account')
         User = pool.get('res.user')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         line = MoveLine.__table__()
         account = Account.__table__()
@@ -332,7 +332,7 @@ class Contract:
         pool = Pool()
         payment = pool.get('account.payment').__table__()
         line = pool.get('account.move.line').__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         result = {x.id: Decimal(0) for x in contracts}
         for contracts_slice in grouped_slice(contracts):
@@ -522,12 +522,13 @@ class Contract:
         pool = Pool()
         ContractInvoice = pool.get('contract.invoice')
         Invoice = pool.get('account.invoice')
-        cursor = Transaction().cursor
+        transaction = Transaction()
+        cursor = transaction.connection.cursor()
         table = cls.__table__()
         contract_invoice = ContractInvoice.__table__()
         invoice = Invoice.__table__()
         values = dict.fromkeys((c.id for c in contracts))
-        in_max = cursor.IN_MAX
+        in_max = transaction.database.IN_MAX
         state_column = Column(invoice, 'state')
 
         if name == 'last_invoice_start':
@@ -837,7 +838,7 @@ class Contract:
             invoice_address=None,  # Will be really set in finalize invoice
             contract=self,
             company=self.company,
-            type='out_invoice',
+            type='out',
             business_kind='contract_invoice',
             journal=None,
             party=self.subscriber,
@@ -1060,7 +1061,8 @@ class Contract:
         for reconciliation_lines in lines_to_reconcile:
             if not reconciliation_lines:
                 continue
-            reconciliations.append(Reconciliation(lines=reconciliation_lines))
+            reconciliations.append(Reconciliation(lines=reconciliation_lines,
+                    date=max(x.date for x in reconciliation_lines)))
         if reconciliations:
             Reconciliation.save(reconciliations)
         return reconciliations
@@ -1099,7 +1101,7 @@ class Contract:
         contract, rate it, extract data to return, then rollback
         everything.
         '''
-        with Transaction().new_cursor():
+        with Transaction().new_transaction() as transaction:
             try:
                 messages = cls.ws_subscribe_contracts(contract_dict)
                 if len(messages) == 1 and not messages.values()[0]['return']:
@@ -1121,7 +1123,7 @@ class Contract:
                     'messages': [{'error': str(exc)}],
                     }
             finally:
-                Transaction().cursor.rollback()
+                transaction.rollback()
             return {contract_dict.keys()[0]: rating_message}
 
     @classmethod
@@ -1296,7 +1298,7 @@ class ContractFee:
         to_deactivate = []
         contract_fee_dict = {x.id: x for x in contract_fees}
 
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         invoice_detail = Pool().get('account.invoice.line.detail').__table__()
         for contract_fee_slice in grouped_slice(contract_fees):
             cursor.execute(*invoice_detail.select(invoice_detail.contract_fee,
@@ -1320,7 +1322,7 @@ class ContractOption:
         to_decline = []
         option_dict = {x.id: x for x in options}
 
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         invoice_detail = Pool().get('account.invoice.line.detail').__table__()
         for option_slice in grouped_slice(options):
             cursor.execute(*invoice_detail.select(invoice_detail.option,
@@ -1350,7 +1352,7 @@ class ExtraPremium:
         to_deactivate = []
         extra_premium_dict = {x.id: x for x in extra_premiums}
 
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         invoice_detail = Pool().get('account.invoice.line.detail').__table__()
         for extra_premium_slice in grouped_slice(extra_premiums):
             cursor.execute(*invoice_detail.select(invoice_detail.extra_premium,
@@ -1426,10 +1428,10 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         # Migration from 1.1: Billing change
         migrate = False
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        if (not TableHandler.table_exist(cursor,
-                'contract_billing_information') and TableHandler.table_exist(
-                    cursor, 'contract_invoice_frequency')):
+        cursor = Transaction().connection.cursor()
+        if (not TableHandler.table_exist(
+                    'contract_billing_information')
+                and TableHandler.table_exist('contract_invoice_frequency')):
             migrate = True
 
         super(ContractBillingInformation, cls).__register__(module_name)
@@ -1517,11 +1519,11 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         if not (self.direct_debit and self.direct_debit_day):
             return None
         if type(line) == dict:
-            curline = MoveLine(**line)
+            cur_line = MoveLine(**line)
         else:
-            curline = line
-        payment_journal = curline.get_payment_journal()
-        return payment_journal.get_next_possible_payment_date(line,
+            cur_line = line
+        payment_journal = cur_line.get_payment_journal()
+        return payment_journal.get_next_possible_payment_date(cur_line,
             self.direct_debit_day)
 
     def same_rule(self, other):
@@ -1699,7 +1701,7 @@ class Premium:
                 unit=None,
                 unit_price=line_amount,
                 taxes=self.taxes,
-                invoice_type='out_invoice',
+                invoice_type='out',
                 account=self.account,
                 coverage_start=start,
                 coverage_end=end,
@@ -1774,7 +1776,7 @@ class ContractInvoice(model.CoopSQL, model.CoopView):
     def check_dates(self):
         pool = Pool()
         Invoice = pool.get('account.invoice')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         table = self.__table__()
         invoice = Invoice.__table__()
         cursor.execute(*table.join(invoice,

@@ -1,13 +1,12 @@
-==============================
+===============================
 Endorsement Insurance Scenario
-==============================
+===============================
 
 Imports::
 
     >>> import datetime
     >>> from proteus import config, Model, Wizard
-    >>> from dateutil.relativedelta import relativedelta
-    >>> from decimal import Decimal
+    >>> from trytond.modules.currency.tests.tools import get_currency
 
 Init Database::
 
@@ -29,8 +28,6 @@ Get Models::
     >>> Company = Model.get('company.company')
     >>> Contract = Model.get('contract')
     >>> Country = Model.get('country.country')
-    >>> Currency = Model.get('currency.currency')
-    >>> CurrencyRate = Model.get('currency.currency.rate')
     >>> Endorsement = Model.get('endorsement')
     >>> EndorsementContract = Model.get('endorsement.contract')
     >>> EndorsementContractField = Model.get('endorsement.contract.field')
@@ -42,7 +39,7 @@ Get Models::
     >>> Field = Model.get('ir.model.field')
     >>> Insurer = Model.get('insurer')
     >>> ItemDescription = Model.get('offered.item.description')
-    >>> ManageExclusionDisplayer = Model.get( 'contract.manage_exclusions.exclusion')
+    >>> ManageExclusionDisplayer = Model.get('contract.manage_exclusions.exclusion')
     >>> MethodDefinition = Model.get('ir.model.method')
     >>> Option = Model.get('contract.option')
     >>> OptionDescription = Model.get('offered.option.description')
@@ -62,16 +59,7 @@ Constants::
 
 Create or fetch Currency::
 
-    >>> currencies = Currency.find([('code', '=', 'USD')])
-    >>> if not currencies:
-    ...     currency = Currency(name='US Dollar', symbol=u'$', code='USD',
-    ...         rounding=Decimal('0.01'), mon_grouping='[]',
-    ...         mon_decimal_point='.')
-    ...     currency.save()
-    ...     CurrencyRate(date=today + relativedelta(month=1, day=1),
-    ...         rate=Decimal('1.0'), currency=currency).save()
-    ... else:
-    ...     currency, = currencies
+    >>> currency = get_currency(code='EUR')
 
 Create or fetch Country::
 
@@ -185,6 +173,7 @@ Create Product::
     >>> quote_sequence.save()
     >>> coverage = OptionDescription()
     >>> coverage.company = company
+    >>> coverage.currency = currency
     >>> coverage.name = 'Test Coverage'
     >>> coverage.code = 'test_coverage'
     >>> coverage.start_date = product_start_date
@@ -194,6 +183,7 @@ Create Product::
     >>> coverage.save()
     >>> product = Product()
     >>> product.company = company
+    >>> product.currency = currency
     >>> product.name = 'Test Product'
     >>> product.code = 'test_product'
     >>> product.contract_generator = contract_sequence

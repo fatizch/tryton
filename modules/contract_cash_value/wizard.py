@@ -65,7 +65,7 @@ class CollectionToCashValue(Wizard):
         line_table = Line.__table__()
         payment_table = Payment.__table__()
 
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         to_date = self.select_date.to_date
         # Accounts to look for
@@ -118,7 +118,7 @@ class CollectionToCashValue(Wizard):
         cash_value_table = CashValueCollection.__table__()
         contract_table = Contract.__table__()
 
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         to_date = self.select_date.to_date
 
         # Products to look for

@@ -18,7 +18,7 @@ class RuleEngineRuntime:
     @check_args('option', 'agent')
     def re_commission_sum_for_option(cls, args):
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         commission = pool.get('commission').__table__()
 
         cursor.execute(*commission.select(Sum(commission.amount),
@@ -32,7 +32,7 @@ class RuleEngineRuntime:
     @check_args('option')
     def re_last_paid_invoice_end_date(cls, args):
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         contract_invoice = pool.get('contract.invoice').__table__()
         invoice_line = pool.get('account.invoice.line').__table__()
         details = pool.get('account.invoice.line.detail').__table__()

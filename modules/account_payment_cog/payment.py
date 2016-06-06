@@ -86,7 +86,7 @@ class Journal(export.ExportImportMixin):
 
     def get_next_possible_payment_date(self, line, day):
         return coop_date.get_next_date_in_sync_with(
-            max(line['maturity_date'], utils.today()), day)
+            max(line.maturity_date, utils.today()), day)
 
 
 class JournalFailureAction(model.CoopSQL, model.CoopView):
@@ -124,8 +124,7 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
     def __register__(cls, module_name):
         # Migration from 1.3: Drop code_unique constraint
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        table = TableHandler(cursor, cls, module_name)
+        table = TableHandler(cls, module_name)
         table.drop_constraint('code_unique')
         super(JournalFailureAction, cls).__register__(module_name)
 
@@ -225,8 +224,7 @@ class RejectReason(model.CoopSQL, model.CoopView):
         TableHandler = backend.get('TableHandler')
         super(RejectReason, cls).__register__(module_name)
 
-        cursor = Transaction().cursor
-        table = TableHandler(cursor, cls, module_name)
+        table = TableHandler(cls, module_name)
 
         # Migration from 1.6 constraint code_unique has been renamed
         table.drop_constraint('code_unique')
@@ -372,8 +370,7 @@ class Payment(export.ExportImportMixin, Printable):
     def __register__(cls, module_name):
         # Migration from 1.6: Renaming column
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        payment_h = TableHandler(cursor, cls, module_name)
+        payment_h = TableHandler(cls, module_name)
 
         if payment_h.column_exist('sepa_merged_id'):
             payment_h.column_rename('sepa_merged_id', 'merged_id')
@@ -616,7 +613,7 @@ class Configuration:
 
 class Group(ModelCurrency, export.ExportImportMixin):
     __name__ = 'account.payment.group'
-    _func_key = 'reference'
+    _func_key = 'number'
 
     processing_payments = fields.One2ManyDomain('account.payment', 'group',
         'Processing Payments',
@@ -674,7 +671,7 @@ class Group(ModelCurrency, export.ExportImportMixin):
     @classmethod
     def get_state(cls, groups, name):
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         account_payment = pool.get('account.payment').__table__()
         result = {x.id: False for x in groups}
 
@@ -690,7 +687,7 @@ class Group(ModelCurrency, export.ExportImportMixin):
     @classmethod
     def get_amount(cls, groups, name):
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         account_payment = pool.get('account.payment').__table__()
         result = {x.id: None for x in groups}
 
@@ -707,7 +704,7 @@ class Group(ModelCurrency, export.ExportImportMixin):
     def get_payment_dates(cls, groups, name):
         pool = Pool()
         Date = pool.get('ir.date')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         account_payment = pool.get('account.payment').__table__()
         result = {x.id: '' for x in groups}
 

@@ -3,6 +3,7 @@
 # This is the only reason why we use bash (not simply sh)
 set -o pipefail
 
+
 _enter() { # move to bin directory
         local script_path
         local script_dir

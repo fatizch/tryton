@@ -473,7 +473,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             payment_term = PaymentTerm.search([])[0]
         return Invoice(
             company=key['company'],
-            type='in_invoice',
+            type='in',
             journal=cls.get_journal(),
             party=party,
             invoice_address=party.address_get(type='invoice'),

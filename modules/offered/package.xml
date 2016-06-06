@@ -3,8 +3,8 @@
     <data>
         <record model="ir.ui.view" id="package_view_form">
             <field name="model">offered.package</field>
-            <field name="type">form</field>
             <field name="name">package_form</field>
+            <field name="type">form</field>
             <field name="inherit" eval="None"/>
         </record>
         <record model="ir.ui.view" id="package_view_list">

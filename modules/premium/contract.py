@@ -486,9 +486,8 @@ class Premium(model.CoopSQL, model.CoopView):
 
         # Migrate from 1.6 : Remove premium-tax relation
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        if TableHandler.table_exist(cursor, 'contract_premium-account_tax'):
-            TableHandler.drop_table(cursor, 'contract.premium-account.tax',
+        if TableHandler.table_exist('contract_premium-account_tax'):
+            TableHandler.drop_table('contract.premium-account.tax',
                 'contract_premium-account_tax', cascade=True)
 
     @dualmethod
@@ -531,7 +530,7 @@ class Premium(model.CoopSQL, model.CoopView):
 
     @classmethod
     def get_parent(cls, premiums, name):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         premium_table = cls.__table__()
         models, columns = [], []
         for field_name in cls.get_possible_parent_field():

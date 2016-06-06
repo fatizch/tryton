@@ -69,7 +69,7 @@ def migrate_age_from_value_to_range():
                             'value': None,
                             })
 
-        transaction.cursor.commit()
+        transaction.commit()
 
 
 if __name__ == "__main__":

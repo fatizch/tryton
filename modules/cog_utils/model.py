@@ -17,7 +17,7 @@ from trytond.cache import Cache
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction
 from trytond.rpc import RPC
-from trytond.tools import reduce_ids
+from trytond.tools import reduce_ids, cursor_dict
 
 import utils
 import fields
@@ -686,7 +686,8 @@ class _RevisionMixin(object):
         'and a dictionnary as value. The dictionnary value contains'
         'main instance id as key and variable value as value'
 
-        cursor = Transaction().cursor
+        transaction = Transaction()
+        cursor = transaction.connection.cursor()
         table = cls.__table__()
         if names:
             columns_expected = list(set(cls.revision_columns()) & set(names))
@@ -707,7 +708,7 @@ class _RevisionMixin(object):
 
         columns += [Column(table, c) for c in columns_expected]
 
-        in_max = cursor.IN_MAX
+        in_max = transaction.database.IN_MAX
         for i in range(0, len(instances), in_max):
             sub_ids = [c.id for c in instances[i:i + in_max]]
             where_parent = reduce_ids(parent_column, sub_ids)
@@ -722,7 +723,7 @@ class _RevisionMixin(object):
                     & (Coalesce(table.date, datetime.date.min) ==
                         Coalesce(subquery.date, datetime.date.min))
                     ).select(*columns))
-            for elem in cursor.dictfetchall():
+            for elem in cursor_dict(cursor):
                 for field_name, value in elem.iteritems():
                     if field_name == cls._parent_name:
                         continue

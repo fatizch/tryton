@@ -116,7 +116,7 @@ class PaymentCreationBatch(batch.BatchRoot):
 
     @classmethod
     def select_ids(cls, treatment_date, extra_args):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor
         tables, query_table, where_clause = cls.get_query(treatment_date,
             extra_args)
         move_line = tables['move_line']

@@ -3,6 +3,7 @@ from .company import *
 from .res import *
 from .test_case import *
 from .ir import *
+from .party import *
 
 
 def register():
@@ -13,4 +14,5 @@ def register():
         Sequence,
         SequenceStrict,
         TestCaseModel,
+        PartyConfiguration,
         module='company_cog', type_='model')

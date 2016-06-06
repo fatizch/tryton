@@ -12,7 +12,7 @@ from trytond.pool import Pool
 from trytond.model import fields as tryton_fields
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.transaction import Transaction
-from trytond.tools import grouped_slice
+from trytond.tools import grouped_slice, cursor_dict
 
 # Needed for Pyson evaluation
 from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT
@@ -36,7 +36,7 @@ class FileLocker:
 
     def __enter__(self):
         self.locker.acquire(timeout=20)
-        self.file_obj = open(self.path, *self.args,  **self.kwargs)
+        self.file_obj = open(self.path, *self.args, **self.kwargs)
         return self.file_obj
 
     def __exit__(self, type, value, traceback):
@@ -46,6 +46,7 @@ class FileLocker:
 
 def safe_open(filepath, *args, **kwargs):
     return FileLocker(filepath, *args, **kwargs)
+
 
 def remove_lockfile(filepath, lock_extension='lck', silent=True):
     lock_filepath = filepath + '.' + lock_extension
@@ -401,7 +402,7 @@ def version_getter(instances, names, version_model, reverse_fname,
         for x in field_map.keys() + [x for x in names if x not in
             field_map.values()]}
 
-    cursor = Transaction().cursor
+    cursor = Transaction().connection.cursor()
     Target = Pool().get(version_model)
     target = Target.__table__()
 
@@ -428,7 +429,7 @@ def version_getter(instances, names, version_model, reverse_fname,
         view = target.select(*columns, where=where_clause &
             parent_col.in_([x.id for x in instance_slice]))
         cursor.execute(*view.select(where=view.start == view.max_start))
-        for value in cursor.dictfetchall():
+        for value in cursor_dict(cursor):
             base_id = value[reverse_fname]
             for k, v in value.iteritems():
                 if k == reverse_fname or k not in field_map:
@@ -441,7 +442,7 @@ def version_getter(instances, names, version_model, reverse_fname,
 
 def clear_transaction_cache(model_name, ids):
     # Copied from ModelStorage::write
-    for cache in Transaction().cursor.cache.itervalues():
+    for cache in Transaction().cache.itervalues():
         if model_name in cache:
             for id_ in ids:
                 if id_ in cache[model_name]:

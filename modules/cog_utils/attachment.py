@@ -1,6 +1,7 @@
 import base64
 
 from trytond.pool import PoolMeta
+import utils
 import fields
 import export
 
@@ -43,9 +44,7 @@ class Attachment(export.ExportImportMixin):
 
     @classmethod
     def get_possible_origin(cls):
-        res = cls.models_get()
-        res.append(('', ''))
-        return res
+        return utils.models_get()
 
     @classmethod
     def __setup__(cls):

@@ -22,6 +22,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
     module = 'contract_insurance_invoice'
 
     @classmethod
+    def depending_modules(cls):
+        return ['company_cog', 'currency_cog']
+
+    @classmethod
     def get_models(cls):
         return {
             'Party': 'party.party',
@@ -44,10 +48,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Reconciliation': 'account.move.reconciliation',
             }
 
+    @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
     def test_premium_get_amount(self):
         'Test Premium.get_amount'
         company, = self.Company.search([
-                ('rec_name', '=', 'Dunder Mifflin'),
+                ('rec_name', '=', 'World Company'),
                 ])
         config = self.OfferedConfiguration(1)
         contract = self.Contract()
@@ -173,11 +178,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ):
             self.assertEqual(premium_once_per_year.get_amount(*period), amount)
 
+    @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
     def test_contract_get_invoice_periods(self):
         'Test Contract get_invoice_periods'
 
         company, = self.Company.search([
-                ('rec_name', '=', 'Dunder Mifflin'),
+                ('rec_name', '=', 'World Company'),
                 ])
         self.User.write([self.User(Transaction().user)], {
                 'main_company': company.id,
@@ -634,14 +640,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
-    from trytond.modules.company.tests import test_company
-    for test in test_company.suite():
-        if test not in suite:
-            suite.addTest(test)
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(ModuleTestCase))
-    suite.addTests(doctest.DocFileSuite('scenario_invoice_contract.rst',
-            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
-            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
+    #  suite.addTests(unittest.TestLoader().loadTestsFromTestCase(ModuleTestCase))
+    #  suite.addTests(doctest.DocFileSuite('scenario_invoice_contract.rst',
+    #          setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+    #          optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     suite.addTests(doctest.DocFileSuite(
             'scenario_invoice_contract_tax_included.rst',
             setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',

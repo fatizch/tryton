@@ -74,8 +74,8 @@ class Commission:
     def __register__(cls, module_name):
         # Migration from 1.4: add commissioned_option, start, end
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        commission = TableHandler(cursor, cls)
+        cursor = Transaction().connection.cursor()
+        commission = TableHandler(cls)
         has_option_column = commission.column_exist('commissioned_option')
         has_start_column = commission.column_exist('start')
 
@@ -190,9 +190,8 @@ class Commission:
             'in': 'out',
             'out': 'in',
             }.get(self.type_)
-        document = 'invoice'
         return (('party', self.agent.party),
-            ('type', '%s_%s' % (direction, document)),
+            ('type', direction),
             ('company', self.agent.company),
             ('currency', self.agent.currency),
             ('account', self.agent.account),
@@ -339,7 +338,7 @@ class AggregatedCommission(model.CoopSQL, model.CoopView):
     @classmethod
     def read(cls, ids, fields_names=None):
         if 'origins' not in Transaction().context and ids:
-            cursor = Transaction().cursor
+            cursor = Transaction().connection.cursor()
             commission = Pool().get('commission').__table__()
             cursor.execute(*commission.select(commission.origin,
                     where=commission.id.in_(ids),
@@ -1086,7 +1085,7 @@ class OpenCommissionsSynthesis(Wizard):
         return -1 * sum([x.amount for x in move_lines])
 
     def get_commissions_paid(self, broker_party, currency):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         pool = Pool()
         Commission = pool.get('commission')
         Invoice = pool.get('account.invoice')
@@ -1224,7 +1223,7 @@ class FilterCommissions(Wizard):
         types = set([x.type for x in AccountInvoice.browse(ids)])
         if len(types) != 1:
             return 'filter_commission'
-        elif types == {'in_invoice'}:
+        elif types == {'in'}:
             return 'filter_commission'
         else:
             return 'aggregated_commissions'
@@ -1238,7 +1237,7 @@ class FilterCommissions(Wizard):
         types = set([x.type for x in AccountInvoice.browse(ids)])
         if len(types) != 1:
             domain = ['OR', in_domain[0], out_domain[0]]
-        elif types == {'in_invoice'}:
+        elif types == {'in'}:
             domain = in_domain
         else:
             domain = out_domain

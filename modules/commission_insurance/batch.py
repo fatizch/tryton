@@ -26,7 +26,7 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
 
     @classmethod
     def select_ids(cls, treatment_date, extra_args):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         pool = Pool()
 
         agent = pool.get('commission.agent').__table__()

@@ -13,7 +13,6 @@
         </record>
         <record model="ir.ui.view" id="dunning_procedure_view_form">
             <field name="model">account.dunning.procedure</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account_dunning.dunning_procedure_view_form"/>
             <field name="name">dunning_procedure_form</field>
         </record>

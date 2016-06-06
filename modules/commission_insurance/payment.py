@@ -27,7 +27,7 @@ class Configuration:
         if not isinstance(getattr(line, 'origin', None), Invoice):
             return super(Configuration, self).get_payment_journal(line)
         if not (line.origin.business_kind == 'broker_invoice' and
-                line.origin.type == 'in_invoice'):
+                line.origin.type == 'in'):
             return super(Configuration, self).get_payment_journal(line)
         journal = self.broker_bank_transfer_journal \
             if line.origin.party.automatic_wire_transfer \

@@ -26,6 +26,7 @@ from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.tools.misc import memoize
+from trytond.tools import cursor_dict
 from trytond.pyson import Eval, Or, Bool, Not, If
 
 from trytond.modules.cog_utils import (coop_date, coop_string, fields,
@@ -564,18 +565,18 @@ class RuleEngineTable(model.CoopSQL):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         super(RuleEngineTable, cls).__register__(module_name)
 
         # Migration from 1.1: split rule parameters in multiple table
         table_definition = cls.__table__()
-        if TableHandler.table_exist(cursor, 'rule_engine_parameter'):
+        if TableHandler.table_exist('rule_engine_parameter'):
             cursor.execute(*table_definition.delete())
             cursor.execute("SELECT the_table, parent_rule "
                 "FROM rule_engine_parameter "
                 "WHERE kind = 'table'")
-            for cur_rule_parameter in cursor.dictfetchall():
+            for cur_rule_parameter in cursor_dict(cursor):
                 cursor.execute(*table_definition.insert(
                     columns=[table_definition.parent_rule,
                     table_definition.table],
@@ -595,18 +596,18 @@ class RuleEngineRuleEngine(model.CoopSQL):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         super(RuleEngineRuleEngine, cls).__register__(module_name)
 
         # Migration from 1.1: split rule parameters in multiple table
         rule_definition = cls.__table__()
-        if TableHandler.table_exist(cursor, 'rule_engine_parameter'):
+        if TableHandler.table_exist('rule_engine_parameter'):
             cursor.execute(*rule_definition.delete())
             cursor.execute("SELECT the_rule, parent_rule "
                 "FROM rule_engine_parameter "
                 "WHERE kind = 'rule'")
-            for cur_rule_parameter in cursor.dictfetchall():
+            for cur_rule_parameter in cursor_dict(cursor):
                 cursor.execute(*rule_definition.insert(
                     columns=[rule_definition.parent_rule,
                     rule_definition.rule],
@@ -625,18 +626,18 @@ class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         super(RuleParameter, cls).__register__(module_name)
 
         # Migration from 1.1: split rule parameters in multiple table
         parameter_definition = cls.__table__()
-        if TableHandler.table_exist(cursor, 'rule_engine_parameter'):
+        if TableHandler.table_exist('rule_engine_parameter'):
             cursor.execute(*parameter_definition.delete())
             cursor.execute("SELECT name, code, parent_rule "
                 "FROM rule_engine_parameter "
                 "WHERE kind = 'kwarg'")
-            for cur_rule_parameter in cursor.dictfetchall():
+            for cur_rule_parameter in cursor_dict(cursor):
                 cursor.execute(*parameter_definition.insert(
                     columns=[parameter_definition.parent_rule,
                     parameter_definition.name, parameter_definition.string,
@@ -647,7 +648,7 @@ class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
             cursor.execute("SELECT name, code, parent_rule "
                 "FROM rule_engine_parameter "
                 "WHERE kind = 'rule_compl'")
-            for cur_rule_parameter in cursor.dictfetchall():
+            for cur_rule_parameter in cursor_dict(cursor):
                 cursor.execute(*parameter_definition.insert(
                     columns=[parameter_definition.parent_rule,
                     parameter_definition.name, parameter_definition.string,
@@ -764,11 +765,11 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         super(RuleEngine, cls).__register__(module_name)
 
-        the_table = TableHandler(cursor, cls, module_name)
+        the_table = TableHandler(cls, module_name)
         rule = cls.__table__()
         # Migration from 1.1: move code to algorithm - add short_name
         if the_table.column_exist('code'):
@@ -858,7 +859,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
 
     @classmethod
     def get_passing_test_cases(cls, instances, name):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         rule = cls.__table__()
         test_case = Pool().get('rule_engine.test_case').__table__()
@@ -1198,7 +1199,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         if not self.id or not getattr(self, 'debug_mode', None):
             return result
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
-        with Transaction().new_cursor() as transaction:
+        with Transaction().new_transaction() as transaction:
             RuleExecution = Pool().get('rule_engine.log')
             rule_execution = RuleExecution()
             rule_execution.rule = self.id
@@ -1211,9 +1212,9 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
                     coop_string.slugify(self.name) + ' - ' + str(exc))
             rule_execution.save()
             try:
-                transaction.cursor.commit()
+                transaction.commit()
             except DatabaseOperationalError:
-                transaction.cursor.rollback()
+                transaction.rollback()
 
     def execute(self, arguments, parameters=None):
 
@@ -1568,6 +1569,8 @@ class TestCase(ModelView, ModelSQL):
 
     @fields.depends('last_passing_date')
     def on_change_with_last_passing_date_str(self, name=None):
+        if not self.last_passing_date:
+            return ''
         return Pool().get('ir.date').datetime_as_string(self.last_passing_date)
 
     @staticmethod

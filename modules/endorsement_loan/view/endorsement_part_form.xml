@@ -7,8 +7,8 @@
         <page name="loan_share_fields">
             <field name="loan_share_fields"/>
         </page>
-        <page name="loan_increment_fields_">
-            <field name="loan_increment_fields_"/>
+        <page name="loan_increment_fields">
+            <field name="loan_increment_fields"/>
         </page>
     </xpath>
 </data>

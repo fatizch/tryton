@@ -34,10 +34,10 @@ def migrate_dates():
         try:
             print "migrating options"
             Option = pool.get('contract.option')
-            transaction.cursor.execute(
+            transaction.connection.cursor().execute(
                 'select id, start_date from contract_option')
             to_save = []
-            values = dict(transaction.cursor.fetchall())
+            values = dict(transaction.connection.cursor().fetchall())
             if values:
                 to_save = []
                 for option_id, prev_start_date in values.iteritems():
@@ -48,19 +48,19 @@ def migrate_dates():
                         to_save.append(option)
                 Option.save(to_save)
         except Exception as e:
-            transaction.cursor.rollback()
+            transaction.rollback()
             raise e
         else:
-            transaction.cursor.commit()
+            transaction.commit()
 
     with Transaction().start(dbname, user_id, context=CONTEXT) as transaction:
         print "migrating extra_premiums"
         try:
             ExtraPremium = pool.get('contract.option.extra_premium')
-            transaction.cursor.execute('select id, start_date, end_date from '
+            transaction.connection.cursor().execute('select id, start_date, end_date from '
                 'contract_option_extra_premium')
             request_res = {item[0]: (item[1], item[2]) for
-                item in transaction.cursor.fetchall()}
+                item in transaction.connection.cursor().fetchall()}
             if request_res:
                 to_save = []
                 for extra_premium_id, dates in request_res.iteritems():
@@ -81,33 +81,33 @@ def migrate_dates():
                     to_save.append(extra_premium)
                 ExtraPremium.save(to_save)
         except Exception as e:
-            transaction.cursor.rollback()
+            transaction.rollback()
             raise e
         else:
-            transaction.cursor.commit()
+            transaction.commit()
 
     with Transaction().start(dbname, user_id, context=CONTEXT) as transaction:
         try:
-            transaction.cursor.execute('alter table contract_option '
+            transaction.connection.cursor().execute('alter table contract_option '
                     'drop column start_date')
         except Exception as e:
-            transaction.cursor.rollback()
+            transaction.rollback()
             raise e
         else:
-            transaction.cursor.commit()
+            transaction.commit()
             print "options migration done"
 
     with Transaction().start(dbname, user_id, context=CONTEXT) as transaction:
         try:
-            transaction.cursor.execute('alter table '
+            transaction.connection.cursor().execute('alter table '
                 'contract_option_extra_premium drop column end_date')
-            transaction.cursor.execute('alter table '
+            transaction.connection.cursor().execute('alter table '
                 'contract_option_extra_premium drop column start_date')
         except Exception as e:
-            transaction.cursor.rollback()
+            transaction.rollback()
             raise e
         else:
-            transaction.cursor.commit()
+            transaction.commit()
             print "extra_premiums migration done"
 
 

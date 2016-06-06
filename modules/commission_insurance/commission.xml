@@ -6,13 +6,11 @@
         <!-- ######### -->
         <record model="ir.ui.view" id="agent_view_form">
             <field name="model">commission.agent</field>
-            <field name="type">form</field>
             <field name="inherit" ref="commission.agent_view_form"/>
             <field name="name">agent_form</field>
         </record>
         <record model="ir.ui.view" id="agent_view_list">
             <field name="model">commission.agent</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="commission.agent_view_list"/>
             <field name="name">agent_list</field>
         </record>
@@ -34,13 +32,11 @@
         <!-- ############## -->
         <record model="ir.ui.view" id="commission_view_form">
             <field name="model">commission</field>
-            <field name="type">form</field>
             <field name="inherit" ref="commission.commission_view_form"/>
             <field name="name">commission_form</field>
         </record>
         <record model="ir.ui.view" id="commission_view_list">
             <field name="model">commission</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="commission.commission_view_list"/>
             <field name="name">commission_list</field>
         </record>
@@ -61,13 +57,11 @@
         <!-- ######## -->
         <record model="ir.ui.view" id="plan_view_form">
             <field name="model">commission.plan</field>
-            <field name="type">form</field>
             <field name="inherit" ref="commission.plan_view_form"/>
             <field name="name">plan_form</field>
         </record>
         <record model="ir.ui.view" id="plan_view_list">
             <field name="model">commission.plan</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="commission.plan_view_list"/>
             <field name="name">plan_list</field>
         </record>
@@ -102,7 +96,6 @@
         <!-- ################## -->
         <record model="ir.ui.view" id="commission_create_invoice_ask_view_form">
             <field name="model">commission.create_invoice.ask</field>
-            <field name="type">form</field>
             <field name="inherit" ref="commission.commission_create_invoice_ask_view_form"/>
             <field name="name">commission_create_invoice_ask_form</field>
         </record>

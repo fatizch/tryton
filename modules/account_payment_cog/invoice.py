@@ -37,7 +37,7 @@ class Invoice:
         line = pool.get('account.move.line').__table__()
         move = pool.get('account.move').__table__()
         invoice = cls.__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         result = {x.id: [] for x in invoices}
         for invoices_slice in grouped_slice(invoices):

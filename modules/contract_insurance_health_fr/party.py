@@ -232,7 +232,7 @@ class HealthPartyComplement:
         0000'''
 
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         fund = pool.get('health.insurance_fund').__table__()
         codes = defaultdict(list)
         for complement in complements:

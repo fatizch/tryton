@@ -818,7 +818,7 @@ class LoanContractDisplayer(model.CoopView):
         if contract_id not in [x.id for x in self.endorsement.contracts]:
             add_endorsement = True
 
-        with Transaction().new_cursor():
+        with Transaction().new_transaction() as transaction:
             try:
                 if add_endorsement:
                     ContractEndorsement(contract=contract_id,
@@ -836,7 +836,7 @@ class LoanContractDisplayer(model.CoopView):
                 _contract.calculate()
                 new_end_date = _contract.end_date
             finally:
-                Transaction().cursor.rollback()
+                transaction.rollback()
 
         self.new_end_date = new_end_date
 

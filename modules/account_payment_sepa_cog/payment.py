@@ -502,7 +502,7 @@ class Payment:
         # create invoice
         invoice = Invoice(
             company=self.company,
-            type='out_invoice',
+            type='out',
             journal=journal,
             party=self.party,
             invoice_address=self.party.main_address,
@@ -532,7 +532,7 @@ class Payment:
                 unit=None,
                 unit_price=self.currency.round(amount),
                 taxes=0,
-                invoice_type='out_invoice',
+                invoice_type='out',
                 account=account_for_billing,
                 )]
 
@@ -563,11 +563,11 @@ class Journal:
             return super(Journal, self).get_next_possible_payment_date(line,
                 day)
         if self.last_sepa_receivable_payment_creation_date:
-            sync_date = max(line['maturity_date'], utils.today(),
+            sync_date = max(line.maturity_date, utils.today(),
                 self.last_sepa_receivable_payment_creation_date +
                 relativedelta(days=1))
         else:
-            sync_date = max(line['maturity_date'], utils.today())
+            sync_date = max(line.maturity_date, utils.today())
         return coop_date.get_next_date_in_sync_with(sync_date, day)
 
     @classmethod

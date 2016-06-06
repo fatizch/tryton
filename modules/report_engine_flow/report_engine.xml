@@ -6,7 +6,6 @@
         <!-- ##################### -->
         <record model="ir.ui.view" id="report_template_form">
             <field name="model">report.template</field>
-            <field name="type">form</field>
             <field name="inherit" ref="report_engine.report_template_form"/>
             <field name="name">report_template_form</field>
         </record>

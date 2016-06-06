@@ -6,6 +6,7 @@ from .address import *
 from .test_case import *
 from .relationship import *
 from .res import *
+from . configuration import *
 
 from trytond.modules.cog_utils import expand_tree
 PartyMenuTreeExpansion = expand_tree('party.synthesis.menu')
@@ -15,6 +16,7 @@ def register():
     Pool.register(
         User,
         Party,
+        Configuration,
         PartyIdentifier,
         PartyCategory,
         Address,

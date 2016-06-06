@@ -74,15 +74,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test010_store_prices(self):
         # Note : setting "id" is required so that object comparison work as
         # expected
-        rated_entity_1 = self.Product()
-        rated_entity_1.id = 10
-        rated_entity_2 = self.Product()
-        rated_entity_2.id = 20
-        rated_entity_3 = self.Fee()
-        rated_entity_3.id = 30
+        rated_entity_1 = self.Product(10)
+        rated_entity_2 = self.Product(20)
+        rated_entity_3 = self.Fee(30)
 
-        parent_1 = self.Contract()
-        parent_1.id = 100
+        parent_1 = self.Contract(100)
         parent_1.final_end_date = None
         some_previous_line = self.Premium()
         some_previous_line.rated_entity = rated_entity_1
@@ -94,13 +90,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
         some_previous_line.taxes = []
         parent_1.premiums = [some_previous_line]
 
-        parent_2 = self.Option()
-        parent_2.id = 200
+        parent_2 = self.Option(200)
         parent_2.final_end_date = datetime.date(2002, 4, 16)
         parent_2.premiums = []
 
-        parent_3 = self.ContractFee()
-        parent_3.id = 200
+        parent_3 = self.ContractFee(200)
         parent_3.premiums = []
 
         new_line_1 = mock.Mock()

@@ -2,6 +2,7 @@
 # #Comment# #Imports
 import datetime
 from proteus import config, Model, Wizard
+from trytond.modules.currency.tests.tools import get_currency
 
 # #Comment# #Init Database
 config = config.set_trytond()
@@ -29,7 +30,6 @@ Clause = Model.get('clause')
 Company = Model.get('company.company')
 Contract = Model.get('contract')
 Country = Model.get('country.country')
-Currency = Model.get('currency.currency')
 Endorsement = Model.get('endorsement')
 EndorsementDefinition = Model.get('endorsement.definition')
 EndorsementPart = Model.get('endorsement.part')
@@ -41,7 +41,7 @@ Sequence = Model.get('ir.sequence')
 User = Model.get('res.user')
 
 # #Comment# #Fetch Currency
-euro = Currency.find([('code', '=', 'EUR')])[0]
+currency = get_currency(code='EUR')
 
 # #Comment# #Create or fetch Country
 countries = Country.find([('code', '=', 'FR')])
@@ -54,7 +54,7 @@ else:
 # #Comment# #Create Company
 comp_party = Party(name='Main Company')
 comp_party.save()
-company = Company(party=comp_party, currency=euro)
+company = Company(party=comp_party, currency=currency)
 company.save()
 user = User(1)
 user.main_company = company
@@ -90,6 +90,7 @@ quote_sequence.company = company
 quote_sequence.save()
 product = Product()
 product.company = company
+product.currency = currency
 product.name = 'Test Product'
 product.code = 'test_product'
 product.contract_generator = contract_sequence

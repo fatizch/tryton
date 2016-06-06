@@ -28,7 +28,7 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
 
     @classmethod
     def select_ids(cls, treatment_date, extra_args):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         pool = Pool()
 
         contract = pool.get('contract').__table__()
@@ -69,7 +69,7 @@ class PostInvoiceContractBatch(batch.BatchRoot):
 
     @classmethod
     def select_ids(cls, treatment_date, extra_args):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         pool = Pool()
 
         account_invoice = pool.get('account.invoice').__table__()

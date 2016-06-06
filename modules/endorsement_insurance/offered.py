@@ -23,11 +23,6 @@ class EndorsementPart:
         'Covered Element Fields', states={
             'invisible': Eval('kind', '') != 'covered_element'},
         depends=['kind'], delete_missing=True)
-    extra_premium_fields_ = fields.Many2Many(
-        'endorsement.contract.extra_premium.field', 'endorsement_part',
-        'field', 'Extra Premium Fields', states={
-            'invisible': Eval('kind', '') != 'extra_premium'},
-        depends=['kind'])
     extra_premium_fields = fields.One2Many(
         'endorsement.contract.extra_premium.field', 'endorsement_part',
         'Extra Premium Fields', states={
@@ -47,12 +42,6 @@ class EndorsementPart:
         cls.option_fields.states['invisible'] = And(
             cls.option_fields.states['invisible'],
             Eval('kind', '') != 'covered_element')
-
-    @classmethod
-    def __post_setup__(cls):
-        super(EndorsementPart, cls).__post_setup__()
-        cls.extra_premium_fields_.domain = Pool().get(
-            'endorsement.contract.extra_premium.field')._fields['field'].domain
 
     def on_change_with_endorsed_model(self, name=None):
         if self.kind in ('covered_element', 'extra_premium'):

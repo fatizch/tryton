@@ -1,51 +1,92 @@
 # vim: set ft=sh:
 # test management
 
-_coog_test_enter() { # set test context
+_coog_test_modules() { # list all linked modules
+        for f in $COOG_TRYTOND/trytond/modules/*
+        do
+                [ -d $f ] && basename $f
+        done
+}
+
+_coog_test_env() { # set test env
         TRYTOND_CONFIG=$COOG_CONF_TEST
         [ -z $TRYTOND_CONFIG ] && echo "missing conf file" && return 1
-        export TRYTOND_CONFIG
         TRYTOND_DATABASE_URI=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_TEST 2> /dev/null`
-        [ $? -eq 0 ] && [ ! -z "$TRYTOND_DATABASE_URI" ] && export TRYTOND_DATABASE_URI
-        export DB_NAME="test_"`date +%s%N`
+        [ $? -ne 0 ] && unset TRYTOND_DATABASE_URI
+        unset DB_NAME
         export DO_NOT_TEST_CASES=1
 }
 
-_coog_test_exec() {
-        run-tests.py -c $TRYTOND_CONFIG -vv -m $*
-}
-
-_coog_test_leave() { # clean test config
-        coog_test_dropdb $DB_NAME
-}
-
-coog_test_dropdb() { # drop db from test database - <db>
-        local db_vars
-        [ -z "$TRYTOND_DATABASE_URI" ] && TRYTOND_DATABASE_URI="sqlite://"
-        db_vars=`echo $TRYTOND_DATABASE_URI | python $COOG_BIN/parse-url.py`
-        [ $? -ne 0 ] && echo "failed to parse db uri" && return 1
-        local db_sys
-        db_sys=`echo "$db_vars" | sed -n 1p`
-        if [ "$db_sys" = "sqlite" ]
+coog_test_generate() { # generate test jobs - [module*]
+        _coog_test_env || return $!
+        local modules
+        if [ $# -eq 0 ]
         then
-                local db_path
-                db_path=`python $COOG_BIN/parse-config.py database path < $COOG_CONF_TEST`
-                [ $? -ne 0 ] && echo "failed to parse conf file" && return 1
-                local db_full_path
-                db_full_path="$db_path"/"$1".sqlite
-                [ -f $db_full_path ] && rm -vf $db_full_path
-        elif [ "$db_sys" = "postgresql" ]
-        then
-                PGHOST=`echo "$db_vars" | sed -n 2p`
-                [ ! -z $PGHOST ] && export PGHOST
-                PGPORT=`echo "$db_vars" | sed -n 3p`
-                [ ! -z $PGPORT ] && export PGPORT
-                PGUSER=`echo "$db_vars" | sed -n 4p`
-                [ ! -z $PGUSER ] && export PGUSER
-                PGPASSWORD=`echo "$db_vars" | sed -n 5p`
-                [ ! -z $PGPASSWORD ] && export PGPASSWORD
-                dropdb -e $1 && return
+                modules=`_coog_test_modules`
+        else
+                modules=$*
         fi
+        python $COOG_BIN/test-generate.py $modules
+}
+
+coog_test_start() { # start test workers - <concurrency>
+        [ -z $1 ] && echo missing workers number && return 1
+        _coog_test_env || return $!
+        coog_rq_qstart test $COOG_TMP/$COOG_FILE_TEST $1
+}
+
+coog_test_exec() { # exec tests - <concurrency> [module*]
+        local nb; nb=$1; shift
+        coog_test_generate $*
+        coog_test_start $nb
+}
+
+coog_test_stop() { # stop test workers
+        coog_rq_qstop $COOG_TMP/$COOG_FILE_TEST
+}
+
+coog_test_status() { # status of current run
+        coog_rq_cli info
+        echo ""
+        echo ""
+        echo "Currently running :"
+        echo ""
+        coog_test_query list wait | grep `date -Idate`
+        echo ""
+        echo "Failures :"
+        echo ""
+        coog_test_query list fail | more
+}
+
+
+coog_test_check() { # watch current status live
+        watch -n 1 "coog test status"
+}
+
+coog_test_query() { # query test redis - [arg*]
+        if [ list = "$1" ]
+        then
+                coog_redis_eval rq redis/test.lua $* | column -t | less
+        else
+                coog_redis_eval rq redis/test.lua $*
+        fi
+}
+
+coog_test_log() { # print batch logs
+        local args
+        local fs
+        fs=`ls $COOG_TMP/$COOG_FILE_TEST*.out 2> /dev/null`
+        [ $? -ne 0 ] && echo no logs && return
+        local f
+        for f in "$fs"
+        do
+                args="$args $f"
+        done
+        cat $* $args
+}
+
+coog_test_logclear() {
+        rm -vf $COOG_TMP/$COOG_FILE_TEST*.out
 }
 
 coog_test_py() { # launch py.test on a module - <module> - all (further args are fwded to py.test)
@@ -63,11 +104,15 @@ coog_test_py() { # launch py.test on a module - <module> - all (further args are
         fi
         py.test $module --ignore=$module/test_case.py --doctest-glob=scenario*.rst $*
         cd $old_wd
-        _coog_test_leave
 }
 
-coog_test_main() { # launch unit tests on a module - <module> - default: all
-        _coog_test_enter || return $?
-        _coog_test_exec $*
-        _coog_test_leave
+coog_test_manual() { # interactively launch tests - <module> - default: all
+        TRYTOND_CONFIG=$COOG_CONF_TEST
+        [ -z $TRYTOND_CONFIG ] && echo "missing conf file" && return 1
+        export TRYTOND_CONFIG
+        TRYTOND_DATABASE_URI=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_TEST 2> /dev/null`
+        [ $? -eq 0 ] && [ ! -z "$TRYTOND_DATABASE_URI" ] && export TRYTOND_DATABASE_URI
+        export DB_NAME="test_"`date +%s%N`
+        export DO_NOT_TEST_CASES=1
+        run-tests.py -c $TRYTOND_CONFIG -vv -m $*
 }

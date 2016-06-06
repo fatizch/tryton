@@ -6,19 +6,16 @@
         </record>
         <record model="ir.ui.view" id="address_view_form">
             <field name="model">party.address</field>
-            <field name="type">form</field>
             <field name="inherit" ref="party.address_view_form"/>
             <field name="name">address_form</field>
         </record>
         <record model="ir.ui.view" id="address_view_tree_sequence">
             <field name="model">party.address</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="party.address_view_tree_sequence"/>
             <field name="name">address_tree_sequence</field>
         </record>
         <record model="ir.ui.view" id="address_view_tree">
             <field name="model">party.address</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="party.address_view_tree"/>
             <field name="name">address_tree</field>
         </record>

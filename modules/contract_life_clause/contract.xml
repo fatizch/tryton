@@ -6,7 +6,6 @@
         <!-- ################### -->
         <record model="ir.ui.view" id="option_view_form">
             <field name="model">contract.option</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract.option_view_form"/>
             <field name="name">option_form</field>
         </record>

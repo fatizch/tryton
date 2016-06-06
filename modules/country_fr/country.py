@@ -3,7 +3,6 @@ import re
 from trytond.pool import PoolMeta
 from trytond.model import Unique
 from trytond import backend
-from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import coop_string, fields
 
@@ -35,8 +34,7 @@ class Zip:
     def __register__(cls, module_name):
         super(Zip, cls).__register__(module_name)
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        TableHandler(cursor, cls, module_name).drop_constraint(
+        TableHandler(cls, module_name).drop_constraint(
             'zip_uniq')
 
     @classmethod

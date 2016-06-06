@@ -17,9 +17,9 @@ class CoogCache(LRUDict):
 
 def get_cache_holder():
     # this cache is owned by the Transaction. So it is thread safe.
-    cursor_cache = Transaction().cursor.cache
-    coog_cache = cursor_cache.get('__coog__', None)
+    transaction_cache = Transaction().cache
+    coog_cache = transaction_cache.get('__coog__', None)
     if coog_cache is None:
         coog_cache = CoogCache()
-        cursor_cache['__coog__'] = coog_cache
+        transaction_cache['__coog__'] = coog_cache
     return coog_cache

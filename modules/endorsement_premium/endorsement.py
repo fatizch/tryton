@@ -1,6 +1,5 @@
 from trytond.pool import PoolMeta
 from trytond import backend
-from trytond.transaction import Transaction
 
 
 __all__ = [
@@ -27,10 +26,9 @@ class Premium:
 
         # Migrate from 1.6 : Remove premium-tax relation
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        if TableHandler.table_exist(cursor,
+        if TableHandler.table_exist(
                 'contract_premium-account_tax__history'):
-            TableHandler.drop_table(cursor, 'contract.premium-account.tax',
+            TableHandler.drop_table('contract.premium-account.tax',
                 'contract_premium-account_tax__history', cascade=True)
 
 

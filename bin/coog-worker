@@ -41,26 +41,28 @@ _coog_worker_bak() { # backup runtime files - <wid> [pid]
 
 }
 
-coog_worker_start() { # start worker - <wid>
+coog_worker_start() { # start worker - <wid> [args]
         [ -z $1 ] && >&2 echo missing worker id && return 1
+        local wid; wid=$1; shift
         local pid_file
-        pid_file=`_coog_worker_file $1 pid`
-        [ -e $pid_file ] && echo worker $1: already running "->" stop or restart && return 1
+        pid_file=`_coog_worker_file $wid pid`
+        [ -e $pid_file ] && echo worker $wid: already running "->" stop or restart && return 1
         local conf_file
-        conf_file=`_coog_worker_file $1 conf`
-        [ -e $conf_file ] && echo worker $1: conf file exists "->" clean manually && return 1
+        conf_file=`_coog_worker_file $wid conf`
+        [ -e $conf_file ] && echo worker $wid: conf file exists "->" clean manually && return 1
         local out_file
-        out_file=`_coog_worker_file $1 out`
-        [ -e $out_file ] && echo worker $1: out file exists "->" clean manually && return 1
+        out_file=`_coog_worker_file $wid out`
+        [ -e $out_file ] && echo worker $wid: out file exists "->" clean manually && return 1
         local old_port
-        old_port=`python $COOG_BIN/parse-config.py jsonrpc listen < $COOG_CONF_SRV | cut -d ":" -f 2` || return $?
-        new_port=`echo "$old_port+$1" | bc`
+        old_port=`python $COOG_BIN/parse-config.py web listen < $COOG_CONF_SRV | cut -d ":" -f 2` || return $?
+        new_port=`echo "$old_port+$wid" | bc`
         sed -e "s,$old_port,$new_port,g" $COOG_CONF_SRV > $conf_file
         local args
-        args="--logconf $COOG_CONF_LOG"
         [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
+        [ ! -z $COOG_CONF_LOG ] && args="--logconf $COOG_CONF_LOG"
+        args="$args $*"
         nohup trytond -c $conf_file --pidfile $pid_file $args > $out_file &
-        echo worker $1: started
+        echo worker $wid: started
 }
 
 coog_worker_stop() { # stop worker (gracefully) - <wid>
@@ -142,12 +144,14 @@ coog_worker_ps() { # print worker process info - <wid>
         echo worker $1: $line
 }
 
-coog_worker_multi() { # execution action on multi workers - <act> <nb>
+coog_worker_multi() { # execution action on multi workers - <act> <nb> [args]
         [ $# -lt 2 ] && >&2 echo missing action and workers number && return 1
+        local act; act=$1; shift
+        local nb; nb=$1; shift
         local wid=0
-        while [ $wid -lt $2 ]
+        while [ $wid -lt $nb ]
         do
                 wid=$((wid+1))
-                coog_worker_$1 $wid
+                coog_worker_$act $wid $*
         done
 }

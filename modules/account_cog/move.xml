@@ -6,7 +6,6 @@
         <!-- ################# -->
         <record model="ir.ui.view" id="move_template_view_form">
             <field name="model">account.move.template</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account.move_template_view_form"/>
             <field name="name">move_template_form</field>
         </record>
@@ -67,7 +66,6 @@
         </record>
         <record model="ir.ui.view" id="move_view_form">
             <field name="model">account.move</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account.move_view_form"/>
             <field name="name">move_form</field>
         </record>
@@ -104,7 +102,6 @@
         </record>
         <record model="ir.ui.view" id="reconcile_show_view_form">
             <field name="model">account.reconcile.show</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account.reconcile_show_view_form"/>
             <field name="name">reconcile_show_form</field>
         </record>
@@ -113,7 +110,6 @@
         <!-- ########################## -->
         <record model="ir.ui.view" id="reconcile_lines_writeoff_view_form">
             <field name="model">account.move.reconcile_lines.writeoff</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account.reconcile_lines_writeoff_view_form"/>
             <field name="name">reconcile_lines_writeoff_form</field>
         </record>

@@ -49,7 +49,7 @@ class ContractOption:
     @classmethod
     def sum_of_existing_commission_recoveries(cls, options):
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         commission = pool.get('commission').__table__()
         commissioned_option_column = Column(commission, 'commissioned_option')
 

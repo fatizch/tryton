@@ -3,7 +3,6 @@
     <data>
         <record model="ir.ui.view" id="commission_create_agents_ask_view_form">
             <field name="model">commission.create_agents.ask</field>
-            <field name="type">form</field>
             <field name="inherit" ref="commission_insurance.commission_create_agents_ask_view_form"/>
             <field name="name">commission_create_agents_ask_form</field>
         </record>

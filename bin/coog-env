@@ -12,6 +12,7 @@ _coog_env_files() { # set file names
         COOG_FILE_RQ=coog-rq-$USER
         COOG_FILE_CEL=coog-cel-$USER
         COOG_FILE_BAT=coog-bat-$USER
+        COOG_FILE_TEST=coog-test-$USER
         if [ ! -z $VIRTUAL_ENV ]
         then
                 local venv
@@ -22,13 +23,14 @@ _coog_env_files() { # set file names
                 COOG_FILE_RQ=$COOG_FILE_RQ-$venv
                 COOG_FILE_CEL=$COOG_FILE_CEL-$venv
                 COOG_FILE_BAT=$COOG_FILE_BAT-$venv
+                COOG_FILE_TEST=$COOG_FILE_TEST-$venv
         else
                 echo warn: running outside a virtual env
         fi
 }
 
 _coog_env_paths() { # set paths
-        [ -z $COOG_TMP ] && COOG_TMP=/tmp
+        COOG_TMP=${COOG_TMP:-/tmp}
         COOG_ROOT=`readlink -f ../..`
         COOG_TRYTON=$COOG_ROOT/tryton
         COOG_TRYTOND=$COOG_ROOT/trytond
@@ -44,7 +46,6 @@ _coog_env_conf() { # set conf vars
         COOG_CONF_SRV="$COOG_CONF/trytond.conf"
         COOG_CONF_BAT="$COOG_CONF/batch.conf"
         COOG_CONF_TEST="$COOG_CONF/test.conf"
-        COOG_CONF_LOG="$COOG_CONF/logging.conf"
 }
 
 _coog_env_postgres() { # set postgres vars
@@ -64,21 +65,21 @@ _coog_env_postgres() { # set postgres vars
 }
 
 _coog_env_common() { # set common vars
-        LOG_LEVEL=`python $COOG_BIN/parse-config.py logger_root level < $COOG_CONF_LOG` || return $?
-        [ ! -z $LOG_LEVEL ] && export LOG_LEVEL
+        LOG_LEVEL=${LOG_LEVEL:-INFO}
+        export LOG_LEVEL
         return 0
 }
 
 _coog_env_client() { # set client vars
-        export PYTHONPATH="$COOG_TRYTON:$PYTHONPATH"
+        export PYTHONPATH="$COOG_TRYTON:${PYTHONPATH:-}"
 }
 
 _coog_env_server() { # set server vars
         export PYTHONPATH="$COOG_LIB:$COOG_TRYTOND:$COOG_PROTEUS:$PYTHONPATH"
         TRYTOND_CONFIG="$COOG_CONF_SRV"
         [ ! -z $TRYTOND_CONFIG ] && export TRYTOND_CONFIG
-        TRYTOND_JSONRPC_DATA="$COOG_SAO"
-        [ ! -z $TRYTOND_JSONRPC_DATA ] && export TRYTOND_JSONRPC_DATA
+        TRYTOND_WEB_ROOT="$COOG_SAO"
+        [ ! -z $TRYTOND_WEB_ROOT ] && export TRYTOND_WEB_ROOT
         DB_NAME=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_SRV | python $COOG_BIN/parse-url.py | sed -n 6p` || return $?
         [ ! -z $DB_NAME ] && export DB_NAME
         TRYTOND_CACHE_REDIS=`python $COOG_BIN/parse-config.py cache redis < $COOG_CONF_SRV 2> /dev/null`
@@ -126,6 +127,7 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    COOG_FILE_RQ           "$COOG_FILE_RQ
         echo "    COOG_FILE_CEL          "$COOG_FILE_CEL
         echo "    COOG_FILE_BAT          "$COOG_FILE_BAT
+        echo "    COOG_FILE_TEST         "$COOG_FILE_TEST
         echo "    COOG_TMP               "$COOG_TMP
         echo "    COOG_ROOT              "$COOG_ROOT
         echo "    COOG_TRYTON            "$COOG_TRYTON
@@ -139,7 +141,7 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    COOG_CONF_SRV          "$COOG_CONF_SRV
         echo "    COOG_CONF_BAT          "$COOG_CONF_BAT
         echo "    COOG_CONF_TEST         "$COOG_CONF_TEST
-        echo "    COOG_CONF_LOG          "$COOG_CONF_LOG
+        echo "    COOG_CONF_LOG          "${COOG_CONF_LOG:-}
         echo
         echo "  Exported variables"
         echo "    PYTHONUNBUFFERED       "$PYTHONUNBUFFERED
@@ -151,7 +153,7 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    PGDATABASE             "$PGDATABASE
         echo "    LOG_LEVEL              "$LOG_LEVEL
         echo "    TRYTOND_CONFIG         "$TRYTOND_CONFIG
-        echo "    TRYTOND_JSONRPC_DATA   "$TRYTOND_JSONRPC_DATA
+        echo "    TRYTOND_WEB_ROOT       "$TRYTOND_WEB_ROOT
         echo "    DB_NAME                "$DB_NAME
         echo "    TRYTOND_CACHE_REDIS    "$TRYTOND_CACHE_REDIS
         echo "    TRYTOND_ASYNC_RQ       "$TRYTOND_ASYNC_RQ
@@ -160,7 +162,7 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    TRYTOND_BATCH_CONFIG   "$TRYTOND_BATCH_CONFIG
 }
 
-coog_env_conf() { # print conf file <client|server|batch|test|log>
+coog_env_config() { # print conf file <client|server|batch|test|log>
         [ -z $1 ] && echo missing requested conf && return 1
         if [ $1 = client ]
         then
@@ -192,6 +194,7 @@ coog_env_conf() { # print conf file <client|server|batch|test|log>
         fi
         if [ $1 = log ]
         then
+                [ -z ${COOG_CONF_LOG:-} ] && echo no conf log && return 1
                 echo '# '"conf file: $COOG_CONF_LOG"
                 echo
                 cat $COOG_CONF_LOG

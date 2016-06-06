@@ -48,7 +48,7 @@
     </py:def>
     <CstmrDrctDbtInitn>
         <GrpHdr>
-            <MsgId>${group.reference[:35]}</MsgId>
+            <MsgId>${group.number[:35]}</MsgId>
             <CreDtTm>${datetime.datetime.now().isoformat()}</CreDtTm>
             <!-- Authstn -->
             <NbOfTxs>${len(group.payments)}</NbOfTxs>

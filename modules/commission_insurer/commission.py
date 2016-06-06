@@ -42,7 +42,7 @@ class Commission:
                 ('journal', '=', journal),
                 ('party', '=', party),
                 ('invoice_date', '=', date),
-                ('type', '=', 'in_invoice'),
+                ('type', '=', 'in'),
                 ('state', '=', 'draft'),
                 ], limit=2)
         if matchs:
@@ -53,7 +53,7 @@ class Commission:
             return matchs[0]
         return Invoice(
             company=company,
-            type='in_invoice',
+            type='in',
             journal=journal,
             party=party,
             invoice_address=party.address_get(type='invoice'),
@@ -156,7 +156,7 @@ class Commission:
         move = pool.get('account.move').__table__()
         move_line = pool.get('account.move.line').__table__()
         journal = pool.get('account.journal').__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         if invoice_ids is not None and len(invoice_ids) == 0:
             return [], []
@@ -205,7 +205,7 @@ class Commission:
     def retrieve_commissions(cls, invoices, until_date, insurers):
         pool = Pool()
         commission = pool.get('commission').__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         line = pool.get('account.invoice.line').__table__()
         agent = pool.get('commission.agent').__table__()
         insurer = pool.get('insurer').__table__()
@@ -276,7 +276,7 @@ class Commission:
         line = Line.__table__()
         Commission = pool.get('commission')
         commission = Commission.__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         is_positive = lambda x: not commission_invoice.type.startswith(x.type_)
 
@@ -394,7 +394,7 @@ class CreateInvoicePrincipal(Wizard):
         Agent = pool.get('commission.agent')
         Line = pool.get('account.invoice.line')
         commission = Commission.__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         to_save = []
 
         query = commission.select(
@@ -441,7 +441,7 @@ class CreateInvoicePrincipal(Wizard):
         clean the invoice and lines
         '''
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         Invoice = pool.get('account.invoice')
         Line = pool.get('account.invoice.line')
         MoveLine = pool.get('account.move.line')

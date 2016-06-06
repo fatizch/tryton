@@ -1,7 +1,6 @@
 from trytond import backend
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
-from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, model, coop_string
 
@@ -47,8 +46,7 @@ class Agent:
         super(Agent, cls).__register__(module_name)
         # Migration from 1.3: Drop commissioned_with_agent column
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        agent = TableHandler(cursor, cls)
+        agent = TableHandler(cls)
         if agent.column_exist('commissioned_with_agent'):
             agent.drop_column('commissioned_with_agent')
 

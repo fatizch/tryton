@@ -134,19 +134,6 @@ msgctxt "field:account.move.template,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:account.open_third_party_balance.start,account:"
-msgid "Account"
-msgstr "Compte"
-
-msgctxt "field:account.open_third_party_balance.start,at_date:"
-msgid "At date"
-msgstr "À la date"
-
-msgctxt ""
-"field:account.open_third_party_balance.start,third_party_balance_option:"
-msgid "Balance Option"
-msgstr "Option de compensation"
-
 msgctxt "field:account.period,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -310,16 +297,6 @@ msgstr "Menu Paiement Synthèse Tiers "
 msgctxt "selection:account.move,kind:"
 msgid ""
 msgstr " "
-
-msgctxt ""
-"selection:account.open_third_party_balance.start,third_party_balance_option:"
-msgid "All"
-msgstr "Toutes"
-
-msgctxt ""
-"selection:account.open_third_party_balance.start,third_party_balance_option:"
-msgid "Only Unbalanced Party"
-msgstr "Seulement les tiers non balancés"
 
 msgctxt "selection:ir.test_case,fiscal_year_periods_frequency:"
 msgid "Half yearly"
@@ -505,17 +482,13 @@ msgctxt "model:ir.ui.menu,name:account.menu_reconcile"
 msgid "Reconcile Accounts"
 msgstr "Lettrer les comptes"
 
-msgctxt "odt:account.aged_balance:account."
+msgctxt "report:account.aged_balance:account."
 msgid "Party"
 msgstr "Tiers"
 
-msgctxt "odt:account.move.general_journal:account."
+msgctxt "report:account.move.general_journal:account."
 msgid "Posted"
 msgstr "Emis"
-
-msgctxt "odt:account.third_party_balance:account."
-msgid "Party"
-msgstr "Tiers"
 
 msgctxt "selection:account.account,kind:account."
 msgid "Receivable"

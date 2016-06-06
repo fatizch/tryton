@@ -246,7 +246,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0035_revert_endorsement(self):
         # WARNING: No dependency, commit required for the history / write dates
         # to kick in properly
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         contract, = self.Contract.search([
                 ('product.code', '=', 'AAA'),
@@ -274,13 +274,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
                         }}})
 
         endorsement.in_progress([endorsement])
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         contract = endorsement.contracts[0]
         self.assertEqual(contract.contract_number, previous_contract_number)
         contract.contract_number = 'in_progress'
         contract.save()
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         contract = endorsement.contracts[0]
         contract_endorsement, = endorsement.contract_endorsements
@@ -288,7 +288,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(endorsement.application_date, None)
         self.assertEqual(contract.contract_number, 'in_progress')
         endorsement.apply([endorsement])
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         contract = endorsement.contracts[0]
         contract_endorsement, = endorsement.contract_endorsements
@@ -299,7 +299,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(contract_endorsement.base_instance.contract_number,
             previous_contract_number)
         endorsement.cancel([endorsement])
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         endorsement = self.Endorsement(endorsement.id)
         contract = endorsement.contracts[0]
@@ -310,25 +310,25 @@ class ModuleTestCase(test_framework.CoopTestCase):
         # to keep on testing
         endorsement.state = 'draft'
         endorsement.save()
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         self.assertEqual(endorsement.rollback_date, None)
         endorsement.in_progress([endorsement])
-        Transaction().cursor.commit()
+        Transaction().commit()
         contract = endorsement.contracts[0]
         contract.apply_in_progress_endorsement([contract])
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         self.assertEqual(endorsement.state, 'applied')
         self.assertRaises(UserError, contract.apply_in_progress_endorsement,
             [contract])
         endorsement.cancel([endorsement])
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         endorsement.state = 'draft'
         endorsement.save()
         endorsement.in_progress([endorsement])
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         contract.revert_current_endorsement([contract])
 
@@ -389,7 +389,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 values)
 
     def test0080_activation_history_getters(self):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         product, = self.Product.search([
                 ('code', '=', 'AAA'),
                 ])
@@ -407,7 +407,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         contract.save()
         cursor.execute('delete from contract_activation_history where '
             'contract = %s' % contract.id)
-        cursor.commit()
+        Transaction().commit()
 
         # test consultation with no matching entry in history table
         with Transaction().set_context(

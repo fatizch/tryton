@@ -1,10 +1,10 @@
 # #Comment# #Imports
 import datetime
-from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 from proteus import config, Model, Wizard
 
 from trytond.modules.company.tests.tools import create_company, get_company
+from trytond.modules.currency.tests.tools import get_currency
 
 # #Comment# #Init Database
 config = config.set_trytond()
@@ -39,8 +39,6 @@ Contract = Model.get('contract')
 ContractInvoice = Model.get('contract.invoice')
 ContractPremium = Model.get('contract.premium')
 Country = Model.get('country.country')
-Currency = Model.get('currency.currency')
-CurrencyRate = Model.get('currency.currency.rate')
 FiscalYear = Model.get('account.fiscalyear')
 Insurer = Model.get('insurer')
 ItemDescription = Model.get('offered.item.description')
@@ -62,9 +60,7 @@ product_start_date = datetime.date(2014, 1, 1)
 contract_start_date = datetime.date(2014, 4, 1)
 
 # #Comment# #Create or fetch Currency
-currency, = Currency.find([('code', '=', 'EUR')])
-CurrencyRate(date=product_start_date, rate=Decimal('1.0'),
-    currency=currency).save()
+currency = get_currency(code='EUR')
 
 # #Comment# #Create or fetch Country
 countries = Country.find([('code', '=', 'FR')])
@@ -251,6 +247,7 @@ quote_sequence.save()
 coverage = OptionDescription()
 coverage.insurer = insurer
 coverage.company = company
+coverage.currency = currency
 coverage.name = u'Test Coverage1'
 coverage.code = u'test_coverage1'
 coverage.item_desc = item_description
@@ -261,6 +258,7 @@ product = Product()
 coverage2 = OptionDescription()
 coverage2.insurer = insurer
 coverage2.company = company
+coverage2.currency = currency
 coverage2.name = u'Test Coverage2'
 coverage2.code = u'test_coverage2'
 coverage2.item_desc = item_description
@@ -271,6 +269,7 @@ coverage2.taxes.append(tax1)
 coverage2.taxes_for_waiver.append(tax_waiver)
 coverage2.save()
 product.company = company
+product.currency = currency
 product.name = 'Test Product'
 product.code = 'test_product'
 product.contract_generator = contract_sequence

@@ -7,7 +7,6 @@
         <record model="ir.ui.view" id="contract_view_form">
             <field name="model">contract</field>
             <field name="inherit" ref="contract.contract_view_form"/>
-            <field name="type">form</field>
             <field name="name">contract_form</field>
         </record>
         <!-- ################################## -->
@@ -15,7 +14,6 @@
         <!-- ################################## -->
         <record model="ir.ui.view" id="sub_status_view_form">
             <field name="model">contract.sub_status</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract.sub_status_view_form"/>
             <field name="name">sub_status_form</field>
         </record>
@@ -42,13 +40,11 @@
         <!-- ########### -->
         <record model="ir.ui.view" id="premium_view_form">
             <field name="model">contract.premium</field>
-            <field name="type">form</field>
             <field name="inherit" ref="premium.premium_view_form"/>
             <field name="name">premium_form</field>
         </record>
         <record model="ir.ui.view" id="contract_view_list">
             <field name="model">contract</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="contract.contract_view_tree"/>
             <field name="name">contract_list</field>
         </record>

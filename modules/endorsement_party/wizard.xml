@@ -63,14 +63,12 @@
         </record>
         <record model="ir.ui.view" id="party_change_relation_displayer_view_tree">
             <field name="model">endorsement.party.change_relation_displayer</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="party_cog.relation_view_editable_list"/>
             <field name="name">party_change_relation_displayer_tree</field>
         </record>
         <record model="ir.ui.view" id="party_change_relation_displayer_view_form">
             <field name="model">endorsement.party.change_relation_displayer</field>
             <field name="inherit" ref="party_relationship.relation_view_form"/>
-            <field name="type">form</field>
             <field name="name">party_change_relation_displayer_form</field>
         </record>
         <!-- ###################### -->
@@ -78,7 +76,6 @@
         <!-- ###################### -->
         <record model="ir.ui.view" id="select_endorsement_view_form">
             <field name="model">endorsement.start.select_endorsement</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement.select_endorsement_view_form"/>
             <field name="name">select_endorsement_form</field>
         </record>

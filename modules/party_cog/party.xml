@@ -8,13 +8,11 @@
             ******************************************* -->
         <record model="ir.ui.view" id="party_view_tree">
             <field name="model">party.party</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="party.party_view_tree"/>
             <field name="name">party_tree</field>
         </record>
         <record model="ir.ui.view" id="party_view_form">
             <field name="model">party.party</field>
-            <field name="type">form</field>
             <field name="inherit" ref="party.party_view_form"/>
             <field name="name">party_form</field>
         </record>
@@ -67,7 +65,6 @@
         </record>
         <record model="ir.ui.view" id="person_view_form">
             <field name="model">party.party</field>
-            <field name="type">form</field>
             <field name="inherit" ref="party.party_view_form"/>
             <field name="arch" type="xml"/>
         </record>
@@ -108,7 +105,6 @@
         </record>
         <record model="ir.ui.view" id="company_view_form">
             <field name="model">party.party</field>
-            <field name="type">form</field>
             <field name="inherit" ref="party.party_view_form"/>
             <field name="arch" type="xml"/>
         </record>

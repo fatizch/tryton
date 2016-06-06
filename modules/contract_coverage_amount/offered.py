@@ -1,6 +1,5 @@
 from trytond import backend
 from trytond.pool import PoolMeta
-from trytond.transaction import Transaction
 from trytond.pyson import If, Bool, Eval
 
 from trytond.modules.cog_utils import model, fields
@@ -38,21 +37,20 @@ class CoverageAmountRule(RuleMixin, model.CoopSQL, model.CoopView):
 
     @classmethod
     def __setup__(cls):
+        super(CoverageAmountRule, cls).__setup__()
         cls.rule.domain.append(If(
                 Bool(Eval('free_input', False)),
                 [('type_', '=', 'coverage_amount_validation')],
                 [('type_', '=', 'coverage_amount_selection')],
                 ))
         cls.rule.depends.append('free_input')
-        super(CoverageAmountRule, cls).__setup__()
 
     @classmethod
     def __register__(cls, module_name):
         super(CoverageAmountRule, cls).__register__(module_name)
         # Migration from 1.4: Rewrite whole coverage amount rule
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        rule = TableHandler(cursor, cls)
+        rule = TableHandler(cls)
         for var_name in ['kind', 'amounts', 'amount_start', 'amount_end',
                 'amount_step', 'other_coverage', 'template',
                 'template_behaviour', 'start_date', 'end_date', 'offered',

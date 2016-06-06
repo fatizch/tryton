@@ -4,8 +4,8 @@
         <page name="covered_elements_fields">
             <field name="covered_elements_fields"/>
         </page>
-        <page name="extra_premium_fields_">
-            <field name="extra_premium_fields_"/>
+        <page name="extra_premium_fields">
+            <field name="extra_premium_fields"/>
         </page>
     </xpath>
 </data>

@@ -6,7 +6,6 @@
         <!-- ############################################################ -->
         <record model="ir.ui.view" id="test_case_form">
             <field name="model">ir.test_case</field>
-            <field name="type">form</field>
             <field name="inherit" ref="cog_utils.test_case_form"/>
             <field name="name">test_case_form</field>
         </record>

@@ -175,8 +175,7 @@ class Line(export.ExportImportMixin):
     def __register__(cls, module_name):
         super(Line, cls).__register__(module_name)
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        table = TableHandler(cursor, cls, module_name)
+        table = TableHandler(cls, module_name)
 
         # These indexes optimizes invoice generation
         # And certainly other coog services
@@ -361,7 +360,7 @@ class Reconcile:
         move = Move.__table__()
         Account = pool.get('account.account')
         account = Account.__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         balance = line.debit - line.credit
         cond = ((line.reconciliation == Null) & account.reconcile &
             (move.state != 'draft'))
@@ -387,7 +386,7 @@ class Reconcile:
         line = Line.__table__()
         Move = pool.get('account.move')
         move = Move.__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         balance = line.debit - line.credit
         cond = ((line.reconciliation == Null) & (move.state != 'draft')

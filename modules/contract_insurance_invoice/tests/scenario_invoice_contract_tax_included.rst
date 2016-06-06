@@ -8,6 +8,7 @@ Imports::
     >>> from proteus import config, Model, Wizard
     >>> from decimal import Decimal
     >>> from trytond.modules.company.tests.tools import create_company, get_company
+    >>> from trytond.modules.currency.tests.tools import get_currency
 
 Init Database::
 
@@ -36,8 +37,6 @@ Get Models::
     >>> ContractInvoice = Model.get('contract.invoice')
     >>> ContractPremium = Model.get('contract.premium')
     >>> Country = Model.get('country.country')
-    >>> Currency = Model.get('currency.currency')
-    >>> CurrencyRate = Model.get('currency.currency.rate')
     >>> FiscalYear = Model.get('account.fiscalyear')
     >>> Option = Model.get('contract.option')
     >>> OptionDescription = Model.get('offered.option.description')
@@ -55,12 +54,11 @@ Constants::
 
     >>> product_start_date = datetime.date(2014, 1, 1)
     >>> contract_start_date = datetime.date(2014, 4, 10)
+    >>> contract_end_date = datetime.date(2014, 6, 30)
 
 Create or fetch Currency::
 
-    >>> currency, = Currency.find([('code', '=', 'EUR')])
-    >>> CurrencyRate(date=product_start_date, rate=Decimal('1.0'),
-    ...     currency=currency).save()
+    >>> currency = get_currency(code='EUR')
 
 Create or fetch Country::
 
@@ -233,6 +231,7 @@ Create Product::
     >>> quote_sequence.save()
     >>> coverage = OptionDescription()
     >>> coverage.company = company
+    >>> coverage.currency = currency
     >>> coverage.name = u'Test Coverage'
     >>> coverage.code = u'test_coverage'
     >>> coverage.start_date = product_start_date
@@ -244,6 +243,7 @@ Create Product::
     >>> coverage.save()
     >>> product = Product()
     >>> product.company = company
+    >>> product.currency = currency
     >>> product.name = 'Test Product'
     >>> product.code = 'test_product'
     >>> product.contract_generator = contract_sequence
@@ -273,6 +273,7 @@ Create Test Contract::
     >>> contract.company = company
     >>> contract.subscriber = subscriber
     >>> contract.start_date = contract_start_date
+    >>> contract.end_date = contract_end_date
     >>> contract.product = product
     >>> contract.status = 'quote'
     >>> contract.billing_informations.append(BillingInformation(date=None,
@@ -285,7 +286,8 @@ Create Test Contract::
     ...         ))
     >>> contract.save()
     >>> Contract.first_invoice([contract.id], config.context)
-    >>> contract_invoice = ContractInvoice.find([('contract', '=', contract.id)])[0]
+    >>> contract_invoice, = ContractInvoice.find([('contract', '=', contract.id)],
+    ...     order=[('start', 'ASC')], limit=1)
     >>> contract_invoice.invoice.total_amount == Decimal('100')
     True
     >>> premium = contract.options[0].premiums[0]
@@ -295,8 +297,6 @@ Create Test Contract::
     ...         Decimal(1) / 100)
     ...     premium.save()
     ...     Contract.first_invoice([contract.id], config.context)
-    ...     contract_invoice = ContractInvoice.find([('contract', '=', contract.id)])[
-    ...         0]
-    ...     res.append(contract_invoice.invoice.total_amount == premium.amount)
-    >>> all(res)
-    True
+    ...     contract_invoice, = ContractInvoice.find(
+    ...         [('contract', '=', contract.id)], order=[('start', 'ASC')], limit=1)
+    ...     assert contract_invoice.invoice.total_amount == premium.amount

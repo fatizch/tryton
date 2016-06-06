@@ -169,7 +169,7 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
     def get_portfolio_size(cls, instances, name):
         pool = Pool()
         result = defaultdict(int)
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         party = pool.get('party.party').__table__()
         cursor.execute(
             *party.select(party.portfolio, Count(party.id),

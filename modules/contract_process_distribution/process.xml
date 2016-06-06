@@ -3,7 +3,6 @@
     <data>
         <record model="ir.ui.view" id="contract_subscribe_find_process_form">
             <field name="model">contract.subscribe.find_process</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract_insurance_process.contract_subscribe_find_process_form"/>
             <field name="name">contract_subscribe_find_process_form</field>
         </record>

@@ -3,7 +3,7 @@
 import datetime
 from proteus import config, Model, Wizard
 from dateutil.relativedelta import relativedelta
-from decimal import Decimal
+from trytond.modules.currency.tests.tools import get_currency
 
 # #Comment# #Init Database
 config = config.set_trytond()
@@ -28,8 +28,6 @@ wizard.execute('upgrade')
 Company = Model.get('company.company')
 Contract = Model.get('contract')
 Country = Model.get('country.country')
-Currency = Model.get('currency.currency')
-CurrencyRate = Model.get('currency.currency.rate')
 Endorsement = Model.get('endorsement')
 EndorsementContract = Model.get('endorsement.contract')
 EndorsementContractField = Model.get('endorsement.contract.field')
@@ -54,16 +52,7 @@ contract_start_date = datetime.date(2014, 4, 10)
 new_contract_start_date = datetime.date(2014, 10, 21)
 
 # #Comment# #Create or fetch Currency
-currencies = Currency.find([('code', '=', 'USD')])
-if not currencies:
-    currency = Currency(name='US Dollar', symbol=u'$', code='USD',
-        rounding=Decimal('0.01'), mon_grouping='[]',
-        mon_decimal_point='.')
-    currency.save()
-    CurrencyRate(date=today + relativedelta(month=1, day=1),
-        rate=Decimal('1.0'), currency=currency).save()
-else:
-    currency, = currencies
+currency = get_currency(code='EUR')
 
 # #Comment# #Create or fetch Country
 countries = Country.find([('code', '=', 'FR')])
@@ -115,12 +104,14 @@ quote_sequence.company = company
 quote_sequence.save()
 coverage = OptionDescription()
 coverage.company = company
+coverage.currency = currency
 coverage.name = 'Test Coverage'
 coverage.code = 'test_coverage'
 coverage.start_date = product_start_date
 coverage.save()
 product = Product()
 product.company = company
+product.currency = currency
 product.name = 'Test Product'
 product.code = 'test_product'
 product.contract_generator = contract_sequence

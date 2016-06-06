@@ -10,13 +10,11 @@
         <!-- ##################### -->
         <record model="ir.ui.view" id="template_view_form">
             <field name="model">product.template</field>
-            <field name="type">form</field>
             <field name="inherit" ref="product.template_view_form"/>
             <field name="name">template_form</field>
         </record>
         <record model="ir.ui.view" id="template_view_list">
             <field name="model">product.template</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="product.template_view_tree"/>
             <field name="name">template_list</field>
         </record>
@@ -67,7 +65,6 @@
         <menuitem parent="menu_main_product" sequence="10" id="menu_category_list" action="product.act_category_list"/>
         <record model="ir.ui.view" id="category_view_form">
             <field name="model">product.category</field>
-            <field name="type">form</field>
             <field name="inherit" ref="product.category_view_form"/>
             <field name="name">category_form</field>
         </record>

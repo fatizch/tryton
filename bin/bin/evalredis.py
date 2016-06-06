@@ -17,6 +17,6 @@ query = client.register_script(lua)
 res = query(args=sys.argv[1:])
 if type(res) is list:
     for line in res:
-        print line
+        print(line)
 else:
-    print res
+    print(res)

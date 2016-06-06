@@ -50,17 +50,20 @@ def prepare_test(*_args):
                 with Transaction().start(DB_NAME, USER, context=CONTEXT):
                     # Run all tests as root. Access management tests should
                     # manually set the user in the transaction
-                    with Transaction().new_cursor(), Transaction().set_user(0):
-                        with Transaction().set_context(master=args[0]):
-                            args[0]._executed = []
-                            for arg in _args:
-                                module_name, method_name = arg.split('.')
-                                launch_function(module_name, method_name)
-                        if not forced:
-                            result = f(args[0])
-                        else:
-                            result = f()
-                        Transaction().cursor.rollback()
+                    with Transaction().new_transaction() as transaction, \
+                            Transaction().set_user(0):
+                        try:
+                            with transaction.set_context(master=args[0]):
+                                args[0]._executed = []
+                                for arg in _args:
+                                    module_name, method_name = arg.split('.')
+                                    launch_function(module_name, method_name)
+                            if not forced:
+                                result = f(args[0])
+                            else:
+                                result = f()
+                        finally:
+                            transaction.rollback()
                         return result
             else:
                 for arg in _args:
@@ -94,11 +97,11 @@ class CoopTestCase(ModuleTestCase):
     def run(self, result=None):
         test_function = getattr(self, self._testMethodName)
         if not (hasattr(test_function, '_is_ready') and
-                test_function._is_ready) and not (self._testMethodName in (
-                        'test_view', 'test_depends', 'test_menu_action',
-                        'test_model_access', 'test9999_launch_test_cases',
-                        'test_rec_name', 'test_workflow_transitions',
-                        'test_field_methods')):
+                test_function._is_ready) and self._testMethodName not in (
+                'test_view', 'test_depends', 'test_menu_action',
+                'test_model_access', 'test9999_launch_test_cases',
+                'test_rec_name', 'test_workflow_transitions',
+                'test_field_methods'):
             good_function = functools.partial(
                 prepare_test()(test_function, True), self)
             setattr(self, self._testMethodName, good_function)
@@ -142,23 +145,28 @@ class CoopTestCase(ModuleTestCase):
 
         from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            with Transaction().new_cursor(), Transaction().set_user(0):
-                self.TestCaseModel.run_test_cases([
-                        getattr(self.TestCaseModel, x)
-                        for x in self.get_test_cases_to_run()])
-                Transaction().cursor.commit()
+            with Transaction().new_transaction() as transaction, \
+                    Transaction().set_user(0):
+                try:
+                    self.TestCaseModel.run_test_cases([
+                            getattr(self.TestCaseModel, x)
+                            for x in self.get_test_cases_to_run()])
+                    transaction.commit()
+                except:
+                    transaction.rollback()
+                    raise
 
     def test9999_launch_test_cases(self):
         if os.environ.get('DO_NOT_TEST_CASES'):
             return
-        with Transaction().new_cursor():
+        with Transaction().new_transaction() as transaction:
             test_case_instance = self.TestCaseModel.get_instance()
             test_case_instance.language, = self.Lang.search([
                     ('code', '=', 'fr_FR')])
             test_case_instance.save()
-            Transaction().cursor.commit()
-        with Transaction().new_cursor(), Transaction().set_context(
-                TESTING=True):
+            transaction.commit()
+        with Transaction().new_transaction() as transaction, \
+                Transaction().set_context(TESTING=True):
             self.TestCaseModel.run_all_test_cases()
 
     def __getattr__(self, name):

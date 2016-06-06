@@ -3,14 +3,12 @@
     <data>
         <record model="ir.ui.view" id="contract_view_form">
             <field name="model">contract</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
         <record model="ir.ui.view" id="contract_view_tree">
             <field name="model">contract</field>
             <field name="inherit" ref="contract.contract_view_tree"/>
-            <field name="type">tree</field>
             <field name="arch" type="xml"/>
         </record>
         <record model="ir.ui.view" id="contract-loan_view_list">
@@ -25,7 +23,6 @@
         </record>
         <record model="ir.ui.view" id="option_view_form">
             <field name="model">contract.option</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract.option_view_form"/>
             <field name="name">option_form</field>
         </record>
@@ -34,19 +31,16 @@
         <!-- ################# -->
         <record model="ir.ui.view" id="extra_premium_view_form">
             <field name="model">contract.option.extra_premium</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract_insurance.extra_premium_view_form"/>
             <field name="name">extra_premium_form</field>
         </record>
         <record model="ir.ui.view" id="options_displayer_view_form">
             <field name="model">contract.wizard.option_subscription.options_displayer</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract.options_displayer_view_form"/>
             <field name="name">options_displayer_form</field>
         </record>
         <record model="ir.ui.view" id="wizard_option_view_tree">
             <field name="model">contract.wizard.option_subscription.options_displayer.option</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="contract.wizard_option_view_tree"/>
             <field name="name">wizard_option_tree</field>
             <field name="field_childs" eval="None"/>

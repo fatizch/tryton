@@ -39,13 +39,9 @@ coog_server_start() { # start server - [args] passed to trytond, logconf NOT set
         [ -e $out_file ] && echo 'server log file exists -> clean manually' && return
         local args
         args=--dev
-        if [ $# -eq 0 ]
-        then
-                args="$args --logconf $COOG_CONF_LOG"
-        else
-                args="$args $*"
-        fi
         [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
+        [ ! -z $COOG_CONF_LOG ] && args="$args --logconf $COOG_CONF_LOG"
+        args="$args $*"
         _coog_server_cleancache
         nohup trytond -c $COOG_CONF_SRV --pidfile $pid_file $args > $out_file &
         echo server started
@@ -135,12 +131,12 @@ coog_server_tail() { # tail server logs
 
 coog_server_ping() { # call coog server - [curl args]
         local uri
-        uri=`python $COOG_BIN/parse-config.py jsonrpc listen < $COOG_CONF_SRV`
+        uri=`python $COOG_BIN/parse-config.py web listen < $COOG_CONF_SRV`
         [ $? -ne 0 ] && echo no rpc url && return 1
         curl "$*" \
                 -X POST \
                 -H "Content-Type: application/json" \
-                -d '{"method": "common.list", "params": [null, null]}' \
-                "$uri"
+                -d '{"method": "common.server.version", "params": [null, null]}' \
+                $uri
         echo
 }

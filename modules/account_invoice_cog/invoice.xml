@@ -22,13 +22,11 @@
         </record>
         <record model="ir.ui.view" id="invoice_view_list">
             <field name="model">account.invoice</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="account_invoice.invoice_view_tree"/>
             <field name="name">invoice_list</field>
         </record>
         <record model="ir.ui.view" id="invoice_view_form">
             <field name="model">account.invoice</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account_invoice.invoice_view_form"/>
             <field name="name">invoice_form</field>
         </record>
@@ -38,6 +36,6 @@
             <field name="action" ref="report_engine.letter_generation_wizard"/>
         </record>
         <menuitem id="account_invoice.menu_invoices" icon="invoice" name="Invoices"/>
-        <menuitem id="account_invoice.menu_invoice_out_invoice_form" icon="invoice" action="account_invoice.act_invoice_out_invoice_form"/>
+        <menuitem id="account_invoice.menu_invoice_out_form" icon="invoice" action="account_invoice.act_invoice_out_form"/>
     </data>
 </tryton>

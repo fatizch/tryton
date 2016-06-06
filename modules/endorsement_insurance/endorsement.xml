@@ -6,7 +6,6 @@
         <!-- ############### -->
         <record model="ir.ui.view" id="endorsement_contract_view_form">
             <field name="model">endorsement.contract</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement.endorsement_contract_view_form"/>
             <field name="name">endorsement_contract_form</field>
         </record>

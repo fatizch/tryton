@@ -8,7 +8,6 @@
         </record>
         <record model="ir.ui.view" id="process_form">
             <field name="model">process</field>
-            <field name="type">form</field>
             <field name="inherit" ref="process.process_form"/>
             <field name="name">process_form</field>
         </record>

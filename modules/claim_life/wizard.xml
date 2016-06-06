@@ -3,14 +3,12 @@
     <data depends="claim_indemnification">
         <record model="ir.ui.view" id="indemnification_validate_tree_view">
             <field name="model">claim.indemnification.assistant.validate.element</field>
-            <field name="type">tree</field>
-	    <field name="inherit" ref="claim_indemnification.indemnification_validate_tree_view"/>
+            <field name="inherit" ref="claim_indemnification.indemnification_validate_tree_view"/>
             <field name="name">indemnification_validate_tree</field>
         </record>
         <record model="ir.ui.view" id="indemnification_control_tree_view">
             <field name="model">claim.indemnification.assistant.control.element</field>
-            <field name="type">tree</field>
-	    <field name="inherit" ref="claim_indemnification.indemnification_control_tree_view"/>
+            <field name="inherit" ref="claim_indemnification.indemnification_control_tree_view"/>
             <field name="name">indemnification_control_tree</field>
         </record>
     </data>

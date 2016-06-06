@@ -825,7 +825,7 @@ def relation_mixin(value_model, field, model, name):
     return Mixin
 
 
-class Contract(CogProcessFramework):
+class Contract(model.CoopSQL, CogProcessFramework):
     __metaclass__ = ClassAttr
     _history = True
     __name__ = 'contract'
@@ -1009,17 +1009,18 @@ class ContractOptionVersion(object):
         pool = Pool()
         Option = pool.get('contract.option')
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        transaction = Transaction()
+        cursor = transaction.connection.cursor()
         option_hist = Option.__table_history__()
         version_hist = cls.__table_history__()
 
         # Migration from 1.4 : Create default contract.option.version
-        to_migrate = not TableHandler.table_exist(cursor, cls._table +
+        to_migrate = not TableHandler.table_exist(cls._table +
             '__history')
         super(ContractOptionVersion, cls).__register__(module)
 
         if to_migrate:
-            version_h = TableHandler(cursor, cls, module, history=True)
+            version_h = TableHandler(cls, module, history=True)
             # Delete previously created history, to have full control
             cursor.execute(*version_hist.delete())
             cursor.execute(*version_hist.insert(
@@ -1037,8 +1038,8 @@ class ContractOptionVersion(object):
                         Column(option_hist, '__id').as_('__id'))))
             cursor.execute(*version_hist.select(
                     Max(Column(version_hist, '__id'))))
-            cursor.setnextid(version_h.table_name + '__',
-                cursor.fetchone()[0] or 0 + 1)
+            transaction.database.setnextid(transaction.connection,
+                version_h.table_name + '__', cursor.fetchone()[0] or 0 + 1)
 
 
 class ContractActivationHistory(object):
@@ -1050,9 +1051,9 @@ class ContractActivationHistory(object):
     def __register__(cls, module_name):
         # Migration from 1.4 add active field
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         do_migrate = False
-        history_table = TableHandler(cursor, cls, history=True)
+        history_table = TableHandler(cls, history=True)
         if not history_table.column_exist('active'):
             do_migrate = True
         super(ContractActivationHistory, cls).__register__(module_name)
@@ -1547,20 +1548,24 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
             assert not self._save_values
 
             # Apply endorsement in a sandboxed transaction
-            with Transaction().new_cursor():
-                with Transaction().set_context(will_be_rollbacked=True):
-                    applied_self = self.__class__(self.id)
-                    self.apply_for_preview([applied_self])
-                    for unitary_endorsement in applied_self.all_endorsements():
-                        endorsed_record = \
-                            unitary_endorsement.get_endorsed_record()
-                        endorsed_model, endorsed_id = (
-                            endorsed_record.__name__, endorsed_record.id)
-                        record = pool.get(endorsed_model)(endorsed_id)
-                        new_values['%s,%i' % (endorsed_model, endorsed_id)] = \
-                            extraction_method(record, **kwargs)
-                    old_values = current_values
-                    Transaction().cursor.rollback()
+            with Transaction().new_transaction() as transaction:
+                try:
+                    with Transaction().set_context(will_be_rollbacked=True):
+                        applied_self = self.__class__(self.id)
+                        self.apply_for_preview([applied_self])
+                        for unitary_endorsement in \
+                                applied_self.all_endorsements():
+                            endorsed_record = \
+                                unitary_endorsement.get_endorsed_record()
+                            endorsed_model, endorsed_id = (
+                                endorsed_record.__name__, endorsed_record.id)
+                            record = pool.get(endorsed_model)(endorsed_id)
+                            new_values['%s,%i' % (endorsed_model,
+                                    endorsed_id)] = extraction_method(record,
+                                **kwargs)
+                        old_values = current_values
+                finally:
+                    transaction.rollback()
             return {'old': old_values, 'new': new_values}
 
     @classmethod
@@ -1585,7 +1590,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                     else:
                         cls.raise_user_error('invalid_format')
             except UserError as exc:
-                Transaction().cursor.rollback()
+                Transaction().rollback()
                 message.append({'error': exc.message})
                 return {ext_id: {
                         'return': False,

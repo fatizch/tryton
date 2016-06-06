@@ -44,10 +44,10 @@ def rename_rule_engine_function(to_renames):
                         new_function)
                 rule.save()
         except Exception as e:
-            transaction.cursor.rollback()
+            transaction.rollback()
             raise e
         else:
-            transaction.cursor.commit()
+            transaction.commit()
 
 if __name__ == "__main__":
     with open(filename, 'r') as f:

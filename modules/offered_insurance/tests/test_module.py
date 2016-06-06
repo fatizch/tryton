@@ -190,6 +190,7 @@ return True'''
         coverage_a.insurer = insurer
 
         coverage_a.company = company
+        coverage_a.currency = company.currency
         coverage_a.save()
 
         # Coverage B
@@ -204,6 +205,7 @@ return True'''
         coverage_b.item_desc = item_desc
         coverage_b.insurer = insurer
         coverage_b.company = company
+        coverage_b.currency = company.currency
         coverage_b.save()
 
         # Coverage C
@@ -217,6 +219,7 @@ return True'''
         coverage_c.item_desc = item_desc
         coverage_c.insurer = insurer
         coverage_c.company = company
+        coverage_c.currency = company.currency
 
         coverage_c.save()
 
@@ -231,6 +234,7 @@ return True'''
         coverage_d.item_desc = item_desc
         coverage_d.insurer = insurer
         coverage_d.company = company
+        coverage_d.currency = company.currency
 
         coverage_d.save()
 
@@ -245,6 +249,7 @@ return True'''
         product_a.contract_generator = ng
         product_a.item_descriptors = [item_desc]
         product_a.company = company
+        product_a.currency = company.currency
         product_a.save()
 
         self.assert_(product_a.id)

@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import unittest
 from stdnum import iban
 
@@ -76,7 +76,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         for value, test in values:
             self.assert_(iban.is_valid(value) == test)
 
-    @test_framework.prepare_test('bank_cog.test0010bank')
+    @test_framework.prepare_test('currency_cog.test0001_testCurrencyCreation',
+        'bank_cog.test0010bank')
     def test0040banknumberunicity(self):
         '''
         Check that a number account is unique in database

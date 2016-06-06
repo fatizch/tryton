@@ -33,7 +33,7 @@ class ModelCurrency(object):
         # TODO : There is a diffence between test case configuration and global
         # configuration
         config = Pool().get('ir.test_case').get_instance()
-        return config.currency.id
+        return config.currency.id if config.currency else None
 
     @classmethod
     def get_currency_from_context(cls):

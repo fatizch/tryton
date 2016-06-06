@@ -1,5 +1,5 @@
-local _NAME = 'batch-rq.lua'
-local _DESCRIPTION = 'A set of tools to query rq jobs on redis'
+local _NAME = 'batch.lua'
+local _DESCRIPTION = 'A set of tools to query batch jobs on redis'
 local _LICENSE = 'GNU GPL-3'
 local _COPYRIGHT = '(c) 2016 Coopengo'
 local _USAGE = [[

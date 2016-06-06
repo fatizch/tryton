@@ -3,7 +3,6 @@
     <data>
         <record model="ir.ui.view" id="loss_desc_view_form">
             <field name="model">benefit.loss.description</field>
-            <field name="type">form</field>
             <field name="inherit" ref="claim.loss_desc_view_form"/>
             <field name="name">loss_description_form</field>
         </record>

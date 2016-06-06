@@ -23,6 +23,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def get_models(cls):
         return {
             'View': 'ir.ui.view',
+            'TestMethodDefinition': 'cog_utils.test_model_method_definition',
             'MethodDefinition': 'ir.model.method',
             'Model': 'ir.model',
             'ExportTest': 'cog_utils.export_test',
@@ -304,38 +305,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(len(proxied_list), 3)
 
     def test0043_test_method_definition_filter(self):
-        class TestModel(ModelSQL):
-            'Test Method Definition Model'
-            __name__ = 'cog_utils.test_model_method_definition'
-
-            attribute = None
-
-            @classmethod
-            def class_method(cls):
-                pass
-
-            def _hidden_method(self):
-                pass
-
-            def arg_method(self, *args):
-                pass
-
-            def no_caller(self, foo=None):
-                pass
-
-            def no_default(self, foo, caller=None):
-                pass
-
-            def good_one(self, foo=None, caller=None):
-                return caller
-
-            def other_good_one(self, caller=None, foo=None, **kwargs):
-                pass
-
-        TestModel.__setup__()
-        TestModel.__post_setup__()
-        TestModel.__register__('cog_utils')
-
         method = self.MethodDefinition()
         self.assertEqual(method.get_possible_methods(), [])
 
@@ -343,22 +312,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ('model', '=', 'cog_utils.test_model_method_definition')])[0]
         method.model.model = 'cog_utils.test_model_method_definition'
 
-        with mock.patch.object(trytond.tests.test_tryton.POOL,
-                'get') as pool_get:
-            pool_get.return_value = TestModel
-            self.assertEqual(method.get_possible_methods(), [
-                    ('good_one', 'good_one'),
-                    ('other_good_one', 'other_good_one'),
-                    ])
-            pool_get.assert_called_with(
-                'cog_utils.test_model_method_definition')
-
+        self.assertEqual(method.get_possible_methods(),
+            [('good_one', 'good_one'), ('other_good_one', 'other_good_one')])
         method.method_name = 'good_one'
 
-        callee = TestModel()
+        callee = self.TestMethodDefinition()
         with mock.patch.object(trytond.tests.test_tryton.POOL,
                 'get') as pool_get:
-            pool_get.return_value = TestModel
+            pool_get.return_value = self.TestMethodDefinition
             self.assertEqual(method.execute(10, callee), 10)
             pool_get.assert_called_with(
                 'cog_utils.test_model_method_definition')
@@ -836,15 +797,15 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual('honey', test_instance.real_field)
 
     def test_0110_history_table(self):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         master = self.TestHistoryTable(foo='1')
         master.save()
-        cursor.commit()
+        Transaction().commit()
 
         master.foo = '2'
         master.save()
-        cursor.commit()
+        Transaction().commit()
 
         self.assertRaises(AssertionError,
             self.TestHistoryTable._get_history_table)
@@ -870,12 +831,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         child_1 = self.TestHistoryChildTable(bar='1', parent=master)
         child_1.save()
-        cursor.commit()
+        Transaction().commit()
         child_date = child_1.create_date
 
         master.childs = []
         master.save()
-        cursor.commit()
+        Transaction().commit()
 
         with Transaction().set_context(_datetime=master.create_date):
             test_table = self.TestHistoryTable._get_history_table()

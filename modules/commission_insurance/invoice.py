@@ -170,7 +170,7 @@ class Invoice:
         pool = Pool()
         super(Invoice, cls).__register__(module_name)
         # Migration from 1.6 Store Business Kind
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         invoice = cls.__table__()
         to_update = cls.__table__()
         insurer = pool.get('insurer').__table__()
@@ -180,7 +180,7 @@ class Invoice:
             condition=invoice.party == insurer.party
             ).select(invoice.id,
             where=((invoice.business_kind == Null)
-                & (invoice.type == 'in_invoice')))
+                & (invoice.type == 'in')))
         cursor.execute(*to_update.update(
                 columns=[to_update.business_kind],
                 values=[Literal('insurer_invoice')],
@@ -190,7 +190,7 @@ class Invoice:
             condition=invoice.party == network.party
             ).select(invoice.id,
             where=((invoice.business_kind == Null)
-                & (invoice.type == 'in_invoice')))
+                & (invoice.type == 'in')))
         cursor.execute(*to_update.update(
                 columns=[to_update.business_kind],
                 values=[Literal('broker_invoice')],
@@ -200,7 +200,7 @@ class Invoice:
         line = super(Invoice, self)._get_move_line(date, amount)
         if (getattr(self, 'business_kind', None) in
                 ['insurer_invoice', 'broker_invoice'] and
-                self.type == 'in_invoice' and self.total_amount > 0):
+                self.type == 'in' and self.total_amount > 0):
             line['payment_date'] = utils.today()
         return line
 
@@ -230,7 +230,7 @@ class Invoice:
         InvoiceLine = pool.get('account.invoice.line')
         commission = Commission.__table__()
         invoice_line = InvoiceLine.__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         sub_query = invoice_line.select(
             Concat('account.invoice.line,', Cast(invoice_line.id, 'VARCHAR')),

@@ -2,7 +2,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
-from trytond.model import ModelView
+from trytond.model import ModelSQL, ModelView
 
 from trytond.modules.cog_utils import coop_string, utils, fields
 
@@ -89,7 +89,7 @@ class ClassAttr(PoolMeta):
         return super(ClassAttr, self).__getattr__(name)
 
 
-class ProcessFramework(ModelView):
+class ProcessFramework(ModelSQL, ModelView):
     'Process Framework'
 
     __metaclass__ = ClassAttr
@@ -262,27 +262,27 @@ class ProcessFramework(ModelView):
         else:
             raise NotImplementedError
 
-    @staticmethod
-    def order_task_status(tables):
+    @classmethod
+    def order_task_status(cls, tables):
         task_status_order = tables.get('process.status')
         if task_status_order:
             return [task_status_order[None][0].name]
         pool = Pool()
         table, _ = tables[None]
-        contract = tables.get('contract')
-        if contract is None:
-            contract = pool.get('contract').__table__()
+        process_target = tables.get('_process_target', cls.__table__())
         step_relation = pool.get('process-process.step').__table__()
         status_relation = pool.get('process.status').__table__()
-        query_table_1 = contract.join(step_relation, condition=(
-                contract.current_state == step_relation.id)).select(
-            contract.id.as_('contract'), step_relation.status.as_('status'))
+        query_table_1 = process_target.join(step_relation, condition=(
+                process_target.current_state == step_relation.id)).select(
+                    process_target.id.as_('target'),
+                    step_relation.status.as_('status'))
         query_table = query_table_1.join(status_relation, condition=(
                 query_table_1.status == status_relation.id)).select(
-            status_relation.name.as_('status_name'), query_table_1.contract)
+                    status_relation.name.as_('status_name'),
+                    query_table_1.target)
         tables['process.status'] = {
             None: (query_table,
-                (query_table.contract == table.id)
+                (query_table.target == table.id)
                 )}
         return [query_table.status_name]
 

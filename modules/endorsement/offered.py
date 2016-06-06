@@ -95,7 +95,7 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
 
     @classmethod
     def get_endorsement_parts(cls, definitions, name):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         pool = Pool()
         intermediate_table = pool.get(
             'endorsement.definition-endorsement.part').__table__()

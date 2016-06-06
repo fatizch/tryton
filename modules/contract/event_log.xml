@@ -3,13 +3,11 @@
     <data depends="event_log">
         <record model="ir.ui.view" id="event_log_view_form">
             <field name="model">event.log</field>
-            <field name="type">form</field>
             <field name="inherit" ref="event_log.event_log_view_form"/>
             <field name="name">event_log_form</field>
         </record>
         <record model="ir.ui.view" id="event_log_view_list">
             <field name="model">event.log</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="event_log.event_log_view_list"/>
             <field name="name">event_log_list</field>
         </record>

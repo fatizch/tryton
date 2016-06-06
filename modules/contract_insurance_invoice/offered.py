@@ -108,10 +108,10 @@ class BillingMode(model.CoopSQL, model.CoopView):
     def __register__(cls, module_name):
         # Migration from 1.1: Billing change
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         need_migrate = False
-        if (not TableHandler.table_exist(cursor, 'offered_billing_mode') and
-                TableHandler.table_exist(cursor, 'offered_invoice_frequency')):
+        if (not TableHandler.table_exist('offered_billing_mode') and
+                TableHandler.table_exist('offered_invoice_frequency')):
             need_migrate = True
         super(BillingMode, cls).__register__(module_name)
         if need_migrate:
@@ -287,8 +287,7 @@ class Product:
         super(Product, cls).__register__(module_name)
         # Migration from 1.3: Drop account_for_billing column
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        product = TableHandler(cursor, cls)
+        product = TableHandler(cls)
         if product.column_exist('account_for_billing'):
             product.drop_column('account_for_billing')
 
@@ -329,10 +328,10 @@ class ProductBillingModeRelation(model.CoopSQL, model.CoopView):
         # Migration from 1.1: Billing change
         migrate = False
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        if (not TableHandler.table_exist(cursor,
+        cursor = Transaction().connection.cursor()
+        if (not TableHandler.table_exist(
                 'offered_product-offered_billing_mode') and
-                TableHandler.table_exist(cursor,
+                TableHandler.table_exist(
                     'offered_product-offered_invoice_frequency')):
             migrate = True
 
@@ -366,10 +365,10 @@ class BillingModePaymentTermRelation(model.CoopSQL, model.CoopView):
         # Migration from 1.1: Billing change
         migrate = False
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        if (not TableHandler.table_exist(cursor,
+        cursor = Transaction().connection.cursor()
+        if (not TableHandler.table_exist(
                 'offered_billing_mode-account_invoice_payment_term') and
-                TableHandler.table_exist(cursor,
+                TableHandler.table_exist(
                     'offered_product-account_invoice_payment_term')):
             migrate = True
 

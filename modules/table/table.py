@@ -104,17 +104,17 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         if backend.name() != 'postgresql':
             return
 
-        with Transaction().new_cursor() as transaction:
-            cursor = transaction.cursor
+        with Transaction().new_transaction() as transaction, \
+                transaction.connection.cursor() as cursor:
             try:
                 cursor.execute('CREATE EXTENSION IF NOT EXISTS tablefunc', ())
-                cursor.commit()
+                transaction.commit()
             except:
                 import logging
                 logger = logging.getLogger('database')
                 logger.warning('Unable to activate tablefunc extension, '
                     '2D displaying of tables will not be available')
-                cursor.rollback()
+                transaction.rollback()
 
     @classmethod
     def copy(cls, records, default=None):
@@ -163,7 +163,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         Cell = pool.get('table.cell')
         DimensionValue = pool.get('table.dimension.value')
 
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         cell = Cell.__table__()
         dimension_tables = [DimensionValue.__table__()
@@ -413,12 +413,11 @@ class TableDefinitionDimension(ModelSQL, ModelView):
 
     @classmethod
     def __register__(cls, module_name):
-        cursor = Transaction().cursor
         TableHandler = backend.get('TableHandler')
 
         super(TableDefinitionDimension, cls).__register__(module_name)
 
-        table = TableHandler(cursor, cls, module_name)
+        table = TableHandler(cls, module_name)
         table.index_action(['definition', 'type'], 'add')
 
     @fields.depends('definition', 'type')
@@ -601,7 +600,7 @@ class TableDefinitionDimensionOpenAskType(ModelView):
 
     @staticmethod
     def default_table():
-        return Transaction().context['active_id']
+        return Transaction().context.get('active_id', None)
 
     @fields.depends('table')
     def get_types(self):
@@ -659,12 +658,11 @@ class TableCell(ModelSQL, ModelView):
 
     @classmethod
     def __register__(cls, module_name):
-        cursor = Transaction().cursor
         TableHandler = backend.get('TableHandler')
 
         super(TableCell, cls).__register__(module_name)
 
-        table = TableHandler(cursor, cls, module_name)
+        table = TableHandler(cls, module_name)
         table.index_action(['definition']
             + ['dimension%s' % i for i in range(1, DIMENSION_MAX + 1)], 'add')
 
@@ -1067,7 +1065,7 @@ class Table2D(ModelSQL, ModelView):
         TableDefinitionDimension = pool.get(
             'table.dimension.value')
         context = Transaction().context
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         definition_id = int(context.get('table', -1))
         if definition_id != -1:
             definition = TableDefinition(definition_id)

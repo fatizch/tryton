@@ -1,13 +1,13 @@
 # -*- coding:utf-8 -*-
 import functools
 
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or
 from trytond.modules.cog_utils import model, coop_string
 from trytond.modules.cog_utils import fields
 from trytond import backend
 from trytond.transaction import Transaction
-from trytond.pool import Pool
+from trytond.tools import cursor_dict
 
 from trytond.modules.rule_engine import check_args, RuleTools
 
@@ -40,24 +40,24 @@ class RuleEngineExtraData(model.CoopSQL):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         super(RuleEngineExtraData, cls).__register__(module_name)
 
         # Migration from 1.1: split rule parameters in multiple table
         extradata_definition = cls.__table__()
-        if TableHandler.table_exist(cursor, 'rule_engine_parameter'):
+        if TableHandler.table_exist('rule_engine_parameter'):
             cursor.execute(*extradata_definition.delete())
             cursor.execute("SELECT external_extra_data_def, parent_rule "
                 "FROM rule_engine_parameter "
                 "WHERE kind = 'compl'")
-            for cur_rule_parameter in cursor.dictfetchall():
+            for cur_rule_parameter in cursor_dict(cursor):
                 cursor.execute(*extradata_definition.insert(
                     columns=[extradata_definition.parent_rule,
                     extradata_definition.extra_data],
                     values=[[cur_rule_parameter['parent_rule'],
                     cur_rule_parameter['external_extra_data_def']]]))
-            TableHandler.table_rename(cursor, 'rule_engine_parameter',
+            TableHandler.table_rename('rule_engine_parameter',
                 'rule_engine_parameter_backup')
 
 

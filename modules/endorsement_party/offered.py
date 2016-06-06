@@ -30,7 +30,7 @@ class EndorsementDefinition:
 
         # Migration from 1.6 : Rename definition_for_contracts to
         # next_endorsement, defined in endorsement module
-        table = TableHandler(Transaction().cursor, cls, module)
+        table = TableHandler(cls, module)
         if table.column_exist('definition_for_contracts'):
             table.column_rename('definition_for_contracts', 'next_endorsement')
         super(EndorsementDefinition, cls).__register__(module)

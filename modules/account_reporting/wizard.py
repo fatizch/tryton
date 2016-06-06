@@ -8,6 +8,7 @@ from trytond.pyson import Eval
 from trytond.report import Report
 from trytond.transaction import Transaction
 from trytond.wizard import (Wizard, StateView, StateReport, Button)
+from trytond.tools import cursor_dict
 
 from trytond.modules.cog_utils import fields, utils, model, coop_date
 
@@ -195,12 +196,12 @@ class MoveLineAggregatedReport(Report):
                 'product_ids': kwargs.get('product_ids'),
                 'state': 'posted',
                 })
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         cursor.execute(*query.select(*columns,
                 where=where_clause,
                 group_by=cls.get_group_by(tables),
                 order_by=(product.name)))
-        return cursor.dictfetchall()
+        return cursor_dict(cursor)
 
     @classmethod
     def get_context(cls, records, data):

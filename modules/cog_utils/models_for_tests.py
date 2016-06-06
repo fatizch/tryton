@@ -14,6 +14,7 @@ import utils
 __metaclass__ = PoolMeta
 
 __all__ = [
+    'TestMethodDefinitions',
     'TestDictSchema',
     'ExportTestTarget',
     'ExportTestTarget2',
@@ -30,6 +31,35 @@ __all__ = [
     'TestHistoryChildTable',
     'TestLoaderUpdater',
     ]
+
+
+class TestMethodDefinitions(model.CoopSQL):
+    'Test Method Definition Model'
+    __name__ = 'cog_utils.test_model_method_definition'
+
+    attribute = None
+
+    @classmethod
+    def class_method(cls):
+        pass
+
+    def _hidden_method(self):
+        pass
+
+    def arg_method(self, *args):
+        pass
+
+    def no_caller(self, foo=None):
+        pass
+
+    def no_default(self, foo, caller=None):
+        pass
+
+    def good_one(self, foo=None, caller=None):
+        return caller
+
+    def other_good_one(self, caller=None, foo=None, **kwargs):
+        pass
 
 
 class TestDictSchema(DictSchemaMixin, model.CoopSQL):

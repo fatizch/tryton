@@ -4,14 +4,12 @@
         <!-- Tree view for contract -->
         <record model="ir.ui.view" id="contract_view_tree">
             <field name="model">contract</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="contract.contract_view_tree"/>
             <field name="arch" type="xml"/>
         </record>
         <!-- form view -->
         <record model="ir.ui.view" id="contract_view_form">
             <field name="model">contract</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>

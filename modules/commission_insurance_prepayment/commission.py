@@ -147,7 +147,7 @@ class Agent:
         if not agents:
             return result
 
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         agent_column = Column(commission, 'agent')
         option_column = Column(commission, 'commissioned_option')
         prepayment_column = Column(commission, 'is_prepayment')
@@ -179,7 +179,7 @@ class Agent:
         Commission = pool.get('commission')
         commission = Commission.__table__()
 
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         agent_column = Column(commission, 'agent')
         option_column = Column(commission, 'commissioned_option')
         redeemed_column = Column(commission, 'redeemed_prepayment')
@@ -214,7 +214,7 @@ class Agent:
         Commission = pool.get('commission')
         commission = Commission.__table__()
 
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         agent_column = Column(commission, 'agent')
         origin_column = Column(commission, 'origin')
         prepayment_column = Column(commission, 'is_prepayment')

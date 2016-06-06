@@ -38,14 +38,14 @@ class Zip(export.ExportImportMixin):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         # Migration from 1.6: merge cog zipcode and tryton zip
         old_table = 'country_zipcode'
-        if TableHandler.table_exist(cursor, old_table):
-            TableHandler.drop_table(cursor, 'country.zip', 'country_zip')
+        if TableHandler.table_exist(old_table):
+            TableHandler.drop_table('country.zip', 'country_zip')
             cursor.execute('DROP SEQUENCE country_zip_id_seq')
-            TableHandler.table_rename(cursor, old_table, cls._table)
+            TableHandler.table_rename(old_table, cls._table)
 
         super(Zip, cls).__register__(module_name)
 

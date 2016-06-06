@@ -44,9 +44,9 @@ class FiscalYear:
         # Migration from 1.4 : add export_moves field : Set current fiscal year
         # to export its moves
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         do_migrate = False
-        table_handler = TableHandler(cursor, cls)
+        table_handler = TableHandler(cls)
         if not table_handler.column_exist('export_moves'):
             do_migrate = True
         super(FiscalYear, cls).__register__(module_name)
@@ -204,7 +204,7 @@ class Snapshot(model.CoopSQL, model.CoopView):
 
         snapshot, = cls.create([{}])
         move = Move.__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         cursor.execute(*move.update(
                 [move.snapshot, move.write_date, move.write_uid],
                 [snapshot.id, CurrentTimestamp(), Transaction().user],

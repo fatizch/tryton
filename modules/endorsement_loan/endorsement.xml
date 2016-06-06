@@ -19,7 +19,6 @@
         <!-- ############### -->
         <record model="ir.ui.view" id="endorsement_view_form">
             <field name="model">endorsement</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement.endorsement_view_form"/>
             <field name="name">endorsement_form</field>
         </record>
@@ -49,7 +48,6 @@
         <!-- ###################################### -->
         <record model="ir.ui.view" id="endorsement_covered_element_option_view_form">
             <field name="model">endorsement.contract.covered_element.option</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement_insurance.endorsement_covered_element_option_view_form"/>
             <field name="name">endorsement_covered_element_option_form</field>
         </record>
@@ -84,7 +82,6 @@
         <!-- ######## -->
         <record model="ir.ui.view" id="ordered_loan_view_list">
             <field name="model">loan</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="loan.ordered_loan_view_list"/>
             <field name="name">ordered_loan_list</field>
         </record>

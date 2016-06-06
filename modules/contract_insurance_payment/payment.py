@@ -53,7 +53,7 @@ class Payment:
         pool = Pool()
         payment = cls.__table__()
         line = pool.get('account.move.line').__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         result = {x.id: None for x in payments}
         for payments_slice in grouped_slice(payments):

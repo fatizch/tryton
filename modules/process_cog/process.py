@@ -1038,7 +1038,7 @@ class ProcessStart(model.CoopView):
 
     @classmethod
     def default_model(cls):
-        raise NotImplementedError
+        return {}
 
     @fields.depends('model')
     def on_change_with_good_process(self):

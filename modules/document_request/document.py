@@ -54,8 +54,7 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
 
     @staticmethod
     def models_get():
-        Attachment = Pool().get('ir.attachment')
-        return Attachment.models_get() + [('', '')]
+        return utils.models_get()
 
     @fields.depends('attachment', 'reception_date', 'received',
         'attachment_name', 'attachment_data')

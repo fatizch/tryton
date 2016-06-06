@@ -3,13 +3,12 @@
     <data>
         <record model="ir.ui.view" id="invoice_line_view_form">
             <field name="model">account.invoice.line</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account_invoice.invoice_line_view_form"/>
             <field name="name">invoice_line_form</field>
         </record>
         <menuitem parent="commission.menu_commission" name="Commission Invoices" id="menu_commission_invoice" sequence="25"/>
-        <record model="ir.action.act_window" id="account_invoice.act_invoice_in_invoice_form">
-            <field name="domain" eval="[('type', '=', 'in_invoice'), ('business_kind', '!=', 'insurer_invoice'), ('business_kind', '!=', 'broker_invoice')]" pyson="1"/>
+        <record model="ir.action.act_window" id="account_invoice.act_invoice_in_form">
+            <field name="domain" eval="[('type', '=', 'in'), ('business_kind', '!=', 'insurer_invoice'), ('business_kind', '!=', 'broker_invoice')]" pyson="1"/>
         </record>
         <!-- ############################################################ -->
         <!-- ########### Broker Invoices ########### -->

@@ -57,10 +57,10 @@ class MoveLine:
         # Migration from 1.3 : Add contract field
         # First, detect if a migration will be needed
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         do_migrate = False
-        if TableHandler.table_exist(cursor, 'account_move_line'):
-            line_table = TableHandler(cursor, cls)
+        if TableHandler.table_exist('account_move_line'):
+            line_table = TableHandler(cls)
             if not line_table.column_exist('contract'):
                 do_migrate = True
         super(MoveLine, cls).__register__(module)

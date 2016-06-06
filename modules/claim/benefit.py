@@ -176,8 +176,7 @@ class Benefit(model.CoopSQL, model.CoopView, model.TaggedMixin):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        table = TableHandler(cursor, cls, module_name)
+        table = TableHandler(cls, module_name)
 
         super(Benefit, cls).__register__(module_name)
 

@@ -119,8 +119,9 @@ class One2ManyDomain(One2Many):
             res[i] = []
 
         targets = []
-        for i in range(0, len(ids), Transaction().cursor.IN_MAX):
-            sub_ids = ids[i:i + Transaction().cursor.IN_MAX]
+        in_max = Transaction().database.IN_MAX
+        for i in range(0, len(ids), in_max):
+            sub_ids = ids[i:i + in_max]
             if field._type == 'reference':
                 references = ['%s,%s' % (model.__name__, x) for x in sub_ids]
                 clause = [(self.field, 'in', references)]

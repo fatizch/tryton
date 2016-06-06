@@ -10,6 +10,10 @@ coog_init_bin() { # link useful bin to venv (tryton, coog, upload.py, etc)
         ln -s "$COOG_TRYTON/bin/tryton"
         [ -h trytond ] && rm trytond
         ln -s "$COOG_TRYTOND/bin/trytond"
+        [ -h trytond-admin ] && rm trytond-admin
+        ln -s "$COOG_TRYTOND/bin/trytond-admin"
+        [ -h trytond-cron ] && rm trytond-cron
+        ln -s "$COOG_TRYTOND/bin/trytond-cron"
         [ -h run-tests.py ] && rm run-tests.py
         ln -s "$COOG_TRYTOND/trytond/tests/run-tests.py"
         [ -h coog ] && rm coog
@@ -32,11 +36,10 @@ _coog_init_conf_cp() {
 
 coog_init_conf() { # set default conf
         [ ! -d "$COOG_CONF" ] && mkdir "$COOG_CONF"
-        _coog_init_conf_cp trytond.conf
-        _coog_init_conf_cp test.conf
         _coog_init_conf_cp tryton.conf
-        _coog_init_conf_cp logging.conf
+        _coog_init_conf_cp trytond.conf
         _coog_init_conf_cp batch.conf
+        _coog_init_conf_cp test.conf
 }
 
 coog_init_redmine() { # init redmine credentials

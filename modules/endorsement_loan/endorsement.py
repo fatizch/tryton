@@ -87,7 +87,7 @@ class Loan:
         payment = pool.get('loan.payment').__table__()
         endorsement = pool.get('endorsement').__table__()
         endorsement_loan = pool.get('endorsement.loan').__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         # Browse instances once to get amount for those without endorsement
         res = {x.id: x.amount for x in instances}
@@ -140,11 +140,11 @@ class LoanIncrement:
         pool = Pool()
         Loan = pool.get('loan')
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         super(LoanIncrement, cls).__register__(module_name)
 
-        loan_history_h = TableHandler(cursor, Loan, module_name, history=True)
+        loan_history_h = TableHandler(Loan, module_name, history=True)
         if loan_history_h.column_exist('payment_frequency'):
             loan_hist = Loan.__table_history__()
             increment_hist = cls.__table_history__()
@@ -241,7 +241,7 @@ class ExtraPremium:
 
     @classmethod
     def __register__(cls, module_name):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         super(ExtraPremium, cls).__register__(module_name)
 
@@ -490,9 +490,10 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         for model_name in models_to_restore:
             if not restore_dict[model_name]:
                 continue
-            pool.get(model_name).restore_history_before(
-                list(set([x.id for x in restore_dict[model_name]])),
+            all_ids = list(set([x.id for x in restore_dict[model_name]]))
+            pool.get(model_name).restore_history_before(all_ids,
                 self.endorsement.rollback_date)
+            utils.clear_transaction_cache(model_name, all_ids)
 
     @classmethod
     def _prepare_restore_history(cls, instances, at_date):

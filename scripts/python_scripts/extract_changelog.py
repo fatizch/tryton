@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import os
 
-module_dir = os.path.join(os.environ.get('VIRTUAL_ENV'), 'tryton-workspace',
-    'coopbusiness', 'modules')
+module_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+    '..', '..', 'modules')
 
 for module in sorted(os.listdir(module_dir)):
     print ''

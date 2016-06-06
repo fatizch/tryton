@@ -32,9 +32,9 @@ class Line:
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
-        the_table = TableHandler(cursor, cls, module_name)
+        the_table = TableHandler(cls, module_name)
         # Migration from 1.4: Store party_payer
         migrate = False
         if not the_table.column_exist('party_payer'):

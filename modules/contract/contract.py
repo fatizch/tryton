@@ -9,7 +9,7 @@ from sql.conditionals import NullIf, Coalesce
 from sql.aggregate import Max, Min
 
 from trytond import backend
-from trytond.tools import grouped_slice
+from trytond.tools import grouped_slice, cursor_dict
 from trytond.rpc import RPC
 from trytond.cache import Cache
 from trytond.transaction import Transaction
@@ -91,9 +91,9 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
     def __register__(cls, module_name):
         # Migration from 1.4 add active field
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         do_migrate = False
-        history_table = TableHandler(cursor, cls)
+        history_table = TableHandler(cls)
         if not history_table.column_exist('active'):
             do_migrate = True
         super(ActivationHistory, cls).__register__(module_name)
@@ -335,9 +335,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def __register__(cls, module_name):
         # Migration from 1.4 Drop contract.address
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        if TableHandler.table_exist(cursor, 'contract_address'):
-            TableHandler.drop_table(cursor, 'contract.address',
+        if TableHandler.table_exist('contract_address'):
+            TableHandler.drop_table('contract.address',
                 'contract_address')
         super(Contract, cls).__register__(module_name)
 
@@ -676,7 +675,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         today = utils.today()
         ActivationHistory = Pool().get('contract.activation_history')
         activation_history = ActivationHistory.__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         values = cls.activation_history_base_values(contracts)
         if backend.name() == 'sqlite':
             return cls.basic_periods_getter(contracts, names, values,
@@ -690,7 +689,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 activation_history, today, where_clause)
             cursor.execute(*query)
 
-            for elem in cursor.dictfetchall():
+            for elem in cursor_dict(cursor):
                 values['start_date'][elem['id']] = elem['start_date']
                 values['end_date'][elem['id']] = elem['end_date']
         return values
@@ -1039,7 +1038,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 for item in objects:
                     new_message += cls._ws_import_entity(item)
             except UserError as exc:
-                Transaction().cursor.rollback()
+                Transaction().rollback()
                 new_message.append({'error': exc.message})
                 return {ext_id: {
                         'return': False,
@@ -1336,7 +1335,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_possible_contracts_from_party(cls, party, at_date):
         if not party:
             return []
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         pool = Pool()
         contract = pool.get('contract').__table__()
         history = pool.get('contract.activation_history').__table__()
@@ -1356,7 +1355,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         cursor.execute(*query_table.select(contract.id,
                 where=(contract.company == company_id) if company_id else
                 None))
-        return cls.browse([x['id'] for x in cursor.dictfetchall()])
+        return cls.browse([x['id'] for x in cursor_dict(cursor)])
 
     def get_appliable_logo(self, kind=''):
         if self.company:
@@ -1479,7 +1478,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             self.append_functional_error('cannot_reactivate_end_reached')
             return None
         # Get new end_date
-        with Transaction().new_cursor() as transaction:
+        with Transaction().new_transaction() as transaction:
             try:
                 contract = self.__class__(self.id)
                 previous_end_date = contract.end_date
@@ -1489,7 +1488,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 dates.append(contract.get_maximum_end_date())
                 new_end_date = min([x for x in dates if x] or [None])
             finally:
-                transaction.cursor.rollback()
+                transaction.rollback()
         if new_end_date is not None and new_end_date <= previous_end_date:
             self.append_functional_error('cannot_reactivate_max_end_date')
             return None
@@ -2086,17 +2085,18 @@ class ContractOptionVersion(model.CoopSQL, model.CoopView):
         pool = Pool()
         Option = pool.get('contract.option')
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        transaction = Transaction()
+        cursor = transaction.connection.cursor()
         option = Option.__table__()
         version = cls.__table__()
 
         # Migration from 1.4 : Create default contract.option.version
-        to_migrate = not TableHandler.table_exist(cursor, cls._table)
+        to_migrate = not TableHandler.table_exist(cls._table)
 
         super(ContractOptionVersion, cls).__register__(module)
 
         if to_migrate:
-            version_h = TableHandler(cursor, cls, module)
+            version_h = TableHandler(cls, module)
             cursor.execute(*version.insert(
                     columns=[
                         version.create_date, version.create_uid,
@@ -2108,8 +2108,8 @@ class ContractOptionVersion(model.CoopSQL, model.CoopView):
                         Literal('{}').as_('extra_data'),
                         option.id.as_('option'), option.id.as_('id'))))
             cursor.execute(*version.select(Max(version.id)))
-            cursor.setnextid(version_h.table_name,
-                cursor.fetchone()[0] or 0 + 1)
+            transaction.database.setnextid(transaction.connection,
+                version_h.table_name, cursor.fetchone()[0] or 0 + 1)
 
     @fields.depends('option', 'start', 'start_date')
     def on_change_option(self):

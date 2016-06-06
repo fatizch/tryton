@@ -6,7 +6,6 @@
         <!-- ############################################################ -->
         <record model="ir.ui.view" id="claim_view_form">
             <field name="model">claim</field>
-            <field name="type">form</field>
             <field name="inherit" ref="claim.claim_view_form"/>
             <field name="name">claim_form</field>
         </record>

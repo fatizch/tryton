@@ -50,9 +50,8 @@ class Party:
         super(Party, cls).__register__(module_name)
         # Migration from 1.3: Drop broker table
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        if TableHandler.table_exist(cursor, 'broker'):
-            TableHandler.drop_table(cursor, 'broker', 'broker', True)
+        if TableHandler.table_exist('broker'):
+            TableHandler.drop_table('broker', 'broker', True)
 
     @classmethod
     def view_attributes(cls):
@@ -84,7 +83,7 @@ class Party:
 
     @classmethod
     def get_broker(cls, parties, names):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         pool = Pool()
         Network = pool.get('distribution.network')
         party = cls.__table__()

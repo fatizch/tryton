@@ -116,11 +116,11 @@ def batch_exec(name, connection_date, treatment_date, args, ids):
                     to_treat = BatchModel.convert_to_instances(l)
                     r = BatchModel.execute(to_treat, l, treat_on, args)
                     res.append(r or len(l))
-                    Transaction().cursor.commit()
+                    Transaction().commit()
                     logger.info('committed %s items', len(l))
             except Exception:
                 logger.exception('exec crashed')
-                Transaction().cursor.rollback()
+                Transaction().rollback()
                 raise
             finally:
                 Cache.resets(database)

@@ -17,8 +17,9 @@ class Country(export.ExportImportMixin):
     def _default_country():
         Country = Pool().get('country.country')
         code = config.get('options', 'default_country', default='FR')
-        country, = Country.search([('code', '=', code)])
-        return country
+        country = Country.search([('code', '=', code)])
+        if country:
+            return country[0]
 
 
 class CountrySubdivision(export.ExportImportMixin):

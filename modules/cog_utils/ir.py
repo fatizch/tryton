@@ -143,10 +143,11 @@ class UIMenu(ExportImportMixin):
         if backend.name() != 'postgresql':
             return
 
-        with Transaction().new_cursor() as transaction:
-            cursor = transaction.cursor
+        with Transaction().new_transaction() as transaction, \
+                transaction.connection.cursor() as cursor:
+            cursor = transaction.connection.cursor()
             cursor.execute('CREATE EXTENSION IF NOT EXISTS unaccent', ())
-            cursor.commit()
+            transaction.commit()
 
     @classmethod
     def __setup__(cls):
@@ -203,7 +204,7 @@ class Action(ExportImportMixin):
 
     @classmethod
     def get_xml_id(cls, actions, name):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         pool = Pool()
         ModelData = pool.get('ir.model.data')
         Action = pool.get('ir.action')
@@ -240,7 +241,7 @@ class Action(ExportImportMixin):
 
     @classmethod
     def search_xml_id(cls, name, clause):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         _, operator, value = clause
         Operator = tryton_fields.SQL_OPERATORS[operator]
         pool = Pool()
@@ -310,10 +311,11 @@ class IrModule:
             # Cache was initialized, module does not exist
             return False
         cls._is_module_installed_cache.clear()
-        modules = cls.search([])
-        for module in modules:
-            cls._is_module_installed_cache.set(module.name,
-                module.state == 'installed')
+        cursor = Transaction().connection.cursor()
+        module = cls.__table__()
+        cursor.execute(*module.select(module.name, module.state))
+        for name, state in cursor.fetchall():
+            cls._is_module_installed_cache.set(name, state == 'installed')
         cls._is_module_installed_cache.set('_check_initialized', True)
         return cls._is_module_installed_cache.get(module_name, False)
 

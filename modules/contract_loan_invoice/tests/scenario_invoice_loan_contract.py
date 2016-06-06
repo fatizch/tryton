@@ -3,6 +3,7 @@
 import datetime
 from proteus import config, Model, Wizard
 from dateutil.relativedelta import relativedelta
+from trytond.modules.currency.tests.tools import get_currency
 from decimal import Decimal
 
 # #Comment# #Init Database
@@ -37,8 +38,6 @@ Contract = Model.get('contract')
 ContractInvoice = Model.get('contract.invoice')
 ContractPremium = Model.get('contract.premium')
 Country = Model.get('country.country')
-Currency = Model.get('currency.currency')
-CurrencyRate = Model.get('currency.currency.rate')
 Fee = Model.get('account.fee')
 FiscalYear = Model.get('account.fiscalyear')
 ItemDescription = Model.get('offered.item.description')
@@ -63,9 +62,7 @@ product_start_date = datetime.date(2014, 1, 1)
 contract_start_date = datetime.date(2014, 4, 10)
 
 # #Comment# #Create or fetch Currency
-currency, = Currency.find([('code', '=', 'EUR')])
-CurrencyRate(date=product_start_date, rate=Decimal('1.0'),
-    currency=currency).save()
+currency = get_currency(code='EUR')
 
 # #Comment# #Create or fetch Country
 countries = Country.find([('code', '=', 'FR')])
@@ -217,6 +214,7 @@ coverage.family = 'loan'
 coverage.start_date = product_start_date
 coverage.account_for_billing = product_account
 coverage.item_desc = item_description
+coverage.currency = currency
 coverage.insurer = insurer
 coverage.save()
 
@@ -246,6 +244,7 @@ product.company = company
 product.name = 'Test Product'
 product.code = 'test_product'
 product.contract_generator = contract_sequence
+product.currency = currency
 product.quote_number_sequence = quote_sequence
 product.start_date = product_start_date
 product.billing_modes.append(freq_monthly)

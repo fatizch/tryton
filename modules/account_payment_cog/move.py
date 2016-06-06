@@ -134,7 +134,7 @@ class MoveLine:
         pool = Pool()
         Account = pool.get('account.account')
         MoveLine = pool.get('account.move.line')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         line = MoveLine.__table__()
         account = Account.__table__()

@@ -100,15 +100,16 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
             logging.getLogger('test_case').info('Not executing test_case "%s",'
                 ' already executed' % test_case.name)
             return
-        with Transaction().new_cursor(), Transaction().set_user(0):
+        with Transaction().new_transaction() as transaction, \
+                Transaction().set_user(0):
             with Transaction().set_context(user=cur_user if cur_user else 1):
                 cls.run_test_case_method(getattr(cls, test_case.method_name))
                 test_case.execution_date = datetime.datetime.now()
                 test_case.save()
             try:
-                Transaction().cursor.commit()
+                transaction.commit()
             except DatabaseOperationalError:
-                Transaction().cursor.rollback()
+                transaction.rollback()
 
     @classmethod
     def clear_all_caches(cls):
@@ -596,7 +597,8 @@ class TestCaseWizard(model.CoopWizard):
                     cur_user = Transaction().user
                     DatabaseOperationalError = backend.get(
                         'DatabaseOperationalError')
-                    with Transaction().new_cursor(), Transaction().set_user(0):
+                    with Transaction().new_transaction() as transaction, \
+                            Transaction().set_user(0):
                         if cur_user:
                             with Transaction().set_context(user=cur_user):
                                 export.ExportImportMixin.import_json(
@@ -605,9 +607,9 @@ class TestCaseWizard(model.CoopWizard):
                                 export.ExportImportMixin.import_json(
                                     the_file.read())
                         try:
-                            Transaction().cursor.commit()
+                            transaction.commit()
                         except DatabaseOperationalError:
-                            Transaction().cursor.rollback()
+                            transaction.rollback()
                     logging.getLogger('test_case').info('Successfully '
                         'imported %s' % elem.filename)
                 except:

@@ -132,6 +132,7 @@ class Group:
 
     @classmethod
     def __setup__(cls):
+        super(Group, cls).__setup__()
         cls._error_messages.update({
                 'cheque_process_exceed': 'The amount of processed payments '
                 'exceed the given number of available cheques: '

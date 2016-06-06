@@ -36,10 +36,10 @@ class ReportProductRelation(model.CoopSQL):
     def __register__(cls, module_name):
         # Migration from 1.3: rename 'document_template' => 'report_template'
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        if TableHandler.table_exist(cursor,
+        cursor = Transaction().connection.cursor()
+        if TableHandler.table_exist(
                 'document_template-offered_product'):
-            TableHandler.table_rename(cursor,
+            TableHandler.table_rename(
                 'document_template-offered_product',
                 'report_template-offered_product')
             cursor.execute('ALTER TABLE "report_template-offered_product" '

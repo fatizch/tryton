@@ -5,10 +5,11 @@ Loan Endorsement Scenario
 Imports::
 
     >>> import datetime
-    >>> from proteus import config, Model, Wizard
-    >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
+    >>> from dateutil.relativedelta import relativedelta
+    >>> from proteus import config, Model, Wizard
     >>> from trytond.modules.company.tests.tools import create_company, get_company
+    >>> from trytond.modules.currency.tests.tools import get_currency
 
 Init Database::
 
@@ -37,8 +38,6 @@ Get Models::
     >>> ContractPremium = Model.get('contract.premium')
     >>> Country = Model.get('country.country')
     >>> CoveredElement = Model.get('contract.covered_element')
-    >>> Currency = Model.get('currency.currency')
-    >>> CurrencyRate = Model.get('currency.currency.rate')
     >>> Endorsement = Model.get('endorsement')
     >>> EndorsementDefinition = Model.get('endorsement.definition')
     >>> EndorsementPart = Model.get('endorsement.part')
@@ -71,9 +70,7 @@ Constants::
 
 Create or fetch Currency::
 
-    >>> currency, = Currency.find()
-    >>> CurrencyRate(date=product_start_date, rate=Decimal('1.0'),
-    ...     currency=currency).save()
+    >>> currency = get_currency(code='EUR')
 
 Create or fetch Country::
 
@@ -195,6 +192,7 @@ Create Coverage::
 
     >>> coverage = OptionDescription()
     >>> coverage.company = company
+    >>> coverage.currency = currency
     >>> coverage.name = 'Test Coverage'
     >>> coverage.code = 'test_coverage'
     >>> coverage.family = 'loan'
@@ -229,6 +227,7 @@ Create Product::
     >>> quote_sequence.save()
     >>> product = Product()
     >>> product.company = company
+    >>> product.currency = currency
     >>> product.name = 'Test Product'
     >>> product.code = 'test_product'
     >>> product.contract_generator = contract_sequence

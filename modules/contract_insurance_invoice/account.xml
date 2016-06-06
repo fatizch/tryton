@@ -6,7 +6,6 @@
         <!-- ####### -->
         <record model="ir.ui.view" id="fee_view_form">
             <field name="model">account.fee</field>
-            <field name="type">form</field>
             <field name="inherit" ref="premium.fee_view_form"/>
             <field name="name">fee_form</field>
         </record>

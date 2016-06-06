@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 
 from trytond.modules.company.tests.tools import create_company, get_company
+from trytond.modules.currency.tests.tools import get_currency
 
 # #Comment# #Init Database
 config = config.set_trytond()
@@ -39,8 +40,6 @@ Contract = Model.get('contract')
 ContractInvoice = Model.get('contract.invoice')
 ContractPremium = Model.get('contract.premium')
 Country = Model.get('country.country')
-Currency = Model.get('currency.currency')
-CurrencyRate = Model.get('currency.currency.rate')
 Fee = Model.get('account.fee')
 FiscalYear = Model.get('account.fiscalyear')
 ItemDescription = Model.get('offered.item.description')
@@ -66,9 +65,7 @@ product_start_date = datetime.date(2014, 1, 1)
 contract_start_date = datetime.date(2014, 4, 10)
 
 # #Comment# #Create or fetch Currency
-currency, = Currency.find([('code', '=', 'EUR')])
-CurrencyRate(date=product_start_date, rate=Decimal('1.0'),
-    currency=currency).save()
+currency = get_currency(code='EUR')
 
 # #Comment# #Create or fetch Country
 countries = Country.find([('code', '=', 'FR')])
@@ -217,6 +214,7 @@ insurer.save()
 # #Comment# #Create Coverage
 coverage = OptionDescription()
 coverage.company = company
+coverage.currency = currency
 coverage.name = 'Test Coverage'
 coverage.code = 'test_coverage'
 coverage.family = 'loan'
@@ -249,6 +247,7 @@ quote_sequence.company = company
 quote_sequence.save()
 product = Product()
 product.company = company
+product.currency = currency
 product.name = 'Test Product'
 product.code = 'test_product'
 product.contract_generator = contract_sequence

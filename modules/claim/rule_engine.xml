@@ -50,7 +50,7 @@
             <field name="name">_re_loss_start_date</field>
             <field name="parent" ref="dossier_sinistre"/>
         </record>
-        <record model="rule_engine.function" id="code_descripteur_préjudice">
+        <record model="rule_engine.function" id="code_descripteur_prejudice">
             <field name="translated_technical_name">code_du_descriteur_du_prejudice</field>
             <field name="description">Code du descripteur de préjudice</field>
             <field name="type">function</field>
@@ -59,7 +59,7 @@
             <field name="name">_re_loss_desc_code</field>
             <field name="parent" ref="dossier_sinistre"/>
         </record>
-        <record model="rule_engine.function" id="code_evenement_préjudice">
+        <record model="rule_engine.function" id="code_evenement_prejudice">
             <field name="translated_technical_name">code_de_l_evenement_du_prejudice</field>
             <field name="description">Code de l'événement du préjudice</field>
             <field name="type">function</field>

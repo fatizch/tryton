@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import datetime
 import unittest
 
@@ -48,6 +48,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         product_a.start_date = datetime.date.today()
         product_a.contract_generator = ng
         product_a.company = company
+        product_a.currency = company.currency
         product_a.start_date = datetime.date(2010, 1, 1)
         product_a.save()
 
@@ -63,6 +64,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         coverage_a.name = 'Alpha Coverage'
         coverage_a.start_date = datetime.date.today()
         coverage_a.company = company
+        coverage_a.currency = company.currency
         coverage_a.start_date = datetime.date(2010, 1, 1)
         coverage_a.save()
 
@@ -75,10 +77,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0030_testProductCoverageRelation(self):
         product_a, = self.Product.search([
                 ('code', '=', 'AAA'),
-            ], limit=1)
+                ], limit=1)
         coverage_a, = self.OptionDescription.search([
                 ('code', '=', 'ALP'),
-            ], limit=1)
+                ], limit=1)
         product_a.coverages = [coverage_a]
         product_a.save()
         self.assertEqual([x.coverage for x in product_a.ordered_coverages],

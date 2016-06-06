@@ -123,22 +123,12 @@ msgid "Invoice"
 msgstr "Quittance"
 
 msgctxt ""
-"model:ir.action.act_window.domain,name:account_invoice.act_invoice_in_credit_note_domain_posted"
+"model:ir.action.act_window.domain,name:account_invoice.act_invoice_out_domain_posted"
 msgid "Posted"
 msgstr "Emis"
 
 msgctxt ""
-"model:ir.action.act_window.domain,name:account_invoice.act_invoice_out_invoice_domain_posted"
-msgid "Posted"
-msgstr "Emis"
-
-msgctxt ""
-"model:ir.action.act_window.domain,name:account_invoice.act_invoice_in_invoice_domain_posted"
-msgid "Posted"
-msgstr "Emis"
-
-msgctxt ""
-"model:ir.action.act_window.domain,name:account_invoice.act_invoice_out_credit_note_domain_posted"
+"model:ir.action.act_window.domain,name:account_invoice.act_invoice_in_domain_posted"
 msgid "Posted"
 msgstr "Emis"
 
@@ -150,7 +140,7 @@ msgctxt "model:ir.action,name:account_invoice.print"
 msgid "Invoice"
 msgstr "Quittance"
 
-msgctxt "model:ir.action,name:account_invoice.act_invoice_out_invoice_form"
+msgctxt "model:ir.action,name:account_invoice.act_invoice_out_form"
 msgid "Invoices"
 msgstr "Quittances"
 
@@ -167,17 +157,13 @@ msgctxt ""
 msgid "Invoice"
 msgstr "Quittance"
 
-msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoice_out_invoice_form"
+msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoice_out_form"
 msgid "Invoices"
 msgstr "Quittances"
 
 msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoices"
 msgid "Invoices"
 msgstr "Quittances"
-
-msgctxt "selection:account.invoice.line,invoice_type:account_invoice."
-msgid "Invoice"
-msgstr "Quittance"
 
 msgctxt "selection:account.invoice,state:account_invoice."
 msgid "Canceled"
@@ -190,10 +176,6 @@ msgstr "Emise"
 msgctxt "selection:account.invoice,state:account_invoice."
 msgid "Validated"
 msgstr "Validée"
-
-msgctxt "selection:account.invoice,type:account_invoice."
-msgid "Invoice"
-msgstr "Quittance"
 
 msgctxt "view:account.invoice:account_invoice."
 msgid "Invoices"

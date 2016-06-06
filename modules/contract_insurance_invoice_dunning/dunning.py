@@ -86,9 +86,9 @@ class Level:
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
-        handler = TableHandler(cursor, cls, module_name)
+        handler = TableHandler(cls, module_name)
         table = cls.__table__()
         # Migration from 1.4
         migrate = False
@@ -157,7 +157,7 @@ class Level:
                 unit=None,
                 unit_price=contract.currency.round(fee.amount),
                 taxes=0,
-                invoice_type='out_invoice',
+                invoice_type='out',
                 account=fee.product.account_revenue_used,
                 )]
 

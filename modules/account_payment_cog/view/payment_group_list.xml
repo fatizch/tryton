@@ -3,7 +3,7 @@
     <xpath expr="/tree" position="replace_attributes">
         <tree string="Payment Groups" keyword_open="0"/>
     </xpath>
-    <xpath expr="/tree/field[@name='reference']" position="before">
+    <xpath expr="/tree/field[@name='number']" position="before">
         <field name="payment_dates"/>
         <field name="amount">
             <suffix name="currency_symbol"/>

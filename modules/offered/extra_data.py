@@ -87,8 +87,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         super(ExtraData, cls).__register__(module_name)
         # Migration from 1.3: Drop start_date, end_date column
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        extra_data = TableHandler(cursor, cls)
+        extra_data = TableHandler(cls)
         if extra_data.column_exist('start_date'):
             extra_data.drop_column('start_date')
         if extra_data.column_exist('end_date'):

@@ -30,12 +30,12 @@ class DocumentRule(RuleMixin, model.CoopSQL, model.CoopView):
 
     @classmethod
     def __register__(cls, module_name):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         super(DocumentRule, cls).__register__(module_name)
         # Migration from 1.3: Drop sub_document_rules column
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        document_rule = TableHandler(cursor, cls)
+        cursor = Transaction().connection.cursor()
+        document_rule = TableHandler(cls)
         if document_rule.column_exist('start_date'):
             document_rule.drop_column('start_date')
         if document_rule.column_exist('end_date'):
@@ -116,8 +116,7 @@ class Product:
         super(Product, cls).__register__(module_name)
         # Migration from 1.3: Drop sub_document_rules column
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        product = TableHandler(cursor, cls)
+        product = TableHandler(cls)
         if product.column_exist('sub_document_rules'):
             product.drop_column('sub_document_rules')
 
@@ -139,8 +138,7 @@ class OptionDescription:
         super(OptionDescription, cls).__register__(module_name)
         # Migration from 1.3: Drop sub_document_rules column
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        option = TableHandler(cursor, cls)
+        option = TableHandler(cls)
         if option.column_exist('sub_document_rules'):
             option.drop_column('sub_document_rules')
 

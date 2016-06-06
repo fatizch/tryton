@@ -6,7 +6,6 @@
         <!-- ############################################################ -->
         <record model="ir.ui.view" id="bank_view_list">
             <field name="model">bank</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="bank.bank_view_list"/>
             <field name="name">bank_list</field>
         </record>
@@ -15,19 +14,16 @@
               *******************************************-->
         <record model="ir.ui.view" id="bank_account_view_form">
             <field name="model">bank.account</field>
-            <field name="type">form</field>
             <field name="inherit" ref="bank.bank_account_view_form"/>
             <field name="name">bank_account_form</field>
         </record>
         <record model="ir.ui.view" id="bank_account_view_list">
             <field name="model">bank.account</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="bank.bank_account_view_list"/>
             <field name="name">bank_account_list</field>
         </record>
         <record model="ir.ui.view" id="bank_account_number_view_list_sequence">
             <field name="model">bank.account.number</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="bank.bank_account_number_view_list_sequence"/>
             <field name="name">bank_account_number_list_sequence</field>
         </record>

@@ -2,7 +2,6 @@ from collections import defaultdict
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
-from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.tools import grouped_slice
 from trytond.model import ModelView, Workflow
@@ -32,8 +31,7 @@ class MoveLine:
     def __register__(cls, module):
         super(MoveLine, cls).__register__(module)
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        table = TableHandler(cursor, cls, module)
+        table = TableHandler(cls, module)
         table.index_action('principal_invoice_line', 'remove')
         table.index_action(['principal_invoice_line', 'account'], 'add')
 

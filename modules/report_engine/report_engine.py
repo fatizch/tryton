@@ -155,11 +155,11 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     def __register__(cls, module_name):
         # Migration from 1.3: rename 'document_template' => 'report_template'
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        if TableHandler.table_exist(cursor, 'document_template'):
-            TableHandler.table_rename(cursor, 'document_template',
+        cursor = Transaction().connection.cursor()
+        if TableHandler.table_exist('document_template'):
+            TableHandler.table_rename('document_template',
                 'report_template')
-        report_template = TableHandler(cursor, cls)
+        report_template = TableHandler(cls)
         has_column_template_extension = report_template.column_exist(
             'template_extension')
         has_column_internal_edm = report_template.column_exist('internal_edm')
@@ -395,9 +395,9 @@ class ReportTemplateVersion(Attachment, export.ExportImportMixin):
     def __register__(cls, module_name):
         # Migration from 1.3: rename 'document_template' => 'report_template'
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        if TableHandler.table_exist(cursor, 'document_template_version'):
-            TableHandler.table_rename(cursor,
+        cursor = Transaction().connection.cursor()
+        if TableHandler.table_exist('document_template_version'):
+            TableHandler.table_rename(
                 'document_template_version', 'report_template_version')
             cursor.execute("UPDATE report_template_version "
                 "SET resource = REPLACE(resource, 'document.', 'report.')")

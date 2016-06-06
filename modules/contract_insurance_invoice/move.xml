@@ -6,43 +6,36 @@
         <!-- ############# -->
         <record model="ir.ui.view" id="move_line_view_form">
             <field name="model">account.move.line</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account.move_line_view_form"/>
             <field name="name">move_line_form</field>
         </record>
         <record model="ir.ui.view" id="move_line_view_list">
             <field name="model">account.move.line</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="account.move_line_view_tree"/>
             <field name="name">move_line_list</field>
         </record>
         <record model="ir.ui.view" id="move_line_payment_view_list">
             <field name="model">account.move.line</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="account_payment.move_line_view_list"/>
             <field name="name">move_line_list</field>
         </record>
         <record model="ir.ui.view" id="move_line_view_list_move">
             <field name="model">account.move.line</field>
-            <field name="type">tree</field>
             <field name="inherit" ref="account.move_line_view_tree_move"/>
             <field name="name">move_line_list_move</field>
         </record>
         <record model="ir.ui.view" id="move_line_view_form_move">
             <field name="model">account.move.line</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account.move_line_view_form_move"/>
             <field name="name">move_line_form_move</field>
         </record>
         <record model="ir.ui.view" id="move_line_party_balance_view_form">
             <field name="model">account.move.line</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account_cog.move_line_party_balance_view_form"/>
             <field name="name">move_line_party_balance_form</field>
         </record>
         <record model="ir.ui.view" id="move_line_party_balance_view_list">
             <field name="model">account.move.line</field>
-            <field name="type">tree</field>
             <field name="name">move_line_party_balance_list</field>
             <field name="inherit" ref="account_cog.move_line_party_balance_view_list"/>
         </record>
@@ -51,7 +44,6 @@
         <!-- ################## -->
         <record model="ir.ui.view" id="reconcile_show_view_form">
             <field name="model">account.reconcile.show</field>
-            <field name="type">form</field>
             <field name="inherit" ref="account.reconcile_show_view_form"/>
             <field name="name">reconcile_show_form</field>
         </record>

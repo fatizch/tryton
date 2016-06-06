@@ -37,7 +37,7 @@ class ContractOptionVersion(object):
         pool = Pool()
         Option = pool.get('contract.option')
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         option = Option.__table_history__()
         version = cls.__table_history__()
 
@@ -45,7 +45,7 @@ class ContractOptionVersion(object):
 
         # Migration from 1.4 : Move contract.option->extra_data in
         # contract.option.version->extra_data
-        option_h = TableHandler(cursor, Option, module, history=True)
+        option_h = TableHandler(Option, module, history=True)
         if option_h.column_exist('extra_data'):
             update_data = option.select(Column(option, '__id'),
                 Coalesce(option.extra_data, '{}').as_('extra_data'))
@@ -74,17 +74,18 @@ class CoveredElementVersion(object):
         pool = Pool()
         CoveredElement = pool.get('contract.covered_element')
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
+        transaction = Transaction()
+        cursor = transaction.connection.cursor()
         covered_element_hist = CoveredElement.__table_history__()
         version_hist = cls.__table_history__()
 
         # Migration from 1.4 : Create default contract.covered_element.version
-        covered_h = TableHandler(cursor, CoveredElement, module, history=True)
+        covered_h = TableHandler(CoveredElement, module, history=True)
         to_migrate = covered_h.column_exist('extra_data')
         super(CoveredElementVersion, cls).__register__(module)
 
         if to_migrate:
-            version_h = TableHandler(cursor, cls, module, history=True)
+            version_h = TableHandler(cls, module, history=True)
             # Delete previously created history, to have full control
             cursor.execute(*version_hist.delete())
             cursor.execute(*version_hist.insert(
@@ -104,9 +105,9 @@ class CoveredElementVersion(object):
                         Column(covered_element_hist, '__id').as_('__id'))))
             cursor.execute(*version_hist.select(
                     Max(Column(version_hist, '__id'))))
-            cursor.setnextid(version_h.table_name + '__',
-                cursor.fetchone()[0] or 0 + 1)
-            covered_history_h = TableHandler(cursor, CoveredElement, module,
+            transaction.database.setnextid(transaction.connection,
+                version_h.table_name + '__', cursor.fetchone()[0] or 0 + 1)
+            covered_history_h = TableHandler(CoveredElement, module,
                 history=True)
             covered_history_h.drop_column('extra_data')
 

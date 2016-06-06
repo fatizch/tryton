@@ -88,7 +88,7 @@ class ExportImportMixin(Model):
 
     @classmethod
     def search_xml_id(cls, name, clause):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         _, operator, value = clause
         Operator = tryton_fields.SQL_OPERATORS[operator]
         ModelData = Pool().get('ir.model.data')
@@ -511,7 +511,7 @@ class ExportImportMixin(Model):
                     'values': object_values,
                     }
             except UserError as exc:
-                Transaction().cursor.rollback()
+                Transaction().rollback()
                 message[ext_id] = {
                     'return': False,
                     'error': exc.message}
@@ -537,7 +537,7 @@ class ExportImportMixin(Model):
             try:
                 entity = cls.import_json(to_create)
             except UserError as exc:
-                Transaction().cursor.rollback()
+                Transaction().rollback()
                 return {ext_id: {
                         'return': False,
                         'messages': {'error': exc.message},

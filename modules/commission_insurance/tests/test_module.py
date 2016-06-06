@@ -50,7 +50,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         invoice = self.Invoice()
         invoice.currency = None
         invoice.currency_date = None
-        invoice.type = 'in_invoice'
+        invoice.type = 'in'
 
         invoice_line = self.InvoiceLine()
         invoice_line.invoice = invoice
