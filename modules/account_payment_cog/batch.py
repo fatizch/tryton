@@ -94,6 +94,10 @@ class PaymentTreatmentBatch(batch.BatchRoot):
             coop_string.get_print_infos(groups, 'payments group'))
         return [group.id for group in groups]
 
+    @classmethod
+    def get_batch_args_name(cls):
+        return ['journal_methods', 'payment_kind']
+
 
 class PaymentCreationBatch(batch.BatchRoot):
     "Payment Creation Batch"
@@ -188,6 +192,10 @@ class PaymentCreationBatch(batch.BatchRoot):
         cls.logger.info('%s created' %
             coop_string.get_print_infos([x.id for x in move_lines], 'payment'))
 
+    @classmethod
+    def get_batch_args_name(cls):
+        return ['payment_kind']
+
 
 class PaymentAcknowledgeBatch(batch.BatchRoot):
     'Payment Acknowledge Batch'
@@ -247,3 +255,7 @@ class PaymentAcknowledgeBatch(batch.BatchRoot):
             Payment.succeed(objects)
         cls.logger.info('%s succeed' %
             coop_string.get_print_infos([x.id for x in objects], 'payment'))
+
+    @classmethod
+    def get_batch_args_name(cls):
+        return ['journal_methods', 'payment_kind', 'group_reference']

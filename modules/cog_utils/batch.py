@@ -95,6 +95,14 @@ class BatchRoot(ModelView):
         raise NotImplementedError
 
     @classmethod
+    def get_batch_args_name(cls):
+        """
+        This method must returns a list filled with
+        each extra_args names (or an empty list).
+        """
+        raise NotImplementedError
+
+    @classmethod
     def get_batch_domain(cls, treatment_date, extra_args):
         return []
 
@@ -250,6 +258,10 @@ class ViewValidationBatch(BatchRoot):
                             full_inherited_xml_id))
         logger.info('%d views checked' % len(objects))
 
+    @classmethod
+    def get_batch_args_name(cls):
+        return ['crash']
+
 
 class CleanDatabaseBatch(BatchRoot):
     'Clean Database Batch'
@@ -344,3 +356,7 @@ class CleanDatabaseBatch(BatchRoot):
             for table in tables:
                 cls.create_pk(buf, table)
         cls.write_batch_output('\n'.join(buf), 'clean.sql')
+
+    @classmethod
+    def get_batch_args_name(cls):
+        return ['module', 'drop_const', 'drop_index']

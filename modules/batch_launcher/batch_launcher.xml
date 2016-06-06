@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="batch_parameter_view_editable_list">
+            <field name="model">batch.launcher.parameter</field>
+            <field name="type">tree</field>
+            <field name="name">batch_parameter_editable_list</field>
+        </record>
+        <!-- ######################### -->
+        <!-- # Batch Launcher Wizard # -->
+        <!-- ######################### -->
+        <record model="ir.action.wizard" id="act_launch_batches">
+            <field name="name">Launch Batches</field>
+            <field name="wiz_name">batch.launcher</field>
+        </record>
+        <!-- ########################### -->
+        <!-- #Batch Select Start Form # -->
+        <!-- ########################### -->
+        <record model="ir.ui.view" id="batch_launcher_start_view_form">
+            <field name="model">batch.launcher.select_batchs</field>
+            <field name="type">form</field>
+            <field name="name">batch_launcher_start_form</field>
+        </record>
+        <!-- ################ -->
+        <!-- # Entry points # -->
+        <!-- ################ -->
+        <menuitem parent="ir.menu_administration" sequence="40" name="Batches" id="menu_batches"/>
+        <menuitem parent="menu_batches" sequence="10" action="act_launch_batches" id="menu_launch_batches"/>
+    </data>
+</tryton>

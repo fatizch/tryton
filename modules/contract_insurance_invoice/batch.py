@@ -58,6 +58,11 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
             (len(invoices), coop_string.get_print_infos(ids, 'contracts')))
 
 
+    @classmethod
+    def get_batch_args_name(cls):
+        return []
+
+
 class PostInvoiceContractBatch(batch.BatchRoot):
     'Post Contract Invoice Batch'
 
@@ -95,6 +100,10 @@ class PostInvoiceContractBatch(batch.BatchRoot):
         Pool().get('account.invoice').post(objects)
         cls.logger.info('%d invoices posted' % len(objects))
 
+    @classmethod
+    def get_batch_args_name(cls):
+        return []
+
 
 class SetNumberInvoiceContractBatch(batch.BatchRoot):
     'Set Contract Invoice Number Batch'
@@ -120,3 +129,7 @@ class SetNumberInvoiceContractBatch(batch.BatchRoot):
         for obj in objects:
             obj.set_number()
         cls.logger.info('%d invoices numbers set' % len(objects))
+
+    @classmethod
+    def get_batch_args_name(cls):
+        return []

@@ -1,0 +1,79 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:batch.launcher.parameter,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:batch.launcher.parameter,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:batch.launcher.parameter,value:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:batch.launcher.select_batchs,available_batches:"
+msgid "Available Batches"
+msgstr "Batchs disponibles"
+
+msgctxt "field:batch.launcher.select_batchs,batch:"
+msgid "Batch"
+msgstr "Batch"
+
+msgctxt "field:batch.launcher.select_batchs,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:batch.launcher.select_batchs,loaded_parameters:"
+msgid "Loaded Parameters"
+msgstr "Paramètres chargés"
+
+msgctxt "field:batch.launcher.select_batchs,on_model:"
+msgid "On model"
+msgstr "Sur le modèle"
+
+msgctxt "field:batch.launcher.select_batchs,parameters:"
+msgid "Batch Parameters"
+msgstr "Paramètres du batch"
+
+msgctxt "field:batch.launcher.select_batchs,treatment_date:"
+msgid "Treatment Date"
+msgstr "Date de traitement"
+
+msgctxt "model:batch.launcher.parameter,name:"
+msgid "Batch Parameter"
+msgstr "Paramètre du batch"
+
+msgctxt "model:batch.launcher.select_batchs,name:"
+msgid "Select Batch"
+msgstr "Sélection batch"
+
+msgctxt "model:ir.action,name:act_launch_batches"
+msgid "Launch Batches"
+msgstr "Exécuter des batchs"
+
+msgctxt "model:ir.ui.menu,name:menu_batches"
+msgid "Batches"
+msgstr "Batchs"
+
+msgctxt "model:ir.ui.menu,name:menu_launch_batches"
+msgid "Launch Batches"
+msgstr "Exécuter des batchs"
+
+msgctxt "view:batch.launcher.parameter:"
+msgid "Batch Parameters"
+msgstr "Paramètres du batch"
+
+msgctxt "view:batch.launcher.select_batchs:"
+msgid "Batches Selection"
+msgstr "Sélection des batchs"
+
+msgctxt "wizard_button:batch.launcher,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:batch.launcher,start,process:"
+msgid "OK"
+msgstr "OK"

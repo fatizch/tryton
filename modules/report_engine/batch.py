@@ -38,3 +38,7 @@ class ReportProductionRequestTreatmentBatch(batch.BatchRoot):
         reports, attachments = ReportProductionRequest.treat_requests(objects)
         cls.logger.info('Produced %s reports, and created %s attachments' %
             (len(reports), len(attachments)))
+
+    @classmethod
+    def get_batch_args_name(cls):
+        return []

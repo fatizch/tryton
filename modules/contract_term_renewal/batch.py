@@ -41,3 +41,7 @@ class RenewContracts(batch.BatchRoot):
             type='wizard')
         renewed = RenewalWizard.renew_contracts(objects)
         cls.logger.info('Renewed %d contracts.' % len(renewed))
+
+    @classmethod
+    def get_batch_args_name(cls):
+        return []

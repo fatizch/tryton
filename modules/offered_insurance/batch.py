@@ -37,3 +37,7 @@ class ProductValidationBatch(batch.BatchRoot):
         Product = Pool().get('offered.product')
         Product._validate(objects)
         cls.logger.info('Validated %d products' % len(objects))
+
+    @classmethod
+    def get_batch_args_name(cls):
+        return []

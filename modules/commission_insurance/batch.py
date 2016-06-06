@@ -77,6 +77,10 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
                 'brokers' if extra_args['agent_type'] == 'agent'
                 else 'insurers'))
 
+    @classmethod
+    def get_batch_args_name(cls):
+        return ['agent_type']
+
 
 class PostCommissionInvoiceBatch(batch.BatchRoot):
     'Post Commission Invoice Batch'
@@ -116,3 +120,7 @@ class PostCommissionInvoiceBatch(batch.BatchRoot):
     def execute(cls, objects, ids, treatment_date, extra_args):
         Pool().get('account.invoice').post(objects)
         cls.logger.info('%d commissions invoices posted' % len(objects))
+
+    @classmethod
+    def get_batch_args_name(cls):
+        return ['agent_type','with_draft']

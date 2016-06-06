@@ -29,3 +29,7 @@ class ValidateRuleBatch(batch.BatchRoot):
     def execute(cls, objects, ids, treatment_date, extra_args):
         Pool().get('rule_engine.test_case').check_pass(objects)
         cls.logger.info('%s objects validated' % len(objects))
+
+    @classmethod
+    def get_batch_args_name(cls):
+        return []

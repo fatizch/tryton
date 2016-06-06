@@ -44,6 +44,10 @@ class ContractEndDateTerminationBatch(batch.BatchRoot):
         Contract.do_terminate(objects)
         cls.logger.info('Terminated %d contracts.' % len(objects))
 
+    @classmethod
+    def get_batch_args_name(cls):
+        return []
+
 
 class ContractDeclineInactiveQuotes(batch.BatchRoot):
     'Decline Inactive Quotes Contracts'
@@ -91,3 +95,7 @@ class ContractDeclineInactiveQuotes(batch.BatchRoot):
         configuration = Pool().get('offered.configuration')(1)
         return configuration.inactivity_delay and \
             configuration.automatic_decline_reason
+
+    @classmethod
+    def get_batch_args_name(cls):
+        return []

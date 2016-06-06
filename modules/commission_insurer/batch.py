@@ -51,6 +51,10 @@ class CreateEmptyInvoicePrincipalBatch(batch.BatchRoot):
         CreateInvoicePrincipal.create_empty_invoices(
             objects, company, journal, treatment_date, description)
 
+    @classmethod
+    def get_batch_args_name(cls):
+        return []
+
 
 class LinkInvoicePrincipalBatch(batch.BatchRoot):
     'Insurer Invoice Principal Link Batch'
@@ -93,6 +97,10 @@ class LinkInvoicePrincipalBatch(batch.BatchRoot):
             insurers, treatment_date, company, journal, description,
             invoice_ids=ids)
 
+    @classmethod
+    def get_batch_args_name(cls):
+        return []
+
 
 class FinalizeInvoicePrincipalBatch(batch.BatchRoot):
     'Insurer Invoice Principal Finalize Batch'
@@ -128,3 +136,7 @@ class FinalizeInvoicePrincipalBatch(batch.BatchRoot):
 
         CreateInvoicePrincipal.finalize_invoices_and_lines(
             objects, company, journal, treatment_date, description)
+
+    @classmethod
+    def get_batch_args_name(cls):
+        return []

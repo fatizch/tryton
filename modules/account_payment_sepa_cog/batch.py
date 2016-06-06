@@ -56,6 +56,10 @@ class PaymentTreatmentBatch:
                     "'waiting' status for  %s" % payments_group)
         return [group.id for group in groups]
 
+    @classmethod
+    def get_batch_args_name(cls):
+        return ['out']
+
 
 class PaymentFailBatch(batch.BatchRootNoSelect):
     'Payment Fail Batch'
@@ -90,3 +94,7 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
             Message.wait(messages)
             Message.do(messages)
         cls.archive_treated_files(files, out_directory, treatment_date)
+
+    @classmethod
+    def get_batch_args_name(cls):
+        return ['in', 'out']

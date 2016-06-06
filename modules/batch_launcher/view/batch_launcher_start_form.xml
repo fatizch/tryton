@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Batches Selection">
+    <label name="batch" colspan="1"/>
+    <field name="batch" colspan="1"/>
+    <label name="on_model"/>
+    <field name="on_model"/>
+    <newline/>
+    <label name="treatment_date"/>
+    <field name="treatment_date"/>
+    <newline/>
+    <field name="parameters" expand_toolbar="0" colspan="4"/>
+    <field name="available_batches" invisible="1"/>
+    <field name="loaded_parameters" invisible="1"/>
+</form>

@@ -43,3 +43,7 @@ class UpdateZipCodesFromHexaPost(batch.BatchRootNoSelect):
         else:
             cls.logger.info('No zipcode to update')
         cls.archive_treated_files(files, archive_path, treatment_date)
+
+    @classmethod
+    def get_batch_args_name(cls):
+        return ['hexa_post_file_path', 'archive']
