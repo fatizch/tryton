@@ -10,6 +10,10 @@ msgctxt "field:account.invoice,sepa_mandate:"
 msgid "Sepa Mandate"
 msgstr "Mandat SEPA"
 
+msgctxt "field:account.invoice,bank_account:"
+msgid "Bank Account"
+msgstr "Compte bancaire"
+
 msgctxt "field:contract.billing_information,sepa_mandate:"
 msgid "Sepa Mandate"
 msgstr "Mandat SEPA"
