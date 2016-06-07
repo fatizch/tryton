@@ -40,7 +40,8 @@ class LaunchBatch(Wizard):
         BatchModel = Pool().get(self.start.batch.model)
         extra_args = {p.code: p.value for p in self.start.parameters}
         ids = BatchModel.select_ids(treatment_date, extra_args)
-        objects = BatchModel.convert_to_instances(ids[0]) if ids else []
+        objects = BatchModel.convert_to_instances((x[0] for x in ids)) \
+            if ids else []
         BatchModel.execute(objects, ids, treatment_date, extra_args)
         return 'end'
 
