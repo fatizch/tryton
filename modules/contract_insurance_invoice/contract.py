@@ -678,6 +678,7 @@ class Contract:
         for contract_slice in grouped_slice(contracts):
             contract_invoices += ContractInvoice.search([
                     ('contract', 'in', [x.id for x in contract_slice]),
+                    ('invoice_state', '!=', 'cancel'),
                     ['OR',
                         ('contract.status', '=', 'void'),
                         ('start', '<=', to_date or datetime.date.min),
