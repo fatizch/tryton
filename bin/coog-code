@@ -15,7 +15,7 @@ _coog_code_status() {
         for repo in $repos
         do
                 local folder; folder=$COOG_ROOT/$repo
-                if [ ! -d $folder ] || [ ! -d $folder/.git ]
+                if [ ! -d $folder ] || [ ! -d $folder/.git ] || [ -e $folder/.not-coog ]
                 then
                         continue
                 fi
@@ -56,7 +56,7 @@ coog_code_foreach() { # exec command on each repo <command>
         for repo in $repos
         do
                 local folder; folder=$COOG_ROOT/$repo
-                if [ ! -d $folder ] || [ ! -d $folder/.git ]
+                if [ ! -d $folder ] || [ ! -d $folder/.git ] || [ -e $folder/.not-coog ]
                 then
                         continue
                 fi
@@ -76,7 +76,7 @@ coog_code_norem() { # list local branches with no remotes - <repo>
         [ -z $1 ] && echo missing repo && return 1
         local wd; wd=`pwd`
         local folder; folder=$COOG_ROOT/$1
-        if [ ! -d $folder ] || [ ! -d $folder/.git ]
+        if [ ! -d $folder ] || [ ! -d $folder/.git ] || [ -e $folder/.not-coog ]
         then
                 echo not a repo && return 1
         fi
