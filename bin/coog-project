@@ -5,35 +5,36 @@ _coog_check_git_url() {
         local final_url=$1
         git ls-remote $final_url > /dev/null
         ret_code=$?
-        if [ $ret_code -ne 0 ]; then
-            echo "Clone url examples: "
-            echo "(https) | https://username@bitbucket.org/project/repo.git"
-            echo "-ssh)   | git@bitbucket.org:project_or_username/repot.git"
-            read -p $final_url" is invalid, type the full clone url ("$2"): " final_url
-            final_url=$(_coog_check_git_url $final_url $2)
+        if [ $ret_code -ne 0 ]
+        then
+                echo "Clone url examples: "
+                echo "(https) | https://username@bitbucket.org/project/repo.git"
+                echo "(ssh)   | git@bitbucket.org:project_or_username/repot.git"
+                read -p $final_url" is invalid, type the full clone url ("$2"): " final_url
+                final_url=$(_coog_check_git_url $final_url $2)
         fi
         echo $final_url
 }
 
 _coog_check_init() {
-        [ -z "$COOG_GITPROJ_NAME" ] && echo "It seems you need to run 'coog init project'" && exit 1;
-        [ -z "$COOG_GITPROJ_URL" ] && echo "It seems you need to run 'coog init project'" && exit 1;
+        [ -z "$COOG_GITPROJ_NAME" ] && echo "It seems you need to run 'coog init project'" && return 1
+        [ -z "$COOG_GITPROJ_URL" ] && echo "It seems you need to run 'coog init project'" && return 1
 }
 
 coog_project_link() { # Add a remote repository (inputs) - [repositories name] - default is empty
-        _coog_check_init
+        _coog_check_init || return 1
         local repo
         local final_url
         local ret_code
         for repo in $*
         do
-                 pushd $COOG_ROOT/$repo > /dev/null
-                 [ $? -ne 0 ] && echo "Ignoring "$repo": directory does not exist" && continue
-                 echo "Checking wether the built url is valid..."
-                 final_url=$COOG_GITPROJ_URL$repo".git"
-                 final_url=$(_coog_check_git_url $final_url $repo)
-                 git remote add $COOG_GITPROJ_NAME $final_url && echo "added: $final_url"
-                 popd > /dev/null
+                pushd $COOG_ROOT/$repo > /dev/null
+                [ $? -ne 0 ] && echo "Ignoring "$repo": directory does not exist" && continue
+                echo "Checking wether the built url is valid..."
+                final_url=$COOG_GITPROJ_URL$repo".git"
+                final_url=$(_coog_check_git_url $final_url $repo)
+                git remote add $COOG_GITPROJ_NAME $final_url && echo "added: $final_url"
+                popd > /dev/null
         done
 }
 
@@ -46,16 +47,16 @@ coog_project_tag() { # Tag branch (input) - [repositories name] - default is emp
         remote_alias="${input:-$remote_alias}"
         for repo in $*
         do
-                 pushd $COOG_ROOT/$repo > /dev/null
-                 [ $? -ne 0 ] && echo "Ignoring "$repo": directory does not exist" && continue
-                 git tag -a $new_tag -m '"$(new_tag)"'
-                 git push --tags $remote_alias master
-                 popd > /dev/null
+                pushd $COOG_ROOT/$repo > /dev/null
+                [ $? -ne 0 ] && echo "Ignoring "$repo": directory does not exist" && continue
+                git tag -a $new_tag -m '"$(new_tag)"'
+                git push --tags $remote_alias master
+                popd > /dev/null
         done
 }
 
 coog_project_rebase() { # Rebase branch (input) - [repositories name] - default is empty
-        _coog_check_init
+        _coog_check_init || return 1
         local branch_to_rebase="recette"
         local input
         local version_to_go
@@ -67,22 +68,23 @@ coog_project_rebase() { # Rebase branch (input) - [repositories name] - default 
         branch_to_rebase="${input:-$branch_to_rebase}"
         for repo in $*
         do
-                 pushd $COOG_ROOT/$repo > /dev/null
-                 [ $? -ne 0 ] && echo "Ignoring "$repo": directory does not exist" && continue
-                 local prev_branch="$(git branch | sed -n '/\* /s///p')"
-                 git checkout $branch_to_rebase &&
-                 git rebase $version_to_go &&
-                 git push $remote_name $branch_to_rebase
-                 if [ $? -ne 0 ]; then
-                     git rebase --abort
-                     git checkout $prev_branch
-                     echo "Rebase push failed for repository: "$repo" on " $remote_name $branch_to_rebase
-                     popd > /dev/null
-                     continue
-                 fi
-                 last_commit="$(git log $remote_name/$branch_to_rebase  --pretty=oneline | head -1)"
-                 echo "Updated - ($(basename $repo) on branch "$branch_to_rebase" - "$last_commit
-                 git checkout $prev_branch
-                 popd > /dev/null
+                pushd $COOG_ROOT/$repo > /dev/null
+                [ $? -ne 0 ] && echo "Ignoring "$repo": directory does not exist" && continue
+                local prev_branch="$(git branch | sed -n '/\* /s///p')"
+                git checkout $branch_to_rebase &&
+                        git rebase $version_to_go &&
+                        git push $remote_name $branch_to_rebase
+                if [ $? -ne 0 ]
+                then
+                        git rebase --abort
+                        git checkout $prev_branch
+                        echo "Rebase push failed for repository: "$repo" on " $remote_name $branch_to_rebase
+                        popd > /dev/null
+                        continue
+                fi
+                last_commit="$(git log $remote_name/$branch_to_rebase  --pretty=oneline | head -1)"
+                echo "Updated - ($(basename $repo) on branch "$branch_to_rebase" - "$last_commit
+                git checkout $prev_branch
+                popd > /dev/null
         done
 }
