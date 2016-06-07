@@ -79,13 +79,6 @@ coog_server_kill() { # kill server process
         _coog_server_bak $pid
 }
 
-coog_server_restart() { # restart server (purge application inside the same process)
-        local pid
-        pid=`_coog_server_pid 0`
-        [ -z $pid ] && echo no server running && return
-        kill -USR1 $pid && echo server restarted
-}
-
 coog_server_ps() { # print server process info (based on ps)
         local pid
         pid=`_coog_server_pid 0`

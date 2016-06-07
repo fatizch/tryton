@@ -46,7 +46,7 @@ coog_worker_start() { # start worker - <wid> [args]
         local wid; wid=$1; shift
         local pid_file
         pid_file=`_coog_worker_file $wid pid`
-        [ -e $pid_file ] && echo worker $wid: already running "->" stop or restart && return 1
+        [ -e $pid_file ] && echo worker $wid: already running "->" stop && return 1
         local conf_file
         conf_file=`_coog_worker_file $wid conf`
         [ -e $conf_file ] && echo worker $wid: conf file exists "->" clean manually && return 1
@@ -81,14 +81,6 @@ coog_worker_kill() { # kill worker process - <wid>
         [ -z $pid ] && echo worker $1: no process running
         [ ! -z $pid ] && kill -9 $pid && echo worker $1: killed
         _coog_worker_bak $1 $pid
-}
-
-coog_worker_restart() { # restart worker - <wid>
-        [ -z $1 ] && >&2 echo missing worker id && return 1
-        local pid
-        pid=`_coog_worker_pid $1 0`
-        [ -z $pid ] && echo worker $1: no process running && return
-        kill -USR1 $pid && echo worker $1: restarted
 }
 
 coog_worker_log() { # less worker logs - <wid>

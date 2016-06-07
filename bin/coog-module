@@ -24,7 +24,6 @@ coog_module_update() { # install / update modules - [modules] - default: all
                 -c $COOG_CONF_SRV \
                 -d $DB_NAME \
                 -u $modules
-        coog_server_restart
 }
 
 coog_module_check() { # check if module is installed - <module>
