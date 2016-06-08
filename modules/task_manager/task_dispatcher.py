@@ -69,7 +69,7 @@ class ProcessLog:
         return start_log.start_time.date()
 
     def get_is_current_user(self, name):
-        if not Transaction().user:
+        if not Transaction().user or not self.user:
             return False
         return Transaction().user == self.user.id
 

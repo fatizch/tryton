@@ -317,15 +317,19 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
         for instances, _ in zipped:
             for instance in instances:
                 good_log = instance.current_log
-                if not good_log:
+                if (not good_log or good_log.to_state is None and
+                        not instance.current_state):
                     continue
-                if good_log.session != good_session:
+                if (good_log.session != good_session or
+                        good_log.to_state is None and instance.current_state):
                     good_log.latest = False
                     good_log.save()
                     old_log = good_log
                     good_log = Log()
                     good_log.session = good_session
-                    good_log.user = Transaction().user
+                    if not Transaction().context.get('set_empty_process_user',
+                            False):
+                        good_log.user = Transaction().user
                     good_log.start_time = datetime.datetime.now()
                     if not (hasattr(old_log, 'to_state') and old_log.to_state):
                         good_log.from_state = instance.current_state

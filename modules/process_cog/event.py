@@ -1,5 +1,7 @@
 from trytond.pyson import Eval, Or
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
+
 from trytond.modules.cog_utils import fields
 
 
@@ -66,7 +68,8 @@ class EventTypeAction:
             for x in objects]
         if ok:
             ProcessModel = pool.get(process_model_name)
-            ProcessModel.write(ok, {'current_state': state})
+            with Transaction().set_context(set_empty_process_user=True):
+                ProcessModel.write(ok, {'current_state': state})
         if not_ok:
             Event.notify_events(not_ok, 'process_not_initiated',
                 description=process.technical_name)
