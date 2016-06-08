@@ -1,10 +1,8 @@
 import logging
-
 from sql import Column
-
 from trytond.pool import Pool
 from trytond.rpc import RPC
-
+from trytond.transaction import Transaction
 from trytond.modules.cog_utils import batch
 
 import tools
@@ -53,10 +51,18 @@ class Migrator(batch.BatchRootNoSelect):
         return res
 
     @classmethod
+    def init_update_cache(cls, rows):
+        ids = [r[cls.func_key] for r in rows]
+        cls.cache_obj['update'] = tools.load_objects(
+            cls.model, cls.func_key,
+            (cls.func_key, 'in', ids))
+
+    @classmethod
     def init_cache(cls, rows):
         """Fill in cls.cache_obj with existing objects required to migrate rows
         """
-        pass
+        if cls.do_update():
+            cls.init_update_cache(rows)
 
     @classmethod
     def query_data(cls, ids):
@@ -143,12 +149,13 @@ class Migrator(batch.BatchRootNoSelect):
         return []
 
     @classmethod
-    def migrate(cls, ids, cursor_src=None):
-        with (tools.connect_to_source().cursor() if not cursor_src
-              else tools.none_ctxt(cursor_src)) as cursor_src:
+    def migrate(cls, ids, conn=None):
+        with (tools.connect_to_source() if not conn
+                  else tools.none_ctxt(conn)) as conn:
+            cursor = conn.cursor()
             select = cls.query_data(ids)
             if select:
-                rows = cls.run_query(select, cursor_src)
+                rows = cls.run_query(select, cursor)
                 if rows:
                     cls.init_cache(rows)
                     return cls.migrate_rows(rows)
@@ -156,30 +163,85 @@ class Migrator(batch.BatchRootNoSelect):
                     cls.logger.error(cls.error_message('no_rows') % (select,))
 
     @classmethod
-    def migrate_rows(cls, rows, cursor_src=None):
+    def migrate_rows(cls, rows, conn=None):
         pool = Pool()
-        Model = pool.get(cls.model)
-        to_create = {}
+        to_upsert = []
         for row in rows:
             try:
                 row = cls.populate(row)
             except tools.MigrateError as e:
                 cls.logger.error(e)
-                continue
-            to_create[row[cls.func_key]] = {k: row[k]
-                for k in row if k in Model._fields}
-        if to_create:
+            else:
+                to_upsert.append(row)
+        result = cls.upsert_records(to_upsert)
+        for migrator in cls.extra_migrator_names():
+            pool.get(migrator).migrate(result, conn)
+        return result
+
+    @classmethod
+    def upsert_records(cls, rows):
+        if not cls.do_update():
+            return cls.create_records(rows)
+        result, to_create, to_update = []
+        for row in rows:
+            if row[cls.func_key] in cls.cache_obj['update']:
+                to_update.append(row)
+            else:
+                to_create.append(row)
+        result += cls.create_records(to_create)
+        result += cls.update_records(to_update)
+        return result
+
+    @classmethod
+    def create_records(cls, rows):
+        """Create records from a list of rows and
+        return the list of ids which were successfully created.
+        """
+        pool = Pool()
+        Model = pool.get(cls.model)
+        if rows:
+            to_create = {}
+            for row in rows:
+                to_create[row[cls.func_key]] = {k: row[k]
+                    for k in row if k in Model._fields
+                    }
             Model.create(to_create.values())
-            for migrator in cls.extra_migrator_names():
-                pool.get(migrator).migrate(to_create.keys(), cursor_src)
-        return to_create
+            return rows
+        return []
+
+    @classmethod
+    def update_records(cls, rows):
+        """Update records from a list of rows.
+        For the moment relational fields are not supported, eg One2Many.
+        Returns a list of successfully updated ids.
+        """
+        pool = Pool()
+        Model = pool.get(cls.model)
+        if rows:
+            to_update = {}
+            for row in rows:
+                obj = cls.cache_obj['update'][row[cls.func_key]]
+                to_update[row[cls.func_key]] = [
+                    [obj], {k: row[k] for k in row if k in Model._fields}
+                    ]
+            Model.write(*sum(to_update.values(), []))
+            return rows
+        return []
+
+    @classmethod
+    def do_update(cls):
+        """Return True if the update flag was set. Otherwise, return False"""
+        return Transaction().context.get('batch_update', False)
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):
-        objs = cls.migrate(ids)
-        if objs is not None:
-            # string to display in 'result' column of `coog batch qlist`
-            return '%s|%s' % (len(objs), len(ids))
+        with Transaction().set_context(
+                batch_update=extra_args.get(
+                    'extra_args', 'false').lower() == 'true'):
+            objs = cls.migrate(ids)
+            if objs is not None:
+                # string to display in 'result' column of `coog batch qlist`
+                return '%s|%s' % (len(objs), len(ids))
 
     @classmethod
     def select_all_ids(cls, extra_args=None):
@@ -196,6 +258,8 @@ class Migrator(batch.BatchRootNoSelect):
                     setattr(select, kw, int(extra_args[kw]))
             cursor.execute(*select)
             vals = [x[select_key] for x in cursor.fetchall()]
-            if cls.model and cls.func_key != 'id':
+            if (cls.model and cls.func_key != 'id'
+                    and 'update' in extra_args
+                    and extra_args['update'].lower() != 'true'):
                 vals = tools.remove_existing_ids(vals, cls.model, cls.func_key)
             return vals

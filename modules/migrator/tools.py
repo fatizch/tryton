@@ -31,7 +31,7 @@ class MigrateCacheError(MigrateError):
 # http://stackoverflow.com/a/12168252
 # Reuse opened connection to the source database without requiring it.
 def none_ctxt(a=None):
-    return contextmanager(lambda: iter([a]))()
+    return contextmanager(lambda: (x for x in [a]))()
 
 
 def connect_to_source():
