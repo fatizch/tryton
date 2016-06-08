@@ -340,9 +340,13 @@ msgctxt "field:contract,premiums:"
 msgid "Premiums"
 msgstr "Primes"
 
-msgctxt "field:contract,receivable_today:"
-msgid "Receivable Today"
-msgstr "À recevoir aujourd'hui"
+msgctxt "field:contract,premiums:"
+msgid "Premiums"
+msgstr "Primes"
+
+msgctxt "field:contract,total_premium_amount:"
+msgid "Total Premium Amount"
+msgstr "Montant de prime total"
 
 msgctxt "field:contract,valid_billing_informations:"
 msgid "Valid Billing Informations"

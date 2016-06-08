@@ -128,6 +128,10 @@ class Contract:
             digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
         'get_processing_payments_amount')
+    total_premium_amount = fields.Function(
+        fields.Numeric('Total Premium Amount',
+            digits=(16, Eval('currency_digits', 2))),
+        'get_total_premium_amount')
 
     _invoices_cache = Cache('invoices_report')
     _premium_intervals_cache = Cache('premium_intervals')
@@ -175,6 +179,13 @@ class Contract:
                     ('start', '>=', self.start_date),
                     ('end', '<=', self.end_date or datetime.date.max),
                     ])]
+
+    def get_total_premium_amount(self, name):
+        if (not self.subscriber or not self.billing_informations or
+                not self.all_premiums):
+            # Test on all_premiums at the end since it may be rather expensive
+            return None
+        return sum(x['total_amount'] for x in self.get_future_invoices(self))
 
     @classmethod
     def get_balance(cls, contracts, name, date=None):
