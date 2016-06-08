@@ -1183,6 +1183,8 @@ class Contract:
     ###########################################################################
     @classmethod
     def get_future_invoices(cls, contract, from_date=None, to_date=None):
+        if isinstance(contract, int):
+            contract = cls(contract)
         cached = cls._future_invoices_cache.get(contract.id, None)
         if cached is not None:
             invoices = cls.load_from_cached_invoices(cached)
