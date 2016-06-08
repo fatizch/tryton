@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, And, Or, Not, In
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, model
 
 
 __metaclass__ = PoolMeta
@@ -16,6 +16,13 @@ class Contract:
     __name__ = 'contract'
 
     @classmethod
+    def __setup__(cls):
+        super(Contract, cls).__setup__()
+        cls._buttons.update({
+                'button_show_all_invoices': {},
+                })
+
+    @classmethod
     def load_from_cached_invoices(cls, cache):
         invoices = super(Contract, cls).load_from_cached_invoices(cache)
         loan_ids = cache['loan_ids']
@@ -26,9 +33,9 @@ class Contract:
                 for line in invoice['details']:
                     if line['loan'] is None:
                         continue
-                if not isinstance(line['loan'], int):
-                    continue
-                line['loan'] = loan_per_id[line['loan']]
+                    if not isinstance(line['loan'], int):
+                        continue
+                    line['loan'] = loan_per_id[line['loan']]
         return invoices
 
     @classmethod
@@ -53,6 +60,12 @@ class Contract:
             displayer)
         for detail in displayer['details']:
             detail['loan'] = detail['premium'].loan
+
+    @classmethod
+    @model.CoopView.button_action(
+        'contract_loan_invoice.act_show_all_invoices')
+    def button_show_all_invoices(cls, contracts):
+        pass
 
 
 class ExtraPremium:
