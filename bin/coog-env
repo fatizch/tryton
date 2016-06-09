@@ -44,9 +44,9 @@ _coog_env_paths() { # set paths
 _coog_env_conf() { # set conf vars
         COOG_CONF_CLI="$COOG_CONF/tryton.conf"
         COOG_CONF_SRV="$COOG_CONF/trytond.conf"
-        COOG_CONF_LOG="$COOG_CONF/logging.conf"
         COOG_CONF_BAT="$COOG_CONF/batch.conf"
         COOG_CONF_TEST="$COOG_CONF/test.conf"
+        COOG_CONF_LOG="$COOG_CONF/logging.conf"
 }
 
 _coog_env_postgres() { # set postgres vars
@@ -118,6 +118,16 @@ coog_env_init() { # set coog vars
                 _coog_env_batch
 }
 
+_coog_check_file() {
+        [ -f $1 ] && echo ok && return
+        echo ko
+}
+
+_coog_check_dir() {
+        [ -d $1 ] && echo ok && return
+        echo ko
+}
+
 coog_env_main() { # print meaningful vars for coog execution
         echo Environment variables:
         echo
@@ -129,20 +139,20 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    COOG_FILE_CEL          "$COOG_FILE_CEL
         echo "    COOG_FILE_BAT          "$COOG_FILE_BAT
         echo "    COOG_FILE_TEST         "$COOG_FILE_TEST
-        echo "    COOG_TMP               "$COOG_TMP
-        echo "    COOG_ROOT              "$COOG_ROOT
-        echo "    COOG_TRYTON            "$COOG_TRYTON
-        echo "    COOG_TRYTOND           "$COOG_TRYTOND
-        echo "    COOG_PROTEUS           "$COOG_PROTEUS
-        echo "    COOG_SAO               "$COOG_SAO
-        echo "    COOG_CONF              "$COOG_CONF
-        echo "    COOG_BIN               "$COOG_BIN
-        echo "    COOG_LIB               "$COOG_LIB
-        echo "    COOG_CONF_CLI          "$COOG_CONF_CLI
-        echo "    COOG_CONF_SRV          "$COOG_CONF_SRV
-        echo "    COOG_CONF_BAT          "$COOG_CONF_BAT
-        echo "    COOG_CONF_TEST         "$COOG_CONF_TEST
-        echo "    COOG_CONF_LOG          "$COOG_CONF_LOG
+        echo "    COOG_TMP               "$COOG_TMP - `_coog_check_dir $COOG_TMP`
+        echo "    COOG_ROOT              "$COOG_ROOT - `_coog_check_dir $COOG_ROOT`
+        echo "    COOG_TRYTON            "$COOG_TRYTON - `_coog_check_dir $COOG_TRYTON`
+        echo "    COOG_TRYTOND           "$COOG_TRYTOND - `_coog_check_dir $COOG_TRYTOND`
+        echo "    COOG_PROTEUS           "$COOG_PROTEUS - `_coog_check_dir $COOG_PROTEUS`
+        echo "    COOG_SAO               "$COOG_SAO - `_coog_check_dir $COOG_SAO`
+        echo "    COOG_CONF              "$COOG_CONF - `_coog_check_dir $COOG_CONF`
+        echo "    COOG_BIN               "$COOG_BIN - `_coog_check_dir $COOG_BIN`
+        echo "    COOG_LIB               "$COOG_LIB - `_coog_check_dir $COOG_LIB`
+        echo "    COOG_CONF_CLI          "$COOG_CONF_CLI - `_coog_check_file $COOG_CONF_CLI`
+        echo "    COOG_CONF_SRV          "$COOG_CONF_SRV - `_coog_check_file $COOG_CONF_SRV`
+        echo "    COOG_CONF_BAT          "$COOG_CONF_BAT - `_coog_check_file $COOG_CONF_BAT`
+        echo "    COOG_CONF_TEST         "$COOG_CONF_TEST - `_coog_check_file $COOG_CONF_TEST`
+        echo "    COOG_CONF_LOG          "$COOG_CONF_LOG - `_coog_check_file $COOG_CONF_LOG`
         echo
         echo "  Exported variables"
         echo "    PYTHONUNBUFFERED       "$PYTHONUNBUFFERED
