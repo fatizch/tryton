@@ -23,6 +23,7 @@ coog_module_update() { # install / update modules - [modules] - default: all
         trytond-admin -v \
                 -c $COOG_CONF_SRV \
                 -d $DB_NAME \
+                --logconf $COOG_CONF_LOG \
                 -u $modules
 }
 
