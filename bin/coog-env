@@ -44,6 +44,7 @@ _coog_env_paths() { # set paths
 _coog_env_conf() { # set conf vars
         COOG_CONF_CLI="$COOG_CONF/tryton.conf"
         COOG_CONF_SRV="$COOG_CONF/trytond.conf"
+        COOG_CONF_LOG="$COOG_CONF/logging.conf"
         COOG_CONF_BAT="$COOG_CONF/batch.conf"
         COOG_CONF_TEST="$COOG_CONF/test.conf"
 }
@@ -141,7 +142,7 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    COOG_CONF_SRV          "$COOG_CONF_SRV
         echo "    COOG_CONF_BAT          "$COOG_CONF_BAT
         echo "    COOG_CONF_TEST         "$COOG_CONF_TEST
-        echo "    COOG_CONF_LOG          "${COOG_CONF_LOG:-}
+        echo "    COOG_CONF_LOG          "$COOG_CONF_LOG
         echo
         echo "  Exported variables"
         echo "    PYTHONUNBUFFERED       "$PYTHONUNBUFFERED
@@ -194,7 +195,7 @@ coog_env_config() { # print conf file <client|server|batch|test|log>
         fi
         if [ $1 = log ]
         then
-                [ -z ${COOG_CONF_LOG:-} ] && echo no conf log && return 1
+                [ -z $COOG_CONF_LOG ] && echo no conf log && return 1
                 echo '# '"conf file: $COOG_CONF_LOG"
                 echo
                 cat $COOG_CONF_LOG
