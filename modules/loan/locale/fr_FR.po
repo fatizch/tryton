@@ -215,6 +215,10 @@ msgctxt "field:loan,company:"
 msgid "Company"
 msgstr "Société"
 
+msgctxt "field:loan,lender:"
+msgid "Lender"
+msgstr "Organisme prêteur"
+
 msgctxt "field:loan,contracts:"
 msgid "Contracts"
 msgstr "Contrats"

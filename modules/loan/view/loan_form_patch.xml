@@ -5,8 +5,8 @@
         <field name="number"/>
         <label name="order"/>
         <field name="order"/>
-        <label name="company"/>
-        <field name="company"/>
+        <label name="lender"/>
+        <field name="lender"/>
         <label name="kind"/>
         <field name="kind"/>
         <label name="amount"/>

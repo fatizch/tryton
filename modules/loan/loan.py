@@ -50,6 +50,8 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     _func_key = 'number'
 
     number = fields.Char('Number', required=True, readonly=True, select=True)
+    lender = fields.Many2One('party.party', 'Lender', required=True,
+        ondelete='RESTRICT')
     company = fields.Many2One('company.company', 'Company', required=True,
         select=True, ondelete='RESTRICT',
         domain=[

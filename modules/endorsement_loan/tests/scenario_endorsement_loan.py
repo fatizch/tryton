@@ -274,6 +274,28 @@ subscriber.account_payable = payable_account
 subscriber.birth_date = datetime.date(1980, 10, 14)
 subscriber.save()
 
+receivable_account2 = Account()
+receivable_account2.name = 'Account Receivable 2'
+receivable_account2.code = 'account_receivable 2'
+receivable_account2.kind = 'receivable'
+receivable_account2.reconcile = True
+receivable_account2.type = receivable_account_kind
+receivable_account2.company = company
+receivable_account2.save()
+payable_account2 = Account()
+payable_account2.name = 'Account Payable 2'
+payable_account2.code = 'account_payable 2'
+payable_account2.kind = 'payable'
+payable_account2.type = payable_account_kind
+payable_account2.company = company
+payable_account2.save()
+
+bank_party = Party()
+bank_party.name = 'Bank of Mordor'
+bank_party.account_receivable = receivable_account2
+bank_party.account_payable = payable_account2
+bank_party.save()
+
 # #Comment# #Create Loan
 loan_payment_date = datetime.date(2014, 5, 1)
 loan_sequence = Sequence()
@@ -281,6 +303,7 @@ loan_sequence.name = 'Loan'
 loan_sequence.code = 'loan'
 loan_sequence.save()
 loan = Loan()
+loan.lender = bank_party
 loan.company = company
 loan.kind = 'fixed_rate'
 loan.funds_release_date = contract_start_date
@@ -382,6 +405,7 @@ len(increments) == 1
 funds_release_date = loan_payment_date = contract_start_date = datetime.date(
     2013, 3, 22)
 loan = Loan()
+loan.lender = bank_party
 loan.company = company
 loan.kind = 'fixed_rate'
 loan.funds_release_date = contract_start_date

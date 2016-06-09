@@ -147,6 +147,21 @@ payable_account.kind = 'payable'
 payable_account.type = payable_account_kind
 payable_account.company = company
 payable_account.save()
+receivable_account2 = Account()
+receivable_account2.name = 'Account Receivable 2'
+receivable_account2.code = 'account_receivable 2'
+receivable_account2.kind = 'receivable'
+receivable_account2.reconcile = True
+receivable_account2.type = receivable_account_kind
+receivable_account2.company = company
+receivable_account2.save()
+payable_account2 = Account()
+payable_account2.name = 'Account Payable 2'
+payable_account2.code = 'account_payable 2'
+payable_account2.kind = 'payable'
+payable_account2.type = payable_account_kind
+payable_account2.company = company
+payable_account2.save()
 
 # #Comment# #Create billing modes
 payment_term = PaymentTerm()
@@ -263,6 +278,12 @@ subscriber.account_payable = payable_account
 subscriber.birth_date = datetime.date(1980, 10, 14)
 subscriber.save()
 
+bank_party = Party()
+bank_party.name = 'Bank of Mordor'
+bank_party.account_receivable = receivable_account2
+bank_party.account_payable = payable_account2
+bank_party.save()
+
 # #Comment# #Create Loans
 loan_payment_date = datetime.date(2014, 5, 1)
 loan_sequence = Sequence()
@@ -270,6 +291,7 @@ loan_sequence.name = 'Loan'
 loan_sequence.code = 'loan'
 loan_sequence.save()
 loan_1 = Loan()
+loan_1.lender = bank_party
 loan_1.company = company
 loan_1.kind = 'fixed_rate'
 loan_1.funds_release_date = contract_start_date
@@ -281,6 +303,7 @@ loan_1.duration = 200
 loan_1.save()
 loan_2 = Loan()
 loan_2.company = company
+loan_2.lender = bank_party
 loan_2.kind = 'fixed_rate'
 loan_2.funds_release_date = contract_start_date
 loan_2.currency = currency

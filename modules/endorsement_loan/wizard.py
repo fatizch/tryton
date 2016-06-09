@@ -656,7 +656,7 @@ class ChangeLoan(EndorsementWizardStepMixin):
     def _loan_fields_to_extract(cls):
         return {
             'loan': ['currency', 'rate', 'payment_frequency', 'order',
-                'first_payment_date', 'funds_release_date',
+                'first_payment_date', 'funds_release_date', 'lender',
                 'kind', 'amount', 'number', 'company', 'increments',
                 'duration', 'duration_unit', 'currency_symbol',
                 'currency_digits', 'previous_frequency',
