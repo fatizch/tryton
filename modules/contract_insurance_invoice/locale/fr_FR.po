@@ -340,10 +340,6 @@ msgctxt "field:contract,premiums:"
 msgid "Premiums"
 msgstr "Primes"
 
-msgctxt "field:contract,premiums:"
-msgid "Premiums"
-msgstr "Primes"
-
 msgctxt "field:contract,total_premium_amount:"
 msgid "Total Premium Amount"
 msgstr "Montant de prime total"
