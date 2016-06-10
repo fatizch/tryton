@@ -6,7 +6,7 @@ COOG_TRYTOND=$COOG_ROOT/trytond
 COOG_BIN=$COOG_ROOT/coog/bin
 COOG_CONF=$COOG_ROOT/coog.conf
 COOG_BATCH_CONF=$COOG_ROOT/batch.conf
-COOG_DATA=$COOG_ROOT/data
+COOG_DATA=$COOG_ROOT/io
 
 ###########
 # helpers #
@@ -61,7 +61,7 @@ conf_database() {
         [ ! -z $COOG_DB_PASSWORD ] && db_password=$COOG_DB_PASSWORD
         [ -z $db_password ] && echo "no db password defined" && return 1
         echo "uri = $db_system://$db_user:$db_password@$db_host:$db_port" >> $COOG_CONF
-        echo "path = $COOG_DATA" >> $COOG_CONF
+        echo "path = $COOG_DATA/edm" >> $COOG_CONF
         [ ! -z $COOG_DB_LANG ] && echo "language = $COOG_DB_LANG" >> $COOG_CONF
         return 0
 }
@@ -148,7 +148,7 @@ conf_sentry() {
 
 conf_batch() {
         echo "[batch]" >> $COOG_CONF
-        echo "root_dir = $COOG_DATA" >> $COOG_CONF
+        echo "root_dir = $COOG_DATA/batch" >> $COOG_CONF
 }
 
 conf() {
@@ -162,13 +162,13 @@ conf() {
                 conf_batch
         [ $? -ne 0 ] && echo "!!! Failed to build configuration file !!!" && return 1
         local override
-        override=$COOG_DATA/coog.conf
+        override=$COOG_DATA/conf/coog.conf
         [ -f $override ] && cat $override >> $COOG_CONF
         local batch_conf
-        batch_conf=$COOG_DATA/batch.conf
+        batch_conf=$COOG_DATA/conf/batch.conf
         if [ -f $batch_conf ]
         then
-                cp $COOG_DATA/batch.conf $COOG_BATCH_CONF
+                cp $COOG_DATA/conf/batch.conf $COOG_BATCH_CONF
         else
                 touch $COOG_BATCH_CONF
         fi
