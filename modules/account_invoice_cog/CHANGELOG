@@ -1,3 +1,5 @@
+* Add wizard to change payment terms of a posted invoice
+
 Version 1.6 - 2015-12-23
 * Allow to define default payment term for customer invoice in configuration
 * Make invoice printable

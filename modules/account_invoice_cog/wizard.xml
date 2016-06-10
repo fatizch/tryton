@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ####################### -->
+        <!-- # Change Payment Term # -->
+        <!-- ####################### -->
+        <record model="ir.action.wizard" id="act_change_payment_term">
+            <field name="name">Change Payment Term</field>
+            <field name="wiz_name">account.invoice.change_payment_term</field>
+        </record>
+        <record model="ir.action.keyword" id="act_change_payment_term_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">account.invoice,-1</field>
+            <field name="action" ref="act_change_payment_term"/>
+        </record>
+        <!-- ############### -->
+        <!-- # Select Term # -->
+        <!-- ############### -->
+        <record model="ir.ui.view" id="select_term_view_form">
+            <field name="model">account.invoice.change_payment_term.select_term</field>
+            <field name="type">form</field>
+            <field name="name">select_term_form</field>
+        </record>
+    </data>
+</tryton>

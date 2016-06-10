@@ -13,5 +13,9 @@
             <field name="name">Pay Invoice</field>
             <field name="code">pay_invoice</field>
         </record>
+        <record model="event.type" id="event_change_invoice_term">
+            <field name="name">Change Payment Term</field>
+            <field name="code">change_payment_term</field>
+        </record>
     </data>
 </tryton>

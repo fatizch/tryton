@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="Change Payment Term">
+    <label name="invoice"/>
+    <field name="invoice" colspan="3"/>
+    <label name="current_term"/>
+    <field name="current_term"/>
+    <label name="new_term"/>
+    <field name="new_term"/>
+</form>

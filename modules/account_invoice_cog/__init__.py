@@ -6,6 +6,7 @@ from .report_engine import *
 from .move import *
 from .configuration import *
 from .payment_term import *
+from .wizard import *
 
 
 def register():
@@ -20,4 +21,9 @@ def register():
         MoveLine,
         Configuration,
         PaymentTerm,
+        SelectTerm,
         module='account_invoice_cog', type_='model')
+
+    Pool.register(
+        ChangePaymentTerm,
+        module='account_invoice_cog', type_='wizard')

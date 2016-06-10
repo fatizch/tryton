@@ -78,6 +78,16 @@ class Invoice(export.ExportImportMixin, Printable):
             ]
 
     @classmethod
+    def check_modify(cls, invoices):
+        if not Transaction().context.get('_payment_term_change', False):
+            super(Invoice, cls).check_modify(invoices)
+
+    @classmethod
+    def update_taxes(cls, invoices, exception=False):
+        if not Transaction().context.get('_payment_term_change', False):
+            super(Invoice, cls).update_taxes(invoices, exception)
+
+    @classmethod
     def is_master_object(cls):
         return True
 
@@ -115,6 +125,37 @@ class Invoice(export.ExportImportMixin, Printable):
         elif self.state == 'posted':
             return 'blue'
         return 'black'
+
+    @classmethod
+    def change_term(cls, invoices, new_term):
+        pool = Pool()
+        Move = pool.get('account.move')
+        Line = pool.get('account.move.line')
+        Event = pool.get('event')
+        to_post, to_reconcile = [], []
+        to_reconcile = []
+        with Transaction().set_context(_payment_term_change=True):
+            previous_moves = [x.move for x in invoices]
+            cls.write(invoices, {
+                    'payment_term': new_term.id, 'move': None})
+            for invoice, move in zip(invoices, previous_moves):
+                invoice.create_move()
+                to_post.append(invoice.move)
+                to_post.append(move.cancel())
+                reconciliation = []
+                for line in move.lines + to_post[-1].lines:
+                    if line.account != invoice.account:
+                        continue
+                    if line.reconciliation:
+                        break
+                    reconciliation.append(line)
+                else:
+                    if reconciliation:
+                        to_reconcile.append(reconciliation)
+        Move.post(to_post)
+        for lines in to_reconcile:
+            Line.reconcile(lines)
+        Event.notify_events(invoices, 'change_payment_term')
 
     @classmethod
     def post(cls, invoices):
