@@ -8,6 +8,7 @@ from trytond.modules.cog_utils import fields
 __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
+    'Option',
     ]
 
 
@@ -36,3 +37,17 @@ class Contract:
     @classmethod
     def search_is_group(cls, name, clause):
         return [('product.is_group', ) + tuple(clause[1:])]
+
+
+class Option:
+    __name__ = 'contract.option'
+
+    is_group = fields.Function(
+        fields.Boolean('Group Option'),
+        'on_change_with_is_group')
+
+    @fields.depends('coverage')
+    def on_change_with_is_group(self, name=None):
+        if not self.coverage:
+            return False
+        return self.coverage.is_group

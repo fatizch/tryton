@@ -13,4 +13,5 @@ def register():
         Benefit,
         # From Contract
         Contract,
+        Option,
         module='contract_group', type_='model')
