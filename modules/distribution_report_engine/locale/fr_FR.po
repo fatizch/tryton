@@ -1,0 +1,60 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:distribution.commercial_product,report_templates:"
+msgid "Report Templates"
+msgstr "Modèles de courrier"
+
+msgctxt "field:report.template,com_products:"
+msgid "Commercial Products"
+msgstr "Produits Commerciaux"
+
+msgctxt "field:report.template-distribution.commercial_product,com_product:"
+msgid "Commercial Product"
+msgstr "Produit commercial"
+
+msgctxt "field:report.template-distribution.commercial_product,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template-distribution.commercial_product,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template-distribution.commercial_product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:report.template-distribution.commercial_product,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:report.template-distribution.commercial_product,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt ""
+"field:report.template-distribution.commercial_product,report_template:"
+msgid "Document"
+msgstr "Document"
+
+msgctxt "field:report.template-distribution.commercial_product,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:report.template-distribution.commercial_product,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:report.template-distribution.commercial_product,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:report.template-distribution.commercial_product,name:"
+msgid "Report template to Commercial Product relation"
+msgstr "Relation entre produits commerciaux et modèles de courrier"
+
+msgctxt "field:distribution.commercial_product,report_style_template:"
+msgid "Report Style"
+msgstr "Style du rapport"

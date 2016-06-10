@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="commercial_product_view_form">
+            <field name="model">distribution.commercial_product</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered_distribution.commercial_product_view_form"/>
+            <field name="name">commercial_product_form</field>
+        </record>
+    </data>
+</tryton>

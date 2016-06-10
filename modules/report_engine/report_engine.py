@@ -481,14 +481,31 @@ class Printable(Model):
 
     def get_available_doc_templates(self, kind=None):
         DocumentTemplate = Pool().get('report.template')
-        domain = [('on_model.model', '=', self.__name__)]
-        if hasattr(self, 'product'):
-            domain.append(('products', '=', self.product.id))
+
         if kind:
-            domain.append(('kind', '=', kind))
+            domain_kind = ('kind', '=', kind)
         else:
-            domain.append(('kind', 'in', self.get_doc_template_kind()))
+            domain_kind = ('kind', 'in', self.get_doc_template_kind())
+
+        domain = self.build_template_domain(domain_kind)
+        if not domain:
+            domain = [
+                ('on_model.model', '=', self.__name__),
+                ]
         return DocumentTemplate.search(domain)
+
+    def build_template_domain(self, domain_kind):
+        template_holders_sub_domains = self.get_template_holders_sub_domains()
+        if not template_holders_sub_domains:
+            return
+        return [
+            ('on_model.model', '=', self.__name__),
+            ['OR'] + template_holders_sub_domains,
+            ['OR', domain_kind, ('kind', '=', '')]
+            ]
+
+    def get_template_holders_sub_domains(self):
+        return []
 
     def get_doc_template_kind(self):
         return ['']

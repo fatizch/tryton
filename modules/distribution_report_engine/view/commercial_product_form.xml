@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='dist_networks']" position="after">
+        <field name="report_templates" colspan="4"/>
+        <label name="report_style_template"/>
+        <field name="report_style_template" colspan="3"/>
+    </xpath>
+</data>
