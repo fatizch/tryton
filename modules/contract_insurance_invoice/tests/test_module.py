@@ -185,6 +185,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         company, = self.Company.search([
                 ('rec_name', '=', 'World Company'),
                 ])
+        currency, = self.Currency.search([], limit=1)
         self.User.write([self.User(Transaction().user)], {
                 'main_company': company.id,
                 'company': company.id,
@@ -247,6 +248,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                                 freq_once.id])],
                     'contract_generator': sequence.id,
                     'quote_number_sequence': quote_sequence.id,
+                    'currency': currency.id,
                     }])
         contract = self.Contract(company=company,
             start_date=date(2014, 4, 15),

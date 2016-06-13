@@ -11,6 +11,7 @@ Imports::
     >>> from trytond.error import UserWarning
     >>> from trytond.modules.company.tests.tools import create_company, get_company
     >>> from trytond.modules.account.tests.tools import get_accounts, create_chart
+    >>> from trytond.modules.currency.tests.tools import get_currency
 
 Init Database::
 
@@ -37,8 +38,6 @@ Get Models::
     >>> ContractInvoice = Model.get('contract.invoice')
     >>> ContractPremium = Model.get('contract.premium')
     >>> Country = Model.get('country.country')
-    >>> Currency = Model.get('currency.currency')
-    >>> CurrencyRate = Model.get('currency.currency.rate')
     >>> FiscalYear = Model.get('account.fiscalyear')
     >>> Option = Model.get('contract.option')
     >>> OptionDescription = Model.get('offered.option.description')
@@ -58,9 +57,7 @@ Constants::
 
 Create or fetch Currency::
 
-    >>> currency, = Currency.find([('code', '=', 'EUR')])
-    >>> CurrencyRate(date=product_start_date, rate=Decimal('1.0'),
-    ...     currency=currency).save()
+    >>> currency = get_currency(code='EUR')
 
 Create or fetch Country::
 
@@ -184,6 +181,7 @@ Create Product::
     >>> quote_sequence.save()
     >>> coverage = OptionDescription()
     >>> coverage.company = company
+    >>> coverage.currency = currency
     >>> coverage.name = u'Test Coverage'
     >>> coverage.code = u'test_coverage'
     >>> coverage.start_date = product_start_date
@@ -222,6 +220,7 @@ Create Contract Fee::
     >>> contract_fee.save()
     >>> product = Product()
     >>> product.company = company
+    >>> product.currency = currency
     >>> product.name = 'Test Product'
     >>> product.code = 'test_product'
     >>> product.contract_generator = contract_sequence
