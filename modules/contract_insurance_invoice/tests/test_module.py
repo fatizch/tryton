@@ -640,10 +640,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
-    #  suite.addTests(unittest.TestLoader().loadTestsFromTestCase(ModuleTestCase))
-    #  suite.addTests(doctest.DocFileSuite('scenario_invoice_contract.rst',
-    #          setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
-    #          optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(ModuleTestCase))
+    suite.addTests(doctest.DocFileSuite('scenario_invoice_contract.rst',
+            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     suite.addTests(doctest.DocFileSuite(
             'scenario_invoice_contract_tax_included.rst',
             setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
