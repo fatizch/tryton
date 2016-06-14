@@ -56,7 +56,7 @@ msgstr "ID"
 
 msgctxt "field:distribution.commercial_product,name:"
 msgid "Name"
-msgstr "Numéro"
+msgstr "Nom"
 
 msgctxt "field:distribution.commercial_product,product:"
 msgid "Technical Product"
@@ -64,7 +64,7 @@ msgstr "Produit technique"
 
 msgctxt "field:distribution.commercial_product,rec_name:"
 msgid "Name"
-msgstr "Numéro"
+msgstr "Nom"
 
 msgctxt "field:distribution.commercial_product,start_date:"
 msgid "Start Date"
@@ -128,7 +128,7 @@ msgstr "ID"
 
 msgctxt "field:distribution.network-commercial_product,rec_name:"
 msgid "Name"
-msgstr "Numéro"
+msgstr "Nom"
 
 msgctxt "field:distribution.network-commercial_product,write_date:"
 msgid "Write Date"
