@@ -5,7 +5,6 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.cog_utils import fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Journal',
     'Payment',
@@ -13,6 +12,7 @@ __all__ = [
 
 
 class Journal:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.journal'
 
     outstandings_waiting_account = fields.Many2One('account.account',
@@ -32,6 +32,7 @@ class Journal:
 
 
 class Payment:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment'
 
     @classmethod
@@ -40,22 +41,8 @@ class Payment:
         clearing_moves = [payment.clearing_move for payment in payments
             if payment.clearing_move and payment.kind == 'receivable' and
             payment.journal.outstandings_waiting_account]
-        if clearing_moves:
-            waiting_moves = []
-            for clearing_move in clearing_moves:
-                default = clearing_move._cancel_default()
-                default['origin'] = str(clearing_move.origin)
-                default['journal'] = \
-                    clearing_move.origin.journal.outstandings_journal
-                waiting_move, = Move.copy([clearing_move],
-                    default=default)
-                for line in waiting_move.lines:
-                    if line.credit or line.debit < 0:
-                        origin_journal = clearing_move.origin.journal
-                        line.account = \
-                            origin_journal.outstandings_waiting_account
-                waiting_move.lines = waiting_move.lines
-                waiting_moves.append(waiting_move)
+        waiting_moves = Move.create_waiting_moves(clearing_moves)
+        if waiting_moves:
             Move.save(waiting_moves)
             Move.post(waiting_moves)
         super(Payment, cls).fail(payments)
