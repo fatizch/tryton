@@ -148,21 +148,32 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
     request_description = fields.Function(
         fields.Char('Request Description', depends=['needed_by']),
         'on_change_with_request_description')
+    documents_str = fields.Function(
+        fields.Char('Documents'),
+        'on_change_with_documents_str')
 
     @classmethod
     def __setup__(cls):
         super(DocumentRequest, cls).__setup__()
         cls._buttons.update({'generic_send_letter': {}})
+        cls._error_messages.update({
+                'document_request_for': 'Document Request For',
+                })
 
     def get_request_date(self):
         return utils.today()
 
     @fields.depends('needed_by')
     def on_change_with_request_description(self, name=None):
-        return 'Document Request for %s' % self.needed_by.get_rec_name(name)
+        return '%s %s' % (self.raise_user_error('document_request_for',
+                raise_exception=False), self.needed_by.get_rec_name(name))
 
     def get_contact(self, name=None):
         return self.needed_by.get_main_contact() if self.needed_by else None
+
+    @fields.depends('documents')
+    def on_change_with_documents_str(self, name=None):
+        return ', '.join([d.document_desc.name for d in self.documents])
 
     @fields.depends('needed_by')
     def on_change_with_needed_by_str(self, name=None):

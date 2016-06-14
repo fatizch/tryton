@@ -45,10 +45,14 @@ class Claim:
     def button_generate_document_request(cls, claims):
         pool = Pool()
         DocumentRequest = pool.get('document.request')
+        to_save = []
         for claim in claims:
-            DocumentRequest.create_request(claim,
-                [line for line in claim.document_request_lines
-                    if not line.received])
+            to_save.append(DocumentRequest(
+                    needed_by=claim,
+                    documents=[line.id for line in claim.document_request_lines
+                        if not line.received]
+                    ))
+        DocumentRequest.save(to_save)
 
     def link_attachments_to_requests(self):
         Request = Pool().get('document.request')

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Requests">
     <field name="is_complete"/>
-    <field name="needed_by"/>
-    <field name="documents"/>
+    <field name="request_description"/>
+    <field name="documents_str"/>
+    <field name="needed_by" tree_invisible="1"/>
 </tree>

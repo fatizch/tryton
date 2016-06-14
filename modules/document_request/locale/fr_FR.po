@@ -10,6 +10,10 @@ msgctxt "error:document.receive:"
 msgid "No document request found for this object"
 msgstr "Pas de demande de document trouvé pour cet objet"
 
+msgctxt "error:document.request:"
+msgid "Document Request For"
+msgstr "Demande de documents pour"
+
 msgctxt "field:document.receive.attach,attachments:"
 msgid "Attachments"
 msgstr "Pièces jointes"
