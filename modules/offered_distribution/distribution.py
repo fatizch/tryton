@@ -58,6 +58,7 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
     'Commercial Product'
 
     __name__ = 'distribution.commercial_product'
+    _func_key = 'code'
 
     product = fields.Many2One('offered.product', 'Technical Product', domain=[
             ('start_date', '<=', Eval('start_date')),
