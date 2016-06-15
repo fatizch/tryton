@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/label[@name='indemnification_rule']" position="before">
+        <label name="force_indemnification_rule"/>
+        <field name="force_indemnification_rule"/>
+    </xpath>
+    <xpath expr="/form/field[@name='indemnification_rule_extra_data']" position="after">
+        <field name="indemnification_rules" colspan="4"/>
+    </xpath>
+    <xpath expr="/form/label[@name='deductible_rule']" position="before">
+        <label name="force_deductible_rule"/>
+        <field name="force_deductible_rule"/>
+    </xpath>
+    <xpath expr="/form/field[@name='deductible_rule_extra_data']" position="after">
+        <field name="deductible_rules" colspan="4"/>
+    </xpath>
+    <xpath expr="/form" position="inside">
+        <field name="is_group" invisible="1"/>
+        <field name="benefit" invisible="1"/>
+    </xpath>
+</data>

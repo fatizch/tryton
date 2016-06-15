@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<form string="Version" col="1">
+    <field name="benefits" group="benefits" mode="tree" view_ids="claim_indemnification_group.option_benefit_view_list" expand_toolbar="0"/>
+    <field name="benefits" group="benefits" mode="form" view_ids="claim_indemnification_group.option_benefit_view_form" expand_toolbar="0"/>
+</form>

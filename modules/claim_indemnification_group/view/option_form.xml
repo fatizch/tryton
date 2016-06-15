@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/notebook/page[@name='versions']" position="after">
+        <page id="rules" string="Rules">
+            <field name="versions" mode="form" view_ids="claim_indemnification_group.option_version_rules_view_form" expand_toolbar="0"/>
+            <field name="is_group" invisible="1"/>
+        </page>
+    </xpath>
+</data>

@@ -1,0 +1,199 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:benefit.rule,deductible_rules:"
+msgid "Deductible Rules"
+msgstr "Règles de franchise"
+
+msgctxt "field:benefit.rule,force_deductible_rule:"
+msgid "Force Deductible Rule"
+msgstr "Imposer la règle de franchise"
+
+msgctxt "field:benefit.rule,force_indemnification_rule:"
+msgid "Force Indemnification Rule"
+msgstr "Imposer la règle d'indemnisation"
+
+msgctxt "field:benefit.rule,indemnification_rules:"
+msgid "Indemnification Rules"
+msgstr "Règles d'indemnisation"
+
+msgctxt "field:benefit.rule,is_group:"
+msgid "Is Group"
+msgstr "Prestation collective"
+
+msgctxt "field:benefit_rule-deductible_rule,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:benefit_rule-deductible_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit_rule-deductible_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit_rule-deductible_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit_rule-deductible_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:benefit_rule-deductible_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit_rule-deductible_rule,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:benefit_rule-deductible_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:benefit_rule-deductible_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:benefit_rule-deductible_rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:benefit_rule-indemnification_rule,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:benefit_rule-indemnification_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit_rule-indemnification_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit_rule-indemnification_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit_rule-indemnification_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:benefit_rule-indemnification_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit_rule-indemnification_rule,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:benefit_rule-indemnification_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:benefit_rule-indemnification_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:benefit_rule-indemnification_rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.option.benefit,available_deductible_rules:"
+msgid "Available Deductible Rule"
+msgstr "Règles de franchise disponibles"
+
+msgctxt "field:contract.option.benefit,available_indemnification_rules:"
+msgid "Available Indemnification Rule"
+msgstr "Règles d'indemnisation disponibles"
+
+msgctxt "field:contract.option.benefit,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:contract.option.benefit,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.option.benefit,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.option.benefit,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.option.benefit,deductible_rule:"
+msgid "Deductible Rule"
+msgstr "Règle de franchise"
+
+msgctxt "field:contract.option.benefit,deductible_rule_extra_data:"
+msgid "Deductible Rule Extra Data"
+msgstr "Données complémentaires de franchise"
+
+msgctxt "field:contract.option.benefit,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.option.benefit,indemnification_rule:"
+msgid "Indemnification Rule"
+msgstr "Règle d'indemnisation"
+
+msgctxt "field:contract.option.benefit,indemnification_rule_extra_data:"
+msgid "Indemnification Rule Extra Data"
+msgstr "Données complémentaires d'indemnisation"
+
+msgctxt "field:contract.option.benefit,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.option.benefit,version:"
+msgid "Version"
+msgstr "Version"
+
+msgctxt "field:contract.option.benefit,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.option.benefit,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.option.benefit,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.option.version,benefits:"
+msgid "Benefits"
+msgstr "Prestations"
+
+msgctxt "model:benefit_rule-deductible_rule,name:"
+msgid "Benefit Rule - Deductible"
+msgstr "Relation prestation - règle de franchise"
+
+msgctxt "model:benefit_rule-indemnification_rule,name:"
+msgid "Benefit Rule - Indemnification"
+msgstr "Relation prestation - règle d'indemnisation"
+
+msgctxt "model:contract.option.benefit,name:"
+msgid "Option Benefit"
+msgstr "Prestation"
+
+msgctxt "view:contract.option.benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "view:contract.option.benefit:"
+msgid "Benefits"
+msgstr "Prestations"
+
+msgctxt "view:contract.option.version:"
+msgid "Version"
+msgstr "Version"
+
+msgctxt "view:contract.option:"
+msgid "Rules"
+msgstr "Règles"

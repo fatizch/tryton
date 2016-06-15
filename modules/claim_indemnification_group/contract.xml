@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ########## -->
+        <!-- # Option # -->
+        <!-- ########## -->
+        <record model="ir.ui.view" id="option_view_form">
+            <field name="model">contract.option</field>
+            <field name="inherit" ref="contract.option_view_form"/>
+            <field name="name">option_form</field>
+        </record>
+        <!-- ################## -->
+        <!-- # Option Version # -->
+        <!-- ################## -->
+        <record model="ir.ui.view" id="option_version_rules_view_form">
+            <field name="model">contract.option.version</field>
+            <field name="type">form</field>
+            <field name="name">option_version_rules_form</field>
+        </record>
+        <!-- ################## -->
+        <!-- # Option Benefit # -->
+        <!-- ################## -->
+        <record model="ir.ui.view" id="option_benefit_view_form">
+            <field name="model">contract.option.benefit</field>
+            <field name="type">form</field>
+            <field name="name">option_benefit_form</field>
+        </record>
+        <record model="ir.ui.view" id="option_benefit_view_list">
+            <field name="model">contract.option.benefit</field>
+            <field name="type">tree</field>
+            <field name="name">option_benefit_list</field>
+        </record>
+    </data>
+</tryton>

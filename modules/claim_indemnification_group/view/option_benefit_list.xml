@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Benefits">
+    <field name="benefit"/>
+    <field name="indemnification_rule"/>
+    <field name="deductible_rule"/>
+</tree>
