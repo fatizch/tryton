@@ -44,7 +44,7 @@ class OptionSubscription:
             contract = covered_element.contract
         if covered_element:
             res = self.init_default_options(contract, covered_element.options,
-                self.select_package.package)
+                getattr(self.select_package, 'package', None))
             res['covered_element'] = covered_element.id
             res['party'] = (covered_element.party.id
                 if covered_element.party else None)

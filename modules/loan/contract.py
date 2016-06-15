@@ -623,6 +623,7 @@ class OptionSubscription:
                     'is_selected': (loan_share is not None
                         or parent_dict['is_selected']),
                     'selection': 'manual',
+                    'name': '    %s %s' % (ordered_loan.number, loan.rec_name),
                     })
         return res
 
@@ -697,13 +698,6 @@ class WizardOption:
         return super(WizardOption, cls).view_attributes() + [
             ('/tree', 'colors', If(~Eval('loan'), 'black', 'blue')),
             ]
-
-    @fields.depends('loan', 'order')
-    def on_change_with_name(self, name=None):
-        if self.loan:
-            return '    %s %s' % (self.order, self.loan.rec_name)
-        else:
-            return super(WizardOption, self).on_change_with_name(name)
 
     def update_loan_shares(self, option, parent):
         if option is None:
