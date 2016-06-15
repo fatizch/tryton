@@ -6,6 +6,7 @@ from .contract import *
 from .account import *
 from .event import *
 from .invoice import *
+from .batch import *
 
 
 def register():
@@ -18,4 +19,5 @@ def register():
         MoveLine,
         EventLog,
         Invoice,
+        DunningTreatmentBatch,
         module='contract_insurance_invoice_dunning', type_='model')

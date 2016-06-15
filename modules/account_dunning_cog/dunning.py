@@ -26,6 +26,11 @@ class Dunning(export.ExportImportMixin):
         delete_missing=True)
 
     @classmethod
+    def __setup__(cls):
+        super(Dunning, cls).__setup__()
+        cls.line.select = True
+
+    @classmethod
     def process_dunning_per_level(cls, dunnings):
         key = attrgetter('level')
         dunnings.sort(key=key)
@@ -73,8 +78,8 @@ class Level(export.ExportImportMixin):
                 level_rank = self.procedure.levels.index(self)
                 previous_level = self.procedure.levels[level_rank - 1]
                 if line.dunnings[-1].level == previous_level:
-                    res = (date - line.dunnings[-1].last_process_date).days >= \
-                        self.days
+                    res = (date - line.dunnings[-1].last_process_date).days \
+                        >= self.days
         else:
             res = super(Level, self).test(line, date)
         if not res or not self.not_mandatory:

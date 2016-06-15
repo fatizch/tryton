@@ -6,6 +6,10 @@ msgctxt "field:account.dunning,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:account.dunning,is_contract_main:"
+msgid "Is Main Dunning for Contract"
+msgstr "Relance principale du contrat"
+
 msgctxt "field:account.dunning.create,id:"
 msgid "ID"
 msgstr "ID"
