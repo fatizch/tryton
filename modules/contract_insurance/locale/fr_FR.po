@@ -89,10 +89,6 @@ msgctxt "field:contract,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract,last_renewed:"
-msgid "Last Renewed"
-msgstr "Dernier renouvellement"
-
 msgctxt "field:contract,multi_mixed_view:"
 msgid "Covered Elements"
 msgstr "Risques Couverts"

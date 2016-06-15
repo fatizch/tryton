@@ -54,8 +54,6 @@ class Contract(Printable):
             },
         depends=['status', 'id', 'product', 'start_date', 'extra_data_values',
             'possible_item_desc'], target_not_required=True)
-    last_renewed = fields.Date('Last Renewed', states=_STATES,
-        depends=_DEPENDS)
     possible_item_desc = fields.Function(
         fields.Many2Many('offered.item.description', None, None,
             'Possible Item Desc', states={'invisible': True}),
@@ -78,6 +76,15 @@ class Contract(Printable):
                 'renewal date calculation : %s',
                 'need_option': 'Select at least one option for %s',
                 })
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        # Migration from 1.6: Drop last_renewed
+        table = TableHandler(cls, module_name)
+        if table.column_exist('last_renewed'):
+            table.drop_column('last_renewed')
+        super(Contract, cls).__register__(module_name)
 
     def _get_calculate_targets(self, model_type):
         if model_type == 'covered_elements':
