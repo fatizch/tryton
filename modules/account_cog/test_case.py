@@ -1,5 +1,4 @@
 import datetime
-from decimal import Decimal
 
 from trytond.cache import Cache
 from trytond.pool import PoolMeta, Pool
@@ -64,13 +63,14 @@ class TestCaseModel:
 
     @classmethod
     def get_account_kind(cls, name):
+        AccountType = Pool().get('account.account.type')
         result = cls._get_account_kind_cache.get(name)
         if result:
-            return result
-        result = Pool().get('account.account.type').search([
+            return AccountType(result)
+        result = AccountType.search([
                 ('name', '=', name),
                 ('company', '=', cls.get_company())], limit=1)[0]
-        cls._get_account_kind_cache.set(name, result)
+        cls._get_account_kind_cache.set(name, result.id)
         return result
 
     @classmethod
