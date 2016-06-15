@@ -670,7 +670,7 @@ class Process(model.CoopSQL, model.TaggedMixin):
             xml += '<group id="void" colspan="6"/>'
         if self.with_prev_next:
             xml += '<button string="%s" ' % self.raise_user_error(
-                'next_button_label')
+                'next_button_label', raise_exception=False)
             xml += 'name="_button_next_%s"/>' % self.id
         xml += '</group>'
         xml += '<newline/>'
