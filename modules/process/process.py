@@ -324,7 +324,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         xml += 'states="{'
         xml += "&quot;invisible&quot;: "
         if auth_pyson:
-            pyson = Not(And(step_pyson, Not(auth_pyson)))
+            pyson = Not(And(step_pyson, auth_pyson))
             invisible_def = utils.get_json_from_pyson(pyson)
         else:
             pyson = Not(step_pyson)
@@ -931,7 +931,7 @@ class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
             auths = []
             for elem in self.authorizations:
                 auths.append(Bool(Eval('groups', []).contains(elem.id)))
-            auth_pyson = Or(*auths)
+            auth_pyson = Or(*auths) if len(auths) > 1 else auths[0]
         else:
             auth_pyson = None
         return step_pyson, auth_pyson
