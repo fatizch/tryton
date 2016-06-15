@@ -3,6 +3,7 @@ try:
     import cStringIO as StringIO
 except ImportError:
     import StringIO
+from decimal import Decimal, ROUND_HALF_UP
 import sys
 import zipfile
 import traceback
@@ -635,6 +636,16 @@ class ReportGenerate(Report):
         report_context = super(ReportGenerate, cls).get_context(
             records, data)
         pool = Pool()
+        report_context['Decimal'] = Decimal
+
+        def custom_round(amount, number):
+            if isinstance(amount, Decimal):
+                return amount.quantize(Decimal(10) ** -number,
+                    rounding=ROUND_HALF_UP)
+            else:
+                return round(amount, number)
+
+        report_context['round'] = custom_round
         report_context['Party'] = pool.get('party.party')(data['party'])
         report_context['Address'] = pool.get('party.address')(data['address'])
         try:

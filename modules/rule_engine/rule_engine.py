@@ -10,7 +10,7 @@ import json
 import datetime
 import pyflakes.messages
 import logging
-from decimal import Decimal, ROUND_HALF_EVEN
+from decimal import Decimal, ROUND_HALF_UP
 
 from StringIO import StringIO
 from pyflakes.checker import Checker
@@ -533,7 +533,7 @@ class RuleTools(ModelView):
     def _re_round(cls, args, amount, rounding_factor):
         assert rounding_factor != 0
         return (amount / rounding_factor).quantize(Decimal('1.'),
-            rounding=ROUND_HALF_EVEN) * rounding_factor
+            rounding=ROUND_HALF_UP) * rounding_factor
 
 
 class FunctionFinder(ast.NodeVisitor):
