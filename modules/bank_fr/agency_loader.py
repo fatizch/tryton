@@ -38,8 +38,17 @@ class AgenciesLoader:
         addresses_to_create = []
         addresses_to_update = []
         row_errors = 0
-        already_treated = set([])
+        already_done = set([])
         addresses_by_name_and_party_bank = {}
+
+        def identical(record, new_values):
+            for k, v in new_values.iteritems():
+                old_value = getattr(record, k, None)
+                if k == 'party':
+                    old_value = old_value.id
+                if (v or None) != (old_value or None):
+                    return False
+            return True
 
         with open(agencies_file_path, 'rb') as f:
             reader = csv.reader(f, delimiter=';')
@@ -77,20 +86,25 @@ class AgenciesLoader:
                         'party': bank.party.id}
 
                 if agency_id not in agencies_ids:
-                    agencies_to_create.append({'bank_code': bank_code,
+                    agency_values = {'bank_code': bank_code,
                             'name': agency_name, 'bank': bank.id,
-                            'branch_code': branch_code})
+                            'branch_code': branch_code}
                     if address_values:
-                        addresses_to_create.append(address_values)
+                        match = [x for x in bank.party.addresses
+                            if identical(x, address_values)]
+                        if match:
+                            agency_values['address'] = match[0].id
+                        else:
+                            addresses_to_create.append(address_values)
+                    agencies_to_create.append(agency_values)
                 else:
                     agency = existing_agencies[agency_id]
                     old_address = agency.address
                     if old_address and address_values:
                         address_values.pop('party')
-                        identical = all([getattr(old_address, k, None) == v
-                                for k, v in address_values.iteritems()])
-                        if (not identical and (agency_name, bank.id)
-                                not in already_treated):
+                        if (not identical(old_address, address_values)
+                                and (agency_name, bank.id)
+                                not in already_done):
                             # in case two agencies of the same bank
                             # share the same address (and the same name)
                             # do not update twice
@@ -99,7 +113,7 @@ class AgenciesLoader:
                         if agency.name != agency_name:
                             agency.name = agency_name
                             agencies_to_rename.append(agency)
-                        already_treated.add((agency_name, bank.id))
+                        already_done.add((agency_name, bank.id))
                     else:
                         agency.name = agency_name
                         agencies_to_link.append(agency)
