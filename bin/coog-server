@@ -33,10 +33,22 @@ _coog_server_cleancache() {
 coog_server_start() { # start server - [args] passed to trytond, logconf NOT set when args
         local pid_file
         pid_file=`_coog_server_file pid`
-        [ -e $pid_file ] && echo 'server already running -> stop or kill' && return
         local out_file
         out_file=`_coog_server_file out`
-        [ -e $out_file ] && echo 'server log file exists -> clean manually' && return
+        if [ -e $pid_file ]
+        then
+                local pid
+                pid=`_coog_server_pid 0`
+                if [ -e /proc/$pid ]
+                then
+                        echo 'server already running -> stop or kill' && return
+                else
+                        rm $pid_file
+                        _coog_server_bak $pid
+                fi
+        else
+                [ -e $out_file ] && echo 'server log file exists -> clean manually' && return
+        fi
         local args
         args=--dev
         [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"

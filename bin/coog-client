@@ -27,10 +27,22 @@ _coog_client_bak() { # backup log file (mv to pid if exists or rm)
 coog_client_start() { # start client - [args] passed to tryton, loglevel NOT set when args
         local pid_file
         pid_file=`_coog_client_file pid`
-        [ -e $pid_file ] && echo 'client already running -> stop or kill' && return
         local out_file
         out_file=`_coog_client_file out`
-        [ -e $out_file ] && echo 'client log file exists -> clean manually' && return
+        if [ -e $pid_file ]
+        then
+                local pid
+                pid=`_coog_client_pid 0`
+                if [ -e /proc/$pid ]
+                then
+                        echo 'client already running -> stop or kill' && return
+                else
+                        rm $pid_file
+                        _coog_client_bak $pid
+                fi
+        else
+                [ -e $out_file ] && echo 'client log file exists -> clean manually' && return
+        fi
         local args
         args=--dev
         if [ $# -eq 0 ]
