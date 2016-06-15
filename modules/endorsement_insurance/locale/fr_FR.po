@@ -574,6 +574,10 @@ msgctxt "field:endorsement.contract.covered_element,item_desc:"
 msgid "Item Description"
 msgstr "Description du Risque"
 
+msgctxt "field:endorsement.contract.covered_element,name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:endorsement.contract.covered_element,options:"
 msgid "Options"
 msgstr "Options"

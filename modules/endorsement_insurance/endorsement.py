@@ -252,6 +252,9 @@ class EndorsementCoveredElement(relation_mixin(
     party = fields.Function(
         fields.Many2One('party.party', 'Party'),
         '')
+    name = fields.Function(
+        fields.Char('Name'),
+        '')
     item_desc = fields.Function(
         fields.Many2One('offered.item.description', 'Item Description'),
         '')
