@@ -46,23 +46,23 @@ class OptionSubscription(model.CoopWizard):
             ])
     update_options = StateTransition()
 
-    def init_default_options(self, contract, subscribed_options):
+    @classmethod
+    def init_default_options(cls, contract, subscribed_options, package):
         options = []
         excluded = []
         for option in subscribed_options:
             excluded += option.coverage.options_excluded
         for coverage in [x.coverage
                 for x in contract.product.ordered_coverages]:
-            if (contract.product.packages and self.select_package.package
-                    and coverage not in self.select_package.package.options):
+            if (contract.product.packages and package
+                    and coverage not in package.options):
                 continue
             existing_option = None
             for option in subscribed_options:
                 if option.coverage == coverage:
                     existing_option = option
                     break
-            with_package = (bool(contract.product.packages)
-                and bool(self.select_package.package))
+            with_package = contract.product.packages and package
             selection = 'manual'
             if coverage.subscription_behaviour == 'mandatory':
                 selection = 'mandatory'
@@ -81,7 +81,7 @@ class OptionSubscription(model.CoopWizard):
                 'option': existing_option.id if existing_option else None,
                 }
             options.append(option_dict)
-            options += self.init_default_childs(contract,
+            options += cls.init_default_childs(contract,
                 coverage, existing_option, option_dict)
         return {
             'contract': contract.id,
@@ -115,7 +115,8 @@ class OptionSubscription(model.CoopWizard):
         contract = self.get_contract()
         if not contract:
             return {}
-        return self.init_default_options(contract, contract.options)
+        return self.init_default_options(contract, contract.options,
+            self.select_package.package)
 
     def add_remove_options(self, options, lines):
         Option = Pool().get('contract.option')

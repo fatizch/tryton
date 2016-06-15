@@ -43,13 +43,14 @@ class OptionSubscription:
                     'active_id'))
             contract = covered_element.contract
         if covered_element:
-            res = self.init_default_options(contract, covered_element.options)
+            res = self.init_default_options(contract, covered_element.options,
+                self.select_package.package)
             res['covered_element'] = covered_element.id
             res['party'] = (covered_element.party.id
                 if covered_element.party else None)
             res['hide_covered_element'] = True
         else:
-            res = {}
+            res = {'contract': contract.id}
         res['possible_covered_elements'] = [
             x.id for x in contract.covered_elements]
         return res
@@ -82,6 +83,19 @@ class OptionsDisplayer:
     party = fields.Function(
         fields.Many2One('party.party', 'Party'),
         'on_change_with_party')
+
+    @fields.depends('contract', 'covered_element', 'options')
+    def on_change_covered_element(self):
+        if not self.covered_element or not self.contract:
+            self.options = []
+        pool = Pool()
+        Subscribor = pool.get('contract.wizard.option_subscription',
+            type='wizard')
+        Option = pool.get(
+            'contract.wizard.option_subscription.options_displayer.option')
+        self.options = [Option(**x)
+            for x in Subscribor.init_default_options(self.contract,
+                self.covered_element.options, None).get('options', None)]
 
     @fields.depends('covered_element')
     def on_change_with_party(self):

@@ -818,8 +818,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         self.main_contract = self.contract
         self.recalculate()
 
-    @fields.depends('current_extra_data', 'item_desc', 'party',
-        'party_extra_data', 'product', 'versions')
+    @fields.depends('current_extra_data', 'item_desc', 'main_contract',
+        'party', 'party_extra_data', 'product', 'versions')
     def on_change_current_extra_data(self):
         current_version = self.get_version_at_date(utils.today())
         if not current_version:
