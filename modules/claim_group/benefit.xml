@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ########### -->
+        <!-- # Benefit # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="benefit_view_form">
+            <field name="model">benefit</field>
+            <field name="inherit" ref="claim.benefit_view_form"/>
+            <field name="name">benefit_form</field>
+        </record>
+        <!-- Override non collective entry point -->
+        <record model="ir.action.act_window" id="claim.act_benefit_form">
+            <field name="domain" eval="[('is_group', '=', False), ('company', '=', Eval('context', {}).get('company', False))]" pyson="1"/>
+        </record>
+        <!-- Entry Point -->
+        <record model="ir.action.act_window" id="act_benefit_collective">
+            <field name="name">Collective Benefits</field>
+            <field name="res_model">benefit</field>
+            <field name="domain" eval="[('is_group', '=', True), ('company', '=', Eval('context', {}).get('company', False))]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_benefit_collective_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="claim.benefit_view_tree"/>
+            <field name="act_window" ref="act_benefit_collective"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_benefit_collective_view2">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="benefit_view_form"/>
+            <field name="act_window" ref="act_benefit_collective"/>
+        </record>
+        <menuitem parent="offered.menu_product" sequence="5" action="act_benefit_collective" id="menu_benefit_collective"/>
+    </data>
+</tryton>

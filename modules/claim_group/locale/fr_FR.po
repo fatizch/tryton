@@ -1,0 +1,15 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:benefit,is_group:"
+msgid "Group Benefit"
+msgstr "Prestation collective"
+
+msgctxt "model:ir.action,name:act_benefit_collective"
+msgid "Collective Benefits"
+msgstr "Prestations collectives"
+
+msgctxt "model:ir.ui.menu,name:menu_benefit_collective"
+msgid "Collective Benefits"
+msgstr "Prestations collectives"
