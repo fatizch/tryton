@@ -157,7 +157,7 @@ class CoopTestCase(ModuleTestCase):
                     raise
 
     def test9999_launch_test_cases(self):
-        if os.environ.get('DO_NOT_TEST_CASES'):
+        if not os.environ.get('DO_TEST_CASES'):
             return
         with Transaction().new_transaction() as transaction:
             test_case_instance = self.TestCaseModel.get_instance()

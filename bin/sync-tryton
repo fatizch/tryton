@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COOG_BRANCH=merge
+COOG_BRANCH=master
 TRYTON_BRANCH=4.0
 
 sync() {

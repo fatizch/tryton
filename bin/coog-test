@@ -14,7 +14,6 @@ _coog_test_env() { # set test env
         TRYTOND_DATABASE_URI=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_TEST 2> /dev/null`
         [ $? -ne 0 ] && unset TRYTOND_DATABASE_URI
         unset DB_NAME
-        export DO_NOT_TEST_CASES=1
 }
 
 coog_test_generate() { # generate test jobs - [module*]
@@ -107,12 +106,6 @@ coog_test_py() { # launch py.test on a module - <module> - all (further args are
 }
 
 coog_test_manual() { # interactively launch tests - <module> - default: all
-        TRYTOND_CONFIG=$COOG_CONF_TEST
-        [ -z $TRYTOND_CONFIG ] && echo "missing conf file" && return 1
-        export TRYTOND_CONFIG
-        TRYTOND_DATABASE_URI=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_TEST 2> /dev/null`
-        [ $? -eq 0 ] && [ ! -z "$TRYTOND_DATABASE_URI" ] && export TRYTOND_DATABASE_URI
-        export DB_NAME="test_"`date +%s%N`
-        export DO_NOT_TEST_CASES=1
+        _coog_test_env || return $!
         run-tests.py -c $TRYTOND_CONFIG -vv -m $*
 }
