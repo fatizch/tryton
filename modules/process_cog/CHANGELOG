@@ -1,3 +1,4 @@
+* Allow to use an existing view as a step view
 * Pyson condition on process initiation can apply on original or event object
 
 Version 1.6 - 2015-12-23

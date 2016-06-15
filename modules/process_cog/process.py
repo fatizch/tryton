@@ -1,5 +1,6 @@
 import pydot
 import datetime
+import lxml
 
 from sql.conditionals import Coalesce
 
@@ -961,6 +962,21 @@ class ProcessStep(model.CoopSQL, model.TaggedMixin):
             ('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework'),
             ], depends=['processes'], required=True, ondelete='RESTRICT')
+    static_view = fields.Many2One('ir.ui.view', 'Static View',
+        states={'invisible': ~Eval('main_model')},
+        domain=[('model', '=', Eval('main_model_name')),
+            ('type', '=', 'form')],
+        depends=['main_model', 'main_model_name'])
+    main_model_name = fields.Function(
+        fields.Char('Main Model Name', states={'invisible': True}),
+        'on_change_with_main_model_name')
+
+    @classmethod
+    def __setup__(cls):
+        super(ProcessStep, cls).__setup__()
+        cls.step_xml.states.update({
+                'readonly': Bool(Eval('static_view', False))})
+        cls.step_xml.depends.append('static_view')
 
     @classmethod
     def copy(cls, steps, default=None):
@@ -988,6 +1004,28 @@ class ProcessStep(model.CoopSQL, model.TaggedMixin):
     @classmethod
     def default_button_domain(cls):
         return '[]'
+
+    @fields.depends('main_model')
+    def on_change_with_main_model_name(self, name=None):
+        return getattr(self.main_model, 'model', '')
+
+    @fields.depends('colspan', 'static_view', 'step_xml')
+    def on_change_static_view(self):
+        if not self.static_view:
+            return
+        view_xml = utils.get_view_complete_xml(
+            Pool().get(self.static_view.model), self.static_view)
+        xml = lxml.etree.fromstring(view_xml)
+        nb_col = int(xml.get('col', '4'))
+        self.colspan = nb_col
+        self.step_xml = '\n'.join([lxml.etree.tostring(x, pretty_print=True)
+                for x in xml])
+        return
+
+    @fields.depends('main_model', 'static_view')
+    def on_change_main_model(self):
+        if not self.main_model:
+            self.static_view = None
 
     def get_pyson_for_button(self):
         return self.pyson or ''

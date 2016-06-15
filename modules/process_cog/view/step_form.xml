@@ -7,6 +7,9 @@
         <field name="button_domain"/>
         <label name="main_model"/>
         <field name="main_model"/>
+        <label name="static_view"/>
+        <field name="static_view"/>
+        <field name="main_model_name" invisible="1"/>
     </xpath>
     <xpath expr="/form/notebook/page[@id='XML']" position="after">
         <page string="Custom Views" id="custom_views">

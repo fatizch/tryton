@@ -447,3 +447,7 @@ def clear_transaction_cache(model_name, ids):
             for id_ in ids:
                 if id_ in cache[model_name]:
                     cache[model_name][id_].clear()
+
+
+def get_view_complete_xml(model, view):
+    return model.fields_view_get(view.id, view.rng_type)['arch']

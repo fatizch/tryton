@@ -305,9 +305,17 @@ msgctxt "field:process.step,main_model:"
 msgid "Main Model"
 msgstr "Modèle Principal"
 
+msgctxt "field:process.step,main_model_name:"
+msgid "Main Model Name"
+msgstr "Nom du modèle principal"
+
 msgctxt "field:process.step,pyson:"
 msgid "Pyson Constraint"
 msgstr "Contraintes Pyson"
+
+msgctxt "field:process.step,static_view:"
+msgid "Static View"
+msgstr "Vue existante"
 
 msgctxt "field:process.step,tags:"
 msgid "Tags"
