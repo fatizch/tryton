@@ -27,7 +27,7 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.tools.misc import memoize
 from trytond.tools import cursor_dict
-from trytond.pyson import Eval, Or, Bool, Not, If
+from trytond.pyson import Eval, Or, Bool, If
 
 from trytond.modules.cog_utils import (coop_date, coop_string, fields,
     model, utils)
@@ -58,6 +58,7 @@ __all__ = [
     'InitTestCaseFromExecutionLog',
     'ValidateRuleTestCases',
     'RuleMixin',
+    'get_rule_mixin',
     ]
 
 CODE_TEMPLATE = """
@@ -191,18 +192,56 @@ class TooFewFunctionCall(Exception):
     pass
 
 
-class RuleMixin(object):
+def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
+    class BaseRuleMixin(object):
+        pass
+
+    if not extra_name:
+        extra_name = field_name + '_extra_data'
+    if not extra_string:
+        extra_string = field_string + ' Extra Data'
+
+    rule_field = fields.Many2One('rule_engine', field_string,
+        ondelete='RESTRICT')
+    rule_extra_data = fields.Dict('rule_engine.rule_parameter', extra_string,
+            states={'invisible': ~Eval(extra_name, False)})
+    setattr(BaseRuleMixin, field_name, rule_field)
+    setattr(BaseRuleMixin, extra_name, rule_extra_data)
+    setattr(BaseRuleMixin, extra_name + '_string',
+        rule_extra_data.translated(extra_name))
+
+    def calculate(self, args):
+        rule = getattr(self, field_name, None)
+        if rule:
+            return rule.execute(args, getattr(self, extra_name)).result
+
+    setattr(BaseRuleMixin, 'calculate_' + field_name, calculate)
+
+    @fields.depends(field_name, extra_name)
+    def on_change_with_rule_extra_data(self):
+        if not getattr(self, field_name):
+                return {}
+        return getattr(self, field_name).get_extra_data_for_on_change(
+            getattr(self, extra_name))
+
+    setattr(BaseRuleMixin, 'on_change_with_' + extra_name,
+        on_change_with_rule_extra_data)
+
+    return BaseRuleMixin
+
+
+class RuleMixin(get_rule_mixin('rule', 'Rule Engine',
+            extra_string='Rule Extra Data')):
     'Rule Mixin'
 
     __name__ = 'rule_engine.rule_mixin'
     _func_key = 'func_key'
 
-    rule = fields.Many2One('rule_engine', 'Rule Engine', required=True,
-        ondelete='RESTRICT')
-    rule_extra_data = fields.Dict('rule_engine.rule_parameter',
-        'Rule Extra Data', states={
-            'invisible': Not(Bool(Eval('rule_extra_data', False)))})
-    rule_extra_data_string = rule_extra_data.translated('rule_extra_data')
+    @classmethod
+    def __setup__(cls):
+        super(RuleMixin, cls).__setup__()
+        cls.rule.required = True
+
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
 
@@ -214,14 +253,7 @@ class RuleMixin(object):
         return [('rule.short_name',) + tuple(clause[1:])]
 
     def calculate(self, args):
-        return self.rule.execute(args, self.rule_extra_data).result
-
-    @fields.depends('rule', 'rule_extra_data')
-    def on_change_with_rule_extra_data(self):
-        if not self.rule:
-            return {}
-        return self.rule.get_extra_data_for_on_change(
-            self.rule_extra_data)
+        return self.calculate_rule(args)
 
 
 class RuleEngineResult(object):
