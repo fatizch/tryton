@@ -114,17 +114,17 @@ msgctxt "field:benefit.rule,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:benefit.rule,indemnification_rule:"
+msgid "Indemnification Rule"
+msgstr "Règle de calcul de prestation"
+
+msgctxt "field:benefit.rule,indemnification_rule_extra_data:"
+msgid "Indemnification Rule Extra Data"
+msgstr "Paramètres de règle de prestation"
+
 msgctxt "field:benefit.rule,rec_name:"
 msgid "Name"
 msgstr "Nom"
-
-msgctxt "field:benefit.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:benefit.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
 
 msgctxt "field:benefit.rule,write_date:"
 msgid "Write Date"
@@ -518,7 +518,7 @@ msgstr "Moteur de Règle"
 
 msgctxt "field:claim.indemnification.control.rule,rule_extra_data:"
 msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
+msgstr "Paramètres de Règle"
 
 msgctxt "field:claim.indemnification.control.rule,write_date:"
 msgid "Write Date"

@@ -1,10 +1,11 @@
 from dateutil.relativedelta import relativedelta
 
+from trytond import backend
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, Bool, Not
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import model, fields
-from trytond.modules.rule_engine import RuleMixin
+from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.currency_cog import ModelCurrency
 
 __metaclass__ = PoolMeta
@@ -59,48 +60,44 @@ class Benefit:
         return 'capital'
 
 
-class BenefitRule(RuleMixin, model.CoopSQL, model.CoopView, ModelCurrency):
+class BenefitRule(
+        get_rule_mixin('indemnification_rule', 'Indemnification Rule'),
+        get_rule_mixin('deductible_rule', 'Deductible Rule'),
+        model.CoopSQL, model.CoopView, ModelCurrency):
     'Benefit Rule'
 
     __name__ = 'benefit.rule'
 
     benefit = fields.Many2One('benefit', 'Benefit', ondelete='CASCADE',
         required=True, select=True)
-    deductible_rule = fields.Many2One('rule_engine', 'Deductible Rule',
-        ondelete='RESTRICT')
-    deductible_rule_extra_data = fields.Dict('rule_engine.rule_parameter',
-        'Deductible Rule Extra Data', states={
-            'invisible': Not(Bool(Eval('deductible_rule_extra_data', False)))})
-    deductible_rule_extra_data_string = deductible_rule_extra_data.translated(
-        'deductible_rule_extra_data')
 
     @classmethod
     def __setup__(cls):
         super(BenefitRule, cls).__setup__()
-        cls.rule.domain = [('type_', '=', 'benefit')]
+        cls.indemnification_rule.domain = [('type_', '=', 'benefit')]
+        cls.deductible_rule.domain = [('type_', '=', 'benefit')]
 
-    @fields.depends('deductible_rule', 'deductible_rule_extra_data')
-    def on_change_with_deductible_rule_extra_data(self):
-        if not self.deductible_rule:
-            return {}
-        return self.deductible_rule.get_extra_data_for_on_change(
-            self.deductible_rule_extra_data)
+    @classmethod
+    def __register__(cls, module):
+        TableHandler = backend.get('TableHandler')
+        handler = TableHandler(cls, module)
+        # Migrate from 1.6 : rename 'rule' to 'indemnification_rule'
+        if handler.column_exist('rule'):
+            handler.column_rename('rule', 'indemnification_rule')
+            handler.column_rename('rule_extra_data',
+                'indemnification_rule_extra_data')
+        super(BenefitRule, cls).__register__(module)
 
     def get_coverage_amount(self, args):
         if 'option' in args and 'covered_person' in args:
             return args['option'].get_coverage_amount(args['covered_person'])
-
-    def calculate_deductible_end_date(self, args):
-        if self.deductible_rule:
-            return self.deductible_rule.execute(args,
-                self.deductible_rule_extra_data).result
 
     def calculate(self, args):
         res = []
         loss = args['loss']
         indemnification = args['indemnification']
         delivered = args['service']
-        deductible_end_date = self.calculate_deductible_end_date(args)
+        deductible_end_date = self.calculate_deductible_rule(args)
         previous_date = None
         if deductible_end_date:
             # create deductible if deductible rule is defined
@@ -131,7 +128,7 @@ class BenefitRule(RuleMixin, model.CoopSQL, model.CoopView, ModelCurrency):
             new_args['date'] = previous_date
             new_args['start_date'] = previous_date
             new_args['end_date'] = date - relativedelta(days=1)
-            benefits = super(BenefitRule, self).calculate(new_args)
+            benefits = self.calculate_indemnification_rule(new_args)
             for benefit in benefits:
                 benefit['kind'] = 'benefit'
             res.extend(benefits)
@@ -139,10 +136,8 @@ class BenefitRule(RuleMixin, model.CoopSQL, model.CoopView, ModelCurrency):
         new_args['date'] = previous_date
         new_args['start_date'] = previous_date
         new_args['end_date'] = indemnification.end_date
-        benefits = super(BenefitRule, self).calculate(new_args)
+        benefits = self.calculate_indemnification_rule(new_args)
         for benefit in benefits:
             benefit['kind'] = 'benefit'
         res.extend(benefits)
         return res
-        if False:
-            return super(BenefitRule, self).calculate(args)
