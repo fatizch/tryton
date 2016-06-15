@@ -1,5 +1,6 @@
+* Add support for warning message in eligibility rule
 * Allow multiple eligibility rules per option
-* Add Eligibility Rule errors management
+* Add eligibility Rule errors management
 
 Version 1.6 - 2015-12-23
 
