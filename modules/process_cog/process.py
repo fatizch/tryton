@@ -557,6 +557,8 @@ class Process(model.CoopSQL, model.TaggedMixin):
         cls._error_messages.update({
                 'button_delete_confirm': 'The current record (%s) will be '
                 'deleted, are you sure you want to proceed ?',
+                'previous_button_label': 'Previous',
+                'next_button_label': 'Next',
                 })
 
     @classmethod
@@ -657,7 +659,8 @@ class Process(model.CoopSQL, model.TaggedMixin):
         xml += '<group id="group_prevnext" colspan="4" col="%s">' % (
             8 + len(middle_buttons))
         if self.with_prev_next:
-            xml += '<button string="Previous "'
+            xml += '<button string="%s"' % self.raise_user_error(
+                'previous_button_label', raise_exception=False)
             xml += ' name="_button_previous_%s"/>' % self.id
         if middle_buttons:
             xml += '<group id="void_l" colspan="3"/>'
@@ -666,7 +669,8 @@ class Process(model.CoopSQL, model.TaggedMixin):
         else:
             xml += '<group id="void" colspan="6"/>'
         if self.with_prev_next:
-            xml += '<button string="Next" '
+            xml += '<button string="%s" ' % self.raise_user_error(
+                'next_button_label')
             xml += 'name="_button_next_%s"/>' % self.id
         xml += '</group>'
         xml += '<newline/>'

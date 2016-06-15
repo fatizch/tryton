@@ -23,6 +23,14 @@ msgid "Pyson expression and description is mandatory"
 msgstr "Expression Pyson et la description sont obligatoires"
 
 msgctxt "error:process:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "error:process:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "error:process:"
 msgid ""
 "The current record (%s) will be deleted, are you sure you want to proceed ?"
 msgstr ""

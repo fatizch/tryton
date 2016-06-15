@@ -152,6 +152,10 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         cls._error_messages.update({
                 'use_steps_only_once':
                 '%s: Step %s cannot be used more than once',
+                'not_allowed_message': 'The current record is in a state '
+                '(%s) that you are not allowed to view',
+                'process_completed': 'The current record completed the '
+                'current process, please go ahead',
                 })
 
     @classmethod
@@ -350,9 +354,9 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
             xml += 'states="{'
             xml += "&quot;invisible&quot;: %s" % invisible_def
             xml += '}">'
-            xml += '<label id="noauth_text" string="The current record is '
-            xml += 'in a state (%s) that you are not allowed to view."/>' % (
-                step.fancy_name)
+            xml += '<label id="noauth_text" string="%s"/>' % (
+                self.raise_user_error('not_allowed_message',
+                    (step.fancy_name,), raise_exception=False))
             xml += '</group>'
         return xml
 
@@ -400,8 +404,8 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         xml += 'states="{'
         xml += "&quot;invisible&quot;: %s" % invisible_def
         xml += '}">'
-        xml += '<label id="complete_text" string="The current record '
-        xml += 'completed the current process, please go ahead"/>'
+        xml += '<label id="complete_text" string="%s"/>' % (
+            self.raise_user_error('process_completed', raise_exception=False))
         xml += '</group>'
 
         return xml
@@ -486,8 +490,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         good_view.model = self.on_model.model
         good_view.name = '%s_%s' % (self.technical_name, kind)
         good_view.type = kind
-        # TODO: Which modules should be used here ?
-        good_view.module = 'process'
+        good_view.module = 'process_views'
         good_view.priority = 100
         if kind == 'tree':
             good_view.arch = self.build_xml_tree_view()
@@ -662,7 +665,9 @@ class ProcessAction(ModelSQL, ModelView):
     def __setup__(cls):
         super(ProcessAction, cls).__setup__()
         cls._error_messages.update({
-                'non_matching_method': 'Method %s does not exist on model %s'})
+                'non_matching_method': 'Method %s does not exist on model %s',
+                'source_code_unavailable': 'Source Code Unavailable',
+                })
 
     @classmethod
     def default_content(cls):
@@ -725,7 +730,8 @@ class ProcessAction(ModelSQL, ModelView):
             func = getattr(GoodModel, self.method_name)
             return ''.join(inspect.getsourcelines(func)[0])
         except:
-            return 'Source Code unavailable'
+            return self.raise_user_error('source_code_unavailable',
+                raise_exception=False)
 
     def get_on_model(self, name):
         if self.parent_step and self.parent_step.main_model:
@@ -765,6 +771,13 @@ class ProcessTransition(ModelSQL, ModelView):
     authorizations = fields.Many2Many('process.transition-group', 'transition',
         'group', 'Authorizations')
     priority = fields.Integer('Priority')
+
+    @classmethod
+    def __setup__(cls):
+        super(ProcessTransition, cls).__setup__()
+        cls._error_messages.update({
+                'complete_button_label': 'Complete',
+                })
 
     @classmethod
     def view_attributes(cls):
@@ -819,7 +832,8 @@ class ProcessTransition(ModelSQL, ModelView):
     def get_rec_name(self, name):
         if not (hasattr(self, 'to_step') and self.to_step):
             if self.kind == 'complete':
-                return 'Complete'
+                return self.raise_user_error('complete_button_label',
+                    raise_exception=False)
             return '...'
         return self.to_step.get_rec_name(name)
 

@@ -6,6 +6,10 @@ msgctxt "error:process.action:"
 msgid "Method %s does not exist on model %s"
 msgstr "La méthode %s n'existe pas sur le modèle %s"
 
+msgctxt "error:process.action:"
+msgid "Source Code Unavailable"
+msgstr "La source n'est pas disponible"
+
 msgctxt "error:process.process_framework:"
 msgid "Enter a value for field '%s' of '%s'"
 msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
@@ -31,12 +35,26 @@ msgid "Both choices must be filled !"
 msgstr "Saisir les deux choix"
 
 msgctxt "error:process.transition:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "error:process.transition:"
 msgid "Pyson expression and description is mandatory"
 msgstr "Expression Pyson et la description sont obligatoires"
 
 msgctxt "error:process:"
 msgid "%s: Step %s cannot be used more than once"
 msgstr "%s: L'étape %s ne peut être utilisée qu'une seule fois"
+
+msgctxt "error:process:"
+msgid "The current record completed the current process, please go ahead"
+msgstr "Processus Terminé. Commencez une nouvelle tâche"
+
+msgctxt "error:process:"
+msgid "The current record is in a state (%s) that you are not allowed to view"
+msgstr ""
+"L'enregistrement actuel (%s) est sur une étape que vous n'êtes pas autorisé "
+"à visualiser."
 
 msgctxt "error:process:"
 msgid "The technical name must be unique"
@@ -334,6 +352,14 @@ msgctxt "field:process.process-act_window,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:process.process_framework,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:process.process_framework,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
 msgctxt "field:process.process_framework,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
@@ -342,6 +368,10 @@ msgctxt "field:process.process_framework,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:process.process_framework,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:process.process_framework,task_name:"
 msgid "Task Name"
 msgstr "Nom de la tâche"
@@ -349,6 +379,14 @@ msgstr "Nom de la tâche"
 msgctxt "field:process.process_framework,task_status:"
 msgid "Task Status"
 msgstr "Statut du processus"
+
+msgctxt "field:process.process_framework,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process.process_framework,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:process.status,code:"
 msgid "Code"
