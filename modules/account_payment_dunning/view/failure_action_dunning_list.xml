@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<tree string="Dunning Configuration" editable="bottom">
+    <field name="procedure" readonly="1"/>
+    <field name="level"/>
+</tree>

@@ -1,0 +1,63 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:account.payment.journal.failure_action.dunning:"
+msgid "Only one configuration per dunning procedure"
+msgstr "Il ne peut y avoir qu'une seule ligne de configuration pour une procédure de relance donnée"
+
+msgctxt "field:account.payment.journal.failure_action,dunning_configurations:"
+msgid "Dunning Configurations"
+msgstr "Configuration des relances"
+
+msgctxt "field:account.payment.journal.failure_action.dunning,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.payment.journal.failure_action.dunning,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.payment.journal.failure_action.dunning,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.payment.journal.failure_action.dunning,failure_action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:account.payment.journal.failure_action.dunning,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.payment.journal.failure_action.dunning,level:"
+msgid "Level"
+msgstr "Niveau"
+
+msgctxt "field:account.payment.journal.failure_action.dunning,procedure:"
+msgid "Procedure"
+msgstr "Procédure"
+
+msgctxt "field:account.payment.journal.failure_action.dunning,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.payment.journal.failure_action.dunning,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.payment.journal.failure_action.dunning,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:account.payment.journal.failure_action.dunning,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:account.payment.journal.failure_action.dunning,name:"
+msgid "Journal Failure Dunning Configuration"
+msgstr "Configuration des relances suite à rejet de paiement"
+
+msgctxt "view:account.payment.journal.failure_action.dunning:"
+msgid "Dunning Configuration"
+msgstr "Configuration de relance"

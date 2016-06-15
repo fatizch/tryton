@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ########################## -->
+        <!-- # Journal Failure Action # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="payment_journal_failure_action_view_form">
+            <field name="model">account.payment.journal.failure_action</field>
+            <field name="inherit" ref="account_payment_cog.payment_journal_failure_action_view_form"/>
+            <field name="name">payment_journal_failure_action_form</field>
+        </record>
+        <!-- ########################### -->
+        <!-- # Journal Failure Dunning # -->
+        <!-- ########################### -->
+        <record model="ir.ui.view" id="failure_action_dunning_view_list">
+            <field name="model">account.payment.journal.failure_action.dunning</field>
+            <field name="type">tree</field>
+            <field name="name">failure_action_dunning_list</field>
+        </record>
+    </data>
+</tryton>
