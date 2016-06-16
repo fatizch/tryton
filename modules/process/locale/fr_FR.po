@@ -776,34 +776,6 @@ msgctxt "selection:process.transition,method_kind:"
 msgid "Replace Step Methods"
 msgstr "Remplacer les Méthodes de l'Etape"
 
-msgctxt "view:contract:"
-msgid "Complete"
-msgstr "Terminer"
-
-msgctxt "view:contract:"
-msgid "Next"
-msgstr "Suivant"
-
-msgctxt "view:contract:"
-msgid "Previous "
-msgstr "Précédent"
-
-msgctxt "view:contract:"
-msgid ""
-"The current record (Contrat) will be deleted, are you sure you want to "
-"proceed ?"
-msgstr ""
-"L'enregistrement actuel (Contrat) va être supprimé, êtes-vous sûr de vouloir"
-" continuer ?"
-
-msgctxt "view:contract:"
-msgid "The current record completed the current process, please go ahead"
-msgstr "Processus Terminé. Commencez une nouvelle tâche"
-
-msgctxt "view:endorsement:"
-msgid "The current record completed the current process, please go ahead"
-msgstr "Processus Terminé. Commencez une nouvelle tâche"
-
 msgctxt "view:process-process.step:"
 msgid "Process Relation"
 msgstr "Relation Prossus - Etape"
