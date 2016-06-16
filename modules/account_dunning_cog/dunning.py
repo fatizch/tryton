@@ -31,12 +31,26 @@ class Dunning(export.ExportImportMixin):
         cls.line.select = True
 
     @classmethod
-    def process_dunning_per_level(cls, dunnings):
+    def dunnings_per_level(cls, dunnings):
         key = attrgetter('level')
         dunnings.sort(key=key)
-        group_dunnings = groupby(dunnings, key)
-        for level, current_dunnings in group_dunnings:
+        return groupby(dunnings, key)
+
+    @classmethod
+    def process_dunning_per_level(cls, dunnings):
+        dunnings_per_level = cls.dunnings_per_level(dunnings)
+        for level, current_dunnings in dunnings_per_level:
             level.process_dunnings(list(current_dunnings))
+
+    @classmethod
+    def notify_dunning_per_level(cls, dunnings):
+        pool = Pool()
+        Event = pool.get('event')
+        dunnings_per_level = cls.dunnings_per_level(dunnings)
+        for level, current_dunnings in dunnings_per_level:
+            if level.event_log_type:
+                Event.notify_events(list(current_dunnings),
+                    level.event_log_type.code)
 
     @classmethod
     def process(cls, dunnings):
@@ -45,6 +59,7 @@ class Dunning(export.ExportImportMixin):
                 'state': 'done',
                 'last_process_date': utils.today(),
                 })
+        cls.notify_dunning_per_level(dunnings)
 
     def get_rec_name(self, name):
         return self.level.rec_name
@@ -65,11 +80,7 @@ class Level(export.ExportImportMixin):
         return '%s@%s' % (self.name, self.procedure.rec_name)
 
     def process_dunnings(self, dunnings):
-        if not self.event_log_type:
-            return
-        pool = Pool()
-        Event = pool.get('event')
-        Event.notify_events(dunnings, self.event_log_type.code)
+        pass
 
     def test(self, line, date):
         if self.days_from_previous_step and self.days is not None:
