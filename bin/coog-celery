@@ -19,6 +19,7 @@ _coog_celery_bak() { # backup log file - [pid]
         local out_file
         out_file=`_coog_celery_file out`
         [ ! -e $out_file ] && echo no celery log && return
+        coog_env_wait $1
         [ -z $1 ] && rm $out_file && return
         local bak_file
         bak_file=`_coog_celery_file out $1`
@@ -37,14 +38,14 @@ coog_celery_start() { # start celery workers - <concurrency>
                 --concurrency=$1
                 --pidfile=$pid_file \
                 --loglevel=$LOG_LEVEL \
-                --logfile=$out_file > $out_file &
+                --logfile=$out_file &> $out_file &
 }
 
 coog_celery_stop() { # stop celery workers
         local pid
         pid=`_coog_celery_pid 0`
-        [ -z $pid ] && echo no workers running && return
-        kill -TERM $pid && echo workers stopped
+        [ -z $pid ] && echo no workers running
+        [ ! -z $pid ] && kill -TERM $pid && echo workers stopped
         _coog_celery_bak $pid
 }
 

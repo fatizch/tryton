@@ -18,6 +18,7 @@ _coog_client_bak() { # backup log file (mv to pid if exists or rm)
         local out_file
         out_file=`_coog_client_file out`
         [ ! -e $out_file ] && echo no client log && return
+        coog_env_wait $1
         [ -z $1 ] && rm $out_file && return
         local bak_file
         bak_file=`_coog_client_file out $1`
@@ -51,7 +52,7 @@ coog_client_start() { # start client - [args] passed to tryton, loglevel NOT set
         else
                 args="$args $*"
         fi
-        nohup tryton -c $COOG_CONF_CLI $args > $out_file &
+        nohup tryton -c $COOG_CONF_CLI $args &> $out_file &
         echo $! > $pid_file
         echo client started
 }
@@ -67,8 +68,8 @@ coog_client_debug() { # start client in pdb - [args] passed to tryton
 coog_client_stop() { # stop client (gracefully)
         local pid
         pid=`_coog_client_pid 1`
-        [ -z $pid ] && echo no client running && return
-        kill -TERM $pid && echo client stopped
+        [ -z $pid ] && echo no client running
+        [ ! -z $pid ] && kill -TERM $pid && echo client stopped
         _coog_client_bak $pid
 }
 

@@ -20,6 +20,7 @@ _coog_rq_bak() { # backup out file - <wid> [pid]
         [ -z $1 ] && echo rq_bak: missing args && return 1
         local out_file
         out_file=`_coog_rq_file $1 out` || return $?
+        coog_env_wait $2
         [ ! -e "$out_file" ] && echo rq_bak: no out for worker $1 && return
         [ -z $2 ] && rm "$out_file" && return
         local bak_file
@@ -38,15 +39,15 @@ coog_rq_start() { # start rq worker - <wid>
         nohup rq worker \
                 -u $TRYTOND_ASYNC_RQ \
                 -n coog-$1 \
-                --pid "$pid_file" > "$out_file" &
+                --pid "$pid_file" &> "$out_file" &
 }
 
 coog_rq_stop() { # stop rq worker - <wid>
         [ -z $1 ] && echo needs worker id to stop && return 1
         local pid
         pid=`_coog_rq_pid $1` || return $?
-        [ -z $pid ] && echo worker $1 is not running && return 1
-        kill -TERM $pid && echo worker stopped
+        [ -z $pid ] && echo worker $1 is not running
+        [ ! -z $pid ] kill -TERM $pid && echo worker stopped
         _coog_rq_bak $1 $pid
 }
 

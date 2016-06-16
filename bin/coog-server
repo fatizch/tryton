@@ -18,6 +18,7 @@ _coog_server_bak() { # backup log file (mv to pid if exists or rm)
         local out_file
         out_file=`_coog_server_file out`
         [ ! -e $out_file ] && echo no server log && return
+        coog_env_wait $1
         [ -z $1 ] && rm $out_file && return
         local bak_file
         bak_file=`_coog_server_file out $1`
@@ -55,7 +56,7 @@ coog_server_start() { # start server - [args] passed to trytond, logconf NOT set
         [ ! -z $COOG_CONF_LOG ] && args="$args --logconf $COOG_CONF_LOG"
         args="$args $*"
         _coog_server_cleancache
-        nohup trytond -c $COOG_CONF_SRV --pidfile $pid_file $args > $out_file &
+        nohup trytond -c $COOG_CONF_SRV --pidfile $pid_file $args &> $out_file &
         echo server started
 }
 
@@ -78,8 +79,8 @@ coog_server_debug() { # start server in pdb - [args] passed to trytond
 coog_server_stop() { # stop server (gracefully)
         local pid
         pid=`_coog_server_pid 0`
-        [ -z $pid ] && echo no server running && return
-        kill -TERM $pid && echo server stopped
+        [ -z $pid ] && echo no server running
+        [ ! -z $pid ] && kill -TERM $pid && echo server stopped
         _coog_server_bak $pid
 }
 

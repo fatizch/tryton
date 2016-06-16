@@ -20,6 +20,7 @@ _coog_worker_bak() { # backup runtime files - <wid> [pid]
         out_file=`_coog_worker_file $1 out`
         if [ -e $out_file ]
         then
+                coog_env_wait $2
                 [ -z $2 ] && rm $out_file && return
                 local bak_file
                 bak_file=`_coog_worker_file $1 out $2`
@@ -61,7 +62,7 @@ coog_worker_start() { # start worker - <wid> [args]
         [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
         [ ! -z $COOG_CONF_LOG ] && args="--logconf $COOG_CONF_LOG"
         args="$args $*"
-        nohup trytond -c $conf_file --pidfile $pid_file $args > $out_file &
+        nohup trytond -c $conf_file --pidfile $pid_file $args &> $out_file &
         echo worker $wid: started
 }
 
@@ -69,8 +70,8 @@ coog_worker_stop() { # stop worker (gracefully) - <wid>
         [ -z $1 ] && >&2 echo missing worker id && return 1
         local pid
         pid=`_coog_worker_pid $1 0`
-        [ -z $pid ] && echo worker $1: no process running && return
-        kill -TERM $pid && echo worker $1: stopped
+        [ -z $pid ] && echo worker $1: no process running
+        [ ! -z $pid ] && kill -TERM $pid && echo worker $1: stopped
         _coog_worker_bak $1 $pid
 }
 

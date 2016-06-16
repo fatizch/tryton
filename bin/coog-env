@@ -72,8 +72,16 @@ _coog_env_postgres() { # set postgres vars
 }
 
 _coog_env_common() { # set common vars
-        LOG_LEVEL=${LOG_LEVEL:-INFO}
-        export LOG_LEVEL
+        if [ -z $LOG_LEVEL ]
+        then
+                if [ -z $COOG_CONF_LOG ]
+                then
+                        LOG_LEVEL=INFO
+                else
+                        LOG_LEVEL=`python $COOG_BIN/parse-config.py logger_root level < $COOG_CONF_LOG` || return $?
+                fi
+                export LOG_LEVEL
+        fi
         return 0
 }
 
@@ -210,6 +218,14 @@ coog_env_config() { # print conf file <client|server|batch|test|log>
                 return
         fi
         echo unknown conf: $1 && return 1
+}
+
+coog_env_wait() { # wait for process to die [pid]
+        [ -z $1 ] && return
+        while [ -e /proc/$1 ]
+        do
+                sleep 0.5
+        done
 }
 
 coog_env_run() { # execute command in coog context
