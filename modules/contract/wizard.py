@@ -62,7 +62,7 @@ class OptionSubscription(model.CoopWizard):
                 if option.coverage == coverage:
                     existing_option = option
                     break
-            with_package = contract.product.packages and package
+            with_package = bool(contract.product.packages and package)
             selection = 'manual'
             if coverage.subscription_behaviour == 'mandatory':
                 selection = 'mandatory'
