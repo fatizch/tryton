@@ -9,3 +9,7 @@ msgstr "Contrat"
 msgctxt "model:ir.action,name:report_bank_deposit_ticket"
 msgid "Bank Deposit Ticket"
 msgstr "Bordereaux de chèques"
+
+msgctxt "field:contract,cancelled_statements:"
+msgid "Cancelled Statements"
+msgstr "Relevés annulés"
