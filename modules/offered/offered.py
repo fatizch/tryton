@@ -436,7 +436,7 @@ class OptionDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
 
     def calculate_end_date(self, exec_context):
         if self.ending_rule:
-            return self.ending_rule[0].calculate(exec_context)
+            return self.ending_rule[0].calculate_rule(exec_context)
 
 
 class OptionDescriptionExtraDataRelation(model.CoopSQL):

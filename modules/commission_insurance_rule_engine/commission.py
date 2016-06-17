@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Not, Or
 
 from trytond.modules.cog_utils import fields, model, coop_string
-from trytond.modules.rule_engine import RuleMixin
+from trytond.modules.rule_engine import get_rule_mixin
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -36,24 +36,19 @@ class Plan:
         return context
 
 
-class PlanLines(RuleMixin, model.CoopSQL, model.CoopView):
+class PlanLines(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoopSQL, model.CoopView):
     __name__ = 'commission.plan.line'
 
     use_rule_engine = fields.Boolean('Use Rule Engine')
     formula_description = fields.Function(fields.Char('Formula'),
         'get_formula_description')
 
-    def get_formula_description(self, name):
-        if self.use_rule_engine:
-            return self.rule.name
-        else:
-            return self.formula
-
     @classmethod
     def __setup__(cls):
         super(PlanLines, cls).__setup__()
         cls.rule.domain = [('type_', '=', 'commission')]
-        cls.rule.required = False
         cls.rule.states['invisible'] = Not(Eval('use_rule_engine', True))
         cls.rule.states['required'] = Eval('use_rule_engine', True)
         cls.rule.depends.append('use_rule_engine')
@@ -65,6 +60,12 @@ class PlanLines(RuleMixin, model.CoopSQL, model.CoopView):
         cls.formula.states['invisible'] = Eval('use_rule_engine', True)
         cls.formula.depends.append('use_rule_engine')
 
+    def get_formula_description(self, name):
+        if self.use_rule_engine:
+            return self.rule.name
+        else:
+            return self.formula
+
     def get_amount(self, **context):
         if not self.use_rule_engine:
             return super(PlanLines, self).get_amount(**context)
@@ -73,7 +74,7 @@ class PlanLines(RuleMixin, model.CoopSQL, model.CoopView):
             context['names']['option'].init_dict_for_rule_engine(args)
         if 'invoice_line' in context['names']:
             args['date'] = context['names']['invoice_line'].coverage_start
-        return Decimal(self.calculate(args))
+        return Decimal(self.calculate_rule(args))
 
     def check_formula(self):
         return True

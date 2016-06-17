@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta
 
 from trytond.modules.cog_utils import fields, model
-from trytond.modules.rule_engine import RuleMixin
+from trytond.modules.rule_engine import get_rule_mixin
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -19,11 +19,12 @@ class Product:
 
     def get_contract_end_date(self, exec_context):
         if self.term_renewal_rule:
-            return self.term_renewal_rule[0].calculate(exec_context)
+            return self.term_renewal_rule[0].calculate_rule(exec_context)
 
 
-class ProductTermRenewalRule(RuleMixin, model.CoopSQL,
-        model.CoopView):
+class ProductTermRenewalRule(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoopSQL, model.CoopView):
     'Product Term Renewal Rule'
 
     __name__ = 'offered.product.term_renewal_rule'
@@ -38,6 +39,7 @@ class ProductTermRenewalRule(RuleMixin, model.CoopSQL,
     @classmethod
     def __setup__(cls):
         super(ProductTermRenewalRule, cls).__setup__()
+        cls.rule.required = True
         cls.rule.domain = [('type_', '=', 'renewal')]
 
     @classmethod

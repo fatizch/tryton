@@ -3,7 +3,7 @@ from trytond.pyson import Eval
 from trytond.model import fields as tryton_fields
 
 from trytond.modules.cog_utils import model, fields, utils
-from trytond.modules.rule_engine import RuleMixin
+from trytond.modules.rule_engine import get_rule_mixin
 
 
 __all__ = [
@@ -11,7 +11,9 @@ __all__ = [
     ]
 
 
-class ProcessAction(model.CoopView, RuleMixin):
+class ProcessAction(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoopView):
     __name__ = 'process.action'
 
     target_path = fields.Char('Target Path',
@@ -25,7 +27,6 @@ class ProcessAction(model.CoopView, RuleMixin):
     def __setup__(cls):
         super(ProcessAction, cls).__setup__()
         cls.content.selection.append(('rule', 'Rule'))
-        cls.rule.required = False
         cls.rule.states = {
             'required': Eval('content', '') == 'rule',
             'invisible': Eval('content', '') != 'rule'}

@@ -3,7 +3,7 @@ from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, model
-from trytond.modules.rule_engine import RuleMixin
+from trytond.modules.rule_engine import get_rule_mixin
 
 
 __all__ = [
@@ -16,7 +16,9 @@ __all__ = [
 __metaclass__ = PoolMeta
 
 
-class DocumentRule(RuleMixin, model.CoopSQL, model.CoopView):
+class DocumentRule(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoopSQL, model.CoopView):
     'Document Managing Rule'
 
     __name__ = 'document.rule'
@@ -62,7 +64,6 @@ class DocumentRule(RuleMixin, model.CoopSQL, model.CoopView):
                 'as keys.',
                 })
         cls.rule.domain = [('type_', '=', 'doc_request')]
-        cls.rule.required = False
         cls.rule.help = ('The rule must return a dictionnary '
         'with document description codes as keys, and dictionnaries as values.'
         ' The possible keys for these sub dictionnaries are : %s ' %
@@ -74,7 +75,7 @@ class DocumentRule(RuleMixin, model.CoopSQL, model.CoopView):
     def calculate_required_documents(self, args):
         if not self.rule:
             return self.format_as_rule_result()
-        result = self.calculate(args)
+        result = self.calculate_rule(args)
         if type(result) is not dict:
             self.raise_user_error('wrong_documents_rule')
         result.update(self.format_as_rule_result())

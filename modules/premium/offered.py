@@ -8,7 +8,7 @@ from trytond.cache import Cache
 from trytond.model import MatchMixin
 
 from trytond.modules.cog_utils import fields, model, coop_date
-from trytond.modules.rule_engine import RuleMixin
+from trytond.modules.rule_engine import get_rule_mixin
 
 
 PREMIUM_FREQUENCY = [
@@ -138,8 +138,9 @@ class ProductFeeRelation(model.CoopSQL):
         required=True, select=True)
 
 
-class OptionDescriptionPremiumRule(RuleMixin, MatchMixin, model.CoopSQL,
-        model.CoopView):
+class OptionDescriptionPremiumRule(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        MatchMixin, model.CoopSQL, model.CoopView):
     'Option Description Premium Rule'
 
     __name__ = 'offered.option.description.premium_rule'
@@ -156,6 +157,7 @@ class OptionDescriptionPremiumRule(RuleMixin, MatchMixin, model.CoopSQL,
     @classmethod
     def __setup__(cls):
         super(OptionDescriptionPremiumRule, cls).__setup__()
+        cls.rule.required = True
         cls.rule.domain = [('type_', '=', 'premium')]
 
     @classmethod

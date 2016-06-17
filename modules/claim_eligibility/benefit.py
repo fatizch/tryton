@@ -1,6 +1,6 @@
 from trytond.pool import PoolMeta
 from trytond.modules.cog_utils import fields, model
-from trytond.modules.rule_engine import RuleMixin
+from trytond.modules.rule_engine import get_rule_mixin
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -21,7 +21,9 @@ class Benefit:
         return True
 
 
-class BenefitEligibilityRule(RuleMixin, model.CoopSQL, model.CoopView):
+class BenefitEligibilityRule(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoopSQL, model.CoopView):
     'Benefit Eligibility Rule'
 
     __name__ = 'benefit.eligibility.rule'
@@ -32,10 +34,11 @@ class BenefitEligibilityRule(RuleMixin, model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(BenefitEligibilityRule, cls).__setup__()
+        cls.rule.required = True
         cls.rule.domain = [('type_', '=', 'benefit')]
 
     def check_eligibility(self, exec_context):
-        res, error_message = self.calculate(exec_context)
+        res, error_message = self.calculate_rule(exec_context)
         if not res:
             self.raise_user_error(error_message)
         return res

@@ -3,7 +3,7 @@ from trytond.pool import PoolMeta
 from trytond.pyson import If, Bool, Eval
 
 from trytond.modules.cog_utils import model, fields
-from trytond.modules.rule_engine import RuleMixin
+from trytond.modules.rule_engine import get_rule_mixin
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -21,10 +21,12 @@ class OptionDescription:
     def get_coverage_amount_rule_result(self, args):
         if not self.coverage_amount_rules:
             return
-        return self.coverage_amount_rules[0].calculate(args)
+        return self.coverage_amount_rules[0].calculate_rule(args)
 
 
-class CoverageAmountRule(RuleMixin, model.CoopSQL, model.CoopView):
+class CoverageAmountRule(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoopSQL, model.CoopView):
     'Coverage Amount Rule'
 
     __name__ = 'offered.coverage_amount.rule'
@@ -38,6 +40,7 @@ class CoverageAmountRule(RuleMixin, model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(CoverageAmountRule, cls).__setup__()
+        cls.rule.required = True
         cls.rule.domain.append(If(
                 Bool(Eval('free_input', False)),
                 [('type_', '=', 'coverage_amount_validation')],

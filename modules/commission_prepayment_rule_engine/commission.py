@@ -4,10 +4,10 @@ from types import FloatType, IntType
 
 from trytond.pool import PoolMeta
 from trytond.model import Unique
-from trytond.pyson import Eval, Bool, Not
+from trytond.pyson import Eval, Not
 
 from trytond.modules.cog_utils import fields, model, coop_string
-from trytond.modules.rule_engine import RuleMixin
+from trytond.modules.rule_engine import get_rule_mixin
 
 __all__ = [
     'Plan',
@@ -39,7 +39,7 @@ class Plan:
                 'extra_data': agent.extra_data
                 }
             option.init_dict_for_rule_engine(args)
-            schedule = self.prepayment_payment_rule.calculate(args)
+            schedule = self.prepayment_payment_rule.calculate_rule(args)
             # check rule result
             if not schedule or not isinstance(schedule, list):
                 self.raise_user_error('invalid_rule_result', schedule)
@@ -56,7 +56,9 @@ class Plan:
         return super(Plan, self).compute_prepayment_schedule(option, agent)
 
 
-class PrepaymentPaymentDateRule(RuleMixin, model.CoopSQL, model.CoopView):
+class PrepaymentPaymentDateRule(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoopSQL, model.CoopView):
     'Prepayment Payment Date Rule'
 
     __name__ = 'commission.plan.prepayment.payment_rule'
@@ -72,6 +74,7 @@ class PrepaymentPaymentDateRule(RuleMixin, model.CoopSQL, model.CoopView):
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
+        cls.rule.required = True
         cls.rule.domain = [('type_', '=', 'commission')]
 
     @fields.depends('code', 'name')
@@ -81,23 +84,20 @@ class PrepaymentPaymentDateRule(RuleMixin, model.CoopSQL, model.CoopView):
         return coop_string.slugify(self.name)
 
 
-class PlanLines:
+class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule')):
+    __metaclass__ = PoolMeta
     __name__ = 'commission.plan.line'
 
-    prepayment_rule = fields.Many2One('rule_engine', 'Prepayment Rule',
-        ondelete='RESTRICT', domain=[('type_', '=', 'commission')],
-        depends=['use_rule_engine'],
-        states={
-            'invisible': Not(Eval('use_rule_engine', True))})
-    prepayment_rule_extra_data = fields.Dict('rule_engine.rule_parameter',
-        'Prepayment Rule Extra Data', states={
-            'invisible': Not(Bool(Eval('prepayment_rule_extra_data', False)))})
     prepayment_formula_description = fields.Function(fields.Char('Prepayment'),
         'get_prepayment_formula_description')
 
     @classmethod
     def __setup__(cls):
         super(PlanLines, cls).__setup__()
+        cls.prepayment_rule.domain = [('type_', '=', 'commission')]
+        cls.prepayment_rule.depends = ['use_rule_engine']
+        cls.prepayment_rule.states = {'invisible':
+            Not(Eval('use_rule_engine', True))}
         cls.prepayment_formula.states['invisible'] = Eval('use_rule_engine',
             True)
         cls.prepayment_formula.depends.append('use_rule_engine')
@@ -118,8 +118,7 @@ class PlanLines:
         if 'option' in context['names']:
             context['names']['option'].init_dict_for_rule_engine(args)
             args['date'] = context['names']['option'].initial_start_date
-        return Decimal(self.prepayment_rule.execute(
-                args, self.prepayment_rule_extra_data).result)
+        return Decimal(self.calculate_prepayment_rule(args))
 
     @fields.depends('prepayment_rule', 'prepayment_rule_extra_data')
     def on_change_with_prepayment_rule_extra_data(self):

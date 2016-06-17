@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta
 
 from trytond.modules.cog_utils import fields, model
-from trytond.modules.rule_engine import RuleMixin
+from trytond.modules.rule_engine import get_rule_mixin
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -86,7 +86,9 @@ class RuleEngine:
         return super(RuleEngine, self).on_change_with_result_type(name)
 
 
-class OptionDescriptionEndingRule(RuleMixin, model.CoopSQL, model.CoopView):
+class OptionDescriptionEndingRule(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoopSQL, model.CoopView):
     'Option Description Ending Rule'
 
     __name__ = 'offered.option.description.ending_rule'
@@ -100,6 +102,7 @@ class OptionDescriptionEndingRule(RuleMixin, model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(OptionDescriptionEndingRule, cls).__setup__()
+        cls.rule.required = True
         cls.rule.domain = [('type_', '=', 'ending')]
 
     @classmethod

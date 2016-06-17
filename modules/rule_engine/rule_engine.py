@@ -57,7 +57,6 @@ __all__ = [
     'RuleEngineResult',
     'InitTestCaseFromExecutionLog',
     'ValidateRuleTestCases',
-    'RuleMixin',
     'get_rule_mixin',
     ]
 
@@ -228,32 +227,6 @@ def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
         on_change_with_rule_extra_data)
 
     return BaseRuleMixin
-
-
-class RuleMixin(get_rule_mixin('rule', 'Rule Engine',
-            extra_string='Rule Extra Data')):
-    'Rule Mixin'
-
-    __name__ = 'rule_engine.rule_mixin'
-    _func_key = 'func_key'
-
-    @classmethod
-    def __setup__(cls):
-        super(RuleMixin, cls).__setup__()
-        cls.rule.required = True
-
-    func_key = fields.Function(fields.Char('Functional Key'),
-        'get_func_key', searcher='search_func_key')
-
-    def get_func_key(self, name):
-        return self.rule.short_name
-
-    @classmethod
-    def search_func_key(cls, name, clause):
-        return [('rule.short_name',) + tuple(clause[1:])]
-
-    def calculate(self, args):
-        return self.calculate_rule(args)
 
 
 class RuleEngineResult(object):

@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta
 
 from trytond.modules.cog_utils import fields, model
-from trytond.modules.rule_engine import RuleMixin
+from trytond.modules.rule_engine import get_rule_mixin
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -23,8 +23,9 @@ class OptionDescription:
         return all([x.calculate(exec_context) for x in self.eligibility_rules])
 
 
-class OptionDescriptionEligibilityRule(RuleMixin, model.CoopSQL,
-        model.CoopView):
+class OptionDescriptionEligibilityRule(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoopSQL, model.CoopView):
     'Option Description Eligibility Rule'
 
     __name__ = 'offered.option.description.eligibility_rule'
@@ -38,6 +39,7 @@ class OptionDescriptionEligibilityRule(RuleMixin, model.CoopSQL,
     @classmethod
     def __setup__(cls):
         super(OptionDescriptionEligibilityRule, cls).__setup__()
+        cls.rule.required = True
         cls.rule.domain = [('type_', '=', 'eligibility')]
 
     @classmethod

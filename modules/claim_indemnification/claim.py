@@ -13,7 +13,7 @@ from trytond.modules.claim_indemnification.benefit import \
     INDEMNIFICATION_DETAIL_KIND
 from trytond.modules.claim_indemnification.benefit import INDEMNIFICATION_KIND
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
-from trytond.modules.rule_engine import RuleMixin
+from trytond.modules.rule_engine import get_rule_mixin
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -344,7 +344,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         ctx['date'] = self.start_date
         if not config.control_rule:
             return False, ''
-        return config.control_rule.calculate(ctx)
+        return config.control_rule.calculate_rule(ctx)
 
     def init_dict_for_rule_engine(self, cur_dict):
         self.service.init_dict_for_rule_engine(cur_dict)
@@ -616,7 +616,14 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
         return details
 
 
-class IndemnificationControlRule(RuleMixin, model.CoopSQL, model.CoopView):
+class IndemnificationControlRule(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoopSQL, model.CoopView):
     'Indemnification Control Rule'
 
     __name__ = 'claim.indemnification.control.rule'
+
+    @classmethod
+    def __setup__(cls):
+        super(IndemnificationControlRule, cls).__setup__()
+        cls.rule.required = True

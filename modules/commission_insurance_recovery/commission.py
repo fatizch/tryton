@@ -2,7 +2,7 @@ from trytond.pool import PoolMeta
 from trytond.model import Unique
 
 from trytond.modules.cog_utils import fields, model, coop_string
-from trytond.modules.rule_engine import RuleMixin
+from trytond.modules.rule_engine import get_rule_mixin
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -24,7 +24,9 @@ class Plan:
         return self.commission_recovery.compute_recovery(option, agent)
 
 
-class CommissionRecoveryRule(model.CoopSQL, model.CoopView, RuleMixin):
+class CommissionRecoveryRule(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoopSQL, model.CoopView):
     'Commission Recovery Rule'
 
     __name__ = 'commission.plan.recovery_rule'
@@ -40,6 +42,7 @@ class CommissionRecoveryRule(model.CoopSQL, model.CoopView, RuleMixin):
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
+        cls.rule.required = True
 
     def compute_recovery(self, option, agent):
         args = {}
@@ -47,7 +50,7 @@ class CommissionRecoveryRule(model.CoopSQL, model.CoopView, RuleMixin):
         # initial_start_date used if contract is never in force
         args['date'] = option.end_date or option.initial_start_date
         args['agent'] = agent
-        return self.calculate(args)
+        return self.calculate_rule(args)
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
