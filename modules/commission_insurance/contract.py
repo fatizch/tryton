@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
-from trytond.cache import Cache
+from trytond.cache import Cache, freeze
 
 from trytond.modules.cog_utils import fields, utils, model
 from trytond.modules.contract import _STATES, _DEPENDS
@@ -93,14 +93,14 @@ class Contract:
             return
         agents = Agent.search(domain)
         pattern = self.get_insurer_pattern(coverage, line)
-        cached = self.insurer_agent_cache.get((pattern, self.id),
-            default=False)
+        key = freeze((pattern, self.id))
+        cached = self.insurer_agent_cache.get(key, default=False)
         if cached is not False:
             return Agent(cached)
         for agent in agents:
             for plan_line in agent.plan.lines:
                 if plan_line.match(pattern):
-                    self.insurer_agent_cache.set((pattern, id), agent.id)
+                    self.insurer_agent_cache.set(key, agent.id)
                     return agent
 
     @classmethod
