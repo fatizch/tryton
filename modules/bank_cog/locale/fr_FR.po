@@ -133,3 +133,7 @@ msgstr "Menu Compte Bancaire Synthèse Tiers "
 msgctxt "view:party.party:"
 msgid "Bank"
 msgstr "Banque"
+
+msgctxt "field:bank.account,owners_name:"
+msgid "Owners"
+msgstr "Propriétaires"

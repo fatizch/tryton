@@ -102,6 +102,9 @@ class BankAccount(export.ExportImportMixin):
         fields.Char('Number', required=True),
         'get_main_bank_account_number', 'setter_void',
         searcher='search_main_bank_account_number')
+    owners_name = fields.Function(
+        fields.Char('Owners'), 'on_change_with_owners_name',
+        searcher='search_owners_name')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
     icon = fields.Function(fields.Char('Icon'), 'get_icon')
@@ -173,6 +176,10 @@ class BankAccount(export.ExportImportMixin):
         return [('numbers',) + tuple(clause[1:])]
 
     @classmethod
+    def search_owners_name(cls, name, clause):
+        return [('owners',) + tuple(clause[1:])]
+
+    @classmethod
     def add_func_key(cls, values):
         values['_func_key'] = values['numbers'][0]['number']
 
@@ -184,6 +191,10 @@ class BankAccount(export.ExportImportMixin):
             return {'update': [
                     {'id': self.numbers[0].id, 'number': self.number},
                     ]}
+
+    @fields.depends('owners')
+    def on_change_with_owners_name(self, name=None):
+        return ','.join([x.rec_name for x in self.owners])
 
     @classmethod
     def setter_void(cls, objects, name, values):

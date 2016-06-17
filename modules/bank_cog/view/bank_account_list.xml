@@ -13,6 +13,7 @@
         <field name="bank" expand="1"/>
     </xpath>
     <xpath expr="/tree/field[@name='bank']" position="after">
+        <field name="owners_name"/>
         <field name="start_date"/>
         <field name="end_date"/>
     </xpath>
