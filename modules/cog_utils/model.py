@@ -4,9 +4,10 @@ import time
 import datetime
 import json
 
+from sql import Union, Column, Literal, Window, Null
 from sql.aggregate import Max
 from sql.conditionals import Coalesce
-from sql import Union, Column, Literal, Window, Null
+
 from contextlib import contextmanager
 
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields

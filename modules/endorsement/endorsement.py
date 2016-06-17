@@ -30,6 +30,8 @@ from trytond.modules.cog_utils import model, fields, coop_string, utils, \
 from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog import CogProcessFramework
 from trytond.modules.report_engine import Printable
+from trytond.modules.cog_utils import history_tools
+
 
 _STATES_WITH_SUBSTATES = ['declined']
 STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS = ['quote', 'declined', 'void']
@@ -905,6 +907,10 @@ class Contract(model.CoopSQL, CogProcessFramework):
     @model.CoopView.button_action('endorsement.act_start_endorsement')
     def start_endorsement(cls, contracts):
         pass
+
+    @classmethod
+    def clear_history(cls, instances):
+        history_tools.clear_previous_history(instances)
 
     @classmethod
     def apply_in_progress_endorsement(cls, contracts):

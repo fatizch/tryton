@@ -4,12 +4,14 @@ import datetime
 import mock
 from decimal import Decimal
 
+from sql import Column
+
 import trytond.tests.test_tryton
 from trytond.model import ModelSQL, fields
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 
-from trytond.modules.cog_utils import test_framework
+from trytond.modules.cog_utils import test_framework, history_tools
 from trytond.modules.cog_utils import utils, coop_string, coop_date, model
 
 
@@ -47,6 +49,102 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0020get_module_path(self):
         self.assert_(utils.get_module_path('cog_utils'))
         self.assert_(utils.get_module_path('dfsfsfsdf') is None)
+
+    def test0025_clear_history(self):
+        transaction = Transaction()
+        cursor = transaction.connection.cursor()
+
+        def assert_history(klass, fname, values):
+            h_table = klass.__table_history__()
+            cursor.execute(*h_table.select(
+                    Column(h_table, '__id'), Column(h_table, fname),
+                    order_by=Column(h_table, '__id')))
+            self.assertEqual(cursor.fetchall(), values)
+
+        # Basic test : Check only latest version exists
+        master = self.TestHistoryTable(foo='v1')
+        master.save()
+        transaction.commit()
+        master.foo = 'v2'
+        master.save()
+        master.foo = 'v3'
+        master.save()
+        transaction.commit()
+
+        assert_history(self.TestHistoryTable, 'foo', [
+                    (1, 'v1'), (2, 'v2'), (3, 'v3')])
+
+        # Test ignore_before : delete all history except the latest version,
+        # as well as any version before ignore_before
+        #   => all ignored, no changes
+        history_tools.clear_previous_history([master],
+            ignore_before=master.write_date)
+        assert_history(self.TestHistoryTable, 'foo', [
+                    (1, 'v1'), (2, 'v2'), (3, 'v3')])
+
+        # Test include_ignore : delete all history except the latest version
+        # and all versions striclty before ignore_before
+        #  => remove v2
+        history_tools.clear_previous_history([master],
+            ignore_before=master.write_date, include_ignore=False)
+        assert_history(self.TestHistoryTable, 'foo', [
+                    (1, 'v1'), (3, 'v3')])
+
+        # Test standard clear : Remove all but latest version
+        history_tools.clear_previous_history([master])
+        master = self.TestHistoryTable(master.id)
+        self.assertEqual(master.foo, 'v3')
+        assert_history(self.TestHistoryTable, 'foo', [(3, 'v3')])
+
+        # Test Children
+        master.childs = [
+            self.TestHistoryChildTable(bar='v1a'),
+            self.TestHistoryChildTable(bar='v1b'),
+            ]
+        master.save()
+        transaction.commit()
+        master.childs = [master.childs[1]]
+        master.foo = 'v4'
+        master.save()
+        transaction.commit()
+        master.childs[0].bar = 'v2b'
+        # Only save the child, not the master
+        master.childs[0].save()
+        transaction.commit()
+
+        # Current history versions :
+        #  - master : (3, 'v3'), (4, 'v4')
+        #  - childs :
+        #       * child 1 : (1, 'v1a'), (3, -'v1a')
+        #       * child 2 : (2, 'v1b'), (4, v1b->'v2b')
+
+        # Clear all : Remove all but latest version
+        history_tools.clear_previous_history([master])
+        master = self.TestHistoryTable(master.id)
+        self.assertEqual(master.foo, 'v4')
+        self.assertEqual([x.bar for x in master.childs], ['v2b'])
+
+        assert_history(self.TestHistoryChildTable, 'bar', [(4, 'v2b')])
+
+        # Test parent deletion
+        master_id = master.id
+        master.delete([master])
+        transaction.commit()
+
+        # Manually handle children field => Delete all children since parent
+        # is dead
+        history_tools.handle_field([], [master_id], {
+                'model': self.TestHistoryChildTable,
+                'reverse_field': 'parent'}, datetime.date.min, True)
+
+        assert_history(self.TestHistoryChildTable, 'bar', [])
+        assert_history(self.TestHistoryTable, 'foo', [
+                (5, 'v4'), (6, None)])
+
+        # Test history cleaning of dead entities
+        history_tools.clear_previous_history(
+            [self.TestHistoryTable(master_id)])
+        assert_history(self.TestHistoryTable, 'foo', [])
 
     def test0030calculate_duration_between(self):
         start_date = datetime.date(2013, 1, 1)
