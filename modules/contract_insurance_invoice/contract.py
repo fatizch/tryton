@@ -135,8 +135,7 @@ class Contract:
         'get_total_premium_amount')
 
     _invoices_cache = Cache('invoices_report')
-    _premium_intervals_cache = Cache('premium_intervals')
-    _future_invoices_cache = Cache('future_invoices')
+    _future_invoices_cache = Cache('future_invoices', context=False)
 
     @classmethod
     def _export_skips(cls):
@@ -840,7 +839,7 @@ class Contract:
     def calculate_prices(cls, contracts, start=None, end=None):
         cls.premium_intervals_cache().clear()
         for contract in contracts:
-            cls._future_invoices_cache.set(contract.id, None)
+            cls._future_invoices_cache.set(contract.id, {})
         return super(Contract, cls).calculate_prices(contracts, start, end)
 
     def get_invoice(self, start, end, billing_information):
@@ -1197,20 +1196,26 @@ class Contract:
     def get_future_invoices(cls, contract, from_date=None, to_date=None):
         if isinstance(contract, int):
             contract = cls(contract)
-        cached = cls._future_invoices_cache.get(contract.id, None)
-        if cached is not None:
-            invoices = cls.load_from_cached_invoices(cached)
+        cached = cls._future_invoices_cache.get(contract.id, {})
+        sub_key = hash(cls._future_invoices_cache_key())
+        if sub_key in cached:
+            invoices = cls.load_from_cached_invoices(cached[sub_key])
         else:
             periods = {x: [contract]
                 for x in contract.get_invoice_periods(contract.end_date,
                     contract.start_date)}
             _, contract_invoices = contract._calculate_invoices(periods)
             invoices = contract.dump_future_invoices(contract_invoices)
-            cls._future_invoices_cache.set(contract.id,
-                cls.dump_to_cached_invoices(invoices))
+            cached[sub_key] = cls.dump_to_cached_invoices(invoices)
+            cls._future_invoices_cache.set(contract.id, cached)
         return [x for x in invoices
             if x['end'] >= (from_date or datetime.date.min)
             and x['start'] <= (to_date or datetime.date.max)]
+
+    @classmethod
+    def _future_invoices_cache_key(cls):
+        context = Transaction().context
+        return (context.get('company', ''), context.get('language', ''))
 
     @classmethod
     def load_from_cached_invoices(cls, cache):
