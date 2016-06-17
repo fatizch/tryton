@@ -12,17 +12,13 @@
         <label name="amount"/>
         <group id="amount">
             <field name="amount" xexpand="0"/>
-            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+            <field name="currency" xexpand="0" xalign="0"/>
         </group>
         <label name="rate"/>
         <group id="rate">
             <field name="rate" factor="100" xexpand="0"/>
             <label string="%" name="rate" xexpand="0" xalign="0"/>
         </group>
-        <newline/>
-        <label name="currency"/>
-        <field name="currency"/>
-        <newline/>
         <newline/>
         <label name="duration"/>
         <group id="duration">
@@ -44,15 +40,16 @@
         <field name="deferral"/>
         <label name="deferral_duration"/>
         <field name="deferral_duration"/>
-        <newline/>
-        <group id="warning" string="" colspan="2">
+        <field name="extra_data" colspan="2"/>
+        <group id="warning" string="" colspan="4">
             <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
             <label string="Please check the last payment" id="warning_payment" yalign="0.0" xalign="0.0" xexpand="1" colspan="3"/>
             <newline/>
         </group>
         <field name="increments" colspan="4" mode="tree" pre_validate="1"/>
-        <field name="insured_persons" colspan="4" view_ids="party_cog.person_view_tree,party.party_view_form"/>
-        <newline/>
+        <group name="insured_persons" colspan="4">
+            <field name="insured_persons" colspan="4" view_ids="party_cog.person_view_tree,party.party_view_form" expand_toolbar="0"/>
+        </group>
         <field name="display_warning" invisible="1"/>
     </xpath>
 </data>

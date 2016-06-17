@@ -5,6 +5,7 @@ from .rule_engine import *
 from .loan import *
 from .party import *
 from .wizard import *
+from .extra_data import *
 
 from trytond.modules.cog_utils import expand_tree
 LoanShareTreeExpansion = expand_tree('loan.share')
@@ -23,6 +24,7 @@ def register():
         ContractOption,
         ExtraPremium,
         LoanShare,
+        ExtraData,
         OptionsDisplayer,
         WizardOption,
         LoanShareTreeExpansion,

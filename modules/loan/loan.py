@@ -170,6 +170,9 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             ('calculated', 'Calculated'),
             ], 'State', readonly=True)
     state_string = state.translated('state')
+    extra_data = fields.Dict('extra_data', 'Extra Data',
+        domain=[('kind', '=', 'loan')])
+    extra_data_string = extra_data.translated('extra_data')
     contracts = fields.Many2Many('contract-loan', 'loan', 'contract',
         'Contracts')
     display_warning = fields.Function(

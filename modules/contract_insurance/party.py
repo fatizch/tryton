@@ -13,7 +13,8 @@ _all_ = [
 class Party:
     __name__ = 'party.party'
 
-    extra_data = fields.Dict('extra_data', 'Extra Data')
+    extra_data = fields.Dict('extra_data', 'Extra Data',
+        domain=[('kind', '=', 'covered_element')])
     extra_data_string = extra_data.translated('extra_data')
     covered_elements = fields.One2Many('contract.covered_element', 'party',
         'Covered Elements')

@@ -215,10 +215,6 @@ msgctxt "field:loan,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:loan,lender:"
-msgid "Lender"
-msgstr "Organisme prêteur"
-
 msgctxt "field:loan,contracts:"
 msgid "Contracts"
 msgstr "Contrats"
@@ -275,6 +271,10 @@ msgctxt "field:loan,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:loan,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:loan,first_payment_date:"
 msgid "First Payment Date"
 msgstr "Date de 1er Paiement"
@@ -306,6 +306,10 @@ msgstr "Type"
 msgctxt "field:loan,last_modification:"
 msgid "Last Modification"
 msgstr "Dernière modification"
+
+msgctxt "field:loan,lender:"
+msgid "Lender"
+msgstr "Organisme prêteur"
 
 msgctxt "field:loan,loan_shares:"
 msgid "Loan Shares"
@@ -810,6 +814,10 @@ msgid "Loan consultation"
 msgstr "Consultation des prêts"
 
 msgctxt "model:tag,name:tag_loan"
+msgid "Loan"
+msgstr "Prêt"
+
+msgctxt "selection:extra_data,kind:"
 msgid "Loan"
 msgstr "Prêt"
 
