@@ -31,6 +31,16 @@ _coog_server_cleancache() {
         [ $? -eq 0 ] && echo redis cache cleaned
 }
 
+coog_server_interact() { # interact server - [args] passed to trytond
+        local args
+        [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
+        [ ! -z $COOG_CONF_LOG ] && args="$args --logconf $COOG_CONF_LOG"
+        args="$args $*"
+        _coog_server_cleancache
+        trytond -c $COOG_CONF_SRV $args &
+        echo $! > $COOG_TMP/$COOG_FILE_WATCH
+}
+
 coog_server_start() { # start server - [args] passed to trytond, logconf NOT set when args
         local pid_file
         pid_file=`_coog_server_file pid`
@@ -50,22 +60,9 @@ coog_server_start() { # start server - [args] passed to trytond, logconf NOT set
         else
                 [ -e $out_file ] && echo 'server log file exists -> clean manually' && return
         fi
-        local args
-        args=--dev
-        [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
-        [ ! -z $COOG_CONF_LOG ] && args="$args --logconf $COOG_CONF_LOG"
-        args="$args $*"
-        _coog_server_cleancache
-        nohup trytond -c $COOG_CONF_SRV --pidfile $pid_file $args &> $out_file &
+        nohup $COOG_BIN/watch $COOG_TRYTOND coog server interact &> $out_file &
+        echo $! > $pid_file
         echo server started
-}
-
-coog_server_interact() { # interact server - [args] passed to trytond
-        local args
-        args=$*
-        [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
-        _coog_server_cleancache
-        trytond -c $COOG_CONF_SRV $args
 }
 
 coog_server_debug() { # start server in pdb - [args] passed to trytond
@@ -78,17 +75,28 @@ coog_server_debug() { # start server in pdb - [args] passed to trytond
 
 coog_server_stop() { # stop server (gracefully)
         local pid
-        pid=`_coog_server_pid 0`
+        pid=`_coog_server_pid 1`
         [ -z $pid ] && echo no server running
         [ ! -z $pid ] && kill -TERM $pid && echo server stopped
         _coog_server_bak $pid
 }
 
-coog_server_kill() { # kill server process
+coog_server_kill() { # kill server
         local pid
         pid=`_coog_server_pid 1`
         [ -z $pid ] && echo no server running
         [ ! -z $pid ] && kill -9 $pid && echo server killed
+        if [ -e $COOG_TMP/$COOG_FILE_WATCH ]
+        then
+                local trytond_pid
+                trytond_pid=`cat $COOG_TMP/$COOG_FILE_WATCH`
+                rm $COOG_TMP/$COOG_FILE_WATCH
+                if [ ! -z $trytond_pid ] && [ -e /proc/$trytond_pid ]
+                then
+                        kill -9 $trytond_pid
+                        coog_env_wait $trytond_pid
+                fi
+        fi
         _coog_server_bak $pid
 }
 

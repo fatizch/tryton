@@ -1,0 +1,49 @@
+#!/bin/bash
+
+start_process() {
+        $*
+        local pid
+        pid=`cat $COOG_TMP/$COOG_FILE_WATCH`
+        echo watch: started $pid
+}
+
+kill_process() {
+        local pid
+        pid=`cat $COOG_TMP/$COOG_FILE_WATCH`
+        kill -SIGTERM $pid
+        echo watch: killed $pid
+        while [ -e /proc/$pid ]
+        do
+                echo watch: wait for $pid
+                sleep 1
+        done
+}
+
+enter() {
+        echo watch: enter
+        local tree; tree=$1; shift
+        local changed
+        start_process $*
+        while true
+        do
+                sleep 1
+                changed=`find -L $tree -name "*.py" -newer $COOG_TMP/$COOG_FILE_WATCH | wc -l`
+                if [ $changed -gt 0 ]
+                then
+                        echo watch: notify $changed changes
+                        kill_process
+                        start_process $*
+                fi
+        done
+}
+
+leave() {
+        echo watch: leave
+        kill_process
+        rm $COOG_TMP/$COOG_FILE_WATCH
+        exit
+}
+
+trap leave SIGTERM
+
+enter $*
