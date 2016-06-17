@@ -115,11 +115,19 @@ class Payment:
                 dunning_procedure.id, payment.fail_code)
             if not level:
                 continue
-            dunnings.append(payment._new_dunning(level))
+            dunning = payment._set_dunning(level)
+            if dunning:
+                dunnings.append(dunning)
         if not dunnings:
             return
         Dunning.save(dunnings)
 
-    def _new_dunning(self, level):
+    def _set_dunning(self, level):
+        if self.line.dunning:
+            if level.sequence > self.line.dunning.level.sequence:
+                self.line.dunning.level = level
+                self.line.dunning.state = 'draft'
+                return self.line.dunning
+            return None
         return Pool().get('account.dunning')(
             line=self.line, level=level, procedure=level.procedure)
