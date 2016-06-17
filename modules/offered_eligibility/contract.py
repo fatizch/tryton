@@ -20,6 +20,15 @@ class Contract:
         return super(Contract, cls)._calculate_methods_after_endorsement() | \
             {'check_eligibility'}
 
+    @classmethod
+    def check_eligibility(cls, contracts, caller=None):
+        for contract in contracts:
+            for option in contract.options:
+                option.check_eligibility()
+            for covered in contract.covered_elements:
+                for option in covered.options:
+                    option.check_eligibility()
+
 
 class ContractOption:
     __name__ = 'contract.option'
