@@ -38,6 +38,7 @@ def register():
         DummyStep,
         RecalculateContract,
         ChangeContractStartDate,
+        ReactivateContract,
         ChangeContractExtraData,
         ManageOptions,
         OptionDisplayer,

@@ -139,6 +139,12 @@
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="priority">300</field>
         </record>
+        <record model="ir.model.method" id="reactivate_through_endorsement">
+            <field name="method_name">reactivate_through_endorsement</field>
+            <field name="name">Reactivate through Endorsement</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">500</field>
+        </record>
         <record model="ir.model.method" id="contract_plan_termination">
             <field name="method_name">plan_termination_or_terminate</field>
             <field name="name">Plan Termination</field>
@@ -248,24 +254,12 @@
             <field name="code">reactivate_contract</field>
             <field name="name">reactivate Contract</field>
             <field name="kind">contract</field>
-            <field name="view">dummy_step</field>
+            <field name="view">reactivate_contract</field>
         </record>
         <record model="endorsement.definition-endorsement.part" id="reactivate_contract_relation">
             <field name="definition" ref="reactivate_contract_definition"/>
             <field name="endorsement_part" ref="reactivate_contract_revision_part"/>
             <field name="order">1</field>
-        </record>
-        <record model="endorsement.contract.field" id="status_date_contract_reactivate_field">
-            <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'status')]"/>
-            <field name="endorsement_part" ref="reactivate_contract_revision_part"/>
-        </record>
-        <record model="endorsement.contract.field" id="sub_status_contract_reactivate_field">
-            <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'sub_status')]"/>
-            <field name="endorsement_part" ref="reactivate_contract_revision_part"/>
-        </record>
-        <record model="endorsement.contract.field" id="end_date_contract_reactivate_field">
-            <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'end_date')]"/>
-            <field name="endorsement_part" ref="reactivate_contract_revision_part"/>
         </record>
         <!-- ################################ -->
         <!-- # Manage Options Configuration # -->

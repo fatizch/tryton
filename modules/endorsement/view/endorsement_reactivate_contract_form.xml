@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="Reactivate Contract" col="2">
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="current_end_date"/>
+    <field name="current_end_date"/>
+    <label name="end_motive"/>
+    <field name="end_motive"/>
+</form>

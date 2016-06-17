@@ -22,6 +22,7 @@ from trytond.model import Workflow, Model, fields as tryton_fields, \
 from trytond.pyson import Eval, PYSONEncoder, PYSON, Bool, Len, Or, If
 from trytond.pool import Pool
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 from trytond.wizard import Wizard, StateAction, StateTransition
 
 from trytond.modules.cog_utils import model, fields, coop_string, utils, \
@@ -932,6 +933,10 @@ class Contract(model.CoopSQL, CogProcessFramework):
             option.set_automatic_end_date()
         self.save()
 
+    def reactivate_through_endorsement(self, caller=None):
+        with ServerContext().set_context(no_reactivate_endorsement=True):
+            self.reactivate([self])
+
     @classmethod
     def _calculate_methods_after_endorsement(cls):
         return {'calculate_activation_dates',
@@ -978,6 +983,8 @@ class Contract(model.CoopSQL, CogProcessFramework):
         previous_dates = {contract.id: contract.end_date
             for contract in contracts}
         super(Contract, cls).reactivate(contracts)
+        if ServerContext().get('no_reactivate_endorsement', False):
+            return
         new_dates = {contract.id: contract.end_date for contract in contracts}
         endorsements = []
         for dates, contract_group in groupby(contracts,

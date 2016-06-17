@@ -17,6 +17,14 @@
             <field name="type">form</field>
             <field name="name">endorsement_change_contract_start_date_form</field>
         </record>
+        <!-- ####################### -->
+        <!-- # Reactivate Contract # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="endorsement_reactivate_contract_view_form">
+            <field name="model">endorsement.contract.reactivate</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_reactivate_contract_form</field>
+        </record>
         <!-- ############################## -->
         <!-- # Change Contract Extra Data  -->
         <!-- ############################## -->

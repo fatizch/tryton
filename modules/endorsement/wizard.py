@@ -25,6 +25,7 @@ __all__ = [
     'add_endorsement_step',
     'DummyStep',
     'RecalculateContract',
+    'ReactivateContract',
     'SelectEndorsement',
     'BasicPreview',
     'StartEndorsement',
@@ -530,6 +531,56 @@ class ChangeContractStartDate(EndorsementWizardStepMixin):
         return {
             'new_start_date': wizard.endorsement.effective_date,
             }
+
+
+class ReactivateContract(EndorsementWizardStepMixin):
+    'Reactivate Contract'
+
+    __name__ = 'endorsement.contract.reactivate'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    current_end_date = fields.Date('Current End Date', readonly=True)
+    end_motive = fields.Many2One('contract.sub_status', 'End Motive',
+        readonly=True)
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement.endorsement_reactivate_contract_view_form'
+
+    @classmethod
+    def is_multi_instance(cls):
+        return False
+
+    @classmethod
+    def allow_inactive_contracts(cls):
+        return True
+
+    @classmethod
+    def get_methods_for_model(cls, model_name):
+        methods = set()
+        if model_name == 'contract':
+            methods.add('reactivate_through_endorsement')
+        return methods
+
+    def step_default(self, name):
+        pool = Pool()
+        Contract = pool.get('contract')
+        contracts = self._get_contracts()
+        assert contracts
+        for contract_id, endorsement in contracts.iteritems():
+            contract = Contract(contract_id)
+            self.wizard.endorsement.effective_date = contract.end_date
+            self.wizard.endorsement.save()
+            break
+        defaults = super(ReactivateContract, self).step_default()
+        defaults['current_end_date'] = contract.end_date
+        defaults['end_motive'] = contract.sub_status.id
+        defaults['contract'] = contract.id
+        return defaults
+
+    def step_update(self):
+        # No input data, everything will be handle in the endorsement methods
+        pass
 
 
 class ChangeContractExtraData(EndorsementWizardStepMixin):
@@ -2256,6 +2307,9 @@ class StartEndorsement(Wizard):
 
 add_endorsement_step(StartEndorsement, RecalculateContract,
     'recalculate_contract')
+
+add_endorsement_step(StartEndorsement, ReactivateContract,
+    'reactivate_contract')
 
 add_endorsement_step(StartEndorsement, ChangeContractExtraData,
     'change_contract_extra_data')
