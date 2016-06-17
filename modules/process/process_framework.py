@@ -2,7 +2,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
-from trytond.model import ModelSQL, ModelView
+from trytond.model import ModelView, ModelSQL
 
 from trytond.modules.cog_utils import coop_string, utils, fields
 
@@ -89,7 +89,7 @@ class ClassAttr(PoolMeta):
         return super(ClassAttr, self).__getattr__(name)
 
 
-class ProcessFramework(ModelSQL, ModelView):
+class ProcessFramework(ModelView):
     'Process Framework'
 
     __metaclass__ = ClassAttr
@@ -129,6 +129,8 @@ class ProcessFramework(ModelSQL, ModelView):
                 'date_in_future': 'Select a date that is not in the future '
                 'for field(s): %s',
                 })
+        if issubclass(cls, ModelSQL):
+            cls.order_task_status = cls._order_task_status
 
     @classmethod
     def __register__(cls, module_name):
@@ -263,7 +265,7 @@ class ProcessFramework(ModelSQL, ModelView):
             raise NotImplementedError
 
     @classmethod
-    def order_task_status(cls, tables):
+    def _order_task_status(cls, tables):
         task_status_order = tables.get('process.status')
         if task_status_order:
             return [task_status_order[None][0].name]
