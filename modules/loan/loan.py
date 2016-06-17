@@ -218,9 +218,11 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             loan_sequences = Sequence.search([('code', '=', 'loan')])
         sequences_dict = dict([(x.company.id, x) for x in loan_sequences])
         vlist = [x.copy() for x in vlist]
+        default_company = cls.default_company()
         for vals in vlist:
             if not vals.get('number'):
-                sequence = sequences_dict.get(vals.get('company'), None)
+                sequence = sequences_dict.get(vals.get('company',
+                        default_company))
                 if not sequence:
                     cls.raise_user_error('no_sequence')
                 vals['number'] = Sequence.get_id(sequence.id)
