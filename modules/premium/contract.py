@@ -562,15 +562,14 @@ class Premium(model.CoopSQL, model.CoopView):
     def get_rated_entities(cls):
         Model = Pool().get('ir.model')
         models = cls._get_rated_entities()
-        key = ('ir.model', models)
-        value = cls._get_ir_models_cache.get(key, None)
+        value = cls._get_ir_models_cache.get(None, None)
         if value is not None:
             return value
 
         models = Model.search([
                 ('model', 'in', models)])
         value = [(None, '')] + [(m.model, m.name) for m in models]
-        cls._get_ir_models_cache.set(key, value)
+        cls._get_ir_models_cache.set(None, value)
         return value
 
     def get_rec_name(self, name):

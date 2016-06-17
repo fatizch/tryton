@@ -15,6 +15,7 @@ from trytond.exceptions import UserError
 from trytond.pool import Pool, PoolMeta
 from trytond.cache import Cache
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 from trytond.wizard import Wizard, StateAction
 from trytond.rpc import RPC
 from trytond.tools import reduce_ids, cursor_dict
@@ -127,7 +128,7 @@ class ErrorManager(object):
 @contextmanager
 def error_manager():
     manager = ErrorManager()
-    with Transaction().set_context(error_manager=manager):
+    with ServerContext().set_context(error_manager=manager):
         try:
             yield
         except UserError, exc:
@@ -139,7 +140,7 @@ def error_manager():
 class FunctionalErrorMixIn(object):
     @classmethod
     def append_functional_error(cls, error, error_args=None, fail=True):
-        error_manager = Transaction().context.get('error_manager', None)
+        error_manager = ServerContext().get('error_manager', None)
         if error_manager is None:
             return cls.raise_user_error(error, error_args)
         error_message = cls.raise_user_error(error, error_args,
@@ -148,14 +149,14 @@ class FunctionalErrorMixIn(object):
 
     @classmethod
     def pop_functional_error(cls, error_code):
-        manager = Transaction().context.get('error_manager', None)
+        manager = ServerContext().get('error_manager', None)
         if not manager:
             return False
         return manager.pop_error(error_code)
 
     @property
     def _error_manager(self):
-        return Transaction().context.get('error_manager', None)
+        return ServerContext().get('error_manager', None)
 
 
 class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,

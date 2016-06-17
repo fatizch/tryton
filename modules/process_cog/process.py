@@ -10,6 +10,7 @@ from trytond.rpc import RPC
 from trytond.pyson import Eval, Not, And, Bool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateView, Button
+from trytond.server_context import ServerContext
 
 from trytond.modules.cog_utils import utils, model, fields
 from trytond.modules.process import ProcessFramework
@@ -390,7 +391,7 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
                 if not good_exec:
                     result = None
                     break
-                with Transaction().set_context(after_executed=True):
+                with ServerContext().set_context(after_executed=True):
                     if good_exec == 'complete':
                         result = cls.build_instruction_complete_method(
                             process, None)([work])

@@ -6,6 +6,7 @@ from trytond.model import ModelView, ModelSQL, Unique
 from trytond.wizard import Wizard, StateAction
 from trytond.report import Report
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 from trytond.pyson import Eval, Bool, Or, And, Not
 from trytond.pool import Pool, PoolMeta
 
@@ -929,7 +930,7 @@ class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
             return self.entering_wizard.id
 
     def execute_after(self, target):
-        if 'after_executed' not in Transaction().context:
+        if ServerContext().get('after_executed', None) is None:
             for code in self.code_after:
                 code.execute(target)
         if self.exiting_wizard:

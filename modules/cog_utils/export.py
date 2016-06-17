@@ -18,6 +18,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
 from trytond.exceptions import UserError
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 
 import fields
 import coop_string
@@ -272,10 +273,10 @@ class ExportImportMixin(Model):
 
     @classmethod
     def import_json(cls, values):
-        import_data = Transaction().context.get('_import_data', None)
+        import_data = ServerContext().get('_import_data', None)
         if import_data is None:
             import_data = {}
-            with Transaction().set_context(_import_data=import_data):
+            with ServerContext().set_context(_import_data=import_data):
                 return cls.import_json(values)
 
         pool = Pool()

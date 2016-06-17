@@ -5,6 +5,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.pool import Pool, PoolMeta
 from trytond.model import Model, fields as tryton_fields
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.wizard import StateAction
 from trytond.pyson import Eval, Bool, In, And, Not, Len, If, PYSONEncoder
@@ -194,7 +195,7 @@ class EndorsementWizardStepMixin(model.CoopView):
             endorsement state. The first parameter is the
             endorsement.start.select record from the wizard.
         '''
-        error_manager = Transaction().context.get('error_manager', None)
+        error_manager = ServerContext().context.get('error_manager', None)
         if error_manager and 'effective_date_before_start_date' in [x[0] for
                 x in error_manager._errors]:
             return
@@ -559,7 +560,8 @@ class ChangeContractExtraData(EndorsementWizardStepMixin):
             defaults['current_extra_data'] = extra_data_values
 
             if endorsement.extra_datas:
-                data_values = endorsement.extra_datas[-1].new_extra_data_values \
+                data_values = \
+                    endorsement.extra_datas[-1].new_extra_data_values \
                     or endorsement.extra_datas[-1].values['extra_data_values']
                 defaults['new_extra_data'] = data_values
             else:

@@ -33,11 +33,12 @@ class Configuration:
         context = Transaction().context
         pattern = {'company': context.get('company')}
         method = self.__class__._get_tax_rounding_cache.get(
-            (self.id, pattern), None)
+            (self.id, 'company', context.get('company')), None)
         if method is not None:
             return method
 
         method = super(Configuration, self).on_change_with_tax_rounding(None,
             pattern)
-        self.__class__._get_tax_rounding_cache.set((self.id, pattern), method)
+        self.__class__._get_tax_rounding_cache.set(
+            (self.id, 'company', context.get('company')), method)
         return method
