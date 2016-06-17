@@ -6,6 +6,10 @@ msgctxt "error:party.contact_mechanism:"
 msgid "Invalid Email !"
 msgstr "e-Mail Invalide"
 
+msgctxt "error:party.identifier.type:"
+msgid "Identifier type is used. Deletion impossible"
+msgstr "Le type d'identifiant est utilisé. Impossible de le supprimer"
+
 msgctxt "error:party.party:"
 msgid "Duplicate(s) already exist(s) : %s"
 msgstr "Des doublon(s) existe(nt) déjà : %s"
@@ -90,10 +94,6 @@ msgctxt "field:party.identifier,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
 
-msgctxt "field:party.identifier,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
 msgctxt "field:party.identifier,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -123,6 +123,46 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:party.identifier,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.identifier.type,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:party.identifier.type,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.identifier.type,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.identifier.type,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.identifier.type,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.identifier.type,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.identifier.type,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.identifier.type,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.identifier.type,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.identifier.type,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -670,6 +710,10 @@ msgctxt "model:ir.action,name:act_menu_open"
 msgid "Open Party Synthesis Menu"
 msgstr "Ouvrir la synthèse"
 
+msgctxt "model:ir.action,name:act_party_identifier_type_form"
+msgid "Party Identifier Type"
+msgstr "Type d'identifiant de tiers"
+
 msgctxt "model:ir.action,name:act_person_form"
 msgid "Persons"
 msgstr "Personnes"
@@ -730,6 +774,10 @@ msgctxt "model:ir.ui.menu,name:menu_company_form"
 msgid "Companies"
 msgstr "Sociétés"
 
+msgctxt "model:ir.ui.menu,name:menu_party_identifier_type_form"
+msgid "Party Identifier Type"
+msgstr "Type d'identifiant de tiers"
+
 msgctxt "model:ir.ui.menu,name:menu_person_form"
 msgid "Persons"
 msgstr "Personnes"
@@ -737,6 +785,10 @@ msgstr "Personnes"
 msgctxt "model:party.identifier,name:"
 msgid "Party Identifier"
 msgstr "Identifiant de tiers"
+
+msgctxt "model:party.identifier.type,name:"
+msgid "Party Identifier Type"
+msgstr "Type d'identifiant de tiers"
 
 msgctxt "model:party.interaction,name:"
 msgid "Party Interaction"
@@ -781,6 +833,10 @@ msgstr "Synthèse acteur - Contact"
 msgctxt "model:party.synthesis.menu.relationship,name:"
 msgid "Party Synthesis Menu Contact"
 msgstr "Synthèse acteur - Moyens de contact"
+
+msgctxt "selection:party.interaction,for_object_ref:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Party"
@@ -845,6 +901,10 @@ msgstr "Mme"
 msgctxt "view:party.address:"
 msgid "Addresses"
 msgstr "Adresses"
+
+msgctxt "view:party.identifier.type:"
+msgid "Party Identifier Type"
+msgstr "Type d'identifiant de tiers"
 
 msgctxt "view:party.identifier:"
 msgid "Party Identifier"

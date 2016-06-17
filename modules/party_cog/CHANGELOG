@@ -1,3 +1,5 @@
+* Allow to extend party identifier type possible values through configuration
+
 Version 1.6 - 2015-12-23
 * Remove contact from party when deleted
 * Add party identifier

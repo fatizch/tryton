@@ -18,6 +18,7 @@ def register():
         Party,
         Configuration,
         PartyIdentifier,
+        PartyIdentifierType,
         PartyCategory,
         Address,
         ContactMechanism,

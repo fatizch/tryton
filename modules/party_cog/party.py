@@ -16,6 +16,7 @@ from trytond.model import Unique
 from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
 from trytond.tools import grouped_slice, cursor_dict
+from trytond.cache import Cache
 
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
@@ -29,6 +30,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Party',
     'PartyIdentifier',
+    'PartyIdentifierType',
     'SynthesisMenuAddress',
     'SynthesisMenuPartyInteraction',
     'SynthesisMenuContact',
@@ -561,6 +563,63 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
 class PartyIdentifier(export.ExportImportMixin):
     __name__ = 'party.identifier'
     _func_key = 'code'
+    _identifier_type_cache = Cache('party.identifier.get_types', context=False)
+
+    @classmethod
+    def get_types(cls):
+        types = super(PartyIdentifier, cls).get_types()
+        lang = Transaction().language
+        dyn_types = cls._identifier_type_cache.get(lang)
+        if dyn_types is not None:
+            return types + dyn_types
+        dyn_types = []
+        for identifier_type in Pool().get('party.identifier.type').search([]):
+            dyn_types.append((identifier_type.code,
+                    coop_string.translate_value(identifier_type, 'name')))
+        cls._identifier_type_cache.set(lang, dyn_types)
+        return types + dyn_types
+
+
+class PartyIdentifierType(model.CoopSQL, model.CoopView):
+    'Party Identifier Type'
+
+    __name__ = 'party.identifier.type'
+    _func_key = 'code'
+
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name', required=True, translate=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(PartyIdentifierType, cls).__setup__()
+        cls._error_messages.update({
+                'type_is_used': 'Identifier type is used. Deletion impossible',
+                })
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        return (coop_string.slugify(self.name)
+            if self.name and not self.code else self.code)
+
+    @classmethod
+    def delete(cls, instances):
+        pool = Pool()
+        Party = pool.get('party.party')
+        if Party.search(
+                [('identifiers.type', 'in', [x.code for x in instances])]):
+            cls.raise_user_error('type_is_used')
+        Pool().get('party.identifier')._identifier_type_cache.clear()
+        super(PartyIdentifierType, cls).delete(instances)
+
+    @classmethod
+    def create(cls, vlist):
+        Pool().get('party.identifier')._identifier_type_cache.clear()
+        return super(PartyIdentifierType, cls).create(vlist)
+
+    @classmethod
+    def write(cls, *args):
+        Pool().get('party.identifier')._identifier_type_cache.clear()
+        super(PartyIdentifierType, cls).write(*args)
 
 
 class SynthesisMenuActionCloseSynthesis(model.CoopSQL):
