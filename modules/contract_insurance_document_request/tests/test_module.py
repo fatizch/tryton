@@ -2,7 +2,7 @@
 import unittest
 
 import trytond.tests.test_tryton
-from trytond.modules.cog_utils import test_framework, utils
+from trytond.modules.cog_utils import test_framework
 from trytond.exceptions import UserError
 
 
@@ -43,6 +43,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         rule_engine.algorithm = "return {'document3': {}, 'document2': {}}"
         rule_engine.status = 'validated'
         rule_engine.context, = self.RuleContext.search([], limit=1)
+        rule_engine.type_ = 'doc_request'
         rule_engine.save()
         rule = self.DocumentRule()
         rule.documents = [self.RuleToDocDescRelation(
