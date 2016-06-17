@@ -731,6 +731,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
             ('decimal', 'Numeric'),
             ('date', 'Date'),
             ('list', 'List'),
+            ('dict', 'Dictionnary'),
             ], 'Result Type'),
         'on_change_with_result_type')
     debug_mode = fields.Boolean('Debug Mode')

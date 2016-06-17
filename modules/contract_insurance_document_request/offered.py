@@ -61,6 +61,7 @@ class DocumentRule(RuleMixin, model.CoopSQL, model.CoopView):
                 'rule must be a dictionnary with document description code '
                 'as keys.',
                 })
+        cls.rule.domain = [('type_', '=', 'doc_request')]
         cls.rule.required = False
         cls.rule.help = ('The rule must return a dictionnary '
         'with document description codes as keys, and dictionnaries as values.'
