@@ -107,15 +107,6 @@ class EndorsementWizardStepMixin(model.CoopView):
     endorsement_part = fields.Many2One('endorsement.part',
         'Endorsement Part', states={'invisible': True, 'readonly': True})
 
-    @classmethod
-    def __setup__(cls):
-        super(EndorsementWizardStepMixin, cls).__setup__()
-        cls._error_messages.update({
-                'effective_date_before_start_date':
-                'The endorsement\'s effective date must be posterior to '
-                'the contracts\' start date',
-                })
-
     def update_endorsement(self, endorsement, wizard):
         # Updates the current endorsement using the data provided in the
         # current instance of the wizard
@@ -196,15 +187,26 @@ class EndorsementWizardStepMixin(model.CoopView):
             endorsement.start.select record from the wizard.
         '''
         error_manager = ServerContext().context.get('error_manager', None)
-        if error_manager and 'effective_date_before_start_date' in [x[0] for
-                x in error_manager._errors]:
-            return
+        Endorsement = Pool().get('endorsement')
         endorsement = select_screen.endorsement
-        if not cls.allow_effective_date_before_contract(select_screen) and \
-                endorsement and any([x.contract.start_date >
-                    endorsement.effective_date
-                    for x in endorsement.contract_endorsements]):
-            cls.append_functional_error('effective_date_before_start_date')
+        if endorsement:
+            contracts = [x.contract for x in endorsement.contracts]
+        elif select_screen.contract:
+            contracts = [select_screen.contract]
+        else:
+            contracts = []
+        if (not error_manager or 'effective_date_before_start_date'
+                not in [x[0] for x in error_manager._errors]):
+            if (not cls.allow_effective_date_before_contract(select_screen) and
+                    any([x.start_date > select_screen.effective_date
+                            for x in contracts])):
+                Endorsement.append_functional_error(
+                    'effective_date_before_start_date')
+        if (not error_manager or 'active_contract_required'
+                not in [x[0] for x in error_manager._errors]):
+            if (not cls.allow_inactive_contracts() and
+                    any([x.status != 'active' for x in contracts])):
+                Endorsement.append_functional_error('active_contract_required')
 
     @classmethod
     def must_skip_step(cls, data_dict):
@@ -219,8 +221,11 @@ class EndorsementWizardStepMixin(model.CoopView):
 
     @classmethod
     def allow_effective_date_before_contract(cls, select_screen):
-        return not select_screen.endorsement or not \
-                select_screen.endorsement.contract_endorsements
+        return False
+
+    @classmethod
+    def allow_inactive_contracts(cls):
+        return False
 
     def _get_contracts(self):
         return {x.contract.id: x
@@ -1887,8 +1892,6 @@ class StartEndorsement(Wizard):
     def __setup__(cls):
         super(StartEndorsement, cls).__setup__()
         cls._error_messages.update({
-                'active_contract_required': 'You cannot start an endorsement '
-                'on a non-active contract !',
                 'cannot_resume_applied': 'It is not possible to resume an '
                 'already applied endorsement',
                 'erase_endorsement': 'Going on will erase all data on the '
@@ -1938,8 +1941,6 @@ class StartEndorsement(Wizard):
         if Transaction().context.get('active_model') == 'contract':
             contract = pool.get('contract')(
                 Transaction().context.get('active_id'))
-            if contract.status != 'active':
-                self.raise_user_error('active_contract_required')
             return {
                 'effective_date': max(contract.start_date, Date.today()),
                 'contract': contract.id,

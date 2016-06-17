@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:endorsement.contract.full_revision_start:"
-msgid ""
-"The endorsement's effective date must be posterior to the contracts' start "
-"date"
-msgstr ""
-"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
-"contrats"
-
 msgctxt "error:endorsement.start:"
 msgid "Cannot start full contract revision, no matching process available"
 msgstr ""

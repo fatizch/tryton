@@ -1192,6 +1192,11 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         cls._order.insert(0, ('last_modification', 'DESC'))
         cls.__rpc__.update({'ws_create_endorsements': RPC(readonly=False)})
         cls._error_messages.update({
+                'active_contract_required': 'You cannot start this endorsement'
+                ' on a non-active contract !',
+                'effective_date_before_start_date':
+                'The endorsement\'s effective date must be posterior to '
+                'the contracts\' start date',
                 'invalid_format': 'Invalid file format',
                 'no_sequence_defined': 'No sequence defined in configuration',
                 })

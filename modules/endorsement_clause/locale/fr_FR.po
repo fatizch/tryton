@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.manage_clauses:"
-msgid ""
-"The endorsement's effective date must be posterior to the contracts' start "
-"date"
-msgstr ""
-"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
-"contrats"
-
 msgctxt "error:endorsement.contract.clause:"
 msgid "New Clause: %s"
 msgstr "Nouvelle clause : %s"
