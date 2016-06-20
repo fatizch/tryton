@@ -14,6 +14,8 @@ class Contract:
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls.agent.domain.append(('second_level_commission', '=', False))
+        cls.broker.domain.append(
+            ('party.agents.second_level_commission', '=', False))
 
 
 class ContractOption:
