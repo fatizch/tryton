@@ -1164,3 +1164,7 @@ msgctxt ""
 "wizard_button:party.display_insured_outstanding_loan_balance,select_date,insured_outstanding_loan_balance_view:"
 msgid "Next"
 msgstr "Suivant"
+
+msgctxt "field:loan,lender_address:"
+msgid "Lender Address"
+msgstr "Adresse de l'organisme prêteur"
