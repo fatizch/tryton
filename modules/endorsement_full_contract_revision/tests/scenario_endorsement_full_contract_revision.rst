@@ -161,6 +161,8 @@ Create Test Contract::
     >>> contract.product = product
     >>> contract.subscriber = subscriber
     >>> contract.quote_number = 'Initial Number'
+    >>> contract.contract_number = 'Initial Number'
+    >>> contract.status = 'active'
     >>> contract.save()
 
 Start Endorsement::

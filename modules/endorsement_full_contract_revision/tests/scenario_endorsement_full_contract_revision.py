@@ -154,6 +154,8 @@ contract.start_date = contract_start_date
 contract.product = product
 contract.subscriber = subscriber
 contract.quote_number = 'Initial Number'
+contract.contract_number = 'Initial Number'
+contract.status = 'active'
 contract.save()
 
 # #Comment# #Start Endorsement

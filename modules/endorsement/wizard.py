@@ -191,8 +191,9 @@ class EndorsementWizardStepMixin(model.CoopView):
         Endorsement = Pool().get('endorsement')
         endorsement = select_screen.endorsement
         if endorsement:
-            contracts = [x.contract for x in endorsement.contracts]
-        elif select_screen.contract:
+            contracts = [x.contract for x in getattr(endorsement, 'contracts',
+                    [])]
+        elif getattr(select_screen, 'contract', None):
             contracts = [select_screen.contract]
         else:
             contracts = []
