@@ -6,6 +6,7 @@ from .distribution import *
 from .offered import *
 from .contract import *
 from .test_case import *
+from .rule_engine import *
 
 
 def register():
@@ -22,4 +23,5 @@ def register():
         Beneficiary,
         # from test_case
         TestCaseModel,
+        RuleEngineRuntime,
         module='offered_distribution', type_='model')

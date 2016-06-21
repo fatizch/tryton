@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="portfolio_code">
+            <field name="translated_technical_name">code_du_portefeuille</field>
+            <field name="description">Code du portefeuille</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_portfolio_code</field>
+            <field name="long_description">Code du portefeuille</field>
+            <field name="parent" ref="contract.te_contract"/>
+        </record>
+    </data>
+</tryton>
