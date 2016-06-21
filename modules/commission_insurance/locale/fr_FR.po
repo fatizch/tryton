@@ -695,6 +695,10 @@ msgctxt "model:ir.action,name:act_filter_commission"
 msgid "Commissions"
 msgstr "Commissions"
 
+msgctxt "error:commission.filter_commission:"
+msgid "The selected contracts have no invoices"
+msgstr "Les contrats sélectionnés n'ont pas de quittances"
+
 msgctxt "model:ir.action,name:act_invoice_broker_invoice_form"
 msgid "Broker Invoices"
 msgstr "Bordereaux courtiers"

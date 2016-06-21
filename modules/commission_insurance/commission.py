@@ -1215,10 +1215,24 @@ class FilterCommissions(Wizard):
     aggregated_commissions = StateAction(
         'commission_insurance.act_commission_aggregated_form_relate')
 
+    @classmethod
+    def __setup__(cls):
+        super(FilterCommissions, cls).__setup__()
+        cls._error_messages.update({
+                'no_invoices': 'The selected contracts have no invoices',
+                })
+
     def transition_choose_action(self):
+        pool = Pool()
+        Invoice = pool.get('account.invoice')
+        active_ids = Transaction().context.get('active_ids')
         active_model = Transaction().context.get('active_model')
         assert active_model in ['account.invoice', 'contract']
         if active_model == 'contract':
+            invoices = Invoice.search([
+                    ('contract', 'in', active_ids)])
+            if not invoices:
+                self.raise_user_error('no_invoices')
             return 'aggregated_commissions'
         ids = Transaction().context.get('active_ids')
         AccountInvoice = Pool().get('account.invoice')
@@ -1260,7 +1274,7 @@ class FilterCommissions(Wizard):
             invoices = Invoice.browse(active_ids)
         return action, {
             'ids': [x.id for x in invoices],
-            'id': invoices[0].id,
+            'id': invoices[0].id if invoices else None,
             'model': 'account.invoice',
             'extra_context': {
                 'origins': [str(x) for invoice in invoices
