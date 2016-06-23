@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:report.flow.variable:"
+msgid "The description must be unique."
+msgstr "La description être unique."
+
 msgctxt "error:report.template:"
 msgid "You cannot print a flow and a model at the same time"
 msgstr ""

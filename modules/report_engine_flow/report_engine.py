@@ -9,6 +9,7 @@ from trytond.wizard import StateView, Button
 from trytond.pyson import Eval, Equal, Not, Or, Bool
 from trytond.transaction import Transaction
 from trytond.config import config
+from trytond.model import Unique
 
 from trytond.modules.cog_utils import fields, model, coop_string
 
@@ -69,7 +70,7 @@ class FlowVariable(model.CoopSQL, model.CoopView):
     _rec_name = 'description'
     name = fields.Function(fields.Char('Name'),
         'get_name', searcher='search_name')
-    description = fields.Char('Description', required=True)
+    description = fields.Char('Description', required=True, select=True)
     kind = fields.Selection(INSTR_TYPES, 'Kind', required=True)
     variable = fields.Many2One('report.flow.variable', 'Variable',
         ondelete='CASCADE', select=True)
@@ -103,6 +104,7 @@ class FlowVariable(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(FlowVariable, cls).__setup__()
+        table = cls.__table__()
         cls.lambdas = {
             'for': lambda this, separator: ('{%%for %s in %s%%}' % (
             this.for_object_statement, this.for_objects_statement),
@@ -118,6 +120,9 @@ class FlowVariable(model.CoopSQL, model.CoopView):
             'function': lambda this, separator: ('${%s}%s' % (
                 this.data, separator), ''),
             }
+        cls._sql_constraints += [
+            ('desc_uniq', Unique(table, table.description),
+                'The description must be unique.')]
 
     @classmethod
     def default_not_data(cls, node):
