@@ -25,6 +25,10 @@ class RelationType(export.ExportImportMixin):
             return self.code
         return coop_string.slugify(self.name)
 
+    @classmethod
+    def _export_skips(cls):
+        return super(RelationType, cls)._export_skips() | {'reverse'}
+
 
 class PartyRelation(export.ExportImportMixin):
     __name__ = 'party.relation'
