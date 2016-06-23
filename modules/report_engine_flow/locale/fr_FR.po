@@ -12,6 +12,10 @@ msgstr ""
 "Vous ne pouvez pas lancer l'impression d'un modèle et générer un flux en "
 "même temps"
 
+msgctxt "error:report.flow.variable:"
+msgid "The description must be unique."
+msgstr "La description être unique."
+
 msgctxt "field:report.flow.variable,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
