@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import export, fields
@@ -72,6 +72,13 @@ class Invoice(export.ExportImportMixin, Printable):
         cls.cancel_move.select = True
         cls.cancel_move.states['invisible'] = ~Eval('cancel_move')
         cls.state_string = cls.state.translated('state')
+        cls._transitions -= {('cancel', 'draft')}
+        cls._buttons.update({
+                'draft': {
+                    'invisible': (If(Eval('state') == 'cancel', True,
+                            cls._buttons['draft']['invisible'])),
+                    },
+                })
 
     @classmethod
     def view_attributes(cls):
