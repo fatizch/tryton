@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<form string="Postpone Parameters">
+    <label name="task"/>
+    <field name="task"/>
+    <label name="process_start"/>
+    <field name="process_start"/>
+    <label name="previous_start"/>
+    <field name="previous_start"/>
+    <label name="new_date"/>
+    <field name="new_date"/>
+    <label name="new_user"/>
+    <field name="new_user"/>
+</form>

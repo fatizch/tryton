@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <!-- ################################# -->
+        <!-- # Get Dates For Process Timings # -->
+        <!-- ################################# -->
+        <record model="ir.action.wizard" id="act_get_dates_for_timings">
+            <field name="name">Process Timings</field>
+            <field name="wiz_name">process.get_dates_for_timings</field>
+        </record>
+        <record model="ir.action.keyword" id="act_view_timings_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">process,-1</field>
+            <field name="action" ref="act_get_dates_for_timings"/>
+        </record>
+        <!-- ############################### -->
+        <!-- # Process Timing Select Dates # -->
+        <!-- ############################### -->
+        <record model="ir.ui.view" id="process_timings_select_dates_view_form">
+            <field name="model">process.view_timings.select_dates</field>
+            <field name="type">form</field>
+            <field name="name">process_timings_select_dates_form</field>
+        </record>
+        <!-- ################### -->
+        <!-- # Process Timings # -->
+        <!-- ################### -->
+        <record model="ir.action.wizard" id="act_view_timings">
+            <field name="name">View Process Timings</field>
+            <field name="wiz_name">process.view_timings</field>
+        </record>
+        <!-- ############################ -->
+        <!-- # Process Timing Displayer # -->
+        <!-- ############################ -->
+        <record model="ir.ui.view" id="process_timings_displayer_view_form">
+            <field name="model">process.view_timings.displayer</field>
+            <field name="type">form</field>
+            <field name="name">process_timings_displayer_form</field>
+        </record>
+    </data>
+</tryton>

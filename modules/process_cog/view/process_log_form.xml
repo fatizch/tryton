@@ -12,8 +12,6 @@
     <field name="start_time"/>
     <label name="end_time" xalign="0"/>
     <field name="end_time"/>
-    <label name="locked" xalign="0"/>
-    <field name="locked"/>
     <label name="latest" xalign="0"/>
     <field name="latest"/>
     <separator name="description" colspan="2"/>

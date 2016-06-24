@@ -2,8 +2,12 @@ import pydot
 import datetime
 import lxml
 
+from sql import Null, Literal
+from sql.functions import CurrentTimestamp
+from sql.aggregate import Avg, Sum, Min, Max
 from sql.conditionals import Coalesce
 
+from trytond import backend
 from trytond.model import fields as tryton_fields, Unique
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
@@ -11,6 +15,7 @@ from trytond.pyson import Eval, Not, And, Bool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateView, Button
 from trytond.server_context import ServerContext
+from trytond.wizard import StateTransition
 
 from trytond.modules.cog_utils import utils, model, fields
 from trytond.modules.process import ProcessFramework
@@ -32,6 +37,8 @@ __all__ = [
     'ProcessFinder',
     'ProcessEnd',
     'ProcessResume',
+    'PostponeTask',
+    'PostponeParameters',
     ]
 
 
@@ -164,81 +171,91 @@ class ProcessLog(model.CoopSQL, model.CoopView):
 
     __name__ = 'process.log'
 
-    user = fields.Many2One('res.user', 'User', ondelete='RESTRICT')
+    user = fields.Many2One('res.user', 'User', ondelete='RESTRICT',
+        required=True)
     from_state = fields.Many2One('process-process.step', 'From State',
+        ondelete='SET NULL', select=True)
+    to_state = fields.Many2One('process-process.step', 'To State',
         ondelete='SET NULL')
-    to_state = fields.Many2One('process-process.step', 'To State', select=True,
-        ondelete='SET NULL')
-    start_time = fields.DateTime('Start Time', readonly=True)
-    start_time_str = fields.Function(
-        fields.Char('Start Time'),
-        'on_change_with_start_time_str')
-    end_time = fields.DateTime('End Time', readonly=True)
-    end_time_str = fields.Function(
-        fields.Char('End Time'),
-        'on_change_with_end_time_str')
+    start_time = fields.DateTime('Start Time', readonly=True, required=True,
+        select=True)
+    end_time = fields.DateTime('End Time', readonly=True, select=True)
     description = fields.Text('Description')
     task = fields.Reference(
         'Task', 'get_task_models', select=True, required=True)
-    locked = fields.Boolean('Lock', select=True)
-    latest = fields.Boolean('Latest', select=True)
-    session = fields.Char('Session')
+    process_start = fields.DateTime('Process Start', readonly=True,
+        required=True)
+    latest = fields.Function(
+        fields.Boolean('Latest'),
+        'get_latest', searcher='search_latest')
 
     @classmethod
-    def default_latest(cls):
-        return True
-
-    @fields.depends('end_time')
-    def on_change_with_end_time_str(self, name=None):
-        return Pool().get('ir.date').datetime_as_string(self.end_time)
-
-    @fields.depends('start_time')
-    def on_change_with_start_time_str(self, name=None):
-        return Pool().get('ir.date').datetime_as_string(self.start_time)
-
-    @staticmethod
-    def order_end_time_str(tables):
-        table, _ = tables[None]
-        return [Coalesce(table.start_time, datetime.date.max)]
-
-    @staticmethod
-    def order_start_time_str(tables):
-        table, _ = tables[None]
-        return [Coalesce(table.end_time, datetime.date.min)]
+    def __setup__(cls):
+        super(ProcessLog, cls).__setup__()
+        cls._error_messages.update({
+                'cannot_copy_logs': 'Copying logs is not allowed !',
+                'cannot_delete_logs': 'Deleting logs is not allowed !',
+                })
+        cls._task_models = None
 
     @classmethod
-    def create(cls, values):
-        for value in values:
-            previous_latest = cls.search([
-                ('task', '=', value['task']),
-                ('latest', '=', True)])
-            if previous_latest:
-                previous_latest = previous_latest[0]
-                previous_latest.latest = False
-                previous_latest.save()
-        return super(ProcessLog, cls).create(values)
+    def __register__(cls, module):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().connection.cursor()
+
+        # Migration from 1.6 : Remove latest / locked columns
+        log_handler = TableHandler(cls, module)
+        to_migrate = log_handler.column_exist('session')
+        super(ProcessLog, cls).__register__(module)
+
+        if to_migrate:
+            log_handler = TableHandler(cls, module)
+            log = cls.__table__()
+            cursor.execute(*log.update(columns=[log.end_time],
+                    values=[Null], where=log.latest == Literal(True)))
+            cursor.execute(*log.update(columns=[log.process_start],
+                    values=[log.start_time]))
+            log_handler.drop_column('session')
+            log_handler.drop_column('latest')
+            log_handler.drop_column('locked')
+
+    @classmethod
+    def delete(cls, *args, **kwargs):
+        if not ServerContext().get('allow_delete_logs', None):
+            cls.raise_user_error('cannot_delete_logs')
+        return super(ProcessLog, cls).delete(*args, **kwargs)
+
+    @classmethod
+    def copy(cls, *args, **kwargs):
+        cls.raise_user_error('cannot_copy_logs')
+
+    def get_latest(self, name):
+        return self.end_time is None
+
+    @classmethod
+    def search_latest(cls, name, clause):
+        operator = (clause[1] == '=' and clause[2] is True) or (
+            clause[1] == '!=' and clause[2] is False)
+        return ('end_time', '=' if operator else '!=', None)
 
     @classmethod
     def get_task_models(cls):
+        if cls._task_models is not None:
+            return cls._task_models
         Model = Pool().get('ir.model')
         good_models = Model.search([('is_workflow', '=', True)])
-        return [(model.model, model.name) for model in good_models]
+        cls._task_models = [(model.model, model.name) for model in good_models]
+        return cls._task_models
 
     def get_rec_name(self, name):
-        # TODO: There should not be logs without tasks
-        if not (hasattr(self, 'task') and self.task):
-            return ''
-        return self.task.get_rec_name(None)
-
-    @classmethod
-    def default_start_time(cls):
-        return datetime.datetime.now()
+        return self.task.get_rec_name(name)
 
 
-class CogProcessFramework(ProcessFramework, model.CoopView):
+class CogProcessFramework(ProcessFramework, model.CoopSQL, model.CoopView):
     'Cog Process Framework'
 
-    logs = fields.One2Many('process.log', 'task', 'Task', delete_missing=True)
+    logs = fields.One2Many('process.log', 'task', 'Task', delete_missing=True,
+        readonly=True)
     current_log = fields.Function(
         fields.Many2One('process.log', 'Current Log'),
         'get_current_log')
@@ -248,9 +265,6 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(CogProcessFramework, cls).__setup__()
-        cls._error_messages.update({
-                'lock_fault': 'Object %s is currently locked by user %s',
-                })
         cls._buttons.update({
                 'button_resume': {
                     'invisible': Not(Bool(Eval('current_state', False))),
@@ -259,6 +273,7 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
         cls.__rpc__.update({
                 'button_delete_task': RPC(instantiate=0, readonly=0),
                 'button_hold_task': RPC(instantiate=0, readonly=0),
+                'button_postpone': RPC(instantiate=0, readonly=0),
                 })
 
     @classmethod
@@ -272,18 +287,16 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
         pass
 
     @classmethod
+    @model.CoopView.button_action('process_cog.act_postpone')
+    def button_postpone(cls, objects):
+        return 'close'
+
+    @classmethod
     def button_delete_task(cls, objects):
         return 'delete,close'
 
     @classmethod
     def button_hold_task(cls, objects):
-        Log = Pool().get('process.log')
-        logs = []
-        for obj in objects:
-            obj.current_log.locked = False
-            logs.append(obj.current_log)
-        if logs:
-            Log.save(logs)
         return 'close'
 
     def get_current_state_name(self, name):
@@ -292,82 +305,68 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
         else:
             return None
 
-    def get_current_log(self, name=None):
-        if not (hasattr(self, 'id') and self.id):
-            return None
+    @classmethod
+    def get_current_log(cls, instances, name):
         Log = Pool().get('process.log')
-        current_log = Log.search([
-                ('task', '=', utils.convert_to_reference(self)),
+        values = {x.id: None for x in instances}
+        current_logs = Log.search([
+                ('task', 'in', [str(x) for x in instances]),
                 ('latest', '=', True)])
-        return current_log[0].id if current_log else None
+        values.update({x.task.id: x.id for x in current_logs})
+        return values
 
     @classmethod
     def write(cls, *args):
-        Log = Pool().get('process.log')
-        actions = iter(args)
-        zipped = zip(actions, actions)
-        for instances, _ in zipped:
-            for instance in instances:
-                if instance.current_log and instance.current_log.locked:
-                    if instance.current_log.user.id != Transaction().user:
-                        cls.raise_user_error('lock_fault', (
-                                instance.get_rec_name(None),
-                                instance.current_log.user.get_rec_name(None)))
         super(CogProcessFramework, cls).write(*args)
 
-        good_session = Transaction().context.get('session')
-        for instances, _ in zipped:
-            for instance in instances:
-                good_log = instance.current_log
-                if (not good_log or good_log.to_state is None and
-                        not instance.current_state):
-                    continue
-                if (good_log.session != good_session or
-                        good_log.to_state is None and instance.current_state):
-                    good_log.latest = False
-                    good_log.save()
-                    old_log = good_log
-                    good_log = Log()
-                    good_log.session = good_session
-                    if not Transaction().context.get('set_empty_process_user',
-                            False):
-                        good_log.user = Transaction().user
-                    good_log.start_time = datetime.datetime.now()
-                    if not (hasattr(old_log, 'to_state') and old_log.to_state):
-                        good_log.from_state = instance.current_state
-                    else:
-                        good_log.from_state = old_log.to_state
-                    good_log.latest = True
-                    good_log.task = instance
-                good_log.to_state = instance.current_state
-                good_log.end_time = datetime.datetime.now()
-                if instance.current_state is None:
-                    good_log.locked = False
-                good_log.save()
+        Log = Pool().get('process.log')
+        logs = sum([x.update_logs() for x in sum(args[::2], [])], [])
+        if logs:
+            Log.save(logs)
 
     @classmethod
     def create(cls, values):
         instances = super(CogProcessFramework, cls).create(values)
         Log = Pool().get('process.log')
-        good_session = Transaction().context.get('session')
-        for instance in instances:
-            log = Log()
-            log.user = Transaction().user
-            log.task = utils.convert_to_reference(instance)
-            log.start_time = datetime.datetime.now()
-            log.end_time = datetime.datetime.now()
-            log.to_state = instance.current_state
-            log.session = good_session
-            log.save()
+        logs = sum([x.update_logs() for x in instances], [])
+        Log.save(logs)
         return instances
 
     @classmethod
     def delete(cls, records):
         # Delete logs
-        Log = Pool().get('process.log')
-        Log.delete(Log.search([('task', 'in', [
-            utils.convert_to_reference(x) for x in records])]))
-        super(CogProcessFramework, cls).delete(records)
+        with ServerContext().set_context(allow_delete_logs=True):
+            super(CogProcessFramework, cls).delete(records)
+
+    def update_logs(self, init_log=None):
+        pool = Pool()
+        Log = pool.get('process.log')
+        User = pool.get('res.user')
+        if init_log is None:
+            init_log = self.current_log
+        if init_log is None:
+            if self.current_state:
+                return [Log(user=Transaction().user, task=str(self),
+                        start_time=CurrentTimestamp(),
+                        process_start=CurrentTimestamp(),
+                        from_state=self.current_state.id,
+                        )]
+            return []
+        if self.current_state == init_log.from_state:
+            return []
+        init_log.end_time = CurrentTimestamp()
+        init_log.to_state = self.current_state
+
+        if init_log.start_time > datetime.datetime.now():
+            # Handle future tasks started early
+            init_log.start_time = CurrentTimestamp()
+        if not self.current_state:
+            return [init_log]
+
+        self.current_log = Log(user=User(Transaction().user), task=self,
+            process_start=init_log.process_start,
+            start_time=CurrentTimestamp(), from_state=self.current_state)
+        return [init_log, self.current_log]
 
     def get_next_execution(self):
         if not self.current_state:
@@ -517,7 +516,6 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
             visible = False
         if visible:
             return
-        self.current_log.locked = False
         self.current_log.end_time = datetime.datetime.now()
         self.current_log.to_state = self.current_state
         self.current_log.save()
@@ -549,6 +547,12 @@ class Process(model.CoopSQL, model.TaggedMixin):
     hold_button = fields.Char('Hold Button Name', help='If not null, a '
         'button will be added on the view with the given name, which will '
         'allow to set the current task on hold')
+    postpone_button = fields.Char('Postpone Button Name', help='If not null, a'
+        ' button will be added on the view with the given name, which will '
+        'allow to postpone the task in the future, and change the user.')
+    average_run_time = fields.Function(
+        fields.TimeDelta('Average Run Time'),
+        'get_average_run_time')
 
     @classmethod
     def __setup__(cls):
@@ -588,6 +592,47 @@ class Process(model.CoopSQL, model.TaggedMixin):
     @classmethod
     def default_steps_implicitly_available(cls):
         return True
+
+    @classmethod
+    def get_average_run_time(cls, processes, name):
+        pool = Pool()
+        log = pool.get('process.log').__table__()
+        state = pool.get('process-process.step').__table__()
+        cursor = Transaction().connection.cursor()
+
+        values = {process.id: datetime.timedelta(seconds=0)
+            for process in processes}
+
+        date_clause = Literal(True)
+        min_date = Transaction().context.get('min_date', None)
+        if min_date is not None:
+            date_clause &= (log.process_start >= min_date)
+        max_date = Transaction().context.get('max_date', None)
+        if max_date is not None:
+            date_clause &= (log.process_start <= max_date)
+
+        query_view = log.select(log.task, log.process_start,
+            Min(log.from_state).as_('from_state'),
+            Max(Coalesce(log.end_time, datetime.datetime.max)).as_('end_time'),
+            where=date_clause,
+            group_by=[log.task, log.process_start]
+            )
+
+        cursor.execute(*query_view.join(state, condition=(
+                    query_view.end_time != datetime.datetime.max)
+                & (query_view.from_state != Null)
+                & (query_view.from_state == state.id)
+                ).select(state.process,
+                Avg(query_view.end_time - query_view.process_start),
+                where=state.process.in_([x.id for x in processes]),
+                group_by=[state.process]))
+
+        for process_id, average in cursor.fetchall():
+            if average.microseconds >= 500000:
+                average += datetime.timedelta(seconds=1)
+            average -= datetime.timedelta(microseconds=average.microseconds)
+            values[process_id] = average
+        return values
 
     def get_next_execution(self, from_step, for_task):
         from_step.execute_after(for_task)
@@ -652,6 +697,10 @@ class Process(model.CoopSQL, model.TaggedMixin):
             middle_buttons.append(
                 '<button string="%s" name="button_hold_task" '
                 'icon="tryton-save"/>' % self.hold_button)
+        if self.postpone_button:
+            middle_buttons.append(
+                '<button string="%s" name="button_postpone" '
+                'icon="tryton-clock"/>' % self.postpone_button)
         return middle_buttons
 
     def get_xml_footer(self, colspan=4):
@@ -719,6 +768,10 @@ class Process(model.CoopSQL, model.TaggedMixin):
 class ProcessStepRelation(model.CoopSQL):
     __name__ = 'process-process.step'
 
+    average_run_time = fields.Function(
+        fields.TimeDelta('Average Run Time'),
+        'get_average_run_time')
+
     @classmethod
     def __setup__(cls):
         super(ProcessStepRelation, cls).__setup__()
@@ -726,6 +779,37 @@ class ProcessStepRelation(model.CoopSQL):
                 ('main_model', '=', Eval('_parent_process', {}).get(
                         'on_model', 0))])
         cls.process.required = True
+
+    @classmethod
+    def get_average_run_time(cls, steps, name):
+        cursor = Transaction().connection.cursor()
+        log = Pool().get('process.log').__table__()
+
+        values = {step.id: datetime.timedelta(seconds=0) for step in steps}
+
+        date_clause = Literal(True)
+        min_date = Transaction().context.get('min_date', None)
+        if min_date is not None:
+            date_clause &= (log.process_start >= min_date)
+        max_date = Transaction().context.get('max_date', None)
+        if max_date is not None:
+            date_clause &= (log.process_start <= max_date)
+
+        query_view = log.select(log.from_state, log.task, log.process_start,
+            Sum(log.end_time - log.start_time).as_('tot_time'),
+            where=(log.end_time != Null) & date_clause
+            & log.from_state.in_([x.id for x in steps]),
+            group_by=[log.from_state, log.task, log.process_start])
+        cursor.execute(*query_view.select(query_view.from_state,
+                Avg(query_view.tot_time),
+                group_by=[query_view.from_state]))
+
+        for state_id, average in cursor.fetchall():
+            if average.microseconds >= 500000:
+                average += datetime.timedelta(seconds=1)
+            average -= datetime.timedelta(microseconds=average.microseconds)
+            values[state_id] = average
+        return values
 
 
 class ViewDescription(model.CoopSQL, model.CoopView):
@@ -1219,7 +1303,6 @@ class ProcessResume(Wizard):
         super(ProcessResume, cls).__setup__()
         cls._error_messages.update({
                 'no_process_found': 'No active process found',
-                'lock_by_user': 'Process Locked by user',
                 })
 
     def do_resume(self, action):
@@ -1233,25 +1316,24 @@ class ProcessResume(Wizard):
         active_logs = Log.search([
                 ('latest', '=', True),
                 ('task', '=', '%s,%i' % (active_model, active_id))])
-        if not active_logs:
-            self.raise_user_error('no_process_found')
-        active_log, = active_logs
-        if (active_log.locked is True and
-                active_log.user.id != Transaction().user):
-            self.raise_user_error('lock_by_user', (active_log.user.name,))
+        if active_logs:
+            active_log, = active_logs
         process_action = instance.current_state.process.get_act_window()
         Action = pool.get('ir.action')
         process_action = Action.get_action_values(process_action.__name__,
             [process_action.id])[0]
-        good_session = Transaction().context.get('session')
+
+        if active_log:
+            active_log.end_time = CurrentTimestamp()
+            active_log.to_state = active_log.from_state
+            active_log.save()
         new_log = Log()
         new_log.user = Transaction().user
-        new_log.locked = True
         new_log.task = instance
-        new_log.from_state = instance.current_state.id
-        new_log.to_state = instance.current_state.id
-        new_log.start_time = datetime.datetime.now()
-        new_log.session = good_session
+        new_log.from_state = instance.current_state
+        new_log.start_time = CurrentTimestamp()
+        new_log.process_start = active_log.process_start if active_log \
+            else CurrentTimestamp()
         new_log.save()
 
         views = process_action['views']
@@ -1272,10 +1354,10 @@ class GenerateGraph:
     __name__ = 'process.generate_graph.report'
 
     @classmethod
-    def build_transition(cls, process, step, transition, graph, nodes, edges):
+    def build_transition(cls, process, transition, graph, nodes, edges):
         if not transition.kind == 'choice':
             super(GenerateGraph, cls).build_transition(
-                process, step, transition, graph, nodes, edges)
+                process, transition, graph, nodes, edges)
             return
         choice_node = pydot.Node(
             transition.pyson_description,
@@ -1317,3 +1399,59 @@ class GenerateGraph:
         edges[(
             'tr%s' % transition.id,
             transition.choice_if_false.to_step.id)] = false_edge
+
+
+class PostponeTask(Wizard):
+    'Postpone Selected Task'
+
+    __name__ = 'task.postpone'
+
+    start_state = 'postpone_parameters'
+    postpone_parameters = StateView('task.postpone.parameters',
+        'process_cog.postpone_task_parameters_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Postpone', 'postpone', 'tryton-go-next', default=True)])
+    postpone = StateTransition()
+
+    def default_postpone_parameters(self, name):
+        pool = Pool()
+        ActiveModel = pool.get(Transaction().context.get('active_model'))
+        active_id = Transaction().context.get('active_id')
+
+        if ActiveModel.__name__ == 'process.log':
+            task = ActiveModel(active_id)
+        else:
+            task = ActiveModel(active_id).current_log
+        return {
+            'task': task.id,
+            'process_start': task.process_start,
+            'new_user': Transaction().user or task.user.id,
+            'new_date': datetime.datetime.now(),
+            'previous_start': task.start_time,
+            }
+
+    def transition_postpone(self):
+        params = self.postpone_parameters
+        task = params.task
+        task.end_time = CurrentTimestamp()
+        task.to_state = task.from_state
+        task.save()
+        defaults = {'start_time': params.new_date, 'end_time': None}
+        if params.new_user:
+            defaults['user'] = params.new_user.id
+        task.copy([task.id], default=defaults)
+        return 'end'
+
+
+class PostponeParameters(model.CoopView):
+    'Postpone Parameters'
+
+    __name__ = 'task.postpone.parameters'
+
+    task = fields.Many2One('process.log', 'Task', readonly=True)
+    process_start = fields.DateTime('Process Start', readonly=True)
+    new_user = fields.Many2One('res.user', 'New User', required=True)
+    new_date = fields.DateTime('New Date',
+        domain=[('new_date', '>=', Eval('previous_start'))],
+        depends=['previous_start'])
+    previous_start = fields.DateTime('Previous Start', readonly=True)

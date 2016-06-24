@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<form string="Select Dates" col="2">
+    <label name="start"/>
+    <field name="start"/>
+    <label name="end"/>
+    <field name="end"/>
+</form>

@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
-        <!-- Transition Override -->
+        <!-- ############## -->
+        <!-- # Transition # -->
+        <!-- ############## -->
         <record model="ir.ui.view" id="transition_form">
             <field name="model">process.transition</field>
             <field name="inherit" ref="process.transition_form"/>
             <field name="name">transition_form</field>
         </record>
-        <!-- Process Override -->
+        <!-- ########### -->
+        <!-- # Process # -->
+        <!-- ########### -->
         <record model="ir.ui.view" id="process_form">
             <field name="model">process</field>
             <field name="inherit" ref="process.process_form"/>
@@ -18,7 +22,19 @@
             <field name="inherit" ref="process.process_list"/>
             <field name="name">process_list</field>
         </record>
-        <!-- Step Override -->
+        <record model="ir.ui.view" id="process_timing_view_form">
+            <field name="model">process</field>
+            <field name="type">form</field>
+            <field name="name">process_timing_form</field>
+        </record>
+        <record model="ir.ui.view" id="process_timing_view_list">
+            <field name="model">process</field>
+            <field name="type">tree</field>
+            <field name="name">process_timing_list</field>
+        </record>
+        <!-- ######## -->
+        <!-- # Step # -->
+        <!-- ######## -->
         <record model="ir.ui.view" id="step_form">
             <field name="model">process.step</field>
             <field name="inherit" ref="process.step_form"/>
@@ -29,7 +45,17 @@
             <field name="inherit" ref="process.step_list"/>
             <field name="name">step_list</field>
         </record>
-        <!-- XML View Desc -->
+        <!-- ######################### -->
+        <!-- # Process Step Relation # -->
+        <!-- ######################### -->
+        <record model="ir.ui.view" id="process_step_timing_view_list">
+            <field name="model">process-process.step</field>
+            <field name="type">tree</field>
+            <field name="name">process_step_timing_list</field>
+        </record>
+        <!-- ################ -->
+        <!-- # Custom Views # -->
+        <!-- ################ -->
         <record model="ir.ui.view" id="view_description_form">
             <field name="model">ir.ui.view.description</field>
             <field name="type">form</field>
@@ -40,13 +66,17 @@
             <field name="type">tree</field>
             <field name="name">view_description_list</field>
         </record>
-        <!-- Process Start -->
+        <!-- ################# -->
+        <!-- # Process Start # -->
+        <!-- ################# -->
         <record model="ir.ui.view" id="process_parameters_form">
             <field name="model">process.start</field>
             <field name="type">form</field>
             <field name="name">process_parameters_form</field>
         </record>
-        <!-- Process Log -->
+        <!-- ############### -->
+        <!-- # Process Log # -->
+        <!-- ############### -->
         <record model="ir.ui.view" id="process_log_form">
             <field name="model">process.log</field>
             <field name="type">form</field>
@@ -78,6 +108,26 @@
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- ################### -->
+        <!-- # Postpone Wizard # -->
+        <!-- ################### -->
+        <record model="ir.action.wizard" id="act_postpone">
+            <field name="name">Postpone</field>
+            <field name="wiz_name">task.postpone</field>
+        </record>
+        <record model="ir.action.keyword" id="act_postpone_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">process.log,-1</field>
+            <field name="action" ref="act_postpone"/>
+        </record>
+        <!-- ####################### -->
+        <!-- # Postpone Parameters # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="postpone_task_parameters_view_form">
+            <field name="model">task.postpone.parameters</field>
+            <field name="type">form</field>
+            <field name="name">postpone_task_parameters_form</field>
         </record>
     </data>
 </tryton>

@@ -1,6 +1,7 @@
 import pydot
 import inspect
 import ast
+from unidecode import unidecode
 
 from trytond.model import ModelView, ModelSQL, Unique
 from trytond.wizard import Wizard, StateAction
@@ -983,24 +984,21 @@ class GenerateGraph(Report):
 
     @classmethod
     def build_step(cls, process, step, graph, nodes):
-        nodes[step.id] = pydot.Node(step.fancy_name, style='filled',
-            shape='rect', fontname='Century Gothic')
-        # if not step.to_steps:
-        #     nodes[step.id].set('style', 'filled')
-        #     nodes[step.id].set('shape', 'circle')
-        #     nodes[step.id].set('fillcolor', '# a2daf4')
+        name = unicode(unidecode(step.fancy_name))
+        nodes[step.id] = pydot.Node(name, style='filled', shape='rect',
+            fontname='Century Gothic')
 
     @classmethod
-    def build_transition(cls, process, step, transition, graph, nodes, edges):
+    def build_transition(cls, process, transition, graph, nodes, edges):
         good_edge = pydot.Edge(nodes[transition.from_step.id],
             nodes[transition.to_step.id], fontname='Century Gothic')
         good_edge.set('len', '1.0')
         good_edge.set('constraint', '1')
         good_edge.set('weight', '1.0')
-        edges[(step.id, transition.to_step.id)] = good_edge
+        edges[(transition.from_step.id, transition.to_step.id)] = good_edge
 
     @classmethod
-    def build_inverse_transition(cls, process, step, transition, graph, nodes,
+    def build_inverse_transition(cls, process, transition, graph, nodes,
             edges):
         tr_fr, tr_to = transition.from_step.id, transition.to_step.id
         if (tr_to, tr_fr) in edges:
@@ -1013,13 +1011,30 @@ class GenerateGraph(Report):
             edges[(tr_fr, tr_to)] = good_edge
 
     @classmethod
-    def build_complete_transition(cls, process, step, transition, graph, nodes,
+    def build_complete_transition(cls, process, transition, graph, nodes,
             edges):
         nodes['tr%s' % transition.id] = pydot.Node('Complete', style='filled',
             shape='circle', fontname='Century Gothic', fillcolor='#ff0000')
         edges[(transition.from_step.id, 'tr%s' % transition.id)] = pydot.Edge(
             nodes[transition.from_step.id], nodes['tr%s' % transition.id],
             fontname='Century Gothic', len=1.0, constraint=1, weight=1.0)
+
+    @classmethod
+    def build_edges(cls, process, graph, nodes):
+        edges = {}
+        for transition in process.transitions:
+            if transition.kind == 'standard' and transition.is_forward():
+                cls.build_transition(process, transition, graph,
+                    nodes, edges)
+        for transition in process.transitions:
+            if transition.kind == 'standard' and transition.is_forward():
+                cls.build_inverse_transition(process, transition,
+                    graph, nodes, edges)
+        for transition in process.transitions:
+            if transition.kind == 'complete':
+                cls.build_complete_transition(process, transition,
+                    graph, nodes, edges)
+        return edges
 
     @classmethod
     def execute(cls, ids, data):
@@ -1031,33 +1046,22 @@ class GenerateGraph(Report):
         if not action_report_ids:
             raise Exception('Error', 'Report (%s) not find!' % cls.__name__)
         action_report = ActionReport(action_report_ids[0])
-        the_process = Process(Transaction().context.get('active_id'))
+        the_process = Process(data['id'])
         graph = cls.build_graph(the_process)
         nodes = {}
         for step in the_process.get_all_steps():
             cls.build_step(the_process, step, graph, nodes)
-        edges = {}
-        for transition in the_process.transitions:
-            if transition.kind == 'standard' and transition.is_forward():
-                cls.build_transition(the_process, step, transition, graph,
-                    nodes, edges)
-        for transition in the_process.transitions:
-            if transition.kind == 'standard' and transition.is_forward():
-                cls.build_inverse_transition(the_process, step, transition,
-                    graph, nodes, edges)
-        for transition in the_process.transitions:
-            if transition.kind == 'complete':
-                cls.build_complete_transition(the_process, step, transition,
-                    graph, nodes, edges)
-        nodes[the_process.first_step().id].set('style', 'filled')
-        nodes[the_process.first_step().id].set('shape', 'octagon')
-        nodes[the_process.first_step().id].set('fillcolor', '#0094d2')
+        edges = cls.build_edges(the_process, graph, nodes)
+
+        nodes[the_process.first_step().step.id].set('style', 'filled')
+        nodes[the_process.first_step().step.id].set('shape', 'octagon')
+        nodes[the_process.first_step().step.id].set('fillcolor', '#0094d2')
         for node in nodes.itervalues():
             graph.add_node(node)
         for edge in edges.itervalues():
             graph.add_edge(edge)
         data = graph.create(prog='dot', format='pdf')
-        return ('pdf', buffer(data), False, action_report.name)
+        return ('pdf', bytearray(data), False, action_report.name)
 
 
 class GenerateGraphWizard(Wizard):

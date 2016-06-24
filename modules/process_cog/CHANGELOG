@@ -1,3 +1,5 @@
+* Add average timings wizard
+* Add "Postpone" action on processes and tasks
 * Allow to use an existing view as a step view
 * Pyson condition on process initiation can apply on original or event object
 

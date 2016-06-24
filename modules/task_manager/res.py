@@ -1,4 +1,6 @@
-from sql import Literal
+import datetime
+
+from sql import Null
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -48,12 +50,12 @@ class User:
             return None
 
         query_table = log.join(priority, condition=(
-                priority.process_step == log.to_state))
+                priority.process_step == log.from_state))
 
         cursor.execute(*query_table.select(log.id,
-            where=((priority.team.in_([team.id for team in self.teams]))
-                & (log.latest == Literal(True))
-                & (log.locked == Literal(False))),
+            where=priority.team.in_([team.id for team in self.teams])
+            & (log.end_time == Null)
+            & (log.start_time <= datetime.datetime.now()),
             order_by=(priority.value, log.start_time),
             limit=1))
 
@@ -160,10 +162,10 @@ class Team(model.CoopSQL, model.CoopView):
         priority = pool.get('res.team.priority').__table__()
 
         query_table = log.join(priority, condition=(
-                priority.process_step == log.to_state))
+                priority.process_step == log.from_state))
 
         cursor.execute(*query_table.select(log.id,
-            where=((priority.team == self.id) & (log.latest == Literal(True))),
+            where=((priority.team == self.id) & (log.end_time == Null)),
             order_by=(priority.value, log.start_time)))
         return [x[0] for x in cursor.fetchall()]
 
@@ -187,8 +189,7 @@ class Team(model.CoopSQL, model.CoopView):
                 priority.process_step == log.to_state))
 
         cursor.execute(*query_table.select(log.id,
-            where=((priority.team == self.id) & (log.latest == Literal(True))
-                & (log.locked == Literal(False))),
+            where=(priority.team == self.id) & (log.end_time == Null),
             order_by=(priority.value, log.start_time),
             limit=1))
 
@@ -219,5 +220,5 @@ class UserTeamRelation(model.CoopSQL, model.CoopView):
         steps = [priority.process_step for priority in self.team.priorities]
         return Log.search_count([
                 ('latest', '=', True),
-                ('to_state', 'in', steps),
+                ('from_state', 'in', steps),
                 ('user', '=', self.id)])

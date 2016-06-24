@@ -830,7 +830,7 @@ def relation_mixin(value_model, field, model, name):
     return Mixin
 
 
-class Contract(model.CoopSQL, CogProcessFramework):
+class Contract(CogProcessFramework):
     __metaclass__ = ClassAttr
     _history = True
     __name__ = 'contract'

@@ -89,12 +89,11 @@ class ClassAttr(PoolMeta):
         return super(ClassAttr, self).__getattr__(name)
 
 
-class ProcessFramework(ModelView):
+class ProcessFramework(ModelSQL, ModelView):
     'Process Framework'
 
     __metaclass__ = ClassAttr
     __allowed_buttons__ = '_button_'
-    __name__ = 'process.process_framework'
 
     # The current state is used to store which process is currently being
     # executed and which step is the current step

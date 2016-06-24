@@ -262,6 +262,10 @@ msgctxt "model:ir.action.act_window.domain,name:act_process_log_domain_all"
 msgid "All"
 msgstr "Toutes"
 
+msgctxt "model:ir.action.act_window.domain,name:act_process_log_domain_future"
+msgid "Futures"
+msgstr "Tâches futures"
+
 msgctxt "model:ir.action.act_window.domain,name:act_process_log_domain_mine"
 msgid "Mine"
 msgstr "Les miennes"

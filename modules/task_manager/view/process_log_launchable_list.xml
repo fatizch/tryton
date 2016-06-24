@@ -2,10 +2,10 @@
 <tree string="Current Tasks" keyword_open="1">
     <field name="user" tree_invisible="1"/>
     <field name="user_name"/>
-    <field name="start_time_str"/>
-    <field name="to_state"/>
+    <field name="start_time" widget="date"/>
+    <field name="start_time" widget="time" string=""/>
+    <field name="from_state"/>
     <field name="task"/>
     <field name="task_name"/>
-    <field name="locked" tree_invisible="1"/>
     <field name="is_current_user" tree_invisible="1"/>
 </tree>

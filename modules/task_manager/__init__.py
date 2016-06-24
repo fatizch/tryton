@@ -1,5 +1,4 @@
 from trytond.pool import Pool
-from .ir import *
 from .res import *
 from .task_dispatcher import *
 
@@ -9,7 +8,6 @@ def register():
         Team,
         TeamGroupRelation,
         Priority,
-        Session,
         User,
         ProcessLog,
         UserTeamRelation,

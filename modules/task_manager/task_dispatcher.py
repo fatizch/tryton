@@ -1,12 +1,12 @@
-import datetime
+from sql import Window
+from sql.aggregate import Min
 
 from trytond.pyson import Eval, Bool, If
-from trytond.wizard import Wizard, StateAction
-from trytond.wizard import StateTransition
+from trytond.wizard import Wizard, StateAction, StateTransition
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.cog_utils import utils, model, fields
+from trytond.modules.cog_utils import model, fields
 
 __metaclass__ = PoolMeta
 
@@ -24,13 +24,13 @@ class ProcessLog:
         fields.Char('User'), 'get_user_name')
     task_start = fields.Function(
         fields.DateTime('Task Start'),
-        'on_change_with_task_start')
+        'get_task_start')
     is_current_user = fields.Function(
         fields.Boolean('Is current user', depends=['user']),
         'get_is_current_user')
     task_start_date = fields.Function(
         fields.Date('Task Start'),
-        'on_change_with_task_start_date')
+        'get_task_start_date')
     task_nb = fields.Function(
         fields.Integer('Task Number'),
         'get_task_nb')
@@ -41,8 +41,8 @@ class ProcessLog:
     @classmethod
     def view_attributes(cls):
         return super(ProcessLog, cls).view_attributes() + [
-            ('/tree', 'colors', If(Bool(Eval('locked')), 'red',
-                    If(Bool(Eval('is_current_user')), 'blue', 'black'))),
+            ('/tree', 'colors', If(Bool(Eval('is_current_user')), 'blue',
+                    'black')),
             ]
 
     @staticmethod
@@ -50,23 +50,22 @@ class ProcessLog:
         table, _ = tables[None]
         return [table.user]
 
-    @fields.depends('task')
-    def on_change_with_task_start(self, name=None):
-        if not (hasattr(self, 'task') and self.task):
-            return None
-        start_log, = self.search([
-            ('from_state', '=', None),
-            ('task', '=', utils.convert_to_reference(self.task))], limit=1)
-        return start_log.start_time
+    @classmethod
+    def get_task_start(cls, logs, name):
+        cursor = Transaction().cursor
+        log = cls.__table__()
+        tmp_query = log.select(log.id, log.task,
+            Min(log.start_time, window=Window([log.task])).as_('min_start'),
+            where=log.task.in_([str(x.task) for x in logs]))
+        cursor.execute(*tmp_query.select(tmp_query.id, tmp_query.min_start,
+                where=tmp_query.id.in_([x.id for x in logs])))
+        values = {}
+        for log_id, min_start in cursor.fetchall():
+            values[log_id] = min_start
+        return values
 
-    @fields.depends('task')
-    def on_change_with_task_start_date(self, name=None):
-        if not (hasattr(self, 'task') and self.task):
-            return None
-        start_log, = self.search([
-                ('from_state', '=', None),
-                ('task', '=', utils.convert_to_reference(self.task))], limit=1)
-        return start_log.start_time.date()
+    def get_task_start_date(self, name):
+        return self.task_start.date() if self.task_start else None
 
     def get_is_current_user(self, name):
         if not Transaction().user or not self.user:
@@ -89,17 +88,8 @@ class TaskDispatcher(Wizard):
 
     __name__ = 'task.select'
 
-    start_state = 'remove_locks'
-
-    class VoidStateAction(StateAction):
-        def __init__(self):
-            StateAction.__init__(self, None)
-
-        def get_action(self):
-            return None
-
-    remove_locks = StateTransition()
-    calculate_action = VoidStateAction()
+    start_state = 'calculate_action'
+    calculate_action = StateAction('process_cog.act_resume_process')
 
     @classmethod
     def __setup__(cls):
@@ -109,56 +99,22 @@ class TaskDispatcher(Wizard):
                 'no_task_found': 'No task found'
                 })
 
-    def transition_remove_locks(self):
-        Log = Pool().get('process.log')
-        locked = Log.search([
-            ('locked', '=', True),
-            ('user', '=', Transaction().user)])
-        if locked:
-            Log.write(locked, {'locked': False})
-        return 'calculate_action'
-
     def do_calculate_action(self, action):
         User = Pool().get('res.user')
-        Log = Pool().get('process.log')
         user = User(Transaction().user)
         task = user.search_next_priority_task()
         if task:
             good_id = task.task.id
             good_model = task.task.__name__
-            act = task.to_state.process.get_act_window()
         else:
             self.raise_user_error('no_task_selected')
 
-        Action = Pool().get('ir.action')
-        act = Action.get_action_values(act.__name__, [act.id])[0]
-
-        good_session = Transaction().context.get('session')
-        GoodModel = Pool().get(good_model)
-        good_object = GoodModel(good_id)
-        new_log = Log()
-        new_log.user = Transaction().user
-        new_log.locked = True
-        new_log.task = good_object
-        new_log.from_state = good_object.current_state.id
-        new_log.to_state = good_object.current_state.id
-        new_log.start_time = datetime.datetime.now()
-        new_log.session = good_session
-        new_log.save()
-
-        views = act['views']
-        if len(views) > 1:
-            for view in views:
-                if view[1] == 'form':
-                    act['views'] = [view]
-                    break
-        res = (act, {
+        return (action, {
                 'id': good_id,
                 'model': good_model,
                 'res_id': [good_id],
                 'res_model': good_model,
                 })
-        return res
 
 
 class LaunchTask(Wizard):

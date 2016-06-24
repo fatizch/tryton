@@ -19,7 +19,6 @@ def register():
         # From ir
         Model,
         # From process_framework
-        ProcessFramework,
         ProcessActWindow,
         module='process', type_='model')
 

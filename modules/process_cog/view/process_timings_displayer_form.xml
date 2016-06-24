@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="Process Timings">
+    <label name="start"/>
+    <field name="start"/>
+    <label name="end"/>
+    <field name="end"/>
+    <field name="processes" mode="list" group="processes" view_ids="process_cog.process_timing_view_list" yexpand="0" yfill="1" expand_toolbar="0" colspan="4"/>
+    <field name="processes" mode="form" group="processes" view_ids="process_cog.process_timing_view_form" expand_toolbar="0" colspan="4"/>
+</form>

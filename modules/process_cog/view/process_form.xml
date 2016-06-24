@@ -22,5 +22,7 @@
         <field name="delete_button"/>
         <label name="hold_button"/>
         <field name="hold_button"/>
+        <label name="postpone_button"/>
+        <field name="postpone_button"/>
     </xpath>
 </data>

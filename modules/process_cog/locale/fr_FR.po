@@ -6,13 +6,17 @@ msgctxt "error:ir.ui.view.description:"
 msgid "The functional id must be unique !"
 msgstr "L'identifiant fonctionnel doit être unique"
 
+msgctxt "error:process.log:"
+msgid "Copying logs is not allowed !"
+msgstr "La copie des tâches n'est pas autorisée !"
+
+msgctxt "error:process.log:"
+msgid "Deleting logs is not allowed !"
+msgstr "La suppression des tâches n'est pas autorisée !"
+
 msgctxt "error:process.resume:"
 msgid "No active process found"
 msgstr "Pas de processus actif trouvé"
-
-msgctxt "error:process.resume:"
-msgid "Process Locked by user"
-msgstr "Processus verrouillé par un utilisateur"
 
 msgctxt "error:process.transition:"
 msgid "Both choices must be filled !"
@@ -129,6 +133,10 @@ msgctxt "field:ir.ui.view.description,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:process,average_run_time:"
+msgid "Average Run Time"
+msgstr "Temps moyen d'exécution"
+
 msgctxt "field:process,close_tab_on_completion:"
 msgid "Close Tab On Completion"
 msgstr "Fermer l'onglet à la fin"
@@ -161,6 +169,10 @@ msgctxt "field:process,kind:"
 msgid "Kind"
 msgstr "Type"
 
+msgctxt "field:process,postpone_button:"
+msgid "Postpone Button Name"
+msgstr "Nom du bouton \"Reporter\""
+
 msgctxt "field:process,steps_implicitly_available:"
 msgid "Steps Implicitly Available"
 msgstr "Etapes Implicites"
@@ -180,6 +192,10 @@ msgstr "Avec Préc/Suiv."
 msgctxt "field:process,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:process-process.step,average_run_time:"
+msgid "Average Run Time"
+msgstr "Temps moyen d'exécution"
 
 msgctxt "field:process-process.step,create_date_:"
 msgid "Creation date"
@@ -217,10 +233,6 @@ msgctxt "field:process.log,end_time:"
 msgid "End Time"
 msgstr "Fin"
 
-msgctxt "field:process.log,end_time_str:"
-msgid "End Time"
-msgstr "Fin"
-
 msgctxt "field:process.log,from_state:"
 msgid "From State"
 msgstr "Etat de Départ"
@@ -233,23 +245,15 @@ msgctxt "field:process.log,latest:"
 msgid "Latest"
 msgstr "Dernier"
 
-msgctxt "field:process.log,locked:"
-msgid "Lock"
-msgstr "Verrrouillé"
+msgctxt "field:process.log,process_start:"
+msgid "Process Start"
+msgstr "Paramètres du Processus"
 
 msgctxt "field:process.log,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.log,session:"
-msgid "Session"
-msgstr "Session"
-
 msgctxt "field:process.log,start_time:"
-msgid "Start Time"
-msgstr "Début"
-
-msgctxt "field:process.log,start_time_str:"
 msgid "Start Time"
 msgstr "Début"
 
@@ -361,6 +365,58 @@ msgctxt "field:process.transition,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:process.view_timings.displayer,end:"
+msgid "End"
+msgstr "Terminer"
+
+msgctxt "field:process.view_timings.displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.view_timings.displayer,processes:"
+msgid "Processes"
+msgstr "Processus"
+
+msgctxt "field:process.view_timings.displayer,start:"
+msgid "Start"
+msgstr "Début"
+
+msgctxt "field:process.view_timings.select_dates,end:"
+msgid "End"
+msgstr "Terminer"
+
+msgctxt "field:process.view_timings.select_dates,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.view_timings.select_dates,start:"
+msgid "Start"
+msgstr "Début"
+
+msgctxt "field:task.postpone.parameters,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:task.postpone.parameters,new_date:"
+msgid "New Date"
+msgstr "Nouvelle date"
+
+msgctxt "field:task.postpone.parameters,new_user:"
+msgid "New User"
+msgstr "Nouvel utilisateur"
+
+msgctxt "field:task.postpone.parameters,previous_start:"
+msgid "Previous Start"
+msgstr "Date antérieure"
+
+msgctxt "field:task.postpone.parameters,process_start:"
+msgid "Process Start"
+msgstr "Paramètres du Processus"
+
+msgctxt "field:task.postpone.parameters,task:"
+msgid "Task"
+msgstr "Tâche"
+
 msgctxt "help:event.type.action,filter_on_event_object:"
 msgid ""
 "If checked, the pyson condition will apply on the original object of the "
@@ -393,6 +449,15 @@ msgstr ""
 "Si renseigné, un bouton avec le nom donné sera ajouté à la vue, ce qui "
 "permettra de mettre la tâche en suspens"
 
+msgctxt "help:process,postpone_button:"
+msgid ""
+"If not null, a button will be added on the view with the given name, which "
+"will allow to postpone the task in the future, and change the user."
+msgstr ""
+"Si renseigné, un bouton sera ajouté sur la vue avec le nom spécifié qui "
+"permettra de reporter la tâche à une date ultérieure. Il permettra également"
+" de réaffecter la tâche à un autre utilisateur."
+
 msgctxt "model:event.type,name:event_process_not_initiated"
 msgid "Process Not Initiated"
 msgstr "Processus non initié"
@@ -401,9 +466,21 @@ msgctxt "model:ir.action,name:act_end_process"
 msgid "End Process"
 msgstr "Fin du processus"
 
+msgctxt "model:ir.action,name:act_get_dates_for_timings"
+msgid "Process Timings"
+msgstr "Temps d'exécution"
+
+msgctxt "model:ir.action,name:act_postpone"
+msgid "Postpone"
+msgstr "Reporter"
+
 msgctxt "model:ir.action,name:act_resume_process"
 msgid "Resume Current Process"
 msgstr "Relancer le processus courant"
+
+msgctxt "model:ir.action,name:act_view_timings"
+msgid "View Process Timings"
+msgstr "Temps  d'exécution des processus"
 
 msgctxt "model:ir.ui.view.description,name:"
 msgid "View Description"
@@ -416,6 +493,18 @@ msgstr "Trace du processus"
 msgctxt "model:process.start,name:"
 msgid "Process Start"
 msgstr "Paramètres du Processus"
+
+msgctxt "model:process.view_timings.displayer,name:"
+msgid "Process Timing Displayer"
+msgstr "Temps d'exécution"
+
+msgctxt "model:process.view_timings.select_dates,name:"
+msgid "Process Timing Select Dates"
+msgstr "Choix de la période"
+
+msgctxt "model:task.postpone.parameters,name:"
+msgid "Postpone Parameters"
+msgstr "Paramètes du report"
 
 msgctxt "selection:ir.ui.view.description,input_mode:"
 msgid "Classic"
@@ -449,6 +538,10 @@ msgctxt "view:ir.ui.view.description:"
 msgid "View Descriptors"
 msgstr "Descripteurs de Vue"
 
+msgctxt "view:process-process.step:"
+msgid "Step"
+msgstr "Etape"
+
 msgctxt "view:process.log:"
 msgid "Log"
 msgstr "Trace"
@@ -465,6 +558,26 @@ msgctxt "view:process.step:"
 msgid "Custom Views"
 msgstr "Vues Personnalisées"
 
+msgctxt "view:process.view_timings.displayer:"
+msgid "Process Timings"
+msgstr "Temps d'exécution des processus"
+
+msgctxt "view:process.view_timings.select_dates:"
+msgid "Select Dates"
+msgstr "Sélectionner la période"
+
+msgctxt "view:process:"
+msgid "Process"
+msgstr "Processus"
+
+msgctxt "view:process:"
+msgid "Processes"
+msgstr "Processus"
+
+msgctxt "view:task.postpone.parameters:"
+msgid "Postpone Parameters"
+msgstr "Paramètres du report"
+
 msgctxt "wizard_button:ProcessFinder,process_parameters,action:"
 msgid "Start Process"
 msgstr "Démarrer le processus"
@@ -472,3 +585,28 @@ msgstr "Démarrer le processus"
 msgctxt "wizard_button:ProcessFinder,process_parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "wizard_button:process.get_dates_for_timings,select_dates,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:process.get_dates_for_timings,select_dates,get_timings:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:process.view_timings,timings,end:"
+msgid "Exit"
+msgstr "Terminer"
+
+msgctxt "wizard_button:process.view_timings,timings,select_dates:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:task.postpone,postpone_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:task.postpone,postpone_parameters,postpone:"
+msgid "Postpone"
+msgstr "Reporter"

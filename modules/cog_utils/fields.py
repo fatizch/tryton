@@ -53,6 +53,10 @@ class DateTime(tryton_fields.DateTime):
     pass
 
 
+class TimeDelta(tryton_fields.TimeDelta):
+    pass
+
+
 class Timestamp(tryton_fields.Timestamp):
     pass
 
