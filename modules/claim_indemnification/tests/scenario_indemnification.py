@@ -104,9 +104,10 @@ event_desc.save()
 Rule = Model.get('rule_engine')
 BenefitRule = Model.get('benefit.rule')
 benefit_rule = BenefitRule()
-benefit_rule.rule_extra_data = {}
-benefit_rule.rule, = Rule.find([('short_name', '=', 'simple_claim_rule')])
-benefit_rule.rule_extra_data = {'claim_amount': Decimal('42')}
+benefit_rule.indemnification_rule_extra_data = {}
+benefit_rule.indemnification_rule, = Rule.find([
+        ('short_name', '=', 'simple_claim_rule')])
+benefit_rule.indemnification_rule_extra_data = {'claim_amount': Decimal('42')}
 benefit_rule.offered = product
 
 contract_start_date = datetime.date(2012, 1, 1)

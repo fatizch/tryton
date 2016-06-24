@@ -136,7 +136,7 @@ class BenefitRule(
         new_args['date'] = previous_date
         new_args['start_date'] = previous_date
         new_args['end_date'] = indemnification.end_date
-        benefits = self.calculate_indemnification_rule(new_args)
+        benefits = self.calculate_indemnification_rule(new_args) or []
         for benefit in benefits:
             benefit['kind'] = 'benefit'
         res.extend(benefits)
