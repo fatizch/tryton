@@ -227,7 +227,9 @@ class ProcessLog(model.CoopSQL, model.CoopView):
 
     @classmethod
     def copy(cls, *args, **kwargs):
-        cls.raise_user_error('cannot_copy_logs')
+        if not ServerContext().get('allow_copy_logs', None):
+            cls.raise_user_error('cannot_copy_logs')
+        return super(ProcessLog, cls).copy(*args, **kwargs)
 
     def get_latest(self, name):
         return self.end_time is None
@@ -1439,7 +1441,8 @@ class PostponeTask(Wizard):
         defaults = {'start_time': params.new_date, 'end_time': None}
         if params.new_user:
             defaults['user'] = params.new_user.id
-        task.copy([task.id], default=defaults)
+        with ServerContext().set_context(allow_copy_logs=True):
+            task.copy([task.id], default=defaults)
         return 'end'
 
 
