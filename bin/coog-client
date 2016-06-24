@@ -34,15 +34,15 @@ coog_client_start() { # start client - [args] passed to tryton, loglevel NOT set
         then
                 local pid
                 pid=`_coog_client_pid 0`
-                if [ -e /proc/$pid ]
+                if [ ! -z $pid ] && [ -e /proc/$pid ]
                 then
-                        echo 'client already running -> stop or kill' && return
+                        echo 'client already running -> stop or kill' && return 1
                 else
                         rm $pid_file
                         _coog_client_bak $pid
                 fi
         else
-                [ -e $out_file ] && echo 'client log file exists -> clean manually' && return
+                [ -e $out_file ] && echo 'client log file exists -> clean manually' && return 1
         fi
         local args
         args=--dev
@@ -84,7 +84,7 @@ coog_client_kill() { # kill client process
 coog_client_ps() { # print client process info (based on ps)
         local pid
         pid=`_coog_client_pid 0`
-        [ -z $pid ] && echo no client running && return
+        [ -z $pid ] && echo no client running && return 1
         ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
 }
 
@@ -95,7 +95,7 @@ coog_client_status() { # print client status (errors based on logs)
         local err
         local wrn
         local inf
-        [ ! -e $out_file ] && echo no client log && return
+        [ ! -e $out_file ] && echo no client log && return 1
         cri=`grep -c "\bCRITICAL:\b" $out_file`
         err=`grep -c "\bERROR:\b" $out_file`
         wrn=`grep -c "\bWARNING:\b" $out_file`
@@ -106,26 +106,26 @@ coog_client_status() { # print client status (errors based on logs)
 coog_client_log() { # less client logs
         local out_file
         out_file=`_coog_client_file out`
-        [ ! -e $out_file ] && echo no client log && return
+        [ ! -e $out_file ] && echo no client log && return 1
         less $* $out_file
 }
 
 coog_client_head() { # head client logs
         local out_file
         out_file=`_coog_client_file out`
-        [ ! -e $out_file ] && echo no client log && return
+        [ ! -e $out_file ] && echo no client log && return 1
         head $* $out_file
 }
 
 coog_client_tail() { # tail client logs
         local out_file
         out_file=`_coog_client_file out`
-        [ ! -e $out_file ] && echo no client log && return
+        [ ! -e $out_file ] && echo no client log && return 1
         tail $* $out_file
 }
 
 coog_client_po() { # update client po file from source code [lang]
-        [ -z $1 ] && echo needs language to update - example: fr_FR && return
+        [ -z $1 ] && echo needs language to update - example: fr_FR && return 1
         local wd
         wd=`pwd`
         cd $COOG_TRYTON
@@ -136,7 +136,7 @@ coog_client_po() { # update client po file from source code [lang]
 }
 
 coog_client_mo() { # generates mo file in client [lang]
-        [ -z $1 ] && echo needs language to generate - example: fr_FR && return
+        [ -z $1 ] && echo needs language to generate - example: fr_FR && return 1
         local wd
         wd=`pwd`
         cd $COOG_TRYTON

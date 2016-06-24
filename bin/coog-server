@@ -50,15 +50,15 @@ coog_server_start() { # start server - [args] passed to trytond, logconf NOT set
         then
                 local pid
                 pid=`_coog_server_pid 0`
-                if [ -e /proc/$pid ]
+                if [ ! -z $pid ] && [ -e /proc/$pid ]
                 then
-                        echo 'server already running -> stop or kill' && return
+                        echo 'server already running -> stop or kill' && return 1
                 else
                         rm $pid_file
                         _coog_server_bak $pid
                 fi
         else
-                [ -e $out_file ] && echo 'server log file exists -> clean manually' && return
+                [ -e $out_file ] && echo 'server log file exists -> clean manually' && return 1
         fi
         nohup $COOG_BIN/watch $COOG_TRYTOND coog server interact &> $out_file &
         echo $! > $pid_file
@@ -103,7 +103,7 @@ coog_server_kill() { # kill server
 coog_server_ps() { # print server process info (based on ps)
         local pid
         pid=`_coog_server_pid 0`
-        [ -z $pid ] && echo no server running && return
+        [ -z $pid ] && echo no server running && return 1
         ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
 }
 
@@ -114,7 +114,7 @@ coog_server_status() { # print server status (errors based on logs)
         local err
         local wrn
         local inf
-        [ ! -e $out_file ] && echo no server log && return
+        [ ! -e $out_file ] && echo no server log && return 1
         cri=`grep -c "\bCRITICAL:\b" $out_file`
         err=`grep -c "\bERROR:\b" $out_file`
         wrn=`grep -c "\bWARNING:\b" $out_file`
@@ -125,21 +125,21 @@ coog_server_status() { # print server status (errors based on logs)
 coog_server_log() { # less server logs
         local out_file
         out_file=`_coog_server_file out`
-        [ ! -e $out_file ] && echo no server log && return
+        [ ! -e $out_file ] && echo no server log && return 1
         less $* $out_file
 }
 
 coog_server_head() { # head server logs
         local out_file
         out_file=`_coog_server_file out`
-        [ ! -e $out_file ] && echo no server log && return
+        [ ! -e $out_file ] && echo no server log && return 1
         head $* $out_file
 }
 
 coog_server_tail() { # tail server logs
         local out_file
         out_file=`_coog_server_file out`
-        [ ! -e $out_file ] && echo no server log && return
+        [ ! -e $out_file ] && echo no server log && return 1
         tail $* $out_file
 }
 
