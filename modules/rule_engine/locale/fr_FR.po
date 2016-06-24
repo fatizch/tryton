@@ -161,6 +161,10 @@ msgctxt "field:rule_engine,extra_data_kind:"
 msgid "Kind"
 msgstr "Type de donnée"
 
+msgctxt "field:rule_engine,functions_used:"
+msgid "Used Functions"
+msgstr "Fonctions utilisées"
+
 msgctxt "field:rule_engine,id:"
 msgid "ID"
 msgstr "ID"
@@ -266,6 +270,46 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine-rule_engine,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:rule_engine-rule_function,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:rule_engine-rule_function,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:rule_engine-rule_function,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine-rule_function,function:"
+msgid "Function"
+msgstr "Fonction"
+
+msgctxt "field:rule_engine-rule_function,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine-rule_function,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine-rule_function,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:rule_engine-rule_function,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine-rule_function,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:rule_engine-rule_function,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -456,6 +500,10 @@ msgstr "Nom"
 msgctxt "field:rule_engine.function,rule:"
 msgid "Rule"
 msgstr "Règle"
+
+msgctxt "field:rule_engine.function,rules:"
+msgid "Used in"
+msgstr "Utilisé par"
 
 msgctxt "field:rule_engine.function,translated_technical_name:"
 msgid "Translated technical name"
@@ -837,6 +885,10 @@ msgctxt "model:ir.action,name:act_rule_engine_log_relate_form"
 msgid "Rule Engine Logs"
 msgstr "Traces du moteur de règle"
 
+msgctxt "model:ir.action,name:act_rule_function_used_rule_form"
+msgid "Used in"
+msgstr "Utilisé par..."
+
 msgctxt "model:ir.action,name:act_test_case_init"
 msgid "Create Test Case"
 msgstr "Créer les jeux d'essai"
@@ -900,6 +952,10 @@ msgstr "Règle"
 msgctxt "model:rule_engine-rule_engine,name:"
 msgid "Rule Engine - Rule Engine"
 msgstr "Règle - Règle"
+
+msgctxt "model:rule_engine-rule_function,name:"
+msgid "Rule Engine Function Relation"
+msgstr "Relation Règle - Fonction"
 
 msgctxt "model:rule_engine-table,name:"
 msgid "Rule_Engine - Table"
@@ -988,6 +1044,10 @@ msgstr "Booléen"
 msgctxt "selection:rule_engine,result_type:"
 msgid "Date"
 msgstr "Date"
+
+msgctxt "selection:rule_engine,result_type:"
+msgid "Dictionnary"
+msgstr "Dictionnaire"
 
 msgctxt "selection:rule_engine,result_type:"
 msgid "List"

@@ -45,6 +45,7 @@ __all__ = [
     'Context',
     'RuleFunction',
     'ContextRuleFunction',
+    'RuleEngineFunctionRelation',
     'TestCase',
     'TestCaseValue',
     'RunTests',
@@ -675,7 +676,7 @@ class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
         cls.string.string = 'Name'
 
 
-class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
+class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
     "Rule"
     __name__ = 'rule_engine'
     _func_key = 'short_name'
@@ -733,6 +734,8 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
                 ~Eval('extra_data'),
                 )
             }, depends=['extra_data_kind', 'extra_data'])
+    functions_used = fields.Many2Many('rule_engine-rule_function', 'rule',
+        'function', 'Used Functions', readonly=True)
     extra_data = fields.Function(fields.Boolean('Display Extra Data'),
         'get_extra_data', 'setter_void')
     extra_data_kind = fields.Function(
@@ -796,9 +799,53 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
                 "'éèêàù-%+:. ', 'eeeau______')")
 
     @classmethod
-    def write(cls, rules, values):
+    def _export_skips(cls):
+        return super(RuleEngine, cls)._export_skips() + {'debug_mode',
+            'exec_logs', 'functions_used'}
+
+    @classmethod
+    def create(cls, vlist):
+        rules = super(RuleEngine, cls).create(vlist)
+        cls.update_functions_used(rules)
+        return rules
+
+    @classmethod
+    def write(cls, *args):
         cls._prepare_context_cache.clear()
-        super(RuleEngine, cls).write(rules, values)
+        super(RuleEngine, cls).write(*args)
+        cls.update_functions_used(sum(args[0::2], []))
+
+    @classmethod
+    def update_functions_used(cls, rules):
+        to_save = []
+        for rule in rules:
+            if rule.status != 'validated':
+                continue
+            old_elements = {x.id for x in rule.functions_used}
+            new_elements = set(rule.extract_functions_used())
+            if old_elements == new_elements:
+                continue
+            rule.functions_used = list(new_elements)
+            to_save.append(rule)
+        if to_save:
+            cls.save(to_save)
+
+    def extract_functions_used(self):
+        RuleFunction = Pool().get('rule_engine.function')
+        errors = check_code(self.execution_code)
+        elements = []
+        for error in errors:
+            assert not self.filter_errors(error)
+            if isinstance(error, WARNINGS):
+                continue
+            try:
+                element = RuleFunction.from_translated_name(
+                    error.message_args[0])
+            except KeyError:
+                # Not a rule function, either another rule / table
+                continue
+            elements.append(element.id)
+        return elements
 
     @classmethod
     def view_attributes(cls):
@@ -810,13 +857,6 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     @classmethod
     def is_master_object(cls):
         return True
-
-    @classmethod
-    def _export_skips(cls):
-        result = super(RuleEngine, cls)._export_skips()
-        result.add('debug_mode')
-        result.add('exec_logs')
-        return result
 
     @classmethod
     def _export_light(cls):
@@ -1328,9 +1368,13 @@ class RuleFunction(ModelView, ModelSQL):
     language = fields.Many2One('ir.lang', 'Language', required=True,
         ondelete='RESTRICT',)
     long_description = fields.Text('Long Description')
+    rules = fields.Many2Many('rule_engine-rule_function', 'function', 'rule',
+        'Used in', readonly=True)
     full_path = fields.Function(
         fields.Char('Full Path'),
         'get_full_path')
+
+    _by_translated_name = Cache('rule_functions_by_name', context=False)
 
     @classmethod
     def __setup__(cls):
@@ -1340,6 +1384,34 @@ class RuleFunction(ModelView, ModelSQL):
                 'Function arguments must only use ascii',
                 'name_accent_error': 'Technical name must only use ascii',
                 })
+
+    @classmethod
+    def _export_skips(cls):
+        return super(RuleFunction, cls)._export_skips() + {'rules'}
+
+    @classmethod
+    def create(cls, *args, **kwargs):
+        cls._by_translated_name.clear()
+        return super(RuleFunction, cls).create(*args, **kwargs)
+
+    @classmethod
+    def write(cls, *args, **kwargs):
+        cls._by_translated_name.clear()
+        return super(RuleFunction, cls).write(*args, **kwargs)
+
+    @classmethod
+    def delete(cls, *args, **kwargs):
+        cls._by_translated_name.clear()
+        return super(RuleFunction, cls).delete(*args, **kwargs)
+
+    @classmethod
+    def from_translated_name(cls, name):
+        data_dict = cls._by_translated_name.get(None, -1)
+        if data_dict == -1:
+            data_dict = {x.translated_technical_name: x.id
+                for x in cls.search([])}
+            cls._by_translated_name.set(None, data_dict)
+        return cls(data_dict[name])
 
     def check_arguments_accents(self):
         if not self.fct_args:
@@ -1429,6 +1501,17 @@ class ContextRuleFunction(ModelSQL):
         ondelete='CASCADE')
     tree_element = fields.Many2One('rule_engine.function', 'Rule Function',
         required=True, ondelete='CASCADE')
+
+
+class RuleEngineFunctionRelation(ModelSQL):
+    'Rule Engine Function Relation'
+
+    __name__ = 'rule_engine-rule_function'
+
+    rule = fields.Many2One('rule_engine', 'Rule', required=True, select=True,
+        ondelete='CASCADE')
+    function = fields.Many2One('rule_engine.function', 'Function',
+        required=True, ondelete='RESTRICT')
 
 
 class TestCaseValue(ModelView, ModelSQL):

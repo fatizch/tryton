@@ -18,6 +18,7 @@ def register():
         TestCaseValue,
         RuleFunction,
         ContextRuleFunction,
+        RuleEngineFunctionRelation,
         RunTestsReport,
         RuleError,
         ValidateRuleBatch,

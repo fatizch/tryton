@@ -174,6 +174,17 @@
             <field name="act_window" ref="tree_element_window"/>
         </record>
         <menuitem parent="menu_rule_engine" action="tree_element_window" id="menu_tree_element" icon="function"/>
+        <!-- Used by -->
+        <record model="ir.action.act_window" id="act_rule_function_used_rule_form">
+            <field name="name">Used in</field>
+            <field name="res_model">rule_engine</field>
+            <field name="domain" eval="[('functions_used', '=', Eval('active_id'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="rule_functions_usage_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">rule_engine.function,-1</field>
+            <field name="action" ref="act_rule_function_used_rule_form"/>
+        </record>
         <!-- ############################################################ -->
         <!-- Run Tests Wizard -->
         <!-- ############################################################ -->

@@ -1,3 +1,4 @@
+* Detect and store used functions in rules
 * Store execution context in rule engine log
 
 Version 1.6 - 2015-12-23
