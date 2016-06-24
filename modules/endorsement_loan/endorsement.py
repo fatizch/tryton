@@ -403,6 +403,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         ondelete='CASCADE', select=True)
     increments = fields.One2Many('endorsement.loan.increment',
         'loan_endorsement', 'Loan Increments', delete_missing=True)
+    extra_data = fields.Dict('extra_data', 'Extra Data')
     definition = fields.Function(
         fields.Many2One('endorsement.definition', 'Definition'),
         'get_definition')
@@ -428,6 +429,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
                 'msg_increment_modifications': 'Increments Modifications',
                 'msg_loan_modifications': 'Loan Modifications',
                 })
+        cls._endorsed_dicts = {'extra_data': 'extra_data'}
         cls.values.states = {
             'readonly': Eval('state') == 'applied',
             }

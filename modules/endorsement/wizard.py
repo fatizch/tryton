@@ -330,7 +330,7 @@ class EndorsementWizardStepMixin(model.CoopView):
                             'unsupported operation on XXX2Many : %s' % str(
                                 action_data))
                 setattr(endorsement, new_name, values)
-            elif isinstance(field, tryton_fields.Dict):
+            elif isinstance(field, tryton_fields.Dict) and v:
                 setattr(endorsement, endorsement._reversed_endorsed_dict[k], v)
             else:
                 new_values[k] = v

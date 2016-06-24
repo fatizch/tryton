@@ -605,7 +605,9 @@ def values_mixin(value_model):
             values = (self.values if self.values else {}).copy()
             for fname, target_fname in \
                     self.__class__._endorsed_dicts.iteritems():
-                values[target_fname] = getattr(self, fname, {}).copy()
+                new_value = getattr(self, fname, None)
+                if new_value:
+                    values[target_fname] = new_value.copy()
             return values
 
         def get_name_for_summary(self, field_, instance_id):
