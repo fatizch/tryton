@@ -88,6 +88,20 @@ coog_test_logclear() {
         rm -vf $COOG_TMP/$COOG_FILE_TEST*.out
 }
 
+coog_test_dropdb() { # drop test db from postgresql server
+        local vars
+        vars=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_TEST | python $COOG_BIN/parse-url.py` || return $?
+        export PGHOST=`echo "$vars" | sed -n 2p`
+        export PGPORT=`echo "$vars" | sed -n 3p`
+        export PGUSER=`echo "$vars" | sed -n 4p`
+        export PGPASSWORD=`echo "$vars" | sed -n 5p`
+        local db
+        for db in `psql -lX | grep "test_" | cut -f1 -d "|"`
+        do
+                dropdb -e $db
+        done
+}
+
 coog_test_py() { # launch py.test on a module - <module> - all (further args are fwded to py.test)
         [ $# -eq 0 ] && echo needs module name to test && return
         _coog_test_enter
