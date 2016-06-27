@@ -212,6 +212,9 @@ class ProcessLog(model.CoopSQL, model.CoopView):
             log_handler = TableHandler(cls, module)
             log = cls.__table__()
             cursor.execute(*log.update(columns=[log.end_time],
+                    values=[log.start_time],
+                    where=log.latest == Literal(False)))
+            cursor.execute(*log.update(columns=[log.end_time],
                     values=[Null], where=log.latest == Literal(True)))
             cursor.execute(*log.update(columns=[log.process_start],
                     values=[log.start_time]))
