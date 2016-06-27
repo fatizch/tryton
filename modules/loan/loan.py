@@ -1150,6 +1150,10 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_currency(self):
         return self.loan.currency
 
+    def get_begin_balance(self, name=None):
+        if self.outstanding_balance is not None and self.principal is not None:
+            return self.outstanding_balance + self.principal
+
     @classmethod
     def create_payment(cls, at_date, number, begin_balance, increment,
             payment_frequency, currency, is_last_payment):
@@ -1180,7 +1184,3 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
                 payment.amount += interest
         payment.outstanding_balance = payment.begin_balance - payment.principal
         return payment
-
-    def get_begin_balance(self, name=None):
-        if self.outstanding_balance is not None and self.principal is not None:
-            return self.outstanding_balance + self.principal
