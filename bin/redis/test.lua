@@ -7,6 +7,7 @@ Usage: only ARGV are used (no KEYS). Possible commands are:
 
   - help: print this text
   - list: list queue jobs - [filters]
+  - count: count queue jobs - [filters]
   - clear: clear queue jobs - [filters]
   - summary: print queue summary
   - key: print job key - <id>
@@ -180,6 +181,20 @@ api.list = function(...)
         end
     end
     return result
+end
+
+api.count = function(...)
+    local filter = create_filter(...)
+    local result = 0
+    local keys = redis.call('KEYS', PATTERN..'*')
+    for _, key in ipairs(keys) do
+        local id = key:sub(#PATTERN+1)
+        local job = prepare(id)
+        if is_eligible(job, filter) then
+            result = result + 1
+        end
+    end
+    return ''..result
 end
 
 api.clear = function(...)

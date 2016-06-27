@@ -108,7 +108,7 @@ coog_rq_qstart() { # start queue workers - <queue> <file> <concurrency>
                 i=$((i+1))
                 nohup rq worker --burst \
                         -u $TRYTOND_ASYNC_RQ \
-                        -n "$1"-"$i" $1 >> "$out_file" &
+                        -n "$1"-"$i" $1 &>> "$out_file" &
                 echo $! >> "$pid_file"
         done
 }

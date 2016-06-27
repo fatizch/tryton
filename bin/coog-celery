@@ -87,7 +87,7 @@ coog_celery_qstart() { # start queue workers - <name> <file> <concurrency>
                 --concurrency=$3 \
                 --pidfile=$pid_file \
                 --loglevel=$LOG_LEVEL \
-                --logfile=$out_file > $out_file &
+                --logfile=$out_file &> $out_file &
         sleep 1  # be sure that pidfile is filled
 }
 
