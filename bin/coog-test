@@ -123,3 +123,40 @@ coog_test_manual() { # interactively launch tests - <module> - default: all
         _coog_test_env || return $!
         run-tests.py -c $TRYTOND_CONFIG -vv -m $*
 }
+
+_coog_test_email() {
+        local email; email=$1; shift
+        local tree; tree=$1; shift
+        local module; module=$1; shift
+        local out; out=$1; shift
+        echo send email to $email to notify $tree has broken $module -- $out attached
+}
+
+coog_test_server5m() { # fetch, merge, and test each commit on changed modules
+        local lock
+        lock=/tmp/test-running
+        [ -e $lock ] && echo RUNNING && return
+        touch $lock
+        local origin
+        origin=`git rev-parse master`
+        echo SYNC
+        coog_code_foreach git fetch -p
+        coog_code_foreach git checkout master
+        coog_code_foreach git merge origin/master
+        for tree in `git rev-list "$origin"..master`
+        do
+                echo TEST $tree
+                git checkout $tree
+                local email
+                email=`git log -1 --pretty=tformat:%ae HEAD`
+                for module in `git diff --stat HEAD~ | grep "\bmodules" | cut -d "/" -f 2 | sort | uniq`
+                do
+                        echo TEST $tree:$module
+                        local out
+                        out=/tmp/test-$tree-$module
+                        coog_test_manual $module &> $out
+                        [ $? -ne 0 ] && coog_test_email $email $tree $module $out
+                done
+        done
+        rm $lock
+}
