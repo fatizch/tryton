@@ -835,7 +835,9 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
         errors = check_code(self.execution_code)
         elements = []
         for error in errors:
-            assert not self.filter_errors(error)
+            # JCA : Do not crash if the user is 0, for tests and module updates
+            if Transaction().user != 0:
+                assert not self.filter_errors(error), error
             if isinstance(error, WARNINGS):
                 continue
             try:
@@ -956,6 +958,7 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
             return True
 
     def check_code(self):
+        # JCA : Do not crash if the user is 0, for tests and module updates
         if Transaction().user == 0:
             return True
         errors = filter(lambda m: self.filter_errors(m),
