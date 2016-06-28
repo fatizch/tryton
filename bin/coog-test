@@ -175,12 +175,15 @@ coog_test_fullcheck() { # check and report a full test
         local out
         out=/tmp/test-`date +"%y%m%d-%H%M%S"`
         coog_test_query summary > $out
-        echo >> $out
-        coog_test_query list > $out
         local fail
         fail=`coog_test_query count fail`
+        if [ $fail -ne 0 ]
+        then
+                echo >> $out
+                coog_test_query list fail >> $out
+        fi
         echo TEST FULL: reports $fail fails
-        _coog_test_email dev@coopengo.com $fail-KO $out
+        _coog_test_email dev@coopengo.com "test-report-$fails-fails" $out
         coog_test_query backup
         coog_test_stop
 }
