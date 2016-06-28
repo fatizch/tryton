@@ -4,6 +4,7 @@
 coog_test_manual() { # interactively launch tests - <module> - default: all
         unset TRYTOND_CONFIG
         unset DB_NAME
+        unset TRYTOND_CACHE_REDIS
         run-tests.py -c $COOG_CONF_TEST -vv -m $*
 }
 
@@ -33,6 +34,7 @@ coog_test_start() { # start test workers - <concurrency>
         [ ! -e $TRYTOND_CONFIG ] && echo bad conf file && return 1
         export TRYTOND_CONFIG
         unset DB_NAME
+        unset TRYTOND_CACHE_REDIS
         coog_rq_qstart test $COOG_TMP/$COOG_FILE_TEST $1
 }
 
