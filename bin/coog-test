@@ -1,6 +1,12 @@
 # vim: set ft=sh:
 # test management
 
+coog_test_manual() { # interactively launch tests - <module> - default: all
+        unset TRYTOND_CONFIG
+        unset DB_NAME
+        run-tests.py -c $COOG_CONF_TEST -vv -m $*
+}
+
 _coog_test_modules() { # list all linked modules
         for f in $COOG_TRYTOND/trytond/modules/*
         do
@@ -8,16 +14,7 @@ _coog_test_modules() { # list all linked modules
         done
 }
 
-_coog_test_env() { # set test env
-        TRYTOND_CONFIG=$COOG_CONF_TEST
-        [ -z $TRYTOND_CONFIG ] && echo "missing conf file" && return 1
-        TRYTOND_DATABASE_URI=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_TEST 2> /dev/null`
-        [ $? -ne 0 ] && unset TRYTOND_DATABASE_URI
-        unset DB_NAME
-}
-
 coog_test_generate() { # generate test jobs - [module*]
-        _coog_test_env || return $!
         local modules
         if [ $# -eq 0 ]
         then
@@ -30,11 +27,18 @@ coog_test_generate() { # generate test jobs - [module*]
 
 coog_test_start() { # start test workers - <concurrency>
         [ -z $1 ] && echo missing workers number && return 1
-        _coog_test_env || return $!
+        [ $1 -eq $1 ] || return 1
+        TRYTOND_CONFIG=$COOG_CONF_TEST
+        [ -z $TRYTOND_CONFIG ] && echo missing conf file && return 1
+        [ ! -e $TRYTOND_CONFIG ] && echo bad conf file && return 1
+        export TRYTOND_CONFIG
+        unset DB_NAME
         coog_rq_qstart test $COOG_TMP/$COOG_FILE_TEST $1
 }
 
 coog_test_exec() { # exec tests - <concurrency> [module*]
+        [ -z $1 ] && echo missing workers number && return 1
+        [ $1 -eq $1 ] || return 1
         local nb; nb=$1; shift
         coog_test_generate $*
         coog_test_start $nb
@@ -102,86 +106,72 @@ coog_test_dropdb() { # drop test db from postgresql server
         done
 }
 
-coog_test_py() { # launch py.test on a module - <module> - all (further args are fwded to py.test)
-        [ $# -eq 0 ] && echo needs module name to test && return
-        _coog_test_enter
-        local old_wd
-        old_wd=`pwd`
-        cd $COOG_TRYTOND/trytond/modules
-        local module
-        module=$1
-        shift 1
-        if [ ! -d $module ]
-        then
-                echo module not found && cd $old_wd && return
-        fi
-        py.test $module --ignore=$module/test_case.py --doctest-glob=scenario*.rst $*
-        cd $old_wd
-}
-
-coog_test_manual() { # interactively launch tests - <module> - default: all
-        _coog_test_env || return $!
-        run-tests.py -c $TRYTOND_CONFIG -vv -m $*
-}
-
 _coog_test_email() {
         local email; email=$1; shift
         local subject; subject=$1: shift
         local content; content=$1; shift
-        echo mailto: $email
-        echo subject: $subject
-        echo $content
+        echo TEST EMAIL: mailto: $email - subject: $subject - content: @$content
 }
 
 coog_test_commits() { # fetch, merge, and test each commit on changed modules
+        echo TEST COMMITS: start @ `date +"%H:%M:%S"`
         local lock
         lock=/tmp/test-running
-        [ -e $lock ] && echo RUNNING && return
+        [ -e $lock ] && echo TEST COMMITS: running -\> leave && return
         touch $lock
         local origin
         origin=`git rev-parse master`
-        echo SYNC
-        coog_code_foreach git fetch -p
-        coog_code_foreach git checkout master
-        coog_code_foreach git merge origin/master
-        coog_code_foreach git submodule update
+        coog_code_foreach git fetch -q -p
+        coog_code_foreach git checkout -q master
+        coog_code_foreach git merge -q --no-edit origin/master
+        coog_code_foreach git submodule -q update
         for tree in `git rev-list "$origin"..master`
         do
-                echo TEST $tree
+                echo TEST COMMITS: commit - $tree
                 git checkout $tree
                 local email
                 email=`git log -1 --pretty=tformat:%ae HEAD`
                 for module in `git diff --stat HEAD~ | grep "\bmodules" | cut -d "/" -f 2 | sort | uniq`
                 do
-                        echo TEST $tree:$module
+                        echo TEST COMMITS: module - $module
                         local out
                         out=/tmp/test-$tree-$module
                         coog_test_manual $module &> $out
-                        [ $? -ne 0 ] && _coog_test_email $email $tree-$module:KO $out
+                        if [ $? -ne 0 ]
+                        then
+                                echo TEST COMMITS: test ko
+                                _coog_test_email $email $tree-$module:KO $out
+                        else
+                                echo TEST COMMITS: test ok
+                        fi
                 done
         done
         rm $lock
 }
 
 coog_test_fullstart() { # starts a full test
-        coog_code_foreach git fetch -p
-        coog_code_foreach git checkout master
-        coog_code_foreach git merge origin/master
-        coog_code_foreach git submodule update
+        echo TEST FULL: start @ `date +"%H:%M:%S"`
+        coog_code_foreach git fetch -q -p
+        coog_code_foreach git checkout -q master
+        coog_code_foreach git merge -q --no-edit origin/master
+        coog_code_foreach git submodule -q update
         coog_test_exec $*
 }
 
 coog_test_fullcheck() { # check and report a full test
-        local wait
-        wait=`coog_test_query count wait`
-        [ $wait -gt 0 ] && return
+        echo TEST FULL: check @ `date +"%H:%M:%S"`
+        local a; a=`coog_test_query count`
+        local w; w=`coog_test_query count wait`
+        [ $a -eq 0 ] && echo TEST FULL: no jobs -\> leave && return
+        [ $w -ne 0 ] && echo TEST FULL: still running -\> leave && return
         local out
-        out=test-`date +"%H:%M:%S"`
+        out=/tmp/test-`date +"%H:%M:%S"`
         coog_test_query summary > $out
         echo >> $out
         coog_test_query list > $out
         local fail
         fail=`coog_test_query count fail`
+        echo TEST FULL: reports $fail fails
         _coog_test_email all $fail-KO $out
         coog_test_query clear
 }

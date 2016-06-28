@@ -63,7 +63,6 @@ coog_code_foreach() { # exec command on each repo <command>
                 cd $folder
                 echo $repo
                 $*
-                echo
         done
         cd $wd
 }

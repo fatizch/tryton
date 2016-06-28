@@ -149,8 +149,6 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    COOG_FILE_CEL          "$COOG_FILE_CEL
         echo "    COOG_FILE_BAT          "$COOG_FILE_BAT
         echo "    COOG_FILE_TEST         "$COOG_FILE_TEST
-        echo "    COOG_FILE_WATCH        "$COOG_FILE_WATCH
-        echo "    COOG_TMP               "$COOG_TMP
         echo "    COOG_ROOT              "$COOG_ROOT
         echo "    COOG_TRYTON            "$COOG_TRYTON
         echo "    COOG_TRYTOND           "$COOG_TRYTOND
@@ -182,6 +180,8 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    TRYTOND_ASYNC_CELERY   "$TRYTOND_ASYNC_CELERY
         echo "    TRYTOND_PERF_BROKER    "$TRYTOND_PERF_BROKER
         echo "    TRYTOND_BATCH_CONFIG   "$TRYTOND_BATCH_CONFIG
+        echo "    COOG_FILE_WATCH        "$COOG_FILE_WATCH
+        echo "    COOG_TMP               "$COOG_TMP
 }
 
 coog_env_config() { # print conf file <client|server|batch|test|log>

@@ -24,5 +24,4 @@ def test(module, options=None):
             'errors': len(result.errors), 'fails': len(result.failures),
             'details': '\n\n'.join('%s\n%s' % (repr(x[0]), x[1])
                 for x in result.failures)})
-
     assert result.wasSuccessful()
