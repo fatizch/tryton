@@ -44,7 +44,7 @@ coog_repo_linkm() { # link repos modules - <repos> - default: all
         local repos
         local repo
         repos=`_coog_repo_link_repos $*`
-        _coog_repo_enter_modules
+        _coog_repo_enter_modules || return 1
         [ $# -eq 0 ] && _coog_repo_rm
         for repo in $repos
         do
@@ -57,7 +57,7 @@ coog_repo_linkp() { # link repos plugins - <repos> - default: all
         local repos
         local repo
         repos=`_coog_repo_link_repos $*`
-        _coog_repo_enter_plugins
+        _coog_repo_enter_plugins || return 1
         [ $# -eq 0 ] && _coog_repo_rm
         for repo in $repos
         do
@@ -72,13 +72,13 @@ coog_repo_link() { # link repos - <repos> - default: all
 }
 
 coog_repo_unlinkm() { # unlink all repos modules
-        _coog_repo_enter_modules
+        _coog_repo_enter_modules || return 1
         _coog_repo_rm
         _coog_repo_leave
 }
 
 coog_repo_unlinkp() { # unlink all repos plugins
-        _coog_repo_enter_plugins
+        _coog_repo_enter_plugins || return 1
         _coog_repo_rm
         _coog_repo_leave
 }

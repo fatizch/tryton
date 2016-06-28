@@ -114,7 +114,7 @@ _coog_test_email() {
 }
 
 coog_test_commits() { # fetch, merge, and test each commit on changed modules
-        echo TEST COMMITS: start @ `date +"%H:%M:%S"`
+        echo TEST COMMITS: start @ `date +"%y-%m-%d %H:%M:%S"`
         local lock
         lock=/tmp/test-running
         [ -e $lock ] && echo TEST COMMITS: running -\> leave && return
@@ -150,7 +150,7 @@ coog_test_commits() { # fetch, merge, and test each commit on changed modules
 }
 
 coog_test_fullstart() { # starts a full test
-        echo TEST FULL: start @ `date +"%H:%M:%S"`
+        echo TEST FULL: start @ `date +"%y-%m-%d %H:%M:%S"`
         coog_code_foreach git fetch -q -p
         coog_code_foreach git checkout -q master
         coog_code_foreach git merge -q --no-edit origin/master
@@ -159,13 +159,13 @@ coog_test_fullstart() { # starts a full test
 }
 
 coog_test_fullcheck() { # check and report a full test
-        echo TEST FULL: check @ `date +"%H:%M:%S"`
+        echo TEST FULL: check @ `date +"%y-%m-%d %H:%M:%S"`
         local a; a=`coog_test_query count`
         local w; w=`coog_test_query count wait`
         [ $a -eq 0 ] && echo TEST FULL: no jobs -\> leave && return
         [ $w -ne 0 ] && echo TEST FULL: still running -\> leave && return
         local out
-        out=/tmp/test-`date +"%H:%M:%S"`
+        out=/tmp/test-`date +"%y%m%d-%H%M%S"`
         coog_test_query summary > $out
         echo >> $out
         coog_test_query list > $out
