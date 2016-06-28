@@ -161,6 +161,14 @@ msgctxt "field:process,end_step_name:"
 msgid "End Step Name"
 msgstr "Nom de l'étape de fin"
 
+msgctxt "field:process,hide_main_menu:"
+msgid "Hide main menu"
+msgstr "Cacher le menu"
+
+msgctxt "field:process,hide_main_toolbar:"
+msgid "Hide main toolbar"
+msgstr "Cacher la barre d'actions"
+
 msgctxt "field:process,hold_button:"
 msgid "Hold Button Name"
 msgstr "Nom du bouton \"Suspendre\""
@@ -440,6 +448,14 @@ msgid ""
 msgstr ""
 "Si renseigné, un bouton avec le nom donné sera ajouté à la vue, ce qui "
 "permettra de supprimer la tâche"
+
+msgctxt "help:process,hide_main_menu:"
+msgid "If True, the main menu will be hidden when inside the processus"
+msgstr "Si vrai, le menu principal sera caché pendant le processus"
+
+msgctxt "help:process,hide_main_toolbar:"
+msgid "If True, the main toolbar will be hidden when inside the processus"
+msgstr "Si vrai, la barre d'action sera cachée pendant le processus"
 
 msgctxt "help:process,hold_button:"
 msgid ""

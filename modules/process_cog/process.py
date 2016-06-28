@@ -555,6 +555,11 @@ class Process(model.CoopSQL, model.TaggedMixin):
     postpone_button = fields.Char('Postpone Button Name', help='If not null, a'
         ' button will be added on the view with the given name, which will '
         'allow to postpone the task in the future, and change the user.')
+    hide_main_toolbar = fields.Boolean('Hide main toolbar',
+        help='If True, the main toolbar will be hidden when inside the '
+        'processus')
+    hide_main_menu = fields.Boolean('Hide main menu',
+        help='If True, the main menu will be hidden when inside the processus')
     average_run_time = fields.Function(
         fields.TimeDelta('Average Run Time'),
         'get_average_run_time')
@@ -585,6 +590,14 @@ class Process(model.CoopSQL, model.TaggedMixin):
     @classmethod
     def _post_import(cls, processes):
         cls.update_view(processes)
+
+    def get_action_context(self):
+        context = super(Process, self).get_action_context()
+        if self.hide_main_menu:
+            context['disable_main_menu'] = True
+        if self.hide_main_toolbar:
+            context['disable_main_toolbar'] = True
+        return context
 
     @classmethod
     def default_with_prev_next(cls):

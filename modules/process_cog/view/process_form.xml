@@ -24,5 +24,9 @@
         <field name="hold_button"/>
         <label name="postpone_button"/>
         <field name="postpone_button"/>
+        <label name="hide_main_menu"/>
+        <field name="hide_main_menu"/>
+        <label name="hide_main_toolbar"/>
+        <field name="hide_main_toolbar"/>
     </xpath>
 </data>
