@@ -1,6 +1,8 @@
+import lxml
 import pydot
 import inspect
 import ast
+import json
 from unidecode import unidecode
 
 from trytond.model import ModelView, ModelSQL, Unique
@@ -281,8 +283,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
             good_action = ActWin()
         good_action.name = self.fancy_name
         good_action.res_model = self.on_model.model
-        good_action.context = '{"running_process": "%s"}' % (
-            self.technical_name)
+        good_action.context = json.dumps(self.get_action_context())
         good_action.domain = '[["current_state", "in", [%s]]]' % (
             ','.join(map(lambda x: str(x.id), self.all_steps)))
         good_action.sequence = 10
@@ -302,10 +303,13 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
 
         return good_action
 
+    def get_action_context(self):
+        return {"running_process": "%s" % self.technical_name}
+
     def get_xml_header(self, colspan="4"):
         xml = ''
         if hasattr(self, 'xml_header') and self.xml_header:
-            xml += ('<group id="process_header" colspan="%s" string=" ">'
+            xml += ('<group id="process_header" colspan="%s" string="">'
                 % colspan)
             xml += self.xml_header
             xml += '</group>'
@@ -351,8 +355,9 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
 
         xml = ''
         if auth_pyson:
+            xml += '<newline/>'
             xml += '<group id="group_%s_noauth" ' % step.technical_name
-            xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1" '
+            xml += 'yfill="1" yexpand="1" '
             xml += 'states="{'
             xml += "&quot;invisible&quot;: %s" % invisible_def
             xml += '}">'
@@ -391,7 +396,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         for step_relation in self.all_steps:
             xml += '<newline/>'
             xml += self.build_step_group_header(
-                step_relation, col=step_relation.step.colspan, string=" ")
+                step_relation, col=step_relation.step.colspan, string="")
             xml += step_relation.step.calculate_form_view(self)
             xml += '</group>'
             xml += self.build_step_auth_group_if_needed(step_relation)
@@ -430,7 +435,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
     def get_xml_footer(self, colspan=4):
         xml = ''
         if hasattr(self, 'xml_footer') and self.xml_footer:
-            xml = ('<group id="process_footer" colspan="%s" string=" ">'
+            xml = ('<group id="process_footer" colspan="%s" string="">'
                 % colspan)
             xml += self.xml_footer
             xml += '</group>'
@@ -460,7 +465,9 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         xml += '<newline/>'
         xml += self.get_xml_footer()
         xml += '</form>'
-        return xml
+        # Prettify xml to ease reading
+        return lxml.etree.tostring(lxml.etree.fromstring(xml),
+            pretty_print=True)
 
     def build_xml_tree_view(self):
         xml = '<?xml version="1.0"?>'
