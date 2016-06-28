@@ -6,13 +6,15 @@ local _USAGE = [[
 Usage: only ARGV are used (no KEYS). Possible commands are:
 
   - help: print this text
-  - list: list queue jobs - [filters]
-  - count: count queue jobs - [filters]
-  - clear: clear queue jobs - [filters]
-  - summary: print queue summary
   - key: print job key - <id>
   - show: show job - <id>
+  - list: list queue jobs - [filters]
+  - count: count queue jobs - [filters]
+  - summary: print queue summary
   - remove: remove job - <id>
+  - clear: remove queue jobs - [filters]
+  - archive: archive job - <id>
+  - backup: archive queue jobs - [filters]
 ]]
 
 -- utils
@@ -55,10 +57,6 @@ local function prepare(id)
         job.status = status
     end
     return job
-end
-
-local function dequeue(q)
-    redis.call('DEL', 'rq:queue:'..q)
 end
 
 local function parse_date(d)
@@ -106,6 +104,12 @@ local function fill(id, job)
     end
 end
 
+local function dequeue()
+    local q = 'rq:queue:'..QUEUE
+    redis.call('DEL', q)
+    redis.call('SREM', 'rq:queues', q)
+end
+
 -- helpers
 
 local function show(id)
@@ -126,6 +130,11 @@ end
 local function remove(id)
     redis.call('DEL', PATTERN..id)
     return string.format('deleted %s', id)
+end
+
+local function archive(id)
+    redis.call('HSET', PATTERN..id, 'status', 'archive')
+    return string.format('archived %s', id)
 end
 
 local function generate_job_api(fn)
@@ -155,6 +164,16 @@ local api = {}
 api.help = function()
     return string.format('%s: %s\n\n%s', _NAME, _DESCRIPTION, _USAGE)
 end
+
+api.key = function(id)
+    assert(id, 'missing job id')
+    local keys = redis.call('KEYS', PATTERN..id..'*')
+    if #keys == 1 then
+        return keys[1]
+    end
+end
+
+api.show = generate_job_api(show)
 
 api.list = function(...)
     local filter = create_filter(...)
@@ -197,24 +216,6 @@ api.count = function(...)
     return ''..result
 end
 
-api.clear = function(...)
-    local filter = create_filter(...)
-    if filter[STATUS[1]] then
-        dequeue(QUEUE)
-    end
-    local result = 0
-    local keys = redis.call('KEYS', PATTERN..'*')
-    for _, key in ipairs(keys) do
-        local id = key:sub(#PATTERN+1)
-        local job = prepare(id)
-        if is_eligible(job, filter) then
-            result = result + 1
-            remove(id)
-        end
-    end
-    return string.format('%d jobs removed', result)
-end
-
 api.summary = function()
     local filter = create_filter()
     local wait = 0
@@ -252,16 +253,45 @@ api.summary = function()
     return ret_pattern:format(wait, success, fail, hr, mn, se)
 end
 
-api.key = function(id)
-    assert(id, 'missing job id')
-    local keys = redis.call('KEYS', PATTERN..id..'*')
-    if #keys == 1 then
-        return keys[1]
+api.remove = generate_job_api(remove)
+
+api.clear = function(...)
+    local filter = create_filter(...)
+    if filter[STATUS[1]] then
+        dequeue()
     end
+    local result = 0
+    local keys = redis.call('KEYS', PATTERN..'*')
+    for _, key in ipairs(keys) do
+        local id = key:sub(#PATTERN+1)
+        local job = prepare(id)
+        if is_eligible(job, filter) then
+            result = result + 1
+            remove(id)
+        end
+    end
+    return string.format('%d jobs removed', result)
 end
 
-api.show = generate_job_api(show)
-api.remove = generate_job_api(remove)
+api.archive = generate_job_api(archive)
+
+api.backup = function(...)
+    local filter = create_filter(...)
+    if filter[STATUS[1]] then
+        dequeue()
+    end
+    local result = 0
+    local keys = redis.call('KEYS', PATTERN..'*')
+    for _, key in ipairs(keys) do
+        local id = key:sub(#PATTERN+1)
+        local job = prepare(id)
+        if is_eligible(job, filter) then
+            result = result + 1
+            archive(id)
+        end
+    end
+    return string.format('%d jobs archived', result)
+end
 
 -- main
 
