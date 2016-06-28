@@ -1,3 +1,5 @@
+import datetime
+
 from trytond.pool import PoolMeta
 
 from trytond.modules.rule_engine import check_args
@@ -39,6 +41,14 @@ class RuleEngineRuntime:
     @check_args('loss')
     def _re_loss_start_date(cls, args):
         return args['loss'].start_date
+
+    @classmethod
+    @check_args('claim')
+    def _re_last_loss_end_date(cls, args):
+        res = datetime.date.min
+        for loss in args['claim'].losses:
+            res = max(loss.end_date or datetime.date.min, res)
+        return res if res != datetime.date.min else None
 
     @classmethod
     @check_args('loss')
