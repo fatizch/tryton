@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="event.type" id="event_accept_service">
+            <field name="name">Accept Claim Service</field>
+            <field name="code">accept_claim_service</field>
+        </record>
+        <record model="event.type" id="event_reactivate_contract">
+            <field name="name">Refuse Claim Service</field>
+            <field name="code">refuse_claim_service</field>
+        </record>
+    </data>
+</tryton>

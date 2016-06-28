@@ -7,5 +7,6 @@ def register():
     Pool.register(
         Benefit,
         BenefitEligibilityRule,
-        Loss,
+        Claim,
+        ClaimService,
         module='claim_eligibility', type_='model')

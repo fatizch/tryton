@@ -38,7 +38,5 @@ class BenefitEligibilityRule(
         cls.rule.domain = [('type_', '=', 'benefit')]
 
     def check_eligibility(self, exec_context):
-        res, error_message = self.calculate_rule(exec_context)
-        if not res:
-            self.raise_user_error(error_message)
-        return res
+        res = self.calculate_rule(exec_context, return_full=True)
+        return res.result, '\n'.join(res.print_info())

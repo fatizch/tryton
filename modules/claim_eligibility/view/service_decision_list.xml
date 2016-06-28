@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tree string="Claim Service">
+    <field name='loss_summary'/>
+    <field name='benefit_summary'/>
+    <field name='eligibility_status'/>
+    <field name='eligibility_comment_wrapped'/>
+</tree>

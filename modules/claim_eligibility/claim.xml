@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="claim_service_decision_view_list">
+            <field name="model">claim.service</field>
+            <field name="type">tree</field>
+            <field name="name">service_decision_list</field>
+        </record>
+    </data>
+</tryton>

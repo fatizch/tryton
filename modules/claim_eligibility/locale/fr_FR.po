@@ -22,10 +22,6 @@ msgctxt "field:benefit.eligibility.rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:benefit.eligibility.rule,func_key:"
-msgid "Functional Key"
-msgstr "Clé fonctionnelle"
-
 msgctxt "field:benefit.eligibility.rule,id:"
 msgid "ID"
 msgstr "ID"
@@ -54,9 +50,41 @@ msgctxt "field:benefit.eligibility.rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:claim.service,eligibility_comment:"
+msgid "Eligibility Comment"
+msgstr "Commentaire"
+
+msgctxt "field:claim.service,eligibility_comment_wrapped:"
+msgid "Eligibility Comment"
+msgstr "Commentaire"
+
+msgctxt "field:claim.service,eligibility_status:"
+msgid "Eligibility Status"
+msgstr "Statut des droits"
+
 msgctxt "model:benefit.eligibility.rule,name:"
 msgid "Benefit Eligibility Rule"
 msgstr "Règle d'éligibilité"
+
+msgctxt "model:event.type,name:event_accept_service"
+msgid "Accept Claim Service"
+msgstr "Accepter la prestation"
+
+msgctxt "model:event.type,name:event_reactivate_contract"
+msgid "Refuse Claim Service"
+msgstr "Refuser la prestation"
+
+msgctxt "selection:claim.service,eligibility_status:"
+msgid "Accepted"
+msgstr "Accepté"
+
+msgctxt "selection:claim.service,eligibility_status:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:claim.service,eligibility_status:"
+msgid "Study In Progress"
+msgstr "Etude en cours"
 
 msgctxt "view:benefit.eligibility.rule:"
 msgid "Benefit Eligibility Rule"
@@ -69,3 +97,7 @@ msgstr "Règles d'éligibilité"
 msgctxt "view:benefit:"
 msgid "Eligibility"
 msgstr "Eligibilité"
+
+msgctxt "view:claim.service:"
+msgid "Claim Service"
+msgstr "Prestation fournie"
