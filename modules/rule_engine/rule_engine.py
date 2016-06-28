@@ -210,10 +210,13 @@ def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
     setattr(BaseRuleMixin, extra_name + '_string',
         rule_extra_data.translated(extra_name))
 
-    def calculate(self, args):
+    def calculate(self, args, return_full=False):
         rule = getattr(self, field_name, None)
         if rule:
-            return rule.execute(args, getattr(self, extra_name)).result
+            res = rule.execute(args, getattr(self, extra_name))
+            if return_full:
+                return res
+            return res.result
 
     setattr(BaseRuleMixin, 'calculate_' + field_name, calculate)
 
