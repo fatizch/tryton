@@ -803,7 +803,7 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
 
     @classmethod
     def _export_skips(cls):
-        return super(RuleEngine, cls)._export_skips() + {'debug_mode',
+        return super(RuleEngine, cls)._export_skips() | {'debug_mode',
             'exec_logs', 'functions_used'}
 
     @classmethod
@@ -1393,7 +1393,7 @@ class RuleFunction(ModelView, ModelSQL):
 
     @classmethod
     def _export_skips(cls):
-        return super(RuleFunction, cls)._export_skips() + {'rules'}
+        return super(RuleFunction, cls)._export_skips() | {'rules'}
 
     @classmethod
     def create(cls, *args, **kwargs):
