@@ -33,7 +33,7 @@ class ClaimService:
     eligibility_comment = fields.Char('Eligibility Comment')
     eligibility_comment_wrapped = fields.Function(
         fields.Text('Eligibility Comment'),
-        'on_change_with_comment_wrapped')
+        'on_change_with_eligibility_comment_wrapped')
 
     @classmethod
     def __setup__(cls):
@@ -59,7 +59,7 @@ class ClaimService:
         return TextWrapper(width=79)
 
     @fields.depends('eligibility_comment')
-    def on_change_with_comment_wrapped(self, name=None):
+    def on_change_with_eligibility_comment_wrapped(self, name=None):
         if not self.eligibility_comment:
             return ''
         wrapper = self.get_wrapper()
