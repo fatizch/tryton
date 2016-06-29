@@ -1226,8 +1226,6 @@ class Contract:
             for line in invoice['details']:
                 if line['premium'] is None:
                     continue
-                if not isinstance(line['premium'], int):
-                    continue
                 line['premium'] = premium_per_id[line['premium']]
         return invoices
 

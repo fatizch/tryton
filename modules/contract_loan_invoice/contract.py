@@ -33,8 +33,6 @@ class Contract:
                 for line in invoice['details']:
                     if line['loan'] is None:
                         continue
-                    if not isinstance(line['loan'], int):
-                        continue
                     line['loan'] = loan_per_id[line['loan']]
         return invoices
 
