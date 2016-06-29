@@ -110,9 +110,9 @@ coog_test_dropdb() { # drop test db from postgresql server
 
 _coog_test_email() {
         local email; email=$1; shift
-        local subject; subject=$1; shift
         local content; content=$1; shift
-        python $COOG_BIN/sendemail.py -fe test@coopengo.com -te $email -s $subject < $content
+        local subject; subject=$*
+        python $COOG_BIN/sendemail.py -fe test@coopengo.com -te $email -s "$subject" < $content
         if [ $? -eq 0 ]
         then
                 echo TEST EMAIL: sent $subject to $email
@@ -150,7 +150,7 @@ coog_test_commits() { # fetch, merge, and test each commit on changed modules
                         if [ $? -ne 0 ]
                         then
                                 echo TEST COMMITS: test ko
-                                _coog_test_email $email "Test KO for $module after ${tree:0:8}" $out
+                                _coog_test_email $email $out Test KO for $module after ${tree:0:8}
                         else
                                 echo TEST COMMITS: test ok
                         fi
@@ -187,7 +187,7 @@ coog_test_fullcheck() { # check and report a full test
         fi
         echo '</pre>' >> $out
         echo TEST FULL: reports $fail fails
-        _coog_test_email dev@coopengo.com "Test Report: $fail fails" $out
+        _coog_test_email dev@coopengo.com $out Test Report: $fail fails
         coog_test_query backup
         coog_test_stop
 }
