@@ -187,6 +187,17 @@ coog_test_fullcheck() { # check and report a full test
         then
                 echo >> $out
                 coog_test_query list fail >> $out
+                local head; head=1
+                coog_test_query list fail |
+                while IFS= read -r f
+                do
+                        [ $head -eq 1 ] && head=0 && continue
+                        echo >> $out
+                        local id
+                        id=`echo $f | cut -d " " -f 4`
+                        coog_test_query show $id >> $out
+                done
+
         fi
         echo '</pre>' >> $out
         echo TEST FULL: end - $fail fails
