@@ -79,36 +79,42 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     }])
         log1, log2, log3, log4, log5 = self.ProcessLog.create([{
                     'user': user1.id,
-                    'to_state': step1,
+                    'from_state': step1,
+                    'process_start': datetime(2014, 1, 1),
                     'start_time': datetime(2014, 1, 1),
-                    'latest': True,
-                    'locked': False,
+                    'end_time': None,
                     'task': '%s,%s' % (self.ProcessTestModel.__name__,
                         test1.id)
                     }, {
                     'user': user1.id,
-                    'to_state': step1,
+                    'from_state': step1,
+                    'process_start': datetime(2013, 1, 1),
                     'start_time': datetime(2013, 1, 1),
-                    'latest': False,
-                    'locked': False,
+                    'end_time': datetime(2013, 1, 1),
                     'task': '%s,%s' % (self.ProcessTestModel.__name__,
                         test1.id)
                     }, {
                     'user': user1.id,
-                    'to_state': step2,
+                    'from_state': step2,
+                    'process_start': datetime(2014, 1, 1),
                     'start_time': datetime(2014, 1, 1),
+                    'end_time': None,
                     'task': '%s,%s' % (self.ProcessTestModel.__name__,
                         test2.id)
                     }, {
                     'user': user1.id,
-                    'to_state': step1,
+                    'from_state': step1,
+                    'process_start': datetime(2014, 1, 2),
                     'start_time': datetime(2014, 1, 2),
+                    'end_time': None,
                     'task': '%s,%s' % (self.ProcessTestModel.__name__,
                         test3.id)
                     }, {
                     'user': user2.id,
-                    'to_state': step1,
+                    'from_state': step1,
+                    'process_start': datetime(2014, 1, 1),
                     'start_time': datetime(2014, 1, 1),
+                    'end_time': None,
                     'task': '%s,%s' % (self.ProcessTestModel.__name__,
                         test1.id)
                     }])
