@@ -102,8 +102,10 @@ class StartEndorsement:
 
     def transition_start(self):
         if Transaction().context.get('active_model') == 'endorsement':
-            endorsement = Pool().get('endorsement')(
-                Transaction().context.get('active_id'))
+            active_id = Transaction().context.get('active_id')
+            if not active_id:
+                return 'end'
+            endorsement = Pool().get('endorsement')(active_id)
             xml_id = 'endorsement_full_contract_revision.'
             'full_contract_revision_definition'
             if endorsement.definition.xml_id == xml_id:
