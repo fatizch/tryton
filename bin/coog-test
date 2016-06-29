@@ -124,7 +124,7 @@ _coog_test_email() {
 coog_test_commits() { # fetch, merge, and test each commit on changed modules
         echo TEST COMMITS: start @ `date +"%y-%m-%d %H:%M:%S"`
         local lock
-        lock=/tmp/test-running
+        lock=$COOG_TMP/test-running
         [ -e $lock ] && echo TEST COMMITS: running -\> leave && return
         touch $lock
         local origin
@@ -143,7 +143,7 @@ coog_test_commits() { # fetch, merge, and test each commit on changed modules
                 do
                         echo TEST COMMITS: module - $module
                         local out
-                        out=/tmp/test-$tree-$module
+                        out=$COOG_TMP/test-$tree-$module
                         echo '<pre style="font-family: monospace">' > $out
                         coog_test_manual $module &>> $out
                         echo '</pre>' >> $out
@@ -175,7 +175,7 @@ coog_test_fullcheck() { # check and report a full test
         [ $a -eq 0 ] && echo TEST FULL: no jobs -\> leave && return
         [ $w -ne 0 ] && echo TEST FULL: still running -\> leave && return
         local out
-        out=/tmp/test-`date +"%y%m%d-%H%M%S"`
+        out=$COOG_TMP/test-`date +"%y%m%d-%H%M%S"`
         echo '<pre style="font-family: monospace">' > $out
         coog_test_query summary >> $out
         local fail
