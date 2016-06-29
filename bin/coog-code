@@ -51,6 +51,9 @@ coog_code_status() { # status of all repos
 
 coog_code_foreach() { # exec command on each repo <command>
         local wd; wd=`pwd`
+        local verbose
+        verbose=0
+        [ ! -z $1 ] && [ $1 = v ] && shift && verbose=1
         cd $COOG_ROOT
         local repos; repos=`ls -1`
         for repo in $repos
@@ -61,8 +64,9 @@ coog_code_foreach() { # exec command on each repo <command>
                         continue
                 fi
                 cd $folder
-                echo $repo
+                [ $verbose = 1 ] && echo "### $repo"
                 $*
+                [ $verbose = 1 ] && echo "###"
         done
         cd $wd
 }

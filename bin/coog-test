@@ -112,7 +112,7 @@ _coog_test_email() {
         local email; email=$1; shift
         local content; content=$1; shift
         local subject; subject=$*
-        python $COOG_BIN/sendemail.py -fe test@coopengo.com -te $email -s "$subject" < $content
+        python $COOG_BIN/sendemail.py -fe test@coopengo.com -fn "Test Cron" -te $email -s "$subject" < $content
         if [ $? -eq 0 ]
         then
                 echo TEST EMAIL: sent $subject to $email
@@ -125,7 +125,7 @@ coog_test_commits() { # fetch, merge, and test each commit on changed modules
         echo TEST COMMITS: start @ `date +"%y-%m-%d %H:%M:%S"`
         local lock
         lock=$COOG_TMP/test-running
-        [ -e $lock ] && echo TEST COMMITS: running -\> leave && return
+        [ -e $lock ] && echo TEST COMMITS: leave - running && return
         touch $lock
         local origin
         origin=`git rev-parse master`
@@ -158,6 +158,7 @@ coog_test_commits() { # fetch, merge, and test each commit on changed modules
                         fi
                 done
         done
+        echo TEST COMMITS: end
         rm $lock
 }
 
@@ -174,8 +175,8 @@ coog_test_fullcheck() { # check and report a full test
         echo TEST FULL: check @ `date +"%y-%m-%d %H:%M:%S"`
         local a; a=`coog_test_query count`
         local w; w=`coog_test_query count wait`
-        [ $a -eq 0 ] && echo TEST FULL: no jobs -\> leave && return
-        [ $w -ne 0 ] && echo TEST FULL: still running -\> leave && return
+        [ $a -eq 0 ] && echo TEST FULL: no jobs && return
+        [ $w -ne 0 ] && echo TEST FULL: running && return
         local out
         out=$COOG_TMP/test-`date +"%y%m%d-%H%M%S"`
         echo '<pre style="font-family: monospace">' > $out
@@ -188,7 +189,7 @@ coog_test_fullcheck() { # check and report a full test
                 coog_test_query list fail >> $out
         fi
         echo '</pre>' >> $out
-        echo TEST FULL: reports $fail fails
+        echo TEST FULL: end - $fail fails
         _coog_test_email dev@coopengo.com $out Test Report: $fail fails
         coog_test_query backup
         coog_test_stop
