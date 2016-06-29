@@ -112,7 +112,7 @@ _coog_test_email() {
         local email; email=$1; shift
         local subject; subject=$1; shift
         local content; content=$1; shift
-        python $COOG_BIN/sendemail.py -f test@coopengo.com -t $email -s $subject < $content
+        python $COOG_BIN/sendemail.py -fe test@coopengo.com -te $email -s $subject < $content
         if [ $? -eq 0 ]
         then
                 echo TEST EMAIL: sent $subject to $email
@@ -144,11 +144,13 @@ coog_test_commits() { # fetch, merge, and test each commit on changed modules
                         echo TEST COMMITS: module - $module
                         local out
                         out=/tmp/test-$tree-$module
-                        coog_test_manual $module &> $out
+                        echo '<pre style="font-family: monospace">' > $out
+                        coog_test_manual $module &>> $out
+                        echo '</pre>' >> $out
                         if [ $? -ne 0 ]
                         then
                                 echo TEST COMMITS: test ko
-                                _coog_test_email $email $tree-$module:KO $out
+                                _coog_test_email $email "Test KO for $module after ${tree:0:8}" $out
                         else
                                 echo TEST COMMITS: test ok
                         fi
@@ -174,7 +176,8 @@ coog_test_fullcheck() { # check and report a full test
         [ $w -ne 0 ] && echo TEST FULL: still running -\> leave && return
         local out
         out=/tmp/test-`date +"%y%m%d-%H%M%S"`
-        coog_test_query summary > $out
+        echo '<pre style="font-family: monospace">' > $out
+        coog_test_query summary >> $out
         local fail
         fail=`coog_test_query count fail`
         if [ $fail -ne 0 ]
@@ -182,8 +185,9 @@ coog_test_fullcheck() { # check and report a full test
                 echo >> $out
                 coog_test_query list fail >> $out
         fi
+        echo '</pre>' >> $out
         echo TEST FULL: reports $fail fails
-        _coog_test_email dev@coopengo.com "test-report-$fails-fails" $out
+        _coog_test_email dev@coopengo.com "Test Report: $fail fails" $out
         coog_test_query backup
         coog_test_stop
 }
