@@ -143,11 +143,13 @@ coog_test_commits() { # fetch, merge, and test each commit on changed modules
                 do
                         echo TEST COMMITS: module - $module
                         local out
+                        local st
                         out=$COOG_TMP/test-$tree-$module
                         echo '<pre style="font-family: monospace">' > $out
                         coog_test_manual $module &>> $out
+                        st=$?
                         echo '</pre>' >> $out
-                        if [ $? -ne 0 ]
+                        if [ $st -ne 0 ]
                         then
                                 echo TEST COMMITS: test ko
                                 _coog_test_email $email $out Test KO for $module after ${tree:0:8}
