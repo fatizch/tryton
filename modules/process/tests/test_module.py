@@ -35,24 +35,32 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         view_tree, = self.View.search([('name', '=', 'basic_process_tree')])
         view_form, = self.View.search([('name', '=', 'basic_process_form')])
-        self.assertEqual(sorted(view_tree.arch), sorted(
+        self.assertEqual(view_tree.arch,
             '<?xml version="1.0"?>'
             '<tree string="Basic Process">'
-            '<field name="current_state"/></tree>'))
-        self.assertEqual(sorted(view_form.arch), sorted(
-            '<?xml version="1.0"?><form string="Basic Process" col="4">'
-            '<group id="process_content" xfill="1" xexpand="1" yfill="1" '
-            'yexpand="1"><field name="current_state" invisible="1" '
-            'readonly="1" colspan="4"/><newline/><newline/><newline/>'
-            '<group id="group_tech_complete" xfill="1" xexpand="1" '
-            'yfill="1" yexpand="1" states="{&quot;invisible&quot;: '
-            '{&quot;__class__&quot;: &quot;Bool&quot;, &quot;v&quot;: '
-            '{&quot;d&quot;: &quot;&quot;, &quot;__class__&quot;: &quot;'
-            'Eval&quot;, &quot;v&quot;: &quot;current_state&quot;}}}">'
-            '<label id="complete_text" string="The current record completed '
-            'the current process, please go ahead"/></group></group>'
-            '<group id="process_buttons" colspan="1" col="1" xexpand="0" '
-            'xfill="0" yexpand="1" yfill="1"></group><newline/></form>'))
+            '<field name="current_state"/></tree>')
+        self.assertEqual([x.strip() for x in view_form.arch.split('\n')], [
+                '<form string="Basic Process" col="4">',
+                '<group id="process_content" xfill="1" xexpand="1" yfill="1" '
+                'yexpand="1">',
+                '<field name="current_state" invisible="1" ' 'readonly="1" '
+                'colspan="4"/>',
+                '<newline/>',
+                '<newline/>',
+                '<newline/>',
+                '<group id="group_tech_complete" xfill="1" xexpand="1" '
+                'yfill="1" yexpand="1" states="{&quot;invisible&quot;: '
+                '{&quot;__class__&quot;: &quot;Bool&quot;, &quot;v&quot;: '
+                '{&quot;d&quot;: &quot;&quot;, &quot;__class__&quot;: &quot;'
+                'Eval&quot;, &quot;v&quot;: &quot;current_state&quot;}}}">',
+                '<label id="complete_text" string="The current record '
+                'completed the current process, please go ahead"/>',
+                '</group>',
+                '</group>',
+                '<group id="process_buttons" colspan="1" col="1" xexpand="0" '
+                'xfill="0" yexpand="1" yfill="1"/>',
+                '<newline/>',
+                '</form>', ''])
 
 
 def suite():
