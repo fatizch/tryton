@@ -1,0 +1,14 @@
+#!/bin/bash
+
+USER=test
+export USER
+HOME=/home/$USER
+export HOME
+
+. $HOME/.profile
+
+workon coog-full
+COOG_TMP=/var/log/coog
+export COOG_TMP
+coog test fullstart 4 &>> $COOG_TMP/test-logs
+deactivate

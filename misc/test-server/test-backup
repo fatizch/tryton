@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd /var/log/coog
+ARCHIVE=`date +"%y-%m-%d"`.tar.gz
+tar czf $ARCHIVE coog-*.out test-*
+rm -rf coog-*.out test-*

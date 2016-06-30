@@ -1,0 +1,18 @@
+#!/bin/bash
+
+USER=test
+export USER
+HOME=/home/$USER
+export HOME
+
+. $HOME/.profile
+
+workon coog-commit
+COOG_TMP=/var/log/coog
+export COOG_TMP
+coog test commits &>> $COOG_TMP/test-logs
+deactivate
+
+workon coog-full
+coog test fullcheck &>> $COOG_TMP/test-logs
+deactivate
