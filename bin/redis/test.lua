@@ -7,6 +7,7 @@ Usage: only ARGV are used (no KEYS). Possible commands are:
 
   - help: print this text
   - key: print job key - <id>
+  - debug: show raw job - <id>
   - show: show job - <id>
   - list: list queue jobs - [filters]
   - ids: list queue ids - [filters]
@@ -113,7 +114,7 @@ end
 
 -- helpers
 
-local function show(id)
+local function debug(id)
     local ret = {id}
     local ret_pattern = '%s: %s'
     local res = redis.call('HGETALL', PATTERN..id)
@@ -123,6 +124,20 @@ local function show(id)
             key = v
         else
             ret[#ret+1] = ret_pattern:format(key, v)
+        end
+    end
+    return ret
+end
+
+local function show(id)
+    local ret = {id:sub(1, 8)}
+    local ret_pattern = '%s: %s'
+    local keys = {'coog', 'coog-result', 'exc_info'}
+    local item
+    for i, v in ipairs(keys) do
+        item = redis.call('HGET', PATTERN..id, v)
+        if item then
+            ret[#ret+1] = item
         end
     end
     return ret
@@ -174,6 +189,7 @@ api.key = function(id)
     end
 end
 
+api.debug = generate_job_api(debug)
 api.show = generate_job_api(show)
 
 api.list = function(...)
@@ -214,7 +230,7 @@ api.ids = function(...)
             result[#result+1] = id:sub(1, 8)
         end
     end
-        return result
+    return result
 end
 
 api.count = function(...)
