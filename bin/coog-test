@@ -83,7 +83,7 @@ coog_test_log() { # print batch logs
         fs=`ls $COOG_TMP/$COOG_FILE_TEST*.out 2> /dev/null`
         [ $? -ne 0 ] && echo no logs && return
         local f
-        for f in "$fs"
+        for f in $fs
         do
                 args="$args $f"
         done
@@ -152,7 +152,7 @@ coog_test_commits() { # fetch, merge, and test each commit on changed modules
                         if [ $st -ne 0 ]
                         then
                                 echo TEST COMMITS: test ko
-                                _coog_test_email $email $out Test KO for $module after ${tree:0:8}
+                                _coog_test_email $email $out Test KO "for" $module after ${tree:0:8}
                         else
                                 echo TEST COMMITS: test ok
                         fi
@@ -187,14 +187,11 @@ coog_test_fullcheck() { # check and report a full test
         then
                 echo >> $out
                 coog_test_query list fail >> $out
-                local head; head=1
-                coog_test_query list fail |
-                while IFS= read -r f
+                coog_test_query ids fail |
+                while IFS= read -r id
                 do
-                        [ $head -eq 1 ] && head=0 && continue
+                        [ -z $id ] && continue
                         echo >> $out
-                        local id
-                        id=`echo $f | cut -d " " -f 4`
                         coog_test_query show $id >> $out
                 done
 
