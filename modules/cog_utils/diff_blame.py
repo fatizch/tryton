@@ -197,7 +197,7 @@ class Revisions(object):
                 limit=per_page,
                 offset=((current_page - 1) * per_page)
                 ))
-        self._revisions = cursor_dict(cursor)
+        self._revisions = list(cursor_dict(cursor))
         self._index = 0
 
     def __iter__(self):
