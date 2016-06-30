@@ -182,9 +182,12 @@ coog_test_fullcheck() { # check and report a full test
         echo '<pre style="font-family: monospace">' > $out
         coog_test_query summary >> $out
         local fail
+        local subject
         fail=`coog_test_query count fail`
         if [ $fail -ne 0 ]
         then
+                subject="Test Report: KO"
+                echo TEST FULL: end - $fail KO
                 echo >> $out
                 coog_test_query list fail >> $out
                 coog_test_query ids fail |
@@ -194,11 +197,12 @@ coog_test_fullcheck() { # check and report a full test
                         echo >> $out
                         coog_test_query show $id >> $out
                 done
-
+        else
+                subject="Test Report: OK"
+                echo TEST FULL: end - OK
         fi
         echo '</pre>' >> $out
-        echo TEST FULL: end - $fail fails
-        _coog_test_email dev@coopengo.com $out Test Report: $fail fails
+        _coog_test_email dev@coopengo.com $out "$subject"
         coog_test_query backup
         coog_test_stop
 }
