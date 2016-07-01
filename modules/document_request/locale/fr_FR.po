@@ -118,6 +118,10 @@ msgctxt "field:document.request.line,attachment_data:"
 msgid "Data"
 msgstr "Données"
 
+msgctxt "model:event.type,name:remind_documents"
+msgid "Remind Documents"
+msgstr "Relance de documents"
+
 msgctxt "field:document.request.line,attachment_name:"
 msgid "Attachment Name"
 msgstr "Nom de la pièce jointe"
