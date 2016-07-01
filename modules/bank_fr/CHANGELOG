@@ -1,3 +1,4 @@
+* The setting of bank from iban also uses branch code
 * Automatically set bank from iban on bank account for french iban
 
 Version 1.6 - 2015-12-23

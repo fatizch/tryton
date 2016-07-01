@@ -90,10 +90,10 @@ class BankAccount:
             return
         self.bank = self.get_bank_from_number()
 
-    def get_bank_identifier_fr(self, number):
-        if not number or not number.startswith('FR') or len(number) < 10:
+    def get_bank_identifiers_fr(self, number):
+        if not number or not number.startswith('FR') or len(number) < 15:
             return
-        return number[4:9]
+        return (number[4:9], number[9:14])
 
     def get_bank_from_number(self):
         pool = Pool()
@@ -102,11 +102,12 @@ class BankAccount:
         if not number:
             return
         number = number.replace(' ', '')
-        bank_identifier_fr = self.get_bank_identifier_fr(number)
-        if not bank_identifier_fr:
+        bank_identifiers_fr = self.get_bank_identifiers_fr(number)
+        if not bank_identifiers_fr:
             return
-        agencies = Agency.search([('bank_code', '=', bank_identifier_fr)],
-                limit=1)
+        bank_code, branch_code = bank_identifiers_fr
+        agencies = Agency.search([('bank_code', '=', bank_code),
+                ('branch_code', '=', branch_code)], limit=1)
         return agencies[0].bank if agencies else None
 
     def check_iban_matches_bank(self):

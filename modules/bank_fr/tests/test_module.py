@@ -39,9 +39,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0020_test_create_agencies(self):
         bank1, bank2 = self.Bank.search([],
             order=[('id', 'ASC')])
-        agency1 = self.Agency(bank=bank1, name='one', bank_code='20041')
+        agency1 = self.Agency(bank=bank1, name='one', bank_code='20041',
+            branch_code='01005')
         agency1.save()
-        agency1_bis = self.Agency(bank=bank1, name='one', bank_code='20041')
+        agency1_bis = self.Agency(bank=bank2, name='one', bank_code='20041',
+            branch_code='00000')
         agency1_bis.save()
         agency2 = self.Agency(bank=bank2, name='one', bank_code='20001')
         agency2.save()
