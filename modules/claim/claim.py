@@ -110,6 +110,11 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             res += ' %s' % self.claimant.rec_name
         return res
 
+    def get_synthesis_rec_name(self, name):
+        if not self.losses:
+            return self.rec_name
+        return ', '.join([x.rec_name for x in self.losses])
+
     def on_change_with_is_sub_status_required(self, name=None):
         return self.status == 'closed'
 
@@ -329,13 +334,18 @@ class Loss(model.CoopSQL, model.CoopView):
         self.end_date = self.end_date if self.end_date else None
 
     def get_rec_name(self, name=None):
+        pool = Pool()
+        Lang = pool.get('ir.lang')
+        lang = Transaction().language
         res = ''
         if self.loss_desc:
             res = self.loss_desc.rec_name
         if self.start_date and not self.end_date:
-            res += ' [%s]' % self.start_date
+            res += ' [%s]' % Lang.strftime(self.start_date, lang, '%d/%m/%Y')
         elif self.start_date and self.end_date:
-            res += ' [%s - %s]' % (self.start_date, self.end_date)
+            res += ' [%s - %s]' % (
+                Lang.strftime(self.start_date, lang, '%d/%m/%Y'),
+                Lang.strftime(self.end_date, lang, '%d/%m/%Y'))
         return res
 
     @classmethod
@@ -444,6 +454,12 @@ class ClaimService(ServiceMixin, model.CoopSQL):
     claim = fields.Function(
         fields.Many2One('claim', 'Claim'),
         'get_claim')
+    loss_summary = fields.Function(
+        fields.Text('Loss Summary'),
+        'get_loss_summary')
+    benefit_summary = fields.Function(
+        fields.Text('Benefit Summary'),
+        'get_benefit_summary')
 
     @classmethod
     def _export_light(cls):
@@ -481,6 +497,14 @@ class ClaimService(ServiceMixin, model.CoopSQL):
                 res += ' [%s]' % coop_string.translate_value(self, 'status')
             return res
         return super(ClaimService, self).get_rec_name(name)
+
+    def get_benefit_summary(self, name):
+        return '%s (%s)' % (self.benefit.rec_name,
+            self.option.coverage.insurer.rec_name)
+
+    def get_loss_summary(self, name=None):
+        if self.loss:
+            return self.loss.rec_name
 
     @classmethod
     def add_func_key(cls, values):

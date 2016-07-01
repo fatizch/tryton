@@ -938,6 +938,10 @@ msgctxt "field:claim.service,loss:"
 msgid "Loss"
 msgstr "Préjudice"
 
+msgctxt "field:claim.service,loss_summary:"
+msgid "Loss Summary"
+msgstr "Résumé des préjudices"
+
 msgctxt "field:claim.service,option:"
 msgid "Coverage"
 msgstr "Garantie"
@@ -961,6 +965,10 @@ msgstr "Nom"
 msgctxt "field:claim.service,status:"
 msgid "Status"
 msgstr "Statut"
+
+msgctxt "field:claim.service,summary:"
+msgid "Service Summary"
+msgstr "Résumé des prestations"
 
 msgctxt "field:claim.service,write_date:"
 msgid "Write Date"
