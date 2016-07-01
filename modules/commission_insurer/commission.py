@@ -278,7 +278,8 @@ class Commission:
         commission = Commission.__table__()
         cursor = Transaction().connection.cursor()
 
-        is_positive = lambda x: not commission_invoice.type.startswith(x.type_)
+        def is_positive(x):
+            return not commission_invoice.type.startswith(x.type_)
 
         def get_insurer_empty_data(insurer_account, insurers_invoices):
             for value in insurers_invoices.values():
@@ -422,6 +423,10 @@ class CreateInvoicePrincipal(Wizard):
                 ).quantize(Decimal(10) ** -Line.unit_price.digits[1])
             new_invoice_line.product = product
             new_invoice_line.on_change_product()
+            # JCA : Force account field, since on_change_product forces it to
+            # the product account. TODO : Investigate what is it in
+            # on_change_product that we need ?
+            new_invoice_line.account = product.account_revenue_used
             to_save.append(new_invoice_line)
         Line.save(to_save)
         for line, (product, agent) in zip(to_save, matches):
