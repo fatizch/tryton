@@ -153,10 +153,6 @@ class OptionDescription:
                     (0, row[0], rule_id, '{"always_underwrite": true}'))
             table.drop_column('with_underwriting')
 
-    @staticmethod
-    def default_with_underwriting():
-        return 'never_underwrite'
-
     @classmethod
     def kind_list_for_extra_data_domain(cls):
         kinds = super(OptionDescription, cls).kind_list_for_extra_data_domain()
