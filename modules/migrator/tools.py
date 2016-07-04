@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from contextlib import contextmanager
+from sql import Column, Table
 
 try:
     import psycopg2
@@ -11,6 +12,7 @@ except ImportError:
 
 from trytond.config import config
 from trytond.pool import Pool
+from trytond.transaction import Transaction
 
 
 class MigrateError(Exception):
@@ -84,7 +86,6 @@ def resolve_key(row, key, cache, dest_key=None, dest_attr=None):
 def remove_existing_ids(ids, model, func_key):
     """Return ids without those of objects already present in coog.
     """
-
     existing_ids = load_objects(model, func_key,
         (func_key, 'in', ids)).keys()
     return set(ids) - set(existing_ids)
@@ -94,3 +95,22 @@ def diff_rows(row_a, row_b):
     """Return the delta dict between row_b and row_a
     """
     return {k: v for k, v in row_b.iteritems() if row_a[k] != v}
+
+
+def cache_from_query(table_name, keys, vals=None, target='id'):
+    """Build a cache dictionary, mapping combinations of existing values for
+       keys to corresponding records.
+       Optional vals tuple is used to build a WHERE...IN clause to restrict the
+       set of records to cache.
+    """
+    if vals:
+        assert len(vals) == 2
+        if not vals[1]:
+            return {}
+    table = Table(table_name)
+    select = table.select(*[Column(table, k) for k in list(keys) + [target]])
+    if vals:
+        select.where = (Column(table, vals[0]).in_(list(vals[1])))
+    cursor = Transaction().cursor
+    cursor.execute(*select)
+    return {x[0] if len(x) == 2 else x[:-1]: x[-1] for x in cursor.fetchall()}
