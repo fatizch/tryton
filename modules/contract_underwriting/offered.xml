@@ -6,5 +6,28 @@
             <field name="inherit" ref="offered.coverage_view_form"/>
             <field name="name">option_description_form</field>
         </record>
+        <!-- ####################################### -->
+        <!-- # Underwriting Rule # -->
+        <!-- ####################################### -->
+        <record model="ir.ui.view" id="underwriting_rule_view_form">
+            <field name="model">underwriting.rule</field>
+            <field name="type">form</field>
+            <field name="name">underwriting_rule_form</field>
+        </record>
+        <record model="ir.ui.view" id="underwriting_rule_view_list">
+            <field name="model">underwriting.rule</field>
+            <field name="type">tree</field>
+            <field name="name">underwriting_rule_list</field>
+        </record>
+        <record model="ir.ui.view" id="underwriting_decision_to_underwriting_decision_view_form">
+            <field name="model">underwriting.decision-underwriting.decision</field>
+            <field name="type">form</field>
+            <field name="name">underwriting_decision_to_underwriting_decision_form</field>
+        </record>
+        <record model="ir.ui.view" id="underwriting_decision_to_underwriting_decision_view_list">
+            <field name="model">underwriting.decision-underwriting.decision</field>
+            <field name="type">tree</field>
+            <field name="name">underwriting_decision_to_underwriting_decision_list</field>
+        </record>
     </data>
 </tryton>

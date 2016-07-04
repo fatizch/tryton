@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="Underwriting Rule">
+    <label name="rule"/>
+    <field name="rule"/>
+    <field name="rule_extra_data" no_command="1" colspan="2"/>
+    <field name="decisions" colspan="4" yexpand="0" yfill="0"/>
+    <label name="accepted_decision"/>
+    <field name="accepted_decision"/>
+</form>

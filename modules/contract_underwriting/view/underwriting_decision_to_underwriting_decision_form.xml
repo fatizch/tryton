@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<form string="Underwriting Decision to Underwriting Decision Relation">
+    <label name="coverage_decision"/>
+    <field name="coverage_decision"/>
+    <newline/>
+    <label name="contract_decision"/>
+    <field name="contract_decision"/>
+</form>

@@ -15,7 +15,7 @@ from trytond.modules.cog_utils import model, fields
 from trytond.modules.cog_utils import utils
 from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
-from trytond.modules.contract import _STATES, _DEPENDS, _CONTRACT_STATUS_STATES
+from trytond.modules.contract import _CONTRACT_STATUS_STATES
 from trytond.modules.contract import _CONTRACT_STATUS_DEPENDS
 from trytond.modules.report_engine import Printable
 
@@ -694,6 +694,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     declined_options = fields.One2ManyDomain('contract.option',
         'covered_element', 'Declined Options',
         domain=[('status', '=', 'declined')], target_not_required=True)
+    all_options = fields.One2Many('contract.option', 'covered_element',
+        'Options', target_not_required=True, delete_missing=True)
     parent = fields.Many2One('contract.covered_element', 'Parent',
         ondelete='CASCADE', select=True)
     party = fields.Many2One('party.party', 'Actor', domain=[

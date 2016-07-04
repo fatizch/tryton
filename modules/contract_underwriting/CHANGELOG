@@ -1,1 +1,4 @@
+* Decline coverage when underwriting is refused
+* Add decision at contract level and/or coverage level
+* Automatic underwriting through rule engine
 * Module creation

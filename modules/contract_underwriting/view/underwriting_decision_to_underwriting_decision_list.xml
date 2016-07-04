@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Underwriting Decision to Underwriting Decision Relation" sequence="order">
+    <field name="order" tree_invisible="1"/>
+    <field name="coverage_decision"/>
+    <field name="contract_decision" expand="1"/>
+</tree>

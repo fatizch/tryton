@@ -2,7 +2,7 @@
 <tree string="Contract Underwriting Decision">
     <field name="code"/>
     <field name="name"/>
+    <field name="level"/>
     <field name="status"/>
-    <field name="with_exclusion"/>
-    <field name="with_subscriber_validation"/>
+    <field name="with_extra_data"/>
 </tree>

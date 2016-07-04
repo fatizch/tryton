@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="rule_engine" id="underwriting_basic_rule">
+            <field name="name">Underwriting Basic Rule</field>
+            <field name="short_name">underwriting_basic_rule</field>
+            <field name="algorithm">return not param_always_underwrite()</field>
+            <field name="status">validated</field>
+            <field name="type_">underwriting</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="always_underwrite">
+            <field name="name">always_underwrite</field>
+            <field name="type_">boolean</field>
+            <field name="string">Always Underwrite</field>
+            <field name="parent_rule" ref="underwriting_basic_rule"/>
+        </record>
+    </data>
+</tryton>

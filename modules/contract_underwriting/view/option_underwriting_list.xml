@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tree string="Option Underwritings">
+<tree string="Option Underwritings" editable="bottom">
     <field name="option"/>
+    <field name="decision" widget="selection"/>
     <field name="extra_data_summary"/>
+    <field name="automatic_decision" tree_invisible="1"/>
 </tree>

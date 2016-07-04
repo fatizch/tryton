@@ -545,7 +545,7 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
         return self.option.covered_element.contract.id
 
     def get_end_date(self, name):
-        if self.option.status == 'void':
+        if self.option.status in ['void', 'declined']:
             return None
         for share in sorted(self.option.loan_shares, key=lambda x: (x.loan.id,
                     x.start_date or datetime.date.min)):

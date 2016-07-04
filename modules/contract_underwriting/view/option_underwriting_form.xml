@@ -2,6 +2,11 @@
 <form string="Option Underwriting">
     <label name="option"/>
     <field name="option"/>
-    <field name="extra_data" colspan="4" no_command="1"/>
-    <field name="contract" colspan="4"/>
+    <newline/>
+    <label name="decision"/>
+    <field name="decision"/>
+    <newline/>
+    <field name="extra_data" colspan="2" no_command="1"/>
+    <field name="contract"/>
+    <field name="automatic_decision" invisible="1"/>
 </form>

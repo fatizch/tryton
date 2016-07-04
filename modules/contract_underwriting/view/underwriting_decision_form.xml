@@ -4,10 +4,13 @@
     <field name="name"/>
     <label name="code"/>
     <field name="code"/>
+    <label name="level"/>
+    <field name="level"/>
     <label name="status"/>
     <field name="status"/>
-    <label name="with_exclusion"/>
-    <field name="with_exclusion"/>
-    <label name="with_subscriber_validation"/>
-    <field name="with_subscriber_validation"/>
+    <label name="decline_option"/>
+    <field name="decline_option"/>
+    <label name="with_extra_data"/>
+    <field name="with_extra_data"/>
+    <field name="ordered_contract_decisions" colspan="4" product="contract_decision"/>
 </form>

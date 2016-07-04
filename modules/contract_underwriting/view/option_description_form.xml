@@ -2,8 +2,7 @@
 <data>
     <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
         <page string="Underwriting" id="underwriting">
-            <label name="with_underwriting"/>
-            <field name="with_underwriting"/>
+            <field name="underwriting_rules" colspan="4" mode="form,tree"/>
         </page>
     </xpath>
 </data>
