@@ -863,9 +863,14 @@ class ReportGenerateFromFile(Report):
                 'report', 'unoconv'), '-f', oext] + filepaths
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE, close_fds=True)
-        if proc.wait() != 0:
-            stdoutdata, stderrdata = proc.communicate()
+        stdoutdata, stderrdata = proc.communicate()
+        if proc.returncode != 0:
+            logger.info('unoconv.stdout : ' + stdoutdata)
+            logger.error('unoconv.stderr : ' + stderrdata)
             raise Exception(stderrdata)
+        else:
+            logger.debug('unoconv.stdout : ' + stdoutdata)
+            logger.debug('unoconv.stderr : ' + stderrdata)
         output_paths = [os.path.splitext(f)[0] + '.' + output_format for
             f in filepaths]
         return output_paths
