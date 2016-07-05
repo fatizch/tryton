@@ -227,8 +227,15 @@ coog_env_config() { # print conf file <client|server|batch|test|log>
 
 coog_env_wait() { # wait for process to die [pid]
         [ -z $1 ] && return
-        while [ -e /proc/$1 ]
+        while true
         do
+                local alive
+                alive=0
+                for pid in $*
+                do
+                        [ -e /proc/$pid ] && alive=$((alive+1))
+                done
+                [ $alive -eq 0 ] && break
                 sleep 0.5
         done
 }
