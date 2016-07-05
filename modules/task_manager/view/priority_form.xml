@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <form string="Priority" col="5">
     <group id="definition" col="2" colspan="4">
         <label name="team" xalign="0"/>

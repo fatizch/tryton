@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <data>
     <xpath expr="/form/group[@id='endorsement_buttons']/button[@name='start_endorsement']" position="replace">
         <button name="button_start_endorsement_process" string="Start Endorsement Process"/>

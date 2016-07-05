@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <tree string="Priorities" sequence="value">
     <field name="value" tree_invisible="1"/>
     <field name="process_step"/>

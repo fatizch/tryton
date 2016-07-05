@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <tree string="Logs">
     <field name="user"/>
     <field name="start_time" widget="date"/>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <form string="New Waivers Of Premiums">
     <label name="new_end_date"/>
     <field name="new_end_date"/>

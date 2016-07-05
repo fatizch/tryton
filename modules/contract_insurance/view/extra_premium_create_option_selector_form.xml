@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <form string="Extra Premium Creation">
     <label name="covered_element"/>
     <field name="covered_element" widget="selection"/>

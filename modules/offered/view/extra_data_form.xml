@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <form string="Extra Data Descriptor">
     <label name="string"/>
     <field name="string"/>

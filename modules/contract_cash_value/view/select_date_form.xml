@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <form string="Select Date">
     <label name="to_date"/>
     <field name="to_date" colspan="3"/>

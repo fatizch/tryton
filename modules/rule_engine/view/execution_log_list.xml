@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <tree string="Rule Executions">
     <field name="create_date_" widget="date"/>
     <field name="create_date_" widget="time" string=""/>

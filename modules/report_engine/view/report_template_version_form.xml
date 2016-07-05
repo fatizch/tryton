@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <form string="Report Template Version" col="2">
     <group id="content" col="2" colspan="1">
         <label name="resource"/>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <data>
     <xpath expr="/form/field[@name='item_kind']" position="after">
     <label name="with_end_date"/>
