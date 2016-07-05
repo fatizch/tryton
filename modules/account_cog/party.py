@@ -62,7 +62,7 @@ class Party(ModelCurrency, model.CoopView):
         Company = Pool().get('company.company')
         company_id = Transaction().context.get('company', None)
         if company_id:
-            return Company(company_id).currency.id
+            return Company(company_id).currency
 
     def get_negative_payable(self, name):
         amount = getattr(self, name[9:])
