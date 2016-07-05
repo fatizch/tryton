@@ -7,7 +7,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'OptionDescription',
     'OptionDescriptionEligibilityRule',
-]
+    ]
 
 
 class OptionDescription:
@@ -74,6 +74,6 @@ class OptionDescriptionEligibilityRule(
             self.append_functional_error(error_message)
             result = False
         if rule_result.warnings:
-            self.raise_user_warning(str((self.id, args['option'])), '\r\r'.join(
-                    rule_result.print_warnings()))
+            self.raise_user_warning(str((self.id, args['option'])),
+                '\r\r'.join(rule_result.print_warnings()))
         return result

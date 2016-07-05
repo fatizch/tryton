@@ -2,6 +2,7 @@ from trytond.pool import Pool
 from .wizard import *
 from .process import *
 
+
 def register():
     Pool.register(
         ContractSubscribeFindProcess,

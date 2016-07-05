@@ -11,6 +11,7 @@ from .wizard import *
 from .event import *
 from .configuration import *
 
+
 def register():
     Pool.register(
         EventDescription,

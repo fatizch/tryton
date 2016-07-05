@@ -6,6 +6,7 @@ from urlparse import urlparse
 from rq import Queue
 
 import async.config as config
+from async.tasks import tasks
 
 broker_url = os.environ.get('TRYTOND_ASYNC_RQ')
 assert broker_url, 'TRYTOND_ASYNC_RQ should be set'
@@ -13,9 +14,8 @@ broker_url = urlparse(broker_url)
 broker_host = broker_url.hostname
 broker_port = broker_url.port
 broker_db = broker_url.path.strip('/')
-connection = redis.StrictRedis(host=broker_host, port=broker_port, db=broker_db)
-
-from async.tasks import tasks
+connection = redis.StrictRedis(host=broker_host, port=broker_port,
+    db=broker_db)
 
 
 def log_job(job, queue, fname, args):

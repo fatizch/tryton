@@ -5,8 +5,7 @@ from trytond.modules.process import ClassAttr
 from trytond.modules.cog_utils import utils, fields, model
 from trytond.modules.process_cog import CogProcessFramework
 from trytond.modules.process_cog import ProcessFinder, ProcessStart
-from trytond.wizard import (Wizard, StateView, Button,
-    StateTransition, StateAction)
+from trytond.wizard import Button, StateTransition, StateAction
 
 
 __metaclass__ = PoolMeta

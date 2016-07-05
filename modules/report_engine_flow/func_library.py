@@ -1,7 +1,7 @@
 import datetime
-from trytond.config import config
 from trytond.pool import Pool
 from trytond.transaction import Transaction
+
 
 def eval_today(fmt=None):
     lang = Transaction().context.get('language')

@@ -1,4 +1,3 @@
-from trytond.pool import Pool
 from trytond.modules.cog_utils import model, fields, coop_string, utils
 
 __all__ = [

@@ -3,11 +3,8 @@ import os
 import time
 import datetime
 
-from trytond import backend
 from trytond.pool import Pool, PoolMeta
-from trytond.wizard import StateView, Button
-from trytond.pyson import Eval, Equal, Not, Or, Bool
-from trytond.transaction import Transaction
+from trytond.pyson import Eval, Not, Or
 from trytond.config import config
 from trytond.model import Unique
 
@@ -75,7 +72,7 @@ class FlowVariable(model.CoopSQL, model.CoopView):
     variable = fields.Many2One('report.flow.variable', 'Variable',
         ondelete='CASCADE', select=True)
     variables = fields.One2Many('report.flow.variable', 'variable',
-        'Variables', states={'invisible': FLAT,},
+        'Variables', states={'invisible': FLAT},
         depends=['kind'], order=[('order', 'ASC')], delete_missing=True)
     data = fields.Char('Data', states={'invisible': Not(FLAT)},
         depends=['kind'])
@@ -107,12 +104,12 @@ class FlowVariable(model.CoopSQL, model.CoopView):
         table = cls.__table__()
         cls.lambdas = {
             'for': lambda this, separator: ('{%%for %s in %s%%}' % (
-            this.for_object_statement, this.for_objects_statement),
+                    this.for_object_statement, this.for_objects_statement),
                 '{%%end%%}%s' % separator),
             'if': lambda this, separator: (
-                '{%%choose%%}{%%when %s%%}'% this.if_statement,
-                '{%%end%%}{%%otherwise%%}%s{%%end%%}%s{%%end%%}'
-                % (this.get_else_generated_code(this), separator)),
+                    '{%%choose%%}{%%when %s%%}' % this.if_statement,
+                    '{%%end%%}{%%otherwise%%}%s{%%end%%}%s{%%end%%}'
+                    % (this.get_else_generated_code(this), separator)),
             'data': lambda this, separator: ('${%s if (%s) else %s}%s' % (
                 this.data, this.data, cls.default_not_data(this), separator),
                 ''),
@@ -218,7 +215,8 @@ class FlowVariable(model.CoopSQL, model.CoopView):
             for it, variable in enumerate(node.variables, start=1):
                 leaf = not variable.variables
                 last = len(node.variables) == it
-                output += node.build_output(node=variable, leaf=leaf, last=last)
+                output += node.build_output(node=variable, leaf=leaf,
+                    last=last)
         output += end
         return output
 
@@ -298,10 +296,10 @@ class ReportTemplate:
     def view_attributes(cls):
         return super(ReportTemplate, cls).view_attributes() + [(
                 '/form/notebook/page[@id="versions"]', 'states',
-                {'invisible': Eval('output_kind') == 'flow'}),(
-                '/form/notebook/page[@id="generated_code"]', 'states',
-                {'invisible': Eval('output_kind') != 'flow'}), (
-                '/form/notebook/page[@id="flow"]', 'states',
+                {'invisible': Eval('output_kind') == 'flow'}),
+            ('/form/notebook/page[@id="generated_code"]', 'states',
+                {'invisible': Eval('output_kind') != 'flow'}),
+            ('/form/notebook/page[@id="flow"]', 'states',
                 {'invisible': Eval('output_kind') != 'flow'}),
             ]
 
@@ -369,10 +367,10 @@ class ReportCreate:
     def transition_generate_reports_or_input_parameters(self):
         has_flow_model = False
         has_standard_model = False
-        for model in self.select_model.models:
-            if model.output_kind == 'flow':
+        for cur_model in self.select_model.models:
+            if cur_model.output_kind == 'flow':
                 has_flow_model = True
-            elif model.output_kind == 'model':
+            elif cur_model.output_kind == 'model':
                 has_standard_model = True
             if has_flow_model and has_standard_model:
                 Pool().get('report.template').raise_user_error('output_mixin')

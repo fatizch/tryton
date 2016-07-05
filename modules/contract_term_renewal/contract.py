@@ -95,7 +95,10 @@ class Contract:
     @classmethod
     def filter_and_sort_contracts_to_renew(cls, contracts):
         res = {}
-        keyfunc = lambda x: x.activation_history[-1].end_date
+
+        def keyfunc(x):
+            return x.activation_history[-1].end_date
+
         contracts = sorted(contracts, key=keyfunc)
         for end_date, contracts in groupby(contracts, key=keyfunc):
             new_start_date = end_date + relativedelta(days=1)

@@ -36,12 +36,14 @@ class Invoice:
         pool = Pool()
         Agent = pool.get('commission.agent')
 
-        key = lambda c: c._group_to_agent_option_key()
-        commissions.sort(key=key)
+        def keyfunc(c):
+            return c._group_to_agent_option_key()
+
+        commissions.sort(key=keyfunc)
         agent_options = {}
         all_options = {}
 
-        for key, comms in groupby(commissions, key=key):
+        for key, comms in groupby(commissions, key=keyfunc):
             key = dict(key)
             if not key['option']:
                 continue

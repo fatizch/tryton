@@ -1,4 +1,4 @@
-from sql import Column
+from sql import Column, Literal
 from sql.operators import Or
 from sql.aggregate import Sum
 
@@ -60,7 +60,7 @@ class ContractOption:
         cursor.execute(*commission.select(
             Sum(commission.amount), commission.agent,
             commission.commissioned_option,
-            where=commission.is_recovery == True,
+            where=commission.is_recovery == Literal(True),
             having=where_option,
             group_by=[commission.agent, commission.commissioned_option]))
 

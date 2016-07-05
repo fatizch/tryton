@@ -7,7 +7,7 @@ from trytond.wizard import Wizard
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Len, PYSONEncoder
 
-from trytond.modules.cog_utils import fields, utils, coop_string, model
+from trytond.modules.cog_utils import fields, coop_string, model
 from trytond.modules.cog_utils import UnionMixin
 
 __metaclass__ = PoolMeta

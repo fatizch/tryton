@@ -31,4 +31,3 @@ with Transaction().start(database, 0, readonly=True):
                 if m.state == 'uninstalled'))
     for module in modules_with_deps:
         print(module.name)
-

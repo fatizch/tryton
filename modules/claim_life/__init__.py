@@ -5,6 +5,7 @@ from .test_case import *
 from .benefit import *
 from .wizard import *
 
+
 def register():
     Pool.register(
         Benefit,

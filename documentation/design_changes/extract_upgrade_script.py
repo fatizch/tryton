@@ -19,7 +19,7 @@ def extract_sh(lines):
         if not l.strip('\n'):
             continue
         line_indent = get_indent_level(l.strip('\n'))
-        if l.strip() == 'Configuration':  #   test bof but good enough
+        if l.strip() == 'Configuration':  # test bof but good enough
             in_config_section = True
         if in_config_section and '.. code-block:: sh' in l:
             in_sh_code_block = True

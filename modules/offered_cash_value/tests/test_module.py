@@ -1,6 +1,4 @@
-#-*- coding:utf-8 -*-
-import unittest
-
+# -*- coding:utf-8 -*-
 import trytond.tests.test_tryton
 
 from trytond.modules.cog_utils import test_framework

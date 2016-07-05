@@ -25,15 +25,21 @@ def write_record(f, te, parent=None):
         te.type,
         te.language.code[0:2])
     if te.namespace:
-        record += u'\n            <field name="namespace">%s</field>' % te.namespace
+        record += u'\n            '
+        record += u'<field name="namespace">%s</field>' % te.namespace
     if te.name:
-        record += u'\n            <field name="name">%s</field>' % te.name
+        record += u'\n            '
+        record += u'<field name="name">%s</field>' % te.name
     if te.fct_args:
-        record += u'\n            <field name="fct_args">%s</field>' % te.fct_args
+        record += u'\n            '
+        record += u'<field name="fct_args">%s</field>' % te.fct_args
     if te.long_description:
-        record += u'\n            <field name="long_description">%s</field>' % te.long_description
+        record += u'\n            '
+        record += u'<field name="long_description">%s</field>' % \
+            te.long_description
     if parent:
-        record += u'\n            <field name="parent" ref="%s"/>' % parent
+        record += u'\n            '
+        record += u'<field name="parent" ref="%s"/>' % parent
     record += '\n        </record>\n'
     f.write(record.encode('utf-8'))
     if not parent:

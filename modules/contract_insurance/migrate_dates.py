@@ -57,7 +57,8 @@ def migrate_dates():
         print "migrating extra_premiums"
         try:
             ExtraPremium = pool.get('contract.option.extra_premium')
-            transaction.connection.cursor().execute('select id, start_date, end_date from '
+            transaction.connection.cursor().execute(
+                'select id, start_date, end_date from '
                 'contract_option_extra_premium')
             request_res = {item[0]: (item[1], item[2]) for
                 item in transaction.connection.cursor().fetchall()}
@@ -88,8 +89,8 @@ def migrate_dates():
 
     with Transaction().start(dbname, user_id, context=CONTEXT) as transaction:
         try:
-            transaction.connection.cursor().execute('alter table contract_option '
-                    'drop column start_date')
+            transaction.connection.cursor().execute(
+                'alter table contract_option ' 'drop column start_date')
         except Exception as e:
             transaction.rollback()
             raise e

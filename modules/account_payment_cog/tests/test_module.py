@@ -76,7 +76,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'name': 'Revenue',
                     'company': company.id,
                     }])
-        account_receivable, account_payable= self.Account.create([{
+        account_receivable, account_payable = self.Account.create([{
                     'name': 'Receivable',
                     'company': company.id,
                     'type': account_kind_receivable.id,

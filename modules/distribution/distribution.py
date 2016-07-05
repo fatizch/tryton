@@ -3,7 +3,7 @@ from sql.aggregate import Count
 
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import Pool
 
 from trytond.modules.cog_utils import model, fields, coop_string
 
@@ -63,7 +63,7 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
         depends=['portfolio_size'],
         help='If checked, parties will be defined within this distribution'
         ' network and can only be accessed by it or its children distribution'
-        ' network.' )
+        ' network.')
     is_distributor = fields.Boolean('Distributor',
         help='If not checked, this distribution network will not be selectable'
         ' during subscription process.')
@@ -74,7 +74,6 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
         fields.Many2Many('distribution.network', None, None,
             'Visible Portfolios'),
         'get_visible_portfolios', searcher='search_visible_portfolios')
-
 
     @classmethod
     def __setup__(cls):

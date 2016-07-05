@@ -150,7 +150,7 @@ contract.billing_informations.append(BillingInformation(date=None,
 contract.contract_number = '123456789'
 contract.save()
 Wizard('contract.activate', models=[contract]).execute('apply')
-contract.billing_information.direct_debit == False
+contract.billing_information.direct_debit is False
 # #Res# #True
 
 # #Comment# #Create first invoice

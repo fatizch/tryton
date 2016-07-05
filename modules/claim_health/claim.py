@@ -72,9 +72,10 @@ class Loss(model.CoopSQL, model.CoopView):
             super(Loss, self).get_date()
 
     def get_covered_person(self):
-        return self.health_loss[0].covered_person if hasattr(self, 'loss_desc') \
-            and self.loss_desc and self.loss_desc.loss_kind == 'health' else \
-            super(Loss, self).get_covered_person()
+        return self.health_loss[0].covered_person \
+            if hasattr(self, 'loss_desc') and self.loss_desc and \
+            self.loss_desc.loss_kind == 'health' \
+            else super(Loss, self).get_covered_person()
 
     def get_loss_kind(self, name):
         return self.loss_desc.loss_kind

@@ -292,7 +292,9 @@ class ProxyListWithGetter(object):
 
     def __init__(self, the_list, getter_function=None):
         if getter_function is None:
-            getter_function = lambda x: x
+            def getter_function(x):
+                return x
+
         self._the_list = the_list
         self._getter_function = getter_function
 

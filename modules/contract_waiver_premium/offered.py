@@ -28,6 +28,7 @@ class OptionDescription:
     def get_account_for_waiver_line(self):
         return self.insurer.party.account_payable
 
+
 class OptionDescriptionTaxRelationForWaiver(model.CoopSQL):
     'Option Description Tax Relation For Waiver'
 

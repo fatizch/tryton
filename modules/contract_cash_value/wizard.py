@@ -179,7 +179,6 @@ class CollectionToCashValue(Wizard):
             cashing_line.party = contract.subscriber
             cashing_line.second_origin = cash_value
             cashing_move.lines.append(cashing_line)
-            good_coverage = coverage_accounts[target_account.id]
             cashing_line = Line()
             # cashing_line.account = good_coverage.get_result('saving_account',
             #     {'appliable_conditions_date': date})[0]

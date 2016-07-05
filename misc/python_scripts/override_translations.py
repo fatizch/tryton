@@ -62,8 +62,8 @@ def get_translation_file(path_to_coopbusiness, module, language):
                 '%s_cog_translation' % module)
         os.makedirs(path)
         f = open(os.path.join(path, '__init__.py'), 'w')
-        f.write('from trytond.pool import Pool\n\n\ndef register():\n')
-        f.write("    Pool.register(module='%s_cog_translation', type_='model')\n"
+        f.write('from trytond.pool import Pool\n\n\ndef register():\n    ')
+        f.write("Pool.register(module='%s_cog_translation', type_='model')\n"
             % module)
         f.close
         f = open(os.path.join(path, 'tryton.cfg'), 'w')

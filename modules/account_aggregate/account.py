@@ -111,7 +111,9 @@ class Move:
 
     @classmethod
     def group_moves_for_snapshots(cls, moves):
-        keyfunc = lambda m: m.journal
+        def keyfunc(m):
+            return m.journal
+
         moves = cls.browse(sorted(moves, key=keyfunc))
 
         groups = []

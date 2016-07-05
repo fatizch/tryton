@@ -11,7 +11,6 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.cog_utils import fields, model
-from trytond.model import Model as TrytonModel
 from trytond.wizard import StateView, Button
 
 from .report_engine import Printable
@@ -261,6 +260,7 @@ class ReportProductionRequest(model.CoopSQL, model.CoopView):
             return '%s/%s' % (start_str, end_str)
         except KeyError:
             return ''
+
 
 class ConfirmReportProductionRequestTreat(model.CoopView):
     'Confirm Report Request Production Treatment'

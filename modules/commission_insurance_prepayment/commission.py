@@ -1,6 +1,6 @@
 from decimal import Decimal
 from simpleeval import simple_eval
-from sql import Column, Null
+from sql import Column, Null, Literal
 from sql.operators import Or
 from sql.aggregate import Sum
 from collections import defaultdict
@@ -226,7 +226,7 @@ class Agent:
 
         for agent in agents:
             where_prepayment.append(((agent_column == agent[0]) &
-                    (prepayment_column == True) &
+                    (prepayment_column == Literal(True)) &
                     (origin_column == 'contract.option,' + str(agent[1]))))
 
         cursor.execute(*commission.select(commission.agent, commission.origin,

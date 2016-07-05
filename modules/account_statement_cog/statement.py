@@ -162,6 +162,7 @@ class Statement(export.ExportImportMixin):
             cls.raise_user_error('empty_lines', ', '.join(errors))
         super(Statement, cls).validate_statement(statements)
 
+
 class LineGroup:
     __name__ = 'account.statement.line.group'
 
@@ -183,15 +184,13 @@ class LineGroup:
     @classmethod
     def view_attributes(cls):
         return super(LineGroup, cls).view_attributes() + [(
-                '/tree', 'colors', If(~Eval('is_cancelled'),
-                    'black', 'red'),
-                ),(
-               '/form/group[@id="cancel_button"]', 'states',
-                    {'invisible': True})
-                ]
+                '/tree', 'colors', If(~Eval('is_cancelled'), 'black', 'red')),
+            ('/form/group[@id="cancel_button"]', 'states',
+                {'invisible': True})]
 
     @classmethod
-    @model.CoopView.button_action('account_statement_cog.act_cancel_line_group')
+    @model.CoopView.button_action(
+        'account_statement_cog.act_cancel_line_group')
     def start_cancel(cls, LineGroups):
         pass
 

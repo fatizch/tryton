@@ -1,4 +1,5 @@
 from decimal import Decimal
+from sql import Literal
 from sql.aggregate import Sum, Max
 
 from trytond.pool import PoolMeta, Pool
@@ -24,7 +25,7 @@ class RuleEngineRuntime:
         cursor.execute(*commission.select(Sum(commission.amount),
             where=((commission.commissioned_option == args['option'].id) &
                 (commission.agent == args['agent'].id) &
-                (commission.is_recovery == False))))
+                (commission.is_recovery == Literal(False)))))
         res = cursor.fetchall()
         return res[0][0] or Decimal(0)
 

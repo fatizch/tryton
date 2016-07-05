@@ -141,7 +141,9 @@ class ContractSet:
         all_reports = [report for contract in self.contracts for report in
             contract.invoices_report()[0]]
 
-        keyfunc = lambda x: x['planned_payment_date']
+        def keyfunc(x):
+            return x['planned_payment_date']
+
         sorted_reports = sorted(all_reports, key=keyfunc)
         reports_per_date = defaultdict(lambda:
             {'total_amount': 0, 'components': []})

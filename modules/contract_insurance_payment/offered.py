@@ -6,7 +6,7 @@ from trytond.modules.cog_utils import fields
 __metaclass__ = PoolMeta
 __all__ = [
     'Product',
-	'BillingMode',
+    'BillingMode',
     ]
 
 

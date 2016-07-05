@@ -71,7 +71,6 @@ class Payment:
     def search_contract(cls, name, clause):
         return [('line.contract',) + tuple(clause[1:])]
 
-
     def get_reference_object_for_edm(self, template):
         if not self.line.contract:
             return super(Payment, self).get_reference_object_for_edm(template)
