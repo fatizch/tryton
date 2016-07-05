@@ -546,7 +546,9 @@ class Payment(export.ExportImportMixin, Printable):
         Event.notify_events(payments, 'succeed_payment')
 
     def get_doc_template_kind(self):
-        return 'reject_payment'
+        res = super(Payment, self).get_doc_template_kind()
+        res.append('reject_payment')
+        return res
 
     def get_contact(self):
         return self.party

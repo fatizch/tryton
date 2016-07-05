@@ -26,7 +26,9 @@ class Dunning(Printable):
                 return attachment.id
 
     def get_doc_template_kind(self):
-        return 'dunning_letter'
+        res = super(Dunning, self).get_doc_template_kind()
+        res.append('dunning_letter')
+        return res
 
     def get_contact(self):
         return self.party

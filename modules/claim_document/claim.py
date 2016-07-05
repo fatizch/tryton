@@ -68,3 +68,8 @@ class Claim:
             request.reception_date = request.attachment.create_date.date()
             to_save.append(request)
         Request.save(to_save)
+
+    def get_doc_template_kind(self):
+        res = super(Claim, self).get_doc_template_kind()
+        res.append('claim')
+        return res

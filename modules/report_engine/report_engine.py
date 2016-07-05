@@ -479,27 +479,17 @@ class Printable(Model):
 
     def get_available_doc_templates(self, kind=None):
         DocumentTemplate = Pool().get('report.template')
-
-        if kind:
-            domain_kind = ('kind', '=', kind)
-        else:
-            domain_kind = ('kind', 'in', self.get_doc_template_kind())
+        domain = [('on_model.model', '=', self.__name__)]
         if hasattr(self, 'product'):
-            domain = [
-                ('on_model.model', '=', self.__name__),
-                ('products', '=', self.product.id),
-                ['OR',
-                    domain_kind,
-                    ('kind', '=', '')],
-                ]
+            domain.append(('products', '=', self.product.id))
+        if kind:
+            domain.append(('kind', '=', kind))
         else:
-            domain = [
-                ('on_model.model', '=', self.__name__),
-                ]
+            domain.append(('kind', 'in', self.get_doc_template_kind()))
         return DocumentTemplate.search(domain)
 
     def get_doc_template_kind(self):
-        return None
+        return ['']
 
     def get_reference_object_for_edm(self, template):
         return self

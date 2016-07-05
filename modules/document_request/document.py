@@ -243,7 +243,9 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
         pass
 
     def get_doc_template_kind(self):
-        return 'doc_request'
+        res = super(DocumentRequest, self).get_doc_template_kind()
+        res.append('doc_request')
+        return res
 
     def get_object_for_contact(self):
         return self.needed_by
