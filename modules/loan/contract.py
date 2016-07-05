@@ -323,7 +323,13 @@ class ContractOption:
         if self.coverage_family != 'loan':
             return dates
         if self.loan_shares:
-            dates['loan'] = max([x.loan.end_date for x in self.loan_shares])
+            # Loan shares are sorted per date, so x[-1] to get the latest one,
+            # and if the share is 0 (the loan is no longer covered), we use the
+            # share date rather than the loan's end date
+            dates['loan'] = max([
+                    x[-1].loan.end_date if x[-1].share else
+                    coop_date.add_day(x[-1].start_date, -1)
+                    for x in self.get_shares_per_loan().values()])
         return dates
 
     def calculate_automatic_end_date(self):
