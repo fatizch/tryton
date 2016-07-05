@@ -14,11 +14,19 @@ _coog_server_pid() { # retrieve pid from pidfile, delete pidfile if arg=1
         [ $1 = 1 ] && rm -f $pid_file
 }
 
+_coog_trytond_pid() { # get trytond pid (managed from watch file)
+        local pid_file
+        pid_file=$COOG_TMP/$COOG_FILE_WATCH
+        [ ! -e $pid_file ] && return
+        cat $pid_file
+        [ $1 = 1 ] && rm -f $pid_file
+}
+
 _coog_server_bak() { # backup log file (mv to pid if exists or rm)
         local out_file
         out_file=`_coog_server_file out`
         [ ! -e $out_file ] && echo no server log && return
-        coog_env_wait $1
+        coog_env_wait $*
         [ -z $1 ] && rm $out_file && return
         local bak_file
         bak_file=`_coog_server_file out $1`
@@ -84,20 +92,13 @@ coog_server_stop() { # stop server (gracefully)
 coog_server_kill() { # kill server
         local pid
         pid=`_coog_server_pid 1`
-        [ -z $pid ] && echo no server running
-        [ ! -z $pid ] && kill -9 $pid && echo server killed
-        if [ -e $COOG_TMP/$COOG_FILE_WATCH ]
-        then
-                local trytond_pid
-                trytond_pid=`cat $COOG_TMP/$COOG_FILE_WATCH`
-                rm $COOG_TMP/$COOG_FILE_WATCH
-                if [ ! -z $trytond_pid ] && [ -e /proc/$trytond_pid ]
-                then
-                        kill -9 $trytond_pid
-                        coog_env_wait $trytond_pid
-                fi
-        fi
-        _coog_server_bak $pid
+        [ -z $pid ] && echo no watcher running
+        [ ! -z $pid ] && kill -9 $pid && echo watcher killed
+        local tpid
+        tpid=`_coog_trytond_pid 1`
+        [ -z $tpid ] && echo no server running
+        [ ! -z $tpid ] && kill -9 $tpid && echo server killed
+        _coog_server_bak $pid $tpid
 }
 
 coog_server_ps() { # print server process info (based on ps)
