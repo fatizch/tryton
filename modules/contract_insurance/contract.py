@@ -266,7 +266,7 @@ class Contract(Printable):
             for option in element.options:
                 possible_end_dates = option.get_possible_end_date()
                 if possible_end_dates:
-                    dates.append(max(possible_end_dates.values()))
+                    dates.append(min(possible_end_dates.values()))
                 else:
                     return None
         if dates:
