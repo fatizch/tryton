@@ -52,7 +52,7 @@ class ProcessLog:
 
     @classmethod
     def get_task_start(cls, logs, name):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         log = cls.__table__()
         tmp_query = log.select(log.id, log.task,
             Min(log.start_time, window=Window([log.task])).as_('min_start'),
