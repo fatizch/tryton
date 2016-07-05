@@ -404,6 +404,51 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
 
 class CoopView(ModelView, FunctionalErrorMixIn):
     @classmethod
+    def fields_view_get(cls, view_id=None, view_type='form'):
+        if not Transaction().context.get('developper_read_view'):
+            return super(CoopView, cls).fields_view_get(view_id, view_type)
+        result = {
+            'model': cls.__name__,
+            'type': view_type,
+            'field_childs': None,
+            'view_id': 0,
+            }
+        xml = '<?xml version="1.0"?>'
+        fnames = []
+        if view_type == 'tree':
+            xml += '<tree string="%s">' % (cls.__doc__ or cls.__name__ +
+                ' Dev View')
+            xml += '<field name="rec_name"/></tree>'
+            fnames.append('rec_name')
+        else:
+            res = cls.fields_get()
+            ignore_fields = cls._export_skips()
+            xml += '<form string="%s" col="2">' % (
+                cls.__doc__ or cls.__name__ + ' Dev View')
+            for fname in sorted(res):
+                if fname in ignore_fields:
+                    continue
+                if res[fname]['type'] in ('one2many', 'many2many', 'text',
+                        'dict'):
+                    xml += '<field name="%s" colspan="2"/>' % fname
+                else:
+                    xml += '<label name="%s"/><field name="%s"/>' % (fname,
+                        fname)
+                fnames.append(fname)
+            xml += '</form>'
+        result['arch'] = xml
+        result['fields'] = cls.fields_get(fnames)
+        for fname in fnames:
+            result['fields'][fname].update({
+                    'string': result['fields'][fname]['string'] +
+                    ' (%s)' % fname,
+                    'states': {'readonly': True},
+                    'on_change': [],
+                    'on_change_with': [],
+                    })
+        return result
+
+    @classmethod
     def setter_void(cls, objects, name, values):
         pass
 
