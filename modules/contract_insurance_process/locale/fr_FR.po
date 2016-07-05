@@ -11,16 +11,24 @@ msgid "At least one option must be selected for %s"
 msgstr "Saisir au moins une garantie pour %s"
 
 msgctxt "error:contract:"
+msgid "Enter a value for field '%s' of '%s'"
+msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
+
+msgctxt "error:contract:"
+msgid "Enter a value for field(s): %s"
+msgstr "Entrez une valeur pour le(s) champs(s) : %s"
+
+msgctxt "error:contract:"
 msgid "Everything is good !"
 msgstr "Tout est bon!"
 
 msgctxt "error:contract:"
-msgid "Object %s is currently locked by user %s"
-msgstr "L'objet %s est verrouillé par l'utilisateur %s"
-
-msgctxt "error:contract:"
 msgid "Option %s must be subscribed after %s"
 msgstr "La Garantie %s doit être souscrite après le %s"
+
+msgctxt "error:contract:"
+msgid "Select a date that is not in the future for field(s): %s"
+msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
 
 msgctxt "error:contract:"
 msgid "The selected subscriber does not have an address"
@@ -38,6 +46,10 @@ msgctxt "field:contract,current_state:"
 msgid "Current State"
 msgstr "Etat courant"
 
+msgctxt "field:contract,current_state_name:"
+msgid "Current State In Process"
+msgstr "Etat courant au sein du processus"
+
 msgctxt "field:contract,logs:"
 msgid "Task"
 msgstr "Tâche"
@@ -53,6 +65,14 @@ msgstr "Synthèse"
 msgctxt "field:contract,subscriber_kind:"
 msgid "Subscriber Kind"
 msgstr "Type"
+
+msgctxt "field:contract,task_name:"
+msgid "Task Name"
+msgstr "Nom de la tâche"
+
+msgctxt "field:contract,task_status:"
+msgid "Task Status"
+msgstr "Statut du processus"
 
 msgctxt "field:contract.option,status_selection:"
 msgid "Status"

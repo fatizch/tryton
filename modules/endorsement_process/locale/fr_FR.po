@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -18,10 +18,6 @@ msgstr "Entrez une valeur pour le(s) champs(s) : %s"
 msgctxt "error:endorsement:"
 msgid "Everything is good !"
 msgstr "Tout est bon!"
-
-msgctxt "error:endorsement:"
-msgid "Object %s is currently locked by user %s"
-msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 
 msgctxt "error:endorsement:"
 msgid "Select a date that is not in the future for field(s): %s"
@@ -50,6 +46,14 @@ msgstr "Avenants unitaires"
 msgctxt "field:endorsement,logs:"
 msgid "Task"
 msgstr "Tâche"
+
+msgctxt "field:endorsement,task_name:"
+msgid "Task Name"
+msgstr "Nom de la tâche"
+
+msgctxt "field:endorsement,task_status:"
+msgid "Task Status"
+msgstr "Statut du processus"
 
 msgctxt "field:endorsement.part.union,code:"
 msgid "Code"

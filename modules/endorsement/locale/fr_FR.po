@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.manage_options.option_displayer:"
+msgid "New Option (%s)"
+msgstr "Nouvelle garantie (%s)"
+
+msgctxt "error:contract.manage_options:"
+msgid "New Option (%s)"
+msgstr "Nouvelle garantie (%s)"
+
 msgctxt "error:contract:"
 msgid "Enter a value for field '%s' of '%s'"
 msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
@@ -15,32 +23,8 @@ msgid "Everything is good !"
 msgstr "Tout est bon!"
 
 msgctxt "error:contract:"
-msgid "Object %s is currently locked by user %s"
-msgstr "L'objet %s est verrouillé par l'utilisateur %s"
-
-msgctxt "error:contract:"
 msgid "Select a date that is not in the future for field(s): %s"
 msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
-
-msgctxt "error:contract.manage_options:"
-msgid "New Option (%s)"
-msgstr "Nouvelle garantie (%s)"
-
-msgctxt "error:contract.manage_options.option_displayer:"
-msgid "New Option (%s)"
-msgstr "Nouvelle garantie (%s)"
-
-msgctxt "error:endorsement:"
-msgid ""
-"The endorsement's effective date must be posterior to the contracts' start "
-"date"
-msgstr ""
-"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
-"contrats"
-
-msgctxt "error:endorsement:"
-msgid "You cannot start this endorsement on a non-active contract !"
-msgstr "Vous ne pouvez démarrer cet avenant sur un contrat non actif!"
 
 msgctxt "error:endorsement.contract.activation_history:"
 msgid "New version"
@@ -194,6 +178,18 @@ msgstr "Pas de séquence définie dans la configuration"
 msgctxt "error:endorsement:"
 msgid "The endorsement number must be unique."
 msgstr "Le numéro d'avenant doit être unique"
+
+msgctxt "error:endorsement:"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date"
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats"
+
+msgctxt "error:endorsement:"
+msgid "You cannot start this endorsement on a non-active contract !"
+msgstr "Vous ne pouvez démarrer cet avenant sur un contrat non actif!"
 
 msgctxt "field:contract,current_log:"
 msgid "Current Log"
@@ -450,18 +446,6 @@ msgstr "Créé par"
 msgctxt "field:endorsement.configuration,endorsement_number_sequence:"
 msgid "Endorsement Number Sequence"
 msgstr "Séquence de numéro d'avenant"
-
-msgctxt "field:offered.configuration,automatic_termination_endorsement:"
-msgid "Automatic Termination Endorsement"
-msgstr "Avenant de résiliation automatique"
-
-msgctxt "field:offered.configuration,automatic_void_endorsement:"
-msgid "Automatic Void Endorsement"
-msgstr "Avenant de résiliation sans effet automatique"
-
-msgctxt "field:offered.configuration,automatic_reactivation_endorsement:"
-msgid "Automatic Reactivation Endorsement"
-msgstr "Avenant de réactivation automatique"
 
 msgctxt "field:endorsement.configuration,id:"
 msgid "ID"
@@ -1253,6 +1237,34 @@ msgctxt "field:endorsement.contract.option.version.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:endorsement.contract.reactivate,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:endorsement.contract.reactivate,current_end_date:"
+msgid "Current End Date"
+msgstr "Date de fin actuelle"
+
+msgctxt "field:endorsement.contract.reactivate,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.contract.reactivate,end_motive:"
+msgid "End Motive"
+msgstr "Raison de résiliation"
+
+msgctxt "field:endorsement.contract.reactivate,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.contract.reactivate,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.reactivate,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:endorsement.contract.recalculate,effective_date:"
 msgid "Effective Date"
 msgstr "Date effective"
@@ -1839,6 +1851,18 @@ msgctxt "field:endorsement.sub_state,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:offered.configuration,automatic_reactivation_endorsement:"
+msgid "Automatic Reactivation Endorsement"
+msgstr "Avenant de réactivation automatique"
+
+msgctxt "field:offered.configuration,automatic_termination_endorsement:"
+msgid "Automatic Termination Endorsement"
+msgstr "Avenant de résiliation automatique"
+
+msgctxt "field:offered.configuration,automatic_void_endorsement:"
+msgid "Automatic Void Endorsement"
+msgstr "Avenant de résiliation sans effet automatique"
+
 msgctxt "field:offered.product,endorsement_definitions:"
 msgid "Endorsement Definitions"
 msgstr "Définitions d'avenant"
@@ -1914,6 +1938,10 @@ msgstr "Modification de version de garantie"
 msgctxt "model:endorsement.contract.option.version.field,name:"
 msgid "Endorsement Option Version Field"
 msgstr "Champ de version de garantie"
+
+msgctxt "model:endorsement.contract.reactivate,name:"
+msgid "Reactivate Contract"
+msgstr "Réactiver le contrat"
 
 msgctxt "model:endorsement.contract.recalculate,name:"
 msgid "Recalculate Contract after endorsement"
@@ -2369,6 +2397,10 @@ msgctxt "view:endorsement.contract.option:"
 msgid "Endorsement Options"
 msgstr "Modifications de la garantie souscrite"
 
+msgctxt "view:endorsement.contract.reactivate:"
+msgid "Reactivate Contract"
+msgstr "Réactiver le contrat"
+
 msgctxt "view:endorsement.contract.recalculate:"
 msgid "Recalculate Contract"
 msgstr "Recalculer le contrat"
@@ -2527,18 +2559,6 @@ msgctxt "wizard_button:endorsement.decline,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:endorsement.start,basic_preview,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt "wizard_button:endorsement.start,basic_preview,cancel:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:endorsement.start,basic_preview,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
 msgid "Next"
@@ -2633,6 +2653,25 @@ msgctxt ""
 msgid "Suspend"
 msgstr "Suspendre"
 
+msgctxt "wizard_button:endorsement.start,reactivate_contract,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,reactivate_contract,reactivate_contract_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,reactivate_contract,reactivate_contract_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,reactivate_contract,reactivate_contract_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
 msgctxt "wizard_button:endorsement.start,recalculate_contract,end:"
 msgid "Cancel"
 msgstr "Annuler"
@@ -2660,10 +2699,6 @@ msgctxt ""
 "wizard_button:endorsement.start,select_endorsement,start_endorsement:"
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
-
-msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
 
 msgctxt "wizard_button:endorsement.start,summary,cancel:"
 msgid "Cancel"

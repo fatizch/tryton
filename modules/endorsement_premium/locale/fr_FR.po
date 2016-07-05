@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:contract.premium,tax_list:"
-msgid "Tax List"
-msgstr "Liste de taxes"
-
 msgctxt "field:endorsement.start.preview_contract_premiums,contract_previews:"
 msgid "Contracts"
 msgstr "Contrats"
@@ -103,16 +99,3 @@ msgstr "Montant"
 msgctxt "view:endorsement.start.preview_contract_premiums:"
 msgid "Preview Contracts Premiums"
 msgstr "Prévisualisation des primes du contrat"
-
-msgctxt ""
-"wizard_button:endorsement.start,preview_contract_premiums,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt "wizard_button:endorsement.start,preview_contract_premiums,cancel:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:endorsement.start,preview_contract_premiums,summary:"
-msgid "Summary"
-msgstr "Synthèse"

@@ -4,7 +4,9 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:account.payment.journal.failure_action.dunning:"
 msgid "Only one configuration per dunning procedure"
-msgstr "Il ne peut y avoir qu'une seule ligne de configuration pour une procédure de relance donnée"
+msgstr ""
+"Il ne peut y avoir qu'une seule ligne de configuration pour une procédure de"
+" relance donnée"
 
 msgctxt "field:account.payment.journal.failure_action,dunning_configurations:"
 msgid "Dunning Configurations"

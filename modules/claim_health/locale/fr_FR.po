@@ -1,6 +1,102 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:benefit.act.description:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
+msgctxt "error:benefit.act.family:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
+msgctxt "field:benefit.act.description,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:benefit.act.description,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.act.description,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.act.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit.act.description,family:"
+msgid "Medical Act Family"
+msgstr "Famille d'actes médicaux"
+
+msgctxt "field:benefit.act.description,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:benefit.act.description,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.act.description,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.act.description,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:benefit.act.description,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:benefit.act.description,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:benefit.act.family,act_descriptions:"
+msgid "Medical Act Descriptions"
+msgstr "Actes médicaux"
+
+msgctxt "field:benefit.act.family,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:benefit.act.family,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.act.family,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.act.family,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit.act.family,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:benefit.act.family,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.act.family,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.act.family,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:benefit.act.family,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:benefit.act.family,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:claim,quote_date:"
 msgid "Quote Date"
@@ -46,6 +142,10 @@ msgctxt "field:claim.loss.health,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:claim.loss.health,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:claim.loss.health,id:"
 msgid "ID"
 msgstr "ID"
@@ -78,6 +178,10 @@ msgctxt "field:claim.loss.health,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:claim.service,delivered_amount:"
+msgid "Delivered Amount"
+msgstr "Montant de la prestation"
+
 msgctxt "field:contract.covered_element,claim_bank_account:"
 msgid "Claim Bank Account"
 msgstr "Compte bancaire pour le virement des prestations"
@@ -94,17 +198,53 @@ msgctxt "field:contract.covered_element,possible_claim_bank_accounts:"
 msgid "Possible Claim Bank Account"
 msgstr "Comptes bancaires disponibles"
 
-msgctxt "field:contract.covered_element.modify,possible_claim_bank_accounts:"
+msgctxt "field:contract.covered_element.modify,possible_claim_bank_owners:"
 msgid "Possible Claim Bank Accounts"
-msgstr "Comptes bancaires possibles"
+msgstr "Compte bancaire de prestations disponibles"
 
 msgctxt "field:contract.covered_element.modify.displayer,claim_bank_account:"
 msgid "Claim Bank Account"
 msgstr "Compte bancaire pour le virement des prestations"
 
+msgctxt "model:benefit.act.description,name:"
+msgid "Medical Act Description"
+msgstr "Acte"
+
+msgctxt "model:benefit.act.family,name:"
+msgid "Medical Act Family"
+msgstr "Famille d'actes médicaux"
+
 msgctxt "model:claim.loss.health,name:"
 msgid "Health Loss"
 msgstr "Acte santé"
+
+msgctxt "model:ir.action,name:act_medical_act_desc_form"
+msgid "Medical Act Descriptions"
+msgstr "Actes médicaux"
+
+msgctxt "model:ir.action,name:act_medical_act_family_form"
+msgid "Medical Act Families"
+msgstr "Familles d'actes médicaux"
+
+msgctxt "model:ir.ui.menu,name:menu_medical_act"
+msgid "Medical Act Descriptions"
+msgstr "Actes médicaux"
+
+msgctxt "model:ir.ui.menu,name:menu_medical_act_family"
+msgid "Medical Act Families"
+msgstr "Familles d'actes médicaux"
+
+msgctxt "selection:benefit.loss.description,loss_kind:"
+msgid "Health"
+msgstr "Santé"
+
+msgctxt "view:benefit.act.description:"
+msgid "Medical Act Description"
+msgstr "Acte"
+
+msgctxt "view:benefit.act.family:"
+msgid "Medical Act Family"
+msgstr "Famille d'actes médicaux"
 
 msgctxt "view:claim.loss.health:"
 msgid "Health Loss"

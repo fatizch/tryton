@@ -1,6 +1,10 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.invoice,bank_account:"
+msgid "Bank Account"
+msgstr "Compte Bancaire"
 
 msgctxt "field:account.invoice,sepa_mandate:"
 msgid "Sepa Mandate"

@@ -14,9 +14,17 @@ msgctxt "field:account.dunning.create,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:account.dunning.level,apply_for:"
+msgid "Apply For"
+msgstr "Appliquer pour"
+
 msgctxt "field:account.dunning.level,contract_action:"
 msgid "Contract Action"
 msgstr "Action sur le contrat"
+
+msgctxt "field:account.dunning.level,dunning_fee:"
+msgid "Fee"
+msgstr "Frais"
 
 msgctxt "field:account.dunning.level,name:"
 msgid "Name"
@@ -25,6 +33,10 @@ msgstr "Nom"
 msgctxt "field:account.dunning.level,termination_mode:"
 msgid "Termination Mode"
 msgstr "Mode de résiliation"
+
+msgctxt "field:account.dunning.procedure,from_payment_date:"
+msgid "Maturity Date From Payment Date"
+msgstr "Date d'échéance initialisée avec la date de paiement"
 
 msgctxt "field:account.dunning.treat,id:"
 msgid "ID"
@@ -50,9 +62,21 @@ msgctxt "field:offered.product,dunning_procedure:"
 msgid "Dunning Procedure"
 msgstr "Procédure de relance"
 
-msgctxt "help:account.dunning.level,skip_level_for_payment:"
-msgid "Skip level if line is paid by payment"
-msgstr "Ignorer le niveau si la ligne est payée par un prélèvement"
+msgctxt "help:account.dunning.level,apply_for:"
+msgid "The kind of billing mode to which this level is applied"
+msgstr "Le type de quittancement pour lequel ce niveau est appliqué"
+
+msgctxt "help:account.dunning.level,dunning_fee:"
+msgid "A fee invoice will be created. Only for dunnings on contracts."
+msgstr ""
+"Une quittance de frais sera créée. Seulement pour les relances portant sur "
+"des quittances de contrats."
+
+msgctxt "help:account.dunning.procedure,from_payment_date:"
+msgid "Maturity date is equal to payment date if defined"
+msgstr ""
+"Date d'échéance sera initialisée avec la date de paiement. La procédure de "
+"relance dépendra de la date de paiement planifiée."
 
 msgctxt "model:account.dunning.create,name:"
 msgid "Dunning Creation Batch"
@@ -79,17 +103,29 @@ msgctxt ""
 msgid "Dunning"
 msgstr "Relance"
 
+msgctxt "selection:account.dunning.level,apply_for:"
+msgid "All"
+msgstr "Tous"
+
+msgctxt "selection:account.dunning.level,apply_for:"
+msgid "Direct Debit"
+msgstr "Prélèvement"
+
+msgctxt "selection:account.dunning.level,apply_for:"
+msgid "Manual"
+msgstr "Manuel"
+
 msgctxt "selection:account.dunning.level,contract_action:"
 msgid ""
 msgstr " "
 
 msgctxt "selection:account.dunning.level,contract_action:"
-msgid "Hold Invoicing"
-msgstr "Suspendre le quittancement"
-
-msgctxt "selection:account.dunning.level,contract_action:"
 msgid "Hold Contract"
 msgstr "Suspendre le contrat"
+
+msgctxt "selection:account.dunning.level,contract_action:"
+msgid "Hold Invoicing"
+msgstr "Suspendre le quittancement"
 
 msgctxt "selection:account.dunning.level,contract_action:"
 msgid "Terminate Contract"
@@ -106,42 +142,3 @@ msgstr "A la dernière quittance postée"
 msgctxt "view:contract:"
 msgid "Contract"
 msgstr "Contrat"
-
-msgctxt "field:account.dunning.level,dunning_fee:"
-msgid "Fee"
-msgstr "Frais"
-
-msgctxt "help:account.dunning.level,dunning_fee:"
-msgid "A fee invoice will be created. Only for dunnings on contracts."
-msgstr "Une quittance de frais sera créée. Seulement pour les relances "
-"portant sur des quittances de contrats."
-
-msgctxt "field:account.dunning.level,apply_for:"
-msgid "Apply For"
-msgstr "Appliquer pour"
-
-msgctxt "selection:account.dunning.level,apply_for:"
-msgid "Direct Debit"
-msgstr "Prélèvement"
-
-msgctxt "selection:account.dunning.level,apply_for:"
-msgid "Manual"
-msgstr "Manuel"
-
-msgctxt "selection:account.dunning.level,apply_for:"
-msgid "All"
-msgstr "Tous"
-
-msgctxt "field:account.dunning.procedure,from_payment_date:"
-msgid "Maturity Date From Payment Date"
-msgstr "Date d'échéance initialisée avec la date de paiement"
-
-msgctxt "help:account.dunning.procedure,from_payment_date:"
-msgid "Maturity date is equal to payment date if defined"
-msgstr ""
-"Date d'échéance sera initialisée avec la date de paiement. La procédure de "
-"relance dépendra de la date de paiement planifiée."
-
-msgctxt "help:account.dunning.level,apply_for:"
-msgid "The kind of billing mode to which this level is applied"
-msgstr "Le type de quittancement pour lequel ce niveau est appliqué"

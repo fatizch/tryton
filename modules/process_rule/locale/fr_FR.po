@@ -16,10 +16,6 @@ msgctxt "error:process.action:"
 msgid "Target path \"%s\" must start with \"object.\""
 msgstr "Le chemin \"%s\" doit commencer par \"object.\""
 
-msgctxt "field:process.action,func_key:"
-msgid "Functional Key"
-msgstr "Clé fonctionnelle"
-
 msgctxt "field:process.action,rule:"
 msgid "Rule Engine"
 msgstr "Règle"

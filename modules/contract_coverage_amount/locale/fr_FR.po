@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -61,10 +61,6 @@ msgstr "Créé par"
 msgctxt "field:offered.coverage_amount.rule,free_input:"
 msgid "Free Input"
 msgstr "Saisie libre"
-
-msgctxt "field:offered.coverage_amount.rule,func_key:"
-msgid "Functional Key"
-msgstr "Clé fonctionnelle"
 
 msgctxt "field:offered.coverage_amount.rule,id:"
 msgid "ID"

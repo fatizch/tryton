@@ -16,7 +16,7 @@ msgstr "Paiements échoués"
 
 msgctxt "field:contract,processing_payments:"
 msgid "Processing Payments"
-msgstr "Paiements traités"
+msgstr "Traitement des paiements"
 
 msgctxt "field:contract,succeeded_payments:"
 msgid "Succeeded Payments"
@@ -28,7 +28,7 @@ msgstr "Mode de quittancement en cas d'échec"
 
 msgctxt "field:offered.product,payment_journal:"
 msgid "Payment Journal"
-msgstr "Journal de prélèvement"
+msgstr "Journal de paiement"
 
 msgctxt "help:offered.product,payment_journal:"
 msgid "If no journal defined the global configuration will be used"

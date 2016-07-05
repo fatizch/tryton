@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.statement:"
-msgid "No lines associated to the statement(s) %s"
-msgstr "Pas de lignes associées au(x) relevé(s) %s"
-
 msgctxt "error:account.move:"
 msgid "The statement is already cancelled"
 msgstr "Le relevé est déja annulé"
@@ -18,6 +14,10 @@ msgctxt "error:account.statement.journal:"
 msgid "You can not cancel two statements with different statement journals"
 msgstr ""
 "Vous ne pouvez pas annuler deux relevés avec differents journaux de relevé"
+
+msgctxt "error:account.statement:"
+msgid "No lines associated to the statement(s) %s"
+msgstr "Pas de lignes associées au(x) relevé(s) %s"
 
 msgctxt "field:account.statement,in_bank_deposit_ticket:"
 msgid "In Bank Deposit Ticket"

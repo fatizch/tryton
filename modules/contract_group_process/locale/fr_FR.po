@@ -27,7 +27,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "model:contract_group.subscribe.find_process,name:"
-msgid "Contract Group Subscribe find Process"
+msgid "Contract Group Subscribe Find Process"
 msgstr "Recherche du processus Contrat Collectif"
 
 msgctxt "model:ir.action,name:subscription_process_launcher"

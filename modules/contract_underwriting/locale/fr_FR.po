@@ -247,7 +247,7 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "field:underwriting.decision-underwriting.decision,contract_decision:"
-msgid "Contract Decisions"
+msgid "Contract Decision"
 msgstr "Décision contrat"
 
 msgctxt "field:underwriting.decision-underwriting.decision,coverage_decision:"
@@ -378,7 +378,6 @@ msgctxt "field:underwriting.rule-underwriting.decision,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-#, fuzzy
 msgctxt "field:underwriting.rule-underwriting.decision,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
@@ -414,6 +413,14 @@ msgstr "Décision d'analyse risques"
 msgctxt "model:ir.ui.menu,name:menu_underwriting_decision_form"
 msgid "Underwriting Decision"
 msgstr "Décision d'analyse de risques"
+
+msgctxt "model:rule_engine,name:underwriting_basic_rule"
+msgid "Underwriting Basic Rule"
+msgstr "Règle basique d'analyse de risque"
+
+msgctxt "model:rule_engine.rule_parameter,string:always_underwrite"
+msgid "Always Underwrite"
+msgstr "Toujours faire l'analyse de risque"
 
 msgctxt "model:underwriting.decision,name:"
 msgid "Underwriting Decision"
@@ -518,11 +525,3 @@ msgstr "Règle d'analyse de risque"
 msgctxt "view:underwriting.rule:"
 msgid "Underwriting Rules"
 msgstr "Règles d'analyse de risque"
-
-msgctxt "model:rule_engine,name:underwriting_basic_rule"
-msgid "Underwriting Basic Rule"
-msgstr "Règle basique d'analyse de risque"
-
-msgctxt "model:rule_engine.rule_parameter,string:always_underwrite"
-msgid "Always Underwrite"
-msgstr "Toujours faire l'analyse de risque"

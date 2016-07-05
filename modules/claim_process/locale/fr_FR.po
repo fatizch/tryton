@@ -27,10 +27,6 @@ msgid "Everything is good !"
 msgstr "Tout est bon!"
 
 msgctxt "error:claim:"
-msgid "Object %s is currently locked by user %s"
-msgstr "L'objet %s est verrouillé par l'utilisateur %s"
-
-msgctxt "error:claim:"
 msgid "Select a date that is not in the future for field(s): %s"
 msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
 
@@ -57,18 +53,6 @@ msgstr "Prestations Fournies"
 msgctxt "field:claim,doc_received:"
 msgid "All Documents Received"
 msgstr "Documents Reçus"
-
-msgctxt "field:claim,indemnifications:"
-msgid "Indemnifications"
-msgstr "Indemnisations"
-
-msgctxt "field:claim,indemnifications_consult:"
-msgid "Indemnifications"
-msgstr "Indemnisations"
-
-msgctxt "field:claim,is_pending_indemnification:"
-msgid "Pending Indemnification"
-msgstr "Indemnisation en attente"
 
 msgctxt "field:claim,logs:"
 msgid "Task"
@@ -248,7 +232,7 @@ msgstr "Clore"
 
 msgctxt "wizard_button:claim.declare,process_parameters,close_claim:"
 msgid "Close claims"
-msgstr "Clore les sinistres"
+msgstr "Clôre les sinistres"
 
 msgctxt "wizard_button:claim.declare,process_parameters,confirm_declaration:"
 msgid "Start Process"

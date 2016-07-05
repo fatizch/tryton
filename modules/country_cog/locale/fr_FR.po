@@ -10,6 +10,10 @@ msgctxt "field:country.subdivision,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:country.zip,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:ir.test_case,load_all_zipcodes:"
 msgid "Load all Zip Codes"
 msgstr "Charger les codes postaux"

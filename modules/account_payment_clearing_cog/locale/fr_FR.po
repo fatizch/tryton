@@ -2,10 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:account.payment.journal,post_clearing_move:"
-msgid "Post Clearing Move"
-msgstr "Emettre le mouvement de compensation"
-
 msgctxt "error:account.payment:"
 msgid "Reject of %s"
 msgstr "Rejet du %s"
+
+msgctxt "field:account.payment.journal,post_clearing_move:"
+msgid "Post Clearing Move"
+msgstr "Emettre le mouvement de compensation"

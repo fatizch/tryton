@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -13,10 +13,6 @@ msgstr "Entrez une valeur pour le(s) champs(s) : %s"
 msgctxt "error:contract.set:"
 msgid "Everything is good !"
 msgstr "Tout est bon!"
-
-msgctxt "error:contract.set:"
-msgid "Object %s is currently locked by user %s"
-msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 
 msgctxt "error:contract.set:"
 msgid "Select a date that is not in the future for field(s): %s"
@@ -46,6 +42,10 @@ msgctxt "field:contract.set,current_state_name:"
 msgid "Current State In Process"
 msgstr "Etape dans le processus"
 
+msgctxt "field:contract.set,has_quote_contracts:"
+msgid "Has Quote Contracts"
+msgstr "A des devis"
+
 msgctxt "field:contract.set,logs:"
 msgid "Task"
 msgstr "Tâche"
@@ -53,6 +53,14 @@ msgstr "Tâche"
 msgctxt "field:contract.set,party_relations:"
 msgid "Party Relations"
 msgstr "Relations tiers"
+
+msgctxt "field:contract.set,task_name:"
+msgid "Task Name"
+msgstr "Nom de la tâche"
+
+msgctxt "field:contract.set,task_status:"
+msgid "Task Status"
+msgstr "Statut du processus"
 
 msgctxt "field:contract.set.validate.find_process,good_process:"
 msgid "Good Process"

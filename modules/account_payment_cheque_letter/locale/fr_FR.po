@@ -6,10 +6,6 @@ msgctxt "error:account.payment.group:"
 msgid "Missing begin cheque number"
 msgstr "Le numéro de chèque de départ est manquant"
 
-msgctxt "error:currency.currency:"
-msgid "and"
-msgstr "et"
-
 msgctxt "error:account.payment.group:"
 msgid "Missing max available cheque number"
 msgstr "Nombre maximum de chèque manquant"
@@ -37,13 +33,9 @@ msgid "You must select sequencial cheque letters numbers: jump from %s to %s"
 msgstr ""
 "Vous devez sélectionner des lèttres cheques qui se suivent: saut de %s à %s"
 
-msgctxt "field:account.payment.merged,formatted_string_amount:"
-msgid "Formatted amount"
-msgstr "Montant en toutes lettres"
-
-msgctxt "field:account.payment.merged,description:"
-msgid "Description"
-msgstr "Description"
+msgctxt "error:currency.currency:"
+msgid "and"
+msgstr "et"
 
 msgctxt "field:account.payment,is_cheque_letter:"
 msgid "Is Cheque Letter"
@@ -52,6 +44,14 @@ msgstr "Est une lettre chèque"
 msgctxt "field:account.payment.journal,validate_process:"
 msgid "Validate on processing"
 msgstr "Valider lors du traitement"
+
+msgctxt "field:account.payment.merged,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:account.payment.merged,formatted_string_amount:"
+msgid "Formatted amount"
+msgstr "Montant en toutes lettres"
 
 msgctxt "field:account.payment.process.start,first_cheque_number:"
 msgid "Cheque number to start with"

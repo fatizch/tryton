@@ -66,6 +66,10 @@ msgctxt "field:document.request,documents:"
 msgid "Documents"
 msgstr "Documents"
 
+msgctxt "field:document.request,documents_str:"
+msgid "Documents"
+msgstr "Documents"
+
 msgctxt "field:document.request,id:"
 msgid "ID"
 msgstr "ID"

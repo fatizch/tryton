@@ -78,9 +78,9 @@ msgctxt "field:party.category,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:party.configuraton,party_lang:"
+msgctxt "field:party.configuration,party_lang:"
 msgid "Party Language"
-msgstr "Langue par défaut des tiers"
+msgstr "Langue des tiers"
 
 msgctxt "field:party.contact_mechanism,xml_id:"
 msgid "XML Id"
@@ -677,6 +677,10 @@ msgstr "Synthèse acteur"
 msgctxt "field:res.user,party_synthesis_previous:"
 msgid "Previous Synthesis Parties"
 msgstr "Synthèses acteur précédentes"
+
+msgctxt "help:party.configuration,party_lang:"
+msgid "The value set on this field will preset the language on new parties"
+msgstr "La valeur définie initialisera la langue sur les tiers"
 
 msgctxt "model:ir.action,name:"
 msgid "Parties Synthesis"

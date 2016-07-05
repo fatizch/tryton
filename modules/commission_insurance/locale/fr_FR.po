@@ -470,6 +470,10 @@ msgctxt "field:commission.synthesis.start,broker_fees_account:"
 msgid "Broker fees account"
 msgstr "Compte de frais courtier"
 
+msgctxt "field:commission.synthesis.start,broker_fees_accounts:"
+msgid "Broker Fees Accounts"
+msgstr "Comptes pour les frais de courtier"
+
 msgctxt "field:commission.synthesis.start,company:"
 msgid "Company"
 msgstr "Société"
@@ -647,8 +651,8 @@ msgid "Broker Changed"
 msgstr "Transfert de portefeuille"
 
 msgctxt "model:ir.action,name:"
-msgid "Brokers"
-msgstr "Courtiers"
+msgid "Aggregated commissions"
+msgstr "Commissions agrégées"
 
 msgctxt "model:ir.action,name:act_broker_commissioned_contract_relate_form"
 msgid "Commissioned Contracts"
@@ -661,10 +665,6 @@ msgstr "Courtiers"
 msgctxt "model:ir.action,name:act_change_broker"
 msgid "Change Broker"
 msgstr "Changement d'apporteur"
-
-msgctxt "model:ir.action,name:act_commission_aggregated_contract_relate_form1"
-msgid "Aggregated commissions"
-msgstr "Commissions agrégées"
 
 msgctxt ""
 "model:ir.action,name:act_commission_aggregated_distribution_relate_form"
@@ -1148,6 +1148,9 @@ msgid "Show"
 msgstr "Afficher"
 
 # Custom translations below
+msgctxt "field:commission,amount:commission."
+msgid "Amount"
+msgstr "Commission"
 
 msgctxt "field:account.invoice,agent:commission."
 msgid "Commission Agent"
@@ -1212,8 +1215,3 @@ msgstr "Protocole de commissionnement"
 msgctxt "view:commission.create_invoice.ask:commission."
 msgid "Create Commission Invoice"
 msgstr "Générer les bordereaux de commission"
-
-# Custom translations below
-msgctxt "field:commission,amount:commission."
-msgid "Amount"
-msgstr "Commission"

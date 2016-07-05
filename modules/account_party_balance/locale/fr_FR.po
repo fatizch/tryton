@@ -64,7 +64,7 @@ msgstr "ID"
 
 msgctxt "field:account.party_balance,is_balance_positive:"
 msgid "Balance Positive"
-msgstr "Balance Positive"
+msgstr "Balance positive"
 
 msgctxt "field:account.party_balance,lines:"
 msgid "Accounting Lines"
@@ -112,7 +112,7 @@ msgstr "Icône"
 
 msgctxt "field:account.party_balance.line,id:"
 msgid "ID"
-msgstr "ID"
+msgstr "Identifiant"
 
 msgctxt "field:account.party_balance.line,move_line:"
 msgid "Move Line"

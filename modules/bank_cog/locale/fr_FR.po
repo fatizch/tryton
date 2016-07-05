@@ -46,6 +46,10 @@ msgctxt "field:bank.account,number:"
 msgid "Number"
 msgstr "Numéro"
 
+msgctxt "field:bank.account,owners_name:"
+msgid "Owners"
+msgstr "Propriétaires"
+
 msgctxt "field:bank.account,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
@@ -133,7 +137,3 @@ msgstr "Menu Compte Bancaire Synthèse Tiers "
 msgctxt "view:party.party:"
 msgid "Bank"
 msgstr "Banque"
-
-msgctxt "field:bank.account,owners_name:"
-msgid "Owners"
-msgstr "Propriétaires"

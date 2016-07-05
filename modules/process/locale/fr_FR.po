@@ -10,22 +10,6 @@ msgctxt "error:process.action:"
 msgid "Source Code Unavailable"
 msgstr "La source n'est pas disponible"
 
-msgctxt "error:process.process_framework:"
-msgid "Enter a value for field '%s' of '%s'"
-msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
-
-msgctxt "error:process.process_framework:"
-msgid "Enter a value for field(s): %s"
-msgstr "Entrez une valeur pour le(s) champs(s) : %s"
-
-msgctxt "error:process.process_framework:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:process.process_framework:"
-msgid "Select a date that is not in the future for field(s): %s"
-msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
-
 msgctxt "error:process.step:"
 msgid "The technical name must be unique"
 msgstr "Le nom technique doit être unique"
@@ -352,42 +336,6 @@ msgctxt "field:process.process-act_window,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:process.process_framework,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:process.process_framework,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:process.process_framework,current_state:"
-msgid "Current State"
-msgstr "Etat Courant"
-
-msgctxt "field:process.process_framework,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:process.process_framework,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:process.process_framework,task_name:"
-msgid "Task Name"
-msgstr "Nom de la tâche"
-
-msgctxt "field:process.process_framework,task_status:"
-msgid "Task Status"
-msgstr "Statut du processus"
-
-msgctxt "field:process.process_framework,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:process.process_framework,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:process.status,code:"
 msgid "Code"
 msgstr "Code"
@@ -699,10 +647,6 @@ msgstr "Action de processus"
 msgctxt "model:process.process-act_window,name:"
 msgid "Process to Action Window Relation"
 msgstr "Relation entre le processus et les actions des fenêtres"
-
-msgctxt "model:process.process_framework,name:"
-msgid "Process Framework"
-msgstr "Structure des processus"
 
 msgctxt "model:process.status,name:"
 msgid "Process Status"

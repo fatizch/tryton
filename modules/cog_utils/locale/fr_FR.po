@@ -28,16 +28,12 @@ msgstr ""
 msgctxt "error:export_not_found:"
 msgid "Cannot import : no object %s with functionnal key : \"%s\" were found."
 msgstr ""
-"Impossible d'importer : Aucun object %s avec la clé fonctionnelle : \"%s\" "
-"n'a été trouvé."
 
 msgctxt "error:export_not_unique:"
 msgid ""
 "Cannot import : the following objects:\\n%s\\n share the same functional "
 "key:\\n\"%s\"."
 msgstr ""
-"Impossible d'importer : Les objets suivants \\n%s\\n ont la même clé "
-"fonctionnelle :\\n\"%s\"."
 
 msgctxt "error:ir.attachment:"
 msgid "Can't decode attachment %s in base 64"
@@ -69,7 +65,7 @@ msgstr "Impossible de charger le jeu d'essai du fichier %s"
 
 msgctxt "error:missing_export_configuration:"
 msgid "Can't find configuration for code %s."
-msgstr "Impossible de trouver une configuration avec le code %s."
+msgstr ""
 
 msgctxt "field:account.account,id:"
 msgid ""
@@ -619,6 +615,10 @@ msgctxt "field:ir.model.access,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:ir.model.cleandb,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:ir.model.field,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
@@ -684,6 +684,10 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:ir.model.method,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:ir.note,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -1253,6 +1257,10 @@ msgstr "Elément à exporter"
 msgctxt "model:ir.import.select_file,name:"
 msgid "File Selector"
 msgstr "Selecteur de fichier"
+
+msgctxt "model:ir.model.cleandb,name:"
+msgid "Clean Database Batch"
+msgstr "Batch de nettoyage de la base de donnée"
 
 msgctxt "model:ir.model.method,name:"
 msgid "Method Definition"

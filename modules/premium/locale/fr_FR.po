@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -181,6 +181,10 @@ msgstr "Primes"
 msgctxt "field:contract.fee,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:contract.fee,used_fees:"
+msgid "Used Fees"
+msgstr "Frais utilisés"
 
 msgctxt "field:contract.fee,write_date:"
 msgid "Write Date"
@@ -417,10 +421,6 @@ msgstr "Créé par"
 msgctxt "field:offered.option.description.premium_rule,frequency:"
 msgid "Rate Frequency"
 msgstr "Périodicité du tarif"
-
-msgctxt "field:offered.option.description.premium_rule,func_key:"
-msgid "Functional Key"
-msgstr "Clé fonctionnelle"
 
 msgctxt "field:offered.option.description.premium_rule,id:"
 msgid "ID"

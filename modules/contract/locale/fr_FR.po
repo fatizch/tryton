@@ -449,6 +449,10 @@ msgctxt "field:contract.contact.type,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract.decline.inactive_quotes,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:contract.decline.select_reason,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -952,27 +956,21 @@ msgctxt "field:event.log,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:offered.configuration,inactivity_delay:"
-msgid "Inactivity Delay"
-msgstr "Délai d'inactivité"
-
 msgctxt "field:offered.configuration,automatic_decline_reason:"
 msgid "Automatic Decline Reason"
 msgstr "Raison de la déclinaison automatique"
 
-msgctxt "help:offered.configuration,inactivity_delay:"
-msgid "All quotes inactive since stricly more than this period (in days) will be declined."
-msgstr ""
-"Tous les devis qui sont inactifs depuis strictement plus que cette période (en jours) "
-"seront declinés automatiquement"
-
-msgctxt "model:contract.decline.inactive_quotes,name:"
-msgid "Decline Inactive Quotes Contracts"
-msgstr "Declinaison devis inactifs"
-
 msgctxt "field:offered.configuration,default_quote_number_sequence:"
 msgid "Default quote number sequence"
 msgstr "Sequence de numéro de devis par défaut"
+
+msgctxt "field:offered.configuration,delay_unit:"
+msgid "Delay Unit"
+msgstr "Unité du délai"
+
+msgctxt "field:offered.configuration,inactivity_delay:"
+msgid "Inactivity Delay"
+msgstr "Délai d'inactivité"
 
 msgctxt "field:offered.product,quote_number_sequence:"
 msgid "Quote number sequence"
@@ -1038,6 +1036,14 @@ msgctxt "field:party.synthesis.menu.contract,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:offered.configuration,inactivity_delay:"
+msgid ""
+"All quotes inactive since stricly more than this period (in days) will be "
+"declined."
+msgstr ""
+"Tous les devis qui sont inactifs depuis strictement plus que cette période "
+"(en jours) seront declinés automatiquement"
+
 msgctxt "model:contract,name:"
 msgid "Contract"
 msgstr "Contrat"
@@ -1061,6 +1067,10 @@ msgstr "Type de contact"
 msgctxt "model:contract.contact.type,name:subscriber"
 msgid "Subscriber"
 msgstr "Souscripteur"
+
+msgctxt "model:contract.decline.inactive_quotes,name:"
+msgid "Decline Inactive Quotes Contracts"
+msgstr "Declinaison devis inactifs"
 
 msgctxt "model:contract.decline.select_reason,name:"
 msgid "Reason selector to decline contract"
@@ -1195,14 +1205,6 @@ msgctxt "model:ir.action,name:act_decline"
 msgid "Decline"
 msgstr "Décliner"
 
-msgctxt "model:ir.action,name:act_end"
-msgid "End Contract"
-msgstr "Résilier Contrat"
-
-msgctxt "model:ir.action,name:act_event_log_relate_form"
-msgid "Event Logs"
-msgstr "Logs d'événements"
-
 msgctxt "model:ir.action,name:act_hold_contract"
 msgid "Hold Contract"
 msgstr "Suspendre le contrat"
@@ -1230,10 +1232,6 @@ msgstr "Sous statut"
 msgctxt "model:ir.action,name:option_subscription_wizard"
 msgid "Option Subscription"
 msgstr "Souscription d'Option"
-
-msgctxt "model:ir.action,name:option_subscription_wizard_launcher"
-msgid "Option Subscription Launcher"
-msgstr "Souscription des options"
 
 msgctxt "model:ir.action.act_window.domain,name:"
 msgid "Quote"
@@ -1307,18 +1305,6 @@ msgstr "Contrat"
 msgctxt "model:res.group,name:group_contract_admin"
 msgid "Contract Administration"
 msgstr "Administration des contrats"
-
-msgctxt "field:offered.configuration,delay_unit:"
-msgid "Delay Unit"
-msgstr "Unité du délai"
-
-msgctxt "selection:offered.configuration,delay_unit:"
-msgid "Months"
-msgstr "Mois"
-
-msgctxt "selection:offered.configuration,delay_unit:"
-msgid "Days"
-msgstr "Jours"
 
 msgctxt "selection:contract,product_subscriber_kind:"
 msgid "All"
@@ -1469,6 +1455,14 @@ msgctxt ""
 "selection:contract.wizard.option_subscription.options_displayer.option,selection:"
 msgid "Manual"
 msgstr "Manuelle"
+
+msgctxt "selection:offered.configuration,delay_unit:"
+msgid "Days"
+msgstr "Jours"
+
+msgctxt "selection:offered.configuration,delay_unit:"
+msgid "Months"
+msgstr "Mois"
 
 msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Contract"

@@ -90,7 +90,8 @@ msgctxt "field:contract.manage_beneficiaries.option,coverage:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "field:contract.manage_beneficiaries.option,customized_beneficiary_clause:"
+msgctxt ""
+"field:contract.manage_beneficiaries.option,customized_beneficiary_clause:"
 msgid "Customized Beneficiary Clause"
 msgstr "Clause bénéficiaire spécifique"
 

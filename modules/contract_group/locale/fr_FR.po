@@ -18,7 +18,7 @@ msgctxt "field:offered.product,is_group:"
 msgid "Group Product"
 msgstr "Produits Collectif"
 
-msgctxt "model:ir.action,name:None"
+msgctxt "model:ir.action,name:"
 msgid "Contrat Group"
 msgstr "Contrat Collectif"
 
@@ -66,10 +66,6 @@ msgstr "Garanties Collectif"
 msgctxt "model:ir.ui.menu,name:menu_group_contract"
 msgid "Group Contract"
 msgstr "Contrat Collectif"
-
-msgctxt "model:ir.ui.menu,name:menu_group_contract_form"
-msgid "Group Contracts"
-msgstr "Contrats Collectifs"
 
 msgctxt "model:ir.ui.menu,name:menu_group_contract_quotes"
 msgid "Quotes"

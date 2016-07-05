@@ -1,0 +1,51 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.payment.party_journal_relation,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.payment.party_journal_relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.payment.party_journal_relation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.payment.party_journal_relation,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:account.payment.party_journal_relation,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:account.payment.party_journal_relation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.payment.party_journal_relation,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.payment.party_journal_relation,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "model:account.payment.party_journal_relation,name:"
+msgid "Party Journal Relation"
+msgstr "Journaux de paiement par tiers"
+
+msgctxt "model:ir.action,name:act_party_journal_relation"
+msgid "Party Journals relations"
+msgstr "Journaux de paiement par tiers"
+
+msgctxt "model:ir.ui.menu,name:menu_party_journal_relation"
+msgid "Party Journals relations"
+msgstr "Journaux de paiement par tiers"
+
+msgctxt "view:account.payment.party_journal_relation:"
+msgid "Party Journal Relation"
+msgstr "Journaux de paiement par tiers"

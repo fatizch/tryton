@@ -41,54 +41,6 @@ msgctxt "error:claim:"
 msgid "The number must be unique!"
 msgstr "Le numéro doit être unique"
 
-msgctxt "field:account.invoice.line,claim_details:"
-msgid "Claim Details"
-msgstr "Détail du sinistre"
-
-msgctxt "field:account.invoice.line.claim_detail,claim:"
-msgid "Claim"
-msgstr "Sinistre"
-
-msgctxt "field:account.invoice.line.claim_detail,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:account.invoice.line.claim_detail,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:account.invoice.line.claim_detail,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:account.invoice.line.claim_detail,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:account.invoice.line.claim_detail,invoice_line:"
-msgid "Invoice Line"
-msgstr "Ligne de quittance"
-
-msgctxt "field:account.invoice.line.claim_detail,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:account.invoice.line.claim_detail,service:"
-msgid "Services"
-msgstr "Services"
-
-msgctxt "field:account.invoice.line.claim_detail,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:account.invoice.line.claim_detail,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:account.invoice.line.claim_detail,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
 msgctxt "field:benefit,beneficiary_kind:"
 msgid "Beneficiary Kind"
 msgstr "Type de bénéficiaire"
@@ -112,10 +64,6 @@ msgstr "Date de Création"
 msgctxt "field:benefit,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
-
-msgctxt "field:benefit,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
 
 msgctxt "field:benefit,description:"
 msgid "Description"
@@ -153,10 +101,6 @@ msgctxt "field:benefit,start_date:"
 msgid "Start Date"
 msgstr "Date d'Effet"
 
-msgctxt "field:benefit,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
 msgctxt "field:benefit,tags:"
 msgid "Tags"
 msgstr "Labels"
@@ -164,14 +108,6 @@ msgstr "Labels"
 msgctxt "field:benefit,tags_name:"
 msgid "Tags"
 msgstr "Labels"
-
-msgctxt "field:benefit,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:benefit,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
 
 msgctxt "field:benefit,write_date:"
 msgid "Write Date"
@@ -457,10 +393,6 @@ msgctxt "field:benefit.loss.description-extra_data,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:claim,attachments:"
-msgid "Attachments"
-msgstr "Pièces jointes"
-
 msgctxt "field:claim,claimant:"
 msgid "Claimant"
 msgstr "Déclarant"
@@ -481,21 +413,9 @@ msgctxt "field:claim,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:claim,current_state:"
-msgid "Current State"
-msgstr "Etat Courant"
-
 msgctxt "field:claim,declaration_date:"
 msgid "Declaration Date"
 msgstr "Date de Déclaration"
-
-msgctxt "field:claim,document_request:"
-msgid "Document Request"
-msgstr "Demande de Documents"
-
-msgctxt "field:claim,document_request_lines:"
-msgid "Required Documents"
-msgstr "Documents requis"
 
 msgctxt "field:claim,end_date:"
 msgid "End Date"
@@ -504,10 +424,6 @@ msgstr "Date de Fin"
 msgctxt "field:claim,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:claim,invoices:"
-msgid "Invoices"
-msgstr "Quittances"
 
 msgctxt "field:claim,is_sub_status_required:"
 msgid "Is Sub Status Required"
@@ -589,7 +505,6 @@ msgctxt "field:claim.close_reason_view,claims:"
 msgid "Claims"
 msgstr "Sinistres"
 
-#, fuzzy
 msgctxt "field:claim.close_reason_view,id:"
 msgid "ID"
 msgstr "ID"
@@ -627,178 +542,6 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:claim.configuration,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:claim.indemnification,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:claim.indemnification,beneficiary:"
-msgid "Beneficiary"
-msgstr "Bénéficiaire"
-
-msgctxt "field:claim.indemnification,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:claim.indemnification,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:claim.indemnification,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:claim.indemnification,currency:"
-msgid "Currency"
-msgstr "Devises"
-
-msgctxt "field:claim.indemnification,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
-
-msgctxt "field:claim.indemnification,currency_symbol:"
-msgid "Currency Symbol"
-msgstr "Symbole de la Devise"
-
-msgctxt "field:claim.indemnification,customer:"
-msgid "Customer"
-msgstr "Client"
-
-msgctxt "field:claim.indemnification,details:"
-msgid "Details"
-msgstr "Détails"
-
-msgctxt "field:claim.indemnification,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:claim.indemnification,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:claim.indemnification,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:claim.indemnification,local_currency:"
-msgid "Local Currency"
-msgstr "Devise Locale"
-
-msgctxt "field:claim.indemnification,local_currency_amount:"
-msgid "Local Currency Amount"
-msgstr "Montant en Devise Locale"
-
-msgctxt "field:claim.indemnification,local_currency_digits:"
-msgid "Local Currency Digits"
-msgstr "Précision de la Devise Locale"
-
-msgctxt "field:claim.indemnification,manual:"
-msgid "Manual Calculation"
-msgstr "Calcul Manuel"
-
-msgctxt "field:claim.indemnification,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:claim.indemnification,service:"
-msgid "Delivered Service"
-msgstr "Prestation Fournie"
-
-msgctxt "field:claim.indemnification,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:claim.indemnification,status:"
-msgid "Status"
-msgstr "Statut"
-
-msgctxt "field:claim.indemnification,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:claim.indemnification,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:claim.indemnification,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:claim.indemnification.detail,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:claim.indemnification.detail,amount_per_unit:"
-msgid "Amount per Unit"
-msgstr "Montant par Unité"
-
-msgctxt "field:claim.indemnification.detail,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:claim.indemnification.detail,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:claim.indemnification.detail,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:claim.indemnification.detail,currency:"
-msgid "Currency"
-msgstr "Devises"
-
-msgctxt "field:claim.indemnification.detail,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
-
-msgctxt "field:claim.indemnification.detail,currency_symbol:"
-msgid "Currency Symbol"
-msgstr "Symbole de la Devise"
-
-msgctxt "field:claim.indemnification.detail,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:claim.indemnification.detail,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:claim.indemnification.detail,indemnification:"
-msgid "Indemnification"
-msgstr "Indemnisation"
-
-msgctxt "field:claim.indemnification.detail,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:claim.indemnification.detail,nb_of_unit:"
-msgid "Nb of Unit"
-msgstr "Nombre d'Unité"
-
-msgctxt "field:claim.indemnification.detail,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:claim.indemnification.detail,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:claim.indemnification.detail,unit:"
-msgid "Unit"
-msgstr "Unité"
-
-msgctxt "field:claim.indemnification.detail,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:claim.indemnification.detail,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:claim.indemnification.detail,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -898,6 +641,10 @@ msgctxt "field:claim.service,benefit:"
 msgid "Benefit"
 msgstr "Prestation"
 
+msgctxt "field:claim.service,benefit_summary:"
+msgid "Benefit Summary"
+msgstr "Résumé des prestations"
+
 msgctxt "field:claim.service,claim:"
 msgid "Claim"
 msgstr "Sinistre"
@@ -926,10 +673,6 @@ msgctxt "field:claim.service,func_error:"
 msgid "Error"
 msgstr "Erreur"
 
-msgctxt "field:claim.service,has_automatic_period_calculation:"
-msgid "has_automatic_period_calculation"
-msgstr ""
-
 msgctxt "field:claim.service,id:"
 msgid "ID"
 msgstr "ID"
@@ -946,18 +689,6 @@ msgctxt "field:claim.service,option:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "field:claim.service,paid_until_date:"
-msgid "Paid Until Date"
-msgstr "Payer jusqu'à"
-
-msgctxt "field:claim.service,payment_accepted_until_date:"
-msgid "Payments Accepted Until:"
-msgstr "Périodes validées jusqu'à"
-
-msgctxt "field:claim.service,period_frequency:"
-msgid "Period Frequency"
-msgstr "Fréquence"
-
 msgctxt "field:claim.service,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -965,10 +696,6 @@ msgstr "Nom"
 msgctxt "field:claim.service,status:"
 msgid "Status"
 msgstr "Statut"
-
-msgctxt "field:claim.service,summary:"
-msgid "Service Summary"
-msgstr "Résumé des prestations"
 
 msgctxt "field:claim.service,write_date:"
 msgid "Write Date"
@@ -1086,14 +813,6 @@ msgctxt "field:contract.option,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
 
-msgctxt "field:document.receive.request,tmp_0:"
-msgid "Claim"
-msgstr "Sinistre"
-
-msgctxt "field:document.receive.request,tmp_1:"
-msgid "Contract"
-msgstr "Contrat"
-
 msgctxt "field:expense,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -1210,10 +929,6 @@ msgctxt "field:party.synthesis.menu.claim,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "model:account.invoice.line.claim_detail,name:"
-msgid "Claim Invoice Line Detail"
-msgstr "Détail d'une période"
-
 msgctxt "model:account.journal,name:"
 msgid "Claim"
 msgstr "Sinistre"
@@ -1266,14 +981,6 @@ msgctxt "model:claim.configuration,name:"
 msgid "Claim Configuration"
 msgstr "Configuration"
 
-msgctxt "model:claim.indemnification,name:"
-msgid "Indemnification"
-msgstr "Indemnisation"
-
-msgctxt "model:claim.indemnification.detail,name:"
-msgid "Indemnification Detail"
-msgstr "Détail de l'indemnisation"
-
 msgctxt "model:claim.loss,name:"
 msgid "Loss"
 msgstr "Préjudice"
@@ -1319,7 +1026,7 @@ msgid "Claims"
 msgstr "Sinistres"
 
 msgctxt "model:ir.action,name:act_close_claim_wizard"
-msgid "Close Claim"
+msgid "Close Claims"
 msgstr "Clore les sinistres"
 
 msgctxt "model:ir.action,name:act_deliver_wizard"
@@ -1406,18 +1113,6 @@ msgctxt "model:tag,name:tag_claim"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "selection:benefit,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:benefit,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:benefit,template_behaviour:"
-msgid "Remove"
-msgstr "Supprimer"
-
 msgctxt "selection:benefit.loss.description,item_kind:"
 msgid ""
 msgstr " "
@@ -1437,90 +1132,6 @@ msgstr "Ouvert"
 msgctxt "selection:claim,status:"
 msgid "Reopened"
 msgstr "Réouvert"
-
-msgctxt "selection:claim.indemnification,kind:"
-msgid "Annuity"
-msgstr "Rente"
-
-msgctxt "selection:claim.indemnification,kind:"
-msgid "Capital"
-msgstr "Capital"
-
-msgctxt "selection:claim.indemnification,kind:"
-msgid "Period"
-msgstr "Période"
-
-msgctxt "selection:claim.indemnification,status:"
-msgid "Calculated"
-msgstr "Calculé"
-
-msgctxt "selection:claim.indemnification,status:"
-msgid "Paid"
-msgstr "Payé"
-
-msgctxt "selection:claim.indemnification,status:"
-msgid "Rejected"
-msgstr "Refusé"
-
-msgctxt "selection:claim.indemnification,status:"
-msgid "Validated"
-msgstr "Validé"
-
-msgctxt "selection:claim.indemnification.detail,kind:"
-msgid "Deductible"
-msgstr "Franchise"
-
-msgctxt "selection:claim.indemnification.detail,kind:"
-msgid "Indemnified"
-msgstr "Indemnisé"
-
-msgctxt "selection:claim.indemnification.detail,kind:"
-msgid "Limit"
-msgstr "Plafond"
-
-msgctxt "selection:claim.indemnification.detail,kind:"
-msgid "Regularization"
-msgstr "Régularisation"
-
-msgctxt "selection:claim.indemnification.detail,kind:"
-msgid "Waiting Period"
-msgstr "Carence"
-
-msgctxt "selection:claim.indemnification.detail,unit:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:claim.indemnification.detail,unit:"
-msgid "Day"
-msgstr "Jour"
-
-msgctxt "selection:claim.indemnification.detail,unit:"
-msgid "Half-year"
-msgstr "Semestre"
-
-msgctxt "selection:claim.indemnification.detail,unit:"
-msgid "Month"
-msgstr "Mois"
-
-msgctxt "selection:claim.indemnification.detail,unit:"
-msgid "Quarter"
-msgstr "Trimestre"
-
-msgctxt "selection:claim.indemnification.detail,unit:"
-msgid "Week"
-msgstr "Semaine"
-
-msgctxt "selection:claim.indemnification.detail,unit:"
-msgid "Year"
-msgstr "Année"
-
-msgctxt "selection:claim.service,period_frequency:"
-msgid "Monthly"
-msgstr "Mensuel"
-
-msgctxt "selection:claim.service,period_frequency:"
-msgid "Quarterly"
-msgstr "Trimestriel"
 
 msgctxt "selection:claim.service,status:"
 msgid "Calculated"
@@ -1550,22 +1161,6 @@ msgctxt "selection:claim.sub_status,status:"
 msgid "Reopened"
 msgstr "Réouvert"
 
-msgctxt "selection:document.receive.request,kind:"
-msgid "Claim"
-msgstr "Sinistre"
-
-msgctxt "selection:document.request,needed_by:"
-msgid "Claim"
-msgstr "Sinistre"
-
-msgctxt "selection:document.request.line,for_object:"
-msgid "Claim"
-msgstr "Sinistre"
-
-msgctxt "selection:document.request.line,for_object:"
-msgid "Delivered Service"
-msgstr "Prestation Fournie"
-
 msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Claim"
 msgstr "Sinistre"
@@ -1587,6 +1182,10 @@ msgid "Loss Descriptor"
 msgstr "Description du Préjudice"
 
 msgctxt "view:benefit:"
+msgid "Administration"
+msgstr "Administration"
+
+msgctxt "view:benefit:"
 msgid "Benefit"
 msgstr "Prestation"
 
@@ -1598,6 +1197,14 @@ msgctxt "view:benefit:"
 msgid "Extra Datas"
 msgstr "Données complémentaires"
 
+msgctxt "view:benefit:"
+msgid "Rules"
+msgstr "Règles"
+
+msgctxt "view:benefit:"
+msgid "Summary"
+msgstr "Synthèse"
+
 msgctxt "view:claim.benefit_to_deliver:"
 msgid "Benefit"
 msgstr "Prestation"
@@ -1605,14 +1212,6 @@ msgstr "Prestation"
 msgctxt "view:claim.close_reason_view:"
 msgid "Close Claim"
 msgstr "Clore les sinistres"
-
-msgctxt "view:claim.indemnification.detail:"
-msgid "Indemnification Detail"
-msgstr "Détail de l'indemnisation"
-
-msgctxt "view:claim.indemnification:"
-msgid "Indemnification"
-msgstr "Indemnisation"
 
 msgctxt "view:claim.loss:"
 msgid "Loss"

@@ -116,10 +116,6 @@ msgctxt "field:account.invoice.aggregate_lines.display.line,tax_amount:"
 msgid "Tax Amount"
 msgstr "Taxe"
 
-msgctxt "field:contract,processing_payments_amount:"
-msgid "Processing Payments Amount"
-msgstr "Montant des paiements en cours"
-
 msgctxt "field:account.invoice.aggregate_lines.display.line,total_amount:"
 msgid "Total Amount"
 msgstr "Montant Total"
@@ -339,6 +335,14 @@ msgstr "Conditions de paiement"
 msgctxt "field:contract,premiums:"
 msgid "Premiums"
 msgstr "Primes"
+
+msgctxt "field:contract,processing_payments_amount:"
+msgid "Processing Payments Amount"
+msgstr "Montant des paiements en cours"
+
+msgctxt "field:contract,receivable_today:"
+msgid "Receivable Today"
+msgstr "À recevoir aujourd'hui"
 
 msgctxt "field:contract,total_premium_amount:"
 msgid "Total Premium Amount"

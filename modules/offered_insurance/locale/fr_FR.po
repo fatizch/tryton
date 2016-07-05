@@ -308,50 +308,6 @@ msgctxt "field:ir.model,printable:"
 msgid "Printable"
 msgstr "Imprimable"
 
-msgctxt "field:offered,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:offered,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
-
-msgctxt "field:offered,description:"
-msgid "Description"
-msgstr "Description"
-
-msgctxt "field:offered,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:offered,extra_data:"
-msgid "Offered Kind"
-msgstr "Typage"
-
-msgctxt "field:offered,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:offered,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
-msgctxt "field:offered,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
 msgctxt "field:offered.exclusion,code:"
 msgid "Code"
 msgstr "Code"
@@ -604,10 +560,6 @@ msgctxt "field:offered.option.description,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.option.description,premium_rules:"
-msgid "Premium Rules"
-msgstr "Règles de Cotisation"
-
 msgctxt "field:offered.option.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -615,18 +567,6 @@ msgstr "Nom"
 msgctxt "field:offered.option.description,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
-
-msgctxt "field:offered.option.description,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
-msgctxt "field:offered.option.description,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered.option.description,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
 
 msgctxt "field:offered.option.description,write_date:"
 msgid "Write Date"
@@ -756,10 +696,6 @@ msgctxt "field:offered.product,packages:"
 msgid "Packages"
 msgstr "Formules"
 
-msgctxt "field:offered.product,premium_dates:"
-msgid "Premium Dates"
-msgstr "Dates de calcul"
-
 msgctxt "field:offered.product,processes:"
 msgid "Processes"
 msgstr "Processus"
@@ -771,18 +707,6 @@ msgstr "Nom"
 msgctxt "field:offered.product,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
-
-msgctxt "field:offered.product,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
-msgctxt "field:offered.product,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered.product,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
 
 msgctxt "field:offered.product,write_date:"
 msgid "Write Date"
@@ -1060,10 +984,6 @@ msgctxt "model:ir.ui.menu,name:menu_model_expense_kind"
 msgid "Expenses Kind"
 msgstr "Type de Frais"
 
-msgctxt "model:offered,name:"
-msgid "Offered"
-msgstr "Offre"
-
 msgctxt "model:offered.exclusion,name:"
 msgid "Exclusion Kind"
 msgstr "Type d'exclusion"
@@ -1296,14 +1216,6 @@ msgctxt "selection:extra_data,type_:"
 msgid "Selection"
 msgstr "Sélection"
 
-msgctxt "selection:offered,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered,template_behaviour:"
-msgid "Remove"
-msgstr "Supprimer"
-
 msgctxt "selection:offered.item.description,kind:"
 msgid ""
 msgstr " "
@@ -1324,10 +1236,6 @@ msgctxt "selection:offered.option.description,family:"
 msgid "Generic"
 msgstr "Générique"
 
-msgctxt "selection:offered.option.description,family:"
-msgid "Life"
-msgstr "Prévoyance"
-
 msgctxt "selection:offered.option.description,insurance_kind:"
 msgid ""
 msgstr " "
@@ -1343,22 +1251,6 @@ msgstr "Obligatoire"
 msgctxt "selection:offered.option.description,subscription_behaviour:"
 msgid "Optional"
 msgstr "En Option"
-
-msgctxt "selection:offered.option.description,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered.option.description,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
-msgctxt "selection:offered.product,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered.product,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
 
 msgctxt "selection:rule_engine,extra_data_kind:"
 msgid "Extra Data"
@@ -1415,14 +1307,6 @@ msgstr "Garantie"
 msgctxt "view:offered.product:"
 msgid "Items"
 msgstr "Biens Couverts"
-
-msgctxt "view:offered:"
-msgid "Eligibility"
-msgstr "Eligibilité"
-
-msgctxt "view:offered:"
-msgid "Pricing"
-msgstr "Cotisation"
 
 msgctxt "view:party.party:"
 msgid "Insurer"

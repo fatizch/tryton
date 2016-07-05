@@ -619,6 +619,10 @@ msgctxt "model:ir.action,name:create_payments_wizard"
 msgid "Create Payments"
 msgstr "Créer les paiements"
 
+msgctxt "model:ir.action,name:manual_merged_payments_fail_wizard"
+msgid "Fail Merged Payments"
+msgstr "Paiements regroupés rejetés"
+
 msgctxt "model:ir.action,name:manual_payment_fail_wizard"
 msgid "Fail Payment"
 msgstr "Rejeter des paiements"

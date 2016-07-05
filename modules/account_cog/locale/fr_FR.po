@@ -182,6 +182,18 @@ msgctxt "field:ir.test_case,fiscal_year_sync_date:"
 msgid "Fiscal Year Sync Date"
 msgstr "Date de Synchro Année Fiscale"
 
+msgctxt "field:party.party,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:party.party,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:party.party,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
 msgctxt "field:party.party,negative_payable:"
 msgid "Payable"
 msgstr "À payer "
@@ -391,10 +403,6 @@ msgctxt "field:account.create_chart.properties,account_receivable:account."
 msgid "Default Receivable Account"
 msgstr "Compte à recevoir par défaut"
 
-msgctxt "field:account.move.line,party:account."
-msgid "Party"
-msgstr "Tiers"
-
 msgctxt "field:account.move.line,reconciliation:account."
 msgid "Reconciliation"
 msgstr "Lettrage"
@@ -481,10 +489,6 @@ msgstr "Lettrage de mouvements comptables"
 msgctxt "model:ir.ui.menu,name:account.menu_reconcile"
 msgid "Reconcile Accounts"
 msgstr "Lettrer les comptes"
-
-msgctxt "report:account.aged_balance:account."
-msgid "Party"
-msgstr "Tiers"
 
 msgctxt "report:account.move.general_journal:account."
 msgid "Posted"

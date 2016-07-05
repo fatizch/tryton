@@ -12,7 +12,7 @@ msgstr "Indemnisations"
 
 msgctxt "field:claim,indemnifications_to_schedule:"
 msgid "Indemnification To Schedule"
-msgstr "Indémnisations ordonnancées"
+msgstr "Indémnisation à ordonnancer"
 
 msgctxt "field:claim,is_pending_indemnification:"
 msgid "Pending Indemnification"

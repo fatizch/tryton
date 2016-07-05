@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -33,10 +33,6 @@ msgstr "Date de Création"
 msgctxt "field:commission.plan.recovery_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
-
-msgctxt "field:commission.plan.recovery_rule,func_key:"
-msgid "Functional Key"
-msgstr "Clé fonctionnelle"
 
 msgctxt "field:commission.plan.recovery_rule,id:"
 msgid "ID"

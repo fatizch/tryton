@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -17,10 +17,6 @@ msgstr "Entrez une valeur pour le(s) champs(s) : %s"
 msgctxt "error:endorsement.set:"
 msgid "Everything is good !"
 msgstr "Tout est bon!"
-
-msgctxt "error:endorsement.set:"
-msgid "Object %s is currently locked by user %s"
-msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 
 msgctxt "error:endorsement.set:"
 msgid "Select a date that is not in the future for field(s): %s"
@@ -71,6 +67,14 @@ msgstr "Résumé des avenants"
 msgctxt "field:endorsement.set,logs:"
 msgid "Task"
 msgstr "Tâche"
+
+msgctxt "field:endorsement.set,task_name:"
+msgid "Task Name"
+msgstr "Nom de la tâche"
+
+msgctxt "field:endorsement.set,task_status:"
+msgid "Task Status"
+msgstr "Statut du processus"
 
 msgctxt "model:ir.action,name:"
 msgid "Endorsement Set Application"

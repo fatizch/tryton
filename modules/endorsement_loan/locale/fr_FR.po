@@ -330,6 +330,10 @@ msgctxt "field:endorsement.loan,endorsement_summary:"
 msgid "Endorsement Summary"
 msgstr "Résumé de l'avenant"
 
+msgctxt "field:endorsement.loan,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:endorsement.loan,id:"
 msgid "ID"
 msgstr "ID"
@@ -918,56 +922,6 @@ msgctxt ""
 msgid "Current Contract Payments"
 msgstr "Echéancier antérieur"
 
-msgctxt "field:endorsement.start.preview_contract_payments.payment,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:endorsement.start.preview_contract_payments.payment,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt ""
-"field:endorsement.start.preview_contract_payments.payment,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
-
-msgctxt ""
-"field:endorsement.start.preview_contract_payments.payment,currency_symbol:"
-msgid "Currency Symbol"
-msgstr "Symbole de la Devise"
-
-msgctxt "field:endorsement.start.preview_contract_payments.payment,fees:"
-msgid "Fees"
-msgstr "Frais"
-
-msgctxt "field:endorsement.start.preview_contract_payments.payment,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt ""
-"field:endorsement.start.preview_contract_payments.payment,period_end:"
-msgid "Period End"
-msgstr "Fin de la période"
-
-msgctxt ""
-"field:endorsement.start.preview_contract_payments.payment,period_start:"
-msgid "Period Start"
-msgstr "Début de la période"
-
-msgctxt ""
-"field:endorsement.start.preview_contract_payments.payment,tax_amount:"
-msgid "Tax Amount"
-msgstr "Montant taxé"
-
-msgctxt "field:endorsement.start.preview_contract_payments.payment,total:"
-msgid "Total"
-msgstr "Total"
-
-msgctxt ""
-"field:endorsement.start.preview_contract_payments.payment,untaxed_amount:"
-msgid "Total"
-msgstr "Total"
-
 msgctxt "field:endorsement.start.preview_loan,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
@@ -1115,10 +1069,6 @@ msgstr "Prévisualisation de l'échéancier"
 msgctxt "model:endorsement.start.preview_contract_payments.contract,name:"
 msgid "Contract Preview"
 msgstr "Prévisualisation du contrat"
-
-msgctxt "model:endorsement.start.preview_contract_payments.payment,name:"
-msgid "Contract Preview Payment"
-msgstr "Ligne d'échéancier"
 
 msgctxt "model:endorsement.start.preview_loan,name:"
 msgid "Preview Loan Endorsement"
@@ -1300,10 +1250,6 @@ msgctxt "view:endorsement.start.preview_contract_payments.contract:"
 msgid "Contracts"
 msgstr "Contrats"
 
-msgctxt "view:endorsement.start.preview_contract_payments.payment:"
-msgid "Contract Payments"
-msgstr "Echéancier"
-
 msgctxt "view:endorsement.start.preview_contract_payments:"
 msgid "Preview Contracts Payments"
 msgstr "Prévisualisation de l'échéancier"
@@ -1422,28 +1368,3 @@ msgctxt ""
 "wizard_button:endorsement.start,loan_share_update,loan_share_update_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
-
-msgctxt ""
-"wizard_button:endorsement.start,preview_contract_payments,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt "wizard_button:endorsement.start,preview_contract_payments,cancel:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:endorsement.start,preview_contract_payments,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
-msgctxt "wizard_button:endorsement.start,preview_loan,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt "wizard_button:endorsement.start,preview_loan,cancel:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:endorsement.start,preview_loan,summary:"
-msgid "Summary"
-msgstr "Synthèse"

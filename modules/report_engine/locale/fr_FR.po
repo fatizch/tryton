@@ -13,10 +13,6 @@ msgstr ""
 "continuer ?"
 
 msgctxt "error:report.create:"
-msgid "Report is impossible: No contact available"
-msgstr "Impression impossible: pas de contact disponible"
-
-msgctxt "error:report.create:"
 msgid ""
 "Error while generating the letter:\n"
 "\n"
@@ -34,14 +30,17 @@ msgstr ""
 "  Erreur:\n"
 "%s"
 
+msgctxt "error:report.create:"
+msgid "Report is impossible: No contact available."
+msgstr "La génération du courrier est impossible: pas de contact disponible"
+
 msgctxt "error:report.template.parameter:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
 
 msgctxt "error:report.template.version:"
-msgid "The  names of attachments must be unique by resource!"
-msgstr ""
-"Le nom des pièces jointes doivent être unique pour une même ressource !"
+msgid "The names of attachments must be unique by resource."
+msgstr "Les noms des pièces jointes doivent être unique par ressource."
 
 msgctxt "error:report.template:"
 msgid "No letter model found for date %s and language %s"
@@ -291,14 +290,6 @@ msgctxt "field:report.template,kind:"
 msgid "Kind"
 msgstr "Type de donnée"
 
-msgctxt "field:report.template,output_kind:"
-msgid "Output kind"
-msgstr "Type de sortie"
-
-msgctxt "selection:report.template,output_kind:"
-msgid "From Model"
-msgstr "Depuis un modèle"
-
 msgctxt "field:report.template,mail_body:"
 msgid "eMail Body"
 msgstr "Corps du courrier électronique"
@@ -318,6 +309,10 @@ msgstr "Nom"
 msgctxt "field:report.template,on_model:"
 msgid "Model"
 msgstr "Modèle"
+
+msgctxt "field:report.template,output_kind:"
+msgid "Output kind"
+msgstr "Type de sortie"
 
 msgctxt "field:report.template,parameters:"
 msgid "Parameters"
@@ -689,7 +684,7 @@ msgctxt "model:ir.action,name:letter_generation_wizard"
 msgid "Letter Generation"
 msgstr "Impression du Courrier"
 
-msgctxt "model:ir.ui.menu,name:menu_convert_templates"
+msgctxt "model:ir.ui.menu,name:"
 msgid "Convert Templates"
 msgstr "Convertir des modèles"
 
@@ -800,6 +795,10 @@ msgstr "Pdf"
 msgctxt "selection:report.template,format_for_internal_edm:"
 msgid "xls"
 msgstr "xls"
+
+msgctxt "selection:report.template,output_kind:"
+msgid "From Model"
+msgstr "Depuis un modèle"
 
 msgctxt "selection:report.template,template_extension:"
 msgid "Open Document Graphics (.odg)"

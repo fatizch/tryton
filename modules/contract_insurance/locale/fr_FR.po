@@ -45,6 +45,10 @@ msgctxt "error:contract:"
 msgid "Invalid file format"
 msgstr "Format de fichier non valide"
 
+msgctxt "error:party.party:"
+msgid "Missing extra data for : %s"
+msgstr "Il manque des données complémentaires pour %s"
+
 msgctxt "field:contract,contract_number:"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
@@ -132,6 +136,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:contract,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:contract.covered_element,all_options:"
+msgid "Options"
+msgstr "Options"
 
 msgctxt "field:contract.covered_element,contract:"
 msgid "Contract"
@@ -228,10 +236,6 @@ msgstr "Parent"
 msgctxt "field:contract.covered_element,party:"
 msgid "Actor"
 msgstr "Tiers"
-
-msgctxt "error:party.party:"
-msgid "Missing extra data for : %s"
-msgstr "Il manque des données complémentaires pour %s"
 
 msgctxt "field:contract.covered_element,party_code:"
 msgid "Party Code"

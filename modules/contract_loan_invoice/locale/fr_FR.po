@@ -66,9 +66,9 @@ msgctxt "field:contract.invoice.show_all.show,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.invoice.show_all.show,premiums:"
+msgctxt "field:contract.invoice.show_all.show,invoices:"
 msgid "Invoices"
-msgstr "Échéances"
+msgstr "Quittances"
 
 msgctxt "field:contract.premium,loan:"
 msgid "Loan"

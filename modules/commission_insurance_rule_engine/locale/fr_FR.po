@@ -66,10 +66,6 @@ msgctxt "field:commission.plan.line,formula_description:"
 msgid "Formula"
 msgstr "Formule"
 
-msgctxt "field:commission.plan.line,func_key:"
-msgid "Functional Key"
-msgstr "Clé fonctionnelle"
-
 msgctxt "field:commission.plan.line,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"

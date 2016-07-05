@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.invoice:"
+msgid "Commission Reset following unreconciliation of invoice %s"
+msgstr "Annulation de commission suite à délettrage de la quittance %s"
+
 msgctxt "error:account.move.line:"
 msgid "Automatic Split Move"
 msgstr "Découpage automatique"
@@ -25,10 +29,6 @@ msgstr ""
 msgctxt "error:commission:"
 msgid "An insurer notice has already been generated today for (%s)"
 msgstr "Un bordereau assureur a déja été généré aujourd'hui pour (%s)"
-
-msgctxt "error:account_invoice:"
-msgid "Commission Reset following unreconciliation of invoice %s"
-msgstr "Annulation de commission suite à délettrage de la quittance %s"
 
 msgctxt "error:received_premiums:"
 msgid "Received Premium"
