@@ -614,6 +614,7 @@ class SelectEndorsement(model.CoopView):
                     [('ordered_endorsement_parts.endorsement_part.kind', '=',
                             'party')],
                     []))]
+        cls.endorsement_definition.depends += ['contract', 'party']
 
     @fields.depends('applicant', 'party')
     def on_change_party(self):
