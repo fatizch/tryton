@@ -51,3 +51,7 @@ def new_populate(menu, model, record, title='', field=None):
 
 
 popup_menu.populate = new_populate
+
+
+def get_plugins(model):
+    return []
