@@ -15,6 +15,7 @@ class OptionDescription:
 
     insurance_kind = fields.Selection([('', '')], 'Insurance Kind',
         sort=False)
+    insurance_kind_string = insurance_kind.translated('insurance_kind')
     insurer = fields.Many2One('insurer', 'Insurer',
         states={'required': ~Eval('is_service')}, ondelete='RESTRICT',
         depends=['is_service'])

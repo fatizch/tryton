@@ -1,3 +1,4 @@
+* Add outstanding amount to rule engine
 * Add extra data on loan
 * Add lender field on loan
 * Calculate and store early repayments on increments

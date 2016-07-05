@@ -28,6 +28,7 @@ def register():
         OptionsDisplayer,
         WizardOption,
         LoanShareTreeExpansion,
+        Party,
         SynthesisMenuLoan,
         SynthesisMenu,
         InsuredOutstandingLoanBalanceView,

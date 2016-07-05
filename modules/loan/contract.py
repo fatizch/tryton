@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 from collections import defaultdict
+from decimal import Decimal
 
 from sql import Literal
 from sql.conditionals import Coalesce
@@ -362,6 +363,32 @@ class ContractOption:
     def check_at_least_one_loan(self):
         return True if self.loan_shares else False
 
+    def get_insured_outstanding_loan_balance(self, date):
+        if not self.is_loan or not self.covered_element.party:
+            return Decimal(0)
+        party = self.covered_element.party
+        return party.get_insured_outstanding_loan_balances(date,
+            self.coverage.currency, self.coverage.insurer,
+            self.coverage.insurance_kind
+            )[self.coverage.insurer.id][self.coverage.insurance_kind][0]
+
+    def get_option_loan_balance(self, date):
+        # Total loan insured on this option
+        return (sum([l.get_outstanding_loan_balance(date)
+                    for l in self.loan_shares])
+            if self.status not in ['declined', 'void'] else Decimal(0))
+
+    def get_total_loan_balance(self, date):
+        # Returns total amount on current option and other loans
+        outstanding = self.get_insured_outstanding_loan_balance(date)
+        if self.status == 'active' and self.parent_contract.status == 'active':
+            # When contract and option is active
+            # get_insured_outstanding_loan_balance
+            # returns also current option outstanding loans amount
+            return outstanding
+        else:
+            return outstanding + self.get_option_loan_balance(date)
+
 
 class ExtraPremium:
     __name__ = 'contract.option.extra_premium'
@@ -597,6 +624,12 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
         with Transaction().set_context(contract=self.contract.id if
                 self.contract else None):
             return '%s (%s%%)' % (self.loan.rec_name, self.share * 100)
+
+    def get_outstanding_loan_balance(self, at_date=None):
+        if not at_date:
+            at_date = self.loan.first_payment_date
+        return self.loan.currency.round(self.share * (
+                self.loan.get_outstanding_loan_balance(at_date=at_date) or 0))
 
     def _expand_tree(self, name):
         return True

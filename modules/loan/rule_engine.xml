@@ -58,6 +58,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_loan_payment_amount</field>
+            <field name="fct_args">date</field>
             <field name="parent" ref="pret"/>
         </record>
         <record model="rule_engine.function" id="montant_du_pret">
@@ -94,6 +95,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_outstanding_loan_balance</field>
+            <field name="fct_args">date</field>
             <field name="parent" ref="pret"/>
         </record>
         <record model="rule_engine.function" id="quotite">
@@ -122,7 +124,41 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_early_repayments_amount</field>
+            <field name="fct_args">date</field>
             <field name="parent" ref="pret"/>
+        </record>
+        <record model="rule_engine.function" id="encours_assure">
+            <field name="translated_technical_name">encours_assure</field>
+            <field name="description">Encours Assuré</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_insured_outstanding_loan_balance</field>
+            <field name="long_description">Montant total assuré pour ce type de garantie et chez cet assureur</field>
+            <field name="fct_args">date</field>
+            <field name="parent" ref="offered_insurance.dossier_garantie"/>
+        </record>
+        <record model="rule_engine.function" id="encours_garantie">
+            <field name="translated_technical_name">encours_garantie</field>
+            <field name="description">Encours de la garantie</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_option_loan_balance</field>
+            <field name="long_description">Montant de l'encours des prêts rattachés à cette garantie</field>
+            <field name="fct_args">date</field>
+            <field name="parent" ref="offered_insurance.dossier_garantie"/>
+        </record>
+        <record model="rule_engine.function" id="encours_total_plus_garantie">
+            <field name="translated_technical_name">encours_total_plus_garantie</field>
+            <field name="description">Somme de l'encours total et de la garantie</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_total_loan_balance</field>
+            <field name="long_description">Montant total de l'encours de l'ensemble des prêts définis dans le système ainsi que ceux définis sur cette garantie</field>
+            <field name="fct_args">date</field>
+            <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
     </data>
 </tryton>

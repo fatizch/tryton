@@ -28,9 +28,11 @@ class RuleEngineRuntime:
 
     @classmethod
     @check_args('loan')
-    def _re_get_loan_payment_amount(cls, args):
+    def _re_get_loan_payment_amount(cls, args, date=None):
+        if not date:
+            date = args['date']
         loan = args['loan']
-        return loan.get_payment_amount(args['date'])
+        return loan.get_payment_amount(date)
 
     @classmethod
     @check_args('loan')
@@ -55,8 +57,10 @@ class RuleEngineRuntime:
 
     @classmethod
     @check_args('loan')
-    def _re_get_outstanding_loan_balance(cls, args):
-        return args['loan'].get_outstanding_loan_balance(at_date=args['date'])
+    def _re_get_outstanding_loan_balance(cls, args, date=None):
+        if not date:
+            date = args['date']
+        return args['loan'].get_outstanding_loan_balance(at_date=date)
 
     @classmethod
     @check_args('share')
@@ -80,6 +84,32 @@ class RuleEngineRuntime:
 
     @classmethod
     @check_args('loan')
-    def _re_get_early_repayments_amount(cls, args):
+    def _re_get_early_repayments_amount(cls, args, date=None):
+        if not date:
+            date = args['date']
         loan = args['loan']
-        return loan.get_early_repayments_amount(args['date'])
+        return loan.get_early_repayments_amount(date)
+
+    @classmethod
+    @check_args('option')
+    def _re_get_insured_outstanding_loan_balance(cls, args, date=None):
+        if not date:
+            date = args['date']
+        option = args['option']
+        return option.get_insured_outstanding_loan_balance(date)
+
+    @classmethod
+    @check_args('option')
+    def _re_get_option_loan_balance(cls, args, date=None):
+        if not date:
+            date = args['date']
+        option = args['option']
+        return option.get_option_loan_balance(date)
+
+    @classmethod
+    @check_args('option')
+    def _re_get_total_loan_balance(cls, args, date=None):
+        if not date:
+            date = args['date']
+        option = args['option']
+        return option.get_total_loan_balance(date)

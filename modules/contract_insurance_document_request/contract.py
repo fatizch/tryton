@@ -70,7 +70,7 @@ class Contract:
                 if not option.status == 'active':
                     continue
                 args = main_args.copy()
-                elem.init_dict_for_rule_engine(args)
+                option.init_dict_for_rule_engine(args)
                 sub_docs = option.coverage.calculate_required_documents(args)
                 documents.update(sub_docs)
 
