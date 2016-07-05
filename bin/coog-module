@@ -19,7 +19,7 @@ coog_module_update() { # install / update modules - [modules] - default: all
         else
                 modules=$*
         fi
-        _coog_server_cleancache
+        coog_server_clearcache
         trytond-admin -v \
                 -c $COOG_CONF_SRV \
                 -d $DB_NAME \
