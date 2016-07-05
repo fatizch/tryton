@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='report_template']" position="after">
         <field name="dunning_configurations" product="procedure" mode="tree" view_ids="account_payment_dunning.failure_action_dunning_view_list" colspan="4" yexpand="1" yfill="1"/>

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
 <data>
     <record model="contract.sub_status" id="sub_status_never_enforced">
         <field name="name">Error</field>

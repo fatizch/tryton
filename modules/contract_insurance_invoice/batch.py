@@ -1,3 +1,5 @@
+# This file is part of Coog. The COPYRIGHT file at the top level of
+# this repository contains the full copyright notices and license terms.
 import logging
 from sql.aggregate import Max
 from sql.operators import Not

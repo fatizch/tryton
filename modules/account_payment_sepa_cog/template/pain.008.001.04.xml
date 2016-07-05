@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
 <Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.04" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:py="http://genshi.edgewall.org/">
     <py:def function="PartyIdentification(party)">
         <Nm>${party.name[:140]}</Nm>

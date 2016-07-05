@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
 <form string="New Covered Element">
     <field name="covered_elements" mode="form,tree" colspan="4"/>
     <field name="extra_data" invisible="1"/>

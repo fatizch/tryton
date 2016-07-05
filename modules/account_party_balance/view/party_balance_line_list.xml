@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
 <tree string="Party Balance Line">
     <field name="description" icon="icon" expand="1"/>
     <field name="contract"/>

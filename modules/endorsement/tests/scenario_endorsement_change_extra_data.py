@@ -1,3 +1,5 @@
+# This file is part of Coog. The COPYRIGHT file at the top level of
+# this repository contains the full copyright notices and license terms.
 # #Title# #Contract Extra Data Endorsement Scenario
 # #Comment# #Imports
 import datetime
