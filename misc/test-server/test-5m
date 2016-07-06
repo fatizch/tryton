@@ -10,7 +10,7 @@ export HOME
 workon coog-commit
 COOG_TMP=/var/log/coog
 export COOG_TMP
-coog test commits &>> $COOG_TMP/test-logs
+coog test commit &>> $COOG_TMP/test-logs
 deactivate
 
 workon coog-full

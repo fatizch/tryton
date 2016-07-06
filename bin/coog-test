@@ -108,6 +108,28 @@ coog_test_dropdb() { # drop test db from postgresql server
         done
 }
 
+_coog_test_pull() {
+        coog_code_foreach git fetch -q -p
+        coog_code_foreach git checkout -q master
+        coog_code_foreach git merge -q --no-edit origin/master
+        coog_code_foreach git submodule -q update
+}
+
+_coog_test_flake8() {
+        local out
+        out=$2-$(basename $1)
+        flake8 --config="$COOG_COOG/tox.ini" "$1" \
+                | grep -vP "modules\/[a-z_]+\/__init__\.py:\d+:\d+: F403" \
+                | grep -vP "modules\/[a-z_]+\/tests\/__init__\.py:\d+:\d+: F401 'suite'" \
+                >> "$out"
+        local lines
+        lines=$(wc -l < "$out")
+        cat "$out" >> "$2"
+        rm "$out"
+        [ "$lines" -eq 0 ] && return 0
+        return 1
+}
+
 _coog_test_email() {
         local email; email=$1; shift
         local content; content=$1; shift
@@ -121,53 +143,56 @@ _coog_test_email() {
         fi
 }
 
-coog_test_commits() { # fetch, merge, and test each commit on changed modules
-        echo TEST COMMITS: start @ `date +"%y-%m-%d %H:%M:%S"`
+coog_test_commit() { # fetch, merge, and test each commit on changed modules
+        echo TEST COMMIT: start @ `date +"%y-%m-%d %H:%M:%S"`
         local lock
         lock=$COOG_TMP/test-running
-        [ -e $lock ] && echo TEST COMMITS: leave - running && return
+        [ -e $lock ] && echo TEST COMMIT: leave - running && return
         touch $lock
         local origin
         origin=`git rev-parse master`
-        coog_code_foreach git fetch -q -p
-        coog_code_foreach git checkout -q master
-        coog_code_foreach git merge -q --no-edit origin/master
-        coog_code_foreach git submodule -q update
+        _coog_test_pull
         for tree in `git rev-list "$origin"..master`
         do
-                echo TEST COMMITS: commit - $tree
+                echo TEST COMMIT: commit - $tree
                 git checkout -q $tree
                 local email
                 email=`git log -1 --pretty=tformat:%ae HEAD`
-                for module in `git diff --stat HEAD~ | grep "\bmodules" | cut -d "/" -f 2 | sort | uniq`
+                local fail
+                fail=0
+                local out
+                out=$COOG_TMP/test-$tree
+                echo '<pre style="font-family: monospace">' > $out
+                echo  Flake8 >> $out
+                for file in `git diff --name-only HEAD~ | grep "\.py$"`
                 do
-                        echo TEST COMMITS: module - $module
-                        local out
-                        local st
-                        out=$COOG_TMP/test-$tree-$module
-                        echo '<pre style="font-family: monospace">' > $out
-                        coog_test_manual $module &>> $out
-                        st=$?
-                        echo '</pre>' >> $out
-                        if [ $st -ne 0 ]
-                        then
-                                echo TEST COMMITS: test ko
-                                _coog_test_email $email $out Test KO "for" $module after ${tree:0:8}
-                        else
-                                echo TEST COMMITS: test ok
-                        fi
+                        _coog_test_flake8 "$COOG_COOG/$file" "$out"
+                        [ $? -ne 0 ] && fail=1
                 done
+                echo >> $out
+                for module in `git diff --name-only HEAD~ | grep "^modules" | cut -d "/" -f 2 | sort | uniq`
+                do
+                        echo Test $module >> $out
+                        coog_test_manual $module &>> $out
+                        if [ $? -eq 0 ]
+                        then
+                                echo TEST COMMIT: module - $module - ok
+                        else
+                                fail=1
+                                echo TEST COMMIT: module - $module - ko
+                        fi
+                        echo >> $out
+                done
+                echo '</pre>' >> $out
+                [ $fail -ne 0 ] && _coog_test_email $email $out "Test KO for ${tree:0:8}"
         done
-        echo TEST COMMITS: end
+        echo TEST COMMIT: end
         rm $lock
 }
 
 coog_test_fullstart() { # starts a full test
         echo TEST FULL: start @ `date +"%y-%m-%d %H:%M:%S"`
-        coog_code_foreach git fetch -q -p
-        coog_code_foreach git checkout -q master
-        coog_code_foreach git merge -q --no-edit origin/master
-        coog_code_foreach git submodule -q update
+        _coog_test_pull
         coog_test_exec $*
 }
 
