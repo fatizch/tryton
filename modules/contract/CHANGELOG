@@ -1,3 +1,4 @@
+Version 1.8 - 2016-07-06
 * Batch to automatically decline quotes exceeding a delay of inactivity
 * Add order methods on start_date, end_date and rec_name for contract list view sorting
 * Add distinct quote entry point

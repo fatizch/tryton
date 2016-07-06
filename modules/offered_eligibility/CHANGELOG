@@ -1,3 +1,4 @@
+Version 1.8 - 2016-07-06
 * Add support for warning message in eligibility rule
 * Allow multiple eligibility rules per option
 * Add eligibility Rule errors management

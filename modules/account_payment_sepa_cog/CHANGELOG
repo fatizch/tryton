@@ -1,3 +1,4 @@
+Version 1.8 - 2016-07-06
 * Allow to add party information in sepa identification
 * Allow user to select a specific bank account during creation payment wizard
 * Allow to split sepa messages by RECUR vs FIRST

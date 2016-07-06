@@ -1,3 +1,4 @@
+Version 1.8 - 2016-07-06
 * Add hook to customize split moves description
 * Allow to automatically post writeoff moves
 * Allow to automatically post reconciliation moves

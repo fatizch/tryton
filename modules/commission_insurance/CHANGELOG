@@ -1,3 +1,4 @@
+Version 1.8 - 2016-07-06
 * Properly handle invoice de-reconciliation
 * Remove commission relate: use aggregated commission instead
 * Add extra parameter 'with_draft' to commission.invoice.post to post even draft invoices
