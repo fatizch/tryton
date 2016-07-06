@@ -25,7 +25,7 @@ __all__ = [
 
 def analyze(meth):
     def wrap(cls, *args, **kwargs):
-        m=meth
+        m = meth
         try:
             p = PerfLog()
             p.method = cls.__name__ + '.' + m.__name__
