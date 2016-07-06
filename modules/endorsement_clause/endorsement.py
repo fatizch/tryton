@@ -62,7 +62,11 @@ class EndorsementContract:
 
     def apply_values(self):
         values = super(EndorsementContract, self).apply_values()
-        values['clauses'] = [clause.apply_values() for clause in self.clauses]
+        clauses = []
+        for clause in self.clauses:
+            clauses.append(clause.apply_values())
+        if clauses:
+            values['clauses'] = clauses
         return values
 
 
