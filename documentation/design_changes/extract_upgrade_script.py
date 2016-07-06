@@ -7,11 +7,7 @@ def extract_sh(lines):
     result = []
 
     def get_indent_level(line):
-        i = None
-        for (i, c) in enumerate(line):
-            if c != ' ':
-                break
-        return i
+        return len(line) - len(line.lstrip())
 
     in_sh_code_block = False
     in_config_section = False
