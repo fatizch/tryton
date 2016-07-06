@@ -1285,12 +1285,6 @@ class ContractPreview(model.CoopView):
     old_contract_payments = fields.One2Many(
         'contract.invoice.show_all.line', None,
         'Current Contract Payments', readonly=True)
-    all_new_payments = fields.One2Many(
-        'endorsement.start.preview_contract_payments.payment', None,
-        'All New Payments', readonly=True, states={'invisible': True})
-    all_old_payments = fields.One2Many(
-        'endorsement.start.preview_contract_payments.payment', None,
-        'All Old Payments', readonly=True, states={'invisible': True})
 
 
 class StartEndorsement:

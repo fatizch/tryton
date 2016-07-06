@@ -874,16 +874,6 @@ msgctxt "field:endorsement.start.preview_contract_payments,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt ""
-"field:endorsement.start.preview_contract_payments.contract,all_new_payments:"
-msgid "All New Payments"
-msgstr "Nouvel échéancier"
-
-msgctxt ""
-"field:endorsement.start.preview_contract_payments.contract,all_old_payments:"
-msgid "All Old Payments"
-msgstr "Ancien échéancier"
-
 msgctxt "field:endorsement.start.preview_contract_payments.contract,contract:"
 msgid "Contract"
 msgstr "Contrat"
