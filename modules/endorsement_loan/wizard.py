@@ -371,6 +371,9 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
                             if not zero_found:
                                 new_shares.append(Share(share=0, loan=loan_id,
                                         start_date=self.effective_date))
+                        else:
+                            # Remaining shares of a now removed loans
+                            new_shares += shares
 
                     option.loan_shares = list(new_shares)
                 covered.options = list(covered.options)
@@ -380,7 +383,8 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
                 endorsements[contract_id] = new_endorsement
             self._update_endorsement(endorsements[contract_id],
                 contract._save_values)
-        endorsement.contract_endorsements = endorsements.values()
+        endorsement.contract_endorsements = [x for x in endorsements.values()
+            if not x.is_null()]
         endorsement.save()
 
     @classmethod
