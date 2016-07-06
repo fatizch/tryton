@@ -233,18 +233,16 @@ class ModuleTestCase(test_framework.CoopTestCase):
             rule.algorithm = 'return 10.0'
             rule.save()
 
-        self.assertEqual(rule.allowed_functions(), [
+        self.assertEqual(set(rule.allowed_functions()), {
                 'add_debug', 'add_error', 'add_error_code', 'add_info',
-                'add_warning', 'calculation_date', 'today'])
+                'add_warning', 'calculation_date', 'today',
+                'datetime', 'Decimal', 'relativedelta'})
         # Check execution_code, code template and decistmt behaviour
         func_code = rule.execution_code.split('\n')
         func_id = ('%s' % hash(rule.name)).replace('-', '_')
         self.assertEqual(func_code, [
                 u'',
                 u'def fct_%s ():' % func_id,
-                u' from decimal import Decimal ',
-                u' import datetime ',
-                u' from dateutil .relativedelta import relativedelta ',
                 u' return Decimal (u\'10.0\')',
                 u'',
                 u'result_%s =fct_%s ()' % (func_id, func_id),
