@@ -12,6 +12,7 @@ from trytond.transaction import Transaction
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 
+logger = logging.getLogger(__name__)
 METHOD_TEMPLATES = ['default_', 'on_change_with_', 'on_change_', 'order_']
 
 __all__ = [
@@ -585,16 +586,19 @@ class DebugModelInstance(ModelSQL, ModelView):
 
         # Import Models, MRO, Methods
         for model_name, data in base_data.iteritems():
+            logger.debug('Importing model %s' % model_name)
             cls.import_model(model_name, data)
         Model.save([x['__instance'] for x in base_data.values()])
 
         # Import Fields
         for model_name, data in base_data.iteritems():
+            logger.debug('Importing fields for model %s' % model_name)
             cls.import_fields(model_name, data, base_data)
         Model.save([x['__instance'] for x in base_data.values()])
 
         # Import Views
         for model_name, data in base_data.iteritems():
+            logger.debug('Importing views for model %s' % model_name)
             cls.import_views(model_name, data, base_data)
         Model.save([x['__instance'] for x in base_data.values()])
 
