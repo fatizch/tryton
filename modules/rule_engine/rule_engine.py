@@ -13,6 +13,7 @@ import datetime
 import pyflakes.messages
 import logging
 from decimal import Decimal, ROUND_HALF_UP
+from dateutil.relativedelta import relativedelta
 
 from StringIO import StringIO
 from pyflakes.checker import Checker
@@ -65,9 +66,6 @@ __all__ = [
 
 CODE_TEMPLATE = """
 def fct_%s():
- from decimal import Decimal
- import datetime
- from dateutil.relativedelta import relativedelta
 %%s
 
 result_%s = fct_%s()
@@ -1004,13 +1002,12 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
         Table = pool.get('table')
         return TableCell.get(Table(table_id), *dim_values)
 
-    @staticmethod
-    def execute_param(param_id, evaluation_context):
+    @classmethod
+    def execute_param(cls, param_id, evaluation_context):
         # evaluation_context is unused, but we need it so that all context
         # functions share the same prototype
         RuleParameter = Pool().get('rule_engine.rule_parameter')
-        RuleEngine.raise_user_error('kwarg_expected',
-            RuleParameter(param_id).name)
+        cls.raise_user_error('kwarg_expected', RuleParameter(param_id).name)
 
     def as_context(self, elem, kind, base_context):
         technical_name = self.get_translated_name(elem, kind)
@@ -1071,7 +1068,13 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
     def prepare_context(self, evaluation_context, execution_kwargs):
         debug = Transaction().context.get('debug', True)
         pre_context = self.build_context(debug)
-        exec_context = {'evaluation_context': evaluation_context}
+        exec_context = {
+            'evaluation_context': evaluation_context,
+            '__builtins__': self.get_builtins(),
+            'Decimal': Decimal,
+            'datetime': datetime,
+            'relativedelta': relativedelta,
+            }
         for k, v in pre_context.iteritems():
             if k in execution_kwargs:
                 exec_context[k] = execution_kwargs.pop(k)
@@ -1088,6 +1091,95 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 continue
             exec_context[k] = debug_wrapper(evaluation_context, v, k)
         return exec_context
+
+    @classmethod
+    def get_builtins(cls):
+        # Returns python builtins which will be available in the rule engine.
+        # Some (like __import__) must be disabled for security reasons
+        return {
+            #  '__import__': __import__,        # Importing, NEVER allow
+            'abs': abs,                         # Absolute value
+            'all': all,                         # Boolean intersect
+            'any': any,                         # Boolean union
+            'basestring': basestring,           # String typechecking
+            'bin': bin,                         # Convert to binary string
+            'bool': bool,                       # Convert to bool
+            'bytearray': bytearray,             # Convert string to bytearray
+            #  'callable': callable,            # If it's needed, it's bad
+            'chr': chr,                         # Convert int to string
+            #  'classmethod': classmethod,      # If needed, it's bad
+            'cmp': cmp,                         # Default comparison
+            # 'compile': compile,               # Compile bytecode
+            'complex': complex,                 # Complex numbers, why not
+            # 'delattr': delattr,               # Remove attribute
+            'dict': dict,                       # Convert to dict
+            # 'dir': dir,                       # Introspection
+            'divmod': divmod,                   # Integer division
+            'enumerate': enumerate,             # Iterate with indexes
+            'eval': eval,                       # Eval arbitrary string, may be
+                                                # useful for dynamic table
+                                                # finding, safe since it reuses
+                                                # the parent context
+            # 'execfile': execfile,             # Exec external file, may be
+                                                # used to view server file
+                                                # system
+            # 'file': file,                     # File constructor
+            'filter': filter,                   # Filter a list against a rule
+            'float': float,                     # Convert to float
+            'format': format,                   # Format string with parameters
+            'frozenset': frozenset,             # Constructor for frozensets
+            'getattr': getattr,                 # Get attribute value
+            # 'globals': globals,               # Find global variables
+            'hasattr': hasattr,                 # Check attribute existence
+            'hash': hash,                       # Hash something
+            # 'help': help,                     # Get some help
+            'hex': hex,                         # Cast to hex
+            # 'id': id,                         # Can be used to get memory
+                                                # addresses
+            # 'input': input,                   # Raw input evaluation
+            'int': int,                         # Cast to int
+            'isinstance': isinstance,           # Check types
+            'issubclass': issubclass,           # Check inheritance
+            'iter': iter,                       # Iterator constructor
+            'len': len,                         # List / Dict length
+            'list': list,                       # Cast to list
+            # 'locals': locals,                 # Local variables dictionnary
+            'long': long,                       # Cast to long
+            'map': map,                         # Apply rule to list
+            'max': max,                         # Maximum value of a list
+            # 'memoryview': memoryview,         # Memory view of an object
+            'min': min,                         # Minimum value of a list
+            'next': next,                       # Next value in an iterator
+            # 'object': object,                 # Objects base class
+            'oct': oct,                         # Cast to octal
+            # 'open': open,                     # Open files
+            'ord': ord,                         # Cast char to int
+            'pow': pow,                         # Power operator
+            # 'print': print,                   # Print something in the logs
+            # 'property': property,             # Define an object property
+            'range': range,                     # Get number ranges
+            # 'raw_input': raw_input,           # Get input from the console
+            'reduce': reduce,                   # Aggregate lists
+            #  'reload': reload,                # Reload a python module
+            'repr': repr,                       # Repr value of an object
+            'reversed': reversed,               # Reverse a list
+            'round': round,                     # Rounds a float
+            'set': set,                         # Set constructor
+            'setattr': setattr,                 # Set an attribute
+            'slice': slice,                     # Get sub list
+            'sorted': sorted,                   # Sort a list
+            # 'staticmethod': staticmethod,     # Method decorator
+            'str': str,                         # Cast to string
+            'sum': sum,                         # Sum of a list
+            #  'super': super,                  # Get previous elem in mro
+            'tuple': tuple,                     # Tuple constructor
+            'type': type,                       # Check type of an object
+            'unichr': unichr,                   # Cast to unicode char
+            'unicode': unicode,                 # Cast to unicode
+            #  'vars': vars,                    # Introspect module
+            'xrange': xrange,                   # Alternate range
+            'zip': zip,                         # Aggregate iterators
+            }
 
     def compute(self, evaluation_context, execution_kwargs):
         with Transaction().set_context(debug=self.debug_mode or
@@ -1234,6 +1326,7 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
             for elem in self.rules_used]
         result += [self.get_translated_name(elem, 'param')
             for elem in self.parameters]
+        result += ['Decimal', 'relativedelta', 'datetime']
         return result
 
     def get_rec_name(self, name=None):
