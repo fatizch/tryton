@@ -1070,11 +1070,9 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
         pre_context = self.build_context(debug)
         exec_context = {
             'evaluation_context': evaluation_context,
-            '__builtins__': self.get_builtins(),
-            'Decimal': Decimal,
-            'datetime': datetime,
-            'relativedelta': relativedelta,
             }
+        static_context = self.get_static_context()
+        exec_context.update(static_context)
         for k, v in pre_context.iteritems():
             if k in execution_kwargs:
                 exec_context[k] = execution_kwargs.pop(k)
@@ -1087,10 +1085,22 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
         if not debug:
             return exec_context
         for k, v in exec_context.iteritems():
-            if k == 'evaluation_context':
+            if k == 'evaluation_context' or k in static_context:
                 continue
             exec_context[k] = debug_wrapper(evaluation_context, v, k)
         return exec_context
+
+    @classmethod
+    def get_static_context(cls):
+        return {
+            '__builtins__': cls.get_builtins(),
+            'Decimal': Decimal,
+            'datetime': datetime,
+            'relativedelta': relativedelta,
+            'True': True,
+            'False': False,
+            'None': None,
+            }
 
     @classmethod
     def get_builtins(cls):
