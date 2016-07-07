@@ -272,9 +272,10 @@ class ModelInfo(ModelView):
         return result
 
     @classmethod
-    def raw_field_infos(cls):
+    def raw_field_infos(cls, models=None):
         pool = Pool()
-        models = [x[0] for x in cls.get_possible_model_names()]
+        if models is None:
+            models = [x[0] for x in cls.get_possible_model_names()]
         infos = cls.raw_model_infos(models)
         for name in models:
             base_model = pool.get(name)
@@ -575,14 +576,18 @@ class DebugModelInstance(ModelSQL, ModelView):
         pass
 
     @classmethod
-    def refresh(cls, name):
+    def refresh(cls, name, models=None):
         Model = Pool().get('debug.model')
 
-        # Delete all existing instances
-        cls.delete(cls.search([]))
-
         # Fetch current data
-        base_data = Pool().get('ir.model.debug.model_info').raw_field_infos()
+        base_data = Pool().get('ir.model.debug.model_info').raw_field_infos(
+            models)
+
+        # Delete all existing instances
+        cls.delete(cls.search([('name', 'in', base_data.keys())]))
+
+        # Existing models
+        existing_models = {x.name: x for x in cls.search([])}
 
         # Import Models, MRO, Methods
         for model_name, data in base_data.iteritems():
@@ -593,7 +598,7 @@ class DebugModelInstance(ModelSQL, ModelView):
         # Import Fields
         for model_name, data in base_data.iteritems():
             logger.debug('Importing fields for model %s' % model_name)
-            cls.import_fields(model_name, data, base_data)
+            cls.import_fields(model_name, data, base_data, existing_models)
         Model.save([x['__instance'] for x in base_data.values()])
 
         # Import Views
@@ -658,7 +663,7 @@ class DebugModelInstance(ModelSQL, ModelView):
         data['__instance'] = new_model
 
     @classmethod
-    def import_fields(cls, model_name, data, full_data):
+    def import_fields(cls, model_name, data, full_data, existing_models):
         model = full_data[model_name]['__instance']
         methods = {x.name: x for x in model.methods}
 
@@ -671,8 +676,12 @@ class DebugModelInstance(ModelSQL, ModelView):
             field.kind = field_data['kind']
             field.function = field_data['is_function']
             if field_data.get('target_model', None):
-                field.target_model = full_data[
-                    field_data['target_model']]['__instance']
+                if field_data['target_model'] in existing_models:
+                    field.target_model = existing_models[
+                        field_data['target_model']]
+                else:
+                    field.target_model = full_data[field_data['target_model']][
+                        '__instance']
             field.default_method = methods.get(
                 'default_%s' % field_name, None)
             field.on_change_method = methods.get(
