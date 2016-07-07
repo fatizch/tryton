@@ -78,6 +78,7 @@ class Claim(CogProcessFramework):
     def init_declaration_document_request(self):
         pool = Pool()
         DocumentRequestLine = pool.get('document.request.line')
+        DocumentDescription = pool.get('document.description')
         documents = []
         for loss in self.losses:
             if not loss.loss_desc:
@@ -90,6 +91,8 @@ class Claim(CogProcessFramework):
                 args = {}
                 delivered.init_dict_for_rule_engine(args)
                 docs = delivered.benefit.calculate_required_documents(args)
+                docs = DocumentDescription.search(
+                    [('code', 'in', docs.keys())])
                 documents.extend(docs)
         existing_document_desc = [request.document_desc
             for request in self.document_request_lines]

@@ -31,7 +31,7 @@ class DocumentRule:
     __name__ = 'document.rule'
 
     benefit = fields.Many2One('benefit', 'Benefit', ondelete='CASCADE',
-        required=True, select=True)
+        select=True)
 
     def get_func_key(self, name):
         return getattr(self.benefit, self.benefit._func_key)
