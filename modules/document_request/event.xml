@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="event.type" id="remind_documents">
+            <field name="name">Remind Documents</field>
+            <field name="code">remind_documents</field>
+        </record>
+    </data>
+</tryton>
