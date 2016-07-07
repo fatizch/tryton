@@ -94,8 +94,7 @@ class Contract(RemindableInterface):
             line.document_desc = rule_doc_descs_by_code[code]
             line.for_object = '%s,%s' % (self.__name__, self.id)
             for k, v in rule_result_values.iteritems():
-                if hasattr(line, k):
-                    setattr(line, k, v)
+                setattr(line, k, v)
             line.save()
         to_delete = []
         for request in self.document_request_lines:
