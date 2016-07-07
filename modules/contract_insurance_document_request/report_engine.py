@@ -26,5 +26,6 @@ class ReportGenerate:
     @classmethod
     def get_context(cls, records, data):
         context = super(ReportGenerate, cls).get_context(records, data)
-        context['force_remind'] = Transaction().context.get('force_remind', False)
+        context['force_remind'] = Transaction().context.get('force_remind',
+            False)
         return context
