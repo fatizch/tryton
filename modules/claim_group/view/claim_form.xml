@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='claimant']" position="after">
+        <label name="legal_entity"/>
+        <field name="legal_entity"/>
+    </xpath>
+</data>
