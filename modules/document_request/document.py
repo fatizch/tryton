@@ -1,9 +1,14 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import functools
+from sql.functions import CurrentDate
+from sql import Null
+from sql.aggregate import Count, Sum
+from sql.conditionals import Case
 
 from trytond.pool import Pool
 from trytond.pyson import Eval
+from trytond import backend
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 
@@ -53,10 +58,52 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
         fields.Many2Many('ir.attachment', None, None, 'Matching Attachments'),
         'get_matching_attachments')
     blocking = fields.Boolean('Blocking', readonly=True)
+    last_reminder_date = fields.Date('Last Reminder Date',
+        states={'invisible': True})
+    reminders_sent = fields.Integer('Reminders Sent')
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().connection.cursor()
+        doc_h = TableHandler(cls, module_name)
+        to_migrate = not doc_h.column_exist('last_reminder_date')
+        super(DocumentRequestLine, cls).__register__(module_name)
+        to_update = cls.__table__()
+        if to_migrate:
+            cursor.execute(*to_update.update(
+                    columns=[
+                        to_update.last_reminder_date,
+                        to_update.reminders_sent],
+                    values=[CurrentDate(), 0],
+                    where=to_update.last_reminder_date == Null,
+                    ))
+
+    @staticmethod
+    def default_last_reminder_date():
+        return utils.today()
+
+    @staticmethod
+    def default_reminders_sent():
+        return 0
+
+    @classmethod
+    def update_reminder(cls, document_lines, increment=False):
+        if not document_lines:
+            return
+        for doc in document_lines:
+            doc.last_reminder_date = utils.today()
+            if increment:
+                doc.reminders_sent += 1
+        cls.save(document_lines)
 
     @staticmethod
     def models_get():
         return utils.models_get()
+
+    @classmethod
+    def default_remind_fields(cls):
+        return ['received']
 
     @fields.depends('attachment', 'reception_date', 'received',
         'attachment_name', 'attachment_data')
@@ -127,6 +174,17 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
         return [x.id for x in Attachment.search([
                     ('resource', '=', str(self.for_object)),
                     ('document_desc', '=', self.document_desc)])]
+
+    @classmethod
+    def update_and_notify_reminders(cls, to_remind_per_object,
+            force_remind, event_code):
+        pool = Pool()
+        pool.get('event').notify_events(to_remind_per_object.keys(),
+            event_code)
+        # if from batch: update document lines reminder increments
+        document_lines = [x for sublist in to_remind_per_object.values()
+                for x in sublist]
+        cls.update_reminder(document_lines, increment=force_remind)
 
 
 class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
@@ -507,3 +565,66 @@ class DocumentReceive(Wizard):
             # pass
 
         return 'end'
+
+
+class RemindableInterface(object):
+    "Remindable Interface"
+
+    __name__ = 'remindable.interface'
+
+    @classmethod
+    def get_document_lines_to_remind(cls, objects, force_remind):
+        raise NotImplementedError
+
+    @classmethod
+    def get_reminder_candidates_query(cls, tables):
+        raise NotImplementedError
+
+    @classmethod
+    def get_reminder_group_by_clause(cls, tables):
+        raise NotImplementedError
+
+    @classmethod
+    def get_reminder_where_clause(cls, tables):
+        raise NotImplementedError
+
+    @classmethod
+    def get_reminder_candidates_tables(cls):
+        tables = {}
+        tables[cls.__name__] = cls.__table__()
+        tables['document.request.line'] = Pool().get(
+            'document.request.line').__table__()
+        return tables
+
+    @classmethod
+    def get_reminder_candidates(cls):
+        cursor = Transaction().connection.cursor()
+        tables = cls.get_reminder_candidates_tables()
+        query_table = cls.get_reminder_candidates_query(tables)
+        having_clause = cls.get_reminder_having_clause(tables)
+        group_by_clause = cls.get_reminder_group_by_clause(tables)
+        where_clause = cls.get_reminder_where_clause(tables)
+        # retrieve all quote contracts which have at least one
+        # document_request_line
+        cursor.execute(
+            *query_table.select(tables[cls.__name__].id,
+                where=where_clause,
+                group_by=group_by_clause,
+                having=having_clause))
+        return cursor.fetchall()
+
+    @classmethod
+    def get_reminder_having_clause(cls, tables):
+        document_request_line = tables['document.request.line']
+        return ((Count(document_request_line.id) > 0) &
+                (Sum(Case((document_request_line.reception_date == Null, 1),
+                            else_=0)) > 0))
+
+    @classmethod
+    def generate_reminds_documents(cls, objects):
+        force_remind = Transaction().context.get('force_remind', False)
+        DocRequestLine = Pool().get('document.request.line')
+        to_remind_per_objects = cls.get_document_lines_to_remind(
+            objects, force_remind)
+        DocRequestLine.update_and_notify_reminders(
+            to_remind_per_objects, force_remind, 'remind_documents')

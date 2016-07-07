@@ -3,6 +3,11 @@
 this repository contains the full copyright notices and license terms. -->
 <form string="Required Documents Rule">
     <field name="documents" product="document" colspan="4"/>
+    <label name="reminder_delay" colspan="1"/>
+    <group id="reminder_group">
+        <field name="reminder_delay" xexpand="0"/>
+        <field name="reminder_unit" xexpand="0" xalign="0"/>
+    </group>
     <label name="rule"/>
     <field name="rule"/>
     <newline/>

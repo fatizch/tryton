@@ -90,6 +90,22 @@ msgctxt "field:document.rule-document.description,blocking:"
 msgid "Blocking"
 msgstr "Bloquant"
 
+msgctxt "field:document.rule,reminder_delay:"
+msgid "Reminder Delay"
+msgstr "Delai de relance"
+
+msgctxt "selection:document.rule,reminder_unit:"
+msgid "Months"
+msgstr "Mois"
+
+msgctxt "selection:document.rule,reminder_unit:"
+msgid "Days"
+msgstr "Jours"
+
+msgctxt "field:document.rule-document.description,max_reminders:"
+msgid "Max Reminders"
+msgstr "Nombre maximum de relances"
+
 msgctxt "field:document.rule-document.description,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"

@@ -6,4 +6,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="document"/>
     <label name="blocking"/>
     <field name="blocking"/>
+    <label name="max_reminders"/>
+    <field name="max_reminders"/>
 </form>

@@ -3,6 +3,7 @@
 from trytond import backend
 from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
+from trytond.pyson import Bool, Eval
 
 from trytond.modules.cog_utils import fields, model
 from trytond.modules.rule_engine import get_rule_mixin
@@ -31,6 +32,13 @@ class DocumentRule(
         'Option Description', ondelete='CASCADE', select=True)
     documents = fields.One2Many('document.rule-document.description', 'rule',
         'Documents')
+    reminder_delay = fields.Integer('Reminder Delay')
+    reminder_unit = fields.Selection([
+            ('', ''),
+            ('month', 'Months'),
+            ('day', 'Days')],
+        'Reminder Unit', states={'required': Bool(Eval('reminder_delay'))},
+        depends=['reminder_delay'])
 
     @classmethod
     def __register__(cls, module_name):
@@ -71,6 +79,10 @@ class DocumentRule(
         ' The possible keys for these sub dictionnaries are : %s ' %
             str(RuleDocumentDescriptionRelation.rule_result_fields))
 
+    @staticmethod
+    def default_reminder_unit():
+        return ''
+
     def format_as_rule_result(self):
         return {x.document.code: x.to_dict() for x in self.documents}
 
@@ -100,12 +112,13 @@ class RuleDocumentDescriptionRelation(model.CoopSQL, model.CoopView):
     document = fields.Many2One('document.description', 'Document',
         ondelete='RESTRICT', required=True, select=True)
     blocking = fields.Boolean('Blocking')
+    max_reminders = fields.Integer('Max Reminders')
 
-    # This should match fields of document request lines
-    rule_result_fields = ['blocking']
+    rule_result_fields = [('blocking', 'blocking'),
+        ('max_reminders', 'max_reminders')]
 
     def to_dict(self):
-        return {x: getattr(self, x) for x in self.rule_result_fields}
+        return {x[1]: getattr(self, x[0]) for x in self.rule_result_fields}
 
 
 class Product:

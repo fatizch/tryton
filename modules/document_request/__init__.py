@@ -15,6 +15,7 @@ def register():
         DocumentReceiveAttach,
         DocumentReceiveSetRequests,
         DocumentRequestBatch,
+        BatchRemindDocuments,
         Attachment,
         module='document_request', type_='model')
     Pool.register(

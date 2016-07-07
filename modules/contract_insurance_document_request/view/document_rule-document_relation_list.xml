@@ -4,4 +4,5 @@ this repository contains the full copyright notices and license terms. -->
 <tree string="Documents" editable="bottom">
     <field name="document"/>
     <field name="blocking"/>
+    <field name="max_reminders"/>
 </tree>

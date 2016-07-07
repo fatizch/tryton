@@ -10,6 +10,10 @@ msgctxt "error:document.receive:"
 msgid "No document request found for this object"
 msgstr "Pas de demande de document trouvé pour cet objet"
 
+msgctxt "field:batch.remind.documents,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "error:document.request:"
 msgid "Document Request For"
 msgstr "Demande de documents pour"
@@ -70,6 +74,10 @@ msgctxt "field:document.request,documents_str:"
 msgid "Documents"
 msgstr "Documents"
 
+msgctxt "field:document.request,documents_str:"
+msgid "Documents"
+msgstr "Documents"
+
 msgctxt "field:document.request,id:"
 msgid "ID"
 msgstr "ID"
@@ -114,9 +122,25 @@ msgctxt "field:document.request.line,attachment_data:"
 msgid "Data"
 msgstr "Données"
 
+msgctxt "model:event.type,name:remind_documents"
+msgid "Remind Documents"
+msgstr "Relance de documents"
+
 msgctxt "field:document.request.line,attachment_name:"
 msgid "Attachment Name"
 msgstr "Nom de la pièce jointe"
+
+msgctxt "field:document.request.line,blocking:"
+msgid "Blocking"
+msgstr "Bloquant"
+
+msgctxt "field:document.request.line,last_reminder_date:"
+msgid "Last Reminder Date"
+msgstr "Dernière date de relance"
+
+msgctxt "field:document.request.line,reminders_sent:"
+msgid "Reminders Sent"
+msgstr "Nombre de relances envoyées"
 
 msgctxt "field:document.request.line,blocking:"
 msgid "Blocking"
@@ -201,6 +225,10 @@ msgstr "Conforme"
 msgctxt "field:ir.attachment,status:"
 msgid "Status"
 msgstr "Statut"
+
+msgctxt "model:batch.remind.documents,name:"
+msgid "Batch Remind Documents"
+msgstr "Batch de relance des documents"
 
 msgctxt "model:document.receive.attach,name:"
 msgid "Document Receive Attach"

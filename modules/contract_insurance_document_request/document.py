@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
+
 __all__ = [
     'DocumentRequest',
     'DocumentReceiveRequest',
@@ -10,6 +10,7 @@ __all__ = [
 
 
 class DocumentRequest:
+    __metaclass__ = PoolMeta
     __name__ = 'document.request'
 
     @classmethod
@@ -20,6 +21,7 @@ class DocumentRequest:
 
 
 class DocumentReceiveRequest:
+    __metaclass__ = PoolMeta
     __name__ = 'document.receive.request'
 
     @classmethod
