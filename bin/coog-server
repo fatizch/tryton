@@ -148,7 +148,7 @@ coog_server_ping() { # call coog server - [curl args]
         local uri
         uri=`python $COOG_BIN/parse-config.py web listen < $COOG_CONF_SRV`
         [ $? -ne 0 ] && echo no rpc url && return 1
-        curl "$*" \
+        curl $* \
                 -X POST \
                 -H "Content-Type: application/json" \
                 -d '{"method": "common.server.version", "params": [null, null]}' \

@@ -117,8 +117,8 @@ _coog_test_pull() {
 
 _coog_test_flake8() {
         flake8 --config="$COOG_COOG/tox.ini" "$1" \
-                | grep -vP "modules\/[a-z_]+\/__init__\.py:\d+:\d+: F403" \
-                | grep -vP "modules\/[a-z_]+\/tests\/__init__\.py:\d+:\d+: F401 'suite'"
+                | grep -vP "modules\/[a-z_]+\/__init__\.py:\d+:\d+: (F403|F405)" \
+                | grep -vP "modules\/[a-z_]+\/tests\/__init__\.py:\d+:\d+: F401 '.*suite'"
 }
 
 coog_test_flake8() {
