@@ -5,7 +5,7 @@ from num2words import num2words
 
 def split_integer_decimal(number):
     integer = int(number)
-    decimal = (number - integer) * 10**(-number.as_tuple()[2])
+    decimal = (number - integer) * 10 ** (-number.as_tuple()[2])
     return (integer, decimal)
 
 
