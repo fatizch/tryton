@@ -908,11 +908,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
         ContactType = Pool().get('contract.contact.type')
         # TODO: Add cache
-        contact_types = dict((c.code, c) for c in ContactType.search([]))
+        contact_types = {c.code: c for c in ContactType.search([])}
+        existing_keys = {(x.type_code, x.party.id) for x in existing_contacts}
         contacts = []
         for contact in self.get_default_contacts(type_, date):
-            if (contact.type_code in [c.type_code for c in existing_contacts]
-                    or not contact.party):
+            if not contact.party or \
+                    (contact.type_code, contact.party.id) in existing_keys:
                 continue
             contact.set_default_address(date)
             if not getattr(contact, 'type', None):
