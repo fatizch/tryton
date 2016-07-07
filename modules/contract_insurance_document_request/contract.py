@@ -165,7 +165,9 @@ class Contract(RemindableInterface):
     def get_document_lines_to_remind(cls, contracts, force_remind):
         DocRequestLine = Pool().get('document.request.line')
         remind_if_false = DocRequestLine.default_remind_fields()
-        def keyfunc(x): return x.product
+
+        def keyfunc(x):
+            return x.product
 
         contracts = sorted(contracts, key=keyfunc)
         to_remind = defaultdict(list)
