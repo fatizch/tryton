@@ -1,0 +1,75 @@
+#!/bin/bash
+
+URL=${URL:-"http://localhost:7999/coog/"}
+USERNAME=${USERNAME:-"admin"}
+PASSWORD=${PASSWORD:-"admin"}
+
+ret=$(curl -s -X POST -H "Content-Type: application/json" -d '{"method": "common.db.login", "params": ["'"$USERNAME"'", "'"$PASSWORD"'"]}' "$URL")
+user=$(echo "$ret" | grep -Pho "\[\d+," | grep -Pho "\d+")
+token=$(echo "$ret" | grep -Pho "[a-z0-9]{32}")
+
+session="Session "$(echo -n "$USERNAME:$user:$token" | openssl enc -base64)
+
+echo "Setup benchmark session..."
+curl -s -X POST -H "Authorization: $session" \
+    -H "Content-Type: application/json" \
+    -d '{"method": "model.utils.benchmark_class._benchmark_setup", "params": [{}]}' \
+    "$URL"
+[ $? -ne 0 ] && exit 1
+echo " "
+echo " "
+
+echo "Testing latency"
+s=$(date +%s%3N)
+for i in {1..100}
+do
+        curl -s -X POST -H "Authorization: $session" \
+            -H "Content-Type: application/json" \
+            -d '{"method": "model.utils.benchmark_class._benchmark_latency", "params": [{}]}' \
+            "$URL" > /dev/null
+        [ $? -ne 0 ] && echo "call #$i failed" && exit 1
+done
+e=$(date +%s%3N)
+echo "... "$(((e-s)/100))
+
+echo " "
+echo "Testing application server cpu"
+curl -s -X POST -H "Authorization: $session" \
+    -H "Content-Type: application/json" \
+    -d '{"method": "model.utils.benchmark_class._benchmark_cpu", "params": [{}]}' \
+    "$URL"
+[ $? -ne 0 ] && exit 1
+echo " "
+
+echo " "
+echo "Testing application server memory"
+curl -s -X POST -H "Authorization: $session" \
+    -H "Content-Type: application/json" \
+    -d '{"method": "model.utils.benchmark_class._benchmark_memory", "params": [{}]}' \
+    "$URL"
+[ $? -ne 0 ] && exit 1
+echo " "
+
+echo " "
+echo "Testing database server write"
+curl -s -X POST -H "Authorization: $session" \
+    -H "Content-Type: application/json" \
+    -d '{"method": "model.utils.benchmark_class._benchmark_db_write", "params": [{}]}' \
+    "$URL"
+echo " "
+
+echo " "
+echo "Testing database server read"
+curl -s -X POST -H "Authorization: $session" \
+    -H "Content-Type: application/json" \
+    -d '{"method": "model.utils.benchmark_class._benchmark_db_read", "params": [{}]}' \
+    "$URL"
+echo " "
+
+echo " "
+echo "Cleaning up"
+curl -s -X POST -H "Authorization: $session" \
+    -H "Content-Type: application/json" \
+    -d '{"method": "model.utils.benchmark_class._benchmark_teardown", "params": [{}]}' \
+    "$URL"
+[ $? -ne 0 ] && echo "Teardown failed, please remove benchmark_table from database" && exit 1

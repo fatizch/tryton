@@ -19,6 +19,7 @@ from .event import *
 from .attachment import *
 from .diff_blame import *
 from .note import *
+from .hardware_bench import *
 
 
 def register():
@@ -77,6 +78,7 @@ def register():
         RevisionBlame,
         RevisionFormatTranslator,
         Note,
+        BenchmarkClass,
         module='cog_utils', type_='model')
 
     if config.get('env', 'testing') == 'True':
