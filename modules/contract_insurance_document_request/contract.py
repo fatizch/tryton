@@ -164,7 +164,7 @@ class Contract(RemindableInterface):
     @classmethod
     def get_document_lines_to_remind(cls, contracts, force_remind):
         DocRequestLine = Pool().get('document.request.line')
-        remind_if_false = DocRequestLine.default_remind_fields()
+        remind_if_false = DocRequestLine.get_default_remind_fields()
 
         def keyfunc(x):
             return x.product

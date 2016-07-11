@@ -102,7 +102,7 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
         return utils.models_get()
 
     @classmethod
-    def default_remind_fields(cls):
+    def get_default_remind_fields(cls):
         return ['received']
 
     @fields.depends('attachment', 'reception_date', 'received',
