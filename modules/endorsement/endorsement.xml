@@ -279,7 +279,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.action.act_window.view" id="act_configuration_view1">
             <field name="sequence" eval="1"/>
-            <field name="view" ref="configuration_view_form"/>
+            <field name="view" ref="endorsement_configuration_view_form"/>
             <field name="act_window" ref="act_configuration_form"/>
         </record>
         <menuitem parent="offered.menu_contract_configuration" action="act_configuration_form" id="menuitem_endorsement_configuration" sequence="0" icon="tryton-preferences"/>
