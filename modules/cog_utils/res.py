@@ -45,8 +45,7 @@ class User(ExportImportMixin):
         status = super(User, self).get_status_bar(name)
         env = config.get('database', 'env_name', default='')
         if env:
-            env = env.replace('%{DB}',
-                Transaction().connection.cursor().dbname)
+            env = env.replace('%{DB}', Transaction().database.name)
             status += ' - %s' % env
         return status
 
