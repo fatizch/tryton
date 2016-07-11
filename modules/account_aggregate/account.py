@@ -332,16 +332,18 @@ class OpenLine(Wizard):
         lines = LineAggregated.browse(Transaction().context['active_ids'])
 
         def domain(line):
-            if line.journal.aggregate and l.snapshot:
-                return [
-                    ('account', '=', l.account.id),
-                    ('move.journal', '=', l.journal.id),
-                    ('move.post_date', '=', l.post_date),
-                    ('move.date', '=', l.date),
-                    ('move.snapshot', '=', l.snapshot.id),
+            if line.journal.aggregate:
+                domain_ = [
+                    ('account', '=', line.account.id),
+                    ('move.journal', '=', line.journal.id),
+                    ('move.post_date', '=', line.post_date),
+                    ('move.date', '=', line.date),
                     ]
+                if line.snapshot:
+                    domain_.append(('move.snapshot', '=', line.snapshot.id))
             else:
-                return [('id', '=', l.id)]
+                domain_ = [('id', '=', l.id)]
+            return domain_
 
         action['pyson_domain'] = ['OR'] + [domain(l) for l in lines]
         action['pyson_domain'] = PYSONEncoder().encode(action['pyson_domain'])
