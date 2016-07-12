@@ -947,6 +947,10 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
                     increments.append(increment)
                 cls.save(increments)
 
+        # Migration from 1.8 , drop lender column
+        if loan_h.column_exist('lender'):
+            loan_h.drop_column('lender')
+
     @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
         'deferral', 'loan', 'number_of_payments', 'payment_amount',
         'payment_frequency', 'rate')
