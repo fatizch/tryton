@@ -20,7 +20,3 @@ def register():
         DocumentReceiveRequest,
         RuleEngine,
         module='contract_insurance_document_request', type_='model')
-
-    Pool.register(
-        ReportGenerate,
-        module='contract_insurance_document_request', type_='report')

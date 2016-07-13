@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import functools
+from collections import defaultdict
+from dateutil.relativedelta import relativedelta
 from sql.functions import CurrentDate
 from sql import Null
 from sql.aggregate import Count, Sum
@@ -181,10 +183,9 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
         pool = Pool()
         pool.get('event').notify_events(to_remind_per_object.keys(),
             event_code)
-        # if from batch: update document lines reminder increments
         document_lines = [x for sublist in to_remind_per_object.values()
                 for x in sublist]
-        cls.update_reminder(document_lines, increment=force_remind)
+        cls.update_reminder(document_lines, increment=not force_remind)
 
 
 class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
@@ -573,11 +574,15 @@ class RemindableInterface(object):
     __name__ = 'remindable.interface'
 
     @classmethod
-    def get_document_lines_to_remind(cls, objects, force_remind):
+    def get_calculated_required_documents(cls, objects):
         raise NotImplementedError
 
     @classmethod
     def get_reminder_candidates_query(cls, tables):
+        raise NotImplementedError
+
+    def fill_to_remind(cls, doc_per_objects, t_remind, objects,
+            force_remind, remind_if_false):
         raise NotImplementedError
 
     @classmethod
@@ -622,9 +627,47 @@ class RemindableInterface(object):
 
     @classmethod
     def generate_reminds_documents(cls, objects):
-        force_remind = Transaction().context.get('force_remind', False)
+        force_remind = Transaction().context.get('force_remind', True)
         DocRequestLine = Pool().get('document.request.line')
         to_remind_per_objects = cls.get_document_lines_to_remind(
             objects, force_remind)
         DocRequestLine.update_and_notify_reminders(
             to_remind_per_objects, force_remind, 'remind_documents')
+
+    @classmethod
+    def get_document_lines_to_remind(cls, objects, force_remind):
+        DocRequestLine = Pool().get('document.request.line')
+        remind_if_false = DocRequestLine.default_remind_fields()
+        to_remind = defaultdict(list)
+        documents_per_object = cls.get_calculated_required_documents(objects)
+        cls.fill_to_remind(documents_per_object, to_remind, objects,
+            force_remind, remind_if_false)
+        return to_remind
+
+    @classmethod
+    def is_document_needed(cls, config, documents, doc,
+            remind_if_false, force_remind):
+        if not config:
+            return False
+        delay = config.reminder_delay
+        unit = config.reminder_unit
+        if remind_if_false and all([getattr(doc, x, False)
+                for x in remind_if_false]):
+            return False
+        if not delay or not unit:
+            if not force_remind:
+                return False
+            else:
+                return True
+        delta = relativedelta(days=+delay) if unit == 'day' \
+                else relativedelta(months=+delay)
+        if doc.document_desc.code not in documents.keys():
+            return False
+        doc_max_reminders = documents[
+            doc.document_desc.code]['max_reminders']
+        if not force_remind and (utils.today() - delta <
+                doc.last_reminder_date or
+                (doc_max_reminders and
+                    doc.reminders_sent >= doc_max_reminders)):
+            return False
+        return True

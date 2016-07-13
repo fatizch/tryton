@@ -162,44 +162,20 @@ class Contract(RemindableInterface):
         return tables['contract'].status.in_(['quote'])
 
     @classmethod
-    def get_document_lines_to_remind(cls, contracts, force_remind):
-        DocRequestLine = Pool().get('document.request.line')
-        remind_if_false = DocRequestLine.get_default_remind_fields()
-
+    def fill_to_remind(cls, doc_per_objects, to_remind, objects,
+            force_remind, remind_if_false):
         def keyfunc(x):
             return x.product
 
-        contracts = sorted(contracts, key=keyfunc)
-        to_remind = defaultdict(list)
-        documents_per_contract = cls.get_calculated_required_documents(
-            contracts)
-
-        for product, contracts in groupby(contracts, key=keyfunc):
-            if not product.document_rules:
-                continue
-            delay = product.document_rules[0].reminder_delay
-            unit = product.document_rules[0].reminder_unit
+        for product, contracts in groupby(objects, key=keyfunc):
+            config = product.document_rules[0] if \
+                product.document_rules else None
             for contract in contracts:
-                documents = documents_per_contract[contract]
+                documents = doc_per_objects[contract]
                 for doc in contract.document_request_lines:
-                    if remind_if_false and all([getattr(doc, x, False) for x in
-                            remind_if_false]):
-                        continue
-                    if not delay:
-                        if not force_remind:
-                            to_remind[contract].append(doc)
-                        continue
-                    delta = relativedelta(days=+delay) if unit == 'day' else \
-                        relativedelta(months=+delay)
-                    doc_max_reminders = documents[
-                        doc.document_desc.code]['max_reminders']
-                    if force_remind and (utils.today() - delta <
-                            doc.last_reminder_date or
-                            (doc_max_reminders and
-                                 doc.reminders_sent >= doc_max_reminders)):
-                        continue
-                    to_remind[contract].append(doc)
-        return to_remind
+                    if cls.is_document_needed(config, documents, doc,
+                            remind_if_false, force_remind):
+                        to_remind[contract].append(doc)
 
     @classmethod
     @ModelView.button

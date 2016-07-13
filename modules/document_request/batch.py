@@ -92,7 +92,7 @@ class BatchRemindDocuments(batch.BatchRoot):
         assert hasattr(Model, 'get_reminder_candidates'), \
             '%s does not implement get_reminder_candidates' % Model.__name__
         objects = Model.browse(ids)
-        with Transaction().set_context(force_remind=True):
+        with Transaction().set_context(force_remind=False):
             Model.generate_reminds_documents(objects)
 
     @classmethod

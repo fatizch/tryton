@@ -1,14 +1,13 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
-from dateutil.relativedelta import relativedelta
 from sql.operators import Concat
 from sql import Cast
 
 from trytond.pool import PoolMeta, Pool
 from trytond.model import ModelView
 
-from trytond.modules.cog_utils import fields, utils
+from trytond.modules.cog_utils import fields
 from trytond.modules.document_request.document import RemindableInterface
 
 
@@ -95,41 +94,19 @@ class Claim(RemindableInterface):
         return documents_per_claim
 
     @classmethod
-    def get_document_lines_to_remind(cls, claims, force_remind):
-        DocRequestLine = Pool().get('document.request.line')
-        remind_if_false = DocRequestLine.default_remind_fields()
-        to_remind = defaultdict(list)
-        documents_per_claim = cls.get_calculated_required_documents(claims)
-        for claim in claims:
-            documents = documents_per_claim[claim]
+    def fill_to_remind(cls, doc_per_objects, to_remind, objects,
+            force_remind, remind_if_false):
+        for claim in objects:
+            documents = doc_per_objects[claim]
             for loss in claim.losses:
                 for delivered in loss.services:
                     benefit = delivered.benefit
-                    if not benefit.documents_rules:
-                        continue
-                    delay = benefit.documents_rules[0].reminder_delay
-                    unit = benefit.documents_rules[0].reminder_unit
+                    config = benefit.documents_rules[0] \
+                        if benefit.documents_rules else None
                     for doc in claim.document_request_lines:
-                        if remind_if_false and all([getattr(doc, x, False)
-                                for x in remind_if_false]):
-                            continue
-                    if not delay:
-                        if not force_remind:
+                        if cls.is_document_needed(config, documents, doc,
+                                remind_if_false, force_remind):
                             to_remind[claim].append(doc)
-                        to_remind[claim].append(doc)
-                    delta = relativedelta(days=+delay) if unit == 'day' else \
-                        relativedelta(months=+delay)
-                    if doc.document_desc.code not in documents.keys():
-                        continue
-                    doc_max_reminders = documents[
-                        doc.document_desc.code]['max_reminders']
-                    if force_remind and (utils.today() - delta <
-                            doc.last_reminder_date or
-                            (doc_max_reminders and
-                                 doc.reminders_sent >= doc_max_reminders)):
-                        continue
-                    to_remind[claim].append(doc)
-        return to_remind
 
     @classmethod
     def get_reminder_candidates_query(cls, tables):

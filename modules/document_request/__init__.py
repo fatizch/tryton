@@ -5,6 +5,7 @@ from trytond.pool import Pool
 from .batch import *
 from .document import *
 from .attachment import *
+from .report_engine import *
 
 
 def register():
@@ -21,3 +22,6 @@ def register():
     Pool.register(
         DocumentReceive,
         module='document_request', type_='wizard')
+    Pool.register(
+        ReportGenerate,
+        module='document_request', type_='report')
