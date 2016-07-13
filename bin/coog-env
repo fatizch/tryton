@@ -39,6 +39,7 @@ _coog_env_paths() { # set paths
         [ -d $COOG_ROOT/trytond ] && COOG_TRYTOND=$COOG_ROOT/trytond
         [ -d $COOG_ROOT/proteus ] && COOG_PROTEUS=$COOG_ROOT/proteus
         [ -d $COOG_ROOT/sao ] && COOG_SAO=$COOG_ROOT/sao
+        [ -d $COOG_ROOT/bench ] && COOG_BENCH=$COOG_ROOT/bench
         [ -d $COOG_ROOT/conf ] && COOG_CONF=$COOG_ROOT/conf
         COOG_COOG=`readlink -f ..`
         COOG_BIN=`readlink -f ./bin`
@@ -100,6 +101,8 @@ _coog_env_server() { # set server vars
         [ ! -z $TRYTOND_CONFIG ] && export TRYTOND_CONFIG
         TRYTOND_WEB_ROOT="$COOG_SAO"
         [ ! -z $TRYTOND_WEB_ROOT ] && export TRYTOND_WEB_ROOT
+        TRYTOND_WEB_BENCH="$COOG_BENCH"
+        [ ! -z $TRYTOND_WEB_BENCH ] && export TRYTOND_WEB_BENCH
         DB_NAME=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_SRV | python $COOG_BIN/parse-url.py | sed -n 6p` || return $?
         [ ! -z $DB_NAME ] && export DB_NAME
         TRYTOND_CACHE_REDIS=`python $COOG_BIN/parse-config.py cache redis < $COOG_CONF_SRV 2> /dev/null`
@@ -155,6 +158,7 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    COOG_TRYTOND           "$COOG_TRYTOND
         echo "    COOG_PROTEUS           "$COOG_PROTEUS
         echo "    COOG_SAO               "$COOG_SAO
+        echo "    COOG_BENCH             "$COOG_BENCH
         echo "    COOG_CONF              "$COOG_CONF
         echo "    COOG_COOG              "$COOG_COOG
         echo "    COOG_BIN               "$COOG_BIN
@@ -176,6 +180,7 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    LOG_LEVEL              "$LOG_LEVEL
         echo "    TRYTOND_CONFIG         "$TRYTOND_CONFIG
         echo "    TRYTOND_WEB_ROOT       "$TRYTOND_WEB_ROOT
+        echo "    TRYTOND_WEB_BENCH      "$TRYTOND_WEB_BENCH
         echo "    DB_NAME                "$DB_NAME
         echo "    TRYTOND_CACHE_REDIS    "$TRYTOND_CACHE_REDIS
         echo "    TRYTOND_ASYNC_RQ       "$TRYTOND_ASYNC_RQ
