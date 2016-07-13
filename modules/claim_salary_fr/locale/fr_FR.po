@@ -301,7 +301,7 @@ msgstr "Salaire"
 
 msgctxt "selection:rule_engine,type_:"
 msgid "Benefit: Net Salary Calculation"
-msgstr "Prestation: Calcule du salaire bet"
+msgstr "Prestation: Calcul du salaire net"
 
 msgctxt "view:claim.net_calculation_rule:"
 msgid "Net Calculation Rule"
