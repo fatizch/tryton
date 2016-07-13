@@ -637,7 +637,7 @@ class RemindableInterface(object):
     @classmethod
     def get_document_lines_to_remind(cls, objects, force_remind):
         DocRequestLine = Pool().get('document.request.line')
-        remind_if_false = DocRequestLine.default_remind_fields()
+        remind_if_false = DocRequestLine.get_default_remind_fields()
         to_remind = defaultdict(list)
         documents_per_object = cls.get_calculated_required_documents(objects)
         cls.fill_to_remind(documents_per_object, to_remind, objects,
