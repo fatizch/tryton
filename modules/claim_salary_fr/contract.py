@@ -27,8 +27,7 @@ class OptionBenefit:
         'Net Calculation Rule', states={
             'required': Bool(Eval('net_salary_mode')),
             'invisible': ~Bool(Eval('net_salary_mode')),
-            },
-            depends=['net_salary_mode'])
+            }, depends=['net_salary_mode'])
 
     @staticmethod
     def default_net_salary_mode():

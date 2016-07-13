@@ -66,6 +66,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         target_not_required=True)
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT')
     _translation_cache = Cache('_get_extra_data_summary_cache')
+    _extra_data_cache = Cache('extra_data_cache')
 
     @classmethod
     def __setup__(cls):
@@ -102,17 +103,20 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
     @classmethod
     def create(cls, vlist):
         created = super(ExtraData, cls).create(vlist)
+        cls._extra_data_cache.clear()
         cls._translation_cache.clear()
         return created
 
     @classmethod
     def delete(cls, ids):
         super(ExtraData, cls).delete(ids)
+        cls._extra_data_cache.clear()
         cls._translation_cache.clear()
 
     @classmethod
     def write(cls, *args):
         super(ExtraData, cls).write(*args)
+        cls._extra_data_cache.clear()
         cls._translation_cache.clear()
 
     @classmethod

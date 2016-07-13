@@ -7,6 +7,7 @@ from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, Or
 from trytond.cache import Cache
+from trytond.model import Unique
 
 from trytond.modules.cog_utils import fields, model, utils
 from trytond.modules.rule_engine import get_rule_mixin
@@ -29,8 +30,9 @@ class NetCalculationRuleExtraData(model.CoopSQL):
     __name__ = 'net_calculation_rule-extra_data'
 
     calculation_rule = fields.Many2One('claim.net_calculation_rule',
-        'Calculation Rule')
-    extra_data = fields.Many2One('extra_data', 'Extra Data')
+        'Calculation Rule', required=True, ondelete='CASCADE')
+    extra_data = fields.Many2One('extra_data', 'Extra Data',
+        required=True, ondelete='CASCADE')
 
 
 class NetCalculationRule(model.CoopSQL, model.CoopView,
@@ -38,19 +40,23 @@ class NetCalculationRule(model.CoopSQL, model.CoopView,
     'Net Calculation Rule'
     __metaclass__ = PoolMeta
     __name__ = 'claim.net_calculation_rule'
+    _func_key = 'name'
 
-    name = fields.Char('Name')
+    name = fields.Char('Name', required=True)
     contributions = fields.Many2Many('net_calculation_rule-extra_data',
         'calculation_rule', 'extra_data', 'Contributions',
-        domain=[('kind', '=', 'salary')])
-    rule = fields.Many2One('', 'Rule')
+        domain=[('kind', '=', 'salary')], required=True)
 
     @classmethod
     def __setup__(cls):
         super(NetCalculationRule, cls).__setup__()
         cls.rule.domain = [
             ('type_', '=', 'benefit_net_salary_calculation')]
-
+        cls.rule.states.update({'required': True})
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('name_uniq', Unique(t, t.name), 'The name must be unique!'),
+            ]
 
 class Salary(model.CoopSQL, model.CoopView):
     'Claim Salary'
@@ -58,9 +64,9 @@ class Salary(model.CoopSQL, model.CoopView):
     __name__ = 'claim.salary'
 
     delivered_service = fields.Many2One('claim.service', 'Delivered Service',
-        ondelete='CASCADE', required=True)
-    from_date = fields.Date('From Date')
-    to_date = fields.Date('To Date')
+        ondelete='CASCADE', required=True, select=True)
+    from_date = fields.Date('From Date', required=True)
+    to_date = fields.Date('To Date', required=True)
     gross_salary = fields.Numeric('Gross Salary',
         digits=(16, Eval('currency_digits', 2)),
         depends=['currency_digits'])
@@ -79,7 +85,6 @@ class Salary(model.CoopSQL, model.CoopView):
     net_limit_mode = fields.Function(
         fields.Boolean('Net Limit Mode'),
         'get_net_limit_mode')
-    _extra_data_cache = Cache('extra_data')
 
     @classmethod
     def __setup__(cls):
@@ -93,19 +98,6 @@ class Salary(model.CoopSQL, model.CoopView):
                 })
 
     @classmethod
-    def update_salary_with_existing_info(cls, salaries):
-        for salary in salaries:
-            found = cls.search([
-                ('from_date', '=', salary.from_date),
-                ('to_date', '=', salary.to_date),
-                ('delivered_service.loss.covered_person', '=',
-                    salary.delivered_service.loss.covered_person)])
-            if found:
-                salary.gross_salary = found[0].gross_salary
-                salary.net_salary = found[0].net_salary
-                salary.salary_bonus = found[0].salary_bonus
-
-    @classmethod
     @model.CoopView.button_action('claim_salary_fr.act_set_contributions')
     def set_contributions(cls, salaries):
         pass
@@ -113,12 +105,12 @@ class Salary(model.CoopSQL, model.CoopView):
     @classmethod
     def update_contributions_table(cls, contributions, tables, key):
         ExtraData = Pool().get('extra_data')
-        for k, v in contributions:
-            extra_data = cls._extra_data_cache.get(k, None)
+        for k, v in contributions.items():
+            extra_data = ExtraData._extra_data_cache.get(k, None)
             if not extra_data:
                 extra_data = ExtraData.search(
                     [('name' , '=', k)], limit=1)[0].id
-                cls._extra_data_cache.set(k, extra_data)
+                ExtraData._extra_data_cache.set(k, extra_data)
             tables[k]['extra_data'] = extra_data
             tables[k][key] = v
 
@@ -133,11 +125,11 @@ class Salary(model.CoopSQL, model.CoopView):
                 'tc': 0,
                 'extra_data': None,
                 })
-        self.update_contributions_table(self.ta_contributions.items(),
+        self.update_contributions_table(self.ta_contributions,
             tables, 'ta')
-        self.update_contributions_table(self.tb_contributions.items(),
+        self.update_contributions_table(self.tb_contributions,
             tables, 'tb')
-        self.update_contributions_table(self.tc_contributions.items(),
+        self.update_contributions_table(self.tc_contributions,
             tables, 'tc')
 
         missing_rates = [x for x in extra_datas if x.id not in

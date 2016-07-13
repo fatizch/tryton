@@ -5,8 +5,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="from_date"/>
     <field name="to_date"/>
     <field name="gross_salary"/>
-    <field name="net_salary"/>
     <field name="salary_bonus"/>
+    <field name="net_salary"/>
     <button name="set_contributions" string="Set Contributions"/>
     <field name="net_limit_mode" tree_invisible="1"/>
 </tree>

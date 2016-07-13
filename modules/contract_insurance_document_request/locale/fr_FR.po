@@ -92,7 +92,7 @@ msgstr "Bloquant"
 
 msgctxt "field:document.rule,reminder_delay:"
 msgid "Reminder Delay"
-msgstr "Delai de relance"
+msgstr "Délai de la relance"
 
 msgctxt "selection:document.rule,reminder_unit:"
 msgid "Months"
