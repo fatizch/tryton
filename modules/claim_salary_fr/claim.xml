@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- ########### Salary ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="salary_view_form">
+            <field name="model">claim.salary</field>
+            <field name="type">form</field>
+            <field name="name">salary_form</field>
+        </record>
+        <record model="ir.ui.view" id="salary_view_list">
+            <field name="model">claim.salary</field>
+            <field name="type">tree</field>
+            <field name="name">salary_list</field>
+        </record>
+        <record model="ir.ui.view" id="claim_service_with_salary_view_form">
+            <field name="model">claim.service</field>
+            <field name="type">form</field>
+            <field name="name">claim_service_with_salary_form</field>
+        </record>
+        <record model="ir.ui.view" id="extra_data_displayers_view_form">
+            <field name="model">claim.extra_datas_displayers</field>
+            <field name="inherit" ref="claim_indemnification.extra_data_displayers_view_form"/>
+            <field name="name">extra_data_displayers_form</field>
+        </record>
+        <record model="ir.ui.view" id="indemnification_definition_view_form">
+            <field name="model">claim.indemnification_definition</field>
+            <field name="inherit" ref="claim_indemnification.indemnification_definition_view_form"/>
+            <field name="name">indemnification_definition_form</field>
+        </record>
+        <record model="ir.ui.view" id="net_calculation_rule_view_form">
+            <field name="model">claim.net_calculation_rule</field>
+            <field name="type">form</field>
+            <field name="name">net_calculation_rule_form</field>
+        </record>
+        <record model="ir.ui.view" id="net_calculation_rule_view_list">
+            <field name="model">claim.net_calculation_rule</field>
+            <field name="type">tree</field>
+            <field name="name">net_calculation_rule_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_net_calculation_rule_form">
+            <field name="name">Net Calculation Rules</field>
+            <field name="res_model">claim.net_calculation_rule</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_net_calculation_rule_form_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="net_calculation_rule_view_list"/>
+            <field name="act_window" ref="act_net_calculation_rule_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_net_calculation_rule_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="net_calculation_rule_view_form"/>
+            <field name="act_window" ref="act_net_calculation_rule_form"/>
+        </record>
+        <menuitem parent="offered.menu_product_configuration" sequence="3" id="menu_net_calculation_rule" action="act_net_calculation_rule_form"/>
+    </data>
+</tryton>

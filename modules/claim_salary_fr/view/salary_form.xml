@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form string="Salary">
+    <label name="delivered_service"/>
+    <field name="delivered_service"/>
+    <newline/>
+    <label name="from_date"/>
+    <field name="from_date"/>
+    <label name="to_date"/>
+    <field name="to_date"/>
+    <label name="gross_salary"/>
+    <field name="gross_salary"/>
+    <label name="net_salary"/>
+    <field name="net_salary"/>
+    <label name="salary_bonus"/>
+    <field name="salary_bonus"/>
+    <newline/>
+    <group id='contributions' colspan="6" col="3">
+        <field name="ta_contributions" readonly="1" no_command="1"/>
+        <field name="tb_contributions" readonly="1" no_command="1"/>
+        <field name="tc_contributions" readonly="1" no_command="1"/>
+    </group>
+    <button name="set_contributions" string="Set Contributions" colspan="4"/>
+    <field name="net_limit_mode" invisible="1"/>
+</form>

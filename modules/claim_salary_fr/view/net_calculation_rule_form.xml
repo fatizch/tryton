@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form string="Net Calculation Rule">
+    <label name="name" xalign="0"/>
+    <field name="name" xalign="0" colspan="3"/>
+    <newline/>
+    <label name="rule" xalign="0"/>
+    <field name="rule" widget="selection" colspan="3"/>
+    <newline/>
+    <field name="contributions" colspan="4"/>
+</form>

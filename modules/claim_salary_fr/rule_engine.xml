@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="service_basic_salary">
+            <field name="translated_technical_name">tranche_salaire</field>
+            <field name="description">Tranche de salaire</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_basic_salary</field>
+            <field name="fct_args">liste_des_type_de_salaire</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="salary_range_rate">
+            <field name="translated_technical_name">taux_de_la_tranche</field>
+            <field name="description">Taux de la tranche</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_range_by_name</field>
+            <field name="fct_args">nom_de_tranche</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="salary_gross_salary">
+            <field name="translated_technical_name">salaire_brut</field>
+            <field name="description">Salaire brut</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_gross_salary</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="salary_net_salary">
+            <field name="translated_technical_name">salaire_net</field>
+            <field name="description">Salaire net</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_net_salary</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="salary_net_limit">
+            <field name="translated_technical_name">limite_au_net</field>
+            <field name="description">Limite au net</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_is_net_limite</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+    </data>
+</tryton>

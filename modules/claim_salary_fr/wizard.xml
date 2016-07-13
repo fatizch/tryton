@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ##################### -->
+        <!-- # Set Contributions # -->
+        <!-- ##################### -->
+        <record model="ir.action.wizard" id="act_set_contributions">
+            <field name="name">Set Contributions</field>
+            <field name="wiz_name">claim_salary_fr.set_contributions</field>
+        </record>
+        <!-- ########################### -->
+        <!-- # Start Set Contributions # -->
+        <!-- ########################### -->
+        <record model="ir.ui.view" id="start_set_contributions_view_form">
+            <field name="model">claim_salary_fr.start_set_contributions</field>
+            <field name="type">form</field>
+            <field name="name">start_set_contributions_form</field>
+        </record>
+        <record model="ir.ui.view" id="contributions_view_list">
+            <field name="model">claim_salary_fr.contributions_view</field>
+            <field name="type">tree</field>
+            <field name="name">contributions_list</field>
+        </record>
+    </data>
+</tryton>

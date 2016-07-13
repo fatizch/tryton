@@ -1,0 +1,344 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:claim.extra_datas_displayers,salaries:"
+msgid "Salaries"
+msgstr "Salaires"
+
+msgctxt "field:claim.indemnification_definition,salaries:"
+msgid "Salaries"
+msgstr "Salaires"
+
+msgctxt "field:claim.net_calculation_rule,contributions:"
+msgid "Contributions"
+msgstr "Contributions"
+
+msgctxt "field:claim.net_calculation_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:claim.net_calculation_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:claim.net_calculation_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.net_calculation_rule,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.net_calculation_rule,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:claim.net_calculation_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:claim.net_calculation_rule,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:claim.net_calculation_rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Donnée complémentaire de règle"
+
+msgctxt "field:claim.net_calculation_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de modification"
+
+msgctxt "field:claim.net_calculation_rule,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.net_calculation_rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:claim.salary,create_date:"
+msgid "Create Date"
+msgstr "Créé par"
+
+msgctxt "field:claim.salary,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:claim.salary,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.salary,delivered_service:"
+msgid "Delivered Service"
+msgstr "Prestation fournie"
+
+msgctxt "field:claim.salary,from_date:"
+msgid "From Date"
+msgstr "Du"
+
+msgctxt "field:claim.salary,gross_salary:"
+msgid "Gross Salary"
+msgstr "Salaire brut"
+
+msgctxt "field:claim.salary,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.salary,net_limit_mode:"
+msgid "Net Limit Mode"
+msgstr "Limiter au salaire net"
+
+msgctxt "field:claim.salary,net_salary:"
+msgid "Net Salary"
+msgstr "Salaire net"
+
+msgctxt "field:claim.salary,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:claim.salary,salary_bonus:"
+msgid "Salary Bonus"
+msgstr "Bonus salaire"
+
+msgctxt "field:claim.salary,ta_contributions:"
+msgid "TA Contributions"
+msgstr "Contributions tranche A"
+
+msgctxt "field:claim.salary,tb_contributions:"
+msgid "TB Contributions"
+msgstr "Contributions tranche B"
+
+msgctxt "field:claim.salary,tc_contributions:"
+msgid "TC Contributions"
+msgstr "Contributions tranche C"
+
+msgctxt "field:claim.salary,to_date:"
+msgid "To Date"
+msgstr "Jusqu'au"
+
+msgctxt "field:claim.salary,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:claim.salary,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.salary,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:claim.service,salary:"
+msgid "Salary"
+msgstr "Salaire"
+
+msgctxt "field:claim_salary_fr.contributions_view,extra_data:"
+msgid "Extra Data"
+msgstr "Donnée complémentaire"
+
+msgctxt "field:claim_salary_fr.contributions_view,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim_salary_fr.contributions_view,ta:"
+msgid "Rate A"
+msgstr "Taux de la tranche A"
+
+msgctxt "field:claim_salary_fr.contributions_view,tb:"
+msgid "Rate B"
+msgstr "Taux de la tranche B"
+
+msgctxt "field:claim_salary_fr.contributions_view,tc:"
+msgid "Rate C"
+msgstr "Taux de la tranche C"
+
+msgctxt "field:claim_salary_fr.start_set_contributions,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim_salary_fr.start_set_contributions,propagate:"
+msgid "Propagate on salaries"
+msgstr "Propager sur les autre salaires"
+
+msgctxt "field:claim_salary_fr.start_set_contributions,rates:"
+msgid "Rates"
+msgstr "Taux"
+
+msgctxt "field:claim_salary_fr.start_set_contributions,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:claim_salary_fr.start_set_contributions,salary:"
+msgid "Salary"
+msgstr "Salaire"
+
+msgctxt "field:contract.option.benefit,net_calculation_rule:"
+msgid "Net Calculation Rule"
+msgstr "Règle de calcul du net"
+
+msgctxt "field:contract.option.benefit,net_salary_mode:"
+msgid "Limit Net Salary Mode"
+msgstr "Limiter au salaire net"
+
+msgctxt "field:contract.option.benefit,salary_mode:"
+msgid "Salary Mode"
+msgstr "Mode salaire"
+
+msgctxt "field:extra_data,group:"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "field:net_calculation_rule-extra_data,calculation_rule:"
+msgid "Calculation Rule"
+msgstr "Règle de calcul"
+
+msgctxt "field:net_calculation_rule-extra_data,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:net_calculation_rule-extra_data,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:net_calculation_rule-extra_data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:net_calculation_rule-extra_data,extra_data:"
+msgid "Extra Data"
+msgstr "Donnée complémentaire"
+
+msgctxt "field:net_calculation_rule-extra_data,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:net_calculation_rule-extra_data,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:net_calculation_rule-extra_data,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:net_calculation_rule-extra_data,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:net_calculation_rule-extra_data,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "help:claim_salary_fr.start_set_contributions,propagate:"
+msgid "Propagate on each salaries with a defined gross salary"
+msgstr ""
+"Propager sur chaque salaire de la prestation avec un salaire brut définit"
+
+msgctxt "model:claim.net_calculation_rule,name:"
+msgid "Net Calculation Rule"
+msgstr "Règle de calcul du salaire net"
+
+msgctxt "model:claim.salary,name:"
+msgid "Claim Salary"
+msgstr "Salaire prestation"
+
+msgctxt "model:claim_salary_fr.contributions_view,name:"
+msgid "Contributions View"
+msgstr "Vues des contributions"
+
+msgctxt "model:claim_salary_fr.start_set_contributions,name:"
+msgid "Start Set Contributions"
+msgstr "Définir les contributions"
+
+msgctxt "model:ir.action,name:act_net_calculation_rule_form"
+msgid "Net Calculation Rules"
+msgstr "Règles de cacul pour le net"
+
+msgctxt "model:ir.action,name:act_set_contributions"
+msgid "Set Contributions"
+msgstr "Définir les contributions"
+
+msgctxt "model:ir.ui.menu,name:menu_net_calculation_rule"
+msgid "Net Calculation Rules"
+msgstr "Règles de cacul pour le net"
+
+msgctxt "model:net_calculation_rule-extra_data,name:"
+msgid "Net Calculation Rule - Extra Data"
+msgstr "Règle de calcul net - Donnée complémentaire"
+
+msgctxt "selection:contract.option.benefit,salary_mode:"
+msgid "Last 12 months"
+msgstr "Les 12 derniers mois"
+
+msgctxt "selection:contract.option.benefit,salary_mode:"
+msgid "Last 12 months on last year"
+msgstr "Les 12 derniers mois de la dernière annnée"
+
+msgctxt "selection:contract.option.benefit,salary_mode:"
+msgid "Last 3 months"
+msgstr "Les trois derniers mois"
+
+msgctxt "selection:contract.option.benefit,salary_mode:"
+msgid "Last 3 months on last year"
+msgstr "Les 3 derniers mois de la dernière annnée"
+
+msgctxt "selection:contract.option.benefit,salary_mode:"
+msgid "Last month"
+msgstr "Dernier mois"
+
+msgctxt "selection:contract.option.benefit,salary_mode:"
+msgid "Last month on last year"
+msgstr "Dernier mois de la dernière année"
+
+msgctxt "selection:extra_data,kind:"
+msgid "Salary"
+msgstr "Salaire"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Benefit: Net Salary Calculation"
+msgstr "Prestation: Calcule du salaire bet"
+
+msgctxt "view:claim.net_calculation_rule:"
+msgid "Net Calculation Rule"
+msgstr "Règle de cacul pour le net"
+
+msgctxt "view:claim.net_calculation_rule:"
+msgid "Net Calculation Rules"
+msgstr "Règles de caculs pour le net"
+
+msgctxt "view:claim.salary:"
+msgid "Salaries"
+msgstr "Salaires"
+
+msgctxt "view:claim.salary:"
+msgid "Salary"
+msgstr "Salaire"
+
+msgctxt "view:claim.salary:"
+msgid "Set Contributions"
+msgstr "Définir les contributions"
+
+msgctxt "view:claim.service:"
+msgid "Delivered Service"
+msgstr "Prestation fournie"
+
+msgctxt "view:claim_salary_fr.contributions_view:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:claim_salary_fr.contributions_view:"
+msgid "Rates"
+msgstr "Taux"
+
+msgctxt "view:claim_salary_fr.start_set_contributions:"
+msgid "Start Set Contributions"
+msgstr "Définir les contributions"
+
+msgctxt "wizard_button:claim_salary_fr.set_contributions,start,end:"
+msgid "End"
+msgstr "Fin"
+
+msgctxt "wizard_button:claim_salary_fr.set_contributions,start,process:"
+msgid "Set contibutions"
+msgstr "Définir les contributions"
