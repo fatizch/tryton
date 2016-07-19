@@ -9,6 +9,8 @@ this repository contains the full copyright notices and license terms. -->
         <field name="custom_transitions"/>
         <label name="steps_implicitly_available"/>
         <field name="steps_implicitly_available"/>
+        <label name="sequence"/>
+        <field name="sequence"/>
     </xpath>
     <xpath expr="/form/group[@id='global_part']/field[@name='on_model']" position="replace_attributes">
         <field name="on_model" colspan="1"/>

@@ -565,10 +565,12 @@ class Process(model.CoopSQL, model.TaggedMixin):
     average_run_time = fields.Function(
         fields.TimeDelta('Average Run Time'),
         'get_average_run_time')
+    sequence = fields.Integer('Sequence')
 
     @classmethod
     def __setup__(cls):
         super(Process, cls).__setup__()
+        cls._order.insert(0, ('sequence', 'ASC'))
         cls.transitions.states['invisible'] = ~Eval('custom_transitions')
         cls.transitions.depends.append('custom_transitions')
         cls._error_messages.update({
@@ -1193,7 +1195,9 @@ class ProcessStart(model.CoopView):
 
     @fields.depends('model')
     def on_change_with_good_process(self):
-        return utils.auto_complete_with_domain(self, 'good_process')
+        instances = utils.get_domain_instances(self, 'good_process')
+        if instances:
+            return instances[0].id
 
 
 class ProcessFinder(Wizard):

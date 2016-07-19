@@ -9,7 +9,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="technical_name"/>
         <newline/>
         <label name="on_model"/>
-        <field name="on_model" colspan="3"/>
+        <field name="on_model"/>
     </group>
     <newline/>
     <notebook>
