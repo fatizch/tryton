@@ -6,7 +6,6 @@ from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, Or
-from trytond.cache import Cache
 from trytond.model import Unique
 
 from trytond.modules.cog_utils import fields, model, utils
@@ -57,6 +56,7 @@ class NetCalculationRule(model.CoopSQL, model.CoopView,
         cls._sql_constraints += [
             ('name_uniq', Unique(t, t.name), 'The name must be unique!'),
             ]
+
 
 class Salary(model.CoopSQL, model.CoopView):
     'Claim Salary'
@@ -109,7 +109,7 @@ class Salary(model.CoopSQL, model.CoopView):
             extra_data = ExtraData._extra_data_cache.get(k, None)
             if not extra_data:
                 extra_data = ExtraData.search(
-                    [('name' , '=', k)], limit=1)[0].id
+                    [('name', '=', k)], limit=1)[0].id
                 ExtraData._extra_data_cache.set(k, extra_data)
             tables[k]['extra_data'] = extra_data
             tables[k][key] = v
@@ -275,6 +275,7 @@ class ClaimService:
         for cur_salary in self.salary:
             res += getattr(cur_salary, name, 0)
         return res
+
 
 class ExtraDatasDisplayers:
     __metaclass__ = PoolMeta

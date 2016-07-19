@@ -90,7 +90,7 @@ coog_test_log() { # print batch logs
         cat $* $args
 }
 
-coog_test_logclear() {
+coog_test_logclear() { # clear test logs
         rm -vf $COOG_TMP/$COOG_FILE_TEST*.out
 }
 
@@ -121,7 +121,7 @@ _coog_test_flake8() {
                 | grep -vP "modules\/[a-z_]+\/tests\/__init__\.py:\d+:\d+: F401 '.*suite'"
 }
 
-coog_test_flake8() {
+coog_test_flake8() { # check modules code (flake8)
         for file in $(find "$COOG_COOG/modules" -name "*.py")
         do
                 _coog_test_flake8 "$file"

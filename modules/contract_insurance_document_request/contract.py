@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 from itertools import groupby
 from collections import defaultdict
-from dateutil.relativedelta import relativedelta
 from sql.operators import Concat
 from sql import Cast
 
@@ -10,7 +9,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.model import ModelView
 
-from trytond.modules.cog_utils import fields, utils
+from trytond.modules.cog_utils import fields
 from trytond.modules.document_request.document import RemindableInterface
 
 

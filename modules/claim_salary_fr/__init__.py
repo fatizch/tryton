@@ -8,6 +8,7 @@ from .contract import *
 from .extra_data import *
 from .wizard import *
 
+
 def register():
     Pool.register(
         ClaimService,
