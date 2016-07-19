@@ -13,6 +13,9 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <label name="direct_debit_day_selector"/>
     <field name="direct_debit_day_selector"/>
+    <newline/>
+    <label name="payer"/>
+    <field name="payer"/>
     <label name="direct_debit_account"/>
     <field name="direct_debit_account"/>
     <newline/>

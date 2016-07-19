@@ -21,6 +21,7 @@ def register():
         Contract,
         CoveredElement,
         Beneficiary,
+        ContractBillingInformation,
         # from test_case
         TestCaseModel,
         RuleEngineRuntime,

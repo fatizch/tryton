@@ -32,6 +32,10 @@ msgctxt "error:contract.premium.display:"
 msgid "No contract found in context"
 msgstr "Pas de contrat trouver dans le contexte"
 
+msgctxt "error:contract:"
+msgid "A payer must be specified"
+msgstr "Un payeur doit être spécifié"
+
 msgctxt "error:offered.billing_mode:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
@@ -292,6 +296,10 @@ msgctxt "field:contract,billing_information:"
 msgid "Current Billing Information"
 msgstr "Données de quittancement courant"
 
+msgctxt "field:contract,billing_information_payer:"
+msgid "Billing Information Payer"
+msgstr "Payeur sur le quittancement"
+
 msgctxt "field:contract,billing_informations:"
 msgid "Billing Information"
 msgstr "Quittancement"
@@ -399,6 +407,10 @@ msgstr "ID"
 msgctxt "field:contract.billing_information,is_once_per_contract:"
 msgid "Once Per Contract?"
 msgstr "Prime unique?"
+
+msgctxt "field:contract.billing_information,payer:"
+msgid "Payer"
+msgstr "Payeur"
 
 msgctxt "field:contract.billing_information,payment_term:"
 msgid "Payment Term"

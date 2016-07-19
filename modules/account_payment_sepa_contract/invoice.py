@@ -17,7 +17,6 @@ class Invoice:
 
     sepa_mandate = fields.Many2One('account.payment.sepa.mandate',
         'Sepa Mandate', states={'readonly': Eval('state') != 'draft'},
-        domain=[('party', '=', Eval('party'))], depends=['state', 'party'],
         ondelete='RESTRICT')
     bank_account = fields.Function(
         fields.Many2One('bank.account', 'Bank Account'),

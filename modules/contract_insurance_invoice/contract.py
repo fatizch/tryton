@@ -75,30 +75,20 @@ class Contract:
     billing_information = fields.Function(
         fields.Many2One('contract.billing_information',
             'Current Billing Information'), 'get_billing_information')
+    payer = fields.Function(
+        fields.Many2One('party.party', 'Payer'),
+        'get_billing_information')
     billing_informations = fields.One2Many('contract.billing_information',
         'contract', 'Billing Information',
         domain=[
             ('billing_mode.products', '=', Eval('product')),
-            If(Bool(Eval('subscriber', False)),
-                ['OR',
-                    ('direct_debit_account.owners', '=', Eval('subscriber')),
-                    If(Bool(Eval('id', False)),
-                        [('id', 'not in', Eval('valid_billing_informations'))],
-                        []),
-                    ('direct_debit_account', '=', None)],
-                [('direct_debit_account', '=', None)]),
             If(Bool(Eval('status') == 'active'),
                 ['OR',
                     ('direct_debit', '=', False),
                     ('direct_debit_account', '!=', None)],
                 [])
         ], delete_missing=True,
-        states=_STATES, depends=['product', 'subscriber', 'status',
-            'valid_billing_informations', 'id'])
-    valid_billing_informations = fields.Function(
-        fields.One2Many('contract.billing_information', None,
-            'Valid Billing Informations'),
-        'get_valid_billing_informations')
+        states=_STATES, depends=['product', 'status', 'id'])
     last_invoice_start = fields.Function(
         fields.Date('Last Invoice Start Date'), 'get_last_invoice',
         searcher='search_last_invoice')
@@ -151,6 +141,9 @@ class Contract:
         cls._buttons.update({
                 'first_invoice': {},
                 })
+        cls._error_messages.update({
+                'no_payer': 'A payer must be specified',
+                })
 
     @classmethod
     def delete(cls, contracts):
@@ -166,8 +159,10 @@ class Contract:
             return
         new_billing_information = self.billing_informations[-1]
         new_billing_information.date = None
+        if not new_billing_information.payer:
+            new_billing_information.payer = self.subscriber
         if new_billing_information.direct_debit_account:
-            if (self.subscriber not in
+            if (new_billing_information.payer not in
                     new_billing_information.direct_debit_account.owners):
                 new_billing_information.direct_debit_account = None
         self.billing_informations = [new_billing_information]
@@ -372,24 +367,6 @@ class Contract:
                     result[contract] += amount
         return result
 
-    def get_valid_billing_informations(self, name):
-        # apply domain only on current and future version
-        # in order to manage subscriber change
-        if not self.start_date:
-            # Void contracts may be fully invalid
-            return []
-        res = []
-        previous_date = datetime.date.max
-        today = utils.today()
-        for billing_info in reversed(self.billing_informations):
-            # If the contract start_date is in the future, we must not validate
-            # anything before it
-            if (previous_date or datetime.date.max) > max(
-                    today, self.start_date):
-                res.append(billing_info.id)
-            previous_date = billing_info.date
-        return res
-
     def invoices_report(self):
         pool = Pool()
         ContractInvoice = pool.get('contract.invoice')
@@ -531,6 +508,8 @@ class Contract:
                     'direct_debit_account')
                 self.append_functional_error('child_field_required',
                     (field, parent))
+            if not billing.payer and billing.direct_debit:
+                self.append_functional_error('no_payer')
 
     @classmethod
     def get_billing_information(cls, contracts, names):
@@ -1440,6 +1419,10 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
     is_once_per_contract = fields.Function(
         fields.Boolean('Once Per Contract?'),
         'on_change_with_is_once_per_contract')
+    payer = fields.Many2One('party.party', 'Payer',
+        states={'invisible': ~Eval('direct_debit'),
+            'required': Bool(Eval('direct_debit'))},
+        depends=['direct_debit'], ondelete='RESTRICT')
 
     @classmethod
     def _export_light(cls):
@@ -1452,6 +1435,10 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         cls.__rpc__.update({
                 'get_allowed_direct_debit_days': RPC(instantiate=0)
                 })
+        cls.direct_debit_account.domain.append([
+                'owners', '=', Eval('payer')
+                ])
+        cls.direct_debit_account.depends.append('payer')
 
     @classmethod
     def __register__(cls, module_name):
@@ -1463,6 +1450,12 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
                     'contract_billing_information')
                 and TableHandler.table_exist('contract_invoice_frequency')):
             migrate = True
+        # Migration from 1.8: Add payer on billing information
+
+        add_payer = False
+        contract_billing_h = TableHandler(cursor, cls)
+        if not contract_billing_h.column_exist('payer'):
+            add_payer = True
 
         super(ContractBillingInformation, cls).__register__(module_name)
 
@@ -1479,6 +1472,39 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
                 'c.direct_debit_account from '
                 'contract_invoice_frequency as f, '
                 'contract as c where f.contract = c.id')
+
+        # Migration from 1.8: Add payer on billing information
+        # The default payer is the mandate's party
+        if add_payer:
+            cls._migrate_payer()
+
+    @classmethod
+    def _migrate_payer(cls):
+        # Migrate from 1.8: Add payer
+        # payer is set as contract subscriber
+        # overriden in account_payment_sepa_contract to migrate payer from SEPA
+        # mandate
+        pool = Pool()
+        cursor = Transaction().cursor
+        Contract = pool.get('contract')
+        contract_table = Contract.__table__()
+        contract_billing = pool.get('contract.billing_information').__table__()
+        update_data = contract_billing.join(contract_table, condition=(
+                contract_billing.contract == contract_billing.id)
+            ).select(contract_billing.id.as_('billing_info'),
+                contract_table.subscriber)
+
+        cursor.execute(*contract_billing.update(
+                columns=[contract_billing.payer],
+                values=[update_data.subscriber],
+                from_=[update_data],
+                where=(contract_billing.id == update_data.billing_info)))
+
+    @fields.depends('direct_debit_account', 'payer')
+    def on_change_payer(self):
+        if not self.payer or self.direct_debit_account and (self.payer not in
+                self.direct_debit_account.owners):
+            self.direct_debit_account = None
 
     @staticmethod
     def revision_columns():

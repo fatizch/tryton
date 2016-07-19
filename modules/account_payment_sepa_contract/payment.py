@@ -21,7 +21,7 @@ class Mandate:
         Invoice = pool.get('account.invoice')
         domain = [('sepa_mandate', '=', self)]
         if party:
-            domain.append(('contract.subscriber', '=', party))
+            domain.append(('payer', '=', party))
         objects = BillingInformation.search(domain)
         if objects:
             return objects

@@ -322,8 +322,8 @@ class MergedPayments(model.CoopSQL, model.CoopView, ModelCurrency,
         # Do not reference a virtual model
         return None
 
-    @staticmethod
-    def table_query():
+    @classmethod
+    def table_query(cls):
         pool = Pool()
         payment = pool.get('account.payment').__table__()
 

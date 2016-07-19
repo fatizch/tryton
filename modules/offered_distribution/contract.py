@@ -10,6 +10,7 @@ __all__ = [
     'Contract',
     'CoveredElement',
     'Beneficiary',
+    'ContractBillingInformation',
     ]
 
 
@@ -59,7 +60,7 @@ class Contract:
             order=[])
 
     @fields.depends('dist_network')
-    def on_change_with_allowed_portfolios(self, name):
+    def on_change_with_allowed_portfolios(self, name=None):
         if not self.dist_network:
             return []
         return [x.id for x in self.dist_network.visible_portfolios]
@@ -135,3 +136,24 @@ class Beneficiary:
     @fields.depends('allowed_portfolios', 'option')
     def on_change_option(self):
         self.allowed_portfolios = self.get_allowed_portfolios()
+
+
+class ContractBillingInformation:
+    __name__ = 'contract.billing_information'
+
+    allowed_portfolios = fields.Function(
+        fields.Many2Many('distribution.network', None, None,
+        'Allowed Portfolios'),
+        'on_change_with_allowed_portfolios')
+
+    @classmethod
+    def __setup__(cls):
+        super(ContractBillingInformation, cls).__setup__()
+        cls.payer.depends.append('allowed_portfolios')
+        cls.payer.domain = [cls.payer.domain, ['OR',
+                ('portfolio', 'in', Eval('allowed_portfolios')),
+                ('portfolio', '=', None)]]
+
+    @fields.depends('contract')
+    def on_change_with_allowed_portfolios(self, name=None):
+        return [x.id for x in self.contract.allowed_portfolios]

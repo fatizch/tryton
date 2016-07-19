@@ -3,7 +3,13 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/label[@name='total_amount']" position="before">
+        <label name="payer"/>
+        <field name="payer"/>
         <label name="bank_account"/>
         <field name="bank_account"/>
+    </xpath>
+    <xpath expr="/form" position="inside">
+        <field name="available_payers" invisible="1"/>
+        <field name="available_bank_accounts" invisible="1"/>
     </xpath>
 </data>

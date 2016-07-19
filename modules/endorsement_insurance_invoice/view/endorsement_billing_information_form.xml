@@ -5,6 +5,9 @@ this repository contains the full copyright notices and license terms. -->
     <label name="billing_mode"/>
     <field name="billing_mode" widget="selection" xexpand="0"/>
     <newline/>
+    <label name="payer"/>
+    <field name="payer"/>
+    <newline/>
     <label name="direct_debit_day_selector"/>
     <field name="direct_debit_day_selector"/>
     <group id="direct_debit" string="" colspan="2" col="7">

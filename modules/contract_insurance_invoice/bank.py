@@ -19,5 +19,5 @@ class BankAccount:
         BillingInformation = Pool().get('contract.billing_information')
         domain = [('direct_debit_account', '=', self)]
         if party:
-            domain.append(('contract.subscriber', '=', party))
+            domain.append(('payer', '=', party))
         return BillingInformation.search(domain)

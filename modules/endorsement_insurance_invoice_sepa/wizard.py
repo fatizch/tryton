@@ -32,7 +32,7 @@ class ChangeBillingInformation:
                 })
 
     @fields.depends('mandate_needed', 'new_billing_information',
-        'sepa_signature_date', 'subscriber')
+        'sepa_signature_date', 'payer')
     def on_change_new_billing_information(self):
         super(ChangeBillingInformation,
             self).on_change_new_billing_information()
@@ -42,11 +42,14 @@ class ChangeBillingInformation:
                     or new_info.direct_debit_account_selector)):
             self.mandate_needed = False
             return
-        possible_mandates = Mandate.search([
-                ('party', '=', self.subscriber.id),
-                ('account_number.account', '=',
-                    (new_info.direct_debit_account or
-                        new_info.direct_debit_account_selector).id)])
+        possible_mandates = None
+        if new_info.payer and (new_info.direct_debit_account or
+                new_info.direct_debit_account_selector):
+            possible_mandates = Mandate.search([
+                    ('party', '=', new_info.payer.id),
+                    ('account_number.account', '=',
+                        (new_info.direct_debit_account or
+                            new_info.direct_debit_account_selector).id)])
         if possible_mandates:
             self.mandate_needed = False
             self.new_billing_information[0].sepa_mandate = possible_mandates[0]
@@ -62,7 +65,8 @@ class ChangeBillingInformation:
     @classmethod
     def direct_debit_account_only_fields(cls):
         return super(ChangeBillingInformation,
-            cls).direct_debit_account_only_fields() + ['sepa_mandate']
+            cls).direct_debit_account_only_fields() + [
+                'sepa_mandate']
 
     def step_default(self, name):
         defaults = super(ChangeBillingInformation, self).step_default(name)
@@ -70,10 +74,12 @@ class ChangeBillingInformation:
         defaults['mandate_needed'] = False
         return defaults
 
-    def set_subscriber_as_account_owner(self):
-        super(ChangeBillingInformation, self).set_subscriber_as_account_owner()
+    def set_account_owner(self):
+        super(ChangeBillingInformation, self).set_account_owner()
         pool = Pool()
+
         Mandate = pool.get('account.payment.sepa.mandate')
+
         if self.mandate_needed:
             new_info = self.new_billing_information[0]
             account = (new_info.direct_debit_account or
@@ -81,7 +87,7 @@ class ChangeBillingInformation:
             self.raise_user_warning('new_mandate_creation',
                 'new_mandate_creation', {})
             new_mandate = Mandate()
-            new_mandate.party = self.subscriber
+            new_mandate.party = new_info.payer
             new_mandate.account_number = [x
                 for x in account.numbers if x.type == 'iban'][0]
             new_mandate.signature_date = self.sepa_signature_date

@@ -7,5 +7,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="billing_mode"/>
     <field name="direct_debit"/>
     <field name="direct_debit_day"/>
+    <field name="payer"/>
     <field name="direct_debit_account"/>
 </tree>

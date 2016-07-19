@@ -29,6 +29,7 @@ def register():
         Message,
         PaymentCreationStart,
         MoveLine,
+        MergedPayments,
         module='account_payment_sepa_cog', type_='model')
     Pool.register(
         PaymentCreation,

@@ -8,7 +8,7 @@ msgid ""
 "\t%s\n"
 "Please check the sequence's prefix and suffix."
 msgstr ""
-"Mauvais paramètres pour dans la séquence SEPA. Les champs suivants n'existent pas sur le modèle Tiers:\n"
+"Mauvais paramètres dans la séquence SEPA. Les champs suivants n'existent pas sur le modèle Tiers:\n"
 "\t%s\n"
 "Veuillez vérifier les préfixes et suffixes de la séquence."
 
@@ -31,6 +31,10 @@ msgstr "Montant de ligne de quittance inconnu : %s %s"
 msgctxt "field:account.payment,bank_account:"
 msgid "Bank Account"
 msgstr "Compte Bancaire"
+
+msgctxt "field:account.payment,payer:"
+msgid "Payer"
+msgstr "Payeur"
 
 msgctxt "field:account.payment,reject_fee_amount:"
 msgid "Reject Fee Amount"
@@ -77,9 +81,17 @@ msgctxt "field:account.payment.journal,split_sepa_messages_by_sequence_type:"
 msgid "Split Sepa Messages By Sequence Type (FRST-RCUR)"
 msgstr "Découper les messages SEPA par type de sequence (FRST-RCUR)"
 
+msgctxt "field:account.payment.payment_creation.start,available_payers:"
+msgid "Available Payers"
+msgstr "Payeurs disponibles"
+
 msgctxt "field:account.payment.payment_creation.start,bank_account:"
 msgid "Bank Account"
 msgstr "Compte Bancaire"
+
+msgctxt "field:account.payment.payment_creation.start,payer:"
+msgid "Payer"
+msgstr "Payeur"
 
 msgctxt "field:account.payment.sepa.mandate,xml_id:"
 msgid "XML Id"

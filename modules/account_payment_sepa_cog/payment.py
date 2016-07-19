@@ -7,12 +7,15 @@ from itertools import groupby
 from collections import namedtuple
 from dateutil.relativedelta import relativedelta
 from collections import defaultdict
+from sql.aggregate import Sum, Max
+from sql import Literal, Null
 
 import genshi
 import genshi.template
 
 from trytond.pyson import Eval, Or, Bool
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 from trytond.modules.cog_utils import fields, export, coop_date, utils
 from .sepa_handler import CAMT054Coog
 
@@ -24,6 +27,7 @@ __all__ = [
     'InvoiceLine',
     'Journal',
     'Message',
+    'MergedPayments',
     'PaymentCreationStart',
     'PaymentCreation',
     ]
@@ -153,10 +157,12 @@ class Group:
         return super(Group, cls)._export_skips() | {'sepa_messages'}
 
     def merge_payment_key(self, payment):
-        return super(Group, self).merge_payment_key(payment) + (
+        result = super(Group, self).merge_payment_key(payment)
+        return [x for x in result if x[0] != 'party'] + [
+            ('party', payment.payer),
             ('sepa_mandate', payment.sepa_mandate),
             ('sepa_bank_account_number', payment.sepa_bank_account_number),
-            )
+            ]
 
     def update_last_sepa_receivable_date(self):
         if self.kind != 'receivable':
@@ -295,8 +301,8 @@ class Payment:
     __name__ = 'account.payment'
 
     bank_account = fields.Many2One('bank.account', 'Bank Account',
-        ondelete='RESTRICT', domain=[('owners', '=', Eval('party'))],
-        depends=['party'])
+        ondelete='RESTRICT', domain=[('owners', '=', Eval('payer'))],
+        depends=['payer'], states={'invisible': ~Eval('payer')})
     sepa_bank_reject_date = fields.Date('SEPA Bank Reject Date',
         states={'invisible': Or(
                 Eval('state') != 'failed',
@@ -307,6 +313,9 @@ class Payment:
             digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
         'get_reject_fee_amount')
+    payer = fields.Function(
+        fields.Many2One('party.party', 'Payer', required=True),
+        'on_change_with_payer')
 
     @classmethod
     def __setup__(cls):
@@ -320,7 +329,45 @@ class Payment:
                     'at "%(date)s"'),
                 })
         cls.sepa_mandate.states = {'invisible': Eval('kind') == 'payable'}
-        cls.sepa_mandate.depends += ['kind']
+        cls.sepa_mandate.depends += ['kind', 'payer']
+        cls.sepa_mandate.domain = [x for x in cls.sepa_mandate.domain
+            if x[0] != 'party']
+        cls.sepa_mandate.domain.append(('party', '=', Eval('payer', -1)))
+
+    @fields.depends('line', 'date', 'sepa_mandate', 'bank_account', 'payer',
+        'amount')
+    def on_change_line(self, name=None):
+        self.sepa_mandate = None
+        self.bank_account = None
+        if self.line:
+            self.amount = self.line.payment_amount
+            contract = self.line.contract
+            if contract:
+                self.contract = contract
+                with Transaction().set_context(
+                        contract_revision_date=self.date):
+                    mandate = contract.billing_information.sepa_mandate
+                self.sepa_mandate = mandate
+                self.bank_account = self.sepa_mandate.account_number.account
+        self.payer = self.on_change_with_payer()
+
+    @fields.depends('contract', 'date', 'sepa_mandate')
+    def on_change_with_payer(self, name=None):
+        if self.sepa_mandate:
+            return self.sepa_mandate.party.id
+        elif self.contract:
+            with Transaction().set_context(
+                    contract_revision_date=self.payment_date):
+                payer = self.contract.billing_information_payer
+                return payer.id if payer else None
+
+    @fields.depends('bank_account', 'sepa_mandate', 'payer')
+    def on_change_party(self):
+        super(Payment, self).on_change_party()
+        if not self.party:
+            self.bank_account = None
+            self.sepa_mandate = None
+            self.payer = None
 
     def get_sepa_end_to_end_id(self, name):
         value = super(Payment, self).get_sepa_end_to_end_id(name)
@@ -608,24 +655,131 @@ class Message:
             }
 
 
+class MergedPayments:
+    __name__ = 'account.payment.merged'
+
+    @classmethod
+    def table_query(cls):
+        # No call to parent method : overriden to merge payments by payer
+        pool = Pool()
+        payment = pool.get('account.payment').__table__()
+        sepa_mandate = pool.get('account.payment.sepa.mandate').__table__()
+        joined_table = payment.join(sepa_mandate,
+            condition=sepa_mandate.id == payment.sepa_mandate)
+
+        return joined_table.select(
+            Max(payment.id).as_('id'),
+            payment.merged_id.as_('merged_id'),
+            payment.journal.as_('journal'),
+            sepa_mandate.party.as_('party'),
+            payment.state.as_('state'),
+            Literal(0).as_('create_uid'),
+            Literal(0).as_('create_date'),
+            Literal(0).as_('write_uid'),
+            Literal(0).as_('write_date'),
+            Sum(payment.amount).as_('amount'),
+            where=(payment.merged_id != Null),
+            group_by=[payment.merged_id, payment.journal,
+                sepa_mandate.party, payment.state])
+
+
 class PaymentCreationStart:
     __name__ = 'account.payment.payment_creation.start'
 
     bank_account = fields.Many2One('bank.account', 'Bank Account',
         domain=[
-            ('owners', '=', Eval('party')),
-            ['OR', ('end_date', '>=', Eval('payment_date')),
-                ('end_date', '=', None)],
-            ['OR', ('start_date', '<=', Eval('payment_date')),
-                ('start_date', '=', None)],
+            ('id', 'in', Eval('available_bank_accounts')),
             ],
+        states={
+            'invisible': ((~Bool(Eval('process_method')) |
+                (Eval('process_method') != 'sepa')) & Bool(
+                Eval('payer'))),
+            'required': (Eval('process_method') == 'sepa')
+            },
+        depends=['payer', 'process_method', 'payment_date'])
+    available_payers = fields.Many2Many('party.party', None, None,
+         'Available Payers')
+    available_bank_accounts = fields.Many2Many('bank.account', None, None,
+         'Available Bank Accounts')
+    payer = fields.Many2One('party.party', 'Payer',
+        domain=[('id', 'in', Eval('available_payers'))],
         states={
             'invisible': (~Bool(Eval('process_method')) |
                 (Eval('process_method') != 'sepa')),
-            'required': (Eval('process_method') == 'sepa') & Bool(
-                Eval('Party')),
+            'required': (Eval('process_method') == 'sepa')
             },
-        depends=['party', 'process_method', 'payment_date'])
+        depends=['available_payers', 'process_method', 'payment_date'])
+
+    @fields.depends('payment_date', 'party', 'available_payers', 'payer',
+        'available_bank_accounts', 'bank_account')
+    def on_change_party(self):
+        self.available_payers = self.update_available_payers()
+        self.payer = self.update_payer()
+        self.available_bank_accounts = self.update_available_bank_accounts()
+        self.bank_account = self.update_bank_account()
+
+    @fields.depends('payment_date', 'available_payers', 'payer',
+        'available_bank_accounts', 'bank_account')
+    def on_change_payer(self):
+        self.available_bank_accounts = self.update_available_bank_accounts()
+        self.bank_account = self.update_bank_account()
+
+    @fields.depends('payment_date', 'party', 'available_payers', 'payer',
+        'available_bank_accounts', 'bank_account')
+    def on_change_payment_date(self):
+        self.available_payers = self.update_available_payers()
+        self.payer = self.update_payer()
+        self.available_bank_accounts = self.update_available_bank_accounts()
+        self.bank_account = self.update_bank_account()
+
+    def update_available_payers(self):
+        if not self.payment_date or not self.party:
+            return
+        payers = []
+        for contract in self.party.contracts:
+            for bill_info in contract.billing_informations:
+                mandate = bill_info.sepa_mandate
+                if mandate and mandate.signature_date <= self.payment_date:
+                    payers.append(mandate.party.id)
+        return list(set(payers))
+
+    def update_available_bank_accounts(self):
+        pool = Pool()
+        Mandate = pool.get('account.payment.sepa.mandate')
+        if not self.payer or not self.payment_date:
+            return []
+        possible_mandates = Mandate.search([
+                ('party', '=', self.payer.id),
+                ('signature_date', '<=', self.payment_date)])
+        return [m.account_number.account.id for m in possible_mandates
+            if (not m.account_number.account.start_date or
+                m.account_number.account.start_date <= self.payment_date) and
+            (not m.account_number.account.end_date or
+                m.account_number.account.end_date >= self.payment_date)]
+
+    def update_payer(self):
+        if not self.available_payers:
+            return
+        if not self.payer:
+            if len(self.available_payers) == 1:
+                return self.available_payers[0].id
+            else:
+                return
+        if self.payer not in self.available_payers:
+            return
+        return self.payer.id
+
+    def update_bank_account(self):
+        if not self.available_bank_accounts:
+            return
+        if not self.bank_account:
+            if len(self.available_bank_accounts) == 1:
+                self.bank_account = self.available_bank_accounts[0].id
+            else:
+                return
+        if self.bank_account not in self.available_bank_accounts:
+            return
+        return self.bank_account.id
 
 
 class PaymentCreation:
@@ -635,3 +789,19 @@ class PaymentCreation:
         super(PaymentCreation, self).init_payment(payment)
         if self.start.bank_account:
             payment['bank_account'] = self.start.bank_account
+        if self.start.process_method == 'sepa' and self.start.payer \
+                and self.start.bank_account:
+            payment['sepa_mandate'] = self._get_sepa_mandate()
+
+    def _get_sepa_mandate(self):
+        pool = Pool()
+        Mandate = pool.get('account.payment.sepa.mandate')
+        return Mandate.search([
+                ('party', '=', self.start.payer.id),
+                ('account_number.account', '=', self.start.bank_account.id),
+                ('signature_date', '<=', self.start.payment_date)])[0]
+
+    def default_start(self, values):
+        start = super(PaymentCreation, self).default_start(values)
+        start.update({'payer': start.get('party', None)})
+        return start

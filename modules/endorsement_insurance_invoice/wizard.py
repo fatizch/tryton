@@ -107,15 +107,12 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
     subscriber = fields.Many2One('party.party', 'Subscriber', states={
             'invisible': True})
     new_billing_information = fields.One2Many('contract.billing_information',
-        'contract', 'New Billing Information', size=1, domain=[
+        None, 'New Billing Information', size=1, domain=[
             ('billing_mode.products', '=', Eval('product')),
-            ['OR',
-                ('direct_debit_account.owners', '=', Eval('subscriber')),
-                ('direct_debit_account', '=', None)],
             ['OR',
                 ('direct_debit', '=', False),
                 ('direct_debit_account', '!=', None)],
-            ], depends=['product', 'subscriber'])
+            ], depends=['product'])
     previous_billing_information = fields.One2Many(
         'contract.billing_information', None, 'Previous Billing Information',
         readonly=True)
@@ -134,7 +131,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
                 'the billing mode %s.',
                 'direct_debit_account_required': 'Please set a  new direct '
                 'debit account !',
-                'subscriber_not_account_owner': 'Subscriber does not own this '
+                'payer_not_account_owner': 'Payer does not own this '
                 'account, do you want it to change ?',
                 })
 
@@ -217,7 +214,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
         return ['billing_mode', 'contract', 'direct_debit',
             'direct_debit_account', 'direct_debit_day',
             'direct_debit_day_selector', 'is_once_per_contract',
-            'payment_term', 'possible_payment_terms']
+            'payment_term', 'possible_payment_terms', 'payer']
 
     @classmethod
     def direct_debit_account_only_fields(cls):
@@ -226,7 +223,6 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
 
     def step_default(self, name):
         defaults = super(ChangeBillingInformation, self).step_default()
-        Party = Pool().get('party.party')
         base_endorsement = self.wizard.endorsement.contract_endorsements[0]
         contract = base_endorsement.contract
         base_instance = utils.get_good_version_at_date(contract,
@@ -241,9 +237,8 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
         defaults['previous_billing_information'] = [base_instance.id]
         updated = None
         for endorsement in base_endorsement.billing_informations:
-            if (endorsement.action == 'update' and
-                    endorsement.values.get('date', None) ==
-                    self.effective_date):
+            endorsement.values['contract'] = contract.id
+            if endorsement.action == 'update':
                 updated = endorsement
             if endorsement.action != 'add':
                 continue
@@ -252,17 +247,10 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
         else:
             previous_values = self._get_default_values({}, base_instance,
                 self.billing_information_fields())
-            previous_values['date'] = self.effective_date
             if updated:
                 previous_values.update(updated.values)
+            previous_values['date'] = self.effective_date
             defaults['new_billing_information'] = [previous_values]
-        new_account = defaults['new_billing_information'][0].get(
-            'direct_debit_account', None)
-        if (defaults['subscriber'] != contract.subscriber.id and new_account):
-            if new_account not in [x.id for x in Party(
-                        defaults['subscriber']).bank_accounts]:
-                defaults['new_billing_information'][0][
-                    'direct_debit_account'] = None
         other_contracts = []
         for contract_id, contract_endorsement in \
                 self._get_contracts().iteritems():
@@ -287,18 +275,17 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
 
     def step_update(self):
         endorsement = self.wizard.select_endorsement.endorsement
-        self.set_subscriber_as_account_owner()
+        self.set_account_owner()
         self.do_update_endorsement(endorsement)
         endorsement.save()
 
-    def set_subscriber_as_account_owner(self):
+    def set_account_owner(self):
         new_info = self.new_billing_information[0]
         if new_info.direct_debit_account:
             return
         if not new_info.direct_debit_account_selector:
             return
-        new_info.search_all_direct_debit_account = False
-        if (self.subscriber in
+        if (new_info.payer in
                 new_info.direct_debit_account_selector.owners):
             new_info.direct_debit_account = \
                 new_info.direct_debit_account_selector
@@ -306,9 +293,10 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
             return
         self.raise_user_warning(
             new_info.direct_debit_account_selector.number,
-            'subscriber_not_account_owner')
+            'payer_not_account_owner')
         new_info.direct_debit_account_selector.owners = list(
-            new_info.direct_debit_account_selector.owners) + [self.subscriber]
+            new_info.direct_debit_account_selector.owners) + [
+                new_info.payer.id]
         new_info.direct_debit_account_selector.save()
         new_info.direct_debit_account = new_info.direct_debit_account_selector
         new_info.direct_debit_account_selector = None

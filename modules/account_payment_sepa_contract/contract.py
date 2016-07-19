@@ -3,7 +3,7 @@
 import datetime
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, And, If, Bool
+from trytond.pyson import Eval, And
 from trytond.transaction import Transaction
 from trytond import backend
 
@@ -18,41 +18,6 @@ __all__ = [
 
 class Contract:
     __name__ = 'contract'
-
-    @classmethod
-    def __setup__(cls):
-        super(Contract, cls).__setup__()
-        cls.billing_informations.domain.append(
-            ['OR',
-                ('sepa_mandate', '=', None),
-                ('sepa_mandate.party', '=', Eval('subscriber')),
-                If(Bool(Eval('id', False)),
-                    [('id', 'not in', Eval('valid_billing_informations'))],
-                    [])
-            ])
-        cls.billing_informations.depends.extend(['subscriber',
-                'valid_billing_informations'])
-
-    @fields.depends('subscriber', 'billing_informations')
-    def on_change_subscriber(self):
-        Mandate = Pool().get('account.payment.sepa.mandate')
-        super(Contract, self).on_change_subscriber()
-        if not self.billing_informations:
-            return
-        new_billing_information = self.billing_informations[-1]
-        if new_billing_information.direct_debit_account is None:
-            new_billing_information.sepa_mandate = None
-        else:
-            possible_mandates = Mandate.search([
-                    ('party', '=', self.subscriber.id),
-                    ('account_number.account', '=',
-                        new_billing_information.direct_debit_account.id)
-                    ])
-            if possible_mandates:
-                new_billing_information.sepa_mandate = possible_mandates[0]
-            else:
-                new_billing_information.sepa_mandate = None
-        self.billing_informations = [new_billing_information]
 
     def init_sepa_mandate(self):
         self.billing_information.init_sepa_mandate()
@@ -132,6 +97,28 @@ class ContractBillingInformation:
                 "contract as c where b.contract = c.id")
 
     @classmethod
+    def _migrate_payer(cls):
+        # Migrate from 1.8: Add payer
+        # override behavior defined in contract_insurance_invoice
+        # module to migrate payer from SEPA mandate
+        pool = Pool()
+        cursor = Transaction().cursor
+        Mandate = pool.get('account.payment.sepa.mandate')
+        sepa_mandate = Mandate.__table__()
+        contract_billing = pool.get('contract.billing_information').__table__()
+
+        update_data = contract_billing.join(sepa_mandate, condition=(
+                contract_billing.sepa_mandate == sepa_mandate.id)
+            ).select(contract_billing.id.as_('billing_info'),
+                sepa_mandate.party)
+
+        cursor.execute(*contract_billing.update(
+                columns=[contract_billing.payer],
+                values=[update_data.party],
+                from_=[update_data],
+                where=(contract_billing.id == update_data.billing_info)))
+
+    @classmethod
     def _export_light(cls):
         return (super(ContractBillingInformation, cls)._export_light() |
             set(['sepa_mandate']))
@@ -148,14 +135,14 @@ class ContractBillingInformation:
                 ('type', '=', 'recurrent'),
                 ('scheme', '=', 'CORE'),
                 ('account_number', 'in', numbers_id),
-                ('party', '=', self.contract.subscriber.id),
+                ('party', '=', self.contract.billing_information_payer.id),
                 ])
         for mandate in mandates:
             self.sepa_mandate = mandate
             self.save()
             return
         mandate = Mandate(
-            party=self.contract.subscriber,
+            party=self.contract.billing_information_payer,
             account_number=self.direct_debit_account.numbers[0],
             type='recurrent',
             scheme='CORE',
@@ -187,7 +174,25 @@ class ContractBillingInformation:
         if previous_account != self.direct_debit_account:
             self.sepa_mandate = None
 
-    @fields.depends('direct_debit_account')
+    @fields.depends('direct_debit_account', 'sepa_mandate')
     def on_change_direct_debit_account(self):
         if not self.direct_debit_account:
             self.sepa_mandate = None
+
+    @fields.depends('contract', 'payer', 'sepa_mandate', 'date',
+        'direct_debit_account')
+    def on_change_payer(self):
+        Mandate = Pool().get('account.payment.sepa.mandate')
+        super(ContractBillingInformation, self).on_change_payer()
+        self.sepa_mandate = None
+        if self.direct_debit_account and self.payer and self.contract \
+                and self.direct_debit_account:
+            possible_mandates = Mandate.search([
+                    ('party', '=', self.payer.id),
+                    ('account_number.account', '=',
+                        self.direct_debit_account.id)
+                    ('signature_date', '>=', self.date
+                        or self.contract.start_date),
+                    ])
+            if possible_mandates:
+                self.sepa_mandate = possible_mandates[0]

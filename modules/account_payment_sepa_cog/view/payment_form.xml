@@ -11,6 +11,8 @@ this repository contains the full copyright notices and license terms. -->
         <label name="sepa_bank_reject_date"/>
         <field name="sepa_bank_reject_date"/>
         <newline/>
+        <label name="payer"/>
+        <field name="payer"/>
         <label name="bank_account"/>
         <field name="bank_account"/>
     </xpath>
