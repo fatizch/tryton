@@ -2,17 +2,25 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract:"
+msgid "A payer must be specified"
+msgstr "Un payeur doit être spécifié"
+
 msgctxt "field:account.invoice,bank_account:"
 msgid "Bank Account"
-msgstr "Compte Bancaire"
+msgstr "Compte bancaire"
 
 msgctxt "field:account.invoice,sepa_mandate:"
 msgid "Sepa Mandate"
 msgstr "Mandat SEPA"
 
-msgctxt "field:account.invoice,bank_account:"
-msgid "Bank Account"
-msgstr "Compte bancaire"
+msgctxt "field:contract,payer:"
+msgid "Payer"
+msgstr "Payeur"
+
+msgctxt "field:contract.billing_information,payer:"
+msgid "Payer"
+msgstr "Payeur"
 
 msgctxt "field:contract.billing_information,sepa_mandate:"
 msgid "Sepa Mandate"

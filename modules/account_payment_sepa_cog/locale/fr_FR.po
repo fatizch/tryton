@@ -81,6 +81,11 @@ msgctxt "field:account.payment.journal,split_sepa_messages_by_sequence_type:"
 msgid "Split Sepa Messages By Sequence Type (FRST-RCUR)"
 msgstr "Découper les messages SEPA par type de sequence (FRST-RCUR)"
 
+msgctxt ""
+"field:account.payment.payment_creation.start,available_bank_accounts:"
+msgid "Available Bank Accounts"
+msgstr "Comptes bancaires disponibles"
+
 msgctxt "field:account.payment.payment_creation.start,available_payers:"
 msgid "Available Payers"
 msgstr "Payeurs disponibles"
