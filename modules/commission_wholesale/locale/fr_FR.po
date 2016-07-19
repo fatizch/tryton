@@ -13,3 +13,11 @@ msgstr "Délégation de paiement"
 msgctxt "field:commission.agent,wholesale_broker:"
 msgid "Wholesale Broker"
 msgstr "Courtier grossiste"
+
+msgctxt "model:ir.action,name:act_invoice_insurer_invoice_form"
+msgid "Insurer Invoices"
+msgstr "Bordereaux courtier grossiste"
+
+msgctxt "selection:account.invoice,business_kind:"
+msgid "Wholesale Invoice"
+msgstr "Bordereau courtier grossiste"

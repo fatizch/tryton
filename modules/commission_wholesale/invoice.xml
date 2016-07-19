@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.action.act_window" id="commission_insurance.act_invoice_insurer_invoice_form">
+            <field name="domain" eval="['OR', [('business_kind', '=', 'insurer_invoice')], [('business_kind', '=', 'wholesale_invoice')]]" pyson="1"/>
+        </record>
+    </data>
+</tryton>

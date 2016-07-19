@@ -77,7 +77,8 @@ class Commission:
             invoice_address=insurer.party.address_get(type='invoice'),
             currency=key['currency'],
             account=key['account'],
-            payment_term=payment_term)
+            payment_term=payment_term,
+            business_kind='wholesale_invoice')
 
 
 class CreateInvoicePrincipal:
