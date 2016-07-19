@@ -122,10 +122,7 @@ _coog_test_flake8() {
 }
 
 coog_test_flake8() { # check modules code (flake8)
-        for file in $(find "$COOG_COOG/modules" -name "*.py")
-        do
-                _coog_test_flake8 "$file"
-        done
+        _coog_test_flake8 "$COOG_COOG/modules"
 }
 
 _coog_test_email() {
