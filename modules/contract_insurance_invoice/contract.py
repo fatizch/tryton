@@ -1421,7 +1421,9 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         'on_change_with_is_once_per_contract')
     payer = fields.Many2One('party.party', 'Payer',
         states={'invisible': ~Eval('direct_debit'),
-            'required': Bool(Eval('direct_debit'))},
+            'required': And(Bool(Eval('direct_debit', False)),
+                (Eval('_parent_contract', {}).get('status', '') ==
+                    'active'))},
         depends=['direct_debit'], ondelete='RESTRICT')
 
     @classmethod
