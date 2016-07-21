@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="event_log">
+        <record model="ir.ui.view" id="event_log_view_form">
+            <field name="model">event.log</field>
+            <field name="inherit" ref="event_log.event_log_view_form"/>
+            <field name="name">event_log_form</field>
+        </record>
+        <record model="ir.ui.view" id="event_log_view_list">
+            <field name="model">event.log</field>
+            <field name="inherit" ref="event_log.event_log_view_list"/>
+            <field name="name">event_log_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_claim_event_log_relate_form">
+            <field name="name">Event Logs</field>
+            <field name="res_model">event.log</field>
+            <field name="domain" eval="[('claim', 'in', Eval('active_ids'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_claim_event_log_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">claim,-1</field>
+            <field name="action" ref="act_claim_event_log_relate_form"/>
+        </record>
+    </data>
+</tryton>

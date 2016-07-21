@@ -3,21 +3,48 @@
 
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
+from trytond.modules.cog_utils import fields
+
 __all__ = [
     'EventLog',
     ]
 
 
 class EventLog:
-
+    __metaclass__ = PoolMeta
     __name__ = 'event.log'
+
+    claim = fields.Many2One('claim', 'Claim', ondelete='SET NULL', select=True)
 
     @classmethod
     def get_related_instances(cls, object_, model_name):
         if model_name == 'contract':
             if object_.__name__ == 'claim':
                 return [object_.get_contract()]
-            if object_.__name__ == 'claim.indemnification':
-                return [object_.service.contract]
+            if object_.__name__ == 'claim.service':
+                return [object_.contract]
+        if model_name == 'claim':
+            if object_.__name__ == 'claim':
+                return [object_]
+            elif object_.__name__ == 'claim.service':
+                return [object_.claim]
+            else:
+                return []
         return super(EventLog, cls).get_related_instances(object_, model_name)
+
+    @classmethod
+    def get_event_keys(cls, objects):
+        cur_dicts = super(EventLog, cls).get_event_keys(objects)
+        for object_, log_dicts in cur_dicts.items():
+            claims = [x for x in
+                cls.get_related_instances(object_, 'claim') if x]
+            if not claims:
+                continue
+            new_dicts = []
+            for log_dict in log_dicts:
+                for claim in claims:
+                    new_dict = log_dict.copy()
+                    new_dict['claim'] = claim.id
+                    new_dicts.append(new_dict)
+            cur_dicts[object_] = new_dicts
+        return cur_dicts

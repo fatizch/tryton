@@ -817,6 +817,10 @@ msgctxt "field:contract.option,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
 
+msgctxt "field:event.log,claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
 msgctxt "field:expense,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -1016,6 +1020,10 @@ msgstr "Délivrer une prestation"
 msgctxt "model:ir.action,name:act_benefit_form"
 msgid "Benefits"
 msgstr "Prestations"
+
+msgctxt "model:ir.action,name:act_claim_event_log_relate_form"
+msgid "Event Logs"
+msgstr "Logs d'événements"
 
 msgctxt "model:ir.action,name:act_claim_form"
 msgid "Claims"

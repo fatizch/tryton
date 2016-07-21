@@ -29,6 +29,8 @@ class EventLog:
     def get_related_instances(cls, object_, model_name):
         # TODO: use claim details to calculate the contract
         if model_name == 'contract':
+            if object_.__name__ == 'claim.indemnification':
+                return [object_.service.contract]
             if (object_.__name__ == 'account.invoice' and
                     not hasattr(object_, 'contract')):
                 return []
