@@ -36,9 +36,6 @@ class Claim(CogProcessFramework):
     main_loss_description = fields.Function(
         fields.Char('Loss Description'),
         'get_main_loss_description')
-    delivered_services = fields.Function(
-        fields.One2Many('claim.service', None, 'Claim Services'),
-        'get_delivered_services', setter='set_delivered_services')
 
     @fields.depends('claimant')
     def on_change_with_contact_history(self, name=None):
@@ -59,21 +56,6 @@ class Claim(CogProcessFramework):
                 loss.start_date, lang, '%d/%m/%Y') if loss.start_date else '',
             Lang.strftime(loss.end_date, lang, '%d/%m/%Y')
             if loss.end_date else '')
-
-    def get_delivered_services(self, name):
-        return [d.id for loss in self.losses for d in loss.services]
-
-    @classmethod
-    def set_delivered_services(cls, claims, name, value):
-        pool = Pool()
-        Service = pool.get('claim.service')
-        for action in value:
-            if action[0] == 'write':
-                objects = [Service(id_) for id_ in action[1]]
-                Service.write(objects, action[2])
-            elif action[0] == 'delete':
-                objects = [Service(id_) for id_ in action[1]]
-                Service.delete(objects)
 
     def init_declaration_document_request(self):
         pool = Pool()

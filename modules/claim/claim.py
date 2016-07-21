@@ -60,6 +60,10 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         delete_missing=True)
     company = fields.Many2One('company.company', 'Company',
         ondelete='RESTRICT')
+    delivered_services = fields.Function(
+        fields.One2Many('claim.service', None, 'Claim Services'),
+        'get_delivered_services', setter='set_delivered_services')
+
     # The Main contract is only used to ease the declaration process for 80%
     # of the claims where there is only one contract involved. This link should
     # not be used for other reason than initiating sub elements on claim.
@@ -119,6 +123,24 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
 
     def on_change_with_is_sub_status_required(self, name=None):
         return self.status == 'closed'
+
+    def get_delivered_services(self, name):
+        Service = Pool().get('claim.service')
+        return [s.id for s in Service.search([('claim', '=', self.id)])]
+
+    @classmethod
+    def set_delivered_services(cls, claims, name, value):
+        pool = Pool()
+        Service = pool.get('claim.service')
+        to_write = []
+        to_delete = []
+        for action in value:
+            if action[0] == 'write':
+                to_write.extend([Service(id_) for id_ in action[1]])
+            elif action[0] == 'delete':
+                to_delete.extend([Service(id_) for id_ in action[1]])
+        Service.write(to_write, action[2])
+        Service.delete(to_delete)
 
     @classmethod
     def add_func_key(cls, values):
@@ -455,7 +477,7 @@ class ClaimService(ServiceMixin, model.CoopSQL):
         depends=['extra_datas'])
     claim = fields.Function(
         fields.Many2One('claim', 'Claim'),
-        'get_claim')
+        'get_claim', searcher='search_claim')
     loss_summary = fields.Function(
         fields.Text('Loss Summary'),
         'get_loss_summary')
@@ -471,6 +493,10 @@ class ClaimService(ServiceMixin, model.CoopSQL):
     def get_claim(self, name):
         if self.loss:
             return self.loss.claim.id
+
+    @classmethod
+    def search_claim(cls, name, clause):
+        return [('loss.claim',) + tuple(clause[1:])]
 
     @fields.depends('benefit', 'extra_datas')
     def on_change_extra_datas(self):

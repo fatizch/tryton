@@ -417,6 +417,10 @@ msgctxt "field:claim,declaration_date:"
 msgid "Declaration Date"
 msgstr "Date de Déclaration"
 
+msgctxt "field:claim,delivered_services:"
+msgid "Claim Services"
+msgstr "Prestations Fournies"
+
 msgctxt "field:claim,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"

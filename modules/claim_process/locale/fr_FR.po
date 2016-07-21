@@ -46,10 +46,6 @@ msgctxt "field:claim,current_state_name:"
 msgid "Current State In Process"
 msgstr "Etat courant au sein du processus"
 
-msgctxt "field:claim,delivered_services:"
-msgid "Claim Services"
-msgstr "Prestations Fournies"
-
 msgctxt "field:claim,doc_received:"
 msgid "All Documents Received"
 msgstr "Documents Reçus"
