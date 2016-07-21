@@ -1,5 +1,8 @@
 #!/bin/bash
 
+PATH="/usr/local/bin:$PATH"
+export PATH
+
 USER=test
 export USER
 HOME=/home/$USER

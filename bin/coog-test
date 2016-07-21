@@ -138,7 +138,7 @@ _coog_test_email() {
         fi
 }
 
-coog_test_commit() { # fetch, merge, and test each commit on changed modules
+coog_test_commit() { # fetch, merge, and test each commit on changed modules (CI)
         echo "TEST COMMIT: start @ $(date +'%y-%m-%d %H:%M:%S')"
         local lock
         lock=$COOG_TMP/test-running
@@ -200,13 +200,13 @@ coog_test_commit() { # fetch, merge, and test each commit on changed modules
         rm "$lock"
 }
 
-coog_test_fullstart() { # starts a full test
+coog_test_fullstart() { # starts a full test (CI)
         echo TEST FULL: start @ `date +"%y-%m-%d %H:%M:%S"`
         _coog_test_pull
         coog_test_exec $*
 }
 
-coog_test_fullcheck() { # check and report a full test
+coog_test_fullcheck() { # check and report a full test (CI)
         echo TEST FULL: check @ `date +"%y-%m-%d %H:%M:%S"`
         local a; a=`coog_test_query count`
         local w; w=`coog_test_query count wait`
