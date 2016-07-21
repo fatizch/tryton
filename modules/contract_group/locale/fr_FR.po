@@ -2,9 +2,57 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.add_enrollment:"
+msgid "Enrollment wizard must be started from a contract"
+msgstr "L'assistant doit être lancé depuis un contrat"
+
+msgctxt "error:contract.add_enrollment:"
+msgid ""
+"Selected contract is not a group contract or no covered element with sub "
+"element is defined in it"
+msgstr ""
+"Le contrat sélectionné n'est pas un conrat collectif ou les éléments "
+"couverts n'ont pas de sous éléments."
+
+msgctxt "error:contract.display_enrollments:"
+msgid "Display Enrollment wizard must be started from a contract"
+msgstr "L'assistant doit être lancé depuis un contrat"
+
 msgctxt "field:contract,is_group:"
 msgid "Group Contract"
 msgstr "Contrat Collectif"
+
+msgctxt "field:contract.enrollment_creation,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.enrollment_creation,employee:"
+msgid "Employee"
+msgstr "Employé"
+
+msgctxt "field:contract.enrollment_creation,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:contract.enrollment_creation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.enrollment_creation,item_desc:"
+msgid "Item Desc"
+msgstr "Type"
+
+msgctxt "field:contract.enrollment_creation,covered_element:"
+msgid "Covered Element"
+msgstr "Element couvert"
+
+msgctxt "field:contract.enrollment_creation,possible_item_desc:"
+msgid "Possible Item Desc"
+msgstr "Description des risques possibles"
+
+msgctxt "field:contract.enrollment_creation,possible_covered_element:"
+msgid "Possible Main Covered"
+msgstr "Elements couverts disponibles"
 
 msgctxt "field:contract.option,is_group:"
 msgid "Group Option"
@@ -17,6 +65,10 @@ msgstr "Garanties Collectif"
 msgctxt "field:offered.product,is_group:"
 msgid "Group Product"
 msgstr "Produits Collectif"
+
+msgctxt "model:contract.enrollment_creation,name:"
+msgid "Enrollment Creation"
+msgstr "Création d'une affiliation"
 
 msgctxt "model:ir.action,name:"
 msgid "Contrat Group"
@@ -33,6 +85,18 @@ msgstr "Devis"
 msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Group Coverages"
 msgstr "Garanties Collectives"
+
+msgctxt "model:ir.action,name:act_create_enrollment_wizard"
+msgid "Create Enrollment"
+msgstr "Créer une affiliation"
+
+msgctxt "model:ir.action,name:act_display_enrollment_form"
+msgid "Enrollments"
+msgstr "Affiliations"
+
+msgctxt "model:ir.action,name:act_display_enrollment_wizard"
+msgid "Display Enrollments"
+msgstr "Afficher les affiliations"
 
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Group Products"
@@ -83,6 +147,19 @@ msgctxt "view:contract.covered_element:"
 msgid "Covered Element"
 msgstr "Risque Couvert"
 
-msgctxt "view:contract:"
+msgctxt "view:contract.enrollment_creation:"
 msgid "Enrollments"
 msgstr "Affiliations"
+
+msgctxt "view:contract:"
+msgid "Add Enrollment"
+msgstr "Créer une affiliation"
+
+msgctxt ""
+"wizard_button:contract.add_enrollment,enrollment_creation,create_enrollment:"
+msgid "Create"
+msgstr "Créer"
+
+msgctxt "wizard_button:contract.add_enrollment,enrollment_creation,end:"
+msgid "Cancel"
+msgstr "Annuler"

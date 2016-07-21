@@ -4,16 +4,19 @@ from trytond.pool import Pool
 from .offered import *
 from .contract import *
 from .benefit import *
+from .wizard import *
 
 
 def register():
     Pool.register(
-        # From Offered
         Product,
         OptionDescription,
-        # From Benefit
         Benefit,
-        # From Contract
         Contract,
         Option,
+        EnrollmentCreation,
         module='contract_group', type_='model')
+    Pool.register(
+        DisplayEnrollments,
+        AddEnrollment,
+        module='contract_group', type_='wizard')

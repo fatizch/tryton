@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- ########### Display Enrollment Wizard ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.action.act_window" id="act_display_enrollment_form">
+            <field name="name">Enrollments</field>
+            <field name="res_model">contract.covered_element</field>
+        </record>
+        <record model="ir.action.wizard" id="act_display_enrollment_wizard">
+            <field name="name">Display Enrollments</field>
+            <field name="wiz_name">contract.display_enrollments</field>
+            <field name="model">contract</field>
+        </record>
+        <record model="ir.action.keyword" id="act_display_enrollment_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_display_enrollment_wizard"/>
+        </record>
+        <record model="ir.action.act_window.view" id="ct_display_enrollment_list_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="contract_insurance.covered_elements_clean_tree"/>
+            <field name="act_window" ref="act_display_enrollment_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="ct_display_enrollment_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="contract_insurance.covered_element_simple_view_form"/>
+            <field name="act_window" ref="act_display_enrollment_form"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Create Enrollment ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="enrollment_creation_view_form">
+            <field name="model">contract.enrollment_creation</field>
+            <field name="type">form</field>
+            <field name="name">enrollment_creation_form</field>
+        </record>
+        <record model="ir.action.wizard" id="act_create_enrollment_wizard">
+            <field name="name">Create Enrollment</field>
+            <field name="wiz_name">contract.add_enrollment</field>
+        </record>
+    </data>
+</tryton>

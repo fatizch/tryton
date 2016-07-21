@@ -2,7 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="//page[@id='admin']/group[@id='left']" position="inside">
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
         <label name="is_group"/>
         <field name="is_group"/>
     </xpath>

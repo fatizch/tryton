@@ -5,7 +5,7 @@ from trytond.pyson import Eval
 from trytond.pool import PoolMeta
 from trytond.pyson import If, Bool
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, model
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -32,6 +32,10 @@ class Contract:
                     )]
             ]
         cls.subscriber.depends += ['is_group']
+        cls._buttons.update({
+                'button_add_enrollment': {
+                    'invisible': ~Bool(Eval('is_group'))}
+                })
 
     def get_is_group(self, name):
         return self.product.is_group if self.product else False
@@ -39,6 +43,12 @@ class Contract:
     @classmethod
     def search_is_group(cls, name, clause):
         return [('product.is_group', ) + tuple(clause[1:])]
+
+    @classmethod
+    @model.CoopView.button_action(
+        'contract_group.act_create_enrollment_wizard')
+    def button_add_enrollment(cls, contracts):
+        pass
 
 
 class Option:

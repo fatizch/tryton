@@ -11,11 +11,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="offered.product_view_form"/>
             <field name="name">product_form</field>
         </record>
-        <record model="ir.ui.view" id="product_view_tree">
-            <field name="model">offered.product</field>
-            <field name="inherit" ref="offered.product_view_tree"/>
-            <field name="arch" type="xml"/>
-        </record>
         <!-- Entry Point -->
         <record model="ir.action.act_window" id="act_product_form">
             <field name="name">Group Products</field>
@@ -24,12 +19,12 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.action.act_window.view" id="act_product_form_view">
             <field name="sequence" eval="20"/>
-            <field name="view" ref="product_view_form"/>
+            <field name="view" ref="offered.product_view_form"/>
             <field name="act_window" ref="act_product_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_product_tree_view">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="product_view_tree"/>
+            <field name="view" ref="offered.product_view_tree"/>
             <field name="act_window" ref="act_product_form"/>
         </record>
         <menuitem parent="offered.menu_product" sequence="10" id="menu_product_form" icon="tryton-list" action="act_product_form"/>
@@ -41,11 +36,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="offered.coverage_view_form"/>
             <field name="name">option_description_form</field>
         </record>
-        <record model="ir.ui.view" id="coverage_view_tree">
-            <field name="model">offered.option.description</field>
-            <field name="inherit" ref="offered.coverage_view_tree"/>
-            <field name="arch" type="xml"/>
-        </record>
         <!-- Entry Point -->
         <record model="ir.action.act_window" id="act_coverage_form">
             <field name="name">Group Coverages</field>
@@ -54,12 +44,12 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.action.act_window.view" id="act_coverage_tree_view">
             <field name="sequence" eval="30"/>
-            <field name="view" ref="coverage_view_tree"/>
+            <field name="view" ref="offered.coverage_view_tree"/>
             <field name="act_window" ref="act_coverage_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_coverage_form_view">
             <field name="sequence" eval="40"/>
-            <field name="view" ref="coverage_view_form"/>
+            <field name="view" ref="offered.coverage_view_form"/>
             <field name="act_window" ref="act_coverage_form"/>
         </record>
         <menuitem parent="offered.menu_product" sequence="20" id="menu_coverage_form" icon="tryton-list" action="act_coverage_form"/>

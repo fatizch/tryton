@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<form string="Enrollments">
+    <label name="covered_element"/>
+    <field name="covered_element" widget='selection'/>
+    <label name="item_desc"/>
+    <field name="item_desc" widget='selection'/>
+    <label name="employee"/>
+    <field name="employee"/>
+    <field name="extra_data" colspan="4"/>
+    <field name="possible_covered_element" invisible="1"/>
+    <field name="possible_item_desc" invisible="1"/>
+    <field name="contract" invisible="1"/>
+</form>
