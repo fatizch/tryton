@@ -134,6 +134,10 @@ msgctxt "field:benefit.rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:claim,indemnifications_details:"
+msgid "Indemnifications Details"
+msgstr "Détails des indémnisations"
+
 msgctxt "field:claim,invoices:"
 msgid "Invoices"
 msgstr "Quittances"
@@ -256,7 +260,7 @@ msgstr "Prestation fournie"
 
 msgctxt "field:claim.indemnification,start_date:"
 msgid "Start Date"
-msgstr "Date d'Effet"
+msgstr "Date de début"
 
 msgctxt "field:claim.indemnification,status:"
 msgid "Status"
@@ -546,6 +550,10 @@ msgctxt "field:claim.indemnification.detail,description:"
 msgid "Description"
 msgstr "Description"
 
+msgctxt "field:claim.indemnification.detail,duration_description:"
+msgid "Duration"
+msgstr "Durée"
+
 msgctxt "field:claim.indemnification.detail,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -557,6 +565,10 @@ msgstr "ID"
 msgctxt "field:claim.indemnification.detail,indemnification:"
 msgid "Indemnification"
 msgstr "Prestations"
+
+msgctxt "field:claim.indemnification.detail,indemnification_kind:"
+msgid "Indemnification Kind"
+msgstr "Type d'indémnisation"
 
 msgctxt "field:claim.indemnification.detail,kind:"
 msgid "Kind"
@@ -572,7 +584,7 @@ msgstr "Nom"
 
 msgctxt "field:claim.indemnification.detail,start_date:"
 msgid "Start Date"
-msgstr "Date d'Effet"
+msgstr "Date de début"
 
 msgctxt "field:claim.indemnification.detail,unit:"
 msgid "Unit"
@@ -624,7 +636,7 @@ msgstr "Prestation fournie"
 
 msgctxt "field:claim.indemnification_definition,start_date:"
 msgid "Start Date"
-msgstr "Date d'Effet"
+msgstr "Date de début"
 
 msgctxt ""
 "field:claim.indemnification_regularization,amount_available_for_regularization:"
@@ -902,6 +914,18 @@ msgstr "Ascendant"
 msgctxt "selection:claim.indemnification.assistant.view,order_sort:"
 msgid "Descending"
 msgstr "Descendant"
+
+msgctxt "selection:claim.indemnification.detail,indemnification_kind:"
+msgid "Annuity"
+msgstr "Rente"
+
+msgctxt "selection:claim.indemnification.detail,indemnification_kind:"
+msgid "Capital"
+msgstr "Capital"
+
+msgctxt "selection:claim.indemnification.detail,indemnification_kind:"
+msgid "Period"
+msgstr "Période"
 
 msgctxt "selection:claim.indemnification.detail,kind:"
 msgid "Deductible"

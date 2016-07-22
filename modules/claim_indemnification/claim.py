@@ -39,6 +39,10 @@ class Claim:
     invoices = fields.Function(
         fields.One2Many('account.invoice', None, 'Invoices'),
         'get_invoices')
+    indemnifications_details = fields.Function(
+        fields.One2Many('claim.indemnification.detail', None,
+            'Indemnifications Details'),
+        'get_indemnifications_details')
 
     @classmethod
     def __setup__(cls):
@@ -46,8 +50,16 @@ class Claim:
         cls._buttons.update({
                 'button_calculate': {
                     'invisible': Eval('status').in_(['closed']),
-                    }
+                    },
+                'create_indemnification': {
+                    'invisible': Eval('status').in_(['closed']),
+                    },
                 })
+
+    def get_indemnifications_details(self, name):
+        IndemnificationDetail = Pool().get('claim.indemnification.detail')
+        return [i.id for i in IndemnificationDetail.search(
+                [('indemnification.service.claim', '=', self.id)])]
 
     def calculate(self):
         for loss in self.losses:
@@ -579,14 +591,16 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
 
     indemnification = fields.Many2One('claim.indemnification',
         'Indemnification', ondelete='CASCADE', required=True, select=True)
-    start_date = fields.Date('Start Date', states={
-            'invisible':
-            Eval('_parent_indemnification', {}).get('kind') != 'period'
-            })
-    end_date = fields.Date('End Date', states={
-            'invisible':
-            Eval('_parent_indemnification', {}).get('kind') != 'period'
-            })
+    start_date = fields.Date('Start Date',
+        states={'invisible': Eval('indemnification_kind') != 'period'},
+        depends=['indemnification_kind'])
+    end_date = fields.Date('End Date',
+        states={'invisible': Eval('indemnification_kind') != 'period'},
+        depends=['indemnification_kind'])
+    indemnification_kind = fields.Function(
+        fields.Selection(INDEMNIFICATION_KIND, 'Indemnification Kind',
+            sort=False),
+        'get_indemnification_kind')
     kind = fields.Selection(INDEMNIFICATION_DETAIL_KIND, 'Kind', sort=False)
     kind_string = kind.translated('kind')
     amount_per_unit = fields.Numeric('Amount per Unit',
@@ -599,6 +613,15 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
         depends=['currency_digits'])
     description = fields.Text('Description')
+    duration_description = fields.Function(
+        fields.Char('Duration'),
+        'get_duration_description')
+
+    def get_indemnification_kind(self, name):
+        return self.indemnification.kind
+
+    def get_duration_description(self, name):
+        return '%s %s(s)' % (self.nb_of_unit, self.unit_string)
 
     def calculate_amount(self):
         self.amount = self.amount_per_unit * self.nb_of_unit
