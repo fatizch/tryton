@@ -41,6 +41,10 @@ msgctxt "error:claim:"
 msgid "The number must be unique!"
 msgstr "Le numéro doit être unique"
 
+msgctxt "field:benefit,automatically_deliver:"
+msgid "Automatically Deliver"
+msgstr "Exercer la prestation automatiquement"
+
 msgctxt "field:benefit,beneficiary_kind:"
 msgid "Beneficiary Kind"
 msgstr "Type de bénéficiaire"
@@ -936,6 +940,12 @@ msgstr "Mis à jour par"
 msgctxt "field:party.synthesis.menu.claim,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "help:benefit,automatically_deliver:"
+msgid "If True the benefit will automatically be delivered after loss declaration"
+msgstr ""
+"Si cochée, la prestation sera exercée automatiquement une fois le préjudice "
+"déclaré"
 
 msgctxt "model:account.journal,name:"
 msgid "Claim"

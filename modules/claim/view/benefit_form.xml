@@ -19,6 +19,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="extra_data_def" colspan="4"/>
         </page>
         <page string="Rules" id="managers">
+            <label name="automatically_deliver"/>
+            <field name="automatically_deliver"/>
             <notebook>
             </notebook>
         </page>

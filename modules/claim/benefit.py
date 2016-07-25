@@ -166,6 +166,9 @@ class Benefit(model.CoopSQL, model.CoopView, model.TaggedMixin):
     beneficiary_kind = fields.Selection('get_beneficiary_kind',
         'Beneficiary Kind', required=True, sort=False)
     beneficiary_kind_string = beneficiary_kind.translated('beneficiary_kind')
+    automatically_deliver = fields.Boolean('Automatically Deliver',
+        help='If True the benefit will automatically be delivered after loss '
+        'declaration')
 
     @classmethod
     def __setup__(cls):

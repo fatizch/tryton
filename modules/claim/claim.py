@@ -266,6 +266,26 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def deliver(cls, claims):
         pass
 
+    @classmethod
+    def deliver_automatic_benefit(cls, claims):
+        to_save = []
+        for claim in claims:
+            changed = False
+            for loss in claim.losses:
+                deliver = [service.benefit for service in loss.services]
+                for contract in claim.possible_contracts:
+                    for benefit, option in \
+                            contract.get_possible_benefits(loss):
+                        if (benefit in deliver or
+                                not benefit.automatically_deliver):
+                            continue
+                        loss.init_services(option, [benefit])
+                        changed = True
+            if changed:
+                claim.losses = list(claim.losses)
+                to_save.append(claim)
+        cls.save(to_save)
+
 
 class Loss(model.CoopSQL, model.CoopView):
     'Loss'
