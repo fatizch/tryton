@@ -67,6 +67,24 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="claim_view_list"/>
             <field name="act_window" ref="act_claim_form"/>
         </record>
+        <record model="ir.action.act_window.domain" id="act_claim_domain_open">
+            <field name="name">Open</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="['OR', ('status', '=', 'open'), ('status', '=', 'reopened')]" pyson="1"/>
+            <field name="act_window" ref="act_claim_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_claim_domain_closed">
+            <field name="name">Closed</field>
+            <field name="sequence" eval="30"/>
+            <field name="domain" eval="[('status', '=', 'closed')]" pyson="1"/>
+            <field name="act_window" ref="act_claim_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_claim_domain_all">
+            <field name="name">All</field>
+            <field name="sequence" eval="40"/>
+            <field name="domain" eval="[]" pyson="1"/>
+            <field name="act_window" ref="act_claim_form"/>
+        </record>
         <record model="ir.action.act_window.view" id="act_claim_view_form">
             <field name="sequence" eval="20"/>
             <field name="view" ref="claim_view_form"/>

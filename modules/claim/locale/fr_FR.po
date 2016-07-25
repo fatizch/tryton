@@ -1288,3 +1288,15 @@ msgstr "Délivrer"
 msgctxt "wizard_button:claim.deliver_benefits,benefits,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "model:ir.action.act_window.domain,name:act_claim_domain_open"
+msgid "Open"
+msgstr "Ouvert"
+
+msgctxt "model:ir.action.act_window.domain,name:act_claim_domain_closed"
+msgid "Closed"
+msgstr "Résilié"
+
+msgctxt "model:ir.action.act_window.domain,name:act_claim_domain_all"
+msgid "All"
+msgstr "Tous"
