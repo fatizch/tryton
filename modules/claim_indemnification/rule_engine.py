@@ -17,11 +17,15 @@ class RuleEngine:
     @classmethod
     def __setup__(cls):
         super(RuleEngine, cls).__setup__()
-        cls.type_.selection.append(('benefit', 'Benefit'))
+        cls.type_.selection.extend([
+            ('benefit', 'Benefit'),
+            ('benefit_deductible', 'Benefit: Deductible')])
 
     def on_change_with_result_type(self, name=None):
         if self.type_ == 'benefit':
             return 'list'
+        elif self.type_ == 'benefit_deductible':
+            return 'date'
         return super(RuleEngine, self).on_change_with_result_type(name)
 
 
@@ -98,3 +102,8 @@ class RuleEngineRuntime:
     @check_args('indemnification')
     def _re_amount(cls, args):
         return args['indemnification'].amount
+
+    @classmethod
+    @check_args('service')
+    def _re_deductible_end_date(cls, args):
+        return args['service'].deductible_end_date

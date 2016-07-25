@@ -59,14 +59,23 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_service_period_frequency</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
-	<record model="rule_engine.function" id="indemnification_amount">
-	  <field name="translated_technical_name">indemnisation_somme</field>
-	  <field name="description">Somme d'un indemnisation</field>
-	  <field name="type">function</field>
-	  <field name="language" ref="ir.lang_fr"/>
-	  <field name="namespace">rule_engine.runtime</field>
-	  <field name="name">_re_amount</field>
-	  <field name="parent" ref="claim.dossier_sinistre"/>
-	</record>
+        <record model="rule_engine.function" id="indemnification_amount">
+            <field name="translated_technical_name">indemnisation_somme</field>
+            <field name="description">Somme d'un indemnisation</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_amount</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="deductible_end_date">
+            <field name="translated_technical_name">date_fin_franchise</field>
+            <field name="description">Date de fin de la franchise</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_deductible_end_date</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
     </data>
 </tryton>

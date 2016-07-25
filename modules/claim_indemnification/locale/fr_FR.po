@@ -648,6 +648,10 @@ msgctxt "field:claim.indemnification_regularization,indemnification:"
 msgid "Indemnification"
 msgstr "Prestations"
 
+msgctxt "field:claim.service,deductible_end_date:"
+msgid "Deductible End Date"
+msgstr "Date de fin de la franchise"
+
 msgctxt "field:claim.service,has_automatic_period_calculation:"
 msgid "has_automatic_period_calculation"
 msgstr ""
@@ -962,6 +966,10 @@ msgstr "Trimestriel"
 msgctxt "selection:rule_engine,type_:"
 msgid "Benefit"
 msgstr "Prestation"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Benefit: Deductible"
+msgstr "Prestation: Franchise"
 
 msgctxt "view:benefit.rule:"
 msgid "Benefit Rule"

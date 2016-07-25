@@ -119,6 +119,9 @@ class ClaimService:
           states={'invisible': ~(Bool(Eval(
                         'has_automatic_period_calculation')))},
           depends=['has_automatic_period_calculation'])
+    deductible_end_date = fields.Function(
+        fields.Date('Deductible End Date'),
+        'get_deductible_end_date')
 
     @classmethod
     def __setup__(cls):
@@ -154,6 +157,12 @@ class ClaimService:
     @classmethod
     def default_period_frequency(cls):
         return 'quarterly'
+
+    def get_deductible_end_date(self, name):
+        args = {}
+        self.init_dict_for_rule_engine(args)
+        args['date'] = self.loss.start_date
+        return self.benefit.calculate_deductible(args)
 
     def init_from_loss(self, loss, benefit):
         pool = Pool()

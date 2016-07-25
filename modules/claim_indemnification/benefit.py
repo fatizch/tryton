@@ -57,6 +57,11 @@ class Benefit:
             return
         return self.benefit_rules[0].calculate(args)
 
+    def calculate_deductible(self, args):
+        if not self.benefit_rules:
+            return
+        return self.benefit_rules[0].calculate_deductible_rule(args)
+
     @staticmethod
     def default_indemnification_kind():
         return 'capital'
@@ -77,7 +82,7 @@ class BenefitRule(
     def __setup__(cls):
         super(BenefitRule, cls).__setup__()
         cls.indemnification_rule.domain = [('type_', '=', 'benefit')]
-        cls.deductible_rule.domain = [('type_', '=', 'benefit')]
+        cls.deductible_rule.domain = [('type_', '=', 'benefit_deductible')]
 
     @classmethod
     def __register__(cls, module):
