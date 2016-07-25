@@ -214,10 +214,6 @@ msgctxt "field:claim.indemnification,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:claim.indemnification,customer:"
-msgid "Customer"
-msgstr "Client"
-
 msgctxt "field:claim.indemnification,details:"
 msgid "Details"
 msgstr "Détails"

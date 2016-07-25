@@ -218,8 +218,6 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
     beneficiary = fields.Many2One('party.party', 'Beneficiary',
         ondelete='RESTRICT', states={'readonly': Eval('status') == 'paid'},
         depends=['status'])
-    customer = fields.Many2One('party.party', 'Customer', ondelete='RESTRICT',
-        states={'readonly': Eval('status') == 'paid'}, depends=['status'])
     service = fields.Many2One('claim.service', 'Claim Service',
         ondelete='CASCADE', select=True, required=True,
         states={'readonly': Eval('status') == 'paid'}, depends=['status'])
@@ -303,7 +301,6 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
     def init_from_service(self, service):
         self.status = 'calculated'
         self.service = service
-        self.customer = service.loss.claim.claimant
         self.beneficiary = self.get_beneficiary(
             service.benefit.beneficiary_kind, service)
 
