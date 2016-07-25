@@ -53,6 +53,12 @@ class Contract:
         else:
             self.create_prepayment_commissions(adjustement=True)
 
+    @classmethod
+    def reactivate(cls, contracts):
+        super(Contract, cls).reactivate(contracts)
+        # Force prepayment recalculation
+        cls.create_prepayment_commissions(contracts, adjustement=False)
+
 
 class ContractOption:
     __name__ = 'contract.option'
