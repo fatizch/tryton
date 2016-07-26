@@ -1,4 +1,4 @@
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import PoolMeta
 from trytond.modules.cog_utils import fields
 
 __all__ = [

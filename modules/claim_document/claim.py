@@ -1,8 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
-from sql.operators import Concat
-from sql import Cast
 
 from trytond.pool import PoolMeta, Pool
 from trytond.model import ModelView

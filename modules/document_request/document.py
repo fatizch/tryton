@@ -13,7 +13,6 @@ from trytond.pyson import Eval
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, Button, StateTransition
-from trytond import backend
 
 from trytond.modules.cog_utils import fields, model, utils
 from trytond.modules.report_engine import Printable

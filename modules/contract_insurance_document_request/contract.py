@@ -2,8 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 from itertools import groupby
 from collections import defaultdict
-from sql.operators import Concat
-from sql import Cast
 
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
