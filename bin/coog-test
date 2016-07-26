@@ -109,9 +109,10 @@ coog_test_dropdb() { # drop test db from postgresql server
 }
 
 _coog_test_pull() {
+        [ -z "$1" ] && echo "missing branch" && return 1
         coog_code_foreach git fetch -q -p
-        coog_code_foreach git checkout -q master
-        coog_code_foreach git merge -q --no-edit origin/master
+        coog_code_foreach git checkout -q "$1"
+        coog_code_foreach git merge -q --no-edit "origin/$1"
         coog_code_foreach git submodule -q update
 }
 
@@ -129,27 +130,28 @@ _coog_test_email() {
         local email; email=$1; shift
         local content; content=$1; shift
         local subject; subject=$*
-        python $COOG_BIN/sendemail.py -fe test@coopengo.com -fn "Test Cron" -te $email -s "$subject" < $content
+        python "$COOG_BIN/sendemail.py" -fe test@coopengo.com -fn "Test Cron" -te "$email" -s "$subject" < "$content"
         if [ $? -eq 0 ]
         then
-                echo TEST EMAIL: sent $subject to $email
+                echo "TEST EMAIL: sent $subject to $email"
         else
-                echo TEST EMAIL: failed to send $subject to $email
+                echo "TEST EMAIL: failed to send $subject to $email"
         fi
 }
 
-coog_test_commit() { # fetch, merge, and test each commit on changed modules (CI)
-        echo "TEST COMMIT: start @ $(date +'%y-%m-%d %H:%M:%S')"
+coog_test_commit() { # fetch, merge, and test each commit on changed modules (CI) <git branch>
+        [ -z "$1" ] && echo "missing branch" && return 1
+        echo "TEST COMMIT $1: start @ $(date +'%y-%m-%d %H:%M:%S')"
         local lock
         lock=$COOG_TMP/test-running
-        [ -e "$lock" ] && echo TEST COMMIT: leave - running && return
+        [ -e "$lock" ] && echo "TEST COMMIT $1: leave - running" && return
         touch "$lock"
         local origin
-        origin=$(git rev-parse master)
-        _coog_test_pull
-        for tree in $(git rev-list "$origin"..master)
+        origin=$(git rev-parse "$1")
+        _coog_test_pull "$1"
+        for tree in $(git rev-list "$origin..$1")
         do
-                echo "TEST COMMIT: commit - $tree"
+                echo "TEST COMMIT $1: commit - $tree"
                 git checkout -q "$tree"
                 local email
                 email=$(git log -1 --pretty=tformat:%ae HEAD)
@@ -189,55 +191,58 @@ coog_test_commit() { # fetch, merge, and test each commit on changed modules (CI
                 echo '</pre>' >> "$out"
                 if [ $fail -eq 0 ]
                 then
-                        echo "TEST COMMIT: commit - $tree - ok"
+                        echo "TEST COMMIT $1: commit - $tree - ok"
                         rm "$out"
                 else
-                        echo "TEST COMMIT: commit - $tree - ko"
+                        echo "TEST COMMIT $1: commit - $tree - ko"
                         _coog_test_email "$email" "$out" "Test KO for ${tree:0:8}"
                 fi
         done
-        echo TEST COMMIT: end
+        echo "TEST COMMIT $1: end"
         rm "$lock"
 }
 
-coog_test_fullstart() { # starts a full test (CI)
-        echo TEST FULL: start @ `date +"%y-%m-%d %H:%M:%S"`
-        _coog_test_pull
-        coog_test_exec $*
+coog_test_fullstart() { # starts a full test (CI) <git branch>
+        [ -z "$1" ] && echo "missing branch" && return 1
+        echo "TEST FULL $1 : start @ $(date +'%y-%m-%d %H:%M:%S')"
+        _coog_test_pull "$1"
+        shift
+        coog_test_exec "$@"
 }
 
-coog_test_fullcheck() { # check and report a full test (CI)
-        echo TEST FULL: check @ `date +"%y-%m-%d %H:%M:%S"`
-        local a; a=`coog_test_query count`
-        local w; w=`coog_test_query count wait`
-        [ $a -eq 0 ] && echo TEST FULL: no jobs && return
-        [ $w -ne 0 ] && echo TEST FULL: running && return
+coog_test_fullcheck() { # check and report a full test (CI) <git branch>
+        [ -z "$1" ] && echo "missing branch" && return 1
+        echo "TEST FULL $1: check @ $(date +'%y-%m-%d %H:%M:%S')"
+        local a; a=$(coog_test_query count)
+        local w; w=$(coog_test_query count "wait")
+        [ "$a" -eq 0 ] && echo "TEST FULL $1: no jobs" && return
+        [ "$w" -ne 0 ] && echo "TEST FULL $1: running" && return
         local out
-        out=$COOG_TMP/test-`date +"%y%m%d-%H%M%S"`
-        echo '<pre style="font-family: monospace">' > $out
-        coog_test_query summary >> $out
+        out=$COOG_TMP/test-$(date +'%y%m%d-%H%M%S')
+        echo '<pre style="font-family: monospace">' > "$out"
+        coog_test_query summary >> "$out"
         local fail
         local subject
-        fail=`coog_test_query count fail`
-        if [ $fail -ne 0 ]
+        fail=$(coog_test_query "count" "fail")
+        if [ "$fail" -ne 0 ]
         then
                 subject="Test Report: KO"
-                echo TEST FULL: end - $fail KO
-                echo >> $out
-                coog_test_query list fail >> $out
+                echo "TEST FULL $1: end - $fail KO"
+                echo >> "$out"
+                coog_test_query list fail >> "$out"
                 coog_test_query ids fail |
                 while IFS= read -r id
                 do
-                        [ -z $id ] && continue
-                        echo >> $out
-                        coog_test_query show $id >> $out
+                        [ -z "$id" ] && continue
+                        echo >> "$out"
+                        coog_test_query show "$id" >> "$out"
                 done
         else
-                subject="Test Report: OK"
-                echo TEST FULL: end - OK
+                subject="Test Report $1: OK"
+                echo "TEST FULL $1: end - OK"
         fi
-        echo '</pre>' >> $out
-        _coog_test_email dev@coopengo.com $out "$subject"
+        echo '</pre>' >> "$out"
+        _coog_test_email dev@coopengo.com "$out" "$subject"
         coog_test_query backup
         coog_test_stop
 }

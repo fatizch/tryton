@@ -4,6 +4,6 @@ PATH="/usr/local/bin:$PATH"
 export PATH
 
 cd /var/log/coog
-ARCHIVE=`date +"%y-%m-%d"`.tar.gz
-tar czf $ARCHIVE coog-*.out test-*
+ARCHIVE="$(date +'%y-%m-%d').tar.gz"
+tar czf "$ARCHIVE" coog-*.out test-*
 rm -rf coog-*.out test-*

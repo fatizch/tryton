@@ -1,0 +1,18 @@
+#!/bin/bash
+
+PATH="/usr/local/bin:$PATH"
+export PATH
+
+USER=test
+export USER
+HOME=/home/$USER
+export HOME
+
+. $HOME/.profile
+
+COOG_TMP=/var/log/coog
+export COOG_TMP
+
+workon coog-1.8
+TRYTOND_ASYNC_RQ=redis://localhost:6379/3 coog test fullstart coog-1.8 4 &>> $COOG_TMP/test-logs
+deactivate

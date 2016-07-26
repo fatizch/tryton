@@ -10,8 +10,9 @@ export HOME
 
 . $HOME/.profile
 
-workon coog-full
 COOG_TMP=/var/log/coog
 export COOG_TMP
-coog test fullstart 4 &>> $COOG_TMP/test-logs
+
+workon coog-master
+TRYTOND_ASYNC_RQ=redis://localhost:6379/1 coog test fullstart master 4 &>> $COOG_TMP/test-logs
 deactivate

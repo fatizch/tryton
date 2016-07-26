@@ -1,3 +1,4 @@
+0 */12 * * 1-5 cd /home/test && ./test-master
+0 3 * * 1-5 cd /home/test && ./test-1.8
 */5 * * * 1-5 cd /home/test && ./test-5m
-0 */12 * * 1-5 cd /home/test && ./test-full
 0 12 * * 7 cd /home/test && ./test-backup

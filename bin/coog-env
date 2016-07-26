@@ -107,10 +107,16 @@ _coog_env_server() { # set server vars
         [ ! -z $DB_NAME ] && export DB_NAME
         TRYTOND_CACHE_REDIS=`python $COOG_BIN/parse-config.py cache redis < $COOG_CONF_SRV 2> /dev/null`
         [ ! -z $TRYTOND_CACHE_REDIS ] && export TRYTOND_CACHE_REDIS
-        TRYTOND_ASYNC_RQ=`python $COOG_BIN/parse-config.py async rq < $COOG_CONF_SRV 2> /dev/null`
-        [ ! -z $TRYTOND_ASYNC_RQ ] && export TRYTOND_ASYNC_RQ
-        TRYTOND_ASYNC_CELERY=`python $COOG_BIN/parse-config.py async celery < $COOG_CONF_SRV 2> /dev/null`
-        [ ! -z $TRYTOND_ASYNC_CELERY ] && export TRYTOND_ASYNC_CELERY
+        if [ -z "$TRYTOND_ASYNC_RQ" ]
+        then
+                TRYTOND_ASYNC_RQ=`python $COOG_BIN/parse-config.py async rq < $COOG_CONF_SRV 2> /dev/null`
+                [ ! -z $TRYTOND_ASYNC_RQ ] && export TRYTOND_ASYNC_RQ
+        fi
+        if [ -z "$TRYTOND_ASYNC_CELERY" ]
+        then
+                TRYTOND_ASYNC_CELERY=`python $COOG_BIN/parse-config.py async celery < $COOG_CONF_SRV 2> /dev/null`
+                [ ! -z $TRYTOND_ASYNC_CELERY ] && export TRYTOND_ASYNC_CELERY
+        fi
         TRYTOND_PERF_BROKER=`python $COOG_BIN/parse-config.py perf broker < $COOG_CONF_SRV 2> /dev/null`
         [ ! -z $TRYTOND_PERF_BROKER ] && export TRYTOND_PERF_BROKER
         export COOG_FILE_WATCH
