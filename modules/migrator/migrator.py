@@ -184,7 +184,7 @@ class Migrator(batch.BatchRootNoSelect):
     def upsert_records(cls, rows):
         if not cls.do_update():
             return cls.create_records(rows)
-        result, to_create, to_update = []
+        result, to_create, to_update = [], [], []
         for row in rows:
             if row[cls.func_key] in cls.cache_obj['update']:
                 to_update.append(row)
