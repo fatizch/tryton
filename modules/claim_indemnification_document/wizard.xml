@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="indemnification_result_required_documents">
+            <field name="model">claim.indemnification_calculation_result</field>
+            <field name="inherit" ref="claim_indemnification.indemnification_calculation_result_view_form"/>
+            <field name="name">indemnification_calculation_result_form</field>
+        </record>
+    </data>
+</tryton>

@@ -22,7 +22,7 @@ class Claim(RemindableInterface):
     __metaclass__ = PoolMeta
 
     document_request_lines = fields.One2Many('document.request.line',
-        'for_object', 'Required Documents', delete_missing=True)
+        'claim', 'Required Documents', delete_missing=True)
     document_request = fields.One2Many('document.request', 'needed_by',
         'Document Request')
     doc_received = fields.Function(
@@ -112,8 +112,8 @@ class Claim(RemindableInterface):
     def get_reminder_candidates_query(cls, tables):
         return tables['claim'].join(
             tables['document.request.line'],
-            condition=(tables['document.request.line'].for_object == Concat(
-                'claim,', Cast(tables['claim'].id, 'VARCHAR'))))
+            condition=(tables['document.request.line'].claim ==
+                tables['claim'].id))
 
     @classmethod
     def get_reminder_group_by_clause(cls, tables):

@@ -1,0 +1,26 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:document.rule,indemnification_doc_rule:"
+msgid "Rule Engine for indemnifications"
+msgstr "Règle des documents requis sur une indémnisation"
+
+msgctxt "field:document.rule,indemnification_doc_rule_extra_data:"
+msgid "Rule Engine for indemnifications Extra Data"
+msgstr "Règle des documents requis sur une indémnisation - Données complémentaires"
+
+msgctxt "field:claim.indemnification_calculation_result,requested_documents:"
+msgid "Request Documents"
+msgstr "Documents requis"
+
+msgctxt "error:claim.indemnification:"
+msgid "The following documents are required before you can schedule this indemnification:\n%s"
+msgstr ""
+"Les documents suivant sont requis avant que vous ne puissiez ordonnancer cette "
+"indemnisation:\n%s"
+
+msgctxt "field:claim,required_indemnification_docs:"
+msgid "Required Docs"
+msgstr "Documents requis"
+

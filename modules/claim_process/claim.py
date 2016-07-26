@@ -78,6 +78,7 @@ class Claim(CogProcessFramework):
                 documents.extend(docs)
         existing_document_desc = [request.document_desc
             for request in self.document_request_lines]
+        to_save = []
         documents = list(set(documents))
         for desc in documents:
             if desc in existing_document_desc:
@@ -86,7 +87,10 @@ class Claim(CogProcessFramework):
             line = DocumentRequestLine()
             line.document_desc = desc
             line.for_object = '%s,%s' % (self.__name__, self.id)
-            line.save()
+            line.claim = self
+            to_save.append(line)
+        if to_save:
+            DocumentRequestLine.save(to_save)
 
     def reject_and_close_claim(self):
         self.status = 'closed'

@@ -10,13 +10,13 @@ msgctxt "error:document.receive:"
 msgid "No document request found for this object"
 msgstr "Pas de demande de document trouvé pour cet objet"
 
-msgctxt "field:batch.remind.documents,id:"
-msgid "ID"
-msgstr "Identifiant"
-
 msgctxt "error:document.request:"
 msgid "Document Request For"
 msgstr "Demande de documents pour"
+
+msgctxt "field:batch.remind.documents,id:"
+msgid "ID"
+msgstr "Identifiant"
 
 msgctxt "field:document.receive.attach,attachments:"
 msgid "Attachments"
@@ -118,10 +118,6 @@ msgctxt "field:document.request.line,attachment_data:"
 msgid "Data"
 msgstr "Données"
 
-msgctxt "model:event.type,name:remind_documents"
-msgid "Remind Documents"
-msgstr "Relance de documents"
-
 msgctxt "field:document.request.line,attachment_name:"
 msgid "Attachment Name"
 msgstr "Nom de la pièce jointe"
@@ -170,6 +166,10 @@ msgctxt "field:document.request.line,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:document.request.line,last_reminder_date:"
+msgid "Last Reminder Date"
+msgstr "Dernière date de relance"
+
 msgctxt "field:document.request.line,matching_attachments:"
 msgid "Matching Attachments"
 msgstr "Pièces jointes correspondantes"
@@ -185,6 +185,10 @@ msgstr "Reçus"
 msgctxt "field:document.request.line,reception_date:"
 msgid "Reception Date"
 msgstr "Date de réception"
+
+msgctxt "field:document.request.line,reminders_sent:"
+msgid "Reminders Sent"
+msgstr "Nombre de relances envoyées"
 
 msgctxt "field:document.request.line,request:"
 msgid "Document Request"
@@ -222,6 +226,10 @@ msgctxt "field:ir.attachment,status:"
 msgid "Status"
 msgstr "Statut"
 
+msgctxt "help:document.request.line,for_object:"
+msgid "References the object for which the document is asked."
+msgstr "Référence l'objet pour lequel le document est demandé."
+
 msgctxt "model:batch.remind.documents,name:"
 msgid "Batch Remind Documents"
 msgstr "Batch de relance des documents"
@@ -249,6 +257,10 @@ msgstr "Ligne de demande de documents"
 msgctxt "model:document.request.process,name:"
 msgid "Document Request Batch Definition"
 msgstr "Définition du batch de demande de documents"
+
+msgctxt "model:event.type,name:remind_documents"
+msgid "Remind Documents"
+msgstr "Relance de documents"
 
 msgctxt "model:ir.action,name:receive_documents_wizard"
 msgid "Document Reception"

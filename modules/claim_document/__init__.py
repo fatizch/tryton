@@ -17,4 +17,5 @@ def register():
         DocumentRequest,
         RequestFinder,
         RuleEngineRuntime,
+        DocumentRequestLine,
         module='claim_document', type_='model')

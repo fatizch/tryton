@@ -19,4 +19,5 @@ def register():
         DocumentRequest,
         DocumentReceiveRequest,
         RuleEngine,
+        DocumentRequestLine,
         module='contract_insurance_document_request', type_='model')

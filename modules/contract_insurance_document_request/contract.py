@@ -28,7 +28,7 @@ class Contract(RemindableInterface):
         fields.Boolean('All Documents Received'),
         'on_change_with_doc_received')
     document_request_lines = fields.One2Many('document.request.line',
-        'for_object', 'Documents',
+        'contract', 'Documents',
         states={'readonly': Eval('status') != 'quote'},
         depends=['status'], delete_missing=True)
 
@@ -85,6 +85,7 @@ class Contract(RemindableInterface):
             for request in self.document_request_lines]
         rule_doc_descs_by_code = {x.code: x for x in
             DocumentDesc.search([('code', 'in', documents.keys())])}
+        to_save = []
         for code, rule_result_values in documents.iteritems():
             if code in existing_document_desc_code:
                 existing_document_desc_code.remove(code)
@@ -92,9 +93,12 @@ class Contract(RemindableInterface):
             line = DocumentRequestLine()
             line.document_desc = rule_doc_descs_by_code[code]
             line.for_object = '%s,%s' % (self.__name__, self.id)
+            line.contract = self
             for k, v in rule_result_values.iteritems():
                 setattr(line, k, v)
-            line.save()
+            to_save.append(line)
+        if to_save:
+            DocumentRequestLine.save(to_save)
         to_delete = []
         for request in self.document_request_lines:
             if (request.document_desc.code in existing_document_desc_code and
@@ -149,8 +153,8 @@ class Contract(RemindableInterface):
     def get_reminder_candidates_query(cls, tables):
         return tables['contract'].join(
             tables['document.request.line'],
-            condition=(tables['document.request.line'].for_object == Concat(
-                'contract,', Cast(tables['contract'].id, 'VARCHAR'))))
+            condition=(tables['document.request.line'].contract ==
+                tables['contract'].id))
 
     @classmethod
     def get_reminder_group_by_clause(cls, tables):

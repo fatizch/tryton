@@ -13,6 +13,7 @@ from trytond.pyson import Eval
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, Button, StateTransition
+from trytond import backend
 
 from trytond.modules.cog_utils import fields, model, utils
 from trytond.modules.report_engine import Printable
@@ -35,7 +36,8 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
     document_desc = fields.Many2One('document.description',
         'Document Definition', required=True, ondelete='RESTRICT')
     for_object = fields.Reference('Needed For', selection='models_get',
-        states={'readonly': ~~Eval('for_object')}, required=True, select=True)
+        states={'readonly': ~~Eval('for_object')}, required=True, select=True,
+        help='References the object for which the document is asked.')
     send_date = fields.Date('Send Date')
     reception_date = fields.Date('Reception Date')
     first_reception_date = fields.Date('First Reception Date')

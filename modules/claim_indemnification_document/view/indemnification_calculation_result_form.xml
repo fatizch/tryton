@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/group[@id='indemnification_request_group']" position="after">
+        <group id="requested_docs_group" colspan="4">
+            <field name="requested_documents"/>
+        </group>
+    </xpath>
+</data>
