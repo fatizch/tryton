@@ -968,12 +968,14 @@ class ReportCreate(Wizard):
                 })
 
     def transition_select_model_needed(self):
-        ActiveModel = Pool().get(Transaction().context.get('active_model'))
-        instance = ActiveModel(Transaction().context.get('active_id'))
+        transaction = Transaction()
+        ActiveModel = Pool().get(transaction.context.get('active_model'))
+        instance = ActiveModel(transaction.context.get('active_id'))
         if not instance:
             return 'select_model'
+        kind = transaction.context.get('report_kind', None)
         self.select_model.available_models = [elem.id for elem in
-            instance.get_available_doc_templates()]
+            instance.get_available_doc_templates(kind)]
         if len(self.select_model.available_models) == 1:
             self.select_model.models = self.select_model.available_models
         if not instance.get_contact():

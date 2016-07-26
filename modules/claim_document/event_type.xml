@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="event.type" id="sent_document_requests">
+            <field name="name">Document Requests Sent</field>
+            <field name="code">sent_document_requests</field>
+        </record>
+    </data>
+</tryton>

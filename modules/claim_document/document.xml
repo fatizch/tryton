@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="ir.action.wizard" id="document_request_report_wizard">
+            <field name="name">Report Document Request</field>
+            <field name="wiz_name">document.request.report</field>
+        </record>
+    </data>
+</tryton>

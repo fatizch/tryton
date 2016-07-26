@@ -101,3 +101,19 @@ msgstr "Documents"
 msgctxt "view:claim:"
 msgid "Documents"
 msgstr "Documents"
+
+msgctxt "error:document.request.report:"
+msgid "Document requests sent:\n %s"
+msgstr "Demande de Documents envoyé:\n %s"
+
+msgctxt "model:ir.action,name:"
+msgid "Document Request report"
+msgstr "Report de demande de document"
+
+msgctxt "model:event.type,name:"
+msgid "Document Requests Sent"
+msgstr "Demande de documents envoyés"
+
+msgctxt "error:document.request.report:"
+msgid "No documents are required."
+msgstr "Aucun document à fournir."

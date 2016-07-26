@@ -5,6 +5,7 @@ from .claim import *
 from .document import *
 from .benefit import *
 from .rule_engine import *
+from .report_engine import *
 
 
 def register():
@@ -18,4 +19,9 @@ def register():
         RequestFinder,
         RuleEngineRuntime,
         DocumentRequestLine,
+        ReportTemplate,
         module='claim_document', type_='model')
+
+    Pool.register(
+        DocumentRequestReport,
+        module='claim_document', type_='wizard')
