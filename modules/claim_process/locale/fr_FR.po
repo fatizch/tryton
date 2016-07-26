@@ -82,6 +82,10 @@ msgctxt "field:claim.declare.element,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:claim.declare.element,losses_summary:"
+msgid "Losses Summary"
+msgstr "Résumé"
+
 msgctxt "field:claim.declare.element,name:"
 msgid "Name"
 msgstr "Numéro"
@@ -98,9 +102,17 @@ msgctxt "field:claim.declare.element,sub_status:"
 msgid "Status details"
 msgstr "Détails du statut"
 
+msgctxt "field:claim.declare.find_process,claim_current_process:"
+msgid "Current Process Id"
+msgstr ""
+
+msgctxt "field:claim.declare.find_process,claim_process_type:"
+msgid "Claim Process Type"
+msgstr "Processus"
+
 msgctxt "field:claim.declare.find_process,claims:"
 msgid "Select claims"
-msgstr "Sélectionnez les sinistres"
+msgstr "Sélectionner les sinistres"
 
 msgctxt "field:claim.declare.find_process,good_process:"
 msgid "Good Process"
@@ -121,10 +133,6 @@ msgstr "Modèle"
 msgctxt "field:claim.declare.find_process,party:"
 msgid "Party"
 msgstr "Tiers"
-
-msgctxt "field:claim.declare.find_process,reopen_process:"
-msgid "Reopen Process"
-msgstr "Rouvrir la processus"
 
 msgctxt "field:claim.loss,benefit_to_deliver:"
 msgid "Benefit"
@@ -180,11 +188,11 @@ msgstr "Identifiant XML"
 
 msgctxt "model:claim.declare.element,name:"
 msgid "Claim Declaration Element"
-msgstr "Elément de déclaration de Sinistre"
+msgstr "Sinistre"
 
 msgctxt "model:claim.declare.find_process,name:"
 msgid "Claim Declare Find Process"
-msgstr "Paramètres du Processus de Déclaration Sinistre"
+msgstr "Sélection du processus"
 
 msgctxt "model:ir.action,name:act_claim_logs"
 msgid "Logs"
@@ -212,11 +220,7 @@ msgstr "Claim Declaration"
 
 msgctxt "selection:process,kind:"
 msgid "Claim Reopening"
-msgstr "Réouverture de Sinistre"
-
-msgctxt "view:claim.loss:"
-msgid "Loss"
-msgstr "Préjudice"
+msgstr "Réouverture d'un sinistre"
 
 msgctxt "view:process:"
 msgid "Loss Description"

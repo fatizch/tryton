@@ -93,17 +93,17 @@ class Claim(CogProcessFramework):
         self.end_date = utils.today()
         return True
 
-    def init_first_loss(self):
+    def add_new_loss(self, loss_desc_code, parameters=None):
+        for loss in self.losses:
+            if (not loss.end_date and loss.loss_desc and
+                    loss.loss_desc.code == loss_desc_code):
+                return
         pool = Pool()
         Loss = pool.get('claim.loss')
-        LossDesc = pool.get('benefit.loss.description')
-        if self.losses:
-            return
-        loss_descs = LossDesc.search([])
-        if loss_descs:
-            loss_desc = loss_descs[0]
-            event_desc = loss_desc.event_descs[0]
-            self.losses = [Loss(loss_desc=loss_desc, event_desc=event_desc)]
+        loss = Loss()
+        loss.claim = self
+        loss.init_loss(loss_desc_code, parameters)
+        self.losses = self.losses + (loss, )
 
     def deliver_services(self):
         pool = Pool()
@@ -135,6 +135,17 @@ class Loss:
     benefits = fields.Function(
         fields.One2Many('benefit', None, 'Benefits'),
         'on_change_with_benefits')
+
+    def init_loss(self, loss_desc_code, parameters=None):
+        pool = Pool()
+        LossDesc = pool.get('benefit.loss.description')
+        self.loss_desc, = LossDesc.search([('code', '=', loss_desc_code)])
+        self.event_desc = self.loss_desc.orderered_event_descs[0]
+        self.extra_data = utils.init_extra_data(self.loss_desc.extra_data_def)
+        if not parameters:
+            return
+        for arg, value in parameters.iteritems():
+            setattr(self, arg, value)
 
     def get_possible_benefits(self):
         if not self.claim or not self.loss_desc:
@@ -240,17 +251,19 @@ class ClaimDeclarationElement(model.CoopView):
     status = fields.Char('Status', readonly=True)
     sub_status = fields.Many2One(
         'claim.sub_status', 'Status details', readonly=True)
+    losses_summary = fields.Text('Losses Summary', readonly=True)
 
     @classmethod
     def from_claim(cls, claim):
         return {
             'select': False,
             'claim': claim.id,
-            'name': str(claim),
+            'name': claim.name,
             'declaration_date': claim.declaration_date,
             'end_date': claim.end_date,
-            'status': claim.status,
-            'sub_status': claim.sub_status.id if claim.sub_status else None
+            'status': claim.status_string,
+            'sub_status': claim.sub_status.id if claim.sub_status else None,
+            'losses_summary': '\n'.join([l.rec_name for l in claim.losses]),
             }
 
 
@@ -262,17 +275,39 @@ class ClaimDeclareFindProcess(ProcessStart):
     party = fields.Many2One('party.party', 'Party', ondelete='SET NULL')
     loss_desc = fields.Many2One('benefit.loss.description', 'Loss Description')
     claims = fields.One2Many('claim.declare.element', None, 'Select claims')
-    reopen_process = fields.Function(
-        fields.Boolean('Reopen Process'), 'get_reopen_process')
+    claim_process_type = fields.Char('Claim Process Type', readonly=True)
+    claim_current_process = fields.Integer('Current Process Id',
+        readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(ClaimDeclareFindProcess, cls).__setup__()
+        cls.good_process.states['invisible'] = False
 
     @classmethod
     def build_process_domain(cls):
         res = super(ClaimDeclareFindProcess, cls).build_process_domain()
-        res += [('for_loss_descs', '=', Eval('loss_desc')),
-                If(Bool(Eval('reopen_process')),
-                   ('kind', '=', 'claim_reopening'),
-                   ('kind', '=', 'claim_declaration'))]
+        res += [If(Bool(Eval('loss_desc')),
+                [('for_loss_descs', '=', Eval('loss_desc'))],
+                []),
+            If(Eval('claim_current_process', 0) != 0,
+                [('id', '=', Eval('claim_current_process'))],
+                [('kind', '=', Eval('claim_process_type'))])]
         return res
+
+    @fields.depends('party', 'claims')
+    def on_change_with_claim_process_type(self, name=None):
+        for claim in self.claims:
+            if claim.select:
+                return 'claim_reopening'
+        return 'claim_declaration'
+
+    @fields.depends('party', 'claims')
+    def on_change_with_claim_current_process(self, name=None):
+        for claim in self.claims:
+            if claim.select and claim.claim.current_state:
+                return claim.claim.current_state.process.id
+        return 0
 
     @classmethod
     def default_party(cls):
@@ -285,7 +320,8 @@ class ClaimDeclareFindProcess(ProcessStart):
     @classmethod
     def build_process_depends(cls):
         res = super(ClaimDeclareFindProcess, cls).build_process_depends()
-        res += ['claims', 'party', 'loss_desc', 'reopen_process']
+        res += ['claims', 'party', 'loss_desc', 'claim_process_type',
+            'claim_current_process']
         return res
 
     @classmethod
@@ -305,21 +341,20 @@ class ClaimDeclareFindProcess(ProcessStart):
                 ('claimant', '=', self.party)],
             order=[('declaration_date', 'DESC')])
         elements = []
+        selected = False
         for claim in available_claims:
-            elements.append(Element.from_claim(claim))
+            element = Element.from_claim(claim)
+            if not selected and claim.status == 'open':
+                selected = True
+                element['select'] = True
+            elements.append(element)
         self.claims = elements
 
-    @fields.depends('claims', 'party', 'loss_desc')
+    @fields.depends('claims', 'party', 'loss_desc', 'claim_process_type',
+        'claim_current_process')
     def on_change_with_good_process(self):
         return super(ClaimDeclareFindProcess,
             self).on_change_with_good_process()
-
-    @fields.depends('claims')
-    def get_reopen_process(self, name):
-        for claim in self.claims:
-            if claim.select is True and claim.status == 'closed':
-                return True
-        return False
 
 
 class ClaimDeclare(ProcessFinder):
@@ -342,7 +377,8 @@ class ClaimDeclare(ProcessFinder):
                 'open_claims':
                 'There are claim\'s still open.',
                 'declare_multiple_selected':
-                'You can only reopen one claim at a time.'
+                'You can only reopen one claim at a time.',
+                'missing_loss_desc': 'Missing Loss Description',
                 })
 
     @classmethod
@@ -359,51 +395,41 @@ class ClaimDeclare(ProcessFinder):
         open_claims = []
         selected_claims = []
         for claim in self.process_parameters.claims:
-            if claim.status in ('open', 'reopened'):
+            if claim.claim.status in ('open', 'reopened'):
                 open_claims.append(claim)
             if claim.select is True:
                 selected_claims.append(claim)
         if len(selected_claims) > 1:
             self.raise_user_error('declare_multiple_selected')
-        if open_claims:
+        if open_claims and len(open_claims) != len(selected_claims):
             self.raise_user_warning(str(open_claims), 'open_claims')
         return 'action'
 
     def do_close_claim(self, action):
         selected_claims = []
         for claim in self.process_parameters.claims:
-            if claim.select and claim.status in ('open', 'reopened'):
+            if claim.select and claim.claim.status in ('open', 'reopened'):
                 selected_claims.append(claim)
         if not selected_claims:
             self.raise_user_error('no_claim_selected')
         return action, {
             'extra_context': {
                 'last_party': self.process_parameters.party.id,
-                'loss_desc': self.process_parameters.loss_desc.id},
+                'loss_desc': self.process_parameters.loss_desc.id
+                if self.process_parameters.loss_desc else None},
             'ids': [claim.claim.id for claim in selected_claims],
             'model': 'claim'}
 
     def init_main_object_from_process(self, obj, process_param):
-        pool = Pool()
-        Loss = pool.get('claim.loss')
         res, errs = super(ClaimDeclare,
             self).init_main_object_from_process(obj, process_param)
         if res:
-            if process_param.party:
-                obj.claimant = process_param.party
-                obj.declaration_date = obj.default_declaration_date()
-                possible_contracts = obj.get_possible_contracts()
-                if len(possible_contracts) == 1:
-                    obj.main_contract = possible_contracts[0]
-            if len(process_param.good_process.for_loss_descs) == 1:
-                loss_desc = process_param.good_process.for_loss_descs[0]
-                event_desc = loss_desc.event_descs[0]
-                obj.losses = [Loss(loss_desc=loss_desc,
-                        event_desc=event_desc,
-                        covered_person=process_param.party
-                        if (process_param.party and
-                            process_param.party.is_person)
-                        else None)]
+            obj.claimant = process_param.party
+            obj.declaration_date = obj.default_declaration_date()
+            obj.losses = []
+            possible_contracts = obj.get_possible_contracts()
+            if len(possible_contracts) == 1:
+                obj.main_contract = possible_contracts[0]
         return res, errs
 
     def search_main_object(self):

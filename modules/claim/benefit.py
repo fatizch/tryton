@@ -6,6 +6,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond import backend
+from trytond.cache import Cache
 
 from trytond.modules.cog_utils import model, fields, coop_string, utils
 
@@ -91,6 +92,8 @@ class LossDescription(model.CoopSQL, model.CoopView):
         ondelete='RESTRICT')
     loss_kind = fields.Selection([('generic', 'Generic')], 'Loss Kind')
 
+    _get_loss_description_cache = Cache('get_loss_description')
+
     @classmethod
     def __setup__(cls):
         super(LossDescription, cls).__setup__()
@@ -115,6 +118,31 @@ class LossDescription(model.CoopSQL, model.CoopView):
     @classmethod
     def default_company(cls):
         return Transaction().context.get('company') or None
+
+    @classmethod
+    def create(cls, vlist):
+        created = super(LossDescription, cls).create(vlist)
+        cls._get_loss_description_cache.clear()
+        return created
+
+    @classmethod
+    def delete(cls, ids):
+        super(LossDescription, cls).delete(ids)
+        cls._get_loss_description_cache.clear()
+
+    @classmethod
+    def write(cls, *args):
+        super(LossDescription, cls).write(*args)
+        cls._get_loss_description_cache.clear()
+
+    @classmethod
+    def get_loss_description(cls, code):
+        loss_desc_id = cls._get_loss_description_cache.get(code, default=-1)
+        if loss_desc_id != -1:
+            return cls(loss_desc_id)
+        instance = cls.search([('code', '=', code)])[0]
+        cls._get_loss_description_cache.set(code, instance.id)
+        return instance
 
 
 class LossDescriptionExtraDataRelation(model.CoopSQL):

@@ -56,6 +56,11 @@ class Loss:
         # Update without func_key is not handled for now
         values['_func_key'] = None
 
+    def init_loss(self, loss_desc_code, parameters=None):
+        super(Loss, self).init_loss(loss_desc_code, parameters)
+        self.covered_person = self.claim.claimant \
+            if self.claim.claimant.is_person else None
+
     @property
     def date(self):
         return self.start_date

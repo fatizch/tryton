@@ -6,10 +6,10 @@ this repository contains the full copyright notices and license terms. -->
         <group id="info_group" colspan="2" col="4">
             <label name="party"/>
             <field name="party"/>
-            <newline/>
-            <label name="loss_desc"/>
-            <field name="loss_desc" widget="selection"/>
         </group>
+        <newline/>
+    </xpath>
+    <xpath expr="/form/field[@name='good_process']" position="after">
         <field name="claims" colspan="4"/>
     </xpath>
 </data>
