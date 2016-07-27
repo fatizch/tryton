@@ -4,6 +4,8 @@ this repository contains the full copyright notices and license terms. -->
 <form string="Field">
     <label name="name"/>
     <field name="name"/>
+    <label name="module"/>
+    <field name="module"/>
     <label name="string"/>
     <field name="string"/>
     <label name="kind"/>

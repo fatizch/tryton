@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import os
+import inspect
 from collections import defaultdict
 import pprint
 import logging
@@ -269,6 +270,15 @@ class ModelInfo(ModelView):
         result['has_domain'] = bool(field_domain)
         if field_domain:
             result['domain'] = repr(field_domain)
+        result['module'] = ''
+        for frame in base_model.__mro__[::-1]:
+            full_name = str(frame)[8:-2].split('.')
+            if len(full_name) < 2:
+                continue
+            if full_name[1] == 'modules':
+                result['module'] = full_name[2]
+            if getattr(frame, field_name, None) is not None:
+                break
         return result
 
     @classmethod
@@ -348,6 +358,14 @@ class ModelInfo(ModelView):
                 mvalues['mro']['% 3d' % (
                         len(mvalues['mro']) + 1)] = m_mro
                 mvalues['_function'] = key
+                if m_mro['initial']:
+                    try:
+                        raw = inspect.getargspec(cur_func)
+                    except:
+                        # Functions which are actually partials are not
+                        # inspectable
+                        continue
+                    mvalues['parameters'] = mname + inspect.formatargspec(*raw)
         to_pop = []
         for mname, mvalues in methods.iteritems():
             if not mvalues['mro']:
@@ -672,6 +690,7 @@ class DebugModelInstance(ModelSQL, ModelView):
         for field_name, field_data in data['fields'].items():
             field = Field()
             field.name = field_name
+            field.module = field_data['module']
             field.string = field_data['string']
             field.kind = field_data['kind']
             field.function = field_data['is_function']
@@ -819,6 +838,7 @@ class DebugFieldInstance(ModelSQL, ModelView):
     model = fields.Many2One('debug.model', 'model', select=True, required=True,
         ondelete='CASCADE')
     name = fields.Char('Name', select=True, readonly=True)
+    module = fields.Char('Module', readonly=True)
     string = fields.Char('String', readonly=True)
     kind = fields.Char('Kind', readonly=True)
     function = fields.Boolean('Function', readonly=True)

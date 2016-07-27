@@ -3,6 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <tree string="Fields">
     <field name="name"/>
+    <field name="module"/>
     <field name="string"/>
     <field name="model"/>
     <field name="kind"/>
