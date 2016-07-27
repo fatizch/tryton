@@ -200,7 +200,8 @@ class OptionDescriptionPremiumRule(
         if date is None:
             return False
         if isinstance(rated_instance, Option):
-            return ((rated_instance.start_date or datetime.date.min) <=
+            return (rated_instance.status not in ['void', 'declined']) and (
+                (rated_instance.start_date or datetime.date.min) <=
                 date <= (rated_instance.final_end_date or datetime.date.max))
         return True
 
