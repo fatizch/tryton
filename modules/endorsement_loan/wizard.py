@@ -345,6 +345,7 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
             # Sync loan shares
             for covered in contract.covered_elements:
                 for option in covered.options:
+                    existing_shares = Option(option.id).loan_shares
                     per_loan = defaultdict(list)
                     for share in option.loan_shares:
                         per_loan[share.loan.id].append(share)
@@ -373,7 +374,8 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
                                         start_date=self.effective_date))
                         else:
                             # Remaining shares of a now removed loans
-                            new_shares += shares
+                            new_shares += [x for x in existing_shares
+                                if x.loan.id == loan_id]
 
                     option.loan_shares = list(new_shares)
                 covered.options = list(covered.options)
