@@ -51,6 +51,14 @@ curl -s -X POST -H "Authorization: $session" \
 echo " "
 
 echo " "
+echo "Testing database server latency"
+curl -s -X POST -H "Authorization: $session" \
+    -H "Content-Type: application/json" \
+    -d '{"method": "model.utils.benchmark_class._benchmark_db_latency", "params": [{}]}' \
+    "$URL"
+echo " "
+
+echo " "
 echo "Testing database server write"
 curl -s -X POST -H "Authorization: $session" \
     -H "Content-Type: application/json" \

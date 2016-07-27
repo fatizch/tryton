@@ -23,8 +23,8 @@ def do_bench(iterations=10):
             # Remove min / max values
             times = sorted(times)
             average = sum(times[1:-1]) / (len(times) - 2)
-            return "%s iterations, avg : %.3f, " % (iterations,
-                average) + 'excluding min (%.3f), max (%.3f)' % (
+            return "%s iterations, avg : %.5f, " % (iterations,
+                average) + 'excluding min (%.5f), max (%.5f)' % (
                 times[0], times[-1])
         return wrapped
     return decorator
@@ -38,13 +38,54 @@ class BenchmarkClass(Model):
     @classmethod
     def __setup__(cls):
         super(BenchmarkClass, cls).__setup__()
+        cls.__rpc__['_benchmark_list'] = RPC(readonly=False)
         cls.__rpc__['_benchmark_setup'] = RPC(readonly=False)
         cls.__rpc__['_benchmark_teardown'] = RPC(readonly=False)
         cls.__rpc__['_benchmark_latency'] = RPC(readonly=True)
         cls.__rpc__['_benchmark_cpu'] = RPC(readonly=True)
         cls.__rpc__['_benchmark_memory'] = RPC(readonly=True)
+        cls.__rpc__['_benchmark_db_latency'] = RPC(readonly=False)
         cls.__rpc__['_benchmark_db_write'] = RPC(readonly=False)
         cls.__rpc__['_benchmark_db_read'] = RPC(readonly=False)
+
+    @classmethod
+    def _benchmark_list(cls):
+        return {
+            'setup': ['_benchmark_setup'],
+            'teardown': ['_benchmark_teardown'],
+            'methods': [
+                ('_benchmark_latency', {
+                        'name': 'Latency',
+                        'server_side': False,
+                        'requires_setup': False,
+                        }),
+                ('_benchmark_cpu', {
+                        'name': 'CPU',
+                        'server_side': True,
+                        'requires_setup': False,
+                        }),
+                ('_benchmark_memory', {
+                        'name': 'Memory',
+                        'server_side': True,
+                        'requires_setup': False,
+                        }),
+                ('_benchmark_db_latency', {
+                        'name': 'DB Latency',
+                        'server_side': True,
+                        'requires_setup': False,
+                        }),
+                ('_benchmark_db_write', {
+                        'name': 'DB Write',
+                        'server_side': True,
+                        'requires_setup': True,
+                        }),
+                ('_benchmark_db_read', {
+                        'name': 'DB Read',
+                        'server_side': True,
+                        'requires_setup': True,
+                        }),
+                ],
+            }
 
     @classmethod
     def _benchmark_setup(cls):
@@ -91,6 +132,12 @@ class BenchmarkClass(Model):
     def _benchmark_memory(cls):
         # Allocate a lot (1GB) of space
         'x' * 1024000000
+
+    @classmethod
+    @do_bench(1000)
+    def _benchmark_db_latency(cls):
+        cursor = Transaction().connection.cursor()
+        cursor.execute('SELECT 1')
 
     @classmethod
     @do_bench(10)
