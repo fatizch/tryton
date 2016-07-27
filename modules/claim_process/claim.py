@@ -144,7 +144,7 @@ class Loss:
         pool = Pool()
         LossDesc = pool.get('benefit.loss.description')
         self.loss_desc, = LossDesc.search([('code', '=', loss_desc_code)])
-        self.event_desc = self.loss_desc.orderered_event_descs[0]
+        self.event_desc = self.loss_desc.event_descs[0]
         self.extra_data = utils.init_extra_data(self.loss_desc.extra_data_def)
         if not parameters:
             return

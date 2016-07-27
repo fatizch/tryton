@@ -37,10 +37,12 @@ class EventDescription(model.CoopSQL, model.CoopView):
         depends=['company'])
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
+    sequence = fields.Integer('Sequence')
 
     @classmethod
     def __setup__(cls):
         super(EventDescription, cls).__setup__()
+        cls._order.insert(0, ('sequence', 'ASC'))
         t = cls.__table__()
         cls._sql_constraints += [
             ('code_unique', Unique(t, t.code), 'The code must be unique'),
@@ -80,6 +82,7 @@ class LossDescription(model.CoopSQL, model.CoopView):
     event_descs = fields.Many2Many(
         'benefit.event.description-loss.description', 'loss_desc',
         'event_desc', 'Events Descriptions',
+        order=[('event_desc.sequence', 'ASC')],
         domain=[('company', '=', Eval('company'))], depends=['company'])
     item_kind = fields.Selection([('', '')], 'Kind')
     item_kind_string = item_kind.translated('item_kind')
