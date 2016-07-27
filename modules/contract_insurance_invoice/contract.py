@@ -1284,7 +1284,8 @@ class Contract:
                     invoice.currency.round(t['amount'])
                     for t in taxes)
             else:
-                tax_amount = sum(t['amount'] for t in taxes)
+                tax_amount = invoice.currency.round(
+                    sum(t['amount'] for t in taxes))
             displayer['details'].append({
                     'name': line.details[0].premium.rec_name,
                     'start': line.coverage_start,
