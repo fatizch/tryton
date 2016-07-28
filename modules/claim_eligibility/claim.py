@@ -4,11 +4,12 @@ from textwrap import TextWrapper
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
-
+from trytond.model import ModelView
 from trytond.modules.cog_utils import model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'ClaimIndemnification',
     'ClaimService',
     'Claim'
     ]
@@ -111,3 +112,22 @@ class ClaimService:
                 'eligibility_status': 'refused',
                 })
         Event.notify_events(services, 'refuse_claim_service')
+
+
+class ClaimIndemnification:
+    __metaclass__ = PoolMeta
+    __name__ = 'claim.indemnification'
+
+    @classmethod
+    def __setup__(cls):
+        super(ClaimIndemnification, cls).__setup__()
+        cls._error_messages.update({
+                'ineligible': 'The claim service is not yet valid'
+                })
+
+    @classmethod
+    def check_schedulability(cls, indemnifications):
+        super(ClaimIndemnification, cls).check_schedulability(indemnifications)
+        for i in indemnifications:
+            if i.service.eligibility_status != 'accepted':
+                cls.append_functional_error('ineligible')

@@ -396,9 +396,15 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         return self.amount > 0 and self.status not in ['paid', 'rejected']
 
     @classmethod
+    def check_schedulability(cls, indemnifications):
+        pass
+
+    @classmethod
     @ModelView.button
     def schedule(cls, indemnifications):
         Event = Pool().get('event')
+        with model.error_manager():
+            cls.check_schedulability(indemnifications)
         for indemnification in indemnifications:
             do_control, reason = indemnification.require_control()
             if do_control is True:

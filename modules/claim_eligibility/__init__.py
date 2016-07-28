@@ -11,4 +11,5 @@ def register():
         BenefitEligibilityRule,
         Claim,
         ClaimService,
+        ClaimIndemnification,
         module='claim_eligibility', type_='model')

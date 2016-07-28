@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:claim.indemnification:"
+msgid "The delivered service has not been accepted"
+msgstr "La prestation fournie n'est pas acceptée"
+
 msgctxt "field:benefit,eligibility_rules:"
 msgid "Benefit Eligibility Rules"
 msgstr "Règles d'éligibilité"
