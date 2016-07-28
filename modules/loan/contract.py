@@ -646,28 +646,6 @@ class OptionSubscription:
         res['is_loan'] = contract.is_loan if contract else False
         return res
 
-    @classmethod
-    def init_default_childs(cls, contract, coverage, option, parent_dict):
-        res = super(OptionSubscription, cls).init_default_childs(contract,
-            coverage, option, parent_dict)
-        for ordered_loan in [x for x in contract.ordered_loans]:
-            loan_share = None
-            loan = ordered_loan.loan
-            for share in option.loan_shares if option else []:
-                if share.loan == loan:
-                    loan_share = share
-                    break
-            res.append({
-                    'loan': loan.id,
-                    'order': ordered_loan.number,
-                    'share': loan_share.share if loan_share else 1,
-                    'is_selected': (loan_share is not None
-                        or parent_dict['is_selected']),
-                    'selection': 'manual',
-                    'name': '    %s %s' % (ordered_loan.number, loan.rec_name),
-                    })
-        return res
-
     def add_remove_options(self, options, lines):
         updated_options = super(OptionSubscription, self).add_remove_options(
             options, [x for x in lines if getattr(x, 'coverage', None)])
@@ -717,6 +695,27 @@ class OptionsDisplayer:
             if option.is_selected and not parent.is_selected:
                 option.is_selected = parent.is_selected
         self.options = self.options
+
+    def update_sub_options(self, new_option):
+        Displayer = Pool().get(
+            'contract.wizard.option_subscription.options_displayer.option')
+        res = super(OptionsDisplayer, self).update_sub_options(new_option)
+        for ordered_loan in [x for x in self.contract.ordered_loans]:
+            loan_share = None
+            loan = ordered_loan.loan
+            for share in (new_option.option.loan_shares
+                    if new_option.option else []):
+                if share.loan == loan:
+                    loan_share = share
+                    break
+            res.append(Displayer(loan=loan, order=ordered_loan.number,
+                    share=loan_share.share if loan_share else 1,
+                    is_selected=(self.options and loan_share is not None
+                            or new_option.is_selected),
+                    selection='manual',
+                    name='    %s %s' % (ordered_loan.number, loan.rec_name),
+                    ))
+        return res
 
 
 class WizardOption:

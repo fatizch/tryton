@@ -31,6 +31,7 @@ class OptionSubscription:
     __name__ = 'contract.wizard.option_subscription'
 
     def default_options_displayer(self, values):
+        res = super(OptionSubscription, self).default_options_displayer(values)
         pool = Pool()
         covered_element = None
         if Transaction().context.get('active_model') == 'contract':
@@ -45,14 +46,10 @@ class OptionSubscription:
                     'active_id'))
             contract = covered_element.contract
         if covered_element:
-            res = self.init_default_options(contract, covered_element.options,
-                getattr(self.select_package, 'package', None))
             res['covered_element'] = covered_element.id
             res['party'] = (covered_element.party.id
                 if covered_element.party else None)
             res['hide_covered_element'] = True
-        else:
-            res = {'contract': contract.id}
         res['possible_covered_elements'] = [
             x.id for x in contract.covered_elements]
         return res
@@ -86,23 +83,29 @@ class OptionsDisplayer:
         fields.Many2One('party.party', 'Party'),
         'on_change_with_party')
 
-    @fields.depends('contract', 'covered_element', 'options')
+    @fields.depends('covered_element')
+    def on_change_contract(self):
+        if not self.covered_element:
+            super(OptionsDisplayer, self).on_change_contract()
+
+    @fields.depends('contract', 'covered_element', 'options', 'package')
     def on_change_covered_element(self):
-        if not self.covered_element or not self.contract:
-            self.options = []
-        pool = Pool()
-        Subscribor = pool.get('contract.wizard.option_subscription',
-            type='wizard')
-        Option = pool.get(
-            'contract.wizard.option_subscription.options_displayer.option')
-        self.options = [Option(**x)
-            for x in Subscribor.init_default_options(self.contract,
-                self.covered_element.options, None).get('options', None)]
+        self.options = []
+        if self.covered_element:
+            self.update_options(self.covered_element.options, [x.coverage
+                    for x in self.contract.product.ordered_coverages
+                    if x.coverage.item_desc is not None])
 
     @fields.depends('covered_element')
     def on_change_with_party(self):
         return (self.covered_element.party.id
             if self.covered_element and self.covered_element.party else None)
+
+    def update_options(self, initial_options, coverages):
+        if not self.covered_element and self.contract:
+            coverages = [x for x in coverages if x.item_desc is None]
+        return super(OptionsDisplayer, self).update_options(initial_options,
+            coverages)
 
 
 class WizardOption:

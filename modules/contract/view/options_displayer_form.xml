@@ -7,5 +7,5 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <field name="options" colspan="4" mode="tree" expand_toolbar="0"/>
     <newline/>
-    <field name="with_package"/>
+    <field name="package"/>
 </form>

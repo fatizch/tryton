@@ -48,53 +48,6 @@ class OptionSubscription(model.CoopWizard):
             ])
     update_options = StateTransition()
 
-    @classmethod
-    def init_default_options(cls, contract, subscribed_options, package):
-        options = []
-        excluded = []
-        for option in subscribed_options:
-            excluded += option.coverage.options_excluded
-        for coverage in [x.coverage
-                for x in contract.product.ordered_coverages]:
-            if (contract.product.packages and package
-                    and coverage not in package.options):
-                continue
-            existing_option = None
-            for option in subscribed_options:
-                if option.coverage == coverage:
-                    existing_option = option
-                    break
-            with_package = bool(contract.product.packages and package)
-            selection = 'manual'
-            if coverage.subscription_behaviour == 'mandatory':
-                selection = 'mandatory'
-            elif not with_package and coverage in excluded:
-                selection = 'automatic'
-            option_dict = {
-                'name': '%s [%s]' % (coverage.rec_name,
-                    coop_string.translate_value(coverage,
-                        'subscription_behaviour')),
-                'is_selected': (bool(existing_option)
-                    or coverage.subscription_behaviour != 'optional'
-                    or with_package),
-                'coverage_behaviour': coverage.subscription_behaviour,
-                'coverage': coverage.id,
-                'selection': selection,
-                'option': existing_option.id if existing_option else None,
-                }
-            options.append(option_dict)
-            options += cls.init_default_childs(contract,
-                coverage, existing_option, option_dict)
-        return {
-            'contract': contract.id,
-            'options': options,
-            'with_package': with_package
-            }
-
-    @classmethod
-    def init_default_childs(cls, contract, coverage, option, parent_dict):
-        return []
-
     def get_contract(self):
         if Transaction().context.get('active_model') == 'contract':
             contract_id = Transaction().context.get('active_id')
@@ -117,8 +70,11 @@ class OptionSubscription(model.CoopWizard):
         contract = self.get_contract()
         if not contract:
             return {}
-        return self.init_default_options(contract, contract.options,
-            self.select_package.package)
+        package = getattr(self.select_package, 'package', None)
+        return {
+            'contract': contract.id,
+            'package': package.id if package else None,
+            }
 
     def add_remove_options(self, options, lines):
         Option = Pool().get('contract.option')
@@ -178,11 +134,20 @@ class OptionsDisplayer(model.CoopView):
     options = fields.One2Many(
         'contract.wizard.option_subscription.options_displayer.option',
         'displayer', 'Options')
-    with_package = fields.Boolean('With Package', states={'invisible': True})
+    package = fields.Many2One('offered.package', 'Package',
+        states={'invisible': True})
 
-    @fields.depends('options', 'with_package')
+    @fields.depends('contract', 'package', 'options')
+    def on_change_contract(self):
+        if not self.contract:
+            return
+        self.options = []
+        self.update_options(self.contract.options, [x.coverage
+            for x in self.contract.product.ordered_coverages])
+
+    @fields.depends('options', 'package')
     def on_change_options(self):
-        if self.with_package:
+        if self.package:
             return
         selected = [elem for elem in self.options
             if (elem.is_selected and getattr(elem, 'coverage', None))]
@@ -208,7 +173,42 @@ class OptionsDisplayer(model.CoopView):
                 continue
             x.is_selected = is_selected
             x.selection = selection
-        self.options = self.options
+        self.options = list(self.options)
+
+    def update_options(self, initial_options, coverages):
+        Displayer = Pool().get(
+            'contract.wizard.option_subscription.options_displayer.option')
+        options = []
+        excluded = []
+        for option in initial_options:
+            excluded += option.coverage.options_excluded
+        for coverage in coverages:
+            existing_option = None
+            for option in initial_options:
+                if option.coverage == coverage:
+                    existing_option = option
+                    break
+            selection = 'manual'
+            if coverage.subscription_behaviour == 'mandatory':
+                selection = 'mandatory'
+            elif not self.package and coverage in excluded:
+                selection = 'automatic'
+            option = Displayer(
+                name='%s [%s]' % (coverage.rec_name,
+                    coop_string.translate_value(coverage,
+                        'subscription_behaviour')),
+                is_selected=((not self.package and (bool(existing_option) or
+                            coverage.subscription_behaviour != 'optional'))
+                    or (self.package and coverage in self.package.options)),
+                coverage_behaviour=coverage.subscription_behaviour,
+                coverage=coverage, selection=selection, option=existing_option,
+                )
+            options.append(option)
+            options += self.update_sub_options(option)
+        self.options = options
+
+    def update_sub_options(self, new_option):
+        return []
 
 
 class WizardOption(model.CoopView):
