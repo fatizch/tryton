@@ -28,8 +28,9 @@ class Contract:
         'on_change_with_broker_party', searcher='search_broker_party')
     agency = fields.Many2One('distribution.network', 'Agency',
         domain=[If(Bool(Eval('broker', False)),
-                   ('parents', '=', Eval('broker')),
-                   ('parent', '=', None))],
+                ['OR', ('id', '=', Eval('broker')),
+                    ('parents', '=', Eval('broker'))],
+                [('parent', '=', None)])],
         states={
             'readonly': ((Eval('status') != 'quote') | ~Eval('broker', None)),
             },
