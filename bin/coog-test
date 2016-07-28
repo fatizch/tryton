@@ -226,7 +226,7 @@ coog_test_fullcheck() { # check and report a full test (CI) <git branch>
         fail=$(coog_test_query "count" "fail")
         if [ "$fail" -ne 0 ]
         then
-                subject="Test Report: KO"
+                subject="Test Report $1: KO"
                 echo "TEST FULL $1: end - $fail KO"
                 echo >> "$out"
                 coog_test_query list fail >> "$out"
