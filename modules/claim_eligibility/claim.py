@@ -4,7 +4,6 @@ from textwrap import TextWrapper
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
-from trytond.model import ModelView
 from trytond.modules.cog_utils import model, fields
 
 __metaclass__ = PoolMeta

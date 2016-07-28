@@ -1,6 +1,6 @@
 from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields
 
 __all__ = [
     'Claim',
