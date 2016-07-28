@@ -72,6 +72,7 @@ class IndemnificationElement(model.CoopView):
             'amount': indemnification.amount,
             'benefit': service.benefit.id,
             'contract': service.contract.id,
+            'currency_digits': indemnification.currency_digits,
             'currency_symbol': indemnification.currency_symbol,
             'start_date': indemnification.start_date,
             'end_date': indemnification.end_date,
