@@ -857,7 +857,8 @@ class ReportGenerateFromFile(Report):
             stderr=subprocess.PIPE, close_fds=True)
         stdoutdata, stderrdata = proc.communicate()
         if proc.returncode != 0:
-            logger.info('unoconv.stdout : ' + stdoutdata)
+            logger.error('unoconv.stdout : ' + stdoutdata)
+            logger.error('unoconv.errorcode: ' + str(proc.returncode))
             logger.error('unoconv.stderr : ' + stderrdata)
             raise Exception(stderrdata)
         else:
