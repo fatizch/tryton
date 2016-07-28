@@ -1,7 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from sql.aggregate import Count
 from trytond.pool import PoolMeta, Pool
-
+from trytond.transaction import Transaction
 from trytond.modules.rule_engine import check_args
 
 __metaclass__ = PoolMeta
@@ -107,3 +108,25 @@ class RuleEngineRuntime:
     @check_args('service')
     def _re_deductible_end_date(cls, args):
         return args['service'].deductible_end_date
+
+    @classmethod
+    @check_args('option')
+    def _re_count_valid_indemnifications(cls, args):
+        pool = Pool()
+        cursor = Transaction().connection.cursor()
+
+        service = pool.get('claim.service').__table__()
+        indemnification = pool.get('claim.indemnification').__table__()
+        option = args['option']
+
+        join_table = indemnification.join(service, condition=(
+                (indemnification.service == service.id)
+                ))
+        cursor.execute(
+            *join_table.select(
+                Count(indemnification.id), where=(
+                    (service.option == option.id) &
+                    (indemnification.status.in_(['validated', 'paid']))
+                    )))
+        result, = cursor.fetchone()
+        return int(result)

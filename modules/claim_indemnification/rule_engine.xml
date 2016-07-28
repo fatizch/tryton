@@ -77,5 +77,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_deductible_end_date</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+        <record model="rule_engine.function" id="count_valid_indemnifications">
+            <field name="translated_technical_name">compte_indemnisation_valides</field>
+            <field name="description">Compter les indemnisation valides</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_count_valid_indemnifications</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
     </data>
 </tryton>
