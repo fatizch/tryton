@@ -90,6 +90,42 @@ coog_test_log() { # print batch logs
         cat $* $args
 }
 
+coog_test_logextract() { # extract job logs <job_id>
+        [ -z "$1" ] && echo missing job id && return 1
+        local match
+        match=$(grep -Hn "$1" "$COOG_TMP/$COOG_FILE_TEST"*.out)
+        local nb
+        nb=$(echo "$match" | wc -l)
+        if [ "$nb" -eq 2 ]
+        then
+                local f; f=$(echo "$match" | cut -d ":" -f 1)
+                local f1; f1=$(echo "$f" | head -1)
+                local f2; f2=$(echo "$f" | tail -1)
+                [ "$f1" != "$f2" ] && echo "bad job id" && return 1
+                local l; l=$(echo "$match" | cut -d ":" -f 2)
+                local l1; l1=$(echo "$l" | head -1)
+                local l2; l2=$(echo "$l" | tail -1)
+                sed -n "$l1,$l2"p "$f1"
+        elif [ "$nb" -eq 1 ]
+        then
+                local f; f=$(echo "$match" | cut -d ":" -f 1)
+                local l1; l1=$(echo "$match" | cut -d ":" -f 2)
+                local l2
+                local m;
+                m=$(sed -n "$((l1+1)),\$p" "$f" | grep -n "Moving job to")
+                if [ -z "$m" ]
+                then
+                        l2=$(wc -l "$f" | cut -d " " -f 1)
+                else
+                        l2=$(echo "$m" | head -1 | cut -d ":" -f 1)
+                        l2=$((l2+l1-1))
+                fi
+                sed -n "$l1,$l2"p "$f"
+        else
+                echo "bad job id" && return 1
+        fi
+}
+
 coog_test_logclear() { # clear test logs
         rm -vf $COOG_TMP/$COOG_FILE_TEST*.out
 }
@@ -210,6 +246,7 @@ coog_test_fullstart() { # starts a full test (CI) <git branch>
         coog_test_exec "$@"
 }
 
+
 coog_test_fullcheck() { # check and report a full test (CI) <git branch>
         [ -z "$1" ] && echo "missing branch" && return 1
         echo "TEST FULL $1: check @ $(date +'%y-%m-%d %H:%M:%S')"
@@ -235,7 +272,14 @@ coog_test_fullcheck() { # check and report a full test (CI) <git branch>
                 do
                         [ -z "$id" ] && continue
                         echo >> "$out"
-                        coog_test_query show "$id" >> "$out"
+                        local log
+                        log=$(coog_test_logextract "$id")
+                        if [ $? -eq 0 ]
+                        then
+                                echo "$log" >> "$out"
+                        else
+                                echo "can not retrieve logs for job: $id" >> "$out"
+                        fi
                 done
         else
                 subject="Test Report $1: OK"

@@ -100,6 +100,7 @@ local function fill(id, job)
     local result = redis.call('HGET', PATTERN..id, 'coog-result')
     if result then
         result = cjson.decode(result)
+        job.db = result.db
         job.total = result.total
         job.fails = result.fails
         job.errors = result.errors
@@ -195,7 +196,7 @@ api.show = generate_job_api(show)
 api.list = function(...)
     local filter = create_filter(...)
     local header = {'queue', 'id', 'status', 'module', 'started', 'ended',
-    'time', 'total', 'fails', 'errors'}
+    'time', 'db', 'total', 'fails', 'errors'}
     local result = {table.concat(header, '\t')}
 
     local function insert(job)
