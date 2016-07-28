@@ -1198,7 +1198,7 @@ class Contract:
     def get_future_invoices(cls, contract, from_date=None, to_date=None):
         if isinstance(contract, int):
             contract = cls(contract)
-        cached = cls._future_invoices_cache.get(contract.id, {})
+        cached = cls._future_invoices_cache.get(contract.id, {}) or {}
         sub_key = hash(cls._future_invoices_cache_key())
         if sub_key in cached:
             invoices = cls.load_from_cached_invoices(cached[sub_key])
