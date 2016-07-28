@@ -568,6 +568,11 @@ class PartyIdentifier(export.ExportImportMixin):
     _identifier_type_cache = Cache('party.identifier.get_types', context=False)
 
     @classmethod
+    def __setup__(cls):
+        super(PartyIdentifier, cls).__setup__()
+        cls.type.required = True
+
+    @classmethod
     def get_types(cls):
         types = super(PartyIdentifier, cls).get_types()
         lang = Transaction().language
