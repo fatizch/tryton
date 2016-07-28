@@ -428,6 +428,13 @@ class Invoice:
                 sum_of_rounded += rounded_of_sum - sum_of_rounded
             assert rounded_of_sum == sum_of_rounded
 
+    def _compute_taxes(self):
+        # Remove 'initial_base' from tax dicts since it shall not be passed to
+        # create or write
+        taxes = super(Invoice, self)._compute_taxes()
+        [tax.pop('initial_base', None) for tax in taxes]
+        return taxes
+
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'
