@@ -213,6 +213,7 @@ payable_account2.save()
 bank_party = Party(name='Bank Of Mordor')
 bank_party.account_receivable = receivable_account2
 bank_party.account_payable = payable_account2
+lender = bank_party.lender_role.new()
 bank_party.save()
 
 zip_ = ZipCode(zip="1", city="Mount Doom", country=country)
