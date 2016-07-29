@@ -378,8 +378,12 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
                 True, at_date, lang))
             value.append(coop_string.get_field_summary(self, 'birth_name',
                 True, at_date, lang))
-        value.append(coop_string.get_field_summary(self, 'addresses', True,
-            at_date, lang))
+        if self.identifiers:
+            value.append(coop_string.get_field_summary(self, 'identifiers',
+                True, at_date, lang))
+        if self.addresses:
+            value.append(coop_string.get_field_summary(self, 'addresses', True,
+                at_date, lang))
         return (label, value)
 
     @classmethod
@@ -585,6 +589,9 @@ class PartyIdentifier(export.ExportImportMixin):
                     coop_string.translate_value(identifier_type, 'name')))
         cls._identifier_type_cache.set(lang, dyn_types)
         return types + dyn_types
+
+    def get_summary_content(self, label, at_date=None, lang=None):
+        return (self.type, self.code)
 
 
 class PartyIdentifierType(model.CoopSQL, model.CoopView):
