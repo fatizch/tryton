@@ -87,8 +87,7 @@ class ManageBeneficiaries(EndorsementWizardStepMixin):
         all_options = []
         for contract, options in per_contract.iteritems():
             all_options += self.generate_displayers(contract, options)
-        defaults['all_options'] = [model.serialize_this(x)
-            for x in all_options]
+        defaults['all_options'] = [model.dictionarize(x) for x in all_options]
         if defaults['possible_contracts']:
             defaults['contract'] = defaults['possible_contracts'][0]
         return defaults

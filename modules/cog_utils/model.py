@@ -28,6 +28,8 @@ import fields
 import export
 import summary
 
+_dictionarize_fields_cache = Cache('dictionarize_fields', context=False)
+
 __all__ = [
     'error_manager',
     'FunctionalErrorMixIn',
@@ -44,38 +46,22 @@ __all__ = [
     ]
 
 
-def serialize_this(data, from_field=None, set_rec_names=False):
-    res = None
-    if (isinstance(data, (tuple, list)) and data and
-            isinstance(data[0], Model)):
-        res = []
-        for elem in data:
-            res.append(serialize_this(elem))
-    elif isinstance(data, Model):
-        if isinstance(data, Model) and data.id > 0:
-            res = data.id
-            if isinstance(from_field, tryton_fields.Reference):
-                res = '%s,%s' % (data.__name__, data.id)
-        else:
-            res = {}
-            if data._values is not None:
-                for key, value in data._values.iteritems():
-                    res[key] = serialize_this(value, data._fields[key],
-                        set_rec_names=set_rec_names)
-                    if set_rec_names and isinstance(data._fields[key],
-                            (tryton_fields.Many2One, tryton_fields.Reference)):
-                        res[key + '.rec_name'] = getattr(value, 'rec_name', '')
-    else:
-        res = data
-    return res
+def dictionarize(instance, field_names=None, set_rec_names=False):
+    '''
+        Returns a dict which may be used to initialize a copy of instance with
+        with identical field values than those of the base instance.
 
+          - field_names : If not set, will try to recursively get all all
+            fields. If a list, only those fields will be handled (ids for
+            One2Many fields). If a dict, the keys will be models and the values
+            will be the list of fields to extract for the model.
 
-def dictionarize(instance, field_names):
-    # Returns a dict which may be used to initialize a copy of instance with
-    # for which the field_names fields are identical.
-    # field_names is either a list of field names to extract (in that case,
-    # O2Ms will be copied as ids, which may be bad), or a dict which states for
-    # each model the field_names to extract
+          - set_rec_names : If True, Many2One and Reference fields will have
+            their rec_name in the resulting dict, to avoir extra reads from the
+            client.
+    '''
+    if field_names is None:
+        field_names = get_dictionarize_fields(instance.__class__)
     if isinstance(field_names, (list, tuple)):
         field_names = {instance.__name__: field_names}
     if not field_names.get(instance.__name__, None):
@@ -87,8 +73,30 @@ def dictionarize(instance, field_names):
             res[k] = v.id
             if isinstance(instance._fields[k], tryton_fields.Reference):
                 res[k] = '%s,%s' % (v.__name__, v.id)
+            if set_rec_names:
+                res[k + '.rec_name'] = getattr(v, 'rec_name', '')
         elif isinstance(v, (list, tuple)):
-            res[k] = [dictionarize(x, field_names) for x in v]
+            res[k] = [dictionarize(x, field_names, set_rec_names) for x in v]
+    return res
+
+
+def get_dictionarize_fields(model):
+    vals = _dictionarize_fields_cache.get(model.__name__, None)
+    if vals is not None:
+        return vals
+    pool = Pool()
+    res = {model.__name__: []}
+    for fname, field in model._fields.iteritems():
+        if (isinstance(field, tryton_fields.Function) and not
+                isinstance(field, tryton_fields.Property)):
+            continue
+        res[model.__name__].append(fname)
+        if isinstance(field, tryton_fields.One2Many):
+            res.update(get_dictionarize_fields(pool.get(field.model_name)))
+            # Remove parent field
+            if field.field:
+                res[field.model_name].pop(field.field)
+    _dictionarize_fields_cache.set(model.__name__, res)
     return res
 
 
