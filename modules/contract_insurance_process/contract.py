@@ -42,9 +42,6 @@ class Contract(CogProcessFramework):
         cls._buttons['button_activate']['invisible'] = Or(
             cls._buttons['button_activate']['invisible'],
             Bool(Eval('current_state', False)))
-        cls._buttons['button_decline']['invisible'] = Or(
-            cls._buttons['button_decline']['invisible'],
-            Bool(Eval('current_state', False)))
 
     @classmethod
     def copy(cls, contracts, default=None):
