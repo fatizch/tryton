@@ -7,8 +7,12 @@ this repository contains the full copyright notices and license terms. -->
         <field name="number"/>
         <label name="order"/>
         <field name="order"/>
+        <newline/>
         <label name="lender"/>
         <field name="lender"/>
+        <label name="lender_address"/>
+        <field name="lender_address"/>
+        <newline/>
         <label name="kind"/>
         <field name="kind"/>
         <label name="amount"/>

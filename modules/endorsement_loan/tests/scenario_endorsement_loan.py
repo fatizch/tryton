@@ -35,6 +35,7 @@ wizard.execute('upgrade')
 Account = Model.get('account.account')
 AccountInvoice = Model.get('account.invoice')
 AccountKind = Model.get('account.account.type')
+Address = Model.get('party.address')
 BillingInformation = Model.get('contract.billing_information')
 BillingMode = Model.get('offered.billing_mode')
 Company = Model.get('company.company')
@@ -66,6 +67,7 @@ Sequence = Model.get('ir.sequence')
 SequenceStrict = Model.get('ir.sequence.strict')
 SequenceType = Model.get('ir.sequence.type')
 User = Model.get('res.user')
+ZipCode = Model.get('country.zip')
 
 # #Comment# #Constants
 today = datetime.date.today()
@@ -297,6 +299,11 @@ bank_party.name = 'Bank of Mordor'
 bank_party.account_receivable = receivable_account2
 bank_party.account_payable = payable_account2
 bank_party.save()
+zip_ = ZipCode(zip="1", city="Mount Doom", country=country)
+zip_.save()
+bank_address = Address(party=bank_party.id, zip="1", country=country,
+    city="Mount Doom")
+bank_address.save()
 
 # #Comment# #Create Loan
 loan_payment_date = datetime.date(2014, 5, 1)
@@ -305,7 +312,7 @@ loan_sequence.name = 'Loan'
 loan_sequence.code = 'loan'
 loan_sequence.save()
 loan = Loan()
-loan.lender = bank_party
+loan.lender_address = bank_address
 loan.company = company
 loan.kind = 'fixed_rate'
 loan.funds_release_date = contract_start_date
@@ -407,7 +414,7 @@ len(increments) == 1
 funds_release_date = loan_payment_date = contract_start_date = datetime.date(
     2013, 3, 22)
 loan = Loan()
-loan.lender = bank_party
+loan.lender_address = bank_address
 loan.company = company
 loan.kind = 'fixed_rate'
 loan.funds_release_date = contract_start_date

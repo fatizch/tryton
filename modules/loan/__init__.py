@@ -36,6 +36,7 @@ def register():
         InsuredOutstandingLoanBalanceView,
         InsuredOutstandingLoanBalanceLineView,
         InsuredOutstandingLoanBalanceSelectDate,
+        Lender,
         module='loan', type_='model')
     Pool.register(
         OptionSubscription,

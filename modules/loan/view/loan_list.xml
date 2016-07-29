@@ -14,4 +14,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="funds_release_date"/>
     <field name="first_payment_date"/>
     <field name="insured_persons_name"/>
+    <field name="lender"/>
 </tree>

@@ -52,5 +52,35 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">party.party,-1</field>
             <field name="action" ref="act_loan_relate_form"/>
         </record>
+        <record model="ir.ui.view" id="party_view_form">
+            <field name="model">party.party</field>
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="name">party_form</field>
+        </record>
+        <record model="ir.ui.view" id="lender_view_form">
+            <field name="model">lender</field>
+            <field name="type">form</field>
+            <field name="name">lender_form</field>
+        </record>
+        <record model="ir.ui.view" id="lender_view_list">
+            <field name="model">lender</field>
+            <field name="type">tree</field>
+            <field name="name">lender_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_lender_form">
+            <field name="name">Lenders</field>
+            <field name="res_model">lender</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_lender_form_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="lender_view_list"/>
+            <field name="act_window" ref="act_lender_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_lender_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="lender_view_form"/>
+            <field name="act_window" ref="act_lender_form"/>
+        </record>
+        <menuitem parent="party.menu_configuration" id="menu_lender_form" action="act_lender_form"/>
     </data>
 </tryton>

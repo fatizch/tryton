@@ -52,8 +52,15 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     _func_key = 'number'
 
     number = fields.Char('Number', required=True, readonly=True, select=True)
-    lender = fields.Many2One('party.party', 'Lender', required=True,
-        ondelete='RESTRICT')
+    lender = fields.Function(
+        fields.Many2One('party.party', 'Lender',
+        domain=[('is_lender', '=', True)]),
+        'on_change_with_lender', setter='setter_void',
+        searcher='search_lender')
+    lender_address = fields.Many2One('party.address', 'Lender Address',
+        required=True, ondelete='RESTRICT',
+        domain=[('party', '=', Eval('lender'))],
+        depends=['lender'])
     company = fields.Many2One('company.company', 'Company', required=True,
         select=True, ondelete='RESTRICT',
         domain=[
@@ -763,6 +770,39 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     def on_change_with_insured_persons_name(self, name=None):
         return ', '.join([x.rec_name for x in self.insured_persons])
 
+    @classmethod
+    def order_lender(cls, tables):
+        pool = Pool()
+        loan, _ = tables[None]
+        address = pool.get('party.address').__table__()
+        party = pool.get('party.party').__table__()
+        address_query = loan.join(address,
+            condition=(loan.lender_address == address.id)
+            ).select(loan.id.as_('loan'), address.party.as_('party'))
+        party_query = address_query.join(party,
+            condition=(address_query.party == party.id)
+            ).select(address_query.loan, party.code)
+        tables['loan.lender'] = {
+            None: (party_query,
+                (party_query.loan == loan.id)
+                )}
+        return [party_query.code]
+
+    @classmethod
+    def search_lender(cls, name, clause):
+        return [('lender_address.party',) + tuple(clause[1:])]
+
+    @fields.depends('lender_address')
+    def on_change_with_lender(self, name=None):
+        if self.lender_address:
+            return self.lender_address.party.id
+
+    @fields.depends('lender_address', 'lender')
+    def on_change_lender(self):
+        if not self.lender or (self.lender_address and
+                self.lender_address.party != self.lender):
+            self.lender_address = None
+
     @fields.depends('payments', 'kind', 'state', 'duration')
     def on_change_with_display_warning(self, name=None):
         if self.state == 'calculated' and (not self.payments
@@ -946,6 +986,10 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
                     increment.start_date = increment.get_start_date(None)
                     increments.append(increment)
                 cls.save(increments)
+
+        # Migration from 1.8 , drop lender column
+        if loan_h.column_exist('lender'):
+            loan_h.drop_column('lender')
 
     @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
         'deferral', 'loan', 'number_of_payments', 'payment_amount',

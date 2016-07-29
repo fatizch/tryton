@@ -11,13 +11,15 @@ from collections import defaultdict
 
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, PYSONEncoder
+from trytond.pyson import Eval, PYSONEncoder, Not, Bool
 from trytond.wizard import Wizard, StateView, Button
 
 from trytond.modules.cog_utils import fields, model, coop_string, UnionMixin
+from trytond.modules.party_cog.party import STATES_COMPANY
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'Lender',
     'Party',
     'SynthesisMenuLoan',
     'SynthesisMenu',
@@ -29,8 +31,54 @@ __all__ = [
     ]
 
 
+class Lender(model.CoopSQL, model.CoopView):
+    'Lender'
+    __name__ = 'lender'
+    _rec_name = 'party'
+
+    party = fields.Many2One('party.party', 'Party', required=True,
+        ondelete='CASCADE', select=True)
+
+
 class Party:
     __name__ = 'party.party'
+
+    lender_role = fields.One2Many('lender', 'party', 'Lender', states={
+            'invisible': ~Eval('is_lender', False) | Not(STATES_COMPANY)},
+        depends=['is_lender', 'is_company'], delete_missing=True)
+    is_lender = fields.Function(
+        fields.Boolean('Is Lender',
+            states={'invisible': Not(STATES_COMPANY)}),
+        'get_is_lender', setter='setter_void', searcher='search_is_lender')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(Party, cls).view_attributes() + [
+            ('/form/notebook/page[@id="role"]/notebook/page[@id="lender"]',
+                'states', {'invisible': Bool(~Eval('is_lender'))}),
+            ]
+
+    @classmethod
+    def search_is_lender(cls, name, clause):
+        clause = list(clause)
+        if clause[2] is True and clause[1] == '=':
+            clause[1], clause[2] = ('!=', None)
+        elif clause[2] is True and clause[1] == '!=':
+            clause[1], clause[2] = ('=', None)
+        elif clause[2] is False:
+            clause[2] = None
+        return [('lender_role', ) + tuple(clause[1:])]
+
+    def get_is_lender(self, name):
+        return len(self.lender_role) > 0 if self.lender_role else False
+
+    @fields.depends('is_lender', 'lender_role')
+    def on_change_is_lender(self):
+        Lender = Pool().get('lender')
+        if not self.is_lender:
+            self.lender_role = None
+        else:
+            self.lender_role = [Lender()]
 
     def get_insured_outstanding_loan_balances(self, date, currency,
             insurer_role=None, ins_kind=None):

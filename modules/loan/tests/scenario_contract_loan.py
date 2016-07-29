@@ -32,6 +32,7 @@ wizard.execute('upgrade')
 # #Comment# #Get Models
 Account = Model.get('account.account')
 AccountKind = Model.get('account.account.type')
+Address = Model.get('party.address')
 Company = Model.get('company.company')
 Contract = Model.get('contract')
 Country = Model.get('country.country')
@@ -46,6 +47,7 @@ Product = Model.get('offered.product')
 Sequence = Model.get('ir.sequence')
 SequenceType = Model.get('ir.sequence.type')
 User = Model.get('res.user')
+ZipCode = Model.get('country.zip')
 
 # #Comment# #Constants
 today = datetime.date.today()
@@ -213,6 +215,12 @@ bank_party.account_receivable = receivable_account2
 bank_party.account_payable = payable_account2
 bank_party.save()
 
+zip_ = ZipCode(zip="1", city="Mount Doom", country=country)
+zip_.save()
+bank_address = Address(party=bank_party.id, zip="1", country=country,
+    city="Mount Doom")
+bank_address.save()
+
 # #Comment# #Create Loans
 loan_payment_date = datetime.date(2014, 5, 1)
 loan_sequence = Sequence()
@@ -220,7 +228,7 @@ loan_sequence.name = 'Loan'
 loan_sequence.code = 'loan'
 loan_sequence.save()
 loan_1 = Loan()
-loan_1.lender = bank_party
+loan_1.lender_address = bank_address
 loan_1.company = company
 loan_1.kind = 'fixed_rate'
 loan_1.funds_release_date = contract_start_date
@@ -232,7 +240,7 @@ loan_1.duration = 200
 loan_1.save()
 loan_2 = Loan()
 loan_2.company = company
-loan_2.lender = bank_party
+loan_2.lender_address = bank_address
 loan_2.kind = 'fixed_rate'
 loan_2.funds_release_date = contract_start_date
 loan_2.currency = currency

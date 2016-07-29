@@ -207,6 +207,42 @@ msgctxt ""
 msgid "Loan Share"
 msgstr "Quotité"
 
+msgctxt "field:lender,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:lender,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:lender,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:lender,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:lender,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:lender,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:lender,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:lender,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:lender,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:loan,amount:"
 msgid "Amount"
 msgstr "Montant initial"
@@ -310,6 +346,10 @@ msgstr "Dernière modification"
 msgctxt "field:loan,lender:"
 msgid "Lender"
 msgstr "Organisme prêteur"
+
+msgctxt "field:loan,lender_address:"
+msgid "Lender Address"
+msgstr "Adresse de l'organisme prêteur"
 
 msgctxt "field:loan,loan_shares:"
 msgid "Loan Shares"
@@ -692,6 +732,14 @@ msgctxt "field:party.display_insured_outstanding_loan_balance.view,insurers:"
 msgid "Loan Insurers"
 msgstr "Assureurs"
 
+msgctxt "field:party.party,is_lender:"
+msgid "Is Lender"
+msgstr "Organisme prêteur"
+
+msgctxt "field:party.party,lender_role:"
+msgid "Lender"
+msgstr "Organisme prêteur"
+
 msgctxt "field:party.synthesis.menu.loan,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -752,6 +800,10 @@ msgctxt "model:ir.action,name:act_display_insured_outstanding_loan_balance"
 msgid "Insured Outstanding Loan Balances"
 msgstr "Encours"
 
+msgctxt "model:ir.action,name:act_lender_form"
+msgid "Lenders"
+msgstr "Organismes prêteurs"
+
 msgctxt "model:ir.action,name:act_loan_form"
 msgid "Loans"
 msgstr "Prêts"
@@ -768,9 +820,17 @@ msgctxt "model:ir.sequence.type,name:sequence_type_loan"
 msgid "Loan"
 msgstr "Prêt"
 
+msgctxt "model:ir.ui.menu,name:menu_lender_form"
+msgid "Lenders"
+msgstr "Organismes prêteurs"
+
 msgctxt "model:ir.ui.menu,name:menu_loan_form"
 msgid "Loans"
 msgstr "Prêts"
+
+msgctxt "model:lender,name:"
+msgid "Lender"
+msgstr "Organisme prêteur"
 
 msgctxt "model:loan,name:"
 msgid "Loan"
@@ -977,6 +1037,14 @@ msgctxt "view:insurer:"
 msgid "Insurers"
 msgstr "Assureurs"
 
+msgctxt "view:lender:"
+msgid "Lender"
+msgstr "Organisme prêteur"
+
+msgctxt "view:lender:"
+msgid "Lenders"
+msgstr "Organismes prêteurs"
+
 msgctxt "view:loan.increment:"
 msgid "%"
 msgstr "%"
@@ -1074,8 +1142,8 @@ msgid "Insured Outstanding Loan Balances"
 msgstr "Encours assurés"
 
 msgctxt "view:party.party:"
-msgid "Loan Information"
-msgstr "Emprunteur"
+msgid "Lender"
+msgstr "Organisme prêteur"
 
 msgctxt ""
 "wizard_button:party.display_insured_outstanding_loan_balance,insured_outstanding_loan_balance_view,end:"

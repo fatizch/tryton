@@ -32,6 +32,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def get_models(cls):
         return {
             'Loan': 'loan',
+            'Lender': 'lender',
             'LoanIncrement': 'loan.increment',
             'Currency': 'currency.currency',
             'Date': 'ir.date',
@@ -50,6 +51,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'CoveredElement': 'contract.covered_element',
             'Option': 'contract.option',
             'Party': 'party.party',
+            'Address': 'party.address',
+            'Country': 'country.country',
+            'ZipCode': 'country.zip',
             'Insurer': 'insurer',
             'InsuredOutstandingLoanBalance':
                 'party.display_insured_outstanding_loan_balance',
@@ -64,8 +68,18 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @test_framework.prepare_test(
         'company_cog.test0001_testCompanyCreation')
     def test0010loan_basic_data(self):
+        mordor = self.Country(name="Mordor", code='MR')
+        mordor.save()
         company, = self.Company().search([], limit=1)
-        self.Party(name='Bank of Mordor').save()
+        bank = self.Party(name='Bank of Mordor')
+        bank.save()
+        lender_role1 = self.Lender(party=bank)
+        lender_role1.save()
+        zip_ = self.ZipCode(zip="1", city="Mount Doom", country=mordor)
+        zip_.save()
+        address = self.Address(party=bank.id, zip="1", country=mordor,
+            city="Mount Doom")
+        address.save()
         self.Sequence(name='Loan', code='loan', company=company).save()
 
     def assert_payment(self, loan, at_date, number=None,
@@ -96,9 +110,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         '''
         currency, = self.Currency.search([], limit=1)
         company, = self.Company().search([], limit=1)
-        bank, = self.Party.search([('name', '=', 'Bank of Mordor')], limit=1)
+        address, = self.Address.search([('zip', '=', "1")], limit=1)
         loan = self.Loan(
-            lender=bank,
+            lender_address=address,
             kind='fixed_rate',
             rate=Decimal('0.04'),
             funds_release_date=datetime.date(2012, 7, 1),
@@ -209,9 +223,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(loan.get_outstanding_loan_balance(
                 at_date=datetime.date(2099, 9, 20)), Decimal(0))
 
-        bank, = self.Party.search([('name', '=', 'Bank of Mordor')], limit=1)
+        address, = self.Address.search([('zip', '=', "1")], limit=1)
         loan = self.Loan(
-            lender=bank,
+            lender_address=address,
             kind='balloon',
             rate=Decimal('0.0677'),
             funds_release_date=datetime.date(2014, 3, 5),
@@ -247,9 +261,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
             Decimal('251695.95'), loan.amount, Decimal('8240.95'),
             Decimal('0'))
 
-        bank, = self.Party.search([('name', '=', 'Bank of Mordor')], limit=1)
+        address, = self.Address.search([('zip', '=', "1")], limit=1)
         loan = self.Loan(
-            lender=bank,
+            lender_address=address,
             kind='balloon',
             rate=Decimal('0.0677'),
             funds_release_date=datetime.date(2014, 3, 5),
@@ -290,9 +304,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
             Decimal('251695.95'), loan.amount, Decimal('8240.95'),
             Decimal('0'))
 
-        bank, = self.Party.search([('name', '=', 'Bank of Mordor')], limit=1)
+        address, = self.Address.search([('zip', '=', "1")], limit=1)
         loan = self.Loan(
-            lender=bank,
+            lender_address=address,
             kind='interest_free',
             funds_release_date=datetime.date(2016, 1, 31),
             rate=None,
@@ -320,9 +334,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
             datetime.date(2016, 3, 27))
 
         # Test Loan Modification at current date
-        bank, = self.Party.search([('name', '=', 'Bank of Mordor')], limit=1)
+        address, = self.Address.search([('zip', '=', "1")], limit=1)
         loan = self.Loan(
-            lender=bank,
+            lender_address=address,
             kind='fixed_rate',
             rate=Decimal('0.033'),
             funds_release_date=datetime.date(2013, 4, 15),
@@ -388,9 +402,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(increment_3.end_date, datetime.date(2034, 2, 5))
 
         # Test manual increment with graduated loan
-        bank, = self.Party.search([('name', '=', 'Bank of Mordor')], limit=1)
+        address, = self.Address.search([('zip', '=', "1")], limit=1)
         loan = self.Loan(
-            lender=bank,
+            lender_address=address,
             kind='graduated',
             rate=Decimal('0.038'),
             funds_release_date=datetime.date(2013, 4, 15),
@@ -470,9 +484,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         '''
         currency, = self.Currency.search([], limit=1)
         company, = self.Company().search([], limit=1)
-        bank, = self.Party.search([('name', '=', 'Bank of Mordor')], limit=1)
+        address, = self.Address.search([('zip', '=', "1")], limit=1)
         loan = self.Loan(
-            lender=bank,
+            lender_address=address,
             kind='fixed_rate',
             rate=Decimal('0.04'),
             funds_release_date=datetime.date(2013, 12, 31),
@@ -506,10 +520,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
         '''
         currency, = self.Currency.search([], limit=1)
         company, = self.Company().search([], limit=1)
-        bank, = self.Party.search([('name', '=', 'Bank of Mordor')], limit=1)
+        address, = self.Address.search([('zip', '=', "1")], limit=1)
 
         loan = self.Loan(
-            lender=bank,
+            lender_address=address,
             kind='graduated',
             funds_release_date=datetime.date(2013, 3, 22),
             first_payment_date=datetime.date(2015, 04, 22),
@@ -597,10 +611,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
             return coverage
 
         def create_loan(amount, base_date):
-            bank, = self.Party.search([('name', '=', 'Bank of Mordor')],
-                limit=1)
+            address, = self.Address.search([('zip', '=', "1")], limit=1)
             loan = self.Loan(
-                lender=bank,
+                lender_address=address,
                 kind='fixed_rate',
                 rate=Decimal('0.04'),
                 funds_release_date=base_date + datetime.timedelta(weeks=20),
@@ -842,10 +855,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0051_compute_early_payment(self):
         currency, = self.Currency.search([], limit=1)
         company, = self.Company().search([], limit=1)
-        bank, = self.Party.search([('name', '=', 'Bank of Mordor')], limit=1)
+        address, = self.Address.search([('zip', '=', "1")], limit=1)
 
         loan = self.Loan(
-            lender=bank,
+            lender_address=address,
             kind='fixed_rate',
             funds_release_date=datetime.date(2013, 3, 22),
             first_payment_date=datetime.date(2013, 3, 22),
@@ -875,6 +888,19 @@ class ModuleTestCase(test_framework.CoopTestCase):
         loan.calculate()
         loan.save()
         self.assertEqual(loan.increments[1].early_repayment, Decimal('40000'))
+
+    @test_framework.prepare_test(
+        'loan.test0010loan_basic_data',
+        )
+    def test0060_lender_role(self):
+        bank, = self.Party().search([('is_lender', '=', True)])
+        self.assertEqual(bank.name, 'Bank of Mordor')
+        self.assertNotEqual(self.Party().search([('is_lender', '!=', True)]),
+                [bank])
+        self.assertEqual(bank.is_lender, True)
+        self.Lender.delete(bank.lender_role)
+        bank.save()
+        self.assertEqual(bank.is_lender, False)
 
 
 def suite():
