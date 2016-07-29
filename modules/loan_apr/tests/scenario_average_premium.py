@@ -291,6 +291,7 @@ payable_account2.save()
 bank_party = Party(name='Bank Of Mordor')
 bank_party.account_receivable = receivable_account2
 bank_party.account_payable = payable_account2
+lender = bank_party.lender_role.new()
 bank_party.save()
 
 # #Comment# #Create Loans
@@ -301,7 +302,7 @@ loan_sequence.code = 'loan'
 loan_sequence.save()
 loan_1 = Loan()
 loan_1.company = company
-loan_1.lender = bank_party
+loan_1.lender_address = bank_party.addresses[0]
 loan_1.kind = 'fixed_rate'
 loan_1.funds_release_date = contract_start_date
 loan_1.currency = currency
@@ -311,7 +312,7 @@ loan_1.amount = Decimal('250000')
 loan_1.duration = 200
 loan_1.save()
 loan_2 = Loan()
-loan_2.lender = bank_party
+loan_2.lender_address = bank_party.addresses[0]
 loan_2.company = company
 loan_2.kind = 'fixed_rate'
 loan_2.funds_release_date = contract_start_date
