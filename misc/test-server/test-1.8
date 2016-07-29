@@ -14,5 +14,5 @@ COOG_TMP=/var/log/coog
 export COOG_TMP
 
 workon coog-1.8
-TRYTOND_ASYNC_RQ=redis://localhost:6379/3 coog test fullstart coog-1.8 4 &>> $COOG_TMP/test-logs
+coog test fullstart coog-1.8 8 &>> $COOG_TMP/test-logs
 deactivate
