@@ -39,6 +39,8 @@ hash_pwd() {
 conf_web() {
         echo "[web]" >> $COOG_CONF
         echo "listen = 0.0.0.0:7999" >> $COOG_CONF
+        echo "root = $COOG_ROOT/sao" >> $COOG_CONF
+        echo "bench = $COOG_ROOT/coog-bench" >> $COOG_CONF
 }
 
 conf_database() {
