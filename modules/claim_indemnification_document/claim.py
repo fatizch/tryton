@@ -48,9 +48,12 @@ class ClaimIndemnification:
     @classmethod
     def get_missing_documents(cls, indemnifications):
         DocumentRequests = Pool().get('document.request.line')
+        claims = set([i.service.claim for i in indemnifications])
         document_requests = DocumentRequests.search([
-                ('for_object', 'in', [
-                    str(i) for i in indemnifications]),
+                ('blocking', '=', True),
+                ('received', '=', False),
+                ('for_object', 'in',
+                    [str(i) for i in indemnifications + list(claims)]),
                 ])
         return document_requests
 

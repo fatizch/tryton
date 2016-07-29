@@ -43,7 +43,8 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
     request_date = fields.Date('Request Date', states={'readonly': True})
     received = fields.Function(
         fields.Boolean('Received', depends=['attachment', 'reception_date']),
-        'on_change_with_received', setter='set_received')
+        'on_change_with_received', setter='set_received',
+        searcher='search_received')
     request = fields.Many2One('document.request', 'Document Request',
         ondelete='CASCADE', select=True)
     attachment = fields.Many2One('ir.attachment', 'Attachment',
@@ -167,6 +168,13 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
             cls.write(request_lines, {'reception_date': utils.today()})
         else:
             cls.write(request_lines, {'reception_date': None})
+
+    @classmethod
+    def search_received(cls, name, domain):
+        _, op, value = domain
+        if value is True:
+            op = '!=' if op == '=' else '='
+        return [('reception_date', op, None)]
 
     def get_attachment_info(self, name):
         if self.attachment:
