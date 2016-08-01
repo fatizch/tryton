@@ -296,9 +296,9 @@ msgctxt "field:contract,billing_information:"
 msgid "Current Billing Information"
 msgstr "Données de quittancement courant"
 
-msgctxt "field:contract,billing_information_payer:"
-msgid "Billing Information Payer"
-msgstr "Payeur sur le quittancement"
+msgctxt "field:contract,payer:"
+msgid "Payer"
+msgstr "Payeur"
 
 msgctxt "field:contract,billing_informations:"
 msgid "Billing Information"

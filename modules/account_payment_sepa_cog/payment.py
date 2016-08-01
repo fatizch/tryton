@@ -358,7 +358,7 @@ class Payment:
         elif self.contract:
             with Transaction().set_context(
                     contract_revision_date=self.payment_date):
-                payer = self.contract.billing_information_payer
+                payer = self.contract.payer
                 return payer.id if payer else None
 
     @fields.depends('bank_account', 'sepa_mandate', 'payer')

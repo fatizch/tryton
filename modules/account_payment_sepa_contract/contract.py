@@ -131,18 +131,20 @@ class ContractBillingInformation:
             return
         numbers_id = [number.id
             for number in self.direct_debit_account.numbers]
+        print self.contract
+        print self.contract.payer.id
         mandates = Mandate.search([
                 ('type', '=', 'recurrent'),
                 ('scheme', '=', 'CORE'),
                 ('account_number', 'in', numbers_id),
-                ('party', '=', self.contract.billing_information_payer.id),
+                ('party', '=', self.contract.payer.id),
                 ])
         for mandate in mandates:
             self.sepa_mandate = mandate
             self.save()
             return
         mandate = Mandate(
-            party=self.contract.billing_information_payer,
+            party=self.contract.payer,
             account_number=self.direct_debit_account.numbers[0],
             type='recurrent',
             scheme='CORE',

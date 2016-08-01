@@ -1424,7 +1424,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
             'required': And(Bool(Eval('direct_debit', False)),
                 (Eval('_parent_contract', {}).get('status', '') ==
                     'active'))},
-        depends=['direct_debit'], ondelete='RESTRICT')
+        depends=['direct_debit', '_parent_contract'], ondelete='RESTRICT')
 
     @classmethod
     def _export_light(cls):
@@ -1511,7 +1511,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
     @staticmethod
     def revision_columns():
         return ['billing_mode', 'payment_term', 'direct_debit_day',
-            'direct_debit_account']
+            'direct_debit_account', 'payer']
 
     @classmethod
     def get_reverse_field_name(cls):
