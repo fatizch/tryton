@@ -168,6 +168,10 @@ msgctxt "error:endorsement.contract:"
 msgid "Options Modifications"
 msgstr "Modifications des options"
 
+msgctxt "error:endorsement.start:"
+msgid "No option was selected!"
+msgstr "Aucune option sélectionnée !"
+
 msgctxt "field:contract.covered_element.add_option,covered_element:"
 msgid "Covered Element"
 msgstr "Risque Couvert"
@@ -1100,10 +1104,6 @@ msgstr "ID"
 msgctxt "field:endorsement.contract.new_extra_premium,new_extra_premium:"
 msgid "New Extra Premium"
 msgstr "Nouvelle surprime"
-
-msgctxt "field:endorsement.contract.new_extra_premium,option_selected:"
-msgid "Option Selected"
-msgstr "Garantie sélectionnée"
 
 msgctxt "field:endorsement.contract.new_extra_premium,options:"
 msgid "Options"

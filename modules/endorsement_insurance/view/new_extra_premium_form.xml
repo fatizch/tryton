@@ -10,5 +10,4 @@ this repository contains the full copyright notices and license terms. -->
         <field name="options" colspan="2" mode="tree" expand_toolbar="0"/>
         <field name="covered_elements" colspan="2" mode="tree" expand_toolbar="0"/>
     </group>
-    <field name="option_selected"/>
 </form>

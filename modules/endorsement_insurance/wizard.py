@@ -1235,8 +1235,6 @@ class NewExtraPremium(model.CoopView):
     new_extra_premium = fields.One2Many('contract.option.extra_premium', None,
         'New Extra Premium')
     options = fields.One2Many('endorsement.option.selector', None, 'Options')
-    option_selected = fields.Boolean('Option Selected', states={
-            'invisible': True})
     covered_elements = fields.One2Many('endorsement.covered_element.selector',
         None, 'Covered Elements')
 
@@ -1249,7 +1247,7 @@ class NewExtraPremium(model.CoopView):
                 {'invisible': Len(Eval('covered_elements', [])) == 1}),
         ]
 
-    @fields.depends('covered_elements', 'option_selected', 'options')
+    @fields.depends('covered_elements', 'options')
     def on_change_covered_elements(self):
         for covered_element in self.covered_elements:
             for option in self.options:
@@ -1259,14 +1257,12 @@ class NewExtraPremium(model.CoopView):
                         covered_element.covered_element_endorsement_id):
                     option.selected = covered_element.selected
         self.options = self.options
-        self.option_selected = any([x.selected for x in self.options])
 
-    @fields.depends('covered_elements', 'option_selected', 'options')
+    @fields.depends('covered_elements', 'options')
     def on_change_options(self):
         for covered_element in self.covered_elements:
             covered_element.selected = False
         self.covered_elements = self.covered_elements
-        self.option_selected = any((x.selected for x in self.options))
 
     @classmethod
     def _extra_premium_fields_to_extract(cls):
@@ -1622,7 +1618,7 @@ class StartEndorsement:
         'endorsement_insurance.new_extra_premium_view_form', [
             Button('Cancel', 'manage_extra_premium', 'tryton-go-previous'),
             Button('Continue', 'add_extra_premium', 'tryton-go-next',
-                default=True, states={'readonly': ~Eval('option_selected')})])
+                default=True)])
     add_extra_premium = StateTransition()
     manage_extra_premium_next = StateTransition()
     remove_option = StateView('contract.covered_element.option.remove',
@@ -1635,6 +1631,13 @@ class StartEndorsement:
     remove_option_previous = StateTransition()
     remove_option_next = StateTransition()
     remove_option_suspend = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(StartEndorsement, cls).__setup__()
+        cls._error_messages.update({
+                'no_option_selected': 'No option was selected!',
+                })
 
     def set_main_object(self, endorsement):
         super(StartEndorsement, self).set_main_object(endorsement)
@@ -1791,6 +1794,8 @@ class StartEndorsement:
         return default_values
 
     def transition_add_extra_premium(self):
+        if not any(x.selected for x in self.new_extra_premium.options):
+            self.raise_user_warning('no_option_selected', 'no_option_selected')
         self.new_extra_premium.update_endorsement(self)
         return 'manage_extra_premium'
 
