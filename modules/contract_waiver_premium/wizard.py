@@ -101,7 +101,7 @@ class CreateWaiver(Wizard):
         ContractInvoice = pool.get('contract.invoice')
         Invoice = pool.get('account.invoice')
         posted_date = [x.start for x in to_reinvoice
-            if x.invoice.state == 'posted']
+            if x.invoice.state in ('posted', 'paid')]
         invoices = ContractInvoice.reinvoice(to_reinvoice)
         Invoice.post([x.invoice for x in invoices if x.start in posted_date])
         return invoices
@@ -112,8 +112,8 @@ class CreateWaiver(Wizard):
         contract_id = Transaction().context['active_id']
         self.create_waiver(contract_id)
         to_reinvoice = ContractInvoice.search([('contract', '=', contract_id),
-                ('invoice.state', 'in', ['validated', 'posted']),
-                ('end', '>=', self.choice.start_date),
+                ('invoice.state', 'in', ['validated', 'posted', 'paid']),
+                ('start', '>=', self.choice.start_date),
                 ('start', '<=', self.choice.end_date or datetime.date.max)])
         invoices = self._reinvoice(to_reinvoice)
         Contract = pool.get('contract')
@@ -164,7 +164,7 @@ class SetWaiverEndDate(Wizard):
         Waiver.write(waivers, {'end_date': self.choice.new_end_date})
         to_reinvoice = ContractInvoice.search([('contract', 'in',
                     [x.contract for x in waivers]),
-                ('invoice.state', 'in', ['validated', 'posted']),
+                ('invoice.state', 'in', ['validated', 'posted', 'paid']),
                 ('end', '>=', self.choice.waivers[0].start_date)])
         invoices = CreateWaiver._reinvoice(to_reinvoice)
         Contract.reconcile(list(set([x.contract for x in waivers])))

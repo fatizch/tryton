@@ -1852,13 +1852,10 @@ class ContractInvoice(model.CoopSQL, model.CoopView):
     @classmethod
     def reinvoice(cls, contract_invoices):
         pool = Pool()
-        Invoice = pool.get('account.invoice')
         Contract = pool.get('contract')
-        invoices = []
         for contract_invoice in contract_invoices:
-            assert contract_invoice.invoice_state not in ('cancel', 'paid')
-            invoices.append(contract_invoice.invoice)
-        Invoice.cancel(invoices)
+            assert contract_invoice.invoice_state != 'cancel'
+        cls.cancel(contract_invoices)
         periods = defaultdict(list)
         for contract_invoice in contract_invoices:
             contract = contract_invoice.contract
