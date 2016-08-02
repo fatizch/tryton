@@ -637,6 +637,7 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             if not contract_endorsement.clean_up():
                 new_endorsements.append(contract_endorsement)
         endorsement.contract_endorsements = new_endorsements
+        endorsement.save()
 
     def get_parent_endorsed(self, parent, contract_endorsements):
         if isinstance(parent, Pool().get('endorsement.contract')):

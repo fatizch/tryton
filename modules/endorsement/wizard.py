@@ -858,6 +858,7 @@ class ManageOptions(EndorsementWizardStepMixin):
             if not contract_endorsement.clean_up():
                 new_endorsements.append(contract_endorsement)
         endorsement.contract_endorsements = new_endorsements
+        endorsement.save()
 
     def get_parent_endorsed(self, parent, contract_endorsements):
         if isinstance(parent, Pool().get('endorsement.contract')):
@@ -2192,7 +2193,6 @@ class StartEndorsement(Wizard):
         state = getattr(self, state_name)
         endorsement = self.get_clean_endorsement(state)
         state.update_endorsement(endorsement, self)
-        endorsement.save()
 
     def get_endorsed_object(self, endorsement_part):
         # TODO : Update once multiple objects may be changed
