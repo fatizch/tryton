@@ -1391,6 +1391,8 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         required=True, ondelete='RESTRICT')
     payment_term = fields.Many2One('account.invoice.payment_term',
         'Payment Term', ondelete='RESTRICT', states={
+            'required': And(Eval('direct_debit', False),
+                (Eval('_parent_contract', {}).get('status', '') == 'active')),
             'invisible': Len(Eval('possible_payment_terms', [])) < 2},
         domain=[('id', 'in', Eval('possible_payment_terms'))],
         depends=['possible_payment_terms'])
@@ -1400,7 +1402,10 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
     direct_debit_day_selector = fields.Function(
         fields.Selection('get_allowed_direct_debit_days',
             'Direct Debit Day', states={
-                'invisible': ~Eval('direct_debit', False)},
+                'invisible': ~Eval('direct_debit', False),
+                'required': And(Eval('direct_debit', False),
+                    (Eval('_parent_contract', {}).get('status', '') ==
+                        'active'))},
             sort=False, depends=['direct_debit', 'direct_debit_day']),
         'get_direct_debit_day_selector', 'setter_void')
     direct_debit_day = fields.Integer('Direct Debit Day')
@@ -1415,8 +1420,11 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         fields.Boolean('Once Per Contract?'),
         'on_change_with_is_once_per_contract')
     payer = fields.Many2One('party.party', 'Payer',
-        states={'invisible': ~Eval('direct_debit')},
-        depends=['direct_debit'], ondelete='RESTRICT')
+        states={'invisible': ~Eval('direct_debit'),
+            'required': And(Bool(Eval('direct_debit', False)),
+                (Eval('_parent_contract', {}).get('status', '') ==
+                    'active'))},
+        depends=['direct_debit', '_parent_contract'], ondelete='RESTRICT')
 
     @classmethod
     def _export_light(cls):
@@ -1479,7 +1487,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         # overriden in account_payment_sepa_contract to migrate payer from SEPA
         # mandate
         pool = Pool()
-        cursor = Transaction().connection.cursor()
+        cursor = Transaction().cursor
         Contract = pool.get('contract')
         contract_table = Contract.__table__()
         contract_billing = pool.get('contract.billing_information').__table__()
