@@ -1424,7 +1424,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
             'required': And(Bool(Eval('direct_debit', False)),
                 (Eval('_parent_contract', {}).get('status', '') ==
                     'active'))},
-        depends=['direct_debit', '_parent_contract'], ondelete='RESTRICT')
+        depends=['direct_debit'], ondelete='RESTRICT')
 
     @classmethod
     def _export_light(cls):
