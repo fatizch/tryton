@@ -131,8 +131,6 @@ class ContractBillingInformation:
             return
         numbers_id = [number.id
             for number in self.direct_debit_account.numbers]
-        print self.contract
-        print self.contract.payer.id
         mandates = Mandate.search([
                 ('type', '=', 'recurrent'),
                 ('scheme', '=', 'CORE'),
