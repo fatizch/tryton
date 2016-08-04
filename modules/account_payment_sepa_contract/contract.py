@@ -190,9 +190,9 @@ class ContractBillingInformation:
             possible_mandates = Mandate.search([
                     ('party', '=', self.payer.id),
                     ('account_number.account', '=',
-                        self.direct_debit_account.id)
+                        self.direct_debit_account.id),
                     ('signature_date', '>=', self.date
-                        or self.contract.start_date),
+                        or self.contract.start_date)
                     ])
             if possible_mandates:
                 self.sepa_mandate = possible_mandates[0]

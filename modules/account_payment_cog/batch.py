@@ -179,7 +179,7 @@ class PaymentCreationBatch(batch.BatchRoot):
         if not ids:
             return
 
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         tables, query_table, where_clause = cls.get_query(treatment_date,
             extra_args)
         move_line = tables['move_line']
