@@ -74,10 +74,10 @@ class Loan:
         for payment in self.payments:
             if not payment.amount:
                 continue
-            cur_payment = payment_dict[payment['start_date']]
+            cur_payment = payment_dict[payment.start_date]
             if cur_payment['nb_years'] is None:
                 cur_payment['nb_years'] = coop_date.number_of_years_between(
-                    self.funds_release_date, payment['start_date'],
+                    self.funds_release_date, payment.start_date,
                     prorata_method=coop_date.prorata_365)
             cur_payment['payment_amount'] += payment.amount
 
