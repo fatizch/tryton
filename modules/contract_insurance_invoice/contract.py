@@ -1455,7 +1455,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         # Migration from 1.8: Add payer on billing information
 
         add_payer = False
-        contract_billing_h = TableHandler(cursor, cls)
+        contract_billing_h = TableHandler(cls, module_name)
         if not contract_billing_h.column_exist('payer'):
             add_payer = True
 
