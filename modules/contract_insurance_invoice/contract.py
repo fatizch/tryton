@@ -1487,7 +1487,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         # overriden in account_payment_sepa_contract to migrate payer from SEPA
         # mandate
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         Contract = pool.get('contract')
         contract_table = Contract.__table__()
         contract_billing = pool.get('contract.billing_information').__table__()
