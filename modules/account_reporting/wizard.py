@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
 from itertools import groupby
 from sql.aggregate import Sum
 from sql.functions import DateTrunc
