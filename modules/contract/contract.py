@@ -150,12 +150,15 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             }, depends=['extra_datas', 'status'])
     product = fields.Many2One('offered.product', 'Product',
         ondelete='RESTRICT', required=True, domain=[
-            If(~Eval('start_date', None),
+            If(~Eval('appliable_conditions_date', None),
                 [],
                 [
-                    ['OR', ('end_date', '>=', Eval('start_date')),
+                    ['OR',
+                        ('end_date', '>=', Eval('appliable_conditions_date')),
                         ('end_date', '=', None)],
-                    ['OR', ('start_date', '<=', Eval('start_date')),
+                    ['OR',
+                        ('start_date', '<=',
+                            Eval('appliable_conditions_date')),
                         ('start_date', '=', None)]]),
             ('company', '=', Eval('company')),
             ], states=_STATES, depends=['start_date', 'status', 'company'])
