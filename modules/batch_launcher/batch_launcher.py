@@ -1,3 +1,5 @@
+# This file is part of Coog. The COPYRIGHT file at the top level of
+# this repository contains the full copyright notices and license terms.
 from datetime import datetime
 import logging
 
@@ -49,9 +51,9 @@ class LaunchBatch(Wizard):
     def possible_batches(cls):
         pool = Pool()
         models = []
-        for model in pool.get('ir.model').search([]):
+        for model_ in pool.get('ir.model').search([]):
             try:
-                models.append((pool.get(model.model), model))
+                models.append((pool.get(model.model), model_))
             except Exception:
                 # Some dirty models could remain in ir.model
                 # even if the definition doesn't exist anymore
