@@ -144,6 +144,10 @@ class Migrator(batch.BatchRootNoSelect):
         return res
 
     @classmethod
+    def get_batch_args_name(cls):
+        return ['in', 'in-file', 'not-in', 'not-in-file']
+
+    @classmethod
     def extra_migrator_names(cls):
         """Return which others migrators to call once current migrator has
            created objects.
