@@ -78,6 +78,8 @@ class OptionDescriptionPremiumRule:
     def get_not_rated_line(cls, rule_dict, date):
         # Loan shares that must not be rated should not create an empty line if
         # there is a new share for the same loan
+        if not date:
+            return []
         if rule_dict['_rated_instance'].__name__ == 'loan.share':
             share = rule_dict['_rated_instance']
             if share.start_date and share.start_date > date:
