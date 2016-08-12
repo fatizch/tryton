@@ -208,7 +208,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     signature_date = fields.Date('Signature Date', states=_STATES,
         depends=_DEPENDS)
     status = fields.Selection(CONTRACTSTATUSES, 'Status', states=_STATES,
-        depends=_DEPENDS, required=True)
+        depends=_DEPENDS, required=True, readonly=True)
     status_string = status.translated('status')
     subscriber = fields.Many2One('party.party', 'Subscriber',
         domain=[If(
