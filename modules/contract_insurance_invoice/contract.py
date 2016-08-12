@@ -152,6 +152,14 @@ class Contract:
                 'first_invoice': {},
                 })
 
+    @classmethod
+    def delete(cls, contracts):
+        pool = Pool()
+        Invoice = pool.get('contract.invoice')
+        Invoice.delete(Invoice.search([('contract', 'in',
+                        [x.id for x in contracts])]))
+        super(Contract, cls).delete(contracts)
+
     @fields.depends('subscriber', 'billing_informations')
     def on_change_subscriber(self):
         if not self.billing_informations:
