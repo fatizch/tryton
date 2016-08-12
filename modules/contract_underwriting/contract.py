@@ -351,6 +351,11 @@ class Contract:
                 {'invisible': ~Eval('underwritings')}
                 )]
 
+    @classmethod
+    def functional_skips_for_duplicate(cls):
+        return (super(Contract, cls).functional_skips_for_duplicate() |
+            set(['underwritings']))
+
     def check_underwriting_complete(self):
         if self.underwritings:
             self.underwritings[-1].check_decision()
