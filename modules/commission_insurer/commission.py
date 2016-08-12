@@ -3,7 +3,7 @@
 from collections import defaultdict
 from sql import Null, Cast
 from sql.conditionals import Coalesce
-from sql.operators import Concat
+from sql.operators import Concat, Not
 from sql.aggregate import Sum
 from decimal import Decimal
 
@@ -154,23 +154,31 @@ class Commission:
             invoice_ids=None):
         pool = Pool()
         Invoice = pool.get('account.invoice')
+        Journal = pool.get('account.journal')
+
         invoice = Invoice.__table__()
         move = pool.get('account.move').__table__()
         move_line = pool.get('account.move.line').__table__()
-        journal = pool.get('account.journal').__table__()
         cursor = Transaction().connection.cursor()
 
         if invoice_ids is not None and len(invoice_ids) == 0:
             return [], []
+
+        # For some reasons, joining on account_journal is horrendously
+        # inefficient, so we get the ids first and inline them in the query.
+        # For the record, the inefficiency is probably caused by the fact that
+        # move.journal is indexed (so the new filter is very efficient) and
+        # journal.type is not.
+        commission_journals = Journal.search([('type', '=', 'commission')])
+        reset_journals = Journal.search([('type', '=', 'commission_reset')])
         query_table = move_line.join(move, condition=move_line.move == move.id
-            ).join(journal, condition=(move.journal == journal.id)
             ).join(invoice,
             condition=(move.id.in_([invoice.move, invoice.cancel_move])
                 & invoice.state.in_(['paid', 'cancel'])
-                & (journal.type != 'commission'))
+                & Not(move.journal.in_([x.id for x in commission_journals])))
             | ((move.origin == Concat('account.invoice,',
                         Cast(invoice.id, 'VARCHAR')))
-                & (journal.type == 'commission_reset')))
+                & move.journal.in_([x.id for x in reset_journals])))
 
         where_clause = (
             move_line.account.in_(accounts)
