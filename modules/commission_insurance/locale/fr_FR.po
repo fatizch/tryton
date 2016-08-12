@@ -159,8 +159,8 @@ msgid "Invoice"
 msgstr "Quittance"
 
 msgctxt "field:commission.aggregated,invoice_state:"
-msgid "State"
-msgstr "État"
+msgid "Client Invoice State"
+msgstr "État de la quittance client"
 
 msgctxt "field:commission.aggregated,party:"
 msgid "Party"

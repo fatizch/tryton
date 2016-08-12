@@ -315,7 +315,7 @@ class AggregatedCommission(model.CoopSQL, model.CoopView):
                 ('posted', 'Posted'),
                 ('paid', 'Paid'),
                 ('cancel', 'Canceled'),
-                ], 'State', readonly=True),
+                ], 'Client Invoice State', readonly=True),
         'get_invoice_state')
 
     def get_commissioned_contract(self, name=None):
