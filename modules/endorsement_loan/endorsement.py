@@ -96,6 +96,7 @@ class Loan:
 
         endorsement_table = endorsement_loan.join(endorsement,
             condition=(endorsement.id == endorsement_loan.endorsement)
+            & (endorsement.state == 'applied')
             & endorsement_loan.loan.in_([x.id for x in instances])
             ).join(payment, condition=(endorsement_loan.loan == payment.loan)
             & (payment.start_date <= endorsement.effective_date))
