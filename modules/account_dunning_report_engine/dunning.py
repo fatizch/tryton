@@ -38,6 +38,11 @@ class Dunning(Printable):
     def get_sender(self):
         return self.company.party
 
+    def get_object_for_contact(self):
+        if self.party:
+            return self.party
+        return super(Dunning, self).get_object_for_contact()
+
 
 class Level:
     __name__ = 'account.dunning.level'

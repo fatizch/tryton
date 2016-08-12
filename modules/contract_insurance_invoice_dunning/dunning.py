@@ -120,6 +120,11 @@ class Dunning:
             return super(Dunning, self).get_reference_object_for_edm(template)
         return self.contract
 
+    def get_object_for_contact(self):
+        if self.contract:
+            return self.contract
+        return super(Dunning, self).get_object_for_contact()
+
 
 class Procedure:
     __name__ = 'account.dunning.procedure'
