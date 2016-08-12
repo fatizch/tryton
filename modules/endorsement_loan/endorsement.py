@@ -286,6 +286,12 @@ class Endorsement:
     def search_loans(cls, name, clause):
         return [('loan_endorsements.loan',) + tuple(clause[1:])]
 
+    def get_contact(self):
+        if self.contracts:
+            return super(Endorsement, self).get_contact()
+        elif self.loans:
+            return self.loans[0].contracts[0].get_contact()
+
     def all_endorsements(self):
         result = super(Endorsement, self).all_endorsements()
         result += self.loan_endorsements
