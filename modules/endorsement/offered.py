@@ -5,6 +5,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
 from trytond.wizard import StateView
 from trytond.transaction import Transaction
+from trytond.cache import Cache
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import model, fields, coop_string
@@ -60,10 +61,27 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
         'endorsement.definition-report.template', 'definition',
         'report_template', 'Report Templates')
 
+    _endorsement_by_code_cache = Cache('endorsement_definition_by_code')
+
     @classmethod
     def __setup__(cls):
         super(EndorsementDefinition, cls).__setup__()
         cls._order = [('name', 'ASC')]
+
+    @classmethod
+    def create(cls, *args, **kwargs):
+        cls._endorsement_by_code_cache.clear()
+        return super(EndorsementDefinition, cls).create(*args, **kwargs)
+
+    @classmethod
+    def write(cls, *args, **kwargs):
+        cls._endorsement_by_code_cache.clear()
+        return super(EndorsementDefinition, cls).write(*args, **kwargs)
+
+    @classmethod
+    def delete(cls, *args, **kwargs):
+        cls._endorsement_by_code_cache.clear()
+        return super(EndorsementDefinition, cls).delete(*args, **kwargs)
 
     @classmethod
     def _export_skips(cls):
@@ -132,6 +150,15 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
 
         return [('ordered_endorsement_parts.endorsement_part.view', operator,
                 'dummy_step')]
+
+    @classmethod
+    def get_definition_by_code(cls, code):
+        value = cls._endorsement_by_code_cache.get(None, None)
+        if value is not None:
+            return cls(value[code])
+        cls._endorsement_by_code_cache.set(None, {x.code: x.id
+                for x in cls.search([('active', '=', True)])})
+        return cls.get_definition_by_code(code)
 
     @classmethod
     def get_preview_states(cls):
