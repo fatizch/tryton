@@ -229,8 +229,8 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
         Party = Pool().get('party.party')
         base_endorsement = self.wizard.endorsement.contract_endorsements[0]
         contract = base_endorsement.contract
-        base_instance = utils.get_good_versions_at_date(contract,
-                'billing_informations', self.effective_date, 'date')[0]
+        base_instance = utils.get_good_version_at_date(contract,
+                'billing_informations', self.effective_date, 'date')
         defaults.update({
                 'contract': contract.id,
                 'subscriber': base_endorsement.values['subscriber']
@@ -406,10 +406,10 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
     def check_before_start(cls, select_screen):
         pool = Pool()
         ContractInvoice = pool.get('contract.invoice')
-        cur_parameters = (utils.get_good_versions_at_date(
+        cur_parameters = utils.get_good_version_at_date(
                 select_screen.contract, 'billing_informations',
                 select_screen.effective_date,
-                'date') or select_screen.contract.billing_informations)[0]
+                'date') or select_screen.contract.billing_informations[0]
         billing_mode = cur_parameters.billing_mode
         if select_screen.effective_date < utils.today():
             # Make sure an invoice exists at this date
