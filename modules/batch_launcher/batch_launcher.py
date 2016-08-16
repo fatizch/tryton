@@ -13,7 +13,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'LaunchBatch',
     'SelectBatch',
-    'BatchParameter'
+    'BatchParameter',
     ]
 
 
@@ -36,7 +36,6 @@ class LaunchBatch(Wizard):
             'Module shoud not be installed in production.')
 
     def transition_process(self):
-        treatment_date = self.start.treatment_date
         treatment_date = datetime.strptime(str(self.start.treatment_date),
             '%Y-%m-%d').date()
         BatchModel = Pool().get(self.start.batch.model)
