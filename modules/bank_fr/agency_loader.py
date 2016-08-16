@@ -46,7 +46,7 @@ class AgenciesLoader:
                 old_value = getattr(record, k, None)
                 if k == 'party':
                     old_value = old_value.id
-                if (v or None) != (old_value or None):
+                if v != old_value:
                     return False
             return True
 
