@@ -24,6 +24,7 @@ class ReportComProductRelation(model.CoopSQL):
 
 class ReportTemplate:
     __name__ = 'report.template'
+    __metaclass__ = PoolMeta
 
     com_products = fields.Many2Many(
         'report.template-distribution.commercial_product',
