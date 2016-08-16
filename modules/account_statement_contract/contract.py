@@ -29,7 +29,7 @@ class Contract:
         Move = pool.get('account.move')
         move_line = pool.get('account.move.line').__table__()
         move = Move.__table__()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
 
         result = {x.id: [] for x in contracts}
         query_table = stmt_line.join(move_line,

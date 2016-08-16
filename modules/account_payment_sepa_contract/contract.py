@@ -102,7 +102,7 @@ class ContractBillingInformation:
         # override behavior defined in contract_insurance_invoice
         # module to migrate payer from SEPA mandate
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         Mandate = pool.get('account.payment.sepa.mandate')
         sepa_mandate = Mandate.__table__()
         contract_billing = pool.get('contract.billing_information').__table__()
