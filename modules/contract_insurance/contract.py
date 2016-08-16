@@ -273,9 +273,8 @@ class Contract(Printable):
         return kinds
 
     def get_template_holders_sub_domains(self):
-        result = super(Contract, self).get_template_holders_sub_domains()
-        result.append([('products', '=', self.product.id)])
-        return result
+        return super(Contract, self).get_template_holders_sub_domains() + [
+            [('products', '=', self.product.id)]]
 
     def get_maximum_end_date(self):
         date = super(Contract, self).get_maximum_end_date()
