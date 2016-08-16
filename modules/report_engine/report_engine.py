@@ -1002,7 +1002,6 @@ class ReportCreate(Wizard):
         if instance.get_contact().addresses:
             addresses = instance.get_contact().addresses
             self.select_model.good_address = addresses[0].id
-
             if len(addresses) == 1 and getattr(self.select_model, 'models',
                     []):
                 return 'generate_reports_or_input_parameters'

@@ -83,8 +83,8 @@ class FlowVariable(model.CoopSQL, model.CoopView):
             'required': Eval('kind') == 'if',
             }, depends=['kind'])
     else_statement = fields.One2Many('report.flow.variable', 'else_reverse',
-            'Else', states={'invisible': Eval('kind') != 'if'},
-            depends=['kind'], order=[('order', 'ASC')], delete_missing=True)
+        'Else', states={'invisible': Eval('kind') != 'if'},
+        depends=['kind'], order=[('order', 'ASC')], delete_missing=True)
     else_reverse = fields.Many2One('report.flow.variable', 'Else Reverse',
         ondelete='CASCADE', select=True)
     for_object_statement = fields.Char('For', states={

@@ -1453,7 +1453,6 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
                 and TableHandler.table_exist('contract_invoice_frequency')):
             migrate = True
         # Migration from 1.8: Add payer on billing information
-
         add_payer = False
         contract_billing_h = TableHandler(cls, module_name)
         if not contract_billing_h.column_exist('payer'):
@@ -1502,12 +1501,6 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
                 from_=[update_data],
                 where=(contract_billing.id == update_data.billing_info)))
 
-    @fields.depends('direct_debit_account', 'payer')
-    def on_change_payer(self):
-        if not self.payer or self.direct_debit_account and (self.payer not in
-                self.direct_debit_account.owners):
-            self.direct_debit_account = None
-
     @staticmethod
     def revision_columns():
         return ['billing_mode', 'payment_term', 'direct_debit_day',
@@ -1527,6 +1520,12 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         if not self.billing_mode.direct_debit:
             return ''
         return str(self.direct_debit_day)
+
+    @fields.depends('direct_debit_account', 'payer')
+    def on_change_payer(self):
+        if not self.payer or self.direct_debit_account and (self.payer not in
+                self.direct_debit_account.owners):
+            self.direct_debit_account = None
 
     @fields.depends('billing_mode', 'direct_debit_day',
         'direct_debit_day_selector', 'direct_debit_account')

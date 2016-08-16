@@ -9,7 +9,6 @@ __all__ = [
 
 
 class CommercialProduct:
-
     __metaclass__ = PoolMeta
     __name__ = 'distribution.commercial_product'
 
