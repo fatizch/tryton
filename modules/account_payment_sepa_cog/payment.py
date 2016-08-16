@@ -314,7 +314,7 @@ class Payment:
             depends=['currency_digits']),
         'get_reject_fee_amount')
     payer = fields.Function(
-        fields.Many2One('party.party', 'Payer', required=True),
+        fields.Many2One('party.party', 'Payer'),
         'on_change_with_payer')
 
     @classmethod
@@ -337,6 +337,7 @@ class Payment:
     @fields.depends('line', 'date', 'sepa_mandate', 'bank_account', 'payer',
         'amount')
     def on_change_line(self, name=None):
+        super(Payment, self).on_change_line()
         self.sepa_mandate = None
         self.bank_account = None
         if self.line:
@@ -797,6 +798,7 @@ class PaymentCreation:
         pool = Pool()
         Mandate = pool.get('account.payment.sepa.mandate')
         return Mandate.search([
+                ('state', '=', 'validated'),
                 ('party', '=', self.start.payer.id),
                 ('account_number.account', '=', self.start.bank_account.id),
                 ('signature_date', '<=', self.start.payment_date)])[0]
