@@ -38,8 +38,8 @@ def analyze(meth):
             m = wrapped_meth
         ret = m(cls, *args, **kwargs)
         try:
-            PerfLog().on_leave(unicode({'args': args, 'kwargs': kwargs}),
-                unicode(ret))
+            PerfLog().on_leave(unicode(
+                    {'args': args, 'kwargs': kwargs, 'return': ret}))
         except:
             perf_logger.exception('batch: error on leave')
         return ret
