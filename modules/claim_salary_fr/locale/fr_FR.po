@@ -6,6 +6,18 @@ msgctxt "error:claim.net_calculation_rule:"
 msgid "The name must be unique!"
 msgstr "Le nom doit être unique!"
 
+msgctxt "view:claim.salary:"
+msgid "Total Bonus Salary"
+msgstr "Montant total des bonus salaire"
+
+msgctxt "view:claim.salary:"
+msgid "Total Gross Salary"
+msgstr "Montant total du salaire brut"
+
+msgctxt "view:claim.salary:"
+msgid "Total Net Salary"
+msgstr "Montant total du salaire net"
+
 msgctxt "field:claim.extra_datas_displayers,salaries:"
 msgid "Salaries"
 msgstr "Salaires"
