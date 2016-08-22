@@ -1,0 +1,67 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:benefit.hospitalisation.period:"
+msgid "The period is invalid"
+msgstr "Cette période est invalide"
+
+msgctxt "error:benefit.loss.description:"
+msgid "There are overlapping periods"
+msgstr "Des périodes se chevauchent"
+
+msgctxt "field:benefit.hospitalisation.period,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.hospitalisation.period,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.hospitalisation.period,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit.hospitalisation.period,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:benefit.hospitalisation.period,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:benefit.hospitalisation.period,loss_desc:"
+msgid "Loss Description"
+msgstr "Type d'événement"
+
+msgctxt "field:benefit.hospitalisation.period,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.hospitalisation.period,start_date:"
+msgid "Start Date"
+msgstr "Date de début"
+
+msgctxt "field:benefit.hospitalisation.period,write_date:"
+msgid "Write Date"
+msgstr "Date de modification"
+
+msgctxt "field:benefit.hospitalisation.period,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:benefit.hospitalisation.period,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:benefit.loss.description,hospitalisation_periods:"
+msgid "Hospitalisation Periods"
+msgstr "Périodes d'hospitalisation"
+
+msgctxt "model:benefit.hospitalisation.period,name:"
+msgid "HospitalisationPeriod"
+msgstr ""
+
+msgctxt "view:benefit.loss.description:"
+msgid "Hospitalisation"
+msgstr "Hospitalisation"
