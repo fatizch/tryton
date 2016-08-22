@@ -6,5 +6,15 @@
             <field name="inherit" ref="claim.claim_view_form"/>
             <field name="name">claim_form</field>
         </record>
+        <record model="ir.ui.view" id="claim_view_list">
+            <field name="model">claim</field>
+            <field name="inherit" ref="claim.claim_view_list"/>
+            <field name="name">claim_list</field>
+        </record>
+        <record model="ir.action.act_window" id="claim.act_claim_relate_form">
+            <field name="name">Claims</field>
+            <field name="res_model">claim</field>
+            <field name="domain" eval="['OR', ('legal_entity', '=', Eval('active_id')), ('claimant', '=', Eval('active_id'))]" pyson="1"/>
+        </record>
     </data>
 </tryton>
