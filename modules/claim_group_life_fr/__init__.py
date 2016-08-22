@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 from .claim import *
 
+
 def register():
     Pool.register(
         HospitalisationPeriod,
