@@ -14,8 +14,6 @@ class ExtraData:
     __metaclass__ = PoolMeta
     __name__ = 'extra_data'
 
-    group = fields.Many2One('claim.net_calculation_rule', 'Group')
-
     @classmethod
     def __setup__(cls):
         super(ExtraData, cls).__setup__()

@@ -30,6 +30,10 @@ msgctxt "field:claim.net_calculation_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:claim.net_calculation_rule,fixed_contributions:"
+msgid "Fixed Contributions"
+msgstr "Contributions fixes"
+
 msgctxt "field:claim.net_calculation_rule,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -110,13 +114,25 @@ msgctxt "field:claim.salary,ta_contributions:"
 msgid "TA Contributions"
 msgstr "Contributions tranche A"
 
+msgctxt "field:claim.salary,ta_fixed_contributions:"
+msgid "TA Fixed Contributions"
+msgstr "Contributions fixes tranche A"
+
 msgctxt "field:claim.salary,tb_contributions:"
 msgid "TB Contributions"
 msgstr "Contributions tranche B"
 
+msgctxt "field:claim.salary,tb_fixed_contributions:"
+msgid "TB Fixed Contributions"
+msgstr "Contributions fixes tranche B"
+
 msgctxt "field:claim.salary,tc_contributions:"
 msgid "TC Contributions"
 msgstr "Contributions tranche C"
+
+msgctxt "field:claim.salary,tc_fixed_contributions:"
+msgid "TC Fixed Contributions"
+msgstr "Contributions fixes tranche C"
 
 msgctxt "field:claim.salary,to_date:"
 msgid "To Date"
@@ -134,9 +150,21 @@ msgctxt "field:claim.salary,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:claim.service,gross_salary:"
+msgid "Gross Salary"
+msgstr "Salaire brut"
+
+msgctxt "field:claim.service,net_salary:"
+msgid "Gross Salary"
+msgstr "Salaire brut"
+
 msgctxt "field:claim.service,salary:"
 msgid "Salary"
 msgstr "Salaire"
+
+msgctxt "field:claim.service,salary_bonus:"
+msgid "Gross Salary"
+msgstr "Salaire brut"
 
 msgctxt "field:claim_salary_fr.contributions_view,extra_data:"
 msgid "Extra Data"
@@ -150,17 +178,37 @@ msgctxt "field:claim_salary_fr.contributions_view,ta:"
 msgid "Rate A"
 msgstr "Taux de la tranche A"
 
+msgctxt "field:claim_salary_fr.contributions_view,ta_fix:"
+msgid "Amount A"
+msgstr "Montant TA"
+
 msgctxt "field:claim_salary_fr.contributions_view,tb:"
 msgid "Rate B"
 msgstr "Taux de la tranche B"
+
+msgctxt "field:claim_salary_fr.contributions_view,tb_fix:"
+msgid "Amount B"
+msgstr "Montant TB"
 
 msgctxt "field:claim_salary_fr.contributions_view,tc:"
 msgid "Rate C"
 msgstr "Taux de la tranche C"
 
+msgctxt "field:claim_salary_fr.contributions_view,tc_fix:"
+msgid "Amount C"
+msgstr "Montant TC"
+
+msgctxt "field:claim_salary_fr.start_set_contributions,fixed_rates:"
+msgid "Fixed Rates"
+msgstr "Taux fixes"
+
 msgctxt "field:claim_salary_fr.start_set_contributions,id:"
 msgid "ID"
 msgstr "Identifiant"
+
+msgctxt "field:claim_salary_fr.start_set_contributions,periods:"
+msgid "Periods"
+msgstr "Périodes"
 
 msgctxt "field:claim_salary_fr.start_set_contributions,propagate:"
 msgid "Propagate on salaries"
@@ -189,10 +237,6 @@ msgstr "Limiter au salaire net"
 msgctxt "field:contract.option.benefit,salary_mode:"
 msgid "Salary Mode"
 msgstr "Mode salaire"
-
-msgctxt "field:extra_data,group:"
-msgid "Group"
-msgstr "Groupe"
 
 msgctxt "field:net_calculation_rule-extra_data,calculation_rule:"
 msgid "Calculation Rule"
@@ -234,6 +278,46 @@ msgctxt "field:net_calculation_rule-extra_data,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:net_calculation_rule-fix_extra_data,calculation_rule:"
+msgid "Calculation Rule"
+msgstr "Règle de calcul"
+
+msgctxt "field:net_calculation_rule-fix_extra_data,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:net_calculation_rule-fix_extra_data,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:net_calculation_rule-fix_extra_data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:net_calculation_rule-fix_extra_data,extra_data:"
+msgid "Extra Data"
+msgstr "Donnée Complémentaire"
+
+msgctxt "field:net_calculation_rule-fix_extra_data,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:net_calculation_rule-fix_extra_data,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:net_calculation_rule-fix_extra_data,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:net_calculation_rule-fix_extra_data,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:net_calculation_rule-fix_extra_data,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "help:claim_salary_fr.start_set_contributions,propagate:"
 msgid "Propagate on each salaries with a defined gross salary"
 msgstr ""
@@ -268,6 +352,10 @@ msgid "Net Calculation Rules"
 msgstr "Règles de cacul pour le net"
 
 msgctxt "model:net_calculation_rule-extra_data,name:"
+msgid "Net Calculation Rule - Extra Data"
+msgstr "Règle de calcul net - Donnée complémentaire"
+
+msgctxt "model:net_calculation_rule-fix_extra_data,name:"
 msgid "Net Calculation Rule - Extra Data"
 msgstr "Règle de calcul net - Donnée complémentaire"
 
@@ -330,6 +418,10 @@ msgstr "Prestation fournie"
 msgctxt "view:claim_salary_fr.contributions_view:"
 msgid "%"
 msgstr "%"
+
+msgctxt "view:claim_salary_fr.contributions_view:"
+msgid "Fixed rates"
+msgstr "Taux fixes"
 
 msgctxt "view:claim_salary_fr.contributions_view:"
 msgid "Rates"

@@ -8,5 +8,6 @@ this repository contains the full copyright notices and license terms. -->
     <label name="rule" xalign="0"/>
     <field name="rule" widget="selection" colspan="3"/>
     <newline/>
-    <field name="contributions" colspan="4"/>
+    <field name="contributions" colspan="2"/>
+    <field name="fixed_contributions" colspan="2"/>
 </form>

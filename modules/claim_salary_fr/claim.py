@@ -20,7 +20,19 @@ __all__ = [
     'FillExtraData',
     'NetCalculationRule',
     'NetCalculationRuleExtraData',
+    'NetCalculationRuleFixExtraData',
     ]
+
+
+class NetCalculationRuleFixExtraData(model.CoopSQL):
+    'Net Calculation Rule - Extra Data'
+    __metaclass__ = PoolMeta
+    __name__ = 'net_calculation_rule-fix_extra_data'
+
+    calculation_rule = fields.Many2One('claim.net_calculation_rule',
+        'Calculation Rule', required=True, ondelete='CASCADE')
+    extra_data = fields.Many2One('extra_data', 'Extra Data',
+        required=True, ondelete='CASCADE')
 
 
 class NetCalculationRuleExtraData(model.CoopSQL):
@@ -44,6 +56,10 @@ class NetCalculationRule(model.CoopSQL, model.CoopView,
     name = fields.Char('Name', required=True)
     contributions = fields.Many2Many('net_calculation_rule-extra_data',
         'calculation_rule', 'extra_data', 'Contributions',
+        domain=[('kind', '=', 'salary')], required=True)
+    fixed_contributions = fields.Many2Many(
+        'net_calculation_rule-fix_extra_data', 'calculation_rule',
+        'extra_data', 'Fixed Contributions',
         domain=[('kind', '=', 'salary')], required=True)
 
     @classmethod
@@ -85,6 +101,12 @@ class Salary(model.CoopSQL, model.CoopView):
     net_limit_mode = fields.Function(
         fields.Boolean('Net Limit Mode'),
         'get_net_limit_mode')
+    ta_fixed_contributions = fields.Dict('extra_data', 'TA Fixed Contributions',
+        domain=[('kind', '=', 'salary')])
+    tb_fixed_contributions = fields.Dict('extra_data', 'TB Fixed Contributions',
+        domain=[('kind', '=', 'salary')])
+    tc_fixed_contributions = fields.Dict('extra_data', 'TC Fixed Contributions',
+        domain=[('kind', '=', 'salary')])
 
     @classmethod
     def __setup__(cls):
@@ -114,23 +136,36 @@ class Salary(model.CoopSQL, model.CoopView):
             tables[k]['extra_data'] = extra_data
             tables[k][key] = v
 
-    def get_rates_per_range(self):
+    def get_rates_per_range(self, fixed=False):
         delivered = self.delivered_service
-        extra_datas = delivered.benefit.benefit_rules[0]. \
+        net_calculuation_rule = delivered.benefit.benefit_rules[0]. \
             option_benefit_at_date(delivered.option,
-                delivered.loss.start_date).net_calculation_rule.contributions
+                delivered.loss.start_date).net_calculation_rule
+        extra_datas = net_calculuation_rule.contributions if not fixed \
+            else net_calculuation_rule.fixed_contributions
         tables = defaultdict(lambda: {
                 'ta': 0,
                 'tb': 0,
                 'tc': 0,
+                'ta_fix': 0,
+                'tb_fix': 0,
+                'tc_fix': 0,
                 'extra_data': None,
                 })
-        self.update_contributions_table(self.ta_contributions,
-            tables, 'ta')
-        self.update_contributions_table(self.tb_contributions,
-            tables, 'tb')
-        self.update_contributions_table(self.tc_contributions,
-            tables, 'tc')
+        if not fixed:
+            self.update_contributions_table(self.ta_contributions,
+                tables, 'ta')
+            self.update_contributions_table(self.tb_contributions,
+                tables, 'tb')
+            self.update_contributions_table(self.tc_contributions,
+                tables, 'tc')
+        else:
+            self.update_contributions_table(self.ta_fixed_contributions,
+                tables, 'ta_fix')
+            self.update_contributions_table(self.tb_fixed_contributions,
+                tables, 'tb_fix')
+            self.update_contributions_table(self.tc_fixed_contributions,
+                tables, 'tc_fix')
 
         missing_rates = [x for x in extra_datas if x.id not in
             [v['extra_data'] for k, v in tables.items()]]
@@ -139,6 +174,9 @@ class Salary(model.CoopSQL, model.CoopView):
                 'ta': 0,
                 'tb': 0,
                 'tc': 0,
+                'ta_fix': 0,
+                'tb_fix': 0,
+                'tc_fix': 0,
                 'extra_data': missing.id,
                 }
         return tables.values()
@@ -152,11 +190,15 @@ class Salary(model.CoopSQL, model.CoopView):
             option_benefit_at_date(delivered_service.option,
                 delivered_service.loss.start_date).net_salary_mode
 
-    def get_range(self, range_name):
+    def get_range(self, range_name, fixed=False):
+        if fixed:
+            range_name += '_fixed'
         extra_data = getattr(self, 't%s_contributions' %
             range_name.lower(), None)
         if not extra_data:
             return None
+        # If fixed: fixed values must be already slicked by the number
+        # of salaries
         return sum(extra_data.values())
 
     def calculate_net_salary(self):

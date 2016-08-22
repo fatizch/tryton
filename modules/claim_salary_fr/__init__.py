@@ -15,6 +15,7 @@ def register():
         Salary,
         NetCalculationRule,
         NetCalculationRuleExtraData,
+        NetCalculationRuleFixExtraData,
         BenefitRule,
         OptionBenefit,
         ExtraDatasDisplayers,

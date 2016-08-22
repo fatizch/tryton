@@ -25,8 +25,8 @@ class RuleEngineRuntime:
 
     @classmethod
     @check_args('curr_salary')
-    def _re_get_range_by_name(cls, args, range_name):
-        return args['curr_salary'].get_range(range_name)
+    def _re_get_range_by_name(cls, args, range_name, fixed=False):
+        return args['curr_salary'].get_range(range_name, fixed)
 
     @classmethod
     @check_args('service')
