@@ -82,7 +82,6 @@ class SetContributions(Wizard):
         return start_dict
 
     def transition_process(self):
-        Salary = Pool().get('claim.salary')
         to_calculate = []
         if self.start.propagate:
             salaries = self.start.periods
