@@ -93,7 +93,7 @@ class Claim(RemindableInterface):
 
     @classmethod
     def fill_to_remind(cls, doc_per_objects, to_remind, objects,
-            force_remind, remind_if_false):
+            force_remind, remind_if_false, treatment_date):
         for claim in objects:
             documents = doc_per_objects[claim]
             for loss in claim.losses:
@@ -103,7 +103,7 @@ class Claim(RemindableInterface):
                         if benefit.documents_rules else None
                     for doc in claim.document_request_lines:
                         if cls.is_document_needed(config, documents, doc,
-                                remind_if_false, force_remind):
+                                remind_if_false, force_remind, treatment_date):
                             to_remind[claim].append(doc)
 
     @classmethod
@@ -123,8 +123,10 @@ class Claim(RemindableInterface):
 
     @classmethod
     @ModelView.button
-    def generate_reminds_documents(cls, claims):
-        super(Claim, cls).generate_reminds_documents(claims)
+    def generate_reminds_documents(cls, claims,
+            treatment_date=None):
+        super(Claim, cls).generate_reminds_documents(claims,
+            treatment_date)
 
     def get_doc_template_kind(self):
         res = super(Claim, self).get_doc_template_kind()

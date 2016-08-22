@@ -164,7 +164,7 @@ class Contract(RemindableInterface):
 
     @classmethod
     def fill_to_remind(cls, doc_per_objects, to_remind, objects,
-            force_remind, remind_if_false):
+            force_remind, remind_if_false, treatment_date):
         def keyfunc(x):
             return x.product
 
@@ -175,10 +175,12 @@ class Contract(RemindableInterface):
                 documents = doc_per_objects[contract]
                 for doc in contract.document_request_lines:
                     if cls.is_document_needed(config, documents, doc,
-                            remind_if_false, force_remind):
+                            remind_if_false, force_remind, treatment_date):
                         to_remind[contract].append(doc)
 
     @classmethod
     @ModelView.button
-    def generate_reminds_documents(cls, contracts):
-        super(Contract, cls).generate_reminds_documents(contracts)
+    def generate_reminds_documents(cls, contracts,
+            treatment_date=None):
+        super(Contract, cls).generate_reminds_documents(contracts,
+            treatment_date)

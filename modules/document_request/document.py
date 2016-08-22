@@ -92,11 +92,11 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
         return 0
 
     @classmethod
-    def update_reminder(cls, document_lines, increment=False):
+    def update_reminder(cls, document_lines, treatment_date, increment=False):
         if not document_lines:
             return
         for doc in document_lines:
-            doc.last_reminder_date = utils.today()
+            doc.last_reminder_date = treatment_date
             if increment:
                 doc.reminders_sent += 1
         cls.save(document_lines)
@@ -188,13 +188,14 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
 
     @classmethod
     def update_and_notify_reminders(cls, to_remind_per_object,
-            force_remind, event_code):
+            force_remind, event_code, treatment_date):
         pool = Pool()
         pool.get('event').notify_events(to_remind_per_object.keys(),
             event_code)
         document_lines = [x for sublist in to_remind_per_object.values()
                 for x in sublist]
-        cls.update_reminder(document_lines, increment=not force_remind)
+        cls.update_reminder(document_lines, treatment_date,
+            increment=not force_remind)
 
 
 class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
@@ -591,7 +592,7 @@ class RemindableInterface(object):
         raise NotImplementedError
 
     def fill_to_remind(cls, doc_per_objects, t_remind, objects,
-            force_remind, remind_if_false):
+            force_remind, remind_if_false, treatment_date):
         raise NotImplementedError
 
     @classmethod
@@ -635,27 +636,31 @@ class RemindableInterface(object):
                             else_=0)) > 0))
 
     @classmethod
-    def generate_reminds_documents(cls, objects):
+    def generate_reminds_documents(cls, objects, treatment_date=None):
+        treatment_date = treatment_date or utils.today()
         force_remind = Transaction().context.get('force_remind', True)
         DocRequestLine = Pool().get('document.request.line')
         to_remind_per_objects = cls.get_document_lines_to_remind(
-            objects, force_remind)
+            objects, force_remind, treatment_date)
         DocRequestLine.update_and_notify_reminders(
-            to_remind_per_objects, force_remind, 'remind_documents')
+            to_remind_per_objects, force_remind, 'remind_documents',
+            treatment_date)
 
     @classmethod
-    def get_document_lines_to_remind(cls, objects, force_remind):
+    def get_document_lines_to_remind(cls, objects, force_remind,
+            treatment_date=None):
+        treatment_date = treatment_date or utils.today()
         DocRequestLine = Pool().get('document.request.line')
         remind_if_false = DocRequestLine.get_default_remind_fields()
         to_remind = defaultdict(list)
         documents_per_object = cls.get_calculated_required_documents(objects)
         cls.fill_to_remind(documents_per_object, to_remind, objects,
-            force_remind, remind_if_false)
+            force_remind, remind_if_false, treatment_date)
         return to_remind
 
     @classmethod
     def is_document_needed(cls, config, documents, doc,
-            remind_if_false, force_remind):
+            remind_if_false, force_remind, treatment_date):
         if not config:
             return False
         delay = config.reminder_delay
@@ -674,7 +679,7 @@ class RemindableInterface(object):
             return False
         doc_max_reminders = documents[
             doc.document_desc.code]['max_reminders']
-        if not force_remind and (utils.today() - delta <
+        if not force_remind and (treatment_date - delta <
                 doc.last_reminder_date or
                 (doc_max_reminders and
                     doc.reminders_sent >= doc_max_reminders)):

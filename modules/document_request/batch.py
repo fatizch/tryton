@@ -93,7 +93,8 @@ class BatchRemindDocuments(batch.BatchRoot):
             '%s does not implement get_reminder_candidates' % Model.__name__
         objects = Model.browse(ids)
         with Transaction().set_context(force_remind=False):
-            Model.generate_reminds_documents(objects)
+            Model.generate_reminds_documents(objects,
+                treatment_date=treatment_date)
 
     @classmethod
     def get_batch_args_name(cls):
