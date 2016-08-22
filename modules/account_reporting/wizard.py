@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
 from itertools import groupby
 from sql.aggregate import Sum
 from sql.functions import DateTrunc
@@ -166,7 +167,13 @@ class MoveLineAggregatedReport(Report):
     @classmethod
     def get_where_clause(cls, tables, values):
         product_ids = values.get('product_ids', None)
+        start_date = values.get('start_date', None)
+        end_date = values.get('end_date', None)
         where_clause = (tables['account.move'].state == values.get('state'))
+        if start_date:
+            where_clause &= tables['invoice'].create_date >= start_date
+        if end_date:
+            where_clause &= tables['invoice'].create_date <= end_date
         if product_ids:
             where_clause &= tables['product'].id.in_(product_ids)
         return where_clause
@@ -197,6 +204,8 @@ class MoveLineAggregatedReport(Report):
         where_clause = cls.get_where_clause(tables, {
                 'product_ids': kwargs.get('product_ids'),
                 'state': 'posted',
+                'start_date': kwargs.get('start_date'),
+                'end_date': kwargs.get('end_date'),
                 })
         cursor = Transaction().connection.cursor()
         cursor.execute(*query.select(*columns,
