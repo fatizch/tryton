@@ -43,6 +43,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="end_date"/>
     <newline/>
     <group id="invisible">
+        <field name="manual_start_date"/>
         <field name="option"/>
         <field name="currency"/>
         <field name="is_discount"/>

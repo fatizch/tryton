@@ -339,7 +339,7 @@ class CreateExtraPremium(Wizard):
         if not all_options:
             self.raise_user_error('option_required')
         return {
-            'start_date': contract.start_date,
+            'manual_start_date': contract.start_date,
             # Set one random option to bypass the "required" attribute
             'option': all_options[0].id,
             }
@@ -368,6 +368,9 @@ class CreateExtraPremium(Wizard):
                 continue
             new_extra_premium = self.extra_premium_data._default_values
             new_extra_premium['option'] = option.option
+            if (new_extra_premium['manual_start_date'] ==
+                    self.select_options.contract.start_date):
+                del new_extra_premium['manual_start_date']
             to_create.append(new_extra_premium)
         ExtraPremium.create(to_create)
 

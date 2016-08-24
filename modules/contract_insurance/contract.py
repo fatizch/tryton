@@ -1334,7 +1334,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         'Calculation Kind')
     calculation_kind_string = calculation_kind.translated('calculation_kind')
     start_date = fields.Function(
-        fields.Date('Start Date'), 'get_start_date')
+        fields.Date('Start Date'), 'get_start_date', setter='setter_void')
     manual_start_date = fields.Date('Manual Start date')
     end_date = fields.Function(fields.Date('End date',
         states={'invisible': ~Eval('time_limited')},
@@ -1491,6 +1491,12 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     @fields.depends('start_date', 'duration', 'duration_unit')
     def on_change_duration_unit(self):
         self.end_date = self.calculate_end_date()
+
+    @fields.depends('manual_start_date', 'option', 'start_date')
+    def on_change_start_date(self):
+        self.manual_start_date = self.start_date
+        if self.option and self.start_date == self.option.start_date:
+            self.manual_start_date = None
 
     @fields.depends('motive')
     def on_change_with_is_discount(self, name=None):
