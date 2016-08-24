@@ -315,7 +315,7 @@ class ClaimService:
     def get_salary_field(self, name):
         res = 0
         for cur_salary in self.salary:
-            res += getattr(cur_salary, name, 0)
+            res += (getattr(cur_salary, name, 0) or 0)
         return res
 
 

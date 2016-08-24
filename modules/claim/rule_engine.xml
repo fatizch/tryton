@@ -52,6 +52,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_loss_start_date</field>
             <field name="parent" ref="dossier_sinistre"/>
         </record>
+        <record model="rule_engine.function" id="nombre_jours_hospitalisation_prejudice">
+            <field name="translated_technical_name">nombre_jours_hospitalisation_prejudice</field>
+            <field name="description">Nombre de jour(s) d'hospitalisation du préjudice</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_total_hospitalisation_period</field>
+            <field name="parent" ref="dossier_sinistre"/>
+        </record>
         <record model="rule_engine.function" id="date_fin_dernier_prejudice">
             <field name="translated_technical_name">date_fin_dernier_prejudice</field>
             <field name="description">Date de fin du dernier prejudice</field>

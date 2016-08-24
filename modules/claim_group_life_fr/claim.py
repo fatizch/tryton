@@ -32,7 +32,10 @@ class HospitalisationPeriod(model.CoopSQL, model.CoopView):
     def validate(cls, periods):
         super(HospitalisationPeriod, cls).validate(periods)
         for period in periods:
-            if period.start_date > period.end_date:
+            if period.start_date > period.end_date or \
+                    period.start_date < period.loss.start_date or \
+                    (period.end_date and period.loss.end_date and
+                        period.end_date > period.loss.end_date):
                 cls.raise_user_error('invalid_period')
 
 
@@ -58,7 +61,7 @@ class Loss:
         super(Loss, cls).validate(losses_desc)
 
         def is_date_between_or_after(date, start_date, end_date):
-            if (date >= start_date and date <= end_date) or date > end_date:
+            if (date > start_date and date < end_date) or date > end_date:
                 return True
             return False
 
