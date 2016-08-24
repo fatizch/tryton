@@ -40,6 +40,13 @@ _coog_repo_link_repos() { # guess modules list from link args
         fi
 }
 
+coog_repo_clean() { # clean non module folders
+        for module in $COOG_COOG/modules/*
+        do
+                [ ! -f "$module/tryton.cfg" ] && rm -rf "$module" && echo "removed $module"
+        done
+}
+
 coog_repo_linkm() { # link repos modules - <repos> - default: all
         local repos
         local repo
@@ -67,6 +74,7 @@ coog_repo_linkp() { # link repos plugins - <repos> - default: all
 }
 
 coog_repo_link() { # link repos - <repos> - default: all
+        coog_repo_clean
         coog_repo_linkm $*
         coog_repo_linkp $*
 }
