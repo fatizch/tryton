@@ -88,6 +88,14 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
             'available_indemnification_rules') <= 1
         cls.indemnification_rule.depends = ['available_indemnification_rules']
 
+    @fields.depends('benefit', 'available_deductible_rules',
+        'available_indemnification_rules')
+    def on_change_benefit(self):
+        self.available_deductible_rules = \
+            self.get_available_rule('available_deductible_rules')
+        self.available_indemnification_rules = \
+            self.get_available_rule('available_indemnification_rules')
+
     def get_available_rule(self, name):
         if not self.benefit:
             return []

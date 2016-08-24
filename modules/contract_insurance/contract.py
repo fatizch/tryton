@@ -433,7 +433,7 @@ class ContractOption:
     @classmethod
     def get_extra_data_summary(cls, extra_datas, name):
         return Pool().get('extra_data').get_extra_data_summary(extra_datas,
-            'extra_data')
+            'current_extra_data')
 
     @classmethod
     def _export_skips(cls):

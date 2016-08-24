@@ -1,0 +1,274 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:endorsement.contract.benefit:"
+msgid "Benefit Endorsement: %s"
+msgstr "Avenant de modification du paramétrage des prestations"
+
+msgctxt "error:endorsement.contract.benefit:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.contract.benefit:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.contract.benefit:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract.covered_element.option.version:"
+msgid "Benefit Modification"
+msgstr "Modifications des prestations"
+
+msgctxt "field:contract.manage_option_benefits,all_options:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "field:contract.manage_option_benefits,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.manage_option_benefits,current_options:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "field:contract.manage_option_benefits,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:contract.manage_option_benefits,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:contract.manage_option_benefits,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:contract.manage_option_benefits,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.manage_option_benefits,possible_contracts:"
+msgid "Possible Contracts"
+msgstr "Contrats disponibles"
+
+msgctxt "field:contract.manage_option_benefits.option,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.manage_option_benefits.option,display_name:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "field:contract.manage_option_benefits.option,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.manage_option_benefits.option,option_benefits:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:contract.manage_option_benefits.option,option_id:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "field:contract.manage_option_benefits.option,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:contract.manage_option_benefits.option,parent_name:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:endorsement.contract.benefit,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.contract.benefit,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.contract.benefit,benefit:"
+msgid "Benefits"
+msgstr "Prestations"
+
+msgctxt "field:endorsement.contract.benefit,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.benefit,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.benefit,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.benefit,deductible_rule_extra_data:"
+msgid "Deductible Extra Data"
+msgstr "Données complémentaires de franchise"
+
+msgctxt "field:endorsement.contract.benefit,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.contract.benefit,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.contract.benefit,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:endorsement.contract.benefit,indemnification_rule_extra_data:"
+msgid "Indemnification Extra Data"
+msgstr "Données complementaire pour les indemnisations"
+
+msgctxt "field:endorsement.contract.benefit,option_version_endorsement:"
+msgid "Option Version Endorsement"
+msgstr "Avenant pour la version de garantie"
+
+msgctxt "field:endorsement.contract.benefit,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.benefit,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.contract.benefit,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.contract.benefit,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:endorsement.contract.benefit,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:endorsement.contract.benefit,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.benefit.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.benefit.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.benefit.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.benefit.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.contract.benefit.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.benefit.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.contract.benefit.field,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:endorsement.contract.benefit.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.benefit.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.benefit.field,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:endorsement.contract.benefit.field,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:endorsement.contract.benefit.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.covered_element.option.version,benefits:"
+msgid "Option Version Endorsement"
+msgstr "Avenant pour la version de garantie"
+
+msgctxt "field:endorsement.part,benefit_fields:"
+msgid "Benefit Fields"
+msgstr "Champs des prestations"
+
+msgctxt "model:contract.manage_option_benefits,name:"
+msgid "Manage Benefits"
+msgstr "Gérer les prestations"
+
+msgctxt "model:contract.manage_option_benefits.option,name:"
+msgid "Manage Benefit Options Displayer"
+msgstr "Gérer les options des prestations"
+
+msgctxt "model:endorsement.contract.benefit,name:"
+msgid "Endorsement Option Benefit"
+msgstr "Avanant pour gérer les options de prestation"
+
+msgctxt "model:endorsement.contract.benefit.field,name:"
+msgid "Endorsement Benefit Field"
+msgstr "Champs de prestations d'avanent"
+
+msgctxt "model:endorsement.part,name:manage_option_benefits_endorsement_part"
+msgid "Handle Option Benefits"
+msgstr "Gérer les options de prestation"
+
+msgctxt "selection:endorsement.contract.benefit,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.contract.benefit,action:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:endorsement.contract.benefit,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
+msgctxt "view:contract.manage_option_benefits.option:"
+msgid "Manage Benefits"
+msgstr "Gérer les prestations"
+
+msgctxt "view:contract.manage_option_benefits.option:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "view:contract.manage_option_benefits:"
+msgid "Manage Benefits"
+msgstr "Gérer les prestations"
+
+msgctxt "wizard_button:endorsement.start,manage_option_benefits,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_option_benefits,manage_option_benefits_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_option_benefits,manage_option_benefits_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_option_benefits,manage_option_benefits_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"

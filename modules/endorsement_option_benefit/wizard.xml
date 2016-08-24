@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of -->
+<!-- this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="endorsement_manage_option_benefits_view_form">
+            <field name="model">contract.manage_option_benefits</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_manage_option_benefits_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_option_benefit_displayer_list">
+            <field name="model">contract.manage_option_benefits.option</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_option_benefit_displayer_list</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_option_benefit_displayer_form">
+            <field name="model">contract.manage_option_benefits.option</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_option_benefit_displayer_form</field>
+        </record>
+    </data>
+</tryton>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of -->
+<!-- this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="endorsement.part" id="manage_option_benefits_endorsement_part">
+            <field name="code">manage_option_benefits</field>
+            <field name="name">Handle Option Benefits</field>
+            <field name="kind">contract</field>
+            <field name="view">manage_option_benefits</field>
+        </record>
+    </data>
+</tryton>

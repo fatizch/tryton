@@ -25,6 +25,7 @@ def register():
         ExtraData,
         StartSetContributions,
         ContributionsView,
+        ManageOptionBenefitsDisplayer,
         module='claim_salary_fr', type_='model')
     Pool.register(
         CreateIndemnification,

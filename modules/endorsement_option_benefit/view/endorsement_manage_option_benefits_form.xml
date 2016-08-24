@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form string="Manage Benefits">
+    <label name="contract"/>
+    <field name="contract" colspan="3"/>
+    <group id="options" string="" colspan="4" col="2" yexpand="1" yfill="1">
+        <field name="current_options" group="options" mode="tree" expand_toolbar="0"/>
+        <field name="current_options" group="options" mode="form" expand_toolbar="0"/>
+    </group>
+    <group id="invisible" string="">
+        <field name="endorsement_definition"/>
+        <field name="possible_contracts"/>
+        <field name="all_options"/>
+        <field name="effective_date"/>
+    </group>
+</form>

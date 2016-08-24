@@ -6,10 +6,10 @@ this repository contains the full copyright notices and license terms. -->
     <field name="benefit"/>
     <label name="version"/>
     <field name="version"/>
-    <label name="indemnification_rule"/>
-    <field name="indemnification_rule" widget="selection"/>
-    <field name="indemnification_rule_extra_data" colspan="2" no_command="1"/>
     <label name="deductible_rule"/>
     <field name="deductible_rule" widget="selection"/>
     <field name="deductible_rule_extra_data" colspan="2" no_command="1"/>
+    <label name="indemnification_rule"/>
+    <field name="indemnification_rule" widget="selection"/>
+    <field name="indemnification_rule_extra_data" colspan="2" no_command="1"/>
 </form>

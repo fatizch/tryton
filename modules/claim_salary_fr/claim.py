@@ -242,7 +242,7 @@ class ClaimService:
             nb_iteration = 12
         elif salary_mode in ('last_3_months', 'last_3_months_last_year'):
             nb_iteration = 3
-        elif salary_mode == ('last_month', 'last_month_last_year'):
+        elif salary_mode in ('last_month', 'last_month_last_year'):
             nb_iteration = 1
 
         if salary_mode in ('last_12_months', 'last_3_months', 'last_month'):

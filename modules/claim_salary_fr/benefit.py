@@ -5,6 +5,7 @@ from trytond.pool import PoolMeta
 __metaclass__ = PoolMeta
 __all__ = [
     'BenefitRule',
+    'ManageOptionBenefitsDisplayer',
     ]
 
 
@@ -17,3 +18,14 @@ class BenefitRule:
         version = option.get_version_at_date(date)
         option_benefit = version.get_benefit(self.benefit)
         return option_benefit
+
+
+class ManageOptionBenefitsDisplayer:
+    __metaclass__ = PoolMeta
+    __name__ = 'contract.manage_option_benefits.option'
+
+    @classmethod
+    def get_option_benefit_fields(cls):
+        return super(
+            ManageOptionBenefitsDisplayer, cls).get_option_benefit_fields() + (
+                'salary_mode', 'net_salary_mode', 'net_calculuation_rule')
