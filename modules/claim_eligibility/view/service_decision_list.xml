@@ -6,4 +6,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name='benefit_summary'/>
     <field name='eligibility_status'/>
     <field name='eligibility_comment_wrapped'/>
+    <button name='check_eligibility' string='Check Eligibility'/>
 </tree>
