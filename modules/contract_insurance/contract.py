@@ -756,6 +756,15 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     multi_mixed_view = options
 
     @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR', [
+                ('party.full_name',) + tuple(clause[1:]),
+                ], [
+                ('item_desc.rec_name',) + tuple(clause[1:]),
+                ],
+            ]
+
+    @classmethod
     def view_attributes(cls):
         return super(CoveredElement, cls).view_attributes() + [(
                 '/form/notebook/page[@id="covered_relations"]',
