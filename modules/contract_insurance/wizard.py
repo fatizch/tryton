@@ -1,9 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from collections import defaultdict
+
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button, \
     StateAction
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Len
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, model
@@ -22,6 +24,7 @@ __all__ = [
     'ExclusionDisplay',
     'ManageExclusion',
     'WizardOption',
+    'ExclusionOptionSelector',
     ]
 
 
@@ -431,26 +434,6 @@ class CreateExtraPremiumOptionSelector(model.CoopView):
         return result
 
 
-class ExclusionSelector(model.CoopView):
-    'Exclusion'
-
-    __name__ = 'contract.manage_exclusion.select.exclusion'
-
-    selected = fields.Boolean('Selected')
-    exclusion = fields.Many2One('offered.exclusion', 'Exclusion')
-
-
-class ExclusionDisplay(model.CoopView):
-    'Exclusion Display'
-
-    __name__ = 'contract.manage_exclusion.select'
-
-    options = fields.One2Many('contract.manage_extra_premium.select.option',
-        None, 'Options')
-    exclusions = fields.One2Many('contract.manage_exclusion.select.exclusion',
-        None, 'Exclusions')
-
-
 class ManageExclusion(Wizard):
     'Manage Exclusions'
 
@@ -459,11 +442,10 @@ class ManageExclusion(Wizard):
     start_state = 'existing'
     existing = StateView('contract.manage_exclusion.select',
         'contract_insurance.manage_exclusion_select_view_form', [
-            Button('End', 'end', 'tryton-cancel'),
-            Button('Propagate Selected', 'propagate_selected',
-                'tryton-fullscreen', default=True),
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Apply', 'apply', 'tryton-go-next', default=True),
             ])
-    propagate_selected = StateTransition()
+    apply = StateTransition()
 
     @classmethod
     def __setup__(cls):
@@ -477,42 +459,202 @@ class ManageExclusion(Wizard):
 
     def default_existing(self, name):
         pool = Pool()
-        Option = pool.get('contract.option')
-        Selector = pool.get('contract.manage_extra_premium.select')
-        active_id = Transaction().context.get('active_id')
         active_model = Transaction().context.get('active_model')
-        if active_model != 'contract.option':
-            self.raise_user_error('no_option')
-        selected_option = Option(active_id)
-        covered_element = selected_option.covered_element
-        existing_exclusions = []
-        existing_options = []
-        for exclusion in selected_option.exclusions:
-            existing_exclusions.append({
-                    'selected': True,
-                    'exclusion': exclusion.id})
-        for option in covered_element.options:
-            if option == selected_option:
-                continue
-            existing_options.append({
-                    'selected': True,
-                    'option': option.id,
-                    'option_name': Selector.get_option_name(option)})
-        return {
-            'exclusions': existing_exclusions,
-            'options': existing_options,
+        active_id = Transaction().context.get('active_id')
+        Contract = pool.get('contract')
+        Displayer = pool.get('contract.manage_exclusion.select.exclusion')
+        if active_model == 'contract':
+            contract = Contract(active_id)
+            if len(contract.covered_elements) == 1:
+                covered_element = contract.covered_elements[0]
+            else:
+                covered_element = None
+        elif active_model == 'contract.option':
+            option = pool.get('contract.option')(active_id)
+            contract = option.parent_contract
+            covered_element = option.covered_element
+        else:
+            self.raise_user_error('bad_model', active_model)
+        defaults = {
+            'covered_element': covered_element.id if covered_element else None,
+            'possible_covered_elements': [x.id
+                for x in contract.covered_elements],
             }
+        all_exclusions = []
+        for cur_covered in contract.covered_elements:
+            exclusions = defaultdict(list)
+            for option in cur_covered.options:
+                for exclusion in option.exclusions:
+                    exclusions[exclusion.id].append(option)
+            all_exclusions += [model.dictionarize(Displayer.new_displayer(
+                        cur_covered, exclusion, options))
+                for exclusion, options in exclusions.iteritems()]
 
-    def transition_propagate_selected(self):
-        selected = [x for x in self.existing.exclusions if x.selected]
-        if len(selected) == 0:
-            self.raise_user_error('no_exclusion_selected')
-        exclusions = set([x.exclusion for x in selected])
-        for option in self.existing.options:
-            if not option.selected:
-                continue
-            values = list(option.option.exclusions)
-            values.extend(list(exclusions - set(option.option.exclusions)))
-            option.option.exclusions = values
-            option.option.save()
+        defaults['all_exclusions'] = all_exclusions
+        if covered_element:
+            defaults['cur_exclusions'] = [x for x in defaults['all_exclusions']
+                if x['parent'] == str(covered_element)]
+
+        return defaults
+
+    def transition_apply(self):
+        Option = Pool().get('contract.option')
+        self.existing.update_exclusions()
+        per_option = {option: []
+            for covered_element in self.existing.possible_covered_elements
+            for option in covered_element.options}
+        for exclusion in self.existing.all_exclusions:
+            for option in exclusion.options:
+                if option.selected:
+                    per_option[option.option].append(exclusion.exclusion)
+        to_save = []
+        for option, exclusions in per_option.iteritems():
+            if {x.id for x in exclusions} != {x.id for x in option.exclusions}:
+                option.exclusions = exclusions
+                to_save.append(option)
+        if to_save:
+            Option.save(to_save)
         return 'end'
+
+
+class ExclusionDisplay(model.CoopView):
+    'Exclusion Display'
+
+    __name__ = 'contract.manage_exclusion.select'
+
+    covered_element = fields.Many2One('contract.covered_element',
+        'Covered Element',
+        domain=[('id', 'in', Eval('possible_covered_elements'))],
+        states={'readonly': Len(Eval('possible_covered_elements', [])) == 1},
+        depends=['possible_covered_elements'])
+    possible_covered_elements = fields.Many2Many('contract.covered_element',
+        None, None, 'Possible Covered Elements', readonly=True,
+        states={'invisible': True})
+    all_exclusions = fields.One2Many(
+        'contract.manage_exclusion.select.exclusion', None, 'Exclusions',
+        states={'invisible': True})
+    cur_exclusions = fields.One2Many(
+        'contract.manage_exclusion.select.exclusion', None, 'Exclusions')
+    used_exclusions = fields.Many2Many('offered.exclusion', None, None,
+        'Used Exclusions', states={'invisible': True})
+    new_exclusion = fields.Many2One('offered.exclusion', 'New Exclusion',
+        states={'invisible': ~Eval('covered_element')},
+        domain=[('id', 'not in', Eval('used_exclusions'))],
+        depends=['covered_element', 'used_exclusions'])
+    propagate_exclusion = fields.Many2One('offered.exclusion', 'Propagate',
+        domain=[('id', 'in', Eval('used_exclusions'))],
+        depends=['used_exclusions'])
+
+    @classmethod
+    def __setup__(cls):
+        super(ExclusionDisplay, cls).__setup__()
+        cls._buttons.update({
+                'button_propagate_selected': {'readonly':
+                    ~Eval('propagate_exclusion')},
+                })
+
+    @fields.depends('all_exclusions', 'covered_element', 'cur_exclusions',
+        'new_exclusion', 'used_exclusions')
+    def on_change_covered_element(self):
+        self.update_exclusions()
+        self.new_exclusion = None
+
+    @fields.depends('cur_exclusions', 'covered_element', 'new_exclusion',
+        'used_exclusions')
+    def on_change_new_exclusion(self):
+        Displayer = Pool().get('contract.manage_exclusion.select.exclusion')
+        self.cur_exclusions = list(self.cur_exclusions) + [
+            Displayer.new_displayer(self.covered_element, self.new_exclusion,
+                self.covered_element.options)]
+        self.new_exclusion = None
+        self.used_exclusions = [x.exclusion for x in self.cur_exclusions]
+
+    @model.CoopView.button_change('cur_exclusions', 'propagate_exclusion')
+    def button_propagate_selected(self):
+        options = [x.options for x in self.cur_exclusions
+            if x.exclusion == self.propagate_exclusion][0]
+        option_ids = [x.option.id for x in options if x.selected]
+        for exclusion in self.cur_exclusions:
+            for option in exclusion.options:
+                option.selected = option.option.id in option_ids
+            exclusion.options = list(exclusion.options)
+            exclusion.option_string = exclusion.on_change_with_option_string()
+        self.cur_exclusions = list(self.cur_exclusions)
+
+    def update_exclusions(self):
+        self.used_exclusions = []
+        if self.cur_exclusions:
+            self.all_exclusions = [x for x in self.all_exclusions
+                if self.cur_exclusions[0].parent != x.parent] + list(
+                self.cur_exclusions)
+        if not self.covered_element:
+            self.cur_exclusions = []
+            return
+        self.cur_exclusions = [x for x in self.all_exclusions
+            if str(self.covered_element) == x.parent]
+        self.used_exclusions = [x.exclusion for x in self.cur_exclusions]
+
+
+class ExclusionSelector(model.CoopView):
+    'Exclusion'
+
+    __name__ = 'contract.manage_exclusion.select.exclusion'
+
+    exclusion = fields.Many2One('offered.exclusion', 'Exclusion',
+        readonly=True)
+    parent = fields.Char('Parent', states={'invisible': True})
+    options = fields.One2Many('contract.option.selector', None, 'Options')
+    option_string = fields.Char('Options', readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(ExclusionSelector, cls).__setup__()
+        cls._buttons.update({
+                'button_clear_all': {},
+                'button_check_all': {},
+                })
+
+    @classmethod
+    def view_attributes(cls):
+        return [('/form/group[@id="invisible"]', 'states',
+                {'invisible': True}),
+            ]
+
+    @fields.depends('options')
+    def on_change_with_option_string(self):
+        return ', '.join(x.option.rec_name for x in self.options if x.selected)
+
+    @model.CoopView.button_change('options', 'option_string')
+    def button_check_all(self):
+        for option in self.options:
+            option.selected = True
+        self.option_string = self.on_change_with_option_string()
+        self.options = list(self.options)
+
+    @model.CoopView.button_change('options', 'option_string')
+    def button_clear_all(self):
+        for option in self.options:
+            option.selected = False
+        self.option_string = ''
+        self.options = list(self.options)
+
+    @classmethod
+    def new_displayer(cls, covered_element, exclusion, options):
+        OptionSelector = Pool().get('contract.option.selector')
+        displayer = cls(
+            parent=str(covered_element),
+            exclusion=exclusion,
+            options=[OptionSelector(option=x,
+                    selected=x in (options or []))
+                for x in covered_element.options])
+        displayer.option_string = displayer.on_change_with_option_string()
+        return displayer
+
+
+class ExclusionOptionSelector(model.CoopView):
+    'Option selector'
+
+    __name__ = 'contract.option.selector'
+
+    option = fields.Many2One('contract.option', 'Option', readonly=True)
+    selected = fields.Boolean('Selected')

@@ -42,13 +42,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Manage Extra Premium</field>
             <field name="wiz_name">contract.manage_extra_premium</field>
         </record>
-        <!-- ###################### -->
-        <!-- # Exclusion Selector # -->
-        <!-- ###################### -->
-        <record model="ir.ui.view" id="manage_exclusion_select_extra_view_list">
-            <field name="model">contract.manage_exclusion.select.exclusion</field>
-            <field name="type">tree</field>
-            <field name="name">manage_exclusion_select_exclusion_list</field>
+        <!-- #################### -->
+        <!-- # Manage Exclusion # -->
+        <!-- #################### -->
+        <record model="ir.action.wizard" id="act_manage_exclusion">
+            <field name="name">Manage Exclusions</field>
+            <field name="wiz_name">contract.manage_exclusion</field>
         </record>
         <!-- ##################### -->
         <!-- # Exclusion Display # -->
@@ -58,12 +57,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">manage_exclusion_select_form</field>
         </record>
-        <!-- #################### -->
-        <!-- # Manage Exclusion # -->
-        <!-- #################### -->
-        <record model="ir.action.wizard" id="act_manage_exclusion">
-            <field name="name">Manage Exclusions</field>
-            <field name="wiz_name">contract.manage_exclusion</field>
+        <!-- ###################### -->
+        <!-- # Exclusion Selector # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="manage_exclusion_select_extra_view_list">
+            <field name="model">contract.manage_exclusion.select.exclusion</field>
+            <field name="type">tree</field>
+            <field name="name">manage_exclusion_select_exclusion_list</field>
+        </record>
+        <record model="ir.ui.view" id="manage_exclusion_select_extra_view_form">
+            <field name="model">contract.manage_exclusion.select.exclusion</field>
+            <field name="type">form</field>
+            <field name="name">manage_exclusion_select_exclusion_form</field>
         </record>
         <!-- ######################################## -->
         <!-- # Create Extra Premium Option Selector # -->
@@ -79,6 +84,14 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.wizard" id="act_create_extra_premium">
             <field name="name">Create Extra Premium</field>
             <field name="wiz_name">contract.option.extra_premium.create</field>
+        </record>
+        <!-- ############################# -->
+        <!-- # Exclusion Option Selector # -->
+        <!-- ############################# -->
+        <record model="ir.ui.view" id="exclusion_option_selector_view_list">
+            <field name="model">contract.option.selector</field>
+            <field name="type">tree</field>
+            <field name="name">exclusion_option_selector_list</field>
         </record>
     </data>
 </tryton>

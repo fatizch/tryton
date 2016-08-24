@@ -72,6 +72,7 @@ class Contract(Printable):
                 'manage_extra_premium': {},
                 'create_extra_premium': {},
                 'generic_send_letter': {},
+                'propagate_exclusions': {},
                 })
         cls._error_messages.update({
                 'error_in_renewal_date_calculation': 'Errors occured during '
@@ -230,6 +231,11 @@ class Contract(Printable):
     @classmethod
     @ModelView.button_action('contract_insurance.act_create_extra_premium')
     def create_extra_premium(cls, instances):
+        pass
+
+    @classmethod
+    @ModelView.button_action('contract_insurance.act_manage_exclusion')
+    def propagate_exclusions(cls, instances):
         pass
 
     def get_publishing_context(self, cur_context):

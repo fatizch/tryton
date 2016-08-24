@@ -2,6 +2,18 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <form string="Manage Exclusions">
-    <field name="exclusions" expand_toolbar="0"/>
-    <field name="options" expand_toolbar="0"/>
+    <label name="covered_element"/>
+    <field name="covered_element" colspan="3" widget="selection"/>
+    <label name="new_exclusion"/>
+    <field name="new_exclusion" colspan="3"/>
+    <field name="cur_exclusions" group="exclusions" mode="tree" colspan="2" expand_toolbar="0"/>
+    <field name="cur_exclusions" group="exclusions" mode="form" colspan="2" expand_toolbar="0"/>
+    <!-- Enable if options propagation among exclusions is required -->
+    <!-- <label name="propagate_exclusion"/> -->
+    <!-- <field name="propagate_exclusion" colspan="2"/> -->
+    <!-- <button string="Propagate Options" name="button_propagate_selected"/> -->
+    <newline/>
+    <field name="possible_covered_elements"/>
+    <field name="all_exclusions"/>
+    <field name="used_exclusions"/>
 </form>

@@ -34,6 +34,7 @@ def register():
         ExtraPremiumSelector,
         CreateExtraPremiumOptionSelector,
         OptionSelector,
+        ExclusionOptionSelector,
         ExtraPremiumDisplay,
         ExclusionSelector,
         ExclusionDisplay,
