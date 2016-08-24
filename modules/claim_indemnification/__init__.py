@@ -29,7 +29,7 @@ def register():
         ExtraDatasDisplayers,
         IndemnificationDefinition,
         IndemnificationCalculationResult,
-        IndemnificationRegularization,
+        IndemnificationRegularisation,
         IndemnificationAssistantView,
         IndemnificationValidateElement,
         IndemnificationControlElement,

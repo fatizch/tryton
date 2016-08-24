@@ -26,7 +26,7 @@ INDEMNIFICATION_DETAIL_KIND = [
     ('deductible', 'Deductible'),
     ('benefit', 'Indemnified'),
     ('limit', 'Limit'),
-    ('regularization', 'Regularization'),
+    ('regularisation', 'Regularisation'),
     ]
 
 

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form string="Regularisation" col="4">
+    <group id="input_fields" colspan="2" col="4">
+        <label name="amount"/>
+        <field name="amount"/>
+        <newline/>
+        <label name="payback_method"/>
+        <field name="payback_method" xexpand="1"/>
+        <label name="payment_term"/>
+        <field name="payment_term" xexpand="1"/>
+    </group>
+    <group id="indemnification_request_group" yfill="1" yexpand="1" colspan="4">
+        <field name="indemnification" colspan="4" mode="form,tree"/>
+    </group>
+    <field name="cancelled" colspan="4"/>
+    <field name="payback_required"/>
+    <field name="payment_term_required"/>
+</form>

@@ -15,5 +15,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Schedule Indemnification</field>
             <field name="code">schedule_indemnification</field>
         </record>
+        <record model="event.type" id="event_cancel_indemnification">
+            <field name="name">Cancel Indemnification</field>
+            <field name="code">cancel_indemnification</field>
+        </record>
     </data>
 </tryton>

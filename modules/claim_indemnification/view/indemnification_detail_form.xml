@@ -5,8 +5,8 @@ this repository contains the full copyright notices and license terms. -->
     <label name="indemnification"/>
     <field name="indemnification"/>
     <newline/>
-    <label name="kind"/>
-    <field name="kind"/>
+    <label name="status"/>
+    <field name="status"/>
     <newline/>
     <label name="start_date"/>
     <field name="start_date"/>

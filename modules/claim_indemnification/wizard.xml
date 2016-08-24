@@ -80,10 +80,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">indemnification_definition_form</field>
         </record>
-        <record model="ir.ui.view" id="indemnification_regularization_view_form">
-            <field name="model">claim.indemnification_regularization</field>
+        <record model="ir.ui.view" id="indemnification_regularisation_view_form">
+            <field name="model">claim.indemnification_regularisation</field>
             <field name="type">form</field>
-            <field name="name">indemnification_regularization_form</field>
+            <field name="name">indemnification_regularisation_form</field>
         </record>
         <record model="ir.ui.view" id="indemnification_calculation_result_view_form">
             <field name="model">claim.indemnification_calculation_result</field>

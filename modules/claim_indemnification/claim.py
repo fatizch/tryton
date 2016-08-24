@@ -4,7 +4,7 @@
 from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Or, Bool
+from trytond.pyson import Eval, Or, Bool, In, Not
 from trytond.model import ModelView
 from trytond.rpc import RPC
 
@@ -144,6 +144,11 @@ class ClaimService:
                 'fill_extra_datas': RPC(instantiate=0,
                     readonly=False),
                 })
+        cls._error_messages.update({
+            'overlap_date': 'Are you sure you want to cancel '
+            'the periods between %s and %s?',
+            'offset_date': 'The date is not equal to the cancelled date'
+            })
 
     @classmethod
     def _export_skips(cls):
@@ -203,11 +208,35 @@ class ClaimService:
         amount = sum([x.amount for x in self.indemnifications
             if x.status == 'paid' and x.currency == currency])
         if amount:
-            details_dict['regularization'] = [
+            details_dict['regularisation'] = [
                 {
                     'amount_per_unit': amount,
                     'nb_of_unit': -1,
                 }]
+
+    @classmethod
+    def cancel_indemnification(cls, services, at_date):
+        to_cancel = []
+        to_delete = []
+        ClaimIndemnification = Pool().get('claim.indemnification')
+        for service in services:
+            for indemn in service.indemnifications:
+                if (indemn.status != 'cancelled' and
+                        indemn.status != 'cancel_paid'):
+                    if at_date < indemn.end_date:
+                        if indemn.status == 'paid':
+                            to_cancel.append(indemn)
+                        else:
+                            to_delete.append(indemn)
+        if to_cancel:
+            if at_date != to_cancel[0].start_date:
+                cls.raise_user_error('offset_date')
+            cls.raise_user_warning('overlap_date', 'overlap_date',
+                (to_cancel[0].start_date, to_cancel[-1].end_date))
+            ClaimIndemnification.cancel_indemnification(to_cancel)
+        if to_delete:
+            ClaimIndemnification.delete(to_delete)
+        return to_cancel
 
     @classmethod
     @ModelView.button_action(
@@ -251,6 +280,10 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             ('rejected', 'Rejected'),
             ('paid', 'Paid'),
             ('cancelled', 'Annule'),
+            ('cancel_paid', 'Paid & Cancelled'),
+            ('cancel_scheduled', 'Schedule Cancelled'),
+            ('cancel_validated', 'Validate Cancelled'),
+            ('cancel_controlled', 'Control Cancelled'),
             ], 'Status', sort=False,
         states={'readonly': Eval('status') == 'paid'}, depends=['status'])
     status_string = status.translated('status')
@@ -284,6 +317,22 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         fields.Char('Prestation'),
         'get_benefit_description')
     control_reason = fields.Char('Control Reason')
+    payback_method = fields.Selection([
+            ('continuous', 'Continuous'),
+            ('immediate', 'Immediate'),
+            ('planned', 'Planned'),
+            ('', ''),
+            ], 'Repayment Method', states={
+                'invisible': Not(In(Eval('status'),
+                        ['cancelled', 'cancel_paid'])),
+                'readonly': Eval('status') == 'cancel_paid'
+            })
+    payment_term = fields.Many2One(
+        'account.invoice.payment_term', 'Payment Term', states={
+            'invisible': Not(In(Eval('status'),
+                    ['cancelled', 'cancel_paid'])),
+            'readonly': Eval('status') == 'cancel_paid'
+            })
 
     @classmethod
     def __setup__(cls):
@@ -403,15 +452,33 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
     @ModelView.button
     def schedule(cls, indemnifications):
         Event = Pool().get('event')
+        schedule = []
+        schedule_cancel = []
+        control = []
+        control_cancel = []
         with model.error_manager():
             cls.check_schedulability(indemnifications)
         for indemnification in indemnifications:
             do_control, reason = indemnification.require_control()
             if do_control is True:
-                cls.write([indemnification], {
-                    'status': 'scheduled', 'control_reason': reason})
+                if indemnification.status == 'cancelled':
+                    schedule_cancel.append(indemnification)
+                else:
+                    schedule.append(indemnification)
             else:
-                cls.write([indemnification], {'status': 'controlled'})
+                if indemnification.status == 'cancelled':
+                    control_cancel.append(indemnification)
+                else:
+                    control.append(indemnification)
+        cls.write(
+            schedule, {
+                'status': 'scheduled', 'control_reason': reason
+                },
+            schedule_cancel, {
+                'status': 'cancel_scheduled', 'control_reason': reason
+                },
+            control, {'status': 'controlled'},
+            control_cancel, {'status': 'cancel_controlled'})
         Event.notify_events(indemnifications, 'schedule_indemnification')
 
     def get_claim_sub_status(self):
@@ -451,7 +518,16 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
     @classmethod
     @ModelView.button
     def validate_indemnification(cls, indemnifications):
-        cls.write(indemnifications, {'status': 'validated'})
+        validate = []
+        cancelled = []
+        for indemn in indemnifications:
+            if indemn.status == 'cancelled':
+                cancelled.append(indemn)
+            else:
+                validate.append(indemn)
+        cls.write(
+            validate, {'status': 'validated'},
+            cancelled, {'status': 'cancel_validated'})
         Event = Pool().get('event')
         Event.notify_events(indemnifications, 'validate_indemnification')
 
@@ -465,16 +541,21 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
     @ModelView.button
     def cancel_indemnification(cls, indemnifications):
         pool = Pool()
-        Invoice = pool.get('account.invoice')
-        indemnification = indemnifications[0].id
-        invoices_to_cancel = Invoice.search([
-                ('lines.claim_details.indemnification', '=', indemnification)])
-        Invoice.cancel(invoices_to_cancel)
         cls.write(indemnifications, {'status': 'cancelled'})
+        Event = pool.get('event')
+        Event.notify_events(indemnifications, 'cancel_indemnification')
 
     @classmethod
     def control_indemnification(cls, indemnifications):
-        cls.write(indemnifications, {'status': 'controlled'})
+        control = []
+        cancelled = []
+        for indemn in indemnifications:
+            if indemn.status == 'cancelled':
+                cancelled.append(indemn)
+            else:
+                control.append(indemn)
+        cls.write(control, {'status': 'controlled'},
+                  cancelled, {'status': 'cancel_controlled'})
 
     @classmethod
     def get_journal(cls):
@@ -493,7 +574,9 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         Invoice = pool.get('account.invoice')
         PaymentTerm = pool.get('account.invoice.payment_term')
         party = key['party']
-        if party.supplier_payment_term:
+        if 'payment_term' in key:
+            payment_term = key['payment_term']
+        elif party.supplier_payment_term:
             payment_term = party.supplier_payment_term
         else:
             payment_term = PaymentTerm.search([])[0]
@@ -511,7 +594,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             description='%s - %s' % (
                 key['indemnification'].service.loss.loss_desc.name,
                 key['indemnification'].service.loss.claim.claimant.full_name)
-            )
+                )
 
     @classmethod
     def _get_invoice_line(cls, key, invoice, indemnification):
@@ -525,6 +608,8 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         invoice_line.quantity = 1
         invoice_line.on_change_product()
         invoice_line.unit_price = indemnification.amount
+        if indemnification.status == 'cancel_validated':
+            invoice_line.unit_price = -invoice_line.unit_price
         detail = LineDetail()
         detail.service = indemnification.service
         detail.indemnification = indemnification
@@ -557,8 +642,9 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
     def invoice(cls, indemnifications):
         pool = Pool()
         Invoice = pool.get('account.invoice')
-
         invoices = []
+        paid = []
+        cancelled = []
         for indemnification in indemnifications:
             key = {
                 'party': indemnification.beneficiary,
@@ -567,6 +653,15 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
                 'currency': indemnification.currency,
                 'indemnification': indemnification,
                 }
+            if indemnification.status == 'cancel_validated':
+                cancelled.append(indemnification)
+                if indemnification.payback_method == 'immediate':
+                    # do something special here, discuss with Fred
+                    pass
+                elif indemnification.payback_method == 'planned':
+                    key.update({'payment_term': indemnification.payment_term})
+            else:
+                paid.append(indemnification)
             invoice = cls._get_invoice(key)
             invoice.lines = [cls._get_invoice_line(key, invoice,
                     indemnification)]
@@ -576,7 +671,8 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             invoices.append(invoice)
         Invoice.save(invoices)
         Invoice.post(invoices)
-        cls.write(indemnifications, {'status': 'paid'})
+        cls.write(paid, {'status': 'paid'},
+            cancelled, {'status': 'cancel_paid'})
 
 
 class IndemnificationTaxes(model.CoopSQL):
@@ -622,6 +718,8 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
     duration_description = fields.Function(
         fields.Char('Duration'),
         'get_duration_description')
+    status = fields.Function(
+        fields.Char('Status'), 'get_status_string')
 
     def get_indemnification_kind(self, name):
         return self.indemnification.kind
@@ -651,6 +749,12 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
                 details.append(detail)
                 detail.kind = key
         return details
+
+    def get_status_string(self, name):
+        if self.indemnification.status == 'cancelled':
+            return '%s - [%s]' % (
+                self.kind_string, self.indemnification.status_string)
+        return self.kind_string
 
 
 class IndemnificationControlRule(

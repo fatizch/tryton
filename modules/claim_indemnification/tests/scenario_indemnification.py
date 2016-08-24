@@ -1,19 +1,19 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 # #Comment# # Init
+import os
+
 import datetime
 from decimal import Decimal
 from dateutil.relativedelta import relativedelta
 from proteus import config, Model, Wizard
 
-# os.environ['DB_NAME'] = 'tests'
-# config = config.set_xmlrpc('http://admin:admin@localhost:8068/tests')
+# os.environ['DB_NAME'] = 'roederer_tests'
 
 # config = config.set_trytond(
-#     database='postgresql://jack:coog@localhost:5432/tests',
 #     user='admin',
 #     config_file=os.path.join(
-#         os.environ['VIRTUAL_ENV'], 'conf', 'trytond.conf')
+#         '/home/jack/workspace/roederer', 'conf', 'trytond.conf')
 # )
 
 from trytond.modules.party_cog.tests.tools import create_party_person
@@ -201,50 +201,112 @@ claim_config = Config()
 claim_config.control_rule = control_rule
 claim_config.save()
 
+Action = Model.get('ir.action')
+action, = Action.find(['name', '=', 'Indemnification Validation Wizard'])
+validate_action = Action.read([action.id], config.context)[0]
+
+action, = Action.find(['name', '=', 'Indemnification Control Wizard'])
+control_action = Action.read([action.id], config.context)[0]
+
+
 # #Comment# #Create indemnifications
 create = Wizard('claim.create_indemnification', models=[service])
 create.form.start_date = datetime.date(2016, 6, 1)
-create.form.end_date = datetime.date(2016, 9, 1)
+create.form.end_date = datetime.date(2016, 12, 1)
 create.form.extra_data = {}
 create.form.service = service
 create.execute('calculate')
 
 indemnifications = service.indemnifications
-len(indemnifications) > 0
+
+len(indemnifications) == 1
 # #Res# #True
 
-indemnifications[0].amount == 3906
+indemnifications[0].amount == 7728
 # #Res# #True
+
 indemnifications[0].click('schedule')
 indemnifications[0].status == 'scheduled'
 # #Res# #True
 
-# #Comment# # Get Control Wizard entrypoint
-Action = Model.get('ir.action')
-action, = Action.find([('name', '=', 'Indemnification Control Wizard')])
-action = Action.read([action.id], config.context)[0]
+controller = Wizard('claim.indemnification.assistant',
+    models=indemnifications, action=control_action)
 
-validation = Wizard('claim.indemnification.assistant',
-    models=indemnifications, action=action)
+controller.form.control[0].action = 'validate'
+controller.execute('control_state')
 
-validation.form.control[0].action = 'validate'
-validation.execute('control_state')
-
-indemnifications[0].control_reason == control_reason
-# #Res# #True
 indemnifications[0].status == 'controlled'
 # #Res# #True
 
-action, = Action.find(['name', '=', 'Indemnification Validation Wizard'])
-action = Action.read([action.id], config.context)[0]
-validation = Wizard('claim.indemnification.assistant',
-    models=indemnifications, action=action)
+validator = Wizard('claim.indemnification.assistant',
+    models=indemnifications, action=validate_action)
 
-validation.form.validate[0].action = 'validate'
-validation.execute('validation_state')
+validator.form.validate[0].action = 'validate'
+validator.execute('validation_state')
 
-indemnifications[0].status == 'paid'
+# #Comment# #Create warning to simulate clicking yes
+Warning = Model.get('res.user.warning')
+warning = Warning()
+warning.always = False
+warning.user = user
+warning.name = 'overlap_date'
+warning.save()
+
+# #Comment# #Generate Regularisation
+create = Wizard('claim.create_indemnification', models=[service])
+create.form.start_date = datetime.date(2016, 6, 1)
+create.form.end_date = datetime.date(2016, 8, 1)
+create.form.extra_data = {}
+create.form.service = service
+create.execute('calculate')
+
+create.execute('regularisation')
+
+create.form.payback_method = 'continuous'
+create.execute('apply_regularisation')
+
+indemnifications = service.indemnifications
+
+len(indemnifications) == 2
 # #Res# #True
 
-claim.invoices[0].total_amount == 3906.00
+# #Comment# #Schedule the indemnification
+indemnifications[1].click('schedule')
+
+indemnifications[1].status == 'scheduled'
+# #Res# #True
+
+indemnifications[0].status == 'cancelled'
+# #Res# #True
+
+controller = Wizard('claim.indemnification.assistant',
+    models=indemnifications, action=control_action)
+
+controller.form.control[0].action = 'validate'
+controller.execute('control_state')
+
+indemnifications[0].status == 'cancelled'
+# #Res# #True
+indemnifications[1].control_reason == control_reason
+# #Res# #True
+indemnifications[1].status == 'controlled'
+# #Res# #True
+
+validator = Wizard('claim.indemnification.assistant',
+    models=indemnifications, action=validate_action)
+
+len(validator.form.validate) == 2
+# #Res# #True
+
+validator.form.validate[0].action = 'validate'
+validator.form.validate[1].action = 'validate'
+validator.execute('validation_state')
+
+indemnifications[0].status == 'cancel_paid'
+# #Res# #True
+
+indemnifications[1].status == 'paid'
+# #Res# #True
+
+claim.invoices[0].total_amount < 0
 # #Res# #True

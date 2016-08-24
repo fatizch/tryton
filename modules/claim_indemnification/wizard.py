@@ -19,7 +19,7 @@ __all__ = [
     'IndemnificationCalculationResult',
     'IndemnificationDefinition',
     'ExtraDataValueDisplayer',
-    'IndemnificationRegularization',
+    'IndemnificationRegularisation',
     'ExtraDatasDisplayers',
     'FillExtraData',
     'IndemnificationValidateElement',
@@ -149,16 +149,15 @@ class IndemnificationAssistantView(model.CoopView):
         if not field:
             return
         if self.mode == 'validate':
-            status = 'controlled'
+            status_domain = ('status', 'in', ['controlled', 'cancelled'])
             model_name = 'claim.indemnification.assistant.validate.element'
         elif self.mode == 'control':
-            status = 'scheduled'
+            status_domain = ('status', '=', 'validated')
             model_name = 'claim.indemnification.assistant.control.element'
         Element = pool.get(model_name)
         Indemnification = pool.get('claim.indemnification')
-        results = Indemnification.search([
-                ('status', '=', status)],
-            order=[(field, self.order_sort)])
+        results = Indemnification.search([status_domain],
+            order=[(field, self.order_sort or 'ASC')])
         sorted_elements = []
         for result in results:
             sorted_elements.append(
@@ -213,7 +212,7 @@ class IndemnificationAssistant(Wizard):
         Indemnification = pool.get('claim.indemnification')
         Element = pool.get('claim.indemnification.assistant.validate.element')
         result = Indemnification.search([
-                ('status', '=', 'controlled')],
+                ('status', 'in', ['controlled', 'cancelled'])],
             order=[('amount', 'DESC')])
         for res in result:
             elements.append(
@@ -356,6 +355,18 @@ class FillExtraData(Wizard):
         return 'end'
 
 
+class SelectService(model.CoopView):
+    'Select Service'
+    __name__ = 'claim.select_service'
+
+    selected_service = fields.Many2One('claim.service', 'Selected Service',
+        required=True,
+        domain=([('id', 'in', Eval('possible_services'))]),
+        depends=['possible_services'])
+    possible_services = fields.One2Many('claim.service', None,
+        'Possible Services', states={'invisible': True})
+
+
 class IndemnificationDefinition(model.CoopView):
     'Indemnification Definition'
     __name__ = 'claim.indemnification_definition'
@@ -391,27 +402,57 @@ class IndemnificationCalculationResult(model.CoopView):
 
     indemnification = fields.One2Many('claim.indemnification', None,
         'Indemnification')
+    cancelled = fields.Many2Many(
+        'claim.indemnification', None, None, 'Cancelled',
+        states={'invisible': True})
 
 
-class IndemnificationRegularization(model.CoopView):
-    'Indemnification Regularization'
-    __name__ = 'claim.indemnification_regularization'
+class IndemnificationRegularisation(model.CoopView):
+    'Indemnification Regularisation'
+    __name__ = 'claim.indemnification_regularisation'
 
-    amount_available_for_regularization = fields.Numeric(
-        'Montant disponible pour regularisation',
+    amount = fields.Numeric('Regularisation Amount',
         digits=(16, 2), readonly=True)
-    amount_selected_for_regularisation = fields.Numeric(
-        'Montant utilise pour regularisation',
-        digits=(16, 2))
     indemnification = fields.One2Many('claim.indemnification', None,
-        'Indemnification', states={'invisible': True})
+        'Indemnification')
+    cancelled = fields.Many2Many(
+        'claim.indemnification', None, None, 'Cancelled', readonly=True)
+    payback_required = fields.Boolean('Payback Required',
+        states={'invisible': True})
+    payback_method = fields.Selection([
+            ('continuous', 'Continuous'),
+            ('immediate', 'Immediate'),
+            ('planned', 'Planned'),
+            ('', ''),
+            ], 'Payback Method',
+            states={'invisible': ~Eval('payback_required')})
+    payment_term_required = fields.Boolean('Payment Term Required',
+        states={'invisible': True})
+    payment_term = fields.Many2One(
+        'account.invoice.payment_term', 'Payment Term',
+        states={'invisible': ~Eval('payment_term_required')})
+
+    @fields.depends('amount')
+    def on_change_with_payback_required(self):
+        return self.amount < 0
+
+    @fields.depends('payback_method', 'payback_required')
+    def on_change_with_payment_term_required(self):
+        return (self.payback_required is True and
+                    self.payback_method == 'planned')
 
 
 class CreateIndemnification(Wizard):
     'Create Indemnification'
     __name__ = 'claim.create_indemnification'
 
-    start_state = 'definition'
+    start_state = 'select_service_needed'
+    select_service_needed = StateTransition()
+    select_service = StateView('claim.select_service',
+        'claim_indemnification.select_service_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Continue', 'service_selected', 'tryton-go-next')])
+    service_selected = StateTransition()
     definition = StateView('claim.indemnification_definition',
         'claim_indemnification.indemnification_definition_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
@@ -419,48 +460,72 @@ class CreateIndemnification(Wizard):
     calculate = StateTransition()
     result = StateView('claim.indemnification_calculation_result',
         'claim_indemnification.indemnification_calculation_result_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Validate', 'regularization', 'tryton-go-next')])
-    regularization = StateTransition()
-    select_regularization = StateView('claim.indemnification_regularization',
-        'claim_indemnification.indemnification_regularization_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Valider', 'apply_regularization', 'tryton-go-next')])
-    apply_regularization = StateTransition()
+            Button('Previous', 'definition', 'tryton-go-previous'),
+            Button('Validate', 'regularisation', 'tryton-go-next')])
+    regularisation = StateTransition()
+    init_previous = StateTransition()
+    select_regularisation = StateView('claim.indemnification_regularisation',
+        'claim_indemnification.indemnification_regularisation_view_form', [
+            Button('Previous', 'init_previous', 'tryton-go-previous'),
+            Button('Valider', 'apply_regularisation', 'tryton-go-next')])
+    apply_regularisation = StateTransition()
 
     def default_definition(self, name):
         pool = Pool()
         Service = pool.get('claim.service')
-        service_id = Transaction().context.get('active_id')
-        service = Service(service_id)
-        non_cancelled = []
-        for indemnification in service.indemnifications:
-            if indemnification.status != 'cancelled':
-                non_cancelled.append(indemnification)
-        if non_cancelled:
-            start_date = non_cancelled[-1].end_date + \
-                relativedelta(days=1)
-            beneficiary = non_cancelled[-1].beneficiary
-
+        Claim = pool.get('claim')
+        Indemnification = pool.get('claim.indemnification')
+        active_id = Transaction().context.get('active_id')
+        if not active_id:
+            return 'end'
+        if Transaction().context.get('active_model') == 'claim.service':
+            self.definition.service = Service(active_id)
+            return 'definition'
+        elif Transaction().context.get('active_model') == 'claim':
+            claim = Claim(active_id)
+            claim_services = [s for s in claim.delivered_services
+                if not s.loss.end_date]
+            if len(claim_services) == 1:
+                self.definition.service = claim_services[0]
+                return 'definition'
+            self.select_service.possible_services = claim_services
+            self.select_service.selected_services = claim_services[0]
+            return 'select_service'
+        elif (Transaction().context.get('active_model') ==
+                'claim_indemnification'):
+            indemnification = Indemnification(active_id)
+            self.definition.start_date = indemnification.start_date
+            self.definition.end_date = indemnification.end_date
+            self.definition.service = indemnification.service
+            self.result.indemnification = [indemnification]
+            return 'result'
         else:
-            start_date = service.loss.start_date
-            beneficiary = service.contract.get_policy_owner(
-                service.loss.start_date)
-        extra_data = utils.get_value_at_date(service.extra_datas, start_date)
-        res = {
-            'service': service_id,
-            'start_date': start_date,
-            'beneficiary': beneficiary.id,
-            'end_date': service.loss.end_date
-            if service.loss.end_date else None,
-            'extra_data': extra_data.extra_data_values,
-            }
-        return res
+            return 'end'
+
+    def transition_service_selected(self):
+        self.definition.service = self.select_service.selected_service
+
+    def delete_indemnification(self):
+        pool = Pool()
+        Indemnification = pool.get('claim.indemnification')
+        if self.result and self.result.indemnification:
+            Indemnification.delete(self.result.indemnification)
+
+    def check_input(self):
+        input_start_date = self.definition.start_date
+        input_end_date = self.definition.end_date
+        ClaimService = Pool().get('claim.service')
+        service = self.definition.service
+        if (input_end_date <= input_start_date or
+                input_start_date <= service.loss.start_date):
+            self.raise_user_error('wrong_date')
+        return ClaimService.cancel_indemnification([service], input_start_date)
 
     def transition_calculate(self):
         pool = Pool()
         Indemnification = pool.get('claim.indemnification')
         ExtraData = pool.get('claim.service.extra_data')
+        self.result.cancelled = self.check_input()
         indemnification = Indemnification(
             start_date=self.definition.start_date,
             end_date=self.definition.end_date
@@ -485,49 +550,55 @@ class CreateIndemnification(Wizard):
         indemnification.beneficiary = self.definition.beneficiary
         Indemnification.calculate([indemnification])
         indemnification.save()
-        self.indemnification = indemnification
+        self.result.indemnification = [indemnification]
         return 'result'
 
     def default_result(self, name):
-        return {'indemnification': [self.indemnification.id]}
-
-    def amount_available_for_regularization(self):
-        res = 0
-        for indemnification in self.definition.service.indemnifications:
-            if indemnification.status == 'cancelled':
-                res += indemnification.amount
-            else:
-                for detail in indemnification.details:
-                    if detail.kind == 'regularization':
-                        res += detail.amount
-        return max(res, 0)
-
-    def transition_regularization(self):
-        if self.amount_available_for_regularization():
-            self.indemnification = self.result.indemnification[0]
-            return 'select_regularization'
-        return 'end'
-
-    def default_select_regularization(self, name):
-        amount = min(self.amount_available_for_regularization(),
-            self.indemnification.amount)
         return {
-            'amount_available_for_regularization': amount,
-            'amount_selected_for_regularisation': amount,
-            'indemnification': [self.indemnification.id]
+            'indemnification': [x.id for x in self.result.indemnification],
+            'cancelled': [x.id for x in self.result.cancelled],
             }
 
-    def transition_apply_regularization(self):
+    def amount_available_for_regularisation(self):
+        declared_res = self.result.indemnification[0].amount
+        cancelled_res = 0
+        for indemnification in self.result.cancelled:
+            cancelled_res += indemnification.amount
+        return declared_res - cancelled_res
+
+    def transition_init_previous(self):
+        self.result.indemnification = \
+            self.select_regularisation.indemnification
+        self.result.cancelled = self.select_regularisation.cancelled
+        return 'result'
+
+    def transition_regularisation(self):
+        if self.result.cancelled:
+            self.select_regularisation.indemnification = \
+                [self.result.indemnification[0].id]
+            self.select_regularisation.cancelled = self.result.cancelled
+            return 'select_regularisation'
+        return 'end'
+
+    def default_select_regularisation(self, name):
+        indemnification = self.select_regularisation.indemnification[0]
+        amount = self.amount_available_for_regularisation()
+        return {
+            'amount': amount,
+            'indemnification': [indemnification.id],
+            'cancelled': [x.id for x in self.select_regularisation.cancelled]
+            }
+
+    def transition_apply_regularisation(self):
         pool = Pool()
-        Detail = pool.get('claim.indemnification.detail')
-        indemnification = self.select_regularization.indemnification[0]
-        detail = Detail(
-            indemnification=indemnification,
-            kind='regularization',
-            amount=-
-            self.select_regularization.amount_selected_for_regularisation)
-        detail.save()
-        indemnification.amount -= \
-            self.select_regularization.amount_selected_for_regularisation
+        Indemnification = pool.get('claim.indemnification')
+        indemnification = self.select_regularisation.indemnification[0]
         indemnification.save()
+        cancelled = self.select_regularisation.cancelled
+        payback_method = self.select_regularisation.payback_method
+        payment_term = getattr(self.select_regularisation, 'payment_term', None)
+        Indemnification.write(list(cancelled), {
+                'payback_method': payback_method,
+                'payment_term': payment_term.id if payment_term else None
+                })
         return 'end'

@@ -638,21 +638,11 @@ msgctxt "field:claim.indemnification_definition,start_date:"
 msgid "Start Date"
 msgstr "Date de début"
 
-msgctxt ""
-"field:claim.indemnification_regularization,amount_available_for_regularization:"
-msgid "Montant disponible pour regularisation"
-msgstr "Montant disponible pour regularisation"
-
-msgctxt ""
-"field:claim.indemnification_regularization,amount_selected_for_regularisation:"
-msgid "Montant utilise pour regularisation"
-msgstr "Montant utilisé pour la régularisation"
-
-msgctxt "field:claim.indemnification_regularization,id:"
+msgctxt "field:claim.indemnification_regularisation,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:claim.indemnification_regularization,indemnification:"
+msgctxt "field:claim.indemnification_regularisation,indemnification:"
 msgid "Indemnification"
 msgstr "Prestations"
 
@@ -751,8 +741,8 @@ msgctxt "model:claim.indemnification_definition,name:"
 msgid "Indemnification Definition"
 msgstr "Définition de la période"
 
-msgctxt "model:claim.indemnification_regularization,name:"
-msgid "Indemnification Regularization"
+msgctxt "model:claim.indemnification_regularisation,name:"
+msgid "Indemnification Regularisation"
 msgstr "Régularisation"
 
 msgctxt "model:event.type,name:event_cancel_invoice"
@@ -940,7 +930,7 @@ msgid "Limit"
 msgstr "Plafond"
 
 msgctxt "selection:claim.indemnification.detail,kind:"
-msgid "Regularization"
+msgid "Regularisation"
 msgstr "Régularisation"
 
 msgctxt "selection:claim.indemnification.detail,kind:"
@@ -1067,8 +1057,8 @@ msgctxt "view:claim.indemnification_definition:"
 msgid "Informations"
 msgstr "Informations"
 
-msgctxt "view:claim.indemnification_regularization:"
-msgid "Regularization"
+msgctxt "view:claim.indemnification_regularisation:"
+msgid "Regularisation"
 msgstr "Régularisation"
 
 msgctxt "view:claim.service:"
@@ -1087,17 +1077,25 @@ msgctxt "wizard_button:claim.create_indemnification,result,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:claim.create_indemnification,result,regularization:"
+msgctxt "wizard_button:claim.create_indemnification,result,regularisation:"
 msgid "Validate"
 msgstr "Valider"
 
 msgctxt ""
-"wizard_button:claim.create_indemnification,select_regularization,apply_regularization:"
+"wizard_button:claim.create_indemnification,select_regularisation,apply_regularisation:"
 msgid "Valider"
 msgstr "Valider"
 
 msgctxt ""
-"wizard_button:claim.create_indemnification,select_regularization,end:"
+"wizard_button:claim.create_indemnification,select_regularisation,result:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:claim.create_indemnification,select_service,continue:"
+msgid "Continue"
+msgstr "Continuer"
+
+msgctxt "wizard_button:claim.create_indemnification,select_service,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -1128,3 +1126,79 @@ msgctxt ""
 "wizard_button:claim.indemnification.assistant,validate_view_state,validation_state:"
 msgid "Done"
 msgstr "Fait"
+
+msgctxt "field:claim.indemnification.detail,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "error:claim.service:"
+msgid "Are you sure you want to cancel the periods between %s and %s?"
+msgstr "Êtes-vous sur de vouloir annuler les périodes entre %s et %s?"
+
+msgctxt "error:claim.service:"
+msgid "The date is not equal to the cancelled date"
+msgstr "Le date n'est pas égale à la date d'annulation"
+
+msgctxt "selection:claim.indemnification_regularisation,payback_method:"
+msgid "Continuous"
+msgstr "Continu"
+
+msgctxt "selection:claim.indemnification_regularisation,payback_method:"
+msgid "Immediate"
+msgstr "Immédiat"
+
+msgctxt "selection:claim.indemnification_regularisation,payback_method:"
+msgid "Planned"
+msgstr "Planifié"
+
+msgctxt "field:claim.indemnification_regularisation,payback_method:"
+msgid "Payback Method"
+msgstr "Méthode de reversement"
+
+msgctxt "selection:claim.indemnification,status:"
+msgid "Paid & Cancelled"
+msgstr "Payé et Annulé"
+
+msgctxt "selection:claim.indemnification,payback_method:"
+msgid "Continuous"
+msgstr "Continu"
+
+msgctxt "selection:claim.indemnification,payback_method:"
+msgid "Immediate"
+msgstr "Immédiat"
+
+msgctxt "selection:claim.indemnification,payback_method:"
+msgid "Planned"
+msgstr "Planifié"
+
+msgctxt "field:claim.indemnification,payback_method:"
+msgid "Repayment Method"
+msgstr "Méthode de reversement"
+
+msgctxt "field:claim.indemnification_regularisation,amount:"
+msgid "Regularisation Amount"
+msgstr "Montant pour la régularisation"
+
+msgctxt "field:claim.indemnification_regularisation,payment_term:"
+msgid "Payment Term"
+msgstr "Conditions de paiement"
+
+msgctxt "field:claim.indemnification,payment_term:"
+msgid "Payment Term"
+msgstr "Conditions de paiement"
+
+msgctxt "field:claim.indemnification_regularisation,cancelled:"
+msgid "Cancelled"
+msgstr "Annulé"
+
+msgctxt "field:claim.indemnification_regularisation,payment_term_required:"
+msgid "Payment Term Required"
+msgstr "Condition de reversement requis"
+
+msgctxt "field:claim.indemnification_regularisation,payback_required:"
+msgid "Payback Required"
+msgstr "Repaiment requis"
+
+msgctxt "field:claim.indemnification_calculation_result,cancelled:"
+msgid "Cancelled"
+msgstr "Annulé"

@@ -1,6 +1,7 @@
 
  Init::
 
+    >>> import os
     >>> import datetime
     >>> from decimal import Decimal
     >>> from dateutil.relativedelta import relativedelta
@@ -172,44 +173,90 @@ Create Claim Configuration::
     >>> claim_config = Config()
     >>> claim_config.control_rule = control_rule
     >>> claim_config.save()
+    >>> Action = Model.get('ir.action')
+    >>> action, = Action.find(['name', '=', 'Indemnification Validation Wizard'])
+    >>> validate_action = Action.read([action.id], config.context)[0]
+    >>> action, = Action.find(['name', '=', 'Indemnification Control Wizard'])
+    >>> control_action = Action.read([action.id], config.context)[0]
 
 Create indemnifications::
 
     >>> create = Wizard('claim.create_indemnification', models=[service])
     >>> create.form.start_date = datetime.date(2016, 6, 1)
-    >>> create.form.end_date = datetime.date(2016, 9, 1)
+    >>> create.form.end_date = datetime.date(2016, 12, 1)
     >>> create.form.extra_data = {}
     >>> create.form.service = service
     >>> create.execute('calculate')
     >>> indemnifications = service.indemnifications
-    >>> len(indemnifications) > 0
+    >>> len(indemnifications) == 1
     True
-    >>> indemnifications[0].amount == 3906
+    >>> indemnifications[0].amount == 7728
     True
     >>> indemnifications[0].click('schedule')
     >>> indemnifications[0].status == 'scheduled'
     True
-
- Get Control Wizard entrypoint::
-
-    >>> Action = Model.get('ir.action')
-    >>> action, = Action.find([('name', '=', 'Indemnification Control Wizard')])
-    >>> action = Action.read([action.id], config.context)[0]
-    >>> validation = Wizard('claim.indemnification.assistant',
-    ...     models=indemnifications, action=action)
-    >>> validation.form.control[0].action = 'validate'
-    >>> validation.execute('control_state')
-    >>> indemnifications[0].control_reason == control_reason
-    True
+    >>> controller = Wizard('claim.indemnification.assistant',
+    ...     models=indemnifications, action=control_action)
+    >>> controller.form.control[0].action = 'validate'
+    >>> controller.execute('control_state')
     >>> indemnifications[0].status == 'controlled'
     True
-    >>> action, = Action.find(['name', '=', 'Indemnification Validation Wizard'])
-    >>> action = Action.read([action.id], config.context)[0]
-    >>> validation = Wizard('claim.indemnification.assistant',
-    ...     models=indemnifications, action=action)
-    >>> validation.form.validate[0].action = 'validate'
-    >>> validation.execute('validation_state')
-    >>> indemnifications[0].status == 'paid'
+    >>> validator = Wizard('claim.indemnification.assistant',
+    ...     models=indemnifications, action=validate_action)
+    >>> validator.form.validate[0].action = 'validate'
+    >>> validator.execute('validation_state')
+
+Create warning to simulate clicking yes::
+
+    >>> Warning = Model.get('res.user.warning')
+    >>> warning = Warning()
+    >>> warning.always = False
+    >>> warning.user = user
+    >>> warning.name = 'overlap_date'
+    >>> warning.save()
+
+Generate Regularisation::
+
+    >>> create = Wizard('claim.create_indemnification', models=[service])
+    >>> create.form.start_date = datetime.date(2016, 6, 1)
+    >>> create.form.end_date = datetime.date(2016, 8, 1)
+    >>> create.form.extra_data = {}
+    >>> create.form.service = service
+    >>> create.execute('calculate')
+    >>> create.execute('regularisation')
+    >>> create.form.payback_method = 'continuous'
+    >>> create.execute('apply_regularisation')
+    >>> indemnifications = service.indemnifications
+    >>> len(indemnifications) == 2
     True
-    >>> claim.invoices[0].total_amount == 3906.00
+
+Schedule the indemnification::
+
+    >>> indemnifications[1].click('schedule')
+    >>> indemnifications[1].status == 'scheduled'
+    True
+    >>> indemnifications[0].status == 'cancelled'
+    True
+    >>> controller = Wizard('claim.indemnification.assistant',
+    ...     models=indemnifications, action=control_action)
+    >>> controller.form.control[0].action = 'validate'
+    >>> controller.execute('control_state')
+    >>> indemnifications[0].status == 'cancelled'
+    True
+    >>> indemnifications[1].control_reason == control_reason
+    True
+    >>> indemnifications[1].status == 'controlled'
+    True
+    >>> validator = Wizard('claim.indemnification.assistant',
+    ...     models=indemnifications, action=validate_action)
+    >>> len(validator.form.validate) == 2
+    True
+    >>> validator.form.validate[0].action = 'validate'
+    >>> validator.form.validate[1].action = 'validate'
+    >>> validator.execute('validation_state')
+    >>> indemnifications[0].status == 'cancel_paid'
+    True
+    >>> indemnifications[1].status == 'paid'
+    True
+    >>> claim.invoices[0].total_amount < 0
     True
