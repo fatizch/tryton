@@ -1870,6 +1870,26 @@ class SelectEndorsement(model.CoopView):
                 'endorsement_definition': self.endorsement_definition,
                 })
 
+    def init_new_endorsement(self):
+        endorsement = self._get_new_endorsement()
+        endorsement.save()
+        self.endorsement = endorsement.id
+
+    def _get_new_endorsement(self):
+        endorsement = Pool().get('endorsement')()
+        endorsement.definition = self.endorsement_definition
+        for fname in self._fields_to_copy():
+            setattr(endorsement, fname, getattr(self, fname, None))
+        if getattr(self, 'contract', None):
+            endorsement.contract_endorsements = [{
+                    'contract': self.contract.id,
+                    'values': {},
+                    }]
+        return endorsement
+
+    def _fields_to_copy(self):
+        return ['applicant', 'effective_date']
+
 
 class BasicPreview(EndorsementWizardPreviewMixin, model.CoopView):
     'Basic Preview State View'
@@ -2015,19 +2035,7 @@ class StartEndorsement(Wizard):
         with model.error_manager():
             self.check_before_start()
         if not self.endorsement:
-            endorsement = Pool().get('endorsement')()
-            endorsement.effective_date = \
-                self.select_endorsement.effective_date
-            endorsement.definition = self.definition
-            if self.select_endorsement.applicant:
-                endorsement.applicant = self.select_endorsement.applicant
-            if getattr(self.select_endorsement, 'contract', None):
-                endorsement.contract_endorsements = [{
-                        'contract': self.select_endorsement.contract.id,
-                        'values': {},
-                        }]
-            endorsement.save()
-            self.select_endorsement.endorsement = endorsement.id
+            self.select_endorsement.init_new_endorsement()
         return self.definition.endorsement_parts[0].view
 
     def check_before_start(self):

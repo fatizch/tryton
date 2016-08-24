@@ -172,14 +172,7 @@ class StartEndorsement:
         with model.error_manager():
             self.check_before_start()
         if not self.endorsement:
-            endorsement = Pool().get('endorsement')()
-            endorsement.effective_date = \
-                self.select_endorsement.effective_date
-            endorsement.definition = self.definition
-            if self.select_endorsement.applicant:
-                endorsement.applicant = self.select_endorsement.applicant
-            endorsement.save()
-            self.select_endorsement.endorsement = endorsement.id
+            self.select_endorsement.init_new_endorsement()
         # See the explanation in the table_query method on
         # endorsement.part.union model in endorsement_process/endorsement.py
         return EndorsementPart(Transaction().context.get(

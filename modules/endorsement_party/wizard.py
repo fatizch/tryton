@@ -622,6 +622,15 @@ class SelectEndorsement(model.CoopView):
     def on_change_party(self):
         self.applicant = self.party
 
+    def _get_new_endorsement(self):
+        endorsement = super(SelectEndorsement, self)._get_new_endorsement()
+        if getattr(self, 'party', None):
+            endorsement.party_endorsements = [{
+                    'party': self.party.id,
+                    'values': {},
+                    }]
+        return endorsement
+
 
 class StartEndorsement:
     __name__ = 'endorsement.start'
@@ -631,17 +640,6 @@ class StartEndorsement:
             return 'select_endorsement'
         else:
             return super(StartEndorsement, self).transition_start()
-
-    def transition_start_endorsement(self):
-        view = super(StartEndorsement, self).transition_start_endorsement()
-        if hasattr(self.select_endorsement, 'party') and\
-                self.select_endorsement.party:
-            self.endorsement.party_endorsements = [{
-                    'party': self.select_endorsement.party.id,
-                    'values': {},
-                    }]
-        self.select_endorsement.endorsement.save()
-        return view
 
     def default_select_endorsement(self, name):
         defaults = super(StartEndorsement, self).default_select_endorsement(
