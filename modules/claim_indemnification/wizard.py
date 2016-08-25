@@ -22,6 +22,7 @@ __all__ = [
     'IndemnificationRegularisation',
     'ExtraDatasDisplayers',
     'FillExtraData',
+    'SelectService',
     'IndemnificationValidateElement',
     'IndemnificationControlElement',
     'IndemnificationAssistantView',
