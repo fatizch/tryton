@@ -2,6 +2,18 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:claim.create_indemnification:"
+msgid "Indemnifications in the future are not allowed"
+msgstr "Les indemnisations dans le futur ne sont pas autorisées"
+
+msgctxt "error:claim.create_indemnification:"
+msgid "The end date must not exceed the loss end date"
+msgstr "La date de fin ne doit pas exceder la date fin du préjudice"
+
+msgctxt "error:claim.create_indemnification:"
+msgid "End date must be higher than start date"
+msgstr "La date de fin doit être supérieure à la date de début"
+
 msgctxt "field:account.invoice.line,claim_details:"
 msgid "Claim Details"
 msgstr "Détail du sinistre"

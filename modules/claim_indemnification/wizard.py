@@ -470,6 +470,17 @@ class CreateIndemnification(Wizard):
             Button('Valider', 'apply_regularisation', 'tryton-go-next')])
     apply_regularisation = StateTransition()
 
+    @classmethod
+    def __setup__(cls):
+        super(CreateIndemnification, cls).__setup__()
+        cls._error_messages.update({
+                'wrong_date': 'End date must be higher than start date',
+                'end_date_future': 'Indemnifications in '
+                'the future are not allowed',
+                'end_date_exceeds_loss': 'The end date must not exceed '
+                'the loss end date',
+                })
+
     def default_definition(self, name):
         pool = Pool()
         Service = pool.get('claim.service')
@@ -516,6 +527,10 @@ class CreateIndemnification(Wizard):
         input_end_date = self.definition.end_date
         ClaimService = Pool().get('claim.service')
         service = self.definition.service
+        if self.definition.end_date > utils.today():
+            self.raise_user_error('end_date_future')
+        if self.definition.end_date > service.loss.end_date:
+            self.raise_user_error('end_date_exceeds_loss')
         if (input_end_date <= input_start_date or
                 input_start_date <= service.loss.start_date):
             self.raise_user_error('wrong_date')
