@@ -73,7 +73,7 @@ class Agency(model.CoopSQL, model.CoopView):
         self.branch_code = self.branch_code.zfill(5)
 
     @fields.depends('bank')
-    def on_change_with_bank_party(self, name):
+    def on_change_with_bank_party(self, name=None):
         return self.bank.party.id if self.bank else None
 
 
