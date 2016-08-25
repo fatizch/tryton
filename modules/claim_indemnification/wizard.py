@@ -481,7 +481,7 @@ class CreateIndemnification(Wizard):
                 'the loss end date',
                 })
 
-    def default_definition(self, name):
+    def transition_select_service_needed(self):
         pool = Pool()
         Service = pool.get('claim.service')
         Claim = pool.get('claim')
@@ -521,6 +521,41 @@ class CreateIndemnification(Wizard):
         Indemnification = pool.get('claim.indemnification')
         if self.result and self.result.indemnification:
             Indemnification.delete(self.result.indemnification)
+
+    def default_definition(self, name):
+        definition = getattr(self, 'definition', None)
+        if definition:
+            service = definition.service
+        result = getattr(self, 'definition', None)
+        if self.result and getattr(result, 'indemnification', None):
+            service = self.result.indemnification[0].service
+            beneficiary = self.result.indemnification[0].beneficiary
+            start_date = self.result.indemnification[0].start_date
+            end_date = self.result.indemnification[0].end_date
+            self.delete_indemnification()
+        else:
+            non_cancelled = []
+            for indemnification in service.indemnifications:
+                if indemnification.status != 'cancelled':
+                    non_cancelled.append(indemnification)
+            if non_cancelled:
+                start_date = non_cancelled[-1].end_date + \
+                    relativedelta(days=1)
+                beneficiary = non_cancelled[-1].beneficiary
+            else:
+                start_date = service.loss.start_date
+                beneficiary = service.contract.get_policy_owner(
+                    service.loss.start_date)
+            end_date = service.loss.end_date
+        extra_data = utils.get_value_at_date(service.extra_datas, start_date)
+        res = {
+            'service': service.id,
+            'start_date': start_date,
+            'beneficiary': beneficiary.id,
+            'end_date': end_date,
+            'extra_data': extra_data.extra_data_values,
+            }
+        return res
 
     def check_input(self):
         input_start_date = self.definition.start_date

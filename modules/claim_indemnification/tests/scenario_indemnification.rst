@@ -1,7 +1,6 @@
 
  Init::
 
-    >>> import os
     >>> import datetime
     >>> from decimal import Decimal
     >>> from dateutil.relativedelta import relativedelta
@@ -129,7 +128,7 @@ Create Claim Configuration::
     >>> claim.main_contract = contract
     >>> claim.save()
     >>> loss = claim.losses.new()
-    >>> loss.start_date = datetime.date(2016, 05, 01)
+    >>> loss.start_date = datetime.date(2016, 01, 01)
     >>> loss.end_date = datetime.date(2017, 01, 01)
     >>> loss.loss_desc = loss_desc
     >>> loss.event_desc = event_desc
@@ -182,8 +181,8 @@ Create Claim Configuration::
 Create indemnifications::
 
     >>> create = Wizard('claim.create_indemnification', models=[service])
-    >>> create.form.start_date = datetime.date(2016, 6, 1)
-    >>> create.form.end_date = datetime.date(2016, 12, 1)
+    >>> create.form.start_date = datetime.date(2016, 1, 1)
+    >>> create.form.end_date = datetime.date(2016, 8, 1)
     >>> create.form.extra_data = {}
     >>> create.form.service = service
     >>> create.execute('calculate')
@@ -218,8 +217,8 @@ Create warning to simulate clicking yes::
 Generate Regularisation::
 
     >>> create = Wizard('claim.create_indemnification', models=[service])
-    >>> create.form.start_date = datetime.date(2016, 6, 1)
-    >>> create.form.end_date = datetime.date(2016, 8, 1)
+    >>> create.form.start_date = datetime.date(2016, 1, 1)
+    >>> create.form.end_date = datetime.date(2016, 6, 1)
     >>> create.form.extra_data = {}
     >>> create.form.service = service
     >>> create.execute('calculate')

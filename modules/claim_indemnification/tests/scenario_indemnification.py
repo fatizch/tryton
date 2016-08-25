@@ -1,8 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 # #Comment# # Init
-import os
-
 import datetime
 from decimal import Decimal
 from dateutil.relativedelta import relativedelta
@@ -150,7 +148,7 @@ claim.main_contract = contract
 claim.save()
 
 loss = claim.losses.new()
-loss.start_date = datetime.date(2016, 05, 01)
+loss.start_date = datetime.date(2016, 01, 01)
 loss.end_date = datetime.date(2017, 01, 01)
 loss.loss_desc = loss_desc
 loss.event_desc = event_desc
@@ -211,8 +209,8 @@ control_action = Action.read([action.id], config.context)[0]
 
 # #Comment# #Create indemnifications
 create = Wizard('claim.create_indemnification', models=[service])
-create.form.start_date = datetime.date(2016, 6, 1)
-create.form.end_date = datetime.date(2016, 12, 1)
+create.form.start_date = datetime.date(2016, 1, 1)
+create.form.end_date = datetime.date(2016, 8, 1)
 create.form.extra_data = {}
 create.form.service = service
 create.execute('calculate')
@@ -254,8 +252,8 @@ warning.save()
 
 # #Comment# #Generate Regularisation
 create = Wizard('claim.create_indemnification', models=[service])
-create.form.start_date = datetime.date(2016, 6, 1)
-create.form.end_date = datetime.date(2016, 8, 1)
+create.form.start_date = datetime.date(2016, 1, 1)
+create.form.end_date = datetime.date(2016, 6, 1)
 create.form.extra_data = {}
 create.form.service = service
 create.execute('calculate')
