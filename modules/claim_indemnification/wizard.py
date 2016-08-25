@@ -564,7 +564,8 @@ class CreateIndemnification(Wizard):
         service = self.definition.service
         if self.definition.end_date > utils.today():
             self.raise_user_error('end_date_future')
-        if self.definition.end_date > service.loss.end_date:
+        if (service.loss.end_date and
+                self.definition.end_date > service.loss.end_date):
             self.raise_user_error('end_date_exceeds_loss')
         if (input_end_date <= input_start_date or
                 input_start_date <= service.loss.start_date):
