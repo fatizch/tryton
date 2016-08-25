@@ -27,6 +27,7 @@ def register():
         EventLog,
         ExtraDataValueDisplayer,
         ExtraDatasDisplayers,
+        SelectService,
         IndemnificationDefinition,
         IndemnificationCalculationResult,
         IndemnificationRegularisation,
