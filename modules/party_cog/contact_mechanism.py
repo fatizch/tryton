@@ -95,7 +95,7 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
     comment = fields.Text('Comment')
     attachment = fields.Many2One('ir.attachment', 'Attachment',
         domain=[('resource', '=', Eval('for_object'))], depends=['for_object'],
-        context={'resource': Eval('for_object')}, ondelete='RESTRICT')
+        context={'resource': Eval('for_object')}, ondelete='CASCADE')
     for_object = fields.Function(
         fields.Char('For Object', states={'invisible': True}),
         'on_change_with_for_object')
