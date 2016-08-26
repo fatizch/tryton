@@ -77,30 +77,22 @@ class ClaimService:
     @classmethod
     @model.CoopView.button
     def check_eligibility(cls, services):
-        to_accept = []
         to_save = []
+        accepted = []
+        Event = Pool().get('event')
         for service in services:
             if service.eligibility_status != 'study_in_progress':
                 continue
             eligible, message = service.calculate_eligibility()
+            service.eligibility_comment = message
             if eligible:
-                to_accept.append(service)
-            else:
-                service.eligibility_comment = message
-                to_save.append(service)
-        cls.save(to_save)
-        cls.accept_services(to_accept)
-
-    @classmethod
-    @model.CoopView.button
-    def accept_services(cls, services):
-        pool = Pool()
-        Event = pool.get('event')
-        cls.write(services, {
-                'eligibility_status': 'accepted',
-                'eligibility_comment': '',
-                })
-        Event.notify_events(services, 'accept_claim_service')
+                service.eligibility_status = 'accepted'
+                accepted.append(service)
+            to_save.append(service)
+        if to_save:
+            cls.save(to_save)
+        if accepted:
+            Event.notify_events(accepted, 'accept_claim_service')
 
     @classmethod
     @model.CoopView.button

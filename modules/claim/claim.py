@@ -132,15 +132,14 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def set_delivered_services(cls, claims, name, value):
         pool = Pool()
         Service = pool.get('claim.service')
-        to_write = []
         to_delete = []
         for action in value:
             if action[0] == 'write':
-                to_write.extend([Service(id_) for id_ in action[1]])
+                Service.write([Service(id_) for id_ in action[1]], action[2])
             elif action[0] == 'delete':
                 to_delete.extend([Service(id_) for id_ in action[1]])
-        Service.write(to_write, action[2])
-        Service.delete(to_delete)
+        if to_delete:
+            Service.delete(to_delete)
 
     @classmethod
     def add_func_key(cls, values):

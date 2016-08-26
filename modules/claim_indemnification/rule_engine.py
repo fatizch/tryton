@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import copy
+
 from sql.aggregate import Count
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -107,7 +109,12 @@ class RuleEngineRuntime:
     @classmethod
     @check_args('service')
     def _re_deductible_end_date(cls, args):
-        return args['service'].deductible_end_date
+        return args['service'].get_deductible_end_date(args=copy.copy(args))
+
+    @classmethod
+    @check_args('service')
+    def _re_is_service_deductible(cls, args):
+        return args['service'].is_deductible()
 
     @classmethod
     @check_args('option')

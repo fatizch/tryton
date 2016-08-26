@@ -43,6 +43,9 @@ class Claim:
         fields.One2Many('claim.indemnification.detail', None,
             'Indemnifications Details'),
         'get_indemnifications_details')
+    is_services_deductible = fields.Function(fields.Boolean(
+            'Is Services Deductible'),
+        'get_is_services_deductible')
 
     @classmethod
     def __setup__(cls):
@@ -55,6 +58,10 @@ class Claim:
                     'invisible': Eval('status').in_(['closed']),
                     },
                 })
+
+    def get_is_services_deductible(self, name=None):
+        return (self.indemnifications_details and all([x.kind == 'deductible'
+                    for x in self.indemnifications_details]))
 
     def get_indemnifications_details(self, name):
         IndemnificationDetail = Pool().get('claim.indemnification.detail')
@@ -154,6 +161,12 @@ class ClaimService:
     def _export_skips(cls):
         return super(ClaimService, cls)._export_skips() | {'multi_level_view'}
 
+    def init_dict_for_rule_engine(self, cur_dict):
+        super(ClaimService, self).init_dict_for_rule_engine(cur_dict)
+        cur_dict['date'] = self.loss.start_date
+        cur_dict['deductible_end_date'] = self.get_deductible_end_date(
+            args=cur_dict)
+
     def calculate(self):
         cur_dict = {}
         self.init_dict_for_rule_engine(cur_dict)
@@ -175,24 +188,33 @@ class ClaimService:
     def default_period_frequency(cls):
         return 'quarterly'
 
-    def get_deductible_end_date(self, name):
-        args = {}
-        self.init_dict_for_rule_engine(args)
-        args['date'] = self.loss.start_date
+    def get_deductible_end_date(self, name=None, args=None):
+        if not args:
+            args = {}
+            self.init_dict_for_rule_engine(args)
         return self.benefit.calculate_deductible(args)
+
+    def is_deductible(self):
+        details = [x for indemn in self.indemnifications for x
+            in indemn.details]
+        if not details:
+            return self.loss.end_date < self.get_deductible_end_date()
+        return all([x.kind == 'deductible' for x in details])
 
     def init_from_loss(self, loss, benefit):
         pool = Pool()
         Indemnification = pool.get('claim.indemnification')
         super(ClaimService, self).init_from_loss(loss, benefit)
+        self.indemnifications = []
         if self.loss.start_date and self.loss.end_date:
-            indemnification = Indemnification(
-                start_date=self.loss.start_date,
-                end_date=self.loss.end_date
-                )
-            indemnification.init_from_service(self)
-            Indemnification.calculate([indemnification])
-            self.indemnifications = [indemnification]
+            if self.loss.end_date < self.get_deductible_end_date():
+                indemnification = Indemnification(
+                    start_date=self.loss.start_date,
+                    end_date=self.loss.end_date
+                    )
+                indemnification.init_from_service(self)
+                Indemnification.calculate([indemnification])
+                self.indemnifications = [indemnification]
 
     def get_paid_until_date(self, name):
         cur_date = None
