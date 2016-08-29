@@ -440,6 +440,17 @@ class Payment:
         super(Payment, cls).fail(payments)
 
     @classmethod
+    def succeed(cls, payments):
+        super(Payment, cls).succeed(payments)
+        to_update = [p for p in payments
+            if (p.sepa_return_reason_code or p.sepa_bank_reject_date)]
+        if to_update:
+            cls.write(to_update, {
+                    'sepa_return_reason_code': None,
+                    'sepa_bank_reject_date': None
+                    })
+
+    @classmethod
     def get_reject_fee(cls, payments):
         pool = Pool()
         JournalFailureAction = pool.get(
