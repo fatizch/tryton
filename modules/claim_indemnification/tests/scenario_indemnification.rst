@@ -185,11 +185,12 @@ Create indemnifications::
     >>> create.form.end_date = datetime.date(2016, 8, 1)
     >>> create.form.extra_data = {}
     >>> create.form.service = service
+    >>> create.form.beneficiary = subscriber
     >>> create.execute('calculate')
     >>> indemnifications = service.indemnifications
     >>> len(indemnifications) == 1
     True
-    >>> indemnifications[0].amount == 7728
+    >>> indemnifications[0].amount == 8988
     True
     >>> indemnifications[0].click('schedule')
     >>> indemnifications[0].status == 'scheduled'
@@ -221,6 +222,7 @@ Generate Regularisation::
     >>> create.form.end_date = datetime.date(2016, 6, 1)
     >>> create.form.extra_data = {}
     >>> create.form.service = service
+    >>> create.form.beneficiary = subscriber
     >>> create.execute('calculate')
     >>> create.execute('regularisation')
     >>> create.form.payback_method = 'continuous'

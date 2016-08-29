@@ -75,6 +75,11 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ############################################################ -->
         <!-- ########### Indemnification Creation Wizard ########### -->
         <!-- ############################################################ -->
+        <record model="ir.ui.view" id="select_service_view_form">
+            <field name="model">claim.select_service</field>
+            <field name="type">form</field>
+            <field name="name">claim_select_service</field>
+        </record>
         <record model="ir.ui.view" id="indemnification_definition_view_form">
             <field name="model">claim.indemnification_definition</field>
             <field name="type">form</field>
@@ -101,6 +106,19 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.model.button-res.group"
             id="invoice_validate_button_group_account">
             <field name="button" ref="claim_create_indemnification_button"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+        <record model="ir.action.wizard" id="act_create_claim_indemnification_wizard">
+            <field name="name">Create Indemnification</field>
+            <field name="wiz_name">claim.create_indemnification</field>
+        </record>
+        <record model="ir.model.button" id="claim_create_claim_indemnification_button">
+            <field name="name">create_indemnification</field>
+            <field name="model" search="[('model', '=', 'claim')]"/>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="claim_create_indemnification_button_group_account">
+            <field name="button" ref="claim_create_claim_indemnification_button"/>
             <field name="group" ref="res.group_admin"/>
         </record>
     </data>

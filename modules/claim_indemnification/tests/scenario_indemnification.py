@@ -213,6 +213,7 @@ create.form.start_date = datetime.date(2016, 1, 1)
 create.form.end_date = datetime.date(2016, 8, 1)
 create.form.extra_data = {}
 create.form.service = service
+create.form.beneficiary = subscriber
 create.execute('calculate')
 
 indemnifications = service.indemnifications
@@ -220,7 +221,7 @@ indemnifications = service.indemnifications
 len(indemnifications) == 1
 # #Res# #True
 
-indemnifications[0].amount == 7728
+indemnifications[0].amount == 8988
 # #Res# #True
 
 indemnifications[0].click('schedule')
@@ -256,10 +257,9 @@ create.form.start_date = datetime.date(2016, 1, 1)
 create.form.end_date = datetime.date(2016, 6, 1)
 create.form.extra_data = {}
 create.form.service = service
+create.form.beneficiary = subscriber
 create.execute('calculate')
-
 create.execute('regularisation')
-
 create.form.payback_method = 'continuous'
 create.execute('apply_regularisation')
 

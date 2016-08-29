@@ -113,6 +113,12 @@ class Claim:
         Service.save(to_save)
         return res
 
+    @classmethod
+    @ModelView.button_action(
+        'claim_indemnification.act_create_claim_indemnification_wizard')
+    def create_indemnification(cls, services):
+        pass
+
 
 class ClaimService:
     __name__ = 'claim.service'

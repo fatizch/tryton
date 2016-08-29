@@ -7,12 +7,16 @@ msgid "Indemnifications in the future are not allowed"
 msgstr "Les indemnisations dans le futur ne sont pas autorisées"
 
 msgctxt "error:claim.create_indemnification:"
-msgid "The end date must not exceed the loss end date"
-msgstr "La date de fin ne doit pas exceder la date fin du préjudice"
+msgid "End date must be greater than the start date"
+msgstr "La date de fin doit être supérieure à la date de début"
 
 msgctxt "error:claim.create_indemnification:"
-msgid "End date must be higher than start date"
-msgstr "La date de fin doit être supérieure à la date de début"
+msgid "No service available for indemnification"
+msgstr "Auncune prestation n'est disponible pour indémnisation"
+
+msgctxt "error:claim.create_indemnification:"
+msgid "The end date must not exceed the loss end date"
+msgstr "La date de fin ne doit pas exceder la date fin du préjudice"
 
 msgctxt "field:account.invoice.line,claim_details:"
 msgid "Claim Details"
@@ -658,6 +662,18 @@ msgctxt "field:claim.indemnification_regularisation,indemnification:"
 msgid "Indemnification"
 msgstr "Prestations"
 
+msgctxt "field:claim.select_service,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:claim.select_service,possible_services:"
+msgid "Possible Services"
+msgstr "Prestations possibles"
+
+msgctxt "field:claim.select_service,selected_service:"
+msgid "Selected Service"
+msgstr "Prestation sélectionnée"
+
 msgctxt "field:claim.service,deductible_end_date:"
 msgid "Deductible End Date"
 msgstr "Date de fin de la franchise"
@@ -757,6 +773,10 @@ msgctxt "model:claim.indemnification_regularisation,name:"
 msgid "Indemnification Regularisation"
 msgstr "Régularisation"
 
+msgctxt "model:claim.select_service,name:"
+msgid "Select Service"
+msgstr "Sélectionner la prestation"
+
 msgctxt "model:event.type,name:event_cancel_invoice"
 msgid "Reject Indemnification"
 msgstr "Rejeter les prestations"
@@ -776,6 +796,10 @@ msgstr "Validation des Indemnisations"
 msgctxt "model:ir.action,name:act_claim_configuration"
 msgid "Claim Configuration"
 msgstr "Configuration"
+
+msgctxt "model:ir.action,name:act_create_claim_indemnification_wizard"
+msgid "Create Indemnification"
+msgstr "Créer une période"
 
 msgctxt "model:ir.action,name:act_create_indemnification_wizard"
 msgid "Create Indemnification"
@@ -1073,6 +1097,10 @@ msgctxt "view:claim.indemnification_regularisation:"
 msgid "Regularisation"
 msgstr "Régularisation"
 
+msgctxt "view:claim.select_service:"
+msgid "Select Service"
+msgstr "Sélectionner la prestation"
+
 msgctxt "view:claim.service:"
 msgid "Fill extra data informations"
 msgstr "Saisir les données complémentaires"
@@ -1088,6 +1116,22 @@ msgstr "Annuler"
 msgctxt "wizard_button:claim.create_indemnification,result,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "wizard_button:claim.create_indemnification,result,definition:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:claim.create_indemnification,result,definition:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:claim.create_indemnification,result,definition:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:claim.create_indemnification,result,definition:"
+msgid "Previous"
+msgstr "Précédent"
 
 msgctxt "wizard_button:claim.create_indemnification,result,regularisation:"
 msgid "Validate"

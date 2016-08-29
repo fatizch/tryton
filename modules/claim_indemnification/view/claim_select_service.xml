@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Select Service">
+    <label name="selected_service"/>
+    <field name="selected_service" widget="selection" colspan="3"/>
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="option"/>
+    <field name="option"/>
+    <field name="possible_services"/>
+</form>
