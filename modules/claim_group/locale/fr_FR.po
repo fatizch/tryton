@@ -6,6 +6,10 @@ msgctxt "field:benefit,is_group:"
 msgid "Group Benefit"
 msgstr "Prestation collective"
 
+msgctxt "field:claim,legal_entity:"
+msgid "Legal Entity"
+msgstr "Société"
+
 msgctxt "model:ir.action,name:act_benefit_collective"
 msgid "Collective Benefits"
 msgstr "Prestations collectives"
