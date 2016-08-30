@@ -3,6 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <tree string="Benefits">
     <field name="benefit"/>
-    <field name="indemnification_rule"/>
     <field name="deductible_rule"/>
+    <field name="indemnification_rule"/>
 </tree>

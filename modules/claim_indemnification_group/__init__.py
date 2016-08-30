@@ -7,6 +7,7 @@ from .contract import *
 
 def register():
     Pool.register(
+        Benefit,
         BenefitRule,
         BenefitRuleIndemnification,
         BenefitRuleDeductible,

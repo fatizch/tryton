@@ -2,10 +2,9 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page[@name='versions']" position="after">
-        <page id="rules" string="Rules">
-            <field name="versions" mode="form" view_ids="claim_indemnification_group.option_version_rules_view_form" expand_toolbar="0"/>
-            <field name="is_group" invisible="1"/>
-        </page>
+    <xpath expr="/form/notebook/page/field[@name='current_extra_data']" position="after">
+        <newline/>
+        <field name="versions" mode="form" view_ids="claim_indemnification_group.option_version_rules_view_form" expand_toolbar="0" colspan="4"/>
+        <field name="is_group" invisible="1"/>
     </xpath>
 </data>

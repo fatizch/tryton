@@ -39,6 +39,12 @@ class OptionVersion:
     benefits = fields.One2Many('contract.option.benefit', 'version',
         'Benefits', delete_missing=True)
 
+    @classmethod
+    def view_attributes(cls):
+        return super(OptionVersion, cls).view_attributes() + [
+            ("/form/group[@id='invisible_benefit']", 'states', {
+                    'invisible': Len(Eval('benefits', [])) == 1})]
+
     def init_from_coverage(self, coverage):
         OptionBenefit = Pool().get('contract.option.benefit')
         benefits = []
@@ -114,5 +120,5 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
             if len(available) == 1:
                 setattr(self, fname, available[0])
                 setattr(self, fname + '_extra_data', {})
-                setattr(self, fname,
+                setattr(self, fname + '_extra_data',
                     getattr(self, 'on_change_with_' + fname + '_extra_data')())
