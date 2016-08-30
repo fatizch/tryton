@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="declaration_process_parameters_form">
+            <field name="model">claim.declare.find_process</field>
+            <field name="name">claim_declare_find_process_form</field>
+            <field name="inherit" ref="claim_process.declaration_process_parameters_form"/>
+        </record>
+    </data>
+</tryton>

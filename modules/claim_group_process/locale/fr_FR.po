@@ -1,0 +1,7 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:claim.declare.find_process,legal_entity:"
+msgid "Legal Entity"
+msgstr "Société"
