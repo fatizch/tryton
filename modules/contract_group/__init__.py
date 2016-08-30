@@ -5,6 +5,7 @@ from .offered import *
 from .contract import *
 from .benefit import *
 from .wizard import *
+from .party import *
 
 
 def register():
@@ -13,6 +14,7 @@ def register():
         OptionDescription,
         Benefit,
         Contract,
+        Party,
         Option,
         EnrollmentCreation,
         module='contract_group', type_='model')
