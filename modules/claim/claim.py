@@ -10,7 +10,7 @@ from trytond.cache import Cache
 
 from trytond.modules.cog_utils import model, utils, fields, export, coop_string
 from trytond.modules.report_engine import Printable
-from trytond.modules.contract import ServiceMixin
+from trytond.modules.currency_cog import ModelCurrency
 
 
 __metaclass__ = PoolMeta
@@ -482,10 +482,14 @@ class Loss(model.CoopSQL, model.CoopView):
             instance.check_end_date()
 
 
-class ClaimService(ServiceMixin, model.CoopSQL):
+class ClaimService(model.CoopView, model.CoopSQL, ModelCurrency):
     'Claim Service'
     __name__ = 'claim.service'
 
+    contract = fields.Many2One('contract', 'Contract', ondelete='RESTRICT')
+    option = fields.Many2One(
+        'contract.option', 'Coverage', ondelete='RESTRICT',
+        depends=['contract'])
     loss = fields.Many2One('claim.loss', 'Loss',
         ondelete='CASCADE', select=True, required=True)
     benefit = fields.Many2One('benefit', 'Benefit', ondelete='RESTRICT',
@@ -568,7 +572,6 @@ class ClaimService(ServiceMixin, model.CoopSQL):
         self.contract = option.parent_contract
 
     def init_dict_for_rule_engine(self, cur_dict):
-        super(ClaimService, self).init_dict_for_rule_engine(cur_dict)
         cur_dict['service'] = self
         self.benefit.init_dict_for_rule_engine(cur_dict)
         self.loss.init_dict_for_rule_engine(cur_dict)

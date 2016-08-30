@@ -2,10 +2,6 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <form string="Claim Service">
-    <label name="status"/>
-    <field name="status"/>
-    <label name="func_error"/>
-    <field name="func_error"/>
     <label name="contract"/>
     <field name="contract"/>
     <label name="option"/>
