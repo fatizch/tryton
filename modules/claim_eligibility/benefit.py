@@ -20,7 +20,7 @@ class Benefit:
     def check_eligibility(self, exec_context):
         if self.eligibility_rules:
             return self.eligibility_rules[0].check_eligibility(exec_context)
-        return True
+        return True, ''
 
 
 class BenefitEligibilityRule(
