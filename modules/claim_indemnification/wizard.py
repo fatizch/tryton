@@ -561,7 +561,7 @@ class CreateIndemnification(Wizard):
             Indemnification.delete(self.result.indemnification)
         else:
             definition = getattr(self, 'definition', None)
-            if definition and hasattr(self, 'service'):
+            if definition and hasattr(definition, 'service'):
                 service = definition.service
             else:
                 return {}
