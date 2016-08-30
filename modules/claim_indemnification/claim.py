@@ -57,6 +57,9 @@ class Claim:
                 'create_indemnification': {
                     'invisible': Eval('status').in_(['closed']),
                     },
+                'schedule_all': {
+                    'invisible': Eval('status').in_(['closed']),
+                    },
                 })
 
     def get_is_services_deductible(self, name=None):
@@ -118,6 +121,14 @@ class Claim:
         'claim_indemnification.act_create_claim_indemnification_wizard')
     def create_indemnification(cls, services):
         pass
+
+    @classmethod
+    @ModelView.button
+    def schedule_all(cls, claims):
+        if not claims:
+            return
+        Indemnification = Pool().get('claim.indemnification')
+        Indemnification.schedule(claims[0].indemnifications_to_schedule)
 
 
 class ClaimService:
