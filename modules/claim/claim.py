@@ -543,10 +543,7 @@ class ClaimService(model.CoopView, model.CoopSQL, ModelCurrency):
 
     def get_rec_name(self, name=None):
         if self.benefit:
-            res = self.benefit.rec_name
-            if self.status:
-                res += ' [%s]' % coop_string.translate_value(self, 'status')
-            return res
+            return self.benefit.rec_name
         return super(ClaimService, self).get_rec_name(name)
 
     def get_benefit_summary(self, name):
