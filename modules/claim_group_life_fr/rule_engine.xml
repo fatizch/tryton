@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data noupdate="1">
+        <record model="rule_engine.function" id="nombre_jours_hospitalisation_prejudice">
+            <field name="translated_technical_name">nombre_jours_hospitalisation_prejudice</field>
+            <field name="description">Nombre de jour(s) d'hospitalisation du préjudice</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_total_hospitalisation_period</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+    </data>
+</tryton>
