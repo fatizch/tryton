@@ -47,6 +47,20 @@ FREQUENCY = [
     ]
 
 
+def calculate_periods_from_dates(dates, period_start_date, period_end_date):
+    periods = []
+    start_date = period_start_date
+    filtered_dates = [x for x in dates if x >
+        period_start_date and x < period_end_date]
+    filtered_dates.sort()
+    for date in filtered_dates:
+        end_date = add_day(date, -1)
+        periods.append((start_date, end_date))
+        start_date = date
+    periods.append((start_date, period_end_date))
+    return periods
+
+
 def add_day(date, nb):
     return date + relativedelta(days=nb)
 

@@ -1,11 +1,13 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import copy
+from dateutil import rrule
 
 from sql.aggregate import Count
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.modules.rule_engine import check_args
+from trytond.modules.cog_utils import coop_date
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -21,8 +23,10 @@ class RuleEngine:
     def __setup__(cls):
         super(RuleEngine, cls).__setup__()
         cls.type_.selection.extend([
-            ('benefit', 'Benefit'),
-            ('benefit_deductible', 'Benefit: Deductible')])
+                ('benefit', 'Benefit'),
+                ('benefit_deductible', 'Benefit: Deductible'),
+                ('benefit_revaluation', 'Benefit: Revaluation'),
+                ])
 
     def on_change_with_result_type(self, name=None):
         if self.type_ == 'benefit':
@@ -66,21 +70,6 @@ class RuleEngineRuntime:
         for detail in details:
             res += (min(to_date, detail.end_date) -
                 max(from_date, detail.start_date)).days + 1
-        return res
-
-    @classmethod
-    @check_args('indemnification', 'start_date', 'end_date')
-    def _re_detail_period_start_date(cls, args):
-        res = []
-        for service in args['indemnification'].service.loss.services:
-            if service == args['indemnification'].service:
-                continue
-            for indemn in service.indemnifications:
-                for detail in indemn.details:
-                    if detail.start_date > args['start_date'] and \
-                            detail.start_date < args['end_date']:
-                        res.append(detail.start_date)
-        res.sort()
         return res
 
     @classmethod
@@ -137,3 +126,32 @@ class RuleEngineRuntime:
                     )))
         result, = cursor.fetchone()
         return int(result)
+
+    @classmethod
+    def _re_revaluation_pivot_dates(cls, args, start_date, end_date, frequency,
+            month_sync=0, day_sync=0):
+        assert frequency in ('YEARLY', 'MONTHLY', 'WEEKLY', 'DAILY')
+        if month_sync:
+            start_date = start_date.replace(month=month_sync)
+        if day_sync:
+            start_date = start_date.replace(day=day_sync)
+        dates = list(rrule.rrule(getattr(rrule, frequency),
+                dtstart=start_date, until=end_date))
+        dates.sort()
+        return [x.date() for x in dates]
+
+    @classmethod
+    def _re_revaluation_sub_periods(cls, args, dates, period_start_date,
+            period_end_date):
+        return coop_date.calculate_periods_from_dates(dates, period_start_date,
+            period_end_date)
+
+    @classmethod
+    @check_args('description')
+    def _re_get_base_salary_calculation_description(cls, args):
+        return args['description']
+
+    @classmethod
+    @check_args('base_amount')
+    def _re_get_daily_base_salary(cls, args):
+        return args['base_amount']

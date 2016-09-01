@@ -203,8 +203,10 @@ class ClaimService:
     def is_deductible(self):
         details = [x for indemn in self.indemnifications for x
             in indemn.details]
-        if not details:
+        if not details and self.loss.end_date:
             return self.loss.end_date < self.get_deductible_end_date()
+        if not self.loss.end_date:
+            return False
         return all([x.kind == 'deductible' for x in details])
 
     def init_from_loss(self, loss, benefit):
@@ -748,6 +750,9 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
         'get_duration_description')
     status = fields.Function(
         fields.Char('Status'), 'get_status_string')
+    base_amount = fields.Numeric('Base Amount',
+        digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
+        depends=['currency_digits'])
 
     def get_indemnification_kind(self, name):
         return self.indemnification.kind

@@ -16,6 +16,14 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/field[@name='deductible_rule_extra_data']" position="after">
         <field name="deductible_rules" colspan="4"/>
     </xpath>
+    <xpath expr="/form/label[@name='revaluation_rule']" position="before">
+        <label name="force_revaluation_rule"/>
+        <field name="force_revaluation_rule"/>
+    </xpath>
+    <xpath expr="/form/field[@name='revaluation_rule_extra_data']" position="after">
+        <field name="revaluation_rules" colspan="4"/>
+    </xpath>
+
     <xpath expr="/form" position="inside">
         <field name="is_group" invisible="1"/>
         <field name="benefit" invisible="1"/>

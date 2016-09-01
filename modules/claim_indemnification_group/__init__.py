@@ -11,6 +11,7 @@ def register():
         BenefitRule,
         BenefitRuleIndemnification,
         BenefitRuleDeductible,
+        BenefitRuleRevaluation,
         Option,
         OptionVersion,
         OptionBenefit,

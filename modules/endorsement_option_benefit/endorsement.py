@@ -99,6 +99,8 @@ class EndorsementOptionBenefit(relation_mixin(
         'rule_engine.rule_parameter', 'Indemnification Extra Data')
     deductible_rule_extra_data = fields.Dict(
         'rule_engine.rule_parameter', 'Deductible Extra Data')
+    revaluation_rule_extra_data = fields.Dict(
+        'rule_engine.rule_parameter', 'Revaluation Extra Data')
 
     @classmethod
     def __setup__(cls):
@@ -111,7 +113,8 @@ class EndorsementOptionBenefit(relation_mixin(
         cls._endorsed_dicts = {
             'indemnification_rule_extra_data':
             'indemnification_rule_extra_data',
-            'deductible_rule_extra_data': 'deductible_rule_extra_data'
+            'deductible_rule_extra_data': 'deductible_rule_extra_data',
+            'revaluation_rule_extra_data': 'revaluation_rule_extra_data',
             }
 
     @classmethod

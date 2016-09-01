@@ -9,4 +9,8 @@ this repository contains the full copyright notices and license terms. -->
     <label name="deductible_rule"/>
     <field name="deductible_rule"/>
     <field name="deductible_rule_extra_data" no_command="1" colspan="4"/>
+    <newline/>
+    <label name="revaluation_rule"/>
+    <field name="revaluation_rule"/>
+    <field name="revaluation_rule_extra_data" no_command="1" colspan="4"/>
 </form>

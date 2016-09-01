@@ -3,10 +3,12 @@
 from trytond.pool import Pool
 
 from .claim import *
+from .rule_engine import *
 
 
 def register():
     Pool.register(
         HospitalisationPeriod,
         Loss,
+        RuleEngineRuntime,
         module='claim_group_life_fr', type_='model')

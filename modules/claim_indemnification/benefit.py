@@ -6,7 +6,7 @@ from trytond import backend
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.cog_utils import model, fields, coop_date
 from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.currency_cog import ModelCurrency
 
@@ -70,6 +70,7 @@ class Benefit:
 class BenefitRule(
         get_rule_mixin('indemnification_rule', 'Indemnification Rule'),
         get_rule_mixin('deductible_rule', 'Deductible Rule'),
+        get_rule_mixin('revaluation_rule', 'Revaluation Rule'),
         model.CoopSQL, model.CoopView, ModelCurrency):
     'Benefit Rule'
 
@@ -83,6 +84,7 @@ class BenefitRule(
         super(BenefitRule, cls).__setup__()
         cls.indemnification_rule.domain = [('type_', '=', 'benefit')]
         cls.deductible_rule.domain = [('type_', '=', 'benefit_deductible')]
+        cls.revaluation_rule.domain = [('type_', '=', 'revaluation_rule')]
 
     @classmethod
     def __register__(cls, module):
@@ -99,6 +101,36 @@ class BenefitRule(
         if 'option' in args and 'covered_person' in args:
             return args['option'].get_coverage_amount(args['covered_person'])
 
+    @classmethod
+    def detail_period_start_date(cls, indemnification, start_date, end_date):
+        res = []
+        for service in indemnification.service.loss.services:
+            if service == indemnification.service:
+                continue
+            for indemn in service.indemnifications:
+                for detail in indemn.details:
+                    if (detail.start_date > start_date and
+                            detail.start_date < end_date):
+                        res.append(detail.start_date)
+        res.sort()
+        return res
+
+    @classmethod
+    def clean_benefits(cls, benefits):
+        benefits = sorted(benefits, key=lambda x: x['start_date'])
+        cleaned = []
+        for period in benefits:
+            if not cleaned or period['amount_per_unit'] \
+                    != cleaned[-1]['amount_per_unit']:
+                cleaned.append(period)
+            else:
+                cleaned[-1]['end_date'] = period['end_date']
+                cleaned[-1]['nb_of_unit'] = (period['end_date'] -
+                    cleaned[-1]['start_date']).days + 1
+                cleaned[-1]['amount'] = (cleaned[-1]['nb_of_unit'] *
+                    cleaned[-1]['amount_per_unit'])
+        return cleaned
+
     def calculate(self, args):
         res = []
         loss = args['loss']
@@ -106,6 +138,7 @@ class BenefitRule(
         delivered = args['service']
         deductible_end_date = self.calculate_deductible_rule(args)
         previous_date = None
+        args['limit_date'] = None
         if deductible_end_date:
             # create deductible if deductible rule is defined
             if args['start_date'] <= deductible_end_date:
@@ -117,6 +150,7 @@ class BenefitRule(
                     'nb_of_unit': (end_period - args['start_date']).days + 1,
                     'unit': 'day',
                     'amount': 0,
+                    'base_amount': 0,
                     'amount_per_unit': 0
                     })
                 if args['end_date'] <= deductible_end_date:
@@ -130,21 +164,27 @@ class BenefitRule(
             if (indemnification.start_date <
                 (extra_data.date or loss.start_date) <
                 indemnification.end_date)]
-        for date in dates:
+        # Add pivot periods
+        dates.extend(self.detail_period_start_date(indemnification,
+                previous_date, args['end_date']))
+        all_benefits = []
+        for start_date, end_date in coop_date.calculate_periods_from_dates(
+                dates, previous_date, args['end_date']):
             new_args = args.copy()
-            new_args['date'] = previous_date
-            new_args['start_date'] = previous_date
-            new_args['end_date'] = date - relativedelta(days=1)
+            new_args['date'] = start_date
+            new_args['start_date'] = start_date
+            new_args['end_date'] = end_date
             benefits = self.calculate_indemnification_rule(new_args)
-            for benefit in benefits:
-                benefit['kind'] = 'benefit'
-            res.extend(benefits)
-        new_args = args.copy()
-        new_args['date'] = previous_date
-        new_args['start_date'] = previous_date
-        new_args['end_date'] = indemnification.end_date
-        benefits = self.calculate_indemnification_rule(new_args) or []
-        for benefit in benefits:
+            if self.revaluation_rule:
+                for benefit in benefits:
+                    reval_args = new_args.copy()
+                    reval_args.update(benefit)
+                    all_benefits.extend(self.calculate_revaluation_rule(
+                        reval_args) or [])
+            else:
+                all_benefits.extend(benefits)
+        all_benefits = self.clean_benefits(all_benefits)
+        for benefit in all_benefits:
             benefit['kind'] = 'benefit'
-        res.extend(benefits)
+        res.extend(all_benefits)
         return res

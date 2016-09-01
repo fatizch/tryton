@@ -18,6 +18,14 @@ msgctxt "field:benefit.rule,indemnification_rules:"
 msgid "Indemnification Rules"
 msgstr "Règles d'indemnisation"
 
+msgctxt "field:benefit.rule,revaluation_rules:"
+msgid "Revaluation Rules"
+msgstr "Règes de revalorisation"
+
+msgctxt "field:benefit.rule,force_revaluation_rule:"
+msgid "Force Revaluation Rules"
+msgstr "Imposer la règle de revalorisation"
+
 msgctxt "field:benefit.rule,is_group:"
 msgid "Is Group"
 msgstr "Prestation collective"
@@ -110,6 +118,10 @@ msgctxt "field:contract.option.benefit,available_indemnification_rules:"
 msgid "Available Indemnification Rule"
 msgstr "Règles d'indemnisation disponibles"
 
+msgctxt "field:contract.option.benefit,available_revaluation_rules:"
+msgid "Available Revaluation Rule"
+msgstr "règles de revalorisation disponibles"
+
 msgctxt "field:contract.option.benefit,benefit:"
 msgid "Benefit"
 msgstr "Prestation"
@@ -145,6 +157,14 @@ msgstr "Règle d'indemnisation"
 msgctxt "field:contract.option.benefit,indemnification_rule_extra_data:"
 msgid "Indemnification Rule Extra Data"
 msgstr "Données complémentaires d'indemnisation"
+
+msgctxt "field:contract.option.benefit,revaluation_rule:"
+msgid "Revaluation Rule"
+msgstr "Règle de revalorisation"
+
+msgctxt "field:contract.option.benefit,revaluation_rule_extra_data:"
+msgid "Revaluation Rule Extra Data"
+msgstr "Données complémentaires de revalorisation"
 
 msgctxt "field:contract.option.benefit,rec_name:"
 msgid "Name"

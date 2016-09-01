@@ -965,6 +965,21 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     where=test_table.id == master.id))
             self.assertEqual(cursor.fetchall(), [(master.id, u'2', None)])
 
+    def test_0115_calculate_periods_at_date(self):
+        dates = [datetime.date(2012, 1, 1), datetime.date(2013, 1, 1),
+            datetime.date(2013, 6, 6), datetime.date(2013, 9, 9),
+            datetime.date(2014, 1, 1), datetime.date(2015, 1, 1)]
+        period_start = dates[1]
+        period_end = dates[-2]
+        periods = coop_date.calculate_periods_from_dates(dates, period_start,
+            period_end)
+        periods_must_be = [
+            (period_start, coop_date.add_day(dates[2], -1)),
+            (dates[2], coop_date.add_day(dates[3], -1)),
+            (dates[3], period_end),
+            ]
+        self.assertEqual(periods, periods_must_be)
+
     def test_string_replace(self):
         s = u'café-THÉ:20$'
 

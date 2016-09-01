@@ -62,6 +62,7 @@ class OptionVersion:
 
 class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         get_rule_mixin('indemnification_rule', 'Indemnification Rule'),
+        get_rule_mixin('revaluation_rule', 'Revaluation Rule'),
         model.CoopSQL, model.CoopView):
     'Option Benefit'
 
@@ -79,6 +80,10 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         fields.Many2Many('rule_engine', None, None,
             'Available Indemnification Rule'),
         'get_available_rule')
+    available_revaluation_rules = fields.Function(
+        fields.Many2Many('rule_engine', None, None,
+            'Available Revaluation Rule'),
+        'get_available_rule')
 
     @classmethod
     def __setup__(cls):
@@ -93,14 +98,21 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         cls.indemnification_rule.states['readonly'] = Len(
             'available_indemnification_rules') <= 1
         cls.indemnification_rule.depends = ['available_indemnification_rules']
+        cls.revaluation_rule.domain = [
+            ('id', 'in', Eval('available_revaluation_rules'))]
+        cls.revaluation_rule.states['readonly'] = Len(
+            'available_revaluation_rules') <= 1
+        cls.revaluation_rule.depends = ['available_revaluation_rules']
 
     @fields.depends('benefit', 'available_deductible_rules',
-        'available_indemnification_rules')
+        'available_indemnification_rules', 'available_revaluation_rules')
     def on_change_benefit(self):
         self.available_deductible_rules = \
             self.get_available_rule('available_deductible_rules')
         self.available_indemnification_rules = \
             self.get_available_rule('available_indemnification_rules')
+        self.available_revaluation_rules = \
+            self.get_available_rule('available_revaluation_rules')
 
     def get_available_rule(self, name):
         if not self.benefit:
@@ -113,7 +125,8 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         return [x.id for x in getattr(benefit_rule, name[10:])]
 
     def init_from_benefit(self):
-        for fname in ('deductible_rule', 'indemnification_rule'):
+        for fname in ('deductible_rule', 'indemnification_rule',
+                'revaluation_rule'):
             available = self.get_available_rule('available_' + fname + 's')
             if len(available) == 0:
                 pass

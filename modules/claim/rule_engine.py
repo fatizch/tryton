@@ -5,7 +5,6 @@ import datetime
 from trytond.pool import PoolMeta
 
 from trytond.modules.rule_engine import check_args
-from trytond.modules.cog_utils import coop_date
 
 
 __metaclass__ = PoolMeta
@@ -52,13 +51,6 @@ class RuleEngineRuntime:
         for loss in args['claim'].losses:
             res = max(loss.end_date or datetime.date.min, res)
         return res if res != datetime.date.min else None
-
-    @classmethod
-    @check_args('loss')
-    def _re_total_hospitalisation_period(cls, args):
-        return sum([coop_date.number_of_days_between(
-                    x.start_date, x.end_date)
-                for x in args['loss'].hospitalisation_periods])
 
     @classmethod
     @check_args('loss')

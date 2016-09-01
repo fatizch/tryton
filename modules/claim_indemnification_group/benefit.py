@@ -12,6 +12,7 @@ __all__ = [
     'BenefitRule',
     'BenefitRuleIndemnification',
     'BenefitRuleDeductible',
+    'BenefitRuleRevaluation',
     ]
 
 
@@ -47,6 +48,10 @@ class BenefitRule:
         'benefit', 'rule', 'Deductible Rules', states={
             'invisible': Eval('force_deductible_rule', False)},
         depends=['force_deductible_rule'])
+    revaluation_rules = fields.Many2Many('benefit_rule-revaluation_rule',
+        'benefit', 'rule', 'Revaluation Rules', states={
+            'invisible': Eval('force_revaluation_rule', False)},
+        depends=['force_revaluation_rule'])
     force_indemnification_rule = fields.Function(
         fields.Boolean('Force Indemnification Rule',
             states={'invisible': ~Eval('is_group')},
@@ -57,6 +62,12 @@ class BenefitRule:
             states={'invisible': ~Eval('is_group')},
             depends=['is_group']),
         'get_force_rule', setter='setter_void')
+    force_revaluation_rule = fields.Function(
+        fields.Boolean('Force Revaluation Rule',
+            states={'invisible': ~Eval('is_group')},
+            depends=['is_group']),
+        'get_force_rule', setter='setter_void')
+
     is_group = fields.Function(
         fields.Boolean('Is Group'),
         'get_is_group')
@@ -81,6 +92,14 @@ class BenefitRule:
             cls.deductible_rule_extra_data.states.get('invisible',
                 True), ~Eval('force_deductible_rule'))
         cls.deductible_rule_extra_data.depends.append('force_deductible_rule')
+        cls.revaluation_rule.states['invisible'] = And(
+            cls.revaluation_rule.states.get('invisible',
+                True), ~Eval('force_revaluation_rule'))
+        cls.revaluation_rule.depends.append('force_revaluation_rule')
+        cls.revaluation_rule_extra_data.states['invisible'] = Or(
+            cls.revaluation_rule_extra_data.states.get('invisible',
+                True), ~Eval('force_revaluation_rule'))
+        cls.revaluation_rule_extra_data.depends.append('force_revaluation_rule')
 
     @classmethod
     def default_force_deductible_rule(cls):
@@ -88,6 +107,10 @@ class BenefitRule:
 
     @classmethod
     def default_force_indemnification_rule(cls):
+        return True
+
+    @classmethod
+    def default_force_revaluation_rule(cls):
         return True
 
     @fields.depends('benefit', 'is_group')
@@ -115,6 +138,11 @@ class BenefitRule:
     def on_change_force_indemnification_rule(self):
         self._on_change_rule('indemnification_rule')
 
+    @fields.depends('revaluation_rule', 'revaluation_rule_extra_data',
+        'revaluation_rules', 'force_revaluation_rule')
+    def on_change_force_revaluation_rule(self):
+        self._on_change_rule('revaluation_rule')
+
     def get_force_rule(self, name):
         return bool(getattr(self, name[6:]))
 
@@ -139,6 +167,9 @@ class BenefitRule:
     def calculate_indemnification_rule(self, args):
         return self._calculate_rule('indemnification_rule', args, [])
 
+    def calculate_revaluation_rule(self, args):
+        return self._calculate_rule('revaluation_rule', args, [])
+
     def required_extra_data_for_rule(self, rule_name, date, option):
         if getattr(self, 'force_' + rule_name):
             return getattr(self, rule_name).extra_data_used
@@ -152,7 +183,8 @@ class BenefitRule:
 
     def required_extra_data(self, service, date):
         res = []
-        for rule_name in ('deductible_rule', 'indemnification_rule'):
+        for rule_name in ('deductible_rule', 'indemnification_rule',
+                'revaluation_rule'):
             res.extend(self.required_extra_data_for_rule(rule_name, date,
                     service.option))
         return res
@@ -173,6 +205,17 @@ class BenefitRuleDeductible(model.CoopSQL):
     'Benefit Rule - Deductible'
 
     __name__ = 'benefit_rule-deductible_rule'
+
+    benefit = fields.Many2One('benefit.rule', 'Benefit', required=True,
+        ondelete='CASCADE', select=True)
+    rule = fields.Many2One('rule_engine', 'Rule', required=True,
+        ondelete='RESTRICT')
+
+
+class BenefitRuleRevaluation(model.CoopSQL):
+    'Benefit Rule - Revaluation'
+
+    __name__ = 'benefit_rule-revaluation_rule'
 
     benefit = fields.Many2One('benefit.rule', 'Benefit', required=True,
         ondelete='CASCADE', select=True)

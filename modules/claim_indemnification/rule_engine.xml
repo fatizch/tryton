@@ -31,15 +31,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="fct_args">Date debut periode, Date fin periode</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
-        <record model="rule_engine.function" id="liste_des_dates_pivots_sur_la_periode">
-            <field name="translated_technical_name">liste_des_dates_pivots_sur_la_periode</field>
-            <field name="description">Liste des dates pivots sur la période</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_detail_period_start_date</field>
-            <field name="parent" ref="claim.dossier_sinistre"/>
-        </record>
         <record model="rule_engine.function" id="somme_montants_journaliers">
             <field name="translated_technical_name">somme_montants_journaliers</field>
             <field name="description">Somme des montants journaliers</field>
@@ -95,5 +86,44 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_count_valid_indemnifications</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+        <record model="rule_engine.function" id="pivot_dates">
+            <field name="translated_technical_name">dates_pivot</field>
+            <field name="description">Dates pivots pour la revalorisation</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_revaluation_pivot_dates</field>
+            <field name="fct_args">Date debut periode, Date fin periode, Frequence, Mois de synchronisation, Jours de synchronisation</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+         <record model="rule_engine.function" id="sub_periods">
+             <field name="translated_technical_name">sous_periodes</field>
+             <field name="description">Calcul des sous périodes</field>
+             <field name="type">function</field>
+             <field name="language" ref="ir.lang_fr"/>
+             <field name="namespace">rule_engine.runtime</field>
+             <field name="name">_re_revaluation_sub_periods</field>
+             <field name="fct_args">Dates pivot, Date debut periode, Date fin periode</field>
+             <field name="parent" ref="claim.dossier_sinistre"/>
+         </record>
+        <record model="rule_engine.function" id="salary_calculation_description">
+            <field name="translated_technical_name">description_du_calcul_du_salaire</field>
+            <field name="description">Description du calcul du salaire journalier</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_base_salary_calculation_description</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="daily_base_salary">
+            <field name="translated_technical_name">salaire_journalier_de_base</field>
+            <field name="description">Montant du salaire journalier de base</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_daily_base_salary</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+
     </data>
 </tryton>

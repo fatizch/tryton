@@ -5,4 +5,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="benefit"/>
     <field name="deductible_rule"/>
     <field name="indemnification_rule"/>
+    <field name="revaluation_rule"/>
 </tree>

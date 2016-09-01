@@ -303,7 +303,9 @@ class ClaimService:
             option_benefit_at_date(self.option,
                 self.loss.start_date).salary_mode
         for key, value in salary_range.iteritems():
-            if salary_mode in ('last_3_months', 'last_3_months_last_year'):
+            if current_salary:
+                coefficient = 1
+            elif salary_mode in ('last_3_months', 'last_3_months_last_year'):
                 coefficient = 4
             elif salary_mode == ('last_month', 'last_month_last_year'):
                 coefficient = 12

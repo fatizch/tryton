@@ -10,4 +10,7 @@ this repository contains the full copyright notices and license terms. -->
     <label name="indemnification_rule"/>
     <field name="indemnification_rule" widget="selection"/>
     <field name="indemnification_rule_extra_data" colspan="2" no_command="1"/>
+    <label name="revaluation_rule"/>
+    <field name="revaluation_rule" widget="selection"/>
+    <field name="revaluation_rule_extra_data" colspan="2" no_command="1"/>
 </form>

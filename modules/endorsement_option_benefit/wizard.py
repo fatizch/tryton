@@ -138,7 +138,8 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
                 'display_name', 'option_benefits', 'start_date'
                 ],
             'contract.option.benefit': Displayer.get_option_benefit_fields() +
-            ('available_deductible_rules', 'available_indemnification_rules')}
+            ('available_deductible_rules', 'available_indemnification_rules',
+                'available_revaluation_rules')}
 
     @classmethod
     def get_version_fields(cls):
@@ -149,7 +150,8 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
                 'extra_data', 'extra_data_as_string',
                 ],
             'contract.option.benefit': Displayer.get_option_benefit_fields() +
-            ('available_deductible_rules', 'available_indemnification_rules')}
+            ('available_deductible_rules', 'available_indemnification_rules',
+                'available_revaluation_rules')}
 
     def get_updated_options_from_contract(self, contract_endorsement):
         contract = contract_endorsement.contract
@@ -254,9 +256,10 @@ class ManageOptionBenefitsDisplayer(model.CoopView):
     @classmethod
     def get_option_benefit_fields(cls):
         return ('benefit',
-            'deductible_rule', 'indemnification_rule',
+            'deductible_rule', 'indemnification_rule', 'revaluation_rule',
             'indemnification_rule_extra_data',
-            'deductible_rule_extra_data')
+            'deductible_rule_extra_data',
+            'revaluation_rule_extra_data')
 
 
 class StartEndorsement:
