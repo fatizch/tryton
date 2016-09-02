@@ -276,7 +276,8 @@ class ClaimDeclareFindProcess(ProcessStart):
 
     __name__ = 'claim.declare.find_process'
 
-    party = fields.Many2One('party.party', 'Party', ondelete='SET NULL')
+    party = fields.Many2One('party.party', 'Party', required=True,
+        ondelete='SET NULL')
     loss_desc = fields.Many2One('benefit.loss.description', 'Loss Description')
     claims = fields.One2Many('claim.declare.element', None, 'Select claims')
     claim_process_type = fields.Char('Claim Process Type', readonly=True)
