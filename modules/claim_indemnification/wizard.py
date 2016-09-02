@@ -631,7 +631,6 @@ class CreateIndemnification(Wizard):
         indemnification.init_from_service(self.definition.service)
         indemnification.beneficiary = self.definition.beneficiary
         Indemnification.calculate([indemnification])
-        indemnification.save()
         self.result.indemnification = [indemnification]
         return 'result'
 

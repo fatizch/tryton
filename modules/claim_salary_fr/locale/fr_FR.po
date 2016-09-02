@@ -357,7 +357,7 @@ msgstr "Vues des contributions"
 
 msgctxt "model:claim_salary_fr.start_set_contributions,name:"
 msgid "Start Set Contributions"
-msgstr "Définir les contributions"
+msgstr "Renseigner les taux de charges sociales salariales"
 
 msgctxt "model:ir.action,name:act_net_calculation_rule_form"
 msgid "Net Calculation Rules"
@@ -365,7 +365,7 @@ msgstr "Règles de cacul pour le net"
 
 msgctxt "model:ir.action,name:act_set_contributions"
 msgid "Set Contributions"
-msgstr "Définir les contributions"
+msgstr "Renseigner les taux de charges sociales salariales"
 
 msgctxt "model:ir.ui.menu,name:menu_net_calculation_rule"
 msgid "Net Calculation Rules"
@@ -429,7 +429,7 @@ msgstr "Salaire"
 
 msgctxt "view:claim.salary:"
 msgid "Set Contributions"
-msgstr "Définir les contributions"
+msgstr "Renseigner les taux de charges sociales salariales"
 
 msgctxt "view:claim.service:"
 msgid "Delivered Service"
@@ -449,7 +449,7 @@ msgstr "Taux"
 
 msgctxt "view:claim_salary_fr.start_set_contributions:"
 msgid "Start Set Contributions"
-msgstr "Définir les contributions"
+msgstr "Renseigner les taux de charges sociales salariales"
 
 msgctxt "wizard_button:claim_salary_fr.set_contributions,start,end:"
 msgid "End"
@@ -457,4 +457,4 @@ msgstr "Fin"
 
 msgctxt "wizard_button:claim_salary_fr.set_contributions,start,process:"
 msgid "Set contibutions"
-msgstr "Définir les contributions"
+msgstr "Renseigner les taux de charges sociales salariales"
