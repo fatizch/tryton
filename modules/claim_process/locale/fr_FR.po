@@ -222,6 +222,10 @@ msgctxt "selection:process,kind:"
 msgid "Claim Reopening"
 msgstr "Réouverture d'un sinistre"
 
+msgctxt "view:claim.declaration.element:"
+msgid "Claim Declaration Element"
+msgstr "Sinistre"
+
 msgctxt "view:process:"
 msgid "Loss Description"
 msgstr "Type de Préjudice"
