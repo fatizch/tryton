@@ -18,6 +18,10 @@ msgctxt "view:claim.salary:"
 msgid "Total Net Salary"
 msgstr "Montant total du salaire net"
 
+msgctxt "view:claim.salary:"
+msgid "Total Net Salary Bonuses"
+msgstr "Montant total des bonus salaire net"
+
 msgctxt "field:claim.extra_datas_displayers,salaries:"
 msgid "Salaries"
 msgstr "Salaires"
@@ -113,6 +117,10 @@ msgstr "Limiter au salaire net"
 msgctxt "field:claim.salary,net_salary:"
 msgid "Net Salary"
 msgstr "Salaire net"
+
+msgctxt "field:claim.salary,net_salary_bonus:"
+msgid "Net Salary Bonus"
+msgstr "Bonus salaire net"
 
 msgctxt "field:claim.salary,rec_name:"
 msgid "Name"

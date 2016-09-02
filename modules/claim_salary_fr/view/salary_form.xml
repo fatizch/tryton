@@ -15,6 +15,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="net_salary"/>
     <label name="salary_bonus"/>
     <field name="salary_bonus"/>
+    <label name="net_salary_bonus"/>
+    <field name="net_salary_bonus"/>
     <newline/>
     <group id='contributions' colspan="6" col="3">
         <field name="ta_contributions" readonly="1" no_command="1"/>

@@ -7,4 +7,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="gross_salary"/>
     <field name="salary_bonus"/>
     <field name="net_salary"/>
+    <field name="net_salary_bonus"/>
 </tree>

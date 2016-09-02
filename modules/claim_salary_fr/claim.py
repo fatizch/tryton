@@ -92,6 +92,9 @@ class Salary(model.CoopSQL, model.CoopView):
     salary_bonus = fields.Numeric('Salary Bonus',
         digits=(16, Eval('currency_digits', 2)),
         depends=['currency_digits'])
+    net_salary_bonus = fields.Numeric('Net Salary Bonus',
+        digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])
     ta_contributions = fields.Dict('extra_data', 'TA Contributions',
         domain=[('kind', '=', 'salary')])
     tb_contributions = fields.Dict('extra_data', 'TB Contributions',
