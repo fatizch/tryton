@@ -4,7 +4,8 @@ import os
 import shutil
 import logging
 import ConfigParser
-from datetime import datetime, date
+from datetime import datetime
+import uuid
 
 from trytond import backend
 from trytond.config import config
@@ -28,9 +29,8 @@ def analyze(meth):
         m = meth
         try:
             p = PerfLog()
-            p.method = cls.__name__ + '.' + m.__name__
             p.on_enter(Pool().get('res.user')(Transaction().user),
-                date.today().strftime('%y%m%d'))
+                uuid.uuid4().hex, cls.__name__, [], {})
             wrapped_meth = profile(m)
         except:
             perf_logger.exception('batch: error on enter')
