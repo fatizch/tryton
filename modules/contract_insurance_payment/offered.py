@@ -20,6 +20,10 @@ class Product:
         ondelete='RESTRICT',
         help='If no journal defined the global configuration will be used')
 
+    @classmethod
+    def _export_light(cls):
+        return super(Product, cls)._export_light() | {'payment_journal'}
+
 
 class BillingMode:
     __name__ = 'offered.billing_mode'
