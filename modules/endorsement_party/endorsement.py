@@ -135,12 +135,10 @@ class Endorsement:
 
     def get_sender(self):
         pool = Pool()
-        if not self.parties:
-            return super(Endorsement, self).get_contact()
         company_id = Transaction().context.get('company', None)
         if company_id:
             return pool.get('company.company')(company_id).party
-        raise NotImplementedError
+        return super(Endorsement, self).get_sender()
 
     def get_object_for_contact(self):
         if not self.parties:
