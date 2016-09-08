@@ -226,6 +226,9 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
     @classmethod
     def read_csv_file(cls, filename, module, sep=';', reader=''):
         cls.load_resources(module)
+        res = []
+        if filename not in cls._loaded_resources[module]['files']:
+            return res
         if isinstance(cls._loaded_resources[module]['files'][filename], list):
             return cls._loaded_resources[module]['files'][filename]
         with open(cls._loaded_resources[module]['files'][filename], 'r') as f:
@@ -234,7 +237,6 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
             elif reader == 'dict':
                 good_reader = csv.DictReader
             reader = good_reader(f, delimiter=sep)
-            res = []
             for line in reader:
                 res.append(line)
         cls._loaded_resources[module]['files'][filename] = res

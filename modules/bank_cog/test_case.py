@@ -57,37 +57,65 @@ class TestCaseModel:
     def bank_test_case(cls):
         pool = Pool()
         Bank = pool.get('bank')
+        Party = pool.get('party.party')
         Configuration = cls.get_instance()
         cls.load_resources(MODULE_NAME)
         bank_file = cls.read_csv_file('bank.csv', MODULE_NAME,
             reader='dict')
         banks = []
-        existing = dict((x.bic, x) for x in Bank.search([]))
+        existing_banks = dict((x.bic, x) for x in Bank.search([]))
+        parties = dict(
+            (x.bank_role[0].bic[0:4], [x, list(x.addresses)])
+            for x in Party.search([('is_bank', '=', True)]))
         for bank_dict in bank_file:
             if (Configuration.number_of_banks > 0
-                    and len(existing) >= Configuration.number_of_banks):
+                    and len(existing_banks) >= Configuration.number_of_banks):
                 break
             bic = '%sXXX' % bank_dict['bic'] if len(bank_dict['bic']) == 8 \
                 else bank_dict['bic']
-            if bic in existing:
+            if bic in existing_banks:
                 continue
-            company = cls.new_company(bank_dict['bank_name'])
+            parent_bic = bic[0:4]
+            address = None
+            addresses = []
+            if parent_bic in parties:
+                party, addresses = parties[parent_bic]
+            else:
+                party = Party(name=bank_dict['bank_name'], is_company=True)
+                parties[parent_bic] = [party, addresses]
             country = cls.get_country_by_code(bank_dict['address_country'])
-            address = cls.create_address(
-                street=bank_dict['address_street'],
-                zip=bank_dict['address_zip'],
-                city=bank_dict['address_city'],
-                country=country
-            )
-            company.addresses = [address]
-
+            for cur_address in addresses:
+                if ((not cur_address.street and not bank_dict['address_street']
+                        or cur_address.street == bank_dict['address_street'])
+                    and (not cur_address.zip and not bank_dict['address_zip']
+                        or cur_address.zip == bank_dict['address_zip'])
+                    and (not cur_address.city and not bank_dict['address_city']
+                        or cur_address.city == bank_dict['address_city'])
+                    and (not cur_address.country and not country
+                        or cur_address.country
+                        and cur_address.country.id == country)):
+                    address = cur_address
+                    break
+            if not address:
+                address = cls.create_address(
+                    street=bank_dict['address_street'],
+                    zip=bank_dict['address_zip'],
+                    city=bank_dict['address_city'],
+                    country=country,
+                    party=party,
+                    )
+                parties[parent_bic][1].append(address)
+            branch_name = bank_dict['branch_name']
+            if branch_name.startswith('(') and branch_name.endswith(')'):
+                branch_name = branch_name[1:-1]
             bank = Bank(
                 bic=bank_dict['bic'],
-                party=company
+                party=party,
+                name=branch_name,
+                address=address,
                 )
-            if bank:
-                banks.append(bank)
-                existing[bank.bic] = bank
+            banks.append(bank)
+            existing_banks[bank.bic] = bank
         Bank.create([x._save_values for x in banks])
 
     @classmethod

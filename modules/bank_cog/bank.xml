@@ -11,6 +11,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="bank.bank_view_list"/>
             <field name="name">bank_list</field>
         </record>
+        <record model="ir.ui.view" id="bank_view_form">
+            <field name="model">bank</field>
+            <field name="inherit" ref="bank.bank_view_form"/>
+            <field name="name">bank_form</field>
+        </record>
         <!--  *******************************************
               ************   Bank account    ************
               *******************************************-->

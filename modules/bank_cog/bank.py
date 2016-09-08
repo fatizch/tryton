@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool, PoolMeta
 from trytond.model import fields as tryton_fields, Unique
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import utils, fields, export
 from trytond.modules.cog_utils import coop_string
@@ -21,14 +22,14 @@ class Bank(export.ExportImportMixin):
     __name__ = 'bank'
     _func_key = 'bic'
 
-    main_address = fields.Function(
-        fields.Many2One('party.address', 'Main Address'),
-        'get_main_address_id')
+    name = fields.Char('Name')
+    address = fields.Many2One('party.address', 'Address',
+        domain=[('party', '=', Eval('party'))], depends=['party'],
+        ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
         super(Bank, cls).__setup__()
-        cls.party.ondelete = 'RESTRICT'
         t = cls.__table__()
         cls._sql_constraints += [
             ('bic_uniq', Unique(t, t.bic), 'The bic must be unique!'),
@@ -72,10 +73,6 @@ class Bank(export.ExportImportMixin):
             [('party.name',) + tuple(clause[1:])],
             [('party.short_name',) + tuple(clause[1:])],
             ]
-
-    def get_main_address_id(self, name):
-        return (self.party.main_address.id
-            if self.party and self.party.main_address else None)
 
     @classmethod
     def valid_BIC(cls, bic):
