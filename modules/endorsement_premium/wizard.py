@@ -11,6 +11,8 @@ from trytond.pyson import Eval, Len
 from trytond.modules.cog_utils import model, fields
 from trytond.modules.endorsement import EndorsementWizardPreviewMixin
 
+from trytond.modules.premium.offered import PREMIUM_FREQUENCY
+
 __metaclass__ = PoolMeta
 __all__ = [
     'StartEndorsement',
@@ -124,12 +126,13 @@ class ContractPreviewPremium(model.CoopView):
     end = fields.Date('End')
     amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
         depends=['currency_digits'])
+    frequency = fields.Selection(PREMIUM_FREQUENCY, 'Frequency')
     currency_digits = fields.Integer('Currency Digits')
     currency_symbol = fields.Char('Currency Symbol')
 
     @classmethod
     def fields_to_extract(cls):
-        return ['contract', 'start', 'end', 'amount']
+        return ['contract', 'start', 'end', 'amount', 'frequency']
 
 
 class StartEndorsement:

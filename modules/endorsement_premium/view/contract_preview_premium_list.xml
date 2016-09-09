@@ -7,5 +7,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="amount" sum="amount">
         <suffix name="currency_symbol"/>
     </field>
+    <field name="frequency"/>
     <field name="name"/>
 </tree>

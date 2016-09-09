@@ -56,6 +56,10 @@ msgctxt "field:endorsement.start.preview_contract_premiums.premium,end:"
 msgid "End"
 msgstr "Terminer"
 
+msgctxt "field:endorsement.start.preview_contract_premiums.premium,frequency:"
+msgid "Frequency"
+msgstr "Fréquence"
+
 msgctxt "field:endorsement.start.preview_contract_premiums.premium,id:"
 msgid "ID"
 msgstr "ID"
@@ -79,6 +83,56 @@ msgstr "Prévisualisation du contrat"
 msgctxt "model:endorsement.start.preview_contract_premiums.premium,name:"
 msgid "Premium Preview"
 msgstr "Prévisualisation des primes"
+
+msgctxt ""
+"selection:endorsement.start.preview_contract_premiums.premium,frequency:"
+msgid "At contract signature"
+msgstr "A la signature du contrat"
+
+msgctxt ""
+"selection:endorsement.start.preview_contract_premiums.premium,frequency:"
+msgid "Half-yearly"
+msgstr "Semestriel"
+
+msgctxt ""
+"selection:endorsement.start.preview_contract_premiums.premium,frequency:"
+msgid "Monthly"
+msgstr "Mensuel"
+
+msgctxt ""
+"selection:endorsement.start.preview_contract_premiums.premium,frequency:"
+msgid "Once per Contract"
+msgstr "Une fois par contrat"
+
+msgctxt ""
+"selection:endorsement.start.preview_contract_premiums.premium,frequency:"
+msgid "Once per Invoice"
+msgstr "Une fois par quittance"
+
+msgctxt ""
+"selection:endorsement.start.preview_contract_premiums.premium,frequency:"
+msgid "Once per Year"
+msgstr "Une fois par an"
+
+msgctxt ""
+"selection:endorsement.start.preview_contract_premiums.premium,frequency:"
+msgid "Quarterly"
+msgstr "Trimestriel"
+
+msgctxt ""
+"selection:endorsement.start.preview_contract_premiums.premium,frequency:"
+msgid "Yearly (360 days)"
+msgstr "Annuel (360 jours)"
+
+msgctxt ""
+"selection:endorsement.start.preview_contract_premiums.premium,frequency:"
+msgid "Yearly (365 days)"
+msgstr "Annuel (365 jours)"
+
+msgctxt ""
+"selection:endorsement.start.preview_contract_premiums.premium,frequency:"
+msgid "Yearly (Exact)"
+msgstr "Annuel (exact)"
 
 msgctxt "view:endorsement.start.preview_contract_premiums.contract:"
 msgid "Contract Premiums Preview"
