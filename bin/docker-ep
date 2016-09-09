@@ -339,7 +339,11 @@ batch() {
         export TRYTOND_CONFIG="$COOG_CONF"
         export TRYTOND_BATCH_CONFIG="$COOG_BATCH_CONF"
         export DB_NAME=$COOG_DB_NAME
-        export LOG_LEVEL=WARNING
+        if [ -z $LOG_LEVEL ]
+        then
+                LOG_LEVEL=WARNING
+                export LOG_LEVEL
+        fi
         [ -z $1 ] && echo missing batch name && return 1
         local name; name=$1; shift
         [ -z $1 ] && echo missing workers number && return 1
