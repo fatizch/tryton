@@ -1169,6 +1169,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 res.append(relation.from_party)
             if relation.to_party != self.party:
                 res.append(relation.to_party)
+        for sub_covered in self.sub_covered_elements:
+            res.extend(sub_covered.get_covered_parties(at_date))
         return res
 
     @classmethod
