@@ -3,7 +3,7 @@
 from sql import Null
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or, In
 from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
@@ -17,7 +17,8 @@ class Contract:
 
     dunning_status = fields.Function(
         fields.Char('Dunning Status', states={
-                'invisible': ~Eval('dunning_status')},
+                'invisible': Or(~Eval('dunning_status'),
+                    In(Eval('status'), ['terminated', 'void']))},
             depends=['dunning_status']),
         'get_dunning_status', searcher='search_dunning_status')
     current_dunning = fields.Function(
