@@ -8,6 +8,7 @@ Usage: only ARGV are used (no KEYS). Possible commands are:
   - help: print this text
   - list: list queue jobs - <broker> <queue> [filters]
   - count: count queue jobs - <broker> <queue> [filters]
+  - waiting: count waiting jobs - <broker> <queue>
   - backup: archive queue jobs - <broker> <queue> [filters]
   - clear: clear queue jobs - <broker> <queue> [filters]
   - summary: print queue summary - <broker> <queue>
@@ -113,6 +114,10 @@ broker_api.rq.remove = function(id)
     return string.format('deleted %s', id)
 end
 
+broker_api.rq.waiting = function(queue)
+    return redis.call('LLEN', 'rq:queue:' .. queue)
+end
+
 broker_api.celery.patterns = {'coog:job:', 'celery-task-meta-'}
 
 broker_api.celery.dequeue = function(q)
@@ -190,6 +195,10 @@ broker_api.celery.remove = function(id)
     redis.call('DEL', broker_api.celery.patterns[1] .. id)
     redis.call('DEL', broker_api.celery.patterns[2] .. id)
     return string.format('deleted %s', id)
+end
+
+broker_api.celery.waiting = function(queue)
+    return redis.call('LLEN', queue)
 end
 
 -- helpers
@@ -310,6 +319,12 @@ api.count = function(broker, queue, ...)
         end
     end
     return result
+end
+
+api.waiting = function(broker, queue)
+    broker = check_broker(broker)
+    assert(queue, 'missing queue')
+    return broker.waiting(queue)
 end
 
 api.backup = function(broker, queue, ...)
