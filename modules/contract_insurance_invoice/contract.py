@@ -3,6 +3,8 @@
 import intervaltree
 import datetime
 import calendar
+import logging
+import traceback
 from collections import defaultdict
 from decimal import Decimal
 
@@ -678,10 +680,11 @@ class Contract:
         contract_invoices = []
         for contract_slice in grouped_slice(contracts):
             contract_invoices += ContractInvoice.search([
-                    ('contract', 'in', [x.id for x in contract_slice]),
-                    ('invoice_state', '!=', 'cancel'),
+                    [('invoice_state', '!=', 'cancel'),
+                        ('contract', 'in', [x.id for x in contract_slice])],
                     ['OR',
                         ('contract.status', '=', 'void'),
+                        ('invoice_state', '!=', 'cancel'),
                         ('start', '<=', to_date or datetime.date.min),
                         ('end', '>=', from_date or datetime.date.max)],
                     ])
@@ -1875,7 +1878,19 @@ class ContractInvoice(model.CoopSQL, model.CoopView):
         Reconciliation = pool.get('account.move.reconciliation')
         Invoice = pool.get('account.invoice')
 
-        invoices = [c.invoice for c in contract_invoices]
+        invoices = []
+        cancelled_invoices = []
+        for contract_invoice in contract_invoices:
+            if contract_invoice.invoice.state == 'cancel':
+                cancelled_invoices.append(contract_invoice.invoice)
+            else:
+                invoices.append(contract_invoice.invoice)
+        if cancelled_invoices:
+            logging.getLogger('contract.invoice').warning('Cancel method '
+                'called on already cancelled invoices : %s.' % ', '.join(
+                    [x.number for x in cancelled_invoices]))
+            traceback.print_stack()
+
         reconciliations = []
         for invoice in invoices:
             if invoice.move:
