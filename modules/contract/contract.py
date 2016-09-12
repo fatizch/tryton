@@ -959,7 +959,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         else:
             return self.contract_number
 
-    def get_synthesis_rec_name(self, name):
+    def get_synthesis_rec_name(self, name=None):
         Date = Pool().get('ir.date')
         dates = '[%s - %s]' % (
             Date.date_as_string(self.start_date) if self.start_date else '',
