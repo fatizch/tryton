@@ -952,7 +952,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             return res
         names = [super(CoveredElement, self).get_rec_name(name)]
         names.append(self.item_desc.rec_name if self.item_desc else None)
-        names.append(self.name)
         return ' '.join([x for x in names if x])
 
     @classmethod
