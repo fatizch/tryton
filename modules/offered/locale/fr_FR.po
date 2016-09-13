@@ -176,75 +176,6 @@ msgctxt "field:ir.test_case,main_company_name:"
 msgid "Main Company Name"
 msgstr "Nom de la company principale"
 
-msgctxt "field:offered,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:offered,company:"
-msgid "Company"
-msgstr "Société"
-
-msgctxt "field:offered,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
-
-msgctxt "field:offered,description:"
-msgid "Description"
-msgstr "Description"
-
-msgctxt "field:offered,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:offered,extra_data:"
-msgid "Offered Kind"
-msgstr "Typage"
-
-msgctxt "field:offered,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:offered,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
-msgctxt "view:offered.product:"
-msgid "Summary"
-msgstr "Synthèse"
-
-msgctxt "view:offered.product:"
-msgid "Rules"
-msgstr "Règles"
-
-msgctxt "view:offered.option.description:"
-msgid "Summary"
-msgstr "Synthèse"
-
-
-msgctxt "field:offered,tags:"
-msgid "Tags"
-msgstr "Labels"
-
-msgctxt "field:offered,tags_name:"
-msgid "Tags"
-msgstr "Labels"
-
-msgctxt "field:offered,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
 msgctxt "field:offered.configuration,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -357,10 +288,6 @@ msgctxt "field:offered.option.description,subscription_behaviour:"
 msgid "Subscription Behaviour"
 msgstr "Comportement à la Souscription"
 
-msgctxt "field:offered.option.description,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
 msgctxt "field:offered.option.description,tags:"
 msgid "Tags"
 msgstr "Labels"
@@ -368,14 +295,6 @@ msgstr "Labels"
 msgctxt "field:offered.option.description,tags_name:"
 msgid "Tags"
 msgstr "Labels"
-
-msgctxt "field:offered.option.description,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered.option.description,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
 
 msgctxt "field:offered.option.description,write_date:"
 msgid "Write Date"
@@ -733,10 +652,6 @@ msgctxt "field:offered.product,subscriber_kind:"
 msgid "Subscriber Kind"
 msgstr "Type"
 
-msgctxt "field:offered.product,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
 msgctxt "field:offered.product,tags:"
 msgid "Tags"
 msgstr "Labels"
@@ -744,14 +659,6 @@ msgstr "Labels"
 msgctxt "field:offered.product,tags_name:"
 msgid "Tags"
 msgstr "Labels"
-
-msgctxt "field:offered.product,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered.product,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
 
 msgctxt "field:offered.product,write_date:"
 msgid "Write Date"
@@ -1009,10 +916,6 @@ msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "model:offered,name:"
-msgid "Offered"
-msgstr "Offre"
-
 msgctxt "model:offered.configuration,name:"
 msgid "Offered Configuration"
 msgstr "Administration produit"
@@ -1137,18 +1040,6 @@ msgctxt "selection:extra_data,type_:"
 msgid "Selection"
 msgstr "Sélection"
 
-msgctxt "selection:offered,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
 msgctxt "selection:offered.option.description,subscription_behaviour:"
 msgid "Defaulted"
 msgstr "Proposée par Défaut"
@@ -1161,18 +1052,6 @@ msgctxt "selection:offered.option.description,subscription_behaviour:"
 msgid "Optional"
 msgstr "En Option"
 
-msgctxt "selection:offered.option.description,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered.option.description,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered.option.description,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
 msgctxt "selection:offered.product,subscriber_kind:"
 msgid "All"
 msgstr "Tous"
@@ -1184,18 +1063,6 @@ msgstr "Société"
 msgctxt "selection:offered.product,subscriber_kind:"
 msgid "Person"
 msgstr "Personne Physique"
-
-msgctxt "selection:offered.product,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered.product,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered.product,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
 
 msgctxt "selection:rule_engine,type_:"
 msgid "Ending"
@@ -1252,10 +1119,6 @@ msgstr "Données Complémentaires"
 msgctxt "view:offered.option.description:"
 msgid "Rules"
 msgstr "Règles"
-
-msgctxt "view:offered.option.description:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
 
 msgctxt "view:offered.option.description:"
 msgid "Subscription"
