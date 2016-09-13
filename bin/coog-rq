@@ -142,3 +142,8 @@ coog_rq_qps() { # ps queue workers process - <file>
         done < "$pid_file"
         [ $one_alive -eq 0 ] && rm $pid_file
 }
+
+coog_rq_qactive() { # count queue active workers - <name>
+        [ -z "$1" ] && echo missing queue name && return 1
+        coog_rq_cli info -r "$1" 2> /dev/null | grep -c "^worker"
+}

@@ -19,6 +19,12 @@ coog_batch_query() { # query batch redis - <cmd> [cmd-arg*]
         coog_redis_eval $broker redis/batch.lua $cmd $broker $*
 }
 
+coog_batch_active() { # count queue active workers - <name>
+        [ -z $1 ] && echo missing batch name && return 1
+        local broker; broker=`_coog_batch_broker` || return $?
+        coog_"$broker"_qactive $1
+}
+
 coog_batch_generate() { # generate batch jobs - <name> [batch-arg*]
         [ $# -lt 1 ] && echo missing at least batch name && return 1
         local broker; broker=`_coog_batch_broker` || return $?
@@ -36,14 +42,14 @@ coog_batch_start() { # start batch execution - <name> <concurrency>
 }
 
 coog_batch_stop() { # stop batch execution - <name>
-        [ -z $1 ] && echo mission batch name && return 1
+        [ -z $1 ] && echo missing batch name && return 1
         local broker; broker=`_coog_batch_broker` || return $?
         local base_file; base_file=`_coog_batch_file $1` || return $?
         coog_"$broker"_qstop "$base_file"
 }
 
 coog_batch_ps() { # ps batch workers - <name>
-        [ -z $1 ] && echo mission batch name && return 1
+        [ -z $1 ] && echo missing batch name && return 1
         local broker; broker=`_coog_batch_broker` || return $?
         local base_file; base_file=`_coog_batch_file $1` || return $?
         coog_"$broker"_qps "$base_file"
@@ -55,6 +61,7 @@ coog_batch_wait() { # wait for batch exec - <name>
         do
                 local waiting
                 waiting=`coog_batch_query waiting $1` || return $?
+                [ "$waiting" -eq 0 ] && waiting=$(coog_batch_active "$1")
                 [ $waiting -eq 0 ] && break
                 echo "wait @ "`date +"%H:%M:%S"`" - $waiting"
                 sleep 10

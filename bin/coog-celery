@@ -112,3 +112,8 @@ coog_celery_qps() { # ps queue workers process - <file>
         [ ! -e /proc/$pid ] && rm $pid_file && echo workers down && return 0
         ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
 }
+
+coog_celery_qactive() { # count queue active workers - <name>
+        [ -z "$1" ] && echo missing queue name && return 1
+        coog_celery_cli inspect -C active 2> /dev/null | grep -c "'$1'"
+}
