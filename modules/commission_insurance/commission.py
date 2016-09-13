@@ -1219,7 +1219,7 @@ class FilterCommissions(Wizard):
     def __setup__(cls):
         super(FilterCommissions, cls).__setup__()
         cls._error_messages.update({
-                'no_invoices': 'The selected contracts have no invoices',
+                'no_invoices': 'The selected contracts do not have any invoice.',
                 })
 
     def transition_choose_action(self):

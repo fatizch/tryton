@@ -100,10 +100,8 @@ class CreateWaiver(Wizard):
         pool = Pool()
         ContractInvoice = pool.get('contract.invoice')
         Invoice = pool.get('account.invoice')
-        posted_date = [x.start for x in to_reinvoice
-            if x.invoice.state in ('posted', 'paid')]
         invoices = ContractInvoice.reinvoice(to_reinvoice)
-        Invoice.post([x.invoice for x in invoices if x.start in posted_date])
+        Invoice.post([x.invoice for x in invoices])
         return invoices
 
     def do_reinvoice(self, action):
