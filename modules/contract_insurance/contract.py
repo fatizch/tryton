@@ -87,6 +87,11 @@ class Contract(Printable):
         table = TableHandler(cls, module_name)
         if table.column_exist('last_renewed'):
             table.drop_column('last_renewed')
+        # Migration from 1.8: Drop Expenses
+        if TableHandler.table_exist('expense'):
+            TableHandler.drop_table('expense', 'expense')
+            TableHandler.drop_table('expense.kind', 'expense_kind')
+
         super(Contract, cls).__register__(module_name)
 
     def _get_calculate_targets(self, model_type):

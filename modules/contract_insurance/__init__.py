@@ -5,7 +5,6 @@ from .contract import *
 from .party import *
 from .report_engine import *
 from .wizard import *
-from .service import *
 from .rule_engine import *
 
 from trytond.modules.cog_utils import expand_tree
@@ -27,8 +26,6 @@ def register():
         OptionExclusionKindRelation,
         OptionTreeExpansion,
         ReportTemplate,
-        ContractService,
-        Expense,
         OptionsDisplayer,
         WizardOption,
         ExtraPremiumSelector,

@@ -3,7 +3,6 @@
 from trytond.pool import Pool
 from .rule_engine import *
 from .offered import *
-from .expense import *
 from .coverage import *
 from .process import *
 from .party import *
@@ -30,6 +29,5 @@ def register():
         RuleEngineRuntime,
         ProcessProductRelation,
         Process,
-        ExpenseKind,
         TestCaseModel,
         module='offered_insurance', type_='model')

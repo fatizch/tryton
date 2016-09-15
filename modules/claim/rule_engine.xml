@@ -15,25 +15,6 @@ this repository contains the full copyright notices and license terms. -->
         </record>
     </data>
     <data>
-        <record model="rule_engine.function" id="total_depenses">
-            <field name="translated_technical_name">total_depenses</field>
-            <field name="description">Récupérer le total des dépenses</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_service_total_expenses</field>
-            <field name="parent" ref="dossier_sinistre"/>
-        </record>
-        <record model="rule_engine.function" id="depense">
-            <field name="translated_technical_name">depense</field>
-            <field name="description">Récupérer la Dépense</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_service_expense</field>
-            <field name="fct_args">Code de la depense</field>
-            <field name="parent" ref="dossier_sinistre"/>
-        </record>
         <record model="rule_engine.function" id="date_declaration_sinistre">
             <field name="translated_technical_name">date_declaration_sinistre</field>
             <field name="description">Date de la déclaration du sinistre</field>

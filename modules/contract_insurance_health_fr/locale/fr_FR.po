@@ -174,10 +174,6 @@ msgctxt "model:ir.action,name:act_insurance_fund_form"
 msgid "Insurance Funds"
 msgstr "Caisses d'Affiliation"
 
-msgctxt "model:ir.test_case.instance,name:expense_kind_test_case"
-msgid "Expense Kind Test Case"
-msgstr "Jeux d'essai : type de Frais"
-
 msgctxt "model:ir.test_case.instance,name:fund_test_case"
 msgid "Fund Test Case"
 msgstr "Jeux d'essai : fonds santé"

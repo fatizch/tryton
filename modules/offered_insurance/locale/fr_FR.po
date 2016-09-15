@@ -36,54 +36,6 @@ msgstr ""
 "L'enregistrement courant (%s) sera supprimé, êtes-vous certain de vouloir "
 "continuer ?"
 
-msgctxt "field:expense.kind,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:expense.kind,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:expense.kind,create_date_:"
-msgid "Creation date"
-msgstr "Date de création"
-
-msgctxt "field:expense.kind,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:expense.kind,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:expense.kind,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:expense.kind,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:expense.kind,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:expense.kind,short_name:"
-msgid "Short Name"
-msgstr "Nom Court"
-
-msgctxt "field:expense.kind,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:expense.kind,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:expense.kind,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
 msgctxt "field:extra_data,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -908,10 +860,6 @@ msgstr ""
 "Si renseigné, un bouton avec le nom donné sera ajouté à la vue, ce qui "
 "permettra de mettre la tâche en suspens"
 
-msgctxt "model:expense.kind,name:"
-msgid "Expense Kind"
-msgstr "Type de Frais"
-
 msgctxt "model:extra_data,name:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
@@ -948,10 +896,6 @@ msgctxt "model:ir.action,name:act_item_desc_form"
 msgid "Item Descriptions"
 msgstr "Descriptions des Risques"
 
-msgctxt "model:ir.action,name:act_model_expense_kind"
-msgid "Expenses Kind"
-msgstr "Type de Frais"
-
 msgctxt "model:ir.test_case.instance,name:extra_premium_kind_test_case"
 msgid "Extra Premium Kind Test Case"
 msgstr "Jeux d'essai : types de surprime"
@@ -979,10 +923,6 @@ msgstr "Assureurs"
 msgctxt "model:ir.ui.menu,name:menu_item_desc_form"
 msgid "Item Descriptions"
 msgstr "Descriptions des Risques"
-
-msgctxt "model:ir.ui.menu,name:menu_model_expense_kind"
-msgid "Expenses Kind"
-msgstr "Type de Frais"
 
 msgctxt "model:offered.exclusion,name:"
 msgid "Exclusion Kind"
@@ -1160,22 +1100,6 @@ msgctxt "model:rule_engine.rule_parameter,string:option_max_age"
 msgid "Maximum age for option (age included)"
 msgstr "Age maximum pour l'option (age inclu)"
 
-msgctxt "selection:expense.kind,kind:"
-msgid "Expert"
-msgstr "Avancé"
-
-msgctxt "selection:expense.kind,kind:"
-msgid "Judiciary"
-msgstr "Judiciaire"
-
-msgctxt "selection:expense.kind,kind:"
-msgid "Medical"
-msgstr "Médical"
-
-msgctxt "selection:expense.kind,kind:"
-msgid "Other"
-msgstr "Autre"
-
 msgctxt "selection:extra_data,kind:"
 msgid "Contract"
 msgstr "Contrat"
@@ -1255,10 +1179,6 @@ msgstr "En Option"
 msgctxt "selection:rule_engine,extra_data_kind:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
-
-msgctxt "view:expense.kind:"
-msgid "Expense Kind"
-msgstr "Type de Frais"
 
 msgctxt "view:extra_data-sub_extra_data:"
 msgid "Relation"

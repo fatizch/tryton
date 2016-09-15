@@ -767,10 +767,6 @@ msgctxt "field:contract.option.selector,selected:"
 msgid "Selected"
 msgstr "Cochée"
 
-msgctxt "field:contract.service,expenses:"
-msgid "Expenses"
-msgstr "Frais"
-
 msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer,covered_element:"
 msgid "Covered Element"
@@ -789,62 +785,6 @@ msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer,possible_covered_elements:"
 msgid "Covered Elements"
 msgstr "Risques Couverts"
-
-msgctxt "field:expense,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:expense,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:expense,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:expense,create_uid:"
-msgid "Create User"
-msgstr "Create User"
-
-msgctxt "field:expense,currency:"
-msgid "Currency"
-msgstr "Devises"
-
-msgctxt "field:expense,currency_digits:"
-msgid "Currency Digits"
-msgstr "Nbre de chiffres après la virgule"
-
-msgctxt "field:expense,currency_symbol:"
-msgid "Currency Symbol"
-msgstr "Symbole de la Devise"
-
-msgctxt "field:expense,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:expense,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:expense,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:expense,service:"
-msgid "Contract Service"
-msgstr "Prestation Fournie"
-
-msgctxt "field:expense,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:expense,write_uid:"
-msgid "Write User"
-msgstr " Mis à jour par"
-
-msgctxt "field:expense,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
 
 msgctxt "field:party.party,covered_elements:"
 msgid "Covered Elements"
@@ -917,10 +857,6 @@ msgstr "Garantie"
 msgctxt "model:contract.service,name:"
 msgid "Contract Service"
 msgstr "Prestation Fournie"
-
-msgctxt "model:expense,name:"
-msgid "Expense"
-msgstr "Dépense"
 
 msgctxt "model:ir.action,name:"
 msgid "Status History"
@@ -1113,14 +1049,6 @@ msgstr "Prestation Fournie"
 msgctxt "view:contract:"
 msgid "Covered Elements"
 msgstr "Risques couverts"
-
-msgctxt "view:expense:"
-msgid "Expense"
-msgstr "Frais"
-
-msgctxt "view:expense:"
-msgid "Expenses"
-msgstr "Frais"
 
 msgctxt "view:party.party:"
 msgid "Extra Data"

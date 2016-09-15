@@ -6,10 +6,6 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ###################### -->
         <!-- # Test Case Instance # -->
         <!-- ###################### -->
-        <record model="ir.test_case.instance" id="expense_kind_test_case">
-            <field name="name">Expense Kind Test Case</field>
-            <field name="method_name">expense_kind_test_case</field>
-        </record>
         <record model="ir.test_case.instance" id="health_care_system_test_case">
             <field name="name">HealthCare System Test Case</field>
             <field name="method_name">health_care_system_test_case</field>

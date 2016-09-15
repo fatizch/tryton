@@ -17,26 +17,6 @@ class TestCaseModel:
     __name__ = 'ir.test_case'
 
     @classmethod
-    def create_expense_kind_from_line(cls, **kwargs):
-        ExpenseKind = Pool().get('expense.kind')
-        return ExpenseKind(**kwargs)
-
-    @classmethod
-    def expense_kind_test_case(cls):
-        ExpenseKind = Pool().get('expense.kind')
-        cls.load_resources(MODULE_NAME)
-        expense_kind_file = cls.read_csv_file('expense_kind.csv', MODULE_NAME,
-            reader='dict')
-        expense_kinds = []
-        for expense_kind_data in expense_kind_file:
-            expense_kinds.append(cls.create_expense_kind_from_line(
-                    kind=expense_kind_data['kind'],
-                    code=expense_kind_data['code'],
-                    name=expense_kind_data['name'],
-                    short_name=expense_kind_data['short_name']))
-        ExpenseKind.create([x._save_values for x in expense_kinds])
-
-    @classmethod
     def create_hc_system(cls, **kwargs):
         HealthCareSystem = Pool().get('health.care_system')
         return HealthCareSystem(**kwargs)
