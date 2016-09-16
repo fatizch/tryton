@@ -201,7 +201,10 @@ coog_test_commit() { # fetch, merge, and test each commit on changed modules (CI
                 do
                         local tmp_file
                         tmp_file="$out"-$(basename "$file")
-                        _coog_test_flake8 "$COOG_COOG/$file" > "$tmp_file"
+                        if [ -e "$COOG_COOG/$file" ]
+                        then
+                                _coog_test_flake8 "$COOG_COOG/$file" > "$tmp_file"
+                        fi
                         local lines
                         lines=$(wc -l < "$tmp_file")
                         if [ "$lines" -eq 0 ]
