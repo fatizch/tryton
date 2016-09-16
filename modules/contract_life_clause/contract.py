@@ -50,6 +50,9 @@ class ContractOption:
         depends=['coverage', 'has_beneficiary_clause', 'contract_status',
             'customized_beneficiary_clause'],
         ondelete='RESTRICT')
+    customized_text = fields.Function(
+        fields.Boolean('Customized Text', states={'invisible': True}),
+        'on_change_with_customized_text')
     customized_beneficiary_clause = fields.Text(
         'Customized Beneficiary Clause',
         states={
@@ -58,10 +61,11 @@ class ContractOption:
                     & (Eval('contract_status') != 'quote'))),
             'required': (Eval('has_beneficiary_clause')
                 & ~Eval('beneficiary_clause')),
-            'readonly': Eval('contract_status') != 'quote',
+            'readonly': (Eval('contract_status') != 'quote') | (
+                ~Eval('customized_text')),
             },
         depends=['has_beneficiary_clause', 'contract_status',
-            'beneficiary_clause'])
+            'beneficiary_clause', 'customized_text'])
     beneficiary_clause_text = fields.Function(
         fields.Text('Beneficiary Clause',
             states={
@@ -136,6 +140,11 @@ class ContractOption:
         if not self.coverage:
             return False
         return bool(self.coverage.beneficiaries_clauses)
+
+    @fields.depends('beneficiary_clause')
+    def on_change_with_customized_text(self, name=None):
+        return (self.beneficiary_clause.customizable
+            if self.beneficiary_clause else True)
 
     def check_beneficiaries(self):
         if not self.beneficiaries:

@@ -9,6 +9,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="customized_beneficiary_clause" colspan="4"/>
             <field name="beneficiary_clause_text" colspan="4"/>
             <field name="beneficiaries" colspan="4"/>
+            <newline/>
+            <field name="customized_text"/>
         </page>
     </xpath>
 </data>
