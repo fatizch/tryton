@@ -332,7 +332,10 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         if Transaction().context.get('company') == self.id:
             return self.name
         else:
-            return '[%s] %s' % (self.code, self.full_name)
+            if self.ssn:
+                return '[%s] %s - %s' % (self.code, self.full_name, self.ssn)
+            else:
+                return '[%s] %s' % (self.code, self.full_name)
 
     def get_synthesis_rec_name(self, name):
         if self.is_person:
@@ -397,6 +400,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             ('name',) + tuple(clause[1:]),
             ('code',) + tuple(clause[1:]),
             ('identifiers.code',) + tuple(clause[1:]),
+            ('ssn',) + tuple(clause[1:]),
         ]
 
     @classmethod
