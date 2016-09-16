@@ -33,9 +33,12 @@ class Claim(CogProcessFramework):
         fields.One2Many('party.interaction', '', 'History',
             depends=['claimant']),
         'on_change_with_contact_history')
-    main_loss_description = fields.Function(
-        fields.Char('Loss Description'),
-        'get_main_loss_description')
+    losses_description = fields.Function(
+        fields.Char('Losses Description'),
+        'get_losses_description')
+    open_loss = fields.Function(
+        fields.One2Many('claim.loss', None, 'Open Loss'),
+        'get_open_loss', setter='set_open_loss')
 
     @fields.depends('claimant')
     def on_change_with_contact_history(self, name=None):
@@ -45,17 +48,25 @@ class Claim(CogProcessFramework):
         return [x.id for x in ContactHistory.search(
                 [('party', '=', self.claimant)])]
 
-    def get_main_loss_description(self, name):
+    def get_open_loss(self, name):
+        return [l.id for l in self.losses if not l.end_date]
+
+    @classmethod
+    def set_open_loss(cls, claims, name, value):
         pool = Pool()
-        Lang = pool.get('ir.lang')
-        lang = Transaction().language
+        Loss = pool.get('claim.loss')
+        for action in value:
+            if action[0] == 'write':
+                objects = [Loss(id_) for id_ in action[1]]
+                Loss.write(objects, action[2])
+            elif action[0] == 'delete':
+                objects = [Loss(id_) for id_ in action[1]]
+                Loss.delete(objects)
+
+    def get_losses_description(self, name):
         if not self.losses:
             return ''
-        loss = self.losses[0]
-        return '%s (%s - %s)' % (loss.loss_desc.name, Lang.strftime(
-                loss.start_date, lang, '%d/%m/%Y') if loss.start_date else '',
-            Lang.strftime(loss.end_date, lang, '%d/%m/%Y')
-            if loss.end_date else '')
+        return ' - '.join([loss.rec_name for loss in self.losses])
 
     def init_declaration_document_request(self):
         pool = Pool()
@@ -374,8 +385,10 @@ class ClaimDeclare(ProcessFinder):
     def __setup__(cls):
         super(ClaimDeclare, cls).__setup__()
         cls.process_parameters.buttons[1].state = 'confirm_declaration'
-        cls.process_parameters.buttons.insert(
-            1, Button('Close claims', 'close_claim', 'tryton-delete'))
+        if 'Close claims' not in [b.string for b in
+                cls.process_parameters.buttons]:
+            cls.process_parameters.buttons.insert(
+                1, Button('Close claims', 'close_claim', 'tryton-delete'))
         cls._error_messages.update({
                 'no_claim_selected':
                 'You must select at least one open claim.',

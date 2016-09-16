@@ -91,7 +91,7 @@ msgstr "ID"
 
 msgctxt "field:benefit,loss_descs:"
 msgid "Loss Descriptions"
-msgstr "Descripteurs de préjudices"
+msgstr "Descripteurs de préjudice"
 
 msgctxt "field:benefit,name:"
 msgid "Name"
@@ -103,7 +103,7 @@ msgstr "Nom"
 
 msgctxt "field:benefit,start_date:"
 msgid "Start Date"
-msgstr "Date d'Effet"
+msgstr "Date de début"
 
 msgctxt "field:benefit,tags:"
 msgid "Tags"
@@ -187,7 +187,7 @@ msgstr "ID"
 
 msgctxt "field:benefit-loss.description,loss_desc:"
 msgid "Loss Description"
-msgstr "Type de Préjudice"
+msgstr "Descripteur de préjudice"
 
 msgctxt "field:benefit-loss.description,rec_name:"
 msgid "Name"
@@ -231,7 +231,7 @@ msgstr "ID"
 
 msgctxt "field:benefit.event.description,loss_descs:"
 msgid "Loss Descriptions"
-msgstr "Descripteurs de préjudices"
+msgstr "Descripteur de préjudice"
 
 msgctxt "field:benefit.event.description,name:"
 msgid "Name"
@@ -279,7 +279,7 @@ msgstr "ID"
 
 msgctxt "field:benefit.event.description-loss.description,loss_desc:"
 msgid "Loss Description"
-msgstr "Type de Préjudice"
+msgstr "Descripteur de préjudice"
 
 msgctxt "field:benefit.event.description-loss.description,rec_name:"
 msgid "Name"
@@ -383,7 +383,7 @@ msgstr "ID"
 
 msgctxt "field:benefit.loss.description-extra_data,loss_desc:"
 msgid "Loss Description"
-msgstr "Type de Préjudice"
+msgstr "Descripteur de préjudice"
 
 msgctxt "field:benefit.loss.description-extra_data,rec_name:"
 msgid "Name"
@@ -517,6 +517,10 @@ msgctxt "field:claim.close_reason_view,claims:"
 msgid "Claims"
 msgstr "Sinistres"
 
+msgctxt "field:claim.close_reason_view,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
 msgctxt "field:claim.close_reason_view,id:"
 msgid "ID"
 msgstr "ID"
@@ -595,11 +599,15 @@ msgstr "ID"
 
 msgctxt "field:claim.loss,loss_desc:"
 msgid "Loss Descriptor"
-msgstr "Description du Préjudice"
+msgstr "Descripteur de préjudice"
 
 msgctxt "field:claim.loss,loss_desc_code:"
 msgid "Loss Desc Code"
 msgstr ""
+
+msgctxt "field:claim.loss,loss_desc_kind:"
+msgid "Loss Desc Kind"
+msgstr "Type de préjudice"
 
 msgctxt "field:claim.loss,multi_level_view:"
 msgid "Claim Services"
@@ -619,7 +627,7 @@ msgstr "Prestations Fournies"
 
 msgctxt "field:claim.loss,start_date:"
 msgid "Loss Date"
-msgstr "Date du préjudice"
+msgstr "Date de début"
 
 msgctxt "field:claim.loss,with_end_date:"
 msgid "With End Date"
@@ -677,13 +685,21 @@ msgctxt "field:claim.service,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:claim.service,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:claim.service,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:claim.service,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
 msgctxt "field:claim.service,extra_datas:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
-
-msgctxt "field:claim.service,func_error:"
-msgid "Error"
-msgstr "Erreur"
 
 msgctxt "field:claim.service,id:"
 msgid "ID"
@@ -705,9 +721,9 @@ msgctxt "field:claim.service,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:claim.service,status:"
-msgid "Status"
-msgstr "Statut"
+msgctxt "field:claim.service,summary:"
+msgid "Service Summary"
+msgstr "Résumé des prestations"
 
 msgctxt "field:claim.service,write_date:"
 msgid "Write Date"
@@ -981,7 +997,7 @@ msgstr ""
 
 msgctxt "model:benefit.loss.description,name:"
 msgid "Loss Description"
-msgstr "Type de Préjudice"
+msgstr "Descripteur de préjudice"
 
 msgctxt "model:benefit.loss.description-extra_data,name:"
 msgid "Relation between Loss Description and Extra Data"
@@ -997,7 +1013,7 @@ msgstr "Prestation à délivrer"
 
 msgctxt "model:claim.close_reason_view,name:"
 msgid "Claim Close Reason View"
-msgstr "Clore les sinistres"
+msgstr "Raison de clôture"
 
 msgctxt "model:claim.configuration,name:"
 msgid "Claim Configuration"
@@ -1073,7 +1089,7 @@ msgstr "Sous statut"
 
 msgctxt "model:ir.sequence,name:claim_sequence"
 msgid "Claim Sequence"
-msgstr "Numéroteur de Sinistre"
+msgstr "Sequence des numéros de sinistres"
 
 msgctxt "model:ir.sequence.type,name:sequence_type_claim_number"
 msgid "Claim Number"
@@ -1089,7 +1105,7 @@ msgstr "Jeux d'essai : descripteurs d'évenement"
 
 msgctxt "model:ir.test_case.instance,name:loss_desc_test_case"
 msgid "Loss Desc Test Case"
-msgstr "Jeux d'essai : descripteurs de préjudice"
+msgstr ""
 
 msgctxt "model:ir.ui.menu,name:menu_benefit_form"
 msgid "Benefits"
@@ -1125,11 +1141,11 @@ msgstr ""
 
 msgctxt "model:party.synthesis.menu.claim,name:"
 msgid "Party Synthesis Menu Claim"
-msgstr "Synthèse acteur - Sinistres"
+msgstr "Synthèse"
 
 msgctxt "model:res.group,name:group_claim"
 msgid "claim"
-msgstr "Sinistre"
+msgstr "sinistre"
 
 msgctxt "model:res.group,name:group_claim_admin"
 msgid "Claim Administration"
@@ -1158,22 +1174,6 @@ msgstr "Ouvert"
 msgctxt "selection:claim,status:"
 msgid "Reopened"
 msgstr "Réouvert"
-
-msgctxt "selection:claim.service,status:"
-msgid "Calculated"
-msgstr "Calculé"
-
-msgctxt "selection:claim.service,status:"
-msgid "Calculating"
-msgstr "Calcul en Cours"
-
-msgctxt "selection:claim.service,status:"
-msgid "Delivered"
-msgstr "Delivré"
-
-msgctxt "selection:claim.service,status:"
-msgid "Not Eligible"
-msgstr "Non Eligible"
 
 msgctxt "selection:claim.sub_status,status:"
 msgid "Closed"
@@ -1205,7 +1205,7 @@ msgstr "Données Complémentaires"
 
 msgctxt "view:benefit.loss.description:"
 msgid "Loss Descriptor"
-msgstr "Description du Préjudice"
+msgstr "Descripteur de préjudice"
 
 msgctxt "view:benefit:"
 msgid "Administration"
@@ -1237,7 +1237,7 @@ msgstr "Prestation"
 
 msgctxt "view:claim.close_reason_view:"
 msgid "Close Claim"
-msgstr "Clore les sinistres"
+msgstr "Clôre les sinistres"
 
 msgctxt "view:claim.loss:"
 msgid "Loss"

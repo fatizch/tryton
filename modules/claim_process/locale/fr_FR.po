@@ -3,16 +3,20 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:claim.declare:"
+msgid "Missing Loss Description"
+msgstr "Le descripteur de préjudice est manquant"
+
+msgctxt "error:claim.declare:"
 msgid "There are claim's still open."
-msgstr "Attention, il reste des sinistres ouverts."
+msgstr "Des sinistres sont encore ouverts"
 
 msgctxt "error:claim.declare:"
 msgid "You can only reopen one claim at a time."
-msgstr "Vous ne pouvez ouvrir q'un sinistre à la fois. "
+msgstr "Vous pouvez réouvrir un sinistre à la fois"
 
 msgctxt "error:claim.declare:"
 msgid "You must select at least one open claim."
-msgstr "Vous devez sélectionner au moins un sinistre ouvert."
+msgstr "Vous devez sélectionner au moins un sinistre"
 
 msgctxt "error:claim:"
 msgid "Enter a value for field '%s' of '%s'"
@@ -56,7 +60,11 @@ msgstr "Tâche"
 
 msgctxt "field:claim,main_loss_description:"
 msgid "Loss Description"
-msgstr "Type de Préjudice"
+msgstr "Descripteur de préjudice"
+
+msgctxt "field:claim,open_loss:"
+msgid "Open Loss"
+msgstr "Evenement ouvert"
 
 msgctxt "field:claim,task_name:"
 msgid "Task Name"
@@ -124,7 +132,7 @@ msgstr "ID"
 
 msgctxt "field:claim.declare.find_process,loss_desc:"
 msgid "Loss Description"
-msgstr "Type de Préjudice"
+msgstr "Descripteur de préjudice"
 
 msgctxt "field:claim.declare.find_process,model:"
 msgid "Model"
@@ -144,7 +152,7 @@ msgstr "Prestations"
 
 msgctxt "field:process,for_loss_descs:"
 msgid "Loss Description"
-msgstr "Type de Préjudice"
+msgstr "Descripteur de préjudice"
 
 msgctxt "field:process-benefit.loss.description,create_date:"
 msgid "Create Date"
@@ -164,7 +172,7 @@ msgstr "ID"
 
 msgctxt "field:process-benefit.loss.description,loss_desc:"
 msgid "Loss Description"
-msgstr "Type de Préjudice"
+msgstr "Descripteur de préjudice"
 
 msgctxt "field:process-benefit.loss.description,process:"
 msgid "Process"
@@ -204,15 +212,15 @@ msgstr "Clore les sinistres"
 
 msgctxt "model:ir.action,name:declaration_process_launcher"
 msgid "Start Declaration"
-msgstr "Déclaration/Instruction Sinistre"
+msgstr "Démarrer la déclaration"
 
 msgctxt "model:ir.ui.menu,name:menu_start_declaration"
 msgid "Start Declaration"
-msgstr "Déclaration/Instruction Sinistre"
+msgstr "Démarrer la déclaration"
 
 msgctxt "model:process-benefit.loss.description,name:"
 msgid "Process Loss Desc Relation"
-msgstr "Préjudice définition"
+msgstr ""
 
 msgctxt "selection:process,kind:"
 msgid "Claim Declaration"
@@ -228,7 +236,7 @@ msgstr "Sinistre"
 
 msgctxt "view:process:"
 msgid "Loss Description"
-msgstr "Type de Préjudice"
+msgstr "Descripteur de préjudice"
 
 msgctxt "wizard_button:claim.declare,process_parameters,close_claim:"
 msgid "Close"
@@ -236,7 +244,7 @@ msgstr "Clore"
 
 msgctxt "wizard_button:claim.declare,process_parameters,close_claim:"
 msgid "Close claims"
-msgstr "Clôre les sinistres"
+msgstr "Clôre les dossiers de prestations"
 
 msgctxt "wizard_button:claim.declare,process_parameters,confirm_declaration:"
 msgid "Start Process"

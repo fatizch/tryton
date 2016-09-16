@@ -206,15 +206,17 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         return 'open'
 
     @classmethod
-    def close(cls, claims, sub_status):
+    def close(cls, claims, sub_status, date=None):
         for claim in claims:
-            claim.close_claim(sub_status)
+            claim.close_claim(sub_status, date)
         cls.save(claims)
 
-    def close_claim(self, sub_status):
+    def close_claim(self, sub_status, date=None):
         self.status = 'closed'
         self.sub_status = sub_status
-        self.end_date = utils.today()
+        self.end_date = date or utils.today()
+        for loss in self.losses:
+            loss.close(sub_status, date)
 
     def reopen_claim(self):
         if self.status == 'closed':
@@ -328,6 +330,9 @@ class Loss(model.CoopSQL, model.CoopView):
     loss_desc_code = fields.Function(
         fields.Char('Loss Desc Code', depends=['loss_desc']),
         'get_loss_desc_code')
+    loss_desc_kind = fields.Function(
+        fields.Char('Loss Desc Kind', depends=['loss_desc']),
+        'get_loss_desc_kind')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
 
@@ -367,6 +372,9 @@ class Loss(model.CoopSQL, model.CoopView):
     def get_loss_desc_code(self, name):
         return self.loss_desc.code if self.loss_desc else ''
 
+    def get_loss_desc_kind(self, name):
+        return self.loss_desc.loss_kind if self.loss_desc else ''
+
     @fields.depends('event_desc', 'loss_desc', 'with_end_date', 'end_date')
     def on_change_loss_desc(self):
         self.with_end_date = self.get_with_end_date('')
@@ -390,6 +398,9 @@ class Loss(model.CoopSQL, model.CoopView):
                 Lang.strftime(self.start_date, lang, '%d/%m/%Y'),
                 Lang.strftime(self.end_date, lang, '%d/%m/%Y'))
         return res
+
+    def get_summary(self):
+        return self.rec_name
 
     @classmethod
     def get_date_field_for_kind(cls, kind):
@@ -462,6 +473,9 @@ class Loss(model.CoopSQL, model.CoopView):
     def get_contracts(self):
         return list(set([x.contract for x in self.services]))
 
+    def close(self, sub_status, date=None):
+        return
+
     @property
     def loss(self):
         return getattr(self, self.loss_desc.loss_kind + '_loss')
@@ -501,6 +515,9 @@ class ClaimService(model.CoopView, model.CoopSQL, ModelCurrency):
     claim = fields.Function(
         fields.Many2One('claim', 'Claim'),
         'get_claim', searcher='search_claim')
+    summary = fields.Function(
+        fields.Text('Service Summary'),
+        'get_summary')
     loss_summary = fields.Function(
         fields.Text('Loss Summary'),
         'get_loss_summary')
@@ -536,8 +553,7 @@ class ClaimService(model.CoopView, model.CoopSQL, ModelCurrency):
         else:
             self.extra_datas = self.extra_datas
 
-        data_values = self.benefit.get_extra_data_def(
-            self.extra_datas[-1].extra_data_values, self.loss.get_date())
+        data_values = self.benefit.get_extra_data_def(self)
 
         self.extra_datas[-1].extra_data_values = data_values
 
@@ -545,6 +561,18 @@ class ClaimService(model.CoopView, model.CoopSQL, ModelCurrency):
         if self.benefit:
             return self.benefit.rec_name
         return super(ClaimService, self).get_rec_name(name)
+
+    def get_summary(self, name=None):
+        res = ''
+        if self.contract.subscriber != self.claim.claimant:
+            res = '%s - ' % self.contract.subscriber.rec_name
+        if self.option and self.option.coverage.insurer:
+            res += '%s [%s] - %s' % (self.contract.rec_name,
+                self.contract.product.rec_name,
+                self.option.coverage.insurer.rec_name)
+        else:
+            res += self.contract.get_synthesis_rec_name()
+        return res
 
     def get_benefit_summary(self, name):
         return '%s (%s)' % (self.benefit.rec_name,

@@ -74,14 +74,17 @@ class DeliverBenefits(Wizard):
                 for benefit, option in contract.get_possible_benefits(loss):
                     if benefit in deliver:
                         continue
-                    description = '<b>%s</b>\n' % self.raise_user_error(
-                        'coverage_information', raise_exception=False)
-                    description += option.current_version.extra_data_as_string
+                    description = '<div><b>%s</b></div>' % \
+                        self.raise_user_error('coverage_information',
+                            raise_exception=False)
+                    for data in option.current_version.\
+                            extra_data_as_string.split('\n'):
+                        description += '<div>%s</div>' % data
                     if benefit.description:
-                        description += '\n\n<b>%s</b>\n' % \
+                        description += '<div><b>%s</b></div>' % \
                             self.raise_user_error('coverage_information',
                                 raise_exception=False)
-                        description += benefit.description
+                        description += '<div>%s</div>' % benefit.description
                     benefits_to_deliver += [{
                             'to_deliver': True,
                             'benefit': benefit.id,
@@ -120,6 +123,7 @@ class ClaimCloseReasonView(model.CoopView):
     claims = fields.Many2Many('claim', '', '', 'Claims', readonly=True)
     sub_status = fields.Many2One(
         'claim.sub_status', 'Substatus', required=True)
+    end_date = fields.Date('End Date')
 
 
 class CloseClaim(Wizard):
@@ -142,5 +146,6 @@ class CloseClaim(Wizard):
 
     def transition_apply_sub_status(self):
         Claim = Pool().get('claim')
-        Claim.close(self.close_reason.claims, self.close_reason.sub_status)
+        Claim.close(self.close_reason.claims, self.close_reason.sub_status,
+            self.close_reason.end_date)
         return 'end'

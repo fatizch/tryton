@@ -3,4 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <tree>
     <field name="loss_desc"/>
+    <field name="event_desc"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
 </tree>

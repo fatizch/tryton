@@ -2,11 +2,17 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/field[@name='start_date']" position="after">
-        <newline/>
-        <label name="end_date"/>
-        <field name="end_date"/>
+    <xpath expr="/form/label[@name='start_date']" position="replace">
+    </xpath>
+    <xpath expr="/form/field[@name='start_date']" position="replace">
+        <label name="std_start_date"/>
+        <field name="std_start_date"/>
+        <label name="std_end_date"/>
+        <field name="std_end_date"/>
         <label name="covered_person"/>
         <field name="covered_person"/>
+        <newline/>
+        <label name="is_a_relapse"/>
+        <field name="is_a_relapse"/>
     </xpath>
 </data>

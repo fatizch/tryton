@@ -15,6 +15,7 @@ def register():
         Benefit,
         BenefitRule,
         Claim,
+        Loss,
         ClaimService,
         Indemnification,
         IndemnificationTaxes,

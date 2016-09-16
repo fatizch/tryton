@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="loss_is_a_relapse">
+            <field name="translated_technical_name">est_une_rechute</field>
+            <field name="description">Est une rechute</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_is_a_relapse</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+    </data>
+</tryton>

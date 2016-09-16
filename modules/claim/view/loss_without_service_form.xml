@@ -10,5 +10,4 @@ this repository contains the full copyright notices and license terms. -->
     <field name="start_date"/>
     <newline/>
     <field name="extra_data" colspan="2" no_command="1"/>
-    <field name="claim"/>
 </form>

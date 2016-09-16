@@ -6,6 +6,10 @@ msgctxt "error:claim.loss:"
 msgid "End Date is smaller than start date"
 msgstr "La date de fin est antérieure à la date de début"
 
+msgctxt "error:claim.loss:"
+msgid "Relapse"
+msgstr "Rechute"
+
 msgctxt "field:benefit.loss.description,with_end_date:"
 msgid "With End Date"
 msgstr "Avec Date de Fin"
@@ -28,9 +32,25 @@ msgctxt "field:claim.loss,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:claim.loss,is_a_relapse:"
+msgid "Is A Relapse"
+msgstr "Est une rechute"
+
 msgctxt "field:claim.loss,possible_covered_persons:"
 msgid "Covered Persons"
 msgstr "Personnes couvertes"
+
+msgctxt "field:claim.loss,return_to_work_date:"
+msgid "Return to Work"
+msgstr "Reprise d'activité"
+
+msgctxt "field:claim.loss,std_end_date:"
+msgid "STD End Date"
+msgstr "Date de fin d'arrêt de travail"
+
+msgctxt "field:claim.loss,std_start_date:"
+msgid "STD Start Date"
+msgstr "Date d'arrêt de travail"
 
 msgctxt "field:claim.loss,with_end_date:"
 msgid "With End Date"
@@ -45,8 +65,16 @@ msgid "Person"
 msgstr "Personne Physique"
 
 msgctxt "selection:benefit.loss.description,loss_kind:"
-msgid "Life"
-msgstr "Prévoyance"
+msgid "Death"
+msgstr "Décès"
+
+msgctxt "selection:benefit.loss.description,loss_kind:"
+msgid "Long term"
+msgstr "Invalidité de travail"
+
+msgctxt "selection:benefit.loss.description,loss_kind:"
+msgid "Short Term"
+msgstr "Incapacité de travail"
 
 msgctxt "view:claim.service:"
 msgid "Add New Indemnification"

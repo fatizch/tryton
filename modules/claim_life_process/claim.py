@@ -26,6 +26,9 @@ class Claim:
         fields.One2Many('claim.indemnification', None,
             'Indemnification To Schedule'),
         'get_indemnifications_to_schedule', setter='setter_void')
+    has_calculated_indemnification = fields.Function(
+        fields.Boolean('Has Calculated Indemnification'),
+        'get_has_calculated_indemnification')
 
     def get_indemnifications(self, name=None):
         res = []
@@ -34,6 +37,10 @@ class Claim:
                 for indemnification in service.indemnifications:
                     res.append(indemnification.id)
         return res
+
+    def get_has_calculated_indemnification(self, name=None):
+        return any([x.status == 'calculated' for x in
+                    self.indemnifications])
 
     def get_is_pending_indemnification(self, name):
         for loss in self.losses:

@@ -27,4 +27,6 @@ class LossDescription:
     def __setup__(cls):
         super(LossDescription, cls).__setup__()
         cls.item_kind.selection.append(('person', 'Person'))
-        cls.loss_kind.selection.append(('life', 'Life'))
+        cls.loss_kind.selection.append(('std', 'Short Term'))
+        cls.loss_kind.selection.append(('ltd', 'Long term'))
+        cls.loss_kind.selection.append(('death', 'Death'))

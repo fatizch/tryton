@@ -2,6 +2,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
+import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or, Bool, In, Not
@@ -20,6 +21,7 @@ from trytond.modules.rule_engine import get_rule_mixin
 __metaclass__ = PoolMeta
 __all__ = [
     'Claim',
+    'Loss',
     'ClaimService',
     'Indemnification',
     'IndemnificationTaxes',
@@ -129,6 +131,21 @@ class Claim:
             return
         Indemnification = Pool().get('claim.indemnification')
         Indemnification.schedule(claims[0].indemnifications_to_schedule)
+
+
+class Loss:
+    __name__ = 'claim.loss'
+
+    def close(self, sub_status, date=None):
+        super(Loss, self).close(sub_status, date)
+        max_end_date = datetime.date.min
+        if self.with_end_date and not self.end_date:
+            for service in self.services:
+                for indemnification in service.indemnifications:
+                    max_end_date = max(indemnification.end_date, max_end_date)
+            if max_end_date != datetime.date.min:
+                self.end_date = max_end_date
+                self.save()
 
 
 class ClaimService:

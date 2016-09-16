@@ -25,13 +25,12 @@ class Benefit:
             return self.benefit_rules[0].required_extra_data(service, date)
         return []
 
-    def get_extra_data_def(self, existing_data, condition_date, service=None):
-        values = super(Benefit, self).get_extra_data_def(existing_data,
-            condition_date)
+    def get_extra_data_def(self, service):
+        values = super(Benefit, self).get_extra_data_def(service)
         if not self.benefit_rules or not service:
             return values
         required = [e.name
-            for e in self.required_extra_data(service, condition_date)]
+            for e in self.required_extra_data(service, self.loss.get_date())]
         return {k: v for k, v in values.iteritems() if k in required}
 
 

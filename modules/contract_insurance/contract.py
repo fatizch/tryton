@@ -1084,7 +1084,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 for k, v in version.extra_data.iteritems()}
 
     def get_relation_with_subscriber(self):
-        if not self.party:
+        if not self.party or not self.contract:
             return
         subscriber = self.contract.subscriber
         kinds = [rel.type.name for rel in self.party.relations
@@ -1180,19 +1180,19 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     @classmethod
     def get_possible_covered_elements(cls, party, at_date):
-        # TODO : Maybe this should be set in claim
-        # TODO : To enhance with status control on contract and option linked
         domain = [
             ('party', '=', party.id),
-            ('options.start_date', '<=', at_date),
-            # ['OR',
-            #     ['options.end_date', '=', None],
-            #     ['options.end_date', '>=', at_date]],
-            ]
+            ['OR',
+                ('options', '=', None),
+                ('options.start_date', '<=', at_date)
+                # ['OR',
+                #     ['options.end_date', '=', None],
+                #     ['options.end_date', '>=', at_date]]],
+                ]]
         if 'company' in Transaction().context:
             domain.append(
                 ('contract.company', '=', Transaction().context['company']))
-        return cls.search([domain])
+        return cls.search(domain)
 
     def match_key(self, from_name=None, party=None):
         if (from_name and self.name == from_name

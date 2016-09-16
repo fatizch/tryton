@@ -252,13 +252,10 @@ class Benefit(model.CoopSQL, model.CoopView, model.TaggedMixin):
     def init_dict_for_rule_engine(self, args):
         args['benefit'] = self
 
-    def get_extra_data_for_exec(self, args):
-        all_schemas = set(self.get_extra_data_def('benefit',
-            args['date']))
-        return all_schemas, all_schemas
-
-    def get_extra_data_def(self, existing_data, condition_date):
+    def get_extra_data_def(self, service):
         ExtraData = Pool().get('extra_data')
+        existing_data = service.extra_datas[-1].extra_data_values
+        condition_date = self.loss.get_date()
         all_schemas, possible_schemas = ExtraData.get_extra_data_definitions(
             self, 'extra_data_def', 'benefit', condition_date)
         return ExtraData.calculate_value_set(possible_schemas, all_schemas,

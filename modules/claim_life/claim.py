@@ -31,6 +31,53 @@ class Loss:
                 ()
                 )
             ], ondelete='RESTRICT', depends=['possible_covered_persons'])
+    std_start_date = fields.Function(fields.Date('STD Start Date',
+            states={'invisible': Eval('loss_desc_kind') not in ('std', 'ltd')},
+            depends=['loss_desc_kind', 'loss_desc']),
+        'get_start_end_dates', setter='set_start_end_dates')
+    std_end_date = fields.Function(fields.Date('STD End Date',
+            states={'invisible': Eval('loss_desc_kind') not in ('std', 'ltd')},
+            depends=['loss_desc_kind', 'loss_desc']),
+        'get_start_end_dates', setter='set_start_end_dates')
+    return_to_work_date = fields.Date('Return to Work',
+        states={'invisible': ~Bool(Eval('return_to_work_date'))})
+    is_a_relapse = fields.Boolean('Is A Relapse',
+        states={'invisible': Eval('loss_desc_kind') != 'std'})
+
+    @classmethod
+    def __setup__(cls):
+        super(Loss, cls).__setup__()
+        cls._error_messages.update({
+                'relapse': 'Relapse',
+                })
+
+    def get_start_end_dates(self, name):
+        if 'start_date' in name:
+            date = 'start_date'
+        else:
+            date = 'end_date'
+        return getattr(self, date, None)
+
+    @classmethod
+    def set_start_end_dates(cls, losses, name, value):
+        if 'start_date' in name:
+            date = 'start_date'
+        else:
+            date = 'end_date'
+        cls.write(losses, {date: value})
+
+    def close(self, sub_status, date=None):
+        super(Loss, self).close(sub_status, date)
+        if date:
+            self.return_to_work_date = date
+            self.save()
+
+    def get_rec_name(self, name=None):
+        res = super(Loss, self).get_rec_name(name)
+        if self.is_a_relapse:
+            res = '%s (%s)' % (res, self.raise_user_error('relapse',
+                raise_exception=False))
+        return res
 
     def get_possible_covered_persons(self):
         res = []
@@ -89,15 +136,26 @@ class ClaimService:
     __name__ = 'claim.service'
 
     def get_covered_person(self):
-        if self.loss.loss_desc.loss_kind == 'life':
+        if self.loss.loss_desc.loss_kind in ('person', 'ltd', 'std', 'death'):
             return self.loss.covered_person
-        return super(ClaimService, self).get_covered_person()
 
     def init_dict_for_rule_engine(self, cur_dict):
         super(ClaimService, self).init_dict_for_rule_engine(
             cur_dict)
         if self.loss.loss_desc.loss_kind == 'life':
             cur_dict['covered_person'] = self.get_covered_person()
+
+    def init_from_loss(self, loss, benefit):
+        super(ClaimService, self).init_from_loss(loss, benefit)
+        if not loss.is_a_relapse:
+            return
+        values = self.extra_datas[-1].extra_data_values
+        old_values = self.loss.claim.delivered_services[0].extra_datas[-1].\
+            extra_data_values
+        for key, value in old_values.iteritems():
+            if key in values:
+                values[key] = value
+        self.extra_datas[-1].extra_data_values = values
 
 
 class ClaimServiceExtraDataRevision:
