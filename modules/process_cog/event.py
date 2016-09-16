@@ -57,7 +57,7 @@ class EventTypeAction:
             process_objects = objects
         return super(EventTypeAction, self).filter_objects(process_objects)
 
-    def execute(self, objects, event_code):
+    def execute(self, objects, event_code, description=None, **kwargs):
         pool = Pool()
         Event = pool.get('event')
         if self.action != 'initiate_process':

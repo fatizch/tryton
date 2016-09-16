@@ -47,7 +47,8 @@ class Event(Model):
             for action in actions:
                 filtered = action.filter_objects(objects)
                 if filtered:
-                    action.execute(filtered, event_code)
+                    action.execute(filtered, event_code, description,
+                        **kwargs)
 
     @classmethod
     def get_event_type_data_from_code(cls, event_code):
@@ -244,7 +245,7 @@ class EventTypeAction(model.CoopSQL, model.CoopView):
         return [x for x in objects if utils.pyson_result(
                 self.pyson_condition, x) is True]
 
-    def execute(self, objects, event_code):
+    def execute(self, objects, event_code, description=None, **kwargs):
         pass
 
     @fields.depends('code', 'name')

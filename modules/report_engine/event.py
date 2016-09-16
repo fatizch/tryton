@@ -70,7 +70,7 @@ class EventTypeAction:
         return super(EventTypeAction, cls)._export_light() | {
             'report_templates'}
 
-    def execute(self, objects, event_code):
+    def execute(self, objects, event_code, description=None, **kwargs):
         pool = Pool()
         ReportProductionRequest = pool.get('report_production.request')
         if self.action != 'generate_documents':

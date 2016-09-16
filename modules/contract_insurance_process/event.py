@@ -18,7 +18,7 @@ class EventTypeAction:
         return super(EventTypeAction, cls).get_action_types() + [
             ('clear_process', 'Clear Process')]
 
-    def execute(self, objects, event_code):
+    def execute(self, objects, event_code, description=None, **kwargs):
         pool = Pool()
         if self.action != 'clear_process':
             return super(EventTypeAction, self).execute(objects, event_code)
