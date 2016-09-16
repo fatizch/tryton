@@ -41,11 +41,12 @@ class ChangePaymentTerm(Wizard):
         return {
             'invoice': invoice.id,
             'current_term': invoice.payment_term.id,
+            'current_invoice_date': invoice.invoice_date,
             }
 
     def transition_change(self):
         Pool().get('account.invoice').change_term([self.select_term.invoice],
-            self.select_term.new_term)
+            self.select_term.new_term, self.select_term.new_invoice_date)
         return 'end'
 
 
@@ -61,3 +62,5 @@ class SelectTerm(model.CoopView):
     new_term = fields.Many2One('account.invoice.payment_term',
         'New Payment Term', domain=[('id', '!=', Eval('current_term'))],
         required=True, depends=['current_term'])
+    new_invoice_date = fields.Date('New Invoice Date', required=True)
+    current_invoice_date = fields.Date('Current Invoice Date', readonly=True)

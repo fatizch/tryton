@@ -26,9 +26,13 @@ msgctxt "field:account.invoice,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.invoice.change_payment_term.select_term,current_invoice_date:"
+msgid "Current Invoice Date"
+msgstr "Date de facturation actuelle"
+
 msgctxt "field:account.invoice.change_payment_term.select_term,current_term:"
 msgid "Current Payment Term"
-msgstr "Conditions de paiement actuelles"
+msgstr "Condition de paiement actuelle"
 
 msgctxt "field:account.invoice.change_payment_term.select_term,id:"
 msgid "ID"
@@ -37,6 +41,10 @@ msgstr "ID"
 msgctxt "field:account.invoice.change_payment_term.select_term,invoice:"
 msgid "Invoice"
 msgstr "Quittance"
+
+msgctxt "field:account.invoice.change_payment_term.select_term,new_invoice_date:"
+msgid "New Invoice Date"
+msgstr "Nouvelle date de facturation"
 
 msgctxt "field:account.invoice.change_payment_term.select_term,new_term:"
 msgid "New Payment Term"

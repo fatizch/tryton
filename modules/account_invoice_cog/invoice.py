@@ -129,7 +129,7 @@ class Invoice(export.ExportImportMixin, Printable):
         return 'black'
 
     @classmethod
-    def change_term(cls, invoices, new_term):
+    def change_term(cls, invoices, new_term, new_invoice_date):
         pool = Pool()
         Move = pool.get('account.move')
         Line = pool.get('account.move.line')
@@ -139,7 +139,10 @@ class Invoice(export.ExportImportMixin, Printable):
         with Transaction().set_context(_payment_term_change=True):
             previous_moves = [x.move for x in invoices]
             cls.write(invoices, {
-                    'payment_term': new_term.id, 'move': None})
+                    'payment_term': new_term.id,
+                    'move': None,
+                    'invoice_date': new_invoice_date
+                    })
             for invoice, move in zip(invoices, previous_moves):
                 invoice.create_move()
                 to_post.append(invoice.move)

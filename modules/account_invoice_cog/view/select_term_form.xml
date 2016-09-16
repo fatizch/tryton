@@ -8,4 +8,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="current_term"/>
     <label name="new_term"/>
     <field name="new_term"/>
+    <label name="current_invoice_date"/>
+    <field name="current_invoice_date"/>
+    <label name="new_invoice_date"/>
+    <field name="new_invoice_date"/>
 </form>
