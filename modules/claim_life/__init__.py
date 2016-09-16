@@ -9,7 +9,6 @@ from .wizard import *
 from .rule_engine import *
 
 
-
 def register():
     Pool.register(
         Benefit,
