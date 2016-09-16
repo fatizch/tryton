@@ -65,8 +65,7 @@ class ChangeBillingInformation:
     @classmethod
     def direct_debit_account_only_fields(cls):
         return super(ChangeBillingInformation,
-            cls).direct_debit_account_only_fields() + [
-                'sepa_mandate']
+            cls).direct_debit_account_only_fields() + ['sepa_mandate']
 
     def step_default(self, name):
         defaults = super(ChangeBillingInformation, self).step_default(name)
@@ -77,9 +76,7 @@ class ChangeBillingInformation:
     def set_account_owner(self):
         super(ChangeBillingInformation, self).set_account_owner()
         pool = Pool()
-
         Mandate = pool.get('account.payment.sepa.mandate')
-
         if self.mandate_needed:
             new_info = self.new_billing_information[0]
             account = (new_info.direct_debit_account or
