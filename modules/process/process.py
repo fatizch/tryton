@@ -700,10 +700,9 @@ class ProcessAction(ModelSQL, ModelView):
         def call_method(method, target, parameters=None):
             if parameters:
                 parameters = ast.literal_eval('(%s,)' % parameters)
-                result = method(target, *parameters)
+                method(target, *parameters)
             else:
-                result = method(target)
-            return result
+                method(target)
 
         if self.content != 'method':
             raise NotImplementedError
@@ -714,13 +713,7 @@ class ProcessAction(ModelSQL, ModelView):
         method = getattr(target.__class__, self.method_name)
         if not hasattr(method, 'im_self') or method.im_self:
             target = [target]
-        result = call_method(method, target, self.parameters)
-        if (not result or
-                not isinstance(result, (list, tuple)) and result is True):
-            return
-        res, errs = result
-        if not res or errs:
-            target.raise_user_error(errs)
+        call_method(method, target, self.parameters)
 
     @fields.depends('parameters')
     def on_change_with_exec_parameters(self, name=None):

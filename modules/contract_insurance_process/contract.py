@@ -99,22 +99,16 @@ class Contract(CogProcessFramework):
 
     def check_option_dates(self):
         result = True
-        errs = []
-
         for option in self.options:
             if option.start_date < self.start_date:
                 result = False
-                errs.append((
-                    'bad_start_date', (
-                        option.coverage.code,
-                        self.start_date)))
+                self.append_functional_error('bad_start_date', (
+                        option.coverage.code, self.start_date))
             elif option.start_date < option.coverage.start_date:
                 result = False
-                errs.append((
-                    'bad_start_date', (
-                        option.coverage.code,
-                        option.coverage.start_date)))
-        return result, errs
+                self.append_functional_error('bad_start_date', (
+                        option.coverage.code, option.coverage.start_date))
+        return result
 
     @classmethod
     def subscribe_contract(cls, *args, **kwargs):

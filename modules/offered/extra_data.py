@@ -209,7 +209,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
             None)
         if expected_values is not None:
             expected_values = expected_values()
-        res, errs = True, []
+        res = True
         translated_keys = TranslatedDict(name=field_name, type_='keys')
         trans_keys = translated_keys.__get__(instance,
             instance.__class__)
@@ -231,7 +231,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                 # manage it on his own
                 cls.raise_user_error('expected_value', (k, field_name,
                         instance.get_rec_name(None)))
-        return res, errs
+        return res
 
     @classmethod
     def calculate_value_set(cls, possible_schemas, all_schemas, values):
