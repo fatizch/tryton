@@ -477,7 +477,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 increment.start_date - relativedelta(days=1))
             early_repayment = previous_payment.outstanding_balance - \
                 increment.begin_balance
-            if early_repayment and early_repayment > (10 **
+            if early_repayment and abs(early_repayment) > (10 **
                     (- self.on_change_with_currency_digits() + 2)):
                 increment.early_repayment = self.currency.round(
                     early_repayment)
