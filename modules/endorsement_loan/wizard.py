@@ -167,6 +167,14 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
     new_loan = fields.Many2One('loan', 'New Loan')
 
     @classmethod
+    def __setup__(cls):
+        super(AddRemoveLoan, cls).__setup__()
+        cls._error_messages.update({
+                'at_least_one_loan':
+                'There must be at least one loan for contract %s',
+                })
+
+    @classmethod
     def view_attributes(cls):
         return super(AddRemoveLoan, cls).view_attributes() + [
             ('/form/group[@id="invisible"]', 'states', {'invisible': True})]
@@ -340,6 +348,9 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
                 if x.loan.id not in added and x.loan.id not in removed] + [
                 OrderedLoan(loan=x, number=i)
                 for i, x in enumerate(added, max_number + 1)]
+            if not contract.ordered_loans:
+                self.raise_user_error('at_least_one_loan',
+                    contract.contract_number)
             final_loans = {x.loan.id for x in contract.ordered_loans}
 
             # Sync loan shares
