@@ -151,7 +151,14 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     product = fields.Many2One('offered.product', 'Product',
         ondelete='RESTRICT', required=True, domain=[
             If(~Eval('appliable_conditions_date', None),
-                [],
+                [
+                    ['OR',
+                        ('end_date', '>=', Eval('initial_start_date')),
+                        ('end_date', '=', None)],
+                    ['OR',
+                        ('start_date', '<=',
+                            Eval('initial_start_date')),
+                        ('start_date', '=', None)]],
                 [
                     ['OR',
                         ('end_date', '>=', Eval('appliable_conditions_date')),
