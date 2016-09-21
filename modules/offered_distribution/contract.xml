@@ -27,7 +27,6 @@ this repository contains the full copyright notices and license terms. -->
     <data depends="endorsement_insurance_invoice">
         <record model="ir.ui.view" id="endorsement_billing_information_view_form">
             <field name="model">contract.billing_information</field>
-            <field name="type">form</field>
             <field name="inherit" ref="endorsement_insurance_invoice.endorsement_billing_information_view_form"/>
             <field name="name">endorsement_billing_information_form</field>
         </record>

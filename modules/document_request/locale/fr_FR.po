@@ -250,10 +250,6 @@ msgctxt "model:document.request.process,name:"
 msgid "Document Request Batch Definition"
 msgstr "Définition du batch de demande de documents"
 
-msgctxt "model:event.type,name:remind_documents"
-msgid "Remind Documents"
-msgstr "Relance de documents"
-
 msgctxt "model:ir.action,name:receive_documents_wizard"
 msgid "Document Reception"
 msgstr "Réception des documents"
