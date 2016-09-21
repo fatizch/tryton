@@ -365,8 +365,6 @@ Test Waiver Creation Wizard::
     >>> create_wizard.execute('reinvoice')
     >>> posted_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
     ...             ('invoice.state', '=', 'posted')]), key=lambda x: x.invoice.start)
-    >>> len(posted_invoices) == 2
-    True
     >>> all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
     ...             ('invoice.state', 'in', ['posted', 'validated'])]),
     ...     key=lambda x: x.invoice.start)
@@ -378,7 +376,7 @@ Test Waiver Creation Wizard::
     True
     >>> all_invoices[1].invoice.state
     u'posted'
-    >>> all([(x.invoice.total_amount, x.invoice.state) == (100, 'validated')
+    >>> all([(x.invoice.total_amount, x.invoice.state) == (100, 'posted')
     ...     for x in all_invoices[2:]])
     True
 
@@ -394,10 +392,10 @@ Test Set Waiver End Date Wizard::
     >>> all([(x.invoice.total_amount, x.invoice.state) == (100, 'posted')
     ...     for x in all_invoices[:2]])
     True
-    >>> all([(x.invoice.total_amount, x.invoice.state) == (100, 'validated')
+    >>> all([(x.invoice.total_amount, x.invoice.state) == (100, 'posted')
     ...     for x in all_invoices[2:4]])
     True
-    >>> all([(x.invoice.total_amount, x.invoice.state) == (155, 'validated')
+    >>> all([(x.invoice.total_amount, x.invoice.state) == (155, 'posted')
     ...     for x in all_invoices[4:]])
     True
     >>> waiver = Waiver.find([])[0]
@@ -410,6 +408,6 @@ Test Set Waiver End Date Wizard::
     >>> all([(x.invoice.total_amount, x.invoice.state) == (100, 'posted')
     ...     for x in all_invoices[:2]])
     True
-    >>> all([(x.invoice.total_amount, x.invoice.state) == (100, 'validated')
+    >>> all([(x.invoice.total_amount, x.invoice.state) == (100, 'posted')
     ...     for x in all_invoices[2:]])
     True

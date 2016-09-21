@@ -361,8 +361,6 @@ create_wizard.form.start_date = contract_start_date
 create_wizard.execute('reinvoice')
 posted_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
             ('invoice.state', '=', 'posted')]), key=lambda x: x.invoice.start)
-len(posted_invoices) == 2
-# #Res# #True
 all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
             ('invoice.state', 'in', ['posted', 'validated'])]),
     key=lambda x: x.invoice.start)
@@ -374,7 +372,7 @@ all_invoices[1].invoice.total_amount == 100
 # #Res# #True
 all_invoices[1].invoice.state
 # #Res# #u'posted'
-all([(x.invoice.total_amount, x.invoice.state) == (100, 'validated')
+all([(x.invoice.total_amount, x.invoice.state) == (100, 'posted')
     for x in all_invoices[2:]])
 # #Res# #True
 
@@ -389,10 +387,10 @@ all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
 all([(x.invoice.total_amount, x.invoice.state) == (100, 'posted')
     for x in all_invoices[:2]])
 # #Res# #True
-all([(x.invoice.total_amount, x.invoice.state) == (100, 'validated')
+all([(x.invoice.total_amount, x.invoice.state) == (100, 'posted')
     for x in all_invoices[2:4]])
 # #Res# #True
-all([(x.invoice.total_amount, x.invoice.state) == (155, 'validated')
+all([(x.invoice.total_amount, x.invoice.state) == (155, 'posted')
     for x in all_invoices[4:]])
 # #Res# #True
 
@@ -406,6 +404,6 @@ all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
 all([(x.invoice.total_amount, x.invoice.state) == (100, 'posted')
     for x in all_invoices[:2]])
 # #Res# #True
-all([(x.invoice.total_amount, x.invoice.state) == (100, 'validated')
+all([(x.invoice.total_amount, x.invoice.state) == (100, 'posted')
     for x in all_invoices[2:]])
 # #Res# #True
