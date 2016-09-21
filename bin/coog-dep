@@ -43,6 +43,7 @@ coog_dep_extend() { # install extended deps (interfaces, deployment extras)
         pip install $proxy_opt msgpack-python               # multi-worker
         pip install $proxy_opt numpy                        # used for taea calculation
         pip install $proxy_opt scipy                        # used for taea calculation
+        pip install $proxy_opt uwsgi                        # for workers
 }
 
 coog_dep_batch() { # install batch deps

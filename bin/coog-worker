@@ -1,150 +1,73 @@
 # vim: set ft=sh:
 # worker management - start, stop, log, status, etc
 
-_coog_worker_file() { # get file name - <wid> <ext> [pid]
-        [ $# -eq 2 ] && echo $COOG_TMP"/"$COOG_FILE_WRK"-"$1"."$2
-        [ $# -eq 3 ] && echo $COOG_TMP"/"$COOG_FILE_WRK"-"$1"-"$3"."$2
+_coog_worker_file() { # get file name - <ext> [pid]
+        [ $# -eq 1 ] && echo "$COOG_TMP/$COOG_FILE_WRK.$1"
+        [ $# -eq 2 ] && echo "$COOG_TMP/$COOG_FILE_WRK-$2.$1"
         return 1
 }
 
-_coog_worker_pid() { # retrieve pid from pidfile - <wid> [delete]
+_coog_worker_pid() { # retrieve pid from pidfile - [delete]
         local pid_file
-        pid_file=`_coog_worker_file $1 pid`
-        [ ! -e $pid_file ] && return
-        cat $pid_file
-        [ $2 = 1 ] && rm -f $pid_file
+        pid_file=$(_coog_worker_file pid)
+        [ ! -e "$pid_file" ] && return
+        cat "$pid_file"
+        [ "$1" = 1 ] && rm -f "$pid_file"
 }
 
-_coog_worker_bak() { # backup runtime files - <wid> [pid]
+_coog_worker_bak() { # backup runtime files - <pid>
         local out_file
-        out_file=`_coog_worker_file $1 out`
-        if [ -e $out_file ]
-        then
-                coog_env_wait $2
-                [ -z $2 ] && rm $out_file && return
-                local bak_file
-                bak_file=`_coog_worker_file $1 out $2`
-                mv $out_file $bak_file
-        else
-                echo no worker out
-        fi
-        local conf_file
-        conf_file=`_coog_worker_file $1 conf`
-        if [ -e $conf_file ]
-        then
-                [ -z $2 ] && rm $conf_file && return
-                local bak_file
-                bak_file=`_coog_worker_file $1 conf $2`
-                mv $conf_file $bak_file
-        else
-                echo no worker conf
-        fi
-
+        out_file=$(_coog_worker_file out)
+        [ ! -e "$out_file" ] && echo no worker log && return
+        coog_env_wait "$1"
+        local bak_file
+        bak_file=$(_coog_worker_file out "$1")
+        mv "$out_file" "$bak_file"
 }
 
-coog_worker_start() { # start worker - <wid> [args]
-        [ -z $1 ] && >&2 echo missing worker id && return 1
-        local wid; wid=$1; shift
+coog_worker_start() { # start workers - <nb>
+        [ -z "$1" ] && echo missing workers number && return 1
         local pid_file
-        pid_file=`_coog_worker_file $wid pid`
-        [ -e $pid_file ] && echo worker $wid: already running "->" stop && return 1
-        local conf_file
-        conf_file=`_coog_worker_file $wid conf`
-        [ -e $conf_file ] && echo worker $wid: conf file exists "->" clean manually && return 1
+        pid_file=$(_coog_worker_file pid)
         local out_file
-        out_file=`_coog_worker_file $wid out`
-        [ -e $out_file ] && echo worker $wid: out file exists "->" clean manually && return 1
-        local old_port
-        old_port=`python $COOG_BIN/parse-config.py web listen < $COOG_CONF_SRV | cut -d ":" -f 2` || return $?
-        new_port=`echo "$old_port+$wid" | bc`
-        sed -e "s,$old_port,$new_port,g" $COOG_CONF_SRV > $conf_file
-        local args
-        [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
-        [ ! -z $COOG_CONF_LOG ] && args="--logconf $COOG_CONF_LOG"
-        args="$args $*"
-        nohup trytond -c $conf_file --pidfile $pid_file $args &> $out_file &
-        echo worker $wid: started
+        out_file=$(_coog_worker_file out)
+        if [ -e "$pid_file" ]
+        then
+                local pid
+                pid=$(_coog_worker_pid 0)
+                if [ ! -z "$pid" ] && [ -e /proc/"$pid" ]
+                then
+                        echo 'workers already running -> stop or kill' && return 1
+                else
+                        rm "$pid_file"
+                        _coog_worker_bak "$pid"
+                fi
+        else
+                [ -e "$out_file" ] && echo 'worker log file exists -> clean manually' && return 1
+        fi
+        nohup uwsgi --module trytond.application:app --http :8000 --stats :8001 --processes "$1" &> "$out_file" &
+        echo "$!" > "$pid_file"
+        echo workers started
 }
 
-coog_worker_stop() { # stop worker (gracefully) - <wid>
-        [ -z $1 ] && >&2 echo missing worker id && return 1
+coog_worker_stop() { # stop workers
         local pid
-        pid=`_coog_worker_pid $1 0`
-        [ -z $pid ] && echo worker $1: no process running
-        [ ! -z $pid ] && kill -TERM $pid && echo worker $1: stopped
-        _coog_worker_bak $1 $pid
+        pid=$(_coog_worker_pid 1)
+        [ -z "$pid" ] && echo no workers running
+        [ ! -z "$pid" ] && kill -SIGINT "$pid" && echo workers stopped
+        _coog_worker_bak "$pid"
 }
 
-coog_worker_kill() { # kill worker process - <wid>
-        [ -z $1 ] && >&2 echo missing worker id && return 1
-        local pid
-        pid=`_coog_worker_pid $1 1`
-        [ -z $pid ] && echo worker $1: no process running
-        [ ! -z $pid ] && kill -9 $pid && echo worker $1: killed
-        _coog_worker_bak $1 $pid
-}
-
-coog_worker_log() { # less worker logs - <wid>
-        [ -z $1 ] && >&2 echo missing worker id && return 1
+coog_worker_log() { # less workers logs
         local out_file
-        out_file=`_coog_worker_file $1 out`
-        shift
-        [ ! -e $out_file ] && echo no worker out && return
-        less $* $out_file
+        out_file=$(_coog_worker_file out)
+        [ ! -e "$out_file" ] && echo no workers log && return 1
+        less "$@" "$out_file"
 }
 
-coog_worker_head() { # head worker logs - <wid>
-        [ -z $1 ] && >&2 echo missing worker id && return 1
+coog_worker_tail() { # tail workers logs
         local out_file
-        out_file=`_coog_worker_file $1 out`
-        shift
-        [ ! -e $out_file ] && echo no worker out && return
-        head $* $out_file
-}
-
-coog_worker_tail() { # tail worker logs - <wid>
-        [ -z $1 ] && >&2 echo missing worker id && return 1
-        local out_file
-        out_file=`_coog_worker_file $1 out`
-        shift
-        [ ! -e $out_file ] && echo no worker out && return
-        tail $* $out_file
-}
-
-coog_worker_status () { # print worker status - <wid>
-        [ -z $1 ] && >&2 echo missing worker id && return 1
-        local out_file
-        out_file=`_coog_worker_file $1 out`
-        local cri
-        local err
-        local wrn
-        local inf
-        [ ! -e $out_file ] && echo worker $1: no out file && return
-        cri=`grep -c "\bCRITICAL:\b" $out_file`
-        err=`grep -c "\bERROR:\b" $out_file`
-        wrn=`grep -c "\bWARNING:\b" $out_file`
-        inf=`grep -c "\bINFO:\b" $out_file`
-        echo worker $1: status \(critical:$cri error:$err warning:$wrn info:$inf\)
-}
-
-coog_worker_ps() { # print worker process info - <wid>
-        [ -z $1 ] && >&2 echo missing worker id && return 1
-        local pid
-        pid=`_coog_worker_pid $1 0`
-        [ -z $pid ] && echo worker $1: no process running && return
-        local line
-        line=`ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem | sed -n 2p` || return
-        echo worker $1: $line
-}
-
-coog_worker_multi() { # execution action on multi workers - <act> <nb> [args]
-        [ $# -lt 2 ] && >&2 echo missing action and workers number && return 1
-        local act; act=$1; shift
-        local nb; nb=$1; shift
-        local wid=0
-        while [ $wid -lt $nb ]
-        do
-                wid=$((wid+1))
-                coog_worker_$act $wid $*
-        done
+        out_file=$(_coog_worker_file out)
+        [ ! -e "$out_file" ] && echo no workers log && return 1
+        tail "$@" "$out_file"
 }
