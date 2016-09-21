@@ -18,4 +18,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="rejected_payment_fee"/>
     <label name="report_template"/>
     <field name="report_template"/>
+    <newline/>
+    <label name="report_template_if_exceeded"/>
+    <field name="report_template_if_exceeded"/>
 </form>

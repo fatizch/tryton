@@ -79,6 +79,11 @@ class Journal(export.ExportImportMixin):
                 if action.report_template:
                     actions.append(('print', action.report_template))
                 return actions
+            elif (action.reject_number and payment_reject_number >
+                    action.reject_number):
+                if action.report_template_if_exceeded:
+                    return [('manual', ),
+                        ('print', action.report_template_if_exceeded)]
         return [('manual',)]
 
     @classmethod
@@ -121,6 +126,14 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
     payment_kind = fields.Function(
         fields.Selection(KINDS, 'Payment Kind'),
         'on_change_with_payment_kind', searcher='search_payment_kind')
+    report_template_if_exceeded = fields.Many2One('report.template',
+        'Report Template If Reject Number Exceeded',
+        domain=[('kind', '=', 'reject_payment')],
+        states={'invisible': ~Bool(Eval('reject_number'))},
+        depends=['reject_number'],
+        ondelete='RESTRICT', help='This template will be printed '
+        'if the reject number is positive and the number of rejects '
+        'for a given payment exceeds its value.')
 
     @classmethod
     def __register__(cls, module_name):
