@@ -697,7 +697,8 @@ class PaymentCreationStart:
                 Eval('payer'))),
             'required': (Eval('process_method') == 'sepa')
             },
-        depends=['payer', 'process_method', 'payment_date'])
+        depends=['payer', 'process_method', 'payment_date',
+            'available_bank_accounts'])
     available_payers = fields.Many2Many('party.party', None, None,
          'Available Payers')
     available_bank_accounts = fields.Many2Many('bank.account', None, None,

@@ -20,7 +20,6 @@ this repository contains the full copyright notices and license terms. -->
     <data depends="contract_insurance_invoice">
         <record model="ir.ui.view" id="contract_billing_information_view_form">
             <field name="model">contract.billing_information</field>
-            <field name="type">form</field>
             <field name="inherit" ref="contract_insurance_invoice.contract_billing_information_view_form"/>
             <field name="name">contract_billing_information_form</field>
         </record>

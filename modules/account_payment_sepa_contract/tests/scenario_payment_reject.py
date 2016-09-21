@@ -166,6 +166,7 @@ contract.billing_informations.append(BillingInformation(date=None,
         billing_mode=monthly_direct_debit,
         payment_term=monthly_direct_debit.allowed_payment_terms[0],
         direct_debit_day=5,
+        payer=subscriber,
         direct_debit_account=subscriber_account))
 contract.contract_number = '123456789'
 contract.save()
