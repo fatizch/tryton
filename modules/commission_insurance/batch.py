@@ -123,4 +123,4 @@ class PostCommissionInvoiceBatch(batch.BatchRoot):
 
     @classmethod
     def get_batch_args_name(cls):
-        return ['agent_type','with_draft']
+        return ['agent_type', 'with_draft']

@@ -18,8 +18,8 @@ class CancelLineGroup:
         Move = Pool().get('account.move')
         waiting_moves = Move.create_waiting_moves(self.start.moves)
         if waiting_moves:
-             Move.save(waiting_moves)
-             Move.post(waiting_moves)
+            Move.save(waiting_moves)
+            Move.post(waiting_moves)
         return super(CancelLineGroup, self).do_cancel(action)
 
 
@@ -38,6 +38,6 @@ class StatementJournal:
 
     @classmethod
     def _export_light(cls):
-         return super(StatementJournal, cls)._export_light() | {
-             'outstandings_waiting_account',
-             'outstandings_journal'}
+        return super(StatementJournal, cls)._export_light() | {
+            'outstandings_waiting_account',
+            'outstandings_journal'}

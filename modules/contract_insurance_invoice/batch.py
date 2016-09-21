@@ -57,7 +57,6 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
         cls.logger.info('%d invoices created for %s' %
             (len(invoices), coop_string.get_print_infos(ids, 'contracts')))
 
-
     @classmethod
     def get_batch_args_name(cls):
         return []
