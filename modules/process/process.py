@@ -601,7 +601,9 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
     def get_act_window(self):
         if not self.menu_items:
             return None
-        lang = Transaction().context.get('language')
+
+        lang = Transaction().context.get('language') or Transaction().language
+
         action, = [x.action_window for x in self.action_windows if
             x.language.code == lang]
         return action
