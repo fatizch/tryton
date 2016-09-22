@@ -3,32 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <!-- ################## -->
-        <!-- # Version Object # -->
-        <!-- ################## -->
-        <record model="ir.ui.view" id="version_object_view_tree">
-            <field name="model">utils.version_object</field>
-            <field name="type">tree</field>
-            <field name="name">version_object_tree</field>
-        </record>
-        <record model="ir.ui.view" id="version_object_view_form">
-            <field name="model">utils.version_object</field>
-            <field name="type">form</field>
-            <field name="name">version_object_form</field>
-        </record>
-        <!-- #################### -->
-        <!-- # Versioned Object # -->
-        <!-- #################### -->
-        <record model="ir.ui.view" id="versionned_object_view_tree">
-            <field name="model">utils.versionned_object</field>
-            <field name="type">tree</field>
-            <field name="name">versionned_object_tree</field>
-        </record>
-        <record model="ir.ui.view" id="versionned_object_view_form">
-            <field name="model">utils.versionned_object</field>
-            <field name="type">form</field>
-            <field name="name">versionned_object_form</field>
-        </record>
         <!-- ##################### -->
         <!-- # Method Definition # -->
         <!-- ##################### -->

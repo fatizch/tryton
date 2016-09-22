@@ -2,11 +2,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
+from trytond import backend
 
-
-STATE_LIFE = (
-    Eval('_parent_offered', {}).get('family') != 'life')
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -16,6 +13,16 @@ __all__ = [
 
 class OptionDescription:
     __name__ = 'offered.option.description'
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(OptionDescription, cls).__register__(module_name)
+        # Migration from 1.8: Drop Salary Range
+        TableHandler = backend.get('TableHandler')
+        if TableHandler.table_exist('salary_range'):
+            TableHandler.drop_table('salary_range.version',
+                'salary_range_version', True)
+            TableHandler.drop_table('salary_range', 'salary_range', True)
 
     @classmethod
     def __setup__(cls):

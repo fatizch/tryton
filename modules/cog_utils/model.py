@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 import inspect
 import logging
-import time
 import datetime
 import json
 
@@ -23,7 +22,6 @@ from trytond.wizard import Wizard, StateAction
 from trytond.rpc import RPC
 from trytond.tools import reduce_ids, cursor_dict
 
-import utils
 import fields
 import export
 import summary
@@ -36,9 +34,6 @@ __all__ = [
     'CoopSQL',
     'CoopView',
     'CoopWizard',
-    'VersionedObject',
-    'VersionObject',
-    'ObjectHistory',
     'expand_tree',
     'UnionMixin',
     'TaggedMixin',
@@ -515,161 +510,6 @@ def expand_tree(name, test_field='must_expand_tree'):
 
 class CoopWizard(Wizard):
     pass
-
-
-class VersionedObject(CoopView):
-    'Versionned Object'
-
-    __name__ = 'utils.versionned_object'
-
-    versions = fields.One2Many(None, 'main_elem', 'Versions',
-        delete_missing=True)
-    current_rec_name = fields.Function(
-        fields.Char('Current Value'),
-        'get_current_rec_name')
-
-    @classmethod
-    def version_model(cls):
-        return 'utils.version_object'
-
-    @classmethod
-    def __setup__(cls):
-        super(VersionedObject, cls).__setup__()
-        cls.versions.model_name = cls.version_model()
-
-    def get_previous_version(self, at_date):
-        prev_version = None
-        for version in self.versions:
-            if version.start_date > at_date:
-                return prev_version
-            prev_version = version
-        return prev_version
-
-    def append_version(self, version):
-        rank = 0
-        prev_version = self.get_previous_version(version.start_date)
-        if prev_version:
-            prev_version.end_date = version.start_date - 1
-            rank = self.versions.index(prev_version) + 1
-        self.versions.insert(rank, version)
-        return self
-
-    def get_version_at_date(self, date):
-        return utils.get_good_version_at_date(self, 'versions', date)
-
-    def get_current_rec_name(self, name):
-        vers = self.get_version_at_date(utils.today())
-        if vers:
-            return vers.rec_name
-        return ''
-
-    @classmethod
-    def default_versions(cls):
-        return [{'start_date': Transaction().context.get('start_date',
-                    Pool().get('ir.date').today())}]
-
-
-class VersionObject(CoopView):
-    'Version Object'
-
-    __name__ = 'utils.version_object'
-
-    main_elem = fields.Many2One(None, 'Descriptor', ondelete='CASCADE',
-        required=True, select=True)
-    start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End Date')
-
-    @classmethod
-    def main_model(cls):
-        return 'utils.versionned_object'
-
-    @classmethod
-    def __setup__(cls):
-        super(VersionObject, cls).__setup__()
-        cls.main_elem.model_name = cls.main_model()
-
-    @staticmethod
-    def default_start_date():
-        return Transaction().context.get('start_date', utils.today())
-
-
-class ObjectHistory(CoopSQL, CoopView):
-    'Object History'
-
-    __name__ = 'coop.object.history'
-
-    date = fields.DateTime('Change Date')
-    from_object = fields.Many2One(None, 'From Object')
-    user = fields.Many2One('res.user', 'User')
-
-    @classmethod
-    def __setup__(cls):
-        cls.from_object.model_name = cls.get_object_model()
-        object_name = cls.get_object_name()
-        if object_name:
-            cls.from_object.string = object_name
-        super(ObjectHistory, cls).__setup__()
-        cls._order.insert(0, ('date', 'DESC'))
-
-    @classmethod
-    def get_object_model(cls):
-        raise NotImplementedError
-
-    @classmethod
-    def get_object_name(cls):
-        return 'From Object'
-
-    @classmethod
-    def _table_query_fields(cls):
-        Object = Pool().get(cls.get_object_model())
-        table = '%s__history' % Object._table
-        return [
-            'MIN("%s".__id) AS id' % table,
-            '"%s".id AS from_object' % table,
-            ('MIN(COALESCE("%s".write_date, "%s".create_date)) AS date'
-                % (table, table)),
-            ('COALESCE("%s".write_uid, "%s".create_uid) AS user'
-                % (table, table)),
-        ] + [
-            '"%s"."%s"' % (table, name)
-            for name, field in cls._fields.iteritems()
-            if name not in ('id', 'from_object', 'date', 'user')
-            and not hasattr(field, 'set')]
-
-    @classmethod
-    def _table_query_group(cls):
-        Object = Pool().get(cls.get_object_model())
-        table = '%s__history' % Object._table
-        return [
-            '"%s".id' % table,
-            'COALESCE("%s".write_uid, "%s".create_uid)' % (table, table),
-            ] + [
-            '"%s"."%s"' % (table, name)
-            for name, field in cls._fields.iteritems()
-            if (name not in ('id', 'from_object', 'date', 'user')
-                and not hasattr(field, 'set'))]
-
-    @classmethod
-    def table_query(cls):
-        Object = Pool().get(cls.get_object_model())
-        return ((
-            'SELECT ' + (', '.join(cls._table_query_fields()))
-            + ' FROM "%s__history" GROUP BY '
-            + (', '.join(cls._table_query_group()))) % Object._table, [])
-
-    @classmethod
-    def read(cls, ids, fields_names=None):
-        res = super(ObjectHistory, cls).read(ids, fields_names=fields_names)
-
-        # Remove microsecond from timestamp
-        for values in res:
-            if 'date' in values:
-                if isinstance(values['date'], basestring):
-                    values['date'] = datetime.datetime(
-                        *time.strptime(
-                            values['date'], '%Y-%m-%d %H:%M:%S.%f')[:6])
-                values['date'] = values['date'].replace(microsecond=0)
-        return res
 
 
 class UnionMixin(TrytonUnionMixin):
