@@ -150,6 +150,7 @@ _coog_test_pull() {
         coog_code_foreach git checkout -q "$1"
         coog_code_foreach git merge -q --no-edit "origin/$1"
         coog_code_foreach git submodule -q update
+        coog_repo_link
 }
 
 _coog_test_flake8() {
@@ -219,6 +220,7 @@ coog_test_commit() { # fetch, merge, and test each commit on changed modules (CI
                 echo >> "$out"
                 for module in $(git diff --name-only HEAD~ | grep "^modules" | cut -d "/" -f 2 | sort | uniq)
                 do
+                        [ ! -e "$COOG_COOG/modules/$module" ] && continue
                         echo Test "$module" >> "$out"
                         coog_test_manual "$module" &>> "$out"
                         if [ $? -ne 0 ]
