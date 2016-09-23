@@ -34,9 +34,10 @@ _coog_server_bak() { # backup log file (mv to pid if exists or rm)
 }
 
 coog_server_clearcache() { # clear server redis cache
-        local ret
-        ret=`coog_redis_exec cache flushdb`
-        [ $? -eq 0 ] && echo redis cache cleaned
+        coog_redis_exec cache flushdb &> /dev/null
+        [ $? -eq 0 ] && echo redis cache cleared
+        find "$COOG_ROOT" -name "*.pyc" -delete
+        [ $? -eq 0 ] && echo pyc files cleared
 }
 
 coog_server_interact() { # interact server - [args] passed to trytond

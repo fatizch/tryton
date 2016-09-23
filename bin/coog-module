@@ -65,6 +65,7 @@ coog_module_updatedb() { # install / update database modules - <database> [modul
         else
                 args='-u '$*
         fi
+        coog_server_clearcache
         trytond-admin -v \
                 -c $COOG_CONF_SRV \
                 -d $db \

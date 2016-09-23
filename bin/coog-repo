@@ -31,7 +31,7 @@ coog_repo_main() { # list repositories
         _coog_repo_list
 }
 
-_coog_repo_link_repos() { # guess modules list from link args
+_coog_repo_list_repos() { # guess modules list from link args
         if [ $# -eq 0 ]
         then
                 echo `_coog_repo_list`
@@ -40,22 +40,34 @@ _coog_repo_link_repos() { # guess modules list from link args
         fi
 }
 
-coog_repo_clean() { # clean non module folders
-        for module in $COOG_COOG/modules/*
+coog_repo_cleanm() { # clean non module folders - <repo>
+        [ -z "$1" ] && echo "missing repo name" && return 1
+        for module in $COOG_ROOT/$1/modules/*
         do
-                [ ! -f "$module/tryton.cfg" ] && rm -rf "$module" && echo "removed $module"
+                if [ ! -f "$module/tryton.cfg" ]
+                then
+                        local m
+                        m=$(basename "$module")
+                        rm -rf "$module"
+                        rm -f "$COOG_TRYTOND/trytond/modules/$m"
+                        echo "removed $1:$m"
+                fi
         done
 }
 
 coog_repo_linkm() { # link repos modules - <repos> - default: all
         local repos
         local repo
-        repos=`_coog_repo_link_repos $*`
+        repos=$(_coog_repo_list_repos $*)
         _coog_repo_enter_modules || return 1
-        [ $# -eq 0 ] && _coog_repo_rm
+        _coog_repo_rm
         for repo in $repos
         do
-                [ -d $COOG_ROOT/$repo/modules ] && ln -s $COOG_ROOT/$repo/modules/* .
+                if [ -d "$COOG_ROOT/$repo/modules" ]
+                then
+                        coog_repo_cleanm "$repo"
+                        ln -s "$COOG_ROOT/$repo"/modules/* .
+                fi
         done
         _coog_repo_leave
 }
@@ -63,9 +75,9 @@ coog_repo_linkm() { # link repos modules - <repos> - default: all
 coog_repo_linkp() { # link repos plugins - <repos> - default: all
         local repos
         local repo
-        repos=`_coog_repo_link_repos $*`
+        repos=`_coog_repo_list_repos $*`
         _coog_repo_enter_plugins || return 1
-        [ $# -eq 0 ] && _coog_repo_rm
+        _coog_repo_rm
         for repo in $repos
         do
                 [ -d $COOG_ROOT/$repo/plugins ] && ln -s $COOG_ROOT/$repo/plugins/* .
@@ -74,7 +86,6 @@ coog_repo_linkp() { # link repos plugins - <repos> - default: all
 }
 
 coog_repo_link() { # link repos - <repos> - default: all
-        coog_repo_clean
         coog_repo_linkm $*
         coog_repo_linkp $*
 }
