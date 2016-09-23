@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############ -->
+        <!-- # Contract # -->
+        <!-- ############ -->
+        <record model="ir.ui.view" id="contract_view_form">
+            <field name="model">contract</field>
+            <field name="inherit" ref="contract.contract_view_form"/>
+            <field name="name">contract_form</field>
+        </record>
+    </data>
+    <data depends="endorsement">
+        <!-- ###################### -->
+        <!-- # Terminate Contract # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="endorsement_terminate_contract_view_form">
+            <field name="model">endorsement.contract.terminate</field>
+            <field name="inherit" ref="endorsement.endorsement_terminate_contract_view_form"/>
+            <field name="name">endorsement_terminate_contract_form</field>
+        </record>
+    </data>
+</tryton>

@@ -124,6 +124,5 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_get_daily_base_salary</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
-
     </data>
 </tryton>

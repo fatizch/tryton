@@ -30,7 +30,8 @@ class Benefit:
         if not self.benefit_rules or not service:
             return values
         required = [e.name
-            for e in self.required_extra_data(service, self.loss.get_date())]
+            for e in self.required_extra_data(service,
+                service.loss.get_date())]
         return {k: v for k, v in values.iteritems() if k in required}
 
 

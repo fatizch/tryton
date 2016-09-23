@@ -30,7 +30,8 @@ class CreateIndemnification:
         state = super(CreateIndemnification, self).transition_calculate()
         if not res:
             return state
-        requested = self.indemnification.create_required_documents(res)
+        requested = \
+            self.result.indemnification[0].create_required_documents(res)
         self.doc_requests = [r.id for r in requested]
         return state
 

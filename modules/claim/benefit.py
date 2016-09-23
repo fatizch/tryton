@@ -255,7 +255,7 @@ class Benefit(model.CoopSQL, model.CoopView, model.TaggedMixin):
     def get_extra_data_def(self, service):
         ExtraData = Pool().get('extra_data')
         existing_data = service.extra_datas[-1].extra_data_values
-        condition_date = self.loss.get_date()
+        condition_date = service.loss.get_date()
         all_schemas, possible_schemas = ExtraData.get_extra_data_definitions(
             self, 'extra_data_def', 'benefit', condition_date)
         return ExtraData.calculate_value_set(possible_schemas, all_schemas,

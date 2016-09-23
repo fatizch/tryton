@@ -491,6 +491,15 @@ class CreateIndemnification(Wizard):
                 'the future are not allowed',
                 'end_date_exceeds_loss': 'The end date must not exceed '
                 'the loss end date',
+                'bad_start_date': 'The contract was terminated on the '
+                '%(contract_end)s, a new indemnification cannot start on '
+                '%(indemn_start)s.',
+                'truncated_end_date': 'The contract was terminated on the '
+                '%(contract_end)s, so the requested indemnification end ('
+                '%(indemn_end)s) will automatically be updated',
+                'lock_end_date': 'The contract was terminated on the '
+                '%(contract_end)s, there will not be any revaluation '
+                'after this date',
                 })
 
     def possible_services(self, claim):
@@ -579,6 +588,14 @@ class CreateIndemnification(Wizard):
                     service.loss.start_date)
             end_date = service.loss.end_date
         extra_data = utils.get_value_at_date(service.extra_datas, start_date)
+        if service.contract and service.contract.end_date:
+            contract_end = service.contract.end_date
+            if contract_end < start_date:
+                if (service.contract.post_termination_claim_behaviour ==
+                        'stop_indemnifications'):
+                    self.raise_user_error('bad_start_date', {
+                            'indemn_start': start_date,
+                            'contract_end': contract_end})
         res = {
             'service': service.id,
             'start_date': start_date,
@@ -593,8 +610,30 @@ class CreateIndemnification(Wizard):
         input_end_date = self.definition.end_date
         ClaimService = Pool().get('claim.service')
         service = self.definition.service
-        if self.definition.end_date > utils.today():
-            self.raise_user_error('end_date_future')
+        if service.contract and service.contract.end_date:
+            contract_end = service.contract.end_date
+            behaviour = service.contract.post_termination_claim_behaviour
+            if contract_end < self.definition.start_date:
+                if behaviour == 'stop_indemnifications':
+                    self.raise_user_error('bad_start_date', {
+                            'indemn_start': self.definition.start_date,
+                            'contract_end': contract_end})
+            if contract_end < self.definition.end_date:
+                if behaviour == 'stop_indemnifications':
+                    self.raise_user_warning(
+                        'truncated_end_date_%i' % service.id,
+                        'truncated_end_date', {
+                            'indemn_end': self.definition.end_date,
+                            'contract_end': contract_end})
+                    self.definition.end_date = contract_end
+                elif behaviour == 'lock_indemnifications':
+                    self.raise_user_warning(
+                        'lock_end_date_%i' % service.id,
+                        'lock_end_date', {
+                            'indemn_end': self.definition.end_date,
+                            'contract_end': contract_end})
+        #  if self.definition.end_date > utils.today():
+        #      self.raise_user_error('end_date_future')
         if (service.loss.end_date and
                 self.definition.end_date > service.loss.end_date):
             self.raise_user_error('end_date_exceeds_loss')

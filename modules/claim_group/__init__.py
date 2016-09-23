@@ -4,6 +4,7 @@ from trytond.pool import Pool
 from .offered import *
 from .benefit import *
 from .claim import *
+from .contract import *
 
 
 def register():
@@ -11,4 +12,6 @@ def register():
         OptionDescription,
         Benefit,
         Claim,
+        Contract,
+        TerminateContract,
         module='claim_group', type_='model')

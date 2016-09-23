@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/group[@id='new_data']/field[@name='termination_reason']" position="after">
+        <newline/>
+        <label name="post_termination_claim_behaviour"/>
+        <field name="post_termination_claim_behaviour"/>
+        <field name="is_group" invisible="1"/>
+    </xpath>
+</data>

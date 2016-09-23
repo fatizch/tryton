@@ -10,6 +10,18 @@ msgctxt "field:claim,legal_entity:"
 msgid "Legal Entity"
 msgstr "Société"
 
+msgctxt "field:contract,post_termination_claim_behaviour:"
+msgid "Post Termination Claim Behaviour"
+msgstr "Comportement des sinistres suite à résiliation"
+
+msgctxt "field:endorsement.contract.terminate,is_group:"
+msgid "Is Group"
+msgstr "Est collectif"
+
+msgctxt "field:endorsement.contract.terminate,post_termination_claim_behaviour:"
+msgid "Post Termination Claim Behaviour"
+msgstr "Comportement des sinistres suite à résiliation"
+
 msgctxt "model:ir.action,name:act_benefit_collective"
 msgid "Collective Benefits"
 msgstr "Prestations collectives"
@@ -17,3 +29,35 @@ msgstr "Prestations collectives"
 msgctxt "model:ir.ui.menu,name:menu_benefit_collective"
 msgid "Collective Benefits"
 msgstr "Prestations collectives"
+
+msgctxt "selection:contract,post_termination_claim_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:contract,post_termination_claim_behaviour:"
+msgid "Lock Indemnifications"
+msgstr "Bloquer les prestations au niveau atteint"
+
+msgctxt "selection:contract,post_termination_claim_behaviour:"
+msgid "Normal Indemnifications"
+msgstr "Continuer les indemnisations"
+
+msgctxt "selection:contract,post_termination_claim_behaviour:"
+msgid "Stop Indemnifications"
+msgstr "Arrêter les indemnisations"
+
+msgctxt "selection:endorsement.contract.terminate,post_termination_claim_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:endorsement.contract.terminate,post_termination_claim_behaviour:"
+msgid "Lock Indemnifications"
+msgstr "Bloquer les prestations au niveau atteint"
+
+msgctxt "selection:endorsement.contract.terminate,post_termination_claim_behaviour:"
+msgid "Normal Indemnifications"
+msgstr "Continuer les indemnisations"
+
+msgctxt "selection:endorsement.contract.terminate,post_termination_claim_behaviour:"
+msgid "Stop Indemnifications"
+msgstr "Arrêter les indemnisations"

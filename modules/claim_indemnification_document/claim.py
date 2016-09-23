@@ -19,7 +19,8 @@ class Claim:
     @fields.depends('document_request_lines')
     def on_change_with_doc_received(self, name=None):
         for doc in self.document_request_lines:
-            if (doc.for_object.__name__ != 'claim.indemnification' and
+            if (doc.for_object and
+                    doc.for_object.__name__ != 'claim.indemnification' and
                     not doc.received and doc.blocking):
                 return False
         return True
