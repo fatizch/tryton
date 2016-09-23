@@ -747,7 +747,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             [('item_descs', '=', Eval('item_desc'))])],
         states={'invisible': ~Eval('manual_end_date'),
             'required': Bool(Eval('manual_end_date', False)),
-            }, depends=['item_desc', 'manual_end_date'])
+            }, depends=['item_desc', 'manual_end_date', 'parent'])
     current_version = fields.Function(
         fields.Many2One('contract.covered_element.version', 'Current Version'),
         'get_current_version')
