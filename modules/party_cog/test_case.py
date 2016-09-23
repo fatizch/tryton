@@ -152,8 +152,6 @@ class TestCaseModel:
     @classmethod
     def create_party(cls, **kwargs):
         Party = Pool().get('party.party')
-        if 'is_company' not in kwargs:
-            kwargs['is_company'] = False
         if 'is_person' not in kwargs:
             kwargs['is_person'] = False
         party = Party(**kwargs)
@@ -166,9 +164,9 @@ class TestCaseModel:
         for contact_type in ('phone', 'email'):
             contacts = []
             if contact_type == 'email':
-                if party.is_company:
-                    if party.short_name:
-                        suffix = party.short_name
+                if not party.is_person:
+                    if party.commercial_name:
+                        suffix = party.commercial_name
                     else:
                         suffix = party.name
                     suffix = coop_string.slugify(suffix, lower=False)
@@ -288,8 +286,7 @@ class TestCaseModel:
     def new_company(cls, name, short_name='', child_level=None,
             cur_depth=None):
         translater = cls.get_translater(MODULE_NAME)
-        company = cls.create_party(is_company=True, name=name,
-            short_name=short_name)
+        company = cls.create_party(name=name, commercial_name=short_name)
         result = []
         if cur_depth and cur_depth > 0:
             for i in range(1, 3):

@@ -1,3 +1,5 @@
+* Behaviour change : A party is either a company (by default) or a person but it can not be both anymore
+
 Version 1.8 - 2016-07-06
 * Allow to extend party identifier type possible values through configuration
 

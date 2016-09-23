@@ -88,11 +88,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 gender='male')
             party4.save()
             self.assert_(party4.id > 0)
-            party5 = self.Party(is_company=True, name='Monsters Incorporated',
-                short_name='Monsters, Inc.')
+            party5 = self.Party(name='Monsters Incorporated',
+                commercial_name='Monsters, Inc.')
             party5.save()
-            party6 = self.Party(is_company=True, name='MONSTERS Incorporated',
-                short_name='Monsters, Inc.')
+            party6 = self.Party(name='MONSTERS Incorporated',
+                commercial_name='Monsters, Inc.')
             self.assertRaises(UserWarning, party6.save)
 
     def test0030addresses_on_change(self):

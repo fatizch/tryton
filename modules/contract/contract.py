@@ -228,7 +228,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 []),
             If(
                 Eval('subscriber_kind') == 'company',
-                [('is_company', '=', True)],
+                [('is_person', '=', False)],
                 [])],
         states=_STATES, depends=['subscriber_kind', 'status'],
         ondelete='RESTRICT')
@@ -786,10 +786,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @fields.depends('product')
     def on_change_with_subscriber_kind(self, name=None):
         if getattr(self, 'subscriber', None):
-            if self.subscriber.is_person:
-                return 'person'
-            elif self.subscriber.is_company:
-                return 'company'
+            return 'person' if self.subscriber.is_person else 'company'
         if not self.product:
             return 'person'
         if self.product.subscriber_kind in ['all', 'person']:
@@ -1469,7 +1466,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         if self.subscriber and (self.subscriber_kind == 'person'
                 and not self.subscriber.is_person
                 or self.subscriber_kind == 'company'
-                and not self.subscriber.is_company):
+                and self.subscriber.is_person):
             self.subscriber = None
 
     @classmethod

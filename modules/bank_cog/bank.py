@@ -71,7 +71,7 @@ class Bank(export.ExportImportMixin):
         return ['OR',
             [('bic',) + tuple(clause[1:])],
             [('party.name',) + tuple(clause[1:])],
-            [('party.short_name',) + tuple(clause[1:])],
+            [('party.commercial_name',) + tuple(clause[1:])],
             ]
 
     @classmethod

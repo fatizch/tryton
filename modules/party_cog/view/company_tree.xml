@@ -3,8 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <tree>
     <field name="code"/>
-    <field name="short_name"/>
     <field name="name"/>
-    <field name="parent"/>
+    <field name="commercial_name"/>
     <field name="main_address"/>
 </tree>

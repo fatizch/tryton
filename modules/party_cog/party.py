@@ -14,6 +14,7 @@ from sql import Literal, Cast
 from sql.operators import Concat
 from sql.conditionals import Coalesce
 
+from trytond import backend
 from trytond.model import Unique
 from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
@@ -52,15 +53,12 @@ GENDER = [
     ]
 
 STATES_PERSON = Bool(Eval('is_person'))
-STATES_COMPANY = Bool(Eval('is_company'))
+STATES_COMPANY = ~Eval('is_person')
 
 
 class Party(export.ExportImportMixin, summary.SummaryMixin):
     __name__ = 'party.party'
     _func_key = 'code'
-
-    is_person = fields.Boolean('Person')
-    is_company = fields.Boolean('Company')
 
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     main_address = fields.Function(
@@ -68,6 +66,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         'get_main_address_id', searcher='search_main_address')
     ####################################
     # Person information
+    is_person = fields.Boolean('Person')
     gender = fields.Selection(GENDER, 'Gender', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
@@ -92,15 +91,11 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         'get_SSN_required')
     ####################################
     # Company information
-    short_name = fields.Char('Short Name',
+    commercial_name = fields.Char('Commercial Name',
         states={'invisible': ~STATES_COMPANY},
-        depends=['is_company'])
-    parent = fields.Many2One('party.party', 'Parent',
-        states={'invisible': ~STATES_COMPANY}, depends=['is_company'])
-    children = fields.One2Many('party.party', 'parent', 'Children',
-        states={'invisible': ~STATES_COMPANY}, depends=['is_company'])
+        depends=['is_person'])
     logo = fields.Binary('Logo', states={'invisible': ~STATES_COMPANY},
-        depends=['is_company'])
+        depends=['is_person'])
     ####################################
     synthesis = fields.One2Many('party.synthesis.menu', 'party', 'Synthesis',
         readonly=True)
@@ -108,6 +103,28 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         fields.Char('Name'), 'get_synthesis_rec_name')
     last_modification = fields.Function(fields.DateTime('Last Modification'),
         'get_last_modification')
+
+    @classmethod
+    def __register__(cls, module_name):
+        # Migration from 1.8: rename short_name to commercial_name
+        TableHandler = backend.get('TableHandler')
+        table = TableHandler(cls, module_name)
+        if table.column_exist('short_name'):
+            table.column_rename('short_name', 'commercial_name')
+        if table.column_exist('is_company'):
+            table.drop_column('is_company')
+        if table.column_exist('parent'):
+            table.drop_column('parent')
+        if TableHandler.table_exist('party_party__history'):
+            table_h = TableHandler(cls, module_name, history=True)
+            if table_h.column_exist('short_name'):
+                table_h.column_rename('short_name', 'commercial_name')
+            if table_h.column_exist('is_company'):
+                table_h.drop_column('is_company')
+            if table_h.column_exist('parent'):
+                table_h.drop_column('parent')
+
+        super(Party, cls).__register__(module_name)
 
     @classmethod
     def __setup__(cls):
@@ -138,11 +155,9 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             ('/form/group[@id="person"]', 'states',
                 {'invisible': ~Eval('is_person')}),
             ('/form/group[@id="company"]', 'states',
-                {'invisible': ~Eval('is_company')}),
+                {'invisible': Bool(Eval('is_person'))}),
             ('/form/notebook/page[@id="tree"]', 'states',
-                {'invisible': ~Eval('is_company')}),
-            ('/form/group[@id="name"]', 'states',
-                {'invisible': Eval('is_company') | Eval('is_person')}),
+                {'invisible': Bool(Eval('is_person'))}),
             ]
 
     @classmethod
@@ -205,7 +220,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         return [
             ('id', '!=', party.id),
             ('name', 'ilike', party.name),
-            ('short_name', 'ilike', party.short_name),
+            ('commercial_name', 'ilike', party.commercial_name),
             ]
 
     @classmethod
@@ -230,7 +245,8 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
                             Pool().get('ir.date').date_as_string(
                                 party.birth_date)))
                 else:
-                    messages.append('%s %s\n' % (party.name, party.short_name))
+                    messages.append('%s %s\n' % (party.name,
+                        party.commercial_name))
             if messages:
                 cls.raise_user_warning('Duplicate Party', 'duplicate_party',
                     ','.join(messages))
@@ -351,7 +367,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         return res
 
     def get_icon(self, name=None):
-        if self.is_company:
+        if not self.is_person:
             return 'coopengo-company'
         return 'coopengo-party'
 
@@ -418,7 +434,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             return self
 
     def get_company(self):
-        if self.is_company:
+        if not self.is_person:
             return self.company
 
     def address_get(self, type=None, at_date=None):

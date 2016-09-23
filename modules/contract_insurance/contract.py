@@ -722,7 +722,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 ()),
             If(
                 Eval('item_kind') == 'company',
-                ('is_company', '=', True),
+                ('is_person', '=', False),
                 ())],
         states={
             'invisible': ~IS_PARTY,

@@ -43,9 +43,9 @@ class Address:
 
         # Set Siret invisible for person
         cls.siret.states = {
-            'invisible': Bool(~Eval('_parent_party', {}).get('is_company'))}
+            'invisible': Bool(Eval('_parent_party', {}).get('is_person'))}
         cls.siret_nic.states = {
-            'invisible': Bool(~Eval('_parent_party', {}).get('is_company'))}
+            'invisible': Bool(Eval('_parent_party', {}).get('is_person'))}
 
     @fields.depends('street')
     def on_change_street(self):

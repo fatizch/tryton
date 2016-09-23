@@ -45,7 +45,7 @@ class Party:
 
     lender_role = fields.One2Many('lender', 'party', 'Lender', states={
             'invisible': ~Eval('is_lender', False) | Not(STATES_COMPANY)},
-        depends=['is_lender', 'is_company'], delete_missing=True)
+        depends=['is_lender', 'is_person'], delete_missing=True)
     is_lender = fields.Function(
         fields.Boolean('Is Lender',
             states={'invisible': Not(STATES_COMPANY)}),

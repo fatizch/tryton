@@ -27,7 +27,7 @@ class Contract:
         cls.subscriber.domain = ['AND', cls.subscriber.domain,
             [If(
                     Bool(Eval('is_group')),
-                    ('is_company', '=', True),
+                    ('is_person', '=', False),
                     (),
                     )]
             ]

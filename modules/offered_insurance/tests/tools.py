@@ -9,7 +9,7 @@ def create_insurer(name=None):
     Insurer = Model.get('insurer')
     if not name:
         name = 'Insurer'
-    insurer_party = Party(name=name, is_company=True)
+    insurer_party = Party(name=name)
     insurer_party.save()
     insurer = Insurer()
     insurer.party = insurer_party

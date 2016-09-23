@@ -4,8 +4,8 @@ this repository contains the full copyright notices and license terms. -->
 <tree string="Brokers">
     <field name="code"/>
     <field name="broker_code"/>
-    <field name="short_name"/>
     <field name="name"/>
+    <field name="commercial_name"/>
     <field name="negative_payable_today" icon="payable_today_icon"/>
     <field name="is_broker"/>
 </tree>

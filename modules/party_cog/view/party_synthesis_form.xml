@@ -21,8 +21,8 @@ this repository contains the full copyright notices and license terms. -->
         <field name="lang"/>
     </group>
     <group id="company" colspan="6" col="6">
-        <label name="short_name"/>
-        <field name="short_name"/>
+        <label name="commercial_name"/>
+        <field name="commercial_name"/>
         <label name="name"/>
         <field name="name"/>
     </group>

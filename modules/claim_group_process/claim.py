@@ -15,7 +15,7 @@ class ClaimDeclareFindProcess:
     __name__ = 'claim.declare.find_process'
 
     legal_entity = fields.Many2One('party.party', 'Legal Entity',
-        domain=[('is_company', '=', True)])
+        domain=[('is_person', '=', False)])
 
     @fields.depends('claims', 'party', 'legal_entity')
     def on_change_party(self):

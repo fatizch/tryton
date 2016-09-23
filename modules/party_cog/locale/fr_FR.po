@@ -270,13 +270,9 @@ msgctxt "field:party.party,identifiers:"
 msgid "Identifiers"
 msgstr "Identifiants"
 
-msgctxt "field:party.party,is_company:"
-msgid "Company"
-msgstr "Société"
-
 msgctxt "field:party.party,is_person:"
 msgid "Person"
-msgstr "Personne"
+msgstr "Personne physique"
 
 msgctxt "field:party.party,last_modification:"
 msgid "Last Modification"
@@ -294,9 +290,9 @@ msgctxt "field:party.party,parent:"
 msgid "Parent"
 msgstr "Parent"
 
-msgctxt "field:party.party,short_name:"
-msgid "Short Name"
-msgstr "Nom Court"
+msgctxt "field:party.party,commercial_name:"
+msgid "Commercial Name"
+msgstr "Nom commercial"
 
 msgctxt "field:party.party,ssn:"
 msgid "SSN"
@@ -692,7 +688,7 @@ msgstr "Adresses"
 
 msgctxt "model:ir.action,name:act_company_form"
 msgid "Companies"
-msgstr "Sociétés"
+msgstr "Personnes morales"
 
 msgctxt "model:ir.action,name:act_contact_history_relate_form1"
 msgid "Party Interaction"
@@ -720,7 +716,7 @@ msgstr "Type d'identifiant de tiers"
 
 msgctxt "model:ir.action,name:act_person_form"
 msgid "Persons"
-msgstr "Personnes"
+msgstr "Personnes physiques"
 
 msgctxt "model:ir.action,name:act_related_parties_relate_form"
 msgid "Related parties"
@@ -776,7 +772,7 @@ msgstr "Synthèse acteur"
 
 msgctxt "model:ir.ui.menu,name:menu_company_form"
 msgid "Companies"
-msgstr "Sociétés"
+msgstr "Personnes morales"
 
 msgctxt "model:ir.ui.menu,name:menu_party_identifier_type_form"
 msgid "Party Identifier Type"
@@ -784,7 +780,7 @@ msgstr "Type d'identifiant de tiers"
 
 msgctxt "model:ir.ui.menu,name:menu_person_form"
 msgid "Persons"
-msgstr "Personnes"
+msgstr "Personnes physiques"
 
 msgctxt "model:party.identifier,name:"
 msgid "Party Identifier"
@@ -924,7 +920,7 @@ msgstr "Historique des Contacts"
 
 msgctxt "view:party.party:"
 msgid "Company"
-msgstr "Société"
+msgstr "Personne morale"
 
 msgctxt "view:party.party:"
 msgid "Contact"
@@ -936,7 +932,7 @@ msgstr "Synthèse acteur"
 
 msgctxt "view:party.party:"
 msgid "Persons"
-msgstr "Personnes"
+msgstr "Personnes physiques"
 
 msgctxt "view:party.party:"
 msgid "Roles"

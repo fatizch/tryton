@@ -81,7 +81,7 @@ class TestCaseModel:
             if parent_bic in parties:
                 party, addresses = parties[parent_bic]
             else:
-                party = Party(name=bank_dict['bank_name'], is_company=True)
+                party = Party(name=bank_dict['bank_name'])
                 parties[parent_bic] = [party, addresses]
             country = cls.get_country_by_code(bank_dict['address_country'])
             for cur_address in addresses:

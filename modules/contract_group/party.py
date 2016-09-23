@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 
 from trytond.modules.cog_utils import fields
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -16,12 +16,12 @@ class Party:
 
     companies = fields.Function(
         fields.Many2Many('party.party', None, None, 'Companies',
-            states={'invisible': Bool(Eval('is_company'))},
-            domain=[('is_company', '=', True)]),
+            states={'invisible': ~Eval('is_person')},
+            domain=[('is_person', '=', False)]),
         'get_companies')
 
     def get_companies(self, name):
         res = [covered.main_contract.subscriber.id
             for covered in self.covered_elements
-            if covered.main_contract.subscriber.is_company]
+            if not covered.main_contract.subscriber.is_person]
         return res

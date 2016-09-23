@@ -37,7 +37,7 @@ class Party:
                 'invalid_ssn_gender': 'Incompatible gender and SSN',
                 })
         # Do not display SIREN for person
-        cls.siren.states = {'invisible': Bool(~Eval('is_company'))}
+        cls.siren.states = {'invisible': Bool(Eval('is_person'))}
 
     @classmethod
     def validate(cls, parties):

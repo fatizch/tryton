@@ -11,16 +11,8 @@ this repository contains the full copyright notices and license terms. -->
         <field name="code" xexpand="0"/>
         <label name="is_person"/>
         <field name="is_person" xexpand="0"/>
-        <label name="is_company"/>
-        <field name="is_company" xexpand="0"/>
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']" position="after">
-        <group id="name" colspan="2" col="2">
-            <label name="name"/>
-            <field name="name"/>
-        </group>
-    </xpath>
-    <xpath expr="/form/group[@id='name']" position="after">
         <group id="person" colspan="6" col="6">
             <label name="gender"/>
             <field name="gender" widget="selection" xexpand="0"/>
@@ -38,10 +30,10 @@ this repository contains the full copyright notices and license terms. -->
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']" position="after">
         <group id="company" colspan="6" col="6">
-            <label name="short_name"/>
-            <field name="short_name"/>
             <label name="name"/>
             <field name="name"/>
+            <label name="commercial_name"/>
+            <field name="commercial_name"/>
         </group>
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']" position="after">
@@ -72,19 +64,14 @@ this repository contains the full copyright notices and license terms. -->
             <newline/>
             <label name="lang"/>
             <field name="lang"/>
+            <newline/>
+            <label name="logo"/>
+            <field name="logo"/>
         </group>
         <field name="relations" colspan="2" view_ids="party_cog.relation_view_editable_list"/>
     </xpath>
     <!-- Add Company and Role pages-->
     <xpath expr="/form/notebook" position="inside">
-        <page string="Company" id="tree">
-            <label name="parent"/>
-            <field name="parent"/>
-            <newline/>
-            <field name="children" colspan="4" view_ids="party_cog.company_view_tree_hierarchical,party_cog.company_view_form" mode="tree,form"/>
-            <label name="logo" xalign="0"/>
-            <field name="logo" colspan="3"/>
-        </page>
         <page string="Roles" id="role">
             <group id="role_group" colspan="4">
             </group>

@@ -113,7 +113,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_company_form">
             <field name="name">Companies</field>
             <field name="res_model">party.party</field>
-            <field name="domain" eval="[('is_company', '=', True)]" pyson="1"/>
+            <field name="domain" eval="[('is_person', '=', False)]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_company_tree_view">
             <field name="sequence" eval="10"/>
@@ -137,12 +137,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_company_form"/>
         </record>
         <menuitem parent="party.menu_party" sequence="0" id="menu_company_form" icon="coopengo-company" action="act_company_form"/>
-        <record model="ir.ui.view" id="company_view_tree_hierarchical">
-            <field name="model">party.party</field>
-            <field name="type">tree</field>
-            <field name="field_childs">children</field>
-            <field name="name">company_tree_hierarchical</field>
-        </record>
         <!-- ******************************************
             ********** Party Identifier Type **********
             ******************************************* -->

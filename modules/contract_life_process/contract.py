@@ -23,7 +23,7 @@ class Contract:
             return True
         covered_elements = []
         if (subscriber.is_person and item_desc.kind == 'person'
-                or subscriber.is_company and item_desc.kind == 'company'
+                or not subscriber.is_person and item_desc.kind == 'company'
                 or item_desc.kind == 'party'):
             CoveredElement = Pool().get('contract.covered_element')
             covered_element = CoveredElement()

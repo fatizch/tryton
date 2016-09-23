@@ -19,7 +19,7 @@ class Party:
 
     insurer_role = fields.One2Many('insurer', 'party', 'Insurer', size=1,
         states={'invisible': ~Eval('is_insurer', False) | Not(STATES_COMPANY)},
-        depends=['is_insurer', 'is_company'])
+        depends=['is_insurer', 'is_person'])
     is_insurer = fields.Function(
         fields.Boolean('Is Insurer',
             states={'invisible': Not(STATES_COMPANY)}),

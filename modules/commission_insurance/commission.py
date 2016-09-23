@@ -940,7 +940,7 @@ class CreateAgentsParties(model.CoopView):
     company = fields.Many2One('company.company', 'Company', required=True)
     parties = fields.Many2Many('party.party', None, None, 'Parties',
         domain=[
-            ('is_company', '=', True),
+            ('is_person', '=', False),
             ('is_bank', '=', False),
             ('is_insurer', '=', False),
             ])
