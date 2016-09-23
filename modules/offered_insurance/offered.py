@@ -14,6 +14,8 @@ __all__ = [
     'ItemDescription',
     'ItemDescSubItemDescRelation',
     'ItemDescriptionExtraDataRelation',
+    'CoveredElementEndReason',
+    'ItemDescriptionEndReasonRelation',
     ]
 
 
@@ -101,6 +103,9 @@ class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
         states={'invisible': Eval('kind') == 'person'})
     coverages = fields.One2Many('offered.option.description', 'item_desc',
         'Coverages', target_not_required=True)
+    covered_element_end_reasons = fields.Many2Many(
+        'offered.item.description-covered_element.end_reason', 'item_desc',
+        'reason', 'Possible End Reasons')
 
     @classmethod
     def copy(cls, items, default=None):
@@ -150,3 +155,41 @@ class ItemDescriptionExtraDataRelation(model.CoopSQL):
         ondelete='CASCADE')
     extra_data_def = fields.Many2One('extra_data', 'Extra Data',
         ondelete='RESTRICT', )
+
+
+class CoveredElementEndReason(model.CoopSQL, model.CoopView,
+        model.TaggedMixin):
+    'End reasons for covered elements'
+
+    __name__ = 'covered_element.end_reason'
+    _func_key = 'code'
+    _rec_name = 'name'
+
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name', translate=True)
+    item_descs = fields.Many2Many(
+        'offered.item.description-covered_element.end_reason',
+        'reason', 'item_desc', 'Item Descriptions')
+
+    @classmethod
+    def _export_skips(cls):
+        return super(CoveredElementEndReason, cls)._export_skips | {
+            'item_descs'}
+
+    @fields.depends('name', 'code')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        elif self.name:
+            return coop_string.slugify(self.name)
+
+
+class ItemDescriptionEndReasonRelation(model.CoopSQL):
+    'Item Description to Covered Element End Reason relation'
+
+    __name__ = 'offered.item.description-covered_element.end_reason'
+
+    item_desc = fields.Many2One('offered.item.description', 'Item Desc',
+        ondelete='CASCADE', select=True, required=True)
+    reason = fields.Many2One('covered_element.end_reason', 'End Reason',
+        ondelete='RESTRICT', select=True, required=True)

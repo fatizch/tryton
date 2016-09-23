@@ -46,5 +46,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_item_desc_form"/>
         </record>
         <menuitem parent="offered.menu_product_configuration" sequence="1" id="menu_item_desc_form" icon="tryton-list" action="act_item_desc_form"/>
+        <!-- ############################## -->
+        <!-- # Covered Element End Reason # -->
+        <!-- ############################## -->
+        <record model="ir.ui.view" id="covered_element_end_reason_view_form">
+            <field name="model">covered_element.end_reason</field>
+            <field name="type">form</field>
+            <field name="name">covered_element_end_reason_form</field>
+        </record>
     </data>
 </tryton>

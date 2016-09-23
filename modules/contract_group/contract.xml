@@ -3,19 +3,19 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <!-- Tree view for contract -->
+        <!-- ############ -->
+        <!-- # Contract # -->
+        <!-- ############ -->
         <record model="ir.ui.view" id="contract_view_tree">
             <field name="model">contract</field>
             <field name="inherit" ref="contract.contract_view_tree"/>
             <field name="arch" type="xml"/>
         </record>
-        <!-- form view -->
         <record model="ir.ui.view" id="contract_view_form">
             <field name="model">contract</field>
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
-        <!-- View for the main menu and the event -->
         <record model="ir.action.act_window" id="act_contract_group_form">
             <field name="name">Group Contracts</field>
             <field name="res_model">contract</field>
@@ -45,22 +45,19 @@ this repository contains the full copyright notices and license terms. -->
             <field name="domain" eval="['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]" pyson="1"/>
             <field name="act_window" ref="act_contract_group_form"/>
         </record>
-	    <record model="ir.action.act_window" id="contract.act_contract_form">
+        <record model="ir.action.act_window" id="contract.act_contract_form">
             <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', False)), ('is_group', '=', False)]" pyson="1"/>
         </record>
-    	<!-- View for Group Contract Quotes -->
-    	<record model="ir.action.act_window" id="act_contract_quote_form">
+        <record model="ir.action.act_window" id="act_contract_quote_form">
             <field name="name">Quotes</field>
             <field name="res_model">contract</field>
             <field name="domain" eval="[('is_group', '=', True), ('status', '=', 'quote')]" pyson="1"/>
-    	</record>
-        <!-- View that connect the form in the tree with the specification -->
+        </record>
         <record model="ir.action.act_window.view" id="act_contract_form_view1">
             <field name="sequence" eval="30"/>
             <field name="view" ref="contract_view_tree"/>
             <field name="act_window" ref="act_contract_group_form"/>
         </record>
-        <!-- View for the edition or the Form of product -->
         <record model="ir.action.act_window.view" id="act_contract_form_view2">
             <field name="sequence" eval="40"/>
             <field name="view" ref="contract_view_form"/>
@@ -69,5 +66,38 @@ this repository contains the full copyright notices and license terms. -->
         <menuitem name="Group Contract" id="menu_group_contract" sequence="10" icon="contract"/>
         <menuitem parent="menu_group_contract" sequence="10" id="menu_group_contract_quotes" icon="contract" action="act_contract_quote_form"/>
         <menuitem parent="menu_group_contract" sequence="20" id="menu_group_contract_active" icon="contract" action="act_contract_group_form"/>
+        <!-- ############## -->
+        <!-- # Enrollment # -->
+        <!-- ############## -->
+        <record model="ir.ui.view" id="enrollment_view_form">
+            <field name="model">contract.covered_element</field>
+            <field name="type">form</field>
+            <field name="name">enrollment_form</field>
+        </record>
+        <record model="ir.ui.view" id="enrollment_view_list">
+            <field name="model">contract.covered_element</field>
+            <field name="type">tree</field>
+            <field name="name">enrollment_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_display_enrollment_form">
+            <field name="name">Enrollments</field>
+            <field name="res_model">contract.covered_element</field>
+            <field name="domain" eval="[('parent.contract', '=', Eval('active_id'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_display_enrollment_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_display_enrollment_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_display_enrollment_list_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="enrollment_view_list"/>
+            <field name="act_window" ref="act_display_enrollment_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_display_enrollment_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="enrollment_view_form"/>
+            <field name="act_window" ref="act_display_enrollment_form"/>
+        </record>
     </data>
 </tryton>

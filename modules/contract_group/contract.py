@@ -2,19 +2,20 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pyson import Eval
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import If, Bool
 
 from trytond.modules.cog_utils import fields, model
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'Option',
+    'CoveredElement',
     ]
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     is_group = fields.Function(
@@ -52,6 +53,7 @@ class Contract:
 
 
 class Option:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     is_group = fields.Function(
@@ -63,3 +65,36 @@ class Option:
         if not self.coverage:
             return False
         return self.coverage.is_group
+
+
+class CoveredElement:
+    __metaclass__ = PoolMeta
+    __name__ = 'contract.covered_element'
+
+    @classmethod
+    def create(cls, vlist):
+        Event = Pool().get('event')
+        covered_elements = super(CoveredElement, cls).create(vlist)
+        Event.notify_events([x for x in covered_elements if x.parent],
+            'new_enrollment')
+        return covered_elements
+
+    @classmethod
+    def write(cls, *args):
+        Event = Pool().get('event')
+        params = iter(args)
+        terminated, modified = [], []
+        for instances, values in zip(params, params):
+            if 'end_reason' not in values:
+                modified += instances
+            else:
+                for record in instances:
+                    if record.manual_end_date:
+                        modified.append(record)
+                    else:
+                        terminated.append(record)
+        super(CoveredElement, cls).write(*args)
+        if terminated:
+            Event.notify_events(terminated, 'terminated_enrollment')
+        if modified:
+            Event.notify_events(modified, 'changed_enrollment')

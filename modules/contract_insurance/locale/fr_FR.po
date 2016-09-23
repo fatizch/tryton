@@ -189,6 +189,10 @@ msgctxt "field:contract.covered_element,declined_options:"
 msgid "Declined Options"
 msgstr "Options déclinées"
 
+msgctxt "field:contract.covered_element,end_reason:"
+msgid "End Reason"
+msgstr "Motif de sortie"
+
 msgctxt "field:contract.covered_element,icon:"
 msgid "Icon"
 msgstr "Icône"
@@ -212,6 +216,14 @@ msgstr "Type de Bien"
 msgctxt "field:contract.covered_element,main_contract:"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "field:contract.covered_element,manual_end_date:"
+msgid "End Date"
+msgstr "Date de fin"
+
+msgctxt "field:contract.covered_element,manual_start_date:"
+msgid "Start Date"
+msgstr "Date de début"
 
 msgctxt "field:contract.covered_element,multi_mixed_view:"
 msgid "Options"

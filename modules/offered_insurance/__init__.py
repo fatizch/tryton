@@ -21,6 +21,8 @@ def register():
         Product,
         ItemDescSubItemDescRelation,
         ItemDescriptionExtraDataRelation,
+        CoveredElementEndReason,
+        ItemDescriptionEndReasonRelation,
         ProductValidationBatch,
         RuleEngineExtraData,
         RuleEngine,

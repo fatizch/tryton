@@ -735,6 +735,19 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         states={'invisible': Eval('item_kind') == 'person'},
         depends=['contract', 'item_kind', 'id'],
         target_not_required=True)
+    manual_start_date = fields.Date('Start Date', states={
+            'invisible': ~Eval('parent'),
+            'required': Bool(Eval('parent', False)),
+            }, depends=['parent'])
+    manual_end_date = fields.Date('End Date', states={
+            'invisible': ~Eval('parent'),
+            }, depends=['parent'])
+    end_reason = fields.Many2One('covered_element.end_reason', 'End Reason',
+        domain=[If(~Eval('parent'), [],
+            [('item_descs', '=', Eval('item_desc'))])],
+        states={'invisible': ~Eval('manual_end_date'),
+            'required': Bool(Eval('manual_end_date', False)),
+            }, depends=['item_desc', 'manual_end_date'])
     current_version = fields.Function(
         fields.Many2One('contract.covered_element.version', 'Current Version'),
         'get_current_version')
@@ -884,6 +897,17 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def on_change_party(self):
         self.recalculate()
 
+    @fields.depends('versions')
+    def on_change_versions(self):
+        if len(self.versions) <= 1:
+            return
+        if self.versions[-1].start:
+            return
+        self.versions[-1].extra_data = dict(self.versions[-2].extra_data)
+        self.versions[-1].extra_data_as_string = \
+            self.versions[-1].on_change_with_extra_data_as_string()
+        self.versions = list(self.versions)
+
     @fields.depends('party')
     def on_change_with_covered_name(self, name=None):
         if self.party:
@@ -1025,9 +1049,9 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def update_item_desc(self):
         if self.parent and self.parent.item_desc:
             if (not self.item_desc or self.item_desc not in
-                    self.parent.item_desc.sub_item_descriptors) and len(
-                    self.parent.item_desc.sub_item_descriptors) == 1:
-                self.item_desc = self.parent.item_desc.sub_item_descriptors[0]
+                    self.parent.item_desc.sub_item_descs) and len(
+                    self.parent.item_desc.sub_item_descs) == 1:
+                self.item_desc = self.parent.item_desc.sub_item_descs[0]
         elif self.product:
             if (not self.item_desc or self.item_desc not in
                     self.product.item_descriptors):
@@ -1266,7 +1290,7 @@ class CoveredElementVersion(model.CoopSQL, model.CoopView):
             },
         depends=['extra_data'])
     extra_data_as_string = fields.Function(
-        fields.Char('Extra Data'),
+        fields.Text('Extra Data'),
         'on_change_with_extra_data_as_string')
     extra_data_string = extra_data.translated('extra_data')
 

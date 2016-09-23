@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
+
+from .event import *
 from .contract import *
 from .party import *
 from .report_engine import *
@@ -14,6 +16,7 @@ OptionTreeExpansion = expand_tree('contract.option')
 
 def register():
     Pool.register(
+        EventLog,
         Party,
         Contract,
         CoveredElement,

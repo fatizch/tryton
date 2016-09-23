@@ -36,6 +36,58 @@ msgstr ""
 "L'enregistrement courant (%s) sera supprimé, êtes-vous certain de vouloir "
 "continuer ?"
 
+msgctxt "field:covered_element.end_reason,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:covered_element.end_reason,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:covered_element.end_reason,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:covered_element.end_reason,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:covered_element.end_reason,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:covered_element.end_reason,item_descs:"
+msgid "Item Descriptions"
+msgstr "Descriptions des Risques"
+
+msgctxt "field:covered_element.end_reason,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:covered_element.end_reason,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:covered_element.end_reason,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:covered_element.end_reason,tags_name:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:covered_element.end_reason,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:covered_element.end_reason,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:covered_element.end_reason,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:extra_data,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -312,6 +364,10 @@ msgctxt "field:offered.item.description,coverages:"
 msgid "Coverages"
 msgstr "Garanties"
 
+msgctxt "field:offered.item.description,covered_element_end_reasons:"
+msgid "Possible End Reasons"
+msgstr "Raisons de fin de couvertures possibles"
+
 msgctxt "field:offered.item.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -365,6 +421,50 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:offered.item.description,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt ""
+"field:offered.item.description-covered_element.end_reason,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:offered.item.description-covered_element.end_reason,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:offered.item.description-covered_element.end_reason,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.item.description-covered_element.end_reason,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:offered.item.description-covered_element.end_reason,item_desc:"
+msgid "Item Desc"
+msgstr "Desc Risque"
+
+msgctxt "field:offered.item.description-covered_element.end_reason,reason:"
+msgid "End Reason"
+msgstr "Motif de sortie"
+
+msgctxt "field:offered.item.description-covered_element.end_reason,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt ""
+"field:offered.item.description-covered_element.end_reason,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:offered.item.description-covered_element.end_reason,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:offered.item.description-covered_element.end_reason,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -860,6 +960,10 @@ msgstr ""
 "Si renseigné, un bouton avec le nom donné sera ajouté à la vue, ce qui "
 "permettra de mettre la tâche en suspens"
 
+msgctxt "model:covered_element.end_reason,name:"
+msgid "End reasons for covered elements"
+msgstr "Raison de fin de couverture"
+
 msgctxt "model:extra_data,name:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
@@ -931,6 +1035,10 @@ msgstr "Type d'exclusion"
 msgctxt "model:offered.item.description,name:"
 msgid "Item Description"
 msgstr "Description du Risque"
+
+msgctxt "model:offered.item.description-covered_element.end_reason,name:"
+msgid "Item Description to Covered Element End Reason relation"
+msgstr "Relation Descripteur de risques - raison de fin de couverture"
 
 msgctxt "model:offered.item.description-extra_data,name:"
 msgid "Item Description to Extra Data Relation"
@@ -1179,6 +1287,10 @@ msgstr "En Option"
 msgctxt "selection:rule_engine,extra_data_kind:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
+
+msgctxt "view:covered_element.end_reason:"
+msgid "Covered Element End Reasons"
+msgstr "Raisons de fin de couverture des éléments couverts"
 
 msgctxt "view:extra_data-sub_extra_data:"
 msgid "Relation"
