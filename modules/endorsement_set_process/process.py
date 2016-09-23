@@ -45,6 +45,21 @@ class EndorsementFindProcess:
 
         self.good_process = self.on_change_with_good_process()
 
+    @classmethod
+    def default_contracts(cls):
+        pool = Pool()
+        Contract = pool.get('contract')
+        contract_ids = super(EndorsementFindProcess, cls).default_contracts()
+        all_contracts = []
+        for contract_id in contract_ids:
+            contract = Contract(contract_id)
+            if contract.contract_set:
+                all_contracts.extend(contract.contract_set.contracts)
+            else:
+                all_contracts.append(contract)
+        all_contracts = list(set(all_contracts))
+        return [c.id for c in all_contracts]
+
 
 class EndorsementStartProcess:
     __name__ = 'endorsement.start_process'
