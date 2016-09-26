@@ -22,14 +22,6 @@ msgctxt "error:party.relation:"
 msgid "The SSN is required for %s"
 msgstr "Le numéro NIR est requis pour %s"
 
-msgctxt "field:contract.covered_element,is_law_madelin:"
-msgid "Law Madelin"
-msgstr "Loi Madelin"
-
-msgctxt "field:contract.covered_element,is_rsi:"
-msgid "Is RSI"
-msgstr "RSI"
-
 msgctxt "field:health.care_system,code:"
 msgid "Code"
 msgstr "Code"

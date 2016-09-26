@@ -1,9 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond import backend
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
-
-from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -15,18 +13,15 @@ __all__ = [
 class CoveredElement:
     __name__ = 'contract.covered_element'
 
-    is_rsi = fields.Function(
-        fields.Boolean('Is RSI', states={'invisible': True}),
-        'on_change_with_is_rsi')
-    is_law_madelin = fields.Boolean('Law Madelin',
-        states={'invisible': ~Eval('is_rsi')})
-
-    @fields.depends('party')
-    def on_change_with_is_rsi(self, name=None):
-        if self.party and self.party.health_complement:
-            hc_system = self.party.health_complement[0].hc_system
-            return hc_system.code == '03' if hc_system else False
-        return False
+    @classmethod
+    def __register__(cls, module_name):
+        super(CoveredElement, cls).__register__(module_name)
+        # Migration from 1.8: Drop is_rsi is_law_madelin and  column
+        TableHandler = backend.get('TableHandler')
+        covered_element = TableHandler(cls)
+        if covered_element.column_exist('is_rsi'):
+            covered_element.drop_column('is_rsi')
+            covered_element.drop_column('is_law_madelin')
 
 
 class Contract:
