@@ -15,7 +15,6 @@ import genshi.template
 
 from trytond.pyson import Eval, Or, Bool
 from trytond.pool import PoolMeta, Pool
-from trytond.transaction import Transaction
 from trytond.modules.cog_utils import fields, export, coop_date, utils
 from .sepa_handler import CAMT054Coog
 
@@ -334,33 +333,10 @@ class Payment:
             if x[0] != 'party']
         cls.sepa_mandate.domain.append(('party', '=', Eval('payer', -1)))
 
-    @fields.depends('line', 'date', 'sepa_mandate', 'bank_account', 'payer',
-        'amount')
-    def on_change_line(self, name=None):
-        super(Payment, self).on_change_line()
-        self.sepa_mandate = None
-        self.bank_account = None
-        if self.line:
-            self.amount = self.line.payment_amount
-            contract = self.line.contract
-            if contract:
-                self.contract = contract
-                with Transaction().set_context(
-                        contract_revision_date=self.date):
-                    mandate = contract.billing_information.sepa_mandate
-                self.sepa_mandate = mandate
-                self.bank_account = self.sepa_mandate.account_number.account
-        self.payer = self.on_change_with_payer()
-
-    @fields.depends('contract', 'date', 'sepa_mandate')
+    @fields.depends('sepa_mandate')
     def on_change_with_payer(self, name=None):
         if self.sepa_mandate:
             return self.sepa_mandate.party.id
-        elif self.contract:
-            with Transaction().set_context(
-                    contract_revision_date=self.payment_date):
-                payer = self.contract.payer
-                return payer.id if payer else None
 
     @fields.depends('bank_account', 'sepa_mandate', 'payer')
     def on_change_party(self):
@@ -436,58 +412,6 @@ class Payment:
         return code
 
     @classmethod
-    def fail(cls, payments):
-        pool = Pool()
-        Invoice = pool.get('account.invoice')
-        ContractInvoice = pool.get('contract.invoice')
-        Configuration = pool.get('account.configuration')
-        MoveLine = pool.get('account.move.line')
-        config = Configuration(1)
-
-        invoices_to_create = []
-        contract_invoices_to_create = []
-        payment_date_to_update = []
-        payments_keys = [(x._get_transaction_key(), x) for x in payments]
-        payments_keys = sorted(payments_keys, key=lambda x: x[0])
-        for key, payments_by_key in groupby(payments_keys, key=lambda x: x[0]):
-            payments_list = [payment[1] for payment in payments_by_key]
-            payment = payments_list[0]
-            sepa_mandate = None
-            payment_date = None
-            reject_fee = cls.get_reject_fee(payments_list)
-            if not reject_fee or not reject_fee.amount:
-                continue
-            if 'retry' in [action[0] for action in
-                    key[1].get_fail_actions(payments_list)]:
-                sepa_mandate = payment.sepa_mandate
-                payment_date = payment.journal.get_next_possible_payment_date(
-                        payment.line, payment.date.day)
-            journal = config.reject_fee_journal
-            account = reject_fee.product.template.account_revenue_used
-            name_for_billing = reject_fee.name
-            invoice = payment.create_fee_invoice(
-                reject_fee.amount, journal, account, name_for_billing,
-                sepa_mandate)
-            contract = cls.get_contract_for_reject_invoice(payments_list)
-            if contract is not None:
-                contract_invoice = ContractInvoice(
-                    contract=contract, invoice=invoice, non_periodic=True)
-                contract_invoices_to_create.append(contract_invoice)
-            invoices_to_create.append(invoice)
-            payment_date_to_update.append({'payment_date': payment_date})
-
-        Invoice.save(invoices_to_create)
-        ContractInvoice.save(contract_invoices_to_create)
-        Invoice.post(invoices_to_create)
-        lines_to_write = []
-        for i, p in zip(invoices_to_create, payment_date_to_update):
-            lines_to_write += [list(i.lines_to_pay), p]
-        if lines_to_write:
-            MoveLine.write(*lines_to_write)
-
-        super(Payment, cls).fail(payments)
-
-    @classmethod
     def succeed(cls, payments):
         super(Payment, cls).succeed(payments)
         to_update = [p for p in payments
@@ -517,23 +441,6 @@ class Payment:
             'sepa_bank_reject_date': utils.today(),
         })
         return fields
-
-    @classmethod
-    def get_contract_for_reject_invoice(cls, payments):
-        # Contract to attach invoice fee
-        contract = None
-        for payment in payments:
-            if not payment.line.contract or \
-                    payment.line.contract.status == 'void':
-                # Void contracts cannot be invoiced anyway
-                continue
-            if not contract:
-                contract = payment.line.contract
-                continue
-            if contract == payment.line.contract:
-                continue
-            return None
-        return contract
 
     def get_description(self, lang=None):
         description = super(Payment, self).get_description(lang)
@@ -735,15 +642,7 @@ class PaymentCreationStart:
         self.bank_account = self.update_bank_account()
 
     def update_available_payers(self):
-        if not self.payment_date or not self.party:
-            return
-        payers = []
-        for contract in self.party.contracts:
-            for bill_info in contract.billing_informations:
-                mandate = bill_info.sepa_mandate
-                if mandate and mandate.signature_date <= self.payment_date:
-                    payers.append(mandate.party.id)
-        return list(set(payers))
+        return [self.party.id] if self.party else []
 
     def update_available_bank_accounts(self):
         pool = Pool()

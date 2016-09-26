@@ -14,4 +14,6 @@ def register():
         Invoice,
         MoveLine,
         Mandate,
+        Payment,
+        PaymentCreationStart,
         module='account_payment_sepa_contract', type_='model')
