@@ -16,11 +16,10 @@ class CoveredElement:
     @classmethod
     def __register__(cls, module_name):
         super(CoveredElement, cls).__register__(module_name)
-        # Migration from 1.8: Drop is_rsi is_law_madelin and  column
+        # Migration from 1.8: Drop law_madelin column
         TableHandler = backend.get('TableHandler')
         covered_element = TableHandler(cls)
-        if covered_element.column_exist('is_rsi'):
-            covered_element.drop_column('is_rsi')
+        if covered_element.column_exist('is_law_madelin'):
             covered_element.drop_column('is_law_madelin')
 
 
