@@ -11,12 +11,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="claim.claim_view_form"/>
             <field name="name">claim_form</field>
         </record>
-        <!-- Receive Documents -->
-        <record model="ir.action.keyword" id="receive_documents_wizard_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">claim,-1</field>
-            <field name="action" ref="document_request.receive_documents_wizard"/>
-        </record>
         <!-- Send Document -->
         <record model="ir.action.keyword" id="letter_generation_claim_keyword">
             <field name="keyword">form_action</field>

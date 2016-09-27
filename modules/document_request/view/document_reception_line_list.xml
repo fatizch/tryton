@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tree string="Lines" editable="bottom">
+    <field name="selected"/>
+    <field name="name" expand="1"/>
+    <field name="type_"/>
+    <field name="reference" tree_invisible="1"/>
+    <field name="was_selected" tree_invisible="1"/>
+    <field name="icon" tree_invisible="1"/>
+</tree>

@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 from .claim import *
+from .document import *
 
 
 def register():
@@ -13,9 +14,11 @@ def register():
         ClaimDeclarationElement,
         ProcessLossDescRelation,
         ClaimDeclareFindProcess,
+        DocumentDescription,
         module='claim_process', type_='model')
 
     Pool.register(
         CloseClaim,
         ClaimDeclare,
+        ReceiveDocument,
         module='claim_process', type_='wizard')

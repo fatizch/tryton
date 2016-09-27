@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/group[@id='main']/field[@name='party']" position="after">
+        <label name="contract"/>
+        <field name="contract"/>
+    </xpath>
+    <xpath expr="/form/group[@id='invisible']" position="inside">
+        <field name="possible_contracts" invisible="1"/>
+    </xpath>
+</data>

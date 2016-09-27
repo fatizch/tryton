@@ -12,15 +12,15 @@ def register():
     Pool.register(
         DocumentRequest,
         DocumentRequestLine,
-        DocumentReceiveRequest,
-        DocumentReceiveAttach,
-        DocumentReceiveSetRequests,
         DocumentRequestBatch,
+        DocumentReception,
+        ReattachDocument,
+        ReceiveDocumentLine,
         BatchRemindDocuments,
         Attachment,
         module='document_request', type_='model')
     Pool.register(
-        DocumentReceive,
+        ReceiveDocument,
         module='document_request', type_='wizard')
     Pool.register(
         ReportGenerate,

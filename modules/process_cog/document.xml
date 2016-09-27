@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="document_request">
+        <!-- ##################### -->
+        <!-- # Reattach Document # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="reattach_document_view_form">
+            <field name="model">document.receive.reattach</field>
+            <field name="inherit" ref="document.reattach_document_view_form"/>
+            <field name="name">reattach_document_form</field>
+        </record>
+    </data>
+</tryton>

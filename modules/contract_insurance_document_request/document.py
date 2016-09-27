@@ -2,16 +2,20 @@
 # this repository contains the full copyright notices and license terms.
 from sql import Cast
 from sql.functions import Substring
-from trytond.pool import PoolMeta
-from trytond.modules.cog_utils import fields
+
 from trytond import backend
+from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
+from trytond.pyson import Eval
+
+from trytond.modules.cog_utils import fields
 
 
 __all__ = [
     'DocumentRequest',
-    'DocumentReceiveRequest',
     'DocumentRequestLine',
+    'DocumentReception',
+    'ReceiveDocument',
     ]
 
 
@@ -54,12 +58,65 @@ class DocumentRequest:
             ('contract', 'Contract'))
 
 
-class DocumentReceiveRequest:
+class DocumentReception:
     __metaclass__ = PoolMeta
-    __name__ = 'document.receive.request'
+    __name__ = 'document.reception'
+
+    contract = fields.Many2One('contract', 'Contract', ondelete='SET NULL',
+        domain=[('id', 'in', Eval('possible_contracts'))],
+        states={'readonly': Eval('state', '') == 'done',
+            'invisible': ~Eval('party')},
+        depends=['party', 'possible_contracts', 'state'])
+    possible_contracts = fields.Function(
+        fields.Many2Many('contract', None, None, 'Possible Contracts'),
+        'on_change_with_possible_contracts')
 
     @classmethod
-    def allowed_values(cls):
-        result = super(DocumentReceiveRequest, cls).allowed_values()
-        result.update({'contract': ('Contract', 'contract_number')})
-        return result
+    def __setup__(cls):
+        super(DocumentReception, cls).__setup__()
+        cls.request.domain = ['OR', cls.request.domain, [
+                ('contract', '=', Eval('contract')),
+                ('reception_date', '=', None),
+                ('attachment', '=', None),
+                ('document_desc', '=', Eval('document_desc'))]]
+        cls.request.depends.append('contract')
+
+    @fields.depends('party')
+    def on_change_with_possible_contracts(self, name=None):
+        if not self.party:
+            return []
+        pool = Pool()
+        Contract = pool.get('contract')
+        CoveredElement = pool.get('contract.covered_element')
+        contracts = set()
+        contracts |= {x.id for x in Contract.search([
+                    ('subscriber', '=', self.party.id)])}
+        contracts |= {x.main_contract.id for x in CoveredElement.search([
+                    ('party', '=', self.party.id)])}
+        return list(contracts)
+
+
+class ReceiveDocument:
+    __metaclass__ = PoolMeta
+    __name__ = 'document.receive'
+
+    def get_possible_objects_from_document(self, document):
+        objects = super(ReceiveDocument,
+            self).get_possible_objects_from_document(document)
+        if document.contract:
+            objects = [document.contract]
+        else:
+            objects += list(document.possible_contracts)
+        return objects
+
+    def get_object_filtering_clause(self, record):
+        if record.__name__ == 'contract':
+            return [('contract', '=', record.id)]
+        return super(ReceiveDocument, self).get_object_filtering_clause(
+            record)
+
+    def set_object_line(self, line, per_object):
+        if line.contract:
+            per_object[line.contract].append(line)
+        else:
+            super(ReceiveDocument, self).set_object_line(line, per_object)

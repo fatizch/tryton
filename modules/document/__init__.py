@@ -8,5 +8,11 @@ from .attachment import *
 def register():
     Pool.register(
         DocumentDescription,
+        DocumentReception,
         Attachment,
+        ReattachDocument,
         module='document', type_='model')
+
+    Pool.register(
+        ReceiveDocument,
+        module='document', type_='wizard')

@@ -2,22 +2,25 @@
 # this repository contains the full copyright notices and license terms.
 from sql import Cast
 from sql.functions import Substring
-from trytond.pool import PoolMeta
-from trytond.modules.cog_utils import fields
 
+from trytond.pool import PoolMeta, Pool
 from trytond import backend
+from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
+from trytond.modules.cog_utils import fields
 
-__metaclass__ = PoolMeta
+
 __all__ = [
     'DocumentRequest',
-    'RequestFinder',
     'DocumentRequestLine',
+    'DocumentReception',
+    'ReceiveDocument',
     ]
 
 
 class DocumentRequestLine:
+    __metaclass__ = PoolMeta
     __name__ = 'document.request.line'
 
     claim = fields.Many2One('claim', 'Claim', ondelete='CASCADE', select=True)
@@ -43,6 +46,7 @@ class DocumentRequestLine:
 
 
 class DocumentRequest:
+    __metaclass__ = PoolMeta
     __name__ = 'document.request'
 
     @classmethod
@@ -53,11 +57,62 @@ class DocumentRequest:
             ('claim.service', 'Claim Service'))
 
 
-class RequestFinder:
-    __name__ = 'document.receive.request'
+class DocumentReception:
+    __metaclass__ = PoolMeta
+    __name__ = 'document.reception'
+
+    claim = fields.Many2One('claim', 'Claim', ondelete='SET NULL',
+        domain=[('id', 'in', Eval('possible_claims'))],
+        states={'readonly': Eval('state', '') == 'done',
+            'invisible': ~Eval('party')},
+        depends=['party', 'possible_claims', 'state'])
+    possible_claims = fields.Function(
+        fields.Many2Many('claim', None, None, 'Possible Claims'),
+        'on_change_with_possible_claims')
 
     @classmethod
-    def allowed_values(cls):
-        result = super(RequestFinder, cls).allowed_values()
-        result.update({'claim': ('Claim', 'name')})
-        return result
+    def __setup__(cls):
+        super(DocumentReception, cls).__setup__()
+        cls.request.domain = ['OR', cls.request.domain, [
+                ('claim', '=', Eval('claim')),
+                ('reception_date', '=', None),
+                ('attachment', '=', None),
+                ('document_desc', '=', Eval('document_desc'))]]
+        cls.request.depends.append('contract')
+
+    @fields.depends('party')
+    def on_change_with_possible_claims(self, name=None):
+        if not self.party:
+            return []
+        pool = Pool()
+        Claim = pool.get('claim')
+        claims = set()
+        claims |= {x.id for x in Claim.search([
+                    ('claimant', '=', self.party.id)])}
+        return list(claims)
+
+
+class ReceiveDocument:
+    __metaclass__ = PoolMeta
+    __name__ = 'document.receive'
+
+    def get_possible_objects_from_document(self, document):
+        objects = super(ReceiveDocument,
+            self).get_possible_objects_from_document(document)
+        if document.claim:
+            objects = [document.claim]
+        else:
+            objects += list(document.possible_claims)
+        return objects
+
+    def get_object_filtering_clause(self, record):
+        if record.__name__ == 'claim':
+            return [('claim', '=', record.id)]
+        return super(ReceiveDocument, self).get_object_filtering_clause(
+            record)
+
+    def set_object_line(self, line, per_object):
+        if line.claim:
+            per_object[line.claim].append(line)
+        else:
+            super(ReceiveDocument, self).set_object_line(line, per_object)

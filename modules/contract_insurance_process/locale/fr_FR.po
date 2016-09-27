@@ -126,6 +126,10 @@ msgctxt "model:ir.ui.menu,name:menu_start_subscription"
 msgid "Start Subscription"
 msgstr "Souscription Contrat"
 
+msgctxt "selection:document.description,when_received:"
+msgid "Start Subscription"
+msgstr "Démarrer une souscription"
+
 msgctxt "selection:process,kind:"
 msgid "Contract Subscription"
 msgstr "Souscription Contrat"

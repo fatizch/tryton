@@ -5,6 +5,7 @@ from .endorsement import *
 from .offered import *
 from .wizard import *
 from .event import *
+from .document import *
 
 
 def register():
@@ -55,6 +56,7 @@ def register():
         ReportTemplate,
         EventTypeAction,
         EventLog,
+        DocumentDescription,
         module='endorsement', type_='model')
 
     Pool.register(
@@ -62,4 +64,5 @@ def register():
         OpenContractAtApplicationDate,
         EndorsementDecline,
         OpenGeneratedEndorsements,
+        ReceiveDocument,
         module='endorsement', type_='wizard')

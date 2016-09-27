@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<tree string="Documents">
-    <field name="name"/>
-    <field name="code"/>
-    <field name="when_received"/>
+<tree string="Document Received">
+    <field name="state"/>
+    <field name="reception_date"/>
+    <field name="rec_name" expand="1"/>
 </tree>

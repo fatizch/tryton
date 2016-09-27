@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:document.receive:"
+msgid "No process was found for the selected element."
+msgstr "Aucun processus détecté pour l'élément sélectionné."
+
 msgctxt "error:ir.ui.view.description:"
 msgid "The functional id must be unique !"
 msgstr "L'identifiant fonctionnel doit être unique"
@@ -40,6 +44,10 @@ msgid ""
 msgstr ""
 "L'enregistrement courant (%s) sera supprimé, êtes-vous certain de vouloir "
 "continuer ?"
+
+msgctxt "field:document.receive.reattach,current_process:"
+msgid "Current Process"
+msgstr "Processus en cours"
 
 msgctxt "field:event.type.action,filter_on_event_object:"
 msgid "Filter On Event Object"
@@ -601,6 +609,10 @@ msgstr "Démarrer le processus"
 msgctxt "wizard_button:ProcessFinder,process_parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "wizard_button:document.receive,free_attach,attach_and_resume:"
+msgid "Attach and Resume Process"
+msgstr "Rattacher et reprendre le processus"
 
 msgctxt "wizard_button:process.get_dates_for_timings,select_dates,end:"
 msgid "Cancel"

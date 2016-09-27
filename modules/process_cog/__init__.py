@@ -6,6 +6,7 @@ from .process import *
 from .process_timings import *
 from .models_for_test import *
 from .event import *
+from .document import *
 
 
 def register():
@@ -24,6 +25,7 @@ def register():
         ProcessTimingDisplayer,
         ProcessTimingSelectDates,
         EventTypeAction,
+        ReattachDocument,
         module='process_cog', type_='model')
 
     Pool.register(
@@ -37,6 +39,7 @@ def register():
         PostponeTask,
         GetDatesForProcessTimings,
         ProcessTimings,
+        ReceiveDocument,
         module='process_cog', type_='wizard')
 
     if config.get('env', 'testing') == 'True':

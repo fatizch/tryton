@@ -38,6 +38,10 @@ msgctxt "model:ir.ui.menu,name:menu_start_subscription"
 msgid "Start Subscription"
 msgstr "Souscription Contrat"
 
+msgctxt "selection:document.description,when_received:"
+msgid "Start Group Subscription"
+msgstr "Démarrer une souscription collective"
+
 msgctxt "wizard_button:contract.subscribe,process_parameters,action:"
 msgid "Start Process"
 msgstr "Démarrer le processus"

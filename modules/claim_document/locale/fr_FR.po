@@ -2,6 +2,18 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:document.request.report:"
+msgid ""
+"Document requests sent:\n"
+" %s"
+msgstr ""
+"Demande de documents envoyé:\n"
+" %s"
+
+msgctxt "error:document.request.report:"
+msgid "No documents are required."
+msgstr "Aucun document à fournir."
+
 msgctxt "field:benefit,documents_rules:"
 msgid "Document Rules"
 msgstr "Règles de gestion des documents"
@@ -66,9 +78,17 @@ msgctxt "field:claim,document_request_lines:"
 msgid "Required Documents"
 msgstr "Documents requis"
 
-msgctxt "field:document.receive.request,tmp_1:"
-msgid "Contract"
-msgstr "Contrat"
+msgctxt "field:document.reception,claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "field:document.reception,possible_claims:"
+msgid "Possible Claims"
+msgstr "Sinistres possibles"
+
+msgctxt "field:document.request.line,claim:"
+msgid "Claim"
+msgstr "Sinistre"
 
 msgctxt "field:document.rule,benefit:"
 msgid "Benefit"
@@ -76,11 +96,23 @@ msgstr "Prestation"
 
 msgctxt "model:benefit.loss.description-document.description,name:"
 msgid "Loss Description to Document Description Relation"
-msgstr ""
+msgstr "Relation Fait générateur - Type de document"
 
-msgctxt "selection:document.receive.request,kind:"
-msgid "Claim"
-msgstr "Sinistre"
+msgctxt "model:event.type,name:"
+msgid "Document Requests Sent"
+msgstr "Demande de documents envoyée"
+
+msgctxt "model:event.type,name:sent_document_requests"
+msgid "Document Requests Sent"
+msgstr "Demande de documents envoyée"
+
+msgctxt "model:ir.action,name:"
+msgid "Document Request report"
+msgstr "Report de demande de document"
+
+msgctxt "model:ir.action,name:document_request_report_wizard"
+msgid "Report Document Request"
+msgstr "Report de demande de document"
 
 msgctxt "selection:document.request,needed_by:"
 msgid "Claim"
@@ -101,19 +133,3 @@ msgstr "Documents"
 msgctxt "view:claim:"
 msgid "Documents"
 msgstr "Documents"
-
-msgctxt "error:document.request.report:"
-msgid "Document requests sent:\n %s"
-msgstr "Demande de Documents envoyé:\n %s"
-
-msgctxt "model:ir.action,name:"
-msgid "Document Request report"
-msgstr "Report de demande de document"
-
-msgctxt "model:event.type,name:"
-msgid "Document Requests Sent"
-msgstr "Demande de documents envoyés"
-
-msgctxt "error:document.request.report:"
-msgid "No documents are required."
-msgstr "Aucun document à fournir."

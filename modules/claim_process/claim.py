@@ -461,6 +461,18 @@ class ClaimDeclare(ProcessFinder):
             main_obj.reopen_claim()
         return main_obj
 
+    def finalize_main_object(self, obj):
+        document_reception = Transaction().context.get(
+            'current_document_reception', None)
+        if not document_reception:
+            return
+        document = Pool().get('document.reception')(document_reception)
+        attachment = document.attachments[0]
+        document.attachment = attachment
+        document.save()
+        attachment.resource = obj
+        attachment.save()
+
 
 class CloseClaim:
     'Clase Claims'

@@ -6,6 +6,16 @@ msgctxt "error:document.description:"
 msgid "The document description code must be unique"
 msgstr "Le code du modèle de document doit être unique"
 
+msgctxt "error:document.reception:"
+msgid "A reception date must be set on %(document_name)s before going on."
+msgstr ""
+"Une date de réception doit être renseignée pour %(document_name)s avant de "
+"continuer."
+
+msgctxt "error:document.reception:"
+msgid "The document will not be attached to anything !"
+msgstr "Le document ne sera rattaché à rien !"
+
 msgctxt "field:document.description,code:"
 msgid "Code"
 msgstr "Code"
@@ -34,6 +44,10 @@ msgctxt "field:document.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:document.description,when_received:"
+msgid "Action when received"
+msgstr "Action quand reçu"
+
 msgctxt "field:document.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -43,6 +57,78 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:document.description,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:document.receive.reattach,document:"
+msgid "Document"
+msgstr "Document"
+
+msgctxt "field:document.receive.reattach,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:document.receive.reattach,target:"
+msgid "Target Instance"
+msgstr "Cible"
+
+msgctxt "field:document.reception,action_defined:"
+msgid "Action Defined"
+msgstr "Action définie"
+
+msgctxt "field:document.reception,attachment:"
+msgid "Attachment"
+msgstr "Pièce jointe"
+
+msgctxt "field:document.reception,attachments:"
+msgid "Content"
+msgstr "Contenu"
+
+msgctxt "field:document.reception,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:document.reception,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:document.reception,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.reception,document_desc:"
+msgid "Document Description"
+msgstr "Descripteur de Document"
+
+msgctxt "field:document.reception,final_target:"
+msgid "Target Instance"
+msgstr "Cible"
+
+msgctxt "field:document.reception,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:document.reception,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.reception,reception_date:"
+msgid "Reception Date"
+msgstr "Date de réception"
+
+msgctxt "field:document.reception,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:document.reception,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:document.reception,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:document.reception,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -66,9 +152,25 @@ msgctxt "model:document.description,name:"
 msgid "Document Description"
 msgstr "Descripteur de Document"
 
+msgctxt "model:document.receive.reattach,name:"
+msgid "Reattach Document"
+msgstr "Rattacher le document"
+
+msgctxt "model:document.reception,name:"
+msgid "Document Reception"
+msgstr "Réception des documents"
+
 msgctxt "model:ir.action,name:act_document_desc"
 msgid "Document Descriptions"
 msgstr "Modèles de document"
+
+msgctxt "model:ir.action,name:act_document_reception"
+msgid "Document Receptions"
+msgstr "Réceptions de documents"
+
+msgctxt "model:ir.action,name:act_receive_document"
+msgid "Receive Document"
+msgstr "Réception d'un document"
 
 msgctxt "model:ir.ui.menu,name:menu_document"
 msgid "Document"
@@ -82,9 +184,41 @@ msgctxt "model:ir.ui.menu,name:menu_document_desc"
 msgid "Document Descriptions"
 msgstr "Modèles de document"
 
+msgctxt "model:ir.ui.menu,name:menu_document_reception"
+msgid "Document Receptions"
+msgstr "Réception de documents"
+
 msgctxt "model:res.group,name:group_document_admin"
 msgid "Document Administration"
 msgstr "Administration des documents"
+
+msgctxt "model:res.group,name:group_document_reception"
+msgid "Document Reception"
+msgstr "Réception des documents"
+
+msgctxt "selection:document.description,when_received:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:document.description,when_received:"
+msgid "Free Attachment"
+msgstr "Rattachement libre"
+
+msgctxt "selection:document.reception,state:"
+msgid "Done"
+msgstr "Terminée"
+
+msgctxt "selection:document.reception,state:"
+msgid "New"
+msgstr "Nouveau"
+
+msgctxt "selection:document.reception,state:"
+msgid "Rejected"
+msgstr "Rejeté"
+
+msgctxt "selection:document.reception,state:"
+msgid "Waiting"
+msgstr "En attente"
 
 msgctxt "view:document.description:"
 msgid "Document"
@@ -93,3 +227,35 @@ msgstr "Document"
 msgctxt "view:document.description:"
 msgid "Documents"
 msgstr "Documents"
+
+msgctxt "view:document.receive.reattach:"
+msgid "Reattach"
+msgstr "Rattacher"
+
+msgctxt "view:document.reception:"
+msgid "Document Received"
+msgstr "Document reçu"
+
+msgctxt "view:document.reception:"
+msgid "Document Reception"
+msgstr "Réception des documents"
+
+msgctxt "view:document.reception:"
+msgid "Execute"
+msgstr "Traiter"
+
+msgctxt "view:document.reception:"
+msgid "Reject"
+msgstr "Rejeter"
+
+msgctxt "view:document.reception:"
+msgid "Wait"
+msgstr "Mettre en attente"
+
+msgctxt "wizard_button:document.receive,free_attach,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:document.receive,free_attach,reattach:"
+msgid "Attach"
+msgstr "Rattacher"

@@ -1,5 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.pool import Pool
+from trytond.transaction import Transaction
+
 from trytond.modules.contract_insurance_process.process import (
     ContractSubscribeFindProcess, ContractSubscribe)
 
@@ -42,3 +45,11 @@ class ContractGroupSubscribe(ContractSubscribe):
             obj.subscriber = process_param.party
             obj.is_group = True
         return res, err
+
+    def finalize_main_object(self, obj):
+        document_reception = Transaction().context.get(
+            'current_document_reception', None)
+        if not document_reception:
+            return
+        document = Pool().get('document.reception')(document_reception)
+        document.transfer(obj)

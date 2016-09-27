@@ -1235,6 +1235,7 @@ class ProcessFinder(Wizard):
         if (hasattr(good_obj, 'current_state') and good_obj.current_state):
             good_obj.current_state.step.execute_before(good_obj)
         good_obj.save()
+        self.finalize_main_object(good_obj)
         return good_values[0], {'res_id': [good_obj.id]}
 
     def search_main_object(self):
@@ -1279,6 +1280,9 @@ class ProcessFinder(Wizard):
     @classmethod
     def get_parameters_view(cls):
         return 'process_cog.process_parameters_form'
+
+    def finalize_main_object(self, obj):
+        pass
 
 
 class ProcessEnd(Wizard):

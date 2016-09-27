@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form string="Document Reception" col="2">
+    <group id="main" string="" colspan="2" col="2" yexpand="1" yfill="1">
+        <label name="state"/>
+        <field name="state"/>
+        <label name="document_desc"/>
+        <field name="document_desc"/>
+        <label name="reception_date"/>
+        <field name="reception_date"/>
+        <label name="attachment"/>
+        <field name="attachment"/>
+        <label name="final_target"/>
+        <field name="final_target"/>
+        <separator name="attachments" colspan="2"/>
+        <field name="attachments" colspan="2" mode="form" expand_toolbar="0"/>
+    </group>
+    <group id="buttons" string="" col="3" colspan="2">
+        <button string="Wait" name="do_wait" icon="tryton-refresh"/>
+        <button string="Reject" name="do_reject" icon="tryton-dialog-error"/>
+        <button string="Execute" name="execute" icon="tryton-executable"/>
+    </group>
+    <group id="invisible" string="" colspan="2">
+        <field name="action_defined" invisible="1"/>
+    </group>
+</form>

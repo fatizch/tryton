@@ -97,3 +97,11 @@ class ContractSubscribe(ProcessFinder):
             if process_param.party:
                 obj.subscriber = process_param.party
         return res, errs
+
+    def finalize_main_object(self, obj):
+        document_reception = Transaction().context.get(
+            'current_document_reception', None)
+        if not document_reception:
+            return
+        document = Pool().get('document.reception')(document_reception)
+        document.transger(obj)

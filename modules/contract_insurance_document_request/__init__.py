@@ -17,7 +17,11 @@ def register():
         OptionDescription,
         Contract,
         DocumentRequest,
-        DocumentReceiveRequest,
+        DocumentReception,
         RuleEngine,
         DocumentRequestLine,
         module='contract_insurance_document_request', type_='model')
+
+    Pool.register(
+        ReceiveDocument,
+        module='contract_insurance_document_request', type_='wizard')

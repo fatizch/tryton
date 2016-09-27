@@ -34,33 +34,29 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">document.request,-1</field>
             <field name="action" ref="report_engine.letter_generation_wizard"/>
         </record>
-        <!-- #################### -->
-        <!-- # Document Receive # -->
-        <!-- #################### -->
-        <record model="ir.ui.view" id="document_receive_request_form">
-            <field name="model">document.receive.request</field>
-            <field name="type">form</field>
-            <field name="name">document_receive_request_form</field>
+        <!-- ###################### -->
+        <!-- # Document Reception # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="document_reception_view_form">
+            <field name="model">document.reception</field>
+            <field name="inherit" ref="document.document_reception_view_form"/>
+            <field name="name">document_reception_form</field>
         </record>
-        <record model="ir.ui.view" id="document_receive_set_requests_form">
-            <field name="model">document.receive.set_requests</field>
-            <field name="type">form</field>
-            <field name="name">document_receive_set_requests_form</field>
+        <!-- ##################### -->
+        <!-- # Reattach Document # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="reattach_document_view_form">
+            <field name="model">document.receive.reattach</field>
+            <field name="inherit" ref="document.reattach_document_view_form"/>
+            <field name="name">reattach_document_form</field>
         </record>
-        <record model="ir.ui.view" id="document_receive_attach_form">
-            <field name="model">document.receive.attach</field>
-            <field name="type">form</field>
-            <field name="name">document_receive_attach_form</field>
+        <!-- ######################### -->
+        <!-- # Receive Document Line # -->
+        <!-- ######################### -->
+        <record model="ir.ui.view" id="document_reception_line_view_list">
+            <field name="model">document.receive.line</field>
+            <field name="type">tree</field>
+            <field name="name">document_reception_line_list</field>
         </record>
-        <record model="ir.action.wizard" id="receive_documents_wizard">
-            <field name="name">Document Reception</field>
-            <field name="wiz_name">document.receive</field>
-        </record>
-        <record model="ir.action.keyword" id="receive_documents_wizard_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">document.request,-1</field>
-            <field name="action" ref="receive_documents_wizard"/>
-        </record>
-        <menuitem name="Receive Documents" id="menu_receive_documents" sequence="15" parent="document.menu_document" action="receive_documents_wizard"/>
     </data>
 </tryton>

@@ -3,19 +3,14 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <record model="res.group" id="group_document_admin">
-            <field name="name">Document Administration</field>
-        </record>
-        <record model="res.user-res.group" id="user_admin_group_document_admin">
-            <field name="user" ref="res.user_admin"/>
-            <field name="group" ref="group_document_admin"/>
-        </record>
+        <!-- ######## -->
+        <!-- # Menu # -->
+        <!-- ######## -->
         <menuitem name="Document" id="menu_document" sequence="15"/>
         <menuitem name="Configuration" parent="menu_document" id="menu_document_configuration" sequence="100"/>
-        <record model="ir.ui.menu-res.group" id="menu_configuration_group_document_admin">
-            <field name="menu" ref="menu_document_configuration"/>
-            <field name="group" ref="group_document_admin"/>
-        </record>
+        <!-- ######################## -->
+        <!-- # Document Description # -->
+        <!-- ######################## -->
         <record model="ir.ui.view" id="document_desc_form">
             <field name="model">document.description</field>
             <field name="type">form</field>
@@ -40,11 +35,104 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="document_desc_form"/>
             <field name="act_window" ref="act_document_desc"/>
         </record>
-        <!-- Group Access to Menu -->
+        <menuitem parent="menu_document_configuration" sequence="30" action="act_document_desc" id="menu_document_desc"/>
+        <!-- Access Rights -->
+        <record model="res.group" id="group_document_admin">
+            <field name="name">Document Administration</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_document_admin">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_document_admin"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_configuration_group_document_admin">
+            <field name="menu" ref="menu_document_configuration"/>
+            <field name="group" ref="group_document_admin"/>
+        </record>
         <record model="ir.ui.menu-res.group" id="group_document_admin_menu_document">
             <field name="group" ref="group_document_admin"/>
             <field name="menu" ref="menu_document"/>
         </record>
-        <menuitem parent="menu_document_configuration" sequence="30" action="act_document_desc" id="menu_document_desc"/>
+        <record model="ir.model.access" id="access_document_description_admin">
+            <field name="model" search="[('model', '=', 'document.description')]"/>
+            <field name="group" ref="document.group_document_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_document_description">
+            <field name="model" search="[('model', '=', 'document.description')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- ###################### -->
+        <!-- # Document Reception # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="document_reception_view_form">
+            <field name="model">document.reception</field>
+            <field name="type">form</field>
+            <field name="name">document_reception_form</field>
+        </record>
+        <record model="ir.ui.view" id="document_reception_view_list">
+            <field name="model">document.reception</field>
+            <field name="type">tree</field>
+            <field name="name">document_reception_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_document_reception">
+            <field name="name">Document Receptions</field>
+            <field name="res_model">document.reception</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_document_reception_view1">
+            <field name="sequence" eval="16"/>
+            <field name="view" ref="document_reception_view_list"/>
+            <field name="act_window" ref="act_document_reception"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_document_reception_view2">
+            <field name="sequence" eval="16"/>
+            <field name="view" ref="document_reception_view_form"/>
+            <field name="act_window" ref="act_document_reception"/>
+        </record>
+        <menuitem parent="menu_document" sequence="30" action="act_document_reception" id="menu_document_reception"/>
+        <!-- Access Rights -->
+        <record model="res.group" id="group_document_reception">
+            <field name="name">Document Reception</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_document_reception">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_document_reception"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_reception_group_document_reception">
+            <field name="menu" ref="menu_document_reception"/>
+            <field name="group" ref="group_document_reception"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="group_document_reception_menu_document">
+            <field name="group" ref="group_document_reception"/>
+            <field name="menu" ref="menu_document"/>
+        </record>
+        <record model="ir.model.access" id="access_document_reception">
+            <field name="model" search="[('model', '=', 'document.reception')]"/>
+            <field name="group" ref="document.group_document_reception"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- #################### -->
+        <!-- # Receive Document # -->
+        <!-- #################### -->
+        <record model="ir.action.wizard" id="act_receive_document">
+            <field name="name">Receive Document</field>
+            <field name="wiz_name">document.receive</field>
+        </record>
+        <!-- ##################### -->
+        <!-- # Reattach Document # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="reattach_document_view_form">
+            <field name="model">document.receive.reattach</field>
+            <field name="type">form</field>
+            <field name="name">reattach_document_form</field>
+        </record>
     </data>
 </tryton>

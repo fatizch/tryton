@@ -1,6 +1,5 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import functools
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 from sql.functions import CurrentDate
@@ -8,11 +7,10 @@ from sql import Null
 from sql.aggregate import Count, Sum
 from sql.conditionals import Case
 
-from trytond.pool import Pool
-from trytond.pyson import Eval
+from trytond.pool import Pool, PoolMeta
+from trytond.pyson import Eval, Bool
 from trytond import backend
 from trytond.transaction import Transaction
-from trytond.wizard import Wizard, StateView, Button, StateTransition
 
 from trytond.modules.cog_utils import fields, model, utils
 from trytond.modules.report_engine import Printable
@@ -20,10 +18,10 @@ from trytond.modules.report_engine import Printable
 __all__ = [
     'DocumentRequestLine',
     'DocumentRequest',
-    'DocumentReceiveRequest',
-    'DocumentReceiveAttach',
-    'DocumentReceiveSetRequests',
-    'DocumentReceive',
+    'DocumentReception',
+    'ReceiveDocument',
+    'ReattachDocument',
+    'ReceiveDocumentLine',
     ]
 
 
@@ -328,256 +326,6 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
         return self.needed_by.get_product()
 
 
-class DocumentReceiveRequest(model.CoopView):
-    'Document Receive Request'
-
-    __name__ = 'document.receive.request'
-
-    kind = fields.Selection([('', '')], 'Kind')
-    value = fields.Char('Value')
-    request = fields.Many2One('document.request', 'Request',
-        states={'invisible': True})
-
-    @classmethod
-    def __setup__(cls):
-        super(DocumentReceiveRequest, cls).__setup__()
-        idx = 0
-        cls.kind.selection = [('', '')]
-        for k, v in cls.allowed_values().iteritems():
-            cls.kind.selection.append((k, v[0]))
-            tmp = fields.Many2One(
-                k, v[0],
-                states={'invisible': Eval('kind') != k},
-                depends=['kind', 'value'])
-            setattr(cls, 'tmp_%s' % idx, tmp)
-
-            def on_change_tmp(self, name=''):
-                if not (hasattr(self, name) and getattr(self, name)):
-                    return {}
-
-                relation = getattr(self, name)
-                if not (hasattr(relation, 'documents') and relation.documents):
-                    return {'value': utils.convert_to_reference(
-                        getattr(self, name))}
-                return {'request': relation.documents[0].id}
-            # Hack to fix http://bugs.python.org/issue3445
-            tmp_function = functools.partial(on_change_tmp,
-                name='tmp_%s' % idx)
-            tmp_function.__module__ = on_change_tmp.__module__
-            tmp_function.__name__ = on_change_tmp.__name__
-            setattr(cls, 'on_change_tmp_%s' % idx, fields.depends(
-                    'request', 'tmp_%s' % idx, 'kind')(tmp_function))
-            idx += 1
-
-    @classmethod
-    def allowed_values(cls):
-        return {}
-
-    @fields.depends('kind')
-    def on_change_kind(self):
-        for k, v in self._fields.iteritems():
-            if not k.startswith('tmp_'):
-                continue
-            setattr(self, k, None)
-
-    @classmethod
-    def fields_view_get(cls, view_id=None, view_type='form'):
-        result = super(DocumentReceiveRequest,
-            cls).fields_view_get(view_id, view_type)
-        request_finder = Pool().get('ir.model').search([
-                ('model', '=', cls.__name__)])[0]
-        fields = ['kind', 'value', 'request']
-        xml = '<?xml version="1.0"?>'
-        xml += '<form string="%s">' % request_finder.name
-        xml += '<label name="kind" xalign="0" colspan="1"/>'
-        xml += '<field name="kind" colspan="3"/>'
-        xml += '<field name="value" invisible="1"/>'
-        xml += '<newline/>'
-        xml += '<field name="request"/>'
-        for k, v in cls._fields.iteritems():
-            if not k.startswith('tmp_'):
-                continue
-            xml += '<newline/>'
-            xml += '<label name="%s" colspan="1"/>' % k
-            xml += '<field name="%s" colspan="3"/>' % k
-            fields.append(k)
-        xml += '</form>'
-        result['arch'] = xml
-        result['fields'] = cls.fields_get(fields_names=fields)
-        return result
-
-
-class DocumentReceiveAttach(model.CoopView):
-    'Document Receive Attach'
-
-    __name__ = 'document.receive.attach'
-
-    attachments = fields.One2Many('ir.attachment', '', 'Attachments',
-        context={'resource': Eval('resource')})
-    resource = fields.Char('Resource', states={'invisible': True})
-
-    @classmethod
-    def __setup__(cls):
-        super(DocumentReceiveAttach, cls).__setup__()
-        cls._error_messages.update({
-            'ident_name': 'Duplicate name on attachments : %s'})
-
-
-class DocumentReceiveSetRequests(model.CoopView):
-    'Document Receive Set Requests'
-
-    __name__ = 'document.receive.set_requests'
-
-    documents = fields.One2Many('document.request', '', 'Documents', size=1)
-
-
-class DocumentReceive(Wizard):
-    'Document Receive'
-
-    __name__ = 'document.receive'
-
-    start_state = 'start'
-    start = StateTransition()
-    select_instance = StateView('document.receive.request',
-        'document_request.document_receive_request_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Continue', 'attachment_setter', 'tryton-ok')])
-    attachment_setter = StateView('document.receive.attach',
-        'document_request.document_receive_attach_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Next', 'only_store', 'tryton-go-next')])
-    only_store = StateTransition()
-    store_attachments = StateTransition()
-    store_and_reconcile = StateTransition()
-    input_document = StateView('document.receive.set_requests',
-        'document_request.document_receive_set_requests_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Complete', 'notify_request', 'tryton-ok')])
-    notify_request = StateTransition()
-    try_to_go_forward = StateTransition()
-
-    @classmethod
-    def __setup__(cls):
-        super(DocumentReceive, cls).__setup__()
-        cls._error_messages.update({
-                'no_document_request_found': 'No document request found for '
-                'this object'})
-
-    def default_select_instance(self, name):
-        if not(Transaction().context.get('active_model', 'z') in [
-                k[0] for k in self.select_instance._fields['kind'].selection]):
-            return {}
-
-        GoodModel = Pool().get(Transaction().context.get('active_model'))
-        good_id = Transaction().context.get('active_id')
-
-        result = {'kind': Transaction().context.get('active_model')}
-        for key, field in self.select_instance._fields.iteritems():
-            if not key.startswith('tmp_'):
-                continue
-            if field.model_name == Transaction().context.get('active_model'):
-                result[key] = Transaction().context.get('active_id')
-                try:
-                    result['request'] = GoodModel(good_id).documents[0].id
-                except:
-                    self.raise_user_error('no_document_request_found')
-                break
-
-        return result
-
-    def transition_start(self):
-        if Transaction().context.get('active_model', '') == 'ir.ui.menu':
-            return 'select_instance'
-
-        GoodModel = Pool().get(Transaction().context.get('active_model'))
-        good_id = Transaction().context.get('active_id')
-
-        self.select_instance.kind = Transaction().context.get('active_model')
-        for key, field in self.select_instance._fields.iteritems():
-            if not key.startswith('tmp_'):
-                continue
-            if field.model_name == Transaction().context.get('active_model'):
-                setattr(
-                    self.select_instance, key,
-                    Transaction().context.get('active_id'))
-                try:
-                    self.select_instance.request = \
-                        GoodModel(good_id).documents[0].id
-                except:
-                    self.raise_user_error('no_document_request_found')
-                break
-
-        return 'attachment_setter'
-
-    def default_attachment_setter(self, name):
-        Attachment = Pool().get('ir.attachment')
-        if not (hasattr(self.select_instance, 'request') and
-                self.select_instance.request):
-            return {'resource': self.select_instance.value}
-        good_obj = self.select_instance.request.needed_by
-        good_obj = utils.convert_to_reference(good_obj)
-        return {
-            'resource': good_obj,
-            'attachments': [att.id for att in Attachment.search(
-                [
-                    ('resource', '=', good_obj),
-                ])]}
-
-    def default_input_document(self, name):
-        return {'documents': [self.select_instance.request.id]}
-
-    def transition_only_store(self):
-        if (hasattr(self.select_instance, 'request') and
-                self.select_instance.request):
-            return 'store_and_reconcile'
-        else:
-            return 'store_attachments'
-
-    def update_attachments(self, resource):
-        Attachment = Pool().get('ir.attachment')
-        previous = Attachment.search([('resource', '=', resource)])
-        current = [k.id for k in self.attachment_setter.attachments]
-        with Transaction().set_context(_force_access=True):
-            for prev_att in previous:
-                if prev_att.id not in current:
-                    prev_att.delete([prev_att])
-            for att in self.attachment_setter.attachments:
-                if isinstance(att.data, int):
-                    continue
-                att.resource = resource
-                att.save()
-
-    def transition_store_attachments(self):
-        resource = self.select_instance.value
-        if resource:
-            self.update_attachments(resource)
-        return 'end'
-
-    def transition_store_and_reconcile(self):
-        resource = self.select_instance.request.needed_by
-        resource = utils.convert_to_reference(resource)
-        self.update_attachments(resource)
-        return 'input_document'
-
-    def transition_notify_request(self):
-        for doc in self.input_document.documents[0].documents:
-            doc.save()
-        self.input_document.documents[0].save()
-        if self.input_document.documents[0].is_complete:
-            self.input_document.documents[0].notify_completed()
-
-        return 'try_to_go_forward'
-
-    def transition_try_to_go_forward(self):
-        # try:
-            # obj = self.select_instance.request.needed_by
-            # obj.build_instruction_method('next')([obj])
-        # except AttributeError:
-            # pass
-
-        return 'end'
-
-
 class RemindableInterface(object):
     "Remindable Interface"
 
@@ -685,3 +433,144 @@ class RemindableInterface(object):
                     doc.reminders_sent >= doc_max_reminders)):
             return False
         return True
+
+
+class DocumentReception:
+    __metaclass__ = PoolMeta
+    __name__ = 'document.reception'
+
+    party = fields.Many2One('party.party', 'Party', ondelete='CASCADE',
+        states={'readonly': Eval('state', '') == 'done'}, depends=['state'])
+    request = fields.Many2One('document.request.line',
+        'Document Request', ondelete='SET NULL',
+        domain=[('for_object.id', '=', Eval('party'), 'party.party'),
+            ('reception_date', '=', None), ('attachment', '=', None),
+            ('document_desc', '=', Eval('document_desc'))],
+        states={'readonly': Eval('state', '') == 'done'},
+        depends=['document_desc', 'party', 'state'])
+
+
+class ReceiveDocument:
+    __metaclass__ = PoolMeta
+    __name__ = 'document.receive'
+
+    def transition_decide(self):
+        state = super(ReceiveDocument, self).transition_decide()
+        if state != 'free_attach' or not self.free_attach.document:
+            return state
+        if self.free_attach.document.request:
+            self.free_attach.target = self.free_attach.document.request
+            return state
+        pool = Pool()
+        RequestLine = pool.get('document.request.line')
+        possible_objects = self.get_possible_objects_from_document(
+            self.free_attach.document)
+        if possible_objects:
+            possible_lines = RequestLine.search([
+                    ('reception_date', '=', None),
+                    ('attachment', '=', None),
+                    ['OR'] + [self.get_object_filtering_clause(x)
+                        for x in possible_objects],
+                    ('document_desc', '=',
+                        self.free_attach.document.document_desc.id),
+                    ])
+            per_object = {x: [] for x in possible_objects}
+            for line in possible_lines:
+                self.set_object_line(line, per_object)
+            final_lines = []
+            matching_sub_line = None
+            for record, lines in per_object.items():
+                final_lines.append(self.new_line(record))
+                for sub_line in lines:
+                    final_lines.append(self.new_line(sub_line))
+                    final_lines[-1].name = '    ' + final_lines[-1].name
+                    if matching_sub_line is None:
+                        matching_sub_line = final_lines[-1]
+                        final_lines[-1].selected = True
+                        final_lines[-1].was_selected = True
+            if matching_sub_line:
+                self.free_attach.target = matching_sub_line.reference
+            elif final_lines:
+                self.free_attach.target = final_lines[0].reference
+                final_lines[0].selected = True
+                final_lines[0].was_selected = True
+            self.free_attach.lines = final_lines
+        return state
+
+    def get_possible_objects_from_document(self, document):
+        return [document.party] if document.party else []
+
+    def get_object_filtering_clause(self, record):
+        return [('for_object', '=', str(record))]
+
+    def set_object_line(self, line, per_object):
+        per_object[line.for_object].append(line)
+
+    def new_line(self, elem):
+        pool = Pool()
+        Model = pool.get('ir.model')
+        line = pool.get('document.receive.line')()
+        line.name = elem.rec_name
+        line.reference = elem
+        line.selected = False
+        line.was_selected = False
+        line.type_ = Model(Model.model_id_per_name(elem.__name__)).name
+        return line
+
+    def transition_reattach(self):
+        request = None
+        if self.free_attach.target.__name__ == 'document.request.line':
+            request = self.free_attach.target
+            self.free_attach.target = request.for_object
+        state = super(ReceiveDocument, self).transition_reattach()
+        if request is None:
+            return state
+        request.attachment = self.free_attach.document.attachment
+        request.reception_date = self.free_attach.document.reception_date
+        request.save()
+        return state
+
+
+class ReattachDocument:
+    __metaclass__ = PoolMeta
+    __name__ = 'document.receive.reattach'
+
+    lines = fields.One2Many('document.receive.line', None, 'Lines',
+        states={'invisible': ~Eval('lines')})
+
+    @classmethod
+    def __setup__(cls):
+        super(ReattachDocument, cls).__setup__()
+        cls.target.states = {'invisible': Bool(Eval('lines'))}
+
+    @fields.depends('lines', 'target')
+    def on_change_lines(self):
+        selected = None
+        for line in self.lines:
+            if line.selected and not line.was_selected:
+                selected = line
+        for line in self.lines:
+            if selected:
+                line.was_selected = line == selected
+                line.selected = line == selected
+            else:
+                line.was_selected = line.selected
+        self.lines = [x for x in self.lines if x.reference]
+        if selected:
+            self.target = selected.reference
+
+
+class ReceiveDocumentLine(model.CoopView):
+    'Receive Document Line'
+
+    __name__ = 'document.receive.line'
+
+    name = fields.Char('Name', readonly=True)
+    type_ = fields.Char('Type', readonly=True)
+    reference = fields.Reference('Reference', 'get_models', readonly=True)
+    selected = fields.Boolean('Selected')
+    was_selected = fields.Boolean('Was Selected')
+
+    @classmethod
+    def get_models(self):
+        return utils.models_get()

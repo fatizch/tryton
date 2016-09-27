@@ -16,12 +16,13 @@ def register():
         LossDescriptionDocumentDescriptionRelation,
         Claim,
         DocumentRequest,
-        RequestFinder,
         RuleEngineRuntime,
         DocumentRequestLine,
+        DocumentReception,
         ReportTemplate,
         module='claim_document', type_='model')
 
     Pool.register(
         DocumentRequestReport,
+        ReceiveDocument,
         module='claim_document', type_='wizard')
