@@ -1,6 +1,5 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import datetime
 from trytond.pool import Pool, PoolMeta
 
 from trytond.modules.cog_utils import fields
@@ -22,16 +21,10 @@ class Contract:
             at_date)
         if not party:
             return res
+        res = set(res)
         for cov_elem in cls.get_possible_covered_elements(party, at_date):
-            contract = cov_elem.main_contract
-            # TODO : Temporary Hack Date validation should be done with domain
-            # and in get_possible_covered_elements
-            if (contract and contract.status == 'active'
-                    and contract.start_date <= at_date <= (
-                        contract.end_date or datetime.date.max)):
-                if contract not in res:
-                    res.append(contract)
-        return res
+            res.add(cov_elem.main_contract)
+        return list(res)
 
     @classmethod
     def get_possible_covered_elements(cls, party, at_date):

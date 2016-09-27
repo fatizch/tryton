@@ -1174,6 +1174,34 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         return any((sub_elem.is_covered_at_date(at_date, coverage)
                 for sub_elem in self.sub_covered_elements))
 
+    def is_valid_at_date(self, at_date):
+        '''
+            Return true if the covered element is active `at_date`. This checks
+            covered_element dates, the contract's activation dates and the
+            contract's company.
+        '''
+        assert at_date
+        # Filter out lines for which manual dates were set which do not
+        # match the given date
+        if self.manual_start_date and self.manual_start_date > at_date:
+            return False
+        if self.manual_end_date and self.manual_end_date < at_date:
+            return False
+
+        # Filter out lines whose contract is not active at the effective
+        # date
+        contract = self.main_contract
+        if not contract.is_active_at_date(at_date):
+            return False
+
+        # Filter out contracts which do not match the current company
+        company = Transaction().context.get('company')
+        if company:
+            if not contract.company or contract.company.id != company:
+                return False
+
+        return True
+
     def is_party_covered(self, party, at_date):
         # TODO : Maybe this should go in contract_life / claim
         if party in self.get_covered_parties(at_date):
@@ -1208,19 +1236,20 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     @classmethod
     def get_possible_covered_elements(cls, party, at_date):
-        domain = [
-            ('party', '=', party.id),
-            ['OR',
-                ('options', '=', None),
-                ('options.start_date', '<=', at_date)
-                # ['OR',
-                #     ['options.end_date', '=', None],
-                #     ['options.end_date', '>=', at_date]]],
-                ]]
-        if 'company' in Transaction().context:
-            domain.append(
-                ('contract.company', '=', Transaction().context['company']))
-        return cls.search(domain)
+        matches = []
+        for covered in cls.search([('party', '=', party.id)]):
+            # Check dates
+            if not covered.is_valid_at_date(at_date):
+                continue
+
+            # Filter out lines which are not covered by any option
+            if covered.contract:
+                if not covered.is_covered_at_date(at_date):
+                    continue
+            elif not covered.parent.is_covered_at_date(at_date):
+                continue
+            matches.append(covered)
+        return matches
 
     def match_key(self, from_name=None, party=None):
         if (from_name and self.name == from_name

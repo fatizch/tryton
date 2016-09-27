@@ -958,6 +958,15 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return max(dates)
         return None
 
+    def is_active_at_date(self, at_date):
+        if self.status in ('draft', 'void'):
+            return False
+        for activation_line in self.activation_history:
+            if ((activation_line.start_date or datetime.date.min) <= at_date
+                    <= (activation_line.end_date or datetime.date.max)):
+                return True
+        return False
+
     def set_appliable_conditions_date(self, new_date):
         self.appliable_conditions_date = new_date
 
