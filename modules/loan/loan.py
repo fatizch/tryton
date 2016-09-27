@@ -643,7 +643,8 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         for share in self.loan_shares:
             if (share.person == party
                     and (not share.start_date or share.start_date <= at_date)
-                    and (at_date <= share.end_date)):
+                    and (at_date <= (share.end_date or
+                            datetime.datetime.max.date()))):
                 return share
 
     def get_publishing_values(self):

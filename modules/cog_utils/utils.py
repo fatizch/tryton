@@ -45,6 +45,12 @@ class FileLocker:
         self.file_obj.close()
         self.locker.release()
 
+    def write(self, *args, **kwargs):
+        return self.file_obj.write(*args, **kwargs)
+
+    def close(self):
+        return self.file_obj.close()
+
 
 def safe_open(filepath, *args, **kwargs):
     return FileLocker(filepath, *args, **kwargs)
