@@ -168,6 +168,8 @@ class BenefitRule(
         dates.extend(self.detail_period_start_date(indemnification,
                 previous_date, args['end_date']))
         all_benefits = []
+
+        must_revaluate = self.must_revaluate()
         for start_date, end_date in coop_date.calculate_periods_from_dates(
                 dates, previous_date, args['end_date']):
             new_args = args.copy()
@@ -175,7 +177,7 @@ class BenefitRule(
             new_args['start_date'] = start_date
             new_args['end_date'] = end_date
             benefits = self.calculate_indemnification_rule(new_args)
-            if self.revaluation_rule:
+            if must_revaluate:
                 for benefit in benefits:
                     reval_args = new_args.copy()
                     reval_args.update(benefit)
@@ -188,3 +190,6 @@ class BenefitRule(
             benefit['kind'] = 'benefit'
         res.extend(all_benefits)
         return res
+
+    def must_revaluate(self):
+        return self.revaluation_rule is not None

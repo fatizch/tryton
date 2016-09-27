@@ -189,6 +189,11 @@ class BenefitRule:
                     service.option))
         return res
 
+    def must_revaluate(self):
+        if self.force_indemnification_rule:
+            return super(BenefitRule, self).must_revaluate()
+        return bool(self.revaluation_rules)
+
 
 class BenefitRuleIndemnification(model.CoopSQL):
     'Benefit Rule - Indemnification'
