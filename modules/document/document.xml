@@ -111,13 +111,20 @@ this repository contains the full copyright notices and license terms. -->
             <field name="group" ref="group_document_reception"/>
             <field name="menu" ref="menu_document"/>
         </record>
-        <record model="ir.model.access" id="access_document_reception">
+        <record model="ir.model.access" id="access_admin_document_reception">
             <field name="model" search="[('model', '=', 'document.reception')]"/>
             <field name="group" ref="document.group_document_reception"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_document_reception">
+            <field name="model" search="[('model', '=', 'document.reception')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
         </record>
         <!-- #################### -->
         <!-- # Receive Document # -->
