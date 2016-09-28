@@ -23,7 +23,7 @@ class Payment:
         payer = super(Payment, self).on_change_with_payer(name)
         if not payer and self.contract:
             with Transaction().set_context(
-                    contract_revision_date=self.payment_date):
+                    contract_revision_date=self.date):
                 payer = self.contract.payer.id
         return payer
 
