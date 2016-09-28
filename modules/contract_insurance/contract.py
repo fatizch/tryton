@@ -167,6 +167,8 @@ class Contract(Printable):
 
     @classmethod
     def get_coverages(cls, product):
+        if not product:
+            return []
         return [x.coverage for x in product.ordered_coverages
             if x.coverage.is_service]
 
