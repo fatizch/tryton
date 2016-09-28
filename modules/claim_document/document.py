@@ -78,7 +78,7 @@ class DocumentReception:
                 ('reception_date', '=', None),
                 ('attachment', '=', None),
                 ('document_desc', '=', Eval('document_desc'))]]
-        cls.request.depends.append('contract')
+        cls.request.depends += ['claim', 'document_desc']
 
     @fields.depends('party')
     def on_change_with_possible_claims(self, name=None):

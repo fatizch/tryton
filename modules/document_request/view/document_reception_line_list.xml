@@ -7,5 +7,4 @@ this repository contains the full copyright notices and license terms. -->
     <field name="type_"/>
     <field name="reference" tree_invisible="1"/>
     <field name="was_selected" tree_invisible="1"/>
-    <field name="icon" tree_invisible="1"/>
 </tree>
