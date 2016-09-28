@@ -204,12 +204,11 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
     def check_extra_data(cls, instance, field_name):
         field_value = getattr(instance, field_name, None)
         if field_value is None:
-            return True, []
+            return
         expected_values = getattr(instance, 'on_change_with_%s' % field_name,
             None)
         if expected_values is not None:
             expected_values = expected_values()
-        res = True
         translated_keys = TranslatedDict(name=field_name, type_='keys')
         trans_keys = translated_keys.__get__(instance,
             instance.__class__)
@@ -221,7 +220,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                     continue
             key, = cls.search([('name', '=', k)])
             if not key.validate_value(v):
-                res = False
                 cls.append_functional_error('invalid_value', (trans_keys[k],
                         coop_string.translate_label(instance, field_name),
                         instance.get_rec_name(None)))
@@ -231,7 +229,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                 # manage it on his own
                 cls.raise_user_error('expected_value', (k, field_name,
                         instance.get_rec_name(None)))
-        return res
 
     @classmethod
     def calculate_value_set(cls, possible_schemas, all_schemas, values):
