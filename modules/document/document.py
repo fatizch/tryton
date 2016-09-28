@@ -100,6 +100,13 @@ class DocumentReception(model.CoopSQL, model.CoopView):
                 })
 
     @classmethod
+    def default_attachments(cls):
+        return [{
+                'status': 'valid',
+                'document_desc': None,
+                }]
+
+    @classmethod
     def default_state(cls):
         return 'new'
 
