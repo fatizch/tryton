@@ -353,6 +353,8 @@ class ClaimDeclareFindProcess(ProcessStart):
         if not self.party:
             self.claims = []
             return
+
+        force_claim = Transaction().context.get('force_claim', None)
         available_claims = Claim.search([
                 ('claimant', '=', self.party)],
             order=[('declaration_date', 'DESC')])
@@ -360,7 +362,8 @@ class ClaimDeclareFindProcess(ProcessStart):
         selected = False
         for claim in available_claims:
             element = Element.from_claim(claim)
-            if not selected and claim.status == 'open':
+            if ((not force_claim and not selected and claim.status == 'open')
+                    or (force_claim and claim.id == force_claim)):
                 selected = True
                 element['select'] = True
             elements.append(element)
@@ -408,6 +411,14 @@ class ClaimDeclare(ProcessFinder):
         return '%s.%s' % (
             'claim_process',
             'declaration_process_parameters_form')
+
+    def default_process_parameters(self, name):
+        active_model = Transaction().context.get('active_model', None)
+        if active_model != 'party.party':
+            return {}
+        return {
+            'party': Transaction().context.get('active_id', None),
+            }
 
     def transition_confirm_declaration(self):
         open_claims = []
@@ -467,11 +478,7 @@ class ClaimDeclare(ProcessFinder):
         if not document_reception:
             return
         document = Pool().get('document.reception')(document_reception)
-        attachment = document.attachments[0]
-        document.attachment = attachment
-        document.save()
-        attachment.resource = obj
-        attachment.save()
+        document.transfer(obj)
 
 
 class CloseClaim:

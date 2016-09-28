@@ -29,7 +29,17 @@ class ReceiveDocument:
         'claim_process.declaration_process_launcher')
 
     def do_start_claim_declaration(self, action):
-        return action, {
+        context = {
             'extra_context': {
                 'current_document_reception': self.free_attach.document.id,
-                }}
+                }
+            }
+        party = self.free_attach.document.party
+        if party:
+            context['id'] = party.id
+            context['ids'] = [party.id]
+            context['model'] = 'party.party'
+            if self.free_attach.document.claim:
+                context['extra_context']['force_claim'] = \
+                    self.free_attach.document.claim.id
+        return action, context

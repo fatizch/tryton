@@ -104,4 +104,4 @@ class ContractSubscribe(ProcessFinder):
         if not document_reception:
             return
         document = Pool().get('document.reception')(document_reception)
-        document.transger(obj)
+        document.transfer(obj)
