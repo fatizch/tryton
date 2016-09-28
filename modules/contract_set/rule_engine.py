@@ -33,6 +33,7 @@ class RuleEngineRuntime:
         for contract in contract_set.contracts:
             parties.extend([x.party for x in contract.covered_elements
             if x.party and x.is_covered_at_date(date)])
+        parties = list(set(parties))
         parties.sort(key=lambda x: x.birth_date)
         relation_number = collections.defaultdict(int)
         for party in parties:
@@ -64,6 +65,7 @@ class RuleEngineRuntime:
         for contract in contract_set.contracts:
             parties.extend([x.party for x in contract.covered_elements
             if x.party and x.is_covered_at_date(date)])
+        parties = list(set(parties))
         for party in parties:
             for relation in utils.get_good_versions_at_date(party, 'relations',
                     date):
