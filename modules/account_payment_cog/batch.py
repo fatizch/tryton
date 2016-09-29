@@ -9,6 +9,7 @@ from sql.aggregate import Count
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
+from trytond.config import config
 
 from trytond.modules.cog_utils import batch, coop_string
 
@@ -35,6 +36,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
         cls._default_config_items.update({
                 'job_size': 0,
                 'payment_kind': '',
+                'cache_size': config.getint('cache', 'record'),
                 })
 
     @classmethod
@@ -72,27 +74,30 @@ class PaymentTreatmentBatch(batch.BatchRoot):
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):
-        groups = []
-        Payment = Pool().get('account.payment')
-        payments = sorted(objects, key=cls._group_payment_key)
-        grouped_payments_list = groupby(payments, key=cls._group_payment_key)
-        keys = []
-        for key, _grouped_payments in grouped_payments_list:
-            def group_func():
-                pool = Pool()
-                Group = pool.get('account.payment.group')
-                group = Group(**dict(key))
-                group.save()
-                groups.append(group)
-                return group
-            keys.append(key)
-            grouped_payments = list(_grouped_payments)
-            cls.logger.info('processing group %s of %s' % (key,
-                coop_string.get_print_infos(grouped_payments, 'payment')))
-            Payment.process(grouped_payments, group_func)
-        cls.logger.info('%s processed' %
-            coop_string.get_print_infos(groups, 'payments group'))
-        return [group.id for group in groups]
+        with Transaction().set_context(
+                _record_cache_size=int(cls.get_conf_item('cache_size'))):
+            groups = []
+            Payment = Pool().get('account.payment')
+            payments = sorted(objects, key=cls._group_payment_key)
+            grouped_payments_list = groupby(payments,
+                key=cls._group_payment_key)
+            keys = []
+            for key, _grouped_payments in grouped_payments_list:
+                def group_func():
+                    pool = Pool()
+                    Group = pool.get('account.payment.group')
+                    group = Group(**dict(key))
+                    group.save()
+                    groups.append(group)
+                    return group
+                keys.append(key)
+                grouped_payments = list(_grouped_payments)
+                cls.logger.info('processing group %s of %s' % (key,
+                    coop_string.get_print_infos(grouped_payments, 'payment')))
+                Payment.process(grouped_payments, group_func)
+            cls.logger.info('%s processed' %
+                coop_string.get_print_infos(groups, 'payments group'))
+            return [group.id for group in groups]
 
     @classmethod
     def get_batch_args_name(cls):

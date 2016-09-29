@@ -9,10 +9,13 @@ from dateutil.relativedelta import relativedelta
 from collections import defaultdict
 from sql.aggregate import Sum, Max
 from sql import Literal, Null
+from sql.conditionals import Case
+from sql.operators import Not
 
 import genshi
 import genshi.template
 
+from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or, Bool
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.cog_utils import fields, export, coop_date, utils
@@ -73,6 +76,59 @@ class Mandate(export.ExportImportMixin):
     def _export_light(cls):
         return (super(Mandate, cls)._export_light() |
             set(['company', 'account_number']))
+
+    @classmethod
+    def get_clause_for_frst(cls, payment_table):
+        return (Not(payment_table.state.in_(('draft', 'approved'))))
+
+    @classmethod
+    def get_initial_sequence_type_per_mandates(cls, mandates):
+        Payment = Pool().get('account.payment')
+        payment = Payment.__table__()
+        mandate = cls.__table__()
+        cursor = Transaction().connection.cursor()
+        ignore_clause = cls.get_clause_for_frst(payment)
+        rejected_clause = ((payment.state == 'failed') &
+        (payment.sepa_mandate_sequence_type != Null) &
+            (payment.sepa_return_reason_information == '/RTYP/RJCT'))
+
+        # The logic here is identical to that of the sequence_type method
+        # For each mandates, we count all (not draft or approved) payments,
+        # all rejected (not draft or approved) payments, and all
+        # (not draft or approved) payments without sepa_mandate_sequence_type.
+        # If there are no payments, or all payments are rejected or
+        # they have no sepa_mandate_sequence_type,
+        # then the mandate is FRST. Else it is RCUR
+        # Except if it is OOFF.
+        sub_query = payment.join(mandate,
+            condition=((mandate.id == payment.sepa_mandate) &
+                (payment.sepa_mandate.in_([x.id for x in mandates])))
+            ).select(payment.sepa_mandate, mandate.type,
+                Sum(
+                    Case((ignore_clause, 1),
+                        else_=0)).as_('count_all'),
+                Sum(
+                    Case((rejected_clause & ignore_clause, 1),
+                        else_=0)).as_('count_rejected'),
+                Sum(
+                    Case((((payment.sepa_mandate_sequence_type == Null) &
+                        ignore_clause), 1),
+                        else_=0)).as_('count_no_seq'),
+                mandate.type.as_('mandate_type'),
+                group_by=[payment.sepa_mandate, mandate.type]
+                )
+
+        type_ = Case(
+            (sub_query.mandate_type == 'one-off', 'OOFF'),
+            else_=Case((
+                        (sub_query.count_all == 0) |
+                        (sub_query.count_all == sub_query.count_rejected) |
+                        (sub_query.count_all == sub_query.count_no_seq),
+                        'FRST'),
+                else_='RCUR'))
+
+        cursor.execute(*sub_query.select(sub_query.sepa_mandate, type_))
+        return dict(cursor.fetchall())
 
     @property
     def sequence_type(self):
@@ -156,10 +212,12 @@ class Group:
         return super(Group, cls)._export_skips() | {'sepa_messages'}
 
     def merge_payment_key(self, payment):
+        pool = Pool()
+        Payment = pool.get('account.payment')
         result = super(Group, self).merge_payment_key(payment)
         return [x for x in result if x[0] != 'party'] + [
             ('party', payment.payer),
-            ('sepa_mandate', payment.sepa_mandate),
+            ('sepa_mandate', Payment.get_sepa_mandates([payment])[0]),
             ('sepa_bank_account_number', payment.sepa_bank_account_number),
             ]
 
@@ -184,47 +242,39 @@ class Group:
         # same sequence_type for all the payments of a given merged group) is
         # to do so in this method.
         #
-        # The first part of the code is more or less a copy of the original
-        # code, while the second part properly set both the merged_id and the
-        # sepa sequence type.
-        #
         # See https://redmine.coopengo.com/issues/1443
         pool = Pool()
         Payment = pool.get('account.payment')
         Sequence = pool.get('ir.sequence')
-        mandate_type = {}
-        to_write = []
-        for payment in [p for p in self.payments
-                if p.kind == 'payable' and not p.bank_account]:
-            bank_account = payment.party.get_bank_account(payment['date'])
-            if bank_account:
-                to_write += [[payment], {'bank_account': bank_account}]
-        if to_write:
-            Payment.write(*to_write)
+        Mandate = pool.get('account.payment.sepa.mandate')
+        if self.kind == 'payable':
+            to_write = []
+            for payment in [p for p in self.payments
+                    if p.kind == 'payable' and not p.bank_account]:
+                bank_account = payment.party.get_bank_account(payment['date'])
+                if bank_account:
+                    to_write.extend([[payment],
+                            {'bank_account': bank_account}])
+            if to_write:
+                Payment.write(*to_write)
 
         to_write = []
         if self.kind == 'receivable':
-            mandates = Payment.get_sepa_mandates(self.payments)
-            for payment, mandate in zip(self.payments, mandates):
+            all_mandates = Payment.get_sepa_mandates(self.payments)
+            mandate_type = Mandate.get_initial_sequence_type_per_mandates(
+                set(all_mandates))
+            keyfunc = self.merge_payment_key
+            sorted_payments = sorted(self.payments, key=keyfunc)
+            for key, payments in groupby(sorted_payments, key=keyfunc):
+                mandate = [x[1] for x in key if x[0] == 'sepa_mandate'][0]
                 if not mandate:
                     self.raise_user_error('no_mandate', payment.rec_name)
-                to_write += [[payment], {'sepa_mandate': mandate}]
-                if mandate.id not in mandate_type:
-                    mandate_type[mandate.id] = mandate.sequence_type
+                to_write.extend([list(payments), {'sepa_mandate': mandate,
+                    'merged_id': Sequence.get('account.payment.merged'),
+                    'sepa_mandate_sequence_type': mandate_type[mandate.id]}])
+        if to_write:
             Payment.write(*to_write)
 
-        keyfunc = self.merge_payment_key
-        payments = sorted(self.payments, key=keyfunc)
-        to_write = []
-        for key, merged_payments in groupby(payments, key=keyfunc):
-            payments = list(merged_payments)
-            values = {'merged_id': Sequence.get('account.payment.merged')}
-            if self.kind == 'receivable':
-                values['sepa_mandate_sequence_type'] = mandate_type[
-                    payments[0].sepa_mandate.id]
-            to_write += [payments, values]
-
-        Payment.write(*to_write)
         self.generate_message(_save=False)
         self.update_last_sepa_receivable_date()
 
