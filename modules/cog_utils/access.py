@@ -65,10 +65,10 @@ class ModelField:
     perm_field_default = fields.Function(fields.Boolean('Default Rights'),
         'get_perms')
     model_name = fields.Function(fields.Char('Model Description'),
-        'on_change_with_model_desc')
+        'on_change_with_model_name')
 
     @fields.depends('model')
-    def on_change_with_model_desc(self, name=None):
+    def on_change_with_model_name(self, name=None):
         return self.model.name
 
     @classmethod
