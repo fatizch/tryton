@@ -138,6 +138,10 @@ msgctxt "view:contract.option:"
 msgid "Options"
 msgstr "Garanties"
 
+msgctxt "view:contract:"
+msgid "Resume Current Process"
+msgstr "Relancer le processus courant"
+
 msgctxt "wizard_button:contract.subscribe,process_parameters,action:"
 msgid "Start Process"
 msgstr "Démarrer le processus"

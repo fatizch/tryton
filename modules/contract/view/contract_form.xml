@@ -6,7 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <label name="rec_name"/>
         <field name="rec_name"/>
         <label name="status"/>
-        <group id="status">
+        <group id="status" col="99">
             <field name="status"/>
             <field name="sub_status"/>
             <group id="termination_reason">

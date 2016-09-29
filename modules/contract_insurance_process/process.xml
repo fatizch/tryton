@@ -21,14 +21,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">party.synthesis.menu,-1</field>
             <field name="action" ref="contract_insurance_process.subscription_process_launcher"/>
         </record>
-        <!--##########################-->
-        <!--# Resume Process Keyword #-->
-        <!--##########################-->
-        <record model="ir.action.keyword" id="act_resume_contract_process_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">contract,-1</field>
-            <field name="action" ref="process_cog.act_resume_process"/>
-        </record>
         <record model="ir.action.keyword" id="act_start_subscription">
             <field name="keyword">form_action</field>
             <field name="model">party.party,-1</field>

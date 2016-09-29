@@ -5,6 +5,7 @@ from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 from trytond.model import ModelView, ModelSQL
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import coop_string, utils, fields
 
@@ -100,7 +101,9 @@ class ProcessFramework(ModelSQL, ModelView):
     # The current state is used to store which process is currently being
     # executed and which step is the current step
     current_state = fields.Many2One('process-process.step', 'Current State',
-        ondelete='RESTRICT', states={'readonly': True})
+        ondelete='RESTRICT', readonly=True, states={
+                'invisible': ~Eval('current_state'),
+                })
     task_name = fields.Function(
         fields.Char('Task Name'),
         'get_task_name')
