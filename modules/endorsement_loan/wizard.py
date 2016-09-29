@@ -1074,9 +1074,10 @@ class SelectLoanShares(EndorsementWizardStepMixin):
                 continue
             if share.new_share is None:
                 # No change : keep previously existing shares
-                if not (len(per_loan[share.loan]) == 1
-                        and per_loan[share.loan][-1].start_date ==
-                        self.effective_date):
+                if (len(per_loan[share.loan]) != 1 or
+                        per_loan[share.loan][-1].start_date !=
+                        self.effective_date or
+                        getattr(per_loan[share.loan][-1], 'id', None)):
                     final_shares += per_loan[share.loan]
                 continue
             # New share with an already existing loan share
