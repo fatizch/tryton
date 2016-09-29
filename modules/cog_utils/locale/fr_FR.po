@@ -607,6 +607,38 @@ msgctxt "field:ir.lang,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:ir.model,perm_create:"
+msgid "Create Access"
+msgstr "Accès en creation"
+
+msgctxt "field:ir.model,perm_delete:"
+msgid "Delete Access"
+msgstr "Accès en suppression"
+
+msgctxt "field:ir.model,perm_read:"
+msgid "Read Access"
+msgstr "Accès en lecture"
+
+msgctxt "field:ir.model,perm_rule_create:"
+msgid "Rule Create Access"
+msgstr "Accès en création sur les règles"
+
+msgctxt "field:ir.model,perm_rule_delete:"
+msgid "Rule Delete Access"
+msgstr "Accès en suppression sur les règles"
+
+msgctxt "field:ir.model,perm_rule_read:"
+msgid "Rule Read Access"
+msgstr "Accès en lecture sur les règles"
+
+msgctxt "field:ir.model,perm_rule_write:"
+msgid "Rule Write Access"
+msgstr "Accès en écriture sur les règles"
+
+msgctxt "field:ir.model,perm_write:"
+msgid "Write Access"
+msgstr "Accès en écriture"
+
 msgctxt "field:ir.model,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -622,6 +654,30 @@ msgstr "ID"
 msgctxt "field:ir.model.field,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
+
+msgctxt "field:ir.model.field,model_name:"
+msgid "Model Description"
+msgstr "Description du modèle"
+
+msgctxt "field:ir.model.field,perm_field_create:"
+msgid "Create Access"
+msgstr "Accès en creation"
+
+msgctxt "field:ir.model.field,perm_field_default:"
+msgid "Default Rights"
+msgstr "Droit par défaut"
+
+msgctxt "field:ir.model.field,perm_field_delete:"
+msgid "Delete Access"
+msgstr "Accès en suppression"
+
+msgctxt "field:ir.model.field,perm_field_read:"
+msgid "Read Access"
+msgstr "Accès en lecture"
+
+msgctxt "field:ir.model.field,perm_field_write:"
+msgid "Write Access"
+msgstr "Accès en écriture"
 
 msgctxt "field:ir.model.field,xml_id:"
 msgid "XML Id"
@@ -947,6 +1003,14 @@ msgctxt "field:ir.ui.icon,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:ir.ui.menu,perm_menu:"
+msgid "Access To Menu"
+msgstr "Accès au menu"
+
+msgctxt "field:ir.ui.menu,perm_menu_default:"
+msgid "Default Rights"
+msgstr "Droit par défaut"
+
 msgctxt "field:ir.ui.menu,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -1067,6 +1131,10 @@ msgctxt "field:tag-object,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:utils.benchmark_class,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:utils.version_object,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -1165,6 +1233,22 @@ msgstr "Résumé de l'export"
 msgctxt "model:export.fields.select,name:"
 msgid "Select Export Fields"
 msgstr "Sélectionner les champs pour l'export"
+
+msgctxt "model:ir.action,name:act_display_access_field_rights"
+msgid "User Field Access Rights Monitoring"
+msgstr "Visualisation des droits d'accès utilisateur sur les champs"
+
+msgctxt "model:ir.action,name:act_display_access_menu_rights"
+msgid "User Menu Access Rights Monitoring"
+msgstr "Visualisation des droits d'accès utilisateur aux menus"
+
+msgctxt "model:ir.action,name:act_display_access_rights"
+msgid "User Access Rights Monitoring"
+msgstr "Visualisation des droits d'accès utilisateur sur les modules"
+
+msgctxt "model:ir.action,name:act_display_access_rules_right"
+msgid "User Rules Access Rights monitoring"
+msgstr "Visualisation des drtois d'accès utilisateur sur les règles"
 
 msgctxt "model:ir.action,name:act_event_type_action_form"
 msgid "Event Type Action"
@@ -1373,6 +1457,10 @@ msgstr "Label"
 msgctxt "model:tag-object,name:"
 msgid "Relation tag to object"
 msgstr "Relation objet label"
+
+msgctxt "model:utils.benchmark_class,name:"
+msgid "Benchmark class for tools"
+msgstr ""
 
 msgctxt "model:utils.version_object,name:"
 msgid "Version Object"

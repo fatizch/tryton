@@ -20,6 +20,7 @@ from .attachment import *
 from .diff_blame import *
 from .note import *
 from .hardware_bench import *
+from .access import *
 
 
 def register():
@@ -77,6 +78,9 @@ def register():
         RevisionFormatTranslator,
         Note,
         BenchmarkClass,
+        Model,
+        ModelField,
+        UIMenuAccess,
         module='cog_utils', type_='model')
 
     if config.get('env', 'testing') == 'True':

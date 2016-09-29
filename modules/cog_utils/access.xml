@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Model Access Monitoring -->
+        <record model="ir.ui.view" id="user_model_access_view_list">
+            <field name="model">ir.model</field>
+            <field name="type">tree</field>
+            <field name="name">user_model_access_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_display_access_rights">
+            <field name="name">User Access Rights Monitoring</field>
+            <field name="res_model">ir.model</field>
+            <field name="order" eval="[('name', 'ASC')]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_show_access_rights_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="user_model_access_view_list"/>
+            <field name="act_window" ref="act_display_access_rights"/>
+        </record>
+        <record model="ir.action.keyword" id="act_show_access_rights_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">res.user,-1</field>
+            <field name="action" ref="act_display_access_rights"/>
+        </record>
+        <!-- Model Field Access Monitoring -->
+        <record model="ir.ui.view" id="user_field_access_view_list">
+            <field name="model">ir.model.field</field>
+            <field name="type">tree</field>
+            <field name="name">user_field_access_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_display_access_field_rights">
+            <field name="name">User Field Access Rights Monitoring</field>
+            <field name="res_model">ir.model.field</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_show_field_access_rights_list">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="user_field_access_view_list"/>
+            <field name="act_window" ref="act_display_access_field_rights"/>
+        </record>
+        <record model="ir.action.keyword" id="act_show_field_access_rights_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">res.user,-1</field>
+            <field name="action" ref="act_display_access_field_rights"/>
+        </record>
+        <!-- Menu Access Monitoring -->
+        <record model="ir.ui.view" id="user_menu_access_view_list">
+            <field name="model">ir.ui.menu</field>
+            <field name="type">tree</field>
+            <field name="name">user_menu_access_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_display_access_menu_rights">
+            <field name="name">User Menu Access Rights Monitoring</field>
+            <field name="res_model">ir.ui.menu</field>
+            <field name="order" eval="[('name', 'ASC')]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_show_field_menu_rights_list">
+            <field name="sequence" eval="30"/>
+            <field name="view" ref="user_menu_access_view_list"/>
+            <field name="act_window" ref="act_display_access_menu_rights"/>
+        </record>
+        <record model="ir.action.keyword" id="act_show_menu_access_rights_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">res.user,-1</field>
+            <field name="action" ref="act_display_access_menu_rights"/>
+        </record>
+        <!-- Rule Access Monitoring -->
+        <record model="ir.ui.view" id="user_rules_access_view_list">
+            <field name="model">ir.model</field>
+            <field name="type">tree</field>
+            <field name="name">user_rules_access_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_display_access_rules_right">
+            <field name="name">User Rules Access Rights monitoring</field>
+            <field name="res_model">ir.model</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_show_rules_access_right">
+            <field name="sequence" eval="40"/>
+            <field name="view" ref="user_rules_access_view_list"/>
+            <field name="act_window" ref="act_display_access_rules_right"/>
+        </record>
+        <record model="ir.action.keyword" id="act_show_rules_access_right_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">res.user,-1</field>
+            <field name="action" ref="act_display_access_rules_right"/>
+        </record>
+
+    </data>
+</tryton>

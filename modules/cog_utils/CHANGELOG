@@ -1,3 +1,5 @@
+* Visualize the different rights of access of a user in independent list-views
+
 Version 1.8 - 2016-07-06
 * Add script to easily create dev databases
 * Add safe_open function for concurrent file operations

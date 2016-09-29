@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tree string="Field Description">
+    <field name="name" expand="1"/>
+    <field name="model_name" expand="1"/>
+    <field name="perm_field_read" expand="1"/>
+    <field name="perm_field_write" expand="1"/>
+    <field name="perm_field_create" expand="1"/>
+    <field name="perm_field_delete" expand="1"/>
+    <field name="perm_field_default" expand="1"/>
+</tree>
