@@ -70,4 +70,6 @@ this repository contains the full copyright notices and license terms. -->
         <button name="button_stop" string="Stop Contract"/>
         <button name="button_reactivate" string="Reactivate Contract"/>
     </group>
+    <newline/>
+    <field name="form_color" invisible="1"/>
 </form>

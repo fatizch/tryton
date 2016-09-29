@@ -280,6 +280,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         'get_last_modification')
     icon = fields.Function(fields.Char('Icon'), 'get_icon')
     color = fields.Function(fields.Char('Color'), 'get_color')
+    form_color = fields.Function(fields.Char('Form color'), 'get_form_color')
 
     @classmethod
     def __setup__(cls):
@@ -379,12 +380,27 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                         Bool(Eval('sub_status')))}
                 ), (
                 '/tree', 'colors', Eval('color', 'black')
+                ), (
+                '/form//field[@name="status"]',
+                'states',
+                {'field_color': Eval('form_color')}
                 )]
 
     def get_color(self, name):
         if self.status in ['void', 'terminated']:
             return 'grey'
         return 'black'
+
+    def get_form_color(self, name):
+        color = self.color
+        if color not in ['grey', 'black']:
+            return color
+        elif self.status == 'quote':
+            return 'blue'
+        elif self.status == 'active':
+            return 'green'
+        else:
+            return 'red'
 
     @classmethod
     def order_rec_name(cls, tables):

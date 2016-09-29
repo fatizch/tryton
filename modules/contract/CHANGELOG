@@ -1,4 +1,4 @@
-* Add dynamic color dynamically to the contract status field
+* Display contract status in color in form view according to its value
 
 Version 1.8 - 2016-07-06
 * Batch to automatically decline quotes exceeding a delay of inactivity
