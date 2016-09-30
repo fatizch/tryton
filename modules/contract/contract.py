@@ -381,7 +381,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 ), (
                 '/tree', 'colors', Eval('color', 'black')
                 ), (
-                '/form//field[@name="status"]',
+                '/form/group/group/field[@name="status"]',
                 'states',
                 {'field_color': Eval('form_color')}
                 )]
