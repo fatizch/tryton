@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- ########### Views ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="interlocutor_view_list">
+            <field name="model">party.interlocutor</field>
+	    <field name="type">tree</field>
+            <field name="name">interlocutor_list</field>
+        </record>
+        <record model="ir.ui.view" id="interlocutor_view_form">
+            <field name="model">party.interlocutor</field>
+	    <field name="type">form</field>
+            <field name="name">interlocutor_form</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Relate ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.action.act_window" id="act_interlocutor_relate_form">
+            <field name="name">Interlocutor</field>
+            <field name="res_model">party.interlocutor</field>
+            <field name="domain" eval="[('party', '=', Eval('active_id'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_interlocutor_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="act_interlocutor_relate_form"/>
+        </record>
+    </data>
+</tryton>
