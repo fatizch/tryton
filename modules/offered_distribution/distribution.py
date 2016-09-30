@@ -17,6 +17,9 @@ __all__ = [
 class DistributionNetwork:
     __name__ = 'distribution.network'
 
+    is_distributor = fields.Boolean('Distributor',
+        help='If not checked, this distribution network will not be selectable'
+        ' during subscription process.')
     commercial_products = fields.Many2Many(
         'distribution.network-commercial_product', 'dist_network',
         'com_product', 'Commercial Products', depends=['company'], domain=[

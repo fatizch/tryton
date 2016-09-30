@@ -4,8 +4,6 @@ this repository contains the full copyright notices and license terms. -->
 <tree string="Distribution Network">
     <field name="code"/>
     <field name="full_name"/>
-    <field name="is_portfolio"/>
-    <field name="is_distributor"/>
     <field name="parent" tree_invisible="1"/>
     <field name="childs" tree_invisible="1"/>
 </tree>

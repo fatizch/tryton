@@ -1,11 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from collections import defaultdict
-from sql.aggregate import Count
-
-from trytond.pyson import Eval, Bool
-from trytond.transaction import Transaction
-from trytond.pool import Pool
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import model, fields, coop_string
 
@@ -57,25 +52,6 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
     mobile = fields.Function(fields.Char('Mobile'), 'get_mechanism')
     fax = fields.Function(fields.Char('Fax'), 'get_mechanism')
     email = fields.Function(fields.Char('E-Mail'), 'get_mechanism')
-    portfolio_size = fields.Function(
-        fields.Integer('Portfolio Size'),
-        'get_portfolio_size')
-    is_portfolio = fields.Boolean('Client Portfolio',
-        states={'readonly': Bool(Eval('portfolio_size', False))},
-        depends=['portfolio_size'],
-        help='If checked, parties will be defined within this distribution'
-        ' network and can only be accessed by it or its children distribution'
-        ' network.')
-    is_distributor = fields.Boolean('Distributor',
-        help='If not checked, this distribution network will not be selectable'
-        ' during subscription process.')
-    portfolio = fields.Function(
-        fields.Many2One('distribution.network', 'Portfolio'),
-        'get_portfolio')
-    visible_portfolios = fields.Function(
-        fields.Many2Many('distribution.network', None, None,
-            'Visible Portfolios'),
-        'get_visible_portfolios', searcher='search_visible_portfolios')
 
     @classmethod
     def __setup__(cls):
@@ -100,23 +76,8 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
         return 0
 
     @staticmethod
-    def default_is_portfolio():
-        return True
-
-    @staticmethod
-    def default_is_distributor():
-        return True
-
-    @staticmethod
     def default_right():
         return 0
-
-    @fields.depends('parent', 'is_portfolio')
-    def on_change_parent(self):
-        if self.parent:
-            self.is_portfolio = not self.parent.portfolio
-        else:
-            self.is_portfolio = True
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
@@ -139,15 +100,6 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
         return [x.id for x in self.search(
                 [('left', '>=', self.left), ('right', '<=', self.right)])]
 
-    def get_visible_portfolios(self, name):
-        return [x.id for x in self.search([
-                    ['OR',
-                        [('left', '>=', self.left),
-                            ('right', '<=', self.right)],
-                        [('left', '<', self.left),
-                            ('right', '>', self.right)]],
-                    [('is_portfolio', '=', True)]])]
-
     def get_mechanism(self, name):
         for mechanism in self.contact_mechanisms:
             if mechanism.type == name:
@@ -165,27 +117,6 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
             return self.party.id
         elif self.parent and self.parent.parent_party:
             return self.parent.parent_party.id
-
-    @classmethod
-    def get_portfolio_size(cls, instances, name):
-        pool = Pool()
-        result = defaultdict(int)
-        cursor = Transaction().connection.cursor()
-        party = pool.get('party.party').__table__()
-        cursor.execute(
-            *party.select(party.portfolio, Count(party.id),
-                where=(party.portfolio.in_([x.id for x in instances])),
-                group_by=[party.portfolio]))
-        for key, value in cursor.fetchall():
-            result[key] = value
-        return result
-
-    def get_portfolio(self, name):
-        if self.is_portfolio:
-            return self.id
-        if self.parent:
-            portfolio = self.parent.portfolio
-            return portfolio.id if portfolio else None
 
     @classmethod
     def search_parents(cls, name, clause):
@@ -216,20 +147,6 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
                 clause.append([
                         ('left', '<=', network.left),
                         ('right', '>=', network.right)])
-            return clause
-        else:
-            raise NotImplementedError
-
-    @classmethod
-    def search_visible_portfolios(cls, name, clause):
-        if clause[1] == 'in':
-            networks = cls.browse(clause[2])
-            clause = [[('is_portfolio', '=', True)], ['OR']]
-            for network in networks:
-                clause[1].append([('left', '<=', network.left),
-                        ('right', '=>', network.right)],
-                    [('left', '>', network.left),
-                        ('right', '<', network.right)])
             return clause
         else:
             raise NotImplementedError

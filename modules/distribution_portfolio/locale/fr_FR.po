@@ -1,0 +1,65 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:contract,allowed_portfolios:"
+msgid "Allowed Portfolios"
+msgstr "Portefeuilles autorisés"
+
+msgctxt "field:contract.billing_information,allowed_portfolios:"
+msgid "Allowed Portfolios"
+msgstr "Portefeuilles autorisés"
+
+msgctxt "field:contract.covered_element,allowed_portfolios:"
+msgid "Allowed Portfolios"
+msgstr "Portefeuilles autorisés"
+
+msgctxt "field:contract.option.beneficiary,allowed_portfolios:"
+msgid "Allowed Portfolios"
+msgstr "Portefeuilles autorisés"
+
+msgctxt "field:contract.subscribe.find_process,authorized_distributors:"
+msgid "Authorized Distributors for party"
+msgstr "Distributeurs autorisés pour le tiers"
+
+msgctxt "field:contract.subscribe.find_process,party_portfolio:"
+msgid "Party Portfolio"
+msgstr "Portefeuille du tiers"
+
+msgctxt "field:distribution.network,is_portfolio:"
+msgid "Client Portfolio"
+msgstr "Portefeuille Client"
+
+msgctxt "field:distribution.network,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
+msgctxt "field:distribution.network,portfolio_size:"
+msgid "Portfolio Size"
+msgstr ""
+
+msgctxt "field:distribution.network,visible_portfolios:"
+msgid "Visible Portfolios"
+msgstr "Portefeuilles accessibles"
+
+msgctxt "field:party.configuration,default_portfolio:"
+msgid "Default Portfolio"
+msgstr "Portefeuille par défaut"
+
+msgctxt "field:party.party,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
+msgctxt "help:party.configuration,default_portfolio:"
+msgid ""
+"This is the default portfolio if the user is not assigned to any "
+"distribution network belonging to a portfolio."
+msgstr ""
+
+msgctxt "help:distribution.network,is_portfolio:"
+msgid ""
+"If checked, parties will be defined within this distribution network and can"
+" only be accessed by it or its children distribution network."
+msgstr ""
+"Si sélectionné, les tiers définis au sein de ce réseau de distribution ne "
+"seront visibles que par le réseau de distribution et ses réseaux enfants."

@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:contract,allowed_portfolios:"
-msgid "Allowed Portfolios"
-msgstr "Portefeuilles autorisés"
-
 msgctxt "field:contract,com_product:"
 msgid "Commercial Product"
 msgstr "Produit commercial"
@@ -13,14 +9,6 @@ msgstr "Produit commercial"
 msgctxt "field:contract,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
-
-msgctxt "field:contract.covered_element,allowed_portfolios:"
-msgid "Allowed Portfolios"
-msgstr "Portefeuilles autorisés"
-
-msgctxt "field:contract.option.beneficiary,allowed_portfolios:"
-msgid "Allowed Portfolios"
-msgstr "Portefeuilles autorisés"
 
 msgctxt "field:distribution.commercial_product,code:"
 msgid "Code"
@@ -94,13 +82,13 @@ msgctxt "field:distribution.network,company:"
 msgid "Company"
 msgstr "Société"
 
+msgctxt "field:distribution.network,is_distributor:"
+msgid "Distributor"
+msgstr "Distributeur"
+
 msgctxt "field:distribution.network,parent_com_products:"
 msgid "Top Level Commercial Products"
 msgstr "Produits commerciaux des niveaux supérieurs"
-
-msgctxt "field:distribution.network,visible_portfolios:"
-msgid "Visible Portfolios"
-msgstr "Portefeuilles visibles"
 
 msgctxt "field:distribution.network-commercial_product,com_product:"
 msgid "Commercial Product"
@@ -145,6 +133,14 @@ msgstr "Identifiant XML"
 msgctxt "field:offered.product,com_products:"
 msgid "Commercial Products"
 msgstr "Produits Commerciaux"
+
+msgctxt "help:distribution.network,is_distributor:"
+msgid ""
+"If not checked, this distribution network will not be selectable during "
+"subscription process."
+msgstr ""
+"Si non sélectionné, le réseau de distribution n'apparaitra pas durant le "
+"processus de souscription"
 
 msgctxt "model:distribution.commercial_product,name:"
 msgid "Commercial Product"

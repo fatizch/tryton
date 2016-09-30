@@ -2,6 +2,10 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
+    <xpath expr="/form/field[@name='code']" position="after">
+        <label name="is_distributor"/>
+        <field name="is_distributor"/>
+    </xpath>
     <xpath expr="/form/notebook" position="inside">
         <page id="product" string="Products">
             <field name="commercial_products" colspan="4"/>

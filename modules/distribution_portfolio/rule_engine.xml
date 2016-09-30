@@ -2,7 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tryton>
-    <data>
+    <data depends="rule_engine">
         <record model="rule_engine.function" id="portfolio_code">
             <field name="translated_technical_name">code_du_portefeuille</field>
             <field name="description">Code du portefeuille</field>

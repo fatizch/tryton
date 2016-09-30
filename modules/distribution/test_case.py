@@ -26,13 +26,12 @@ class TestCaseModel:
 
     @classmethod
     def new_distribution_network(cls, name, children_name=None,
-            children_number=None, is_distributor=False):
+            children_number=None):
         res = cls.create_distribution_network(name=name, childs=[])
         if children_name and children_number:
             for i in range(1, children_number + 1):
                 child = cls.new_distribution_network('%s %s' %
                     (children_name, i))
-                child.is_distributor = is_distributor
                 res.childs.append(child)
         return res
 
@@ -40,15 +39,10 @@ class TestCaseModel:
     def distribution_network_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         root = cls.new_distribution_network(translater('Root'))
-        root.is_portfolio = True
 
         internal_network = cls.new_distribution_network(translater(
                 'Internal Network'), translater('Region'), 2)
         root.childs.append(internal_network)
-        Configuration = Pool().get('party.configuration')
-        config = Configuration(1)
-        if config.default_portfolio is None:
-            config.default_portfolio = root
         for region in internal_network.childs:
             for i in range(1, random.randint(1, 3)):
                 name = '%s : %s %s' % (region.name, translater('Dept'), i)

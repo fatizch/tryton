@@ -11,6 +11,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="distribution.dist_network_view_form"/>
             <field name="name">distribution_network_form</field>
         </record>
+        <record model="ir.ui.view" id="dist_network_view_list">
+            <field name="model">distribution.network</field>
+            <field name="inherit" ref="distribution.dist_network_view_list"/>
+            <field name="name">distribution_network_list</field>
+        </record>
+        <record model="ir.ui.view" id="dist_network_view_list_with_contacts">
+            <field name="model">distribution.network</field>
+            <field name="inherit" ref="distribution.dist_network_view_list_with_contacts"/>
+            <field name="name">distribution_network_list_with_contacts</field>
+        </record>
         <!-- Read / Write rule -->
         <record model="ir.rule.group" id="rule_group_dist_network">
             <field name="model" search="[('model', '=', 'distribution.network')]"/>

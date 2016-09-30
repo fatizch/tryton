@@ -7,10 +7,6 @@ msgctxt ""
 msgid "Authorized Commercial Products"
 msgstr "Produits commerciaux autorisés"
 
-msgctxt "field:contract.subscribe.find_process,authorized_distributors:"
-msgid "Authorized Distributors for party"
-msgstr "Distributeurs autorisés pour le tiers"
-
 msgctxt "field:contract.subscribe.find_process,commercial_product:"
 msgid "Product"
 msgstr "Produit"
@@ -18,7 +14,3 @@ msgstr "Produit"
 msgctxt "field:contract.subscribe.find_process,distributor:"
 msgid "Distributor"
 msgstr "Distributeur"
-
-msgctxt "field:contract.subscribe.find_process,party_portfolio:"
-msgid "Party Portfolio"
-msgstr "Portefeuille du tiers"

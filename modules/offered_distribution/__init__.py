@@ -6,23 +6,14 @@ from .distribution import *
 from .offered import *
 from .contract import *
 from .test_case import *
-from .rule_engine import *
 
 
 def register():
     Pool.register(
-        # from distribution
         DistributionNetwork,
         CommercialProduct,
         DistributionNetworkComProductRelation,
-        # From Offered
         Product,
-        # from contract
         Contract,
-        CoveredElement,
-        Beneficiary,
-        ContractBillingInformation,
-        # from test_case
         TestCaseModel,
-        RuleEngineRuntime,
         module='offered_distribution', type_='model')

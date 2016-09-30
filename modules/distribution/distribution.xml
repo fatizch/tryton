@@ -7,7 +7,6 @@ this repository contains the full copyright notices and license terms. -->
         <!--Menus-->
         <!--############################################################-->
         <menuitem name="Distribution" id="menu_distribution" sequence="15"/>
-        <menuitem name="Configuration" parent="menu_distribution" id="menu_distribution_configuration" sequence="100" icon="tryton-preferences"/>
         <!--############################################################-->
         <!--Distribution Network-->
         <!--############################################################-->

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <menuitem name="Configuration" parent="distribution.menu_distribution" id="menu_distribution_configuration" sequence="100" icon="tryton-preferences"/>
+        <record model="ir.ui.view" id="dist_network_view_form">
+            <field name="model">distribution.network</field>
+            <field name="inherit" ref="distribution.dist_network_view_form"/>
+            <field name="name">distribution_network_form</field>
+        </record>
+        <record model="ir.ui.view" id="dist_network_view_list">
+            <field name="model">distribution.network</field>
+            <field name="inherit" ref="distribution.dist_network_view_list"/>
+            <field name="name">distribution_network_list</field>
+        </record>
+        <record model="ir.ui.view" id="dist_network_view_list_with_contacts">
+            <field name="model">distribution.network</field>
+            <field name="inherit" ref="distribution.dist_network_view_list_with_contacts"/>
+            <field name="name">distribution_network_list_with_contacts</field>
+        </record>
+    </data>
+</tryton>

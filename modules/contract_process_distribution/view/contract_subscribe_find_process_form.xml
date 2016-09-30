@@ -9,9 +9,5 @@ this repository contains the full copyright notices and license terms. -->
         <label name="commercial_product"/>
         <field name="commercial_product"/>
         <newline/>
-        <group id="invisible" string="" colspan="4">
-            <field name="authorized_distributors"/>
-            <field name="party_portfolio"/>
-        </group>
     </xpath>
 </data>
