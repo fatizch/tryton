@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ######## -->
+        <!-- # Loss # -->
+        <!-- ######## -->
+        <record model="ir.ui.view" id="loss_view_form">
+            <field name="model">claim.loss</field>
+            <field name="inherit" ref="claim.loss_view_form"/>
+            <field name="name">loss_form</field>
+        </record>
+        <!-- #################### -->
+        <!-- # Deduction Period # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="deduction_period_view_list">
+            <field name="model">claim.loss.deduction.period</field>
+            <field name="type">tree</field>
+            <field name="name">deduction_period_list</field>
+        </record>
+    </data>
+</tryton>

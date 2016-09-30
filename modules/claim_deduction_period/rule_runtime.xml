@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ################# -->
+        <!-- # Tree Elements # -->
+        <!-- ################# -->
+        <record model="rule_engine.function" id="deduction_payment">
+            <field name="translated_technical_name">montant_de_deduction</field>
+            <field name="description">Montant de Déduction</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_deduction_period_amount</field>
+            <field name="long_description">Retourne le montant de déductions correspondant à la période et au type sélectionné. Si 'arrondi' est vrai, le montant journalier sera arrondi avant la proratisation.</field>
+            <field name="fct_args">type, date_debut, date_fin, [arrondi]</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+    </data>
+</tryton>

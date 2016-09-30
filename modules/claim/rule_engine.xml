@@ -33,7 +33,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_loss_start_date</field>
             <field name="parent" ref="dossier_sinistre"/>
         </record>
-       <record model="rule_engine.function" id="date_fin_dernier_prejudice">
+        <record model="rule_engine.function" id="date_fin_dernier_prejudice">
             <field name="translated_technical_name">date_fin_dernier_prejudice</field>
             <field name="description">Date de fin du dernier prejudice</field>
             <field name="type">function</field>

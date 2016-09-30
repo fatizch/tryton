@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ######################### -->
+        <!-- # Deduction Period Kind # -->
+        <!-- ######################### -->
+        <record model="ir.ui.view" id="deduction_period_kind_view_form">
+            <field name="model">benefit.loss.description.deduction_period_kind</field>
+            <field name="type">form</field>
+            <field name="name">deduction_period_kind_form</field>
+        </record>
+        <record model="ir.ui.view" id="deduction_period_kind_view_list">
+            <field name="model">benefit.loss.description.deduction_period_kind</field>
+            <field name="type">tree</field>
+            <field name="name">deduction_period_kind_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_deduction_period_kind">
+            <field name="name">Deduction Period Kind</field>
+            <field name="res_model">benefit.loss.description.deduction_period_kind</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_deduction_period_kind_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="deduction_period_kind_view_list"/>
+            <field name="act_window" ref="act_deduction_period_kind"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_deduction_period_kind_view2">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="deduction_period_kind_view_form"/>
+            <field name="act_window" ref="act_deduction_period_kind"/>
+        </record>
+        <menuitem parent="claim.menu_claim_configuration" sequence="10" action="act_deduction_period_kind" id="menu_deduction_period_kind"/>
+        <!-- ############# -->
+        <!-- # Loss Desc # -->
+        <!-- ############# -->
+        <record model="ir.ui.view" id="loss_desc_view_form">
+            <field name="model">benefit.loss.description</field>
+            <field name="inherit" ref="claim.loss_desc_view_form"/>
+            <field name="name">loss_desc_form</field>
+        </record>
+    </data>
+</tryton>

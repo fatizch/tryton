@@ -1,0 +1,224 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:benefit.loss.description.deduction_period_kind:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
+msgctxt "field:benefit.loss.description,deduction_period_kinds:"
+msgid "Deduction Period Kinds"
+msgstr "Types de périodes de déduction"
+
+msgctxt "field:benefit.loss.description-deduction_period_kind,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.loss.description-deduction_period_kind,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.loss.description-deduction_period_kind,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:benefit.loss.description-deduction_period_kind,deduction_period_kind:"
+msgid "Deduction Period Kind"
+msgstr "Type de période de déduction"
+
+msgctxt "field:benefit.loss.description-deduction_period_kind,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:benefit.loss.description-deduction_period_kind,loss_desc:"
+msgid "Loss Description"
+msgstr "Descripteur de préjudice"
+
+msgctxt "field:benefit.loss.description-deduction_period_kind,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.loss.description-deduction_period_kind,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:benefit.loss.description-deduction_period_kind,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:benefit.loss.description-deduction_period_kind,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:benefit.loss.description.deduction_period_kind,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:benefit.loss.description.deduction_period_kind,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.loss.description.deduction_period_kind,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.loss.description.deduction_period_kind,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit.loss.description.deduction_period_kind,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:benefit.loss.description.deduction_period_kind,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.loss.description.deduction_period_kind,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.loss.description.deduction_period_kind,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:benefit.loss.description.deduction_period_kind,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:benefit.loss.description.deduction_period_kind,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:claim.indemnification_definition,existing_deduction_periods:"
+msgid "Existing Deduction Periods"
+msgstr "Périodes de déduction existantes"
+
+msgctxt "field:claim.indemnification_definition,future_deduction_periods:"
+msgid "Future Deduction Periods"
+msgstr "Périodes de déduction futures"
+
+msgctxt "field:claim.loss,deduction_kinds:"
+msgid "Deduction Kinds"
+msgstr "Types de déduction"
+
+msgctxt "field:claim.loss,deduction_periods:"
+msgid "Deduction Periods"
+msgstr "Périodes de déduction"
+
+msgctxt "field:claim.loss.deduction.period,amount_kind:"
+msgid "Amount Kind"
+msgstr "Type de montant"
+
+msgctxt "field:claim.loss.deduction.period,amount_received:"
+msgid "Amount Received"
+msgstr "Montant reçu"
+
+msgctxt "field:claim.loss.deduction.period,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.loss.deduction.period,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.loss.deduction.period,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.loss.deduction.period,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:claim.loss.deduction.period,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:claim.loss.deduction.period,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:claim.loss.deduction.period,daily_amount:"
+msgid "Daily Amount"
+msgstr "Montant par jour"
+
+msgctxt "field:claim.loss.deduction.period,deduction_kind:"
+msgid "Deduction Kind"
+msgstr "Type de déduction"
+
+msgctxt "field:claim.loss.deduction.period,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:claim.loss.deduction.period,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.loss.deduction.period,loss:"
+msgid "Loss"
+msgstr "Evénement"
+
+msgctxt "field:claim.loss.deduction.period,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:claim.loss.deduction.period,start_date:"
+msgid "Start Date"
+msgstr "Date de début"
+
+msgctxt "field:claim.loss.deduction.period,total_amount:"
+msgid "Total Amount"
+msgstr "Montant Total"
+
+msgctxt "field:claim.loss.deduction.period,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:claim.loss.deduction.period,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.loss.deduction.period,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:benefit.loss.description-deduction_period_kind,name:"
+msgid "Loss Description to Deduction Period Kind Relation"
+msgstr "Relation Descripteur de préjudice - Type de période de déduction"
+
+msgctxt "model:benefit.loss.description.deduction_period_kind,name:"
+msgid "Deduction Period Kind"
+msgstr "Type de période de déduction"
+
+msgctxt "model:claim.loss.deduction.period,name:"
+msgid "Deduction Period"
+msgstr "Période de déduction"
+
+msgctxt "model:ir.action,name:act_deduction_period_kind"
+msgid "Deduction Period Kind"
+msgstr "Type de période de déduction"
+
+msgctxt "model:ir.ui.menu,name:menu_deduction_period_kind"
+msgid "Deduction Period Kind"
+msgstr "Type de période de déduction"
+
+msgctxt "selection:claim.loss.deduction.period,amount_kind:"
+msgid "Per Day"
+msgstr "Par jour"
+
+msgctxt "selection:claim.loss.deduction.period,amount_kind:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "view:benefit.loss.description.deduction_period_kind:"
+msgid "Deduction Period Kind"
+msgstr "Type de période de déduction"
+
+msgctxt "view:benefit.loss.description.deduction_period_kind:"
+msgid "Deduction Period Kinds"
+msgstr "Types de périodes de déduction"
+
+msgctxt "view:claim.loss.deduction.period:"
+msgid "Deduction Periods"
+msgstr "Périodes de déduction"

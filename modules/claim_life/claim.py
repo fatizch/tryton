@@ -91,6 +91,8 @@ class Loss:
 
     @fields.depends('claim', 'start_date')
     def on_change_with_possible_covered_persons(self, name=None):
+        if not self.start_date:
+            return []
         return [x.id for x in self.get_possible_covered_persons()]
 
     @fields.depends('covered_person', 'possible_loss_descs', 'claim',

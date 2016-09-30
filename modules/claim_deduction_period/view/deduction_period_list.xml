@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tree string="Deduction Periods" editable="bottom">
+    <field name="start_date"/>
+    <field name="end_date"/>
+    <field name="deduction_kind" widget="selection"/>
+    <field name="amount_kind"/>
+    <field name="amount_received">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="currency"/>
+    <field name="currency_digits" tree_invisible="1"/>
+    <field name="currency_symbol" tree_invisible="1"/>
+</tree>

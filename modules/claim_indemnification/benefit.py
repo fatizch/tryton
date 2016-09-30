@@ -102,8 +102,8 @@ class BenefitRule(
             return args['option'].get_coverage_amount(args['covered_person'])
 
     @classmethod
-    def detail_period_start_date(cls, indemnification, start_date, end_date):
-        res = []
+    def calculation_dates(cls, indemnification, start_date, end_date):
+        res = set()
         for service in indemnification.service.loss.services:
             if service == indemnification.service:
                 continue
@@ -111,8 +111,7 @@ class BenefitRule(
                 for detail in indemn.details:
                     if (detail.start_date > start_date and
                             detail.start_date < end_date):
-                        res.append(detail.start_date)
-        res.sort()
+                        res.add(detail.start_date)
         return res
 
     @classmethod
@@ -159,19 +158,19 @@ class BenefitRule(
                     previous_date = deductible_end_date + relativedelta(days=1)
         if not previous_date:
             previous_date = indemnification.start_date
-        dates = [extra_data.date or loss.start_date
+        dates = {extra_data.date or loss.start_date
             for extra_data in delivered.extra_datas
             if (indemnification.start_date <
                 (extra_data.date or loss.start_date) <
-                indemnification.end_date)]
+                indemnification.end_date)}
         # Add pivot periods
-        dates.extend(self.detail_period_start_date(indemnification,
-                previous_date, args['end_date']))
+        dates |= self.calculation_dates(indemnification, previous_date,
+            args['end_date'])
         all_benefits = []
 
         must_revaluate = self.must_revaluate()
         for start_date, end_date in coop_date.calculate_periods_from_dates(
-                dates, previous_date, args['end_date']):
+                list(dates), previous_date, args['end_date']):
             new_args = args.copy()
             new_args['date'] = start_date
             new_args['start_date'] = start_date
