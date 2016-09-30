@@ -124,5 +124,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_get_daily_base_salary</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+         <record model="rule_engine.function" id="annuity_period">
+             <field name="translated_technical_name">periode_de_rente</field>
+             <field name="description">Calcul des périodes de rente</field>
+             <field name="type">function</field>
+             <field name="language" ref="ir.lang_fr"/>
+             <field name="namespace">rule_engine.runtime</field>
+             <field name="name">_re_annuity_periods</field>
+             <field name="fct_args">Date debut periode, Date fin periode</field>
+             <field name="parent" ref="claim.dossier_sinistre"/>
+         </record>
     </data>
 </tryton>

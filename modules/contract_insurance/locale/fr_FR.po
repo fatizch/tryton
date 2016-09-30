@@ -1010,10 +1010,6 @@ msgctxt "view:contract.manage_exclusion.select:"
 msgid "Manage Exclusions"
 msgstr "Gérer les exclusions"
 
-msgctxt "view:contract.manage_exclusion.select:"
-msgid "Propagate Options"
-msgstr "Propager les garanties"
-
 msgctxt "view:contract.manage_extra_premium.select.extra:"
 msgid "Select Extra Premium"
 msgstr "Sélection de la surprime"

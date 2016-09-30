@@ -10,4 +10,5 @@ this repository contains the full copyright notices and license terms. -->
         <suffix name="currency_symbol"/>
     </field>
     <button string="Schedule" name="schedule"/>
+    <button string="Modify" name="modify_indemnification"/>
 </tree>

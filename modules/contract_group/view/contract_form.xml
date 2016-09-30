@@ -6,7 +6,4 @@ this repository contains the full copyright notices and license terms. -->
         <label name="is_group"/>
         <field name="is_group"/>
     </xpath>
-    <xpath expr="/form/group[@id='button_change_start_date']" position="inside">
-        <button name="button_add_enrollment" string="Add Enrollment"/>
-    </xpath>
 </data>

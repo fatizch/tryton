@@ -5,14 +5,23 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/label[@name='start_date']" position="replace">
     </xpath>
     <xpath expr="/form/field[@name='start_date']" position="replace">
-        <label name="std_start_date"/>
-        <field name="std_start_date"/>
     </xpath>
     <xpath expr="/form/label[@name='end_date']" position="replace">
     </xpath>
     <xpath expr="/form/field[@name='end_date']" position="replace">
+    </xpath>
+    <xpath expr="/form/field[@name='extra_data']" position="before">
+        <label name="std_start_date"/>
+        <field name="std_start_date"/>
         <label name="std_end_date"/>
         <field name="std_end_date"/>
+        <label name="initial_std_start_date"/>
+        <field name="initial_std_start_date"/>
+        <label name="ltd_start_date"/>
+        <field name="ltd_start_date"/>
+        <label name="ltd_end_date"/>
+        <field name="ltd_end_date"/>
+        <newline/>
         <label name="covered_person"/>
         <field name="covered_person"/>
         <label name="return_to_work_date"/>
@@ -20,5 +29,6 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="is_a_relapse"/>
         <field name="is_a_relapse"/>
+        <newline/>
     </xpath>
 </data>

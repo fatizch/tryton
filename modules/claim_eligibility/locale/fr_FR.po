@@ -3,8 +3,8 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:claim.indemnification:"
-msgid "The delivered service has not been accepted"
-msgstr "La prestation fournie n'est pas acceptée"
+msgid "The claim service is not yet valid"
+msgstr "La prestation n'est pas valide"
 
 msgctxt "field:benefit,eligibility_rules:"
 msgid "Benefit Eligibility Rules"
@@ -101,6 +101,10 @@ msgstr "Règles d'éligibilité"
 msgctxt "view:benefit:"
 msgid "Eligibility"
 msgstr "Eligibilité"
+
+msgctxt "view:claim.service:"
+msgid "Check Eligibility"
+msgstr "Vérifier l'éligibilité"
 
 msgctxt "view:claim.service:"
 msgid "Claim Service"

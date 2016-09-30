@@ -1,4 +1,7 @@
+# This file is part of Coog. The COPYRIGHT file at the top level of
+# this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool, PoolMeta
+from trytond.model import ModelView
 
 from trytond.modules.cog_utils import fields
 
@@ -16,15 +19,6 @@ class Claim:
         fields.One2Many('document.request.line', None, 'Required Docs'),
         'get_required_indemnification_docs')
 
-    @fields.depends('document_request_lines')
-    def on_change_with_doc_received(self, name=None):
-        for doc in self.document_request_lines:
-            if (doc.for_object and
-                    doc.for_object.__name__ != 'claim.indemnification' and
-                    not doc.received and doc.blocking):
-                return False
-        return True
-
     def get_required_indemnification_docs(self, name=None):
         if not self.indemnifications_to_schedule:
             return []
@@ -38,6 +32,9 @@ class Claim:
 class ClaimIndemnification:
     __metaclass__ = PoolMeta
     __name__ = 'claim.indemnification'
+
+    document_request_lines = fields.One2Many('document.request.line',
+        'for_object', 'Documents', delete_missing=True)
 
     @classmethod
     def __setup__(cls):
@@ -69,11 +66,17 @@ class ClaimIndemnification:
         pool = Pool()
         DocumentDesc = pool.get('document.description')
         DocumentRequestLine = pool.get('document.request.line')
+        if not required_documents:
+            return
         documents = DocumentDesc.search([
                 ('code', 'in', required_documents.keys())
                 ])
         requests = []
+        already_created = [d.document_desc
+            for d in self.document_request_lines]
         for document in documents:
+            if document in already_created:
+                continue
             request = DocumentRequestLine(
                 document_desc=document,
                 for_object=self,
@@ -82,9 +85,24 @@ class ClaimIndemnification:
                 setattr(request, k, v)
             requests.append(request)
         DocumentRequestLine.save(requests)
-        return requests
+
+    @classmethod
+    def calculate_required_documents(cls, indemnifications):
+        for indemnification in indemnifications:
+            args = {}
+            indemnification.init_dict_for_rule_engine(args)
+            args['date'] = indemnification.service.loss.start_date
+            required_documents = indemnification.service.benefit.\
+                calculate_required_docs_for_indemnification(args)
+            indemnification.create_required_documents(required_documents)
 
     @classmethod
     def check_schedulability(cls, indemnifications):
         super(ClaimIndemnification, cls).check_schedulability(indemnifications)
         cls.check_required_documents(indemnifications)
+
+    @classmethod
+    @ModelView.button
+    def calculate(cls, indemnifications):
+        super(ClaimIndemnification, cls).calculate(indemnifications)
+        cls.calculate_required_documents(indemnifications)

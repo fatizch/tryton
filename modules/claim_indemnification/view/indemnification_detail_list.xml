@@ -6,14 +6,15 @@ this repository contains the full copyright notices and license terms. -->
     <field name="start_date"/>
     <field name="end_date"/>
     <field name="duration_description"/>
+    <field name="base_amount">
+        <suffix name="currency_symbol"/>
+    </field>
     <field name="amount_per_unit">
         <suffix name="currency_symbol"/>
     </field>
     <field name="amount">
         <suffix name="currency_symbol"/>
     </field>
-    <field name="base_amount">
-        <suffix name="currency_symbol"/>
-    </field>
+    <field name="benefit_description"/>
    <field name="indemnification_kind" tree_invisible="1"/>
 </tree>

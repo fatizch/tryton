@@ -14,10 +14,6 @@ from trytond.modules.rule_engine import get_rule_mixin
 __all__ = [
     'ClaimService',
     'Salary',
-    'ExtraDatasDisplayers',
-    'IndemnificationDefinition',
-    'CreateIndemnification',
-    'FillExtraData',
     'NetCalculationRule',
     'NetCalculationRuleExtraData',
     'NetCalculationRuleFixExtraData',
@@ -104,12 +100,12 @@ class Salary(model.CoopSQL, model.CoopView):
     net_limit_mode = fields.Function(
         fields.Boolean('Net Limit Mode'),
         'get_net_limit_mode')
-    ta_fixed_contributions = fields.Dict('extra_data', 'TA Fixed Contributions',
-        domain=[('kind', '=', 'salary')])
-    tb_fixed_contributions = fields.Dict('extra_data', 'TB Fixed Contributions',
-        domain=[('kind', '=', 'salary')])
-    tc_fixed_contributions = fields.Dict('extra_data', 'TC Fixed Contributions',
-        domain=[('kind', '=', 'salary')])
+    ta_fixed_contributions = fields.Dict('extra_data',
+        'TA Fixed Contributions', domain=[('kind', '=', 'salary')])
+    tb_fixed_contributions = fields.Dict('extra_data',
+        'TB Fixed Contributions', domain=[('kind', '=', 'salary')])
+    tc_fixed_contributions = fields.Dict('extra_data',
+        'TC Fixed Contributions', domain=[('kind', '=', 'salary')])
 
     @classmethod
     def __setup__(cls):
@@ -288,11 +284,8 @@ class ClaimService:
 
         pmss_table, = Table.search([('code', '=', 'pmss')])
         salary_range = {'TA': 0, 'TB': 0, 'TC': 0}
-        if self.loss.is_a_relapse:
-            salaries = self.claim.delivered_services[0].salary \
-                if not current_salary else [current_salary]
-        else:
-            salaries = self.salary if not current_salary else [current_salary]
+        salaries = self.claim.delivered_services[0].salary \
+            if not current_salary else [current_salary]
         for cur_salary in salaries:
             salary_to_use = 0
             for salary_def in salaries_def:
@@ -321,49 +314,4 @@ class ClaimService:
         res = 0
         for cur_salary in self.salary:
             res += (getattr(cur_salary, name, 0) or 0)
-        return res
-
-
-class ExtraDatasDisplayers:
-    __metaclass__ = PoolMeta
-    __name__ = 'claim.extra_datas_displayers'
-
-    salaries = fields.Many2Many('claim.salary', None, None, 'Salaries')
-
-
-class IndemnificationDefinition:
-    __metaclass__ = PoolMeta
-    __name__ = 'claim.indemnification_definition'
-
-    salaries = fields.Many2Many('claim.salary', None, None, 'Salaries')
-
-
-class CreateIndemnification:
-    __metaclass__ = PoolMeta
-    __name__ = 'claim.create_indemnification'
-
-    def default_definition(self, name):
-        pool = Pool()
-        Service = pool.get('claim.service')
-        res = super(CreateIndemnification, self).default_definition(name)
-        service = Service(res['service'])
-        res['salaries'] = [s.id for s in service.salary]
-        return res
-
-    def transition_calculate(self):
-        Salary = Pool().get('claim.salary')
-        Salary.save(self.definition.salaries)
-        return super(CreateIndemnification, self).transition_calculate()
-
-
-class FillExtraData:
-    __metaclass__ = PoolMeta
-    __name__ = 'claim.fill_extra_datas'
-
-    def default_definition(self, name):
-        pool = Pool()
-        Service = pool.get('claim.service')
-        res = super(FillExtraData, self).default_definition(name)
-        service = Service(res['service'])
-        res['salaries'] = [s.id for s in service.salary]
         return res

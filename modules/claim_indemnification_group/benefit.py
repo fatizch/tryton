@@ -3,7 +3,7 @@
 import datetime
 
 from trytond.pool import PoolMeta
-from trytond.pyson import And, Eval, Or
+from trytond.pyson import And, Eval, Or, Bool
 
 from trytond.modules.cog_utils import fields, model
 
@@ -62,12 +62,16 @@ class BenefitRule:
             states={'invisible': ~Eval('is_group')},
             depends=['is_group']),
         'get_force_rule', setter='setter_void')
+    force_annuity_frequency = fields.Boolean(
+        'Force Annuity Frenquency',
+        help='Get annuity frequency from product if True',
+        states={'invisible': ~Eval('is_group') | ~Eval('requires_frequency')},
+        depends=['is_group', 'requires_frequency'])
     force_revaluation_rule = fields.Function(
         fields.Boolean('Force Revaluation Rule',
             states={'invisible': ~Eval('is_group')},
             depends=['is_group']),
         'get_force_rule', setter='setter_void')
-
     is_group = fields.Function(
         fields.Boolean('Is Group'),
         'get_is_group')
@@ -99,7 +103,17 @@ class BenefitRule:
         cls.revaluation_rule_extra_data.states['invisible'] = Or(
             cls.revaluation_rule_extra_data.states.get('invisible',
                 True), ~Eval('force_revaluation_rule'))
-        cls.revaluation_rule_extra_data.depends.append('force_revaluation_rule')
+        cls.revaluation_rule_extra_data.depends.append(
+            'force_revaluation_rule')
+        cls.annuity_frequency.states['invisible'] = Or(
+                cls.annuity_frequency.states.get('invisible'),
+                And(Bool(Eval('is_group')), ~Eval('force_annuity_frequency')))
+        cls.annuity_frequency.depends.extend(['force_annuity_frequency',
+            'is_group'])
+
+    @classmethod
+    def default_force_annuity_frequency(cls):
+        return True
 
     @classmethod
     def default_force_deductible_rule(cls):
@@ -115,7 +129,8 @@ class BenefitRule:
 
     @fields.depends('benefit', 'is_group')
     def on_change_benefit(self):
-        self.is_group = self.benefit.is_group
+        super(BenefitRule, self).on_change_benefit()
+        self.is_group = self.benefit.is_group if self.benefit else False
 
     def _on_change_rule(self, rule_name):
         if getattr(self, 'force_' + rule_name, None):

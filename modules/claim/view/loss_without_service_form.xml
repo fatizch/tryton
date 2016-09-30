@@ -8,6 +8,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="event_desc" widget="selection"/>
     <label name="start_date"/>
     <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
     <newline/>
     <field name="extra_data" colspan="2" no_command="1"/>
 </form>

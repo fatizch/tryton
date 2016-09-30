@@ -1,10 +1,12 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Len
+from trytond.pyson import Eval, Len, Bool
 
 from trytond.modules.cog_utils import fields, model
 from trytond.modules.rule_engine import get_rule_mixin
+from trytond.modules.claim_indemnification.benefit import ANNUITY_FREQUENCIES
+
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -80,6 +82,18 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         fields.Many2Many('rule_engine', None, None,
             'Available Indemnification Rule'),
         'get_available_rule')
+    annuity_frequency = fields.Selection(ANNUITY_FREQUENCIES,
+        'Annuity Frequency', states={
+            'readonly': Bool(Eval('annuity_frequency_forced')),
+            'invisible': ~Eval('annuity_frequency_required'),
+            'required': Bool(Eval('annuity_frequency_required'))},
+        depends=['annuity_frequency_forced', 'annuity_frequency_required'])
+    annuity_frequency_forced = fields.Function(
+        fields.Boolean('Annuity frequency Forced'),
+        'get_annuity_frequency_forced')
+    annuity_frequency_required = fields.Function(
+        fields.Boolean('Annuity Frequency Required'),
+        'get_annuity_frequency_required')
     available_revaluation_rules = fields.Function(
         fields.Many2Many('rule_engine', None, None,
             'Available Revaluation Rule'),
@@ -105,14 +119,34 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         cls.revaluation_rule.depends = ['available_revaluation_rules']
 
     @fields.depends('benefit', 'available_deductible_rules',
-        'available_indemnification_rules', 'available_revaluation_rules')
+        'available_indemnification_rules', 'available_revaluation_rules',
+        'annuity_frequency', 'annuity_frequency_forced')
     def on_change_benefit(self):
+        super(OptionBenefit, self).on_change_benefit()
         self.available_deductible_rules = \
             self.get_available_rule('available_deductible_rules')
         self.available_indemnification_rules = \
             self.get_available_rule('available_indemnification_rules')
         self.available_revaluation_rules = \
             self.get_available_rule('available_revaluation_rules')
+        if not self.benefit:
+            self.annuity_frequency_forced = False
+        else:
+            self.annuity_frequency_forced = \
+                self.benefit.benefit_rules[0].force_annuity_frequency
+        if self.annuity_frequency_forced:
+            self.annuity_frequency = \
+                self.benefit.benefit_rules[0].annuity_frequency
+
+    def get_annuity_frequency_forced(self, name):
+        if not self.benefit:
+            return False
+        return self.benefit.benefit_rules[0].force_annuity_frequency
+
+    def get_annuity_frequency_required(self, name):
+        if not self.benefit:
+            return False
+        return self.benefit.indemnification_kind == 'annuity'
 
     def get_available_rule(self, name):
         if not self.benefit:
@@ -129,9 +163,12 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
                 'revaluation_rule'):
             available = self.get_available_rule('available_' + fname + 's')
             if len(available) == 0:
-                pass
+                continue
             if len(available) == 1:
                 setattr(self, fname, available[0])
                 setattr(self, fname + '_extra_data', {})
                 setattr(self, fname + '_extra_data',
                     getattr(self, 'on_change_with_' + fname + '_extra_data')())
+        benefit_rule = self.benefit.benefit_rules[0]
+        if benefit_rule.force_annuity_frequency:
+            self.annuity_frequency = benefit_rule.annuity_frequency

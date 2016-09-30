@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='benefit']" position="after">
+        <label name="eligibility_status"/>
+        <field name="eligibility_status"/>
+        <button name="check_eligibility" string="Check Eligibility"/>
+    </xpath>
+</data>

@@ -6,6 +6,10 @@ msgctxt "field:benefit.rule,deductible_rules:"
 msgid "Deductible Rules"
 msgstr "Règles de franchise"
 
+msgctxt "field:benefit.rule,force_annuity_frequency:"
+msgid "Force Annuity Frenquency"
+msgstr "Imposer la fréquence d'indemnisation"
+
 msgctxt "field:benefit.rule,force_deductible_rule:"
 msgid "Force Deductible Rule"
 msgstr "Imposer la règle de franchise"
@@ -14,21 +18,21 @@ msgctxt "field:benefit.rule,force_indemnification_rule:"
 msgid "Force Indemnification Rule"
 msgstr "Imposer la règle d'indemnisation"
 
+msgctxt "field:benefit.rule,force_revaluation_rule:"
+msgid "Force Revaluation Rule"
+msgstr "Imposer la règle de revalorisation"
+
 msgctxt "field:benefit.rule,indemnification_rules:"
 msgid "Indemnification Rules"
 msgstr "Règles d'indemnisation"
 
-msgctxt "field:benefit.rule,revaluation_rules:"
-msgid "Revaluation Rules"
-msgstr "Règes de revalorisation"
-
-msgctxt "field:benefit.rule,force_revaluation_rule:"
-msgid "Force Revaluation Rules"
-msgstr "Imposer la règle de revalorisation"
-
 msgctxt "field:benefit.rule,is_group:"
 msgid "Is Group"
 msgstr "Prestation collective"
+
+msgctxt "field:benefit.rule,revaluation_rules:"
+msgid "Revaluation Rules"
+msgstr "Règes de revalorisation"
 
 msgctxt "field:benefit_rule-deductible_rule,benefit:"
 msgid "Benefit"
@@ -110,6 +114,54 @@ msgctxt "field:benefit_rule-indemnification_rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:benefit_rule-revaluation_rule,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:benefit_rule-revaluation_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit_rule-revaluation_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit_rule-revaluation_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit_rule-revaluation_rule,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:benefit_rule-revaluation_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit_rule-revaluation_rule,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:benefit_rule-revaluation_rule,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:benefit_rule-revaluation_rule,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:benefit_rule-revaluation_rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.option.benefit,annuity_frequency:"
+msgid "Annuity Frequency"
+msgstr "Fréquence d'indemnisation"
+
+msgctxt "field:contract.option.benefit,annuity_frequency_forced:"
+msgid "Annuity frequency forced"
+msgstr "Fréquence d'indemnisation imposée"
+
 msgctxt "field:contract.option.benefit,available_deductible_rules:"
 msgid "Available Deductible Rule"
 msgstr "Règles de franchise disponibles"
@@ -158,6 +210,10 @@ msgctxt "field:contract.option.benefit,indemnification_rule_extra_data:"
 msgid "Indemnification Rule Extra Data"
 msgstr "Données complémentaires d'indemnisation"
 
+msgctxt "field:contract.option.benefit,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:contract.option.benefit,revaluation_rule:"
 msgid "Revaluation Rule"
 msgstr "Règle de revalorisation"
@@ -165,10 +221,6 @@ msgstr "Règle de revalorisation"
 msgctxt "field:contract.option.benefit,revaluation_rule_extra_data:"
 msgid "Revaluation Rule Extra Data"
 msgstr "Données complémentaires de revalorisation"
-
-msgctxt "field:contract.option.benefit,rec_name:"
-msgid "Name"
-msgstr "Nom"
 
 msgctxt "field:contract.option.benefit,version:"
 msgid "Version"
@@ -190,6 +242,10 @@ msgctxt "field:contract.option.version,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
 
+msgctxt "help:benefit.rule,force_annuity_frequency:"
+msgid "Get annuity frequency from product if True"
+msgstr "Retourne la fréquence définie au produit si vrai"
+
 msgctxt "model:benefit_rule-deductible_rule,name:"
 msgid "Benefit Rule - Deductible"
 msgstr "Relation prestation - règle de franchise"
@@ -198,9 +254,29 @@ msgctxt "model:benefit_rule-indemnification_rule,name:"
 msgid "Benefit Rule - Indemnification"
 msgstr "Relation prestation - règle d'indemnisation"
 
+msgctxt "model:benefit_rule-revaluation_rule,name:"
+msgid "Benefit Rule - Revaluation"
+msgstr "Prestation - Revalorisation"
+
 msgctxt "model:contract.option.benefit,name:"
 msgid "Option Benefit"
 msgstr "Prestation"
+
+msgctxt "selection:contract.option.benefit,annuity_frequency:"
+msgid "Half-yearly"
+msgstr "Semestrielle"
+
+msgctxt "selection:contract.option.benefit,annuity_frequency:"
+msgid "Monthly"
+msgstr "Mensuelle"
+
+msgctxt "selection:contract.option.benefit,annuity_frequency:"
+msgid "Quarterly"
+msgstr "Trimestrielle"
+
+msgctxt "selection:contract.option.benefit,annuity_frequency:"
+msgid "Yearly"
+msgstr "Annuelle"
 
 msgctxt "view:contract.option.benefit:"
 msgid "Benefit"
@@ -209,6 +285,10 @@ msgstr "Prestation"
 msgctxt "view:contract.option.benefit:"
 msgid "Benefits"
 msgstr "Prestations"
+
+msgctxt "view:contract.option.version:"
+msgid "Invisible Benefit"
+msgstr "Prestation invisible"
 
 msgctxt "view:contract.option.version:"
 msgid "Version"

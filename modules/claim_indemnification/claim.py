@@ -3,11 +3,16 @@
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
 import datetime
+from sql.aggregate import Max
+from dateutil.relativedelta import relativedelta
+from itertools import groupby
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or, Bool, In, Not
 from trytond.model import ModelView
+from trytond.transaction import Transaction
 from trytond.rpc import RPC
+from trytond.tools import grouped_slice
 
 from trytond.modules.cog_utils import fields, model, coop_string, utils, \
     coop_date
@@ -17,6 +22,8 @@ from trytond.modules.claim_indemnification.benefit import \
 from trytond.modules.claim_indemnification.benefit import INDEMNIFICATION_KIND
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 from trytond.modules.rule_engine import get_rule_mixin
+from trytond.modules.cog_utils.coop_date import FREQUENCY_CONVERSION_TABLE
+from .benefit import ANNUITY_FREQUENCIES
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -27,12 +34,6 @@ __all__ = [
     'IndemnificationTaxes',
     'IndemnificationDetail',
     'IndemnificationControlRule'
-    ]
-
-
-PERIOD_FREQUENCIES = [
-    ('quarterly', 'Quarterly'),
-    ('monthly', 'Monthly'),
     ]
 
 
@@ -160,7 +161,7 @@ class ClaimService:
             states={'invisible': ~(Bool(Eval(
                             'has_automatic_period_calculation')))},
             depends=['has_automatic_period_calculation']),
-        getter='get_paid_until_date')
+        getter='get_paid_until_date', searcher='search_paid_until_date')
     has_automatic_period_calculation = fields.Function(
         fields.Boolean('has_automatic_period_calculation'),
         getter='getter_has_automatic_period_calculation')
@@ -168,9 +169,9 @@ class ClaimService:
           states={'invisible': ~(Bool(Eval(
                     'has_automatic_period_calculation')))},
           depends=['has_automatic_period_calculation'])
-    period_frequency = fields.Selection(PERIOD_FREQUENCIES, 'Period Frequency',
-          states={'invisible': ~(Bool(Eval(
-                        'has_automatic_period_calculation')))},
+    annuity_frequency = fields.Selection(ANNUITY_FREQUENCIES,
+        'Annuity Frequency', states={
+            'invisible': ~(Bool(Eval('has_automatic_period_calculation')))},
           depends=['has_automatic_period_calculation'])
     deductible_end_date = fields.Function(
         fields.Date('Deductible End Date'),
@@ -195,15 +196,40 @@ class ClaimService:
     def _export_skips(cls):
         return super(ClaimService, cls)._export_skips() | {'multi_level_view'}
 
+    @classmethod
+    def get_paid_until_date(cls, services, name):
+        indemnification = Pool().get('claim.indemnification').__table__()
+        cursor = Transaction().connection.cursor()
+        result = {x.id: None for x in services}
+        for sub_services in grouped_slice(services):
+            cursor.execute(*indemnification.select(indemnification.service,
+                    Max(indemnification.end_date),
+                    where=indemnification.service.in_(
+                        [x.id for x in sub_services]),
+                    group_by=[indemnification.service]))
+            for service_id, max_date in cursor.fetchall():
+                result[service_id] = max_date
+        return result
+
+    @classmethod
+    def search_paid_until_date(cls, name, clause):
+        _, operator, value = clause
+        indemnification = Pool().get('claim.indemnification').__table__()
+        Operator = fields.SQL_OPERATORS[operator]
+        query_table = indemnification.select(indemnification.service,
+            group_by=[indemnification.service],
+            having=Operator(Max(indemnification.end_date), value))
+        return [('id', 'in', query_table)]
+
     def init_dict_for_rule_engine(self, cur_dict):
         super(ClaimService, self).init_dict_for_rule_engine(cur_dict)
-        cur_dict['date'] = self.loss.start_date
         cur_dict['deductible_end_date'] = self.get_deductible_end_date(
             args=cur_dict)
 
     def calculate(self):
         cur_dict = {}
         self.init_dict_for_rule_engine(cur_dict)
+        cur_dict['date'] = self.loss.start_date
         cur_dict['currency'] = self.get_currency()
         self.func_error = None
         self.status = 'calculated'
@@ -218,14 +244,11 @@ class ClaimService:
         return self.benefit.has_automatic_period_calculation() \
             if self.benefit else False
 
-    @classmethod
-    def default_period_frequency(cls):
-        return 'quarterly'
-
     def get_deductible_end_date(self, name=None, args=None):
         if not args:
             args = {}
             self.init_dict_for_rule_engine(args)
+            args['date'] = self.loss.start_date
         return self.benefit.calculate_deductible(args)
 
     def is_deductible(self):
@@ -241,6 +264,7 @@ class ClaimService:
         pool = Pool()
         Indemnification = pool.get('claim.indemnification')
         super(ClaimService, self).init_from_loss(loss, benefit)
+        self.annuity_frequency = benefit.benefit_rules[0].annuity_frequency
         self.indemnifications = []
         if self.loss.start_date and self.loss.end_date:
             if self.loss.end_date < self.get_deductible_end_date():
@@ -249,17 +273,9 @@ class ClaimService:
                     end_date=self.loss.end_date
                     )
                 indemnification.init_from_service(self)
+                indemnification.save()
                 Indemnification.calculate([indemnification])
                 self.indemnifications = [indemnification]
-
-    def get_paid_until_date(self, name):
-        cur_date = None
-        for indemnification in self.indemnifications:
-            if not cur_date:
-                cur_date = indemnification.end_date
-            else:
-                cur_date = max(cur_date, indemnification.end_date)
-        return cur_date
 
     def regularize_indemnification(self, indemnification, details_dict,
             currency):
@@ -274,6 +290,7 @@ class ClaimService:
 
     @classmethod
     def cancel_indemnification(cls, services, at_date):
+        Date = Pool().get('ir.date')
         to_cancel = []
         to_delete = []
         ClaimIndemnification = Pool().get('claim.indemnification')
@@ -290,7 +307,8 @@ class ClaimService:
             if at_date != to_cancel[0].start_date:
                 cls.raise_user_error('offset_date')
             cls.raise_user_warning('overlap_date', 'overlap_date',
-                (to_cancel[0].start_date, to_cancel[-1].end_date))
+                (Date.date_as_string(to_cancel[0].start_date),
+                    Date.date_as_string(to_cancel[-1].end_date)))
             ClaimIndemnification.cancel_indemnification(to_cancel)
         if to_delete:
             ClaimIndemnification.delete(to_delete)
@@ -307,6 +325,86 @@ class ClaimService:
         'claim_indemnification.act_fill_extra_data_wizard')
     def fill_extra_datas(cls, services):
         pass
+
+    @classmethod
+    def create_indemnifications(cls, services, until=None):
+        Indemnification = Pool().get('claim.indemnification')
+        if until is None:
+            until = utils.today()
+        indemnifications = []
+        for service in services:
+            indemnifications += service.create_missing_indemnifications(until)
+        if not indemnifications:
+            return
+        Indemnification.calculate(indemnifications)
+        Indemnification.save(indemnifications)
+
+    def create_missing_indemnifications(self, until):
+        if self.paid_until_date >= until:
+            return []
+        if not self.indemnifications:
+            return []
+        if self.benefit.indemnification_kind != 'annuity':
+            return []
+        periods = []
+        for period in self.get_new_indemnification_periods(until):
+            periods.append(self.new_indemnification(*period))
+        return periods
+
+    def get_next_period_end_date(self, from_date):
+        if self.annuity_frequency:
+            nb_month = FREQUENCY_CONVERSION_TABLE[self.annuity_frequency]
+            period_start_date = from_date + relativedelta(day=1,
+                month=((from_date.month - 1) // nb_month) * nb_month + 1)
+            return period_start_date + relativedelta(months=nb_month, days=-1)
+        elif self.loss.end_date:
+            return self.loss.end_date
+
+    def get_new_indemnification_periods(self, until):
+        periods = []
+        end_date = self.paid_until_date
+        while end_date < until:
+            base_date = coop_date.add_day(end_date, 1)
+            end_date = self.get_next_period_end_date(base_date)
+            periods.append((base_date, end_date))
+        return periods
+
+    def new_indemnification(self, start, end):
+        Indemnification = Pool().get('claim.indemnification')
+        indemnification = Indemnification(start_date=start, end_date=end)
+        indemnification.init_from_service(self)
+        indemnification.beneficiary = self.indemnifications[-1].beneficiary
+        return indemnification
+
+    def calculate_annuity_periods(self, from_date, to_date):
+        '''
+            return a list with a tuple with :
+            period from_date, period to_date, is_full_period, prorata, unit
+        '''
+        nb_month = FREQUENCY_CONVERSION_TABLE[self.annuity_frequency]
+        period_start_date = self.get_next_period_end_date(from_date)
+        period_end_date = period_start_date
+        res = []
+        while period_end_date < to_date:
+            full_period = True
+            period_end_date = self.get_next_period_end_date(
+                period_start_date)
+            cur_period_start = max(period_start_date, from_date)
+            cur_period_end = min(period_end_date, to_date)
+            if (cur_period_start == from_date and
+                    from_date != period_start_date):
+                full_period = False
+            if (cur_period_end == to_date and
+                    to_date != period_end_date):
+                full_period = False
+            if full_period:
+                res.append((cur_period_start, cur_period_end, full_period,
+                        nb_month, self.annuity_frequency[0:-2]))
+            else:
+                res.append((cur_period_start, cur_period_end, full_period,
+                    (cur_period_end - cur_period_start).days + 1, 'day'))
+            period_start_date = period_end_date + relativedelta(days=1)
+        return res
 
 
 class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
@@ -372,7 +470,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
     taxes = fields.Many2Many('claim.indemnification-acount.tax',
         'indemnification', 'tax', 'Taxes')
     benefit_description = fields.Function(
-        fields.Char('Prestation'),
+        fields.Char('Benefit Description'),
         'get_benefit_description')
     control_reason = fields.Char('Control Reason')
     payback_method = fields.Selection([
@@ -408,6 +506,8 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
                     'invisible': Eval('status') != 'calculated'},
                 'cancel_indemnification': {
                     'invisible': Eval('status') != 'paid'},
+                'modify_indemnification': {
+                    'invisible': Eval('status') != 'calculated'},
                 'schedule': {
                     'invisible': Eval('status') != 'calculated'},
                 })
@@ -674,10 +774,8 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             payment_term=payment_term,
             invoice_date=utils.today(),
             currency_date=utils.today(),
-            description='%s - %s' % (
-                key['indemnification'].service.loss.loss_desc.name,
-                key['indemnification'].service.loss.claim.claimant.full_name)
-                )
+            description='%s' % (party.full_name),
+            )
 
     @classmethod
     def _get_invoice_line(cls, key, invoice, indemnification):
@@ -721,6 +819,14 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
                 Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1])
             invoice.lines = list(invoice.lines) + [invoice_line]
 
+    def _group_to_claim_invoice_key(self):
+        return {
+            'party': self.beneficiary,
+            'product': self.service.benefit.account_product,
+            'company': self.service.contract.company,
+            'currency': self.currency,
+            }
+
     @classmethod
     def invoice(cls, indemnifications):
         pool = Pool()
@@ -728,34 +834,39 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         invoices = []
         paid = []
         cancelled = []
-        for indemnification in indemnifications:
-            key = {
-                'party': indemnification.beneficiary,
-                'product': indemnification.service.benefit.account_product,
-                'company': indemnification.service.contract.company,
-                'currency': indemnification.currency,
-                'indemnification': indemnification,
-                }
-            if indemnification.status == 'cancel_validated':
-                cancelled.append(indemnification)
-                if indemnification.payback_method == 'immediate':
-                    # do something special here, discuss with Fred
-                    pass
-                elif indemnification.payback_method == 'planned':
-                    key.update({'payment_term': indemnification.payment_term})
-            else:
-                paid.append(indemnification)
+        key = lambda c: c._group_to_claim_invoice_key()
+        indemnifications.sort(key=key)
+        for key, group_indemnification in groupby(indemnifications, key=key):
             invoice = cls._get_invoice(key)
-            invoice.lines = [cls._get_invoice_line(key, invoice,
-                    indemnification)]
-            if indemnification.taxes:
-                cls.add_taxes_to_invoice(invoice, indemnification.taxes,
-                    indemnification.amount)
+            lines = []
+            for indemnification in group_indemnification:
+                if indemnification.status == 'cancel_validated':
+                    cancelled.append(indemnification)
+                    if indemnification.payback_method == 'immediate':
+                        # do something special here, discuss with Fred
+                        pass
+                    elif indemnification.payback_method == 'planned':
+                        key.update({'payment_term':
+                                indemnification.payment_term})
+                else:
+                    paid.append(indemnification)
+                lines.extend([cls._get_invoice_line(key, invoice,
+                        indemnification)])
+                if indemnification.taxes:
+                    cls.add_taxes_to_invoice(invoice, indemnification.taxes,
+                        indemnification.amount)
+            invoice.lines = lines
             invoices.append(invoice)
         Invoice.save(invoices)
         Invoice.post(invoices)
         cls.write(paid, {'status': 'paid'},
             cancelled, {'status': 'cancel_paid'})
+
+    @classmethod
+    @ModelView.button_action(
+        'claim_indemnification.act_create_claim_indemnification_wizard')
+    def modify_indemnification(cls, indemnifications):
+        pass
 
 
 class IndemnificationTaxes(model.CoopSQL):
@@ -777,10 +888,10 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
     indemnification = fields.Many2One('claim.indemnification',
         'Indemnification', ondelete='CASCADE', required=True, select=True)
     start_date = fields.Date('Start Date',
-        states={'invisible': Eval('indemnification_kind') != 'period'},
+        states={'invisible': Eval('indemnification_kind') == 'capital'},
         depends=['indemnification_kind'])
     end_date = fields.Date('End Date',
-        states={'invisible': Eval('indemnification_kind') != 'period'},
+        states={'invisible': Eval('indemnification_kind') == 'capital'},
         depends=['indemnification_kind'])
     indemnification_kind = fields.Function(
         fields.Selection(INDEMNIFICATION_KIND, 'Indemnification Kind',
@@ -806,12 +917,20 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
     base_amount = fields.Numeric('Base Amount',
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
         depends=['currency_digits'])
+    benefit_description = fields.Function(
+        fields.Char('Prestation'),
+        'get_benefit_description')
 
     def get_indemnification_kind(self, name):
         return self.indemnification.kind
 
     def get_duration_description(self, name):
         return '%s %s(s)' % (self.nb_of_unit, self.unit_string)
+
+    def get_benefit_description(self, name):
+        if self.indemnification:
+            return self.indemnification.benefit_description
+        return ''
 
     def calculate_amount(self):
         self.amount = self.amount_per_unit * self.nb_of_unit
@@ -837,7 +956,8 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
         return details
 
     def get_status_string(self, name):
-        if self.indemnification.status == 'cancelled':
+        if self.indemnification.status in ('cancelled', 'cancel_paid',
+                'cancel_scheduled', 'cancel_validated', 'cancel_controlled'):
             return '%s - [%s]' % (
                 self.kind_string, self.indemnification.status_string)
         return self.kind_string

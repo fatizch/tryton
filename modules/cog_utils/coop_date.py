@@ -46,6 +46,13 @@ FREQUENCY = [
     ('yearly', 'Yearly'),
     ]
 
+FREQUENCY_CONVERSION_TABLE = {
+    'yearly': Decimal(12),
+    'half_yearly': Decimal(6),
+    'quarterly': Decimal(3),
+    'monthly': Decimal(1),
+    }
+
 
 def calculate_periods_from_dates(dates, period_start_date, period_end_date):
     periods = []

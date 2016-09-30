@@ -4,6 +4,7 @@ from trytond.pool import Pool
 from .benefit import *
 from .contract import *
 from .rule_engine import *
+from .claim import *
 
 
 def register():
@@ -17,4 +18,5 @@ def register():
         OptionVersion,
         OptionBenefit,
         RuleEngineRuntime,
+        ClaimService,
         module='claim_indemnification_group', type_='model')

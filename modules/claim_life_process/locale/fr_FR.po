@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:claim,has_calculated_indemnification:"
+msgid "Has Calculated Indemnification"
+msgstr "Contient des indémnisations calculées"
+
 msgctxt "field:claim,indemnifications:"
 msgid "Indemnifications"
 msgstr "Indemnisations"

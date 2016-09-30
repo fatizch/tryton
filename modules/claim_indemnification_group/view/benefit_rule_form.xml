@@ -2,6 +2,10 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
+    <xpath expr="/form/label[@name='annuity_frequency']" position="before">
+        <label name="force_annuity_frequency"/>
+        <field name="force_annuity_frequency"/>
+    </xpath>
     <xpath expr="/form/label[@name='indemnification_rule']" position="before">
         <label name="force_indemnification_rule"/>
         <field name="force_indemnification_rule"/>

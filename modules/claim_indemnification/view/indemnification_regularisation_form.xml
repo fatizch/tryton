@@ -3,8 +3,12 @@
 this repository contains the full copyright notices and license terms. -->
 <form string="Regularisation" col="4">
     <group id="input_fields" colspan="2" col="4">
-        <label name="amount"/>
-        <field name="amount"/>
+        <label name="new_indemnification_amount"/>
+        <field name="new_indemnification_amount"/>
+        <label name="cancelled_amount"/>
+        <field name="cancelled_amount"/>
+        <label name="remaining_amount"/>
+        <field name="remaining_amount"/>
         <newline/>
         <label name="payback_method"/>
         <field name="payback_method" xexpand="1"/>

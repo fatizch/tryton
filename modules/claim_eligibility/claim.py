@@ -41,9 +41,6 @@ class ClaimService:
     def __setup__(cls):
         super(ClaimService, cls).__setup__()
         cls._buttons.update({
-            'accept_services': {
-                'invisible': Eval('eligibility_status') != 'study_in_progress',
-                },
             'refuse_services': {
                 'invisible': Eval('eligibility_status') != 'study_in_progress',
                 },

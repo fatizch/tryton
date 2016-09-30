@@ -11,6 +11,7 @@ from trytond.pyson import Eval, Equal
 
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.cog_utils.coop_date import FREQUENCY_CONVERSION_TABLE
 
 
 __metaclass__ = PoolMeta
@@ -423,8 +424,15 @@ class IndemnificationRegularisation(model.CoopView):
     'Indemnification Regularisation'
     __name__ = 'claim.indemnification_regularisation'
 
-    amount = fields.Numeric('Regularisation Amount',
-        digits=(16, 2), readonly=True)
+    remaining_amount = fields.Numeric('Remaining Amount',
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
+        readonly=True)
+    cancelled_amount = fields.Numeric('Cancelled Amount',
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
+        readonly=True)
+    new_indemnification_amount = fields.Numeric('New Indemnification Amount',
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
+        readonly=True)
     indemnification = fields.One2Many('claim.indemnification', None,
         'Indemnification')
     cancelled = fields.Many2Many(
@@ -443,10 +451,12 @@ class IndemnificationRegularisation(model.CoopView):
     payment_term = fields.Many2One(
         'account.invoice.payment_term', 'Payment Term',
         states={'invisible': ~Eval('payment_term_required')})
+    currency_digits = fields.Integer(
+        'Currency Digits', states={'invisible': True})
 
-    @fields.depends('amount')
+    @fields.depends('remaining_amount')
     def on_change_with_payback_required(self):
-        return self.amount < 0
+        return self.remaining_amount < 0
 
     @fields.depends('payback_method', 'payback_required')
     def on_change_with_payment_term_required(self):
@@ -533,12 +543,13 @@ class CreateIndemnification(Wizard):
                 return 'definition'
             return 'select_service'
         elif (Transaction().context.get('active_model') ==
-                'claim_indemnification'):
+                'claim.indemnification'):
             indemnification = Indemnification(active_id)
             self.definition.start_date = indemnification.start_date
             self.definition.end_date = indemnification.end_date
             self.definition.service = indemnification.service
             self.result.indemnification = [indemnification]
+            self.result.cancelled = []
             return 'result'
         else:
             return 'end'
@@ -559,17 +570,27 @@ class CreateIndemnification(Wizard):
         self.definition.service = self.select_service.selected_service
         return 'definition'
 
+    def get_end_date(self, start_date, service):
+        if service.loss.end_date:
+            return service.loss.end_date
+        elif service.annuity_frequency:
+            nb_month = FREQUENCY_CONVERSION_TABLE[service.annuity_frequency]
+            period_start_date = start_date + relativedelta(day=1,
+                month=((start_date.month - 1) // nb_month) * nb_month + 1)
+            return period_start_date + relativedelta(months=nb_month, days=-1)
+        return None
+
     def default_definition(self, name):
-        Indemnification = Pool().get('claim.indemnification')
         result = getattr(self, 'result', None)
         if self.result and getattr(result, 'indemnification', None):
             service = self.result.indemnification[0].service
             beneficiary = self.result.indemnification[0].beneficiary
             start_date = self.result.indemnification[0].start_date
             end_date = self.result.indemnification[-1].end_date
-            Indemnification.delete(self.result.indemnification)
+            indemnification_id = self.result.indemnification[0].id
         else:
             definition = getattr(self, 'definition', None)
+            indemnification_id = None
             if definition and hasattr(definition, 'service'):
                 service = definition.service
             else:
@@ -586,7 +607,7 @@ class CreateIndemnification(Wizard):
                 start_date = service.loss.start_date
                 beneficiary = service.contract.get_policy_owner(
                     service.loss.start_date)
-            end_date = service.loss.end_date
+            end_date = self.get_end_date(start_date, service)
         extra_data = utils.get_value_at_date(service.extra_datas, start_date)
         if service.contract and service.contract.end_date:
             contract_end = service.contract.end_date
@@ -602,6 +623,7 @@ class CreateIndemnification(Wizard):
             'end_date': end_date,
             'beneficiary': beneficiary.id,
             'extra_data': extra_data.extra_data_values,
+            'indemnification': [indemnification_id],
             }
         return res
 
@@ -632,8 +654,8 @@ class CreateIndemnification(Wizard):
                         'lock_end_date', {
                             'indemn_end': self.definition.end_date,
                             'contract_end': contract_end})
-        #  if self.definition.end_date > utils.today():
-        #      self.raise_user_error('end_date_future')
+        if self.definition.end_date > utils.today():
+            self.raise_user_error('end_date_future')
         if (service.loss.end_date and
                 self.definition.end_date > service.loss.end_date):
             self.raise_user_error('end_date_exceeds_loss')
@@ -647,10 +669,12 @@ class CreateIndemnification(Wizard):
         Indemnification = pool.get('claim.indemnification')
         ExtraData = pool.get('claim.service.extra_data')
         self.result.cancelled = self.check_input()
-        indemnification = Indemnification(
-            start_date=self.definition.start_date,
-            end_date=self.definition.end_date
-            )
+        if hasattr(self.result, 'indemnification'):
+            indemnification = self.result.indemnification[0]
+        else:
+            indemnification = Indemnification()
+        indemnification.start_date = self.definition.start_date
+        indemnification.end_date = self.definition.end_date
         extra_data_values = self.definition.get_extra_data_values()
         extra_data = utils.get_value_at_date(
             self.definition.service.extra_datas, self.definition.start_date)
@@ -679,13 +703,6 @@ class CreateIndemnification(Wizard):
             'cancelled': [x.id for x in self.result.cancelled],
             }
 
-    def amount_available_for_regularisation(self):
-        declared_res = self.result.indemnification[0].amount
-        cancelled_res = 0
-        for indemnification in self.result.cancelled:
-            cancelled_res += indemnification.amount
-        return declared_res - cancelled_res
-
     def transition_init_previous(self):
         self.result.indemnification = \
             self.select_regularisation.indemnification
@@ -702,11 +719,18 @@ class CreateIndemnification(Wizard):
 
     def default_select_regularisation(self, name):
         indemnification = self.select_regularisation.indemnification[0]
-        amount = self.amount_available_for_regularisation()
+        new_indemnification_amount = self.result.indemnification[0].amount
+        cancelled_amount = 0
+        for indemnification in self.result.cancelled:
+            cancelled_amount += indemnification.amount
+        remaining_amount = new_indemnification_amount - cancelled_amount
         return {
-            'amount': amount,
+            'remaining_amount': remaining_amount,
+            'new_indemnification_amount': new_indemnification_amount,
+            'cancelled_amount': cancelled_amount,
             'indemnification': [indemnification.id],
-            'cancelled': [x.id for x in self.select_regularisation.cancelled]
+            'cancelled': [x.id for x in self.select_regularisation.cancelled],
+            'currency_digits': indemnification.currency_digits
             }
 
     def transition_apply_regularisation(self):

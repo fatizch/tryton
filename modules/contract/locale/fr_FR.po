@@ -894,8 +894,7 @@ msgctxt "field:contract.wizard.option_subscription.options_displayer,options:"
 msgid "Options"
 msgstr "Options"
 
-msgctxt ""
-"field:contract.wizard.option_subscription.options_displayer,package:"
+msgctxt "field:contract.wizard.option_subscription.options_displayer,package:"
 msgid "Package"
 msgstr "Formule"
 

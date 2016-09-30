@@ -6,8 +6,8 @@ this repository contains the full copyright notices and license terms. -->
         <page string="Indemnisations" id="indemnifications">
             <field name="indemnifications" colspan="4" no_command="1" view_ids="claim_indemnification.indemnification_simple_view_list,claim_indemnification.indemnification_view_form"/>
             <newline/>
-            <label name="period_frequency"/>
-            <field name="period_frequency"/>
+            <label name="annuity_frequency"/>
+            <field name="annuity_frequency"/>
             <label name="payment_accepted_until_date"/>
             <field name="payment_accepted_until_date"/>
             <newline/>

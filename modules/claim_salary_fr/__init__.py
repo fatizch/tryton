@@ -18,8 +18,6 @@ def register():
         NetCalculationRuleFixExtraData,
         BenefitRule,
         OptionBenefit,
-        ExtraDatasDisplayers,
-        IndemnificationDefinition,
         RuleEngineRuntime,
         RuleEngine,
         ExtraData,
@@ -28,7 +26,5 @@ def register():
         ManageOptionBenefitsDisplayer,
         module='claim_salary_fr', type_='model')
     Pool.register(
-        CreateIndemnification,
-        FillExtraData,
         SetContributions,
         module='claim_salary_fr', type_='wizard')

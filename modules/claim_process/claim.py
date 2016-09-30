@@ -84,9 +84,11 @@ class Claim(CogProcessFramework):
                 args = {}
                 delivered.init_dict_for_rule_engine(args)
                 docs = delivered.benefit.calculate_required_documents(args)
-                docs = DocumentDescription.search(
-                    [('code', 'in', docs.keys())])
-                documents.extend(docs)
+                if docs:
+                    # to do: Use cache
+                    docs = DocumentDescription.search(
+                        [('code', 'in', docs.keys())])
+                    documents.extend(docs)
         existing_document_desc = [request.document_desc
             for request in self.document_request_lines]
         to_save = []

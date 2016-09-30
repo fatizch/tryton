@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 
 from trytond import backend
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import model, fields, coop_date
 from trytond.modules.rule_engine import get_rule_mixin
@@ -27,6 +27,13 @@ INDEMNIFICATION_DETAIL_KIND = [
     ('benefit', 'Indemnified'),
     ('limit', 'Limit'),
     ('regularisation', 'Regularisation'),
+    ]
+ANNUITY_FREQUENCIES = [
+    ('', ''),
+    ('yearly', 'Yearly'),
+    ('half_yearly', 'Half-yearly'),
+    ('quarterly', 'Quarterly'),
+    ('monthly', 'Monthly'),
     ]
 
 
@@ -78,6 +85,16 @@ class BenefitRule(
 
     benefit = fields.Many2One('benefit', 'Benefit', ondelete='CASCADE',
         required=True, select=True)
+    annuity_frequency = fields.Selection(ANNUITY_FREQUENCIES,
+        'Annuity Frequency',
+            states={
+                'invisible': ~Eval('requires_frequency'),
+                'required': Bool(Eval('requires_frequency', False))
+                },
+        depends=['requires_frequency', 'benefit'])
+    requires_frequency = fields.Function(
+        fields.Boolean('Frequency Required', depends=['benefit']),
+        'get_requires_frequency')
 
     @classmethod
     def __setup__(cls):
@@ -96,6 +113,19 @@ class BenefitRule(
             handler.column_rename('rule_extra_data',
                 'indemnification_rule_extra_data')
         super(BenefitRule, cls).__register__(module)
+
+    @fields.depends('benefit', 'requires_frequency')
+    def on_change_benefit(self):
+        if self.benefit is None:
+            self.requires_frequency = False
+        else:
+            self.requires_frequency = (self.benefit.indemnification_kind ==
+                'annuity')
+
+    def get_requires_frequency(self, name):
+        if not self.benefit:
+            return False
+        return self.benefit.indemnification_kind == 'annuity'
 
     def get_coverage_amount(self, args):
         if 'option' in args and 'covered_person' in args:
@@ -119,13 +149,16 @@ class BenefitRule(
         benefits = sorted(benefits, key=lambda x: x['start_date'])
         cleaned = []
         for period in benefits:
-            if not cleaned or period['amount_per_unit'] \
-                    != cleaned[-1]['amount_per_unit']:
+            if (not cleaned or period['amount_per_unit'] !=
+                    cleaned[-1]['amount_per_unit'] or
+                    period['unit'] != cleaned[-1]['unit']
+                    and (cleaned[-1]['end_date'] -
+                        period['start_date']).days == 1):
                 cleaned.append(period)
             else:
                 cleaned[-1]['end_date'] = period['end_date']
-                cleaned[-1]['nb_of_unit'] = (period['end_date'] -
-                    cleaned[-1]['start_date']).days + 1
+                cleaned[-1]['nb_of_unit'] = period['nb_of_unit'] + \
+                    cleaned[-1]['nb_of_unit']
                 cleaned[-1]['amount'] = (cleaned[-1]['nb_of_unit'] *
                     cleaned[-1]['amount_per_unit'])
         return cleaned
@@ -184,9 +217,9 @@ class BenefitRule(
                         reval_args) or [])
             else:
                 all_benefits.extend(benefits)
-        all_benefits = self.clean_benefits(all_benefits)
         for benefit in all_benefits:
             benefit['kind'] = 'benefit'
+        all_benefits = self.clean_benefits(all_benefits)
         res.extend(all_benefits)
         return res
 

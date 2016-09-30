@@ -4,8 +4,8 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='extra_datas']" position="after">
         <newline/>
-        <label name="period_frequency"/>
-        <field name="period_frequency"/>
+        <label name="annuity_frequency"/>
+        <field name="annuity_frequency"/>
         <label name="payment_accepted_until_date"/>
         <field name="payment_accepted_until_date"/>
         <label name="paid_until_date"/>

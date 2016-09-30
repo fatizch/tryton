@@ -50,7 +50,7 @@ class RuleEngineRuntime:
         return args['end_date']
 
     @classmethod
-    @check_args('benefit', 'option')
+    @check_args('benefit', 'option', 'loss')
     def _re_number_of_deductible_days(cls, args, from_date, to_date):
         pool = Pool()
         Details = pool.get('claim.indemnification.detail')
@@ -65,6 +65,8 @@ class RuleEngineRuntime:
                 ]],
                 ('indemnification.service.benefit', '=', args['benefit'].id),
                 ('indemnification.service.option', '=', args['option'].id),
+                ('indemnification.service.loss.covered_person', '=',
+                    args['loss'].covered_person.id),
                 ])
         res = 0
         for detail in details:
@@ -88,7 +90,7 @@ class RuleEngineRuntime:
     @classmethod
     @check_args('service')
     def _re_service_period_frequency(cls, args):
-        return args['service'].period_frequency
+        return args['service'].annuity_frequency
 
     @classmethod
     @check_args('indemnification')
@@ -135,8 +137,8 @@ class RuleEngineRuntime:
             start_date = start_date.replace(month=month_sync)
         if day_sync:
             start_date = start_date.replace(day=day_sync)
-        dates = list(rrule.rrule(getattr(rrule, frequency),
-                dtstart=start_date, until=end_date))
+        dates = list(rrule.rrule(getattr(rrule, frequency), dtstart=start_date,
+                until=end_date))
         dates.sort()
         return [x.date() for x in dates]
 
@@ -155,3 +157,9 @@ class RuleEngineRuntime:
     @check_args('base_amount')
     def _re_get_daily_base_salary(cls, args):
         return args['base_amount']
+
+    @classmethod
+    @check_args('service')
+    def _re_annuity_periods(cls, args, start_date, end_date):
+        return args['service'].calculate_annuity_periods(start_date,
+            end_date)

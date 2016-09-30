@@ -6,25 +6,13 @@ msgctxt "error:claim.net_calculation_rule:"
 msgid "The name must be unique!"
 msgstr "Le nom doit être unique!"
 
-msgctxt "view:claim.salary:"
-msgid "Total Bonus Salary"
-msgstr "Montant total des bonus salaire"
-
-msgctxt "view:claim.salary:"
-msgid "Total Gross Salary"
-msgstr "Montant total du salaire brut"
-
-msgctxt "view:claim.salary:"
-msgid "Total Net Salary"
-msgstr "Montant total du salaire net"
-
-msgctxt "view:claim.salary:"
-msgid "Total Net Salary Bonuses"
-msgstr "Montant total des bonus salaire net"
-
 msgctxt "field:claim.extra_datas_displayers,salaries:"
 msgid "Salaries"
 msgstr "Salaires"
+
+msgctxt "field:claim.indemnification,document_request_lines:"
+msgid "Documents"
+msgstr "Pièces justificatives"
 
 msgctxt "field:claim.indemnification_definition,salaries:"
 msgid "Salaries"
@@ -379,6 +367,14 @@ msgctxt "model:net_calculation_rule-fix_extra_data,name:"
 msgid "Net Calculation Rule - Extra Data"
 msgstr "Règle de calcul net - Donnée complémentaire"
 
+msgctxt "selection:benefit.rule,annuity_frequency:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:contract.option.benefit,annuity_frequency:"
+msgid ""
+msgstr " "
+
 msgctxt "selection:contract.option.benefit,salary_mode:"
 msgid "Last 12 months"
 msgstr "Les 12 derniers mois"
@@ -430,6 +426,22 @@ msgstr "Salaire"
 msgctxt "view:claim.salary:"
 msgid "Set Contributions"
 msgstr "Renseigner les taux de charges sociales salariales"
+
+msgctxt "view:claim.salary:"
+msgid "Total Bonus Salary"
+msgstr "Montant total des bonus salaire"
+
+msgctxt "view:claim.salary:"
+msgid "Total Gross Salary"
+msgstr "Montant total du salaire brut"
+
+msgctxt "view:claim.salary:"
+msgid "Total Net Salary"
+msgstr "Montant total du salaire net"
+
+msgctxt "view:claim.salary:"
+msgid "Total Net Salary Bonuses"
+msgstr "Montant total des bonus salaire net"
 
 msgctxt "view:claim.service:"
 msgid "Delivered Service"

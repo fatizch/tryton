@@ -1,4 +1,6 @@
-from trytond.pool import PoolMeta
+# This file is part of Coog. The COPYRIGHT file at the top level of
+# this repository contains the full copyright notices and license terms.
+from trytond.pool import PoolMeta, Pool
 from trytond.modules.cog_utils import fields
 
 __all__ = [
@@ -11,9 +13,8 @@ class IndemnificationCalculationResult:
     __metaclass__ = PoolMeta
     __name__ = 'claim.indemnification_calculation_result'
 
-    requested_documents = fields.Many2Many(
-        'document.request.line', None, None, 'Requested Documents',
-        readonly=True)
+    requested_documents = fields.One2Many('document.request.line', None,
+        'Requested Documents')
 
 
 class CreateIndemnification:
@@ -21,23 +22,21 @@ class CreateIndemnification:
     __name__ = 'claim.create_indemnification'
 
     def transition_calculate(self):
-        service = self.definition.service
-        args = {}
-        args['start_date'] = self.definition.start_date
-        args['end_date'] = self.definition.end_date
-        service.init_dict_for_rule_engine(args)
-        res = service.benefit.calculate_required_docs_for_indemnification(args)
         state = super(CreateIndemnification, self).transition_calculate()
-        if not res:
-            return state
-        requested = \
-            self.result.indemnification[0].create_required_documents(res)
-        self.doc_requests = [r.id for r in requested]
+        self.result.requested_documents = [r
+            for r in self.result.indemnification[0].document_request_lines]
         return state
 
     def default_result(self, name):
+        Indemnification = Pool().get('claim.indemnification')
         defaults = super(CreateIndemnification, self).default_result(name)
-        requested = getattr(self, 'doc_requests', None)
-        if requested:
-            defaults['requested_documents'] = requested
+        if defaults['indemnification']:
+            indemnification = Indemnification(defaults['indemnification'][0])
+            defaults['requested_documents'] = [r.id
+                for r in indemnification.document_request_lines]
         return defaults
+
+    def transition_regularisation(self):
+        DocumentRequest = Pool().get('document.request.line')
+        DocumentRequest.save(self.result.requested_documents)
+        return super(CreateIndemnification, self).transition_regularisation()

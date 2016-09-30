@@ -8,6 +8,7 @@ this repository contains the full copyright notices and license terms. -->
     <label name="status"/>
     <field name="status"/>
     <button string="Calculate" name="calculate"/>
+    <button string="Modify" name="modify_indemnification"/>
     <button string="Cancel" name="cancel_indemnification"/>
     <newline/>
     <label name="start_date"/>

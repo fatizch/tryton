@@ -8,6 +8,7 @@ from .invoice import *
 from .wizard import *
 from .configuration import *
 from .event import *
+from .batch import *
 
 
 def register():
@@ -38,6 +39,7 @@ def register():
         IndemnificationControlRule,
         Configuration,
         EventTypeAction,
+        CreateClaimIndemnificationBatch,
         module='claim_indemnification', type_='model')
     Pool.register(
         FillExtraData,

@@ -32,11 +32,22 @@ class Loss:
                 )
             ], ondelete='RESTRICT', depends=['possible_covered_persons'])
     std_start_date = fields.Function(fields.Date('STD Start Date',
-            states={'invisible': Eval('loss_desc_kind') not in ('std', 'ltd')},
+            states={'invisible': Eval('loss_desc_kind') != ('std')},
             depends=['loss_desc_kind', 'loss_desc']),
         'get_start_end_dates', setter='set_start_end_dates')
     std_end_date = fields.Function(fields.Date('STD End Date',
-            states={'invisible': Eval('loss_desc_kind') not in ('std', 'ltd')},
+            states={'invisible': Eval('loss_desc_kind') != ('std')},
+            depends=['loss_desc_kind', 'loss_desc']),
+        'get_start_end_dates', setter='set_start_end_dates')
+    initial_std_start_date = fields.Date('Initial STD Start Date',
+        states={'invisible': Eval('loss_desc_kind') != ('ltd')},
+        depends=['loss_desc_kind', 'loss_desc'])
+    ltd_start_date = fields.Function(fields.Date('LTD Start Date',
+            states={'invisible': Eval('loss_desc_kind') != 'ltd'},
+            depends=['loss_desc_kind', 'loss_desc']),
+        'get_start_end_dates', setter='set_start_end_dates')
+    ltd_end_date = fields.Function(fields.Date('LTD End Date',
+            states={'invisible': Eval('loss_desc_kind') != 'ltd'},
             depends=['loss_desc_kind', 'loss_desc']),
         'get_start_end_dates', setter='set_start_end_dates')
     return_to_work_date = fields.Date('Return to Work',
@@ -82,7 +93,7 @@ class Loss:
     def get_possible_covered_persons(self):
         res = []
         CoveredElement = Pool().get('contract.covered_element')
-        if not self.claim:
+        if not self.claim or not self.start_date:
             return []
         for covered_element in CoveredElement.get_possible_covered_elements(
                 self.claim.claimant, self.start_date):
