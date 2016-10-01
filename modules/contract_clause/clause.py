@@ -2,14 +2,14 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 __all__ = [
     'ContractClause',
     ]
 
 
-class ContractClause(model.CoopSQL, model.CoopView):
+class ContractClause(model.CoogSQL, model.CoogView):
     'Contract Clause'
 
     __name__ = 'contract.clause'

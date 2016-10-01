@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 from trytond.modules.endorsement import relation_mixin
 
 
@@ -72,7 +72,7 @@ class EndorsementContract:
 
 class EndorsementClause(relation_mixin('endorsement.contract.clause.field',
             'clause', 'contract.clause', 'Clause'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Clause'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.clause'

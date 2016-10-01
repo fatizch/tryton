@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.model import Unique
 
-from trytond.modules.cog_utils import fields, model, coop_string
+from trytond.modules.coog_core import fields, model, coog_string
 
 
 __all__ = [
@@ -23,7 +23,7 @@ class LossDescription:
         'deduction_period_kind', 'Deduction Period Kinds')
 
 
-class DeductionPeriodKind(model.CoopSQL, model.CoopView):
+class DeductionPeriodKind(model.CoogSQL, model.CoogView):
     'Deduction Period Kind'
 
     __name__ = 'benefit.loss.description.deduction_period_kind'
@@ -45,10 +45,10 @@ class DeductionPeriodKind(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
 
-class LossDescriptionDeductionPeriodKindRelation(model.CoopSQL):
+class LossDescriptionDeductionPeriodKindRelation(model.CoogSQL):
     'Loss Description to Deduction Period Kind Relation'
 
     __name__ = 'benefit.loss.description-deduction_period_kind'

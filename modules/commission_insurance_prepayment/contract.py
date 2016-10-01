@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.pool import PoolMeta, Pool
 from trytond.model import dualmethod
 
-from trytond.modules.cog_utils import fields, utils
+from trytond.modules.coog_core import fields, utils
 
 
 __metaclass__ = PoolMeta

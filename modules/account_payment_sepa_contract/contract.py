@@ -7,7 +7,7 @@ from trytond.pyson import Eval, And
 from trytond.transaction import Transaction
 from trytond import backend
 
-from trytond.modules.cog_utils import fields, utils
+from trytond.modules.coog_core import fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [

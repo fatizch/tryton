@@ -3,7 +3,7 @@
 from trytond.pool import Pool, PoolMeta
 from trytond.model import ModelView
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.coog_core import fields
 
 __all__ = [
     'Claim',

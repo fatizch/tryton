@@ -31,9 +31,9 @@ _dictionarize_fields_cache = Cache('dictionarize_fields', context=False)
 __all__ = [
     'error_manager',
     'FunctionalErrorMixIn',
-    'CoopSQL',
-    'CoopView',
-    'CoopWizard',
+    'CoogSQL',
+    'CoogView',
+    'CoogWizard',
     'expand_tree',
     'UnionMixin',
     'TaggedMixin',
@@ -165,7 +165,7 @@ class FunctionalErrorMixIn(object):
         return ServerContext().get('error_manager', None)
 
 
-class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
+class CoogSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
         summary.SummaryMixin):
     create_date_ = fields.Function(
         fields.DateTime('Creation date'),
@@ -173,12 +173,12 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
 
     @classmethod
     def __setup__(cls):
-        super(CoopSQL, cls).__setup__()
+        super(CoogSQL, cls).__setup__()
         cls.__rpc__.update({'extract_object': RPC(instantiate=0)})
 
     @classmethod
     def __post_setup__(cls):
-        super(CoopSQL, cls).__post_setup__()
+        super(CoogSQL, cls).__post_setup__()
         if cls.table_query != ModelSQL.table_query:
             return
         if cls._table and len(cls._table) > 64:
@@ -224,7 +224,7 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
 
     @property
     def _save_values(self):
-        values = super(CoopSQL, self)._save_values
+        values = super(CoogSQL, self)._save_values
         for fname, fvalues in values.iteritems():
             field = self._fields[fname]
             if not isinstance(field, fields.One2Many):
@@ -241,12 +241,12 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
         field = cls._fields.get(name, None)
         if isinstance(field, fields.Function) and field.loader:
             return getattr(cls, field.loader)(self)
-        return super(CoopSQL, self).__getattr__(name)
+        return super(CoogSQL, self).__getattr__(name)
 
     def __setattr__(self, name, value):
         cls = self.__class__
         field = cls._fields.get(name, None)
-        super(CoopSQL, self).__setattr__(name, value)
+        super(CoogSQL, self).__setattr__(name, value)
         if isinstance(field, fields.Function) and field.updater:
             getattr(cls, field.updater)(self, value)
 
@@ -257,7 +257,7 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
     @classmethod
     def create(cls, vlist):
         cls.update_values_before_create(vlist)
-        return super(CoopSQL, cls).create(vlist)
+        return super(CoogSQL, cls).create(vlist)
 
     @classmethod
     def delete(cls, instances):
@@ -277,7 +277,7 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
             to_delete.append((field.model_name, field.field))
 
         instance_list = ['%s,%s' % (i.__name__, i.id) for i in instances]
-        super(CoopSQL, cls).delete(instances)
+        super(CoogSQL, cls).delete(instances)
         for model_name, field_name in to_delete:
             TargetModel = Pool().get(model_name)
             TargetModel.delete(TargetModel.search(
@@ -341,7 +341,7 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
         # if cls.__name__ == 'rule_engine':
         #     print domain
         try:
-            return super(CoopSQL, cls).search(domain=domain, offset=offset,
+            return super(CoogSQL, cls).search(domain=domain, offset=offset,
                 limit=limit, order=order, count=count, query=query)
         except:
             logging.getLogger('root').debug('Bad domain on model %s : %r' % (
@@ -370,7 +370,7 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
                     continue
                 constraints.append(column.name)
         if not constraints:
-            return super(CoopSQL, cls).copy(objects, default=default)
+            return super(CoogSQL, cls).copy(objects, default=default)
         default = default.copy()
 
         for constraint in constraints:
@@ -379,7 +379,7 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
             'copying instances of %s' % (', '.join(constraints), cls.__name__))
 
         def single_copy(obj):
-            copy = super(CoopSQL, cls).copy([obj], default)[0]
+            copy = super(CoogSQL, cls).copy([obj], default)[0]
             for constraint in constraints:
                 setattr(copy, constraint, '%s_%s' % (
                     getattr(objects[0], constraint), copy.id))
@@ -393,7 +393,7 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
 
     @classmethod
     def search_global(cls, text):
-        for record, rec_name, icon in super(CoopSQL, cls).search_global(text):
+        for record, rec_name, icon in super(CoogSQL, cls).search_global(text):
             yield record, rec_name, record.get_icon()
 
     @classmethod
@@ -404,14 +404,14 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
         pass
 
     def get_rec_name(self, name=None):
-        return super(CoopSQL, self).get_rec_name(name)
+        return super(CoogSQL, self).get_rec_name(name)
 
 
-class CoopView(ModelView, FunctionalErrorMixIn):
+class CoogView(ModelView, FunctionalErrorMixIn):
     @classmethod
     def fields_view_get(cls, view_id=None, view_type='form'):
         if not Transaction().context.get('developper_read_view'):
-            return super(CoopView, cls).fields_view_get(view_id, view_type)
+            return super(CoogView, cls).fields_view_get(view_id, view_type)
         result = {
             'model': cls.__name__,
             'type': view_type,
@@ -508,7 +508,7 @@ def expand_tree(name, test_field='must_expand_tree'):
     return ViewTreeState
 
 
-class CoopWizard(Wizard):
+class CoogWizard(Wizard):
     pass
 
 
@@ -645,7 +645,7 @@ class TaggedMixin(object):
         return [('tags.name',) + tuple(clause[1:])]
 
 
-class MethodDefinition(CoopSQL, CoopView):
+class MethodDefinition(CoogSQL, CoogView):
     'Method Definition'
     '''
         This model uses is what ir.model is for models and ir.model.field for

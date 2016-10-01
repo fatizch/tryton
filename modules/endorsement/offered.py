@@ -8,7 +8,7 @@ from trytond.transaction import Transaction
 from trytond.cache import Cache
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.coog_core import model, fields, coog_string
 from .endorsement import field_mixin
 from .wizard import EndorsementWizardPreviewMixin
 
@@ -30,7 +30,7 @@ __all__ = [
     ]
 
 
-class EndorsementDefinition(model.CoopSQL, model.CoopView):
+class EndorsementDefinition(model.CoogSQL, model.CoogView):
     'Endorsement Definition'
 
     __name__ = 'endorsement.definition'
@@ -111,7 +111,7 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     @classmethod
     def get_endorsement_parts(cls, definitions, name):
@@ -176,7 +176,7 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
             # TODO : Fix this. Fails on BasicPreview with
             # endorsement_insurance_invoice override
             # result[state_name] = \
-            #     coop_string.translate_model_name(state_class)
+            #     coog_string.translate_model_name(state_class)
         return [(k, v) for k, v in result.iteritems()] + [('', '')]
 
     def get_methods_for_model(self, model_name):
@@ -193,7 +193,7 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
         return method_names
 
 
-class EndorsementPart(model.CoopSQL, model.CoopView):
+class EndorsementPart(model.CoogSQL, model.CoogView):
     'Endorsement Part'
     _func_key = 'code'
 
@@ -246,7 +246,7 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     @fields.depends('kind')
     def on_change_with_endorsed_model(self, name=None):
@@ -303,7 +303,7 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
             BaseModel.delete(to_delete)
 
 
-class EndorsementDefinitionPartRelation(model.CoopSQL, model.CoopView):
+class EndorsementDefinitionPartRelation(model.CoogSQL, model.CoogView):
     'Endorsement Definition Part Relation'
 
     __name__ = 'endorsement.definition-endorsement.part'
@@ -320,22 +320,22 @@ class EndorsementDefinitionPartRelation(model.CoopSQL, model.CoopView):
         cls._order.append(('order', 'ASC'))
 
 
-class EndorsementContractField(field_mixin('contract'), model.CoopSQL,
-        model.CoopView):
+class EndorsementContractField(field_mixin('contract'), model.CoogSQL,
+        model.CoogView):
     'Endorsement Contract Field'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.field'
 
 
 class EndorsementOptionField(field_mixin('contract.option'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Option Field'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.option.field'
 
 
 class EndorsementOptionVersionField(field_mixin('contract.option.version'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Option Version Field'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.option.version.field'
@@ -343,14 +343,14 @@ class EndorsementOptionVersionField(field_mixin('contract.option.version'),
 
 class EndorsementActivationHistoryField(
         field_mixin('contract.activation_history'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Activation History Field'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.activation_history.field'
 
 
 class EndorsementContactField(field_mixin('contract.contact'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Contact Field'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.contact.field'
@@ -358,7 +358,7 @@ class EndorsementContactField(field_mixin('contract.contact'),
 
 class EndorsementExtraDataField(
         field_mixin('contract.extra_data'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Extra Data Field'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.extra_data.field'
@@ -379,7 +379,7 @@ class Product:
             'endorsement_definitions'}
 
 
-class EndorsementDefinitionProductRelation(model.CoopSQL):
+class EndorsementDefinitionProductRelation(model.CoogSQL):
     'Endorsement Definition to Product Relation'
 
     __name__ = 'endorsement.definition-product'
@@ -389,7 +389,7 @@ class EndorsementDefinitionProductRelation(model.CoopSQL):
         'Definition', ondelete='RESTRICT')
 
 
-class EndorsementSubState(model.CoopSQL, model.CoopView):
+class EndorsementSubState(model.CoogSQL, model.CoogView):
     'Endorsement SubState'
 
     __name__ = 'endorsement.sub_state'
@@ -412,4 +412,4 @@ class EndorsementSubState(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)

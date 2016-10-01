@@ -7,7 +7,7 @@ from sql.operators import Not
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import batch, coop_string
+from trytond.modules.coog_core import batch, coog_string
 
 
 __all__ = [
@@ -55,7 +55,7 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
     def execute(cls, objects, ids, treatment_date, extra_args):
         invoices = Pool().get('contract').invoice(objects, treatment_date)
         cls.logger.info('%d invoices created for %s' %
-            (len(invoices), coop_string.get_print_infos(ids, 'contracts')))
+            (len(invoices), coog_string.get_print_infos(ids, 'contracts')))
 
     @classmethod
     def get_batch_args_name(cls):

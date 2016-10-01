@@ -6,7 +6,7 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
-from trytond.modules.cog_utils import model, fields, utils
+from trytond.modules.coog_core import model, fields, utils
 
 __all__ = [
     'DisplayContractPremium',
@@ -104,7 +104,7 @@ class DisplayContractPremium(Wizard):
         return 'display'
 
 
-class DisplayContractPremiumDisplayer(model.CoopView):
+class DisplayContractPremiumDisplayer(model.CoogView):
     'Display Contract Premium Displayer'
 
     __name__ = 'contract.premium.display.premiums'
@@ -113,7 +113,7 @@ class DisplayContractPremiumDisplayer(model.CoopView):
         None, 'Premiums', readonly=True)
 
 
-class DisplayContractPremiumDisplayerPremiumLine(model.CoopView):
+class DisplayContractPremiumDisplayerPremiumLine(model.CoogView):
     'Display Contract Premium Displayer Prmeium Line'
 
     __name__ = 'contract.premium.display.premiums.line'

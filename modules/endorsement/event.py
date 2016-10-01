@@ -7,7 +7,7 @@ from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -17,7 +17,7 @@ __all__ = [
     ]
 
 
-class EndorsementDefinitionReportTemplate(model.CoopSQL, model.CoopView):
+class EndorsementDefinitionReportTemplate(model.CoogSQL, model.CoogView):
     'Endorsement Definition Report Template Relation'
     __name__ = 'endorsement.definition-report.template'
 

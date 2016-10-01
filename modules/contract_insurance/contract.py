@@ -13,9 +13,9 @@ from trytond.pyson import Eval, If, Or, Bool, Len
 from trytond.transaction import Transaction
 from trytond.model import ModelView
 
-from trytond.modules.cog_utils import model, fields
-from trytond.modules.cog_utils import utils
-from trytond.modules.cog_utils import coop_string
+from trytond.modules.coog_core import model, fields
+from trytond.modules.coog_core import utils
+from trytond.modules.coog_core import coog_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.contract import _CONTRACT_STATUS_STATES
 from trytond.modules.contract import _CONTRACT_STATUS_DEPENDS
@@ -645,7 +645,7 @@ class ContractOptionVersion:
             option_h.drop_column('extra_data')
 
 
-class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
+class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         ModelCurrency):
     'Covered Element'
     '''
@@ -1287,7 +1287,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             self.extra_data.update(cov_dict['extra_data'])
 
 
-class CoveredElementVersion(model.CoopSQL, model.CoopView):
+class CoveredElementVersion(model.CoogSQL, model.CoogView):
     'Contract Covered Element Version'
 
     __name__ = 'contract.covered_element.version'
@@ -1366,7 +1366,7 @@ class CoveredElementVersion(model.CoopSQL, model.CoopView):
             }
 
 
-class CoveredElementPartyRelation(model.CoopSQL):
+class CoveredElementPartyRelation(model.CoogSQL):
     'Relation between Covered Element and Covered Relations'
 
     __name__ = 'contract.covered_element-party'
@@ -1377,7 +1377,7 @@ class CoveredElementPartyRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
+class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
     'Extra Premium'
 
     __name__ = 'contract.option.extra_premium'
@@ -1588,7 +1588,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         if self.calculation_kind == 'flat' and self.flat_amount:
             return self.currency.amount_as_string(abs(self.flat_amount))
         elif self.calculation_kind == 'rate' and self.rate:
-            return '%s %%' % coop_string.format_number('%.2f',
+            return '%s %%' % coog_string.format_number('%.2f',
                 abs(self.rate) * 100)
 
     def get_time_limited(self, name):
@@ -1663,7 +1663,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
                 years=years, days=-1)
 
 
-class OptionExclusionKindRelation(model.CoopSQL):
+class OptionExclusionKindRelation(model.CoogSQL):
     'Option to Exclusion Kind relation'
 
     __name__ = 'contract.option-exclusion.kind'

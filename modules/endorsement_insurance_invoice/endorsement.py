@@ -6,7 +6,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or, Bool
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 from trytond.modules.endorsement import relation_mixin
 
 __metaclass__ = PoolMeta
@@ -229,7 +229,7 @@ class EndorsementBillingInformation(relation_mixin(
             'endorsement.contract.billing_information.field',
             'billing_information', 'contract.billing_information',
             'Billing Informations'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Billing Information'
 
     __name__ = 'endorsement.contract.billing_information'

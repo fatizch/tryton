@@ -5,7 +5,7 @@ from decimal import Decimal
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, Or
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 __metaclass__ = PoolMeta
 
@@ -178,7 +178,7 @@ class ContractOption:
             return self.beneficiary_clause.content
 
 
-class Beneficiary(model.CoopSQL, model.CoopView):
+class Beneficiary(model.CoogSQL, model.CoogView):
     'Contract Beneficiary'
 
     __name__ = 'contract.option.beneficiary'

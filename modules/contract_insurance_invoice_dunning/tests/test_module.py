@@ -4,13 +4,13 @@ import unittest
 import doctest
 
 import trytond.tests.test_tryton
-from trytond.modules.cog_utils import test_framework
+from trytond.modules.coog_core import test_framework
 from trytond.tests.test_tryton import doctest_setup, doctest_teardown
 
 
-class ModuleTestCase(test_framework.CoopTestCase):
+class ModuleTestCase(test_framework.CoogTestCase):
     '''
-    Test Coop module.
+    Test Coog module.
     '''
     module = 'contract_insurance_invoice_dunning'
 

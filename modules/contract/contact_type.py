@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
-from trytond.modules.cog_utils import model, fields, coop_string, utils
+from trytond.modules.coog_core import model, fields, coog_string, utils
 from trytond.pyson import Eval, Bool
 
 __all__ = [
@@ -11,7 +11,7 @@ __all__ = [
     ]
 
 
-class ContactType(model.CoopSQL, model.CoopView):
+class ContactType(model.CoogSQL, model.CoogView):
     'Contact Type'
 
     __name__ = 'contract.contact.type'
@@ -23,10 +23,10 @@ class ContactType(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
 
-class ContractContact(model._RevisionMixin, model.CoopSQL, model.CoopView):
+class ContractContact(model._RevisionMixin, model.CoogSQL, model.CoogView):
     'Contract Contact'
 
     __name__ = 'contract.contact'

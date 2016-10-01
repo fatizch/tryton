@@ -14,15 +14,15 @@ from trytond.transaction import Transaction
 from trytond.rpc import RPC
 from trytond.tools import grouped_slice
 
-from trytond.modules.cog_utils import fields, model, coop_string, utils, \
-    coop_date
+from trytond.modules.coog_core import fields, model, coog_string, utils, \
+    coog_date
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.claim_indemnification.benefit import \
     INDEMNIFICATION_DETAIL_KIND
 from trytond.modules.claim_indemnification.benefit import INDEMNIFICATION_KIND
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 from trytond.modules.rule_engine import get_rule_mixin
-from trytond.modules.cog_utils.coop_date import FREQUENCY_CONVERSION_TABLE
+from trytond.modules.coog_core.coog_date import FREQUENCY_CONVERSION_TABLE
 from .benefit import ANNUITY_FREQUENCIES
 
 __metaclass__ = PoolMeta
@@ -364,7 +364,7 @@ class ClaimService:
         periods = []
         end_date = self.paid_until_date
         while end_date < until:
-            base_date = coop_date.add_day(end_date, 1)
+            base_date = coog_date.add_day(end_date, 1)
             end_date = self.get_next_period_end_date(base_date)
             periods.append((base_date, end_date))
         return periods
@@ -407,7 +407,7 @@ class ClaimService:
         return res
 
 
-class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
+class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency):
     'Indemnification'
 
     __name__ = 'claim.indemnification'
@@ -590,13 +590,13 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
 
     def get_rec_name(self, name):
         return u'%s - %s: %s [%s]' % (
-            coop_string.translate_value(self, 'start_date')
+            coog_string.translate_value(self, 'start_date')
             if self.start_date else '',
-            coop_string.translate_value(self, 'end_date')
+            coog_string.translate_value(self, 'end_date')
             if self.end_date else '',
             self.get_currency().amount_as_string(self.amount)
             if self.amount else '',
-            coop_string.translate_value(self, 'status') if self.status else '',
+            coog_string.translate_value(self, 'status') if self.status else '',
             )
 
     def complete_indemnification(self):
@@ -869,7 +869,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         pass
 
 
-class IndemnificationTaxes(model.CoopSQL):
+class IndemnificationTaxes(model.CoogSQL):
     'Indemnification - Taxes Relation'
 
     __name__ = 'claim.indemnification-acount.tax'
@@ -880,7 +880,7 @@ class IndemnificationTaxes(model.CoopSQL):
         'Indemnification', ondelete='RESTRICT', required=True, select=True)
 
 
-class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
+class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency):
     'Indemnification Detail'
 
     __name__ = 'claim.indemnification.detail'
@@ -903,7 +903,7 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
         depends=['currency_digits'])
     nb_of_unit = fields.Numeric('Nb of Unit')
-    unit = fields.Selection(coop_date.DAILY_DURATION, 'Unit')
+    unit = fields.Selection(coog_date.DAILY_DURATION, 'Unit')
     unit_string = unit.translated('unit')
     amount = fields.Numeric('Amount',
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
@@ -965,7 +965,7 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
 
 class IndemnificationControlRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Indemnification Control Rule'
 
     __name__ = 'claim.indemnification.control.rule'

@@ -3,7 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 from collections import OrderedDict
 from trytond.pool import Pool, PoolMeta
-from trytond.modules.cog_utils import fields, export
+from trytond.modules.coog_core import fields, export
 from trytond.modules.country_cog import country
 
 __metaclass__ = PoolMeta

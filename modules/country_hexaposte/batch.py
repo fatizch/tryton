@@ -3,7 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 import logging
 from trytond.pool import Pool
-from trytond.modules.cog_utils import batch
+from trytond.modules.coog_core import batch
 
 from .hexa_post import HexaPostLoader
 

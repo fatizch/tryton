@@ -6,7 +6,7 @@ from collections import defaultdict
 from trytond.pool import PoolMeta
 from trytond.cache import Cache
 
-from trytond.modules.cog_utils import coop_date
+from trytond.modules.coog_core import coog_date
 
 
 __metaclass__ = PoolMeta
@@ -62,7 +62,7 @@ class Contract:
 
     def get_used_loans_ratios(self):
         loan_data = {loan.id: {
-                'duration': coop_date.number_of_days_between(
+                'duration': coog_date.number_of_days_between(
                     loan.funds_release_date, loan.end_date),
                 'max_insured': 0,
                 } for loan in self.used_loans}

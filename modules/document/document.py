@@ -7,7 +7,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateTransition, StateView, Button
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model, coop_string, utils
+from trytond.modules.coog_core import fields, model, coog_string, utils
 
 __all__ = [
     'DocumentDescription',
@@ -17,7 +17,7 @@ __all__ = [
     ]
 
 
-class DocumentDescription(model.CoopSQL, model.CoopView):
+class DocumentDescription(model.CoogSQL, model.CoogView):
     'Document Description'
 
     __name__ = 'document.description'
@@ -43,10 +43,10 @@ class DocumentDescription(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
 
-class DocumentReception(model.CoopSQL, model.CoopView):
+class DocumentReception(model.CoogSQL, model.CoogView):
     'Document Reception'
 
     __name__ = 'document.reception'
@@ -162,7 +162,7 @@ class DocumentReception(model.CoopSQL, model.CoopView):
                 document.raise_user_warning(document.id, 'not_attached')
 
     @classmethod
-    @model.CoopView.button_action('document.act_receive_document')
+    @model.CoogView.button_action('document.act_receive_document')
     def execute(cls, documents):
         cls.check_reception_date(documents)
 
@@ -232,7 +232,7 @@ class ReceiveDocument(Wizard):
         return action, {}
 
 
-class ReattachDocument(model.CoopView):
+class ReattachDocument(model.CoogView):
     'Reattach Document'
 
     __name__ = 'document.receive.reattach'

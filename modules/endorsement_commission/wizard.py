@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
 from trytond.pyson import Eval, If, Bool
 
-from trytond.modules.cog_utils import fields, utils
+from trytond.modules.coog_core import fields, utils
 from trytond.modules.endorsement import EndorsementWizardStepMixin
 
 __metaclass__ = PoolMeta

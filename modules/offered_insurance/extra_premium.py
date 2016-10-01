@@ -5,7 +5,7 @@ from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
@@ -13,7 +13,7 @@ __all__ = [
     ]
 
 
-class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
+class ExtraPremiumKind(model.CoogSQL, model.CoogView, ModelCurrency):
     'Extra Premium Kind'
     __name__ = 'extra_premium.kind'
     _func_key = 'code'
@@ -64,7 +64,7 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
     @fields.depends('name', 'code')
     def on_change_name(self):
         if not self.code:
-            self.code = coop_string.slugify(self.name)
+            self.code = coog_string.slugify(self.name)
 
     @fields.depends('is_discount')
     def on_change_is_discount(self):

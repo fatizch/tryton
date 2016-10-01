@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 from trytond.modules.endorsement import (EndorsementWizardStepMixin,
     add_endorsement_step)
 

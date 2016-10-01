@@ -7,7 +7,7 @@ from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.currency_cog import ModelCurrency
 
 FEE_FREQUENCIES = [
@@ -23,7 +23,7 @@ __all__ = [
     ]
 
 
-class Fee(model.CoopSQL, model.CoopView, ModelCurrency):
+class Fee(model.CoogSQL, model.CoogView, ModelCurrency):
     'Fee'
 
     __name__ = 'account.fee'
@@ -104,7 +104,7 @@ class Fee(model.CoopSQL, model.CoopView, ModelCurrency):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     def get_currency(self):
         return self.company.currency if self.company else None

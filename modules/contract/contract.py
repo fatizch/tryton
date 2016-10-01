@@ -21,8 +21,8 @@ from trytond.pool import Pool
 from trytond.model import dualmethod, Unique
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
-from trytond.modules.cog_utils import utils, model, fields, coop_date
-from trytond.modules.cog_utils import coop_string, export
+from trytond.modules.coog_core import utils, model, fields, coog_date
+from trytond.modules.coog_core import coog_string, export
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.offered import offered
 from trytond.error import UserError
@@ -68,7 +68,7 @@ __all__ = [
     ]
 
 
-class ActivationHistory(model.CoopSQL, model.CoopView):
+class ActivationHistory(model.CoogSQL, model.CoogView):
     'Activation History'
 
     __name__ = 'contract.activation_history'
@@ -127,7 +127,7 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
             Date.date_as_string(self.end_date) if self.end_date else '')
 
 
-class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
+class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     'Contract'
 
     __name__ = 'contract'
@@ -534,7 +534,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return []
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     def button_calculate(cls, contracts):
         cls.calculate(contracts)
 
@@ -998,7 +998,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             Date.date_as_string(self.start_date) if self.start_date else '',
             Date.date_as_string(self.end_date) if self.end_date else '')
         product = '[%s]' % self.product.rec_name
-        status = '[%s]' % coop_string.translate_value(self, 'status')
+        status = '[%s]' % coog_string.translate_value(self, 'status')
         number = self.contract_number or self.quote_number
         if self.status in ['void', 'declined']:
             return '%s %s %s' % (number, product, status)
@@ -1118,7 +1118,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 min(product.end_date, end_date)
                 if end_date else product.end_date)
             if end_date:
-                self.activation_history[0].end_date = coop_date.add_day(
+                self.activation_history[0].end_date = coog_date.add_day(
                     end_date, -1)
             self.start_date, self.end_date = start_date, end_date
             self.status = 'quote'
@@ -1424,37 +1424,37 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return result
 
     @classmethod
-    @model.CoopView.button_action('contract.option_subscription_wizard')
+    @model.CoogView.button_action('contract.option_subscription_wizard')
     def option_subscription(cls, contracts):
         pass
 
     @classmethod
-    @model.CoopView.button_action('contract.act_change_start_date')
+    @model.CoogView.button_action('contract.act_change_start_date')
     def button_change_start_date(cls, contracts):
         pass
 
     @classmethod
-    @model.CoopView.button_action('contract.act_activate')
+    @model.CoogView.button_action('contract.act_activate')
     def button_activate(cls, contracts):
         pass
 
     @classmethod
-    @model.CoopView.button_action('contract.act_decline')
+    @model.CoogView.button_action('contract.act_decline')
     def button_decline(cls, contracts):
         pass
 
     @classmethod
-    @model.CoopView.button_action('contract.act_stop')
+    @model.CoogView.button_action('contract.act_stop')
     def button_stop(cls, contracts):
         pass
 
     @classmethod
-    @model.CoopView.button_action('contract.act_hold_contract')
+    @model.CoogView.button_action('contract.act_hold_contract')
     def button_hold(cls, contracts):
         pass
 
     @classmethod
-    @model.CoopView.button_action('contract.act_reactivate')
+    @model.CoogView.button_action('contract.act_reactivate')
     def button_reactivate(cls, contracts):
         pass
 
@@ -1553,7 +1553,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                     end_date=address.end_date))
             if not address.end_date or address.end_date >= self.end_date:
                 break
-            next_start = coop_date.add_day(address.end_date, 1)
+            next_start = coog_date.add_day(address.end_date, 1)
         self.contacts = contacts
         self.save()
 
@@ -1600,7 +1600,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                         contact.address.end_date))
             if idx == 0 or not contacts[idx - 1].end_date or not contact.date:
                 continue
-            if (coop_date.add_day(contacts[idx - 1].end_date, 1)
+            if (coog_date.add_day(contacts[idx - 1].end_date, 1)
                     != contact.date):
                 self.append_functional_error('bad_contact_follow_up',
                     (contact_type.rec_name,))
@@ -1609,7 +1609,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         self.check_contacts(self.subscriber, 'subscriber')
 
 
-class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
+class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         ModelCurrency):
     'Contract Option'
 
@@ -2095,7 +2095,7 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         self.sub_status = reason
 
 
-class ContractOptionVersion(model.CoopSQL, model.CoopView):
+class ContractOptionVersion(model.CoogSQL, model.CoogView):
     'Contract Option Version'
 
     __name__ = 'contract.option.version'
@@ -2181,8 +2181,8 @@ class ContractOptionVersion(model.CoopSQL, model.CoopView):
         self.option.init_dict_for_rule_engine(cur_dict)
 
 
-class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,
-        model.CoopView, export.ExportImportMixin):
+class ContractExtraDataRevision(model._RevisionMixin, model.CoogSQL,
+        model.CoogView, export.ExportImportMixin):
     'Contract Extra Data'
 
     __name__ = 'contract.extra_data'
@@ -2219,7 +2219,7 @@ class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,
             values['_func_key'] = None
 
 
-class ContractSelectHoldReason(model.CoopView):
+class ContractSelectHoldReason(model.CoogView):
     'End date selector for contract'
 
     __name__ = 'contract.hold.select_hold_status'
@@ -2253,7 +2253,7 @@ class ContractHold(Wizard):
         return 'end'
 
 
-class ContractSelectStartDate(model.CoopView):
+class ContractSelectStartDate(model.CoogView):
     'Start date selector for contract'
 
     __name__ = 'contract.select_start_date'
@@ -2311,7 +2311,7 @@ class ContractChangeStartDate(Wizard):
         return 'end'
 
 
-class ContractSubStatus(model.CoopSQL, model.CoopView):
+class ContractSubStatus(model.CoogSQL, model.CoogView):
     'Contract SubStatus'
 
     __name__ = 'contract.sub_status'
@@ -2356,7 +2356,7 @@ class ContractSubStatus(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     @classmethod
     def get_sub_status(cls, code):

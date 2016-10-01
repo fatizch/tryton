@@ -32,10 +32,10 @@ from trytond.tools.misc import memoize
 from trytond.tools import cursor_dict
 from trytond.pyson import Eval, Or, Bool, If
 
-from trytond.modules.cog_utils import (coop_date, coop_string, fields,
+from trytond.modules.coog_core import (coog_date, coog_string, fields,
     model, utils)
-from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
-from trytond.modules.cog_utils.model import CoopView as ModelView
+from trytond.modules.coog_core.model import CoogSQL as ModelSQL
+from trytond.modules.coog_core.model import CoogView as ModelView
 from trytond.modules.table import table
 
 __all__ = [
@@ -431,7 +431,7 @@ class RuleTools(ModelView):
                 not isinstance(date2, datetime.date)):
             args['errors'].append('years_between needs datetime types')
             raise CatchedRuleEngineError
-        return coop_date.number_of_years_between(date1, date2)
+        return coog_date.number_of_years_between(date1, date2)
 
     @classmethod
     def _re_days_between(cls, args, date1, date2):
@@ -439,7 +439,7 @@ class RuleTools(ModelView):
                 not isinstance(date2, datetime.date)):
             args['errors'].append('days_between needs datetime types')
             raise CatchedRuleEngineError
-        return coop_date.number_of_days_between(date1, date2)
+        return coog_date.number_of_days_between(date1, date2)
 
     @classmethod
     def _re_today(cls, args):
@@ -447,43 +447,43 @@ class RuleTools(ModelView):
 
     @classmethod
     def _re_convert_frequency(cls, args, from_frequency, to_frequency):
-        return coop_date.convert_frequency(from_frequency, to_frequency)
+        return coog_date.convert_frequency(from_frequency, to_frequency)
 
     @classmethod
     def _re_add_days(cls, args, date, duration=1):
-        return coop_date.add_duration(date, 'day', duration)
+        return coog_date.add_duration(date, 'day', duration)
 
     @classmethod
     def _re_add_weeks(cls, args, date, duration=1):
-        return coop_date.add_duration(date, 'week', duration)
+        return coog_date.add_duration(date, 'week', duration)
 
     @classmethod
     def _re_add_months(cls, args, date, duration=1,
             stick_to_end_of_month=False):
-        return coop_date.add_duration(date, 'month', duration,
+        return coog_date.add_duration(date, 'month', duration,
             stick_to_end_of_month)
 
     @classmethod
     def _re_add_years(cls, args, date, duration=1,
             stick_to_end_of_month=False):
-        return coop_date.add_duration(date, 'year', duration,
+        return coog_date.add_duration(date, 'year', duration,
             stick_to_end_of_month)
 
     @classmethod
     def _re_add_quarters(cls, args, date, duration=1,
             stick_to_end_of_month=False):
-        return coop_date.add_duration(date, 'quarter', duration,
+        return coog_date.add_duration(date, 'quarter', duration,
             stick_to_end_of_month)
 
     @classmethod
     def _re_add_half_years(cls, args, date, duration=1,
             stick_to_end_of_month=False):
-        return coop_date.add_duration(date, 'half_year', duration,
+        return coog_date.add_duration(date, 'half_year', duration,
             stick_to_end_of_month)
 
     @classmethod
     def _re_slugify(cls, args, text, char='_', lower=True):
-        return coop_string.slugify(text, char, lower)
+        return coog_string.slugify(text, char, lower)
 
     @classmethod
     def add_error(cls, args, error_code, custom=False, lvl=None):
@@ -563,7 +563,7 @@ class FunctionFinder(ast.NodeVisitor):
         return super(FunctionFinder, self).visit(node)
 
 
-class RuleEngineTable(model.CoopSQL):
+class RuleEngineTable(model.CoogSQL):
     'Rule_Engine - Table'
 
     __name__ = 'rule_engine-table'
@@ -594,7 +594,7 @@ class RuleEngineTable(model.CoopSQL):
                     cur_rule_parameter['the_table']]]))
 
 
-class RuleEngineRuleEngine(model.CoopSQL):
+class RuleEngineRuleEngine(model.CoogSQL):
     'Rule Engine - Rule Engine'
 
     __name__ = 'rule_engine-rule_engine'
@@ -625,7 +625,7 @@ class RuleEngineRuleEngine(model.CoopSQL):
                     cur_rule_parameter['the_rule']]]))
 
 
-class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
+class RuleParameter(DictSchemaMixin, model.CoogSQL, model.CoogView):
     'Rule Parameter'
 
     __name__ = 'rule_engine.rule_parameter'
@@ -671,7 +671,7 @@ class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
     def on_change_with_name(self):
         if self.name:
             return self.name
-        return coop_string.slugify(self.string)
+        return coog_string.slugify(self.string)
 
     @classmethod
     def __setup__(cls):
@@ -680,7 +680,7 @@ class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
         cls.string.string = 'Name'
 
 
-class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
+class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     "Rule"
     __name__ = 'rule_engine'
     _func_key = 'short_name'
@@ -877,7 +877,7 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
             tmp_node['name'] = ''
             tmp_node['translated'] = ''
             tmp_node['fct_args'] = ''
-            tmp_node['description'] = coop_string.translate_label(cls,
+            tmp_node['description'] = coog_string.translate_label(cls,
                 label_type)
             tmp_node['type'] = 'folder'
             tmp_node['long_description'] = ''
@@ -903,7 +903,7 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
     def on_change_with_short_name(self):
         if self.short_name:
             return self.short_name
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     @fields.depends('type_')
     def on_change_with_result_type(self, name=None):
@@ -1276,7 +1276,7 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 if not dim_name:
                     dim_name = 'Col #%s' % idx
                 dimension_names.append(dim_name)
-            res = ', '.join([coop_string.slugify(x, lower=False)
+            res = ', '.join([coog_string.slugify(x, lower=False)
                 for x in dimension_names])
         elif kind == 'rule':
             res = ', '.join(('%s=' % elem.name
@@ -1318,13 +1318,13 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
             res = []
 
         self.data_tree_structure_for_kind(res,
-            coop_string.translate_label(self, 'parameters'),
+            coog_string.translate_label(self, 'parameters'),
             'param', self.parameters)
         self.data_tree_structure_for_kind(res,
-            coop_string.translate_label(self, 'rules_used'), 'rule',
+            coog_string.translate_label(self, 'rules_used'), 'rule',
             self.rules_used)
         self.data_tree_structure_for_kind(res,
-            coop_string.translate_label(self, 'tables_used'), 'table',
+            coog_string.translate_label(self, 'tables_used'), 'table',
             self.tables_used)
         return res
 
@@ -1367,7 +1367,7 @@ class RuleEngine(model.CoopSQL, model.CoopView, model.TaggedMixin):
             rule_execution.calculation_date = date
             if exc:
                 rule_execution.errors += '\n' + (
-                    coop_string.slugify(self.name) + ' - ' + str(exc))
+                    coog_string.slugify(self.name) + ' - ' + str(exc))
             rule_execution.save()
             try:
                 transaction.commit()
@@ -1528,7 +1528,7 @@ class RuleFunction(ModelView, ModelSQL):
     def check_arguments_accents(self):
         if not self.fct_args:
             return True
-        result = coop_string.is_ascii(self.fct_args)
+        result = coog_string.is_ascii(self.fct_args)
         if result:
             return True
         self.raise_user_error('argument_accent_error')
@@ -1536,7 +1536,7 @@ class RuleFunction(ModelView, ModelSQL):
     def check_name_accents(self):
         if not self.name:
             return True
-        result = coop_string.is_ascii(self.translated_technical_name)
+        result = coog_string.is_ascii(self.translated_technical_name)
         if result:
             return True
         self.raise_user_error('name_accent_error')
@@ -1557,7 +1557,7 @@ class RuleFunction(ModelView, ModelSQL):
         if self.translated_technical_name:
             return
         self.translated_technical_name = \
-            coop_string.slugify(self.description)
+            coog_string.slugify(self.description)
 
     def as_tree(self):
         tree = {}
@@ -1590,7 +1590,7 @@ class RuleFunction(ModelView, ModelSQL):
     @fields.depends('rule')
     def on_change_with_translated_technical_name(self):
         if self.rule:
-            return coop_string.slugify(self.rule.name)
+            return coog_string.slugify(self.rule.name)
 
     @staticmethod
     def default_long_description():
@@ -1877,7 +1877,7 @@ class RunTests(Wizard):
         return {'report': '\n\n'.join(results)}
 
 
-class RuleError(model.CoopSQL, model.CoopView):
+class RuleError(model.CoogSQL, model.CoogView):
     'Rule Error'
 
     __name__ = 'functional_error'
@@ -1930,7 +1930,7 @@ class RuleError(model.CoopSQL, model.CoopView):
         if self.code:
             return self.code
         elif self.name:
-            return coop_string.slugify(self.name)
+            return coog_string.slugify(self.name)
 
     @classmethod
     def get_functional_errors_from_errors(cls, errors):

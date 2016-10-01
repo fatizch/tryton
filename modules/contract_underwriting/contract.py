@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, If
 from trytond.model import dualmethod
 
-from trytond.modules.cog_utils import model, fields, utils
+from trytond.modules.coog_core import model, fields, utils
 from trytond.modules.contract import _STATES as CONTRACT_STATES
 
 __metaclass__ = PoolMeta
@@ -16,7 +16,7 @@ __all__ = [
     ]
 
 
-class ContractUnderwriting(model.CoopSQL, model.CoopView):
+class ContractUnderwriting(model.CoogSQL, model.CoogView):
     'Contract Underwriting'
 
     __name__ = 'contract.underwriting'
@@ -248,7 +248,7 @@ class ContractUnderwriting(model.CoopSQL, model.CoopView):
         args['underwriting'] = self
 
 
-class ContractUnderwritingOption(model.CoopSQL, model.CoopView):
+class ContractUnderwritingOption(model.CoogSQL, model.CoogView):
     'Contract Option Underwriting'
 
     __name__ = 'contract.underwriting.option'

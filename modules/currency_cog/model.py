@@ -3,7 +3,7 @@
 from trytond.transaction import Transaction
 from trytond.pool import Pool
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.coog_core import fields
 
 
 __all__ = [

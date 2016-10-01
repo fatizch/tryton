@@ -26,9 +26,9 @@ from trytond.wizard import Wizard, StateView, Button, StateAction
 from trytond.rpc import RPC
 from trytond.cache import Cache
 
-from trytond.modules.cog_utils import (coop_date, coop_string, utils, model,
+from trytond.modules.coog_core import (coog_date, coog_string, utils, model,
     fields)
-from trytond.modules.cog_utils.cache import CoogCache, get_cache_holder
+from trytond.modules.coog_core.cache import CoogCache, get_cache_holder
 from trytond.modules.contract import _STATES
 
 __metaclass__ = PoolMeta
@@ -504,9 +504,9 @@ class Contract:
     def check_billing_information(self):
         for billing in self.billing_informations:
             if billing.direct_debit and not billing.direct_debit_account:
-                parent = coop_string.translate_label(
+                parent = coog_string.translate_label(
                     self, 'billing_information')
-                field = coop_string.translate_label(billing,
+                field = coog_string.translate_label(billing,
                     'direct_debit_account')
                 self.append_functional_error('child_field_required',
                     (field, parent))
@@ -820,13 +820,13 @@ class Contract:
         if tree is None:
             tree = intervaltree.IntervalTree((
                     intervaltree.Interval(p.start or datetime.date.min,
-                        coop_date.add_day(p.end, 1) if p.end
+                        coog_date.add_day(p.end, 1) if p.end
                         else datetime.date.max, idx)
                     for idx, p in enumerate(contract.all_premiums)))
             cache[contract.id] = tree
         if tree is not None:
             return [contract.all_premiums[x.data]
-                for x in tree.search(start, coop_date.add_day(end, 1))]
+                for x in tree.search(start, coog_date.add_day(end, 1))]
 
     @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
@@ -1380,8 +1380,8 @@ class ExtraPremium:
             super(ExtraPremium, cls).delete(extra_premium_dict.values())
 
 
-class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
-        model.CoopView):
+class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
+        model.CoogView):
     'Contract Billing Information'
 
     __name__ = 'contract.billing_information'
@@ -1681,7 +1681,7 @@ class Premium:
             stick = (start_date.month, start_date.day) == (2, 29)
             amount = 0
             for year in xrange(end.year - start.year + 1):
-                new_date = coop_date.add_year(start_date, start.year -
+                new_date = coog_date.add_year(start_date, start.year -
                         start_date.year + year, stick)
                 if start <= new_date <= end:
                     amount += self.amount
@@ -1693,10 +1693,10 @@ class Premium:
         # daily rule because the number of days may vary.
         occurences = []
         if self.frequency.startswith('yearly'):
-            nb_years = coop_date.number_of_years_between(start, end)
+            nb_years = coog_date.number_of_years_between(start, end)
             if nb_years:
                 occurences = [None] * (nb_years - 1) + [
-                    coop_date.add_year(start, nb_years)]
+                    coog_date.add_year(start, nb_years)]
                 start = occurences[-1]
                 occurences[-1] = datetime.datetime.combine(occurences[-1],
                     datetime.time())
@@ -1769,7 +1769,7 @@ class Premium:
                 )]
 
 
-class ContractInvoice(model.CoopSQL, model.CoopView):
+class ContractInvoice(model.CoogSQL, model.CoogView):
     'Contract Invoice'
 
     __name__ = 'contract.invoice'
@@ -1867,12 +1867,12 @@ class ContractInvoice(model.CoopSQL, model.CoopView):
         return Contract.invoice_periods(periods)
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     def button_reinvoice(cls, contract_invoices):
         cls.reinvoice(contract_invoices)
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     def cancel(cls, contract_invoices):
         pool = Pool()
         Reconciliation = pool.get('account.move.reconciliation')
@@ -1913,7 +1913,7 @@ class ContractInvoice(model.CoopSQL, model.CoopView):
         return 'cancel'
 
 
-class InvoiceContractStart(model.CoopView):
+class InvoiceContractStart(model.CoogView):
     'Invoice Contract'
 
     __name__ = 'contract.do_invoice.start'
@@ -1943,7 +1943,7 @@ class InvoiceContract(Wizard):
         contract = Contract(Transaction().context.get('active_ids')[0])
         if contract.last_invoice_end:
             return {
-                'up_to_date': coop_date.add_day(contract.last_invoice_end, 1),
+                'up_to_date': coog_date.add_day(contract.last_invoice_end, 1),
                 }
         else:
             return {

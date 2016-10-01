@@ -4,7 +4,7 @@
 import logging
 
 from trytond.pool import Pool
-from trytond.modules.cog_utils import batch
+from trytond.modules.coog_core import batch
 
 
 class RenewContracts(batch.BatchRoot):

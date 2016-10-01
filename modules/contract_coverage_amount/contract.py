@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 from trytond.rpc import RPC
 
-from trytond.modules.cog_utils import fields, utils, model
+from trytond.modules.coog_core import fields, utils, model
 from trytond.modules.currency_cog import ModelCurrency
 
 __metaclass__ = PoolMeta
@@ -151,7 +151,7 @@ class ContractOption:
         return self.coverage.coverage_amount_rules[0].free_input
 
 
-class ContractOptionVersion(model.CoopSQL, model.CoopView, ModelCurrency):
+class ContractOptionVersion(model.CoogSQL, model.CoogView, ModelCurrency):
     __name__ = 'contract.option.version'
 
     coverage_amount = fields.Numeric('Coverage Amount',

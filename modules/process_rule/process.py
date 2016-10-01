@@ -4,7 +4,7 @@ from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.model import fields as tryton_fields
 
-from trytond.modules.cog_utils import model, fields, utils
+from trytond.modules.coog_core import model, fields, utils
 from trytond.modules.rule_engine import get_rule_mixin
 
 
@@ -15,7 +15,7 @@ __all__ = [
 
 class ProcessAction(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoopView):
+        model.CoogView):
     __name__ = 'process.action'
 
     target_path = fields.Char('Target Path',

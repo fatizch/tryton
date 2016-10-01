@@ -7,7 +7,7 @@ from sql import Null
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, coop_string, model
+from trytond.modules.coog_core import fields, coog_string, model
 
 __metaclass__ = PoolMeta
 
@@ -66,7 +66,7 @@ class User:
             return Log(ids[0])
 
 
-class Priority(model.CoopSQL, model.CoopView):
+class Priority(model.CoogSQL, model.CoogView):
     'Priority'
 
     __name__ = 'res.team.priority'
@@ -103,7 +103,7 @@ class Priority(model.CoopSQL, model.CoopView):
         return super(Priority, cls)._export_light() | {'process_step'}
 
 
-class TeamGroupRelation(model.CoopSQL):
+class TeamGroupRelation(model.CoogSQL):
     'Team - Group Relation'
 
     __name__ = 'res.team-res.group'
@@ -114,7 +114,7 @@ class TeamGroupRelation(model.CoopSQL):
         required=True)
 
 
-class Team(model.CoopSQL, model.CoopView):
+class Team(model.CoogSQL, model.CoogView):
     'Team'
 
     __name__ = 'res.team'
@@ -146,7 +146,7 @@ class Team(model.CoopSQL, model.CoopView):
         return super(Team, cls)._export_skips() | {'users', 'users_links'}
 
     @classmethod
-    @model.CoopView.button_action('task_manager.wizard_add_user')
+    @model.CoogView.button_action('task_manager.wizard_add_user')
     def add_user_button(cls, teams):
         pass
 
@@ -154,7 +154,7 @@ class Team(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     def get_tasks_team(self, name):
         pool = Pool()
@@ -200,7 +200,7 @@ class Team(model.CoopSQL, model.CoopView):
             return Log(ids[0])
 
 
-class UserTeamRelation(model.CoopSQL, model.CoopView):
+class UserTeamRelation(model.CoogSQL, model.CoogView):
     'Relation between User and Team'
 
     __name__ = 'res.user-res.team'

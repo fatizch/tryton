@@ -7,7 +7,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.model import ModelView
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.coog_core import fields
 from trytond.modules.document_request.document import RemindableInterface
 
 

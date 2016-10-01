@@ -27,9 +27,9 @@ __all__ = [
     ]
 
 
-class TestMethodDefinitions(model.CoopSQL):
+class TestMethodDefinitions(model.CoogSQL):
     'Test Method Definition Model'
-    __name__ = 'cog_utils.test_model_method_definition'
+    __name__ = 'coog_core.test_model_method_definition'
 
     attribute = None
 
@@ -56,29 +56,29 @@ class TestMethodDefinitions(model.CoopSQL):
         pass
 
 
-class TestDictSchema(DictSchemaMixin, model.CoopSQL):
+class TestDictSchema(DictSchemaMixin, model.CoogSQL):
     'Test Dict Schema'
-    __name__ = 'cog_utils.test.dict.schema'
+    __name__ = 'coog_core.test.dict.schema'
 
 
-class ExportTestTarget(model.CoopSQL, export.ExportImportMixin):
+class ExportTestTarget(model.CoogSQL, export.ExportImportMixin):
     'no doc'
-    __name__ = 'cog_utils.export_test_target'
+    __name__ = 'coog_core.export_test_target'
     _func_key = 'char'
     char = fields.Char('My field')
 
 
-class ExportTestTargetSlave(model.CoopSQL, export.ExportImportMixin):
+class ExportTestTargetSlave(model.CoogSQL, export.ExportImportMixin):
     'no doc'
-    __name__ = 'cog_utils.export_test_target_slave'
+    __name__ = 'coog_core.export_test_target_slave'
     _func_key = 'char'
     char = fields.Char('My field')
     integer = fields.Integer('Integer')
 
 
-class ExportTest(model.CoopSQL, export.ExportImportMixin):
+class ExportTest(model.CoogSQL, export.ExportImportMixin):
     'Export Test'
-    __name__ = 'cog_utils.export_test'
+    __name__ = 'coog_core.export_test'
     _func_key = 'char'
     boolean = fields.Boolean('Boolean')
     integer = fields.Integer('Integer')
@@ -93,20 +93,20 @@ class ExportTest(model.CoopSQL, export.ExportImportMixin):
             ('select1', 'Select 1'),
             ('select2', 'Select 2'),
             ], 'Selection')
-    many2one = fields.Many2One('cog_utils.export_test_target',
+    many2one = fields.Many2One('coog_core.export_test_target',
             'Many2One')
-    many2many = fields.Many2Many('cog_utils.export_test_relation',
+    many2many = fields.Many2Many('coog_core.export_test_relation',
             'many2many', 'target', 'Many2Many')
-    one2many = fields.One2Many('cog_utils.export_test_target', 'one2many',
+    one2many = fields.One2Many('coog_core.export_test_target', 'one2many',
             'One2Many')
-    valid_one2many = fields.One2Many('cog_utils.export_test_target_slave',
+    valid_one2many = fields.One2Many('coog_core.export_test_target_slave',
         'one2many', 'Valid One2Many')
     reference = fields.Reference('Reference', [
             (None, ''),
-            ('cog_utils.export_test_target', 'Target'),
+            ('coog_core.export_test_target', 'Target'),
             ])
     property_m2o = fields.Property(
-        fields.Many2One('cog_utils.export_test_target', 'Property Many2One',
+        fields.Many2One('coog_core.export_test_target', 'Property Many2One',
             domain=[('char', '=', 'key')]))
     property_numeric = fields.Property(fields.Numeric('Property Numeric'))
     property_char = fields.Property(fields.Char('Property Char'))
@@ -115,7 +115,7 @@ class ExportTest(model.CoopSQL, export.ExportImportMixin):
             ('select1', 'Select 1'),
             ('select2', 'Select 2'),
             ], 'Property Selection'))
-    some_dict = fields.Dict('cog_utils.test.dict.schema', 'Dict')
+    some_dict = fields.Dict('coog_core.test.dict.schema', 'Dict')
 
     @classmethod
     def _export_light(cls):
@@ -124,12 +124,12 @@ class ExportTest(model.CoopSQL, export.ExportImportMixin):
 
 class ExportTestTarget2:
     'no doc'
-    __name__ = 'cog_utils.export_test_target'
+    __name__ = 'coog_core.export_test_target'
     _func_key = 'char'
     char = fields.Char('My field')
     integer = fields.Integer('Integer')
-    one2many = fields.Many2One('cog_utils.export_test', 'Export Data')
-    many2one = fields.Many2One('cog_utils.export_test', 'Export Data')
+    one2many = fields.Many2One('coog_core.export_test', 'Export Data')
+    many2one = fields.Many2One('coog_core.export_test', 'Export Data')
 
     @classmethod
     def is_master_object(cls):
@@ -142,62 +142,62 @@ class ExportTestTarget2:
 
 class ExportTestTargetSlave2:
     'no doc'
-    __name__ = 'cog_utils.export_test_target_slave'
+    __name__ = 'coog_core.export_test_target_slave'
     _func_key = 'char'
     char = fields.Char('My field')
-    one2many = fields.Many2One('cog_utils.export_test', 'Export Data')
+    one2many = fields.Many2One('coog_core.export_test', 'Export Data')
 
 
-class ExportTestRelation(model.CoopSQL, export.ExportImportMixin):
+class ExportTestRelation(model.CoogSQL, export.ExportImportMixin):
     "Export Data Many2Many"
-    __name__ = 'cog_utils.export_test_relation'
-    many2many = fields.Many2One('cog_utils.export_test', 'Export Data')
-    target = fields.Many2One('cog_utils.export_test_target', 'Target')
+    __name__ = 'coog_core.export_test_relation'
+    many2many = fields.Many2One('coog_core.export_test', 'Export Data')
+    target = fields.Many2One('coog_core.export_test_target', 'Target')
 
 
-class O2MDeletionMaster(model.CoopSQL):
+class O2MDeletionMaster(model.CoogSQL):
     'O2M Deletion Master'
 
-    __name__ = 'cog_utils.o2m_deletion_master_test'
+    __name__ = 'coog_core.o2m_deletion_master_test'
 
-    test_one2many = fields.One2Many('cog_utils.o2m_deletion_child_test',
+    test_one2many = fields.One2Many('coog_core.o2m_deletion_child_test',
         'master', 'Test One2Many', delete_missing=True)
 
 
-class O2MDeletionChild(model.CoopSQL):
+class O2MDeletionChild(model.CoogSQL):
     'O2M Deletion Child'
 
-    __name__ = 'cog_utils.o2m_deletion_child_test'
+    __name__ = 'coog_core.o2m_deletion_child_test'
 
-    master = fields.Many2One('cog_utils.o2m_deletion_master_test', 'Master')
+    master = fields.Many2One('coog_core.o2m_deletion_master_test', 'Master')
 
 
-class TestHistoryTable(model.CoopSQL):
+class TestHistoryTable(model.CoogSQL):
     'Test History'
 
-    __name__ = 'cog_utils.test_history'
+    __name__ = 'coog_core.test_history'
     _history = True
 
     foo = fields.Char('Foo')
-    childs = fields.One2Many('cog_utils.test_history.child', 'parent',
+    childs = fields.One2Many('coog_core.test_history.child', 'parent',
         'Childs', delete_missing=True)
 
 
-class TestHistoryChildTable(model.CoopSQL):
+class TestHistoryChildTable(model.CoogSQL):
     'Test History Child Table'
 
-    __name__ = 'cog_utils.test_history.child'
+    __name__ = 'coog_core.test_history.child'
     _history = True
 
-    parent = fields.Many2One('cog_utils.test_history', 'Parent',
+    parent = fields.Many2One('coog_core.test_history', 'Parent',
         ondelete='CASCADE', required=True, select=True)
     bar = fields.Char('Bar')
 
 
-class TestLoaderUpdater(model.CoopSQL):
+class TestLoaderUpdater(model.CoogSQL):
     'Test Loader Updater'
 
-    __name__ = 'cog_utils.test_loader_updater'
+    __name__ = 'coog_core.test_loader_updater'
 
     real_field = fields.Char('Real Field')
     normal_function = fields.Function(

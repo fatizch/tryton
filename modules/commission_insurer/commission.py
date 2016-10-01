@@ -13,7 +13,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import PYSONEncoder
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, utils, coop_date
+from trytond.modules.coog_core import fields, utils, coog_date
 
 __metaclass__ = PoolMeta
 __all__ = ['Commission', 'CreateInvoicePrincipal', 'CreateInvoicePrincipalAsk']
@@ -577,4 +577,4 @@ class CreateInvoicePrincipalAsk(ModelView):
 
     @staticmethod
     def default_until_date():
-        return coop_date.get_last_day_of_last_month(utils.today())
+        return coog_date.get_last_day_of_last_month(utils.today())

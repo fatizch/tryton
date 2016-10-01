@@ -7,7 +7,7 @@ from sql.aggregate import Count
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.modules.rule_engine import check_args
-from trytond.modules.cog_utils import coop_date
+from trytond.modules.coog_core import coog_date
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -145,7 +145,7 @@ class RuleEngineRuntime:
     @classmethod
     def _re_revaluation_sub_periods(cls, args, dates, period_start_date,
             period_end_date):
-        return coop_date.calculate_periods_from_dates(dates, period_start_date,
+        return coog_date.calculate_periods_from_dates(dates, period_start_date,
             period_end_date)
 
     @classmethod

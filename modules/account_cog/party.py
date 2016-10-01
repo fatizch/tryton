@@ -4,13 +4,13 @@ import copy
 from sql.aggregate import Max
 from sql import Literal
 
-from trytond.modules.cog_utils import UnionMixin
+from trytond.modules.coog_core import UnionMixin
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder, Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.currency_cog import ModelCurrency
 
 __metaclass__ = PoolMeta
@@ -22,7 +22,7 @@ __all__ = [
     ]
 
 
-class Party(ModelCurrency, model.CoopView):
+class Party(ModelCurrency, model.CoogView):
     __name__ = 'party.party'
 
     payable_icon = fields.Function(
@@ -98,7 +98,7 @@ class Party(ModelCurrency, model.CoopView):
             return 'rounded_warning'
 
 
-class SynthesisMenuMoveLine(model.CoopSQL):
+class SynthesisMenuMoveLine(model.CoogSQL):
     'Party Synthesis Menu Move line'
 
     __name__ = 'party.synthesis.menu.move.line'
@@ -120,7 +120,7 @@ class SynthesisMenuMoveLine(model.CoopSQL):
             Max(move_line.create_date).as_('create_date'),
             Max(move_line.write_uid).as_('write_uid'),
             Max(move_line.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(MoveLineSynthesis, 'name')).
+            Literal(coog_string.translate_label(MoveLineSynthesis, 'name')).
             as_('name'), party.id.as_('party'),
             group_by=party.id)
 
@@ -129,10 +129,10 @@ class SynthesisMenuMoveLine(model.CoopSQL):
 
     def get_rec_name(self, name):
         Move_Line_Synthesis = Pool().get('party.synthesis.menu.move.line')
-        return coop_string.translate_label(Move_Line_Synthesis, 'name')
+        return coog_string.translate_label(Move_Line_Synthesis, 'name')
 
 
-class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
+class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView):
     'Party Synthesis Menu'
 
     __name__ = 'party.synthesis.menu'

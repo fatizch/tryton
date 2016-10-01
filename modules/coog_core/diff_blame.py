@@ -14,7 +14,7 @@ from sql import Desc
 from sql.conditionals import Coalesce
 from sql.aggregate import Count
 
-from coop_string import translate_value, translate_label
+from coog_string import translate_value, translate_label
 
 import model
 import fields
@@ -324,7 +324,7 @@ class RevisionFormatTranslator(model.ModelView):
     target_label = fields.Char('target')
 
 
-class RevisionBlame(model.CoopView):
+class RevisionBlame(model.CoogView):
     'Revision Blame View'
 
     __name__ = 'diff_blame.revision_blame'
@@ -351,7 +351,7 @@ class RevisionBlame(model.CoopView):
                     }
                 })
 
-    @model.CoopView.button_change('model_id', 'model_name', 'blame_text',
+    @model.CoogView.button_change('model_id', 'model_name', 'blame_text',
         'current_page', 'total_pages')
     def next_revisions(self):
         if self.current_page == self.total_pages:
@@ -361,7 +361,7 @@ class RevisionBlame(model.CoopView):
         self.blame_text = generate_diff(instance,
             self.current_page, self.total_pages)
 
-    @model.CoopView.button_change('model_id', 'model_name', 'blame_text',
+    @model.CoogView.button_change('model_id', 'model_name', 'blame_text',
         'current_page', 'total_pages')
     def prev_revisions(self):
         if (self.current_page - 1) >= 0:
@@ -380,7 +380,7 @@ class RevisionBlameWizard(Wizard):
 
     revision_blame = StateView(
         'diff_blame.revision_blame',
-        'cog_utils.revision_blame_view_form',
+        'coog_core.revision_blame_view_form',
         [Button('Done', 'end', 'tryton-ok')]
     )
 

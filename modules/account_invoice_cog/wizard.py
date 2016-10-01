@@ -5,7 +5,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 __all__ = [
     'ChangePaymentTerm',
@@ -50,7 +50,7 @@ class ChangePaymentTerm(Wizard):
         return 'end'
 
 
-class SelectTerm(model.CoopView):
+class SelectTerm(model.CoogView):
     'Select Term'
 
     __name__ = 'account.invoice.change_payment_term.select_term'

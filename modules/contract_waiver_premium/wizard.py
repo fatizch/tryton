@@ -3,7 +3,7 @@
 import datetime
 
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 from trytond.wizard import Wizard, StateView, Button, StateAction
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, PYSONEncoder
@@ -18,7 +18,7 @@ __all__ = [
     ]
 
 
-class CreateWaiverChoice(model.CoopView):
+class CreateWaiverChoice(model.CoogView):
     'Create Waiver Choice'
     __name__ = 'contract.waiver_premium.create.choice'
 
@@ -123,7 +123,7 @@ class CreateWaiver(Wizard):
         return action, {}
 
 
-class SetWaiverEndDateChoice(model.CoopView):
+class SetWaiverEndDateChoice(model.CoogView):
     'Create Waiver Choice'
     __name__ = 'contract.waiver_premium.set_end_date.choice'
 

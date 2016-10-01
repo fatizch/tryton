@@ -4,8 +4,8 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, fields
-from trytond.modules.cog_utils import coop_string
+from trytond.modules.coog_core import model, fields
+from trytond.modules.coog_core import coog_string
 
 
 __metaclass__ = PoolMeta
@@ -78,7 +78,7 @@ class Product:
         return super(Product, cls)._export_light() | {'processes'}
 
 
-class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
+class ItemDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
     'Item Description'
 
     __name__ = 'offered.item.description'
@@ -118,7 +118,7 @@ class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
         if self.code:
             return self.code
         elif self.name:
-            return coop_string.slugify(self.name)
+            return coog_string.slugify(self.name)
 
     @classmethod
     def _export_skips(cls):
@@ -135,7 +135,7 @@ class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
         return True
 
 
-class ItemDescSubItemDescRelation(model.CoopSQL):
+class ItemDescSubItemDescRelation(model.CoogSQL):
     'Relation between Item Desc and Sub Item Desc'
 
     __name__ = 'offered.item.description-sub_item.description'
@@ -146,7 +146,7 @@ class ItemDescSubItemDescRelation(model.CoopSQL):
         'Sub Item Desc', ondelete='RESTRICT')
 
 
-class ItemDescriptionExtraDataRelation(model.CoopSQL):
+class ItemDescriptionExtraDataRelation(model.CoogSQL):
     'Item Description to Extra Data Relation'
 
     __name__ = 'offered.item.description-extra_data'
@@ -157,7 +157,7 @@ class ItemDescriptionExtraDataRelation(model.CoopSQL):
         ondelete='RESTRICT', )
 
 
-class CoveredElementEndReason(model.CoopSQL, model.CoopView,
+class CoveredElementEndReason(model.CoogSQL, model.CoogView,
         model.TaggedMixin):
     'End reasons for covered elements'
 
@@ -181,10 +181,10 @@ class CoveredElementEndReason(model.CoopSQL, model.CoopView,
         if self.code:
             return self.code
         elif self.name:
-            return coop_string.slugify(self.name)
+            return coog_string.slugify(self.name)
 
 
-class ItemDescriptionEndReasonRelation(model.CoopSQL):
+class ItemDescriptionEndReasonRelation(model.CoogSQL):
     'Item Description to Covered Element End Reason relation'
 
     __name__ = 'offered.item.description-covered_element.end_reason'

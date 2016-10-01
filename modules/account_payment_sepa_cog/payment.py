@@ -18,7 +18,7 @@ import genshi.template
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or, Bool
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.cog_utils import fields, export, coop_date, utils
+from trytond.modules.coog_core import fields, export, coog_date, utils
 from .sepa_handler import CAMT054Coog
 
 __metaclass__ = PoolMeta
@@ -586,7 +586,7 @@ class Journal:
                 relativedelta(days=1))
         else:
             sync_date = max(line.maturity_date, utils.today())
-        return coop_date.get_next_date_in_sync_with(sync_date, day)
+        return coog_date.get_next_date_in_sync_with(sync_date, day)
 
     @classmethod
     def _export_light(cls):

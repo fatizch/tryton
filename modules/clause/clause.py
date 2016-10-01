@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.model import Unique
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.coog_core import model, fields, coog_string
 
 
 __all__ = [
@@ -10,7 +10,7 @@ __all__ = [
     ]
 
 
-class Clause(model.CoopSQL, model.CoopView):
+class Clause(model.CoogSQL, model.CoogView):
     'Clause'
 
     __name__ = 'clause'
@@ -39,7 +39,7 @@ class Clause(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     @classmethod
     def default_kind(cls):

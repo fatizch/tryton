@@ -5,7 +5,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.wizard import Wizard, StateView, Button
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 __all__ = [
     'ShowAllInvoices',
@@ -39,7 +39,7 @@ class ShowAllInvoices(Wizard):
             }
 
 
-class ShowAllInvoicesMain(model.CoopView):
+class ShowAllInvoicesMain(model.CoogView):
     'Show All Invoices - Main'
 
     __name__ = 'contract.invoice.show_all.show'
@@ -48,7 +48,7 @@ class ShowAllInvoicesMain(model.CoopView):
         'Invoices', readonly=True)
 
 
-class ShowAllInvoicesLine(model.CoopView):
+class ShowAllInvoicesLine(model.CoogView):
     'Show All Invoices - Line'
 
     __name__ = 'contract.invoice.show_all.line'

@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import model, fields, coop_string, coop_date
+from trytond.modules.coog_core import model, fields, coog_string, coog_date
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -28,7 +28,7 @@ class Product:
         depends=['is_loan'], ondelete='RESTRICT')
 
 
-class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
+class LoanAveragePremiumRule(model.CoogSQL, model.CoogView):
     'Loan Average Premium Rule'
 
     __name__ = 'loan.average_premium_rule'
@@ -75,7 +75,7 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     def calculate_average_premium_for_contract(self, loan, contract):
         if not self.use_default_rule:
@@ -117,12 +117,12 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
         # contract is used.
         biggest_loans = {k for k, v in loan_insured.items()
             if max_insured == v}
-        longest_duration = max([coop_date.number_of_days_between(
+        longest_duration = max([coog_date.number_of_days_between(
                     x.funds_release_date,
                     x.end_date)
                 for x in contract.used_loans])
         longest_loans = {x.id for x in contract.used_loans
-            if coop_date.number_of_days_between(x.funds_release_date,
+            if coog_date.number_of_days_between(x.funds_release_date,
                 x.end_date) == longest_duration}
         top_loans = longest_loans & biggest_loans
         biggest, longest = None, None
@@ -169,7 +169,7 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             if action == 'do_not_use':
                 continue
             fee_amount += sum(v.values()) * ratios[action]
-        den = insured_amount * coop_date.number_of_years_between(
+        den = insured_amount * coog_date.number_of_years_between(
             loan.funds_release_date, loan.end_date)
         base_amount = loan_amount + fee_amount
         loan_average = base_amount * 100 / den if den else None
@@ -196,12 +196,12 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
         # Same algorithm than for contract-wide average premium rate
         biggest_loans = {k for k, v in loan_insured.items()
             if max_insured == v}
-        longest_duration = max([coop_date.number_of_days_between(
+        longest_duration = max([coog_date.number_of_days_between(
                     x.funds_release_date,
                     x.end_date)
                 for x in contract.used_loans])
         longest_loans = {x.id for x in contract.used_loans
-            if coop_date.number_of_days_between(x.funds_release_date,
+            if coog_date.number_of_days_between(x.funds_release_date,
                 x.end_date) == longest_duration}
         top_loans = longest_loans & biggest_loans
         biggest, longest = None, None
@@ -250,12 +250,12 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             fee_amount += sum(v.values()) * ratios[action]
         base_value = share_amount + fee_amount
         loan_average = base_value * 100 / (loan.amount *
-            coop_date.number_of_years_between(loan.funds_release_date,
+            coog_date.number_of_years_between(loan.funds_release_date,
                 loan.end_date) * share.share)
         return base_value, loan_average
 
 
-class FeeRule(model.CoopSQL, model.CoopView):
+class FeeRule(model.CoogSQL, model.CoogView):
     'Fee Rule'
 
     __name__ = 'loan.average_premium_rule.fee_rule'

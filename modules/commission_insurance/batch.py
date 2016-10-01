@@ -6,7 +6,7 @@ from sql import Null
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import batch, coop_string
+from trytond.modules.coog_core import batch, coog_string
 
 
 __all__ = [
@@ -73,7 +73,7 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
         invoices = Commission.invoice(commissions)
         Invoice.write(invoices, {'invoice_date': treatment_date})
         cls.logger.info('Commissions invoices created for %s' %
-            coop_string.get_print_infos(ids,
+            coog_string.get_print_infos(ids,
                 'brokers' if extra_args['agent_type'] == 'agent'
                 else 'insurers'))
 

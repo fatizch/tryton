@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 
 __all__ = [
@@ -11,7 +11,7 @@ __all__ = [
     ]
 
 
-class ReportComProductRelation(model.CoopSQL):
+class ReportComProductRelation(model.CoogSQL):
     'Report template to Commercial Product relation'
     __metaclass__ = PoolMeta
     __name__ = 'report.template-distribution.commercial_product'

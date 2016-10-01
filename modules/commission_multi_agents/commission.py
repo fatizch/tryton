@@ -4,7 +4,7 @@ from trytond import backend
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model, coop_string
+from trytond.modules.coog_core import fields, model, coog_string
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -71,7 +71,7 @@ class Agent:
     @classmethod
     def format_hash(cls, hash_dict):
         return super(Agent, cls).format_hash(hash_dict) + '\n' + \
-            coop_string.translate_label(cls, 'commissioned_agents') + ' : ' + \
+            coog_string.translate_label(cls, 'commissioned_agents') + ' : ' + \
             ', '.join([x.rec_name for x in hash_dict['commissioned_agents']])
 
     def get_hash(self):
@@ -80,7 +80,7 @@ class Agent:
                         for x in self.commissioned_agents])),)
 
 
-class AgentAgentRelation(model.CoopSQL, model.CoopView):
+class AgentAgentRelation(model.CoogSQL, model.CoogView):
     'Multi Agent Relation'
 
     __name__ = 'commission.agent-agent'
@@ -108,7 +108,7 @@ class Plan:
         return super(Plan, cls)._export_light() | {'commissioned_agents'}
 
 
-class PlanAgentRelation(model.CoopSQL, model.CoopView):
+class PlanAgentRelation(model.CoogSQL, model.CoogView):
     'Commission Plan - Agent'
     __name__ = 'commission_plan-agent'
 

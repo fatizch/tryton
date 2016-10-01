@@ -19,7 +19,7 @@ smtp_server = smtp.your_provider.com
 smtp_port = 587 (it should match your stmp server's port)
 
 This script can for example be launched by a mercurical hook
-in the coopbusiness repository, and/or by a cron job.
+in the coog repository, and/or by a cron job.
 
 If you want to launch the tests when changes are pushed to your repo,
 you can add a hook on the repos.  and add a cronjob to regularly update
@@ -75,7 +75,7 @@ with open('running', 'w') as f:
 
 try:
 
-    os.chdir(os.path.join(path_to_workspace, 'coopbusiness', 'scripts'))
+    os.chdir(os.path.join(path_to_workspace, 'coog', 'scripts'))
     updater = subprocess.Popen(['./script_launcher.py', 'configure'])
     updater.communicate()
 
@@ -112,7 +112,7 @@ try:
         stdout=subprocess.PIPE)
     date = p.communicate()[0]
 
-    os.chdir(os.path.join(path_to_workspace, 'coopbusiness'))
+    os.chdir(os.path.join(path_to_workspace, 'coog'))
     p = subprocess.Popen(['git', 'rev-parse', '--short', 'HEAD'],
         stdout=subprocess.PIPE)
     commit_info = p.communicate()[0]

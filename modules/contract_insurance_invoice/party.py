@@ -7,7 +7,7 @@ from sql import Literal
 from trytond.pool import Pool
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
-from trytond.modules.cog_utils import model, fields, coop_string, UnionMixin
+from trytond.modules.coog_core import model, fields, coog_string, UnionMixin
 
 __all__ = [
     'SynthesisMenuInvoice',
@@ -16,7 +16,7 @@ __all__ = [
     ]
 
 
-class SynthesisMenuInvoice(model.CoopSQL):
+class SynthesisMenuInvoice(model.CoogSQL):
     'Party Synthesis Menu Invoice'
     __name__ = 'party.synthesis.menu.invoice'
     name = fields.Char('Invoices')
@@ -37,7 +37,7 @@ class SynthesisMenuInvoice(model.CoopSQL):
             Max(invoice.create_date).as_('create_date'),
             Max(invoice.write_uid).as_('write_uid'),
             Max(invoice.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(InvoiceSynthesis, 'name')).
+            Literal(coog_string.translate_label(InvoiceSynthesis, 'name')).
             as_('name'), party.id.as_('party'),
             group_by=party.id)
 
@@ -46,10 +46,10 @@ class SynthesisMenuInvoice(model.CoopSQL):
 
     def get_rec_name(self, name):
         InvoiceSynthesis = Pool().get('party.synthesis.menu.invoice')
-        return coop_string.translate_label(InvoiceSynthesis, 'name')
+        return coog_string.translate_label(InvoiceSynthesis, 'name')
 
 
-class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
+class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
 

@@ -5,7 +5,7 @@ from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 from trytond.model import ModelView
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.coog_core import fields
 from trytond.modules.document_request.document import RemindableInterface
 
 

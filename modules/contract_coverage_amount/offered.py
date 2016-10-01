@@ -4,7 +4,7 @@ from trytond import backend
 from trytond.pool import PoolMeta
 from trytond.pyson import If, Bool, Eval
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 from trytond.modules.rule_engine import get_rule_mixin
 
 __metaclass__ = PoolMeta
@@ -28,7 +28,7 @@ class OptionDescription:
 
 class CoverageAmountRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Coverage Amount Rule'
 
     __name__ = 'offered.coverage_amount.rule'

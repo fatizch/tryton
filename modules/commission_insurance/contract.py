@@ -6,7 +6,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
 from trytond.cache import Cache, freeze
 
-from trytond.modules.cog_utils import fields, utils, model
+from trytond.modules.coog_core import fields, utils, model
 from trytond.modules.contract import _STATES, _DEPENDS
 
 __all__ = [

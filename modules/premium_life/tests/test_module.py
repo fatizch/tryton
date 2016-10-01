@@ -5,10 +5,10 @@ import datetime
 from mock import Mock
 
 import trytond.tests.test_tryton
-from trytond.modules.cog_utils import test_framework
+from trytond.modules.coog_core import test_framework
 
 
-class ModuleTestCase(test_framework.CoopTestCase):
+class ModuleTestCase(test_framework.CoogTestCase):
     'Module Test Case'
 
     module = 'premium_life'

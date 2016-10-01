@@ -7,7 +7,7 @@ from trytond.exceptions import UserError
 from trytond.model import ModelView, ModelSQL
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import coop_string, utils, fields
+from trytond.modules.coog_core import coog_string, utils, fields
 
 
 __all__ = [
@@ -320,7 +320,7 @@ class ProcessFramework(ModelSQL, ModelView):
         labels = []
         for field in args:
             if not getattr(self, field):
-                labels.append(coop_string.translate_label(self, field))
+                labels.append(coog_string.translate_label(self, field))
         if labels:
             self.append_functional_error('field_required',
                 ', '.join(["'%s'" % l for l in labels]))
@@ -330,7 +330,7 @@ class ProcessFramework(ModelSQL, ModelView):
         for field in args:
             date = getattr(self, field)
             if date and date > utils.today():
-                labels.append(coop_string.translate_label(self, field))
+                labels.append(coog_string.translate_label(self, field))
         if labels:
             self.append_functional_error('date_in_future',
                 ', '.join(["'%s'" % l for l in labels]))

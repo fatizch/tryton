@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta, Pool
 
 from trytond.transaction import Transaction
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 
 
@@ -17,7 +17,7 @@ __all__ = [
     ]
 
 
-class BenefitToDeliver(model.CoopView):
+class BenefitToDeliver(model.CoogView):
     'Benefit To Deliver'
 
     __name__ = 'claim.benefit_to_deliver'
@@ -32,7 +32,7 @@ class BenefitToDeliver(model.CoopView):
     loss = fields.Many2One('claim.loss', 'Loss', readonly=True)
 
 
-class SelectBenefits(model.CoopView):
+class SelectBenefits(model.CoogView):
     'Select benefits'
 
     __name__ = 'claim.select_benefits'
@@ -115,7 +115,7 @@ class DeliverBenefits(Wizard):
         return 'end'
 
 
-class ClaimCloseReasonView(model.CoopView):
+class ClaimCloseReasonView(model.CoogView):
     'Claim Close Reason View'
 
     __name__ = 'claim.close_reason_view'

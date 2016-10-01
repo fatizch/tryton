@@ -5,7 +5,7 @@ from trytond.pyson import Not, Eval, Bool, If
 from trytond.transaction import Transaction
 from trytond import backend
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 from trytond.modules.party_cog.party import STATES_COMPANY
 
 
@@ -65,7 +65,7 @@ class Party:
             ]
 
     @classmethod
-    @model.CoopView.button_action(
+    @model.CoogView.button_action(
         'commission_insurance.act_commission_synthesis_display')
     def button_commissions_synthesis(cls, contracts):
         pass

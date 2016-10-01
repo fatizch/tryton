@@ -4,7 +4,7 @@ from decimal import ROUND_HALF_UP
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import export, utils
+from trytond.modules.coog_core import export, utils
 
 import string_utils
 

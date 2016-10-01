@@ -15,7 +15,7 @@ from trytond.wizard import Wizard, StateView, StateTransition, StateAction, \
     Button
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.coog_core import fields, model, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -94,7 +94,7 @@ class Move:
         return super(Move, cls).copy(lines, default=default)
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     def post(cls, moves):
         pool = Pool()
         Snapshot = pool.get('account.move.snapshot')
@@ -161,17 +161,17 @@ class TakeSnapshot(Wizard):
         return 'done'
 
 
-class SnapshotStart(model.CoopView):
+class SnapshotStart(model.CoogView):
     'Snapshot Moves'
     __name__ = 'account.move.snapshot.start'
 
 
-class SnapshotDone(model.CoopView):
+class SnapshotDone(model.CoogView):
     'Snapshot Moves'
     __name__ = 'account.move.snapshot.done'
 
 
-class Snapshot(model.CoopSQL, model.CoopView):
+class Snapshot(model.CoogSQL, model.CoogView):
     'Snapshot Move'
     __name__ = 'account.move.snapshot'
     name = fields.Char('Name', required=True)
@@ -218,7 +218,7 @@ class Snapshot(model.CoopSQL, model.CoopView):
         return snapshot.id
 
 
-class LineAggregated(model.CoopSQL, model.CoopView):
+class LineAggregated(model.CoogSQL, model.CoogView):
     'Account Move Line Aggregated'
     __name__ = 'account.move.line.aggregated'
 

@@ -363,7 +363,7 @@ def check_style(session, issue_url, repo_path, email, password):
         else:
             branch = ['coopengo']
     else:
-        repository_url = repo_path + 'coopbusiness'
+        repository_url = repo_path + 'coog'
         branch = ['coog']
 
     repo_dir = install_repository(repository_url, branch)

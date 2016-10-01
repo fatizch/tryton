@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.coog_core import model, fields, coog_string
 
 __all__ = [
     'DistributionNetwork',
@@ -10,7 +10,7 @@ __all__ = [
     ]
 
 
-class DistributionNetwork(model.CoopSQL, model.CoopView):
+class DistributionNetwork(model.CoogSQL, model.CoogView):
     'Distribution Network'
 
     __name__ = 'distribution.network'
@@ -83,7 +83,7 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     def get_rec_name(self, name=None):
         if self.code:
@@ -180,7 +180,7 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
             ]
 
 
-class DistributionNetworkContactMechanism(model.CoopSQL):
+class DistributionNetworkContactMechanism(model.CoogSQL):
     'Relation Distribution Network - Contact Mechanism'
 
     __name__ = 'distribution_network-party.contact_mechanism'

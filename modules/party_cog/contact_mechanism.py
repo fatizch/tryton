@@ -9,7 +9,7 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.party.contact_mechanism import _TYPES
-from trytond.modules.cog_utils import model, utils, fields, export
+from trytond.modules.coog_core import model, utils, fields, export
 
 MEDIA = _TYPES + [
     ('mail', 'Mail')
@@ -67,7 +67,7 @@ class ContactMechanism(export.ExportImportMixin):
         values['_func_key'] = values['value']
 
 
-class PartyInteraction(model.CoopSQL, model.CoopView):
+class PartyInteraction(model.CoogSQL, model.CoogView):
     'Party Interaction'
 
     __name__ = 'party.interaction'

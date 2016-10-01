@@ -5,7 +5,7 @@ from collections import defaultdict
 from trytond.pyson import Eval, Len, If
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import model, fields, utils
+from trytond.modules.coog_core import model, fields, utils
 from trytond.modules.endorsement import (EndorsementWizardStepMixin,
     add_endorsement_step)
 
@@ -181,7 +181,7 @@ class ManageBeneficiaries(EndorsementWizardStepMixin):
         return all_options
 
 
-class ManageBeneficiariesOptionDisplayer(model.CoopView):
+class ManageBeneficiariesOptionDisplayer(model.CoogView):
     'Manage Beneficiaries Option Displayer'
 
     __name__ = 'contract.manage_beneficiaries.option'
@@ -264,7 +264,7 @@ class ManageBeneficiariesOptionDisplayer(model.CoopView):
         return ('accepting', 'address', 'party', 'reference', 'share')
 
 
-class ManageBeneficiariesDisplayer(model.CoopView):
+class ManageBeneficiariesDisplayer(model.CoogView):
     'Manage Beneficiaries Displayer'
 
     __name__ = 'contract.manage_beneficiaries.beneficiary'

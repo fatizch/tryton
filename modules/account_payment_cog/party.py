@@ -4,12 +4,12 @@ import copy
 from sql.aggregate import Max
 from sql import Literal
 
-from trytond.modules.cog_utils import UnionMixin
+from trytond.modules.coog_core import UnionMixin
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
-from trytond.modules.cog_utils import model, fields, coop_string, utils
-from trytond.modules.cog_utils import coop_date
+from trytond.modules.coog_core import model, fields, coog_string, utils
+from trytond.modules.coog_core import coog_date
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -31,7 +31,7 @@ class Party:
         return False
 
 
-class SynthesisMenuPayment(model.CoopSQL):
+class SynthesisMenuPayment(model.CoogSQL):
     'Party Synthesis Menu payment'
     __name__ = 'party.synthesis.menu.payment'
     name = fields.Char('Outstanding/Failed Payments')
@@ -49,7 +49,7 @@ class SynthesisMenuPayment(model.CoopSQL):
             Max(payment.create_date).as_('create_date'),
             Max(payment.write_uid).as_('write_uid'),
             Max(payment.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(PaymentSynthesis, 'name')).
+            Literal(coog_string.translate_label(PaymentSynthesis, 'name')).
             as_('name'), payment.party,
             group_by=payment.party)
 
@@ -58,10 +58,10 @@ class SynthesisMenuPayment(model.CoopSQL):
 
     def get_rec_name(self, name):
         PaymentSynthesis = Pool().get('party.synthesis.menu.payment')
-        return coop_string.translate_label(PaymentSynthesis, 'name')
+        return coog_string.translate_label(PaymentSynthesis, 'name')
 
 
-class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
+class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
 
@@ -94,7 +94,7 @@ class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
         if model != 'account.payment':
             return super(SynthesisMenu, cls).build_sub_query(model, table,
                 columns)
-        filter_date = coop_date.add_year(utils.today(), -1)
+        filter_date = coog_date.add_year(utils.today(), -1)
         return table.select(*columns,
             where=(((table.state == 'processing') | (table.state == 'failed'))
                 & (table.date >= filter_date)))

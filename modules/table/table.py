@@ -25,11 +25,11 @@ from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
 from trytond.tools import memoize
 
-from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
-from trytond.modules.cog_utils.model import CoopView as ModelView
-from trytond.modules.cog_utils import fields
-from trytond.modules.cog_utils import utils, coop_string, model
-from trytond.modules.cog_utils.cache import CoogCache, get_cache_holder
+from trytond.modules.coog_core.model import CoogSQL as ModelSQL
+from trytond.modules.coog_core.model import CoogView as ModelView
+from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import utils, coog_string, model
+from trytond.modules.coog_core.cache import CoogCache, get_cache_holder
 
 __all__ = [
     'TableCell',
@@ -307,7 +307,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     @classmethod
     def default_number_of_digits(cls):

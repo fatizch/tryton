@@ -14,7 +14,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, PYSONEncoder, Not, Bool
 from trytond.wizard import Wizard, StateView, Button
 
-from trytond.modules.cog_utils import fields, model, coop_string, UnionMixin
+from trytond.modules.coog_core import fields, model, coog_string, UnionMixin
 from trytond.modules.party_cog.party import STATES_COMPANY
 
 __metaclass__ = PoolMeta
@@ -31,7 +31,7 @@ __all__ = [
     ]
 
 
-class Lender(model.CoopSQL, model.CoopView):
+class Lender(model.CoogSQL, model.CoogView):
     'Lender'
     __name__ = 'lender'
     _rec_name = 'party'
@@ -146,7 +146,7 @@ class Party:
         return aggregate_amounts
 
 
-class SynthesisMenuLoan(model.CoopSQL):
+class SynthesisMenuLoan(model.CoogSQL):
     'Party Synthesis Menu Loan'
     __name__ = 'party.synthesis.menu.loan'
     name = fields.Char('Loans')
@@ -179,7 +179,7 @@ class SynthesisMenuLoan(model.CoopSQL):
             Max(loan.create_date).as_('create_date'),
             Max(loan.write_uid).as_('write_uid'),
             Max(loan.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(LoanSynthesis, 'name')).
+            Literal(coog_string.translate_label(LoanSynthesis, 'name')).
             as_('name'), party.id.as_('party'),
             group_by=party.id)
 
@@ -188,10 +188,10 @@ class SynthesisMenuLoan(model.CoopSQL):
 
     def get_rec_name(self, name):
         LoanSynthesis = Pool().get('party.synthesis.menu.loan')
-        return coop_string.translate_label(LoanSynthesis, 'name')
+        return coog_string.translate_label(LoanSynthesis, 'name')
 
 
-class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
+class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
 
@@ -339,7 +339,7 @@ class DisplayInsuredOutstandingLoanBalance(Wizard):
             }
 
 
-class InsuredOutstandingLoanBalanceView(model.CoopView):
+class InsuredOutstandingLoanBalanceView(model.CoogView):
     'Insured Outstanding Loan Balance View'
 
     __name__ = 'party.display_insured_outstanding_loan_balance.view'
@@ -350,7 +350,7 @@ class InsuredOutstandingLoanBalanceView(model.CoopView):
     date = fields.Date('Date')
 
 
-class InsuredOutstandingLoanBalanceLineView(model.CoopView):
+class InsuredOutstandingLoanBalanceLineView(model.CoogView):
     'Insured Outstanding Loan Balance Line View'
 
     __name__ = 'party.display_insured_outstanding_loan_balance.line_view'
@@ -366,7 +366,7 @@ class InsuredOutstandingLoanBalanceLineView(model.CoopView):
     insurers = fields.Char('Loan Insurers', states={'invisible': True})
 
 
-class InsuredOutstandingLoanBalanceSelectDate(model.CoopView):
+class InsuredOutstandingLoanBalanceSelectDate(model.CoogView):
     'Date selector for insured outstanding loan balance display'
 
     __name__ = 'party.display_insured_outstanding_loan_balance.select_date'

@@ -27,12 +27,12 @@ from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 from trytond.wizard import Wizard, StateAction, StateTransition
 
-from trytond.modules.cog_utils import model, fields, coop_string, utils, \
-    coop_date
+from trytond.modules.coog_core import model, fields, coog_string, utils, \
+    coog_date
 from trytond.modules.process import ClassAttr
-from trytond.modules.process_cog import CogProcessFramework
+from trytond.modules.process_cog import CoogProcessFramework
 from trytond.modules.report_engine import Printable
-from trytond.modules.cog_utils import history_tools
+from trytond.modules.coog_core import history_tools
 
 
 _STATES_WITH_SUBSTATES = ['declined']
@@ -231,7 +231,7 @@ class EndorsementRoot(object):
 
 def values_mixin(value_model):
 
-    class Mixin(EndorsementRoot, model.CoopSQL, model.CoopView):
+    class Mixin(EndorsementRoot, model.CoogSQL, model.CoogView):
         values = fields.Dict(value_model, 'Values')
         # applied_on need to be stored to be used as datetime_field
         applied_on = fields.Timestamp('Applied On', readonly=True)
@@ -466,8 +466,8 @@ def values_mixin(value_model):
                         v = Date.date_as_string(v, lang)
                     vals.append((k or '', field, prev_value, v or ''))
                 elif isinstance(field, tryton_fields.Boolean):
-                    v = coop_string.translate_bool(v)
-                    prev_value = coop_string.translate_bool(prev_value)
+                    v = coog_string.translate_bool(v)
+                    prev_value = coog_string.translate_bool(prev_value)
                     vals.append((k, field, prev_value, v))
                 elif isinstance(field, tryton_fields.Selection):
                     def _translate_selection(prev_value, v):
@@ -479,15 +479,15 @@ def values_mixin(value_model):
                                     field.selection)())
                             selection_new = dict(getattr(ValueModel(
                                         self.relation), field.selection)())
-                            prev_translated = coop_string.translate(ValueModel,
+                            prev_translated = coog_string.translate(ValueModel,
                                 k, selection_original[prev_value], 'selection')
-                            v_translated = coop_string.translate(ValueModel, k,
+                            v_translated = coog_string.translate(ValueModel, k,
                                 selection_new[v], 'selection')
                         else:
                             selection = dict(field.selection)
-                            prev_translated = coop_string.translate(ValueModel,
+                            prev_translated = coog_string.translate(ValueModel,
                                 k, selection[prev_value], 'selection')
-                            v_translated = coop_string.translate(ValueModel, k,
+                            v_translated = coog_string.translate(ValueModel, k,
                                 selection[v], 'selection')
                         return prev_translated, v_translated
                     try:
@@ -503,11 +503,11 @@ def values_mixin(value_model):
             for fname, target_fname in \
                     self.__class__._endorsed_dicts.iteritems():
                 if base_object:
-                    prev_value = ', '.join(coop_string.translate_value(
+                    prev_value = ', '.join(coog_string.translate_value(
                             base_object, target_fname).split('\n'))
                 else:
                     prev_value = ''
-                new_value = ', '.join(coop_string.translate_value(self,
+                new_value = ', '.join(coog_string.translate_value(self,
                         fname).split('\n'))
                 if prev_value != new_value:
                     vals.append((target_fname, getattr(ValueModel,
@@ -515,14 +515,14 @@ def values_mixin(value_model):
             result = []
             if hasattr(self, 'action') and self.action == 'add':
                 for fname, ffield, _, new in vals:
-                    label = u'%s' % coop_string.translate(
+                    label = u'%s' % coog_string.translate(
                         ValueModel, fname, ffield.string, 'field')
                     value = u' → %s' % new
                     result.append((label, value))
             else:
                 for fname, ffield, old, new in vals:
                     if old != new:
-                        label = u'%s' % coop_string.translate(
+                        label = u'%s' % coog_string.translate(
                             ValueModel, fname, ffield.string, 'field')
                         value = u'%s → %s' % (old, new)
                         result.append((label, value))
@@ -832,7 +832,7 @@ def relation_mixin(value_model, field, model, name):
     return Mixin
 
 
-class Contract(CogProcessFramework):
+class Contract(CoogProcessFramework):
     __metaclass__ = ClassAttr
     _history = True
     __name__ = 'contract'
@@ -890,7 +890,7 @@ class Contract(CogProcessFramework):
             str(x) for x in endorsements]
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     def revert_current_endorsement(cls, contracts):
         Endorsement = Pool().get('endorsement')
         endorsements_to_cancel = set()
@@ -908,7 +908,7 @@ class Contract(CogProcessFramework):
         return 'close'
 
     @classmethod
-    @model.CoopView.button_action('endorsement.act_start_endorsement')
+    @model.CoogView.button_action('endorsement.act_start_endorsement')
     def start_endorsement(cls, contracts):
         pass
 
@@ -1000,7 +1000,7 @@ class Contract(CogProcessFramework):
         for dates, contract_group in groupby(contracts,
                 lambda x: (previous_dates[x.id], new_dates[x.id])):
             endorsements.append(ContractEndorsement.new_rollback_point(
-                    list(contract_group), coop_date.add_day(dates[0], 1),
+                    list(contract_group), coog_date.add_day(dates[0], 1),
                     'automatic_reactivation_endorsement',
                     {'values': {
                             'status': 'active',
@@ -1092,7 +1092,7 @@ class ContractContact(object):
     __name__ = 'contract.contact'
 
 
-class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
+class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
     'Endorsement'
 
     __metaclass__ = PoolMeta
@@ -1308,7 +1308,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     def get_endorsement_summary(self, name):
         result = [x.get_endorsement_summary(name)
                 for x in self.all_endorsements() if not x.is_null()]
-        return coop_string.generate_summaries(result) if result else ''
+        return coog_string.generate_summaries(result) if result else ''
 
     @classmethod
     def search_contracts(cls, name, clause):
@@ -1360,7 +1360,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                 value_endorsement.update_after_cancellation()
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     @Workflow.transition('canceled')
     def cancel(cls, endorsements):
         pool = Pool()
@@ -1374,7 +1374,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         Event.notify_events(endorsements, 'cancel_endorsement')
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     @Workflow.transition('declined')
     def decline(cls, endorsements, reason=None):
         pool = Pool()
@@ -1387,7 +1387,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                 description=(reason.name if reason else None))
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     @Workflow.transition('draft')
     def draft(cls, endorsements):
         cls._draft([x for x in endorsements if x.state != 'declined'])
@@ -1410,7 +1410,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         cls.write(endorsements, {'rollback_date': CurrentTimestamp()})
 
     @classmethod
-    @model.CoopView.button_action('endorsement.act_open_generated')
+    @model.CoogView.button_action('endorsement.act_open_generated')
     @Workflow.transition('applied')
     def apply(cls, endorsements):
         pool = Pool()
@@ -1463,12 +1463,12 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
             Event.notify_events(endorsements, 'apply_endorsement')
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     def button_delete(cls, instances):
         return 'delete'
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     def reset(cls, endorsements):
         pool = Pool()
         ContractEndorsement = pool.get('endorsement.contract')
@@ -1527,7 +1527,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
                 instance.save()
 
     @classmethod
-    @model.CoopView.button_action('endorsement.act_decline_endorsement')
+    @model.CoogView.button_action('endorsement.act_decline_endorsement')
     def button_decline_endorsement(cls, endorsements):
         pass
 
@@ -1542,7 +1542,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         cls.apply(endorsements)
 
     @classmethod
-    @model.CoopView.button_action('endorsement.act_contract_open')
+    @model.CoogView.button_action('endorsement.act_contract_open')
     def open_contract(cls, endorsements):
         pass
 
@@ -1645,13 +1645,13 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
         return endorsements
 
     @classmethod
-    @model.CoopView.button_action('endorsement.act_resume_endorsement')
+    @model.CoogView.button_action('endorsement.act_resume_endorsement')
     def start_endorsement(cls, endorsements):
         pass
 
 
 class EndorsementContract(values_mixin('endorsement.contract.field'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Contract'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract'
@@ -2036,7 +2036,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
 class EndorsementOption(relation_mixin(
             'endorsement.contract.option.field', 'option', 'contract.option',
             'Options'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Option'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.option'
@@ -2126,7 +2126,7 @@ class EndorsementOption(relation_mixin(
 class EndorsementOptionVersion(relation_mixin(
             'endorsement.contract.option.version.field', 'version',
             'contract.option.version', 'Versions'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Option Version'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.option.version'
@@ -2168,7 +2168,7 @@ class EndorsementActivationHistory(relation_mixin(
             'endorsement.contract.activation_history.field',
             'activation_history', 'contract.activation_history',
             'Activation History'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Activation History'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.activation_history'
@@ -2191,7 +2191,7 @@ class EndorsementContact(relation_mixin(
             'endorsement.contract.contact.field',
             'contact', 'contract.contact',
             'Contract Contacts'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Contact'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.contact'
@@ -2218,7 +2218,7 @@ class EndorsementContact(relation_mixin(
 class EndorsementExtraData(relation_mixin(
             'endorsement.contract.extra_data.field', 'extra_data',
             'contract.extra_data', 'Extra Datas'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Extra Data'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.extra_data'
@@ -2310,7 +2310,7 @@ class EndorsementExtraData(relation_mixin(
                 return ''
             extra_data = self.__class__.get_extra_data_def_cache(name)
             if extra_data.type_ == 'boolean':
-                return coop_string.translate_bool(value)
+                return coog_string.translate_bool(value)
             elif extra_data.type_ == 'selection':
                 selection = dict(json.loads(extra_data.selection_json))
                 return selection[value]
@@ -2338,7 +2338,7 @@ class EndorsementExtraData(relation_mixin(
             self.new_extra_data_values
 
 
-class EndorsementConfiguration(ModelSingleton, model.CoopSQL, model.CoopView):
+class EndorsementConfiguration(ModelSingleton, model.CoogSQL, model.CoogView):
     'Endorsement Configuration'
     __name__ = 'endorsement.configuration'
 

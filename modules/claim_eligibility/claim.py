@@ -4,7 +4,7 @@ from textwrap import TextWrapper
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -72,7 +72,7 @@ class ClaimService:
         return self.benefit.check_eligibility(exec_context)
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     def check_eligibility(cls, services):
         to_save = []
         accepted = []
@@ -92,7 +92,7 @@ class ClaimService:
             Event.notify_events(accepted, 'accept_claim_service')
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     def refuse_services(cls, services):
         pool = Pool()
         Event = pool.get('event')

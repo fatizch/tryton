@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.model import Unique
 
-from trytond.modules.cog_utils import fields, model, coop_string
+from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 __metaclass__ = PoolMeta
@@ -28,7 +28,7 @@ class Plan:
 
 class CommissionRecoveryRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Commission Recovery Rule'
 
     __name__ = 'commission.plan.recovery_rule'
@@ -58,7 +58,7 @@ class CommissionRecoveryRule(
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
 
 class Commission:

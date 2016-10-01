@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import export, fields
+from trytond.modules.coog_core import export, fields
 
 __metaclass__ = PoolMeta
 __all__ = [

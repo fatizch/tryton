@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 
 __metaclass__ = PoolMeta
@@ -14,7 +14,7 @@ __all__ = [
     ]
 
 
-class CashValueCollection(model.CoopView, model.CoopSQL):
+class CashValueCollection(model.CoogView, model.CoogSQL):
     'Cash Value Collection'
 
     __name__ = 'contract.cash_value.collection'

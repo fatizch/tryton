@@ -8,7 +8,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, Button
 from trytond.pyson import Eval, Len
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 from trytond.modules.endorsement import EndorsementWizardPreviewMixin
 
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
@@ -23,7 +23,7 @@ __all__ = [
 
 
 class PreviewContractPremiums(EndorsementWizardPreviewMixin,
-        model.CoopView):
+        model.CoogView):
     'Preview Contract Premiums'
 
     __name__ = 'endorsement.start.preview_contract_premiums'
@@ -100,7 +100,7 @@ class PreviewContractPremiums(EndorsementWizardPreviewMixin,
         return {'contract_previews': contracts.values()}
 
 
-class ContractPreview(model.CoopView):
+class ContractPreview(model.CoogView):
     'Contract Preview'
 
     __name__ = 'endorsement.start.preview_contract_premiums.contract'
@@ -116,7 +116,7 @@ class ContractPreview(model.CoopView):
         'Current Contract Premiums', readonly=True)
 
 
-class ContractPreviewPremium(model.CoopView):
+class ContractPreviewPremium(model.CoogView):
     'Premium Preview'
 
     __name__ = 'endorsement.start.preview_contract_premiums.premium'

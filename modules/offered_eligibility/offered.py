@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 from trytond.modules.rule_engine import get_rule_mixin
 
 __metaclass__ = PoolMeta
@@ -27,7 +27,7 @@ class OptionDescription:
 
 class OptionDescriptionEligibilityRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Option Description Eligibility Rule'
 
     __name__ = 'offered.option.description.eligibility_rule'

@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateAction, Button
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -35,7 +35,7 @@ class GetDatesForProcessTimings(Wizard):
                 }}
 
 
-class ProcessTimingSelectDates(model.CoopView):
+class ProcessTimingSelectDates(model.CoogView):
     'Process Timing Select Dates'
 
     __name__ = 'process.view_timings.select_dates'
@@ -64,7 +64,7 @@ class ProcessTimings(Wizard):
             }
 
 
-class ProcessTimingDisplayer(model.CoopView):
+class ProcessTimingDisplayer(model.CoogView):
     'Process Timing Displayer'
 
     __name__ = 'process.view_timings.displayer'

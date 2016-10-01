@@ -6,7 +6,7 @@ from trytond.pyson import Eval, Or, Bool
 from trytond import backend
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 __metaclass__ = PoolMeta
@@ -28,7 +28,7 @@ UNDERWRITING_STATUSES = [
     ]
 
 
-class UnderwritingDecision(model.CoopSQL, model.CoopView):
+class UnderwritingDecision(model.CoogSQL, model.CoogView):
     'Underwriting Decision'
 
     __name__ = 'underwriting.decision'
@@ -94,12 +94,12 @@ class UnderwritingDecision(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify('%s_%s' % (
+        return coog_string.slugify('%s_%s' % (
                 self.level_string if self.level else '',
                 self.name))
 
 
-class UnderwritingDecisionUnderwritingDecision(model.CoopSQL, model.CoopView):
+class UnderwritingDecisionUnderwritingDecision(model.CoogSQL, model.CoogView):
     'Underwriting Decision to Underwriting Decision Relation'
 
     __name__ = 'underwriting.decision-underwriting.decision'
@@ -168,7 +168,7 @@ class OptionDescription:
 
 class UnderwritingRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Underwriting Rule'
 
     __name__ = 'underwriting.rule'
@@ -225,7 +225,7 @@ class UnderwritingRule(
         return rule_result.result
 
 
-class UnderwritingRuleUnderwritingDecision(model.CoopSQL):
+class UnderwritingRuleUnderwritingDecision(model.CoogSQL):
     'Underwriting Rule to Underwriting Decision Relation'
 
     __name__ = 'underwriting.rule-underwriting.decision'

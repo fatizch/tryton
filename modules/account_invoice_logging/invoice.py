@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.cog_utils import model, fields, utils
+from trytond.modules.coog_core import model, fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -41,7 +41,7 @@ class Invoice:
                 } for invoice in invoices]
 
 
-class InvoiceLogging(model.CoopSQL, model.CoopView):
+class InvoiceLogging(model.CoogSQL, model.CoogView):
     'Invoice Logging'
     __name__ = 'account.invoice.logging'
 

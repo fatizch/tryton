@@ -5,7 +5,7 @@ from trytond.pyson import Eval
 from trytond.model import Unique
 from trytond.cache import Cache
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 __all__ = [
     'PaymentJournal',
@@ -50,7 +50,7 @@ class JournalFailureAction:
         'Dunning Configurations', delete_missing=True)
 
 
-class JournalFailureDunning(model.CoopSQL, model.CoopView):
+class JournalFailureDunning(model.CoogSQL, model.CoogView):
     'Journal Failure Dunning Configuration'
 
     __name__ = 'account.payment.journal.failure_action.dunning'

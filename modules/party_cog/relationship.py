@@ -3,7 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import fields, coop_string, export
+from trytond.modules.coog_core import fields, coog_string, export
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -23,7 +23,7 @@ class RelationType(export.ExportImportMixin):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     @classmethod
     def _export_skips(cls):

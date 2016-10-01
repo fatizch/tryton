@@ -11,7 +11,7 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.config import config
 
-from trytond.modules.cog_utils import batch, coop_string
+from trytond.modules.coog_core import batch, coog_string
 
 
 __all__ = [
@@ -93,10 +93,10 @@ class PaymentTreatmentBatch(batch.BatchRoot):
                 keys.append(key)
                 grouped_payments = list(_grouped_payments)
                 cls.logger.info('processing group %s of %s' % (key,
-                    coop_string.get_print_infos(grouped_payments, 'payment')))
+                    coog_string.get_print_infos(grouped_payments, 'payment')))
                 Payment.process(grouped_payments, group_func)
             cls.logger.info('%s processed' %
-                coop_string.get_print_infos(groups, 'payments group'))
+                coog_string.get_print_infos(groups, 'payments group'))
             return [group.id for group in groups]
 
     @classmethod
@@ -195,7 +195,7 @@ class PaymentCreationBatch(batch.BatchRoot):
         move_lines = MoveLine.browse([x[0] for x in cursor.fetchall()])
         MoveLine.create_payments(move_lines)
         cls.logger.info('%s created' %
-            coop_string.get_print_infos([x.id for x in move_lines], 'payment'))
+            coog_string.get_print_infos([x.id for x in move_lines], 'payment'))
 
     @classmethod
     def get_batch_args_name(cls):
@@ -259,7 +259,7 @@ class PaymentAcknowledgeBatch(batch.BatchRoot):
         with Transaction().set_context(disable_auto_aggregate=True):
             Payment.succeed(objects)
         cls.logger.info('%s succeed' %
-            coop_string.get_print_infos([x.id for x in objects], 'payment'))
+            coog_string.get_print_infos([x.id for x in objects], 'payment'))
 
     @classmethod
     def get_batch_args_name(cls):

@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Equal, Not
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 __all__ = [
     'HospitalisationPeriod',
@@ -11,7 +11,7 @@ __all__ = [
     ]
 
 
-class HospitalisationPeriod(model.CoopSQL, model.CoopView):
+class HospitalisationPeriod(model.CoogSQL, model.CoogView):
     """HospitalisationPeriod"""
 
     __name__ = 'claim.loss.hospitalisation.period'

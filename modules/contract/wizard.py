@@ -7,7 +7,7 @@ from trytond.pyson import Eval, Len, If, PYSONEncoder
 from trytond.wizard import StateTransition, StateView, Button, StateAction
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import model, fields, coop_string, utils
+from trytond.modules.coog_core import model, fields, coog_string, utils
 from trytond.modules.offered import offered
 
 __all__ = [
@@ -27,7 +27,7 @@ __all__ = [
     ]
 
 
-class OptionSubscription(model.CoopWizard):
+class OptionSubscription(model.CoogWizard):
     'Option Subscription'
 
     __name__ = 'contract.wizard.option_subscription'
@@ -112,7 +112,7 @@ class OptionSubscription(model.CoopWizard):
         return 'end'
 
 
-class PackageSelection(model.CoopView):
+class PackageSelection(model.CoogView):
     'Select Package'
 
     __name__ = 'contract.wizard.option_subscription.select_package'
@@ -124,7 +124,7 @@ class PackageSelection(model.CoopView):
         'Possible Packages')
 
 
-class OptionsDisplayer(model.CoopView):
+class OptionsDisplayer(model.CoogView):
     'Select Covered Element'
 
     __name__ = 'contract.wizard.option_subscription.options_displayer'
@@ -195,7 +195,7 @@ class OptionsDisplayer(model.CoopView):
                 selection = 'automatic'
             option = Displayer(
                 name='%s [%s]' % (coverage.rec_name,
-                    coop_string.translate_value(coverage,
+                    coog_string.translate_value(coverage,
                         'subscription_behaviour')),
                 is_selected=((not self.package and (bool(existing_option) or
                             coverage.subscription_behaviour != 'optional'))
@@ -211,7 +211,7 @@ class OptionsDisplayer(model.CoopView):
         return []
 
 
-class WizardOption(model.CoopView):
+class WizardOption(model.CoogView):
     'Option'
 
     __name__ = 'contract.wizard.option_subscription.options_displayer.option'
@@ -244,21 +244,21 @@ class WizardOption(model.CoopView):
     def on_change_with_name(self, name=None):
         if self.coverage:
             return '%s [%s]' % (self.coverage.rec_name,
-                coop_string.translate_value(self, 'coverage_behaviour'))
+                coog_string.translate_value(self, 'coverage_behaviour'))
 
     @staticmethod
     def default_selection():
         return 'manual'
 
 
-class ContractActivateConfirm(model.CoopView):
+class ContractActivateConfirm(model.CoogView):
     'Confirm Contract Activation View'
     __name__ = 'contract.activate.confirm'
 
     contract = fields.Many2One('contract', 'Contract', readonly=True)
 
 
-class ContractActivate(model.CoopWizard):
+class ContractActivate(model.CoogWizard):
     'Activate Contract Wizard'
 
     __name__ = 'contract.activate'
@@ -310,7 +310,7 @@ class ContractActivate(model.CoopWizard):
         return 'end'
 
 
-class ContractSelectDeclineReason(model.CoopView):
+class ContractSelectDeclineReason(model.CoogView):
     'Reason selector to decline contract'
     __name__ = 'contract.decline.select_reason'
 
@@ -319,7 +319,7 @@ class ContractSelectDeclineReason(model.CoopView):
         domain=[('status', '=', 'declined')])
 
 
-class ContractDecline(model.CoopWizard):
+class ContractDecline(model.CoogWizard):
     'Decline Contract Wizard'
 
     __name__ = 'contract.decline'
@@ -351,7 +351,7 @@ class ContractDecline(model.CoopWizard):
         return 'end'
 
 
-class ContractStopSelectContracts(model.CoopView):
+class ContractStopSelectContracts(model.CoogView):
     'Select Contract to stop'
 
     __name__ = 'contract.stop.select_contracts'
@@ -379,7 +379,7 @@ class ContractStopSelectContracts(model.CoopView):
                 )]
 
 
-class ContractStop(model.CoopWizard):
+class ContractStop(model.CoogWizard):
     'Stop Contract'
 
     __name__ = 'contract.stop'
@@ -411,7 +411,7 @@ class ContractStop(model.CoopWizard):
         return 'end'
 
 
-class ContractReactivateCheck(model.CoopView):
+class ContractReactivateCheck(model.CoogView):
     'Contract Reactivate Check'
 
     __name__ = 'contract.reactivate.check_contracts'
@@ -433,7 +433,7 @@ class ContractReactivateCheck(model.CoopView):
                 )]
 
 
-class ContractReactivate(model.CoopWizard):
+class ContractReactivate(model.CoogWizard):
     'Reactivate Contract'
 
     __name__ = 'contract.reactivate'
@@ -475,7 +475,7 @@ class ContractReactivate(model.CoopWizard):
         return 'end'
 
 
-class RelatedAttachments(model.CoopWizard):
+class RelatedAttachments(model.CoogWizard):
     'Related Attachments'
 
     __name__ = 'contract.related_attachments'

@@ -4,8 +4,8 @@ import random
 import datetime
 from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
-from trytond.modules.cog_utils import fields
-from trytond.modules.cog_utils import coop_string
+from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import coog_string
 
 
 MODULE_NAME = 'party_cog'
@@ -169,14 +169,14 @@ class TestCaseModel:
                         suffix = party.commercial_name
                     else:
                         suffix = party.name
-                    suffix = coop_string.slugify(suffix, lower=False)
+                    suffix = coog_string.slugify(suffix, lower=False)
                     value = 'contact@%s.com' % suffix
                 elif party.is_person:
                     prefix = ''
                     if party.first_name:
-                        prefix = '%s.' % coop_string.slugify(
+                        prefix = '%s.' % coog_string.slugify(
                             party.first_name, lower=False)
-                    prefix += coop_string.slugify(party.name, lower=False)
+                    prefix += coog_string.slugify(party.name, lower=False)
                     value = '%s@%s' % (prefix, random.choice(
                             possible_domains))
                 value = value.replace(' ', '').lower()
@@ -299,5 +299,5 @@ class TestCaseModel:
 
     @classmethod
     def hierarchy_test_case(cls):
-        company = cls.new_company('Coop', 'Coop', 1, 4)
+        company = cls.new_company('Coog', 'Coog', 1, 4)
         company.save()

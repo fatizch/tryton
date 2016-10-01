@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import trytond.tests.test_tryton
 
-from trytond.modules.cog_utils import test_framework
+from trytond.modules.coog_core import test_framework
 
 
 def doctest_dropdb(test):
@@ -19,9 +19,9 @@ def doctest_dropdb(test):
         cursor.close()
 
 
-class ModuleTestCase(test_framework.CoopTestCase):
+class ModuleTestCase(test_framework.CoogTestCase):
     '''
-    Test Coop module.
+    Test Coog module.
     '''
     module = 'test_module'
 

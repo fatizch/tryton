@@ -3,7 +3,7 @@
 import random
 
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.cog_utils import coop_string
+from trytond.modules.coog_core import coog_string
 
 MODULE_NAME = 'distribution'
 
@@ -20,7 +20,7 @@ class TestCaseModel:
     def create_distribution_network(cls, **kwargs):
         DistributionNetwork = Pool().get('distribution.network')
         if 'code' not in kwargs:
-            kwargs['code'] = coop_string.slugify(
+            kwargs['code'] = coog_string.slugify(
                 kwargs['name'])
         return DistributionNetwork(**kwargs)
 

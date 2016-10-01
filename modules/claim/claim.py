@@ -8,7 +8,7 @@ from trytond.transaction import Transaction
 from trytond.model import Unique
 from trytond.cache import Cache
 
-from trytond.modules.cog_utils import model, utils, fields, export, coop_string
+from trytond.modules.coog_core import model, utils, fields, export, coog_string
 from trytond.modules.report_engine import Printable
 from trytond.modules.currency_cog import ModelCurrency
 
@@ -29,7 +29,7 @@ CLAIMSTATUSES = [
     ]
 
 
-class Claim(model.CoopSQL, model.CoopView, Printable):
+class Claim(model.CoogSQL, model.CoogView, Printable):
     'Claim'
 
     __name__ = 'claim'
@@ -263,7 +263,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         return self.get_contract().offered
 
     @classmethod
-    @model.CoopView.button_action('claim.act_deliver_wizard')
+    @model.CoogView.button_action('claim.act_deliver_wizard')
     def deliver(cls, claims):
         pass
 
@@ -288,7 +288,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         cls.save(to_save)
 
 
-class Loss(model.CoopSQL, model.CoopView):
+class Loss(model.CoogSQL, model.CoogView):
     'Loss'
 
     __name__ = 'claim.loss'
@@ -496,7 +496,7 @@ class Loss(model.CoopSQL, model.CoopView):
             instance.check_end_date()
 
 
-class ClaimService(model.CoopView, model.CoopSQL, ModelCurrency):
+class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
     'Claim Service'
     __name__ = 'claim.service'
 
@@ -622,7 +622,7 @@ class ClaimService(model.CoopView, model.CoopSQL, ModelCurrency):
         return res
 
 
-class ClaimSubStatus(model.CoopSQL, model.CoopView):
+class ClaimSubStatus(model.CoogSQL, model.CoogView):
     'Claim Close Reason'
 
     __name__ = 'claim.sub_status'
@@ -664,7 +664,7 @@ class ClaimSubStatus(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     @classmethod
     def default_active(cls):
@@ -680,8 +680,8 @@ class ClaimSubStatus(model.CoopSQL, model.CoopView):
         return instance
 
 
-class ClaimServiceExtraDataRevision(model._RevisionMixin, model.CoopSQL,
-        model.CoopView, export.ExportImportMixin):
+class ClaimServiceExtraDataRevision(model._RevisionMixin, model.CoogSQL,
+        model.CoogView, export.ExportImportMixin):
     'Claim Service Extra Data'
 
     __name__ = 'claim.service.extra_data'

@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Not, Bool
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.party_cog.party import STATES_COMPANY
 
 __metaclass__ = PoolMeta
@@ -39,7 +39,7 @@ class Party:
     def get_summary_content(self, label, at_date=None, lang=None):
         res = super(Party, self).get_summary_content(label, at_date, lang)
         if self.insurer_role:
-            res[1].append(coop_string.get_field_summary(self, 'insurer_role',
+            res[1].append(coog_string.get_field_summary(self, 'insurer_role',
                 True, at_date, lang))
         return res
 
@@ -50,7 +50,7 @@ class Party:
             return super(Party, self).get_rec_name(name)
 
 
-class Insurer(model.CoopView, model.CoopSQL):
+class Insurer(model.CoogView, model.CoogSQL):
     'Insurer'
 
     __name__ = 'insurer'

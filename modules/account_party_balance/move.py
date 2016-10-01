@@ -6,7 +6,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Bool, Eval
 from trytond.wizard import Wizard, StateView, Button
 from trytond.transaction import Transaction
-from trytond.modules.cog_utils import fields, model, coop_date, utils
+from trytond.modules.coog_core import fields, model, coog_date, utils
 from trytond.modules.currency_cog import ModelCurrency
 
 __metaclass__ = PoolMeta
@@ -39,7 +39,7 @@ class MoveLine:
                 return self.origin_item.sepa_mandate.account_number.account.id
 
 
-class PartyBalanceLine(model.CoopView):
+class PartyBalanceLine(model.CoogView):
     'Party Balance Line'
 
     __name__ = 'account.party_balance.line'
@@ -140,7 +140,7 @@ class PartyBalanceLine(model.CoopView):
         return Move.get_origin()
 
 
-class PartyBalance(ModelCurrency, model.CoopView):
+class PartyBalance(ModelCurrency, model.CoogView):
     'Party Balance'
 
     __name__ = 'account.party_balance'
@@ -226,7 +226,7 @@ class PartyBalance(ModelCurrency, model.CoopView):
                 line.parent = parent_line
             lines.append(parent_line)
 
-    @model.CoopView.button_change(*_FIELDS)
+    @model.CoogView.button_change(*_FIELDS)
     def refresh(self):
         Line = Pool().get('account.party_balance.line')
         lines = []
@@ -356,7 +356,7 @@ class OpenPartyBalance(Wizard):
             'all_lines': [x.id for x in lines],
             'hide_reconciled_lines': False,
             'hide_canceled_invoices': True,
-            'from_date': coop_date.add_year(utils.today(), -1),
+            'from_date': coog_date.add_year(utils.today(), -1),
             'contracts': [x.id for x in Contract.search([
                         ('subscriber', '=', party),
                         ('status', '!=', 'quote'),

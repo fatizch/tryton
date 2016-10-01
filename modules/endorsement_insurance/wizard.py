@@ -8,7 +8,7 @@ from trytond.wizard import StateView, StateTransition, Button
 from trytond.pyson import Eval, Len, Bool, If, Equal
 from trytond.model import Model
 
-from trytond.modules.cog_utils import model, fields, utils, coop_date
+from trytond.modules.coog_core import model, fields, utils, coog_date
 from trytond.modules.endorsement import EndorsementWizardStepMixin, \
     add_endorsement_step
 
@@ -356,7 +356,7 @@ class RemoveOption(EndorsementWizardStepMixin):
         base_endorsement.save()
 
 
-class RemoveOptionSelector(model.CoopView):
+class RemoveOptionSelector(model.CoogView):
     'Remove Option Selector'
 
     __name__ = 'contract.covered_element.option.remove.option_selector'
@@ -725,7 +725,7 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             'contract_modify_covered_element_view_form'
 
 
-class CoveredElementDisplayer(model.CoopView):
+class CoveredElementDisplayer(model.CoogView):
     'Covered Element Displayer'
 
     __name__ = 'contract.covered_element.modify.displayer'
@@ -827,7 +827,7 @@ class CoveredElementDisplayer(model.CoopView):
             }
 
 
-class ExtraPremiumDisplayer(model.CoopView):
+class ExtraPremiumDisplayer(model.CoogView):
     'Extra Premium Displayer'
 
     __name__ = 'endorsement.contract.extra_premium.displayer'
@@ -979,7 +979,7 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
                 if elem.extra_premium_id:
                     ex_endorsement = ExtraPremiumEndorsement(action='update',
                         extra_premium=elem.extra_premium_id,
-                        values={'manual_end_date': coop_date.add_day(
+                        values={'manual_end_date': coog_date.add_day(
                                 self.effective_date, -1)})
                 else:
                     continue
@@ -1183,7 +1183,7 @@ class OptionDisplayer:
         return to_extract
 
 
-class OptionSelector(model.CoopView):
+class OptionSelector(model.CoogView):
     'Option Selector'
 
     __name__ = 'endorsement.option.selector'
@@ -1207,7 +1207,7 @@ class OptionSelector(model.CoopView):
         return selector
 
 
-class CoveredElementSelector(model.CoopView):
+class CoveredElementSelector(model.CoogView):
     'Covered Element Selector'
 
     __name__ = 'endorsement.covered_element.selector'
@@ -1228,7 +1228,7 @@ class CoveredElementSelector(model.CoopView):
         return selector
 
 
-class NewExtraPremium(model.CoopView):
+class NewExtraPremium(model.CoogView):
     'New Extra Premium'
 
     __name__ = 'endorsement.contract.new_extra_premium'
@@ -1481,7 +1481,7 @@ class ManageExclusions(EndorsementWizardStepMixin):
         return all_options
 
 
-class ManageExclusionsOptionDisplayer(model.CoopView):
+class ManageExclusionsOptionDisplayer(model.CoogView):
     'Manage Exclusions Option Displayer'
 
     __name__ = 'contract.manage_exclusions.option'
@@ -1535,7 +1535,7 @@ class ManageExclusionsOptionDisplayer(model.CoopView):
         raise NotImplementedError
 
 
-class ManageExclusionsDisplayer(model.CoopView):
+class ManageExclusionsDisplayer(model.CoogView):
     'Manage Exclusions Displayer'
 
     __name__ = 'contract.manage_exclusions.exclusion'

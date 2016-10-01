@@ -4,7 +4,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Not, Eval, Bool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.transaction import Transaction
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 
 __all__ = [
@@ -14,7 +14,7 @@ __all__ = [
     ]
 
 
-class ContributionsView(model.CoopView):
+class ContributionsView(model.CoogView):
     'Contributions View'
     __name__ = 'claim_salary_fr.contributions_view'
 
@@ -28,7 +28,7 @@ class ContributionsView(model.CoopView):
     tc_fix = fields.Numeric('Amount C', digits=(16, 4), required=True)
 
 
-class StartSetContributions(model.CoopView):
+class StartSetContributions(model.CoogView):
     'Start Set Contributions'
     __metaclass__ = PoolMeta
     __name__ = 'claim_salary_fr.start_set_contributions'

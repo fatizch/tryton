@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.coog_core import fields, model, utils
 
 
 __metaclass__ = PoolMeta
@@ -41,7 +41,7 @@ class Contract:
                 )]
 
     @classmethod
-    @model.CoopView.button_action(
+    @model.CoogView.button_action(
         'contract_waiver_premium.act_create_waiver_wizard')
     def create_waiver(cls, contracts):
         pass

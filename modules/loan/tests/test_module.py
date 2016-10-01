@@ -9,13 +9,13 @@ import datetime
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import doctest_setup, doctest_teardown
 
-from trytond.modules.cog_utils import test_framework, coop_date
+from trytond.modules.coog_core import test_framework, coog_date
 from trytond.transaction import Transaction
 
 
-class ModuleTestCase(test_framework.CoopTestCase):
+class ModuleTestCase(test_framework.CoogTestCase):
     '''
-    Test Coop module.
+    Test Coog module.
     '''
     module = 'loan'
 
@@ -172,7 +172,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         loan.rate = Decimal('0.0752')
         loan.funds_release_date = datetime.date(2014, 3, 5)
         loan.payment_frequency = 'quarter'
-        loan.first_payment_date = coop_date.add_duration(
+        loan.first_payment_date = coog_date.add_duration(
             loan.funds_release_date, loan.payment_frequency,
             stick_to_end_of_month=True)
         self.assertEqual(loan.first_payment_date, datetime.date(2014, 6, 5))

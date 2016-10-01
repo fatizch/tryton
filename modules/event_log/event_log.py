@@ -5,7 +5,7 @@ from sql.conditionals import Coalesce
 
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
-from trytond.modules.cog_utils import model, fields, utils
+from trytond.modules.coog_core import model, fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -15,7 +15,7 @@ __all__ = [
     ]
 
 
-class EventLog(model.CoopSQL, model.CoopView):
+class EventLog(model.CoogSQL, model.CoogView):
     'Event Log'
 
     __name__ = 'event.log'

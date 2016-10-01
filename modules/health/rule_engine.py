@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 
 from trytond.modules.rule_engine import check_args
-from trytond.modules.cog_utils import utils
+from trytond.modules.coog_core import utils
 
 __metaclass__ = PoolMeta
 __all__ = [

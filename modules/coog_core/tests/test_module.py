@@ -13,40 +13,40 @@ from trytond.model import ModelSQL, fields
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 
-from trytond.modules.cog_utils import test_framework, history_tools
-from trytond.modules.cog_utils import utils, coop_string, coop_date, model
+from trytond.modules.coog_core import test_framework, history_tools
+from trytond.modules.coog_core import utils, coog_string, coog_date, model
 
 
-class ModuleTestCase(test_framework.CoopTestCase):
+class ModuleTestCase(test_framework.CoogTestCase):
     '''
-    Test Coop module.
+    Test Coog module.
     '''
-    module = 'cog_utils'
+    module = 'coog_core'
 
     @classmethod
     def get_models(cls):
         return {
             'View': 'ir.ui.view',
-            'TestMethodDefinition': 'cog_utils.test_model_method_definition',
+            'TestMethodDefinition': 'coog_core.test_model_method_definition',
             'MethodDefinition': 'ir.model.method',
             'Model': 'ir.model',
-            'ExportTest': 'cog_utils.export_test',
-            'ExportTestTarget': 'cog_utils.export_test_target',
-            'ExportTestTargetSlave': 'cog_utils.export_test_target_slave',
-            'ExportTestRelation': 'cog_utils.export_test_relation',
-            'O2MMaster': 'cog_utils.o2m_deletion_master_test',
-            'O2MChild': 'cog_utils.o2m_deletion_child_test',
+            'ExportTest': 'coog_core.export_test',
+            'ExportTestTarget': 'coog_core.export_test_target',
+            'ExportTestTargetSlave': 'coog_core.export_test_target_slave',
+            'ExportTestRelation': 'coog_core.export_test_relation',
+            'O2MMaster': 'coog_core.o2m_deletion_master_test',
+            'O2MChild': 'coog_core.o2m_deletion_child_test',
             'ExportModelConfiguration': 'ir.export.configuration.model',
             'ExportConfiguration': 'ir.export.configuration',
             'ExportFieldConfiguration': 'ir.export.configuration.field',
             'EventTypeAction': 'event.type.action',
-            'TestHistoryTable': 'cog_utils.test_history',
-            'TestHistoryChildTable': 'cog_utils.test_history.child',
-            'TestLoaderUpdater': 'cog_utils.test_loader_updater',
+            'TestHistoryTable': 'coog_core.test_history',
+            'TestHistoryChildTable': 'coog_core.test_history.child',
+            'TestLoaderUpdater': 'coog_core.test_loader_updater',
             }
 
     def test0020get_module_path(self):
-        self.assert_(utils.get_module_path('cog_utils'))
+        self.assert_(utils.get_module_path('coog_core'))
         self.assert_(utils.get_module_path('dfsfsfsdf') is None)
 
     def test0025_clear_history(self):
@@ -148,87 +148,87 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0030calculate_duration_between(self):
         start_date = datetime.date(2013, 1, 1)
         end_date = datetime.date(2013, 1, 31)
-        self.assert_(coop_date.duration_between(start_date, end_date, 'day')
+        self.assert_(coog_date.duration_between(start_date, end_date, 'day')
             == 31)
-        self.assert_(coop_date.duration_between(start_date, end_date, 'month')
+        self.assert_(coog_date.duration_between(start_date, end_date, 'month')
             == 1)
-        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'month') == (1, True))
-        self.assert_(coop_date.duration_between(start_date, end_date,
+        self.assert_(coog_date.duration_between(start_date, end_date,
                 'quarter') == 0)
-        self.assert_(coop_date.duration_between(start_date, end_date, 'year')
+        self.assert_(coog_date.duration_between(start_date, end_date, 'year')
             == 0)
 
         end_date = datetime.date(2013, 3, 31)
-        self.assert_(coop_date.duration_between(start_date, end_date, 'day')
+        self.assert_(coog_date.duration_between(start_date, end_date, 'day')
             == 90)
-        self.assert_(coop_date.duration_between(start_date, end_date, 'month')
+        self.assert_(coog_date.duration_between(start_date, end_date, 'month')
             == 3)
-        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'month') == (3, True))
-        self.assert_(coop_date.duration_between(start_date, end_date,
+        self.assert_(coog_date.duration_between(start_date, end_date,
                 'quarter') == 1)
-        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'quarter') == (1, True))
-        self.assert_(coop_date.duration_between(start_date, end_date, 'year')
+        self.assert_(coog_date.duration_between(start_date, end_date, 'year')
             == 0)
 
         end_date = datetime.date(2013, 12, 31)
-        self.assert_(coop_date.duration_between(start_date, end_date, 'day')
+        self.assert_(coog_date.duration_between(start_date, end_date, 'day')
             == 365)
-        self.assert_(coop_date.duration_between(start_date, end_date, 'month')
+        self.assert_(coog_date.duration_between(start_date, end_date, 'month')
             == 12)
-        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'month') == (12, True))
-        self.assert_(coop_date.duration_between(start_date, end_date,
+        self.assert_(coog_date.duration_between(start_date, end_date,
             'quarter') == 4)
-        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'quarter') == (4, True))
-        self.assert_(coop_date.duration_between(start_date, end_date, 'year')
+        self.assert_(coog_date.duration_between(start_date, end_date, 'year')
             == 1)
-        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'year') == (1, True))
 
         end_date = datetime.date(2014, 1, 1)
-        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'month') == (12, False))
-        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'year') == (1, False))
 
         start_date = datetime.date(2016, 2, 29)
-        self.assertEqual(coop_date.add_duration(start_date, 'month', 1),
+        self.assertEqual(coog_date.add_duration(start_date, 'month', 1),
             datetime.date(2016, 3, 29))
-        self.assertEqual(coop_date.add_duration(start_date, 'month', 1, True),
+        self.assertEqual(coog_date.add_duration(start_date, 'month', 1, True),
             datetime.date(2016, 3, 31))
 
         start_date = datetime.date(2015, 2, 28)
-        self.assertEqual(coop_date.add_duration(start_date, 'year', 1),
+        self.assertEqual(coog_date.add_duration(start_date, 'year', 1),
             datetime.date(2016, 2, 28))
-        self.assertEqual(coop_date.add_duration(start_date, 'year', 1, True),
+        self.assertEqual(coog_date.add_duration(start_date, 'year', 1, True),
             datetime.date(2016, 2, 29))
 
         start_date = datetime.date(2015, 2, 12)
         end_date = datetime.date(2016, 3, 10)
-        self.assertEqual(coop_date.number_of_years_between(start_date,
+        self.assertEqual(coog_date.number_of_years_between(start_date,
                 end_date), 1)
-        self.assertEqual(coop_date.number_of_years_between(end_date,
+        self.assertEqual(coog_date.number_of_years_between(end_date,
                 start_date), -1)
-        self.assertEqual(coop_date.number_of_years_between(start_date,
-                end_date, prorata_method=coop_date.prorata_365),
+        self.assertEqual(coog_date.number_of_years_between(start_date,
+                end_date, prorata_method=coog_date.prorata_365),
             1 + Decimal(28) / Decimal(365))
 
         # Test leap year
         start_date = datetime.date(2016, 2, 29)
         end_date = datetime.date(2017, 3, 27)
-        self.assertEqual(coop_date.number_of_years_between(start_date,
-                end_date, prorata_method=coop_date.prorata_365),
+        self.assertEqual(coog_date.number_of_years_between(start_date,
+                end_date, prorata_method=coog_date.prorata_365),
             1 + Decimal(28) / Decimal(365))
         # Test negative
-        self.assertEqual(coop_date.number_of_years_between(end_date,
-                start_date, prorata_method=coop_date.prorata_365),
+        self.assertEqual(coog_date.number_of_years_between(end_date,
+                start_date, prorata_method=coog_date.prorata_365),
             -1 - Decimal(28) / Decimal(365))
 
-        self.assertEqual(coop_date.get_last_day_of_last_month(
+        self.assertEqual(coog_date.get_last_day_of_last_month(
             datetime.date(2016, 3, 15)), datetime.date(2016, 2, 29))
 
     def test0035_functional_error(self):
@@ -270,7 +270,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         class TestModel(ModelSQL, model._RevisionMixin):
             'Test RevisionMixin Model'
-            __name__ = 'cog_utils.test_model_revision_mixin'
+            __name__ = 'coog_core.test_model_revision_mixin'
             _parent_name = 'parent'
             parent = fields.Integer('Parent', required=True)
             value = fields.Integer('Value')
@@ -281,7 +281,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         class TestModelWithReverseField(ModelSQL, model._RevisionMixin):
             'Test RevisionMixin Model'
-            __name__ = 'cog_utils.test_model_revision_mixin'
+            __name__ = 'coog_core.test_model_revision_mixin'
             _parent_name = 'parent'
             parent = fields.Integer('Parent', required=True)
             value = fields.Integer('Value')
@@ -296,11 +296,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         TestModel.__setup__()
         TestModel.__post_setup__()
-        TestModel.__register__('cog_utils')
+        TestModel.__register__('coog_core')
 
         TestModelWithReverseField.__setup__()
         TestModelWithReverseField.__post_setup__()
-        TestModelWithReverseField.__register__('cog_utils')
+        TestModelWithReverseField.__register__('coog_core')
 
         parent_id = 1
 
@@ -406,8 +406,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(method.get_possible_methods(), [])
 
         method.model = self.Model.search([
-                ('model', '=', 'cog_utils.test_model_method_definition')])[0]
-        method.model.model = 'cog_utils.test_model_method_definition'
+                ('model', '=', 'coog_core.test_model_method_definition')])[0]
+        method.model.model = 'coog_core.test_model_method_definition'
 
         self.assertEqual(method.get_possible_methods(),
             [('good_one', 'good_one'), ('other_good_one', 'other_good_one')])
@@ -419,17 +419,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
             pool_get.return_value = self.TestMethodDefinition
             self.assertEqual(method.execute(10, callee), 10)
             pool_get.assert_called_with(
-                'cog_utils.test_model_method_definition')
+                'coog_core.test_model_method_definition')
 
         method.id = 10
         with mock.patch.object(self.MethodDefinition, 'search') as search:
             search.return_value = [method]
             self.assertEqual(self.MethodDefinition.get_method(
-                    'cog_utils.test_model_method_definition', 'good_on'),
+                    'coog_core.test_model_method_definition', 'good_on'),
                 method)
             search.assert_called_with([
                     ('model.model', '=',
-                        'cog_utils.test_model_method_definition'),
+                        'coog_core.test_model_method_definition'),
                     ('method_name', '=', 'good_on')])
 
     def test0050_export_import_key_not_unique(self):
@@ -464,7 +464,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         to_export.export_json(output=output)
 
         values.update({'_func_key': 'somekey',
-                '__name__': 'cog_utils.export_test',
+                '__name__': 'coog_core.export_test',
                 'reference': None,
                 'one2many': [],
                 'property_m2o': None,
@@ -673,17 +673,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual('select2', to_export.property_selection)
 
     def test_0063_export_import_configuration(self):
-        model = self.Model.search([('model', '=', 'cog_utils.export_test')])[0]
+        model = self.Model.search([('model', '=', 'coog_core.export_test')])[0]
         model_configuration = self.ExportModelConfiguration(name='Export Test',
             code='export_test', model=model,
-            model_name='cog_utils.export_test')
+            model_name='coog_core.export_test')
         model_configuration.save()
         model_slave = self.Model.search(
-            [('model', '=', 'cog_utils.export_test_target_slave')])[0]
+            [('model', '=', 'coog_core.export_test_target_slave')])[0]
         model_configuration_slave = self.ExportModelConfiguration(
             name='Export Test Slave', code='export_test_slave',
             model=model_slave,
-            model_name='cog_utils.export_test_target_slave')
+            model_name='coog_core.export_test_target_slave')
         model_configuration_slave.save()
         field_configuration = self.ExportFieldConfiguration(field_name='char',
             model=model_configuration, export_light_strategy=False)
@@ -885,11 +885,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
             datetime.date(2014, 1, 1), datetime.date(2015, 1, 1)]
         period_start = dates[1]
         period_end = dates[-2]
-        periods = coop_date.calculate_periods_from_dates(dates, period_start,
+        periods = coog_date.calculate_periods_from_dates(dates, period_start,
             period_end)
         periods_must_be = [
-            (period_start, coop_date.add_day(dates[2], -1)),
-            (dates[2], coop_date.add_day(dates[3], -1)),
+            (period_start, coog_date.add_day(dates[2], -1)),
+            (dates[2], coog_date.add_day(dates[3], -1)),
             (dates[3], period_end),
             ]
         self.assertEqual(periods, periods_must_be)
@@ -897,10 +897,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test_string_replace(self):
         s = u'café-THÉ:20$'
 
-        self.assertEqual(coop_string.slugify(s, lower=False), u'cafe-THE_20_')
-        self.assertEqual(coop_string.slugify(s), u'cafe-the_20_')
-        self.assertEqual(coop_string.asciify(s), u'cafe-THE:20$')
-        self.assertEqual(coop_string.slugify(s, '-'), u'cafe-the-20-')
+        self.assertEqual(coog_string.slugify(s, lower=False), u'cafe-THE_20_')
+        self.assertEqual(coog_string.slugify(s), u'cafe-the_20_')
+        self.assertEqual(coog_string.asciify(s), u'cafe-THE:20$')
+        self.assertEqual(coog_string.slugify(s, '-'), u'cafe-the-20-')
 
     def test_event_type_action_pyson(self):
         good_obj = self.ExportTest(char='bingo',

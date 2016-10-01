@@ -172,7 +172,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">error</field>
             <field name="src">Cannot import : no object %s with functionnal key : "%s" were found.</field>
             <field name="value">Cannot import : no object %s with functionnal key : "%s" were found.</field>
-            <field name="module">cog_utils</field>
+            <field name="module">coog_core</field>
             <field name="fuzzy" eval="False"/>
         </record>
         <record model="ir.translation" id="translation_not_unique">
@@ -181,7 +181,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">error</field>
             <field name="src">Cannot import : the following objects:\n%s\n share the same functional key:\n"%s".</field>
             <field name="value">Cannot import : the following objects:\n%s\n share the same functional key:\n"%s".</field>
-            <field name="module">cog_utils</field>
+            <field name="module">coog_core</field>
             <field name="fuzzy" eval="False"/>
         </record>
         <record model="ir.translation" id="translation_missing_export_configuration">
@@ -190,7 +190,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">error</field>
             <field name="src">Can't find configuration for code %s.</field>
             <field name="value">Can't find configuration for code %s.</field>
-            <field name="module">cog_utils</field>
+            <field name="module">coog_core</field>
             <field name="fuzzy" eval="False"/>
         </record>
     </data>

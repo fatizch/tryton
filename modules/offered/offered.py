@@ -7,8 +7,8 @@ from trytond.transaction import Transaction
 from trytond.rpc import RPC
 from trytond import backend
 
-from trytond.modules.cog_utils import model, utils, fields
-from trytond.modules.cog_utils import coop_string
+from trytond.modules.coog_core import model, utils, fields
+from trytond.modules.coog_core import coog_string
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
@@ -34,7 +34,7 @@ SUBSCRIPTION_BEHAVIOUR = [
     ]
 
 
-class Product(model.CoopSQL, model.CoopView, model.TaggedMixin):
+class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
     'Product'
 
     __name__ = 'offered.product'
@@ -256,7 +256,7 @@ class Product(model.CoopSQL, model.CoopView, model.TaggedMixin):
         return self.currency.digits if self.currency else 2
 
 
-class OptionDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
+class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
     'OptionDescription'
 
     __name__ = 'offered.option.description'
@@ -431,7 +431,7 @@ class OptionDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
-        return self.code if self.code else coop_string.slugify(self.name)
+        return self.code if self.code else coog_string.slugify(self.name)
 
     def init_dict_for_rule_engine(self, args):
         args['coverage'] = self
@@ -441,7 +441,7 @@ class OptionDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
             return self.ending_rule[0].calculate_rule(exec_context)
 
 
-class OptionDescriptionExtraDataRelation(model.CoopSQL):
+class OptionDescriptionExtraDataRelation(model.CoogSQL):
     'Relation between OptionDescription and Extra Data'
 
     __name__ = 'offered.option.description-extra_data'
@@ -452,7 +452,7 @@ class OptionDescriptionExtraDataRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class ProductOptionDescriptionRelation(model.CoopSQL, model.CoopView):
+class ProductOptionDescriptionRelation(model.CoogSQL, model.CoogView):
     'Product to Option Description Relation'
 
     __name__ = 'offered.product-option.description'
@@ -464,7 +464,7 @@ class ProductOptionDescriptionRelation(model.CoopSQL, model.CoopView):
     order = fields.Integer('Order')
 
 
-class ProductExtraDataRelation(model.CoopSQL):
+class ProductExtraDataRelation(model.CoogSQL):
     'Relation between Product and Extra Data'
 
     __name__ = 'offered.product-extra_data'
@@ -474,7 +474,7 @@ class ProductExtraDataRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class OptionDescriptionRequired(model.CoopSQL):
+class OptionDescriptionRequired(model.CoogSQL):
     'Option Description Required'
 
     __name__ = 'offered.option.description.required'
@@ -485,7 +485,7 @@ class OptionDescriptionRequired(model.CoopSQL):
         'To Option Description', ondelete='RESTRICT')
 
 
-class OptionDescriptionExcluded(model.CoopSQL):
+class OptionDescriptionExcluded(model.CoogSQL):
     'Option Description Excluded'
 
     __name__ = 'offered.option.description.excluded'

@@ -4,7 +4,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import model, fields, utils, coop_string
+from trytond.modules.coog_core import model, fields, utils, coog_string
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -57,7 +57,7 @@ class DistributionNetwork:
         return result
 
 
-class CommercialProduct(model.CoopSQL, model.CoopView):
+class CommercialProduct(model.CoogSQL, model.CoogView):
     'Commercial Product'
 
     __name__ = 'distribution.commercial_product'
@@ -95,7 +95,7 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     @classmethod
     def _export_light(cls):
@@ -103,7 +103,7 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
             {'dist_networks', 'product'}
 
 
-class DistributionNetworkComProductRelation(model.CoopSQL):
+class DistributionNetworkComProductRelation(model.CoogSQL):
     'Relation Distribution Network - Commercial Product'
 
     __name__ = 'distribution.network-commercial_product'

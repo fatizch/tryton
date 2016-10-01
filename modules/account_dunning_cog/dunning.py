@@ -7,7 +7,7 @@ from trytond.model import Unique
 from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import fields, utils, export, coop_string
+from trytond.modules.coog_core import fields, utils, export, coog_string
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -121,7 +121,7 @@ class Procedure(export.ExportImportMixin):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     @classmethod
     def is_master_object(cls):

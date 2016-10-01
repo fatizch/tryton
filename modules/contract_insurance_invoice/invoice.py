@@ -12,7 +12,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool, Not
 from trytond.wizard import Wizard, StateView, Button
 
-from trytond.modules.cog_utils import utils, model, fields
+from trytond.modules.coog_core import utils, model, fields
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
 
 __metaclass__ = PoolMeta
@@ -500,7 +500,7 @@ class InvoiceLine:
             'contract']
 
 
-class InvoiceLineDetail(model.CoopSQL, model.CoopView):
+class InvoiceLineDetail(model.CoogSQL, model.CoogView):
     'Invoice Line Detail'
 
     __name__ = 'account.invoice.line.detail'
@@ -679,7 +679,7 @@ class InvoiceLineAggregates(Wizard):
                     key=order_lines)]}
 
 
-class InvoiceLineAggregatesDisplay(model.CoopView):
+class InvoiceLineAggregatesDisplay(model.CoogView):
     'Display Invoice Line Aggregates'
 
     __name__ = 'account.invoice.aggregate_lines.display'
@@ -688,7 +688,7 @@ class InvoiceLineAggregatesDisplay(model.CoopView):
         None, 'Lines', readonly=True)
 
 
-class InvoiceLineAggregatesDisplayLine(model.CoopView):
+class InvoiceLineAggregatesDisplayLine(model.CoogView):
     'Invoice Line Aggregates Displayer'
 
     __name__ = 'account.invoice.aggregate_lines.display.line'

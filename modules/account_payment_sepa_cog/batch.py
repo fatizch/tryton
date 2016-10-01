@@ -6,7 +6,7 @@ import os
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import batch
+from trytond.modules.coog_core import batch
 
 __metaclass__ = PoolMeta
 __all__ = [

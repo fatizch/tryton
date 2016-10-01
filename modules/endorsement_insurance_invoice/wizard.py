@@ -4,7 +4,7 @@ import datetime
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Len, If
 
-from trytond.modules.cog_utils import model, fields, utils
+from trytond.modules.coog_core import model, fields, utils
 from trytond.modules.endorsement import EndorsementWizardStepMixin
 from trytond.modules.endorsement import EndorsementRecalculateMixin
 from trytond.modules.endorsement import add_endorsement_step
@@ -484,7 +484,7 @@ class ChangeDirectDebitAccount(ChangeBillingInformation):
         return False
 
 
-class ContractDisplayer(model.CoopView):
+class ContractDisplayer(model.CoogView):
     'Contract Displayer'
 
     __name__ = 'contract.billing_information.change.contract_displayer'

@@ -10,8 +10,8 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, Equal
 
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
-from trytond.modules.cog_utils import fields, model, utils
-from trytond.modules.cog_utils.coop_date import FREQUENCY_CONVERSION_TABLE
+from trytond.modules.coog_core import fields, model, utils
+from trytond.modules.coog_core.coog_date import FREQUENCY_CONVERSION_TABLE
 
 
 __metaclass__ = PoolMeta
@@ -31,7 +31,7 @@ __all__ = [
     ]
 
 
-class IndemnificationElement(model.CoopView):
+class IndemnificationElement(model.CoogView):
     'Claim Indemnification Element'
 
     __name__ = 'claim.indemnification.assistant.element'
@@ -105,7 +105,7 @@ class IndemnificationControlElement(IndemnificationElement):
         return res
 
 
-class IndemnificationAssistantView(model.CoopView):
+class IndemnificationAssistantView(model.CoogView):
     'Indemnification Assistant View'
 
     __name__ = 'claim.indemnification.assistant.view'
@@ -290,7 +290,7 @@ class IndemnificationAssistant(Wizard):
         return 'end'
 
 
-class ExtraDataValueDisplayer(model.CoopView):
+class ExtraDataValueDisplayer(model.CoogView):
     'Extra Data Value Displayer'
     __name__ = 'claim.extra_data_value_displayer'
 
@@ -299,7 +299,7 @@ class ExtraDataValueDisplayer(model.CoopView):
     value = fields.Numeric('Value')
 
 
-class ExtraDatasDisplayers(model.CoopView):
+class ExtraDatasDisplayers(model.CoogView):
     'Extra Datas'
     __name__ = 'claim.extra_datas_displayers'
 
@@ -357,7 +357,7 @@ class FillExtraData(Wizard):
         return 'end'
 
 
-class SelectService(model.CoopView):
+class SelectService(model.CoogView):
     'Select Service'
     __name__ = 'claim.select_service'
 
@@ -380,7 +380,7 @@ class SelectService(model.CoopView):
             self.option = None
 
 
-class IndemnificationDefinition(model.CoopView):
+class IndemnificationDefinition(model.CoogView):
     'Indemnification Definition'
     __name__ = 'claim.indemnification_definition'
 
@@ -409,7 +409,7 @@ class IndemnificationDefinition(model.CoopView):
         return self.extra_data
 
 
-class IndemnificationCalculationResult(model.CoopView):
+class IndemnificationCalculationResult(model.CoogView):
     'Indemnification Calculation Result'
     __name__ = 'claim.indemnification_calculation_result'
 
@@ -420,7 +420,7 @@ class IndemnificationCalculationResult(model.CoopView):
         states={'invisible': True})
 
 
-class IndemnificationRegularisation(model.CoopView):
+class IndemnificationRegularisation(model.CoogView):
     'Indemnification Regularisation'
     __name__ = 'claim.indemnification_regularisation'
 

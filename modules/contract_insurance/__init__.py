@@ -9,7 +9,7 @@ from .report_engine import *
 from .wizard import *
 from .rule_engine import *
 
-from trytond.modules.cog_utils import expand_tree
+from trytond.modules.coog_core import expand_tree
 CoveredElementTreeExpansion = expand_tree('contract.covered_element')
 OptionTreeExpansion = expand_tree('contract.option')
 

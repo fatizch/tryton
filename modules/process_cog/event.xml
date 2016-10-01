@@ -5,7 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <record model="ir.ui.view" id="event_type_action_view_form">
             <field name="model">event.type.action</field>
-            <field name="inherit" ref="cog_utils.event_type_action_view_form"/>
+            <field name="inherit" ref="coog_core.event_type_action_view_form"/>
             <field name="name">event_type_action_form</field>
         </record>
     </data>

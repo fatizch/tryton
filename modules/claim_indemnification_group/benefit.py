@@ -5,7 +5,7 @@ import datetime
 from trytond.pool import PoolMeta
 from trytond.pyson import And, Eval, Or, Bool
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 __all__ = [
     'Benefit',
@@ -210,7 +210,7 @@ class BenefitRule:
         return bool(self.revaluation_rules)
 
 
-class BenefitRuleIndemnification(model.CoopSQL):
+class BenefitRuleIndemnification(model.CoogSQL):
     'Benefit Rule - Indemnification'
 
     __name__ = 'benefit_rule-indemnification_rule'
@@ -221,7 +221,7 @@ class BenefitRuleIndemnification(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class BenefitRuleDeductible(model.CoopSQL):
+class BenefitRuleDeductible(model.CoogSQL):
     'Benefit Rule - Deductible'
 
     __name__ = 'benefit_rule-deductible_rule'
@@ -232,7 +232,7 @@ class BenefitRuleDeductible(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class BenefitRuleRevaluation(model.CoopSQL):
+class BenefitRuleRevaluation(model.CoogSQL):
     'Benefit Rule - Revaluation'
 
     __name__ = 'benefit_rule-revaluation_rule'

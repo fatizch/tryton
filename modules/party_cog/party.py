@@ -25,8 +25,8 @@ from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateTransition, StateView
 from trytond.pyson import PYSONEncoder
-from trytond.modules.cog_utils import utils, fields, model, export, summary
-from trytond.modules.cog_utils import coop_string, UnionMixin
+from trytond.modules.coog_core import utils, fields, model, export, summary
+from trytond.modules.coog_core import coog_string, UnionMixin
 
 
 __metaclass__ = PoolMeta
@@ -355,7 +355,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
 
     def get_synthesis_rec_name(self, name):
         if self.is_person:
-            res = '%s %s %s' % (coop_string.translate_value(
+            res = '%s %s %s' % (coog_string.translate_value(
                 self, 'gender'), self.name.upper(), self.first_name)
             if self.ssn:
                 res += ' (%s)' % self.ssn
@@ -391,17 +391,17 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             label = self.rec_name
         value = []
         if self.is_person:
-            value.append(coop_string.get_field_summary(self, 'ssn', True,
+            value.append(coog_string.get_field_summary(self, 'ssn', True,
                 at_date, lang))
-            value.append(coop_string.get_field_summary(self, 'birth_date',
+            value.append(coog_string.get_field_summary(self, 'birth_date',
                 True, at_date, lang))
-            value.append(coop_string.get_field_summary(self, 'birth_name',
+            value.append(coog_string.get_field_summary(self, 'birth_name',
                 True, at_date, lang))
         if self.identifiers:
-            value.append(coop_string.get_field_summary(self, 'identifiers',
+            value.append(coog_string.get_field_summary(self, 'identifiers',
                 True, at_date, lang))
         if self.addresses:
-            value.append(coop_string.get_field_summary(self, 'addresses', True,
+            value.append(coog_string.get_field_summary(self, 'addresses', True,
                 at_date, lang))
         return (label, value)
 
@@ -529,7 +529,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         result['name'] = self.name
         result['first_name'] = self.first_name
         result['birth_date'] = self.birth_date
-        result['gender'] = coop_string.translate_value(self, 'gender')
+        result['gender'] = coog_string.translate_value(self, 'gender')
         try:
             result['main_address'] = self.addresses[0]
         except:
@@ -581,7 +581,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             }
 
     @classmethod
-    @model.CoopView.button_action('party_cog.start_synthesis_menu')
+    @model.CoogView.button_action('party_cog.start_synthesis_menu')
     def button_start_synthesis_menu(cls, parties):
         pass
 
@@ -606,7 +606,7 @@ class PartyIdentifier(export.ExportImportMixin):
         dyn_types = []
         for identifier_type in Pool().get('party.identifier.type').search([]):
             dyn_types.append((identifier_type.code,
-                    coop_string.translate_value(identifier_type, 'name')))
+                    coog_string.translate_value(identifier_type, 'name')))
         cls._identifier_type_cache.set(lang, dyn_types)
         return types + dyn_types
 
@@ -614,7 +614,7 @@ class PartyIdentifier(export.ExportImportMixin):
         return (self.type, self.code)
 
 
-class PartyIdentifierType(model.CoopSQL, model.CoopView):
+class PartyIdentifierType(model.CoogSQL, model.CoogView):
     'Party Identifier Type'
 
     __name__ = 'party.identifier.type'
@@ -632,7 +632,7 @@ class PartyIdentifierType(model.CoopSQL, model.CoopView):
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
-        return (coop_string.slugify(self.name)
+        return (coog_string.slugify(self.name)
             if self.name and not self.code else self.code)
 
     @classmethod
@@ -656,7 +656,7 @@ class PartyIdentifierType(model.CoopSQL, model.CoopView):
         super(PartyIdentifierType, cls).write(*args)
 
 
-class SynthesisMenuActionCloseSynthesis(model.CoopSQL):
+class SynthesisMenuActionCloseSynthesis(model.CoogSQL):
     'Party Synthesis Menu Action Close'
     __name__ = 'party.synthesis.menu.action_close'
     name = fields.Char('Close Synthesis')
@@ -682,7 +682,7 @@ class SynthesisMenuActionCloseSynthesis(model.CoopSQL):
             Max(party_table.create_date).as_('create_date'),
             Max(party_table.write_uid).as_('write_uid'),
             Max(party_table.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(PartyActionClose,
+            Literal(coog_string.translate_label(PartyActionClose,
                 'name')).as_('name'), Literal(party_id).as_('party'))
 
     def get_icon(self, name=None):
@@ -690,10 +690,10 @@ class SynthesisMenuActionCloseSynthesis(model.CoopSQL):
 
     def get_rec_name(self, name):
         PartyActionClose = Pool().get('party.synthesis.menu.action_close')
-        return coop_string.translate_label(PartyActionClose, 'name')
+        return coog_string.translate_label(PartyActionClose, 'name')
 
 
-class SynthesisMenuActionRefreshSynthesis(model.CoopSQL):
+class SynthesisMenuActionRefreshSynthesis(model.CoogSQL):
     'Party Synthesis Menu Action Refresh'
     __name__ = 'party.synthesis.menu.action_refresh'
 
@@ -719,7 +719,7 @@ class SynthesisMenuActionRefreshSynthesis(model.CoopSQL):
             Max(party_table.create_date).as_('create_date'),
             Max(party_table.write_uid).as_('write_uid'),
             Max(party_table.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(PartyActionRefresh,
+            Literal(coog_string.translate_label(PartyActionRefresh,
                 'name')).as_('name'), Literal(party_id).as_('party'))
 
     def get_icon(self, name=None):
@@ -727,10 +727,10 @@ class SynthesisMenuActionRefreshSynthesis(model.CoopSQL):
 
     def get_rec_name(self, name):
         PartyActionRefresh = Pool().get('party.synthesis.menu.action_refresh')
-        return coop_string.translate_label(PartyActionRefresh, 'name')
+        return coog_string.translate_label(PartyActionRefresh, 'name')
 
 
-class SynthesisMenuPartyInteraction(model.CoopSQL):
+class SynthesisMenuPartyInteraction(model.CoogSQL):
     'Party Synthesis Menu Interaction'
     __name__ = 'party.synthesis.menu.party_interaction'
     name = fields.Char('Interactions')
@@ -749,17 +749,17 @@ class SynthesisMenuPartyInteraction(model.CoopSQL):
             Max(party_interaction.create_date).as_('create_date'),
             Max(party_interaction.write_uid).as_('write_uid'),
             Max(party_interaction.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(PartyInteractionSynthesis,
+            Literal(coog_string.translate_label(PartyInteractionSynthesis,
                 'name')).as_('name'),
             party_interaction.party,
             group_by=party_interaction.party)
 
     def get_rec_name(self, name):
         PartyInteraction = Pool().get('party.synthesis.menu.party_interaction')
-        return coop_string.translate_label(PartyInteraction, 'name')
+        return coog_string.translate_label(PartyInteraction, 'name')
 
 
-class SynthesisMenuAddress(model.CoopSQL):
+class SynthesisMenuAddress(model.CoogSQL):
     'Party Synthesis Menu Address'
     __name__ = 'party.synthesis.menu.address'
     name = fields.Char('Addresses')
@@ -780,7 +780,7 @@ class SynthesisMenuAddress(model.CoopSQL):
             Max(address.create_date).as_('create_date'),
             Max(address.write_uid).as_('write_uid'),
             Max(address.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(AddressSynthesis, 'name')).
+            Literal(coog_string.translate_label(AddressSynthesis, 'name')).
             as_('name'), party.id.as_('party'),
             group_by=party.id)
 
@@ -789,10 +789,10 @@ class SynthesisMenuAddress(model.CoopSQL):
 
     def get_rec_name(self, name):
         AddressSynthesis = Pool().get('party.synthesis.menu.address')
-        return coop_string.translate_label(AddressSynthesis, 'name')
+        return coog_string.translate_label(AddressSynthesis, 'name')
 
 
-class SynthesisMenuContact(model.CoopSQL):
+class SynthesisMenuContact(model.CoogSQL):
     'Party Synthesis Menu Contact'
     __name__ = 'party.synthesis.menu.contact'
     name = fields.Char('Contacts')
@@ -813,7 +813,7 @@ class SynthesisMenuContact(model.CoopSQL):
             Max(contact.create_date).as_('create_date'),
             Max(contact.write_uid).as_('write_uid'),
             Max(contact.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(ContactSynthesis, 'name')).
+            Literal(coog_string.translate_label(ContactSynthesis, 'name')).
             as_('name'), party.id.as_('party'),
             group_by=party.id)
 
@@ -822,10 +822,10 @@ class SynthesisMenuContact(model.CoopSQL):
 
     def get_rec_name(self, name):
         ContactSynthesis = Pool().get('party.synthesis.menu.contact')
-        return coop_string.translate_label(ContactSynthesis, 'name')
+        return coog_string.translate_label(ContactSynthesis, 'name')
 
 
-class SynthesisMenuRelationship(model.CoopSQL):
+class SynthesisMenuRelationship(model.CoogSQL):
     'Party Synthesis Menu Contact'
     __name__ = 'party.synthesis.menu.relationship'
     name = fields.Char('Party Relation')
@@ -846,7 +846,7 @@ class SynthesisMenuRelationship(model.CoopSQL):
             Max(relation.create_date).as_('create_date'),
             Max(relation.write_uid).as_('write_uid'),
             Max(relation.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(RelationSynthesis, 'name')).
+            Literal(coog_string.translate_label(RelationSynthesis, 'name')).
             as_('name'), party.id.as_('party'),
             group_by=party.id)
 
@@ -855,10 +855,10 @@ class SynthesisMenuRelationship(model.CoopSQL):
 
     def get_rec_name(self, name):
         RelationSynthesis = Pool().get('party.synthesis.menu.relationship')
-        return coop_string.translate_label(RelationSynthesis, 'name')
+        return coog_string.translate_label(RelationSynthesis, 'name')
 
 
-class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView,
+class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView,
         model.ExpandTreeMixin):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
@@ -1020,7 +1020,7 @@ class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView,
         return not self.parent or self.parent and not self.parent.parent
 
 
-class SynthesisMenuOpenState(model.CoopView):
+class SynthesisMenuOpenState(model.CoogView):
     'Syntesis Menu Open State'
     __name__ = 'party.synthesis.menu.open_state'
 

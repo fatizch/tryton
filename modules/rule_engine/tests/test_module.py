@@ -7,12 +7,12 @@ import trytond.tests.test_tryton
 from trytond.transaction import Transaction
 from trytond.error import UserError
 
-from trytond.modules.cog_utils import test_framework
+from trytond.modules.coog_core import test_framework
 
 
-class ModuleTestCase(test_framework.CoopTestCase):
+class ModuleTestCase(test_framework.CoogTestCase):
     '''
-    Test Coop module.
+    Test Coog module.
     '''
 
     module = 'rule_engine'

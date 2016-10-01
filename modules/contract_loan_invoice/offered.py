@@ -4,7 +4,7 @@ import datetime
 
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import fields, coop_date
+from trytond.modules.coog_core import fields, coog_date
 
 
 __metaclass__ = PoolMeta
@@ -25,7 +25,7 @@ class Product:
             if elem.start_date:
                 dates.add(elem.start_date)
             if elem.end_date:
-                dates.add(coop_date.add_day(elem.end_date, 1))
+                dates.add(coog_date.add_day(elem.end_date, 1))
 
     def get_dates(self, contract):
         dates = super(Product, self).get_dates(contract)
@@ -88,7 +88,7 @@ class OptionDescriptionPremiumRule:
                 if x.loan == share.loan and x.start_date and x.start_date > (
                     share.start_date or datetime.date.min)]
             # option.loan_shares are sorted per loan / start
-            if shares and shares[0].start_date == coop_date.add_day(
+            if shares and shares[0].start_date == coog_date.add_day(
                     share.end_date, 1):
                 return []
         return super(OptionDescriptionPremiumRule, cls).get_not_rated_line(

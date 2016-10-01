@@ -11,7 +11,7 @@ from trytond.transaction import Transaction
 from trytond.model import ModelView, Workflow
 from trytond.tools import grouped_slice
 
-from trytond.modules.cog_utils import utils, fields, coop_date
+from trytond.modules.coog_core import utils, fields, coog_date
 
 __all__ = [
     'InvoiceLine',
@@ -76,7 +76,7 @@ class InvoiceLine:
             commission_rate = (commission_amount / amount).quantize(
                 Decimal('.0001'))
             if (commission_data and commission_data[-1][3] == commission_rate
-                    and commission_data[-1][1] == coop_date.add_day(
+                    and commission_data[-1][1] == coog_date.add_day(
                         start, -1)):
                 # Same rate => extend previous line
                 commission_data[-1][1] = end

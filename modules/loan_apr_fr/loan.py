@@ -7,7 +7,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, coop_date
+from trytond.modules.coog_core import fields, coog_date
 
 
 __metaclass__ = PoolMeta
@@ -61,9 +61,9 @@ class Loan:
                 continue
             cur_payment = payment_dict[premium_data['period_start']]
             if cur_payment['nb_years'] is None:
-                cur_payment['nb_years'] = coop_date.number_of_years_between(
+                cur_payment['nb_years'] = coog_date.number_of_years_between(
                     self.funds_release_date, premium_data['period_start'],
-                    prorata_method=coop_date.prorata_365)
+                    prorata_method=coog_date.prorata_365)
             if premium_data['loan']:
                 cur_payment['insurance_amount'] += premium_data['amount']
                 cur_payment['insurance_amount'] += premium_data['tax']
@@ -76,9 +76,9 @@ class Loan:
                 continue
             cur_payment = payment_dict[payment.start_date]
             if cur_payment['nb_years'] is None:
-                cur_payment['nb_years'] = coop_date.number_of_years_between(
+                cur_payment['nb_years'] = coog_date.number_of_years_between(
                     self.funds_release_date, payment.start_date,
-                    prorata_method=coop_date.prorata_365)
+                    prorata_method=coog_date.prorata_365)
             cur_payment['payment_amount'] += payment.amount
 
         payments = [payment_dict[x] for x in sorted(payment_dict.keys())]

@@ -9,7 +9,7 @@ from trytond.pyson import Eval, Bool, If
 from trytond.wizard import Wizard, StateView, Button, StateAction
 from trytond.model import ModelView
 
-from trytond.modules.cog_utils import fields, export, model
+from trytond.modules.coog_core import fields, export, model
 
 __metaclass__ = PoolMeta
 
@@ -191,7 +191,7 @@ class LineGroup:
                 {'invisible': True})]
 
     @classmethod
-    @model.CoopView.button_action(
+    @model.CoogView.button_action(
         'account_statement_cog.act_cancel_line_group')
     def start_cancel(cls, LineGroups):
         pass

@@ -6,7 +6,7 @@ from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model, coop_date
+from trytond.modules.coog_core import fields, model, coog_date
 from trytond.modules.endorsement import field_mixin
 
 
@@ -43,12 +43,12 @@ class EndorsementDefinition:
         # Special case : We must recompute one day before the effective date,
         # unless the effective date is synced with a billing date
         periods = contract.get_invoice_periods(
-            coop_date.add_day(effective_date, 1),
-            coop_date.add_day(effective_date, -1))
+            coog_date.add_day(effective_date, 1),
+            coog_date.add_day(effective_date, -1))
         if effective_date in [x[0] for x in periods]:
             # There was a planned billing anyway
             return effective_date
-        return coop_date.add_day(effective_date, -1)
+        return coog_date.add_day(effective_date, -1)
 
     def get_rebill_end(self, contract_endorsement):
         if contract_endorsement.contract.status == 'void':
@@ -111,8 +111,8 @@ class EndorsementPart:
 
 
 class EndorsementBillingInformationField(
-        field_mixin('contract.billing_information'), model.CoopSQL,
-        model.CoopView):
+        field_mixin('contract.billing_information'), model.CoogSQL,
+        model.CoogView):
     'Endorsement Billing Information Field'
 
     __name__ = 'endorsement.contract.billing_information.field'

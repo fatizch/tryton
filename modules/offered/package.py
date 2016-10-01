@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.model import Unique
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.coog_core import model, fields, coog_string
 
 __all__ = [
     'Package',
@@ -11,7 +11,7 @@ __all__ = [
     ]
 
 
-class Package(model.CoopSQL, model.CoopView):
+class Package(model.CoogSQL, model.CoogView):
     'Package'
 
     __name__ = 'offered.package'
@@ -38,10 +38,10 @@ class Package(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
 
-class PackageOptionDescriptionRelation(model.CoopSQL):
+class PackageOptionDescriptionRelation(model.CoogSQL):
     'Package - Option Description Relation'
 
     __name__ = 'offered.package-option.description'
@@ -51,7 +51,7 @@ class PackageOptionDescriptionRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class ProductPackageRelation(model.CoopSQL):
+class ProductPackageRelation(model.CoogSQL):
     'Product - Package Relation'
 
     __name__ = 'offered.product-package'

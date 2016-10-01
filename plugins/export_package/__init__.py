@@ -15,7 +15,7 @@ def add_to_exportpackage(data):
 
     try:
         wiz_info, = RPCExecute('model', 'ir.model.data', 'search_read', [
-                ('module', '=', 'cog_utils'),
+                ('module', '=', 'coog_core'),
                 ('fs_id', '=', 'export_package_wizard'),
                 ])
         Action.execute(wiz_info['db_id'], data, 'ir.action.wizard')

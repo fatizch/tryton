@@ -4,7 +4,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.coog_core import fields
 from trytond.modules.process_cog import ProcessFinder, ProcessStart
 
 

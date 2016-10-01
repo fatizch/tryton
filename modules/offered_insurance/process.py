@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 
 __metaclass__ = PoolMeta
@@ -12,7 +12,7 @@ __all__ = [
     ]
 
 
-class ProcessProductRelation(model.CoopSQL):
+class ProcessProductRelation(model.CoogSQL):
     'Process Product Relation'
 
     __name__ = 'process-offered.product'

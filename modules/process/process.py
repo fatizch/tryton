@@ -15,8 +15,8 @@ from trytond.server_context import ServerContext
 from trytond.pyson import Eval, Bool, Or, And, Not
 from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.cog_utils import coop_string, utils
-from trytond.modules.cog_utils import fields, model, export
+from trytond.modules.coog_core import coog_string, utils
+from trytond.modules.coog_core import fields, model, export
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -50,7 +50,7 @@ class Status(ModelSQL, ModelView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
 
 class ProcessStepRelation(export.ExportImportMixin, ModelSQL, ModelView):
@@ -612,7 +612,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
     def on_change_with_technical_name(self):
         if self.technical_name:
             return self.technical_name
-        return coop_string.slugify(self.fancy_name)
+        return coog_string.slugify(self.fancy_name)
 
     def get_display_steps_without_status(self, name):
         return False
@@ -741,7 +741,7 @@ class ProcessAction(ModelSQL, ModelView):
 
     def get_on_model(self, name):
         if self.parent_step and self.parent_step.main_model:
-            # TODO : to change from process module to coop_process
+            # TODO : to change from process module to coog_process
             return self.parent_step.main_model.id
         elif (self.parent_transition and self.parent_transition.on_process and
                 self.parent_transition.on_process.on_model):
@@ -965,7 +965,7 @@ class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
         if self.technical_name:
             return self.technical_name
         elif self.fancy_name:
-            return coop_string.slugify(self.fancy_name)
+            return coog_string.slugify(self.fancy_name)
 
     @classmethod
     def default_colspan(cls):
@@ -1082,7 +1082,7 @@ class GenerateGraphWizard(Wizard):
         return action, {'id': Transaction().context.get('active_id')}
 
 
-class ProcessActWindow(model.CoopSQL):
+class ProcessActWindow(model.CoogSQL):
     'Process to Action Window Relation'
 
     __name__ = 'process.process-act_window'

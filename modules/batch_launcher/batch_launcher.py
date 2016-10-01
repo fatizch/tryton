@@ -6,7 +6,7 @@ import logging
 from trytond.pyson import Eval, Bool, Not
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
-from trytond.modules.cog_utils import model, fields, utils
+from trytond.modules.coog_core import model, fields, utils
 
 
 __metaclass__ = PoolMeta
@@ -80,7 +80,7 @@ class LaunchBatch(Wizard):
             hasattr(model, 'get_batch_args_name')
 
 
-class BatchParameter(model.CoopView):
+class BatchParameter(model.CoogView):
     'Batch Parameter'
 
     __name__ = 'batch.launcher.parameter'
@@ -88,7 +88,7 @@ class BatchParameter(model.CoopView):
     value = fields.Char('Value')
 
 
-class SelectBatch(model.CoopView):
+class SelectBatch(model.CoogView):
     'Select Batch'
     __name__ = 'batch.launcher.select_batchs'
 

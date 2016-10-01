@@ -7,7 +7,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
 from trytond.pyson import Eval, And, Or
 from trytond.transaction import Transaction
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.coog_core import fields, model, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -198,12 +198,12 @@ class Contract:
         Event.notify_events(contracts, 'decline_contract_renewal')
 
     @classmethod
-    @model.CoopView.button_action('contract_term_renewal.act_decline_renewal')
+    @model.CoogView.button_action('contract_term_renewal.act_decline_renewal')
     def button_decline_renewal(cls, contracts):
         pass
 
     @classmethod
-    @model.CoopView.button_action('contract_term_renewal.act_renew')
+    @model.CoogView.button_action('contract_term_renewal.act_renew')
     def button_renew(cls, contracts):
         pass
 
@@ -213,7 +213,7 @@ class Contract:
         return super(Contract, self).get_report_functional_date(event_code)
 
 
-class SelectDeclineRenewalReason(model.CoopView):
+class SelectDeclineRenewalReason(model.CoogView):
     'Reason selector to decline renewal'
     __name__ = 'contract_term_renewal.decline_renewal.select_reason'
 
@@ -222,7 +222,7 @@ class SelectDeclineRenewalReason(model.CoopView):
         domain=[('status', '=', 'terminated')])
 
 
-class DeclineRenewal(model.CoopWizard):
+class DeclineRenewal(model.CoogWizard):
     'Decline Renewal Wizard'
 
     __name__ = 'contract_term_renewal.decline_renewal'
@@ -251,14 +251,14 @@ class DeclineRenewal(model.CoopWizard):
         return 'end'
 
 
-class ConfirmRenew(model.CoopView):
+class ConfirmRenew(model.CoogView):
     'Confirm Contract Renewal'
     __name__ = 'contract_term_renewal.renew.confirm'
 
     contracts = fields.One2Many('contract', None, 'Contracts', readonly=True)
 
 
-class Renew(model.CoopWizard):
+class Renew(model.CoogWizard):
     'Renewal Wizard'
 
     __name__ = 'contract_term_renewal.renew'

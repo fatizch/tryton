@@ -5,8 +5,8 @@ import functools
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or
-from trytond.modules.cog_utils import model, coop_string
-from trytond.modules.cog_utils import fields
+from trytond.modules.coog_core import model, coog_string
+from trytond.modules.coog_core import fields
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.tools import cursor_dict
@@ -29,7 +29,7 @@ __all__ = [
     ]
 
 
-class RuleEngineExtraData(model.CoopSQL):
+class RuleEngineExtraData(model.CoogSQL):
     'Rule Engine - Extra Data'
 
     __name__ = 'rule_engine-extra_data'
@@ -89,7 +89,7 @@ class RuleEngine:
         tmp_node['name'] = ''
         tmp_node['translated'] = ''
         tmp_node['fct_args'] = ''
-        tmp_node['description'] = coop_string.translate_label(cls,
+        tmp_node['description'] = coog_string.translate_label(cls,
             'extra_data_used')
         tmp_node['type'] = 'folder'
         tmp_node['long_description'] = ''
@@ -121,7 +121,7 @@ class RuleEngine:
     def data_tree_structure(self):
         res = super(RuleEngine, self).data_tree_structure()
         self.data_tree_structure_for_kind(res,
-            coop_string.translate_label(self, 'extra_data_used'),
+            coog_string.translate_label(self, 'extra_data_used'),
             'compl', self.extra_data_used)
         return res
 

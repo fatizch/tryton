@@ -10,7 +10,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 from trytond.modules.endorsement import relation_mixin
 
 __all__ = [
@@ -237,7 +237,7 @@ class EndorsementContract:
 class EndorsementCoveredElement(relation_mixin(
             'endorsement.contract.covered_element.field', 'covered_element',
             'contract.covered_element', 'Covered Elements'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Covered Element'
 
     __name__ = 'endorsement.contract.covered_element'
@@ -378,7 +378,7 @@ class EndorsementCoveredElement(relation_mixin(
 class EndorsementCoveredElementVersion(relation_mixin(
             'endorsement.contract.covered_element.version.field', 'version',
             'contract.covered_element.version', 'Versions'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Covered Element Version'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.covered_element.version'
@@ -420,7 +420,7 @@ class EndorsementCoveredElementVersion(relation_mixin(
 class EndorsementCoveredElementOption(relation_mixin(
             'endorsement.contract.option.field', 'option', 'contract.option',
             'Options'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Option'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.covered_element.option'
@@ -577,7 +577,7 @@ class EndorsementCoveredElementOption(relation_mixin(
 class EndorsementCoveredElementOptionVersion(relation_mixin(
             'endorsement.contract.option.version.field', 'version',
             'contract.option.version', 'Versions'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Option Version'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.covered_element.option.version'
@@ -619,7 +619,7 @@ class EndorsementCoveredElementOptionVersion(relation_mixin(
 class EndorsementExtraPremium(relation_mixin(
             'endorsement.contract.extra_premium.field', 'extra_premium',
             'contract.option.extra_premium', 'Extra Premiums'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Extra Premium'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.extra_premium'
@@ -668,7 +668,7 @@ class EndorsementExtraPremium(relation_mixin(
 class EndorsementExclusion(relation_mixin(
             'endorsement.contract.option.exclusion.field', 'option_exclusion',
             'contract.option-exclusion.kind', 'Exclusion'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Exclusion'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.option.exclusion'

@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
-from trytond.modules.cog_utils import coop_date
+from trytond.modules.coog_core import coog_date
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -18,7 +18,7 @@ class BenefitRule:
         loan = args['loan']
         if loan:
             payment = loan.get_payment(from_date)
-            return min(to_date, coop_date.get_end_of_period(payment.start_date,
+            return min(to_date, coog_date.get_end_of_period(payment.start_date,
                     loan.payment_frequency))
         else:
             return

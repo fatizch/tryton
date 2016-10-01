@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta
 from trytond.pyson import Eval, If, Bool
 from trytond.modules.company import CompanyReport
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.coog_core import fields
 
 __metaclass__ = PoolMeta
 

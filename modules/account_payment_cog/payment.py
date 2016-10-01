@@ -15,8 +15,8 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Not, In, Bool, If, PYSONEncoder
 
 from trytond.modules.account_payment.payment import KINDS
-from trytond.modules.cog_utils import export, fields, model
-from trytond.modules.cog_utils import coop_date, utils, coop_string
+from trytond.modules.coog_core import export, fields, model
+from trytond.modules.coog_core import coog_date, utils, coog_string
 from trytond.modules.report_engine import Printable
 from trytond.modules.currency_cog import ModelCurrency
 
@@ -92,11 +92,11 @@ class Journal(export.ExportImportMixin):
             'default_reject_fee'}
 
     def get_next_possible_payment_date(self, line, day):
-        return coop_date.get_next_date_in_sync_with(
+        return coog_date.get_next_date_in_sync_with(
             max(line.maturity_date, utils.today()), day)
 
 
-class JournalFailureAction(model.CoopSQL, model.CoopView):
+class JournalFailureAction(model.CoogSQL, model.CoogView):
     'Journal Failure Action'
 
     __name__ = 'account.payment.journal.failure_action'
@@ -213,7 +213,7 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
         return [('reject_reason.payment_kind',) + tuple(clause[1:])]
 
 
-class RejectReason(model.CoopSQL, model.CoopView):
+class RejectReason(model.CoogSQL, model.CoogView):
     'Payment Journal Reject Reason'
     __name__ = 'account.payment.journal.reject_reason'
     _func_key = 'code'
@@ -289,7 +289,7 @@ class FilterPaymentsPerMergedId(Wizard):
         return action, {}
 
 
-class MergedPayments(model.CoopSQL, model.CoopView, ModelCurrency,
+class MergedPayments(model.CoogSQL, model.CoogView, ModelCurrency,
         Printable):
     'Merged payments'
 
@@ -456,7 +456,7 @@ class Payment(export.ExportImportMixin, Printable):
         return (self, self.journal)
 
     @classmethod
-    @model.CoopView.button_action(
+    @model.CoogView.button_action(
         'account_payment_cog.act_process_payments_button')
     def process_payments(cls, payments):
         pass
@@ -743,7 +743,7 @@ class Group(ModelCurrency, export.ExportImportMixin):
             )
 
 
-class PaymentMotive(model.CoopSQL, model.CoopView):
+class PaymentMotive(model.CoogSQL, model.CoogView):
     'Payment Motive'
 
     __name__ = 'account.payment.motive'
@@ -764,10 +764,10 @@ class PaymentMotive(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
 
-class PaymentFailInformation(model.CoopView):
+class PaymentFailInformation(model.CoogView):
     'Payment Fail Information'
     __name__ = 'account.payment.fail_information'
 
@@ -807,7 +807,7 @@ class PaymentFailInformation(model.CoopView):
             self.raise_user_error('mixing_payment_kinds')
 
 
-class ManualPaymentFail(model.CoopWizard):
+class ManualPaymentFail(model.CoogWizard):
     'Fail Payment'
     __name__ = 'account.payment.manual_payment_fail'
 
@@ -857,7 +857,7 @@ class ManualPaymentFail(model.CoopWizard):
         return 'end'
 
 
-class ProcessManualFailPament(model.CoopWizard):
+class ProcessManualFailPament(model.CoogWizard):
     'Process Manual Fail Payment'
     __name__ = 'account.payment.process_manual_fail_payment'
 

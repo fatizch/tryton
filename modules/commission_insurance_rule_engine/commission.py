@@ -5,7 +5,7 @@ from decimal import Decimal
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Not, Or
 
-from trytond.modules.cog_utils import fields, model, coop_string
+from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 __metaclass__ = PoolMeta
@@ -40,7 +40,7 @@ class Plan:
 
 class PlanLines(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     __name__ = 'commission.plan.line'
 
     use_rule_engine = fields.Boolean('Use Rule Engine')
@@ -119,7 +119,7 @@ class Agent:
     @classmethod
     def format_hash(cls, hash_dict):
         return super(Agent, cls).format_hash(hash_dict) + '\n' + \
-            coop_string.translate_label(cls, 'extra_data') + ' : ' + \
+            coog_string.translate_label(cls, 'extra_data') + ' : ' + \
             str(hash_dict['extra_data'])
 
     def get_hash(self):

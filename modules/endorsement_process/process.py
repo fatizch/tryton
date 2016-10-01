@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pyson import Eval, Bool, In
 from trytond.pool import PoolMeta
-from trytond.modules.cog_utils import model
+from trytond.modules.coog_core import model
 from trytond.modules.endorsement.endorsement import \
     STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS
 
@@ -36,7 +36,7 @@ class Contract:
                 })
 
     @classmethod
-    @model.CoopView.button_action(
+    @model.CoogView.button_action(
         'endorsement_process.endorsement_process_launcher')
     def button_start_endorsement_process(cls, contracts):
         pass

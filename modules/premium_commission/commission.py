@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -22,7 +22,7 @@ class CommissionPlan:
         'Fees')
 
 
-class CommissionPlanFee(model.CoopSQL):
+class CommissionPlanFee(model.CoogSQL):
     'Commission Plan Fee'
 
     __name__ = 'commission.plan-account.fee'
@@ -40,7 +40,7 @@ class Agent:
         'Fees')
 
 
-class AgentFee(model.CoopSQL):
+class AgentFee(model.CoogSQL):
     'Agent Fee'
 
     __name__ = 'commission.agent-account.fee'

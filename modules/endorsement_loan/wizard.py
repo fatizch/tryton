@@ -8,7 +8,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import StateView, Button, StateTransition
 from trytond.pyson import Eval, Bool, Len, If, Not
 
-from trytond.modules.cog_utils import fields, model, utils, coop_date
+from trytond.modules.coog_core import fields, model, utils, coog_date
 from trytond.modules.endorsement import EndorsementWizardPreviewMixin
 from trytond.modules.endorsement import EndorsementWizardStepMixin, \
     add_endorsement_step
@@ -155,7 +155,7 @@ class OptionDisplayer:
         return new_option
 
 
-class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
+class AddRemoveLoan(EndorsementWizardStepMixin, model.CoogView):
     'Add Remove Loan'
 
     __name__ = 'endorsement.loan.add_remove'
@@ -405,7 +405,7 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoopView):
         return 'endorsement_loan.loan_add_remove_view_form'
 
 
-class AddRemoveLoanDisplayer(model.CoopView):
+class AddRemoveLoanDisplayer(model.CoogView):
     'Add Remove Loan Displayer'
 
     __name__ = 'endorsement.loan.add_remove.displayer'
@@ -431,7 +431,7 @@ class AddRemoveLoanDisplayer(model.CoopView):
         return self.loan.rec_name
 
 
-class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
+class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoogView):
     'Change Loan at Date'
 
     __name__ = 'endorsement.loan.change_any_date'
@@ -486,7 +486,7 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
             return
         self.new_increments[-1].loan = self.current_loan
         if len(self.new_increments) > 1:
-            new_start = coop_date.add_duration(
+            new_start = coog_date.add_duration(
                 self.new_increments[-2].end_date,
                 self.new_increments[-2].payment_frequency, 1)
             new_rate = self.new_increments[-2].rate
@@ -620,7 +620,7 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoopView):
         return 'endorsement_loan.loan_change_any_date_view_form'
 
 
-class ChangeLoanDisplayer(model.CoopView):
+class ChangeLoanDisplayer(model.CoogView):
     'Change Loan Displayer'
 
     __name__ = 'endorsement.loan.change.displayer'
@@ -702,7 +702,7 @@ class ChangeLoan(EndorsementWizardStepMixin):
                     cur_changes.increments if x.action == 'add']
             for increment in loan_change['increments']:
                 if increment.get('start_date', None) is not None:
-                    increment['end_date'] = coop_date.add_duration(
+                    increment['end_date'] = coog_date.add_duration(
                         increment['start_date'],
                         increment['payment_frequency'],
                         increment['number_of_payments'] - 1,
@@ -762,7 +762,7 @@ class ChangeLoan(EndorsementWizardStepMixin):
         loan_dict.pop('applied_endorsements', None)
 
 
-class ChangeLoanUpdatedPayments(model.CoopView):
+class ChangeLoanUpdatedPayments(model.CoogView):
     'Change Loan Updated Payments'
 
     __name__ = 'endorsement.loan.change.updated_payments'
@@ -775,7 +775,7 @@ class ChangeLoanUpdatedPayments(model.CoopView):
         readonly=True)
 
 
-class LoanDisplayUpdatedPayments(model.CoopView):
+class LoanDisplayUpdatedPayments(model.CoogView):
     'Display Updated Payments'
 
     __name__ = 'endorsement.loan.display_updated_payments'
@@ -793,7 +793,7 @@ class LoanDisplayUpdatedPayments(model.CoopView):
         'Loan Payments')
 
 
-class LoanSelectContracts(model.CoopView):
+class LoanSelectContracts(model.CoogView):
     'Select contracts related to the loan for update'
 
     __name__ = 'endorsement.loan.select_contracts'
@@ -803,7 +803,7 @@ class LoanSelectContracts(model.CoopView):
         'Contracts to update')
 
 
-class LoanContractDisplayer(model.CoopView):
+class LoanContractDisplayer(model.CoogView):
     'Contract Displayer for the LoanSelectContracts view'
 
     __name__ = 'endorsement.loan.select_contracts.contract'
@@ -1098,7 +1098,7 @@ class SelectLoanShares(EndorsementWizardStepMixin):
         return final_shares
 
 
-class LoanShareSelector(model.CoopView):
+class LoanShareSelector(model.CoogView):
     'Loan Share Selector'
 
     __name__ = 'contract.covered_element.add_option.loan_share_selector'
@@ -1129,7 +1129,7 @@ class LoanShareSelector(model.CoopView):
             self.new_share = None
 
 
-class SharePerLoan(model.CoopView):
+class SharePerLoan(model.CoogView):
     'Share per Loan'
 
     __name__ = 'contract.covered_element.add_option.share_per_loan'
@@ -1154,7 +1154,7 @@ class SelectEndorsement:
                     self.contract.used_loans[0].funds_release_date
 
 
-class PreviewLoanEndorsement(EndorsementWizardPreviewMixin, model.CoopView):
+class PreviewLoanEndorsement(EndorsementWizardPreviewMixin, model.CoogView):
     'Preview Loan Endorsement'
 
     __name__ = 'endorsement.start.preview_loan'
@@ -1204,7 +1204,7 @@ class PreviewLoanEndorsement(EndorsementWizardPreviewMixin, model.CoopView):
 
 
 class PreviewContractPayments(EndorsementWizardPreviewMixin,
-        model.CoopView):
+        model.CoogView):
     'Preview Contract Payments'
 
     __name__ = 'endorsement.start.preview_contract_payments'
@@ -1279,7 +1279,7 @@ class PreviewContractPayments(EndorsementWizardPreviewMixin,
         return {'contract_previews': contracts.values()}
 
 
-class ContractPreview(model.CoopView):
+class ContractPreview(model.CoogView):
     'Contract Preview'
 
     __name__ = 'endorsement.start.preview_contract_payments.contract'

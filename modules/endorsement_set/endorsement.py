@@ -8,7 +8,7 @@ from trytond.transaction import Transaction
 from trytond.model import Workflow, Unique
 from trytond.pyson import Eval, Bool, Equal
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -27,7 +27,7 @@ class Configuration:
         fields.Many2One('ir.sequence', 'Endorsement Set Number Sequence'))
 
 
-class EndorsementSet(model.CoopSQL, model.CoopView):
+class EndorsementSet(model.CoogSQL, model.CoogView):
     'Endorsement Set'
 
     __name__ = 'endorsement.set'
@@ -103,12 +103,12 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
         return super(EndorsementSet, cls).create(vlist)
 
     @classmethod
-    @model.CoopView.button_action('endorsement_set.act_decline_set')
+    @model.CoogView.button_action('endorsement_set.act_decline_set')
     def button_decline_set(cls, endorsements):
         pass
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     def reset(cls, endorsement_sets):
         pool = Pool()
         Endorsement = pool.get('endorsement')
@@ -237,7 +237,7 @@ class Endorsement:
             [('endorsements.generated_by', '=', self)])]
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     @Workflow.transition('applied')
     def apply(cls, endorsements):
         to_apply = set(endorsements)
@@ -256,7 +256,7 @@ class Endorsement:
         super(Endorsement, cls).apply_for_preview(list(set(to_apply)))
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     @Workflow.transition('declined')
     def decline(cls, endorsements, reason=None):
         to_decline = set(endorsements)
@@ -295,7 +295,7 @@ class Endorsement:
         return endorsements
 
 
-class EndorsementSetSelectDeclineReason(model.CoopView):
+class EndorsementSetSelectDeclineReason(model.CoogView):
     'Reason selector to decline endorsement set'
 
     __name__ = 'endorsement.set.decline.select_reason'
@@ -306,7 +306,7 @@ class EndorsementSetSelectDeclineReason(model.CoopView):
         domain=[('state', '=', 'declined')])
 
 
-class EndorsementSetDecline(model.CoopWizard):
+class EndorsementSetDecline(model.CoogWizard):
     'Decline EndorsementSet Wizard'
 
     __name__ = 'endorsement.set.decline'

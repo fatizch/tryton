@@ -3,7 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 from trytond.model import Unique
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -23,7 +23,7 @@ class LossDescription:
         cls.loss_kind.selection.append(('health', 'Health'))
 
 
-class MedicalActDescription(model.CoopSQL, model.CoopView):
+class MedicalActDescription(model.CoogSQL, model.CoogView):
     'Medical Act Description'
 
     __name__ = 'benefit.act.description'
@@ -46,7 +46,7 @@ class MedicalActDescription(model.CoopSQL, model.CoopView):
         return self.code
 
 
-class MedicalActFamily(model.CoopSQL, model.CoopView):
+class MedicalActFamily(model.CoogSQL, model.CoogView):
     'Medical Act Family'
 
     __name__ = 'benefit.act.family'

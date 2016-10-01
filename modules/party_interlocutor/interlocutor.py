@@ -3,7 +3,7 @@
 from trytond.model import fields
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, coop_string
+from trytond.modules.coog_core import model, coog_string
 
 __all__ = [
     'ContactInterlocutor',
@@ -11,7 +11,7 @@ __all__ = [
     ]
 
 
-class ContactInterlocutor(model.CoopSQL, model.CoopView):
+class ContactInterlocutor(model.CoogSQL, model.CoogView):
     'Party Interlocutor'
 
     __name__ = 'party.interlocutor'
@@ -30,11 +30,11 @@ class ContactInterlocutor(model.CoopSQL, model.CoopView):
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
-        return self.code if self.code else coop_string.slugify(self.name)
+        return self.code if self.code else coog_string.slugify(self.name)
 
 
-class PartyContactInterlocutorPartyContactMechanism(model.CoopSQL,
-        model.CoopView):
+class PartyContactInterlocutorPartyContactMechanism(model.CoogSQL,
+        model.CoogView):
     'Party Contact Interlocutor Party Contact Mechanism Relation'
 
     __name__ = 'party.interlocutor-party.contact_mechanism'

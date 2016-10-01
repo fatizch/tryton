@@ -15,7 +15,7 @@ from trytond.rpc import RPC
 from trytond.model import dualmethod
 from trytond.cache import Cache
 
-from trytond.modules.cog_utils import model, fields, utils, coop_date
+from trytond.modules.coog_core import model, fields, utils, coog_date
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.contract import _STATES, _DEPENDS
 
@@ -64,12 +64,12 @@ class Contract:
         self.fees = list(self.fees)
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     def button_calculate_prices(cls, contracts):
         cls.calculate_prices(contracts)
 
     @classmethod
-    @model.CoopView.button_action('premium.act_premium_display')
+    @model.CoogView.button_action('premium.act_premium_display')
     def button_display_premium(cls, contracts):
         pass
 
@@ -219,7 +219,7 @@ class Contract:
                         # rated_entity, we update its end to match
                         # the new one if it is a dated premium
                         if prev_value.start:
-                            prev_value.end = coop_date.add_day(elem.start, -1)
+                            prev_value.end = coog_date.add_day(elem.start, -1)
                         to_save.append(prev_value)
                     else:
                         if getattr(prev_value, 'id', -1) < 0:
@@ -290,7 +290,7 @@ class ContractOption:
         set(['premiums']))
 
 
-class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
+class ContractFee(model.CoogSQL, model.CoogView, ModelCurrency):
     'Contract Fee'
 
     __name__ = 'contract.fee'
@@ -447,7 +447,7 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
         self.contract.init_dict_for_rule_engine(base_dict)
 
 
-class Premium(model.CoopSQL, model.CoopView):
+class Premium(model.CoogSQL, model.CoogView):
     'Premium'
 
     __name__ = 'contract.premium'

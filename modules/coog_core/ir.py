@@ -452,11 +452,11 @@ class TranslationOverride(Wizard):
     __name__ = 'ir.translation.override'
 
     start = StateView('ir.translation.override.start',
-        'cog_utils.override_start_view_form', [
+        'coog_core.override_start_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Edit', 'edit', 'tryton-ok', default=True),
             ])
-    edit = StateAction('cog_utils.act_override_translation_form')
+    edit = StateAction('coog_core.act_override_translation_form')
 
     def do_edit(self, action):
         domain = [('lang', '=', self.start.language.code)]
@@ -504,7 +504,7 @@ class Translation:
         # This import cannot be done at the top of the file, because it forces
         # the import of ir/sequence.py before batch configuration is loaded.
         # TODO : Fix this, for instance by moving batch_launcher.py outside of
-        # cog_utils
+        # coog_core
         from trytond.ir.translation import TrytonPOFile
         # first pass: extract plain module translations
         res = super(Translation, cls).translation_export(lang, module) or ''

@@ -8,7 +8,7 @@ from trytond.wizard import Wizard, StateView, StateTransition, Button, \
 from trytond.pyson import Eval, Bool, Len
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -120,7 +120,7 @@ class WizardOption:
         super(WizardOption, self).init_subscribed_option(displayer, option)
 
 
-class ExtraPremiumSelector(model.CoopView):
+class ExtraPremiumSelector(model.CoogView):
     'Extra Premium'
 
     __name__ = 'contract.manage_extra_premium.select.extra'
@@ -131,7 +131,7 @@ class ExtraPremiumSelector(model.CoopView):
     selected = fields.Boolean('Selected')
 
 
-class OptionSelector(model.CoopView):
+class OptionSelector(model.CoogView):
     'Option'
 
     __name__ = 'contract.manage_extra_premium.select.option'
@@ -142,7 +142,7 @@ class OptionSelector(model.CoopView):
     extra_premiums = fields.Char('Existing Extra Premiums')
 
 
-class ExtraPremiumDisplay(model.CoopView):
+class ExtraPremiumDisplay(model.CoogView):
     'Extra Premium Display'
 
     __name__ = 'contract.manage_extra_premium.select'
@@ -393,7 +393,7 @@ class CreateExtraPremium(Wizard):
             }
 
 
-class CreateExtraPremiumOptionSelector(model.CoopView):
+class CreateExtraPremiumOptionSelector(model.CoogView):
     'Create Extra Premium Option Selector'
 
     __name__ = 'contract.option.extra_premium.create.option_selector'
@@ -517,7 +517,7 @@ class ManageExclusion(Wizard):
         return 'end'
 
 
-class ExclusionDisplay(model.CoopView):
+class ExclusionDisplay(model.CoogView):
     'Exclusion Display'
 
     __name__ = 'contract.manage_exclusion.select'
@@ -569,7 +569,7 @@ class ExclusionDisplay(model.CoopView):
         self.new_exclusion = None
         self.used_exclusions = [x.exclusion for x in self.cur_exclusions]
 
-    @model.CoopView.button_change('cur_exclusions', 'propagate_exclusion')
+    @model.CoogView.button_change('cur_exclusions', 'propagate_exclusion')
     def button_propagate_selected(self):
         options = [x.options for x in self.cur_exclusions
             if x.exclusion == self.propagate_exclusion][0]
@@ -595,7 +595,7 @@ class ExclusionDisplay(model.CoopView):
         self.used_exclusions = [x.exclusion for x in self.cur_exclusions]
 
 
-class ExclusionSelector(model.CoopView):
+class ExclusionSelector(model.CoogView):
     'Exclusion'
 
     __name__ = 'contract.manage_exclusion.select.exclusion'
@@ -624,14 +624,14 @@ class ExclusionSelector(model.CoopView):
     def on_change_with_option_string(self):
         return ', '.join(x.option.rec_name for x in self.options if x.selected)
 
-    @model.CoopView.button_change('options', 'option_string')
+    @model.CoogView.button_change('options', 'option_string')
     def button_check_all(self):
         for option in self.options:
             option.selected = True
         self.option_string = self.on_change_with_option_string()
         self.options = list(self.options)
 
-    @model.CoopView.button_change('options', 'option_string')
+    @model.CoogView.button_change('options', 'option_string')
     def button_clear_all(self):
         for option in self.options:
             option.selected = False
@@ -651,7 +651,7 @@ class ExclusionSelector(model.CoopView):
         return displayer
 
 
-class ExclusionOptionSelector(model.CoopView):
+class ExclusionOptionSelector(model.CoogView):
     'Option selector'
 
     __name__ = 'contract.option.selector'

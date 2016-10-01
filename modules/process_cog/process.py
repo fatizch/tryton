@@ -19,7 +19,7 @@ from trytond.wizard import Wizard, StateAction, StateView, Button
 from trytond.server_context import ServerContext
 from trytond.wizard import StateTransition
 
-from trytond.modules.cog_utils import utils, model, fields
+from trytond.modules.coog_core import utils, model, fields
 from trytond.modules.process import ProcessFramework
 
 
@@ -30,7 +30,7 @@ __all__ = [
     'ProcessTransition',
     'GenerateGraph',
     'ProcessLog',
-    'CogProcessFramework',
+    'CoogProcessFramework',
     'ProcessStepRelation',
     'Process',
     'ViewDescription',
@@ -44,7 +44,7 @@ __all__ = [
     ]
 
 
-class Status(model.CoopSQL):
+class Status(model.CoogSQL):
     __name__ = 'process.status'
 
     @classmethod
@@ -54,7 +54,7 @@ class Status(model.CoopSQL):
         return result
 
 
-class ProcessAction(model.CoopSQL):
+class ProcessAction(model.CoogSQL):
     __name__ = 'process.action'
 
     @classmethod
@@ -66,7 +66,7 @@ class ProcessAction(model.CoopSQL):
             super(ProcessAction, self).execute(target)
 
 
-class ProcessTransition(model.CoopSQL):
+class ProcessTransition(model.CoogSQL):
     __name__ = 'process.transition'
 
     pyson_choice = fields.Char('Choice', states={
@@ -168,7 +168,7 @@ class ProcessTransition(model.CoopSQL):
         return result
 
 
-class ProcessLog(model.CoopSQL, model.CoopView):
+class ProcessLog(model.CoogSQL, model.CoogView):
     'Process Log'
 
     __name__ = 'process.log'
@@ -258,7 +258,7 @@ class ProcessLog(model.CoopSQL, model.CoopView):
         return self.task.get_rec_name(name)
 
 
-class CogProcessFramework(ProcessFramework, model.CoopSQL, model.CoopView):
+class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
     'Cog Process Framework'
 
     logs = fields.One2Many('process.log', 'task', 'Task', delete_missing=True,
@@ -271,7 +271,7 @@ class CogProcessFramework(ProcessFramework, model.CoopSQL, model.CoopView):
 
     @classmethod
     def __setup__(cls):
-        super(CogProcessFramework, cls).__setup__()
+        super(CoogProcessFramework, cls).__setup__()
         cls._buttons.update({
                 'button_resume': {
                     'invisible': Not(Bool(Eval('current_state', False))),
@@ -285,16 +285,16 @@ class CogProcessFramework(ProcessFramework, model.CoopSQL, model.CoopView):
 
     @classmethod
     def _export_skips(cls):
-        return (super(CogProcessFramework, cls)._export_skips() |
+        return (super(CoogProcessFramework, cls)._export_skips() |
             set(['logs']))
 
     @classmethod
-    @model.CoopView.button_action('process_cog.act_resume_process')
+    @model.CoogView.button_action('process_cog.act_resume_process')
     def button_resume(cls, objects):
         pass
 
     @classmethod
-    @model.CoopView.button_action('process_cog.act_postpone')
+    @model.CoogView.button_action('process_cog.act_postpone')
     def button_postpone(cls, objects):
         return 'close'
 
@@ -324,7 +324,7 @@ class CogProcessFramework(ProcessFramework, model.CoopSQL, model.CoopView):
 
     @classmethod
     def write(cls, *args):
-        super(CogProcessFramework, cls).write(*args)
+        super(CoogProcessFramework, cls).write(*args)
 
         Log = Pool().get('process.log')
         logs = sum([x.update_logs() for x in sum(args[::2], [])], [])
@@ -333,7 +333,7 @@ class CogProcessFramework(ProcessFramework, model.CoopSQL, model.CoopView):
 
     @classmethod
     def create(cls, values):
-        instances = super(CogProcessFramework, cls).create(values)
+        instances = super(CoogProcessFramework, cls).create(values)
         Log = Pool().get('process.log')
         logs = sum([x.update_logs() for x in instances], [])
         Log.save(logs)
@@ -343,7 +343,7 @@ class CogProcessFramework(ProcessFramework, model.CoopSQL, model.CoopView):
     def delete(cls, records):
         # Delete logs
         with ServerContext().set_context(allow_delete_logs=True):
-            super(CogProcessFramework, cls).delete(records)
+            super(CoogProcessFramework, cls).delete(records)
 
     def update_logs(self, init_log=None):
         pool = Pool()
@@ -512,7 +512,7 @@ class CogProcessFramework(ProcessFramework, model.CoopSQL, model.CoopView):
         return button_complete_generic
 
     def set_state(self, value, process_name=None):
-        super(CogProcessFramework, self).set_state(value, process_name)
+        super(CoogProcessFramework, self).set_state(value, process_name)
         if self.current_state:
             authorizations = self.current_state.step.authorizations
             visible = len(authorizations) == 0
@@ -533,7 +533,7 @@ class CogProcessFramework(ProcessFramework, model.CoopSQL, model.CoopView):
             **kwargs)
 
 
-class Process(model.CoopSQL, model.TaggedMixin):
+class Process(model.CoogSQL, model.TaggedMixin):
     __name__ = 'process'
     _func_key = 'technical_name'
 
@@ -787,7 +787,7 @@ class Process(model.CoopSQL, model.TaggedMixin):
         return map(lambda x: x.step, self.all_steps[step1_idx:step2_idx + 1])
 
 
-class ProcessStepRelation(model.CoopSQL):
+class ProcessStepRelation(model.CoogSQL):
     __name__ = 'process-process.step'
 
     average_run_time = fields.Function(
@@ -834,7 +834,7 @@ class ProcessStepRelation(model.CoopSQL):
         return values
 
 
-class ViewDescription(model.CoopSQL, model.CoopView):
+class ViewDescription(model.CoogSQL, model.CoogView):
     'View Description'
 
     __name__ = 'ir.ui.view.description'
@@ -1059,7 +1059,7 @@ class ViewDescription(model.CoopSQL, model.CoopView):
                 ]
 
 
-class ProcessStep(model.CoopSQL, model.TaggedMixin):
+class ProcessStep(model.CoogSQL, model.TaggedMixin):
     __name__ = 'process.step'
     _func_key = 'technical_name'
 
@@ -1164,7 +1164,7 @@ class ProcessStep(model.CoopSQL, model.TaggedMixin):
         return result
 
 
-class ProcessStart(model.CoopView):
+class ProcessStart(model.CoogView):
     'Process Start'
 
     __name__ = 'process.start'
@@ -1472,7 +1472,7 @@ class PostponeTask(Wizard):
         return 'end'
 
 
-class PostponeParameters(model.CoopView):
+class PostponeParameters(model.CoogView):
     'Postpone Parameters'
 
     __name__ = 'task.postpone.parameters'

@@ -37,7 +37,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.model import DictSchemaMixin
 
-from trytond.modules.cog_utils import fields, model, utils, coop_string, export
+from trytond.modules.coog_core import fields, model, utils, coog_string, export
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +65,7 @@ FILE_EXTENSIONS = [
     ]
 
 
-class TemplateParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
+class TemplateParameter(DictSchemaMixin, model.CoogSQL, model.CoogView):
     'Template Parameter'
 
     __name__ = 'report.template.parameter'
@@ -88,7 +88,7 @@ class TemplateParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
         return {'param_' + k: v for k, v in parameters.iteritems()}
 
 
-class TemplateTemplateParameterRelation(model.CoopSQL):
+class TemplateTemplateParameterRelation(model.CoogSQL):
     'Relation between Report Template and Template Parameter'
 
     __name__ = 'report.template-report.template.parameter'
@@ -99,7 +99,7 @@ class TemplateTemplateParameterRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
+class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     'Report Template'
 
     __name__ = 'report.template'
@@ -244,7 +244,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     def print_reports(self, reports, context_):
         """ Reports is a list of dicts with keys:
@@ -270,7 +270,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
             filename, ext = os.path.splitext(report['report_name'])
             out_path = os.path.join(
                 export_dirname,
-                '%s_%s%s' % (coop_string.slugify(filename),
+                '%s_%s%s' % (coog_string.slugify(filename),
                     datetime.now().strftime("%H%M%S%f"), ext))
             with open(out_path, 'a') as out:
                 out.write(report['data'])
@@ -459,7 +459,7 @@ class Printable(Model):
         good_model.save()
 
     @classmethod
-    @model.CoopView.button_action('report_engine.letter_generation_wizard')
+    @model.CoogView.button_action('report_engine.letter_generation_wizard')
     def generic_send_letter(cls, objs):
         pass
 
@@ -570,7 +570,7 @@ class Printable(Model):
         return all_reports, all_attachments
 
 
-class ReportCreateSelectTemplate(model.CoopView):
+class ReportCreateSelectTemplate(model.CoogView):
     'Report Create Select Template'
 
     __name__ = 'report.create.select_template'
@@ -625,7 +625,7 @@ class ReportGenerate(Report):
     def get_date_suffix(cls, language):
         pool = Pool()
         Date = pool.get('ir.date')
-        return coop_string.slugify(
+        return coog_string.slugify(
             Date.date_as_string(utils.today(), language))
 
     @classmethod
@@ -729,7 +729,7 @@ class ReportGenerate(Report):
     @classmethod
     def edm_write_tmp_report(cls, report_data, filename):
         basename, ext = os.path.splitext(filename)
-        filename = coop_string.slugify(basename, lower=False) + ext
+        filename = coog_string.slugify(basename, lower=False) + ext
         server_shared_folder = config.get('EDM', 'server_shared_folder',
             default='/tmp')
         client_shared_folder = config.get('EDM', 'client_shared_folder')
@@ -886,7 +886,7 @@ class ReportGenerateFromFile(Report):
         return output_paths
 
 
-class ReportCreatePreviewLine(model.CoopView):
+class ReportCreatePreviewLine(model.CoogView):
     'Report Create Preview Line'
 
     __name__ = 'report.create.preview.line'
@@ -898,7 +898,7 @@ class ReportCreatePreviewLine(model.CoopView):
     file_basename = fields.Char('Filename')
 
 
-class ReportCreatePreview(model.CoopView):
+class ReportCreatePreview(model.CoogView):
     'Report Create Preview'
 
     __name__ = 'report.create.preview'
@@ -916,13 +916,13 @@ class ReportCreatePreview(model.CoopView):
     def on_change_with_output_report_filepath(self, name=None):
         if all([x.template.convert_to_pdf for x in self.reports]):
             # Generate unique temporary output report filepath
-            return os.path.join(tempfile.mkdtemp(), coop_string.slugify(
+            return os.path.join(tempfile.mkdtemp(), coog_string.slugify(
                         self.output_report_name, lower=False) + '.pdf')
         else:
             return self.reports[0].server_filepath
 
 
-class ReportCreateAttach(model.CoopView):
+class ReportCreateAttach(model.CoogView):
     'Report Create Attach'
 
     __name__ = 'report.create.attach'
@@ -931,7 +931,7 @@ class ReportCreateAttach(model.CoopView):
     name = fields.Char('Filename')
 
 
-class ReportInputParameters(model.CoopView):
+class ReportInputParameters(model.CoogView):
     'Report Input Parameters'
 
     __name__ = 'report.create.input_parameters'
@@ -1047,7 +1047,7 @@ class ReportCreate(Wizard):
         if email:
             self.preview_document.email = email[0].value
         output = printable_inst.get_document_filename()
-        self.preview_document.output_report_name = coop_string.slugify(output,
+        self.preview_document.output_report_name = coog_string.slugify(output,
             lower=False)
         self.preview_document.output_report_filepath = \
             self.preview_document.on_change_with_output_report_filepath()

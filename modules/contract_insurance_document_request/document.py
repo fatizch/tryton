@@ -8,7 +8,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.coog_core import fields
 
 
 __all__ = [

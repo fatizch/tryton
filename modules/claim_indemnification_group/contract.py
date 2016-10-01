@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Len, Bool
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.claim_indemnification.benefit import ANNUITY_FREQUENCIES
 
@@ -65,7 +65,7 @@ class OptionVersion:
 class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         get_rule_mixin('indemnification_rule', 'Indemnification Rule'),
         get_rule_mixin('revaluation_rule', 'Revaluation Rule'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Option Benefit'
 
     __name__ = 'contract.option.benefit'

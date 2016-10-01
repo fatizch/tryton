@@ -23,7 +23,7 @@ from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 
 import fields
-import coop_string
+import coog_string
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -588,7 +588,7 @@ class ImportWizard(Wizard):
 
     start_state = 'file_selector'
     file_selector = StateView('ir.import.select_file',
-        'cog_utils.import_select_file_form', [
+        'coog_core.import_select_file_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Import', 'file_import', 'tryton-ok')])
     file_import = StateTransition()
@@ -647,7 +647,7 @@ class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.package_name)
+        return coog_string.slugify(self.package_name)
 
     @classmethod
     def add_func_key(cls, values):
@@ -668,7 +668,7 @@ class Add2ExportPackageWizard(Wizard):
     __name__ = 'ir.export_package.add_records'
 
     start = StateView('ir.export_package.add_records.start',
-        'cog_utils.ir_export_package_add_records_start', [
+        'coog_core.ir_export_package_add_records_start', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Add', 'add', 'tryton-ok', default=True),
             ])
@@ -715,7 +715,7 @@ class ExportConfiguration(ModelSQL, ModelView, ExportImportMixin):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     def init_configuration(self):
         self._configuration = {}
@@ -775,7 +775,7 @@ class ExportModelConfiguration(ModelSQL, ModelView, ExportImportMixin):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     def get_fields(self):
         res = collections.defaultdict(list)
@@ -792,7 +792,7 @@ class ExportModelConfiguration(ModelSQL, ModelView, ExportImportMixin):
             set(['model']))
 
     @classmethod
-    @ModelView.button_action('cog_utils.export_fields_selection')
+    @ModelView.button_action('coog_core.export_fields_selection')
     def button_select_fields(cls, export_models):
         pass
 
@@ -864,7 +864,7 @@ class ExportFieldsSelection(Wizard):
 
     start_state = 'fields_selection'
     fields_selection = StateView('export.fields.select',
-        'cog_utils.export_fields_select_view_form', [
+        'coog_core.export_fields_select_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Apply', 'apply', 'tryton-go-next')])
     apply = StateTransition()
@@ -922,12 +922,12 @@ class ExportToFile(Wizard):
 
     start_state = 'conf_selection'
     conf_selection = StateView('export.export_configuration_selection',
-        'cog_utils.export_configuration_selection_view_form', [
+        'coog_core.export_configuration_selection_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Next', 'export', 'tryton-go-next')])
     export = StateTransition()
     export_summary = StateView('export.export_summary',
-        'cog_utils.export_summary_view_form', [
+        'coog_core.export_summary_view_form', [
             Button('Previous', 'conf_selection', 'tryton-go-previous'),
             Button('Ok', 'end', 'tryton-ok')])
 

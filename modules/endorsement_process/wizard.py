@@ -5,7 +5,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Button, Wizard, StateAction, StateView
 
 from trytond.modules.process_cog import ProcessFinder, ProcessStart
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 from trytond.modules.endorsement.endorsement import \
     STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS
 

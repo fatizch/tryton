@@ -3,7 +3,7 @@
 from trytond.pool import Pool
 from trytond.wizard import StateView, Button
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 __all__ = [
     'InsurerReportContractConfigure',
@@ -12,7 +12,7 @@ __all__ = [
     ]
 
 
-class InsurerReportContractConfigure(model.CoopView):
+class InsurerReportContractConfigure(model.CoogView):
     'Configure Insurer Contract Reporting'
 
     __name__ = 'insurer_reporting.contract.configure'
@@ -23,7 +23,7 @@ class InsurerReportContractConfigure(model.CoopView):
                     'insurer_report_covered'))])
 
 
-class InsurerReportResult(model.CoopView):
+class InsurerReportResult(model.CoogView):
     'Insurer Reporting Result'
 
     __name__ = 'insurer_reporting.result'
@@ -31,7 +31,7 @@ class InsurerReportResult(model.CoopView):
     reports = fields.One2Many('ir.attachment', None, 'Reports', readonly=True)
 
 
-class InsurerReportContract(model.CoopWizard):
+class InsurerReportContract(model.CoogWizard):
     'Insurer Contract Reporting'
 
     __name__ = 'insurer_reporting.contract'

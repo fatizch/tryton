@@ -4,7 +4,7 @@ from trytond.transaction import Transaction
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 from trytond.modules.endorsement import relation_mixin, field_mixin
 
 
@@ -83,7 +83,7 @@ class EndorsementOptionVersion:
 class EndorsementOptionBenefit(relation_mixin(
             'endorsement.contract.benefit.field', 'benefit',
             'contract.option.benefit', 'Benefits'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Option Benefit'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.benefit'
@@ -141,6 +141,6 @@ class EndorsementPart:
 
 
 class EndorsementBenefitField(field_mixin('contract.option.benefit'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Benefit Field'
     __name__ = 'endorsement.contract.benefit.field'

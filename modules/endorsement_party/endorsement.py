@@ -6,7 +6,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.endorsement import values_mixin, relation_mixin
 
 
@@ -30,7 +30,7 @@ class Address(object):
 class EndorsementPartyAddress(relation_mixin(
             'endorsement.party.address.field', 'address', 'party.address',
             'Addresses'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Address'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.party.address'
@@ -64,7 +64,7 @@ class EndorsementPartyAddress(relation_mixin(
 class EndorsementPartyRelation(relation_mixin(
             'endorsement.party.relation.field', 'relationship',
             'party.relation.all', 'Relation'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Relations'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.party.relation'
@@ -113,7 +113,7 @@ class Party:
         ]
 
     @classmethod
-    @model.CoopView.button_action('endorsement.act_start_endorsement')
+    @model.CoogView.button_action('endorsement.act_start_endorsement')
     def start_endorsement(cls, parties):
         pass
 
@@ -187,7 +187,7 @@ class Endorsement:
 
 
 class EndorsementParty(values_mixin('endorsement.party.field'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Party'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.party'

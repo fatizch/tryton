@@ -8,7 +8,7 @@ from sql.operators import Concat
 from trytond.transaction import Transaction
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 __all__ = [
     'SelectDate',
@@ -19,7 +19,7 @@ __all__ = [
     ]
 
 
-class SelectDate(model.CoopView):
+class SelectDate(model.CoogView):
     'Select Date in Collection to Cash Value wizard'
 
     __name__ = 'contract.wizard.collection_to_cash_value.select_date'
@@ -233,7 +233,7 @@ class CashValueUpdate(Wizard):
         return 'end'
 
 
-class CashSurrenderParameters(model.CoopView):
+class CashSurrenderParameters(model.CoogView):
     'Cash Surrender Parameters'
 
     __name__ = 'contract.wizard.cash_surrender.parameters'

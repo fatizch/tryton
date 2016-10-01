@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, If
 
-from trytond.modules.cog_utils import fields, model, coop_string
+from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.endorsement import (EndorsementWizardStepMixin,
     add_endorsement_step)
 from trytond.modules.party_relationship import PartyRelationAll
@@ -27,7 +27,7 @@ __all__ = [
     ]
 
 
-class AddressDisplayer(model.CoopView):
+class AddressDisplayer(model.CoogView):
     'Address Displayer'
 
     __name__ = 'endorsement.party.change_address_displayer'
@@ -344,7 +344,7 @@ class ChangePartySSN(EndorsementWizardStepMixin):
         party_endorsement.save()
 
 
-class PartyNameDisplayer(model.CoopView):
+class PartyNameDisplayer(model.CoogView):
     'Change Party Name Displayer'
 
     __name__ = 'endorsement.party.change_name.displayer'
@@ -366,7 +366,7 @@ class PartyNameDisplayer(model.CoopView):
     def get_possible_genders(cls):
         Party = Pool().get('party.party')
         return [
-            (x, coop_string.translate(Party, 'gender', y, ttype='selection'))
+            (x, coog_string.translate(Party, 'gender', y, ttype='selection'))
             for x, y in Party._fields['gender'].selection]
 
 
@@ -596,7 +596,7 @@ class ChangePartyRelationship(EndorsementWizardStepMixin):
             party_endorsement.save()
 
 
-class SelectEndorsement(model.CoopView):
+class SelectEndorsement(model.CoogView):
     'Select Endorsement'
 
     __name__ = 'endorsement.start.select_endorsement'

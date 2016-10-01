@@ -4,8 +4,8 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
 from trytond.modules.process import ClassAttr
-from trytond.modules.process_cog import CogProcessFramework
-from trytond.modules.cog_utils import fields
+from trytond.modules.process_cog import CoogProcessFramework
+from trytond.modules.coog_core import fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -13,7 +13,7 @@ __all__ = [
     ]
 
 
-class ContractSet(CogProcessFramework):
+class ContractSet(CoogProcessFramework):
     __name__ = 'contract.set'
     __metaclass__ = ClassAttr
 

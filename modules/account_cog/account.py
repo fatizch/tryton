@@ -7,7 +7,7 @@ from trytond.cache import Cache
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import export, fields, utils
+from trytond.modules.coog_core import export, fields, utils
 
 
 __metaclass__ = PoolMeta

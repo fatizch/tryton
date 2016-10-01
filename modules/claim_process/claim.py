@@ -4,8 +4,8 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Bool
 from trytond.transaction import Transaction
 from trytond.modules.process import ClassAttr
-from trytond.modules.cog_utils import utils, fields, model
-from trytond.modules.process_cog import CogProcessFramework
+from trytond.modules.coog_core import utils, fields, model
+from trytond.modules.process_cog import CoogProcessFramework
 from trytond.modules.process_cog import ProcessFinder, ProcessStart
 from trytond.wizard import Button, StateTransition, StateAction
 
@@ -23,7 +23,7 @@ __all__ = [
     ]
 
 
-class Claim(CogProcessFramework):
+class Claim(CoogProcessFramework):
     'Claim'
 
     __metaclass__ = ClassAttr
@@ -244,7 +244,7 @@ class Process:
         cls.kind.selection[:] = list(set(cls.kind.selection))
 
 
-class ProcessLossDescRelation(model.CoopSQL):
+class ProcessLossDescRelation(model.CoogSQL):
     'Process Loss Desc Relation'
 
     __name__ = 'process-benefit.loss.description'
@@ -255,7 +255,7 @@ class ProcessLossDescRelation(model.CoopSQL):
         required=True)
 
 
-class ClaimDeclarationElement(model.CoopView):
+class ClaimDeclarationElement(model.CoogView):
     'Claim Declaration Element'
 
     __name__ = 'claim.declare.element'

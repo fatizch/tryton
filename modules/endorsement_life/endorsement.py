@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 from trytond.modules.endorsement import relation_mixin
 
 
@@ -123,7 +123,7 @@ class EndorsementCoveredElementOption:
 class EndorsementBeneficiary(relation_mixin(
             'endorsement.contract.beneficiary.field', 'beneficiary',
             'contract.option.beneficiary', 'Beneficiary'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Beneficiary'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.beneficiary'

@@ -5,8 +5,8 @@ from trytond.config import config
 
 from .batch import *
 from .utils import *
-from .coop_date import *
-from .coop_string import *
+from .coog_date import *
+from .coog_string import *
 from .export import *
 from .ir import *
 from .res import *
@@ -81,7 +81,7 @@ def register():
         Model,
         ModelField,
         UIMenuAccess,
-        module='cog_utils', type_='model')
+        module='coog_core', type_='model')
 
     if config.get('env', 'testing') == 'True':
         Pool.register(
@@ -98,7 +98,7 @@ def register():
             TestHistoryTable,
             TestHistoryChildTable,
             TestLoaderUpdater,
-            module='cog_utils', type_='model')
+            module='coog_core', type_='model')
 
     Pool.register(
         ImportWizard,
@@ -108,4 +108,4 @@ def register():
         ExportToFile,
         TranslationOverride,
         RevisionBlameWizard,
-        module='cog_utils', type_='wizard')
+        module='coog_core', type_='wizard')

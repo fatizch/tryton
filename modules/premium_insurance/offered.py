@@ -4,7 +4,7 @@ import datetime
 
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import coop_date
+from trytond.modules.coog_core import coog_date
 
 
 __metaclass__ = PoolMeta
@@ -25,7 +25,7 @@ class Product:
             for elem in option.extra_premiums:
                 dates.add(elem.start_date)
                 if elem.end_date:
-                    dates.add(coop_date.add_day(elem.end_date, 1))
+                    dates.add(coog_date.add_day(elem.end_date, 1))
 
     def get_covered_element_dates(self, dates, covered_element):
         for data in covered_element.options:

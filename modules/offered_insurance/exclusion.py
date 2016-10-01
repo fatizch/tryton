@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.model import Unique
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.coog_core import model, fields, coog_string
 
 
 __all__ = [
@@ -10,7 +10,7 @@ __all__ = [
     ]
 
 
-class ExclusionKind(model.CoopSQL, model.CoopView):
+class ExclusionKind(model.CoogSQL, model.CoogView):
     'Exclusion Kind'
 
     __name__ = 'offered.exclusion'
@@ -30,7 +30,7 @@ class ExclusionKind(model.CoopSQL, model.CoopView):
     @fields.depends('name', 'code')
     def on_change_name(self):
         if not self.code:
-            self.code = coop_string.slugify(self.name)
+            self.code = coog_string.slugify(self.name)
 
     @classmethod
     def search_rec_name(cls, name, clause):

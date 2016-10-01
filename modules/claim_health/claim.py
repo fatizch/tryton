@@ -2,7 +2,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 from trytond.pyson import Eval, Equal, Bool
 
 __metaclass__ = PoolMeta
@@ -14,7 +14,7 @@ __all__ = [
     ]
 
 
-class HealthLoss(model.CoopSQL, model.CoopView):
+class HealthLoss(model.CoogSQL, model.CoogView):
     'Health Loss'
 
     __name__ = 'claim.loss.health'
@@ -52,7 +52,7 @@ class HealthLoss(model.CoopSQL, model.CoopView):
         values['_func_key'] = ''
 
 
-class Loss(model.CoopSQL, model.CoopView):
+class Loss(model.CoogSQL, model.CoogView):
     'Loss'
 
     __name__ = 'claim.loss'

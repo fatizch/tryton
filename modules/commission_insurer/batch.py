@@ -6,7 +6,7 @@ from sql import Null
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import batch
+from trytond.modules.coog_core import batch
 
 __all__ = [
     'CreateEmptyInvoicePrincipalBatch',

@@ -8,7 +8,7 @@ from trytond.transaction import Transaction
 from trytond import backend
 from trytond.cache import Cache
 
-from trytond.modules.cog_utils import model, fields, coop_string, utils
+from trytond.modules.coog_core import model, fields, coog_string, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -23,7 +23,7 @@ __all__ = [
     ]
 
 
-class EventDescription(model.CoopSQL, model.CoopView):
+class EventDescription(model.CoogSQL, model.CoogView):
     'Event Description'
 
     __name__ = 'benefit.event.description'
@@ -68,10 +68,10 @@ class EventDescription(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
 
-class LossDescription(model.CoopSQL, model.CoopView):
+class LossDescription(model.CoogSQL, model.CoogView):
     'Loss Description'
 
     __name__ = 'benefit.loss.description'
@@ -148,7 +148,7 @@ class LossDescription(model.CoopSQL, model.CoopView):
         return instance
 
 
-class LossDescriptionExtraDataRelation(model.CoopSQL):
+class LossDescriptionExtraDataRelation(model.CoogSQL):
     'Relation between Loss Description and Extra Data'
 
     __name__ = 'benefit.loss.description-extra_data'
@@ -159,7 +159,7 @@ class LossDescriptionExtraDataRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class EventDescriptionLossDescriptionRelation(model.CoopSQL):
+class EventDescriptionLossDescriptionRelation(model.CoogSQL):
     'Event Description - Loss Description Relation'
 
     __name__ = 'benefit.event.description-loss.description'
@@ -170,7 +170,7 @@ class EventDescriptionLossDescriptionRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class Benefit(model.CoopSQL, model.CoopView, model.TaggedMixin):
+class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
     'Benefit'
 
     __name__ = 'benefit'
@@ -267,10 +267,10 @@ class Benefit(model.CoopSQL, model.CoopView, model.TaggedMixin):
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
-        return self.code if self.code else coop_string.slugify(self.name)
+        return self.code if self.code else coog_string.slugify(self.name)
 
 
-class BenefitLossDescriptionRelation(model.CoopSQL):
+class BenefitLossDescriptionRelation(model.CoogSQL):
     'Benefit Loss Description Relation'
 
     __name__ = 'benefit-loss.description'
@@ -280,7 +280,7 @@ class BenefitLossDescriptionRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class OptionDescriptionBenefitRelation(model.CoopSQL):
+class OptionDescriptionBenefitRelation(model.CoogSQL):
     'Option Description to Benefit Relation'
 
     __name__ = 'option.description-benefit'
@@ -290,7 +290,7 @@ class OptionDescriptionBenefitRelation(model.CoopSQL):
     benefit = fields.Many2One('benefit', 'Benefit', ondelete='RESTRICT')
 
 
-class BenefitExtraDataRelation(model.CoopSQL):
+class BenefitExtraDataRelation(model.CoogSQL):
     'Benefit to Extra Data Relation'
 
     __name__ = 'benefit-extra_data'

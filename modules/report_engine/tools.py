@@ -10,7 +10,7 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 
 __all__ = [
@@ -127,7 +127,7 @@ class ConvertTemplate(Wizard):
         return data_out
 
 
-class SelectTemplatesForConversion(model.CoopView):
+class SelectTemplatesForConversion(model.CoogView):
     'Select Templates for Conversion'
 
     __name__ = 'report.convert.select_templates'
@@ -150,7 +150,7 @@ class SelectTemplatesForConversion(model.CoopView):
                 'recalculate_matches': {
                     'readonly': ~Eval('search_for')}})
 
-    @model.CoopView.button_change('changes_calculated', 'matches',
+    @model.CoogView.button_change('changes_calculated', 'matches',
         'replace_with', 'search_for', 'templates')
     def recalculate_matches(self):
         pool = Pool()
@@ -181,7 +181,7 @@ class SelectTemplatesForConversion(model.CoopView):
         self.matches = []
 
 
-class MatchDisplayer(model.CoopView):
+class MatchDisplayer(model.CoogView):
     'Match Displayer'
 
     __name__ = 'report.convert.match'

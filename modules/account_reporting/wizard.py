@@ -12,7 +12,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import (Wizard, StateView, StateReport, Button)
 from trytond.tools import cursor_dict
 
-from trytond.modules.cog_utils import fields, utils, model, coop_date
+from trytond.modules.coog_core import fields, utils, model, coog_date
 
 __all__ = [
     'PrintMoveLineAggregatedReport',
@@ -21,7 +21,7 @@ __all__ = [
     ]
 
 
-class PrintMoveLineAggregatedReportStart(model.CoopView):
+class PrintMoveLineAggregatedReportStart(model.CoogView):
     'Print Aggregated Move Lines Report Start'
     __name__ = 'account.move_line_aggregated_report.print.start'
 
@@ -85,8 +85,8 @@ class MoveLineAggregatedReport(Report):
             return str(yyyy_mm_dd)[0:7]
 
         records = []
-        all_dates = [coop_date.add_month(start_date, n)
-            for n in range(coop_date.number_of_months_between(
+        all_dates = [coog_date.add_month(start_date, n)
+            for n in range(coog_date.number_of_months_between(
                     start_date, end_date) + 1)]
         month_sum = {month(m): 0 for m in all_dates}
         # Workaround 'Incoherent column repetition found' error that occurs at

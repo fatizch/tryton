@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.cog_utils import coop_string
+from trytond.modules.coog_core import coog_string
 
 MODULE_NAME = 'clause'
 
@@ -18,7 +18,7 @@ class TestCaseModel:
     def create_clause(cls, **kwargs):
         Clause = Pool().get('clause')
         if 'code' not in kwargs:
-            kwargs['code'] = coop_string.slugify(kwargs['name'])
+            kwargs['code'] = coog_string.slugify(kwargs['name'])
         if 'customizable' not in kwargs:
             kwargs['customizable'] = True
         return Clause(**kwargs)

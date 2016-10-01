@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.modules.cog_utils import model, fields, coop_string, utils
+from trytond.modules.coog_core import model, fields, coog_string, utils
 
 __all__ = [
     'Tag',
@@ -8,7 +8,7 @@ __all__ = [
     ]
 
 
-class Tag(model.CoopSQL, model.CoopView):
+class Tag(model.CoogSQL, model.CoogView):
     'Tag'
 
     __name__ = 'tag'
@@ -36,10 +36,10 @@ class Tag(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
 
-class TagObjectRelation(model.CoopSQL, model.CoopView):
+class TagObjectRelation(model.CoogSQL, model.CoogView):
     'Relation tag to object'
 
     __name__ = 'tag-object'

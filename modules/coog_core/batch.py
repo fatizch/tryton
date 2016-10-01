@@ -14,7 +14,7 @@ from trytond.transaction import Transaction
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.perf_analyzer import PerfLog, profile, logger as perf_logger
 
-import coop_string
+import coog_string
 
 __all__ = [
     'BatchRoot',
@@ -145,7 +145,7 @@ class BatchRoot(ModelView):
         filepath_template = cls.get_conf_item('filepath_template')
         filepath_template = filepath_template.\
             replace('%{FILENAME}', filename). \
-            replace('%{BATCHNAME}', coop_string.slugify(cls.__name__))
+            replace('%{BATCHNAME}', coog_string.slugify(cls.__name__))
         if '%{TIMESTAMP}' in filepath_template:
             date_format = cls.get_conf_item('filepath_timestamp_format')
             timestamp = datetime.now().strftime(date_format)
@@ -231,10 +231,10 @@ class ViewValidationBatch(BatchRoot):
     def get_batch_domain(cls, treatment_date, extra_args):
         Module = Pool().get('ir.module')
         modules = Module.search([])
-        utils_module = Module.search([('name', '=', 'cog_utils')])[0]
-        coop_modules = set([module.name for module in modules
+        utils_module = Module.search([('name', '=', 'coog_core')])[0]
+        coog_modules = set([module.name for module in modules
                 if utils_module in module.parents])
-        return [('module', 'in', coop_modules)]
+        return [('module', 'in', coog_modules)]
 
     @classmethod
     @analyze

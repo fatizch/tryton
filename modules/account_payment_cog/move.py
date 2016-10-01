@@ -13,7 +13,7 @@ from trytond.pyson import Eval, Bool, If, PYSONEncoder
 from trytond.wizard import StateView, Button, StateTransition, StateAction
 from trytond.transaction import Transaction
 from trytond.modules.account_payment.payment import KINDS
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.coog_core import fields, model, utils
 
 __metaclass__ = PoolMeta
 
@@ -222,7 +222,7 @@ class MoveLine:
         return Payment.create(payments)
 
 
-class PaymentInformationSelection(model.CoopView):
+class PaymentInformationSelection(model.CoogView):
     'Payment Information Selection'
 
     __name__ = 'account.payment.payment_information_selection'
@@ -232,7 +232,7 @@ class PaymentInformationSelection(model.CoopView):
         'Move Line')
 
 
-class PaymentInformationModification(model.CoopWizard):
+class PaymentInformationModification(model.CoogWizard):
     'Payment Information Modification'
 
     __name__ = 'account.payment.payment_information_modification'
@@ -277,7 +277,7 @@ class PaymentInformationModification(model.CoopWizard):
         return 'end'
 
 
-class PaymentCreationStart(model.CoopView):
+class PaymentCreationStart(model.CoogView):
     'Payment Creation Start'
     __name__ = 'account.payment.payment_creation.start'
 
@@ -341,7 +341,7 @@ class PaymentCreationStart(model.CoopView):
         return utils.today()
 
 
-class PaymentCreation(model.CoopWizard):
+class PaymentCreation(model.CoogWizard):
     'Payment Creation'
     __name__ = 'account.payment.creation'
 

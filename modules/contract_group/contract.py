@@ -5,7 +5,7 @@ from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import If, Bool
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 __all__ = [
     'Contract',
@@ -46,7 +46,7 @@ class Contract:
         return [('product.is_group', ) + tuple(clause[1:])]
 
     @classmethod
-    @model.CoopView.button_action(
+    @model.CoogView.button_action(
         'contract_group.act_create_enrollment_wizard')
     def button_add_enrollment(cls, contracts):
         pass

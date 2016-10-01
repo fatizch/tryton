@@ -5,7 +5,7 @@ import re
 from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -29,7 +29,7 @@ class Bank:
             ]
 
 
-class Agency(model.CoopSQL, model.CoopView):
+class Agency(model.CoogSQL, model.CoogView):
     'Agency'
     __name__ = 'bank.agency'
 

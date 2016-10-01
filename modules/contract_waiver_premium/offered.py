@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 
 __metaclass__ = PoolMeta
@@ -31,7 +31,7 @@ class OptionDescription:
         return self.insurer.party.account_payable
 
 
-class OptionDescriptionTaxRelationForWaiver(model.CoopSQL):
+class OptionDescriptionTaxRelationForWaiver(model.CoogSQL):
     'Option Description Tax Relation For Waiver'
 
     __name__ = 'coverage-account.tax-for_waiver'

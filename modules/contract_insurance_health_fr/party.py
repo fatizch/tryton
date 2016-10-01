@@ -6,7 +6,7 @@ from collections import defaultdict
 
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.cog_utils import fields
+from trytond.modules.coog_core import fields
 
 __metaclass__ = PoolMeta
 __all__ = [

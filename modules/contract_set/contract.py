@@ -7,7 +7,7 @@ from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool, Equal
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 from trytond.modules.contract import _STATES, _DEPENDS
 from trytond.modules.contract.contract import CONTRACTSTATUSES
 from trytond.wizard import StateTransition, StateView, Button
@@ -32,7 +32,7 @@ class Configuration:
             domain=[('code', '=', 'contract_set_number')]))
 
 
-class ContractSet(model.CoopSQL, model.CoopView, Printable):
+class ContractSet(model.CoogSQL, model.CoogView, Printable):
     'Contract Set'
 
     __name__ = 'contract.set'
@@ -101,7 +101,7 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
         return dates
 
     @classmethod
-    @model.CoopView.button_action('contract_set.act_decline_set')
+    @model.CoogView.button_action('contract_set.act_decline_set')
     def button_decline_set(cls, contracts):
         pass
 
@@ -226,7 +226,7 @@ class Contract:
         ContractSet.check_contracts_unicity(set(contract_sets))
 
 
-class ContractSetSelectDeclineReason(model.CoopView):
+class ContractSetSelectDeclineReason(model.CoogView):
     'Reason selector to decline contract set'
 
     __name__ = 'contract.set.decline.select_reason'
@@ -237,7 +237,7 @@ class ContractSetSelectDeclineReason(model.CoopView):
         domain=[('status', '=', 'declined')])
 
 
-class ContractSetDecline(model.CoopWizard):
+class ContractSetDecline(model.CoogWizard):
     'Decline Contract Set Wizard'
 
     __name__ = 'contract.set.decline'

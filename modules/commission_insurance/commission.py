@@ -18,8 +18,8 @@ from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
 from trytond.cache import Cache
 
-from trytond.modules.cog_utils import (fields, model, export, coop_string,
-    coop_date, utils)
+from trytond.modules.coog_core import (fields, model, export, coog_string,
+    coog_date, utils)
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
@@ -280,7 +280,7 @@ class Commission:
             cls.save(to_save)
 
 
-class AggregatedCommission(model.CoopSQL, model.CoopView):
+class AggregatedCommission(model.CoogSQL, model.CoogView):
     'Commission Aggregated'
 
     __name__ = 'commission.aggregated'
@@ -498,7 +498,7 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     def get_commissioned_products(self, name):
         products = []
@@ -525,7 +525,7 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
                 periods.append((date, all_dates[-1]))
             else:
                 periods.append((date,
-                        coop_date.add_day(all_dates[idx + 1], -1)))
+                        coog_date.add_day(all_dates[idx + 1], -1)))
         return periods
 
     def get_commission_dates(self, invoice_line):
@@ -588,7 +588,7 @@ class PlanLines(export.ExportImportMixin):
         return self.options_extract
 
 
-class PlanLinesCoverageRelation(model.CoopSQL, model.CoopView):
+class PlanLinesCoverageRelation(model.CoogSQL, model.CoogView):
     'Commission Plan Line - Offered Option Description'
 
     __name__ = 'commission.plan.lines-offered.option.description'
@@ -599,7 +599,7 @@ class PlanLinesCoverageRelation(model.CoopSQL, model.CoopView):
         ondelete='RESTRICT')
 
 
-class PlanRelation(model.CoopSQL, model.CoopView):
+class PlanRelation(model.CoogSQL, model.CoogView):
     'Commission Plan - Commission Plan'
 
     __name__ = 'commission_plan-commission_plan'
@@ -608,7 +608,7 @@ class PlanRelation(model.CoopSQL, model.CoopView):
     to = fields.Many2One('commission.plan', 'Plan', ondelete='RESTRICT')
 
 
-class PlanCalculationDate(model.CoopSQL, model.CoopView):
+class PlanCalculationDate(model.CoogSQL, model.CoogView):
     'Plan Calculation Date'
 
     __name__ = 'commission.plan.date'
@@ -700,7 +700,7 @@ class PlanCalculationDate(model.CoopSQL, model.CoopView):
                     value = getattr(self, fname, None)
                     if not value:
                         continue
-                    date = getattr(coop_date, 'add_%s' % fname)(date,
+                    date = getattr(coog_date, 'add_%s' % fname)(date,
                         int(value))
                 values.append(date)
         if not values:
@@ -815,7 +815,7 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
 
     @classmethod
     def format_hash(cls, hash_dict):
-        return coop_string.translate_label(cls, 'plan') + ' : ' + \
+        return coog_string.translate_label(cls, 'plan') + ' : ' + \
             hash_dict['plan'].rec_name
 
     def get_hash(self):
@@ -932,7 +932,7 @@ class CreateAgents(Wizard):
             }
 
 
-class CreateAgentsParties(model.CoopView):
+class CreateAgentsParties(model.CoogView):
     'Create Agents'
 
     __name__ = 'commission.create_agents.parties'
@@ -957,7 +957,7 @@ class CreateAgentsParties(model.CoopView):
         return Transaction().context.get('company')
 
 
-class CreateAgentsAsk(model.CoopView):
+class CreateAgentsAsk(model.CoogView):
     'Create Agents'
 
     __name__ = 'commission.create_agents.ask'
@@ -1151,7 +1151,7 @@ class OpenCommissionsSynthesis(Wizard):
         }
 
 
-class OpenCommissionsSynthesisStart(model.CoopView):
+class OpenCommissionsSynthesisStart(model.CoogView):
     'Open Commissions Synthesis Start'
 
     __name__ = 'commission.synthesis.start'
@@ -1170,7 +1170,7 @@ class OpenCommissionsSynthesisStart(model.CoopView):
         return Transaction().context.get('company')
 
 
-class OpenCommissionsSynthesisShow(model.CoopView, ModelCurrency):
+class OpenCommissionsSynthesisShow(model.CoogView, ModelCurrency):
     'Open Commissions Synthesis Show'
 
     __name__ = 'commission.synthesis.show'
@@ -1192,7 +1192,7 @@ class OpenCommissionsSynthesisShow(model.CoopView, ModelCurrency):
         readonly=True)
 
 
-class OpenCommissionSynthesisYearLine(model.CoopView):
+class OpenCommissionSynthesisYearLine(model.CoogView):
     'Open Commissions Synthesis Year Line'
 
     __name__ = 'commission.synthesis.year_line'
@@ -1355,7 +1355,7 @@ class ChangeBroker(Wizard):
         return 'end'
 
 
-class SelectNewBroker(model.CoopView):
+class SelectNewBroker(model.CoogView):
     'Select New Broker'
 
     __name__ = 'commission.change_broker.select_new_broker'

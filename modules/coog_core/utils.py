@@ -70,17 +70,17 @@ def remove_lockfile(filepath, lock_extension='lck', silent=True):
 def get_trytond_modules():
     Module = Pool().get('ir.module')
     modules = Module.search([])
-    cog_utils = Module.search([('name', '=', 'cog_utils')])[0]
+    coog_core = Module.search([('name', '=', 'coog_core')])[0]
 
-    def is_coopengo_module(module):
+    def is_coog_module(module):
         if module.name.endswith('cog_translation') or \
-                module.name == 'cog_utils' or cog_utils in module.parents:
+                module.name == 'coog_core' or coog_core in module.parents:
             return True
-        return any([is_coopengo_module(x) for x in module.parents])
+        return any([is_coog_module(x) for x in module.parents])
 
     trytond_modules = []
     for module in modules:
-        if not is_coopengo_module(module):
+        if not is_coog_module(module):
             trytond_modules.append(module.name)
     return trytond_modules
 

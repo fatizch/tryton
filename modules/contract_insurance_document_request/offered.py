@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 from trytond.pyson import Bool, Eval
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 from trytond.modules.rule_engine import get_rule_mixin
 
 
@@ -21,7 +21,7 @@ __metaclass__ = PoolMeta
 
 class DocumentRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Document Managing Rule'
 
     __name__ = 'document.rule'
@@ -102,7 +102,7 @@ class DocumentRule(
             return getattr(self.option, self.option._func_key)
 
 
-class RuleDocumentDescriptionRelation(model.CoopSQL, model.CoopView):
+class RuleDocumentDescriptionRelation(model.CoogSQL, model.CoogView):
     'Rule to Document Description Relation'
 
     __name__ = 'document.rule-document.description'

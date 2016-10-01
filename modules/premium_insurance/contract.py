@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, If
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.coog_core import fields
 
 # Keys should exist in premium.offered.PREMIUM_FREQUENCY
 EXTRA_PREMIUM_FREQUENCIES = [

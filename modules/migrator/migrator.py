@@ -5,7 +5,7 @@ from sql import Column
 from trytond.pool import Pool
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
-from trytond.modules.cog_utils import batch
+from trytond.modules.coog_core import batch
 
 import tools
 

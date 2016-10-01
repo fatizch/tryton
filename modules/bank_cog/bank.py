@@ -4,8 +4,8 @@ from trytond.pool import Pool, PoolMeta
 from trytond.model import fields as tryton_fields, Unique
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import utils, fields, export
-from trytond.modules.cog_utils import coop_string
+from trytond.modules.coog_core import utils, fields, export
+from trytond.modules.coog_core import coog_string
 
 
 __metaclass__ = PoolMeta
@@ -147,7 +147,7 @@ class BankAccount(export.ExportImportMixin):
         return utils.today()
 
     def get_summary_content(self, label, at_date=None, lang=None):
-        return coop_string.get_field_summary(self, 'numbers', True, at_date,
+        return coog_string.get_field_summary(self, 'numbers', True, at_date,
             lang)
 
     def get_numbers_as_char(self, name):

@@ -12,7 +12,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.endorsement import values_mixin, relation_mixin
 
 
@@ -328,7 +328,7 @@ class Endorsement:
         return result
 
     @classmethod
-    @model.CoopView.button
+    @model.CoogView.button
     def reset(cls, endorsements):
         pool = Pool()
         LoanEndorsement = pool.get('endorsement.loan')
@@ -400,7 +400,7 @@ class EndorsementContract:
 
 
 class EndorsementLoan(values_mixin('endorsement.loan.field'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Loan'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.loan'
@@ -636,7 +636,7 @@ class EndorsementCoveredElementOption:
 class EndorsementLoanShare(relation_mixin(
             'endorsement.loan.share.field', 'loan_share', 'loan.share',
             'Loan Shares'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Loan Share'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.loan.share'
@@ -706,7 +706,7 @@ class EndorsementLoanShare(relation_mixin(
 class EndorsementLoanIncrement(relation_mixin(
             'endorsement.loan.increment.field', 'increment', 'loan.increment',
             'Loan Increments'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Loan Increment'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.loan.increment'
@@ -742,7 +742,7 @@ class EndorsementLoanIncrement(relation_mixin(
 class EndorsementContractLoan(relation_mixin(
             'endorsement.contract.loan.field', 'contract_loan',
             'contract-loan', 'Contract Loan'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Contract Loan'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.loan'

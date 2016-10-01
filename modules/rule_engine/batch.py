@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import logging
 
-from trytond.modules.cog_utils import batch
+from trytond.modules.coog_core import batch
 from trytond.pool import Pool
 
 __all__ = [

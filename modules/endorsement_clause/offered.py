@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 from trytond.modules.endorsement import field_mixin
 
 
@@ -25,7 +25,7 @@ class EndorsementPart:
 
 
 class EndorsementClauseField(field_mixin('contract.clause'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Clause Field'
 
     __name__ = 'endorsement.contract.clause.field'

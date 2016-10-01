@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.cog_utils import utils
+from trytond.modules.coog_core import utils
 
 
 __metaclass__ = PoolMeta

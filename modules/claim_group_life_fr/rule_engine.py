@@ -4,7 +4,7 @@
 from trytond.pool import PoolMeta
 
 from trytond.modules.rule_engine import check_args
-from trytond.modules.cog_utils import coop_date
+from trytond.modules.coog_core import coog_date
 
 
 __metaclass__ = PoolMeta
@@ -19,6 +19,6 @@ class RuleEngineRuntime:
     @classmethod
     @check_args('loss')
     def _re_total_hospitalisation_period(cls, args):
-        return sum([coop_date.number_of_days_between(
+        return sum([coog_date.number_of_days_between(
                     x.start_date, x.end_date)
                 for x in args['loss'].hospitalisation_periods])

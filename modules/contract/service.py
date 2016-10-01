@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pyson import If, Eval, Bool
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.coog_core import model, fields, coog_string
 
 __all__ = [
     'ServiceMixin',
@@ -10,7 +10,7 @@ __all__ = [
     ]
 
 
-class ServiceMixin(model.CoopView):
+class ServiceMixin(model.CoogView):
     'Service Mixin'
 
     __name__ = 'contract.service_mixin'
@@ -42,7 +42,7 @@ class ServiceMixin(model.CoopView):
         else:
             res = super(ServiceMixin, self).get_rec_name(name)
         if self.status:
-            res += ' [%s]' % coop_string.translate_value(self, 'status')
+            res += ' [%s]' % coog_string.translate_value(self, 'status')
         return res
 
     @staticmethod
@@ -59,7 +59,7 @@ class ServiceMixin(model.CoopView):
         raise NotImplementedError
 
 
-class ContractService(ServiceMixin, model.CoopSQL):
+class ContractService(ServiceMixin, model.CoogSQL):
     'Contract Service'
 
     __name__ = 'contract.service'

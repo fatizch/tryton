@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, And, Or, Not, In
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 
 __metaclass__ = PoolMeta
@@ -62,7 +62,7 @@ class Contract:
             detail['loan'] = detail['premium'].loan
 
     @classmethod
-    @model.CoopView.button_action(
+    @model.CoogView.button_action(
         'contract_loan_invoice.act_show_all_invoices')
     def button_show_all_invoices(cls, contracts):
         pass

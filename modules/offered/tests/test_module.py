@@ -6,10 +6,10 @@ import unittest
 
 import trytond.tests.test_tryton
 
-from trytond.modules.cog_utils import test_framework
+from trytond.modules.coog_core import test_framework
 
 
-class ModuleTestCase(test_framework.CoopTestCase):
+class ModuleTestCase(test_framework.CoogTestCase):
     '''
     Test Offered Module
     '''

@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 
 __metaclass__ = PoolMeta
@@ -50,7 +50,7 @@ class LossDescription:
         return self.documents
 
 
-class LossDescriptionDocumentDescriptionRelation(model.CoopSQL):
+class LossDescriptionDocumentDescriptionRelation(model.CoogSQL):
     'Loss Description to Document Description Relation'
 
     __name__ = 'benefit.loss.description-document.description'

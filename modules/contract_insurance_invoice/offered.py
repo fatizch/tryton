@@ -11,7 +11,7 @@ from trytond.model import Unique
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model, export, utils
+from trytond.modules.coog_core import fields, model, export, utils
 
 from .contract import FREQUENCIES
 
@@ -55,7 +55,7 @@ CONVERSION_TABLE = {
     }
 
 
-class BillingMode(model.CoopSQL, model.CoopView):
+class BillingMode(model.CoogSQL, model.CoogView):
     'Billing Mode'
     __name__ = 'offered.billing_mode'
     _func_key = 'code'
@@ -192,7 +192,7 @@ class BillingMode(model.CoopSQL, model.CoopView):
         return False
 
 
-class BillingModeFeeRelation(model.CoopSQL):
+class BillingModeFeeRelation(model.CoogSQL):
     'Billing Mode Fee Relation'
 
     __name__ = 'offered.billing_mode-account.fee'
@@ -314,7 +314,7 @@ class Product:
         return utils.today() + relativedelta(days=offset or 0)
 
 
-class ProductBillingModeRelation(model.CoopSQL, model.CoopView):
+class ProductBillingModeRelation(model.CoogSQL, model.CoogView):
     'Product Billing Mode Relation'
 
     __name__ = 'offered.product-offered.billing_mode'
@@ -351,7 +351,7 @@ class ProductBillingModeRelation(model.CoopSQL, model.CoopView):
                 '"offered_product-offered_invoice_frequency"')
 
 
-class BillingModePaymentTermRelation(model.CoopSQL, model.CoopView):
+class BillingModePaymentTermRelation(model.CoogSQL, model.CoogView):
     'Billing Mode Payment Term Relation'
 
     __name__ = 'offered.billing.mode-account.invoice.payment_term'

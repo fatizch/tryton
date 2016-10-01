@@ -9,7 +9,7 @@ from trytond.pyson import Eval
 from trytond.cache import Cache
 from trytond.model import MatchMixin
 
-from trytond.modules.cog_utils import fields, model, coop_date
+from trytond.modules.coog_core import fields, model, coog_date
 from trytond.modules.rule_engine import get_rule_mixin
 
 
@@ -38,7 +38,7 @@ __all__ = [
     ]
 
 
-class ProductPremiumDate(model.CoopSQL, model.CoopView):
+class ProductPremiumDate(model.CoogSQL, model.CoogView):
     'Product Premium Dates'
 
     __name__ = 'offered.product.premium_date'
@@ -106,7 +106,7 @@ class Product:
             return
         dates.add(option.start_date)
         if option.end_date:
-            dates.add(coop_date.add_day(option.end_date, 1))
+            dates.add(coog_date.add_day(option.end_date, 1))
         for version in option.versions:
             if version.start is not None:
                 dates.add(version.start)
@@ -129,7 +129,7 @@ class Product:
         return dates
 
 
-class ProductFeeRelation(model.CoopSQL):
+class ProductFeeRelation(model.CoogSQL):
     'Product Fee Relation'
 
     __name__ = 'offered.product-account.fee'
@@ -142,7 +142,7 @@ class ProductFeeRelation(model.CoopSQL):
 
 class OptionDescriptionPremiumRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        MatchMixin, model.CoopSQL, model.CoopView):
+        MatchMixin, model.CoogSQL, model.CoogView):
     'Option Description Premium Rule'
 
     __name__ = 'offered.option.description.premium_rule'
@@ -305,7 +305,7 @@ class OptionDescription:
                     premium_rule.calculate(rated_instance, lines)
 
 
-class OptionDescriptionFeeRelation(model.CoopSQL):
+class OptionDescriptionFeeRelation(model.CoogSQL):
     'Option Description Fee Relation'
 
     __name__ = 'offered.option.description-account.fee'
@@ -316,7 +316,7 @@ class OptionDescriptionFeeRelation(model.CoopSQL):
         required=True)
 
 
-class OptionDescriptionTaxRelation(model.CoopSQL):
+class OptionDescriptionTaxRelation(model.CoogSQL):
     'Option Description Tax Relation'
 
     __name__ = 'offered.option.description-account.tax'

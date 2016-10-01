@@ -7,7 +7,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import PYSONEncoder
 from trytond.wizard import Wizard
 
-from trytond.modules.cog_utils import model, fields, coop_string, UnionMixin
+from trytond.modules.coog_core import model, fields, coog_string, UnionMixin
 
 __metaclass__ = PoolMeta
 
@@ -33,7 +33,7 @@ class Party:
         return super(Party, cls)._export_light() | {'claims'}
 
     @classmethod
-    @model.CoopView.button_action('claim.act_claims_button')
+    @model.CoogView.button_action('claim.act_claims_button')
     def open_claims(cls, objs):
         pass
 
@@ -50,7 +50,7 @@ class PartyInteraction:
         cls.for_object_ref.selection.append(['claim', 'Claim'])
 
 
-class SynthesisMenuClaim(model.CoopSQL):
+class SynthesisMenuClaim(model.CoogSQL):
     'Party Synthesis Menu Claim'
     __name__ = 'party.synthesis.menu.claim'
 
@@ -72,7 +72,7 @@ class SynthesisMenuClaim(model.CoopSQL):
             Max(claim.create_date).as_('create_date'),
             Max(claim.write_uid).as_('write_uid'),
             Max(claim.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(ClaimSynthesis, 'name')).
+            Literal(coog_string.translate_label(ClaimSynthesis, 'name')).
             as_('name'), party.id.as_('party'),
             group_by=party.id)
 
@@ -81,10 +81,10 @@ class SynthesisMenuClaim(model.CoopSQL):
 
     def get_rec_name(self, name):
         ClaimSynthesis = Pool().get('party.synthesis.menu.claim')
-        return coop_string.translate_label(ClaimSynthesis, 'name')
+        return coog_string.translate_label(ClaimSynthesis, 'name')
 
 
-class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
+class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
 

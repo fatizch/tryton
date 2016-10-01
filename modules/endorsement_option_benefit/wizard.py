@@ -3,7 +3,7 @@
 from collections import defaultdict
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Len
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.endorsement import (EndorsementWizardStepMixin,
     add_endorsement_step)
 
@@ -201,7 +201,7 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
                 if not v.start or v.start < self.effective_date] + [version]
 
 
-class ManageOptionBenefitsDisplayer(model.CoopView):
+class ManageOptionBenefitsDisplayer(model.CoogView):
     'Manage Benefit Options Displayer'
 
     __name__ = 'contract.manage_option_benefits.option'

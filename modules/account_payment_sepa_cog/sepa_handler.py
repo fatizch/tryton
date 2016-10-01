@@ -5,7 +5,7 @@ from dateutil.parser import parse
 
 from trytond.modules.account_payment_sepa.payment import CAMT054
 
-from trytond.modules.cog_utils import utils
+from trytond.modules.coog_core import utils
 
 __all__ = ['CAMT054Coog']
 

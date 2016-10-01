@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 __metaclass__ = PoolMeta
 
@@ -12,7 +12,7 @@ __all__ = [
     ]
 
 
-class CashValueRule(model.CoopSQL):
+class CashValueRule(model.CoogSQL):
     'Cash Value Rule'
 
     __name__ = 'cash_value.cash_value_rule'

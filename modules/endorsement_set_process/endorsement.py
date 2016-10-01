@@ -1,9 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.process_cog import CogProcessFramework
+from trytond.modules.process_cog import CoogProcessFramework
 from trytond.modules.process import ClassAttr
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
@@ -49,7 +49,7 @@ class Endorsement:
                 self.generated_endorsement_sets])
 
 
-class EndorsementSet(CogProcessFramework):
+class EndorsementSet(CoogProcessFramework):
 
     __name__ = 'endorsement.set'
     __metaclass__ = ClassAttr
@@ -81,7 +81,7 @@ class EndorsementSet(CogProcessFramework):
         return super(EndorsementSet, cls)._export_skips() | {'attachments'}
 
     @classmethod
-    @model.CoopView.button_action('process_cog.act_resume_process')
+    @model.CoogView.button_action('process_cog.act_resume_process')
     def button_resume_process(cls, endorsement_sets):
         pass
 

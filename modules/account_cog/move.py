@@ -10,7 +10,7 @@ from trytond import backend
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
-from trytond.modules.cog_utils import export, fields, utils, coop_string
+from trytond.modules.coog_core import export, fields, utils, coog_string
 
 __metaclass__ = PoolMeta
 
@@ -87,7 +87,7 @@ class Move(export.ExportImportMixin):
                 return self.origin.get_synthesis_rec_name(name)
             return self.origin.get_rec_name(name)
         elif self.description and self.journal:
-            return '%s %s' % (coop_string.translate_value(
+            return '%s %s' % (coog_string.translate_value(
                     self.journal, 'type'), self.description)
         elif self.description:
             return self.description
@@ -230,7 +230,7 @@ class Line(export.ExportImportMixin):
             else self.move.synthesis_rec_name)
 
     def get_kind_string(self, name):
-        return coop_string.translate(self.move, 'kind')
+        return coog_string.translate(self.move, 'kind')
 
     @classmethod
     def search_is_reconciled(cls, name, clause):

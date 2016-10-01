@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 __all_ = [
     'HealthCareSystem',
@@ -8,7 +8,7 @@ __all_ = [
     ]
 
 
-class HealthCareSystem(model.CoopSQL, model.CoopView):
+class HealthCareSystem(model.CoogSQL, model.CoogView):
     'Health Care System'
 
     __name__ = 'health.care_system'
@@ -20,7 +20,7 @@ class HealthCareSystem(model.CoopSQL, model.CoopView):
     short_name = fields.Char('Short Name')
 
 
-class InsuranceFund(model.CoopSQL, model.CoopView):
+class InsuranceFund(model.CoogSQL, model.CoogView):
     'Insurance Fund'
 
     __name__ = 'health.insurance_fund'

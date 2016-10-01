@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.model import Unique
 from trytond.pool import PoolMeta
-from trytond.modules.cog_utils import fields, export, model, coop_string
+from trytond.modules.coog_core import fields, export, model, coog_string
 
 __metaclass__ = PoolMeta
 
@@ -39,7 +39,7 @@ class Journal(export.ExportImportMixin):
         return super(Journal, cls)._export_light() | {'currency', 'company'}
 
 
-class CancelMotive(model.CoopSQL, model.CoopView):
+class CancelMotive(model.CoogSQL, model.CoogView):
     'Statement Journal Cancel Motives'
 
     __name__ = 'account.statement.journal.cancel_motive'
@@ -67,10 +67,10 @@ class CancelMotive(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
 
-class JournalCancelMotiveRelation(model.CoopSQL, model.CoopView):
+class JournalCancelMotiveRelation(model.CoogSQL, model.CoogView):
     'Journal - Statement Journal Cancel Motives'
 
     __name__ = 'statement.journal-statement.journal.cancel_motive'

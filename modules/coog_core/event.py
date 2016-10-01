@@ -8,7 +8,7 @@ from trytond.cache import Cache
 
 import model
 import fields
-import coop_string
+import coog_string
 import utils
 
 __metaclass__ = PoolMeta
@@ -102,7 +102,7 @@ class Event(Model):
             }
 
 
-class EventType(model.CoopSQL, model.CoopView):
+class EventType(model.CoogSQL, model.CoogView):
     'Event Type'
 
     __name__ = 'event.type'
@@ -151,10 +151,10 @@ class EventType(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
 
-class ActionEventTypeRelation(model.CoopSQL, model.CoopView):
+class ActionEventTypeRelation(model.CoogSQL, model.CoogView):
     'Action Event Type Relation'
 
     __name__ = 'event.type.action-event.type'
@@ -165,7 +165,7 @@ class ActionEventTypeRelation(model.CoopSQL, model.CoopView):
         required=True)
 
 
-class EventTypeAction(model.CoopSQL, model.CoopView):
+class EventTypeAction(model.CoogSQL, model.CoogView):
     'Event Type Action'
 
     __name__ = 'event.type.action'
@@ -252,7 +252,7 @@ class EventTypeAction(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.slugify(self.name)
+        return coog_string.slugify(self.name)
 
     def cache_data(self):
         return {'id': self.id, 'action': self.action}

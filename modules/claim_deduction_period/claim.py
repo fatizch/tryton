@@ -5,7 +5,7 @@ from decimal import Decimal
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, fields, coop_date
+from trytond.modules.coog_core import model, fields, coog_date
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
@@ -36,7 +36,7 @@ class Loss:
         return []
 
 
-class DeductionPeriod(model.CoopSQL, model.CoopView, ModelCurrency):
+class DeductionPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
     'Deduction Period'
 
     __name__ = 'claim.loss.deduction.period'
@@ -80,7 +80,7 @@ class DeductionPeriod(model.CoopSQL, model.CoopView, ModelCurrency):
         if self.amount_kind == 'per_day':
             return self.amount_received
         elif self.amount_kind == 'total':
-            period_length = Decimal(coop_date.number_of_days_between(
+            period_length = Decimal(coog_date.number_of_days_between(
                     self.start_date, self.end_date))
             if round:
                 return self.currency.round(
@@ -93,7 +93,7 @@ class DeductionPeriod(model.CoopSQL, model.CoopView, ModelCurrency):
         if self.amount_kind == 'total':
             return self.amount_received
         elif self.amount_kind == 'per_day':
-            period_length = Decimal(coop_date.number_of_days_between(
+            period_length = Decimal(coog_date.number_of_days_between(
                     self.start_date, self.end_date))
             return self.amount_received * period_length
         raise NotImplementedError

@@ -13,7 +13,7 @@ __all__ = [
     'launch_function',
     'test_values_against_model',
     'prepare_test',
-    'CoopTestCase',
+    'CoogTestCase',
     ]
 
 
@@ -80,8 +80,8 @@ def prepare_test(*_args):
     return decorator
 
 
-class CoopTestCase(ModuleTestCase):
-    'Coop Test Case'
+class CoogTestCase(ModuleTestCase):
+    'Coog Test Case'
 
     @classmethod
     def depending_modules(cls):
@@ -107,7 +107,7 @@ class CoopTestCase(ModuleTestCase):
             good_function = functools.partial(
                 prepare_test()(test_function, True), self)
             setattr(self, self._testMethodName, good_function)
-        super(CoopTestCase, self).run(result)
+        super(CoogTestCase, self).run(result)
 
     @classmethod
     def get_models(cls):
@@ -173,7 +173,7 @@ class CoopTestCase(ModuleTestCase):
 
     def __getattr__(self, name):
         if name == '_models':
-            return super(CoopTestCase, self).__getattr__(name)
+            return super(CoogTestCase, self).__getattr__(name)
         if self._models and name in self._models:
             return self._models[name]
         raise AttributeError

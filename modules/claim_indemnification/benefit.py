@@ -6,7 +6,7 @@ from trytond import backend
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import model, fields, coop_date
+from trytond.modules.coog_core import model, fields, coog_date
 from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.currency_cog import ModelCurrency
 
@@ -78,7 +78,7 @@ class BenefitRule(
         get_rule_mixin('indemnification_rule', 'Indemnification Rule'),
         get_rule_mixin('deductible_rule', 'Deductible Rule'),
         get_rule_mixin('revaluation_rule', 'Revaluation Rule'),
-        model.CoopSQL, model.CoopView, ModelCurrency):
+        model.CoogSQL, model.CoogView, ModelCurrency):
     'Benefit Rule'
 
     __name__ = 'benefit.rule'
@@ -202,7 +202,7 @@ class BenefitRule(
         all_benefits = []
 
         must_revaluate = self.must_revaluate()
-        for start_date, end_date in coop_date.calculate_periods_from_dates(
+        for start_date, end_date in coog_date.calculate_periods_from_dates(
                 list(dates), previous_date, args['end_date']):
             new_args = args.copy()
             new_args['date'] = start_date

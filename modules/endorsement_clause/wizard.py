@@ -5,7 +5,7 @@ from collections import defaultdict
 from trytond.pyson import Eval, Len, If
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import model, fields, utils
+from trytond.modules.coog_core import model, fields, utils
 from trytond.modules.endorsement import (EndorsementWizardStepMixin,
     add_endorsement_step)
 
@@ -212,7 +212,7 @@ class ManageClauses(EndorsementWizardStepMixin):
     def state_view_name(cls):
         return 'endorsement_clause.contract_manage_clauses_view_form'
 
-    @model.CoopView.button_change('contract', 'current_clauses', 'new_clause',
+    @model.CoogView.button_change('contract', 'current_clauses', 'new_clause',
         'possible_clauses')
     def add_clause(self):
         assert self.new_clause
@@ -233,7 +233,7 @@ class ManageClauses(EndorsementWizardStepMixin):
         new_clause.customizable = self.new_clause.customizable
         return new_clause
 
-    @model.CoopView.button_change('contract', 'current_clauses')
+    @model.CoogView.button_change('contract', 'current_clauses')
     def add_text_clause(self):
         Clause = Pool().get('contract.manage_clauses.clause')
         self.current_clauses = list(self.current_clauses) + [
@@ -241,7 +241,7 @@ class ManageClauses(EndorsementWizardStepMixin):
                 text='', customizable=True)]
 
 
-class ClauseDisplayer(model.CoopView):
+class ClauseDisplayer(model.CoogView):
     'Clause Displayer'
 
     __name__ = 'contract.manage_clauses.clause'

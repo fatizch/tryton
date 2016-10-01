@@ -5,7 +5,7 @@ import logging
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import batch, coop_date
+from trytond.modules.coog_core import batch, coog_date
 
 __all__ = [
     'DocumentRequestBatch',
@@ -43,7 +43,7 @@ class DocumentRequestBatch(batch.BatchRoot):
             [
                 'OR',
                 ('send_date', '=', None),
-                ('send_date', '<=', coop_date.add_month(treatment_date, -3))]]
+                ('send_date', '<=', coog_date.add_month(treatment_date, -3))]]
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):

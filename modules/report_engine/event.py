@@ -12,7 +12,7 @@ from trytond.cache import Cache
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 from trytond.wizard import StateView, Button
 
 from .report_engine import Printable
@@ -28,7 +28,7 @@ __all__ = [
     ]
 
 
-class EventTypeActionReportTemplate(model.CoopSQL, model.CoopView):
+class EventTypeActionReportTemplate(model.CoogSQL, model.CoogView):
     'Event Type Action Template Relation'
     __name__ = 'event.type.action-report.template'
 
@@ -172,7 +172,7 @@ class EventTypeAction:
         return data
 
 
-class ReportProductionRequest(model.CoopSQL, model.CoopView):
+class ReportProductionRequest(model.CoogSQL, model.CoogView):
     'Report Production Request'
 
     _func_key = 'id'
@@ -264,7 +264,7 @@ class ReportProductionRequest(model.CoopSQL, model.CoopView):
             return ''
 
 
-class ConfirmReportProductionRequestTreat(model.CoopView):
+class ConfirmReportProductionRequestTreat(model.CoogView):
     'Confirm Report Request Production Treatment'
     __name__ = 'report_production.request.treat.confirm'
 
@@ -272,7 +272,7 @@ class ConfirmReportProductionRequestTreat(model.CoopView):
         'Report Production Requests', readonly=True)
 
 
-class ReportProductionRequestTreatResult(model.CoopView):
+class ReportProductionRequestTreatResult(model.CoogView):
     'Report Request Production Treatment Result'
     __name__ = 'report_production.request.treat.result'
 
@@ -280,7 +280,7 @@ class ReportProductionRequestTreatResult(model.CoopView):
         'Attachments', readonly=True)
 
 
-class TreatReportProductionRequest(model.CoopWizard):
+class TreatReportProductionRequest(model.CoogWizard):
     'Treat Report Production Request'
 
     __name__ = 'report_production.request.treat'

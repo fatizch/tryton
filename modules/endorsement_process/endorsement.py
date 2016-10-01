@@ -4,8 +4,8 @@ from sql import Literal
 from sql.operators import Mul
 
 from trytond.modules.process import ClassAttr
-from trytond.modules.process_cog import CogProcessFramework
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.process_cog import CoogProcessFramework
+from trytond.modules.coog_core import model, fields
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -16,7 +16,7 @@ __all__ = [
     ]
 
 
-class Endorsement(CogProcessFramework):
+class Endorsement(CoogProcessFramework):
     'Endorsement'
 
     __metaclass__ = ClassAttr
@@ -67,13 +67,13 @@ class Endorsement(CogProcessFramework):
         return endorsements
 
     @classmethod
-    @model.CoopView.button_action(
+    @model.CoogView.button_action(
         'endorsement_process.act_preview_changes')
     def button_preview_changes(cls, endorsements):
         pass
 
 
-class EndorsementPartUnion(model.CoopSQL, model.CoopView):
+class EndorsementPartUnion(model.CoogSQL, model.CoogView):
     'Endorsement Part Display'
 
     __name__ = 'endorsement.part.union'
@@ -149,7 +149,7 @@ class EndorsementPartUnion(model.CoopSQL, model.CoopView):
                 endorsement.id.as_('endorsement'))
 
     @classmethod
-    @model.CoopView.button_action(
+    @model.CoogView.button_action(
         'endorsement.act_start_endorsement')
     def button_modify(cls, endorsement_part_unions):
         pass

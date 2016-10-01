@@ -6,12 +6,12 @@ import unittest
 import trytond.tests.test_tryton
 from trytond.exceptions import UserError
 
-from trytond.modules.cog_utils import test_framework, utils
+from trytond.modules.coog_core import test_framework, utils
 
 
-class ModuleTestCase(test_framework.CoopTestCase):
+class ModuleTestCase(test_framework.CoogTestCase):
     '''
-    Test Coop module.
+    Test Coog module.
     '''
     module = 'document_request'
 
@@ -21,7 +21,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'DocumentRequestLine': 'document.request.line',
             'DocumentDescription': 'document.description',
             'Attachment': 'ir.attachment',
-            'ExportTest': 'cog_utils.export_test',
+            'ExportTest': 'coog_core.export_test',
         }
 
     def create_doc_request_line(self, code="doc"):

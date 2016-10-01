@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import export, fields
+from trytond.modules.coog_core import export, fields
 from trytond.modules.report_engine import Printable
 
 __metaclass__ = PoolMeta

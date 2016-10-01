@@ -4,7 +4,7 @@ import datetime
 
 from trytond.cache import Cache
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.cog_utils import coop_date, fields
+from trytond.modules.coog_core import coog_date, fields
 
 MODULE_NAME = 'account_cog'
 
@@ -158,7 +158,7 @@ class TestCaseModel:
         translater = cls.get_translater(MODULE_NAME)
         return cls.create_fiscal_year(
             start_date=start_date,
-            end_date=coop_date.add_day(coop_date.add_year(
+            end_date=coog_date.add_day(coog_date.add_year(
                     start_date, 1), -1),
             name='%s %s' % (translater('Fiscal Year'),
                 start_date.year),

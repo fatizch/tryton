@@ -8,7 +8,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, Button
 from trytond.pyson import Eval
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -129,7 +129,7 @@ class DisplayLoanAveragePremium(Wizard):
                 }
 
 
-class DisplayLoanAveragePremiumValues(model.CoopView):
+class DisplayLoanAveragePremiumValues(model.CoogView):
     'Display Loan Average Premium Values'
 
     __name__ = 'loan.average_premium_rate.display.values'
@@ -139,7 +139,7 @@ class DisplayLoanAveragePremiumValues(model.CoopView):
         readonly=True)
 
 
-class AveragePremiumRateLoanDisplayer(model.CoopView):
+class AveragePremiumRateLoanDisplayer(model.CoogView):
     'Average Premium Rate Loan Displayer'
 
     __name__ = 'loan.average_premium_rate.loan_displayer'

@@ -2,7 +2,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.wizard import Wizard, StateAction, StateTransition
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import utils
+from trytond.modules.coog_core import utils
 
 
 __all__ = [

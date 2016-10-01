@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -23,7 +23,7 @@ class OptionDescription:
         depends=['beneficiaries_clauses'], ondelete='RESTRICT')
 
 
-class OptionDescriptionBeneficiaryClauseRelation(model.CoopSQL):
+class OptionDescriptionBeneficiaryClauseRelation(model.CoogSQL):
     'Relation Option Description To Beneficiary Clause'
     __name__ = 'offered.option.description-beneficiary_clause'
 

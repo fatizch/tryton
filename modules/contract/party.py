@@ -9,8 +9,8 @@ from trytond.wizard import Wizard
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Len, PYSONEncoder
 
-from trytond.modules.cog_utils import fields, coop_string, model
-from trytond.modules.cog_utils import UnionMixin
+from trytond.modules.coog_core import fields, coog_string, model
+from trytond.modules.coog_core import UnionMixin
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -73,18 +73,18 @@ class Party:
         return self.contracts[-1].id if self.contracts else None
 
     @classmethod
-    @model.CoopView.button_action('contract.act_contract_button')
+    @model.CoogView.button_action('contract.act_contract_button')
     def open_contracts(cls, objs):
         pass
 
     @classmethod
-    @model.CoopView.button_action('contract.act_quote_button')
+    @model.CoogView.button_action('contract.act_quote_button')
     def open_quotes(cls, objs):
         pass
 
     def get_summary_content(self, label, at_date=None, lang=None):
         res = super(Party, self).get_summary_content(label, at_date, lang)
-        res[1].append(coop_string.get_field_summary(self, 'contracts', True,
+        res[1].append(coog_string.get_field_summary(self, 'contracts', True,
             at_date, lang))
         return res
 
@@ -98,7 +98,7 @@ class PartyInteraction:
         cls.for_object_ref.selection.append(('contract', 'Contract'))
 
 
-class SynthesisMenuContrat(model.CoopSQL):
+class SynthesisMenuContrat(model.CoogSQL):
     'Party Synthesis Menu Contract'
     __name__ = 'party.synthesis.menu.contract'
 
@@ -120,7 +120,7 @@ class SynthesisMenuContrat(model.CoopSQL):
             Max(contract.create_date).as_('create_date'),
             Max(contract.write_uid).as_('write_uid'),
             Max(contract.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(cls, 'name')).as_('name'),
+            Literal(coog_string.translate_label(cls, 'name')).as_('name'),
             party.id.as_('subscriber'),
             group_by=party.id)
 
@@ -129,10 +129,10 @@ class SynthesisMenuContrat(model.CoopSQL):
 
     def get_rec_name(self, name):
         ContractSynthesis = Pool().get('party.synthesis.menu.contract')
-        return coop_string.translate_label(ContractSynthesis, 'name')
+        return coog_string.translate_label(ContractSynthesis, 'name')
 
 
-class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
+class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
 

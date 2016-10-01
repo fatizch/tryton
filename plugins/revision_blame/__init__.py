@@ -10,7 +10,7 @@ def revision_blame(data):
 
     try:
         ret = RPCExecute('model', 'ir.model.data', 'search_read', [
-                ('module', '=', 'cog_utils'),
+                ('module', '=', 'coog_core'),
                 ('fs_id', '=', 'revision_blame')
                 ])[0]
         Action.execute(ret['db_id'], data, 'ir.action.wizard')

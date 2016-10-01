@@ -8,12 +8,12 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ############################################################ -->
         <record model="ir.ui.view" id="test_case_form">
             <field name="model">ir.test_case</field>
-            <field name="inherit" ref="cog_utils.test_case_form"/>
+            <field name="inherit" ref="coog_core.test_case_form"/>
             <field name="name">test_case_form</field>
         </record>
         <!-- Data -->
-        <record model="ir.test_case" id="cog_utils.test_case_configuration">
-            <field name="main_company_name">Coop</field>
+        <record model="ir.test_case" id="coog_core.test_case_configuration">
+            <field name="main_company_name">Coog</field>
         </record>
         <!-- ###################### -->
         <!-- # Test Case Instance # -->

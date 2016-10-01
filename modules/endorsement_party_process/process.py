@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.transaction import Transaction
 from trytond.modules.process_cog import ProcessFinder, ProcessStart
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 
@@ -115,7 +115,7 @@ class Party:
                 })
 
     @classmethod
-    @model.CoopView.button_action(
+    @model.CoogView.button_action(
         'endorsement_party_process.endorsement_party_process_launcher')
     def button_start_endorsement_process(cls, parties):
         pass

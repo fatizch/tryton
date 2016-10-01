@@ -9,7 +9,7 @@ from trytond.tools import grouped_slice
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.coog_core import fields
 
 
 __metaclass__ = PoolMeta

@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.endorsement import EndorsementWizardStepMixin, \
     add_endorsement_step
-from trytond.modules.cog_utils import utils, fields
+from trytond.modules.coog_core import utils, fields
 
 __metaclass__ = PoolMeta
 __all__ = [

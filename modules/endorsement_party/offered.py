@@ -4,7 +4,7 @@ from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 from trytond.modules.endorsement import field_mixin
 
 
@@ -78,22 +78,22 @@ class EndorsementPart:
             return [('kind', '!=', 'party')]
 
 
-class EndorsementPartyField(field_mixin('party.party'), model.CoopSQL,
-        model.CoopView):
+class EndorsementPartyField(field_mixin('party.party'), model.CoogSQL,
+        model.CoogView):
     'Endorsement Party Field'
 
     __name__ = 'endorsement.party.field'
 
 
-class EndorsementAddressField(field_mixin('party.address'), model.CoopSQL,
-        model.CoopView):
+class EndorsementAddressField(field_mixin('party.address'), model.CoogSQL,
+        model.CoogView):
     'Endorsement Address Field'
 
     __name__ = 'endorsement.party.address.field'
 
 
-class EndorsementRelationField(field_mixin('party.relation'), model.CoopSQL,
-        model.CoopView):
+class EndorsementRelationField(field_mixin('party.relation'), model.CoogSQL,
+        model.CoogView):
     'Endorsement Relations Field'
 
     __name__ = 'endorsement.party.relation.field'

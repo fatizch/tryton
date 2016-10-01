@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, And
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 from trytond.modules.endorsement import field_mixin
 
 __metaclass__ = PoolMeta
@@ -79,29 +79,29 @@ class EndorsementPart:
 
 
 class EndorsementCoveredElementField(field_mixin('contract.covered_element'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Covered Element Field'
 
     __name__ = 'endorsement.contract.covered_element.field'
 
 
 class EndorsementCoveredElementVersionField(
-        field_mixin('contract.covered_element.version'), model.CoopSQL,
-        model.CoopView):
+        field_mixin('contract.covered_element.version'), model.CoogSQL,
+        model.CoogView):
     'Endorsement Covered Element Version Field'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.covered_element.version.field'
 
 
 class EndorsementExtraPremiumField(field_mixin(
-            'contract.option.extra_premium'), model.CoopSQL, model.CoopView):
+            'contract.option.extra_premium'), model.CoogSQL, model.CoogView):
     'Endorsement Extra Premium Field'
 
     __name__ = 'endorsement.contract.extra_premium.field'
 
 
 class EndorsementExclusionField(field_mixin(
-            'contract.option-exclusion.kind'), model.CoopSQL, model.CoopView):
+            'contract.option-exclusion.kind'), model.CoogSQL, model.CoogView):
     'Endorsement Exclusion Field'
 
     __name__ = 'endorsement.contract.option.exclusion.field'

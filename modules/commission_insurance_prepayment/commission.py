@@ -13,7 +13,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, If
 
 from trytond.modules.commission import Commission as TrytonCommission
-from trytond.modules.cog_utils import fields, utils
+from trytond.modules.coog_core import fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [

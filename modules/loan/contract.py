@@ -13,7 +13,7 @@ from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, If, Len, Not, In
 
-from trytond.modules.cog_utils import fields, model, coop_string, coop_date, \
+from trytond.modules.coog_core import fields, model, coog_string, coog_date, \
     utils
 
 __metaclass__ = PoolMeta
@@ -202,7 +202,7 @@ class Contract:
         return False
 
 
-class ContractLoan(model.CoopSQL, model.CoopView):
+class ContractLoan(model.CoogSQL, model.CoogView):
     'Contract Loan'
 
     __name__ = 'contract-loan'
@@ -331,7 +331,7 @@ class ContractOption:
             # share date rather than the loan's end date
             dates['loan'] = max([
                     x[-1].loan.end_date if x[-1].share else
-                    coop_date.add_day(x[-1].start_date, -1)
+                    coog_date.add_day(x[-1].start_date, -1)
                     for x in self.get_shares_per_loan().values()])
         return dates
 
@@ -472,7 +472,7 @@ class ExtraPremium:
     def get_value_as_string(self, name):
         if self.calculation_kind in ('initial_capital_per_mil',
                 'remaining_capital_per_mil') and self.capital_per_mil_rate:
-            return u'%s ‰' % coop_string.format_number('%.2f',
+            return u'%s ‰' % coog_string.format_number('%.2f',
                 self.capital_per_mil_rate * 1000)
         return super(ExtraPremium, self).get_value_as_string(name)
 
@@ -486,7 +486,7 @@ _STATES = {
 _DEPENDS = ['contract']
 
 
-class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
+class LoanShare(model.CoogSQL, model.CoogView, model.ExpandTreeMixin):
     'Loan Share'
 
     __name__ = 'loan.share'
@@ -593,7 +593,7 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
                 continue
             # First loan share for the same loan but "older":
             return min(self.option.end_date,
-                coop_date.add_day(share.start_date, -1))
+                coog_date.add_day(share.start_date, -1))
         else:
             return min(self.option.end_date, self.loan.end_date)
 

@@ -8,7 +8,7 @@ from trytond.pyson import Eval
 from trytond.tools import grouped_slice
 from trytond.model import ModelView, Workflow
 
-from trytond.modules.cog_utils import fields, utils
+from trytond.modules.coog_core import fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [

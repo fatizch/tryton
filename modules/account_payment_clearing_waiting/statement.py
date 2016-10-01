@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
-from trytond.modules.cog_utils import fields
+from trytond.modules.coog_core import fields
 
 __all__ = [
     'CancelLineGroup',

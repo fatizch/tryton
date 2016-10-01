@@ -30,7 +30,7 @@ __all__ = [
     ]
 
 
-class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
+class TestCaseModel(ModelSingleton, model.CoogSQL, model.CoogView):
     'Test Case Model'
 
     __name__ = 'ir.test_case'
@@ -391,7 +391,7 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
         return cls.solve_graph(None, final_dependencies)
 
 
-class TestCaseInstance(model.CoopSQL, model.CoopView):
+class TestCaseInstance(model.CoogSQL, model.CoogView):
     'Test Case Instance'
 
     __name__ = 'ir.test_case.instance'
@@ -452,7 +452,7 @@ class TestCaseInstance(model.CoopSQL, model.CoopView):
         Pool().get('ir.test_case').run_test_cases([test_cases])
 
 
-class TestCaseRequirementRelation(model.CoopSQL):
+class TestCaseRequirementRelation(model.CoogSQL):
     'Test Case Requirement Relation'
 
     __name__ = 'ir.test_case.instance-ir.test_case.instance'
@@ -463,7 +463,7 @@ class TestCaseRequirementRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class TestCaseSelector(model.CoopView):
+class TestCaseSelector(model.CoogView):
     'Test Case Selector'
 
     __name__ = 'ir.test_case.run.select.method'
@@ -478,7 +478,7 @@ class TestCaseSelector(model.CoopView):
             ('not_selected', 'Not Selected')], 'Selection')
 
 
-class TestCaseFileSelector(model.CoopView):
+class TestCaseFileSelector(model.CoogView):
     'Test Case File Selector'
 
     __name__ = 'ir.test_case.run.select.file'
@@ -488,7 +488,7 @@ class TestCaseFileSelector(model.CoopView):
     full_path = fields.Char('Full Path')
 
 
-class SelectTestCase(model.CoopView):
+class SelectTestCase(model.CoogView):
     'Select Test Case'
 
     __name__ = 'ir.test_case.run.select'
@@ -535,14 +535,14 @@ class SelectTestCase(model.CoopView):
         self.test_files = self.test_files
 
 
-class TestCaseWizard(model.CoopWizard):
+class TestCaseWizard(model.CoogWizard):
     'Test Case Wizard'
 
     __name__ = 'ir.test_case.run'
 
     start_state = 'select_test_cases'
     select_test_cases = StateView('ir.test_case.run.select',
-        'cog_utils.test_case_run_select_form', [
+        'coog_core.test_case_run_select_form', [
             Button('Quit', 'end', 'tryton-cancel'),
             Button('Execute Selected', 'execute_test_cases', 'tryton-ok')])
     execute_test_cases = StateTransition()

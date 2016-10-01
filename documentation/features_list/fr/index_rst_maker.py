@@ -31,7 +31,7 @@ def next_line(text):
             return line
 
 if __name__ == '__main__':
-    modules_dir = '../../../../coopbusiness/modules/'
+    modules_dir = '../../../../coog/modules/'
 
     lines = []
     data = []

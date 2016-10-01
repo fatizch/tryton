@@ -6,7 +6,7 @@ from trytond.pool import PoolMeta
 from trytond.model import Unique
 from trytond import backend
 
-from trytond.modules.cog_utils import coop_string, fields
+from trytond.modules.coog_core import coog_string, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -53,7 +53,7 @@ class Zip:
     def replace_city_name_with_support_for_french_sna(city):
         # French zip code are validated by SNA
         # and some modification must be made on city name to be validated
-        city = coop_string.slugify(city, ' ', lower=False).upper().\
+        city = coog_string.slugify(city, ' ', lower=False).upper().\
             replace('-', ' ').strip()
         city = re.compile(r'([^\s\w]|_)+').sub('', city)  # remove ponctuations
         regex = r'(?P<before>(.* )?)SAINT(?P<e_letter>E?) (?P<after>.*)'

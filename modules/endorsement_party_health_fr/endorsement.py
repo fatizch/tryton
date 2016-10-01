@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 from trytond.modules.endorsement import relation_mixin
 
 __metaclass__ = PoolMeta
@@ -30,7 +30,7 @@ class HealthComplement(object):
 class EndorsementPartyHealthComplement(relation_mixin(
             'endorsement.party.health_complement.field', 'health_complement',
             'health.party_complement', 'Health Complement'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Health Complement'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.party.health_complement'

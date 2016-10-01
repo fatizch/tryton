@@ -8,13 +8,13 @@ from io import BytesIO
 
 from mock import Mock
 
-from trytond.modules.cog_utils import test_framework
+from trytond.modules.coog_core import test_framework
 from trytond.modules.account_payment_sepa_cog.payment import CAMT054Coog
 
 
-class ModuleTestCase(test_framework.CoopTestCase):
+class ModuleTestCase(test_framework.CoogTestCase):
     '''
-    Test Coop module.
+    Test Coog module.
     '''
     module = 'account_payment_sepa_cog'
 

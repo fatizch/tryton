@@ -4,7 +4,7 @@ from trytond import backend
 from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.coog_core import fields, model
 
 
 __metaclass__ = PoolMeta
@@ -25,7 +25,7 @@ class ReportTemplate:
         return super(ReportTemplate, cls)._export_skips() | {'products'}
 
 
-class ReportProductRelation(model.CoopSQL):
+class ReportProductRelation(model.CoogSQL):
     'Report template to Product relation'
 
     __name__ = 'report.template-offered.product'

@@ -5,7 +5,7 @@ import datetime
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.endorsement import field_mixin
 
 
@@ -99,28 +99,28 @@ class EndorsementPart:
         super(EndorsementPart, self).clean_up(endorsement)
 
 
-class EndorsementLoanField(field_mixin('loan'), model.CoopSQL, model.CoopView):
+class EndorsementLoanField(field_mixin('loan'), model.CoogSQL, model.CoogView):
     'Endorsement Loan Field'
 
     __name__ = 'endorsement.loan.field'
 
 
-class EndorsementLoanShareField(field_mixin('loan.share'), model.CoopSQL,
-        model.CoopView):
+class EndorsementLoanShareField(field_mixin('loan.share'), model.CoogSQL,
+        model.CoogView):
     'Endorsement Loan Share Field'
 
     __name__ = 'endorsement.loan.share.field'
 
 
 class EndorsementLoanIncrementField(field_mixin('loan.increment'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Loan Increment Field'
 
     __name__ = 'endorsement.loan.increment.field'
 
 
 class EndorsementContractLoanField(field_mixin('contract-loan'),
-        model.CoopSQL, model.CoopView):
+        model.CoogSQL, model.CoogView):
     'Endorsement Contract Loan Field'
 
     __name__ = 'endorsement.contract.loan.field'

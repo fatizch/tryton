@@ -8,8 +8,8 @@ from sql import Literal
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, PYSONEncoder, Not, Bool
 
-from trytond.modules.cog_utils import coop_string, fields, utils, model
-from trytond.modules.cog_utils import UnionMixin
+from trytond.modules.coog_core import coog_string, fields, utils, model
+from trytond.modules.coog_core import UnionMixin
 from trytond.modules.party_cog.party import STATES_COMPANY
 from trytond.wizard import Wizard
 
@@ -55,10 +55,10 @@ class Party:
 
     def get_summary_content(self, label, at_date=None, lang=None):
         res = super(Party, self).get_summary_content(label, at_date, lang)
-        res[1].append(coop_string.get_field_summary(self, 'bank_accounts',
+        res[1].append(coog_string.get_field_summary(self, 'bank_accounts',
                 True, at_date, lang))
         if self.bank_role:
-            res[1].append(coop_string.get_field_summary(self, 'bank_role',
+            res[1].append(coog_string.get_field_summary(self, 'bank_role',
                     True, at_date, lang))
         return res
 
@@ -121,7 +121,7 @@ class Party:
         return super(Party, self).get_rec_name(name)
 
 
-class SynthesisMenuBankAccoount(model.CoopSQL):
+class SynthesisMenuBankAccoount(model.CoogSQL):
     'Party Synthesis Menu Bank Account'
     __name__ = 'party.synthesis.menu.bank_account'
 
@@ -143,7 +143,7 @@ class SynthesisMenuBankAccoount(model.CoopSQL):
             Max(bank_account.create_date).as_('create_date'),
             Max(bank_account.write_uid).as_('write_uid'),
             Max(bank_account.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(BankAccountSynthesis, 'name')).
+            Literal(coog_string.translate_label(BankAccountSynthesis, 'name')).
             as_('name'),
             party.id.as_('owner'),
             group_by=party.id)
@@ -153,10 +153,10 @@ class SynthesisMenuBankAccoount(model.CoopSQL):
 
     def get_rec_name(self, name):
         BankAccountSynthesis = Pool().get('party.synthesis.menu.bank_account')
-        return coop_string.translate_label(BankAccountSynthesis, 'name')
+        return coog_string.translate_label(BankAccountSynthesis, 'name')
 
 
-class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
+class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
 

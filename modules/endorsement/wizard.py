@@ -12,7 +12,7 @@ from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.wizard import StateAction
 from trytond.pyson import Eval, Bool, In, And, Not, Len, If, PYSONEncoder
 
-from trytond.modules.cog_utils import model, fields, utils, coop_date
+from trytond.modules.coog_core import model, fields, utils, coog_date
 
 OPTION_ACTIONS = [
     ('nothing', ''),
@@ -93,7 +93,7 @@ def add_endorsement_step(wizard_class, step_class, step_name):
         get_step_method('suspend'))
 
 
-class EndorsementWizardStepMixin(model.CoopView):
+class EndorsementWizardStepMixin(model.CoogView):
     '''
         A mixin class for State Views being used in the Endorsement Wizard.
         They store basic information about the current endorsement :
@@ -1019,7 +1019,7 @@ class ManageOptions(EndorsementWizardStepMixin):
     def state_view_name(cls):
         return 'endorsement.contract_manage_options_view_form'
 
-    @model.CoopView.button_change('contract', 'current_options',
+    @model.CoogView.button_change('contract', 'current_options',
         'current_parent', 'effective_date', 'new_coverage',
         'possible_coverages')
     def add_option(self):
@@ -1050,7 +1050,7 @@ class ManageOptions(EndorsementWizardStepMixin):
             self.effective_date, coverage=coverage)
 
 
-class OptionDisplayer(model.CoopView):
+class OptionDisplayer(model.CoogView):
     'Option Displayer'
 
     __name__ = 'contract.manage_options.option_displayer'
@@ -1123,11 +1123,11 @@ class OptionDisplayer(model.CoopView):
             self.update_extra_data_string()
 
         if self.action == 'terminated':
-            self.end_date = coop_date.add_day(self.effective_date, -1)
+            self.end_date = coog_date.add_day(self.effective_date, -1)
             self.sub_status = pool.get('contract.sub_status').get_sub_status(
                 'terminated')
         else:
-            if self.end_date == coop_date.add_day(self.effective_date, -1):
+            if self.end_date == coog_date.add_day(self.effective_date, -1):
                 if self.cur_option_id:
                     self.end_date = pool.get('contract.option')(
                         self.cur_option_id).end_date
@@ -1488,7 +1488,7 @@ class ChangeContractSubscriber(EndorsementWizardStepMixin):
         return 'endorsement.endorsement_change_contract_subscriber_view_form'
 
 
-class ManageContacts(EndorsementWizardStepMixin, model.CoopView):
+class ManageContacts(EndorsementWizardStepMixin, model.CoogView):
     'Manage Contacts'
 
     __name__ = 'endorsement.manage_contacts'
@@ -1695,19 +1695,19 @@ class ManageContacts(EndorsementWizardStepMixin, model.CoopView):
             return new_contact
         if (getattr(old, 'id', None) is None and not new_contact.automatic
                 and not getattr(new, 'address', None)):
-            new_contact.end_date = coop_date.add_day(self.effective_date, -1)
+            new_contact.end_date = coog_date.add_day(self.effective_date, -1)
             new_contact.action = 'ended'
             return new_contact
         if new.address and new.address != old.address:
             new_contact.new_address = new.address
             new_contact.action = 'new_address'
-            new_contact.end_date = coop_date.add_day(self.effective_date, -1)
+            new_contact.end_date = coog_date.add_day(self.effective_date, -1)
             return new_contact
         new_contact.action = 'nothing'
         return new_contact
 
 
-class ContactDisplayer(model.CoopView):
+class ContactDisplayer(model.CoogView):
     'Contact Displayer'
 
     __name__ = 'endorsement.manage_contacts.contact'
@@ -1763,12 +1763,12 @@ class ContactDisplayer(model.CoopView):
             else:
                 self.end_date = None
         elif self.action == 'ended' and self.contact_id:
-            self.end_date = coop_date.add_day(self.effective_date, -1)
+            self.end_date = coog_date.add_day(self.effective_date, -1)
             self.new_address = None
         elif self.action == 'added':
             self.end_date = None
         elif self.action == 'new_address':
-            self.end_date = coop_date.add_day(self.effective_date, -1)
+            self.end_date = coog_date.add_day(self.effective_date, -1)
 
     @fields.depends('action', 'contact_id', 'effective_date', 'new_address',
         'old_address')
@@ -1786,7 +1786,7 @@ class ContactDisplayer(model.CoopView):
             address=self.new_address, end_date=None)
 
 
-class SelectEndorsement(model.CoopView):
+class SelectEndorsement(model.CoogView):
     'Select Endorsement'
 
     __name__ = 'endorsement.start.select_endorsement'
@@ -1891,7 +1891,7 @@ class SelectEndorsement(model.CoopView):
         return ['applicant', 'effective_date']
 
 
-class BasicPreview(EndorsementWizardPreviewMixin, model.CoopView):
+class BasicPreview(EndorsementWizardPreviewMixin, model.CoogView):
     'Basic Preview State View'
 
     __name__ = 'endorsement.start.preview_changes'
@@ -2165,7 +2165,7 @@ class StartEndorsement(Wizard):
                 continue
             # Do NOT enable this unless you launch all endorsement modules
             # tests (including scenarios) and they PASS !
-            # result[state_name] = coop_string.translate_model_name(
+            # result[state_name] = coog_string.translate_model_name(
             #     pool.get(state.model_name))
             result[state_name] = state.model_name
         return result
@@ -2366,7 +2366,7 @@ class OpenContractAtApplicationDate(Wizard):
         return action, {}
 
 
-class EndorsementSelectDeclineReason(model.CoopView):
+class EndorsementSelectDeclineReason(model.CoogView):
     'Reason selector to decline endorsement'
 
     __name__ = 'endorsement.decline.select_reason'
@@ -2377,7 +2377,7 @@ class EndorsementSelectDeclineReason(model.CoopView):
         domain=[('state', '=', 'declined')])
 
 
-class EndorsementDecline(model.CoopWizard):
+class EndorsementDecline(model.CoogWizard):
     'Decline Endorsement Wizard'
 
     __name__ = 'endorsement.decline'

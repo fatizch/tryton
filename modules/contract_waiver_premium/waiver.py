@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -11,7 +11,7 @@ __all__ = [
     ]
 
 
-class PremiumWaiverContractOption(model.CoopSQL, model.CoopView):
+class PremiumWaiverContractOption(model.CoogSQL, model.CoogView):
     'Premium Waiver - Contract Option Relation'
 
     __name__ = 'contract.waiver_premium-contract.option'
@@ -22,7 +22,7 @@ class PremiumWaiverContractOption(model.CoopSQL, model.CoopView):
         required=True, ondelete='CASCADE', select=True)
 
 
-class PremiumWaiver(model.CoopSQL, model.CoopView):
+class PremiumWaiver(model.CoogSQL, model.CoogView):
     'Premium Waiver'
 
     __name__ = 'contract.waiver_premium'

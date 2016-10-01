@@ -8,7 +8,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, Or
 from trytond.model import Unique
 
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.rule_engine import get_rule_mixin
 
 __all__ = [
@@ -20,7 +20,7 @@ __all__ = [
     ]
 
 
-class NetCalculationRuleFixExtraData(model.CoopSQL):
+class NetCalculationRuleFixExtraData(model.CoogSQL):
     'Net Calculation Rule - Extra Data'
     __metaclass__ = PoolMeta
     __name__ = 'net_calculation_rule-fix_extra_data'
@@ -31,7 +31,7 @@ class NetCalculationRuleFixExtraData(model.CoopSQL):
         required=True, ondelete='CASCADE')
 
 
-class NetCalculationRuleExtraData(model.CoopSQL):
+class NetCalculationRuleExtraData(model.CoogSQL):
     'Net Calculation Rule - Extra Data'
     __metaclass__ = PoolMeta
     __name__ = 'net_calculation_rule-extra_data'
@@ -42,7 +42,7 @@ class NetCalculationRuleExtraData(model.CoopSQL):
         required=True, ondelete='CASCADE')
 
 
-class NetCalculationRule(model.CoopSQL, model.CoopView,
+class NetCalculationRule(model.CoogSQL, model.CoogView,
         get_rule_mixin('rule', 'Rule')):
     'Net Calculation Rule'
     __metaclass__ = PoolMeta
@@ -70,7 +70,7 @@ class NetCalculationRule(model.CoopSQL, model.CoopView,
             ]
 
 
-class Salary(model.CoopSQL, model.CoopView):
+class Salary(model.CoogSQL, model.CoogView):
     'Claim Salary'
     __metaclass__ = PoolMeta
     __name__ = 'claim.salary'
@@ -119,7 +119,7 @@ class Salary(model.CoopSQL, model.CoopView):
                 })
 
     @classmethod
-    @model.CoopView.button_action('claim_salary_fr.act_set_contributions')
+    @model.CoogView.button_action('claim_salary_fr.act_set_contributions')
     def set_contributions(cls, salaries):
         pass
 

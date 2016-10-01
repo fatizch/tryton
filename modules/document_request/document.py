@@ -12,7 +12,7 @@ from trytond.pyson import Eval, Bool
 from trytond import backend
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.report_engine import Printable
 
 __all__ = [
@@ -25,7 +25,7 @@ __all__ = [
     ]
 
 
-class DocumentRequestLine(model.CoopSQL, model.CoopView):
+class DocumentRequestLine(model.CoogSQL, model.CoogView):
     'Document Request Line'
 
     __name__ = 'document.request.line'
@@ -196,7 +196,7 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
             increment=not force_remind)
 
 
-class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
+class DocumentRequest(Printable, model.CoogSQL, model.CoogView):
     'Document Request'
 
     __name__ = 'document.request'
@@ -560,7 +560,7 @@ class ReattachDocument:
             self.target = selected.reference
 
 
-class ReceiveDocumentLine(model.CoopView):
+class ReceiveDocumentLine(model.CoogView):
     'Receive Document Line'
 
     __name__ = 'document.receive.line'

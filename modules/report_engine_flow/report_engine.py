@@ -10,7 +10,7 @@ from trytond.pyson import Eval, Not, Or
 from trytond.config import config
 from trytond.model import Unique
 
-from trytond.modules.cog_utils import fields, model, coop_string
+from trytond.modules.coog_core import fields, model, coog_string
 
 import func_library
 
@@ -34,7 +34,7 @@ FLAT = Or(Eval('kind') == 'data', Eval('kind') == 'free',
     Eval('kind') == 'function')
 
 
-class TemplateVariableRelation(model.CoopSQL, model.CoopView):
+class TemplateVariableRelation(model.CoogSQL, model.CoogView):
     'Template Variable Relation'
 
     __name__ = 'report.template.flow_variable.relation'
@@ -57,11 +57,11 @@ class TemplateVariableRelation(model.CoopSQL, model.CoopView):
 
     def get_variable_field(self, name):
         if name == 'kind':
-            return coop_string.translate_value(self.variable, 'kind')
+            return coog_string.translate_value(self.variable, 'kind')
         return getattr(self.variable, name)
 
 
-class FlowVariable(model.CoopSQL, model.CoopView):
+class FlowVariable(model.CoogSQL, model.CoogView):
     'Flow Variable'
 
     __name__ = 'report.flow.variable'

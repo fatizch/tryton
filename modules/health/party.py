@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.coog_core import model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -41,8 +41,8 @@ class Party:
         return name
 
 
-class HealthPartyComplement(model._RevisionMixin, model.CoopSQL,
-        model.CoopView):
+class HealthPartyComplement(model._RevisionMixin, model.CoogSQL,
+        model.CoogView):
     'Health Party Complement'
 
     __name__ = 'health.party_complement'

@@ -12,7 +12,7 @@ from trytond.model.fields.dict import TranslatedDict
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model, coop_string
+from trytond.modules.coog_core import fields, model, coog_string
 
 __metaclass__ = PoolMeta
 
@@ -22,7 +22,7 @@ __all__ = [
     ]
 
 
-class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
+class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
         model.TaggedMixin):
     'Extra Data'
 
@@ -157,7 +157,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
     @fields.depends('name', 'string')
     def on_change_with_name(self):
         if not self.name and self.string:
-            return coop_string.slugify(self.string)
+            return coog_string.slugify(self.string)
         return self.name
 
     @fields.depends('tags')
@@ -221,7 +221,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
             key, = cls.search([('name', '=', k)])
             if not key.validate_value(v):
                 cls.append_functional_error('invalid_value', (trans_keys[k],
-                        coop_string.translate_label(instance, field_name),
+                        coog_string.translate_label(instance, field_name),
                         instance.get_rec_name(None)))
         if expected_values is not None:
             for k, v in expected_values.iteritems():
@@ -285,7 +285,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         elif self.type_ in ['integer', 'float', 'numeric'] and not value:
             return '0'
         elif self.type_ == 'boolean':
-            return coop_string.translate_bool(value, lang)
+            return coog_string.translate_bool(value, lang)
         if not value:
             return ''
         return str(value)
@@ -316,7 +316,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                 vals = []
                 for k, v in getattr(instance, var_name).iteritems():
                     if type(v) == bool:
-                        vals.append((trans_keys[k], coop_string.translate_bool(
+                        vals.append((trans_keys[k], coog_string.translate_bool(
                                     v, lang)))
                     else:
                         vals.append((trans_keys[k], trans_vals[k]))
@@ -343,7 +343,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         return [('tags.name',) + tuple(clause[1:])]
 
 
-class ExtraDataSubExtraDataRelation(model.CoopSQL, model.CoopView):
+class ExtraDataSubExtraDataRelation(model.CoogSQL, model.CoogView):
     'Extra Data to Sub Extra Data Relation'
 
     __name__ = 'extra_data-sub_extra_data'

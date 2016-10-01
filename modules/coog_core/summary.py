@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import coop_string
+import coog_string
 import logging
 
 LOG = logging.getLogger(__name__)
@@ -18,5 +18,5 @@ class SummaryMixin(object):
         return (label, value)
 
     def get_summary(self, name):
-        ret = coop_string.generate_summary(self.get_summary_content(True))
+        ret = coog_string.generate_summary(self.get_summary_content(True))
         return ret
