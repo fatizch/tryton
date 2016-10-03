@@ -985,8 +985,9 @@ msgid "Should the premium be stored at the contract's frequency ?"
 msgstr "La prime doit-elle être stockée à la fréquence du contrat?"
 
 msgctxt "help:offered.product,taxes_included_in_premium:"
-msgid "Taxes Included In Premium"
-msgstr "Taxes incluses dans le tarif"
+msgid "Taxes Included In Premium. Requires tax rounding to be set to \"line\""
+msgstr "Taxes incluses dans le tarif. L'arrondi des taxes doit être configuré"
+" par ligne"
 
 msgctxt "model:account.invoice.aggregate_lines.display,name:"
 msgid "Display Invoice Line Aggregates"

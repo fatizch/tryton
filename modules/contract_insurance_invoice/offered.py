@@ -8,7 +8,7 @@ from dateutil.relativedelta import relativedelta
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, If
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, model, export, utils
@@ -277,8 +277,10 @@ class Product:
     days_offset_for_subscription_payments = fields.Integer(
         'Days Offset For Subscription Payments')
     taxes_included_in_premium = fields.Boolean('Taxes Included',
-        help='Taxes Included In Premium',
-        states={'invisible': Eval('tax_rounding') == 'document'},
+        help='Taxes Included In Premium. Requires tax rounding to be set to'
+        '"line"', domain=[If(Eval('tax_rounding', '') == 'document', [
+                    ('taxes_included_in_premium', '=', False)], [])],
+        states={'readonly': Eval('tax_rounding') == 'document'},
         depends=['tax_rounding'])
     tax_rounding = fields.Function(
         fields.Char('Tax_Rounding'),
@@ -300,11 +302,18 @@ class Product:
             Eval('taxes_included_in_premium'))])
         cls.coverages.depends.extend(['taxes_included_in_premium'])
 
-    def get_tax_rounding(self, name):
-        pool = Pool()
-        Configuration = pool.get('account.configuration')
-        config = Configuration(1)
-        return config.tax_rounding
+    @classmethod
+    def default_tax_rounding(cls):
+        return Pool().get('account.configuration')(1).tax_rounding
+
+    @fields.depends('coverages')
+    def on_change_taxes_included_in_premium(self):
+        self.coverages = []
+
+    @classmethod
+    def get_tax_rounding(cls, products, name):
+        method = cls.default_tax_rounding()
+        return {x.id: method for x in products}
 
     def get_change_billing_modes_order(self, name):
         return False

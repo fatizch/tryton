@@ -2,7 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page[@id='managers']/notebook/page[@id='premium_data']/separator[@name='premium_dates']" position="before">
+    <xpath expr="/form/notebook/page[@id='option']/label[@name='change_coverages_order']" position="before">
         <label name="taxes_included_in_premium"/>
         <field name="taxes_included_in_premium"/>
     </xpath>
