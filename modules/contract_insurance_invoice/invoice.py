@@ -11,6 +11,7 @@ from trytond.rpc import RPC
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool, Not
 from trytond.wizard import Wizard, StateView, Button
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import utils, model, fields
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
@@ -387,6 +388,10 @@ class Invoice:
                 result[k] = v.date()
         return result
 
+    def _get_taxes(self):
+        with ServerContext().set_context(taxes_initial_base=defaultdict(int)):
+            return super(Invoice, self)._get_taxes()
+
     def _get_tax_context(self):
         context = super(Invoice, self)._get_tax_context()
         if (getattr(self, 'contract', None) and self.contract.product and
@@ -397,7 +402,7 @@ class Invoice:
     @classmethod
     def _compute_tax_line(cls, amount, base, tax):
         line = super(Invoice, cls)._compute_tax_line(amount, base, tax)
-        line['initial_base'] = base
+        ServerContext().get('taxes_initial_base')[line] += base
         return line
 
     def _round_taxes(self, taxes):
@@ -412,10 +417,11 @@ class Invoice:
             return
         expected_amount_non_rounded = 0
         sum_of_rounded = 0
+        initial_data = ServerContext().get('taxes_initial_base')
         for taxline in taxes.itervalues():
             if expected_amount_non_rounded == 0:
                 # Add base amount only for the first tax
-                expected_amount_non_rounded = taxline['initial_base']
+                expected_amount_non_rounded = initial_data[taxline]
             expected_amount_non_rounded += taxline['amount']
             for attribute in ('base', 'amount'):
                 taxline[attribute] = self.currency.round(taxline[attribute])
@@ -427,13 +433,9 @@ class Invoice:
                 taxline['amount'] += rounded_of_sum - sum_of_rounded
                 sum_of_rounded += rounded_of_sum - sum_of_rounded
             assert rounded_of_sum == sum_of_rounded
-
-    def _compute_taxes(self):
-        # Remove 'initial_base' from tax dicts since it shall not be passed to
-        # create or write
-        taxes = super(Invoice, self)._compute_taxes()
-        [tax.pop('initial_base', None) for tax in taxes]
-        return taxes
+        if self.currency:
+            for k in initial_data:
+                initial_data[k] = self.currency.round(initial_data[k])
 
 
 class InvoiceLine:

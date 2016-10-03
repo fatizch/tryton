@@ -48,8 +48,8 @@ Tax = Model.get('account.tax')
 
 # #Comment# #Constants
 product_start_date = datetime.date(2014, 1, 1)
-contract_start_date = datetime.date(2014, 4, 10)
-contract_end_date = datetime.date(2014, 6, 30)
+contract_start_date = datetime.date(2016, 4, 10)
+contract_end_date = datetime.date(2016, 6, 30)
 
 # #Comment# #Create or fetch Currency
 currency = get_currency(code='EUR')
@@ -225,6 +225,32 @@ coverage.taxes.append(tax1)
 coverage.taxes.append(tax2)
 coverage.taxes.append(tax3)
 coverage.save()
+coverage_1 = OptionDescription()
+coverage_1.company = company
+coverage_1.currency = currency
+coverage_1.name = u'Test coverage_1'
+coverage_1.code = u'test_coverage_1'
+coverage_1.start_date = product_start_date
+coverage_1.account_for_billing = product_account
+coverage_1.taxes_included_in_premium = True
+tax1, tax2, tax3 = Tax(tax1.id), Tax(tax2.id), Tax(tax3.id)
+coverage_1.taxes.append(tax1)
+coverage_1.taxes.append(tax2)
+coverage_1.taxes.append(tax3)
+coverage_1.save()
+coverage_2 = OptionDescription()
+coverage_2.company = company
+coverage_2.currency = currency
+coverage_2.name = u'Test coverage_2'
+coverage_2.code = u'test_coverage_2'
+coverage_2.start_date = product_start_date
+coverage_2.account_for_billing = product_account
+coverage_2.taxes_included_in_premium = True
+tax1, tax2, tax3 = Tax(tax1.id), Tax(tax2.id), Tax(tax3.id)
+coverage_2.taxes.append(tax1)
+coverage_2.taxes.append(tax2)
+coverage_2.taxes.append(tax3)
+coverage_2.save()
 product = Product()
 product.company = company
 product.currency = currency
@@ -236,6 +262,8 @@ product.start_date = product_start_date
 product.billing_modes.append(freq_monthly)
 product.billing_modes.append(freq_yearly)
 product.coverages.append(coverage)
+product.coverages.append(coverage_1)
+product.coverages.append(coverage_2)
 product.taxes_included_in_premium = True
 product.save()
 
@@ -263,14 +291,22 @@ contract.billing_informations.append(BillingInformation(date=None,
 contract.save()
 Wizard('contract.activate', models=[contract]).execute('apply')
 contract.options[0].premiums.append(ContractPremium(start=contract_start_date,
-        amount=Decimal('100'), frequency='monthly',
+        amount=Decimal('2'), frequency='monthly',
         account=product_account, rated_entity=coverage,
+        ))
+contract.options[0].premiums.append(ContractPremium(start=contract_start_date,
+        amount=Decimal('2'), frequency='monthly',
+        account=product_account, rated_entity=coverage_1,
+        ))
+contract.options[0].premiums.append(ContractPremium(start=contract_start_date,
+        amount=Decimal('2'), frequency='monthly',
+        account=product_account, rated_entity=coverage_2,
         ))
 contract.save()
 Contract.first_invoice([contract.id], config.context)
 contract_invoice, = ContractInvoice.find([('contract', '=', contract.id)],
     order=[('start', 'ASC')], limit=1)
-contract_invoice.invoice.total_amount == Decimal('100')
+contract_invoice.invoice.total_amount == Decimal('6')
 # #Res# #True
 
 premium = contract.options[0].premiums[0]
@@ -282,4 +318,4 @@ for premium_amount in range(100, 300):
     Contract.first_invoice([contract.id], config.context)
     contract_invoice, = ContractInvoice.find(
         [('contract', '=', contract.id)], order=[('start', 'ASC')], limit=1)
-    assert contract_invoice.invoice.total_amount == premium.amount
+    assert contract_invoice.invoice.total_amount == premium.amount + Decimal(4)
