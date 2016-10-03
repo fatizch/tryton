@@ -51,6 +51,23 @@ msgctxt "error:ir.export.configuration:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
 
+msgctxt "error:ir.model:"
+msgid ""
+"This will deactivate the history for this model, the history table will be "
+"kept in the database until it is manually removed."
+msgstr ""
+"L'historique va être desactivé pour ce modèle. La table d'historique "
+"correspondante sera conservée dans la base de données et devra être "
+"supprimée manuellement."
+
+msgctxt "error:ir.model:"
+msgid ""
+"This will forcefully set the history for this model, a full database update "
+"will be required."
+msgstr ""
+"L'historique va être activé pour ce modèle. Une mise à jour de la base "
+"devra être déclenchée."
+
 msgctxt "error:ir.model.method:"
 msgid "The method name must be unique for a given model!"
 msgstr "Le nom de méthode doit être unique pour un modèle donné."
@@ -606,6 +623,14 @@ msgstr "Importer le Fichier"
 msgctxt "field:ir.lang,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:ir.model,history_status:"
+msgid "History Status"
+msgstr "Statut de l'historique"
+
+msgctxt "field:ir.model,manual_history:"
+msgid "Manual History"
+msgstr "Historique Manuel"
 
 msgctxt "field:ir.model,perm_create:"
 msgid "Create Access"
@@ -1478,6 +1503,34 @@ msgctxt "selection:event.type.action,treatment_kind:"
 msgid "Synchronous"
 msgstr "Synchrone"
 
+msgctxt "selection:ir.model,history_status:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:ir.model,history_status:"
+msgid "Deactivated"
+msgstr "Désactivé"
+
+msgctxt "selection:ir.model,history_status:"
+msgid "Hardcoded"
+msgstr "Forcé"
+
+msgctxt "selection:ir.model,history_status:"
+msgid "Manually Set"
+msgstr "Activé manuellement"
+
+msgctxt "selection:ir.model,history_status:"
+msgid "Never Activated"
+msgstr "Jamais activé"
+
+msgctxt "selection:ir.model,history_status:"
+msgid "Waiting for Activation"
+msgstr "En attente d'activation"
+
+msgctxt "selection:ir.model,history_status:"
+msgid "Waiting for Removal"
+msgstr "En attente de suppression"
+
 msgctxt "selection:ir.test_case.run.select.method,selection:"
 msgid "Automatic"
 msgstr "Automatique"
@@ -1573,6 +1626,14 @@ msgstr "Paquets d'export"
 msgctxt "view:ir.import.select_file:"
 msgid "File Selection"
 msgstr "Sélection de Fichier"
+
+msgctxt "view:ir.model:"
+msgid "Historize"
+msgstr "Historiser"
+
+msgctxt "view:ir.model:"
+msgid "Deactivate History"
+msgstr "Désactiver l'historisation"
 
 msgctxt "view:ir.model.method:"
 msgid "Method"

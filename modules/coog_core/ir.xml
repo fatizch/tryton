@@ -3,6 +3,22 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- ######### -->
+        <!-- # Model # -->
+        <!-- ######### -->
+        <record model="ir.ui.view" id="model_view_list">
+            <field name="model">ir.model</field>
+            <field name="inherit" ref="ir.model_view_tree"/>
+            <field name="name">model_list</field>
+        </record>
+        <record model="ir.ui.view" id="model_view_form">
+            <field name="model">ir.model</field>
+            <field name="inherit" ref="ir.model_view_form"/>
+            <field name="name">model_form</field>
+        </record>
+        <!-- ############ -->
+        <!-- # Sequence # -->
+        <!-- ############ -->
         <record model="ir.ui.view" id="sequence_view_form">
             <field name="model">ir.sequence</field>
             <field name="inherit" ref="ir.sequence_view_form"/>

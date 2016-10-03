@@ -13,7 +13,7 @@ from sql.operators import Concat
 
 from trytond.pyson import Eval
 from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
-from trytond.model import Model, ModelSQL, ModelView, fields as tryton_fields
+from trytond.model import ModelSQL, ModelView, fields as tryton_fields
 from trytond.model import Unique
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
@@ -24,6 +24,7 @@ from trytond.server_context import ServerContext
 
 import fields
 import coog_string
+from historizable import Historizable
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -51,7 +52,7 @@ class NotExportImport(Exception):
     pass
 
 
-class ExportImportMixin(Model):
+class ExportImportMixin(Historizable):
     'Mixin to support export/import in json'
 
     _func_key = 'rec_name'
@@ -603,7 +604,7 @@ class ImportWizard(Wizard):
         return 'end'
 
 
-class ExportInstance(ExportImportMixin, ModelSQL, ModelView):
+class ExportInstance(ExportImportMixin, ModelView):
     'Export Instance'
 
     __name__ = 'ir.export_package.item'
@@ -624,7 +625,7 @@ class ExportInstance(ExportImportMixin, ModelSQL, ModelView):
         return res
 
 
-class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
+class ExportPackage(ExportImportMixin, ModelView):
     'Export Package'
 
     __name__ = 'ir.export_package'
@@ -686,7 +687,7 @@ class Add2ExportPackageWizard(Wizard):
         return 'end'
 
 
-class ExportConfiguration(ModelSQL, ModelView, ExportImportMixin):
+class ExportConfiguration(ExportImportMixin, ModelView):
     'Export Configuration'
     __name__ = 'ir.export.configuration'
     _func_key = 'code'
@@ -730,7 +731,7 @@ class ExportConfiguration(ModelSQL, ModelView, ExportImportMixin):
         return None
 
 
-class ExportModelConfiguration(ModelSQL, ModelView, ExportImportMixin):
+class ExportModelConfiguration(ExportImportMixin, ModelView):
     'Export Model Configuration'
     __name__ = 'ir.export.configuration.model'
 
@@ -797,7 +798,7 @@ class ExportModelConfiguration(ModelSQL, ModelView, ExportImportMixin):
         pass
 
 
-class ExportFieldConfiguration(ModelSQL, ModelView, ExportImportMixin):
+class ExportFieldConfiguration(ExportImportMixin, ModelView):
     'Export Field Configuration'
     __name__ = 'ir.export.configuration.field'
     _rec_name = 'field_name'

@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import logging
 import datetime
 import polib
 from sql.operators import Concat
@@ -7,7 +8,7 @@ from sql.operators import Concat
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
-from trytond.pyson import Eval, PYSONEncoder
+from trytond.pyson import Eval, PYSONEncoder, Not, In
 from trytond.transaction import Transaction
 from trytond.model import fields as tryton_fields, ModelView
 from trytond.wizard import Wizard, StateView, Button, StateAction
@@ -15,6 +16,7 @@ from trytond.wizard import Wizard, StateView, Button, StateAction
 import fields
 import utils
 import model
+from historizable import Historizable
 from export import ExportImportMixin
 
 __metaclass__ = PoolMeta
@@ -328,11 +330,116 @@ class IrModel(ExportImportMixin):
 
     _models_per_name = Cache('models_per_name')
 
+    manual_history = fields.Boolean('Manual History')
+    history_status = fields.Function(
+        fields.Selection([
+                ('never_activated', 'Never Activated'),
+                ('partially_deactivated', 'Deactivated'),
+                ('hardcoded', 'Hardcoded'),
+                ('manual', 'Manually Set'),
+                ('unavailable', ''),
+                ('waiting_for_activation', 'Waiting for Activation'),
+                ('waiting_for_removal', 'Waiting for Removal'),
+                ], 'History Status'),
+        'get_history_status')
+
+    @classmethod
+    def __setup__(cls):
+        super(IrModel, cls).__setup__()
+        cls._error_messages.update({
+                'force_set_warning': 'This will forcefully set the history for'
+                ' this model, a full database update will be required.',
+                'force_unset_warning': 'This will deactivate the history for '
+                'this model, the history table will be kept in the database '
+                'until it is manually removed.',
+                })
+        cls._buttons.update({
+                'force_set_history': {
+                    'invisible':
+                    Eval('history_status', 'unavailable') == 'unavailable',
+                    'readonly': Not(In(Eval('history_status', ''),
+                            ['never_activated', 'partially_deactivated',
+                                'waiting_for_removal'])),
+                    },
+                'force_unset_history': {
+                    'invisible':
+                    Eval('history_status', 'unavailable') == 'unavailable',
+                    'readonly': Not(In(Eval('history_status', ''),
+                            ['manual', 'waiting_for_activation'])),
+                    },
+                })
+
     @classmethod
     def _export_skips(cls):
         result = super(IrModel, cls)._export_skips()
         result.add('fields')
         return result
+
+    @classmethod
+    def get_history_status(cls, models, name):
+        logger = logging.getLogger(__name__)
+        pool = Pool()
+        result = {}
+        TableHandler = backend.get('TableHandler')
+        for cur_model in models:
+            try:
+                Target = pool.get(cur_model.model)
+                if not issubclass(Target, Historizable) or not Target._table:
+                    result[cur_model.id] = 'unavailable'
+                    continue
+                history_exists = TableHandler.table_exist(Target._table +
+                    '__history')
+                if Target._code_history:
+                    result[cur_model.id] = 'hardcoded'
+                elif (cur_model.manual_history and Target._history and
+                        history_exists):
+                    result[cur_model.id] = 'manual'
+                elif cur_model.manual_history:
+                    result[cur_model.id] = 'waiting_for_activation'
+                elif Target._history:
+                    result[cur_model.id] = 'waiting_for_removal'
+                elif history_exists:
+                    result[cur_model.id] = 'partially_deactivated'
+                else:
+                    result[cur_model.id] = 'never_activated'
+            except KeyError:
+                logger.warning('Cannot get model %s' % cur_model.model)
+                result[cur_model.id] = 'unavailable'
+        return result
+
+    @classmethod
+    @model.CoogView.button
+    def force_set_history(cls, models):
+        for cur_model in models:
+            assert cur_model.history_status in ('never_activated',
+                'partially_deactivated', 'waiting_for_removal')
+        cls.raise_user_warning('force_set_warning', 'force_set_warning', ())
+        cls.write(models, {'manual_history': True})
+        cls.update_ir_status()
+
+    @classmethod
+    @model.CoogView.button
+    def force_unset_history(cls, models):
+        for cur_model in models:
+            assert cur_model.history_status in ('manual',
+                'waiting_for_activation')
+        cls.raise_user_warning('force_unset_warning',
+            'force_unset_warning', ())
+        cls.write(models, {'manual_history': False})
+        cls.update_ir_status()
+
+    @classmethod
+    def update_ir_status(cls):
+        Module = Pool().get('ir.module')
+        must_update = any((x.history_status in ('waiting_for_activation',
+                    'waiting_for_removal'))
+            for x in cls.search([]))
+        ir = Module.search([('name', '=', 'ir')])[0]
+        if (must_update and ir.state == 'to upgrade') or (
+                not must_update and ir.state == 'installed'):
+            return
+        ir.state = 'to upgrade' if must_update else 'installed'
+        ir.save()
 
     @classmethod
     def model_id_per_name(cls, model_name):

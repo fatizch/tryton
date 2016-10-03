@@ -165,7 +165,7 @@ class FunctionalErrorMixIn(object):
         return ServerContext().get('error_manager', None)
 
 
-class CoogSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn,
+class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
         summary.SummaryMixin):
     create_date_ = fields.Function(
         fields.DateTime('Creation date'),
