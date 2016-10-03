@@ -3,7 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='invoicing']/field[@name='fees']" position="before">
-        <field name="total_premium_amount"/>
         <field name="billing_informations" colspan="4"/>
     </xpath>
 </data>
