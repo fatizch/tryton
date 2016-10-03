@@ -10,7 +10,7 @@ Imports::
     >>> from decimal import Decimal
     >>> from trytond.modules.party_cog.tests.tools import create_party_person
     >>> from trytond.modules.company.tests.tools import create_company, get_company
-    >>> from trytond.modules.cog_utils.test_framework import test_values_against_model
+    >>> from trytond.modules.coog_core.test_framework import test_values_against_model
 
 Init Database::
 

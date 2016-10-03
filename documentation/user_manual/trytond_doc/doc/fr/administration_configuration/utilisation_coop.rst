@@ -18,7 +18,7 @@ D'abord killer tous les processes celery puis utiliser la commande ``purge`` :
     .. code:: sh
 
         ps auxww | grep celery | awk '{print $2}' | xargs kill
-        celery -A trytond.modules.cog_utils.batch_launcher purge
+        celery -A trytond.modules.coog_core.batch_launcher purge
 
 .. _daemon:
 
@@ -33,7 +33,7 @@ La ligne de commande exacte pour ``celery multi`` étant :
     .. code:: sh
 
         celery multi start worker_coog --config=celeryconfig -A \
-            trytond.modules.cog_utils.batch_launcher --loglevel=INFO \
+            trytond.modules.coog_core.batch_launcher --loglevel=INFO \
             --logfile=/my/path/worker_coog.log --pidfile=/my/path/celery-%n.pid
 
 Consulter les logs batch

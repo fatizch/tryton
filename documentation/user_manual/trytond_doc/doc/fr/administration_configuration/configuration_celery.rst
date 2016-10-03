@@ -71,7 +71,7 @@ exemple de ``/etc/default/celeryd`` ::
 
     # App instance to use
     # comment out this line if you don't use an app
-    CELERY_APP="trytond.modules.cog_utils.batch_launcher"
+    CELERY_APP="trytond.modules.coog_core.batch_launcher"
 
     # Where to chdir at start.
     CELERYD_CHDIR="/Exploitation/virtualenvs/server_demo_cog/"
@@ -119,7 +119,7 @@ coog::
         exit 1
     fi
 
-    APP=trytond.modules.cog_utils.batch_launcher
+    APP=trytond.modules.coog_core.batch_launcher
     ACTION=$1
     LOG_DIR=$VIRTUAL_ENV/tryton-workspace/logs
     WORKER_NAME='worker_coog'
