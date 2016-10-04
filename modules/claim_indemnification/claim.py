@@ -221,11 +221,6 @@ class ClaimService:
             having=Operator(Max(indemnification.end_date), value))
         return [('id', 'in', query_table)]
 
-    def init_dict_for_rule_engine(self, cur_dict):
-        super(ClaimService, self).init_dict_for_rule_engine(cur_dict)
-        cur_dict['deductible_end_date'] = self.get_deductible_end_date(
-            args=cur_dict)
-
     def calculate(self):
         cur_dict = {}
         self.init_dict_for_rule_engine(cur_dict)
@@ -766,6 +761,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency):
         return Invoice(
             company=key['company'],
             type='in',
+            business_kind='claim_invoice',
             journal=cls.get_journal(),
             party=party,
             invoice_address=party.address_get(type='invoice'),
@@ -787,6 +783,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency):
         invoice_line.type = 'line'
         invoice_line.product = key['product']
         invoice_line.quantity = 1
+        invoice_line.party = invoice.party
         invoice_line.on_change_product()
         invoice_line.unit_price = indemnification.amount
         if indemnification.status == 'cancel_validated':
@@ -834,9 +831,13 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency):
         invoices = []
         paid = []
         cancelled = []
-        key = lambda c: c._group_to_claim_invoice_key()
-        indemnifications.sort(key=key)
-        for key, group_indemnification in groupby(indemnifications, key=key):
+
+        def group_key(x):
+            return x._group_to_claim_invoice_key()
+
+        indemnifications.sort(key=group_key)
+        for key, group_indemnification in groupby(indemnifications,
+                key=group_key):
             invoice = cls._get_invoice(key)
             lines = []
             for indemnification in group_indemnification:

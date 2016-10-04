@@ -897,6 +897,10 @@ msgctxt "model:ir.action,name:act_claim_configuration"
 msgid "Claim Configuration"
 msgstr "Configuration"
 
+msgctxt "model:ir.action,name:act_claim_invoice"
+msgid "Claim Invoices"
+msgstr "Remboursements sinistre"
+
 msgctxt "model:ir.action,name:act_create_claim_indemnification_wizard"
 msgid "Create Indemnification"
 msgstr "Créer une période"
@@ -944,6 +948,10 @@ msgstr "Règle simple de calcul de la prestation"
 msgctxt "model:rule_engine.rule_parameter,string:claim_amount"
 msgid "Claim Amount"
 msgstr "Montant"
+
+msgctxt "selection:account.invoice,business_kind:"
+msgid "Claim Invoice"
+msgstr "Remboursement Sinistre"
 
 msgctxt "selection:benefit,indemnification_kind:"
 msgid "Annuity"

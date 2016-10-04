@@ -2,7 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
+from trytond.modules.coog_core import utils
+
 __all__ = [
     'EventLog',
     'EventTypeAction',
@@ -23,10 +24,12 @@ class EventTypeAction:
 
 
 class EventLog:
+    __metaclass__ = PoolMeta
     __name__ = 'event.log'
 
     @classmethod
     def get_related_instances(cls, object_, model_name):
+        model_name = 'contract'
         # TODO: use claim details to calculate the contract
         if model_name == 'contract':
             if object_.__name__ == 'claim.indemnification':
@@ -34,4 +37,8 @@ class EventLog:
             if (object_.__name__ == 'account.invoice' and
                     not hasattr(object_, 'contract')):
                 return []
+            if object_.__name__ == 'account.payment':
+                # The module may not be installed, which would cause a crash
+                if not utils.is_module_installed('contract_insurance_payment'):
+                    return []
         return super(EventLog, cls).get_related_instances(object_, model_name)

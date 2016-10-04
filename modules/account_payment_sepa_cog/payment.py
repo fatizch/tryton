@@ -16,7 +16,7 @@ import genshi
 import genshi.template
 
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, Or, Bool
+from trytond.pyson import Eval, Or, Bool, If
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields, export, coog_date, utils
 from .sepa_handler import CAMT054Coog
@@ -216,7 +216,7 @@ class Group:
         Payment = pool.get('account.payment')
         result = super(Group, self).merge_payment_key(payment)
         return [x for x in result if x[0] != 'party'] + [
-            ('party', payment.payer),
+            ('party', payment.payer or payment.party),
             ('sepa_mandate', Payment.get_sepa_mandates([payment])[0]),
             ('sepa_bank_account_number', payment.sepa_bank_account_number),
             ]
@@ -251,7 +251,7 @@ class Group:
             to_write = []
             for payment in [p for p in self.payments
                     if p.kind == 'payable' and not p.bank_account]:
-                bank_account = payment.party.get_bank_account(payment['date'])
+                bank_account = payment.party.get_bank_account(payment.date)
                 if bank_account:
                     to_write.extend([[payment],
                             {'bank_account': bank_account}])
@@ -350,8 +350,12 @@ class Payment:
     __name__ = 'account.payment'
 
     bank_account = fields.Many2One('bank.account', 'Bank Account',
-        ondelete='RESTRICT', domain=[('owners', '=', Eval('payer'))],
-        depends=['payer'], states={'invisible': ~Eval('payer')})
+        ondelete='RESTRICT', domain=[If(Eval('kind', '') == 'payable',
+                [('owners', '=', Eval('party'))],
+                [('owners', '=', Eval('payer'))])],
+        states={'invisible': (~Eval('payer') & (Eval('kind') == 'receivable'))
+            | (~Eval('party') & (Eval('kind') == 'payable'))},
+        depends=['kind', 'party', 'payer'])
     sepa_bank_reject_date = fields.Date('SEPA Bank Reject Date',
         states={'invisible': Or(
                 Eval('state') != 'failed',

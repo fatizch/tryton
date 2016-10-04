@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond import backend
 from trytond.pool import PoolMeta
+
 from trytond.modules.coog_core import model, fields
 
 __metaclass__ = PoolMeta
@@ -13,6 +15,11 @@ __all__ = [
 
 class Invoice:
     __name__ = 'account.invoice'
+
+    @classmethod
+    def __setup__(cls):
+        super(Invoice, cls).__setup__()
+        cls.business_kind.selection.append(('claim_invoice', 'Claim Invoice'))
 
     def _get_tax_context(self):
         context = super(Invoice, self)._get_tax_context()
@@ -35,8 +42,32 @@ class ClaimInvoiceLineDetail(model.CoogSQL, model.CoogView):
 
     invoice_line = fields.Many2One('account.invoice.line', 'Invoice Line',
         ondelete='CASCADE', readonly=True, required=True, select=True)
-    claim = fields.Many2One('claim', 'Claim')
-    service = fields.Many2One('claim.service', 'Services',
-        ondelete='RESTRICT')
     indemnification = fields.Many2One('claim.indemnification',
-        'Indemnification')
+        'Indemnification', required=True, ondelete='RESTRICT', select=True)
+    claim = fields.Function(
+        fields.Many2One('claim', 'Claim'),
+        'get_claim')
+    service = fields.Function(
+        fields.Many2One('claim.service', 'Services'),
+        'get_service')
+
+    @classmethod
+    def __register__(cls, module):
+        TableHandler = backend.get('TableHandler')
+
+        # Migration from 1.8 : Drop hardcoded claim and service columns
+        handler = TableHandler(cls, module)
+        to_migrate = handler.column_exist('claim')
+        super(ClaimInvoiceLineDetail, cls).__register__(module)
+
+        if to_migrate:
+            handler = TableHandler(cls, module)
+            handler.drop_column('claim')
+            handler.drop_column('service')
+
+    def get_claim(self, name):
+        # All the fields are required, no checks required
+        return self.indemnification.service.claim.id
+
+    def get_service(self, name):
+        return self.indemnification.service.id
