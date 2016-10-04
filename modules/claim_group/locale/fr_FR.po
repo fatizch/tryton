@@ -61,3 +61,7 @@ msgstr "Continuer les indemnisations"
 msgctxt "selection:endorsement.contract.terminate,post_termination_claim_behaviour:"
 msgid "Stop Indemnifications"
 msgstr "Arrêter les indemnisations"
+
+msgctxt "field:claim,interlocutor:"
+msgid "Interlocutor"
+msgstr "Interlocuteur"

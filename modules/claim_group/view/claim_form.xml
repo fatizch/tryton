@@ -5,5 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/field[@name='claimant']" position="after">
         <label name="legal_entity"/>
         <field name="legal_entity"/>
+        <label name="interlocutor"/>
+        <field name="interlocutor"/>
     </xpath>
 </data>
