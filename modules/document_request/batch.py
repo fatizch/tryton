@@ -65,6 +65,10 @@ class DocumentRequestBatch(batch.BatchRoot):
                 cls.logger.info('Processed report request for %s' %
                     cur_object.get_rec_name(None))
 
+    @classmethod
+    def get_batch_args_name(cls):
+        return []
+
 
 class BatchRemindDocuments(batch.BatchRoot):
     'Batch Remind Documents'

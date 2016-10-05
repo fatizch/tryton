@@ -52,7 +52,7 @@ class LaunchBatch(Wizard):
         models = []
         for model_ in pool.get('ir.model').search([]):
             try:
-                models.append((pool.get(model.model), model_))
+                models.append((pool.get(model_.model), model_))
             except Exception:
                 # Some dirty models could remain in ir.model
                 # even if the definition doesn't exist anymore
