@@ -545,8 +545,10 @@ def values_mixin(value_model):
 
         def update_after_application(self, parent_endorsed_record=None,
                 pre_application_records=None, current_records=None):
-            if not parent_endorsed_record:
-                parent_endorsed_record = self.get_endorsed_record()
+            if parent_endorsed_record is None:
+                # Force reload the record
+                record = self.get_endorsed_record()
+                parent_endorsed_record = Pool().get(record.__name__)(record.id)
             for endorsement_fname in [x[0] for x
                     in self._endorsement_tree.values()]:
                 sub_endorsements = getattr(self, endorsement_fname, [])
@@ -786,17 +788,19 @@ def relation_mixin(value_model, field, model, name):
                 parent_endorsed_record=None):
             if self.action == 'update':
                 parent_endorsed_record = getattr(self,
-                    getattr(self, '_relation_field_name'))
+                    self._relation_field_name)
                 super(Mixin, self).get_records_before_application(
                     current_records, parent_endorsed_record)
 
         def update_after_application(self, parent_endorsed_record=None,
                 pre_application_records=None, current_records=None):
             if self.action == 'add':
-                self.set_relation_for_added_record(current_records,
-                    pre_application_records)
-            parent_endorsed_record = getattr(self,
-                getattr(self, '_relation_field_name'))
+                parent_endorsed_record = self.set_relation_for_added_record(
+                    current_records, pre_application_records)
+            else:
+                # Force reload the record
+                record = getattr(self, self._relation_field_name)
+                parent_endorsed_record = Pool().get(record.__name__)(record.id)
             super(Mixin, self).update_after_application(parent_endorsed_record,
                 pre_application_records, current_records)
 
@@ -805,7 +809,7 @@ def relation_mixin(value_model, field, model, name):
                 self.remove_relation()
             else:
                 parent_endorsed_record = getattr(self,
-                    getattr(self, '_relation_field_name'))
+                    self._relation_field_name)
             super(Mixin, self).update_after_cancellation(
                 parent_endorsed_record)
 
