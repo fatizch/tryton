@@ -26,6 +26,10 @@ msgctxt "field:account.invoice,icon:"
 msgid "Icon"
 msgstr "Icône"
 
+msgctxt "field:account.invoice,reconciliation_date:"
+msgid "Reconciliation Date"
+msgstr "Date de lettrage"
+
 msgctxt "field:account.invoice,taxes_included:"
 msgid "Taxes Included"
 msgstr "Taxes incluses"

@@ -60,6 +60,8 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
     business_kind = fields.Selection([('', '')], 'Business Kind',
         states={'readonly': Eval('state') != 'draft'}, depends=['state'])
     business_kind_string = business_kind.translated('business_kind')
+    reconciliation_date = fields.Function(
+        fields.Date('Reconciliation Date'), 'get_reconciliation_date')
     taxes_included = fields.Function(
         fields.Boolean('Taxes Included'),
         loader='get_taxes_included')
@@ -96,6 +98,15 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
         return super(Invoice, cls).view_attributes() + [
             ('/tree', 'colors', Eval('color')),
             ]
+
+    def get_reconciliation_date(self, name):
+        dates = []
+        for line in self.lines_to_pay:
+            if line.reconciliation:
+                dates.append(line.reconciliation.create_date)
+        if not dates:
+            return None
+        return max(dates)
 
     @classmethod
     def validate(cls, invoices):
