@@ -515,7 +515,7 @@ class CreateIndemnification(Wizard):
     def possible_services(self, claim):
         res = []
         for delivered in claim.delivered_services:
-            if not delivered.loss.end_date:
+            if not delivered.loss.end_date or not delivered.indemnifications:
                 res.append(delivered)
                 continue
             for indemnification in reversed(delivered.indemnifications):
@@ -562,8 +562,9 @@ class CreateIndemnification(Wizard):
         claim = Claim(Transaction().context.get('active_id'))
         claim_services = self.possible_services(claim)
         return {
-            'possible_services': claim_services,
-            'selected_service': claim_services[0] if claim_services else None
+            'possible_services': [s.id for s in claim_services],
+            'selected_service': claim_services[0].id if claim_services
+            else None
             }
 
     def transition_service_selected(self):
