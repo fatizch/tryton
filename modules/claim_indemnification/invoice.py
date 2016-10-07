@@ -46,7 +46,7 @@ class ClaimInvoiceLineDetail(model.CoogSQL, model.CoogView):
         'Indemnification', required=True, ondelete='RESTRICT', select=True)
     claim = fields.Function(
         fields.Many2One('claim', 'Claim'),
-        'get_claim')
+        'get_claim', searcher='search_claim')
     service = fields.Function(
         fields.Many2One('claim.service', 'Services'),
         'get_service')
@@ -68,6 +68,10 @@ class ClaimInvoiceLineDetail(model.CoogSQL, model.CoogView):
     def get_claim(self, name):
         # All the fields are required, no checks required
         return self.indemnification.service.claim.id
+
+    @classmethod
+    def search_claim(cls, name, clause):
+        return [('indemnification.service.loss.claim', clause[1], clause[2])]
 
     def get_service(self, name):
         return self.indemnification.service.id
