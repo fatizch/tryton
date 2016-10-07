@@ -56,7 +56,7 @@ class NetCalculationRule(model.CoogSQL, model.CoogView,
     fixed_contributions = fields.Many2Many(
         'net_calculation_rule-fix_extra_data', 'calculation_rule',
         'extra_data', 'Fixed Contributions',
-        domain=[('kind', '=', 'salary')], required=True)
+        domain=[('kind', '=', 'salary')])
 
     @classmethod
     def __setup__(cls):
