@@ -26,6 +26,8 @@ this repository contains the full copyright notices and license terms. -->
     </group>
     <label name="manual"/>
     <field name="manual"/>
+    <label name="is_paid"/>
+    <field name="is_paid"/>
     <label name="local_currency_amount"/>
     <group id="local_amount">
         <field name="local_currency_amount"/>

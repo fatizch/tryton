@@ -484,6 +484,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency):
                     ['cancelled', 'cancel_paid'])),
             'readonly': Eval('status') == 'cancel_paid'
             })
+    is_paid = fields.Function(fields.Boolean('Paid'), 'get_is_paid')
 
     @classmethod
     def __setup__(cls):
@@ -511,6 +512,24 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency):
                 "%(indemn_end)s) is not compatible with the contract's end "
                 'date (%(contract_end)s).',
                 })
+
+    def get_is_paid(self, name):
+        pool = Pool()
+        cursor = Transaction().connection.cursor()
+        AccountInvoice = pool.get('account.invoice')
+        invoice_detail = pool.get(
+            'account.invoice.line.claim_detail').__table__()
+        invoice_line = pool.get('account.invoice.line').__table__()
+        query_table = invoice_detail.join(invoice_line, condition=(
+                invoice_detail.invoice_line == invoice_line.id))
+        cursor.execute(*query_table.select(invoice_line.invoice, where=(
+                    invoice_detail.indemnification == self.id)))
+        ids = cursor.fetchall()
+        invoices = AccountInvoice.search([('id', 'in', list(ids))])
+        for invoice in invoices:
+            if invoice.status == 'paid' and invoice.reconciliation_date:
+                return True
+        return False
 
     def get_benefit_description(self, name):
         if self.service and self.service.benefit:

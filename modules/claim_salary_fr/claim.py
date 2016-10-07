@@ -229,6 +229,7 @@ class ClaimService:
         fields.Numeric('Gross Salary', digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
         'get_salary_field')
+    salary_mode = fields.Function(fields.Char('Salary Mode'), 'get_salary_mode')
 
     def init_salaries(self):
         Salary = Pool().get('claim.salary')
@@ -262,6 +263,10 @@ class ClaimService:
 
         # Salary.update_salary_with_existing_info(to_save)
         Salary.save(to_save)
+
+    def get_salary_mode(self, name):
+        return self.benefit.benefit_rules[0].option_benefit_at_date(
+            self.option, self.loss.start_date).salary_mode
 
     def init_from_loss(self, loss, benefit):
         super(ClaimService, self).init_from_loss(loss, benefit)

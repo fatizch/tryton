@@ -5,6 +5,7 @@ import copy
 from sql.aggregate import Max
 from sql import Literal
 
+from trytond.rpc import RPC
 from trytond.wizard import Wizard
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Len, PYSONEncoder
@@ -43,6 +44,10 @@ class Party:
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
+        cls.__rpc__.update({
+                'ws_get_covered_contracts_at_date': RPC(
+                    readonly=True, instantiate=0)
+                })
         cls._buttons.update({
                 'open_contracts': {
                     'invisible': Len(Eval('contracts', [])) > 0,
@@ -87,6 +92,11 @@ class Party:
         res[1].append(coog_string.get_field_summary(self, 'contracts', True,
             at_date, lang))
         return res
+
+    def ws_get_covered_contracts_at_date(self, date):
+        Contract = Pool().get('contract')
+        contracts = Contract.get_possible_contracts_from_party(self, date)
+        return [c.id for c in contracts]
 
 
 class PartyInteraction:

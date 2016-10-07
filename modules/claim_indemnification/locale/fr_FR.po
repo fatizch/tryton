@@ -302,6 +302,10 @@ msgctxt "field:claim.indemnification,manual:"
 msgid "Manual Calculation"
 msgstr "Calcul Manuel"
 
+msgctxt "field:claim.indemnification,paid:"
+msgid "Paid"
+msgstr "Payée"
+
 msgctxt "field:claim.indemnification,payback_method:"
 msgid "Repayment Method"
 msgstr "Méthode de reversement"

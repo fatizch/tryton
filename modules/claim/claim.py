@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
+from trytond.rpc import RPC
 from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -91,6 +92,11 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
             ]
         cls._buttons.update({
                 'deliver': {}
+                })
+        cls.__rpc__.update({
+                'ws_add_new_loss': RPC(instantiate=0, readonly=False),
+                'ws_deliver_automatic_benefit': RPC(
+                    instantiate=0, readonly=False),
                 })
 
     @classmethod
@@ -287,6 +293,24 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
                 to_save.append(claim)
         cls.save(to_save)
 
+    def add_new_loss(self, loss_desc_code, parameters=None):
+        for loss in self.losses:
+            if (not loss.end_date and loss.loss_desc and
+                    loss.loss_desc.code == loss_desc_code):
+                return
+        loss = Pool().get('claim.loss')()
+        loss.claim = self
+        loss.init_loss(loss_desc_code, parameters)
+        self.losses = self.losses + (loss, )
+
+    def ws_add_new_loss(self, loss_desc_code, parameters=None):
+        self.add_new_loss(loss_desc_code, parameters)
+        self.save()
+
+    @classmethod
+    def ws_deliver_automatic_benefit(cls, claims):
+        cls.deliver_automatic_benefit(claims)
+
 
 class Loss(model.CoogSQL, model.CoogView):
     'Loss'
@@ -332,7 +356,7 @@ class Loss(model.CoogSQL, model.CoogView):
         'get_loss_desc_code')
     loss_desc_kind = fields.Function(
         fields.Char('Loss Desc Kind', depends=['loss_desc']),
-        'get_loss_desc_kind')
+        'get_loss_desc_kind', searcher='search_loss_desc_kind')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
 
@@ -374,6 +398,10 @@ class Loss(model.CoogSQL, model.CoogView):
 
     def get_loss_desc_kind(self, name):
         return self.loss_desc.loss_kind if self.loss_desc else ''
+
+    @classmethod
+    def search_loss_desc_kind(cls, name, clause):
+        return [('loss_desc.kind',) + tuple(clause[1:])]
 
     @fields.depends('event_desc', 'loss_desc', 'with_end_date', 'end_date')
     def on_change_loss_desc(self):
