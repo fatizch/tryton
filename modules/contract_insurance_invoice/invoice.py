@@ -11,7 +11,6 @@ from trytond.rpc import RPC
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool, Not
 from trytond.wizard import Wizard, StateView, Button
-from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import utils, model, fields
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
@@ -126,6 +125,16 @@ class Invoice:
 
     def get_base_amount(self, name):
         return self.untaxed_amount - self.fees
+
+    def get_taxes_included(self, name=None):
+        # Insurance product do not reference tryton products, so we need to
+        # store the information elsewhere and override the base taxes rules. We
+        # must use `getattr` since the invoice may not be already saved
+        contract = getattr(self, 'contract', None)
+        business_kind = getattr(self, 'business_kind', None)
+        if contract and business_kind == 'contract_invoice':
+            return bool(self.contract.product.taxes_included_in_premium)
+        return super(Invoice, self).get_taxes_included(name)
 
     @classmethod
     def get_contract_invoice_field(cls, instances, name):
@@ -387,55 +396,6 @@ class Invoice:
             for k, v in cursor.fetchall():
                 result[k] = v.date()
         return result
-
-    def _get_taxes(self):
-        with ServerContext().set_context(taxes_initial_base=defaultdict(int)):
-            return super(Invoice, self)._get_taxes()
-
-    def _get_tax_context(self):
-        context = super(Invoice, self)._get_tax_context()
-        if (getattr(self, 'contract', None) and self.contract.product and
-                self.contract.product.taxes_included_in_premium):
-            context['tax_included'] = True
-        return context
-
-    @classmethod
-    def _compute_tax_line(cls, amount, base, tax):
-        line = super(Invoice, cls)._compute_tax_line(amount, base, tax)
-        ServerContext().get('taxes_initial_base')[line] += base
-        return line
-
-    def _round_taxes(self, taxes):
-        '''
-            Tax included option is only available if taxes are rounded per line
-            This code implements the Sum Preserving Rounding algorithm
-        '''
-        context = Transaction().context
-        if not context.get('tax_included') or not context['tax_included']:
-            return super(Invoice, self)._round_taxes(taxes)
-        if not self.currency:
-            return
-        expected_amount_non_rounded = 0
-        sum_of_rounded = 0
-        initial_data = ServerContext().get('taxes_initial_base')
-        for taxline in taxes.itervalues():
-            if expected_amount_non_rounded == 0:
-                # Add base amount only for the first tax
-                expected_amount_non_rounded = initial_data[taxline]
-            expected_amount_non_rounded += taxline['amount']
-            for attribute in ('base', 'amount'):
-                taxline[attribute] = self.currency.round(taxline[attribute])
-            if sum_of_rounded == 0:
-                sum_of_rounded = taxline['base']
-            sum_of_rounded += taxline['amount']
-            rounded_of_sum = self.currency.round(expected_amount_non_rounded)
-            if sum_of_rounded != rounded_of_sum:
-                taxline['amount'] += rounded_of_sum - sum_of_rounded
-                sum_of_rounded += rounded_of_sum - sum_of_rounded
-            assert rounded_of_sum == sum_of_rounded
-        if self.currency:
-            for k in initial_data:
-                initial_data[k] = self.currency.round(initial_data[k])
 
 
 class InvoiceLine:

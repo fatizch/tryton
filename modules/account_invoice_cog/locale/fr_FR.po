@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.invoice:"
+msgid "A given invoice (%(invoice_name)s) must have a uniform tax management method across products."
+msgstr "Une quittance donnée (%(invoice_name)s) doit avoir une configuration de taxes uniforme sur ses produits"
+
 msgctxt "error:account.invoice.change_payment_term:"
 msgid "The invoice must be posted !"
 msgstr "La quittance doit être émise !"
@@ -21,6 +25,10 @@ msgstr "Couleur"
 msgctxt "field:account.invoice,icon:"
 msgid "Icon"
 msgstr "Icône"
+
+msgctxt "field:account.invoice,taxes_included:"
+msgid "Taxes Included"
+msgstr "Taxes incluses"
 
 msgctxt "field:account.invoice,xml_id:"
 msgid "XML Id"

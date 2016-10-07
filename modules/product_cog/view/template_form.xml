@@ -7,5 +7,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="account_revenue"/>
         <label name="account_expense"/>
         <field name="account_expense"/>
+        <label name="taxes_included"/>
+        <field name="taxes_included"/>
     </xpath>
 </data>

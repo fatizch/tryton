@@ -14,6 +14,10 @@ msgctxt "field:product.product,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:product.template,taxes_included:"
+msgid "Taxes Included"
+msgstr "Taxes incluses"
+
 msgctxt "field:product.template,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"

@@ -5,6 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/tree" position="inside">
         <field name="account_revenue"/>
         <field name="account_expense"/>
+        <field name="taxes_included"/>
     </xpath>
     <xpath expr="/tree/field[@name='list_price']" position="replace"/>
     <xpath expr="/tree/field[@name='cost_price']" position="replace"/>

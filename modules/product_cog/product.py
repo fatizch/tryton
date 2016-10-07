@@ -17,6 +17,8 @@ class Template(export.ExportImportMixin):
     __name__ = 'product.template'
     _func_key = 'name'
 
+    taxes_included = fields.Boolean('Taxes Included')
+
     @classmethod
     def __setup__(cls):
         super(Template, cls).__setup__()

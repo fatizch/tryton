@@ -261,6 +261,7 @@ product.quote_number_sequence = quote_sequence
 product.start_date = product_start_date
 product.billing_modes.append(freq_monthly)
 product.billing_modes.append(freq_yearly)
+product.taxes_included_in_premium = True
 product.coverages.append(coverage)
 product.coverages.append(coverage_1)
 product.coverages.append(coverage_2)
