@@ -1751,7 +1751,8 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         current_version = self.update_current_version()
         self.current_extra_data = current_version.extra_data
 
-    @fields.depends('current_extra_data', 'versions')
+    @fields.depends('appliable_conditions_date', 'coverage', 'coverage_family',
+        'current_extra_data', 'product', 'start_date', 'versions')
     def on_change_current_extra_data(self):
         current_version = self.get_version_at_date(utils.today())
         if not current_version:
@@ -1760,6 +1761,8 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         current_version.extra_data_as_string = \
             current_version.on_change_with_extra_data_as_string()
         self.versions = list(self.versions)
+        self.update_current_version()
+        self.current_extra_data = current_version.extra_data
 
     @fields.depends('sub_status', 'manual_end_date')
     def on_change_with_sub_status(self, name=None):
