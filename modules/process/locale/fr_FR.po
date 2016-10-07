@@ -44,6 +44,10 @@ msgctxt "error:process:"
 msgid "The technical name must be unique"
 msgstr "Le nom technique doit être unique"
 
+msgctxt "error:process.process-act_window:"
+msgid "The action must be unique per process / language"
+msgstr "L'action doit être uniquer par processus / langue"
+
 msgctxt "field:ir.model,is_workflow:"
 msgid "Is Workflow"
 msgstr "Processus"

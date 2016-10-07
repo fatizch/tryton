@@ -1092,3 +1092,12 @@ class ProcessActWindow(model.CoogSQL):
     action_window = fields.Many2One('ir.action.act_window', 'Action Window',
         ondelete='CASCADE', required=True)
     language = fields.Many2One('ir.lang', 'Language', ondelete='RESTRICT')
+
+    @classmethod
+    def __setup__(cls):
+        super(ProcessActWindow, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints = [
+            ('process_language_unique', Unique(t, t.process, t.language),
+                'The action must be unique per process / language'),
+            ]
