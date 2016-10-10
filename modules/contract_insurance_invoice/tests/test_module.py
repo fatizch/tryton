@@ -567,11 +567,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
         invoice_1.move = base_move
         invoice_1.cancel_move = cancel_move
 
-        payment = mock.Mock()
-        payment.__name__ = 'account.payment'
-        payment.line = mock.Mock()
-        payment.line.origin = invoice_1
-
         line_no_origin = mock.Mock()
         line_no_origin.origin = None
 
@@ -583,6 +578,25 @@ class ModuleTestCase(test_framework.CoogTestCase):
         line_base.origin = invoice_1
         line_base.amount = 10
         line_base.move = base_move
+
+        line_base_2 = mock.Mock()
+        line_base_2.origin = invoice_1
+        line_base_2.amount = 20
+        line_base_2.move = base_move
+
+        payment = mock.Mock()
+        payment.__name__ = 'account.payment'
+        payment.line = line_base
+
+        payment_2 = mock.Mock()
+        payment_2.__name__ = 'account.payment'
+        payment_2.line = line_base_2
+
+        payment_none = mock.Mock()
+        payment_none.__name__ = 'account.payment'
+        payment_none.line = mock.Mock()
+        payment_none.line.origin = invoice_1
+        payment_none.line.move = mock.Mock()
 
         line_cancel_1 = mock.Mock()
         line_cancel_1.origin = base_move
@@ -597,11 +611,19 @@ class ModuleTestCase(test_framework.CoogTestCase):
         line_payment = mock.Mock()
         line_payment.origin = payment
         line_payment.amount = -10
-        line_payment.origin.line = line_base
+
+        line_payment_2 = mock.Mock()
+        line_payment_2.origin = payment_2
+        line_payment_2.amount = -20
+
+        line_payment_none = mock.Mock()
+        line_payment_none.origin = payment_none
+        line_payment_none.amount = -42
 
         def test_perfect(original_lines, expected):
-            self.assertEqual(expected,
-                contract.reconcile_perfect_lines(original_lines))
+            for expected_item, result_item in zip(expected,
+                    contract.reconcile_perfect_lines(original_lines)):
+                self.assertEqual(sorted(expected_item), sorted(result_item))
 
         # Test non affected lines are not used, base is reconciled with
         # cancellation
@@ -622,10 +644,27 @@ class ModuleTestCase(test_framework.CoogTestCase):
         test_perfect([line_base, line_payment],
             ([([line_base, line_payment], 0)], []))
 
-        # Test error if cancel amount does not match base amount
-        self.assertRaises(AssertionError,
-            lambda: contract.reconcile_perfect_lines([line_base, line_cancel_1,
-                    line_cancel_2]))
+        # Test with unmatched paid line
+        test_perfect([line_base, line_payment_none],
+            ([], [line_base, line_payment_none]))
+
+        # Test with several cancel lines
+        test_perfect([line_base, line_cancel_1, line_base_2, line_cancel_2],
+            ([([line_base, line_base_2, line_cancel_1, line_cancel_2], 0)],
+                []))
+
+        # Test with several paid lines
+        test_perfect([line_base, line_base_2, line_payment, line_payment_2],
+            ([
+                    ([line_base, line_payment], 0),
+                    ([line_base_2, line_payment_2], 0)],
+                []))
+
+        # Test with several cancel lines, and paid
+        test_perfect([line_base, line_cancel_1, line_base_2, line_cancel_2,
+                line_payment],
+            ([([line_base, line_base_2, line_cancel_1, line_cancel_2], 0)],
+                [line_payment]))
 
         # Test that base lines which only look like base lines are properly
         # filtered

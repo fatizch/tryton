@@ -1010,7 +1010,7 @@ class Contract:
 
     def reconcile_perfect_lines(self, possible_lines):
         per_invoice = defaultdict(
-            lambda: {'base': None, 'paid': None, 'canceled': None})
+            lambda: {'base': [], 'paid': [], 'canceled': []})
         unmatched = []
         for line in possible_lines:
             if not line.origin:
@@ -1018,35 +1018,47 @@ class Contract:
                 continue
             if (line.origin.__name__ == 'account.invoice' and
                     line.origin.move == line.move):
-                per_invoice[line.origin]['base'] = line
+                per_invoice[line.origin]['base'].append(line)
                 continue
             if (line.origin.__name__ == 'account.move' and
                     line.origin.origin.__name__ == 'account.invoice' and
                     line.origin.origin.cancel_move == line.move):
-                per_invoice[line.origin.origin]['canceled'] = line
+                per_invoice[line.origin.origin]['canceled'].append(line)
                 continue
             if (line.origin.__name__ == 'account.payment' and
                     line.origin.line and
                     line.origin.line.origin.__name__ == 'account.invoice' and
                     line.origin.line.origin.move == line.origin.line.move):
-                per_invoice[line.origin.line.origin]['paid'] = line
+                per_invoice[line.origin.line.origin]['paid'].append(line)
                 continue
             unmatched.append(line)
+
         matched = []
         for data in per_invoice.values():
-            if data['base'] and data['canceled']:
-                assert data['base'].amount + data['canceled'].amount == 0
-                matched.append(([data['base'], data['canceled']], 0))
-                if data['paid']:
-                    unmatched.append(data['paid'])
+            base_lines, cancel_lines, pay_lines = [data[x] for x in
+                'base', 'canceled', 'paid']
+            if cancel_lines:
+                if not base_lines:
+                    unmatched.extend(cancel_lines + pay_lines)
+                    continue
+                base_and_cancel = base_lines + cancel_lines
+                assert sum(x.amount for x in base_and_cancel) == 0
+                matched.append((base_and_cancel, 0))
+                unmatched.extend(pay_lines)
                 continue
-            if data['base'] and data['paid'] and \
-                    data['base'].amount + data['paid'].amount == 0:
-                matched.append(([data['base'], data['paid']], 0))
-                if data['canceled']:
-                    unmatched.append(data['canceled'])
-                continue
-            unmatched += [x for x in data.values() if x is not None]
+            if pay_lines:
+                per_line = {x.origin.line: x for x in pay_lines}
+                for line in base_lines:
+                    if line not in per_line:
+                        unmatched.append(line)
+                        continue
+                    if per_line[line].amount + line.amount != 0:
+                        unmatched.extend([line, per_line.pop(line)])
+                        continue
+                    matched.append(([line, per_line.pop(line)], 0))
+                unmatched.extend(per_line.values())
+            if base_lines and not cancel_lines and not pay_lines:
+                unmatched.extend(base_lines)
         return (matched, unmatched)
 
     @classmethod
