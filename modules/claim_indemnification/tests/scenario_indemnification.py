@@ -258,6 +258,13 @@ create.form.end_date = datetime.date(2016, 6, 1)
 create.form.extra_data = {}
 create.form.service = service
 create.form.beneficiary = subscriber
+
+# First call will raise a Warning
+warning = Warning()
+warning.always = False
+warning.user = user
+warning.name = 'multiple_capital_indemnifications_[1]'
+warning.save()
 create.execute('calculate')
 create.execute('regularisation')
 create.form.payback_method = 'continuous'

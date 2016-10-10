@@ -223,6 +223,11 @@ Generate Regularisation::
     >>> create.form.extra_data = {}
     >>> create.form.service = service
     >>> create.form.beneficiary = subscriber
+    >>> warning = Warning()
+    >>> warning.always = False
+    >>> warning.user = user
+    >>> warning.name = 'multiple_capital_indemnifications_[1]'
+    >>> warning.save()
     >>> create.execute('calculate')
     >>> create.execute('regularisation')
     >>> create.form.payback_method = 'continuous'
