@@ -73,11 +73,11 @@ coog_module_updatedb() { # install / update database modules - <database> [modul
 }
 
 coog_module_create() { # creates a new module in the modules folder - <module_name> <file_1> [file_2] etc.
-        [ -z $1 ] && echo No module name && return 1
-        [ -z $2 ] && echo No main file && return 1
+        [ -z "$1" ] && echo No module name && return 1
+        [ -z "$2" ] && echo No main file && return 1
         local module_folder
-        module_folder=$COOG_BIN/../../modules/$1
-        [ -d $module_folder ] && echo Module $1 already exists && return 1
+        module_folder=$COOG_BIN/../../modules/"$1"
+        [ -d "$module_folder" ] && echo Module "$1" already exists && return 1
 
         local module_name
         module_name=$1
@@ -86,102 +86,110 @@ coog_module_create() { # creates a new module in the modules folder - <module_na
         filenames=$*
 
         # Create folders
-        mkdir $module_folder
-        mkdir $module_folder/view
-        mkdir $module_folder/locale
-        mkdir $module_folder/tests
-        mkdir $module_folder/doc
-        mkdir $module_folder/doc/fr
-        touch $module_folder/doc/fr/features.rst
-        touch $module_folder/doc/fr/index.rst
-        touch $module_folder/doc/fr/summary.rst
+        mkdir "$module_folder"
+        mkdir "$module_folder"/view
+        mkdir "$module_folder"/locale
+        mkdir "$module_folder"/tests
+        mkdir "$module_folder"/doc
+        mkdir "$module_folder"/doc/fr
+        touch "$module_folder"/doc/fr/features.rst
+        touch "$module_folder"/doc/fr/index.rst
+        touch "$module_folder"/doc/fr/summary.rst
 
         # Init tryton.cfg
-        echo "[tryton]" > $module_folder/tryton.cfg
-        echo "depends:" >> $module_folder/tryton.cfg
-        echo "    ir" >> $module_folder/tryton.cfg
-        echo "    res" >> $module_folder/tryton.cfg
-        echo "    cog_utils" >> $module_folder/tryton.cfg
-        echo "xml:" >> $module_folder/tryton.cfg
+        echo "[tryton]" > "$module_folder"/tryton.cfg
+        echo "depends:" >> "$module_folder"/tryton.cfg
+        echo "    ir" >> "$module_folder"/tryton.cfg
+        echo "    res" >> "$module_folder"/tryton.cfg
+        echo "    coog_core" >> "$module_folder"/tryton.cfg
+        echo "xml:" >> "$module_folder"/tryton.cfg
         for filename in $filenames
         do
-            echo "    $filename.xml" >> $module_folder/tryton.cfg
+            echo "    $filename.xml" >> "$module_folder"/tryton.cfg
         done
 
         # Init __init__.py
-        echo "from trytond.pool import Pool" > $module_folder/__init__.py
+        echo "# This file is part of Coog. The COPYRIGHT file at the top level of" > "$module_folder"/__init__.py
+        echo "# this repository contains the full copyright notices and license terms." >> "$module_folder"/__init__.py
+        echo "from trytond.pool import Pool" >> "$module_folder"/__init__.py
         for filename in $filenames
         do
-            echo "from .$filename import *" >> $module_folder/__init__.py
+            echo "from .$filename import *" >> "$module_folder"/__init__.py
         done
-        echo "" >> $module_folder/__init__.py
-        echo "" >> $module_folder/__init__.py
-        echo "def register():" >> $module_folder/__init__.py
-        echo "    Pool.register(" >> $module_folder/__init__.py
-        echo "        module='$module_name', type_='model')" >> $module_folder/__init__.py
+        echo "" >> "$module_folder"/__init__.py
+        echo "" >> "$module_folder"/__init__.py
+        echo "def register():" >> "$module_folder"/__init__.py
+        echo "    Pool.register(" >> "$module_folder"/__init__.py
+        echo "        module='$module_name', type_='model')" >> "$module_folder"/__init__.py
 
         # Init xml
         for filename in $filenames
         do
-            echo "<?xml version=\"1.0\"?>" > $module_folder/$filename.xml
-            echo "<tryton>" >> $module_folder/$filename.xml
-            echo "    <data>" >> $module_folder/$filename.xml
-            echo "    </data>" >> $module_folder/$filename.xml
-            echo "</tryton>" >> $module_folder/$filename.xml
+            echo "<?xml version=\"1.0\"?>" > "$module_folder"/"$filename".xml
+            echo "<!-- This file is part of Coog. The COPYRIGHT file at the top level of" >> "$module_folder"/"$filename".xml
+            echo "this repository contains the full copyright notices and license terms. -->" >> "$module_folder"/"$filename".xml
+            echo "<tryton>" >> "$module_folder"/"$filename".xml
+            echo "    <data>" >> "$module_folder"/"$filename".xml
+            echo "    </data>" >> "$module_folder"/"$filename".xml
+            echo "</tryton>" >> "$module_folder"/"$filename".xml
         done
 
         # Init py
         for filename in $filenames
         do
-            echo "from trytond.pool import PoolMeta" > $module_folder/$filename.py
-            echo "" >> $module_folder/$filename.py
-            echo "__metaclass__ = PoolMeta" >> $module_folder/$filename.py
-            echo "__all__ = [" >> $module_folder/$filename.py
-            echo "    ]" >> $module_folder/$filename.py
+            echo "# This file is part of Coog. The COPYRIGHT file at the top level of" > "$module_folder"/"$filename".py
+            echo "# this repository contains the full copyright notices and license terms." >> "$module_folder"/"$filename".py
+            echo "from trytond.pool import PoolMeta" >> "$module_folder"/"$filename".py
+            echo "" >> "$module_folder"/"$filename".py
+            echo "__metaclass__ = PoolMeta" >> "$module_folder"/"$filename".py
+            echo "__all__ = [" >> "$module_folder"/"$filename".py
+            echo "    ]" >> "$module_folder"/"$filename".py
         done
 
         # Init CHANGELOG
-        echo "* Module creation" > $module_folder/CHANGELOG
+        echo "* Module creation" > "$module_folder"/CHANGELOG
 
         # Init Tests
-        echo "from .test_module import suite" > $module_folder/tests/__init__.py
-        echo "import unittest" > $module_folder/tests/test_module.py
-        echo "" >> $module_folder/tests/test_module.py
-        echo "import trytond.tests.test_tryton" >> $module_folder/tests/test_module.py
-        echo "from trytond.modules.cog_utils import test_framework" >> $module_folder/tests/test_module.py
-        echo "" >> $module_folder/tests/test_module.py
-        echo "" >> $module_folder/tests/test_module.py
-        echo "class ModuleTestCase(test_framework.CoopTestCase):" >> $module_folder/tests/test_module.py
-        echo "    'Module Test Case'" >> $module_folder/tests/test_module.py
-        echo "" >> $module_folder/tests/test_module.py
-        echo "    module = '$module_name'" >> $module_folder/tests/test_module.py
-        echo "" >> $module_folder/tests/test_module.py
-        echo "" >> $module_folder/tests/test_module.py
-        echo "def suite():" >> $module_folder/tests/test_module.py
-        echo "    suite = trytond.tests.test_tryton.suite()" >> $module_folder/tests/test_module.py
-        echo "    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(" >> $module_folder/tests/test_module.py
-        echo "        ModuleTestCase))" >> $module_folder/tests/test_module.py
-        echo "    return suite" >> $module_folder/tests/test_module.py
+        echo "# This file is part of Coog. The COPYRIGHT file at the top level of" > "$module_folder"/tests/__init__.py
+        echo "# this repository contains the full copyright notices and license terms." >> "$module_folder"/tests/__init__.py
+        echo "from .test_module import suite" >> "$module_folder"/tests/__init__.py
+        echo "import unittest" > "$module_folder"/tests/test_module.py
+        echo "" >> "$module_folder"/tests/test_module.py
+        echo "import trytond.tests.test_tryton" >> "$module_folder"/tests/test_module.py
+        echo "from trytond.modules.coog_core import test_framework" >> "$module_folder"/tests/test_module.py
+        echo "" >> "$module_folder"/tests/test_module.py
+        echo "" >> "$module_folder"/tests/test_module.py
+        echo "class ModuleTestCase(test_framework.CoopTestCase):" >> "$module_folder"/tests/test_module.py
+        echo "    'Module Test Case'" >> "$module_folder"/tests/test_module.py
+        echo "" >> "$module_folder"/tests/test_module.py
+        echo "    module = '$module_name'" >> "$module_folder"/tests/test_module.py
+        echo "" >> "$module_folder"/tests/test_module.py
+        echo "" >> "$module_folder"/tests/test_module.py
+        echo "def suite():" >> "$module_folder"/tests/test_module.py
+        echo "    suite = trytond.tests.test_tryton.suite()" >> "$module_folder"/tests/test_module.py
+        echo "    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(" >> "$module_folder"/tests/test_module.py
+        echo "        ModuleTestCase))" >> "$module_folder"/tests/test_module.py
+        echo "    return suite" >> "$module_folder"/tests/test_module.py
 
         # Init index.rst
-        echo ".. MAIN_TOPIC" >> $module_folder/doc/fr/index.rst
-        echo "" >> $module_folder/doc/fr/index.rst
-        echo "MAIN TOPIC - Module Topic" >> $module_folder/doc/fr/index.rst
-        echo "=========================" >> $module_folder/doc/fr/index.rst
-        echo "" >> $module_folder/doc/fr/index.rst
-        echo "Résumé" >> $module_folder/doc/fr/index.rst
-        echo "------" >> $module_folder/doc/fr/index.rst
-        echo "" >> $module_folder/doc/fr/index.rst
-        echo ".. include:: summary.rst" >> $module_folder/doc/fr/index.rst
-        echo "" >> $module_folder/doc/fr/index.rst
-        echo "" >> $module_folder/doc/fr/index.rst
-        echo ".. toctree::" >> $module_folder/doc/fr/index.rst
-        echo "    :hidden:" >> $module_folder/doc/fr/index.rst
-        echo "" >> $module_folder/doc/fr/index.rst
-        echo "    summary.rst" >> $module_folder/doc/fr/index.rst
+        echo ".. MAIN_TOPIC" >> "$module_folder"/doc/fr/index.rst
+        echo "" >> "$module_folder"/doc/fr/index.rst
+        echo "MAIN TOPIC - Module Topic" >> "$module_folder"/doc/fr/index.rst
+        echo "=========================" >> "$module_folder"/doc/fr/index.rst
+        echo "" >> "$module_folder"/doc/fr/index.rst
+        echo "Résumé" >> "$module_folder"/doc/fr/index.rst
+        echo "------" >> "$module_folder"/doc/fr/index.rst
+        echo "" >> "$module_folder"/doc/fr/index.rst
+        echo ".. include:: summary.rst" >> "$module_folder"/doc/fr/index.rst
+        echo "" >> "$module_folder"/doc/fr/index.rst
+        echo "" >> "$module_folder"/doc/fr/index.rst
+        echo ".. toctree::" >> "$module_folder"/doc/fr/index.rst
+        echo "    :hidden:" >> "$module_folder"/doc/fr/index.rst
+        echo "" >> "$module_folder"/doc/fr/index.rst
+        echo "    summary.rst" >> "$module_folder"/doc/fr/index.rst
 
         # Init translation file
-        echo "#" > $module_folder/locale/fr_FR.po
-        echo 'msgid ""' >> $module_folder/locale/fr_FR.po
-        echo 'msgstr "Content-Type: text/plain; charset=utf-8\n"' >> $module_folder/locale/fr_FR.po
+        echo "#" > "$module_folder"/locale/fr_FR.po
+        echo 'msgid ""' >> "$module_folder"/locale/fr_FR.po
+        echo 'msgstr "Content-Type: text/plain; charset=utf-8\n"' >> "$module_folder"/locale/fr_FR.po
 }
