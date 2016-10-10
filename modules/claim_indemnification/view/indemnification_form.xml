@@ -18,11 +18,25 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <label name="beneficiary"/>
     <field name="beneficiary"/>
+    <label name="product"/>
+    <field name="product"/>
     <newline/>
-    <label name="amount"/>
-    <group id="amount">
-        <field name="amount" xexpand="0"/>
-        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    <group id="amount" string="" colspan="4" col="6">
+        <label name="amount"/>
+        <group id="amount">
+            <field name="amount" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+        </group>
+        <label name="amount"/>
+        <group id="tax_amount">
+            <field name="tax_amount" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+        </group>
+        <label name="total_amount"/>
+        <group id="total_amount">
+            <field name="total_amount" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+        </group>
     </group>
     <label name="manual"/>
     <field name="manual"/>
@@ -35,4 +49,5 @@ this repository contains the full copyright notices and license terms. -->
     </group>
     <field name="details" colspan="4"/>
     <field name="kind" invisible="1"/>
+    <field name="possible_products" invisible="1"/>
 </form>

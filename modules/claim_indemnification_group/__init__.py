@@ -5,11 +5,13 @@ from .benefit import *
 from .contract import *
 from .rule_engine import *
 from .claim import *
+from .wizard import *
 
 
 def register():
     Pool.register(
         Benefit,
+        BenefitCompanyProduct,
         BenefitRule,
         BenefitRuleIndemnification,
         BenefitRuleDeductible,
@@ -19,4 +21,6 @@ def register():
         OptionBenefit,
         RuleEngineRuntime,
         ClaimService,
+        Indemnification,
+        IndemnificationDefinition,
         module='claim_indemnification_group', type_='model')

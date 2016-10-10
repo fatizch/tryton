@@ -1,3 +1,4 @@
+* Configure accounting products per benefit, handle taxes
 * Handle automatic indemnification periods creation for annuity benefits
 * Add select service step on indemnification creation wizard
 * Handling overlapping periods and cancelled indemnifications

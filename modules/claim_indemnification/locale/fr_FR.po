@@ -4,31 +4,47 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:claim.create_indemnification:"
 msgid "End date must be greater than the start date"
-msgstr ""
+msgstr "La date de fin doit être supérieure à la date de début"
 
 msgctxt "error:claim.create_indemnification:"
 msgid "Indemnifications in the future are not allowed"
 msgstr "Les indemnisations dans le futur ne sont pas autorisées"
 
 msgctxt "error:claim.create_indemnification:"
-msgid "The contract was terminated on the %(contract_end)s, a new indemnification cannot start on %(indemn_start)s."
-msgstr "Le contrat a été résilié le %(contract_end)s, il n'est pas possible de commencer une indemnisation le %(indemn_start)s."
+msgid ""
+"The contract was terminated on the %(contract_end)s, a new indemnification "
+"cannot start on %(indemn_start)s."
+msgstr ""
+"Le contrat a été résilié le %(contract_end)s, il n'est pas possible de "
+"commencer une indemnisation le %(indemn_start)s."
 
 msgctxt "error:claim.create_indemnification:"
-msgid "The contract was terminated on the %(contract_end)s, so the requested indemnification end (%(indemn_end)s) will automatically be updated"
-msgstr "Le contrat a été résilié le %(contract_end)s, la période d'indemnisation va être réduite à cette date"
+msgid ""
+"The contract was terminated on the %(contract_end)s, so the requested "
+"indemnification end (%(indemn_end)s) will automatically be updated"
+msgstr ""
+"Le contrat a été résilié le %(contract_end)s, la période d'indemnisation va "
+"être réduite à cette date"
 
 msgctxt "error:claim.create_indemnification:"
-msgid "The contract was terminated on the %(contract_end)s, there will not be any revaluation after this date"
-msgstr "Le contrat a été résilié le %(contract_end)s, les revalorisations seront désactivées après cette date"
+msgid ""
+"The contract was terminated on the %(contract_end)s, there will not be any "
+"revaluation after this date"
+msgstr ""
+"Le contrat a été résilié le %(contract_end)s, les revalorisations seront "
+"désactivées après cette date"
 
 msgctxt "error:claim.create_indemnification:"
 msgid "The end date must not exceed the loss end date"
 msgstr "La date de fin ne doit pas exceder la date fin du préjudice"
 
 msgctxt "error:claim.indemnification:"
-msgid "The indemnification period (%(indemn_start)s - %(indemn_end)s) is not compatible with the contract's end date (%(contract_end)s)."
-msgstr "La période d'indemnisation (%(indemn_start)s - %(indemn_end)s) n'est pas compatible avec la date de fin du contrat (%(contract_end)s)."
+msgid ""
+"The indemnification period (%(indemn_start)s - %(indemn_end)s) is not "
+"compatible with the contract's end date (%(contract_end)s)."
+msgstr ""
+"La période d'indemnisation (%(indemn_start)s - %(indemn_end)s) n'est pas "
+"compatible avec la date de fin du contrat (%(contract_end)s)."
 
 msgctxt "error:claim.service:"
 msgid "Are you sure you want to cancel the periods between %s and %s?"
@@ -90,10 +106,6 @@ msgctxt "field:account.invoice.line.claim_detail,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:benefit,account_product:"
-msgid "Account Product"
-msgstr "Produit comptable"
-
 msgctxt "field:benefit,automatic_period_calculation:"
 msgid "Automatic Period Calculation"
 msgstr "Calcul automatique des périodes"
@@ -105,6 +117,50 @@ msgstr "Règles de Prestation"
 msgctxt "field:benefit,indemnification_kind:"
 msgid "Indemnification Kind"
 msgstr "Type d'indémnisation"
+
+msgctxt "field:benefit,products:"
+msgid "Products"
+msgstr "Produits comptables"
+
+msgctxt "field:benefit-product,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:benefit-product,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-product,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit-product,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:benefit-product,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:benefit-product,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit-product,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:benefit-product,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:benefit-product,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit.rule,annuity_frequency:"
 msgid "Annuity Frequency"
@@ -162,13 +218,17 @@ msgctxt "field:benefit.rule,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:benefit.rule,requires_frequency:"
+msgid "Frequency Required"
+msgstr "Fréquence requise"
+
 msgctxt "field:benefit.rule,revaluation_rule:"
 msgid "Revaluation Rule"
 msgstr "Règle de revalorisation"
 
-msgctxt "field:benefit.rule,requires_frequency:"
-msgid "Frequency required"
-msgstr "Fréquence requise"
+msgctxt "field:benefit.rule,revaluation_rule_extra_data:"
+msgid "Revaluation Rule Extra Data"
+msgstr "Données complémentaires de revalorisation"
 
 msgctxt "field:benefit.rule,write_date:"
 msgid "Write Date"
@@ -193,6 +253,10 @@ msgstr "Quittances"
 msgctxt "field:claim,is_services_deductible:"
 msgid "Is Services Deductible"
 msgstr "Le service est une période de franchise"
+
+msgctxt "field:claim,open_loss:"
+msgid "Open Loss"
+msgstr "Evenement ouvert"
 
 msgctxt "field:claim.configuration,control_rule:"
 msgid "Control Rule"
@@ -314,6 +378,14 @@ msgctxt "field:claim.indemnification,payment_term:"
 msgid "Payment Term"
 msgstr "Conditions de paiement"
 
+msgctxt "field:claim.indemnification,possible_products:"
+msgid "Possible Products"
+msgstr "Taxes possibles"
+
+msgctxt "field:claim.indemnification,product:"
+msgid "Product"
+msgstr "Taxes"
+
 msgctxt "field:claim.indemnification,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -330,9 +402,17 @@ msgctxt "field:claim.indemnification,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:claim.indemnification,taxes:"
-msgid "Taxes"
-msgstr "Taxes"
+msgctxt "field:claim.indemnification,tax_amount:"
+msgid "Tax Amount"
+msgstr "Taxe"
+
+msgctxt "field:claim.indemnification,taxes_included:"
+msgid "Taxes included"
+msgstr "Taxes incluses"
+
+msgctxt "field:claim.indemnification,total_amount:"
+msgid "Total Amount"
+msgstr "Montant total"
 
 msgctxt "field:claim.indemnification,write_date:"
 msgid "Write Date"
@@ -343,46 +423,6 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:claim.indemnification,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:claim.indemnification-acount.tax,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:claim.indemnification-acount.tax,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:claim.indemnification-acount.tax,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:claim.indemnification-acount.tax,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:claim.indemnification-acount.tax,indemnification:"
-msgid "Indemnification"
-msgstr "Prestations"
-
-msgctxt "field:claim.indemnification-acount.tax,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:claim.indemnification-acount.tax,tax:"
-msgid "Tax"
-msgstr "Taxe"
-
-msgctxt "field:claim.indemnification-acount.tax,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:claim.indemnification-acount.tax,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:claim.indemnification-acount.tax,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -594,6 +634,10 @@ msgctxt "field:claim.indemnification.detail,base_amount:"
 msgid "Base Amount"
 msgstr "Montant de base"
 
+msgctxt "field:claim.indemnification.detail,benefit_description:"
+msgid "Prestation"
+msgstr "Prestation"
+
 msgctxt "field:claim.indemnification.detail,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -694,10 +738,6 @@ msgctxt "field:claim.indemnification_definition,beneficiary:"
 msgid "Beneficiary"
 msgstr "Bénéficiaire"
 
-msgctxt "field:claim.indemnification_definition,beneficiary_is_person:"
-msgid "Beneficiary Is A Person"
-msgstr "Le bénéficiaire est une personne"
-
 msgctxt "field:claim.indemnification_definition,end_date:"
 msgid "End_Date"
 msgstr "Date de fin"
@@ -710,6 +750,14 @@ msgctxt "field:claim.indemnification_definition,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:claim.indemnification_definition,possible_products:"
+msgid "Possible Products"
+msgstr "Taxes possibles"
+
+msgctxt "field:claim.indemnification_definition,product:"
+msgid "Product"
+msgstr "Taxes"
+
 msgctxt "field:claim.indemnification_definition,service:"
 msgid "Claim Service"
 msgstr "Prestation fournie"
@@ -718,13 +766,17 @@ msgctxt "field:claim.indemnification_definition,start_date:"
 msgid "Start Date"
 msgstr "Date de début"
 
-msgctxt "field:claim.indemnification_regularisation,amount:"
-msgid "Regularisation Amount"
-msgstr "Montant pour la régularisation"
-
 msgctxt "field:claim.indemnification_regularisation,cancelled:"
 msgid "Cancelled"
 msgstr "Annulé"
+
+msgctxt "field:claim.indemnification_regularisation,cancelled_amount:"
+msgid "Cancelled Amount"
+msgstr "Montant annulé"
+
+msgctxt "field:claim.indemnification_regularisation,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
 
 msgctxt "field:claim.indemnification_regularisation,id:"
 msgid "ID"
@@ -733,6 +785,11 @@ msgstr "ID"
 msgctxt "field:claim.indemnification_regularisation,indemnification:"
 msgid "Indemnification"
 msgstr "Prestations"
+
+msgctxt ""
+"field:claim.indemnification_regularisation,new_indemnification_amount:"
+msgid "New Indemnification Amount"
+msgstr "Nouveau montant d'indemnisation"
 
 msgctxt "field:claim.indemnification_regularisation,payback_method:"
 msgid "Payback Method"
@@ -749,6 +806,10 @@ msgstr "Conditions de paiement"
 msgctxt "field:claim.indemnification_regularisation,payment_term_required:"
 msgid "Payment Term Required"
 msgstr "Condition de reversement requis"
+
+msgctxt "field:claim.indemnification_regularisation,remaining_amount:"
+msgid "Remaining Amount"
+msgstr "Montant restant"
 
 msgctxt "field:claim.select_service,contract:"
 msgid "Contract"
@@ -780,7 +841,7 @@ msgstr "Date de fin de la franchise"
 
 msgctxt "field:claim.service,has_automatic_period_calculation:"
 msgid "has_automatic_period_calculation"
-msgstr ""
+msgstr "Périodes calculées automatiquement"
 
 msgctxt "field:claim.service,indemnifications:"
 msgid "Indemnifications"
@@ -817,6 +878,10 @@ msgctxt "model:account.journal.type,name:journal_type_claim"
 msgid "Claim"
 msgstr "Sinistre"
 
+msgctxt "model:benefit-product,name:"
+msgid "Benefit Product relation"
+msgstr "Relation Prestation - Produit"
+
 msgctxt "model:benefit.rule,name:"
 msgid "Benefit Rule"
 msgstr "Prestation"
@@ -833,21 +898,17 @@ msgctxt "model:claim.indemnification,name:"
 msgid "Indemnification"
 msgstr "Prestations"
 
-msgctxt "model:claim.indemnification-acount.tax,name:"
-msgid "Indemnification - Taxes Relation"
-msgstr ""
-
 msgctxt "model:claim.indemnification.assistant.control.element,name:"
 msgid "Claim Indemnification Control Element"
-msgstr ""
+msgstr "Elément de contrôle des prestations"
 
 msgctxt "model:claim.indemnification.assistant.validate.element,name:"
 msgid "Claim Indemnification Validate Element"
-msgstr ""
+msgstr "Elément de validation des prestations"
 
 msgctxt "model:claim.indemnification.assistant.view,name:"
 msgid "Indemnification Assistant View"
-msgstr ""
+msgstr "Vue d'aide des prestations"
 
 msgctxt "model:claim.indemnification.control.rule,name:"
 msgid "Indemnification Control Rule"
@@ -970,6 +1031,10 @@ msgid "Period"
 msgstr "Période"
 
 msgctxt "selection:benefit.rule,annuity_frequency:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:benefit.rule,annuity_frequency:"
 msgid "Half-yearly"
 msgstr "Semestrielle"
 
@@ -996,6 +1061,10 @@ msgstr "Capital"
 msgctxt "selection:claim.indemnification,kind:"
 msgid "Period"
 msgstr "Période"
+
+msgctxt "selection:claim.indemnification,payback_method:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:claim.indemnification,payback_method:"
 msgid "Continuous"
@@ -1158,6 +1227,10 @@ msgid "Year"
 msgstr "Année"
 
 msgctxt "selection:claim.indemnification_regularisation,payback_method:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:claim.indemnification_regularisation,payback_method:"
 msgid "Continuous"
 msgstr "Continu"
 
@@ -1170,12 +1243,24 @@ msgid "Planned"
 msgstr "Planifié"
 
 msgctxt "selection:claim.service,annuity_frequency:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:claim.service,annuity_frequency:"
+msgid "Half-yearly"
+msgstr "Semestrielle"
+
+msgctxt "selection:claim.service,annuity_frequency:"
 msgid "Monthly"
 msgstr "Mensuel"
 
 msgctxt "selection:claim.service,annuity_frequency:"
 msgid "Quarterly"
 msgstr "Trimestriel"
+
+msgctxt "selection:claim.service,annuity_frequency:"
+msgid "Yearly"
+msgstr "Annuelle"
 
 msgctxt "selection:rule_engine,type_:"
 msgid "Benefit"
@@ -1196,6 +1281,10 @@ msgstr "Prestation"
 msgctxt "view:benefit.rule:"
 msgid "Benefit Rules"
 msgstr "Règles de Prestation"
+
+msgctxt "view:benefit:"
+msgid "Accounting"
+msgstr "Comptabilité"
 
 msgctxt "view:benefit:"
 msgid "Benefit"
@@ -1223,7 +1312,7 @@ msgstr "Prestations"
 
 msgctxt "view:claim.indemnification.assistant.validate.element:"
 msgid "Compensation Elements"
-msgstr ""
+msgstr "Eléments de compensation"
 
 msgctxt "view:claim.indemnification.assistant.validate.element:"
 msgid "Indemnification"

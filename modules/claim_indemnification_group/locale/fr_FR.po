@@ -2,6 +2,50 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:benefit,company_products:"
+msgid "Company Products"
+msgstr "Produits comptables pour la société"
+
+msgctxt "field:benefit-company_product,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:benefit-company_product,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-company_product,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-company_product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit-company_product,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:benefit-company_product,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:benefit-company_product,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit-company_product,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:benefit-company_product,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:benefit-company_product,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:benefit.rule,deductible_rules:"
 msgid "Deductible Rules"
 msgstr "Règles de franchise"
@@ -159,8 +203,12 @@ msgid "Annuity Frequency"
 msgstr "Fréquence d'indemnisation"
 
 msgctxt "field:contract.option.benefit,annuity_frequency_forced:"
-msgid "Annuity frequency forced"
+msgid "Annuity frequency Forced"
 msgstr "Fréquence d'indemnisation imposée"
+
+msgctxt "field:contract.option.benefit,annuity_frequency_required:"
+msgid "Annuity Frequency Required"
+msgstr "Fréquence de remboursement requise"
 
 msgctxt "field:contract.option.benefit,available_deductible_rules:"
 msgid "Available Deductible Rule"
@@ -242,9 +290,17 @@ msgctxt "field:contract.option.version,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
 
+msgctxt "help:benefit,company_products:"
+msgid "Products available when paying a company"
+msgstr "Produits disponible en cas de paiement direct à la société"
+
 msgctxt "help:benefit.rule,force_annuity_frequency:"
 msgid "Get annuity frequency from product if True"
 msgstr "Retourne la fréquence définie au produit si vrai"
+
+msgctxt "model:benefit-company_product,name:"
+msgid "Benefit Company Product relation"
+msgstr "Relation Prestation - Produit de la société"
 
 msgctxt "model:benefit_rule-deductible_rule,name:"
 msgid "Benefit Rule - Deductible"
@@ -261,6 +317,10 @@ msgstr "Prestation - Revalorisation"
 msgctxt "model:contract.option.benefit,name:"
 msgid "Option Benefit"
 msgstr "Prestation"
+
+msgctxt "selection:contract.option.benefit,annuity_frequency:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:contract.option.benefit,annuity_frequency:"
 msgid "Half-yearly"

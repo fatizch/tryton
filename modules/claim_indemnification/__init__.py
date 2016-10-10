@@ -14,12 +14,12 @@ from .batch import *
 def register():
     Pool.register(
         Benefit,
+        BenefitProduct,
         BenefitRule,
         Claim,
         Loss,
         ClaimService,
         Indemnification,
-        IndemnificationTaxes,
         IndemnificationDetail,
         Invoice,
         InvoiceLine,

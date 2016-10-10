@@ -13,6 +13,7 @@ from trytond.modules.currency_cog import ModelCurrency
 __metaclass__ = PoolMeta
 __all__ = [
     'Benefit',
+    'BenefitProduct',
     'BenefitRule',
     ]
 
@@ -46,14 +47,14 @@ class Benefit:
         'indemnification_kind')
     benefit_rules = fields.One2Many('benefit.rule', 'benefit', 'Benefit Rules',
         delete_missing=True)
-    account_product = fields.Many2One('product.product', 'Account Product',
-        ondelete='RESTRICT', required=True)
     automatic_period_calculation = fields.Boolean(
         'Automatic Period Calculation',
         help='Periods will be automatically calculated reusing data from'
         'previous period.',
         states={'invisible': Eval('indemnification_kind') != 'period'},
         depends=['indemnification_kind'])
+    products = fields.Many2Many('benefit-product', 'benefit', 'product',
+        'Products')
 
     def has_automatic_period_calculation(self):
         return self.automatic_period_calculation and \
@@ -72,6 +73,17 @@ class Benefit:
     @staticmethod
     def default_indemnification_kind():
         return 'capital'
+
+
+class BenefitProduct(model.CoogSQL):
+    'Benefit Product relation'
+
+    __name__ = 'benefit-product'
+
+    benefit = fields.Many2One('benefit', 'Benefit', required=True,
+        ondelete='CASCADE', select=True)
+    product = fields.Many2One('product.product', 'Product', required=True,
+        ondelete='RESTRICT')
 
 
 class BenefitRule(

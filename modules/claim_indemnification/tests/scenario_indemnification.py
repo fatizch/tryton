@@ -119,7 +119,7 @@ benefit.code = 'refund'
 benefit.start_date = datetime.date(2010, 1, 1)
 benefit.indemnification_kind = 'capital'
 benefit.beneficiary_kind = 'subscriber'
-benefit.account_product = account_product
+benefit.products.append(account_product)
 benefit.loss_descs.append(loss_desc)
 benefit.benefit_rules.append(benefit_rule)
 benefit.save()

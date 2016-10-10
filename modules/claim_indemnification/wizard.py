@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, Equal
+from trytond.pyson import Eval, Equal, Bool, Len
 
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 from trytond.modules.coog_core import fields, model, utils
@@ -71,7 +71,7 @@ class IndemnificationElement(model.CoogView):
         return {
             'action': 'nothing',
             'indemnification': indemnification.id,
-            'amount': indemnification.amount,
+            'amount': indemnification.total_amount,
             'benefit': service.benefit.id,
             'contract': service.contract.id,
             'currency_digits': indemnification.currency_digits,
@@ -136,7 +136,7 @@ class IndemnificationAssistantView(model.CoogView):
     def get_field_names(cls):
         return [
             ('', ''),
-            ('amount', 'Montant'),
+            ('total_amount', 'Montant'),
             ('start_date', 'Date de début'),
             ('end_date', 'Date de fin')]
 
@@ -215,13 +215,13 @@ class IndemnificationAssistant(Wizard):
         Element = pool.get('claim.indemnification.assistant.validate.element')
         result = Indemnification.search([
                 ('status', 'in', ['controlled', 'cancelled'])],
-            order=[('amount', 'DESC')])
+            order=[('total_amount', 'DESC')])
         for res in result:
             elements.append(
                 Element.from_indemnification(res))
         return {
             'validate': elements, 'mode': 'validate',
-            'global_setter': 'nothing', 'field_sort': 'amount',
+            'global_setter': 'nothing', 'field_sort': 'total_amount',
             'order_sort': 'DESC'}
 
     def default_control_view_state(self, fields):
@@ -231,7 +231,7 @@ class IndemnificationAssistant(Wizard):
         Element = pool.get('claim.indemnification.assistant.control.element')
         result = Indemnification.search([
                 ('status', '=', 'scheduled')],
-            order=[('amount', 'DESC')])
+            order=[('total_amount', 'DESC')])
         for res in result:
             elements.append(
                 Element.from_indemnification(res))
@@ -389,21 +389,34 @@ class IndemnificationDefinition(model.CoogView):
     extra_data = fields.Dict('extra_data', 'Extra Data')
     service = fields.Many2One('claim.service', 'Claim Service')
     beneficiary = fields.Many2One('party.party', 'Beneficiary')
-    beneficiary_is_person = fields.Function(
-        fields.Boolean('Beneficiary Is A Person', depends=['beneficiary']),
-        'get_beneficiary_is_person')
+    product = fields.Many2One('product.product', 'Product', states={
+            'invisible': Bool(Eval('product', False)) &
+            (Len(Eval('possible_products', [])) == 1),
+            }, required=True, domain=[('id', 'in', Eval('possible_products'))],
+        depends=['possible_products'])
+    possible_products = fields.Many2Many('product.product', None, None,
+        'Possible Products')
 
-    def get_beneficiary_is_person(self, name):
-        if self.beneficiary:
-            return self.beneficiary.is_person
-        return False
+    @fields.depends('possible_products', 'product', 'service')
+    def on_change_service(self):
+        self.update_product()
 
-    @fields.depends('beneficiary', 'beneficiary_is_person')
-    def on_change_beneficiary(self):
-        if self.beneficiary:
-            self.beneficiary_is_person = self.beneficiary.is_person
+    def get_possible_products(self, name):
+        if not self.service:
+            return []
+        return [x.id for x in self.service.benefit.products]
+
+    def update_product(self):
+        Product = Pool().get('product.product')
+        products = self.get_possible_products(None)
+        if self.product and self.product.id not in products:
+            self.product = None
+        if len(products) == 1:
+            self.product = Product(products[0])
+        if products:
+            self.possible_products = Product.browse(products)
         else:
-            self.beneficiary_is_person = False
+            self.possible_products = []
 
     def get_extra_data_values(self):
         return self.extra_data
@@ -548,6 +561,8 @@ class CreateIndemnification(Wizard):
             self.definition.start_date = indemnification.start_date
             self.definition.end_date = indemnification.end_date
             self.definition.service = indemnification.service
+            self.definition.beneficiary = indemnification.beneficiary
+            self.definition.product = indemnification.product
             self.result.indemnification = [indemnification]
             self.result.cancelled = []
             return 'result'
@@ -589,7 +604,9 @@ class CreateIndemnification(Wizard):
             start_date = self.result.indemnification[0].start_date
             end_date = self.result.indemnification[-1].end_date
             indemnification_id = self.result.indemnification[0].id
+            product_id = self.result.indemnification[0].product.id
         else:
+            product_id = None
             definition = getattr(self, 'definition', None)
             indemnification_id = None
             if definition and hasattr(definition, 'service'):
@@ -625,6 +642,7 @@ class CreateIndemnification(Wizard):
             'beneficiary': beneficiary.id,
             'extra_data': extra_data.extra_data_values,
             'indemnification': [indemnification_id],
+            'product': product_id,
             }
         return res
 
@@ -693,7 +711,12 @@ class CreateIndemnification(Wizard):
             extra_data.save()
         self.definition.service.save()
         indemnification.init_from_service(self.definition.service)
+        indemnification.amount = 0
+        indemnification.total_amount = 0
+        indemnification.currency = indemnification.service.get_currency()
+        indemnification.currency_digits = indemnification.currency.digits
         indemnification.beneficiary = self.definition.beneficiary
+        indemnification.product = self.definition.product
         Indemnification.calculate([indemnification])
         self.result.indemnification = [indemnification]
         return 'result'
@@ -723,7 +746,7 @@ class CreateIndemnification(Wizard):
         new_indemnification_amount = self.result.indemnification[0].amount
         cancelled_amount = 0
         for indemnification in self.result.cancelled:
-            cancelled_amount += indemnification.amount
+            cancelled_amount += indemnification.total_amount
         remaining_amount = new_indemnification_amount - cancelled_amount
         return {
             'remaining_amount': remaining_amount,

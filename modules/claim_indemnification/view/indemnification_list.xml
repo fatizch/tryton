@@ -9,6 +9,12 @@ this repository contains the full copyright notices and license terms. -->
     <field name="amount">
         <suffix name="currency_symbol"/>
     </field>
+    <field name="tax_amount">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="total_amount">
+        <suffix name="currency_symbol"/>
+    </field>
     <button string="Schedule" name="schedule"/>
     <button string="Modify" name="modify_indemnification"/>
 </tree>

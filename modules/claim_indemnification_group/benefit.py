@@ -9,6 +9,7 @@ from trytond.modules.coog_core import fields, model
 
 __all__ = [
     'Benefit',
+    'BenefitCompanyProduct',
     'BenefitRule',
     'BenefitRuleIndemnification',
     'BenefitRuleDeductible',
@@ -19,6 +20,10 @@ __all__ = [
 class Benefit:
     __metaclass__ = PoolMeta
     __name__ = 'benefit'
+
+    company_products = fields.Many2Many('benefit-company_product', 'benefit',
+        'product', 'Company Products', help='Products available when '
+        'paying a company')
 
     def required_extra_data(self, service, date):
         if self.benefit_rules and service:
@@ -33,6 +38,17 @@ class Benefit:
             for e in self.required_extra_data(service,
                 service.loss.get_date())]
         return {k: v for k, v in values.iteritems() if k in required}
+
+
+class BenefitCompanyProduct(model.CoogSQL):
+    'Benefit Company Product relation'
+
+    __name__ = 'benefit-company_product'
+
+    benefit = fields.Many2One('benefit', 'Benefit', required=True,
+        ondelete='CASCADE', select=True)
+    product = fields.Many2One('product.product', 'Product', required=True,
+        ondelete='RESTRICT')
 
 
 class BenefitRule:
