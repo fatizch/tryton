@@ -23,8 +23,12 @@ def register():
         ClaimService,
         Indemnification,
         IndemnificationDefinition,
+        TransferServicesContracts,
+        TransferServicesBenefits,
+        TransferServicesBenefitLine,
         module='claim_indemnification_group', type_='model')
 
     Pool.register(
         CreateIndemnification,
+        TransferServices,
         module='claim_indemnification_group', type_='wizard')

@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import fields
 
@@ -22,6 +22,31 @@ class ClaimService:
         option_benefit = self.option.get_version_at_date(
             self.loss.start_date).get_benefit(self.benefit)
         self.annuity_frequency = option_benefit.annuity_frequency
+
+    @classmethod
+    def transfer_services(cls, matches, at_date):
+        '''
+            Create new services according to `matches` :
+            matches = [
+                ('src_benefit', 'src_option', 'target_benefit',
+                    'target_option'),
+                ]
+        '''
+        copies = []
+        for src_benefit, src_option, target_benefit, target_option in matches:
+            to_copy = cls.search([('benefit', '=', src_benefit.id),
+                    ('option', '=', src_option.id),
+                    ['OR', ('loss.end_date', '=', None),
+                        ('loss.end_date', '>=', at_date)]])
+            copies += cls.copy(to_copy, default={
+                    'benefit': target_benefit.id,
+                    'option': target_option.id,
+                    'contract': target_option.parent_contract.id,
+                    })
+        Event = Pool().get('event')
+        if copies:
+            Event.notify_events(copies, 'transferred_claim_service')
+        return copies
 
 
 class Indemnification:

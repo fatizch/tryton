@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ##################### -->
+        <!-- # Transfer Services # -->
+        <!-- ##################### -->
+        <record model="ir.action.wizard" id="act_claim_transfer_services">
+            <field name="name">Transfer Services</field>
+            <field name="wiz_name">claim.transfer_services</field>
+        </record>
+        <menuitem parent="claim.menu_claim" sequence="50" action="act_claim_transfer_services" id="menu_transfer_services"/>
+        <!-- ############################### -->
+        <!-- # Transfer Services Contracts # -->
+        <!-- ############################### -->
+        <record model="ir.ui.view" id="transfer_services_contracts_view_form">
+            <field name="model">claim.transfer_services.contracts</field>
+            <field name="type">form</field>
+            <field name="name">transfer_services_contracts_form</field>
+        </record>
+        <!-- ############################## -->
+        <!-- # Transfer Services Benefits # -->
+        <!-- ############################## -->
+        <record model="ir.ui.view" id="transfer_services_benefits_view_form">
+            <field name="model">claim.transfer_services.benefits</field>
+            <field name="type">form</field>
+            <field name="name">transfer_services_benefits_form</field>
+        </record>
+        <!-- ################################## -->
+        <!-- # Transfer Services Benefit Line # -->
+        <!-- ################################## -->
+        <record model="ir.ui.view" id="transfer_services_benefit_line_view_list">
+            <field name="model">claim.transfer_services.benefit_line</field>
+            <field name="type">tree</field>
+            <field name="name">transfer_services_benefit_line_list</field>
+        </record>
+    </data>
+</tryton>

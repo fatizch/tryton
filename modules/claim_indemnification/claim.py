@@ -203,6 +203,14 @@ class ClaimService:
         return super(ClaimService, cls)._export_skips() | {'multi_level_view'}
 
     @classmethod
+    def copy(cls, services, default=None):
+        default = default.copy() if default else {}
+        if 'indemnification' not in default:
+            default['indemnifications'] = []
+            default['multi_level_view'] = []
+        return super(ClaimService, cls).copy(services, default)
+
+    @classmethod
     def get_paid_until_date(cls, services, name):
         indemnification = Pool().get('claim.indemnification').__table__()
         cursor = Transaction().connection.cursor()
