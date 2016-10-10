@@ -392,7 +392,8 @@ class IndemnificationDefinition(model.CoogView):
             'invisible': ~Eval('is_period'),
             'required': Bool(Eval('is_period', False)),
             }, depends=['is_period'])
-    extra_data = fields.Dict('extra_data', 'Extra Data')
+    extra_data = fields.Dict('extra_data', 'Extra Data', states={
+            'invisible': ~Eval('extra_data')})
     service = fields.Many2One('claim.service', 'Claim Service')
     is_period = fields.Boolean('Is Period')
     beneficiary = fields.Many2One('party.party', 'Beneficiary')
