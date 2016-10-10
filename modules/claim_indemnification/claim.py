@@ -190,10 +190,13 @@ class ClaimService:
                     readonly=False),
                 })
         cls._error_messages.update({
-            'overlap_date': 'Are you sure you want to cancel '
-            'the periods between %s and %s?',
-            'offset_date': 'The date is not equal to the cancelled date'
-            })
+                'overlap_date': 'Are you sure you want to cancel '
+                'the periods between %s and %s?',
+                'offset_date': 'The date is not equal to the cancelled date',
+                'multiple_capital_indemnifications': 'There may not be '
+                'multiple capital indemnifications, the current one will be '
+                'cancelled',
+                })
 
     @classmethod
     def _export_skips(cls):
@@ -296,17 +299,24 @@ class ClaimService:
             for indemn in service.indemnifications:
                 if (indemn.status != 'cancelled' and
                         indemn.status != 'cancel_paid'):
-                    if at_date < indemn.end_date:
+                    if (service.benefit.indemnification_kind == 'capital' or
+                            at_date < indemn.end_date):
                         if indemn.status == 'paid':
                             to_cancel.append(indemn)
                         else:
                             to_delete.append(indemn)
         if to_cancel:
-            if at_date != to_cancel[0].start_date:
+            if (service.benefit.indemnification_kind != 'capital' and
+                    at_date != to_cancel[0].start_date):
                 cls.raise_user_error('offset_date')
-            cls.raise_user_warning('overlap_date', 'overlap_date',
-                (Date.date_as_string(to_cancel[0].start_date),
-                    Date.date_as_string(to_cancel[-1].end_date)))
+            if service.benefit.indemnification_kind != 'capital':
+                cls.raise_user_warning('overlap_date', 'overlap_date',
+                    (Date.date_as_string(to_cancel[0].start_date),
+                        Date.date_as_string(to_cancel[-1].end_date)))
+            else:
+                cls.raise_user_warning('multiple_capital_indemnifications_%s' %
+                    str([x.id for x in services]),
+                    'multiple_capital_indemnifications')
             ClaimIndemnification.cancel_indemnification(to_cancel)
         if to_delete:
             ClaimIndemnification.delete(to_delete)
@@ -1031,10 +1041,20 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency):
         fields.Char('Prestation'),
         'get_benefit_description')
 
+    @classmethod
+    def __setup__(cls):
+        super(IndemnificationDetail, cls).__setup__()
+        cls._error_messages.update({
+                'capital_string': 'Capital',
+                })
+
     def get_indemnification_kind(self, name):
         return self.indemnification.kind
 
     def get_duration_description(self, name):
+        if self.indemnification.kind == 'capital':
+            return self.raise_user_error('capital_string',
+                raise_exception=False)
         return '%s %s(s)' % (self.nb_of_unit, self.unit_string)
 
     def get_benefit_description(self, name):

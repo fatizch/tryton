@@ -30,7 +30,6 @@ class EventLog:
 
     @classmethod
     def get_related_instances(cls, object_, model_name):
-        model_name = 'contract'
         # TODO: use claim details to calculate the contract
         if model_name == 'contract':
             if object_.__name__ == 'claim.indemnification':

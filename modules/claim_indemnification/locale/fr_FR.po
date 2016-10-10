@@ -46,6 +46,10 @@ msgstr ""
 "La période d'indemnisation (%(indemn_start)s - %(indemn_end)s) n'est pas "
 "compatible avec la date de fin du contrat (%(contract_end)s)."
 
+msgctxt "error:claim.indemnification.detail:"
+msgid "Capital"
+msgstr "Capital"
+
 msgctxt "error:claim.service:"
 msgid "Are you sure you want to cancel the periods between %s and %s?"
 msgstr "Êtes-vous sur de vouloir annuler les périodes entre %s et %s?"

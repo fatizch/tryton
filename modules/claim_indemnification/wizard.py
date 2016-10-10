@@ -384,10 +384,17 @@ class IndemnificationDefinition(model.CoogView):
     'Indemnification Definition'
     __name__ = 'claim.indemnification_definition'
 
-    start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End_Date', required=True)
+    start_date = fields.Date('Start Date', states={
+            'invisible': ~Eval('is_period'),
+            'required': Bool(Eval('is_period', False)),
+            }, depends=['is_period'])
+    end_date = fields.Date('End Date', states={
+            'invisible': ~Eval('is_period'),
+            'required': Bool(Eval('is_period', False)),
+            }, depends=['is_period'])
     extra_data = fields.Dict('extra_data', 'Extra Data')
     service = fields.Many2One('claim.service', 'Claim Service')
+    is_period = fields.Boolean('Is Period')
     beneficiary = fields.Many2One('party.party', 'Beneficiary')
     product = fields.Many2One('product.product', 'Product', states={
             'invisible': Bool(Eval('product', False)) &
@@ -397,9 +404,14 @@ class IndemnificationDefinition(model.CoogView):
     possible_products = fields.Many2Many('product.product', None, None,
         'Possible Products')
 
-    @fields.depends('possible_products', 'product', 'service')
+    @fields.depends('is_period', 'possible_products', 'product', 'service')
     def on_change_service(self):
         self.update_product()
+        if not self.service:
+            self.is_period = False
+        else:
+            benefit = self.service.benefit
+            self.is_period = benefit.indemnification_kind != 'capital'
 
     def get_possible_products(self, name):
         if not self.service:
@@ -617,7 +629,7 @@ class CreateIndemnification(Wizard):
             for indemnification in service.indemnifications:
                 if indemnification.status != 'cancelled':
                     non_cancelled.append(indemnification)
-            if non_cancelled:
+            if non_cancelled and non_cancelled[-1].end_date:
                 start_date = non_cancelled[-1].end_date + \
                     relativedelta(days=1)
                 beneficiary = non_cancelled[-1].beneficiary
@@ -651,34 +663,37 @@ class CreateIndemnification(Wizard):
         input_end_date = self.definition.end_date
         ClaimService = Pool().get('claim.service')
         service = self.definition.service
-        if service.contract and service.contract.end_date:
+        if (input_start_date and service.contract and
+                service.contract.end_date):
             contract_end = service.contract.end_date
             behaviour = service.contract.post_termination_claim_behaviour
-            if contract_end < self.definition.start_date:
+            if contract_end < input_start_date:
                 if behaviour == 'stop_indemnifications':
                     self.raise_user_error('bad_start_date', {
-                            'indemn_start': self.definition.start_date,
+                            'indemn_start': input_start_date,
                             'contract_end': contract_end})
-            if contract_end < self.definition.end_date:
+            if contract_end < input_end_date:
                 if behaviour == 'stop_indemnifications':
                     self.raise_user_warning(
                         'truncated_end_date_%i' % service.id,
                         'truncated_end_date', {
-                            'indemn_end': self.definition.end_date,
+                            'indemn_end': input_end_date,
                             'contract_end': contract_end})
-                    self.definition.end_date = contract_end
+                    input_end_date = contract_end
                 elif behaviour == 'lock_indemnifications':
                     self.raise_user_warning(
                         'lock_end_date_%i' % service.id,
                         'lock_end_date', {
-                            'indemn_end': self.definition.end_date,
+                            'indemn_end': input_end_date,
                             'contract_end': contract_end})
-        if self.definition.end_date > utils.today():
+        if (input_end_date and
+                input_end_date > utils.today()):
             self.raise_user_error('end_date_future')
-        if (service.loss.end_date and
-                self.definition.end_date > service.loss.end_date):
+        if (input_end_date and service.loss.end_date and
+                input_end_date > service.loss.end_date):
             self.raise_user_error('end_date_exceeds_loss')
-        if (input_end_date <= input_start_date or
+        if input_end_date and input_start_date and (
+                input_end_date <= input_start_date or
                 input_start_date < service.loss.start_date):
             self.raise_user_error('wrong_date')
         return ClaimService.cancel_indemnification([service], input_start_date)
@@ -692,21 +707,21 @@ class CreateIndemnification(Wizard):
             indemnification = self.result.indemnification[0]
         else:
             indemnification = Indemnification()
+        loss = self.definition.service.loss
         indemnification.start_date = self.definition.start_date
         indemnification.end_date = self.definition.end_date
         extra_data_values = self.definition.get_extra_data_values()
+        extra_date = self.definition.start_date or loss.start_date
         extra_data = utils.get_value_at_date(
-            self.definition.service.extra_datas, self.definition.start_date)
+            self.definition.service.extra_datas, extra_date)
         if (extra_data.extra_data_values != extra_data_values):
-            if (self.definition.start_date == extra_data.date or
-                    self.definition.start_date ==
-                    self.definition.service.loss.start_date and
+            if (extra_date == extra_data.date or
+                    extra_date == self.definition.service.loss.start_date and
                     not extra_data.date):
                 extra_data.extra_data_values = extra_data_values
             else:
                 extra_data = ExtraData(
-                    extra_data_values=extra_data_values,
-                    date=self.definition.start_date,
+                    extra_data_values=extra_data_values, date=extra_date,
                     claim_service=self.definition.service)
             extra_data.save()
         self.definition.service.save()
@@ -743,7 +758,8 @@ class CreateIndemnification(Wizard):
 
     def default_select_regularisation(self, name):
         indemnification = self.select_regularisation.indemnification[0]
-        new_indemnification_amount = self.result.indemnification[0].amount
+        new_indemnification_amount = \
+            self.result.indemnification[0].total_amount
         cancelled_amount = 0
         for indemnification in self.result.cancelled:
             cancelled_amount += indemnification.total_amount

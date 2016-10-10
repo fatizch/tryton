@@ -86,7 +86,7 @@ class CoveredElement:
         terminated, modified = [], []
         for instances, values in zip(params, params):
             if 'end_reason' not in values:
-                modified += instances
+                modified += [x for x in instances if x.parent]
             else:
                 for record in instances:
                     if record.manual_end_date:

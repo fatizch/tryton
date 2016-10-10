@@ -244,6 +244,8 @@ class ClaimService:
             nb_iteration = 3
         elif salary_mode in ('last_month', 'last_month_last_year'):
             nb_iteration = 1
+        else:
+            return
 
         if salary_mode in ('last_12_months', 'last_3_months', 'last_month'):
             reference_date = self.loss.start_date
@@ -251,6 +253,8 @@ class ClaimService:
                 'last_3_months_last_year', 'last_month_last_year'):
             reference_date = datetime.date(
                 self.loss.start_date.year - 1, 12, 31)
+        else:
+            return
 
         to_save = []
         end_month = datetime.date(reference_date.year, reference_date.month,

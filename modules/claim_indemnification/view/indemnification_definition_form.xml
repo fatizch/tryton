@@ -14,5 +14,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="product" widget="selection"/>
     <field name="service" invisible="1"/>
     <field name="possible_products" invisible="1"/>
+    <field name="is_period" invisible="1"/>
     <newline/>
 </form>

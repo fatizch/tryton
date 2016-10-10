@@ -4,7 +4,7 @@
 from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If, Bool
+from trytond.pyson import Eval, If, Bool, In
 from trytond.modules.coog_core import fields
 
 __metaclass__ = PoolMeta
@@ -58,6 +58,14 @@ class Loss:
     @classmethod
     def __setup__(cls):
         super(Loss, cls).__setup__()
+        cls.start_date.states['invisible'] = cls.start_date.states.get(
+            'invisible', False) | In(Eval('loss_desc_kind', ''),
+            ['std', 'ltd'])
+        cls.start_date.depends.append('loss_desc_kind')
+        cls.end_date.states['invisible'] = cls.end_date.states.get(
+            'invisible', False) | In(Eval('loss_desc_kind', ''),
+            ['std', 'ltd'])
+        cls.end_date.depends.append('loss_desc_kind')
         cls._error_messages.update({
                 'relapse': 'Relapse',
                 })
