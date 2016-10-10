@@ -544,11 +544,6 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'schedule': {
                     'invisible': Eval('status') != 'calculated'},
                 })
-        cls._error_messages.update({
-                'bad_dates': 'The indemnification period (%(indemn_start)s - '
-                "%(indemn_end)s) is not compatible with the contract's end "
-                'date (%(contract_end)s).',
-                })
 
     @classmethod
     def __register__(cls, module):
@@ -822,21 +817,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
 
     @classmethod
     def check_calculable(cls, indemnifications):
-        for indemnification in indemnifications:
-            if not indemnification.service:
-                continue
-            contract = indemnification.service.contract
-            if not contract or contract.status != 'terminated':
-                continue
-            if (contract.post_termination_claim_behaviour !=
-                    'stop_indemnisations'):
-                continue
-            if (contract.end_date > indemnification.start_date or
-                    contract.end_date > indemnification.end_date):
-                cls.append_functional_error('bad_dates', {
-                        'indemn_start': indemnification.start_date,
-                        'indemn_end': indemnification.end_date,
-                        'contract_end': contract.end_date})
+        pass
 
     @classmethod
     @ModelView.button

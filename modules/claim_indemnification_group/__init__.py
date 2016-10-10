@@ -24,3 +24,7 @@ def register():
         Indemnification,
         IndemnificationDefinition,
         module='claim_indemnification_group', type_='model')
+
+    Pool.register(
+        CreateIndemnification,
+        module='claim_indemnification_group', type_='wizard')
