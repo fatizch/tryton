@@ -1,11 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import doctest
 import unittest
 
 import trytond.tests.test_tryton
 from trytond.modules.coog_core import test_framework
-from trytond.tests.test_tryton import doctest_setup, doctest_teardown
 
 
 class ModuleTestCase(test_framework.CoogTestCase):

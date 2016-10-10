@@ -40,8 +40,8 @@ class Party:
         where_clause = Operator(contract.subscriber,
             getattr(cls, name).sql_format(value))
         query = contract.join(covered_element, condition=(
-                contract.id == covered_element.contract
-                )).join(covered_element2, condition=(
+                contract.id == covered_element.contract)
+            ).join(covered_element2, condition=(
                 covered_element2.parent == covered_element.id))
         return [('id', 'in', query.select(
-            covered_element2.party, where=(where_clause)))]
+                    covered_element2.party, where=(where_clause)))]
