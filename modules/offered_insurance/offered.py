@@ -173,7 +173,7 @@ class CoveredElementEndReason(model.CoogSQL, model.CoogView,
 
     @classmethod
     def _export_skips(cls):
-        return super(CoveredElementEndReason, cls)._export_skips | {
+        return super(CoveredElementEndReason, cls)._export_skips() | {
             'item_descs'}
 
     @fields.depends('name', 'code')
