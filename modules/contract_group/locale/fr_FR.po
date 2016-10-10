@@ -2,6 +2,18 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.transfer_covered_elements:"
+msgid ""
+"There is a non covered period, source contract ends on the %(source_end)s "
+"when target starts on %(target_start)s."
+msgstr ""
+"Il y a une période non couverte, le contrat d'origine se termine le "
+"%(source_end)s alors que le nouveau commence le %(target_start)s."
+
+msgctxt "error:contract.transfer_covered_elements.contracts:"
+msgid "%s (%i covered elements)"
+msgstr "%s (%i sous-éléments)"
+
 msgctxt "field:contract,is_group:"
 msgid "Group Contract"
 msgstr "Contrat Collectif"
@@ -9,6 +21,67 @@ msgstr "Contrat Collectif"
 msgctxt "field:contract.option,is_group:"
 msgid "Group Option"
 msgstr "Garantie collective"
+
+msgctxt "field:contract.transfer_covered_elements.contracts,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.transfer_covered_elements.contracts,source_contract:"
+msgid "Source Contract"
+msgstr "Contrat d'origine"
+
+msgctxt ""
+"field:contract.transfer_covered_elements.contracts,source_item_descs:"
+msgid "Source Item Descs"
+msgstr "Risques d'origine"
+
+msgctxt "field:contract.transfer_covered_elements.contracts,source_product:"
+msgid "Source Product"
+msgstr "Produit d'origine"
+
+msgctxt "field:contract.transfer_covered_elements.contracts,target_contract:"
+msgid "Target Contract"
+msgstr "Contrat cible"
+
+msgctxt ""
+"field:contract.transfer_covered_elements.contracts,target_item_descs:"
+msgid "Target Item Descs"
+msgstr "Risque cible"
+
+msgctxt "field:contract.transfer_covered_elements.contracts,target_product:"
+msgid "Target Product"
+msgstr "Produit cible"
+
+msgctxt "field:contract.transfer_covered_elements.item_desc_line,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.transfer_covered_elements.item_desc_line,number:"
+msgid "Number"
+msgstr "Nombre"
+
+msgctxt ""
+"field:contract.transfer_covered_elements.item_desc_line,source_covered:"
+msgid "Source Covered"
+msgstr "Origine"
+
+msgctxt ""
+"field:contract.transfer_covered_elements.item_desc_line,target_covered:"
+msgid "Target Covered"
+msgstr "Cible"
+
+msgctxt "field:contract.transfer_covered_elements.item_descs,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.transfer_covered_elements.item_descs,lines:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt ""
+"field:contract.transfer_covered_elements.item_descs,possible_targets:"
+msgid "Possible Targets"
+msgstr "Risques possibles"
 
 msgctxt "field:offered.option.description,is_group:"
 msgid "Group Coverage"
@@ -22,6 +95,33 @@ msgctxt "field:party.party,companies:"
 msgid "Companies"
 msgstr "Sociétés"
 
+
+msgctxt "help:contract.transfer_covered_elements.item_desc_line,source_covered:"
+msgid ""
+"One of the source contract covered elements with sub covered elements to "
+"transfer"
+msgstr ""
+"Un élément couvert du contrat d'origine ayant des sous-éléments à transférer"
+
+msgctxt "help:contract.transfer_covered_elements.item_desc_line,target_covered:"
+msgid ""
+"The covered element of the target contract to transfer the sub covered "
+"elements to"
+msgstr ""
+"L'élément couvert du contrat cible vers lequel transférer les sous éléments"
+
+msgctxt "model:contract.transfer_covered_elements.contracts,name:"
+msgid "Transfer Covered Elements Contracts"
+msgstr "Contrats du transfert"
+
+msgctxt "model:contract.transfer_covered_elements.item_desc_line,name:"
+msgid "Transfer Covered Elements Item Desc Line"
+msgstr "Ligne de transfert d'élément couvert"
+
+msgctxt "model:contract.transfer_covered_elements.item_descs,name:"
+msgid "Transfer Covered Elements Item Descs"
+msgstr "Risques du transfert"
+
 msgctxt "model:event.type,name:event_changed_enrollment"
 msgid "Changed Enrollment"
 msgstr "Modification d'affiliation"
@@ -33,6 +133,10 @@ msgstr "Nouvelle affiliation"
 msgctxt "model:event.type,name:event_terminated_enrollment"
 msgid "Terminated Enrollment"
 msgstr "Fin d'affiliation"
+
+msgctxt "model:event.type,name:event_transferred_enrollment"
+msgid "Transferred Enrollment"
+msgstr "Affiliation transférée"
 
 msgctxt "model:ir.action,name:"
 msgid "Contrat Group"
@@ -57,6 +161,10 @@ msgstr "Affiliations"
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Group Products"
 msgstr "Produits Collectif"
+
+msgctxt "model:ir.action,name:act_transfer_covered_elements"
+msgid "Transfer Covered Elements"
+msgstr "Transférer des risques"
 
 msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_active"
 msgid "Active"
@@ -95,6 +203,10 @@ msgctxt "model:ir.ui.menu,name:menu_group_contract_quotes"
 msgid "Quotes"
 msgstr "Devis"
 
+msgctxt "model:ir.ui.menu,name:menu_group_contract_transfer_enrollment"
+msgid "Transfer Covered Elements"
+msgstr "Transférer des risques"
+
 msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Group Products"
 msgstr "Produits Collectif"
@@ -107,6 +219,37 @@ msgctxt "view:contract.covered_element:"
 msgid "Enrollments"
 msgstr "Affiliations"
 
+msgctxt "view:contract.transfer_covered_elements.contracts:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "view:contract.transfer_covered_elements.item_desc_line:"
+msgid "Covered Elements"
+msgstr "Risques"
+
+msgctxt "view:contract.transfer_covered_elements.item_descs:"
+msgid "Item Descs"
+msgstr "Risques"
+
 msgctxt "view:contract:"
 msgid "Add Enrollment"
 msgstr "Créer une affiliation"
+
+msgctxt "wizard_button:contract.transfer_covered_elements,item_descs,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:contract.transfer_covered_elements,item_descs,transfer:"
+msgid "Transfer"
+msgstr "Transférer"
+
+msgctxt ""
+"wizard_button:contract.transfer_covered_elements,select_contracts,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:contract.transfer_covered_elements,select_contracts,item_descs:"
+msgid "Check Item Descs"
+msgstr "Vérifier les risques"

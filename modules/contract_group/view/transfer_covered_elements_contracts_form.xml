@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form string="Contracts" col="2">
+    <group id="source" string="" col="2">
+        <label name="source_contract"/>
+        <field name="source_contract"/>
+        <label name="source_product"/>
+        <field name="source_product"/>
+        <field name="source_item_descs" colspan="2"/>
+    </group>
+    <group id="target" string="" col="2">
+        <label name="target_contract"/>
+        <field name="target_contract"/>
+        <label name="target_product"/>
+        <field name="target_product"/>
+        <field name="target_item_descs" colspan="2"/>
+    </group>
+</form>

@@ -1,10 +1,10 @@
 .. contract
 
-Collectif
-=========
+Group
+=====
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 

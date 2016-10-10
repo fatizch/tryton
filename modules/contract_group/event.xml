@@ -15,5 +15,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Changed Enrollment</field>
             <field name="code">changed_enrollment</field>
         </record>
+        <record model="event.type" id="event_transferred_enrollment">
+            <field name="name">Transferred Enrollment</field>
+            <field name="code">transferred_enrollment</field>
+        </record>
     </data>
 </tryton>

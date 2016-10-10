@@ -6,6 +6,7 @@ from .offered import *
 from .contract import *
 from .benefit import *
 from .party import *
+from .wizard import *
 
 
 def register():
@@ -17,4 +18,11 @@ def register():
         Option,
         CoveredElement,
         Party,
+        TransferCoveredElementsContracts,
+        TransferCoveredElementsItemDescs,
+        TransferCoveredElementsItemDescLine,
         module='contract_group', type_='model')
+
+    Pool.register(
+        TransferCoveredElements,
+        module='contract_group', type_='wizard')

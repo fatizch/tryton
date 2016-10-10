@@ -5,7 +5,7 @@ from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import If, Bool
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, coog_date
 
 __all__ = [
     'Contract',
@@ -33,10 +33,6 @@ class Contract:
                     )]
             ]
         cls.subscriber.depends += ['is_group']
-        cls._buttons.update({
-                'button_add_enrollment': {
-                    'invisible': ~Bool(Eval('is_group'))}
-                })
 
     def get_is_group(self, name):
         return self.product.is_group if self.product else False
@@ -44,12 +40,6 @@ class Contract:
     @classmethod
     def search_is_group(cls, name, clause):
         return [('product.is_group', ) + tuple(clause[1:])]
-
-    @classmethod
-    @model.CoogView.button_action(
-        'contract_group.act_create_enrollment_wizard')
-    def button_add_enrollment(cls, contracts):
-        pass
 
 
 class Option:
@@ -98,3 +88,28 @@ class CoveredElement:
             Event.notify_events(terminated, 'terminated_enrollment')
         if modified:
             Event.notify_events(modified, 'changed_enrollment')
+
+    @classmethod
+    def transfer_sub_covered(cls, matches, at_date):
+        '''
+            Copies sub covered elements from one covered element to another.
+            The `matches` dictionary uses the source element as key and the
+            target as value.
+        '''
+        new_elements = []
+        for source, target in matches.iteritems():
+            to_move = cls.search([
+                    ('parent', '=', source.id),
+                    ['OR', ('manual_end_date', '=', None),
+                        ('manual_end_date', '>', at_date)],
+                    ])
+            if not to_move:
+                continue
+            new_elements += cls.copy(to_move, default={
+                    'parent': target.id,
+                    'manual_start_date': coog_date.add_day(at_date, 1)})
+            cls.write(to_move, {'manual_end_date': at_date})
+        Event = Pool().get('event')
+        if new_elements:
+            Event.notify_events(new_elements, 'transferred_enrollment')
+        return new_elements

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################# -->
+        <!-- # Transfer Covered Elements # -->
+        <!-- ############################# -->
+        <record model="ir.action.wizard" id="act_transfer_covered_elements">
+            <field name="name">Transfer Covered Elements</field>
+            <field name="wiz_name">contract.transfer_covered_elements</field>
+        </record>
+        <menuitem parent="contract_group.menu_group_contract" sequence="30" id="menu_group_contract_transfer_enrollment" action="act_transfer_covered_elements"/>
+        <!-- ####################################### -->
+        <!-- # Transfer Covered Elements Contracts # -->
+        <!-- ####################################### -->
+        <record model="ir.ui.view" id="transfer_covered_elements_contracts_view_form">
+            <field name="model">contract.transfer_covered_elements.contracts</field>
+            <field name="type">form</field>
+            <field name="name">transfer_covered_elements_contracts_form</field>
+        </record>
+        <!-- ######################################## -->
+        <!-- # Transfer Covered Elements Item Descs # -->
+        <!-- ######################################## -->
+        <record model="ir.ui.view" id="transfer_covered_elements_item_descs_view_form">
+            <field name="model">contract.transfer_covered_elements.item_descs</field>
+            <field name="type">form</field>
+            <field name="name">transfer_covered_elements_item_descs_form</field>
+        </record>
+        <!-- ############################################ -->
+        <!-- # Transfer Covered Elements Item Desc Line # -->
+        <!-- ############################################ -->
+        <record model="ir.ui.view" id="transfer_covered_elements_item_desc_line_view_list">
+            <field name="model">contract.transfer_covered_elements.item_desc_line</field>
+            <field name="type">tree</field>
+            <field name="name">transfer_covered_elements_item_desc_line_list</field>
+        </record>
+    </data>
+</tryton>
