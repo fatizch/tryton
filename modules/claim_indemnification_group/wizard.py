@@ -255,7 +255,7 @@ class TransferServicesBenefits(model.CoogView):
 
     lines = fields.One2Many('claim.transfer_services.benefit_line', None,
         'Lines', domain=[('target_covered', 'in', Eval('possible_covered'))],
-        depends=['possible_benefits'])
+        depends=['possible_covered'])
     possible_covered = fields.Many2Many('contract.covered_element', None, None,
         'Possible Covered Elements', readonly=True)
 
