@@ -286,7 +286,7 @@ class TransferServicesBenefitLine(model.CoogView):
     target_benefit = fields.Many2One('benefit', 'Target Benefit', domain=[
             ('id', 'in', Eval('possible_benefits'))], states={
             'readonly': ~Eval('target_option')}, required=True,
-        depends=['option', 'possible_benefits'])
+        depends=['target_option', 'possible_benefits'])
     possible_benefits = fields.Many2Many('benefit', None, None,
         'Possible Benefits', readonly=True)
 
