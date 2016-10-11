@@ -586,7 +586,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         ids = cursor.fetchall()
         invoices = AccountInvoice.search([('id', 'in', list(ids))])
         for invoice in invoices:
-            if invoice.status == 'paid' and invoice.reconciliation_date:
+            if invoice.state == 'paid' and invoice.reconciliation_date:
                 return True
         return False
 
