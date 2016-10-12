@@ -26,19 +26,21 @@ _coog_celery_bak() { # backup log file - [pid]
         mv $out_file $bak_file
 }
 
-coog_celery_start() { # start celery workers - <concurrency>
+coog_celery_start() { # start celery workers - <concurrency> [queues]
+        [ -z "$1" ] && echo missing concurrency && return 1
         local pid_file
-        pid_file=`_coog_celery_file pid`
-        [ -e $pid_file ] && echo 'workers already running -> stop or kill' && return
+        pid_file=$(_coog_celery_file pid)
+        [ -e "$pid_file" ] && echo 'workers already running -> stop or kill' && return
         local out_file
-        out_file=`_coog_celery_file out`
-        [ -e $out_file ] && echo 'celery log file exists -> clean manually' && return
+        out_file=$(_coog_celery_file out)
+        [ -e "$out_file" ] && echo 'celery log file exists -> clean manually' && return
         nohup celery worker \
                 --app=async.broker_celery \
-                --concurrency=$1
-                --pidfile=$pid_file \
-                --loglevel=$LOG_LEVEL \
-                --logfile=$out_file &> $out_file &
+                --queues="$2" \
+                --concurrency="$1" \
+                --pidfile="$pid_file" \
+                --loglevel="$LOG_LEVEL" \
+                --logfile="$out_file" &> "$out_file" &
 }
 
 coog_celery_stop() { # stop celery workers
