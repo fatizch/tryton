@@ -62,7 +62,7 @@ class ContractDeclineInactiveQuotes(batch.BatchRoot):
     @classmethod
     def select_ids(cls, treatment_date, extra_args):
         pool = Pool()
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         configuration = pool.get('offered.configuration')(1)
         assert cls.check_batch_configuration(), \
             'Required product configuration is not specified.'
