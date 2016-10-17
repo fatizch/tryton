@@ -679,16 +679,14 @@ class Contract:
         ContractInvoice = pool.get('contract.invoice')
         contract_invoices = []
         for contract_slice in grouped_slice(contracts):
-            contract_invoices += ContractInvoice.search([
-                    [('invoice_state', '!=', 'cancel'),
-                        ('contract', 'in', [x.id for x in contract_slice])],
-                    ['OR',
-                        ('contract.status', '=', 'void'),
-                        ('invoice_state', '!=', 'cancel'),
-                        ('start', '<=', to_date or datetime.date.min),
-                        ('end', '>=', from_date or datetime.date.max)],
-                    ])
-
+            contract_invoices.extend(ContractInvoice.search([
+                        [('invoice_state', '!=', 'cancel'),
+                            ('contract', 'in', [x.id for x in contract_slice])],
+                        ['OR',
+                            ('contract.status', '=', 'void'),
+                            ('start', '<=', to_date or datetime.date.min),
+                            ('end', '>=', from_date or datetime.date.max)],
+                        ])
         actions = {
             'cancel': [],
             'delete': [],
@@ -748,7 +746,6 @@ class Contract:
                         contract.activation_history[-1].end_date or
                         datetime.date.max)):
                 periods[period].append(contract)
-
         return cls.invoice_periods(periods)
 
     @classmethod
