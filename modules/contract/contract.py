@@ -1114,13 +1114,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             start_date = (
                 max(product.start_date, start_date)
                 if start_date else product.start_date)
-            end_date = (
-                min(product.end_date, end_date)
-                if end_date else product.end_date)
-            if end_date:
-                self.activation_history[0].end_date = coog_date.add_day(
-                    end_date, -1)
-            self.start_date, self.end_date = start_date, end_date
+            self.start_date = start_date
             self.status = 'quote'
             self.company = product.company
             self.init_extra_data()
