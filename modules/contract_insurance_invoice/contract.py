@@ -686,7 +686,7 @@ class Contract:
                             ('contract.status', '=', 'void'),
                             ('start', '<=', to_date or datetime.date.min),
                             ('end', '>=', from_date or datetime.date.max)],
-                        ])
+                        ]))
         actions = {
             'cancel': [],
             'delete': [],
