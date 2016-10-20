@@ -28,7 +28,7 @@ class Contract:
         if not self.dist_network:
             return None
         com_products = utils.get_good_versions_at_date(self.dist_network,
-            'all_com_products', self.appliable_condition_date)
+            'all_com_products', self.appliable_conditions_date)
         com_product = [x for x in com_products if x.product == self.product]
         if com_product:
             return com_product[0].id
