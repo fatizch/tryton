@@ -22,6 +22,11 @@ class Invoice:
         fields.Many2One('bank.account', 'Bank Account'),
         'get_bank_account')
 
+    @classmethod
+    def __setup__(cls):
+        super(Invoice, cls).__setup__()
+        cls._check_modify_exclude.append('sepa_mandate')
+
     def update_invoice_before_post(self):
         invoice = super(Invoice, self).update_invoice_before_post()
         if not self.contract:
