@@ -267,7 +267,7 @@ class Line(export.ExportImportMixin):
             for line in split_move.lines:
                 if abs(line.amount) == abs(source_line.amount):
                     compensation = line
-                elif abs(line.amount) == split_amount:
+                elif not split and abs(line.amount) == split_amount:
                     split = line
                 else:
                     remaining = line
