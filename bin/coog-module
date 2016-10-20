@@ -95,6 +95,10 @@ coog_module_create() { # creates a new module in the modules folder - <module_na
         touch "$module_folder"/doc/fr/features.rst
         touch "$module_folder"/doc/fr/index.rst
         touch "$module_folder"/doc/fr/summary.rst
+        mkdir "$module_folder"/doc/en
+        touch "$module_folder"/doc/en/features.rst
+        touch "$module_folder"/doc/en/index.rst
+        touch "$module_folder"/doc/en/summary.rst
 
         # Init tryton.cfg
         echo "[tryton]" > "$module_folder"/tryton.cfg
@@ -172,21 +176,45 @@ coog_module_create() { # creates a new module in the modules folder - <module_na
         echo "    return suite" >> "$module_folder"/tests/test_module.py
 
         # Init index.rst
-        echo ".. MAIN_TOPIC" >> "$module_folder"/doc/fr/index.rst
-        echo "" >> "$module_folder"/doc/fr/index.rst
-        echo "MAIN TOPIC - Module Topic" >> "$module_folder"/doc/fr/index.rst
-        echo "=========================" >> "$module_folder"/doc/fr/index.rst
-        echo "" >> "$module_folder"/doc/fr/index.rst
-        echo "Résumé" >> "$module_folder"/doc/fr/index.rst
-        echo "------" >> "$module_folder"/doc/fr/index.rst
-        echo "" >> "$module_folder"/doc/fr/index.rst
-        echo ".. include:: summary.rst" >> "$module_folder"/doc/fr/index.rst
-        echo "" >> "$module_folder"/doc/fr/index.rst
-        echo "" >> "$module_folder"/doc/fr/index.rst
-        echo ".. toctree::" >> "$module_folder"/doc/fr/index.rst
-        echo "    :hidden:" >> "$module_folder"/doc/fr/index.rst
-        echo "" >> "$module_folder"/doc/fr/index.rst
-        echo "    summary.rst" >> "$module_folder"/doc/fr/index.rst
+        for lang in fr en
+        do
+            echo ".. MAIN_TOPIC" >> "$module_folder"/doc/"$lang"/index.rst
+            echo "" >> "$module_folder"/doc/"$lang"/index.rst
+            echo "MAIN TOPIC - Module Topic" >> "$module_folder"/doc/"$lang"/index.rst
+            echo "=========================" >> "$module_folder"/doc/"$lang"/index.rst
+            echo "" >> "$module_folder"/doc/"$lang"/index.rst
+            if [ "$lang" = "fr" ]
+            then
+                echo "Résumé" >> "$module_folder"/doc/"$lang"/index.rst
+                echo "------" >> "$module_folder"/doc/"$lang"/index.rst
+            elif [ "$lang" = "en" ]
+            then
+                echo "Summary" >> "$module_folder"/doc/"$lang"/index.rst
+                echo "-------" >> "$module_folder"/doc/"$lang"/index.rst
+            fi
+            echo "" >> "$module_folder"/doc/"$lang"/index.rst
+            echo ".. include:: summary.rst" >> "$module_folder"/doc/"$lang"/index.rst
+            echo "" >> "$module_folder"/doc/"$lang"/index.rst
+            echo "" >> "$module_folder"/doc/"$lang"/index.rst
+            if [ "$lang" = "fr" ]
+            then
+                echo "Fonctionnalités" >> "$module_folder"/doc/"$lang"/index.rst
+                echo "---------------" >> "$module_folder"/doc/"$lang"/index.rst
+            elif [ "$lang" = "en" ]
+            then
+                echo "Features" >> "$module_folder"/doc/"$lang"/index.rst
+                echo "--------" >> "$module_folder"/doc/"$lang"/index.rst
+            fi
+            echo "" >> "$module_folder"/doc/"$lang"/index.rst
+            echo ".. include:: features.rst" >> "$module_folder"/doc/"$lang"/index.rst
+            echo "" >> "$module_folder"/doc/"$lang"/index.rst
+            echo "" >> "$module_folder"/doc/"$lang"/index.rst
+            echo ".. toctree::" >> "$module_folder"/doc/"$lang"/index.rst
+            echo "    :hidden:" >> "$module_folder"/doc/"$lang"/index.rst
+            echo "" >> "$module_folder"/doc/"$lang"/index.rst
+            echo "    summary.rst" >> "$module_folder"/doc/"$lang"/index.rst
+            echo "    features.rst" >> "$module_folder"/doc/"$lang"/index.rst
+        done
 
         # Init translation file
         echo "#" > "$module_folder"/locale/fr_FR.po
