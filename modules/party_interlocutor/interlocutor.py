@@ -27,6 +27,18 @@ class ContactInterlocutor(model.CoogSQL, model.CoogView):
         domain=[('party', '=', Eval('party'))], depends=['party'])
     party = fields.Many2One('party.party', 'Party', ondelete='CASCADE',
         domain=[('is_company', '=', True)], required=True, select=True)
+    email = fields.Function(
+        fields.Char('E-Mail'), 'get_mechanism')
+    phone = fields.Function(
+        fields.Char('Phone'), 'get_mechanism')
+    mobile = fields.Function(
+        fields.Char('Mobile'), 'get_mechanism')
+
+    def get_mechanism(self, name):
+        for mechanism in self.contact_mechanisms:
+            if mechanism.type == name:
+                return mechanism.value
+        return ''
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
