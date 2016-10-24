@@ -927,7 +927,7 @@ class Contract:
             subscribers[contract.subscriber].append(contract)
         clause = [
             ('reconciliation', '=', None),
-            ('date', '<=', utils.today()),
+            # ('date', '<=', utils.today()),
             ('move_state', 'not in', ('draft', 'validated'))]
         subscriber_clause = ['OR']
         for subscriber, contract_group in subscribers.iteritems():

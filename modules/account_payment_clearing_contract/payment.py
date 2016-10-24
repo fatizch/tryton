@@ -32,9 +32,9 @@ class Payment:
 
         super(Payment, cls).succeed(payments)
 
-        contracts = [p.line.contract for p in payments if p.line
-            and p.line.contract and p.line.move.invoice and
-            p.line.move.invoice.state == 'cancel']
-        contracts = list(set(contracts))
+        contracts = {p.line.contract for p in payments if p.line
+            and p.line.contract and ((p.line.move.invoice and
+                    p.line.move.invoice.state == 'cancel') or
+                not p.line.reconciliation)}
         if contracts:
-            Contract.reconcile(contracts)
+            Contract.reconcile(list(contracts))
