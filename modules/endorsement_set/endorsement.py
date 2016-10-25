@@ -131,16 +131,20 @@ class EndorsementSet(model.CoogSQL, model.CoogView):
     @classmethod
     def apply_set(cls, endorsement_sets):
         pool = Pool()
+        Event = pool.get('event')
         Endorsement = pool.get('endorsement')
         Endorsement.apply([x for endorsement_set in endorsement_sets
                 for x in endorsement_set.endorsements])
+        Event.notify_events(endorsement_sets, 'apply_endorsement_set')
 
     @classmethod
     def decline_set(cls, endorsement_sets, reason=None):
         pool = Pool()
+        Event = pool.get('event')
         Endorsement = pool.get('endorsement')
         Endorsement.decline([x for endorsement_set in endorsement_sets
                 for x in endorsement_set.endorsements], reason=reason)
+        Event.notify_events(endorsement_sets, 'decline_endorsement_set')
 
     def get_contract_set(self, name):
         if (self.endorsements and self.endorsements[0].contracts and

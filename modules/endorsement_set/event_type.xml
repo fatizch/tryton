@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="event.type" id="event_apply_endorsement_set">
+            <field name="name">Apply Endorsement Set</field>
+            <field name="code">apply_endorsement_set</field>
+        </record>
+        <record model="event.type" id="event_decline_endorsement_set">
+            <field name="name">Decline Endorsement Set</field>
+            <field name="code">decline_endorsement_set</field>
+        </record>
+    </data>
+</tryton>
