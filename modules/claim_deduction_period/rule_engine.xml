@@ -13,8 +13,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_deduction_period_amount</field>
-            <field name="long_description">Retourne le montant de déductions correspondant à la période et au type sélectionné. Si 'arrondi' est vrai, le montant journalier sera arrondi avant la proratisation.</field>
-            <field name="fct_args">type, date_debut, date_fin, [arrondi]</field>
+            <field name="long_description">Retourne le montant de déductions correspondant à la période et au type sélectionné. Si montantt_journalier est vrai alors le montant est proraté au jour. Si 'arrondi' est vrai, le montant journalier sera arrondi avant la proratisation.</field>
+            <field name="fct_args">type, date_debut, date_fin, [montant_journalier], [arrondi]</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
     </data>

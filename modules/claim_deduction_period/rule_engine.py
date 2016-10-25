@@ -19,7 +19,7 @@ class RuleRuntime:
     @classmethod
     @check_args('loss')
     def _re_get_deduction_period_amount(self, args, code, start_date,
-            end_date, round=False):
+            end_date, daily=True, round=False):
         loss = args['loss']
         amount = Decimal(0)
         allowed = {x for x in loss.loss_desc.deduction_period_kinds
@@ -36,5 +36,9 @@ class RuleRuntime:
             days = (earliest_end - latest_start).days + 1
             if days <= 0:
                 continue
-            amount += days * period.on_change_with_daily_amount(round=round)
+            if daily:
+                amount += period.on_change_with_daily_amount(round=round)
+            else:
+                amount += days * period.on_change_with_daily_amount(
+                    round=round)
         return amount

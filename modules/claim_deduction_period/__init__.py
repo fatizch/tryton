@@ -4,7 +4,7 @@ from trytond.pool import Pool
 
 from .benefit import *
 from .claim import *
-from .runtime import *
+from .rule_engine import *
 from .wizard import *
 
 
@@ -19,7 +19,6 @@ def register():
         IndemnificationDefinition,
         RuleRuntime,
         module='claim_deduction_period', type_='model')
-
     Pool.register(
         CreateIndemnification,
         module='claim_deduction_period', type_='wizard')
