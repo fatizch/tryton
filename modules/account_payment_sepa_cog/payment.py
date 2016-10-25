@@ -616,6 +616,16 @@ class Message:
             lambda f: CAMT054Coog(f, Payment),
             }
 
+    def parse(self):
+        Event = Pool().get('event')
+        super(Message, self).parse()
+        Event.notify_events([self], 'parse_sepa_message')
+
+    def send(self):
+        Event = Pool().get('event')
+        super(Message, self).send()
+        Event.notify_events([self], 'send_sepa_message')
+
 
 class MergedPayments:
     __name__ = 'account.payment.merged'

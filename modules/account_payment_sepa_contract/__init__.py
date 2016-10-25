@@ -5,6 +5,7 @@ from .contract import *
 from .invoice import *
 from .move import *
 from .payment import *
+from .event import *
 
 
 def register():
@@ -16,4 +17,5 @@ def register():
         Mandate,
         Payment,
         PaymentCreationStart,
+        EventLog,
         module='account_payment_sepa_contract', type_='model')

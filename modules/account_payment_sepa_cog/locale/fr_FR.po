@@ -258,6 +258,14 @@ msgctxt "model:account.payment.journal.reject_reason,description:sepa_TM01"
 msgid "File receive after Cut-off time"
 msgstr "Heure limite dépassée"
 
+msgctxt "model:event.type,name:event_parse_sepa_message"
+msgid "Process Incoming Sepa Message"
+msgstr "Traitement d'un message Sepa entrant"
+
+msgctxt "model:event.type,name:event_send_sepa_message"
+msgid "Send Sepa Message"
+msgstr "Envoi d'un message Sepa"
+
 msgctxt "model:ir.action,name:act_message_form"
 msgid "SEPA Reject Messages"
 msgstr "Messages de rejet SEPA"
