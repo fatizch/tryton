@@ -218,8 +218,8 @@ class BenefitRule(
                 list(dates), previous_date, args['end_date']):
             new_args = args.copy()
             new_args['date'] = start_date
-            new_args['start_date'] = start_date
-            new_args['end_date'] = end_date
+            new_args['indemnification_detail_start_date'] = start_date
+            new_args['indemnification_detail_end_date'] = end_date
             benefits = self.calculate_indemnification_rule(new_args)
             if must_revaluate:
                 for benefit in benefits:

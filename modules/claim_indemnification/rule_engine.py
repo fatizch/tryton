@@ -40,14 +40,18 @@ class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
 
     @classmethod
-    @check_args('start_date')
-    def _re_indemnification_start_date(cls, args):
-        return args['start_date']
+    def _re_indemnification_period_start_date(cls, args):
+        if 'indemnification_detail_start_date' in args:
+            return args['indemnification_detail_start_date']
+        elif 'indemnification' in args:
+            return args['indemnification'].start_date
 
     @classmethod
-    @check_args('end_date')
-    def _re_indemnification_end_date(cls, args):
-        return args['end_date']
+    def _re_indemnification_period_end_date(cls, args):
+        if 'indemnification_detail_end_date' in args:
+            return args['indemnification_detail_end_date']
+        elif 'indemnification' in args:
+            return args['indemnification'].end_date
 
     @classmethod
     @check_args('benefit', 'option', 'loss')

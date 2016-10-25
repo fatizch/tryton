@@ -9,7 +9,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_indemnification_start_date</field>
+            <field name="name">_re_indemnification_period_start_date</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="date_fin_periode_indemnisation">
@@ -18,7 +18,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_indemnification_end_date</field>
+            <field name="name">_re_indemnification_period_end_date</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="nb_jour_franchise">
