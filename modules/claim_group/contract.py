@@ -30,6 +30,11 @@ class Contract:
                 [])],
         depends=['is_group', 'status'])
 
+    @classmethod
+    def clean_before_reactivate(cls, contracts):
+        cls.write(contracts, {'post_termination_claim_behaviour': ''})
+        super(Contract, cls).clean_before_reactivate(contracts)
+
 
 class TerminateContract:
     __metaclass__ = PoolMeta

@@ -20,7 +20,7 @@ class RuleEngineRuntime:
     @check_args('contract')
     def _re_revaluation_max_revaluation_date(cls, args):
         contract = args['contract']
-        if (contract and contract.status != 'terminated' and
+        if (contract and
                 contract.post_termination_claim_behaviour ==
                 'lock_indemnifications'):
             return contract.end_date
