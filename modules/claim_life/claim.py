@@ -134,10 +134,7 @@ class Loss:
         return self.start_date
 
     def get_covered_person(self):
-        if hasattr(self, 'loss_desc') and self.loss_desc and hasattr(
-                self, 'covered_person'):
-            if self.loss_desc.loss_kind == 'life':
-                return self.covered_person
+        return getattr(self, 'covered_person', None)
 
     def get_all_extra_data(self, at_date):
         CoveredElement = Pool().get('contract.covered_element')
@@ -157,8 +154,7 @@ class ClaimService:
     __name__ = 'claim.service'
 
     def get_covered_person(self):
-        if self.loss.loss_desc.loss_kind in ('person', 'ltd', 'std', 'death'):
-            return self.loss.covered_person
+        return self.loss.get_covered_person()
 
     def init_dict_for_rule_engine(self, cur_dict):
         super(ClaimService, self).init_dict_for_rule_engine(
