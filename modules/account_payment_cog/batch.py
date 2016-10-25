@@ -256,7 +256,8 @@ class PaymentAcknowledgeBatch(batch.BatchRoot):
     def execute(cls, objects, ids, treatment_date, extra_args):
         pool = Pool()
         Payment = pool.get('account.payment')
-        with Transaction().set_context(disable_auto_aggregate=True):
+        with Transaction().set_context(disable_auto_aggregate=True,
+                reconcile_to_date=treatment_date):
             Payment.succeed(objects)
         cls.logger.info('%s succeed' %
             coog_string.get_print_infos([x.id for x in objects], 'payment'))

@@ -923,11 +923,13 @@ class Contract:
         MoveLine = pool.get('account.move.line')
         # Find all not reconciled lines
         subscribers = defaultdict(list)
+        date = Transaction().context.get('reconcile_to_date',
+            utils.today())
         for contract in contracts:
             subscribers[contract.subscriber].append(contract)
         clause = [
             ('reconciliation', '=', None),
-            ('date', '<=', utils.today()),
+            ('date', '<=', date),
             ('move_state', 'not in', ('draft', 'validated'))]
         subscriber_clause = ['OR']
         for subscriber, contract_group in subscribers.iteritems():
