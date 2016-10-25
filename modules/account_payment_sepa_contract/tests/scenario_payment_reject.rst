@@ -326,5 +326,5 @@ Fail payments::
     ...     relativedelta(days=1)
     True
     >>> contract.reload()
-    >>> len(contract.invoices) == 4
+    >>> len(contract.invoices) == 3
     True

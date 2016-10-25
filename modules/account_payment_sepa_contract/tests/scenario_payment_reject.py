@@ -308,5 +308,5 @@ contract.billing_informations[-1].date == third_invoice.end + \
     relativedelta(days=1)
 # #Res# #True
 contract.reload()
-len(contract.invoices) == 4
+len(contract.invoices) == 3
 # #Res# #True
