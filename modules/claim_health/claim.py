@@ -69,9 +69,10 @@ class Loss(model.CoogSQL, model.CoogView):
             super(Loss, cls).get_date_field_for_kind(kind)
 
     def get_date(self):
-        return self.health_loss[0].act_date if hasattr(self, 'loss_desc') \
-            and self.loss_desc and self.loss_desc.loss_kind == 'health' else \
-            super(Loss, self).get_date()
+        if (self.health_loss and getattr(self, 'loss_desc', None) and
+                self.loss_desc.loss_kind == 'health'):
+            return self.health_loss[0].act_date
+        return super(Loss, self).get_date()
 
     def get_covered_person(self):
         return self.health_loss[0].covered_person \

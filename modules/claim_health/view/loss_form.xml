@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='extra_data']" position="before">
-        <field name="health_loss"/>
+        <field name="health_loss" colspan="4"/>
         <newline/>
     </xpath>
 </data>
