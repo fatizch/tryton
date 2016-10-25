@@ -116,14 +116,15 @@ class Payment:
                     getattr(payment.line.move.origin, 'end', None))]
             if next_invoice_dates:
                 next_invoice_date = max(next_invoice_dates)
-                next_invoice_date += relativedelta(days=1)
             else:
                 # case when only non periodic invoice payment is failed
                 next_invoice_date = max(contract.start_date,
                     contract.last_paid_invoice_end or datetime.date.min)
 
+            new_billing_date = (next_invoice_date + relativedelta(days=1)) if \
+                next_invoice_dates else next_invoice_date
             new_billing_information = ContractBillingInformation(
-                date=max(Date.today(), next_invoice_date),
+                date=max(Date.today(), new_billing_date),
                 billing_mode=failure_billing_mode,
                 payment_term=failure_billing_mode.allowed_payment_terms[0])
             contract.billing_informations = contract.billing_informations + \
