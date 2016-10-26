@@ -19,7 +19,7 @@ from trytond import backend
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or, Bool, If
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coog_core import fields, export, coog_date, utils, model
+from trytond.modules.coog_core import fields, coog_date, utils, model
 from .sepa_handler import CAMT054Coog
 
 __metaclass__ = PoolMeta
