@@ -37,6 +37,7 @@ class ChangeBillingInformation:
                 Not(Bool(Eval('amend_previous_mandate'))),
                 cls.other_contracts.domain,
                 [('to_propagate', 'in', ('bank_account', 'everything'))])]
+        cls.other_contracts.depends.append('amend_previous_mandate')
         cls._error_messages.update({
                 'new_mandate_creation': 'A new mandate will be created, this '
                 'action cannot be cancelled',

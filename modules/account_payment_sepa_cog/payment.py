@@ -278,6 +278,8 @@ class Group:
         # Overloading tryton to use Coog's templates
         # that implements the amendment (Amndmnt) sections
         # The md5sums of the original tryton files are:
+        # a2dd4810c27d001535620ce314354e87  base.xml
+        # f1b122ef8823e910a9544b2ba9b8d999  base.003.xml
         # 3fabd8939a0e1864be5600e1d563f8d1  pain.008.001.02.xml
         # b2be297bb1f0b939e2ee52594aceebd9  pain.008.001.04.xml
         # 09e2a7e044f88df154a5121ea35220f9  pain.008.003.02.xml
