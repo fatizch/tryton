@@ -1281,27 +1281,36 @@ class Contract:
                     x.coverage_start)):
             taxes = Tax.compute(line.taxes, line.unit_price, line.quantity,
                 date=contract_invoice.start)
+            premium = line.details[0].premium
+            amount = invoice.currency.round(line.unit_price)
             if config._tax_rounding == 'line':
-                tax_amount = sum(
-                    invoice.currency.round(t['amount'])
-                    for t in taxes)
+                # Manually handle taxes_included_in_premium, it's easier since
+                # we only need to manage a single total tax amount.
+                if premium.rated_entity and getattr(premium.rated_entity,
+                        'taxes_included_in_premium', False):
+                    tax_amount = invoice.currency.round(line.unit_price +
+                        sum(t['amount'] for t in taxes)) - amount
+                else:
+                    tax_amount = sum(
+                        invoice.currency.round(t['amount'])
+                        for t in taxes)
             else:
                 tax_amount = invoice.currency.round(
                     sum(t['amount'] for t in taxes))
             displayer['details'].append({
-                    'name': line.details[0].premium.rec_name,
+                    'name': premium.rec_name,
                     'start': line.coverage_start,
                     'end': line.coverage_end,
-                    'premium': line.details[0].premium,
+                    'premium': premium,
                     'currency_digits': invoice.currency.digits,
                     'currency_symbol': invoice.currency.symbol,
-                    'amount': line.unit_price,
+                    'amount': amount,
                     'tax_amount': tax_amount,
-                    'total_amount': line.unit_price + tax_amount,
+                    'total_amount': amount + tax_amount,
                     })
-            displayer['amount'] += line.unit_price
+            displayer['amount'] += amount
             displayer['tax_amount'] += tax_amount
-            displayer['total_amount'] += line.unit_price + tax_amount
+            displayer['total_amount'] += amount + tax_amount
     ###########################################################################
     # End calculation cache                                                   #
     ###########################################################################

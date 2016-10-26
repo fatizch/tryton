@@ -37,7 +37,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'SequenceType': 'ir.sequence.type',
             'Account': 'account.account',
             'AccountKind': 'account.account.type',
+            'Tax': 'account.tax',
             'Product': 'offered.product',
+            'Coverage': 'offered.option.description',
             'PaymentTerm': 'account.invoice.payment_term',
             'BillingInformation': 'contract.billing_information',
             'BillingMode': 'offered.billing_mode',
@@ -46,8 +48,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'User': 'res.user',
             'Configuration': 'account.configuration',
             'OfferedConfiguration': 'offered.configuration',
+            'ConfigurationTaxRounding': 'account.configuration.tax_rounding',
             'PaymentJournal': 'account.payment.journal',
             'Reconciliation': 'account.move.reconciliation',
+            'ContractInvoice': 'contract.invoice',
+            'Invoice': 'account.invoice',
+            'InvoiceLine': 'account.invoice.line',
+            'InvoiceLineDetail': 'account.invoice.line.detail',
             }
 
     @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
@@ -349,6 +356,186 @@ class ModuleTestCase(test_framework.CoogTestCase):
             self.assertEqual(
                 payment_journal.get_next_possible_payment_date(line, 5),
                 date(2014, 10, 5))
+
+    @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
+    def test0040_invoice_cache(self):
+        self.maxDiff = None
+        company, = self.Company.search([
+                ('rec_name', '=', 'World Company'),
+                ])
+        tax_account_kind = self.AccountKind()
+        tax_account_kind.name = 'Tax Account Kind'
+        tax_account_kind.company = company
+        tax_account_kind.save()
+        tax_account = self.Account()
+        tax_account.name = 'Main tax'
+        tax_account.code = 'main_tax'
+        tax_account.kind = 'revenue'
+        tax_account.company = company
+        tax_account.type = tax_account_kind
+        tax_account.save()
+        configuration = self.Configuration(1)
+        configuration.tax_roundings = [self.ConfigurationTaxRounding(
+                company=company, method='line'
+                )]
+        configuration.save()
+        tax_1 = self.Tax()
+        tax_1.name = 'Tax1'
+        tax_1.type = 'percentage'
+        tax_1.description = 'Tax 1'
+        tax_1.rate = Decimal('0.09')
+        tax_1.company = company
+        tax_1.invoice_account = tax_account
+        tax_1.credit_note_account = tax_account
+        tax_1.save()
+
+        coverage_1 = self.Coverage()
+        coverage_1.taxes_included_in_premium = False
+        coverage_2 = self.Coverage()
+        coverage_2.taxes_included_in_premium = True
+
+        premium_1 = self.Premium(10)
+        premium_1.rec_name = 'Coverage A'
+        premium_1.rated_entity = coverage_2
+
+        premium_2 = self.Premium(11)
+        premium_2.rec_name = 'Coverage B'
+        premium_2.rated_entity = coverage_2
+
+        product = self.Product(taxes_included_in_premium=True)
+        contract = self.Contract(product=product)
+
+        invoice_1 = self.Invoice()
+        invoice_1.description = 'Invoice 1'
+        invoice_1.currency = company.currency
+        invoice_1.contract = contract
+        invoice_1.lines = [
+            self.InvoiceLine(
+                unit_price=Decimal('31.5250'),
+                coverage_start=datetime.date(2017, 1, 20),
+                coverage_end=datetime.date(2017, 2, 19),
+                quantity=1,
+                details=[self.InvoiceLineDetail(premium=premium_1)],
+                taxes=[],
+                ),
+            self.InvoiceLine(
+                unit_price=Decimal('20.2156'),
+                coverage_start=datetime.date(2017, 1, 20),
+                coverage_end=datetime.date(2017, 2, 19),
+                quantity=1,
+                details=[self.InvoiceLineDetail(premium=premium_2)],
+                taxes=[tax_1],
+                ),
+            ]
+        invoice_2 = self.Invoice()
+        invoice_2.description = 'Invoice 2'
+        invoice_2.currency = company.currency
+        invoice_2.contract = contract
+        invoice_2.lines = [
+            self.InvoiceLine(
+                unit_price=Decimal('31.5250'),
+                coverage_start=datetime.date(2017, 2, 20),
+                coverage_end=datetime.date(2017, 3, 19),
+                quantity=1,
+                details=[self.InvoiceLineDetail(premium=premium_1)],
+                taxes=[],
+                ),
+            self.InvoiceLine(
+                unit_price=Decimal('7.9418'),
+                coverage_start=datetime.date(2017, 2, 20),
+                coverage_end=datetime.date(2017, 3, 2),
+                quantity=1,
+                details=[self.InvoiceLineDetail(premium=premium_2)],
+                taxes=[tax_1],
+                ),
+            ]
+
+        fake_invoices = [
+            self.ContractInvoice(
+                contract=contract,
+                invoice=invoice_1,
+                start=datetime.date(2017, 1, 20),
+                end=datetime.date(2017, 2, 19),
+                ),
+            self.ContractInvoice(
+                contract=contract,
+                invoice=invoice_2,
+                start=datetime.date(2017, 2, 20),
+                end=datetime.date(2017, 3, 19),
+                ),
+            ]
+
+        # Force company in context for rounding configuration reading
+        with Transaction().set_context(company=company.id):
+            dumped_invoices = self.Contract.dump_to_cached_invoices(
+                self.Contract().dump_future_invoices(fake_invoices))
+
+        cached_invoices = {
+            'invoices': [
+                {'amount': Decimal('51.75'),
+                    'currency_digits': 2,
+                    'currency_symbol': company.currency.symbol,
+                    'details': [{'amount': Decimal('31.53'),
+                            'currency_digits': 2,
+                            'currency_symbol': company.currency.symbol,
+                            'end': datetime.date(2017, 2, 19),
+                            'name': 'Coverage A',
+                            'premium': 10,
+                            'start': datetime.date(2017, 1, 20),
+                            'tax_amount': Decimal('0.00'),
+                            'total_amount': Decimal('31.53')},
+                        {'amount': Decimal('20.22'),
+                            'currency_digits': 2,
+                            'currency_symbol': company.currency.symbol,
+                            'end': datetime.date(2017, 2, 19),
+                            'name': 'Coverage B',
+                            'premium': 11,
+                            'start': datetime.date(2017, 1, 20),
+                            'tax_amount': Decimal('1.82'),
+                            'total_amount': Decimal('22.04')}],
+                    'end': datetime.date(2017, 2, 19),
+                    'name': 'Invoice 1',
+                    'premium': None,
+                    'start': datetime.date(2017, 1, 20),
+                    'tax_amount': Decimal('1.82'),
+                    'total_amount': Decimal('53.57')},
+                {'amount': Decimal('39.47'),
+                    'currency_digits': 2,
+                    'currency_symbol': company.currency.symbol,
+                    'details': [{'amount': Decimal('31.53'),
+                            'currency_digits': 2,
+                            'currency_symbol': company.currency.symbol,
+                            'end': datetime.date(2017, 3, 19),
+                            'name': 'Coverage A',
+                            'premium': 10,
+                            'start': datetime.date(2017, 2, 20),
+                            'tax_amount': Decimal('0.00'),
+                            'total_amount': Decimal('31.53')},
+                        {'amount': Decimal('7.94'),
+                            'currency_digits': 2,
+                            'currency_symbol': company.currency.symbol,
+                            'end': datetime.date(2017, 3, 2),
+                            'name': 'Coverage B',
+                            'premium': 11,
+                            'start': datetime.date(2017, 2, 20),
+                            # This tax amount may be confusing, but it is
+                            # right. The product is configured taxes included,
+                            # so even though the tax amount looks like it
+                            # should be 0.71, it has to be 0.72 so the total
+                            # amount is 8.66 as expected.
+                            'tax_amount': Decimal('0.72'),
+                            'total_amount': Decimal('8.66')}],
+                    'end': datetime.date(2017, 3, 19),
+                    'name': 'Invoice 2',
+                    'premium': None,
+                    'start': datetime.date(2017, 2, 20),
+                    'tax_amount': Decimal('0.72'),
+                    'total_amount': Decimal('40.19')},
+                ],
+            'premium_ids': [10, 11],
+            }
+
+        self.assertEqual(dumped_invoices, cached_invoices)
 
     def test0050_propagate_contract_move_line(self):
         from trytond.modules.account.move import Line as SuperLine
