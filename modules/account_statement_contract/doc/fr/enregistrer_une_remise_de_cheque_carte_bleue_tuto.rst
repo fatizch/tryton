@@ -27,7 +27,7 @@ suivants:
     -  Balance: à ne pas utiliser dans le cas d'un journal de type chèque
 - *Sequence des relevés*: séquence utilisée pour le numéro de remise de chèques
 - *Bordereaux de chèques*: permet de définir qu'il s'agit d'un journal pour
-remise de chèques.
+  remise de chèques.
 
 
 

@@ -1,7 +1,7 @@
-.. transversal
+.. accounting
 
-Agrégat comptable
-=================
+Comptabilité - Agrégat comptable
+================================
 
 Résumé
 ------

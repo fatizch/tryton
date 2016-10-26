@@ -32,9 +32,21 @@ msgctxt "field:claim.loss,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:claim.loss,initial_std_start_date:"
+msgid "Initial STD Start Date"
+msgstr "Date de début de l'arrêt de travail"
+
 msgctxt "field:claim.loss,is_a_relapse:"
 msgid "Is A Relapse"
 msgstr "Est une rechute"
+
+msgctxt "field:claim.loss,ltd_end_date:"
+msgid "LTD End Date"
+msgstr "Date de fin de l'invalidité"
+
+msgctxt "field:claim.loss,ltd_start_date:"
+msgid "LTD Start Date"
+msgstr "Date de début de l'invalidité"
 
 msgctxt "field:claim.loss,possible_covered_persons:"
 msgid "Covered Persons"

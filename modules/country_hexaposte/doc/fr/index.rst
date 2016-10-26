@@ -1,7 +1,7 @@
 .. custom_tryton_coog
 
-Pays - Hexaposte
-================
+Tryton Coog - Hexaposte
+=======================
 
 Résumé
 ------

@@ -76,7 +76,7 @@ msgstr "Modèle"
 
 msgctxt "model:contract.set.validate.find_process,name:"
 msgid "ContractSetValidate Find Process"
-msgstr ""
+msgstr "Recherche de processus de validation de groupes de contrats"
 
 msgctxt "model:ir.action,name:act_contract_set_logs"
 msgid "Logs"

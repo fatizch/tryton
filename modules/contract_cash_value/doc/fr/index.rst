@@ -1,7 +1,7 @@
 .. capital
 
-Contrat de capitalisation
-=========================
+Capitalisation - Contrat
+========================
 
 Résumé
 ------

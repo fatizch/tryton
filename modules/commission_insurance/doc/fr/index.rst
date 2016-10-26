@@ -1,6 +1,6 @@
 .. commission
 
-Commission d'assurance
+Commission - Assurance
 ======================
 
 Résumé
@@ -19,4 +19,3 @@ Fonctionnalités
 
     summary.rst
     features.rst
-

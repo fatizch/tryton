@@ -1,12 +1,19 @@
 .. transversal
 
-Demande de pièce
-================
+Transverse - Demande de pièce
+=============================
 
 Résumé
 ------
 
 .. include:: summary.rst
+
+
+Fonctionnalités
+---------------
+
+
+.. include:: features.rst
 
 
 Aide utilisateur
@@ -21,4 +28,4 @@ Aide utilisateur
     :hidden:
 
     summary.rst
-
+    features.rst

@@ -1,16 +1,21 @@
 .. claim
 
-Processus de déclaration de sinistres en collectif
-==================================================
+Sinistre - Processus de déclaration collectif
+=============================================
 
 Résumé
 ------
 
 .. include:: summary.rst
 
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
 
 .. toctree::
     :hidden:
 
     summary.rst
-
+    features.rst

@@ -11,7 +11,7 @@ En fonction du contrat, des actions supplémentaires liées à la clôture peuve
 *Fréquence suggérée: quotidienne*
 
 Batch de rejet des devis inactifs [contract.decline.inactive_quotes]
-===================================================================
+====================================================================
 
 Ce batch décline les contrats qui valident les conditions suivantes :
 - status devis (quote).

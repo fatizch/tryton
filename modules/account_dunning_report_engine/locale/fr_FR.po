@@ -20,4 +20,4 @@ msgstr "Modèle de courrier"
 
 msgctxt "help:account.dunning.level,not_mandatory:"
 msgid "If higher level can be processed, this step will be skipped"
-msgstr ""
+msgstr "Si un niveau supérieur peut être traité, ce niveau sera ignoré"

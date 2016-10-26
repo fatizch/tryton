@@ -1,7 +1,7 @@
 .. credit
 
-Calcul du TAEA
-==============
+Emprunteur - Calcul du TAEA
+===========================
 
 Résumé
 ------

@@ -1,7 +1,7 @@
 .. life
 
-Contrat de Prévoyance - Clause bénéficiaire
-===========================================
+Prévoyance - Clause bénéficiaire
+================================
 
 Résumé
 ------
@@ -19,5 +19,3 @@ Fonctionnalités
 
     features.rst
     summary.rst
-
-

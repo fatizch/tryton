@@ -10,6 +10,10 @@ msgctxt "error:process.action:"
 msgid "Source Code Unavailable"
 msgstr "La source n'est pas disponible"
 
+msgctxt "error:process.process-act_window:"
+msgid "The action must be unique per process / language"
+msgstr "L'action doit être uniquer par processus / langue"
+
 msgctxt "error:process.step:"
 msgid "The technical name must be unique"
 msgstr "Le nom technique doit être unique"
@@ -43,10 +47,6 @@ msgstr ""
 msgctxt "error:process:"
 msgid "The technical name must be unique"
 msgstr "Le nom technique doit être unique"
-
-msgctxt "error:process.process-act_window:"
-msgid "The action must be unique per process / language"
-msgstr "L'action doit être uniquer par processus / langue"
 
 msgctxt "field:ir.model,is_workflow:"
 msgid "Is Workflow"

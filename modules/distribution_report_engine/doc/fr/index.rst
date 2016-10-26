@@ -1,7 +1,7 @@
 .. laboratory
 
-Produit - Distribution sur réseau - Courriers
-=============================================
+Laboratoire Produit - Distribution sur réseau - Courriers
+=========================================================
 
 Résumé
 ------

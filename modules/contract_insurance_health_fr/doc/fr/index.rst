@@ -1,7 +1,7 @@
 .. health
 
-Contrat santé française
-=======================
+Santé - Contrat (fr)
+====================
 
 Résumé
 ------
@@ -12,6 +12,14 @@ Fonctionnalités
 ---------------
 
 .. include:: features.rst
+
+Aide utilisateur
+----------------
+
+.. toctree::
+    :maxdepth: 2
+
+    dev/jeux d essai.rst
 
 .. toctree::
     :hidden:

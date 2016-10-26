@@ -8,11 +8,11 @@ msgstr "Le NIR est requis pour les personnes couvertes %s"
 
 msgctxt "error:health.party_complement:"
 msgid "HC system must be defined"
-msgstr ""
+msgstr "Le régime doit être renseigné"
 
 msgctxt "error:health.party_complement:"
 msgid "Wrong Insurance Fund Number: %s"
-msgstr ""
+msgstr "Numéro de fond invalide : %s"
 
 msgctxt "error:party.relation:"
 msgid "%s can't be both a social security insured and dependent"

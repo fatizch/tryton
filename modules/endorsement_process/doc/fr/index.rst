@@ -13,6 +13,14 @@ Fonctionnalités
 
 .. include:: features.rst
 
+Aide utilisateur
+----------------
+
+.. toctree::
+    :maxdepth: 2
+
+    user/configuration.rst
+
 .. toctree::
     :hidden:
 

@@ -138,13 +138,17 @@ msgctxt "field:endorsement.contract.benefit,relation:"
 msgid "Relation"
 msgstr "Relation"
 
+msgctxt "field:endorsement.contract.benefit,revaluation_rule_extra_data:"
+msgid "Revaluation Extra Data"
+msgstr "Données complémetnaires de revalorisation"
+
 msgctxt "field:endorsement.contract.benefit,values:"
 msgid "Values"
 msgstr "Valeurs"
 
 msgctxt "field:endorsement.contract.benefit,write_date:"
 msgid "Write Date"
-msgstr "Modifié par"
+msgstr "Date de mise à jour"
 
 msgctxt "field:endorsement.contract.benefit,write_uid:"
 msgid "Write User"
@@ -192,7 +196,7 @@ msgstr "Nom"
 
 msgctxt "field:endorsement.contract.benefit.field,write_date:"
 msgid "Write Date"
-msgstr "Modifié par"
+msgstr "Date de mise à jour"
 
 msgctxt "field:endorsement.contract.benefit.field,write_uid:"
 msgid "Write User"

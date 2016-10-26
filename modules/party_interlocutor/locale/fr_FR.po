@@ -96,7 +96,7 @@ msgstr "Nom"
 
 msgctxt "field:party.interlocutor-party.contact_mechanism,write_date:"
 msgid "Write Date"
-msgstr "Modifié par"
+msgstr "Date de mise à jour"
 
 msgctxt "field:party.interlocutor-party.contact_mechanism,write_uid:"
 msgid "Write User"

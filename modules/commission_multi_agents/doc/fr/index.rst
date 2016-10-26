@@ -1,7 +1,7 @@
 .. commission
 
-Gestion des sur-apporteurs
-==========================
+Commission - Gestion des sur-apporteurs
+=======================================
 
 Résumé
 ------

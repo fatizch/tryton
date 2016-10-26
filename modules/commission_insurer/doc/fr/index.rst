@@ -1,15 +1,20 @@
 .. commission
 
-Gestion des bordereaux assureurs
-================================
+Commission - Bordereaux assureurs
+=================================
 
 Résumé
 ------
 
 .. include:: summary.rst
 
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
 .. toctree::
     :hidden:
 
     summary.rst
-
+    features.rst

@@ -151,6 +151,10 @@ msgctxt "model:ir.ui.menu,name:menu_start_endorsement_process"
 msgid "Start Endorsement Process"
 msgstr "Démarrer le processus d'avenant"
 
+msgctxt "selection:document.description,when_received:"
+msgid "Start Endorsement Process"
+msgstr "Démarrer le processus d'avenant"
+
 msgctxt "selection:process,kind:"
 msgid "Contract Endorsement"
 msgstr "Avenant au contrat"

@@ -1,4 +1,4 @@
-..contract
+.. endorsement
 
 Avenant - Clauses
 =================

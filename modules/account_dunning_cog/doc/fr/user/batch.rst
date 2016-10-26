@@ -9,7 +9,7 @@ de maturité de la ligne a atteint un niveau de relance.
 
 
 Batch de traitement des relances [account.dunning.treat]
-=======================================================
+========================================================
 
 Ce batch traite les relances qui sont dans un état brouillon en fonction du
 niveau de la relance.

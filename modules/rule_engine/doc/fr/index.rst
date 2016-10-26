@@ -1,7 +1,7 @@
 .. transversal
 
-Moteur de règles
-================
+Transverse - Moteur de règles
+=============================
 
 Résumé
 ------

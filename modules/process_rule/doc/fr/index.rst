@@ -1,7 +1,7 @@
 .. transversal
 
-Processus - Règles
-==================
+Transverse - Règles sur les processus
+=====================================
 
 Résumé
 ------

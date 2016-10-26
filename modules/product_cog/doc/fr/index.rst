@@ -1,16 +1,21 @@
-.. laboratory
+.. accounting
 
-Produit comptable - Assurance
-=============================
+Tryton Coog - Produit comptable
+===============================
 
 Résumé
 ------
 
 .. include:: summary.rst
 
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
 
 .. toctree::
     :hidden:
 
     summary.rst
-
+    features.rst

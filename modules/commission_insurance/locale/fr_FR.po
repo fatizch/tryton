@@ -22,6 +22,10 @@ msgstr ""
 "\n"
 "%s"
 
+msgctxt "error:commission.filter_commission:"
+msgid "The selected contracts do not have any invoice."
+msgstr "Les contrats sélectionnés n'ont pas de quittances"
+
 msgctxt "error:commission.plan.date:"
 msgid "Invalid Month (%s) Day (%s) Combination"
 msgstr "La combinaison Mois (%s) Jour (%s) n'est pas valide"
@@ -695,10 +699,6 @@ msgctxt "model:ir.action,name:act_filter_commission"
 msgid "Commissions"
 msgstr "Commissions"
 
-msgctxt "error:commission.filter_commission:"
-msgid "The selected contracts do not have any invoice."
-msgstr "Les contrats sélectionnés n'ont pas de quittances"
-
 msgctxt "model:ir.action,name:act_invoice_broker_invoice_form"
 msgid "Broker Invoices"
 msgstr "Bordereaux courtiers"
@@ -1152,9 +1152,6 @@ msgid "Show"
 msgstr "Afficher"
 
 # Custom translations below
-msgctxt "field:commission,amount:commission."
-msgid "Amount"
-msgstr "Commission"
 
 msgctxt "field:account.invoice,agent:commission."
 msgid "Commission Agent"
@@ -1180,13 +1177,13 @@ msgctxt "model:commission.create_invoice.ask,name:commission."
 msgid "Create Commission Invoice"
 msgstr "Générer les bordereaux de commission"
 
-msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
-msgid "Create Commission Invoices"
-msgstr "Générer les bordereaux de commission"
-
 msgctxt "model:ir.action,name:commission.act_agent_form"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
+msgid "Create Commission Invoices"
+msgstr "Générer les bordereaux de commission"
 
 msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
 msgid "Agents"
@@ -1209,12 +1206,12 @@ msgid "Principal Of"
 msgstr "Commissionne"
 
 msgctxt "view:commission.agent:commission."
-msgid "Agents"
-msgstr "Protocoles de commissionnement"
-
-msgctxt "view:commission.agent:commission."
 msgid "Agent"
 msgstr "Protocole de commissionnement"
+
+msgctxt "view:commission.agent:commission."
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "view:commission.create_invoice.ask:commission."
 msgid "Create Commission Invoice"

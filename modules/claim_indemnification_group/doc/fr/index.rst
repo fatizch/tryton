@@ -1,15 +1,21 @@
-.. Claim
+.. claim
 
-Sinistres - Prestations des contrats collectifs
-===============================================
+Sinistre - Prestations des contrats collectifs
+==============================================
 
 Résumé
 ------
 
 .. include:: summary.rst
 
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
 
 .. toctree::
     :hidden:
 
     summary.rst
+    features.rst

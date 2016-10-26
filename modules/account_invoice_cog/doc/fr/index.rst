@@ -1,7 +1,7 @@
 .. custom_tryton_coog
 
-Quittance Assurance
-====================
+Tryton Coog - Quittance
+=======================
 
 Résumé
 ------

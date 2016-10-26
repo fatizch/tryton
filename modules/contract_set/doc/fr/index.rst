@@ -1,7 +1,7 @@
 .. contract
 
-Ensemble de contrats
-====================
+Contrat - Ensemble de contrats
+==============================
 
 Résumé
 ------

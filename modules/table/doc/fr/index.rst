@@ -1,7 +1,7 @@
 .. transversal
 
-Paramétrage - Tables à N dimensions
-===================================
+Transverse - Tables à N dimensions
+==================================
 
 Résumé
 ------

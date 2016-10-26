@@ -1,7 +1,7 @@
 .. contract
 
-Réseau de distribution
-======================
+Contrat - Réseau de distribution
+================================
 
 Résumé
 ------
@@ -18,4 +18,3 @@ Fonctionnalités
 
     summary.rst
     features.rst
-

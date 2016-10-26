@@ -1,7 +1,7 @@
 .. custom_tryton_coog
 
-Pays - Assurance
-================
+Tryton Coog - Pays
+==================
 
 Résumé
 ------

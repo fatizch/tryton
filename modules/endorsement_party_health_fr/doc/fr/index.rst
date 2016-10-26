@@ -1,7 +1,7 @@
 .. health
 
-Avenant - Personne - Santé Française
-====================================
+Santé - Avenant sur les personnes (fr)
+======================================
 
 Résumé
 ------
@@ -19,4 +19,3 @@ Fonctionnalités
 
     features.rst
     summary.rst
-

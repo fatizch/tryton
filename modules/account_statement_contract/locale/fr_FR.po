@@ -6,10 +6,70 @@ msgctxt "field:account.statement.line,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:contract,cancelled_statements:"
+msgid "Cancelled Statements"
+msgstr "Relevés annulés"
+
 msgctxt "model:ir.action,name:report_bank_deposit_ticket"
 msgid "Bank Deposit Ticket"
 msgstr "Bordereaux de chèques"
 
-msgctxt "field:contract,cancelled_statements:"
-msgid "Cancelled Statements"
-msgstr "Relevés annulés"
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "#"
+msgstr "#"
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "(Annulé)"
+msgstr "(Annulé)"
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "(Brouillon)"
+msgstr "(Brouillon)"
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid ":"
+msgstr " : "
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "Ban"
+msgstr "Ban"
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "Bordereau de remise de chèque"
+msgstr "Bordereau de remise de chèque"
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "Ch"
+msgstr "Ch"
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "Compte"
+msgstr "Compte"
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "Date:"
+msgstr "Date :"
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "Montant"
+msgstr "Montant"
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "Personne"
+msgstr "Personne"
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "Relevé"
+msgstr "Relevé"
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "que"
+msgstr "que"
+
+msgctxt "report:account.statement.bank_deposit_ticket_report:"
+msgid "è"
+msgstr "è"

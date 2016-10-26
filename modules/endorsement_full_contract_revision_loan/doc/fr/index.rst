@@ -1,7 +1,7 @@
 .. credit
 
-Avenant - Reprise Intégrale de Contrat (Pret)
-=============================================
+Emprunteur - Avenant de reprise intégrale de contrat
+====================================================
 
 Résumé
 ------

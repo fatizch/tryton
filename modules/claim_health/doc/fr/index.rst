@@ -1,7 +1,7 @@
 .. claim
 
-Décompte Santé
-==============
+Sinistre - Décompte Santé
+=========================
 
 Résumé
 ------

@@ -1,7 +1,7 @@
-.. contract
+.. accounting
 
-Rapports comptables
-===================
+Comptabilité - Rapports
+=======================
 
 Résumé
 ------

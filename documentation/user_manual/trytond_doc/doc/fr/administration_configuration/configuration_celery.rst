@@ -104,7 +104,10 @@ celery_multi
 de lancer des workers sur un env de prod**
 
 Example de wrapping script autour de celery_multi pour lancer les workers
-coog::
+coog:
+
+.. code:: bash
+
      #!/bin/bash
 
     USAGE="Usage: celery_multi_coog [start|stop|stopwait|restart|kill|get hostname|names]"
@@ -126,6 +129,3 @@ coog::
     celery multi $ACTION $WORKER_NAME --config=celeryconfig -A $APP \
     --pidfile=$LOG_DIR/celery-%n.pid  \
     --loglevel=INFO --logfile=$LOG_DIR/$WORKER_NAME.log
-
-
-

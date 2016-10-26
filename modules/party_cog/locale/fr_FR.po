@@ -254,9 +254,9 @@ msgctxt "field:party.party,birth_name:"
 msgid "Birth Name"
 msgstr "Nom de naissance"
 
-msgctxt "field:party.party,children:"
-msgid "Children"
-msgstr "Enfants"
+msgctxt "field:party.party,commercial_name:"
+msgid "Commercial Name"
+msgstr "Nom commercial"
 
 msgctxt "field:party.party,first_name:"
 msgid "First Name"
@@ -285,14 +285,6 @@ msgstr "Logo"
 msgctxt "field:party.party,main_address:"
 msgid "Main Address"
 msgstr "Adresse"
-
-msgctxt "field:party.party,parent:"
-msgid "Parent"
-msgstr "Parent"
-
-msgctxt "field:party.party,commercial_name:"
-msgid "Commercial Name"
-msgstr "Nom commercial"
 
 msgctxt "field:party.party,ssn:"
 msgid "SSN"
@@ -917,10 +909,6 @@ msgstr "Identifiants de tiers"
 msgctxt "view:party.interaction:"
 msgid "Communication Log"
 msgstr "Historique des Contacts"
-
-msgctxt "view:party.party:"
-msgid "Company"
-msgstr "Personne morale"
 
 msgctxt "view:party.party:"
 msgid "Contact"

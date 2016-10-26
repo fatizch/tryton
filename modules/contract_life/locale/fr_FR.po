@@ -2,38 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:offered.item.description,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "model:tag,name:tag_life"
-msgid "Life"
-msgstr "Prévoyance"
-
-msgctxt "selection:offered.option.description,family:"
-msgid "Life"
-msgstr "Prévoyance"
-
-msgctxt "selection:offered.option.description,insurance_kind:"
-msgid "Death"
-msgstr "Décès"
-
-msgctxt "selection:offered.option.description,insurance_kind:"
-msgid "Partial Disability"
-msgstr "Invalidité partielle"
-
-msgctxt "selection:offered.option.description,insurance_kind:"
-msgid "Temporary Disability"
-msgstr "Incapacité de travail"
-
-msgctxt "selection:offered.option.description,insurance_kind:"
-msgid "Total And Irreversible Autonomy Loss"
-msgstr "Perte Totale et Irréversible d'Autonomie"
-
-msgctxt "selection:offered.option.description,insurance_kind:"
-msgid "Total Disability"
-msgstr "Invalidité totale"
-
 msgctxt "field:contract.covered_element-party,covered_element:"
 msgid "Covered Element"
 msgstr "Risque Couvert"
@@ -66,9 +34,41 @@ msgctxt "field:contract.option,person:"
 msgid "Person"
 msgstr "Personne Physique"
 
+msgctxt "field:offered.item.description,kind:"
+msgid "Kind"
+msgstr "Type"
+
 msgctxt "model:contract.covered_element-party,name:"
 msgid "Relation between Covered Element and Covered Relations"
 msgstr "Relation Risque Couvert et Relations"
+
+msgctxt "model:tag,name:tag_life"
+msgid "Life"
+msgstr "Prévoyance"
+
+msgctxt "selection:offered.option.description,family:"
+msgid "Life"
+msgstr "Prévoyance"
+
+msgctxt "selection:offered.option.description,insurance_kind:"
+msgid "Death"
+msgstr "Décès"
+
+msgctxt "selection:offered.option.description,insurance_kind:"
+msgid "Partial Disability"
+msgstr "Invalidité partielle"
+
+msgctxt "selection:offered.option.description,insurance_kind:"
+msgid "Temporary Disability"
+msgstr "Incapacité de travail"
+
+msgctxt "selection:offered.option.description,insurance_kind:"
+msgid "Total And Irreversible Autonomy Loss"
+msgstr "Perte Totale et Irréversible d'Autonomie"
+
+msgctxt "selection:offered.option.description,insurance_kind:"
+msgid "Total Disability"
+msgstr "Invalidité totale"
 
 msgctxt "view:contract.covered_element:"
 msgid "Covered Person"

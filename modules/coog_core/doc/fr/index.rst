@@ -1,7 +1,7 @@
 .. transversal
 
-Utilitaires
-===========
+Transverse - Utilitaires
+========================
 
 Résumé
 ------
@@ -12,6 +12,16 @@ Fonctionnalités
 ---------------
 
 .. include:: features.rst
+
+Aide utilisateur
+----------------
+
+.. toctree::
+    :maxdepth: 2
+
+    import_export_parametrage_tuto.rst
+    user/export_tools.rst
+    user/batch.rst
 
 
 .. toctree::

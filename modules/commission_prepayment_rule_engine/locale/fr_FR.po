@@ -92,11 +92,11 @@ msgstr "Règles de calcul de la date de paiement du précompte"
 
 msgctxt "model:rule_engine,name:commission_precompte"
 msgid "Precompte sur la prime de la premiere annee"
-msgstr ""
+msgstr "Précompte sur la prime de la première année"
 
 msgctxt "model:rule_engine.rule_parameter,string:escompte_premiere_annee"
 msgid "Pourcentage du précompte"
-msgstr ""
+msgstr "Pourcentage du précompte"
 
 msgctxt "view:commission.plan.prepayment.payment_rule:"
 msgid "Prepayment Payment Date Rule"

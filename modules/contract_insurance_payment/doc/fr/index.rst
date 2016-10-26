@@ -1,6 +1,6 @@
 .. contract
 
-Paiement - Contrats
+Contrat - Paiements
 ===================
 
 Résumé
@@ -18,5 +18,3 @@ Fonctionnalités
 
     features.rst
     summary.rst
-
-

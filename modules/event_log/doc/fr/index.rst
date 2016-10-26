@@ -1,7 +1,7 @@
 .. transversal
 
-Compte rendu d'évenements (CRE)
-===============================
+Transverse - Compte rendu d'évenements (CRE)
+============================================
 
 Résumé
 ------
@@ -12,14 +12,6 @@ Fonctionnalités
 ---------------
 
 .. include:: features.rst
-
-
-Aide utilisateur
-----------------
-
-.. toctree::
-    user/index.rst
-
 
 .. toctree::
     :hidden:

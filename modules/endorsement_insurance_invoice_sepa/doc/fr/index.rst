@@ -1,7 +1,7 @@
 .. endorsement
 
-Avenant - Quittancement - SEPA
-==============================
+Avenant - Gestion des données SEPA
+==================================
 
 Résumé
 ------

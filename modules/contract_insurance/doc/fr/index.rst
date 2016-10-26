@@ -1,6 +1,6 @@
 .. contract
 
-Contrat d'assurance
+Contrat - Assurance
 ===================
 
 Résumé
@@ -19,11 +19,10 @@ Aide utilisateur
 .. toctree::
    :maxdepth: 1
 
-   user/creer_une_surprime
+   user/creer_une_surprime.rst
 
 .. toctree::
     :hidden:
 
     summary.rst
     features.rst
-

@@ -18,9 +18,3 @@ Fonctionnalités
 
     summary.rst
     features.rst
-
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

@@ -1,7 +1,7 @@
-.. core_coog
+.. transversal
 
-Debugging des données
-=====================
+Transverse - Debugging des données
+==================================
 
 Résumé
 ------

@@ -1,8 +1,7 @@
 .. custom_tryton_coog
 
-
-Monnaie - Assurance
-===================
+Tryton Coog - Monnaie
+=====================
 
 Résumé
 ------

@@ -1,7 +1,7 @@
-.. credit
+.. commission
 
-Commission ORIAS
-==============
+Commission - ORIAS
+==================
 
 Résumé
 ------

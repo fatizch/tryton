@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:distribution.commercial_product,report_style_template:"
+msgid "Report Style"
+msgstr "Style du rapport"
+
 msgctxt "field:distribution.commercial_product,report_templates:"
 msgid "Report Templates"
 msgstr "Modèles de courrier"
@@ -54,7 +58,3 @@ msgstr "Identifiant XML"
 msgctxt "model:report.template-distribution.commercial_product,name:"
 msgid "Report template to Commercial Product relation"
 msgstr "Relation entre produits commerciaux et modèles de courrier"
-
-msgctxt "field:distribution.commercial_product,report_style_template:"
-msgid "Report Style"
-msgstr "Style du rapport"

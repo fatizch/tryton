@@ -1,7 +1,7 @@
 .. custom_tryton_coog
 
-Tiers (fr)
-==========
+Tryton Coog - Tiers (fr)
+========================
 
 Résumé
 ------
@@ -9,8 +9,14 @@ Résumé
 .. include:: summary.rst
 
 
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+
 .. toctree::
     :hidden:
 
     summary.rst
-
+    features.rst

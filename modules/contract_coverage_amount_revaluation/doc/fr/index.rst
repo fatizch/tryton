@@ -1,7 +1,7 @@
 .. contract
 
-Montant de Couverture Revalorisé
-=================
+Contrat - Montant de Couverture Revalorisé
+==========================================
 
 Résumé
 ------

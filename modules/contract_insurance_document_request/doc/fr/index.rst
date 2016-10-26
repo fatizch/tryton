@@ -1,7 +1,7 @@
 .. contract
 
-Demande de pièce - Assurance
-============================
+Contrat - Demande de pièces
+===========================
 
 Résumé
 ------

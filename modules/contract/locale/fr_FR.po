@@ -185,6 +185,10 @@ msgctxt "field:contract,final_end_date:"
 msgid "Final End Date"
 msgstr "Date de fin définitive"
 
+msgctxt "field:contract,form_color:"
+msgid "Form color"
+msgstr "Couleur du formulaire"
+
 msgctxt "field:contract,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
@@ -1203,6 +1207,10 @@ msgstr "Contrats"
 msgctxt "model:ir.action,name:act_decline"
 msgid "Decline"
 msgstr "Décliner"
+
+msgctxt "model:ir.action,name:act_event_log_relate_form"
+msgid "Event Logs"
+msgstr "Logs d'événements"
 
 msgctxt "model:ir.action,name:act_hold_contract"
 msgid "Hold Contract"

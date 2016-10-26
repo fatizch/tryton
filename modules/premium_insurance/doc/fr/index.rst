@@ -1,7 +1,7 @@
 .. contract
 
-Prime - Assurance
-==================
+Contrat - Primes assurance
+==========================
 
 Résumé
 ------

@@ -6,17 +6,9 @@ msgctxt "error:claim.net_calculation_rule:"
 msgid "The name must be unique!"
 msgstr "Le nom doit être unique!"
 
-msgctxt "field:claim.extra_datas_displayers,salaries:"
-msgid "Salaries"
-msgstr "Salaires"
-
 msgctxt "field:claim.indemnification,document_request_lines:"
 msgid "Documents"
 msgstr "Pièces justificatives"
-
-msgctxt "field:claim.indemnification_definition,salaries:"
-msgid "Salaries"
-msgstr "Salaires"
 
 msgctxt "field:claim.net_calculation_rule,contributions:"
 msgid "Contributions"
@@ -60,7 +52,7 @@ msgstr "Donnée complémentaire de règle"
 
 msgctxt "field:claim.net_calculation_rule,write_date:"
 msgid "Write Date"
-msgstr "Date de modification"
+msgstr "Date de mise à jour"
 
 msgctxt "field:claim.net_calculation_rule,write_uid:"
 msgid "Write User"
@@ -148,7 +140,7 @@ msgstr "Jusqu'au"
 
 msgctxt "field:claim.salary,write_date:"
 msgid "Write Date"
-msgstr "Modifié par"
+msgstr "Date de mise à jour"
 
 msgctxt "field:claim.salary,write_uid:"
 msgid "Write User"
@@ -162,10 +154,6 @@ msgctxt "field:claim.service,gross_salary:"
 msgid "Gross Salary"
 msgstr "Salaire brut"
 
-msgctxt "field:claim.service,salary_mode:"
-msgid "Salary Mode"
-msgstr "Mode salaire"
-
 msgctxt "field:claim.service,net_salary:"
 msgid "Gross Salary"
 msgstr "Salaire brut"
@@ -177,6 +165,10 @@ msgstr "Salaire"
 msgctxt "field:claim.service,salary_bonus:"
 msgid "Gross Salary"
 msgstr "Salaire brut"
+
+msgctxt "field:claim.service,salary_mode:"
+msgid "Salary Mode"
+msgstr "Mode de salaire"
 
 msgctxt "field:claim_salary_fr.contributions_view,extra_data:"
 msgid "Extra Data"
@@ -280,7 +272,7 @@ msgstr "Nom"
 
 msgctxt "field:net_calculation_rule-extra_data,write_date:"
 msgid "Write Date"
-msgstr "Modifié par"
+msgstr "Date de mise à jour"
 
 msgctxt "field:net_calculation_rule-extra_data,write_uid:"
 msgid "Write User"
@@ -320,7 +312,7 @@ msgstr "Nom"
 
 msgctxt "field:net_calculation_rule-fix_extra_data,write_date:"
 msgid "Write Date"
-msgstr "Modifié par"
+msgstr "Date de mise à jour"
 
 msgctxt "field:net_calculation_rule-fix_extra_data,write_uid:"
 msgid "Write User"
@@ -376,6 +368,10 @@ msgid ""
 msgstr " "
 
 msgctxt "selection:contract.option.benefit,annuity_frequency:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:contract.option.benefit,salary_mode:"
 msgid ""
 msgstr " "
 

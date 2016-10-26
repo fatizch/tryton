@@ -1,6 +1,6 @@
 .. life
 
-Prime - Prévoyance
+Prévoyance - Primes
 ===================
 
 Résumé

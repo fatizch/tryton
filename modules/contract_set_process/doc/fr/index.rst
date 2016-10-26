@@ -1,7 +1,7 @@
 .. contract
 
-Ensemble de contrats - Processus
-================================
+Contrat - Processus sur ensemble de contrats
+============================================
 
 Résumé
 ------
@@ -19,4 +19,3 @@ Fonctionnalités
 
     features.rst
     summary.rst
-

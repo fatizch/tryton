@@ -1,7 +1,7 @@
 .. custom_tryton_coog
 
-Compte - Assurance
-=======================
+Tryton Coog - Comptabilité
+==========================
 
 Résumé
 ------

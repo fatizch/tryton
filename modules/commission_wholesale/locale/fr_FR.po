@@ -14,7 +14,7 @@ msgctxt "field:commission.agent,wholesale_broker:"
 msgid "Wholesale Broker"
 msgstr "Courtier grossiste"
 
-msgctxt "model:ir.action,name:act_invoice_insurer_invoice_form"
+msgctxt "model:ir.action,name:"
 msgid "Insurer Invoices"
 msgstr "Bordereaux courtier grossiste"
 

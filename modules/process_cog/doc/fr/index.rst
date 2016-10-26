@@ -1,7 +1,7 @@
 .. transversal
 
-Processus - Paramétrage par étapes
-==================================
+Transverse - Paramétrage de processus par étapes
+================================================
 
 Résumé
 ------

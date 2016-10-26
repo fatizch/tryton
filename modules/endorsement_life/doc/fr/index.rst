@@ -1,6 +1,6 @@
-..life
+.. life
 
-Avenant - Prévoyance
+Prévoyance - Avenant
 ====================
 
 Résumé

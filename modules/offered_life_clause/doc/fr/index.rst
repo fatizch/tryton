@@ -1,7 +1,7 @@
-..life
+.. life
 
-Produit de Prévoyance - Clause
-==============================
+Prévoyance - Clauses
+====================
 
 Résumé
 ------
@@ -19,5 +19,3 @@ Fonctionnalités
 
     features.rst
     summary.rst
-
-

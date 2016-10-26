@@ -1,7 +1,7 @@
 .. custom_tryton_coog
 
-Gestion des relances assurances
-===============================
+Tryton Coog - Gestion des relances
+==================================
 
 Résumé
 ------

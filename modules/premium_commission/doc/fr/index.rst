@@ -1,7 +1,7 @@
-.. contract
+.. commission
 
-Prime - Frais d'apporteur
-=========================
+Commission - Frais d'apporteur
+==============================
 
 Résumé
 ------

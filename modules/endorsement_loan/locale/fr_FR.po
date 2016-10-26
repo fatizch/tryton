@@ -30,6 +30,10 @@ msgctxt "error:endorsement.contract:"
 msgid "Contract Loans Changes"
 msgstr "Modifications des prêts"
 
+msgctxt "error:endorsement.loan.add_remove:"
+msgid "There must be at least one loan for contract %s"
+msgstr "Il doit y avoir au moins un prêt pour le contrat %s"
+
 msgctxt "error:endorsement.loan.increment:"
 msgid "New version"
 msgstr "Nouvelle version"
@@ -70,10 +74,6 @@ msgctxt "error:endorsement.loan:"
 msgid "There may only be one endorsement in_progress at a given time per loan"
 msgstr ""
 "Il ne peut y avoir qu'un seul avenant en cours de saisie sur un prêt donné."
-
-msgctxt "error:endorsement.loan.add_remove:"
-msgid "There must be at least one loan for contract %s"
-msgstr "Il doit y avoir au moins un prêt pour le contrat %s"
 
 msgctxt ""
 "field:contract.covered_element.add_option.loan_share_selector,contract_endorsement:"

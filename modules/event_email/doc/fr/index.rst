@@ -1,7 +1,7 @@
 .. transversal
 
-Envoi de mail déclenché par des événements
-==========================================
+Transverse - Envoi de mail déclenché par des événements
+=======================================================
 
 Résumé
 ------

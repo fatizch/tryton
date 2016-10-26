@@ -63,8 +63,8 @@ msgid "Launch Batches"
 msgstr "Exécuter des batchs"
 
 msgctxt "view:batch.launcher.parameter:"
-msgid "Batch Parameters"
-msgstr "Paramètres du batch"
+msgid "Model"
+msgstr "Modèle"
 
 msgctxt "view:batch.launcher.select_batchs:"
 msgid "Batches Selection"

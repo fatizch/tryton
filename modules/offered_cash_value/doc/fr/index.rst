@@ -1,6 +1,6 @@
 .. capital
 
-Produit - Capitalisation
+Capitalisation - Produit
 ========================
 
 Résumé

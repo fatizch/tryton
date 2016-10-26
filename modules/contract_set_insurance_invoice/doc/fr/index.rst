@@ -1,7 +1,7 @@
 .. contract
 
-Ensemble de contrats - Prime
-============================
+Contrat - Prime sur ensemble de contrats
+========================================
 
 Résumé
 ------

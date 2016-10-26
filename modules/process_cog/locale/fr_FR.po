@@ -189,6 +189,10 @@ msgctxt "field:process,postpone_button:"
 msgid "Postpone Button Name"
 msgstr "Nom du bouton \"Reporter\""
 
+msgctxt "field:process,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
 msgctxt "field:process,steps_implicitly_available:"
 msgid "Steps Implicitly Available"
 msgstr "Etapes Implicites"

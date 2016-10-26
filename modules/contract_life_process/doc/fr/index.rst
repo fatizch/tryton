@@ -1,6 +1,6 @@
 .. life
 
-Contrat de Prévoyance - Souscription
+Prévoyance - Souscription de contrat
 ====================================
 
 Résumé

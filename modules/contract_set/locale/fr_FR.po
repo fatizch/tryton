@@ -114,7 +114,7 @@ msgstr "Ensemble de contrats"
 
 msgctxt "model:contract.set.decline.select_reason,name:"
 msgid "Reason selector to decline contract set"
-msgstr ""
+msgstr "Motif de déclinaison d'un groupe de contrat"
 
 msgctxt "model:event.type,name:event_activate_contract_set"
 msgid "Activate Contract Set"

@@ -1,7 +1,7 @@
 .. contract
 
-Quittancement des contrats
-==========================
+Contrat - Quittancement
+=======================
 
 Résumé
 ------

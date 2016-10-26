@@ -7,7 +7,8 @@ la date de traitement, un bordereau sera généré avec un statut brouillon.
 - *Fréquence suggérée:* mensuel
 - *Date de traitement à fournir:* date de la fin du mois précédent
 - *agent_type:* cette option est obligatoire pour générer des bordereaux. Deux
-options sont possibles
+  options sont possibles
+
     - 'agent': seul les bordereaux courtiers seront générés
     - 'principal': seul les bordereaux assureurs seront générés
 
@@ -20,7 +21,8 @@ mouvements correspondantes.
 - *Fréquence suggérée:* mensuel
 - *Date de traitement à fournir:* non nécessaire
 - *agent_type:* cette option est obligatoire pour émettre des bordereaux. Deux
-options sont possibles
+  options sont possibles
+
     - 'agent': seul les bordereaux courtiers seront émis
     - 'principal': seul les bordereaux assureurs seront émis
 

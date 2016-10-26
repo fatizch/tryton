@@ -1,7 +1,7 @@
 .. endorsement
 
 Avenant - Personne
-===================
+==================
 
 Résumé
 ------

@@ -603,7 +603,7 @@ msgstr "Descripteur de préjudice"
 
 msgctxt "field:claim.loss,loss_desc_code:"
 msgid "Loss Desc Code"
-msgstr ""
+msgstr "Code du descripteur de préjudice"
 
 msgctxt "field:claim.loss,loss_desc_kind:"
 msgid "Loss Desc Kind"
@@ -845,30 +845,6 @@ msgctxt "field:event.log,claim:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "field:expense,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:expense,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:expense,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:expense,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:expense,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:expense,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:offered.option.description,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
@@ -962,7 +938,8 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "help:benefit,automatically_deliver:"
-msgid "If True the benefit will automatically be delivered after loss declaration"
+msgid ""
+"If True the benefit will automatically be delivered after loss declaration"
 msgstr ""
 "Si cochée, la prestation sera exercée automatiquement une fois le préjudice "
 "déclaré"
@@ -981,11 +958,11 @@ msgstr "Prestation"
 
 msgctxt "model:benefit-extra_data,name:"
 msgid "Benefit to Extra Data Relation"
-msgstr ""
+msgstr "Relation prestation - données complémentaires"
 
 msgctxt "model:benefit-loss.description,name:"
 msgid "Benefit Loss Description Relation"
-msgstr ""
+msgstr "Relation prestation - descripteur de préjudice"
 
 msgctxt "model:benefit.event.description,name:"
 msgid "Event Description"
@@ -993,7 +970,7 @@ msgstr "Evénements"
 
 msgctxt "model:benefit.event.description-loss.description,name:"
 msgid "Event Description - Loss Description Relation"
-msgstr ""
+msgstr "Relation descripteur d'événement - descripteur de préjudice"
 
 msgctxt "model:benefit.loss.description,name:"
 msgid "Loss Description"
@@ -1001,7 +978,7 @@ msgstr "Descripteur de préjudice"
 
 msgctxt "model:benefit.loss.description-extra_data,name:"
 msgid "Relation between Loss Description and Extra Data"
-msgstr ""
+msgstr "Relation descripteur de préjudice - données complémentaires"
 
 msgctxt "model:claim,name:"
 msgid "Claim"
@@ -1038,10 +1015,6 @@ msgstr "Données complémentaires"
 msgctxt "model:claim.sub_status,name:"
 msgid "Claim Close Reason"
 msgstr "Raison de clôture"
-
-msgctxt "model:expense,name:"
-msgid "Expense"
-msgstr "Frais"
 
 msgctxt "model:ir.action,name:"
 msgid "Deliver Benefits"
@@ -1087,6 +1060,18 @@ msgctxt "model:ir.action,name:act_sub_status_form"
 msgid "Sub-status"
 msgstr "Sous statut"
 
+msgctxt "model:ir.action.act_window.domain,name:act_claim_domain_all"
+msgid "All"
+msgstr "Tous"
+
+msgctxt "model:ir.action.act_window.domain,name:act_claim_domain_closed"
+msgid "Closed"
+msgstr "Résilié"
+
+msgctxt "model:ir.action.act_window.domain,name:act_claim_domain_open"
+msgid "Open"
+msgstr "Ouvert"
+
 msgctxt "model:ir.sequence,name:claim_sequence"
 msgid "Claim Sequence"
 msgstr "Sequence des numéros de sinistres"
@@ -1105,7 +1090,7 @@ msgstr "Jeux d'essai : descripteurs d'évenement"
 
 msgctxt "model:ir.test_case.instance,name:loss_desc_test_case"
 msgid "Loss Desc Test Case"
-msgstr ""
+msgstr "Jeu d'essai des descripteurs de préjudice"
 
 msgctxt "model:ir.ui.menu,name:menu_benefit_form"
 msgid "Benefits"
@@ -1137,7 +1122,7 @@ msgstr "Sous statut"
 
 msgctxt "model:option.description-benefit,name:"
 msgid "Option Description to Benefit Relation"
-msgstr ""
+msgstr "Relation garantie - prestation"
 
 msgctxt "model:party.synthesis.menu.claim,name:"
 msgid "Party Synthesis Menu Claim"
@@ -1302,15 +1287,3 @@ msgstr "Délivrer"
 msgctxt "wizard_button:claim.deliver_benefits,benefits,end:"
 msgid "Cancel"
 msgstr "Annuler"
-
-msgctxt "model:ir.action.act_window.domain,name:act_claim_domain_open"
-msgid "Open"
-msgstr "Ouvert"
-
-msgctxt "model:ir.action.act_window.domain,name:act_claim_domain_closed"
-msgid "Closed"
-msgstr "Résilié"
-
-msgctxt "model:ir.action.act_window.domain,name:act_claim_domain_all"
-msgid "All"
-msgstr "Tous"

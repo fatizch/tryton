@@ -1,7 +1,7 @@
 .. contract
 
-Montant de Couverture
-=================
+Contrat - Montant de Couverture
+===============================
 
 Résumé
 ------

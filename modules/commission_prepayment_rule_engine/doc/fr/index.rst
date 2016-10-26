@@ -1,7 +1,7 @@
 .. commission
 
-Commission précompte - moteur de règles
-========================================
+Commission - Moteur de règles de précompte
+==========================================
 
 Résumé
 ------
@@ -19,4 +19,3 @@ Fonctionnalités
 
     summary.rst
     features.rst
-

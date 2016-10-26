@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.transfer_covered_elements.contracts:"
+msgid "%s (%i covered elements)"
+msgstr "%s (%i sous-éléments)"
+
 msgctxt "error:contract.transfer_covered_elements:"
 msgid ""
 "There is a non covered period, source contract ends on the %(source_end)s "
@@ -9,10 +13,6 @@ msgid ""
 msgstr ""
 "Il y a une période non couverte, le contrat d'origine se termine le "
 "%(source_end)s alors que le nouveau commence le %(target_start)s."
-
-msgctxt "error:contract.transfer_covered_elements.contracts:"
-msgid "%s (%i covered elements)"
-msgstr "%s (%i sous-éléments)"
 
 msgctxt "field:contract,is_group:"
 msgid "Group Contract"
@@ -95,15 +95,16 @@ msgctxt "field:party.party,companies:"
 msgid "Companies"
 msgstr "Sociétés"
 
-
-msgctxt "help:contract.transfer_covered_elements.item_desc_line,source_covered:"
+msgctxt ""
+"help:contract.transfer_covered_elements.item_desc_line,source_covered:"
 msgid ""
 "One of the source contract covered elements with sub covered elements to "
 "transfer"
 msgstr ""
 "Un élément couvert du contrat d'origine ayant des sous-éléments à transférer"
 
-msgctxt "help:contract.transfer_covered_elements.item_desc_line,target_covered:"
+msgctxt ""
+"help:contract.transfer_covered_elements.item_desc_line,target_covered:"
 msgid ""
 "The covered element of the target contract to transfer the sub covered "
 "elements to"

@@ -1,7 +1,7 @@
 .. claim
 
-Décompte santé français
-=======================
+Sinistre - Décompte santé français
+==================================
 
 Résumé
 ------

@@ -1,7 +1,7 @@
 .. commission
 
-Avenant - Commission
-====================
+Commission - Avenants
+=====================
 
 Résumé
 ------

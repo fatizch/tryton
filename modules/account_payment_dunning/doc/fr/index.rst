@@ -1,15 +1,21 @@
-.. Dunning
+.. accounting
 
-Relance - Suite à rejet de paiement
-===================================
+Comptabilité - Gestion des impayés
+==================================
 
 Résumé
 ------
 
 .. include:: summary.rst
 
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
 
 .. toctree::
     :hidden:
 
     summary.rst
+    features.rst

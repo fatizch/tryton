@@ -34,6 +34,10 @@ msgstr ""
 "La période d'indemnisation (%(indemn_start)s - %(indemn_end)s) n'est pas "
 "compatible avec la date de fin du contrat (%(contract_end)s)."
 
+msgctxt "error:claim.transfer_services.contracts:"
+msgid "%s (%i claims)"
+msgstr "%s (%i sinistres)"
+
 msgctxt "field:benefit,company_products:"
 msgid "Company Products"
 msgstr "Produits comptables pour la société"
@@ -68,7 +72,7 @@ msgstr "Nom"
 
 msgctxt "field:benefit-company_product,write_date:"
 msgid "Write Date"
-msgstr "Modifié par"
+msgstr "Date de mise à jour"
 
 msgctxt "field:benefit-company_product,write_uid:"
 msgid "Write User"
@@ -220,7 +224,7 @@ msgstr "Règle"
 
 msgctxt "field:benefit_rule-revaluation_rule,write_date:"
 msgid "Write Date"
-msgstr "Modifié par"
+msgstr "Date de mise à jour"
 
 msgctxt "field:benefit_rule-revaluation_rule,write_uid:"
 msgid "Write User"
@@ -229,6 +233,82 @@ msgstr "Modifié par"
 msgctxt "field:benefit_rule-revaluation_rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:claim.transfer_services.benefit_line,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.transfer_services.benefit_line,number:"
+msgid "Number"
+msgstr "Numéro"
+
+msgctxt "field:claim.transfer_services.benefit_line,possible_benefits:"
+msgid "Possible Benefits"
+msgstr "Prestations disponibles"
+
+msgctxt "field:claim.transfer_services.benefit_line,source_benefit:"
+msgid "Source Benefit"
+msgstr "Prestation d'origine"
+
+msgctxt "field:claim.transfer_services.benefit_line,source_covered:"
+msgid "Source Covered"
+msgstr "Risque d'origine"
+
+msgctxt "field:claim.transfer_services.benefit_line,source_option:"
+msgid "Source Option"
+msgstr "Garantie d'origine"
+
+msgctxt "field:claim.transfer_services.benefit_line,target_benefit:"
+msgid "Target Benefit"
+msgstr "Prestation cible"
+
+msgctxt "field:claim.transfer_services.benefit_line,target_covered:"
+msgid "Target Covered"
+msgstr "Risque cible"
+
+msgctxt "field:claim.transfer_services.benefit_line,target_option:"
+msgid "Target Option"
+msgstr "Garantie cible"
+
+msgctxt "field:claim.transfer_services.benefits,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.transfer_services.benefits,lines:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "field:claim.transfer_services.benefits,possible_covered:"
+msgid "Possible Covered Elements"
+msgstr "Eléments couverts disponibles"
+
+msgctxt "field:claim.transfer_services.contracts,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.transfer_services.contracts,source_benefits:"
+msgid "Source Benefits"
+msgstr "Prestations d'origine"
+
+msgctxt "field:claim.transfer_services.contracts,source_contract:"
+msgid "Source Contract"
+msgstr "Contrat d'origine"
+
+msgctxt "field:claim.transfer_services.contracts,source_product:"
+msgid "Source Product"
+msgstr "Produit d'origine"
+
+msgctxt "field:claim.transfer_services.contracts,target_benefits:"
+msgid "Target Benefits"
+msgstr "Prestations cible"
+
+msgctxt "field:claim.transfer_services.contracts,target_contract:"
+msgid "Target Contract"
+msgstr "Contrat cible"
+
+msgctxt "field:claim.transfer_services.contracts,target_product:"
+msgid "Target Product"
+msgstr "Produit cible"
 
 msgctxt "field:contract.option.benefit,annuity_frequency:"
 msgid "Annuity Frequency"
@@ -346,9 +426,33 @@ msgctxt "model:benefit_rule-revaluation_rule,name:"
 msgid "Benefit Rule - Revaluation"
 msgstr "Prestation - Revalorisation"
 
+msgctxt "model:claim.transfer_services.benefit_line,name:"
+msgid "Transfer Services Benefit Line"
+msgstr "Ligne de prestation du transfert de sinistres"
+
+msgctxt "model:claim.transfer_services.benefits,name:"
+msgid "Transfer Services Benefits"
+msgstr "Prestation du transfert de sinistres"
+
+msgctxt "model:claim.transfer_services.contracts,name:"
+msgid "Transfer Services Contracts"
+msgstr "Contrats du transfert de sinistres"
+
 msgctxt "model:contract.option.benefit,name:"
 msgid "Option Benefit"
 msgstr "Prestation"
+
+msgctxt "model:event.type,name:event_transferred_service"
+msgid "Transferred Services"
+msgstr "Sinistres transferrés"
+
+msgctxt "model:ir.action,name:act_claim_transfer_services"
+msgid "Transfer Services"
+msgstr "Transférer des sinistres "
+
+msgctxt "model:ir.ui.menu,name:menu_transfer_services"
+msgid "Transfer Services"
+msgstr "Transférer des sinistres"
 
 msgctxt "selection:contract.option.benefit,annuity_frequency:"
 msgid ""
@@ -370,6 +474,18 @@ msgctxt "selection:contract.option.benefit,annuity_frequency:"
 msgid "Yearly"
 msgstr "Annuelle"
 
+msgctxt "view:claim.transfer_services.benefit_line:"
+msgid "Benefits"
+msgstr "Prestations"
+
+msgctxt "view:claim.transfer_services.benefits:"
+msgid "Transfer Services - Benefits"
+msgstr "Transfert de sinistres - Prestations"
+
+msgctxt "view:claim.transfer_services.contracts:"
+msgid "Transfer Services - Contracts"
+msgstr "Transfert de sinistres - Contrats"
+
 msgctxt "view:contract.option.benefit:"
 msgid "Benefit"
 msgstr "Prestation"
@@ -389,3 +505,19 @@ msgstr "Version"
 msgctxt "view:contract.option:"
 msgid "Rules"
 msgstr "Règles"
+
+msgctxt "wizard_button:claim.transfer_services,benefits,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:claim.transfer_services,benefits,transfer:"
+msgid "Transfer"
+msgstr "Transférer"
+
+msgctxt "wizard_button:claim.transfer_services,select_contracts,benefits:"
+msgid "Match Benefits"
+msgstr "Correspondance des prestations"
+
+msgctxt "wizard_button:claim.transfer_services,select_contracts,end:"
+msgid "Cancel"
+msgstr "Annuler"

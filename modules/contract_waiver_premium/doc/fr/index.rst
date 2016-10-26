@@ -1,7 +1,7 @@
 .. contract
 
-Exonération de primes
-=====================
+Contrat - Exonération de primes
+===============================
 
 Résumé
 ------

@@ -1,7 +1,7 @@
 .. transversal
 
-Clausier
-========
+Transverse - Clausier
+=====================
 
 Résumé
 ------
@@ -19,5 +19,3 @@ Fonctionnalités
 
     summary.rst
     features.rst
-
-

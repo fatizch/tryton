@@ -48,7 +48,7 @@ msgstr "Date d'Effet"
 
 msgctxt "field:claim.loss.hospitalisation.period,write_date:"
 msgid "Write Date"
-msgstr "Modifié par"
+msgstr "Date de mise à jour"
 
 msgctxt "field:claim.loss.hospitalisation.period,write_uid:"
 msgid "Write User"

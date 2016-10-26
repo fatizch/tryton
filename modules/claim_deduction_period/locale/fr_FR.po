@@ -41,7 +41,7 @@ msgstr "Nom"
 
 msgctxt "field:benefit.loss.description-deduction_period_kind,write_date:"
 msgid "Write Date"
-msgstr "Modifié par"
+msgstr "Date de mise à jour"
 
 msgctxt "field:benefit.loss.description-deduction_period_kind,write_uid:"
 msgid "Write User"
@@ -81,7 +81,7 @@ msgstr "Nom"
 
 msgctxt "field:benefit.loss.description.deduction_period_kind,write_date:"
 msgid "Write Date"
-msgstr "Modifié par"
+msgstr "Date de mise à jour"
 
 msgctxt "field:benefit.loss.description.deduction_period_kind,write_uid:"
 msgid "Write User"
@@ -90,6 +90,10 @@ msgstr "Modifié par"
 msgctxt "field:benefit.loss.description.deduction_period_kind,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:claim.indemnification_definition,deduction_period_kinds:"
+msgid "Deduction Kinds"
+msgstr "Types de déduction"
 
 msgctxt "field:claim.indemnification_definition,existing_deduction_periods:"
 msgid "Existing Deduction Periods"
@@ -173,7 +177,7 @@ msgstr "Montant Total"
 
 msgctxt "field:claim.loss.deduction.period,write_date:"
 msgid "Write Date"
-msgstr "Modifié par"
+msgstr "Date de mise à jour"
 
 msgctxt "field:claim.loss.deduction.period,write_uid:"
 msgid "Write User"

@@ -1,7 +1,7 @@
 .. contract
 
-Gestion du SEPA pour les contrats
-=================================
+Contrat - Gestion du SEPA
+=========================
 
 Résumé
 ------

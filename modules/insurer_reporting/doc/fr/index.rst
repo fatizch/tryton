@@ -1,7 +1,7 @@
 .. contract
 
-Rapports Assureurs
-==================
+Contrat - Rapports Assureurs
+============================
 
 Résumé
 ------

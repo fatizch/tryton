@@ -1,13 +1,17 @@
 .. custom_tryton_coog
 
-SEPA
-====
+Tryton Coog - Gestion du SEPA
+=============================
 
 Résumé
 ------
 
 .. include:: summary.rst
 
+Fonctionnalités
+---------------
+
+.. include:: features.rst
 
 .. toctree::
     :hidden:

@@ -1,7 +1,7 @@
 .. life
 
-Contrat de Prévoyance
-=====================
+Prévoyance
+==========
 
 Résumé
 ------

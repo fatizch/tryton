@@ -1,7 +1,7 @@
 .. commission
 
-Moteur de règles - Commissions
-==============================
+Commission - Moteur de règles
+=============================
 
 Résumé
 ------

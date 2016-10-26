@@ -1,10 +1,17 @@
 .. commission
 
-Mouvement comptable d'attente - Assurance
-=========================================
+Commission - Mouvement comptable d'attente
+==========================================
 
-Ce module permet d'émettre automatiquement le mouvement comptable d'attente
-lors de sa création.
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
 
 .. toctree::
     :hidden:

@@ -42,6 +42,74 @@ msgctxt "model:ir.ui.menu,name:menu_print_invoice_report"
 msgid "Print Move Lines Aggregated by Product Report"
 msgstr "Imprimer le rapport des lignes comptables agrégées par produit"
 
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "("
+msgstr "("
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid ")"
+msgstr ")"
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid ","
+msgstr ","
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "-"
+msgstr "_"
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "/"
+msgstr "/"
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "00/00/0000"
+msgstr "00/00/0000"
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "00:00:00"
+msgstr "00:00:00"
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "???"
+msgstr "???"
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "Page"
+msgstr "Page"
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "company.rec_name"
+msgstr "company.rec_name"
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "relatorio:///for"
+msgstr "relatorio:///for"
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "relatorio://for each=\"month in rec['by_month']\""
+msgstr "relatorio://for each=\"month in rec['by_month']\""
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "relatorio://for each=\"rec in records\""
+msgstr "relatorio://for each=\"rec in records\""
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "relatorio://month['amount']"
+msgstr "relatorio://month['amount']"
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "relatorio://rec['product']"
+msgstr "relatorio://rec['product']"
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "relatorio://rec['total']"
+msgstr "relatorio://rec['total']"
+
+msgctxt "report:account.move_line_aggregated.report:"
+msgid "€"
+msgstr "€"
+
 msgctxt "view:account.move_line_aggregated_report.print.start:"
 msgid "Print Move Lines Aggregated by Product Report"
 msgstr "Imprimer le rapport des lignes comptables agrégées par produit"

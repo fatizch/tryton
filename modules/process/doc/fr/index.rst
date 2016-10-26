@@ -1,7 +1,7 @@
 .. transversal
 
-Processus paramétrable
-======================
+Transverse - Processus paramétrable
+===================================
 
 Résumé
 ------

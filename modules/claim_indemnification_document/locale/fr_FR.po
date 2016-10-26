@@ -10,6 +10,10 @@ msgctxt "field:claim,required_indemnification_docs:"
 msgid "Required Docs"
 msgstr "Documents requis"
 
+msgctxt "field:claim.indemnification,document_request_lines:"
+msgid "Documents"
+msgstr "Documents requis"
+
 msgctxt "field:claim.indemnification_calculation_result,requested_documents:"
 msgid "Requested Documents"
 msgstr "Documents requis"

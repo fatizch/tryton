@@ -1,7 +1,7 @@
 .. endorsement
 
-Avenant Personne - Processus
-============================
+Avenant - Processus d'avenant de personne
+=========================================
 
 Résumé
 ------

@@ -18,9 +18,13 @@ msgctxt "error:bank:"
 msgid "The bic must be unique!"
 msgstr "Le BIC doit être unique!"
 
-msgctxt "field:bank,main_address:"
-msgid "Main Address"
-msgstr "Adresse Principale"
+msgctxt "field:bank,address:"
+msgid "Address"
+msgstr "Adresse"
+
+msgctxt "field:bank,name:"
+msgid "Name"
+msgstr "Nom"
 
 msgctxt "field:bank,xml_id:"
 msgid "XML Id"

@@ -1,7 +1,7 @@
 .. contract
 
-Prime
-=====
+Contrat - Prime
+===============
 
 Résumé
 ------

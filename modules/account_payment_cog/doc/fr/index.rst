@@ -1,7 +1,7 @@
 .. custom_tryton_coog
 
-Paiement - Assurance
-====================
+Tryton Coog - Paiement
+======================
 
 Résumé
 ------

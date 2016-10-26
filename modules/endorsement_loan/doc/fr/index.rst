@@ -1,7 +1,7 @@
 .. credit
 
-Avenant - Modification de prêt
-==============================
+Emprunteur - Avenant de modification de prêt
+============================================
 
 Résumé
 ------
@@ -19,4 +19,3 @@ Fonctionnalités
 
     features.rst
     summary.rst
-

@@ -1,7 +1,7 @@
 .. credit
 
-Contrat d'Assurance Emprunteur - Quittancement
-==============================================
+Emprunteur - Quittancement
+==========================
 
 Résumé
 ------
@@ -19,4 +19,3 @@ Fonctionnalités
 
     features.rst
     summary.rst
-

@@ -19,4 +19,3 @@ Fonctionnalités
 
     summary.rst
     features.rst
-

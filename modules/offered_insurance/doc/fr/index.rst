@@ -1,7 +1,7 @@
 .. laboratory
 
-Produit - Assurance
-===================
+Laboratoire Produit - Assurance
+===============================
 
 Résumé
 ------
@@ -19,9 +19,9 @@ Aide utilisateur
 .. toctree::
    :maxdepth: 2
 
-   user/batch
-   user/creer_un_produit_tuto
-   user/imprimer_courrier
+   user/batch.rst
+   user/creer_un_produit_tuto.rst
+   user/imprimer_courrier.rst
 
 
 .. toctree::

@@ -1,7 +1,7 @@
 .. contract
 
-Gestion des courriers de relances
-=================================
+Contrat - Gestion des courriers de relances
+===========================================
 
 Résumé
 ------

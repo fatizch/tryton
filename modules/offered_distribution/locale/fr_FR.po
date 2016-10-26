@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:contract,allowed_portfolios:"
+msgid "Allowed Portfolios"
+msgstr "Portefeuilles autorisés"
+
 msgctxt "field:contract,com_product:"
 msgid "Commercial Product"
 msgstr "Produit commercial"
@@ -9,6 +13,18 @@ msgstr "Produit commercial"
 msgctxt "field:contract,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
+
+msgctxt "field:contract.billing_information,allowed_portfolios:"
+msgid "Allowed Portfolios"
+msgstr "Portefeuilles autorisés"
+
+msgctxt "field:contract.covered_element,allowed_portfolios:"
+msgid "Allowed Portfolios"
+msgstr "Portefeuilles autorisés"
+
+msgctxt "field:contract.option.beneficiary,allowed_portfolios:"
+msgid "Allowed Portfolios"
+msgstr "Portefeuilles autorisés"
 
 msgctxt "field:distribution.commercial_product,code:"
 msgid "Code"

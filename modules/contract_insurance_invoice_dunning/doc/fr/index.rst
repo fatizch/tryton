@@ -1,7 +1,7 @@
 .. contract
 
-Gestion des impayés contrats
-============================
+Contrat - Impayés
+=================
 
 Résumé
 ------

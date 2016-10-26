@@ -1,7 +1,7 @@
 .. contract
 
-Clause sur contrat
-==================
+Contrat - Clauses
+=================
 
 Résumé
 ------
@@ -19,4 +19,3 @@ Fonctionnalités
 
     summary.rst
     features.rst
-

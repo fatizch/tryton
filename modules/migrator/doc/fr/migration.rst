@@ -73,22 +73,27 @@ __setup__() : configuration
 - cls.transcoding : à renseigner pour transcoder des valeurs récupérées dans la
   base source vers des valeurs attendues par coog.
   exemple: transcodage du *genre* pour un tiers
+
+.. code:: python
+
     cls.namings.update({'gender': {u'mr': 'male', u'mme': 'female',
         None: 'male'}})
 
 select_ids() : sélection des ids à migrer
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - en générique: l'ensemble des ids est contruit à partir d'un
   dictionnaire regroupant les paramètres passés au batch, les modes suivants
   sont gérés :
-    - `in`: liste des identifiants à migrer est passée sur la ligne de commande
-    - `in-file`: liste des identifiants à migrer chargée à partir d'un fichier
-      .py
-    - `not-in`: liste des identifiants à exclure est passée sur la ligne de
-      commande
-    - `not-in-file`: liste des identifiants à exclure chargée à partir d'un
-      fichier .py
+
+  - `in`: liste des identifiants à migrer est passée sur la ligne de commande
+  - `in-file`: liste des identifiants à migrer chargée à partir d'un fichier
+    .py
+  - `not-in`: liste des identifiants à exclure est passée sur la ligne de
+    commande
+  - `not-in-file`: liste des identifiants à exclure chargée à partir d'un
+    fichier .py
+
   si ni `in` `in-file` ne sont pas passés en paramètre alors tous les ids de la
   table source cls.table sont chargés (mode par défaut)
 

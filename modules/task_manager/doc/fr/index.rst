@@ -1,12 +1,18 @@
 .. transversal
 
-Gestion de tâches
-=================
+Transverse - Gestion des tâches
+===============================
 
 Résumé
 ------
 
 .. include:: summary.rst
+
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
 
 
 .. toctree::

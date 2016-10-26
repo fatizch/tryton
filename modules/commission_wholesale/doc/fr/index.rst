@@ -1,7 +1,7 @@
 .. commission
 
-Commission Courtier Grossiste
-=============================
+Commission - Courtier Grossiste
+===============================
 
 Résumé
 ------

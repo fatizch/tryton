@@ -1,7 +1,17 @@
 .. custom_tryton_coog
 
-Tiers - Assurance
-=================
+Tryton Coog - Tiers
+===================
+
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
 
 
 .. toctree::
