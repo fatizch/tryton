@@ -10,6 +10,7 @@ from mock import Mock
 
 from trytond.modules.coog_core import test_framework
 from trytond.modules.account_payment_sepa_cog.payment import CAMT054Coog
+from trytond.exceptions import UserError
 
 
 class ModuleTestCase(test_framework.CoogTestCase):
@@ -24,7 +25,16 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'PaymentJournal': 'account.payment.journal',
             'MoveLine': 'account.move.line',
             'Message': 'account.payment.sepa.message',
+            'Mandate': 'account.payment.sepa.mandate',
+            'Party': 'party.party',
+            'BankAccount': 'bank.account',
+            'Group': 'account.payment.group',
+            'Journal': 'account.payment.journal',
             }
+
+    @classmethod
+    def depending_modules(cls):
+        return ['bank_cog', 'company_cog']
 
     def test0010_test_next_possible_payment_date(self):
         today = datetime.date.today()
@@ -79,6 +89,59 @@ class ModuleTestCase(test_framework.CoogTestCase):
     def test_camt054_001_02(self):
         'Test camt.054.001.02 handling'
         self.handle_camt054('camt.054.001.02')
+
+    @test_framework.prepare_test(
+        'company_cog.test0001_testCompanyCreation',
+        'bank_cog.test0020bankaccount')
+    def test_mandate_validation(self):
+        account, = self.BankAccount.search([], limit=1)
+        party, = self.Party.search([], limit=1)
+        company, = self.Company().search([], limit=1)
+        mandate = self.Mandate(party=party, company=company,
+            account_number=account.numbers[0], identification='001',
+            type='recurrent', scheme='CORE',
+            signature_date=datetime.date(2011, 1, 1))
+        mandate.save()
+        with self.assertRaises(UserError):
+            # Amendment without start_date
+            mandate2 = self.Mandate(party=party, company=company,
+                account_number=account.numbers[0], identification='001',
+                type='recurrent', scheme='CORE',
+                signature_date=datetime.date(2011, 1, 1),
+                amendment_of=mandate)
+            mandate2.save()
+        mandate2 = self.Mandate(party=party, company=company,
+            account_number=account.numbers[0], identification='001',
+            type='recurrent', scheme='CORE',
+            signature_date=datetime.date(2011, 1, 1),
+            amendment_of=mandate,
+            start_date=datetime.date(2010, 1, 1))
+        mandate2.save()
+        with self.assertRaises(UserError):
+            # Same identification, different origin
+            mandate3 = self.Mandate(party=party, company=company,
+                account_number=account.numbers[0], identification='001',
+                type='recurrent', scheme='CORE',
+                signature_date=datetime.date(2011, 1, 1))
+            mandate3.save()
+        with self.assertRaises(UserError):
+            # Amendment with same start date
+            mandate4 = self.Mandate(party=party, company=company,
+                account_number=account.numbers[0], identification='001',
+                type='recurrent', scheme='CORE',
+                signature_date=datetime.date(2011, 1, 1),
+                amendment_of=mandate2,
+                start_date=datetime.date(2010, 1, 1))
+            mandate4.save()
+
+    def test_get_sepa_template(self):
+        flavors = ['base', 'base.003', 'pain.001.001.03', 'pain.001.001.05',
+            'pain.001.003.03', 'pain.008.001.02',
+            'pain.008.001.04', 'pain.008.003.02']
+        for flavor in flavors:
+            self.Group(kind='receivable', journal=self.Journal(
+                    sepa_receivable_flavor=flavor)
+            ).get_sepa_template()
 
 
 def suite():

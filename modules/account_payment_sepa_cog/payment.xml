@@ -13,6 +13,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="account_payment.payment_journal_view_form"/>
             <field name="name">payment_journal_form</field>
         </record>
+        <record model="ir.ui.view" id="mandate_view_form">
+            <field name="model">account.payment.sepa.mandate</field>
+            <field name="inherit" ref="account_payment_sepa.mandate_view_form"/>
+            <field name="name">mandate_form</field>
+        </record>
         <record model="ir.sequence.type" id="sequence_type_account_payment_merged">
             <field name="name">Account Payment Merged</field>
             <field name="code">account.payment.merged</field>

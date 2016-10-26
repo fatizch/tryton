@@ -97,8 +97,25 @@ this repository contains the full copyright notices and license terms. -->
                         <MndtRltdInf py:with="mandate = payment.sepa_mandate">
                             <MndtId>${mandate.reference}</MndtId>
                             <DtOfSgntr>${mandate.signature_date.isoformat()}</DtOfSgntr>
-                            <!-- AmdmntInd -->
-                            <!-- AmdmntInfDtls -->
+                            <py:if test="mandate.amendment_of and not any([x.state == 'succeeded' for x in mandate.payments])">
+                            <AmdmntInd>true</AmdmntInd>
+                            <AmdmntInfDtls>
+                                <OrgnlDbtrAcct>
+                                    <Id>
+                                        <py:choose test="mandate.amendment_of.account_number.account.bank.bic == mandate.account_number.account.bank.bic">
+                                        <py:when test="True">
+                                        <IBAN>${mandate.amendment_of.account_number.number}</IBAN>
+                                        </py:when>
+                                        <py:when test="False">
+                                        <Othr>
+                                            <Id>SMNDA</Id>
+                                        </Othr>
+                                        </py:when>
+                                        </py:choose>
+                                    </Id>
+                                </OrgnlDbtrAcct>
+                            </AmdmntInfDtls>
+                            </py:if>
                             <ElctrncSgntr py:if="mandate.electronic_signature">${mandate.electronic_signature}</ElctrncSgntr>
                             <FrstColltnDt py:if="mandate.first_date">${mandate.first_date.isoformat()}</FrstColltnDt>
                             <FnlColltnDt py:if="mandate.final_date">${mandate.final_date.isoformat()}</FnlColltnDt>

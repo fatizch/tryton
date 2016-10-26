@@ -357,8 +357,9 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
             elif action == 'bank_account':
                 if (contract_billing_informations[-1].date ==
                         self.effective_date):
-                    contract_billing_informations[-1].direct_debit_account = \
-                        new_info.direct_debit_account
+                    for fname in self.direct_debit_account_only_fields():
+                        setattr(contract_billing_informations[-1], fname,
+                            getattr(new_info, fname, None))
                 elif (contract_billing_informations[-1].direct_debit_account ==
                         previous_account):
                     new_values = {x: getattr(contract_billing_informations[-1],

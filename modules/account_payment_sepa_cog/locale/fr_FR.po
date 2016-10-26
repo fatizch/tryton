@@ -12,6 +12,10 @@ msgstr ""
 "\t%s\n"
 "Veuillez vérifier les préfixes et suffixes de la séquence."
 
+msgctxt "error:account.payment.sepa.mandate:"
+msgid "All SEPA mandates with identification \"%(identification)s\" must have the same origin"
+msgstr "Tous les mandats SEPA ayant pour RUM : \"%(identification)s\" doivent avoir la même origine"
+
 msgctxt "error:account.payment:"
 msgid "Direct Debit Disbursement of"
 msgstr "Virement du"
@@ -97,6 +101,14 @@ msgstr "Compte Bancaire"
 msgctxt "field:account.payment.payment_creation.start,payer:"
 msgid "Payer"
 msgstr "Payeur"
+
+msgctxt "field:account.payment.sepa.mandate,amendment_of:"
+msgid "Amendment of"
+msgstr "Amendement de"
+
+msgctxt "field:account.payment.sepa.mandate,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
 
 msgctxt "field:account.payment.sepa.mandate,xml_id:"
 msgid "XML Id"

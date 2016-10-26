@@ -1414,12 +1414,17 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
         cls.write(endorsements, {'rollback_date': CurrentTimestamp()})
 
     @classmethod
+    def pre_apply_hook(cls, endorsements_per_model):
+        pass
+
+    @classmethod
     @model.CoogView.button_action('endorsement.act_open_generated')
     @Workflow.transition('applied')
     def apply(cls, endorsements):
         pool = Pool()
         Event = pool.get('event')
         endorsements_per_model = cls.group_per_model(endorsements)
+        cls.pre_apply_hook(endorsements_per_model)
         for model_name in cls.apply_order():
             if model_name not in endorsements_per_model:
                 continue

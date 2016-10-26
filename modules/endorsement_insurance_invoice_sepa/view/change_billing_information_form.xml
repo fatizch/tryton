@@ -8,5 +8,9 @@ this repository contains the full copyright notices and license terms. -->
         <field name="sepa_signature_date"/>
         <newline/>
         <field name="mandate_needed"/>
+        <field name="previous_mandate"/>
+        <newline/>
+        <label name="amend_previous_mandate"/>
+        <field name="amend_previous_mandate"/>
     </xpath>
 </data>

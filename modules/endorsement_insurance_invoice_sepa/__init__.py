@@ -8,6 +8,7 @@ from .wizard import *
 def register():
     Pool.register(
         Contract,
+        Endorsement,
         ChangeBillingInformation,
         ChangeDirectDebitAccount,
         module='endorsement_insurance_invoice_sepa', type_='model')

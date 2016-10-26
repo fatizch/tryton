@@ -33,7 +33,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         party1, = self.Party.create([{
                 'name': 'Bank 1', 'addresses': []
         }])
-        bank1, = self.Bank.create([{'party': party1.id}])
+        bank1, = self.Bank.create([{'party': party1.id, 'bic': 'ABCDEFGH'}])
         self.assert_(bank1.id)
 
     @test_framework.prepare_test('bank_cog.test0010bank')

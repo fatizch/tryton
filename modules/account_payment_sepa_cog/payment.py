@@ -15,10 +15,11 @@ from sql.operators import Not
 import genshi
 import genshi.template
 
+from trytond import backend
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or, Bool, If
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coog_core import fields, export, coog_date, utils
+from trytond.modules.coog_core import fields, export, coog_date, utils, model
 from .sepa_handler import CAMT054Coog
 
 __metaclass__ = PoolMeta
@@ -48,19 +49,74 @@ def remove_comment(stream):
         yield kind, data, pos
 
 
-class Mandate(export.ExportImportMixin):
+class Mandate(model.CoogSQL, model.CoogView):
     __name__ = 'account.payment.sepa.mandate'
     _func_key = 'identification'
+
+    start_date = fields.Date('Start Date',
+        states={
+            'readonly': Eval('state').in_(['validated', 'canceled']),
+            },
+        domain=[If(Bool(Eval('amendment_of', False)),
+                [('start_date', '!=', None)], [])],
+        depends=['state', 'amendment_of'])
+    amendment_of = fields.Many2One('account.payment.sepa.mandate',
+        'Amendment Of',
+        states={
+            'readonly': Eval('state').in_(['validated', 'canceled']),
+            },
+        domain=[('OR', ('start_date', '=', None),
+                ('start_date', '<', Eval('start_date', datetime.date.max))),
+            ('identification', '=', Eval('identification')),
+            ('party', '=', Eval('party'))],
+        depends=['state', 'identification', 'start_date', 'party'],
+        ondelete='RESTRICT',
+        select=True)
 
     @classmethod
     def __setup__(cls):
         super(Mandate, cls).__setup__()
         cls.identification.select = True
+        cls._sql_constraints = [x for x in cls._sql_constraints if x[0]
+            != 'identification_unique']
         cls._error_messages.update({
                 'bad_place_holders': 'Bad placeholders in SEPA Sequence. '
                 "The following fields do not exist on Party model:\n\t%s\n"
-                "Please check the sequence's prefix and suffix."
+                "Please check the sequence's prefix and suffix.",
+                'origin_must_be_same': ('All SEPA mandates with identification '
+                    '"%(identification)s" must have the same origin'),
                 })
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(Mandate, cls).__register__(module_name)
+        TableHandler = backend.get('TableHandler')
+        TableHandler(cls, module_name).drop_constraint(
+            'identification_unique')
+
+    @classmethod
+    def validate(cls, mandates):
+        super(Mandate, cls).validate(mandates)
+        with model.error_manager():
+            cls.check_no_duplicates(mandates)
+
+    def _get_origin(self):
+        if self.amendment_of:
+            return self.amendment_of._get_origin()
+        return self
+
+    @classmethod
+    def check_no_duplicates(cls, mandates):
+        by_identification = defaultdict(list)
+        same_identifications = cls.search([('identification', 'in',
+                    [x.identification for x in mandates])])
+        for mandate in same_identifications:
+            by_identification[mandate.identification].append(
+                mandate)
+        for identification, mandates in by_identification.iteritems():
+            if len(set([x._get_origin() for x in mandates])) != 1:
+                cls.append_functional_error('origin_must_be_same', {
+                        'identification': identification})
 
     def get_rec_name(self, name):
         if self.identification is None or self.party is None:
@@ -128,21 +184,32 @@ class Mandate(export.ExportImportMixin):
                 else_='RCUR'))
 
         cursor.execute(*sub_query.select(sub_query.sepa_mandate, type_))
-        return dict(cursor.fetchall())
+        res = dict(cursor.fetchall())
+        amendments_frsts = [x for x in mandates if x.amendment_of
+            and res[x.id] == 'FRST']
+        if amendments_frsts:
+            amended_res = cls.get_initial_sequence_type_per_mandates(
+                [x.amendment_of for x in amendments_frsts])
+            amended_rcurs = {k for k, v in amended_res.iteritems()
+                if v == 'RCUR'}
+            if amended_rcurs:
+                res.update({x: 'RCUR' for x in amendments_frsts
+                        if x.amendment_of in amended_rcurs})
+        return res
 
     @property
     def sequence_type(self):
-        seq_type = super(Mandate, self).sequence_type
-        if seq_type != 'RCUR':
-            return seq_type
-        payments = [p for p in self.payments
-            if p.state not in ['draft', 'approved']]
+        if self.type == 'one-off':
+            return 'OOFF'
+        payments = [p for p in self.payments if p.state not in
+            ['draft', 'approved']]
         if (not payments
                 or all(not p.sepa_mandate_sequence_type for p in payments)
                 or all(p.rejected for p in payments)):
-            return 'FRST'
+            return self.amendment_of.sequence_type if self.amendment_of \
+                else 'FRST'
         else:
-            return seq_type
+            return 'RCUR'
 
     def objects_using_me_for_party(self, party=None):
         Payment = Pool().get('account.payment')
@@ -206,6 +273,19 @@ class Group:
             ('done', 'Done'),
             ('canceled', 'Canceled'),
             ]
+
+    def get_sepa_template(self):
+        # Overloading tryton to use Coog's templates
+        # that implements the amendment (Amndmnt) sections
+        # The md5sums of the original tryton files are:
+        # 3fabd8939a0e1864be5600e1d563f8d1  pain.008.001.02.xml
+        # b2be297bb1f0b939e2ee52594aceebd9  pain.008.001.04.xml
+        # 09e2a7e044f88df154a5121ea35220f9  pain.008.003.02.xml
+
+        if self.kind != 'receivable' or self.kind == 'receivable' and \
+                not self.journal.sepa_receivable_flavor.startswith('pain.008'):
+            return super(Group, self).get_sepa_template()
+        return loader.load('%s.xml' % self.journal.sepa_receivable_flavor)
 
     @classmethod
     def _export_skips(cls):

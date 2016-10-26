@@ -12,17 +12,41 @@ msgid "A new mandate will be created, this action cannot be cancelled"
 msgstr ""
 "Un nouveau mandat va être créé, cette action ne pourra pas être annulée !"
 
+msgctxt "error:contract:"
+msgid ""
+"Mandates with identification %s are amended. Please use the newer version or"
+" generate a new mandate for this contract."
+msgstr ""
+"Les mandats avec les RUM %s sont amendés. Veuillez utiliser une version "
+"plus récente ou générer un nouveau mandat pour ce contrat."
+
+msgctxt "field:contract.billing_information.change,amend_previous_mandate:"
+msgid "Amend Previous Mandate"
+msgstr "Amender le précédent mandat"
+
 msgctxt "field:contract.billing_information.change,mandate_needed:"
 msgid "Mandate Needed"
 msgstr "Mandat Requis"
+
+msgctxt "field:contract.billing_information.change,previous_mandate:"
+msgid "Previous Mandate"
+msgstr "Mandat précédent"
 
 msgctxt "field:contract.billing_information.change,sepa_signature_date:"
 msgid "Sepa Mandate Signature Date"
 msgstr "Date de signature du mandat SEPA"
 
+msgctxt "field:contract.direct_debit_account.change,amend_previous_mandate:"
+msgid "Amend Previous Mandate"
+msgstr "Amender le précédent"
+
 msgctxt "field:contract.direct_debit_account.change,mandate_needed:"
 msgid "Mandate Needed"
 msgstr "Mandat Requis"
+
+msgctxt "field:contract.direct_debit_account.change,previous_mandate:"
+msgid "Previous Mandate"
+msgstr "Mandat précédent"
 
 msgctxt "field:contract.direct_debit_account.change,sepa_signature_date:"
 msgid "Sepa Mandate Signature Date"
