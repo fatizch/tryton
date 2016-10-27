@@ -1,4 +1,4 @@
-* Allow to print distrinct reports when exceeding a given number of rejected payments
+* Allow to print distinct reports when exceeding a given number of rejected payments
 
 Version 1.8 - 2016-07-06
 * Group payment creation batch per party
