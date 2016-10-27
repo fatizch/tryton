@@ -1,3 +1,4 @@
+* Add utility to generate new module file structure
 * Visualize the different rights of access of a user in independent list-views
 * Configure models to historize via the application
 
