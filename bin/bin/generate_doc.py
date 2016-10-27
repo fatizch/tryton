@@ -108,7 +108,7 @@ for module in os.listdir(modules_doc_files):
                 module_data = (section, next_line(index), summ.readlines())
                 section_data.append(module_data)
     except KeyError:
-        print('Bad section comment in %s/index.rst' % module)
+        logger.warning('Bad section comment in %s/index.rst' % module)
         continue
     except IOError:
         continue
@@ -130,4 +130,4 @@ with codecs.open(features_file, 'a', encoding='utf-8') as output:
 process = subprocess.Popen(['make', doc_format], cwd=doc_files)
 process.communicate()
 
-print 'Doc generated in ' + doc_files
+logger.info('Doc generated in ' + doc_files)
