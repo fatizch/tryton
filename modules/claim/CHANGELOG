@@ -1,5 +1,6 @@
 * Add option to automatically deliver benefits
 * Add claim on event log - view event log on claim
+* Add rule engine function to get the sum of all hospitalisation periods
 
 Version 1.8 - 2016-07-06
 * Rework module. Merge with benefit module
