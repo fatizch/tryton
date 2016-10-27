@@ -51,7 +51,7 @@ class ClaimIndemnification:
                 ('blocking', '=', True),
                 ('received', '=', False),
                 ('for_object', 'in',
-                    [str(i) for i in indemnifications + list(claims)]),
+                    [str(i) for i in list(indemnifications) + list(claims)]),
                 ])
         return document_requests
 
