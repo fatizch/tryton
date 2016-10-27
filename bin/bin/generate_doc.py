@@ -6,9 +6,13 @@ import codecs
 import re
 import subprocess
 import unicodedata
-
+import logging
 from collections import OrderedDict
 from itertools import groupby
+
+logging.basicConfig()
+logger = logging.getLogger()
+
 
 SECTIONS = OrderedDict([
         ('core_coog', 'Noyau Coog\n'),
@@ -70,6 +74,16 @@ shutil.copytree(modules, modules_doc_files, ignore=filter_ignore_files)
 section_data = []
 
 for module in os.listdir(modules_doc_files):
+    module_doc_path = os.path.join(modules_doc_files, module, 'doc', language)
+    if not os.path.isdir(module_doc_path):
+        logger.warning('Missing doc folder for module %s' % module)
+        continue
+    if not os.path.isfile(os.path.join(module_doc_path, 'index.rst')):
+        logger.warning('Missing index.rst file for module %s' % module)
+    if not os.path.isfile(os.path.join(module_doc_path, 'summary.rst')):
+        logger.warning('Missing summary.rst file for module %s' % module)
+    if not os.path.isfile(os.path.join(module_doc_path, 'features.rst')):
+        logger.warning('Missing features.rst file for module %s' % module)
     try:
         with codecs.open(os.path.join(modules_doc_files, module, 'doc',
                     language, 'index.rst'), encoding='utf-8') as index:
