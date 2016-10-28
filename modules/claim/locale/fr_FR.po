@@ -1066,7 +1066,7 @@ msgstr "Tous"
 
 msgctxt "model:ir.action.act_window.domain,name:act_claim_domain_closed"
 msgid "Closed"
-msgstr "Résilié"
+msgstr "Fermé"
 
 msgctxt "model:ir.action.act_window.domain,name:act_claim_domain_open"
 msgid "Open"

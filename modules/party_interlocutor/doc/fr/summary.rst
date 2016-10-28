@@ -1,1 +1,1 @@
-Ce module permet de rattacher les interlocuteurs à un Tiers.
+Ce module permet de définir les interlocuteurs d'une société.

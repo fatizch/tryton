@@ -1,3 +1,4 @@
+* Allow to modify invoicing date in change payment term invoice wizard
 * Add reconciliation date to invoices
 * Configure and manage taxes included per product / invoice
 

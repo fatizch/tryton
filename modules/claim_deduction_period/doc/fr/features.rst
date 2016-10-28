@@ -1,6 +1,7 @@
 - **Périodes de déduction** : Il est possible de configurer des types de
   période de déduction par prestation qu'il sera possible de créer / modifier
-  lors de la création des indemnisations associées.
+  lors de la création des indemnisations associées (ex: mi-temps thérapeutique,
+  versement pôle emploi...)
 
 - **Suivi des montants déduits** : Les périodes de déductions sont associées à
   un montant, qui peut être exprimé en € par jour, ou bien en total sur la

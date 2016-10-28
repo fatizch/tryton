@@ -1,7 +1,9 @@
 * Add basic benchmarking tool to analyze server performance
+* Extend event action API to be able to use event description and kwargs
 * Add utility to generate new module file structure
 * Visualize the different rights of access of a user in independent list-views
 * Configure models to historize via the application
+* Rename cog_utils in coog_core
 
 Version 1.8 - 2016-07-06
 * Add script to easily create dev databases

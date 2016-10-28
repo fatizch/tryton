@@ -1,3 +1,5 @@
+* Add sequence on process to be able to order process
+
 Version 1.8 - 2016-07-06
 * Add average timings wizard
 * Add "Postpone" action on processes and tasks
