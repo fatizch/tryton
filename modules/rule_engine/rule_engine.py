@@ -1231,10 +1231,10 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
                                 line_number <= lineno + 2):
                             if line_number == lineno:
                                 stack_info += \
-                                    '>>\t' + line + '\n'
+                                    '>>\t' + repr(line) + '\n'
                             else:
                                 stack_info += \
-                                    '  \t' + line + '\n'
+                                    '  \t' + repr(line) + '\n'
                     stack_info += '\n'
                     stack_info += str(exc)
                     the_result.low_level_debug.append(stack_info)
