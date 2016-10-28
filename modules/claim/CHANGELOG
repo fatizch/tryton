@@ -1,3 +1,4 @@
+* Group claims by status into their respective tabs
 * Add option to automatically deliver benefits
 * Add claim on event log - view event log on claim
 * Add rule engine function to get the sum of all hospitalisation periods
