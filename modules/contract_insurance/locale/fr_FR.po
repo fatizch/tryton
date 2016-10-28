@@ -882,6 +882,10 @@ msgctxt "model:ir.action,name:act_create_extra_premium"
 msgid "Create Extra Premium"
 msgstr "Créer une surprime"
 
+msgctxt "model:ir.action,name:act_display_party_enrollments"
+msgid "Enrollments"
+msgstr "Affiliations"
+
 msgctxt "model:ir.action,name:act_manage_exclusion"
 msgid "Manage Exclusions"
 msgstr "Gérer les exclusions"
