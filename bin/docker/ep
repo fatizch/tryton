@@ -1,0 +1,223 @@
+#!/bin/bash
+# vim: set ft=sh:
+# docker entrypoint
+
+COOG_ROOT=/coog
+COOG_TRYTOND=$COOG_ROOT/trytond
+COOG_BIN=$COOG_ROOT/coog/bin
+COOG_CONF=$COOG_ROOT/coog.conf
+COOG_BATCH_CONF=$COOG_ROOT/batch.conf
+COOG_IO=$COOG_ROOT/io
+
+##################
+# init container #
+##################
+
+conf_postgres() {
+        [ -z "$COOG_POSTGRES_HOST" ] && echo "missing -e COOG_POSTGRES_HOST" && return 1
+        [ -z "$COOG_POSTGRES_PORT" ] && COOG_POSTGRES_PORT=5432
+        return 0
+}
+
+conf_redis() {
+        [ ! -z "$COOG_REDIS_HOST" ] && [ -z "$COOG_REDIS_PORT" ] && COOG_REDIS_PORT=6379
+        return 0
+}
+
+conf_database() {
+        echo "[database]"
+        echo "path = $COOG_IO/edm"
+        [ ! -z "$COOG_DB_LANG" ] && echo "language = $COOG_DB_LANG"
+        [ -z "$COOG_DB_USER" ] && echo "missing DB user" && return 1
+        [ -z "$COOG_DB_PASSWORD" ] && echo "missing DB password" && return 1
+        echo "uri = postgresql://$COOG_DB_USER:$COOG_DB_PASSWORD@$COOG_POSTGRES_HOST:$COOG_POSTGRES_PORT"
+        return 0
+}
+
+conf_cache() {
+        echo "[cache]"
+        [ ! -z "$COOG_CACHE_MODEL" ] && echo "model = $COOG_CACHE_MODEL"
+        [ ! -z "$COOG_CACHE_RECORD" ] && echo "record = $COOG_CACHE_RECORD"
+        [ ! -z "$COOG_CACHE_FIELD" ] && echo "field = $COOG_CACHE_FIELD"
+        [ ! -z "$COOG_CACHE_COOG" ] && echo "coog_cache_size = $COOG_CACHE_COOG"
+        if [ ! -z "$COOG_CACHE_DB" ]
+        then
+                [ -z "$COOG_REDIS_HOST" ] && echo "no redis configured" && return 1
+                echo "redis = redis://$COOG_REDIS_HOST:$COOG_REDIS_PORT/$COOG_CACHE_DB"
+        fi
+        return 0
+}
+
+conf_async() {
+        echo "[async]"
+        if [ ! -z "$COOG_CELERY_DB" ]
+        then
+                [ -z "$COOG_REDIS_HOST" ] && echo "no redis configured" && return 1
+                TRYTOND_ASYNC_CELERY="redis://$COOG_REDIS_HOST:$COOG_REDIS_PORT/$COOG_CELERY_DB"
+                export TRYTOND_ASYNC_CELERY
+                echo "celery = $TRYTOND_ASYNC_CELERY"
+        fi
+        return 0
+}
+
+hash_pwd() {
+        python -c "import crypt,random,string; print crypt.crypt('$1', ''.join(random.sample(string.ascii_letters + string.digits, 8)))"
+}
+
+conf_session() {
+        echo "[session]"
+        [ -z "$COOG_SESSION_SUPERPWD" ] && return 0
+        local password
+        password=$(hash_pwd "$COOG_SESSION_SUPERPWD")
+        echo "super_pwd = $password"
+        return 0
+}
+
+conf_report() {
+        echo "[report]"
+        echo "unoconv = pipe,name=trytond;urp;StarOffice.ComponentContext"
+        return 0
+}
+
+conf_sentry() {
+        echo "[sentry]"
+        [ ! -z "$COOG_SENTRY" ] && echo "dsn = $COOG_SENTRY"
+        return 0
+}
+
+conf_batch() {
+        echo "[batch]"
+        echo "root_dir = $COOG_IO/batch"
+}
+
+set_conf() {
+        # build conf from env vars
+        ( conf_postgres &&
+                conf_redis &&
+                conf_database &&
+                conf_cache &&
+                conf_async &&
+                conf_session &&
+                conf_report &&
+                conf_sentry &&
+                conf_batch ) >> "$COOG_CONF"
+        [ $? -ne 0 ] && echo "!!! Failed to build configuration file !!!" && return 1
+        # append override
+        local override
+        override="$COOG_IO/conf/coog.conf"
+        [ -f "$override" ] && cat "$override" >> $COOG_CONF
+        # set batch conf
+        touch "$COOG_BATCH_CONF"
+        local batch_conf
+        batch_conf="$COOG_IO/conf/batch.conf"
+        [ -f "$batch_conf" ] && cat "$batch_conf" >> "$COOG_BATCH_CONF"
+        return 0
+}
+
+set_env() {
+        export PYTHONUNBUFFERED=1
+        export PYTHONPATH="$COOG_BIN/lib:$COOG_TRYTOND:$PYTHONPATH"
+        export TRYTOND_CONFIG="$COOG_CONF"
+        export TRYTOND_BATCH_CONFIG="$COOG_BATCH_CONF"
+        [ ! -z "$COOG_DB_NAME" ] && export DB_NAME=$COOG_DB_NAME
+        [ ! -z "$LOG_LEVEL" ] && LOG_LEVEL=WARNING
+        export LOG_LEVEL
+        return 0
+}
+
+init() {
+        set_env && set_conf
+}
+
+uno() {
+        unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
+        sleep 3
+        unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
+}
+
+###############
+# entrypoints #
+###############
+
+link() {
+        . $COOG_BIN/coog-repo
+        coog_repo_linkm
+}
+
+print_version() {
+        cat $COOG_ROOT/.version
+}
+
+print_env() {
+        init || return $?
+        echo
+        echo after conf
+        printenv
+}
+
+print_conf() {
+        init || return $?
+        echo '# COOG_CONF'
+        cat $COOG_CONF
+        echo '# COOG_BATCH_CONF'
+        cat $COOG_BATCH_CONF
+}
+
+admin() {
+        echo Welcome on board, Coog Admin is preparing to start
+        init || return $?
+        local args
+        args="-c $COOG_CONF"
+        [ ! -z "$COOG_DB_NAME" ] && args="$args -d $COOG_DB_NAME"
+        trytond-admin "$args" "$@"
+}
+
+cron() {
+        echo Welcome on board, Coog Cron is preparing to start
+        init || return $?
+        uno
+        local args
+        args="-c $COOG_CONF"
+        [ ! -z "$COOG_DB_NAME" ] && args="$args -d $COOG_DB_NAME"
+        trytond-cron "$args" "$@"
+}
+
+wsgi() {
+        [ -z "$1" ] && echo "missing processes number" && return 1
+        echo Welcome on board, Coog WSGI is preparing to start
+        init || return $?
+        uno
+        uwsgi -T --module trytond.application:app --http :7999 --processes "$1"
+}
+
+celery() {
+        [ "$#" -lt 2 ] && echo "missing arguments" && return 1
+        echo Welcome on board, Coog Celery is preparing to start
+        init || return $?
+        uno
+        celery worker \
+                --app=async.broker_celery \
+                --concurrency="$1" \
+                --queues="$2" \
+                --loglevel="$LOG_LEVEL"
+}
+
+########
+# main #
+########
+
+main() {
+        [ -z "$1" ] && echo Possible commands: version - env - conf - admin - cron - wsgi - celery && return 1
+        [ "$1" = dep ] && { shift; dep; return $?; }
+        [ "$1" = link ] && { shift; link; return $?; }
+        [ "$1" = version ] && { shift; print_version; return $?; }
+        [ "$1" = env ] && { shift; print_env; return $?; }
+        [ "$1" = conf ] && { shift; print_conf; return $?; }
+        [ "$1" = admin ] && { shift; admin "$@"; return $?; }
+        [ "$1" = cron ] && { shift; cron "$@"; return $?; }
+        [ "$1" = wsgi ] && { shift; wsgi "$@"; return $?; }
+        [ "$1" = celery ] && { shift; celery "$@"; return $?; }
+        echo "Not supported command" && return 1
+}
+
+main "$@"

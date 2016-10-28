@@ -45,7 +45,7 @@ coog_worker_start() { # start workers - <nb>
         else
                 [ -e "$out_file" ] && echo 'worker log file exists -> clean manually' && return 1
         fi
-        nohup uwsgi --module trytond.application:app --http :8000 --stats :8001 --processes "$1" &> "$out_file" &
+        nohup uwsgi -T --module trytond.application:app --http :8000 --stats :8001 --processes "$1" &> "$out_file" &
         echo "$!" > "$pid_file"
         echo workers started
 }

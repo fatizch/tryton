@@ -2,68 +2,45 @@
 # dependancies management
 
 
-_coog_dep_proxy_opt() {
-        [ ! -z $http_proxy ] && echo "--proxy $http_proxy" && return
-        [ ! -z $https_proxy ] && echo "--proxy $https_proxy" && return
+_coog_dep_proxy() {
+        [ ! -z "$http_proxy" ] && echo "--proxy $http_proxy" && return
+        [ ! -z "$https_proxy" ] && echo "--proxy $https_proxy" && return
 }
 
-coog_dep_base() { # install base deps
-        local proxy_opt
-        proxy_opt=`_coog_dep_proxy_opt`
-        pip install $proxy_opt pyflakes
-        pip install $proxy_opt dateutils
-        pip install $proxy_opt lxml
-        pip install $proxy_opt python-sql
-        pip install $proxy_opt psycopg2
-        pip install $proxy_opt polib
-        pip install $proxy_opt Genshi
-        pip install $proxy_opt relatorio
-        pip install $proxy_opt pydot
-        pip install $proxy_opt pyparsing
-        pip install $proxy_opt python-stdnum
-        pip install $proxy_opt unidecode
-        pip install $proxy_opt argcomplete
-        pip install $proxy_opt num2words
-        pip install $proxy_opt intervaltree
-        pip install $proxy_opt filelock
-        pip install $proxy_opt wrapt
-        pip install $proxy_opt werkzeug
-}
-
-coog_dep_extend() { # install extended deps (interfaces, deployment extras)
-        local proxy_opt
-        proxy_opt=`_coog_dep_proxy_opt`
-        pip install $proxy_opt Mock
-        pip install $proxy_opt simpleeval
-        pip install $proxy_opt python-ldap                  # ldap
-        pip install $proxy_opt vobject                      # vcalendar
-        pip install $proxy_opt raven                        # sentry
-        pip install $proxy_opt redis                        # batch & multi-worker
-        pip install $proxy_opt hiredis                      # batch & multi-worker
-        pip install $proxy_opt msgpack-python               # multi-worker
-        pip install $proxy_opt numpy                        # used for taea calculation
-        pip install $proxy_opt scipy                        # used for taea calculation
-        pip install $proxy_opt uwsgi                        # for workers
-}
-
-coog_dep_batch() { # install batch deps
-        local proxy_opt
-        proxy_opt=`_coog_dep_proxy_opt`
-        pip install $proxy_opt rq                           # batch
-        pip install $proxy_opt celery                       # batch
-}
-
-coog_dep_extra() { # install specific tasks deps
-        coog_dep_batch
-        local proxy_opt
-        proxy_opt=`_coog_dep_proxy_opt`
-        pip install $proxy_opt sphinx                       # doc
-        pip install $proxy_opt sphinxcontrib-inheritance    # doc
-        pip install $proxy_opt pytest                       # test
-}
-
-coog_dep_main() { # install all deps
-        coog_dep_base
-        coog_dep_extend
-        coog_dep_extra
+coog_dep_main() { # install base deps
+        pip install $(_coog_dep_proxy) "$@" \
+                pyflakes \
+                dateutils \
+                lxml \
+                python-sql \
+                psycopg2 \
+                polib \
+                Genshi \
+                relatorio \
+                pydot \
+                pyparsing \
+                python-stdnum \
+                unidecode \
+                argcomplete \
+                num2words \
+                intervaltree \
+                filelock \
+                wrapt \
+                werkzeug \
+                Mock \
+                simpleeval \
+                python-ldap \
+                vobject \
+                raven \
+                redis \
+                hiredis \
+                msgpack-python \
+                numpy \
+                scipy \
+                uwsgi \
+                rq \
+                celery \
+                sphinx \
+                sphinxcontrib-inheritance \
+                pytest
 }

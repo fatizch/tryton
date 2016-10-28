@@ -11,13 +11,6 @@ _coog_docker_leave() {
         cd $_coog_docker_wd
 }
 
-coog_docker_env() { # build docker env image - [docker-build-arg*]
-        _coog_docker_enter env
-        cp $_coog_docker_wd/docker/coog-env.docker Dockerfile
-        docker build -t coog/env -f Dockerfile $* .
-        _coog_docker_leave
-}
-
 _coog_docker_archive() { # archive repo - <repo> <tree>
         local repo; repo=$1
         local tree; tree=$2
@@ -69,8 +62,8 @@ coog_docker_build() { # build docker image - [image*] -- [docker-build-arg*]
         done
         if [ $ret -eq 0 ]
         then
-                cp $_coog_docker_wd/docker/coog.docker Dockerfile
-                docker build -t coog/$image -f Dockerfile $* .
+                cp $_coog_docker_wd/docker/Dockerfile .
+                docker build -t coog/$image $* .
         fi
         _coog_docker_leave
 }
