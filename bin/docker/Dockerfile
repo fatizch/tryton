@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libsasl2-dev \
         libreoffice-writer \
         unoconv \
+        redis-tools \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN pip install \
@@ -38,6 +39,7 @@ RUN pip install \
         scipy \
         uwsgi \
         celery \
+        rq \
     && rm -rf /root/.cache
 
 RUN mkdir /coog && mkdir /coog/data

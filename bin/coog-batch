@@ -11,7 +11,7 @@ coog_batch_query() { # query batch redis - <cmd> [cmd-arg*]
         [ $# -lt 1 ] && echo missing cmd && return 1
         local cmd; cmd=$1; shift
         local broker; broker=$(_coog_batch_broker) || return $?
-        coog_redis_eval "$broker" redis/batch.lua "$cmd" "$broker" "$@"
+        coog_redis_eval "$broker" "$COOG_ROOT/coog/bin/redis/batch.lua" "$cmd" "$broker" "$@"
 }
 
 coog_batch_generate() { # generate batch jobs - <name> [batch-arg*]

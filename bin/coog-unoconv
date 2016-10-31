@@ -16,7 +16,7 @@ coog_unoconv_start() { # start - [unoconv args]
         local pid_file; pid_file=$(_coog_unoconv_file pid)
         local out_file; out_file=$(_coog_unoconv_file out)
         local connection; connection=$(_coog_unoconv_connection)
-        HOME=$COOG_TMP/coog-unoconv unoconv --listener -c "$connection" "$@" &> "$out_file" &
+        HOME=$COOG_TMP/unoconv unoconv --listener -c "$connection" "$@" &> "$out_file" &
         echo "$!" > "$pid_file"
         echo unoconv started
 }
