@@ -1,148 +1,69 @@
 # vim: set ft=sh:
 # test management
 
-coog_test_manual() { # interactively launch tests - <module> - default: all
+coog_test_dropdb() { # drop test db from postgresql server
+        local vars
+        vars=$(python "$COOG_BIN/parse-config.py" database uri < "$COOG_CONF_TEST" | python "$COOG_BIN/parse-url.py") || return $?
+        export PGHOST=$(echo "$vars" | sed -n 2p)
+        export PGPORT=$(echo "$vars" | sed -n 3p)
+        export PGUSER=$(echo "$vars" | sed -n 4p)
+        export PGPASSWORD=$(echo "$vars" | sed -n 5p)
+        for db in $(psql -lX | grep "test_" | cut -f1 -d "|")
+        do
+                dropdb -e "$db"
+        done
+}
+
+coog_test_manual() { # interactively launch tests - [module *]
         unset TRYTOND_CONFIG
         unset DB_NAME
         unset TRYTOND_CACHE_REDIS
         coog_server_clearcache
-        run-tests.py -c $COOG_CONF_TEST -vv -m $*
+        run-tests.py -c "$COOG_CONF_TEST" -vv -m "$@"
 }
 
 _coog_test_modules() { # list all linked modules
         for f in $COOG_TRYTOND/trytond/modules/*
         do
-                [ -d $f ] && basename $f
+                [ -d "$f" ] && basename "$f"
         done
 }
 
-coog_test_generate() { # generate test jobs - [module*]
+coog_test_generate() { # generate test jobs - [module *]
         local modules
         if [ $# -eq 0 ]
         then
-                modules=`_coog_test_modules`
+                modules=$(_coog_test_modules)
         else
                 modules=$*
         fi
-        python $COOG_BIN/test-generate.py $modules
+        python "$COOG_BIN/test-generate.py" $modules
 }
 
-coog_test_start() { # start test workers - <concurrency>
-        [ -z $1 ] && echo missing workers number && return 1
-        [ $1 -eq $1 ] || return 1
+coog_test_start() { # start test workers - <nb>
+        [ -z "$1" ] && echo missing workers number && return 1
+        [ "$1" -eq "$1" ] || return 1
         TRYTOND_CONFIG=$COOG_CONF_TEST
-        [ -z $TRYTOND_CONFIG ] && echo missing conf file && return 1
-        [ ! -e $TRYTOND_CONFIG ] && echo bad conf file && return 1
+        [ -z "$TRYTOND_CONFIG" ] && echo missing conf file && return 1
+        [ ! -e "$TRYTOND_CONFIG" ] && echo bad conf file && return 1
         export TRYTOND_CONFIG
         unset DB_NAME
         unset TRYTOND_CACHE_REDIS
         coog_server_clearcache
-        coog_rq_qstart test $COOG_TMP/$COOG_FILE_TEST $1
-}
-
-coog_test_exec() { # exec tests - <concurrency> [module*]
-        [ -z $1 ] && echo missing workers number && return 1
-        [ $1 -eq $1 ] || return 1
-        local nb; nb=$1; shift
-        coog_test_generate $*
-        coog_test_start $nb
+        for i in $(seq 1 "$1")
+        do
+                coog_rq_start "test-$i" "test"
+        done
 }
 
 coog_test_stop() { # stop test workers
-        coog_rq_qstop $COOG_TMP/$COOG_FILE_TEST
-}
-
-coog_test_status() { # status of current run
-        coog_rq_cli info
-        echo ""
-        echo ""
-        echo "Currently running :"
-        echo ""
-        coog_test_query list wait | grep `date -Idate`
-        echo ""
-        echo "Failures :"
-        echo ""
-        coog_test_query list fail | more
-}
-
-
-coog_test_check() { # watch current status live
-        watch -n 1 "coog test status"
-}
-
-coog_test_query() { # query test redis - [arg*]
-        if [ list = "$1" ]
-        then
-                coog_redis_eval rq redis/test.lua $* | column -t | less
-        else
-                coog_redis_eval rq redis/test.lua $*
-        fi
-}
-
-coog_test_log() { # print batch logs
-        local args
-        local fs
-        fs=`ls $COOG_TMP/$COOG_FILE_TEST*.out 2> /dev/null`
-        [ $? -ne 0 ] && echo no logs && return
-        local f
-        for f in $fs
+        for wid in $(coog_rq_cli info -r -W "test" | grep -Po "test-\d+\b")
         do
-                args="$args $f"
+                coog_rq_stop "$wid" &
         done
-        cat $* $args
-}
-
-coog_test_logextract() { # extract job logs <job_id>
-        [ -z "$1" ] && echo missing job id && return 1
-        local match
-        match=$(grep -Hn "$1" "$COOG_TMP/$COOG_FILE_TEST"*.out)
-        local nb
-        nb=$(echo "$match" | wc -l)
-        if [ "$nb" -eq 2 ]
-        then
-                local f; f=$(echo "$match" | cut -d ":" -f 1)
-                local f1; f1=$(echo "$f" | head -1)
-                local f2; f2=$(echo "$f" | tail -1)
-                [ "$f1" != "$f2" ] && echo "bad job id" && return 1
-                local l; l=$(echo "$match" | cut -d ":" -f 2)
-                local l1; l1=$(echo "$l" | head -1)
-                local l2; l2=$(echo "$l" | tail -1)
-                sed -n "$l1,$l2"p "$f1"
-        elif [ "$nb" -eq 1 ]
-        then
-                local f; f=$(echo "$match" | cut -d ":" -f 1)
-                local l1; l1=$(echo "$match" | cut -d ":" -f 2)
-                local l2
-                local m;
-                m=$(sed -n "$((l1+1)),\$p" "$f" | grep -n "Moving job to")
-                if [ -z "$m" ]
-                then
-                        l2=$(wc -l "$f" | cut -d " " -f 1)
-                else
-                        l2=$(echo "$m" | head -1 | cut -d ":" -f 1)
-                        l2=$((l2+l1-1))
-                fi
-                sed -n "$l1,$l2"p "$f"
-        else
-                echo "bad job id" && return 1
-        fi
-}
-
-coog_test_logclear() { # clear test logs
-        rm -vf $COOG_TMP/$COOG_FILE_TEST*.out
-}
-
-coog_test_dropdb() { # drop test db from postgresql server
-        local vars
-        vars=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_TEST | python $COOG_BIN/parse-url.py` || return $?
-        export PGHOST=`echo "$vars" | sed -n 2p`
-        export PGPORT=`echo "$vars" | sed -n 3p`
-        export PGUSER=`echo "$vars" | sed -n 4p`
-        export PGPASSWORD=`echo "$vars" | sed -n 5p`
-        local db
-        for db in `psql -lX | grep "test_" | cut -f1 -d "|"`
+        for pid in $(jobs -p)
         do
-                dropdb -e $db
+                wait "$pid"
         done
 }
 
@@ -178,7 +99,7 @@ _coog_test_email() {
         fi
 }
 
-coog_test_commit() { # fetch, merge, and test each commit on changed modules (CI) <git branch>
+coog_test_commit() { # fetch, merge, and test each commit on changed modules - <branch>
         [ -z "$1" ] && echo "missing branch" && return 1
         echo "TEST COMMIT $1: start @ $(date +'%y-%m-%d %H:%M:%S')"
         local lock
@@ -245,16 +166,62 @@ coog_test_commit() { # fetch, merge, and test each commit on changed modules (CI
         rm "$lock"
 }
 
-coog_test_fullstart() { # starts a full test (CI) <git branch>
+coog_test_fullstart() { # starts a full test - <branch> <nb> [modules]
         [ -z "$1" ] && echo "missing branch" && return 1
         echo "TEST FULL $1 : start @ $(date +'%y-%m-%d %H:%M:%S')"
         _coog_test_pull "$1"
         shift
-        coog_test_exec "$@"
+        coog_test_start "$1"
+        shift
+        coog_test_generate "$@"
 }
 
+coog_test_query() { # query test redis - [arg*]
+        if [ list = "$1" ]
+        then
+                coog_redis_eval rq redis/test.lua "$@" | column -t | less
+        else
+                coog_redis_eval rq redis/test.lua "$@"
+        fi
+}
 
-coog_test_fullcheck() { # check and report a full test (CI) <git branch>
+coog_test_logextract() { # extract job logs - <job_id>
+        [ -z "$1" ] && echo missing job id && return 1
+        local match
+        match=$(grep -Hn "$1" $(_coog_rq_file "test*" out))
+        local nb
+        nb=$(echo "$match" | wc -l)
+        if [ "$nb" -eq 2 ]
+        then
+                local f; f=$(echo "$match" | cut -d ":" -f 1)
+                local f1; f1=$(echo "$f" | head -1)
+                local f2; f2=$(echo "$f" | tail -1)
+                [ "$f1" != "$f2" ] && echo "bad job id" && return 1
+                local l; l=$(echo "$match" | cut -d ":" -f 2)
+                local l1; l1=$(echo "$l" | head -1)
+                local l2; l2=$(echo "$l" | tail -1)
+                sed -n "$l1,$l2"p "$f1"
+        elif [ "$nb" -eq 1 ]
+        then
+                local f; f=$(echo "$match" | cut -d ":" -f 1)
+                local l1; l1=$(echo "$match" | cut -d ":" -f 2)
+                local l2
+                local m;
+                m=$(sed -n "$((l1+1)),\$p" "$f" | grep -n "Moving job to")
+                if [ -z "$m" ]
+                then
+                        l2=$(wc -l "$f" | cut -d " " -f 1)
+                else
+                        l2=$(echo "$m" | head -1 | cut -d ":" -f 1)
+                        l2=$((l2+l1-1))
+                fi
+                sed -n "$l1,$l2"p "$f"
+        else
+                echo "bad job id" && return 1
+        fi
+}
+
+coog_test_fullcheck() { # check and report a full test - <branch>
         [ -z "$1" ] && echo "missing branch" && return 1
         echo "TEST FULL $1: check @ $(date +'%y-%m-%d %H:%M:%S')"
         local a; a=$(coog_test_query count)
@@ -267,7 +234,7 @@ coog_test_fullcheck() { # check and report a full test (CI) <git branch>
         coog_test_query summary >> "$out"
         local fail
         local subject
-        fail=$(coog_test_query "count" "fail")
+        fail=$(coog_test_query count fail)
         if [ "$fail" -ne 0 ]
         then
                 subject="Test Report $1: KO"
@@ -294,6 +261,14 @@ coog_test_fullcheck() { # check and report a full test (CI) <git branch>
         fi
         echo '</pre>' >> "$out"
         _coog_test_email dev@coopengo.com "$out" "$subject"
-        coog_test_query backup
+        coog_test_query "clear"
         coog_test_stop
+}
+
+coog_test_main() {
+        while true
+        do
+                coog test fullcheck master
+                sleep 60
+        done
 }

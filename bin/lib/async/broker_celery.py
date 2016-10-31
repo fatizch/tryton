@@ -4,9 +4,9 @@ import redis
 
 from urlparse import urlparse
 from celery import Celery
+from celery import Task
 
 import async.config as config
-
 from async.tasks import tasks
 
 broker_url = os.environ.get('TRYTOND_ASYNC_CELERY')
@@ -25,8 +25,16 @@ broker_db = broker_url.path.strip('/')
 connection = redis.StrictRedis(host=broker_host, port=broker_port,
     db=broker_db)
 
+
+class CoogTask(Task):
+    abstract = True
+
+    def on_failure(self, exc, task_id, args, kwargs, einfo):
+        connection.lpush('coog:fail', task_id)
+
+
 for name, func in tasks.iteritems():
-    app.task(func, name=name, serializer='json')
+    app.task(func, base=CoogTask, name=name, serializer='json')
 
 
 def log_job(job, queue, fname, args):
@@ -43,10 +51,11 @@ def enqueue(queue, fname, args):
 
 
 def split(job_key):
-    job = connection.get(job_key)
+    job = connection.get('coog:job:%s' % job_key)
     job = json.loads(job)
     args = job['args']
     ids = args[4]
+    assert len(ids) > 1, 'can not split a singleton'
     args_list = [[args[0], args[1], args[2], args[3], [id]] for id in ids]
     for args in args_list:
         enqueue(job['queue'], job['func'], args)

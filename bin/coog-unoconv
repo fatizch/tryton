@@ -1,46 +1,59 @@
 # vim: set ft=sh:
 # manage unoconv daemon process
 
+_coog_unoconv_file() {
+        echo "$COOG_TMP/$COOG_FILE_UNO.$1"
+}
+
 _coog_unoconv_connection() {
         local c
-        c=`python $COOG_BIN/parse-config.py report unoconv < $COOG_CONF_SRV 2> /dev/null`
-        [ ! -z $c ] && echo $c && return
+        c=$(python "$COOG_BIN/parse-config.py" report unoconv < "$COOG_CONF_SRV" 2> /dev/null)
+        [ ! -z "$c" ] && echo "$c" && return
         echo "pipe,name=trytond;urp;StarOffice.ComponentContext"
 }
 
-coog_unoconv_start() { # start unoconv listener - [unoconv args]
-        local connection
-        connection=`_coog_unoconv_connection` || return $?
-        HOME=$COOG_TMP/unoconv nohup unoconv --listener -c $connection &>> /dev/null &
+coog_unoconv_start() { # start - [unoconv args]
+        local pid_file; pid_file=$(_coog_unoconv_file pid)
+        local out_file; out_file=$(_coog_unoconv_file out)
+        local connection; connection=$(_coog_unoconv_connection)
+        HOME=$COOG_TMP/coog-unoconv unoconv --listener -c "$connection" "$@" &> "$out_file" &
+        echo "$!" > "$pid_file"
         echo unoconv started
 }
 
-coog_unoconv_stop() { # stop unoconv listener
-        local connection
-        connection=`_coog_unoconv_connection` || return $?
-        pkill --signal TERM -f "$connection"
+coog_unoconv_stop() { # stop
+        local pid_file; pid_file=$(_coog_unoconv_file pid)
+        local out_file; out_file=$(_coog_unoconv_file out)
+        local pid; pid=$(coog_env_term "$pid_file") || return $?
+        coog_env_bak "$out_file" "$pid"
+        echo unoconv stopped
 }
 
-coog_unoconv_kill() { # kill unoconv listener
-        local connection
-        connection=`_coog_unoconv_connection` || return $?
-        pkill --signal 9 -f "$connection"
+coog_unoconv_pid() { # get pid
+        local pid_file; pid_file=$(_coog_unoconv_file pid)
+        coog_env_pid "$pid_file"
 }
 
-coog_unoconv_ps() { # print unoconv process info
-        local connection
-        connection=`_coog_unoconv_connection` || return $?
-        pgrep -a -f "$connection"
+coog_unoconv_log() { # less logs - [less args]
+        local out_file; out_file=$(_coog_unoconv_file out)
+        less "$@" "$out_file"
+}
+
+coog_unoconv_head() { # head logs - [head args]
+        local out_file; out_file=$(_coog_unoconv_file out)
+        head "$@" "$out_file"
+}
+
+coog_unoconv_tail() { # tail logs - [tail args]
+        local out_file; out_file=$(_coog_unoconv_file out)
+        tail "$@" "$out_file"
 }
 
 coog_unoconv_test() { # test a pdf conversion with unoconv
-        [ -z $1 ] && echo no input file && return 1
+        [ -z "$1" ] && echo no input file && return 1
         local connection
-        connection=`_coog_unoconv_connection` || return $?
-        local out_file
-        out_file="/tmp/pdf_"`date +%s%N`".pdf"
-        unoconv --no-launch -c $connection -f pdf -o $out_file $1
+        connection=$(_coog_unoconv_connection)
+        unoconv --no-launch -c "$connection" -f pdf "$1"
         [ $? -ne 0 ] && echo test ko && return 1
-        echo generated file: $out_file
         echo test ok
 }

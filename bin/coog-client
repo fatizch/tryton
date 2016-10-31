@@ -1,49 +1,24 @@
 # vim: set ft=sh:
-# client management - start, stop, log, etc
+# client management - start, stop, log, etc.
 
-_coog_client_file() { # get file name
-        [ $# -eq 1 ] && echo $COOG_TMP"/"$COOG_FILE_CLI"."$1
-        [ $# -eq 2 ] && echo $COOG_TMP"/"$COOG_FILE_CLI"-"$2"."$1
+_coog_client_file() {
+        echo "$COOG_TMP/$COOG_FILE_CLI.$1"
 }
 
-_coog_client_pid() { # retrieve pid from pidfile, delete pidfile if arg=1
-        local pid_file
-        pid_file=`_coog_client_file pid`
-        [ ! -e $pid_file ] && return
-        cat $pid_file
-        [ $1 = 1 ] && rm -f $pid_file
+coog_client_launch() { # launch - [tryton args]
+        tryton -c "$COOG_CONF_CLI" "$@"
 }
 
-_coog_client_bak() { # backup log file (mv to pid if exists or rm)
-        local out_file
-        out_file=`_coog_client_file out`
-        [ ! -e $out_file ] && echo no client log && return
-        coog_env_wait $1
-        [ -z $1 ] && rm $out_file && return
-        local bak_file
-        bak_file=`_coog_client_file out $1`
-        mv $out_file $bak_file
+coog_client_debug() { # launch in pdb - [tryton args]
+        python -m pdb "$COOG_TRYTON/bin/tryton" -c "$COOG_CONF_CLI" "$@"
 }
 
-coog_client_start() { # start client - [args] passed to tryton, loglevel NOT set when args
-        local pid_file
-        pid_file=`_coog_client_file pid`
-        local out_file
-        out_file=`_coog_client_file out`
-        if [ -e $pid_file ]
-        then
-                local pid
-                pid=`_coog_client_pid 0`
-                if [ ! -z $pid ] && [ -e /proc/$pid ]
-                then
-                        echo 'client already running -> stop or kill' && return 1
-                else
-                        rm $pid_file
-                        _coog_client_bak $pid
-                fi
-        else
-                [ -e $out_file ] && echo 'client log file exists -> clean manually' && return 1
-        fi
+coog_client_start() { # start - [tryton args]
+        local pid_file; pid_file=$(_coog_client_file pid)
+        local out_file; out_file=$(_coog_client_file out)
+        local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
+                >&2 echo "already running" && return 1
+        coog_env_bak "$out_file" "$pid" || return $?
         local args
         args=--dev
         if [ $# -eq 0 ]
@@ -52,94 +27,48 @@ coog_client_start() { # start client - [args] passed to tryton, loglevel NOT set
         else
                 args="$args $*"
         fi
-        nohup tryton -c $COOG_CONF_CLI $args &> $out_file &
-        echo $! > $pid_file
+        tryton -c "$COOG_CONF_CLI" $args &> "$out_file" &
+        echo "$!" > "$pid_file"
         echo client started
 }
 
-coog_client_interact() { # interact client - [args] passed to tryton
-        tryton -c $COOG_CONF_CLI $*
+coog_client_stop() { # stop
+        local pid_file; pid_file=$(_coog_client_file pid)
+        local out_file; out_file=$(_coog_client_file out)
+        local pid; pid=$(coog_env_term "$pid_file") || return $?
+        coog_env_bak "$out_file" "$pid"
+        echo client stopped
 }
 
-coog_client_debug() { # start client in pdb - [args] passed to tryton
-        python -m pdb "$COOG_TRYTON/bin/tryton" -c $COOG_CONF_CLI $*
+coog_client_pid() { # get pid
+        local pid_file; pid_file=$(_coog_client_file pid)
+        coog_env_pid "$pid_file"
 }
 
-coog_client_stop() { # stop client (gracefully)
-        local pid
-        pid=`_coog_client_pid 1`
-        [ -z $pid ] && echo no client running
-        [ ! -z $pid ] && kill -TERM $pid && echo client stopped
-        _coog_client_bak $pid
+coog_client_log() { # less logs - [less args]
+        local out_file; out_file=$(_coog_client_file out)
+        less "$@" "$out_file"
 }
 
-coog_client_kill() { # kill client process
-        local pid
-        pid=`_coog_client_pid 1`
-        [ -z $pid ] && echo no client running
-        [ ! -z $pid ] && kill -9 $pid && echo client killed
-        _coog_client_bak $pid
+coog_client_head() { # head logs - [head args]
+        local out_file; out_file=$(_coog_client_file out)
+        head "$@" "$out_file"
 }
 
-coog_client_ps() { # print client process info (based on ps)
-        local pid
-        pid=`_coog_client_pid 0`
-        [ -z $pid ] && echo no client running && return 1
-        ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
-}
-
-coog_client_status() { # print client status (errors based on logs)
-        local out_file
-        out_file=`_coog_client_file out`
-        local cri
-        local err
-        local wrn
-        local inf
-        [ ! -e $out_file ] && echo no client log && return 1
-        cri=`grep -c "\bCRITICAL:\b" $out_file`
-        err=`grep -c "\bERROR:\b" $out_file`
-        wrn=`grep -c "\bWARNING:\b" $out_file`
-        inf=`grep -c "\bINFO:\b" $out_file`
-        echo client status \(critical:$cri error:$err warning:$wrn info:$inf\)
-}
-
-coog_client_log() { # less client logs
-        local out_file
-        out_file=`_coog_client_file out`
-        [ ! -e $out_file ] && echo no client log && return 1
-        less $* $out_file
-}
-
-coog_client_head() { # head client logs
-        local out_file
-        out_file=`_coog_client_file out`
-        [ ! -e $out_file ] && echo no client log && return 1
-        head $* $out_file
-}
-
-coog_client_tail() { # tail client logs
-        local out_file
-        out_file=`_coog_client_file out`
-        [ ! -e $out_file ] && echo no client log && return 1
-        tail $* $out_file
+coog_client_tail() { # tail logs - [tail args]
+        local out_file; out_file=$(_coog_client_file out)
+        tail "$@" "$out_file"
 }
 
 coog_client_po() { # update client po file from source code [lang]
-        [ -z $1 ] && echo needs language to update - example: fr_FR && return 1
-        local wd
-        wd=`pwd`
-        cd $COOG_TRYTON
-        python ./setup.py extract_messages --no-location --omit-header &&
-                python ./setup.py update_catalog --ignore-obsolete=true -l $1
-        find -name "*.pot" -delete
-        cd $wd
+        [ -z "$1" ] && echo needs language to update - example: fr_FR && return 1
+        ( cd "$COOG_TRYTON" &&
+                python ./setup.py extract_messages --no-location --omit-header &&
+                python ./setup.py update_catalog --ignore-obsolete=true -l "$1" &&
+                find -name "*.pot" -delete )
 }
 
 coog_client_mo() { # generates mo file in client [lang]
-        [ -z $1 ] && echo needs language to generate - example: fr_FR && return 1
-        local wd
-        wd=`pwd`
-        cd $COOG_TRYTON
-        python ./setup.py compile_catalog --locale $1
-        cd $wd
+        [ -z "$1" ] && echo needs language to generate - example: fr_FR && return 1
+        ( cd "$COOG_TRYTON" && python ./setup.py compile_catalog --locale "$1" )
 }

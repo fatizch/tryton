@@ -1,73 +1,45 @@
 # vim: set ft=sh:
-# worker management - start, stop, log, status, etc
+# worker management - start, stop, log, etc.
 
-_coog_worker_file() { # get file name - <ext> [pid]
-        [ $# -eq 1 ] && echo "$COOG_TMP/$COOG_FILE_WRK.$1"
-        [ $# -eq 2 ] && echo "$COOG_TMP/$COOG_FILE_WRK-$2.$1"
-        return 1
+_coog_worker_file() { # get file name - <ext>
+        echo "$COOG_TMP/$COOG_FILE_WRK.$1"
 }
 
-_coog_worker_pid() { # retrieve pid from pidfile - [delete]
-        local pid_file
-        pid_file=$(_coog_worker_file pid)
-        [ ! -e "$pid_file" ] && return
-        cat "$pid_file"
-        [ "$1" = 1 ] && rm -f "$pid_file"
-}
-
-_coog_worker_bak() { # backup runtime files - <pid>
-        local out_file
-        out_file=$(_coog_worker_file out)
-        [ ! -e "$out_file" ] && echo no worker log && return
-        coog_env_wait "$1"
-        local bak_file
-        bak_file=$(_coog_worker_file out "$1")
-        mv "$out_file" "$bak_file"
-}
-
-coog_worker_start() { # start workers - <nb>
+coog_worker_start() { # start - <nb>
         [ -z "$1" ] && echo missing workers number && return 1
-        local pid_file
-        pid_file=$(_coog_worker_file pid)
-        local out_file
-        out_file=$(_coog_worker_file out)
-        if [ -e "$pid_file" ]
-        then
-                local pid
-                pid=$(_coog_worker_pid 0)
-                if [ ! -z "$pid" ] && [ -e /proc/"$pid" ]
-                then
-                        echo 'workers already running -> stop or kill' && return 1
-                else
-                        rm "$pid_file"
-                        _coog_worker_bak "$pid"
-                fi
-        else
-                [ -e "$out_file" ] && echo 'worker log file exists -> clean manually' && return 1
-        fi
-        nohup uwsgi -T --module trytond.application:app --http :8000 --stats :8001 --processes "$1" &> "$out_file" &
-        echo "$!" > "$pid_file"
-        echo workers started
+        local pid_file; pid_file=$(_coog_worker_file pid)
+        local out_file; out_file=$(_coog_worker_file out)
+        local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
+                >&2 echo "already running" && return 1
+        coog_env_bak "$out_file" "$pid" || return $?
+        uwsgi -T --module trytond.application:app --http :7999 --processes "$1" --pidfile "$pid_file" &> "$out_file" &
+        echo worker started
 }
 
-coog_worker_stop() { # stop workers
-        local pid
-        pid=$(_coog_worker_pid 1)
-        [ -z "$pid" ] && echo no workers running
-        [ ! -z "$pid" ] && kill -SIGINT "$pid" && echo workers stopped
-        _coog_worker_bak "$pid"
+coog_worker_stop() { # stop
+        local pid_file; pid_file=$(_coog_worker_file pid)
+        local out_file; out_file=$(_coog_worker_file out)
+        local pid; pid=$(coog_env_int "$pid_file") || return $?
+        coog_env_bak "$out_file" "$pid"
+        echo worker stopped
 }
 
-coog_worker_log() { # less workers logs
-        local out_file
-        out_file=$(_coog_worker_file out)
-        [ ! -e "$out_file" ] && echo no workers log && return 1
+coog_worker_pid() { # get pid
+        local pid_file; pid_file=$(_coog_worker_file pid)
+        coog_env_pid "$pid_file"
+}
+
+coog_worker_log() { # less logs - [less args]
+        local out_file; out_file=$(_coog_worker_file out)
         less "$@" "$out_file"
 }
 
-coog_worker_tail() { # tail workers logs
-        local out_file
-        out_file=$(_coog_worker_file out)
-        [ ! -e "$out_file" ] && echo no workers log && return 1
+coog_worker_head() { # head logs - [head args]
+        local out_file; out_file=$(_coog_worker_file out)
+        head "$@" "$out_file"
+}
+
+coog_worker_tail() { # tail logs - [tail args]
+        local out_file; out_file=$(_coog_worker_file out)
         tail "$@" "$out_file"
 }

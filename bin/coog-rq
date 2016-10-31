@@ -1,149 +1,73 @@
 # vim: set ft=sh:
-# rq - workers and queues management
+# rq - workers management
 
-_coog_rq_file() { # get file name - <wid> <ext> [pid]
-        [ $# -lt 2 ] && echo rq_file: missing args && return 1
-        [ $# -eq 2 ] && echo $COOG_TMP"/"$COOG_FILE_RQ"-"$1"."$2 && return
-        [ $# -eq 3 ] && echo $COOG_TMP"/"$COOG_FILE_RQ"-"$1"-"$3"."$2 && return
+_coog_rq_file() {
+        echo "$COOG_TMP/$COOG_FILE_RQ-$1.$2"
 }
 
-_coog_rq_pid() { # retrieve pid from pidfile - <wid>
-        [ -z $1 ] && echo rq_pid: missing args && return 1
-        local pid_file
-        pid_file=`_coog_rq_file $1 pid` || return $?
-        [ ! -e "$pid_file" ] && echo rq_pid: no pid file && return 1
-        cat "$pid_file"
-        rm -f "$pid_file"
+coog_rq_start() { # start worker - <wid> [queue +]
+        [ -z "$1" ] && >&2 echo needs worker id to start && return 1
+        local wid; wid=$1; shift
+        local pid_file; pid_file=$(_coog_rq_file "$wid" pid)
+        local out_file; out_file=$(_coog_rq_file "$wid" out)
+        local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
+                >&2 echo "already running" && return 1
+        coog_env_bak "$out_file" "$pid" || return $?
+        rq worker \
+                -u "$TRYTOND_ASYNC_RQ" \
+                -n "coog-$wid" \
+                --pid "$pid_file" "$@" &> "$out_file" &
+        echo rq started
 }
 
-_coog_rq_bak() { # backup out file - <wid> [pid]
-        [ -z $1 ] && echo rq_bak: missing args && return 1
-        local out_file
-        out_file=`_coog_rq_file $1 out` || return $?
-        coog_env_wait $2
-        [ ! -e "$out_file" ] && echo rq_bak: no out for worker $1 && return
-        [ -z $2 ] && rm "$out_file" && return
-        local bak_file
-        bak_file=`_coog_rq_file $1 out $2` || return $?
-        mv "$out_file" "$bak_file"
+coog_rq_stop() { # stop worker - <wid>
+        [ -z "$1" ] && >&2 echo needs worker id to stop && return 1
+        local pid_file; pid_file=$(_coog_rq_file "$1" pid)
+        local out_file; out_file=$(_coog_rq_file "$1" out)
+        local pid; pid=$(coog_env_term "$pid_file") || return $?
+        coog_env_bak "$out_file" "$pid"
+        echo rq stopped
 }
 
-coog_rq_start() { # start rq worker - <wid>
-        [ -z $1 ] && echo needs worker id to start && return 1
-        local pid_file
-        pid_file=`_coog_rq_file $1 pid` || return $?
-        [ -e "$pid_file" ] && echo worker $1 already running -">" stop && return 1
-        local out_file
-        out_file=`_coog_rq_file $1 out` || return $?
-        [ -e "$out_file" ] && echo out file exists for worker $1 -">" clean manually && return 1
-        nohup rq worker \
-                -u $TRYTOND_ASYNC_RQ \
-                -n coog-$1 \
-                --pid "$pid_file" &> "$out_file" &
+coog_rq_pid() { # get pid - <wid>
+        [ -z "$1" ] && >&2 echo needs worker id to stop && return 1
+        local pid_file; pid_file=$(_coog_rq_file "$1" pid)
+        coog_env_pid "$pid_file"
 }
 
-coog_rq_stop() { # stop rq worker - <wid>
-        [ -z $1 ] && echo needs worker id to stop && return 1
-        local pid
-        pid=`_coog_rq_pid $1` || return $?
-        [ -z $pid ] && echo worker $1 is not running
-        [ ! -z $pid ] kill -TERM $pid && echo worker stopped
-        _coog_rq_bak $1 $pid
-}
-
-coog_rq_cli() { # rq cli wrapper - [rq args]
+coog_rq_cli() { # rq cli wrapper - <rq args>
         local cmd; cmd=$1; shift
-        rq $cmd -u $TRYTOND_ASYNC_RQ $*
+        rq "$cmd" -u "$TRYTOND_ASYNC_RQ" "$@"
 }
 
-coog_rq_log() { # less rq out - <wid> [less args]
-        [ -z $1 ] && echo needs worker id && return 1
-        local out_file
-        out_file=`_coog_rq_file $1 out` || return $?
-        [ ! -e "$out_file" ] && echo no out for worker $1  && return 1
-        shift
-        less $* "$out_file"
+coog_rq_info() { # print workers infos
+        coog_rq_cli info
 }
 
-coog_rq_head() { # head rq out - <wid> [head args]
-        [ -z $1 ] && echo needs worker id && return 1
-        local out_file
-        out_file=`_coog_rq_file $1 out` || return $?
-        [ ! -e "$out_file" ] && echo no out for worker $1 && return 1
-        shift
-        head $* "$out_file"
+coog_rq_queued() { # count queued jobs - <name>
+        [ -z "$1" ] && >&2 echo missing queue name && return 1
+        local q; q=$(coog_rq_cli info -r -Q "$1" | grep -oP "\d+$")
+        local wk; wk=$(coog_rq_cli info -r -W "$1" | grep -c "busy")
+        echo $((q+wk))
 }
 
-coog_rq_tail() { # tail rq out - <wid> [tail args]
-        [ -z $1 ] && echo needs worker id && return 1
-        local out_file
-        out_file=`_coog_rq_file $1 out` || return $?
-        [ ! -e "$out_file" ] && echo no out for worker && return 1
-        shift
-        tail $* "$out_file"
+coog_rq_log() { # less logs - <wid> [less args]
+        [ -z "$1" ] && >&2 echo needs worker id && return 1
+        local wid; wid=$1; shift
+        local out_file; out_file=$(_coog_rq_file "$wid" out)
+        less "$@" "$out_file"
 }
 
-_coog_rq_cleanpid() { # check if workers running, clean pid file - <file>
-        [ -z "$1" ] && echo missing pid file && return 1
-        [ ! -e "$1" ] && return 0
-        local pid
-        while read -r pid
-        do
-                [ -e /proc/$pid ] && return 0
-        done < "$1"
-        rm -f "$1"
+coog_rq_head() { # head logs - <wid> [head args]
+        [ -z "$1" ] && >&2 echo needs worker id && return 1
+        local wid; wid=$1; shift
+        local out_file; out_file=$(_coog_rq_file "$wid" out)
+        head "$@" "$out_file"
 }
 
-coog_rq_qstart() { # start queue workers - <queue> <file> <concurrency>
-        [ $# -lt 3 ] && echo missing args && return 1
-        local pid_file
-        pid_file="$2".pid
-        _coog_rq_cleanpid $pid_file
-        [ -e "$pid_file" ] && echo workers already running -">" stop && return 1
-        local i=0
-        while [ $i -lt $3 ]
-        do
-                local out_file
-                out_file="$2"-"$i".out
-                i=$((i+1))
-                nohup rq worker --burst \
-                        -u $TRYTOND_ASYNC_RQ \
-                        -n "$1"-"$i" $1 &>> "$out_file" &
-                echo $! >> "$pid_file"
-        done
-}
-
-coog_rq_qstop() { # stop queue workers - <file>
-        [ -z "$1" ] && echo missing file && return 1
-        local pid_file
-        pid_file="$1".pid
-        [ ! -e "$pid_file" ] && echo inexisting pid file && return 1
-        local pid
-        while read -r pid
-        do
-                [ ! -e /proc/$pid ] && continue
-                kill -TERM $pid && echo WARNING: worker $pid stopped - burst option not working
-        done < "$pid_file"
-        rm -f "$pid_file"
-}
-
-coog_rq_qps() { # ps queue workers process - <file>
-        [ -z "$1" ] && echo missing file && return 1
-        local pid_file
-        pid_file="$1".pid
-        [ ! -e "$pid_file" ] && echo workers down && return 0
-        local one_alive=0
-        local pid
-        while read -r pid
-        do
-                [ ! -e /proc/$pid ] && echo worker $pid down
-                one_alive=1
-                ps -h -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
-        done < "$pid_file"
-        [ $one_alive -eq 0 ] && rm $pid_file
-}
-
-coog_rq_qactive() { # count queue active workers - <name>
-        [ -z "$1" ] && echo missing queue name && return 1
-        coog_rq_cli info -r "$1" 2> /dev/null | grep -c "^worker"
+coog_rq_tail() { # tail logs - <wid> [tail args]
+        [ -z "$1" ] && >&2 echo needs worker id && return 1
+        local wid; wid=$1; shift
+        local out_file; out_file=$(_coog_rq_file "$wid" out)
+        tail "$@" "$out_file"
 }

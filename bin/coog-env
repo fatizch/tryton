@@ -9,6 +9,7 @@ _coog_env_files() { # set file names
         COOG_FILE_CLI=coog-cli-$USER
         COOG_FILE_SRV=coog-srv-$USER
         COOG_FILE_WRK=coog-wrk-$USER
+        COOG_FILE_UNO=coog-uno-$USER
         COOG_FILE_RQ=coog-rq-$USER
         COOG_FILE_CEL=coog-cel-$USER
         COOG_FILE_BAT=coog-bat-$USER
@@ -21,6 +22,7 @@ _coog_env_files() { # set file names
                 COOG_FILE_CLI=$COOG_FILE_CLI-$venv
                 COOG_FILE_SRV=$COOG_FILE_SRV-$venv
                 COOG_FILE_WRK=$COOG_FILE_WRK-$venv
+                COOG_FILE_UNO=$COOG_FILE_UNO-$venv
                 COOG_FILE_RQ=$COOG_FILE_RQ-$venv
                 COOG_FILE_CEL=$COOG_FILE_CEL-$venv
                 COOG_FILE_BAT=$COOG_FILE_BAT-$venv
@@ -238,21 +240,48 @@ coog_env_config() { # print conf file <client|server|batch|test|log>
         echo unknown conf: $1 && return 1
 }
 
-coog_env_wait() { # wait for process to die [pid]
-        [ -z $1 ] && return
+coog_env_wait() { # wait for process to die - <pid>
+        [ -z "$1" ] && >&2 echo missing arguments && return 1
         while true
         do
-                local alive
-                alive=0
-                for pid in $*
-                do
-                        [ -e /proc/$pid ] && alive=$((alive+1))
-                done
-                [ $alive -eq 0 ] && break
+                [ ! -e /proc/"$1" ] && break
                 sleep 0.5
         done
 }
 
+coog_env_pid() { # pid from file - <file>
+        [ -z "$1" ] && >&2 echo missing arguments && return 1
+        [ ! -e "$1" ] && >&2 echo no pid file && return 1
+        local pid; pid=$(cat "$1");
+        [ -z "$pid" ] && >&2 echo no pid && return 1
+        echo "$pid"
+        [ ! -e "/proc/$pid" ] && rm -f "$1" && >&2 echo no runnig pid && return 1
+        return 0
+}
+
+coog_env_term() { # terminate process - <file>
+        local pid; pid=$(coog_env_pid "$@") || return $?
+        kill -TERM "$pid"
+        coog_env_wait "$pid"
+        rm -f "$1"
+        echo "$pid"
+}
+
+coog_env_int() { # interrupt process - <file>
+        local pid; pid=$(coog_env_pid "$@") || return $?
+        kill -INT "$pid"
+        coog_env_wait "$pid"
+        rm -f "$1"
+        echo "$pid"
+}
+
+coog_env_bak() { # backup out file - <file> <pid>
+        [ -z "$1" ] && >&2 echo missing arguments && return 1
+        [ ! -e "$1" ] && return 0
+        [ -z "$2" ] && mv "$1" "$1.bak" && return 0
+        mv "$1" "$1.$2"
+}
+
 coog_env_run() { # execute command in coog context
-        $*
+        "$@"
 }

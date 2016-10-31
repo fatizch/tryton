@@ -1,158 +1,84 @@
 # vim: set ft=sh:
-# server management - start, stop, log, status, etc
+# server management - start, stop, log, etc.
 
-_coog_server_file() { # get file name
-        [ $# -eq 1 ] && echo $COOG_TMP"/"$COOG_FILE_SRV"."$1
-        [ $# -eq 2 ] && echo $COOG_TMP"/"$COOG_FILE_SRV"-"$2"."$1
+_coog_server_file() {
+        echo "$COOG_TMP/$COOG_FILE_SRV.$1"
 }
 
-_coog_server_pid() { # retrieve pid from pidfile, delete pidfile if arg=1
-        local pid_file
-        pid_file=`_coog_server_file pid`
-        [ ! -e $pid_file ] && return
-        cat $pid_file
-        [ $1 = 1 ] && rm -f $pid_file
-}
-
-_coog_trytond_pid() { # get trytond pid (managed from watch file)
-        local pid_file
-        pid_file=$COOG_TMP/$COOG_FILE_WATCH
-        [ ! -e $pid_file ] && return
-        cat $pid_file
-        [ $1 = 1 ] && rm -f $pid_file
-}
-
-_coog_server_bak() { # backup log file (mv to pid if exists or rm)
-        local out_file
-        out_file=`_coog_server_file out`
-        [ ! -e $out_file ] && echo no server log && return
-        coog_env_wait $*
-        [ -z $1 ] && rm $out_file && return
-        local bak_file
-        bak_file=`_coog_server_file out $1`
-        mv $out_file $bak_file
-}
-
-coog_server_clearcache() { # clear server redis cache
+coog_server_clearcache() { # clear redis cache
         coog_redis_exec cache flushdb &> /dev/null
         [ $? -eq 0 ] && echo redis cache cleared
         find "$COOG_ROOT" -name "*.pyc" -delete
         [ $? -eq 0 ] && echo pyc files cleared
 }
 
-coog_server_interact() { # interact server - [args] passed to trytond
+coog_server_launch() { # launch - [trytond args]
         local args
-        [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
-        [ ! -z $COOG_CONF_LOG ] && args="$args --logconf $COOG_CONF_LOG"
+        [ ! -z "$DB_NAME" ] && args="$args -d $DB_NAME"
+        [ ! -z "$COOG_CONF_LOG" ] && args="$args --logconf $COOG_CONF_LOG"
         args="$args $*"
         coog_server_clearcache
-        trytond -c $COOG_CONF_SRV $args &
-        echo $! > $COOG_TMP/$COOG_FILE_WATCH
+        trytond -c "$COOG_CONF_SRV" $args &
+        echo "$!" > "$COOG_TMP/$COOG_FILE_WATCH"
 }
 
-coog_server_start() { # start server - [args] passed to trytond, logconf NOT set when args
-        local pid_file
-        pid_file=`_coog_server_file pid`
-        local out_file
-        out_file=`_coog_server_file out`
-        if [ -e $pid_file ]
-        then
-                local pid
-                pid=`_coog_server_pid 0`
-                if [ ! -z $pid ] && [ -e /proc/$pid ]
-                then
-                        echo 'server already running -> stop or kill' && return 1
-                else
-                        rm $pid_file
-                        _coog_server_bak $pid
-                fi
-        else
-                [ -e $out_file ] && echo 'server log file exists -> clean manually' && return 1
-        fi
-        nohup $COOG_BIN/watch $COOG_TRYTOND coog server interact &> $out_file &
-        echo $! > $pid_file
+coog_server_debug() { # launch in pdb - [trytond args]
+        local args
+        args=$*
+        [ ! -z "$DB_NAME" ] && args="$args -d $DB_NAME"
+        coog_server_clearcache
+        python -m pdb "$COOG_TRYTOND/bin/trytond" -c "$COOG_CONF_SRV" $args
+}
+
+coog_server_start() { # start - [trytond args]
+        local pid_file; pid_file=$(_coog_server_file pid)
+        local out_file; out_file=$(_coog_server_file out)
+        local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
+                >&2 echo "already running" && return 1
+        coog_env_bak "$out_file" "$pid" || return $?
+        "$COOG_BIN/watch" "$COOG_TRYTOND" coog server launch &> "$out_file" &
+        echo "$!" > "$pid_file"
         echo server started
 }
 
-coog_server_debug() { # start server in pdb - [args] passed to trytond
-        local args
-        args=$*
-        [ ! -z $DB_NAME ] && args="$args -d $DB_NAME"
-        coog_server_clearcache
-        python -m pdb "$COOG_TRYTOND/bin/trytond" -c $COOG_CONF_SRV $args
+coog_server_stop() { # stop
+        local pid_file; pid_file=$(_coog_server_file pid)
+        local out_file; out_file=$(_coog_server_file out)
+        local pid; pid=$(coog_env_term "$pid_file") || return $?
+        coog_env_bak "$out_file" "$pid"
+        echo server stopped
 }
 
-coog_server_stop() { # stop server (gracefully)
-        local pid
-        pid=`_coog_server_pid 1`
-        [ -z $pid ] && echo no server running
-        [ ! -z $pid ] && kill -TERM $pid && echo server stopped
-        _coog_server_bak $pid
+coog_server_pid() { # get pid
+        local pid_file; pid_file=$(_coog_server_file pid)
+        local pid1; pid1=$(coog_env_pid "$pid_file") || return $?
+        local pid2; pid2=$(cat "$COOG_TMP/$COOG_FILE_WATCH")
+        echo "$pid1" "$pid2"
 }
 
-coog_server_kill() { # kill server
-        local pid
-        pid=`_coog_server_pid 1`
-        [ -z $pid ] && echo no watcher running
-        [ ! -z $pid ] && kill -9 $pid && echo watcher killed
-        local tpid
-        tpid=`_coog_trytond_pid 1`
-        [ -z $tpid ] && echo no server running
-        [ ! -z $tpid ] && kill -9 $tpid && echo server killed
-        _coog_server_bak $pid $tpid
+coog_server_log() { # less logs - [less args]
+        local out_file; out_file=$(_coog_server_file out)
+        less "$@" "$out_file"
 }
 
-coog_server_ps() { # print server process info (based on ps)
-        local pid
-        pid=`_coog_server_pid 0`
-        [ -z $pid ] && echo no server running && return 1
-        ps -p $pid -o pid,stat,start,time,%cpu,rss,vsz,%mem
+coog_server_head() { # head logs - [head args]
+        local out_file; out_file=$(_coog_server_file out)
+        head "$@" "$out_file"
 }
 
-coog_server_status() { # print server status (errors based on logs)
-        local out_file
-        out_file=`_coog_server_file out`
-        local cri
-        local err
-        local wrn
-        local inf
-        [ ! -e $out_file ] && echo no server log && return 1
-        cri=`grep -c "\bCRITICAL:\b" $out_file`
-        err=`grep -c "\bERROR:\b" $out_file`
-        wrn=`grep -c "\bWARNING:\b" $out_file`
-        inf=`grep -c "\bINFO:\b" $out_file`
-        echo server status \(critical:$cri error:$err warning:$wrn info:$inf\)
+coog_server_tail() { # tail logs - [tail args]
+        local out_file; out_file=$(_coog_server_file out)
+        tail "$@" "$out_file"
 }
 
-coog_server_log() { # less server logs
-        local out_file
-        out_file=`_coog_server_file out`
-        [ ! -e $out_file ] && echo no server log && return 1
-        less $* $out_file
-}
-
-coog_server_head() { # head server logs
-        local out_file
-        out_file=`_coog_server_file out`
-        [ ! -e $out_file ] && echo no server log && return 1
-        head $* $out_file
-}
-
-coog_server_tail() { # tail server logs
-        local out_file
-        out_file=`_coog_server_file out`
-        [ ! -e $out_file ] && echo no server log && return 1
-        tail $* $out_file
-}
-
-coog_server_ping() { # call coog server - [curl args]
+coog_server_test() { # call for test - [curl args]
         local uri
-        uri=`python $COOG_BIN/parse-config.py web listen < $COOG_CONF_SRV`
-        [ $? -ne 0 ] && echo no rpc url && return 1
-        curl $* \
+        uri=$(python "$COOG_BIN/parse-config.py" web listen < "$COOG_CONF_SRV")
+        [ $? -ne 0 ] && >&2 echo no rpc url && return 1
+        curl "$@" \
                 -X POST \
                 -H "Content-Type: application/json" \
                 -d '{"method": "common.server.version", "params": [null, null]}' \
-                $uri
+                "$uri"
         echo
 }

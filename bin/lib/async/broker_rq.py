@@ -42,10 +42,11 @@ def enqueue(queue, fname, args):
 
 
 def split(job_key):
-    job = connection.hget(job_key, 'coog')
+    job = connection.hget('rq:job:%s' % job_key, 'coog')
     job = json.loads(job)
     args = job['args']
     ids = args[4]
+    assert len(ids) > 1, 'can not split a singleton'
     args_list = [[args[0], args[1], args[2], args[3], [id]] for id in ids]
     for args in args_list:
         enqueue(job['queue'], job['func'], args)

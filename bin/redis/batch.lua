@@ -6,16 +6,18 @@ local _USAGE = [[
 Usage: only ARGV are used (no KEYS). Possible commands are:
 
   - help: print this text
-  - list: list queue jobs - <broker> <queue> [filters]
-  - count: count queue jobs - <broker> <queue> [filters]
-  - waiting: count waiting jobs - <broker> <queue>
-  - backup: archive queue jobs - <broker> <queue> [filters]
-  - clear: clear queue jobs - <broker> <queue> [filters]
-  - summary: print queue summary - <broker> <queue>
-  - key: print job key - <broker> <id>
-  - show: show job - <broker> <id>
-  - archive: archive job - <broker> <id>
-  - remove: remove job - <broker> <id>
+
+  - fail: count queue failed jobs - <broker> <queue>
+
+  - q: print queue summary - <broker> <queue>
+  - qlist: list queue jobs - <broker> [queue [filters] ]
+  - qcount: count queue jobs - <broker> [ queue [filters] ]
+  - qarchive: archive queue jobs - <broker> <queue> [filters]
+  - qremove: clear queue jobs - <broker> <queue> [filters]
+
+  - j: show job - <broker> <id>
+  - jarchive: archive job - <broker> <id>
+  - jremove: remove job - <broker> <id>
 ]]
 
 -- utils
@@ -32,10 +34,8 @@ local STATUS = {'wait', 'success', 'fail', 'archive'}
 local broker_api = {rq={}, celery={}}
 
 broker_api.rq.patterns = {'rq:job:'}
-
-broker_api.rq.dequeue = function(q)
-    redis.call('DEL', 'rq:queue:' .. q)
-end
+broker_api.rq.queue_pattern = 'rq:queue:'
+broker_api.rq.fail_list = 'rq:queue:failed'
 
 broker_api.rq.show = function(id)
     local ret = {id}
@@ -106,23 +106,19 @@ broker_api.rq.archive = function(id, force)
     end
     local key = broker_api.rq.patterns[1] .. id
     redis.call('HSET', key, 'status', STATUS[#STATUS])
+    redis.call('LREM', broker_api.rq.fail_list, 0, id)
     return string.format('archived %s', id)
 end
 
 broker_api.rq.remove = function(id)
     redis.call('DEL', broker_api.rq.patterns[1] .. id)
+    redis.call('LREM', broker_api.rq.fail_list, 0, id)
     return string.format('deleted %s', id)
 end
 
-broker_api.rq.waiting = function(queue)
-    return redis.call('LLEN', 'rq:queue:' .. queue)
-end
-
 broker_api.celery.patterns = {'coog:job:', 'celery-task-meta-'}
-
-broker_api.celery.dequeue = function(q)
-    redis.call('DEL', q)
-end
+broker_api.celery.queue_pattern = ''
+broker_api.celery.fail_list = 'coog:fail'
 
 broker_api.celery.show = function(id)
     local ret = {id}
@@ -188,17 +184,15 @@ broker_api.celery.archive = function(id, force)
     local job = cjson.decode(redis.call('GET', key))
     job.status = STATUS[#STATUS]
     redis.call('SET', key, cjson.encode(job))
+    redis.call('LREM', broker_api.celery.fail_list, 0, id)
     return string.format('archived %s', id)
 end
 
 broker_api.celery.remove = function(id)
     redis.call('DEL', broker_api.celery.patterns[1] .. id)
     redis.call('DEL', broker_api.celery.patterns[2] .. id)
+    redis.call('LREM', broker_api.celery.fail_list, 0, id)
     return string.format('deleted %s', id)
-end
-
-broker_api.celery.waiting = function(queue)
-    return redis.call('LLEN', queue)
 end
 
 -- helpers
@@ -263,114 +257,22 @@ api.help = function()
     return string.format('%s: %s\n\n%s', _NAME, _DESCRIPTION, _USAGE)
 end
 
-api.list = function(broker, queue, ...)
+api.fail = function(broker, queue)
     broker = check_broker(broker)
-    if queue == 'all' then
-        queue = nil
-    end
-    local filter = check_filter({0, 1}, ...)
-
-    local header = {'queue', 'id', 'status', 'connect', 'treat', 'args',
-        'records', 'result'}
-    local result = {table.concat(header, '\t')}
-
-    local function insert(job)
-        job.id = job.id:sub(1, 8)
-        if #job.records > 20 then
-            local head = job.records:sub(1, 9)
-            local tail = job.records:sub(-9, -1)
-            job.records =  head .. '..' .. tail
-        end
-        local item = {}
-        for _, k in ipairs(header) do
-            item[#item+1] = job[k]
-        end
-        result[#result+1] = table.concat(item, '\t')
-    end
-
-    local pattern = broker.patterns[1]
-    local keys = redis.call('KEYS', pattern .. '*')
-    for _, key in ipairs(keys) do
-        local id = key:sub(#pattern+1)
+    assert(queue, 'missing queue')
+    local filter = check_filter({2, 1})
+    local result = {}
+    local fails = redis.call('LRANGE', broker.fail_list, 0, -1)
+    for _, id in ipairs(fails) do
         local job = broker.prepare(id)
         if is_eligible(job, queue, filter) then
-            broker.fill(id, job)
-            insert(job)
+            result[#result+1] = id
         end
     end
     return result
 end
 
-api.count = function(broker, queue, ...)
-    broker = check_broker(broker)
-    if queue == 'all' then
-        queue = nil
-    end
-    local filter = check_filter({0, 1}, ...)
-
-    local result = 0
-    local pattern = broker.patterns[1]
-    local keys = redis.call('KEYS', pattern .. '*')
-    for _, key in ipairs(keys) do
-        local id = key:sub(#pattern+1)
-        local job = broker.prepare(id)
-        if is_eligible(job, queue, filter) then
-            result = result + 1
-        end
-    end
-    return result
-end
-
-api.waiting = function(broker, queue)
-    broker = check_broker(broker)
-    assert(queue, 'missing queue')
-    return broker.waiting(queue)
-end
-
-api.backup = function(broker, queue, ...)
-    broker = check_broker(broker)
-    assert(queue, 'missing queue')
-    local filter = check_filter({1, 2}, ...)
-    assert(not filter[STATUS[1]], 'archiving waiting jobs: no sense')
-
-    local result = 0
-    local pattern = broker.patterns[1]
-    local keys = redis.call('KEYS', pattern .. '*')
-    for _, key in ipairs(keys) do
-        local id = key:sub(#pattern+1)
-        local job = broker.prepare(id)
-        if is_eligible(job, queue, filter) then
-            result = result + 1
-            broker.archive(id, true)
-        end
-    end
-    return string.format('%d jobs archived', result)
-end
-
-api.clear = function(broker, queue, ...)
-    broker = check_broker(broker)
-    assert(queue, 'missing queue')
-    local filter = check_filter({0, 1}, ...)
-
-    if filter[STATUS[1]] then
-        broker.dequeue(queue)
-    end
-
-    local result = 0
-    local pattern = broker.patterns[1]
-    local keys = redis.call('KEYS', pattern .. '*')
-    for _, key in ipairs(keys) do
-        local id = key:sub(#pattern+1)
-        local job = broker.prepare(id)
-        if is_eligible(job, queue, filter) then
-            result = result + 1
-            broker.remove(id)
-        end
-    end
-    return string.format('%d jobs removed', result)
-end
-
-api.summary = function(broker, queue)
+api.q = function(broker, queue)
     broker = check_broker(broker)
     assert(queue, 'missing queue')
     local filter = check_filter({0, 1})
@@ -414,19 +316,110 @@ api.summary = function(broker, queue)
     return ret_pattern:format(wait, success, fail, hr, mn, se)
 end
 
-api.key = function(broker, id)
-    local broker = check_broker(broker)
-    assert(id, 'missing job id')
-    local pattern = broker.patterns[1]
-    local keys = redis.call('KEYS', pattern .. id .. '*')
-    if #keys == 1 then
-        return keys[1]
+api.qlist = function(broker, queue, ...)
+    broker = check_broker(broker)
+    if queue == 'all' then
+        queue = nil
     end
+    local filter = check_filter({0, 1}, ...)
+
+    local header = {'queue', 'id', 'status', 'connect', 'treat', 'args',
+        'records', 'result'}
+    local result = {table.concat(header, '\t')}
+
+    local function insert(job)
+        job.id = job.id:sub(1, 8)
+        if #job.records > 20 then
+            local head = job.records:sub(1, 9)
+            local tail = job.records:sub(-9, -1)
+            job.records =  head .. '..' .. tail
+        end
+        local item = {}
+        for _, k in ipairs(header) do
+            item[#item+1] = job[k]
+        end
+        result[#result+1] = table.concat(item, '\t')
+    end
+
+    local pattern = broker.patterns[1]
+    local keys = redis.call('KEYS', pattern .. '*')
+    for _, key in ipairs(keys) do
+        local id = key:sub(#pattern+1)
+        local job = broker.prepare(id)
+        if is_eligible(job, queue, filter) then
+            broker.fill(id, job)
+            insert(job)
+        end
+    end
+    return result
 end
 
-api.show = generate_job_api('show')
-api.archive = generate_job_api('archive')
-api.remove = generate_job_api('remove')
+api.qcount = function(broker, queue, ...)
+    broker = check_broker(broker)
+    if queue == 'all' then
+        queue = nil
+    end
+    local filter = check_filter({0, 1}, ...)
+
+    local result = 0
+    local pattern = broker.patterns[1]
+    local keys = redis.call('KEYS', pattern .. '*')
+    for _, key in ipairs(keys) do
+        local id = key:sub(#pattern+1)
+        local job = broker.prepare(id)
+        if is_eligible(job, queue, filter) then
+            result = result + 1
+        end
+    end
+    return result
+end
+
+api.qarchive = function(broker, queue, ...)
+    broker = check_broker(broker)
+    assert(queue, 'missing queue')
+    local filter = check_filter({1, 2}, ...)
+    assert(not filter[STATUS[1]], 'archiving waiting jobs: no sense')
+
+    local result = 0
+    local pattern = broker.patterns[1]
+    local keys = redis.call('KEYS', pattern .. '*')
+    for _, key in ipairs(keys) do
+        local id = key:sub(#pattern+1)
+        local job = broker.prepare(id)
+        if is_eligible(job, queue, filter) then
+            result = result + 1
+            broker.archive(id, true)
+        end
+    end
+    return string.format('%d jobs archived', result)
+end
+
+api.qremove = function(broker, queue, ...)
+    broker = check_broker(broker)
+    assert(queue, 'missing queue')
+    local filter = check_filter({0, 1}, ...)
+
+    if filter[STATUS[1]] then
+        redis.call('DEL', broker.queue_pattern .. queue)
+    end
+
+    local result = 0
+    local pattern = broker.patterns[1]
+    local keys = redis.call('KEYS', pattern .. '*')
+    for _, key in ipairs(keys) do
+        local id = key:sub(#pattern+1)
+        local job = broker.prepare(id)
+        if is_eligible(job, queue, filter) then
+            result = result + 1
+            broker.remove(id)
+        end
+    end
+    return string.format('%d jobs removed', result)
+end
+
+api.j = generate_job_api('show')
+api.jarchive = generate_job_api('archive')
+api.jremove = generate_job_api('remove')
 
 -- main
 
