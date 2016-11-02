@@ -255,7 +255,7 @@ coog_env_pid() { # pid from file - <file>
         local pid; pid=$(cat "$1");
         [ -z "$pid" ] && >&2 echo no pid && return 1
         echo "$pid"
-        [ ! -e "/proc/$pid" ] && rm -f "$1" && >&2 echo no runnig pid && return 1
+        [ ! -e "/proc/$pid" ] && rm -f "$1" && >&2 echo no running pid && return 1
         return 0
 }
 
