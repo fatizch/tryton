@@ -1,27 +1,27 @@
 # vim: set ft=sh:
 # batch management
 
-_coog_batch_broker() { # get batch broker
+_coog_batch_broker() {
         [ ! -z "$TRYTOND_ASYNC_CELERY" ] && echo celery && return
         [ ! -z "$TRYTOND_ASYNC_RQ" ] && echo rq && return
         >&2 echo no async broker configured && return 1
 }
 
-coog_batch_query() { # query batch redis - <cmd> [cmd-arg*]
+coog_batch_query() { # query redis batch script - <cmd> [cmd-arg*]
         [ $# -lt 1 ] && echo missing cmd && return 1
         local cmd; cmd=$1; shift
         local broker; broker=$(_coog_batch_broker) || return $?
         coog_redis_eval "$broker" "$COOG_ROOT/coog/bin/redis/batch.lua" "$cmd" "$broker" "$@"
 }
 
-coog_batch_generate() { # generate batch jobs - <name> [batch-arg*]
+coog_batch_generate() { # generate jobs - <name> [batch-arg*]
         [ $# -lt 1 ] && echo missing at least batch name && return 1
         local broker; broker=$(_coog_batch_broker) || return $?
         local name; name=$1; shift
         python "$COOG_BIN/batch-generate.py" -b "$broker" -n "$name" "$@"
 }
 
-coog_batch_join() { # wait for batch exec - <name>
+coog_batch_join() { # wait for execution - <name>
         [ $# -lt 1 ] && echo missing batch name && return 1
         local broker; broker=$(_coog_batch_broker) || return $?
         while true
@@ -31,9 +31,9 @@ coog_batch_join() { # wait for batch exec - <name>
                 echo "wait @ $(date +'%H:%M:%S') - $queued"
                 sleep 10
         done
-        local failed; failed=$(coog_batch_query "fail" "$1" | grep -Pc "\w+") || return $?
-        [ "$failed" -eq 0 ] && echo batch exec succeeded && return 0
-        echo batch exec failed - "$failed" jobs in fail && return 1
+        local failed; failed=$(coog_batch_query "fail" "$1" | grep -Pc "\w+")
+        [ "$failed" -eq 0 ] && echo batch succeeded && return 0
+        echo batch failed - "$failed" errors && return 1
 }
 
 coog_batch_split() { # split failed jobs - <name>
@@ -41,6 +41,7 @@ coog_batch_split() { # split failed jobs - <name>
         local broker; broker=$(_coog_batch_broker) || return $?
         for jid in $(coog_batch_query "fail" "$1")
         do
+                echo "split $jid"
                 python "$COOG_BIN/batch-split.py" "$broker" "$jid" && coog_batch_query jarchive "$jid"
         done
 }
