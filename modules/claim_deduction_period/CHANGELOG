@@ -1,3 +1,4 @@
+Version 1.10 - 2016-11-02
 * Allow to access deduction period information in rule engine
 * Allow to define deduction period kind, deduction period amount
 * Module creation

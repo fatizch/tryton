@@ -1,3 +1,4 @@
+Version 1.10 - 2016-11-02
 * Add basic benchmarking tool to analyze server performance
 * Extend event action API to be able to use event description and kwargs
 * Add utility to generate new module file structure

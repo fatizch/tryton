@@ -1,3 +1,4 @@
+Version 1.10 - 2016-11-02
 * Add rule to calculate required documents when validating an indemnification
 * Allow indemnifications to reference a document request
 * Module Creation

@@ -1,3 +1,4 @@
+Version 1.10 - 2016-11-02
 * Detect the field in which a module was declared
 * Allow to trigger per modified file analysis
 * Add debbug logs

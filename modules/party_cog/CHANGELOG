@@ -1,3 +1,4 @@
+Version 1.10 - 2016-11-02
 * Allow to search party from SSN information
 * Behaviour change : A party is either a company (by default) or a person but it can not be both anymore
 

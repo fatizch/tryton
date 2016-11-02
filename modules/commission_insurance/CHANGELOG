@@ -1,3 +1,5 @@
+Version 1.10 - 2016-11-02
+
 Version 1.8 - 2016-07-06
 * Properly handle invoice de-reconciliation
 * Remove commission relate: use aggregated commission instead

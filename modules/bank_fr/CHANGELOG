@@ -1,3 +1,5 @@
+Version 1.10 - 2016-11-02
+
 Version 1.8 - 2016-07-06
 * The setting of bank from iban also uses branch code
 * Automatically set bank from iban on bank account for french iban
