@@ -258,11 +258,3 @@ coog_test_fullcheck() { # check and report a full test - <branch>
         coog_test_query "clear"
         coog_test_stop
 }
-
-coog_test_main() {
-        while true
-        do
-                coog test fullcheck master
-                sleep 60
-        done
-}
