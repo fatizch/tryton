@@ -481,14 +481,17 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
 
     @classmethod
     def calculate_activation_dates(cls, contracts, caller=None):
+        updated = []
         for contract in contracts:
             if contract.status == 'void':
-                return
+                continue
             dates = [contract.get_date_used_for_contract_end_date()]
             dates.append(contract.get_maximum_end_date())
             dates = [x for x in dates if x] or [None]
             contract.end_date = min(dates)
-        cls.save(contracts)
+            updated.append(contract)
+        if updated:
+            cls.save(updated)
 
     def notify_end_date_change(self, value):
         for option in self.options:
