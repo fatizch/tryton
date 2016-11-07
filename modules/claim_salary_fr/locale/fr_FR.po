@@ -392,6 +392,10 @@ msgid "Last 3 months on last year"
 msgstr "Les 3 derniers mois de la dernière annnée"
 
 msgctxt "selection:contract.option.benefit,salary_mode:"
+msgid "Last Year"
+msgstr "La dernière année"
+
+msgctxt "selection:contract.option.benefit,salary_mode:"
 msgid "Last month"
 msgstr "Dernier mois"
 

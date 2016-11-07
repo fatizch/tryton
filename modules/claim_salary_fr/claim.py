@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
+from decimal import Decimal
 from dateutil.relativedelta import relativedelta
 from collections import defaultdict
 
@@ -10,6 +11,7 @@ from trytond.model import Unique
 
 from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.rule_engine import get_rule_mixin
+from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
     'ClaimService',
@@ -70,7 +72,7 @@ class NetCalculationRule(model.CoogSQL, model.CoogView,
             ]
 
 
-class Salary(model.CoogSQL, model.CoogView):
+class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
     'Claim Salary'
     __metaclass__ = PoolMeta
     __name__ = 'claim.salary'
@@ -122,6 +124,11 @@ class Salary(model.CoogSQL, model.CoogView):
     @model.CoogView.button_action('claim_salary_fr.act_set_contributions')
     def set_contributions(cls, salaries):
         pass
+
+    @classmethod
+    def get_currency(self):
+        if self.service:
+            return self.service.currency
 
     @classmethod
     def update_contributions_table(cls, contributions, tables, key):
@@ -235,21 +242,20 @@ class ClaimService:
         Salary = Pool().get('claim.salary')
         if self.loss.is_a_relapse:
             return
-        salary_mode = self.benefit.benefit_rules[0]. \
-            option_benefit_at_date(self.option,
-                self.loss.start_date).salary_mode
-        if salary_mode in ('last_12_months', 'last_12_months_last_year'):
+        if self.salary_mode in ('last_12_months', 'last_12_months_last_year'):
             nb_iteration = 12
-        elif salary_mode in ('last_3_months', 'last_3_months_last_year'):
+        elif self.salary_mode in ('last_3_months', 'last_3_months_last_year'):
             nb_iteration = 3
-        elif salary_mode in ('last_month', 'last_month_last_year'):
+        elif self.salary_mode in ('last_month',
+                'last_month_last_year', 'last_year'):
             nb_iteration = 1
         else:
             return
 
-        if salary_mode in ('last_12_months', 'last_3_months', 'last_month'):
+        if self.salary_mode in ('last_12_months',
+                'last_3_months', 'last_month', 'last_year'):
             reference_date = self.loss.start_date
-        elif salary_mode in ('last_12_months_last_year',
+        elif self.salary_mode in ('last_12_months_last_year',
                 'last_3_months_last_year', 'last_month_last_year'):
             reference_date = datetime.date(
                 self.loss.start_date.year - 1, 12, 31)
@@ -260,7 +266,11 @@ class ClaimService:
         end_month = datetime.date(reference_date.year, reference_date.month,
             1) - relativedelta(days=1)
         for i in range(0, nb_iteration):
-            start_month = datetime.date(end_month.year, end_month.month, 1)
+            if self.salary_mode == 'last_year':
+                start_month = datetime.date(
+                    end_month.year - 1, reference_date.month, 1)
+            else:
+                start_month = datetime.date(end_month.year, end_month.month, 1)
             to_save.append(Salary(from_date=start_month, to_date=end_month,
                 delivered_service=self))
             end_month = start_month - relativedelta(days=1)
@@ -299,20 +309,22 @@ class ClaimService:
             salary_to_use = 0
             for salary_def in salaries_def:
                 salary_to_use += getattr(cur_salary, salary_def, 0) or 0
+            if self.salary_mode == 'last_year' and salary_to_use:
+                salary_to_use /= 12
+                salary_to_use.quantize(Decimal(1) / 10 ** self.currency_digits)
             pmss = TableCell.get(pmss_table, cur_salary.from_date)
             month_range = calculate_salary_range(salary_to_use, pmss)
             salary_range['TA'] += month_range['TA']
             salary_range['TB'] += month_range['TB']
             salary_range['TC'] += month_range['TC']
-        salary_mode = self.benefit.benefit_rules[0]. \
-            option_benefit_at_date(self.option,
-                self.loss.start_date).salary_mode
         for key, value in salary_range.iteritems():
             if current_salary:
                 coefficient = 1
-            elif salary_mode in ('last_3_months', 'last_3_months_last_year'):
+            elif self.salary_mode in ('last_3_months',
+                    'last_3_months_last_year'):
                 coefficient = 4
-            elif salary_mode == ('last_month', 'last_month_last_year'):
+            elif self.salary_mode in ('last_month',
+                    'last_month_last_year', 'last_year'):
                 coefficient = 12
             else:
                 coefficient = 1
