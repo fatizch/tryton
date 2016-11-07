@@ -7,14 +7,12 @@ _coog_batch_broker() {
         >&2 echo no async broker configured && return 1
 }
 
-coog_batch_query() { # query redis batch script - <cmd> [cmd-arg*]
-        [ $# -lt 1 ] && echo missing cmd && return 1
-        local cmd; cmd=$1; shift
+coog_batch_query() { # query redis batch script - [args*]
         local broker; broker=$(_coog_batch_broker) || return $?
-        coog_redis_eval "$broker" "$COOG_ROOT/coog/bin/redis/batch.lua" "$cmd" "$broker" "$@"
+        coog_redis_eval "$broker" "$@"
 }
 
-coog_batch_generate() { # generate jobs - <name> [batch-arg*]
+coog_batch_generate() { # generate jobs - <name> [args*]
         [ $# -lt 1 ] && echo missing at least batch name && return 1
         local broker; broker=$(_coog_batch_broker) || return $?
         local name; name=$1; shift
@@ -43,5 +41,6 @@ coog_batch_split() { # split failed jobs - <name>
         do
                 echo "split $jid"
                 python "$COOG_BIN/batch-split.py" "$broker" "$jid" && coog_batch_query jarchive "$jid"
+                [ $? -ne 0 ] && return $?
         done
 }

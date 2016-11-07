@@ -177,12 +177,7 @@ coog_test_fullstart() { # starts a full test - <branch> <nb> [modules]
 }
 
 coog_test_query() { # query test redis - [arg*]
-        if [ list = "$1" ]
-        then
-                coog_redis_eval rq redis/test.lua "$@" | column -t | less
-        else
-                coog_redis_eval rq redis/test.lua "$@"
-        fi
+        coog_redis_eval rq "$@"
 }
 
 coog_test_logextract() { # extract job logs - <job_id>
@@ -224,25 +219,24 @@ coog_test_logextract() { # extract job logs - <job_id>
 coog_test_fullcheck() { # check and report a full test - <branch>
         [ -z "$1" ] && echo "missing branch" && return 1
         echo "TEST FULL $1: check @ $(date +'%y-%m-%d %H:%M:%S')"
-        local a; a=$(coog_test_query count)
-        local w; w=$(coog_test_query count "wait")
+        local a; a=$(coog_test_query qcount "test")
+        local w; w=$(coog_test_query qcount "test" "wait")
         [ "$a" -eq 0 ] && echo "TEST FULL $1: no jobs" && return
         [ "$w" -ne 0 ] && echo "TEST FULL $1: running" && return
         local out
         out=$COOG_TMP/test-$(date +'%y%m%d-%H%M%S')
         echo '<pre style="font-family: monospace">' > "$out"
-        coog_test_query summary >> "$out"
+        coog_test_query q "test" >> "$out"
         local fail
         local subject
-        fail=$(coog_test_query count fail)
+        fail=$(coog_test_query fail "test" | grep -Pc "\w+")
         if [ "$fail" -ne 0 ]
         then
                 subject="Test Report $1: KO"
                 echo "TEST FULL $1: end - $fail KO"
                 echo >> "$out"
-                coog_test_query list fail >> "$out"
-                coog_test_query ids fail |
-                while IFS= read -r id
+                coog_test_query qlist fail "test" >> "$out"
+                for id in $(coog_test_query fail "test")
                 do
                         [ -z "$id" ] && continue
                         echo >> "$out"
@@ -255,6 +249,6 @@ coog_test_fullcheck() { # check and report a full test - <branch>
         fi
         echo '</pre>' >> "$out"
         _coog_test_email dev@coopengo.com "$out" "$subject"
-        coog_test_query "clear"
+        coog_test_query qremove "test"
         coog_test_stop
 }
