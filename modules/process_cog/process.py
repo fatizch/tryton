@@ -68,7 +68,11 @@ class ProcessAction(model.CoogSQL):
 
 class ProcessTransition(model.CoogSQL):
     __name__ = 'process.transition'
+    _func_key = 'func_key'
 
+    func_key = fields.Function(
+        fields.Char('Func Key'),
+        'get_func_key', searcher='search_func_key')
     pyson_choice = fields.Char('Choice', states={
             'invisible': Eval('kind') != 'choice'})
     pyson_description = fields.Char('Pyson Description', states={
@@ -119,6 +123,26 @@ class ProcessTransition(model.CoogSQL):
     def _export_light(cls):
         return set(
             ['choice_if_true', 'choice_if_false', 'from_step', 'to_step'])
+
+    def get_func_key(self, name=None):
+        return '|'.join((self.on_process.technical_name if
+                self.on_process else 'None',
+                self.from_step.technical_name, self.to_step.technical_name if
+                self.to_step else 'None'))
+
+    def search_func_key(self, name, clause):
+        assert '|' in clause[2]
+        operands = clause[2].split('|')
+        on_process, from_step, to_step = operands
+        if on_process == 'None':
+            on_process = None
+        if to_step == 'None':
+            to_step = None
+        return [
+            ('on_process.technical_name', clause[1], on_process),
+            ('from_step', clause[1], from_step),
+            ('to_step', clause[1], to_step),
+            ]
 
     def execute(self, target):
         if self.kind != 'choice':
