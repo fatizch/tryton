@@ -27,10 +27,27 @@ coog_redis_exec() { # execute redis command - <context> [args*]
         redis-cli --raw $args "$@"
 }
 
+_coog_redis_script() {
+        [ -z "$1" ] && >&2 echo missing context && return 1
+        [ -f "$COOG_ROOT/coog/bin/redis/$1.lua" ] && echo "$COOG_ROOT/coog/bin/redis/$1.lua" && return 0
+        [ -d "$COOG_ROOT/coog/bin/redis/$1" ] && echo "$COOG_ROOT/coog/bin/redis/$1/main.lua" && return 0
+        >&2 echo "no script for $1" && return 1
+}
+
 coog_redis_eval() { # eval redis script - <context> [args*]
         [ -z "$1" ] && >&2 echo missing context && return 1
         local context; context=$1; shift
         local uri; uri=$(_coog_redis_uri "$context") || return $?
         local args; args=$(_coog_redis_args "$uri") || return $?
-        redis-cli --raw $args --eval "$COOG_ROOT/coog/bin/redis/$context.lua" , "$@"
+        local script; script=$(_coog_redis_script "$context") || return $?
+        redis-cli --raw $args --eval "$script" , "$@"
+}
+
+coog_redis_debug() { # debug redis script - <context> [args*]
+        [ -z "$1" ] && >&2 echo missing context && return 1
+        local context; context=$1; shift
+        local uri; uri=$(_coog_redis_uri "$context") || return $?
+        local args; args=$(_coog_redis_args "$uri") || return $?
+        local script; script=$(_coog_redis_script "$context") || return $?
+        redis-cli --ldb $args --eval "$script" , "$@"
 }

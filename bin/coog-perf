@@ -2,13 +2,11 @@
 # explore performance analyzes data
 
 coog_perf_main() { # query perf analyzes - command [args]
-        [ -z $1 ] && echo missing command && return 1
-        local cmd
-        cmd="coog_redis_eval perf vendor/tryton-perf-analyzer/main.lua $*"
-        if [ $1 = help ] || [ $1 = io ] || [ $1 = profile ] || [ $1 = query ]
+        [ -z "$1" ] && echo missing command && return 1
+        if [ "$1" = help ] || [ "$1" = io ] || [ "$1" = profile ] || [ "$1" = query ]
         then
-                $cmd
+                coog_redis_eval perf "$@"
         else
-                $cmd | column -t | less
+                coog_redis_eval perf "$@" | column -t | less
         fi
 }
