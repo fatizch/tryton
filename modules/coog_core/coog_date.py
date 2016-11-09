@@ -38,7 +38,7 @@ DAILY_DURATION = [
 
 FREQUENCY = [
     ('', ''),
-    ('dayly', 'Dayly'),
+    ('daily', 'Daily'),
     ('weekly', 'Weekly'),
     ('monthly', 'Monthly'),
     ('quarterly', 'Quarterly'),
@@ -94,7 +94,7 @@ def add_duration(date, duration_unit, duration=1, stick_to_end_of_month=False):
     for example : 01/01/Y + 1 year = 01/01/Y+1
     '''
     duration = int(duration)
-    if duration_unit in ['day', 'dayly']:
+    if duration_unit in ['day', 'daily']:
         res = add_day(date, duration)
     elif duration_unit in ['week', 'weekly']:
         res = add_day(date, 7 * duration)
@@ -200,7 +200,7 @@ def duration_between_and_is_it_exact(date1, date2, duration_unit):
 
 
 def convert_frequency(from_frequency, to_frequency):
-    unsupported_freq = ['day', 'dayly', 'week', 'weekly']
+    unsupported_freq = ['day', 'daily', 'week', 'weekly']
     if from_frequency in unsupported_freq or to_frequency in unsupported_freq:
         raise Exception('Frequency Conversion Unsupported')
 
