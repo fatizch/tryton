@@ -82,7 +82,7 @@ _coog_env_common() { # set common vars
         then
                 if [ -z $COOG_CONF_LOG ]
                 then
-                        LOG_LEVEL=INFO
+                        LOG_LEVEL=WARNING
                 else
                         LOG_LEVEL=`python $COOG_BIN/parse-config.py logger_root level < $COOG_CONF_LOG` || return $?
                 fi
