@@ -199,34 +199,39 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    COOG_TMP               "$COOG_TMP
 }
 
-coog_env_config() { # print conf file <client|server|batch|test|log>
+coog_env_config() { # print or edit conf file <client|server|batch|test|log> [edit]
         [ -z $1 ] && echo missing requested conf && return 1
+        local command_
+        command_="cat"
+        [ $2  = "edit" ] && command_=$EDITOR
+        [ -z $command_ ] && echo "Please set the EDITOR environment variable" \
+            && return 1
         if [ $1 = client ]
         then
                 echo '# '"conf file: $COOG_CONF_CLI"
                 echo
-                cat $COOG_CONF_CLI
+                $command_ $COOG_CONF_CLI
                 return
         fi
         if [ $1 = server ]
         then
                 echo '# '"conf file: $COOG_CONF_SRV"
                 echo
-                cat $COOG_CONF_SRV
+                $command_ $COOG_CONF_SRV
                 return
         fi
         if [ $1 = batch ]
         then
                 echo '# '"conf file: $COOG_CONF_BAT"
                 echo
-                cat $COOG_CONF_BAT
+                $command_ $COOG_CONF_BAT
                 return
         fi
         if [ $1 = test ]
         then
                 echo '# '"conf file: $COOG_CONF_TEST"
                 echo
-                cat $COOG_CONF_TEST
+                $command_ $COOG_CONF_TEST
                 return
         fi
         if [ $1 = log ]
@@ -234,7 +239,7 @@ coog_env_config() { # print conf file <client|server|batch|test|log>
                 [ -z $COOG_CONF_LOG ] && echo no conf log && return 1
                 echo '# '"conf file: $COOG_CONF_LOG"
                 echo
-                cat $COOG_CONF_LOG
+                $command_ $COOG_CONF_LOG
                 return
         fi
         echo unknown conf: $1 && return 1
