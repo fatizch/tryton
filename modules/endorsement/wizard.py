@@ -284,7 +284,7 @@ class EndorsementWizardStepMixin(model.CoogView):
         for k, v in data_dict.iteritems():
             field = Model._fields[k]
             if isinstance(field, tryton_fields.Function):
-                if not field.setter or field.setter == 'setter_void':
+                if not field.setter:
                     continue
                 field = field._field
             if k in ('create_date', 'create_uid', 'write_date', 'write_uid'):
