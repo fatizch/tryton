@@ -1,0 +1,1 @@
+- **Saisie possible de la banque sur un bordereau de chèque**

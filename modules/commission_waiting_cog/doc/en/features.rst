@@ -1,0 +1,1 @@
+- **Emission automatique des mouvements comptables d'attente**
