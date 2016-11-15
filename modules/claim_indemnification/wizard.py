@@ -654,7 +654,7 @@ class CreateIndemnification(Wizard):
                 input_end_date > service.loss.end_date):
             self.raise_user_error('end_date_exceeds_loss')
         if input_end_date and input_start_date and (
-                input_end_date <= input_start_date or
+                input_end_date < input_start_date or
                 input_start_date < service.loss.start_date):
             self.raise_user_error('wrong_date')
         return ClaimService.cancel_indemnification([service], input_start_date)
