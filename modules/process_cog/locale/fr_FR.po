@@ -555,8 +555,8 @@ msgid ""
 msgstr " "
 
 msgctxt "selection:process.transition,kind:"
-msgid "Calculated"
-msgstr "Calculé"
+msgid "Choice"
+msgstr "Choix"
 
 msgctxt "view:ir.ui.view.description:"
 msgid "View Descriptor"

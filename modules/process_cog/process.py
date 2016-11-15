@@ -80,20 +80,20 @@ class ProcessTransition(model.CoogSQL):
     choice_if_true = fields.Many2One('process.transition',
         'Transition if True', states={'invisible': Eval('kind') != 'choice'},
         domain=[
-            ('kind', '=', 'calculated'),
+            ('kind', '=', 'choice'),
             ('main_model', '=', Eval('_parent_on_process', {}).get(
                 'on_model'))], ondelete='RESTRICT')
     choice_if_false = fields.Many2One('process.transition',
         'Transition if False', states={
             'invisible': Eval('kind') != 'choice'}, domain=[
-            ('kind', '=', 'calculated'),
+            ('kind', '=', 'choice'),
             ('main_model', '=', Eval('_parent_on_process', {}).get(
                 'on_model'))], ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
         super(ProcessTransition, cls).__setup__()
-        cls.kind.selection.append(('calculated', 'Calculated'))
+        cls.kind.selection.append(('choice', 'Choice'))
         cls.from_step.domain.extend([
                 ('main_model', '=', Eval('_parent_on_process', {}).get(
                     'on_model'))])
