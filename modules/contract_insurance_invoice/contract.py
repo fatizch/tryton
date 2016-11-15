@@ -55,6 +55,52 @@ FREQUENCIES = [
     ]
 
 
+class CustomRrule(object):
+    '''
+        This class implements the two methods `between` and `after` which are
+        the two methods of `rrule` that we use in get_amount.
+
+        The purpose of this override is to manually manage some edge cases
+        which are not (yet) properly handled by `rrule`.
+        See `premium._get_rrule` for more informations.
+    '''
+    def __init__(self, start, interval):
+        assert start
+        assert interval
+        self._interval = interval
+        self._start = start
+
+    def between(self, start, end):
+        assert start
+        assert end
+        start = start.date()
+        end = end.date() - datetime.timedelta(2)
+        cur_date = self._start
+        result = []
+        i = 1
+        while cur_date <= end:
+            if cur_date >= start and cur_date < end:
+                result.append(datetime.datetime.combine(cur_date,
+                        datetime.time()))
+            cur_date = coog_date.add_month(self._start, self._interval * i,
+                stick_to_end_of_month=True)
+            i += 1
+        return result
+
+    def after(self, date):
+        assert date
+        date = date.date()
+        if date < self._start:
+            return self._start
+        cur_date = self._start
+        i = 1
+        while cur_date < date:
+            cur_date = coog_date.add_month(self._start, self._interval * i,
+                stick_to_end_of_month=True)
+            i += 1
+        return datetime.datetime.combine(cur_date, datetime.time())
+
+
 class Contract:
     __name__ = 'contract'
 
@@ -1653,6 +1699,9 @@ class Premium:
     def get_description(self):
         return getattr(self.parent, 'full_name', self.parent.rec_name)
 
+    def _custom_rrule(self, interval):
+        return CustomRrule(self.start, interval)
+
     def _get_rrule(self, start):
         if self.frequency in ('monthly', 'quarterly', 'half_yearly'):
             freq = MONTHLY
@@ -1661,6 +1710,14 @@ class Premium:
                 'quarterly': 3,
                 'half_yearly': 6,
                 }.get(self.frequency)
+            # Special case for monthly iterations that may skip inexisting
+            # days. For instance, a monthly rrule starting on the 31st of
+            # January will skip over february, etc...
+            # A solution should be implemented soon(TM) :
+            # https://github.com/dateutil/dateutil/issues/285
+            # In the meantime, we use a CustomRrule to manage those edge cases.
+            if start.day in (29, 30, 31):
+                return self._custom_rrule(interval)
         elif self.frequency == 'yearly':
             freq = DAILY
             # Get current year contract start_date
@@ -1724,6 +1781,7 @@ class Premium:
         start = datetime.datetime.combine(start, datetime.time())
         end = datetime.datetime.combine(end, datetime.time())
         if not occurences:
+            # TODO : Why the + 2 ???
             occurences = rrule.between(start, end + datetime.timedelta(2))
         amount = len(occurences) * self.amount
         try:

@@ -187,6 +187,32 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 ):
             self.assertEqual(premium_once_per_year.get_amount(*period), amount)
 
+        premium_29th = self.Premium(
+            start=date(2016, 11, 29),
+            frequency='monthly',
+            amount=Decimal(200),
+            main_contract=contract,
+            )
+        contract.start_date = date(2016, 11, 29)
+        for period, amount in (
+                ((date(2016, 11, 29), date(2017, 11, 28)), Decimal(2400)),
+                ((date(2016, 11, 29), date(2017, 2, 28)), Decimal(600)),
+                ):
+            self.assertEqual(premium_29th.get_amount(*period), amount)
+
+        premium_30th = self.Premium(
+            start=date(2016, 11, 30),
+            frequency='monthly',
+            amount=Decimal(200),
+            main_contract=contract,
+            )
+        contract.start_date = date(2016, 11, 30)
+        for period, amount in (
+                ((date(2016, 11, 30), date(2017, 11, 29)), Decimal(2400)),
+                ((date(2016, 11, 30), date(2017, 2, 28)), Decimal(600)),
+                ):
+            self.assertEqual(premium_30th.get_amount(*period), amount)
+
     @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
     def test_contract_get_invoice_periods(self):
         'Test Contract get_invoice_periods'
