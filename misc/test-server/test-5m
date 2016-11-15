@@ -18,9 +18,13 @@ coog test commit master &>> $COOG_TMP/test-logs
 deactivate
 
 workon coog-master
-TRYTOND_ASYNC_RQ=redis://localhost:6379/1 coog test fullcheck master &>> $COOG_TMP/test-logs
+coog test fullcheck master &>> $COOG_TMP/test-logs
 deactivate
 
 workon coog-1.8
-TRYTOND_ASYNC_RQ=redis://localhost:6379/3 coog test fullcheck coog-1.8 &>> $COOG_TMP/test-logs
+coog test fullcheck coog-1.8 &>> $COOG_TMP/test-logs
+deactivate
+
+workon coog-1.10
+coog test fullcheck coog-1.10 &>> $COOG_TMP/test-logs
 deactivate
