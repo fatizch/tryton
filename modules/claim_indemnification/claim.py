@@ -367,21 +367,23 @@ class ClaimService:
             periods.append(self.new_indemnification(*period))
         return periods
 
-    def get_next_period_end_date(self, from_date):
+    def get_full_period(self, from_date):
+        nb_month = FREQUENCY_CONVERSION_TABLE[self.annuity_frequency]
+        period_start_date = from_date + relativedelta(day=1,
+            month=((from_date.month - 1) // nb_month) * nb_month + 1)
         if self.annuity_frequency:
-            nb_month = FREQUENCY_CONVERSION_TABLE[self.annuity_frequency]
-            period_start_date = from_date + relativedelta(day=1,
-                month=((from_date.month - 1) // nb_month) * nb_month + 1)
-            return period_start_date + relativedelta(months=nb_month, days=-1)
+            period_end_date = period_start_date + \
+                relativedelta(months=nb_month, days=-1)
+            return (period_start_date, period_end_date)
         elif self.loss.end_date:
-            return self.loss.end_date
+            return (period_start_date, self.loss.end_date)
 
     def get_new_indemnification_periods(self, until):
         periods = []
         end_date = self.paid_until_date
         while end_date < until:
             base_date = coog_date.add_day(end_date, 1)
-            end_date = self.get_next_period_end_date(base_date)
+            start_date, end_date = self.get_full_period(base_date)
             periods.append((base_date, end_date))
         return periods
 
@@ -394,17 +396,20 @@ class ClaimService:
 
     def calculate_annuity_periods(self, from_date, to_date):
         '''
-            return a list with a tuple with :
-            period from_date, period to_date, is_full_period, prorata, unit
+            This method calculate annuity period between two dates.
+            It return a list of tuples with
+            start date,
+            end date,
+            full_period to know if the period is a full period,
+            prorata represents the period number of month if is a full period
+            else the number of days,
+            unit represent the time unit 'days', 'month' ...
         '''
         nb_month = FREQUENCY_CONVERSION_TABLE[self.annuity_frequency]
-        period_start_date = self.get_next_period_end_date(from_date)
-        period_end_date = period_start_date
+        period_start_date, period_end_date = self.get_full_period(from_date)
         res = []
-        while period_end_date < to_date:
+        while period_start_date < to_date:
             full_period = True
-            period_end_date = self.get_next_period_end_date(
-                period_start_date)
             cur_period_start = max(period_start_date, from_date)
             cur_period_end = min(period_end_date, to_date)
             if (cur_period_start == from_date and
@@ -419,7 +424,8 @@ class ClaimService:
             else:
                 res.append((cur_period_start, cur_period_end, full_period,
                     (cur_period_end - cur_period_start).days + 1, 'day'))
-            period_start_date = period_end_date + relativedelta(days=1)
+            period_start_date, period_end_date = self.get_full_period(
+                period_end_date + relativedelta(days=1))
         return res
 
 

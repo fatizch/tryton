@@ -47,10 +47,10 @@ FREQUENCY = [
     ]
 
 FREQUENCY_CONVERSION_TABLE = {
-    'yearly': Decimal(12),
-    'half_yearly': Decimal(6),
-    'quarterly': Decimal(3),
-    'monthly': Decimal(1),
+    'yearly': 12,
+    'half_yearly': 6,
+    'quarterly': 3,
+    'monthly': 1,
     }
 
 
