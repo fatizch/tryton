@@ -515,6 +515,19 @@ class Property(ExportImportMixin):
         result.add('res')
         return result
 
+    @classmethod
+    def models_get(cls):
+        # Override original version to use translated names
+        pool = Pool()
+        Model = pool.get('ir.model')
+        models = cls._models_get_cache.get(None)
+        if models:
+            return models
+        models = sorted([(x.model, x.name) for x in Model.search([])],
+            key=lambda x: x[1]) + [('', '')]
+        cls._models_get_cache.set(None, models)
+        return models
+
 
 class Lang(ExportImportMixin):
     __name__ = 'ir.lang'
