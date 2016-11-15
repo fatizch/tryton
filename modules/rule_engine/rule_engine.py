@@ -298,11 +298,18 @@ class RuleExecutionLog(ModelSQL, ModelView):
     calls = fields.Text('Calls', states={'readonly': True})
     calculation_date = fields.Date('Calculation Date', readonly=True)
     context = fields.Text('Context', readonly=True)
+    rule_algorithm = fields.Function(
+        fields.Text('Rule Algorithm'),
+        'on_change_with_rule_algorithm')
 
     @classmethod
     def __setup__(cls):
         super(RuleExecutionLog, cls).__setup__()
         cls._order.insert(0, ('calculation_date', 'DESC'))
+
+    @fields.depends('rule')
+    def on_change_with_rule_algorithm(self, name=None):
+        return self.rule.algorithm
 
     def init_from_rule_result(self, result):
         self.errors = '\n'.join(result.print_errors())

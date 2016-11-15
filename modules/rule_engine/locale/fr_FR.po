@@ -581,6 +581,10 @@ msgctxt "field:rule_engine.log,rule:"
 msgid "Rule"
 msgstr "Règle"
 
+msgctxt "field:rule_engine.log,rule_algorithm:"
+msgid "Rule Algorithm"
+msgstr "Algorithme de la règle"
+
 msgctxt "field:rule_engine.log,user:"
 msgid "User"
 msgstr "Utilisateur"
