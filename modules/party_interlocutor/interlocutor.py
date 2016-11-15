@@ -26,7 +26,7 @@ class ContactInterlocutor(model.CoogSQL, model.CoogView):
         'interlocutor', 'contact_mechanism', 'Contact Mechanisms',
         domain=[('party', '=', Eval('party'))], depends=['party'])
     party = fields.Many2One('party.party', 'Party', ondelete='CASCADE',
-        domain=[('is_company', '=', True)], required=True, select=True)
+        domain=[('is_person', '=', False)], required=True, select=True)
     email = fields.Function(
         fields.Char('E-Mail'), 'get_mechanism')
     phone = fields.Function(
