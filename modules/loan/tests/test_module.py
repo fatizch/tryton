@@ -860,7 +860,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         loan = self.Loan(
             lender_address=address,
             kind='fixed_rate',
-            funds_release_date=datetime.date(2013, 3, 22),
+            funds_release_date=datetime.date(2013, 2, 22),
             first_payment_date=datetime.date(2013, 3, 22),
             rate=Decimal('0.01'),
             amount=Decimal(200000),

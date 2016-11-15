@@ -107,7 +107,8 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
     funds_release_date = fields.Date('Funds Release Date', required=True,
         states=_STATES, depends=_DEPENDS)
     first_payment_date = fields.Date('First Payment Date', required=True,
-        states=_STATES, depends=_DEPENDS)
+        domain=[('first_payment_date', '>', Eval('funds_release_date'))],
+        states=_STATES, depends=['state', 'funds_release_date'])
     loan_shares = fields.One2Many('loan.share', 'loan', 'Loan Shares',
         readonly=True, states={'invisible': ~Eval('loan_shares')},
         delete_missing=True, target_not_indexed=True)
@@ -414,7 +415,8 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
                 outstanding_balance=self.amount,
                 )]
         begin_balance = self.amount
-        if self.first_payment_date == self.on_change_with_first_payment_date():
+
+        if self.first_payment_date == self.calculate_synch_first_payment_date():
             # First payment date is synchronised with funds release date
             initial_date = self.funds_release_date
             shift = 1
@@ -674,11 +676,7 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
 
     @fields.depends('payment_frequency', 'funds_release_date')
     def on_change_with_first_payment_date(self):
-        if self.funds_release_date and self.payment_frequency:
-            return coog_date.add_duration(self.funds_release_date,
-                self.payment_frequency, stick_to_end_of_month=True)
-        else:
-            return None
+        return self.calculate_synch_first_payment_date()
 
     @fields.depends('kind', 'rate')
     def on_change_with_rate(self):
@@ -758,6 +756,13 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
                     increment.start_date < previous_end):
                 increment.manual = True
         self.increments = new_increments
+
+    def calculate_synch_first_payment_date(self):
+        if self.funds_release_date and self.payment_frequency:
+            return coog_date.add_duration(self.funds_release_date,
+                self.payment_frequency, stick_to_end_of_month=True)
+        else:
+            return None
 
     @classmethod
     def get_insured_persons_name(cls, loans, name=None):
