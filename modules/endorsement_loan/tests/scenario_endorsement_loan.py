@@ -412,8 +412,8 @@ len(increments) == 1
 
 # #Comment# # TEST CHANGE ANY DATE
 # #Comment# #Create Loan
-funds_release_date = loan_payment_date = contract_start_date = datetime.date(
-    2013, 3, 22)
+funds_release_date = contract_start_date = datetime.date(2013, 2, 22)
+loan_payment_date = datetime.date(2013, 3, 22)
 loan = Loan()
 loan.lender_address = bank_address
 loan.company = company
@@ -450,7 +450,7 @@ contract.billing_informations.append(BillingInformation(
 contract.save()
 
 # #Comment# #New Endorsement
-new_increment_date = datetime.date(2023, 3, 22)
+new_increment_date = datetime.date(2023, 2, 22)
 new_endorsement = Wizard('endorsement.start')
 new_endorsement.form.contract = contract
 new_endorsement.form.endorsement_definition = change_any_date
