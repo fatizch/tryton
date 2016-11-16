@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from itertools import groupby
+
 from trytond.pyson import Eval, Or
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -31,7 +33,8 @@ class EventTypeAction:
     @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
-            ('initiate_process', 'Initiate Process')]
+            ('initiate_process', 'Initiate Process'),
+            ('clear_process', 'Clear Process')]
 
     @classmethod
     def _export_light(cls):
@@ -58,10 +61,30 @@ class EventTypeAction:
         return super(EventTypeAction, self).filter_objects(process_objects)
 
     def execute(self, objects, event_code, description=None, **kwargs):
+        if self.action == 'clear_process':
+            return self._action_clear_process(objects, event_code, description,
+                **kwargs)
+        elif self.action == 'initiate_process':
+            return self._action_initiate_process(objects, event_code,
+                description, **kwargs)
+        else:
+            return super(EventTypeAction, self).execute(objects, event_code)
+
+    def _action_clear_process(self, objects, event_code, description,
+            **kwargs):
+        pool = Pool()
+
+        def keyfunc(x):
+            return x.__name__
+
+        objects.sort(key=keyfunc)
+        for name, group in groupby(objects, key=keyfunc):
+            pool.get(name).write(list(group), {'current_state': None})
+
+    def _action_initiate_process(self, objects, event_code, description,
+            **kwargs):
         pool = Pool()
         Event = pool.get('event')
-        if self.action != 'initiate_process':
-            return super(EventTypeAction, self).execute(objects, event_code)
         process = self.process_to_initiate
         process_model_name = process.on_model.model
         state = process.first_step()
