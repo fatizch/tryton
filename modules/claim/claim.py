@@ -293,18 +293,14 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
                 to_save.append(claim)
         cls.save(to_save)
 
-    def add_new_loss(self, loss_desc_code, parameters=None):
-        for loss in self.losses:
-            if (not loss.end_date and loss.loss_desc and
-                    loss.loss_desc.code == loss_desc_code):
-                return
+    def add_new_loss(self, loss_desc_code, **kwargs):
         loss = Pool().get('claim.loss')()
         loss.claim = self
-        loss.init_loss(loss_desc_code, parameters)
+        loss.init_loss(loss_desc_code, **kwargs)
         self.losses = self.losses + (loss, )
 
     def ws_add_new_loss(self, loss_desc_code, parameters=None):
-        self.add_new_loss(loss_desc_code, parameters)
+        self.add_new_loss(loss_desc_code, **parameters)
         self.save()
 
     @classmethod
@@ -497,6 +493,17 @@ class Loss(model.CoogSQL, model.CoogView):
             service = self.init_service(option, benefit)
             if service:
                 self.services = self.services + (service,)
+
+    def init_loss(self, loss_desc_code, **kwargs):
+        pool = Pool()
+        LossDesc = pool.get('benefit.loss.description')
+        self.loss_desc, = LossDesc.search([('code', '=', loss_desc_code)])
+        self.event_desc = self.loss_desc.event_descs[0]
+        self.extra_data = utils.init_extra_data(self.loss_desc.extra_data_def)
+        if not kwargs:
+            return
+        for arg, value in kwargs.iteritems():
+            setattr(self, arg, value)
 
     def get_contracts(self):
         return list(set([x.contract for x in self.services]))
