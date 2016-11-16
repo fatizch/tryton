@@ -520,6 +520,10 @@ msgctxt "field:process.transition,methods:"
 msgid "Methods"
 msgstr "Méthodes"
 
+msgctxt "field:process.transition,name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:process.transition,on_process:"
 msgid "On Process"
 msgstr "Sur le Processus"

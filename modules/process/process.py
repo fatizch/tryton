@@ -7,6 +7,9 @@ import ast
 import json
 from unidecode import unidecode
 
+from sql import Literal
+
+from trytond import backend
 from trytond.model import ModelView, ModelSQL, Unique
 from trytond.wizard import Wizard, StateAction
 from trytond.report import Report
@@ -230,11 +233,13 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
                     break
             if cur_step.id not in result:
                 result[cur_step.id] = ('step', cur_step)
+        complete_buttons = []
         for trans in self.transitions:
             if (trans.from_step == step_relation.step and
                     trans.kind == 'complete'):
-                result['complete'] = trans
-                break
+                complete_buttons.append(trans)
+        if complete_buttons:
+            result['complete'] = complete_buttons
         return result
 
     def get_or_create_root_menu_for_lang(self, lang):
@@ -389,8 +394,8 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
                     the_step.fancy_name, self.id, step_relation.step.id,
                     the_step.id)
                 continue
-        if 'complete' in the_buttons:
-            xml += the_buttons['complete'].build_button()
+        for button in the_buttons.get('complete', []):
+            xml += button.build_button()
         return nb_buttons, xml
 
     def get_xml_for_steps(self):
@@ -764,6 +769,10 @@ class ProcessTransition(ModelSQL, ModelView):
             ('standard', 'Standard Transition'),
             ('complete', 'Complete Process')],
         'Transition Kind', required=True)
+    name = fields.Char('Name', states={
+            'required': Eval('kind') == 'complete',
+            'invisible': Eval('kind') == 'standard',
+            }, depends=['kind'], translate=True)
     # Could be useful if we need to find the dependencies of the pyson expr :
     #  re.compile('Eval\(\'([a-zA-Z0-9._]*)\'', re.I|re.U) + finditer
     pyson = fields.Char('Pyson Constraint')
@@ -784,6 +793,23 @@ class ProcessTransition(ModelSQL, ModelView):
         cls._error_messages.update({
                 'complete_button_label': 'Complete',
                 })
+
+    @classmethod
+    def __register__(cls, module):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().connection.cursor()
+        transition_h = TableHandler(cls, module)
+        to_migrate = not transition_h.column_exist('name')
+        super(ProcessTransition, cls).__register__(module)
+
+        # Migrate from 1.10 : Allow to customize complete transition name
+        to_update = cls.__table__()
+        if to_migrate:
+            cursor.execute(*to_update.update(
+                    columns=[to_update.name],
+                    values=[Literal('Complete')],
+                    where=to_update.kind == 'complete',
+                    ))
 
     @classmethod
     def view_attributes(cls):
@@ -823,8 +849,7 @@ class ProcessTransition(ModelSQL, ModelView):
 
     def build_button(self):
         if self.kind == 'complete':
-            complete_name = self.on_process.end_step_name or 'Complete'
-            xml = '<button string="%s" ' % complete_name
+            xml = '<button string="%s" ' % self.name
             xml += 'name="_button_transition_%s_%s"/>' % (
                 self.on_process.id, self.id)
             return xml
