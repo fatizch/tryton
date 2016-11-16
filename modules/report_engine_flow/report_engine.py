@@ -113,7 +113,7 @@ class FlowVariable(model.CoogSQL, model.CoogView):
                     '{%%end%%}{%%otherwise%%}%s{%%end%%}%s{%%end%%}'
                     % (this.get_else_generated_code(this), separator)),
             'data': lambda this, separator: ('${%s if (%s) else %s}%s' % (
-                this.data, this.data, cls.default_not_data(this), separator),
+                this.data, this.data, cls._default_not_data(this), separator),
                 ''),
             'free': lambda this, separator: (this.data + separator, ''),
             'function': lambda this, separator: ('${%s}%s' % (
@@ -124,7 +124,7 @@ class FlowVariable(model.CoogSQL, model.CoogView):
                 'The description must be unique.')]
 
     @classmethod
-    def default_not_data(cls, node):
+    def _default_not_data(cls, node):
         return '""'
 
     @classmethod
