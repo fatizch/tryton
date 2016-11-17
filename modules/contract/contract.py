@@ -2102,7 +2102,7 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
                 where=(contract.company == company_id) if company_id else
                 None))
         options = cls.browse([x['id'] for x in cursor_dict(cursor)])
-        return [o for o in options if o.is_active_at_date()]
+        return [o for o in options if o.is_active_at_date(at_date)]
 
 
 class ContractOptionVersion(model.CoogSQL, model.CoogView):
