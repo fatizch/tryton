@@ -1365,30 +1365,10 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             return self.product.currency
 
     @classmethod
-    def get_possible_contracts_from_party(cls, party, at_date):
-        if not party:
-            return []
-        cursor = Transaction().connection.cursor()
-        pool = Pool()
-        contract = pool.get('contract').__table__()
-        history = pool.get('contract.activation_history').__table__()
-
-        query_table = contract.join(history, condition=(
-                (contract.id == history.contract)
-                & (contract.subscriber == party.id)
-                & (
-                    (contract.status == 'active')
-                    | (contract.status == 'hold'))
-                & (history.start_date <= at_date)
-                & (
-                    (history.end_date == Null)
-                    | (history.end_date >= at_date))
-                ))
-        company_id = Transaction().context.get('company', None)
-        cursor.execute(*query_table.select(contract.id,
-                where=(contract.company == company_id) if company_id else
-                None))
-        return cls.browse([x['id'] for x in cursor_dict(cursor)])
+    def get_covered_contracts_from_party(cls, party, at_date):
+        Option = Pool().get('contract.option')
+        options = Option.get_covered_options_from_party(party, at_date)
+        return list({option.parent_contract for option in options})
 
     def get_appliable_logo(self, kind=''):
         if self.company:
@@ -2093,6 +2073,36 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
     def decline_option(self, reason):
         self.status = 'declined'
         self.sub_status = reason
+
+    def is_active_at_date(self, at_date):
+        return (at_date >= (self.initial_start_date or datetime.date.min) and
+            at_date <= (self.final_end_date or datetime.date.max))
+
+    @classmethod
+    def get_covered_options_from_party(cls, party, at_date):
+        if not party:
+            return []
+        cursor = Transaction().connection.cursor()
+        pool = Pool()
+        option = pool.get('contract.option').__table__()
+        contract = pool.get('contract').__table__()
+        history = pool.get('contract.activation_history').__table__()
+
+        query_table = contract.join(history, condition=(
+                (contract.id == history.contract)
+                & (contract.subscriber == party.id)
+                & (history.start_date <= at_date)
+                & (
+                    (history.end_date == Null)
+                    | (history.end_date >= at_date)))
+            ).join(option, condition=(
+                option.contract == contract.id))
+        company_id = Transaction().context.get('company', None)
+        cursor.execute(*query_table.select(contract.id,
+                where=(contract.company == company_id) if company_id else
+                None))
+        options = cls.browse([x['id'] for x in cursor_dict(cursor)])
+        return [o for o in options if o.is_active_at_date()]
 
 
 class ContractOptionVersion(model.CoogSQL, model.CoogView):

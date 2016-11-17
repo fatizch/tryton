@@ -45,8 +45,6 @@ class Option:
 
     def get_possible_benefits(self, loss):
         res = []
-        if not self.is_item_covered(loss):
-            return res
         for benefit in self.coverage.get_possible_benefits(
                 loss.loss_desc, loss.event_desc, loss.get_date()):
             res.append((benefit, self))

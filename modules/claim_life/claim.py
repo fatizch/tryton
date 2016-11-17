@@ -149,6 +149,14 @@ class Loss:
                 res.update(covered_element.get_all_extra_data(self.start_date))
         return res
 
+    def covered_options(self):
+        Option = Pool().get('contract.option')
+        person = self.get_covered_person()
+        if person:
+            return Option.get_covered_options_from_party(person,
+                self.get_date() or self.declaration_date)
+        return super(Loss, self).covered_options()
+
 
 class ClaimService:
     __name__ = 'claim.service'

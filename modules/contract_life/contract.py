@@ -15,18 +15,6 @@ class Contract:
     __name__ = 'contract'
 
     @classmethod
-    def get_possible_contracts_from_party(cls, party, at_date):
-        # TODO : Move to claim ?
-        res = super(Contract, cls).get_possible_contracts_from_party(party,
-            at_date)
-        if not party:
-            return res
-        res = set(res)
-        for cov_elem in cls.get_possible_covered_elements(party, at_date):
-            res.add(cov_elem.main_contract)
-        return list(res)
-
-    @classmethod
     def get_possible_covered_elements(cls, party, at_date):
         # TODO : Move to claim ?
         CoveredElement = Pool().get('contract.covered_element')
@@ -61,3 +49,14 @@ class ContractOption:
     def on_change_with_person(self, name=None):
         if self.covered_element and self.covered_element.party:
             return self.covered_element.party.id
+
+    @classmethod
+    def get_covered_options_from_party(cls, party, at_date):
+        CoveredElement = Pool().get('contract.covered_element')
+        options = super(ContractOption, cls).get_covered_options_from_party(
+            party, at_date)
+        for covered in CoveredElement.search([('party', '=', party.id)]):
+            if not covered.is_valid_at_date(at_date):
+                continue
+            options.extend(covered.fill_list_with_covered_options(at_date))
+        return options

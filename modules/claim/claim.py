@@ -242,7 +242,7 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
         if not at_date:
             at_date = self.declaration_date
         Contract = Pool().get('contract')
-        return Contract.get_possible_contracts_from_party(self.claimant,
+        return Contract.get_covered_contracts_from_party(self.claimant,
             at_date)
 
     def getter_possible_contracts(self, name=None):
@@ -280,14 +280,13 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
             changed = False
             for loss in claim.losses:
                 deliver = [service.benefit for service in loss.services]
-                for contract in claim.possible_contracts:
-                    for benefit, option in \
-                            contract.get_possible_benefits(loss):
-                        if (benefit in deliver or
-                                not benefit.automatically_deliver):
-                            continue
-                        loss.init_services(option, [benefit])
-                        changed = True
+                for benefit, option in \
+                        loss.covered_benefit_and_options():
+                    if (benefit in deliver or
+                            not benefit.automatically_deliver):
+                        continue
+                    loss.init_services(option, [benefit])
+                    changed = True
             if changed:
                 claim.losses = list(claim.losses)
                 to_save.append(claim)
@@ -529,6 +528,18 @@ class Loss(model.CoogSQL, model.CoogView):
     def validate(cls, instances):
         for instance in instances:
             instance.check_end_date()
+
+    def covered_options(self):
+        Option = Pool().get('contract.option')
+        return Option.get_covered_options_from_party(self.claim.claimant,
+            self.get_date() or self.declaration_date)
+
+    def covered_benefit_and_options(self):
+        options = self.covered_options()
+        res = []
+        for option in options:
+            res.extend(option.get_possible_benefits(self))
+        return res
 
 
 class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):

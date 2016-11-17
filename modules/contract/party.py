@@ -95,7 +95,7 @@ class Party:
 
     def ws_get_covered_contracts_at_date(self, date):
         Contract = Pool().get('contract')
-        contracts = Contract.get_possible_contracts_from_party(self, date)
+        contracts = Contract.get_covered_contracts_from_party(self, date)
         return [c.id for c in contracts]
 
 
