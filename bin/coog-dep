@@ -39,7 +39,7 @@ coog_dep_main() { # install base deps
                 scipy \
                 uwsgi \
                 rq \
-                celery \
+                "celery<4.0" \
                 sphinx \
                 sphinxcontrib-inheritance \
                 pytest
