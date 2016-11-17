@@ -125,7 +125,6 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
     def set_contributions(cls, salaries):
         pass
 
-    @classmethod
     def get_currency(self):
         if self.service:
             return self.service.currency
@@ -278,12 +277,13 @@ class ClaimService:
         # Salary.update_salary_with_existing_info(to_save)
         Salary.save(to_save)
 
-    def get_salary_mode(self, name):
+    def get_salary_mode(self, name=None):
         return self.benefit.benefit_rules[0].option_benefit_at_date(
             self.option, self.loss.start_date).salary_mode
 
     def init_from_loss(self, loss, benefit):
         super(ClaimService, self).init_from_loss(loss, benefit)
+        self.salary_mode = self.get_salary_mode()
         self.init_salaries()
 
     def calculate_basic_salary(self, salaries_def, current_salary=None):
