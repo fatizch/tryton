@@ -407,16 +407,16 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
 
     @classmethod
     def search_rec_name(cls, name, clause):
+        # TODO : add an index on full_name search
         if clause[1].startswith('!') or clause[1].startswith('not '):
             bool_op = 'AND'
         else:
             bool_op = 'OR'
         return [bool_op,
-            ('first_name',) + tuple(clause[1:]),
-            ('name',) + tuple(clause[1:]),
             ('code',) + tuple(clause[1:]),
             ('identifiers.code',) + tuple(clause[1:]),
             ('ssn',) + tuple(clause[1:]),
+            ('full_name',) + tuple(clause[1:]),
         ]
 
     @classmethod
