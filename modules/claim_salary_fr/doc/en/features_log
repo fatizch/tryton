@@ -1,0 +1,7 @@
+* Handle annual salaries
+
+Version 1.10 - 2016-11-02
+* Adding fixed rates for the net salary computing
+* Adding the sum of bonuses amount, gross salaries and net salaries in the footer
+* Net salary computing using the gross salary and french income brackets
+* Module creation

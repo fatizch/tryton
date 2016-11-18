@@ -1,0 +1,34 @@
+Version 1.10 - 2016-11-02
+* Display contract status in color in form view according to its value
+
+Version 1.8 - 2016-07-06
+* Batch to automatically decline quotes exceeding a delay of inactivity
+* Add order methods on start_date, end_date and rec_name for contract list view sorting
+* Add distinct quote entry point
+* Allow to initialize contacts and check their consistency
+
+Version 1.6 - 2015-12-23
+* Add contract field on event logs
+* Display contract in different colors in tree view according to state.
+* Add contract icon on tree view
+
+Version 1.5 - 2015-09-24
+* Add cache on contract.sub_status
+* Add contract.option.version and move extra_data in contract module
+* Voiding a contract preserves initial_start_date and activation_history
+* Add sub_status to option
+
+Version 1.4 - 2015-05-29
+* Add wizard to stop (terminate / void) contracts
+* Add relate to event logs from contract if the module is installed
+* Allow to pre-set termination reason
+
+Version 1.3 - 2015-01-22
+* Centralize calculate method
+* Add automatic calculation of end_dates
+* Add subscription web service
+* Add possibility to subscribe several options at the same time with a package
+* Added Wizard to change start date of contract with propagation to related objects before activation.
+
+Version 1.2 - 2014-07-01
+* Changelog file creation

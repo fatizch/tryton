@@ -1,0 +1,11 @@
+Version 1.10 - 2016-11-02
+* Allow scheduling of all indemnifications in one click
+* Improve claim invoices workflow and readability
+* Configure accounting products per benefit, handle taxes
+* Handle automatic indemnification periods creation for annuity benefits
+* Add select service step on indemnification creation wizard
+* Handling overlapping periods and cancelled indemnifications
+* Add deductible date on claim service - Allow to use it in rule engine
+
+Version 1.8 - 2016-07-06
+* Module Creation

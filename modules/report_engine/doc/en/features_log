@@ -1,0 +1,20 @@
+Version 1.10 - 2016-11-02
+
+Version 1.8 - 2016-07-06
+* Add custom rounding function
+* Allow to generate reports with a style template
+* Add custom input parameters to report template
+* Authorize entering paths with subfolders as export destination
+
+Version 1.6 - 2015-12-23
+* Handle asynchronous report production
+* Add wizard to ease migration of names in report templates
+* Allow to define report templates to be printed at given event
+* Add option to export the document on generation to the server filesystem
+* Add option to store the original generated document in the internal edm even if the final output is converted to pdf
+* Make conversion to pdf optional for automatic generation of documents
+* Enable one click printing or mail
+
+Version 1.4 - 2015-05-29
+* Add generic process report method
+* Module creation
