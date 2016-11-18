@@ -7,15 +7,24 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool, In
 from trytond.modules.coog_core import fields
 
-__metaclass__ = PoolMeta
 __all__ = [
+    'Claim',
     'Loss',
     'ClaimService',
     'ClaimServiceExtraDataRevision',
     ]
 
 
+class Claim:
+    __metaclass__ = PoolMeta
+    __name__ = 'claim'
+
+    def add_new_relapse(self, loss_desc_code):
+        self.add_new_loss(loss_desc_code, is_a_relapse=True)
+
+
 class Loss:
+    __metaclass__ = PoolMeta
     __name__ = 'claim.loss'
 
     possible_covered_persons = fields.Function(
@@ -68,6 +77,12 @@ class Loss:
         cls.end_date.depends.append('loss_desc_kind')
         cls._error_messages.update({
                 'relapse': 'Relapse',
+                'missing_previous_loss': 'An inital std must be created in '
+                'order to declare a relapse',
+                'previous_loss_end_date_missing': "The previous std "
+                "doesn't have an end date defined",
+                'one_day_between_relapse_and_previous_loss': 'One day is '
+                'required between the relapse and the previous std'
                 })
 
     def get_start_end_dates(self, name):
@@ -157,8 +172,26 @@ class Loss:
                 self.get_date() or self.declaration_date)
         return super(Loss, self).covered_options()
 
+    def pre_validate(self):
+        super(Loss, self).pre_validate()
+        if not self.is_a_relapse:
+            return
+        if self.claim.losses.index(self) == 0:
+            self.raise_user_error('missing_previous_loss')
+        if not self.start_date:
+            return
+        previous_loss = self.claim.losses[
+            self.claim.losses.index(self) - 1]
+        if not previous_loss.end_date:
+            self.raise_user_error('previous_loss_end_date_missing')
+        if (self.start_date - previous_loss.end_date).days <= 1:
+            # As it's a relapse there must be one day of work betwwen two std
+            self.raise_user_error(
+                'one_day_between_relapse_and_previous_loss')
+
 
 class ClaimService:
+    __metaclass__ = PoolMeta
     __name__ = 'claim.service'
 
     def get_covered_person(self):
@@ -184,6 +217,7 @@ class ClaimService:
 
 
 class ClaimServiceExtraDataRevision:
+    __metaclass__ = PoolMeta
     __name__ = 'claim.service.extra_data'
 
     @classmethod

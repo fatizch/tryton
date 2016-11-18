@@ -3,12 +3,27 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:claim.loss:"
+msgid "An inital std must be created in order to declare a relapse"
+msgstr "Un arrêt initial est requis avant de pouvoir créer une rechute"
+
+msgctxt "error:claim.loss:"
 msgid "End Date is smaller than start date"
 msgstr "La date de fin est antérieure à la date de début"
 
 msgctxt "error:claim.loss:"
+msgid "One day is required between the relapse and the previous std"
+msgstr ""
+"Il doit y avoir au moins un jour d'écart entre la date de fin de l'arrêt "
+"précédent et la rechute"
+
+msgctxt "error:claim.loss:"
 msgid "Relapse"
 msgstr "Rechute"
+
+msgctxt "error:claim.loss:"
+msgid "The previous std doesn't have an end date defined"
+msgstr ""
+"La date de fin d'arrêt de travail du précédent arrêt n'est pas définie"
 
 msgctxt "field:benefit.loss.description,with_end_date:"
 msgid "With End Date"

@@ -16,6 +16,7 @@ def register():
         ContractOption,
         ClaimService,
         ClaimServiceExtraDataRevision,
+        Claim,
         Loss,
         RuleEngineRuntime,
         TestCaseModel,
