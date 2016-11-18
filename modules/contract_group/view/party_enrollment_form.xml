@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form string="Enrollments" col="2">
+    <label name="parent"/>
+    <field name="parent"/>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="manual_start_date"/>
+    <field name="manual_start_date"/>
+    <label name="manual_end_date"/>
+    <field name="manual_end_date"/>
+    <label name="end_reason"/>
+    <field name="end_reason" widget="selection"/>
+    <field name="versions" colspan="2" mode="form,tree"/>
+    <newline/>
+    <field name="item_kind"/>
+    <field name="is_person"/>
+    <field name="party_extra_data" invisible="1"/>
+    <field name="product" invisible="1"/>
+    <field name="options" invisible="1"/>
+    <field name="item_desc" invisible="1"/>
+    <field name="main_contract" invisible="1"/>
+    <field name="contract" invisible="1"/>
+</form>

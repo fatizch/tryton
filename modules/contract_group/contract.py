@@ -61,6 +61,13 @@ class CoveredElement:
     __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element'
 
+    subscriber = fields.Function(
+        fields.Many2One('party.party', 'Subscriber'),
+        'get_subscriber')
+
+    def get_subscriber(self, name):
+        return self.main_contract.subscriber.id
+
     @classmethod
     def create(cls, vlist):
         Event = Pool().get('event')

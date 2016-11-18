@@ -74,20 +74,24 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">enrollment_form</field>
         </record>
+        <!-- The following view is quite the same as the one above : 
+             the 'selection' widget on the 'parent' field has been removed 
+             due to load of all the 'covered_element' that causes a slowdown -->
+        <record model="ir.ui.view" id="party_enrollment_view_form">
+            <field name="model">contract.covered_element</field>
+            <field name="type">form</field>
+            <field name="name">party_enrollment_form</field>
+        </record>
         <record model="ir.ui.view" id="enrollment_view_list">
             <field name="model">contract.covered_element</field>
             <field name="type">tree</field>
             <field name="name">enrollment_list</field>
         </record>
+        <!-- Contract relate -->
         <record model="ir.action.act_window" id="act_display_enrollment_form">
             <field name="name">Enrollments</field>
             <field name="res_model">contract.covered_element</field>
             <field name="domain" eval="[('parent.contract', '=', Eval('active_id'))]" pyson="1"/>
-        </record>
-        <record model="ir.action.keyword" id="act_display_enrollment_keyword">
-            <field name="keyword">form_relate</field>
-            <field name="model">contract,-1</field>
-            <field name="action" ref="act_display_enrollment_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_display_enrollment_list_view">
             <field name="sequence" eval="10"/>
@@ -98,6 +102,32 @@ this repository contains the full copyright notices and license terms. -->
             <field name="sequence" eval="20"/>
             <field name="view" ref="enrollment_view_form"/>
             <field name="act_window" ref="act_display_enrollment_form"/>
+        </record>
+        <record model="ir.action.keyword" id="act_display_enrollment_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_display_enrollment_form"/>
+        </record>
+        <!-- Party relate -->
+        <record model="ir.action.act_window" id="act_display_party_enrollments">
+            <field name="name">Enrollments</field>
+            <field name="res_model">contract.covered_element</field>
+            <field name="domain" eval="[('party', '=', Eval('active_id')), ('parent', '!=', None)]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_display_party_enrollment_list_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="enrollment_view_list"/>
+            <field name="act_window" ref="act_display_party_enrollments"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_display_party_enrollment_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="party_enrollment_view_form"/>
+            <field name="act_window" ref="act_display_party_enrollments"/>
+        </record>
+        <record model="ir.action.keyword" id="act_relate_enrollments_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="act_display_party_enrollments"/>
         </record>
     </data>
 </tryton>

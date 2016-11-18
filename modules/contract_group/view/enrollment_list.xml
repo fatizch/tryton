@@ -6,4 +6,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="manual_start_date"/>
     <field name="manual_end_date"/>
     <field name="end_reason"/>
+    <field name="main_contract"/>
+    <field name="subscriber"/>
+    <field name="parent"/>
 </tree>

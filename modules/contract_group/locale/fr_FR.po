@@ -18,6 +18,10 @@ msgctxt "field:contract,is_group:"
 msgid "Group Contract"
 msgstr "Contrat Collectif"
 
+msgctxt "field:contract.covered_element,subscriber_name:"
+msgid "Subscriber name"
+msgstr "Souscripteur"
+
 msgctxt "field:contract.option,is_group:"
 msgid "Group Option"
 msgstr "Garantie collective"
@@ -156,6 +160,10 @@ msgid "Group Coverages"
 msgstr "Garanties Collectives"
 
 msgctxt "model:ir.action,name:act_display_enrollment_form"
+msgid "Enrollments"
+msgstr "Affiliations"
+
+msgctxt "model:ir.action,name:act_display_party_enrollments"
 msgid "Enrollments"
 msgstr "Affiliations"
 
