@@ -16,6 +16,7 @@ def register():
     Pool.register(
         Party,
         Insurer,
+        InsurerDelegation,
         ItemDescription,
         OptionDescription,
         Product,

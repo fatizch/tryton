@@ -10,6 +10,14 @@ msgctxt "error:extra_premium.kind:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
+msgctxt "error:insurer.delegation:"
+msgid "There can be only one delegation per insurance family."
+msgstr "Il ne peut y avoir qu'une seule règle de délégation par ligne métier."
+
+msgctxt "error:insurer:"
+msgid "There must be at least one \"generic\" delegation rule for %s."
+msgstr "Il doit y avoir au moins une règle de délégation \"générique\" pour %s."
+
 msgctxt "error:offered.exclusion:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
@@ -280,6 +288,10 @@ msgctxt "field:insurer,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:insurer,delegations:"
+msgid "Insurer Delegations"
+msgstr "Délégations de l'assureur"
+
 msgctxt "field:insurer,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
@@ -305,6 +317,46 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:insurer,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:insurer.delegation,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:insurer.delegation,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:insurer.delegation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:insurer.delegation,family:"
+msgid "Family"
+msgstr "Famille"
+
+msgctxt "field:insurer.delegation,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:insurer.delegation,insurer:"
+msgid "Insurer"
+msgstr "Assureur"
+
+msgctxt "field:insurer.delegation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:insurer.delegation,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:insurer.delegation,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:insurer.delegation,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -980,6 +1032,10 @@ msgctxt "model:insurer,name:"
 msgid "Insurer"
 msgstr "Assureur"
 
+msgctxt "model:insurer.delegation,name:"
+msgid "Insurer Delegation"
+msgstr "Délégation de l'assureur"
+
 msgctxt "model:ir.action,name:"
 msgid "Clauses"
 msgstr "Clauses"
@@ -1248,6 +1304,10 @@ msgctxt "selection:extra_data,type_:"
 msgid "Selection"
 msgstr "Sélection"
 
+msgctxt "selection:insurer.delegation,family:"
+msgid "Generic"
+msgstr "Générique"
+
 msgctxt "selection:offered.item.description,kind:"
 msgid ""
 msgstr " "
@@ -1319,6 +1379,10 @@ msgstr "Type de surprime"
 msgctxt "view:extra_premium.kind:"
 msgid "Extra Premium Kinds"
 msgstr "Types de surprime"
+
+msgctxt "view:insurer.delegation:"
+msgid "Delegations"
+msgstr "Délégations"
 
 msgctxt "view:insurer:"
 msgid "Insurer"

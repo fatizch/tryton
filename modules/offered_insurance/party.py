@@ -1,6 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from sql import Literal
+
+from trytond import backend
+from trytond.pool import PoolMeta, Pool
+from trytond.model import Unique
+from trytond.transaction import Transaction
 from trytond.pyson import Eval, Not, Bool
 
 from trytond.modules.coog_core import model, fields, coog_string
@@ -11,6 +16,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Party',
     'Insurer',
+    'InsurerDelegation',
     ]
 
 
@@ -61,6 +67,35 @@ class Insurer(model.CoogView, model.CoogSQL):
         'get_func_key', searcher='search_func_key')
     party = fields.Many2One('party.party', 'Insurer', ondelete='RESTRICT',
         required=True)
+    delegations = fields.One2Many('insurer.delegation', 'insurer',
+        'Insurer Delegations', delete_missing=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(Insurer, cls).__setup__()
+        cls._error_messages.update({
+                'missing_generic_delegation': 'There must be at least one '
+                '"generic" delegation rule for %s.',
+                })
+
+    @classmethod
+    def validate(cls, insurers):
+        super(Insurer, cls).validate(insurers)
+        with model.error_manager():
+            cls.check_delegations(insurers)
+
+    @classmethod
+    def check_delegations(cls, insurers):
+        for insurer in insurers:
+            if not any(x.family == 'generic' for x in insurer.delegations):
+                insurer.append_functional_error('missing_generic_delegation',
+                    (insurer.party.rec_name,))
+
+    @classmethod
+    def default_delegations(cls):
+        return [{
+                'family': 'generic',
+                }]
 
     def get_func_key(self, name):
         return self.party.code
@@ -79,3 +114,74 @@ class Insurer(model.CoogView, model.CoogSQL):
     def get_rec_name(self, name):
         return (self.party.rec_name
             if self.party else super(Insurer, self).get_rec_name(name))
+
+    def get_delegation(self, family):
+        generic = None
+        for elem in self.delegations:
+            if elem.family == 'generic':
+                generic = elem
+            elif elem.family == family:
+                return elem
+        return generic
+
+
+class InsurerDelegation(model.CoogView, model.CoogSQL):
+    'Insurer Delegation'
+
+    __name__ = 'insurer.delegation'
+
+    insurer = fields.Many2One('insurer', 'Insurer', required=True,
+        ondelete='CASCADE', select=True)
+    family = fields.Selection([], 'Family')
+
+    @classmethod
+    def __setup__(cls):
+        super(InsurerDelegation, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('family_uniq', Unique(t, t.insurer, t.family),
+                'There can be only one delegation per insurance family.'),
+            ]
+        cls._delegation_flags = []
+
+    @classmethod
+    def __post_setup__(cls):
+        cls.family.selection = Pool().get(
+            'offered.option.description').family.selection
+        super(InsurerDelegation, cls).__post_setup__()
+
+    @classmethod
+    def create(cls, vlist):
+        result = super(InsurerDelegation, cls).create(vlist)
+        Pool().get('offered.option.description')._insurer_flags_cache.clear()
+        return result
+
+    @classmethod
+    def write(cls, *args):
+        super(InsurerDelegation, cls).write(*args)
+        Pool().get('offered.option.description')._insurer_flags_cache.clear()
+
+    @classmethod
+    def delete(cls, instances):
+        super(InsurerDelegation, cls).delete(instances)
+        Pool().get('offered.option.description')._insurer_flags_cache.clear()
+
+    @classmethod
+    def default_family(cls):
+        return 'generic'
+
+    @classmethod
+    def __register__(cls, module):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().connection.cursor()
+        to_migrate = not TableHandler.table_exist(cls._table)
+
+        super(InsurerDelegation, cls).__register__(module)
+
+        if not to_migrate:
+            return
+        insurer = Pool().get('insurer').__table__()
+        delegation = cls.__table__()
+        cursor.execute(*delegation.insert(columns=[delegation.insurer,
+                    delegation.family],
+                values=insurer.select(insurer.id, Literal('generic'))))

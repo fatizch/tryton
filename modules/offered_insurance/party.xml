@@ -3,11 +3,17 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- ######### -->
+        <!-- # Party # -->
+        <!-- ######### -->
         <record model="ir.ui.view" id="party_view_form">
             <field name="model">party.party</field>
             <field name="inherit" ref="party.party_view_form"/>
             <field name="name">party_form</field>
         </record>
+        <!-- ########### -->
+        <!-- # Insurer # -->
+        <!-- ########### -->
         <record model="ir.ui.view" id="insurer_view_form">
             <field name="model">insurer</field>
             <field name="type">form</field>
@@ -33,5 +39,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_insurer_form"/>
         </record>
         <menuitem parent="party.menu_configuration" id="menu_insurer_form" icon="insurer" action="act_insurer_form"/>
+        <!-- ###################### -->
+        <!-- # Insurer Delegation # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="insurer_delegation_view_list">
+            <field name="model">insurer.delegation</field>
+            <field name="type">tree</field>
+            <field name="name">insurer_delegation_list</field>
+        </record>
     </data>
 </tryton>

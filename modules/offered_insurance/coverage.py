@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
+from trytond.cache import Cache
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import fields
@@ -26,6 +27,8 @@ class OptionDescription:
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         ondelete='RESTRICT', states={'required': ~Eval('is_service')},
         depends=['is_service'], select=True)
+
+    _insurer_flags_cache = Cache('get_insurer_flag')
 
     @classmethod
     def kind_list_for_extra_data_domain(cls):
@@ -66,3 +69,14 @@ class OptionDescription:
 
     def get_currency(self):
         return self.currency
+
+    @classmethod
+    def get_insurer_flag(cls, coverage, flag_name):
+        cached = cls._insurer_flags_cache.get(coverage.id, -1)
+        if cached != -1:
+            return cached[flag_name]
+        delegation_line = coverage.insurer.get_delegation(coverage.family)
+        cached = {x: getattr(delegation_line, x)
+            for x in Pool().get('insurer.delegation')._delegation_flags}
+        cls._insurer_flags_cache.set(coverage.id, cached)
+        return cached[flag_name]
