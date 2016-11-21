@@ -1952,32 +1952,8 @@ class ContractInvoice(model.CoogSQL, model.CoogView):
     @classmethod
     @model.CoogView.button
     def cancel(cls, contract_invoices):
-        pool = Pool()
-        Reconciliation = pool.get('account.move.reconciliation')
-        Invoice = pool.get('account.invoice')
-
-        invoices = []
-        cancelled_invoices = []
-        for contract_invoice in contract_invoices:
-            if contract_invoice.invoice.state == 'cancel':
-                cancelled_invoices.append(contract_invoice.invoice)
-            else:
-                invoices.append(contract_invoice.invoice)
-        if cancelled_invoices:
-            logging.getLogger('contract.invoice').warning('Cancel method '
-                'called on already cancelled invoices : %s.' % ', '.join(
-                    [x.number for x in cancelled_invoices]))
-            traceback.print_stack()
-
-        reconciliations = []
-        for invoice in invoices:
-            if invoice.move:
-                for line in invoice.move.lines:
-                    if line.reconciliation:
-                        reconciliations.append(line.reconciliation)
-        if reconciliations:
-            Reconciliation.delete(reconciliations)
-        Invoice.cancel(invoices)
+        Invoice = Pool().get('account.invoice')
+        Invoice.cancel([x.invoice for x in contract_invoices])
 
     @classmethod
     def delete(cls, contract_invoices):

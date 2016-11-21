@@ -11,6 +11,7 @@ from trytond.rpc import RPC
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool, Not
 from trytond.wizard import Wizard, StateView, Button
+from trytond.model import ModelView, Workflow
 
 from trytond.modules.coog_core import utils, model, fields
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
@@ -89,6 +90,7 @@ class Invoice:
             ('contract_invoice', 'Contract Invoice'),
             ]
         cls.business_kind.depends += ['contract_invoice']
+        cls._transitions |= {('paid', 'cancel')}
 
     @classmethod
     def __register__(cls, module_name):
@@ -317,6 +319,26 @@ class Invoice:
                     '\n\t'.join([x.description for x in old_invoices])))
             return old_invoices
         return []
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('cancel')
+    def cancel(cls, invoices):
+        cls.auto_unreconcile(invoices)
+        super(Invoice, cls).cancel(invoices)
+
+    @classmethod
+    def auto_unreconcile(cls, invoices):
+        pool = Pool()
+        Reconciliation = pool.get('account.move.reconciliation')
+        reconciliations = []
+        for invoice in invoices:
+            if invoice.contract and invoice.move:
+                for line in invoice.move.lines:
+                    if line.reconciliation:
+                        reconciliations.append(line.reconciliation)
+        if reconciliations:
+            Reconciliation.delete(reconciliations)
 
     @classmethod
     def post(cls, invoices):
