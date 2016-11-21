@@ -558,6 +558,7 @@ class ReattachDocument:
         self.lines = [x for x in self.lines if x.reference]
         if selected:
             self.target = selected.reference
+            self.on_change_target()
 
 
 class ReceiveDocumentLine(model.CoogView):

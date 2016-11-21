@@ -51,23 +51,14 @@ class ReattachDocument:
 
     current_process = fields.Reference('Current Process', 'get_models')
 
-    @fields.depends('current_process', 'lines')
-    def on_change_lines(self):
-        super(ReattachDocument, self).on_change_lines()
+    @fields.depends('current_process', 'target')
+    def on_change_target(self):
+        super(ReattachDocument, self).on_change_target()
         self.current_process = None
-        request, parent = None, None
-        for line in reversed(self.lines):
-            if line.selected:
-                if line.reference.__name__ == 'document.request.line':
-                    request = line
-                else:
-                    parent = line.reference
-                    break
-            if request and line.reference.__name__ != 'document.request.line':
-                parent = line.reference
-                break
-        else:
+        if not self.target:
             return
-        state = getattr(parent, 'current_state', None)
-        if state:
-            self.current_process = parent
+        to_check = self.target
+        if self.target.__name__ == 'document.request.line':
+            to_check = self.target.for_object
+        if getattr(to_check, 'current_state', None):
+            self.current_process = to_check

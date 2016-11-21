@@ -244,3 +244,7 @@ class ReattachDocument(model.CoogView):
     @classmethod
     def get_models(cls):
         return utils.models_get()
+
+    def on_change_target(self):
+        # Placeholder for module overrides
+        pass
