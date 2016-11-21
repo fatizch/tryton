@@ -75,8 +75,11 @@ class OptionDescription:
         cached = cls._insurer_flags_cache.get(coverage.id, -1)
         if cached != -1:
             return cached[flag_name]
-        delegation_line = coverage.insurer.get_delegation(coverage.family)
-        cached = {x: getattr(delegation_line, x)
-            for x in Pool().get('insurer.delegation')._delegation_flags}
+        flags = Pool().get('insurer.delegation')._delegation_flags
+        if coverage.insurer:
+            delegation_line = coverage.insurer.get_delegation(coverage.family)
+            cached = {x: getattr(delegation_line, x) for x in flags}
+        else:
+            cached = {x: True for x in flags}
         cls._insurer_flags_cache.set(coverage.id, cached)
         return cached[flag_name]
