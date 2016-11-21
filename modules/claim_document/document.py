@@ -44,6 +44,18 @@ class DocumentRequestLine:
                     where=(table.for_object.like('claim,%'))
                     ))
 
+    @classmethod
+    def update_values_from_target(cls, data_dict):
+        super(DocumentRequestLine, cls).update_values_from_target(data_dict)
+        for target, values in data_dict.iteritems():
+            if not target.startswith('claim,'):
+                continue
+            claim_id = int(target.split(',')[1])
+            for value in values:
+                if 'claim' in value:
+                    continue
+                value['claim'] = claim_id
+
 
 class DocumentRequest:
     __metaclass__ = PoolMeta

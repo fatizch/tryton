@@ -81,6 +81,33 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
                     where=to_update.last_reminder_date == Null,
                     ))
 
+    @classmethod
+    def create(cls, vlist):
+        # Add hook to update creation data depending on the target model. See
+        # contract / claim implementation for examples
+        per_target = defaultdict(list)
+        for elem in vlist:
+            if 'for_object' in elem:
+                per_target[elem.get('for_object')].append(elem)
+        cls.update_values_from_target(per_target)
+        return super(DocumentRequestLine, cls).create(vlist)
+
+    @classmethod
+    def write(cls, *args):
+        # Add hook to update write data depending on the target model. See
+        # contract / claim implementation for examples
+        params = iter(args)
+        per_target = defaultdict(list)
+        for _, values in zip(params, params):
+            if 'for_object' in values:
+                per_target[values.get('for_object')].append(values)
+        cls.update_values_from_target(per_target)
+        super(DocumentRequestLine, cls).write(*args)
+
+    @classmethod
+    def update_values_from_target(cls, data_dict):
+        pass
+
     @staticmethod
     def default_last_reminder_date():
         return utils.today()
