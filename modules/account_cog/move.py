@@ -55,6 +55,11 @@ class Move(export.ExportImportMixin):
         fields.Char('Information'),
         'get_synthesis_rec_name')
 
+    @classmethod
+    def __register__(cls, module_name):
+        super(Move, cls).__register__(module_name)
+        cls.origin.select = True
+
     def get_kind(self, name):
         return ''
 

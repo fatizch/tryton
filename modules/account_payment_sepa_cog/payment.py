@@ -453,6 +453,11 @@ class Payment:
         'on_change_with_payer')
 
     @classmethod
+    def __register__(cls, module_name):
+        super(Payment, cls).__register__(module_name)
+        cls.sepa_mandate.select = True
+
+    @classmethod
     def __setup__(cls):
         super(Payment, cls).__setup__()
         cls._error_messages.update({
