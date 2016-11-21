@@ -50,6 +50,14 @@ msgstr ""
 "La période d'indemnisation (%(indemn_start)s - %(indemn_end)s) n'est pas "
 "compatible avec la date de fin du contrat (%(contract_end)s)."
 
+msgctxt "error:claim.indemnification:"
+msgid "The insurer %(insurer)s did not allow to create indemnifications."
+msgstr "L'assureur %(insurer)s n'a pas autorisé la création d'indemnisations."
+
+msgctxt "error:claim.indemnification:"
+msgid "The insurer %(insurer)s did not allow to pay indemnifications."
+msgstr "L'assureur %(insurer)s n'a pas autorisé le paiement d'indemnisations."
+
 msgctxt "error:claim.service:"
 msgid "Are you sure you want to cancel the periods between %s and %s?"
 msgstr "Êtes-vous sur de vouloir annuler les périodes entre %s et %s?"
@@ -875,6 +883,14 @@ msgctxt "field:claim.service,payment_accepted_until_date:"
 msgid "Payments Accepted Until:"
 msgstr "Périodes validées jusqu'à"
 
+msgctxt "field:insurer.delegation,claim_create_indemnifications:"
+msgid "Indemnifications Creation"
+msgstr "Création d'indemnisations"
+
+msgctxt "field:insurer.delegation,claim_pay_indemnifications:"
+msgid "Indemnifications Payment"
+msgstr "Paiement d'indemnisations"
+
 msgctxt "help:benefit,automatic_period_calculation:"
 msgid ""
 "Periods will be automatically calculated reusing data fromprevious period."
@@ -1277,6 +1293,10 @@ msgstr "Trimestriel"
 msgctxt "selection:claim.service,annuity_frequency:"
 msgid "Yearly"
 msgstr "Annuelle"
+
+msgctxt "selection:insurer.delegation,family:"
+msgid "Life"
+msgstr "Prévoyance"
 
 msgctxt "selection:rule_engine,type_:"
 msgid "Benefit"

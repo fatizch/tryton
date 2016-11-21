@@ -701,6 +701,10 @@ msgctxt "field:claim.service,extra_datas:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
+msgctxt "field:claim.service,icon:"
+msgid "Icon"
+msgstr "Icône"
+
 msgctxt "field:claim.service,id:"
 msgid "ID"
 msgstr "ID"
@@ -712,6 +716,10 @@ msgstr "Préjudice"
 msgctxt "field:claim.service,loss_summary:"
 msgid "Loss Summary"
 msgstr "Résumé des préjudices"
+
+msgctxt "field:claim.service,insurer_delegations:"
+msgid "Insurer Delegations"
+msgstr "Délégations accordées"
 
 msgctxt "field:claim.service,option:"
 msgid "Coverage"
@@ -844,6 +852,10 @@ msgstr "Prestations"
 msgctxt "field:event.log,claim:"
 msgid "Claim"
 msgstr "Sinistre"
+
+msgctxt "field:insurer.delegation,claim_create:"
+msgid "Claim Creation"
+msgstr "Création de sinistres"
 
 msgctxt "field:offered.option.description,benefits:"
 msgid "Benefits"

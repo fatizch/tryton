@@ -570,6 +570,14 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
     benefit_summary = fields.Function(
         fields.Text('Benefit Summary'),
         'get_benefit_summary')
+    insurer_delegations = fields.Function(
+        fields.Char('Insurer Delefations', states={
+                'invisible': ~Eval('insurer_delegations'),
+                'field_color_red': True}),
+        'on_change_with_insurer_delegations')
+    icon = fields.Function(
+        fields.Char('Icon'),
+        'get_icon')
 
     @classmethod
     def _export_light(cls):
@@ -579,6 +587,10 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
     def get_claim(self, name):
         if self.loss:
             return self.loss.claim.id
+
+    def get_icon(self, name):
+        if self.insurer_delegations:
+            return 'tryton-dialog-warning'
 
     @classmethod
     def search_claim(cls, name, clause):
@@ -602,6 +614,27 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
         data_values = self.benefit.get_extra_data_def(self)
 
         self.extra_datas[-1].extra_data_values = data_values
+
+    @fields.depends('option')
+    def on_change_with_insurer_delegations(self, name=None):
+        '''
+            Returns a string with the translated name of all granted claim
+            related delegations
+        '''
+        if not self.option or not self.option.coverage.insurer:
+            return ''
+        pool = Pool()
+        InsurerDelegation = pool.get('insurer.delegation')
+        Translation = pool.get('ir.translation')
+        fnames = [x for x in InsurerDelegation._delegation_flags
+            if x.startswith('claim_')]
+        delegation = self.option.coverage.insurer.get_delegation(
+            self.option.coverage.family)
+        values = [Translation.get_source('insurer.delegation,' + x,
+                'field', Transaction().language, None)
+            or InsurerDelegation._fields[x].string
+            for x in fnames if not getattr(delegation, x)]
+        return ', '.join(values)
 
     def get_rec_name(self, name=None):
         if self.benefit:

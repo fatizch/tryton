@@ -8,6 +8,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="option"/>
     <label name="loss"/>
     <field name="loss"/>
+    <label name="insurer_delegations"/>
+    <field name="insurer_delegations"/>
     <newline/>
     <label name="benefit"/>
     <field name="benefit" widget="selection"/>

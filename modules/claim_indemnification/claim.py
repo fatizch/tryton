@@ -558,6 +558,12 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'schedule': {
                     'invisible': Eval('status') != 'calculated'},
                 })
+        cls._error_messages.update({
+                'cannot_create_indemnifications': 'The insurer %(insurer)s '
+                'did not allow to create indemnifications.',
+                'cannot_pay_indemnifications': 'The insurer %(insurer)s '
+                'did not allow to pay indemnifications.',
+                })
 
     @classmethod
     def __register__(cls, module):
@@ -569,6 +575,21 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             handler.column_rename('amount', 'total_amount')
 
         super(Indemnification, cls).__register__(module)
+
+    @classmethod
+    def validate(cls, indemnifications):
+        super(Indemnification, cls).validate(indemnifications)
+        with model.error_manager():
+            cls.check_insurer_delegation(indemnifications)
+
+    @classmethod
+    def check_insurer_delegation(cls, indemnifications):
+        coverages = {x.service.option.coverage for x in indemnifications}
+        for coverage in coverages:
+            if not coverage.get_insurer_flag(coverage,
+                    'claim_create_indemnifications'):
+                cls.append_functional_error('cannot_create_indemnifications',
+                    {'insurer': coverage.insurer.rec_name})
 
     @property
     def tax_date(self):
@@ -960,6 +981,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         paid = []
         cancelled = []
 
+        with model.error_manager():
+            cls.check_invoicable(indemnifications)
+
         def group_key(x):
             return x._group_to_claim_invoice_key()
 
@@ -987,6 +1011,15 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         Invoice.post(invoices)
         cls.write(paid, {'status': 'paid'},
             cancelled, {'status': 'cancel_paid'})
+
+    @classmethod
+    def check_invoicable(cls, indemnifications):
+        coverages = {x.service.option.coverage for x in indemnifications}
+        for coverage in coverages:
+            if not coverage.get_insurer_flag(coverage,
+                    'claim_pay_indemnifications'):
+                cls.append_functional_error('cannot_pay_indemnifications',
+                    {'insurer': coverage.insurer.rec_name})
 
     @classmethod
     @ModelView.button_action(

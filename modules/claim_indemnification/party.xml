@@ -3,14 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <!-- ##################### -->
-        <!-- # Claimant relation # -->
-        <!-- ##################### -->
-        <record model="ir.action.act_window" id="act_claims_button">
-            <field name="name">Claims</field>
-            <field name="res_model">claim</field>
-            <field name="domain" eval="[('claimant', '=', Eval('active_id'))]" pyson="1"/>
-        </record>
         <!-- ###################### -->
         <!-- # Insurer Delegation # -->
         <!-- ###################### -->

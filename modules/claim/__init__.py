@@ -40,6 +40,7 @@ def register():
         SelectBenefits,
         SynthesisMenuClaim,
         SynthesisMenu,
+        InsurerDelegation,
         ReportTemplate,
         EventLog,
         Configuration,

@@ -8,11 +8,13 @@ from .invoice import *
 from .wizard import *
 from .configuration import *
 from .event import *
+from .party import *
 from .batch import *
 
 
 def register():
     Pool.register(
+        InsurerDelegation,
         Benefit,
         BenefitProduct,
         BenefitRule,

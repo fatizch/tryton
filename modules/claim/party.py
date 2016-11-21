@@ -17,6 +17,7 @@ __all__ = [
     'SynthesisMenuClaim',
     'SynthesisMenu',
     'SynthesisMenuOpen',
+    'InsurerDelegation',
     ]
 
 
@@ -140,3 +141,19 @@ class SynthesisMenuOpen(Wizard):
                             ])[0].id, 'form')]
         }
         return actions
+
+
+class InsurerDelegation:
+    __metaclass__ = PoolMeta
+    __name__ = 'insurer.delegation'
+
+    claim_create = fields.Boolean('Claim Creation')
+
+    @classmethod
+    def __setup__(cls):
+        super(InsurerDelegation, cls).__setup__()
+        cls._delegation_flags.append('claim_create')
+
+    @classmethod
+    def default_claim_create(cls):
+        return True
