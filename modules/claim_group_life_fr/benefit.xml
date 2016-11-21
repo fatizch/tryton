@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="benefit.loss.description.deduction_period_kind" id="part_time_deduction_type">
+            <field name="name">Part Time</field>
+            <field name="code">part_time</field>
+        </record>
+    </data>
+</tryton>

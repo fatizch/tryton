@@ -1,4 +1,6 @@
+* Amélioration de la saisie des périodes de déductions
+
 Version 1.10 - 2016-11-02
-* Allow to access deduction period information in rule engine
-* Allow to define deduction period kind, deduction period amount
-* Module creation
+* Ajout des données liées aux périodes de décutions dans le moteur de règles
+* Définition des type de périodes et montants sur les périodes de déductions
+* Création du module

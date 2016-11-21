@@ -30,8 +30,11 @@ class CreateIndemnification:
             loss = self.definition.service.loss
             per_date = {x.start_date: x for x in loss.deduction_periods}
             periods = []
-            for elem in (self.definition.existing_deduction_periods +
-                    self.definition.future_deduction_periods):
+            for elem in self.definition.deduction_periods:
+                if (not getattr(elem, 'start_date', None) and
+                        not getattr(elem, 'end_date', None)):
+                    elem.start_date = self.definition.start_date
+                    elem.end_date = self.definition.end_date
                 if elem.start_date in per_date:
                     elem.id = per_date[elem.start_date].id
                 periods.append(elem)
@@ -47,43 +50,35 @@ class IndemnificationDefinition:
     deduction_period_kinds = fields.Many2Many(
         'benefit.loss.description.deduction_period_kind', None, None,
         'Deduction Kinds')
-    existing_deduction_periods = fields.One2Many(
-        'claim.loss.deduction.period', None, 'Existing Deduction Periods',
-        readonly=True, states={'invisible': ~Eval('deduction_period_kinds')},
-        depends=['deduction_period_kinds'])
-    future_deduction_periods = fields.One2Many('claim.loss.deduction.period',
+    deduction_periods = fields.One2Many('claim.loss.deduction.period',
         None, 'Future Deduction Periods',
         domain=[('deduction_kind', 'in', Eval('deduction_period_kinds'))],
         states={'invisible': ~Eval('deduction_period_kinds')},
         depends=['deduction_period_kinds'])
 
-    @fields.depends('existing_deduction_periods', 'future_deduction_periods',
+    @fields.depends('deduction_periods',
         'deduction_period_kinds', 'service', 'start_date')
     def on_change_start_date(self):
         if not self.deduction_period_kinds:
-            self.existing_deduction_periods = []
-            self.future_deduction_periods = []
+            self.deduction_periods = []
             return
         current_futures = {x.start_date: x
-            for x in self.future_deduction_periods
+            for x in self.deduction_periods
             if self.start_date and x.start_date
             and x.start_date >= self.start_date}
 
-        past, futures = [], []
+        futures = []
         for period in self.service.loss.deduction_periods:
             if not self.start_date or period.start_date < self.start_date:
-                past.append(period)
                 continue
             if period.start_date in current_futures:
                 futures.append(current_futures.pop(period.start_date))
             else:
                 futures.append(period)
-        futures += [x for x in self.future_deduction_periods
+        futures += [x for x in self.deduction_periods
             if not x.start_date or x.start_date in current_futures]
 
-        self.existing_deduction_periods = [self.new_deduction_period(x)
-            for x in past]
-        self.future_deduction_periods = [self.new_deduction_period(x)
+        self.deduction_periods = [self.new_deduction_period(x)
             for x in futures]
 
     def new_deduction_period(self, deduction):

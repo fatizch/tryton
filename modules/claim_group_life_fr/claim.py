@@ -4,10 +4,12 @@ from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Equal, Not
 
 from trytond.modules.coog_core import model, fields
+from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 
 __all__ = [
     'HospitalisationPeriod',
     'Loss',
+    'IndemnificationDetail',
     ]
 
 
@@ -18,8 +20,7 @@ class HospitalisationPeriod(model.CoogSQL, model.CoogView):
 
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date', required=True)
-    loss = fields.Many2One('claim.loss', 'Loss',
-        ondelete="CASCADE")
+    loss = fields.Many2One('claim.loss', 'Loss', ondelete="CASCADE")
 
     @classmethod
     def __setup__(cls):
@@ -80,3 +81,17 @@ class Loss:
                                 period[1], periods[idx + 1][0],
                                 periods[idx + 1][1]):
                         cls.raise_user_error('period_overlap')
+
+
+class IndemnificationDetail:
+    __metaclass__ = PoolMeta
+    __name__ = 'claim.indemnification.detail'
+
+    part_time_amount = fields.Numeric('Part Time Amount',
+        digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
+        depends=['currency_digits'])
+
+    @classmethod
+    def __setup__(cls):
+        super(IndemnificationDetail, cls).__setup__()
+        cls.kind.selection.append(('part_time', 'Part Time'))

@@ -4,8 +4,7 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='extra_data']" position="after">
         <newline/>
-        <field name="existing_deduction_periods" colspan="2"/>
-        <field name="future_deduction_periods" colspan="2"/>
+        <field name="deduction_periods" colspan="4" view_ids="claim_deduction_period.deduction_period_without_date_view_list"/>
         <field name="deduction_period_kinds" invisible="1"/>
     </xpath>
 </data>

@@ -95,13 +95,9 @@ msgctxt "field:claim.indemnification_definition,deduction_period_kinds:"
 msgid "Deduction Kinds"
 msgstr "Types de déduction"
 
-msgctxt "field:claim.indemnification_definition,existing_deduction_periods:"
-msgid "Existing Deduction Periods"
-msgstr "Périodes de déduction existantes"
-
-msgctxt "field:claim.indemnification_definition,future_deduction_periods:"
-msgid "Future Deduction Periods"
-msgstr "Périodes de déduction futures"
+msgctxt "field:claim.indemnification_definition,deduction_periods:"
+msgid "Deduction Periods"
+msgstr "Périodes de déduction"
 
 msgctxt "field:claim.loss,deduction_kinds:"
 msgid "Deduction Kinds"

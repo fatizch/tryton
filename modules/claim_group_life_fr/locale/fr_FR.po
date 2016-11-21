@@ -10,6 +10,10 @@ msgctxt "error:claim.loss:"
 msgid "There are overlapping periods"
 msgstr "Des périodes se chevauchent"
 
+msgctxt "field:claim.indemnification.detail,part_time_amount:"
+msgid "Part Time Amount"
+msgstr "Montant du mi-temps thérapeutique"
+
 msgctxt "field:claim.loss,hospitalisation_periods:"
 msgid "Hospitalisation Periods"
 msgstr "Périodes d'hospitalisation"
@@ -58,9 +62,18 @@ msgctxt "field:claim.loss.hospitalisation.period,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt ""
+"model:benefit.loss.description.deduction_period_kind,name:part_time_deduction_type"
+msgid "Part Time"
+msgstr "Mi-temps thérapeutique"
+
 msgctxt "model:claim.loss.hospitalisation.period,name:"
 msgid "HospitalisationPeriod"
 msgstr "Période d'hospitalisation"
+
+msgctxt "selection:claim.indemnification.detail,kind:"
+msgid "Part Time"
+msgstr "Mi-temps thérapeutique"
 
 msgctxt "view:benefit.loss.description:"
 msgid "Hospitalisation"

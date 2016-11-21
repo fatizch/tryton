@@ -3,11 +3,14 @@
 from trytond.pool import Pool
 
 from .claim import *
+from .benefit import *
 from .rule_engine import *
 
 
 def register():
     Pool.register(
+        BenefitRule,
+        IndemnificationDetail,
         HospitalisationPeriod,
         Loss,
         RuleEngineRuntime,

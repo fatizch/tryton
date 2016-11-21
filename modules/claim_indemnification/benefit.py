@@ -23,11 +23,8 @@ INDEMNIFICATION_KIND = [
     ('annuity', 'Annuity'),
     ]
 INDEMNIFICATION_DETAIL_KIND = [
-    ('waiting_period', 'Waiting Period'),
     ('deductible', 'Deductible'),
     ('benefit', 'Indemnified'),
-    ('limit', 'Limit'),
-    ('regularisation', 'Regularisation'),
     ]
 ANNUITY_FREQUENCIES = [
     ('', ''),
@@ -225,8 +222,12 @@ class BenefitRule(
                 for benefit in benefits:
                     reval_args = new_args.copy()
                     reval_args.update(benefit)
-                    all_benefits.extend(self.calculate_revaluation_rule(
-                        reval_args) or [])
+                    reval_benefits = self.calculate_revaluation_rule(
+                        reval_args) or []
+                    for reval_benefit in reval_benefits:
+                        tmp_benefit = benefit.copy()
+                        tmp_benefit.update(reval_benefit)
+                        all_benefits.append(tmp_benefit)
             else:
                 all_benefits.extend(benefits)
         for benefit in all_benefits:
