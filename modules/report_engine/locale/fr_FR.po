@@ -22,7 +22,7 @@ msgid ""
 "  Error:\n"
 "%s"
 msgstr ""
-"Erreur lors de la génération de la lettre:\n"
+"Erreur lors de la génération du courrier:\n"
 "\n"
 "  Expression:\n"
 "%s\n"
@@ -44,7 +44,7 @@ msgstr "Les noms des pièces jointes doivent être unique par ressource."
 
 msgctxt "error:report.template:"
 msgid "No letter model found for date %s and language %s"
-msgstr "Pas de modèle de lettre trouvé pour le %s et la langue %s"
+msgstr "Pas de modèle de courrier trouvé pour le %s et la langue %s"
 
 msgctxt "error:report.template:"
 msgid "The document template code must be unique"
@@ -650,7 +650,7 @@ msgstr "Si la sélection doit être triée par le libéllé"
 
 msgctxt "model:event.type.action-report.template,name:"
 msgid "Event Type Action Template Relation"
-msgstr "Relation action par type d'événement modèle de lettre"
+msgstr "Relation action par type d'événement modèle de courrier"
 
 msgctxt "model:ir.action,name:act_convert_templates"
 msgid "Convert Templates"
@@ -658,7 +658,7 @@ msgstr "Convertir des modèles"
 
 msgctxt "model:ir.action,name:act_doc_template"
 msgid "Document Templates"
-msgstr "Modèles de courriers"
+msgstr "Modèles de courrier"
 
 msgctxt "model:ir.action,name:act_report_production_request_form"
 msgid "Report Production Requests"
@@ -690,7 +690,7 @@ msgstr "Convertir des modèles"
 
 msgctxt "model:ir.ui.menu,name:menu_doc_template"
 msgid "Document Templates"
-msgstr "Modèles de Lettre"
+msgstr "Modèles de courrier"
 
 msgctxt "model:ir.ui.menu,name:menu_report"
 msgid "Report"
@@ -870,7 +870,7 @@ msgstr "Rechercher des occurences"
 
 msgctxt "view:report.convert.select_templates:"
 msgid "Update Templates"
-msgstr "Mise à jour des modèles de courriers"
+msgstr "Mise à jour des modèles de courrier"
 
 msgctxt "view:report.create.attach:"
 msgid "Attachment"
@@ -890,7 +890,7 @@ msgstr "Rapports"
 
 msgctxt "view:report.create.select_template:"
 msgid "Document Templates"
-msgstr "Modèles de Lettre"
+msgstr "Modèles de courrier"
 
 msgctxt "view:report.template.parameter:"
 msgid "Parameter"
