@@ -95,10 +95,12 @@ coog_module_create() { # creates a new module in the modules folder - <module_na
         touch "$module_folder"/doc/fr/features.rst
         touch "$module_folder"/doc/fr/index.rst
         touch "$module_folder"/doc/fr/summary.rst
+        echo "* Creation du module" > "$module_folder"/doc/fr/features_log
         mkdir "$module_folder"/doc/en
         touch "$module_folder"/doc/en/features.rst
         touch "$module_folder"/doc/en/index.rst
         touch "$module_folder"/doc/en/summary.rst
+        echo "* Module Creation" > "$module_folder"/doc/en/features_log
 
         # Init tryton.cfg
         echo "[tryton]" > "$module_folder"/tryton.cfg
