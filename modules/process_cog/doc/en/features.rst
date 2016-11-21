@@ -1,16 +1,18 @@
-- **Processus simplifié :** Permet de créer un processus basique, sous la forme
-  d'une simple liste d'étapes. Toutes les transitions sont possibles entre
-  toutes les étapes, l'ordre par défaut d'exécution étant celui de la liste
-  des étapes.
+- **Simple Process**: Allows to create a basic process, with only a step list.
+  All transitions are allowed between all steps, the default execution order is
+  the that of the step list.
 
-- **Processus par produit :** Si un produit particulier nécessite un processus
-  particulier, il est possible de le paramétrer.
+- **Per Product Process**: It is possible to configure different process for
+  the same action depending on other parameters (typically, insurance product)
 
-- **Navigation simplifiée :** Ajout des boutons *Précédent* et *Suivant*
-  (optionnellement) sur les étapes, afin de faciliter la navigation entre les
-  étapes dans le cas des workflows linéaires.
+- **Easy navigation**: A process can be configured to have *Previous* and
+  *Next* buttons on all steps, which helps navigating linear processes.
 
-- **Contrôles de surface :** Via un domaine défini sur une étape, il est
-  possible d'interdire de sortir de l'étape (i.e. blocage par le client) si
-  certaines conditions ne sont pas remplies. Cela permet de définir
-  directement dans le paramétrage des contraintes simples.
+- **Light controls**: Using a step-defined domain, it is possible to block
+  leaving the step (through the client) unless special conditions are met. This
+  allows to define simple constraints through pure configuration
+
+- **Event triggered process**: Events can be configured to start processes.
+  They can be linked to either the original object which triggered the event,
+  or one related to it (provided the link is properly defined). It is also
+  possible to chose the step at which the process will start.

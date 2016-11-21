@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from itertools import groupby
 
-from trytond.pyson import Eval, Or
+from trytond.pyson import Eval, Or, If
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
@@ -23,12 +23,23 @@ class EventTypeAction:
         ondelete='RESTRICT', states={
             'invisible': Eval('action') != 'initiate_process',
             'required': Eval('action') == 'initiate_process'})
+    step_to_start = fields.Many2One('process-process.step', 'Step to start',
+        domain=[If(~Eval('process_to_initiate'), [],
+                [('process', '=', Eval('process_to_initiate'))])],
+        ondelete='SET NULL', states={
+            'invisible': ~Eval('process_to_initiate'),
+            }, depends=['process_to_initiate'])
     filter_on_event_object = fields.Boolean('Filter On Event Object',
         help="If checked, the pyson condition will apply on the original"
         " object of the event. Otherwise, the condition will apply on the"
         " object of the process.", states={
             'invisible': Or(~Eval('pyson_condition'),
                 Eval('action') != 'initiate_process')})
+
+    @fields.depends('process_to_initiate', 'step_to_start')
+    def on_change_process_to_initiate(self):
+        if not self.process_to_initiate:
+            self.step_to_start = None
 
     @classmethod
     def get_action_types(cls):
@@ -39,7 +50,7 @@ class EventTypeAction:
     @classmethod
     def _export_light(cls):
         return super(EventTypeAction, cls)._export_light() | {
-            'process_to_initiate'}
+            'process_to_initiate', 'step_to_start'}
 
     def get_objects_for_process(self, objects, target_model_name):
         raise NotImplementedError
@@ -87,7 +98,7 @@ class EventTypeAction:
         Event = pool.get('event')
         process = self.process_to_initiate
         process_model_name = process.on_model.model
-        state = process.first_step()
+        state = self.step_to_start or process.first_step()
         ok, not_ok = [], []
         [ok.append(x) if not x.current_state else not_ok.append(x)
             for x in objects]

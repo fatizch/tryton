@@ -1,3 +1,5 @@
+* Allow to chose the step on which an event starting a process should start
+
 Version 1.10 - 2016-11-02
 * Add sequence on process to be able to order process
 

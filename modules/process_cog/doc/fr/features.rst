@@ -14,3 +14,9 @@
   possible d'interdire de sortir de l'étape (i.e. blocage par le client) si
   certaines conditions ne sont pas remplies. Cela permet de définir
   directement dans le paramétrage des contraintes simples.
+
+- **Déclenchement de processus via événements** : Les événements peuvent être
+  configurés pour déclencher des processus. Ces processus peuvent être
+  rattachés à l'objet ayant déclenché l'événement ou à un objet lié (sous
+  réserve que le lien entre les deux soit convenablement renseigné). Il est
+  également possible de choisir l'étape où débutera le processus.
