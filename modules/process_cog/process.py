@@ -313,6 +313,14 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
             set(['logs']))
 
     @classmethod
+    def copy(cls, instances, default=None):
+        if default:
+            default['logs'] = []
+        else:
+            default = {'logs': []}
+        return super(CoogProcessFramework, cls).copy(instances, default)
+
+    @classmethod
     @model.CoogView.button_action('process_cog.act_resume_process')
     def button_resume(cls, objects):
         pass

@@ -145,6 +145,25 @@ class ProcessFramework(ModelSQL, ModelView):
         good_model.save()
 
     @classmethod
+    def copy(cls, instances, default=None):
+        # Restart current processes on the copies when duplicating
+        copies = super(ProcessFramework, cls).copy(instances, default)
+        processes_start = {}
+        to_save = []
+        for copy, original in zip(copies, instances):
+            if not original.current_state:
+                continue
+            cur_process = original.current_state.process
+            if cur_process not in processes_start:
+                processes_start[cur_process] = \
+                    cur_process.get_first_state_relation()
+            copy.current_state = processes_start[cur_process]
+            to_save.append(copy)
+        if to_save:
+            cls.save(to_save)
+        return copies
+
+    @classmethod
     def build_instruction_transition_method(cls, process, transition):
         def button_transition_generic(works):
             ProcessTransition = Pool().get('process.transition')
@@ -189,21 +208,9 @@ class ProcessFramework(ModelSQL, ModelView):
             Process = Pool().get('process')
             process_desc, = Process.search([
                     ('technical_name', '=', process_name)], limit=1)
+            if process_desc.on_model.model != self.__name__:
+                return
         self.current_state = process_desc.get_step_relation(value)
-
-    @classmethod
-    def default_current_state(cls):
-        # When we are first accessing the record, if we are in a process, we
-        # need to get a default value so that the states work properly
-        process_name = Transaction().context.get('running_process')
-        if not process_name:
-            return
-        Process = Pool().get('process')
-        process_desc, = Process.search([
-                ('technical_name', '=', process_name)], limit=1)
-        # The good value is the name associated to the first step of the
-        # current process
-        return process_desc.get_first_state_relation().id
 
     @classmethod
     def raise_user_error(cls, errors, error_args=None, error_description='',
