@@ -190,7 +190,7 @@ wsgi() {
         echo Welcome on board, Coog WSGI is preparing to start
         init || return $?
         uno
-        uwsgi -T --module trytond.application:app --http :7999 --http-timeout 600 --processes "$1"
+        uwsgi -M -T --module trytond.application:app --http :7999 --http-timeout 600 --processes "$1"
 }
 
 _celery() {
