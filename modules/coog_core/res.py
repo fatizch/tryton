@@ -3,6 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.config import config
 from trytond.transaction import Transaction
+from trytond.modules.coog_core import fields
 
 from export import ExportImportMixin
 
@@ -35,6 +36,13 @@ class User(ExportImportMixin):
     __name__ = 'res.user'
     _func_key = 'login'
 
+    color_bg = fields.Function(fields.Char('Background Color'), 'get_color_bg')
+
+    @classmethod
+    def __setup__(cls):
+        super(User, cls).__setup__()
+        cls._preferences_fields.append('color_bg')
+
     @classmethod
     def _export_skips(cls):
         result = super(User, cls)._export_skips()
@@ -48,6 +56,12 @@ class User(ExportImportMixin):
             env = env.replace('%{DB}', Transaction().database.name)
             status += ' - %s' % env
         return status
+
+    def get_color_bg(self, name):
+        db = Transaction().database.name
+        color = config.get('database', db, default=None)
+        if color:
+            return '#%s' % color
 
     @classmethod
     def _export_light(cls):

@@ -22,6 +22,7 @@ Aide utilisateur
     import_export_parametrage_tuto.rst
     user/export_tools.rst
     user/batch.rst
+    user/server_config.rst
 
 
 .. toctree::

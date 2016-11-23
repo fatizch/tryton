@@ -1056,6 +1056,10 @@ msgctxt "field:res.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:res.user,color_bg:"
+msgid "Background Color"
+msgstr "Couleur de fond"
+
 msgctxt "field:res.user,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
