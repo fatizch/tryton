@@ -532,7 +532,7 @@ class Loss(model.CoogSQL, model.CoogView):
     def covered_options(self):
         Option = Pool().get('contract.option')
         return Option.get_covered_options_from_party(self.claim.claimant,
-            self.get_date() or self.declaration_date)
+            self.get_date() or self.claim.declaration_date)
 
     def covered_benefit_and_options(self):
         options = self.covered_options()

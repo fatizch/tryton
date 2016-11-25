@@ -169,7 +169,7 @@ class Loss:
         person = self.get_covered_person()
         if person:
             return Option.get_covered_options_from_party(person,
-                self.get_date() or self.declaration_date)
+                self.get_date() or self.claim.declaration_date)
         return super(Loss, self).covered_options()
 
     def pre_validate(self):
