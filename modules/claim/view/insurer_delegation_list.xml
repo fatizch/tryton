@@ -2,7 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/tree/field[@name='family']" position="after">
+    <xpath expr="/tree/field[@name='insurance_kind']" position="after">
         <field name="claim_create" expand="1"/>
     </xpath>
 </data>

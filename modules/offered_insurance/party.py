@@ -74,7 +74,7 @@ class Insurer(model.CoogView, model.CoogSQL):
     def __setup__(cls):
         super(Insurer, cls).__setup__()
         cls._error_messages.update({
-                'missing_generic_delegation': 'There must be at least one '
+                'missing_default_delegation': 'There must be at least one '
                 '"generic" delegation rule for %s.',
                 })
 
@@ -87,14 +87,14 @@ class Insurer(model.CoogView, model.CoogSQL):
     @classmethod
     def check_delegations(cls, insurers):
         for insurer in insurers:
-            if not any(x.family == 'generic' for x in insurer.delegations):
-                insurer.append_functional_error('missing_generic_delegation',
+            if not any(x.insurance_kind == '' for x in insurer.delegations):
+                insurer.append_functional_error('missing_default_delegation',
                     (insurer.party.rec_name,))
 
     @classmethod
     def default_delegations(cls):
         return [{
-                'family': 'generic',
+                'insurance_kind': '',
                 }]
 
     def get_func_key(self, name):
@@ -115,12 +115,12 @@ class Insurer(model.CoogView, model.CoogSQL):
         return (self.party.rec_name
             if self.party else super(Insurer, self).get_rec_name(name))
 
-    def get_delegation(self, family):
+    def get_delegation(self, insurance_kind):
         generic = None
         for elem in self.delegations:
-            if elem.family == 'generic':
+            if elem.insurance_kind == '':
                 generic = elem
-            elif elem.family == family:
+            elif elem.insurance_kind == insurance_kind:
                 return elem
         return generic
 
@@ -132,22 +132,22 @@ class InsurerDelegation(model.CoogView, model.CoogSQL):
 
     insurer = fields.Many2One('insurer', 'Insurer', required=True,
         ondelete='CASCADE', select=True)
-    family = fields.Selection([], 'Family')
+    insurance_kind = fields.Selection([], 'Insurance Kind')
 
     @classmethod
     def __setup__(cls):
         super(InsurerDelegation, cls).__setup__()
         t = cls.__table__()
         cls._sql_constraints += [
-            ('family_uniq', Unique(t, t.insurer, t.family),
-                'There can be only one delegation per insurance family.'),
+            ('insurance_kind_uniq', Unique(t, t.insurer, t.insurance_kind),
+                'There can be only one delegation per insurance kind.'),
             ]
         cls._delegation_flags = []
 
     @classmethod
     def __post_setup__(cls):
-        cls.family.selection = Pool().get(
-            'offered.option.description').family.selection
+        cls.insurance_kind.selection = Pool().get(
+            'offered.option.description').insurance_kind.selection
         super(InsurerDelegation, cls).__post_setup__()
 
     @classmethod
@@ -167,8 +167,8 @@ class InsurerDelegation(model.CoogView, model.CoogSQL):
         Pool().get('offered.option.description')._insurer_flags_cache.clear()
 
     @classmethod
-    def default_family(cls):
-        return 'generic'
+    def default_insurance_kind(cls):
+        return ''
 
     @classmethod
     def __register__(cls, module):
@@ -183,5 +183,5 @@ class InsurerDelegation(model.CoogView, model.CoogSQL):
         insurer = Pool().get('insurer').__table__()
         delegation = cls.__table__()
         cursor.execute(*delegation.insert(columns=[delegation.insurer,
-                    delegation.family],
-                values=insurer.select(insurer.id, Literal('generic'))))
+                    delegation.insurance_kind],
+                values=insurer.select(insurer.id, Literal(''))))

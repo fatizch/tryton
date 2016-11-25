@@ -629,7 +629,7 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
         fnames = [x for x in InsurerDelegation._delegation_flags
             if x.startswith('claim_')]
         delegation = self.option.coverage.insurer.get_delegation(
-            self.option.coverage.family)
+            self.option.coverage.insurance_kind)
         values = [Translation.get_source('insurer.delegation,' + x,
                 'field', Transaction().language, None)
             or InsurerDelegation._fields[x].string

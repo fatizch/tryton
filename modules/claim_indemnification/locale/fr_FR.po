@@ -1294,10 +1294,6 @@ msgctxt "selection:claim.service,annuity_frequency:"
 msgid "Yearly"
 msgstr "Annuelle"
 
-msgctxt "selection:insurer.delegation,family:"
-msgid "Life"
-msgstr "Prévoyance"
-
 msgctxt "selection:rule_engine,type_:"
 msgid "Benefit"
 msgstr "Prestation"
