@@ -1,3 +1,3 @@
-Ce module étend la gestion des contrats pour supporter les produits de type
-prévoyance. Cela passe principalement par l'ajout de la notion de montant
-de couverture sur les éléments couverts.
+This module improves the contract management of life products. The main
+addition is the possibility to configure and chose a coverage amount on
+subscribed options.

@@ -34,5 +34,8 @@ class OptionDescription:
                 ('total_disability', 'Total Disability'),
                 ('total_autonomy_loss',
                     'Total And Irreversible Autonomy Loss'),
+                ('education_annuities', 'Education Annuities'),
+                ('joint_annuities', 'Joint Annuities'),
+                ('funeral_capital', 'Funeral Capital'),
                 ('death', 'Death'),
                 ])
