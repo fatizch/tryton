@@ -18,6 +18,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="first_reception_date"/>
     <label name="for_object" xalign="0"/>
     <field name="for_object" colspan="5"/>
+    <separator name="details" colspan="6"/>
+    <field name="details" colspan="6"/>
     <newline/>
     <label name="attachment" xalign="0"/>
     <field name="attachment" colspan="5"/>

@@ -63,6 +63,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     last_reminder_date = fields.Date('Last Reminder Date',
         states={'invisible': True})
     reminders_sent = fields.Integer('Reminders Sent')
+    details = fields.Text('Details')
 
     @classmethod
     def __register__(cls, module_name):
