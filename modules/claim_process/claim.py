@@ -13,7 +13,6 @@ from trytond.wizard import Button, StateTransition, StateAction
 __metaclass__ = PoolMeta
 __all__ = [
     'Claim',
-    'Loss',
     'Process',
     'ProcessLossDescRelation',
     'ClaimDeclareFindProcess',
@@ -125,86 +124,6 @@ class Claim(CoogProcessFramework):
                     to_save.extend(loss.services)
         if to_save:
             Services.save(to_save)
-
-
-class Loss:
-    __name__ = 'claim.loss'
-
-    # The Benefit to deliver is just a shortcut to ease delivered service
-    # creation. it should not be used once a service has been created
-    benefit_to_deliver = fields.Function(
-        fields.Many2One('benefit', 'Benefit',
-            # domain=[('id', 'in', Eval('benefits'))],
-            depends=['benefits']),
-        'get_benefit_to_deliver', 'setter_void')
-    benefits = fields.Function(
-        fields.One2Many('benefit', None, 'Benefits'),
-        'on_change_with_benefits')
-
-    def get_possible_benefits(self):
-        if not self.claim or not self.loss_desc:
-            return {}
-        res = {}
-        if self.claim.main_contract:
-            contracts = [self.claim.main_contract]
-        else:
-            contracts = self.claim.get_possible_contracts(
-                at_date=self.get_date())
-        for contract in contracts:
-            for covered_element in contract.covered_elements:
-                for option in covered_element.options:
-                    benefits = option.get_possible_benefits(self)
-                    if benefits:
-                        res[option.id] = benefits
-        return res
-
-    @fields.depends('loss_desc', 'event_desc', 'claim')
-    def on_change_with_benefits(self, name=None):
-        res = []
-        for x in self.get_possible_benefits().values():
-            res += [benefit.id for benefit in x]
-        return list(set(res))
-
-    def get_benefit_to_deliver(self, name):
-        if (len(self.services) == 1
-                and self.services[0].status == 'calculating'):
-            return self.services[0].benefit.id
-
-    @fields.depends('benefit_to_deliver', 'services', 'claim', 'loss_desc',
-        'event_desc')
-    def on_change_benefit_to_deliver(self):
-        pool = Pool()
-        Service = pool.get('claim.service')
-        if not self.services:
-            self.services = [Service(status='calculating')]
-        elif not((len(self.services) == 1
-                and self.services[0].status == 'calculating')):
-            return
-        service = self.services[0]
-        service.benefit = (self.benefit_to_deliver if self.benefit_to_deliver
-            else None)
-        service.extra_data = (utils.init_extra_data(
-                self.benefit_to_deliver.extra_data_def)
-            if self.benefit_to_deliver else {})
-        contract = None
-        if self.claim.main_contract:
-            contract = self.claim.main_contract
-        else:
-            contracts = self.claim.get_possible_contracts(self.get_date())
-            if len(contracts) == 1:
-                contract = contracts[0]
-        if contract:
-            service.contract = contract
-            if self.benefit_to_deliver:
-                options = []
-                for covered_element in contract.covered_elements:
-                    for option in covered_element.options:
-                        if self.benefit_to_deliver in \
-                                option.get_possible_benefits(self):
-                            options.append(option)
-                if len(set(options)) == 1:
-                    service.option = options[0]
-        self.services = self.services
 
 
 class Process:

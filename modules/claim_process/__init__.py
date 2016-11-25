@@ -9,7 +9,6 @@ def register():
     Pool.register(
         # From claim
         Claim,
-        Loss,
         Process,
         ClaimDeclarationElement,
         ProcessLossDescRelation,

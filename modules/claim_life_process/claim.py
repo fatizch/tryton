@@ -6,7 +6,6 @@ from trytond.modules.coog_core import fields
 __metaclass__ = PoolMeta
 __all__ = [
     'Claim',
-    'Loss',
     ]
 
 
@@ -53,12 +52,3 @@ class Claim:
     def get_indemnifications_to_schedule(self, name):
         return [indemnification.id for indemnification in self.indemnifications
             if indemnification.status in ('calculated', 'scheduled')]
-
-
-class Loss:
-    __name__ = 'claim.loss'
-
-    @classmethod
-    def __setup__(cls):
-        super(Loss, cls).__setup__()
-        cls.benefits.on_change_with.add('covered_person')
