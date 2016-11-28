@@ -1,0 +1,50 @@
+# vim: set ft=sh:
+# chain helpers ($CHAIN_NAME and $CHAIN_FILE are supposed to be set)
+
+chain_begin() {
+        {
+                echo "From: batch@coog.com"
+                echo "To: $COOG_ADMIN_EMAIL"
+                echo "Subject: $CHAIN_NAME"
+                echo "MIME-Version: 1.0"
+                echo "Content-Type: text/plain"
+                echo
+        } >> "$CHAIN_FILE"
+}
+
+chain_step() {
+        echo '=>=>=>=>=>'
+        coog_batch_exec "$@" &
+}
+
+chain_wait() {
+        local ret=0
+        for pid in $(jobs -p)
+        do
+                wait "$pid" || ret=1
+        done
+        while [ ! -z "$1" ]
+        do
+                coog_batch_report "$1" >> "$CHAIN_FILE"
+                shift
+        done
+        if [ "$ret" -eq 0 ]
+        then
+                echo "<=<=<=<=<= ok" && return 0
+        else
+                echo "<=<=<=<=<= ko" && return 1
+        fi
+}
+
+chain_end() {
+        local ret=$?
+        if [ $ret -eq 0 ]
+        then
+                sed -i -e "s/Subject: $CHAIN_NAME/Subject: $CHAIN_NAME: OK/g" "$CHAIN_FILE"
+        else
+                sed -i -e "s/Subject: $CHAIN_NAME/Subject: $CHAIN_NAME: KO/g" "$CHAIN_FILE"
+        fi
+        sed -i -e 's/\\n/\n/g' "$CHAIN_FILE"
+        echo "========== $CHAIN_FILE"
+        [ $ret -eq 0 ] && exit 0 || exit $ret
+}

@@ -1,0 +1,12 @@
+# vim: set ft=sh:
+# batch chain management
+
+coog_chain_main() { # execute batch chain - <module> <chain>
+        [ $# -lt 2 ] && >&2 echo missing arguments && return 1
+        local mod; mod="$1"; shift
+        local chain; chain="$1"; shift
+        [ ! -e "$COOG_TRYTOND/trytond/modules/$mod" ] && >&2 echo bad module name && return 1
+        [ ! -e "$COOG_TRYTOND/trytond/modules/$mod/chain/$chain" ] && >&2 echo bad chain name && return 1
+        . "$COOG_TRYTOND/trytond/modules/coog_core/chain/.helpers"
+        . "$COOG_TRYTOND/trytond/modules/$mod/chain/$chain" "$@"
+}

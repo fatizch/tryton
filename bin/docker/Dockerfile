@@ -38,7 +38,7 @@ RUN pip install \
         numpy \
         scipy \
         uwsgi \
-        celery \
+        "celery<4" \
         rq \
     && rm -rf /root/.cache
 

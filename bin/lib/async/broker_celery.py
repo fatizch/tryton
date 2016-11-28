@@ -55,7 +55,8 @@ def split(job_key):
     job = json.loads(job)
     args = job['args']
     ids = args[4]
-    assert len(ids) > 1, 'can not split a singleton'
+    if len(ids) <= 1:
+        exit(code=1)
     args_list = [[args[0], args[1], args[2], args[3], [id]] for id in ids]
     for args in args_list:
         enqueue(job['queue'], job['func'], args)

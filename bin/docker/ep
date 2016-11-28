@@ -94,7 +94,7 @@ conf_batch() {
         echo "root_dir = $COOG_IO/batch"
 }
 
-set_conf() {
+_init_conf() {
         # build conf from env vars
         conf_postgres >> "$COOG_CONF_SRV" || return $?
         conf_redis >> "$COOG_CONF_SRV" || return $?
@@ -117,10 +117,10 @@ set_conf() {
         return 0
 }
 
-set_env() {
+_init_env() {
         export PYTHONUNBUFFERED=1
         export PYTHONPATH="$COOG_LIB:$COOG_TRYTOND:$PYTHONPATH"
-        [ -z "$LOG_LEVEL" ] && LOG_LEVEL=WARNING
+        [ -z "$LOG_LEVEL" ] && LOG_LEVEL=ERROR
         export LOG_LEVEL
         export TRYTOND_CONFIG="$COOG_CONF_SRV"
         export TRYTOND_BATCH_CONFIG="$COOG_CONF_BAT"
@@ -130,11 +130,11 @@ set_env() {
         return 0
 }
 
-init() {
-        set_conf && set_env
+_init() {
+        _init_conf && _init_env
 }
 
-uno() {
+_uno() {
         unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
         sleep 3
         unoconv --listener -c "pipe,name=trytond;urp;StarOffice.ComponentContext" &
@@ -144,60 +144,60 @@ uno() {
 # entrypoints #
 ###############
 
-link() {
+_link() {
         . "$COOG_ROOT/coog/bin/coog-repo"
         coog_repo_linkm
 }
 
-print_version() {
+_print_version() {
         cat "$COOG_ROOT/.version"
 }
 
-print_env() {
-        init || return $?
+_print_env() {
+        _init || return $?
         echo
         printenv
 }
 
-print_conf() {
-        init || return $?
+_print_conf() {
+        _init || return $?
         echo '# COOG_CONF_SRV'
         cat $COOG_CONF_SRV
         echo '# COOG_CONF_BAT'
         cat $COOG_CONF_BAT
 }
 
-admin() {
-        init || return $?
+_admin() {
+        _init || return $?
         local args
         args="-c $COOG_CONF_SRV"
         [ ! -z "$COOG_DB_NAME" ] && args="$args -d $COOG_DB_NAME"
         trytond-admin "$args" "$@"
 }
 
-cron() {
+_cron() {
         echo Welcome on board, Coog Cron is preparing to start
-        init || return $?
-        uno
+        _init || return $?
+        _uno
         local args
         args="-c $COOG_CONF_SRV"
         [ ! -z "$COOG_DB_NAME" ] && args="$args -d $COOG_DB_NAME"
         trytond-cron "$args" "$@"
 }
 
-wsgi() {
-        [ -z "$1" ] && echo "missing processes number" && return 1
-        echo Welcome on board, Coog WSGI is preparing to start
-        init || return $?
-        uno
+_server() {
+        [ -z "$1" ] && echo "missing concurrency" && return 1
+        echo Welcome on board, Coog Server is preparing to start
+        _init || return $?
+        _uno
         uwsgi -M -T --module trytond.application:app --http :7999 --http-timeout 600 --processes "$1"
 }
 
 _celery() {
         [ "$#" -lt 2 ] && echo "missing arguments" && return 1
         echo Welcome on board, Coog Celery is preparing to start
-        init || return $?
-        uno
+        _init || return $?
+        _uno
         celery worker \
                 --app=async.broker_celery \
                 --concurrency="$1" \
@@ -206,31 +206,39 @@ _celery() {
 }
 
 _rq() {
-        [ -z "$1" ] && echo "missing queues" && return 1
+        [ -z "$1" ] && echo "missing queue" && return 1
         echo Welcome on board, Coog RQ is preparing to start
-        init || return $?
-        uno
+        _init || return $?
+        _uno
         rq worker \
                 -u "$TRYTOND_ASYNC_RQ" \
                 "$@"
 }
 
-batch() {
+_batch() {
         [ -z "$1" ] && echo "missing batch name" && return 1
-        init || return $?
+        _init || return $?
         . "$COOG_ROOT/coog/bin/coog-redis"
         . "$COOG_ROOT/coog/bin/coog-celery"
         . "$COOG_ROOT/coog/bin/coog-rq"
         . "$COOG_ROOT/coog/bin/coog-batch"
-        coog_batch_generate "$@" || return $?
-        coog_batch_join "$1" && return 0
-        coog_batch_split "$1" || return $?
-        coog_batch_join "$1"
+        coog_batch_exec "$@"
 }
 
-redis() {
-        [ -z "$1" ] && echo "missing batch context" && return 1
-        init || return $?
+_chain() {
+        [ "$#" -lt 2 ] && echo "missing arguments" && return 1
+        _init || return $?
+        . "$COOG_ROOT/coog/bin/coog-redis"
+        . "$COOG_ROOT/coog/bin/coog-celery"
+        . "$COOG_ROOT/coog/bin/coog-rq"
+        . "$COOG_ROOT/coog/bin/coog-batch"
+        . "$COOG_ROOT/coog/bin/coog-chain"
+        coog_chain_main "$@"
+}
+
+_redis() {
+        [ -z "$1" ] && echo "missing redis context" && return 1
+        _init || return $?
         . "$COOG_ROOT/coog/bin/coog-redis"
         coog_redis_eval "$@"
 }
@@ -239,20 +247,40 @@ redis() {
 # main #
 ########
 
+usage() {
+        echo
+        echo Image commands
+        echo
+        echo "  version       -> gets image version (git trees)"
+        echo "  env           -> gets container env vars"
+        echo "  conf          -> gets container coog configuration"
+        echo "  admin         -> launch admin utils - <args>"
+        echo "  cron          -> starts coog cron"
+        echo "  server        -> starts coog server - <workers nb>"
+        echo "  celery        -> starts celery workers - <workers nb> <queue,+>"
+        echo "  rq            -> starts rq worker - <queue +>"
+        echo "  batch         -> executes batch - <name> [args *]"
+        echo "  chain         -> executes batch chain - <module> <chain> [args *]"
+        echo "  redis         -> executes redis script - <context> [args *]"
+        echo
+}
+
 main() {
-        [ -z "$1" ] && echo Possible commands: version - env - conf - admin - cron - wsgi - batch - celery - rq && return 1
-        [ "$1" = dep ] && { shift; dep; return $?; }
-        [ "$1" = link ] && { shift; link; return $?; }
-        [ "$1" = version ] && { shift; print_version; return $?; }
-        [ "$1" = env ] && { shift; print_env; return $?; }
-        [ "$1" = conf ] && { shift; print_conf; return $?; }
-        [ "$1" = admin ] && { shift; admin "$@"; return $?; }
-        [ "$1" = cron ] && { shift; cron "$@"; return $?; }
-        [ "$1" = wsgi ] && { shift; wsgi "$@"; return $?; }
-        [ "$1" = celery ] && { shift; _celery "$@"; return $?; }
-        [ "$1" = rq ] && { shift; _rq "$@"; return $?; }
-        [ "$1" = batch ] && { shift; batch "$@"; return $?; }
-        [ "$1" = redis ] && { shift; redis "$@"; return $?; }
+        [ -z "$1" ] && usage && return 1
+        local cmd; cmd="$1"; shift
+        #
+        [ "$cmd" = link ] && { _link; return $?; }
+        [ "$cmd" = version ] && { _print_version; return $?; }
+        [ "$cmd" = env ] && { _print_env; return $?; }
+        [ "$cmd" = conf ] && { _print_conf; return $?; }
+        [ "$cmd" = admin ] && { _admin "$@"; return $?; }
+        [ "$cmd" = cron ] && { _cron "$@"; return $?; }
+        [ "$cmd" = server ] && { _server "$@"; return $?; }
+        [ "$cmd" = celery ] && { _celery "$@"; return $?; }
+        [ "$cmd" = rq ] && { _rq "$@"; return $?; }
+        [ "$cmd" = batch ] && { _batch "$@"; return $?; }
+        [ "$cmd" = chain ] && { _chain "$@"; return $?; }
+        [ "$cmd" = redis ] && { _redis "$@"; return $?; }
         echo "Not supported command" && return 1
 }
 

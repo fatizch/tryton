@@ -1,0 +1,25 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=invoice
+CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
+
+[ $# -lt 1 ] && >&2 echo missing arguments && exit 1
+
+chain_begin
+
+# executing many batches in || with != arguments
+# chain_step batch_1 --treatment-date="$1" --bar=foo
+# chain_step batch_2 --treatment-date="$1" --eggs=spam
+# chain_wait batch_1 batch_2 || chain_end
+
+chain_step contract.invoice.create --treatment-date="$1"
+chain_wait contract.invoice.create || chain_end
+
+chain_step contract.invoice.set_number --treatment-date="$1"
+chain_wait contract.invoice.set_number || chain_end
+
+chain_step contract.invoice.post --treatment-date="$1"
+chain_wait contract.invoice.post || chain_end
+
+chain_end
