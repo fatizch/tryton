@@ -1,6 +1,13 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from collections import defaultdict
+
+from sql import Null, Literal
+from sql.aggregate import Count
+from sql.operators import NotIn
+
 from trytond.pool import Pool, PoolMeta
+from trytond.transaction import Transaction
 from trytond.model import ModelView
 
 from trytond.modules.coog_core import fields
@@ -35,13 +42,55 @@ class ClaimIndemnification:
 
     document_request_lines = fields.One2Many('document.request.line',
         'for_object', 'Documents', delete_missing=True)
+    hidden_waiting_requests = fields.Function(
+        fields.Boolean('Hidden waiting requests'),
+        'get_hidden_waiting_requests')
 
     @classmethod
     def __setup__(cls):
         super(ClaimIndemnification, cls).__setup__()
         cls._error_messages.update({
                 'required_document': 'The document "%s" is required',
+                'required_confidential_documents': 'There are missing required'
+                ' documents that you are not allowed to view.',
                 })
+
+    @classmethod
+    def get_hidden_waiting_requests(cls, indemnifications, name):
+        # This getter allows the user to know if there are request lines which
+        # he is not allowed to view, and which are not yet received.
+        pool = Pool()
+        line = pool.get('document.request.line').__table__()
+        allowed_document_descs = pool.get('document.description').search([])
+        claims = set([])
+        per_claim = defaultdict(list)
+        for indemnification in indemnifications:
+            per_claim[indemnification.service.claim.id].append(indemnification)
+            claims.add(indemnification.service.claim)
+        claims = list(claims)
+
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*line.select(line.for_object,
+                where=line.for_object.in_(
+                    [str(x) for x in list(indemnifications) + claims])
+                & NotIn(line.document_desc, [x.id for x in
+                        allowed_document_descs])
+                & (line.blocking == Literal(True))
+                & (line.reception_date == Null),
+                group_by=[line.for_object],
+                having=Count(line.id) > 0))
+
+        result = {x.id: False for x in indemnifications}
+        for for_object, in cursor.fetchall():
+            res_model, res_id = for_object.split(',')
+            res_id = int(res_id)
+            if res_model == 'claim':
+                for elem in per_claim[res_id]:
+                    result[elem.id] = True
+            else:
+                # Indemnification
+                result[res_id] = True
+        return result
 
     @classmethod
     def get_missing_documents(cls, indemnifications):
@@ -61,6 +110,8 @@ class ClaimIndemnification:
         for doc in missing_documents:
             cls.append_functional_error(
                 'required_document', doc.document_desc.name)
+        if any((x.hidden_waiting_requests for x in indemnifications)):
+            cls.append_functional_error('required_confidential_documents')
 
     def create_required_documents(self, required_documents):
         pool = Pool()

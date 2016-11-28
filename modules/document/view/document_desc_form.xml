@@ -8,4 +8,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="code"/>
     <label name="when_received"/>
     <field name="when_received"/>
+    <field name="groups" colspan="4"/>
 </form>

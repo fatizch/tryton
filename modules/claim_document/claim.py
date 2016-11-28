@@ -2,7 +2,12 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 
+from sql import Null
+from sql.aggregate import Count
+from sql.operators import NotIn
+
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 from trytond.model import ModelView
 
 from trytond.modules.coog_core import fields
@@ -29,6 +34,10 @@ class Claim(RemindableInterface):
         'on_change_with_doc_received')
     attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments',
         target_not_required=True)
+    hidden_waiting_requests = fields.Function(
+        fields.Boolean('Hidden waiting requests'),
+        'get_hidden_waiting_requests',
+        searcher='search_hidden_waiting_requests')
 
     @classmethod
     def __setup__(cls):
@@ -38,12 +47,52 @@ class Claim(RemindableInterface):
                 'generate_reminds_documents': {},
                 })
 
-    @fields.depends('document_request_lines')
+    @classmethod
+    def get_hidden_waiting_requests(cls, claims, name):
+        # This getter allows the user to know if there are request lines which
+        # he is not allowed to view, and which are not yet received.
+        pool = Pool()
+        line = pool.get('document.request.line').__table__()
+        allowed_document_descs = pool.get('document.description').search([])
+
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*line.select(line.claim,
+                where=line.claim.in_([x.id for x in claims])
+                & NotIn(line.document_desc, [x.id for x in
+                        allowed_document_descs])
+                & (line.reception_date == Null),
+                group_by=[line.claim],
+                having=Count(line.id) > 0))
+
+        result = {x.id: False for x in claims}
+        for claim_id, in cursor.fetchall():
+            result[claim_id] = True
+        return result
+
+    @classmethod
+    def search_hidden_waiting_requests(cls, name, clause):
+        pool = Pool()
+        line = pool.get('document.request.line').__table__()
+        allowed_document_descs = pool.get('document.description').search([])
+
+        expected = (clause[1] == '=' and clause[2] is True) or (
+            clause[1] == '!=' and clause[2] is False)
+        if expected:
+            having_clause = Count(line.id) > 0
+        else:
+            having_clause = Count(line.id) == 0
+
+        return [('id', 'in', line.select(line.claim,
+                    where=NotIn(line.document_desc, [x.id for x in
+                            allowed_document_descs])
+                    & (line.reception_date == Null),
+                    group_by=[line.claim],
+                    having=having_clause))]
+
+    @fields.depends('document_request_lines', 'hidden_waiting_requests')
     def on_change_with_doc_received(self, name=None):
-        for doc in self.document_request_lines:
-            if not doc.received:
-                return False
-        return True
+        return not self.hidden_waiting_requests and all(
+            (x.received for x in self.document_request_lines))
 
     @classmethod
     @ModelView.button

@@ -32,6 +32,10 @@ msgctxt "field:document.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:document.description,groups:"
+msgid "Groups"
+msgstr "Groupes"
+
 msgctxt "field:document.description,id:"
 msgid "ID"
 msgstr "ID"
@@ -57,6 +61,46 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:document.description,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:document.description-res.group,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:document.description-res.group,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:document.description-res.group,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.description-res.group,document_desc:"
+msgid "Document Description"
+msgstr "Descripteur de Document"
+
+msgctxt "field:document.description-res.group,group:"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "field:document.description-res.group,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:document.description-res.group,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.description-res.group,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:document.description-res.group,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:document.description-res.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -151,6 +195,10 @@ msgstr "Identifiant XML"
 msgctxt "model:document.description,name:"
 msgid "Document Description"
 msgstr "Descripteur de Document"
+
+msgctxt "model:document.description-res.group,name:"
+msgid "Document Desc Group relation"
+msgstr "Relation type de document - groupe d'utilisateurs"
 
 msgctxt "model:document.receive.reattach,name:"
 msgid "Reattach Document"

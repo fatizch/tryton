@@ -73,6 +73,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_doc_template">
             <field name="name">Document Templates</field>
             <field name="res_model">report.template</field>
+            <field name="context" eval="{'remove_document_desc_filter': 1}" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_doc_template_view1">
             <field name="sequence" eval="16"/>

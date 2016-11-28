@@ -8,6 +8,7 @@ from .attachment import *
 def register():
     Pool.register(
         DocumentDescription,
+        DocumentDescGroup,
         DocumentReception,
         Attachment,
         ReattachDocument,

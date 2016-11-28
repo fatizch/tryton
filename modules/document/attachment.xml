@@ -3,6 +3,9 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- ############## -->
+        <!-- # Attachment # -->
+        <!-- ############## -->
         <record model="ir.ui.view" id="attachment_view_form">
             <field name="model">ir.attachment</field>
             <field name="inherit" ref="ir.attachment_view_form"/>
@@ -12,6 +15,19 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">ir.attachment</field>
             <field name="inherit" ref="ir.attachment_view_tree"/>
             <field name="name">attachment_list</field>
+        </record>
+        <!-- Rules -->
+        <record model="ir.rule.group" id="rule_group_attachment">
+            <field name="model" search="[('model', '=', 'ir.attachment')]"/>
+            <field name="global_p" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.rule" id="rule_attachment">
+            <field name="domain" eval="['OR', ('document_desc', '=', None), ('document_desc.groups', '=', None), ('document_desc.groups', 'in', Eval('user', {}).get('groups', []))]" pyson="1"/>
+            <field name="rule_group" ref="rule_group_attachment"/>
         </record>
     </data>
 </tryton>

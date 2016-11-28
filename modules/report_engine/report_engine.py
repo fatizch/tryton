@@ -194,6 +194,16 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                     ))
 
     @classmethod
+    def search(cls, domain, *args, **kwargs):
+        # Never search any document for which the user is not allowed to view
+        # the type
+        document_descs = Pool().get('document.description').search([])
+        domain = ['AND', domain,
+            ['OR', ('document_desc', '=', None),
+                ('document_desc', 'in', [x.id for x in document_descs])]]
+        return super(ReportTemplate, cls).search(domain, *args, **kwargs)
+
+    @classmethod
     def default_output_kind(cls):
         return 'model'
 

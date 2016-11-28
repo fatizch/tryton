@@ -24,6 +24,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_document_desc">
             <field name="name">Document Descriptions</field>
             <field name="res_model">document.description</field>
+            <field name="context" eval="{'remove_document_desc_filter': 1}" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_document_desc_view1">
             <field name="sequence" eval="16"/>

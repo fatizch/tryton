@@ -18,6 +18,16 @@ class Attachment:
         'Document Description', ondelete='SET NULL')
 
     @classmethod
+    def search(cls, domain, *args, **kwargs):
+        # Never search any document for which the user is not allowed to view
+        # the type
+        document_descs = Pool().get('document.description').search([])
+        domain = ['AND', domain,
+            ['OR', ('document_desc', '=', None),
+                ('document_desc', 'in', [x.id for x in document_descs])]]
+        return super(Attachment, cls).search(domain, *args, **kwargs)
+
+    @classmethod
     def search_for_export_import(cls, values):
         pool = Pool()
         if '_func_key' in values:

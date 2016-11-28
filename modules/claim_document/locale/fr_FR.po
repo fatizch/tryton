@@ -78,6 +78,10 @@ msgctxt "field:claim,document_request_lines:"
 msgid "Required Documents"
 msgstr "Documents requis"
 
+msgctxt "field:claim,hidden_waiting_requests:"
+msgid "Hidden waiting requests"
+msgstr "Documents requis cachés"
+
 msgctxt "field:document.reception,claim:"
 msgid "Claim"
 msgstr "Sinistre"

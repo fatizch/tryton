@@ -3,7 +3,12 @@
 from itertools import groupby
 from collections import defaultdict
 
+from sql import Null
+from sql.aggregate import Count
+from sql.operators import NotIn
+
 from trytond.pool import Pool, PoolMeta
+from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.model import ModelView
 
@@ -29,6 +34,10 @@ class Contract(RemindableInterface):
         'contract', 'Documents',
         states={'readonly': Eval('status') != 'quote'},
         depends=['status'], delete_missing=True)
+    hidden_waiting_requests = fields.Function(
+        fields.Boolean('Hidden waiting requests'),
+        'get_hidden_waiting_requests',
+        searcher='search_hidden_waiting_requests')
 
     @classmethod
     def __setup__(cls):
@@ -48,9 +57,10 @@ class Contract(RemindableInterface):
         return (super(Contract, cls).functional_skips_for_duplicate() |
             set(['attachments']))
 
-    @fields.depends('document_request_lines')
+    @fields.depends('document_request_lines', 'hidden_waiting_requests')
     def on_change_with_doc_received(self, name=None):
-        return all((x.received for x in self.document_request_lines))
+        return not self.hidden_waiting_requests and all(
+            (x.received for x in self.document_request_lines))
 
     @classmethod
     def get_calculated_required_documents(cls, contracts):
@@ -72,6 +82,48 @@ class Contract(RemindableInterface):
                     args)
                 documents_per_contract[contract].update(option_docs)
         return documents_per_contract
+
+    @classmethod
+    def get_hidden_waiting_requests(cls, contracts, name):
+        # This getter allows the user to know if there are request lines which
+        # he is not allowed to view, and which are not yet received.
+        pool = Pool()
+        line = pool.get('document.request.line').__table__()
+        allowed_document_descs = pool.get('document.description').search([])
+
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*line.select(line.contract,
+                where=line.contract.in_([x.id for x in contracts])
+                & NotIn(line.document_desc, [x.id for x in
+                        allowed_document_descs])
+                & (line.reception_date == Null),
+                group_by=[line.contract],
+                having=Count(line.id) > 0))
+
+        result = {x.id: False for x in contracts}
+        for contract_id, in cursor.fetchall():
+            result[contract_id] = True
+        return result
+
+    @classmethod
+    def search_hidden_waiting_requests(cls, name, clause):
+        pool = Pool()
+        line = pool.get('document.request.line').__table__()
+        allowed_document_descs = pool.get('document.description').search([])
+
+        expected = (clause[1] == '=' and clause[2] is True) or (
+            clause[1] == '!=' and clause[2] is False)
+        if expected:
+            having_clause = Count(line.id) > 0
+        else:
+            having_clause = Count(line.id) == 0
+
+        return [('id', 'in', line.select(line.contract,
+                    where=NotIn(line.document_desc, [x.id for x in
+                            allowed_document_descs])
+                    & (line.reception_date == Null),
+                    group_by=[line.contract],
+                    having=having_clause))]
 
     def init_subscription_document_request(self):
         pool = Pool()

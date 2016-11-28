@@ -11,6 +11,7 @@ from trytond.modules.coog_core import fields, model, coog_string, utils
 
 __all__ = [
     'DocumentDescription',
+    'DocumentDescGroup',
     'DocumentReception',
     'ReceiveDocument',
     'ReattachDocument',
@@ -28,6 +29,8 @@ class DocumentDescription(model.CoogSQL, model.CoogView):
     when_received = fields.Selection([
             ('', ''), ('free_attach', 'Free Attachment')],
         'Action when received')
+    groups = fields.Many2Many('document.description-res.group',
+        'document_desc', 'group', 'Groups')
 
     @classmethod
     def __setup__(cls):
@@ -39,11 +42,57 @@ class DocumentDescription(model.CoogSQL, model.CoogView):
         ]
         cls._order.insert(0, ('name', 'ASC'))
 
+    @classmethod
+    def search(cls, domain, *args, **kwargs):
+        # Filter out everything the user is not allowed to view
+        # The 'remove_document_desc_filter' is used in document desc act window
+        # and in report engine act window (report engine module) to allow
+        # configuration by non-authorized members.
+        if not Transaction().context.get('remove_document_desc_filter', False):
+            user = Pool().get('res.user')(Transaction().user)
+            domain = ['AND', domain,
+                ['OR', ('groups', '=', None),
+                    ('groups', 'in', [x.id for x in user.groups])]]
+        return super(DocumentDescription, cls).search(domain, *args, **kwargs)
+
     @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
             return self.code
         return coog_string.slugify(self.name)
+
+
+class DocumentDescGroup(model.CoogSQL):
+    'Document Desc Group relation'
+
+    __name__ = 'document.description-res.group'
+
+    document_desc = fields.Many2One('document.description',
+        'Document Description', ondelete='CASCADE', required=True, select=True)
+    group = fields.Many2One('res.group', 'Group', ondelete='CASCADE',
+        required=True, select=True)
+
+    @classmethod
+    def delete(cls, records):
+        Rule = Pool().get('ir.rule')
+        super(DocumentDescGroup, cls).delete(records)
+        # Restart the cache on the domain_get method of ir.rule
+        Rule._domain_get_cache.clear()
+
+    @classmethod
+    def create(cls, vlist):
+        Rule = Pool().get('ir.rule')
+        res = super(DocumentDescGroup, cls).create(vlist)
+        # Restart the cache on the domain_get method of ir.rule
+        Rule._domain_get_cache.clear()
+        return res
+
+    @classmethod
+    def write(cls, records, values, *args):
+        Rule = Pool().get('ir.rule')
+        super(DocumentDescGroup, cls).write(records, values, *args)
+        # Restart the cache on the domain_get method
+        Rule._domain_get_cache.clear()
 
 
 class DocumentReception(model.CoogSQL, model.CoogView):

@@ -6,6 +6,11 @@ msgctxt "error:claim.indemnification:"
 msgid "The document \"%s\" is required"
 msgstr "Le document \"%s\" est requis"
 
+msgctxt "error:claim.indemnification:"
+msgid "There are missing required documents that you are not allowed to view."
+msgstr ""
+"Il y a des documents requis manquants que vous n'etes pas autorisés à voir."
+
 msgctxt "field:claim,required_indemnification_docs:"
 msgid "Required Docs"
 msgstr "Documents requis"
@@ -13,6 +18,10 @@ msgstr "Documents requis"
 msgctxt "field:claim.indemnification,document_request_lines:"
 msgid "Documents"
 msgstr "Documents requis"
+
+msgctxt "field:claim.indemnification,hidden_waiting_requests:"
+msgid "Hidden waiting requests"
+msgstr "Documents requis cachés"
 
 msgctxt "field:claim.indemnification_calculation_result,requested_documents:"
 msgid "Requested Documents"

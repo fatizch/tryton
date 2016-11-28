@@ -83,6 +83,15 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
                     ))
 
     @classmethod
+    def search(cls, domain, *args, **kwargs):
+        # Never search any document for which the user is not allowed to view
+        # the type
+        document_descs = Pool().get('document.description').search([])
+        domain = ['AND', domain,
+            ['OR', ('document_desc', '=', None),
+                ('document_desc', 'in', [x.id for x in document_descs])]]
+        return super(DocumentRequestLine, cls).search(domain, *args, **kwargs)
+
     def create(cls, vlist):
         # Add hook to update creation data depending on the target model. See
         # contract / claim implementation for examples
