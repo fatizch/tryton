@@ -1,4 +1,3 @@
-[submodule "bin/vendor/tryton-perf-analyzer"]
+[submodule "perf"]
 	path = bin/redis/perf
 	url = git@github.com:coopengo/tryton-perf-analyzer.git
-	branch = master

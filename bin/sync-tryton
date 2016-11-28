@@ -1,23 +1,31 @@
 #!/bin/bash
+# vim: set ft=sh:
 
-COOG_BRANCH=master
-TRYTON_BRANCH=4.0
+[ -z "$1" ] && echo missing tryton branch && exit 1
+TRYTON_BRANCH="$1"; shift
+echo "$TRYTON_BRANCH" | grep -P "^\d\.\d+$" &> /dev/null # tryton branches ~ <major>.<minor>
+[ $? -ne 0 ] && echo bad tryton branch && exit 1
+
+[ -z "$1" ] && echo missing coog branch && exit 1
+COOG_BRANCH="$1"; shift
+echo "$COOG_BRANCH" | grep -P "^(master|coog-\d\.\d+)$" &> /dev/null # coog branches ~ coog-<major>.<minor>
+[ $? -ne 0 ] && echo bad coog branch && exit 1
 
 sync() {
         local diff
-        diff=`git diff HEAD | wc -l`
-        [ $diff -ne 0 ] && echo repo not clean && return 1
+        diff=$(git diff HEAD | wc -l)
+        [ "$diff" -ne 0 ] && echo repo not clean && return 1
         git fetch -p &&
-                git checkout $TRYTON_BRANCH &&
-                git rebase origin/$TRYTON_BRANCH &&
-                git checkout $COOG_BRANCH &&
-                git rebase origin/$COOG_BRANCH
+                git checkout "$TRYTON_BRANCH" &&
+                git rebase origin/"$TRYTON_BRANCH" &&
+                git checkout "$COOG_BRANCH" &&
+                git rebase origin/"$COOG_BRANCH"
 }
 
 merge() {
-        git checkout $COOG_BRANCH &&
-                git merge $TRYTON_BRANCH --no-edit &&
-                git push origin $COOG_BRANCH
+        git checkout "$COOG_BRANCH" &&
+                git merge "$TRYTON_BRANCH" --no-edit &&
+                git push origin "$COOG_BRANCH"
 }
 
 sync_proteus() {
@@ -46,34 +54,25 @@ sync_modules() {
         local st=0
         for repo in modules/*
         do
-                if [ -d $repo ] && [ -e $repo/.git ]
+                if [ -d "$repo" ] && [ -e "$repo"/.git ]
                 then
                         echo
-                        echo Work on $repo
-                        cd $repo && sync && merge
-                        [ $? -ne 0 ] && st=1 && echo Error on $repo
+                        echo Work on "$repo"
+                        cd "$repo" && sync && merge
+                        [ $? -ne 0 ] && st=1 && echo Error on "$repo"
                         cd ../..
                 fi
         done
         [ $st -ne 0 ] && cd .. && return 1
-        git checkout $TRYTON_BRANCH && git submodule foreach git checkout $TRYTON_BRANCH && git add . && git commit -m "update modules" && git push origin $TRYTON_BRANCH
-        git checkout $COOG_BRANCH && git submodule foreach git checkout $COOG_BRANCH && git add . && git commit -m "update modules" && git push origin $COOG_BRANCH
+        git checkout "$TRYTON_BRANCH" && git submodule foreach git checkout "$TRYTON_BRANCH" && git add . && git commit -m "update modules" && git push origin "$TRYTON_BRANCH"
+        git checkout "$COOG_BRANCH" && git submodule foreach git checkout "$COOG_BRANCH" && git add . && git commit -m "update modules" && git push origin "$COOG_BRANCH"
         cd ..
 }
 
 main() {
-        if [ ! -z $1 ]
-        then
-                sync_$1
-        else
-                echo missing repo && return 1
-        fi
+        [ -z "$1" ] && echo missing repo && return 1
+        "sync_$1"
 }
 
-_target=`readlink -f $0 | xargs dirname`/../..
-_source=`pwd`
-cd $_target
-main $*
-_ret=$?
-cd $_source
-exit $_ret
+_target=$(readlink -f "$0" | xargs dirname)/../..
+(cd "$_target"; main "$@")
