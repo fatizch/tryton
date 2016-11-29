@@ -3,6 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/tree/field[@name='claimant']" position="after">
-        <field name="legal_entity" tree_invisible="1"/>
+        <field name="legal_entity"/>
     </xpath>
 </data>

@@ -6,4 +6,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="claimant"/>
     <field name="status"/>
     <field name="sub_status"/>
+    <field name="losses_description"/>
 </tree>
