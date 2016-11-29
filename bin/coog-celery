@@ -7,7 +7,7 @@ _coog_celery_file() {
 
 coog_celery_start() { # start workers - <concurrency> <queue,+>
         [ $# -lt 2 ] && >&2 echo "missing arguments" && return 1
-        [ "$1" -eq "$1" ] 2>/dev/null || { echo "argument must be an integer"; return 1; }
+        [ "$1" -eq "$1" ] 2> /dev/null || { echo "argument must be an integer"; return 1; }
         local pid_file; pid_file=$(_coog_celery_file pid)
         local out_file; out_file=$(_coog_celery_file out)
         local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
