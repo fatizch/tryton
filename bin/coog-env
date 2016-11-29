@@ -72,7 +72,13 @@ _coog_env_postgres() { # set postgres vars
         [ ! -z $PGUSER ] && export PGUSER
         PGPASSWORD=`echo "$db_conf" | sed -n 5p`
         [ ! -z $PGPASSWORD ] && export PGPASSWORD
-        PGDATABASE=`echo "$db_conf" | sed -n 6p`
+        if [ ! -z "$DB_NAME" ]
+        then
+                PGDATABASE="$DB_NAME"
+        else
+
+                PGDATABASE=`echo "$db_conf" | sed -n 6p`
+        fi
         [ ! -z $PGDATABASE ] && export PGDATABASE
         return 0
 }
@@ -105,7 +111,10 @@ _coog_env_server() { # set server vars
         [ ! -z $TRYTOND_WEB_ROOT ] && export TRYTOND_WEB_ROOT
         TRYTOND_WEB_BENCH="$COOG_BENCH"
         [ ! -z $TRYTOND_WEB_BENCH ] && export TRYTOND_WEB_BENCH
-        DB_NAME=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_SRV | python $COOG_BIN/parse-url.py | sed -n 6p` || return $?
+        if [ -z "$DB_NAME" ]
+        then
+                DB_NAME=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_SRV | python $COOG_BIN/parse-url.py | sed -n 6p` || return $?
+        fi
         [ ! -z $DB_NAME ] && export DB_NAME
         TRYTOND_CACHE_REDIS=`python $COOG_BIN/parse-config.py cache redis < $COOG_CONF_SRV 2> /dev/null`
         [ ! -z $TRYTOND_CACHE_REDIS ] && export TRYTOND_CACHE_REDIS
@@ -205,7 +214,7 @@ coog_env_config() { # print or edit conf file <client|server|batch|test|log> [ed
         command_="cat"
         [ $2  = "edit" ] && command_=$EDITOR
         [ -z $command_ ] && echo "Please set the EDITOR environment variable" \
-            && return 1
+                && return 1
         if [ $1 = client ]
         then
                 echo '# '"conf file: $COOG_CONF_CLI"

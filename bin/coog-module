@@ -55,23 +55,6 @@ coog_module_translate() { # generate module translations
         python $COOG_BIN/translate.py -c $COOG_CONF_SRV -p $COOG_TRYTOND/trytond/modules $args
 }
 
-coog_module_updatedb() { # install / update database modules - <database> [modules] - default is all
-        [ -z $1 ] && echo no given database && return
-        local db; db=$1; shift
-        local args
-        if [ -z $1 ]
-        then
-                args='--all'
-        else
-                args='-u '$*
-        fi
-        coog_server_clearcache
-        trytond-admin -v \
-                -c $COOG_CONF_SRV \
-                -d $db \
-                $args
-}
-
 coog_module_create() { # creates a new module in the modules folder - <module_name> <file_1> [file_2] etc.
         [ -z "$1" ] && echo No module name && return 1
         [ -z "$2" ] && echo No main file && return 1
