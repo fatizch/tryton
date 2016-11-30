@@ -10,16 +10,25 @@ __metaclass__ = PoolMeta
 __all__ = [
     'ClaimIndemnification',
     'ClaimService',
-    'Claim'
+    'Claim',
+    'ExtraData',
     ]
 
 
 class Claim:
     __name__ = 'claim'
 
+    all_services_refused = fields.Function(
+        fields.Boolean('All services are refused'),
+        'get_all_services_refused')
+
     def check_eligibility(self):
         Service = Pool().get('claim.service')
         Service.check_eligibility(self.delivered_services)
+
+    def get_all_services_refused(self, name=None):
+        return all(x.eligibility_status == 'refused'
+            for x in self.delivered_services)
 
 
 class ClaimService:
@@ -36,6 +45,8 @@ class ClaimService:
     eligibility_comment_wrapped = fields.Function(
         fields.Text('Eligibility Comment'),
         'on_change_with_eligibility_comment_wrapped')
+    eligibility_extra_data_values = fields.Dict('extra_data',
+        'Eligibility Extra Data')
 
     @classmethod
     def __setup__(cls):
@@ -44,10 +55,16 @@ class ClaimService:
             'refuse_services': {
                 'invisible': Eval('eligibility_status') != 'study_in_progress',
                 },
+            'validate_services': {
+                'invisible': Eval('eligibility_status') != 'study_in_progress',
+                },
             'check_eligibility': {
                 'invisible': Eval('eligibility_status') != 'study_in_progress',
                 }
             })
+        cls._error_messages.update({
+                'warning_refuse_service': 'Confirm service refusal'
+                })
 
     @staticmethod
     def default_eligibility_status():
@@ -94,12 +111,37 @@ class ClaimService:
     @classmethod
     @model.CoogView.button
     def refuse_services(cls, services):
+        cls.raise_user_warning('warning_refuse_service',
+            'warning_refuse_service')
         pool = Pool()
         Event = pool.get('event')
         cls.write(services, {
                 'eligibility_status': 'refused',
                 })
         Event.notify_events(services, 'refuse_claim_service')
+
+    @classmethod
+    @model.CoogView.button_action(
+        'claim_eligibility.act_validate_eligibility_wizard')
+    def validate_services(cls, services):
+        pass
+
+    def init_eligibility_extra_data_values(self):
+        ExtraData = Pool().get('extra_data')
+        extra_datas = ExtraData.search(
+            [('kind', '=', 'manual_eligibility_reason')])
+        self.eligibility_extra_data_values = {
+            x.name: None for x in extra_datas}
+
+    def get_all_extra_data(self, at_date):
+        res = super(ClaimService, self).get_all_extra_data(at_date)
+        res.update(self.eligibility_extra_data_values)
+        return res
+
+    def accept_eligibility(self, extra_data):
+        self.__class__.write([self], {
+                'eligibility_status': 'accepted',
+                'eligibility_extra_data_values': extra_data})
 
 
 class ClaimIndemnification:
@@ -119,3 +161,13 @@ class ClaimIndemnification:
         for i in indemnifications:
             if i.service.eligibility_status != 'accepted':
                 cls.append_functional_error('ineligible')
+
+
+class ExtraData:
+    __name__ = 'extra_data'
+
+    @classmethod
+    def __setup__(cls):
+        super(ExtraData, cls).__setup__()
+        cls.kind.selection.append(('manual_eligibility_reason',
+                'Manual Eligibility Reason'))

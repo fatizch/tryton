@@ -1,5 +1,8 @@
-- **Paramétrage de la règle d'éligibilité**: Via le moteur de règle, il est
-possible de définir ses propres règles d'éligibilité à une prestation (ex:
-délai de déclaration, paiements des quittances à jour...)
+- **Setting the eligibility rule**: Via the rule engine, it's possible to define
+ its own eligibility rules for a delivered service (ex: time limit, payments of 
+ up-to-date receipts, ...)
 
-- **Gestion de l'éligibilité de la prestation au niveau du sinistre**
+- **Claim eligibility management at the level of loss**: Eligibility is 
+automatically calculated according to defined rules. It's possible to force 
+validation (in case of late declaration, ...) or to reject it while the study 
+is in progress

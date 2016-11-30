@@ -39,7 +39,8 @@ class DocumentRequestLine:
             table = cls.__table__()
             cursor.execute(*table.update(
                     columns=[table.claim],
-                    values=[Cast(Substring(table.for_object, len('claim,') + 1),
+                    values=[Cast(Substring(table.for_object,
+                                len('claim,') + 1),
                             cls.claim.sql_type().base)],
                     where=(table.for_object.like('claim,%'))
                     ))
@@ -55,6 +56,11 @@ class DocumentRequestLine:
                 if 'claim' in value:
                     continue
                 value['claim'] = claim_id
+
+    @fields.depends('claim', 'for_object')
+    def on_change_claim(self):
+        if self.for_object is None:
+            self.for_object = self.claim
 
 
 class DocumentRequest:

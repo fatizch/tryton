@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- ########### Validate Eligibility wizard ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="validate_eligibility_view_form">
+            <field name="model">claim.service</field>
+            <field name="type">form</field>
+            <field name="name">validate_eligibility_form</field>
+        </record>
+        <record model="ir.action.wizard" id="act_validate_eligibility_wizard">
+            <field name="name">Validate Eligibility</field>
+            <field name="wiz_name">claim.manual_validation_eligibility</field>
+        </record>
+    </data>
+</tryton>

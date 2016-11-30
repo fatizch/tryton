@@ -1,6 +1,8 @@
+* Possibilité de forcer la validation ou le refus de l'éligibilité 
+
 Version 1.10 - 2016-11-02
-* Verify eligibility when scheduling an indemnification
+* Vérifier l'éligibilité lors de l'ordonnancement d'une indemnisation
 
 Version 1.8 - 2016-07-06
-* Add accept/refuse benefit button on delivered service
-* Module creation
+* Ajout des boutons Valider et Décliner sur la prestation
+* Création du module

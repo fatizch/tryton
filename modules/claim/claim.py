@@ -262,8 +262,6 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
             return contracts[0]
         elif len(contracts) > 1 and self.main_contract in contracts:
             return self.main_contract
-        else:
-            self.raise_user_error('no_main_contract')
 
     def get_product(self):
         return self.get_contract().offered

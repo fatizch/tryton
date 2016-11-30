@@ -3,6 +3,7 @@
 from trytond.pool import Pool
 from .benefit import *
 from .claim import *
+from .wizard import *
 
 
 def register():
@@ -12,4 +13,8 @@ def register():
         Claim,
         ClaimService,
         ClaimIndemnification,
+        ExtraData,
         module='claim_eligibility', type_='model')
+    Pool.register(
+        ManualValidationEligibility,
+        module='claim_eligibility', type_='wizard')
