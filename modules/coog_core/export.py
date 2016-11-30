@@ -145,15 +145,15 @@ class ExportImportMixin(Historizable):
         already_exported = set()
         self.export_json(output=result, already_exported=already_exported,
             configuration=configuration)
-        export_log = 'The following records will be exported:\n '
+        export_log = '<div>The following records will be exported:</div>'
         instances = collections.defaultdict(list)
         for value in already_exported:
             instances[value.__name__].append((value.rec_name,
                 getattr(value, value._func_key)))
         for k, v in instances.iteritems():
-            export_log += '<b>%s</b>\n' % k
+            export_log += '<div><b>%s</b></div>' % k
             for elem in v:
-                export_log += '    %s - %s\n' % elem
+                export_log += '<div>    %s - %s</div>' % elem
         return filename, result, export_log
 
     @classmethod
@@ -576,9 +576,9 @@ class FileSelector(ModelView):
                 instances[value['__name__']].append(value['_func_key'])
             result = ''
             for k, v in instances.iteritems():
-                result += '<b>%s</b>\n' % k
+                result += '<div><b>%s</b></div>' % k
                 for elem in v:
-                    result += '    %s\n' % elem
+                    result += '<div>    %s</div>' % elem
             return result
 
 
