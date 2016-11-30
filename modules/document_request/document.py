@@ -92,6 +92,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
                 ('document_desc', 'in', [x.id for x in document_descs])]]
         return super(DocumentRequestLine, cls).search(domain, *args, **kwargs)
 
+    @classmethod
     def create(cls, vlist):
         # Add hook to update creation data depending on the target model. See
         # contract / claim implementation for examples
