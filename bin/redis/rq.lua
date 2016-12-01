@@ -94,6 +94,7 @@ broker.fill = function(id, job)
     data = cjson.decode(data)
     local args = data.args
     job.task = data.func
+    job.context = args[1]
     job.connect = args[2] or '-'
     job.treat = args[3] or '-'
     job.args = cjson.encode(args[4])
@@ -210,8 +211,8 @@ api.qlist = function(queue, ...)
     assert(queue, 'missing queue')
     local filter = check_filter({0, 1}, ...)
 
-    local header = {'queue', 'id', 'status', 'connect', 'treat', 'args',
-        'records', 'result'}
+    local header = {'queue', 'id', 'status', 'context', 'connect', 'treat',
+        'args', 'records', 'result'}
     local result = {table.concat(header, '\t')}
 
     local function insert(job)

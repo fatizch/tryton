@@ -235,12 +235,11 @@ coog_test_fullcheck() { # check and report a full test - <branch>
                 subject="Test Report $1: KO"
                 echo "TEST FULL $1: end - $fail KO"
                 echo >> "$out"
-                coog_test_query qlist "test" fail >> "$out"
-                for id in $(coog_test_query "test" fail)
+                coog_test_query qlist "test" fail | column -t >> "$out"
+                for id in $(coog_test_query fail "test")
                 do
                         [ -z "$id" ] && continue
                         echo >> "$out"
-                        local log
                         coog_test_logextract "$id" >> "$out"
                 done
         else
