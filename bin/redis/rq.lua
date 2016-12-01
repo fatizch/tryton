@@ -17,7 +17,6 @@ Usage: only ARGV are used (no KEYS). Possible commands are:
   - qremove: clear queue jobs - <queue> [filters]
 
   - j: show job - <id>
-  - jtime: time job execution - <id>
   - jarchive: archive job - <id>
   - jremove: remove job - <id>
 ]]
@@ -109,7 +108,7 @@ end
 
 broker.time = function(id)
     local key = broker.patterns[1] .. id
-    local enqueued = redis.call('HGET', key, 'started_at')
+    local enqueued = redis.call('HGET', key, 'enqueued_at')
     local ended = redis.call('HGET', key, 'ended_at')
     if enqueued and ended then
         local qy, qm, qd, qh, qmn, qs = parse_date(enqueued)
@@ -340,7 +339,6 @@ local function generate_job_api(act)
 end
 
 api.j = generate_job_api('show')
-api.jtime = generate_job_api('time')
 api.jarchive = generate_job_api('archive')
 api.jremove = generate_job_api('remove')
 
