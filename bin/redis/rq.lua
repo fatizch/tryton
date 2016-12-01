@@ -12,10 +12,12 @@ Usage: only ARGV are used (no KEYS). Possible commands are:
   - q: print queue summary - <queue>
   - qlist: list queue jobs - <queue> [filters]
   - qcount: count queue jobs - <queue> [filters]
+  - qtime: time queue execution - <queue> [filters]
   - qarchive: archive queue jobs - <queue> [filters]
   - qremove: clear queue jobs - <queue> [filters]
 
   - j: show job - <id>
+  - jtime: time job execution - <id>
   - jarchive: archive job - <id>
   - jremove: remove job - <id>
 ]]
@@ -107,7 +109,7 @@ end
 
 broker.time = function(id)
     local key = broker.patterns[1] .. id
-    local enqueued = redis.call('HGET', key, 'enqueued_at')
+    local enqueued = redis.call('HGET', key, 'started_at')
     local ended = redis.call('HGET', key, 'ended_at')
     if enqueued and ended then
         local qy, qm, qd, qh, qmn, qs = parse_date(enqueued)
@@ -257,6 +259,24 @@ api.qcount = function(queue, ...)
     return result
 end
 
+api.qtime = function(queue, ...)
+    assert(queue, 'missing queue')
+    local filter = check_filter({0, 1}, ...)
+
+    local result = 0
+    local pattern = broker.patterns[1]
+    local keys = redis.call('KEYS', pattern .. '*')
+    for _, key in ipairs(keys) do
+        local id = key:sub(#pattern+1)
+        local job = broker.prepare(id)
+        if is_eligible(job, queue, filter) then
+            local t = broker.time(id)
+            result = math.max(result, t)
+        end
+    end
+    return result
+end
+
 api.qarchive = function(queue, ...)
     assert(queue, 'missing queue')
     local filter = check_filter({1, 2}, ...)
@@ -320,6 +340,7 @@ local function generate_job_api(act)
 end
 
 api.j = generate_job_api('show')
+api.jtime = generate_job_api('time')
 api.jarchive = generate_job_api('archive')
 api.jremove = generate_job_api('remove')
 

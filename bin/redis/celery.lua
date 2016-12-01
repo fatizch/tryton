@@ -12,6 +12,7 @@ Usage: only ARGV are used (no KEYS). Possible commands are:
   - q: print queue summary - <queue>
   - qlist: list queue jobs - <queue> [filters]
   - qcount: count queue jobs - <queue> [filters]
+  - qtime: time queue execution - <queue> [filters]
   - qarchive: archive queue jobs - <queue> [filters]
   - qremove: clear queue jobs - <queue> [filters]
 
@@ -243,6 +244,24 @@ api.qcount = function(queue, ...)
         local job = broker.prepare(id)
         if is_eligible(job, queue, filter) then
             result = result + 1
+        end
+    end
+    return result
+end
+
+api.qtime = function(queue, ...)
+    assert(queue, 'missing queue')
+    local filter = check_filter({0, 1}, ...)
+
+    local result = 0
+    local pattern = broker.patterns[1]
+    local keys = redis.call('KEYS', pattern .. '*')
+    for _, key in ipairs(keys) do
+        local id = key:sub(#pattern+1)
+        local job = broker.prepare(id)
+        if is_eligible(job, queue, filter) then
+           local t = broker.time(id)
+           result = math.max(result, t)
         end
     end
     return result
