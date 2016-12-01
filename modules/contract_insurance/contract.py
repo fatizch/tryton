@@ -799,8 +799,8 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
 
     @classmethod
     def _export_skips(cls):
-        return (super(CoveredElement, cls)._export_skips() |
-            set(['multi_mixed_view']))
+        return super(CoveredElement, cls)._export_skips() | {
+            'multi_mixed_view', 'all_options'}
 
     @classmethod
     def add_func_key(cls, values):
