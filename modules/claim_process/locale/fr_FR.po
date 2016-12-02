@@ -62,10 +62,6 @@ msgctxt "field:claim,logs:"
 msgid "Task"
 msgstr "Tâche"
 
-msgctxt "field:claim,losses_description:"
-msgid "Losses Description"
-msgstr "Descripteurs de préjudices"
-
 msgctxt "field:claim,open_loss:"
 msgid "Open Loss"
 msgstr "Evenement ouvert"

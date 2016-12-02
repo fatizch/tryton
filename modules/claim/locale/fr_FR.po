@@ -445,6 +445,10 @@ msgctxt "field:claim,losses:"
 msgid "Losses"
 msgstr "Préjudices"
 
+msgctxt "field:claim,losses_description:"
+msgid "Losses Description"
+msgstr "Descripteurs de préjudices"
+
 msgctxt "field:claim,main_contract:"
 msgid "Main Contract"
 msgstr "Contrat Principal"

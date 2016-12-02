@@ -78,6 +78,8 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
         fields.Many2Many('contract', None, None, 'Contracts'),
         'getter_possible_contracts')
     _claim_number_generator_cache = Cache('claim_number_generator')
+    losses_description = fields.Function(
+        fields.Char('Losses Description'), 'get_losses_description')
 
     @classmethod
     def __setup__(cls):
@@ -316,6 +318,9 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
     @classmethod
     def ws_deliver_automatic_benefit(cls, claims):
         cls.deliver_automatic_benefit(claims)
+
+    def get_losses_description(self, name):
+        return ' - '.join([loss.rec_name for loss in self.losses])
 
 
 class Loss(model.CoogSQL, model.CoogView):

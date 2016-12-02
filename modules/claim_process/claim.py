@@ -32,9 +32,6 @@ class Claim(CoogProcessFramework):
         fields.One2Many('party.interaction', '', 'History',
             depends=['claimant']),
         'on_change_with_contact_history')
-    losses_description = fields.Function(
-        fields.Char('Losses Description'),
-        'get_losses_description')
     open_loss = fields.Function(
         fields.One2Many('claim.loss', None, 'Open Loss'),
         'get_open_loss', setter='set_open_loss')
@@ -61,11 +58,6 @@ class Claim(CoogProcessFramework):
             elif action[0] == 'delete':
                 objects = [Loss(id_) for id_ in action[1]]
                 Loss.delete(objects)
-
-    def get_losses_description(self, name):
-        if not self.losses:
-            return ''
-        return ' - '.join([loss.rec_name for loss in self.losses])
 
     def init_declaration_document_request(self):
         pool = Pool()
