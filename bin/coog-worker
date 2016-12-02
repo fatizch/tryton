@@ -24,6 +24,11 @@ coog_worker_stop() { # stop
         echo worker stopped
 }
 
+coog_worker_stop() { # kill
+        coog_pid_pid | xargs kill -9 &> /dev/null
+        echo worker killed
+}
+
 coog_worker_pid() { # get pid
         local pid_file; pid_file=$(_coog_worker_file pid)
         coog_env_pid "$pid_file"

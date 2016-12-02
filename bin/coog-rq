@@ -35,6 +35,11 @@ coog_rq_pid() { # get pid - <wid>
         coog_env_pid "$pid_file"
 }
 
+coog_rq_kill() { # kill pid - <wid>
+        coog_rq_pid "$*" | xargs kill -9 &> /dev/null
+        echo rq killed
+}
+
 coog_rq_cli() { # rq cli wrapper - <rq args>
         local cmd; cmd=$1; shift
         rq "$cmd" -u "$TRYTOND_ASYNC_RQ" "$@"

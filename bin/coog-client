@@ -40,6 +40,11 @@ coog_client_stop() { # stop
         echo client stopped
 }
 
+coog_client_kill() { # kill
+        coog_client_pid | xargs kill -9 &> /dev/null
+        echo client killed
+}
+
 coog_client_pid() { # get pid
         local pid_file; pid_file=$(_coog_client_file pid)
         coog_env_pid "$pid_file"

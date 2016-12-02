@@ -49,6 +49,11 @@ coog_server_stop() { # stop
         echo server stopped
 }
 
+coog_server_kill() { # kill
+        coog_server_pid | xargs kill -9 &> /dev/null
+        echo server killed
+}
+
 coog_server_pid() { # get pid
         local pid_file; pid_file=$(_coog_server_file pid)
         local pid1; pid1=$(coog_env_pid "$pid_file") || return $?
