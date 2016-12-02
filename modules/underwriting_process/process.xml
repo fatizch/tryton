@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ########### -->
+        <!-- # Process # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="process_view_form">
+            <field name="model">process</field>
+            <field name="inherit" ref="process.process_form"/>
+            <field name="name">process_form</field>
+        </record>
+        <!-- ################################### -->
+        <!-- # Underwriting Start Find Process # -->
+        <!-- ################################### -->
+        <record model="ir.ui.view" id="underwriting_start_find_process_view_form">
+            <field name="model">underwriting.start.find_process</field>
+            <field name="inherit" ref="process_cog.process_parameters_form"/>
+            <field name="name">underwriting_start_find_process_form</field>
+        </record>
+        <!-- ###################### -->
+        <!-- # Underwriting Start # -->
+        <!-- ###################### -->
+        <record model="ir.action.wizard" id="act_underwriting_start">
+            <field name="name">Start Underwriting</field>
+            <field name="wiz_name">underwriting.start</field>
+        </record>
+        <menuitem parent="underwriting.menu_underwriting" sequence="1" action="act_underwriting_start" id="menu_start_underwriting"/>
+    </data>
+</tryton>

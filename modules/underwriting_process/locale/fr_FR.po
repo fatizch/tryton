@@ -1,0 +1,156 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:underwriting:"
+msgid "Cannot draft completed results"
+msgstr "Impossible de passer des décisions validées en brouillon"
+
+msgctxt "error:underwriting:"
+msgid "Cannot draft completed underwritings"
+msgstr "Impossible de passer des demandes terminées en brouillon"
+
+msgctxt "error:underwriting:"
+msgid "Enter a value for field '%s' of '%s'"
+msgstr "Entrez une valeur pour le champ '%s' de '%s'"
+
+msgctxt "error:underwriting:"
+msgid "Enter a value for field(s): %s"
+msgstr "Entrez une valeur pour le(s) champs(s) : %s"
+
+msgctxt "error:underwriting:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:underwriting:"
+msgid "Select a date that is not in the future for field(s): %s"
+msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
+
+#, fuzzy
+msgctxt "field:event.type.action,step_to_start:"
+msgid "Step to start"
+msgstr "État de départ"
+
+msgctxt "field:process,underwriting_types:"
+msgid "Underwriting Types"
+msgstr "Types de demandes de décisions"
+
+msgctxt "field:process-underwriting.type,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:process-underwriting.type,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:process-underwriting.type,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process-underwriting.type,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:process-underwriting.type,process:"
+msgid "Process"
+msgstr "Processus"
+
+msgctxt "field:process-underwriting.type,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:process-underwriting.type,underwriting_type:"
+msgid "Underwriting Type"
+msgstr "Type de demande de décisions"
+
+msgctxt "field:process-underwriting.type,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:process-underwriting.type,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:process-underwriting.type,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:underwriting,current_log:"
+msgid "Current Log"
+msgstr "Trace Courante"
+
+msgctxt "field:underwriting,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
+msgctxt "field:underwriting,current_state_name:"
+msgid "Current State In Process"
+msgstr "Etat courant au sein du processus"
+
+msgctxt "field:underwriting,logs:"
+msgid "Task"
+msgstr "Tâche"
+
+msgctxt "field:underwriting,requested_documents:"
+msgid "Requested Documents"
+msgstr "Documents requis"
+
+msgctxt "field:underwriting,task_name:"
+msgid "Task Name"
+msgstr "Nom de la tâche"
+
+msgctxt "field:underwriting,task_status:"
+msgid "Task Status"
+msgstr "Statut du processus"
+
+msgctxt "field:underwriting.start.find_process,good_process:"
+msgid "Good Process"
+msgstr "Processus"
+
+msgctxt "field:underwriting.start.find_process,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:underwriting.start.find_process,model:"
+msgid "Model"
+msgstr "Modèle"
+
+msgctxt "field:underwriting.start.find_process,parent:"
+msgid "For Object"
+msgstr "Pour l'objet"
+
+msgctxt "field:underwriting.start.find_process,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:underwriting.start.find_process,underwriting_type:"
+msgid "Type"
+msgstr "Type de demande de décisions"
+
+msgctxt "model:ir.action,name:act_underwriting_start"
+msgid "Start Underwriting"
+msgstr "Démarrer une demande de décisions"
+
+msgctxt "model:ir.ui.menu,name:menu_start_underwriting"
+msgid "Start Underwriting"
+msgstr "Démarrer une demande de décisions"
+
+msgctxt "model:process-underwriting.type,name:"
+msgid "Process Underwriting Type Relation"
+msgstr "Relation type de demande de décisions - processus"
+
+msgctxt "model:underwriting.start.find_process,name:"
+msgid "Underwriting Process - Find Process"
+msgstr "Recherche de processus pour création de demande de décisions"
+
+msgctxt "selection:process,kind:"
+msgid "Underwriting Creation"
+msgstr "Création de demande de décisions"
+
+msgctxt "wizard_button:underwriting.start,process_parameters,action:"
+msgid "Start Process"
+msgstr "Démarrer le processus"
+
+msgctxt "wizard_button:underwriting.start,process_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"
