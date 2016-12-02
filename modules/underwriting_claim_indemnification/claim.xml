@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- #################################### -->
+        <!-- # Claim Indemnification Definition # -->
+        <!-- #################################### -->
+        <record model="ir.ui.view" id="indemnification_definition_view_form">
+            <field name="model">claim.indemnification_definition</field>
+            <field name="inherit" ref="claim_indemnification.indemnification_definition_view_form"/>
+            <field name="name">indemnification_definition_form</field>
+        </record>
+        <!-- ######################################## -->
+        <!-- # Create Indemnification Underwritings # -->
+        <!-- ######################################## -->
+        <record model="ir.ui.view" id="create_indemnification_underwritings_view_form">
+            <field name="model">claim.create_indemnification.underwritings</field>
+            <field name="type">form</field>
+            <field name="name">create_indemnification_underwritings_form</field>
+        </record>
+    </data>
+</tryton>

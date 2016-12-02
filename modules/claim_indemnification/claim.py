@@ -205,6 +205,9 @@ class ClaimService:
     deductible_end_date = fields.Function(
         fields.Date('Deductible End Date'),
         'get_deductible_end_date')
+    last_indemnification_date = fields.Function(
+        fields.Date('Last Indemnification Date'),
+        'get_last_indemnification_date')
 
     @classmethod
     def __setup__(cls):
@@ -250,6 +253,10 @@ class ClaimService:
             for service_id, max_date in cursor.fetchall():
                 result[service_id] = max_date
         return result
+
+    def get_last_indemnification_date(self, name):
+        return max(x.end_date or x.start_date for x in self.indemnifications
+            if x.status == 'paid')
 
     @classmethod
     def search_paid_until_date(cls, name, clause):

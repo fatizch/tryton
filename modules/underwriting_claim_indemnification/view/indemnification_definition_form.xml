@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='extra_data']" position="after">
+        <label name="accept_underwriting_reduction"/>
+        <field name="accept_underwriting_reduction"/>
+        <field name="underwriting_reduction" invisible="1"/>
+        <field name="underwritings" invisible="1"/>
+        <newline/>
+    </xpath>
+</data>

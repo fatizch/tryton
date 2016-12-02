@@ -6,6 +6,8 @@ from trytond.pool import PoolMeta
 from trytond.pyson import And, Eval, Or, Bool
 
 from trytond.modules.coog_core import fields, model
+from trytond.modules.claim_indemnification \
+    import BenefitRule as OriginalBenefitRule
 
 __all__ = [
     'Benefit',
@@ -183,8 +185,7 @@ class BenefitRule:
     def _calculate_rule(self, rule_name, args, default_value):
         option = args.get('option', None)
         if not option or getattr(self, 'force_' + rule_name):
-            return getattr(super(BenefitRule, self),
-                'calculate_' + rule_name)(args)
+            return getattr(OriginalBenefitRule, 'calculate_' + rule_name)(args)
         # Use option defined rule
         version = option.get_version_at_date(args['date'])
         option_benefit = version.get_benefit(self.benefit)

@@ -885,6 +885,10 @@ msgctxt "field:claim.service,indemnifications:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
 
+msgctxt "field:claim.service,last_indemnification_date:"
+msgid "Last Indemnification Date"
+msgstr "Date de dernière indemnisation"
+
 msgctxt "field:claim.service,multi_level_view:"
 msgid "Indemnifications"
 msgstr "Indemnisations"

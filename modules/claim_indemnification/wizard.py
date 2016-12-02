@@ -659,15 +659,8 @@ class CreateIndemnification(Wizard):
             self.raise_user_error('wrong_date')
         return ClaimService.cancel_indemnification([service], input_start_date)
 
-    def transition_calculate(self):
-        pool = Pool()
-        Indemnification = pool.get('claim.indemnification')
-        ExtraData = pool.get('claim.service.extra_data')
-        self.result.cancelled = self.check_input()
-        if hasattr(self.result, 'indemnification'):
-            indemnification = self.result.indemnification[0]
-        else:
-            indemnification = Indemnification()
+    def init_indemnification(self, indemnification):
+        ExtraData = Pool().get('claim.service.extra_data')
         loss = self.definition.service.loss
         indemnification.start_date = self.definition.start_date
         indemnification.end_date = self.definition.end_date
@@ -693,6 +686,16 @@ class CreateIndemnification(Wizard):
         indemnification.currency_digits = indemnification.currency.digits
         indemnification.beneficiary = self.definition.beneficiary
         indemnification.product = self.definition.product
+
+    def transition_calculate(self):
+        pool = Pool()
+        Indemnification = pool.get('claim.indemnification')
+        self.result.cancelled = self.check_input()
+        if hasattr(self.result, 'indemnification'):
+            indemnification = self.result.indemnification[0]
+        else:
+            indemnification = Indemnification()
+        self.init_indemnification(indemnification)
         Indemnification.calculate([indemnification])
         self.result.indemnification = [indemnification]
         return 'result'

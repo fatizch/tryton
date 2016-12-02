@@ -1,0 +1,83 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:benefit.rule:"
+msgid "Applied %(reduction)s %% reduction after underwriting"
+msgstr "Application de %(reduction)s %% de réduction suite à analyse"
+
+msgctxt "error:claim.service:"
+msgid ""
+"An underwriting decision blocked indemnifications for this service starting "
+"%(decision_date)s"
+msgstr ""
+"Décision a été prise de bloquer les indemnisations pour cette prestation à "
+"partir du %(decision_date)s"
+
+msgctxt "field:claim.create_indemnification.underwritings,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.create_indemnification.underwritings,underwritings:"
+msgid "Underwritings"
+msgstr "Demandes de décisions"
+
+msgctxt "field:claim.indemnification,apply_underwriting_reduction:"
+msgid "Apply underwriting reduction"
+msgstr "Appliquer les décisions de réduction"
+
+msgctxt ""
+"field:claim.indemnification_definition,accept_underwriting_reduction:"
+msgid "Accept underwriting reduction"
+msgstr "Accepter les décisions de réduction"
+
+msgctxt "field:claim.indemnification_definition,underwriting_reduction:"
+msgid "Underwriting Reduction"
+msgstr "Décisions de réduction"
+
+msgctxt "field:claim.indemnification_definition,underwritings:"
+msgid "Underwritings"
+msgstr "Demandes de décisions"
+
+msgctxt "field:underwriting.decision.type,reduction_percentage:"
+msgid "Reduction Percentage"
+msgstr "Pourcentage de réduction"
+
+msgctxt "field:underwriting.result,last_indemnification_date:"
+msgid "Last Indemnification Date"
+msgstr "Date de dernière indemnisation"
+
+msgctxt "model:claim.create_indemnification.underwritings,name:"
+msgid "Create Indemnification Underwritings"
+msgstr "Demandes de décision créées"
+
+msgctxt "selection:underwriting.decision.type,decision:"
+msgid "Block Indemnifications"
+msgstr "Indemnisations bloquées"
+
+msgctxt "selection:underwriting.decision.type,decision:"
+msgid "Reduce Indemnifications"
+msgstr "Indemnisations limitées"
+
+msgctxt "view:claim.create_indemnification.underwritings:"
+msgid "Underwritings"
+msgstr "Demandes de décisions"
+
+msgctxt "view:underwriting.decision.type:"
+msgid "%"
+msgstr "%"
+
+msgctxt ""
+"wizard_button:claim.create_indemnification,activated_underwritings,calculate:"
+msgid "Continue"
+msgstr "Continuer"
+
+msgctxt ""
+"wizard_button:claim.create_indemnification,activated_underwritings,definition:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:claim.create_indemnification,activated_underwritings,end:"
+msgid "Exit"
+msgstr "Annuler"

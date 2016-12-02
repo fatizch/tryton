@@ -65,7 +65,7 @@ class Benefit:
     def calculate_deductible(self, args):
         if not self.benefit_rules:
             return
-        return self.benefit_rules[0].calculate_deductible_rule(args)
+        return self.benefit_rules[0].do_calculate_deductible_rule(args)
 
     @staticmethod
     def default_indemnification_kind():
@@ -177,7 +177,7 @@ class BenefitRule(
         loss = args['loss']
         indemnification = args['indemnification']
         delivered = args['service']
-        deductible_end_date = self.calculate_deductible_rule(args)
+        deductible_end_date = self.do_calculate_deductible_rule(args)
         previous_date = None
         args['limit_date'] = None
         if deductible_end_date:
@@ -217,12 +217,12 @@ class BenefitRule(
             new_args['date'] = start_date
             new_args['indemnification_detail_start_date'] = start_date
             new_args['indemnification_detail_end_date'] = end_date
-            benefits = self.calculate_indemnification_rule(new_args)
+            benefits = self.do_calculate_indemnification_rule(new_args)
             if must_revaluate:
                 for benefit in benefits:
                     reval_args = new_args.copy()
                     reval_args.update(benefit)
-                    reval_benefits = self.calculate_revaluation_rule(
+                    reval_benefits = self.do_calculate_revaluation_rule(
                         reval_args) or []
                     for reval_benefit in reval_benefits:
                         tmp_benefit = benefit.copy()
@@ -235,6 +235,15 @@ class BenefitRule(
         all_benefits = self.clean_benefits(all_benefits)
         res.extend(all_benefits)
         return res
+
+    def do_calculate_indemnification_rule(self, args):
+        return self.calculate_indemnification_rule(args)
+
+    def do_calculate_deductible_rule(self, args):
+        return self.calculate_deductible_rule(args)
+
+    def do_calculate_revaluation_rule(self, args):
+        return self.calculate_revaluation_rule(args)
 
     def must_revaluate(self):
         return self.revaluation_rule is not None

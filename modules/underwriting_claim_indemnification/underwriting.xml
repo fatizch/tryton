@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################## -->
+        <!-- # Underwriting Decision Type # -->
+        <!-- ############################## -->
+        <record model="ir.ui.view" id="underwriting_decision_type_view_form">
+            <field name="model">underwriting.decision.type</field>
+            <field name="inherit" ref="underwriting.underwriting_decision_type_view_form"/>
+            <field name="name">underwriting_decision_type_form</field>
+        </record>
+        <!-- ####################### -->
+        <!-- # Underwriting Result # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="underwriting_result_view_list">
+            <field name="model">underwriting.result</field>
+            <field name="inherit" ref="underwriting.underwriting_result_view_list"/>
+            <field name="name">underwriting_result_list</field>
+        </record>
+    </data>
+</tryton>

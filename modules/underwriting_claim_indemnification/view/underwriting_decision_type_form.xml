@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='decision']" position="after">
+        <label name="reduction_percentage"/>
+        <group name="reduction_percentage" string="">
+            <field name="reduction_percentage" xexpand="0" factor="100"/>
+            <label string="%" id="reduction_percentage" xexpand="0" xalign="0"/>
+        </group>
+    </xpath>
+</data>
