@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='extra_datas']" position="after">
+        <separator name="underwritings" colspan="4"/>
+        <field name="underwritings" colspan="4" expand_toolbar="0" view_ids="underwriting.underwriting_result_light_view_list,underwriting.underwriting_result_view_form"/>
+    </xpath>
+</data>

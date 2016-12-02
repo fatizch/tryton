@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ####################### -->
+        <!-- # Underwriting Result # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="underwriting_result_view_form">
+            <field name="model">underwriting.result</field>
+            <field name="inherit" ref="underwriting.underwriting_result_view_form"/>
+            <field name="name">underwriting_result_form</field>
+        </record>
+    </data>
+</tryton>

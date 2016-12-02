@@ -1,0 +1,77 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:claim:"
+msgid ""
+"It is necessary to activate underwritings for the following claims before going on:\n"
+"\n"
+"%(claims)s"
+msgstr ""
+"Il est nécessaire d'activer les demandes de décisions suivantes avant de continuer :\n"
+"\n"
+"%(claims)s"
+
+msgctxt "field:benefit,underwriting_delay:"
+msgid "Underwriting Delay (Days)"
+msgstr "Délai de demande de décisions (jours)"
+
+msgctxt "field:benefit,underwriting_type:"
+msgid "Underwriting Type"
+msgstr "Règle de demande de décisions"
+
+msgctxt "field:claim,underwritings:"
+msgid "Underwritings"
+msgstr "Demandes de décisions"
+
+msgctxt "field:claim.service,underwritings:"
+msgid "Underwritings"
+msgstr "Demandes de décisions"
+
+msgctxt "field:underwriting.result,claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "field:underwriting.result,is_claim:"
+msgid "Is Claim"
+msgstr "Est sinistre ?"
+
+msgctxt "field:underwriting.result,possible_claims:"
+msgid "Possible claims"
+msgstr "Sinistres possibles"
+
+msgctxt "field:underwriting.result,service:"
+msgid "Service"
+msgstr "Service"
+
+msgctxt "model:ir.action,name:act_claim_underwritings"
+msgid "Underwritings"
+msgstr "Demandes de décisions"
+
+msgctxt "selection:underwriting,on_object:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "selection:underwriting,state:"
+msgid "Processing"
+msgstr "En cours"
+
+msgctxt "selection:underwriting.decision.type,model:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "selection:underwriting.decision.type,model:"
+msgid "Claim Service"
+msgstr "Prestation fournie"
+
+msgctxt "selection:underwriting.result,target:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "selection:underwriting.result,target:"
+msgid "Claim Service"
+msgstr "Prestation fournie"
+
+msgctxt "selection:underwriting.result,underwriting_state:"
+msgid "Processing"
+msgstr "En cours"

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ########### -->
+        <!-- # Benefit # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="benefit_view_form">
+            <field name="model">benefit</field>
+            <field name="inherit" ref="claim.benefit_view_form"/>
+            <field name="name">benefit_form</field>
+        </record>
+        <!-- ################# -->
+        <!-- # Claim Service # -->
+        <!-- ################# -->
+        <record model="ir.ui.view" id="service_view_form">
+            <field name="model">claim.service</field>
+            <field name="inherit" ref="claim.claim_service_view_form"/>
+            <field name="name">service_form</field>
+        </record>
+        <!-- ################ -->
+        <!-- # Claim Relate # -->
+        <!-- ################ -->
+        <record model="ir.action.act_window" id="act_claim_underwritings">
+            <field name="name">Underwritings</field>
+            <field name="res_model">underwriting</field>
+            <field name="domain" eval="[['on_object', '=', ['claim', Eval('active_id')]]]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_claim_underwritings_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="underwriting.underwriting_view_list"/>
+            <field name="act_window" ref="act_claim_underwritings"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_claim_underwritings_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="underwriting.underwriting_view_form"/>
+            <field name="act_window" ref="act_claim_underwritings"/>
+        </record>
+        <record model="ir.action.keyword" id="act_claim_underwritings_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">claim,-1</field>
+            <field name="action" ref="act_claim_underwritings"/>
+        </record>
+    </data>
+</tryton>
