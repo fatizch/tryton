@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tree string="Underwriting Decision" editable="bottom">
+    <field name="state"/>
+    <field name="target"/>
+    <field name="effective_decision_date"/>
+    <field name="effective_decision_end"/>
+    <field name="provisional_decision"/>
+    <field name="final_decision" widget="selection"/>
+    <field name="decision_date"/>
+    <button name="finalize" string="Finalize"/>
+    <button name="abandon" string="Abandon"/>
+    <field name="underwriting" tree_invisible="1"/>
+    <field name="underwriting_state" tree_invisible="1"/>
+    <field name="end_date_required" tree_invisible="1"/>
+</tree>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="event.type" id="event_underwriting_validated">
+            <field name="name">Underwriting Validated</field>
+            <field name="code">underwriting_validated</field>
+        </record>
+        <record model="event.type" id="event_underwriting_completed">
+            <field name="name">Underwriting Completed</field>
+            <field name="code">underwriting_completed</field>
+        </record>
+        <record model="event.type" id="event_underwriting_result_finalized">
+            <field name="name">Underwriting Result Finalized</field>
+            <field name="code">underwriting_result_finalized</field>
+        </record>
+        <record model="event.type" id="event_underwriting_result_abandonned">
+            <field name="name">Underwriting Result Abandonned</field>
+            <field name="code">underwriting_result_abandonned</field>
+        </record>
+    </data>
+</tryton>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form string="Underwriting Type">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="end_date_required"/>
+    <field name="end_date_required"/>
+    <label name="next_underwriting"/>
+    <field name="next_underwriting" widget="selection"/>
+    <field name="decisions" colspan="4"/>
+    <label name="waiting_decision"/>
+    <field name="waiting_decision" widget="selection" colspan="3"/>
+    <field name="documents" colspan="4"/>
+</form>

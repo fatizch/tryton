@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form string="Underwriting">
+    <label name="type_"/>
+    <field name="type_"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="on_object"/>
+    <field name="on_object"/>
+    <label name="state"/>
+    <field name="state"/>
+    <group id="results_draft" string="" colspan="4" yexpand="1" yfill="1">
+        <field name="results" colspan="4"/>
+    </group>
+    <group id="results_other" string="" colspan="4" yexpand="1" yfill="1">
+        <separator name="results" colspan="4"/>
+        <field name="results" colspan="4" expand_toolbar="0"/>
+    </group>
+    <group id="buttons" string="" colspan="4">
+        <button string="Draft" name="draft" icon="tryton-go-previous"/>
+        <button string="Validate" name="process" icon="tryton-go-next"/>
+        <button string="Complete" name="complete" icon="tryton-go-next"/>
+    </group>
+</form>

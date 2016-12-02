@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ######### -->
+        <!-- # Menus # -->
+        <!-- ######### -->
+        <menuitem sequence="100" id="menu_underwriting" name="Underwriting"/>
+        <menuitem parent="menu_underwriting" sequence="100" id="menu_underwriting_configuration" name="Configuration"/>
+        <!-- ##################### -->
+        <!-- # Underwriting Type # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="underwriting_type_view_form">
+            <field name="model">underwriting.type</field>
+            <field name="type">form</field>
+            <field name="name">underwriting_type_form</field>
+        </record>
+        <record model="ir.ui.view" id="underwriting_type_view_list">
+            <field name="model">underwriting.type</field>
+            <field name="type">tree</field>
+            <field name="name">underwriting_type_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_underwriting_type">
+            <field name="name">Underwriting Types</field>
+            <field name="res_model">underwriting.type</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_underwriting_type_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="underwriting_type_view_list"/>
+            <field name="act_window" ref="act_underwriting_type"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_underwriting_type_view2">
+            <field name="sequence" eval="11"/>
+            <field name="view" ref="underwriting_type_view_form"/>
+            <field name="act_window" ref="act_underwriting_type"/>
+        </record>
+        <menuitem parent="menu_underwriting_configuration" sequence="10" action="act_underwriting_type" id="menu_underwriting_type"/>
+        <!-- ############################## -->
+        <!-- # Underwriting Decision Type # -->
+        <!-- ############################## -->
+        <record model="ir.ui.view" id="underwriting_decision_type_view_form">
+            <field name="model">underwriting.decision.type</field>
+            <field name="type">form</field>
+            <field name="name">underwriting_decision_type_form</field>
+        </record>
+        <record model="ir.ui.view" id="underwriting_decision_type_view_list">
+            <field name="model">underwriting.decision.type</field>
+            <field name="type">tree</field>
+            <field name="name">underwriting_decision_type_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_underwriting_decision_type">
+            <field name="name">Underwriting Decision Types</field>
+            <field name="res_model">underwriting.decision.type</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_underwriting_decision_type_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="underwriting_decision_type_view_list"/>
+            <field name="act_window" ref="act_underwriting_decision_type"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_underwriting_decision_type_view2">
+            <field name="sequence" eval="11"/>
+            <field name="view" ref="underwriting_decision_type_view_form"/>
+            <field name="act_window" ref="act_underwriting_decision_type"/>
+        </record>
+        <menuitem parent="menu_underwriting_configuration" sequence="12" action="act_underwriting_decision_type" id="menu_underwriting_decision_type"/>
+        <!-- ################ -->
+        <!-- # Underwriting # -->
+        <!-- ################ -->
+        <record model="ir.ui.view" id="underwriting_view_form">
+            <field name="model">underwriting</field>
+            <field name="type">form</field>
+            <field name="name">underwriting_form</field>
+        </record>
+        <record model="ir.ui.view" id="underwriting_view_list">
+            <field name="model">underwriting</field>
+            <field name="type">tree</field>
+            <field name="name">underwriting_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_underwriting">
+            <field name="name">Underwritings</field>
+            <field name="res_model">underwriting</field>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_draft_underwriting">
+            <field name="name">Draft</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain" eval="[['state', '=', 'draft']]" pyson="1"/>
+            <field name="act_window" ref="act_underwriting"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_finalizable_results_underwriting">
+            <field name="name">Finalizable Results</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[['finalizable_result', '=', True]]" pyson="1"/>
+            <field name="act_window" ref="act_underwriting"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_finalizable_underwriting">
+            <field name="name">Finalizable</field>
+            <field name="sequence" eval="30"/>
+            <field name="domain" eval="[['finalizable', '=', True]]" pyson="1"/>
+            <field name="act_window" ref="act_underwriting"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_pending_underwriting">
+            <field name="name">Pending</field>
+            <field name="sequence" eval="40"/>
+            <field name="domain" eval="[['state', '=', 'processing']]" pyson="1"/>
+            <field name="act_window" ref="act_underwriting"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_all_underwriting">
+            <field name="name">All</field>
+            <field name="sequence" eval="50"/>
+            <field name="act_window" ref="act_underwriting"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_underwriting_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="underwriting_view_list"/>
+            <field name="act_window" ref="act_underwriting"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_underwriting_view2">
+            <field name="sequence" eval="11"/>
+            <field name="view" ref="underwriting_view_form"/>
+            <field name="act_window" ref="act_underwriting"/>
+        </record>
+        <menuitem parent="menu_underwriting" sequence="10" action="act_underwriting" id="menu_underwritings"/>
+        <!-- ####################### -->
+        <!-- # Underwriting Result # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="underwriting_result_view_form">
+            <field name="model">underwriting.result</field>
+            <field name="type">form</field>
+            <field name="name">underwriting_result_form</field>
+        </record>
+        <record model="ir.ui.view" id="underwriting_result_view_list">
+            <field name="model">underwriting.result</field>
+            <field name="type">tree</field>
+            <field name="name">underwriting_result_list</field>
+        </record>
+        <record model="ir.ui.view" id="underwriting_result_light_view_list">
+            <field name="model">underwriting.result</field>
+            <field name="type">tree</field>
+            <field name="name">underwriting_result_light_list</field>
+        </record>
+        <!-- ################ -->
+        <!-- # Party Relate # -->
+        <!-- ################ -->
+        <record model="ir.action.act_window" id="act_party_underwritings">
+            <field name="name">Underwritings</field>
+            <field name="res_model">underwriting</field>
+            <field name="domain" eval="[['party', '=', Eval('active_id')]]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_party_underwritings_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="underwriting_view_list"/>
+            <field name="act_window" ref="act_party_underwritings"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_party_underwritings_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="underwriting_view_form"/>
+            <field name="act_window" ref="act_party_underwritings"/>
+        </record>
+        <record model="ir.action.keyword" id="act_party_underwritings_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="act_party_underwritings"/>
+        </record>
+        <!-- ##################### -->
+        <!-- # Plan Underwriting # -->
+        <!-- ##################### -->
+        <record model="ir.action.wizard" id="act_plan_underwriting">
+            <field name="name">Plan Underwriting</field>
+            <field name="wiz_name">underwriting.plan</field>
+        </record>
+        <!-- ########################## -->
+        <!-- # Plan Underwriting Date # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="underwriting_plan_date_view_form">
+            <field name="model">underwriting.plan.date</field>
+            <field name="type">form</field>
+            <field name="name">underwriting_plan_date_form</field>
+        </record>
+    </data>
+</tryton>
