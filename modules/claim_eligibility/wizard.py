@@ -16,7 +16,8 @@ class ManualValidationEligibility(Wizard):
     'Manual Validation Eligibility'
     __name__ = 'claim.manual_validation_eligibility'
 
-    start_state = 'display_service'
+    start_state = 'check_extra_data'
+    check_extra_data = StateTransition()
     display_service = StateView('claim.service',
         'claim_eligibility.validate_eligibility_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
@@ -33,7 +34,7 @@ class ManualValidationEligibility(Wizard):
                 'Validation cannot be processed without knowing the reason : '
                 '%s must be filled'})
 
-    def default_display_service(self, fields):
+    def transition_check_extra_data(self):
         pool = Pool()
         Service = pool.get('claim.service')
         assert Transaction().context.get('active_model') == 'claim.service'
@@ -43,11 +44,17 @@ class ManualValidationEligibility(Wizard):
         service = Service(active_id)
         if not service.eligibility_extra_data_values:
             service.init_eligibility_extra_data_values()
+        self.display_service.eligibility_extra_data_values = \
+            service.eligibility_extra_data_values
         if service.eligibility_extra_data_values:
-            return {
-                'eligibility_extra_data_values':
-                service.eligibility_extra_data_values
-                }
+            return 'display_service'
+        return 'finalize_validation'
+
+    def default_display_service(self, fields):
+        return {
+            'eligibility_extra_data_values':
+            self.display_service.eligibility_extra_data_values
+            }
 
     def transition_check_result(self):
         extradata = self.display_service.eligibility_extra_data_values
