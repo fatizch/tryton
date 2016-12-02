@@ -140,6 +140,14 @@ class Claim:
 class Loss:
     __name__ = 'claim.loss'
 
+    @classmethod
+    def __setup__(cls):
+        super(Loss, cls).__setup__()
+        cls._error_messages.update({
+                'indemnized_losses': 'Some draft losses have active '
+                'indemnifications, they may have to be reevaluated:\n\n%s',
+                })
+
     def close(self, sub_status, date=None):
         super(Loss, self).close(sub_status, date)
         max_end_date = datetime.date.min
@@ -150,6 +158,24 @@ class Loss:
             if max_end_date != datetime.date.min:
                 self.end_date = max_end_date
                 self.save()
+
+    @classmethod
+    def activate(cls, losses):
+        indemnized_losses = []
+        for loss in losses:
+            if loss.state == 'active':
+                continue
+            for service in loss.services:
+                if any(x.status in ['validated', 'paid', 'calculated',
+                            'scheduled', 'controlled']
+                        for x in service.indemnifications):
+                    indemnized_losses.append(loss)
+                    break
+        if indemnized_losses:
+            cls.raise_user_warning('indemnized_' + ','.join(
+                    str(x.id) for x in indemnized_losses), 'indemnized_losses',
+                ('\n'.join(x.rec_name for x in indemnized_losses),))
+        super(Loss, cls).activate(losses)
 
 
 class ClaimService:
@@ -563,6 +589,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'did not allow to create indemnifications.',
                 'cannot_pay_indemnifications': 'The insurer %(insurer)s '
                 'did not allow to pay indemnifications.',
+                'cannot_schedule_draft_loss': 'Cannot schedule '
+                'indemnifications for draft loss %(loss)s',
                 })
 
     @classmethod
@@ -775,7 +803,10 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
 
     @classmethod
     def check_schedulability(cls, indemnifications):
-        pass
+        for indemnification in indemnifications:
+            if indemnification.service.loss.state == 'draft':
+                cls.append_functional_error('cannot_schedule_draft_loss',
+                    {'loss': indemnification.service.loss.rec_name})
 
     @classmethod
     @ModelView.button

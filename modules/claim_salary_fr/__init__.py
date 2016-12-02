@@ -1,30 +1,32 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .claim import *
-from .rule_engine import *
-from .benefit import *
-from .contract import *
-from .extra_data import *
-from .wizard import *
+
+import claim
+import rule_engine
+import benefit
+import contract
+import extra_data
+import wizard
 
 
 def register():
     Pool.register(
-        ClaimService,
-        Salary,
-        NetCalculationRule,
-        NetCalculationRuleExtraData,
-        NetCalculationRuleFixExtraData,
-        BenefitRule,
-        OptionBenefit,
-        RuleEngineRuntime,
-        RuleEngine,
-        ExtraData,
-        StartSetContributions,
-        ContributionsView,
-        ManageOptionBenefitsDisplayer,
+        claim.ClaimLoss,
+        claim.ClaimService,
+        claim.Salary,
+        claim.NetCalculationRule,
+        claim.NetCalculationRuleExtraData,
+        claim.NetCalculationRuleFixExtraData,
+        benefit.BenefitRule,
+        contract.OptionBenefit,
+        rule_engine.RuleEngineRuntime,
+        rule_engine.RuleEngine,
+        extra_data.ExtraData,
+        wizard.StartSetContributions,
+        wizard.ContributionsView,
+        benefit.ManageOptionBenefitsDisplayer,
         module='claim_salary_fr', type_='model')
     Pool.register(
-        SetContributions,
+        wizard.SetContributions,
         module='claim_salary_fr', type_='wizard')

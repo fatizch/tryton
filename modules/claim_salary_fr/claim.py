@@ -14,6 +14,7 @@ from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
+    'ClaimLoss',
     'ClaimService',
     'Salary',
     'NetCalculationRule',
@@ -218,11 +219,24 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
         self.save()
 
 
+class ClaimLoss:
+    __metaclass__ = PoolMeta
+    __name__ = 'claim.loss'
+
+    @classmethod
+    def activate(cls, losses):
+        super(ClaimLoss, cls).activate(losses)
+        for loss in losses:
+            for service in loss.services:
+                service.init_salaries()
+
+
 class ClaimService:
     __metaclass__ = PoolMeta
     __name__ = 'claim.service'
 
-    salary = fields.One2Many('claim.salary', 'delivered_service', 'Salary')
+    salary = fields.One2Many('claim.salary', 'delivered_service', 'Salary',
+        order=[('from_date', 'DESC')], delete_missing=True)
     gross_salary = fields.Function(
         fields.Numeric('Gross Salary', digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
@@ -261,21 +275,26 @@ class ClaimService:
         else:
             return
 
-        to_save = []
+        # Use getattr since the salary field not be set yet
+        per_date = {x.from_date: x for x in getattr(self, 'salary', [])}
         end_month = datetime.date(reference_date.year, reference_date.month,
             1) - relativedelta(days=1)
+        salaries = []
         for i in range(0, nb_iteration):
             if self.salary_mode == 'last_year':
                 start_month = datetime.date(
                     end_month.year - 1, reference_date.month, 1)
             else:
                 start_month = datetime.date(end_month.year, end_month.month, 1)
-            to_save.append(Salary(from_date=start_month, to_date=end_month,
-                delivered_service=self))
+            if start_month in per_date:
+                salaries.append(per_date[start_month])
+            else:
+                salaries.append(Salary(from_date=start_month,
+                        to_date=end_month))
             end_month = start_month - relativedelta(days=1)
 
-        # Salary.update_salary_with_existing_info(to_save)
-        Salary.save(to_save)
+        self.salary = salaries
+        self.save()
 
     def get_salary_mode(self, name=None):
         return self.benefit.benefit_rules[0].option_benefit_at_date(

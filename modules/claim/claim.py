@@ -272,11 +272,23 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
         pass
 
     @classmethod
+    def draft_losses(cls, claims):
+        Pool().get('claim.loss').draft(sum([list(x.losses) for x in claims],
+                []))
+
+    @classmethod
+    def activate_losses(cls, claims):
+        Pool().get('claim.loss').activate(sum([list(x.losses) for x in claims],
+                []))
+
+    @classmethod
     def deliver_automatic_benefit(cls, claims):
         to_save = []
         for claim in claims:
             changed = False
             for loss in claim.losses:
+                if loss.state != 'active':
+                    continue
                 deliver = [service.benefit for service in loss.services]
                 for benefit, option in \
                         loss.covered_benefit_and_options():
@@ -299,6 +311,7 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
     def ws_add_new_loss(self, loss_desc_code, parameters=None):
         self.add_new_loss(loss_desc_code, **parameters)
         self.save()
+        self.activate_losses([self])
 
     @classmethod
     def ws_deliver_automatic_benefit(cls, claims):
@@ -313,19 +326,21 @@ class Loss(model.CoogSQL, model.CoogView):
 
     claim = fields.Many2One('claim', 'Claim', ondelete='CASCADE',
         required=True, select=True)
+    state = fields.Selection([('draft', 'Draft'), ('active', 'Active')],
+        'State', required=True, readonly=True)
     loss_desc = fields.Many2One('benefit.loss.description', 'Loss Descriptor',
         ondelete='RESTRICT', required=True,
-        domain=[
-                ('id', 'in', Eval('possible_loss_descs')),
-                ],
-        depends=['possible_loss_descs'])
+        states={'readonly': Eval('state') != 'draft'},
+        domain=[('id', 'in', Eval('possible_loss_descs'))],
+        depends=['possible_loss_descs', 'state'])
     possible_loss_descs = fields.Function(
         fields.Many2Many('benefit.loss.description', None, None,
             'Possible Loss Descs', ),
         'on_change_with_possible_loss_descs')
     event_desc = fields.Many2One('benefit.event.description', 'Event',
+        states={'readonly': Eval('state') != 'draft'},
         domain=[('loss_descs', '=', Eval('loss_desc'))],
-        depends=['loss_desc'], ondelete='RESTRICT', required=True)
+        depends=['loss_desc', 'state'], ondelete='RESTRICT', required=True)
     services = fields.One2Many(
         'claim.service', 'loss', 'Claim Services', delete_missing=True,
         target_not_required=True, domain=[
@@ -336,9 +351,13 @@ class Loss(model.CoogSQL, model.CoogView):
         depends=['loss_desc'])
     multi_level_view = fields.One2Many('claim.service',
         'loss', 'Claim Services', target_not_required=True)
-    extra_data = fields.Dict('extra_data', 'Extra Data',
-        states={'invisible': ~Eval('extra_data')})
-    start_date = fields.Date('Loss Date')
+    extra_data = fields.Dict('extra_data', 'Extra Data', states={
+            'invisible': ~Eval('extra_data'),
+            'readonly': Eval('state') != 'draft'},
+        depends=['state'])
+    start_date = fields.Date('Loss Date', states={
+            'readonly': Eval('state') != 'draft'},
+        depends=['state'])
     with_end_date = fields.Function(
         fields.Boolean('With End Date'), 'get_with_end_date')
     end_date = fields.Date('End Date',
@@ -360,6 +379,14 @@ class Loss(model.CoogSQL, model.CoogView):
                 'end_date_smaller_than_start_date':
                 'End Date is smaller than start date',
                 })
+        cls._buttons.update({
+                'draft': {'readonly': Eval('state') == 'draft'},
+                'activate': {'readonly': Eval('state') == 'active'},
+                })
+
+    @classmethod
+    def default_state(cls):
+        return 'draft'
 
     @fields.depends('claim', 'event_desc', 'loss_desc', 'start_date')
     def on_change_with_possible_loss_descs(self, name=None):
@@ -538,6 +565,22 @@ class Loss(model.CoogSQL, model.CoogView):
         for option in options:
             res.extend(option.get_possible_benefits(self))
         return res
+
+    @classmethod
+    @model.CoogView.button
+    def draft(cls, losses):
+        to_write = [x for x in losses if x.state != 'draft']
+        if to_write:
+            cls.write(to_write, {'state': 'draft'})
+            Pool().get('event').notify_events(to_write, 'draft_loss')
+
+    @classmethod
+    @model.CoogView.button
+    def activate(cls, losses):
+        to_write = [x for x in losses if x.state != 'active']
+        if to_write:
+            cls.write(to_write, {'state': 'active'})
+            Pool().get('event').notify_events(to_write, 'activate_loss')
 
 
 class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):

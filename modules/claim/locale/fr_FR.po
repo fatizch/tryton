@@ -629,6 +629,10 @@ msgctxt "field:claim.loss,start_date:"
 msgid "Loss Date"
 msgstr "Date de début"
 
+msgctxt "field:claim.loss,state:"
+msgid "State"
+msgstr "Etat"
+
 msgctxt "field:claim.loss,with_end_date:"
 msgid "With End Date"
 msgstr "Avec Date de Fin"
@@ -1028,6 +1032,14 @@ msgctxt "model:claim.sub_status,name:"
 msgid "Claim Close Reason"
 msgstr "Raison de clôture"
 
+msgctxt "model:event.type,name:event_activate_loss"
+msgid "Activate Loss"
+msgstr "Validation de l'événement"
+
+msgctxt "model:event.type,name:event_draft_loss"
+msgid "Draft Loss"
+msgstr "Passage en brouillon de l'événement"
+
 msgctxt "model:ir.action,name:"
 msgid "Deliver Benefits"
 msgstr "Délivrer une prestation"
@@ -1172,6 +1184,14 @@ msgctxt "selection:claim,status:"
 msgid "Reopened"
 msgstr "Réouvert"
 
+msgctxt "selection:claim.loss,state:"
+msgid "Active"
+msgstr "Valide"
+
+msgctxt "selection:claim.loss,state:"
+msgid "Draft"
+msgstr "Brouillon"
+
 msgctxt "selection:claim.sub_status,status:"
 msgid "Closed"
 msgstr "Fermé"
@@ -1275,6 +1295,14 @@ msgstr "Sinistres"
 msgctxt "view:claim:"
 msgid "Losses"
 msgstr "Préjudices"
+
+msgctxt "view:claim.loss:"
+msgid "Activate"
+msgstr "Valider"
+
+msgctxt "view:claim.loss:"
+msgid "Draft"
+msgstr "Brouillon"
 
 msgctxt "view:offered.option.description:"
 msgid "Benefits"

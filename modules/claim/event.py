@@ -21,11 +21,15 @@ class EventLog:
         if model_name == 'contract':
             if object_.__name__ == 'claim':
                 return [object_.get_contract()]
+            if object_.__name__ == 'claim.loss':
+                return [object_.claim.get_contract()]
             if object_.__name__ == 'claim.service':
                 return [object_.contract]
         if model_name == 'claim':
             if object_.__name__ == 'claim':
                 return [object_]
+            if object_.__name__ == 'claim.loss':
+                return [object_.claim]
             elif object_.__name__ == 'claim.service':
                 return [object_.claim]
             else:

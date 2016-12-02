@@ -41,16 +41,18 @@ class Loss:
                 )
             ], ondelete='RESTRICT', depends=['possible_covered_persons'])
     std_start_date = fields.Function(fields.Date('STD Start Date',
-            states={'invisible': Eval('loss_desc_kind') != ('std')},
-            depends=['loss_desc_kind', 'loss_desc']),
+            states={'invisible': Eval('loss_desc_kind') != 'std',
+                'readonly': Eval('state') != 'draft'},
+            depends=['loss_desc_kind', 'loss_desc', 'state']),
         'get_start_end_dates', setter='set_start_end_dates')
     std_end_date = fields.Function(fields.Date('STD End Date',
             states={'invisible': Eval('loss_desc_kind') != ('std')},
             depends=['loss_desc_kind', 'loss_desc']),
         'get_start_end_dates', setter='set_start_end_dates')
     initial_std_start_date = fields.Date('Initial STD Start Date',
-        states={'invisible': Eval('loss_desc_kind') != ('ltd')},
-        depends=['loss_desc_kind', 'loss_desc'])
+        states={'invisible': Eval('loss_desc_kind') != 'ltd',
+            'readonly': Eval('state') != 'draft'},
+        depends=['loss_desc_kind', 'loss_desc', 'state'])
     ltd_start_date = fields.Function(fields.Date('LTD Start Date',
             states={'invisible': Eval('loss_desc_kind') != 'ltd'},
             depends=['loss_desc_kind', 'loss_desc']),

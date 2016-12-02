@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="event.type" id="event_draft_loss">
+            <field name="name">Draft Loss</field>
+            <field name="code">draft_loss</field>
+        </record>
+        <record model="event.type" id="event_activate_loss">
+            <field name="name">Activate Loss</field>
+            <field name="code">activate_loss</field>
+        </record>
+    </data>
+</tryton>
