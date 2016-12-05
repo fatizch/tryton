@@ -153,6 +153,7 @@ loss.end_date = datetime.date(2017, 01, 01)
 loss.loss_desc = loss_desc
 loss.event_desc = event_desc
 loss.save()
+loss.click('activate')
 
 len(claim.losses) == 1
 # #Res# #True

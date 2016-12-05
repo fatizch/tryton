@@ -133,6 +133,7 @@ Create Claim Configuration::
     >>> loss.loss_desc = loss_desc
     >>> loss.event_desc = event_desc
     >>> loss.save()
+    >>> loss.click('activate')
     >>> len(claim.losses) == 1
     True
     >>> ClaimService = Model.get('claim.service')
