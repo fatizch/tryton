@@ -1,3 +1,4 @@
+* Contrôle de doublons possibles sur les événements
 * Ajout d'un statut sur les événements
 * Gestion des niveaux de délégation assureur spécifiques aux sinistres
 * Amélioration de l'API et des performance pour délivrer une prestation

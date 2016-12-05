@@ -191,6 +191,21 @@ class Loss:
             self.raise_user_error(
                 'one_day_between_relapse_and_previous_loss')
 
+    @classmethod
+    def get_possible_duplicates_fields(cls):
+        return super(Loss, cls).get_possible_duplicates_fields() | {
+            'covered_person',
+            }
+
+    def get_possible_duplicates_clauses(self):
+        return super(Loss, self).get_possible_duplicates_clauses() + [
+            ('covered_person', '=', self.covered_person.id),
+            ]
+
+    @classmethod
+    def do_check_duplicates(cls):
+        return True
+
 
 class ClaimService:
     __metaclass__ = PoolMeta

@@ -1,3 +1,4 @@
+* Check for possible duplicates claim losses
 * Add a status field on claim losses
 * Add claim related insurer delegation levels
 * Improve performance and API for delivering a loss

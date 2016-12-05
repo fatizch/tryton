@@ -26,6 +26,10 @@ msgctxt "error:claim.loss:"
 msgid "End Date is smaller than start date"
 msgstr "La date de fin est antérieure à la date de début"
 
+msgctxt "error:claim.loss:"
+msgid "The loss %(loss)s could be a duplicate of:\n\n%(losses)s"
+msgstr "L'événement %(loss)s est peut-être un doublon de :\n\n%(losses)s"
+
 msgctxt "error:claim.sub_status:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"

@@ -383,6 +383,8 @@ class Loss(model.CoogSQL, model.CoogView):
         cls._error_messages.update({
                 'end_date_smaller_than_start_date':
                 'End Date is smaller than start date',
+                'duplicate_loss': 'The loss %(loss)s could be a duplicate '
+                'of:\n\n%(losses)s',
                 })
         cls._buttons.update({
                 'draft': {'readonly': Eval('state') == 'draft'},
@@ -559,6 +561,29 @@ class Loss(model.CoogSQL, model.CoogView):
         for instance in instances:
             instance.check_end_date()
 
+    def get_possible_duplicates(self):
+        if not self.do_check_duplicates():
+            return []
+        for key in self.get_possible_duplicates_fields():
+            if not getattr(self, key, None):
+                return []
+        return self.search(self.get_possible_duplicates_clauses())
+
+    @classmethod
+    def get_possible_duplicates_fields(cls):
+        return {'loss_desc', 'start_date'}
+
+    def get_possible_duplicates_clauses(self):
+        return [
+            ('id', '!=', self.id),
+            ('loss_desc', '=', self.loss_desc.id),
+            ('start_date', '=', self.start_date),
+            ]
+
+    @classmethod
+    def do_check_duplicates(cls):
+        return False
+
     def covered_options(self):
         Option = Pool().get('contract.option')
         return Option.get_covered_options_from_party(self.claim.claimant,
@@ -584,6 +609,13 @@ class Loss(model.CoogSQL, model.CoogView):
     def activate(cls, losses):
         to_write = [x for x in losses if x.state != 'active']
         if to_write:
+            for loss in to_write:
+                duplicates = loss.get_possible_duplicates()
+                if not duplicates:
+                    continue
+                cls.raise_user_warning('possible_duplicates_%s' % str(loss.id),
+                    'duplicate_loss', {'loss': loss.rec_name,
+                        'losses': '\n'.join(x.rec_name for x in duplicates)})
             cls.write(to_write, {'state': 'active'})
             Pool().get('event').notify_events(to_write, 'activate_loss')
 
