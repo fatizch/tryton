@@ -24,8 +24,8 @@ coog_worker_stop() { # stop
         echo worker stopped
 }
 
-coog_worker_stop() { # kill
-        coog_pid_pid | xargs kill -9 &> /dev/null
+coog_worker_kill() { # kill
+        coog_worker_pid | xargs kill -9 &> /dev/null
         echo worker killed
 }
 
