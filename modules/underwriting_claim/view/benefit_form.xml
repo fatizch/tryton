@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
-        <page name="underwriting">
+        <page name="underwriting_type">
             <label name="underwriting_type"/>
             <field name="underwriting_type"/>
             <label name="underwriting_delay"/>
