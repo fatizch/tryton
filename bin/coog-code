@@ -12,14 +12,6 @@ _coog_code_st_repo() {
         local branch
         branch=$(git rev-parse --abbrev-ref HEAD)
         [ "$branch" = HEAD ] && branch=X
-        local origin
-        if [ "$branch" = X ]
-        then
-                origin=X
-        else
-                origin=$(git diff --shortstat "origin/$branch" "$branch" 2> /dev/null) || origin=NA
-                origin=$(_coog_code_st_fmt $origin)
-        fi
         local mine
         if [ "$branch" = X ]
         then
@@ -28,20 +20,31 @@ _coog_code_st_repo() {
                 mine=$(git diff --shortstat "origin/$branch" "$branch" 2> /dev/null) || mine=NA
                 mine=$(_coog_code_st_fmt $mine)
         fi
-        local stage
-        stage=$(git diff --shortstat --cached) || stage=NA
-        stage=$(_coog_code_st_fmt $stage)
-        local dirty
-        dirty=$(git diff --shortstat) || dirty=NA
-        dirty=$(_coog_code_st_fmt $dirty)
+        local origin
+        if [ "$branch" = X ]
+        then
+                origin=X
+        else
+                origin=$(git diff --shortstat "origin/$branch" "$branch" 2> /dev/null) || origin=NA
+                origin=$(_coog_code_st_fmt $origin)
+        fi
         local master
-        if [ "$branch" = master ]
+        if [ "$branch" = X ]
+        then
+                master=X
+        elif [ "$branch" = master ]
         then
                 master=X
         else
                 master=$(git diff --shortstat master "$branch") || master=NA
                 master=$(_coog_code_st_fmt $master)
         fi
+        local stage
+        stage=$(git diff --shortstat --cached) || stage=NA
+        stage=$(_coog_code_st_fmt $stage)
+        local dirty
+        dirty=$(git diff --shortstat) || dirty=NA
+        dirty=$(_coog_code_st_fmt $dirty)
         echo "$repo $branch $mine $origin $master $stage $dirty"
 }
 
