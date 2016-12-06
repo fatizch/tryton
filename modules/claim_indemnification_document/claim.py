@@ -69,14 +69,20 @@ class ClaimIndemnification:
             claims.add(indemnification.service.claim)
         claims = list(claims)
 
+        where_clause = line.for_object.in_(
+            [str(x) for x in list(indemnifications) + claims]) & NotIn(
+            line.document_desc, [x.id for x in allowed_document_descs]) & (
+            line.blocking == Literal(True)) & (
+            line.reception_date == Null)
+        if allowed_document_descs:
+            where_clause &= NotIn(line.document_desc, [x.id for x in
+                    allowed_document_descs])
+        else:
+            where_clause &= line.document_desc == Null
+
         cursor = Transaction().connection.cursor()
         cursor.execute(*line.select(line.for_object,
-                where=line.for_object.in_(
-                    [str(x) for x in list(indemnifications) + claims])
-                & NotIn(line.document_desc, [x.id for x in
-                        allowed_document_descs])
-                & (line.blocking == Literal(True))
-                & (line.reception_date == Null),
+                where=where_clause,
                 group_by=[line.for_object],
                 having=Count(line.id) > 0))
 

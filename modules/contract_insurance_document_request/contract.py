@@ -91,12 +91,17 @@ class Contract(RemindableInterface):
         line = pool.get('document.request.line').__table__()
         allowed_document_descs = pool.get('document.description').search([])
 
+        where_clause = line.contract.in_([x.id for x in contracts]) & (
+            line.reception_date == Null)
+        if allowed_document_descs:
+            where_clause &= NotIn(line.document_desc, [x.id for x in
+                    allowed_document_descs])
+        else:
+            where_clause &= line.document_desc == Null
+
         cursor = Transaction().connection.cursor()
         cursor.execute(*line.select(line.contract,
-                where=line.contract.in_([x.id for x in contracts])
-                & NotIn(line.document_desc, [x.id for x in
-                        allowed_document_descs])
-                & (line.reception_date == Null),
+                where=where_clause,
                 group_by=[line.contract],
                 having=Count(line.id) > 0))
 
@@ -118,10 +123,15 @@ class Contract(RemindableInterface):
         else:
             having_clause = Count(line.id) == 0
 
+        where_clause = line.reception_date == Null
+        if allowed_document_descs:
+            where_clause &= NotIn(line.document_desc, [x.id for x in
+                    allowed_document_descs])
+        else:
+            where_clause &= line.document_desc == Null
+
         return [('id', 'in', line.select(line.contract,
-                    where=NotIn(line.document_desc, [x.id for x in
-                            allowed_document_descs])
-                    & (line.reception_date == Null),
+                    where=where_clause,
                     group_by=[line.contract],
                     having=having_clause))]
 

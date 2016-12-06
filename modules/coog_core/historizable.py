@@ -27,7 +27,7 @@ class Historizable(ModelSQL):
                         where=model_table.model == cls.__name__))
                 force_historize = cursor.fetchone()[0] or False
             except:
-                pass
+                t.rollback()
         cls._code_history = getattr(cls, '_code_history', cls._history)
         cls._history = cls._history or force_historize
         super(Historizable, cls).__setup__()
