@@ -255,8 +255,11 @@ class ClaimService:
         return result
 
     def get_last_indemnification_date(self, name):
-        return max(x.end_date or x.start_date for x in self.indemnifications
-            if x.status == 'paid')
+        indemnifications = [x for x in self.indemnifications
+            if x.status == 'paid']
+        if indemnifications:
+            return max(x.end_date or x.start_date for x in indemnifications)
+        return None
 
     @classmethod
     def search_paid_until_date(cls, name, clause):
