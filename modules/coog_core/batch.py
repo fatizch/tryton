@@ -29,7 +29,7 @@ def analyze(meth):
         m = meth
         try:
             p = PerfLog()
-            p.on_enter(Pool().get('res.user')(Transaction().user),
+            p.on_enter(Transaction().user,
                 uuid.uuid4().hex, cls.__name__, [], {})
             wrapped_meth = profile(m)
         except:
