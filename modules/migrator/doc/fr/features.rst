@@ -1,0 +1,1 @@
+- la classe parente **Migrator** dont tous les batches de migration héritent

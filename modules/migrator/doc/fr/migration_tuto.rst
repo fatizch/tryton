@@ -1,7 +1,7 @@
 Paramétrage
 ===========
 
-Sections à ajouter à *trytond.conf*  ::
+Section à ajouter à *trytond.conf*  ::
 
     [migration]
     database = source_db
@@ -10,11 +10,6 @@ Sections à ajouter à *trytond.conf*  ::
     host = 10.123.456.789
     schema = schema_if_needed
 
-    [batch]
-    config_file = /mon/env/tryton-workspace/conf/batch.conf
-
-Voir https://github.com/coopengo/coog/wiki/ops-batch pour la configuration des
-batches.
 
 Architecture
 ============
@@ -49,7 +44,7 @@ La structure de table par défaut (cls.table et cls.columns) requêtée par un
 objet Migrator reflète le modèle coog
 
 exemple: pour migrer un tiers, on requête une table 'party' avec des colonnes
-'name', 'first_name', etc
+'name', 'first_name', etc.
 
 Différentes surcharges sont à faire selon l'écart par rapport à ce cas
 "idéal" :
@@ -67,16 +62,19 @@ __setup__() : configuration
 
 - cls.table, cls.columns : à renseigner afin d'avoir le mode par défaut de
   sélection d'ids, ie le chargement de tous les ids d'une table donnée
-- cls.model, cls.func_key : si renseigné alors sont exclus de la sélection
-  d'ids à migrer les ids correspondant à des objets déjà présents en base
-  destination
+- cls.model, cls.func_key : si renseigné alors deux modes de migration sont 
+  disponibles suivant la valeur du flag --update de la ligne de commande :
+    - --update 0: sont alors exclus de la sélection d'ids à migrer les ids
+      des enregistrements déjà présents en base destination
+    - --update 1: les enregistrements déjà présents en base destination sont mis
+      à jour si nécessaire
 - cls.transcoding : à renseigner pour transcoder des valeurs récupérées dans la
   base source vers des valeurs attendues par coog.
   exemple: transcodage du *genre* pour un tiers
 
-.. code:: python
+  .. code:: python
 
-    cls.namings.update({'gender': {u'mr': 'male', u'mme': 'female',
+      cls.namings.update({'gender': {u'mr': 'male', u'mme': 'female',
         None: 'male'}})
 
 select_ids() : sélection des ids à migrer
@@ -123,6 +121,5 @@ Et au cas par cas :
       contrats
     - populate: pour stocker des champs additionnels dans
       l'objet ou "résoudre" des champs c'est à dire passer d'un code à une
-      instance d'objet en la récupérant dans le cache
+      instance d'enregistrement en la récupérant dans le cache
     - migrate_rows: création des objets coog à partir des dictionnaires source
-

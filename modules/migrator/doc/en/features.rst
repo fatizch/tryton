@@ -1,0 +1,1 @@
+- **Migrator batch** parent class inherited by all migration related batches

@@ -1,17 +1,28 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+
 import logging
+import tools
+
+from random import shuffle
 from sql import Column
+
+from trytond.modules.coog_core import batch
 from trytond.pool import Pool
 from trytond.rpc import RPC
-from trytond.transaction import Transaction
-from trytond.modules.coog_core import batch
 
-import tools
 
 __all__ = [
     'Migrator',
     ]
+
+
+class MigrateError(Exception):
+    """Error that stops the migration of current row
+    """
+    def __init__(self, error_code, error_message):
+        super(MigrateError, self).__init__(error_message)
+        self.code = error_code
 
 
 class Migrator(batch.BatchRootNoSelect):
@@ -21,13 +32,14 @@ class Migrator(batch.BatchRootNoSelect):
 
     logger = logging.getLogger(__name__)
     # fields to override in __setup__
-    table = None      # table name to migrate in the source database
-    columns = {}      # mapping of row dict keys to table columns
-    model = ''        # model name of corresponding objects in coog database
-    func_key = 'id'   # model attribute to use as key when caching coog objects
-    cache_obj = {}    # cache of coog objects required to migrate rows
-    transcoding = {}  # contains transcoded values for rows values
-    error_messages = {}
+    table = None         # table name to migrate in the source database
+    columns = {}         # mapping of row dict keys to table columns
+    model = ''           # model name of corresponding records in coog database
+    func_key = 'id'      # attribute to use as key when caching coog records
+    cache_obj = {}       # cache of coog objects required to migrate rows
+    transcoding = {}     # contains transcoded values for rows values
+    error_messages = {}  # errors codes/messages mapping
+    extra_args = {'update': False}  # extra arguments passed to batch command
 
     @classmethod
     def __setup__(cls):
@@ -36,13 +48,37 @@ class Migrator(batch.BatchRootNoSelect):
                 'select_ids': RPC(readonly=False)})
         cls.error_messages.update({
                 'no_rows': 'No rows returned by query %s',
+                'cache_miss': "[%s] Missing '%s' in cache to set '%s' field",
+                'no_update': ("no --update mode available for this batch as "
+                    "specified func_key is 'id'"),
                 })
 
     @classmethod
     def error_message(cls, code):
         """Get error message prefixed by its code
         """
-        return '[%s] %s' % (code, cls.error_messages.get(code, code))
+        return '%%s: [%s/%s] %s' % (cls.__name__, code,
+            cls.error_messages.get(code, code))
+
+    @classmethod
+    def raise_error(cls, row, error_code, error_msg_args=None):
+        if not error_msg_args:
+            error_msg_args = []
+        error_msg_args = [row[cls.func_key]
+            if row and row.get(cls.func_key, None) else '?'] + list(
+                error_msg_args)
+        raise MigrateError(error_code,
+            cls.error_message(error_code) % tuple(error_msg_args))
+
+    @classmethod
+    def cast_extra_args(cls, extra_args):
+        if extra_args.get('update', None) and isinstance(extra_args['update'],
+                basestring):
+            extra_args['update'] = extra_args['update'].lower() in ('1',
+                'true')
+        if extra_args.get('update', None) and cls.func_key == 'id':
+            cls.raise_error(None, 'no_update')
+        return extra_args
 
     @classmethod
     def select_columns(cls, tables=None):
@@ -54,16 +90,17 @@ class Migrator(batch.BatchRootNoSelect):
 
     @classmethod
     def init_update_cache(cls, rows):
+        """Fill in cls.cache_obj with  objects to update.
+        """
         ids = [r[cls.func_key] for r in rows]
-        cls.cache_obj['update'] = tools.load_objects(
-            cls.model, cls.func_key,
-            (cls.func_key, 'in', ids))
+        cls.cache_obj['update'] = tools.cache_from_query(cls.model.replace(
+                '.', '_'), (cls.func_key,), (cls.func_key, ids))
 
     @classmethod
     def init_cache(cls, rows):
         """Fill in cls.cache_obj with existing objects required to migrate rows
         """
-        if cls.do_update():
+        if cls.extra_args.get('update', False):
             cls.init_update_cache(rows)
 
     @classmethod
@@ -84,24 +121,24 @@ class Migrator(batch.BatchRootNoSelect):
         """
         cls.logger.debug("Execute sql query '%s'" % (select,))
         cursor.execute(*select)
-        rows = cursor.fetchall()
-        for row in rows:
-            row = cls.sanitize(row)
-        num_rows_query = len(rows)
-        rows = [r for r in rows if getattr(r, cls.func_key, 1)]
+        rows_all = cursor.fetchall()
+        rows = [r for r in rows_all if cls.sanitize(r)]
         cls.logger.debug(('Result of sql query => %s rows, %s after '
-                'sanitize') % (num_rows_query, len(rows)))
+                'sanitize') % (len(rows_all), len(rows)))
         return rows
 
     @classmethod
     def sanitize(cls, row):
-        """Reformat row to match target expected format and perform
-           sanity checks.
-           Set row func key to None to flag a row that must not be migrated.
+        """Reformat row to match target expected format and perform sanity
+           checks.
+           Return None to discard the row from the list of rows to migrate.
         """
-        for k, v in row.iteritems():
-            if isinstance(v, basestring):
-                row[k] = v.strip()
+        for k in cls.columns:
+            if k in row:
+                if isinstance(row[k], basestring):
+                    row[k] = row[k].strip()
+            else:
+                row[k] = None
         # If row key is in transcoding, replace row value by transcoded one
         for key in cls.transcoding.keys():
             if key in row:
@@ -128,20 +165,66 @@ class Migrator(batch.BatchRootNoSelect):
         """
         ids = []
         excluded = []
-        if 'in' in extra_args:
-            ids = eval(extra_args.get('in', '[]'))
-        elif 'in-file' in extra_args:
-            with open(extra_args['in-file']) as f:
-                ids = eval(f.read())
-        elif cls.table and cls.columns:
-            ids = cls.select_all_ids(extra_args)
+        cls.extra_args.update(cls.cast_extra_args(extra_args))
         if 'not-in' in extra_args:
             excluded = eval(extra_args.get('not-in', '[]'))
         elif 'not-in-file' in extra_args:
             with open(extra_args['not-in-file']) as f:
                 excluded = eval(f.read())
-        res = [[x] for x in set(ids) - set(excluded)]
-        return res
+        if 'in' in extra_args:
+            ids = eval(extra_args.get('in', '[]'))
+        elif 'in-file' in extra_args:
+            with open(extra_args['in-file']) as f:
+                ids = eval(f.read())
+        # By default query all table ids
+        elif cls.table and cls.columns:
+            cursor = tools.CONNECT_SRC.cursor()
+            select, select_key = cls.select(extra_args)
+            for kw in ('limit', 'offset'):
+                if extra_args and kw in extra_args:
+                    setattr(select, kw, int(extra_args[kw]))
+            cursor.execute(*select)
+            ids = cls.select_extract_ids(select_key, cursor.fetchall())
+        cls.logger.info('%s ids before removal' % len(ids))
+        if cls.model and not cls.extra_args.get('update', False) and \
+                cls.func_key != 'id':
+            ids = cls.select_remove_ids(ids, excluded)
+        cls.logger.info('%s ids after removal' % len(ids))
+        ids = cls.select_group_ids(ids)
+        cls.logger.info('%s groups from ids' % len(ids))
+        if extra_args.get('shuffle', False):
+            shuffle(ids)
+        return ids
+
+    @classmethod
+    def select(cls, extra_args):
+        """Return ids selection query and which model key to use to retrieve
+           existing ids
+        """
+        select_key = cls.columns[cls.func_key]
+        select = cls.table.select(*[Column(cls.table, select_key)],
+            order_by=(Column(cls.table, select_key)))
+        return select, cls.func_key
+
+    @classmethod
+    def select_remove_ids(cls, ids, excluded, extra_args=None):
+        """Return ids after having removed those of records already present
+           in coog.
+        """
+        table_name = cls.model.replace('.', '_')
+        existing_ids = tools.cache_from_query(table_name,
+            (cls.func_key,)).keys()
+        return list(set(ids) - set(excluded) - set(existing_ids))
+
+    @classmethod
+    def select_group_ids(cls, ids):
+        """Group together ids that must be handled by same job
+        """
+        return [[x] for x in ids]
+
+    @classmethod
+    def select_extract_ids(cls, select_key, rows):
+        return [x[cls.columns[select_key]] for x in rows]
 
     @classmethod
     def get_batch_args_name(cls):
@@ -155,38 +238,43 @@ class Migrator(batch.BatchRootNoSelect):
         return []
 
     @classmethod
-    def migrate(cls, ids, conn=None):
-        with (tools.connect_to_source() if not conn
-                  else tools.none_ctxt(conn)) as conn:
-            cursor = conn.cursor()
-            select = cls.query_data(ids)
-            if select:
-                rows = cls.run_query(select, cursor)
-                if rows:
-                    cls.init_cache(rows)
-                    return cls.migrate_rows(rows)
-                else:
-                    cls.logger.error(cls.error_message('no_rows') % (select,))
+    def migrate(cls, ids):
+        cls.logger.info('%s is starting to migrate %s ids. Extra args: %s' % (
+                cls.__name__, len(ids), cls.extra_args))
+        select = cls.query_data(ids)
+        res = {}
+        if ids and select:
+            rows = cls.run_query(select, tools.CONNECT_SRC.cursor())
+            if not rows:
+                cls.logger.warning(cls.error_message(
+                    'no_rows') % (None, select,))
+            cls.init_cache(rows)
+            res.update(cls.migrate_rows(rows, ids) or {})
+        else:
+            cls.logger.error(cls.error_message('no_rows') % (None, select,))
+        return res
 
     @classmethod
-    def migrate_rows(cls, rows, conn=None):
+    def migrate_rows(cls, rows, ids):
         pool = Pool()
-        to_upsert = []
+        to_upsert = {}
         for row in rows:
             try:
                 row = cls.populate(row)
-            except tools.MigrateError as e:
+            except MigrateError as e:
                 cls.logger.error(e)
-            else:
-                to_upsert.append(row)
-        result = cls.upsert_records(to_upsert)
-        for migrator in cls.extra_migrator_names():
-            pool.get(migrator).migrate(result, conn)
-        return result
+                continue
+            to_upsert[row[cls.func_key]] = row
+        if to_upsert:
+            cls.upsert_records(to_upsert.values())
+            for migrator in cls.extra_migrator_names():
+                pool.get(migrator).migrate(to_upsert.keys())
+        return to_upsert
 
     @classmethod
     def upsert_records(cls, rows):
-        if not cls.do_update():
+        Model = Pool().get(cls.model)
+        if not cls.extra_args['update']:
             return cls.create_records(rows)
         result, to_create, to_update = [], [], []
         for row in rows:
@@ -201,71 +289,56 @@ class Migrator(batch.BatchRootNoSelect):
     @classmethod
     def create_records(cls, rows):
         """Create records from a list of rows and
-        return the list of ids which were successfully created.
+           return the list of ids which were successfully created.
         """
         pool = Pool()
         Model = pool.get(cls.model)
+        rows = [{k: row[k] for k in row if k in set(Model._fields) - {'id', }}
+            for row in rows]
         if rows:
-            to_create = {}
-            for row in rows:
-                to_create[row[cls.func_key]] = {k: row[k]
-                    for k in row if k in Model._fields
-                    }
-            Model.create(to_create.values())
+            Model.create(rows)
             return rows
         return []
 
     @classmethod
     def update_records(cls, rows):
         """Update records from a list of rows.
-        For the moment relational fields are not supported, eg One2Many.
-        Returns a list of successfully updated ids.
+           For the moment relational fields are not supported, eg One2Many.
+           Returns a list of successfully updated ids.
         """
         pool = Pool()
         Model = pool.get(cls.model)
+        rows = [{k: row[k] for k in row if k in set(Model._fields) - {'id', }}
+            for row in rows]
         if rows:
             to_update = {}
             for row in rows:
-                obj = cls.cache_obj['update'][row[cls.func_key]]
-                to_update[row[cls.func_key]] = [
-                    [obj], {k: row[k] for k in row if k in Model._fields}
-                    ]
+                obj = Model(cls.cache_obj['update'][row[cls.func_key]])
+                to_update[row[cls.func_key]] = [[obj], row]
             Model.write(*sum(to_update.values(), []))
             return rows
         return []
 
     @classmethod
-    def do_update(cls):
-        """Return True if the update flag was set. Otherwise, return False"""
-        return Transaction().context.get('batch_update', False)
-
-    @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):
-        with Transaction().set_context(
-                batch_update=extra_args.get(
-                    'extra_args', 'false').lower() == 'true'):
-            objs = cls.migrate(ids)
-            if objs is not None:
-                # string to display in 'result' column of `coog batch qlist`
-                return '%s|%s' % (len(objs), len(ids))
+        cls.extra_args.update(cls.cast_extra_args(extra_args))
+        objs = cls.migrate(ids)
+        if objs is not None:
+            # string to display in 'result' column of `coog batch qlist`
+            return '%s|%s' % (len(objs), len(ids))
 
     @classmethod
-    def select_all_ids(cls, extra_args=None):
-        """Return all values for given column in table.
-           If model and field are present, remove from returned list all ids of
-           objects that are already existing.
+    def resolve_key(cls, row, key, cache_name, dest_key=None, dest_attr=None):
+        """Replace row[key] with the corresponding value in the cache.
+           Raise an error if row[key] is not present in cache.
         """
-        with tools.connect_to_source().cursor() as cursor:
-            select_key = cls.columns[cls.func_key]
-            select = cls.table.select(*[Column(cls.table, select_key)],
-                order_by=(Column(cls.table, select_key)))
-            for kw in ('limit', 'offset'):
-                if extra_args and kw in extra_args:
-                    setattr(select, kw, int(extra_args[kw]))
-            cursor.execute(*select)
-            vals = [x[select_key] for x in cursor.fetchall()]
-            if (cls.model and cls.func_key != 'id'
-                    and 'update' in extra_args
-                    and extra_args['update'].lower() != 'true'):
-                vals = tools.remove_existing_ids(vals, cls.model, cls.func_key)
-            return vals
+        if not dest_key:
+            dest_key = key
+        if row[key] is not None:
+            try:
+                obj = cls.cache_obj[cache_name][row[key]]
+                row[dest_key] = getattr(obj, dest_attr) if dest_attr else obj
+            except KeyError:
+                cls.raise_error(row, 'cache_miss', (cache_name, row[key],
+                    dest_key))
+        return row

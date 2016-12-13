@@ -1,23 +1,18 @@
 .. transversal
 
-Transverse - Outils de migration
-================================
+Transversal - Migration tools
+=============================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
-
-Aide utilisateur
-----------------
-
-.. include:: migration.rst
 
 
 .. toctree::
@@ -25,4 +20,3 @@ Aide utilisateur
 
     summary.rst
     features.rst
-    migration.rst
