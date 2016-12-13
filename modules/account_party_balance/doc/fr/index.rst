@@ -1,15 +1,15 @@
-.. MAIN_TOPIC
+.. accounting
 
-MAIN TOPIC - Module Topic
-=========================
+Comptabilité - Balance comptable par tiers
+==========================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

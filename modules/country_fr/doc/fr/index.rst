@@ -1,15 +1,15 @@
-.. MAIN_TOPIC
+.. transversal
 
-MAIN TOPIC - Module Topic
-=========================
+Transverse - France
+===================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

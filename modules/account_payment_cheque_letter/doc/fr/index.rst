@@ -1,15 +1,15 @@
-.. MAIN_TOPIC
+.. accounting
 
-MAIN TOPIC - Module Topic
-=========================
+Comptabilité - Lettres chèques
+==============================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

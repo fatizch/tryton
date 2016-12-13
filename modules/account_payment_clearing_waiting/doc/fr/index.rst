@@ -1,15 +1,15 @@
-.. MAIN_TOPIC
+.. accounting
 
-MAIN TOPIC - Module Topic
-=========================
+Comptabilité - Compte d'attente de paiement
+===========================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

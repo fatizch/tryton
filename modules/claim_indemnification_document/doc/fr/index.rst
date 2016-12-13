@@ -1,15 +1,15 @@
-.. MAIN_TOPIC
+.. claim
 
-MAIN TOPIC - Module Topic
-=========================
+Sinistre - Document pour les indemnisations
+===========================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 
