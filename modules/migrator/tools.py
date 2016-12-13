@@ -17,17 +17,18 @@ from trytond.transaction import Transaction
 
 def connect_to_source():
     section = 'migration'
-    conn = psycopg2.connect(
-        database=config.get(section, 'database'),
-        user=config.get(section, 'user'),
-        password=config.get(section, 'password'),
-        host=config.get(section, 'host'),
-        connect_timeout=5,  # in seconds
-        cursor_factory=RealDictCursor)
-    schema = config.get(section, 'schema')
-    if schema:
-        conn.cursor().execute("SET SCHEMA '%s'" % schema)
-    return conn
+    if config.has_section(section):
+        conn = psycopg2.connect(
+            database=config.get(section, 'database'),
+            user=config.get(section, 'user'),
+            password=config.get(section, 'password'),
+            host=config.get(section, 'host'),
+            connect_timeout=5,  # in seconds
+            cursor_factory=RealDictCursor)
+        schema = config.get(section, 'schema')
+        if schema:
+            conn.cursor().execute("SET SCHEMA '%s'" % schema)
+        return conn
 
 
 CONNECT_SRC = connect_to_source()
