@@ -22,6 +22,15 @@ class Claim:
     def add_new_relapse(self, loss_desc_code):
         self.add_new_loss(loss_desc_code, is_a_relapse=True)
 
+    def add_new_long_term_disability(self, loss_desc_code):
+        self.add_new_loss(loss_desc_code)
+        assert self.losses[-1].loss_desc.code == loss_desc_code
+        # Look for last short term loss and init the start date
+        for loss in self.losses[-2::-1]:  # Python is fun
+            if loss.loss_desc.loss_kind == 'std':
+                self.losses[-1].initial_std_start_date = loss.start_date
+                break
+
 
 class Loss:
     __metaclass__ = PoolMeta
