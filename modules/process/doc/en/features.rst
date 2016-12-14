@@ -1,28 +1,26 @@
-- **Création d'étapes :** Un processus métier consiste du point de vue
-  utilisateur en une succession d'étape. Il est possible de créer ces étapes
-  depuis l'interface, et de les combiner pour créer le processus le plus
-  adapté. Les étapes peuvent être partagées entre les processus.
+- **Step creation**: A business process is basically a list of steps. We allow
+  to manually create those steps from the application, and combine them to
+  create the best process for the situation. A given step can be used across
+  multiple processes.
 
-- **Design d'écrans :** Il est possible via paramétage de concevoir chaque
-  écran du processus final, afin d'avoir le maximum de contrôle sur ce que
-  voient les utilisateurs. Afin de simplifier la saisie, il est possible
-  d'ajouter un header sur le processus, qui sera visible sur toutes les étapes.
+- **View design**: The step configuration allows to design specific views for
+  each step, so the final process has the finest control on what the end user
+  will see. It is also possible to add a header and / or a footer on the whole
+  process.
 
-- **Contrôles de surface :** Il est possible d'ajouter des contrôles sur chaque
-  étape, directement depuis l'interface de paramétrage. Ces contrôles peuvent
-  être simples (tel champ est requis) comme plus complexes, auquel cas ils
-  utilisent des fonctions fournies de base dans l'outil.
+- **Soft controls**: On each step, we can easily add controls from the
+  configuration interface. Those control may be simple (a given field is
+  required) or more complex, in which case they will use methods available from
+  the application code base.
 
-- **Gestion des habilitations :** Chaque étape du processus peut n'être visible
-  que par certains utilisateurs (sélection médicale, etc...)
+- **User right managements**: A given step can be configured to be only
+  accessible to certain users (underwriting, validation, etc...)
 
-- **Navigation contrôlée :** Il est possible pour chaque étape du processus de
-  définir quelles étapes sont accessibles. Par défaut, tout est possible
-  (l'utilisateur peut sauter du début à la fin du processus, il sera arrêté si
-  un contrôle bloque sur une étape). A l'inverse, il est possible de choisir
-  précisément quelles transitions d'étapes sont possibles, pour un maximum de
-  contrôle.
+- **Control flow**: All transitions between steps can be finely controlled. As
+  a default rule, everything is possible, the user can jump around in the
+  process, and will only be stopped if a specific check fails. The other way is
+  possible as well, where only the transitions that are specifically allowed
+  are available.
 
-- **Sauvegarde continue :** Les processus peuvent être suspendus et repris à
-  tout moment. Plusieurs processus peuvent être traités simultanément par le
-  même utilisateur.
+- **Safe save**: A running proces can be suspended and resumed at any time.
+  Multiple processes can be handled at the same time by a given user.

@@ -145,18 +145,47 @@ class ProcessFramework(ModelSQL, ModelView):
         good_model.save()
 
     @classmethod
+    def create(cls, vlist):
+        created = super(ProcessFramework, cls).create(vlist)
+        for elem in created:
+            if not elem.current_state:
+                continue
+            elem.current_state.process.init_new_process(elem)
+            elem.save()
+        return created
+
+    @classmethod
+    def write(cls, *args):
+        actions = iter(args)
+        to_process = []
+        for instances, action in zip(actions, actions):
+            to_process += [x for x in instances if x.current_state is None]
+        super(ProcessFramework, cls).write(*args)
+        to_save = []
+        for elem in to_process:
+            if not elem.current_state:
+                continue
+            elem.current_state.process.init_new_process(elem)
+            to_save.append(elem)
+        if to_save:
+            cls.save(to_save)
+
+    @classmethod
     def copy(cls, instances, default=None):
         # Restart current processes on the copies when duplicating
+        cur_states = [x.current_state for x in instances]
+        default = default.copy() if default is not None else {}
+        default['current_state'] = None
         copies = super(ProcessFramework, cls).copy(instances, default)
         processes_start = {}
         to_save = []
-        for copy, original in zip(copies, instances):
-            if not original.current_state:
+        for copy, state in zip(copies, cur_states):
+            if not state:
                 continue
-            cur_process = original.current_state.process
+            cur_process = state.process
             if cur_process not in processes_start:
                 processes_start[cur_process] = \
-                    cur_process.get_first_state_relation()
+                    cur_process.first_step()
             copy.current_state = processes_start[cur_process]
             to_save.append(copy)
         if to_save:

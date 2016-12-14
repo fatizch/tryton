@@ -720,6 +720,10 @@ msgctxt "selection:process.transition,kind:"
 msgid "Standard Transition"
 msgstr "Transition Standard"
 
+msgctxt "selection:process.transition,kind:"
+msgid "Start Process"
+msgstr "Démarrer le processus"
+
 msgctxt "selection:process.transition,method_kind:"
 msgid "Executed between steps"
 msgstr "Exécuter entre les Etapes"

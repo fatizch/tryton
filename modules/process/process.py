@@ -196,6 +196,14 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         Menu = Pool().get('ir.ui.menu')
         return Menu.list_icons()
 
+    def init_new_process(self, instance):
+        for elem in self.transitions:
+            if elem.kind != 'start':
+                continue
+            if elem.to_step != instance.current_state.step:
+                continue
+            elem.execute(instance)
+
     @fields.depends('fancy_name', 'menu_name')
     def on_change_with_menu_name(self):
         if not (hasattr(self, 'fancy_name') and self.fancy_name):
@@ -544,10 +552,11 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
                 return elem
         return None
 
-    def get_first_state_relation(self):
-        return self.all_steps[0]
-
     def first_step(self):
+        for elem in self.transitions:
+            if elem.kind != 'start' or not elem.to_step:
+                continue
+            return self.get_step_relation(elem.to_step)
         return self.all_steps[0]
 
     def get_rec_name(self, name):
@@ -761,21 +770,28 @@ class ProcessTransition(ModelSQL, ModelView):
     on_process = fields.Many2One('process', 'On Process', required=True,
         ondelete='CASCADE', select=True)
     from_step = fields.Many2One('process.step', 'From Step',
-        ondelete='CASCADE', required=True)
+        ondelete='CASCADE', states={
+            'required': Eval('kind') != 'start',
+            'invisible': Eval('kind') == 'start'},
+        depends=['kind'])
     to_step = fields.Many2One('process.step', 'To Step', ondelete='CASCADE',
-        domain=[('id', '!=', Eval('from_step'))], depends=['from_step'],
-        states={'invisible': Eval('kind') != 'standard'})
+        domain=[('id', '!=', Eval('from_step'))],
+        states={'invisible': Eval('kind') == 'complete',
+            'required': Eval('kind') == 'start'},
+        depends=['from_step', 'kind'])
     kind = fields.Selection([
+            ('start', 'Start Process'),
             ('standard', 'Standard Transition'),
             ('complete', 'Complete Process')],
         'Transition Kind', required=True)
     name = fields.Char('Name', states={
             'required': Eval('kind') == 'complete',
-            'invisible': Eval('kind') == 'standard',
+            'invisible': Eval('kind') != 'complete',
             }, depends=['kind'], translate=True)
     # Could be useful if we need to find the dependencies of the pyson expr :
     #  re.compile('Eval\(\'([a-zA-Z0-9._]*)\'', re.I|re.U) + finditer
-    pyson = fields.Char('Pyson Constraint')
+    pyson = fields.Char('Pyson Constraint', states={
+            'invisible': Eval('kind') == 'draft'}, depends=['kind'])
     methods = fields.One2ManyDomain('process.action', 'parent_transition',
         'Methods', domain=[('technical_kind', '=', 'transition')],
         order=[('sequence', 'ASC')], target_not_required=True)
@@ -790,6 +806,7 @@ class ProcessTransition(ModelSQL, ModelView):
     @classmethod
     def __setup__(cls):
         super(ProcessTransition, cls).__setup__()
+        cls._order = [('priority', 'ASC')]
         cls._error_messages.update({
                 'complete_button_label': 'Complete',
                 })

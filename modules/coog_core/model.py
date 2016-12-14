@@ -371,7 +371,7 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
                 constraints.append(column.name)
         if not constraints:
             return super(CoogSQL, cls).copy(objects, default=default)
-        default = default.copy()
+        default = default.copy() if default is not None else {}
 
         for constraint in constraints:
             default[constraint] = 'temp_for_copy'
