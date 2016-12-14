@@ -19,7 +19,7 @@ this repository contains the full copyright notices and license terms. -->
             <label name="sub_status"/>
             <field name="sub_status"/>
             <newline/>
-            <field name="current_extra_data" colspan="2" no_command="1"/>
+            <field name="current_extra_data" colspan="4" no_command="1"/>
         </page>
         <page name="versions">
             <field name="versions"/>
