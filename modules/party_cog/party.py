@@ -412,12 +412,15 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             bool_op = 'AND'
         else:
             bool_op = 'OR'
-        return [bool_op,
+        domain = [bool_op,
             ('code',) + tuple(clause[1:]),
             ('identifiers.code',) + tuple(clause[1:]),
             ('ssn',) + tuple(clause[1:]),
-            ('full_name',) + tuple(clause[1:]),
-        ]
+            ]
+        if (not isinstance(clause[2], basestring) or
+                ' ' not in clause[2].strip(' %')):
+            return domain
+        return domain + [('full_name',) + tuple(clause[1:])]
 
     @classmethod
     def search_full_name(cls, name, clause):
