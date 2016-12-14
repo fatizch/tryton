@@ -222,11 +222,6 @@ class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
             table.drop_column('template_behaviour')
 
     @classmethod
-    def delete(cls, entities):
-        cls.delete_rules(entities)
-        super(Benefit, cls).delete(entities)
-
-    @classmethod
     def _export_light(cls):
         return super(Benefit, cls)._export_light() | {'company'}
 
