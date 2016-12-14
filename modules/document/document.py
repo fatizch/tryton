@@ -43,6 +43,10 @@ class DocumentDescription(model.CoogSQL, model.CoogView):
         cls._order.insert(0, ('name', 'ASC'))
 
     @classmethod
+    def _export_light(cls):
+        return super(DocumentDescription, cls)._export_light() | {'groups', }
+
+    @classmethod
     def search(cls, domain, *args, **kwargs):
         # Filter out everything the user is not allowed to view
         # The 'remove_document_desc_filter' is used in document desc act window
