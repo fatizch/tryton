@@ -95,7 +95,7 @@ class MigratorZip(migrator.Migrator):
         for (country, _zip, city, line5), _rows in groupby(rows, lambda r: (
                         r['country_code'], r['zip'], r['city'], r['line5'])):
             row = cls.populate(list(_rows)[0])
-            key = (row['zip'], row['country'], rowfds['city'], row['line5'])
+            key = (row['zip'], row['country'], row['city'], row['line5'])
             # Call to populate() may return a row with the same values as a
             # previous one, in that case we don't want to add it.
             if key in cls.cache_obj['zip']:
