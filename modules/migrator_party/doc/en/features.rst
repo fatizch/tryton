@@ -1,0 +1,6 @@
+- **Country migration batch**
+- **Zip code migration batch**
+- **Address migration batch**
+- **Party relation migration batch**
+- **Contact mechanism migration batch**
+- **Party migration batch**

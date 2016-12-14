@@ -1,0 +1,6 @@
+- **Batch de migration des pays**
+- **Batch de migration des codes postaux**
+- **Batch de migration des adresses**
+- **Batch de migration des relation entre tiers**
+- **Batch de migration des mécanismes de contacts**
+- **Batch de migration des tiers**

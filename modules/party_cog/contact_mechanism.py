@@ -14,6 +14,7 @@ from trytond.modules.coog_core import model, utils, fields, export
 MEDIA = _TYPES + [
     ('mail', 'Mail')
     ]
+VALID_EMAIL_REGEX = r"[^@]+@[^@]+\.[^@]+"
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -47,7 +48,7 @@ class ContactMechanism(export.ExportImportMixin):
             return True
         if hasattr(self, 'email') and self.email:
             import re
-            if not re.match(r"[^@]+@[^@]+\.[^@]+", self.email):
+            if not re.match(VALID_EMAIL_REGEX, self.email):
                 return False
         return True
 
