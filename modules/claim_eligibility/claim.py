@@ -152,7 +152,7 @@ class ClaimIndemnification:
     def __setup__(cls):
         super(ClaimIndemnification, cls).__setup__()
         cls._error_messages.update({
-                'ineligible': 'The claim service is not yet valid'
+                'ineligible': 'The claim service is not eligible',
                 })
 
     @classmethod

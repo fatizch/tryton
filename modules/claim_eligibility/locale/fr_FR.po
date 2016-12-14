@@ -3,8 +3,8 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:claim.indemnification:"
-msgid "The claim service is not yet valid"
-msgstr "La prestation n'est pas valide"
+msgid "The claim service is not eligible"
+msgstr "L'éligibilité de la prestation n'a pas été validée"
 
 msgctxt "error:claim.manual_validation_eligibility:"
 msgid ""
