@@ -72,6 +72,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
 
     __name__ = 'table'
     _func_key = 'code'
+    _get_dimension_dates_cache = Cache('get_dates_from_table_dimension')
 
     name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
@@ -148,6 +149,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         Cell = Pool().get('table.cell')
         Cell.delete(sum([list(x.cells) for x in tables], []))
         super(TableDefinition, cls).delete(tables)
+        cls._get_dimension_dates_cache.clear()
 
     @classmethod
     def is_master_object(cls):
@@ -270,6 +272,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         pool = Pool()
         TableDefinitionDimension = pool.get('table.dimension.value')
         super(TableDefinition, cls).write(*args)
+        cls._get_dimension_dates_cache.clear()
 
         actions = iter(args)
         for records, values in zip(actions, actions):
@@ -328,6 +331,26 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
                 res = '%s (%s)' % (res, cell)
         return res
 
+    @classmethod
+    def create(cls, vlist):
+        tables = super(TableDefinition, cls).create(vlist)
+        cls._get_dimension_dates_cache.clear()
+        return tables
+
+    @classmethod
+    def get_dates_from_table_dimension(cls, table_code, col_number):
+        key = (table_code, col_number)
+        date_list = cls._get_dimension_dates_cache.get(key, default=-1)
+        if date_list != -1:
+            return date_list
+        dim_name = 'dimension' + str(col_number)
+        dimension = Pool().get('table.dimension.value').search([
+                ('definition.code', '=', table_code), ('type', '=', dim_name)])
+        date_list = [(x.start_date, x.end_date) for x in dimension]
+        cls._get_dimension_dates_cache.set(key, date_list)
+        return date_list
+
+
 for i in range(1, DIMENSION_MAX + 1):
     setattr(TableDefinition, 'dimension_order%s' % i,
         fields.Selection(ORDER, 'Dimension Order %s' % i,
@@ -360,6 +383,7 @@ def dimension_state(kind):
     return {
         'invisible': Eval('dimension_kind') != kind,
         }
+
 
 DIMENSION_DEPENDS = ['dimension_kind']
 
@@ -451,6 +475,8 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         records = super(TableDefinitionDimension, cls).create(vlist)
         cls.clean_sequence(records)
         cls.set_name(records)
+        Table = Pool().get('table')
+        Table._get_dimension_dates_cache.clear()
         return records
 
     @classmethod
@@ -460,6 +486,8 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         records = sum(args[0::2], [])
         cls.clean_sequence(records)
         cls.set_name(records)
+        Table = Pool().get('table')
+        Table._get_dimension_dates_cache.clear()
 
     @classmethod
     def _view_look_dom_arch(cls, tree, type, field_children=None):
@@ -592,6 +620,11 @@ class TableDefinitionDimension(ModelSQL, ModelView):
             dimension_id = None
         cls._get_dimension_cache.set(key, dimension_id)
         return dimension_id
+
+    @classmethod
+    def delete(cls, tables):
+        super(TableDefinitionDimension, cls).delete(tables)
+        Pool().get('table')._get_dimension_dates_cache.clear()
 
 
 class TableDefinitionDimensionOpenAskType(ModelView):
@@ -886,6 +919,7 @@ class TableCell(ModelSQL, ModelView):
         if cell:
             return cls._load_value(cell.value, definition.type_)
 
+
 for i in range(1, DIMENSION_MAX + 1):
     setattr(TableCell, 'dimension%s' % i,
         fields.Many2One('table.dimension.value', 'Dimension %s' % i,
@@ -946,6 +980,7 @@ class TableOpen2DAskDimensions(ModelView):
                 view_fields['dimension%s' % i]['string'] = getattr(
                     definition, 'dimension_name%s' % i)
         return result
+
 
 for i in range(3, DIMENSION_MAX + 1):
     setattr(TableOpen2DAskDimensions, 'dimension%s' % i,

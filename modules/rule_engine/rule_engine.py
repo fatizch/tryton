@@ -552,6 +552,15 @@ class RuleTools(ModelView):
         return (amount / rounding_factor).quantize(Decimal('1.'),
             rounding=ROUND_HALF_UP) * rounding_factor
 
+    @classmethod
+    def _re_dates_list_from_table_dimension(cls, args, table_code, col_number,
+            start_date, end_date):
+        Table = Pool().get('table')
+        dimension_values = Table.get_dates_from_table_dimension(table_code,
+            col_number)
+        return [val[0] for val in dimension_values if val[0] >= start_date
+                and (val[1] or datetime.date.min) <= end_date]
+
 
 class FunctionFinder(ast.NodeVisitor):
 

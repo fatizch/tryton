@@ -247,5 +247,16 @@ etre disponible dans le contexte d'exécution</field>
             <field name="long_description">Arrondir un montant selon un facteur(ex: arrondir(10.242, 0.01) = 10.24)</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
+        <record model="rule_engine.function" id="dates_changement_table">
+            <field name="translated_technical_name">dates_changement_table</field>
+            <field name="description">Récupérer une liste de dates</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_dates_list_from_table_dimension</field>
+            <field name="fct_args">Code_de_la_table, numero_de_dimension, date_de_debut_de_periode, date_de_fin_de_periode</field>
+            <field name="long_description">Récupérer une liste de dates à partir d'une dimension pour une table donnée</field>
+            <field name="parent" ref="dossier_outils"/>
+        </record>
     </data>
 </tryton>
