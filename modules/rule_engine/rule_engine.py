@@ -1,6 +1,7 @@
 # encoding: utf-8
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import random
 import sys
 import pprint
 import traceback
@@ -82,6 +83,7 @@ def check_code(algorithm):
     else:
         warnings = Checker(tree, 'test')
         return warnings.messages
+
 
 WARNINGS = []
 for name in (
@@ -553,7 +555,18 @@ class RuleTools(ModelView):
             rounding=ROUND_HALF_UP) * rounding_factor
 
     @classmethod
-    def _re_dates_list_from_table_dimension(cls, args, table_code, col_number,
+    def _re_random_integer(cls, args, min_value, max_value):
+        return random.randint(min_value, max_value)
+
+    @classmethod
+    def _re_random_floating(cls, args, min_value, max_value, digits=None):
+        value = Decimal(random.uniform(min_value, max_value))
+        if digits is None:
+            return value
+        return value.quantize(Decimal(10) ** -digits)
+
+     @classmethod
+     def _re_dates_list_from_table_dimension(cls, args, table_code, col_number,
             start_date, end_date):
         Table = Pool().get('table')
         dimension_values = Table.get_dates_from_table_dimension(table_code,

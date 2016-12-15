@@ -247,6 +247,36 @@ etre disponible dans le contexte d'exécution</field>
             <field name="long_description">Arrondir un montant selon un facteur(ex: arrondir(10.242, 0.01) = 10.24)</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
+        <record model="rule_engine.function" id="entier_aleatoire">
+            <field name="translated_technical_name">entier_aleatoire</field>
+            <field name="description">Entier Aléatoire</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_random_integer</field>
+            <field name="fct_args">minimum, maximum</field>
+            <field name="long_description">
+Retourne un entier aléatoire entre les valeurs minimum
+et maximum autorisées (incluses).
+
+Minimum, Maximum</field>
+            <field name="parent" ref="dossier_outils"/>
+        </record>
+        <record model="rule_engine.function" id="valeur_aleatoire">
+            <field name="translated_technical_name">valeur_aleatoire</field>
+            <field name="description">Valeur Aléatoire</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_random_floating</field>
+            <field name="fct_args">minimum, maximum, digits</field>
+            <field name="long_description">
+Retourne une valeur aléatoire comprise entre le minimum
+et le maximum autorisé (incluses). Un paramètre optionnel
+indique le nombre de décimales.
+
+Minimum, Maximum, [nombre de décimales]</field>
+        </record>
         <record model="rule_engine.function" id="dates_changement_table">
             <field name="translated_technical_name">dates_changement_table</field>
             <field name="description">Récupérer une liste de dates</field>

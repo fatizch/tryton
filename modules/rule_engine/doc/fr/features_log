@@ -1,21 +1,22 @@
+* Ajout de fonctions de génération aléatoires dans le moteur de règles
 * Ajout d'une donnée métier pour calculer l'indice d'une table pour une période
 
 Version 1.10 - 2016-11-02
 
 Version 1.8 - 2016-07-06
-* Detect and store used functions in rules
-* Store execution context in rule engine log
+* Détection et enregistrement des données utilisées dans les règles
+* Sauvegarde du contexte d'exécution dans les traces d'exécution
 
 Version 1.6 - 2015-12-23
-* Display expected return type to help user
+* Affichage du type de retour attendu afin de faciliter la saisie
 
 Version 1.4 - 2015-05-29
-* Add calculation date to rule engine log to retrieve more easily the good log
-* Execution logs are no more automatically deleted when the debug mode is removed
-* Move test case and execution logs to relate
+* Ajout de la date de calcul sur les traces d'exécution pour faciliter l'analyze
+* Les traces ne sont plus supprimées automatiquement lors de la désactivation du mode de debug
+* Déplacement des jeux d'essai dans un onglet à part
 
 Version 1.3 - 2015-01-22
-* Improve performances with cache
+* Utilisation d'un cache pour améliorer les performances
 
 Version 1.2 - 2014-07-01
-* Changelog file creation
+* Création du fichier de suivi
