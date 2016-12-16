@@ -565,8 +565,8 @@ class RuleTools(ModelView):
             return value
         return value.quantize(Decimal(10) ** -digits)
 
-     @classmethod
-     def _re_dates_list_from_table_dimension(cls, args, table_code, col_number,
+    @classmethod
+    def _re_dates_list_from_table_dimension(cls, args, table_code, col_number,
             start_date, end_date):
         Table = Pool().get('table')
         dimension_values = Table.get_dates_from_table_dimension(table_code,
