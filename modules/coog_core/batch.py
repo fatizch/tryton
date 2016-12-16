@@ -233,7 +233,7 @@ class ViewValidationBatch(BatchRoot):
         modules = Module.search([])
         utils_module = Module.search([('name', '=', 'coog_core')])[0]
         coog_modules = set([module.name for module in modules
-                if utils_module in module.parents])
+                if utils_module in module.parents] + ['coog_core'])
         return [('module', 'in', coog_modules)]
 
     @classmethod
