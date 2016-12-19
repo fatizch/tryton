@@ -53,3 +53,7 @@
   deactivating a previously historized model will not remove the history table
   in the database. Also, models which are "hardcoded" as historized will not be
   modifiable.
+
+- **Extra details configuration**: Add a Mixin which can be used to add
+  configurable detail fields on a model. The fields are configured per model
+  through the application.

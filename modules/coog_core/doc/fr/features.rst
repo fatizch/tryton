@@ -54,3 +54,14 @@
 
 - **Outils tryton :** Ajout de méthodes permettant de simplement évaluer des
   domaines, des expressions pyson, de manipuler des listes versionnées, etc...
+
+- **Historisation manuelle** : Possibilité via l'interface de Coog de définir
+  que certains modèles doivent être historisés. Une mise à jour des modules
+  est nécessaire pour que la modification soit prise en compte. Quoi qu'il
+  arrive, la dé-historisation d'un modèle ne supprimera pas la table associée
+  afin d'éviter tout risque de perte de données accidentelle. En outre, les
+  modèles dont l'historisation est "hardcodée" ne pourront être modifiés.
+
+- **Détails configurables** : Ajout d'un Mixin permettant d'ajouter des détails
+  configurables sur des modèles. Les détails sont paramétrés par modèle
+  directement dans l'application.

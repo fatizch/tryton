@@ -21,6 +21,7 @@ from .diff_blame import *
 from .note import *
 from .hardware_bench import *
 from .access import *
+import extra_details
 
 
 def register():
@@ -81,6 +82,8 @@ def register():
         Model,
         ModelField,
         UIMenuAccess,
+        extra_details.ExtraDetailsConfiguration,
+        extra_details.ExtraDetailsConfigurationLine,
         module='coog_core', type_='model')
 
     if config.get('env', 'testing') == 'True':

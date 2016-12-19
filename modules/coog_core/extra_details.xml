@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################### -->
+        <!-- # Extra Details Configuration # -->
+        <!-- ############################### -->
+        <record model="ir.ui.view" id="extra_details_configuration_view_form">
+            <field name="model">extra_details.configuration</field>
+            <field name="type">form</field>
+            <field name="name">extra_details_configuration_form</field>
+        </record>
+        <record model="ir.ui.view" id="extra_details_configuration_view_list">
+            <field name="model">extra_details.configuration</field>
+            <field name="type">tree</field>
+            <field name="name">extra_details_configuration_list</field>
+        </record>
+        <!-- Entry Point -->
+        <record model="ir.action.act_window" id="act_extra_details_configuration">
+            <field name="name">Extra Details Configuration</field>
+            <field name="res_model">extra_details.configuration</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_extra_details_configuration_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="extra_details_configuration_view_list"/>
+            <field name="act_window" ref="act_extra_details_configuration"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_extra_details_configuration_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="extra_details_configuration_view_form"/>
+            <field name="act_window" ref="act_extra_details_configuration"/>
+        </record>
+        <menuitem parent="ir.menu_administration" sequence="50" action="act_extra_details_configuration" id="menu_extra_details_configuration"/>
+        <!-- ##################################### -->
+        <!-- # Extra Details Configuration Lines # -->
+        <!-- ##################################### -->
+        <record model="ir.ui.view" id="extra_details_configuration_line_view_form">
+            <field name="model">extra_details.configuration.line</field>
+            <field name="type">form</field>
+            <field name="name">extra_details_configuration_line_form</field>
+        </record>
+        <record model="ir.ui.view" id="extra_details_configuration_line_view_list">
+            <field name="model">extra_details.configuration.line</field>
+            <field name="type">tree</field>
+            <field name="name">extra_details_configuration_line_list</field>
+        </record>
+    </data>
+</tryton>

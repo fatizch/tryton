@@ -28,16 +28,20 @@ msgstr ""
 msgctxt "error:export_not_found:"
 msgid "Cannot import : no object %s with functionnal key : \"%s\" were found."
 msgstr ""
-"Impossible d'importer : impossible de trouver un object %s avec la clé "
-"fonctionnelle : \"%s\""
+"Impossible d'importer : aucun objet de type %s ayant la clé fonctionnelle : "
+"\"%s\" n'a été trouvé"
 
 msgctxt "error:export_not_unique:"
 msgid ""
 "Cannot import : the following objects:\\n%s\\n share the same functional "
 "key:\\n\"%s\"."
 msgstr ""
-"Impossible d'importer : Les objects :\\n%s\\n ont la même clé fonctionnelle :"
-"\n\"%s\""
+"Impossible d'importer : les objets :\\n%s\\n partagent la même clé "
+"fonctionnelle :\\n\"%s\"."
+
+msgctxt "error:extra_details.configuration:"
+msgid "The model must be unique!"
+msgstr "Le modèle doit être unique !"
 
 msgctxt "error:ir.attachment:"
 msgid "Can't decode attachment %s in base 64"
@@ -126,7 +130,7 @@ msgstr "ID"
 
 msgctxt "field:diff_blame.revision_blame,model_name:"
 msgid "Model Name"
-msgstr "Numéro"
+msgstr "Nom du modèle"
 
 msgctxt "field:diff_blame.revision_blame,record_name:"
 msgid "Record Name"
@@ -335,6 +339,110 @@ msgstr "ID"
 msgctxt "field:export.fields.select,selected_fields:"
 msgid "Selected Fields"
 msgstr "Champs sélectionnés"
+
+msgctxt "field:extra_details.configuration,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:extra_details.configuration,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:extra_details.configuration,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:extra_details.configuration,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:extra_details.configuration,lines:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "field:extra_details.configuration,model_name:"
+msgid "Model Name"
+msgstr "Nom du modèle"
+
+msgctxt "field:extra_details.configuration,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:extra_details.configuration,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:extra_details.configuration,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:extra_details.configuration,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:extra_details.configuration.line,configuration:"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "field:extra_details.configuration.line,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:extra_details.configuration.line,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:extra_details.configuration.line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:extra_details.configuration.line,digits:"
+msgid "Digits"
+msgstr "Précision"
+
+msgctxt "field:extra_details.configuration.line,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:extra_details.configuration.line,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:extra_details.configuration.line,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:extra_details.configuration.line,selection:"
+msgid "Selection"
+msgstr "Sélection"
+
+msgctxt "field:extra_details.configuration.line,selection_json:"
+msgid "Selection JSON"
+msgstr "Sélection JSON"
+
+msgctxt "field:extra_details.configuration.line,selection_sorted:"
+msgid "Selection Sorted"
+msgstr "Sélection Triée"
+
+msgctxt "field:extra_details.configuration.line,string:"
+msgid "String"
+msgstr "Nom long"
+
+msgctxt "field:extra_details.configuration.line,type_:"
+msgid "Type"
+msgstr "Type de demande de décisions"
+
+msgctxt "field:extra_details.configuration.line,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:extra_details.configuration.line,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:extra_details.configuration.line,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.action,xml_id:"
 msgid "XML Id"
@@ -1172,6 +1280,14 @@ msgstr ""
 "Expression pyson pour filtrer les objets de l'évenement. Si non renseigné aucun filtre ne sera appliqué. Si l'expression est évaluée à Vrai pour un objet, l'action sera effectuée sur ce dernier, autrement elle sera ignorée. Exemple d'expression :\n"
 " Eval('status') == 'active'"
 
+msgctxt "help:extra_details.configuration.line,selection:"
+msgid "A couple of key and label separated by \":\" per line"
+msgstr "Un couple de clé, valeur séparé par un \":\" par ligne"
+
+msgctxt "help:extra_details.configuration.line,selection_sorted:"
+msgid "If the selection must be sorted on label"
+msgstr "Si la sélection doit être triée par le libéllé"
+
 msgctxt "help:ir.test_case.instance,test_method_name:"
 msgid ""
 "The name of the method that will be used to decide whether the Test Case "
@@ -1235,6 +1351,14 @@ msgctxt "model:export.fields.select,name:"
 msgid "Select Export Fields"
 msgstr "Sélectionner les champs pour l'export"
 
+msgctxt "model:extra_details.configuration,name:"
+msgid "Extra Details Configuration"
+msgstr "Configuration des détails"
+
+msgctxt "model:extra_details.configuration.line,name:"
+msgid "Extra Details Configuration Line"
+msgstr "Donnée de détail"
+
 msgctxt "model:ir.action,name:act_display_access_field_rights"
 msgid "User Field Access Rights Monitoring"
 msgstr "Visualisation des droits d'accès utilisateur sur les champs"
@@ -1270,6 +1394,10 @@ msgstr "Configurations de l'export des modèles"
 msgctxt "model:ir.action,name:act_export_package"
 msgid "Export Package"
 msgstr "Exports groupés"
+
+msgctxt "model:ir.action,name:act_extra_details_configuration"
+msgid "Extra Details Configuration"
+msgstr "Configuration des détails"
 
 msgctxt "model:ir.action,name:act_override_translation_form"
 msgid "Override Translations"
@@ -1419,6 +1547,10 @@ msgctxt "model:ir.ui.menu,name:menu_export_package"
 msgid "Export Package"
 msgstr "Exports groupés"
 
+msgctxt "model:ir.ui.menu,name:menu_extra_details_configuration"
+msgid "Extra Details Configuration"
+msgstr "Configuration des détails"
+
 msgctxt "model:ir.ui.menu,name:menu_import_wizard"
 msgid "Import Wizard"
 msgstr "Importer un fichier"
@@ -1470,6 +1602,38 @@ msgstr "Asynchrone"
 msgctxt "selection:event.type.action,treatment_kind:"
 msgid "Synchronous"
 msgstr "Synchrone"
+
+msgctxt "selection:extra_details.configuration.line,type_:"
+msgid "Boolean"
+msgstr "Booléen"
+
+msgctxt "selection:extra_details.configuration.line,type_:"
+msgid "Char"
+msgstr "Caractères"
+
+msgctxt "selection:extra_details.configuration.line,type_:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "selection:extra_details.configuration.line,type_:"
+msgid "DateTime"
+msgstr "Date-Heure"
+
+msgctxt "selection:extra_details.configuration.line,type_:"
+msgid "Float"
+msgstr "Numérique (Virgule flottante)"
+
+msgctxt "selection:extra_details.configuration.line,type_:"
+msgid "Integer"
+msgstr "Entier"
+
+msgctxt "selection:extra_details.configuration.line,type_:"
+msgid "Numeric"
+msgstr "Numérique"
+
+msgctxt "selection:extra_details.configuration.line,type_:"
+msgid "Selection"
+msgstr "Sélection"
 
 msgctxt "selection:ir.model,history_status:"
 msgid ""
@@ -1554,6 +1718,22 @@ msgstr "Résumé de l'export"
 msgctxt "view:export.fields.select:"
 msgid "Export Fields Selection"
 msgstr "Sélection des champs à exporter"
+
+msgctxt "view:extra_details.configuration.line:"
+msgid "Line"
+msgstr "Ligne"
+
+msgctxt "view:extra_details.configuration.line:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "view:extra_details.configuration:"
+msgid "Extra Details Configuration"
+msgstr "Configuration des détails"
+
+msgctxt "view:extra_details.configuration:"
+msgid "Extra Details Configurations"
+msgstr "Configurations des détails"
 
 msgctxt "view:ir.export.configuration.field:"
 msgid "Export Field Configuration"

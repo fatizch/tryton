@@ -1,38 +1,41 @@
+* Mixin de détails configurable
+
 Version 1.10 - 2016-11-02
-* Add basic benchmarking tool to analyze server performance
-* Extend event action API to be able to use event description and kwargs
-* Add utility to generate new module file structure
-* Visualize the different rights of access of a user in independent list-views
-* Configure models to historize via the application
-* Rename cog_utils in coog_core
+* Outil de benchmarking basique pour l'analyse des performances du serveur
+* Extension de l'API des événements pour filtrer le type d'événement et d'autres paramètres
+* Utilitaire de création de nouveaux modules
+* Affichage des habilitations consolidées d'un utilisateur
+* Configuration via l'application des modèles historisables
+* Renommage de cog_utils en coog_core
 
 Version 1.8 - 2016-07-06
-* Add script to easily create dev databases
-* Add safe_open function for concurrent file operations
-* Add loader and updater functions for function fields
-* Add table view for history
-* Manage mono process batches
+* Mise à disposition d'un script de création de bases de paramétrage pur
+* Ajout d'une fonction "safe_open" permettant des opérations concurrentes sur des fichiers
+* Champs fonction dynamiques utilisant les méthodes "loader" et "updater"
+* Visualisation de l'historique via une vue dédiée
+* Gestion des batchs mono-process
 
 Version 1.6 - 2015-12-23
-* Add pyson filtering for actions on event type
-* Add list of actions on event type
-* Add generic version getter
-* Add ws_create_objects web service
-* Add tags to sequence
-* Add TranslationOverride wizard to edit custom translations
+* Filtrage pyson des actions sur les types d'événements
+* Gestion d'une liste d'action déclenchée par des événements
+* Ajout d'accesseurs pour les données versionnées
+* Mise en place du webservice ws_create_objects
+* Possibilité d'ajouter des labels sur les séquences
+* Assistant de surcharge des traductions pour faciliter la personnalisation
 
 Version 1.4 - 2015-05-29
-* Attachment defines binary data encoding and decoding for export
-* Move attachment from report_engine to cog_utils
-* Batches can now make use of command line extra arguments
-* Allow to automatically delete removed records of a O2M field
-* Allow to configure required data for an export
-* Allow to call ir.model.methods with lists
+* Inclusion automatique des fichiers liés aux pièces jointes dans l'export / import
+* Gestion des pièces jointe directement dans cog_utils
+* Prise en compte de paramètres supplémentaire sur la ligne de commande des batchs
+* Configuration des One2Many pour supprimer automatiquement les éléments manquants
+* Possibilité de configurer des données requises dans un export
+* Appels aux ir.model.methods avec des listes d'instances
+
 
 Version 1.3 - 2015-01-22
-* Externalize batches settings into a custom .conf file
-* Revamp export / import
+* Stockage de la configuration des batchs dans un fichier indépendant
+* Retravail de la fonctionnalité d'export / import
 
 Version 1.2 - 2014-07-01
-* Changelog file creation
-* Add Event and EventType
+* Gestion des événements et types d'événements
+* Création du fichier de suivi
