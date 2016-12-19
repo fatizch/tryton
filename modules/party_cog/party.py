@@ -417,9 +417,11 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             ('identifiers.code',) + tuple(clause[1:]),
             ('ssn',) + tuple(clause[1:]),
             ]
+        # We do not want to search on full_name for too short strings since the
+        # search is rather expensive
         if (not isinstance(clause[2], basestring) or
                 ' ' not in clause[2].strip(' %')):
-            return domain
+            return domain + [('name',) + tuple(clause[1:])]
         return domain + [('full_name',) + tuple(clause[1:])]
 
     @classmethod
