@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="party.relation.type" id="parent_company_relation">
+            <field name="code">parent_company</field>
+            <field name="name">Parent Company</field>
+        </record>
+        <record model="party.relation.type" id="subsidiary_company_relation">
+            <field name="code">subsidiary_company</field>
+            <field name="name">Subsidiary Company</field>
+            <field name="reverse" ref="contract_group.parent_company_relation"/>
+        </record>
+        <record model="party.relation.type" id="parent_company_relation" update="1">
+            <field name="reverse" ref="contract_group.parent_company_relation"/>
+        </record>
+    </data>
+</tryton>
