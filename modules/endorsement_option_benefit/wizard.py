@@ -24,6 +24,7 @@ class OptionDisplayer:
     def _option_fields_to_extract(cls):
         fields = super(OptionDisplayer, cls)._option_fields_to_extract()
         Displayer = Pool().get('contract.manage_option_benefits.option')
+        fields['contract.option.version'].append('benefits')
         fields['contract.option.benefit'] = \
             Displayer.get_option_benefit_fields()
         return fields
