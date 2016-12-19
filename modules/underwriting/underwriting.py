@@ -414,6 +414,9 @@ class Underwriting(model.CoogSQL, model.CoogView):
         return self.type_.new_underwriting(self.on_object, self.party,
             [(date, x.target) for x in self.results])
 
+    def init_dict_for_rule_engine(self, data):
+        data['underwriting'] = self
+
 
 class UnderwritingResult(model.CoogSQL, model.CoogView):
     'Underwriting Result'
