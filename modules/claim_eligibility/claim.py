@@ -70,6 +70,10 @@ class ClaimService:
     def default_eligibility_status():
         return 'study_in_progress'
 
+    def init_from_loss(self, loss, benefit):
+        self.eligibility_extra_data_values = {}
+        super(ClaimService, self).init_from_loss(loss, benefit)
+
     @classmethod
     def get_wrapper(cls):
         return TextWrapper(width=79)
