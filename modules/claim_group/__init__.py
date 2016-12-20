@@ -5,7 +5,6 @@ from .offered import *
 from .benefit import *
 from .claim import *
 from .contract import *
-from .rule_engine import *
 
 
 def register():
@@ -13,7 +12,6 @@ def register():
         OptionDescription,
         Benefit,
         Claim,
-        RuleEngineRuntime,
         Contract,
         TerminateContract,
         module='claim_group', type_='model')

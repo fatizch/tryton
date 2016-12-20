@@ -1,3 +1,5 @@
+# This file is part of Coog. The COPYRIGHT file at the top level of
+# this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
 from trytond.modules.rule_engine import check_args
@@ -15,3 +17,9 @@ class RuleEngineRuntime:
     @check_args('loss')
     def _re_is_a_relapse(cls, args):
         return args['loss'].is_a_relapse
+
+    @classmethod
+    @check_args('indemnification')
+    def _re_is_covered_element_beneficiary(cls, args):
+        return (args['indemnification'].service.loss.covered_person
+                == args['indemnification'].beneficiary)
