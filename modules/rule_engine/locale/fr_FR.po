@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "selection:rule_engine,type_:"
+msgid "Tool"
+msgstr "Outillage"
+
 msgctxt "error:functional_error:"
 msgid "Number of arguments does not match string content"
 msgstr "Le nombre d'arguments ne correspond pas au contenu"

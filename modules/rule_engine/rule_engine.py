@@ -730,7 +730,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             ('validated', 'Validated')],
         'Status')
     status_string = status.translated('status')
-    type_ = fields.Selection([('', '')], 'Type')
+    type_ = fields.Selection([('', ''), ('tool', 'Tool')], 'Type')
     result_type = fields.Function(
         fields.Selection([
             ('', ''),
@@ -1228,7 +1228,6 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 execution_kwargs)
             the_result = context['evaluation_context']['__result__']
             localcontext = {}
-
             try:
                 comp = _compile_source_exec(self.execution_code)
                 exec comp in context, localcontext
