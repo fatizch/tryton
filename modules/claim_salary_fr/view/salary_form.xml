@@ -25,4 +25,5 @@ this repository contains the full copyright notices and license terms. -->
     </group>
     <button name="set_contributions" string="Set Contributions" colspan="4"/>
     <field name="net_limit_mode" invisible="1"/>
+    <field name="is_readonly" invisible="1"/>
 </form>

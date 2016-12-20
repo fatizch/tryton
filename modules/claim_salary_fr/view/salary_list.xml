@@ -10,4 +10,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="net_salary_bonus" sum="Total Net Salary Bonuses"/>
     <button name="set_contributions" string="Set Contributions"/>
     <field name="net_limit_mode" tree_invisible="1"/>
+    <field name="is_readonly" tree_invisible="1"/>
+    <field name="color" tree_invisible="1"/>
 </tree>

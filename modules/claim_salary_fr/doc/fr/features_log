@@ -1,7 +1,10 @@
-* Handle annual salaries
+* Amélioration de l'affichage des salaires
+* Evolution du calcul des tranches de salaires
+* Ajout du mode de salaire 'les 4 derniers trimestres'
+* Ajout du mode de salaire 'sur la dernière année'
 
 Version 1.10 - 2016-11-02
-* Adding fixed rates for the net salary computing
-* Adding the sum of bonuses amount, gross salaries and net salaries in the footer
-* Net salary computing using the gross salary and french income brackets
-* Module creation
+* Ajout de la gestion des montants fixes sur le calcul du salaire net
+* Ajout de la somme des montant des salaires nets, bruts et bonus
+* Calcul du salaire net sur la base du salaire brut
+* Création du module

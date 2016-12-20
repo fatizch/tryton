@@ -1,3 +1,6 @@
+* Improve salary display
+* Review salary range calculation
+* Add last 4 quarters as salary mode
 * Handle annual salaries
 
 Version 1.10 - 2016-11-02

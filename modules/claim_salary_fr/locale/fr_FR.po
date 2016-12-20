@@ -62,6 +62,10 @@ msgctxt "field:claim.net_calculation_rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:claim.salary,color:"
+msgid "Color"
+msgstr "Couleur"
+
 msgctxt "field:claim.salary,create_date:"
 msgid "Create Date"
 msgstr "Créé par"
@@ -73,6 +77,18 @@ msgstr "Date de création"
 msgctxt "field:claim.salary,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:claim.salary,currency:"
+msgid "Currency"
+msgstr "Devise"
+
+msgctxt "field:claim.salary,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:claim.salary,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
 
 msgctxt "field:claim.salary,delivered_service:"
 msgid "Delivered Service"
@@ -89,6 +105,10 @@ msgstr "Salaire brut"
 msgctxt "field:claim.salary,id:"
 msgid "ID"
 msgstr "Identifiant"
+
+msgctxt "field:claim.salary,is_readonly:"
+msgid "Is Readonly"
+msgstr "Est en lecture seule"
 
 msgctxt "field:claim.salary,net_limit_mode:"
 msgid "Net Limit Mode"
@@ -390,6 +410,10 @@ msgstr "Les trois derniers mois"
 msgctxt "selection:contract.option.benefit,salary_mode:"
 msgid "Last 3 months on last year"
 msgstr "Les 3 derniers mois de la dernière annnée"
+
+msgctxt "selection:contract.option.benefit,salary_mode:"
+msgid "Last 4 quarters"
+msgstr "Les 4 derniers trimestres"
 
 msgctxt "selection:contract.option.benefit,salary_mode:"
 msgid "Last Year"

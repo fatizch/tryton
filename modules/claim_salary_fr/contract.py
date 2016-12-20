@@ -17,7 +17,8 @@ SALARY_MODES = [
     ('last_12_months_last_year', 'Last 12 months on last year'),
     ('last_3_months_last_year', 'Last 3 months on last year'),
     ('last_month_last_year', 'Last month on last year'),
-    ('last_year', 'Last Year')
+    ('last_year', 'Last Year'),
+    ('last_4_quarters', 'Last 4 quarters'),
     ]
 
 
