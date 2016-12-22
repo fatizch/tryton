@@ -185,7 +185,8 @@ class BenefitRule:
     def _calculate_rule(self, rule_name, args, default_value):
         option = args.get('option', None)
         if not option or getattr(self, 'force_' + rule_name):
-            return getattr(OriginalBenefitRule, 'calculate_' + rule_name)(args)
+            return getattr(OriginalBenefitRule, 'calculate_' + rule_name)(
+                self, args)
         # Use option defined rule
         version = option.get_version_at_date(args['date'])
         option_benefit = version.get_benefit(self.benefit)
