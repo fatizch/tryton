@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="underwriting">
+        <!-- ################ -->
+        <!-- # Underwriting # -->
+        <!-- ################ -->
+        <record model="ir.action.act_window" id="underwriting.act_party_underwritings">
+            <field name="domain" eval="['OR', ['on_object.legal_entity', '=', Eval('active_id'), 'claim'], ['party', '=', Eval('active_id')]]" pyson="1"/>
+        </record>
+    </data>
+</tryton>

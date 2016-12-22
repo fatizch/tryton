@@ -1,8 +1,10 @@
+* Affichage des demandes de décisions liées à des sinistres rattachées à une société
+
 Version 1.10 - 2016-11-02
-* Add relation to interlocutor on claim
-* Manage claim behaviour following contract termination
-* Add legal entity on claim
-* Add Relate to get Claims per party and Companies
+* Ajout d'un lien vers un interlocuteur sur les sinistres
+* Gestion du comportement des sinistres suite à résiliation
+* Rattachement des sinistres aux sociétés souscriptrices
+* Ajout d'un raccourcis permettant de consulter les sinitres rattachés à un tiers
 
 Version 1.8 - 2016-07-06
-* Module creation
+* Création du module
