@@ -1,6 +1,5 @@
 [
     "account_dunning",
-    "account_dunning_level",
     "account_invoice",
     "account_invoice-account_move_line",
     "account_invoice_line",
