@@ -18,6 +18,10 @@ msgctxt "field:contract,is_group:"
 msgid "Group Contract"
 msgstr "Contrat Collectif"
 
+msgctxt "field:contract.covered_element,contract_exit_date:"
+msgid "Contract Exit Date"
+msgstr "Date de sortie du contrat"
+
 msgctxt "field:contract.covered_element,subscriber_name:"
 msgid "Subscriber name"
 msgstr "Souscripteur"

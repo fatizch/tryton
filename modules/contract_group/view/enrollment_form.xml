@@ -14,6 +14,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="manual_end_date"/>
     <label name="end_reason"/>
     <field name="end_reason" widget="selection"/>
+    <label name="contract_exit_date"/>
+    <field name="contract_exit_date"/>
     <field name="versions" colspan="2" mode="form,tree"/>
     <newline/>
     <field name="item_kind"/>

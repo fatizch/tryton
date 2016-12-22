@@ -61,6 +61,9 @@ class CoveredElement:
     __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element'
 
+    contract_exit_date = fields.Date('Contract Exit Date', states={
+            'invisible': ~Eval('manual_end_date')},
+        depends=['manual_end_date'])
     subscriber = fields.Function(
         fields.Many2One('party.party', 'Subscriber'),
         'get_subscriber')
@@ -95,6 +98,10 @@ class CoveredElement:
             Event.notify_events(terminated, 'terminated_enrollment')
         if modified:
             Event.notify_events(modified, 'changed_enrollment')
+
+    @fields.depends('contract_exit_date', 'manual_end_date')
+    def on_change_manual_end_date(self):
+        self.contract_exit_date = self.manual_end_date
 
     @classmethod
     def transfer_sub_covered(cls, matches, at_date):
