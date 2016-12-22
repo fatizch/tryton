@@ -124,6 +124,14 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
             res += ' %s' % self.claimant.rec_name
         return res
 
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        op = 'AND' if clause[1] == '!=' or clause[1].startswith('not') else 'OR'
+        return [op,
+            ('name',) + tuple(clause[1:]),
+            ('claimant.rec_name',) + tuple(clause[1:]),
+            ]
+
     def get_synthesis_rec_name(self, name):
         if not self.losses:
             return self.rec_name
