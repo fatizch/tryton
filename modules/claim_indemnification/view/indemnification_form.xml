@@ -27,7 +27,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="amount" xexpand="0"/>
             <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
         </group>
-        <label name="amount"/>
+        <label name="tax_amount"/>
         <group id="tax_amount">
             <field name="tax_amount" xexpand="0"/>
             <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
