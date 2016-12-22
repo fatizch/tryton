@@ -6,6 +6,11 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ################ -->
         <!-- # Underwriting # -->
         <!-- ################ -->
+        <record model="ir.ui.view" id="underwriting_view_list">
+            <field name="model">underwriting</field>
+            <field name="inherit" ref="underwriting.underwriting_view_list"/>
+            <field name="name">underwriting_list</field>
+        </record>
         <record model="ir.action.keyword" id="act_resume_underwriting_process_keyword">
             <field name="keyword">form_action</field>
             <field name="model">underwriting,-1</field>
