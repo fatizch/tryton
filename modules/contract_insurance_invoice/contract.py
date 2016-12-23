@@ -420,9 +420,12 @@ class Contract:
         ContractInvoice = pool.get('contract.invoice')
         non_periodic_invoices = ContractInvoice.search([
                 ('contract', '=', self),
-                ('invoice.state', 'not in', ('cancel', 'paid')),
+                ('invoice.state', 'not in', ('cancel', 'paid', 'draft')),
                 ('non_periodic', '=', True)])
-        all_good_invoices = list(set(self.current_term_invoices) |
+        periodic_invoices = [x for x in ContractInvoice.search([
+                    ('contract', '=', self),
+                    ('invoice.state', 'not in', ('cancel', 'paid', 'draft'))])]
+        all_good_invoices = list(set(periodic_invoices) |
             set(non_periodic_invoices))
         amount_per_date = defaultdict(lambda: {'amount': 0, 'components': []})
         for invoice in all_good_invoices:
