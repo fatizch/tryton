@@ -1,4 +1,5 @@
-#
+# This file is part of Coog. The COPYRIGHT file at the top level of
+# this repository contains the full copyright notices and license terms.p
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -120,7 +121,7 @@ msgstr "Salaire net"
 
 msgctxt "field:claim.salary,net_salary_bonus:"
 msgid "Net Salary Bonus"
-msgstr "Bonus salaire net"
+msgstr "Prime (net)"
 
 msgctxt "field:claim.salary,rec_name:"
 msgid "Name"
@@ -128,7 +129,7 @@ msgstr "Nom"
 
 msgctxt "field:claim.salary,salary_bonus:"
 msgid "Salary Bonus"
-msgstr "Bonus salaire"
+msgstr "Prime"
 
 msgctxt "field:claim.salary,ta_contributions:"
 msgid "TA Contributions"
@@ -457,7 +458,7 @@ msgstr "Renseigner les taux de charges sociales salariales"
 
 msgctxt "view:claim.salary:"
 msgid "Total Bonus Salary"
-msgstr "Montant total des bonus salaire"
+msgstr "Montant total des primes"
 
 msgctxt "view:claim.salary:"
 msgid "Total Gross Salary"
@@ -469,7 +470,7 @@ msgstr "Montant total du salaire net"
 
 msgctxt "view:claim.salary:"
 msgid "Total Net Salary Bonuses"
-msgstr "Montant total des bonus salaire net"
+msgstr "Montant total des primes (net)"
 
 msgctxt "view:claim.service:"
 msgid "Delivered Service"

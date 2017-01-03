@@ -223,7 +223,7 @@ class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
     @classmethod
     def _export_light(cls):
-        return super(Benefit, cls)._export_light() | {'company'}
+        return super(Benefit, cls)._export_light() | {'company', 'loss_descs'}
 
     @classmethod
     def get_beneficiary_kind(cls):
