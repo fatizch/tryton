@@ -32,6 +32,7 @@ from trytond.transaction import Transaction
 from trytond.tools.misc import memoize
 from trytond.tools import cursor_dict
 from trytond.pyson import Eval, Or, Bool, If
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import (coog_date, coog_string, fields,
     model, utils)
@@ -1096,7 +1097,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return '\n'.join(result)
 
     def prepare_context(self, evaluation_context, execution_kwargs):
-        debug = Transaction().context.get('debug', True)
+        debug = ServerContext().get('rule_debug', True)
         pre_context = self.build_context(debug)
         exec_context = {
             'evaluation_context': evaluation_context,
@@ -1222,8 +1223,8 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             }
 
     def compute(self, evaluation_context, execution_kwargs):
-        with Transaction().set_context(debug=self.debug_mode or
-                'force_debug_mode' in Transaction().context):
+        with ServerContext().set_context(rule_debug=ServerContext().get(
+                    'rule_debug', self.debug_mode)):
             context = self.prepare_context(evaluation_context,
                 execution_kwargs)
             the_result = context['evaluation_context']['__result__']
@@ -1231,7 +1232,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             try:
                 comp = _compile_source_exec(self.execution_code)
                 exec comp in context, localcontext
-                if (not Transaction().context.get('debug') and
+                if (not ServerContext().get('rule_debug') and
                         self.status == 'draft'):
                     self.raise_user_error('execute_draft_rule', (self.name))
                 the_result.result = localcontext[
@@ -1773,7 +1774,7 @@ class TestCase(ModelView, ModelSQL):
         test_context = {
             key: noargs_func(key, value)
             for key, value in test_context.items()}
-        with Transaction().set_context(force_debug_mode=True):
+        with ServerContext().set_context(rule_debug=True):
             return self.rule.execute({}, test_context)
 
     @fields.depends('test_values', 'rule')

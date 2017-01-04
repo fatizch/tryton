@@ -2,12 +2,17 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import unittest
+import datetime
+from decimal import Decimal
+
 import trytond.tests.test_tryton
 
 from trytond.transaction import Transaction
 from trytond.error import UserError
 
 from trytond.modules.coog_core import test_framework
+from trytond.modules.rule_engine.rule_engine import CatchedRuleEngineError
+from trytond.modules.rule_engine.rule_engine import RuleEngineResult
 
 
 class ModuleTestCase(test_framework.CoogTestCase):
@@ -33,6 +38,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'Table': 'table',
             'Log': 'rule_engine.log',
             'InitTestCaseFromExecutionLog': 'rule_engine.test_case.init',
+            'Runtime': 'rule_engine.runtime',
+            'RuleError': 'functional_error',
         }
 
     @classmethod
@@ -560,6 +567,178 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         ('passing_test_cases', '=', False)])))
 
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
+    def test0040_testRuleTools(self):
+        rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
+        rule1 = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
+
+        # Test _re_generic_value_get
+        self.assertEqual(self.Runtime._re_generic_value_get(
+                {'rule': rule}, 'rule.name'),
+            'Test Rule Advanced')
+        self.assertRaises(Exception, self.Runtime._re_generic_value_get,
+            {'rule': rule}, 'rule.context')
+        self.assertEqual(self.Runtime._re_generic_value_get(
+                {'rule': rule1}, 'rule.parameters.name'), ['test_parameter'])
+        self.assertEqual(self.Runtime._re_generic_value_get(
+                {'rule': rule1}, 'rule.parameters[-1].name'), 'test_parameter')
+
+        # Test _re_years_between
+        self.assertEqual(self.Runtime._re_years_between({},
+                datetime.date(2000, 1, 1), datetime.date(2000, 12, 31)), 1)
+        self.assertEqual(self.Runtime._re_years_between({},
+                datetime.date(2000, 1, 1), datetime.date(2000, 12, 30)), 0)
+        self.assertEqual(self.Runtime._re_years_between({},
+                datetime.date(2000, 1, 1), datetime.date(2001, 12, 31)), 2)
+        self.assertEqual(self.Runtime._re_years_between({},
+                datetime.date(2000, 1, 1), datetime.date(2001, 1, 1)), 1)
+        self.assertEqual(self.Runtime._re_years_between({},
+                datetime.date(2003, 2, 28), datetime.date(2004, 2, 28)), 1)
+        self.assertEqual(self.Runtime._re_years_between({},
+                datetime.date(2004, 2, 29), datetime.date(2005, 2, 27)), 1)
+        test_args = {'errors': []}
+        self.assertRaises(CatchedRuleEngineError,
+            self.Runtime._re_years_between, test_args, None, None)
+        self.assertEqual(len(test_args['errors']), 1)
+
+        # Test _re_days_between
+        self.assertEqual(self.Runtime._re_days_between({},
+                datetime.date(2000, 1, 1), datetime.date(2000, 1, 1)), 1)
+        self.assertEqual(self.Runtime._re_days_between({},
+                datetime.date(2004, 2, 28), datetime.date(2004, 3, 1)), 3)
+        test_args = {'errors': []}
+        self.assertRaises(CatchedRuleEngineError,
+            self.Runtime._re_days_between, test_args, None, None)
+        self.assertEqual(len(test_args['errors']), 1)
+
+        # Test _re_today
+        self.assertEqual(self.Runtime._re_today({}), datetime.date.today())
+        with Transaction().set_context(
+                client_defined_date=datetime.date(2000, 1, 1)):
+            self.assertEqual(self.Runtime._re_today({}),
+                datetime.date(2000, 1, 1))
+
+        # Test _re_convert_frequency
+        self.assertEqual(self.Runtime._re_convert_frequency({}, 'monthly',
+                'quarterly'), 3)
+        self.assertEqual(self.Runtime._re_convert_frequency({}, 'yearly',
+                'quarterly'), 0.25)
+        self.assertEqual(self.Runtime._re_convert_frequency({}, 'yearly',
+                'yearly'), 1)
+
+        # Test _re_add_days
+        self.assertEqual(self.Runtime._re_add_days({},
+                datetime.date(2000, 1, 1), 1), datetime.date(2000, 1, 2))
+        self.assertEqual(self.Runtime._re_add_days({},
+                datetime.date(2004, 2, 28), 1), datetime.date(2004, 2, 29))
+        self.assertEqual(self.Runtime._re_add_days({},
+                datetime.date(2004, 2, 29), 1), datetime.date(2004, 3, 1))
+        self.assertEqual(self.Runtime._re_add_days({},
+                datetime.date(2004, 3, 1), -1), datetime.date(2004, 2, 29))
+
+        # Test _re_add_weeks
+        self.assertEqual(self.Runtime._re_add_weeks({},
+                datetime.date(2000, 1, 1), 1), datetime.date(2000, 1, 8))
+        self.assertEqual(self.Runtime._re_add_weeks({},
+                datetime.date(2000, 1, 8), -1), datetime.date(2000, 1, 1))
+        self.assertEqual(self.Runtime._re_add_weeks({},
+                datetime.date(2004, 2, 29), 1), datetime.date(2004, 3, 7))
+        self.assertEqual(self.Runtime._re_add_weeks({},
+                datetime.date(2004, 3, 7), -1), datetime.date(2004, 2, 29))
+
+        # Test _re_add_months
+        self.assertEqual(self.Runtime._re_add_months({},
+                datetime.date(2000, 1, 1), 1), datetime.date(2000, 2, 1))
+        self.assertEqual(self.Runtime._re_add_months({},
+                datetime.date(2000, 2, 1), -1), datetime.date(2000, 1, 1))
+        self.assertEqual(self.Runtime._re_add_months({},
+                datetime.date(2003, 2, 28), 12), datetime.date(2004, 2, 28))
+        self.assertEqual(self.Runtime._re_add_months({},
+                datetime.date(2003, 2, 28), 12, True),
+            datetime.date(2004, 2, 29))
+
+        # Test _re_add_years
+        self.assertEqual(self.Runtime._re_add_years({},
+                datetime.date(2003, 2, 28), 1), datetime.date(2004, 2, 28))
+        self.assertEqual(self.Runtime._re_add_years({},
+                datetime.date(2003, 2, 28), 1, True),
+            datetime.date(2004, 2, 29))
+        self.assertEqual(self.Runtime._re_add_years({},
+                datetime.date(2004, 2, 28), -1), datetime.date(2003, 2, 28))
+
+        # Test _re_add_quarters
+        self.assertEqual(self.Runtime._re_add_quarters({},
+                datetime.date(2000, 1, 1), 1), datetime.date(2000, 4, 1))
+        self.assertEqual(self.Runtime._re_add_quarters({},
+                datetime.date(2000, 4, 1), -1), datetime.date(2000, 1, 1))
+        self.assertEqual(self.Runtime._re_add_quarters({},
+                datetime.date(2003, 2, 28), 4), datetime.date(2004, 2, 28))
+        self.assertEqual(self.Runtime._re_add_quarters({},
+                datetime.date(2003, 2, 28), 4, True),
+            datetime.date(2004, 2, 29))
+
+        # Test _re_add_half_years
+        self.assertEqual(self.Runtime._re_add_half_years({},
+                datetime.date(2000, 1, 1), 1), datetime.date(2000, 7, 1))
+        self.assertEqual(self.Runtime._re_add_half_years({},
+                datetime.date(2000, 7, 1), -1), datetime.date(2000, 1, 1))
+        self.assertEqual(self.Runtime._re_add_half_years({},
+                datetime.date(2003, 2, 28), 2), datetime.date(2004, 2, 28))
+        self.assertEqual(self.Runtime._re_add_half_years({},
+                datetime.date(2003, 2, 28), 2, True),
+            datetime.date(2004, 2, 29))
+
+        # Test add_error
+        warning = self.RuleError(code='test_warning', name='Test Warning',
+            kind='warning')
+        warning.save()
+        error = self.RuleError(code='test_error', name='Test Error',
+            kind='error')
+        error.save()
+
+        args = {'__result__': RuleEngineResult()}
+        self.Runtime._re_add_info(args, 'test')
+        self.assertEqual(args['__result__'].info, ['test'])
+        self.Runtime._re_add_warning(args, 'test')
+        self.assertEqual(args['__result__'].warnings, ['test'])
+        self.Runtime._re_add_error(args, 'test')
+        self.assertEqual(args['__result__'].errors, ['test'])
+        self.Runtime._re_debug(args, 'test')
+        self.assertEqual(args['__result__'].debug, ['test'])
+
+        args = {'__result__': RuleEngineResult()}
+        self.Runtime._re_add_error_code(args, 'test_warning')
+        self.assertEqual(args['__result__'].warnings, [warning])
+        self.Runtime._re_add_error_code(args, 'test_error')
+        self.assertEqual(args['__result__'].errors, [error])
+
+        # Test _re_calculation_date
+        self.assertEqual(self.Runtime._re_calculation_date({}),
+            datetime.date.today())
+        self.assertEqual(self.Runtime._re_calculation_date({
+                    'date': datetime.date(2000, 1, 1)}),
+            datetime.date(2000, 1, 1))
+
+        # Test _re_date_as_string
+        with Transaction().set_context(language='en_US'):
+            self.assertEqual(self.Runtime._re_date_as_string({},
+                    datetime.date(2000, 2, 1)), '02/01/2000')
+        with Transaction().set_context(language='fr_FR'):
+            self.assertEqual(self.Runtime._re_date_as_string({},
+                    datetime.date(2000, 2, 1)), '01/02/2000')
+
+        # Test _re_round
+        self.assertEqual(self.Runtime._re_round({}, Decimal('1.2'), 1),
+            Decimal('1'))
+        self.assertEqual(self.Runtime._re_round({}, Decimal('1.2'),
+                Decimal('0.1')), Decimal('1.2'))
+        self.assertEqual(self.Runtime._re_round({}, Decimal('1.23'),
+                Decimal('0.1')), Decimal('1.2'))
+        self.assertEqual(self.Runtime._re_round({}, Decimal('1.5'), 1),
+            Decimal('2'))
+        self.assertEqual(self.Runtime._re_round({}, Decimal('2.5'), 1),
+            Decimal('3'))
+
+    @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
     def test0060_testRuleEngineDebugging(self):
         # This test must be run later as execute rule with debug enabled forces
         # a commit
@@ -583,11 +762,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
         rule.algorithm = 'return 1 / 0'
         rule.save()
         self.assertRaises(UserError, rule.execute, {})
-
-        # Test that disabling debug_mode effectively delete existing logs
-        rule.debug_mode = False
-        rule.save()
-        self.assertEqual(rule.exec_logs, ())
 
     def test_0061_testTestCaseCreationFromLog(self):
         # test0060 forces a commit so no need for prepare_test
