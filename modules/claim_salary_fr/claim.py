@@ -257,6 +257,10 @@ class ClaimLoss:
             for service in loss.services:
                 service.init_salaries()
 
+    def get_salary_reference_date(self):
+        if self.loss_desc_kind == 'ltd':
+            return self.initial_std_start_date
+        return self.start_date
 
 class ClaimService:
     __metaclass__ = PoolMeta
@@ -295,14 +299,14 @@ class ClaimService:
 
         if self.salary_mode in ('last_12_months', 'last_3_months',
                 'last_month', 'last_year'):
-            reference_date = self.loss.start_date
+            reference_date = self.loss.get_salary_reference_date()
         elif self.salary_mode in ('last_12_months_last_year',
                 'last_3_months_last_year', 'last_month_last_year'):
             reference_date = datetime.date(
-                self.loss.start_date.year - 1, 12, 31)
+                self.loss.get_salary_reference_date().year - 1, 12, 31)
         elif self.salary_mode == 'last_4_quarters':
-            reference_date = self.loss.start_date + relativedelta(day=1,
-                month=((self.loss.start_date.month - 1) // 3) * 3 + 1)
+            reference_date = self.loss.get_salary_reference_date() + relativedelta(day=1,
+                month=((self.loss.get_salary_reference_date().month - 1) // 3) * 3 + 1)
         else:
             return []
 
@@ -310,11 +314,12 @@ class ClaimService:
         end_month = datetime.date(reference_date.year, reference_date.month,
             1) - relativedelta(days=1)
         for i in range(0, 12):
-            if self.salary_mode == 'last_4_quarters' and nb_iteration <= i:
+            if (self.salary_mode in ('last_4_quarters', 'last_year')
+                    and nb_iteration <= i):
                 break
             if self.salary_mode == 'last_year':
-                start_month = datetime.date(end_month.year - 1,
-                    reference_date.month, 1)
+                start_month = end_month + relativedelta(days=1,
+                    years=-1)
             elif self.salary_mode == 'last_4_quarters':
                 start_month = end_month + relativedelta(days=1) - \
                     relativedelta(months=3)
@@ -402,7 +407,7 @@ class ClaimService:
                     cur_salary.to_date.month, 1)
             else:
                 begin_date = cur_salary.to_date + relativedelta(days=1,
-                    years=1)
+                    years=-1)
             prorata = ((cur_salary.to_date - begin_date).days + 1) / \
                 Decimal(((cur_salary.to_date - cur_salary.from_date).days + 1))
             for salary_def in salaries_def:
@@ -418,12 +423,12 @@ class ClaimService:
                         sum_prorata += prorata
                         salary_to_use += salary_to_add
 
-        salary_to_use = salary_to_use / sum_prorata * 12
+        if self.salary_mode != 'last_year':
+            salary_to_use = salary_to_use / sum_prorata * 12
         pmss = pmss / sum_prorata * 12
         salary_to_use += bonus
         pmss.quantize(Decimal(1) / 10 ** self.currency_digits)
         salary_to_use.quantize(Decimal(1) / 10 ** self.currency_digits)
-
         year_range = calculate_salary_range(salary_to_use, pmss)
         salary_range['TA'] = year_range['TA']
         salary_range['TB'] = year_range['TB']
