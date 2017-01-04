@@ -7,6 +7,8 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool, In
 from trytond.modules.coog_core import fields
 
+from datetime import timedelta
+
 __all__ = [
     'Claim',
     'Loss',
@@ -145,15 +147,26 @@ class Loss:
     def on_change_covered_person(self):
         self.possible_loss_descs = self.on_change_with_possible_loss_descs()
 
+    @fields.depends('return_to_work_date', 'end_date')
+    def on_change_return_to_work_date(self):
+        self.update_end_date()
+
+    def update_end_date(self):
+        if self.return_to_work_date and not self.end_date:
+            self.end_date = self.return_to_work_date - timedelta(days=1)
+
     @classmethod
     def add_func_key(cls, values):
         # Update without func_key is not handled for now
         values['_func_key'] = None
 
     def init_loss(self, loss_desc_code, **kwargs):
+        self.return_to_work_date = None
+        self.end_date = None
         super(Loss, self).init_loss(loss_desc_code, **kwargs)
         self.covered_person = self.claim.claimant \
             if self.claim.claimant.is_person else None
+        self.update_end_date()
 
     @property
     def date(self):
