@@ -68,7 +68,7 @@ class UnderwritingResult:
     @classmethod
     def __setup__(cls):
         super(UnderwritingResult, cls).__setup__()
-        cls.target.states['invisible'] = cls.target.states.get('invisible',
+        cls.target.states['readonly'] = cls.target.states.get('readonly',
             False) | Bool(Eval('is_claim'))
         cls.target.depends += ['is_claim']
 

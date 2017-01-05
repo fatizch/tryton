@@ -16,6 +16,7 @@ Fonctionnalités
 
 
 .. toctree::
+
     :hidden:
 
     summary.rst

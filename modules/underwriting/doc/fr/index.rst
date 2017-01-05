@@ -14,12 +14,17 @@ Fonctionnalités
 
 .. include:: features.rst
 
+Tutoriel
+--------
+
+.. include:: underwriting_tuto.rst
+
 Aide utilisateur
 ----------------
 
 .. toctree::
+    underwriting_tuto.rst
     user/batch.rst
-
 
 .. toctree::
     :hidden:
