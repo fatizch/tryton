@@ -1,11 +1,13 @@
+* Filtrage des indemnisations par type d'évènement dans les assistants de contrôle / validation
+
 Version 1.10 - 2016-11-02
-* Allow scheduling of all indemnifications in one click
-* Improve claim invoices workflow and readability
-* Configure accounting products per benefit, handle taxes
-* Handle automatic indemnification periods creation for annuity benefits
-* Add select service step on indemnification creation wizard
-* Handling overlapping periods and cancelled indemnifications
-* Add deductible date on claim service - Allow to use it in rule engine
+* Planification de toutes les indemnisations en un clic
+* Amélioration du flux de travail et de la lisibilité des remboursements de sinistres
+* Configuration des produits comptables par prestation, gestion des taxes
+* Création automatique de périodes d'indemnisation pour les prestations de rentes
+* Ajout d'une étape de sélection des prestations dans l'assistant de création des indemnisations
+* Gestion des périodes de chevauchement et des indemnisations annulées
+* Ajout de la date de franchise dans le service de sinistres - utilisable dans le moteur de règles
 
 Version 1.8 - 2016-07-06
-* Module Creation
+* Création du module

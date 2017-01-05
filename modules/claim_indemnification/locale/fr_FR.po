@@ -600,6 +600,10 @@ msgctxt "field:claim.indemnification.assistant.view,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:claim.indemnification.assistant.view,loss_kind:"
+msgid "Loss Kind"
+msgstr "Type d'évènement"
+
 msgctxt "field:claim.indemnification.assistant.view,mode:"
 msgid "View mode"
 msgstr "Mode de visualisation"

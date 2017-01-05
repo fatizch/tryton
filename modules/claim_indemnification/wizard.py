@@ -102,6 +102,7 @@ class IndemnificationControlElement(IndemnificationElement):
         res = super(IndemnificationControlElement, cls).from_indemnification(
             indemnification)
         res['reason'] = indemnification.control_reason
+        res['loss_kind'] = indemnification.service.loss.loss_desc
         return res
 
 
@@ -131,6 +132,7 @@ class IndemnificationAssistantView(model.CoogView):
             ('validate', 'Validate'),
             ('refuse', 'Refuse')],
         'Global value')
+    loss_kind = fields.Many2One('benefit.loss.description', 'Loss Kind')
 
     @classmethod
     def get_field_names(cls):
@@ -140,26 +142,37 @@ class IndemnificationAssistantView(model.CoogView):
             ('start_date', 'Date de début'),
             ('end_date', 'Date de fin')]
 
-    @fields.depends('control', 'field_sort', 'order_sort', 'mode', 'validate')
+    @fields.depends('control', 'field_sort', 'order_sort', 'mode', 'validate',
+        'loss_kind')
     def on_change_order_sort(self):
-        self.on_change_field_sort()
+        self.apply_filters()
 
-    @fields.depends('control', 'field_sort', 'order_sort', 'mode', 'validate')
+    @fields.depends('control', 'field_sort', 'order_sort', 'mode', 'validate',
+        'loss_kind')
     def on_change_field_sort(self):
-        pool = Pool()
-        field = self.field_sort
-        if not field:
-            return
+        self.apply_filters()
+
+    @fields.depends('control', 'field_sort', 'order_sort', 'mode', 'validate',
+        'loss_kind')
+    def on_change_loss_kind(self):
+        self.apply_filters()
+
+    def apply_filters(self):
         if self.mode == 'validate':
-            status_domain = ('status', 'in', ['controlled', 'cancelled'])
+            domain = [('status', 'in', ['controlled', 'cancelled'])]
             model_name = 'claim.indemnification.assistant.validate.element'
         elif self.mode == 'control':
-            status_domain = ('status', '=', 'validated')
+            domain = [('status', '=', 'validated')]
             model_name = 'claim.indemnification.assistant.control.element'
+        pool = Pool()
         Element = pool.get(model_name)
         Indemnification = pool.get('claim.indemnification')
-        results = Indemnification.search([status_domain],
-            order=[(field, self.order_sort or 'ASC')])
+        if self.loss_kind:
+            domain.append(('service.loss.loss_desc', '=', self.loss_kind.id))
+        order = []
+        if self.field_sort:
+            order.append((self.field_sort, self.order_sort or 'ASC'))
+        results = Indemnification.search(domain, order=order)
         sorted_elements = []
         for result in results:
             sorted_elements.append(

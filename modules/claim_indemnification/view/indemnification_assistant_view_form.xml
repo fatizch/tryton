@@ -5,6 +5,8 @@ this repository contains the full copyright notices and license terms. -->
     <group id="control_group" colspan="2" col="4">
         <label name="global_setter"/>
         <field name="global_setter"/>
+        <label name="loss_kind"/>
+        <field name="loss_kind" widget="selection"/>
         <newline/>
         <label name="field_sort"/>
         <field name="field_sort"/>
