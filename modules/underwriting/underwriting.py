@@ -434,6 +434,9 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
         states={'readonly': (In(Eval('state'), ['abandonned', 'finalized']))
             | (Eval('underwriting_state') != 'draft')},
         depends=['state', 'underwriting_state'])
+    target_description = fields.Function(
+        fields.Char('Target'),
+        'on_change_with_target_description')
     target_model = fields.Function(
         fields.Char('Target Model', states={'invisible': True}),
         'on_change_with_target_model')
@@ -530,6 +533,12 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
         self.decision = self.provisional_decision
         self.underwriting_state = self.underwriting.state
         self.end_date_required = self.underwriting.type_.end_date_required
+
+    @fields.depends('target')
+    def on_change_with_target_description(self, name=None):
+        if not self.target:
+            return ''
+        return self.target.rec_name
 
     @fields.depends('target')
     def on_change_with_target_model(self, name=None):

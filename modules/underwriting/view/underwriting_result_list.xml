@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <tree string="Underwriting Decision" editable="bottom">
     <field name="state"/>
-    <field name="target"/>
+    <field name="target_description"/>
     <field name="effective_decision_date"/>
     <field name="effective_decision_end"/>
     <field name="provisional_decision"/>

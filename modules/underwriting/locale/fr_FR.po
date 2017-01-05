@@ -198,6 +198,10 @@ msgctxt "field:underwriting.result,target:"
 msgid "Target"
 msgstr "Décision pour"
 
+msgctxt "field:underwriting.result,target_description:"
+msgid "Target"
+msgstr "Décision pour"
+
 msgctxt "field:underwriting.result,target_model:"
 msgid "Target Model"
 msgstr "Modèle cible"
