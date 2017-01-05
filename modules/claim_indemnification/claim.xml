@@ -21,17 +21,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">indemnification_simple_list</field>
         </record>
-    	<record model="ir.ui.view" id="indemnification_control_rule_form">
-    	  <field name="model">claim.indemnification.control.rule</field>
-    	  <field name="type">form</field>
-    	  <field name="name">indemnification_control_rule_form</field>
-    	</record>
-    	<record model="ir.ui.view" id="indemnification_control_rule_tree">
-    	  <field name="model">claim.indemnification.control.rule</field>
-    	  <field name="type">tree</field>
-    	  <field name="name">indemnification_control_rule_tree</field>
-    	</record>
-    	<record model="ir.action.act_window" id="act_indemnification_control_rule">
+        <record model="ir.ui.view" id="indemnification_control_rule_form">
+          <field name="model">claim.indemnification.control.rule</field>
+          <field name="type">form</field>
+          <field name="name">indemnification_control_rule_form</field>
+        </record>
+        <record model="ir.ui.view" id="indemnification_control_rule_tree">
+          <field name="model">claim.indemnification.control.rule</field>
+          <field name="type">tree</field>
+          <field name="name">indemnification_control_rule_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_indemnification_control_rule">
             <field name="name">Indemnification Control Rule</field>
             <field name="res_model">claim.indemnification.control.rule</field>
         </record>
@@ -45,10 +45,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="indemnification_control_rule_tree"/>
             <field name="act_window" ref="act_indemnification_control_rule"/>
         </record>
-    	<menuitem name="Indemnification Control Rule" parent="claim.menu_claim_configuration"
-    		  id="menu_indemnification_control_rule" action="act_indemnification_control_rule"
-    		  icon="tryton-preferences"/>
-	    <!--################################################################ -->
+        <menuitem name="Indemnification Control Rule" parent="claim.menu_claim_configuration"
+              id="menu_indemnification_control_rule" action="act_indemnification_control_rule"
+              icon="tryton-preferences"/>
+        <!--################################################################ -->
         <!-- Indemnification Detail -->
         <!--################################################################ -->
         <record model="ir.ui.view" id="indemnification_detail_view_form">
@@ -60,6 +60,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">claim.indemnification.detail</field>
             <field name="type">tree</field>
             <field name="name">indemnification_detail_list</field>
+        </record>
+        <!-- Extra Details Configuration -->
+        <record model="extra_details.configuration" id="indemnification_extra_details_configuration">
+            <field name="model_name">claim.indemnification.detail</field>
         </record>
         <!-- ############################################################ -->
         <!-- ########### claim ########### -->

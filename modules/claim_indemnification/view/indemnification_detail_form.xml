@@ -29,5 +29,6 @@ this repository contains the full copyright notices and license terms. -->
         <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
     </group>
     <newline/>
-    <field name="description" colspan="4"/>
+    <field name="description" colspan="2" yexpand="1" yfill="1"/>
+    <field name="extra_details" colspan="2" yexpand="1" yfill="1"/>
 </form>

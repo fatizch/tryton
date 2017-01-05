@@ -1,13 +1,14 @@
+* Ajout de détails complémentaires sur les détails d'indemnisation
 * Filtrage des indemnisations par type d'évènement dans les assistants de contrôle / validation
 
 Version 1.10 - 2016-11-02
-* Planification de toutes les indemnisations en un clic
-* Amélioration du flux de travail et de la lisibilité des remboursements de sinistres
-* Configuration des produits comptables par prestation, gestion des taxes
-* Création automatique de périodes d'indemnisation pour les prestations de rentes
-* Ajout d'une étape de sélection des prestations dans l'assistant de création des indemnisations
-* Gestion des périodes de chevauchement et des indemnisations annulées
-* Ajout de la date de franchise dans le service de sinistres - utilisable dans le moteur de règles
+* Ordonnancement des indemnisations en un clic
+* Amélioration du processus de quittancement des sinistres
+* Configuration de la comptabilité par prestation, gestion des taxes
+* Création automatique des périodes de rente
+* Etape de sélection du service délivré dans l'assistant de création d'indemnisation
+* Détection et annulation des chevauchement de périodes d'indemnisation
+* Calcul de la date de franchise sur les services délivrés, mise à disposition dans le moteur de règle
 
 Version 1.8 - 2016-07-06
 * Création du module

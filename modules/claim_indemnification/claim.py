@@ -26,6 +26,8 @@ from trytond.modules.claim_indemnification.benefit import INDEMNIFICATION_KIND
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.coog_core.coog_date import FREQUENCY_CONVERSION_TABLE
+from trytond.modules.coog_core.extra_details import WithExtraDetails
+
 from .benefit import ANNUITY_FREQUENCIES
 
 __metaclass__ = PoolMeta
@@ -1069,7 +1071,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         pass
 
 
-class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency):
+class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
+        WithExtraDetails):
     'Indemnification Detail'
 
     __name__ = 'claim.indemnification.detail'

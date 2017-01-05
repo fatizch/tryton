@@ -3,6 +3,30 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- ################################ -->
+        <!-- # Claim Indemnification Detail # -->
+        <!-- ################################ -->
+        <record model="extra_details.configuration.line" id="indemnification_extra_details_tranche_a">
+            <field name="configuration" ref="claim_indemnification.indemnification_extra_details_configuration"/>
+            <field name="string">Tranche A</field>
+            <field name="name">tranche_a</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+        </record>
+        <record model="extra_details.configuration.line" id="indemnification_extra_details_tranche_b">
+            <field name="configuration" ref="claim_indemnification.indemnification_extra_details_configuration"/>
+            <field name="string">Tranche B</field>
+            <field name="name">tranche_b</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+        </record>
+        <record model="extra_details.configuration.line" id="indemnification_extra_details_tranche_c">
+            <field name="configuration" ref="claim_indemnification.indemnification_extra_details_configuration"/>
+            <field name="string">Tranche C</field>
+            <field name="name">tranche_c</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+        </record>
         <!-- ############################################################ -->
         <!-- ########### Salary ########### -->
         <!-- ############################################################ -->
