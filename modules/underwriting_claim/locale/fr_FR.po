@@ -28,6 +28,14 @@ msgctxt "field:claim.service,underwritings:"
 msgid "Underwritings"
 msgstr "Demandes de décisions"
 
+msgctxt "field:underwriting,insurers:"
+msgid "Insurers"
+msgstr "Assureurs"
+
+msgctxt "field:underwriting,insurers_names:"
+msgid "Insurers"
+msgstr "Assureurs"
+
 msgctxt "field:underwriting.result,claim:"
 msgid "Claim"
 msgstr "Sinistre"

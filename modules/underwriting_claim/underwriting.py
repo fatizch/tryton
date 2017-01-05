@@ -26,6 +26,20 @@ class Underwriting:
     __metaclass__ = PoolMeta
     __name__ = 'underwriting'
 
+    insurers = fields.Function(
+        fields.Many2Many('insurer', None, None, 'Insurers'),
+        'get_insurers')
+    insurers_names = fields.Function(
+        fields.Char('Insurers'),
+        'get_insurers_names')
+
+    def get_insurers(self, name):
+        return list(set([x.service.option.coverage.insurer.id
+                    for x in self.results if x.service and x.service.option]))
+
+    def get_insurers_names(self, name):
+        return ', '.join(x.rec_name for x in self.insurers)
+
     @classmethod
     def __setup__(cls):
         super(Underwriting, cls).__setup__()
