@@ -1018,7 +1018,11 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @staticmethod
     def execute_rule(rule_id, evaluation_context, **execution_kwargs):
         the_rule = Pool().get('rule_engine')(rule_id)
+        # Backup main result execution data
+        # This prevent debug log to be overwritten in nested rule calls
+        current_result = evaluation_context.pop('__result__')
         result = the_rule.execute(evaluation_context, execution_kwargs)
+        evaluation_context['__result__'] = current_result
         if result.has_errors:
             raise InternalRuleEngineError(
                 'Impossible to evaluate parameter %s' % the_rule.short_name)
