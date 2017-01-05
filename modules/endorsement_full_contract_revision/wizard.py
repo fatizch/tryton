@@ -142,7 +142,7 @@ class StartEndorsement:
             if view[1] == 'form']
 
         # Update contract state
-        contract.current_state = process.all_steps[0]
+        contract.current_state = process.first_step()
         contract.current_state.step.execute_before(contract)
         contract.save()
 

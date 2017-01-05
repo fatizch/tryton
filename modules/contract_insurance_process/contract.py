@@ -58,7 +58,7 @@ class Contract(CoogProcessFramework):
         for clone in clones:
             process = [x for x in processes if clone.product in x.for_products]
             if process:
-                clone.current_state = process[0].all_steps[0]
+                clone.current_state = process[0].first_step()
                 clone.save()
         return clones
 

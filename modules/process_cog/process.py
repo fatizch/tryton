@@ -1288,7 +1288,7 @@ class ProcessFinder(Wizard):
     def init_state(self, obj):
         if not getattr(obj, 'current_state', None):
             obj.current_state = \
-                self.process_parameters.good_process.all_steps[0]
+                self.process_parameters.good_process.first_step()
 
     def instanciate_main_object(self):
         GoodModel = Pool().get(self.process_parameters.model.model)

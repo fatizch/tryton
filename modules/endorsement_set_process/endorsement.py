@@ -35,7 +35,7 @@ class Endorsement:
                     'endorsement.set')])
         if processes:
             process = processes[0]
-            state = process.all_steps[0]
+            state = process.first_step()
             for end_set in endorsement_sets:
                 end_set.current_state = state
             EndorsementSet.save(endorsement_sets)
