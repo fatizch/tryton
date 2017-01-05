@@ -411,18 +411,13 @@ msgctxt "model:ir.action.act_window.domain,name:act_all_underwriting"
 msgid "All"
 msgstr "Toutes"
 
+msgctxt "model:ir.action.act_window.domain,name:act_completed_underwriting"
+msgid "Completed"
+msgstr "Validées"
+
 msgctxt "model:ir.action.act_window.domain,name:act_draft_underwriting"
 msgid "Draft"
-msgstr "Brouillon"
-
-msgctxt ""
-"model:ir.action.act_window.domain,name:act_finalizable_results_underwriting"
-msgid "Finalizable Results"
-msgstr "Décisions finalisables"
-
-msgctxt "model:ir.action.act_window.domain,name:act_finalizable_underwriting"
-msgid "Finalizable"
-msgstr "Finalisable"
+msgstr "En attente"
 
 msgctxt "model:ir.action.act_window.domain,name:act_pending_underwriting"
 msgid "Pending"
