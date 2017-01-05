@@ -192,11 +192,18 @@ class Invoice:
 
     @classmethod
     def search_contract_invoice(cls, name, clause):
-        _, operator, value = clause
-        if operator == 'ilike':
-            # Search using contract fitler crashes, does not support search on
-            # contract.rec_name
-            return []
+        target, operator, value = clause
+        if operator == 'ilike' and target == 'contract':
+            # Specific filter on contract  :
+            # Search on rec_name causes crashe
+            Contract = Pool().get('contract')
+            operator = 'in'
+            value = Contract.search(['rec_name', 'ilike', value], query=True)
+        elif target.startswith('contract.'):
+            Contract = Pool().get('contract')
+            target = target[9:]
+            value = Contract.search([target, operator, value], query=True)
+            operator = 'in'
         Operator = fields.SQL_OPERATORS[operator]
 
         contract_invoice = Pool().get('contract.invoice').__table__()
