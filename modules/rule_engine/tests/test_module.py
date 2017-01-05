@@ -477,7 +477,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 "args : ('foo', 1)\n\t"
                 "result = ham\n"
                 "Entering rule_test_rule\n\t"
-                "kwargs : {'test_parameter': 20}")
+                "kwargs : {'test_parameter': 20}\n\t"
+                "result = 20")
             self.assertEqual(tc.debug, '')
             self.assertEqual(tc.result_errors, u'test error')
             self.assertEqual(tc.expected_result,
