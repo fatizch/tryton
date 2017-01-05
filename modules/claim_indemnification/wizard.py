@@ -102,7 +102,6 @@ class IndemnificationControlElement(IndemnificationElement):
         res = super(IndemnificationControlElement, cls).from_indemnification(
             indemnification)
         res['reason'] = indemnification.control_reason
-        res['loss_kind'] = indemnification.service.loss.loss_desc
         return res
 
 
