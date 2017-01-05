@@ -17,6 +17,7 @@ this repository contains the full copyright notices and license terms. -->
         <separator name="results" colspan="4"/>
         <field name="results" colspan="4" expand_toolbar="0"/>
     </group>
+    <field name="requested_documents" colspan="4"/>
     <group id="buttons" string="" colspan="4">
         <button string="Draft" name="draft" icon="tryton-go-previous"/>
         <button string="Validate" name="process" icon="tryton-go-next"/>
