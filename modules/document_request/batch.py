@@ -37,7 +37,7 @@ class DocumentRequestBatch(batch.BatchRoot):
         return [('request', 'ASC')]
 
     @classmethod
-    def get_batch_domain(cls, treatment_date, extra_args):
+    def get_batch_domain(cls, treatment_date):
         return [
             ('reception_date', '=', None),
             [
@@ -46,7 +46,7 @@ class DocumentRequestBatch(batch.BatchRoot):
                 ('send_date', '<=', coog_date.add_month(treatment_date, -3))]]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date):
         ReportCreate = Pool().get(
             'report.create', type='wizard')
         for cur_object in objects:
@@ -65,10 +65,6 @@ class DocumentRequestBatch(batch.BatchRoot):
                 cls.logger.info('Processed report request for %s' %
                     cur_object.get_rec_name(None))
 
-    @classmethod
-    def get_batch_args_name(cls):
-        return []
-
 
 class BatchRemindDocuments(batch.BatchRoot):
     'Batch Remind Documents'
@@ -82,15 +78,13 @@ class BatchRemindDocuments(batch.BatchRoot):
         return []
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args=None):
-        on_model = extra_args.get('on_model', False)
+    def select_ids(cls, treatment_date, on_model=False):
         assert on_model, 'The parameter on_model is required'
         Model = Pool().get(on_model)
         return Model.get_reminder_candidates()
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
-        on_model = extra_args.get('on_model', False)
+    def execute(cls, objects, ids, treatment_date, on_model=False):
         assert on_model, 'The parameter on_model is required'
         Model = Pool().get(on_model)
         assert hasattr(Model, 'get_reminder_candidates'), \
@@ -99,7 +93,3 @@ class BatchRemindDocuments(batch.BatchRoot):
         with Transaction().set_context(force_remind=False):
             Model.generate_reminds_documents(objects,
                 treatment_date=treatment_date)
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return ['on_model']

@@ -29,7 +29,7 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
         return 'contract'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args):
+    def select_ids(cls, treatment_date):
         cursor = Transaction().connection.cursor()
         pool = Pool()
 
@@ -52,14 +52,10 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
         return cursor.fetchall()
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date):
         invoices = Pool().get('contract').invoice(objects, treatment_date)
         cls.logger.info('%d invoices created for %s' %
             (len(invoices), coog_string.get_print_infos(ids, 'contracts')))
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return []
 
 
 class PostInvoiceContractBatch(batch.BatchRoot):
@@ -74,7 +70,7 @@ class PostInvoiceContractBatch(batch.BatchRoot):
         return 'account.invoice'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args):
+    def select_ids(cls, treatment_date):
         cursor = Transaction().connection.cursor()
         pool = Pool()
 
@@ -95,13 +91,9 @@ class PostInvoiceContractBatch(batch.BatchRoot):
         return cursor.fetchall()
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date):
         Pool().get('account.invoice').post(objects)
         cls.logger.info('%d invoices posted' % len(objects))
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return []
 
 
 class SetNumberInvoiceContractBatch(batch.BatchRoot):
@@ -116,19 +108,15 @@ class SetNumberInvoiceContractBatch(batch.BatchRoot):
         return 'account.invoice'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args):
+    def select_ids(cls, treatment_date):
         job_size = cls.get_conf_item('job_size')
         assert job_size == '0', 'Can not scale out'
         pool = Pool()
         post_batch = pool.get('contract.invoice.post')
-        return post_batch.select_ids(treatment_date, extra_args)
+        return post_batch.select_ids(treatment_date)
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date):
         for obj in objects:
             obj.set_number()
         cls.logger.info('%d invoices numbers set' % len(objects))
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return []

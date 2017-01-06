@@ -16,11 +16,10 @@ class UpdateZipCodesFromHexaPost(batch.BatchRootNoSelect):
     logger = logging.getLogger(__name__)
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date, archive_path,
+            hexa_post_file_path=None):
         Zip = Pool().get('country.zip')
-        hexa_post_file_path = extra_args.get('hexa_post_file_path',
-            cls.get_conf_item('hexa_post_file_path'))
-        archive_path = extra_args.get('archive')
+        hexa_post_file_path or cls.get_conf_item('hexa_post_file_path')
         if not hexa_post_file_path:
             raise Exception('Hexapost file path missing in '
                 'either arguments or batch configuration file')
@@ -43,7 +42,3 @@ class UpdateZipCodesFromHexaPost(batch.BatchRootNoSelect):
         else:
             cls.logger.info('No zipcode to update')
         cls.archive_treated_files(files, archive_path, treatment_date)
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return ['hexa_post_file_path', 'archive']

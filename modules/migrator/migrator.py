@@ -39,7 +39,6 @@ class Migrator(batch.BatchRootNoSelect):
     cache_obj = {}       # cache of coog objects required to migrate rows
     transcoding = {}     # contains transcoded values for rows values
     error_messages = {}  # errors codes/messages mapping
-    extra_args = {'update': False}  # extra arguments passed to batch command
 
     @classmethod
     def __setup__(cls):
@@ -71,14 +70,14 @@ class Migrator(batch.BatchRootNoSelect):
             cls.error_message(error_code) % tuple(error_msg_args))
 
     @classmethod
-    def cast_extra_args(cls, extra_args):
-        if extra_args.get('update', None) and isinstance(extra_args['update'],
+    def cast_extra_args(cls, **kwargs):
+        if kwargs.get('update', None) and isinstance(kwargs['update'],
                 basestring):
-            extra_args['update'] = extra_args['update'].lower() in ('1',
+            kwargs['update'] = kwargs['update'].lower() in ('1',
                 'true')
-        if extra_args.get('update', None) and cls.func_key == 'id':
+        if kwargs.get('update', None) and cls.func_key == 'id':
             cls.raise_error(None, 'no_update')
-        return extra_args
+        return kwargs
 
     @classmethod
     def select_columns(cls, tables=None):
@@ -97,10 +96,10 @@ class Migrator(batch.BatchRootNoSelect):
                 '.', '_'), (cls.func_key,), (cls.func_key, ids))
 
     @classmethod
-    def init_cache(cls, rows):
+    def init_cache(cls, rows, **kwargs):
         """Fill in cls.cache_obj with existing objects required to migrate rows
         """
-        if cls.extra_args.get('update', False):
+        if kwargs.get('update', False):
             cls.init_update_cache(rows)
 
     @classmethod
@@ -152,7 +151,7 @@ class Migrator(batch.BatchRootNoSelect):
         return row
 
     @classmethod
-    def select_ids(cls, treatment_date=None, extra_args=None):
+    def select_ids(cls, **kwargs):
         """Return ids of objects to migrate.
            By default return all cls.column values of cls.table except ids
            corresponding to existing instances of cls.model.
@@ -165,39 +164,39 @@ class Migrator(batch.BatchRootNoSelect):
         """
         ids = []
         excluded = []
-        cls.extra_args.update(cls.cast_extra_args(extra_args))
-        if 'not-in' in extra_args:
-            excluded = eval(extra_args.get('not-in', '[]'))
-        elif 'not-in-file' in extra_args:
-            with open(extra_args['not-in-file']) as f:
+        kwargs.update(cls.cast_extra_args(kwargs))
+        if 'not-in' in kwargs:
+            excluded = eval(kwargs.get('not-in', '[]'))
+        elif 'not-in-file' in kwargs:
+            with open(kwargs['not-in-file']) as f:
                 excluded = eval(f.read())
-        if 'in' in extra_args:
-            ids = eval(extra_args.get('in', '[]'))
-        elif 'in-file' in extra_args:
-            with open(extra_args['in-file']) as f:
+        if 'in' in kwargs:
+            ids = eval(kwargs.get('in', '[]'))
+        elif 'in-file' in kwargs:
+            with open(kwargs['in-file']) as f:
                 ids = eval(f.read())
         # By default query all table ids
         elif cls.table and cls.columns:
             cursor = tools.CONNECT_SRC.cursor()
-            select, select_key = cls.select(extra_args)
+            select, select_key = cls.select(kwargs)
             for kw in ('limit', 'offset'):
-                if extra_args and kw in extra_args:
-                    setattr(select, kw, int(extra_args[kw]))
+                if kwargs and kw in kwargs:
+                    setattr(select, kw, int(kwargs[kw]))
             cursor.execute(*select)
             ids = cls.select_extract_ids(select_key, cursor.fetchall())
         cls.logger.info('%s ids before removal' % len(ids))
-        if cls.model and not cls.extra_args.get('update', False) and \
+        if cls.model and not kwargs.get('update', False) and \
                 cls.func_key != 'id':
             ids = cls.select_remove_ids(ids, excluded)
         cls.logger.info('%s ids after removal' % len(ids))
         ids = cls.select_group_ids(ids)
         cls.logger.info('%s groups from ids' % len(ids))
-        if extra_args.get('shuffle', False):
+        if kwargs.get('shuffle', False):
             shuffle(ids)
         return ids
 
     @classmethod
-    def select(cls, extra_args):
+    def select(cls, **kwargs):
         """Return ids selection query and which model key to use to retrieve
            existing ids
         """
@@ -207,7 +206,7 @@ class Migrator(batch.BatchRootNoSelect):
         return select, cls.func_key
 
     @classmethod
-    def select_remove_ids(cls, ids, excluded, extra_args=None):
+    def select_remove_ids(cls, ids, excluded, **kwargs):
         """Return ids after having removed those of records already present
            in coog.
         """
@@ -227,10 +226,6 @@ class Migrator(batch.BatchRootNoSelect):
         return [x[cls.columns[select_key]] for x in rows]
 
     @classmethod
-    def get_batch_args_name(cls):
-        return ['in', 'in-file', 'not-in', 'not-in-file']
-
-    @classmethod
     def extra_migrator_names(cls):
         """Return which others migrators to call once current migrator has
            created objects.
@@ -238,9 +233,9 @@ class Migrator(batch.BatchRootNoSelect):
         return []
 
     @classmethod
-    def migrate(cls, ids):
+    def migrate(cls, ids, **kwargs):
         cls.logger.info('%s is starting to migrate %s ids. Extra args: %s' % (
-                cls.__name__, len(ids), cls.extra_args))
+                cls.__name__, len(ids), kwargs))
         select = cls.query_data(ids)
         res = {}
         if ids and select:
@@ -272,9 +267,9 @@ class Migrator(batch.BatchRootNoSelect):
         return to_upsert
 
     @classmethod
-    def upsert_records(cls, rows):
+    def upsert_records(cls, rows, **kwargs):
         Model = Pool().get(cls.model)
-        if not cls.extra_args['update']:
+        if not kwargs['update']:
             return cls.create_records(rows)
         result, to_create, to_update = [], [], []
         for row in rows:
@@ -320,8 +315,8 @@ class Migrator(batch.BatchRootNoSelect):
         return []
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
-        cls.extra_args.update(cls.cast_extra_args(extra_args))
+    def execute(cls, objects, ids, **kwargs):
+        kwargs.update(cls.cast_extra_args(kwargs))
         objs = cls.migrate(ids)
         if objs is not None:
             # string to display in 'result' column of `coog batch qlist`
@@ -342,3 +337,9 @@ class Migrator(batch.BatchRootNoSelect):
                 cls.raise_error(row, 'cache_miss', (cache_name, row[key],
                     dest_key))
         return row
+
+    @classmethod
+    def check_params(cls, params):
+        super(Migrator, cls).check_params(params)
+        params.setdefault('update', False)
+        return params

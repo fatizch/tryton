@@ -27,7 +27,7 @@ class CreateEmptyInvoicePrincipalBatch(batch.BatchRoot):
         return 'insurer'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args):
+    def select_ids(cls, treatment_date):
         insurer = Pool().get('insurer').__table__()
         cursor = Transaction().connection.cursor()
 
@@ -37,7 +37,7 @@ class CreateEmptyInvoicePrincipalBatch(batch.BatchRoot):
         return cursor.fetchall()
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date):
         pool = Pool()
         Journal = pool.get('account.journal')
         Company = pool.get('company.company')
@@ -50,10 +50,6 @@ class CreateEmptyInvoicePrincipalBatch(batch.BatchRoot):
 
         CreateInvoicePrincipal.create_empty_invoices(
             objects, company, journal, treatment_date, description)
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return []
 
 
 class LinkInvoicePrincipalBatch(batch.BatchRoot):
@@ -68,7 +64,7 @@ class LinkInvoicePrincipalBatch(batch.BatchRoot):
         return 'insurer'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args):
+    def select_ids(cls, treatment_date):
         until_date = treatment_date
         pool = Pool()
         insurers = pool.get('insurer').search([
@@ -80,7 +76,7 @@ class LinkInvoicePrincipalBatch(batch.BatchRoot):
         return ([invoice] for invoice in invoices)
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date):
         pool = Pool()
         Journal = pool.get('account.journal')
         Company = pool.get('company.company')
@@ -97,10 +93,6 @@ class LinkInvoicePrincipalBatch(batch.BatchRoot):
             insurers, treatment_date, company, journal, description,
             invoice_ids=ids)
 
-    @classmethod
-    def get_batch_args_name(cls):
-        return []
-
 
 class FinalizeInvoicePrincipalBatch(batch.BatchRoot):
     'Insurer Invoice Principal Finalize Batch'
@@ -114,7 +106,7 @@ class FinalizeInvoicePrincipalBatch(batch.BatchRoot):
         return 'insurer'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args):
+    def select_ids(cls, treatment_date):
         insurer = Pool().get('insurer').__table__()
         cursor = Transaction().connection.cursor()
 
@@ -124,7 +116,7 @@ class FinalizeInvoicePrincipalBatch(batch.BatchRoot):
         return cursor.fetchall()
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date):
         pool = Pool()
         Journal = pool.get('account.journal')
         Company = pool.get('company.company')
@@ -136,7 +128,3 @@ class FinalizeInvoicePrincipalBatch(batch.BatchRoot):
 
         CreateInvoicePrincipal.finalize_invoices_and_lines(
             objects, company, journal, treatment_date, description)
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return []

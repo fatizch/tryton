@@ -95,10 +95,8 @@ broker.fill = function(id, job)
     local args = data.args
     job.task = data.func
     job.context = args[1]
-    job.connect = args[2] or '-'
-    job.treat = args[3] or '-'
-    job.args = cjson.encode(args[4])
-    job.records = args[5] and table.concat(args[5], ',') or '-'
+    job.records = args[2] and table.concat(args[5], ',') or '-'
+    job.args = cjson.encode(args[3])
     job.result = 'pickled!'
 end
 
@@ -211,8 +209,8 @@ api.qlist = function(queue, ...)
     assert(queue, 'missing queue')
     local filter = check_filter({0, 1}, ...)
 
-    local header = {'queue', 'id', 'status', 'context', 'connect', 'treat',
-        'args', 'records', 'result'}
+    local header = {'queue', 'id', 'status', 'context', 'records', 'args',
+        'result'}
     local result = {table.concat(header, '\t')}
 
     local function insert(job)

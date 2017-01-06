@@ -23,7 +23,7 @@ class RenewContracts(batch.BatchRoot):
         return 'contract'
 
     @classmethod
-    def get_batch_domain(cls, treatment_date, extra_args):
+    def get_batch_domain(cls, treatment_date):
         pool = Pool()
         Product = pool.get('offered.product')
         renewable_products = Product.search([
@@ -36,12 +36,8 @@ class RenewContracts(batch.BatchRoot):
             ('end_date', '<=', treatment_date)]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date):
         RenewalWizard = Pool().get('contract_term_renewal.renew',
             type='wizard')
         renewed = RenewalWizard.renew_contracts(objects)
         cls.logger.info('Renewed %d contracts.' % len(renewed))
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return []

@@ -1,10 +1,5 @@
 import logging
-
-from datetime import datetime, date
-
 import async.broker as async_broker
-
-DATE_FORMAT = '%Y-%m-%d'           # 2000-12-31
 
 
 def _batch_split(l, n):
@@ -18,57 +13,39 @@ def _batch_split(l, n):
             yield l[i:i + n]
 
 
-def batch_generate(name, connection_date, treatment_date, args):
+def batch_generate(name, params):
     assert name, 'Batch name is required'
 
     from trytond.cache import Cache
     from trytond.pool import Pool
     from trytond.transaction import Transaction
-
     from tryton_init import database
 
     logger = logging.getLogger(name)
-
+    logger.info('generate with params: %s', params)
     broker = async_broker.get_module()
-
-    if connection_date is None:
-        connect_on = date.today()
-        connection_date = connect_on.strftime(DATE_FORMAT)
-    else:
-        connect_on = datetime.strptime(connection_date, DATE_FORMAT).date()
-
-    if treatment_date is None:
-        treat_on = date.today()
-        treatment_date = treat_on.strftime(DATE_FORMAT)
-    else:
-        treat_on = datetime.strptime(treatment_date, DATE_FORMAT).date()
-
-    logger.info('generate with c_dt: %s, t_dt: %s, args: %s', connection_date,
-        treatment_date, args)
-
+    batch_params = params.copy()
+    job_size = batch_params.pop('job_size', None)
+    batch_params.pop('transaction_size', None)
+    res = []
     with Transaction().start(database, 0, readonly=True):
         User = Pool().get('res.user')
         # TODO: add batch user
         admin, = User.search([('login', '=', 'admin')])
         BatchModel = Pool().get(name)
-
-    res = []
-    with Transaction().start(database, admin.id, readonly=True):
+        batch_params = BatchModel.check_params(batch_params)
         with Transaction().set_context(User.get_preferences(context_only=True),
-                client_defined_date=connect_on):
+                client_defined_date=batch_params['connection_date']):
             Cache.clean(database)
+            batch_params.pop('connection_date', None)
             try:
-                job_size = args.get('job_size', None)
                 if job_size is None:
                     job_size = BatchModel.get_conf_item('job_size')
                 job_size = int(job_size)
-                logger.info('job_size: %s', job_size)
-                ids = [x[0] for x in BatchModel.select_ids(treat_on, args)]
+                ids = [x[0] for x in BatchModel.select_ids(**batch_params)]
                 for l in _batch_split(ids, job_size):
-                    broker.enqueue(name, 'batch_exec', (name, connection_date,
-                            treatment_date, args, l))
+                    broker.enqueue(name, 'batch_exec', (name, l, params))
                     res.append(len(l))
-                    logger.info('created a job for %s ids', len(l))
             except Exception:
                 logger.exception('generate crashed')
                 raise
@@ -77,25 +54,18 @@ def batch_generate(name, connection_date, treatment_date, args):
     return res
 
 
-def batch_exec(name, connection_date, treatment_date, args, ids):
+def batch_exec(name, ids, params):
     assert name, 'Batch name is required'
     assert type(ids) is list, 'Ids list is required'
-    assert connection_date, 'Connection date is required'
-    assert treatment_date, 'Treatment date is required'
+    assert type(params) is dict, 'Params dict is required'
 
     from trytond.cache import Cache
     from trytond.pool import Pool
     from trytond.transaction import Transaction
-
     from tryton_init import database
 
     logger = logging.getLogger(name)
-
-    logger.info('exec %s items with c_dt: %s, t_dat: %s, args: %s', len(ids),
-        connection_date, treatment_date, args)
-
-    connect_on = datetime.strptime(connection_date, DATE_FORMAT).date()
-    treat_on = datetime.strptime(treatment_date, DATE_FORMAT).date()
+    logger.info('exec %s items with params: %s', len(ids), params)
 
     with Transaction().start(database, 0, readonly=True):
         User = Pool().get('res.user')
@@ -103,23 +73,26 @@ def batch_exec(name, connection_date, treatment_date, args, ids):
         admin, = User.search([('login', '=', 'admin')])
         BatchModel = Pool().get(name)
 
+    batch_params = params.copy()
+    batch_params.pop('job_size', None)
+    transaction_size = batch_params.pop('transacion_size', None)
+
     res = []
     with Transaction().start(database, admin.id):
+        batch_params = BatchModel.check_params(batch_params)
         with Transaction().set_context(User.get_preferences(context_only=True),
-                client_defined_date=connect_on):
+                client_defined_date=batch_params['connection_date']):
+            batch_params.pop('connection_date', None)
             Cache.clean(database)
-            transaction_size = args.get('transaction_size', None)
             if transaction_size is None:
                 transaction_size = BatchModel.get_conf_item('transaction_size')
             transaction_size = int(transaction_size)
-            logger.info('transaction_size: %s', transaction_size)
             try:
                 for l in _batch_split(ids, transaction_size):
                     to_treat = BatchModel.convert_to_instances(l)
-                    r = BatchModel.execute(to_treat, l, treat_on, args)
+                    r = BatchModel.execute(to_treat, l, **batch_params)
                     res.append(r or len(l))
                     Transaction().commit()
-                    logger.info('committed %s items', len(l))
             except Exception:
                 logger.exception('exec crashed')
                 Transaction().rollback()

@@ -28,7 +28,7 @@ class CreateClaimIndemnificationBatch(batch.BatchRoot):
         return 'claim.service'
 
     @classmethod
-    def get_batch_domain(cls, treatment_date, extra_args):
+    def get_batch_domain(cls, treatment_date):
         # don't create indemnification if paid_until_date is manual
         # First indmenification is manual
         # Can be improve by selection benefit in a separate list
@@ -41,6 +41,6 @@ class CreateClaimIndemnificationBatch(batch.BatchRoot):
             ]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date):
         Pool().get('claim.service').create_indemnifications(objects,
             treatment_date)

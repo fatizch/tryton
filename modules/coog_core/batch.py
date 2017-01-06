@@ -4,23 +4,26 @@ import os
 import shutil
 import logging
 import ConfigParser
-from datetime import datetime
+from datetime import datetime, date
 import uuid
+import warnings
 
 from trytond import backend
 from trytond.config import config
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.model import ModelView, ModelSQL, fields
+from trytond.model import ModelView, ModelSQL, Model, fields
 from trytond.perf_analyzer import PerfLog, profile, logger as perf_logger
 
 import coog_string
+
 
 __all__ = [
     'BatchRoot',
     'BatchRootNoSelect',
     'ViewValidationBatch',
     'CleanDatabaseBatch',
+    'BatchParamsConfig',
     ]
 
 
@@ -83,7 +86,17 @@ class BatchRoot(ModelView):
         return item
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args=None):
+    def check_params(cls, params):
+        logger = logging.getLogger(cls.__name__)
+        if not params.get('connection_date'):
+            logger.warning('Missing parameter: connection_date')
+        params.setdefault('connection_date', date.today())
+        BatchParamsConfig = Pool().get('batch.params_config')
+        params = BatchParamsConfig.get_computed_params(params)
+        return params
+
+    @classmethod
+    def execute(cls, objects, ids):
         raise NotImplementedError
 
     @classmethod
@@ -95,15 +108,7 @@ class BatchRoot(ModelView):
         raise NotImplementedError
 
     @classmethod
-    def get_batch_args_name(cls):
-        """
-        This method must returns a list filled with
-        each extra_args names (or an empty list).
-        """
-        raise NotImplementedError
-
-    @classmethod
-    def get_batch_domain(cls, treatment_date, extra_args):
+    def get_batch_domain(cls, **kwargs):
         return []
 
     @classmethod
@@ -115,11 +120,11 @@ class BatchRoot(ModelView):
         return 'id'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args=None):
+    def select_ids(cls, **kwargs):
         cursor = Transaction().connection.cursor()
         SearchModel = Pool().get(cls.get_batch_search_model())
         tables, expression = SearchModel.search_domain(
-            cls.get_batch_domain(treatment_date, extra_args))
+            cls.get_batch_domain(**kwargs))
         main_table, _ = tables[None]
 
         def convert_from(table, tables):
@@ -210,7 +215,7 @@ class BatchRootNoSelect(BatchRoot):
         raise ''
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args=None):
+    def select_ids(cls, **kwargs):
         return []
 
 
@@ -228,7 +233,7 @@ class ViewValidationBatch(BatchRoot):
         return 'ir.ui.view'
 
     @classmethod
-    def get_batch_domain(cls, treatment_date, extra_args):
+    def get_batch_domain(cls):
         Module = Pool().get('ir.module')
         modules = Module.search([])
         utils_module = Module.search([('name', '=', 'coog_core')])[0]
@@ -238,13 +243,12 @@ class ViewValidationBatch(BatchRoot):
 
     @classmethod
     @analyze
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, crash=None):
         logger = logging.getLogger(cls.__name__)
         # Extra arg to make batch crash for test
-        crash_on = extra_args.get('crash', None)
-        crash_on = crash_on and int(crash_on)
+        crash = crash and int(crash)
         for view in objects:
-            if crash_on and view.id == crash_on:
+            if crash and view.id == crash:
                 raise Exception('Crash for fun')
             full_xml_id = view.xml_id
             if full_xml_id == '':
@@ -257,10 +261,6 @@ class ViewValidationBatch(BatchRoot):
                         'different id !' % (full_xml_id,
                             full_inherited_xml_id))
         logger.info('%d views checked' % len(objects))
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return ['crash']
 
 
 class CleanDatabaseBatch(BatchRoot):
@@ -278,8 +278,7 @@ class CleanDatabaseBatch(BatchRoot):
         return 'ir.model'
 
     @classmethod
-    def get_batch_domain(cls, treatment_date, extra_args={}):
-        module = extra_args.get('module', None)
+    def get_batch_domain(cls, module):
         return module and [('module', '=', module)]
 
     @classmethod
@@ -316,7 +315,8 @@ class CleanDatabaseBatch(BatchRoot):
         buf.append('ALTER TABLE "%s" ADD PRIMARY KEY(id);' % table.table_name)
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, connection_date, treatment_date,
+            module=None, drop_const=None, drop_index=None):
         tables = []
         buf = []
         TableHandler = backend.get('TableHandler')
@@ -344,19 +344,27 @@ class CleanDatabaseBatch(BatchRoot):
             table = TableHandler(c)
             cls.check_model(buf, model.model, fields, table)
             tables.append(table)
-        const = extra_args.get('drop_const', None)
-        if const is not None:
+        if drop_const is not None:
             for table in tables:
                 cls.drop_constraints(buf, table)
-        index = extra_args.get('drop_index', None)
-        if index is not None:
+        if drop_index is not None:
             for table in tables:
                 cls.drop_indexes(buf, table)
-        if const is not None or index is not None:
+        if drop_const is not None or drop_index is not None:
             for table in tables:
                 cls.create_pk(buf, table)
         cls.write_batch_output('\n'.join(buf), 'clean.sql')
 
+
+class BatchParamsConfig(Model):
+    'Batch Parameters Configuration'
+
+    __name__ = 'batch.params_config'
+
     @classmethod
-    def get_batch_args_name(cls):
-        return ['module', 'drop_const', 'drop_index']
+    def get_computed_params(cls, params):
+        c_params = params.copy()
+        if params.get('treatment_date'):
+            c_params['treatment_date'] = datetime.strptime(
+                params['treatment_date'], '%Y-%m-%d').date()
+        return c_params

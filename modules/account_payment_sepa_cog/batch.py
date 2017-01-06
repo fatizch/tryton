@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import codecs
 import os
+import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -36,11 +37,11 @@ class PaymentTreatmentBatch:
         return res
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, **kwargs):
         Group = Pool().get('account.payment.group')
         groups = Group.browse(super(PaymentTreatmentBatch, cls).execute(
-                objects, ids, treatment_date, extra_args))
-        dirpath = extra_args.get('out', None) or cls.generate_filepath()
+                objects, ids, **kwargs))
+        dirpath = kwargs.get('out', None) or cls.generate_filepath()
         out_filepaths = []
         for payments_group in groups:
             if payments_group.journal.process_method == 'sepa':
@@ -56,10 +57,6 @@ class PaymentTreatmentBatch:
                     "'waiting' status for  %s" % payments_group)
         return [group.id for group in groups]
 
-    @classmethod
-    def get_batch_args_name(cls):
-        return ['out']
-
 
 class PaymentFailBatch(batch.BatchRootNoSelect):
     'Payment Fail Batch'
@@ -67,9 +64,12 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
     __name__ = 'account.payment.fail'
 
     @classmethod
-    def execute(cls, object, ids, treatment_date, extra_args):
-        in_directory = extra_args.get('in', None) or cls.get_conf_item('in')
-        out_directory = extra_args.get('out', None) or cls.get_conf_item('out')
+    def execute(cls, object, ids, **kwargs):
+        in_directory = kwargs.get('in', None) or cls.get_conf_item('in')
+        out_directory = kwargs.get('out', None) or cls.get_conf_item('out')
+        treatment_date_str = kwargs.get('treatment_date', None)
+        treatment_date = datetime.datetime.strptime(treatment_date_str,
+            '%Y-%m-%d').date()
         if not in_directory or not out_directory:
             raise Exception("'in' and 'out' are required")
         files = cls.get_file_names_and_paths(in_directory)
@@ -94,7 +94,3 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
             Message.wait(messages)
             Message.do(messages)
         cls.archive_treated_files(files, out_directory, treatment_date)
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return ['in', 'out']

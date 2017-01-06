@@ -27,14 +27,10 @@ class DunningCreationBatch(batch.BatchRoot):
         return 'account.dunning'
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date):
         Dunning = Pool().get('account.dunning')
         Dunning.generate_dunnings(treatment_date)
         cls.logger.info('Dunnings Generated Until %s' % treatment_date)
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return []
 
 
 class DunningTreatmentBatch(batch.BatchRoot):
@@ -52,7 +48,7 @@ class DunningTreatmentBatch(batch.BatchRoot):
         return 'account.dunning'
 
     @classmethod
-    def get_batch_domain(cls, treatment_date, extra_args):
+    def get_batch_domain(cls):
         return [('state', '=', 'draft')]
 
     @classmethod
@@ -60,11 +56,7 @@ class DunningTreatmentBatch(batch.BatchRoot):
         return [('level', 'DESC')]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids):
         Dunning = Pool().get('account.dunning')
         Dunning.process(objects)
         cls.logger.info('Dunnings Process')
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return []

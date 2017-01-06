@@ -13,4 +13,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="parameters" expand_toolbar="0" colspan="4"/>
     <field name="available_batches" invisible="1"/>
     <field name="loaded_parameters" invisible="1"/>
+    <field name="has_treatment_date" invisible="1"/>
 </form>

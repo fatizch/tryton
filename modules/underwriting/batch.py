@@ -28,7 +28,7 @@ class UnderwritingActivationBatch(batch.BatchRoot):
         return 'underwriting'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args=None):
+    def select_ids(cls, treatment_date):
         pool = Pool()
         underwriting = pool.get('underwriting').__table__()
         result = pool.get('underwriting.result').__table__()
@@ -42,10 +42,6 @@ class UnderwritingActivationBatch(batch.BatchRoot):
         return cursor.fetchall()
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date):
         Pool().get('underwriting').process(objects)
         cls.logger.info('Done processing %s underwritings' % str(len(ids)))
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return []

@@ -27,14 +27,14 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
         return 'party.party'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args):
+    def select_ids(cls, treatment_date, agent_type):
         cursor = Transaction().connection.cursor()
         pool = Pool()
 
         agent = pool.get('commission.agent').__table__()
         commission = pool.get('commission').__table__()
 
-        if 'agent_type' not in extra_args:
+        if not agent_type:
             cls.logger.warning('No agent_type defined. '
                 'Batch execution aborted')
             return
@@ -45,7 +45,7 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
         cursor.execute(*query_table.select(agent.party,
                 where=((commission.invoice_line == Null) &
                     (commission.date <= treatment_date) &
-                    (agent.type_ == extra_args['agent_type'])),
+                    (agent.type_ == agent_type)),
                 group_by=[agent.party]))
 
         return cursor.fetchall()
@@ -59,11 +59,11 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
         return domain
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date, agent_type):
         pool = Pool()
         Commission = pool.get('commission')
         Invoice = pool.get('account.invoice')
-        if 'agent_type' not in extra_args:
+        if not agent_type:
             cls.logger.warning('No agent_type defined. '
                 'Batch execution aborted')
             return
@@ -74,12 +74,8 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
         Invoice.write(invoices, {'invoice_date': treatment_date})
         cls.logger.info('Commissions invoices created for %s' %
             coog_string.get_print_infos(ids,
-                'brokers' if extra_args['agent_type'] == 'agent'
+                'brokers' if agent_type == 'agent'
                 else 'insurers'))
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return ['agent_type']
 
 
 class PostCommissionInvoiceBatch(batch.BatchRoot):
@@ -94,33 +90,29 @@ class PostCommissionInvoiceBatch(batch.BatchRoot):
         return 'account.invoice'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args):
+    def select_ids(cls, agent_type, with_draft=False):
         pool = Pool()
         AccountInvoice = pool.get('account.invoice')
 
-        if 'agent_type' not in extra_args:
+        if not agent_type:
             cls.logger.warning('No agent_type defined. '
                 'Batch execution aborted')
             return
 
         status = ['validated']
-        if extra_args.get('with_draft', False):
+        if with_draft:
             status += ['draft']
         domain = [('state', 'in', status)]
 
-        if extra_args['agent_type'] == 'agent':
+        if agent_type == 'agent':
             domain.append(('business_kind', '=', 'broker_invoice'),)
-        elif extra_args['agent_type'] == 'principal':
+        elif agent_type == 'principal':
             domain.append(('business_kind', '=', 'insurer_invoice'),)
 
         invoices = AccountInvoice.search(domain)
         return [[invoice.id] for invoice in invoices]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, agent_type, with_draft=False):
         Pool().get('account.invoice').post(objects)
         cls.logger.info('%d commissions invoices posted' % len(objects))
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return ['agent_type', 'with_draft']

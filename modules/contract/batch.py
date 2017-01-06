@@ -31,7 +31,7 @@ class ContractEndDateTerminationBatch(batch.BatchRoot):
         return 'contract'
 
     @classmethod
-    def get_batch_domain(cls, treatment_date, extra_args):
+    def get_batch_domain(cls, treatment_date):
         return [['OR',
                 ('status', '=', 'active'),
                 ('status', '=', 'hold')],
@@ -39,14 +39,10 @@ class ContractEndDateTerminationBatch(batch.BatchRoot):
             ('end_date', '<=', treatment_date)]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date):
         Contract = Pool().get('contract')
         Contract.do_terminate(objects)
         cls.logger.info('Terminated %d contracts.' % len(objects))
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return []
 
 
 class ContractDeclineInactiveQuotes(batch.BatchRoot):
@@ -60,7 +56,7 @@ class ContractDeclineInactiveQuotes(batch.BatchRoot):
         return 'contract'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args):
+    def select_ids(cls, treatment_date):
         pool = Pool()
         cursor = Transaction().connection.cursor()
         configuration = pool.get('offered.configuration')(1)
@@ -81,7 +77,7 @@ class ContractDeclineInactiveQuotes(batch.BatchRoot):
         return cursor.fetchall()
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date):
         pool = Pool()
         configuration = pool.get('offered.configuration')(1)
         Contract = pool.get('contract')
@@ -95,7 +91,3 @@ class ContractDeclineInactiveQuotes(batch.BatchRoot):
         configuration = Pool().get('offered.configuration')(1)
         return configuration.inactivity_delay and \
             configuration.automatic_decline_reason
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return []

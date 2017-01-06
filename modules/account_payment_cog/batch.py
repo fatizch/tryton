@@ -48,13 +48,12 @@ class PaymentTreatmentBatch(batch.BatchRoot):
         return 'account.payment'
 
     @classmethod
-    def get_batch_domain(cls, treatment_date, extra_args):
+    def get_batch_domain(cls, treatment_date, payment_kind=None,
+            journal_methods=None):
+        payment_kind or cls.get_conf_item('payment_kind')
         res = [
             ('state', '=', 'approved'),
             ('date', '<=', treatment_date)]
-        payment_kind = extra_args.get('payment_kind',
-            cls.get_conf_item('payment_kind'))
-        journal_methods = extra_args.get('journal_methods', None)
         if journal_methods:
             journal_methods = [x.strip() for x in journal_methods.split(',')]
             res.append(('journal.process_method', 'in', journal_methods))
@@ -73,7 +72,8 @@ class PaymentTreatmentBatch(batch.BatchRoot):
         return (('journal', payment.journal.id), ('kind', payment.kind))
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date, payment_kind=None,
+            journal_methods=None):
         with Transaction().set_context(
                 _record_cache_size=int(cls.get_conf_item('cache_size'))):
             groups = []
@@ -99,10 +99,6 @@ class PaymentTreatmentBatch(batch.BatchRoot):
                 coog_string.get_print_infos(groups, 'payments group'))
             return [group.id for group in groups]
 
-    @classmethod
-    def get_batch_args_name(cls):
-        return ['journal_methods', 'payment_kind']
-
 
 class PaymentCreationBatch(batch.BatchRoot):
     "Payment Creation Batch"
@@ -126,24 +122,23 @@ class PaymentCreationBatch(batch.BatchRoot):
         return 'account.move.line'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args):
+    def select_ids(cls, treatment_date, payment_kind):
         cursor = Transaction().connection.cursor()
         tables, query_table, where_clause = cls.get_query(treatment_date,
-            extra_args)
+            payment_kind)
         move_line = tables['move_line']
         cursor.execute(*query_table.select(move_line.party,
             where=where_clause, group_by=move_line.party))
         return cursor.fetchall()
 
     @classmethod
-    def get_query(cls, treatment_date, extra_args):
+    def get_query(cls, treatment_date, payment_kind=None):
         pool = Pool()
         payment = pool.get('account.payment').__table__()
         move_line = pool.get('account.move.line').__table__()
         account = pool.get('account.account').__table__()
         party = pool.get('party.party').__table__()
-        payment_kind = extra_args.get('payment_kind',
-            cls.get_conf_item('payment_kind'))
+        payment_kind or cls.get_conf_item('payment_kind')
         if payment_kind and payment_kind not in PAYMENT_KINDS:
             msg = "ignore payment_kind: '%s' not in %s" % (payment_kind,
                 PAYMENT_KINDS)
@@ -175,7 +170,7 @@ class PaymentCreationBatch(batch.BatchRoot):
         return tables, query_table, where_clause
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date, payment_kind):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         # TODO : handle generically
@@ -186,7 +181,7 @@ class PaymentCreationBatch(batch.BatchRoot):
 
         cursor = Transaction().connection.cursor()
         tables, query_table, where_clause = cls.get_query(treatment_date,
-            extra_args)
+            payment_kind)
         move_line = tables['move_line']
         cursor.execute(*query_table.select(move_line.id,
                 where=where_clause & move_line.party.in_(ids),
@@ -196,10 +191,6 @@ class PaymentCreationBatch(batch.BatchRoot):
         MoveLine.create_payments(move_lines)
         cls.logger.info('%s created' %
             coog_string.get_print_infos([x.id for x in move_lines], 'payment'))
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return ['payment_kind']
 
 
 class PaymentAcknowledgeBatch(batch.BatchRoot):
@@ -224,23 +215,20 @@ class PaymentAcknowledgeBatch(batch.BatchRoot):
         return 'account.payment'
 
     @classmethod
-    def select_ids(cls, treatment_date, extra_args):
+    def select_ids(cls, treatment_date, group_reference=None,
+            payment_kind=None, journal_methods=None):
         pool = Pool()
         Group = pool.get('account.payment.group')
         Payment = pool.get('account.payment')
-        if 'group_reference' in extra_args:
+        if group_reference:
             groups = Group.search([
-                    ('reference', '=', extra_args['group_reference'])])
+                    ('reference', '=', group_reference)])
             if len(groups) != 1:
-                msg = "Payment Group Reference %s invalid" % \
-                    extra_args['group_reference']
+                msg = "Payment Group Reference %s invalid" % group_reference
                 cls.logger.error('%s. Aborting' % msg)
                 raise Exception(msg)
             return [[payment.id] for payment in groups[0].processing_payments]
-
-        payment_kind = extra_args.get('payment_kind',
-            cls.get_conf_item('payment_kind'))
-        journal_methods = extra_args.get('journal_methods', None)
+        payment_kind or cls.get_conf_item('payment_kind')
         if payment_kind and payment_kind not in PAYMENT_KINDS:
             msg = "ignoring payment_kind: '%s' not in %s" % (payment_kind,
                 PAYMENT_KINDS)
@@ -253,7 +241,8 @@ class PaymentAcknowledgeBatch(batch.BatchRoot):
         return [[payment.id] for payment in Payment.search(domain)]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, treatment_date, group_reference=None,
+            payment_kind=None, journal_methods=None):
         pool = Pool()
         Payment = pool.get('account.payment')
         with Transaction().set_context(disable_auto_aggregate=True,
@@ -261,7 +250,3 @@ class PaymentAcknowledgeBatch(batch.BatchRoot):
             Payment.succeed(objects)
         cls.logger.info('%s succeed' %
             coog_string.get_print_infos([x.id for x in objects], 'payment'))
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return ['journal_methods', 'payment_kind', 'group_reference']

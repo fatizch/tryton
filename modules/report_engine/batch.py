@@ -28,17 +28,13 @@ class ReportProductionRequestTreatmentBatch(batch.BatchRoot):
         return 'report_production.request'
 
     @classmethod
-    def get_batch_domain(cls, treatment_date, extra_args):
+    def get_batch_domain(cls):
         return [('treated', '=', False)]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids):
         pool = Pool()
         ReportProductionRequest = pool.get('report_production.request')
         reports, attachments = ReportProductionRequest.treat_requests(objects)
         cls.logger.info('Produced %s reports, and created %s attachments' %
             (len(reports), len(attachments)))
-
-    @classmethod
-    def get_batch_args_name(cls):
-        return []

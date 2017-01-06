@@ -82,6 +82,7 @@ def register():
         Model,
         ModelField,
         UIMenuAccess,
+        BatchParamsConfig,
         extra_details.ExtraDetailsConfiguration,
         extra_details.ExtraDetailsConfigurationLine,
         module='coog_core', type_='model')
