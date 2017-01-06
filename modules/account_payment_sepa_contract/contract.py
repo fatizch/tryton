@@ -59,6 +59,11 @@ class Contract:
         if to_save:
             Invoice.save(to_save)
 
+    def action_required_when_payments_failed(self):
+        # when contract is void without due amount no need to process any
+        # action following a payment failed
+        return self.status != 'void' or self.balance > 0
+
 
 class ContractBillingInformation:
     __name__ = 'contract.billing_information'

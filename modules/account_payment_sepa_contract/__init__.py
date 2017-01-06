@@ -16,6 +16,7 @@ def register():
         MoveLine,
         Mandate,
         Payment,
+        Journal,
         PaymentCreationStart,
         EventLog,
         module='account_payment_sepa_contract', type_='model')

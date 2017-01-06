@@ -12,6 +12,7 @@ __all__ = [
     'Mandate',
     'Payment',
     'PaymentCreationStart',
+    'Journal',
     ]
 
 
@@ -63,11 +64,14 @@ class Payment:
             payment = payments_list[0]
             sepa_mandate = None
             payment_date = None
+            journal = key[1]
             reject_fee = cls.get_reject_fee(payments_list)
-            if not reject_fee or not reject_fee.amount:
+            if (not reject_fee or not reject_fee.amount or
+                    not journal.process_actions_when_payments_failed(
+                        payments_list)):
                 continue
             if 'retry' in [action[0] for action in
-                    key[1].get_fail_actions(payments_list)]:
+                    journal.get_fail_actions(payments_list)]:
                 sepa_mandate = payment.sepa_mandate
                 payment_date = payment.journal.get_next_possible_payment_date(
                         payment.line, payment.date.day)
@@ -112,6 +116,18 @@ class Payment:
                 continue
             return None
         return contract
+
+
+class Journal:
+    __name__ = 'account.payment.journal'
+
+    def process_actions_when_payments_failed(self, payments):
+        # no need to process action for contracts that are void without due
+        # amount
+        return super(Journal, self).process_actions_when_payments_failed(
+            payments) and any([(not p.line.contract or
+                    p.line.contract.action_required_when_payments_failed())
+                for p in payments if p.line])
 
 
 class Mandate:

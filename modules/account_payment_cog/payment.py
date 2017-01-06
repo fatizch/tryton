@@ -57,11 +57,16 @@ class Journal(export.ExportImportMixin):
                 ' payments at the same time',
                 })
 
+    def process_actions_when_payments_failed(self, payments):
+        return True
+
     def get_fail_actions(self, payments):
         """
         Payments is a list of payments processed in the same payment
         transaction
         """
+        if not self.process_actions_when_payments_failed(payments):
+            return []
         reject_code = payments[0].fail_code
         payment_reject_number = max(len(payment.line.payments) for payment in
             payments)
