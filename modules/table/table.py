@@ -430,7 +430,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         'End Date',
         states=dimension_state('range-date'), depends=DIMENSION_DEPENDS,
         help='Date Excluded')
-    _get_dimension_cache = Cache('get_dimension_id')
+    _get_dimension_cache = Cache('get_dimension_ids')
 
     @classmethod
     def __setup__(cls):
@@ -574,14 +574,13 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         return [('name',) + tuple(clause[1:])]
 
     @classmethod
-    def get_dimension_id(cls, definition, dimension_idx, value):
+    def get_dimension_ids(cls, definition, dimension_idx, value):
         key = (definition.id, dimension_idx, value)
-        dimension_id = cls._get_dimension_cache.get(key, default=-1)
-        if dimension_id != -1:
-            return dimension_id
+        dimension_ids = cls._get_dimension_cache.get(key)
+        if dimension_ids:
+            return dimension_ids
 
         kind = getattr(definition, 'dimension_kind%d' % (dimension_idx + 1))
-        dimension = None
         clause = [
             ('definition', '=', definition.id),
             ('type', '=', 'dimension%d' % (dimension_idx + 1)),
@@ -612,14 +611,9 @@ class TableDefinitionDimension(ModelSQL, ModelView):
                         ('end_date', '>', value),
                         ],
                     ])
-        dimensions = cls.search(clause)
-        if dimensions:
-            dimension, = dimensions
-            dimension_id = dimension.id
-        else:
-            dimension_id = None
-        cls._get_dimension_cache.set(key, dimension_id)
-        return dimension_id
+        dimension_ids = [x.id for x in cls.search(clause)]
+        cls._get_dimension_cache.set(key, dimension_ids)
+        return dimension_ids
 
     @classmethod
     def delete(cls, tables):
@@ -896,8 +890,11 @@ class TableCell(ModelSQL, ModelView):
             domain = [('definition', '=', definition.id)]
             for i in range(DIMENSION_MAX):
                 value = values[i]
-                dimension_id = Dimension.get_dimension_id(definition, i, value)
-                domain.append(('dimension%d' % (i + 1), '=', dimension_id))
+                dimension_ids = Dimension.get_dimension_ids(
+                    definition, i, value)
+                domain.append([('dimension%d' % (i + 1),
+                            'in' if dimension_ids else '=',
+                            dimension_ids or None)])
             cells = cls.search(domain)
             if not cells:
                 cache[key] = None
