@@ -45,6 +45,7 @@ class Claim(RemindableInterface):
         cls._buttons.update({
                 'button_generate_document_request': {},
                 'generate_reminds_documents': {},
+                'launch_report_wizard': {},
                 })
 
     @classmethod
@@ -117,6 +118,11 @@ class Claim(RemindableInterface):
                         if not line.received]
                     ))
         DocumentRequest.save(to_save)
+
+    @classmethod
+    @ModelView.button_action('claim_document.document_request_report_wizard')
+    def launch_report_wizard(cls, claims):
+        pass
 
     def link_attachments_to_requests(self):
         Request = Pool().get('document.request')
