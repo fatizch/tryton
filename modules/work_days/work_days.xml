@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+    <!-- ############################################################ -->
+        <!-- ########### Configuration ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="configuration_view_form">
+            <field name="model">work_days.configuration</field>
+            <field name="type">form</field>
+            <field name="name">configuration_form</field>
+        </record>
+        <record model="ir.ui.view" id="configuration_view_list">
+            <field name="model">work_days.configuration</field>
+            <field name="type">tree</field>
+            <field name="name">configuration_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_configuration_window">
+            <field name="name">Configuration</field>
+            <field name="res_model">work_days.configuration</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_configuration_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="configuration_view_form"/>
+            <field name="act_window" ref="act_configuration_window"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_configuration_list_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="configuration_view_list"/>
+            <field name="act_window" ref="act_configuration_window"/>
+        </record>
+        <menuitem name="Work Days" parent="ir.menu_administration" id="menu_work_days" sequence="300"/>
+        <menuitem name="Configuration" parent="menu_work_days" id="menu_configuration" action="act_configuration_window"/>
+        <!-- ############################################################ -->
+        <!-- ########### Holidays ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="holiday_view_list">
+            <field name="model">work_days.holiday</field>
+            <field name="type">tree</field>
+            <field name="name">holiday_list</field>
+        </record>
+        <record model="ir.ui.view" id="holiday_view_form">
+            <field name="model">work_days.holiday</field>
+            <field name="type">form</field>
+            <field name="name">holiday_form</field>
+        </record>
+    </data>
+</tryton>

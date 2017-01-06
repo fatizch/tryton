@@ -1,0 +1,236 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:batch.params_config:"
+msgid "No configuration given"
+msgstr "Configuration absente"
+
+msgctxt "error:work_days.configuration:"
+msgid "Some holidays have duplicates"
+msgstr "Certains jours fériés sont en double"
+
+msgctxt "error:work_days.holiday:"
+msgid "Invalid month/day combination"
+msgstr "Combinaison jour/mois invalide"
+
+#, fuzzy
+msgctxt "field:batch.params_config,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:work_days.configuration,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:work_days.configuration,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:work_days.configuration,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:work_days.configuration,holidays:"
+msgid "Holidays"
+msgstr "Jours Fériés"
+
+msgctxt "field:work_days.configuration,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:work_days.configuration,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:work_days.configuration,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:work_days.configuration,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:work_days.configuration,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:work_days.holiday,configuration:"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "field:work_days.holiday,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:work_days.holiday,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:work_days.holiday,day:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "field:work_days.holiday,easter_delta_days:"
+msgid "Delta days from Easter"
+msgstr "Jours de différence par rapport à Pâques"
+
+msgctxt "field:work_days.holiday,holiday_type:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:work_days.holiday,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:work_days.holiday,month:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "field:work_days.holiday,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:work_days.holiday,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:work_days.holiday,weekly_day:"
+msgid "Weekly Day Off"
+msgstr "Jour de Repos Hebdomadaire"
+
+msgctxt "field:work_days.holiday,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:work_days.holiday,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "model:batch.params_config,name:"
+msgid "Batch Parameters Configuration"
+msgstr "Configuration des paramètres de batch"
+
+msgctxt "model:ir.action,name:act_configuration_window"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "model:ir.ui.menu,name:menu_configuration"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "model:ir.ui.menu,name:menu_work_days"
+msgid "Work Days"
+msgstr "Jours Ouvrés"
+
+msgctxt "model:work_days.configuration,name:"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "model:work_days.holiday,name:"
+msgid "Holiday"
+msgstr "Jour Férié"
+
+msgctxt "selection:work_days.holiday,holiday_type:"
+msgid "Easter Related Holiday"
+msgstr "Jour Férié lié à Pâques"
+
+msgctxt "selection:work_days.holiday,holiday_type:"
+msgid "Input"
+msgstr "Saisie"
+
+msgctxt "selection:work_days.holiday,holiday_type:"
+msgid "Weekly Day Off"
+msgstr "Jour de Repos Hebdomadaire"
+
+msgctxt "selection:work_days.holiday,month:"
+msgid "April"
+msgstr "Avril"
+
+msgctxt "selection:work_days.holiday,month:"
+msgid "August"
+msgstr "Août"
+
+msgctxt "selection:work_days.holiday,month:"
+msgid "December"
+msgstr "Décembre"
+
+msgctxt "selection:work_days.holiday,month:"
+msgid "February"
+msgstr "Février"
+
+msgctxt "selection:work_days.holiday,month:"
+msgid "January"
+msgstr "Janvier"
+
+msgctxt "selection:work_days.holiday,month:"
+msgid "July"
+msgstr "Juillet"
+
+msgctxt "selection:work_days.holiday,month:"
+msgid "June"
+msgstr "Juin"
+
+msgctxt "selection:work_days.holiday,month:"
+msgid "March"
+msgstr "Mars"
+
+msgctxt "selection:work_days.holiday,month:"
+msgid "May"
+msgstr "Mai"
+
+msgctxt "selection:work_days.holiday,month:"
+msgid "November"
+msgstr "Novembre"
+
+msgctxt "selection:work_days.holiday,month:"
+msgid "October"
+msgstr "Octobre"
+
+msgctxt "selection:work_days.holiday,month:"
+msgid "September"
+msgstr "Septembre"
+
+msgctxt "selection:work_days.holiday,weekly_day:"
+msgid "Friday"
+msgstr "Vendredi"
+
+msgctxt "selection:work_days.holiday,weekly_day:"
+msgid "Monday"
+msgstr "Lundi"
+
+msgctxt "selection:work_days.holiday,weekly_day:"
+msgid "Saturday"
+msgstr "Samedi"
+
+msgctxt "selection:work_days.holiday,weekly_day:"
+msgid "Sunday"
+msgstr "Dimanche"
+
+msgctxt "selection:work_days.holiday,weekly_day:"
+msgid "Thursday"
+msgstr "Jeudi"
+
+msgctxt "selection:work_days.holiday,weekly_day:"
+msgid "Tuesday"
+msgstr "Mardi"
+
+msgctxt "selection:work_days.holiday,weekly_day:"
+msgid "Wednesday"
+msgstr "Mercredi"
+
+msgctxt "view:work_days.configuration:"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "view:work_days.configuration:"
+msgid "Configurations"
+msgstr "Configurations"
+
+msgctxt "view:work_days.holiday:"
+msgid "Holiday"
+msgstr "Jours Fériés"
+
+msgctxt "view:work_days.holiday:"
+msgid "Holidays"
+msgstr "Jours Fériés"
