@@ -268,7 +268,6 @@ class Migrator(batch.BatchRootNoSelect):
 
     @classmethod
     def upsert_records(cls, rows, **kwargs):
-        Model = Pool().get(cls.model)
         if not kwargs.get('update', False):
             return cls.create_records(rows)
         result, to_create, to_update = [], [], []
