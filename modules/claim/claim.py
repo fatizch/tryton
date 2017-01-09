@@ -381,7 +381,7 @@ class Loss(model.CoogSQL, model.CoogView):
         'get_loss_desc_code')
     loss_desc_kind = fields.Function(
         fields.Char('Loss Desc Kind', depends=['loss_desc']),
-        'get_loss_desc_kind', searcher='search_loss_desc_kind')
+        loader='load_loss_desc_kind', searcher='search_loss_desc_kind')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
 
@@ -431,7 +431,7 @@ class Loss(model.CoogSQL, model.CoogView):
     def get_loss_desc_code(self, name):
         return self.loss_desc.code if self.loss_desc else ''
 
-    def get_loss_desc_kind(self, name):
+    def load_loss_desc_kind(self, name=None):
         return self.loss_desc.loss_kind if self.loss_desc else ''
 
     @classmethod
