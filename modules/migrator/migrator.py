@@ -244,13 +244,13 @@ class Migrator(batch.BatchRootNoSelect):
                 cls.logger.warning(cls.error_message(
                     'no_rows') % (None, select,))
             cls.init_cache(rows)
-            res.update(cls.migrate_rows(rows, ids) or {})
+            res.update(cls.migrate_rows(rows, ids, **kwargs) or {})
         else:
             cls.logger.error(cls.error_message('no_rows') % (None, select,))
         return res
 
     @classmethod
-    def migrate_rows(cls, rows, ids):
+    def migrate_rows(cls, rows, ids, **kwargs):
         pool = Pool()
         to_upsert = {}
         for row in rows:
@@ -261,15 +261,15 @@ class Migrator(batch.BatchRootNoSelect):
                 continue
             to_upsert[row[cls.func_key]] = row
         if to_upsert:
-            cls.upsert_records(to_upsert.values())
+            cls.upsert_records(to_upsert.values(), **kwargs)
             for migrator in cls.extra_migrator_names():
-                pool.get(migrator).migrate(to_upsert.keys())
+                pool.get(migrator).migrate(to_upsert.keys(), **kwargs)
         return to_upsert
 
     @classmethod
     def upsert_records(cls, rows, **kwargs):
         Model = Pool().get(cls.model)
-        if not kwargs['update']:
+        if not kwargs.get('update', False):
             return cls.create_records(rows)
         result, to_create, to_update = [], [], []
         for row in rows:
@@ -317,7 +317,7 @@ class Migrator(batch.BatchRootNoSelect):
     @classmethod
     def execute(cls, objects, ids, **kwargs):
         kwargs.update(cls.cast_extra_args(**kwargs))
-        objs = cls.migrate(ids)
+        objs = cls.migrate(ids, **kwargs)
         if objs is not None:
             # string to display in 'result' column of `coog batch qlist`
             return '%s|%s' % (len(objs), len(ids))
