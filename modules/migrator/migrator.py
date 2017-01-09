@@ -164,7 +164,7 @@ class Migrator(batch.BatchRootNoSelect):
         """
         ids = []
         excluded = []
-        kwargs.update(cls.cast_extra_args(kwargs))
+        kwargs.update(cls.cast_extra_args(**kwargs))
         if 'not-in' in kwargs:
             excluded = eval(kwargs.get('not-in', '[]'))
         elif 'not-in-file' in kwargs:
@@ -316,7 +316,7 @@ class Migrator(batch.BatchRootNoSelect):
 
     @classmethod
     def execute(cls, objects, ids, **kwargs):
-        kwargs.update(cls.cast_extra_args(kwargs))
+        kwargs.update(cls.cast_extra_args(**kwargs))
         objs = cls.migrate(ids)
         if objs is not None:
             # string to display in 'result' column of `coog batch qlist`
