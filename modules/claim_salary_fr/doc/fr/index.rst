@@ -18,3 +18,8 @@ Fonctionnalités
 
     summary.rst
     features.rst
+
+Tutoriels
+---------
+
+    .. include:: parametrer_calcul_salaire_net_tuto.rst
