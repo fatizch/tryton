@@ -1,3 +1,6 @@
+* Set void state on a contract in case an unpaid premium event occurs before 
+the contract start date
+
 Version 1.10 - 2016-11-02
 
 Version 1.8 - 2016-07-06

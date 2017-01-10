@@ -201,8 +201,10 @@ class Level:
         Contract = pool.get('contract')
         SubStatus = pool.get('contract.sub_status')
         to_terminate = defaultdict(list)
-        termination_reason, = SubStatus.search([
-                ('code', '=', 'unpaid_premium_termination')])
+        to_void = []
+        termination_reason, = SubStatus.get_sub_status(
+            'unpaid_premium_termination')
+        void_reason, = SubStatus.get_sub_status('unpaid_premium_void')
         for dunning in dunnings:
             if not dunning.contract:
                 continue
@@ -214,9 +216,14 @@ class Level:
             if (dunning.contract.termination_reason == termination_reason and
                     dunning.contract.end_date == date):
                 continue
-            to_terminate[date].append(dunning.contract)
+            if not date:
+                to_void.append(dunning.contract)
+            else:
+                to_terminate[date].append(dunning.contract)
         for date, contracts in to_terminate.iteritems():
             Contract.terminate(contracts, date, termination_reason)
+        if to_void:
+            Contract.void(to_void, void_reason)
 
     def get_fee_invoice_lines(self, fee, contract):
         pool = Pool()

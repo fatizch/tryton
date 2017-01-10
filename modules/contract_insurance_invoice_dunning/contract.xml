@@ -16,6 +16,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="code">unpaid_premium_hold</field>
             <field name="status">hold</field>
         </record>
+        <record model="contract.sub_status" id="sub_status_void_unpaid_premium">
+            <field name="name">Unpaid Premium Void</field>
+            <field name="code">unpaid_premium_void</field>
+            <field name="status">void</field>
+        </record>
         <!-- ############################################################ -->
         <!-- ########### Contract form ########### -->
         <!-- ############################################################ -->

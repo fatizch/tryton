@@ -94,6 +94,10 @@ msgctxt "model:contract.sub_status,name:sub_status_terminated_unpaid_premium"
 msgid "Unpaid Premium Termination"
 msgstr "Résiliation contentieuse"
 
+msgctxt "model:contract.sub_status,name:sub_status_void_unpaid_premium"
+msgid "Unpaid Premium Void"
+msgstr "Sans effet suite à non paiement"
+
 msgctxt "model:ir.action,name:act_contract_dunning_form"
 msgid "Contracts"
 msgstr "Contrats"
