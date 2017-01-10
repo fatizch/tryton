@@ -73,7 +73,11 @@ class Loss:
             depends=['loss_desc_kind', 'loss_desc']),
         'get_start_end_dates', setter='set_start_end_dates')
     return_to_work_date = fields.Date('Return to Work',
-        states={'invisible': ~Bool(Eval('return_to_work_date'))})
+        states={'invisible': Eval('loss_desc_kind') != 'std'},
+        domain=[If(Bool(Eval('return_to_work_date')),
+                ('return_to_work_date', '>', Eval('end_date')),
+                ())
+            ], depends=['end_date'])
     is_a_relapse = fields.Boolean('Is A Relapse',
         states={'invisible': Eval('loss_desc_kind') != 'std'})
 
