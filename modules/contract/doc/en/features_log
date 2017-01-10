@@ -1,3 +1,5 @@
+* Allow to filter by initial start date
+
 Version 1.10 - 2016-11-02
 * Display contract status in color in form view according to its value
 

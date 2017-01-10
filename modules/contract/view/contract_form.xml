@@ -29,8 +29,10 @@ this repository contains the full copyright notices and license terms. -->
         </group>
     </group>
     <group id="right" colspan="2" col="2">
-        <label name="initial_start_date"/>
-        <field name="initial_start_date"/>
+        <group id="initial_start_date" colspan="2" string="">
+            <label name="initial_start_date"/>
+            <field name="initial_start_date"/>
+        </group>
         <label name="start_date"/>
         <field name="start_date"/>
         <label name="end_date"/>

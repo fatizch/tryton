@@ -189,11 +189,8 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         'contract', 'Activation History', order=[('start_date', 'ASC')],
         states=_STATES, depends=_DEPENDS, delete_missing=True)
     initial_start_date = fields.Function(
-        fields.Date('Initial Start Date',
-            states={
-                'invisible': Eval('initial_start_date') == Eval('start_date'),
-                }),
-        'get_initial_start_date')
+        fields.Date('Initial Start Date'),
+        'get_initial_start_date', searcher='search_contract_date')
     final_end_date = fields.Function(
         fields.Date('Final End Date',
             states={
@@ -384,7 +381,11 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                 '/form/group/group/field[@name="status"]',
                 'states',
                 {'field_color': Eval('form_color')}
-                )]
+                ), (
+                '/form/group[@id="right"]/group[@id="initial_start_date"]',
+                'states',
+                {'invisible': Eval('initial_start_date') == Eval('start_date')}
+                ), ]
 
     def get_color(self, name):
         if self.status in ['void', 'terminated']:
@@ -878,6 +879,8 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                 datetime.date.max)
         elif name == 'start_date':
             column = Max(activation_history.start_date)
+        elif name == 'initial_start_date':
+            column = Min(activation_history.start_date)
 
         query = activation_history.select(activation_history.contract,
             having=Operator(column, value),
