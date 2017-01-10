@@ -202,9 +202,9 @@ class Level:
         SubStatus = pool.get('contract.sub_status')
         to_terminate = defaultdict(list)
         to_void = []
-        termination_reason, = SubStatus.get_sub_status(
+        termination_reason = SubStatus.get_sub_status(
             'unpaid_premium_termination')
-        void_reason, = SubStatus.get_sub_status('unpaid_premium_void')
+        void_reason = SubStatus.get_sub_status('unpaid_premium_void')
         for dunning in dunnings:
             if not dunning.contract:
                 continue
