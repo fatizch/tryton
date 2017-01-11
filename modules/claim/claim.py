@@ -636,6 +636,10 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
     option = fields.Many2One(
         'contract.option', 'Coverage', ondelete='RESTRICT',
         depends=['contract'])
+    theoretical_covered_element = fields.Function(
+        fields.Many2One('contract.covered_element',
+            'Theoretical Covered Element'),
+        'get_theoretical_covered_element')
     loss = fields.Many2One('claim.loss', 'Loss',
         ondelete='CASCADE', select=True, required=True)
     benefit = fields.Many2One('benefit', 'Benefit', ondelete='RESTRICT',
@@ -664,6 +668,9 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
     icon = fields.Function(
         fields.Char('Icon'),
         'get_icon')
+
+    def get_theoretical_covered_element(self, name):
+        return None
 
     @classmethod
     def _export_light(cls):

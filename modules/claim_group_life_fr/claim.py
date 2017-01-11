@@ -7,38 +7,11 @@ from trytond.modules.coog_core import model, fields
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 
 __all__ = [
-    'HospitalisationPeriod',
     'Loss',
+    'Service',
     'IndemnificationDetail',
+    'HospitalisationPeriod',
     ]
-
-
-class HospitalisationPeriod(model.CoogSQL, model.CoogView):
-    """HospitalisationPeriod"""
-
-    __name__ = 'claim.loss.hospitalisation.period'
-
-    start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End Date', required=True)
-    loss = fields.Many2One('claim.loss', 'Loss', ondelete="CASCADE")
-
-    @classmethod
-    def __setup__(cls):
-        super(HospitalisationPeriod, cls).__setup__()
-        cls._error_messages.update({
-                'invalid_period': 'The period is invalid',
-                })
-
-    @classmethod
-    def validate(cls, periods):
-        super(HospitalisationPeriod, cls).validate(periods)
-        for period in periods:
-            if period.start_date > period.end_date or \
-                    (period.loss.start_date and period.start_date <
-                        period.loss.start_date) or \
-                    (period.end_date and period.loss.end_date and
-                        period.end_date > period.loss.end_date):
-                cls.raise_user_error('invalid_period')
 
 
 class Loss:
@@ -83,6 +56,22 @@ class Loss:
                         cls.raise_user_error('period_overlap')
 
 
+class Service:
+    __metaclass__ = PoolMeta
+    __name__ = 'claim.service'
+
+    def get_theoretical_covered_element(self, name):
+        # This should be in a claim_group_life module which does not exist
+        if (self.option and self.option.is_group and
+                self.option.covered_element):
+            person = self.get_covered_person()
+            if person and self.option.covered_element.party != person:
+                for elem in self.option.covered_element.sub_covered_elements:
+                    if elem.party == person:
+                        return elem
+        return super(Service, self).get_theoretical_covered_element(name)
+
+
 class IndemnificationDetail:
     __metaclass__ = PoolMeta
     __name__ = 'claim.indemnification.detail'
@@ -95,3 +84,31 @@ class IndemnificationDetail:
     def __setup__(cls):
         super(IndemnificationDetail, cls).__setup__()
         cls.kind.selection.append(('part_time', 'Part Time'))
+
+
+class HospitalisationPeriod(model.CoogSQL, model.CoogView):
+    """HospitalisationPeriod"""
+
+    __name__ = 'claim.loss.hospitalisation.period'
+
+    start_date = fields.Date('Start Date', required=True)
+    end_date = fields.Date('End Date', required=True)
+    loss = fields.Many2One('claim.loss', 'Loss', ondelete="CASCADE")
+
+    @classmethod
+    def __setup__(cls):
+        super(HospitalisationPeriod, cls).__setup__()
+        cls._error_messages.update({
+                'invalid_period': 'The period is invalid',
+                })
+
+    @classmethod
+    def validate(cls, periods):
+        super(HospitalisationPeriod, cls).validate(periods)
+        for period in periods:
+            if period.start_date > period.end_date or \
+                    (period.loss.start_date and period.start_date <
+                        period.loss.start_date) or \
+                    (period.end_date and period.loss.end_date and
+                        period.end_date > period.loss.end_date):
+                cls.raise_user_error('invalid_period')

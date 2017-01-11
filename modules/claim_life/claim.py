@@ -258,6 +258,13 @@ class ClaimService:
                 values[key] = value
         self.extra_datas[-1].extra_data_values = values
 
+    def get_theoretical_covered_element(self, name):
+        if self.option and self.option.covered_element:
+            person = self.get_covered_person()
+            if person and self.option.covered_element.party == person:
+                return self.option.covered_element
+        return super(ClaimService, self).get_theoretical_covered_element(name)
+
 
 class ClaimServiceExtraDataRevision:
     __metaclass__ = PoolMeta

@@ -1,3 +1,4 @@
+* Ajout d'un champ sur les service vers le risque couvert concerné
 * Ajout du déclarant dans les critères de recherche par défaut
 * Contrôle de doublons possibles sur les événements
 * Ajout d'un statut sur les événements

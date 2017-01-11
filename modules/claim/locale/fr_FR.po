@@ -745,6 +745,10 @@ msgctxt "field:claim.service,summary:"
 msgid "Service Summary"
 msgstr "Résumé des prestations"
 
+msgctxt "field:claim.service,theoretical_covered_element:"
+msgid "Theoretical Covered Element"
+msgstr "Risque couvert théorique"
+
 msgctxt "field:claim.service,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"

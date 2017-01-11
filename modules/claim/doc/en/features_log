@@ -1,3 +1,4 @@
+* Add covered_element field on services
 * Add claimant in default search for claims
 * Check for possible duplicates claim losses
 * Add a status field on claim losses
