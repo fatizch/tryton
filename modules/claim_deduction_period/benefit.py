@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from dateutils import relativedelta
+
 from trytond.pool import PoolMeta
 from trytond.model import Unique
 
@@ -74,5 +76,5 @@ class BenefitRule:
             if start_date <= period.start_date <= end_date:
                 dates.add(period.start_date)
             if start_date <= period.end_date <= end_date:
-                dates.add(period.end_date)
+                dates.add(period.end_date + relativedelta(days=1))
         return dates
