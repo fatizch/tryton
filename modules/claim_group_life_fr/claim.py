@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Equal, Not
 
 from trytond.modules.coog_core import model, fields
@@ -84,6 +84,18 @@ class IndemnificationDetail:
     def __setup__(cls):
         super(IndemnificationDetail, cls).__setup__()
         cls.kind.selection.append(('part_time', 'Part Time'))
+
+    def get_status_string(self, name):
+        res = super(IndemnificationDetail, self).get_status_string(name)
+        part_time = Pool().get(
+            'benefit.loss.description.deduction_period_kind').search(
+            [('xml_id', '=', 'claim_group_life_fr.part_time_deduction_type')]
+            )[0]
+        if any([x.start_date <= self.end_date and x.end_date >= self.start_date
+                    for x in self.indemnification.service.loss.deduction_periods
+                    if x.deduction_kind == part_time]):
+            res += ' (' + part_time.name + ')'
+        return res
 
 
 class HospitalisationPeriod(model.CoogSQL, model.CoogView):

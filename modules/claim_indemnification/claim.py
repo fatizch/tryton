@@ -30,7 +30,6 @@ from trytond.modules.coog_core.extra_details import WithExtraDetails
 
 from .benefit import ANNUITY_FREQUENCIES
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Claim',
     'Loss',
@@ -42,6 +41,7 @@ __all__ = [
 
 
 class Claim:
+    __metaclass__ = PoolMeta
     __name__ = 'claim'
 
     invoices = fields.Function(
@@ -140,6 +140,7 @@ class Claim:
 
 
 class Loss:
+    __metaclass__ = PoolMeta
     __name__ = 'claim.loss'
 
     @classmethod
@@ -181,6 +182,7 @@ class Loss:
 
 
 class ClaimService:
+    __metaclass__ = PoolMeta
     __name__ = 'claim.service'
 
     indemnifications = fields.One2Many('claim.indemnification',
