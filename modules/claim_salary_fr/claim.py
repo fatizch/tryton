@@ -422,12 +422,18 @@ class ClaimService:
                     salary_to_add = \
                         (getattr(cur_salary, salary_def, 0) or 0) * prorata
                     if salary_to_add:
-                        pmss += TableCell.get(pmss_table, cur_salary.from_date)
+                        pmss += TableCell.get(pmss_table, cur_salary.from_date
+                            ) / prorata
                         sum_prorata += prorata
                         salary_to_use += salary_to_add
 
-        salary_to_use = salary_to_use / sum_prorata * len(salaries)
-        pmss = pmss / sum_prorata * 12
+        # Calculate monthly salary
+        salary_to_use /= sum_prorata
+
+        if self.salary_mode != 'last_year' and not current_salary:
+            salary_to_use *= 12
+        if not current_salary or self.salary_mode == 'last_year':
+            pmss *= 12
         salary_to_use += bonus
         pmss.quantize(Decimal(1) / 10 ** self.currency_digits)
         salary_to_use.quantize(Decimal(1) / 10 ** self.currency_digits)
