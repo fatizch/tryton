@@ -306,8 +306,10 @@ class ClaimService:
             reference_date = datetime.date(
                 self.loss.get_salary_reference_date().year - 1, 12, 31)
         elif self.salary_mode == 'last_4_quarters':
-            reference_date = self.loss.get_salary_reference_date() + relativedelta(day=1,
-                month=((self.loss.get_salary_reference_date().month - 1) // 3) * 3 + 1)
+            reference_date = self.loss.get_salary_reference_date() + \
+                relativedelta(day=1,
+                month=((self.loss.get_salary_reference_date().month - 1) // 3
+                        ) * 3 + 1)
         else:
             return []
 
