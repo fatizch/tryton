@@ -54,12 +54,12 @@ Reload the context::
 
 Create Fiscal Year::
 
-    >>> fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
-    ...         today=datetime.date(2015, 1, 1)))
-    >>> fiscalyear.click('create_period')
-    >>> fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
-    ...         today=datetime.date(2015, 1, 1) + relativedelta(years=1)))
-    >>> fiscalyear.click('create_period')
+    >>> base_year = 2015
+    >>> while base_year <= datetime.date.today().year + 1:
+    ...     fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(
+    ...         company, today=datetime.date(base_year, 1, 1)))
+    ...     fiscalyear.click('create_period')
+    ...     base_year += 1
 
 Create chart of accounts::
 

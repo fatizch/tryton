@@ -1,7 +1,6 @@
 import os
 import argparse
 import logging
-# import warnings
 
 import async.broker as async_broker
 from async.tasks import batch_generate

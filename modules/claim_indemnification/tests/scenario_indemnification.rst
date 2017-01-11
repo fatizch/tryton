@@ -3,7 +3,6 @@
 
     >>> import datetime
     >>> from decimal import Decimal
-    >>> from dateutil.relativedelta import relativedelta
     >>> from proteus import config, Model, Wizard
     >>> from trytond.modules.party_cog.tests.tools import create_party_person
     >>> from trytond.modules.contract.tests.tools import add_quote_number_generator
@@ -35,10 +34,10 @@
 Create Fiscal Year::
 
     >>> fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(
-    ...     company, today=datetime.date(2015, 1, 1)))
+    ...     company, today=datetime.date(datetime.date.today().year, 1, 1)))
     >>> fiscalyear.click('create_period')
     >>> fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(
-    ...     company, today=datetime.date(2015, 1, 1) + relativedelta(years=1)))
+    ...     company, today=datetime.date(datetime.date.today().year + 1, 1, 1)))
     >>> fiscalyear.click('create_period')
 
 Create chart of accounts::

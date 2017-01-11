@@ -3,7 +3,6 @@
 # #Comment# # Init
 import datetime
 from decimal import Decimal
-from dateutil.relativedelta import relativedelta
 from proteus import config, Model, Wizard
 
 # os.environ['DB_NAME'] = 'roederer_tests'
@@ -50,11 +49,12 @@ config._context['company'] = company.id
 
 # #Comment# #Create Fiscal Year
 fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(
-    company, today=datetime.date(2015, 1, 1)))
+    company, today=datetime.date(datetime.date.today().year, 1, 1)))
 fiscalyear.click('create_period')
 fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(
-    company, today=datetime.date(2015, 1, 1) + relativedelta(years=1)))
+    company, today=datetime.date(datetime.date.today().year + 1, 1, 1)))
 fiscalyear.click('create_period')
+
 
 # #Comment# #Create chart of accounts
 _ = create_chart(company)
