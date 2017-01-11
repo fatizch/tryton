@@ -1,6 +1,4 @@
-- **Batch de création et de traitement des paiements**
-
-- **Ajout des informations de paiement sur la synthèse acteur**
+- **Payment creation and processing batches**
 
 - **Gestion automatisée des rejets de paiement**
 

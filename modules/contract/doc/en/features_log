@@ -1,3 +1,4 @@
+* Add chains for decline inactive quotes and terminate contract batches
 * Allow to filter by initial start date
 
 Version 1.10 - 2016-11-02

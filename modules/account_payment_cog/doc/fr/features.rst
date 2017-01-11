@@ -1,4 +1,4 @@
-- **Batch de création et de traitement des paiements**
+- **Batch de création et de traitement des paiments**
 
 - **Ajout des informations de paiement sur la synthèse acteur**
 
