@@ -262,6 +262,7 @@ class ClaimLoss:
             return self.initial_std_start_date
         return self.start_date
 
+
 class ClaimService:
     __metaclass__ = PoolMeta
     __name__ = 'claim.service'
@@ -423,8 +424,7 @@ class ClaimService:
                         sum_prorata += prorata
                         salary_to_use += salary_to_add
 
-        if self.salary_mode != 'last_year':
-            salary_to_use = salary_to_use / sum_prorata * 12
+        salary_to_use = salary_to_use / sum_prorata * len(salaries)
         pmss = pmss / sum_prorata * 12
         salary_to_use += bonus
         pmss.quantize(Decimal(1) / 10 ** self.currency_digits)

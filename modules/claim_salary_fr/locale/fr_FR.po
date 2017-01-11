@@ -256,8 +256,8 @@ msgid "Net Calculation Rule"
 msgstr "Règle de calcul du net"
 
 msgctxt "field:contract.option.benefit,net_salary_mode:"
-msgid "Limit Net Salary Mode"
-msgstr "Limiter au salaire net"
+msgid "Calculate Net Salary"
+msgstr "Calcul du salaire net"
 
 msgctxt "field:contract.option.benefit,salary_mode:"
 msgid "Salary Mode"
