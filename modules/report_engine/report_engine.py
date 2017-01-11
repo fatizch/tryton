@@ -1076,24 +1076,28 @@ class ReportCreateSelectTemplate(model.CoogView):
     __name__ = 'report.create.select_template'
 
     template = fields.Many2One('report.template', 'Template', required=True,
-        domain=[('id', 'in', Eval('possible_templates'))])
+        domain=[('id', 'in', Eval('possible_templates'))],
+        depends=['possible_templates'])
     possible_templates = fields.Many2Many('report.template', None, None,
         'Possible Templates', states={'invisible': True})
     recipient = fields.Many2One('party.party', 'Recipient', required=True,
         states={'invisible': ~Eval('template')},
-        domain=[('id', 'in', Eval('possible_recipients'))])
+        domain=[('id', 'in', Eval('possible_recipients'))],
+        depends=['possible_recipients'])
     possible_recipients = fields.Many2Many('party.party', None, None,
         'Possible Recipients', states={'invisible': True})
     recipient_address = fields.Many2One('party.address', 'Recipient Address',
         domain=[('party', '=', Eval('recipient'))], states={
-            'invisible': ~Eval('recipient') | ~Eval('template')})
+            'invisible': ~Eval('recipient') | ~Eval('template')},
+        depends=['recipient', 'template'])
     recipient_email = fields.Many2One('party.contact_mechanism',
         'Recipient Email', states={'invisible': ~Eval('recipient')
             | ~Eval('template')},
         domain=[('party', '=', Eval('recipient')),
-            ('type', '=', 'email')])
+            ('type', '=', 'email')],
+        depends=['recipient'])
     parameters = fields.Dict('report.template.parameters', 'Parameters',
-        states={'invisible': ~Eval('parameters')})
+        states={'invisible': ~Eval('parameters')}, depends=['parameters'])
 
     @fields.depends('parameters', 'recipient', 'recipient_address',
         'recipient_email', 'template')

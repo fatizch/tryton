@@ -155,10 +155,5 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_report_template_parameter_form"/>
         </record>
         <menuitem parent="menu_report" sequence="50" action="act_report_template_parameter_form" id="menu_template_parameter"/>
-        <record model="ir.ui.view" id="report_input_parameters_view_form">
-            <field name="model">report.create.input_parameters</field>
-            <field name="type">form</field>
-            <field name="name">report_create_input_parameters_form</field>
-        </record>
     </data>
 </tryton>
