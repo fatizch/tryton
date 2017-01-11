@@ -218,6 +218,7 @@ class BenefitRule(
             new_args['indemnification_detail_start_date'] = start_date
             new_args['indemnification_detail_end_date'] = end_date
             benefits = self.do_calculate_indemnification_rule(new_args)
+            new_args['indemnification_periods'] = benefits
             if must_revaluate:
                 for benefit in benefits:
                     reval_args = new_args.copy()

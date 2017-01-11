@@ -26,6 +26,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="long_description">Calcule le nombre d'années entre deux dates</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
+        <record model="rule_engine.function" id="mois_entre">
+            <field name="translated_technical_name">mois_entre</field>
+            <field name="description">Nombre de mois entre...</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_months_between</field>
+            <field name="fct_args">debut, fin</field>
+            <field name="long_description">Calcule le nombre de mois entre deux dates</field>
+            <field name="parent" ref="dossier_outils"/>
+        </record>
         <record model="rule_engine.function" id="jours_entre">
             <field name="translated_technical_name">jours_entre</field>
             <field name="description">Nombre de jours entre...</field>

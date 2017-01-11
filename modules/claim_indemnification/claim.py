@@ -446,7 +446,7 @@ class ClaimService:
         nb_month = FREQUENCY_CONVERSION_TABLE[self.annuity_frequency]
         period_start_date, period_end_date = self.get_full_period(from_date)
         res = []
-        while period_start_date < to_date:
+        while period_start_date <= to_date:
             full_period = True
             cur_period_start = max(period_start_date, from_date)
             cur_period_end = min(period_end_date, to_date)

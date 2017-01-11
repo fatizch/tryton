@@ -444,6 +444,14 @@ class RuleTools(ModelView):
         return coog_date.number_of_years_between(date1, date2)
 
     @classmethod
+    def _re_months_between(cls, args, date1, date2):
+        if (not isinstance(date1, datetime.date) or
+                not isinstance(date2, datetime.date)):
+            args['errors'].append('monthss_between needs datetime types')
+            raise CatchedRuleEngineError
+        return coog_date.number_of_months_between(date1, date2)
+
+    @classmethod
     def _re_days_between(cls, args, date1, date2):
         if (not isinstance(date1, datetime.date) or
                 not isinstance(date2, datetime.date)):

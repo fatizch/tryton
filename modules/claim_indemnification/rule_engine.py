@@ -163,6 +163,11 @@ class RuleEngineRuntime:
         return args['base_amount']
 
     @classmethod
+    @check_args('indemnification_periods')
+    def _re_get_indemnification_periods(cls, args):
+        return args['indemnification_periods']
+
+    @classmethod
     @check_args('service')
     def _re_annuity_periods(cls, args, start_date, end_date):
         return args['service'].calculate_annuity_periods(start_date,
