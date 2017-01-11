@@ -225,7 +225,8 @@ class EndorsementWizardStepMixin(model.CoogView):
 
     @classmethod
     def allow_effective_date_before_contract(cls, select_screen):
-        return False
+        return any(x.view == 'change_start_date'
+            for x in select_screen.endorsement_definition.endorsement_parts)
 
     @classmethod
     def allow_inactive_contracts(cls):
