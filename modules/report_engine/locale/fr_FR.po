@@ -162,30 +162,6 @@ msgctxt "field:report.convert.select_templates,templates:"
 msgid "Templates"
 msgstr "Modèles"
 
-msgctxt "field:report.create.attach,attachment:"
-msgid "Data File"
-msgstr "Fichier"
-
-msgctxt "field:report.create.attach,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:report.create.attach,name:"
-msgid "Filename"
-msgstr "Nom du Fichier"
-
-msgctxt "field:report.create.input_parameters,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:report.create.input_parameters,parameters:"
-msgid "Parameters"
-msgstr "Paramètres"
-
-msgctxt "field:report.create.preview,email:"
-msgid "eMail"
-msgstr "Courrier Electronique"
-
 msgctxt "field:report.create.preview,id:"
 msgid "ID"
 msgstr "ID"
@@ -197,10 +173,6 @@ msgstr "Chemin du rapport généré"
 msgctxt "field:report.create.preview,output_report_name:"
 msgid "Output Report Name"
 msgstr "Nom du rapport"
-
-msgctxt "field:report.create.preview,party:"
-msgid "Party"
-msgstr "Tiers"
 
 msgctxt "field:report.create.preview,reports:"
 msgid "Reports"
@@ -226,25 +198,37 @@ msgctxt "field:report.create.preview.line,template:"
 msgid "Template"
 msgstr "Modèle"
 
-msgctxt "field:report.create.select_template,available_models:"
-msgid "Available Models"
-msgstr "Modèles disponibles"
-
-msgctxt "field:report.create.select_template,good_address:"
-msgid "Mail Address"
-msgstr "Adresse du courrier"
-
 msgctxt "field:report.create.select_template,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:report.create.select_template,models:"
-msgid "Models"
-msgstr "Modèles"
+msgctxt "field:report.create.select_template,parameters:"
+msgid "Parameters"
+msgstr "Paramètres"
 
-msgctxt "field:report.create.select_template,party:"
-msgid "Party"
-msgstr "Tiers"
+msgctxt "field:report.create.select_template,possible_recipients:"
+msgid "Possible Recipients"
+msgstr "Destinataires possibles"
+
+msgctxt "field:report.create.select_template,possible_templates:"
+msgid "Possible Templates"
+msgstr "Modèles disponibles"
+
+msgctxt "field:report.create.select_template,recipient:"
+msgid "Recipient"
+msgstr "Destinataire"
+
+msgctxt "field:report.create.select_template,recipient_address:"
+msgid "Recipient Address"
+msgstr "Adresse du destinataire"
+
+msgctxt "field:report.create.select_template,recipient_email:"
+msgid "Recipient Email"
+msgstr "Email du destinataire"
+
+msgctxt "field:report.create.select_template,template:"
+msgid "Template"
+msgstr "Modèle"
 
 msgctxt "field:report.template,code:"
 msgid "Code"
@@ -712,14 +696,6 @@ msgctxt "model:report.convert.select_templates,name:"
 msgid "Select Templates for Conversion"
 msgstr "Sélection des conversions à exécuter"
 
-msgctxt "model:report.create.attach,name:"
-msgid "Report Create Attach"
-msgstr "Création de l'attachement"
-
-msgctxt "model:report.create.input_parameters,name:"
-msgid "Report Input Parameters"
-msgstr "Entrer les paramètres de courrier"
-
 msgctxt "model:report.create.preview,name:"
 msgid "Report Create Preview"
 msgstr "Prévisualisation des rapports"
@@ -729,7 +705,7 @@ msgid "Report Create Preview Line"
 msgstr "Prévisualisation du rapport"
 
 msgctxt "model:report.create.select_template,name:"
-msgid "Report Create Select Template"
+msgid "Report Creation Select Template"
 msgstr "Sélection du modèle"
 
 msgctxt "model:report.template,name:"
@@ -872,14 +848,6 @@ msgctxt "view:report.convert.select_templates:"
 msgid "Update Templates"
 msgstr "Mise à jour des modèles de courrier"
 
-msgctxt "view:report.create.attach:"
-msgid "Attachment"
-msgstr "Pièce jointe"
-
-msgctxt "view:report.create.input_parameters:"
-msgid "Input Templates Parameters"
-msgstr "Entrer les paramètres de courrier"
-
 msgctxt "view:report.create.preview.line:"
 msgid "Report Preview"
 msgstr "Prévisualisation du courrier"
@@ -952,26 +920,6 @@ msgctxt "wizard_button:report.convert,select_templates,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:report.create,attach,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:report.create,attach,post_generation:"
-msgid "Complete"
-msgstr "Terminer"
-
-msgctxt "wizard_button:report.create,attach,post_generation:"
-msgid "Save"
-msgstr "Sauvegarder"
-
-msgctxt "wizard_button:report.create,input_parameters,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:report.create,input_parameters,generate_reports:"
-msgid "Generate"
-msgstr "Générer"
-
 msgctxt "wizard_button:report.create,preview_document,end:"
 msgid "Cancel"
 msgstr "Annuler"
@@ -984,16 +932,15 @@ msgctxt "wizard_button:report.create,preview_document,open_document:"
 msgid "Open"
 msgstr "Ouvrir"
 
-msgctxt "wizard_button:report.create,preview_document,select_model:"
+msgctxt "wizard_button:report.create,preview_document,select_template:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "wizard_button:report.create,select_model,end:"
+msgctxt "wizard_button:report.create,select_template,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt ""
-"wizard_button:report.create,select_model,generate_reports_or_input_parameters:"
+msgctxt "wizard_button:report.create,select_template,generate:"
 msgid "Generate"
 msgstr "Générer"
 

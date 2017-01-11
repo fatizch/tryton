@@ -5,8 +5,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="reports" colspan="4"/>
     <label name="output_report_name"/>
     <field name="output_report_name" colspan="3"/>
-    <label name="email"/>
-    <field name="email" colspan="3"/>
     <field name="output_report_filepath"/>
-    <field name="party"/>
 </form>

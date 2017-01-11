@@ -228,9 +228,10 @@ class ReportGenerate:
 
     @classmethod
     def execute(cls, ids, data, immediate_conversion=False):
-        template, = data['doc_template']
-        if template.output_kind == 'flow':
-            method_name = 'process_%s' % template.output_method
+        report_template = Pool().get('report.template')(
+            data['doc_template'][0])
+        if report_template.output_kind == 'flow':
+            method_name = 'process_%s' % report_template.output_method
             if hasattr(cls, method_name):
                 return getattr(cls, method_name)(ids, data)
             return '', '', False, ''
@@ -249,12 +250,13 @@ class ReportGenerate:
         from genshi.template import NewTextTemplate
         timestamp = datetime.datetime.fromtimestamp(time.time()
             ).strftime('%Y%m%d%H%f')
-        selected_template = data['doc_template'][0]
+        selected_template = Pool().get('report.template')(
+            data['doc_template'][0])
         records = cls._get_records(ids, data['model'], data)
         template_content = selected_template.generated_code
         tmpl = NewTextTemplate(template_content)
         result = tmpl.generate(**cls.get_context(records, data)).render()
-        return 'txt', bytearray(result), False, 'COOG_%s' % timestamp
+        return 'txt', bytearray(result, 'utf-8'), False, 'COOG_%s' % timestamp
 
 
 class ReportTemplate:
@@ -339,23 +341,21 @@ class ReportTemplate:
 class ReportCreate:
     __name__ = 'report.create'
 
-    def report_execute(self, ids, doc_template, report_context, reports):
+    def report_execute(self, ids, doc_template, report_context):
         if doc_template.output_kind != 'flow':
             return super(ReportCreate, self).report_execute(
-                ids, doc_template, report_context, reports)
-        else:
-            ReportModel = Pool().get('report.generate', type='report')
-            ext, filedata, prnt, file_basename = ReportModel.execute(ids,
-                report_context, immediate_conversion=False)
-            filename = '%s.%s' % (file_basename, ext)
-            created_file = self.create_flow_file(filename, filedata)
-            reports.append({
-                    'generated_report': created_file,
-                    'server_filepath': created_file,
-                    'file_basename': file_basename,
-                    'template': doc_template,
-                    })
-            return ext, filedata, prnt, file_basename
+                ids, doc_template, report_context)
+        ReportModel = Pool().get('report.generate', type='report')
+        ext, filedata, prnt, file_basename = ReportModel.execute(ids,
+            report_context, immediate_conversion=False)
+        filename = '%s.%s' % (file_basename, ext)
+        created_file = self.create_flow_file(filename, filedata)
+        return {
+            'generated_report': created_file,
+            'server_filepath': created_file,
+            'file_basename': file_basename,
+            'template': doc_template,
+            }
 
     @classmethod
     def create_flow_file(cls, file_basename, content):
@@ -366,25 +366,8 @@ class ReportCreate:
             _file.write(content)
         return filepath
 
-    def transition_generate_reports_or_input_parameters(self):
-        has_flow_model = False
-        has_standard_model = False
-        for cur_model in self.select_model.models:
-            if cur_model.output_kind == 'flow':
-                has_flow_model = True
-            elif cur_model.output_kind == 'model':
-                has_standard_model = True
-            if has_flow_model and has_standard_model:
-                Pool().get('report.template').raise_user_error('output_mixin')
-
-        if any([x.parameters for x in self.select_model.models]):
-            return 'input_parameters'
-        return 'generate_reports'
-
-    def finalize_reports(self, reports, printable_inst):
-        if not reports or reports[0]['template'].output_kind != 'flow':
-            return super(ReportCreate, self).finalize_reports(
-                reports, printable_inst)
-        else:
-            self.preview_document.reports = reports
-            return 'end'
+    def transition_generate(self):
+        next_state = super(ReportCreate, self).transition_generate()
+        if self.select_template.template.output_kind != 'flow':
+            return next_state
+        return 'end'

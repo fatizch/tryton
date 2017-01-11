@@ -1,15 +1,25 @@
-- **Impression/envoi par mail en un clic**
-- **Génération automatique de documents**
-- **Conversion pdf**
-- **Sauvegarde des versions de documents (originelle et/ou pdf) en GED
-  interne**
-- **Choix entre multi-documents en sortie ou un seul document fusionné**
-- **Sélection d'un ou plusieurs modèles de lettres à générer à la survenue
-  d'un évènement**
-- **Production asynchrone de documents suite à un évènement**: Les documents
-  à générer suite à la survenue d'un évènement peuvent l'être, au choix,
-  de manière synchrone ou de manière asynchrone. Dans le cas de la génération
-  synchrone, les documents sont produits dès la survenue de l'évènement. Dans
-  le cas de la génération asynchrone, une demande de production de documents
-  est enregistrée. Ces demandes peuvent ensuite être traitées par batch ou
-  manuellement avec l'assistant dédié.
+- **One-click printing / mailing**: The application interface allows the user
+  to directly choose what to do with the document which is going to be
+  generated.
+
+- **Event based document generation**: Configure inside the application the
+  events which should trigger an automatic document generation. It is possible
+  to select where the generated document should be placed on the server
+  filesystem.
+
+- **Pdf conversion**: The configuration allows to choose whether or not the
+  document should be converted to pdf or keep its original format.
+
+- **Internal EDM linking**: Generated documents can be configured to be stored
+  in the internal EDM. The storage format can be configured and may be
+  different than the one received by the user.
+
+- **Split or group documents**: When printing a group of documents, it is
+  possible to choose between one grouped file, or multiple files.
+
+- **Asynchronous document requests**: Event triggered document generations can
+  be configured for synchronous or asynchronouse behaviour. While synchronous
+  documents are generated right after the event occured, asynchronous documents
+  are stores as "document requests" that are planned in the future. Those 
+  requests can be automatically processed with a batch, or manually with a
+  dedicated wizard.

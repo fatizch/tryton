@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form string="Document Templates" col="2">
+    <label name="template"/>
+    <field name="template" widget="selection"/>
+    <separator name="parameters" colspan="2"/>
+    <field name="parameters" colspan="2" no_command="1"/>
+    <label name="recipient"/>
+    <field name="recipient" widget="selection"/>
+    <label name="recipient_address"/>
+    <field name="recipient_address" widget="selection"/>
+    <label name="recipient_email"/>
+    <field name="recipient_email" widget="selection"/>
+    <newline/>
+    <field name="possible_templates"/>
+    <field name="possible_recipients"/>
+</form>
