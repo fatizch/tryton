@@ -8,7 +8,7 @@ from trytond.modules.migrator import migrator, tools
 
 __all__ = [
     'MigratorPayment',
-]
+    ]
 
 
 class MigratorPayment(migrator.Migrator):
@@ -31,7 +31,7 @@ class MigratorPayment(migrator.Migrator):
                 })
 
     @classmethod
-    def select(cls, extra_args):
+    def select(cls, **kwargs):
         """Select all payments that are not reconciled, as migration of
         reconciliations takes care of creating reconciled payments.
         """
@@ -44,7 +44,7 @@ class MigratorPayment(migrator.Migrator):
             cls.func_key)
 
     @classmethod
-    def init_cache(cls, rows):
+    def init_cache(cls, rows, **kwargs):
         pool = Pool()
         Account = pool.get('account.account')
         Journal = pool.get('account.journal')
@@ -109,7 +109,7 @@ class MigratorPayment(migrator.Migrator):
         return row
 
     @classmethod
-    def migrate_rows(cls, rows, ids, cursor_src=None):
+    def migrate_rows(cls, rows, ids, **kwargs):
         pool = Pool()
         Payment = Pool().get('account.payment')
 

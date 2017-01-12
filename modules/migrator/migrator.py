@@ -178,7 +178,7 @@ class Migrator(batch.BatchRootNoSelect):
         # By default query all table ids
         elif cls.table and cls.columns:
             cursor = tools.CONNECT_SRC.cursor()
-            select, select_key = cls.select(kwargs)
+            select, select_key = cls.select(**kwargs)
             for kw in ('limit', 'offset'):
                 if kwargs and kw in kwargs:
                     setattr(select, kw, int(kwargs[kw]))
@@ -243,7 +243,7 @@ class Migrator(batch.BatchRootNoSelect):
             if not rows:
                 cls.logger.warning(cls.error_message(
                     'no_rows') % (None, select,))
-            cls.init_cache(rows)
+            cls.init_cache(rows, **kwargs)
             res.update(cls.migrate_rows(rows, ids, **kwargs) or {})
         else:
             cls.logger.error(cls.error_message('no_rows') % (None, select,))

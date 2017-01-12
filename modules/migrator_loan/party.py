@@ -24,8 +24,8 @@ class MigratorLender(migrator.Migrator):
         cls.columns = {k: k for k in ('code', 'party')}
 
     @classmethod
-    def init_cache(cls, rows):
-        super(MigratorLender, cls).init_cache(rows)
+    def init_cache(cls, rows, **kwargs):
+        super(MigratorLender, cls).init_cache(rows, **kwargs)
         cls.cache_obj['party'] = tools.cache_from_query('party_party',
             ('code',), ('code', [r['party'] for r in rows]))
 

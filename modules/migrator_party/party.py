@@ -34,8 +34,8 @@ class MigratorParty(migrator.Migrator):
                 )}
 
     @classmethod
-    def init_cache(cls, rows):
-        super(MigratorParty, cls).init_cache(rows)
+    def init_cache(cls, rows, **kwargs):
+        super(MigratorParty, cls).init_cache(rows, **kwargs)
         cls.cache_obj['party'] = tools.cache_from_query('party_party',
             ('code', ), ('code', [r['code'] for r in rows]))
 
@@ -76,7 +76,7 @@ class MigratorPartyRelation(migrator.Migrator):
         cls.columns = {k: k for k in ('id', 'from_', 'to', 'type')}
 
     @classmethod
-    def init_cache(cls, rows):
+    def init_cache(cls, rows, **kwargs):
         cls.cache_obj['party'] = tools.cache_from_query('party_party',
             ('code', ), ('code', [r['from_'] for r in rows] +
                 [r['to'] for r in rows]))

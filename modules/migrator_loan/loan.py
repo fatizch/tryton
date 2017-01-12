@@ -44,8 +44,8 @@ class MigratorLoanIncrement(migrator.Migrator):
         return select
 
     @classmethod
-    def init_cache(cls, rows):
-        super(MigratorLoanIncrement, cls).init_cache(rows)
+    def init_cache(cls, rows, **kwargs):
+        super(MigratorLoanIncrement, cls).init_cache(rows, **kwargs)
         cls.cache_obj['loan'] = tools.cache_from_query('loan', ('number', ),
             ('number', [r['loan'] for r in rows]))
 
@@ -63,7 +63,7 @@ class MigratorLoanIncrement(migrator.Migrator):
         return row
 
     @classmethod
-    def migrate_rows(cls, rows_all, ids):
+    def migrate_rows(cls, rows_all, ids, **kwargs):
         pool = Pool()
         Loan = pool.get('loan')
         LoanIncrement = pool.get('loan.increment')
@@ -118,8 +118,8 @@ class MigratorLoan(migrator.Migrator):
                 })
 
     @classmethod
-    def init_cache(cls, rows):
-        super(MigratorLoan, cls).init_cache(rows)
+    def init_cache(cls, rows, **kwargs):
+        super(MigratorLoan, cls).init_cache(rows, **kwargs)
         cls.currency = Pool().get('currency.currency').search(
             [('code', '=', 'EUR')])[0]
         cls.company = Pool().get('company.company').search([])[0]
@@ -136,7 +136,7 @@ class MigratorLoan(migrator.Migrator):
         return row
 
     @classmethod
-    def migrate_rows(cls, rows, ids):
+    def migrate_rows(cls, rows, ids, **kwargs):
         pool = Pool()
         Loan = pool.get('loan')
         MigratorLoanIncrement = Pool().get('migrator.loan.increment')

@@ -68,8 +68,8 @@ class MigratorZip(migrator.Migrator):
         return select
 
     @classmethod
-    def init_cache(cls, rows):
-        super(MigratorZip, cls).init_cache(rows)
+    def init_cache(cls, rows, **kwargs):
+        super(MigratorZip, cls).init_cache(rows, **kwargs)
         cls.cache_obj['country'] = tools.cache_from_query('country_country',
             ('code',))
         cls.cache_obj['zip'] = tools.cache_from_query('country_zip',
@@ -89,7 +89,7 @@ class MigratorZip(migrator.Migrator):
         return row
 
     @classmethod
-    def migrate_rows(cls, rows, ids):
+    def migrate_rows(cls, rows, ids, **kwargs):
         to_upsert = {}
         done_keys = set()
         for (country, _zip, city, line5), _rows in groupby(rows, lambda r: (
@@ -107,7 +107,7 @@ class MigratorZip(migrator.Migrator):
             done_keys.add(key)
             to_upsert[key] = row
         if to_upsert:
-            cls.upsert_records(to_upsert.values())
+            cls.upsert_records(to_upsert.values(), **kwargs)
         return to_upsert
 
 
@@ -138,8 +138,8 @@ class MigratorAddress(migrator.Migrator):
         return select
 
     @classmethod
-    def init_cache(cls, rows):
-        super(MigratorAddress, cls).init_cache(rows)
+    def init_cache(cls, rows, **kwargs):
+        super(MigratorAddress, cls).init_cache(rows, **kwargs)
         cls.cache_obj['country'] = tools.cache_from_query('country_country',
             ('code', ))
         cls.cache_obj['party'] = tools.cache_from_query('party_party',
@@ -177,8 +177,8 @@ class MigratorContact(migrator.Migrator):
             })
 
     @classmethod
-    def init_cache(cls, rows):
-        super(MigratorContact, cls).init_cache(rows)
+    def init_cache(cls, rows, **kwargs):
+        super(MigratorContact, cls).init_cache(rows, **kwargs)
         cls.cache_obj['party'] = tools.cache_from_query('party_party',
             ('code', ), ('code', [r['party'] for r in rows]))
 
@@ -207,7 +207,7 @@ class MigratorContact(migrator.Migrator):
         return contacts
 
     @classmethod
-    def migrate_rows(cls, rows, ids):
+    def migrate_rows(cls, rows, ids, **kwargs):
         pool = Pool()
         to_create = []
         for row in rows:
