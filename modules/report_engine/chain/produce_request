@@ -1,0 +1,25 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=produce_request
+CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
+
+TREATMENT_DATE=""
+
+for i in "$@"
+do
+    case $i in
+        *)
+    shift
+    echo "'$i' ignored (unknown argument)" 1>&2
+    ;;
+esac
+done
+
+
+chain_begin
+
+chain_step report_production.request.batch_treat
+chain_wait report_production.request.batch_treat || chain_end
+
+chain_end

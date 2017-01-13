@@ -1,0 +1,30 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=snapshot
+CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
+
+TREATMENT_DATE=""
+
+for i in "$@"
+do
+    case $i in
+    --treatment_date=*)
+        TREATMENT_DATE="${i#*=}"
+    shift
+    ;;
+        *)
+    shift
+    echo "'$i' ignored (unknown argument)" 1>&2
+    ;;
+esac
+done
+
+[ -z "$TREATMENT_DATE" ] && echo 'Missing treatment_date' && exit 1
+
+chain_begin
+
+chain_step account.move.snapshot.take --treatment_date="$TREATMENT_DATE"
+chain_wait account.move.snapshot.take || chain_end
+
+chain_end
