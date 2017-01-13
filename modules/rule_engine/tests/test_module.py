@@ -25,25 +25,25 @@ class ModuleTestCase(test_framework.CoogTestCase):
     @classmethod
     def get_models(cls):
         return {
-            'RuleFunction': 'rule_engine.function',
             'Context': 'rule_engine.context',
-            'RuleEngine': 'rule_engine',
-            'TestCase': 'rule_engine.test_case',
-            'TestCaseValue': 'rule_engine.test_case.value',
-            'RunTests': 'rule_engine.run_tests',
+            'InitTestCaseFromExecutionLog': 'rule_engine.test_case.init',
             'Language': 'ir.lang',
-            'RuleParameter': 'rule_engine.rule_parameter',
+            'Log': 'rule_engine.log',
+            'RuleEngine': 'rule_engine',
             'RuleEngineRuleEngine': 'rule_engine-rule_engine',
             'RuleEngineTable': 'rule_engine-table',
+            'RuleFunction': 'rule_engine.function',
+            'RuleParameter': 'rule_engine.rule_parameter',
+            'RunTests': 'rule_engine.run_tests',
             'Table': 'table',
-            'Log': 'rule_engine.log',
-            'InitTestCaseFromExecutionLog': 'rule_engine.test_case.init',
+            'TestCase': 'rule_engine.test_case',
+            'TestCaseValue': 'rule_engine.test_case.value',
             'Runtime': 'rule_engine.runtime',
             'RuleError': 'functional_error',
         }
 
     @classmethod
-    def depending_modules(cls):
+    def fetch_models_for(cls):
         return ['table']
 
     def test0011_testCleanValues(self):
@@ -63,7 +63,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertRaises(trytond.error.UserError, te.save)
 
     def test0012_createRuleToolsRuleFunction(self):
-        english = self.Language.search([('code', '=', 'en_US')])
+        english = self.Language.search([('code', '=', 'en')])
 
         def create_tree_elem(the_type, name, translated_name, namespace,
                 description):
@@ -100,7 +100,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         ct.name = 'test_context'
         allowed_elements = []
         for elem in self.RuleFunction.search([
-                    ('language.code', '=', 'en_US')]):
+                    ('language.code', '=', 'en')]):
             allowed_elements.append(elem)
         ct.allowed_elements = allowed_elements
         self.assertEqual(len(ct.allowed_elements), 7)
@@ -720,10 +720,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
             datetime.date(2000, 1, 1))
 
         # Test _re_date_as_string
-        with Transaction().set_context(language='en_US'):
+        with Transaction().set_context(language='en'):
             self.assertEqual(self.Runtime._re_date_as_string({},
                     datetime.date(2000, 2, 1)), '02/01/2000')
-        with Transaction().set_context(language='fr_FR'):
+        with Transaction().set_context(language='fr'):
             self.assertEqual(self.Runtime._re_date_as_string({},
                     datetime.date(2000, 2, 1)), '01/02/2000')
 

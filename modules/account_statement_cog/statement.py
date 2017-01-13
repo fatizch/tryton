@@ -125,6 +125,7 @@ class Statement(export.ExportImportMixin):
     def on_change_with_in_bank_deposit_ticket(self, name=None):
         return self.journal and self.journal.bank_deposit_ticket_statement
 
+    @fields.depends('lines')
     def on_change_lines(self):
         # Workaround for issue #2743 : assume that we are in a recursion if
         # last line amount is None

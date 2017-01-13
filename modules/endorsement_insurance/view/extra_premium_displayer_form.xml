@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Extra Premium">
+<form>
     <field name="extra_premium" mode="form" colspan="4" expand_toolbar="0"/>
     <group id="invisible">
         <field name="contract"/>

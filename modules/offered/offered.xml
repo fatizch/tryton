@@ -165,16 +165,5 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">option_description_ending_rule_form</field>
         </record>
-        <!-- ############ -->
-        <!-- # Sequence # -->
-        <!-- ############ -->
-        <record model="ir.model.access" id="access_ir_sequence_admin">
-            <field name="model" search="[('model', '=', 'ir.sequence')]"/>
-            <field name="group" ref="group_offered_admin"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
-        </record>
     </data>
 </tryton>

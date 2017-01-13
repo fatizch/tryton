@@ -389,8 +389,8 @@ class ContractFee(model.CoogSQL, model.CoogView, ModelCurrency):
 
     @fields.depends('contract', 'currency', 'currency_symbol')
     def on_change_contract(self):
-        self.currency = self.contract.currency
-        self.currency_symbol = self.currency.symbol
+        self.currency = self.contract.currency if self.contract else None
+        self.currency_symbol = self.currency.symbol if self.currency else None
 
     @fields.depends('fee_type', 'fee', 'currency', 'overriden_amount',
         'overriden_rate', 'accept_fee', 'currency_symbol')

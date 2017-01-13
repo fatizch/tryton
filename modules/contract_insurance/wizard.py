@@ -562,6 +562,8 @@ class ExclusionDisplay(model.CoogView):
     @fields.depends('cur_exclusions', 'covered_element', 'new_exclusion',
         'used_exclusions')
     def on_change_new_exclusion(self):
+        if not self.covered_element:
+            return
         Displayer = Pool().get('contract.manage_exclusion.select.exclusion')
         self.cur_exclusions = list(self.cur_exclusions) + [
             Displayer.new_displayer(self.covered_element, self.new_exclusion,

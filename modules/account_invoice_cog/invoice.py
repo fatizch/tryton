@@ -142,7 +142,7 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
     def is_master_object(cls):
         return True
 
-    @fields.depends('state', 'amount_to_pay_today')
+    @fields.depends('state', 'amount_to_pay_today', 'total_amount')
     def on_change_with_icon(self, name=None):
         if self.state == 'cancel':
             return 'invoice_cancel'
@@ -192,12 +192,17 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
                     'move': None,
                     'invoice_date': new_invoice_date
                     })
+            new_moves = []
             for invoice, move in zip(invoices, previous_moves):
-                invoice.create_move()
-                to_post.append(invoice.move)
-                to_post.append(move.cancel())
+                new_moves.append(invoice.get_move())
+                invoice.move = new_moves[-1]
+            if new_moves:
+                Move.save(new_moves)
+                cls.save(invoices)
+            for invoice, previous_move in zip(invoices, previous_moves):
+                to_post.append(previous_move.cancel())
                 reconciliation = []
-                for line in move.lines + to_post[-1].lines:
+                for line in previous_move.lines + to_post[-1].lines:
                     if line.account != invoice.account:
                         continue
                     if line.reconciliation:
@@ -206,7 +211,7 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
                 else:
                     if reconciliation:
                         to_reconcile.append(reconciliation)
-        Move.post(to_post)
+        Move.post(new_moves + to_post)
         for lines in to_reconcile:
             Line.reconcile(lines)
         Event.notify_events(invoices, 'change_payment_term')

@@ -6,13 +6,13 @@ from trytond.pool import Pool, PoolMeta
 from trytond.modules.coog_core import fields, export
 from trytond.modules.country_cog import country
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Address',
     ]
 
 
 class Address(export.ExportImportMixin):
+    __metaclass__ = PoolMeta
     __name__ = 'party.address'
     _func_key = 'func_key'
 
@@ -20,7 +20,7 @@ class Address(export.ExportImportMixin):
     end_date = fields.Date('End Date')
     zip_and_city = fields.Function(
         fields.Many2One('country.zip', 'Zip'),
-        'get_zip_and_city', 'set_zip_and_city', searcher='search_zip_and_city')
+        'get_zip_and_city', 'setter_void', searcher='search_zip_and_city')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
 
@@ -73,12 +73,14 @@ class Address(export.ExportImportMixin):
             else:
                 self.zip = None
 
-    @fields.depends('zip', 'city', 'country', 'zip_and_city', 'streetbis')
-    def on_change_streetbis(self):
+    @fields.depends('address_lines', 'city', 'country', 'zip', 'zip_and_city')
+    def on_change_address_lines(self):
+        super(Address, self).on_change_address_lines()
         if not self.city or not self.zip:
             return
-        self.zip_and_city = self.find_zip_and_city(self.zip,
-            self.city, self.streetbis, self.country)
+        data_finder = {'zip': self.zip, 'city': self.city}
+        data_finder.update(self.address_lines)
+        self.zip_and_city = self.find_zip_and_city(data_finder)
         if self.zip_and_city:
             self.city = self.zip_and_city.city
             self.zip = self.zip_and_city.zip
@@ -100,16 +102,14 @@ class Address(export.ExportImportMixin):
             return ['']
 
     @classmethod
-    def get_domain_for_find_zip_and_city(cls, zip_, city, streetbis):
-        return [('city', '=', city), ('zip', '=', zip_)]
+    def get_domain_for_find_zip_and_city(cls, data):
+        return [('city', '=', data.get('city', '')),
+            ('zip', '=', data.get('zip', ''))]
 
     @classmethod
-    def find_zip_and_city(cls, zip_, city, streetbis, country=None):
-        if streetbis is None:
-            streetbis = ''
+    def find_zip_and_city(cls, data, country=None):
         Zip = Pool().get('country.zip')
-        domain = cls.get_domain_for_find_zip_and_city(zip_, city,
-                streetbis)
+        domain = cls.get_domain_for_find_zip_and_city(data)
         if country:
             domain.append(('country', '=', country.id))
         zips = Zip.search(domain, limit=1)
@@ -117,45 +117,20 @@ class Address(export.ExportImportMixin):
             return zips[0]
 
     def get_zip_and_city(self, name):
-        zip_and_city = self.find_zip_and_city(self.zip, self.city,
-            self.streetbis, self.country)
+        data_finder = {'zip': self.zip, 'city': self.city}
+        data_finder.update(self.address_lines or {})
+        zip_and_city = self.find_zip_and_city(data_finder, self.country)
         if zip_and_city:
             return zip_and_city.id
 
-    @fields.depends('zip', 'country', 'city', 'zip_and_city', 'streetbis')
+    @fields.depends('zip', 'country', 'city', 'zip_and_city', 'address_lines')
     def on_change_zip_and_city(self):
         self.city = self.zip_and_city.city if self.zip_and_city else ''
         self.zip = self.zip_and_city.zip if self.zip_and_city else ''
 
-    @classmethod
-    def set_zip_and_city(cls, addresses, name, vals):
-        pass
-
-    @fields.depends('street', 'streetbis', 'zip', 'city', 'subdivision',
-        'country')
     def get_address_as_char(self, name, with_return_carriage=False):
-        full_address = OrderedDict()
-        for k in ['street', 'streetbis', 'zip', 'city']:
-            full_address[k] = getattr(self, k)
-        for k in ['subdivision', 'country']:
-            value = getattr(self, k)
-            if value:
-                full_address[k] = value.name
-            else:
-                full_address[k] = ''
-
-        full_address['zip_and_city'] = ' '.join(x for x in (full_address[k] for
-                k in ['zip', 'city'] if full_address[k]))
-        full_address['sub_and_country'] = ' '.join(x for x in (full_address[k]
-                for k in ['subdivision', 'country'] if full_address[k]))
-
-        full_address.pop('city')
-        full_address.pop('zip')
-        full_address.pop('subdivision')
-        full_address.pop('country')
-
         sep = '\n' if with_return_carriage else ' '
-        return sep.join(x for x in full_address.values() if x)
+        return sep.join(self.get_full_address(None).splitlines())
 
     def get_rec_name(self, name):
         return self.get_address_as_char(name)

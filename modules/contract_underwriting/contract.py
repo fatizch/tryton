@@ -285,10 +285,13 @@ class ContractUnderwritingOption(model.CoogSQL, model.CoogView):
 
     @fields.depends('underwriting')
     def on_change_with_contract(self, name=None):
-        return self.underwriting.contract.id
+        if self.underwriting and self.underwriting.contract:
+            return self.underwriting.contract.id
 
     @fields.depends('extra_data')
     def on_change_with_extra_data_summary(self, name=None):
+        if not self.extra_data:
+            return ''
         return Pool().get('extra_data').get_extra_data_summary([self],
             'extra_data').values()[0]
 

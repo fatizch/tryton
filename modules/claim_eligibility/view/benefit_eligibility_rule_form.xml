@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Benefit Eligibility Rule">
+<form>
     <label name="rule"/>
     <field name="rule"/>
     <field name="rule_extra_data" no_command="1" colspan="4"/>

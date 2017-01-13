@@ -7,7 +7,6 @@ this repository contains the full copyright notices and license terms. -->
     </xpath>
     <xpath expr="/tree/field[@name='name']" position="replace"/>
     <xpath expr="/tree/field[@name='lang']" position="replace"/>
-    <xpath expr="/tree/field[@name='vat_code']" position="replace"/>
     <xpath expr="/tree" position="inside">
         <field name="is_person"/>
         <field name="main_address"/>

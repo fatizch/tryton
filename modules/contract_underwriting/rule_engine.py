@@ -2,13 +2,15 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
+from trytond.modules.coog_core import fields
+
 __all__ = [
     'RuleEngine',
     ]
 
 
 class RuleEngine:
+    __metaclass__ = PoolMeta
     __name__ = 'rule_engine'
 
     @classmethod
@@ -16,6 +18,7 @@ class RuleEngine:
         super(RuleEngine, cls).__setup__()
         cls.type_.selection.append(('underwriting', 'Underwriting'))
 
+    @fields.depends('type_')
     def on_change_with_result_type(self, name=None):
         if self.type_ == 'underwriting':
             return 'boolean'

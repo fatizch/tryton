@@ -8,6 +8,7 @@ Imports::
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
     >>> from proteus import config, Model, Wizard
+    >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.currency.tests.tools import get_currency
     >>> from trytond.modules.company.tests.tools import create_company, get_company
     >>> from trytond.modules.account.tests.tools import create_fiscalyear, \
@@ -23,16 +24,10 @@ Imports::
     >>> from trytond.modules.contract.tests.tools import add_quote_number_generator
     >>> from trytond.modules.country_cog.tests.tools import create_country
     >>> from trytond.modules.premium.tests.tools import add_premium_rules
-    >>> config = config.set_trytond()
-    >>> config.pool.test = True
 
 Install Modules::
 
-    >>> Module = Model.get('ir.module')
-    >>> contract_dunning_module = Module.find([
-    ...         ('name', '=', 'contract_insurance_invoice_dunning')])[0]
-    >>> contract_dunning_module.click('install')
-    >>> Wizard('ir.module.install_upgrade').execute('upgrade')
+    >>> config = activate_modules('contract_insurance_invoice_dunning')
 
 Create country::
 
@@ -113,22 +108,22 @@ Create dunning procedure::
     >>> level = procedure.levels.new()
     >>> level.name = 'Reminder'
     >>> level.sequence = 1
-    >>> level.days = 30
+    >>> level.overdue = datetime.timedelta(30)
     >>> level.apply_for = 'manual'
     >>> level = procedure.levels.new()
     >>> level.name = 'Formal Demand'
     >>> level.sequence = 2
-    >>> level.days = 60
+    >>> level.overdue = datetime.timedelta(60)
     >>> level = procedure.levels.new()
     >>> level.name = 'Suspend contract'
     >>> level.sequence = 2
-    >>> level.days = 90
+    >>> level.overdue = datetime.timedelta(90)
     >>> level.contract_action = 'hold'
     >>> level.dunning_fee = fee
     >>> level = procedure.levels.new()
     >>> level.name = 'Terminate contract'
     >>> level.sequence = 3
-    >>> level.days = 100
+    >>> level.overdue = datetime.timedelta(100)
     >>> level.contract_action = 'terminate'
     >>> level.termination_mode = 'at_last_posted_invoice'
     >>> procedure.save()

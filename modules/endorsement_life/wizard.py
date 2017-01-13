@@ -305,6 +305,8 @@ class ManageBeneficiariesDisplayer(model.CoogView):
 
     @fields.depends('action', 'beneficiary', 'beneficiary_id', 'name')
     def on_change_beneficiary(self):
+        if not self.beneficiary:
+            return
         self.name = self.beneficiary[0].on_change_with_rec_name()
         if not self.beneficiary_id or self.action == 'removed':
             return

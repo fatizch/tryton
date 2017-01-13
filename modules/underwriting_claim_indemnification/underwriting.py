@@ -33,7 +33,7 @@ class UnderwritingDecisionType:
             ('reduce_indemnification', 'Reduce Indemnifications'),
             ]
 
-    @classmethod
+    @fields.depends('decision', 'reduction_percentage')
     def on_change_decision(self):
         if self.decision != 'reduce_indemnification':
             self.reduction_percentage = 0

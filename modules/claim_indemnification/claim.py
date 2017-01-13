@@ -219,11 +219,9 @@ class ClaimService:
     @classmethod
     def __setup__(cls):
         super(ClaimService, cls).__setup__()
-        cls.__rpc__.update({
-                'create_indemnification': RPC(instantiate=0,
-                    readonly=False),
-                'fill_extra_datas': RPC(instantiate=0,
-                    readonly=False),
+        cls._buttons.update({
+                'create_indemnification': {},
+                'fill_extra_datas': {},
                 })
         cls._error_messages.update({
                 'overlap_date': 'Are you sure you want to cancel '

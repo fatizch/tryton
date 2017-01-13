@@ -55,6 +55,9 @@ class ContractContact(model._RevisionMixin, model.CoogSQL, model.CoogView):
         'on_change_with_is_address_required')
 
     def _on_change(self):
+        if not self.contract:
+            self.address = None
+            return
         if self.type and self.type.code == 'subscriber':
             self.party = self.contract.subscriber
         addresses = utils.filter_list_at_date(

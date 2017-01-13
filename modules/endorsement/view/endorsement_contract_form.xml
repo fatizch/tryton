@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Endorsement">
+<form>
     <label name="contract"/>
     <field name="contract"/>
     <field name="values" colspan="4"/>
@@ -12,8 +12,4 @@ this repository contains the full copyright notices and license terms. -->
     </notebook>
     <label name="state"/>
     <field name="state"/>
-    <group col="2" colspan="2" id="buttons">
-        <button name="draft" string="Draft"/>
-        <button name="apply" string="Apply"/>
-    </group>
 </form>

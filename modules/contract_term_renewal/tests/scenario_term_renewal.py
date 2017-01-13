@@ -5,11 +5,8 @@
 import datetime
 from proteus import config, Model, Wizard
 from dateutil.relativedelta import relativedelta
+from trytond.tests.tools import activate_modules
 from trytond.modules.currency.tests.tools import get_currency
-
-# #Comment# #Init Database
-config = config.set_trytond()
-config.pool.test = True
 
 # Useful for updating the tests without having to recreate a db from scratch
 # import os
@@ -21,13 +18,7 @@ config.pool.test = True
 
 
 # #Comment# #Install Modules
-Module = Model.get('ir.module')
-renewal_module = Module.find([('name', '=', 'contract_term_renewal')])[0]
-Module.install([renewal_module.id], config.context)
-endorsement_module = Module.find([('name', '=', 'endorsement')])[0]
-Module.install([endorsement_module.id], config.context)
-wizard = Wizard('ir.module.install_upgrade')
-wizard.execute('upgrade')
+config = activate_modules(['contract_term_renewal', 'endorsement'])
 
 # #Comment# #Get Models
 Account = Model.get('account.account')

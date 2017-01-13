@@ -126,8 +126,8 @@ class InvoiceLine:
         commission_amount = plan.compute(amount, product, pattern)
         return commission_amount
 
-    def get_move_line(self):
-        lines = super(InvoiceLine, self).get_move_line()
+    def get_move_lines(self):
+        lines = super(InvoiceLine, self).get_move_lines()
         if (not self.account.party_required or not self.invoice.contract or
                 not getattr(self.detail, 'fee', None) or
                 not self.detail.fee.broker_fee):
@@ -137,7 +137,7 @@ class InvoiceLine:
                 self.invoice.contract, self.details.fee.rec_name)
         # Update party to broker for broker fee line
         for line in lines:
-            line['party'] = self.invoice.contract.agent.party
+            line.party = self.invoice.contract.agent.party
         return lines
 
 
@@ -195,7 +195,7 @@ class Invoice:
         if (getattr(self, 'business_kind', None) in
                 ['insurer_invoice', 'broker_invoice'] and
                 self.type == 'in' and self.total_amount > 0):
-            line['payment_date'] = utils.today()
+            line.payment_date = utils.today()
         return line
 
     def get_synthesis_rec_name(self, name):

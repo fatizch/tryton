@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Option" cursor="beneficiaries" col="2">
+<form cursor="beneficiaries" col="2">
     <label name="coverage"/>
     <field name="coverage"/>
     <label name="beneficiary_clause"/>

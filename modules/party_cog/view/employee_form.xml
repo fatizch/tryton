@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form" position="replace_attributes">
-        <form string="Employee"/>
+        <form/>
     </xpath>
     <xpath expr="/form/group/label[@name='active']" position="before">
         <label name="company"/>

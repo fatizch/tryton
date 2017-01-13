@@ -4,28 +4,21 @@
 # #Comment# #Imports
 import datetime
 from proteus import config, Model, Wizard
+from trytond.tests.tools import activate_modules
 from decimal import Decimal
 
-# #Comment# #Init Database
-config = config.set_trytond()
-config.pool.test = True
 # Useful for updating the tests without having to recreate a db from scratch
 # import os
 # config = config.set_trytond(
 #     database='postgresql://tryton:tryton@localhost:5432/test_db',
 #     user='admin',
-#     language='en_US',
+#     language='en',
 #     config_file=os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
 #         'conf', 'trytond.conf'))
 # config.pool.test = True
 
 # #Comment# #Install Modules
-Module = Model.get('ir.module')
-endorsement_life_module = Module.find([
-        ('name', '=', 'endorsement_life')])[0]
-Module.install([endorsement_life_module.id], config.context)
-wizard = Wizard('ir.module.install_upgrade')
-wizard.execute('upgrade')
+config = activate_modules('endorsement_life')
 
 # #Comment# #Get Models
 Account = Model.get('account.account')

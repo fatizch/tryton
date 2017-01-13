@@ -270,37 +270,19 @@ class Invoice:
 
     def update_move_line_from_billing_information(self, line,
             billing_information):
-        return {'payment_date':
-            billing_information.get_direct_debit_planned_date(line)}
-
-    def _get_move_line_invoice_line(self):
-        res = super(Invoice, self)._get_move_line_invoice_line()
-        if not self.contract:
-            return res
-        for line in res:
-            line['contract'] = self.contract
-        return res
-
-    def _get_move_line_invoice_tax(self):
-        res = super(Invoice, self)._get_move_line_invoice_tax()
-        if not self.contract:
-            return res
-        for line in res:
-            line['contract'] = self.contract
-        return res
+        line.payment_date = billing_information.get_direct_debit_planned_date(
+            line)
 
     def _get_move_line(self, date, amount):
         line = super(Invoice, self)._get_move_line(date, amount)
         if not self.contract or not self.contract_invoice or not line:
             return line
-        line['contract'] = self.contract.id
-        contract_revision_date = max(line['maturity_date'],
-            utils.today())
+        line.contract = self.contract.id
+        contract_revision_date = max(line.maturity_date, utils.today())
         with Transaction().set_context(
                 contract_revision_date=contract_revision_date):
-            res = self.update_move_line_from_billing_information(
-                line, self.contract.billing_information)
-            line.update(res)
+            self.update_move_line_from_billing_information(line,
+                self.contract.billing_information)
             return line
 
     def update_invoice_before_post(self):
@@ -479,6 +461,13 @@ class InvoiceLine:
             if covered_element:
                 return covered_element.id
 
+    def get_move_lines(self):
+        lines = super(InvoiceLine, self).get_move_lines()
+        if self.invoice.contract:
+            for line in lines:
+                line.contract = self.invoice.contract
+        return lines
+
     @property
     def origin_name(self):
         if self.detail:
@@ -489,6 +478,17 @@ class InvoiceLine:
     def _get_origin(cls):
         return super(InvoiceLine, cls)._get_origin() + [
             'contract']
+
+
+class InvoiceTax:
+    __name__ = 'account.invoice.tax'
+
+    def get_move_lines(self):
+        lines = super(InvoiceTax, self).get_move_lines()
+        if self.invoice.contract:
+            for line in lines:
+                line.contract = self.invoice.contract
+        return lines
 
 
 class InvoiceLineDetail(model.CoogSQL, model.CoogView):

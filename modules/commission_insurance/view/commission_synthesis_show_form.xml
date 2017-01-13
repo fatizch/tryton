@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Commissions synthesis">
+<form>
     <label name="broker_fees_paid"/>
     <group id="broker_fees_paid">
         <field name="broker_fees_paid" xexpand="0"/>

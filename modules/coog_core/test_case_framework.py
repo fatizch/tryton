@@ -177,7 +177,7 @@ class TestCaseModel(ModelSingleton, model.CoogSQL, model.CoogView):
         Lang = Pool().get('ir.lang')
         langs = Lang.search([
                 ('translatable', '=', False),
-                ('code', 'in', ['fr_FR', 'en_US'])])
+                ('code', 'in', ['fr', 'en'])])
         # We force the write on existing records, do not use the auto-save on
         # test_case return values
         Lang.write(langs, {'translatable': True})
@@ -248,7 +248,7 @@ class TestCaseModel(ModelSingleton, model.CoogSQL, model.CoogView):
 
     @classmethod
     def translate_this(cls, msg_id, module_name):
-        if cls.get_language().code == 'en_US':
+        if cls.get_language().code == 'en':
             return msg_id
         cls.load_resources(module_name)
         return cls._loaded_resources[module_name]['translations'][msg_id]

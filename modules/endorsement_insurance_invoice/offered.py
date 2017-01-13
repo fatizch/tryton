@@ -97,6 +97,7 @@ class EndorsementPart:
         if part_h.column_exist('requires_contract_rebill'):
             part_h.drop_column('requires_contract_rebill')
 
+    @fields.depends('kind')
     def on_change_with_endorsed_model(self, name=None):
         if self.kind == 'billing_information':
             return Pool().get('ir.model').search([

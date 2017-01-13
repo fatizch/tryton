@@ -6,21 +6,12 @@ Imports::
 
     >>> import datetime
     >>> from proteus import config, Model, Wizard
+    >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.currency.tests.tools import get_currency
-
-Init Database::
-
-    >>> config = config.set_trytond()
-    >>> config.pool.test = True
 
 Install Modules::
 
-    >>> Module = Model.get('ir.module')
-    >>> full_contract_revision_module = Module.find([
-    ...         ('name', '=', 'endorsement_full_contract_revision')])[0]
-    >>> Module.install([full_contract_revision_module.id], config.context)
-    >>> wizard = Wizard('ir.module.install_upgrade')
-    >>> wizard.execute('upgrade')
+    >>> conf = activate_modules('endorsement_full_contract_revision')
 
 Get Models::
 
@@ -79,8 +70,8 @@ Create Company::
 
 Reload the context::
 
-    >>> config._context = User.get_preferences(True, config.context)
-    >>> config._context['company'] = company.id
+    >>> conf._context = User.get_preferences(True, conf.context)
+    >>> conf._context['company'] = company.id
 
 Create Product::
 

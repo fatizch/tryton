@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
+from trytond.modules.coog_core import fields
 from trytond.modules.rule_engine import check_args
 
 __metaclass__ = PoolMeta
@@ -47,6 +48,7 @@ class RuleEngine:
         super(RuleEngine, cls).__setup__()
         cls.type_.selection.append(('commission', 'Commission'))
 
+    @fields.depends('type_')
     def on_change_with_result_type(self, name=None):
         if self.type_ == 'commission':
             return 'decimal'

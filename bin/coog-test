@@ -17,7 +17,7 @@ coog_test_dropdb() { # drop test db from postgresql server
 coog_test_manual() { # interactively launch tests - [module *]
         unset TRYTOND_CONFIG
         unset DB_NAME
-        unset TRYTOND_CACHE_REDIS
+        unset TRYTOND_CACHE_CLASS
         coog_server_clearcache
         run-tests.py -c "$COOG_CONF_TEST" -vv -m "$@"
 }
@@ -48,7 +48,7 @@ coog_test_start() { # start test workers - <nb>
         [ ! -e "$TRYTOND_CONFIG" ] && echo bad conf file && return 1
         export TRYTOND_CONFIG
         unset DB_NAME
-        unset TRYTOND_CACHE_REDIS
+        unset TRYTOND_CACHE_CLASS
         coog_server_clearcache
         for i in $(seq 1 "$1")
         do

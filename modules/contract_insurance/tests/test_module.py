@@ -20,7 +20,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     module = 'contract_insurance'
 
     @classmethod
-    def depending_modules(cls):
+    def fetch_models_for(cls):
         return ['offered_insurance']
 
     @classmethod

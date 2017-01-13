@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Select Loan Shares">
+<form>
     <field name="shares_per_loan" mode="tree" expand_toolbar="0"/>
     <newline/>
     <field name="loan_share_selectors" mode="tree" expand_toolbar="0"/>

@@ -2,7 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
+from trytond.modules.coog_core import fields
+
 __all__ = [
     'RuleEngine',
     'RuleEngineRuntime',
@@ -10,6 +11,7 @@ __all__ = [
 
 
 class RuleEngine:
+    __metaclass__ = PoolMeta
     __name__ = 'rule_engine'
 
     @classmethod
@@ -20,6 +22,7 @@ class RuleEngine:
         cls.type_.selection.append(('coverage_amount_selection',
             'Coverage Amount Selection'))
 
+    @fields.depends('type_')
     def on_change_with_result_type(self, name=None):
         if self.type_ == 'coverage_amount_validation':
             return 'boolean'
@@ -29,7 +32,7 @@ class RuleEngine:
 
 
 class RuleEngineRuntime:
-
+    __metaclass__ = PoolMeta
     __name__ = 'rule_engine.runtime'
 
     @classmethod

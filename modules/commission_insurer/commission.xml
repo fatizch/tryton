@@ -15,7 +15,7 @@ this repository contains the full copyright notices and license terms. -->
         <menuitem parent="commission.menu_commission" sequence="50" action="act_commission_create_invoice_principal" id="menu_commission_create_invoice_principal"/>
         <record model="ir.translation" id="translation_invoice_line_description">
             <field name="name">received_premiums</field>
-            <field name="lang">en_US</field>
+            <field name="lang">en</field>
             <field name="type">error</field>
             <field name="src">Received Premium</field>
             <field name="value">Received Premium</field>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<tree string="Addresses">
+<tree>
     <field name="date"/>
     <field name="name" expand="1"/>
     <field name="party" expand="1"/>

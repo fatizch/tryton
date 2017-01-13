@@ -906,6 +906,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                 for contract in contracts
                 for option in contract.options])
 
+    @fields.depends('status')
     def on_change_with_is_sub_status_required(self, name=None):
         return self.status in _STATUSES_WITH_SUBSTATUS
 
@@ -1734,6 +1735,8 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
     @fields.depends('appliable_conditions_date', 'coverage', 'coverage_family',
         'current_extra_data', 'product', 'start_date', 'versions')
     def on_change_current_extra_data(self):
+        if not self.versions:
+            return
         current_version = self.get_version_at_date(utils.today())
         if not current_version:
             return

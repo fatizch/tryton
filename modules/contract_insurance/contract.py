@@ -847,11 +847,14 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         'versions')
     def on_change_contract(self):
         self.main_contract = self.contract
-        self.recalculate()
+        if self.main_contract:
+            self.recalculate()
 
     @fields.depends('current_extra_data', 'item_desc', 'main_contract',
         'party', 'party_extra_data', 'product', 'versions')
     def on_change_current_extra_data(self):
+        if not self.versions:
+            return
         current_version = self.get_version_at_date(utils.today())
         if not current_version:
             return
@@ -1063,6 +1066,9 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         return current_version
 
     def update_default_options(self):
+        if not self.product or not self.item_desc:
+            self.options = []
+            return
         available_coverages = self.get_coverages(self.product, self.item_desc)
         new_options = list(getattr(self, 'options', ()))
         for elem in new_options:
@@ -1556,7 +1562,7 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
     def on_change_with_max_rate(self, name=None):
         return self.motive.max_rate if self.motive else None
 
-    @fields.depends('value_as_string')
+    @fields.depends('option', 'motive', 'value_as_string')
     def on_change_with_rec_name(self, name=None):
         return self.get_rec_name(name)
 
@@ -1575,8 +1581,8 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
         return list(POSSIBLE_EXTRA_PREMIUM_RULES)
 
     def get_rec_name(self, name):
-        return '%s %s %s' % (self.option.rec_name,
-            self.get_value_as_string(name), self.motive.name)
+        return '%s %s %s' % (self.option.rec_name if self.option else '',
+            self.value_as_string, self.motive.name if self.motive else '')
 
     def get_value_as_string(self, name):
         if self.calculation_kind == 'flat' and self.flat_amount:

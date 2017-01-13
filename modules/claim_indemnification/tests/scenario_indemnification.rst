@@ -3,7 +3,8 @@
 
     >>> import datetime
     >>> from decimal import Decimal
-    >>> from proteus import config, Model, Wizard
+    >>> from proteus import Model, Wizard
+    >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.party_cog.tests.tools import create_party_person
     >>> from trytond.modules.contract.tests.tools import add_quote_number_generator
     >>> from trytond.modules.currency.tests.tools import get_currency
@@ -14,12 +15,7 @@
     ...     create_fiscalyear, create_chart, get_accounts)
     >>> from trytond.modules.account_invoice.tests.tools import (
     ...     set_fiscalyear_invoice_sequences)
-    >>> config = config.set_trytond()
-    >>> config.pool.test = True
-    >>> Module = Model.get('ir.module')
-    >>> claim_module = Module.find([('name', '=', 'claim_indemnification')])[0]
-    >>> claim_module.click('install')
-    >>> Wizard('ir.module.install_upgrade').execute('upgrade')
+    >>> config = activate_modules('claim_indemnification')
     >>> _ = create_country()
     >>> currency = get_currency(code='EUR')
     >>> _ = create_company(currency=currency)

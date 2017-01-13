@@ -799,7 +799,9 @@ class PaymentFailInformation(model.CoogView):
                 })
 
     @fields.depends('payments')
-    def on_change_payments(self, name=None):
+    def on_change_payments(self):
+        if not self.payments:
+            return
         methods = set([p.journal.process_method for p in self.payments])
         if len(methods) == 1:
             self.process_method = list(methods)[0]

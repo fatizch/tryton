@@ -4,7 +4,6 @@ from trytond.pool import Pool
 from trytond.model import Unique
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
-from trytond.rpc import RPC
 from trytond import backend
 
 from trytond.modules.coog_core import model, utils, fields
@@ -92,8 +91,6 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
-        cls.__rpc__.update({'get_product_def': RPC()})
-
         cls._error_messages.update({
                 'missing_contract_extra_data': 'The following contract extra'
                 'data should be set on the product: %s',
@@ -233,12 +230,6 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
                     % dict(SUBSCRIBER_KIND)[self.subscriber_kind]])
         return True, []
 
-    @classmethod
-    def get_product_def(cls, code):
-        products = cls.search([('code', '=', code)])
-        if len(products) == 1:
-            return products[0].extract_object('full')
-
     def get_change_coverages_order(self, name):
         return False
 
@@ -252,7 +243,8 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
         if template.template_extension == 'odt':
             return self.report_style_template
 
-    def on_change_with_currency_digits(self, name):
+    @fields.depends('currency')
+    def on_change_with_currency_digits(self, name=None):
         return self.currency.digits if self.currency else 2
 
 
@@ -426,7 +418,8 @@ class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def on_change_with_products_name(self, name=None):
         return ', '.join([x.name for x in self.products])
 
-    def on_change_with_currency_digits(self, name):
+    @fields.depends('currency')
+    def on_change_with_currency_digits(self, name=None):
         return self.currency.digits if self.currency else 2
 
     @fields.depends('code', 'name')

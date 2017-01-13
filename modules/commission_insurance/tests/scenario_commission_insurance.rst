@@ -7,6 +7,7 @@ Imports::
     >>> import datetime
     >>> from proteus import config, Model, Wizard
     >>> from decimal import Decimal
+    >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.currency.tests.tools import get_currency
     >>> from trytond.modules.company.tests.tools import create_company, get_company
     >>> from trytond.modules.account.tests.tools import create_fiscalyear, \
@@ -25,15 +26,10 @@ Imports::
 
 Create Database::
 
-    >>> config = config.set_trytond()
-    >>> config.pool.test = True
 
 Install Modules::
 
-    >>> Module = Model.get('ir.module')
-    >>> commission_module = Module.find([('name', '=', 'commission_insurance')])[0]
-    >>> commission_module.click('install')
-    >>> Wizard('ir.module.install_upgrade').execute('upgrade')
+    >>> config = activate_modules('commission_insurance')
 
 Create country::
 

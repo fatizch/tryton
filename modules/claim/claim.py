@@ -137,6 +137,7 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
             return self.rec_name
         return ', '.join([x.rec_name for x in self.losses])
 
+    @fields.depends('status')
     def on_change_with_is_sub_status_required(self, name=None):
         return self.status == 'closed'
 
@@ -240,9 +241,13 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
             self.sub_status = None
             self.end_date = None
 
-    @fields.depends('claimant', 'declaration_date', 'possible_contracts')
+    @fields.depends('claimant', 'declaration_date', 'main_contract',
+        'possible_contracts')
     def on_change_claimant(self):
-        self.possible_contracts = self.get_possible_contracts()
+        if self.claimant is None:
+            self.possible_contracts = []
+        else:
+            self.possible_contracts = self.get_possible_contracts()
         main_contract = None
         if len(self.possible_contracts) == 1:
             main_contract = self.possible_contracts[0]

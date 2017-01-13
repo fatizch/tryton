@@ -8,7 +8,7 @@ Le but de ce tutoriel est de présenter l'environnement de travail Coog.
 
 Lorsque vous lancez Coog, l'application vous demande de vous identifier. Voici le détail des informations à saisir:
 
-* Hôte: Adresse du serveur Coog et port. Par défaut le port est 7999
+* Hôte: Adresse du serveur Coog et port. Par défaut le port est 8000
 * Base de données: Base de données sur laquelle se connecter
 * Nom d'utilisateur: Nom de l'utilisateur
 * Mot de passe: Mot de passe de l'utilisateur

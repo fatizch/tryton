@@ -66,7 +66,7 @@ coog_client_tail() { # tail logs - [tail args]
 }
 
 coog_client_po() { # update client po file from source code [lang]
-        [ -z "$1" ] && echo needs language to update - example: fr_FR && return 1
+        [ -z "$1" ] && echo needs language to update - example: fr && return 1
         ( cd "$COOG_TRYTON" &&
                 python ./setup.py extract_messages --no-location --omit-header &&
                 python ./setup.py update_catalog --ignore-obsolete=true -l "$1" &&
@@ -74,6 +74,6 @@ coog_client_po() { # update client po file from source code [lang]
 }
 
 coog_client_mo() { # generates mo file in client [lang]
-        [ -z "$1" ] && echo needs language to generate - example: fr_FR && return 1
+        [ -z "$1" ] && echo needs language to generate - example: fr && return 1
         ( cd "$COOG_TRYTON" && python ./setup.py compile_catalog --locale "$1" )
 }

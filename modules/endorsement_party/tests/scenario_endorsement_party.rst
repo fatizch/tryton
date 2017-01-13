@@ -8,22 +8,14 @@ Imports::
     >>> from proteus import config, Model, Wizard
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
+    >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.party_cog.tests.tools import create_party_person
     >>> from trytond.modules.company.tests.tools import create_company, get_company
     >>> from trytond.modules.coog_core.test_framework import test_values_against_model
 
-Init Database::
-
-    >>> config = config.set_trytond()
-    >>> config.pool.test = True
-
 Install Modules::
 
-    >>> Module = Model.get('ir.module')
-    >>> endorsement_module = Module.find([('name', '=', 'endorsement_party')])[0]
-    >>> Module.install([endorsement_module.id], config.context)
-    >>> wizard = Wizard('ir.module.install_upgrade')
-    >>> wizard.execute('upgrade')
+    >>> config = activate_modules('endorsement_party')
 
 Get Models::
 
@@ -112,12 +104,10 @@ Create or fetch Country::
     ...     'name': 'name1',
     ...     'start_date': datetime.date(2000, 1, 1),
     ...     'street': 'street1',
-    ...     'streetbis': 'streetbis1',
     ...     'zip_and_city': paris1}
     >>> new_data = {
     ...     'name': 'name2',
     ...     'street': 'street2',
-    ...     'streetbis': 'streetbis2',
     ...     'zip_and_city': paris2}
 
 Create john::

@@ -755,6 +755,8 @@ class ManageOptions(EndorsementWizardStepMixin):
         'possible_coverages')
     def on_change_current_parent(self):
         self.update_contract()
+        if self.contract is None:
+            return
         self.update_all_options()
         self.update_current_options()
         self.update_possible_coverages()
@@ -762,6 +764,8 @@ class ManageOptions(EndorsementWizardStepMixin):
     @fields.depends('current_options', 'current_parent', 'effective_date',
         'possible_coverages')
     def on_change_current_options(self):
+        if not self.current_parent:
+            return
         self.update_possible_coverages()
 
     def calculate_possible_parents(self):
@@ -770,6 +774,8 @@ class ManageOptions(EndorsementWizardStepMixin):
     def update_contract(self):
         if isinstance(self._parent, Pool().get('endorsement.contract')):
             self.contract = self._parent.contract
+        elif self._parent is None:
+            self.contract = None
         else:
             raise NotImplementedError
 
@@ -1116,6 +1122,8 @@ class OptionDisplayer(model.CoogView):
     @fields.depends('action', 'cur_option_id', 'effective_date', 'end_date',
         'extra_data', 'extra_data_as_string', 'sub_status')
     def on_change_action(self):
+        if not self.action:
+            return
         pool = Pool()
         if self.action not in ('modified', 'added'):
             self.extra_data = pool.get('contract.option')(
@@ -1136,6 +1144,9 @@ class OptionDisplayer(model.CoogView):
     @fields.depends('action', 'cur_option_id', 'effective_date', 'extra_data',
         'extra_data_as_string')
     def on_change_extra_data(self):
+        if not self.extra_data and self.action is None:
+            self.extra_data_as_string = ''
+            return
         self.update_extra_data_string()
         if self.action == 'added':
             return
@@ -1858,6 +1869,8 @@ class SelectEndorsement(model.CoogView):
     @fields.depends('contract', 'contract_has_future_endorsement',
         'contract_in_process', 'effective_date', 'effective_date_before_today')
     def on_change_effective_date(self):
+        if not self.effective_date:
+            return
         self.effective_date_before_today = self.effective_date < utils.today()
         self.on_change_contract()
 

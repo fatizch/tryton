@@ -6,30 +6,23 @@ import datetime
 from decimal import Decimal
 from dateutil.relativedelta import relativedelta
 from proteus import config, Model, Wizard
+from trytond.tests.tools import activate_modules
 
 from trytond.modules.company.tests.tools import create_company, get_company
 from trytond.modules.currency.tests.tools import get_currency
 
-# #Comment# #Init Database
-config = config.set_trytond()
-config.pool.test = True
 # Useful for updating the tests without having to recreate a db from scratch
 # import os
 # config = config.set_trytond(
 #     database='postgresql://tryton:tryton@localhost:5432/test_db',
 #     user='admin',
-#     language='en_US',
+#     language='en',
 #     config_file=os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
 #         'conf', 'trytond.conf'))
 # config.pool.test = True
 
 # #Comment# #Install Modules
-Module = Model.get('ir.module')
-endorsement_loan_module = Module.find([
-        ('name', '=', 'endorsement_loan')])[0]
-Module.install([endorsement_loan_module.id], config.context)
-wizard = Wizard('ir.module.install_upgrade')
-wizard.execute('upgrade')
+config = activate_modules('endorsement_loan')
 
 # #Comment# #Get Models
 Account = Model.get('account.account')

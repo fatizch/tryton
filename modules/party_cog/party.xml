@@ -206,7 +206,6 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.action.act_window" id="act_menu_form">
             <field name="name">Synthesis</field>
-            <field name="window_name" eval="False"/>
             <field name="res_model">party.synthesis.menu</field>
             <field name="domain" eval="[['OR', ('party', 'in', Eval('active_ids', [])), ('party', '=', None)], ('parent', '=', None)]" pyson="1"/>
         </record>
@@ -242,7 +241,6 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.action.act_window" id="act_menu_open">
             <field name="name">Open Party Synthesis Menu</field>
-            <field name="window_name" eval="False"/>
         </record>
         <record model="ir.action.wizard" id="party.wizard_check_vies">
             <field name="active" eval="False"/>

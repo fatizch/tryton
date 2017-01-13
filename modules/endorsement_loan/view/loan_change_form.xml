@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Change Loan">
+<form>
     <group id="one_loan" colspan="4" yexpand="1" yfill="1">
         <field name="loan_changes" colspan="4" mode="form" expand_toolbar="0"/>
     </group>

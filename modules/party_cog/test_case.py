@@ -134,8 +134,8 @@ class TestCaseModel:
             try:
                 data = random.choice(files['address_%s.csv' % party_kind])
                 # zfill(5) is not country safe
-                address = cls.create_address(street=data['street'],
-                    streetbis=data['streetbis'],
+                address = cls.create_address(street='\n'.join(['', '',
+                            data['street'], data['streetbis']]),
                     country=cls.get_country(data['country']),
                     zip=data['zip'].zfill(5), city=data['city'])
             except:

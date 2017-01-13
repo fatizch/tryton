@@ -24,7 +24,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     module = 'contract_insurance_invoice'
 
     @classmethod
-    def depending_modules(cls):
+    def fetch_models_for(cls):
         return ['company_cog', 'currency_cog']
 
     @classmethod

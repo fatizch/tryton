@@ -470,7 +470,7 @@ class EndorsementCoveredElementOption(relation_mixin(
 
     @fields.depends('values', 'option')
     def on_change_with_coverage(self, name=None):
-        result = self.values.get('coverage', None)
+        result = self.values.get('coverage', None) if self.values else None
         if result:
             return result
         if self.option:

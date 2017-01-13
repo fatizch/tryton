@@ -136,7 +136,7 @@ def translate(model, var_name, src, ttype, lang=None):
 
 def translate_bool(value, lang=None):
     language = lang.code if lang else Transaction().language
-    if language == 'fr_FR':
+    if language == 'fr':
         return 'Vrai' if value else 'Faux'
     return str(value)
 

@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
+from trytond.modules.coog_core import fields
+
 __metaclass__ = PoolMeta
 __all__ = [
     'RuleEngine',
@@ -16,6 +18,7 @@ class RuleEngine:
         super(RuleEngine, cls).__setup__()
         cls.type_.selection.append(('renewal', 'Renewal'))
 
+    @fields.depends('type_')
     def on_change_with_result_type(self, name=None):
         if self.type_ == 'renewal':
             return 'date'

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Change Direct Debit Account" col="4">
+<form col="4">
     <group id="header" colspan="4">
         <label name="effective_date"/>
         <field name="effective_date"/>

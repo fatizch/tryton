@@ -18,8 +18,8 @@ class Invoice:
 
     def _get_move_line(self, date, amount):
         line = super(Invoice, self)._get_move_line(date, amount)
-        if line.get('payment_date', None):
+        if getattr(line, 'payment_date', None):
             dunning_procedure = self.get_dunning_procedure()
             if dunning_procedure and dunning_procedure.from_payment_date:
-                line['maturity_date'] = line['payment_date']
+                line.maturity_date = line.payment_date
         return line

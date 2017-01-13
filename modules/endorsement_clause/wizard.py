@@ -62,7 +62,8 @@ class ManageClauses(EndorsementWizardStepMixin):
 
     @fields.depends('contract', 'current_clauses', 'possible_clauses')
     def on_change_current_clauses(self):
-        self.update_possible_clauses()
+        if self.contract:
+            self.update_possible_clauses()
 
     def update_all_clauses(self):
         if not self.current_clauses:
@@ -82,6 +83,10 @@ class ManageClauses(EndorsementWizardStepMixin):
         self.current_clauses = new_clauses
 
     def update_possible_clauses(self):
+        if not self.contract:
+            self.possible_clauses = []
+            self.new_clause = None
+            return
         self.new_clause = None
         current_clauses = {
             x.clause for x in self.current_clauses

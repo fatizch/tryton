@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/tree" position="replace_attributes">
-        <tree string="Payment Groups" keyword_open="0"/>
+        <tree keyword_open="0"/>
     </xpath>
     <xpath expr="/tree/field[@name='number']" position="before">
         <field name="payment_dates"/>

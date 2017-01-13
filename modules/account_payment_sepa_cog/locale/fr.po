@@ -118,10 +118,6 @@ msgctxt "field:bank.account.number,mandates:"
 msgid "Sepa Mandates"
 msgstr "Mandats SEPA"
 
-msgctxt "field:party.party,is_sepa_creditor_identifier_needed:"
-msgid "Need SEPA Creditor Identifier"
-msgstr "SEPA Creditor Identifier nécessaire"
-
 msgctxt "model:account.payment.fail,name:"
 msgid "Payment Fail Batch"
 msgstr "Batch de rejets de paiements"

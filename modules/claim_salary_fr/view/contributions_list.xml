@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<tree string="Rates" editable="bottom">
+<tree editable="bottom">
     <field name="extra_data"/>
     <field name="ta">
-        <suffix string="%"/>
+        <suffix id="suffix" string="%"/>
     </field>
     <field name="tb">
-        <suffix string="%"/>
+        <suffix id="suffix" string="%"/>
     </field>
     <field name="tc">
-        <suffix string="%"/>
+        <suffix id="suffix" string="%"/>
     </field>
 </tree>

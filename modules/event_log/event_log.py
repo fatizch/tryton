@@ -43,7 +43,9 @@ class EventLog(model.CoogSQL, model.CoogView):
 
     @fields.depends('date')
     def on_change_with_date_str(self, name=None):
-        return Pool().get('ir.date').datetime_as_string(self.date)
+        if self.date:
+            return Pool().get('ir.date').datetime_as_string(self.date)
+        return ''
 
     @fields.depends('object_', 'description')
     def on_change_with_description_str(self, name=None):

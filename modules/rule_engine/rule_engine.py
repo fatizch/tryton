@@ -312,7 +312,7 @@ class RuleExecutionLog(ModelSQL, ModelView):
 
     @fields.depends('rule')
     def on_change_with_rule_algorithm(self, name=None):
-        return self.rule.algorithm
+        return self.rule.algorithm if self.rule else ''
 
     def init_from_rule_result(self, result):
         self.errors = '\n'.join(result.print_errors())
@@ -935,7 +935,9 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
     @fields.depends('name', 'algorithm')
     def on_change_with_execution_code(self, name=None):
-        return self.as_function(self.name, self.algorithm)
+        if self.algorithm:
+            return self.as_function(self.name, self.algorithm)
+        return ''
 
     @fields.depends('short_name', 'name')
     def on_change_with_short_name(self):

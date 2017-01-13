@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Confirm Report Production Request Treatment">
+<form>
     <image name="tryton-dialog-information" xexpand="0" xfill="0"/>
     <label string="Are you sure you want to treat these requests ?" id="confirm_report_production_request_treatment" yalign="0.0" xalign="0.0" xexpand="1"/>
     <field name="requests" colspan="4" expand_toolbar="0"/>

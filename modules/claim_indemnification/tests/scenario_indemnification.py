@@ -3,7 +3,8 @@
 # #Comment# # Init
 import datetime
 from decimal import Decimal
-from proteus import config, Model, Wizard
+from proteus import Model, Wizard
+from trytond.tests.tools import activate_modules
 
 # os.environ['DB_NAME'] = 'roederer_tests'
 
@@ -24,13 +25,7 @@ from trytond.modules.account.tests.tools import (
 from trytond.modules.account_invoice.tests.tools import (
     set_fiscalyear_invoice_sequences)
 
-config = config.set_trytond()
-config.pool.test = True
-
-Module = Model.get('ir.module')
-claim_module = Module.find([('name', '=', 'claim_indemnification')])[0]
-claim_module.click('install')
-Wizard('ir.module.install_upgrade').execute('upgrade')
+config = activate_modules('claim_indemnification')
 
 _ = create_country()
 
@@ -54,7 +49,6 @@ fiscalyear.click('create_period')
 fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(
     company, today=datetime.date(datetime.date.today().year + 1, 1, 1)))
 fiscalyear.click('create_period')
-
 
 # #Comment# #Create chart of accounts
 _ = create_chart(company)

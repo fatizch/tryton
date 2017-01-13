@@ -118,8 +118,10 @@ class ContractOption:
                         'coverage_amount': self.current_coverage_amount,
                         })
 
-    @fields.depends('current_coverage_amount', 'versions')
+    @fields.depends('current_coverage_amount', 'start_date', 'versions')
     def on_change_current_coverage_amount(self):
+        if not self.versions:
+            return
         current_version = self.get_version_at_date(self.start_date)
         if not current_version:
             return

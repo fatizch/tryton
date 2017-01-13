@@ -659,7 +659,7 @@ class ReportGenerate(Report):
             report_context['Lang'] = report_context['Party'].lang.code
         except AttributeError:
             report_context['Lang'] = pool.get('ir.lang').search([
-                    ('code', '=', 'en_US')])[0]
+                    ('code', '=', 'en')])[0]
         if data['sender']:
             report_context['Sender'] = pool.get('party.party')(data['sender'])
         else:

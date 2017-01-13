@@ -5,13 +5,13 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/tree/field[@name='procedure']" position="replace_attributes">
         <field name="procedure" expand="0"/>
     </xpath>
-    <xpath expr="/tree/field[@name='days']" position="replace_attributes">
-        <field name="days" expand="0"/>
+    <xpath expr="/tree/field[@name='overdue']" position="replace_attributes">
+        <field name="overdue" expand="0"/>
     </xpath>
     <xpath expr="/tree/field[@name='procedure']" position="before">
         <field name="name"/>
     </xpath>
-    <xpath expr="/tree/field[@name='days']" position="after">
+    <xpath expr="/tree/field[@name='overdue']" position="after">
         <field name="days_from_previous_step"/>
         <field name="not_mandatory"/>
     </xpath>

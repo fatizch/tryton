@@ -85,14 +85,14 @@ class Level(export.ExportImportMixin):
         pass
 
     def test(self, line, date):
-        if self.days_from_previous_step and self.days is not None:
+        if self.days_from_previous_step and self.overdue is not None:
             res = False
             if line.dunnings:
                 level_rank = self.procedure.levels.index(self)
                 previous_level = self.procedure.levels[level_rank - 1]
                 if line.dunnings[-1].level == previous_level:
                     res = (date - line.dunnings[-1].last_process_date).days \
-                        >= self.days
+                        >= self.overdue.days
         else:
             res = super(Level, self).test(line, date)
         if not res or not self.not_mandatory:

@@ -84,17 +84,9 @@ class CoogTestCase(ModuleTestCase):
     'Coog Test Case'
 
     @classmethod
-    def depending_modules(cls):
-        return []
-
-    @classmethod
-    def get_test_cases_to_run(cls):
-        return []
-
-    @classmethod
-    def install_module(cls):
+    def activate_module(cls):
         import trytond.tests.test_tryton
-        trytond.tests.test_tryton.install_module(cls.module)
+        trytond.tests.test_tryton.activate_module(cls.module)
 
     def run(self, result=None):
         test_function = getattr(self, self._testMethodName)
@@ -103,7 +95,7 @@ class CoogTestCase(ModuleTestCase):
                 'test_view', 'test_depends', 'test_menu_action',
                 'test_model_access', 'test9999_launch_test_cases',
                 'test_rec_name', 'test_workflow_transitions',
-                'test_field_methods'):
+                'test_field_methods', 'test_rpc_callable'):
             good_function = functools.partial(
                 prepare_test()(test_function, True), self)
             setattr(self, self._testMethodName, good_function)
@@ -114,20 +106,22 @@ class CoogTestCase(ModuleTestCase):
         return {}
 
     @classmethod
-    def get_all_modules(cls, modules):
-        for module in cls.depending_modules() + [cls.module]:
+    def fetch_models_for(cls):
+        return []
+
+    @classmethod
+    def get_modules_for_models(cls, modules):
+        for module in cls.fetch_models_for() + [cls.module]:
             if module in modules:
                 continue
             the_module = get_module_test_case(module)
             modules[module] = the_module
-            the_module.ModuleTestCase.get_all_modules(modules)
+            the_module.ModuleTestCase.get_modules_for_models(modules)
 
     def setUp(self):
         import trytond.tests.test_tryton
         modules = {}
-        self.get_all_modules(modules)
-        for module in modules.itervalues():
-            module.ModuleTestCase.install_module()
+        self.get_modules_for_models(modules)
 
         models = {
             'TestCaseModel': 'ir.test_case',
@@ -145,26 +139,13 @@ class CoogTestCase(ModuleTestCase):
                     v, type='wizard')
             self._models.update({k: good_model})
 
-        from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT
-        with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            with Transaction().new_transaction() as transaction, \
-                    Transaction().set_user(0):
-                try:
-                    self.TestCaseModel.run_test_cases([
-                            getattr(self.TestCaseModel, x)
-                            for x in self.get_test_cases_to_run()])
-                    transaction.commit()
-                except:
-                    transaction.rollback()
-                    raise
-
     def test9999_launch_test_cases(self):
         if not os.environ.get('DO_TEST_CASES'):
             return
         with Transaction().new_transaction() as transaction:
             test_case_instance = self.TestCaseModel.get_instance()
             test_case_instance.language, = self.Lang.search([
-                    ('code', '=', 'fr_FR')])
+                    ('code', '=', 'fr')])
             test_case_instance.save()
             transaction.commit()
         with Transaction().new_transaction() as transaction, \

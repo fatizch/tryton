@@ -4,11 +4,8 @@
 # #Comment# #Imports
 import datetime
 from proteus import config, Model, Wizard
+from trytond.tests.tools import activate_modules
 from trytond.modules.currency.tests.tools import get_currency
-
-# #Comment# #Init Database
-config = config.set_trytond()
-config.pool.test = True
 
 # Useful for updating the tests without having to recreate a db from scratch
 # import os
@@ -20,11 +17,7 @@ config.pool.test = True
 
 
 # #Comment# #Install Modules
-Module = Model.get('ir.module')
-endorsement_module = Module.find([('name', '=', 'endorsement_insurance')])[0]
-Module.install([endorsement_module.id], config.context)
-wizard = Wizard('ir.module.install_upgrade')
-wizard.execute('upgrade')
+config = activate_modules('endorsement_insurance')
 
 # #Comment# #Get Models
 Account = Model.get('account.account')

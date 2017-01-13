@@ -7,7 +7,7 @@ from sql.aggregate import Count
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.modules.rule_engine import check_args
-from trytond.modules.coog_core import coog_date
+from trytond.modules.coog_core import coog_date, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -28,6 +28,7 @@ class RuleEngine:
                 ('benefit_revaluation', 'Benefit: Revaluation'),
                 ])
 
+    @fields.depends('type_')
     def on_change_with_result_type(self, name=None):
         if self.type_ == 'benefit':
             return 'list'

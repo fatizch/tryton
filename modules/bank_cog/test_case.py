@@ -31,10 +31,11 @@ class TestCaseModel:
 
         Address = Pool().get('party.address')
         address = Address()
-        address.name = line[11:49].strip()
-        address.line3 = line[88:120].strip()
-        address.street = line[120:152].strip().upper()
-        address.streetbis = line[152:184].strip().upper()
+        address.street = '\n'.join([
+                line[11:49].strip(),
+                line[88:120].strip(),
+                line[120:152].strip().upper(),
+                line[152:184].strip().upper()])
         address.zip = line[184:189].strip().upper()
         address.city = line[190:216].strip().upper()
         country_code = check_for_pattern(line[240:242], r'^[A-Z]{2}')

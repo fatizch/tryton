@@ -163,10 +163,11 @@ class DocumentReception(model.CoogSQL, model.CoogView):
     def default_state(cls):
         return 'new'
 
-    @fields.depends('attachments', 'document_desc')
+    @fields.depends('action_defined', 'attachments', 'document_desc')
     def on_change_document_desc(self):
-        self.attachments[0].document_desc = self.document_desc
-        self.attachments = list(self.attachments)
+        if self.attachments:
+            self.attachments[0].document_desc = self.document_desc
+            self.attachments = list(self.attachments)
         if self.document_desc:
             self.action_defined = self.document_desc.when_received
 

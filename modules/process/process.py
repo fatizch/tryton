@@ -459,7 +459,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
 
     def build_xml_form_view(self):
         xml = '<?xml version="1.0"?>'
-        xml += '<form string="%s" col="4">' % self.fancy_name
+        xml += '<form col="4">'
         xml += '<group id="process_content" '
         xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1">'
         xml += self.get_xml_header()
@@ -486,7 +486,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
 
     def build_xml_tree_view(self):
         xml = '<?xml version="1.0"?>'
-        xml += '<tree string="%s">' % self.fancy_name
+        xml += '<tree>'
         xml += self.xml_tree
         xml += '</tree>'
         return xml
@@ -535,7 +535,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         Lang = Pool().get('ir.lang')
         good_langs = Lang.search(['OR',
                 ('translatable', '=', True),
-                ('code', '=', 'en_US'),
+                ('code', '=', 'en'),
                 ])
         good_menus = []
         for lang in good_langs:

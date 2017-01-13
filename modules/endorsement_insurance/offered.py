@@ -45,6 +45,7 @@ class EndorsementPart:
             cls.option_fields.states['invisible'],
             Eval('kind', '') != 'covered_element')
 
+    @fields.depends('kind')
     def on_change_with_endorsed_model(self, name=None):
         if self.kind in ('covered_element', 'extra_premium'):
             return Pool().get('ir.model').search([

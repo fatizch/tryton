@@ -66,11 +66,11 @@ class Agency(model.CoogSQL, model.CoogView):
 
     @fields.depends('bank_code')
     def on_change_bank_code(self):
-        self.bank_code = self.bank_code.zfill(5)
+        self.bank_code = self.bank_code.zfill(5) if self.bank_code else ''
 
     @fields.depends('branch_code')
     def on_change_branch_code(self):
-        self.branch_code = self.branch_code.zfill(5)
+        self.branch_code = (self.branch_code or '').zfill(5)
 
     @fields.depends('bank')
     def on_change_with_bank_party(self, name=None):

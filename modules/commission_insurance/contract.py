@@ -127,13 +127,15 @@ class Contract:
     @fields.depends('broker', 'agent', 'agency')
     def on_change_broker(self):
         self.broker_party = self.on_change_with_broker_party()
-        self.agent = self.on_change_with_agent()
+        if self.broker_party:
+            self.agent = self.on_change_with_agent()
         if not self.broker:
             self.agency = None
 
-    @fields.depends('broker_party')
+    @fields.depends('broker_party', 'product', 'start_date')
     def on_change_with_agent(self):
-        return utils.auto_complete_with_domain(self, 'agent')
+        if self.product and self.start_date:
+            return utils.auto_complete_with_domain(self, 'agent')
 
     @classmethod
     def change_broker(cls, contracts, new_broker, at_date,

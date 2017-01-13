@@ -18,7 +18,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     module = 'offered_insurance'
 
     @classmethod
-    def depending_modules(cls):
+    def fetch_models_for(cls):
         return ['rule_engine', 'company_cog']
 
     @classmethod

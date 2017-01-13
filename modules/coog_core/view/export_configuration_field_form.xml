@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Export Field Configuration">
+<form>
     <label name="field_model"/>
     <field name="field_model"/>
     <label name="export_light_strategy"/>

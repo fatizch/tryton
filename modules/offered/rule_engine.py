@@ -82,6 +82,7 @@ class RuleEngine:
         super(RuleEngine, cls).__setup__()
         cls.type_.selection.append(('ending', 'Ending'))
 
+    @fields.depends('type_')
     def on_change_with_result_type(self, name=None):
         if self.type_ == 'ending':
             return 'date'

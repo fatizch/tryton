@@ -4,7 +4,7 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/tree" position="inside">
         <field name="share" factor="100">
-            <suffix string="%"/>
+            <suffix id="suffix" string="%"/>
         </field>
     </xpath>
 </data>

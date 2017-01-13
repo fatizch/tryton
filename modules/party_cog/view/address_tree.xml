@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/tree" position="replace_attributes">
-        <tree string="Addresses" tree_state="1"/>
+        <tree tree_state="1"/>
     </xpath>
     <xpath expr="/tree/field[@name='name']" position="before">
         <field name="start_date"/>
@@ -14,8 +14,5 @@ this repository contains the full copyright notices and license terms. -->
     </xpath>
     <xpath expr="/tree/field[@name='city']" position="replace_attributes">
         <field name="city" tree_invisible="1"/>
-    </xpath>
-    <xpath expr="/tree/field[@name='streetbis']" position="after">
-        <field name="zip_and_city"/>
     </xpath>
 </data>

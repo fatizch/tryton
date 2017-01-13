@@ -2,44 +2,21 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
-from trytond.modules.party.address import STATES, DEPENDS
 
 from trytond.modules.coog_core import fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Address',
     ]
 
 
 class Address:
-
+    __metaclass__ = PoolMeta
     __name__ = 'party.address'
-
-    line3 = fields.Char('Building (Line 3)', help='''AFNOR - Line 3
-        Delivery point location
-        Wing or Building or Construction or Industrial zone''',
-        states=STATES, depends=DEPENDS)
 
     @classmethod
     def __setup__(cls):
         super(Address, cls).__setup__()
-        cls.name.string = 'Line 2'
-        cls.name.help = '''AFNOR - Line 2
-        For individual : Delivery Point Access Data
-        Door or Letterbox number, floor, staircase
-        For companies : Individual Identification Form of Address -
-        Given Name, Surname, function, Department'''
-
-        cls.street.help = '''AFNOR - Line 4
-            Street number or plot and thoroughfare -
-            Street or Avenue or Village...'''
-
-        cls.streetbis.string = 'Post Office (Line 5)'
-        cls.streetbis.help = '''AFNOR - Line 5
-            Delivery Service
-            Identification Thoroughfare Complement BP (P.O box)
-            and Locality (if different from the distribution area indicator'''
 
         # Set Siret invisible for person
         cls.siret.states = {
@@ -47,38 +24,18 @@ class Address:
         cls.siret_nic.states = {
             'invisible': Bool(Eval('_parent_party', {}).get('is_person'))}
 
-    @fields.depends('street')
-    def on_change_street(self):
-        # AFNOR rule, no comma after street number and line 4 should be upper
-        self.street = self.street.replace(',', '').upper()
+    @classmethod
+    def _format_address_FR(cls, lines):
+        lines = super(Address, cls)._format_address_FR(lines)
+        if lines is not None and '4_ligne4' in lines:
+            lines['4_ligne4'] = (lines['4_ligne4'] or '').replace(',', '')
+        return lines
 
-    @fields.depends('streetbis')
-    def on_change_streetbis(self):
-        # AFNOR rule, line 5 should be in uppercase
-        if self.streetbis:
-            self.streetbis = self.streetbis.upper()
-        super(Address, self).on_change_streetbis()
-
-    @fields.depends('city')
+    @fields.depends('city', 'country')
     def on_change_city(self):
         # AFNOR rule, line 6 must be in uppercase
-        self.city = self.city.upper()
-
-    def get_full_address(self, name):
-        res = ''
-        if self.name:
-            res = self.name + '\n'
-        if self.line3:
-            res += self.line3 + '\n'
-        if self.street:
-            res += self.street + '\n'
-        if self.streetbis:
-            res += self.streetbis + '\n'
-        if self.zip and self.city:
-            res += '%s %s' % (self.zip, self.city)
-        if self.country and self.country.code != 'FR':
-            res += self.country.name
-        return res
+        if self.country and self.country.code == 'FR':
+            self.city = self.city.upper() if self.city else ''
 
     def get_department(self):
         if not self.zip:
@@ -92,15 +49,20 @@ class Address:
         return self.zip[0:2]
 
     @classmethod
-    def get_domain_for_find_zip_and_city(cls, zip, city, streetbis):
-        return super(Address, cls).get_domain_for_find_zip_and_city(
-            zip, city, streetbis) + [('line5', '=', streetbis)]
+    def get_domain_for_find_zip_and_city(cls, data):
+        return super(Address, cls).get_domain_for_find_zip_and_city(data) + [
+            ('line5', '=', data.get('5_ligne5', ''))]
 
-    @fields.depends('zip', 'country', 'city', 'zip_and_city', 'streetbis')
+    @fields.depends('zip', 'country', 'city', 'zip_and_city', 'address_lines',
+        'street')
     def on_change_zip_and_city(self):
         super(Address, self).on_change_zip_and_city()
-        self.streetbis = (self.zip_and_city.line5) if self.zip_and_city \
-            else None
+        if self.country and self.country.code == 'FR':
+            values = (self.address_lines.copy() if self.address_lines else {})
+            values['5_ligne5'] = (self.zip_and_city.line5
+                if self.zip_and_city else '')
+            self.address_lines = values
+            self._update_street()
 
     @classmethod
     def _get_address_zipcode_equivalent_for_import(cls):

@@ -138,6 +138,8 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
     @fields.depends('contract', 'effective_date', 'new_billing_information',
         'other_contracts', 'previous_billing_information', 'subscriber')
     def on_change_new_billing_information(self):
+        if not self.new_billing_information:
+            return
         pool = Pool()
         Contract = pool.get('contract')
         Displayer = pool.get(

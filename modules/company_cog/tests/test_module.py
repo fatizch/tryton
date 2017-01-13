@@ -14,7 +14,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     module = 'company_cog'
 
     @classmethod
-    def depending_modules(cls):
+    def fetch_models_for(cls):
         return ['currency_cog']
 
     @classmethod

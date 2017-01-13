@@ -98,5 +98,6 @@ class Party:
                 person.ssn = person.ssn[0:SSN_LENGTH - size] + value
             cls.write([person], {'ssn': person.ssn})
 
+    @fields.depends('ssn_key', 'ssn_no_key')
     def on_change_with_ssn(self, name=None):
-        return self.ssn_no_key + self.ssn_key
+        return (self.ssn_no_key or '') + (self.ssn_key or '')

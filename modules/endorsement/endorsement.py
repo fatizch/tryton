@@ -2083,7 +2083,7 @@ class EndorsementOption(relation_mixin(
 
     @fields.depends('values', 'option')
     def on_change_with_coverage(self, name=None):
-        result = self.values.get('coverage', None)
+        result = (self.values or {}).get('coverage', None)
         if result:
             return result
         if self.option:

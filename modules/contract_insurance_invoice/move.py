@@ -210,11 +210,13 @@ class ReconcileShow:
     @fields.depends('contract', 'description', 'journal', 'lines', 'party',
         'remaining_repartition_method', 'write_off')
     def on_change_lines(self):
+        if not self.lines:
+            return
         self.write_off = self.on_change_with_write_off()
         self.on_change_write_off()
 
     @fields.depends('contract', 'description', 'journal', 'party',
-        'remaining_repartition_method')
+        'remaining_repartition_method', 'repartition_method_string')
     def on_change_remaining_repartition_method(self):
         pool = Pool()
         Contract = pool.get('contract')
@@ -231,7 +233,8 @@ class ReconcileShow:
         else:
             self.journal = Journal.get_default_journal('write-off')
         self.description = '%s - %s' % (self.repartition_method_string,
-            self.contract.rec_name if self.contract else self.party.rec_name)
+            self.contract.rec_name if self.contract
+            else self.party.rec_name if self.party else '')
 
     @fields.depends('contract', 'journal', 'party',
         'remaining_repartition_method', 'write_off')

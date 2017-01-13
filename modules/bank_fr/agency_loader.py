@@ -81,7 +81,8 @@ class AgenciesLoader:
                 address_values = None
                 if zip_and_city:
                     zip_, city = zip_and_city.split(None, 1)
-                    address_values = {'street': street, 'streetbis': streetbis,
+                    address_values = {'street': '\n'.join(['', '', street,
+                                streetbis]),
                         'zip': zip_, 'city': city, 'name': agency_name,
                         'party': bank.party.id}
 

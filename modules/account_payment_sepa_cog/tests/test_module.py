@@ -33,7 +33,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             }
 
     @classmethod
-    def depending_modules(cls):
+    def fetch_models_for(cls):
         return ['bank_cog', 'company_cog']
 
     def test0010_test_next_possible_payment_date(self):

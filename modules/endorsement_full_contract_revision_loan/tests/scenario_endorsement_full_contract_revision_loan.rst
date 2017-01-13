@@ -11,22 +11,13 @@ Imports::
     >>> from proteus import config, Model, Wizard
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
+    >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.company.tests.tools import create_company, get_company
     >>> from trytond.modules.currency.tests.tools import get_currency
 
-Init Database::
-
-    >>> config = config.set_trytond()
-    >>> config.pool.test = True
-
 Install Modules::
 
-    >>> Module = Model.get('ir.module')
-    >>> endorsement_loan_module = Module.find([
-    ...         ('name', '=', 'endorsement_full_contract_revision_loan')])[0]
-    >>> Module.install([endorsement_loan_module.id], config.context)
-    >>> wizard = Wizard('ir.module.install_upgrade')
-    >>> wizard.execute('upgrade')
+    >>> config = activate_modules('endorsement_full_contract_revision_loan')
 
 Get Models::
 

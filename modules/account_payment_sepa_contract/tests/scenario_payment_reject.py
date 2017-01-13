@@ -4,7 +4,8 @@
 # #Comment# #Imports
 import datetime
 from dateutil.relativedelta import relativedelta
-from proteus import config, Model, Wizard
+from proteus import Model, Wizard
+from trytond.tests.tools import activate_modules
 from trytond.modules.currency.tests.tools import get_currency
 from trytond.modules.company.tests.tools import create_company, get_company
 from trytond.modules.account.tests.tools import create_fiscalyear, \
@@ -21,15 +22,8 @@ from trytond.modules.contract.tests.tools import add_quote_number_generator
 from trytond.modules.country_cog.tests.tools import create_country
 from trytond.modules.premium.tests.tools import add_premium_rules
 
-config = config.set_trytond()
-config.pool.test = True
-
 # #Comment# #Install Modules
-Module = Model.get('ir.module')
-payment_sepa_module = Module.find(
-    [('name', '=', 'account_payment_sepa_contract')])[0]
-payment_sepa_module.click('install')
-Wizard('ir.module.install_upgrade').execute('upgrade')
+config = activate_modules('account_payment_sepa_contract')
 
 # #Comment# #Create country
 _ = create_country()

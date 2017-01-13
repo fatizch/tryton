@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Claim Service">
+<form>
     <notebook>
         <page string="Indemnisations" id="indemnifications">
             <field name="indemnifications" colspan="4" no_command="1" view_ids="claim_indemnification.indemnification_simple_view_list,claim_indemnification.indemnification_view_form"/>

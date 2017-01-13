@@ -571,6 +571,8 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
     def update_contract(self):
         if isinstance(self._parent, Pool().get('endorsement.contract')):
             self.contract = self._parent.contract
+        elif self._parent is None:
+            self.contract = None
         else:
             raise NotImplementedError
 
@@ -785,6 +787,9 @@ class CoveredElementDisplayer(model.CoogView):
         return self.check_versions_modified()
 
     def update_extra_data_string(self):
+        if not self.extra_data:
+            self.extra_data_as_string = ''
+            return
         self.extra_data_as_string = Pool().get(
             'extra_data').get_extra_data_summary([self], 'extra_data')[self.id]
 

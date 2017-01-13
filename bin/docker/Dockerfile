@@ -54,4 +54,4 @@ RUN ep link
 VOLUME ["/coog/sao", "/coog/coog-bench"]
 
 ENTRYPOINT ["ep"]
-EXPOSE 7999
+EXPOSE 8000

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Revision Blame" col="6">
+<form col="6">
     <group  col="6" rowspan="1" id="info">
         <label name="record_name" xfill="1" colspan="1"/>
         <field name="record_name" xexpand="0" readonly="1" colspan="1"/>

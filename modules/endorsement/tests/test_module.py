@@ -37,7 +37,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             }
 
     @classmethod
-    def depending_modules(cls):
+    def fetch_models_for(cls):
         return ['offered', 'contract']
 
     def test0000_test_add_endorsement_step(self):

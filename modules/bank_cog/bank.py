@@ -88,7 +88,7 @@ class Bank(export.ExportImportMixin):
 
     @fields.depends('bic')
     def on_change_with_bic(self):
-        return self.bic.upper().strip()
+        return self.bic.upper().strip() if self.bic else ''
 
 
 class BankAccount(export.ExportImportMixin):

@@ -235,7 +235,7 @@ class PaymentTermLine(export.ExportImportMixin):
 
 
 class PaymentTermLineRelativeDelta(export.ExportImportMixin):
-    __name__ = 'account.invoice.payment_term.line.relativedelta'
+    __name__ = 'account.invoice.payment_term.line.delta'
     _func_key = 'func_key'
 
     func_key = fields.Function(fields.Char('Functional Key'),

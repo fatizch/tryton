@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Process">
+<form>
     <field name="all_steps" mode="list" view_ids="process_cog.process_step_timing_view_list" expand_toolbar="0"/>
 </form>

@@ -555,7 +555,7 @@ class TranslationOverrideStart(ModelView):
     language = fields.Many2One('ir.lang', 'Language', required=True,
         domain=[
             ('translatable', '=', True),
-            ('code', '!=', 'en_US'),
+            ('code', '!=', 'en'),
             ])
     export_kind = fields.Selection([
             ('product', 'Product'),

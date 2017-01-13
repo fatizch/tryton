@@ -67,8 +67,10 @@ class Indemnification:
             return super(Indemnification, self).get_possible_products(name)
         return [x.id for x in self.service.benefit.company_products]
 
-    @fields.depends('beneficiary', 'possible_products', 'product')
+    @fields.depends('beneficiary', 'possible_products', 'product', 'service')
     def on_change_beneficiary(self):
+        if not self.service and not self.beneficiary:
+            return
         self.update_product()
 
     @classmethod

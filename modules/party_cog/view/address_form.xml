@@ -15,7 +15,10 @@ this repository contains the full copyright notices and license terms. -->
         <label name="zip_and_city"/>
         <field name="zip_and_city"/>
     </xpath>
-    <!--     <xpath expr="/form/label[@name='streetbis']" position="before">
-        <newline/>
-    </xpath> -->
+    <xpath expr="/form/label[@name='street']" position="replace">
+        <separator name="street" colspan="4"/>
+    </xpath>
+    <xpath expr="/form/field[@name='street']" position="replace_attributes">
+        <field name="street" colspan="4"/>
+    </xpath>
 </data>

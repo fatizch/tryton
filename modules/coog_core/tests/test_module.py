@@ -402,6 +402,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(len(proxied_list), 3)
 
     def test0043_test_method_definition_filter(self):
+        from trytond.pool import Pool
+
         method = self.MethodDefinition()
         self.assertEqual(method.get_possible_methods(), [])
 
@@ -414,8 +416,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         method.method_name = 'good_one'
 
         callee = self.TestMethodDefinition()
-        with mock.patch.object(trytond.tests.test_tryton.POOL,
-                'get') as pool_get:
+        with mock.patch.object(Pool, 'get') as pool_get:
             pool_get.return_value = self.TestMethodDefinition
             self.assertEqual(method.execute(10, callee), 10)
             pool_get.assert_called_with(

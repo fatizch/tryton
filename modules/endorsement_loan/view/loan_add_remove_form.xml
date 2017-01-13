@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Add Remove Loans">
+<form>
     <field name="loan_actions" mode="tree" expand_toolbar="0" colspan="4"/>
     <label name="new_loan"/>
     <field name="new_loan" colspan="3"/>

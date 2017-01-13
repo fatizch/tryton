@@ -357,6 +357,8 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
         if any([getattr(x, 'manual', None)
                 for x in getattr(self, 'increments', [])]):
             return
+        if not self.duration_unit or not self.payment_frequency:
+            return
         increments = []
         coeff = Decimal(coog_date.convert_frequency(self.duration_unit,
                 self.payment_frequency))

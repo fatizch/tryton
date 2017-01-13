@@ -439,7 +439,7 @@ class ExtraPremium:
 
     @fields.depends('option')
     def on_change_with_is_loan(self, name=None):
-        return self.option.coverage.family == 'loan'
+        return self.option.coverage.family == 'loan' if self.option else False
 
     @fields.depends('is_loan')
     def get_possible_extra_premiums_kind(self):
@@ -557,8 +557,10 @@ class LoanShare(model.CoogSQL, model.CoogView, model.ExpandTreeMixin):
     def default_share():
         return 1
 
+    @fields.depends('end_date', 'option', 'share', 'start_date')
     def on_change_with_icon(self, name=None):
-        if self.share == 0 or self.option.status in ['terminated', 'void']:
+        if self.share == 0 or self.option and self.option.status in [
+                'terminated', 'void']:
             return 'loan-interest-grey-cancel'
         elif (self.start_date or datetime.date.min) <= utils.today() <= (
                 self.end_date or datetime.date.max):

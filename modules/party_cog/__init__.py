@@ -1,45 +1,78 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from sql import Literal
+from sql.operators import Concat
+
 from trytond.pool import Pool
-from .party import *
-from .category import *
-from .contact_mechanism import *
-from .address import *
-from .test_case import *
-from .relationship import *
-from .res import *
-from .configuration import *
+
+import party
+import category
+import contact_mechanism
+import address
+import test_case
+import relationship
+import res
+import configuration
 
 from trytond.modules.coog_core import expand_tree
+
 PartyMenuTreeExpansion = expand_tree('party.synthesis.menu')
 
 
 def register():
+    migrate_1_10_include_name_in_street()
+
     Pool.register(
-        User,
-        Party,
-        Configuration,
-        PartyIdentifier,
-        PartyIdentifierType,
-        PartyCategory,
-        Address,
-        ContactMechanism,
-        PartyInteraction,
-        TestCaseModel,
-        RelationType,
-        PartyRelation,
-        PartyRelationAll,
-        SynthesisMenuActionCloseSynthesis,
-        SynthesisMenuActionRefreshSynthesis,
-        SynthesisMenuContact,
-        SynthesisMenuAddress,
-        SynthesisMenuPartyInteraction,
-        SynthesisMenuRelationship,
-        SynthesisMenu,
-        SynthesisMenuOpenState,
+        res.User,
+        party.Party,
+        configuration.Configuration,
+        party.PartyIdentifier,
+        party.PartyIdentifierType,
+        category.PartyCategory,
+        address.Address,
+        contact_mechanism.ContactMechanism,
+        contact_mechanism.PartyInteraction,
+        test_case.TestCaseModel,
+        relationship.RelationType,
+        relationship.PartyRelation,
+        relationship.PartyRelationAll,
+        party.SynthesisMenuActionCloseSynthesis,
+        party.SynthesisMenuActionRefreshSynthesis,
+        party.SynthesisMenuContact,
+        party.SynthesisMenuAddress,
+        party.SynthesisMenuPartyInteraction,
+        party.SynthesisMenuRelationship,
+        party.SynthesisMenu,
+        party.SynthesisMenuOpenState,
         PartyMenuTreeExpansion,
         module='party_cog', type_='model')
     Pool.register(
-        SynthesisMenuSet,
-        SynthesisMenuOpen,
+        party.SynthesisMenuSet,
+        party.SynthesisMenuOpen,
         module='party_cog', type_='wizard')
+
+
+def migrate_1_10_include_name_in_street():
+    from trytond import backend
+    from trytond.transaction import Transaction
+    from trytond.modules.party import Address
+
+    previous_register = Address.__register__.im_func
+
+    @classmethod
+    def patched_register(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().connection.cursor()
+        table = TableHandler(cls, module_name)
+        sql_table = cls.__table__()
+        migrate_name = table.column_exist('streetbis')
+
+        previous_register(cls, module_name)
+
+        # Migration from 1.10 : merge name into street
+        if migrate_name:
+            value = Concat(sql_table.name, Concat('\n', sql_table.street))
+            cursor.execute(*sql_table.update([sql_table.street], [value]))
+            cursor.execute(*sql_table.update([sql_table.name], [Literal('')]))
+
+    Address.__register__ = patched_register

@@ -980,18 +980,6 @@ class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView,
         return table, columns
 
     @classmethod
-    def view_header_get(cls, value, view_type='form'):
-        pool = Pool()
-        Party = pool.get('party.party')
-        context = Transaction().context
-        value = super(SynthesisMenu, cls).view_header_get(value,
-            view_type=view_type)
-        if context.get('party'):
-            party = Party(context['party'])
-            value = '%s - %s' % (party.rec_name, value)
-        return value
-
-    @classmethod
     def search_global(cls, text):
         party_ids = Transaction().context.get('party_synthesis')
         if party_ids:

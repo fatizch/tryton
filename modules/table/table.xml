@@ -137,7 +137,6 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_table_2d_relate_form">
             <field name="name">Table 2D</field>
             <field name="res_model">table.2d</field>
-            <field name="window_name" eval="False"/>
             <field name="context" eval="{'table': Eval('active_id'), 'dimension3': Eval('dimension3'), 'dimension4': Eval('dimension4')}" pyson="1"/>
         </record>
         <!-- Access Right -->

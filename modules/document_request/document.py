@@ -275,8 +275,10 @@ class DocumentRequest(Printable, model.CoogSQL, model.CoogView):
 
     @fields.depends('needed_by')
     def on_change_with_request_description(self, name=None):
-        return '%s %s' % (self.raise_user_error('document_request_for',
-                raise_exception=False), self.needed_by.get_rec_name(name))
+        if self.needed_by:
+            return '%s %s' % (self.raise_user_error('document_request_for',
+                    raise_exception=False), self.needed_by.get_rec_name(name))
+        return ''
 
     def get_contact(self, name=None):
         return self.needed_by.get_main_contact() if self.needed_by else None

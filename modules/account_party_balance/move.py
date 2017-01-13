@@ -311,7 +311,8 @@ class PartyBalance(ModelCurrency, model.CoogView):
 
     @fields.depends(*_FIELDS)
     def on_change_contract(self):
-        self.refresh()
+        if self.party:
+            self.refresh()
 
     def get_currency(self, name=None):
         return self.currency

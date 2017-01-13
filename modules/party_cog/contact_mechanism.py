@@ -114,6 +114,8 @@ class PartyInteraction(model.CoogSQL, model.CoogView):
 
     @fields.depends('contact_datetime')
     def on_change_with_contact_datetime_str(self, name=None):
+        if not self.contact_datetime:
+            return ''
         return Pool().get('ir.date').datetime_as_string(self.contact_datetime)
 
     @fields.depends('party', 'for_object_ref')

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Start Set Contributions">
+<form>
     <field name="rates" colspan="4" view_ids="claim_salary_fr.contributions_view_list"/>
     <field name="fixed_rates" colspan="4" view_ids="claim_salary_fr.fixed_contributions_view_list"/>
     <label name="propagate"/>

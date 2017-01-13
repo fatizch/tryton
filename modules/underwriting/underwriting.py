@@ -527,8 +527,10 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
         return 'waiting'
 
     @fields.depends('end_date_required', 'provisional_decision',
-        'underwriting')
+        'underwriting', 'underwriting_state')
     def on_change_underwriting(self):
+        if not self.underwriting:
+            return
         self.provisional_decision = self.underwriting.type_.waiting_decision
         self.decision = self.provisional_decision
         self.underwriting_state = self.underwriting.state

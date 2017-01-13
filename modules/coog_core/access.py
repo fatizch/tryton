@@ -69,7 +69,7 @@ class ModelField:
 
     @fields.depends('model')
     def on_change_with_model_name(self, name=None):
-        return self.model.name
+        return self.model.name if self.model else ''
 
     @classmethod
     def get_perms(cls, instances, name):

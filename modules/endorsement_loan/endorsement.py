@@ -176,11 +176,13 @@ class LoanIncrement:
         'deferral', 'number_of_payments', 'loan', 'payment_amount',
         'payment_frequency', 'rate')
     def on_change_payment_amount(self):
+        if self.loan is None:
+            return
         if self.payment_amount is None:
             self.payment_amount = self.calculate_payment_amount()
             self.calculated_amount = self.payment_amount
 
-    @fields.depends('calculated_amount')
+    @fields.depends('calculated_amount', 'payment_amount')
     def on_change_begin_balance(self):
         old_amount = self.payment_amount
         super(LoanIncrement, self).on_change_begin_balance()
@@ -189,7 +191,7 @@ class LoanIncrement:
             self.payment_amount = old_amount
         self.calculated_amount = new_amount
 
-    @fields.depends('calculated_amount')
+    @fields.depends('calculated_amount', 'payment_amount')
     def on_change_deferral(self):
         old_amount = self.payment_amount
         super(LoanIncrement, self).on_change_deferral()
@@ -198,7 +200,7 @@ class LoanIncrement:
             self.payment_amount = old_amount
         self.calculated_amount = new_amount
 
-    @fields.depends('calculated_amount')
+    @fields.depends('calculated_amount', 'payment_amount')
     def on_change_number_of_payments(self):
         old_amount = self.payment_amount
         super(LoanIncrement, self).on_change_number_of_payments()
@@ -207,7 +209,7 @@ class LoanIncrement:
             self.payment_amount = old_amount
         self.calculated_amount = new_amount
 
-    @fields.depends('calculated_amount')
+    @fields.depends('calculated_amount', 'payment_amount')
     def on_change_payment_frequency(self):
         old_amount = self.payment_amount
         super(LoanIncrement, self).on_change_payment_frequency()
@@ -216,7 +218,7 @@ class LoanIncrement:
             self.payment_amount = old_amount
         self.calculated_amount = new_amount
 
-    @fields.depends('calculated_amount')
+    @fields.depends('calculated_amount', 'payment_amount')
     def on_change_rate(self):
         old_amount = self.payment_amount
         super(LoanIncrement, self).on_change_rate()
@@ -667,19 +669,22 @@ class EndorsementLoanShare(relation_mixin(
     def default_definition(cls):
         return Transaction().context.get('definition', None)
 
-    @fields.depends('values')
+    @fields.depends('loan_share', 'values')
     def on_change_with_loan(self, name=None):
-        return self.values.get('loan', self.loan_share.loan.id)
+        return (self.values or {}).get('loan',
+            self.loan_share.loan.id if self.loan_share else None)
 
-    @fields.depends('values')
+    @fields.depends('loan_share', 'values')
     def on_change_with_share(self, name=None):
+        self.values = self.values or {}
         if self.loan_share:
             return self.values.get('share', self.loan_share.share)
         else:
             return self.values.get('share', None)
 
-    @fields.depends('values')
+    @fields.depends('loan_share', 'values')
     def on_change_with_start_date(self, name=None):
+        self.values = self.values or {}
         if self.loan_share:
             return self.values.get('start_date', self.loan_share.start_date)
         else:

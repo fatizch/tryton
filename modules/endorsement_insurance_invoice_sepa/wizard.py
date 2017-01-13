@@ -52,6 +52,8 @@ class ChangeBillingInformation:
     def on_change_new_billing_information(self):
         super(ChangeBillingInformation,
             self).on_change_new_billing_information()
+        if not self.new_billing_information:
+            return
         Mandate = Pool().get('account.payment.sepa.mandate')
         new_info = self.new_billing_information[0]
         previous_info = self.previous_billing_information[0]

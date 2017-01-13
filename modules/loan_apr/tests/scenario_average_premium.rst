@@ -8,21 +8,13 @@ Imports::
     >>> from proteus import config, Model, Wizard
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
+    >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.company.tests.tools import create_company, get_company
     >>> from trytond.modules.currency.tests.tools import get_currency
 
-Init Database::
-
-    >>> config = config.set_trytond()
-    >>> config.pool.test = True
-
 Install Modules::
 
-    >>> Module = Model.get('ir.module')
-    >>> loan_apr = Module.find([('name', '=', 'loan_apr')])[0]
-    >>> Module.install([loan_apr.id], config.context)
-    >>> wizard = Wizard('ir.module.install_upgrade')
-    >>> wizard.execute('upgrade')
+    >>> config = activate_modules('loan_apr')
 
 Get Models::
 

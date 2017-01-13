@@ -15,7 +15,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="end"/>
         <field name="base_amount"/>
         <field name="commission_rate" factor="100">
-            <suffix string="%"/>
+            <suffix id="suffix" string="%"/>
         </field>
         <field name="amount" sum="Amount"/>
     </xpath>

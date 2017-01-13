@@ -15,18 +15,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
     module = 'contract_insurance_document_request'
 
     @classmethod
-    def depending_modules(cls):
+    def fetch_models_for(cls):
         return ['contract']
 
     @classmethod
     def get_models(cls):
         return {
-            'DocumentRule': 'document.rule',
-            'DocumentDesc': 'document.description',
-            'RuleEngine': 'rule_engine',
-            'RuleContext': 'rule_engine.context',
-            'RuleToDocDescRelation': 'document.rule-document.description',
             'Attachment': 'ir.attachment',
+            'DocumentDesc': 'document.description',
+            'DocumentRule': 'document.rule',
+            'RuleContext': 'rule_engine.context',
+            'RuleEngine': 'rule_engine',
+            'RuleToDocDescRelation': 'document.rule-document.description',
             }
 
     @test_framework.prepare_test('contract.test0010_testContractCreation')

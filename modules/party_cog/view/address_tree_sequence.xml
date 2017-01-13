@@ -12,7 +12,4 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/tree/field[@name='city']" position="replace_attributes">
         <field name="city" tree_invisible="1"/>
     </xpath>
-    <xpath expr="/tree/field[@name='streetbis']" position="after">
-        <field name="zip_and_city"/>
-    </xpath>
 </data>

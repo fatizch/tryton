@@ -4,21 +4,13 @@ Imports::
     >>> import datetime
     >>> from decimal import Decimal
     >>> from proteus import config, Model, Wizard
+    >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.company.tests.tools import create_company, get_company
     >>> from trytond.modules.currency.tests.tools import get_currency
 
-Init Database::
-
-    >>> config = config.set_trytond()
-    >>> config.pool.test = True
-
 Install Modules::
 
-    >>> Module = Model.get('ir.module')
-    >>> invoice_module = Module.find([('name', '=', 'contract_waiver_premium')])[0]
-    >>> Module.install([invoice_module.id], config.context)
-    >>> wizard = Wizard('ir.module.install_upgrade')
-    >>> wizard.execute('upgrade')
+    >>> config = activate_modules('contract_waiver_premium')
 
 Get Models::
 

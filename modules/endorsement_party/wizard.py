@@ -10,7 +10,8 @@ from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.endorsement import (EndorsementWizardStepMixin,
     add_endorsement_step)
 from trytond.modules.party_relationship import PartyRelationAll
-from trytond.modules.party_cog import PartyRelationAll as PartyRelationAllCoog
+from trytond.modules.party_cog.relationship \
+    import PartyRelationAll as PartyRelationAllCoog
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -54,8 +55,10 @@ class AddressDisplayer(model.CoogView):
         effective_date = Transaction().context.get('effective_date')
         return [{'party': good_id, 'start_date': effective_date}]
 
-    @fields.depends('new_address', 'is_new')
+    @fields.depends('date', 'is_new', 'new_address', 'party')
     def on_change_new_address(self):
+        if not self.new_address:
+            return
         self.name = self.new_address[0].get_rec_name(None)
         if hasattr(self.new_address[0], 'start_date'):
             self.date = self.new_address[0].start_date
@@ -92,9 +95,9 @@ class ChangePartyAddress(EndorsementWizardStepMixin):
 
     @classmethod
     def _address_fields_to_extract(cls):
-        return ['name', 'street', 'streetbis', 'zip', 'city', 'start_date',
-            'end_date', 'party', 'country', 'zip_and_city', 'subdivision',
-            'active']
+        return ['name', 'street', 'address_lines', 'has_address_lines', 'zip',
+            'city', 'start_date', 'end_date', 'party', 'country',
+            'zip_and_city', 'subdivision', 'active']
 
     def _get_parties(self):
         return {x.party.id: x

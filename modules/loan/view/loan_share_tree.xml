@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<tree string="Loan Shares" editable="bottom">
+<tree editable="bottom">
     <field name="loan" icon="icon"/>
     <field name="share" factor="100">
-        <suffix string="%"/>
+        <suffix id="suffix" string="%"/>
     </field>
     <field name="start_date"/>
     <field name="end_date"/>

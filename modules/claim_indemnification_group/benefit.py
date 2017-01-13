@@ -167,7 +167,7 @@ class BenefitRule:
         self._on_change_rule('deductible_rule')
 
     @fields.depends('force_indemnification_rule', 'indemnification_rules',
-        'rule', 'rule_extra_data')
+        'indemnification_rule', 'indemnification_rule_extra_data')
     def on_change_force_indemnification_rule(self):
         self._on_change_rule('indemnification_rule')
 

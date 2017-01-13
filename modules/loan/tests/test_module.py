@@ -20,40 +20,24 @@ class ModuleTestCase(test_framework.CoogTestCase):
     module = 'loan'
 
     @classmethod
-    def depending_modules(cls):
-        return ['offered_insurance', 'contract_insurance',
-            'contract_insurance_process', 'contract_life_process']
-
-    @classmethod
-    def get_test_cases_to_run(cls):
-        return []
+    def fetch_models_for(cls):
+        return ['offered_insurance', 'contract_insurance']
 
     @classmethod
     def get_models(cls):
         return {
-            'Loan': 'loan',
-            'Lender': 'lender',
-            'LoanIncrement': 'loan.increment',
-            'Currency': 'currency.currency',
-            'Date': 'ir.date',
             'Account': 'account.account',
             'AccountKind': 'account.account.type',
-            'Sequence': 'ir.sequence',
-            'SequenceType': 'ir.sequence.type',
-            'ItemDescription': 'offered.item.description',
-            'ContractProcessLauncher': 'contract.subscribe',
-            'ExtraPremiumKind': 'extra_premium.kind',
-            'ExtraPremium': 'contract.option.extra_premium',
-            'ExtraData': 'extra_data',
-            'Contract': 'contract',
-            'Coverage': 'offered.option.description',
-            'LoanShare': 'loan.share',
-            'CoveredElement': 'contract.covered_element',
-            'Option': 'contract.option',
-            'Party': 'party.party',
             'Address': 'party.address',
+            'Contract': 'contract',
             'Country': 'country.country',
-            'ZipCode': 'country.zip',
+            'Coverage': 'offered.option.description',
+            'CoveredElement': 'contract.covered_element',
+            'Currency': 'currency.currency',
+            'Date': 'ir.date',
+            'ExtraData': 'extra_data',
+            'ExtraPremium': 'contract.option.extra_premium',
+            'ExtraPremiumKind': 'extra_premium.kind',
             'Insurer': 'insurer',
             'InsuredOutstandingLoanBalance':
                 'party.display_insured_outstanding_loan_balance',
@@ -63,6 +47,16 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 'party.display_insured_outstanding_loan_balance.line_view',
             'InsuredOutstandingLoanBalanceSelectDate':
                 'party.display_insured_outstanding_loan_balance.select_date',
+            'ItemDescription': 'offered.item.description',
+            'Lender': 'lender',
+            'Loan': 'loan',
+            'LoanIncrement': 'loan.increment',
+            'LoanShare': 'loan.share',
+            'Option': 'contract.option',
+            'Party': 'party.party',
+            'Sequence': 'ir.sequence',
+            'SequenceType': 'ir.sequence.type',
+            'ZipCode': 'country.zip',
             }
 
     @test_framework.prepare_test(

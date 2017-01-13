@@ -31,10 +31,6 @@ class Char(tryton_fields.Char):
     pass
 
 
-class Sha(tryton_fields.Sha):
-    pass
-
-
 class Text(tryton_fields.Text):
     pass
 

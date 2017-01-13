@@ -129,7 +129,6 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_open_contract_at_date">
             <field name="name">Contract</field>
             <field name="res_model">contract</field>
-            <field name="window_name" eval="False"/>
             <field name="domain" eval="[('id', 'in', Eval('contracts'))]" pyson="1"/>
             <field name="context" eval="{'_datetime': Eval('application_date'), 'contract': Eval('contract')}" pyson="1"/>
         </record>

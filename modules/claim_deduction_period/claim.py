@@ -77,7 +77,9 @@ class DeductionPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
     @fields.depends('amount_kind', 'amount_received', 'currency', 'end_date',
         'start_date')
     def on_change_with_daily_amount(self, name=None, round=True):
-        if self.amount_kind == 'per_day':
+        if self.amount_kind is None:
+            return None
+        elif self.amount_kind == 'per_day':
             return self.amount_received
         elif self.amount_kind == 'total':
             period_length = Decimal(coog_date.number_of_days_between(
@@ -90,6 +92,8 @@ class DeductionPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
 
     @fields.depends('amount_kind', 'amount_received', 'end_date', 'start_date')
     def on_change_with_total_amount(self, name=None):
+        if not self.amount_kind:
+            return None
         if self.amount_kind == 'total':
             return self.amount_received
         elif self.amount_kind == 'per_day':

@@ -14,7 +14,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     module = 'endorsement_set'
 
     @classmethod
-    def depending_modules(cls):
+    def fetch_models_for(cls):
         return ['endorsement', 'contract_set']
 
     @classmethod

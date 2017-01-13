@@ -29,7 +29,8 @@ coog_dep_main() { # install base deps
                 werkzeug \
                 Mock \
                 simpleeval \
-                python-ldap \
+                ldap3 \
+                chardet \
                 vobject \
                 raven \
                 redis \

@@ -1,0 +1,115 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:country.address.line,country:"
+msgid "Country"
+msgstr "Pays"
+
+msgctxt "field:country.address.line,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:country.address.line,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:country.address.line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:country.address.line,digits:"
+msgid "Digits"
+msgstr "Précision"
+
+msgctxt "field:country.address.line,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:country.address.line,name:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:country.address.line,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:country.address.line,selection:"
+msgid "Selection"
+msgstr "Sélection"
+
+msgctxt "field:country.address.line,selection_json:"
+msgid "Selection JSON"
+msgstr "Sélection JSON"
+
+msgctxt "field:country.address.line,selection_sorted:"
+msgid "Selection Sorted"
+msgstr "Sélection Triée"
+
+msgctxt "field:country.address.line,string:"
+msgid "Label"
+msgstr "Libellé"
+
+msgctxt "field:country.address.line,type_:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:country.address.line,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:country.address.line,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:country.address.line,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:country.country,address_line_configuration:"
+msgid "Address Line Configuration"
+msgstr "Configuration des lignes d'adresse"
+
+msgctxt "field:country.country,address_lines:"
+msgid "Address Lines"
+msgstr "Lignes d'adresse"
+
+msgctxt "field:party.address,address_lines:"
+msgid "Address Lines"
+msgstr "Lignes d'adresse"
+
+msgctxt "field:party.address,has_address_lines:"
+msgid "Has Address Lines"
+msgstr "Avec lignes d'adresses"
+
+msgctxt "help:country.address.line,selection:"
+msgid "A couple of key and label separated by \":\" per line"
+msgstr "Un couple de clé, valeur séparé par un \\\":\\\" par ligne"
+
+msgctxt "help:country.address.line,selection_sorted:"
+msgid "If the selection must be sorted on label"
+msgstr "Si la sélection doit être triée par le libéllé"
+
+msgctxt "model:country.address.line,name:"
+msgid "Country Address Line"
+msgstr "Ligne d'adresse"
+
+msgctxt "model:country.address.line,string:fr_afnor2"
+msgid "Escalier, N° d'appartement"
+msgstr "Escalier, N° d'appartement"
+
+msgctxt "model:country.address.line,string:fr_afnor3"
+msgid "Bâtiment"
+msgstr "Bâtiment"
+
+msgctxt "model:country.address.line,string:fr_afnor4"
+msgid "Numéro et libellé de voie"
+msgstr "Numéro et libellé de voie"
+
+msgctxt "model:country.address.line,string:fr_afnor5"
+msgid "Lieu dit, boîte postale..."
+msgstr "Lieu dit, boîte postale..."
+
+msgctxt "selection:country.address.line,type_:"
+msgid "Char"
+msgstr "Caractères"

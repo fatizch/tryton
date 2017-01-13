@@ -4,13 +4,6 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/label[@name='name']" position="replace"/>
     <xpath expr="/form/field[@name='name']" position="replace"/>
-    <xpath expr="/form/group[@id='checkboxes']" position="after">
-        <newline/>
-        <label name="name"/>
-        <field name="name"/>
-        <label name="line3"/>
-        <field name="line3"/>
-    </xpath>
     <xpath expr="/form/label[@name='subdivision']" position="replace"/>
     <xpath expr="/form/field[@name='subdivision']" position="replace"/>
 </data>

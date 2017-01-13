@@ -1,4 +1,4 @@
-<?xml version="1.0"?> <form string="New Waivers Of Premiums">
+<?xml version="1.0"?> <form>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
     <label name="start_date"/>

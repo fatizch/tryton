@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Update Templates">
+<form>
     <field name="message" colspan="4"/>
     <label name="search_for"/>
     <field name="search_for"/>

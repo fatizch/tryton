@@ -1194,10 +1194,10 @@ class Table2D(ModelSQL, ModelView):
         if dimension_title:
             title += ' (' + ', '.join(dimension_title) + ')'
         if view_type == 'tree':
-            xml += '<tree string="%s" editable="bottom">' % title
+            xml += '<tree editable="bottom">' % title
             xml += '<field name="row"/>'
         elif view_type == 'form':
-            xml += '<form string="%s" col="2">' % title
+            xml += '<form col="2">' % title
             xml += '<label name="row"/><field name="row"/>'
         for dimension in dimensions2:
             field_name = 'col%d' % dimension.id

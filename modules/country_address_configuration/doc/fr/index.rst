@@ -1,12 +1,13 @@
-.. endorsement
+.. transversal
 
-Avenant - Personne (FR)
-=======================
+Transverse - Configuration des lignes d'adresses
+================================================
 
 Résumé
 ------
 
 .. include:: summary.rst
+
 
 Fonctionnalités
 ---------------
@@ -17,5 +18,5 @@ Fonctionnalités
 .. toctree::
     :hidden:
 
-    features.rst
     summary.rst
+    features.rst

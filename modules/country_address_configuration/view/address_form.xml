@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/label[@name='street']" position="after">
+        <newline/>
+        <field name="address_lines" colspan="4" no_command="1"/>
+        <field name="has_address_lines" invisible="1"/>
+        <newline/>
+    </xpath>
+</data>

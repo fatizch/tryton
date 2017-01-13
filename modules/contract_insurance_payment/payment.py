@@ -145,7 +145,7 @@ class Payment:
         Invoice = pool.get('account.invoice')
         MoveLine = pool.get('account.move.line')
 
-        payment_line_to_modify = []
+        to_save = []
         for payment in payments:
             if not isinstance(payment.line.move.origin, Invoice):
                 continue
@@ -156,14 +156,9 @@ class Payment:
                 continue
             with Transaction().set_context(
                     contract_revision_date=contract_invoice.start):
-                res = invoice.update_move_line_from_billing_information(
-                    payment.line,
+                invoice.update_move_line_from_billing_information(payment.line,
                     contract_invoice.contract.billing_information)
-                for field_name, field_value in res.iteritems():
-                    setattr(payment.line, field_name, field_value)
-                payment_line_to_modify += [[payment.line], {
-                            'payment_date': payment.line.payment_date
-                        }]
+                to_save.append(payment.line)
 
-        if payment_line_to_modify:
-            MoveLine.write(*payment_line_to_modify)
+        if to_save:
+            MoveLine.save(to_save)

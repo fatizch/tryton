@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form string="Beneficiary">
+<form>
     <field name="beneficiary" mode="form" view_ids="endorsement_life.beneficiary_no_option_view_form" expand_toolbar="0"/>
 </form>

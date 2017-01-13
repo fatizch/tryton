@@ -116,8 +116,10 @@ _coog_env_server() { # set server vars
                 DB_NAME=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_SRV | python $COOG_BIN/parse-url.py | sed -n 6p` || return $?
         fi
         [ ! -z $DB_NAME ] && export DB_NAME
-        TRYTOND_CACHE_REDIS=`python $COOG_BIN/parse-config.py cache redis < $COOG_CONF_SRV 2> /dev/null`
-        [ ! -z $TRYTOND_CACHE_REDIS ] && export TRYTOND_CACHE_REDIS
+        TRYTOND_CACHE_CLASS=`python $COOG_BIN/parse-config.py cache class < $COOG_CONF_SRV 2> /dev/null`
+        [ ! -z $TRYTOND_CACHE_CLASS ] && export TRYTOND_CACHE_CLASS
+        TRYTOND_CACHE_URI=`python $COOG_BIN/parse-config.py cache uri < $COOG_CONF_SRV 2> /dev/null`
+        [ ! -z $TRYTOND_CACHE_URI ] && export TRYTOND_CACHE_URI
         if [ -z "$TRYTOND_ASYNC_RQ" ]
         then
                 TRYTOND_ASYNC_RQ=`python $COOG_BIN/parse-config.py async rq < $COOG_CONF_SRV 2> /dev/null`
@@ -199,7 +201,8 @@ coog_env_main() { # print meaningful vars for coog execution
         echo "    TRYTOND_WEB_ROOT       "$TRYTOND_WEB_ROOT
         echo "    TRYTOND_WEB_BENCH      "$TRYTOND_WEB_BENCH
         echo "    DB_NAME                "$DB_NAME
-        echo "    TRYTOND_CACHE_REDIS    "$TRYTOND_CACHE_REDIS
+        echo "    TRYTOND_CACHE_CLASS    "$TRYTOND_CACHE_CLASS
+        echo "    TRYTOND_CACHE_URI      "$TRYTOND_CACHE_URI
         echo "    TRYTOND_ASYNC_RQ       "$TRYTOND_ASYNC_RQ
         echo "    TRYTOND_ASYNC_CELERY   "$TRYTOND_ASYNC_CELERY
         echo "    TRYTOND_PERF_BROKER    "$TRYTOND_PERF_BROKER

@@ -215,7 +215,7 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoogView):
 
     @fields.depends('loan_actions', 'new_loan', 'possible_contracts')
     def on_change_new_loan(self):
-        if self.new_loan.id in [x.loan.id
+        if not self.new_loan or self.new_loan.id in [x.loan.id
                 for x in self.loan_actions if x.loan]:
             self.new_loan = None
             return
@@ -428,7 +428,8 @@ class AddRemoveLoanDisplayer(model.CoogView):
     def on_change_with_name(self):
         if self.contract:
             return '        ' + self.contract.rec_name
-        return self.loan.rec_name
+        if self.loan:
+            return self.loan.rec_name
 
 
 class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoogView):
@@ -633,7 +634,8 @@ class ChangeLoanDisplayer(model.CoogView):
 
     @fields.depends('new_values')
     def on_change_with_loan_rec_name(self):
-        return self.new_values[0].get_rec_name(None)
+        if self.new_values:
+            return self.new_values[0].get_rec_name(None)
 
 
 class ChangeLoan(EndorsementWizardStepMixin):

@@ -107,7 +107,7 @@ class UnderwritingResult:
 
     @fields.depends('underwriting')
     def on_change_with_is_claim(self, name=None):
-        if self.underwriting.on_object:
+        if self.underwriting and self.underwriting.on_object:
             return self.underwriting.on_object.__name__ == 'claim'
 
     @fields.depends('claim', 'is_claim', 'target', 'underwriting')

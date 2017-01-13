@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<tree string="Loan Shares" editable="bottom">
+<tree editable="bottom">
     <field name="parent_name" expand="1"/>
     <field name="loan" expand="1"/>
     <field name="previous_share" factor="100">
-        <suffix string="%"/>
+        <suffix id="suffix" string="%"/>
     </field>
     <field name="new_share" factor="100">
-        <suffix string="%"/>
+        <suffix id="suffix" string="%"/>
     </field>
     <field name="share_id" tree_invisible="1"/>
     <field name="parent" tree_invisible="1"/>

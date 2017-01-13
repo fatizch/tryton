@@ -163,6 +163,8 @@ class IndemnificationAssistantView(model.CoogView):
         elif self.mode == 'control':
             domain = [('status', '=', 'validated')]
             model_name = 'claim.indemnification.assistant.control.element'
+        else:
+            return
         pool = Pool()
         Element = pool.get(model_name)
         Indemnification = pool.get('claim.indemnification')
@@ -628,12 +630,10 @@ class CreateIndemnification(Wizard):
             beneficiary = self.result.indemnification[0].beneficiary
             start_date = self.result.indemnification[0].start_date
             end_date = self.result.indemnification[-1].end_date
-            indemnification_id = self.result.indemnification[0].id
             product_id = self.result.indemnification[0].product.id
         else:
             product_id = None
             definition = getattr(self, 'definition', None)
-            indemnification_id = None
             if definition and hasattr(definition, 'service'):
                 service = definition.service
             else:
@@ -661,7 +661,6 @@ class CreateIndemnification(Wizard):
             'end_date': end_date,
             'beneficiary': beneficiary.id,
             'extra_data': extra_data.extra_data_values,
-            'indemnification': [indemnification_id],
             'product': product_id,
             }
         return res

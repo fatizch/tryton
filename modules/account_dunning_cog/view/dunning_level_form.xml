@@ -6,7 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <label name="name"/>
         <field name="name"/>
     </xpath>
-    <xpath expr="/form/field[@name='days']" position="after">
+    <xpath expr="/form/field[@name='overdue']" position="after">
         <label name="days_from_previous_step"/>
         <field name="days_from_previous_step"/>
         <label name="not_mandatory"/>

@@ -61,6 +61,7 @@ class EndorsementPart:
         super(EndorsementPart, cls).__setup__()
         cls.kind.selection.append(('party', 'Party'))
 
+    @fields.depends('kind', 'party')
     def on_change_with_endorsed_model(self, name=None):
         if self.kind == 'party':
             return Pool().get('ir.model').search([

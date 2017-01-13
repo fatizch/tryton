@@ -63,6 +63,7 @@ class EndorsementPart:
         cls.kind.selection.append(('loan', 'Loan'))
         cls.kind.selection.append(('loan_share', 'Loan Share'))
 
+    @fields.depends('kind')
     def on_change_with_endorsed_model(self, name=None):
         if self.kind == 'loan':
             return Pool().get('ir.model').search([

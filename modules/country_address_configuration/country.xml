@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ########### -->
+        <!-- # Country # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="country_view_form">
+            <field name="model">country.country</field>
+            <field name="inherit" ref="country.country_view_form"/>
+            <field name="name">country_form</field>
+        </record>
+        <!-- ######################## -->
+        <!-- # Country Address Line # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="country_address_line_view_form">
+            <field name="model">country.address.line</field>
+            <field name="type">form</field>
+            <field name="name">country_address_line_form</field>
+        </record>
+        <record model="ir.ui.view" id="country_address_line_view_list">
+            <field name="model">country.address.line</field>
+            <field name="type">tree</field>
+            <field name="name">country_address_line_list</field>
+        </record>
+    </data>
+    <data skiptest="1" grouped="1">
+        <!-- ############################ -->
+        <!-- # Fr Address Configuration # -->
+        <!-- ############################ -->
+        <record model="country.address.line" id="fr_afnor2">
+            <field name="country" ref="country.fr"/>
+            <field name="name">2_ligne2</field>
+            <field name="string">Escalier, N° d'appartement</field>
+        </record>
+        <record model="country.address.line" id="fr_afnor3">
+            <field name="country" ref="country.fr"/>
+            <field name="name">3_ligne3</field>
+            <field name="string">Bâtiment</field>
+        </record>
+        <record model="country.address.line" id="fr_afnor4">
+            <field name="country" ref="country.fr"/>
+            <field name="name">4_ligne4</field>
+            <field name="string">Numéro et libellé de voie</field>
+        </record>
+        <record model="country.address.line" id="fr_afnor5">
+            <field name="country" ref="country.fr"/>
+            <field name="name">5_ligne5</field>
+            <field name="string">Lieu dit, boîte postale...</field>
+        </record>
+    </data>
+</tryton>

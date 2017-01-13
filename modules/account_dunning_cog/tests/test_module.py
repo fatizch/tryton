@@ -27,21 +27,21 @@ class ModuleTestCase(test_framework.CoogTestCase):
         procedure = self.Procedure(name='Procedure', code='procedure')
         procedure.save()
         level1 = self.Level()
-        level1.days = 20
+        level1.overdue = datetime.timedelta(20)
         level1.name = 'Level1'
         level1.days_from_previous_step = False
         level1.not_mandatory = True
         level1.procedure = procedure
         level1.save()
         level2 = self.Level()
-        level2.days = 60
+        level2.overdue = datetime.timedelta(60)
         level2.not_mandatory = False
         level2.days_from_previous_step = False
         level2.name = 'Level2'
         level2.procedure = procedure
         level2.save()
         level3 = self.Level()
-        level3.days = 10
+        level3.overdue = datetime.timedelta(10)
         level3.name = 'Level3'
         level3.not_mandatory = False
         level3.days_from_previous_step = True

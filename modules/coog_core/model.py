@@ -19,7 +19,6 @@ from trytond.cache import Cache
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 from trytond.wizard import Wizard, StateAction
-from trytond.rpc import RPC
 from trytond.tools import reduce_ids, cursor_dict
 
 import fields
@@ -170,11 +169,6 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
     create_date_ = fields.Function(
         fields.DateTime('Creation date'),
         '_get_creation_date')
-
-    @classmethod
-    def __setup__(cls):
-        super(CoogSQL, cls).__setup__()
-        cls.__rpc__.update({'extract_object': RPC(instantiate=0)})
 
     @classmethod
     def __post_setup__(cls):
@@ -421,15 +415,13 @@ class CoogView(ModelView, FunctionalErrorMixIn):
         xml = '<?xml version="1.0"?>'
         fnames = []
         if view_type == 'tree':
-            xml += '<tree string="%s">' % (cls.__doc__ or cls.__name__ +
-                ' Dev View')
+            xml += '<tree>'
             xml += '<field name="rec_name"/></tree>'
             fnames.append('rec_name')
         else:
             res = cls.fields_get()
             ignore_fields = cls._export_skips()
-            xml += '<form string="%s" col="2">' % (
-                cls.__doc__ or cls.__name__ + ' Dev View')
+            xml += '<form col="2">'
             for fname in sorted(res):
                 if fname in ignore_fields:
                     continue

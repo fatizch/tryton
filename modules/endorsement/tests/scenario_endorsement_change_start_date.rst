@@ -7,20 +7,12 @@ Imports::
     >>> import datetime
     >>> from proteus import config, Model, Wizard
     >>> from dateutil.relativedelta import relativedelta
+    >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.currency.tests.tools import get_currency
-
-Init Database::
-
-    >>> config = config.set_trytond()
-    >>> config.pool.test = True
 
 Install Modules::
 
-    >>> Module = Model.get('ir.module')
-    >>> endorsement_module = Module.find([('name', '=', 'endorsement')])[0]
-    >>> Module.install([endorsement_module.id], config.context)
-    >>> wizard = Wizard('ir.module.install_upgrade')
-    >>> wizard.execute('upgrade')
+    >>> config = activate_modules('endorsement')
 
 Get Models::
 
