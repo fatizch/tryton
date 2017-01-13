@@ -2,12 +2,13 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tree string="Claim Service">
-    <field name='loss_summary'/>
-    <field name='benefit_summary'/>
-    <field name='eligibility_status'/>
-    <field name='eligibility_comment_wrapped'/>
+    <field name="loss_summary"/>
+    <field name="benefit_summary"/>
+    <field name="eligibility_status"/>
+    <field name="eligibility_comment_wrapped"/>
+    <field name="indemnification_start_date"/>
     <field name="insurer_delegations"/>
-    <button name='check_eligibility' string='Check Eligibility'/>
+    <button name="check_eligibility" string="Check Eligibility"/>
     <button name="validate_services" string="Validate Eligibility"/>
     <button name="refuse_services" string="Decline Eligibility"/>
 </tree>

@@ -86,6 +86,10 @@ msgctxt "field:claim.service,eligibility_status:"
 msgid "Eligibility Status"
 msgstr "Statut des droits"
 
+msgctxt "field:claim.service,indemnification_start_date:"
+msgid "Indemnification Start Date"
+msgstr "Date de début d'indemnisation"
+
 msgctxt "model:benefit.eligibility.rule,name:"
 msgid "Benefit Eligibility Rule"
 msgstr "Règle d'éligibilité"

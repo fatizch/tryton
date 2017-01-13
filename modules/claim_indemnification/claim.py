@@ -212,6 +212,9 @@ class ClaimService:
     last_indemnification_date = fields.Function(
         fields.Date('Last Indemnification Date'),
         'get_last_indemnification_date')
+    indemnification_start_date = fields.Function(
+        fields.Date('Indemnification Start Date'),
+        'get_indemnification_start_date')
 
     @classmethod
     def __setup__(cls):
@@ -263,6 +266,11 @@ class ClaimService:
             if x.status == 'paid']
         if indemnifications:
             return max(x.end_date or x.start_date for x in indemnifications)
+        return None
+
+    def get_indemnification_start_date(self, name):
+        if self.deductible_end_date:
+            return self.deductible_end_date + datetime.timedelta(days=1)
         return None
 
     @classmethod
