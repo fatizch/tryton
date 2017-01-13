@@ -346,7 +346,7 @@ class ClaimService:
                 }]
 
     @classmethod
-    def cancel_indemnification(cls, services, at_date):
+    def cancel_indemnification(cls, services, from_date, to_date=None):
         Date = Pool().get('ir.date')
         to_cancel = []
         to_delete = []
@@ -356,14 +356,16 @@ class ClaimService:
                 if (indemn.status != 'cancelled' and
                         indemn.status != 'cancel_paid'):
                     if (service.benefit.indemnification_kind == 'capital' or
-                            at_date < indemn.end_date):
+                            ((not to_date or indemn.start_date <= to_date) and
+                                from_date < indemn.end_date)):
                         if indemn.status == 'paid':
                             to_cancel.append(indemn)
                         else:
                             to_delete.append(indemn)
         if to_cancel:
             if (service.benefit.indemnification_kind != 'capital' and
-                    at_date != to_cancel[0].start_date):
+                    (from_date > to_cancel[0].start_date or
+                        to_date < to_cancel[-1].end_date)):
                 cls.raise_user_error('offset_date')
             if service.benefit.indemnification_kind != 'capital':
                 cls.raise_user_warning('overlap_date', 'overlap_date',

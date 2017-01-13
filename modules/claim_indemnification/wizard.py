@@ -547,10 +547,19 @@ class CreateIndemnification(Wizard):
             if not delivered.loss.end_date or not delivered.indemnifications:
                 res.append(delivered)
                 continue
-            for indemnification in reversed(delivered.indemnifications):
-                if indemnification.status != 'cancelled':
-                    if delivered.loss.end_date > indemnification.end_date:
-                        res.append(delivered)
+            sorted_indemnifications = sorted([x
+                    for x in delivered.indemnifications
+                    if x.status != 'cancelled'],
+                key=lambda x: x.start_date)
+            if sorted_indemnifications[-1].end_date < delivered.loss.end_date:
+                res.append(delivered)
+                continue
+            for idx, indemn in enumerate(sorted_indemnifications):
+                if idx + 1 == len(sorted_indemnifications):
+                    break
+                if (sorted_indemnifications[idx + 1].start_date >
+                        indemn.end_date + relativedelta(days=1)):
+                    res.append(delivered)
                     break
         return res
 
@@ -643,6 +652,9 @@ class CreateIndemnification(Wizard):
                     service.loss.start_date)
             end_date = self.get_end_date(start_date, service)
         extra_data = utils.get_value_at_date(service.extra_datas, start_date)
+        if end_date and start_date > end_date:
+            start_date = None
+            end_date = None
         res = {
             'service': service.id,
             'start_date': start_date,
@@ -669,7 +681,8 @@ class CreateIndemnification(Wizard):
                 input_end_date < input_start_date or
                 input_start_date < service.loss.start_date):
             self.raise_user_error('wrong_date')
-        return ClaimService.cancel_indemnification([service], input_start_date)
+        return ClaimService.cancel_indemnification([service], input_start_date,
+            input_end_date)
 
     def init_indemnification(self, indemnification):
         ExtraData = Pool().get('claim.service.extra_data')
