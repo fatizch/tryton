@@ -259,8 +259,8 @@ api.qtime = function(queue, ...)
         local id = key:sub(#pattern+1)
         local job = broker.prepare(id)
         if is_eligible(job, queue, filter) then
-           local t = broker.time(id)
-           result = math.max(result, t)
+            local t = broker.time(id)
+            result = math.max(result, t)
         end
     end
     return result
