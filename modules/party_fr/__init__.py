@@ -10,16 +10,17 @@ import test_case
 
 
 def register():
-    migrate_1_10_include_line3_in_street()
-
     Pool.register(
         address.Address,
         party.Party,
         test_case.TestCaseModel,
         module='party_fr', type_='model')
 
+    Pool.register_post_init_hooks(migrate_1_10_include_line3_in_street,
+        module='party_fr')
 
-def migrate_1_10_include_line3_in_street():
+
+def migrate_1_10_include_line3_in_street(pool):
     from trytond import backend
     from trytond.transaction import Transaction
     from trytond.modules.party import Address
@@ -32,7 +33,8 @@ def migrate_1_10_include_line3_in_street():
         cursor = Transaction().connection.cursor()
         table = TableHandler(cls, module_name)
         sql_table = cls.__table__()
-        migrate_name = table.column_exist('streetbis')
+        migrate_name = table.column_exist('streetbis') and \
+            table.column_exist('line3')
 
         previous_register(cls, module_name)
 

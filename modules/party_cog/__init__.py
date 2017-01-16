@@ -20,8 +20,6 @@ PartyMenuTreeExpansion = expand_tree('party.synthesis.menu')
 
 
 def register():
-    migrate_1_10_include_name_in_street()
-
     Pool.register(
         res.User,
         party.Party,
@@ -51,8 +49,11 @@ def register():
         party.SynthesisMenuOpen,
         module='party_cog', type_='wizard')
 
+    Pool.register_post_init_hooks(migrate_1_10_include_name_in_street,
+        module='party_cog')
 
-def migrate_1_10_include_name_in_street():
+
+def migrate_1_10_include_name_in_street(pool):
     from trytond import backend
     from trytond.transaction import Transaction
     from trytond.modules.party import Address
