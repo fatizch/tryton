@@ -2,16 +2,13 @@
 CHAIN_NAME=underwriting
 CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
 
-[ $# -lt 1 ] && >&2 echo missing arguments && exit 1
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE')
+CHAIN_REQUIRED=('TREATMENT_DATE')
 
+chain_params "$@"
 chain_begin
 
-# executing many batches in || with != arguments
-# chain_step batch_1 --treatment_date="$1" --bar=foo
-# chain_step batch_2 --treatment_date="$1" --eggs=spam
-# chain_wait batch_1 batch_2 || chain_end
-
-chain_step underwriting.activate --treatment_date="$1"
+chain_step underwriting.activate ${GIVEN_PARAMETERS[@]}
 chain_wait underwriting.activate || chain_end
 
 chain_end

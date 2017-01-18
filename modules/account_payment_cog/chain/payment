@@ -4,41 +4,10 @@
 CHAIN_NAME=payment
 CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
 
-TREATMENT_DATE=""
-PAYMENT_KIND=""
-JOURNAL_METHODS=""
-GROUP_REFERENCE=""
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'PAYMENT_KIND' 'JOURNAL_METHODS' 'GROUP_REFERENCE')
+CHAIN_REQUIRED=('TREATMENT_DATE' 'PAYMENT_KIND' 'JOURNAL_METHODS')
 
-for i in "$@"
-do
-    case $i in
-    --treatment_date=*)
-        TREATMENT_DATE="${i#*=}"
-    shift
-    ;;
-    --payment_kind=*)
-        PAYMENT_KIND="${i#*=}"
-    shift
-    ;;
-    --journal_methods=*)
-        JOURNAL_METHODS="${i#*=}"
-    shift
-    ;;
-    --group_reference=*)
-        GROUP_REFERENCE="${i#*=}"
-    shift
-    ;;
-        *)
-    shift
-    echo "'$i' ignored (unknown argument)" 1>&2
-    ;;
-esac
-done
-
-[ -z "$TREATMENT_DATE" ] && echo 'Missing treatment_date' && exit 1
-[ -z "$PAYMENT_KIND" ] && echo 'Missing payment_kind' && exit 1
-[ -z "$JOURNAL_METHODS" ] && echo 'Missing journal_methods' && exit 1
-
+chain_params "$@"
 chain_begin
 
 chain_step account.payment.create --treatment_date="$TREATMENT_DATE" \
@@ -49,12 +18,12 @@ chain_step account.payment.process --treatment_date="$TREATMENT_DATE" \
     --payment_kind="$PAYMENT_KIND" --journal_methods="$JOURNAL_METHODS"
 chain_wait account.payment.process || chain_end
 
- [[ -z  $GROUP_REFERENCE ]] && chain_step account.payment.acknowledge \
-     --treatment_date="$TREATMENT_DATE" --payment_kind="$PAYMENT_KIND" \
-     --journal_methods="$JOURNAL_METHODS"
- [[ ! -z  $GROUP_REFERENCE ]] && chain_step account.payment.acknowledge \
-     --treatment_date="$TREATMENT_DATE" --payment_kind="$PAYMENT_KIND" \
-     --journal_methods="$JOURNAL_METHODS" --group_reference=$GROUP_REFERENCE
+[[ -z  $GROUP_REFERENCE ]] && chain_step account.payment.acknowledge \
+    --treatment_date="$TREATMENT_DATE" --payment_kind="$PAYMENT_KIND" \
+    --journal_methods="$JOURNAL_METHODS"
+[[ ! -z  $GROUP_REFERENCE ]] && chain_step account.payment.acknowledge \
+    --treatment_date="$TREATMENT_DATE" --payment_kind="$PAYMENT_KIND" \
+    --journal_methods="$JOURNAL_METHODS" --group_reference=$GROUP_REFERENCE
 chain_wait account.payment.acknowledge || chain_end
 
 chain_end

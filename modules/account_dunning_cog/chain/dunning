@@ -4,27 +4,13 @@
 CHAIN_NAME=dunning
 CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
 
-TREATMENT_DATE=""
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE')
+CHAIN_REQUIRED=('TREATMENT_DATE')
 
-for i in "$@"
-do
-    case $i in
-    --treatment_date=*)
-        TREATMENT_DATE="${i#*=}"
-    shift
-    ;;
-    *)
-    shift
-    echo "'$i' ignored (unknown argument)" 1>&2
-    ;;
-esac
-done
-
-[ -z "$TREATMENT_DATE" ] && echo 'Missing treatment_date' && exit 1
-
+chain_params "$@"
 chain_begin
 
-chain_step account.dunning.create --treatment_date="$TREATMENT_DATE"
+chain_step account.dunning.create ${GIVEN_PARAMETERS[@]}
 chain_wait account.dunning.create || chain_end
 
 chain_step account.dunning.treat

@@ -4,19 +4,10 @@
 CHAIN_NAME=produce_request
 CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
 
-TREATMENT_DATE=""
+CHAIN_PARAMETERS=('CONNECTION_DATE')
+CHAIN_REQUIRED=()
 
-for i in "$@"
-do
-    case $i in
-        *)
-    shift
-    echo "'$i' ignored (unknown argument)" 1>&2
-    ;;
-esac
-done
-
-
+chain_params "$@"
 chain_begin
 
 chain_step report_production.request.batch_treat

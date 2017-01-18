@@ -27,6 +27,12 @@ class PaymentTreatmentBatch:
                 })
 
     @classmethod
+    def get_batch_domain(cls, treatment_date, payment_kind=None,
+            journal_methods=None, **kwargs):
+        return super(PaymentTreatmentBatch, cls).get_batch_domain(
+            treatment_date, payment_kind, journal_methods)
+
+    @classmethod
     def _group_payment_key(cls, payment):
         res = super(PaymentTreatmentBatch, cls)._group_payment_key(payment)
         journal = payment.journal

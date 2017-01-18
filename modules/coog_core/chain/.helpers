@@ -1,6 +1,5 @@
 # vim: set ft=sh:
 # chain helpers ($CHAIN_NAME and $CHAIN_FILE are supposed to be set)
-
 chain_begin() {
         {
                 echo "From: batch@coog.com"
@@ -10,6 +9,40 @@ chain_begin() {
                 echo "Content-Type: text/plain"
                 echo
         } >> "$CHAIN_FILE"
+}
+
+chain_params() {
+        # This magic method create and set global variables
+        # according to parameters given to the chain
+        GIVEN_PARAMETERS=()
+        for i in "$@"
+        do
+            local PARAM_NAME=`expr match "$i" ' *--\([^= ]*\)=' | awk '{ print toupper($1) }'`
+            local PARAM_VALUE="${i#*=}"
+            if [[ " ${CHAIN_PARAMETERS[*]} " == *" $PARAM_NAME "* ]]
+            then
+                if [[ -z $PARAM_VALUE ]]
+                then
+                    PARAM_VALUE=""
+                else
+                    printf -v $PARAM_NAME $PARAM_VALUE
+                fi
+                GIVEN_PARAMETERS+=($i)
+            else
+                echo "Unknown batch chain parameter:" `echo $PARAM_NAME | awk '{ print tolower($1) }'` 1>&2
+            fi
+        done
+
+        local FAILED=0
+        for i in "${CHAIN_REQUIRED[@]}"
+        do
+            if [[ -z ${!i} ]]
+            then
+                echo "Missing batch chain parameter:" `echo $i | awk '{ print tolower($1) }'` 1>&2
+                FAILED+=1
+            fi
+        done
+        [[ $FAILED -gt 0 ]] && exit 1
 }
 
 chain_step() {
