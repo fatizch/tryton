@@ -30,7 +30,7 @@ RUN pip install \
         wrapt \
         werkzeug \
         simpleeval \
-        python-ldap \
+        ldap3 \
         raven \
         redis \
         hiredis \
