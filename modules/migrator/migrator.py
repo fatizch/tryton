@@ -302,13 +302,14 @@ class Migrator(batch.BatchRootNoSelect):
         """
         pool = Pool()
         Model = pool.get(cls.model)
-        rows = [{k: row[k] for k in row if k in set(Model._fields) - {'id', }}
-            for row in rows]
         if rows:
             to_update = {}
             for row in rows:
-                obj = Model(cls.cache_obj['update'][row[cls.func_key]])
-                to_update[row[cls.func_key]] = [[obj], row]
+                func_key = row[cls.func_key]
+                row = {k: row[k] for k in row
+                    if k in set(Model._fields) - {'id', }}
+                obj = Model(cls.cache_obj['update'][func_key])
+                to_update[func_key] = [[obj], row]
             Model.write(*sum(to_update.values(), []))
             return rows
         return []
