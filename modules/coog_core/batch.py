@@ -233,7 +233,7 @@ class ViewValidationBatch(BatchRoot):
         return 'ir.ui.view'
 
     @classmethod
-    def get_batch_domain(cls):
+    def get_batch_domain(cls, crash=None):
         Module = Pool().get('ir.module')
         modules = Module.search([])
         utils_module = Module.search([('name', '=', 'coog_core')])[0]
