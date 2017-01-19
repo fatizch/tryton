@@ -22,4 +22,5 @@ def register():
         EventLog,
         Invoice,
         DunningTreatmentBatch,
+        DunningCreationBatch,
         module='contract_insurance_invoice_dunning', type_='model')
