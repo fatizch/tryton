@@ -50,7 +50,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
     @classmethod
     def get_batch_domain(cls, treatment_date, payment_kind=None,
             journal_methods=None):
-        payment_kind or cls.get_conf_item('payment_kind')
+        payment_kind = payment_kind or cls.get_conf_item('payment_kind')
         res = [
             ('state', '=', 'approved'),
             ('date', '<=', treatment_date)]
@@ -138,7 +138,7 @@ class PaymentCreationBatch(batch.BatchRoot):
         move_line = pool.get('account.move.line').__table__()
         account = pool.get('account.account').__table__()
         party = pool.get('party.party').__table__()
-        payment_kind or cls.get_conf_item('payment_kind')
+        payment_kind = payment_kind or cls.get_conf_item('payment_kind')
         if payment_kind and payment_kind not in PAYMENT_KINDS:
             msg = "ignore payment_kind: '%s' not in %s" % (payment_kind,
                 PAYMENT_KINDS)
@@ -228,7 +228,7 @@ class PaymentAcknowledgeBatch(batch.BatchRoot):
                 cls.logger.error('%s. Aborting' % msg)
                 raise Exception(msg)
             return [[payment.id] for payment in groups[0].processing_payments]
-        payment_kind or cls.get_conf_item('payment_kind')
+        payment_kind = payment_kind or cls.get_conf_item('payment_kind')
         if payment_kind and payment_kind not in PAYMENT_KINDS:
             msg = "ignoring payment_kind: '%s' not in %s" % (payment_kind,
                 PAYMENT_KINDS)
