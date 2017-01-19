@@ -6,7 +6,6 @@ import logging
 import ConfigParser
 from datetime import datetime, date
 import uuid
-import warnings
 
 from trytond import backend
 from trytond.config import config
@@ -278,7 +277,8 @@ class CleanDatabaseBatch(BatchRoot):
         return 'ir.model'
 
     @classmethod
-    def get_batch_domain(cls, module):
+    def get_batch_domain(cls, connection_date, treatment_date, module=None,
+            drop_const=None, drop_index=None):
         return module and [('module', '=', module)]
 
     @classmethod
