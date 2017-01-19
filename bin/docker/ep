@@ -169,20 +169,8 @@ _print_conf() {
 
 _admin() {
         _init || return $?
-        local args
-        args="-c $COOG_CONF_SRV"
-        [ ! -z "$COOG_DB_NAME" ] && args="$args -d $COOG_DB_NAME"
-        trytond-admin "$args" "$@"
-}
-
-_cron() {
-        echo Welcome on board, Coog Cron is preparing to start
-        _init || return $?
-        _uno
-        local args
-        args="-c $COOG_CONF_SRV"
-        [ ! -z "$COOG_DB_NAME" ] && args="$args -d $COOG_DB_NAME"
-        trytond-cron "$args" "$@"
+        [ -z "$COOG_DB_NAME" ] && echo missing db name && return 1
+        trytond-admin -v -c "$COOG_CONF_SRV" -d "$COOG_DB_NAME" "$@"
 }
 
 _server() {
@@ -257,7 +245,6 @@ usage() {
         echo "  env           -> gets container env vars"
         echo "  conf          -> gets container coog configuration"
         echo "  admin         -> launch admin utils - <args>"
-        echo "  cron          -> starts coog cron"
         echo "  server        -> starts coog server - <workers nb>"
         echo "  celery        -> starts celery workers - <workers nb> <queue,+>"
         echo "  rq            -> starts rq worker - <queue +>"
@@ -276,7 +263,6 @@ main() {
         [ "$cmd" = env ] && { _print_env; return $?; }
         [ "$cmd" = conf ] && { _print_conf; return $?; }
         [ "$cmd" = admin ] && { _admin "$@"; return $?; }
-        [ "$cmd" = cron ] && { _cron "$@"; return $?; }
         [ "$cmd" = server ] && { _server "$@"; return $?; }
         [ "$cmd" = celery ] && { _celery "$@"; return $?; }
         [ "$cmd" = rq ] && { _rq "$@"; return $?; }
