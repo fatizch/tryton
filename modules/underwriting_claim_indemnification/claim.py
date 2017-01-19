@@ -96,6 +96,9 @@ class Service:
                     elem.effective_decision_date <= end
                     <= elem.effective_decision_end):
                 yield elem
+            elif not elem.effective_decision_end and (
+                    elem.effective_decision_date <= end):
+                yield elem
 
     def check_underwritings(self, start, end):
         blocking_decision = self.get_underwriting_blocking_decision(start, end)
