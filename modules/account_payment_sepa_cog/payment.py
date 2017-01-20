@@ -458,7 +458,8 @@ class Payment:
             depends=['currency_digits']),
         'get_reject_fee_amount')
     payer = fields.Function(
-        fields.Many2One('party.party', 'Payer'),
+        fields.Many2One('party.party', 'Payer',
+            states={'invisible': (Eval('kind') == 'payable')}),
         'on_change_with_payer')
 
     @classmethod
@@ -761,11 +762,12 @@ class PaymentCreationStart:
         states={
             'invisible': ((~Bool(Eval('process_method')) |
                 (Eval('process_method') != 'sepa')) & Bool(
-                Eval('payer'))),
-            'required': (Eval('process_method') == 'sepa')
+                Eval('payer')) | (Eval('kind') == 'payable')),
+            'required': ((Eval('process_method') == 'sepa') &
+                (Eval('kind') == 'receivable'))
             },
         depends=['payer', 'process_method', 'payment_date',
-            'available_bank_accounts'])
+            'available_bank_accounts', 'kind'])
     available_payers = fields.Many2Many('party.party', None, None,
          'Available Payers')
     available_bank_accounts = fields.Many2Many('bank.account', None, None,
@@ -774,10 +776,12 @@ class PaymentCreationStart:
         domain=[('id', 'in', Eval('available_payers'))],
         states={
             'invisible': (~Bool(Eval('process_method')) |
-                (Eval('process_method') != 'sepa')),
-            'required': (Eval('process_method') == 'sepa')
+                (Eval('process_method') != 'sepa') |
+                (Eval('kind') == 'payable')),
+            'required': ((Eval('process_method') == 'sepa') &
+                (Eval('kind') == 'receivable'))
             },
-        depends=['available_payers', 'process_method', 'payment_date'])
+        depends=['available_payers', 'process_method', 'payment_date', 'kind'])
 
     @fields.depends('payment_date', 'party', 'available_payers', 'payer',
         'available_bank_accounts', 'bank_account')
