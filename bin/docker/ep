@@ -44,7 +44,8 @@ conf_cache() {
         if [ ! -z "$COOG_CACHE_DB" ]
         then
                 [ -z "$COOG_REDIS_HOST" ] && echo "no redis configured" && return 1
-                echo "redis = redis://$COOG_REDIS_HOST:$COOG_REDIS_PORT/$COOG_CACHE_DB"
+                echo "class = trytond.cache_redis.RedisCache"
+                echo "uri = redis://$COOG_REDIS_HOST:$COOG_REDIS_PORT/$COOG_CACHE_DB"
         fi
         return 0
 }
