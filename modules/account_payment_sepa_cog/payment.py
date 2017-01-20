@@ -284,7 +284,9 @@ class Group:
         # b2be297bb1f0b939e2ee52594aceebd9  pain.008.001.04.xml
         # 09e2a7e044f88df154a5121ea35220f9  pain.008.003.02.xml
 
-        if self.kind != 'receivable' or self.kind == 'receivable' and \
+        if self.kind != 'receivable' or \
+                self.journal.sepa_receivable_flavor.endswith('-cfonb') \
+                or self.kind == 'receivable' and \
                 not self.journal.sepa_receivable_flavor.startswith('pain.008'):
             return super(Group, self).get_sepa_template()
         return loader.load('%s.xml' % self.journal.sepa_receivable_flavor)
