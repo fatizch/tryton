@@ -10,6 +10,9 @@ CHAIN_REQUIRED=('TREATMENT_DATE')
 chain_params "$@"
 chain_begin
 
+chain_step account.dunning.update ${GIVEN_PARAMETERS[@]}
+chain_wait account.dunning.update || chain_end
+
 chain_step account.dunning.create ${GIVEN_PARAMETERS[@]}
 chain_wait account.dunning.create || chain_end
 
