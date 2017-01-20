@@ -457,7 +457,7 @@ class ReportTemplateVersion(Attachment, export.ExportImportMixin):
 
 
 class Printable(Model):
-
+    'Base class for printable objects'
     @classmethod
     def __register__(cls, module_name):
         # We need to store the fact that this class is a Printable class in the

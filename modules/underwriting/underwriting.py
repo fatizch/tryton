@@ -12,6 +12,7 @@ from trytond.pyson import Eval, If, Bool, In, Len
 
 from trytond.modules.coog_core import model, fields, coog_string, utils
 from trytond.modules.coog_core import coog_date
+from trytond.modules.report_engine import Printable
 
 __all__ = [
     'UnderwritingType',
@@ -143,7 +144,7 @@ class UnderwritingTypeDocument(model.CoogSQL):
         required=True, ondelete='RESTRICT')
 
 
-class Underwriting(model.CoogSQL, model.CoogView):
+class Underwriting(model.CoogSQL, model.CoogView, Printable):
     'Underwriting'
 
     __name__ = 'underwriting'
@@ -197,6 +198,7 @@ class Underwriting(model.CoogSQL, model.CoogView):
                     'invisible': Eval('state') != 'processing',
                     },
                 'plan_button': {},
+                'generic_send_letter': {},
                 })
         cls._error_messages.update({
                 'cannot_draft': 'Cannot draft completed underwritings',
@@ -416,6 +418,11 @@ class Underwriting(model.CoogSQL, model.CoogView):
 
     def init_dict_for_rule_engine(self, data):
         data['underwriting'] = self
+        if hasattr(self.on_object, 'init_dict_for_rule_engine'):
+            self.on_object.init_dict_for_rule_engine(data)
+
+    def get_contact(self):
+        return self.party
 
 
 class UnderwritingResult(model.CoogSQL, model.CoogView):
@@ -590,6 +597,12 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
     def do_abandon(cls, instances):
         Pool().get('event').notify_events(instances,
             'underwriting_result_abandonned')
+
+    def init_dict_for_rule_engine(self, data):
+        self.underwriting.init_dict_for_rule_engine(data)
+        data['underwriting_result'] = self
+        if hasattr(self.target, 'init_dict_for_rule_engine'):
+            self.target.init_dict_for_rule_engine(data)
 
 
 class PlanUnderwriting(Wizard):
