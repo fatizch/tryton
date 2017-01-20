@@ -4,10 +4,10 @@ this repository contains the full copyright notices and license terms. -->
 <tree editable="bottom">
     <field name="state"/>
     <field name="target_description"/>
-    <field name="effective_decision_date"/>
-    <field name="effective_decision_end"/>
     <field name="provisional_decision"/>
     <field name="final_decision" widget="selection"/>
+    <field name="effective_decision_date"/>
+    <field name="effective_decision_end"/>
     <field name="decision_date"/>
     <button name="finalize" string="Finalize"/>
     <button name="abandon" string="Abandon"/>
