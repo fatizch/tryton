@@ -21,6 +21,11 @@ class RuleEngineRuntime:
         return len(contract.get_covered_elements_at_date(args['date']))
 
     @classmethod
+    @check_args('contract')
+    def _re_initial_number_of_sub_covered_elements(cls, args):
+        return args['contract'].initial_number_of_sub_covered_elements or 0
+
+    @classmethod
     @check_args('elem', 'contract', 'coverage')
     def _re_covered_element_rank(cls, args):
         elem = args['elem']

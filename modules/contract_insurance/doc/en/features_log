@@ -1,3 +1,5 @@
+* Add a contract field with the number of sub covered elements when the contract started
+
 Version 1.10 - 2016-11-02
 * Add relate on party to display enrollments
 * Make the extra premium wizard directly available on the contract

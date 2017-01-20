@@ -12,6 +12,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_number_of_covered_elements</field>
             <field name="parent" ref="contract.te_contract"/>
         </record>
+        <record model="rule_engine.function" id="initial_number_of_sub_covered_elements">
+            <field name="translated_technical_name">nombre_initial_de_sous_elements_couverts</field>
+            <field name="description">Nombre initial de sous-élements couverts</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_initial_number_of_sub_covered_elements</field>
+            <field name="parent" ref="contract.te_contract"/>
+        </record>
         <record model="rule_engine.function" id="_re_covered_element_rank">
             <field name="translated_technical_name">rang_element_couvert</field>
             <field name="description">Rang élement couvert</field>
