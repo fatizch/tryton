@@ -15,7 +15,6 @@ def register():
         claim.Service,
         claim.Indemnification,
         claim.IndemnificationDefinition,
-        claim.CreateIndemnificationUnderwritings,
         rule_engine.RuleEngineRuntime,
         module='underwriting_claim_indemnification', type_='model')
     Pool.register(

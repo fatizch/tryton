@@ -1,7 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.wizard import Button, StateView
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import model, fields, coog_string, coog_date
@@ -12,7 +11,6 @@ __all__ = [
     'Indemnification',
     'IndemnificationDefinition',
     'CreateIndemnification',
-    'CreateIndemnificationUnderwritings',
     ]
 
 
@@ -162,14 +160,6 @@ class CreateIndemnification(model.FunctionalErrorMixIn):
     __metaclass__ = PoolMeta
     __name__ = 'claim.create_indemnification'
 
-    activated_underwritings = StateView(
-        'claim.create_indemnification.underwritings',
-        'underwriting_claim_indemnification.'
-        'create_indemnification_underwritings_view_form', [
-            Button('Exit', 'end', 'tryton-cancel'),
-            Button('Previous', 'definition', 'tryton-go-previous'),
-            Button('Continue', 'calculate', 'tryton-go-next', default=True)])
-
     def check_input(self):
         result = super(CreateIndemnification, self).check_input()
         input_start_date = self.definition.start_date
@@ -205,24 +195,6 @@ class CreateIndemnification(model.FunctionalErrorMixIn):
 
     def transition_calculate(self):
         input_end_date = self.definition.end_date
-        underwritings = Pool().get('claim').activate_underwritings_if_needed(
+        Pool().get('claim').activate_underwritings_if_needed(
             [self.definition.service.claim], input_end_date)
-        if underwritings:
-            self.activated_underwritings.underwritings = underwritings
-            return 'activated_underwritings'
         return super(CreateIndemnification, self).transition_calculate()
-
-    def default_activated_underwritings(self, name):
-        return {
-            'underwritings': [x.id
-                for x in self.activated_underwritings.underwritings],
-            }
-
-
-class CreateIndemnificationUnderwritings(model.CoogView):
-    'Create Indemnification Underwritings'
-
-    __name__ = 'claim.create_indemnification.underwritings'
-
-    underwritings = fields.Many2Many('underwriting', None, None,
-        'Underwritings')
