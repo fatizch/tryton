@@ -385,6 +385,10 @@ class Payment(export.ExportImportMixin, Printable):
                 'invisible': ~Eval('reject_description')}),
         'get_reject_description')
     merged_id = fields.Char('Merged ID', select=True)
+    related_invoice = fields.Function(fields.Many2One(
+        'account.invoice', 'Related Invoice'), 'get_related_invoice')
+    related_invoice_business_kind = fields.Function(fields.Char(
+       'Related Invoice Business Kind'), 'get_related_invoice_business_kind')
 
     @classmethod
     def __register__(cls, module_name):
@@ -465,6 +469,14 @@ class Payment(export.ExportImportMixin, Printable):
         'account_payment_cog.act_process_payments_button')
     def process_payments(cls, payments):
         pass
+
+    def get_related_invoice(self, name=None):
+        if self.line:
+            return self.line.move.invoice.id
+
+    def get_related_invoice_business_kind(self, name=None):
+            return (self.related_invoice.business_kind if
+                self.related_invoice else None)
 
     @property
     def fail_code(self):
