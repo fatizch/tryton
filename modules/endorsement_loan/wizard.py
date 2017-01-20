@@ -1351,20 +1351,6 @@ class StartEndorsement:
                 default=True),
             ])
 
-    def default_select_endorsement(self, name):
-        result = super(StartEndorsement, self).default_select_endorsement(name)
-        pool = Pool()
-        Contract = pool.get('contract')
-        active_model = Transaction().context.get('active_model')
-        if active_model == 'contract':
-            contract = Contract(Transaction().context.get('active_id'))
-            if contract.is_loan:
-                if len(contract.used_loans) == 1:
-                    result['loan'] = contract.used_loans[0].id
-        elif active_model == 'loan':
-            result['loan'] == Transaction().context.get('active_id')
-        return result
-
     def default_change_loan_data(self, name):
         ChangeLoan = Pool().get('endorsement.loan.change')
         endorsement_part = self.get_endorsement_part_for_state(
