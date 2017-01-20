@@ -1,5 +1,4 @@
-# This file is part of Coog. The COPYRIGHT file at the top level of
-# this repository contains the full copyright notices and license terms.p
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -95,6 +94,10 @@ msgctxt "field:claim.salary,delivered_service:"
 msgid "Delivered Service"
 msgstr "Prestation fournie"
 
+msgctxt "field:claim.salary,fixed_contributions:"
+msgid "Fixed Contributions"
+msgstr "Contributions fixes"
+
 msgctxt "field:claim.salary,from_date:"
 msgid "From Date"
 msgstr "Du"
@@ -135,25 +138,13 @@ msgctxt "field:claim.salary,ta_contributions:"
 msgid "TA Contributions"
 msgstr "Contributions tranche A"
 
-msgctxt "field:claim.salary,ta_fixed_contributions:"
-msgid "TA Fixed Contributions"
-msgstr "Contributions fixes tranche A"
-
 msgctxt "field:claim.salary,tb_contributions:"
 msgid "TB Contributions"
 msgstr "Contributions tranche B"
 
-msgctxt "field:claim.salary,tb_fixed_contributions:"
-msgid "TB Fixed Contributions"
-msgstr "Contributions fixes tranche B"
-
 msgctxt "field:claim.salary,tc_contributions:"
 msgid "TC Contributions"
 msgstr "Contributions tranche C"
-
-msgctxt "field:claim.salary,tc_fixed_contributions:"
-msgid "TC Fixed Contributions"
-msgstr "Contributions fixes tranche C"
 
 msgctxt "field:claim.salary,to_date:"
 msgid "To Date"
@@ -192,8 +183,12 @@ msgid "Salary Mode"
 msgstr "Mode de salaire"
 
 msgctxt "field:claim_salary_fr.contributions_view,extra_data:"
-msgid "Extra Data"
-msgstr "Donnée complémentaire"
+msgid "Contributions"
+msgstr "Contributions"
+
+msgctxt "field:claim_salary_fr.contributions_view,fixed_amount:"
+msgid "Amount"
+msgstr "Montant"
 
 msgctxt "field:claim_salary_fr.contributions_view,id:"
 msgid "ID"
@@ -203,25 +198,13 @@ msgctxt "field:claim_salary_fr.contributions_view,ta:"
 msgid "Rate A"
 msgstr "Taux de la tranche A"
 
-msgctxt "field:claim_salary_fr.contributions_view,ta_fix:"
-msgid "Amount A"
-msgstr "Montant TA"
-
 msgctxt "field:claim_salary_fr.contributions_view,tb:"
 msgid "Rate B"
 msgstr "Taux de la tranche B"
 
-msgctxt "field:claim_salary_fr.contributions_view,tb_fix:"
-msgid "Amount B"
-msgstr "Montant TB"
-
 msgctxt "field:claim_salary_fr.contributions_view,tc:"
 msgid "Rate C"
 msgstr "Taux de la tranche C"
-
-msgctxt "field:claim_salary_fr.contributions_view,tc_fix:"
-msgid "Amount C"
-msgstr "Montant TC"
 
 msgctxt "field:claim_salary_fr.start_set_contributions,fixed_rates:"
 msgid "Fixed Rates"
@@ -280,8 +263,8 @@ msgid "Create User"
 msgstr "Créé par"
 
 msgctxt "field:net_calculation_rule-extra_data,extra_data:"
-msgid "Extra Data"
-msgstr "Donnée complémentaire"
+msgid "Contributions"
+msgstr "Contributions"
 
 msgctxt "field:net_calculation_rule-extra_data,id:"
 msgid "ID"
@@ -320,8 +303,8 @@ msgid "Create User"
 msgstr "Créé par"
 
 msgctxt "field:net_calculation_rule-fix_extra_data,extra_data:"
-msgid "Extra Data"
-msgstr "Donnée Complémentaire"
+msgid "Contributions"
+msgstr "Contributions"
 
 msgctxt "field:net_calculation_rule-fix_extra_data,id:"
 msgid "ID"
@@ -384,18 +367,6 @@ msgctxt "model:net_calculation_rule-fix_extra_data,name:"
 msgid "Net Calculation Rule - Extra Data"
 msgstr "Règle de calcul net - Donnée complémentaire"
 
-msgctxt "selection:benefit.rule,annuity_frequency:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:contract.option.benefit,annuity_frequency:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:contract.option.benefit,salary_mode:"
-msgid ""
-msgstr " "
-
 msgctxt "selection:contract.option.benefit,salary_mode:"
 msgid "Last 12 months"
 msgstr "Les 12 derniers mois"
@@ -445,14 +416,6 @@ msgid "Net Calculation Rules"
 msgstr "Règles de caculs pour le net"
 
 msgctxt "view:claim.salary:"
-msgid "Salaries"
-msgstr "Salaires"
-
-msgctxt "view:claim.salary:"
-msgid "Salary"
-msgstr "Salaire"
-
-msgctxt "view:claim.salary:"
 msgid "Set Contributions"
 msgstr "Renseigner les taux de charges sociales salariales"
 
@@ -479,14 +442,6 @@ msgstr "Prestation fournie"
 msgctxt "view:claim_salary_fr.contributions_view:"
 msgid "%"
 msgstr "%"
-
-msgctxt "view:claim_salary_fr.contributions_view:"
-msgid "Fixed rates"
-msgstr "Taux fixes"
-
-msgctxt "view:claim_salary_fr.contributions_view:"
-msgid "Rates"
-msgstr "Taux"
 
 msgctxt "view:claim_salary_fr.start_set_contributions:"
 msgid "Start Set Contributions"

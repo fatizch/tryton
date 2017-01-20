@@ -3,7 +3,5 @@
 this repository contains the full copyright notices and license terms. -->
 <tree editable="bottom">
     <field name="extra_data"/>
-    <field name="ta_fix"/>
-    <field name="tb_fix"/>
-    <field name="tc_fix"/>
+    <field name="fixed_amount"/>
 </tree>
