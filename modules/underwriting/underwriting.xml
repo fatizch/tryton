@@ -64,6 +64,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_underwriting_decision_type"/>
         </record>
         <menuitem parent="menu_underwriting_configuration" sequence="12" action="act_underwriting_decision_type" id="menu_underwriting_decision_type"/>
+        <!-- ################################### -->
+        <!-- # Underwriting Type Document Rule # -->
+        <!-- ################################### -->
+        <record model="ir.ui.view" id="underwriting_document_rule_view_form">
+            <field name="model">underwriting.document_rule</field>
+            <field name="type">form</field>
+            <field name="name">underwriting_document_rule_form</field>
+        </record>
         <!-- ################ -->
         <!-- # Underwriting # -->
         <!-- ################ -->

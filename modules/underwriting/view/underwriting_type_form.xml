@@ -13,5 +13,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="decisions" colspan="4"/>
     <label name="waiting_decision"/>
     <field name="waiting_decision" widget="selection" colspan="3"/>
-    <field name="documents" colspan="4"/>
+    <field name="document_rule" colspan="4" mode="form" expand_toolbar="0"/>
 </form>

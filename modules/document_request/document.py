@@ -14,6 +14,7 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.report_engine import Printable
+from trytond.modules.rule_engine import get_rule_mixin
 
 __all__ = [
     'DocumentRequestLine',
@@ -618,3 +619,64 @@ class ReceiveDocumentLine(model.CoogView):
     @classmethod
     def get_models(self):
         return utils.models_get()
+
+
+class DocumentRuleMixin(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoogSQL, model.CoogView):
+    '''
+        Mixin class to create document rules.
+    '''
+    reminder_delay = fields.Integer('Reminder Delay')
+    reminder_unit = fields.Selection([
+            ('', ''),
+            ('month', 'Months'),
+            ('day', 'Days')],
+        'Reminder Unit', states={'required': Bool(Eval('reminder_delay'))},
+        depends=['reminder_delay'])
+
+    @classmethod
+    def __setup__(cls):
+        super(DocumentRuleMixin, cls).__setup__()
+        cls.rule.domain = [('type_', '=', 'doc_request')]
+        cls.rule.help = ('The rule must return a dictionnary '
+            'with document description codes as keys, and dictionnaries as '
+            'values.')
+
+    @staticmethod
+    def default_reminder_unit():
+        return ''
+
+    def calculate_required_documents(self, data_dict):
+        if not self.rule:
+            return {}
+        rule_result = self.calculate_rule(data_dict)
+        if type(rule_result) is not dict:
+            self.raise_user_error('wrong_documents_rule')
+        return rule_result
+
+    @classmethod
+    def merge_results(cls, *args):
+        final_result = {}
+        for data in args:
+            for code, values in data.iteritems():
+                if code not in final_result:
+                    final_result[code] = values
+                    continue
+                cls.merge_lines(final_result[code], values)
+
+    @classmethod
+    def merge_lines(cls, final, to_merge):
+        for k, v in to_merge.iteritems():
+            if k not in final:
+                final[k] = v
+                continue
+            if final[k] == v:
+                continue
+            if k == 'blocking':
+                final[k] = v or final[k]
+            elif k == 'max_reminders':
+                if v and final[k]:
+                    final[k] = min(v, final[k])
+                elif v:
+                    final[k] = v

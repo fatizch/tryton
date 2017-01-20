@@ -45,8 +45,8 @@ class Underwriting:
         super(Underwriting, cls).__setup__()
         cls.on_object.selection.append(('claim', 'Claim'))
 
-    def add_document(self, document_desc):
-        line = super(Underwriting, self).add_document(document_desc)
+    def add_document(self, document_desc, data):
+        line = super(Underwriting, self).add_document(document_desc, data)
         if self.on_object.__name__ == 'claim':
             line.claim = self.on_object
         return line

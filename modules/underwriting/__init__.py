@@ -13,7 +13,7 @@ def register():
         underwriting.UnderwritingDecisionType,
         underwriting.UnderwritingType,
         underwriting.UnderwritingTypeDecision,
-        underwriting.UnderwritingTypeDocument,
+        underwriting.UnderwritingTypeDocumentRule,
         underwriting.Underwriting,
         underwriting.UnderwritingResult,
         underwriting.PlanUnderwritingDate,
