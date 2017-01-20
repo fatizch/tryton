@@ -296,6 +296,12 @@ class Group:
         return super(Group, cls)._export_skips() | {'sepa_messages'}
 
     def merge_payment_key(self, payment):
+        # This method is used twice when processing payments:
+        # once for setting the merged_id, and once when generating the sepa
+        # message. For the latter, it is used to regoup payments in combination
+        # with the sepa_group_payment_key method, which uses the payment's date.
+        # To prevent duplicate end_to_end_ids in the sepa_file, we need the date
+        # here too.
         pool = Pool()
         Payment = pool.get('account.payment')
         result = super(Group, self).merge_payment_key(payment)
@@ -303,6 +309,7 @@ class Group:
             ('party', payment.payer or payment.party),
             ('sepa_mandate', Payment.get_sepa_mandates([payment])[0]),
             ('sepa_bank_account_number', payment.sepa_bank_account_number),
+            ('date', payment.date),
             ]
 
     def update_last_sepa_receivable_date(self):
