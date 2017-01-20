@@ -1,0 +1,16 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=payment
+CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
+
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'PAYMENT_KIND' 'JOURNAL_METHODS' 'GROUP_REFERENCE')
+CHAIN_REQUIRED=('TREATMENT_DATE' 'PAYMENT_KIND' 'JOURNAL_METHODS')
+
+chain_params "$@"
+chain_begin
+
+chain_step account.payment.acknowledge ${GIVEN_PARAMETERS[@]}
+chain_wait account.payment.acknowledge || chain_end
+
+chain_end
