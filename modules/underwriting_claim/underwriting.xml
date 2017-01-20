@@ -11,5 +11,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="underwriting.underwriting_result_view_form"/>
             <field name="name">underwriting_result_form</field>
         </record>
+        <record model="ir.ui.view" id="underwriting_claim_result_view_form">
+            <field name="model">underwriting.result</field>
+            <field name="type">form</field>
+            <field name="name">underwriting_claim_result_form</field>
+        </record>
     </data>
 </tryton>

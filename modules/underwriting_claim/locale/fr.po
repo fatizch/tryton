@@ -40,9 +40,17 @@ msgctxt "field:underwriting.result,claim:"
 msgid "Claim"
 msgstr "Sinistre"
 
+msgctxt "field:underwriting.result,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
 msgctxt "field:underwriting.result,is_claim:"
 msgid "Is Claim"
 msgstr "Est sinistre ?"
+
+msgctxt "field:underwriting.result,option:"
+msgid "Option"
+msgstr "Garantie"
 
 msgctxt "field:underwriting.result,possible_claims:"
 msgid "Possible claims"

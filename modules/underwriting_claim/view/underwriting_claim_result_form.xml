@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form col="2">
+    <separator name="final_decision" colspan="2"/>
+    <label name="final_decision"/>
+    <field name="final_decision"/>
+    <label name="effective_decision_date"/>
+    <field name="effective_decision_date"/>
+    <label name="effective_decision_end"/>
+    <field name="effective_decision_end"/>
+    <separator name="target" colspan="2"/>
+    <label name="service"/>
+    <field name="service"/>
+    <label name="claim"/>
+    <field name="claim"/>
+    <label name="option"/>
+    <field name="option"/>
+    <label name="contract"/>
+    <field name="contract"/>
+</form>
