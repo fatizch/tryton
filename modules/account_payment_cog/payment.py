@@ -388,7 +388,8 @@ class Payment(export.ExportImportMixin, Printable):
     related_invoice = fields.Function(fields.Many2One(
             'account.invoice', 'Related Invoice'), 'get_related_invoice')
     related_invoice_business_kind = fields.Function(fields.Char(
-            'Related Invoice Business Kind'), 'get_related_invoice_business_kind')
+            'Related Invoice Business Kind'),
+        'get_related_invoice_business_kind')
 
     @classmethod
     def __register__(cls, module_name):
