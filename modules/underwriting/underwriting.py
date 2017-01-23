@@ -161,7 +161,8 @@ class UnderwritingTypeDocumentRule(document.DocumentRuleMixin):
         super(UnderwritingTypeDocumentRule, cls).__setup__()
         table = cls.__table__()
         cls._sql_constraints = [
-            ('one_per_underwriting_type', Unique(table, table.underwriting),
+            ('one_per_underwriting_type',
+                Unique(table, table.underwriting_type),
                 'There may be only one document rule per underwriting type'),
             ]
 
