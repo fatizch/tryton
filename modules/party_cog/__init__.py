@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from sql import Literal
 from sql.operators import Concat
+from sql.conditionals import Coalesce
 
 from trytond.pool import Pool
 
@@ -72,7 +73,8 @@ def migrate_1_10_include_name_in_street(pool):
 
         # Migration from 1.10 : merge name into street
         if migrate_name:
-            value = Concat(sql_table.name, Concat('\n', sql_table.street))
+            value = Concat(Coalesce(sql_table.name, ''),
+                Concat('\n', Coalesce(sql_table.street, '')))
             cursor.execute(*sql_table.update([sql_table.street], [value]))
             cursor.execute(*sql_table.update([sql_table.name], [Literal('')]))
 
