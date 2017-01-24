@@ -155,7 +155,7 @@ class Contract(Printable):
                 (Coalesce(sub_covered_element.manual_start_date,
                         datetime.date.min) <= win_query.start_date),
                 group_by=[win_query.id]))
-        result = {x.id: x for x in contracts}
+        result = {x.id: 0 for x in contracts}
         for contract_id, sub_element_count in cursor.fetchall():
             result[contract_id] = sub_element_count
         return result
