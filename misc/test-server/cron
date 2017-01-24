@@ -1,5 +1,11 @@
-0 */12 * * 1-5 cd /home/test && ./test-master
-0 14 * * 1-5 cd /home/test && ./test-1.8
-0 16 * * 1-5 cd /home/test && ./test-1.10
-*/5 * * * 1-5 cd /home/test && ./test-5m
-0 12 * * 7 cd /home/test && ./test-backup
+*/5 * * * 1-5 cd /home/test && ./test commit
+
+0 */12 * * 1-5 cd /home/test && ./test fullstart master
+0 14 * * 1-5 cd /home/test && ./test fullstart 1.8
+0 16 * * 1-5 cd /home/test && ./test fullstart 1.10
+
+*/5 * * * 1-5 cd /home/test && ./test fullcheck master
+*/5 * * * 1-5 cd /home/test && ./test fullcheck 1.8
+*/5 * * * 1-5 cd /home/test && ./test fullcheck 1.10
+
+0 12 * * 7 cd /home/test && ./test backup

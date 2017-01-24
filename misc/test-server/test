@@ -1,0 +1,131 @@
+#!/bin/bash
+
+TEST_POSTGRES_IMAGE=postgres:9.5-alpine
+TEST_REDIS_IMAGE=redis:3.2-alpine
+TEST_WORKSPACE=workspace
+
+# helpers
+
+_escape_slashes() {
+  sed 's/\//\\\//g'
+}
+
+_docker_exec() {
+  local im; im=$1; shift
+  local br; br=$1; shift
+  docker "$@" "test-$im-$br"
+}
+
+_docker_ip() {
+  docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$@"
+}
+
+# commands
+
+postgres() {
+  [ $# -lt 2 ] && echo missing branch / action && return 1
+  local br; br=$1; shift
+  local act; act=$1; shift
+  if [ "$act" = run ]
+  then
+    docker run -d \
+      -v /usr/share/zoneinfo:/usr/share/zoneinfo:ro \
+      -v /etc/timezone:/etc/timezone:ro \
+      -e POSTGRES_PASSWORD=postgres \
+      --name "test-postgres-$br" \
+      $TEST_POSTGRES_IMAGE
+    [ $? -ne 0 ] && return 1
+    local ws; ws="$HOME/$TEST_WORKSPACE-$br"
+    if [ -d "$ws" ]
+    then
+      local l; l=$(echo "uri = postgresql://postgres:postgres@$(_docker_ip "test-postgres-$br"):5432" | _escape_slashes)
+      sed -i 's/uri = postgresql.*/'"$l"'/' "$ws/conf/trytond.conf"
+      sed -i 's/uri = postgresql.*/'"$l"'/' "$ws/conf/test.conf"
+    fi
+  else
+    _docker_exec postgres "$br" "$act" "$@"
+  fi
+}
+
+redis() {
+  [ $# -lt 2 ] && echo missing branch / action && return 1
+  local br; br=$1; shift
+  local act; act=$1; shift
+  if [ "$act" = run ]
+  then
+    docker run -d \
+      -v /usr/share/zoneinfo:/usr/share/zoneinfo:ro \
+      -v /etc/timezone:/etc/timezone:ro \
+      --name "test-redis-$br" \
+      $TEST_REDIS_IMAGE
+    [ $? -ne 0 ] && return 1
+    local ws; ws="$HOME/$TEST_WORKSPACE-$br"
+    if [ -d "$ws" ]
+    then
+      local l; l=$(echo "rq = redis://$(_docker_ip "test-redis-$br"):6379/0" | _escape_slashes)
+      sed -i -e 's/rq = redis.*/'"$l"'/' "$ws/conf/trytond.conf"
+      sed -i -e 's/rq = redis.*/'"$l"'/' "$ws/conf/test.conf"
+    fi
+  else
+    _docker_exec redis "$br" "$act" "$@"
+  fi
+}
+
+commit() {
+  workon "coog-commit"
+  coog test commit master &>> "$COOG_TMP/test-logs"
+  deactivate
+}
+
+fullstart() {
+  [ -z "$1" ] && echo missing branch && return 1
+  local br; br=$1; shift
+  workon "coog-$br"
+  [ "$br" != master ] && br="coog-$br"
+  coog test fullstart "$br" 8 &>> "$COOG_TMP/test-logs"
+  deactivate
+}
+
+fullcheck() {
+  [ -z "$1" ] && echo missing banch && return 1
+  local br; br=$1; shift
+  workon "coog-$br"
+  [ "$br" != master ] && br="coog-$br"
+  coog test fullcheck "$br" &>> "$COOG_TMP/test-logs"
+  deactivate
+}
+
+fullstop() {
+  [ -z "$1" ] && echo missing banch && return 1
+  local br; br=$1; shift
+  workon "coog-$br"
+  [ "$br" != master ] && br="coog-$br"
+  coog test stop &>> "$COOG_TMP/test-logs"
+  deactivate
+}
+
+backup() {
+  cd /var/log/coog
+  local archive; archive="$(date +'%y-%m-%d').tar.gz"
+  tar czf "$archive" coog-* test-*
+  rm -rf coog-* test-*
+}
+
+# entrypoint
+
+main() {
+  [ -z "$1" ] && echo missing cmd && return 1
+  local cmd; cmd="$1"; shift
+
+  USER=test; export USER
+  HOME=/home/$USER; export HOME
+  [ -f $HOME/.profile ] && source $HOME/.profile
+
+  PATH="/usr/local/bin:$PATH"; export PATH
+
+  COOG_TMP=/var/log/coog; export COOG_TMP
+
+  ("$cmd" "$@")
+}
+
+main "$@"
