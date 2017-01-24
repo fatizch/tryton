@@ -68,7 +68,7 @@ class Service:
             if person and self.option.covered_element.party != person:
                 for elem in self.option.covered_element.sub_covered_elements:
                     if elem.party == person:
-                        return elem
+                        return elem.id
         return super(Service, self).get_theoretical_covered_element(name)
 
 

@@ -264,7 +264,7 @@ class ClaimService:
         if self.option and self.option.covered_element:
             person = self.get_covered_person()
             if person and self.option.covered_element.party == person:
-                return self.option.covered_element
+                return self.option.covered_element.id
         return super(ClaimService, self).get_theoretical_covered_element(name)
 
 
