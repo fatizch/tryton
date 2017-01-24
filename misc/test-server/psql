@@ -1,0 +1,10 @@
+#!/bin/bash
+
+source ./test
+
+docker run -it --rm \
+    -v /usr/share/zoneinfo:/usr/share/zoneinfo:ro \
+    -v /etc/timezone:/etc/timezone:ro \
+    --link "test-postgres-$1:postgres" \
+    "$TEST_POSTGRES_IMAGE" \
+    psql -U postgres -h postgres
