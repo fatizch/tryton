@@ -22,6 +22,7 @@ __all__ = [
     'BatchRootNoSelect',
     'ViewValidationBatch',
     'CleanDatabaseBatch',
+    'NoSelectBatchExample',
     'BatchParamsConfig',
     ]
 
@@ -203,7 +204,7 @@ class BatchRootNoSelect(BatchRoot):
 
     @classmethod
     def convert_to_instances(cls, ids):
-        return []
+        return [id for id in ids]
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -215,7 +216,17 @@ class BatchRootNoSelect(BatchRoot):
 
     @classmethod
     def select_ids(cls, **kwargs):
-        return []
+        return [[0]]
+
+
+class NoSelectBatchExample(BatchRootNoSelect):
+    'Batch No Select Example'
+
+    __name__ = 'coog.noselect_batch_example'
+
+    @classmethod
+    def execute(cls, objects, ids):
+        return 'objects: %s - ids: %s' % (objects, ids)
 
 
 class ViewValidationBatch(BatchRoot):
