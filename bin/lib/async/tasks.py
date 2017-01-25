@@ -1,16 +1,21 @@
 import logging
 import async.broker as async_broker
+from itertools import chain
 
 
 def _batch_split(l, n):
+    # see coog/bin/lib/async/test_async.py
     assert n >= 0, 'Negative split size'
-    if len(l) == 0:
-        return
-    elif n == 0 or n >= len(l):
-        yield l
+    if n == 0 or len(l) == 0:
+        yield list(chain.from_iterable(l))
     else:
-        for i in xrange(0, len(l), n):
-            yield l[i:i + n]
+        group = []
+        for i, ids in enumerate(l):
+            group.extend(ids)
+            if (len(group) >= n or ids == l[-1] or
+                    (len(group) + len(l[i + 1]) > n)):
+                yield group
+                group = []
 
 
 def batch_generate(name, params):
@@ -42,7 +47,7 @@ def batch_generate(name, params):
                 if job_size is None:
                     job_size = BatchModel.get_conf_item('job_size')
                 job_size = int(job_size)
-                ids = [x[0] for x in BatchModel.select_ids(**batch_params)]
+                ids = BatchModel.select_ids(**batch_params)
                 for l in _batch_split(ids, job_size):
                     broker.enqueue(name, 'batch_exec', (name, l, params))
                     res.append(len(l))
@@ -75,7 +80,7 @@ def batch_exec(name, ids, params):
 
     batch_params = params.copy()
     batch_params.pop('job_size', None)
-    transaction_size = batch_params.pop('transacion_size', None)
+    transaction_size = batch_params.pop('transaction_size', None)
 
     res = []
     with Transaction().start(database, admin.id):
@@ -88,7 +93,7 @@ def batch_exec(name, ids, params):
                 transaction_size = BatchModel.get_conf_item('transaction_size')
             transaction_size = int(transaction_size)
             try:
-                for l in _batch_split(ids, transaction_size):
+                for l in _batch_split([[x] for x in ids], transaction_size):
                     to_treat = BatchModel.convert_to_instances(l)
                     r = BatchModel.execute(to_treat, l, **batch_params)
                     res.append(r or len(l))

@@ -15,6 +15,12 @@ coog_test_dropdb() { # drop test db from postgresql server
 }
 
 coog_test_manual() { # interactively launch tests - [module *]
+        if [[ $1 == "bin" ]]
+        then
+            cd $COOG_BIN/..
+            python -m pytest -v --ignore=lib/tryton_test.py
+            return
+        fi
         unset TRYTOND_CONFIG
         unset DB_NAME
         unset TRYTOND_CACHE_CLASS
