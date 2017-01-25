@@ -1,0 +1,113 @@
+diff --git a/modules/loan/loan.py b/modules/loan/loan.py
+index 84b1855..a601671 100644
+--- a/modules/loan/loan.py
++++ b/modules/loan/loan.py
+@@ -7,6 +7,7 @@ from sql.conditionals import Coalesce
+ from dateutil.relativedelta import relativedelta
+ 
+ from trytond import backend
++from trytond.rpc import RPC
+ from trytond.pool import Pool
+ from trytond.transaction import Transaction
+ from trytond.pyson import Eval, Bool, If, Not
+@@ -194,6 +195,9 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
+     @classmethod
+     def __setup__(cls):
+         super(Loan, cls).__setup__()
++        cls.__rpc__.update({
++            'ws_calculate': RPC(instantiate=0)
++            })
+         cls._order.insert(0, ('last_modification', 'DESC'))
+         cls._error_messages.update({
+                 'no_sequence': 'No loan sequence defined',
+@@ -493,6 +497,15 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
+         self.update_increments_and_calculate_payments()
+         self.state = 'calculated'
+ 
++    def ws_calculate(self):
++        self.calculate()
++        return [{
++            'date': payment.start_date,
++            'outstanding': payment.outstanding_balance,
++            'principal': getattr(payment, 'principal', None),
++            'interest': getattr(payment, 'interest', None),
++            } for payment in self.payments]
++
+     @classmethod
+     def insert_manual_increment(cls, increment, increments):
+         increments_to_keep = [x for x in increments
+diff --git a/modules/loan_apr_fr/loan.py b/modules/loan_apr_fr/loan.py
+index 5667e56..38cddc6 100644
+--- a/modules/loan_apr_fr/loan.py
++++ b/modules/loan_apr_fr/loan.py
+@@ -3,6 +3,7 @@
+ from collections import defaultdict
+ from decimal import Decimal
+ 
++from trytond.rpc import RPC
+ from trytond.pool import PoolMeta, Pool
+ from trytond.transaction import Transaction
+ from trytond.pyson import Eval
+@@ -26,6 +27,13 @@ class Loan:
+         digits=(16, Eval('currency_digits', 2)))
+ 
+     @classmethod
++    def __setup__(cls):
++        super(Loan, cls).__setup__()
++        cls.__rpc__.update({
++                'calculate_taea': RPC(instantiate=0),
++                })
++
++    @classmethod
+     def default_bank_fees(cls):
+         return 0
+ 
+diff --git a/modules/rule_engine/rule_engine.py b/modules/rule_engine/rule_engine.py
+index 0eceebe..312ab7e 100644
+--- a/modules/rule_engine/rule_engine.py
++++ b/modules/rule_engine/rule_engine.py
+@@ -798,6 +798,9 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
+     @classmethod
+     def __setup__(cls):
+         super(RuleEngine, cls).__setup__()
++        cls.__rpc__.update({
++                'ws_execute': RPC(instantiate=0),
++                })
+         cls._error_messages.update({
+                 'invalid_code': 'Your algorithm has errors!',
+                 'bad_rule_computation': 'An error occured in rule %s.'
+@@ -1418,7 +1421,6 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
+                 transaction.rollback()
+ 
+     def execute(self, arguments, parameters=None):
+-
+         # We cannot use lambda in a loop
+         def kwarg_function(value):
+             return lambda: value
+@@ -1431,6 +1433,26 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
+         self.add_debug_log(result, arguments.get('date', None))
+         return result
+ 
++    def _execute_case(self, arguments, parameters, tech, tech_name):
++        def tech_fn(input_string):
++            return tech[input_string]
++        parameters[tech_name] = tech_fn
++        result = self.execute(arguments, parameters)
++        if result.has_errors:
++            raise Exception('Error')
++        elif not result.result_set:
++            raise Exception('No result')
++        else:
++            return result.result
++
++    def ws_execute(self, cases):
++        RuleFunction = Pool().get('rule_engine.function')
++        tech_func, = RuleFunction.search(['name', '=',
++                RuleTools._re_generic_value_get.__name__])
++        tech_name = tech_func.translated_technical_name
++        return [self._execute_case(case['args'], case['params'], case['tech'],
++                tech_name) for case in cases]
++
+ 
+ class Context(ModelView, ModelSQL, model.TaggedMixin):
+     "Context"
