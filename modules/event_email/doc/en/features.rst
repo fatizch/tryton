@@ -1,6 +1,6 @@
 - **Event-triggered emails**: Configure emails to be sent when certain events
   are happening in the application. It is possible to configure the sender,
-  recipients, subject and body of the email.
+  recipients, subject, the body of the email and finally, the attachment model.
 
 - **Context base body**: A simple syntax can be used in the body to access the
   fields of the object that triggered the event to customize the email

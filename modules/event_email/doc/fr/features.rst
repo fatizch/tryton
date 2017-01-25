@@ -1,6 +1,7 @@
 - **Emails déclenchés par des événements** : Configuration d'emails à envoyer
   lorsque certains événements ont lieu dans l'application. Il est possible de
-  définir l'émetteur, les destinataires, le sujet et le contenu de l'email.
+  définir l'émetteur, les destinataires, le sujet et le contenu de l'email
+  ainsi que des modèles de pièce jointe.
 
 - **Contenu dynamique** : Une syntaxe simple est disponible dans le corps du
   message permettant d'accéder aux données de l'object ayant déclenché

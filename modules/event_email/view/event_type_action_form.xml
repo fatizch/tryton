@@ -16,5 +16,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="email_subject" colspan="3"/>
         <separator name="email_body" colspan="4"/>
         <field name="email_body" colspan="4"/>
+        <separator string="Attachment Template" colspan="4"/>
+        <field name="attachment_template" widget="selection"/>
     </xpath>
 </data>
