@@ -41,6 +41,22 @@ class OptionDescription:
             ('kind', 'in', cls.kind_list_for_extra_data_domain())]
 
     @classmethod
+    def create(cls, vlist):
+        created = super(OptionDescription, cls).create(vlist)
+        Pool().get('offered.item.description')._check_sub_options_cache.clear()
+        return created
+
+    @classmethod
+    def delete(cls, ids):
+        super(OptionDescription, cls).delete(ids)
+        Pool().get('offered.item.description')._check_sub_options_cache.clear()
+
+    @classmethod
+    def write(cls, *args):
+        super(OptionDescription, cls).write(*args)
+        Pool().get('offered.item.description')._check_sub_options_cache.clear()
+
+    @classmethod
     def _export_light(cls):
         return (super(OptionDescription, cls)._export_light() |
             set(['insurer']))

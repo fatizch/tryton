@@ -3,6 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
+from trytond.cache import Cache
 
 from trytond.modules.coog_core import model, fields
 from trytond.modules.coog_core import coog_string
@@ -106,6 +107,7 @@ class ItemDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
     covered_element_end_reasons = fields.Many2Many(
         'offered.item.description-covered_element.end_reason', 'item_desc',
         'reason', 'Possible End Reasons')
+    _check_sub_options_cache = Cache('has_sub_options')
 
     @classmethod
     def copy(cls, items, default=None):
@@ -133,6 +135,14 @@ class ItemDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @classmethod
     def is_master_object(cls):
         return True
+
+    def has_sub_options(self):
+        cached = self.__class__._check_sub_options_cache.get(self.id, -1)
+        if cached != -1:
+            return cached
+        value = any(x.coverages for x in self.sub_item_descs)
+        self.__class__._check_sub_options_cache.set(self.id, value)
+        return value
 
 
 class ItemDescSubItemDescRelation(model.CoogSQL):

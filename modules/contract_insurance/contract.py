@@ -1190,12 +1190,18 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             return self.item_desc.extra_data_def
 
     def is_covered_at_date(self, at_date, coverage=None):
+        if not self.main_contract:
+            return False
+        if not self.main_contract.is_active_at_date(at_date):
+            return False
         for option in self.options:
             if ((not coverage or option.coverage == coverage) and
                     option.status not in ['void', 'declined'] and
                     utils.is_effective_at_date(option, at_date,
                         end_var_name='final_end_date')):
                 return True
+        if not self.item_desc.has_sub_options():
+            return False
         return any((sub_elem.is_covered_at_date(at_date, coverage)
                 for sub_elem in self.sub_covered_elements))
 
