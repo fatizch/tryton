@@ -136,6 +136,8 @@ class Contract:
         def limit_dates(dates, start=None, end=None):
             res = set([x for x in dates
                     if (not start or x >= start) and (not end or x < end)])
+            if start:
+                res.add(start)
             if end:
                 res.add(end)
             return sorted(res)
