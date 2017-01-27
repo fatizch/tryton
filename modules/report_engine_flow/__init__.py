@@ -2,20 +2,22 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .report_engine import *
+import report_engine
+import batch
 
 
 def register():
     Pool.register(
-        ReportTemplate,
-        FlowVariable,
-        TemplateVariableRelation,
+        report_engine.ReportTemplate,
+        report_engine.FlowVariable,
+        report_engine.TemplateVariableRelation,
+        batch.BaseMassFlowBatch,
         module='report_engine_flow', type_='model')
 
     Pool.register(
-        ReportCreate,
+        report_engine.ReportCreate,
         module='report_engine_flow', type_='wizard')
 
     Pool.register(
-        ReportGenerate,
+        report_engine.ReportGenerate,
         module='report_engine_flow', type_='report')
