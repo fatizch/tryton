@@ -47,14 +47,19 @@ class SnapshotTakeBatch(batch.BatchRootNoSelect):
             ]
 
     @classmethod
+    def get_filename(cls, output_folder, snapshot):
+        return os.path.join(output_folder, '%s.csv' %
+            snapshot.name)
+
+    @classmethod
     def export_snapshot(cls, snap_id, output_folder):
         to_export = cls.fields_to_export()
         lines = Pool().get('account.move.line.aggregated').search(
             [('snapshot', '=', snap_id)])
         if lines:
             header = [cls.sanitize_value(x[0](lines[0])) for x in to_export]
-            filename = os.path.join(output_folder, '%s.csv' %
-                lines[0].snapshot.name)
+            filename = cls.get_filename(output_folder, lines[0].snapshot)
+
         with open(filename, 'w+') as _f:
             writer = csv.writer(_f, delimiter=';')
             writer.writerow(header)
