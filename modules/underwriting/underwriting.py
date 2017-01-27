@@ -41,7 +41,7 @@ class UnderwritingType(model.CoogSQL, model.CoogView):
     waiting_decision = fields.Many2One('underwriting.decision.type',
         'Waiting Decision', required=True, ondelete='RESTRICT')
     document_rule = fields.One2Many('underwriting.document_rule',
-        'underwriting_type', 'Document Rule')
+        'underwriting_type', 'Document Rule', delete_missing=True)
     end_date_required = fields.Boolean('End date required',
         help='If True, the end date will be required on the related decisions')
     next_underwriting = fields.Many2One('underwriting.type',

@@ -14,5 +14,5 @@ class Configuration:
 
     __name__ = 'claim.configuration'
 
-    control_rule = fields.Many2One(
-        'claim.indemnification.control.rule', 'Control Rule')
+    control_rule = fields.Many2One('claim.indemnification.control.rule',
+        'Control Rule', ondelete='RESTRICT')

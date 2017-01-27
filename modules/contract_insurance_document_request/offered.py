@@ -31,7 +31,7 @@ class DocumentRule(
     option = fields.Many2One('offered.option.description',
         'Option Description', ondelete='CASCADE', select=True)
     documents = fields.One2Many('document.rule-document.description', 'rule',
-        'Documents')
+        'Documents', delete_missing=True)
     reminder_delay = fields.Integer('Reminder Delay')
     reminder_unit = fields.Selection([
             ('', ''),

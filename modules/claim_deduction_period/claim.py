@@ -49,7 +49,7 @@ class DeductionPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
         depends=['start_date'])
     deduction_kind = fields.Many2One(
         'benefit.loss.description.deduction_period_kind', 'Deduction Kind',
-        required=True)
+        required=True, ondelete='RESTRICT')
     amount_kind = fields.Selection([
             ('total', 'Total'), ('per_day', 'Per Day')], 'Amount Kind')
     amount_received = fields.Numeric('Amount Received', required=True,

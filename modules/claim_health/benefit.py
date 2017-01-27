@@ -32,7 +32,7 @@ class MedicalActDescription(model.CoogSQL, model.CoogView):
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
     family = fields.Many2One('benefit.act.family', 'Medical Act Family',
-            ondelete='RESTRICT')
+            ondelete='RESTRICT', required=True, select=True)
 
     @classmethod
     def __setup__(cls):
@@ -55,7 +55,7 @@ class MedicalActFamily(model.CoogSQL, model.CoogView):
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True)
     act_descriptions = fields.One2Many('benefit.act.description', 'family',
-        'Medical Act Descriptions')
+        'Medical Act Descriptions', delete_missing=True)
 
     @classmethod
     def __setup__(cls):

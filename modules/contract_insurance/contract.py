@@ -762,7 +762,7 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             'invisible': ~Eval('parent'),
             }, depends=['parent'])
     end_reason = fields.Many2One('covered_element.end_reason', 'End Reason',
-        domain=[If(~Eval('parent'), [],
+        ondelete='RESTRICT', domain=[If(~Eval('parent'), [],
             [('item_descs', '=', Eval('item_desc'))])],
         states={'invisible': ~Eval('manual_end_date'),
             'required': Bool(Eval('manual_end_date', False)),

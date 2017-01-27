@@ -140,7 +140,7 @@ class DocumentReception(model.CoogSQL, model.CoogView):
             ], 'State', readonly=True)
     state_string = state.translated('state')
     attachments = fields.One2Many('ir.attachment', 'resource', 'Content',
-        size=1, states={'invisible': ~Eval('attachments')})
+        size=1, states={'invisible': ~Eval('attachments')}, delete_missing=True)
     # Once the document is treated, attachments becomes empty, and attachment
     # is set.
     attachment = fields.Many2One('ir.attachment', 'Attachment', readonly=True,

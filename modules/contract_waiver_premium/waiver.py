@@ -35,7 +35,7 @@ class PremiumWaiver(model.CoogSQL, model.CoogView):
         fields.Char('Options Names'),
         'get_options_names')
     contract = fields.Many2One('contract', 'Contract', required=True,
-        select=True)
+        select=True, ondelete='CASCADE')
 
     @classmethod
     def __setup__(cls):

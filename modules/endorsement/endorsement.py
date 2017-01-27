@@ -1149,7 +1149,7 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
         fields.Text('Endorsement Summary', readonly=True),
         'get_endorsement_summary')
     attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments',
-        target_not_required=True)
+        delete_missing=True)
     contracts_name = fields.Function(
         fields.Char('Contracts Name'),
         'get_contracts_name')

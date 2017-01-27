@@ -64,7 +64,7 @@ class EndorsementSet(CoogProcessFramework):
         fields.One2Many('ir.attachment', 'origin',
             'Created Attachments'), 'get_created_attachments')
     attachments = fields.One2Many('ir.attachment', 'resource',
-        'Attachments')
+        'Attachments', delete_missing=True)
 
     @classmethod
     def __setup__(cls):

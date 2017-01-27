@@ -26,14 +26,14 @@ class Contract(RemindableInterface):
     __metaclass__ = PoolMeta
 
     attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments',
-        delete_missing=False, target_not_required=True)
+        delete_missing=True, target_not_required=True)
     doc_received = fields.Function(
         fields.Boolean('All Documents Received'),
         'on_change_with_doc_received')
     document_request_lines = fields.One2Many('document.request.line',
         'contract', 'Documents',
         states={'readonly': Eval('status') != 'quote'},
-        depends=['status'], delete_missing=True)
+        depends=['status'], delete_missing=True, target_not_required=True)
     hidden_waiting_requests = fields.Function(
         fields.Boolean('Hidden waiting requests'),
         'get_hidden_waiting_requests',

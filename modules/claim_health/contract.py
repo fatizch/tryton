@@ -21,7 +21,7 @@ class CoveredElement:
         fields.Many2One('bank.account', 'Claim Default Bank Account'),
         'get_claim_default_bank_account')
     claim_specific_bank_account = fields.Many2One('bank.account',
-        'Specific Claim Bank Account',
+        'Specific Claim Bank Account', ondelete='RESTRICT',
         domain=[('id', 'in', Eval('possible_claim_bank_accounts'))],
         depends=['possible_claim_bank_accounts'])
     possible_claim_bank_accounts = fields.Function(

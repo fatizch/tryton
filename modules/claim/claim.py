@@ -368,7 +368,7 @@ class Loss(model.CoogSQL, model.CoogView):
                     Eval('loss_desc'))]],
         depends=['loss_desc'])
     multi_level_view = fields.One2Many('claim.service',
-        'loss', 'Claim Services', target_not_required=True)
+        'loss', 'Claim Services', target_not_required=True, delete_missing=True)
     extra_data = fields.Dict('extra_data', 'Extra Data', states={
             'invisible': ~Eval('extra_data'),
             'readonly': Eval('state') != 'draft'},
