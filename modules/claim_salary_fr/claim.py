@@ -157,12 +157,8 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
     def update_contributions_table(cls, contributions, tables, key):
         ExtraData = Pool().get('extra_data')
         for k, v in contributions.items():
-            extra_data = ExtraData._extra_data_cache.get(k, None)
-            if not extra_data:
-                extra_data = ExtraData.search(
-                    [('name', '=', k)], limit=1)[0].id
-                ExtraData._extra_data_cache.set(k, extra_data)
-            tables[k]['extra_data'] = extra_data
+            data_def = ExtraData._extra_data_struct.get(k)
+            tables[k]['extra_data'] = data_def['id']
             tables[k][key] = v
 
     def get_rates_per_range(self, fixed=False):

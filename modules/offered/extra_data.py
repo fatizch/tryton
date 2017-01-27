@@ -331,12 +331,27 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
         res = extra_data.get(key)
         if res is not None:
             return res
-        # TODO : To Enhance and load data_def in cache
-        data_def, = cls.search([('name', '=', key)])
-        if data_def.type_ in ['integer', 'float', 'numeric']:
+        data_def = cls._extra_data_struct(key)
+        if data_def['type_'] in ['integer', 'float', 'numeric']:
             return 0
-        elif data_def.type_ in ['char', 'selection']:
+        elif data_def['type_'] in ['char', 'selection']:
             return ''
+
+    @classmethod
+    def _extra_data_struct(cls, name):
+        value = cls._extra_data_cache.get(name, -1)
+        if value != -1:
+            return value
+        instance = cls.search([('name', '=', name)])[0]
+        instance_data = instance._extra_data_struct_extract()
+        cls._extra_data_cache.set(name, instance_data)
+        return instance_data.copy()
+
+    def _extra_data_struct_extract(self):
+        return {
+            'type_': self.type_,
+            'id': self.id,
+            }
 
     @classmethod
     def search_tags(cls, name, clause):
