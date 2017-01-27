@@ -158,19 +158,28 @@ class BenefitRule(
         benefits = sorted(benefits, key=lambda x: x['start_date'])
         cleaned = []
         for period in benefits:
-            if (not cleaned or period['amount_per_unit'] !=
-                    cleaned[-1]['amount_per_unit'] or
-                    period['unit'] != cleaned[-1]['unit']
-                    and (cleaned[-1]['end_date'] -
-                        period['start_date']).days == 1):
+            if not cleaned or not cls.same_indemnification_line(cleaned[-1],
+                    period):
                 cleaned.append(period)
             else:
-                cleaned[-1]['end_date'] = period['end_date']
-                cleaned[-1]['nb_of_unit'] = period['nb_of_unit'] + \
-                    cleaned[-1]['nb_of_unit']
-                cleaned[-1]['amount'] = (cleaned[-1]['nb_of_unit'] *
-                    cleaned[-1]['amount_per_unit'])
+                cls.merge_indemnification_line(cleaned[-1], period)
         return cleaned
+
+    @classmethod
+    def same_indemnification_line(cls, line1, line2):
+        for fname in ('amount_per_unit', 'unit', 'description',
+                'extra_details'):
+            if line1.get(fname, None) != line2.get(fname, None):
+                return False
+        if (line1['end_date'] - line2['start_date']).days != 1:
+            return False
+        return True
+
+    @classmethod
+    def merge_indemnification_line(cls, base, duplicate):
+        base['end_date'] = duplicate['end_date']
+        base['nb_unit'] += duplicate['nb_unit']
+        base['amount'] = base['amount_per_unit'] * base['nb_unit']
 
     def calculate(self, args):
         res = []
