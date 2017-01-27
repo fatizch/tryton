@@ -362,6 +362,22 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     date(2014, 1, 1), date(2014, 1, 31),
                     contract.billing_informations[0])])
 
+        contract = self.Contract(company=company,
+            start_date=date(2014, 1, 31),
+            product=product,
+            billing_informations=[
+                self.BillingInformation(date=None,
+                    billing_mode=freq_month,
+                    payment_term=payment_term),
+                ])
+        contract.save()
+        bil_info = contract.billing_informations[0]
+        self.assertEqual(contract.get_invoice_periods(date(2014, 4, 1)), [
+                (date(2014, 1, 31), date(2014, 2, 27), bil_info),
+                (date(2014, 2, 28), date(2014, 3, 30), bil_info),
+                (date(2014, 3, 31), date(2014, 4, 29), bil_info),
+                ])
+
     def test_get_direct_debit_day(self):
         current_date = date(2014, 9, 1)
         with Transaction().set_context(client_defined_date=current_date):
