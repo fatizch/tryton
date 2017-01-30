@@ -157,7 +157,7 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
     def update_contributions_table(cls, contributions, tables, key):
         ExtraData = Pool().get('extra_data')
         for k, v in contributions.items():
-            data_def = ExtraData._extra_data_struct.get(k)
+            data_def = ExtraData._extra_data_struct(k)
             tables[k]['extra_data'] = data_def['id']
             tables[k][key] = v
 
