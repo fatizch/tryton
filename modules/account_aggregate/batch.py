@@ -60,12 +60,12 @@ class SnapshotTakeBatch(batch.BatchRootNoSelect):
             header = [cls.sanitize_value(x[0](lines[0])) for x in to_export]
             filename = cls.get_filename(output_folder, lines[0].snapshot)
 
-        with open(filename, 'w+') as _f:
-            writer = csv.writer(_f, delimiter=';')
-            writer.writerow(header)
-            for line in lines:
-                writer.writerow([cls.sanitize_value(
-                            x[1](line)) for x in to_export])
+            with open(filename, 'w+') as _f:
+                writer = csv.writer(_f, delimiter=';')
+                writer.writerow(header)
+                for line in lines:
+                    writer.writerow([cls.sanitize_value(
+                                x[1](line)) for x in to_export])
 
     @classmethod
     def execute(cls, objects, ids, output_folder=None):
