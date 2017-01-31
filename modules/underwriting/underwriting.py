@@ -110,7 +110,7 @@ class UnderwritingType(model.CoogSQL, model.CoogView):
             decision.init_dict_for_rule_engine(data_dict)
             results.append(rule.calculate_required_documents(data_dict))
         if len(results) > 1:
-            return rule.merge_results(results)
+            return rule.merge_results(*results)
         return results[0]
 
 
