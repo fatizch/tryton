@@ -138,4 +138,4 @@ Supportée
 Exemple :
 ---------
 
-``coog batch exec account.payment.acknowledge 2 payment_kind=receivable``
+``coog batch exec account.payment.acknowledge 2 --payment_kind=receivable --journal_methods=sepa,manual``
