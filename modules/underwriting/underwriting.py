@@ -415,7 +415,11 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
                 'state': 'completed',
                 })
         copies_per_date = defaultdict(list)
+        valid_underwritings = []
         for underwriting in underwritings:
+            if any((x.state == 'finalized' for x in underwriting.results)):
+                valid_underwritings.append(underwriting)
+        for underwriting in valid_underwritings:
             if underwriting.type_.next_underwriting:
                 copies_per_date[max(x.effective_decision_end
                         for x in underwriting.results)].append(underwriting)
