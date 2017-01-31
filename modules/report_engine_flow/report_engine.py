@@ -74,7 +74,7 @@ class FlowVariable(model.CoogSQL, model.CoogView):
     variable = fields.Many2One('report.flow.variable', 'Variable',
         ondelete='CASCADE', select=True)
     variables = fields.One2Many('report.flow.variable', 'variable',
-        'Variables', states={'invisible': FLAT},
+        'Variables', states={'invisible': FLAT}, target_not_required=True,
         depends=['kind'], order=[('order', 'ASC')], delete_missing=True)
     data = fields.Char('Data', states={'invisible': Not(FLAT)},
         depends=['kind'])
@@ -84,7 +84,8 @@ class FlowVariable(model.CoogSQL, model.CoogView):
             }, depends=['kind'])
     else_statement = fields.One2Many('report.flow.variable', 'else_reverse',
         'Else', states={'invisible': Eval('kind') != 'if'},
-        depends=['kind'], order=[('order', 'ASC')], delete_missing=True)
+        target_not_required=True, depends=['kind'], order=[('order', 'ASC')],
+        delete_missing=True)
     else_reverse = fields.Many2One('report.flow.variable', 'Else Reverse',
         ondelete='CASCADE', select=True)
     for_object_statement = fields.Char('For', states={

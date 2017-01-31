@@ -13,7 +13,7 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, model, export, utils
 
-from .contract import FREQUENCIES
+from .contract import FREQUENCIES, CustomRrule
 
 __metaclass__ = PoolMeta
 
@@ -158,9 +158,26 @@ class BillingMode(model.CoogSQL, model.CoogView):
     def default_sync_month():
         return ''
 
+    def _custom_rrule(self, start, end):
+        # Do not handle the case where the global configuration is to sync all
+        # invoices on the 31 / 30 / 29 of january
+        assert not self.sync_day and not self.sync_month
+        interval = {
+            'monthly': 1,
+            'quarterly': 3,
+            'half_yearly': 6,
+            'yearly': 12,
+            }.get(self.frequency)
+        return CustomRrule(start, interval, end)
+
     def get_rrule(self, start, until=None):
         bymonthday = int(self.sync_day) if self.sync_day else None
         bymonth = int(self.sync_month) if self.sync_month else None
+        if (not bymonthday and start.day in (29, 30, 31) or
+                bymonthday in (29, 30, 31)) and (
+                self.frequency in ('yearly', 'quarterly', 'half_yearly',
+                    'monthly')):
+            return self._custom_rrule(start, until), until
         if self.frequency in ('yearly', 'quarterly', 'half_yearly'):
             freq = YEARLY
             if self.frequency in ('quarterly', 'half_yearly'):

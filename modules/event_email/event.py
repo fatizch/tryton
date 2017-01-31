@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 import logging
 from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
+from email.mime.multipart import MIMEMultipart
 from genshi.template import TextTemplate
 
 from trytond.pool import PoolMeta
@@ -52,6 +54,10 @@ class EventTypeAction:
         '"object" keyword in the body templating will hold a list rather than '
         'a single instance.',
         depends=['action'])
+    attachment_template = fields.Many2One('report.template',
+        'Attachement Template', states={
+            'invisible': Eval('action') != 'send_email',
+            }, depends=['action'], ondelete='RESTRICT')
 
     @classmethod
     def get_action_types(cls):
@@ -86,7 +92,21 @@ class EventTypeAction:
 
     def generate_email(self, data):
         template = TextTemplate(self.email_body)
-        msg = MIMEText(template.generate(**data).render())
+        cur_object = data['object']
+        if self.attachment_template:
+            attachments = self.attachment_template._generate_reports(
+                [cur_object] if not isinstance(cur_object, list) else
+                cur_object, {})
+            if attachments:
+                msg = MIMEMultipart(template.generate(**data).render())
+                for i, attachment in enumerate(attachments):
+                    part = MIMEApplication(
+                        attachment['data'],
+                        Name='%s_%s' % (i, attachment['report_name']),
+                        )
+                    msg.attach(part)
+            else:
+                msg = MIMEText(template.generate(**data).render())
         msg['From'] = self.email_sender
         msg['To'] = self.email_dest
         msg['Subject'] = self.email_subject

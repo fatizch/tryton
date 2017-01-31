@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "view:event.type.action:"
+msgid "Attachment Template"
+msgstr "Modèle de pièce jointe"
+
+msgctxt "field:event.type.action,attachment_template:"
+msgid "Attachment Template"
+msgstr "Modèle de pièce jointe"
+
 msgctxt "field:event.type.action,email_blocking:"
 msgid "Email is blocking"
 msgstr "Bloquant"

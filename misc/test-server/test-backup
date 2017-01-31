@@ -1,9 +1,0 @@
-#!/bin/bash
-
-PATH="/usr/local/bin:$PATH"
-export PATH
-
-cd /var/log/coog
-ARCHIVE="$(date +'%y-%m-%d').tar.gz"
-tar czf "$ARCHIVE" coog-* test-*
-rm -rf coog-* test-*

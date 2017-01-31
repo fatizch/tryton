@@ -582,7 +582,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             'invisible': Not(In(Eval('status'),
                     ['cancelled', 'cancel_paid'])),
             'readonly': Eval('status') == 'cancel_paid'
-            })
+            }, ondelete='RESTRICT', depends=['status'])
     is_paid = fields.Function(fields.Boolean('Paid'), 'get_is_paid')
 
     @classmethod

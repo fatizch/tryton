@@ -54,6 +54,10 @@ msgctxt "field:account.dunning.treat,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:account.dunning.update,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "help:account.dunning.level,days_from_previous_step:"
 msgid "Days are defined based on the previous level execution date"
 msgstr ""
@@ -72,3 +76,7 @@ msgstr "Batch de création des relances "
 msgctxt "model:account.dunning.treat,name:"
 msgid "Process Dunning Batch"
 msgstr "Batch de traitement des relances"
+
+msgctxt "model:account.dunning.update,name:"
+msgid "Dunning Update Batch"
+msgstr "Batch de mise à jour des relances"

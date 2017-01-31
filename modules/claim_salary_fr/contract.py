@@ -29,7 +29,7 @@ class OptionBenefit:
     salary_mode = fields.Selection(SALARY_MODES, 'Salary Mode')
     net_salary_mode = fields.Boolean('Calculate Net Salary')
     net_calculation_rule = fields.Many2One('claim.net_calculation_rule',
-        'Net Calculation Rule', states={
+        'Net Calculation Rule', ondelete='RESTRICT', states={
             'required': Bool(Eval('net_salary_mode')),
             'invisible': ~Bool(Eval('net_salary_mode')),
             }, depends=['net_salary_mode'])

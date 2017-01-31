@@ -5,6 +5,7 @@ try:
 except ImportError:
     import json
 
+from itertools import groupby
 import datetime
 
 from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
@@ -223,15 +224,32 @@ class ReportProductionRequest(model.CoogSQL, model.CoogView):
     @classmethod
     def treat_requests(cls, report_production_requests):
         all_reports, all_attachments = [], []
-        for request in report_production_requests:
-            if not request.report_template:
-                continue
-            context_ = json.loads(request.context_, object_hook=JSONDecoder())
-            cls.instantiate_from_dict(context_)
-            reports, attachments = request.report_template.produce_reports([
-                    request.object_], context_)
-            all_reports.extend(reports)
-            all_attachments.extend(attachments)
+
+        def group_prod_requests(x):
+            return x.report_template
+        report_production_requests = sorted(report_production_requests,
+            key=group_prod_requests)
+        for template, values in groupby(report_production_requests,
+                group_prod_requests):
+            values = list(values)
+            if not template.split_reports:
+                # Grouped by context and template
+                genexp_sort = lambda x: x.context_
+            else:
+                # Grouped by request id
+                genexp_sort = lambda x: x.id
+
+            values = sorted(values, key=genexp_sort)
+            for _, requests in groupby(values, genexp_sort):
+                requests = list(requests)
+                to_treat = [x.object_ for x in requests]
+                context_ = json.loads(requests[0].context_,
+                    object_hook=JSONDecoder())
+                cls.instantiate_from_dict(context_)
+                reports, attachments = requests[0].\
+                    report_template.produce_reports(to_treat, context_)
+                all_reports.extend(reports)
+                all_attachments.extend(attachments)
         cls.write(list(report_production_requests), {'treated': True})
         return all_reports, all_attachments
 

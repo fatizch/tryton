@@ -20,7 +20,7 @@ class Loss:
 
     hospitalisation_periods = fields.One2Many(
         'claim.loss.hospitalisation.period', 'loss',
-        'Hospitalisation Periods', states={
+        'Hospitalisation Periods', delete_missing=True, states={
             'invisible': Not(Equal(Eval('loss_desc_kind'), 'std'))},
         depends=['loss_desc_kind'])
 
@@ -68,7 +68,7 @@ class Service:
             if person and self.option.covered_element.party != person:
                 for elem in self.option.covered_element.sub_covered_elements:
                     if elem.party == person:
-                        return elem
+                        return elem.id
         return super(Service, self).get_theoretical_covered_element(name)
 
 
@@ -105,7 +105,8 @@ class HospitalisationPeriod(model.CoogSQL, model.CoogView):
 
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date', required=True)
-    loss = fields.Many2One('claim.loss', 'Loss', ondelete="CASCADE")
+    loss = fields.Many2One('claim.loss', 'Loss', ondelete='CASCADE',
+        required=True, select=True)
 
     @classmethod
     def __setup__(cls):

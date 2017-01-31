@@ -6,7 +6,7 @@ import logging
 import ConfigParser
 from datetime import datetime, date
 import uuid
-import warnings
+import itertools
 
 from trytond import backend
 from trytond.config import config
@@ -23,7 +23,9 @@ __all__ = [
     'BatchRootNoSelect',
     'ViewValidationBatch',
     'CleanDatabaseBatch',
+    'NoSelectBatchExample',
     'BatchParamsConfig',
+    'MemorySavingBatch',
     ]
 
 
@@ -204,7 +206,7 @@ class BatchRootNoSelect(BatchRoot):
 
     @classmethod
     def convert_to_instances(cls, ids):
-        return []
+        return [id for id in ids]
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -216,7 +218,17 @@ class BatchRootNoSelect(BatchRoot):
 
     @classmethod
     def select_ids(cls, **kwargs):
-        return []
+        return [[0]]
+
+
+class NoSelectBatchExample(BatchRootNoSelect):
+    'Batch No Select Example'
+
+    __name__ = 'coog.noselect_batch_example'
+
+    @classmethod
+    def execute(cls, objects, ids):
+        return 'objects: %s - ids: %s' % (objects, ids)
 
 
 class ViewValidationBatch(BatchRoot):
@@ -233,7 +245,7 @@ class ViewValidationBatch(BatchRoot):
         return 'ir.ui.view'
 
     @classmethod
-    def get_batch_domain(cls):
+    def get_batch_domain(cls, crash=None):
         Module = Pool().get('ir.module')
         modules = Module.search([])
         utils_module = Module.search([('name', '=', 'coog_core')])[0]
@@ -278,7 +290,8 @@ class CleanDatabaseBatch(BatchRoot):
         return 'ir.model'
 
     @classmethod
-    def get_batch_domain(cls, module):
+    def get_batch_domain(cls, connection_date, treatment_date, module=None,
+            drop_const=None, drop_index=None):
         return module and [('module', '=', module)]
 
     @classmethod
@@ -368,3 +381,101 @@ class BatchParamsConfig(Model):
             c_params['treatment_date'] = datetime.strptime(
                 params['treatment_date'], '%Y-%m-%d').date()
         return c_params
+
+
+class MemorySavingBatch(BatchRoot):
+    'Memory Save Batch'
+
+    __name__ = 'memory.save.batch'
+
+    @classmethod
+    def get_tables(cls, *args, **kwargs):
+        main_model_name = cls.get_batch_main_model_name()
+        return {
+            main_model_name: Pool().get(main_model_name).__table__(),
+            }
+
+    @classmethod
+    def convert_to_instances(cls, ids):
+        """
+        Should not be overwritten. parse_select_ids should be the
+        only method to create our own generator expression objects.
+        """
+        return []
+
+    @classmethod
+    def get_query_table(cls, tables, *args, **kwargs):
+        return tables[cls.get_batch_main_model_name()]
+
+    @classmethod
+    def get_group_by(cls, tables, *args, **kwargs):
+        return None
+
+    @classmethod
+    def get_where_clause(cls, tables, *args, **kwargs):
+        return None
+
+    @classmethod
+    def get_order_by(cls, tables, *args, **kwargs):
+        return None
+
+    @classmethod
+    def check_mandatory_parameters(cls, *args, **kwargs):
+        raise NotImplementedError
+
+    @classmethod
+    def select_ids(cls, *args, **kwargs):
+        """
+        Returns generator expression of list of one tuple element.
+        The tuple hold the values of selected_fields. This ensure that we have
+        1 jobs per tuple of selected values.
+        """
+        tables = cls.get_tables()
+        cls.check_mandatory_parameters(*args, **kwargs)
+        cursor = Transaction().connection.cursor()
+        query_table = cls.get_query_table(tables, *args, **kwargs)
+        group_by = cls.get_group_by(tables, *args, **kwargs)
+        where_clause = cls.get_where_clause(tables, *args, **kwargs)
+        order_by = cls.get_order_by(tables, *args, **kwargs)
+        fields_to_select = cls.fields_to_select(tables, *args, **kwargs)
+
+        cursor.execute(*query_table.select(*fields_to_select,
+                where=where_clause,
+                group_by=group_by,
+                order_by=order_by))
+        if not group_by:
+            return ([tuple(rows)] for rows in cursor.fetchall())
+        else:
+            return ([tuple(rows)] for rows in itertools.islice(
+                    cursor.fetchall(), len(group_by)))
+
+    @classmethod
+    def parse_select_ids(cls, fetched_data, *args, **kwargs):
+        raise NotImplementedError
+
+    @classmethod
+    def fields_to_select(cls, tables, *args, **kwargs):
+        """
+        Return all the fields to select in the select_ids
+        """
+        raise NotImplementedError
+
+    @classmethod
+    def execute(cls, objects, ids, *args, **kwargs):
+        """
+        Execute method is overrided to instance objects by our own way.
+        parse_select_ids should return a generator expression to properly
+        preserve the memory.
+        """
+        cls.check_mandatory_parameters(*args, **kwargs)
+        objects = cls.parse_select_ids(
+            (x[0] for x in cls.select_ids(**kwargs)), *args,
+            **kwargs)
+        cls.lazy_execute(objects, ids, *args, **kwargs)
+
+    @classmethod
+    def lazy_execute(cls, objects, ids, *args, **kwargs):
+        """
+        Substitutes the execute method and should be overwritten.
+        """
+        raise NotImplementedError

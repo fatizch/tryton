@@ -64,6 +64,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_underwriting_decision_type"/>
         </record>
         <menuitem parent="menu_underwriting_configuration" sequence="12" action="act_underwriting_decision_type" id="menu_underwriting_decision_type"/>
+        <!-- ################################### -->
+        <!-- # Underwriting Type Document Rule # -->
+        <!-- ################################### -->
+        <record model="ir.ui.view" id="underwriting_document_rule_view_form">
+            <field name="model">underwriting.document_rule</field>
+            <field name="type">form</field>
+            <field name="name">underwriting_document_rule_form</field>
+        </record>
         <!-- ################ -->
         <!-- # Underwriting # -->
         <!-- ################ -->
@@ -77,6 +85,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">underwriting_list</field>
         </record>
+        <!-- Entry point -->
         <record model="ir.action.act_window" id="act_underwriting">
             <field name="name">Underwritings</field>
             <field name="res_model">underwriting</field>
@@ -115,6 +124,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_underwriting"/>
         </record>
         <menuitem parent="menu_underwriting" sequence="10" action="act_underwriting" id="menu_underwritings"/>
+        <!-- Documents -->
+        <record model="ir.action.keyword" id="letter_generation_underwriting_keyword">
+            <field name="keyword">form_print</field>
+            <field name="model">underwriting,-1</field>
+            <field name="action" ref="report_engine.letter_generation_wizard"/>
+        </record>
         <!-- ####################### -->
         <!-- # Underwriting Result # -->
         <!-- ####################### -->

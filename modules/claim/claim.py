@@ -368,7 +368,7 @@ class Loss(model.CoogSQL, model.CoogView):
                     Eval('loss_desc'))]],
         depends=['loss_desc'])
     multi_level_view = fields.One2Many('claim.service',
-        'loss', 'Claim Services', target_not_required=True)
+        'loss', 'Claim Services', target_not_required=True, delete_missing=True)
     extra_data = fields.Dict('extra_data', 'Extra Data', states={
             'invisible': ~Eval('extra_data'),
             'readonly': Eval('state') != 'draft'},
@@ -786,11 +786,18 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
         if self.option:
             return self.option.get_currency()
 
+    def get_service_extra_data(self, at_date):
+        """
+        This method should not be modified, it is specific to only pickup
+        service's extra datas and may be used outside the code (In reports
+        templates for instance)
+        """
+        extra_data = utils.get_value_at_date(self.extra_datas, at_date)
+        return extra_data.extra_data_values if extra_data else {}
+
     def get_all_extra_data(self, at_date):
         res = {}
-        extra_data = utils.get_value_at_date(self.extra_datas, at_date)
-        good_extra_data = extra_data.extra_data_values if extra_data else {}
-        res.update(good_extra_data)
+        res.update(self.get_service_extra_data(at_date))
         res.update(self.loss.get_all_extra_data(at_date))
         if self.option:
             res.update(self.option.get_all_extra_data(at_date))

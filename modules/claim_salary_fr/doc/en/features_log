@@ -1,3 +1,5 @@
+* Fixed amount contributions are no longer related to salary ranges
+* Review rates per range retrieval method: add an optional rates list to be limited
 * Add tutorial on how to parameter coog to calculate net salary
 * Improve salary display
 * Review salary range calculation

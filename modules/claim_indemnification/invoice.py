@@ -3,7 +3,7 @@
 from trytond import backend
 from trytond.pool import PoolMeta
 
-from trytond.modules.coog_core import model, fields
+from trytond.modules.coog_core import model, fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -26,6 +26,13 @@ class Invoice:
         if not getattr(self, 'contract', None):
             context['tax_included'] = True
         return context
+
+    def _get_move_line(self, date, amount):
+        line = super(Invoice, self)._get_move_line(date, amount)
+        if (getattr(self, 'business_kind', None) == 'claim_invoice' and
+                self.type == 'in' and self.total_amount > 0):
+            line.payment_date = utils.today()
+        return line
 
 
 class InvoiceLine:

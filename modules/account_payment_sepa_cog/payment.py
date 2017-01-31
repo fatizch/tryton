@@ -284,7 +284,9 @@ class Group:
         # b2be297bb1f0b939e2ee52594aceebd9  pain.008.001.04.xml
         # 09e2a7e044f88df154a5121ea35220f9  pain.008.003.02.xml
 
-        if self.kind != 'receivable' or self.kind == 'receivable' and \
+        if self.kind != 'receivable' or \
+                self.journal.sepa_receivable_flavor.endswith('-cfonb') \
+                or self.kind == 'receivable' and \
                 not self.journal.sepa_receivable_flavor.startswith('pain.008'):
             return super(Group, self).get_sepa_template()
         return loader.load('%s.xml' % self.journal.sepa_receivable_flavor)
@@ -294,6 +296,12 @@ class Group:
         return super(Group, cls)._export_skips() | {'sepa_messages'}
 
     def merge_payment_key(self, payment):
+        # This method is used twice when processing payments:
+        # once for setting the merged_id, and once when generating the sepa
+        # message. For the latter, it is used to regoup payments in combination
+        # with the sepa_group_payment_key method, which uses the payment's date.
+        # To prevent duplicate end_to_end_ids in the sepa_file, we need the date
+        # here too.
         pool = Pool()
         Payment = pool.get('account.payment')
         result = super(Group, self).merge_payment_key(payment)
@@ -301,6 +309,7 @@ class Group:
             ('party', payment.payer or payment.party),
             ('sepa_mandate', Payment.get_sepa_mandates([payment])[0]),
             ('sepa_bank_account_number', payment.sepa_bank_account_number),
+            ('date', payment.date),
             ]
 
     def update_last_sepa_receivable_date(self):
@@ -449,7 +458,8 @@ class Payment:
             depends=['currency_digits']),
         'get_reject_fee_amount')
     payer = fields.Function(
-        fields.Many2One('party.party', 'Payer'),
+        fields.Many2One('party.party', 'Payer',
+            states={'invisible': (Eval('kind') == 'payable')}),
         'on_change_with_payer')
 
     @classmethod
@@ -752,11 +762,12 @@ class PaymentCreationStart:
         states={
             'invisible': ((~Bool(Eval('process_method')) |
                 (Eval('process_method') != 'sepa')) & Bool(
-                Eval('payer'))),
-            'required': (Eval('process_method') == 'sepa')
+                Eval('payer')) | (Eval('kind') == 'payable')),
+            'required': ((Eval('process_method') == 'sepa') &
+                (Eval('kind') == 'receivable'))
             },
         depends=['payer', 'process_method', 'payment_date',
-            'available_bank_accounts'])
+            'available_bank_accounts', 'kind'])
     available_payers = fields.Many2Many('party.party', None, None,
          'Available Payers')
     available_bank_accounts = fields.Many2Many('bank.account', None, None,
@@ -765,10 +776,12 @@ class PaymentCreationStart:
         domain=[('id', 'in', Eval('available_payers'))],
         states={
             'invisible': (~Bool(Eval('process_method')) |
-                (Eval('process_method') != 'sepa')),
-            'required': (Eval('process_method') == 'sepa')
+                (Eval('process_method') != 'sepa') |
+                (Eval('kind') == 'payable')),
+            'required': ((Eval('process_method') == 'sepa') &
+                (Eval('kind') == 'receivable'))
             },
-        depends=['available_payers', 'process_method', 'payment_date'])
+        depends=['available_payers', 'process_method', 'payment_date', 'kind'])
 
     @fields.depends('payment_date', 'party', 'available_payers', 'payer',
         'available_bank_accounts', 'bank_account')

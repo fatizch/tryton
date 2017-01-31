@@ -3,9 +3,9 @@
 import datetime
 from dateutil.relativedelta import relativedelta
 
-from sql import Null
+from sql import Null, Window
 from sql.conditionals import Coalesce
-from sql.aggregate import Max
+from sql.aggregate import Max, Min, Count
 
 from trytond import backend
 from trytond.pool import Pool, PoolMeta
@@ -63,6 +63,9 @@ class Contract(Printable):
     covered_element_options = fields.Function(
         fields.One2Many('contract.option', None, 'Covered Element Options'),
         'get_covered_element_options')
+    initial_number_of_sub_covered_elements = fields.Function(
+        fields.Integer('Initial Number of sub covered elements'),
+        'get_initial_number_of_sub_covered_elements')
     multi_mixed_view = covered_elements
 
     @classmethod
@@ -123,6 +126,39 @@ class Contract(Printable):
         return [option.id
             for covered_element in self.covered_elements
             for option in covered_element.options]
+
+    @classmethod
+    def get_initial_number_of_sub_covered_elements(cls, contracts, name):
+        pool = Pool()
+        activation_history = pool.get('contract.activation_history').__table__()
+        CoveredElement = pool.get('contract.covered_element')
+        covered_element = CoveredElement.__table__()
+        sub_covered_element = CoveredElement.__table__()
+
+        cursor = Transaction().connection.cursor()
+        win_query = activation_history.select(
+            activation_history.contract.as_('id'),
+            activation_history.start_date,
+            Min(activation_history.start_date, window=Window(
+                    [activation_history.contract])).as_('min_start'),
+            where=activation_history.active
+            )
+        query = win_query.join(covered_element,
+            condition=covered_element.contract == win_query.id
+            ).join(sub_covered_element,
+                condition=covered_element.id == sub_covered_element.parent)
+        cursor.execute(*query.select(win_query.id,
+                Count(sub_covered_element.id),
+                where=(win_query.start_date == win_query.min_start) &
+                win_query.id.in_([x.id for x in contracts]) &
+                (sub_covered_element.contract == Null) &
+                (Coalesce(sub_covered_element.manual_start_date,
+                        datetime.date.min) <= win_query.start_date),
+                group_by=[win_query.id]))
+        result = {x.id: 0 for x in contracts}
+        for contract_id, sub_element_count in cursor.fetchall():
+            result[contract_id] = sub_element_count
+        return result
 
     def clean_up_versions(self):
         super(Contract, self).clean_up_versions()
@@ -726,7 +762,7 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             'invisible': ~Eval('parent'),
             }, depends=['parent'])
     end_reason = fields.Many2One('covered_element.end_reason', 'End Reason',
-        domain=[If(~Eval('parent'), [],
+        ondelete='RESTRICT', domain=[If(~Eval('parent'), [],
             [('item_descs', '=', Eval('item_desc'))])],
         states={'invisible': ~Eval('manual_end_date'),
             'required': Bool(Eval('manual_end_date', False)),
@@ -1154,12 +1190,18 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             return self.item_desc.extra_data_def
 
     def is_covered_at_date(self, at_date, coverage=None):
+        if not self.main_contract:
+            return False
+        if not self.main_contract.is_active_at_date(at_date):
+            return False
         for option in self.options:
             if ((not coverage or option.coverage == coverage) and
                     option.status not in ['void', 'declined'] and
                     utils.is_effective_at_date(option, at_date,
                         end_var_name='final_end_date')):
                 return True
+        if not self.item_desc.has_sub_options():
+            return False
         return any((sub_elem.is_covered_at_date(at_date, coverage)
                 for sub_elem in self.sub_covered_elements))
 

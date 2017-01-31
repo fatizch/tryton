@@ -80,7 +80,7 @@ class CreateIndemnification:
         return defaults
 
     def check_input(self):
-        super(CreateIndemnification, self).check_input()
+        res = super(CreateIndemnification, self).check_input()
         input_start_date = self.definition.start_date
         input_end_date = self.definition.end_date
         service = self.definition.service
@@ -107,6 +107,7 @@ class CreateIndemnification:
                         'lock_end_date', {
                             'indemn_end': input_end_date,
                             'contract_end': contract_end})
+        return res
 
 
 class TransferServices(Wizard):

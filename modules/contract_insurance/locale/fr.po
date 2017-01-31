@@ -97,6 +97,10 @@ msgctxt "field:contract,multi_mixed_view:"
 msgid "Covered Elements"
 msgstr "Risques Couverts"
 
+msgctxt "field:contract,initial_number_of_sub_covered_elements:"
+msgid "Initial Number of sub covered elements"
+msgstr "Nombre initial de sous-éléments couverts"
+
 msgctxt "field:contract,options:"
 msgid "Options"
 msgstr "Garanties"

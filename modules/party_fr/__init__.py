@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from sql.operators import Concat
+from sql.conditionals import Coalesce
 
 from trytond.pool import Pool
 
@@ -40,7 +41,8 @@ def migrate_1_10_include_line3_in_street(pool):
 
         # Migration from 1.10 : merge line3 into street
         if migrate_name:
-            value = Concat(sql_table.line3, Concat('\n', sql_table.street))
+            value = Concat(Coalesce(sql_table.line3, ''),
+                Concat('\n', Coalesce(sql_table.street, '')))
             cursor.execute(*sql_table.update([sql_table.street], [value]))
             table.drop_column('line3')
 

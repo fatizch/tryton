@@ -1106,7 +1106,7 @@ class ProcessStep(model.CoogSQL, model.TaggedMixin):
             ('model', '!=', 'process.process_framework'),
             ], depends=['processes'], required=True, ondelete='RESTRICT')
     static_view = fields.Many2One('ir.ui.view', 'Static View',
-        states={'invisible': ~Eval('main_model')},
+        ondelete='RESTRICT', states={'invisible': ~Eval('main_model')},
         domain=[('model', '=', Eval('main_model_name')),
             ('type', '=', 'form')],
         depends=['main_model', 'main_model_name'])

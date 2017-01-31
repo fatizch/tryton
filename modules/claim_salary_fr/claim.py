@@ -30,7 +30,7 @@ class NetCalculationRuleFixExtraData(model.CoogSQL):
 
     calculation_rule = fields.Many2One('claim.net_calculation_rule',
         'Calculation Rule', required=True, ondelete='CASCADE')
-    extra_data = fields.Many2One('extra_data', 'Extra Data',
+    extra_data = fields.Many2One('extra_data', 'Contributions',
         required=True, ondelete='CASCADE')
 
 
@@ -41,7 +41,7 @@ class NetCalculationRuleExtraData(model.CoogSQL):
 
     calculation_rule = fields.Many2One('claim.net_calculation_rule',
         'Calculation Rule', required=True, ondelete='CASCADE')
-    extra_data = fields.Many2One('extra_data', 'Extra Data',
+    extra_data = fields.Many2One('extra_data', 'Contributions',
         required=True, ondelete='CASCADE')
 
 
@@ -105,12 +105,8 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
     net_limit_mode = fields.Function(
         fields.Boolean('Net Limit Mode'),
         'get_net_limit_mode')
-    ta_fixed_contributions = fields.Dict('extra_data',
-        'TA Fixed Contributions', domain=[('kind', '=', 'salary')])
-    tb_fixed_contributions = fields.Dict('extra_data',
-        'TB Fixed Contributions', domain=[('kind', '=', 'salary')])
-    tc_fixed_contributions = fields.Dict('extra_data',
-        'TC Fixed Contributions', domain=[('kind', '=', 'salary')])
+    fixed_contributions = fields.Dict('extra_data', 'Fixed Contributions',
+        domain=[('kind', '=', 'salary')])
     is_readonly = fields.Function(
         fields.Boolean('Is Readonly'),
         'get_is_readonly')
@@ -161,15 +157,12 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
     def update_contributions_table(cls, contributions, tables, key):
         ExtraData = Pool().get('extra_data')
         for k, v in contributions.items():
-            extra_data = ExtraData._extra_data_cache.get(k, None)
-            if not extra_data:
-                extra_data = ExtraData.search(
-                    [('name', '=', k)], limit=1)[0].id
-                ExtraData._extra_data_cache.set(k, extra_data)
-            tables[k]['extra_data'] = extra_data
+            data_def = ExtraData._extra_data_struct(k)
+            tables[k]['extra_data'] = data_def['id']
             tables[k][key] = v
 
     def get_rates_per_range(self, fixed=False):
+        ExtraData = Pool().get('extra_data')
         delivered = self.delivered_service
         net_calculuation_rule = delivered.benefit.benefit_rules[0]. \
             option_benefit_at_date(delivered.option,
@@ -180,9 +173,7 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
                 'ta': 0,
                 'tb': 0,
                 'tc': 0,
-                'ta_fix': 0,
-                'tb_fix': 0,
-                'tc_fix': 0,
+                'fixed_amount': 0,
                 'extra_data': None,
                 })
         if not fixed:
@@ -193,12 +184,8 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
             self.update_contributions_table(self.tc_contributions,
                 tables, 'tc')
         else:
-            self.update_contributions_table(self.ta_fixed_contributions,
-                tables, 'ta_fix')
-            self.update_contributions_table(self.tb_fixed_contributions,
-                tables, 'tb_fix')
-            self.update_contributions_table(self.tc_fixed_contributions,
-                tables, 'tc_fix')
+            self.update_contributions_table(self.fixed_contributions, tables,
+                'fixed_amount')
 
         missing_rates = [x for x in extra_datas if x.id not in
             [v['extra_data'] for k, v in tables.items()]]
@@ -207,12 +194,11 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
                 'ta': 0,
                 'tb': 0,
                 'tc': 0,
-                'ta_fix': 0,
-                'tb_fix': 0,
-                'tc_fix': 0,
+                'fixed_amount': 0,
                 'extra_data': missing.id,
                 }
-        return tables.values()
+        return sorted(tables.values(),
+            key=lambda x: ExtraData(x['extra_data']).name)
 
     @fields.depends('delivered_service')
     def get_net_limit_mode(self, name=None):
@@ -223,11 +209,15 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
             option_benefit_at_date(delivered_service.option,
                 delivered_service.loss.start_date).net_salary_mode
 
-    def get_range(self, range_name, fixed=False):
+    def get_range(self, range_name=None, fixed=False, codes_list=None):
         if fixed:
-            range_name += '_fixed'
-        extra_data = getattr(self, 't%s_contributions' %
-            range_name.lower(), None)
+            extra_data = getattr(self, 'fixed_contributions', None)
+        elif range_name:
+            extra_data = getattr(self, 't%s_contributions' %
+                range_name.lower(), None)
+        if codes_list:
+            extra_data = {k: extra_data[k] for k in codes_list
+                if k in extra_data}
         if not extra_data:
             return None
         # If fixed: fixed values must be already slicked by the number

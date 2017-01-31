@@ -25,15 +25,16 @@ class Claim(RemindableInterface):
     __metaclass__ = PoolMeta
 
     document_request_lines = fields.One2Many('document.request.line',
-        'claim', 'Required Documents', delete_missing=True)
+        'claim', 'Required Documents', delete_missing=True,
+        target_not_required=True)
     document_request = fields.One2Many('document.request', 'needed_by',
-        'Document Request')
+        'Document Request', delete_missing=True)
     doc_received = fields.Function(
         fields.Boolean('All Documents Received',
             depends=['document_request_lines']),
         'on_change_with_doc_received')
     attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments',
-        target_not_required=True)
+        delete_missing=True)
     hidden_waiting_requests = fields.Function(
         fields.Boolean('Hidden waiting requests'),
         'get_hidden_waiting_requests',

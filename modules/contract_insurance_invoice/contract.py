@@ -3,8 +3,6 @@
 import intervaltree
 import datetime
 import calendar
-import logging
-import traceback
 from collections import defaultdict
 from decimal import Decimal
 
@@ -64,22 +62,37 @@ class CustomRrule(object):
         which are not (yet) properly handled by `rrule`.
         See `premium._get_rrule` for more informations.
     '''
-    def __init__(self, start, interval):
+    def __init__(self, start, interval, end=None):
         assert start
         assert interval
         self._interval = interval
         self._start = start
+        self._end = end
+        self._iter_pos = None
+
+    def __iter__(self):
+        self._iter_pos = 0
+        return self
+
+    def next(self):
+        date = coog_date.add_month(self._start, self._interval * self._iter_pos,
+            stick_to_end_of_month=True)
+        if self._end and self._end < date:
+            raise StopIteration
+        self._iter_pos += 1
+        return datetime.datetime.combine(date, datetime.time())
 
     def between(self, start, end):
         assert start
         assert end
         start = start.date()
-        end = end.date() - datetime.timedelta(2)
+        end = end.date() if not self._end else min(end.date(),
+            self._end + datetime.timedelta(1))
         cur_date = self._start
         result = []
         i = 1
-        while cur_date <= end:
-            if cur_date >= start and cur_date < end:
+        while cur_date < end:
+            if cur_date > start and cur_date < end:
                 result.append(datetime.datetime.combine(cur_date,
                         datetime.time()))
             cur_date = coog_date.add_month(self._start, self._interval * i,
@@ -89,7 +102,8 @@ class CustomRrule(object):
 
     def after(self, date):
         assert date
-        date = date.date()
+        date = date.date() if not self._end else min(date.date(),
+            self._end + datetime.timedelta(1))
         if date < self._start:
             return self._start
         cur_date = self._start
@@ -1784,13 +1798,14 @@ class Premium:
         start = datetime.datetime.combine(start, datetime.time())
         end = datetime.datetime.combine(end, datetime.time())
         if not occurences:
-            # TODO : Why the + 2 ???
+            # In our use case, a period will be "1900-01-01 / 1900-01-31". The
+            # 'between' method returns "full" periods and excludes the start
+            # and end dates, so we have to search for
+            # "1900-01-01 / 1900-02-02" in order to have a match at
+            # "1900-02-01"
             occurences = rrule.between(start, end + datetime.timedelta(2))
         amount = len(occurences) * self.amount
-        try:
-            last_date = occurences[-1]
-        except IndexError:
-            last_date = start
+        last_date = occurences[-1] if occurences else start
         next_date = rrule.after(last_date)
         if self.frequency in ('once_per_contract'):
             if (last_date <= datetime.datetime.combine(self.start,

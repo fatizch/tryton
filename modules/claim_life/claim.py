@@ -4,7 +4,7 @@
 from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If, Bool, In
+from trytond.pyson import Eval, If, Bool, In, And
 from trytond.modules.coog_core import fields
 
 from datetime import timedelta
@@ -62,7 +62,9 @@ class Loss:
         'get_start_end_dates', setter='set_start_end_dates')
     initial_std_start_date = fields.Date('Initial STD Start Date',
         states={'invisible': Eval('loss_desc_kind') != 'ltd',
-            'readonly': Eval('state') != 'draft'},
+            'readonly': Eval('state') != 'draft',
+            'required': And(Eval('state') != 'draft',
+                Eval('loss_desc_kind') == 'ltd')},
         depends=['loss_desc_kind', 'loss_desc', 'state'])
     ltd_start_date = fields.Function(fields.Date('LTD Start Date',
             states={'invisible': Eval('loss_desc_kind') != 'ltd'},
@@ -262,7 +264,7 @@ class ClaimService:
         if self.option and self.option.covered_element:
             person = self.get_covered_person()
             if person and self.option.covered_element.party == person:
-                return self.option.covered_element
+                return self.option.covered_element.id
         return super(ClaimService, self).get_theoretical_covered_element(name)
 
 

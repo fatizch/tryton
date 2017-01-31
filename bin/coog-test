@@ -15,11 +15,19 @@ coog_test_dropdb() { # drop test db from postgresql server
 }
 
 coog_test_manual() { # interactively launch tests - [module *]
+        if [[ $1 == "bin" ]]
+        then
+            cd $COOG_BIN/..
+            python -m pytest -v --ignore=lib/tryton_test.py
+            return
+        fi
         unset TRYTOND_CONFIG
         unset DB_NAME
         unset TRYTOND_CACHE_CLASS
+        DB_CACHE="$COOG_TMP/coog-test-manual-db-cache"; export DB_CACHE
         coog_server_clearcache
         run-tests.py -c "$COOG_CONF_TEST" -vv -m "$@"
+        rm -rf "$DB_CACHE"
 }
 
 _coog_test_modules() { # list all linked modules
@@ -170,6 +178,7 @@ coog_test_fullstart() { # starts a full test - <branch> <nb> [modules]
         [ -z "$1" ] && echo "missing branch" && return 1
         echo "TEST FULL $1 : start @ $(date +'%y-%m-%d %H:%M:%S')"
         _coog_test_pull "$1"
+        DB_CACHE="$COOG_TMP/$1"; export DB_CACHE
         shift
         coog_test_start "$1"
         shift
@@ -250,4 +259,5 @@ coog_test_fullcheck() { # check and report a full test - <branch>
         _coog_test_email dev@coopengo.com "$out" "$subject"
         coog_test_query qremove "test"
         coog_test_stop
+        rm -rf "$COOG_TMP/$1"
 }

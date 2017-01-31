@@ -58,6 +58,7 @@ def register():
         FileSelector,
         ViewValidationBatch,
         CleanDatabaseBatch,
+        NoSelectBatchExample,
         TestCaseModel,
         TestCaseInstance,
         TestCaseRequirementRelation,

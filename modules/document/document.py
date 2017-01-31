@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 from trytond.rpc import RPC
+from trytond.cache import Cache
 from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateTransition, StateView, Button
@@ -32,6 +33,8 @@ class DocumentDescription(model.CoogSQL, model.CoogView):
     groups = fields.Many2Many('document.description-res.group',
         'document_desc', 'group', 'Groups')
 
+    _document_per_code_cache = Cache('get_document_per_code')
+
     @classmethod
     def __setup__(cls):
         super(DocumentDescription, cls).__setup__()
@@ -41,6 +44,22 @@ class DocumentDescription(model.CoogSQL, model.CoogView):
                 'The document description code must be unique'),
         ]
         cls._order.insert(0, ('name', 'ASC'))
+
+    @classmethod
+    def create(cls, vlist):
+        result = super(DocumentDescription, cls).create(vlist)
+        cls._document_per_code_cache.clear()
+        return result
+
+    @classmethod
+    def write(cls, *args):
+        super(DocumentDescription, cls).write(*args)
+        cls._document_per_code_cache.clear()
+
+    @classmethod
+    def delete(cls, documents):
+        super(DocumentDescription, cls).delete(documents)
+        cls._document_per_code_cache.clear()
 
     @classmethod
     def _export_light(cls):
@@ -64,6 +83,15 @@ class DocumentDescription(model.CoogSQL, model.CoogView):
         if self.code:
             return self.code
         return coog_string.slugify(self.name)
+
+    @classmethod
+    def get_document_per_code(cls, code):
+        cached = cls._document_per_code_cache.get(code, -1)
+        if cached != -1:
+            return cls(cached)
+        document, = cls.search([('code', '=', code)])
+        cls._document_per_code_cache.set(code, document.id)
+        return document
 
 
 class DocumentDescGroup(model.CoogSQL):
@@ -112,7 +140,7 @@ class DocumentReception(model.CoogSQL, model.CoogView):
             ], 'State', readonly=True)
     state_string = state.translated('state')
     attachments = fields.One2Many('ir.attachment', 'resource', 'Content',
-        size=1, states={'invisible': ~Eval('attachments')})
+        size=1, states={'invisible': ~Eval('attachments')}, delete_missing=True)
     # Once the document is treated, attachments becomes empty, and attachment
     # is set.
     attachment = fields.Many2One('ir.attachment', 'Attachment', readonly=True,

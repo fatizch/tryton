@@ -45,8 +45,8 @@ class Underwriting:
         super(Underwriting, cls).__setup__()
         cls.on_object.selection.append(('claim', 'Claim'))
 
-    def add_document(self, document_desc):
-        line = super(Underwriting, self).add_document(document_desc)
+    def add_document(self, document_desc, data):
+        line = super(Underwriting, self).add_document(document_desc, data)
         if self.on_object.__name__ == 'claim':
             line.claim = self.on_object
         return line
@@ -78,6 +78,12 @@ class UnderwritingResult:
     possible_claims = fields.Function(
         fields.Many2Many('claim', None, None, 'Possible claims'),
         'get_possible_claims')
+    option = fields.Function(
+        fields.Many2One('contract.option', 'Option'),
+        'get_option')
+    contract = fields.Function(
+        fields.Many2One('contract', 'Contract'),
+        'get_contract')
 
     @classmethod
     def __setup__(cls):
@@ -94,16 +100,24 @@ class UnderwritingResult:
                 self.target_model = 'claim'
                 self.service = None
 
-    @fields.depends('claim', 'is_claim', 'service', 'target')
+    @fields.depends('claim', 'contract', 'is_claim', 'option', 'service',
+        'target')
     def on_change_service(self):
         if self.is_claim:
             if self.service:
                 self.target = self.service
                 self.target_model = 'claim.service'
                 self.claim = self.service.claim
+                self.option = self.service.option
+                if self.option:
+                    self.contract = self.option.parent_contract
+                else:
+                    self.contract = None
             else:
                 self.target = self.claim
                 self.target_model = 'claim'
+                self.option = None
+                self.contract = None
 
     @fields.depends('underwriting')
     def on_change_with_is_claim(self, name=None):
@@ -120,6 +134,16 @@ class UnderwritingResult:
             if not self.target:
                 self.target = self.claim
                 self.target_model = 'claim'
+
+    def get_option(self, name):
+        if not self.service or not self.service.option:
+            return None
+        return self.service.option.id
+
+    def get_contract(self, name):
+        if not self.option:
+            return None
+        return self.option.parent_contract.id
 
     def get_claim(self, name):
         if not self.is_claim:

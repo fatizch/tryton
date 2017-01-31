@@ -14,14 +14,6 @@ msgstr ""
 "Décision a été prise de bloquer les indemnisations pour cette prestation à "
 "partir du %(decision_date)s"
 
-msgctxt "field:claim.create_indemnification.underwritings,id:"
-msgid "ID"
-msgstr "Identifiant"
-
-msgctxt "field:claim.create_indemnification.underwritings,underwritings:"
-msgid "Underwritings"
-msgstr "Demandes de décisions"
-
 msgctxt "field:claim.indemnification,apply_underwriting_reduction:"
 msgid "Apply underwriting reduction"
 msgstr "Appliquer les décisions de réduction"
@@ -47,10 +39,6 @@ msgctxt "field:underwriting.result,last_indemnification_date:"
 msgid "Last Indemnification Date"
 msgstr "Date de dernière indemnisation"
 
-msgctxt "model:claim.create_indemnification.underwritings,name:"
-msgid "Create Indemnification Underwritings"
-msgstr "Demandes de décision créées"
-
 msgctxt "selection:underwriting.decision.type,decision:"
 msgid "Block Indemnifications"
 msgstr "Indemnisations bloquées"
@@ -58,10 +46,6 @@ msgstr "Indemnisations bloquées"
 msgctxt "selection:underwriting.decision.type,decision:"
 msgid "Reduce Indemnifications"
 msgstr "Indemnisations limitées"
-
-msgctxt "view:claim.create_indemnification.underwritings:"
-msgid "Underwritings"
-msgstr "Demandes de décisions"
 
 msgctxt "view:underwriting.decision.type:"
 msgid "%"

@@ -13,6 +13,7 @@ def register():
         Dunning,
         Level,
         Procedure,
+        DunningUpdateBatch,
         DunningCreationBatch,
         DunningTreatmentBatch,
         Party,

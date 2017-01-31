@@ -21,3 +21,8 @@ class Claim:
         ondelete='RESTRICT', domain=[
             ('party', '=', Eval('legal_entity'))
             ], depends=['legal_entity'])
+
+    def get_recipients(self):
+        recipients = [self.legal_entity] if self.legal_entity else []
+        recipients += super(Claim, self).get_recipients()
+        return recipients

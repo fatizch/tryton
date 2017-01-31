@@ -7,17 +7,20 @@ from sql import Null
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, StateAction
 from trytond.wizard import Button
+from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, Bool, In, Len
 
 from trytond.modules.coog_core import model, fields, coog_string, utils
 from trytond.modules.coog_core import coog_date
+from trytond.modules.report_engine import Printable
+from trytond.modules.document_request import document
 
 __all__ = [
     'UnderwritingType',
     'UnderwritingDecisionType',
     'UnderwritingTypeDecision',
-    'UnderwritingTypeDocument',
+    'UnderwritingTypeDocumentRule',
     'Underwriting',
     'UnderwritingResult',
     'PlanUnderwriting',
@@ -36,10 +39,9 @@ class UnderwritingType(model.CoogSQL, model.CoogView):
     decisions = fields.Many2Many('underwriting.type-decision',
         'underwriting_type', 'decision', 'Decisions')
     waiting_decision = fields.Many2One('underwriting.decision.type',
-        'Waiting Decision', domain=[('id', 'in', Eval('decisions'))],
-        required=True, depends=['decisions'], ondelete='RESTRICT')
-    documents = fields.Many2Many('underwriting.type-document.description',
-        'underwriting_type', 'document_desc', 'Documents')
+        'Waiting Decision', required=True, ondelete='RESTRICT')
+    document_rule = fields.One2Many('underwriting.document_rule',
+        'underwriting_type', 'Document Rule', delete_missing=True)
     end_date_required = fields.Boolean('End date required',
         help='If True, the end date will be required on the related decisions')
     next_underwriting = fields.Many2One('underwriting.type',
@@ -56,6 +58,10 @@ class UnderwritingType(model.CoogSQL, model.CoogView):
     def _export_light(cls):
         return super(UnderwritingType, cls)._export_light() | {'decisions',
             'waiting_decision'}
+
+    @classmethod
+    def default_document_rule(cls):
+        return [{}]
 
     @fields.depends('decisions', 'waiting_decision')
     def on_change_decisions(self):
@@ -96,6 +102,17 @@ class UnderwritingType(model.CoogSQL, model.CoogView):
         underwriting.results = new_decisions
         return underwriting
 
+    def calculate_documents(self, underwriting):
+        rule = self.document_rule[0]
+        results = []
+        for decision in underwriting.results:
+            data_dict = {}
+            decision.init_dict_for_rule_engine(data_dict)
+            results.append(rule.calculate_required_documents(data_dict))
+        if len(results) > 1:
+            return rule.merge_results(*results)
+        return results[0]
+
 
 class UnderwritingDecisionType(model.CoogSQL, model.CoogView):
     'Underwriting Decision Type'
@@ -132,18 +149,25 @@ class UnderwritingTypeDecision(model.CoogSQL):
         required=True, ondelete='RESTRICT')
 
 
-class UnderwritingTypeDocument(model.CoogSQL):
-    'Underwriting Type - Document description relation'
+class UnderwritingTypeDocumentRule(document.DocumentRuleMixin):
+    'Underwriting Document Rule'
+    __name__ = 'underwriting.document_rule'
 
-    __name__ = 'underwriting.type-document.description'
+    underwriting_type = fields.Many2One('underwriting.type', 'Parent',
+        ondelete='CASCADE', required=True, select=True)
 
-    underwriting_type = fields.Many2One('underwriting.type',
-        'Underwriting Type', required=True, select=True, ondelete='CASCADE')
-    document_desc = fields.Many2One('document.description', 'Document',
-        required=True, ondelete='RESTRICT')
+    @classmethod
+    def __setup__(cls):
+        super(UnderwritingTypeDocumentRule, cls).__setup__()
+        table = cls.__table__()
+        cls._sql_constraints = [
+            ('one_per_underwriting_type',
+                Unique(table, table.underwriting_type),
+                'There may be only one document rule per underwriting type'),
+            ]
 
 
-class Underwriting(model.CoogSQL, model.CoogView):
+class Underwriting(model.CoogSQL, model.CoogView, Printable):
     'Underwriting'
 
     __name__ = 'underwriting'
@@ -197,6 +221,7 @@ class Underwriting(model.CoogSQL, model.CoogView):
                     'invisible': Eval('state') != 'processing',
                     },
                 'plan_button': {},
+                'generic_send_letter': {},
                 })
         cls._error_messages.update({
                 'cannot_draft': 'Cannot draft completed underwritings',
@@ -349,19 +374,26 @@ class Underwriting(model.CoogSQL, model.CoogView):
         Line = Pool().get('document.request.line')
         to_create = []
         for underwriting in underwritings:
-            existing = {x.document_desc
+            existing = {x.document_desc.code
                 for x in underwriting.requested_documents}
-            for document in underwriting.type_.documents:
-                if document in existing:
+            for key, data in underwriting.type_.calculate_documents(
+                    underwriting).iteritems():
+                if key in existing:
+                    # TODO : Handle update / deletion ?
                     continue
-                to_create.append(underwriting.add_document(document))
+                to_create.append(underwriting.add_document(key, data))
         if to_create:
             Line.save(to_create)
 
-    def add_document(self, document_desc):
-        line = Pool().get('document.request.line')()
-        line.document_desc = document_desc
+    def add_document(self, document_code, data):
+        pool = Pool()
+        doc_desc = pool.get('document.description').get_document_per_code(
+            document_code)
+        line = pool.get('document.request.line')()
+        line.document_desc = doc_desc
         line.for_object = self
+        for k, v in data.iteritems():
+            setattr(line, k, v)
         return line
 
     @classmethod
@@ -383,7 +415,11 @@ class Underwriting(model.CoogSQL, model.CoogView):
                 'state': 'completed',
                 })
         copies_per_date = defaultdict(list)
+        valid_underwritings = []
         for underwriting in underwritings:
+            if any((x.state == 'finalized' for x in underwriting.results)):
+                valid_underwritings.append(underwriting)
+        for underwriting in valid_underwritings:
             if underwriting.type_.next_underwriting:
                 copies_per_date[max(x.effective_decision_end
                         for x in underwriting.results)].append(underwriting)
@@ -416,6 +452,11 @@ class Underwriting(model.CoogSQL, model.CoogView):
 
     def init_dict_for_rule_engine(self, data):
         data['underwriting'] = self
+        if hasattr(self.on_object, 'init_dict_for_rule_engine'):
+            self.on_object.init_dict_for_rule_engine(data)
+
+    def get_contact(self):
+        return self.party
 
 
 class UnderwritingResult(model.CoogSQL, model.CoogView):
@@ -590,6 +631,12 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
     def do_abandon(cls, instances):
         Pool().get('event').notify_events(instances,
             'underwriting_result_abandonned')
+
+    def init_dict_for_rule_engine(self, data):
+        self.underwriting.init_dict_for_rule_engine(data)
+        data['underwriting_result'] = self
+        if hasattr(self.target, 'init_dict_for_rule_engine'):
+            self.target.init_dict_for_rule_engine(data)
 
 
 class PlanUnderwriting(Wizard):

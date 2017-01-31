@@ -1,3 +1,11 @@
+Batch de mise à jour des relances [account.dunning.update]
+==========================================================
+
+Ce batch met à jour le niveau des relances existantes en fonction de la date
+de traitement.
+
+*Fréquence suggérée: quotidienne*
+
 Batch de generation des relances [account.dunning.create]
 =========================================================
 

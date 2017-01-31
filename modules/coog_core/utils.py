@@ -56,6 +56,21 @@ def safe_open(filepath, *args, **kwargs):
     return FileLocker(filepath, *args, **kwargs)
 
 
+def iterator_slice(objects, max):
+        count = 0
+        sliced = []
+        for obj in objects:
+            count += 1
+            sliced.append(obj)
+            if count % max == 0:
+                count = 0
+                yield sliced
+                del sliced[:]
+        if sliced:
+            yield sliced
+            del sliced[:]
+
+
 def remove_lockfile(filepath, lock_extension='lck', silent=True):
     lock_filepath = filepath + '.' + lock_extension
     try:
