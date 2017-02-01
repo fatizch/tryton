@@ -28,5 +28,5 @@ def register():
         benefit.ManageOptionBenefitsDisplayer,
         module='claim_salary_fr', type_='model')
     Pool.register(
-        wizard.SetContributions,
+        wizard.ComputeNetSalaries,
         module='claim_salary_fr', type_='wizard')

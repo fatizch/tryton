@@ -4,11 +4,11 @@ this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
         <!-- ##################### -->
-        <!-- # Set Contributions # -->
+        <!-- # Compute net salaries # -->
         <!-- ##################### -->
-        <record model="ir.action.wizard" id="act_set_contributions">
-            <field name="name">Set Contributions</field>
-            <field name="wiz_name">claim_salary_fr.set_contributions</field>
+        <record model="ir.action.wizard" id="act_compute_net_salaries">
+            <field name="name">Compute net salaries</field>
+            <field name="wiz_name">claim_salary_fr.compute_net_salaries</field>
         </record>
         <!-- ########################### -->
         <!-- # Start Set Contributions # -->

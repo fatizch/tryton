@@ -8,7 +8,7 @@ from trytond.modules.coog_core import model, fields
 
 
 __all__ = [
-    'SetContributions',
+    'ComputeNetSalaries',
     'StartSetContributions',
     'ContributionsView',
     ]
@@ -33,8 +33,8 @@ class StartSetContributions(model.CoogView):
 
     rates = fields.One2Many('claim_salary_fr.contributions_view',
         None, 'Rates')
-    fixed_rates = fields.One2Many('claim_salary_fr.contributions_view',
-        None, 'Fixed Rates')
+    fixed_amounts = fields.One2Many('claim_salary_fr.contributions_view',
+        None, 'Fixed Amounts')
     rule = fields.Many2One('rule_engine', 'Rule', states={
            'invisible': True})
     salary = fields.Many2One('claim.salary', 'Salary', states={
@@ -47,15 +47,15 @@ class StartSetContributions(model.CoogView):
             })
 
 
-class SetContributions(Wizard):
-    'Set Contibutions'
+class ComputeNetSalaries(Wizard):
+    'Compute net salaries'
     __metaclass__ = PoolMeta
-    __name__ = 'claim_salary_fr.set_contributions'
+    __name__ = 'claim_salary_fr.compute_net_salaries'
 
     start = StateView('claim_salary_fr.start_set_contributions',
         'claim_salary_fr.start_set_contributions_view_form', [
             Button('End', 'end', 'tryton-cancel'),
-            Button('Set contibutions', 'process',
+            Button('Compute net salaries', 'process',
                 'tryton-go-next', default=True)])
     process = StateTransition()
 
@@ -75,7 +75,7 @@ class SetContributions(Wizard):
             'propagate': True,
             'periods': [x.id for x in delivered.salary],
             'rates': salary.get_rates_per_range(),
-            'fixed_rates': salary.get_rates_per_range(fixed=True),
+            'fixed_amounts': salary.get_rates_per_range(fixed=True),
             }
         return start_dict
 
@@ -90,7 +90,7 @@ class SetContributions(Wizard):
                     salary.ta_contributions[rate.extra_data.name] = rate.ta
                     salary.tb_contributions[rate.extra_data.name] = rate.tb
                     salary.tc_contributions[rate.extra_data.name] = rate.tc
-                for rate in self.start.fixed_rates:
+                for rate in self.start.fixed_amounts:
                     salary.fixed_contributions[rate.extra_data.name] = \
                         rate.fixed_amount
                 to_calculate.append(salary)
@@ -104,7 +104,7 @@ class SetContributions(Wizard):
                     rate.extra_data.name] = rate.tb
                 self.start.salary.tc_contributions[
                     rate.extra_data.name] = rate.tc
-            for rate in self.start.fixed_rates:
+            for rate in self.start.fixed_amounts:
                 self.start.salary.fixed_contributions[rate.extra_data.name] = \
                     rate.fixed_amount
             to_calculate.append(self.start.salary)

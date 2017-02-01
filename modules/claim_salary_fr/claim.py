@@ -119,7 +119,7 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
         super(Salary, cls).__setup__()
         cls._order = [('from_date', 'DESC')]
         cls._buttons.update({
-                'set_contributions': {
+                'compute_net_salaries': {
                     'invisible': Or(
                         ~Bool(Eval('gross_salary')),
                         ~Bool(Eval('net_limit_mode')))}
@@ -138,8 +138,8 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
         return 'black'
 
     @classmethod
-    @model.CoogView.button_action('claim_salary_fr.act_set_contributions')
-    def set_contributions(cls, salaries):
+    @model.CoogView.button_action('claim_salary_fr.act_compute_net_salaries')
+    def compute_net_salaries(cls, salaries):
         pass
 
     def get_is_readonly(self, name):
