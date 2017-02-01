@@ -74,7 +74,7 @@ class BatchRemindDocuments(batch.BatchRoot):
     logger = logging.getLogger(__name__)
 
     @classmethod
-    def convert_to_instances(cls, ids):
+    def convert_to_instances(cls, ids, *args, **kwargs):
         return []
 
     @classmethod

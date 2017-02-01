@@ -95,7 +95,7 @@ broker.fill = function(id, job)
     local args = data.args
     job.task = data.func
     job.context = args[1]
-    job.records = args[2] and table.concat(args[2], ',') or '-'
+    job.records = cjson.encode(args[2])
     job.args = cjson.encode(args[3])
     job.result = 'pickled!'
 end

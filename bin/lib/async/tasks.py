@@ -1,21 +1,24 @@
 import logging
 import async.broker as async_broker
-from itertools import chain
 
 
-def _batch_split(l, n):
-    # see coog/bin/lib/async/test_async.py
+def split_batch(l, n):
     assert n >= 0, 'Negative split size'
-    if n == 0 or len(l) == 0:
-        yield list(chain.from_iterable(l))
-    else:
-        group = []
-        for i, ids in enumerate(l):
-            group.extend(ids)
-            if (len(group) >= n or ids == l[-1] or
-                    (len(group) + len(l[i + 1]) > n)):
+    group = []
+    for ids in l:
+        # using list to group jobs (not tuple or dict)
+        if not isinstance(ids, list):
+            ids = [ids]
+        if n > 0 and len(group) + len(ids) > n:
+            if len(ids) > len(group):
+                yield ids[:]
+            else:
                 yield group
-                group = []
+                group = ids[:]
+        else:
+            group.extend(ids)
+    if len(group) > 0:
+        yield group
 
 
 def batch_generate(name, params):
@@ -47,8 +50,8 @@ def batch_generate(name, params):
                 if job_size is None:
                     job_size = BatchModel.get_conf_item('job_size')
                 job_size = int(job_size)
-                ids = BatchModel.select_ids(**batch_params)
-                for l in _batch_split(ids, job_size):
+                for l in split_batch(BatchModel.select_ids(**batch_params),
+                        job_size):
                     broker.enqueue(name, 'batch_exec', (name, l, params))
                     res.append(len(l))
             except Exception:
@@ -57,6 +60,17 @@ def batch_generate(name, params):
             finally:
                 Cache.resets(database)
     return res
+
+
+def split_job(l, n):
+    assert n >= 0, 'Negative split size'
+    if len(l) == 0:
+        return
+    elif n == 0 or n >= len(l):
+        yield l
+    else:
+        for i in xrange(0, len(l), n):
+            yield l[i:i + n]
 
 
 def batch_exec(name, ids, params):
@@ -93,9 +107,11 @@ def batch_exec(name, ids, params):
                 transaction_size = BatchModel.get_conf_item('transaction_size')
             transaction_size = int(transaction_size)
             try:
-                for l in _batch_split([[x] for x in ids], transaction_size):
-                    to_treat = BatchModel.convert_to_instances(l)
-                    r = BatchModel.execute(to_treat, l, **batch_params)
+                for l in split_job(ids, transaction_size):
+                    to_treat = BatchModel.convert_to_instances(l,
+                       **batch_params)
+                    r = BatchModel.execute(to_treat, [x[0] for x in l],
+                        **batch_params)
                     res.append(r or len(l))
                     Transaction().commit()
             except Exception:

@@ -92,7 +92,7 @@ broker.fill = function(id, job)
     local args = job.args
     job.task = job.func
     job.context = args[1]
-    job.records = table.concat(args[2], ',')
+    job.records = cjson.encode(args[2])
     job.args = cjson.encode(args[3])
     if job.result then
         job.result = cjson.encode(job.result)

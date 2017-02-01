@@ -166,9 +166,9 @@ class BatchRoot(ModelView):
         return filepath
 
     @classmethod
-    def convert_to_instances(cls, ids):
+    def convert_to_instances(cls, ids, *args, **kwargs):
         MainModel = Pool().get(cls.get_batch_main_model_name())
-        return MainModel.browse(ids)
+        return MainModel.browse([x[0] for x in ids])
 
     @classmethod
     def write_batch_output(cls, _buffer, filename):
@@ -205,8 +205,8 @@ class BatchRootNoSelect(BatchRoot):
         cls._default_config_items.update({'job_size': '0'})
 
     @classmethod
-    def convert_to_instances(cls, ids):
-        return [id for id in ids]
+    def convert_to_instances(cls, ids, *args, **kwargs):
+        return ids[:]
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -396,7 +396,7 @@ class MemorySavingBatch(BatchRoot):
             }
 
     @classmethod
-    def convert_to_instances(cls, ids):
+    def convert_to_instances(cls, ids, *args, **kwargs):
         """
         Should not be overwritten. parse_select_ids should be the
         only method to create our own generator expression objects.
