@@ -976,7 +976,7 @@ class ViewDescription(model.CoogSQL, model.CoogView):
     def on_change_with_header_line(self):
         if self.input_mode == 'expert':
             return self.header_line
-        xml = 'string="%s" ' % self.view_string
+        xml = ''
         if hasattr(self, 'view_kind') and self.view_kind == 'form':
             xml += 'col="%s" ' % self.nb_col
         return xml
