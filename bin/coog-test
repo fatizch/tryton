@@ -228,6 +228,7 @@ coog_test_logextract() { # extract job logs - <job_id>
 coog_test_fullcheck() { # check and report a full test - <branch>
         [ -z "$1" ] && echo "missing branch" && return 1
         echo "TEST FULL $1: check @ $(date +'%y-%m-%d %H:%M:%S')"
+        coog_redis_eval rq ping > /dev/null || return 1
         local a; a=$(coog_test_query qcount "test")
         local w; w=$(coog_test_query qcount "test" "wait")
         [ "$a" -eq 0 ] && echo "TEST FULL $1: no jobs" && return
