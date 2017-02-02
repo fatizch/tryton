@@ -1,3 +1,4 @@
+* Remove basic benchmarking tool (moved to a standalone module)
 * Add configurable detail mixin
 
 Version 1.10 - 2016-11-02

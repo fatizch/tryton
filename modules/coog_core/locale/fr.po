@@ -1268,10 +1268,6 @@ msgctxt "field:tag-object,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:utils.benchmark_class,id:"
-msgid "ID"
-msgstr "Identifiant"
-
 msgctxt "help:event.type.action,pyson_condition:"
 msgid ""
 "A Pyson expression to filter the objects of the event. If not set, no filter will be applied. If the expression evaluates to True for an object, the action will be taken on it. Otherwise, it will be ignored. Example expression :\n"
@@ -1590,10 +1586,6 @@ msgstr "Label"
 msgctxt "model:tag-object,name:"
 msgid "Relation tag to object"
 msgstr "Relation objet label"
-
-msgctxt "model:utils.benchmark_class,name:"
-msgid "Benchmark class for tools"
-msgstr "Outils de benchmark"
 
 msgctxt "selection:event.type.action,treatment_kind:"
 msgid "Asynchronous"

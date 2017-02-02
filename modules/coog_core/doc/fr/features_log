@@ -1,3 +1,4 @@
+* Outil de benchmarking déplacé dans un module indépendant
 * Mixin de détails configurable
 
 Version 1.10 - 2016-11-02
