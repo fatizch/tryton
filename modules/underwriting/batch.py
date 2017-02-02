@@ -30,14 +30,20 @@ class UnderwritingActivationBatch(batch.BatchRoot):
     @classmethod
     def select_ids(cls, treatment_date):
         pool = Pool()
+        Type = pool.get('underwriting.type')
         underwriting = pool.get('underwriting').__table__()
         result = pool.get('underwriting.result').__table__()
         cursor = Transaction().connection.cursor()
 
+        automatic_types = Type.search([('manual_activation', '=', False)])
+        if not automatic_types:
+            return []
+
         cursor.execute(*underwriting.join(result, condition=(
                     result.underwriting == underwriting.id)
                 ).select(underwriting.id, where=(underwriting.state == 'draft')
-                & (result.effective_decision_date <= treatment_date),
+                & (result.effective_decision_date <= treatment_date)
+                & underwriting.type_.in_([x.id for x in automatic_types]),
                 group_by=[underwriting.id]))
         return cursor.fetchall()
 

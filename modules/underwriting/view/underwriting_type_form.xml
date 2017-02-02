@@ -10,6 +10,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="end_date_required"/>
     <label name="next_underwriting"/>
     <field name="next_underwriting" widget="selection"/>
+    <label name="manual_activation"/>
+    <field name="manual_activation"/>
     <field name="decisions" colspan="4"/>
     <label name="waiting_decision"/>
     <field name="waiting_decision" widget="selection" colspan="3"/>

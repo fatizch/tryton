@@ -48,6 +48,13 @@ class UnderwritingType(model.CoogSQL, model.CoogView):
         'Next Underwriting', ondelete='RESTRICT', states={
             'invisible': ~Eval('end_date_required')},
         depends=['end_date_required'])
+    manual_activation = fields.Boolean('Manual Activation',
+        help='If set, underwritings created with this type will not be '
+        'automatically activated by the underwriting activation batch')
+
+    @staticmethod
+    def default_manual_activation():
+        return False
 
     @classmethod
     def _export_skips(cls):

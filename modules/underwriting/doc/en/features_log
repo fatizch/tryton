@@ -1,3 +1,4 @@
+* Possibility to force a manual activation
 * Use rule engine to configure default documents
 * Rulable underwritings for custom validation rules
 * Display attachments on underwritings
