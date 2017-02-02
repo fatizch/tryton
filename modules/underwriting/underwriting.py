@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
 from collections import defaultdict
 
 from sql import Null
@@ -428,8 +429,10 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
                 valid_underwritings.append(underwriting)
         for underwriting in valid_underwritings:
             if underwriting.type_.next_underwriting:
-                copies_per_date[max(x.effective_decision_end
-                        for x in underwriting.results)].append(underwriting)
+                copies_per_date[max(
+                        (x.effective_decision_end or datetime.date.min)
+                        for x in underwriting.results)
+                    ].append(underwriting)
         for date, underwritings in copies_per_date.iteritems():
             cls.plan_underwriting(underwritings, coog_date.add_day(date, 1))
         Event.notify_events(underwritings, 'underwriting_completed')
