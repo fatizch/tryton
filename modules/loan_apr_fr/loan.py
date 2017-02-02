@@ -3,6 +3,7 @@
 from collections import defaultdict
 from decimal import Decimal
 
+from trytond.rpc import RPC
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -24,6 +25,13 @@ class Loan:
         'get_taea')
     bank_fees = fields.Numeric('Bank Fees', depends=['currency_digits'],
         digits=(16, Eval('currency_digits', 2)))
+
+    @classmethod
+    def __setup__(cls):
+        super(Loan, cls).__setup__()
+        cls.__rpc__.update({
+                'calculate_taea': RPC(instantiate=0),
+                })
 
     @classmethod
     def default_bank_fees(cls):

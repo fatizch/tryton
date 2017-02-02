@@ -29,7 +29,7 @@ from trytond.model import fields as tryton_fields, Model
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.tools.misc import memoize
+from trytond.tools import memoize
 from trytond.tools import cursor_dict
 from trytond.pyson import Eval, Or, Bool, If
 from trytond.server_context import ServerContext
@@ -798,6 +798,9 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @classmethod
     def __setup__(cls):
         super(RuleEngine, cls).__setup__()
+        cls.__rpc__.update({
+                'ws_execute': RPC(instantiate=0),
+                })
         cls._error_messages.update({
                 'invalid_code': 'Your algorithm has errors!',
                 'bad_rule_computation': 'An error occured in rule %s.'
@@ -1418,7 +1421,6 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 transaction.rollback()
 
     def execute(self, arguments, parameters=None):
-
         # We cannot use lambda in a loop
         def kwarg_function(value):
             return lambda: value
@@ -1430,6 +1432,29 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         result.context = self.format_context(arguments)
         self.add_debug_log(result, arguments.get('date', None))
         return result
+
+    @staticmethod
+    @memoize(1)
+    def generic_get_function_name():
+        RuleFunction = Pool().get('rule_engine.function')
+        tech_func, = RuleFunction.search([
+                ['namespace', '=', 'rule_engine.runtime'],
+                ['name', '=', RuleTools._re_generic_value_get.__name__],
+                ])
+        return tech_func.translated_technical_name
+
+    def ws_execute(self, cases):
+        tech_name = self.generic_get_function_name()
+
+        def execute_case(case):
+            def tech_fn(input_string):
+                return case['tech'][input_string]
+            case['params'][tech_name] = tech_fn
+            result = self.execute(case['args'], case['params'])
+            fields = ['result', 'errors', 'warnings', 'info', 'debug']
+            return {k: getattr(result, k, None) for k in fields}
+
+        return [self.execute_case(case) for case in cases]
 
 
 class Context(ModelView, ModelSQL, model.TaggedMixin):

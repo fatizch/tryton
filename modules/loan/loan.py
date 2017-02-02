@@ -7,6 +7,7 @@ from sql.conditionals import Coalesce
 from dateutil.relativedelta import relativedelta
 
 from trytond import backend
+from trytond.rpc import RPC
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool, If, Not
@@ -194,6 +195,9 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
     @classmethod
     def __setup__(cls):
         super(Loan, cls).__setup__()
+        cls.__rpc__.update({
+                'ws_calculate': RPC(instantiate=0),
+                })
         cls._order.insert(0, ('last_modification', 'DESC'))
         cls._error_messages.update({
                 'no_sequence': 'No loan sequence defined',
@@ -492,6 +496,15 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
         self.check_increments()
         self.update_increments_and_calculate_payments()
         self.state = 'calculated'
+
+    def ws_calculate(self):
+        self.calculate()
+        return [{
+                'date': payment.start_date,
+                'outstanding': payment.outstanding_balance,
+                'principal': getattr(payment, 'principal', 0),
+                'interest': getattr(payment, 'interest', 0),
+                } for payment in self.payments]
 
     @classmethod
     def insert_manual_increment(cls, increment, increments):
