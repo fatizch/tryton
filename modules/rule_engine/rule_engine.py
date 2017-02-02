@@ -1434,7 +1434,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return result
 
     @staticmethod
-    @memoize(1)
+    @memoize(4)
     def generic_get_function_name():
         RuleFunction = Pool().get('rule_engine.function')
         tech_func, = RuleFunction.search([
