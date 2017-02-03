@@ -401,7 +401,7 @@ class MemorySavingBatch(BatchRoot):
         Should not be overwritten. parse_select_ids should be the
         only method to create our own generator expression objects.
         """
-        return []
+        return cls.parse_select_ids(ids, *args, **kwargs)
 
     @classmethod
     def get_query_table(cls, tables, *args, **kwargs):
@@ -444,9 +444,9 @@ class MemorySavingBatch(BatchRoot):
                 group_by=group_by,
                 order_by=order_by))
         if not group_by:
-            return ([tuple(rows)] for rows in cursor.fetchall())
+            return (tuple(rows) for rows in cursor.fetchall())
         else:
-            return ([tuple(rows)] for rows in itertools.islice(
+            return (tuple(rows) for rows in itertools.islice(
                     cursor.fetchall(), len(group_by)))
 
     @classmethod
@@ -463,19 +463,6 @@ class MemorySavingBatch(BatchRoot):
     @classmethod
     def execute(cls, objects, ids, *args, **kwargs):
         """
-        Execute method is overrided to instance objects by our own way.
-        parse_select_ids should return a generator expression to properly
-        preserve the memory.
+        Execute method only checks mandatory parameters.
         """
         cls.check_mandatory_parameters(*args, **kwargs)
-        objects = cls.parse_select_ids(
-            (x[0] for x in cls.select_ids(**kwargs)), *args,
-            **kwargs)
-        cls.lazy_execute(objects, ids, *args, **kwargs)
-
-    @classmethod
-    def lazy_execute(cls, objects, ids, *args, **kwargs):
-        """
-        Substitutes the execute method and should be overwritten.
-        """
-        raise NotImplementedError

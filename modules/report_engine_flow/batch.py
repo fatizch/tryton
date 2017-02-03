@@ -81,21 +81,21 @@ class BaseMassFlowBatch(batch.MemorySavingBatch):
         flush_size = int(kwargs['flush_size'])
         for lines in utils.iterator_slice(lines, flush_size):
             with utils.safe_open(filename, 'ab') as fo_:
-                fo_.write('\n'.join(lines))
+                fo_.write('\n'.join(lines) + '\n')
 
     @classmethod
     def get_filename(cls, *args, **kwargs):
         return kwargs['output_filename']
 
     @classmethod
-    def lazy_execute(cls, objects, ids, *args, **kwargs):
+    def execute(cls, objects, ids, *args, **kwargs):
         """
-        Substitute to def execute(cls, ...)
         It behaves the same way but "objects" are not automatically browsed:
         these objects are returned by the parse_select_ids method.
         So you must define a parse_select_ids which returns a generator
         expression to properly save the memory.
         """
+        super(BaseMassFlowBatch, cls).execute(objects, ids, *args, **kwargs)
         lines = (line for line in cls.format_lines(objects, *args, **kwargs))
         cls.line_writer(cls.get_filename(*args, **kwargs), lines,
                 *args, **kwargs)
