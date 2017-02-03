@@ -234,6 +234,7 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
         cls._error_messages.update({
                 'cannot_draft': 'Cannot draft completed underwritings',
                 'cannot_draft_result': 'Cannot draft completed results',
+                'non_completed_result': 'Results must be finalized first',
                 })
 
     @classmethod
@@ -406,22 +407,21 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
 
     @classmethod
     @model.CoogView.button
-    def complete(cls, underwritings, abandon=False):
+    def complete(cls, underwritings, default_action=None):
         pool = Pool()
         Event = pool.get('event')
-        Result = pool.get('underwriting.result')
-        if abandon:
-            Result.write(Result.search([
-                        ('underwriting', 'in', [x.id for x in underwritings]),
-                        ('state', '=', 'waiting'),
-                        ]), {'state': 'abandonned'})
-        else:
-            with model.error_manager():
-                for underwriting in underwritings:
+        with model.error_manager():
+            for underwriting in underwritings:
+                if default_action:
+                    for result in underwriting.results:
+                        if result.state != 'waiting':
+                            continue
+                        getattr(result, default_action)()
+                    underwriting.results = list(underwriting.results)
+                else:
                     underwriting.check_completable()
-        cls.write(underwritings, {
-                'state': 'completed',
-                })
+                underwriting.state = 'completed'
+        cls.save(underwritings)
         copies_per_date = defaultdict(list)
         valid_underwritings = []
         for underwriting in underwritings:

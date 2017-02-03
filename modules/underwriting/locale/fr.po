@@ -10,6 +10,10 @@ msgctxt "error:underwriting:"
 msgid "Cannot draft completed underwritings"
 msgstr "Impossible de passer des demandes terminées en brouillon"
 
+msgctxt "error:underwriting:"
+msgid "Results must be finalized first"
+msgstr "Les résultats doivent être finalisés avant de continuer"
+
 msgctxt "field:underwriting,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
