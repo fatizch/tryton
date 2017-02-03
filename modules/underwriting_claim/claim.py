@@ -46,8 +46,10 @@ class Claim:
     @classmethod
     def delete(cls, claims):
         Underwriting = Pool().get('underwriting')
-        Underwriting.delete(Underwriting.search(
-                [('on_object', 'in', [str(x) for x in claims])]))
+        to_clean = Underwriting.search(
+            [('on_object', 'in', [str(x) for x in claims])])
+        if to_clean:
+            Underwriting.delete(to_clean)
         super(Claim, cls).delete(claims)
 
     @classmethod
@@ -181,6 +183,22 @@ class ClaimService:
         fields.Many2Many('underwriting.result', None, None, 'Underwritings',
             states={'invisible': ~Eval('underwritings')}),
         'get_appliable_underwritings')
+
+    @classmethod
+    def delete(cls, services):
+        pool = Pool()
+        Underwriting = pool.get('underwriting')
+        UnderwritingResult = pool.get('underwriting.result')
+        to_clean = UnderwritingResult.search(
+            [('target', 'in', [str(x) for x in services])])
+        if to_clean:
+            underwritings = list({x.underwriting.id for x in to_clean})
+            UnderwritingResult.delete(to_clean)
+            to_delete = [x for x in Underwriting.browse(underwritings)
+                if len(x.results) == 0]
+            if to_delete:
+                Underwriting.delete(to_delete)
+        super(ClaimService, cls).delete(services)
 
     @classmethod
     def get_appliable_underwritings(cls, services, name):
