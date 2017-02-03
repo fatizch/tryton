@@ -27,6 +27,7 @@ def batch_generate(name, params):
     from trytond.cache import Cache
     from trytond.pool import Pool
     from trytond.transaction import Transaction
+    from trytond.server_context import ServerContext
     from tryton_init import database
 
     logger = logging.getLogger(name)
@@ -50,10 +51,11 @@ def batch_generate(name, params):
                 if job_size is None:
                     job_size = BatchModel.get_conf_item('job_size')
                 job_size = int(job_size)
-                for l in split_batch(BatchModel.select_ids(**batch_params),
-                        job_size):
-                    broker.enqueue(name, 'batch_exec', (name, l, params))
-                    res.append(len(l))
+                with ServerContext().set_context(from_batch=True):
+                    for l in split_batch(BatchModel.select_ids(**batch_params),
+                            job_size):
+                        broker.enqueue(name, 'batch_exec', (name, l, params))
+                        res.append(len(l))
             except Exception:
                 logger.exception('generate crashed')
                 raise
@@ -81,6 +83,7 @@ def batch_exec(name, ids, params):
     from trytond.cache import Cache
     from trytond.pool import Pool
     from trytond.transaction import Transaction
+    from trytond.server_context import ServerContext
     from tryton_init import database
 
     logger = logging.getLogger(name)
@@ -107,13 +110,14 @@ def batch_exec(name, ids, params):
                 transaction_size = BatchModel.get_conf_item('transaction_size')
             transaction_size = int(transaction_size)
             try:
-                for l in split_job(ids, transaction_size):
-                    to_treat = BatchModel.convert_to_instances(l,
-                       **batch_params)
-                    r = BatchModel.execute(to_treat, [x[0] for x in l],
-                        **batch_params)
-                    res.append(r or len(l))
-                    Transaction().commit()
+                with ServerContext().set_context(from_batch=True):
+                    for l in split_job(ids, transaction_size):
+                        to_treat = BatchModel.convert_to_instances(l,
+                            **batch_params)
+                        r = BatchModel.execute(to_treat, [x[0] for x in l],
+                            **batch_params)
+                        res.append(r or len(l))
+                        Transaction().commit()
             except Exception:
                 logger.exception('exec crashed')
                 Transaction().rollback()
