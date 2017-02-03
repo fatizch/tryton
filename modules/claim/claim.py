@@ -87,6 +87,8 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
         cls._error_messages.update({
                 'no_main_contract': 'Impossible to find a main contract, '
                 'please try again once it has been set',
+                'invalid_declaration_date': 'Declaration date cannot be '
+                'posterior to today\'s date',
                 })
         t = cls.__table__()
         cls._sql_constraints += [
@@ -136,6 +138,18 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
         if not self.losses:
             return self.rec_name
         return ', '.join([x.rec_name for x in self.losses])
+
+    @classmethod
+    def validate(cls, claims):
+        super(Claim, cls).validate(claims)
+        cls.check_declaration_date(claims)
+
+    @classmethod
+    def check_declaration_date(cls, claims):
+        for claim in claims:
+            if claim.declaration_date > min(claim.create_date.date(),
+                    utils.today()):
+                claim.raise_user_error('invalid_declaration_date')
 
     @fields.depends('status')
     def on_change_with_is_sub_status_required(self, name=None):
@@ -398,6 +412,8 @@ class Loss(model.CoogSQL, model.CoogView):
                 'End Date is smaller than start date',
                 'duplicate_loss': 'The loss %(loss)s could be a duplicate '
                 'of:\n\n%(losses)s',
+                'prior_declaration_date': 'Declaration date '
+                '%(declaration_date)s is prior to start date %(start_date)s',
                 })
         cls._buttons.update({
                 'draft': {'readonly': Eval('state') == 'draft'},
@@ -623,6 +639,18 @@ class Loss(model.CoogSQL, model.CoogView):
         to_write = [x for x in losses if x.state != 'active']
         if to_write:
             for loss in to_write:
+                if loss.start_date > loss.claim.declaration_date:
+                    lang = Transaction().context.get('language')
+                    Lang = Pool().get('ir.lang')
+                    lang, = Lang.search([('code', '=', lang)], limit=1)
+                    cls.raise_user_warning('prior_declaration_date_%s' %
+                        str(loss.id), 'prior_declaration_date', {
+                            'declaration_date': Lang.strftime(
+                                loss.claim.declaration_date, lang.code,
+                                lang.date),
+                            'start_date': Lang.strftime(loss.start_date,
+                                lang.code, lang.date),
+                            })
                 duplicates = loss.get_possible_duplicates()
                 if not duplicates:
                     continue

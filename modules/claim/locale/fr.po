@@ -23,6 +23,10 @@ msgid "Coverage Information"
 msgstr "Information de la garantie"
 
 msgctxt "error:claim.loss:"
+msgid "Declaration date %(declaration_date)s is prior to start date %(start_date)s"
+msgstr "La date de déclaration %(declaration_date)s est antérieure à la date d'arrêt %(start_date)s"
+
+msgctxt "error:claim.loss:"
 msgid "End Date is smaller than start date"
 msgstr "La date de fin est antérieure à la date de début"
 
@@ -33,6 +37,10 @@ msgstr "L'événement %(loss)s est peut-être un doublon de :\n\n%(losses)s"
 msgctxt "error:claim.sub_status:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
+
+msgctxt "error:claim:"
+msgid "Declaration date cannot be posterior to today's date"
+msgstr "La date de déclaration ne peut être postérieure à la date d'aujourd'hui"
 
 msgctxt "error:claim:"
 msgid ""

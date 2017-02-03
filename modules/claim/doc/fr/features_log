@@ -1,3 +1,5 @@
+* Avertissement si la date de déclaration de sinistre est antérieur à la date d'arrêt
+* Erreur utilisateur si la date de déclaration de sinistre est postérieure à la date du jour
 * Ajout d'un champ sur les service vers le risque couvert concerné
 * Ajout du déclarant dans les critères de recherche par défaut
 * Contrôle de doublons possibles sur les événements
