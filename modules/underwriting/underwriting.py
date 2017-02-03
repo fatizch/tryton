@@ -4,6 +4,8 @@ import datetime
 from collections import defaultdict
 
 from sql import Null
+from sql.conditionals import Coalesce
+from sql.aggregate import Min
 
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, StateAction
@@ -213,6 +215,9 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
     type_code = fields.Function(
         fields.Char('Type Code'),
         'on_change_with_type_code')
+    effective_date = fields.Function(
+        fields.Date('Effetive Date'),
+        'getter_effective_date', searcher='search_effective_date')
 
     @classmethod
     def __setup__(cls):
@@ -276,6 +281,24 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
                 self.finalizable_result = True
 
     @classmethod
+    def getter_effective_date(cls, underwritings, name):
+        pool = Pool()
+        decision = pool.get('underwriting.result').__table__()
+        cursor = Transaction().connection.cursor()
+
+        result = {x.id: datetime.date.max for x in underwritings}
+        cursor.execute(*decision.select(decision.underwriting,
+                Min(Coalesce(decision.effective_decision_date,
+                        datetime.date.max)),
+                where=decision.underwriting.in_([x.id for x in underwritings]),
+                group_by=[decision.underwriting],
+                ))
+
+        for underwriting_id, date in cursor.fetchall():
+            result[underwriting_id] = date
+        return result
+
+    @classmethod
     def get_finalizable(cls, underwritings, name):
         pool = Pool()
         decision = pool.get('underwriting.result').__table__()
@@ -314,6 +337,23 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
         for underwriting_id, in cursor.fetchall():
             result[underwriting_id] = True
         return result
+
+    @classmethod
+    def search_effective_date(cls, name, clause):
+        pool = Pool()
+        decision = pool.get('underwriting.result').__table__()
+        underwriting = cls.__table__()
+        _, operator, value = clause
+        Operator = fields.SQL_OPERATORS[operator]
+
+        query = underwriting.join(decision, 'LEFT OUTER',
+            condition=(decision.underwriting == underwriting.id)
+            ).select(underwriting.id, group_by=[underwriting.id],
+                having=Operator(Min(Coalesce(decision.effective_decision_date,
+                            datetime.date.max)),
+                    cls.effective_date.sql_format(value)))
+
+        return [('id', 'in', query)]
 
     @classmethod
     def search_finalizable(cls, name, clause):
@@ -356,6 +396,28 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
             & (decision.decision_date != Null))
 
         return [('id', 'in' if expected else 'not in', query)]
+
+    @classmethod
+    def order_effective_date(cls, tables):
+        decision_order = tables.get('decision_order')
+        if decision_order is not None:
+            return [decision_order[None][0].order]
+
+        table, _ = tables[None]
+        decision = Pool().get('underwriting.result').__table__()
+
+        query_table = table.join(decision, 'LEFT OUTER', condition=(
+                decision.underwriting == table.id)
+            ).select(table.id, Min(
+                Coalesce(decision.effective_decision_date,
+                    datetime.date.max)).as_('order'),
+            group_by=[table.id])
+        tables['decision_order'] = {
+            None: (query_table,
+                (query_table.id == table.id)
+                )}
+
+        return [query_table.order]
 
     @classmethod
     @model.CoogView.button

@@ -26,6 +26,10 @@ msgctxt "field:underwriting,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:underwriting,effective_date:"
+msgid "Effective Date"
+msgstr "Date d'effet"
+
 msgctxt "field:underwriting,finalizable:"
 msgid "Finalizable"
 msgstr "Finalisable"
@@ -415,6 +419,10 @@ msgctxt "model:ir.action,name:act_underwriting"
 msgid "Underwritings"
 msgstr "Demandes de décisions"
 
+msgctxt "model:ir.action,name:act_planned_underwriting"
+msgid "Planned Underwritings"
+msgstr "Demandes de décisions planifiées"
+
 msgctxt "model:ir.action,name:act_underwriting_decision_type"
 msgid "Underwriting Decision Types"
 msgstr "Types de décisions"
@@ -427,17 +435,25 @@ msgctxt "model:ir.action.act_window.domain,name:act_all_underwriting"
 msgid "All"
 msgstr "Toutes"
 
+msgctxt "model:ir.action.act_window.domain,name:act_automatic_planned_underwriting"
+msgid "Automatic"
+msgstr "Automatiques"
+
 msgctxt "model:ir.action.act_window.domain,name:act_completed_underwriting"
 msgid "Completed"
 msgstr "Validées"
 
-msgctxt "model:ir.action.act_window.domain,name:act_draft_underwriting"
-msgid "Draft"
-msgstr "En attente"
+msgctxt "model:ir.action.act_window.domain,name:act_manual_planned_underwriting"
+msgid "Manual"
+msgstr "Manuelles"
 
 msgctxt "model:ir.action.act_window.domain,name:act_pending_underwriting"
 msgid "Pending"
 msgstr "En cours"
+
+msgctxt "model:ir.ui.menu,name:menu_planned_underwritings"
+msgid "Planned Underwritings"
+msgstr "Demandes de décisions planifiées"
 
 msgctxt "model:ir.ui.menu,name:menu_underwriting"
 msgid "Underwriting"

@@ -1,3 +1,4 @@
+* Point d'entrée séparé pour les demandes de décisions planifiées
 * Possibilité de forcer l'activation manuelle
 * Utilisation du moteur de règle pour configurer les documents demandés par défaut
 * Branchement du moteur de règle sur les demandes de décisions

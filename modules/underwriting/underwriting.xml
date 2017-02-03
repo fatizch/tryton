@@ -102,15 +102,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="domain" eval="[['state', '=', 'completed']]" pyson="1"/>
             <field name="act_window" ref="act_underwriting"/>
         </record>
-        <record model="ir.action.act_window.domain" id="act_draft_underwriting">
-            <field name="name">Draft</field>
-            <field name="sequence" eval="30"/>
-            <field name="domain" eval="[['state', '=', 'draft']]" pyson="1"/>
-            <field name="act_window" ref="act_underwriting"/>
-        </record>
         <record model="ir.action.act_window.domain" id="act_all_underwriting">
             <field name="name">All</field>
             <field name="sequence" eval="50"/>
+            <field name="domain" eval="[['state', '!=', 'draft']]" pyson="1"/>
             <field name="act_window" ref="act_underwriting"/>
         </record>
         <record model="ir.action.act_window.view" id="act_underwriting_view1">
@@ -124,6 +119,35 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_underwriting"/>
         </record>
         <menuitem parent="menu_underwriting" sequence="10" action="act_underwriting" id="menu_underwritings"/>
+        <!-- Future entry point -->
+        <record model="ir.action.act_window" id="act_planned_underwriting">
+            <field name="name">Planned Underwritings</field>
+            <field name="res_model">underwriting</field>
+            <field name="order" eval="[['effective_date', 'ASC']]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_manual_planned_underwriting">
+            <field name="name">Manual</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain" eval="[['state', '=', 'draft'], ['type_.manual_activation', '=', True]]" pyson="1"/>
+            <field name="act_window" ref="act_planned_underwriting"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_automatic_planned_underwriting">
+            <field name="name">Automatic</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[['state', '=', 'draft'], ['type_.manual_activation', '=', False]]" pyson="1"/>
+            <field name="act_window" ref="act_planned_underwriting"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_planned_underwriting_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="underwriting_view_list"/>
+            <field name="act_window" ref="act_planned_underwriting"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_planned_underwriting_view2">
+            <field name="sequence" eval="11"/>
+            <field name="view" ref="underwriting_view_form"/>
+            <field name="act_window" ref="act_planned_underwriting"/>
+        </record>
+        <menuitem parent="menu_underwriting" sequence="15" action="act_planned_underwriting" id="menu_planned_underwritings"/>
         <!-- Documents -->
         <record model="ir.action.keyword" id="letter_generation_underwriting_keyword">
             <field name="keyword">form_print</field>

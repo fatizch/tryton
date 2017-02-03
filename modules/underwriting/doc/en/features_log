@@ -1,3 +1,4 @@
+* Separate entry point for planned underwritings
 * Possibility to force a manual activation
 * Use rule engine to configure default documents
 * Rulable underwritings for custom validation rules
