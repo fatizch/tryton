@@ -345,11 +345,11 @@ msgstr "Vues des contributions"
 
 msgctxt "model:claim_salary_fr.start_set_contributions,name:"
 msgid "Start Set Contributions"
-msgstr "Renseigner les taux de charges sociales salariales"
+msgstr "Calculer les salaires nets"
 
 msgctxt "model:ir.action,name:act_net_calculation_rule_form"
 msgid "Net Calculation Rules"
-msgstr "Règles de cacul pour le net"
+msgstr "Règles de calcul pour le net"
 
 msgctxt "model:ir.action,name:act_compute_net_salaries"
 msgid "Compute net salaries"
@@ -357,7 +357,7 @@ msgstr "Calculer les salaires nets"
 
 msgctxt "model:ir.ui.menu,name:menu_net_calculation_rule"
 msgid "Net Calculation Rules"
-msgstr "Règles de cacul pour le net"
+msgstr "Règles de calcul pour le net"
 
 msgctxt "model:net_calculation_rule-extra_data,name:"
 msgid "Net Calculation Rule - Extra Data"
@@ -409,11 +409,11 @@ msgstr "Prestation: Calcul du salaire net"
 
 msgctxt "view:claim.net_calculation_rule:"
 msgid "Net Calculation Rule"
-msgstr "Règle de cacul pour le net"
+msgstr "Règle de calcul pour le net"
 
 msgctxt "view:claim.net_calculation_rule:"
 msgid "Net Calculation Rules"
-msgstr "Règles de caculs pour le net"
+msgstr "Règles de calculs pour le net"
 
 msgctxt "view:claim.salary:"
 msgid "Compute net salaries"
@@ -445,7 +445,7 @@ msgstr "%"
 
 msgctxt "view:claim_salary_fr.start_set_contributions:"
 msgid "Start Set Contributions"
-msgstr "Renseigner les taux de charges sociales salariales"
+msgstr "Calculer les salaires nets"
 
 msgctxt "wizard_button:claim_salary_fr.compute_net_salaries,start,end:"
 msgid "End"
