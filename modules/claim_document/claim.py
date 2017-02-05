@@ -126,7 +126,7 @@ class Claim(RemindableInterface):
         pass
 
     def link_attachments_to_requests(self):
-        Request = Pool().get('document.request')
+        Request = Pool().get('document.request.line')
         attachments_grouped = defaultdict(list)
         for attachment in self.attachments:
             attachments_grouped[attachment.document_desc].append(attachment)
