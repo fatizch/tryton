@@ -29,9 +29,9 @@ msgstr "Documents requis"
 
 msgctxt "field:document.rule,indemnification_doc_rule:"
 msgid "Rule Engine for indemnifications"
-msgstr "Règle des documents requis sur une indémnisation"
+msgstr "Règle des documents requis sur une indemnisation"
 
 msgctxt "field:document.rule,indemnification_doc_rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr ""
-"Règle des documents requis sur une indémnisation - Données complémentaires"
+"Règle des documents requis sur une indemnisation - Données complémentaires"

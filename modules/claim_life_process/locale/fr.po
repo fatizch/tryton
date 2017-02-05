@@ -4,7 +4,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:claim,has_calculated_indemnification:"
 msgid "Has Calculated Indemnification"
-msgstr "Contient des indémnisations calculées"
+msgstr "Contient des indemnisations calculées"
 
 msgctxt "field:claim,indemnifications:"
 msgid "Indemnifications"
@@ -16,7 +16,7 @@ msgstr "Indemnisations"
 
 msgctxt "field:claim,indemnifications_to_schedule:"
 msgid "Indemnification To Schedule"
-msgstr "Indémnisation à ordonnancer"
+msgstr "indemnisation à ordonnancer"
 
 msgctxt "field:claim,is_pending_indemnification:"
 msgid "Pending Indemnification"
@@ -32,7 +32,7 @@ msgstr "Prestation fournie"
 
 msgctxt "view:claim.service:"
 msgid "Indemnisations"
-msgstr "Indémnisations"
+msgstr "indemnisations"
 
 msgctxt "view:claim.service:"
 msgid "Informations"

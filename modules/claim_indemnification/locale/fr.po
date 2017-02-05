@@ -150,7 +150,7 @@ msgstr "Règles de Prestation"
 
 msgctxt "field:benefit,indemnification_kind:"
 msgid "Indemnification Kind"
-msgstr "Type d'indémnisation"
+msgstr "Type d'indemnisation"
 
 msgctxt "field:benefit,products:"
 msgid "Products"
@@ -278,7 +278,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:claim,indemnifications_details:"
 msgid "Indemnifications Details"
-msgstr "Détails des indémnisations"
+msgstr "Détails des indemnisations"
 
 msgctxt "field:claim,invoices:"
 msgid "Invoices"
@@ -614,7 +614,7 @@ msgstr "Trier par"
 
 msgctxt "field:claim.indemnification.assistant.view,validate:"
 msgid "Indemnifications to validate"
-msgstr "Indémnisations à valider"
+msgstr "indemnisations à valider"
 
 msgctxt "field:claim.indemnification.control.rule,create_date:"
 msgid "Create Date"
@@ -722,7 +722,7 @@ msgstr "Prestations"
 
 msgctxt "field:claim.indemnification.detail,indemnification_kind:"
 msgid "Indemnification Kind"
-msgstr "Type d'indémnisation"
+msgstr "Type d'indemnisation"
 
 msgctxt "field:claim.indemnification.detail,kind:"
 msgid "Kind"
@@ -994,7 +994,7 @@ msgstr "Sélectionner la prestation"
 
 msgctxt "model:event.type,name:event_cancel_indemnification"
 msgid "Cancel Indemnification"
-msgstr "Annulation d'une période d'indémnisation"
+msgstr "Annulation d'une période d'indemnisation"
 
 msgctxt "model:event.type,name:event_cancel_invoice"
 msgid "Reject Indemnification"
@@ -1050,7 +1050,7 @@ msgstr "Configuration"
 
 msgctxt "model:ir.ui.menu,name:menu_control_indemnification"
 msgid "Controler les Indemnifications"
-msgstr "Contrôler les indémnisations"
+msgstr "Contrôler les indemnisations"
 
 msgctxt "model:ir.ui.menu,name:menu_indemnification_control_rule"
 msgid "Indemnification Control Rule"
@@ -1058,7 +1058,7 @@ msgstr "Règle de contrôle des prestations"
 
 msgctxt "model:ir.ui.menu,name:menu_validate_indemnification"
 msgid "Validate Indemnifications"
-msgstr "Valider les indémnisations"
+msgstr "Valider les indemnisations"
 
 msgctxt "model:rule_engine,name:simple_claim_rule"
 msgid "Simple Claim Rule"
