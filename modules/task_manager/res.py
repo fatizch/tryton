@@ -9,18 +9,18 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, coog_string, model
 
-__metaclass__ = PoolMeta
-
 __all__ = [
     'User',
     'Priority',
     'Team',
     'TeamGroupRelation',
     'UserTeamRelation',
-]
+    'ProcessStepRelation',
+    ]
 
 
 class User:
+    __metaclass__ = PoolMeta
     __name__ = 'res.user'
 
     teams = fields.Many2Many('res.user-res.team', 'user', 'team', 'Teams')
@@ -72,7 +72,7 @@ class Priority(model.CoogSQL, model.CoogView):
     __name__ = 'res.team.priority'
 
     process_step = fields.Many2One('process-process.step', 'Process Step',
-        required=True, ondelete='CASCADE')
+        required=True, ondelete='CASCADE', select=True)
     team = fields.Many2One('res.team', 'Team', ondelete='CASCADE',
         required=True, select=True)
     value = fields.Integer('Value')
@@ -224,3 +224,11 @@ class UserTeamRelation(model.CoogSQL, model.CoogView):
                 ('latest', '=', True),
                 ('from_state', 'in', steps),
                 ('user', '=', self.id)])
+
+
+class ProcessStepRelation:
+    __metaclass__ = PoolMeta
+    __name__ = 'process-process.step'
+
+    teams = fields.Many2Many('res.team.priority', 'process_step', 'team',
+        'Teams')

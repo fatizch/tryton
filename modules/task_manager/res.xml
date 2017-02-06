@@ -128,15 +128,21 @@ this repository contains the full copyright notices and license terms. -->
             <field name="domain" eval="[('user', '=', Eval('_user')), ('start_time', '&lt;=', DateTime())]" pyson="1"/>
             <field name="act_window" ref="act_process_log"/>
         </record>
+        <record model="ir.action.act_window.domain" id="act_process_log_domain_my_teams">
+            <field name="name">My Teams</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[('start_time', '&lt;=', DateTime()), ('my_teams', '=', True)]" pyson="1"/>
+            <field name="act_window" ref="act_process_log"/>
+        </record>
         <record model="ir.action.act_window.domain" id="act_process_log_domain_all">
             <field name="name">All</field>
-            <field name="sequence" eval="20"/>
+            <field name="sequence" eval="30"/>
             <field name="domain" eval="[('start_time', '&lt;=', DateTime())]" pyson="1"/>
             <field name="act_window" ref="act_process_log"/>
         </record>
         <record model="ir.action.act_window.domain" id="act_process_log_domain_future">
             <field name="name">Futures</field>
-            <field name="sequence" eval="20"/>
+            <field name="sequence" eval="40"/>
             <field name="domain" eval="[('start_time', '&gt;', DateTime())]" pyson="1"/>
             <field name="act_window" ref="act_process_log"/>
         </record>

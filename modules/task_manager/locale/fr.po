@@ -10,9 +10,17 @@ msgctxt "error:task.select:"
 msgid "No task has been selected."
 msgstr "Pas de Tâche Sélectionnée"
 
+msgctxt "field:process-process.step,teams:"
+msgid "Teams"
+msgstr "Equipes"
+
 msgctxt "field:process.log,is_current_user:"
 msgid "Is current user"
 msgstr "Est l'utisateur courant"
+
+msgctxt "field:process.log,my_teams:"
+msgid "My teams"
+msgstr "Mes équipes"
 
 msgctxt "field:process.log,task_name:"
 msgid "Name"
@@ -29,6 +37,14 @@ msgstr "Début de la Tâche"
 msgctxt "field:process.log,task_start_date:"
 msgid "Task Start"
 msgstr "Début de la Tâche"
+
+msgctxt "field:process.log,teams:"
+msgid "Teams"
+msgstr "Equipes"
+
+msgctxt "field:process.log,team_names:"
+msgid "Teams"
+msgstr "Equipes"
 
 msgctxt "field:process.log,user_name:"
 msgid "User"
@@ -269,6 +285,10 @@ msgstr "Tâches futures"
 msgctxt "model:ir.action.act_window.domain,name:act_process_log_domain_mine"
 msgid "Mine"
 msgstr "Les miennes"
+
+msgctxt "model:ir.action.act_window.domain,name:act_process_log_domain_my_teams"
+msgid "My teams"
+msgstr "Mes équipes"
 
 msgctxt "model:ir.ui.menu,name:menu_launch_existing_tasks"
 msgid "Waiting Tasks"

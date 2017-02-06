@@ -9,5 +9,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="from_state"/>
     <field name="task"/>
     <field name="task_name"/>
+    <field name="team_names"/>
     <field name="is_current_user" tree_invisible="1"/>
 </tree>

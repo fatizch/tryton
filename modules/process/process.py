@@ -92,13 +92,13 @@ class ProcessStepRelation(export.ExportImportMixin, ModelSQL, ModelView):
                 ]
 
     def get_rec_name(self, name):
+        if self.status:
+            return self.status.rec_name
         res = ''
         if self.process:
             res += '%s - ' % self.process.rec_name
         if self.step:
             res += self.step.rec_name
-        if self.status:
-            res += ' (%s)' % self.status.rec_name
         if not res:
             res = super(ProcessStepRelation, self).get_rec_name(name)
         return res

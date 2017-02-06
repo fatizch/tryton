@@ -39,6 +39,15 @@ class ProcessLog:
     task_name = fields.Function(
         fields.Char('Name'),
         'get_task_name')
+    teams = fields.Function(
+        fields.Many2Many('res.team', None, None, 'Teams'),
+        'get_teams')
+    team_names = fields.Function(
+        fields.Char('Teams'),
+        'get_team_names', searcher='search_team_names')
+    my_teams = fields.Function(
+        fields.Boolean('My teams'),
+        'get_my_teams', searcher='search_my_teams')
 
     @classmethod
     def view_attributes(cls):
@@ -51,6 +60,11 @@ class ProcessLog:
     def order_user_name(tables):
         table, _ = tables[None]
         return [table.user]
+
+    def get_my_teams(self, name):
+        if not self.from_state:
+            return False
+        return bool(set(self.teams) * set(self.from_state.teams))
 
     @classmethod
     def get_task_start(cls, logs, name):
@@ -69,6 +83,12 @@ class ProcessLog:
     def get_task_start_date(self, name):
         return self.task_start.date() if self.task_start else None
 
+    def get_team_names(self, name):
+        return ', '.join(x.name for x in self.teams)
+
+    def get_teams(self, name):
+        return [x.id for x in self.from_state.teams] if self.from_state else []
+
     def get_is_current_user(self, name):
         if not Transaction().user or not self.user:
             return False
@@ -83,6 +103,26 @@ class ProcessLog:
 
     def get_task_name(self, name=None):
         return self.task.task_name if self.task else None
+
+    @classmethod
+    def search_my_teams(cls, name, clause):
+        if (clause[1] == '=' and clause[2]) or (
+                clause[1] == '!=' and not clause[2]):
+            op = 'in'
+        else:
+            op = 'not in'
+        teams = Pool().get('res.user')(Transaction().user).teams
+        possible_states = sum([[x.process_step for x in team.priorities]
+                for team in teams], [])
+        return [('from_state', op, possible_states)]
+
+    @classmethod
+    def search_team_names(cls, name, clause):
+        Team = Pool().get('res.team')
+        teams = Team.search([('rec_name', clause[1], clause[2])])
+        possible_states = sum([[x.process_step for x in team.priorities]
+                for team in teams], [])
+        return [('from_state', 'in', possible_states)]
 
 
 class TaskDispatcher(Wizard):
