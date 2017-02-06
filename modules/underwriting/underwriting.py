@@ -3,7 +3,9 @@
 import datetime
 from collections import defaultdict
 
-from sql import Null
+from sql import Null, Cast
+
+from sql.operators import Concat
 from sql.conditionals import Coalesce
 from sql.aggregate import Min
 
@@ -215,6 +217,10 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
     type_code = fields.Function(
         fields.Char('Type Code'),
         'on_change_with_type_code')
+    documents_received = fields.Function(
+        fields.Boolean('Documents received', depends=['requested_documents']),
+        'on_change_with_documents_received',
+        searcher='search_documents_received')
     effective_date = fields.Function(
         fields.Date('Effetive Date'),
         'getter_effective_date', searcher='search_effective_date')
@@ -279,6 +285,28 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
             self.finalizable = False
             if elem.final_decision and elem.decision_date:
                 self.finalizable_result = True
+
+    @fields.depends('requested_documents')
+    def on_change_with_documents_received(self, name=None):
+        return all(x.received for x in self.requested_documents)
+
+    @classmethod
+    def search_documents_received(cls, name, clause):
+        underwriting = cls.__table__()
+        pool = Pool()
+        document_request = pool.get('document.request.line').__table__()
+        query = underwriting.join(document_request,
+            condition=document_request.for_object ==
+            Concat('underwriting,', Cast(underwriting.id, 'VARCHAR'))
+            ).select(underwriting.id,
+            where=(document_request.reception_date == Null))
+        if (clause[1] == '=' and not clause[2]) \
+                or (clause[1] == '!=' and clause[2]):
+            domain = [('id', 'in', query)]
+        elif (clause[1] == '=' and clause[2]) \
+                or (clause[1] == '!=' and not clause[2]):
+            domain = [('id', 'not in', query)]
+        return domain
 
     @classmethod
     def getter_effective_date(cls, underwritings, name):
