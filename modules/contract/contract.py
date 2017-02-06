@@ -1355,7 +1355,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         for coverage in self.get_coverages(self.product):
             good_opt = None
             if coverage in existing:
-                good_opt = existing[coverage.code]
+                good_opt = existing[coverage]
             elif coverage.subscription_behaviour == 'mandatory':
                 good_opt = OptionModel.new_option_from_coverage(coverage,
                     self.product, self.start_date)
