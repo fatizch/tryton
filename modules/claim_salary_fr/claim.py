@@ -401,8 +401,8 @@ class ClaimService:
             else:
                 begin_date = cur_salary.to_date + relativedelta(days=1,
                     years=-1)
-            prorata = ((cur_salary.to_date - begin_date).days + 1) / \
-                Decimal(((cur_salary.to_date - cur_salary.from_date).days + 1))
+            prorata = ((cur_salary.to_date - cur_salary.from_date).days + 1) / \
+                Decimal((cur_salary.to_date - begin_date).days + 1)
             for salary_def in salaries_def:
                 if 'bonus' in salary_def:
                     # bonus are added only one time at the end
@@ -410,23 +410,23 @@ class ClaimService:
                     bonus += getattr(cur_salary, salary_def, 0) or 0
                 elif in_period:
                     salary_to_add = \
-                        (getattr(cur_salary, salary_def, 0) or 0) * prorata
+                        (getattr(cur_salary, salary_def, 0) or 0)
                     if salary_to_add:
                         pmss += TableCell.get(pmss_table, cur_salary.from_date
-                            ) / prorata
+                            ) * prorata
                         sum_prorata += prorata
                         salary_to_use += salary_to_add
 
         # Calculate monthly salary
-        salary_to_use /= sum_prorata
-
         if self.salary_mode != 'last_year' and not current_salary:
-            salary_to_use *= 12
-        if not current_salary or self.salary_mode == 'last_year':
-            pmss *= 12
+            salary_to_use *= 12 / sum_prorata
+            pmss *= 12 / sum_prorata
         salary_to_use += bonus
-        pmss.quantize(Decimal(1) / 10 ** self.currency_digits)
-        salary_to_use.quantize(Decimal(1) / 10 ** self.currency_digits)
+
+        pmss = pmss.quantize(Decimal(1) / 10 ** self.currency_digits)
+        salary_to_use = salary_to_use.quantize(Decimal(1) /
+            10 ** self.currency_digits)
+
         year_range = calculate_salary_range(salary_to_use, pmss)
         salary_range['TA'] = year_range['TA']
         salary_range['TB'] = year_range['TB']
