@@ -1,3 +1,4 @@
+* Ajout d'un nom d'affichage basé sur le tiers
 * Champ documents_received indiquant si tous les documents demandés pour une analyse ont été reçus
 * Point d'entrée séparé pour les demandes de décisions planifiées
 * Possibilité de forcer l'activation manuelle

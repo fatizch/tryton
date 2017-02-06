@@ -1,3 +1,4 @@
+* Add party-based rec_name
 * Field documents_received indicates if all requested documents have been received for an underwriting
 * Separate entry point for planned underwritings
 * Possibility to force a manual activation

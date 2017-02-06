@@ -366,6 +366,9 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
             result[underwriting_id] = True
         return result
 
+    def get_rec_name(self, name):
+        return self.type_.name + ' - ' + self.party.rec_name
+
     @classmethod
     def search_effective_date(cls, name, clause):
         pool = Pool()
@@ -424,6 +427,13 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
             & (decision.decision_date != Null))
 
         return [('id', 'in' if expected else 'not in', query)]
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            ('party.rec_name',) + tuple(clause[1:]),
+            ('type_.name',) + tuple(clause[1:]),
+            ]
 
     @classmethod
     def order_effective_date(cls, tables):
