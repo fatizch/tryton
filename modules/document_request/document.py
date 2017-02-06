@@ -664,6 +664,7 @@ class DocumentRuleMixin(
                     final_result[code] = values
                     continue
                 cls.merge_lines(final_result[code], values)
+        return final_result
 
     @classmethod
     def merge_lines(cls, final, to_merge):
