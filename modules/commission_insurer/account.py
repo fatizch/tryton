@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
+from sql import Null
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
@@ -69,16 +70,27 @@ class Invoice:
     def cancel(cls, invoices):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
+        move_line = MoveLine.__table__()
+        invoice_line = pool.get('account.invoice.line').__table__()
 
         super(Invoice, cls).cancel(invoices)
 
         # remove link to principal_invoice_line for move
         for sub_invoices in grouped_slice(invoices):
             ids = [i.id for i in sub_invoices]
-            move_lines = MoveLine.search([
-                ('principal_invoice_line.invoice', 'in', ids)
-                ])
-            MoveLine.write(move_lines, {'principal_invoice_line': None})
+            cursor = Transaction().cursor
+            # in this case, a join would cost much more time
+            invoice_line_query = invoice_line.select(invoice_line.id,
+                where=(invoice_line.invoice.in_(ids)))
+            cursor.execute(*invoice_line_query)
+            invoice_line_ids = [x[0] for x in cursor.fetchall()]
+            move_line_query = move_line.select(move_line.id, where=(
+                    move_line.principal_invoice_line.in_(invoice_line_ids)))
+            cursor.execute(*move_line_query)
+            move_line_ids = [x[0] for x in cursor.fetchall()]
+            if move_line_ids:
+                move_lines = MoveLine.browse(move_line_ids)
+                MoveLine.write(move_lines, {'principal_invoice_line': None})
 
     @classmethod
     def reset_commissions(cls, invoices):
