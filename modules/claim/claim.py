@@ -587,6 +587,7 @@ class Loss(model.CoogSQL, model.CoogView):
 
     @classmethod
     def validate(cls, instances):
+        super(Loss, cls).validate(instances)
         for instance in instances:
             instance.check_end_date()
 
