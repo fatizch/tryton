@@ -558,6 +558,15 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
     def get_contact(self):
         return self.party
 
+    def get_sender(self):
+        return self.on_object.get_sender()
+
+    def get_recipients(self):
+        res = set()
+        if self.party:
+            res.add(self.party)
+        return list(res | set(self.on_object.get_recipients()))
+
 
 class UnderwritingResult(model.CoogSQL, model.CoogView):
     'Underwriting Result'
