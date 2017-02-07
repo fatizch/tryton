@@ -557,8 +557,8 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
         return copies
 
     def _get_planned_duplicate(self, date):
-        return self.type_.new_underwriting(self.on_object, self.party,
-            [(date, x.target) for x in self.results])
+        return self.type_.next_underwriting.new_underwriting(self.on_object,
+            self.party, [(date, x.target) for x in self.results])
 
     def init_dict_for_rule_engine(self, data):
         data['underwriting'] = self
