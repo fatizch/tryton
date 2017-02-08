@@ -64,7 +64,7 @@ class EventLog:
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().connection.cursor()
         event_h = TableHandler(cls, module_name)
-        to_migrate = event_h.column_exist('contract')
+        to_migrate = not event_h.column_exist('contract')
 
         super(EventLog, cls).__register__(module_name)
 
