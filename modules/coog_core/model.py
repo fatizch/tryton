@@ -234,7 +234,13 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
         cls = self.__class__
         field = cls._fields.get(name, None)
         if isinstance(field, fields.Function) and field.loader:
-            return getattr(cls, field.loader)(self)
+            from inspect import getargspec
+            func_loader = getattr(cls, field.loader)
+            name_required = len(getargspec(func_loader).args) > 1
+            if name_required:
+                return getattr(cls, field.loader)(self, name)
+            else:
+                return getattr(cls, field.loader)(self)
         return super(CoogSQL, self).__getattr__(name)
 
     def __setattr__(self, name, value):
