@@ -118,7 +118,7 @@ class One2ManyDomain(One2Many):
             field = Relation._inherit_fields[self.field][2]
         res = {}
         for i in ids:
-            res[i] = []
+            res[i] = set(), []
 
         targets = []
         in_max = Transaction().database.IN_MAX
@@ -165,8 +165,11 @@ class One2ManyDomain(One2Many):
 
         for target in targets:
             origin_id = getattr(target, self.field).id
-            res[origin_id].append(target.id)
-        return dict((key, tuple(value)) for key, value in res.iteritems())
+            if target.id not in res[origin_id][0]:
+                # Use set / list combination to manage order
+                res[origin_id][0].add(target.id)
+                res[origin_id][1].append(target.id)
+        return dict((key, tuple(value[0])) for key, value in res.iteritems())
 
 
 class Many2Many(tryton_fields.Many2Many):
