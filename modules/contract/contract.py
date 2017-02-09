@@ -1778,8 +1778,8 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
 
     @fields.depends('contract')
     def on_change_with_current_policy_owner(self, name=None):
-        if self.contract:
-            return self.contract.current_policy_owner
+        if self.contract and self.contract.current_policy_owner:
+            return self.contract.current_policy_owner.id
 
     @fields.depends('contract')
     def on_change_with_product(self, name=None):
