@@ -15,9 +15,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Underwriting Result Finalized</field>
             <field name="code">underwriting_result_finalized</field>
         </record>
-        <record model="event.type" id="event_underwriting_result_abandonned">
-            <field name="name">Underwriting Result Abandonned</field>
-            <field name="code">underwriting_result_abandonned</field>
+        <record model="event.type" id="event_underwriting_result_abandoned">
+            <field name="name">Underwriting Result Abandoned</field>
+            <field name="code">underwriting_result_abandoned</field>
         </record>
     </data>
 </tryton>

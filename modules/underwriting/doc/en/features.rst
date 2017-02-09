@@ -5,7 +5,7 @@
 
 - **Underwriting**: It is possible to create underwritings which, according
   to the selected type, will manage a list of decisions. Each decision can be
-  individually validated or abandonned, and the underwriting can be completed
+  individually validated or abandoned, and the underwriting can be completed
   "as a whole".
 
 - **Underwriting planning**: The current underwriting can be copied in the

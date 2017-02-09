@@ -204,7 +204,7 @@ class ClaimService:
     def get_appliable_underwritings(cls, services, name):
         decisions = Pool().get('underwriting.result').search([
                 ('target', 'in', [str(x) for x in services]),
-                ('state', '!=', 'abandonned'),
+                ('state', '!=', 'abandoned'),
                 ('underwriting.state', '!=', 'draft'),
                 ], order=[('effective_decision_date', 'ASC')])
         result = defaultdict(list)

@@ -4,10 +4,9 @@ import datetime
 from collections import defaultdict
 
 from sql import Null, Cast
-
 from sql.operators import Concat
-from sql.conditionals import Coalesce
-from sql.aggregate import Min
+from sql.conditionals import Coalesce, Case
+from sql.aggregate import Min, Max, Count
 
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, StateAction
@@ -217,6 +216,13 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
     type_code = fields.Function(
         fields.Char('Type Code'),
         'on_change_with_type_code')
+    sub_status = fields.Function(fields.Selection([
+                ('finalized', 'Finalized'),
+                ('abandoned', 'Abandoned'),
+                ('mixed', 'Mixed')
+                ], 'Sub-status', depends=['results', 'state'], states={
+                'invisible': Eval('state') != 'completed'}),
+        'getter_sub_status', searcher='search_sub_status')
     documents_received = fields.Function(
         fields.Boolean('Documents received', depends=['requested_documents']),
         'on_change_with_documents_received',
@@ -325,6 +331,38 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
         for underwriting_id, date in cursor.fetchall():
             result[underwriting_id] = date
         return result
+
+    @classmethod
+    def getter_sub_status(cls, underwritings, name):
+        pool = Pool()
+        result = pool.get('underwriting.result').__table__()
+        cursor = Transaction().connection.cursor()
+
+        status = {x.id: '' for x in underwritings}
+        cursor.execute(*result.select(result.underwriting,
+                Case((Count(result.state, distinct=True) > 1, 'mixed'),
+                    else_=Max(result.state)), where=result.state != 'waiting',
+                group_by=result.underwriting
+                ))
+
+        for underwriting_id, sub_status in cursor.fetchall():
+            status[underwriting_id] = sub_status
+        return status
+
+    @classmethod
+    def search_sub_status(cls, name, clause):
+        pool = Pool()
+        result = pool.get('underwriting.result').__table__()
+        _, operator, value = clause
+        Operator = fields.SQL_OPERATORS[operator]
+
+        query = result.select(result.underwriting,
+            where=(result.state != 'waiting'), group_by=result.underwriting,
+            having=Operator(Case((Count(result.state, distinct=True) > 1,
+                        'mixed'), else_=Max(result.state)),
+                cls.sub_status.sql_format(value)))
+
+        return [('id', 'in', query)]
 
     @classmethod
     def get_finalizable(cls, underwritings, name):
@@ -539,7 +577,7 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
 
     def check_completable(self):
         for result in self.results:
-            if result.state not in ('finalized', 'abandonned'):
+            if result.state not in ('finalized', 'abandoned'):
                 self.append_functional_error('non_completed_result',
                     {'target': result.target.rec_name})
 
@@ -586,12 +624,12 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
     underwriting = fields.Many2One('underwriting', 'Underwriting',
         required=True, select=True, ondelete='CASCADE')
     state = fields.Selection([('waiting', 'Waiting'),
-            ('abandonned', 'Abandonned'),
+            ('abandoned', 'Abandoned'),
             ('finalized', 'Finalized')], 'State', states={
             'readonly': Eval('state') != 'processing'})
     state_string = state.translated('state')
     target = fields.Reference('Target', [], select=True, required=True,
-        states={'readonly': (In(Eval('state'), ['abandonned', 'finalized']))
+        states={'readonly': (In(Eval('state'), ['abandoned', 'finalized']))
             | (Eval('underwriting_state') != 'draft')},
         depends=['state', 'underwriting_state'])
     target_description = fields.Function(
@@ -603,7 +641,7 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
     final_decision = fields.Many2One('underwriting.decision.type',
         'Final Decision', states={
             'required': Eval('state') == 'finalized',
-            'readonly': In(Eval('state'), ['abandonned', 'finalized'])},
+            'readonly': In(Eval('state'), ['abandoned', 'finalized'])},
         domain=[If(Bool(Eval('final_decision', False)),
                 ['model', '=', Eval('target_model')], [])],
         depends=['state', 'target_model'], ondelete='RESTRICT')
@@ -644,13 +682,13 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
         cls._buttons.update({
                 'finalize': {
                     'invisible': (Eval('underwriting_state') == 'draft')
-                    | In(Eval('state'), ['abandonned', 'finalized']),
+                    | In(Eval('state'), ['abandoned', 'finalized']),
                     'readonly': ~Eval('final_decision') |
                     ~Eval('effective_decision_date'),
                     },
                 'abandon': {
                     'invisible': (Eval('underwriting_state') == 'draft')
-                    | In(Eval('state'), ['abandonned', 'finalized']),
+                    | In(Eval('state'), ['abandoned', 'finalized']),
                     }})
 
     @classmethod
@@ -666,20 +704,20 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
     @classmethod
     def write(cls, *args):
         params = iter(args)
-        finalized, abandonned = [], []
+        finalized, abandoned = [], []
         for instances, values in zip(params, params):
             if 'state' not in values:
                 continue
             if values['state'] == 'finalized':
                 assert all(x.state == 'waiting' for x in instances)
                 finalized += instances
-            elif values['state'] == 'abandonned':
+            elif values['state'] == 'abandoned':
                 assert all(x.state == 'waiting' for x in instances)
-                abandonned += instances
+                abandoned += instances
         super(UnderwritingResult, cls).write(*args)
         if finalized:
             cls.do_finalize(finalized)
-        if abandonned:
+        if abandoned:
             cls.do_abandon(finalized)
 
     @classmethod
@@ -739,7 +777,7 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
     def abandon(self):
         assert self.state == 'waiting'
         self.decision_date = utils.today()
-        self.state = 'abandonned'
+        self.state = 'abandoned'
 
     @classmethod
     def do_finalize(cls, instances):
@@ -749,7 +787,7 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
     @classmethod
     def do_abandon(cls, instances):
         Pool().get('event').notify_events(instances,
-            'underwriting_result_abandonned')
+            'underwriting_result_abandoned')
 
     def init_dict_for_rule_engine(self, data):
         self.underwriting.init_dict_for_rule_engine(data)

@@ -6,6 +6,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="effective_date"/>
     <field name="type_"/>
     <field name="on_object"/>
+    <field name="sub_status"/>
     <field name="documents_received"/>
     <field name="party" tree_invisible="1"/>
 </tree>
