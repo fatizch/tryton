@@ -23,9 +23,10 @@
   possible de spécifier les taxes qui s'appliquent sur le résultat des calculs
   de ces règles.
 
-- **Paramétrage des dates de calcul de prime :** Du fait de la flexibilité des
-  règles de calcul de prime, il est nécessaire de pouvoir paramétrer quand
-  est-ce que les règles de tarif doivent être recalculées.
+- **Premium date configuration :** List of dates for premium calculation. The contract start date is used by default but other dates could be added :
+    * annually at the contract anniversary
+    * annually at a custom date (January 1st for example)
+    * with a relative duration from the contract start date (1 month after the contract start date for a free month for example)
 
 - **Calcul des primes sur le contrat :** Le fait de recalculer le contrat
   déclenche un recalcul des primes du contrat. Ces primes sont les sorties

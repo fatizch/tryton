@@ -48,10 +48,28 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
     type_ = fields.Selection([
             ('yearly_on_start_date', 'Yearly, from the contract start date'),
             ('yearly_custom_date', 'Yearly, at this date'),
-            ], 'Date rule')
+            ('duration_initial_start_date', 'Duration from the contract '
+                'initial start date'),
+            ('duration_current_start_date', 'Duration from the contract '
+                'current start date'),
+            ], 'Date rule', sort=False)
     custom_date = fields.Date('Custom Sync Date', states={
             'required': Eval('type_', '') == 'yearly_custom_date',
             'invisible': Eval('type_', '') != 'yearly_custom_date',
+            }, depends=['type_'])
+    duration = fields.Integer('Duration',
+        states={
+            'required': Eval('type_', '').in_(
+                ['duration_initial_start_date', 'duration_current_start_date']),
+            'invisible': ~Eval('type_', '').in_(
+                ['duration_initial_start_date', 'duration_current_start_date']),
+            }, depends=['type_'])
+    duration_unit = fields.Selection(coog_date.DAILY_DURATION, 'Unit',
+        states={
+            'required': Eval('type_', '').in_(
+                ['duration_initial_start_date', 'duration_current_start_date']),
+            'invisible': ~Eval('type_', '').in_(
+                ['duration_initial_start_date', 'duration_current_start_date']),
             }, depends=['type_'])
 
     @classmethod
@@ -68,6 +86,10 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
     def on_change_type_(self):
         if self.type_ != 'yearly_custom_date':
             self.custom_date = None
+        elif self.type_ not in ['duration_initial_start_date',
+                'duration_current_start_date']:
+            self.duration = None
+            self.duration_unit = None
 
     def get_rule_for_contract(self, contract):
         max_date = contract.end_date
@@ -80,6 +102,14 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
         elif self.type_ == 'yearly_on_start_date':
             return rrule.rrule(rrule.YEARLY, dtstart=contract.start_date,
                 until=max_date)
+        elif self.type_ == 'duration_initial_start_date':
+            date = coog_date.add_duration(contract.initial_start_date,
+                self.duration_unit, self.duration, True)
+            return [datetime.datetime.combine(date, datetime.time())]
+        elif self.type_ == 'duration_current_start_date':
+            date = coog_date.add_duration(contract.start_date,
+                self.duration_unit, self.duration, True)
+            return [datetime.datetime.combine(date, datetime.time())]
 
 
 class Product:

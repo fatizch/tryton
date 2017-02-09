@@ -4,4 +4,6 @@ this repository contains the full copyright notices and license terms. -->
 <tree editable="bottom">
     <field name="type_"/>
     <field name="custom_date"/>
+    <field name="duration"/>
+    <field name="duration_unit"/>
 </tree>

@@ -23,9 +23,10 @@
   possible de spécifier les taxes qui s'appliquent sur le résultat des calculs
   de ces règles.
 
-- **Paramétrage des dates de calcul de prime :** Du fait de la flexibilité des
-  règles de calcul de prime, il est nécessaire de pouvoir paramétrer quand
-  est-ce que les règles de tarif doivent être recalculées.
+- **Paramétrage des dates de calcul de prime :** Précise les dates auxquelles un calcul du tarif doit être réalisé. Par défaut, un calcul est fait à la date d'effet du contrat, mais il est possible d'ajouter d'autres dates :
+    * annuellement à la date anniversaire du contrat
+    * annuellement à une date précise (le 1er janvier par exemple)
+    * à une durée relative par rapport à la date d'effet du contrat (1 mois après la souscription d'un contrat pour gérer une gratuité pendant ce délai par exemple)
 
 - **Calcul des primes sur le contrat :** Le fait de recalculer le contrat
   déclenche un recalcul des primes du contrat. Ces primes sont les sorties

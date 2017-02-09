@@ -518,6 +518,14 @@ msgctxt "field:offered.product.premium_date,custom_date:"
 msgid "Custom Sync Date"
 msgstr "Date de synchro personnalisée"
 
+msgctxt "field:offered.product.premium_date,duration:"
+msgid "Duration"
+msgstr "Durée"
+
+msgctxt "field:offered.product.premium_date,duration_unit:"
+msgid "Unit"
+msgstr "Unité"
+
 msgctxt "field:offered.product.premium_date,id:"
 msgid "ID"
 msgstr "ID"
@@ -734,6 +742,38 @@ msgctxt "selection:offered.option.description.premium_rule,premium_base:"
 msgid "Option"
 msgstr "Option"
 
+msgctxt "selection:offered.product.premium_date,duration_unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:offered.product.premium_date,duration_unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:offered.product.premium_date,duration_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:offered.product.premium_date,duration_unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:offered.product.premium_date,duration_unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "selection:offered.product.premium_date,duration_unit:"
+msgid "Year"
+msgstr "Année"
+
+msgctxt "selection:offered.product.premium_date,type_:"
+msgid "Duration from the contract current start date"
+msgstr "Durée à partir du début du terme courant du contrat"
+
+msgctxt "selection:offered.product.premium_date,type_:"
+msgid "Duration from the contract initial start date"
+msgstr "Durée à partir de la date d'effet initiale du contrat"
+
 msgctxt "selection:offered.product.premium_date,type_:"
 msgid "Yearly, at this date"
 msgstr "Annuellement, à cette date"
@@ -750,25 +790,9 @@ msgctxt "view:account.fee:"
 msgid "%"
 msgstr "%"
 
-msgctxt "view:account.fee:"
-msgid "Fee"
-msgstr "Frais"
-
-msgctxt "view:account.fee:"
-msgid "Fees"
-msgstr "Frais"
-
 msgctxt "view:contract.fee:"
 msgid "%"
 msgstr "%"
-
-msgctxt "view:contract.fee:"
-msgid "Contract Fee"
-msgstr "Frais du contrat"
-
-msgctxt "view:contract.fee:"
-msgid "Contract Fees"
-msgstr "Frais du contrat"
 
 msgctxt "view:contract.premium.display.premiums.line:"
 msgid "Premium"
