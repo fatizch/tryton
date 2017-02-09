@@ -646,7 +646,7 @@ class Configuration:
         return self.direct_debit_journal
 
 
-class Group(ModelCurrency, export.ExportImportMixin):
+class Group(ModelCurrency, export.ExportImportMixin, Printable):
     __name__ = 'account.payment.group'
     _func_key = 'number'
 
@@ -764,6 +764,12 @@ class Group(ModelCurrency, export.ExportImportMixin):
             ('party', payment.party),
             ('currency', payment.currency),
             )
+
+    def get_contact(self):
+        return self.journal.company.party
+
+    def get_sender(self):
+        return self.journal.company.party
 
 
 class PaymentMotive(model.CoogSQL, model.CoogView):

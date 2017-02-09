@@ -8,5 +8,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">account.payment,-1</field>
             <field name="action" ref="report_engine.letter_generation_wizard"/>
         </record>
+        <record model="ir.action.keyword" id="report_payment_group_keyword">
+            <field name="keyword">form_print</field>
+            <field name="model">account.payment.group,-1</field>
+            <field name="action" ref="report_engine.letter_generation_wizard"/>
+        </record>
     </data>
 </tryton>

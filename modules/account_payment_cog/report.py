@@ -17,5 +17,4 @@ class ReportTemplate:
             return result
         if self.on_model.model == 'account.payment':
             result.append(('reject_payment', 'Reject Payment'))
-
         return result
