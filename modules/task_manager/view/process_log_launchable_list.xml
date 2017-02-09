@@ -11,4 +11,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="task_name"/>
     <field name="team_names"/>
     <field name="is_current_user" tree_invisible="1"/>
+    <field name="is_authorized" tree_invisible="1"/>
 </tree>

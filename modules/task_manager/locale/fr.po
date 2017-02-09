@@ -14,6 +14,10 @@ msgctxt "field:process-process.step,teams:"
 msgid "Teams"
 msgstr "Equipes"
 
+msgctxt "field:process.log,is_authorized:"
+msgid "Is Authorized"
+msgstr "Est Autorisé"
+
 msgctxt "field:process.log,is_current_user:"
 msgid "Is current user"
 msgstr "Est l'utisateur courant"

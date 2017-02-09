@@ -48,12 +48,14 @@ class ProcessLog:
     my_teams = fields.Function(
         fields.Boolean('My teams'),
         'get_my_teams', searcher='search_my_teams')
+    is_authorized = fields.Function(
+        fields.Boolean('Is Authorized'), 'get_is_authorized')
 
     @classmethod
     def view_attributes(cls):
         return super(ProcessLog, cls).view_attributes() + [
             ('/tree', 'colors', If(Bool(Eval('is_current_user')), 'blue',
-                    'black')),
+                   If(Bool(~Eval('is_authorized')), 'grey', 'black')))
             ]
 
     @staticmethod
@@ -93,6 +95,15 @@ class ProcessLog:
         if not Transaction().user or not self.user:
             return False
         return Transaction().user == self.user.id
+
+    def get_is_authorized(self, name):
+        user = Transaction().user
+        if not user:
+            return False
+        for authorization in self.from_state.step.authorizations:
+            if user in authorization.users:
+                return True
+        return False
 
     def get_task_nb(self, name):
         # used by graph presenter
