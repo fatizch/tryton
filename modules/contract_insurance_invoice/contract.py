@@ -23,6 +23,7 @@ from trytond.tools import reduce_ids, grouped_slice
 from trytond.wizard import Wizard, StateView, Button, StateAction
 from trytond.rpc import RPC
 from trytond.cache import Cache
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import (coog_date, coog_string, utils, model,
     fields)
@@ -62,21 +63,36 @@ class CustomRrule(object):
         which are not (yet) properly handled by `rrule`.
         See `premium._get_rrule` for more informations.
     '''
-    def __init__(self, start, interval, end=None):
+    def __init__(self, start, interval, end=None, base_date=None):
         assert start
         assert interval
+        assert base_date is None or base_date <= start
+        self._base_date = base_date or start
         self._interval = interval
         self._start = start
         self._end = end
         self._iter_pos = None
+        self.set_base_iter_pos()
+
+    def set_base_iter_pos(self):
+        self._base_iter_pos = 0
+        if self._start == self._base_date:
+            return
+        date = self._base_date
+        while date < self._start:
+            self._base_iter_pos += 1
+            date = coog_date.add_month(self._base_date,
+                self._interval * self._base_iter_pos,
+                stick_to_end_of_month=True)
+        self._base_iter_pos -= 1
 
     def __iter__(self):
-        self._iter_pos = 0
+        self._iter_pos = self._base_iter_pos
         return self
 
     def next(self):
-        date = coog_date.add_month(self._start, self._interval * self._iter_pos,
-            stick_to_end_of_month=True)
+        date = coog_date.add_month(self._base_date,
+            self._interval * self._iter_pos, stick_to_end_of_month=True)
         if self._end and self._end < date:
             raise StopIteration
         self._iter_pos += 1
@@ -88,14 +104,14 @@ class CustomRrule(object):
         start = start.date()
         end = end.date() if not self._end else min(end.date(),
             self._end + datetime.timedelta(1))
-        cur_date = self._start
+        cur_date = self._base_date
         result = []
-        i = 1
+        i = self._base_iter_pos
         while cur_date < end:
             if cur_date > start and cur_date < end:
                 result.append(datetime.datetime.combine(cur_date,
                         datetime.time()))
-            cur_date = coog_date.add_month(self._start, self._interval * i,
+            cur_date = coog_date.add_month(self._base_date, self._interval * i,
                 stick_to_end_of_month=True)
             i += 1
         return result
@@ -104,12 +120,13 @@ class CustomRrule(object):
         assert date
         date = date.date() if not self._end else min(date.date(),
             self._end + datetime.timedelta(1))
-        if date < self._start:
-            return self._start
-        cur_date = self._start
-        i = 1
+        if date < self._base_date:
+            return self.after(self._start)
+        cur_date = coog_date.add_month(self._base_date,
+            self._interval * self._base_iter_pos, stick_to_end_of_month=True)
+        i = self._base_iter_pos + 1
         while cur_date < date:
-            cur_date = coog_date.add_month(self._start, self._interval * i,
+            cur_date = coog_date.add_month(self._base_date, self._interval * i,
                 stick_to_end_of_month=True)
             i += 1
         return datetime.datetime.combine(cur_date, datetime.time())
@@ -686,8 +703,10 @@ class Contract:
         if next_billing_information:
             until = next_billing_information.date
         invoice_rrule = rruleset()
-        rule, until_date = billing_information.billing_mode.get_rrule(start,
-            until)
+        with ServerContext().set_context(
+                cur_billing_information=billing_information):
+            rule, until_date = billing_information.billing_mode.get_rrule(
+                start, until)
         invoice_rrule.rrule(rule)
         return (invoice_rrule, until_date, billing_information)
 
@@ -1733,7 +1752,7 @@ class Premium:
             # A solution should be implemented soon(TM) :
             # https://github.com/dateutil/dateutil/issues/285
             # In the meantime, we use a CustomRrule to manage those edge cases.
-            if start.day in (29, 30, 31):
+            if start.day in (28, 29, 30, 31):
                 return self._custom_rrule(interval)
         elif self.frequency == 'yearly':
             freq = DAILY

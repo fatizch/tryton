@@ -10,6 +10,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
 from trytond.pyson import Eval, Bool, If
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields, model, export, utils
 
@@ -168,13 +169,21 @@ class BillingMode(model.CoogSQL, model.CoogView):
             'half_yearly': 6,
             'yearly': 12,
             }.get(self.frequency)
-        return CustomRrule(start, interval, end)
+        base_date = start
+        # Sync on the contract date / billing_info date
+        billing_info = ServerContext().get('cur_billing_information', None)
+        if billing_info:
+            if billing_info.date:
+                base_date = billing_info.date
+            else:
+                base_date = billing_info.contract.start_date
+        return CustomRrule(start, interval, end=end, base_date=base_date)
 
     def get_rrule(self, start, until=None):
         bymonthday = int(self.sync_day) if self.sync_day else None
         bymonth = int(self.sync_month) if self.sync_month else None
-        if (not bymonthday and start.day in (29, 30, 31) or
-                bymonthday in (29, 30, 31)) and (
+        if (not bymonthday and start.day in (28, 29, 30, 31) or
+                bymonthday in (28, 29, 30, 31)) and (
                 self.frequency in ('yearly', 'quarterly', 'half_yearly',
                     'monthly')):
             return self._custom_rrule(start, until), until
