@@ -1,3 +1,4 @@
+* Add process configuration entry point
 * Possibility to configure the default start step
 * Add "start" transitions which are called only once per process
 

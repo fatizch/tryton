@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ######################### -->
+        <!-- # Process Configuration # -->
+        <!-- ######################### -->
+        <record model="ir.ui.view" id="configuration_view_form">
+            <field name="model">process.configuration</field>
+            <field name="inherit" ref="process.configuration_view_form"/>
+            <field name="name">configuration_form</field>
+        </record>
+    </data>
+</tryton>

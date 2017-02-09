@@ -188,7 +188,10 @@ class LaunchTask(Wizard):
         return Pool().get('process.log')(active_id)
 
     def transition_find_action(self):
-        if self.current_log.user.id in (Transaction().user, 0, 1):
+        pool = Pool()
+        Config = pool.get('process.configuration')
+        if Config.get_singleton().share_tasks or (
+                self.current_log.user.id in (Transaction().user, 0, 1)):
             # Users 0 is root (technical) and user 1 is admin. Those should not
             # interfere with the process
             return 'resume_process_action'

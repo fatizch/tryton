@@ -1,7 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
+
 import res
+import configuration
 import task_dispatcher
 
 
@@ -14,6 +16,7 @@ def register():
         res.User,
         res.UserTeamRelation,
         res.ProcessStepRelation,
+        configuration.ProcessConfiguration,
         module='task_manager', type_='model')
     Pool.register(
         task_dispatcher.TaskDispatcher,

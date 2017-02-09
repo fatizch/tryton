@@ -296,6 +296,30 @@ msgctxt "field:process.action,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:process.configuration,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:process.configuration,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process.configuration,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:process.configuration,rec_name:"
+msgid "Name"
+msgstr "Name"
+
+msgctxt "field:process.configuration,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:process.configuration,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
 msgctxt "field:process.process-act_window,action_window:"
 msgid "Action Window"
 msgstr "Action Window"
@@ -596,6 +620,10 @@ msgctxt "help:process.action,parameters:"
 msgid "Write parameters separated by \",\""
 msgstr "Ecrire les paramètres séparés par des \",\""
 
+msgctxt "model:ir.action,name:act_configuration"
+msgid "Configuration"
+msgstr "Configuration"
+
 msgctxt "model:ir.action,name:act_process_desc"
 msgid "Processes"
 msgstr "Processus"
@@ -615,6 +643,10 @@ msgstr "Graphique"
 msgctxt "model:ir.action,name:report_generate_graph"
 msgid "Graph"
 msgstr "Graphique"
+
+msgctxt "model:ir.ui.menu,name:menu_configuration"
+msgid "Configuration"
+msgstr "Configuration"
 
 msgctxt "model:ir.ui.menu,name:menu_process_desc"
 msgid "Processes"
@@ -651,6 +683,10 @@ msgstr "Relation Processus - Etape"
 msgctxt "model:process.action,name:"
 msgid "Process Action"
 msgstr "Action de processus"
+
+msgctxt "model:process.configuration,name:"
+msgid "Process Configuration"
+msgstr "Configuration des processus"
 
 msgctxt "model:process.process-act_window,name:"
 msgid "Process to Action Window Relation"
@@ -709,10 +745,6 @@ msgid "Transition"
 msgstr "Transition"
 
 msgctxt "selection:process.transition,kind:"
-msgid "Calculated"
-msgstr "Calculé"
-
-msgctxt "selection:process.transition,kind:"
 msgid "Complete Process"
 msgstr "Terminer le processus"
 
@@ -757,14 +789,6 @@ msgid "Code"
 msgstr "Code"
 
 msgctxt "view:process.step:"
-msgid "Process Step"
-msgstr "Descripteur d'Etape"
-
-msgctxt "view:process.step:"
-msgid "Process Steps"
-msgstr "Paramétrage des Etapes"
-
-msgctxt "view:process.step:"
 msgid "Usage"
 msgstr "Utilisation"
 
@@ -783,14 +807,6 @@ msgstr "Transitions"
 msgctxt "view:process:"
 msgid "Description"
 msgstr "Description"
-
-msgctxt "view:process:"
-msgid "Process"
-msgstr "Descripteur de Processus"
-
-msgctxt "view:process:"
-msgid "Processes"
-msgstr "Paramétrage des Processus"
 
 msgctxt "view:process:"
 msgid "Update Menu"
