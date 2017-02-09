@@ -248,46 +248,73 @@ class LineAggregated(model.CoogSQL, model.CoogView):
     def get_currency_digits(self, name):
         return self.account.currency_digits
 
-    @staticmethod
-    def table_query():
+    @classmethod
+    def get_tables(cls):
         pool = Pool()
-        Line = pool.get('account.move.line')
-        line = Line.__table__()
-        Move = pool.get('account.move')
-        move = Move.__table__()
-        Journal = pool.get('account.journal')
-        journal = Journal.__table__()
+        return {
+            'account.move.line': pool.get('account.move.line'
+                ).__table__(),
+            'account.move': pool.get('account.move').__table__(),
+            'account.journal': pool.get('account.journal').__table__()
+            }
 
+    @classmethod
+    def where_clause(cls, tables):
+        return None
+
+    @classmethod
+    def fields_to_select(cls, tables):
+        line = tables['account.move.line']
+        move = tables['account.move']
+        journal = tables['account.journal']
+        return [Max(line.id).as_('id'),
+            Literal(0).as_('create_uid'),
+            Literal(0).as_('create_date'),
+            Literal(0).as_('write_uid'),
+            Literal(0).as_('write_date'),
+            Case((journal.aggregate and not journal.aggregate_posting,
+                Literal('')),
+                else_=Max(move.description)).as_('description'),
+            Case((journal.aggregate,
+               Concat(ToChar(move.post_date, 'YYYYMMDD'),
+                Cast(move.snapshot, 'VARCHAR'))),
+                else_=Max(move.number)).as_('aggregated_move_id'),
+            line.account.as_('account'),
+            move.journal.as_('journal'),
+            move.date.as_('date'),
+            move.post_date.as_('post_date'),
+            move.snapshot.as_('snapshot'),
+            Sum(Coalesce(line.debit, 0)).as_('debit'),
+            Sum(Coalesce(line.credit, 0)).as_('credit'),
+            ]
+
+    @classmethod
+    def get_group_by(cls, tables):
+        line = tables['account.move.line']
+        move = tables['account.move']
+        journal = tables['account.journal']
+        return [line.account,
+            Case((journal.aggregate, move.journal), else_=line.id),
+            journal.aggregate,
+            move.journal,
+            move.date,
+            move.post_date,
+            move.snapshot]
+
+    @classmethod
+    def join_table(cls, tables):
+        line = tables['account.move.line']
+        move = tables['account.move']
+        journal = tables['account.journal']
         return line.join(move, condition=line.move == move.id
-            ).join(journal, condition=move.journal == journal.id
-            ).select(
-                Max(line.id).as_('id'),
-                Literal(0).as_('create_uid'),
-                Literal(0).as_('create_date'),
-                Literal(0).as_('write_uid'),
-                Literal(0).as_('write_date'),
-                Case((journal.aggregate and not journal.aggregate_posting,
-                    Literal('')),
-                    else_=Max(move.description)).as_('description'),
-                Case((journal.aggregate,
-                    Concat(ToChar(move.post_date, 'YYYYMMDD'),
-                    Cast(move.snapshot, 'VARCHAR'))),
-                    else_=Max(move.number)).as_('aggregated_move_id'),
-                line.account.as_('account'),
-                move.journal.as_('journal'),
-                move.date.as_('date'),
-                move.post_date.as_('post_date'),
-                move.snapshot.as_('snapshot'),
-                Sum(Coalesce(line.debit, 0)).as_('debit'),
-                Sum(Coalesce(line.credit, 0)).as_('credit'),
-                group_by=[
-                    line.account,
-                    Case((journal.aggregate, move.journal), else_=line.id),
-                    journal.aggregate,
-                    move.journal,
-                    move.date,
-                    move.post_date,
-                    move.snapshot])
+            ).join(journal, condition=move.journal == journal.id)
+
+    @classmethod
+    def table_query(cls):
+        tables = cls.get_tables()
+        return cls.join_table(tables).select(*cls.fields_to_select(tables),
+            group_by=cls.get_group_by(tables),
+            where=cls.where_clause(tables))
 
 
 class OpenLineAggregated(Wizard):
