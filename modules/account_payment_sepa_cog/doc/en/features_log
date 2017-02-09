@@ -1,4 +1,5 @@
-Add the chain batch
+* Rename the xml file of a payments group message into 'group.rec_name + group.journal.name + group.kind + group.payment_date' with payment_date only added if there is only exactly one
+* Add the chain batch
 
 Version 1.10 - 2016-11-02
 * Allow to amend a sepa mandate to change its bank account

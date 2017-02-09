@@ -739,9 +739,16 @@ class Group(ModelCurrency, export.ExportImportMixin):
     def get_payment_dates(cls, groups, name):
         pool = Pool()
         Date = pool.get('ir.date')
+        return {k: ', '.join([Date.date_as_string(x) for x in v])
+            for k, v in cls.get_payment_dates_per_group(groups, name
+                ).iteritems()}
+
+    @classmethod
+    def get_payment_dates_per_group(cls, groups, name):
+        pool = Pool()
         cursor = Transaction().connection.cursor()
         account_payment = pool.get('account.payment').__table__()
-        result = {x.id: '' for x in groups}
+        res_dict = {x.id: [] for x in groups}
 
         cursor.execute(*account_payment.select(
                 account_payment.group, account_payment.date,
@@ -749,10 +756,8 @@ class Group(ModelCurrency, export.ExportImportMixin):
                 group_by=[account_payment.group, account_payment.date]))
 
         for group_id, date in cursor.fetchall():
-            if result[group_id]:
-                result[group_id] += ', '
-            result[group_id] += Date.date_as_string(date)
-        return result
+            res_dict[group_id].append(date)
+        return res_dict
 
     def merge_payment_key(self, payment):
         return (('merged_id', payment.merged_id),

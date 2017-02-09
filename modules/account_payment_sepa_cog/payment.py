@@ -20,6 +20,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or, Bool, If
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields, coog_date, utils, model
+from trytond.modules.coog_core import coog_string
 from .sepa_handler import CAMT054Coog
 
 __metaclass__ = PoolMeta
@@ -266,6 +267,7 @@ class Group:
     @classmethod
     def __setup__(cls):
         super(Group, cls).__setup__()
+        cls.kind_string = cls.kind.translated('kind')
         cls._order.insert(0, ('id', 'DESC'))
         cls.state.selection += [
             ('draft', 'Draft'),
@@ -722,6 +724,18 @@ class Message:
         Event = Pool().get('event')
         super(Message, self).send()
         Event.notify_events([self], 'send_sepa_message')
+
+    def get_filename(self, name):
+        pool = Pool()
+        Group = pool.get('account.payment.group')
+        assert isinstance(self.origin, Group)
+        names = [self.origin.rec_name, self.origin.journal.name,
+            self.origin.kind_string]
+        payment_dates = Group.get_payment_dates_per_group(
+            [self.origin], name)[self.origin.id]
+        if len(payment_dates) == 1:
+            names.append(payment_dates[0].strftime('%Y%m%d'))
+        return coog_string.slugify('_'.join(names)) + '.xml'
 
 
 class MergedPayments:
