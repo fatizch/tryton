@@ -183,7 +183,11 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
         for displayer in options:
             patched_option = per_key[displayer.parent]
             version = patched_option.get_version_at_date(self.effective_date)
-            if version.start == self.effective_date:
+            if (version.start == self.effective_date) or (
+                    version.start is None and self.effective_date ==
+                    contract_endorsement.contract.start_date):
+                if getattr(version, 'benefits', None) is None:
+                    version.init_from_coverage(patched_option.coverage)
                 patched_benefits = {x.benefit.id: x for x in version.benefits}
                 for benefit in displayer.option_benefits:
                     patched_benefit = patched_benefits[benefit.benefit.id]
@@ -198,8 +202,8 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
                 version = Version(**model.dictionarize(version, fields))
                 version.start = self.effective_date
                 version.benefits = displayer.option_benefits
-            patched_option.versions = [v for v in patched_option.versions
-                if not v.start or v.start < self.effective_date] + [version]
+                patched_option.versions = [v for v in patched_option.versions
+                    if not v.start or v.start < self.effective_date] + [version]
 
 
 class ManageOptionBenefitsDisplayer(model.CoogView):
