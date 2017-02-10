@@ -22,6 +22,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'PartyRelation': 'party.relation.all',
             'Contract': 'contract',
             'RuleEngineRuntime': 'rule_engine.runtime',
+            'ItemDesc': 'offered.item.description',
             }
 
     def test0016_test_rule_engine_function(self):
@@ -54,7 +55,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 {'to': party_mother, 'type': relation_child}])
         party_child2.save()
 
-        contract = self.Contract(subscriber=party_father,
+        contract = self.Contract(subscriber=party_father, status='activate',
+            activation_history=[{'start_date': datetime.date(2014, 1, 1),
+                    'end_date': datetime.date(2016, 12, 31)}],
             covered_elements=[{
                     'party': party_father,
                     'options': [{
@@ -84,6 +87,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
                             'final_end_date': datetime.date(2014, 1, 31)}],
                     'sub_covered_elements': [],
                     }])
+        # Force set function fields that will be used
+        item_desc = self.ItemDesc(sub_item_descs=[])
+        for covered_element in contract.covered_elements:
+            covered_element.contract = contract
+            covered_element.item_desc = item_desc
+            covered_element.main_contract = contract
+            covered_element.options[0].main_contract = contract
         args = {'contract': contract, 'person': party_child1,
             'date': datetime.date(2014, 1, 1)}
         # test _re_relation_number
