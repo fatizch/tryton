@@ -169,7 +169,7 @@ class One2ManyDomain(One2Many):
                 # Use set / list combination to manage order
                 res[origin_id][0].add(target.id)
                 res[origin_id][1].append(target.id)
-        return dict((key, tuple(value[0])) for key, value in res.iteritems())
+        return dict((key, tuple(value[1])) for key, value in res.iteritems())
 
 
 class Many2Many(tryton_fields.Many2Many):
