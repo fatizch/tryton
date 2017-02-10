@@ -7,10 +7,22 @@ msgid "The description must be unique."
 msgstr "La description doit être unique."
 
 msgctxt "error:report.template:"
+msgid "Default Flux"
+msgstr "Flux par défaut"
+
+msgctxt "error:report.template:"
+msgid "From Flow Variable"
+msgstr "Variable de flux"
+
+msgctxt "error:report.template:"
 msgid "You cannot print a flow and a model at the same time"
 msgstr ""
 "Vous ne pouvez pas lancer l'impression d'un modèle et générer un flux en "
 "même temps"
+
+msgctxt "field:mass.flow.batch,id:"
+msgid "ID"
+msgstr "Identifiant"
 
 msgctxt "field:report.flow.variable,create_date:"
 msgid "Create Date"
@@ -183,6 +195,10 @@ msgstr "Variable de flux"
 msgctxt "model:ir.ui.menu,name:menu_flow_variables"
 msgid "Flow Variables"
 msgstr "Variables de flux"
+
+msgctxt "model:mass.flow.batch,name:"
+msgid "Mass Flow Batch"
+msgstr ""
 
 msgctxt "model:report.flow.variable,name:"
 msgid "Flow Variable"

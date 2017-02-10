@@ -4,6 +4,7 @@ import inspect
 import logging
 import datetime
 import json
+from genshi.template import NewTextTemplate
 
 from sql import Union, Column, Literal, Window, Null
 from sql.aggregate import Max
@@ -19,7 +20,7 @@ from trytond.cache import Cache
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 from trytond.wizard import Wizard, StateAction
-from trytond.tools import reduce_ids, cursor_dict
+from trytond.tools import reduce_ids, cursor_dict, memoize
 
 import fields
 import export
@@ -38,6 +39,41 @@ __all__ = [
     'TaggedMixin',
     'MethodDefinition',
     ]
+
+
+def genshi_evaluated_fields(*fields_):
+    # Do the magic
+
+    @memoize(1000)
+    def cached_text_template(to_evaluate):
+        return NewTextTemplate(to_evaluate)
+
+    def evaluate_string(context_, to_evaluate):
+        tmpl = cached_text_template(to_evaluate)
+        evaluated_field = tmpl.generate(**context_).render()
+        return evaluated_field
+
+    def get_evaluated_field(self, name):
+        original_field_value = getattr(self, '_'.join(name.split('_')[2:]))
+        genshi_context = self.get_genshi_context([self], name) if hasattr(
+            self, 'get_genshi_context') else {}
+        return evaluate_string(genshi_context, original_field_value)
+
+    @classmethod
+    def get_genshi_context(cls, records, field_name):
+        return ServerContext().get('genshi_context', {})
+
+    def decorate(klass):
+        for field_ in fields_:
+            evaluated_field_name = 'genshi_evaluated_' + field_
+            original_field = getattr(klass, field_)
+            setattr(klass, evaluated_field_name, fields.Function(
+                    fields.Char(original_field.string + 'Genshi Evaluated'),
+                    loader='get_genshi_evaluated'))
+            setattr(klass, 'get_genshi_evaluated', get_evaluated_field)
+        setattr(klass, 'get_genshi_context', get_genshi_context)
+        return klass
+    return decorate
 
 
 def dictionarize(instance, field_names=None, set_rec_names=False):

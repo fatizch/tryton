@@ -10,8 +10,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="recipient" widget="selection"/>
     <label name="recipient_address"/>
     <field name="recipient_address" widget="selection"/>
-    <label name="recipient_email"/>
-    <field name="recipient_email" widget="selection"/>
     <newline/>
     <field name="possible_templates"/>
     <field name="possible_recipients"/>

@@ -12,6 +12,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="kind" colspan="3"/>
     <label name="output_kind"/>
     <field name="output_kind" colspan="1"/>
+    <label name="output_method" colspan="1"/>
+    <field name="output_method" colspan="1"/>
     <newline/>
     <label name="format_for_internal_edm" xalign="0"/>
     <field name="format_for_internal_edm"/>
@@ -34,12 +36,6 @@ this repository contains the full copyright notices and license terms. -->
         </page>
         <page name="event_type_actions">
             <field name="event_type_actions" colspan="4"/>
-        </page>
-        <page string="Mail" id="Mail" col="2">
-            <label name="mail_subject"/>
-            <field name="mail_subject"/>
-            <newline/>
-            <field name="mail_body" colspan="2"/>
         </page>
         <page name="tags">
             <field name="tags" colspan="4"/>

@@ -1,0 +1,245 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "help:report.template,allow_manual_sending:"
+msgid ""
+"Be carefull: Do not exceed the operating system max command line length with"
+" your attachments"
+msgstr ""
+"Prudence: N'excedez pas la taille maximale des arguments de votre système à "
+"cause de vos pièces jointes "
+
+msgctxt "error:report.template:"
+msgid "Email"
+msgstr "Email"
+
+msgctxt "error:report.template:"
+msgid "The email could not be sent"
+msgstr "L'eMail n'a pas pu être envoyé"
+
+msgctxt "error:report.template:"
+msgid "The template does not allow email editing"
+msgstr "Le modèle de courrier ne permet pas l'édition d'eMail"
+
+msgctxt "error:report.template:"
+msgid "You cannot print a flow and a model at the same time"
+msgstr ""
+"Vous ne pouvez pas lancer l'impression d'un modèle et générer un flux en "
+"même temps"
+
+msgctxt "field:report.template,allow_manual_sending:"
+msgid "Allow Manual Sending"
+msgstr "Autoriser l'édition manuelle"
+
+msgctxt "field:report.template,attachments:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgctxt "field:report.template,email_blocking:"
+msgid "Email is blocking"
+msgstr "eMail bloquant"
+
+msgctxt "field:report.template,email_body:"
+msgid "eMail Body"
+msgstr "Corps de l'eMail"
+
+msgctxt "field:report.template,email_dest:"
+msgid "Email Recipients"
+msgstr "Destinataires de l'eMail"
+
+msgctxt "field:report.template,email_sender:"
+msgid "Email Sender"
+msgstr "Emetteur de l'eMail"
+
+msgctxt "field:report.template,email_subject:"
+msgid "eMail Subject"
+msgstr "Sujet de l'eMail"
+
+msgctxt "field:report.template,generated_code:"
+msgid "Generated code"
+msgstr "Code généré"
+
+msgctxt "field:report.template,genshi_evaluated_email_body:"
+msgid "eMail BodyGenshi Evaluated"
+msgstr ""
+
+msgctxt "field:report.template,genshi_evaluated_email_dest:"
+msgid "Email RecipientsGenshi Evaluated"
+msgstr ""
+
+msgctxt "field:report.template,genshi_evaluated_email_sender:"
+msgid "Email SenderGenshi Evaluated"
+msgstr ""
+
+msgctxt "field:report.template,genshi_evaluated_email_subject:"
+msgid "eMail SubjectGenshi Evaluated"
+msgstr ""
+
+msgctxt "field:report.template,html_body:"
+msgid "HTML Body"
+msgstr "Corps en HTML"
+
+msgctxt "field:report.template,images:"
+msgid "Images"
+msgstr "Images"
+
+msgctxt "field:report.template,output_method:"
+msgid "Output method"
+msgstr "Méthode de sortie"
+
+msgctxt "field:report.template,variables_relation:"
+msgid "Flow Variables Relation"
+msgstr "Variables de flux"
+
+msgctxt "field:report.template-report.template.image_attachment,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template-report.template.image_attachment,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template-report.template.image_attachment,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:report.template-report.template.image_attachment,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:report.template-report.template.image_attachment,image:"
+msgid "Image"
+msgstr "Image"
+
+msgctxt "field:report.template-report.template.image_attachment,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report.template-report.template.image_attachment,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:report.template-report.template.image_attachment,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:report.template-report.template.image_attachment,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:report.template-report.template.image_attachment,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:report.template.image_attachment,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template.image_attachment,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template.image_attachment,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:report.template.image_attachment,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:report.template.image_attachment,image:"
+msgid "Image"
+msgstr "Image"
+
+msgctxt "field:report.template.image_attachment,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report.template.image_attachment,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report.template.image_attachment,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:report.template.image_attachment,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:report.template.image_attachment,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:report.template.report.template.relation,child_template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:report.template.report.template.relation,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template.report.template.relation,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template.report.template.relation,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:report.template.report.template.relation,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:report.template.report.template.relation,parent_template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:report.template.report.template.relation,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report.template.report.template.relation,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:report.template.report.template.relation,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:report.template.report.template.relation,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:ir.action,name:generate_email"
+msgid "Generate Email"
+msgstr "Générer l'eMail"
+
+msgctxt "model:report.template-report.template.image_attachment,name:"
+msgid "Report Template Image attachment Relation"
+msgstr "Relation modèle image pièce jointe"
+
+msgctxt "model:report.template.image_attachment,name:"
+msgid "Image Attachment"
+msgstr "Image en pièce jointe"
+
+msgctxt "model:report.template.report.template.relation,name:"
+msgid "Template Template Relation"
+msgstr "Relation Modèle Modèle"
+
+msgctxt "selection:report.template,output_kind:"
+msgid "From Variables"
+msgstr "Depuis des variables"
+
+msgctxt "selection:report.template,output_method:"
+msgid "Default"
+msgstr "Défaut"
+
+msgctxt "view:report.template:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgctxt "wizard_button:report.create,select_template,open_email:"
+msgid "Manual eMail sending"
+msgstr "Envoi manuel de l'eMail"

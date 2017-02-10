@@ -1,3 +1,4 @@
+* La fonctionnalité des emails à été sortie de ce module au profit d'un nouveau module "report_engine_email"
 * Ajout de la chaine de batchs
 * Sélection du destinataire, simplification de l'assistant de génération
 

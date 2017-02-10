@@ -1,16 +1,15 @@
 .. transversal
 
-Send emails based on events
-===========================
+Transverse - Génération de mails
+================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

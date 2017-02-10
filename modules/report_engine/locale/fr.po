@@ -43,6 +43,14 @@ msgid "The names of attachments must be unique by resource."
 msgstr "Les noms des pièces jointes doivent être unique par ressource."
 
 msgctxt "error:report.template:"
+msgid "From Model"
+msgstr "Depuis un modèle"
+
+msgctxt "error:report.template:"
+msgid "Open Document"
+msgstr "Modèle ODT"
+
+msgctxt "error:report.template:"
 msgid "No letter model found for date %s and language %s"
 msgstr "Pas de modèle de courrier trouvé pour le %s et la langue %s"
 
@@ -274,14 +282,6 @@ msgctxt "field:report.template,kind:"
 msgid "Kind"
 msgstr "Type de donnée"
 
-msgctxt "field:report.template,mail_body:"
-msgid "eMail Body"
-msgstr "Corps du courrier électronique"
-
-msgctxt "field:report.template,mail_subject:"
-msgid "eMail Subject"
-msgstr "Sujet du courrier électronique"
-
 msgctxt "field:report.template,modifiable_before_printing:"
 msgid "Modifiable"
 msgstr "Editable"
@@ -438,10 +438,6 @@ msgctxt "field:report.template.parameter,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:report.template.version,collision:"
-msgid "Collision"
-msgstr "Collision"
-
 msgctxt "field:report.template.version,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -462,13 +458,13 @@ msgctxt "field:report.template.version,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:report.template.version,digest:"
-msgid "Digest"
-msgstr "Empreinte"
-
 msgctxt "field:report.template.version,end_date:"
 msgid "End date"
 msgstr "Date de Fin"
+
+msgctxt "field:report.template.version,file_id:"
+msgid "File ID"
+msgstr "ID du fichier"
 
 msgctxt "field:report.template.version,id:"
 msgid "ID"
@@ -844,10 +840,6 @@ msgctxt "view:report.convert.select_templates:"
 msgid "Check for Matches"
 msgstr "Rechercher des occurences"
 
-msgctxt "view:report.convert.select_templates:"
-msgid "Update Templates"
-msgstr "Mise à jour des modèles de courrier"
-
 msgctxt "view:report.create.preview.line:"
 msgid "Report Preview"
 msgstr "Prévisualisation du courrier"
@@ -881,28 +873,12 @@ msgid "Automatic Generation"
 msgstr "Génération automatique"
 
 msgctxt "view:report.template:"
-msgid "Mail"
-msgstr "Courrier Electronique"
-
-msgctxt "view:report.template:"
-msgid "Report Template"
-msgstr "Modèle de courrier"
-
-msgctxt "view:report.template:"
-msgid "Report Templates"
-msgstr "Modèles de courrier"
-
-msgctxt "view:report.template:"
 msgid "Versions"
 msgstr "Versions"
 
 msgctxt "view:report_production.request.treat.confirm:"
 msgid "Are you sure you want to treat these requests ?"
 msgstr "Êtes-vous sûr de vouloir traiter ces demandes ?"
-
-msgctxt "view:report_production.request.treat.confirm:"
-msgid "Confirm Report Production Request Treatment"
-msgstr "Confirmer le traitement des demandes de production de document"
 
 msgctxt "view:report_production.request.treat.result:"
 msgid "Attachments"
@@ -923,10 +899,6 @@ msgstr "Annuler"
 msgctxt "wizard_button:report.create,preview_document,end:"
 msgid "Cancel"
 msgstr "Annuler"
-
-msgctxt "wizard_button:report.create,preview_document,mail:"
-msgid "Mail"
-msgstr "Courrier Electronique"
 
 msgctxt "wizard_button:report.create,preview_document,open_document:"
 msgid "Open"

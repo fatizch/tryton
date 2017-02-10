@@ -112,8 +112,6 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     kind = fields.Selection('get_possible_kinds', 'Kind')
     output_kind = fields.Selection('get_possible_output_kinds',
         'Output kind', required=True)
-    mail_subject = fields.Char('eMail Subject')
-    mail_body = fields.Text('eMail Body')
     format_for_internal_edm = fields.Selection([
             ('', ''),
             ('original', 'Original'),
@@ -138,6 +136,9 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             'report_template', 'event_type_action', 'Event Type Actions')
     parameters = fields.Many2Many('report.template-report.template.parameter',
         'report_template', 'parameter', 'Parameters')
+    output_method = fields.Selection('get_possible_output_methods',
+        'Output method', states={
+            }, depends=['output_kind'])
 
     @classmethod
     def __setup__(cls):
@@ -150,6 +151,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         cls._error_messages.update({
                 'no_version_match': 'No letter model found for date %s '
                 'and language %s',
+                'output_method_open_document': 'Open Document',
+                'output_kind_from_model': 'From Model',
                 })
 
     @classmethod
@@ -165,7 +168,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             'template_extension')
         has_column_internal_edm = report_template.column_exist('internal_edm')
         has_column_output_kind = report_template.column_exist('output_kind')
+        has_column_mail_subject = report_template.column_exist('mail_subject')
+        has_column_mail_body = report_template.column_exist('mail_body')
         super(ReportTemplate, cls).__register__(module_name)
+        to_update = cls.__table__()
         if not has_column_template_extension:
             # Migration from 1.4 : set default values for new columns
             cursor.execute("UPDATE report_template "
@@ -185,11 +191,29 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 "WHERE internal_edm = 'TRUE' and convert_to_pdf = 'FALSE'")
             report_template.drop_column('internal_edm')
         if not has_column_output_kind:
-            to_update = cls.__table__()
             cursor.execute(*to_update.update(columns=[to_update.output_kind],
                     values=[Literal(cls.default_output_kind())],
-                    where=to_update.output_kind == Null
-                    ))
+                    where=to_update.output_kind == Null))
+        if has_column_mail_subject or has_column_mail_body:
+            # Migration from 1.10: New module report_engine_email
+            cursor.execute(*to_update.update(columns=[to_update.output_method],
+                    values=[Literal(cls.default_output_method())],
+                    where=to_update.output_method == ''))
+        if has_column_mail_subject:
+            # Migration from 1.10: New module report_engine_email
+            report_template.drop_column('mail_subject')
+        if has_column_mail_body:
+            # Migration from 1.10: New module report_engine_email
+            report_template.drop_column('mail_body')
+
+    @classmethod
+    def default_output_method(cls):
+        return 'open_document'
+
+    def get_possible_output_methods(self):
+        return [('open_document',
+                self.raise_user_error('output_method_open_document',
+                    raise_exception=False))]
 
     @classmethod
     def search(cls, domain, *args, **kwargs):
@@ -210,7 +234,9 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
     @classmethod
     def get_possible_output_kinds(cls):
-        return [('model', 'From Model')]
+        return [
+            ('model', cls.raise_user_error('output_kind_from_model',
+                    raise_exception=False))]
 
     @classmethod
     def _export_light(cls):
@@ -246,6 +272,9 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             if version.end_date >= date:
                 return version
         self.raise_user_error('no_version_match', (date, language))
+
+    def on_change_output_kind(self):
+        pass
 
     @fields.depends('on_model')
     def get_possible_kinds(self):
@@ -588,7 +617,7 @@ class ReportGenerate(Report):
     __name__ = 'report.generate'
 
     @classmethod
-    def execute(cls, ids, data, immediate_conversion=False):
+    def process_open_document(cls, ids, data, immediate_conversion):
         pool = Pool()
         ActionReport = pool.get('ir.action.report')
         action_reports = ActionReport.search([
@@ -608,12 +637,28 @@ class ReportGenerate(Report):
             selected_party)
         report_context = cls.get_context(records, data)
         action_report.template_extension = selected_letter.template_extension
+        # ABD: We should convert event if we don't have format_for_internal_edf
+        # but immediate_conversion set
         if immediate_conversion and selected_letter.format_for_internal_edm \
                 not in ('', 'original'):
             action_report.extension = selected_letter.format_for_internal_edm
+        elif selected_letter.convert_to_pdf:
+            action_report.extension = 'pdf'
         oext, content = cls.convert(action_report,
             cls.render(action_report, report_context))
         return (oext, bytearray(content), action_report.direct_print, filename)
+
+    @classmethod
+    def execute(cls, ids, data, immediate_conversion=False):
+        report_template = Pool().get('report.template')(
+            data['doc_template'][0])
+        method_name = 'process_%s' % report_template.output_method
+        if hasattr(cls, method_name):
+            return getattr(cls, method_name)(ids, data,
+                immediate_conversion=immediate_conversion)
+        else:
+            raise NotImplementedError('Unknown kind %s' %
+                report_template.output_method)
 
     @classmethod
     def get_filename_separator(cls):
@@ -681,6 +726,8 @@ class ReportGenerate(Report):
         report_context['Date'] = pool.get('ir.date').today()
         report_context['FDate'] = format_date
         report_context['relativedelta'] = relativedelta
+        report_context['Company'] = pool.get('party.party')(
+            Transaction().context.get('company'))
         SelectedModel = pool.get(data['model'])
         selected_obj = SelectedModel(data['id'])
         report_context.update(selected_obj.get_publishing_context(
@@ -726,9 +773,7 @@ class ReportGenerate(Report):
             raise exc
 
     @classmethod
-    def edm_write_tmp_report(cls, report_data, filename):
-        basename, ext = os.path.splitext(filename)
-        filename = coog_string.slugify(basename, lower=False) + ext
+    def create_shared_tmp_dir(cls):
         server_shared_folder = config.get('EDM', 'server_shared_folder',
             default='/tmp')
         client_shared_folder = config.get('EDM', 'client_shared_folder')
@@ -738,10 +783,18 @@ class ReportGenerate(Report):
         except OSError as e:
             raise Exception('Could not create tmp_directory in %s (%s)' %
                 (server_shared_folder, e))
-        tmp_suffix_path = os.path.join(tmp_dir, filename)
-        server_filepath = os.path.join(server_shared_folder, tmp_suffix_path)
-        client_filepath = os.path.join(client_shared_folder, tmp_suffix_path) \
+        server_filepath = os.path.join(server_shared_folder, tmp_dir)
+        client_filepath = os.path.join(client_shared_folder, tmp_dir) \
             if client_shared_folder else ''
+        return client_filepath, server_filepath
+
+    @classmethod
+    def edm_write_tmp_report(cls, report_data, filename):
+        basename, ext = os.path.splitext(filename)
+        filename = coog_string.slugify(basename, lower=False) + ext
+        client_filepath, server_filepath = cls.create_shared_tmp_dir()
+        client_filepath = os.path.join(client_filepath, filename)
+        server_filepath = os.path.join(server_filepath, filename)
         with open(server_filepath, 'w') as f:
             f.write(report_data)
             return(client_filepath, server_filepath)
@@ -901,11 +954,9 @@ class ReportCreate(Wizard):
         'report_engine.document_create_preview_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Previous', 'select_template', 'tryton-go-previous'),
-            Button('Mail', 'mail', 'tryton-print-email', default=True),
             Button('Open', 'open_document', 'tryton-print-open')
             ])
     open_document = StateAction('report_engine.generate_file_report')
-    mail = StateAction('report_engine.generate_file_report')
     post_generation = StateTransition()
     attach_to_contact = StateTransition()
 
@@ -941,15 +992,12 @@ class ReportCreate(Wizard):
     def default_select_template(self, fields):
         return self.select_template._default_values
 
-    def transition_generate(self):
-        self.remove_edm_temp_files()
+    def create_report_context(self):
         instance = self.get_instance()
-        pool = Pool()
-        TemplateParameter = pool.get('report.template.parameter')
+        template = self.select_template.template
         sender = instance.get_sender()
         sender_address = instance.get_sender_address()
-        template = self.select_template.template
-        report_context = {
+        return {
             'id': instance.id,
             'ids': [instance.id],
             'model': instance.__name__,
@@ -960,6 +1008,14 @@ class ReportCreate(Wizard):
             'sender_address': sender_address.id if sender_address else None,
             'origin': None,
             }
+
+    def transition_generate(self):
+        self.remove_edm_temp_files()
+        instance = self.get_instance()
+        report_context = self.create_report_context()
+        pool = Pool()
+        TemplateParameter = pool.get('report.template.parameter')
+        template = self.select_template.template
         if self.select_template.parameters:
             report_context.update(TemplateParameter.get_data_for_report(
                     self.input_parameters.parameters))
@@ -1005,7 +1061,7 @@ class ReportCreate(Wizard):
         return self.preview_document._default_values
 
     def do_open_document(self, action):
-        return self.open_or_mail_report(action,
+        return self.action_open_report(action,
             Transaction().context.get('email_print'))
 
     def transition_open_document(self):
@@ -1013,7 +1069,7 @@ class ReportCreate(Wizard):
             return 'end'
         return 'post_generation'
 
-    def open_or_mail_report(self, action, email_print):
+    def action_open_report(self, action, email_print):
         pool = Pool()
         Report = pool.get('report.generate_from_file', type='report')
         if self.select_template.template.convert_to_pdf:
@@ -1025,15 +1081,8 @@ class ReportCreate(Wizard):
             filename = [self.preview_document.reports[0].server_filepath][0]
         action['email_print'] = email_print
         action['direct_print'] = Transaction().context.get('direct_print')
-        action['email'] = {'to': getattr(self.select_template.recipient_email,
-                'value', '')}
+        action['email'] = {'to': ''}
         return action, {'output_report_filepath': filename}
-
-    def do_mail(self, action):
-        return self.open_or_mail_report(action, True)
-
-    def transition_mail(self):
-        return self.transition_open_document()
 
     def transition_post_generation(self):
         instance = self.get_instance()
@@ -1090,17 +1139,10 @@ class ReportCreateSelectTemplate(model.CoogView):
         domain=[('party', '=', Eval('recipient'))], states={
             'invisible': ~Eval('recipient') | ~Eval('template')},
         depends=['recipient', 'template'])
-    recipient_email = fields.Many2One('party.contact_mechanism',
-        'Recipient Email', states={'invisible': ~Eval('recipient')
-            | ~Eval('template')},
-        domain=[('party', '=', Eval('recipient')),
-            ('type', '=', 'email')],
-        depends=['recipient'])
     parameters = fields.Dict('report.template.parameters', 'Parameters',
         states={'invisible': ~Eval('parameters')}, depends=['parameters'])
 
-    @fields.depends('parameters', 'recipient', 'recipient_address',
-        'recipient_email', 'template')
+    @fields.depends('parameters', 'recipient', 'recipient_address', 'template')
     def on_change_template(self):
         if not self.template:
             self.recipient = None
@@ -1110,11 +1152,10 @@ class ReportCreateSelectTemplate(model.CoogView):
             self.parameters = {
                 str(x.name): None for x in self.template.parameters}
 
-    @fields.depends('recipient', 'recipient_address', 'recipient_email')
+    @fields.depends('recipient', 'recipient_address')
     def on_change_recipient(self):
         if not self.recipient:
             self.recipient_address = None
-            self.recipient_email = None
         else:
             self.recipient_address = self.recipient.address_get()
 

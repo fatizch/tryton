@@ -1,7 +1,0 @@
-* Allow to add report template as attachment in event action configuration
-
-Version 1.10 - 2016-11-02
-* Allow to trigger email from event
-* Allow to customize email body from event context
-* Isolation level: email dispatch blocking transaction or not
-* Module creation

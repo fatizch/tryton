@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- #################### -->
+        <!-- # Image attachment # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="report_template_image_attachment_form">
+            <field name="model">report.template.image_attachment</field>
+            <field name="type">form</field>
+            <field name="name">report_template_image_attachment_form</field>
+        </record>
+        <record model="ir.ui.view" id="report_template_image_attachment_list">
+            <field name="model">report.template.image_attachment</field>
+            <field name="type">tree</field>
+            <field name="name">report_template_image_attachment_list</field>
+        </record>
+        <!-- ##################### -->
+        <!-- # Report Template   # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="report_template_form">
+            <field name="model">report.template</field>
+            <field name="inherit" ref="report_engine.report_template_form"/>
+            <field name="name">report_template_form</field>
+        </record>
+        <!-- ############################ -->
+        <!-- #  Report Email Generate   # -->
+        <!-- ############################ -->
+        <record model="ir.action.report" id="generate_email">
+            <field name="name">Generate Email</field>
+            <field name="report_name">report.generate_email</field>
+        </record>
+        <!-- ############################## -->
+        <!-- # Document Creation - Select # -->
+        <!-- ############################## -->
+        <record model="ir.ui.view" id="create_report_select_template_view_form">
+            <field name="model">report.create.select_template</field>
+            <field name="inherit" ref="report_engine.create_report_select_template_view_form"/>
+            <field name="name">create_report_select_template_form</field>
+        </record>
+    </data>
+</tryton>

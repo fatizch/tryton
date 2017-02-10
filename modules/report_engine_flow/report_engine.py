@@ -228,18 +228,6 @@ class ReportGenerate:
     __name__ = 'report.generate'
 
     @classmethod
-    def execute(cls, ids, data, immediate_conversion=False):
-        report_template = Pool().get('report.template')(
-            data['doc_template'][0])
-        if report_template.output_kind == 'flow':
-            method_name = 'process_%s' % report_template.output_method
-            if hasattr(cls, method_name):
-                return getattr(cls, method_name)(ids, data)
-            return '', '', False, ''
-        return super(ReportGenerate, cls).execute(ids, data,
-            immediate_conversion)
-
-    @classmethod
     def get_context(cls, records, data):
         report_context = super(ReportGenerate, cls).get_context(records, data)
         report_context.update({x[0]: getattr(func_library, 'eval_%s' % x[0])
@@ -247,7 +235,7 @@ class ReportGenerate:
         return report_context
 
     @classmethod
-    def process_default(cls, ids, data):
+    def process_default_flux(cls, ids, data, **kwargs):
         from genshi.template import NewTextTemplate
         timestamp = datetime.datetime.fromtimestamp(time.time()
             ).strftime('%Y%m%d%H%f')
@@ -284,34 +272,40 @@ class ReportTemplate:
         cls._error_messages.update({
                 'output_mixin': 'You cannot print a flow'
                 ' and a model at the same time',
+                'output_kind_flow_variable': 'From Flow Variable',
+                'output_method_default_flux': 'Default Flux'
                 })
         for fname in ['modifiable_before_printing', 'convert_to_pdf',
                 'split_reports', 'template_extension', 'document_desc',
-                'export_dir', 'format_for_internal_edm']:
+                'export_dir', 'format_for_internal_edm', 'versions']:
             field = getattr(cls, fname)
             field.states['invisible'] = Or(Eval('output_kind') == 'flow',
                 field.states.get('invisible', False))
             field.depends.append('output_kind')
 
     @classmethod
-    def default_output_method(cls):
-        return ''
-
-    @classmethod
     def view_attributes(cls):
         return super(ReportTemplate, cls).view_attributes() + [(
                 '/form/notebook/page[@id="versions"]', 'states',
-                {'invisible': Eval('output_kind') == 'flow'}),
+                {'invisible': getattr(cls, 'versions').states.get(
+                        'invisible')}),
             ('/form/notebook/page[@id="generated_code"]', 'states',
                 {'invisible': Eval('output_kind') != 'flow'}),
             ('/form/notebook/page[@id="flow"]', 'states',
                 {'invisible': Eval('output_kind') != 'flow'}),
             ]
 
+    def get_selected_version(self, date, language):
+        if self.output_kind == 'flow':
+            return None
+        return super(ReportTemplate, self).get_selected_version(date,
+            language)
+
     @classmethod
     def get_possible_output_kinds(cls):
         return super(ReportTemplate, cls).get_possible_output_kinds() + \
-            [('flow', 'From Variables')]
+            [('flow', cls.raise_user_error('output_kind_flow_variable',
+                        raise_exception=False))]
 
     def get_generated_code(self, name=None):
         output = '{%for record in records%}'
@@ -321,22 +315,28 @@ class ReportTemplate:
         output += '{%end%}'
         return output
 
-    @classmethod
-    def get_possible_output_methods(cls):
-        return [('', ''), ('default', 'Default')]
+    @fields.depends('output_kind')
+    def get_possible_output_methods(self):
+        if self.output_kind == 'flow':
+            return [('default_flux',
+                    self.raise_user_error('output_method_default_flux',
+                        raise_exception=False))]
+        return super(ReportTemplate, self).get_possible_output_methods()
 
     @fields.depends('output_kind', 'split_reports', 'convert_to_pdf')
     def on_change_output_kind(self):
+        super(ReportTemplate, self).on_change_output_kind()
         if self.output_kind == 'flow':
             self.split_reports = False
             self.convert_to_pdf = False
 
     def print_reports(self, reports, context_):
-        if self.output_kind != 'flow':
-            return super(ReportTemplate, self).print_reports(reports, context_)
-        ReportModel = Pool().get('report.create', type='wizard')
-        for report in reports:
-            ReportModel.create_flow_file(report['report_name'], report['data'])
+        if self.output_kind == 'flow':
+            ReportModel = Pool().get('report.create', type='wizard')
+            for report in reports:
+                ReportModel.create_flow_file(report['report_name'],
+                    report['data'])
+        return super(ReportTemplate, self).print_reports(reports, context_)
 
 
 class ReportCreate:

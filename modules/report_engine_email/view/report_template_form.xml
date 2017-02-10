@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='split_reports']" position="after">
+        <label name="email_sender"/>
+        <field name="email_sender" colspan="3"/>
+        <label name="email_dest"/>
+        <field name="email_dest" colspan="3"/>
+        <label name="email_subject"/>
+        <field name="email_subject" colspan="3"/>
+        <label name="html_body"/>
+        <field name="html_body" colspan="3"/>
+        <label name="email_body"/>
+        <newline/>
+        <field name="email_body" colspan="4"/>
+        <label name="email_blocking"/>
+        <field name="email_blocking" colspan="1"/>
+        <label name="allow_manual_sending"/>
+        <field name="allow_manual_sending" colspan="1"/>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='versions']" position="after">
+        <page string="Attachments" id="attachments">
+            <field name="attachments" colspan="2"/>
+            <field name="images" colspan="2" widget="one2many"/>
+        </page>
+    </xpath>
+</data>
