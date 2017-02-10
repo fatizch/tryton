@@ -433,6 +433,10 @@ msgctxt "field:account.payment.payment_creation.start,lines_to_pay:"
 msgid "Lines To Pay"
 msgstr "Lignes à payer"
 
+msgctxt "field:account.payment.payment_creation.start,lines_to_pay_filter:"
+msgid "Lines To Pay Filter"
+msgstr "Lignes à payer"
+
 msgctxt "field:account.payment.payment_creation.start,motive:"
 msgid "Motive"
 msgstr "Motif"

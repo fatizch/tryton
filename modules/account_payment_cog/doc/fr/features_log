@@ -1,38 +1,39 @@
+* Amélioration des performances de l'assistant de création des paiements
 * Ajout de la chaîne des batchs de paiement
 
 Version 1.10 - 2016-11-02
-* Allow to print distinct reports when exceeding a given number of rejected payments
+* Permettre d'imprimer différents modèles de courriers quand un nombre donné de paiements rejetés est dépassé
 
 Version 1.8 - 2016-07-06
-* Group payment creation batch per party
-* Add payment kind on payment reject reason to differentiate actions and letters when failing
-* Wizard to modify payment date from a move line can now work with several lines
-* Aggregate payment moves per group key if available
-* UI enhancement on payment group list view (add amount and payment dates)
-* Add predefined motive on creation payment wizard
-* Adding merged_id from account_payment_sepa_cog
-* Adding payment merged reject
-* Hide fail button on merged payments tree view if merged payment already failed
+* Grouper les paiements par tiers dans le batch de création de paiements
+* Ajouter le type de paiement sur la raison du rejet pour différencier les actions et les courriers au moment du rejet
+* L'assistant pour modifier la date de paiement sur une ligne de mouvement comptable fonctionne maintenant avec plusieurs lignes
+* Agréger les mouvements de paiements par clé de groupe si disponible
+* Amélioration de l'IU sur la liste des groupes de paiements (ajout du montant et des dates de paiements)
+* Ajouter des raisons prédéfinies dans l'assistant de création des paiements
+* Ajout du merged_id depuis account_payment_sepa_cog
+* Ajout du rejet des paiements regroupés
+* Cacher le boutton 'échouer' sur les paiements regroupés si ils sont déjà échoués
 
 Version 1.6 - 2015-12-23
-* Add Acknowledge Batch
-* Add fail payment wizard in order to select the reject reason
-* Display information on the invoice if a payment is planned
-* Allow to generate a report when payment is rejected
+* Ajout du batch d'accuser de réception des paiements
+* Ajout de l'assistant de rejet des paiements pour choisir une raison de rejet
+* Afficher des informations sur la quittance si un paiement est prévu
+* Permettre de générer un courrier quand un paiement est rejeté
 
 Version 1.4 - 2015-05-29
-* Calculate payment date based on previous payment sent
-* Add payments creation wizard
-* Manage manual reject payment processus
-* Allow to configure payment fail action accoding number of retry
-* Allow to block payments for a party
-* Add payable payment creation through batch
+* Calculer la date de paiement en fonction du paiement précédemment envoyé
+* Ajout de l'assistant de création des paiements
+* Gérer le processus de rejet manual 
+* Permettre de configurer les actions de rejets en fonction d'un nombre d'essais
+* Permettre de bloquer les paiements pour un tiers donné
+* Création des paiements 'à payer' par batch
 
 Version 1.3 - 2015-01-22
-* Add reject fee invoices
-* Allow to easily get the xml sepa message
-* Mass validation of payment groups
-* Add payment creation and payment treatment batch
+* Ajout des quittances de frais de rejet
+* Permettre de facilement obtenir le message sepa au format xml
+* Validation en masse des groupes de paiements
+* Ajout des batch de création et de traitement des paiements
 
 Version 1.2 - 2014-07-01
-* Changelog file creation
+* Creation du fichier Changelog

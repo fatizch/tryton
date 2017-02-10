@@ -1,3 +1,4 @@
+* Improve performances for payment creation wizard
 * Add payment batches chain
 
 Version 1.10 - 2016-11-02
@@ -24,7 +25,7 @@ Version 1.4 - 2015-05-29
 * Calculate payment date based on previous payment sent
 * Add payments creation wizard
 * Manage manual reject payment processus
-* Allow to configure payment fail action accoding number of retry
+* Allow to configure payment fail action according to a number of retry
 * Allow to block payments for a party
 * Add payable payment creation through batch
 

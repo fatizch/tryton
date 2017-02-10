@@ -9,7 +9,7 @@ from decimal import Decimal
 from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool, If, PYSONEncoder
+from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.wizard import StateView, Button, StateTransition, StateAction
 from trytond.transaction import Transaction
 from trytond.modules.account_payment.payment import KINDS
@@ -286,21 +286,14 @@ class PaymentCreationStart(model.CoogView):
             'required': ~Eval('multiple_parties'),
             })
     multiple_parties = fields.Boolean('Payments For Multiple Parties')
+    lines_to_pay_filter = fields.Function(
+        fields.Many2Many('account.move.line', None, None,
+            'Lines To Pay Filter', states={'invisible': True}),
+        'on_change_with_lines_to_pay_filter')
     lines_to_pay = fields.Many2Many('account.move.line', None, None,
         'Lines To Pay', required=True, domain=[
-            ('account.kind', 'in', ['payable', 'receivable']),
-            If(Bool(Eval('party')),
-                [('party', '=', Eval('party')), ], []),
-            If(Eval('kind', '') == 'receivable',
-                ['OR',
-                    [('credit', '<', 0)],
-                    [('debit', '>', 0)]],
-                ['OR',
-                    [('credit', '>', 0)],
-                    [('debit', '<', 0)]]),
-            ('reconciliation', '=', None),
-            ('payment_amount', '!=', 0)],
-        depends=['party', 'kind'])
+            ('id', 'in', Eval('lines_to_pay_filter'))],
+        depends=['lines_to_pay_filter'])
     payment_date = fields.Date('Payment Date', required=True)
     journal = fields.Many2One('account.payment.journal', 'Payment Journal',
         required=True)
@@ -320,6 +313,38 @@ class PaymentCreationStart(model.CoogView):
         states={'invisible': Eval('process_method') != 'manual'},
         depends=['process_method'])
     total_amount = fields.Numeric('Total Amount', readonly=True)
+
+    @classmethod
+    def view_attributes(cls):
+        return super(PaymentCreationStart, cls).view_attributes() + [
+            ('/form/group[@id="invisible"]', 'states',
+                {'invisible': True}),
+            ]
+
+    @fields.depends('party', 'kind')
+    def on_change_with_lines_to_pay_filter(self, name=None):
+        pool = Pool()
+        Line = pool.get('account.move.line')
+        Account = Pool().get('account.account')
+        if not self.party:
+            return []
+        accounts = [x.id for x in Account.search(
+                [('kind', 'in', ('receivable', 'payable'))])]
+        if self.kind == 'receivable':
+            sign_clause = ['OR',
+                    [('credit', '<', 0)],
+                    [('debit', '>', 0)]]
+        else:
+            sign_clause = ['OR',
+                    [('credit', '>', 0)],
+                    [('debit', '<', 0)]]
+        lines = Line.search([
+                ('account', 'in', accounts),
+                sign_clause,
+                ('party', '=', self.party.id),
+                ('reconciliation', '=', None)
+                ])
+        return [x.id for x in lines if x.payment_amount != 0]
 
     @fields.depends('journal')
     def on_change_with_process_method(self, name=None):
@@ -377,6 +402,7 @@ class PaymentCreation(model.CoogWizard):
     def default_start(self, values):
         pool = Pool()
         Line = pool.get('account.move.line')
+        Account = pool.get('account.account')
         model = Transaction().context.get('active_model')
         if model == 'account.move.line':
             active_ids = Transaction().context.get('active_ids', [])
@@ -395,20 +421,22 @@ class PaymentCreation(model.CoogWizard):
                 }
         elif model == 'party.party':
             active_id = Transaction().context.get('active_id', None)
+            accounts = [x.id for x in Account.search(
+                    [('kind', 'in', ('receivable', 'payable'))])]
             lines = Line.search([
-                    ('account.kind', 'in', ['payable', 'receivable']),
+                    ('account', 'in', accounts),
                     ['OR',
                         [('credit', '>', 0)],
                         [('debit', '<', 0)]],
                     ('party', '=', active_id),
-                    ('reconciliation', '=', None),
-                    ('payment_amount', '!=', 0),
+                    ('reconciliation', '=', None)
                     ])
+            move_line_ids = [x.id for x in lines if x.payment_amount != 0]
             return {
                 'kind': 'payable',
                 'multiple_parties': False,
                 'party': active_id,
-                'lines_to_pay': [l.id for l in lines],
+                'lines_to_pay': move_line_ids,
                 }
         return {'kind': 'payable'}
 
