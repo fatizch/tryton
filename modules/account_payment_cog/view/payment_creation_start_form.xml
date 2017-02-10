@@ -26,6 +26,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="lines_to_pay" colspan="4"/>
     <newline/>
     <field name="multiple_parties" invisible="1"/>
+    <field name="have_lines_payment_date" invisible="1"/>
     <group id="invisible" string="">
         <field name="lines_to_pay_filter" colspan="4"/>
     </group>

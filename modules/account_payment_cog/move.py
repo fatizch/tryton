@@ -294,7 +294,11 @@ class PaymentCreationStart(model.CoogView):
         'Lines To Pay', required=True, domain=[
             ('id', 'in', Eval('lines_to_pay_filter'))],
         depends=['lines_to_pay_filter'])
-    payment_date = fields.Date('Payment Date', required=True)
+    payment_date = fields.Date('Payment Date', states={
+            'required': ~Eval('have_lines_payment_date')
+             }, help='Payment date is required if at least one line to pay '
+        'doesn\'t have a payment date. When its value is set, it is propagated '
+        'to all lines to pay.')
     journal = fields.Many2One('account.payment.journal', 'Payment Journal',
         required=True)
     kind = fields.Selection(KINDS, 'Payment Kind')
@@ -313,6 +317,7 @@ class PaymentCreationStart(model.CoogView):
         states={'invisible': Eval('process_method') != 'manual'},
         depends=['process_method'])
     total_amount = fields.Numeric('Total Amount', readonly=True)
+    have_lines_payment_date = fields.Boolean('Lines Have Payment Date')
 
     @classmethod
     def view_attributes(cls):
@@ -361,9 +366,12 @@ class PaymentCreationStart(model.CoogView):
     def on_change_with_description(self):
         return self.motive.name if self.motive else None
 
-    @staticmethod
-    def default_payment_date():
-        return utils.today()
+    @fields.depends('lines_to_pay')
+    def on_change_lines_to_pay(self):
+        self.have_lines_payment_date = all(
+            x.payment_date for x in self.lines_to_pay)
+        if not self.have_lines_payment_date and self.payment_date is None:
+            self.payment_date = utils.today()
 
 
 class PaymentCreation(model.CoogWizard):
@@ -452,8 +460,9 @@ class PaymentCreation(model.CoogWizard):
         kind = self.get_lines_amount_per_kind(self.start.lines_to_pay)
         if kind.keys()[0] != self.start.kind:
             self.raise_user_error('incompatible_lines_with_kind')
-        MoveLine.write(list(self.start.lines_to_pay),
-            {'payment_date': self.start.payment_date})
+        if self.start.payment_date:
+            MoveLine.write(list(self.start.lines_to_pay),
+                {'payment_date': self.start.payment_date})
         payments = MoveLine.init_payments(self.start.lines_to_pay,
             self.start.journal)
         for payment in payments:
