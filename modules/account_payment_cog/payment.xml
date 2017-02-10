@@ -96,9 +96,9 @@ this repository contains the full copyright notices and license terms. -->
         <field name="action" ref="act_merged_form_relate_details"/>
     </record>
         <menuitem parent="account_payment.menu_payment_configuration" sequence="20" action="act_reject_reason_form" id="menu_reject_reason_form"/>
-        <!-- ####################################### -->
-        <!-- ########### Rejected Payment########### -->
-        <!-- ####################################### -->
+        <!-- ######################################## -->
+        <!-- ########### Rejected Payment ########### -->
+        <!-- ######################################## -->
         <record model="ir.action.act_window" id="act_payment_fail_status_form">
             <field name="name">Payments Rejected</field>
             <field name="res_model">account.payment</field>
@@ -116,12 +116,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_payment_fail_status_form"/>
         </record>
         <menuitem parent="account_payment.menu_payments" sequence="20" action="act_payment_fail_status_form" id="menu_fail_payment_status_form"/>
-        <!-- ############################################################ -->
+        <!-- ################################## -->
         <!-- ########### Event Type ########### -->
-        <!-- ############################################################ -->
+        <!-- ################################## -->
         <record model="event.type" id="event_process_payment">
             <field name="name">Process Payment</field>
             <field name="code">process_payment</field>
+        </record>
+        <record model="event.type" id="event_payment_group_created">
+            <field name="name">Payment Group Created</field>
+            <field name="code">payment_group_created</field>
         </record>
         <record model="event.type" id="event_fail_payment">
             <field name="name">Fail Payment</field>
@@ -131,9 +135,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Succeed payment</field>
             <field name="code">succeed_payment</field>
         </record>
-        <!-- ############################################################ -->
+        <!-- ########################################### -->
         <!-- ########### Payment Fail Wizard ########### -->
-        <!-- ############################################################ -->
+        <!-- ########################################### -->
         <record model="ir.ui.view" id="payment_fail_information_view_form">
             <field name="model">account.payment.fail_information</field>
             <field name="type">form</field>

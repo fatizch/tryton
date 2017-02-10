@@ -568,6 +568,7 @@ class Payment(export.ExportImportMixin, Printable):
                 to_write += [[payment], {'description': description}]
         if to_write:
             cls.write(*to_write)
+        Event.notify_events([group], 'payment_group_created')
         Event.notify_events(payments, 'process_payment')
         return group
 

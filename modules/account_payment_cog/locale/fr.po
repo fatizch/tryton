@@ -623,6 +623,10 @@ msgctxt "model:event.type,name:event_process_payment"
 msgid "Process Payment"
 msgstr "Traitement du paiement"
 
+msgctxt "model:event.type,name:event_payment_group_created"
+msgid "Payment Group Created"
+msgstr "Groupe de paiement créé"
+
 msgctxt "model:event.type,name:event_succeed_payment"
 msgid "Succeed payment"
 msgstr "Succès du paiement"
