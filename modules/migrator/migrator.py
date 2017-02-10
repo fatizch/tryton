@@ -219,7 +219,7 @@ class Migrator(batch.BatchRootNoSelect):
     def select_group_ids(cls, ids):
         """Group together ids that must be handled by same job
         """
-        return [[x] for x in ids]
+        return [(x,)for x in ids]
 
     @classmethod
     def select_extract_ids(cls, select_key, rows):
