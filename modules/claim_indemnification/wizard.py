@@ -749,8 +749,8 @@ class CreateIndemnification(Wizard):
         new_indemnification_amount = \
             self.result.indemnification[0].total_amount
         cancelled_amount = 0
-        for indemnification in self.result.cancelled:
-            cancelled_amount += indemnification.total_amount
+        for cur_indemn in self.result.cancelled:
+            cancelled_amount += cur_indemn.total_amount
         remaining_amount = new_indemnification_amount - cancelled_amount
         return {
             'remaining_amount': remaining_amount,

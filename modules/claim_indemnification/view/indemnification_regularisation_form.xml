@@ -16,7 +16,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="payment_term" xexpand="1"/>
     </group>
     <group id="indemnification_request_group" yfill="1" yexpand="1" colspan="4">
-        <field name="indemnification" colspan="4" mode="form,tree"/>
+        <field name="indemnification" colspan="4"/>
     </group>
     <field name="cancelled" colspan="4"/>
     <field name="payback_required"/>
