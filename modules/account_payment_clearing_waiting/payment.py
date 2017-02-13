@@ -36,8 +36,9 @@ class Payment:
     __name__ = 'account.payment'
 
     @classmethod
-    def fail(cls, payments):
+    def handle_moves_before_fail(cls, payments):
         Move = Pool().get('account.move')
+        super(Payment, cls).handle_moves_before_fail(payments)
         clearing_moves = [payment.clearing_move for payment in payments
             if payment.clearing_move and payment.kind == 'receivable' and
             payment.journal.outstandings_waiting_account]
@@ -45,4 +46,3 @@ class Payment:
         if waiting_moves:
             Move.save(waiting_moves)
             Move.post(waiting_moves)
-        super(Payment, cls).fail(payments)

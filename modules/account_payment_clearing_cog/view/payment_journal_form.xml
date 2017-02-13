@@ -5,5 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/field[@name='clearing_journal']" position="after">
         <label name="post_clearing_move"/>
         <field name="post_clearing_move"/>
+        <label name="always_create_clearing_move"/>
+        <field name="always_create_clearing_move"/>
     </xpath>
 </data>

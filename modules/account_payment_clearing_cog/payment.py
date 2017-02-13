@@ -17,6 +17,12 @@ __all__ = [
 class Journal:
     __name__ = 'account.payment.journal'
     post_clearing_move = fields.Boolean('Post Clearing Move')
+    always_create_clearing_move = fields.Boolean(
+        'Always Create Clearing Move', help='For payments that are failed '
+        'before being succeeded (e.g: technical failure) a clearing move will '
+        'be created when the payment is failed. The end result is similar to '
+        'what would have happened if the payment had been succeeded and then '
+        'failed')
 
     @classmethod
     def _export_light(cls):
@@ -55,11 +61,32 @@ class Payment:
             Move.post(clearing_moves)
 
     @classmethod
+    def handle_moves_before_fail(cls, payments):
+        pool = Pool()
+        Move = pool.get('account.move')
+
+        moves, to_post = [], []
+        for payment in [x for x in payments if not x.clearing_move and
+                x.journal.always_create_clearing_move]:
+            move = payment.create_clearing_move()
+            if move:
+                moves.append(move)
+                if payment.journal.post_clearing_move:
+                    to_post.append(move)
+        if moves:
+            Move.save(moves)
+            cls.write(*sum((([m.origin], {'clearing_move': m.id})
+                        for m in moves), ()))
+        if to_post:
+            Move.post(to_post)
+
+    @classmethod
     @ModelView.button
     @Workflow.transition('failed')
     def fail(cls, payments):
         pool = Pool()
         Move = pool.get('account.move')
+        cls.handle_moves_before_fail(payments)
         clearing_moves = ['account.move,%s' % payment.clearing_move.id
             for payment in payments
             if payment.clearing_move and payment.journal.post_clearing_move]
