@@ -156,7 +156,7 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
                 start_dates = [x.start_date for x in claim.losses
                     if x.start_date]
                 start_dates.sort()
-                if start_dates[0] > claim.declaration_date:
+                if start_dates and start_dates[0] > claim.declaration_date:
                     lang = Transaction().context.get('language')
                     Lang = Pool().get('ir.lang')
                     lang, = Lang.search([('code', '=', lang)], limit=1)
