@@ -3,6 +3,7 @@
 import os
 import re
 import datetime
+import logging
 from itertools import groupby
 from collections import namedtuple
 from dateutil.relativedelta import relativedelta
@@ -16,6 +17,7 @@ import genshi
 import genshi.template
 
 from trytond import backend
+from trytond.config import config
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or, Bool, If
 from trytond.pool import PoolMeta, Pool
@@ -41,6 +43,8 @@ PARTY_PLACEHOLDER = re.compile(r'{party_(\w*)}')
 loader = genshi.template.TemplateLoader(
     os.path.join(os.path.dirname(__file__), 'template'),
     auto_reload=True)
+
+logger = logging.getLogger(__name__)
 
 
 def remove_comment(stream):
@@ -371,19 +375,6 @@ class Group:
         self.generate_message(_save=False)
         self.update_last_sepa_receivable_date()
 
-    def dump_sepa_messages(self, dirpath):
-        output_paths = []
-        sepa_messages_waiting = [x for x in self.sepa_messages
-            if x.state == 'waiting']
-        for sepa_msg in sepa_messages_waiting:
-            filepath = os.path.join(dirpath, sepa_msg.filename)
-            with open(filepath, 'w') as _file:
-                _file.write(sepa_msg.message.encode('utf-8'))
-            output_paths.append(filepath)
-        Message = Pool().get('account.payment.sepa.message')
-        Message.do(sepa_messages_waiting)
-        return output_paths
-
     def get_remittance_info(self):
         return ''
 
@@ -700,6 +691,13 @@ class Journal:
 class Message:
     __name__ = 'account.payment.sepa.message'
 
+    @classmethod
+    def __setup__(cls):
+        super(Message, cls).__setup__()
+        if not config.has_option('sepa_payment', 'out_dir'):
+            logger.warning('The option \'out_dir\' should be'
+                ' set in the configuration file')
+
     @staticmethod
     def _get_handlers():
         pool = Pool()
@@ -715,12 +713,20 @@ class Message:
             lambda f: CAMT054Coog(f, Payment),
             }
 
+    def dump_sepa_message(self, dirpath):
+        filepath = os.path.join(dirpath, self.filename)
+        with open(filepath, 'w') as _f:
+            _f.write(self.message.encode('utf-8'))
+        return filepath
+
     def parse(self):
         Event = Pool().get('event')
         super(Message, self).parse()
         Event.notify_events([self], 'parse_sepa_message')
 
     def send(self):
+        outdir = os.path.normpath(config.get('sepa_payment', 'out_dir'))
+        self.dump_sepa_message(outdir)
         Event = Pool().get('event')
         super(Message, self).send()
         Event.notify_events([self], 'send_sepa_message')

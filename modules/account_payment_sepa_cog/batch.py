@@ -11,9 +11,33 @@ from trytond.modules.coog_core import batch
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'PaymentSepaDoBatch',
     'PaymentTreatmentBatch',
     'PaymentFailBatch',
     ]
+
+
+class PaymentSepaDoBatch(batch.BatchRoot):
+    'Payment Sepa Do Batch'
+    __name__ = 'account.payment.do_sepa_messages'
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'account.payment.sepa.message'
+
+    @classmethod
+    def get_batch_search_model(cls):
+        return 'account.payment.sepa.message'
+
+    @classmethod
+    def get_batch_domain(cls, **kwargs):
+        return [('type', '=', 'out'), ('state', '=', 'waiting')]
+
+    @classmethod
+    def execute(cls, objects, ids, **kwargs):
+        Message = Pool().get('account.payment.sepa.message')
+        Message.do(objects)
+        return [o.id for o in objects]
 
 
 class PaymentTreatmentBatch:
@@ -23,45 +47,18 @@ class PaymentTreatmentBatch:
     def __setup__(cls):
         super(PaymentTreatmentBatch, cls).__setup__()
         cls._default_config_items.update({
-                'job_size': '0',
+                'job_size': 0
                 })
-
-    @classmethod
-    def get_batch_domain(cls, treatment_date, payment_kind=None,
-            journal_methods=None, **kwargs):
-        return super(PaymentTreatmentBatch, cls).get_batch_domain(
-            treatment_date, payment_kind, journal_methods)
 
     @classmethod
     def _group_payment_key(cls, payment):
         res = super(PaymentTreatmentBatch, cls)._group_payment_key(payment)
         journal = payment.journal
-        if journal.process_method == 'sepa' and \
-                journal.split_sepa_messages_by_sequence_type:
+        if (journal.process_method == 'sepa' and
+                journal.split_sepa_messages_by_sequence_type):
             res = res + (('sequence_type', payment.sepa_mandate_sequence_type
                     or payment.sepa_mandate.sequence_type),)
         return res
-
-    @classmethod
-    def execute(cls, objects, ids, **kwargs):
-        Group = Pool().get('account.payment.group')
-        groups = Group.browse(super(PaymentTreatmentBatch, cls).execute(
-                objects, ids, **kwargs))
-        dirpath = kwargs.get('out', None) or cls.generate_filepath()
-        out_filepaths = []
-        for payments_group in groups:
-            if payments_group.journal.process_method == 'sepa':
-                out_filepaths = payments_group.dump_sepa_messages(dirpath)
-                if out_filepaths:
-                    log_msg = "SEPA message of %s written to '%s'" % (
-                        payments_group, out_filepaths[0])
-            if len(out_filepaths) == 1:
-                cls.logger.info(log_msg)
-            if len(out_filepaths) > 1:
-                cls.logger.warning('Only last ' + log_msg)
-                raise Exception("Multiple sepa messages with "
-                    "'waiting' status for  %s" % payments_group)
-        return [group.id for group in groups]
 
 
 class PaymentFailBatch(batch.BatchRootNoSelect):

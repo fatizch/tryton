@@ -15,6 +15,7 @@ def register():
     Pool.register(
         Party,
         PaymentTreatmentBatch,
+        PaymentSepaDoBatch,
         PaymentFailBatch,
         Payment,
         Mandate,
