@@ -8,7 +8,6 @@ this repository contains the full copyright notices and license terms. -->
         <suffix name="currency_symbol"/>
     </field>
     <field name="post_date"/>
-    <field name="payment_date"/>
     <field name="reconciliation"/>
     <field name="is_reconciled" tree_invisible="1"/>
     <field name="color" tree_invisible="1"/>
