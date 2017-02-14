@@ -6,7 +6,6 @@ from trytond.pyson import Eval
 __metaclass__ = PoolMeta
 __all__ = [
     'Party',
-    'PartyInteraction',
     ]
 
 
@@ -28,12 +27,3 @@ class Party:
                 ]
         cls.account_payable.domain = [['OR', ('kind', '=', 'other'),
                 original_domain[0]], original_domain[1]]
-
-
-class PartyInteraction:
-    __name__ = 'party.interaction'
-
-    @classmethod
-    def __setup__(cls):
-        super(PartyInteraction, cls).__setup__()
-        cls.for_object_ref.selection.append(['account.invoice', 'Invoice'])

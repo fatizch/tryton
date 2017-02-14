@@ -30,7 +30,6 @@ def register():
         ContractService,
         RuleEngineRuntime,
         Party,
-        PartyInteraction,
         TestCaseModel,
         PackageSelection,
         OptionsDisplayer,

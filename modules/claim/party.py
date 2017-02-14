@@ -13,7 +13,6 @@ __metaclass__ = PoolMeta
 
 __all__ = [
     'Party',
-    'PartyInteraction',
     'SynthesisMenuClaim',
     'SynthesisMenu',
     'SynthesisMenuOpen',
@@ -40,15 +39,6 @@ class Party:
 
     def get_last_claim_id(self, name):
         return self.claims[-1].id if self.claims else None
-
-
-class PartyInteraction:
-    __name__ = 'party.interaction'
-
-    @classmethod
-    def __setup__(cls):
-        super(PartyInteraction, cls).__setup__()
-        cls.for_object_ref.selection.append(['claim', 'Claim'])
 
 
 class SynthesisMenuClaim(model.CoogSQL):

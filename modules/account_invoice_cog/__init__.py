@@ -17,7 +17,6 @@ def register():
         Invoice,
         TestCaseModel,
         Party,
-        PartyInteraction,
         ReportTemplate,
         Move,
         MoveLine,

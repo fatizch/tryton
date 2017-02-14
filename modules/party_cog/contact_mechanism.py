@@ -100,9 +100,12 @@ class PartyInteraction(model.CoogSQL, model.CoogView):
     for_object = fields.Function(
         fields.Char('For Object', states={'invisible': True}),
         'on_change_with_for_object')
-    for_object_ref = fields.Reference('For Object', [('', ''),
-            ('party.party', 'Party')],
+    for_object_ref = fields.Reference('For Object', 'get_models',
         states={'readonly': True})
+
+    @classmethod
+    def get_models(self):
+        return utils.models_get() + [('', '')]
 
     @staticmethod
     def default_contact_datetime():

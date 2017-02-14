@@ -17,7 +17,6 @@ __all__ = [
     'SynthesisMenuPayment',
     'SynthesisMenu',
     'SynthesisMenuOpen',
-    'PartyInteraction',
     ]
 
 
@@ -122,12 +121,3 @@ class SynthesisMenuOpen(Wizard):
             'views': [(None, 'tree'), (None, 'form')]
         }
         return actions
-
-
-class PartyInteraction:
-    __name__ = 'party.interaction'
-
-    @classmethod
-    def __setup__(cls):
-        super(PartyInteraction, cls).__setup__()
-        cls.for_object_ref.selection.append(('account.payment', 'Payment'))

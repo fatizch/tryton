@@ -33,7 +33,6 @@ def register():
         Option,
         RuleEngineRuntime,
         Party,
-        PartyInteraction,
         OptionDescription,
         TestCaseModel,
         BenefitToDeliver,

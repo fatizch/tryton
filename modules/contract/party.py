@@ -16,7 +16,6 @@ from trytond.modules.coog_core import UnionMixin
 __metaclass__ = PoolMeta
 __all__ = [
     'Party',
-    'PartyInteraction',
     'SynthesisMenu',
     'SynthesisMenuOpen',
     'SynthesisMenuContrat',
@@ -97,15 +96,6 @@ class Party:
         Contract = Pool().get('contract')
         contracts = Contract.get_covered_contracts_from_party(self, date)
         return [c.id for c in contracts]
-
-
-class PartyInteraction:
-    __name__ = 'party.interaction'
-
-    @classmethod
-    def __setup__(cls):
-        super(PartyInteraction, cls).__setup__()
-        cls.for_object_ref.selection.append(('contract', 'Contract'))
 
 
 class SynthesisMenuContrat(model.CoogSQL):
