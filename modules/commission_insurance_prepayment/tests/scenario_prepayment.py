@@ -279,6 +279,10 @@ contract.options[0].premiums.append(ContractPremium(
         account=accounts['revenue'], rated_entity=Coverage(coverage)))
 contract.save()
 
+contract.options[0].coverage.premium_rules[0].rule_extra_data = \
+    {'premium_amount': Decimal(110)}
+contract.options[0].coverage.premium_rules[0].save()
+
 # #Comment# #Invoice contract and post
 generate_invoice = Wizard('contract.do_invoice', models=[contract])
 generate_invoice.form.up_to_date = until_date

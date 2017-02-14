@@ -312,6 +312,9 @@ Add new premium version::
     ...         amount=Decimal('110'), frequency='monthly',
     ...         account=accounts['revenue'], rated_entity=Coverage(coverage)))
     >>> contract.save()
+    >>> contract.options[0].coverage.premium_rules[0].rule_extra_data = \
+    ...     {'premium_amount': Decimal(110)}
+    >>> contract.options[0].coverage.premium_rules[0].save()
 
 Invoice contract and post::
 
