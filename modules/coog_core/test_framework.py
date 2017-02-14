@@ -142,15 +142,19 @@ class CoogTestCase(ModuleTestCase):
     def test9999_launch_test_cases(self):
         if not os.environ.get('DO_TEST_CASES'):
             return
-        with Transaction().new_transaction() as transaction:
-            test_case_instance = self.TestCaseModel.get_instance()
-            test_case_instance.language, = self.Lang.search([
-                    ('code', '=', 'fr')])
-            test_case_instance.save()
-            transaction.commit()
-        with Transaction().new_transaction() as transaction, \
-                Transaction().set_context(TESTING=True):
-            self.TestCaseModel.run_all_test_cases()
+        with Transaction().start(DB_NAME, USER, context=CONTEXT):
+            with Transaction().new_transaction() as transaction:
+                try:
+                    test_case_instance = self.TestCaseModel.get_instance()
+                    test_case_instance.language, = self.Lang.search([
+                            ('code', '=', 'fr')])
+                    test_case_instance.save()
+                    transaction.commit()
+                except:
+                    transaction.rollback()
+            with Transaction().new_transaction() as transaction, \
+                    Transaction().set_context(TESTING=True):
+                self.TestCaseModel.run_all_test_cases()
 
     def __getattr__(self, name):
         if name == '_models':
