@@ -637,8 +637,8 @@ class ReportGenerate(Report):
             selected_party)
         report_context = cls.get_context(records, data)
         action_report.template_extension = selected_letter.template_extension
-        # ABD: We should convert event if we don't have format_for_internal_edf
-        # but immediate_conversion set
+        # ABD: We should consider convert_to_pdf
+        # event if format_for_internal_edm is not set
         if immediate_conversion and selected_letter.format_for_internal_edm \
                 not in ('', 'original'):
             action_report.extension = selected_letter.format_for_internal_edm
@@ -1072,7 +1072,9 @@ class ReportCreate(Wizard):
     def action_open_report(self, action, email_print):
         pool = Pool()
         Report = pool.get('report.generate_from_file', type='report')
-        if self.select_template.template.convert_to_pdf:
+        if (self.select_template.template.convert_to_pdf and not
+                self.preview_document.reports[0].server_filepath.endswith(
+                    '.pdf')):
             Report.convert_single_attachment(
                 [self.preview_document.reports[0].server_filepath],
                 self.preview_document.output_report_filepath)
@@ -1173,7 +1175,8 @@ class ReportCreatePreview(model.CoogView):
 
     @fields.depends('output_report_name', 'reports')
     def on_change_with_output_report_filepath(self, name=None):
-        if all([x.template.convert_to_pdf for x in self.reports]):
+        if all([x.template.convert_to_pdf and not os.path.isfile(
+                        x.server_filepath) for x in self.reports]):
             # Generate unique temporary output report filepath
             return os.path.join(tempfile.mkdtemp(), coog_string.slugify(
                         self.output_report_name, lower=False) + '.pdf')
