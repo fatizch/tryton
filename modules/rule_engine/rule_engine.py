@@ -1454,7 +1454,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             fields = ['result', 'errors', 'warnings', 'info', 'debug']
             return {k: getattr(result, k, None) for k in fields}
 
-        return [self.execute_case(case) for case in cases]
+        return [execute_case(case) for case in cases]
 
 
 class Context(ModelView, ModelSQL, model.TaggedMixin):
