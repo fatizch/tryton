@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 import unittest
 import datetime
-
 import trytond.tests.test_tryton
 
 from trytond.modules.coog_core import test_framework
@@ -24,6 +23,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'CoveredElement': 'contract.covered_element',
             'RuleEngineRuntime': 'rule_engine.runtime',
             'ContractSet': 'contract.set',
+            'ItemDesc': 'offered.item.description',
             }
 
     def test001_test_rule_engine_function(self):
@@ -60,6 +60,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         contract1 = self.Contract(start_date=datetime.date(2014, 01, 01),
             subscriber=party_father,
+            status='active',
+            activation_history=[{'start_date': datetime.date(2014, 01, 1),
+                    'end_date': datetime.date(2016, 12, 31)}],
             covered_elements=[{
                     'party': party_father,
                     'options': [{
@@ -77,6 +80,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     }])
         contract2 = self.Contract(start_date=datetime.date(2014, 01, 01),
             subscriber=party_mother,
+            status='active',
+            activation_history=[{'start_date': datetime.date(2014, 01, 1),
+                    'end_date': datetime.date(2016, 12, 31)}],
             covered_elements=[{
                     'party': party_mother,
                     'options': [{
@@ -95,6 +101,16 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     }])
         contract_set = self.ContractSet()
         contract_set.contracts = [contract1, contract2]
+
+        # Force set function fields that will be used
+        item_desc = self.ItemDesc(sub_item_descs=[])
+        for covered_element in contract1.covered_elements:
+            covered_element.item_desc = item_desc
+            covered_element.main_contract = contract1
+
+        for covered_element in contract2.covered_elements:
+            covered_element.item_desc = item_desc
+            covered_element.main_contract = contract2
 
         args = {'contract': contract1, 'contract_set': contract_set,
             'person': party_child1, 'date': datetime.date(2014, 1, 1)}
