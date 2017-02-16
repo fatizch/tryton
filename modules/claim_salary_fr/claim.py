@@ -418,7 +418,8 @@ class ClaimService:
                         salary_to_use += salary_to_add
 
         # Calculate monthly salary
-        if self.salary_mode != 'last_year' and not current_salary:
+        if self.salary_mode != 'last_year' and not current_salary and \
+                sum_prorata:
             salary_to_use *= 12 / sum_prorata
             pmss *= 12 / sum_prorata
         salary_to_use += bonus
