@@ -4,7 +4,7 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form" position="inside">
         <newline/>
-        <label name="claim_specific_bank_account"/>
-        <field name="claim_specific_bank_account"/>
+        <label name="claim_bank_account"/>
+        <field name="claim_bank_account"/>
     </xpath>
 </data>
