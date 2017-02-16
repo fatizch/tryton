@@ -168,8 +168,8 @@ class Claim:
         if draft_underwritings:
             cls.raise_user_warning('must_activate_underwritings_%s' %
                 claims[0].id, 'must_activate_underwritings',
-                {'claims': '\n'.join([x.claim.rec_name
-                            for x in draft_underwritings])})
+                {'claims': '\n'.join({x.claim.rec_name
+                            for x in draft_underwritings})})
             processed = list({x.underwriting for x in draft_underwritings})
             Underwriting.process(processed)
             return processed
