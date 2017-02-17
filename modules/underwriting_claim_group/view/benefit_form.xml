@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/notebook/page[@id='managers']/notebook/page[@id='underwriting_rule']/label[@name='underwriting_rule']" position="before">
+        <label name="force_underwriting_rule"/>
+        <field name="force_underwriting_rule"/>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='managers']/notebook/page[@id='underwriting_rule']/field[@name='underwriting_rule_extra_data']" position="after">
+        <field name="underwriting_rules" colspan="4"/>
+    </xpath>
+</data>

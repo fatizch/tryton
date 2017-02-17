@@ -158,8 +158,7 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         return [x.id for x in getattr(benefit_rule, name[10:])]
 
     def init_from_benefit(self):
-        for fname in ('deductible_rule', 'indemnification_rule',
-                'revaluation_rule'):
+        for fname in self.__class__.rule_fields():
             available = self.get_available_rule('available_' + fname + 's')
             if len(available) == 0:
                 continue
@@ -171,3 +170,7 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         benefit_rule = self.benefit.benefit_rules[0]
         if benefit_rule.force_annuity_frequency:
             self.annuity_frequency = benefit_rule.annuity_frequency
+
+    @classmethod
+    def rule_fields(cls):
+        return ['deductible_rule', 'indemnification_rule', 'revaluation_rule']

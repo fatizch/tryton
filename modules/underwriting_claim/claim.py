@@ -5,7 +5,8 @@ from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import fields, coog_date
+from trytond.modules.coog_core import fields
+from trytond.modules.rule_engine import get_rule_mixin
 
 __all__ = [
     'Benefit',
@@ -15,15 +16,24 @@ __all__ = [
     ]
 
 
-class Benefit:
+class Benefit(get_rule_mixin('underwriting_rule', 'Underwriting Rule')):
     __metaclass__ = PoolMeta
     __name__ = 'benefit'
 
-    underwriting_type = fields.Many2One('underwriting.type',
-        'Underwriting Type', ondelete='RESTRICT')
-    underwriting_delay = fields.Integer('Underwriting Delay (Days)', states={
-            'invisible': ~Eval('underwriting_type')},
-        depends=['underwriting_type'])
+    @classmethod
+    def __setup__(cls):
+        super(Benefit, cls).__setup__()
+        cls.underwriting_rule.domain = [('type_', '=', 'underwriting_type')]
+
+    def do_calculate_underwritings(self, data):
+        if not self.underwriting_rule:
+            return None, None
+        code, date = self.calculate_underwriting_rule(data)
+        if code:
+            type_ = Pool().get('underwriting.type').get_type_from_code(code)
+        else:
+            type_ = None
+        return type_, date
 
 
 class Claim:
@@ -90,22 +100,18 @@ class Claim:
         update = defaultdict(list)
         for loss in self.losses:
             for service in loss.services:
-                if not service.benefit.underwriting_type:
+                type_, date = service.get_underwriting_data()
+                if not type_:
                     continue
-                date = loss.start_date
-                if service.benefit.underwriting_delay:
-                    date = coog_date.add_day(date,
-                        service.benefit.underwriting_delay)
                 for elem in service.underwritings:
                     if elem.effective_decision_date == date:
                         break
                 else:
-                    found = existing.get(service.benefit.underwriting_type,
-                        None)
+                    found = existing.get(type_, None)
                     if found:
                         update[found].append((date, service))
                     else:
-                        missing[service.benefit.underwriting_type].append(
+                        missing[type_].append(
                             (date, service))
         to_create, to_save = [], []
         for underwriting_type, services in missing.iteritems():
@@ -211,6 +217,11 @@ class ClaimService:
         for decision in decisions:
             result[decision.target.id].append(decision.id)
         return result
+
+    def get_underwriting_data(self):
+        data_dict = {}
+        self.init_dict_for_rule_engine(data_dict)
+        return self.benefit.do_calculate_underwritings(data_dict)
 
 
 class DeliverBenefit:

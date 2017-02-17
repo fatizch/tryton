@@ -14,6 +14,7 @@ from trytond.wizard import Button
 from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, Bool, In, Len
+from trytond.cache import Cache
 
 from trytond.modules.coog_core import model, fields, coog_string, utils
 from trytond.modules.coog_core import coog_date
@@ -56,6 +57,8 @@ class UnderwritingType(model.CoogSQL, model.CoogView):
         help='If set, underwritings created with this type will not be '
         'automatically activated by the underwriting activation batch')
 
+    _type_per_code_cache = Cache('_get_underwriting_type_from_code')
+
     @staticmethod
     def default_manual_activation():
         return False
@@ -69,6 +72,22 @@ class UnderwritingType(model.CoogSQL, model.CoogView):
     def _export_light(cls):
         return super(UnderwritingType, cls)._export_light() | {'decisions',
             'waiting_decision'}
+
+    @classmethod
+    def create(cls, *args):
+        res = super(UnderwritingType, cls).create(*args)
+        cls._type_per_code_cache.clear()
+        return res
+
+    @classmethod
+    def write(cls, *args):
+        super(UnderwritingType, cls).write(*args)
+        cls._type_per_code_cache.clear()
+
+    @classmethod
+    def delete(cls, *args):
+        super(UnderwritingType, cls).delete(*args)
+        cls._type_per_code_cache.clear()
 
     @classmethod
     def default_document_rule(cls):
@@ -123,6 +142,15 @@ class UnderwritingType(model.CoogSQL, model.CoogView):
         if len(results) > 1:
             return rule.merge_results(*results)
         return results[0]
+
+    @classmethod
+    def get_type_from_code(cls, code):
+        cached = cls._type_per_code_cache.get(code, -1)
+        if cached != -1:
+            return cls(cached) if cached else None
+        to_cache = cls.search([('code', '=', code)])
+        cls._type_per_code_cache.set(code, to_cache[0].id if to_cache else None)
+        return to_cache[0]
 
 
 class UnderwritingDecisionType(model.CoogSQL, model.CoogView):

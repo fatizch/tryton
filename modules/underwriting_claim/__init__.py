@@ -5,6 +5,7 @@ from trytond.pool import Pool
 import underwriting
 import claim
 import event
+import rule_engine
 
 
 def register():
@@ -16,6 +17,7 @@ def register():
         claim.Claim,
         claim.ClaimService,
         event.EventLog,
+        rule_engine.RuleEngine,
         module='underwriting_claim', type_='model')
     Pool.register(
         claim.DeliverBenefit,

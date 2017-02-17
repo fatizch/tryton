@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='revaluation_rule_extra_data']" position="after">
+        <label name="underwriting_rule"/>
+        <field name="underwriting_rule" widget="selection"/>
+        <field name="underwriting_rule_extra_data" colspan="2" no_command="1"/>
+    </xpath>
+</data>
