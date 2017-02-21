@@ -4,7 +4,7 @@
 CHAIN_NAME=payment
 CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
 
-CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'PAYMENT_KIND' 'JOURNAL_METHODS' 'OUT')
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'PAYMENT_KIND' 'JOURNAL_METHODS')
 CHAIN_REQUIRED=('TREATMENT_DATE' 'PAYMENT_KIND' 'JOURNAL_METHODS')
 
 chain_params "$@"
@@ -14,13 +14,8 @@ chain_step account.payment.create --treatment_date="$TREATMENT_DATE" \
     --payment_kind="$PAYMENT_KIND"
 chain_wait account.payment.create || chain_end
 
-[[ -z  $OUT ]] && chain_step account.payment.process \
-    --treatment_date="$TREATMENT_DATE" --payment_kind="$PAYMENT_KIND" \
-    --journal_methods="$JOURNAL_METHODS"
-chain_wait account.payment.process || chain_end
-[[ ! -z  $OUT ]] && chain_step account.payment.process \
-    --treatment_date="$TREATMENT_DATE" --payment_kind="$PAYMENT_KIND" \
-    --journal_methods="$JOURNAL_METHODS" --out=$OUT
+chain_step account.payment.process --treatment_date="$TREATMENT_DATE" \
+    --payment_kind="$PAYMENT_KIND" --journal_methods="$JOURNAL_METHODS"
 chain_wait account.payment.process || chain_end
 
 chain_step account.payment.do_sepa_messages
