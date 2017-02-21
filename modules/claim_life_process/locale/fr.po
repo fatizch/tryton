@@ -27,10 +27,6 @@ msgid "Add New Indemnification"
 msgstr "Nouvelle période"
 
 msgctxt "view:claim.service:"
-msgid "Claim Service"
-msgstr "Prestation fournie"
-
-msgctxt "view:claim.service:"
 msgid "Indemnisations"
 msgstr "indemnisations"
 

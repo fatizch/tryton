@@ -207,7 +207,7 @@ msgid "Rate C"
 msgstr "Taux de la tranche C"
 
 msgctxt "field:claim_salary_fr.start_set_contributions,fixed_amounts:"
-msgid "Fixed amounts"
+msgid "Fixed Amounts"
 msgstr "Montants fixes"
 
 msgctxt "field:claim_salary_fr.start_set_contributions,id:"
@@ -347,13 +347,28 @@ msgctxt "model:claim_salary_fr.start_set_contributions,name:"
 msgid "Start Set Contributions"
 msgstr "Calculer les salaires nets"
 
-msgctxt "model:ir.action,name:act_net_calculation_rule_form"
-msgid "Net Calculation Rules"
-msgstr "Règles de calcul pour le net"
+msgctxt ""
+"model:extra_details.configuration.line,string:indemnification_extra_details_tranche_a"
+msgid "Tranche A"
+msgstr "Tranche A"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:indemnification_extra_details_tranche_b"
+msgid "Tranche B"
+msgstr "Tranche B"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:indemnification_extra_details_tranche_c"
+msgid "Tranche C"
+msgstr "Tranche C"
 
 msgctxt "model:ir.action,name:act_compute_net_salaries"
 msgid "Compute net salaries"
 msgstr "Calculer les salaires nets"
+
+msgctxt "model:ir.action,name:act_net_calculation_rule_form"
+msgid "Net Calculation Rules"
+msgstr "Règles de calcul pour le net"
 
 msgctxt "model:ir.ui.menu,name:menu_net_calculation_rule"
 msgid "Net Calculation Rules"
@@ -366,6 +381,10 @@ msgstr "Règle de calcul net - Donnée complémentaire"
 msgctxt "model:net_calculation_rule-fix_extra_data,name:"
 msgid "Net Calculation Rule - Extra Data"
 msgstr "Règle de calcul net - Donnée complémentaire"
+
+msgctxt "selection:contract.option.benefit,salary_mode:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:contract.option.benefit,salary_mode:"
 msgid "Last 12 months"

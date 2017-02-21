@@ -230,10 +230,6 @@ msgctxt "view:loan.average_premium_rate.loan_displayer:"
 msgid "%"
 msgstr "%"
 
-msgctxt "view:loan.average_premium_rate.loan_displayer:"
-msgid "Loans"
-msgstr "Prêts"
-
 msgctxt "view:loan.average_premium_rule.fee_rule:"
 msgid "Fee Rule"
 msgstr "Règle de frais"

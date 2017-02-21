@@ -87,7 +87,7 @@ msgid "Death"
 msgstr "Décès"
 
 msgctxt "selection:offered.option.description,insurance_kind:"
-msgid "Educuation Anuities"
+msgid "Education Annuities"
 msgstr "Rente éducation"
 
 msgctxt "selection:offered.option.description,insurance_kind:"
@@ -95,7 +95,7 @@ msgid "Funeral Capital"
 msgstr "Obsèques"
 
 msgctxt "selection:offered.option.description,insurance_kind:"
-msgid "Joint Anuities"
+msgid "Joint Annuities"
 msgstr "Rente conjoint"
 
 msgctxt "selection:offered.option.description,insurance_kind:"

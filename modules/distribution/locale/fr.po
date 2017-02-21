@@ -250,9 +250,5 @@ msgid "Distribution Administration"
 msgstr "Administration des réseaux de distribution"
 
 msgctxt "view:distribution.network:"
-msgid "Distribution Network"
-msgstr "Réseau de Distribution"
-
-msgctxt "view:distribution.network:"
 msgid "Hierarchy"
 msgstr "Hierarchie"

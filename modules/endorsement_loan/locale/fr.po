@@ -1128,10 +1128,6 @@ msgctxt "view:contract.covered_element.add_option.loan_share_selector:"
 msgid "%"
 msgstr "%"
 
-msgctxt "view:contract.covered_element.add_option.loan_share_selector:"
-msgid "Loan Shares"
-msgstr "Quotités"
-
 msgctxt "view:contract.covered_element.add_option.loan_shares:"
 msgid "Select Loan Shares"
 msgstr "Choix des quotités"
@@ -1139,10 +1135,6 @@ msgstr "Choix des quotités"
 msgctxt "view:contract.covered_element.add_option.share_per_loan:"
 msgid "%"
 msgstr "%"
-
-msgctxt "view:contract.covered_element.add_option.share_per_loan:"
-msgid "Shares per Loan"
-msgstr "Quotités par prêt"
 
 msgctxt "view:endorsement.loan.add_remove.displayer:"
 msgid "Loans"

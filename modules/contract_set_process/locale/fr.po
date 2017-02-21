@@ -95,10 +95,6 @@ msgid "Contract Set Validation"
 msgstr "Validation d'un ensemble de contrat"
 
 msgctxt "view:contract:"
-msgid "Contracts"
-msgstr "Contrats"
-
-msgctxt "view:contract:"
 msgid "Resume"
 msgstr "Lancer"
 

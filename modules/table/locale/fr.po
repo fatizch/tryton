@@ -1011,16 +1011,8 @@ msgid "Table Definition Dimensions"
 msgstr "Dimensions"
 
 msgctxt "view:table:"
-msgid "Basic Table Definition"
-msgstr "Definition simple d'une table"
-
-msgctxt "view:table:"
 msgid "Dimensions"
 msgstr "Dimensions"
-
-msgctxt "view:table:"
-msgid "Table Definition"
-msgstr "Table"
 
 msgctxt "wizard_button:table.2d.open,ask_dimensions,end:"
 msgid "Cancel"

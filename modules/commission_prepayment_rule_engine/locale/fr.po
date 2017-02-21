@@ -99,14 +99,6 @@ msgid "Pourcentage du précompte"
 msgstr "Pourcentage du précompte"
 
 msgctxt "view:commission.plan.prepayment.payment_rule:"
-msgid "Prepayment Payment Date Rule"
-msgstr "Règle de calcul de la date de paiement du précompte"
-
-msgctxt "view:commission.plan.prepayment.payment_rule:"
-msgid "Prepayment Payment Date Rules"
-msgstr "Règles de calcul de la date de paiement du précompte"
-
-msgctxt "view:commission.plan.prepayment.payment_rule:"
 msgid ""
 "Schedule rule (must return the schedule with the format [(date, percentage),"
 " (date2, percentage2)])"

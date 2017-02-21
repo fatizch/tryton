@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:batch.launcher.select_batchs:"
+msgid "Required parameter: %(param)s"
+msgstr "Paramètre de batch requis: %s(param)s"
+
 msgctxt "field:batch.launcher.parameter,code:"
 msgid "Code"
 msgstr "Code"
@@ -21,6 +25,10 @@ msgstr "Batchs disponibles"
 msgctxt "field:batch.launcher.select_batchs,batch:"
 msgid "Batch"
 msgstr "Batch"
+
+msgctxt "field:batch.launcher.select_batchs,has_treatment_date:"
+msgid "Has Treatment Date"
+msgstr "A une date de traitement"
 
 msgctxt "field:batch.launcher.select_batchs,id:"
 msgid "ID"

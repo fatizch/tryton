@@ -143,10 +143,6 @@ msgid "Contracts"
 msgstr "Contrats"
 
 msgctxt "view:endorsement.start.preview_contract_premiums.premium:"
-msgid "Contract Premiums"
-msgstr "Primes du contrat"
-
-msgctxt "view:endorsement.start.preview_contract_premiums.premium:"
 msgid "amount"
 msgstr "Montant"
 

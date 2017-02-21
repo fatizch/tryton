@@ -47,12 +47,12 @@ msgid "From Model"
 msgstr "Depuis un modèle"
 
 msgctxt "error:report.template:"
-msgid "Open Document"
-msgstr "Modèle ODT"
-
-msgctxt "error:report.template:"
 msgid "No letter model found for date %s and language %s"
 msgstr "Pas de modèle de courrier trouvé pour le %s et la langue %s"
+
+msgctxt "error:report.template:"
+msgid "Open Document"
+msgstr "Modèle ODT"
 
 msgctxt "error:report.template:"
 msgid "The document template code must be unique"
@@ -297,6 +297,10 @@ msgstr "Modèle"
 msgctxt "field:report.template,output_kind:"
 msgid "Output kind"
 msgstr "Type de sortie"
+
+msgctxt "field:report.template,output_method:"
+msgid "Output method"
+msgstr "Méthode de sortie"
 
 msgctxt "field:report.template,parameters:"
 msgid "Parameters"

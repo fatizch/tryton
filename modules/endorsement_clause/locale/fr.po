@@ -282,10 +282,6 @@ msgctxt "view:contract.manage_clauses:"
 msgid "Add Text Clause"
 msgstr "Ajouter une clause libre"
 
-msgctxt "view:contract.manage_clauses:"
-msgid "Manage Clauses"
-msgstr "Gérer les clauses"
-
 msgctxt "view:endorsement.contract.clause.field:"
 msgid "Endorsement Field"
 msgstr "Champ d'avenant"

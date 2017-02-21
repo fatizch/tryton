@@ -1077,14 +1077,6 @@ msgid "Relations"
 msgstr "Relations"
 
 msgctxt "view:extra_data:"
-msgid "Extra Data Descriptor"
-msgstr "Descripteur de Données Complémentaires"
-
-msgctxt "view:extra_data:"
-msgid "Extra Data Descriptors"
-msgstr "Descripteurs de Données Complémentaires"
-
-msgctxt "view:extra_data:"
 msgid "Main"
 msgstr "Principale"
 
@@ -1103,14 +1095,6 @@ msgstr "Règle"
 msgctxt "view:offered.option.description:"
 msgid "Administration"
 msgstr "Administration"
-
-msgctxt "view:offered.option.description:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "view:offered.option.description:"
-msgid "Coverages"
-msgstr "Garanties"
 
 msgctxt "view:offered.option.description:"
 msgid "Extra Data"
@@ -1151,14 +1135,6 @@ msgstr "Données Complémentaires"
 msgctxt "view:offered.product:"
 msgid "Option Descriptions"
 msgstr "Garanties"
-
-msgctxt "view:offered.product:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "view:offered.product:"
-msgid "Products"
-msgstr "Produits"
 
 msgctxt "view:offered.product:"
 msgid "Report Templates"

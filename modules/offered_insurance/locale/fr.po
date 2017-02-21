@@ -11,9 +11,8 @@ msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
 msgctxt "error:insurer.delegation:"
-msgid "There can be only one delegation per insurance type."
-msgstr ""
-"Il ne peut y avoir qu'une seule règle de délégation par type d'assurance."
+msgid "There can be only one delegation per insurance kind."
+msgstr "Il ne peut y avoir qu'une délégation par type d'assurance"
 
 msgctxt "error:insurer:"
 msgid "There must be at least one \"generic\" delegation rule for %s."
@@ -333,13 +332,13 @@ msgctxt "field:insurer.delegation,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:insurer.delegation,insurance_kind:"
-msgid "Insurance Kind"
-msgstr "Type d'assurance"
-
 msgctxt "field:insurer.delegation,id:"
 msgid "ID"
 msgstr "Identifiant"
+
+msgctxt "field:insurer.delegation,insurance_kind:"
+msgid "Insurance Kind"
+msgstr "Type d'assurance"
 
 msgctxt "field:insurer.delegation,insurer:"
 msgid "Insurer"
@@ -1372,14 +1371,6 @@ msgstr "Descripteurs de Données Complémentaires"
 msgctxt "view:extra_premium.kind:"
 msgid "%"
 msgstr "%"
-
-msgctxt "view:extra_premium.kind:"
-msgid "Extra Premium Kind"
-msgstr "Type de surprime"
-
-msgctxt "view:extra_premium.kind:"
-msgid "Extra Premium Kinds"
-msgstr "Types de surprime"
 
 msgctxt "view:insurer.delegation:"
 msgid "Delegations"

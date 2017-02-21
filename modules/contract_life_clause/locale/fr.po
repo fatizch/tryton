@@ -98,14 +98,6 @@ msgctxt "view:contract.option.beneficiary:"
 msgid "%"
 msgstr "%"
 
-msgctxt "view:contract.option.beneficiary:"
-msgid "Beneficiaries"
-msgstr "Bénéficiaires"
-
-msgctxt "view:contract.option.beneficiary:"
-msgid "Beneficiary"
-msgstr "Bénéficiaire"
-
 msgctxt "view:contract.option:"
 msgid "Beneficiary Clause"
 msgstr "Clause bénéficiaire"

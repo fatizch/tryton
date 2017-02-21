@@ -915,14 +915,6 @@ msgid "Contact"
 msgstr "Contact"
 
 msgctxt "view:party.party:"
-msgid "Party Synthesis"
-msgstr "Synthèse acteur"
-
-msgctxt "view:party.party:"
-msgid "Persons"
-msgstr "Personnes physiques"
-
-msgctxt "view:party.party:"
 msgid "Roles"
 msgstr "Rôles"
 

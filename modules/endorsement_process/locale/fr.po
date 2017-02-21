@@ -168,10 +168,6 @@ msgid "Modify"
 msgstr "Modifier"
 
 msgctxt "view:endorsement.part.union:"
-msgid "Endorsement Parts"
-msgstr "Avenants unitaires"
-
-msgctxt "view:endorsement.part.union:"
 msgid "Modify"
 msgstr "Modifier"
 

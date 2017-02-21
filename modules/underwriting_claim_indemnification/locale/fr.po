@@ -50,18 +50,3 @@ msgstr "Indemnisations limitées"
 msgctxt "view:underwriting.decision.type:"
 msgid "%"
 msgstr "%"
-
-msgctxt ""
-"wizard_button:claim.create_indemnification,activated_underwritings,calculate:"
-msgid "Continue"
-msgstr "Continuer"
-
-msgctxt ""
-"wizard_button:claim.create_indemnification,activated_underwritings,definition:"
-msgid "Previous"
-msgstr "Précédent"
-
-msgctxt ""
-"wizard_button:claim.create_indemnification,activated_underwritings,end:"
-msgid "Exit"
-msgstr "Annuler"

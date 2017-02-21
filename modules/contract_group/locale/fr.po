@@ -22,8 +22,8 @@ msgctxt "field:contract.covered_element,contract_exit_date:"
 msgid "Contract Exit Date"
 msgstr "Date de sortie du contrat"
 
-msgctxt "field:contract.covered_element,subscriber_name:"
-msgid "Subscriber name"
+msgctxt "field:contract.covered_element,subscriber:"
+msgid "Subscriber"
 msgstr "Souscripteur"
 
 msgctxt "field:contract.option,is_group:"
@@ -223,6 +223,14 @@ msgstr "Transférer des risques"
 msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Group Products"
 msgstr "Produits Collectif"
+
+msgctxt "model:party.relation.type,name:parent_company_relation"
+msgid "Parent Company"
+msgstr "Société parente"
+
+msgctxt "model:party.relation.type,name:subsidiary_company_relation"
+msgid "Subsidiary Company"
+msgstr "Société subsidiaire"
 
 msgctxt "model:tag,name:tag_group"
 msgid "Group"

@@ -9,7 +9,3 @@ msgstr "Banque"
 msgctxt "view:account.statement.line:"
 msgid "Amount"
 msgstr "Montant"
-
-msgctxt "view:account.statement.line:"
-msgid "Statement Lines"
-msgstr "Lignes de relevé"

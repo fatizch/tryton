@@ -93,13 +93,13 @@ msgctxt "field:contract,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract,multi_mixed_view:"
-msgid "Covered Elements"
-msgstr "Risques Couverts"
-
 msgctxt "field:contract,initial_number_of_sub_covered_elements:"
 msgid "Initial Number of sub covered elements"
 msgstr "Nombre initial de sous-éléments couverts"
+
+msgctxt "field:contract,multi_mixed_view:"
+msgid "Covered Elements"
+msgstr "Risques Couverts"
 
 msgctxt "field:contract,options:"
 msgid "Options"
@@ -979,14 +979,6 @@ msgid "Versions"
 msgstr "Versions"
 
 msgctxt "view:contract.covered_element:"
-msgid "Covered Element"
-msgstr "Risque Couvert"
-
-msgctxt "view:contract.covered_element:"
-msgid "Covered Elements"
-msgstr "Risques Couverts"
-
-msgctxt "view:contract.covered_element:"
 msgid "Covered Relations"
 msgstr "Relations Couvertes"
 
@@ -1001,10 +993,6 @@ msgstr "Sous Risques Couverts"
 msgctxt "view:contract.manage_exclusion.select.exclusion:"
 msgid "All"
 msgstr "Tous"
-
-msgctxt "view:contract.manage_exclusion.select.exclusion:"
-msgid "Exclusions"
-msgstr "Exclusions"
 
 msgctxt "view:contract.manage_exclusion.select.exclusion:"
 msgid "None"
@@ -1035,20 +1023,12 @@ msgid "%"
 msgstr "%"
 
 msgctxt "view:contract.option.extra_premium:"
-msgid "Extra Premium"
-msgstr "Surprime / Réduction"
-
-msgctxt "view:contract.option.extra_premium:"
 msgid "Propagate"
 msgstr "Propager"
 
 msgctxt "view:contract.option.selector:"
 msgid "Options"
 msgstr "Garanties"
-
-msgctxt "view:contract.option:"
-msgid "Option"
-msgstr "Option"
 
 msgctxt "view:contract.option:"
 msgid "Propagate"

@@ -27,7 +27,7 @@ coog_module_update() { # install / update modules - [modules] - default: all
 }
 
 coog_module_check() { # check if module is installed - <module>
-        psql -w -t -c "select name from ir_module where name='$1' and state='installed'" | sed '/^\s*$/d' | wc -l
+        psql -w -t -c "select name from ir_module where name='$1' and state='activated'" | sed '/^\s*$/d' | wc -l
 }
 
 coog_module_list() { # list installed module from repo - <repo>

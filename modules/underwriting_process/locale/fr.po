@@ -26,7 +26,6 @@ msgctxt "error:underwriting:"
 msgid "Select a date that is not in the future for field(s): %s"
 msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
 
-#, fuzzy
 msgctxt "field:event.type.action,step_to_start:"
 msgid "Step to start"
 msgstr "État de départ"

@@ -1049,18 +1049,6 @@ msgctxt "view:loan.increment:"
 msgid "%"
 msgstr "%"
 
-msgctxt "view:loan.increment:"
-msgid "Loan Increment"
-msgstr "Palier"
-
-msgctxt "view:loan.increment:"
-msgid "Loan Increments"
-msgstr "Paliers"
-
-msgctxt "view:loan.payment:"
-msgid "Loan Payment"
-msgstr "Echéance"
-
 msgctxt "view:loan.payment:"
 msgid "Total Amount"
 msgstr "Montant Total"
@@ -1077,14 +1065,6 @@ msgctxt "view:loan.share:"
 msgid "%"
 msgstr "%"
 
-msgctxt "view:loan.share:"
-msgid "Loan Share"
-msgstr "Quotité"
-
-msgctxt "view:loan.share:"
-msgid "Loan Shares"
-msgstr "Quotités"
-
 msgctxt "view:loan:"
 msgid "%"
 msgstr "%"
@@ -1098,16 +1078,8 @@ msgid "Calculate Amortization Table"
 msgstr "Calculer la table d'amortissement"
 
 msgctxt "view:loan:"
-msgid "Loan"
-msgstr "Prêt"
-
-msgctxt "view:loan:"
 msgid "Loan Parameters"
 msgstr "Paramètres du prêt"
-
-msgctxt "view:loan:"
-msgid "Loans"
-msgstr "Prêts"
 
 msgctxt "view:loan:"
 msgid "Please check the last payment"

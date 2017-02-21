@@ -1519,21 +1519,9 @@ msgctxt "view:contract.option:"
 msgid "Main Data"
 msgstr "Données principales"
 
-msgctxt "view:contract.option:"
-msgid "Option"
-msgstr "Option"
-
-msgctxt "view:contract.option:"
-msgid "Options"
-msgstr "Options"
-
 msgctxt "view:contract.reactivate.check_contracts:"
 msgid "Contract will still be terminated as of today after validation"
 msgstr "Le contrat sera toujours résilié à aujourd'hui après la validation"
-
-msgctxt "view:contract.reactivate.check_contracts:"
-msgid "Reactivate Contract"
-msgstr "Réactiver le contrat"
 
 msgctxt "view:contract.select_start_date:"
 msgid "Select Start Date"
@@ -1542,10 +1530,6 @@ msgstr "Sélectionner la date d'effet"
 msgctxt "view:contract.service:"
 msgid "Contract Service"
 msgstr "Prestation Fournie"
-
-msgctxt "view:contract.stop.select_contracts:"
-msgid "Select contracts to stop"
-msgstr "Résiliation"
 
 msgctxt "view:contract.stop.select_contracts:"
 msgid ""
@@ -1588,10 +1572,6 @@ msgid "Contacts"
 msgstr "Contacts"
 
 msgctxt "view:contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "view:contract:"
 msgid "Data"
 msgstr "Données"
 
@@ -1606,10 +1586,6 @@ msgstr "Suspendre le contrat"
 msgctxt "view:contract:"
 msgid "Options"
 msgstr "Options"
-
-msgctxt "view:contract:"
-msgid "Quote"
-msgstr "Devis"
 
 msgctxt "view:contract:"
 msgid "Reactivate Contract"

@@ -23,13 +23,6 @@ msgid "Coverage Information"
 msgstr "Information de la garantie"
 
 msgctxt "error:claim.loss:"
-msgid ""
-"Declaration date %(declaration_date)s is prior to start date %(start_date)s"
-msgstr ""
-"La date de déclaration %(declaration_date)s est antérieure à la date de "
-"début %(start_date)s"
-
-msgctxt "error:claim.loss:"
 msgid "End Date is smaller than start date"
 msgstr "La date de fin est antérieure à la date de début"
 
@@ -46,6 +39,13 @@ msgstr ""
 msgctxt "error:claim.sub_status:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
+
+msgctxt "error:claim:"
+msgid ""
+"Declaration date %(declaration_date)s is prior to start date %(start_date)s"
+msgstr ""
+"La date de déclaration %(declaration_date)s est antérieure à la date de "
+"début %(start_date)s"
 
 msgctxt "error:claim:"
 msgid "Declaration date cannot be posterior to today's date"
@@ -883,6 +883,10 @@ msgctxt "field:contract.option,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
 
+msgctxt "field:event.log,claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
 msgctxt "field:insurer.delegation,claim_create:"
 msgid "Claim Creation"
 msgstr "Création de sinistres"
@@ -1074,6 +1078,10 @@ msgctxt "model:ir.action,name:act_benefit_form"
 msgid "Benefits"
 msgstr "Prestations"
 
+msgctxt "model:ir.action,name:act_claim_event_log_relate_form"
+msgid "Event Logs"
+msgstr "Logs d'événements"
+
 msgctxt "model:ir.action,name:act_claim_form"
 msgid "Claims"
 msgstr "Sinistres"
@@ -1225,6 +1233,38 @@ msgstr "Ouvrir"
 msgctxt "selection:claim.sub_status,status:"
 msgid "Reopened"
 msgstr "Réouvert"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Death"
+msgstr "Décès"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Education Annuities"
+msgstr "Rente éducation"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Funeral Capital"
+msgstr "Obsèques"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Joint Annuities"
+msgstr "Rente conjoint"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Partial Disability"
+msgstr "Invalidité partielle"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Temporary Disability"
+msgstr "Incapacité de travail"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Total And Irreversible Autonomy Loss"
+msgstr "Perte Totale et Irréversible d'Autonomie"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Total Disability"
+msgstr "Invalidité totale"
 
 msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Claim"

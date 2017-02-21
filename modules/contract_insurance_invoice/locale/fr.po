@@ -256,11 +256,11 @@ msgctxt "field:account.invoice.payment_term.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:account.invoice.payment_term.line.relativedelta,func_key:"
+msgctxt "field:account.invoice.payment_term.line.delta,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
 
-msgctxt "field:account.invoice.payment_term.line.relativedelta,xml_id:"
+msgctxt "field:account.invoice.payment_term.line.delta,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -1263,10 +1263,6 @@ msgid "Base"
 msgstr "Base"
 
 msgctxt "view:account.invoice.aggregate_lines.display.line:"
-msgid "Lines"
-msgstr "Lignes"
-
-msgctxt "view:account.invoice.aggregate_lines.display.line:"
 msgid "Tax"
 msgstr "Taxe"
 
@@ -1291,20 +1287,8 @@ msgid "General"
 msgstr "Général"
 
 msgctxt "view:account.invoice.line:"
-msgid "Invoice Line"
-msgstr "Ligne de Facture"
-
-msgctxt "view:account.invoice.line:"
-msgid "Invoice Lines"
-msgstr "Lignes de facture"
-
-msgctxt "view:account.invoice.line:"
 msgid "Notes"
 msgstr "Notes"
-
-msgctxt "view:account.invoice:"
-msgid "Premium Notices"
-msgstr "Quittances"
 
 msgctxt "view:account.invoice:"
 msgid "Total Amount"
@@ -1325,14 +1309,6 @@ msgstr "Génération des quittances"
 msgctxt "view:contract.invoice:"
 msgid "Cancel"
 msgstr "Annuler"
-
-msgctxt "view:contract.invoice:"
-msgid "Contract Invoice"
-msgstr "Quittance"
-
-msgctxt "view:contract.invoice:"
-msgid "Contract Invoices"
-msgstr "Quittances"
 
 msgctxt "view:contract.invoice:"
 msgid "Reinvoice"

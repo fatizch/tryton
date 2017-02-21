@@ -14,7 +14,6 @@ msgctxt "error:work_days.holiday:"
 msgid "Invalid month/day combination"
 msgstr "Combinaison jour/mois invalide"
 
-#, fuzzy
 msgctxt "field:batch.params_config,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -144,6 +143,10 @@ msgid "Weekly Day Off"
 msgstr "Jour de Repos Hebdomadaire"
 
 msgctxt "selection:work_days.holiday,month:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:work_days.holiday,month:"
 msgid "April"
 msgstr "Avril"
 
@@ -190,6 +193,10 @@ msgstr "Octobre"
 msgctxt "selection:work_days.holiday,month:"
 msgid "September"
 msgstr "Septembre"
+
+msgctxt "selection:work_days.holiday,weekly_day:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:work_days.holiday,weekly_day:"
 msgid "Friday"

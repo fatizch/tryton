@@ -211,16 +211,8 @@ msgid "Account Move Lines Aggregated"
 msgstr "Agrégat comptable"
 
 msgctxt "view:account.move.snapshot.done:"
-msgid "Moves Snapshot"
-msgstr "Instantané des mouvements"
-
-msgctxt "view:account.move.snapshot.done:"
 msgid "The snapshot has been taken!"
 msgstr "L'instantané a été pris!"
-
-msgctxt "view:account.move.snapshot.start:"
-msgid "Moves Snapshot"
-msgstr "Instantané des mouvements"
 
 msgctxt "view:account.move.snapshot.start:"
 msgid "Take a snapshot of moves"

@@ -1052,10 +1052,6 @@ msgid "Commission"
 msgstr "Commission"
 
 msgctxt "view:commission.aggregated:"
-msgid "Aggregated Commissions"
-msgstr "Commissions agrégées"
-
-msgctxt "view:commission.aggregated:"
 msgid "Total"
 msgstr "Total"
 
@@ -1083,10 +1079,6 @@ msgctxt "view:commission.synthesis.show:"
 msgid "Commissions paid by year"
 msgstr "Commissions payées par année"
 
-msgctxt "view:commission.synthesis.show:"
-msgid "Commissions synthesis"
-msgstr "Synthèse des commissions"
-
 msgctxt "view:commission.synthesis.start:"
 msgid "Select broker fees account"
 msgstr "Sélectionner le compte de frais courtier"
@@ -1106,10 +1098,6 @@ msgstr "Montant"
 msgctxt "view:party.party:"
 msgid "Broker"
 msgstr "Courtier"
-
-msgctxt "view:party.party:"
-msgid "Brokers"
-msgstr "Courtiers"
 
 msgctxt "view:party.party:"
 msgid "Show commissions synthesis"

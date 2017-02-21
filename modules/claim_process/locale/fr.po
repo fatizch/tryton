@@ -142,14 +142,6 @@ msgctxt "field:claim.declare.find_process,party:"
 msgid "Party"
 msgstr "Tiers"
 
-msgctxt "field:claim.loss,benefit_to_deliver:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "field:claim.loss,benefits:"
-msgid "Benefits"
-msgstr "Prestations"
-
 msgctxt "field:process,for_loss_descs:"
 msgid "Loss Description"
 msgstr "Descripteur de préjudice"

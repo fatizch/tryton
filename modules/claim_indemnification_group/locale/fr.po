@@ -498,10 +498,6 @@ msgctxt "view:contract.option.version:"
 msgid "Invisible Benefit"
 msgstr "Prestation invisible"
 
-msgctxt "view:contract.option.version:"
-msgid "Version"
-msgstr "Version"
-
 msgctxt "view:contract.option:"
 msgid "Rules"
 msgstr "Règles"

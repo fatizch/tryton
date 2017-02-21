@@ -162,14 +162,6 @@ msgctxt "view:account.party_balance.line:"
 msgid "Balance"
 msgstr "Compte tiers"
 
-msgctxt "view:account.party_balance.line:"
-msgid "Party Balance Line"
-msgstr "Ligne de compte tiers"
-
-msgctxt "view:account.party_balance:"
-msgid "Balance"
-msgstr "Compte tiers"
-
 msgctxt "view:account.party_balance:"
 msgid "_Refresh"
 msgstr "_Rafraichir"

@@ -190,29 +190,29 @@ msgid "Invoice"
 msgstr "Quittance"
 
 msgctxt ""
-"model:ir.action.act_window.domain,name:account_invoice.act_invoice_out_domain_posted"
-msgid "Posted"
-msgstr "Emis"
-
-msgctxt ""
 "model:ir.action.act_window.domain,name:account_invoice.act_invoice_in_domain_posted"
 msgid "Posted"
 msgstr "Emis"
 
-msgctxt "model:ir.action,name:account_invoice.print"
-msgid "Invoice"
-msgstr "Quittance"
+msgctxt ""
+"model:ir.action.act_window.domain,name:account_invoice.act_invoice_out_domain_posted"
+msgid "Posted"
+msgstr "Emis"
 
 msgctxt "model:ir.action,name:account_invoice.act_invoice_form2"
 msgid "Invoices"
 msgstr "Quittances"
 
-msgctxt "model:ir.action,name:account_invoice.act_invoice_out_form"
-msgid "Customer Invoices"
-msgstr "Quittances"
-
 msgctxt "model:ir.action,name:account_invoice.act_invoice_form"
 msgid "Invoices"
+msgstr "Quittances"
+
+msgctxt "model:ir.action,name:account_invoice.print"
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "model:ir.action,name:account_invoice.act_invoice_out_form"
+msgid "Customer Invoices"
 msgstr "Quittances"
 
 msgctxt "model:ir.action,name:account_invoice.report_invoice"
@@ -224,17 +224,13 @@ msgctxt ""
 msgid "Invoice"
 msgstr "Quittance"
 
-msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoice_out_form"
-msgid "Customer Invoices"
-msgstr "Quittances"
-
 msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoices"
 msgid "Invoices"
 msgstr "Quittances"
 
-msgctxt "selection:account.invoice,state:account_invoice."
-msgid "Validated"
-msgstr "Validée"
+msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoice_out_form"
+msgid "Customer Invoices"
+msgstr "Quittances"
 
 msgctxt "selection:account.invoice,state:account_invoice."
 msgid "Posted"
@@ -244,18 +240,14 @@ msgctxt "selection:account.invoice,state:account_invoice."
 msgid "Canceled"
 msgstr "Annulée"
 
-msgctxt "view:account.invoice:account_invoice."
-msgid "Invoices"
-msgstr "Quittances"
-
-msgctxt "view:account.invoice:account_invoice."
-msgid "Post"
-msgstr "Emettre"
+msgctxt "selection:account.invoice,state:account_invoice."
+msgid "Validated"
+msgstr "Validée"
 
 msgctxt "view:account.invoice:account_invoice."
 msgid "Invoice"
 msgstr "Quittance"
 
-msgctxt "view:account.invoice.line:account_invoice."
-msgid "Invoice Lines"
-msgstr "Lignes de quittance"
+msgctxt "view:account.invoice:account_invoice."
+msgid "Post"
+msgstr "Emettre"

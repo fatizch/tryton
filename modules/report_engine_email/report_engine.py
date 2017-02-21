@@ -197,7 +197,7 @@ class ReportTemplate:
     allow_manual_sending = fields.Boolean('Allow Manual Sending', states={
             'invisible': Eval('output_kind') != 'email',
             },
-        help='Be carefull: Do not exceed the operating system max command '
+        help='Be careful: Do not exceed the operating system max command '
         'line length with your attachments',
         depends=['output_kind'])
     attachments = fields.Many2Many(

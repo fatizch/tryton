@@ -139,10 +139,6 @@ msgid "Check Eligibility"
 msgstr "Vérifier l'éligibilité"
 
 msgctxt "view:claim.service:"
-msgid "Claim Service"
-msgstr "Prestation fournie"
-
-msgctxt "view:claim.service:"
 msgid "Decline Eligibility"
 msgstr "Refuser l'éligibilité"
 

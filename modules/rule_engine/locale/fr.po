@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "selection:rule_engine,type_:"
-msgid "Tool"
-msgstr "Outillage"
-
 msgctxt "error:functional_error:"
 msgid "Number of arguments does not match string content"
 msgstr "Le nombre d'arguments ne correspond pas au contenu"
@@ -1077,6 +1073,10 @@ msgctxt "selection:rule_engine,type_:"
 msgid ""
 msgstr " "
 
+msgctxt "selection:rule_engine,type_:"
+msgid "Tool"
+msgstr "Outillage"
+
 msgctxt "selection:rule_engine.function,type:"
 msgid "Folder"
 msgstr "Dossier"
@@ -1172,10 +1172,6 @@ msgstr "Recalculer"
 msgctxt "view:rule_engine.test_case:"
 msgid "Result"
 msgstr "Résultat"
-
-msgctxt "view:rule_engine.test_case:"
-msgid "Test Case"
-msgstr "Jeu d'essai"
 
 msgctxt "view:rule_engine:"
 msgid "Rule"

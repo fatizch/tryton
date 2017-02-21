@@ -2345,10 +2345,6 @@ msgctxt "view:contract.manage_options:"
 msgid "Add Option"
 msgstr "Souscrire une garantie"
 
-msgctxt "view:contract.manage_options:"
-msgid "Manage Options"
-msgstr "Gérer les Options"
-
 msgctxt "view:contract:"
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
@@ -2426,22 +2422,6 @@ msgid "Void Contract"
 msgstr "Résiliation sans effet"
 
 msgctxt "view:endorsement.contract:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt "view:endorsement.contract:"
-msgid "Draft"
-msgstr "Brouillon"
-
-msgctxt "view:endorsement.contract:"
-msgid "Endorsement"
-msgstr "Avenant"
-
-msgctxt "view:endorsement.contract:"
-msgid "Endorsements"
-msgstr "Avenants"
-
-msgctxt "view:endorsement.contract:"
 msgid "Options"
 msgstr "Options"
 
@@ -2481,25 +2461,9 @@ msgctxt "view:endorsement.part:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "view:endorsement.part:"
-msgid "Endorsements"
-msgstr "Avenants"
-
-msgctxt "view:endorsement.part:"
-msgid "Templates"
-msgstr "Avenants unitaires"
-
 msgctxt "view:endorsement.start.preview_changes:"
 msgid "Changes"
 msgstr "Modifications"
-
-msgctxt "view:endorsement.start.select_endorsement:"
-msgid "Endorsement Summary"
-msgstr "Résumé de l'avenant"
-
-msgctxt "view:endorsement.start.select_endorsement:"
-msgid "Select Endorsement"
-msgstr "Sélection de l'avenant"
 
 msgctxt "view:endorsement.start.select_endorsement:"
 msgid ""
@@ -2534,18 +2498,6 @@ msgstr "Annuler"
 msgctxt "view:endorsement:"
 msgid "Delete"
 msgstr "Supprimer"
-
-msgctxt "view:endorsement:"
-msgid "Endorsement Group"
-msgstr "Avenant"
-
-msgctxt "view:endorsement:"
-msgid "Endorsement Groups"
-msgstr "Avenants"
-
-msgctxt "view:endorsement:"
-msgid "Generated Endorsements"
-msgstr "Avenants générés"
 
 msgctxt "view:endorsement:"
 msgid "Open Contract"

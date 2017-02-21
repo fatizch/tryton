@@ -93,9 +93,5 @@ msgid "Resume Current Process"
 msgstr "Relancer le processus courant"
 
 msgctxt "view:endorsement:"
-msgid "Endorsements"
-msgstr "Avenants"
-
-msgctxt "view:endorsement:"
 msgid "Preview Changes"
 msgstr "Prévisualiser les changements"

@@ -281,14 +281,6 @@ msgid "Reattach"
 msgstr "Rattacher"
 
 msgctxt "view:document.reception:"
-msgid "Document Received"
-msgstr "Document reçu"
-
-msgctxt "view:document.reception:"
-msgid "Document Reception"
-msgstr "Réception des documents"
-
-msgctxt "view:document.reception:"
 msgid "Execute"
 msgstr "Traiter"
 

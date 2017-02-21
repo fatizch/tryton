@@ -267,13 +267,5 @@ msgid "Documents"
 msgstr "Documents"
 
 msgctxt "view:document.request:"
-msgid "Document Request"
-msgstr "Demande de Documents"
-
-msgctxt "view:document.request:"
-msgid "Requests"
-msgstr "Demandes"
-
-msgctxt "view:document.request:"
 msgid "Send Request"
 msgstr "Envoyer la demande"
