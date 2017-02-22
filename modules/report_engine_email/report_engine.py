@@ -17,7 +17,7 @@ from trytond.pyson import Eval, Or
 from trytond.sendmail import sendmail, sendmail_transactional
 from trytond.wizard import Button, StateAction
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, coog_string
 
 
 __metaclass__ = PoolMeta
@@ -85,7 +85,7 @@ class ReportGenerate:
 
     @classmethod
     def generate_email(self, selected_letter, cur_object, report_context):
-        if selected_letter.attachments:
+        if selected_letter.attachments or selected_letter.images:
             attachments = sum([tmpl._generate_reports(
                  [cur_object], {}) for tmpl in
                     selected_letter.attachments], [])
@@ -101,10 +101,13 @@ class ReportGenerate:
                         selected_letter.genshi_evaluated_email_body.encode(
                             'utf-8'))
                 for i, attachment in enumerate(attachments):
+                    at_name = attachment['report_name']
                     part = MIMEApplication(
-                        attachment['data'],
-                        Name='%s_%s' % (i, attachment['report_name'])
-                        )
+                        attachment['data'])
+                    part.add_header('Content-Disposition', 'attachment; '
+                        'filename="%s_%s.%s"' % (i,
+                            coog_string.slugify(at_name.split('.')[0]),
+                            at_name.split('.')[1]))
                     msg.attach(part)
                 for image in selected_letter.images:
                     img = MIMEImage(image.image)
@@ -262,6 +265,7 @@ class ReportTemplate:
             self.email_dest = ''
             self.email_sender = ''
             self.attachments = []
+            self.version = []
         super(ReportTemplate, self).on_change_output_kind()
 
     @fields.depends('output_kind')
