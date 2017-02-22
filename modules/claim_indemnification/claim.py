@@ -310,7 +310,9 @@ class ClaimService:
         details = [x for indemn in self.indemnifications for x
             in indemn.details]
         if not details and self.loss.end_date:
-            return self.loss.end_date < self.get_deductible_end_date()
+            deductible_end_date = self.get_deductible_end_date() or \
+                coog_date.add_day(self.loss.start_date, -1)
+            return self.loss.end_date < deductible_end_date
         if not self.loss.end_date:
             return False
         return all([x.kind == 'deductible' for x in details])
@@ -322,7 +324,9 @@ class ClaimService:
         self.annuity_frequency = benefit.benefit_rules[0].annuity_frequency
         self.indemnifications = []
         if self.loss.start_date and self.loss.end_date:
-            if self.loss.end_date < self.get_deductible_end_date():
+            deductible_end_date = self.get_deductible_end_date() or \
+                coog_date.add_day(self.loss.start_date, -1)
+            if self.loss.end_date < deductible_end_date:
                 indemnification = Indemnification(
                     start_date=self.loss.start_date,
                     end_date=self.loss.end_date
