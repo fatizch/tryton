@@ -42,7 +42,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     request_date = fields.Date('Request Date', states={'readonly': True})
     received = fields.Function(
         fields.Boolean('Received', depends=['attachment', 'reception_date']),
-        'on_change_with_received', setter='set_received',
+        'on_change_with_received', setter='setter_void',
         searcher='search_received')
     request = fields.Many2One('document.request', 'Document Request',
         ondelete='CASCADE', select=True)
@@ -178,10 +178,9 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
         else:
             self.reception_date = None
 
-    @fields.depends('attachment', 'reception_date')
+    @fields.depends('reception_date')
     def on_change_with_reception_date(self, name=None):
-        return self.reception_date if (self.reception_date and
-            self.attachment) else utils.today()
+        return self.reception_date if self.reception_date else utils.today()
 
     def get_rec_name(self, name=None):
         return self.document_desc.name if self.document_desc else ''
@@ -201,13 +200,6 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
                 k for k, v in cls._fields['for_object'].selection]:
             return ''
         return needed_by
-
-    @classmethod
-    def set_received(cls, request_lines, name, value):
-        if value:
-            cls.write(request_lines, {'reception_date': utils.today()})
-        else:
-            cls.write(request_lines, {'reception_date': None})
 
     @classmethod
     def search_received(cls, name, domain):
