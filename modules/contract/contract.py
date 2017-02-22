@@ -1162,7 +1162,6 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             self.contract_number = self.get_new_contract_number()
         # if contract was hold remove sub status reason
         self.sub_status = None
-        self.save()
 
     def get_policy_owner(self, at_date=None):
         '''
@@ -1186,6 +1185,8 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         self.before_activate()
         self.do_activate()
         self.after_activate()
+        self.save()
+
         Event.notify_events([self], event)
 
     def do_activate(self):

@@ -20,10 +20,12 @@ class Contract:
     __name__ = 'contract'
 
     def init_sepa_mandate(self):
+        # Force refresh of link as contract version could be outdated
+        self.billing_information.contract = self
         self.billing_information.init_sepa_mandate()
 
-    def before_activate(self):
-        super(Contract, self).before_activate()
+    def after_activate(self):
+        super(Contract, self).after_activate()
         self.init_sepa_mandate()
 
     @classmethod
@@ -128,6 +130,18 @@ class ContractBillingInformation:
         return (super(ContractBillingInformation, cls)._export_light() |
             set(['sepa_mandate']))
 
+    def new_mandate(self, type_, scheme, state):
+        Mandate = Pool().get('account.payment.sepa.mandate')
+        return Mandate(
+            party=self.contract.payer,
+            account_number=self.direct_debit_account.numbers[0],
+            type=type_,
+            scheme=scheme,
+            signature_date=(self.contract.signature_date or
+                self.contract.start_date),
+            company=self.contract.company,
+            state=state)
+
     def init_sepa_mandate(self):
         pool = Pool()
         Mandate = pool.get('account.payment.sepa.mandate')
@@ -146,16 +160,7 @@ class ContractBillingInformation:
             self.sepa_mandate = mandate
             self.save()
             return
-        mandate = Mandate(
-            party=self.contract.payer,
-            account_number=self.direct_debit_account.numbers[0],
-            type='recurrent',
-            scheme='CORE',
-            signature_date=(self.contract.signature_date or
-                self.contract.start_date),
-            company=self.contract.company,
-            state='validated')
-        self.sepa_mandate = mandate
+        self.sepa_mandate = self.new_mandate('recurrent', 'CORE', 'validated')
         self.save()
 
     @classmethod
