@@ -718,6 +718,10 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
                     'invisible': (Eval('underwriting_state') == 'draft')
                     | In(Eval('state'), ['abandoned', 'finalized']),
                     }})
+        cls._error_messages.update({
+                'result_wait_expected': 'The underwriting result \'%s\' should'
+                ' be in \'waiting\' state instead of \'%s\''
+                })
 
     @classmethod
     def __post_setup__(cls):
@@ -733,15 +737,21 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
     def write(cls, *args):
         params = iter(args)
         finalized, abandoned = [], []
-        for instances, values in zip(params, params):
-            if 'state' not in values:
-                continue
-            if values['state'] == 'finalized':
-                assert all(x.state == 'waiting' for x in instances)
-                finalized += instances
-            elif values['state'] == 'abandoned':
-                assert all(x.state == 'waiting' for x in instances)
-                abandoned += instances
+        with model.error_manager():
+            for instances, values in zip(params, params):
+                if 'state' not in values:
+                    continue
+                if values['state'] in ['finalized', 'abandoned']:
+                    for instance in instances:
+                        if instance.state != 'waiting':
+                            cls.append_functional_error(
+                                'result_wait_expected', (instance.rec_name,
+                                    coog_string.translate_value(
+                                        instance, 'state')))
+                if values['state'] == 'finalized':
+                    finalized += instances
+                elif values['state'] == 'abandoned':
+                    abandoned += instances
         super(UnderwritingResult, cls).write(*args)
         if finalized:
             cls.do_finalize(finalized)
@@ -797,13 +807,17 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
 
     @model.CoogView.button_change('decision_date', 'final_decision', 'state')
     def finalize(self):
-        assert self.state == 'waiting'
+        if self.state != 'waiting':
+            self.__class__.raise_user_error('result_wait_expected',
+                (self.rec_name, coog_string.translate_value(self, 'state')))
         self.decision_date = utils.today()
         self.state = 'finalized'
 
     @model.CoogView.button_change('decision_date', 'state')
     def abandon(self):
-        assert self.state == 'waiting'
+        if self.state != 'waiting':
+            self.__class__.raise_user_error('result_wait_expected',
+                (self.rec_name, coog_string.translate_value(self, 'state')))
         self.decision_date = utils.today()
         self.state = 'abandoned'
 

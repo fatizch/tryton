@@ -2,6 +2,12 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:underwriting.result:"
+msgid "The underwriting result '%s' should be"
+" in 'waiting' state instead of '%s'"
+msgstr "La décision assureur '%s' devrait être en 'attente'"
+" et non '%s'"
+
 msgctxt "error:underwriting.document_rule:"
 msgid "There may be only one document rule per underwriting type"
 msgstr ""
