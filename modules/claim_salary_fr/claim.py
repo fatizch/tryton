@@ -250,6 +250,8 @@ class ClaimLoss:
     def get_salary_reference_date(self):
         if self.loss_desc_kind == 'ltd':
             return self.initial_std_start_date
+        if self.is_a_relapse:
+            return self.claim.losses[0].start_date
         return self.start_date
 
 
