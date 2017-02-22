@@ -15,6 +15,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="std_start_date"/>
         <label name="std_end_date"/>
         <field name="std_end_date"/>
+        <newline/>
         <label name="initial_std_start_date"/>
         <field name="initial_std_start_date"/>
         <label name="ltd_start_date"/>

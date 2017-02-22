@@ -9,8 +9,10 @@ this repository contains the full copyright notices and license terms. -->
         <field name="std_end_date"/>
         <label name="return_to_work_date"/>
         <field name="return_to_work_date"/>
+        <newline/> 
         <label name="initial_std_start_date"/>
         <field name="initial_std_start_date"/>
+        <newline/> 
         <label name="ltd_start_date"/>
         <field name="ltd_start_date"/>
         <label name="ltd_end_date"/>
