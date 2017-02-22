@@ -24,10 +24,14 @@ coog_test_manual() { # interactively launch tests - [module *]
         unset TRYTOND_CONFIG
         unset DB_NAME
         unset TRYTOND_CACHE_CLASS
-        DB_CACHE="$COOG_TMP/coog-test-manual-db-cache"; export DB_CACHE
+
+        local forced
+        forced=$DB_CACHE
+        [ -z "$DB_CACHE" ] && DB_CACHE="$COOG_TMP/coog-test-manual-db-cache"
         coog_server_clearcache
         run-tests.py -c "$COOG_CONF_TEST" -vv -m "$@"
-        rm -rf "$DB_CACHE"
+
+        [ -z "$forced" ] && rm -rf "$DB_CACHE"
 }
 
 _coog_test_modules() { # list all linked modules
