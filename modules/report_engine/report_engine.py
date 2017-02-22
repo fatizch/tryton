@@ -1003,7 +1003,8 @@ class ReportCreate(Wizard):
             'model': instance.__name__,
             'doc_template': [template.id],
             'party': self.select_template.recipient.id,
-            'address': self.select_template.recipient_address.id,
+            'address': self.select_template.recipient_address.id if \
+                self.select_template.recipient_address else None,
             'sender': sender.id if sender else None,
             'sender_address': sender_address.id if sender_address else None,
             'origin': None,
