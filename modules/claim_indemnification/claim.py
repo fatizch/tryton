@@ -303,6 +303,7 @@ class ClaimService:
         if not args:
             args = {}
             self.init_dict_for_rule_engine(args)
+        if 'date' not in args:
             args['date'] = self.loss.start_date
         return self.benefit.calculate_deductible(args)
 
