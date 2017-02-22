@@ -252,7 +252,8 @@ class ClaimDeclareFindProcess(ProcessStart):
         selected = False
         for claim in available_claims:
             element = Element.from_claim(claim)
-            if ((not force_claim and not selected and claim.status == 'open')
+            if ((not force_claim and not selected and claim.status in ('open', 
+                        'reopened'))
                     or (force_claim and claim.id == force_claim)):
                 selected = True
                 element['select'] = True
