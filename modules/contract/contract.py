@@ -671,6 +671,11 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         return [tables['activation_history'][None][0].end_date]
 
     @classmethod
+    def order_initial_start_date(cls, tables):
+        cls.add_activation_history_tables(tables)
+        return [tables['activation_history'][None][0].min_start]
+
+    @classmethod
     def build_activation_history_query(cls, activation_history,
             today=None, where_clause=None):
         today = today or utils.today()
@@ -690,6 +695,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         query = win_query.select(win_query.id,
             win_query.start_date,
             win_query.end_date,
+            win_query.min_start,
             where=(
                 # case 1: today is inside a period
                 ((win_query.start_date <= today) &

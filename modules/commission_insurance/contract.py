@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 
+from sql.operators import Concat
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
 from trytond.cache import Cache, freeze
@@ -181,3 +182,29 @@ class Contract:
     @classmethod
     def search_broker_party(cls, name, clause):
         return [('agent.party',) + tuple(clause[1:])]
+
+    @staticmethod
+    def order_broker_party(tables):
+        broker_party_order = tables.get('broker_party_order_tables')
+        if broker_party_order:
+            return [broker_party_order[None][0].order]
+        pool = Pool()
+        table, _ = tables[None]
+        contract = tables.get('contract')
+        if contract is None:
+            contract = pool.get('contract').__table__()
+        party_relation = pool.get('party.party').__table__()
+        agent_relation = pool.get('commission.agent').__table__()
+
+        query = contract.join(agent_relation, condition=(
+                contract.agent == agent_relation.id)
+                ).join(party_relation, condition=(
+                        agent_relation.party == party_relation.id)).select(
+                            contract.id.as_('contract'),
+                            Concat(party_relation.code,
+                                party_relation.name).as_('order'))
+
+        tables['broker_party_order_tables'] = {
+            None: (query, (query.contract == table.id))
+            }
+        return [query.order]
