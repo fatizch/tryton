@@ -218,7 +218,7 @@ class BatchRootNoSelect(BatchRoot):
 
     @classmethod
     def select_ids(cls, **kwargs):
-        return [[0]]
+        return [(0,)]
 
 
 class NoSelectBatchExample(BatchRootNoSelect):
