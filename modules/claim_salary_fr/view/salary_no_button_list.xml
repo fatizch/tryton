@@ -8,4 +8,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="salary_bonus"/>
     <field name="net_salary"/>
     <field name="net_salary_bonus"/>
+    <field name="has_contributions"/>
 </tree>

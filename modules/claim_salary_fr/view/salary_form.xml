@@ -23,7 +23,6 @@ this repository contains the full copyright notices and license terms. -->
         <field name="tb_contributions" readonly="1" no_command="1"/>
         <field name="tc_contributions" readonly="1" no_command="1"/>
     </group>
-    <button name="compute_net_salaries" string="Compute net salaries" colspan="4"/>
     <field name="net_limit_mode" invisible="1"/>
     <field name="is_readonly" invisible="1"/>
 </form>

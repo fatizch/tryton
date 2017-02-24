@@ -12,6 +12,7 @@ import wizard
 
 def register():
     Pool.register(
+        claim.Claim,
         claim.ClaimLoss,
         claim.ClaimService,
         claim.Salary,
@@ -24,9 +25,10 @@ def register():
         rule_engine.RuleEngine,
         extra_data.ExtraData,
         wizard.StartSetContributions,
+        wizard.StartSetSalaries,
         wizard.ContributionsView,
         benefit.ManageOptionBenefitsDisplayer,
         module='claim_salary_fr', type_='model')
     Pool.register(
-        wizard.ComputeNetSalaries,
+        wizard.SalariesComputation,
         module='claim_salary_fr', type_='wizard')

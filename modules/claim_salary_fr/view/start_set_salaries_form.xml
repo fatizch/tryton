@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<tree editable="bottom">
-    <field name="extra_data" width="300"/>
-    <field name="fixed_amount" width="200"/>
-</tree>
+<form>
+    <field name="net_limit_mode" invisible="1"/>
+    <field name="periods" view_ids="claim_salary_fr.gross_salary_view_list" colspan="4"/>
+</form>

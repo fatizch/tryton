@@ -1,3 +1,4 @@
+* Ajout de l'assistant de salaires permettant de saisir les salaires et de calculer les salaires nets.
 * Les contributions à montant fixe ne sont plus liée à des tranches de salaire
 * Evolution de la méthode de récuperation des taux par tranche: ajout d'une liste optionnelle de taux auxquels se limiter
 * Ajout d'un tutoriel sur le paramétrage du calcul du salaire net

@@ -1,22 +1,31 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Not, Eval, Bool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.transaction import Transaction
 from trytond.modules.coog_core import model, fields
 
 
 __all__ = [
-    'ComputeNetSalaries',
     'StartSetContributions',
     'ContributionsView',
+    'StartSetSalaries',
+    'SalariesComputation',
     ]
+
+
+class StartSetSalaries(model.CoogView):
+    'Start Set Salaries'
+    __name__ = 'claim.start_set_salaries'
+
+    periods = fields.One2Many('claim.salary', None, 'Periods',
+        order=[('from_date', 'ASC')])
+    net_limit_mode = fields.Boolean('Net Limit Mode')
 
 
 class ContributionsView(model.CoogView):
     'Contributions View'
-    __name__ = 'claim_salary_fr.contributions_view'
+    __name__ = 'claim.contributions_view'
 
     extra_data = fields.Many2One('extra_data', 'Contributions',
         domain=[('kind', '=', 'salary')])
@@ -29,91 +38,144 @@ class ContributionsView(model.CoogView):
 class StartSetContributions(model.CoogView):
     'Start Set Contributions'
     __metaclass__ = PoolMeta
-    __name__ = 'claim_salary_fr.start_set_contributions'
+    __name__ = 'claim.start_set_contributions'
 
-    rates = fields.One2Many('claim_salary_fr.contributions_view',
-        None, 'Rates')
-    fixed_amounts = fields.One2Many('claim_salary_fr.contributions_view',
-        None, 'Fixed Amounts')
+    rates = fields.One2Many('claim.contributions_view', None, 'Rates')
+    fixed_amounts = fields.One2Many('claim.contributions_view', None,
+        'Fixed Amounts')
     rule = fields.Many2One('rule_engine', 'Rule', states={
            'invisible': True})
-    salary = fields.Many2One('claim.salary', 'Salary', states={
-           'invisible': True})
-    propagate = fields.Boolean('Propagate on salaries',
-        help="Propagate on each salaries with a defined gross salary")
     periods = fields.One2Many('claim.salary', None, 'Periods',
-        order=[('from_date', 'ASC')], states={
-            'invisible': Not(Bool(Eval('propagate'))),
-            })
+        order=[('from_date', 'ASC')])
 
 
-class ComputeNetSalaries(Wizard):
-    'Compute net salaries'
-    __metaclass__ = PoolMeta
-    __name__ = 'claim_salary_fr.compute_net_salaries'
+class SalariesComputation(Wizard):
+    'Salaries Computation Wizard'
+    __name__ = 'claim.salaries_computation'
 
-    start = StateView('claim_salary_fr.start_set_contributions',
-        'claim_salary_fr.start_set_contributions_view_form', [
-            Button('End', 'end', 'tryton-cancel'),
-            Button('Compute net salaries', 'process',
-                'tryton-go-next', default=True)])
+    start = StateView('claim.start_set_salaries',
+        'claim_salary_fr.start_set_salaries_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Next', 'process', 'tryton-go-next', default=True)])
     process = StateTransition()
+    net_salary = StateView('claim.start_set_contributions',
+        'claim_salary_fr.start_set_contributions_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Previous', 'start', 'tryton-go-previous'),
+            Button('Compute net salaries', 'set_contributions',
+                'tryton-go-next'),
+            Button('Compute and finish', 'compute', 'tryton-go-next',
+                default=True)])
+    compute = StateTransition()
+    set_contributions = StateTransition()
 
-    def default_start(self, name):
-        pool = Pool()
+    @classmethod
+    def __setup__(cls):
+        super(SalariesComputation, cls).__setup__()
+        cls._error_messages.update({
+                'no_delivered_services': 'No service can be delivered for this'
+                ' claim',
+                'no_rule': 'No net salary computation rule has been defined',
+                'indemnifications': 'This claim has indemnification periods, '
+                'you may have to cancel them or recompute if salaries are '
+                'modifed'
+                })
+
+    def get_rule_service(self):
+        assert Transaction().context.get('active_model') == 'claim'
         selected_id = Transaction().context.get('active_id')
-        assert Transaction().context.get('active_model') == 'claim.salary'
-        salary = pool.get('claim.salary')(selected_id)
-        delivered = salary.delivered_service
-        rule = delivered.benefit.benefit_rules[0].option_benefit_at_date(
-            delivered.option,
-            delivered.loss.start_date).net_calculation_rule.rule
+        claim = Pool().get('claim')(selected_id)
+        services = claim.delivered_services
+        if services:
+            is_indemnificated = any(x.indemnifications for x in services)
+            net_limit_mode = False
+            rule = None
+            for service in services:
+                for benefit_rule in service.benefit.benefit_rules:
+                    benefit_at_date = benefit_rule.option_benefit_at_date(
+                        service.option, service.loss.start_date)
+                    if benefit_at_date.net_salary_mode:
+                        net_limit_mode = True
+                        rule = benefit_at_date.net_calculation_rule.rule
+                        break
+                if net_limit_mode:
+                    break
+            return {
+                'is_indemnificated': is_indemnificated,
+                'delivered_service': services[0],
+                'net_limit_mode': net_limit_mode,
+                'rule': rule,
+                }
+        return None
 
-        start_dict = {
-            'rule': rule.id,
-            'salary': selected_id,
-            'propagate': True,
-            'periods': [x.id for x in delivered.salary],
-            'rates': salary.get_rates_per_range(),
-            'fixed_amounts': salary.get_rates_per_range(fixed=True),
+    def default_start(self, fields):
+        delivered = self.get_rule_service()
+        if not delivered:
+            self.raise_user_error('no_delivered_services')
+        if delivered['is_indemnificated']:
+            self.raise_user_warning('indemnifications', 'indemnifications')
+        net_limit_mode = delivered['net_limit_mode']
+        delivered_service = delivered['delivered_service']
+        return {
+            'periods': [s.id for s in delivered_service.salary],
+            'net_limit_mode': net_limit_mode,
             }
-        return start_dict
 
     def transition_process(self):
-        to_calculate = []
-        if self.start.propagate:
-            salaries = self.start.periods
-            for salary in salaries:
-                if not salary.gross_salary:
-                    continue
-                for rate in self.start.rates:
-                    salary.ta_contributions[rate.extra_data.name] = rate.ta
-                    salary.tb_contributions[rate.extra_data.name] = rate.tb
-                    salary.tc_contributions[rate.extra_data.name] = rate.tc
-                for rate in self.start.fixed_amounts:
-                    salary.fixed_contributions[rate.extra_data.name] = \
-                        rate.fixed_amount
-                to_calculate.append(salary)
+        pool = Pool()
+        Salary = pool.get('claim.salary')
+        Salary.save(self.start.periods)
+        if self.start.net_limit_mode and self.start.periods[0]:
+            return 'net_salary'
         else:
-            if not self.start.salary.gross_salary:
-                return 'end'
-            for rate in self.start.rates:
-                self.start.salary.ta_contributions[
-                    rate.extra_data.name] = rate.ta
-                self.start.salary.tb_contributions[
-                    rate.extra_data.name] = rate.tb
-                self.start.salary.tc_contributions[
-                    rate.extra_data.name] = rate.tc
-            for rate in self.start.fixed_amounts:
-                self.start.salary.fixed_contributions[rate.extra_data.name] = \
-                    rate.fixed_amount
-            to_calculate.append(self.start.salary)
+            return 'end'
 
-        # Needed to save properly the extra datas
+    def default_net_salary(self, fields):
+        delivered_rule = self.get_rule_service()
+        if not delivered_rule:
+            self.raise_user_error('no_delivered_services')
+        delivered_service = delivered_rule['delivered_service']
+        rule = delivered_rule['rule']
+        if not rule:
+            self.raise_user_error('no_rule')
+        salaries = delivered_service.salary
+        return {
+            'rule': rule.id,
+            'periods': [s.id for s in salaries],
+            'rates': salaries[0].get_rates_per_range(),
+            'fixed_amounts': salaries[0].get_rates_per_range(fixed=True)
+            }
+
+    def update_salary(self):
+        to_calculate = []
+        to_empty = []
+        for salary in self.net_salary.periods:
+            if not salary.gross_salary:
+                if salary.net_salary:
+                    to_empty.append(salary)
+                continue
+            for rate in self.net_salary.rates:
+                salary.ta_contributions[rate.extra_data.name] = rate.ta
+                salary.tb_contributions[rate.extra_data.name] = rate.tb
+                salary.tc_contributions[rate.extra_data.name] = rate.tc
+            for rate in self.net_salary.fixed_amounts:
+                salary.fixed_contributions[rate.extra_data.name] = \
+                    rate.fixed_amount
+            to_calculate.append(salary)
         for salary in to_calculate:
             salary.ta_contributions = salary.ta_contributions
             salary.tb_contributions = salary.tb_contributions
             salary.tc_contributions = salary.tc_contributions
             salary.fixed_contributions = salary.fixed_contributions
             salary.calculate_net_salary()
+        if to_empty:
+            Salary = Pool().get('claim.salary')
+            Salary.write(to_empty, {'net_salary': None})
+
+    def transition_set_contributions(self):
+        self.update_salary()
+        return 'net_salary'
+
+    def transition_compute(self):
+        self.update_salary()
         return 'end'

@@ -45,6 +45,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">salary_no_button_list</field>
         </record>
+        <record model="ir.ui.view" id="gross_salary_view_list">
+            <field name="model">claim.salary</field>
+            <field name="type">tree</field>
+            <field name="name">gross_salary_list</field>
+        </record>
         <record model="ir.ui.view" id="claim_service_with_salary_view_form">
             <field name="model">claim.service</field>
             <field name="type">form</field>

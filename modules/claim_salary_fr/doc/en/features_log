@@ -1,3 +1,4 @@
+* Add salaries wizard which allows to enter salaries and compute net salaries
 * Fixed amount contributions are no longer related to salary ranges
 * Review rates per range retrieval method: add an optional rates list to be limited
 * Add tutorial on how to parameter coog to calculate net salary

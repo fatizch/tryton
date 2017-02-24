@@ -4,10 +4,7 @@ this repository contains the full copyright notices and license terms. -->
 <form>
     <field name="rates" colspan="3" view_ids="claim_salary_fr.contributions_view_list"/>
     <field name="fixed_amounts" colspan="1" view_ids="claim_salary_fr.fixed_contributions_view_list"/>
-    <label name="propagate"/>
-    <field name="propagate"/>
     <newline/>
     <field name="periods" colspan="4" view_ids="claim_salary_fr.salary_no_button_view_list"/>
     <field name="rule" invisible="1"/>
-    <field name="salary" invisible="1"/>
 </form>

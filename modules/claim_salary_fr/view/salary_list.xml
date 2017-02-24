@@ -1,14 +1,13 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<tree editable="bottom">
+<tree>
     <field name="from_date"/>
     <field name="to_date"/>
     <field name="gross_salary" sum="Total Gross Salary"/>
     <field name="salary_bonus" sum="Total Bonus Salary"/>
     <field name="net_salary" sum="Total Net Salary"/>
     <field name="net_salary_bonus" sum="Total Net Salary Bonuses"/>
-    <button name="compute_net_salaries" string="Compute net salaries"/>
     <field name="net_limit_mode" tree_invisible="1"/>
     <field name="is_readonly" tree_invisible="1"/>
     <field name="color" tree_invisible="1"/>

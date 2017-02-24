@@ -3,28 +3,36 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+         <!-- ##################### -->
+        <!-- # Salaries Wizard # -->
         <!-- ##################### -->
-        <!-- # Compute net salaries # -->
-        <!-- ##################### -->
-        <record model="ir.action.wizard" id="act_compute_net_salaries">
-            <field name="name">Compute net salaries</field>
-            <field name="wiz_name">claim_salary_fr.compute_net_salaries</field>
+        <record model="ir.action.wizard" id="salaries_wizard">
+            <field name="name">Salaries Computation Wizard</field>
+            <field name="wiz_name">claim.salaries_computation</field>
+        </record>
+        <!-- ########################### -->
+        <!-- # Start Set Salaries # -->
+        <!-- ########################### -->
+        <record model="ir.ui.view" id="start_set_salaries_view_form">
+            <field name="model">claim.start_set_salaries</field>
+            <field name="type">form</field>
+            <field name="name">start_set_salaries_form</field>
         </record>
         <!-- ########################### -->
         <!-- # Start Set Contributions # -->
         <!-- ########################### -->
         <record model="ir.ui.view" id="start_set_contributions_view_form">
-            <field name="model">claim_salary_fr.start_set_contributions</field>
+            <field name="model">claim.start_set_contributions</field>
             <field name="type">form</field>
             <field name="name">start_set_contributions_form</field>
         </record>
         <record model="ir.ui.view" id="contributions_view_list">
-            <field name="model">claim_salary_fr.contributions_view</field>
+            <field name="model">claim.contributions_view</field>
             <field name="type">tree</field>
             <field name="name">contributions_list</field>
         </record>
         <record model="ir.ui.view" id="fixed_contributions_view_list">
-            <field name="model">claim_salary_fr.contributions_view</field>
+            <field name="model">claim.contributions_view</field>
             <field name="type">tree</field>
             <field name="name">fixed_contributions_list</field>
         </record>

@@ -7,13 +7,14 @@ from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, Or
-from trytond.model import Unique
+from trytond.model import Unique, ModelView
 
 from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
+    'Claim',
     'ClaimLoss',
     'ClaimService',
     'Salary',
@@ -113,17 +114,14 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
     color = fields.Function(
         fields.Char('Color', depends=['is_readonly']),
         'get_color')
+    has_contributions = fields.Function(
+        fields.Boolean('Has Contributions'),
+        'get_has_contributions')
 
     @classmethod
     def __setup__(cls):
         super(Salary, cls).__setup__()
         cls._order = [('from_date', 'DESC')]
-        cls._buttons.update({
-                'compute_net_salaries': {
-                    'invisible': Or(
-                        ~Bool(Eval('gross_salary')),
-                        ~Bool(Eval('net_limit_mode')))}
-                })
 
     @classmethod
     def view_attributes(cls):
@@ -136,11 +134,6 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
         if self.is_readonly:
             return 'grey'
         return 'black'
-
-    @classmethod
-    @model.CoogView.button_action('claim_salary_fr.act_compute_net_salaries')
-    def compute_net_salaries(cls, salaries):
-        pass
 
     def get_is_readonly(self, name):
         periods = self.delivered_service.calculate_salaries_period_dates()
@@ -199,6 +192,13 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
                 }
         return sorted(tables.values(),
             key=lambda x: ExtraData(x['extra_data']).name)
+
+    @fields.depends('ta_contributions', 'tb_contributions', 'tc_contributions',
+        'fixed_contributions')
+    def get_has_contributions(self, name=None):
+        return self.gross_salary and (self.ta_contributions or
+                self.tb_contributions or self.tc_contributions or
+                self.fixed_contributions)
 
     @fields.depends('delivered_service')
     def get_net_limit_mode(self, name=None):
@@ -260,7 +260,7 @@ class ClaimService:
     __name__ = 'claim.service'
 
     salary = fields.One2Many('claim.salary', 'delivered_service', 'Salary',
-        order=[('from_date', 'DESC')], delete_missing=True)
+        order=[('from_date', 'DESC')], delete_missing=True, readonly=True)
     gross_salary = fields.Function(
         fields.Numeric('Gross Salary', digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
@@ -442,3 +442,20 @@ class ClaimService:
         for cur_salary in self.salary:
             res += (getattr(cur_salary, name, 0) or 0)
         return res
+
+
+class Claim:
+    __metaclass__ = PoolMeta
+    __name__ = 'claim'
+
+    @classmethod
+    def __setup__(cls):
+        super(Claim, cls).__setup__()
+        cls._buttons.update({
+                'launch_salaries_wizard': {},
+                })
+
+    @classmethod
+    @ModelView.button_action('claim_salary_fr.salaries_wizard')
+    def launch_salaries_wizard(cls, claims):
+        pass
