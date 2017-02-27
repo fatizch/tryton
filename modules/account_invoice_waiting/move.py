@@ -21,6 +21,8 @@ class Move:
         Period = pool.get('account.period')
         company = Transaction().context.get('company')
         lines = [l for l in self.lines if l.account.waiting_for_account]
+        if not lines:
+            return None
 
         move = Move()
         move.journal = self.journal
