@@ -283,7 +283,11 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls.rec_name.string = 'Number'
-        cls.__rpc__.update({'ws_subscribe_contracts': RPC(readonly=False)})
+        cls.__rpc__.update({
+                'ws_subscribe_contracts': RPC(readonly=False),
+                'calculate': RPC(readonly=False, instantiate=0),
+                'activate_contract': RPC(readonly=False, instantiate=0),
+                })
         cls._buttons.update({
                 'option_subscription': {},
                 'button_change_start_date': {
@@ -747,6 +751,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             self.extra_datas = self.extra_datas
             return
 
+        self.init_from_product(self.product, self.start_date)
         options = list(self.options)
         available_coverages = self.get_coverages(self.product)
         if options:
