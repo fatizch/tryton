@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond import backend
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import model, fields, utils
 
@@ -20,6 +20,29 @@ class Invoice:
     def __setup__(cls):
         super(Invoice, cls).__setup__()
         cls.business_kind.selection.append(('claim_invoice', 'Claim Invoice'))
+
+    @classmethod
+    def cancel(cls, invoices):
+        Indemnification = Pool().get('claim.indemnification')
+        super(Invoice, cls).cancel(invoices)
+        claim_invoices = [i for i in invoices if i.business_kind ==
+            'claim_invoice']
+        cancelled_indemnifications = []
+        unpaid_indemnifications = []
+        for invoice in claim_invoices:
+            for detail in [d for l in invoice.lines for d in l.claim_details]:
+                if detail.indemnification.status == 'cancelled':
+                    cancelled_indemnifications.append(detail.indemnification)
+                elif detail.indemnification.status == 'paid':
+                    unpaid_indemnifications.append(detail.indemnification)
+        cancelled_indemnifications = list(set(cancelled_indemnifications))
+        unpaid_indemnifications = list(set(unpaid_indemnifications))
+        if cancelled_indemnifications:
+            Indemnification.write(cancelled_indemnifications,
+                {'status': 'cancel_controlled'})
+        if unpaid_indemnifications:
+            Indemnification.write(unpaid_indemnifications,
+                {'status': 'controlled'})
 
     def _get_tax_context(self):
         context = super(Invoice, self)._get_tax_context()
