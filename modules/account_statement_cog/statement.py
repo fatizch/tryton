@@ -129,7 +129,9 @@ class Statement(export.ExportImportMixin):
     def on_change_lines(self):
         # Workaround for issue #2743 : assume that we are in a recursion if
         # last line amount is None
-        if self.lines and self.lines[-1].amount is None:
+        # Edited for issue #5830: Handle case where an empty line
+        # (with an amount of 0) is placed at the end of the list
+        if any(x.amount is None for x in self.lines):
             return
         super(Statement, self).on_change_lines()
 
