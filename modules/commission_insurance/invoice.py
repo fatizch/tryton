@@ -289,6 +289,10 @@ class Invoice:
 
         super(Invoice, cls).cancel(invoices)
 
+        if not any(invoice.business_kind in ('broker_invoice',
+                'insurer_invoice') for invoice in invoices):
+            return
+
         for sub_invoices in grouped_slice(invoices):
             # Remove link to invoice_line in commission for cancelled invoice
             ids = [i.id for i in sub_invoices]
