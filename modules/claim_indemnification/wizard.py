@@ -7,6 +7,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.transaction import Transaction
+from trytond.model import ModelStorage
 from trytond.pyson import Eval, Equal, Bool, Len
 
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
@@ -71,14 +72,18 @@ class IndemnificationElement(model.CoogView):
         return {
             'action': 'nothing',
             'indemnification': indemnification.id,
+            'indemnification.rec_name': indemnification.rec_name,
             'amount': indemnification.total_amount,
             'benefit': service.benefit.id,
+            'benefit.rec_name': service.benefit.rec_name,
             'contract': service.contract.id,
+            'contract.rec_name': service.contract.rec_name,
             'currency_digits': indemnification.currency_digits,
             'currency_symbol': indemnification.currency_symbol,
             'start_date': indemnification.start_date,
             'end_date': indemnification.end_date,
             'claim': service.loss.claim.id,
+            'claim.rec_name': service.loss.claim.rec_name,
             'loss_date': service.loss.start_date,
             'indemnification_details': [indemnification.id]
             }
@@ -223,33 +228,13 @@ class IndemnificationAssistant(Wizard):
         return 'end'
 
     def default_validate_view_state(self, fields):
-        pool = Pool()
-        elements = []
-        Indemnification = pool.get('claim.indemnification')
-        Element = pool.get('claim.indemnification.assistant.validate.element')
-        result = Indemnification.search([
-                ('status', 'in', ['controlled', 'cancelled'])],
-            order=[('total_amount', 'DESC')])
-        for res in result:
-            elements.append(
-                Element.from_indemnification(res))
         return {
-            'validate': elements, 'mode': 'validate',
+            'validate': [], 'mode': 'validate',
             'global_setter': 'nothing', 'field_sort': 'total_amount',
             'order_sort': 'DESC'}
 
     def default_control_view_state(self, fields):
-        pool = Pool()
-        elements = []
-        Indemnification = pool.get('claim.indemnification')
-        Element = pool.get('claim.indemnification.assistant.control.element')
-        result = Indemnification.search([
-                ('status', '=', 'scheduled')],
-            order=[('total_amount', 'DESC')])
-        for res in result:
-            elements.append(
-                Element.from_indemnification(res))
-        return {'control': elements, 'mode': 'control'}
+        return {'control': [], 'mode': 'control'}
 
     def transition_validation_state(self):
         pool = Pool()
