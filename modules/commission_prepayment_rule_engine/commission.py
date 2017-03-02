@@ -49,7 +49,8 @@ class Plan:
                 for date, percentage in schedule:
                     if (not isinstance(date, datetime.date) or
                             not isinstance(percentage, FloatType) and
-                            not isinstance(percentage, IntType)):
+                            not isinstance(percentage, IntType) and
+                            not isinstance(percentage, Decimal)):
                         self.raise_user_error('invalid_rule_result', schedule)
             except:
                 self.raise_user_error('invalid_rule_result', schedule)
