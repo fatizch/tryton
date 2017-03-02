@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="work_days.configuration" id="work_days_config_fr_alsace">
+            <field name="code">french_work_days_alsace</field>
+            <field name="name">French work days alsace</field>
+        </record>
+        <record model="work_days.holiday" id="new_year_day_off_alsace">
+            <field name="name">Jour de l'an</field>
+            <field name="holiday_type">input</field>
+            <field name="month">1</field>
+            <field name="day">1</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+        <record model="work_days.holiday" id="labour_day_holiday_alsace">
+            <field name="name">Fête du travail</field>
+            <field name="holiday_type">input</field>
+            <field name="month">5</field>
+            <field name="day">1</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+        <record model="work_days.holiday" id="ww2_armistice_holiday_alsace">
+            <field name="name">Armistice 1945</field>
+            <field name="holiday_type">input</field>
+            <field name="month">5</field>
+            <field name="day">8</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+        <record model="work_days.holiday" id="national_holiday_alsace">
+            <field name="name">Fête national</field>
+            <field name="holiday_type">input</field>
+            <field name="month">7</field>
+            <field name="day">14</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+        <record model="work_days.holiday" id="assumption_holiday_alsace">
+            <field name="name">Assomption</field>
+            <field name="holiday_type">input</field>
+            <field name="month">8</field>
+            <field name="day">15</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+        <record model="work_days.holiday" id="toussaint_holiday_alsace">
+            <field name="name">La Toussaint</field>
+            <field name="holiday_type">input</field>
+            <field name="month">11</field>
+            <field name="day">1</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+        <record model="work_days.holiday" id="ww1_armistice_holiday_alsace">
+            <field name="name">Armistice 1918</field>
+            <field name="holiday_type">input</field>
+            <field name="month">11</field>
+            <field name="day">11</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+        <record model="work_days.holiday" id="christmas_holiday_alsace">
+            <field name="name">Noël</field>
+            <field name="holiday_type">input</field>
+            <field name="month">12</field>
+            <field name="day">25</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+        <record model="work_days.holiday" id="saint_stephen_holiday_alsace">
+            <field name="name">Saint Etienne</field>
+            <field name="holiday_type">input</field>
+            <field name="month">12</field>
+            <field name="day">26</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+        <record model="work_days.holiday" id="saturday_day_off_alsace">
+            <field name="holiday_type">weekly_day_off</field>
+            <field name="weekly_day">5</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+         <record model="work_days.holiday" id="sunday_day_off_alsace">
+            <field name="holiday_type">weekly_day_off</field>
+            <field name="weekly_day">6</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+        <record model="work_days.holiday" id="good_friday_holiday_alsace">
+            <field name="name">Vendredi saint</field>
+            <field name="holiday_type">easter_holiday</field>
+            <field name="easter_delta_days">-2</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+        <record model="work_days.holiday" id="easter_holiday_alsace">
+            <field name="name">Lundi de Pâques</field>
+            <field name="holiday_type">easter_holiday</field>
+            <field name="easter_delta_days">1</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+        <record model="work_days.holiday" id="ascension_holiday_alsace">
+            <field name="name">Ascencion</field>
+            <field name="holiday_type">easter_holiday</field>
+            <field name="easter_delta_days">39</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+        <record model="work_days.holiday" id="Pentecost_holiday_alsace">
+            <field name="name">Penteĉote</field>
+            <field name="holiday_type">easter_holiday</field>
+            <field name="easter_delta_days">50</field>
+            <field name="configuration" ref="work_days_config_fr_alsace"/>
+        </record>
+    </data>
+</tryton>
