@@ -8,4 +8,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="day"/>
     <field name="easter_delta_days"/>
     <field name="weekly_day"/>
+    <field name="holiday_date"/>
 </tree>

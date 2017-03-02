@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 from dateutil import rrule
+from dateutil.easter import easter
 
 from trytond.pyson import Eval
 
@@ -25,6 +26,9 @@ class Configuration(ModelSQL, ModelView):
         'Holidays')
     code = fields.Char('Code', required=True, select=True)
     name = fields.Char('Name', required=True, translate=True)
+    holidays_year = fields.Function(
+        fields.Integer('Holidays Year'),
+        'get_holidays_year', setter='setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -37,6 +41,33 @@ class Configuration(ModelSQL, ModelView):
     def validate(cls, configurations):
         super(Configuration, cls).validate(configurations)
         cls.check_duplicates(configurations)
+
+    @classmethod
+    def setter_void(cls, objects, name, values):
+        pass
+
+    def get_holidays_year(self, name):
+        return int(datetime.date.today().year)
+
+    @fields.depends('holidays', 'holidays_year')
+    def on_change_holidays_year(self, name=None):
+        if self.holidays_year is None:
+            for holiday in self.holidays:
+                holiday.holiday_date = None
+            return
+        if self.holidays_year < 1:
+            self.holidays_year = 1
+        elif self.holidays_year > 9999:
+            self.holidays_year = 9999
+        for holiday in self.holidays:
+            if holiday.holiday_type == 'weekly_day_off':
+                holiday.holiday_date = None
+            elif holiday.holiday_type == 'easter_holiday':
+                holiday.holiday_date = easter(self.holidays_year) + \
+                    datetime.timedelta(days=holiday.easter_delta_days)
+            else:
+                holiday.holiday_date = datetime.date(self.holidays_year,
+                        int(holiday.month), int(holiday.day))
 
     @staticmethod
     def is_duplicate_fixed(fixed_holidays):
@@ -130,7 +161,7 @@ class Holiday(ModelSQL, ModelView):
             ('input', 'Input'),
             ('weekly_day_off', 'Weekly Day Off'),
             ('easter_holiday', 'Easter Related Holiday'),
-            ], 'Type', sort=False)
+            ], 'Type', required=True, sort=False)
     easter_delta_days = fields.Integer('Delta days from Easter', states={
             'invisible': Eval('holiday_type') != 'easter_holiday',
             'required': Eval('holiday_type') == 'easter_holiday'
@@ -170,6 +201,9 @@ class Holiday(ModelSQL, ModelView):
             'invisible': Eval('holiday_type') != 'weekly_day_off',
             'required': Eval('holiday_type') == 'weekly_day_off'
             }, depends=['holiday_type'])
+    holiday_date = fields.Date("Holiday's Date", states={
+            'invisible': Eval('holiday_type') == 'weekly_day_off'},
+        depends=['holiday_type'])
 
     @classmethod
     def __setup__(cls):

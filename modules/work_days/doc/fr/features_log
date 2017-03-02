@@ -1,1 +1,3 @@
+* Ajout des champs holiday_year et holiday_date permettant de calculer les dates des jours fériés d'une certaine année.
+
 * Création du module

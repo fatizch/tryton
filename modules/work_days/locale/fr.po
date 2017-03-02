@@ -34,6 +34,10 @@ msgctxt "field:work_days.configuration,holidays:"
 msgid "Holidays"
 msgstr "Jours Fériés"
 
+msgctxt "field:work_days.configuration,holidays_year:"
+msgid "Holidays Year"
+msgstr "Année des jours fériés"
+
 msgctxt "field:work_days.configuration,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -73,6 +77,10 @@ msgstr "Jour"
 msgctxt "field:work_days.holiday,easter_delta_days:"
 msgid "Delta days from Easter"
 msgstr "Jours de différence par rapport à Pâques"
+
+msgctxt "field:work_days.holiday,holiday_date:"
+msgid "Holiday's Date"
+msgstr "Date du jour férié"
 
 msgctxt "field:work_days.holiday,holiday_type:"
 msgid "Type"
