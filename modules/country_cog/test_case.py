@@ -25,8 +25,11 @@ class TestCaseModel:
             return
         Country = Pool().get('country.country')
         Zip = Pool().get('country.zip')
-        country = Country.search([
-                ('code', '=', cls.get_language().code[-2:])])[0]
+        countries = Country.search([
+                ('code', '=', cls.get_language().code.upper())])
+        if not countries:
+            return
+        country = countries[0]
         cls.load_resources(MODULE_NAME)
         zip_file = cls.read_csv_file('zipcode.csv', MODULE_NAME, sep='\t')
         existing_zips = Zip.search([('country', '=', country.id)])
