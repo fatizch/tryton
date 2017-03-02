@@ -240,6 +240,14 @@ msgctxt "field:contract.covered_element.modify,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.covered_element.modify,new_item_desc:"
+msgid "New Covered Element"
+msgstr "Nouvel élément couvert"
+
+msgctxt "field:contract.covered_element.modify,possible_item_descs:"
+msgid "Possible Item Descriptors"
+msgstr "Types de risques"
+
 msgctxt "field:contract.covered_element.modify,possible_parents:"
 msgid "Possible Parents"
 msgstr "Parents possibles"
@@ -273,6 +281,14 @@ msgctxt "field:contract.covered_element.modify.displayer,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.covered_element.modify.displayer,item_desc:"
+msgid "Item Description"
+msgstr "Description du Risque"
+
+msgctxt "field:contract.covered_element.modify.displayer,name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:contract.covered_element.modify.displayer,parent:"
 msgid "Parent Reference"
 msgstr "Parent"
@@ -284,6 +300,10 @@ msgstr "Parent"
 msgctxt "field:contract.covered_element.modify.displayer,party:"
 msgid "Party"
 msgstr "Tiers"
+
+msgctxt "field:contract.covered_element.modify.displayer,sub_status:"
+msgid "Sub Status"
+msgstr "Sous Statut"
 
 msgctxt "field:contract.covered_element.new,contract:"
 msgid "Contract"
@@ -1404,8 +1424,16 @@ msgid ""
 msgstr " "
 
 msgctxt "selection:contract.covered_element.modify.displayer,action:"
+msgid "Add"
+msgstr "Ajouter"
+
+msgctxt "selection:contract.covered_element.modify.displayer,action:"
 msgid "Modified"
 msgstr "Modifié"
+
+msgctxt "selection:contract.covered_element.modify.displayer,action:"
+msgid "Terminate"
+msgstr "Résilier"
 
 msgctxt ""
 "selection:contract.covered_element.option.remove.option_selector,action:"
@@ -1526,16 +1554,16 @@ msgid "Add Option"
 msgstr "Souscrire une garantie"
 
 msgctxt "view:contract.covered_element.modify.displayer:"
-msgid "Covered Element"
-msgstr "Risque Couvert"
+msgid "Restore"
+msgstr "Restaurer"
 
 msgctxt "view:contract.covered_element.modify.displayer:"
-msgid "Covered Elements"
-msgstr "Risques Couverts"
+msgid "Terminate"
+msgstr "Résilier"
 
 msgctxt "view:contract.covered_element.modify:"
-msgid "Manage Covered Elements"
-msgstr "Gérer les risques couverts"
+msgid "Add covered element"
+msgstr "Ajouter un risque"
 
 msgctxt "view:contract.covered_element.new:"
 msgid "New Covered Element"

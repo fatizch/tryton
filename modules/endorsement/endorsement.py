@@ -824,6 +824,11 @@ def relation_mixin(value_model, field, model, name):
             self.set_relation([self], None, relation_record.id)
             return relation_record
 
+        def endorsement_matches_record(self, record):
+            if self.relation == getattr(record, 'id', None):
+                return True
+            return super(Mixin, self).endorsement_matches_record(record)
+
     setattr(Mixin, field, fields.Function(fields.Many2One(model, name,
                 datetime_field='applied_on',
                 states={

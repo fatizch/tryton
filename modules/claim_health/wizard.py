@@ -82,6 +82,8 @@ class CoveredElementDisplayer:
     @fields.depends('action', 'claim_bank_account', 'cur_covered_id',
         'effective_date', 'extra_data')
     def on_change_claim_bank_account(self):
+        if self.action in ('add', 'terminate'):
+            return
         if self.check_modified():
             self.action = 'modified'
         else:

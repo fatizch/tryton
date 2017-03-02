@@ -372,7 +372,7 @@ class EndorsementCoveredElement(relation_mixin(
 
     @classmethod
     def _ignore_fields_for_matching(cls):
-        return {'options'}
+        return {'options', 'contract'}
 
 
 class EndorsementCoveredElementVersion(relation_mixin(

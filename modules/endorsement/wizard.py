@@ -852,6 +852,7 @@ class ManageOptions(EndorsementWizardStepMixin):
             self.current_parent = parent
             parent = self.get_parent_endorsed(self._parent,
                 contract_endorsements)
+            parent.options = getattr(parent, 'options', [])
             existing_options = defaultdict(list)
             for option in parent.options:
                 existing_options[option.coverage].append(option)
@@ -980,7 +981,7 @@ class ManageOptions(EndorsementWizardStepMixin):
         for options in per_coverage.itervalues():
             for idx, option in enumerate(sorted(options,
                         key=lambda x: x.manual_start_date or x.start_date)):
-                save_values = option._save_values
+                save_values = option._values
                 if not save_values and (self.effective_date > (
                             getattr(option, 'manual_end_date',
                                 getattr(option, 'end_date', None))

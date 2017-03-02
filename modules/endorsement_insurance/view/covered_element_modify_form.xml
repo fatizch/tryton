@@ -4,8 +4,19 @@ this repository contains the full copyright notices and license terms. -->
 <form col="2">
     <label name="parent_rec_name"/>
     <field name="parent_rec_name"/>
+    <label name="item_desc"/>
+    <field name="item_desc"/>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="sub_status"/>
+    <field name="sub_status"/>
     <newline/>
     <field name="extra_data" no_command="1" colspan="2"/>
     <newline/>
+    <button string="Terminate" name="terminate" colspan="2" type="instance"/>
+    <button string="Restore" name="unterminate" colspan="2" type="instance"/>
     <field name="action" invisible="1"/>
+    <field name="cur_covered_id" invisible="1"/>
 </form>

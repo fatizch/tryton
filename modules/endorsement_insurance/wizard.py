@@ -536,6 +536,19 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
         'contract.covered_element.modify.displayer', None,
         'Current Covered Elements')
     possible_parents = fields.Text('Possible Parents', readonly=True)
+    possible_item_descs = fields.Many2Many('offered.item.description', None,
+        None, 'Possible Item Descriptors', readonly=True)
+    new_item_desc = fields.Many2One('offered.item.description',
+        'New Covered Element',
+        domain=[('id', 'in', Eval('possible_item_descs'))],
+        depends=['possible_item_descs'])
+
+    @classmethod
+    def __setup__(cls):
+        super(ModifyCoveredElement, cls).__setup__()
+        cls._buttons.update({'add_covered_element': {
+                    'readonly': ~Eval('new_item_desc'),
+                    'invisible': ~Eval('new_item_desc')}})
 
     @classmethod
     def view_attributes(cls):
@@ -575,6 +588,10 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             self.contract = None
         else:
             raise NotImplementedError
+        if self.contract:
+            self.possible_item_descs = self.contract.product.item_descriptors
+        else:
+            self.possible_item_descs = []
 
     def update_all_covered(self):
         if not self.current_covered:
@@ -589,7 +606,7 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
     def update_current_covered(self):
         new_covered_elements = []
         for covered_element in sorted(self.all_covered,
-                key=lambda x: x.party.name if x.party else ''):
+                key=lambda x: x.party.name if x.party else x.name):
             if covered_element.parent == self.current_parent:
                 new_covered_elements.append(covered_element)
         self.current_covered = new_covered_elements
@@ -623,6 +640,8 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
         for contract_endorsement in endorsement.contract_endorsements:
             contract = contract_endorsement.contract
             utils.apply_dict(contract, contract_endorsement.apply_values())
+            contract.covered_elements = [x for x in contract.covered_elements
+                if getattr(x, 'id', 0) > 0]
             contract_endorsements[contract.id] = contract
 
         for parent, new_covered_elements in per_parent.iteritems():
@@ -654,6 +673,10 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
                 self._update_nothing(new_covered, parent, per_id)
             elif new_covered.action == 'modified':
                 self._update_modified(new_covered, parent, per_id)
+            elif new_covered.action == 'add':
+                self._update_added(new_covered, parent, per_id)
+            elif new_covered.action == 'terminate':
+                self._update_terminated(new_covered, parent, per_id)
 
     def cancel_versions_changes(self, new_covered_element, per_id):
         CoveredElement = Pool().get('contract.covered_element')
@@ -686,6 +709,36 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             current_version.extra_data = new_covered_element.extra_data
         good_covered.versions = new_versions
 
+    def _update_added(self, new_covered_element, parent, per_id):
+        parent.covered_elements = list(parent.covered_elements) + [
+            new_covered_element.create_covered()]
+        if new_covered_element._parent.__name__ == 'endorsement.contract':
+            for old in new_covered_element._parent.covered_elements:
+                if old.action != 'add':
+                    continue
+                if new_covered_element.match_values(old.values):
+                    old_values = old.apply_values()[1][0].get('options', None)
+                    if old_values:
+                        utils.apply_dict(parent.covered_elements[-1],
+                            {'options': old_values})
+                    break
+
+    def _update_terminated(self, new_covered_element, parent, per_id):
+        if not new_covered_element.cur_covered_id:
+            # Was added then removed => just do not add it
+            return
+        # Clean up options
+        good_covered = per_id[new_covered_element.cur_covered_id]
+        options = []
+        for option in good_covered.options:
+            options.append(option)
+            if option.end_date and option.end_date < self.effective_date:
+                continue
+            option.manual_end_date = coog_date.add_day(self.effective_date, -1)
+            option.sub_status = new_covered_element.sub_status
+            option.status = 'terminated'
+        good_covered.options = options
+
     def get_covered_from_parent(self, parent):
         if isinstance(parent, Pool().get('endorsement.contract')):
             contract = parent.contract
@@ -708,11 +761,21 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             # covered existed before, either modification or resiliation
             version_date = covered_element.get_version_at_date(
                 self.effective_date).start
-            if not version_date or version_date == self.effective_date:
+            terminated = [x for x in covered_element.options
+                if x.manual_end_date == coog_date.add_day(
+                    self.effective_date, -1)]
+            still_active = [x for x in covered_element.options
+                if not x.manual_end_date or
+                x.manual_end_date >= self.effective_date]
+            if terminated and not still_active:
+                displayer.action = 'terminate'
+                displayer.sub_status = terminated[0].sub_status
+            elif not version_date or version_date == self.effective_date:
                 displayer.action = 'modified'
             else:
-                # Only covered, resiliation
                 displayer.action = 'nothing'
+        else:
+            displayer.action = 'add'
         return [displayer]
 
     def get_parent_name(self, parent):
@@ -720,6 +783,24 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             return parent.contract.rec_name
         else:
             return parent.rec_name
+
+    @model.CoogView.button_change('all_covered', 'contract', 'current_covered',
+        'current_parent', 'effective_date', 'new_item_desc')
+    def add_covered_element(self):
+        assert self.new_item_desc
+        new_covered = self.new_covered_element()
+        self.new_coverage = None
+        self.current_covered = list(self.current_covered) + [new_covered]
+
+    def new_covered_element(self):
+        covered_element = Pool().get('contract.covered_element')()
+        covered_element.item_desc = self.new_item_desc
+        covered_element.contract = self.contract
+        covered_element.name = ''
+        covered_element.product = self.contract.product
+        covered_element.versions = []
+        covered_element.on_change_item_desc()
+        return self.generate_displayers(self._parent, covered_element)[0]
 
     @classmethod
     def state_view_name(cls):
@@ -732,8 +813,11 @@ class CoveredElementDisplayer(model.CoogView):
 
     __name__ = 'contract.covered_element.modify.displayer'
 
-    action = fields.Selection([('nothing', ''), ('modified', 'Modified')],
-        'Action')
+    action = fields.Selection([('nothing', ''), ('modified', 'Modified'),
+            ('add', 'Add'), ('terminate', 'Terminate')], 'Action',
+        domain=[If(Eval('action') == 'add',
+                [('action', 'in', ['add', 'terminate'])],
+                [('action', '!=', 'add')])])
     parent = fields.Char('Parent Reference', readonly=True)
     parent_rec_name = fields.Char('Parent', readonly=True)
     extra_data = fields.Dict('extra_data', 'Extra Data', states={
@@ -743,7 +827,33 @@ class CoveredElementDisplayer(model.CoogView):
     display_name = fields.Char('Name', readonly=True)
     cur_covered_id = fields.Integer('Existing Covered Element', readonly=True)
     effective_date = fields.Date('Effective Date', readonly=True)
-    party = fields.Many2One('party.party', 'Party', readonly=True)
+    party = fields.Many2One('party.party', 'Party', states={
+            'readonly': Eval('action') != 'add'})
+    item_desc = fields.Many2One('offered.item.description', 'Item Description',
+        readonly=True)
+    name = fields.Char('Name', states={'readonly': Eval('action') != 'add'})
+    sub_status = fields.Many2One('contract.sub_status', 'Sub Status',
+        states={
+            'required': (Eval('action') == 'terminate') &
+            ~Eval('cur_covered_id'),
+            'invisible': (Eval('action') != 'terminate') |
+            (Eval('action') == 'terminate') & ~Eval('cur_covered_id')},
+        domain=[If((Eval('action') == 'terminate') &
+                Bool(Eval('cur_covered_id')),
+                [('status', '=', 'terminated')],
+                [])], depends=['action'])
+
+    @classmethod
+    def __setup__(cls):
+        super(CoveredElementDisplayer, cls).__setup__()
+        cls._buttons.update({'terminate': {
+                    'readonly': Eval('action') == 'terminate',
+                    'invisible': Eval('action') == 'terminate',
+                    },
+                'unterminate': {
+                    'readonly': Eval('action') != 'terminate',
+                    'invisible': Eval('action') != 'terminate',
+                    }})
 
     @property
     def _parent(self):
@@ -757,19 +867,23 @@ class CoveredElementDisplayer(model.CoogView):
         return self.__parent
 
     @fields.depends('action', 'cur_covered_id', 'effective_date', 'extra_data',
-        'extra_data_as_string')
+        'extra_data_as_string', 'sub_status')
     def on_change_action(self):
         pool = Pool()
         if self.cur_covered_id and self.action == 'nothing':
             self.extra_data = pool.get('contract.covered_element')(
                 self.cur_covered_id).get_version_at_date(
                 self.effective_date).extra_data
+        if self.action != 'terminate':
+            self.sub_status = None
         self.update_extra_data_string()
 
     @fields.depends('action', 'cur_covered_id', 'effective_date',
         'extra_data', 'extra_data_as_string')
     def on_change_extra_data(self):
         self.update_extra_data_string()
+        if self.action in ('add', 'terminate'):
+            return
         if self.check_modified():
             self.action = 'modified'
         else:
@@ -803,15 +917,37 @@ class CoveredElementDisplayer(model.CoogView):
         else:
             displayer.cur_covered_id = None
             displayer.display_name = 'New Covered Element (%s)' % (
-                covered_element.party.rec_name)
+                covered_element.party.rec_name if covered_element.party
+                else covered_element.name)
         if getattr(covered_element, 'versions', None) is None:
             covered_element.versions = [Pool().get(
                     'contract.covered_element.version').get_default_version()]
         displayer.action = 'nothing'
+        displayer.party = getattr(covered_element, 'party', None)
+        displayer.name = covered_element.name
+        displayer.item_desc = covered_element.item_desc
         displayer.extra_data = covered_element.get_version_at_date(
             effective_date).extra_data
         displayer.party = covered_element.party
         return displayer
+
+    def create_covered(self):
+        assert self.action == 'add'
+        covered = Pool().get('contract.covered_element')()
+        covered.item_desc = self.item_desc
+        covered.party = self.party
+        covered.name = self.name
+        covered.versions = [self.to_version()]
+        return covered
+
+    def match_values(self, values):
+        party = values.get('party', None)
+        if bool(party) != bool(self.party) or (party and
+                party != self.party.id):
+            return False
+        if self.name != values.get('name', ''):
+            return False
+        return True
 
     def to_version(self, previous_version=None):
         Version = Pool().get('contract.covered_element.version')
@@ -830,6 +966,18 @@ class CoveredElementDisplayer(model.CoogView):
             'contract.covered_element': [],
             'contract.covered_element.version': ['extra_data'],
             }
+
+    @model.CoogView.button_change('action')
+    def terminate(self):
+        self.action = 'terminate'
+
+    @model.CoogView.button_change('action', 'cur_covered_id')
+    def unterminate(self):
+        if self.cur_covered_id:
+            self.action = 'nothing'
+        else:
+            self.action = 'add'
+        self.sub_status = None
 
 
 class ExtraPremiumDisplayer(model.CoogView):
@@ -1108,7 +1256,7 @@ class ManageOptions:
 
     def covered_element_options_per_coverage(self, covered_element):
         per_coverage = defaultdict(list)
-        for option in covered_element.options:
+        for option in getattr(covered_element, 'options', []):
             per_coverage[option.coverage].append(option)
         return per_coverage
 
@@ -1153,8 +1301,22 @@ class ManageOptions:
             contract = contract_endorsements[
                 parent.contract_endorsement.contract.id]
             contract.covered_elements = list(contract.covered_elements)
-            return [x for x in contract.covered_elements
-                if parent.endorsement_matches_record(x)][0]
+
+            def covered_key(x):
+                good_id = getattr(x, 'id', None)
+                if good_id:
+                    return good_id
+                name = getattr(x, 'name', '')
+                party = getattr(x, 'party', None)
+                if party:
+                    party = party.id
+                return name, party
+
+            covered = {covered_key(x): x for x in contract.covered_elements}
+            if getattr(parent, 'relation', None) in covered:
+                return covered[parent.relation]
+            return covered[(parent.values.get('name', ''),
+                    parent.values.get('party', None))]
         else:
             return super(ManageOptions, self).get_parent_endorsed(parent,
                 contract_endorsements)
@@ -1656,6 +1818,7 @@ class StartEndorsement:
             for i, covered_element in enumerate(endorsement.covered_elements):
                 if covered_element.action == 'add':
                     default_covered_elements[i].update(covered_element.values)
+            default_values['covered_elements']
 
     def default_new_covered_element(self, name):
         endorsement_part = self.get_endorsement_part_for_state(
@@ -1668,13 +1831,14 @@ class StartEndorsement:
             'start_date': endorsement_date,
             'contract': contract.id,
             'possible_item_desc': [x.id for x in contract.possible_item_desc],
-            'extra_datas': [x.id for x in contract.extra_datas],
+            'extra_data': [x.id for x in contract.extra_datas],
             }
         num_covered_elements = 1
         if (self.endorsement.contract_endorsements and
                 self.endorsement.contract_endorsements[0].covered_elements):
-            num_covered_elements = len(
-                self.endorsement.contract_endorsements[0].covered_elements)
+            changed = self.endorsement.contract_endorsements[0].covered_elements
+            num_covered_elements = len([x for x in changed
+                    if x.action == 'add'])
         result['covered_elements'] = [{
                 'item_desc': (result['possible_item_desc'] or [None])[0],
                 'main_contract': contract.id,
