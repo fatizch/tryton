@@ -108,7 +108,12 @@ class CustomRrule(object):
         result = []
         i = self._base_iter_pos
         while cur_date < end:
-            if cur_date > start and cur_date < end:
+            if cur_date > start:
+                # If the date matches the end of the month and end is the end
+                # of the month, we want the final date to be end + 1 in order
+                # to be consistent with the rrule API
+                if cur_date == coog_date.get_end_of_month(cur_date):
+                    cur_date = cur_date + relativedelta(days=1)
                 result.append(datetime.datetime.combine(cur_date,
                         datetime.time()))
             cur_date = coog_date.add_month(self._base_date, self._interval * i,
@@ -125,7 +130,7 @@ class CustomRrule(object):
         cur_date = coog_date.add_month(self._base_date,
             self._interval * self._base_iter_pos, stick_to_end_of_month=True)
         i = self._base_iter_pos + 1
-        while cur_date < date:
+        while cur_date <= date:
             cur_date = coog_date.add_month(self._base_date, self._interval * i,
                 stick_to_end_of_month=True)
             i += 1
@@ -1836,14 +1841,18 @@ class Premium:
             else:
                 return 0
 
-        if next_date and (next_date - end).days > 1:
-            if (next_date - last_date).days != 0:
-                if self.prorate_premiums:
-                    ratio = (Decimal((end - last_date).days + 1)
-                        / Decimal((next_date - last_date).days))
-                    amount += self.amount * ratio
-                elif (end - last_date).days + 1 != 0:
-                    amount += self.amount
+        # Rrules 'between' returns the date after the occurence, so if
+        # last_date == end it means that there is an extra day to prorate
+        if last_date <= end and (next_date - last_date).days != 0:
+            if self.prorate_premiums:
+                # Do not add parenthesis anywhere here. We want to first
+                # multiply the amount with the number of days, and divide
+                # after to avoid Decimal limitations
+                amount += self.amount * \
+                    Decimal((end - last_date).days + 1) \
+                    / Decimal((next_date - last_date).days)
+            elif (end - last_date).days + 1 != 0:
+                amount += self.amount
         return amount
 
     def get_invoice_lines(self, start, end):
