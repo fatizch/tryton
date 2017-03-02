@@ -2,6 +2,22 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.notification:"
+msgid "Enter a value for field '%s' of '%s'"
+msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
+
+msgctxt "error:contract.notification:"
+msgid "Enter a value for field(s): %s"
+msgstr "Entrez une valeur pour le(s) champs(s) : %s"
+
+msgctxt "error:contract.notification:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:contract.notification:"
+msgid "Select a date that is not in the future for field(s): %s"
+msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
+
 msgctxt "error:contract:"
 msgid "At least an option must be selected"
 msgstr "Saisir une garantie"
@@ -71,6 +87,30 @@ msgid "Task Name"
 msgstr "Nom de la tâche"
 
 msgctxt "field:contract,task_status:"
+msgid "Task Status"
+msgstr "Statut du processus"
+
+msgctxt "field:contract.notification,current_log:"
+msgid "Current Log"
+msgstr "Trace Courante"
+
+msgctxt "field:contract.notification,current_state:"
+msgid "Current State"
+msgstr "Etat courant"
+
+msgctxt "field:contract.notification,current_state_name:"
+msgid "Current State In Process"
+msgstr "Etat courant au sein du processus"
+
+msgctxt "field:contract.notification,logs:"
+msgid "Task"
+msgstr "Tâche"
+
+msgctxt "field:contract.notification,task_name:"
+msgid "Task Name"
+msgstr "Nom de la tâche"
+
+msgctxt "field:contract.notification,task_status:"
 msgid "Task Status"
 msgstr "Statut du processus"
 

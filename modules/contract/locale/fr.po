@@ -113,6 +113,10 @@ msgctxt "error:contract:"
 msgid "There are dates for which no %s address is defined"
 msgstr "Il y a des dates pour lesquelles le %s n'a pas d'adresse renseignée"
 
+msgctxt "error:event.type.action:"
+msgid "WARNING: The Pyson Condition is applied on contract."
+msgstr "Attention : La condition Pyson est appliquée sur le contrat"
+
 msgctxt "field:contract,activation_history:"
 msgid "Activation History"
 msgstr "Historique d'activation"
@@ -524,6 +528,58 @@ msgstr "Raison de suspension"
 msgctxt "field:contract.hold.select_hold_status,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract.notification,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.notification,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.notification,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.notification,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.notification,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.notification,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.notification,planned_treatment_date:"
+msgid "Planned Treatment Date"
+msgstr "Date de traitement planifiée"
+
+msgctxt "field:contract.notification,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.notification,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:contract.notification,treatment_date:"
+msgid "Treatment Date"
+msgstr "Date de traitement"
+
+msgctxt "field:contract.notification,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:contract.notification,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.notification,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.option,appliable_conditions_date:"
 msgid "Appliable Conditions Date"
@@ -955,9 +1011,9 @@ msgctxt ""
 msgid "Possible Packages"
 msgstr "Formules possibles"
 
-msgctxt "field:event.log,contract:"
-msgid "Contract"
-msgstr "Contrat"
+msgctxt "field:event.type.action,notification_delay:"
+msgid "Notification Delay (in days)"
+msgstr "Délai avant notifications (en jours)"
 
 msgctxt "field:offered.configuration,automatic_decline_reason:"
 msgid "Automatic Decline Reason"
@@ -1087,6 +1143,10 @@ msgctxt "model:contract.hold.select_hold_status,name:"
 msgid "End date selector for contract"
 msgstr "Choix de la date de fin pour le contrat"
 
+msgctxt "model:contract.notification,name:"
+msgid "Contract Notification"
+msgstr "Notifications"
+
 msgctxt "model:contract.option,name:"
 msgid "Contract Option"
 msgstr "Garantie"
@@ -1200,6 +1260,14 @@ msgctxt "model:ir.action,name:act_contract_form"
 msgid "Contracts"
 msgstr "Contrats"
 
+msgctxt "model:ir.action,name:act_contract_notification_from_contract_view"
+msgid "Notifications"
+msgstr "Notifications"
+
+msgctxt "model:ir.action,name:act_contract_notification_view"
+msgid "Contract Notification"
+msgstr "Notifications"
+
 msgctxt "model:ir.action,name:act_contract_relate_form"
 msgid "Contracts"
 msgstr "Contrats"
@@ -1207,10 +1275,6 @@ msgstr "Contrats"
 msgctxt "model:ir.action,name:act_decline"
 msgid "Decline"
 msgstr "Décliner"
-
-msgctxt "model:ir.action,name:act_event_log_relate_form"
-msgid "Event Logs"
-msgstr "Logs d'événements"
 
 msgctxt "model:ir.action,name:act_hold_contract"
 msgid "Hold Contract"
@@ -1261,6 +1325,24 @@ msgctxt ""
 msgid "Terminated"
 msgstr "Résilié"
 
+msgctxt "model:ir.action.act_window.domain,name:act_notification_domain_close"
+msgid "Closed"
+msgstr "Fermé"
+
+msgctxt "model:ir.action.act_window.domain,name:act_notification_domain_open"
+msgid "Open"
+msgstr "Ouvert"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_notification_from_contract_domain_close"
+msgid "Closed"
+msgstr "Fermé"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_notification_from_contract_domain_open"
+msgid "Open"
+msgstr "Ouvert"
+
 msgctxt "model:ir.action.act_window.domain,name:act_quote_domain_all"
 msgid "Quote"
 msgstr "Devis"
@@ -1292,6 +1374,10 @@ msgstr "Traitement"
 msgctxt "model:ir.ui.menu,name:menu_contract_form"
 msgid "Contracts"
 msgstr "Contrats"
+
+msgctxt "model:ir.ui.menu,name:menu_contract_notification"
+msgid "Notifications"
+msgstr "Notifications"
 
 msgctxt "model:ir.ui.menu,name:menu_quote_form"
 msgid "Quotes"
@@ -1506,6 +1592,10 @@ msgstr "Données complémentaires"
 msgctxt "view:contract.hold.select_hold_status:"
 msgid "Select Hold Reason"
 msgstr "Selectionner la raison de suspension"
+
+msgctxt "view:contract.notification:"
+msgid "Treated"
+msgstr "Traitée"
 
 msgctxt "view:contract.option.version:"
 msgid "Version"

@@ -12,6 +12,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ContractOption',
+    'ContractNotification',
     ]
 
 
@@ -149,3 +150,12 @@ class ContractOption:
     @fields.depends('status')
     def on_change_with_status_selection(self, name=None):
         return self.status and self.status == 'active'
+
+
+class ContractNotification(CoogProcessFramework):
+    __name__ = 'contract.notification'
+    __metaclass__ = ClassAttr
+
+    def do_treat(self, date):
+        super(ContractNotification, self).do_treat(date)
+        self.current_state = None

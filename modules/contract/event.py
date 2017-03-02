@@ -1,13 +1,16 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
+
 from sql import Cast, Literal
 from sql.functions import Substring, Position
 
 from trytond import backend
-from trytond.pool import PoolMeta
+from trytond.pyson import Eval
+from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -18,6 +21,37 @@ __all__ = [
 
 class EventTypeAction:
     __name__ = 'event.type.action'
+
+    notification_delay = fields.Integer(
+        'Notification Delay (in days)', states={
+            'invisible': Eval('action') != 'create_contract_notification'},
+        depends=['action'])
+
+    @classmethod
+    def __setup__(cls):
+        super(EventTypeAction, cls).__setup__()
+        cls._error_messages.update({
+                'notification_descriptor': 'WARNING: The Pyson'
+                    ' Condition is applied on contract.'})
+
+    @classmethod
+    def get_action_types(cls):
+        return super(EventTypeAction, cls).get_action_types() + [
+            ('create_contract_notification', 'Create Contract Notification')]
+
+    @fields.depends('action')
+    def on_change_with_descriptor(self, name=None):
+        if (self.action == 'create_contract_notification'):
+            return self.raise_user_error('notification_descriptor',
+                raise_exception=False)
+        return super(EventTypeAction, self).on_change_with_descriptor(name)
+
+    def filter_objects(self, objects):
+        if self.action != 'create_contract_notification':
+            return super(EventTypeAction, self).filter_objects(objects)
+        contracts = sum(
+            [self.get_contracts_from_object(o) for o in objects], [])
+        return super(EventTypeAction, self).filter_objects(contracts)
 
     def get_contracts_from_object(self, object_):
         contracts = []
@@ -48,6 +82,27 @@ class EventTypeAction:
             return filtering_object.product.report_templates
         return super(EventTypeAction, self).get_templates_list(
             filtering_object)
+
+    @fields.depends('notification_delay')
+    def create_contract_notification(self, contracts):
+        notifications = []
+        date = utils.today() + datetime.timedelta(
+            days=self.notification_delay or 0)
+        ContractNotification = Pool().get('contract.notification')
+        for contract in set(contracts):
+            notifications.append(ContractNotification(contract=contract.id,
+                    planned_treatment_date=date, name=self.name))
+        return notifications
+
+    def execute(self, objects, event_code, description=None, **kwargs):
+        if self.action != 'create_contract_notification':
+            return super(EventTypeAction, self).execute(objects, event_code)
+        if not objects:
+            return
+        ContractNotification = Pool().get('contract.notification')
+        notifications = self.create_contract_notification(objects)
+        if notifications:
+            ContractNotification.save(notifications)
 
 
 class EventLog:

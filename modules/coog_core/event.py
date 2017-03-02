@@ -189,6 +189,10 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
                 'invisible': ~Eval('handles_asynchronous')})
     event_types = fields.Many2Many('event.type.action-event.type', 'action',
         'event_type', 'Event Types')
+    descriptor = fields.Function(
+        fields.Text('Descriptor',
+            states={'invisible': ~Eval('descriptor')}),
+        'on_change_with_descriptor')
 
     @classmethod
     def __setup__(cls):
@@ -253,6 +257,10 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
         if self.code:
             return self.code
         return coog_string.slugify(self.name)
+
+    @fields.depends('action')
+    def on_change_with_descriptor(self, name=None):
+        return ''
 
     def cache_data(self):
         return {'id': self.id, 'action': self.action}

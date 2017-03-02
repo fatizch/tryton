@@ -6,12 +6,14 @@ this repository contains the full copyright notices and license terms. -->
     <field name="name"/>
     <label name="code"/>
     <field name="code"/>
-    <label name="priority"/>
-    <field name="priority"/>
     <label name="pyson_condition"/>
-    <field name="pyson_condition"/>
+    <field name="pyson_condition" colspan="3"/>
     <label name="action"/>
     <field name="action"/>
+    <label name="priority"/>
+    <field name="priority"/>
+    <separator name="descriptor" colspan="4"/>
+    <field name="descriptor" colspan="4" yexpand="0"/>
     <label name="treatment_kind"/>
     <field name="treatment_kind"/>
     <field name="handles_asynchronous" colspan="4"/>

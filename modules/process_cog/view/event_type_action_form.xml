@@ -3,7 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='action']" position="after">
-        <newline/>
         <label name="process_to_initiate"/>
         <field name="process_to_initiate"/>
         <label name="step_to_start"/>

@@ -12,6 +12,7 @@ def register():
     Pool.register(
         Contract,
         ContractOption,
+        ContractNotification,
         Process,
         ContractSubscribeFindProcess,
         EventTypeAction,

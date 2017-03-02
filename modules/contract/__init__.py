@@ -13,6 +13,7 @@ from .configuration import *
 from .offered import *
 from .batch import *
 from .event import *
+from .notification import *
 
 
 def register():
@@ -43,6 +44,7 @@ def register():
         ContractStopSelectContracts,
         ContractSelectHoldReason,
         ContractReactivateCheck,
+        ContractNotification,
         EventTypeAction,
         EventLog,
         ContractDeclineInactiveQuotes,

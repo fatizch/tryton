@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ######################### -->
+        <!-- # Contract Notification # -->
+        <!-- ######################### -->
+        <record model="ir.ui.view" id="notification_view_form">
+            <field name="model">contract.notification</field>
+            <field name="type">form</field>
+            <field name="name">contract_notification_form</field>
+        </record>
+        <record model="ir.ui.view" id="notification_view_list">
+            <field name="model">contract.notification</field>
+            <field name="type">tree</field>
+            <field name="name">contract_notification_list</field>
+        </record>
+        <!-- Entry Point -->
+        <record model="ir.action.act_window" id="act_contract_notification_view">
+            <field name="name">Contract Notification</field>
+            <field name="res_model">contract.notification</field>
+            <field name="search_value" eval="[('planned_treatment_date', '&lt;=', Date())]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_notification_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="notification_view_list"/>
+            <field name="act_window" ref="act_contract_notification_view"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_notification_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="notification_view_form"/>
+            <field name="act_window" ref="act_contract_notification_view"/>
+        </record>
+        <!-- Tabs -->
+        <record model="ir.action.act_window.domain" id="act_notification_domain_open">
+            <field name="name">Open</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain" eval="[('treatment_date', '=', None)]" pyson="1"/>
+            <field name="act_window" ref="act_contract_notification_view"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_notification_domain_close">
+            <field name="name">Closed</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[('treatment_date', '!=', None)]" pyson="1"/>
+            <field name="act_window" ref="act_contract_notification_view"/>
+        </record>
+        <!-- From Contract Relate -->
+        <record model="ir.action.act_window" id="act_contract_notification_from_contract_view">
+            <field name="name">Notifications</field>
+            <field name="res_model">contract.notification</field>
+            <field name="domain" eval="[('contract', '=', Eval('active_id'))]" pyson="1"/>
+            <field name="search_value"
+                eval="[('planned_treatment_date', '&lt;=', Date())]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_notification_from_contract_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="notification_view_list"/>
+            <field name="act_window" ref="act_contract_notification_from_contract_view"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_notification_from_contract_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="notification_view_form"/>
+            <field name="act_window" ref="act_contract_notification_from_contract_view"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_notification_from_contract_domain_open">
+            <field name="name">Open</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain" eval="[('treatment_date', '=', None)]" pyson="1"/>
+            <field name="act_window" ref="act_contract_notification_from_contract_view"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_notification_from_contract_domain_close">
+            <field name="name">Closed</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[('treatment_date', '!=', None)]" pyson="1"/>
+            <field name="act_window" ref="act_contract_notification_from_contract_view"/>
+        </record>
+        <record model="ir.action.keyword" id="act_launch_notification_from_contract_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_contract_notification_from_contract_view"/>
+        </record>
+        <!-- Menu Entry -->
+        <menuitem id="menu_contract_notification" name="Notifications" parent="contract.menu_contract" sequence="100" action="act_contract_notification_view" icon="tryton-list"/>
+    </data>
+</tryton>

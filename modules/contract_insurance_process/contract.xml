@@ -21,5 +21,24 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="contract.contract_view_tree"/>
             <field name="name">contract_tree</field>
         </record>
+        <!-- ######################### -->
+        <!-- # Contract Notification # -->
+        <!-- ######################### -->
+        <record model="ir.ui.view" id="notification_view_form">
+            <field name="model">contract.notification</field>
+            <field name="inherit" ref="contract.notification_view_form"/>
+            <field name="name">contract_notification_form</field>
+        </record>
+        <record model="ir.ui.view" id="notification_view_list">
+            <field name="model">contract.notification</field>
+            <field name="inherit" ref="contract.notification_view_list"/>
+            <field name="name">contract_notification_list</field>
+        </record>
+        <!-- Resume Process -->
+        <record model="ir.action.keyword" id="act_launch_task_from_notification_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">contract.notification,-1</field>
+            <field name="action" ref="process_cog.act_resume_process"/>
+        </record>
     </data>
 </tryton>

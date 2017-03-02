@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="name"/>
+    <field name="name"/>
+    <newline/>
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="subscriber"/>
+    <field name="subscriber"/>
+    <label name="planned_treatment_date"/>
+    <field name="planned_treatment_date"/>
+    <label name="treatment_date"/>
+    <field name="treatment_date"/>
+    <group id="notification_button_group" colspan="4" col="11">
+        <group id="notification_button_group_space_left" colspan="5"/>
+        <button string="Treated" name="treat"/>
+        <group id="notification_button_group_space_right" colspan="5"/>
+    </group>
+</form>

@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
+from trytond.pyson import Eval, And, Or
+from trytond.server_context import ServerContext
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -11,6 +13,14 @@ __all__ = [
 class EventTypeAction:
     __name__ = 'event.type.action'
 
+    @classmethod
+    def __setup__(cls):
+        super(EventTypeAction, cls).__setup__()
+        cls.process_to_initiate.states['invisible'] = And(
+            cls.process_to_initiate.states.get('invisible', True),
+            Eval('action') != 'create_contract_notification')
+        cls.process_to_initiate.depends.append('action')
+
     def get_objects_for_process(self, objects, target_model_name):
         if target_model_name != 'contract':
             return super(EventTypeAction, self).get_objects_for_process(
@@ -19,3 +29,14 @@ class EventTypeAction:
         for object_ in objects:
             process_objects.extend(self.get_contracts_from_object(object_))
         return process_objects
+
+    def create_contract_notification(self, contracts):
+        notifications = super(EventTypeAction,
+            self).create_contract_notification(contracts)
+        if not self.process_to_initiate:
+            return notifications
+        state = self.step_to_start or self.process_to_initiate.first_step()
+        with ServerContext().set_context(initiate_process=True):
+            for notification in notifications:
+                notification.current_state = state
+        return notifications
