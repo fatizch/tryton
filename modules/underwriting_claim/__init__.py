@@ -18,6 +18,7 @@ def register():
         claim.ClaimService,
         event.EventLog,
         rule_engine.RuleEngine,
+        rule_engine.RuleEngineRuntime,
         module='underwriting_claim', type_='model')
     Pool.register(
         claim.DeliverBenefit,

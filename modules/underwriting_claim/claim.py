@@ -180,6 +180,9 @@ class Claim:
             Underwriting.process(processed)
             return processed
 
+    def init_dict_for_rule_engine(self, cur_dict):
+        cur_dict['claim'] = self
+
 
 class ClaimService:
     __metaclass__ = PoolMeta
