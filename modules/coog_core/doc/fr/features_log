@@ -1,3 +1,4 @@
+* Les actions par type d'événement peuvent être activé/désactivé
 * Outil de benchmarking déplacé dans un module indépendant
 * Mixin de détails configurable
 

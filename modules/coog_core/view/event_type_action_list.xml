@@ -6,4 +6,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="code"/>
     <field name="action"/>
     <field name="priority"/>
+    <field name="active" tree_invisible="1"/>
 </tree>

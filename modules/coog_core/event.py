@@ -193,6 +193,7 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
         fields.Text('Descriptor',
             states={'invisible': ~Eval('descriptor')}),
         'on_change_with_descriptor')
+    active = fields.Boolean('Active')
 
     @classmethod
     def __setup__(cls):
@@ -226,6 +227,10 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
     @classmethod
     def default_treatment_kind(cls):
         return 'synchronous'
+
+    @classmethod
+    def default_active(cls):
+        return True
 
     @fields.depends('treatment_kind')
     def on_change_action(self):

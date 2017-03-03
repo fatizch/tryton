@@ -208,6 +208,10 @@ msgctxt "field:event.type.action,action:"
 msgid "Action"
 msgstr "Action"
 
+msgctxt "field:event.type.action,active:"
+msgid "Active"
+msgstr "Actif"
+
 msgctxt "field:event.type.action,code:"
 msgid "Code"
 msgstr "Code"
