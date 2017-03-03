@@ -5,7 +5,7 @@ from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, utils
 from trytond.modules.rule_engine import get_rule_mixin
 
 __all__ = [
@@ -162,7 +162,9 @@ class Claim:
         self.update_underwritings([self])
 
     @classmethod
-    def activate_underwritings_if_needed(cls, claims, date):
+    def activate_underwritings_if_needed(cls, claims, date=None):
+        if not date:
+            date = utils.today()
         pool = Pool()
         Underwriting = pool.get('underwriting')
         Result = pool.get('underwriting.result')
