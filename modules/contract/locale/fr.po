@@ -114,6 +114,10 @@ msgid "There are dates for which no %s address is defined"
 msgstr "Il y a des dates pour lesquelles le %s n'a pas d'adresse renseignée"
 
 msgctxt "error:event.type.action:"
+msgid "Create Contract Notification"
+msgstr "Créer une notification"
+
+msgctxt "error:event.type.action:"
 msgid "WARNING: The Pyson Condition is applied on contract."
 msgstr "Attention : La condition Pyson est appliquée sur le contrat"
 

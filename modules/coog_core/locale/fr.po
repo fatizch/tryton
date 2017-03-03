@@ -224,6 +224,10 @@ msgctxt "field:event.type.action,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:event.type.action,descriptor:"
+msgid "Descriptor"
+msgstr "Descripteur"
+
 msgctxt "field:event.type.action,event_types:"
 msgid "Event Types"
 msgstr "Types d'événement"

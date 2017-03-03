@@ -36,6 +36,12 @@ class EventTypeAction:
             'invisible': Or(~Eval('pyson_condition'),
                 Eval('action') != 'initiate_process')})
 
+    @classmethod
+    def __setup__(cls):
+        super(EventTypeAction, cls).__setup__()
+        cls._error_messages.update({'initiate_process': 'Initiate Process'})
+        cls._error_messages.update({'clear_process': 'Clear Process'})
+
     @fields.depends('process_to_initiate', 'step_to_start')
     def on_change_process_to_initiate(self):
         if not self.process_to_initiate:
@@ -44,8 +50,10 @@ class EventTypeAction:
     @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
-            ('initiate_process', 'Initiate Process'),
-            ('clear_process', 'Clear Process')]
+            ('initiate_process', cls.raise_user_error(
+                    'initiate_process', raise_exception=False)),
+            ('clear_process', cls.raise_user_error(
+                    'clear_process', raise_exception=False))]
 
     @classmethod
     def _export_light(cls):

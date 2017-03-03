@@ -31,13 +31,15 @@ class EventTypeAction:
     def __setup__(cls):
         super(EventTypeAction, cls).__setup__()
         cls._error_messages.update({
+                'create_contract_notification': 'Create Contract Notification',
                 'notification_descriptor': 'WARNING: The Pyson'
                     ' Condition is applied on contract.'})
 
     @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
-            ('create_contract_notification', 'Create Contract Notification')]
+            ('create_contract_notification', cls.raise_user_error(
+                    'create_contract_notification', raise_exception=False))]
 
     @fields.depends('action')
     def on_change_with_descriptor(self, name=None):

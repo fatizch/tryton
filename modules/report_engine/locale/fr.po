@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:event.type.action:"
+msgid "Generate Documents"
+msgstr "Générer les documents"
+
 msgctxt "error:report.convert:"
 msgid "%i occurences were converted"
 msgstr "%i occurences ont été remplacées"

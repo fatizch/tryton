@@ -71,10 +71,18 @@ class EventTypeAction:
     __name__ = 'event.type.action'
 
     @classmethod
+    def __setup__(cls):
+        super(EventTypeAction, cls).__setup__()
+        cls._error_messages.update({
+                'cancel_or_delete_non_periodic_invoices':
+                'Cancel or Delete Non Periodic Invoices'})
+
+    @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
-            ('cancel_or_delete_non_periodic_invoices',
-                'Cancel or Delete Non Periodic Invoices')]
+            ('cancel_or_delete_non_periodic_invoices', cls.raise_user_error(
+                    'cancel_or_delete_non_periodic_invoices',
+                    raise_exception=False))]
 
     def filter_objects(self, objects):
         if self.action != 'cancel_or_delete_non_periodic_invoices':

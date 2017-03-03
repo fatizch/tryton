@@ -6,6 +6,14 @@ msgctxt "error:document.receive:"
 msgid "No process was found for the selected element."
 msgstr "Aucun processus détecté pour l'élément sélectionné."
 
+msgctxt "error:event.type.action:"
+msgid "Clear Process"
+msgstr "Supprimer le processus en courant"
+
+msgctxt "error:event.type.action:"
+msgid "Initiate Process"
+msgstr "Initier un processus"
+
 msgctxt "error:ir.ui.view.description:"
 msgid "The functional id must be unique !"
 msgstr "L'identifiant fonctionnel doit être unique"

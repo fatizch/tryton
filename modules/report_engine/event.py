@@ -47,9 +47,15 @@ class EventTypeAction:
         states={'invisible': Eval('action') != 'generate_documents'})
 
     @classmethod
+    def __setup__(cls):
+        super(EventTypeAction, cls).__setup__()
+        cls._error_messages.update({'generate_documents': 'Generate Documents'})
+
+    @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
-            ('generate_documents', 'Generate Documents')]
+            ('generate_documents', cls.raise_user_error(
+                    'generate_documents', raise_exception=False))]
 
     @classmethod
     def default_treatment_kind(cls):
