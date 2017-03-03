@@ -1244,6 +1244,10 @@ msgctxt "model:event.type,name:event_void_contract"
 msgid "Void Contract"
 msgstr "Contrat sans effet"
 
+msgctxt "model:event.type.action,name:event_action_notification"
+msgid "Notification After Void"
+msgstr "Notification suite sans effet"
+
 msgctxt "model:ir.action,name:"
 msgid "Devis"
 msgstr "Devis"

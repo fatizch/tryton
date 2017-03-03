@@ -1,3 +1,4 @@
+* Automatically create a notification when contracts are voided
 * Add Contract Notifications
 * Add chains for decline inactive quotes and terminate contract batches
 * Allow to filter by initial start date

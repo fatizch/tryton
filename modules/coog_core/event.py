@@ -171,7 +171,7 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
     __name__ = 'event.type.action'
     _func_key = 'code'
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     action = fields.Selection('get_action_types', 'Action', select=True)
     priority = fields.Integer('Priority', required=True)
