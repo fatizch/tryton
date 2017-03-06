@@ -216,7 +216,13 @@ Fail payment::
 
 Create second invoice::
 
-    >>> until_date = contract_start_date + relativedelta(months=1)
+    >>> if contract_start_date.month != (contract_start_date +
+    ...         relativedelta(days=1)).month:
+    ...     until_date = contract_start_date + relativedelta(days=1)
+    ...     until_date = until_date + relativedelta(months=1)
+    ...     until_date = until_date + relativedelta(days=-1)
+    ... else:
+    ...     until_date = contract_start_date + relativedelta(months=1)
     >>> generate_invoice = Wizard('contract.do_invoice', models=[contract])
     >>> generate_invoice.form.up_to_date = until_date
     >>> generate_invoice.execute('invoice')
@@ -258,7 +264,13 @@ Fail payment::
 
 Create third invoice::
 
-    >>> until_date = contract_start_date + relativedelta(months=2)
+    >>> if contract_start_date.month != (contract_start_date +
+    ...         relativedelta(days=1)).month:
+    ...     until_date = contract_start_date + relativedelta(days=1)
+    ...     until_date = until_date + relativedelta(months=2)
+    ...     until_date = until_date + relativedelta(days=-1)
+    ... else:
+    ...     until_date = contract_start_date + relativedelta(months=2)
     >>> generate_invoice = Wizard('contract.do_invoice', models=[contract])
     >>> generate_invoice.form.up_to_date = until_date
     >>> generate_invoice.execute('invoice')
