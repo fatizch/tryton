@@ -841,7 +841,7 @@ class CoveredElementDisplayer(model.CoogView):
         domain=[If((Eval('action') == 'terminate') &
                 Bool(Eval('cur_covered_id')),
                 [('status', '=', 'terminated')],
-                [])], depends=['action'])
+                [])], depends=['action', 'cur_covered_id'])
 
     @classmethod
     def __setup__(cls):
