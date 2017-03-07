@@ -6,12 +6,18 @@ _coog_rq_file() {
 }
 
 coog_rq_start() { # start worker - <wid> [queue +]
-        [ $# -lt 2 ] && >&2 echo "missing arguments" && return 1
+        [ $# -lt 1 ] && >&2 echo "missing arguments" && return 1
         local wid; wid=$1; shift
         local pid_file; pid_file=$(_coog_rq_file "$wid" pid)
         local out_file; out_file=$(_coog_rq_file "$wid" out)
         local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
                 >&2 echo "already running" && return 1
+
+        if [ -z "$1" ]; then
+            queue="$(python -W ignore $COOG_BIN/load_batches.py | tr '\n' ' ' 2> /dev/null)"
+        else
+            queue="$@"
+        fi
         coog_env_bak "$out_file" "$pid" || return $?
         rq worker \
                 -u "$TRYTOND_ASYNC_RQ" \
