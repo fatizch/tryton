@@ -27,12 +27,15 @@ class Product:
             if elem.end_date:
                 dates.add(coog_date.add_day(elem.end_date, 1))
 
+    def get_loan_dates(self, dates, loan):
+        dates.add(loan.funds_release_date)
+        dates.add(loan.first_payment_date)
+        dates.add(loan.end_date)
+
     def get_dates(self, contract):
         dates = super(Product, self).get_dates(contract)
         for loan in contract.used_loans:
-            dates.add(loan.funds_release_date)
-            dates.add(loan.first_payment_date)
-            dates.add(loan.end_date)
+            self.get_loan_dates(dates, loan)
         return dates
 
 
