@@ -188,7 +188,7 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
             args['product'] = self
 
     def get_all_extra_data(self, at_date):
-        return getattr(self, 'extra_data', {})
+        return dict(getattr(self, 'extra_data', {}))
 
     def get_extra_data_def(self, type_, existing_data, condition_date,
             item_desc=None, coverage=None):
@@ -384,7 +384,7 @@ class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return self.currency
 
     def get_all_extra_data(self, at_date):
-        return getattr(self, 'extra_data', {})
+        return dict(getattr(self, 'extra_data', {}))
 
     def get_publishing_values(self):
         result = super(OptionDescription, self).get_publishing_values()
