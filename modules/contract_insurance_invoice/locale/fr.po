@@ -400,6 +400,10 @@ msgctxt "field:contract.billing_information,direct_debit_day_selector:"
 msgid "Direct Debit Day"
 msgstr "Jour de prélèvement"
 
+msgctxt "field:contract.billing_information,icon:"
+msgid "Icon"
+msgstr "Icône"
+
 msgctxt "field:contract.billing_information,id:"
 msgid "ID"
 msgstr "ID"
@@ -423,6 +427,14 @@ msgstr "Conditions de paiement offerts"
 msgctxt "field:contract.billing_information,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:contract.billing_information,suspended:"
+msgid "Suspended"
+msgstr "Suspendu"
+
+msgctxt "field:contract.billing_information,suspensions:"
+msgid "Suspensions"
+msgstr "Suspensions"
 
 msgctxt "field:contract.billing_information,write_date:"
 msgid "Write Date"
@@ -535,6 +547,70 @@ msgstr "Active"
 msgctxt "field:contract.option.extra_premium,premiums:"
 msgid "Premiums"
 msgstr "Primes"
+
+msgctxt "field:contract.payment_suspension,active:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "field:contract.payment_suspension,billing_info:"
+msgid "Billing Information"
+msgstr "Quittancement"
+
+msgctxt "field:contract.payment_suspension,billing_info_rec_name:"
+msgid "Billing Information"
+msgstr "Quittancement"
+
+msgctxt "field:contract.payment_suspension,color:"
+msgid "Color"
+msgstr "Couleur"
+
+msgctxt "field:contract.payment_suspension,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.payment_suspension,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.payment_suspension,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.payment_suspension,force_active:"
+msgid "Force Active"
+msgstr "Forcer actif"
+
+msgctxt "field:contract.payment_suspension,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.payment_suspension,payment_line_due:"
+msgid "Payment Due Line"
+msgstr "Ligne de paiement due"
+
+msgctxt "field:contract.payment_suspension,payment_line_rec_name:"
+msgid "Payment Line"
+msgstr "Ligne de paiement"
+
+msgctxt "field:contract.payment_suspension,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.payment_suspension,use_force:"
+msgid "Use Forced Value"
+msgstr "Utiliser la valeur forcée"
+
+msgctxt "field:contract.payment_suspension,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:contract.payment_suspension,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.payment_suspension,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.premium,account:"
 msgid "Account"
@@ -956,6 +1032,18 @@ msgctxt "field:party.synthesis.menu.invoice,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:contract.payment_suspension,force_active:"
+msgid "Force the suspension status to active or inactive"
+msgstr "Forcer le statut de la suspension à active ou inactive"
+
+msgctxt "help:contract.payment_suspension,use_force:"
+msgid ""
+"If True, use the Force Active field to define whether the suspension is "
+"active or not"
+msgstr ""
+"Si coché, utiliser le champs d'activation forcée pour définir si la "
+"suspension est active ou non"
+
 msgctxt "help:offered.billing_mode,allowed_direct_debit_days:"
 msgid ""
 "Days of the month allowed for direct debit payment separated by comma.\n"
@@ -1026,6 +1114,10 @@ msgctxt "model:contract.invoice.set_number,name:"
 msgid "Set Contract Invoice Number Batch"
 msgstr "Batch de numérotation des quittances"
 
+msgctxt "model:contract.payment_suspension,name:"
+msgid "Payment Suspension"
+msgstr "Suspension de paiement"
+
 msgctxt "model:contract.premium,name:"
 msgid "Premium"
 msgstr "Prime"
@@ -1042,6 +1134,10 @@ msgctxt "model:ir.action,name:"
 msgid "Invoice Frequencies"
 msgstr "Fréquences de quittancement"
 
+msgctxt "model:ir.action,name:act_contract_payment_suspension_form"
+msgid "Payment Suspensions"
+msgstr "Suspensions de paiement"
+
 msgctxt "model:ir.action,name:act_invoice"
 msgid "Invoice Contracts"
 msgstr "Génération des quittances"
@@ -1057,6 +1153,14 @@ msgstr "Modes de quittancement"
 msgctxt "model:ir.action,name:act_premium_notice_form"
 msgid "Premium Notices"
 msgstr "Quittances"
+
+msgctxt "model:ir.action,name:act_suspensions_relate_form"
+msgid "Payment Suspensions"
+msgstr "Suspensions de paiement"
+
+msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_suspended"
+msgid "Suspended Payments"
+msgstr "Paiements suspendus"
 
 msgctxt "model:ir.action.act_window.domain,name:act_invoice_domain_all"
 msgid "All"
@@ -1153,6 +1257,14 @@ msgstr "Annulation de quittance"
 msgctxt "selection:account.move,kind:"
 msgid "Invoice Posting"
 msgstr "Emission de quittance"
+
+msgctxt "selection:account.payment.journal.failure_action,action:"
+msgid "Suspend Payments (Automatic un-suspend)"
+msgstr "Suspendre les paiements (Dé-suspension automatique)"
+
+msgctxt "selection:account.payment.journal.failure_action,action:"
+msgid "Suspend Payments (Manual un-suspend)"
+msgstr "Suspendre les paiements (Dé-suspension manuelle)"
 
 msgctxt "selection:account.reconcile.show,remaining_repartition_method:"
 msgid "Set on Contract"
@@ -1299,8 +1411,16 @@ msgid "Total Amount"
 msgstr "Montant total"
 
 msgctxt "view:contract.billing_information:"
-msgid "Contract Billing Information"
-msgstr "Quittancement"
+msgid "Suspend Payments"
+msgstr "Suspendre les paiements"
+
+msgctxt "view:contract.billing_information:"
+msgid "Suspension"
+msgstr "Suspension"
+
+msgctxt "view:contract.billing_information:"
+msgid "Unsuspend Payments"
+msgstr "Dé-suspendre les paiements"
 
 msgctxt "view:contract.covered_element:"
 msgid "Premiums"
@@ -1321,6 +1441,14 @@ msgstr "Regénérer les quittances"
 msgctxt "view:contract.option:"
 msgid "Premium"
 msgstr "Prime"
+
+msgctxt "view:contract.payment_suspension:"
+msgid "Activate"
+msgstr "Activer"
+
+msgctxt "view:contract.payment_suspension:"
+msgid "Deactivate"
+msgstr "Désactiver"
 
 msgctxt "view:contract.premium.display.premiums.line:"
 msgid "Premium"

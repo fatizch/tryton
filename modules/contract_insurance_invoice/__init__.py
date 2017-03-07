@@ -13,6 +13,7 @@ from .rule_engine import *
 from .event import *
 from .bank import *
 from .configuration import *
+import payment
 
 
 def register():
@@ -57,6 +58,9 @@ def register():
         EventTypeAction,
         BankAccount,
         OfferedConfiguration,
+        payment.Payment,
+        payment.PaymentSuspension,
+        payment.JournalFailureAction,
         module='contract_insurance_invoice', type_='model')
     Pool.register(
         InvoiceContract,

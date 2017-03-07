@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tree>
+    <field name="payment_line_rec_name"/>
+    <field name="billing_info_rec_name"/>
+    <field name="active" tree_invisible="1"/>
+    <field name="color" tree_invisible="1"/>
+    <button name="activate" string="Activate" tree_invisible="1"/>
+    <button name="deactivate" string="Deactivate" tree_invisible="1"/>
+</tree>

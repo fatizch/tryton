@@ -1,3 +1,15 @@
+- **Suspensions de paiement :** Il est désormais possible de suspendre les paiement
+  pour des informations de quittancement d'un contrat. Ces suspensions peuvent être
+  automatiques (définies dans les actions en cas d'échec sur les journaux de paiement)
+  ou bien manuelles via un boutton sur dans la page de quittancement des contrats.
+  La dé-suspension peut également être automatique (Une suspension est inactive
+  lorsque la ligne dûe sur laquelle elle porte est réconciliée) ou manuelle (comme
+  la suspension manuelle).
+  Une relation a été ajoutée aux informations de quittancement pour facilement
+  retrouver les suspensions associées.
+  Une nouvelle page montrant les contrats avec un mode de quittancement
+  suspendu a également été ajoutée à la vue liste des contrats.
+
 - **Paramétrage des paramètres de quittancement :** Il est possible de définir
   par paramétrage un ensemble de règles de quittancement, ainsi que les
   produits et / ou conditions sous lesquelles ces règles sont disponible.

@@ -15,4 +15,15 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <label name="payment_term"/>
     <field name="payment_term" widget="selection"/>
+    <newline/>
+    <field name="suspended" invisible="1"/>
+    <group id="buttons" colspan="4" col="10">
+        <group id="buttons_group_space_left" colspan="4"/>
+        <group id="buttons_group_space_center" colspan="1">
+            <button name="suspend_payments" string="Suspend Payments" colspan="1"/>
+            <newline/>
+            <button name="unsuspend_payments" string="Unsuspend Payments" colspan="1"/>
+        </group>
+        <group id="buttons_group_space_right" colspan="5"/>
+    </group>
 </form>

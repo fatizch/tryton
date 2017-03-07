@@ -46,8 +46,8 @@ class BillingInformation(object):
 
     @classmethod
     def view_attributes(cls):
-        return [('/form/group[@id="invisible"]', 'states',
-                 {'invisible': True})]
+        return super(BillingInformation, cls).view_attributes() + \
+            [('/form/group[@id="invisible"]', 'states', {'invisible': True})]
 
     @fields.depends('contract', 'direct_debit_account',
         'direct_debit_account_selector', 'search_all_direct_debit_account')

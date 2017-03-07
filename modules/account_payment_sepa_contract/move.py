@@ -19,4 +19,9 @@ class MoveLine:
         if (self.origin and isinstance(self.origin, Invoice) and
                 self.origin.sepa_mandate):
             payment['sepa_mandate'] = self.origin.sepa_mandate.id
+        billing_info = self.contract.billing_information \
+            if self.contract else None
+        if billing_info:
+            payment['date'] = billing_info.get_direct_debit_planned_date(self) \
+                or payment['date']
         return payment

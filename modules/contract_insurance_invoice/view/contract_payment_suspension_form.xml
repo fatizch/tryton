@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="payment_line_due"/>
+    <field name="payment_line_due"/>
+    <label name="billing_info"/>
+    <field name="billing_info"/>
+    <label name="use_force"/>
+    <field name="use_force"/>
+    <label name="force_active"/>
+    <field name="force_active"/>
+    <label name="active"/>
+    <field name="active"/>
+    <group id="buttons" colspan="4" col="10">
+        <group id="buttons_group_space_left" colspan="4"/>
+        <group id="buttons_group_space_center" colspan="1">
+            <button name="activate" string="Activate"/>
+            <button name="deactivate" string="Deactivate"/>
+        </group>
+        <group id="buttons_group_space_right" colspan="5"/>
+    </group>
+</form>

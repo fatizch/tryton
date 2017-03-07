@@ -11,6 +11,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
+        <record model="ir.action.act_window.domain" id="act_contract_domain_suspended">
+            <field name="name">Suspended Payments</field>
+            <field name="sequence" eval="35"/>
+            <field name="domain" eval="[('billing_informations.suspensions.active', '=', True)]" pyson="1"/>
+            <field name="act_window" ref="contract.act_contract_form"/>
+        </record>
         <!-- ################################## -->
         <!-- ########### sub status ########### -->
         <!-- ################################## -->
@@ -36,6 +42,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">contract.billing_information</field>
             <field name="type">form</field>
             <field name="name">contract_billing_information_without_date_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_suspensions_relate_form">
+            <field name="name">Payment Suspensions</field>
+            <field name="res_model">contract.payment_suspension</field>
+            <field name="domain" eval="[('billing_info', 'in', Eval('active_ids')),
+                ('active', 'in', [True, False])]" pyson="1"></field>
+        </record>
+        <record model="ir.action.keyword" id="act_suspensions_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract.billing_information,-1</field>
+            <field name="action" ref="act_suspensions_relate_form"/>
         </record>
         <!-- ########### -->
         <!-- # Premium # -->

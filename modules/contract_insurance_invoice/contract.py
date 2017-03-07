@@ -5,6 +5,7 @@ import datetime
 import calendar
 from collections import defaultdict
 from decimal import Decimal
+from itertools import groupby
 
 from sql import Column, Null, Literal
 from sql.aggregate import Max, Count, Sum
@@ -15,7 +16,7 @@ from dateutil.relativedelta import relativedelta
 
 from trytond.pool import Pool, PoolMeta
 from trytond.model import dualmethod
-from trytond.pyson import Eval, And, Len, If, Bool, PYSONEncoder
+from trytond.pyson import Eval, And, Len, If, Bool, Or, PYSONEncoder
 from trytond.error import UserError
 from trytond import backend
 from trytond.transaction import Transaction
@@ -228,6 +229,11 @@ class Contract:
         cls._error_messages.update({
                 'no_payer': 'A payer must be specified',
                 })
+
+    def get_color(self, name=None):
+        if self.billing_information and self.billing_information.suspended:
+            return 'red'
+        return super(Contract, self).get_color(name)
 
     @classmethod
     def delete(cls, contracts):
@@ -1535,6 +1541,12 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
                 (Eval('_parent_contract', {}).get('status', '') ==
                     'active'))},
         depends=['direct_debit'], ondelete='RESTRICT')
+    suspended = fields.Function(fields.Boolean('Suspended'),
+        'get_suspended')
+    icon = fields.Function(fields.Char('Icon'),
+        'get_icon')
+    suspensions = fields.One2Many('contract.payment_suspension',
+        'billing_info', 'Suspensions', delete_missing=True)
 
     @classmethod
     def _export_light(cls):
@@ -1551,6 +1563,65 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
                 'owners', '=', Eval('payer')
                 ])
         cls.direct_debit_account.depends.append('payer')
+        cls._buttons.update({
+                'suspend_payments': {'invisible': Or(~Eval('direct_debit'),
+                        Bool(Eval('suspended')))},
+                'unsuspend_payments': {'invisible': Or(~Eval('direct_debit'),
+                        ~Bool(Eval('suspended')))},
+                })
+
+    @classmethod
+    def suspension_values(cls, billing_id, payment, **kwargs):
+        values = {
+            'billing_info': billing_id,
+            'payment_line_due': payment.line.id if payment else None,
+            }
+        values.update(kwargs)
+        return values
+
+    @classmethod
+    @model.CoogView.button
+    def suspend_payments(cls, billings, payments_per_billing=None):
+        if not billings and not payments_per_billing:
+            return
+        BillingSuspension = Pool().get('contract.payment_suspension')
+        values = []
+        if payments_per_billing:
+            server_ctx = ServerContext()
+            for billing_id, payments in payments_per_billing.items():
+                for payment in payments:
+                    values.append(cls.suspension_values(
+                            billing_id, payment,
+                            use_force=server_ctx.get('use_force', False),
+                            force_active=server_ctx.get('use_force', False)))
+        else:
+            values += [cls.suspension_values(x.id, None, use_force=True,
+                    force_active=True) for x in billings]
+        if values:
+            BillingSuspension.create(values)
+
+    @classmethod
+    @model.CoogView.button
+    def unsuspend_payments(cls, billings):
+        PaymentSuspension = Pool().get('contract.payment_suspension')
+        suspensions = PaymentSuspension.search([('billing_info', 'in',
+                    [x.id for x in billings])])
+        PaymentSuspension.write(suspensions, {
+                'use_force': True,
+                'force_active': False,
+                })
+
+    @classmethod
+    def get_suspended(cls, billings, name):
+        res = {x.id: False for x in billings}
+        suspensions = Pool().get('contract.payment_suspension').search(
+            [('billing_info', 'in', [x.id for x in billings])],
+            order=[('billing_info', 'ASC')])
+
+        for billing_info, suspensions in groupby(suspensions,
+                key=lambda x: x.billing_info.id):
+            res[billing_info] = any(suspensions)
+        return res
 
     @classmethod
     def __register__(cls, module_name):
@@ -1619,6 +1690,11 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
     @classmethod
     def get_reverse_field_name(cls):
         return 'billing_information'
+
+    def get_icon(self, name=None):
+        if self.suspended:
+            return 'rounded_warning'
+        return super(ContractBillingInformation, self).get_icon(name)
 
     @fields.depends('billing_mode')
     def get_allowed_direct_debit_days(self):

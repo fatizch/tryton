@@ -1,3 +1,13 @@
+- **Payment suspensions :** It is now possible to suspend the payments for a
+  given contract billing information. These suspensions could be automatics 
+  (Actuib defined in a journal failure action) or manuals via a button in the 
+  contract billing informations list page. The un-suspension can also be
+  automatic (suspension is inactive when the associated account move line
+  is reconciled) or manual (The same way as the manual suspension).
+  A relate is added on billing informations to easely find associated suspensions.
+  Finally, a new page showing all contracts with a suspended billing information
+  has been added to the contract list view.
+
 - **Paramétrage des paramètres de quittancement :** Il est possible de définir
   par paramétrage un ensemble de règles de quittancement, ainsi que les
   produits et / ou conditions sous lesquelles ces règles sont disponible.

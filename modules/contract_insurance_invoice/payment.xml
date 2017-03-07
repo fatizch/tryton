@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ###################### -->
+        <!-- # Payment Suspension # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="contract_payment_suspension_view_list">
+            <field name="model">contract.payment_suspension</field>
+            <field name="type">tree</field>
+            <field name="name">contract_payment_suspension_list</field>
+        </record>
+        <record model="ir.ui.view" id="contract_payment_suspension_view_form">
+            <field name="model">contract.payment_suspension</field>
+            <field name="type">form</field>
+            <field name="name">contract_payment_suspension_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_contract_payment_suspension_form">
+            <field name="name">Payment Suspensions</field>
+            <field name="res_model">contract.payment_suspension</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_payment_suspension_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="contract_payment_suspension_view_list"/>
+            <field name="act_window" ref="act_contract_payment_suspension_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_payment_suspension_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="contract_payment_suspension_view_form"/>
+            <field name="act_window" ref="act_contract_payment_suspension_form"/>
+        </record>
+    </data>
+</tryton>

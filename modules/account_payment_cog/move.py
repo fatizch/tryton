@@ -175,6 +175,8 @@ class MoveLine:
 
     @classmethod
     def init_payments(cls, lines, journal):
+        if not lines:
+            return []
         payments = []
         outstanding = cls.get_outstanding_amount(lines)
         if lines[0].account.kind == 'receivable' and outstanding > 0:
@@ -366,7 +368,7 @@ class PaymentCreationStart(model.CoogView):
     def on_change_with_description(self):
         return self.motive.name if self.motive else None
 
-    @fields.depends('lines_to_pay')
+    @fields.depends('lines_to_pay', 'payment_date')
     def on_change_lines_to_pay(self):
         self.have_lines_payment_date = all(
             x.payment_date for x in self.lines_to_pay)

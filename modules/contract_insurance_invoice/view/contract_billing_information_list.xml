@@ -3,10 +3,13 @@
 this repository contains the full copyright notices and license terms. -->
 <tree>
     <field name="contract"/>
-    <field name="date"/>
+    <field name="date" icon="icon"/>
     <field name="billing_mode"/>
     <field name="direct_debit"/>
     <field name="direct_debit_day"/>
     <field name="payer"/>
     <field name="direct_debit_account"/>
+    <field name="suspended" tree_invisible="1"/>
+    <button name="suspend_payments" string="Suspend Payments"/>
+    <button name="unsuspend_payments" string="Unsuspend Payments"/>
 </tree>

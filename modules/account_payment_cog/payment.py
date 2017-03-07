@@ -374,6 +374,7 @@ class Payment(export.ExportImportMixin, Printable):
     icon = fields.Function(
         fields.Char('Icon'),
         'get_icon')
+    manual_reject_code = fields.Char('Manual Reject Code')
     manual_fail_status = fields.Selection([
         ('', ''),
         ('pending', 'Pending'),
@@ -481,7 +482,7 @@ class Payment(export.ExportImportMixin, Printable):
 
     @property
     def fail_code(self):
-        pass
+        return self.manual_reject_code
 
     @classmethod
     def fail(cls, payments):
@@ -592,7 +593,7 @@ class Payment(export.ExportImportMixin, Printable):
 
     @classmethod
     def payments_fields_to_update_after_fail(cls, reject_reason):
-        return {}
+        return {'manual_reject_code': reject_reason.code}
 
     def get_grouping_key(self):
         return self.merged_id if self.merged_id else self.id

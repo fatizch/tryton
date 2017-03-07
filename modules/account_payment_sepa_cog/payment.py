@@ -584,6 +584,8 @@ class Payment:
             'sepa_return_reason_code': reject_reason.code,
             'sepa_bank_reject_date': utils.today(),
         })
+        if reject_reason.process_method == 'sepa':
+            fields['manual_reject_code'] = None
         return fields
 
     def get_description(self, lang=None):
