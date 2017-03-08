@@ -18,3 +18,6 @@ def register():
         Invoice,
         Event,
         module='commission_insurance_prepayment', type_='model')
+    Pool.register(
+        FilterCommissions,
+        module='commission_insurance_prepayment', type_='wizard')

@@ -21,6 +21,7 @@ __all__ = [
     'Commission',
     'Plan',
     'Agent',
+    'FilterCommissions',
     ]
 
 
@@ -266,3 +267,25 @@ class Agent:
                 cls.sum_of_redeemed_prepayment(agents).iteritems():
             result[key] -= prepayment_amount
         return result
+
+
+class FilterCommissions:
+    __metaclass__ = PoolMeta
+    __name__ = 'commission.filter_commission'
+
+    def do_aggregated_commissions(self, action):
+        act, ctx = super(
+            FilterCommissions, self).do_aggregated_commissions(action)
+        transaction = Transaction()
+        active_model = transaction.context.get('active_model')
+        active_id = transaction.context.get('active_id')
+        if active_model == 'contract':
+            contract = Pool().get('contract')(active_id)
+            options = contract.options + contract.covered_element_options
+            if 'extra_context' not in ctx:
+                ctx['extra_context'] = {}
+            if 'origins' not in ctx['extra_context']:
+                ctx['extra_context']['origins'] = []
+            ctx['extra_context']['origins'].extend(
+                [str(o) for o in options])
+        return act, ctx

@@ -369,9 +369,9 @@ class AggregatedCommission(model.CoogSQL, model.CoogView):
         invoice_line = InvoiceLine.__table__()
 
         where_clause = None
-        if 'origins' in Transaction().context:
-            where_clause = (commission.origin.in_(
-                    Transaction().context.get('origins')))
+        origins = Transaction().context.get('origins', None)
+        if origins:
+            where_clause = commission.origin.in_(origins)
 
         commission_agent = commission.join(agent,
             condition=commission.agent == agent.id)
