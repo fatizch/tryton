@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import base64
 
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import PoolMeta
 from trytond.cache import Cache
 from trytond.ir.resource import ResourceMixin
 import utils
