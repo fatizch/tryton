@@ -113,17 +113,6 @@ class Commission:
                     values=[update_table.start, update_table.end],
                     from_=[update_table],
                     where=(commission_up.id == update_table.id)))
-        # Migration from 1.6: store commission_rate as percent
-        commission = cls.__table__()
-        rate_not_as_percent_query = commission.select(commission.id,
-            where=(commission.commission_rate >= 1), limit=1)
-        cursor.execute(*rate_not_as_percent_query)
-        if len(cursor.fetchall()):
-            commission = cls.__table__()
-            cursor.execute(*commission.update(
-                    columns=[commission.commission_rate],
-                    values=[Cast(commission.commission_rate / 100,
-                        'DECIMAL (16,4)')]))
 
     @classmethod
     def __setup__(cls):
