@@ -29,7 +29,7 @@ class Loss:
         order=[('deduction_kind', 'ASC'), ('start_date', 'ASC')],
         depends=['deduction_kinds'])
 
-    @fields.depends('loss_desc', 'deduction_kinds')
+    @fields.depends('loss_desc')
     def on_change_with_deduction_kinds(self, name=None):
         if self.loss_desc:
             return [x.id for x in self.loss_desc.deduction_period_kinds]

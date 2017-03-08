@@ -2,7 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 import base64
 
-from trytond.pool import PoolMeta
+from trytond.pool import Pool, PoolMeta
+from trytond.cache import Cache
+from trytond.ir.resource import ResourceMixin
 import utils
 import fields
 import export
@@ -22,6 +24,7 @@ class Attachment(export.ExportImportMixin):
         selection='get_possible_origin', select=True)
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
+    _models_get_cache = Cache('models_get_cache')
 
     @classmethod
     def is_master_object(cls):
@@ -43,6 +46,14 @@ class Attachment(export.ExportImportMixin):
                 return [('id', '=', None)]
         else:
             return [('id', '=', None)]
+
+    @staticmethod
+    def get_models():
+        result = Attachment._models_get_cache.get('get_models', None)
+        if result is None:
+            result = ResourceMixin.get_models()
+            Attachment._models_get_cache.set('get_models', result)
+        return result
 
     @classmethod
     def get_possible_origin(cls):
