@@ -331,6 +331,11 @@ class Contract:
                 result[contract] = balance
         return result
 
+    def get_color(self, name):
+        if self.status in ['void', 'terminated'] and self.balance_today != 0:
+            return 'red'
+        return super(Contract, self).get_color(name)
+
     @classmethod
     def search_balance(cls, name, clause, date=None):
         pool = Pool()
