@@ -20,7 +20,7 @@ class PaymentSuspension(model.CoogSQL, model.CoogView):
         'get_payment_line_rec_name')
     billing_info = fields.Many2One('contract.billing_information',
         'Billing Information', required=True, ondelete='CASCADE',
-        readonly=True)
+        readonly=True, select=True)
     billing_info_rec_name = fields.Function(fields.Char('Billing Information'),
         'get_billing_info_rec_name')
     use_force = fields.Boolean('Use Forced Value', readonly=True, help='If '
