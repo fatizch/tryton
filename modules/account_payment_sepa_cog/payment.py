@@ -8,8 +8,8 @@ from itertools import groupby
 from collections import namedtuple
 from dateutil.relativedelta import relativedelta
 from collections import defaultdict
-from sql.aggregate import Sum, Max
-from sql import Literal, Null
+from sql.aggregate import Sum
+from sql import Null
 from sql.conditionals import Case
 from sql.operators import Not
 
@@ -33,6 +33,7 @@ __all__ = [
     'InvoiceLine',
     'Journal',
     'Message',
+    'MergedBySepaPartyMixin',
     'MergedPayments',
     'PaymentCreationStart',
     'PaymentCreation',
@@ -746,32 +747,46 @@ class Message:
         return coog_string.slugify('_'.join(names)) + '.xml'
 
 
-class MergedPayments:
-    __name__ = 'account.payment.merged'
+class MergedBySepaPartyMixin(object):
+    __metaclass__ = PoolMeta
 
     @classmethod
-    def table_query(cls):
-        # No call to parent method : overriden to merge payments by payer
-        pool = Pool()
-        payment = pool.get('account.payment').__table__()
-        sepa_mandate = pool.get('account.payment.sepa.mandate').__table__()
-        joined_table = payment.join(sepa_mandate,
+    def _table_models(cls):
+        return super(MergedBySepaPartyMixin, cls)._table_models() + \
+            ['account.payment.sepa.mandate']
+
+    @classmethod
+    def get_query_table(cls, tables):
+        sepa_mandate = tables['account.payment.sepa.mandate']
+        payment = tables['account.payment']
+        base_table = super(MergedBySepaPartyMixin, cls).get_query_table(
+            tables)
+        return base_table.join(sepa_mandate,
             condition=sepa_mandate.id == payment.sepa_mandate)
 
-        return joined_table.select(
-            Max(payment.id).as_('id'),
-            payment.merged_id.as_('merged_id'),
-            payment.journal.as_('journal'),
-            sepa_mandate.party.as_('party'),
-            payment.state.as_('state'),
-            Literal(0).as_('create_uid'),
-            Literal(0).as_('create_date'),
-            Literal(0).as_('write_uid'),
-            Literal(0).as_('write_date'),
-            Sum(payment.amount).as_('amount'),
-            where=(payment.merged_id != Null),
-            group_by=[payment.merged_id, payment.journal,
-                sepa_mandate.party, payment.state])
+    @classmethod
+    def get_select_fields(cls, tables):
+        select_fields = super(MergedBySepaPartyMixin, cls).get_select_fields(
+            tables)
+        select_fields['party'] = tables['account.payment.sepa.mandate'
+            ].party.as_('party')
+        select_fields['sepa_mandate'] = \
+            tables['account.payment'].sepa_mandate.as_('sepa_mandate')
+        return select_fields
+
+    @classmethod
+    def get_group_by_clause(cls, tables):
+        sepa_mandate = tables['account.payment.sepa.mandate']
+        payment = tables['account.payment']
+        clause = super(MergedBySepaPartyMixin, cls).get_group_by_clause(
+            tables)
+        clause['sepa_mandate'] = payment.sepa_mandate
+        clause['party'] = sepa_mandate.party
+        return clause
+
+
+class MergedPayments(MergedBySepaPartyMixin):
+    __name__ = 'account.payment.merged'
 
 
 class PaymentCreationStart:

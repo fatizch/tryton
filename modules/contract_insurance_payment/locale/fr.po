@@ -10,6 +10,78 @@ msgctxt "field:account.payment.journal,failure_billing_mode:"
 msgid "Failure Billing Mode"
 msgstr "Mode de quittancement en cas d'échec"
 
+msgctxt "field:account.payment.merged.by_contract,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:account.payment.merged.by_contract,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:account.payment.merged.by_contract,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.payment.merged.by_contract,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.payment.merged.by_contract,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.payment.merged.by_contract,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:account.payment.merged.by_contract,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:account.payment.merged.by_contract,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:account.payment.merged.by_contract,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account.payment.merged.by_contract,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:account.payment.merged.by_contract,merged_id:"
+msgid "Merged id"
+msgstr "Identifiant de regroupement"
+
+msgctxt "field:account.payment.merged.by_contract,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:account.payment.merged.by_contract,payments:"
+msgid "Payments"
+msgstr "Paiements"
+
+msgctxt "field:account.payment.merged.by_contract,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:account.payment.merged.by_contract,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:account.payment.merged.by_contract,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.payment.merged.by_contract,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:account.payment.merged.by_contract,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:contract,failed_payments:"
 msgid "Failed Payments"
 msgstr "Paiements échoués"
@@ -34,6 +106,10 @@ msgctxt "help:offered.product,payment_journal:"
 msgid "If no journal defined the global configuration will be used"
 msgstr "Si aucun journal n'est défini, la configuration gloable sera utilisée"
 
+msgctxt "model:account.payment.merged.by_contract,name:"
+msgid "Merged payments by contracts"
+msgstr "Paiements regroupés par contrat"
+
 msgctxt "model:ir.action,name:act_payments_relate_form"
 msgid "Payments"
 msgstr "Paiements"
@@ -41,3 +117,23 @@ msgstr "Paiements"
 msgctxt "selection:account.payment.journal.failure_action,action:"
 msgid "Move to manual payment"
 msgstr "Basculer en paiement manuel"
+
+msgctxt "selection:account.payment.merged.by_contract,state:"
+msgid "Approved"
+msgstr "Approuvé"
+
+msgctxt "selection:account.payment.merged.by_contract,state:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:account.payment.merged.by_contract,state:"
+msgid "Failed"
+msgstr "Rejeté"
+
+msgctxt "selection:account.payment.merged.by_contract,state:"
+msgid "Processing"
+msgstr "Traitement"
+
+msgctxt "selection:account.payment.merged.by_contract,state:"
+msgid "Succeeded"
+msgstr "Réussi"

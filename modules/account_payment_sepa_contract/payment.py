@@ -6,6 +6,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields
 from trytond.transaction import Transaction
 
+from trytond.modules.account_payment_sepa_cog import MergedBySepaPartyMixin
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -13,6 +14,7 @@ __all__ = [
     'Payment',
     'PaymentCreationStart',
     'Journal',
+    'MergedPaymentsByContracts',
     ]
 
 
@@ -128,6 +130,11 @@ class Journal:
             payments) and any([(not p.line.contract or
                     p.line.contract.action_required_when_payments_failed())
                 for p in payments if p.line])
+
+
+class MergedPaymentsByContracts(MergedBySepaPartyMixin):
+
+    __name__ = 'account.payment.merged.by_contract'
 
 
 class Mandate:

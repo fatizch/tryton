@@ -15,6 +15,6 @@ class ReportTemplate:
         result = super(ReportTemplate, self).get_possible_kinds()
         if not self.on_model:
             return result
-        if self.on_model.model in ('account.payment', 'account.payment.merged'):
+        if self.on_model.model == 'account.payment.merged.by_contract':
             result.append(('reject_payment', 'Reject Payment'))
         return result

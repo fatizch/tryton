@@ -377,6 +377,10 @@ msgctxt "field:account.payment.merged,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.payment.merged,payments:"
+msgid "Payments"
+msgstr "Paiements"
+
 msgctxt "field:account.payment.motive,code:"
 msgid "Code"
 msgstr "Code"

@@ -24,6 +24,7 @@ __metaclass__ = PoolMeta
 
 __all__ = [
     'Payment',
+    'MergedPaymentsMixin',
     'MergedPayments',
     'FilterPaymentsPerMergedId',
     'Configuration',
@@ -294,11 +295,9 @@ class FilterPaymentsPerMergedId(Wizard):
         return action, {}
 
 
-class MergedPayments(model.CoogSQL, model.CoogView, ModelCurrency,
+class MergedPaymentsMixin(model.CoogSQL, model.CoogView, ModelCurrency,
         Printable):
-    'Merged payments'
-
-    __name__ = 'account.payment.merged'
+    'Merged payments Mixin'
 
     merged_id = fields.Char('Merged id', readonly=True)
     amount = fields.Numeric('Amount', readonly=True,
@@ -314,18 +313,67 @@ class MergedPayments(model.CoogSQL, model.CoogView, ModelCurrency,
             ('succeeded', 'Succeeded'),
             ('failed', 'Failed'),
             ], 'State', readonly=True)
+    payments = fields.Function(
+        fields.Many2Many('account.payment', None, None, 'Payments'),
+        'get_payments')
 
     @classmethod
     def __setup__(cls):
-        super(MergedPayments, cls).__setup__()
+        super(MergedPaymentsMixin, cls).__setup__()
         cls._order = [('merged_id', 'DESC')]
-        cls._buttons.update({
-                'button_fail_merged_payments': {
-                    'invisible': Not(In(Eval('state'),
-                            ['processing', 'succeeded'])),
-                    'icon': 'tryton-cancel',
-                    }
-                })
+
+    @classmethod
+    def _table_models(cls):
+        return ['account.payment']
+
+    @classmethod
+    def get_tables(cls):
+        return {x: Pool().get(x).__table__() for x in cls._table_models()}
+
+    @classmethod
+    def get_query_table(cls, tables):
+        return tables['account.payment']
+
+    @classmethod
+    def get_group_by_clause(cls, tables):
+        payment_table = tables['account.payment']
+        return {'merged_id': payment_table.merged_id,
+            'journal': payment_table.journal,
+            'party': payment_table.party,
+            'state': payment_table.state}
+
+    @classmethod
+    def get_where_clause(cls, tables):
+        payment_table = tables['account.payment']
+        return (payment_table.merged_id != Null)
+
+    @classmethod
+    def get_select_fields(cls, tables):
+        payment_table = tables['account.payment']
+        return {
+            'id': Max(payment_table.id).as_('id'),
+            'merged_id': payment_table.merged_id.as_('merged_id'),
+            'journal': payment_table.journal.as_('journal'),
+            'party': payment_table.party.as_('party'),
+            'state': payment_table.state.as_('state'),
+            'create_uid': Literal(0).as_('create_uid'),
+            'create_date': Literal(0).as_('create_date'),
+            'write_uid': Literal(0).as_('write_uid'),
+            'write_date': Literal(0).as_('write_date'),
+            'amount': Sum(payment_table.amount).as_('amount')}
+
+    @classmethod
+    def table_query(cls):
+        tables = cls.get_tables()
+        query_table = cls.get_query_table(tables)
+        return query_table.select(
+            *cls.get_select_fields(tables).values(),
+            where=cls.get_where_clause(tables),
+            group_by=cls.get_group_by_clause(tables).values())
+
+    @classmethod
+    def get_payments(cls, merged_payments, name):
+        raise NotImplementedError
 
     def get_currency(self, name=None):
         return self.journal.currency if self.journal else None
@@ -340,25 +388,33 @@ class MergedPayments(model.CoogSQL, model.CoogView, ModelCurrency,
         # Do not reference a virtual model
         return None
 
-    @classmethod
-    def table_query(cls):
-        pool = Pool()
-        payment = pool.get('account.payment').__table__()
 
-        return payment.select(
-            Max(payment.id).as_('id'),
-            payment.merged_id.as_('merged_id'),
-            payment.journal.as_('journal'),
-            payment.party.as_('party'),
-            payment.state.as_('state'),
-            Literal(0).as_('create_uid'),
-            Literal(0).as_('create_date'),
-            Literal(0).as_('write_uid'),
-            Literal(0).as_('write_date'),
-            Sum(payment.amount).as_('amount'),
-            where=(payment.merged_id != Null),
-            group_by=[payment.merged_id, payment.journal,
-                      payment.party, payment.state])
+class MergedPayments(MergedPaymentsMixin):
+    'Merged payments'
+
+    __name__ = 'account.payment.merged'
+
+    @classmethod
+    def get_payments(cls, merged_payments, name):
+        payment = Pool().get('account.payment').__table__()
+        cursor = Transaction().connection.cursor()
+        res = {x.merged_id: [x.id, []] for x in merged_payments}
+        cursor.execute(*payment.select(payment.id, payment.merged_id,
+                where=payment.merged_id.in_(res.keys())))
+        for payment_id, merged_id in cursor.fetchall():
+            res[merged_id][1].append(payment_id)
+        return {v[0]: v[1] for v in res.values()}
+
+    @classmethod
+    def __setup__(cls):
+        super(MergedPayments, cls).__setup__()
+        cls._buttons.update({
+                'button_fail_merged_payments': {
+                    'invisible': Not(In(Eval('state'),
+                            ['processing', 'succeeded'])),
+                    'icon': 'tryton-cancel',
+                    }
+                })
 
     @classmethod
     @ModelView.button_action(
@@ -531,9 +587,19 @@ class Payment(export.ExportImportMixin, Printable):
         pass
 
     @classmethod
+    def get_objects_for_fail_prints(cls, report, payments):
+        MergedPayment = Pool().get('account.payment.merged')
+        if report.on_model.model == 'account.payment.merged':
+            merged_ids = list(set(x.merged_id for x in payments))
+            payments = MergedPayment.search(
+                [('merged_id', 'in', merged_ids)])
+        return payments
+
+    @classmethod
     def fail_print(cls, to_prints):
         for report, payments in to_prints:
-            report.produce_reports(payments)
+            to_print = cls.get_objects_for_fail_prints(report, payments)
+            report.produce_reports(to_print)
 
     @fields.depends('line')
     def on_change_line(self):

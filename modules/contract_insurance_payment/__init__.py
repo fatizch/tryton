@@ -8,6 +8,7 @@ from .offered import *
 from .move import *
 from .event import *
 from .contract import *
+from .report import *
 
 
 def register():
@@ -21,4 +22,6 @@ def register():
         MoveLine,
         EventLog,
         Contract,
+        ReportTemplate,
+        MergedPaymentsByContracts,
         module='contract_insurance_payment', type_='model')

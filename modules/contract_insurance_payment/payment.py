@@ -10,6 +10,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields
+from trytond.modules.account_payment_cog import MergedPaymentsMixin
 
 
 __metaclass__ = PoolMeta
@@ -17,6 +18,7 @@ __all__ = [
     'Payment',
     'Journal',
     'JournalFailureAction',
+    'MergedPaymentsByContracts',
     ]
 
 
@@ -162,3 +164,81 @@ class Payment:
 
         if to_save:
             MoveLine.save(to_save)
+
+    @classmethod
+    def get_objects_for_fail_prints(cls, report, payments):
+        MergedPaymentsByContracts = Pool().get(
+            'account.payment.merged.by_contract')
+        if report.on_model.model != 'account.payment.merged.by_contract':
+            return super(Payment, cls).get_objects_for_fail_prints(report,
+                payments)
+        merged_ids = list(set(x.merged_id for x in payments))
+        contract_ids = list(set(x.contract for x in payments))
+        payments = MergedPaymentsByContracts.search([
+                ('merged_id', 'in', merged_ids),
+                ('contract', 'in', contract_ids)])
+        return payments
+
+
+class MergedPaymentsByContracts(MergedPaymentsMixin):
+    'Merged payments by contracts'
+
+    __name__ = 'account.payment.merged.by_contract'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    merged_payment = fields.Function(
+        fields.Many2One('account.payment.merged', 'Merged Payment'),
+        'get_merged_payment')
+
+    @classmethod
+    def get_payments(cls, merged_payments, name):
+        tables = cls.get_tables()
+        move_line, payment = [tables[x] for x in ['account.move.line',
+                'account.payment']]
+        cursor = Transaction().connection.cursor()
+        res = {(x.merged_id, x.contract.id): [x.id, []]
+            for x in merged_payments}
+        cursor.execute(*move_line.select(move_line.id, move_line.contract,
+                where=move_line.contract.in_([x[1] for x in res.keys()])))
+        lines_and_contracts = dict(cursor.fetchall())
+        cursor.execute(*payment.select(
+                payment.id, payment.merged_id, payment.line,
+                where=((payment.merged_id.in_([x[0] for x in res.keys()]) &
+                    (payment.line.in_(lines_and_contracts.keys()))))))
+        for payment_id, merged_id, line in cursor.fetchall():
+            res[(merged_id, lines_and_contracts[line])][1].append(payment_id)
+        return {v[0]: v[1] for v in res.values()}
+
+    def get_merged_payment(self, name):
+        return Pool().get('account.payment.merged').search([
+                ('merged_id', '=', self.merged_id)])[0]
+
+    @classmethod
+    def _table_models(cls):
+        return super(MergedPaymentsByContracts, cls)._table_models() + \
+            ['account.move.line']
+
+    @classmethod
+    def get_query_table(cls, tables):
+        move_line = tables['account.move.line']
+        payment = tables['account.payment']
+        base_table = super(MergedPaymentsByContracts, cls).get_query_table(
+            tables)
+        return base_table.join(move_line,
+            condition=move_line.id == payment.line)
+
+    @classmethod
+    def get_select_fields(cls, tables):
+        select_fields = super(MergedPaymentsByContracts,
+            cls).get_select_fields(tables)
+        select_fields['contract'] = tables['account.move.line'].contract.as_(
+            'contract')
+        return select_fields
+
+    @classmethod
+    def get_group_by_clause(cls, tables):
+        move_line = tables['account.move.line']
+        clause = super(MergedPaymentsByContracts, cls).get_group_by_clause(
+            tables)
+        clause['contract'] = move_line.contract
+        return clause
