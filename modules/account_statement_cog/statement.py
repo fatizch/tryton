@@ -8,7 +8,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, If
 from trytond.wizard import Wizard, StateView, Button, StateAction
 from trytond.model import ModelView
-
+from trytond.modules.account_statement.statement import _STATES, _DEPENDS
 from trytond.modules.coog_core import fields, export, model
 
 __metaclass__ = PoolMeta
@@ -104,6 +104,8 @@ class Statement(export.ExportImportMixin):
         super(Statement, cls).__setup__()
         cls.lines.depends.append('in_bank_deposit_ticket')
         cls.name.readonly = True
+        cls.date.states.update(_STATES)
+        cls.date.depends += _DEPENDS
         cls._error_messages.update({
                 'empty_lines': 'No lines associated to the statement(s) %s',
                 })
