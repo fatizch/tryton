@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <tree>
     <field name="rec_name"/>
-    <field name="amount"/>
+    <field name="amount" sum="Amount"/>
     <field name="frequency"/>
     <field name="start"/>
     <field name="end"/>
