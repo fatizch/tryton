@@ -1795,7 +1795,7 @@ class Premium:
             ('company', '=', Eval('context', {}).get('company', -1)),
             ['OR', [('kind', '=', 'revenue')], [('kind', '=', 'other')]]
             ],
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', readonly=True)
 
     @classmethod
     def _export_light(cls):

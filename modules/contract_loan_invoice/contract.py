@@ -87,7 +87,8 @@ class ExtraPremium:
 class Premium:
     __name__ = 'contract.premium'
 
-    loan = fields.Many2One('loan', 'Loan', select=True, ondelete='RESTRICT')
+    loan = fields.Many2One('loan', 'Loan', select=True, ondelete='RESTRICT',
+        readonly=True)
 
     @classmethod
     def __setup__(cls):

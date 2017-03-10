@@ -224,7 +224,7 @@ msgstr "Créé par"
 
 msgctxt "field:contract.premium,end:"
 msgid "End"
-msgstr "Terminer"
+msgstr "Fin"
 
 msgctxt "field:contract.premium,fee:"
 msgid "Fee"

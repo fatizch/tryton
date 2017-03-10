@@ -39,7 +39,7 @@ class Contract:
     fees = fields.One2Many('contract.fee', 'contract', 'Fees', states=_STATES,
         depends=_DEPENDS, delete_missing=True)
     premiums = fields.One2Many('contract.premium', 'contract', 'Premiums',
-        delete_missing=True, target_not_required=True)
+        delete_missing=True, target_not_required=True, readonly=True)
     show_premium = fields.Function(
         fields.Boolean('Show Premium'), 'get_show_premium')
 
@@ -284,7 +284,7 @@ class ContractOption:
     __name__ = 'contract.option'
 
     premiums = fields.One2Many('contract.premium', 'option', 'Premiums',
-        delete_missing=True, target_not_required=True)
+        delete_missing=True, target_not_required=True, readonly=True)
 
     @classmethod
     def functional_skips_for_duplicate(cls):
@@ -303,7 +303,7 @@ class ContractFee(model.CoogSQL, model.CoogView, ModelCurrency):
         domain=[('id', 'not in', Eval('used_fees', []))],
         depends=['used_fees'], ondelete='RESTRICT')
     premiums = fields.One2Many('contract.premium', 'fee', 'Premiums',
-        delete_missing=True, target_not_required=True)
+        delete_missing=True, target_not_required=True, readonly=True)
     overriden_amount = fields.Numeric('Amount', states={
             'readonly': ~Eval('fee_allow_override', False),
             'invisible': Eval('fee_type', '') != 'fixed'},
@@ -454,17 +454,18 @@ class Premium(model.CoogSQL, model.CoogView):
 
     __name__ = 'contract.premium'
     contract = fields.Many2One('contract', 'Contract', select=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', readonly=True)
     option = fields.Many2One('contract.option', 'Option', select=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', readonly=True)
     fee = fields.Many2One('contract.fee', 'Fee', ondelete='CASCADE',
-        select=True)
+        select=True, readonly=True)
     rated_entity = fields.Reference('Rated Entity', 'get_rated_entities',
-        required=True, select=True)
-    start = fields.Date('Start')
-    end = fields.Date('End')
-    amount = fields.Numeric('Amount', required=True)
-    frequency = fields.Selection(PREMIUM_FREQUENCY, 'Frequency', sort=False)
+        required=True, select=True, readonly=True)
+    start = fields.Date('Start', readonly=True)
+    end = fields.Date('End', readonly=True)
+    amount = fields.Numeric('Amount', required=True, readonly=True)
+    frequency = fields.Selection(PREMIUM_FREQUENCY, 'Frequency', sort=False,
+        readonly=True)
     frequency_string = frequency.translated('frequency')
     taxes = fields.Function(
         fields.Many2Many('account.tax', None, None, 'Taxes'),

@@ -35,7 +35,8 @@ class CoveredElement:
     __name__ = 'contract.covered_element'
 
     premiums = fields.One2Many('contract.premium', 'covered_element',
-        'Premiums', delete_missing=True, target_not_required=True)
+        'Premiums', delete_missing=True, target_not_required=True,
+        readonly=True)
 
     @classmethod
     def functional_skips_for_duplicate(cls):
@@ -55,7 +56,8 @@ class ExtraPremium:
                 ('flat_amount_frequency', '=', ''),
                 ('flat_amount_frequency', '!=', ''))])
     premiums = fields.One2Many('contract.premium', 'extra_premium',
-        'Premiums', delete_missing=True, target_not_required=True)
+        'Premiums', delete_missing=True, target_not_required=True,
+        readonly=True)
 
     @fields.depends('calculation_kind')
     def on_change_with_flat_amount_frequency(self):
@@ -66,9 +68,9 @@ class Premium:
     __name__ = 'contract.premium'
 
     covered_element = fields.Many2One('contract.covered_element',
-        'Covered Element', select=True, ondelete='CASCADE')
+        'Covered Element', select=True, ondelete='CASCADE', readonly=True)
     extra_premium = fields.Many2One('contract.option.extra_premium',
-        'Extra Premium', select=True, ondelete='CASCADE')
+        'Extra Premium', select=True, ondelete='CASCADE', readonly=True)
 
     def _get_main_contract(self):
         if self.covered_element:

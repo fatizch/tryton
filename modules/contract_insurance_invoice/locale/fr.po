@@ -286,7 +286,7 @@ msgstr "Factures"
 
 msgctxt "field:contract,all_premiums:"
 msgid "All Premiums"
-msgstr "Toutes les primes"
+msgstr "Primes"
 
 msgctxt "field:contract,balance:"
 msgid "Balance"
