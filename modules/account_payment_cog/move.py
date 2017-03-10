@@ -272,7 +272,6 @@ class PaymentInformationModification(model.CoogWizard):
             if new_date != line.payment_date:
                 # Allow to write off existing payment date
                 lines.append(line)
-
         if lines:
             Line = Pool().get('account.move.line')
             Line.write(lines, {'payment_date': new_date})
@@ -284,7 +283,7 @@ class PaymentCreationStart(model.CoogView):
     __name__ = 'account.payment.payment_creation.start'
 
     party = fields.Many2One('party.party', 'Party', states={
-            'readonly': Bool(Eval('multiple_parties')),
+            'invisible': Bool(Eval('multiple_parties')),
             'required': ~Eval('multiple_parties'),
             })
     multiple_parties = fields.Boolean('Payments For Multiple Parties')

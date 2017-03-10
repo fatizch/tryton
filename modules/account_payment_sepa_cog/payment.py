@@ -799,9 +799,11 @@ class PaymentCreationStart:
         states={
             'invisible': ((~Bool(Eval('process_method')) |
                 (Eval('process_method') != 'sepa')) & Bool(
-                Eval('payer')) | (Eval('kind') == 'payable')),
+                Eval('payer')) | (Eval('kind') == 'payable') |
+                Eval('multiple_parties')),
             'required': ((Eval('process_method') == 'sepa') &
-                (Eval('kind') == 'receivable'))
+                (Eval('kind') == 'receivable') &
+                ~Eval('multiple_parties'))
             },
         depends=['payer', 'process_method', 'payment_date',
             'available_bank_accounts', 'kind'])
@@ -814,9 +816,11 @@ class PaymentCreationStart:
         states={
             'invisible': (~Bool(Eval('process_method')) |
                 (Eval('process_method') != 'sepa') |
-                (Eval('kind') == 'payable')),
+                (Eval('kind') == 'payable') |
+                Eval('multiple_parties')),
             'required': ((Eval('process_method') == 'sepa') &
-                (Eval('kind') == 'receivable'))
+                (Eval('kind') == 'receivable') &
+                ~Eval('multiple_parties'))
             },
         depends=['available_payers', 'process_method', 'payment_date', 'kind'])
 
