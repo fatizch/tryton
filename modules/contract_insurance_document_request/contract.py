@@ -63,6 +63,11 @@ class Contract(RemindableInterface):
             (x.received for x in self.document_request_lines))
 
     @classmethod
+    def _calculate_methods(cls, product):
+        return super(Contract, cls)._calculate_methods(product) + [('contract',
+                'init_subscription_document_request')]
+
+    @classmethod
     def get_calculated_required_documents(cls, contracts):
         contracts_args = {c: {
                 'date': c.start_date,
@@ -136,6 +141,8 @@ class Contract(RemindableInterface):
                     having=having_clause))]
 
     def init_subscription_document_request(self):
+        if self.status != 'quote':
+            return
         pool = Pool()
         DocumentRequestLine = pool.get('document.request.line')
         DocumentDesc = pool.get('document.description')
