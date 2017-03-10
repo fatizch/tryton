@@ -595,6 +595,12 @@ class Translation:
     __name__ = 'ir.translation'
 
     @classmethod
+    def delete(cls, translations):
+        if not translations:
+            return
+        return super(Translation, cls).delete(translations)
+
+    @classmethod
     def write(cls, translations, values, *args):
         # TranslationOverride wizard set target_module to '' in product mode or
         # a module name in client mode. Assign None to target_module if no info
