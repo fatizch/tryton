@@ -1,4 +1,6 @@
+* Add rule engine function _re_get_prepayment_adjustment which determines whether a contract requires prepayments adjustment
 * Keep track of all commission lines instead of deleting them and recreating them.
+
 
 Version 1.10 - 2016-11-02
 

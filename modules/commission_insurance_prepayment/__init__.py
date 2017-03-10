@@ -5,6 +5,7 @@ from .contract import *
 from .commission import *
 from .invoice import *
 from .event import *
+from .rule_engine import *
 
 
 def register():
@@ -17,6 +18,7 @@ def register():
         Agent,
         Invoice,
         Event,
+        RuleEngineRuntime,
         module='commission_insurance_prepayment', type_='model')
     Pool.register(
         FilterCommissions,
