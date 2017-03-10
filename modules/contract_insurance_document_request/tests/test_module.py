@@ -57,6 +57,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         rule.save()
 
         contract, = self.Contract.search([])
+        contract.status = 'quote'
         contract.init_subscription_document_request()
         self.assertEqual(set([(d.document_desc.code, d.blocking)
                     for d in contract.document_request_lines]),
