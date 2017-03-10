@@ -134,9 +134,113 @@ msgctxt "model:work_days.configuration,name:"
 msgid "Configuration"
 msgstr "Configuration"
 
+msgctxt "model:work_days.configuration,name:work_days_config_fr"
+msgid "french work days"
+msgstr "Jours Fériés Français"
+
+msgctxt "model:work_days.configuration,name:work_days_config_fr_alsace"
+msgid "french work days alsace"
+msgstr "Jours Fériés Français en Alsace"
+
 msgctxt "model:work_days.holiday,name:"
 msgid "Holiday"
 msgstr "Jour Férié"
+
+msgctxt "model:work_days.holiday,name:Pentecost_holiday"
+msgid "Whit Monday"
+msgstr "Lundi de Pentecôte"
+
+msgctxt "model:work_days.holiday,name:Pentecost_holiday_alsace"
+msgid "Whit Monday"
+msgstr "Lundi de Pentecôte"
+
+msgctxt "model:work_days.holiday,name:ascension_holiday"
+msgid "Ascencion Day"
+msgstr "Jeudi de l'ascencion"
+
+msgctxt "model:work_days.holiday,name:ascension_holiday_alsace"
+msgid "Ascencion Day"
+msgstr "Jeudi de l'ascencion"
+
+msgctxt "model:work_days.holiday,name:assumption_holiday"
+msgid "Assumption Day"
+msgstr "Assomption"
+
+msgctxt "model:work_days.holiday,name:assumption_holiday_alsace"
+msgid "Assumption Day"
+msgstr "Assomption"
+
+msgctxt "model:work_days.holiday,name:christmas_holiday"
+msgid "Christmas"
+msgstr "Noël"
+
+msgctxt "model:work_days.holiday,name:christmas_holiday_alsace"
+msgid "Christmas"
+msgstr "Noël"
+
+msgctxt "model:work_days.holiday,name:easter_holiday"
+msgid "Easter Monday"
+msgstr "Lundi de Pâques"
+
+msgctxt "model:work_days.holiday,name:easter_holiday_alsace"
+msgid "Easter Monday"
+msgstr "Lundi de Pâques"
+
+msgctxt "model:work_days.holiday,name:good_friday_holiday_alsace"
+msgid "Good Friday"
+msgstr "Vendredi Saint"
+
+msgctxt "model:work_days.holiday,name:labour_day_holiday"
+msgid "Labour Day"
+msgstr "Fête du Travail"
+
+msgctxt "model:work_days.holiday,name:labour_day_holiday_alsace"
+msgid "Labour Day"
+msgstr "Fête du travail"
+
+msgctxt "model:work_days.holiday,name:national_holiday"
+msgid "National Holiday"
+msgstr "Fête National"
+
+msgctxt "model:work_days.holiday,name:national_holiday_alsace"
+msgid "National Holiday"
+msgstr "Fête National"
+
+msgctxt "model:work_days.holiday,name:new_year_day_off"
+msgid "New Year's Day"
+msgstr "Jour de l'an"
+
+msgctxt "model:work_days.holiday,name:new_year_day_off_alsace"
+msgid "New Year's Day"
+msgstr "Jour de l'an"
+
+msgctxt "model:work_days.holiday,name:saint_stephen_holiday_alsace"
+msgid "Saint Stephen"
+msgstr "Saint Etienne"
+
+msgctxt "model:work_days.holiday,name:toussaint_holiday"
+msgid "All Saint's Day"
+msgstr "La Toussaint"
+
+msgctxt "model:work_days.holiday,name:toussaint_holiday_alsace"
+msgid "All Saint's Day"
+msgstr "La Toussaint"
+
+msgctxt "model:work_days.holiday,name:ww1_armistice_holiday"
+msgid "Second World War Armisitice"
+msgstr "Armistice 1945"
+
+msgctxt "model:work_days.holiday,name:ww1_armistice_holiday_alsace"
+msgid "First World War Armisitice"
+msgstr "Armistice 1918"
+
+msgctxt "model:work_days.holiday,name:ww2_armistice_holiday"
+msgid "Second World War Armistice"
+msgstr "Armistice 1945"
+
+msgctxt "model:work_days.holiday,name:ww2_armistice_holiday_alsace"
+msgid "Second World War Armistice"
+msgstr "Armistice 1945"
 
 msgctxt "selection:work_days.holiday,holiday_type:"
 msgid "Easter Related Holiday"
