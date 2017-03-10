@@ -151,7 +151,7 @@ class ContractOption:
                 commission.origin = self
                 commission.agent = agent
                 commission.product = plan.commission_product
-                commission.commission_rate = rate
+                commission.commission_rate = rate * percentage
                 commission.amount = percentage * amount
                 commission.commissioned_option = self
                 commissions.append(commission)
