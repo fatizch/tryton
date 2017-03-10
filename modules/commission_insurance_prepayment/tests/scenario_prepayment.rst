@@ -272,7 +272,7 @@ Terminate Contract::
 Check commission once terminated::
 
     >>> commissions = Commission.find([('is_prepayment', '=', True)],
-    ...     order=[('amount', 'ASC')])
+    ...     order=[('create_date', 'ASC')])
 
 commission explanation::
 
@@ -280,25 +280,33 @@ commission explanation::
 -300 : 12months * 60 - 7months*60::
 
 
-210 : 7months * 30::
+-150 : 12months * 30 - 7months*60::
+
+
+360 : 12months * 30::
 
 
 720 : 12months * 60::
 
     >>> [(x.amount, x.agent.party.name) for x in commissions] == [
-    ...     (Decimal('-300.0000'), u'Broker'),
-    ...     (Decimal('210.0000'), u'Insurer'),
-    ...     (Decimal('720.0000'), u'Broker')]
+    ...     (Decimal('360.00000000'), u'Insurer'),
+    ...     (Decimal('720.00000000'), u'Broker'),
+    ...     (Decimal('-300.00000000'), u'Broker'),
+    ...     (Decimal('-150.00000000'), u'Insurer')]
     True
 
 Reactivate Contract::
 
     >>> Wizard('contract.reactivate', models=[contract]).execute('reactivate')
     >>> commissions = Commission.find([('is_prepayment', '=', True)],
-    ...     order=[('amount', 'ASC')])
+    ...     order=[('create_date', 'ASC')])
     >>> [(x.amount, x.agent.party.name) for x in commissions] == [
-    ...     (Decimal('360.0000'), u'Insurer'),
-    ...     (Decimal('720.0000'), u'Broker')]
+    ...     (Decimal('360.00000000'), u'Insurer'),
+    ...     (Decimal('720.00000000'), u'Broker'),
+    ...     (Decimal('-300.00000000'), u'Broker'),
+    ...     (Decimal('-150.00000000'), u'Insurer'),
+    ...     (Decimal('300.00000000'), u'Broker'),
+    ...     (Decimal('150.00000000'), u'Insurer')]
     True
 
 Add new premium version::
@@ -377,7 +385,7 @@ Terminate Contract::
 Check commission once terminated::
 
     >>> commissions = Commission.find([('is_prepayment', '=', True)],
-    ...     order=[('amount', 'ASC')])
+    ...     order=[('create_date', 'ASC')])
 
 commission explanation::
 
@@ -385,13 +393,15 @@ commission explanation::
 -48 : 12*100*0.6 - (11-9)*110*0.6 - 9 *100 *0.6::
 
 
-336 : 9*100*0.3 + (11-9)*110*0.3::
-
-
-720 : 12*100*0.6::
+-24 : 12*100*0.3 - (11-9)*110*0.3 - 9 *100 *0.3::
 
     >>> [(x.amount, x.agent.party.name) for x in commissions] == [
-    ...     (Decimal('-48.0000'), u'Broker'),
-    ...     (Decimal('336.0000'), u'Insurer'),
-    ...     (Decimal('720.0000'), u'Broker')]
+    ...     (Decimal('360.00000000'), u'Insurer'),
+    ...     (Decimal('720.00000000'), u'Broker'),
+    ...     (Decimal('-300.00000000'), u'Broker'),
+    ...     (Decimal('-150.00000000'), u'Insurer'),
+    ...     (Decimal('300.00000000'), u'Broker'),
+    ...     (Decimal('150.00000000'), u'Insurer'),
+    ...     (Decimal('-48.00000000'), u'Broker'),
+    ...     (Decimal('-24.00000000'), u'Insurer')]
     True

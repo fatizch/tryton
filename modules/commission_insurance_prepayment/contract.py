@@ -113,31 +113,21 @@ class ContractOption:
 
         commissions = []
         agents_plans_to_compute = self.agent_plans_used()
-        to_delete = []
 
         if not agents_plans_to_compute:
             return []
-        paid_prepayments = Agent.paid_prepayments([(x[0].id, self.id)
+        all_prepayments = Agent.sum_of_prepayments([(x[0].id, self.id)
                 for x in agents_plans_to_compute])
         for agent, plan in agents_plans_to_compute:
-            if ((agent.id, self.id) in paid_prepayments and
+            if ((agent.id, self.id) in all_prepayments and
                     not plan.adjust_prepayment and adjustment):
-                # if configuration "no adjustement" is selected adjust only
-                # if no prepayment paid
                 continue
             amount, rate = self._get_prepayment_amount_and_rate(agent, plan)
             if amount is None:
                 continue
 
-            to_delete += Commission.search([
-                    ('invoice_line', '=', None),
-                    ('origin', '=', '%s,%s' % (self.__name__, self.id)),
-                    ('is_prepayment', '=', True),
-                    ('agent', '=', agent.id)
-                    ])
-
-            if (agent.id, self.id) in paid_prepayments:
-                amount = amount - paid_prepayments[(agent.id, self.id)]
+            if (agent.id, self.id) in all_prepayments:
+                amount = amount - all_prepayments[(agent.id, self.id)]
             digits = Commission.amount.digits
             amount = amount.quantize(Decimal(str(10.0 ** -digits[1])))
             if not amount:
@@ -155,8 +145,6 @@ class ContractOption:
                 commission.amount = percentage * amount
                 commission.commissioned_option = self
                 commissions.append(commission)
-
-        Commission.delete(to_delete)
         return commissions
 
     def adjust_prepayment_once_terminated(self):
@@ -166,7 +154,7 @@ class ContractOption:
 
         commissions = []
         agents_plans_to_compute = self.agent_plans_used()
-        outstanding_prepayment = Agent.outstanding_paid_prepayment(
+        outstanding_prepayment = Agent.outstanding_prepayment(
             [(x[0].id, self.id) for x in agents_plans_to_compute])
         for agent, plan in agents_plans_to_compute:
             if (agent.id, self.id) not in outstanding_prepayment:
@@ -186,12 +174,4 @@ class ContractOption:
             commission.amount = -amount
             commission.commissioned_option = self
             commissions.append(commission)
-        to_delete = []
-        to_delete += Commission.search([
-                ('invoice_line', '=', None),
-                ('commissioned_option', '=', self.id),
-                ('is_prepayment', '=', True),
-                ('agent', 'in', [a[0].id for a in agents_plans_to_compute])
-                ])
-        Commission.delete(to_delete)
         return commissions
