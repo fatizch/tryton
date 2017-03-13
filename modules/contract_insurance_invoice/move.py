@@ -158,8 +158,9 @@ WHERE
 
     @classmethod
     def init_payments(cls, lines, journal):
-        lines = [x for x in lines if (x.contract.billing_information and not
-            x.contract.billing_information.suspended) or not
+        lines = [x for x in lines if not x.contract or (
+                x.contract.billing_information and not
+                x.contract.billing_information.suspended) or not
             x.contract.billing_information]
         return super(MoveLine, cls).init_payments(lines, journal)
 
