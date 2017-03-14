@@ -89,6 +89,8 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
                 'please try again once it has been set',
                 'invalid_declaration_date': 'Declaration date cannot be '
                 'posterior to today\'s date',
+                'loss_desc_mixin': 'You can not close multiple claims '
+                'with different loss descriptions at the same time',
                 })
         t = cls.__table__()
         cls._sql_constraints += [
@@ -403,6 +405,13 @@ class Loss(model.CoogSQL, model.CoogView):
         loader='load_loss_desc_kind', searcher='search_loss_desc_kind')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
+    available_closing_reasons = fields.Function(
+        fields.One2Many('claim.closing_reason', None,
+            'Available Closing Reason'),
+        'get_available_closing_reasons')
+    closing_reason = fields.Many2One('claim.closing_reason', 'Closing Reason',
+        domain=[('id', 'in', Eval('available_closing_reasons'))],
+        depends=['available_closing_reasons'], ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
@@ -423,6 +432,12 @@ class Loss(model.CoogSQL, model.CoogView):
     @classmethod
     def default_state(cls):
         return 'draft'
+
+    def on_change_with_closing_reason(self, name=None):
+        pass
+
+    def get_available_closing_reasons(self, name=None):
+        return [x.id for x in self.loss_desc.closing_reasons]
 
     @fields.depends('claim', 'event_desc', 'loss_desc', 'start_date')
     def on_change_with_possible_loss_descs(self, name=None):
@@ -569,7 +584,7 @@ class Loss(model.CoogSQL, model.CoogView):
         return list(set([x.contract for x in self.services]))
 
     def close(self, sub_status, date=None):
-        return
+        pass
 
     @property
     def loss(self):

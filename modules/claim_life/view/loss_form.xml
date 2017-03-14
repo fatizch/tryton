@@ -10,7 +10,7 @@ this repository contains the full copyright notices and license terms. -->
     </xpath>
     <xpath expr="/form/field[@name='end_date']" position="replace">
     </xpath>
-    <xpath expr="/form/field[@name='extra_data']" position="before">
+    <xpath expr="/form/label[@name='closing_reason']" position="replace">
         <label name="std_start_date"/>
         <field name="std_start_date"/>
         <label name="std_end_date"/>
@@ -28,6 +28,8 @@ this repository contains the full copyright notices and license terms. -->
         <label name="return_to_work_date"/>
         <field name="return_to_work_date"/>
         <newline/>
+        <label name="closing_reason"/>
+        <field name="closing_reason" widget="selection"/>
         <label name="is_a_relapse"/>
         <field name="is_a_relapse"/>
         <newline/>

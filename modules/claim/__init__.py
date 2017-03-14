@@ -16,8 +16,10 @@ from .configuration import *
 
 def register():
     Pool.register(
+        ClosingReason,
         EventDescription,
         LossDescription,
+        LossDescriptionClosingReason,
         Benefit,
         EventDescriptionLossDescriptionRelation,
         BenefitLossDescriptionRelation,

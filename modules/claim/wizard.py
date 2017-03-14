@@ -123,7 +123,6 @@ class ClaimCloseReasonView(model.CoogView):
     claims = fields.Many2Many('claim', '', '', 'Claims', readonly=True)
     sub_status = fields.Many2One(
         'claim.sub_status', 'Substatus', required=True)
-    end_date = fields.Date('End Date')
 
 
 class CloseClaim(Wizard):
@@ -146,6 +145,5 @@ class CloseClaim(Wizard):
 
     def transition_apply_sub_status(self):
         Claim = Pool().get('claim')
-        Claim.close(self.close_reason.claims, self.close_reason.sub_status,
-            self.close_reason.end_date)
+        Claim.close(self.close_reason.claims, self.close_reason.sub_status)
         return 'end'

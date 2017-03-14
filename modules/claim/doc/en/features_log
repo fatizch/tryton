@@ -1,3 +1,4 @@
+* Add closing reason configuration on losses
 * Add user warning if claim's declaration date is prior to loss start date
 * Add user error if claim's declaration date is posterior to current date
 * Add covered_element field on services

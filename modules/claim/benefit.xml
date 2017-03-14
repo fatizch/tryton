@@ -121,6 +121,35 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="loss_desc_view_form"/>
             <field name="act_window" ref="act_loss_desc_form"/>
         </record>
-        <menuitem parent="offered.menu_product_configuration" sequence="11" id="menu_loss_desc_form" icon="tryton-list" action="act_loss_desc_form"/>
+        <menuitem parent="offered.menu_product_configuration" sequence="12" id="menu_loss_desc_form" icon="tryton-list" action="act_loss_desc_form"/>
+        <!-- ############################################################ -->
+        <!-- Closing Reason -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="closing_reason_view_form">
+            <field name="model">claim.closing_reason</field>
+            <field name="type">form</field>
+            <field name="name">closing_reason_form</field>
+        </record>
+        <record model="ir.ui.view" id="closing_reason_view_list">
+            <field name="model">claim.closing_reason</field>
+            <field name="type">tree</field>
+            <field name="name">closing_reason_list</field>
+        </record>
+        <!-- Entry Point -->
+        <record model="ir.action.act_window" id="act_closing_reason_form">
+            <field name="name">Closing Reasons</field>
+            <field name="res_model">claim.closing_reason</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_closing_reason_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="closing_reason_view_list"/>
+            <field name="act_window" ref="act_closing_reason_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_closing_reason_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="closing_reason_view_form"/>
+            <field name="act_window" ref="act_closing_reason_form"/>
+        </record>
+        <menuitem parent="menu_loss_desc_form" sequence="10" id="menu_closing_reason" icon="tryton-list" action="act_closing_reason_form"/>
     </data>
 </tryton>

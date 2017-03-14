@@ -12,6 +12,8 @@ from trytond.modules.coog_core import model, fields, coog_string, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'ClosingReason',
+    'LossDescriptionClosingReason',
     'EventDescription',
     'LossDescription',
     'EventDescriptionLossDescriptionRelation',
@@ -21,6 +23,42 @@ __all__ = [
     'LossDescriptionExtraDataRelation',
     'BenefitExtraDataRelation',
     ]
+
+
+class ClosingReason(model.CoogSQL, model.CoogView):
+    'Closing Reason'
+
+    __name__ = 'claim.closing_reason'
+    _func_key = 'code'
+
+    name = fields.Char('Name', required=True)
+    code = fields.Char('Code', required=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(ClosingReason, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_unique', Unique(t, t.code), 'The code must be unique'),
+            ]
+
+    @fields.depends('name')
+    def on_change_with_code(self):
+        if not self.code:
+            return coog_string.slugify(self.name)
+        return self.code
+
+
+class LossDescriptionClosingReason(model.CoogSQL):
+    'Relation between Loss Description and Closing Reason'
+
+    __name__ = 'loss.description-claim.closing_reason'
+
+    closing_reason = fields.Many2One('claim.closing_reason', 'Closing Reason',
+        required=True, ondelete='CASCADE')
+    loss_description = fields.Many2One('benefit.loss.description',
+        'Benefit Loss Description', required=True, ondelete='CASCADE',
+        select=True)
 
 
 class EventDescription(model.CoogSQL, model.CoogView):
@@ -94,6 +132,8 @@ class LossDescription(model.CoogSQL, model.CoogView):
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
     loss_kind = fields.Selection([('generic', 'Generic')], 'Loss Kind')
+    closing_reasons = fields.Many2Many('loss.description-claim.closing_reason',
+        'loss_description', 'closing_reason', 'Closing Reasons')
 
     _get_loss_description_cache = Cache('get_loss_description')
 

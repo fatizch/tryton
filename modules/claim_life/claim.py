@@ -4,7 +4,7 @@
 from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If, Bool, In, And
+from trytond.pyson import Eval, If, Bool, In, And, Or
 from trytond.modules.coog_core import fields
 
 from datetime import timedelta
@@ -103,6 +103,11 @@ class Loss:
                 'one_day_between_relapse_and_previous_loss': 'One day is '
                 'required between the relapse and the previous std'
                 })
+        cls.closing_reason.states.update({
+                'required': Bool(Eval('ltd_end_date')) |
+                Bool(Eval('std_end_date'))
+                })
+        cls.closing_reason.depends.extend(['ltd_end_date', 'std_end_date'])
 
     def get_start_end_dates(self, name):
         if 'start_date' in name:
@@ -141,6 +146,13 @@ class Loss:
                 self.claim.claimant, self.start_date):
             res.extend(covered_element.get_covered_parties(self.start_date))
         return res
+
+    @fields.depends('std_end_date', 'ltd_end_date', 'available_closing_reasons')
+    def on_change_with_closing_reason(self, name=None):
+        super(Loss, self).on_change_with_closing_reason(name)
+        if ((self.std_end_date or self.ltd_end_date) and
+                len(self.available_closing_reasons) == 1):
+            return self.available_closing_reasons[0].id
 
     @fields.depends('claim', 'start_date')
     def on_change_with_possible_covered_persons(self, name=None):

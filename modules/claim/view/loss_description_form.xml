@@ -16,7 +16,8 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <notebook>
         <page string="Events" id="events">
-            <field name="event_descs"/>
+            <field name="event_descs" colspan="2"/>
+            <field name="closing_reasons" colspan="2"/>
         </page>
         <page string="Extra Data" id="extra_data">
             <field name="extra_data_def"/>

@@ -149,7 +149,7 @@ class Claim:
 
     @classmethod
     def close(cls, claims, sub_status, date=None):
-        super(Claim, cls).close(claims, sub_status, date=None)
+        super(Claim, cls).close(claims, sub_status, date)
         cls.update_underwritings(claims)
 
     @classmethod

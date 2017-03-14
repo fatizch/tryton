@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:claim.closing_reason:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
 msgctxt "error:benefit.event.description:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
@@ -23,6 +27,13 @@ msgid "Coverage Information"
 msgstr "Information de la garantie"
 
 msgctxt "error:claim.loss:"
+msgid ""
+"Declaration date %(declaration_date)s is prior to start date %(start_date)s"
+msgstr ""
+"La date de déclaration %(declaration_date)s est antérieure à la date de "
+"début %(start_date)s"
+
+msgctxt "error:claim.loss:"
 msgid "End Date is smaller than start date"
 msgstr "La date de fin est antérieure à la date de début"
 
@@ -41,13 +52,6 @@ msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
 
 msgctxt "error:claim:"
-msgid ""
-"Declaration date %(declaration_date)s is prior to start date %(start_date)s"
-msgstr ""
-"La date de déclaration %(declaration_date)s est antérieure à la date de "
-"début %(start_date)s"
-
-msgctxt "error:claim:"
 msgid "Declaration date cannot be posterior to today's date"
 msgstr ""
 "La date de déclaration ne peut être postérieure à la date d'aujourd'hui"
@@ -62,6 +66,14 @@ msgstr ""
 msgctxt "error:claim:"
 msgid "The number must be unique!"
 msgstr "Le numéro doit être unique"
+
+msgctxt "error:claim:"
+msgid ""
+"You can not close multiple claims with different loss descriptions at the "
+"same time"
+msgstr ""
+"Vous ne pouvez pas fermer plusieurs dossiers avec différentes descriptions "
+"de sinistre en même temps"
 
 msgctxt "field:benefit,automatically_deliver:"
 msgid "Automatically Deliver"
@@ -319,6 +331,10 @@ msgctxt "field:benefit.event.description-loss.description,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:benefit.loss.description,closing_reasons:"
+msgid "Closing Reasons"
+msgstr "Motifs de fin"
+
 msgctxt "field:benefit.loss.description,code:"
 msgid "Code"
 msgstr "Code"
@@ -539,13 +555,17 @@ msgctxt "field:claim.benefit_to_deliver,to_deliver:"
 msgid "To Deliver"
 msgstr "Délivrer"
 
+msgctxt "field:claim.close_reason_view,available_closing_reasons:"
+msgid "Available Closing Reasons"
+msgstr "Motifs de fin disponibles"
+
 msgctxt "field:claim.close_reason_view,claims:"
 msgid "Claims"
 msgstr "Sinistres"
 
-msgctxt "field:claim.close_reason_view,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
+msgctxt "field:claim.close_reason_view,closing_reason:"
+msgid "Closing Reason"
+msgstr "Motif de fin"
 
 msgctxt "field:claim.close_reason_view,id:"
 msgid "ID"
@@ -587,9 +607,17 @@ msgctxt "field:claim.configuration,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:claim.loss,available_closing_reasons:"
+msgid "Available Closing Reason"
+msgstr "Motif de fin disponible"
+
 msgctxt "field:claim.loss,claim:"
 msgid "Claim"
 msgstr "Sinistre"
+
+msgctxt "field:claim.loss,closing_reason:"
+msgid "Closing Reason"
+msgstr "Motif de fin"
 
 msgctxt "field:claim.loss,create_date:"
 msgid "Create Date"
@@ -875,6 +903,46 @@ msgctxt "field:claim.sub_status,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:claim.closing_reason,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:claim.closing_reason,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.closing_reason,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.closing_reason,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.closing_reason,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.closing_reason,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:claim.closing_reason,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:claim.closing_reason,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:claim.closing_reason,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.closing_reason,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:contract,claims:"
 msgid "Claims"
 msgstr "Sinistres"
@@ -890,6 +958,46 @@ msgstr "Sinistre"
 msgctxt "field:insurer.delegation,claim_create:"
 msgid "Claim Creation"
 msgstr "Création de sinistres"
+
+msgctxt "field:loss.description-claim.closing_reason,closing_reason:"
+msgid "Closing Reason"
+msgstr "Motif de fin"
+
+msgctxt "field:loss.description-claim.closing_reason,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:loss.description-claim.closing_reason,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:loss.description-claim.closing_reason,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:loss.description-claim.closing_reason,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:loss.description-claim.closing_reason,loss_description:"
+msgid "Benefit Loss Description"
+msgstr "Description de sinistre"
+
+msgctxt "field:loss.description-claim.closing_reason,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:loss.description-claim.closing_reason,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:loss.description-claim.closing_reason,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:loss.description-claim.closing_reason,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.option.description,benefits:"
 msgid "Benefits"
@@ -1062,6 +1170,10 @@ msgctxt "model:claim.sub_status,name:"
 msgid "Claim Close Reason"
 msgstr "Raison de clôture"
 
+msgctxt "model:claim.closing_reason,name:"
+msgid "Closing Reason"
+msgstr "Motif de fin"
+
 msgctxt "model:event.type,name:event_activate_loss"
 msgid "Activate Loss"
 msgstr "Validation de l'événement"
@@ -1097,6 +1209,10 @@ msgstr "Sinistres"
 msgctxt "model:ir.action,name:act_close_claim_wizard"
 msgid "Close Claims"
 msgstr "Clore les sinistres"
+
+msgctxt "model:ir.action,name:act_closing_reason_form"
+msgid "Closing Reason"
+msgstr "Motif de fin"
 
 msgctxt "model:ir.action,name:act_deliver_wizard"
 msgid "Deliver Benefits"
@@ -1162,6 +1278,10 @@ msgctxt "model:ir.ui.menu,name:menu_claim_form"
 msgid "Claims"
 msgstr "Sinistres"
 
+msgctxt "model:ir.ui.menu,name:menu_closing_reason"
+msgid "Closing Reason"
+msgstr "Motif de fin"
+
 msgctxt "model:ir.ui.menu,name:menu_event_desc_form"
 msgid "Events"
 msgstr "Evénements"
@@ -1173,6 +1293,10 @@ msgstr "Préjudices"
 msgctxt "model:ir.ui.menu,name:sub_status_form"
 msgid "Sub-status"
 msgstr "Sous statut"
+
+msgctxt "model:loss.description-claim.closing_reason,name:"
+msgid "Relation between Loss Description and Closing Reason"
+msgstr "Relation entre Description de sinistre et Motif de fin"
 
 msgctxt "model:option.description-benefit,name:"
 msgid "Option Description to Benefit Relation"

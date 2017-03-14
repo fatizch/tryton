@@ -1,3 +1,4 @@
+* Ajout du paramétrage u motif de fermeture des sinistres
 * Avertissement si la date de déclaration de sinistre est antérieur à la date d'arrêt
 * Erreur utilisateur si la date de déclaration de sinistre est postérieure à la date du jour
 * Ajout d'un champ sur les service vers le risque couvert concerné
