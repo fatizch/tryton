@@ -282,10 +282,6 @@ msgctxt "field:party.party,logo:"
 msgid "Logo"
 msgstr "Logo"
 
-msgctxt "field:party.party,long_gender:"
-msgid "Gender Long"
-msgstr "Genre long"
-
 msgctxt "field:party.party,main_address:"
 msgid "Main Address"
 msgstr "Adresse"
@@ -893,21 +889,6 @@ msgstr "M."
 msgctxt "selection:party.party,gender:"
 msgid "Mrs."
 msgstr "Mme"
-
-#, fuzzy
-msgctxt "selection:party.party,long_gender:"
-msgid ""
-msgstr ""
-"Le contrat sera actif après cette étape, êtes-vous sûr de vouloir continuer "
-"?"
-
-msgctxt "selection:party.party,long_gender:"
-msgid "Madame"
-msgstr "Madame"
-
-msgctxt "selection:party.party,long_gender:"
-msgid "Mister"
-msgstr "Monsieur"
 
 msgctxt "view:party.address:"
 msgid "Addresses"

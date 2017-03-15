@@ -42,7 +42,7 @@ class ClosingReason(model.CoogSQL, model.CoogView):
             ('code_unique', Unique(t, t.code), 'The code must be unique'),
             ]
 
-    @fields.depends('name', 'code')
+    @fields.depends('name')
     def on_change_with_code(self):
         if not self.code:
             return coog_string.slugify(self.name)
