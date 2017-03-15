@@ -201,7 +201,6 @@ validate_action = Action.read([action.id], config.context)[0]
 action, = Action.find(['name', '=', 'Indemnification Control Wizard'])
 control_action = Action.read([action.id], config.context)[0]
 
-
 # #Comment# #Create indemnifications
 create = Wizard('claim.create_indemnification', models=[service])
 create.form.start_date = datetime.date(2016, 1, 1)
@@ -224,8 +223,12 @@ indemnifications[0].status == 'scheduled'
 # #Res# #True
 
 controller = Wizard('claim.indemnification.assistant',
-    models=indemnifications, action=control_action)
+    models=indemnifications,
+    action=control_action)
 
+# #Comment# # Manually set wizard mode for apply_filters
+controller.form.mode = 'control'
+controller.form.order_sort = 'ASC'
 controller.form.control[0].action = 'validate'
 controller.execute('control_state')
 
@@ -282,6 +285,8 @@ indemnifications[0].status == 'cancelled'
 controller = Wizard('claim.indemnification.assistant',
     models=indemnifications, action=control_action)
 
+controller.form.mode = 'control'
+controller.form.order_sort = 'ASC'
 controller.form.control[0].action = 'validate'
 controller.execute('control_state')
 

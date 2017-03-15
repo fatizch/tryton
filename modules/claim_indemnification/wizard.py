@@ -166,7 +166,7 @@ class IndemnificationAssistantView(model.CoogView):
             domain = [('status', 'in', ['controlled', 'cancelled'])]
             model_name = 'claim.indemnification.assistant.validate.element'
         elif self.mode == 'control':
-            domain = [('status', '=', 'validated')]
+            domain = [('status', '=', 'scheduled')]
             model_name = 'claim.indemnification.assistant.control.element'
         else:
             return
@@ -183,7 +183,10 @@ class IndemnificationAssistantView(model.CoogView):
         for result in results:
             sorted_elements.append(
                 Element.from_indemnification(result))
-        self.validate = sorted_elements
+        if self.mode == 'control':
+            self.control = sorted_elements
+        elif self.mode == 'validate':
+            self.validate = sorted_elements
 
     @fields.depends('global_setter', 'validate', 'control')
     def on_change_global_setter(self):

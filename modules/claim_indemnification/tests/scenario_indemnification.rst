@@ -192,7 +192,10 @@ Create indemnifications::
     >>> indemnifications[0].status == 'scheduled'
     True
     >>> controller = Wizard('claim.indemnification.assistant',
-    ...     models=indemnifications, action=control_action)
+    ...     models=indemnifications,
+    ...     action=control_action)
+    >>> controller.form.mode = 'control'
+    >>> controller.form.order_sort = 'ASC'
     >>> controller.form.control[0].action = 'validate'
     >>> controller.execute('control_state')
     >>> indemnifications[0].status == 'controlled'
@@ -241,6 +244,8 @@ Schedule the indemnification::
     True
     >>> controller = Wizard('claim.indemnification.assistant',
     ...     models=indemnifications, action=control_action)
+    >>> controller.form.mode = 'control'
+    >>> controller.form.order_sort = 'ASC'
     >>> controller.form.control[0].action = 'validate'
     >>> controller.execute('control_state')
     >>> indemnifications[0].status == 'cancelled'
