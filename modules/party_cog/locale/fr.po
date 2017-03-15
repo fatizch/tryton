@@ -282,6 +282,18 @@ msgctxt "field:party.party,logo:"
 msgid "Logo"
 msgstr "Logo"
 
+msgctxt "field:party.party,long_gender:"
+msgid "Gender Long"
+msgstr "Genre long"
+
+msgctxt "selection:party.party,long_gender:"
+msgid "Madame"
+msgstr "Madame"
+
+msgctxt "selection:party.party,long_gender:"
+msgid "Mister"
+msgstr "Monsieur"
+
 msgctxt "field:party.party,main_address:"
 msgid "Main Address"
 msgstr "Adresse"

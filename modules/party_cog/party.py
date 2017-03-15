@@ -52,6 +52,13 @@ GENDER = [
     ('', ''),
     ]
 
+LONG_GENDER = [
+    ('male', 'Mister'),
+    ('female', 'Madame'),
+    ('', ''),
+    ]
+
+
 STATES_PERSON = Bool(Eval('is_person'))
 STATES_COMPANY = ~Eval('is_person')
 
@@ -71,7 +78,12 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
             }, depends=['is_person'])
+    long_gender = fields.Function(
+        fields.Selection(LONG_GENDER, 'Gender Long',
+            states={'invisible': True}),
+        'get_long_gender')
     gender_string = gender.translated('gender')
+    long_gender_string = gender.translated('long_gender')
     first_name = fields.Char('First Name', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
@@ -175,6 +187,9 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         if not self.is_person:
             return self.code
         return '%s|%s|%s' % (self.name, self.first_name, self.birth_date)
+
+    def get_long_gender(self, name):
+        return self.gender
 
     @classmethod
     def search_func_key(cls, name, clause):

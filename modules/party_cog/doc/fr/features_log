@@ -1,19 +1,21 @@
+* Ajout du champs "genre long"
+
 Version 1.10 - 2016-11-02
-* Allow to search party from SSN information
-* Behaviour change : A party is either a company (by default) or a person but it can not be both anymore
+* Ajout de la recherche par numéro de sécurité sociale
+* Modification du comportement: Un tiers est soit une société (par défaut) soit une personne, mais ne peut plus être les deux à la fois
 
 Version 1.8 - 2016-07-06
-* Allow to extend party identifier type possible values through configuration
+* Possibilité d'étendre le type possible d'identifiant du tiers via la configuration
 
 Version 1.6 - 2015-12-23
-* Remove contact from party when deleted
-* Add party identifier
+* Contact retiré du tiers lors de la suppression
+* Ajout d'un identifiant de tiers.
 
 Version 1.4 - 2015-05-29
 
 Version 1.3 - 2015-01-22
-* Add child / parent relation
-* Add relation editable tree
+* Ajout d'une relation enfant / parent
+* Ajout d'une relation vue liste éditable
 
 Version 1.2 - 2014-07-01
-* Changelog file creation
+* Création du fichier de changelog
