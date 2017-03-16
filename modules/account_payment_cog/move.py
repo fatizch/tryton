@@ -374,6 +374,15 @@ class PaymentCreationStart(model.CoogView):
         if not self.have_lines_payment_date and self.payment_date is None:
             self.payment_date = utils.today()
 
+    @staticmethod
+    def default_journal():
+        pool = Pool()
+        Journal = pool.get('account.payment.journal')
+        result = Journal.search([
+            ('default_payment_journal', '=', True)])
+        if result:
+            return result[0].id
+
 
 class PaymentCreation(model.CoogWizard):
     'Payment Creation'
