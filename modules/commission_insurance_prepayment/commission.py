@@ -10,7 +10,7 @@ from collections import defaultdict
 from trytond.tools import decistmt
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, If
+from trytond.pyson import Eval, If, PYSONEncoder
 
 from trytond.modules.commission import Commission as TrytonCommission
 from trytond.modules.coog_core import fields, utils
@@ -22,6 +22,7 @@ __all__ = [
     'Plan',
     'Agent',
     'FilterCommissions',
+    'FilterAggregatedCommissions',
     ]
 
 
@@ -245,3 +246,21 @@ class FilterCommissions:
             ctx['extra_context']['origins'].extend(
                 [str(o) for o in options])
         return act, ctx
+
+
+class FilterAggregatedCommissions:
+    __metaclass__ = PoolMeta
+    __name__ = 'commission.aggregated.open_detail'
+
+    def do_filter_commission(self, action):
+        context = Transaction().context
+        commission = Pool().get('commission')(
+            context.get('active_id'))
+        if commission.origin.__name__ != 'contract.option':
+            return super(FilterAggregatedCommissions,
+                self).do_filter_commission(action)
+        origins = context.get('origins', [])
+        clause = [('origin', 'in', origins)] if origins else []
+        clause += [('agent', '=', commission.agent.id)]
+        action.update({'pyson_domain': PYSONEncoder().encode(clause)})
+        return action, {}

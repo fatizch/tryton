@@ -1265,9 +1265,6 @@ class FilterCommissions(Wizard):
         else:
             invoices = Invoice.browse(active_ids)
         return action, {
-            'ids': [x.id for x in invoices],
-            'id': invoices[0].id if invoices else None,
-            'model': 'account.invoice',
             'extra_context': {
                 'origins': [str(x) for invoice in invoices
                     for x in invoice.lines]},

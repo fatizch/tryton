@@ -22,4 +22,5 @@ def register():
         module='commission_insurance_prepayment', type_='model')
     Pool.register(
         FilterCommissions,
+        FilterAggregatedCommissions,
         module='commission_insurance_prepayment', type_='wizard')
