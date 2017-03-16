@@ -1072,6 +1072,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         if product is None:
             self.options = []
             self.extra_datas = []
+            self.extra_data_values = {}
             return
 
         if not start_date:
@@ -1104,6 +1105,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             self.extra_datas[-1].extra_data_values,
             self.appliable_conditions_date)
         self.extra_datas[-1].extra_data_values = data_values
+        self.extra_data_values = data_values
 
     @fields.depends('extra_datas', 'start_date', 'options', 'product',
         'appliable_conditions_date')
