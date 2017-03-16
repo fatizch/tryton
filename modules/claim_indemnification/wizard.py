@@ -7,7 +7,6 @@ from dateutil.relativedelta import relativedelta
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.transaction import Transaction
-from trytond.model import ModelStorage
 from trytond.pyson import Eval, Equal, Bool, Len
 
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
@@ -237,7 +236,9 @@ class IndemnificationAssistant(Wizard):
             'order_sort': 'DESC'}
 
     def default_control_view_state(self, fields):
-        return {'control': [], 'mode': 'control'}
+        return {'control': [], 'mode': 'control',
+            'global_setter': 'nothing', 'field_sort': 'total_amount',
+            'order_sort': 'DESC'}
 
     def transition_validation_state(self):
         pool = Pool()
