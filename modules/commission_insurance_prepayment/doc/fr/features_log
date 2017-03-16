@@ -1,3 +1,4 @@
+* Prise en compte de l'amortissement lors du calcul de l'assiette de commission.
 *  Ajout de la fonction _re_get_prepayment_adjustment dans le moteur de règles. Elle détermine si un contrat a besoin d'un ajustement de précompte.
 * Garder toutes les lignes de commission au lieu de les supprimer puis les recréer.
 

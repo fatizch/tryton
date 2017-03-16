@@ -1,3 +1,4 @@
+* A commission's base amount is equal to its amount divided by its rate.
 * Improve performances on invoice cancellation
 * Add batch chain
 

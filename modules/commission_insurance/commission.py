@@ -63,7 +63,7 @@ class Commission:
         'get_broker', searcher='search_broker')
     commission_rate = fields.Numeric('Commission Rate', digits=(16, 4))
     base_amount = fields.Function(
-        fields.Numeric('Base Amount'),
+        fields.Numeric('Base Amount', digits=(16, 8)),
         'get_base_amount')
     commissioned_subscriber = fields.Function(
         fields.Many2One('party.party', 'Contract Subscriber'),
@@ -127,7 +127,9 @@ class Commission:
             return self.commissioned_option.parent_contract.id
 
     def get_base_amount(self, name):
-        return getattr(self.origin, 'amount', 0)
+        if self.amount and self.commission_rate:
+            return self.amount / self.commission_rate
+        return 0
 
     @classmethod
     def search_commissioned_contract(cls, name, clause):

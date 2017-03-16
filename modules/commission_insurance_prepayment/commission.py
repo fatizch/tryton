@@ -86,6 +86,12 @@ class Commission:
                     -commission.redeemed_prepayment
         return clones
 
+    def get_base_amount(self, name):
+        base_amount = super(Commission, self).get_base_amount(name)
+        if self.redeemed_prepayment and self.commission_rate:
+            base_amount += self.redeemed_prepayment / self.commission_rate
+        return base_amount
+
 
 class PlanLines:
     __name__ = 'commission.plan.line'

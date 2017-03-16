@@ -1,3 +1,4 @@
+* Take redeemed prepayments into account when computing a commission's base amount
 * Add rule engine function _re_get_prepayment_adjustment which determines whether a contract requires prepayments adjustment
 * Keep track of all commission lines instead of deleting them and recreating them.
 
