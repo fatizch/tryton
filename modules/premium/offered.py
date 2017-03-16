@@ -3,9 +3,8 @@
 import datetime
 from dateutil import rrule
 
-from trytond import backend
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool, In
 from trytond.cache import Cache
 from trytond.model import MatchMixin
 
@@ -52,10 +51,11 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
                 'initial start date'),
             ('duration_current_start_date', 'Duration from the contract '
                 'current start date'),
+            ('at_given_date', 'At this date')
             ], 'Date rule', sort=False)
     custom_date = fields.Date('Custom Sync Date', states={
-            'required': Eval('type_', '') == 'yearly_custom_date',
-            'invisible': Eval('type_', '') != 'yearly_custom_date',
+            'required': Bool(In(Eval('type_', ''),
+                    ['yearly_custom_date', 'at_given_date'])),
             }, depends=['type_'])
     duration = fields.Integer('Duration',
         states={
@@ -72,19 +72,9 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
                 ['duration_initial_start_date', 'duration_current_start_date']),
             }, depends=['type_'])
 
-    @classmethod
-    def __register__(cls, module_name):
-        super(ProductPremiumDate, cls).__register__(module_name)
-
-        # Migration from 1.3 : Remove constraint on triplet product / type_ /
-        # custom_date
-        TableHandler = backend.get('TableHandler')
-        TableHandler(cls, module_name).drop_constraint(
-            'offered_product_premium_date_rule_uniq')
-
     @fields.depends('type_', 'custom_date')
     def on_change_type_(self):
-        if self.type_ != 'yearly_custom_date':
+        if self.type_ not in ('yearly_custom_date', 'at_given_date'):
             self.custom_date = None
         elif self.type_ not in ['duration_initial_start_date',
                 'duration_current_start_date']:
@@ -110,6 +100,9 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
             date = coog_date.add_duration(contract.start_date,
                 self.duration_unit, self.duration, True)
             return [datetime.datetime.combine(date, datetime.time())]
+        elif self.type_ == 'at_given_date':
+            return [datetime.datetime.combine(
+                    self.custom_date, datetime.time.min)]
 
 
 class Product:

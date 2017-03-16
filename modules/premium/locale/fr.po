@@ -786,6 +786,10 @@ msgctxt "selection:offered.product.premium_date,type_:"
 msgid "Yearly, from the contract start date"
 msgstr "Annuellement à l'anniversaire du contrat"
 
+msgctxt "selection:offered.product.premium_date,type_:"
+msgid "At this date"
+msgstr "A cette date"
+
 msgctxt "selection:rule_engine,type_:"
 msgid "Premium"
 msgstr "Prime"
