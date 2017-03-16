@@ -84,12 +84,21 @@ class ContractOption:
         if not self.start_date:
             # when a contract is void for example
             return 0
-        end_first_year = self.start_date + relativedelta(years=1, days=-1)
+        contract_start_date = self.parent_contract.initial_start_date
+        end_first_year = contract_start_date + relativedelta(years=1, days=-1)
         lines = []
+        periods = self.parent_contract.get_invoice_periods(end_first_year,
+            contract_start_date)
         for premium in self.premiums:
-            lines.extend(premium.get_invoice_lines(self.start_date,
-                end_first_year))
-        first_year_premium = sum([line.unit_price for line in lines])
+            for start, end, _ in periods:
+                if end < premium.start or (premium.end and start > premium.end):
+                    continue
+                lines.extend(premium.get_invoice_lines(
+                        max(premium.start,start),
+                        min(end, end_first_year)))
+        first_year_premium = sum([
+                self.parent_contract.currency.round(line.unit_price)
+                for line in lines])
         return first_year_premium
 
     def _get_prepayment_amount_and_rate(self, agent, plan, pattern=None):
