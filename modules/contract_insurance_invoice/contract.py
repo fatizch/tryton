@@ -1181,13 +1181,19 @@ class Contract:
             Reconciliation.save(reconciliations)
         return reconciliations
 
+    @fields.depends('billing_informations')
+    def on_change_product(self):
+        super(Contract, self).on_change_product()
+
     def init_from_product(self, product, start_date=None, end_date=None):
-        pool = Pool()
         super(Contract, self).init_from_product(product, start_date, end_date)
-        BillingInformation = pool.get('contract.billing_information')
-        if not product.billing_modes:
+        if not self.product or not self.product.billing_modes:
             return
-        default_billing_mode = product.billing_modes[0]
+        self.init_billing_information()
+
+    def init_billing_information(self):
+        BillingInformation = Pool().get('contract.billing_information')
+        default_billing_mode = self.product.billing_modes[0]
         if default_billing_mode.direct_debit:
             days = default_billing_mode.get_allowed_direct_debit_days()
             direct_debit_day = days[0][0]

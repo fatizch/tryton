@@ -167,12 +167,10 @@ Create Contract::
     >>> contract.subscriber = subscriber
     >>> contract.start_date = contract_start_date
     >>> contract.product = product
-    >>> contract.billing_informations.append(BillingInformation(date=None,
-    ...         billing_mode=monthly_direct_debit,
-    ...         payment_term=monthly_direct_debit.allowed_payment_terms[0],
-    ...         direct_debit_day=5,
-    ...         payer=subscriber,
-    ...         direct_debit_account=subscriber_account))
+    >>> contract.billing_informations[0].billing_mode = monthly_direct_debit
+    >>> contract.billing_informations[0].direct_debit_day = 5
+    >>> contract.billing_informations[0].payer = subscriber
+    >>> contract.billing_informations[0].direct_debit_account = subscriber_account
     >>> contract.contract_number = '123456789'
     >>> contract.save()
     >>> Wizard('contract.activate', models=[contract]).execute('apply')

@@ -740,70 +740,15 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     @fields.depends('product', 'options', 'start_date', 'extra_datas',
         'appliable_conditions_date')
     def on_change_product(self):
-        pool = Pool()
-        ExtraData = pool.get('contract.extra_data')
-        if self.product is None:
-            self.subscriber_kind = 'person'
-            self.extra_data_values = {}
-            self.options = []
-            self.options = self.options
-            self.extra_datas = []
-            self.extra_datas = self.extra_datas
-            return
-
         self.init_from_product(self.product, self.start_date)
-        options = list(self.options)
-        available_coverages = self.get_coverages(self.product)
-        if options:
-            for elem in options:
-                if elem.coverage not in available_coverages:
-                    options.remove(elem)
-                else:
-                    available_coverages.remove(elem.coverage)
-        Option = Pool().get('contract.option')
-        for elem in available_coverages:
-            if elem.subscription_behaviour == 'optional':
-                continue
-            options.append(Option.new_option_from_coverage(elem,
-                    self.product, self.start_date))
-        self.options = options
-        extra_vals = {}
-        if self.extra_datas:
-            extra_vals = self.extra_datas[0].extra_data_values
-        extra_data_value = self.product.get_extra_data_def(
-                'contract', extra_vals, self.appliable_conditions_date)
-        self.subscriber_kind = ('person' if self.product.subscriber_kind in
-            ['all', 'person'] else 'company')
-        extra_datas = []
-        extra_datas.append(ExtraData(date=None,
-                extra_data_values=extra_data_value))
-        self.extra_datas = extra_datas
-        self.extra_data_values = extra_data_value
-        self.extra_data_values = self.extra_data_values
-        self.product_subscriber_kind = self.product.subscriber_kind
-
-    @fields.depends('extra_datas', 'start_date', 'options', 'product',
-        'appliable_conditions_date')
-    def on_change_extra_datas(self):
-        pool = Pool()
-        ExtraData = pool.get('contract.extra_data')
-
-        if not self.product:
-            self.extra_datas = []
-            return
-
-        if not self.extra_datas:
-            self.extra_datas = [
-                ExtraData(extra_data_values={}, date=None)]
+        if self.product:
+            self.subscriber_kind = ('person' if self.product.subscriber_kind in
+                ['all', 'person'] else 'company')
+            self.product_subscriber_kind = self.product.subscriber_kind
         else:
-            self.extra_datas = self.extra_datas
-
-        data_values = self.product.get_extra_data_def('contract',
-            self.extra_datas[-1].extra_data_values,
-            self.appliable_conditions_date)
-
-        self.extra_datas[-1].extra_data_values = data_values
-        self.extra_data_values = data_values
+            self.subscriber_kind = 'all'
+            self.product_subscriber_kind = 'all'
+        self.extra_data_values = self.extra_data_values
 
     @fields.depends('start_date')
     def on_change_start_date(self):
@@ -1049,7 +994,6 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         self.subscriber = party
         at_date = contract_dict.get('start_date', utils.today())
         self.init_from_product(product, at_date)
-        self.on_change_extra_data()
 
     def before_activate(self):
         self.calculate()
@@ -1125,39 +1069,46 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         return return_values
 
     def init_from_product(self, product, start_date=None, end_date=None):
+        if product is None:
+            self.options = []
+            self.extra_datas = []
+            return
+
         if not start_date:
             start_date = utils.today()
         if utils.is_effective_at_date(product, start_date):
             self.product = product
-            start_date = (
-                max(product.start_date, start_date)
+            start_date = (max(product.start_date, start_date)
                 if start_date else product.start_date)
             self.start_date = start_date
+            self.appliable_conditions_date = self.start_date
             self.status = 'quote'
             self.company = product.company
+            self.init_options()
             self.init_extra_data()
         else:
             self.raise_user_error('inactive_product_at_date',
                 (product.name, start_date))
-        self.appliable_conditions_date = self.start_date
 
     def init_extra_data(self):
-        if not (hasattr(self, 'extra_datas') and
-                self.extra_datas):
+        if not self.product:
             self.extra_datas = []
-            self.extra_datas = self.extra_datas
-        self.on_change_extra_datas()
+            return
 
-    def get_extra_data_def(self):
-        extra_data_defs = []
-        if self.product:
-            extra_data_defs.extend(self.product.get_extra_data_def(
-                ['contract'], at_date=self.start_date))
-        for option in self.options:
-            extra_data_defs.extend(
-                option.product.get_extra_data_def(['contract'],
-                    at_date=option.start_date))
-        return set(extra_data_defs)
+        pool = Pool()
+        ExtraData = pool.get('contract.extra_data')
+        if not getattr(self, 'extra_datas', None):
+            self.extra_datas = [
+                ExtraData(extra_data_values={}, date=None)]
+        data_values = self.product.get_extra_data_def('contract',
+            self.extra_datas[-1].extra_data_values,
+            self.appliable_conditions_date)
+        self.extra_datas[-1].extra_data_values = data_values
+
+    @fields.depends('extra_datas', 'start_date', 'options', 'product',
+        'appliable_conditions_date')
+    def on_change_extra_datas(self):
+        self.init_extra_data()
 
     def init_dict_for_rule_engine(self, cur_dict):
         cur_dict['contract'] = self
@@ -1360,21 +1311,20 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         return [x.coverage for x in product.ordered_coverages]
 
     def init_options(self):
-        existing = dict(((x.coverage, x) for x in getattr(
-                    self, 'options', [])))
-        good_options = []
-        OptionModel = Pool().get('contract.option')
-        for coverage in self.get_coverages(self.product):
-            good_opt = None
-            if coverage in existing:
-                good_opt = existing[coverage]
-            elif coverage.subscription_behaviour == 'mandatory':
-                good_opt = OptionModel.new_option_from_coverage(coverage,
-                    self.product, self.start_date)
-            if good_opt:
-                good_opt.contract = self
-                good_options.append(good_opt)
-        self.options = good_options
+        Option = Pool().get('contract.option')
+        options = list(getattr(self, 'options', []))
+        coverages = self.get_coverages(self.product)
+        for opt in options:
+            if opt.coverage not in coverages:
+                options.remove(opt)
+            else:
+                coverages.remove(opt.coverage)
+
+        for coverage in coverages:
+            if coverage.subscription_behaviour != 'optional':
+                options.append(Option.new_option_from_coverage(
+                    coverage, self.product, self.start_date))
+        self.options = options
 
     def get_currency(self):
         if hasattr(self, 'product') and self.product:
