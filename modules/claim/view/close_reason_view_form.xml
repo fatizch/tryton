@@ -3,6 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <form col="4">
     <label name="sub_status" colspan="1"/>
-    <field name="sub_status" widget="selection" colspan="3"/>
+    <field name="sub_status" widget="selection"/>
     <field name="claims" colspan="4" expand_toolbar="0"/>
 </form>

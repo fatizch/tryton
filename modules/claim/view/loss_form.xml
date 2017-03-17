@@ -11,7 +11,7 @@ this repository contains the full copyright notices and license terms. -->
     <label name="end_date"/>
     <field name="end_date"/>
     <label name="closing_reason" colspan="1"/>
-    <field name="closing_reason" widget="selection" colspan="3"/>
+    <field name="closing_reason" widget="selection"/>
     <field name="available_closing_reasons" invisible="1"/>
     <newline/>
     <field name="extra_data" colspan="2" no_command="1"/>
