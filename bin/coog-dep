@@ -30,6 +30,7 @@ coog_dep_main() { # install base deps
                 Mock \
                 simpleeval \
                 ldap3 \
+                requests \
                 chardet \
                 vobject \
                 raven \
