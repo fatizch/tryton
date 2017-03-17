@@ -31,6 +31,7 @@ RUN pip install \
         werkzeug \
         simpleeval \
         ldap3 \
+        requests \
         raven \
         redis \
         hiredis \
