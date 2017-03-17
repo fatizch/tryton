@@ -230,10 +230,15 @@ class Contract:
                 'no_payer': 'A payer must be specified',
                 })
 
+    def get_color_from_balance_today(self):
+        if self.status in ['void', 'terminated'] and self.balance_today != 0:
+            return 'red'
+
     def get_color(self, name=None):
         if self.billing_information and self.billing_information.suspended:
             return 'red'
-        return super(Contract, self).get_color(name)
+        return (self.get_color_from_balance_today() or
+            super(Contract, self).get_color(name))
 
     @classmethod
     def delete(cls, contracts):
@@ -330,11 +335,6 @@ class Contract:
                     balance = Decimal(str(balance))
                 result[contract] = balance
         return result
-
-    def get_color(self, name):
-        if self.status in ['void', 'terminated'] and self.balance_today != 0:
-            return 'red'
-        return super(Contract, self).get_color(name)
 
     @classmethod
     def search_balance(cls, name, clause, date=None):
