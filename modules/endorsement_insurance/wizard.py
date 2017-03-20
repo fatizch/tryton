@@ -1339,6 +1339,33 @@ class ManageOptions:
 class OptionDisplayer:
     __name__ = 'contract.manage_options.option_displayer'
 
+    @property
+    def product(self):
+        product = super(OptionDisplayer, self).product
+        if product:
+            return product
+        if not self._parent:
+            return
+        if self._parent.__name__ == 'contract.covered_element':
+            return self._parent.main_contract.product
+        if self._parent.__name__ == 'endorsement.contract.covered_element':
+            return self._parent.contract_endorsement.contract.product
+
+    @property
+    def item_desc(self):
+        if not self._parent:
+            return
+        if self._parent.__name__ in ('contract.covered_element',
+                'endorsement.contract.covered_element'):
+            return self._parent.item_desc
+
+    def refresh_extra_data(self):
+        if not self.item_desc:
+            return super(OptionDisplayer, self).refresh_extra_data()
+        self.extra_data = self.product.get_extra_data_def('option',
+            self.extra_data, self.effective_date, coverage=self.coverage,
+            item_desc=self.item_desc)
+
     @classmethod
     def _option_fields_to_extract(cls):
         to_extract = super(OptionDisplayer, cls)._option_fields_to_extract()

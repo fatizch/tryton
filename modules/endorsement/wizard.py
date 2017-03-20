@@ -1120,6 +1120,13 @@ class OptionDisplayer(model.CoogView):
     def coverage(self):
         return Pool().get('offered.option.description')(self.coverage_id)
 
+    @property
+    def product(self):
+        if not self._parent:
+            return None
+        if self._parent.__name__ == 'contract':
+            return self._parent.product
+
     @fields.depends('action', 'cur_option_id', 'effective_date', 'end_date',
         'extra_data', 'extra_data_as_string', 'sub_status')
     def on_change_action(self):
@@ -1143,11 +1150,12 @@ class OptionDisplayer(model.CoogView):
                         self.cur_option_id).end_date
 
     @fields.depends('action', 'cur_option_id', 'effective_date', 'extra_data',
-        'extra_data_as_string')
+        'extra_data_as_string', 'parent', 'coverage_id')
     def on_change_extra_data(self):
         if not self.extra_data and self.action is None:
             self.extra_data_as_string = ''
             return
+        self.refresh_extra_data()
         self.update_extra_data_string()
         if self.action == 'added':
             return
@@ -1159,6 +1167,12 @@ class OptionDisplayer(model.CoogView):
         elif self.extra_data == previous_extra_data and (
                 self.action == 'modified'):
             self.action = 'nothing'
+
+    def refresh_extra_data(self):
+        if not self.product:
+            return
+        self.extra_data = self.product.get_extra_data_def('option',
+            self.extra_data, self.effective_date, coverage=self.coverage)
 
     def update_extra_data_string(self):
         self.extra_data_as_string = Pool().get(
