@@ -296,6 +296,9 @@ class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return ExtraData.calculate_value_set(possible_schemas, all_schemas,
             existing_data)
 
+    def get_all_extra_data(self, at_date):
+        return dict(getattr(self, 'extra_data', {}))
+
     @classmethod
     def is_master_object(cls):
         return True

@@ -852,6 +852,7 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
             res.update(self.option.get_all_extra_data(at_date))
         elif self.contract:
             res.update(self.contract.get_all_extra_data(at_date))
+        res.update(self.benefit.get_all_extra_data(at_date))
         return res
 
 

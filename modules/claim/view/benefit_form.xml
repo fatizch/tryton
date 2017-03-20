@@ -15,6 +15,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="description" colspan="4"/>
         </page>
         <page string="Extra Datas" id="extra_datas">
+            <field name="extra_data" colspan="4"/>
             <newline/>
             <field name="extra_data_def" colspan="4"/>
         </page>
@@ -34,8 +35,6 @@ this repository contains the full copyright notices and license terms. -->
             <group id="right" col="2">
                 <label name="company"/>
                 <field name="company"/>
-                <newline/>
-                <field name="extra_data" colspan="2"/>
             </group>
             <field name="tags" colspan="4"/>
         </page>
