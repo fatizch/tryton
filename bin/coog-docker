@@ -16,27 +16,32 @@ _coog_docker_archive() { # archive repo - <repo> <tree>
         local tree; tree=$2
         echo $repo:$tree:`git rev-parse $tree` >> "$_coog_docker_gd"/.version
         [ $? -ne 0 ] && echo bad revision $tree from $repo && return 1
-        local base; base="$_coog_docker_gd"/"$repo"
-        local submodules; submodules=`git submodule | wc -l`
-        if [ $submodules -eq 0 ]
+        local base; base="$_coog_docker_gd"/"$repo"; mkdir $base
+        if [ -d ./docker ]
         then
-                git archive --format tar -o "$base".tar $tree
+                ./docker/build $tree && cp -r ./docker/content/* "$base"
         else
-                local current; current=`git rev-parse --abbrev-ref HEAD`
-                [ -z $current ] && echo $repo: branch is $current && return 1
-                [ "$current" = HEAD ] && echo $repo: branch is $current && return 1
-                local dirty; dirty=`git diff $current | wc -l`
-                [ "$dirty" -ne 0 ] && echo repo $repo is not clean && return 1
-                git archive --format tar -o "$base".tar $tree
-                # need to checkout to get submodules @ right commit
-                git checkout $tree
-                [ $? -ne 0 ] && echo "checkout $tree ko" && return 1
-                git submodule foreach "git archive --prefix="'$path'"/ --format tar -o "$base"-"'$sha1'".tar "'$sha1'
-                git submodule foreach "tar A -f "$base".tar "$base"-"'$sha1'".tar"
-                git submodule foreach "rm -f "$base"-"'$sha1'".tar"
-                git checkout "$current"
+                local submodules; submodules=`git submodule | wc -l`
+                if [ $submodules -eq 0 ]
+                then
+                        git archive --format tar -o "$base".tar $tree
+                else
+                        local current; current=`git rev-parse --abbrev-ref HEAD`
+                        [ -z $current ] && echo $repo: branch is $current && return 1
+                        [ "$current" = HEAD ] && echo $repo: branch is $current && return 1
+                        local dirty; dirty=`git diff $current | wc -l`
+                        [ "$dirty" -ne 0 ] && echo repo $repo is not clean && return 1
+                        git archive --format tar -o "$base".tar $tree
+                        # need to checkout to get submodules @ right commit
+                        git checkout $tree
+                        [ $? -ne 0 ] && echo "checkout $tree ko" && return 1
+                        git submodule foreach "git archive --prefix="'$path'"/ --format tar -o "$base"-"'$sha1'".tar "'$sha1'
+                        git submodule foreach "tar A -f "$base".tar "$base"-"'$sha1'".tar"
+                        git submodule foreach "rm -f "$base"-"'$sha1'".tar"
+                        git checkout "$current"
+                fi
+                tar x -f "$base".tar -C $base && rm "$base".tar
         fi
-        mkdir $base && tar x -f "$base".tar -C $base && rm "$base".tar
 }
 
 coog_docker_build() { # build docker image - [image*] -- [docker-build-arg*]
