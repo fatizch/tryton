@@ -47,6 +47,10 @@ class ClaimService:
         'on_change_with_eligibility_comment_wrapped')
     eligibility_extra_data_values = fields.Dict('extra_data',
         'Eligibility Extra Data')
+    extra_eligibility_data_summary = fields.Function(
+        fields.Text('Eligibility Extra Data Summary',
+            depends=['eligibility_extra_data_values']),
+        'get_eligibility_extra_data_summary')
 
     @classmethod
     def __setup__(cls):
@@ -56,7 +60,7 @@ class ClaimService:
                 'invisible': Eval('eligibility_status') != 'study_in_progress',
                 },
             'validate_services': {
-                'invisible': Eval('eligibility_status') != 'study_in_progress',
+                'invisible': Eval('eligibility_status') == 'refused',
                 },
             'check_eligibility': {
                 'invisible': Eval('eligibility_status') != 'study_in_progress',
@@ -70,6 +74,11 @@ class ClaimService:
     def default_eligibility_status():
         return 'study_in_progress'
 
+    @classmethod
+    def get_eligibility_extra_data_summary(cls, services, name):
+        return Pool().get('extra_data').get_extra_data_summary(services,
+            'eligibility_extra_data_values')
+
     def init_from_loss(self, loss, benefit):
         self.eligibility_extra_data_values = {}
         super(ClaimService, self).init_from_loss(loss, benefit)
@@ -80,10 +89,14 @@ class ClaimService:
 
     @fields.depends('eligibility_comment')
     def on_change_with_eligibility_comment_wrapped(self, name=None):
+        comment = ''
+        if (self.eligibility_status == 'accepted' and
+                self.extra_eligibility_data_summary):
+            comment = '%s\n' % self.extra_eligibility_data_summary
         if not self.eligibility_comment:
-            return ''
+            return comment
         wrapper = self.get_wrapper()
-        return '\n'.join(map(wrapper.fill,
+        return comment + '\n'.join(map(wrapper.fill,
                 self.eligibility_comment.splitlines()))
 
     def calculate_eligibility(self):

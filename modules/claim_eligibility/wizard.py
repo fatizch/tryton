@@ -32,7 +32,10 @@ class ManualValidationEligibility(Wizard):
         cls._error_messages.update({
                 'validation_eligibility_need_extra_data':
                 'Validation cannot be processed without knowing the reason : '
-                '%s must be filled'})
+                '%s must be filled',
+                'eligibility_data_change': 'Eligibility information change. '
+                'It could be necessary to recalculate existing indemnification'
+                ' period.'})
 
     def transition_check_extra_data(self):
         pool = Pool()
@@ -70,6 +73,11 @@ class ManualValidationEligibility(Wizard):
         Service = pool.get('claim.service')
         active_id = Transaction().context.get('active_id')
         service = Service(active_id)
+        if (service.eligibility_status == 'accepted' and
+                service.eligibility_extra_data_values !=
+                self.display_service.eligibility_extra_data_values):
+            self.raise_user_warning('eligibility_data_change',
+                'eligibility_data_change')
         Service.accept_eligibility(service,
             self.display_service.eligibility_extra_data_values)
         Event.notify_events([service], 'accept_claim_service')

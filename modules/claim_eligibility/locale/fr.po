@@ -8,6 +8,14 @@ msgstr "L'éligibilité de la prestation n'a pas été validée"
 
 msgctxt "error:claim.manual_validation_eligibility:"
 msgid ""
+"Eligibility information change. It could be necessary to recalculate "
+"existing indemnification period."
+msgstr ""
+"Les information de validation des droits ont changé. Il est peut être "
+"nécessaire de faire des régularisations."
+
+msgctxt "error:claim.manual_validation_eligibility:"
+msgid ""
 "Validation cannot be processed without knowing the reason : %s must be "
 "filled"
 msgstr ""
@@ -20,7 +28,7 @@ msgstr "Confirmer  le refus de prestation"
 
 msgctxt "field:benefit,eligibility_rules:"
 msgid "Benefit Eligibility Rules"
-msgstr "Règles d'éligibilité"
+msgstr "Règles de validation des droits"
 
 msgctxt "field:benefit.eligibility.rule,benefit:"
 msgid "Benefit"
@@ -86,13 +94,17 @@ msgctxt "field:claim.service,eligibility_status:"
 msgid "Eligibility Status"
 msgstr "Statut des droits"
 
+msgctxt "field:claim.service,extra_eligibility_data_summary:"
+msgid "Eligibility Extra Data Summary"
+msgstr "Résumé des données complémentaires de validation des droits"
+
 msgctxt "field:claim.service,indemnification_start_date:"
 msgid "Indemnification Start Date"
 msgstr "Date de début d'indemnisation"
 
 msgctxt "model:benefit.eligibility.rule,name:"
 msgid "Benefit Eligibility Rule"
-msgstr "Règle d'éligibilité"
+msgstr "Règle de validation des droits"
 
 msgctxt "model:event.type,name:event_accept_service"
 msgid "Accept Claim Service"
@@ -104,7 +116,7 @@ msgstr "Refuser la prestation"
 
 msgctxt "model:ir.action,name:act_validate_eligibility_wizard"
 msgid "Validate Eligibility"
-msgstr "Valider l'éligibilité"
+msgstr "Valider les droits"
 
 msgctxt "selection:claim.service,eligibility_status:"
 msgid "Accepted"
@@ -124,11 +136,11 @@ msgstr "Motif de validation manuelle"
 
 msgctxt "view:benefit.eligibility.rule:"
 msgid "Benefit Eligibility Rule"
-msgstr "Règle d'éligibilité"
+msgstr "Règle de validation des droits"
 
 msgctxt "view:benefit.eligibility.rule:"
 msgid "Benefit Eligibility Rules"
-msgstr "Règles d'éligibilité"
+msgstr "Règles de validation des droits"
 
 msgctxt "view:benefit:"
 msgid "Eligibility"
@@ -136,15 +148,15 @@ msgstr "Eligibilité"
 
 msgctxt "view:claim.service:"
 msgid "Check Eligibility"
-msgstr "Vérifier l'éligibilité"
+msgstr "Vérifier les droits"
 
 msgctxt "view:claim.service:"
 msgid "Decline Eligibility"
-msgstr "Refuser l'éligibilité"
+msgstr "Refuser les droits"
 
 msgctxt "view:claim.service:"
 msgid "Validate Eligibility"
-msgstr "Valider l'éligibilité"
+msgstr "Valider les droits"
 
 msgctxt ""
 "wizard_button:claim.manual_validation_eligibility,display_service,check_result:"
