@@ -2,8 +2,11 @@
 # this repository contains the full copyright notices and license terms.
 import copy
 from dateutil import rrule
+from decimal import Decimal
 
 from sql.aggregate import Count
+from dateutil.relativedelta import relativedelta
+
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.modules.rule_engine import check_args
@@ -162,6 +165,17 @@ class RuleEngineRuntime:
     @check_args('base_amount')
     def _re_get_daily_base_salary(cls, args):
         return args['base_amount']
+
+    @classmethod
+    @check_args('indemnification')
+    def _re_maximum_daily_amount_for_indemnification(cls, args):
+        amounts = []
+        for detail in args['indemnification'].details:
+            if not detail.start_date or not detail.end_date:
+                continue
+            days = relativedelta(detail.end_date, detail.start_date).days + 1
+            amounts.append(detail.amount / days)
+        return max(amounts) or Decimal(0)
 
     @classmethod
     @check_args('indemnification_periods')

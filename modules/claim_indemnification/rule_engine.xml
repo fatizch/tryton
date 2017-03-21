@@ -143,5 +143,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="fct_args">Date debut periode, Date fin periode</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+        <record model="rule_engine.function" id="max_daily_amount_for_indemnification">
+            <field name="translated_technical_name">maximum_prestations_journalieres</field>
+            <field name="description">Maximum des prestations journalière sur une indemnisation</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_maximum_daily_amount_for_indemnification</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
     </data>
 </tryton>
