@@ -619,6 +619,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'cannot_schedule_draft_loss': 'Cannot schedule '
                 'indemnifications for draft loss %(loss)s',
                 })
+        cls._order = [('start_date', 'ASC')]
 
     @classmethod
     def __register__(cls, module):
@@ -1134,6 +1135,7 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
         cls._error_messages.update({
                 'capital_string': 'Capital',
                 })
+        cls._order = [('start_date', 'ASC')]
 
     def get_indemnification_kind(self, name):
         return self.indemnification.kind
