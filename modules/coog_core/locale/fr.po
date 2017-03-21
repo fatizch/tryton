@@ -1455,6 +1455,16 @@ msgctxt "model:ir.action,name:revision_blame"
 msgid "Diff Blame Revision"
 msgstr "Différence dé Révisions"
 
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_event_type_action_domain_active"
+msgid "Enabled"
+msgstr "Actif"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_event_type_action_domain_inactive"
+msgid "Disabled"
+msgstr "Inactif"
+
 msgctxt "model:ir.export.configuration,name:"
 msgid "Export Configuration"
 msgstr "Configuration de l'export"

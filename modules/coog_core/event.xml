@@ -30,6 +30,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_event_type_action_form">
             <field name="name">Event Type Action</field>
             <field name="res_model">event.type.action</field>
+            <field name="domain" eval="[('active', 'in', [True, False])]" pyson="1"></field>
         </record>
         <record model="ir.action.act_window.view" id="act_event_type_view_list">
             <field name="sequence" eval="10"/>
@@ -49,6 +50,19 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window.view" id="act_event_type_action_view_form">
             <field name="sequence" eval="20"/>
             <field name="view" ref="event_type_action_view_form"/>
+            <field name="act_window" ref="act_event_type_action_form"/>
+        </record>
+        <!-- Tabs -->
+        <record model="ir.action.act_window.domain" id="act_event_type_action_domain_active">
+            <field name="name">Enabled</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain" eval="[('active', '=', True)]" pyson="1"/>
+            <field name="act_window" ref="act_event_type_action_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_event_type_action_domain_inactive">
+            <field name="name">Disabled</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[('active', '!=', True)]" pyson="1"/>
             <field name="act_window" ref="act_event_type_action_form"/>
         </record>
         <menuitem name="Event" id="menu_event" sequence="100" parent="ir.menu_administration"/>

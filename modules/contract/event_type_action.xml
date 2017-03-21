@@ -8,6 +8,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="code">notification_after_void</field>
             <field name="priority">10000</field>
             <field name="action">create_contract_notification</field>
+            <field name="notification_delay">20</field>
             <field name="active">False</field>
         </record>
         <record model="event.type.action-event.type" id="event_void_contract_join_notification">
