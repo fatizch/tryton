@@ -1,3 +1,4 @@
+* Deactivate terminated contract's dunnings
 * Set void state on a contract in case an unpaid premium event occurs before 
 the contract start date
 

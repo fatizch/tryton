@@ -125,6 +125,25 @@ class Dunning:
             return self.contract
         return super(Dunning, self).get_object_for_contact()
 
+    def get_active(self, name):
+        res = super(Dunning, self).get_active(name)
+        if not self.contract:
+            return res
+        return res and self.contract.status != 'terminated'
+
+    @classmethod
+    def search_active(cls, name, clause):
+        domain = super(Dunning, cls).search_active(name, clause)
+        comparator = {'=': True, '!=': False}
+        if clause[1] in comparator:
+            if clause[2] == comparator[clause[1]]:
+                domain.append(['OR', ('line.contract', '=', None),
+                    ('line.contract.status', '!=', 'terminated')])
+            else:
+                domain = ['OR', domain, [('line.contract', '!=', None),
+                        ('line.contract.status', '=', 'terminated')]]
+        return domain
+
 
 class Procedure:
     __name__ = 'account.dunning.procedure'
