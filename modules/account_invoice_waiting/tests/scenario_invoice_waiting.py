@@ -1,0 +1,297 @@
+# #Title# # Test account invoice waiting
+# This file is part of Coog. The COPYRIGHT file at the top level of
+# this repository contains the full copyright notices and license terms.
+# #Comment# # Init
+import datetime
+from decimal import Decimal
+from proteus import Model, Wizard
+from trytond.tests.tools import activate_modules
+from trytond.modules.company.tests.tools import create_company, get_company
+from trytond.modules.account.tests.tools import create_fiscalyear, \
+    create_chart, get_accounts, create_tax, set_tax_code
+from trytond.modules.account_invoice.tests.tools import \
+    set_fiscalyear_invoice_sequences
+
+# #Comment# #Set date
+
+today = datetime.date.today()
+
+# #Comment# #Install Modules
+
+config = activate_modules('account_invoice_waiting')
+
+# #Comment# #Create company
+
+_ = create_company()
+company = get_company()
+tax_identifier = company.party.identifiers.new()
+tax_identifier.type = 'eu_vat'
+tax_identifier.code = 'BE0897290877'
+company.party.save()
+
+# #Comment# #Create fiscal year
+
+fiscalyear = set_fiscalyear_invoice_sequences(
+    create_fiscalyear(company))
+fiscalyear.click('create_period')
+period = fiscalyear.periods[0]
+
+
+# #Comment# #Create waiting account
+WaitingAccount = Model.get('account.account')
+WaitingAccountKind = Model.get('account.account.type')
+waiting_account_kind = WaitingAccountKind()
+waiting_account_kind.name = 'Waiting Account Kind'
+waiting_account_kind.company = company
+waiting_account_kind.save()
+waiting_account = WaitingAccount()
+waiting_account.name = 'Waiting Account'
+waiting_account.company = company
+waiting_account.code = 'waiting_account'
+waiting_account.kind = 'other'
+waiting_account.type = waiting_account_kind
+waiting_account.save()
+
+# #Comment# #Create chart of accounts
+
+_ = create_chart(company)
+accounts = get_accounts(company)
+receivable = accounts['receivable']
+revenue_without_waiting = accounts['revenue']
+revenue = waiting_account
+waiting_account.waiting_for_account = accounts['revenue']
+waiting_account.save()
+expense = accounts['expense']
+account_tax = accounts['tax']
+account_cash = accounts['cash']
+
+# #Comment# #Create tax
+
+tax = set_tax_code(create_tax(Decimal('.10')))
+tax.save()
+invoice_base_code = tax.invoice_base_code
+invoice_tax_code = tax.invoice_tax_code
+credit_note_base_code = tax.credit_note_base_code
+credit_note_tax_code = tax.credit_note_tax_code
+
+# #Comment# #Set Cash journal
+
+Journal = Model.get('account.journal')
+journal_cash, = Journal.find([('type', '=', 'cash')])
+journal_cash.credit_account = account_cash
+journal_cash.debit_account = account_cash
+journal_cash.save()
+
+# #Comment# #Set Cash journal
+
+Journal = Model.get('account.journal')
+journal_waiting, = Journal.find([('type', '=', 'wait')])
+
+account_config = Model.get('account.configuration')(1)
+account_config.waiting_journal = journal_waiting
+account_config.save()
+
+# #Comment# #Create Write-Off journal
+
+Sequence = Model.get('ir.sequence')
+sequence_journal, = Sequence.find([('code', '=', 'account.journal')])
+journal_writeoff = Journal(
+    name='Write-Off',
+    type='write-off',
+    sequence=sequence_journal,
+    credit_account=revenue,
+    debit_account=expense)
+
+journal_writeoff.save()
+
+# #Comment# #Create party
+
+Party = Model.get('party.party')
+party = Party(name='Party')
+party.save()
+
+# #Comment# #Create product
+
+ProductUom = Model.get('product.uom')
+unit, = ProductUom.find([('name', '=', 'Unit')])
+ProductTemplate = Model.get('product.template')
+Product = Model.get('product.product')
+product = Product()
+template = ProductTemplate()
+template.name = 'product'
+template.default_uom = unit
+template.type = 'service'
+template.list_price = Decimal('40')
+template.cost_price = Decimal('25')
+template.account_expense = expense
+template.account_revenue = waiting_account
+template.customer_taxes.append(tax)
+template.save()
+product.template = template
+product.save()
+
+# #Comment# #Create product without waiting account
+
+product_without_waiting = Product()
+template_without_waiting = ProductTemplate()
+template_without_waiting.name = 'product'
+template_without_waiting.default_uom = unit
+template_without_waiting.type = 'service'
+template_without_waiting.list_price = Decimal('40')
+template_without_waiting.cost_price = Decimal('25')
+template_without_waiting.account_expense = expense
+template_without_waiting.account_revenue = revenue_without_waiting
+template_without_waiting.customer_taxes.append(tax)
+template_without_waiting.save()
+product_without_waiting.template = template_without_waiting
+product_without_waiting.save()
+
+
+# #Comment# #Create payment term
+
+PaymentTerm = Model.get('account.invoice.payment_term')
+payment_term = PaymentTerm(name='Term')
+line = payment_term.lines.new(type='percent', ratio=Decimal('.5'))
+delta = line.relativedeltas.new(days=20)
+line = payment_term.lines.new(type='remainder')
+delta = line.relativedeltas.new(days=40)
+payment_term.save()
+
+# #Comment# #Create a paid invoice type "in"
+
+Invoice = Model.get('account.invoice')
+InvoiceLine = Model.get('account.invoice.line')
+invoice = Invoice()
+invoice.party = party
+invoice.payment_term = payment_term
+invoice.invoice_date = today
+line = InvoiceLine()
+invoice.lines.append(line)
+invoice.type = 'in'
+line.product = product
+line.quantity = 1
+line.unit_price = Decimal('40')
+line.account = revenue
+line.description = 'Test'
+line2 = InvoiceLine()
+invoice.lines.append(line2)
+line.product = product_without_waiting
+line2.quantity = 1
+line2.unit_price = Decimal('60')
+line2.account = revenue_without_waiting
+line2.description = 'Test2'
+invoice.save()
+invoice.click('post')
+
+all(x.amount > 0 for x in invoice.move.lines if x.account == waiting_account)
+# #Res# #True
+
+
+waiting_amount = sum(x.amount
+    for x in invoice.move.lines if x.account == waiting_account)
+
+pay = Wizard('account.invoice.pay', [invoice])
+pay.form.journal = journal_cash
+pay.execute('choice')
+
+waiting_move, = Model.get('account.move').find([(
+        'origin', '=', 'account.invoice,' + str(invoice.id)),
+        ('id', '!=', invoice.move.id)
+        ])
+
+waiting_amount_paid = sum(x.amount
+    for x in waiting_move.lines if x.account == waiting_account)
+
+waiting_amount != 0
+# #Res# #True
+waiting_amount_paid != 0
+# #Res# #True
+waiting_amount + waiting_amount_paid == 0
+# #Res# #True
+
+# #Comment# #The invoice is posted when the reconciliation is deleted
+
+invoice.payment_lines[0].reconciliation.delete()
+invoice.reload()
+
+waiting_move_payment_cancel, = Model.get('account.move').find(
+    [('origin', '=', 'account.invoice,' + str(invoice.id)),
+    ('id', 'not in', [invoice.move.id, waiting_move.id])]
+    )
+
+waiting_amount_payment_cancel = sum(x.amount
+    for x in waiting_move_payment_cancel.lines if x.account == waiting_account)
+
+waiting_amount_payment_cancel != 0
+# #Res# #True
+waiting_amount_paid != 0
+# #Res# #True
+waiting_amount_payment_cancel + waiting_amount_paid == 0
+# #Res# #True
+
+# #Comment# #Create a paid invoice type "out"
+
+Invoice = Model.get('account.invoice')
+InvoiceLine = Model.get('account.invoice.line')
+invoice = Invoice()
+invoice.party = party
+invoice.payment_term = payment_term
+invoice.invoice_date = today
+line = InvoiceLine()
+invoice.lines.append(line)
+line2 = InvoiceLine()
+invoice.lines.append(line2)
+invoice.type = 'out'
+line.product = product
+line.quantity = 1
+line.unit_price = Decimal('40')
+line.account = revenue
+line.description = 'Test'
+line2.product = product_without_waiting
+line2.quantity = 1
+line2.unit_price = Decimal('60')
+line2.account = revenue_without_waiting
+line2.description = 'Test2'
+invoice.save()
+invoice.click('post')
+
+all(x.amount < 0 for x in invoice.move.lines if x.account == waiting_account)
+# #Res# #True
+
+
+waiting_amount = sum(x.amount
+    for x in invoice.move.lines if x.account == waiting_account)
+
+pay = Wizard('account.invoice.pay', [invoice])
+pay.form.journal = journal_cash
+pay.execute('choice')
+
+waiting_move, = Model.get('account.move').find([(
+        'origin', '=', 'account.invoice,' + str(invoice.id)),
+        ('id', '!=', invoice.move.id)
+        ])
+
+waiting_amount_paid = sum(x.amount
+    for x in waiting_move.lines if x.account == waiting_account)
+
+waiting_amount != 0
+# #Res# #True
+waiting_amount_paid != 0
+# #Res# #True
+waiting_amount + waiting_amount_paid == 0
+# #Res# #True
+
+# #Comment# #The invoice is posted when the reconciliation is deleted
+
+invoice.payment_lines[0].reconciliation.delete()
+invoice.reload()
+
+waiting_move_payment_cancel, = Model.get('account.move').find(
+    [('origin', '=', 'account.invoice,' + str(invoice.id)),
+    ('id', 'not in', [invoice.move.id, waiting_move.id])])
+
+waiting_amount_payment_cancel = sum(x.amount
+    for x in waiting_move_payment_cancel.lines if x.account == waiting_account)
+
+waiting_amount_payment_cancel + waiting_amount_paid == 0
+# #Res# #True
