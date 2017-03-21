@@ -32,6 +32,8 @@ class EventLog:
                 return [object_.claim]
             elif object_.__name__ == 'claim.service':
                 return [object_.claim]
+            elif object_.__name__ == 'claim.indemnification':
+                return [object_.service.claim]
             else:
                 return []
         return super(EventLog, cls).get_related_instances(object_, model_name)
