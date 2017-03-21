@@ -87,7 +87,7 @@ class ClaimService:
     def get_wrapper(cls):
         return TextWrapper(width=79)
 
-    @fields.depends('eligibility_comment')
+    @fields.depends('eligibility_comment', 'eligibility_status')
     def on_change_with_eligibility_comment_wrapped(self, name=None):
         comment = ''
         if (self.eligibility_status == 'accepted' and
