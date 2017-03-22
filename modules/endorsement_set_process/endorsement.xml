@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ################### -->
+        <!-- # Endorsement Set # -->
+        <!-- ################### -->
+        <record model="ir.ui.view" id="endorsement_set_view_list">
+            <field name="model">endorsement.set</field>
+            <field name="inherit" ref="endorsement_set.endorsement_set_view_list"/>
+            <field name="name">endorsement_set_list</field>
+        </record>
+    </data>
+</tryton>
