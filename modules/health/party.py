@@ -1,9 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
+
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import model, fields
+from trytond.modules.coog_core import model, fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -39,6 +41,10 @@ class Party:
         if self.is_person and self.ssn:
             name += " - %s" % self.ssn
         return name
+
+    def get_health_complement_at_date(self, at_date=None):
+        return utils.get_good_version_at_date(self, 'health_complement',
+            at_date)
 
 
 class HealthPartyComplement(model._RevisionMixin, model.CoogSQL,
