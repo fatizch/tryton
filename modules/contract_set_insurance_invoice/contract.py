@@ -140,8 +140,10 @@ class ContractSet:
         return aggregated
 
     def invoices_report(self):
-        all_reports = [report for contract in self.contracts for report in
-            contract.invoices_report()[0]]
+        invoices_reports = [contract.invoices_report()
+            for contract in self.contracts]
+        all_reports = [report for invoice_report in invoices_reports
+            for report in invoice_report[0]]
 
         def keyfunc(x):
             return x['planned_payment_date']
@@ -160,4 +162,9 @@ class ContractSet:
                 reports_per_date[planned_date][
                     'planned_payment_date'] = planned_date
                 total += report['total_amount']
-        return [sorted(reports_per_date.values(), key=keyfunc), total]
+        taxes = defaultdict(int)
+        for report in invoices_reports:
+            for key, value in report[2].iteritems():
+                taxes[key] += value
+        return [sorted(reports_per_date.values(), key=keyfunc), total,
+            dict(taxes)]
