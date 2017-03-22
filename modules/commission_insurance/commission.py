@@ -148,6 +148,9 @@ class Commission:
     def get_commissioned_contract(self, name):
         if self.commissioned_option:
             return self.commissioned_option.parent_contract.id
+        elif self.origin and self.origin.__name__ == 'account.invoice.line':
+            if self.origin.invoice.contract:
+                return self.origin.invoice.contract.id
 
     def get_base_amount(self, name):
         if self.amount and self.commission_rate:
