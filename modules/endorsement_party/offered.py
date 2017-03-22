@@ -1,6 +1,5 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
@@ -24,17 +23,6 @@ class EndorsementDefinition:
     is_party = fields.Function(
         fields.Boolean('Is Party'),
         'get_is_party', searcher='search_is_party')
-
-    @classmethod
-    def __register__(cls, module):
-        TableHandler = backend.get('TableHandler')
-
-        # Migration from 1.6 : Rename definition_for_contracts to
-        # next_endorsement, defined in endorsement module
-        table = TableHandler(cls, module)
-        if table.column_exist('definition_for_contracts'):
-            table.column_rename('definition_for_contracts', 'next_endorsement')
-        super(EndorsementDefinition, cls).__register__(module)
 
     def get_is_party(self, name):
         return any([x.is_party for x in self.endorsement_parts])
