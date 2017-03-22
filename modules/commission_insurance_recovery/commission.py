@@ -23,7 +23,13 @@ class Plan:
     def compute_recovery(self, option, agent):
         if not self.commission_recovery:
             return
-        return self.commission_recovery.compute_recovery(option, agent)
+        pattern = self.recovery_pattern(option, agent)
+        for line in self.lines:
+            if line.match(pattern):
+                return self.commission_recovery.compute_recovery(option, agent)
+
+    def recovery_pattern(self, option, agent):
+        return {'coverage': option.coverage}
 
 
 class CommissionRecoveryRule(
