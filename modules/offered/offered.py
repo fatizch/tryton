@@ -87,6 +87,7 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @classmethod
     def __setup__(cls):
         super(Product, cls).__setup__()
+        cls._export_binary_fields.add('report_style_template')
         t = cls.__table__()
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),

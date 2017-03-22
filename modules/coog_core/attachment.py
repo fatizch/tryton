@@ -62,9 +62,7 @@ class Attachment(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Attachment, cls).__setup__()
-        cls._error_messages.update({
-                'can_t_decode_base64': "Can't decode attachment %s in base 64"
-                })
+        cls._export_binary_fields.add('data')
 
     @classmethod
     def add_func_key(cls, values):
@@ -79,29 +77,3 @@ class Attachment(export.ExportImportMixin):
     def _export_skips(cls):
         return (super(Attachment, cls)._export_skips() |
             set(['digest', 'collision']))
-
-    @classmethod
-    def decode_binary_data(cls, values):
-        if 'data' in values:
-            try:
-                values['data'] = base64.b64decode(values['data'])
-            except Exception:
-                cls.raise_user_error('can_t_decode_base64',
-                    values['_func_key'])
-
-    @staticmethod
-    def encode_binary_data(new_values, configuration, instance):
-        if not configuration and instance.data or 'data' in new_values:
-            new_values['data'] = base64.b64encode(instance.data)
-
-    @classmethod
-    def _import_json(cls, values, main_object=None):
-        cls.decode_binary_data(values)
-        return super(Attachment, cls)._import_json(values, main_object)
-
-    def export_json(self, skip_fields=None, already_exported=None,
-            output=None, main_object=None, configuration=None):
-        new_values = super(Attachment, self).export_json(skip_fields,
-            already_exported, output, main_object, configuration)
-        self.encode_binary_data(new_values, configuration, self)
-        return new_values

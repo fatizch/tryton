@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import base64
 import datetime
 import collections
 try:
@@ -78,6 +79,7 @@ class ExportImportMixin(Historizable):
             readonly=True, result=lambda r: cls._export_format_result(r))
         cls.__rpc__['ws_consult'] = RPC(readonly=True)
         cls.__rpc__['ws_create_objects'] = RPC(readonly=False)
+        cls._export_binary_fields = set()
 
     @classmethod
     def get_xml_id(cls, objects, name):
@@ -187,6 +189,7 @@ class ExportImportMixin(Historizable):
     def _import_json(cls, values, main_object=None):
         logging.getLogger('import').debug('Importing [%s] %s' % (
                 cls.__name__, values['_func_key']))
+        cls.decode_binary_data(values)
         pool = Pool()
         new_values = {}
         lines = {}
@@ -478,6 +481,7 @@ class ExportImportMixin(Historizable):
         if output is not None and (
                 self.is_master_object() or main_object == self):
             output.append(values)
+        self.encode_binary_data(values, configuration, self)
         logging.getLogger('export').debug(' -> done [%s] %s' % (
                 self.__name__, values['_func_key']))
         return values
@@ -550,6 +554,18 @@ class ExportImportMixin(Historizable):
                 'messages': {cls.__name__: getattr(entity, getattr(
                             entity, '_func_key'))}}
         return return_values
+
+    @classmethod
+    def decode_binary_data(cls, values):
+        for fname in cls._export_binary_fields:
+            if fname in values:
+                values[fname] = base64.b64decode(values[fname])
+
+    def encode_binary_data(self, new_values, configuration):
+        for fname in self._export_binary_fields:
+            val = getattr(self, fname, None)
+            if not configuration and val or fname in new_values:
+                new_values[fname] = base64.b64encode(val)
 
 
 class FileSelector(ModelView):
