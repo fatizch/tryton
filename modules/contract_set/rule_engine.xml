@@ -21,7 +21,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
             <field name="translated_technical_name">nombre_relation_dans_groupe</field>
             <field name="language" ref="ir.lang_fr"/>
-            <field name="fct_args">Nom de la relation</field>
+            <field name="fct_args">Nom de la relation, [age minimum]</field>
         </record>
     </data>
 </tryton>

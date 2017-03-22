@@ -18,7 +18,8 @@ class RuleEngineRuntime:
 
     @classmethod
     @check_args('contract')
-    def _re_relation_number_order_by_age_in_set(cls, args, relation_name):
+    def _re_relation_number_order_by_age_in_set(cls, args, relation_name,
+            min_age=None):
         if 'contract_set' in args:
             contract_set = args['contract_set']
         else:
@@ -43,6 +44,9 @@ class RuleEngineRuntime:
                 if (relation.to in parties and
                         relation.type.code == relation_name):
                     relation_number[relation.to] += 1
+                    if min_age is None or not party.birth_date or (
+                            date.year - party.birth_date.year) <= min_age:
+                        relation_number[relation.to] += 1
                     if party == person:
                         res = max(res, relation_number[relation.to])
             if party == person:
