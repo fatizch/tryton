@@ -36,7 +36,7 @@ from trytond.modules.coog_core import history_tools
 
 
 _STATES_WITH_SUBSTATES = ['declined']
-STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS = ['quote', 'declined', 'void']
+STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS = ['quote', 'declined']
 
 __all__ = [
     'field_mixin',
