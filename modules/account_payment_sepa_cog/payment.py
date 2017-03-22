@@ -345,31 +345,35 @@ class Group:
         Payment = pool.get('account.payment')
         Sequence = pool.get('ir.sequence')
         Mandate = pool.get('account.payment.sepa.mandate')
-        if self.kind == 'payable':
-            to_write = []
-            for payment in [p for p in self.payments
-                    if p.kind == 'payable' and not p.bank_account]:
-                bank_account = payment.party.get_bank_account(payment.date)
-                if bank_account:
-                    to_write.extend([[payment],
-                            {'bank_account': bank_account}])
-            if to_write:
-                Payment.write(*to_write)
-
         to_write = []
+        keyfunc = self.merge_payment_key
+        sorted_payments = sorted(self.payments, key=keyfunc)
         if self.kind == 'receivable':
             all_mandates = Payment.get_sepa_mandates(self.payments)
             mandate_type = Mandate.get_initial_sequence_type_per_mandates(
                 set(all_mandates))
-            keyfunc = self.merge_payment_key
-            sorted_payments = sorted(self.payments, key=keyfunc)
-            for key, payments in groupby(sorted_payments, key=keyfunc):
+        for key, payments in groupby(sorted_payments, key=keyfunc):
+            values = {}
+            payments = list(payments)
+            if self.kind == 'payable':
+                bank_account = next((x.bank_account for x in payments if
+                        x.bank_account), None)
+                if not bank_account:
+                    bank_account = key['party'].get_bank_account(
+                        key['date'])
+                    if bank_account:
+                        values['bank_account'] = bank_account
+            elif self.kind == 'receivable':
                 mandate = [x[1] for x in key if x[0] == 'sepa_mandate'][0]
                 if not mandate:
-                    self.raise_user_error('no_mandate', payment.rec_name)
-                to_write.extend([list(payments), {'sepa_mandate': mandate,
-                    'merged_id': Sequence.get('account.payment.merged'),
-                    'sepa_mandate_sequence_type': mandate_type[mandate.id]}])
+                    with model.error_manager():
+                        for payment in payments:
+                            self.append_functional_error('no_mandate',
+                                payment.rec_name)
+                values['sepa_mandate'] = mandate
+                values['sepa_mandate_sequence_type'] = mandate_type[mandate.id]
+            values['merged_id'] = Sequence.get('account.payment.merged')
+            to_write.extend([payments, values])
         if to_write:
             Payment.write(*to_write)
 
