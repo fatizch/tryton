@@ -223,10 +223,10 @@ Post Invoice::
     >>> line = first_invoice.invoice.lines[1]
     >>> len(line.commissions)
     2
-    >>> set([(x.amount, x.commission_rate, x.agent.party.name)
+    >>> set([(x.amount, x.commission_rate, x.agent.party.name, x.line_amount)
     ...     for x in line.commissions]) == set([
-    ...             (Decimal('10'), Decimal('.1'), u'Broker'),
-    ...             (Decimal('60'), Decimal('.6'), u'Insurer')])
+    ...             (Decimal('10'), Decimal('.1'), u'Broker', Decimal('100')),
+    ...             (Decimal('60'), Decimal('.6'), u'Insurer', Decimal('100'))])
     True
 
 Pay invoice::

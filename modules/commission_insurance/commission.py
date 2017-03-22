@@ -71,6 +71,24 @@ class Commission:
         searcher='search_commissioned_subscriber')
     start = fields.Date('Start')
     end = fields.Date('End')
+    line_tax_rate = fields.Function(
+        fields.Numeric('Line Tax Rate', digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_origin_invoice_line_field')
+    line_taxed_amount = fields.Function(
+        fields.Numeric('Line Taxed Amount', digits=(16,
+                Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_origin_invoice_line_field')
+    line_tax_amount = fields.Function(
+        fields.Numeric('Line Tax Amount', digits=(16,
+                Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_origin_invoice_line_field')
+    line_amount = fields.Function(
+        fields.Numeric('Line Amount', digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_origin_invoice_line_field')
 
     @classmethod
     def __register__(cls, module_name):
@@ -121,6 +139,11 @@ class Commission:
         cls.invoice_line.select = True
         cls.type_.searcher = 'search_type_'
         cls.agent.select = True
+
+    def get_origin_invoice_line_field(self, name):
+        if getattr(self.origin, '__name__', '') != 'account.invoice.line':
+            return
+        return abs(getattr(self.origin, name[5:], None) or 0)
 
     def get_commissioned_contract(self, name):
         if self.commissioned_option:
