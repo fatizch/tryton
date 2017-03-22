@@ -156,7 +156,7 @@ msgctxt "field:extra_data,type_:"
 msgid "Type"
 msgstr "Type"
 
-msgctxt "field:extra_data,with_default_value:"
+msgctxt "field:extra_data,has_default_value:"
 msgid "Default Value"
 msgstr "Valeur par Défaut"
 

@@ -19,9 +19,9 @@ this repository contains the full copyright notices and license terms. -->
             <label name="digits"/>
             <field name="digits"/>
             <newline/>
-            <label name="with_default_value"/>
+            <label name="has_default_value"/>
             <group id="default value">
-                <field name="with_default_value" xexpand="0"/>
+                <field name="has_default_value" xexpand="0"/>
                 <field name="default_value_boolean" xexpand="0"/>
                 <field name="default_value_selection"/>
                 <field name="default_value"/>

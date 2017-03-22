@@ -29,26 +29,24 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
     __name__ = 'extra_data'
     _func_key = 'name'
 
-    with_default_value = fields.Boolean('Default Value')
+    has_default_value = fields.Boolean('Default Value')
     default_value_boolean = fields.Function(
         fields.Boolean('Default Value',
             states={
-                'required': Bool(Eval('with_default_value')) & (
-                    Eval('type_') == 'boolean'),
-                'invisible': ~Eval('with_default_value') | (
+                'invisible': ~Eval('has_default_value') | (
                     Eval('type_') != 'boolean'),
                 },
-            depends=['type_', 'with_default_value']),
+            depends=['type_', 'has_default_value']),
         'get_default_value', 'setter_void')
     default_value_selection = fields.Function(
         fields.Selection('get_default_value_selection', 'Default Value',
             states={
-                'required': Bool(Eval('with_default_value')) & (
+                'required': Bool(Eval('has_default_value')) & (
                     Eval('type_') == 'selection'),
-                'invisible': ~Eval('with_default_value') | (
+                'invisible': ~Eval('has_default_value') | (
                     Eval('type_') != 'selection'),
                 },
-            depends=['type_', 'selection', 'with_default_value'],
+            depends=['type_', 'selection', 'has_default_value'],
             ),
         'get_default_value', 'setter_void')
     default_value = fields.Char('Default Value', states={'invisible': True})
@@ -87,7 +85,6 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
 
     @classmethod
     def __register__(cls, module_name):
-        super(ExtraData, cls).__register__(module_name)
         # Migration from 1.3: Drop start_date, end_date column
         TableHandler = backend.get('TableHandler')
         extra_data = TableHandler(cls)
@@ -99,6 +96,12 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
         # Migration from 1.6 Drop sub_data_config_kind
         if extra_data.column_exist('sub_data_config_kind'):
             extra_data.drop_column('sub_data_config_kind')
+
+        # Migration from 1.10: Rename with_default_value
+        if extra_data.column_exist('with_default_value'):
+            extra_data.column_rename('with_default_value',
+            'has_default_value')
+        super(ExtraData, cls).__register__(module_name)
 
     @classmethod
     def create(cls, vlist):
@@ -134,13 +137,19 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
         return ''
 
     @fields.depends('default_value_selection', 'type_', 'selection',
-        'with_default_value')
+        'has_default_value')
     def on_change_selection(self):
         if self.default_value_selection is None:
             return
         selection = self.get_default_value_selection()
         if self.default_value_selection not in selection:
             self.default_value_selection = selection[0] or None
+
+    @fields.depends('default_value_selection', 'type_', 'selection',
+        'has_default_value')
+    def on_change_has_default_value(self):
+        if self.has_default_value is True:
+            self.default_value_selection = None
 
     @fields.depends('type_')
     def on_change_type_(self):
@@ -172,7 +181,7 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
     def on_change_default_value_selection(self):
         self.default_value = self.default_value_selection
 
-    @fields.depends('type_', 'selection', 'with_default_value')
+    @fields.depends('type_', 'selection', 'has_default_value')
     def get_default_value_selection(self):
         selection = [('', '')]
         selection += [x.split(':') for x in self.selection.splitlines()
@@ -187,7 +196,8 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
         if name_type == 'boolean':
             return self.default_value == 'True'
         if name_type == 'selection':
-            return self.default_value if self.type_ == 'selection' else None
+            return self.default_value if self.type_ == 'selection' and \
+                self.has_default_value else None
         return None
 
     def validate_value(self, value):
@@ -261,7 +271,7 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
             cur_value = init_dict[self.name]
         except KeyError:
             cur_value = (self.get_default_value(None)
-                if self.with_default_value else None)
+                if self.has_default_value else None)
         # We set a boolean to know if the value is forced through rule engine
         new_vals[self.name] = (cur_value, False)
         args = {'extra_data': init_dict}
