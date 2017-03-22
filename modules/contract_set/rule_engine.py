@@ -43,7 +43,6 @@ class RuleEngineRuntime:
             for relation in relations:
                 if (relation.to in parties and
                         relation.type.code == relation_name):
-                    relation_number[relation.to] += 1
                     if min_age is None or not party.birth_date or (
                             date.year - party.birth_date.year) <= min_age:
                         relation_number[relation.to] += 1
