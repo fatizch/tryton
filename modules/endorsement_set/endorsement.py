@@ -250,7 +250,7 @@ class Endorsement:
                     not set(endorsement.endorsement_set.endorsements
                     ).issubset(to_apply):
                 cls.raise_user_error('must_apply_all')
-        return super(Endorsement, cls).apply(endorsements)
+        super(Endorsement, cls).apply(endorsements)
 
     @classmethod
     def apply_for_preview(cls, endorsements):
