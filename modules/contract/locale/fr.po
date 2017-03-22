@@ -309,6 +309,10 @@ msgctxt "field:contract.activation_history,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:contract.activation_history,contract_status:"
+msgid "Contract Status"
+msgstr "Statut du contrat"
+
 msgctxt "field:contract.activation_history,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -725,6 +729,10 @@ msgctxt "field:contract.option,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract.option.version,contract_status:"
+msgid "Contract Status"
+msgstr "Statut du contrat"
+
 msgctxt "field:contract.option.version,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -1015,6 +1023,10 @@ msgctxt ""
 msgid "Possible Packages"
 msgstr "Formules possibles"
 
+msgctxt "field:event.log,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
 msgctxt "field:event.type.action,notification_delay:"
 msgid "Notification Delay (in days)"
 msgstr "Délai avant notifications (en jours)"
@@ -1283,6 +1295,10 @@ msgstr "Contrats"
 msgctxt "model:ir.action,name:act_decline"
 msgid "Decline"
 msgstr "Décliner"
+
+msgctxt "model:ir.action,name:act_event_log_relate_form"
+msgid "Event Logs"
+msgstr "Logs d'événements"
 
 msgctxt "model:ir.action,name:act_hold_contract"
 msgid "Hold Contract"

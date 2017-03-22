@@ -195,6 +195,10 @@ msgctxt "error:endorsement:"
 msgid "You cannot start this endorsement on a non-active contract !"
 msgstr "Vous ne pouvez démarrer cet avenant sur un contrat non actif!"
 
+msgctxt "error:event.type.action:"
+msgid "Create Contract Notification"
+msgstr "Créer une notification"
+
 msgctxt "field:contract,current_log:"
 msgid "Current Log"
 msgstr "Trace Courante"
@@ -2519,6 +2523,18 @@ msgctxt "wizard_button:endorsement.decline,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
+msgctxt "wizard_button:endorsement.start,basic_preview,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:endorsement.start,basic_preview,cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,basic_preview,summary:"
+msgid "Summary"
+msgstr "Synthèse"
+
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
 msgid "Next"
@@ -2659,6 +2675,10 @@ msgctxt ""
 "wizard_button:endorsement.start,select_endorsement,start_endorsement:"
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
+
+msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
 
 msgctxt "wizard_button:endorsement.start,summary,cancel:"
 msgid "Cancel"
