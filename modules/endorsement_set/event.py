@@ -1,3 +1,5 @@
+# This file is part of Coog. The COPYRIGHT file at the top level of
+# this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
 __all__ = [
@@ -12,8 +14,15 @@ class EventTypeAction:
 
     def get_contract_sets_from_object(self, object_):
         if object_.__name__ != 'endorsement.set':
-            return self.get_contract_sets_from_object(object_)
+            return super(EventTypeAction, self).get_contract_sets_from_object(
+                object_)
         return [object_.contract_set]
+
+    def get_endorsements_from_object(self, object_):
+        if object_.__name__ == 'endorsement.set':
+            return list(object_.endorsements)
+        return super(EventTypeAction, self).get_endorsements_from_object(
+            object_)
 
 
 class EventLog:
