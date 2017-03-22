@@ -270,6 +270,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.ui.view" id="configuration_view_form">
             <field name="model">offered.configuration</field>
+            <field name="type" eval="None"/>
             <field name="inherit" ref="offered.configuration_view_form"/>
             <field name="name">offered_configuration_form</field>
         </record>

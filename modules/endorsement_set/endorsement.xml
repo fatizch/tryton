@@ -66,6 +66,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.ui.view" id="configuration_view_form">
             <field name="model">endorsement.configuration</field>
+            <field name="type" eval="None"/>
             <field name="inherit" ref="endorsement.endorsement_configuration_view_form"/>
             <field name="name">configuration_form</field>
         </record>
