@@ -56,7 +56,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     attachment_data = fields.Function(
         fields.Binary('Data', filename='attachment_name',
             depends=['attachment']),
-        'get_attachment_info')
+        'get_attachment_info', 'set_attachment_data')
     matching_attachments = fields.Function(
         fields.Many2Many('ir.attachment', None, None, 'Matching Attachments'),
         'get_matching_attachments')
@@ -211,6 +211,29 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     def get_attachment_info(self, name):
         if self.attachment:
             return getattr(self.attachment, name.split('_')[1])
+
+    @classmethod
+    def set_attachment_data(cls, requests, name, value):
+        Attachment = Pool().get('ir.attachment')
+        attachments = []
+        to_save = []
+        for request in requests:
+            if not request.attachment:
+                attachment = Attachment()
+                attachment.resource = request.for_object
+                attachment.document_desc = request.document_desc
+                attachment.data = value
+                attachment.name = request.document_desc.name
+                attachments.append(attachment)
+                request.attachment = attachment
+                to_save.append(request)
+            else:
+                request.attachment.data = value
+                attachments.append(request.attachment)
+        if attachments:
+            Attachment.save(attachments)
+        if to_save:
+            cls.save(to_save)
 
     def get_matching_attachments(self, name):
         Attachment = Pool().get('ir.attachment')
