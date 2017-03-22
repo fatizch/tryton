@@ -24,5 +24,10 @@ class CAMT054Coog(CAMT054):
         tag = etree.QName(element)
         date = element.find('./{%(ns)s}BookgDt/{%(ns)s}Dt'
             % {'ns': tag.namespace})
+        if date is None:
+            # Some banks do not use BookgDt
+            date = element.find(
+                './{%(ns)s}NtryDtls//{%(ns)s}RltdDts/{%(ns)s}IntrBkSttlmDt' %
+                {'ns': tag.namespace})
         if date is not None:
             return parse(date.text).date()
