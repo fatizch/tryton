@@ -36,8 +36,8 @@ fiscalyear = set_fiscalyear_invoice_sequences(
 fiscalyear.click('create_period')
 period = fiscalyear.periods[0]
 
-
 # #Comment# #Create waiting account
+
 WaitingAccount = Model.get('account.account')
 WaitingAccountKind = Model.get('account.account.type')
 waiting_account_kind = WaitingAccountKind()
@@ -52,15 +52,30 @@ waiting_account.kind = 'other'
 waiting_account.type = waiting_account_kind
 waiting_account.save()
 
+# #Comment# #Create base account
+
+BaseAccount = Model.get('account.account')
+BaseAccountKind = Model.get('account.account.type')
+base_account_kind = BaseAccountKind()
+base_account_kind.name = 'Base Account Kind'
+base_account_kind.company = company
+base_account_kind.save()
+base_account = BaseAccount()
+base_account.name = 'Base Account'
+base_account.company = company
+base_account.code = 'base_account'
+base_account.kind = 'other'
+base_account.type = base_account_kind
+base_account.save()
+
 # #Comment# #Create chart of accounts
 
 _ = create_chart(company)
 accounts = get_accounts(company)
 receivable = accounts['receivable']
-revenue_without_waiting = accounts['revenue']
-revenue = waiting_account
 waiting_account.waiting_for_account = accounts['revenue']
 waiting_account.save()
+revenue_without_waiting = base_account
 expense = accounts['expense']
 account_tax = accounts['tax']
 account_cash = accounts['cash']
@@ -82,15 +97,6 @@ journal_cash.credit_account = account_cash
 journal_cash.debit_account = account_cash
 journal_cash.save()
 
-# #Comment# #Set Cash journal
-
-Journal = Model.get('account.journal')
-journal_waiting, = Journal.find([('type', '=', 'wait')])
-
-account_config = Model.get('account.configuration')(1)
-account_config.waiting_journal = journal_waiting
-account_config.save()
-
 # #Comment# #Create Write-Off journal
 
 Sequence = Model.get('ir.sequence')
@@ -99,7 +105,7 @@ journal_writeoff = Journal(
     name='Write-Off',
     type='write-off',
     sequence=sequence_journal,
-    credit_account=revenue,
+    credit_account=waiting_account,
     debit_account=expense)
 
 journal_writeoff.save()
@@ -141,11 +147,9 @@ template_without_waiting.list_price = Decimal('40')
 template_without_waiting.cost_price = Decimal('25')
 template_without_waiting.account_expense = expense
 template_without_waiting.account_revenue = revenue_without_waiting
-template_without_waiting.customer_taxes.append(tax)
 template_without_waiting.save()
 product_without_waiting.template = template_without_waiting
 product_without_waiting.save()
-
 
 # #Comment# #Create payment term
 
@@ -166,26 +170,25 @@ invoice.party = party
 invoice.payment_term = payment_term
 invoice.invoice_date = today
 line = InvoiceLine()
-invoice.lines.append(line)
 invoice.type = 'in'
 line.product = product
 line.quantity = 1
 line.unit_price = Decimal('40')
-line.account = revenue
+line.account = waiting_account
 line.description = 'Test'
 line2 = InvoiceLine()
-invoice.lines.append(line2)
-line.product = product_without_waiting
+line2.product = product_without_waiting
 line2.quantity = 1
 line2.unit_price = Decimal('60')
 line2.account = revenue_without_waiting
 line2.description = 'Test2'
+invoice.lines.append(line)
+invoice.lines.append(line2)
 invoice.save()
 invoice.click('post')
 
 all(x.amount > 0 for x in invoice.move.lines if x.account == waiting_account)
 # #Res# #True
-
 
 waiting_amount = sum(x.amount
     for x in invoice.move.lines if x.account == waiting_account)
@@ -245,7 +248,7 @@ invoice.type = 'out'
 line.product = product
 line.quantity = 1
 line.unit_price = Decimal('40')
-line.account = revenue
+line.account = waiting_account
 line.description = 'Test'
 line2.product = product_without_waiting
 line2.quantity = 1
@@ -257,7 +260,6 @@ invoice.click('post')
 
 all(x.amount < 0 for x in invoice.move.lines if x.account == waiting_account)
 # #Res# #True
-
 
 waiting_amount = sum(x.amount
     for x in invoice.move.lines if x.account == waiting_account)
