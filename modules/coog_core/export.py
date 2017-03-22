@@ -481,7 +481,7 @@ class ExportImportMixin(Historizable):
         if output is not None and (
                 self.is_master_object() or main_object == self):
             output.append(values)
-        self.encode_binary_data(values, configuration, self)
+        self.encode_binary_data(values, configuration)
         logging.getLogger('export').debug(' -> done [%s] %s' % (
                 self.__name__, values['_func_key']))
         return values

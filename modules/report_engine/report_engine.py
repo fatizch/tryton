@@ -471,6 +471,7 @@ class ReportTemplateVersion(Attachment, export.ExportImportMixin):
         cls.type.states = {'readonly': True}
         cls.resource.selection = [('report.template', 'Document Template')]
         cls.resource.required = True
+        cls._export_binary_fields.add('data')
 
     @classmethod
     def default_type(cls):
@@ -493,15 +494,6 @@ class ReportTemplateVersion(Attachment, export.ExportImportMixin):
         Attachment.decode_binary_data(values)
         return super(ReportTemplateVersion, cls)._import_json(values,
             main_object)
-
-    def export_json(self, skip_fields=None, already_exported=None,
-            output=None, main_object=None, configuration=None):
-        pool = Pool()
-        Attachment = pool.get('ir.attachment')
-        new_values = super(ReportTemplateVersion, self).export_json(
-            skip_fields, already_exported, output, main_object, configuration)
-        Attachment.encode_binary_data(new_values, configuration, self)
-        return new_values
 
 
 class Printable(Model):
