@@ -117,7 +117,7 @@ msgstr ""
 
 msgctxt "error:claim.service:"
 msgid "Are you sure you want to cancel the periods between %s and %s?"
-msgstr "Êtes-vous sur de vouloir annuler les périodes entre %s et %s?"
+msgstr "Vous êtes en train de faire une régularisation de prestations déjà réglées. Êtes-vous sur de vouloir annuler les périodes entre %s et %s?"
 
 msgctxt "error:claim.service:"
 msgid "The date is not equal to the cancelled date"
@@ -445,7 +445,7 @@ msgstr "Calcul Manuel"
 
 msgctxt "field:claim.indemnification,payback_method:"
 msgid "Repayment Method"
-msgstr "Méthode de reversement"
+msgstr "Méthode de régularisation"
 
 msgctxt "field:claim.indemnification,payment_term:"
 msgid "Payment Term"
@@ -882,7 +882,7 @@ msgstr "Nouveau montant d'indemnisation"
 
 msgctxt "field:claim.indemnification_regularisation,payback_method:"
 msgid "Payback Method"
-msgstr "Méthode de reversement"
+msgstr "Méthode de régularisation"
 
 msgctxt "field:claim.indemnification_regularisation,payback_required:"
 msgid "Payback Required"
@@ -894,7 +894,7 @@ msgstr "Conditions de paiement"
 
 msgctxt "field:claim.indemnification_regularisation,payment_term_required:"
 msgid "Payment Term Required"
-msgstr "Condition de reversement requise"
+msgstr "Condition de régularisation requise"
 
 msgctxt "field:claim.indemnification_regularisation,remaining_amount:"
 msgid "Remaining Amount"
@@ -1173,15 +1173,15 @@ msgstr " "
 
 msgctxt "selection:claim.indemnification,payback_method:"
 msgid "Continuous"
-msgstr "Continu"
+msgstr "Par compensation"
 
 msgctxt "selection:claim.indemnification,payback_method:"
 msgid "Immediate"
-msgstr "Immédiat"
+msgstr "Par réclamation de l'indu à effet immédiat"
 
 msgctxt "selection:claim.indemnification,payback_method:"
 msgid "Planned"
-msgstr "Planifié"
+msgstr "Par planification"
 
 msgctxt "selection:claim.indemnification,status:"
 msgid "Annule"
@@ -1325,15 +1325,15 @@ msgstr " "
 
 msgctxt "selection:claim.indemnification_regularisation,payback_method:"
 msgid "Continuous"
-msgstr "Continu"
+msgstr "Par compensation"
 
 msgctxt "selection:claim.indemnification_regularisation,payback_method:"
 msgid "Immediate"
-msgstr "Immédiat"
+msgstr "Par réclamation de l'indu à effet immédiat"
 
 msgctxt "selection:claim.indemnification_regularisation,payback_method:"
 msgid "Planned"
-msgstr "Planifié"
+msgstr "Par planification"
 
 msgctxt "selection:claim.service,annuity_frequency:"
 msgid ""
