@@ -67,6 +67,7 @@ class TemplateParameter(DictSchemaMixin, model.CoogSQL, model.CoogView):
     'Template Parameter'
 
     __name__ = 'report.template.parameter'
+    _func_key = 'name'
 
     @classmethod
     def __setup__(cls):
