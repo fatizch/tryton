@@ -47,8 +47,8 @@ msgid "The names of attachments must be unique by resource."
 msgstr "Les noms des pièces jointes doivent être unique par ressource."
 
 msgctxt "error:report.template:"
-msgid "From Model"
-msgstr "Depuis un modèle"
+msgid "From File"
+msgstr "Depuis un fichier"
 
 msgctxt "error:report.template:"
 msgid "No letter model found for date %s and language %s"
@@ -57,6 +57,10 @@ msgstr "Pas de modèle de courrier trouvé pour le %s et la langue %s"
 msgctxt "error:report.template:"
 msgid "Open Document"
 msgstr "Modèle ODT"
+
+msgctxt "error:report.template:"
+msgid "Flat Document"
+msgstr "Document plat"
 
 msgctxt "error:report.template:"
 msgid "The document template code must be unique"

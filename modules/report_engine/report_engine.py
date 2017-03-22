@@ -34,7 +34,7 @@ from trytond.report import Report
 from trytond.ir import Attachment
 from trytond.exceptions import UserError
 from trytond.transaction import Transaction
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Equal
 from trytond.model import DictSchemaMixin
 
 from trytond.modules.coog_core import fields, model, utils, coog_string, export
@@ -118,8 +118,11 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             ('original', 'Original'),
             ('pdf', 'Pdf'),
             ('xls95', 'xls'),
-            ], 'Format for internal EDM', help="If no format is specified, "
-            "the document will not be stored in the internal EDM")
+            ], 'Format for internal EDM', states={
+            'invisible': Equal(Eval('output_method'),'flat_document')},
+        depends=['output_method'],
+        help="If no format is specified, the document will not be stored "
+        "in the internal EDM")
     document_desc = fields.Many2One('document.description',
         'Document Description', ondelete='SET NULL')
     modifiable_before_printing = fields.Boolean('Modifiable',
@@ -129,10 +132,15 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         'Template Extension')
     export_dir = fields.Char('Export Directory', help='Store a copy of each '
         'generated document in specified server directory')
-    convert_to_pdf = fields.Boolean('Convert to pdf')
-    split_reports = fields.Boolean('Split Reports', help="If checked,"
-        " one document will be produced for each object. If not checked"
-        " a single document will be produced for several objects.")
+    convert_to_pdf = fields.Boolean('Convert to pdf', states={
+            'invisible': Equal(Eval('output_method'), 'flat_document')},
+        depends=['output_method'])
+    split_reports = fields.Boolean('Split Reports', states={
+            'invisible': Equal(Eval('output_method'), 'flat_document')},
+        depends=['output_method'],
+        help="If checked, one document will be produced for each object. "
+        "If not checked a single document will be produced for several "
+        "objects.")
     event_type_actions = fields.Many2Many('event.type.action-report.template',
             'report_template', 'event_type_action', 'Event Type Actions')
     parameters = fields.Many2Many('report.template-report.template.parameter',
@@ -153,7 +161,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 'no_version_match': 'No letter model found for date %s '
                 'and language %s',
                 'output_method_open_document': 'Open Document',
-                'output_kind_from_model': 'From Model',
+                'output_method_flat_document': 'Flat Document',
+                'output_kind_from_model': 'From File',
                 })
 
     @classmethod
@@ -214,6 +223,9 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def get_possible_output_methods(self):
         return [('open_document',
                 self.raise_user_error('output_method_open_document',
+                    raise_exception=False)),
+            ('flat_document',
+                self.raise_user_error('output_method_flat_document',
                     raise_exception=False))]
 
     @classmethod
@@ -276,6 +288,12 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
     def on_change_output_kind(self):
         pass
+
+    @fields.depends('output_method', 'format_for_internal_edm')
+    def on_change_output_method(self):
+        if self.output_method == 'flat_document':
+            self.format_for_internal_edm = 'original'
+            self.convert_to_pdf = False
 
     @fields.depends('on_model')
     def get_possible_kinds(self):
@@ -616,6 +634,27 @@ class Printable(Model):
 
 class ReportGenerate(Report):
     __name__ = 'report.generate'
+
+    @classmethod
+    def process_flat_document(cls, ids, data, immediate_conversion):
+        pool = Pool()
+        ActionReport = pool.get('ir.action.report')
+        action_reports = ActionReport.search([
+                ('report_name', '=', cls.__name__)
+                ])
+        SelectedModel = Pool().get(data['model'])
+        selected_obj = SelectedModel(data['id'])
+        selected_letter = Pool().get('report.template')(
+            data['doc_template'][0])
+        version = selected_letter.get_selected_version(utils.today(),
+            selected_obj.get_lang())
+        extension = os.path.splitext(version.name)[1]
+        name_giver = data.get('resource', None) or SelectedModel(data['id'])
+        selected_party = pool.get('party.party')(data['party'])
+        filename = cls.get_filename(selected_letter, name_giver,
+            selected_party)
+        return (extension, version.data, action_reports[0].direct_print,
+            filename)
 
     @classmethod
     def process_open_document(cls, ids, data, immediate_conversion):
