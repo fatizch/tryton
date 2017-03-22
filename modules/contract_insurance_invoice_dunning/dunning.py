@@ -278,10 +278,12 @@ class Level:
         Invoice = pool.get('account.invoice')
         ContractInvoice = pool.get('contract.invoice')
         Contract = pool.get('contract')
+        MoveLine = pool.get('account.move.line')
         journal = self.get_fee_journal()
         fee = self.dunning_fee
         invoices_to_create = []
         contract_invoices_to_create = []
+        invoice_to_update = []
         keyfunc = self.get_contract_from_dunning()
         sorted_dunnings = sorted(dunnings, key=keyfunc)
         for contract, cur_dunnings in groupby(sorted_dunnings, key=keyfunc):
@@ -301,11 +303,21 @@ class Level:
                 invoice=invoice, non_periodic=True)
             invoices_to_create.append(invoice)
             contract_invoices_to_create.append(contract_invoice)
+            # Make sure the payment_date will be cleared if the contract is not
+            # currently using direct debit
+            if (contract.billing_informations[-1] != billing_info and
+                    not contract.billing_informations[-1].direct_debit):
+                invoice_to_update.append(invoice)
         if invoices_to_create:
             Contract._finalize_invoices(contract_invoices_to_create)
             Invoice.save(invoices_to_create)
             ContractInvoice.save(contract_invoices_to_create)
             Invoice.post(invoices_to_create)
+            lines_to_write = []
+            for invoice in invoice_to_update:
+                lines_to_write += list(invoice.lines_to_pay)
+            if lines_to_write:
+                MoveLine.write(lines_to_write, {'payment_date': None})
 
     def process_dunnings(self, dunnings):
         if self.dunning_fee:
