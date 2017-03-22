@@ -475,6 +475,7 @@ class Contract:
         all_good_invoices = list(set(periodic_invoices) |
             set(non_periodic_invoices))
         amount_per_date = defaultdict(lambda: {'amount': 0, 'components': []})
+        taxes = defaultdict(int)
         for invoice in all_good_invoices:
             if invoice.invoice.lines_to_pay:
                 for line in invoice.invoice.lines_to_pay:
@@ -499,13 +500,23 @@ class Contract:
                             'kind': 'invoice_term', 'amount': term_amount,
                             'term': invoice.invoice.payment_term,
                             'invoice': invoice})
+            for tax in invoice.invoice.taxes:
+                taxes[tax.tax] += tax.amount
         invoices = [{
                 'total_amount': amount_per_date[key]['amount'],
                 'planned_payment_date': key,
                 'components': amount_per_date[key]['components']}
             for key in sorted(amount_per_date.keys())]
+        total_amount = sum(x['total_amount'] for x in invoices)
         invoices = self.substract_balance_from_invoice_reports(invoices)
-        return [invoices, sum([x['total_amount'] for x in invoices])]
+        total_amount_after_substract = sum(x['total_amount'] for x in invoices)
+        if total_amount != 0:
+            ratio_taxes = total_amount_after_substract / total_amount
+        else:
+            ratio_taxes = 1
+        taxes = {code: self.currency.round(amount * ratio_taxes)
+            for code, amount in taxes.iteritems()}
+        return [invoices, sum(x['total_amount'] for x in invoices), taxes]
 
     def substract_balance_from_invoice_reports(self, invoice_reports):
         outstanding_amount = self.balance_today - self.receivable_today
