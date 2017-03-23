@@ -74,7 +74,7 @@ class Commission:
     start = fields.Date('Start')
     end = fields.Date('End')
     line_tax_rate = fields.Function(
-        fields.Numeric('Line Tax Rate', digits=(16, Eval('currency_digits', 2)),
+        fields.Numeric('Line Tax Rate', digits=(16, 2),
             depends=['currency_digits']),
         'get_origin_invoice_line_field')
     line_taxed_amount = fields.Function(
@@ -91,6 +91,9 @@ class Commission:
         fields.Numeric('Line Amount', digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
         'get_origin_invoice_line_field')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'get_currency_digits')
 
     @classmethod
     def __register__(cls, module_name):
@@ -153,6 +156,9 @@ class Commission:
         elif self.origin and self.origin.__name__ == 'account.invoice.line':
             if self.origin.invoice.contract:
                 return self.origin.invoice.contract.id
+
+    def get_currency_digits(self, name):
+        return self.currency.digits if self.currency else 2
 
     def get_base_amount(self, name):
         if self.amount and self.commission_rate:
