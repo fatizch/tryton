@@ -165,6 +165,7 @@ class JournalFailureAction(model.CoogSQL, model.CoogView):
     def get_rejected_payment_fee(cls, code, payment_kind='receivable'):
         if not code:
             return
+        # TODO : Add cache on this method
         JournalFailureAction = Pool().get(
             'account.payment.journal.failure_action')
         failure_actions = JournalFailureAction.search([
@@ -173,8 +174,9 @@ class JournalFailureAction(model.CoogSQL, model.CoogView):
                 ])
         if len(failure_actions) == 0:
             cls.raise_user_error('unknown_reject_reason_code', (code))
-        failure_action = failure_actions[0]
-        return failure_action.rejected_payment_fee
+        for failure_action in failure_actions:
+            if failure_action.rejected_payment_fee:
+                return failure_action.rejected_payment_fee
 
     @fields.depends('rejected_payment_fee')
     def on_change_with_is_fee_required(self, name=None):
