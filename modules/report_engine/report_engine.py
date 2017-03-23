@@ -36,6 +36,7 @@ from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Equal
 from trytond.model import DictSchemaMixin
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields, model, utils, coog_string, export
 
@@ -98,6 +99,7 @@ class TemplateTemplateParameterRelation(model.CoogSQL):
         ondelete='RESTRICT')
 
 
+@model.genshi_evaluated_fields('export_dir')
 class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     'Report Template'
 
@@ -309,7 +311,13 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         """ Reports is a list of dicts with keys:
             object, origin, report type, data, report name"""
         if self.export_dir:
-            self.export_reports(reports)
+            ReportGenerate = Pool().get('report.generate', type='report')
+            data = context_['reporting_data']
+            records = ReportGenerate._get_records(data['ids'], data['model'],
+                data)
+            with ServerContext().set_context(
+                    genshi_context=ReportGenerate.get_context(records, data)):
+                self.export_reports(reports)
 
     def export_reports(self, reports):
         export_root_dir = config.get('report', 'export_root_dir')
@@ -318,7 +326,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 'setting specified.')
         # authorize entering dirpath starting with '/' relative to the root
         export_dirname = os.path.realpath(os.path.join(export_root_dir,
-            self.export_dir.lstrip(os.sep)))
+            self.genshi_evaluated_export_dir.lstrip(os.sep)))
         # prevent user entering '..' to escape from root
         if not export_dirname.startswith(os.path.realpath(export_root_dir)):
             raise Exception('Error', ('Export directory outside of configured '
@@ -685,12 +693,15 @@ class ReportGenerate(Report):
         report_template = Pool().get('report.template')(
             data['doc_template'][0])
         method_name = 'process_%s' % report_template.output_method
-        if hasattr(cls, method_name):
-            return getattr(cls, method_name)(ids, data,
-                immediate_conversion=immediate_conversion)
-        else:
-            raise NotImplementedError('Unknown kind %s' %
-                report_template.output_method)
+        records = cls._get_records(ids, data['model'], data)
+        report_context = cls.get_context(records, data)
+        with ServerContext().set_context(genshi_context=report_context):
+            if hasattr(cls, method_name):
+                return getattr(cls, method_name)(ids, data,
+                    immediate_conversion=immediate_conversion)
+            else:
+                raise NotImplementedError('Unknown kind %s' %
+                    report_template.output_method)
 
     @classmethod
     def get_filename_separator(cls):

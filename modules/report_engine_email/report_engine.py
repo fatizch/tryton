@@ -139,37 +139,35 @@ class ReportGenerate:
         assert len(ids) == 1
         records = cls._get_records(ids, data['model'], data)
         report_context = cls.get_context(records, data)
-        server_context = ServerContext()
-        send = server_context.get('auto_send', True)
-        with server_context.set_context(genshi_context=report_context):
-            selected_letter = Pool().get('report.template')(
-                data['doc_template'][0])
-            for record in records:
-                data_email = cls.generate_email(selected_letter, record,
-                    report_context)
-                msg = data_email['message']
-                attachments = data_email['attachments']
-                recipients = [x.strip() for x in
-                    selected_letter.genshi_evaluated_email_dest.split(',')]
-                if not send:
-                    continue
-                if not selected_letter.email_blocking:
-                    try:
-                        sendmail(
-                            selected_letter.genshi_evaluated_email_sender,
-                            recipients, msg)
-                        logging.getLogger('report.generate').info(
-                            'Mail sent to %s' % recipients)
-                    except Exception as e:
-                        logging.getLogger('report.generate').error(
-                            'Could not send email for object %s on template'
-                            ' %s. Error : %s' %
-                            (str(record), str(selected_letter), str(e)))
-                        selected_letter.raise_user_error('email_not_sent')
-                else:
-                    sendmail_transactional(
-                        selected_letter.genshi_generated_email_sender,
-                        recipients, msg, Transaction())
+        send = ServerContext().get('auto_send', True)
+        selected_letter = Pool().get('report.template')(
+            data['doc_template'][0])
+        for record in records:
+            data_email = cls.generate_email(selected_letter, record,
+                report_context)
+            msg = data_email['message']
+            attachments = data_email['attachments']
+            recipients = [x.strip() for x in
+                selected_letter.genshi_evaluated_email_dest.split(',')]
+            if not send:
+                continue
+            if not selected_letter.email_blocking:
+                try:
+                    sendmail(
+                        selected_letter.genshi_evaluated_email_sender,
+                        recipients, msg)
+                    logging.getLogger('report.generate').info(
+                        'Mail sent to %s' % recipients)
+                except Exception as e:
+                    logging.getLogger('report.generate').error(
+                        'Could not send email for object %s on template'
+                        ' %s. Error : %s' %
+                        (str(record), str(selected_letter), str(e)))
+                    selected_letter.raise_user_error('email_not_sent')
+            else:
+                sendmail_transactional(
+                    selected_letter.genshi_generated_email_sender,
+                    recipients, msg, Transaction())
         return ([x['report_type'] for x in attachments],
             [x['data'] for x in attachments],
                 False, [x['report_name'] for x in attachments])

@@ -1,3 +1,4 @@
+* The "Export directory" field now support genshi expression
 * Add output method which does not evaluate the document
 * Extract email feature from current module to the new report_engine_email module
 * Add the batches chain
