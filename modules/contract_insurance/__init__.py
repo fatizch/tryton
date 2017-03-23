@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .event import *
+import event
 from .contract import *
 from .party import *
 from .report_engine import *
@@ -16,7 +16,8 @@ OptionTreeExpansion = expand_tree('contract.option')
 
 def register():
     Pool.register(
-        EventLog,
+        event.EventTypeAction,
+        event.EventLog,
         Party,
         Contract,
         CoveredElement,

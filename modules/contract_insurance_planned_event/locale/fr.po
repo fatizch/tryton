@@ -1,0 +1,11 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "model:event.type,name:planned_event_notification"
+msgid "Planned Event Option"
+msgstr "Evénement planifié de garantie"
+
+msgctxt "view:offered.option.description:"
+msgid "Planing Event"
+msgstr "Evénement planifié"

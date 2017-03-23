@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="event.type" id="planned_event_notification">
+            <field name="name">Planned Event Option</field>
+            <field name="code">planned_event_option</field>
+        </record>
+        <record model="ir.model.method" id="contract_update_planned_events">
+            <field name="method_name">endorsement_update_planned_events</field>
+            <field name="name">Update Contract Planned Events</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">1000</field>
+        </record>
+    </data>
+</tryton>

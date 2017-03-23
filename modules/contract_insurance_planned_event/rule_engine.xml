@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="option_automatic_end_date">
+            <field name="translated_technical_name">garantie_date_fin_automatique</field>
+            <field name="description">Date de fin automatique de la garantie</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_option_automatic_end_date</field>
+            <field name="fct_args"></field>
+            <field name="parent" ref="offered_insurance.dossier_garantie"/>
+        </record>
+    </data>
+</tryton>

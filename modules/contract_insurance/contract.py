@@ -371,7 +371,7 @@ class Contract(Printable):
                 self)
 
 
-class ContractOption:
+class ContractOption(Printable):
     __name__ = 'contract.option'
 
     covered_element = fields.Many2One('contract.covered_element',
@@ -651,6 +651,15 @@ class ContractOption:
         if self.covered_element:
             res.update(self.covered_element.get_all_extra_data(at_date))
         return res
+
+    def get_contact(self):
+        return self.covered_element.party or self.main_contract.get_contact()
+
+    def get_object_for_contact(self):
+        return self.covered_element.party or self.main_contract.get_contact()
+
+    def get_sender(self):
+        return self.covered_element.party or self.main_contract.get_contact()
 
 
 class ContractOptionVersion:
