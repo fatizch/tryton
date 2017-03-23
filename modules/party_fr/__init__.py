@@ -18,7 +18,7 @@ def register():
         module='party_fr', type_='model')
 
     Pool.register_post_init_hooks(migrate_1_10_include_line3_in_street,
-        module='party_fr')
+        module='party')
 
 
 def migrate_1_10_include_line3_in_street(pool):

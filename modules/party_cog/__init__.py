@@ -51,7 +51,7 @@ def register():
         module='party_cog', type_='wizard')
 
     Pool.register_post_init_hooks(migrate_1_10_include_name_in_street,
-        module='party_cog')
+        module='party')
 
 
 def migrate_1_10_include_name_in_street(pool):
