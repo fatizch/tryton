@@ -15,6 +15,8 @@ from trytond.pyson import Eval, If, PYSONEncoder
 from trytond.modules.commission import Commission as TrytonCommission
 from trytond.modules.coog_core import fields, utils
 
+from trytond.modules.commission_insurance.commission import BASE_AMOUNT_DIGITS
+
 __metaclass__ = PoolMeta
 __all__ = [
     'PlanLines',
@@ -91,7 +93,7 @@ class Commission:
         base_amount = super(Commission, self).get_base_amount(name)
         if self.redeemed_prepayment and self.commission_rate:
             base_amount += self.redeemed_prepayment / self.commission_rate
-        return base_amount
+        return base_amount.quantize(Decimal(1) / 10 ** BASE_AMOUNT_DIGITS)
 
 
 class PlanLines:

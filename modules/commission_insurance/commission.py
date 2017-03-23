@@ -47,6 +47,8 @@ __all__ = [
     ]
 __metaclass__ = PoolMeta
 
+BASE_AMOUNT_DIGITS = 8
+
 
 class Commission:
     __name__ = 'commission'
@@ -63,7 +65,7 @@ class Commission:
         'get_broker', searcher='search_broker')
     commission_rate = fields.Numeric('Commission Rate', digits=(16, 4))
     base_amount = fields.Function(
-        fields.Numeric('Base Amount', digits=(16, 8)),
+        fields.Numeric('Base Amount', digits=(16, BASE_AMOUNT_DIGITS)),
         'get_base_amount')
     commissioned_subscriber = fields.Function(
         fields.Many2One('party.party', 'Contract Subscriber'),
