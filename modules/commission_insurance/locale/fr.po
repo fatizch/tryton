@@ -658,6 +658,10 @@ msgctxt "model:ir.action,name:"
 msgid "Aggregated commissions"
 msgstr "Commissions agrégées"
 
+msgctxt "model:ir.action,name:None"
+msgid "Aggregated commissions"
+msgstr "Commissions agrégées"
+
 msgctxt "model:ir.action,name:act_broker_commissioned_contract_relate_form"
 msgid "Commissioned Contracts"
 msgstr "Contrats commissionnés"
@@ -676,10 +680,6 @@ msgid "Aggregated commissions"
 msgstr "Commissions agrégées"
 
 msgctxt "model:ir.action,name:act_commission_aggregated_form_relate"
-msgid "Aggregated commissions"
-msgstr "Commissions agrégées"
-
-msgctxt "model:ir.action,name:act_commission_aggregated_form_relate2"
 msgid "Aggregated commissions"
 msgstr "Commissions agrégées"
 
@@ -1165,13 +1165,13 @@ msgctxt "model:commission.create_invoice.ask,name:commission."
 msgid "Create Commission Invoice"
 msgstr "Générer les bordereaux de commission"
 
-msgctxt "model:ir.action,name:commission.act_agent_form"
-msgid "Agents"
-msgstr "Protocoles de commissionnement"
-
 msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
 msgid "Create Commission Invoices"
 msgstr "Générer les bordereaux de commission"
+
+msgctxt "model:ir.action,name:commission.act_agent_form"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
 msgid "Agents"
