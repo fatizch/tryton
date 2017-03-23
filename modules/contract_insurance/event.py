@@ -34,8 +34,7 @@ class EventTypeAction:
 
     def get_templates_list(self, filtering_object):
         if filtering_object.__name__ == 'contract.option':
-            return sum([list(x.report_templates)
-                    for x in filtering_object.coverage.products], [])
+            return filtering_object.covered_element.product.report_templates
         return super(EventTypeAction, self).get_templates_list(
             filtering_object)
 

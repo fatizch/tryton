@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:offered.option.description,planning_rule:"
+msgid "Planning Rule"
+msgstr "Règle de planification"
+
+msgctxt "field:offered.option.description,planning_rule_extra_data:"
+msgid "Planning Rule Extra Data"
+msgstr "Données complémentaires de la règle de planification"
+
 msgctxt "model:event.type,name:planned_event_notification"
 msgid "Planned Event Option"
 msgstr "Evénement planifié de garantie"

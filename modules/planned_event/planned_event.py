@@ -24,6 +24,11 @@ class EventPlanningConfigurationMixin(get_rule_mixin('planning_rule',
             'Planning Rule')):
     __metaclass__ = PoolMeta
 
+    @classmethod
+    def __setup__(cls):
+        super(EventPlanningConfigurationMixin, cls).__setup__()
+        cls.planning_rule.domain = [('type_', '=', 'planning_rule')]
+
     def calculate_planned_events(self, context_):
         return self.calculate_planning_rule(context_)
 

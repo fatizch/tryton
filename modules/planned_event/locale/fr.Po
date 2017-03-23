@@ -2,9 +2,17 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:planned.event,planned_date:"
-msgid "Planned Date"
-msgstr "Date planifiée"
+msgctxt "field:planned.event,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:planned.event,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:planned.event,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
 
 msgctxt "field:planned.event,description:"
 msgid "Description"
@@ -14,13 +22,37 @@ msgctxt "field:planned.event,event_type:"
 msgid "Event Type"
 msgstr "Type d'événement"
 
+msgctxt "field:planned.event,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:planned.event,on_object:"
 msgid "Object"
 msgstr "Objet"
 
+msgctxt "field:planned.event,planned_date:"
+msgid "Planned Date"
+msgstr "Date plannifiée"
+
 msgctxt "field:planned.event,processed:"
 msgid "Processed"
 msgstr "Traité"
+
+msgctxt "field:planned.event,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:planned.event,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:planned.event,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:planned.event,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:planned.event.process,id:"
 msgid "ID"
@@ -32,7 +64,7 @@ msgstr "Evénements planifiés"
 
 msgctxt "model:ir.action.act_window.domain,name:act_planned_event"
 msgid "Planned"
-msgstr "Plannifié"
+msgstr "Planifié"
 
 msgctxt "model:ir.action.act_window.domain,name:act_processed_planned_event"
 msgid "Processed"
@@ -41,6 +73,10 @@ msgstr "Traité"
 msgctxt "model:ir.ui.menu,name:menu_planned_event"
 msgid "Planned Events"
 msgstr "Evénements planifiés"
+
+msgctxt "model:planned.event,name:"
+msgid "Planned Event"
+msgstr "Evénement planifié"
 
 msgctxt "model:planned.event.process,name:"
 msgid "Process Planned Event"
