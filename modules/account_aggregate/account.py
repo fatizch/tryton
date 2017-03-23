@@ -180,7 +180,9 @@ class Snapshot(model.CoogSQL, model.CoogView):
     def __setup__(cls):
         super(Snapshot, cls).__setup__()
         cls._error_messages.update({
-            'no_sequence_defined': 'No sequence defined in configuration'
+            'no_sequence_defined': 'No sequence defined in configuration',
+            'no_fiscal_year': 'No fiscal year defined with the Export Moves'
+            ' option',
             })
 
     @classmethod
@@ -205,6 +207,8 @@ class Snapshot(model.CoogSQL, model.CoogView):
         Period = pool.get('account.period')
         allowed_periods = Period.search([
                 ('fiscalyear.export_moves', '=', True)])
+        if not allowed_periods:
+            cls.raise_user_error('no_fiscal_year')
 
         snapshot, = cls.create([{}])
         move = Move.__table__()

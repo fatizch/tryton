@@ -6,6 +6,10 @@ msgctxt "error:account.move.snapshot:"
 msgid "No sequence defined in configuration"
 msgstr "Pas de séquence définie dans la configuration"
 
+msgctxt "error:account.move.snapshot:"
+msgid "No fiscal year defined with the Export Moves option"
+msgstr "Pas d'année fiscale avec l'option Exporter les mouvements comptables"
+
 msgctxt "field:account.configuration,snapshot_sequence:"
 msgid "Snapshot Sequence"
 msgstr "Sequence des instantanés"
