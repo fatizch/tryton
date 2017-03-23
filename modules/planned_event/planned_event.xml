@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="planned_event_view_form">
+            <field name="model">planned.event</field>
+            <field name="type">form</field>
+            <field name="name">planned_event_form</field>
+        </record>
+        <record model="ir.ui.view" id="planned_event_view_list">
+            <field name="model">planned.event</field>
+            <field name="type">tree</field>
+            <field name="name">planned_event_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_planned_event_form">
+            <field name="name">Planned Events</field>
+            <field name="res_model">planned.event</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_planned_event_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="planned_event_view_list"/>
+            <field name="act_window" ref="act_planned_event_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_planned_event_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="planned_event_view_form"/>
+            <field name="act_window" ref="act_planned_event_form"/>
+        </record>
+        <!-- Planned -->
+        <record model="ir.action.act_window.domain" id="act_planned_event">
+            <field name="name">Planned</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain" eval="[('processed', '=', False)]" pyson="1"/>
+            <field name="act_window" ref="act_planned_event_form"/>
+        </record>
+        <!-- Processed -->
+        <record model="ir.action.act_window.domain" id="act_processed_planned_event">
+            <field name="name">Processed</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[('processed', '=', True)]" pyson="1"/>
+            <field name="act_window" ref="act_planned_event_form"/>
+        </record>
+        <menuitem parent="coog_core.menu_event" action="act_planned_event_form" id="menu_planned_event"/>
+    </data>
+</tryton>

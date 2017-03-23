@@ -1,0 +1,51 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:planned.event,planned_date:"
+msgid "Planned Date"
+msgstr "Date planifiée"
+
+msgctxt "field:planned.event,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:planned.event,event_type:"
+msgid "Event Type"
+msgstr "Type d'événement"
+
+msgctxt "field:planned.event,on_object:"
+msgid "Object"
+msgstr "Objet"
+
+msgctxt "field:planned.event,processed:"
+msgid "Processed"
+msgstr "Traité"
+
+msgctxt "field:planned.event.process,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "model:ir.action,name:act_planned_event_form"
+msgid "Planned Events"
+msgstr "Evénements planifiés"
+
+msgctxt "model:ir.action.act_window.domain,name:act_planned_event"
+msgid "Planned"
+msgstr "Plannifié"
+
+msgctxt "model:ir.action.act_window.domain,name:act_processed_planned_event"
+msgid "Processed"
+msgstr "Traité"
+
+msgctxt "model:ir.ui.menu,name:menu_planned_event"
+msgid "Planned Events"
+msgstr "Evénements planifiés"
+
+msgctxt "model:planned.event.process,name:"
+msgid "Process Planned Event"
+msgstr "Traitement des événements planifiés"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Planning Rule"
+msgstr "Règle de planification"
