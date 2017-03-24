@@ -69,16 +69,17 @@ class Claim(CoogProcessFramework):
                 continue
             loss_docs = loss.loss_desc.get_documents()
             documents.extend(loss_docs)
+
             for delivered in loss.services:
                 if not (hasattr(delivered, 'benefit') and delivered.benefit):
                     continue
                 args = {}
                 delivered.init_dict_for_rule_engine(args)
-                docs = delivered.benefit.calculate_required_documents(args)
-                if docs:
+                default_docs = delivered.benefit.calculate_required_documents(args)
+                if default_docs:
                     # to do: Use cache
                     docs = DocumentDescription.search(
-                        [('code', 'in', docs.keys())])
+                        [('code', 'in', default_docs.keys())])
                     documents.extend(docs)
         existing_document_desc = [request.document_desc
             for request in self.document_request_lines]
@@ -88,7 +89,9 @@ class Claim(CoogProcessFramework):
             if desc in existing_document_desc:
                 existing_document_desc.remove(desc)
                 continue
-            line = DocumentRequestLine()
+            if desc.code in default_docs:
+                params = default_docs.get(desc.code, {})
+            line = DocumentRequestLine(**params)
             line.document_desc = desc
             line.for_object = '%s,%s' % (self.__name__, self.id)
             line.claim = self
