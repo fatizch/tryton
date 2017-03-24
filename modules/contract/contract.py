@@ -1233,27 +1233,25 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     def do_terminate(cls, contracts):
         if not contracts:
             return
-        pool = Pool()
-        Event = pool.get('event')
-        Option = pool.get('contract.option')
-        SubStatus = pool.get('contract.sub_status')
-        reached_end_date = SubStatus.get_sub_status('reached_end_date')
-        sub_status_contracts = defaultdict(list)
         for contract in contracts:
-            sub_status_contracts[contract.activation_history[-1].
-                termination_reason or reached_end_date].append(contract)
-        to_write = []
-        for sub_status, contracts in sub_status_contracts.iteritems():
-            to_write += [contracts, {
-                    'status': 'terminated',
-                    'sub_status': sub_status,
-                    }]
-        cls.write(*to_write)
-        options_to_write = Option.search([('parent_contract', 'in',
-                    [x.id for x in contracts])])
-        Option.write(options_to_write, {'status': 'terminated',
-                'sub_status': sub_status})
-        Event.notify_events(contracts, 'terminate_contract')
+            contract.update_for_termination()
+        cls.save(contracts)
+        Pool().get('event').notify_events(contracts, 'terminate_contract')
+
+    def update_for_termination(self):
+        SubStatus = Pool().get('contract.sub_status')
+        sub_status = self.activation_history[-1].termination_reason
+        if not sub_status:
+            sub_status = SubStatus.get_sub_status('reached_end_date')
+        self.status = 'terminated'
+        self.sub_status = sub_status
+        for option in self.options:
+            if option.status in ('active', 'hold'):
+                option.status = 'terminated'
+                option.sub_status = sub_status
+            elif option.status == 'quote':
+                option.status = 'declined'
+        self.options = self.options
 
     @classmethod
     def plan_termination_or_terminate(cls, contracts, caller=None):

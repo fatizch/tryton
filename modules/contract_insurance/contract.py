@@ -162,6 +162,19 @@ class Contract(Printable):
             result[contract_id] = sub_element_count
         return result
 
+    def update_for_termination(self):
+        super(Contract, self).update_for_termination()
+        sub_status = self.sub_status
+        for covered_element in self.covered_elements:
+            for option in covered_element.options:
+                if option.status in ('active', 'hold'):
+                    option.status = 'terminated'
+                    option.sub_status = sub_status
+                elif option.status == 'quote':
+                    option.status = 'declined'
+            covered_element.options = covered_element.options
+        self.covered_elements = self.covered_elements
+
     def clean_up_versions(self):
         super(Contract, self).clean_up_versions()
 

@@ -593,6 +593,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract.save()
         self.assertEqual(len(contract.covered_elements[0].options), 2)
         self.Contract.do_terminate([contract])
+        contract = self.Contract(contract.id)
         for option in contract.covered_elements[0].options:
             self.assertEqual(option.status, 'terminated')
             self.assertEqual(option.sub_status, sub_status)
