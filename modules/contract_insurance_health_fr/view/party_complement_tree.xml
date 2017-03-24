@@ -7,5 +7,6 @@ this repository contains the full copyright notices and license terms. -->
         <field name="department" tree_invisible="1"/>
         <field name="insurance_fund_number"/>
         <field name="insurance_fund"/>
+        <field name="birth_order"/>
     </xpath>
 </data>

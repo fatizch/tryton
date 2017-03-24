@@ -23,6 +23,7 @@ class Party:
         fields.Many2One('contract', 'Health Contract', states={
                 'invisible': Eval('context', {}).get('synthesis') != 'health',
                 }), 'get_health_contract_id')
+    birth_order = fields.Integer('Birth Order')
 
     def get_health_contract_id(self, name):
         for contract in self.contracts:

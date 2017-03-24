@@ -12,5 +12,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="insurance_fund_number"/>
         <label name="insurance_fund"/>
         <field name="insurance_fund"/>
+        <label name="birth_order"/>
+        <field name="birth_order"/>
     </xpath>
 </data>

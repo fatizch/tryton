@@ -3,6 +3,8 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='general']" position="inside">
+        <label name="birth_order"/>
+        <field name="birth_order"/>
         <field name="health_complement" colspan="4"/>
     </xpath>
 </data>

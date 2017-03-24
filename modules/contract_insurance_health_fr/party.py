@@ -4,6 +4,7 @@ import re
 from sql.aggregate import Max
 from collections import defaultdict
 
+from trytond import backend
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields
@@ -20,16 +21,34 @@ class Party:
     __name__ = 'party.party'
     _func_key = 'func_key'
 
-    social_security_dependent = fields.Function(fields.One2Many('party.party',
-            None, 'Social Security Dependent', depends=['relations']),
+    social_security_dependent = fields.Function(
+        fields.One2Many('party.party', None, 'Social Security Dependent',
+            depends=['relations']),
         'get_relations')
-    social_security_insured = fields.Function(fields.One2Many('party.party',
-            None, 'Social Security Insured', depends=['relations']),
+    social_security_insured = fields.Function(
+        fields.One2Many('party.party', None, 'Social Security Insured',
+            depends=['relations']),
         'get_relations')
     main_insured_ssn = fields.Function(fields.Char('Main Insured SSN'),
         'get_main_insured_ssn', searcher='search_main_insured_ssn')
+    main_health_complement = fields.Function(
+        fields.Many2One('health.party_complement', 'Main Health Complement',
+            depends=['social_security_insured']),
+        'get_main_health_complement')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
+
+    def get_main_health_complement(self, name):
+        complement = self.get_health_complement_at_date()
+        return complement.id if complement else None
+
+    def get_health_complement_at_date(self, at_date=None):
+        res = super(Party, self).get_health_complement_at_date(at_date)
+        if res:
+            return res
+        if self.social_security_dependent:
+            parent = self.social_security_dependent[0]
+            return parent.get_health_complement_at_date(at_date)
 
     def get_main_insured_ssn(self, name):
         if self.social_security_dependent:
@@ -217,7 +236,9 @@ class HealthPartyComplement:
             'Insurance Fund', depends=['insurance_fund_number']),
         'get_insurance_fund')
     insurance_fund_number = fields.Char('Health Care System Number', size=9)
-    birth_order = fields.Integer('Birth Order')
+    birth_order = fields.Function(
+        fields.Integer('Birth Order'),
+        'get_birth_order')
 
     @classmethod
     def __setup__(cls):
@@ -226,6 +247,30 @@ class HealthPartyComplement:
             'wrong_insurance_fund_number': 'Wrong Insurance Fund Number: %s',
             'hc_system_not_defined': 'HC system must be defined'
             })
+
+    @classmethod
+    def __register__(cls, module):
+        TableHandler = backend.get('TableHandler')
+
+        # Migration from 1.10 : save birth_order on party
+        complement_h = TableHandler(cls)
+        migrate = complement_h.column_exist('birth_order')
+
+        super(HealthPartyComplement, cls).__register__(module)
+
+        if migrate:
+            party = Pool().get('party.party').__table__()
+            complement = cls.__table__()
+            cursor = Transaction().connection.cursor()
+            cursor.execute(*party.update(
+                    columns=[party.birth_order],
+                    values=[complement.birth_order],
+                    from_=[complement],
+                    where=party.id == complement.party))
+            complement_h.drop_column('birth_order')
+
+    def get_birth_order(self, name):
+        return self.party.birth_order
 
     @classmethod
     def get_insurance_fund(cls, complements, name=None):
