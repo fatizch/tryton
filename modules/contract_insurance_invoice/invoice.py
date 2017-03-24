@@ -351,6 +351,9 @@ class Invoice:
                 if (contract.status == 'hold' and contract.sub_status and
                         not contract.sub_status.hold_billing):
                     continue
+                if (invoice.contract_invoice.non_periodic and
+                        contract.status not in ('quote', 'declined')):
+                    continue
                 cls.raise_user_error(
                     'post_on_non_active_contract', {
                         'invoice': invoice.rec_name,
