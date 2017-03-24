@@ -44,8 +44,9 @@ class Contract:
                 contract.billing_informations, date).sepa_mandate
             for contract in contracts}
         clause = ['OR'] + [
-            [('contract', '=', contract), ('state', '=', 'posted')]
-            for contract in update_data.keys()]
+            [('contract', '=', contract), ('state', '=', 'posted'),
+                ('party', '=', mandate.party)]
+            for contract, mandate in update_data.items()]
 
         invoices = Invoice.search(clause)
         to_save = []
