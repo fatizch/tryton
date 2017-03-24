@@ -658,10 +658,6 @@ msgctxt "model:ir.action,name:"
 msgid "Aggregated commissions"
 msgstr "Commissions agrégées"
 
-msgctxt "model:ir.action,name:None"
-msgid "Aggregated commissions"
-msgstr "Commissions agrégées"
-
 msgctxt "model:ir.action,name:act_broker_commissioned_contract_relate_form"
 msgid "Commissioned Contracts"
 msgstr "Contrats commissionnés"
