@@ -23,6 +23,8 @@ from trytond.modules.report_engine import Printable
 
 
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
+IS_READ_ONLY = Bool(Eval('contract_status')) & (
+    Eval('contract_status') != 'quote')
 
 POSSIBLE_EXTRA_PREMIUM_RULES = [
     ('flat', 'Montant Fixe'),
@@ -707,42 +709,56 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
         states={'invisible': ~Eval('contract')}, depends=['contract'],
         select=True)
+    contract_status = fields.Function(
+        fields.Char('Contract Status'),
+        'on_change_with_contract_status')
     versions = fields.One2Many('contract.covered_element.version',
         'covered_element', 'Versions', delete_missing=True,
-        order=[('start', 'ASC')])
+        order=[('start', 'ASC')], states={'readonly': IS_READ_ONLY},
+        depends=_CONTRACT_STATUS_DEPENDS)
     covered_relations = fields.Many2Many('contract.covered_element-party',
         'covered_element', 'party_relation', 'Covered Relations', domain=[
             'OR',
             [('from_party', '=', Eval('party'))],
             [('to_party', '=', Eval('party'))],
-            ], depends=['party'],
-        states={'invisible': ~IS_PARTY})
+            ],
+        states={
+            'invisible': ~IS_PARTY,
+            'readonly': IS_READ_ONLY,
+            }, depends=['party', 'contract_status', 'item_kind'])
     current_extra_data = fields.Function(
         fields.Dict('extra_data', 'Current Extra Data', states={
-                'invisible': ~Eval('current_extra_data')},
-            depends=['current_extra_data']),
+                'invisible': ~Eval('current_extra_data'),
+                'readonly': IS_READ_ONLY,
+                }, depends=['current_extra_data', 'contract_status']),
         'get_current_version', setter='setter_void')
     current_extra_data_string = current_extra_data.translated(
         'current_extra_data')
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
-        ondelete='RESTRICT', required=True)
-    name = fields.Char('Name', states={'invisible': IS_PARTY})
+        ondelete='RESTRICT', required=True, states={'readonly': IS_READ_ONLY},
+        depends=_CONTRACT_STATUS_DEPENDS)
+    name = fields.Char('Name', states={
+            'invisible': IS_PARTY,
+            'readonly': IS_READ_ONLY,
+            }, depends=['party', 'item_kind', 'contract_status'])
     options = fields.One2ManyDomain('contract.option', 'covered_element',
         'Options', domain=[
             ('coverage.products', '=', Eval('product')),
             ('coverage.item_desc', '=', Eval('item_desc')),
             ('status', '!=', 'declined'),
-            ],
-        depends=['item_desc', 'product'],
-        target_not_required=True, order=[('coverage', 'ASC'),
-            ('start_date', 'ASC')])
+            ], states={'readonly': IS_READ_ONLY},
+        depends=['item_desc', 'product', 'contract_status'],
+        target_not_required=True,
+        order=[('coverage', 'ASC'), ('start_date', 'ASC')])
     declined_options = fields.One2ManyDomain('contract.option',
         'covered_element', 'Declined Options',
-        domain=[('status', '=', 'declined')], target_not_required=True)
+        domain=[('status', '=', 'declined')], target_not_required=True,
+        readonly=True)
     all_options = fields.One2Many('contract.option', 'covered_element',
-        'Options', target_not_required=True, delete_missing=True)
+        'Options', target_not_required=True, delete_missing=True,
+        readonly=True)
     parent = fields.Many2One('contract.covered_element', 'Parent',
-        ondelete='CASCADE', select=True)
+        ondelete='CASCADE', select=True, readonly=True)
     party = fields.Many2One('party.party', 'Actor', domain=[
             If(
                 Eval('item_kind') == 'person',
@@ -755,27 +771,35 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         states={
             'invisible': ~IS_PARTY,
             'required': IS_PARTY,
-            }, ondelete='RESTRICT', depends=['item_kind'], select=True)
+            'readonly': IS_READ_ONLY,
+            }, ondelete='RESTRICT',
+        depends=['item_kind', 'contract_status'], select=True)
     sub_covered_elements = fields.One2Many('contract.covered_element',
         'parent', 'Sub Covered Elements',
         # TODO : invisibility should depend on a function field checking the
         # item desc definition
-        states={'invisible': Eval('item_kind') == 'person'},
+        states={
+            'invisible': Eval('item_kind') == 'person',
+            },
         depends=['contract', 'item_kind', 'id'],
         target_not_required=True)
     manual_start_date = fields.Date('Start Date', states={
             'invisible': ~Eval('parent'),
             'required': Bool(Eval('parent', False)),
-            }, depends=['parent'])
+            'readonly': IS_READ_ONLY,
+            }, depends=['parent', 'contract_status'])
     manual_end_date = fields.Date('End Date', states={
             'invisible': ~Eval('parent'),
-            }, depends=['parent'])
+            'readonly': IS_READ_ONLY,
+            }, depends=['parent', 'contract_status'])
     end_reason = fields.Many2One('covered_element.end_reason', 'End Reason',
         ondelete='RESTRICT', domain=[If(~Eval('parent'), [],
-            [('item_descs', '=', Eval('item_desc'))])],
-        states={'invisible': ~Eval('manual_end_date'),
+            [('item_descs', '=', Eval('item_desc'))])], states={
+            'invisible': ~Eval('manual_end_date'),
             'required': Bool(Eval('manual_end_date', False)),
-            }, depends=['item_desc', 'manual_end_date', 'parent'])
+            'readonly': IS_READ_ONLY,
+            }, depends=['item_desc', 'manual_end_date', 'parent',
+                'contract_status'])
     current_version = fields.Function(
         fields.Many2One('contract.covered_element.version', 'Current Version'),
         'get_current_version')
@@ -969,6 +993,11 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         parent = getattr(self, 'parent', None)
         if parent:
             return self.parent.main_contract.id
+
+    @fields.depends('contract')
+    def on_change_with_contract_status(self, name=None):
+        # Only 1st level must be read only to deal with group contracts
+        return self.contract.status if self.contract else ''
 
     @fields.depends('contract', 'parent', 'main_contract')
     def on_change_with_product(self, name=None):
@@ -1346,12 +1375,16 @@ class CoveredElementVersion(model.CoogSQL, model.CoogView):
 
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', required=True, ondelete='CASCADE', select=True)
-    start = fields.Date('Start')
+    contract_status = fields.Function(
+        fields.Char('Contract Status'),
+        'on_change_with_contract_status')
+    start = fields.Date('Start', readonly=True)
     extra_data = fields.Dict('extra_data', 'Extra Data',
         states={
             'invisible': ~Eval('extra_data'),
+            'readonly': Eval('contract_status') != 'quote',
             },
-        depends=['extra_data'])
+        depends=['extra_data', 'contract_status'])
     extra_data_as_string = fields.Function(
         fields.Text('Extra Data'),
         'on_change_with_extra_data_as_string')
@@ -1400,6 +1433,11 @@ class CoveredElementVersion(model.CoogSQL, model.CoogView):
         return Pool().get('extra_data').get_extra_data_summary([self],
             'extra_data')[self.id]
 
+    @fields.depends('covered_element')
+    def on_change_with_contract_status(self, name=None):
+        return (self.covered_element.contract_status
+            if self.covered_element else '')
+
     @classmethod
     def order_start(cls, tables):
         table, _ = tables[None]
@@ -1433,36 +1471,53 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
 
     __name__ = 'contract.option.extra_premium'
 
+    option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
+        states={'invisible': ~Eval('option')}, select=True, required=True,
+        readonly=True)
+    contract_status = fields.Function(
+        fields.Char('Contract Status'),
+        'on_change_with_contract_status')
     calculation_kind = fields.Selection('get_possible_extra_premiums_kind',
-        'Calculation Kind')
+        'Calculation Kind', states=_CONTRACT_STATUS_STATES,
+        depends=_CONTRACT_STATUS_DEPENDS)
     calculation_kind_string = calculation_kind.translated('calculation_kind')
     start_date = fields.Function(
-        fields.Date('Start Date'), 'get_start_date', setter='setter_void')
-    manual_start_date = fields.Date('Manual Start date')
-    end_date = fields.Function(fields.Date('End date',
-        states={'invisible': ~Eval('time_limited')},
+        fields.Date('Start Date', states=_CONTRACT_STATUS_STATES,
+        depends=_CONTRACT_STATUS_DEPENDS),
+        'get_start_date', setter='setter_void')
+    manual_start_date = fields.Date('Manual Start date',
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
+    end_date = fields.Function(fields.Date('End date', states={
+            'invisible': ~Eval('time_limited')},
         depends=['time_limited']),
         'get_end_date')
-    manual_end_date = fields.Date('Manual End Date')
+    manual_end_date = fields.Date('Manual End Date',
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     final_end_date = fields.Function(
         fields.Date('Final End Date'),
         'get_final_end_date')
     duration = fields.Integer('Duration', states={
-            'invisible': ~Eval('time_limited')}, depends=['time_limited'])
+            'invisible': ~Eval('time_limited'),
+            'readonly': Eval('contract_status') != 'quote',
+            }, depends=['time_limited', 'contract_status'])
     duration_unit = fields.Selection(
         [('month', 'Month'), ('year', 'Year')],
         'Duration Unit', sort=False, required=True, states={
-            'invisible': ~Eval('time_limited')}, depends=['time_limited'])
+            'invisible': ~Eval('time_limited'),
+            'readonly': Eval('contract_status') != 'quote',
+            }, depends=['time_limited', 'contract_status'])
     duration_unit_string = duration_unit.translated('duration_unit')
     time_limited = fields.Function(
-        fields.Boolean('Time Limited'), 'get_time_limited',
-        setter='setter_void')
+        fields.Boolean('Time Limited', states=_CONTRACT_STATUS_STATES,
+        depends=_CONTRACT_STATUS_DEPENDS),
+        'get_time_limited', setter='setter_void')
     flat_amount = fields.Numeric('Flat amount', states={
             'invisible': Eval('calculation_kind', '') != 'flat',
             'required': Eval('calculation_kind', '') == 'flat',
+            'readonly': Eval('contract_status') != 'quote',
             }, digits=(16, Eval('currency_digits', 2)),
         depends=['currency_digits', 'calculation_kind', 'is_discount',
-                 'max_value'],
+                 'max_value', 'contract_status'],
         domain=[If(Eval('calculation_kind', '') != 'flat',
                 [],
                 If(Bool(Eval('is_discount')),
@@ -1476,14 +1531,14 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
                             [('flat_amount', '<', Eval('max_value'))]]
                         ]))])
     motive = fields.Many2One('extra_premium.kind', 'Motive',
-        ondelete='RESTRICT', required=True)
-    option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
-        states={'invisible': ~Eval('option')}, select=True, required=True)
+        ondelete='RESTRICT', required=True, states=_CONTRACT_STATUS_STATES,
+        depends=_CONTRACT_STATUS_DEPENDS)
     rate = fields.Numeric('Rate on Premium', states={
             'invisible': Eval('calculation_kind', '') != 'rate',
-            'required': Eval('calculation_kind', '') == 'rate'},
-        digits=(16, 4), depends=['calculation_kind', 'is_discount',
-                                 'max_rate'],
+            'required': Eval('calculation_kind', '') == 'rate',
+            'readonly': Eval('contract_status') != 'quote',
+            }, digits=(16, 4), depends=['calculation_kind', 'is_discount',
+            'max_rate', 'contract_status'],
         domain=[If(Eval('calculation_kind', '') != 'rate',
                 [],
                 If(Bool(Eval('is_discount')),
@@ -1518,7 +1573,8 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
         cls._error_messages.update({
                 'bad_start_date': 'Extra premium %s start date (%s) should be '
                 'greater than the coverage\'s (%s)'})
-        cls._buttons.update({'propagate': {}})
+        cls._buttons.update({'propagate': {
+                    'readonly': Eval('contract_status') != 'quote'}})
 
     @classmethod
     def view_attributes(cls):
@@ -1561,6 +1617,10 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
         if 'end_date' in Transaction().context:
             return Transaction().context.get('end_date')
         return None
+
+    @fields.depends('option')
+    def on_change_with_contract_status(self, name=None):
+        return self.option.contract_status if self.option else ''
 
     @fields.depends('manual_start_date', 'option', 'start_date')
     def on_change_option(self):

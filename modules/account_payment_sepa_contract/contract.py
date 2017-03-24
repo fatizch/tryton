@@ -74,11 +74,12 @@ class ContractBillingInformation:
         'Sepa Mandate', states={
             'invisible': ~Eval('direct_debit'),
             'required': And(Eval('direct_debit', False),
-                (Eval('_parent_contract', {}).get('status', '') == 'active'))},
-        domain=[
+                (Eval('_parent_contract', {}).get('status', '') == 'active')),
+            'readonly': Eval('contract_status') != 'quote',
+            }, domain=[
             ('account_number.account', '=', Eval('direct_debit_account'))],
-        depends=['direct_debit', 'direct_debit_account'], ondelete='RESTRICT',
-        )
+        depends=['direct_debit', 'direct_debit_account', 'contract_status'],
+        ondelete='RESTRICT')
 
     @classmethod
     def __register__(cls, module_name):

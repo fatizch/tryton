@@ -159,9 +159,10 @@ class ContractOptionVersion(model.CoogSQL, model.CoogView, ModelCurrency):
     coverage_amount = fields.Numeric('Coverage Amount',
         states={
             'invisible': ~Eval('_parent_option', {}).get(
-                'has_coverage_amount', False)
+                'has_coverage_amount', False),
+            'readonly': Eval('contract_status') != 'quote',
             },
-        depends=['option'])
+        depends=['option', 'contract_status'])
 
     def get_currency(self):
         return self.option.currency

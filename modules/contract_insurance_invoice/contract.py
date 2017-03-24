@@ -30,6 +30,8 @@ from trytond.modules.coog_core import (coog_date, coog_string, utils, model,
     fields)
 from trytond.modules.coog_core.cache import CoogCache, get_cache_holder
 from trytond.modules.contract import _STATES
+from trytond.modules.contract import _CONTRACT_STATUS_STATES
+from trytond.modules.contract import _CONTRACT_STATUS_DEPENDS
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -1525,15 +1527,21 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
 
     contract = fields.Many2One('contract', 'Contract', required=True,
         select=True, ondelete='CASCADE')
+    contract_status = fields.Function(
+        fields.Char('Contract Status'),
+        'on_change_with_contract_status')
     billing_mode = fields.Many2One('offered.billing_mode', 'Billing Mode',
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS,
         required=True, ondelete='RESTRICT')
     payment_term = fields.Many2One('account.invoice.payment_term',
         'Payment Term', ondelete='RESTRICT', states={
             'required': And(Eval('direct_debit', False),
                 (Eval('_parent_contract', {}).get('status', '') == 'active')),
-            'invisible': Len(Eval('possible_payment_terms', [])) < 2},
+            'invisible': Len(Eval('possible_payment_terms', [])) < 2,
+            'readonly': Eval('contract_status') != 'quote',
+            },
         domain=[('id', 'in', Eval('possible_payment_terms'))],
-        depends=['possible_payment_terms'])
+        depends=['possible_payment_terms', 'contract_status'])
     direct_debit = fields.Function(
         fields.Boolean('Direct Debit Payment'), 'on_change_with_direct_debit',
         searcher='search_direct_debit')
@@ -1543,26 +1551,32 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
                 'invisible': ~Eval('direct_debit', False),
                 'required': And(Eval('direct_debit', False),
                     (Eval('_parent_contract', {}).get('status', '') ==
-                        'active'))},
-            sort=False, depends=['direct_debit', 'direct_debit_day']),
+                        'active')),
+                'readonly': Eval('contract_status') != 'quote',
+                }, sort=False,
+            depends=['direct_debit', 'direct_debit_day', 'contract_status']),
         'get_direct_debit_day_selector', 'setter_void')
-    direct_debit_day = fields.Integer('Direct Debit Day')
+    direct_debit_day = fields.Integer('Direct Debit Day',
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     direct_debit_account = fields.Many2One('bank.account',
-        'Direct Debit Account',
-        states={'invisible': ~Eval('direct_debit')},
-        depends=['direct_debit'], ondelete='RESTRICT')
+        'Direct Debit Account', states={
+            'invisible': ~Eval('direct_debit'),
+            'readonly': Eval('contract_status') != 'quote',
+            }, depends=['direct_debit', 'contract_status'],
+        ondelete='RESTRICT')
     possible_payment_terms = fields.Function(fields.One2Many(
             'account.invoice.payment_term', None, 'Possible Payment Term'),
             'on_change_with_possible_payment_terms')
     is_once_per_contract = fields.Function(
         fields.Boolean('Once Per Contract?'),
         'on_change_with_is_once_per_contract')
-    payer = fields.Many2One('party.party', 'Payer',
-        states={'invisible': ~Eval('direct_debit'),
+    payer = fields.Many2One('party.party', 'Payer', states={
+            'invisible': ~Eval('direct_debit'),
             'required': And(Bool(Eval('direct_debit', False)),
                 (Eval('_parent_contract', {}).get('status', '') ==
-                    'active'))},
-        depends=['direct_debit'], ondelete='RESTRICT')
+                    'active')),
+            'readonly': Eval('contract_status') != 'quote',
+            }, depends=['direct_debit', 'contract_status'], ondelete='RESTRICT')
     suspended = fields.Function(fields.Boolean('Suspended'),
         'get_suspended')
     icon = fields.Function(fields.Char('Icon'),
@@ -1591,6 +1605,8 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
                 'unsuspend_payments': {'invisible': Or(~Eval('direct_debit'),
                         ~Bool(Eval('suspended')))},
                 })
+        cls.date.states = _CONTRACT_STATUS_STATES
+        cls.date.depends = _CONTRACT_STATUS_DEPENDS
 
     @classmethod
     def suspension_values(cls, billing_id, payment, **kwargs):
@@ -1777,6 +1793,10 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
     def on_change_with_is_once_per_contract(self, name=None):
         return (self.billing_mode.frequency == 'once_per_contract'
             if self.billing_mode else False)
+
+    @fields.depends('contract')
+    def on_change_with_contract_status(self, name=None):
+        return self.contract.status
 
     def get_direct_debit_planned_date(self, line):
         pool = Pool()

@@ -78,16 +78,23 @@ class ActivationHistory(model.CoogSQL, model.CoogView):
         'get_func_key')
     contract = fields.Many2One('contract', 'Contract', required=True,
         ondelete='CASCADE', select=True)
-    start_date = fields.Date('Start Date')
+    contract_status = fields.Function(
+        fields.Char('Contract Status'),
+        'on_change_with_contract_status')
+    start_date = fields.Date('Start Date', states=_CONTRACT_STATUS_STATES,
+        depends=_CONTRACT_STATUS_DEPENDS)
     end_date = fields.Date('End Date', domain=['OR',
             ('end_date', '=', None),
             ('start_date', '=', None),
             ('end_date', '>=', Eval('start_date', datetime.date.min))],
-        depends=['start_date'])
+        states=_CONTRACT_STATUS_STATES,
+        depends=['start_date', 'contract_status'])
     termination_reason = fields.Many2One('contract.sub_status',
         'Termination Reason', domain=[('status', '=', 'terminated')],
-        ondelete='RESTRICT')
-    active = fields.Boolean('Active')
+        ondelete='RESTRICT', states=_CONTRACT_STATUS_STATES,
+        depends=_CONTRACT_STATUS_DEPENDS)
+    active = fields.Boolean('Active', states=_CONTRACT_STATUS_STATES,
+        depends=_CONTRACT_STATUS_DEPENDS)
 
     @classmethod
     def __register__(cls, module_name):
@@ -125,6 +132,10 @@ class ActivationHistory(model.CoogSQL, model.CoogView):
         return "[%s - %s]" % (
             Date.date_as_string(self.start_date) if self.start_date else '',
             Date.date_as_string(self.end_date) if self.end_date else '')
+
+    @fields.depends('contract')
+    def on_change_with_contract_status(self, name=None):
+        return self.contract.status if self.contract else ''
 
 
 class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
@@ -1754,13 +1765,13 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             return self.contract.product.id
 
     @fields.depends('contract')
-    def on_change_with_contract_status(self, name=None):
-        return self.contract.status if self.contract else ''
-
-    @fields.depends('contract')
     def on_change_with_parent_contract(self, name=None):
         if self.contract:
             return self.contract.id
+
+    @fields.depends('parent_contract')
+    def on_change_with_contract_status(self, name=None):
+        return self.parent_contract.status if self.parent_contract else ''
 
     @classmethod
     def get_current_version(cls, options, names):
@@ -2082,12 +2093,16 @@ class ContractOptionVersion(model.CoogSQL, model.CoogView):
 
     option = fields.Many2One('contract.option', 'Option',
         required=True, ondelete='CASCADE', select=True)
-    start = fields.Date('Start')
+    contract_status = fields.Function(
+        fields.Char('Contract Status'),
+        'on_change_with_contract_status')
+    start = fields.Date('Start', readonly=True)
     extra_data = fields.Dict('extra_data', 'Extra Data',
         states={
             'invisible': ~Eval('extra_data'),
+            'readonly': Eval('contract_status') != 'quote',
             },
-        depends=['extra_data'])
+        depends=['extra_data', 'contract_status'])
     extra_data_as_string = fields.Function(
         fields.Char('Extra Data'),
         'on_change_with_extra_data_as_string')
@@ -2144,6 +2159,10 @@ class ContractOptionVersion(model.CoogSQL, model.CoogView):
             return self.start
         return self.start or self.option.start_date
 
+    @fields.depends('option')
+    def on_change_with_contract_status(self, name=None):
+        return self.option.contract_status if self.option else ''
+
     @classmethod
     def order_start(cls, tables):
         table, _ = tables[None]
@@ -2171,12 +2190,22 @@ class ContractExtraDataRevision(model._RevisionMixin, model.CoogSQL,
 
     contract = fields.Many2One('contract', 'Contract', required=True,
         select=True, ondelete='CASCADE')
-    extra_data_values = fields.Dict('extra_data', 'Extra Data')
+    contract_status = fields.Function(
+        fields.Char('Contract Status'),
+        'on_change_with_contract_status')
+    extra_data_values = fields.Dict('extra_data', 'Extra Data',
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     extra_data_values_translated = extra_data_values.translated(
         'extra_data_values')
     extra_data_summary = fields.Function(
         fields.Text('Extra Data Summary'),
         'get_extra_data_summary')
+
+    @classmethod
+    def __setup__(cls):
+        super(ContractExtraDataRevision, cls).__setup__()
+        cls.date.states = _CONTRACT_STATUS_STATES
+        cls.date.depends = _CONTRACT_STATUS_DEPENDS
 
     @staticmethod
     def revision_columns():
@@ -2197,6 +2226,10 @@ class ContractExtraDataRevision(model._RevisionMixin, model.CoogSQL,
             values['_func_key'] = values['date']
         else:
             values['_func_key'] = None
+
+    @fields.depends('contract')
+    def on_change_with_contract_status(self, name=None):
+        return self.contract.status if self.contract else ''
 
 
 class ContractSelectHoldReason(model.CoogView):
