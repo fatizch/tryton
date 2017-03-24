@@ -11,4 +11,5 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/tree/field[@name='amount']" position="after">
         <field name="number"/>
     </xpath>
+    <field name="statement" invisible="1"/>
 </data>
