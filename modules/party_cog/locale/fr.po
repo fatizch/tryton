@@ -266,6 +266,10 @@ msgctxt "field:party.party,gender:"
 msgid "Gender"
 msgstr "Genre"
 
+msgctxt "field:party.party,has_active_address:"
+msgid "Has Active Address"
+msgstr "A une adresse active"
+
 msgctxt "field:party.party,identifiers:"
 msgid "Identifiers"
 msgstr "Identifiants"
@@ -285,14 +289,6 @@ msgstr "Logo"
 msgctxt "field:party.party,long_gender:"
 msgid "Gender Long"
 msgstr "Genre long"
-
-msgctxt "selection:party.party,long_gender:"
-msgid "Madame"
-msgstr "Madame"
-
-msgctxt "selection:party.party,long_gender:"
-msgid "Mister"
-msgstr "Monsieur"
 
 msgctxt "field:party.party,main_address:"
 msgid "Main Address"
@@ -901,6 +897,19 @@ msgstr "M."
 msgctxt "selection:party.party,gender:"
 msgid "Mrs."
 msgstr "Mme"
+
+#, fuzzy
+msgctxt "selection:party.party,long_gender:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:party.party,long_gender:"
+msgid "Madame"
+msgstr "Madame"
+
+msgctxt "selection:party.party,long_gender:"
+msgid "Mister"
+msgstr "Monsieur"
 
 msgctxt "view:party.address:"
 msgid "Addresses"

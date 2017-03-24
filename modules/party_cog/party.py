@@ -71,6 +71,8 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
     main_address = fields.Function(
         fields.Many2One('party.address', 'Main Address'),
         'get_main_address_id', searcher='search_main_address')
+    has_active_address = fields.Function(
+        fields.Boolean('Has Active Address'), 'get_has_active_address')
     ####################################
     # Person information
     is_person = fields.Boolean('Person')
@@ -477,6 +479,11 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
     def get_main_address_id(self, name=None, at_date=None):
         address = self.address_get(at_date=at_date)
         return address.id if address else None
+
+    def get_has_active_address(self, name=None):
+        addresses = utils.get_good_versions_at_date(
+            self, 'addresses', utils.today())
+        return any([x.active for x in addresses])
 
     def get_last_modification(self, name):
         return (self.write_date if self.write_date else self.create_date
