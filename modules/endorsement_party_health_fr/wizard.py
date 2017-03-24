@@ -87,12 +87,10 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
                 party_endorsement.health_complement)
             party = Party(party_id)
             for i, health_complement in enumerate(self.new_health_complement):
-                new_values = {}
-                if hasattr(health_complement, '_save_values'):
-                    new_values = {k: v for k, v in
-                        health_complement._save_values.iteritems() if k in
-                        self._health_complement_fields_to_extract() and
-                        v != getattr(self.current_health_complement[0], k)}
+                new_values = {k: v
+                    for k, v in health_complement._save_values.iteritems()
+                    if k in self._health_complement_fields_to_extract() and
+                    v != getattr(self.current_health_complement[0], k)}
                 dates = [x.date for x in party.health_complement]
                 action = 'update' if 'date' not in new_values or \
                     new_values['date'] in dates else 'add'
