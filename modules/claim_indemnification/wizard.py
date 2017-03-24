@@ -393,7 +393,6 @@ class IndemnificationDefinition(model.CoogView):
             }, depends=['is_period'])
     end_date = fields.Date('End Date', states={
             'invisible': ~Eval('is_period'),
-            'required': Bool(Eval('is_period', False)),
             }, depends=['is_period'])
     extra_data = fields.Dict('extra_data', 'Extra Data', states={
             'invisible': ~Eval('extra_data')})
@@ -507,6 +506,7 @@ class CreateIndemnification(Wizard):
     definition = StateView('claim.indemnification_definition',
         'claim_indemnification.indemnification_definition_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Possible Services', 'select_service', 'tryton-go-previous'),
             Button('Calculate', 'calculate', 'tryton-go-next')])
     calculate = StateTransition()
     result = StateView('claim.indemnification_calculation_result',
@@ -530,9 +530,10 @@ class CreateIndemnification(Wizard):
                 'the future are not allowed',
                 'end_date_exceeds_loss': 'The end date must not exceed '
                 'the loss end date',
+                'end_date_required': 'End date is required'
                 })
 
-    def possible_services(self, claim):
+    def default_service_for_treatment(self, claim):
         res = []
         for delivered in claim.delivered_services:
             if not delivered.loss.end_date or not delivered.indemnifications:
@@ -552,7 +553,7 @@ class CreateIndemnification(Wizard):
                         indemn.end_date + relativedelta(days=1)):
                     res.append(delivered)
                     break
-        return res
+        return res[0] if res and len(res) == 1 else None
 
     def transition_select_service_needed(self):
         pool = Pool()
@@ -566,9 +567,10 @@ class CreateIndemnification(Wizard):
             self.select_service.selected_service = Service(active_id)
             return 'definition'
         elif Transaction().context.get('active_model') == 'claim':
-            claim_services = self.possible_services(Claim(active_id))
-            if len(claim_services) == 1:
-                self.definition.service = claim_services[0]
+            claim_service = self.default_service_for_treatment(
+                Claim(active_id))
+            if claim_service:
+                self.definition.service = claim_service
                 return 'definition'
             return 'select_service'
         elif (Transaction().context.get('active_model') ==
@@ -591,11 +593,11 @@ class CreateIndemnification(Wizard):
         if not Transaction().context.get('active_model') == 'claim':
             return {}
         claim = Claim(Transaction().context.get('active_id'))
-        claim_services = self.possible_services(claim)
+        claim_services = claim.delivered_services
+        default_service = self.default_service_for_treatment(claim)
         return {
             'possible_services': [s.id for s in claim_services],
-            'selected_service': claim_services[0].id if claim_services
-            else None
+            'selected_service': default_service.id if default_service else None,
             }
 
     def transition_service_selected(self):
@@ -659,6 +661,8 @@ class CreateIndemnification(Wizard):
         input_end_date = self.definition.end_date
         ClaimService = Pool().get('claim.service')
         service = self.definition.service
+        if self.definition.is_period and not input_end_date:
+            self.raise_user_error('end_date_required')
         if (input_end_date and
                 input_end_date > utils.today()):
             self.raise_user_error('end_date_future')

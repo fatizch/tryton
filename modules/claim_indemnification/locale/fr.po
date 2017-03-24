@@ -3,6 +3,10 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:claim.create_indemnification:"
+msgid "End date is required"
+msgstr "La date de fin est requise"
+
+msgctxt "error:claim.create_indemnification:"
 msgid "End date must be greater than the start date"
 msgstr "La date de fin doit être supérieure à la date de début"
 
@@ -289,10 +293,6 @@ msgstr "Quittances"
 msgctxt "field:claim,is_services_deductible:"
 msgid "Is Services Deductible"
 msgstr "Le service est une période de franchise"
-
-msgctxt "field:claim,open_loss:"
-msgid "Open Loss"
-msgstr "Evenement ouvert"
 
 msgctxt "field:claim.configuration,control_rule:"
 msgid "Control Rule"
@@ -1318,6 +1318,38 @@ msgctxt "selection:claim.service,annuity_frequency:"
 msgid "Yearly"
 msgstr "Annuelle"
 
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Death"
+msgstr "Décès"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Education Annuities"
+msgstr "Rente éducation"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Funeral Capital"
+msgstr "Obsèques"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Joint Annuities"
+msgstr "Rente conjoint"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Partial Disability"
+msgstr "Invalidité partielle"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Temporary Disability"
+msgstr "Incapacité de travail"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Total And Irreversible Autonomy Loss"
+msgstr "Perte Totale et Irréversible d'Autonomie"
+
+msgctxt "selection:insurer.delegation,insurance_kind:"
+msgid "Total Disability"
+msgstr "Invalidité totale"
+
 msgctxt "selection:rule_engine,type_:"
 msgid "Benefit"
 msgstr "Prestation"
@@ -1429,6 +1461,16 @@ msgstr "Calculer"
 msgctxt "wizard_button:claim.create_indemnification,definition,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:claim.create_indemnification,definition,select_service:"
+msgid "Possible Services"
+msgstr "Prestations possibles"
+
+msgctxt ""
+"wizard_button:claim.create_indemnification,definition,select_service:"
+msgid "Previous"
+msgstr "Précédent"
 
 msgctxt "wizard_button:claim.create_indemnification,result,definition:"
 msgid "Previous"
