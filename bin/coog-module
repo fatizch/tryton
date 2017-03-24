@@ -103,7 +103,7 @@ coog_module_create() { # creates a new module in the modules folder - <module_na
         echo "from trytond.pool import Pool" >> "$module_folder"/__init__.py
         for filename in $filenames
         do
-            echo "from .$filename import *" >> "$module_folder"/__init__.py
+            echo "import $filename" >> "$module_folder"/__init__.py
         done
         echo "" >> "$module_folder"/__init__.py
         echo "" >> "$module_folder"/__init__.py
@@ -130,13 +130,9 @@ coog_module_create() { # creates a new module in the modules folder - <module_na
             echo "# this repository contains the full copyright notices and license terms." >> "$module_folder"/"$filename".py
             echo "from trytond.pool import PoolMeta" >> "$module_folder"/"$filename".py
             echo "" >> "$module_folder"/"$filename".py
-            echo "__metaclass__ = PoolMeta" >> "$module_folder"/"$filename".py
             echo "__all__ = [" >> "$module_folder"/"$filename".py
             echo "    ]" >> "$module_folder"/"$filename".py
         done
-
-        # Init CHANGELOG
-        echo "* Module creation" > "$module_folder"/CHANGELOG
 
         # Init Tests
         echo "# This file is part of Coog. The COPYRIGHT file at the top level of" > "$module_folder"/tests/__init__.py
