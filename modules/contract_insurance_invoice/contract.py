@@ -1796,7 +1796,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
 
     @fields.depends('contract')
     def on_change_with_contract_status(self, name=None):
-        return self.contract.status
+        return self.contract.status if self.contract else ''
 
     def get_direct_debit_planned_date(self, line):
         pool = Pool()
