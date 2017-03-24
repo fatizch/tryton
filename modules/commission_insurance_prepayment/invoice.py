@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from decimal import Decimal
 from itertools import groupby
 from collections import defaultdict
 
@@ -59,10 +60,10 @@ class Invoice:
             agent_options.keys())
 
         outstanding_prepayment_per_contract = defaultdict(lambda: 0)
-        for (agent_id, option_id), amount in \
+        for (agent_id, option_id), prepayment_amount_base in \
                 outstanding_prepayment.iteritems():
             outstanding_prepayment_per_contract[
-                all_options[(option_id, agent_id)]] += amount
+                all_options[(option_id, agent_id)]] += prepayment_amount_base[0]
 
         for (agent_id, option_id), comms in agent_options.iteritems():
             key = all_options[(option_id, agent_id)]
@@ -70,7 +71,7 @@ class Invoice:
                 if key not in outstanding_prepayment_per_contract:
                     continue
                 prepayment_used = min(outstanding_prepayment_per_contract[key],
-                    commission.amount)
+                    commission.amount).quantize(Decimal(1) / 10 ** 8)
                 commission.amount -= prepayment_used
                 commission.redeemed_prepayment = prepayment_used
                 outstanding_prepayment_per_contract[key] -= prepayment_used

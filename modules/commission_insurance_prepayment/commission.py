@@ -5,7 +5,7 @@ from simpleeval import simple_eval
 from sql import Column, Null
 from sql.operators import Or
 from sql.aggregate import Sum
-from collections import defaultdict
+from sql.conditionals import Case, Coalesce
 
 from trytond.tools import decistmt
 from trytond.pool import PoolMeta, Pool
@@ -145,11 +145,20 @@ class Agent:
     __name__ = 'commission.agent'
 
     @classmethod
+    def _prepayment_base_amount_sum_column(cls, commission):
+        return Sum(Case(
+                (Coalesce(commission.commission_rate, 0) == 0, 0),
+                else_=((Coalesce(commission.amount, 0) +
+                    Coalesce(commission.redeemed_prepayment, 0)) /
+                    commission.commission_rate)
+                ))
+
+    @classmethod
     def sum_of_prepayments(cls, agents):
         """
             agents is a list of tuple (agent_id, coverage_id)
             Return a dictionnary with (agent_id, coverage) as key
-                and prepayments as value
+                and [prepayments, base_amount] as value
         """
         pool = Pool()
         Commission = pool.get('commission')
@@ -169,13 +178,16 @@ class Agent:
             where_clause.append(((agent_column == agent[0]) &
                     (prepayment_column == True) &  # NOQA
                     (option_column == agent[1])))
+        # base_amount is computed for each line depending on what it contains.
+        # if there is no rate or it is equal to 0, base amount is equal to 0
+        # if there is a redeemed prepayment, it should be taken into account
         cursor.execute(*commission.select(commission.agent, commission.origin,
                 Sum(commission.amount),
+                cls._prepayment_base_amount_sum_column(commission),
                 where=where_clause,
                 group_by=[commission.agent, commission.origin]))
-        for agent, option, amount in cursor.fetchall():
-            result[(agent, int(option.split(',')[1]))] = amount
-
+        for agent, option, amount, base_amount in cursor.fetchall():
+            result[(agent, int(option.split(',')[1]))] = [amount, base_amount]
         return result
 
     @classmethod
@@ -183,7 +195,7 @@ class Agent:
         """
             agents is a list of tuple (agent_id, option_id)
             Return a dictionnary with (agent_id, option_id) as key
-                and sum of redeemed amount as value
+                and [sum of redeemed amount, sum of base amount] as value
         """
         pool = Pool()
         Commission = pool.get('commission')
@@ -203,14 +215,17 @@ class Agent:
             where_redeemed.append(((agent_column == agent[0]) &
                     (redeemed_column != Null) &
                     (option_column == agent[1])))
-
+        # base_amount is computed for each line depending on what it contains.
+        # if there is no rate or it is equal to 0, base amount is equal to 0
+        # if there is a prepayment amount, it should be taken into account
         cursor.execute(*commission.select(commission.agent,
                 commission.commissioned_option,
                 Sum(commission.redeemed_prepayment),
+                cls._prepayment_base_amount_sum_column(commission),
                 where=where_redeemed,
                 group_by=[commission.agent, commission.commissioned_option]))
-        for agent, option, amount in cursor.fetchall():
-            result[(agent, option)] = amount
+        for agent, option, amount, base_amount in cursor.fetchall():
+            result[(agent, option)] = [amount, base_amount]
         return result
 
     @classmethod
@@ -218,13 +233,13 @@ class Agent:
         """
             agents is a list of tuple (agent_id, option_id)
             Return a dictionnary with (agent_id, option_id) as key
-                and outstanding amount as value
+                and [outstanding amount, outstanding_base_amount] as value
         """
-        result = defaultdict(int)
-        result.update(cls.sum_of_prepayments(agents))
-        for key, prepayment_amount in \
+        result = cls.sum_of_prepayments(agents)
+        for key, prepayment_amount_base in \
                 cls.sum_of_redeemed_prepayment(agents).iteritems():
-            result[key] -= prepayment_amount
+            result[key][0] -= prepayment_amount_base[0]
+            result[key][1] -= prepayment_amount_base[1]
         return result
 
 

@@ -94,7 +94,7 @@ class ContractOption:
                 if end < premium.start or (premium.end and start > premium.end):
                     continue
                 lines.extend(premium.get_invoice_lines(
-                        max(premium.start,start),
+                        max(premium.start, start),
                         min(end, end_first_year)))
         first_year_premium = sum([
                 self.parent_contract.currency.round(line.unit_price)
@@ -137,7 +137,7 @@ class ContractOption:
                     continue
 
                 if (agent.id, self.id) in all_prepayments:
-                    amount = amount - all_prepayments[(agent.id, self.id)]
+                    amount = amount - all_prepayments[(agent.id, self.id)][0]
                 digits = Commission.amount.digits
                 amount = amount.quantize(Decimal(str(10.0 ** -digits[1])))
                 if not amount:
@@ -170,7 +170,8 @@ class ContractOption:
         for agent, plan in agents_plans_to_compute:
             if (agent.id, self.id) not in outstanding_prepayment:
                 continue
-            amount = outstanding_prepayment[(agent.id, self.id)]
+            amount, base_amount = outstanding_prepayment[(agent.id, self.id)]
+            rate = amount / base_amount if base_amount else 0
             digits = Commission.amount.digits
             amount = amount.quantize(Decimal(str(10.0 ** -digits[1])))
             if not amount:
@@ -183,6 +184,7 @@ class ContractOption:
             commission.agent = agent
             commission.product = plan.commission_product
             commission.amount = -amount
+            commission.commission_rate = rate.quantize(Decimal(1) / 10 ** 4)
             commission.commissioned_option = self
             commissions.append(commission)
         return commissions
