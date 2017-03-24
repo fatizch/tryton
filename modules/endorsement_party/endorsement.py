@@ -13,6 +13,7 @@ from trytond.modules.endorsement import values_mixin, relation_mixin
 __metaclass__ = PoolMeta
 __all__ = [
     'Address',
+    'Relation',
     'Party',
     'EndorsementParty',
     'EndorsementPartyAddress',
@@ -63,7 +64,7 @@ class EndorsementPartyAddress(relation_mixin(
 
 class EndorsementPartyRelation(relation_mixin(
             'endorsement.party.relation.field', 'relationship',
-            'party.relation.all', 'Relation'),
+            'party.relation', 'Relation'),
         model.CoogSQL, model.CoogView):
     'Endorsement Relations'
     __metaclass__ = PoolMeta
@@ -116,6 +117,11 @@ class Party:
     @model.CoogView.button_action('endorsement.act_start_endorsement')
     def start_endorsement(cls, parties):
         pass
+
+
+class Relation:
+    __name__ = 'party.relation'
+    _history = True
 
 
 class Endorsement:
@@ -270,8 +276,15 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
                         raise_exception=False),
                     address_summary])
 
-        relation_summary = [relation.get_diff('party.relation.all',
-                relation.relationship) for relation in self.relations]
+        relation_summary = []
+        for relation in self.relations:
+            if relation.action == 'remove':
+                relation_summary.append(
+                    (relation.raise_user_error('mes_remove_version',
+                        raise_exception=False), relation.relation.rec_name),)
+            else:
+                relation_summary.append(relation.get_diff('party.relation',
+                    relation.relationship))
         if relation_summary:
             result[1].append(['%s :' % self.raise_user_error(
                         'msg_relations_modifications',
@@ -292,7 +305,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
 
     @classmethod
     def _get_restore_history_order(cls):
-        return ['party.party', 'party.address', 'party.relation.all']
+        return ['party.party', 'party.address', 'party.relation']
 
     def do_restore_history(self):
         pool = Pool()
@@ -314,7 +327,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
     def _prepare_restore_history(cls, instances, at_date):
         for party in instances['party.party']:
             instances['party.address'] += party.addresses
-            instances['party.relation.all'] += party.relations
+            instances['party.relation'] += party.relations
 
     @classmethod
     def draft(cls, party_endorsements):

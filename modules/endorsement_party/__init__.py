@@ -15,6 +15,7 @@ def register():
         EndorsementAddressField,
         EndorsementRelationField,
         Party,
+        Relation,
         Address,
         EndorsementParty,
         EndorsementPartyAddress,
