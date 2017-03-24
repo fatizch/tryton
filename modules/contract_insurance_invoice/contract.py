@@ -467,18 +467,12 @@ class Contract:
     def invoices_report(self):
         pool = Pool()
         ContractInvoice = pool.get('contract.invoice')
-        non_periodic_invoices = ContractInvoice.search([
+        all_invoices = ContractInvoice.search([
                 ('contract', '=', self),
-                ('invoice.state', 'not in', ('cancel', 'paid', 'draft')),
-                ('non_periodic', '=', True)])
-        periodic_invoices = [x for x in ContractInvoice.search([
-                    ('contract', '=', self),
-                    ('invoice.state', 'not in', ('cancel', 'paid', 'draft'))])]
-        all_good_invoices = list(set(periodic_invoices) |
-            set(non_periodic_invoices))
+                ('invoice.state', 'not in', ('cancel', 'paid', 'draft'))])
         amount_per_date = defaultdict(lambda: {'amount': 0, 'components': []})
         taxes = defaultdict(int)
-        for invoice in all_good_invoices:
+        for invoice in all_invoices:
             if invoice.invoice.lines_to_pay:
                 for line in invoice.invoice.lines_to_pay:
                     date = line.payment_date or line.maturity_date or line.date
