@@ -467,10 +467,10 @@ class ChangeDirectDebitAccount(ChangeBillingInformation):
         super(ChangeDirectDebitAccount, cls).check_before_start(select_screen)
         cls.pop_functional_error('no_matching_invoice_date')
         cls.pop_functional_error('unauthorized_date')
-        if not utils.get_good_versions_at_date(
+        if not utils.get_good_version_at_date(
                 select_screen.contract, 'billing_informations',
                 select_screen.effective_date,
-                'date')[0].direct_debit:
+                'date').direct_debit:
             cls.append_functional_error('not_direct_debit')
         if select_screen.effective_date < utils.today():
             cls.append_functional_error('no_past_date')
@@ -480,9 +480,9 @@ class ChangeDirectDebitAccount(ChangeBillingInformation):
         contract = data_dict.get('contract', None)
         if not contract:
             return False
-        if not utils.get_good_versions_at_date(contract,
+        if not utils.get_good_version_at_date(contract,
                 'billing_informations', data_dict['endorsement_date'],
-                'date')[0].direct_debit:
+                'date').direct_debit:
             return True
         return False
 
