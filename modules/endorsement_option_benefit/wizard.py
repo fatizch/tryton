@@ -196,6 +196,8 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
                         old_value = getattr(patched_benefit, fname, None)
                         if new_value != old_value:
                             version.benefits = displayer.option_benefits
+                            patched_option.versions = list(
+                                patched_option.versions)
                             break
             else:
                 fields = self.get_version_fields()
