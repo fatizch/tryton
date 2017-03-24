@@ -538,7 +538,7 @@ class Contract:
         return invoice_reports
 
     def invoice_to_end_date(self):
-        Contract.invoice([self], self.final_end_date)
+        self.invoice([self], self.final_end_date)
 
     def get_non_periodic_payment_date(self):
         return self.product.get_non_periodic_payment_date(self)
