@@ -6,5 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="adjust_prepayment"/>
         <field name="adjust_prepayment"/>
+        <label name="delete_unpaid_prepayment"/>
+        <field name="delete_unpaid_prepayment"/>
     </xpath>
 </data>

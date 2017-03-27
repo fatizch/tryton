@@ -115,6 +115,9 @@ class Plan:
     __name__ = 'commission.plan'
 
     adjust_prepayment = fields.Boolean('Adjust Prepayment')
+    delete_unpaid_prepayment = fields.Boolean('Delete Unpaid Prepayment',
+        help='Redeemed of unpaid invoices will be deleted once contracts '
+        'are terminated')
 
     def get_context_formula(self, amount, product, pattern=None):
         context = super(Plan, self).get_context_formula(amount, product,
@@ -156,7 +159,7 @@ class Agent:
     @classmethod
     def sum_of_prepayments(cls, agents):
         """
-            agents is a list of tuple (agent_id, coverage_id)
+            Agents is a list of tuple (agent_id, coverage_id)
             Return a dictionnary with (agent_id, coverage) as key
                 and [prepayments, base_amount] as value
         """
@@ -193,7 +196,7 @@ class Agent:
     @classmethod
     def sum_of_redeemed_prepayment(cls, agents):
         """
-            agents is a list of tuple (agent_id, option_id)
+            Agents is a list of tuple (agent_id, option_id)
             Return a dictionnary with (agent_id, option_id) as key
                 and [sum of redeemed amount, sum of base amount] as value
         """
@@ -231,7 +234,7 @@ class Agent:
     @classmethod
     def outstanding_prepayment(cls, agents):
         """
-            agents is a list of tuple (agent_id, option_id)
+            Agents is a list of tuple (agent_id, option_id)
             Return a dictionnary with (agent_id, option_id) as key
                 and [outstanding amount, outstanding_base_amount] as value
         """

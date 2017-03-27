@@ -40,12 +40,48 @@ class Contract:
         Commission = pool.get('commission')
         commissions = []
         options = []
+        cls.remove_unpaid_reedemed_prepayment(contracts)
         for contract in contracts:
             options.extend(list(contract.covered_element_options +
                 contract.options))
         for option in options:
             commissions.extend(option.adjust_prepayment_once_terminated())
         Commission.save(commissions)
+
+    @classmethod
+    def remove_unpaid_reedemed_prepayment(cls, contracts):
+        pool = Pool()
+        Configuration = pool.get('offered.configuration')
+        Commission = pool.get('commission')
+        configuration = Configuration.get_singleton()
+        if not configuration:
+            return
+
+        contracts = [contract for contract in contracts
+            if contract.termination_reason in
+            configuration.remove_commission_for_sub_status]
+        if not contracts:
+            return
+        options = []
+        for contract in contracts:
+            options += contract.options
+            options += contract.covered_element_options
+        commissions = Commission.search([
+                ('redeemed_prepayment', '!=', None),
+                ('redeemed_prepayment', '!=', 0),
+                ('date', '=', None),
+                ('commissioned_option', 'in', [o.id for o in options])])
+        to_delete = []
+        to_save = []
+        for commission in commissions:
+            if commission.agent.plan.delete_unpaid_prepayment:
+                to_delete.append(commission)
+            else:
+                commission.amount += commission.redeemed_prepayment
+                commission.redeemed_prepayment = None
+                to_save.append(commission)
+        Commission.delete(to_delete)
+        Commission.save(to_save)
 
     def rebill(self, start=None, end=None, post_end=None):
         super(Contract, self).rebill(start, end, post_end)

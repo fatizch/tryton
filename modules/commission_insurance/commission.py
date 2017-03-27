@@ -52,6 +52,7 @@ BASE_AMOUNT_DIGITS = 8
 
 class Commission:
     __name__ = 'commission'
+
     commissioned_contract = fields.Function(
         fields.Many2One('contract', 'Commissioned Contract'),
         'get_commissioned_contract', searcher='search_commissioned_contract')
