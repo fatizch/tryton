@@ -148,8 +148,8 @@ class JournalFailureAction:
         cls._fail_actions_order.insert(
             cls._fail_actions_order.index('retry') + 1, 'create_reject_fee')
 
-    def get_actions(self):
-        actions = super(JournalFailureAction, self).get_actions()
+    def get_actions(self, **kwargs):
+        actions = super(JournalFailureAction, self).get_actions(**kwargs)
         if self.rejected_payment_fee:
             actions.append(('create_reject_fee', None))
         return actions
