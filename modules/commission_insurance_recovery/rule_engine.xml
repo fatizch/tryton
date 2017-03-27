@@ -21,5 +21,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">re_last_paid_invoice_end_date</field>
             <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
         </record>
+        <record model="rule_engine.function" id="recovery_for_yearly_prepayment">
+            <field name="translated_technical_name">montant_reprise_sur_n_mois</field>
+            <field name="description">Montant de reprise à une date calculé sur la base d'un nombre de mois ramené
+à une année de précompte</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="fct_args">date_de_fin, nb_mois</field>
+            <field name="name">re_prorated_recovery_for_yearly_prepayments</field>
+            <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
+        </record>
     </data>
 </tryton>

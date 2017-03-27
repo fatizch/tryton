@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
+from dateutil.relativedelta import relativedelta
+
 from sql import Literal
 from sql.aggregate import Sum, Max
 
@@ -48,3 +50,35 @@ class RuleEngineRuntime:
             where=((details.option == args['option'].id))))
         res = cursor.fetchall()
         return res[0][0]
+
+    @classmethod
+    @check_args('option', 'agent', 'contract')
+    def re_prorated_recovery_for_yearly_prepayments(cls, args, at_date,
+            nb_month):
+        Agent = Pool().get('commission.agent')
+        agent = args['agent']
+        option = args['option']
+        contract = args['contract']
+        key = (agent.id, option.id)
+
+        one_year = contract.initial_start_date + relativedelta(
+            years=1, days=-1)
+
+        if at_date <= one_year:
+            # First Year: it's all prepayment
+            prepayment_amount = Agent.sum_of_commissions([key])
+            return prepayment_amount[key] * 12 / nb_month
+        else:
+            # Only use first year prepayment
+            com = Agent.commissions_until_date([key], one_year)
+            if key not in com:
+                return Decimal(0)
+            redeemed_com = com[key]['redeemed_commission']
+            commission = com[key]['commission']
+            redeemend_end_date = contract.initial_start_date + \
+                relativedelta(months=nb_month, days=-1)
+            redeemed_duration = (redeemend_end_date -
+                contract.initial_start_date).days + 1
+            option_duration = (at_date - contract.initial_start_date).days + 1
+            return (redeemed_com + commission) * (1 - option_duration /
+                Decimal(redeemed_duration))

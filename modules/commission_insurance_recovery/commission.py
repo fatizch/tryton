@@ -1,6 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from sql.aggregate import Sum
+from sql.operators import Or, Not
+
+from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 from trytond.model import Unique
 
 from trytond.modules.coog_core import fields, model, coog_string
@@ -11,6 +15,7 @@ __all__ = [
     'Plan',
     'CommissionRecoveryRule',
     'Commission',
+    'Agent',
     ]
 
 
@@ -95,3 +100,78 @@ class Commission:
             invoice_line.description = cls.raise_user_error(
                     'recovery_commission', raise_exception=False)
         return invoice_line
+
+
+class Agent:
+    __name__ = 'commission.agent'
+
+    @classmethod
+    def commissions_until_date(cls, agents, date):
+        """
+            Agents is a list of tuple (agent_id, option_id)
+            Return a dictionnary with (agent_id, option_id) as key
+            and dictionnary with sum of contract commission amount
+            without prepayment and first year commission redeemed
+            amount as value
+        """
+        if not agents:
+            return {}
+
+        commission = Pool().get('commission').__table__()
+        cursor = Transaction().connection.cursor()
+
+        constraints = []
+        result = {}
+        for agent in agents:
+            result[agent] = {
+                'commission': 0,
+                'redeemed_commission': 0
+                }
+            constraints.append((
+                    (commission.agent == agent[0]) &
+                    (commission.commissioned_option == agent[1]) &
+                    (commission.end <= date) &
+                    Not(commission.is_prepayment) &
+                    Not(commission.is_recovery)))
+
+        cursor.execute(*commission.select(commission.agent,
+                commission.commissioned_option,
+                Sum(commission.amount), Sum(commission.redeemed_prepayment),
+                where=Or(*constraints),
+                group_by=[commission.agent, commission.commissioned_option]))
+        for agent, option, com_amount, com_redeemed in cursor.fetchall():
+            result[(agent, option)] = {
+                'commission': com_amount or 0,
+                'redeemed_commission': com_redeemed or 0
+                }
+        return result
+
+    @classmethod
+    def sum_of_commissions(cls, agents):
+        """
+            Agents is a list of tuple (agent_id, option_id)
+            Return a dictionnary with (agent_id, option_id) as key
+            and sum of contract commission amount with prepayment as value
+        """
+        if not agents:
+            return {}
+
+        commission = Pool().get('commission').__table__()
+        cursor = Transaction().connection.cursor()
+
+        constraints = []
+        result = {}
+        for agent in agents:
+            result[agent] = 0
+            constraints.append((
+                    (commission.agent == agent[0]) &
+                    (commission.commissioned_option == agent[1]) &
+                    Not(commission.is_recovery)))
+
+        cursor.execute(*commission.select(commission.agent,
+                commission.commissioned_option, Sum(commission.amount),
+                where=Or(*constraints),
+                group_by=[commission.agent, commission.commissioned_option]))
+        for agent, option, com_amount in cursor.fetchall():
+            result[(agent, option)] = com_amount
+        return result
