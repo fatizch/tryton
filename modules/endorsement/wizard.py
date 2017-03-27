@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 from collections import defaultdict
+from operator import attrgetter
 from dateutil.relativedelta import relativedelta
 
 from trytond.pool import Pool, PoolMeta
@@ -1258,6 +1259,8 @@ class TerminateContract(EndorsementWizardStepMixin):
                 'must be anterior to the end date of the modified period: %s',
                 'termination_date_must_be_posterior': 'The termination date '
                 'must be posterior to the contract start date: %s',
+                'termination_before_active_start_date': 'You are trying to '
+                'terminate the contract before its active start date'
                 })
 
     @classmethod
@@ -1275,6 +1278,37 @@ class TerminateContract(EndorsementWizardStepMixin):
 
     def endorsement_values(self):
         return {'termination_reason': self.termination_reason.id}
+
+    @classmethod
+    def check_before_start(cls, select_screen):
+        super(TerminateContract, cls).check_before_start(select_screen)
+        contracts = []
+        endorsement = select_screen.endorsement
+        if endorsement:
+            contracts = [x.contract
+                for x in getattr(endorsement, 'contract_endorsements', [])]
+        elif hasattr(select_screen, 'contract'):
+            contracts = [select_screen.contract]
+        to_warn = []
+        for contract in contracts:
+            if select_screen.effective_date < contract.start_date:
+                to_warn.append(str(contract.id))
+        if to_warn:
+            warning_id = ','.join(to_warn[0:10])
+            cls.raise_user_warning(
+                'termination_before_active_start_date_%s' % warning_id,
+                'termination_before_active_start_date')
+
+    @classmethod
+    def allow_effective_date_before_contract(cls, select_screen):
+        endorsement = select_screen.endorsement
+        contracts = []
+        if endorsement:
+            contracts = [c for c in endorsement.contract_endorsements]
+        elif hasattr(endorsement, 'contract'):
+            contracts = [select_screen.contract]
+        return all([x.initial_start_date > select_screen.effective_date
+                for x in contracts])
 
     def step_default(self, name):
         pool = Pool()
@@ -1305,7 +1339,7 @@ class TerminateContract(EndorsementWizardStepMixin):
         last_period = contract.activation_history[-1]
         endorsement.values = {'end_date': self.termination_date}
 
-        if self.termination_date < contract.start_date:
+        if self.termination_date < contract.initial_start_date:
             self.raise_user_error('termination_date_must_be_posterior',
                 Date.date_as_string(contract.start_date, lang))
 
@@ -1327,12 +1361,33 @@ class TerminateContract(EndorsementWizardStepMixin):
         else:
             # No next period
             if contract.end_date == last_period.end_date:
-                endorsement.activation_history = [EndorsementActivationHistory(
-                        action='update',
-                        contract_endorsement=endorsement,
-                        activation_history=last_period,
-                        definition=self.endorsement_definition,
-                        values=self.endorsement_values())]
+                if self.termination_date < last_period.start_date:
+                    history_endorsements = []
+                    valid_activation_history = []
+                    for activation_history in contract.activation_history:
+                        if (activation_history.start_date >
+                                self.termination_date):
+                            history_endorsements.append(EndorsementActivationHistory(
+                                    action='remove',
+                                    contract_endorsement=endorsement,
+                                    activation_history=activation_history))
+                        else:
+                            valid_activation_history.append(activation_history)
+                    latest = max(valid_activation_history, key=attrgetter('start_date'))
+                    history_endorsements.append(EndorsementActivationHistory(
+                            action='update',
+                            contract_endorsement=endorsement,
+                            activation_history=latest,
+                            values=self.endorsement_values()))
+                    endorsement.activation_history = history_endorsements
+                # remove activation_history
+                else:
+                    endorsement.activation_history = [EndorsementActivationHistory(
+                            action='update',
+                            contract_endorsement=endorsement,
+                            activation_history=last_period,
+                            definition=self.endorsement_definition,
+                            values=self.endorsement_values())]
             # We have a next period, we must remove it,
             # And update the current term period
             else:
