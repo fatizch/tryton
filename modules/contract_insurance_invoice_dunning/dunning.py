@@ -128,7 +128,7 @@ class Dunning:
         res = super(Dunning, self).get_active(name)
         if not self.contract:
             return res
-        return res and self.contract.status != 'terminated'
+        return res and self.contract.status not in ('terminated', 'void')
 
     @classmethod
     def search_active(cls, name, clause):
@@ -137,10 +137,11 @@ class Dunning:
         if clause[1] in comparator:
             if clause[2] == comparator[clause[1]]:
                 domain.append(['OR', ('line.contract', '=', None),
-                    ('line.contract.status', '!=', 'terminated')])
+                        ('line.contract.status', 'not in',
+                            ('terminated', 'void'))])
             else:
                 domain = ['OR', domain, [('line.contract', '!=', None),
-                        ('line.contract.status', '=', 'terminated')]]
+                        ('line.contract.status', 'in', ('terminated', 'void'))]]
         return domain
 
 
