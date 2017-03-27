@@ -4,7 +4,7 @@
 from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If, Bool, In, And, Or
+from trytond.pyson import Eval, If, Bool, In, And, Or, Equal
 from trytond.modules.coog_core import fields
 
 from datetime import timedelta
@@ -81,7 +81,13 @@ class Loss:
                 ())
             ], depends=['end_date'])
     is_a_relapse = fields.Boolean('Is A Relapse',
-        states={'invisible': Eval('loss_desc_kind') != 'std'})
+        states={
+            'invisible': Or(Eval('loss_desc_kind') != 'std',
+                ~Eval('is_a_relapse'))}, readonly=True,
+        depends=['loss_desc_kind', 'is_a_relapse'])
+    loss_kind = fields.Function(
+        fields.Char('Loss Kind'),
+        'get_loss_kind')
 
     @classmethod
     def __setup__(cls):
@@ -104,10 +110,15 @@ class Loss:
                 'required between the relapse and the previous std'
                 })
         cls.closing_reason.states.update({
-                'required': Bool(Eval('ltd_end_date')) |
-                Bool(Eval('std_end_date'))
+                'required': If(Equal(Eval('loss_kind'), 'std'),
+                    Bool(Eval('std_end_date')),
+                    Bool(Eval('ltd_end_date')))
                 })
-        cls.closing_reason.depends.extend(['ltd_end_date', 'std_end_date'])
+        cls.closing_reason.depends.extend(['std_end_date', 'ltd_end_date',
+                'loss_kind'])
+
+    def get_loss_kind(self, name):
+        return self.loss_desc.loss_kind
 
     def get_start_end_dates(self, name):
         if 'start_date' in name:
@@ -153,6 +164,8 @@ class Loss:
         if ((self.std_end_date or self.ltd_end_date) and
                 len(self.available_closing_reasons) == 1):
             return self.available_closing_reasons[0].id
+        if not self.std_end_date and not self.ltd_end_date:
+            return None
 
     @fields.depends('claim', 'start_date')
     def on_change_with_possible_covered_persons(self, name=None):

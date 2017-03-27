@@ -149,18 +149,60 @@ class Loss:
         cls._error_messages.update({
                 'indemnized_losses': 'Some draft losses have active '
                 'indemnifications, they may have to be reevaluated:\n\n%s',
+                'missing_end_date': 'The end date is missing on the loss',
+                'missing_closing_reason': 'The closing reason is missing on the'
+                ' loss',
+                'unpaid_indemnification': '%s indemnification(s) remains '
+                'unpaid',
+                'gap_found_in_period': 'A gap has been detected from %s to %s',
+                'no_indemnifications': 'No indemnification has been found',
                 })
+
+    def check_indemnification_gaps(self, service):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        lang = pool.get('res.user')(Transaction().user).language
+        indemnifications = [x
+            for x in service.indemnifications
+            if x.status in ('scheduled', 'controlled', 'validated',
+                'rejected', 'paid')]
+        indemnifications = sorted(indemnifications, lambda x: x.start_date)
+        for index, indemn in enumerate(indemnifications[1:]):
+            previous_indemn = indemnifications[index - 1]
+            if (previous_indemn.end_date and indemn.start_date -
+                    previous_indemn.end_date > datetime.timedelta(0)):
+                self.__class__.raise_user_warning('gap_found_in_period_%s' %
+                    '-'.join([previous_indemn.id, indemn.id]),
+                    'gap_found_in_period',
+                    (Date.date_as_string(previous_indemn.end_date, lang),
+                        Date.date_as_string(indemn.start_date, lang)))
+        if indemnifications and indemn.end_date < self.end_date:
+            self.__class__.raise_user_warning('gap_found_in_period_%s' %
+                '-'.join([indemn.id, self.id]),
+                'gap_found_in_period', (
+                    Date.date_as_string(indemn.end_date, lang),
+                    Date.date_as_string(self.end_date, lang)))
 
     def close(self, sub_status, date=None):
         super(Loss, self).close(sub_status, date)
-        max_end_date = datetime.date.min
         if self.with_end_date and not self.end_date:
-            for service in self.services:
-                for indemnification in service.indemnifications:
-                    max_end_date = max(indemnification.end_date, max_end_date)
-            if max_end_date != datetime.date.min:
-                self.end_date = max_end_date
-                self.save()
+            self.__class__.raise_user_error('missing_end_date')
+        if self.with_end_date and not self.closing_reason:
+            self.__class__.raise_user_error('missing_closing_reason')
+        for service in self.services:
+            if not service.indemnifications:
+                self.__class__.raise_user_warning(
+                    'no_indemnifications_%s' % service.id,
+                    'no_indemnifications')
+                continue
+            unpaid = [x for x in service.indemnifications
+                if x.status in ('calculated', 'cancelled')]
+            if unpaid:
+                self.__class__.raise_user_error(
+                    'unpaid_indemnification', len(unpaid))
+            if not self.end_date:
+                return
+            self.check_indemnification_gaps(service)
 
     @classmethod
     def activate(cls, losses):

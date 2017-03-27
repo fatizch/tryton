@@ -28,5 +28,6 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="is_a_relapse"/>
         <field name="is_a_relapse"/>
+        <field name="loss_kind" invisible="1"/>
     </xpath>
 </data>
