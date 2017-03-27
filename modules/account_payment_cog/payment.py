@@ -78,19 +78,10 @@ class Journal(export.ExportImportMixin):
             if action.reject_reason.code == reject_code
             and action.payment_kind == kind]
         possible_actions.sort(key=lambda x: x.reject_number, reverse=True)
+        actions = []
         for action in possible_actions:
-            if (not action.reject_number or
-                    action.reject_number == payment_reject_number):
-                actions = [(action.action, )]
-                if action.report_template:
-                    actions.append(('print', action.report_template))
-                return actions
-            elif (action.reject_number and payment_reject_number >
-                    action.reject_number):
-                if action.report_template_if_exceeded:
-                    return [('manual', ),
-                        ('print', action.report_template_if_exceeded)]
-        return [('manual',)]
+            actions += action.get_actions(reject_number=payment_reject_number)
+        return actions or [('manual',)]
 
     @classmethod
     def _export_light(cls):
@@ -155,11 +146,25 @@ class JournalFailureAction(model.CoogSQL, model.CoogView):
         cls._error_messages.update({
                 'unknown_reject_reason_code': 'Unknown reject code : %s',
                 })
+        cls._fail_actions_order = ['retry', 'print']
 
     @classmethod
     def _export_light(cls):
         return super(JournalFailureAction, cls)._export_light() | {
             'reject_reason', 'rejected_payment_fee', 'report_template'}
+
+    def get_actions(self, **kwargs):
+        reject_number = kwargs.get('reject_number', 0)
+        actions = []
+        if not self.reject_number or self.reject_number == reject_number:
+            actions.append((self.action,))
+            if self.report_template:
+                actions.append(('print', self.report_template))
+        elif (self.report_template_if_exceeded and self.reject_number and
+                reject_number > self.reject_number):
+            actions += [('manual',),
+                ('print', self.report_template_if_exceeded)]
+        return actions
 
     @classmethod
     def get_rejected_payment_fee(cls, code, payment_kind='receivable'):
@@ -547,6 +552,7 @@ class Payment(export.ExportImportMixin, Printable):
         pool = Pool()
         Line = pool.get('account.move.line')
         Event = pool.get('event')
+        FailureAction = pool.get('account.payment.journal.failure_action')
         payments = [pm for pm in payments if pm.state != 'failed']
 
         super(Payment, cls).fail(payments)
@@ -570,13 +576,8 @@ class Payment(export.ExportImportMixin, Printable):
                 else:
                     actions['fail_%s' % action[0]].extend(payments_list)
 
-        for action, payments in actions.iteritems():
-            if action == 'fail_print':
-                # treat print at the end once all action are done
-                continue
-            getattr(cls, action)(payments)
-        if 'fail_print' in actions:
-            getattr(cls, 'fail_print')(actions['fail_print'])
+        for action in FailureAction._fail_actions_order:
+            getattr(cls, 'fail_%s' % action)(actions['fail_%s' % action])
 
     @classmethod
     def fail_manual(cls, payments):

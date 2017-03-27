@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
+import payment
 from .dunning import *
 from .offered import *
 from .contract import *
@@ -21,6 +22,7 @@ def register():
         MoveLine,
         EventLog,
         Invoice,
+        payment.Payment,
         DunningTreatmentBatch,
         DunningCreationBatch,
         module='contract_insurance_invoice_dunning', type_='model')

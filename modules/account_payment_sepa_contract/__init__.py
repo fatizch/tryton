@@ -17,6 +17,7 @@ def register():
         Mandate,
         Payment,
         Journal,
+        JournalFailureAction,
         PaymentCreationStart,
         EventLog,
         MergedPaymentsByContracts,

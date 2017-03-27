@@ -8,17 +8,18 @@ from trytond.transaction import Transaction
 
 from trytond.modules.account_payment_sepa_cog import MergedBySepaPartyMixin
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Mandate',
     'Payment',
     'PaymentCreationStart',
     'Journal',
+    'JournalFailureAction',
     'MergedPaymentsByContracts',
     ]
 
 
 class Payment:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment'
 
     @fields.depends('contract', 'payment_date', 'sepa_mandate')
@@ -48,7 +49,7 @@ class Payment:
         self.payer = self.on_change_with_payer()
 
     @classmethod
-    def fail(cls, payments):
+    def fail_create_reject_fee(cls, payments):
         pool = Pool()
         Invoice = pool.get('account.invoice')
         ContractInvoice = pool.get('contract.invoice')
@@ -97,10 +98,14 @@ class Payment:
         lines_to_write = []
         for i, p in zip(invoices_to_create, payment_date_to_update):
             lines_to_write += [list(i.lines_to_pay), p]
+            # Update only if payment_date is not defined. Else use contract
+            # configuration in order to set the payment date
+            for line in i.lines_to_pay:
+                if not line.payment_date:
+                    lines_to_write += [list(i.lines_to_pay), p]
+                    break
         if lines_to_write:
             MoveLine.write(*lines_to_write)
-
-        super(Payment, cls).fail(payments)
 
     @classmethod
     def get_contract_for_reject_invoice(cls, payments):
@@ -121,6 +126,7 @@ class Payment:
 
 
 class Journal:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.journal'
 
     def process_actions_when_payments_failed(self, payments):
@@ -132,12 +138,29 @@ class Journal:
                 for p in payments if p.line])
 
 
-class MergedPaymentsByContracts(MergedBySepaPartyMixin):
+class JournalFailureAction:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.payment.journal.failure_action'
 
+    @classmethod
+    def __setup__(cls):
+        super(JournalFailureAction, cls).__setup__()
+        cls._fail_actions_order.insert(
+            cls._fail_actions_order.index('retry') + 1, 'create_reject_fee')
+
+    def get_actions(self):
+        actions = super(JournalFailureAction, self).get_actions()
+        if self.rejected_payment_fee:
+            actions.append(('create_reject_fee', None))
+        return actions
+
+
+class MergedPaymentsByContracts(MergedBySepaPartyMixin):
     __name__ = 'account.payment.merged.by_contract'
 
 
 class Mandate:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.sepa.mandate'
 
     def objects_using_me_for_party(self, party=None):
@@ -160,6 +183,7 @@ class Mandate:
 
 
 class PaymentCreationStart:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.payment_creation.start'
 
     def update_available_payers(self):

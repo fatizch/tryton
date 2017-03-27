@@ -1,3 +1,4 @@
+* Manage order of reject actions
 * Allow to print merged payments when failing
 * Improve performances for payment creation wizard
 * Add payment batches chain

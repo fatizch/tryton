@@ -1,3 +1,4 @@
+* Gestion de l'ordre d'exécution des actions de rejet
 * Permettre d'imprimer des paiements regroupés à l'échec
 * Amélioration des performances de l'assistant de création des paiements
 * Ajout de la chaîne des batchs de paiement

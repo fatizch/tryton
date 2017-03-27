@@ -43,6 +43,7 @@ class JournalFailureAction:
         super(JournalFailureAction, cls).__setup__()
         manual_payment = ('move_to_manual_payment', 'Move to manual payment')
         cls.action.selection.append(manual_payment)
+        cls._fail_actions_order.insert(0, 'move_to_manual_payment')
 
 
 class Payment:
