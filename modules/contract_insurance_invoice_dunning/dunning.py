@@ -2,11 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 from itertools import groupby
-from sql import Literal, Window, Null
+from sql import Window, Null
 from sql.aggregate import Min, Max
 
 from trytond.transaction import Transaction
-from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
@@ -162,7 +161,8 @@ class Level:
             ('hold', 'Hold Contract')], 'Contract Action')
     termination_mode = fields.Selection([
             ('at_last_posted_invoice', 'At Last Posted Invoice'),
-            ('at_last_paid_invoice', 'At Last Paid Invoice')],
+            ('at_last_paid_invoice', 'At Last Paid Invoice'),
+            ('at_dunning_effective_date', 'At Dunning Effective Date')],
             'Termination Mode', depends=['contract_action'],
             states={'invisible': Eval('contract_action') != 'terminate'})
     apply_for = fields.Selection([
@@ -176,21 +176,16 @@ class Level:
 
     @classmethod
     def __register__(cls, module_name):
-        TableHandler = backend.get('TableHandler')
         cursor = Transaction().connection.cursor()
-
-        handler = TableHandler(cls, module_name)
         table = cls.__table__()
-        # Migration from 1.4
-        migrate = False
-        if handler.column_exist('skip_level_for_payment'):
-            migrate = True
+
         super(Level, cls).__register__(module_name)
-        if migrate:
-            cursor.execute(*table.update(columns=[table.apply_for],
-                    values=['manual'], where=(
-                        table.skip_level_for_payment == Literal(True))))
-            handler.drop_column('skip_level_for_payment')
+
+        # Migration from 1.10 : replace at_dunning_creation_date mode with
+        # at_dunning_effective_date
+        cursor.execute(*table.update(columns=[table.termination_mode],
+                values=['at_dunning_effective_date'],
+                where=(table.termination_mode == 'at_dunning_creation_date')))
 
     @staticmethod
     def default_termination_mode():
@@ -232,6 +227,8 @@ class Level:
             elif self.termination_mode == 'at_last_paid_invoice':
                 date = dunning.contract.last_paid_invoice_end or \
                     dunning.contract.last_posted_invoice_end
+            elif self.termination_mode == 'at_dunning_effective_date':
+                date = dunning.calculate_last_process_date()
             if (dunning.contract.termination_reason == termination_reason and
                     dunning.contract.end_date == date):
                 continue

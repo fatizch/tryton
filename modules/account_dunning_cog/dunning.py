@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from collections import defaultdict
 from operator import attrgetter
 from itertools import groupby
 
@@ -57,11 +58,22 @@ class Dunning(export.ExportImportMixin):
     @classmethod
     def process(cls, dunnings):
         cls.process_dunning_per_level(dunnings)
-        cls.write([d for d in dunnings if not d.blocked], {
-                'state': 'done',
-                'last_process_date': utils.today(),
-                })
+        update_dates = defaultdict(list)
+        for dunning in dunnings:
+            if dunning.blocked:
+                continue
+            update_dates[dunning.calculate_last_process_date()].append(
+                dunning)
+        if update_dates:
+            cls.write(*sum([
+                        [values, {'state': 'done', 'last_proces_date': date}]
+                        for date, values in update_dates.iteritems()], []))
         cls.notify_dunning_per_level(dunnings)
+
+    def calculate_last_process_date(self):
+        if not self.last_process_date or not self.level.days_from_previous_step:
+            return utils.today()
+        return self.last_process_date + self.level.overdue
 
     def get_rec_name(self, name):
         return self.level.rec_name
