@@ -14,6 +14,7 @@ import test_case
 import relationship
 import res
 import configuration
+import attachment
 
 from trytond.modules.coog_core import expand_tree
 
@@ -35,6 +36,7 @@ def register():
         relationship.RelationType,
         relationship.PartyRelation,
         relationship.PartyRelationAll,
+        attachment.Attachment,
         party.SynthesisMenuActionCloseSynthesis,
         party.SynthesisMenuActionRefreshSynthesis,
         party.SynthesisMenuContact,

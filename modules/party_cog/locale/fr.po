@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:ir.attachment:"
+msgid ""
+"Some attachments are used on interactions with the following parties:"
+"\n\n%(parties)s\n\nGoing on will break the links."
+msgstr ""
+"Certaines pièces jointes sont référencées par des communications avec les"
+"tiers suivants :\n\n%(parties)s\n\nContinuer brisera ces liens."
+
 msgctxt "error:party.contact_mechanism:"
 msgid "Invalid Email !"
 msgstr "e-Mail Invalide"
