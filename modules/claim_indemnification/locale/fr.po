@@ -15,6 +15,10 @@ msgid "Indemnifications in the future are not allowed"
 msgstr "Les indemnisations dans le futur ne sont pas autorisées"
 
 msgctxt "error:claim.create_indemnification:"
+msgid "Start date is required"
+msgstr "La date de début est requise"
+
+msgctxt "error:claim.create_indemnification:"
 msgid ""
 "The contract was terminated on the %(contract_end)s, a new indemnification "
 "cannot start on %(indemn_start)s."

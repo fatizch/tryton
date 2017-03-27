@@ -389,7 +389,6 @@ class IndemnificationDefinition(model.CoogView):
 
     start_date = fields.Date('Start Date', states={
             'invisible': ~Eval('is_period'),
-            'required': Bool(Eval('is_period', False)),
             }, depends=['is_period'])
     end_date = fields.Date('End Date', states={
             'invisible': ~Eval('is_period'),
@@ -530,7 +529,8 @@ class CreateIndemnification(Wizard):
                 'the future are not allowed',
                 'end_date_exceeds_loss': 'The end date must not exceed '
                 'the loss end date',
-                'end_date_required': 'End date is required'
+                'end_date_required': 'End date is required',
+                'start_date_required': 'Start date is required',
                 })
 
     def default_service_for_treatment(self, claim):
@@ -661,8 +661,11 @@ class CreateIndemnification(Wizard):
         input_end_date = self.definition.end_date
         ClaimService = Pool().get('claim.service')
         service = self.definition.service
-        if self.definition.is_period and not input_end_date:
-            self.raise_user_error('end_date_required')
+        if self.definition.is_period:
+            if not input_start_date:
+                self.raise_user_error('start_date_required')
+            if not input_end_date:
+                self.raise_user_error('end_date_required')
         if (input_end_date and
                 input_end_date > utils.today()):
             self.raise_user_error('end_date_future')
