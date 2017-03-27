@@ -445,6 +445,8 @@ class RelationDisplayer(PartyRelationAll, PartyRelationAllCoog):
     is_new = fields.Boolean('Is New')
     relation_endorsement = fields.Many2One('endorsement.party.relation',
         'Relation Endorsement')
+    to_remove = fields.Boolean('Remove', states={
+            'readonly': Bool(Eval('is_new', False))}, depends=['is_new'])
 
     @classmethod
     def default_is_new(cls):
@@ -550,6 +552,17 @@ class ChangePartyRelationship(EndorsementWizardStepMixin):
             for displayer in self.displayers:
                 prev_relation = displayer.previous_relation[0] if\
                     displayer.previous_relation else None
+                if displayer.to_remove and prev_relation:
+                    relation_endorsement = EndorsementRelation(
+                        action='remove',
+                        party_endorsement=party_endorsement,
+                        relationship=prev_relation,
+                        relation=prev_relation.id,
+                        definition=self.endorsement_definition
+                        )
+                    relation_endorsement.save()
+                    continue
+
                 new_values = get_save_values(displayer, prev_relation)
                 if not new_values:
                     continue
