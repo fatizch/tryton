@@ -453,11 +453,11 @@ msgstr "Conditions de paiement"
 
 msgctxt "field:claim.indemnification,possible_products:"
 msgid "Possible Products"
-msgstr "Taxes possibles"
+msgstr "Contributions possibles"
 
 msgctxt "field:claim.indemnification,product:"
 msgid "Product"
-msgstr "Taxes"
+msgstr "Contributions"
 
 msgctxt "field:claim.indemnification,rec_name:"
 msgid "Name"
@@ -477,11 +477,11 @@ msgstr "Statut"
 
 msgctxt "field:claim.indemnification,tax_amount:"
 msgid "Tax Amount"
-msgstr "Taxe"
+msgstr "Contributions"
 
 msgctxt "field:claim.indemnification,taxes_included:"
 msgid "Taxes included"
-msgstr "Taxes incluses"
+msgstr "Contributions incluses"
 
 msgctxt "field:claim.indemnification,total_amount:"
 msgid "Total Amount"
@@ -841,11 +841,11 @@ msgstr "Est périodique"
 
 msgctxt "field:claim.indemnification_definition,possible_products:"
 msgid "Possible Products"
-msgstr "Taxes possibles"
+msgstr "Contributions possibles"
 
 msgctxt "field:claim.indemnification_definition,product:"
 msgid "Product"
-msgstr "Taxes"
+msgstr "Contributions"
 
 msgctxt "field:claim.indemnification_definition,service:"
 msgid "Claim Service"
