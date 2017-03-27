@@ -1,3 +1,4 @@
+* New rule engine function to detect if an option is already subscribed
 * Add insurer delegation flags
 
 Version 1.10 - 2016-11-02

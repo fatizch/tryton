@@ -203,6 +203,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="fct_args">Code Taxe, Assiette</field>
             <field name="parent" ref="dossier_rule_combination"/>
         </record>
+        <record model="rule_engine.function" id="option_deja_souscrite">
+            <field name="translated_technical_name">option_deja_souscrite</field>
+            <field name="description">Option déjà souscrite</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_coverage_already_subscribed</field>
+            <field name="parent" ref="dossier_garantie"/>
+        </record>
     </data>
     <data noupdate="1">
         <record model="rule_engine.context-function" id="cte_default_dossier_personne_couverte">

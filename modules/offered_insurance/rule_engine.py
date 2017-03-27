@@ -2,6 +2,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import functools
+import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or
@@ -11,6 +12,7 @@ from trytond import backend
 from trytond.transaction import Transaction
 from trytond.tools import cursor_dict
 
+from trytond.modules.coog_core import utils
 from trytond.modules.rule_engine import check_args, RuleTools
 
 ###############################################################################
@@ -318,3 +320,33 @@ class RuleEngineRuntime:
     @check_args('option')
     def _re_option_code(cls, args):
         return args['option'].coverage.code
+
+    @classmethod
+    @check_args('option', 'contract')
+    def _re_coverage_already_subscribed(cls, args):
+        # This function returns True if the coverage was already subscribed by
+        # another contract, and False if the coverage was never subscribed
+        # or if this contract is the first one to subscribe it for the current
+        # subscriber.
+        date = args.get('date', utils.today())
+        contract = args['contract']
+        contracts = cls.get_all_contracts(contract.subscriber, date)
+        matches = [c.id for c in contracts for o in c.options
+            if (o.coverage == args['option'].coverage and
+                o.initial_start_date <= date and
+                (o.final_end_date or datetime.date.max) >= date)]
+        matches.sort()
+        return matches and (contract.id not in matches or
+            matches.index(contract.id) != 0)
+
+    @classmethod
+    def get_all_contracts(cls, party, at_date=None):
+        Contract = Pool().get('contract')
+        at_date = at_date if at_date else utils.today()
+        return Contract.search([('activation_history.start_date', '<=',
+            at_date),
+                ('activation_history.end_date', '>=', at_date),
+                ('status', 'not in', ('void', 'declined')),
+                ['OR',
+                    ('subscriber', '=', party),
+                    ('covered_elements.party', '=', party)]])
