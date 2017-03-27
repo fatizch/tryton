@@ -10,6 +10,6 @@ this repository contains the full copyright notices and license terms. -->
     </xpath>
     <xpath expr="/tree/field[@name='amount']" position="after">
         <field name="number"/>
+        <field name="statement" tree_invisible="1"/>
     </xpath>
-    <field name="statement" invisible="1"/>
 </data>
