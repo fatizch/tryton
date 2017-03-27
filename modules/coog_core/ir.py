@@ -3,6 +3,7 @@
 import logging
 import datetime
 import polib
+from lxml import etree
 from sql.operators import Concat
 
 from trytond import backend
@@ -44,6 +45,94 @@ __all__ = [
     'TranslationOverrideStart'
 ]
 SEPARATOR = ' / '
+
+FORM_WIDGETS = ['icon', 'many2many_selection']
+FORM_ATTRIBUTES = """
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+    xmlns="http://relaxng.org/ns/structure/1.0">
+<define name="attlist.field" combine="interleave">
+    <optional>
+        <attribute name="context_tree"/>
+    </optional>
+</define>
+<define name="attlist.field" combine="interleave">
+    <optional>
+        <attribute name="no_command">
+            <choice>
+                <value>0</value>
+                <value>1</value>
+            </choice>
+        </attribute>
+    </optional>
+</define>
+    <define name="attlist.field" combine="interleave">
+    <optional>
+        <attribute name="relation"/>
+    </optional>
+    </define>
+    <define name="attlist.field" combine="interleave">
+    <optional>
+        <attribute name="relation_field"/>
+    </optional>
+    </define>
+    <define name="attlist.field" combine="interleave">
+    <optional>
+        <attribute name="group"/>
+    </optional>
+    </define>
+    <define name="attlist.field" combine="interleave">
+    <optional>
+        <attribute name="states"/>
+    </optional>
+    </define>
+    <define name="attlist.field" combine="interleave">
+    <optional>
+        <attribute name="expand_toolbar" a:defaultValue="0">
+            <choice>
+                <value>0</value>
+              <value>1</value>
+            </choice>
+      </attribute>
+    </optional>
+    </define>
+</grammar>
+"""
+
+TREE_ATTRIBUTES = """
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+    xmlns="http://relaxng.org/ns/structure/1.0">
+  <define name="attlist.tree" combine="interleave">
+    <optional>
+      <attribute name="always_expand">
+        <choice>
+          <value>0</value>
+          <value>1</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="attlist.tree" combine="interleave">
+    <optional>
+      <attribute name="editable_open">
+        <choice>
+          <value>0</value>
+          <value>1</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="attlist.tree" combine="interleave">
+    <optional>
+      <attribute name="colors"/>
+    </optional>
+  </define>
+  <define name="attlist.button" combine="interleave">
+    <optional>
+      <attribute name="keywords"/>
+    </optional>
+  </define>
+</grammar>
+"""
 
 
 class Sequence(ExportImportMixin, model.TaggedMixin):
@@ -134,6 +223,31 @@ class DateClass:
 class View(ExportImportMixin):
     __name__ = 'ir.ui.view'
     _func_key = 'name'
+
+    @classmethod
+    def get_rng(cls, type_):
+        rng = super(View, cls).get_rng(type_)
+        key = (cls.__name__, type_, 'override')
+        cache_rng = cls._get_rng_cache.get(key, None)
+        if cache_rng is None:
+            if type_ == 'tree':
+                attributes = etree.fromstring(TREE_ATTRIBUTES)
+                for attr in attributes.iterchildren("*"):
+                    rng.append(attr)
+            elif type_ == 'form':
+                widgets = rng.xpath(
+                    '//ns:define/ns:optional/ns:attribute'
+                    '[@name="widget"]/ns:choice',
+                    namespaces={'ns': 'http://relaxng.org/ns/structure/1.0'})[0]
+                for widget_name in FORM_WIDGETS:
+                    subelem = etree.SubElement(widgets,
+                        '{http://relaxng.org/ns/structure/1.0}value')
+                    subelem.text = widget_name
+                attributes = etree.fromstring(FORM_ATTRIBUTES)
+                for attr in attributes.iterfind('*'):
+                    rng.append(attr)
+            cls._get_rng_cache.set(key, rng)
+        return rng
 
 
 class UIMenu(ExportImportMixin):
