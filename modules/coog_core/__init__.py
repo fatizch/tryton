@@ -120,6 +120,9 @@ def register():
 def cache_fields_get(pool):
     from trytond.model import Model
 
+    if hasattr(Model, '_fields_get_cache'):
+        return
+
     Model._fields_get_cache = Cache('fields_get_cache')
     fields_get_orig = Model.fields_get.__func__
 
