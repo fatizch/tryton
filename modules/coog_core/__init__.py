@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 from trytond.config import config
+from trytond.cache import Cache
 
 from .batch import *
 from .utils import *
@@ -112,3 +113,24 @@ def register():
         TranslationOverride,
         RevisionBlameWizard,
         module='coog_core', type_='wizard')
+
+    Pool.register_post_init_hooks(cache_fields_get, module='ir')
+
+
+def cache_fields_get(pool):
+    from trytond.model import Model
+
+    Model._fields_get_cache = Cache('fields_get_cache')
+    fields_get_orig = Model.fields_get.__func__
+
+    @classmethod
+    def patched_fields_get(cls, field_names=None):
+        key = (cls.__name__, set(field_names or []))
+        cached_value = cls._fields_get_cache.get(key, None)
+        if cached_value:
+            return cached_value
+        res = fields_get_orig(cls, field_names)
+        cls._fields_get_cache.set(key, res)
+        return res
+
+    Model.fields_get = patched_fields_get

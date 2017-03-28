@@ -11,7 +11,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
 from trytond.pyson import Eval, PYSONEncoder, Not, In
 from trytond.transaction import Transaction
-from trytond.model import fields as tryton_fields, ModelView
+from trytond.model import fields as tryton_fields, ModelView, Model
 from trytond.wizard import Wizard, StateView, Button, StateAction
 
 import fields
@@ -712,6 +712,7 @@ class Translation:
     def delete(cls, translations):
         if not translations:
             return
+        Model._fields_get_cache.clear()
         return super(Translation, cls).delete(translations)
 
     @classmethod
@@ -719,6 +720,7 @@ class Translation:
         # TranslationOverride wizard set target_module to '' in product mode or
         # a module name in client mode. Assign None to target_module if no info
         # in context ie TranslationOverride wizard hasn't been called.
+        Model._fields_get_cache.clear()
         target_module = Transaction().context.get('target_module', None)
         if target_module is None:
             return super(Translation, cls).write(translations, values, *args)
@@ -738,6 +740,11 @@ class Translation:
             new_args.append(new_values)
         args = list(new_args + list(args))
         super(Translation, cls).write(*args)
+
+    @classmethod
+    def create(cls, vlist):
+        Model._fields_get_cache.clear()
+        return super(Translation, cls).create(vlist)
 
     @classmethod
     def translation_export(cls, lang, module):
