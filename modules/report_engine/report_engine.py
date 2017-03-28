@@ -121,7 +121,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             ('pdf', 'Pdf'),
             ('xls95', 'xls'),
             ], 'Format for internal EDM', states={
-            'invisible': Equal(Eval('output_method'),'flat_document')},
+            'invisible': Equal(Eval('output_method'), 'flat_document')},
         depends=['output_method'],
         help="If no format is specified, the document will not be stored "
         "in the internal EDM")
@@ -389,7 +389,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             reporting_data.update({x.name_in_template: None
                     for x in self.parameters})
         functional_date = context_.get('functional_date')
-        if functional_date:
+        if functional_date and functional_date != utils.today():
             with Transaction().set_context(
                     client_defined_date=functional_date):
                 extension, data, _, report_name = ReportModel.execute(
@@ -1046,8 +1046,8 @@ class ReportCreate(Wizard):
             'model': instance.__name__,
             'doc_template': [template.id],
             'party': self.select_template.recipient.id,
-            'address': self.select_template.recipient_address.id if \
-                self.select_template.recipient_address else None,
+            'address': self.select_template.recipient_address.id
+            if self.select_template.recipient_address else None,
             'sender': sender.id if sender else None,
             'sender_address': sender_address.id if sender_address else None,
             'origin': None,
