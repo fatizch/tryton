@@ -423,7 +423,6 @@ class ClaimService:
             ClaimIndemnification.cancel_indemnification(to_cancel)
         if to_delete:
             ClaimIndemnification.delete(to_delete)
-        return to_cancel
 
     @classmethod
     @ModelView.button_action(

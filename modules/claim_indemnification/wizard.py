@@ -442,9 +442,6 @@ class IndemnificationCalculationResult(model.CoogView):
 
     indemnification = fields.One2Many('claim.indemnification', None,
         'Indemnification')
-    cancelled = fields.Many2Many(
-        'claim.indemnification', None, None, 'Cancelled',
-        states={'invisible': True})
 
 
 class IndemnificationRegularisation(model.CoogView):
@@ -582,7 +579,6 @@ class CreateIndemnification(Wizard):
             self.definition.beneficiary = indemnification.beneficiary
             self.definition.product = indemnification.product
             self.result.indemnification = [indemnification]
-            self.result.cancelled = []
             return 'result'
         else:
             return 'end'
@@ -613,6 +609,9 @@ class CreateIndemnification(Wizard):
                 month=((start_date.month - 1) // nb_month) * nb_month + 1)
             return period_start_date + relativedelta(months=nb_month, days=-1)
         return None
+
+    def get_cancelled_indemnification(self, service):
+        return [i for i in service.indemnifications if i.status == 'cancelled']
 
     def default_definition(self, name):
         result = getattr(self, 'result', None)
@@ -659,7 +658,6 @@ class CreateIndemnification(Wizard):
     def check_input(self):
         input_start_date = self.definition.start_date
         input_end_date = self.definition.end_date
-        ClaimService = Pool().get('claim.service')
         service = self.definition.service
         if self.definition.is_period:
             if not input_start_date:
@@ -676,8 +674,6 @@ class CreateIndemnification(Wizard):
                 input_end_date < input_start_date or
                 input_start_date < service.loss.start_date):
             self.raise_user_error('wrong_date')
-        return ClaimService.cancel_indemnification([service], input_start_date,
-            input_end_date)
 
     def init_indemnification(self, indemnification):
         ExtraData = Pool().get('claim.service.extra_data')
@@ -709,8 +705,11 @@ class CreateIndemnification(Wizard):
 
     def transition_calculate(self):
         pool = Pool()
+        ClaimService = pool.get('claim.service')
         Indemnification = pool.get('claim.indemnification')
-        self.result.cancelled = self.check_input()
+        self.check_input()
+        ClaimService.cancel_indemnification([self.definition.service],
+            self.definition.start_date, self.definition.end_date)
         if hasattr(self.result, 'indemnification'):
             indemnification = self.result.indemnification[0]
         else:
@@ -723,7 +722,6 @@ class CreateIndemnification(Wizard):
     def default_result(self, name):
         return {
             'indemnification': [x.id for x in self.result.indemnification],
-            'cancelled': [x.id for x in self.result.cancelled],
             }
 
     def transition_init_previous(self):
@@ -733,10 +731,12 @@ class CreateIndemnification(Wizard):
         return 'result'
 
     def transition_regularisation(self):
-        if self.result.cancelled:
+        cancelled = self.get_cancelled_indemnification(
+            self.result.indemnification[0].service)
+        if cancelled:
             self.select_regularisation.indemnification = \
                 [self.result.indemnification[0].id]
-            self.select_regularisation.cancelled = self.result.cancelled
+            self.select_regularisation.cancelled = cancelled
             return 'select_regularisation'
         return 'end'
 
@@ -745,7 +745,8 @@ class CreateIndemnification(Wizard):
         new_indemnification_amount = \
             self.result.indemnification[0].total_amount
         cancelled_amount = 0
-        for cur_indemn in self.result.cancelled:
+        for cur_indemn in self.get_cancelled_indemnification(
+                self.result.indemnification[0].service):
             cancelled_amount += cur_indemn.total_amount
         remaining_amount = new_indemnification_amount - cancelled_amount
         return {
