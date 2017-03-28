@@ -11,6 +11,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="claim.loss_view_form"/>
             <field name="name">loss_form</field>
         </record>
+        <record model="ir.ui.view" id="loss_without_service_view_form">
+            <field name="model">claim.loss</field>
+            <field name="inherit" ref="claim.loss_without_service_view_form"/>
+            <field name="name">loss_without_service_form</field>
+        </record>
         <!-- #################### -->
         <!-- # Deduction Period # -->
         <!-- #################### -->

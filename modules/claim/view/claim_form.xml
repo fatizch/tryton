@@ -24,7 +24,7 @@ this repository contains the full copyright notices and license terms. -->
     <notebook>
         <page string="Losses" id="losses">
             <field name="losses" group="multi_losses" mode="tree" view_ids="claim.loss_simple_list" xexpand="0" xfill="0"/>
-            <field name="losses" group="multi_losses" mode="form" relation="claim.loss" relation_field="claim" view_ids="claim.loss_view_form"/>
+            <field name="losses" group="multi_losses" mode="form" relation="claim.loss" relation_field="claim" view_ids="claim.loss_without_service_view_form"/>
             <field name="losses" group="multi_losses" mode="form" relation="claim.service" relation_field="loss" view_ids="claim.claim_service_view_form"/>
         </page>
     </notebook>
