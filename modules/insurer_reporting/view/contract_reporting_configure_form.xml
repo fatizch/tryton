@@ -7,4 +7,7 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <label name="template"/>
     <field name="template" widget="selection"/>
+    <newline/>
+    <label name="at_date"/>
+    <field name="at_date"/>
 </form>

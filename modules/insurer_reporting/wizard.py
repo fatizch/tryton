@@ -1,7 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
+
 from trytond.pool import Pool
 from trytond.wizard import StateView, Button
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import model, fields
 
@@ -21,6 +24,7 @@ class InsurerReportContractConfigure(model.CoogView):
     template = fields.Many2One('report.template', 'Template', required=True,
         domain=[('kind', 'in', ('insurer_report_contract',
                     'insurer_report_covered'))])
+    at_date = fields.Date('Date', required=True)
 
 
 class InsurerReportResult(model.CoogView):
@@ -50,15 +54,20 @@ class InsurerReportContract(model.CoogWizard):
         pool = Pool()
         Contract = pool.get('contract')
         insurer = self.configure_report.insurer
+        max_date = datetime.datetime.combine(self.configure_report.at_date,
+            datetime.datetime.max.time())
         all_contracts = Contract.search([
+                ('create_date', '<=', max_date),
                 ('status', 'not in', ('quote', 'declined')),
                 ['OR',
                     ('covered_elements.options.coverage.insurer', '=',
                         insurer),
                     ('options.coverage.insurer', '=', insurer)]])
         template = self.configure_report.template
-        _, attachments = template.produce_reports(all_contracts,
-            {'origin': insurer, 'resource': insurer})
+        with Transaction().set_context(
+                reporting_date=max_date):
+            _, attachments = template.produce_reports(all_contracts,
+                {'origin': insurer, 'resource': insurer})
         return {
             'reports': [x.id for x in attachments],
             }
