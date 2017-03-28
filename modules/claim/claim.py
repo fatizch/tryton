@@ -483,7 +483,7 @@ class Loss(model.CoogSQL, model.CoogView):
             self.event_desc = None
         self.end_date = self.end_date if self.end_date else None
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         pool = Pool()
         Lang = pool.get('ir.lang')
         lang = Transaction().language
@@ -783,7 +783,7 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
             for x in fnames if not getattr(delegation, x)]
         return ', '.join(values)
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         if self.benefit:
             return self.benefit.rec_name
         return super(ClaimService, self).get_rec_name(name)

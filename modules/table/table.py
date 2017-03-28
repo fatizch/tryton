@@ -779,7 +779,7 @@ class TableCell(ModelSQL, ModelView):
             return
         return self._load_value(self.value, self.definition.type_)
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         if self.definition:
             return str(self.get_value_with_type())
         return super(TableCell, self).get_rec_name(name)

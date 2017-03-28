@@ -43,7 +43,7 @@ class Zip:
     def default_line5(cls):
         return ''
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         base = super(Zip, self).get_rec_name(None)
         if not self.line5:
             return base

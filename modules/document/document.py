@@ -212,7 +212,7 @@ class DocumentReception(model.CoogSQL, model.CoogView):
         if self.attachment and self.attachment.document_desc:
             return self.attachment.document_desc.id
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         if self.attachments:
             return self.attachments[0].rec_name
         if self.attachment:

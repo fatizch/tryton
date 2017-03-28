@@ -141,7 +141,7 @@ class Loss:
             self.return_to_work_date = date
             self.save()
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         res = super(Loss, self).get_rec_name(name)
         if self.is_a_relapse:
             res = '%s (%s)' % (res, self.raise_user_error('relapse',

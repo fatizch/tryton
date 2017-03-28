@@ -439,7 +439,7 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
     def getter_void(self, name):
         pass
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         return super(CoogSQL, self).get_rec_name(name)
 
 

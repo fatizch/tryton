@@ -51,7 +51,7 @@ class Zip(export.ExportImportMixin):
 
         super(Zip, cls).__register__(module_name)
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         return '%s %s' % (self.zip, self.city)
 
     @classmethod

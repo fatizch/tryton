@@ -37,7 +37,7 @@ class HealthLoss(model.CoogSQL, model.CoogView):
     def get_func_key(self, name):
         return ''
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         return '[%s] ' % self.act_date + self.covered_person.full_name
 
     @classmethod

@@ -85,7 +85,7 @@ class DistributionNetwork(model.CoogSQL, model.CoogView):
             return self.code
         return coog_string.slugify(self.name)
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         if self.code:
             return '[%s] %s' % (self.code, self.full_name)
         else:

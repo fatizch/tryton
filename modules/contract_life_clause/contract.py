@@ -209,7 +209,7 @@ class Beneficiary(model.CoogSQL, model.CoogView):
     def on_change_with_rec_name(self, name=None):
         return self.get_rec_name(name)
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         if self.party:
             return self.party.full_name
         else:

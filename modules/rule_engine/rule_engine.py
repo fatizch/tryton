@@ -1386,7 +1386,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         result += ['Decimal', 'relativedelta', 'datetime']
         return result
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         return self.name
 
     def get_extra_data(self, name):

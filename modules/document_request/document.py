@@ -182,7 +182,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     def on_change_with_reception_date(self, name=None):
         return self.reception_date if self.reception_date else utils.today()
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         return self.document_desc.name if self.document_desc else ''
 
     @classmethod

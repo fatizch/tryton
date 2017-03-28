@@ -36,7 +36,7 @@ class ServiceMixin(model.CoogView):
             'readonly': True,
             })
 
-    def get_rec_name(self, name=None):
+    def get_rec_name(self, name):
         if self.option:
             res = self.option.get_rec_name(name)
         else:
