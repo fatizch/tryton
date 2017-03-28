@@ -9,6 +9,7 @@ from trytond.model import Workflow, Unique
 from trytond.pyson import Eval, Bool, Equal
 
 from trytond.modules.coog_core import model, fields
+from trytond.modules.report_engine import Printable
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -27,7 +28,7 @@ class Configuration:
         fields.Many2One('ir.sequence', 'Endorsement Set Number Sequence'))
 
 
-class EndorsementSet(model.CoogSQL, model.CoogView):
+class EndorsementSet(model.CoogSQL, model.CoogView, Printable):
     'Endorsement Set'
 
     __name__ = 'endorsement.set'
@@ -206,6 +207,11 @@ class EndorsementSet(model.CoogSQL, model.CoogView):
                         endorsement.effective_date != value)],
                 {'effective_date': value}]
         Endorsement.write(*to_write)
+
+    def get_report_functional_date(self, event_code):
+        if event_code == 'apply_endorsement_set':
+            return self.effective_date
+        return super(Endorsement, self).get_report_functional_date(event_code)
 
 
 class Endorsement:
