@@ -278,7 +278,8 @@ class Invoice:
         if not self.contract or not self.contract_invoice or not line:
             return line
         line.contract = self.contract.id
-        contract_revision_date = max(line.maturity_date, utils.today())
+        contract_revision_date = max(line.maturity_date,
+            utils.today(), self.contract.initial_start_date or utils.today())
         with Transaction().set_context(
                 contract_revision_date=contract_revision_date):
             self.update_move_line_from_billing_information(line,
