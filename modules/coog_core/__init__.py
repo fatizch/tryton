@@ -127,12 +127,12 @@ def cache_fields_get(pool):
     fields_get_orig = Model.fields_get.__func__
 
     @classmethod
-    def patched_fields_get(cls, field_names=None):
-        key = freeze((cls.__name__, set(field_names or [])))
+    def patched_fields_get(cls, fields_names=None):
+        key = freeze((cls.__name__, set(fields_names or [])))
         cached_value = cls._fields_get_cache.get(key, None)
         if cached_value:
             return cached_value
-        res = fields_get_orig(cls, field_names)
+        res = fields_get_orig(cls, fields_names)
         cls._fields_get_cache.set(key, res)
         return res
 
