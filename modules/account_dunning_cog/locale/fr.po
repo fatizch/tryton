@@ -22,6 +22,10 @@ msgctxt "field:account.dunning.create,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:account.dunning.level,days:"
+msgid "Days"
+msgstr "Jours"
+
 msgctxt "field:account.dunning.level,days_from_previous_step:"
 msgid "Days Defined From Previous Step"
 msgstr "Jours définis par rapport au précédent niveau"

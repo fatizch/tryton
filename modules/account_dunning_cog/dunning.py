@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
 from collections import defaultdict
 from operator import attrgetter
 from itertools import groupby
@@ -89,6 +90,8 @@ class Level(export.ExportImportMixin):
         help='Days are defined based on the previous level execution date')
     not_mandatory = fields.Boolean('Level Not Mandatory',
         help='If an higher level can be processed, this step will be skipped')
+    days = fields.Function(fields.Integer('Days'), 'on_change_with_days',
+        'set_days')
 
     def get_rec_name(self, name):
         return '%s@%s' % (self.name, self.procedure.rec_name)
@@ -114,6 +117,15 @@ class Level(export.ExportImportMixin):
         if len(self.procedure.levels) > level_index + 1:
             return not self.procedure.levels[level_index + 1].test(line, date)
         return res
+
+    @fields.depends('overdue')
+    def on_change_with_days(self, name=None):
+        return self.overdue.days if self.overdue is not None else None
+
+    @classmethod
+    def set_days(cls, levels, name, value):
+        cls.write(levels, {'overdue': datetime.timedelta(value)
+                if value is not None else None})
 
 
 class Procedure(export.ExportImportMixin):
