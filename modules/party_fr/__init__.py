@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import logging
+
 from sql.operators import Concat
 from sql.conditionals import Coalesce
 
@@ -21,11 +23,16 @@ def register():
         module='party')
 
 
-def migrate_1_10_include_line3_in_street(pool):
+def migrate_1_10_include_line3_in_street(pool, update):
+    if update != 'party':
+        return
+
     from trytond import backend
     from trytond.transaction import Transaction
     from trytond.modules.party import Address
 
+    logging.getLogger('modules').info('Running post init hook %s' %
+        'migrate_1_10_include_line3_in_street')
     previous_register = Address.__register__.im_func
 
     @classmethod

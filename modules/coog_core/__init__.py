@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import logging
+
 from trytond.pool import Pool
 from trytond.config import config
 from trytond.cache import Cache, freeze
@@ -117,12 +119,14 @@ def register():
     Pool.register_post_init_hooks(cache_fields_get, module='ir')
 
 
-def cache_fields_get(pool):
+def cache_fields_get(pool, update):
     from trytond.model import Model
 
     if hasattr(Model, '_fields_get_cache'):
         return
 
+    logging.getLogger('modules').info('Running post init hook %s' %
+        'cache_fields_get')
     Model._fields_get_cache = Cache('fields_get_cache')
     fields_get_orig = Model.fields_get.__func__
 
