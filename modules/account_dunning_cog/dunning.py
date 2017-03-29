@@ -66,7 +66,7 @@ class Dunning(export.ExportImportMixin):
                 dunning)
         if update_dates:
             cls.write(*sum([
-                        [values, {'state': 'done', 'last_proces_date': date}]
+                        [values, {'state': 'done', 'last_process_date': date}]
                         for date, values in update_dates.iteritems()], []))
         cls.notify_dunning_per_level(dunnings)
 
