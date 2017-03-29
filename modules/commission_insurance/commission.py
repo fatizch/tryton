@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 from dateutil import rrule
+from decimal import Decimal
 
 from sql import Cast, Literal
 from sql.operators import Concat
@@ -164,7 +165,7 @@ class Commission:
     def get_base_amount(self, name):
         if self.amount and self.commission_rate:
             return self.amount / self.commission_rate
-        return 0
+        return Decimal(0)
 
     @classmethod
     def search_commissioned_contract(cls, name, clause):
