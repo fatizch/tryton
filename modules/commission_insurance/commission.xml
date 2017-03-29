@@ -149,6 +149,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_commission_aggregated_form_relate">
             <field name="name">Aggregated commissions</field>
             <field name="res_model">commission.aggregated</field>
+            <field name="domain" eval=""/>
         </record>
         <record model="ir.action.wizard" id="act_commission_aggregated_relate_details">
             <field name="name">Filtering wizard</field>
