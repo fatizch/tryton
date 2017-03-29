@@ -20,10 +20,9 @@ coog_module_update() { # install / update modules - [modules] - default: all
                 modules=$*
         fi
         coog_server_clearcache
-        trytond-admin -v \
-                -c $COOG_CONF_SRV \
-                -d $DB_NAME \
-                -u $modules
+        local args; args="-v -c $COOG_CONF_SRV -d $DB_NAME -u $modules"
+        [ ! -z "$COOG_CONF_LOG" ] && args="$args --logconf $COOG_CONF_LOG"
+        trytond-admin $args
 }
 
 coog_module_check() { # check if module is installed - <module>
