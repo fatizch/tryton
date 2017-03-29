@@ -67,8 +67,10 @@ class Commission:
         insurer = key['insurer']
         if key['type'].startswith('out'):
             payment_term = insurer.party.customer_payment_term
+            account = insurer.party.account_receivable
         else:
             payment_term = insurer.party.supplier_payment_term
+            account = insurer.party.account_payable
         return Invoice(
             company=key['company'],
             type=key['type'],
@@ -76,7 +78,7 @@ class Commission:
             party=insurer.party,
             invoice_address=insurer.party.address_get(type='invoice'),
             currency=key['currency'],
-            account=key['account'],
+            account=account,
             payment_term=payment_term,
             business_kind='wholesale_invoice')
 
