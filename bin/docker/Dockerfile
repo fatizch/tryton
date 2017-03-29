@@ -3,6 +3,7 @@ MAINTAINER Coopengo <support@coopengo.com>
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         gcc \
+        vim \
         libpq-dev \
         libldap2-dev \
         libsasl2-dev \
