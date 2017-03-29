@@ -8,7 +8,7 @@ msgstr "Le code doit être unique"
 
 msgctxt "field:benefit.loss.description,deduction_period_kinds:"
 msgid "Deduction Period Kinds"
-msgstr "Types de périodes de déduction"
+msgstr "Types de prestation annexe"
 
 msgctxt "field:benefit.loss.description-deduction_period_kind,create_date:"
 msgid "Create Date"
@@ -25,7 +25,7 @@ msgstr "Créé par"
 msgctxt ""
 "field:benefit.loss.description-deduction_period_kind,deduction_period_kind:"
 msgid "Deduction Period Kind"
-msgstr "Type de période de déduction"
+msgstr "Type de prestation annexe"
 
 msgctxt "field:benefit.loss.description-deduction_period_kind,id:"
 msgid "ID"
@@ -93,19 +93,19 @@ msgstr "Identifiant XML"
 
 msgctxt "field:claim.indemnification_definition,deduction_period_kinds:"
 msgid "Deduction Kinds"
-msgstr "Types de déduction"
+msgstr "Types de prestation annexe"
 
 msgctxt "field:claim.indemnification_definition,deduction_periods:"
 msgid "Future Deduction Periods"
-msgstr "Futures périodes de déduction"
+msgstr "Futures prestations annexes"
 
 msgctxt "field:claim.loss,deduction_kinds:"
 msgid "Deduction Kinds"
-msgstr "Types de déduction"
+msgstr "Types de prestation annexe"
 
 msgctxt "field:claim.loss,deduction_periods:"
 msgid "Deduction Periods"
-msgstr "Périodes de déduction"
+msgstr "Prestations annexes"
 
 msgctxt "field:claim.loss.deduction.period,amount_kind:"
 msgid "Amount Kind"
@@ -145,7 +145,7 @@ msgstr "Montant par jour"
 
 msgctxt "field:claim.loss.deduction.period,deduction_kind:"
 msgid "Deduction Kind"
-msgstr "Type de déduction"
+msgstr "Type de prestation annexe"
 
 msgctxt "field:claim.loss.deduction.period,end_date:"
 msgid "End Date"
@@ -185,23 +185,23 @@ msgstr "Identifiant XML"
 
 msgctxt "model:benefit.loss.description-deduction_period_kind,name:"
 msgid "Loss Description to Deduction Period Kind Relation"
-msgstr "Relation Descripteur de préjudice - Type de période de déduction"
+msgstr "Relation Descripteur de préjudice - Type de prestation annexe"
 
 msgctxt "model:benefit.loss.description.deduction_period_kind,name:"
 msgid "Deduction Period Kind"
-msgstr "Type de période de déduction"
+msgstr "Type de prestation annexe"
 
 msgctxt "model:claim.loss.deduction.period,name:"
 msgid "Deduction Period"
-msgstr "Période de déduction"
+msgstr "Prestations annexes"
 
 msgctxt "model:ir.action,name:act_deduction_period_kind"
 msgid "Deduction Period Kind"
-msgstr "Type de période de déduction"
+msgstr "Type de prestation annexe"
 
 msgctxt "model:ir.ui.menu,name:menu_deduction_period_kind"
 msgid "Deduction Period Kind"
-msgstr "Type de période de déduction"
+msgstr "Type de prestation annexe"
 
 msgctxt "selection:claim.loss.deduction.period,amount_kind:"
 msgid "Per Day"
@@ -213,12 +213,12 @@ msgstr "Total"
 
 msgctxt "view:benefit.loss.description.deduction_period_kind:"
 msgid "Deduction Period Kind"
-msgstr "Type de période de déduction"
+msgstr "Type de prestation annexe"
 
 msgctxt "view:benefit.loss.description.deduction_period_kind:"
 msgid "Deduction Period Kinds"
-msgstr "Types de périodes de déduction"
+msgstr "Types de prestation annexe"
 
 msgctxt "view:claim.loss.deduction.period:"
 msgid "Deduction Periods"
-msgstr "Périodes de déduction"
+msgstr "Prestations annexes"
