@@ -44,7 +44,8 @@ _STATES = {
     }
 _DEPENDS = ['status']
 _CONTRACT_STATUS_STATES = {
-    'readonly': Eval('contract_status') != 'quote',
+    'readonly': Bool(Eval('contract_status')) & (
+        Eval('contract_status') != 'quote'),
     }
 _CONTRACT_STATUS_DEPENDS = ['contract_status']
 _STATUSES_WITH_SUBSTATUS = ['void', 'terminated', 'declined', 'hold']

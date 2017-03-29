@@ -3,7 +3,7 @@
 import datetime
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, And
+from trytond.pyson import Eval, And, Bool
 from trytond.transaction import Transaction
 from trytond import backend
 
@@ -76,7 +76,9 @@ class ContractBillingInformation:
             'invisible': ~Eval('direct_debit'),
             'required': And(Eval('direct_debit', False),
                 (Eval('_parent_contract', {}).get('status', '') == 'active')),
-            'readonly': Eval('contract_status') != 'quote',
+            'readonly': Bool(Eval('contract_status')) & (
+                    Eval('contract_status') != 'quote'),
+
             }, domain=[
             ('account_number.account', '=', Eval('direct_debit_account'))],
         depends=['direct_debit', 'direct_debit_account', 'contract_status'],

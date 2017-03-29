@@ -1532,7 +1532,8 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
             'required': And(Eval('direct_debit', False),
                 (Eval('_parent_contract', {}).get('status', '') == 'active')),
             'invisible': Len(Eval('possible_payment_terms', [])) < 2,
-            'readonly': Eval('contract_status') != 'quote',
+            'readonly': Bool(Eval('contract_status')) & (
+                Eval('contract_status') != 'quote'),
             },
         domain=[('id', 'in', Eval('possible_payment_terms'))],
         depends=['possible_payment_terms', 'contract_status'])
@@ -1546,7 +1547,8 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
                 'required': And(Eval('direct_debit', False),
                     (Eval('_parent_contract', {}).get('status', '') ==
                         'active')),
-                'readonly': Eval('contract_status') != 'quote',
+                'readonly': Bool(Eval('contract_status')) & (
+                    Eval('contract_status') != 'quote'),
                 }, sort=False,
             depends=['direct_debit', 'direct_debit_day', 'contract_status']),
         'get_direct_debit_day_selector', 'setter_void')
@@ -1555,7 +1557,8 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
     direct_debit_account = fields.Many2One('bank.account',
         'Direct Debit Account', states={
             'invisible': ~Eval('direct_debit'),
-            'readonly': Eval('contract_status') != 'quote',
+            'readonly': Bool(Eval('contract_status')) & (
+                Eval('contract_status') != 'quote'),
             }, depends=['direct_debit', 'contract_status'],
         ondelete='RESTRICT')
     possible_payment_terms = fields.Function(fields.One2Many(
@@ -1569,7 +1572,9 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
             'required': And(Bool(Eval('direct_debit', False)),
                 (Eval('_parent_contract', {}).get('status', '') ==
                     'active')),
-            'readonly': Eval('contract_status') != 'quote',
+            'readonly': Bool(Eval('contract_status')) & (
+                    Eval('contract_status') != 'quote'),
+
             }, depends=['direct_debit', 'contract_status'], ondelete='RESTRICT')
     suspended = fields.Function(fields.Boolean('Suspended'),
         'get_suspended')
@@ -1790,7 +1795,9 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
 
     @fields.depends('contract')
     def on_change_with_contract_status(self, name=None):
-        return self.contract.status if self.contract else ''
+        # Fake billing information could be displayed in endorsement so
+        # we need to check if this is a real billing information
+        return self.contract.status if self.contract and self.id > 0 else ''
 
     def get_direct_debit_planned_date(self, line):
         pool = Pool()
