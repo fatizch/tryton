@@ -2064,7 +2064,9 @@ class ContractInvoice(model.CoogSQL, model.CoogView):
             billing_info = self.contract.billing_information
             return billing_info.get_direct_debit_planned_date({
                     'maturity_date': self.invoice.start or datetime.date.min,
-                    'contract': self.contract})
+                    'party': billing_info.payer,
+                    'contract': self.contract,
+                    })
 
     @classmethod
     def search_invoice_state(cls, name, domain):
