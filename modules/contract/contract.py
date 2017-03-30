@@ -1336,6 +1336,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             if coverage.subscription_behaviour != 'optional':
                 options.append(Option.new_option_from_coverage(
                     coverage, self.product, self.start_date))
+                options[-1].contract = self
         self.options = options
 
     def get_currency(self):
