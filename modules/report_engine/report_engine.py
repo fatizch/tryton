@@ -115,14 +115,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     kind = fields.Selection('get_possible_kinds', 'Kind')
     output_kind = fields.Selection('get_possible_output_kinds',
         'Output kind', required=True)
-    format_for_internal_edm = fields.Selection([
-            ('', ''),
-            ('original', 'Original'),
-            ('pdf', 'Pdf'),
-            ('xls95', 'xls'),
-            ], 'Format for internal EDM', states={
-            'invisible': Equal(Eval('output_method'), 'flat_document')},
-        depends=['output_method'],
+    format_for_internal_edm = fields.Selection('get_available_formats',
+        'Format for internal EDM',
         help="If no format is specified, the document will not be stored "
         "in the internal EDM")
     document_desc = fields.Many2One('document.description',
@@ -165,6 +159,9 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 'output_method_open_document': 'Open Document',
                 'output_method_flat_document': 'Flat Document',
                 'output_kind_from_model': 'From File',
+                'format_original': 'Original',
+                'format_pdf': 'Pdf',
+                'format_xls': 'xls',
                 })
 
     @classmethod
@@ -229,6 +226,27 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             ('flat_document',
                 self.raise_user_error('output_method_flat_document',
                     raise_exception=False))]
+
+    @fields.depends('output_method')
+    def get_available_formats(self):
+        available_format = [
+            ('', ''),
+            ]
+        if self.output_method == 'open_document':
+            available_format += [
+                ('original', self.__class__.raise_user_error(
+                        'format_original', raise_exception=False)),
+                ('pdf', self.__class__.raise_user_error(
+                        'format_pdf', raise_exception=False)),
+                ('xls95', self.__class__.raise_user_error(
+                        'format_xls', raise_exception=False)),
+            ]
+        elif self.output_method == 'flat_document':
+            available_format += [
+                ('original', self.__class__.raise_user_error(
+                        'format_original', raise_exception=False)),
+                ]
+        return available_format
 
     @classmethod
     def search(cls, domain, *args, **kwargs):

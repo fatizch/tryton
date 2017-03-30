@@ -764,19 +764,15 @@ msgctxt "selection:event.type.action,treatment_kind:"
 msgid "Synchronous"
 msgstr "Synchrone"
 
-msgctxt "selection:report.template,format_for_internal_edm:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:report.template,format_for_internal_edm:"
+msgctxt "error:report.template:"
 msgid "Original"
 msgstr "Originel"
 
-msgctxt "selection:report.template,format_for_internal_edm:"
-msgid "Pdf"
+msgctxt "error:report.template:"
+msgid "pdf"
 msgstr "Pdf"
 
-msgctxt "selection:report.template,format_for_internal_edm:"
+msgctxt "error:report.template:"
 msgid "xls"
 msgstr "xls"
 
