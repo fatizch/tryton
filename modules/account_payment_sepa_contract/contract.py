@@ -5,7 +5,6 @@ import datetime
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, And, Bool
 from trytond.transaction import Transaction
-from trytond import backend
 
 from trytond.modules.coog_core import fields, utils
 
@@ -83,51 +82,6 @@ class ContractBillingInformation:
             ('account_number.account', '=', Eval('direct_debit_account'))],
         depends=['direct_debit', 'direct_debit_account', 'contract_status'],
         ondelete='RESTRICT')
-
-    @classmethod
-    def __register__(cls, module_name):
-        pool = Pool()
-        migrate = False
-        TableHandler = backend.get('TableHandler')
-        cursor = Transaction().connection.cursor()
-
-        the_table = TableHandler(cls, module_name)
-        Contract = pool.get('contract')
-        contract_table = TableHandler(Contract, module_name)
-        if (not the_table.column_exist('sepa_mandate') and
-                contract_table.column_exist('sepa_mandate')):
-            migrate = True
-
-        super(ContractBillingInformation, cls).__register__(module_name)
-
-        # Migration from 1.1: Billing change
-        if migrate:
-            cursor.execute("update contract_billing_information "
-                "set sepa_mandate = c.sepa_mandate "
-                "from contract_billing_information as b, "
-                "contract as c where b.contract = c.id")
-
-    @classmethod
-    def _migrate_payer(cls):
-        # Migrate from 1.8: Add payer
-        # override behavior defined in contract_insurance_invoice
-        # module to migrate payer from SEPA mandate
-        pool = Pool()
-        cursor = Transaction().connection.cursor()
-        Mandate = pool.get('account.payment.sepa.mandate')
-        sepa_mandate = Mandate.__table__()
-        contract_billing = pool.get('contract.billing_information').__table__()
-
-        update_data = contract_billing.join(sepa_mandate, condition=(
-                contract_billing.sepa_mandate == sepa_mandate.id)
-            ).select(contract_billing.id.as_('billing_info'),
-                sepa_mandate.party)
-
-        cursor.execute(*contract_billing.update(
-                columns=[contract_billing.payer],
-                values=[update_data.party],
-                from_=[update_data],
-                where=(contract_billing.id == update_data.billing_info)))
 
     @classmethod
     def _export_light(cls):
