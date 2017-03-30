@@ -36,6 +36,10 @@ def migrate_1_8_add_payer_from_mandate(pool, update):
     # module to migrate payer from SEPA mandate
     if update != 'contract_insurance_invoice':
         return
+    if pool.get('ir.module').search([('name', '=',
+                    'account_payment_sepa_contract')])[0].state not in (
+            'activated', 'to activate', 'to upgrade'):
+        return
 
     from trytond.transaction import Transaction
     from trytond.modules.contract_insurance_invoice.contract import \
