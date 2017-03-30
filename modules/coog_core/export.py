@@ -559,13 +559,14 @@ class ExportImportMixin(Historizable):
     def decode_binary_data(cls, values):
         for fname in cls._export_binary_fields:
             if fname in values:
-                values[fname] = base64.b64decode(values[fname])
+                if values[fname]:
+                    values[fname] = base64.b64decode(values[fname])
 
     def encode_binary_data(self, new_values, configuration):
         for fname in self._export_binary_fields:
             val = getattr(self, fname, None)
             if not configuration and val or fname in new_values:
-                new_values[fname] = base64.b64encode(val)
+                new_values[fname] = base64.b64encode(val) if val else val
 
 
 class FileSelector(ModelView):
