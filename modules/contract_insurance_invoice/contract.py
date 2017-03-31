@@ -66,7 +66,8 @@ class CustomRrule(object):
         which are not (yet) properly handled by `rrule`.
         See `premium._get_rrule` for more informations.
     '''
-    def __init__(self, start, interval, end=None, base_date=None):
+    def __init__(self, start, interval, end=None, base_date=None,
+            follow_end_of_month=True):
         assert start
         assert interval
         assert base_date is None or base_date <= start
@@ -75,6 +76,7 @@ class CustomRrule(object):
         self._start = start
         self._end = end
         self._iter_pos = None
+        self._follow_end_of_month = follow_end_of_month
         self.set_base_iter_pos()
 
     def set_base_iter_pos(self):
@@ -86,7 +88,7 @@ class CustomRrule(object):
             self._base_iter_pos += 1
             date = coog_date.add_month(self._base_date,
                 self._interval * self._base_iter_pos,
-                stick_to_end_of_month=True)
+                stick_to_end_of_month=self._follow_end_of_month)
         self._base_iter_pos -= 1
 
     def __iter__(self):
@@ -95,7 +97,8 @@ class CustomRrule(object):
 
     def next(self):
         date = coog_date.add_month(self._base_date,
-            self._interval * self._iter_pos, stick_to_end_of_month=True)
+            self._interval * self._iter_pos,
+            stick_to_end_of_month=self._follow_end_of_month)
         if self._end and self._end < date:
             raise StopIteration
         self._iter_pos += 1
@@ -120,7 +123,7 @@ class CustomRrule(object):
                 result.append(datetime.datetime.combine(cur_date,
                         datetime.time()))
             cur_date = coog_date.add_month(self._base_date, self._interval * i,
-                stick_to_end_of_month=True)
+                stick_to_end_of_month=self._follow_end_of_month)
             i += 1
         return result
 
@@ -131,11 +134,12 @@ class CustomRrule(object):
         if date < self._base_date:
             return self.after(self._start)
         cur_date = coog_date.add_month(self._base_date,
-            self._interval * self._base_iter_pos, stick_to_end_of_month=True)
+            self._interval * self._base_iter_pos,
+            stick_to_end_of_month=self._follow_end_of_month)
         i = self._base_iter_pos + 1
         while cur_date <= date:
             cur_date = coog_date.add_month(self._base_date, self._interval * i,
-                stick_to_end_of_month=True)
+                stick_to_end_of_month=self._follow_end_of_month)
             i += 1
         return datetime.datetime.combine(cur_date, datetime.time())
 
@@ -1859,8 +1863,11 @@ class Premium:
     def get_description(self):
         return getattr(self.parent, 'full_name', self.parent.rec_name)
 
-    def _custom_rrule(self, interval):
-        return CustomRrule(self.start, interval)
+    def _custom_rrule(self, start, interval):
+        if ((self.main_contract.start_date + relativedelta(days=1)).month !=
+                self.main_contract.start_date.month):
+            return CustomRrule(start, interval)
+        return CustomRrule(start, interval, follow_end_of_month=False)
 
     def _get_rrule(self, start):
         if self.frequency in ('monthly', 'quarterly', 'half_yearly'):
@@ -1877,7 +1884,7 @@ class Premium:
             # https://github.com/dateutil/dateutil/issues/285
             # In the meantime, we use a CustomRrule to manage those edge cases.
             if start.day in (28, 29, 30, 31):
-                return self._custom_rrule(interval)
+                return self._custom_rrule(start, interval)
         elif self.frequency == 'yearly':
             freq = DAILY
             # Get current year contract start_date

@@ -226,6 +226,33 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 ):
             self.assertEqual(premium_prorated.get_amount(*period), amount)
 
+        # This case is special. Since the contract starts on the 30th of March,
+        # we assume that a premium going from the 30th April to the 29th May is
+        # a full month, even though the standard "follow end of month" would
+        # make it a month minus one day.
+        # The second test sets the contract's start date to 28th February. In
+        # that case, we apply the end month following rule, so the same premium
+        # from the 30th April to 29th May is not a full month.
+        premium_worst_sync = self.Premium(
+            start=date(2017, 4, 30),
+            frequency='monthly',
+            amount=Decimal(30),
+            main_contract=contract,
+            )
+        contract.start_date = date(2017, 3, 30)
+        for period, amount in (
+                ((date(2017, 4, 30), date(2017, 5, 29)), Decimal(30)),
+                ((date(2017, 5, 30), date(2017, 6, 29)), Decimal(30)),
+                ):
+            self.assertEqual(premium_worst_sync.get_amount(*period), amount)
+        premium_worst_sync.amount = Decimal(31)
+        contract.start_date = date(2017, 2, 28)
+        for period, amount in (
+                ((date(2017, 4, 30), date(2017, 5, 29)), Decimal(30)),
+                ((date(2017, 5, 30), date(2017, 6, 29)), Decimal(31)),
+                ):
+            self.assertEqual(premium_worst_sync.get_amount(*period), amount)
+
     @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
     def test_contract_get_invoice_periods(self):
         'Test Contract get_invoice_periods'
