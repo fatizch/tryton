@@ -166,7 +166,7 @@ class Loss:
             for x in service.indemnifications
             if x.status in ('scheduled', 'controlled', 'validated',
                 'rejected', 'paid')]
-        indemnifications = sorted(indemnifications, lambda x: x.start_date)
+        indemnifications = sorted(indemnifications, key=lambda x: x.start_date)
         indemn = None
         for index, indemn in enumerate(indemnifications[1:]):
             previous_indemn = indemnifications[index - 1]
