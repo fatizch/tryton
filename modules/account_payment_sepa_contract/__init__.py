@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import logging
 
+from trytond import backend
 from trytond.pool import Pool
 
 from .contract import *
@@ -52,6 +53,11 @@ def migrate_1_8_add_payer_from_mandate(pool, update):
     @classmethod
     def patched_migrate(cls):
         previous_migrate(cls)
+
+        TableHandler = backend.get('TableHandler')
+        billing_info = TableHandler(cls)
+        if not billing_info.column_exist('sepa_mandate'):
+            return
 
         cursor = Transaction().connection.cursor()
         Mandate = pool.get('account.payment.sepa.mandate')
