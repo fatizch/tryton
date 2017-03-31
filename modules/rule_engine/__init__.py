@@ -4,7 +4,7 @@ from trytond.pool import Pool
 
 from .batch import *
 from .rule_engine import *
-import view
+import ir
 
 
 def register():
@@ -25,7 +25,7 @@ def register():
         RunTestsReport,
         RuleError,
         ValidateRuleBatch,
-        view.View,
+        ir.View,
         module='rule_engine', type_='model')
     Pool.register(
         # From rule_engine
