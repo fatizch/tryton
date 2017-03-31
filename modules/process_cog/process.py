@@ -239,9 +239,11 @@ class ProcessLog(model.CoogSQL, model.CoogView):
             log = cls.__table__()
             cursor.execute(*log.update(columns=[log.end_time],
                     values=[log.start_time],
-                    where=log.latest == Literal(False)))
+                    where=(log.latest == Literal(False))
+                    | (log.to_state == Null)))
             cursor.execute(*log.update(columns=[log.end_time],
-                    values=[Null], where=log.latest == Literal(True)))
+                    values=[Null], where=(log.latest == Literal(True))
+                    & (log.to_state != Null)))
             cursor.execute(*log.update(columns=[log.process_start],
                     values=[log.start_time]))
             log_handler.drop_column('session')

@@ -98,7 +98,7 @@ class ProcessLog:
 
     def get_is_authorized(self, name):
         user = Transaction().user
-        if not user:
+        if not user or not self.from_state:
             return False
         for authorization in self.from_state.step.authorizations:
             if user in authorization.users:
