@@ -411,7 +411,8 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
                     (select_screen.contract.rec_name,
                         select_screen.effective_date))
         rrule, until = billing_mode.get_rrule(cur_parameters.date
-            or select_screen.contract.start_date,
+            or select_screen.contract.start_date
+            or select_screen.contract.initial_start_date,
             until=select_screen.effective_date)
         if datetime.datetime.combine(select_screen.effective_date,
                 datetime.datetime.min.time()) not in rrule:

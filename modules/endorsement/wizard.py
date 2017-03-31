@@ -204,7 +204,7 @@ class EndorsementWizardStepMixin(model.CoogView):
                 not in [x[0] for x in error_manager._errors]):
             if (not cls.allow_effective_date_before_contract(select_screen) and
                     any([x.start_date > select_screen.effective_date
-                            for x in contracts])):
+                            for x in contracts if x.start_date])):
                 Endorsement.append_functional_error(
                     'effective_date_before_start_date')
         if (not error_manager or 'active_contract_required'
@@ -2101,7 +2101,8 @@ class StartEndorsement(Wizard):
             contract = pool.get('contract')(
                 Transaction().context.get('active_id'))
             return {
-                'effective_date': max(contract.start_date, Date.today()),
+                'effective_date': max(contract.start_date
+                    or contract.initial_start_date, Date.today()),
                 'contract': contract.id,
                 'applicant': contract.subscriber.id,
                 }
