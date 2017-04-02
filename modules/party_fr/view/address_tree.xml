@@ -3,5 +3,4 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/tree/field[@name='subdivision']" position="replace"/>
-    <xpath expr="/tree/field[@name='name']" position="replace"/>
 </data>
