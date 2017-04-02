@@ -7,8 +7,9 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import dualmethod
 from trytond.server_context import ServerContext
 
-from trytond.modules.coog_core import fields, utils
-
+from trytond.modules.coog_core import fields
+from trytond.modules.commission_insurance.commission import \
+    COMMISSION_AMOUNT_DIGITS, COMMISSION_RATE_DIGITS
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -147,14 +148,36 @@ class ContractOption:
         amount = plan.compute_prepayment(self.product, pattern=pattern)
         if amount:
             rate = (amount / pattern['first_year_premium']).quantize(
-                Decimal('.0001'))
+                Decimal(10) ** -COMMISSION_RATE_DIGITS)
         else:
             rate = None
         return amount, rate
 
-    def compute_prepayment(self, adjustment):
+    def compute_commission_with_prepayment_schedule(self, agent, plan, rate,
+            amount):
         pool = Pool()
         Commission = pool.get('commission')
+        commissions = []
+        if amount is None or not amount.quantize(
+                Decimal(10) ** -COMMISSION_AMOUNT_DIGITS):
+            return commissions
+        for (date, percentage) in plan.compute_prepayment_schedule(self, agent):
+            commission = Commission()
+            commission.is_prepayment = True
+            commission.date = date
+            commission.origin = self
+            commission.agent = agent
+            commission.product = plan.commission_product
+            commission.commission_rate = (rate * percentage).quantize(
+                Decimal(10) ** -COMMISSION_RATE_DIGITS)
+            commission.amount = (percentage * amount).quantize(
+                Decimal(10) ** -COMMISSION_AMOUNT_DIGITS)
+            commission.commissioned_option = self
+            commissions.append(commission)
+        return commissions
+
+    def compute_prepayment(self, adjustment):
+        pool = Pool()
         Agent = pool.get('commission.agent')
         commissions = []
         with ServerContext().set_context(prepayment_adjustment=adjustment):
@@ -174,53 +197,25 @@ class ContractOption:
 
                 if (agent.id, self.id) in all_prepayments:
                     amount = amount - all_prepayments[(agent.id, self.id)][0]
-                digits = Commission.amount.digits
-                amount = amount.quantize(Decimal(str(10.0 ** -digits[1])))
-                if not amount:
-                    continue
-
-                payment_schedule = plan.compute_prepayment_schedule(self, agent)
-                for (date, percentage) in payment_schedule:
-                    commission = Commission()
-                    commission.is_prepayment = True
-                    commission.date = date
-                    commission.origin = self
-                    commission.agent = agent
-                    commission.product = plan.commission_product
-                    commission.commission_rate = (rate * percentage).quantize(
-                        Decimal(1) / 10 ** 4)
-                    commission.amount = percentage * amount
-                    commission.commissioned_option = self
-                    commissions.append(commission)
+                commissions += self.compute_commission_with_prepayment_schedule(
+                    agent, plan, rate, amount)
         return commissions
 
     def adjust_prepayment_once_terminated(self):
         pool = Pool()
-        Commission = pool.get('commission')
         Agent = pool.get('commission.agent')
 
         commissions = []
-        agents_plans_to_compute = self.agent_plans_used()
-        outstanding_prepayment = Agent.outstanding_prepayment(
-            [(x[0].id, self.id) for x in agents_plans_to_compute])
-        for agent, plan in agents_plans_to_compute:
-            if (agent.id, self.id) not in outstanding_prepayment:
-                continue
-            amount, base_amount = outstanding_prepayment[(agent.id, self.id)]
-            rate = amount / base_amount if base_amount else 0
-            digits = Commission.amount.digits
-            amount = amount.quantize(Decimal(str(10.0 ** -digits[1])))
-            if not amount:
-                continue
-
-            commission = Commission()
-            commission.is_prepayment = True
-            commission.date = utils.today()
-            commission.origin = self
-            commission.agent = agent
-            commission.product = plan.commission_product
-            commission.amount = -amount
-            commission.commission_rate = rate.quantize(Decimal(1) / 10 ** 4)
-            commission.commissioned_option = self
-            commissions.append(commission)
-        return commissions
+        with ServerContext().set_context(prepayment_adjustment=True):
+            agents_plans_to_compute = self.agent_plans_used()
+            outstanding_prepayment = Agent.outstanding_prepayment(
+                [(x[0].id, self.id) for x in agents_plans_to_compute])
+            for agent, plan in agents_plans_to_compute:
+                if (agent.id, self.id) not in outstanding_prepayment:
+                    continue
+                amount, base_amount = outstanding_prepayment[
+                    (agent.id, self.id)]
+                rate = amount / base_amount if base_amount else 0
+                commissions += self.compute_commission_with_prepayment_schedule(
+                    agent, plan, rate, -amount)
+            return commissions

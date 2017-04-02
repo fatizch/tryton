@@ -15,7 +15,8 @@ from trytond.pyson import Eval, If, PYSONEncoder
 from trytond.modules.commission import Commission as TrytonCommission
 from trytond.modules.coog_core import fields, utils
 
-from trytond.modules.commission_insurance.commission import BASE_AMOUNT_DIGITS
+from trytond.modules.commission_insurance.commission import \
+    COMMISSION_AMOUNT_DIGITS
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -34,7 +35,8 @@ class Commission:
     is_prepayment = fields.Boolean('Is Prepayment',
         states=TrytonCommission._readonly_states,
         depends=TrytonCommission._readonly_depends)
-    redeemed_prepayment = fields.Numeric('Redeemed Prepayment', digits=(16, 8),
+    redeemed_prepayment = fields.Numeric('Redeemed Prepayment',
+        digits=(16, COMMISSION_AMOUNT_DIGITS),
         states=TrytonCommission._readonly_states,
         depends=TrytonCommission._readonly_depends)
 
@@ -93,7 +95,7 @@ class Commission:
         base_amount = super(Commission, self).get_base_amount(name)
         if self.redeemed_prepayment and self.commission_rate:
             base_amount += self.redeemed_prepayment / self.commission_rate
-        return base_amount.quantize(Decimal(1) / 10 ** BASE_AMOUNT_DIGITS)
+        return base_amount.quantize(Decimal(10) ** -COMMISSION_AMOUNT_DIGITS)
 
 
 class PlanLines:

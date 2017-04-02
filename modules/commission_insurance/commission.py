@@ -48,7 +48,8 @@ __all__ = [
     ]
 __metaclass__ = PoolMeta
 
-BASE_AMOUNT_DIGITS = 8
+COMMISSION_AMOUNT_DIGITS = 8
+COMMISSION_RATE_DIGITS = 4
 
 
 class Commission:
@@ -65,9 +66,10 @@ class Commission:
     broker = fields.Function(
         fields.Many2One('distribution.network', 'Broker'),
         'get_broker', searcher='search_broker')
-    commission_rate = fields.Numeric('Commission Rate', digits=(16, 4))
+    commission_rate = fields.Numeric('Commission Rate',
+        digits=(16, COMMISSION_RATE_DIGITS))
     base_amount = fields.Function(
-        fields.Numeric('Base Amount', digits=(16, BASE_AMOUNT_DIGITS)),
+        fields.Numeric('Base Amount', digits=(16, COMMISSION_AMOUNT_DIGITS)),
         'get_base_amount')
     commissioned_subscriber = fields.Function(
         fields.Many2One('party.party', 'Contract Subscriber'),
@@ -142,7 +144,7 @@ class Commission:
     @classmethod
     def __setup__(cls):
         super(Commission, cls).__setup__()
-        cls.amount.digits = (16, 8)
+        cls.amount.digits = (16, COMMISSION_AMOUNT_DIGITS)
         cls.invoice_line.select = True
         cls.type_.searcher = 'search_type_'
         cls.agent.select = True

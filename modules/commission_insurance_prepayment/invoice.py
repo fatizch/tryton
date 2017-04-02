@@ -8,6 +8,9 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import ModelView, Workflow
 from trytond.transaction import Transaction
 
+from trytond.modules.commission_insurance.commission import \
+    COMMISSION_AMOUNT_DIGITS
+
 __metaclass__ = PoolMeta
 __all__ = [
     'Invoice',
@@ -71,7 +74,8 @@ class Invoice:
                 if key not in outstanding_prepayment_per_contract:
                     continue
                 prepayment_used = min(outstanding_prepayment_per_contract[key],
-                    commission.amount).quantize(Decimal(1) / 10 ** 8)
+                    commission.amount).quantize(
+                    Decimal(10) ** -COMMISSION_AMOUNT_DIGITS)
                 commission.amount -= prepayment_used
                 commission.redeemed_prepayment = prepayment_used
                 outstanding_prepayment_per_contract[key] -= prepayment_used
