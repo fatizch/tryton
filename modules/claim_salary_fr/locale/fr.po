@@ -392,21 +392,6 @@ msgctxt "model:ir.action,name:"
 msgid "Compute net salaries"
 msgstr "Calculer les salaires nets"
 
-msgctxt ""
-"model:extra_details.configuration.line,string:indemnification_extra_details_tranche_a"
-msgid "Tranche A"
-msgstr "Tranche A"
-
-msgctxt ""
-"model:extra_details.configuration.line,string:indemnification_extra_details_tranche_b"
-msgid "Tranche B"
-msgstr "Tranche B"
-
-msgctxt ""
-"model:extra_details.configuration.line,string:indemnification_extra_details_tranche_c"
-msgid "Tranche C"
-msgstr "Tranche C"
-
 msgctxt "model:ir.action,name:salaries_wizard"
 msgid "Salaries Computation Wizard"
 msgstr "Assistant de saisie des salaires"
