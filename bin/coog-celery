@@ -13,7 +13,7 @@ coog_celery_start() { # start workers - <concurrency> [queue,+]
 
         [ "$1" -eq "$1" ] 2> /dev/null || { echo "argument must be an integer"; return 1; }
         if [ -z "$2" ]; then
-            queue="$(python -W ignore $COOG_BIN/load_batches.py | tr '\n' ',' 2> /dev/null)" 
+            queue="$(python -W ignore $COOG_BIN/load_batches.py | tr '\n' ',' 2> /dev/null)"
         else
             queue="$2"
         fi

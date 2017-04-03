@@ -185,25 +185,39 @@ _server() {
 }
 
 _celery() {
-        [ "$#" -lt 2 ] && echo "missing arguments" && return 1
+        [ -z "$1" ] && echo "missing concurrency" && return 1
         echo Welcome on board, Coog Celery is preparing to start
         _init || return $?
         _uno
+        local n; n="$1"; shift
+        local q
+        if [ ! -z "$1" ]
+        then
+                q="$@"
+        else
+                q="$(python -W ignore $COOG_BIN/load_batches.py | tr '\n' ',' 2> /dev/null)"
+        fi
         celery worker \
                 --app=async.broker_celery \
-                --concurrency="$1" \
-                --queues="$2" \
-                --loglevel="$LOG_LEVEL"
+                --loglevel="$LOG_LEVEL" \
+                --concurrency="$n" \
+                --queues=$q
 }
 
 _rq() {
-        [ -z "$1" ] && echo "missing queue" && return 1
         echo Welcome on board, Coog RQ is preparing to start
         _init || return $?
         _uno
+        local q
+        if [ ! -z "$1" ]
+        then
+                q="$@"
+        else
+                q="$(python -W ignore $COOG_BIN/load_batches.py | tr '\n' ' ' 2> /dev/null)"
+        fi
         rq worker \
                 -u "$TRYTOND_ASYNC_RQ" \
-                "$@"
+                $q
 }
 
 _batch() {
