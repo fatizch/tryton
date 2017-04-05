@@ -34,7 +34,8 @@ class EventTypeAction:
         " object of the event. Otherwise, the condition will apply on the"
         " object of the process.", states={
             'invisible': Or(~Eval('pyson_condition'),
-                Eval('action') != 'initiate_process')})
+                Eval('action') != 'initiate_process')},
+        depends=['pyson_condition', 'action'])
 
     @classmethod
     def __setup__(cls):

@@ -3,6 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, And, Or
 from trytond.server_context import ServerContext
+from trytond.modules.coog_core import fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -20,6 +21,15 @@ class EventTypeAction:
             cls.process_to_initiate.states.get('invisible', True),
             Eval('action') != 'create_contract_notification')
         cls.process_to_initiate.depends.append('action')
+        cls.filter_on_event_object.states['invisible'] = And(
+            cls.filter_on_event_object.states.get('invisible', True),
+            Eval('action') != 'create_contract_notification')
+        cls.filter_on_event_object.depends.append('action')
+
+    @fields.depends('filter_on_event_object')
+    def on_change_with_show_descriptor(self, name=None):
+        show = super(EventTypeAction, self).on_change_with_show_descriptor(name)
+        return show and not self.filter_on_event_object
 
     def get_objects_for_process(self, objects, target_model_name):
         if target_model_name != 'contract':
@@ -29,6 +39,11 @@ class EventTypeAction:
         for object_ in objects:
             process_objects.extend(self.get_contracts_from_object(object_))
         return process_objects
+
+    def get_objects_to_filter(self, objects):
+        if self.filter_on_event_object:
+            return objects
+        return super(EventTypeAction, self).get_objects_to_filter(objects)
 
     def create_contract_notification(self, contracts):
         notifications = super(EventTypeAction,

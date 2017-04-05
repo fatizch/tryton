@@ -5,5 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/field[@name='priority']" position="after">
         <label name="notification_delay"/>
         <field name="notification_delay"/>
+        <label name="show_descriptor"/>
+        <field name="show_descriptor"/>
     </xpath>
 </data>

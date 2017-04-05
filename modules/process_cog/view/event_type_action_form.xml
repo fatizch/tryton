@@ -3,11 +3,12 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='action']" position="after">
+        <newline/>
         <label name="process_to_initiate"/>
         <field name="process_to_initiate"/>
-        <label name="step_to_start"/>
-        <field name="step_to_start"/>
         <label name="filter_on_event_object"/>
         <field name="filter_on_event_object"/>
+        <label name="step_to_start"/>
+        <field name="step_to_start"/>
     </xpath>
 </data>

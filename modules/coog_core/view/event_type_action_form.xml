@@ -10,8 +10,10 @@ this repository contains the full copyright notices and license terms. -->
     <field name="pyson_condition" colspan="3"/>
     <label name="action"/>
     <field name="action"/>
+    <newline/>
     <label name="priority"/>
     <field name="priority"/>
+    <newline/>
     <label name="active"/>
     <field name="active"/>
     <separator name="descriptor" colspan="4"/>

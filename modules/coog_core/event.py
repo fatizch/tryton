@@ -188,10 +188,11 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
                 'invisible': ~Eval('handles_asynchronous')})
     event_types = fields.Many2Many('event.type.action-event.type', 'action',
         'event_type', 'Event Types')
-    descriptor = fields.Function(
-        fields.Text('Descriptor',
-            states={'invisible': ~Eval('descriptor')}),
-        'on_change_with_descriptor')
+    show_descriptor = fields.Function(fields.Boolean('Show Descriptor',
+            states={'invisible': True}), 'on_change_with_show_descriptor')
+    descriptor = fields.Function(fields.Text('Descriptor',
+            states={'invisible': ~Eval('show_descriptor')},
+            depends=['show_descriptor']), 'on_change_with_descriptor')
     active = fields.Boolean('Active')
 
     @classmethod
@@ -231,9 +232,10 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
     def default_active(cls):
         return True
 
-    @fields.depends('treatment_kind')
+    @fields.depends('action', 'treatment_kind', 'show_descriptor')
     def on_change_action(self):
         self.treatment_kind = 'synchronous'
+        self.show_descriptor = len(self.on_change_with_descriptor()) > 0
 
     @classmethod
     def get_action_types(cls):
@@ -262,9 +264,12 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
             return self.code
         return coog_string.slugify(self.name)
 
-    @fields.depends('action')
     def on_change_with_descriptor(self, name=None):
         return ''
+
+    @fields.depends('descriptor')
+    def on_change_with_show_descriptor(self, name=None):
+        return len(self.descriptor) > 0
 
     def cache_data(self):
         return {'id': self.id, 'action': self.action}

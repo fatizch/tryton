@@ -48,12 +48,21 @@ class EventTypeAction:
                 raise_exception=False)
         return super(EventTypeAction, self).on_change_with_descriptor(name)
 
+    def get_objects_to_filter(self, objects):
+        return self.get_contracts_from_objects(objects)
+
+    def get_contracts_from_objects(self, objects):
+        return sum([self.get_contracts_from_object(o) for o in objects], [])
+
     def filter_objects(self, objects):
         if self.action != 'create_contract_notification':
             return super(EventTypeAction, self).filter_objects(objects)
-        contracts = sum(
-            [self.get_contracts_from_object(o) for o in objects], [])
-        return super(EventTypeAction, self).filter_objects(contracts)
+
+        to_filter = self.get_objects_to_filter(objects)
+        result = super(EventTypeAction, self).filter_objects(to_filter)
+        if result and result[0].__name__ != 'contract':
+            result = self.get_contracts_from_objects(result)
+        return result
 
     def get_contracts_from_object(self, object_):
         contracts = []
