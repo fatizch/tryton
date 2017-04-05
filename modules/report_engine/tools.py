@@ -95,9 +95,12 @@ class ConvertTemplate(Wizard):
             for item in zin.infolist():
                 if item.filename != 'content.xml':
                     continue
+                try:
+                    contents = zin.read('content.xml').decode('utf-8')
+                except UnicodeDecodeError:
+                    contents = zin.read('content.xml')
                 return [x.replace('&quot;', '"').replace('&apos;', "'")
-                    for x in re.findall(find_placeholders,
-                        zin.read('content.xml'))
+                    for x in re.findall(find_placeholders, contents)
                     if search_for in x]
 
     @classmethod
@@ -121,9 +124,17 @@ class ConvertTemplate(Wizard):
                 if item.filename != 'content.xml':
                     zout.writestr(item, zin.read(item.filename))
                 else:
+                    data = zin.read('content.xml')
+                    decoded = True
+                    try:
+                        data = data.decode('utf-8')
+                    except UnicodeDecodeError:
+                        decoded = False
                     for search, replace in matches:
-                        zout.writestr(item, zin.read(
-                                'content.xml').replace(search, replace))
+                        data = data.replace(search, replace)
+                    if decoded:
+                        data = data.encode('utf-8')
+                    zout.writestr(item, data)
         return data_out
 
 
