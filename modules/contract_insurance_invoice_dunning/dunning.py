@@ -268,8 +268,14 @@ class Level:
     def get_contract_from_dunning(self):
         return lambda x: x.contract
 
-    def get_contract_from_dunning_group(self, dunnings):
-        return next((x.contract for x in dunnings if x.contract), None)
+    def get_contract_from_dunning_group(self, main_contract, dunnings):
+        # If the contract used to group dunnings (main_contract) is in list
+        # contracts, we want to return this one instead of another.
+        contracts = [x.contract for x in dunnings if x.contract]
+        if contracts:
+            return main_contract if main_contract in contracts else
+                contracts[0]
+        return main_contract
 
     def create_and_post_fee_invoices(self, dunnings):
         pool = Pool()
@@ -285,8 +291,8 @@ class Level:
         keyfunc = self.get_contract_from_dunning()
         sorted_dunnings = sorted(dunnings, key=keyfunc)
         for contract, cur_dunnings in groupby(sorted_dunnings, key=keyfunc):
-            contract = self.get_contract_from_dunning_group(cur_dunnings) \
-                or contract
+            contract = self.get_contract_from_dunning_group(contract,
+                cur_dunnings)
             if not contract:
                 continue
             billing_info = contract.billing_information
