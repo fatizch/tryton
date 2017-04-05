@@ -316,6 +316,10 @@ msgctxt "field:event.type.action-event.type,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:export.export_configuration_selection,beautify_output:"
+msgid "Beautify output file"
+msgstr "Formatter le fichier de sortie"
+
 msgctxt "field:export.export_configuration_selection,configuration:"
 msgid "Configuration"
 msgstr "Configuration"

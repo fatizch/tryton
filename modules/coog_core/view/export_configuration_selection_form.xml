@@ -4,4 +4,6 @@ this repository contains the full copyright notices and license terms. -->
 <form>
     <label name="configuration"/>
     <field name="configuration" colspan="3"/>
+    <label name="beautify_output"/>
+    <field name="beautify_output"/>
 </form>

@@ -923,6 +923,7 @@ class ExportConfigurationSelection(ModelView):
 
     configuration = fields.Many2One('ir.export.configuration', 'Configuration',
         None)
+    beautify_output = fields.Boolean('Beautify output file')
 
 
 class ExportSummary(ModelView):
@@ -949,20 +950,30 @@ class ExportToFile(Wizard):
             Button('Previous', 'conf_selection', 'tryton-go-previous'),
             Button('Ok', 'end', 'tryton-ok')])
 
+    def default_conf_selection(self, name):
+        return {'beautify_output': False}
+
     def transition_export(self):
         pool = Pool()
         model = Transaction().context.get('active_model')
         Model = pool.get(model)
         model_id = Transaction().context.get('active_id')
         export_object = Model(model_id)
-        self._file_name, self._result, self._summary = \
-            export_object.export_json_to_file(
+        file_name, result, summary = export_object.export_json_to_file(
                 self.conf_selection.configuration)
+        if self.conf_selection.beautify_output:
+            result = json.dumps(result, cls=JSONEncoder, indent=4,
+                    sort_keys=True, separators=(',', ': '))
+        else:
+            result = json.dumps(result, cls=JSONEncoder)
+        self.export_summary.summary = summary
+        self.export_summary.file = result
+        self.export_summary.file_name = file_name
         return 'export_summary'
 
     def default_export_summary(self, name):
         return {
-            'summary': self._summary,
-            'file': json.dumps(self._result, cls=JSONEncoder),
-            'file_name': self._file_name,
+            'summary': self.export_summary.summary,
+            'file': self.export_summary.file,
+            'file_name': self.export_summary.file_name,
             }
