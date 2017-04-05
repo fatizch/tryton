@@ -44,13 +44,13 @@ def migrate_1_10_include_line3_in_street(pool, update):
         migrate_name = table.column_exist('streetbis') and \
             table.column_exist('line3')
 
-        previous_register(cls, module_name)
-
         # Migration from 1.10 : merge line3 into street
         if migrate_name:
             value = Concat(Coalesce(sql_table.line3, ''),
                 Concat('\n', Coalesce(sql_table.street, '')))
             cursor.execute(*sql_table.update([sql_table.street], [value]))
             table.drop_column('line3')
+
+        previous_register(cls, module_name)
 
     Address.__register__ = patched_register
