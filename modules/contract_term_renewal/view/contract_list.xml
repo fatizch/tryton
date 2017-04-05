@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/tree" position="inside">
+        <button name="button_renew" string="Renew Contract" tree_invisible="1"/>
+        <field name="is_renewable" tree_invisible="1"/>
+    </xpath>
+</data>

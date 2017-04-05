@@ -26,6 +26,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
+        <record model="ir.ui.view" id="contract_view_list">
+            <field name="model">contract</field>
+            <field name="inherit" ref="contract.contract_view_tree"/>
+            <field name="name">contract_list</field>
+        </record>
         <record model="ir.ui.view" id="confirm_contract_renewal_view_form">
             <field name="model">contract_term_renewal.renew.confirm</field>
             <field name="type">form</field>
