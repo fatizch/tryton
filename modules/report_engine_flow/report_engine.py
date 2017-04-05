@@ -251,11 +251,6 @@ class ReportGenerate:
 class ReportTemplate:
     __name__ = 'report.template'
 
-    output_method = fields.Selection('get_possible_output_methods',
-        'Output method', states={
-            'invisible': Eval('output_kind') == 'model',
-            'required': Eval('output_kind') == 'flow',
-            }, depends=['output_kind'])
     variables_relation = fields.One2Many(
         'report.template.flow_variable.relation', 'template',
         'Flow Variables Relation', order=[('order', 'ASC')],

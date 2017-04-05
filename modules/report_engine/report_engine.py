@@ -219,6 +219,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def default_output_method(cls):
         return 'open_document'
 
+    @fields.depends('output_kind')
     def get_possible_output_methods(self):
         return [('open_document',
                 self.raise_user_error('output_method_open_document',
