@@ -273,8 +273,8 @@ class Level:
         # contracts, we want to return this one instead of another.
         contracts = [x.contract for x in dunnings if x.contract]
         if contracts:
-            return main_contract if main_contract in contracts else
-                contracts[0]
+            return (main_contract if main_contract in contracts else
+                contracts[0])
         return main_contract
 
     def create_and_post_fee_invoices(self, dunnings):
