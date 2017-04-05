@@ -8,10 +8,5 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="party.party_configuration_view_form"/>
             <field name="name">configuration_form</field>
         </record>
-        <record model="ir.property" id="property_party_lang">
-            <field name="field"
-                search="[('model.model', '=', 'party.party'), ('name', '=', 'lang')]"/>
-            <field name="value" eval="'ir.lang,' + str(ref('ir.lang_en'))"/>
-        </record>
     </data>
 </tryton>
