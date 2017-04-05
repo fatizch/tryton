@@ -2,11 +2,9 @@
 # chain helpers ($CHAIN_NAME and $CHAIN_FILE are supposed to be set)
 chain_begin() {
         {
-                echo "From: batch@coog.com"
-                echo "To: $COOG_ADMIN_EMAIL"
-                echo "Subject: $CHAIN_NAME"
-                echo "MIME-Version: 1.0"
-                echo "Content-Type: text/plain"
+                echo "################################"
+                echo "# $CHAIN_NAME: OK"
+                echo "################################"
                 echo
         } >> "$CHAIN_FILE"
 }
@@ -17,37 +15,37 @@ chain_params() {
         GIVEN_PARAMETERS=()
         for i in "$@"
         do
-            local PARAM_NAME=`expr match "$i" ' *--\([^= ]*\)=' | awk '{ print toupper($1) }'`
-            local PARAM_VALUE="${i#*=}"
-            if [[ " ${CHAIN_PARAMETERS[*]} " == *" $PARAM_NAME "* ]]
-            then
-                if [[ -z $PARAM_VALUE ]]
+                local PARAM_NAME=`expr match "$i" ' *--\([^= ]*\)=' | awk '{ print toupper($1) }'`
+                local PARAM_VALUE="${i#*=}"
+                if [[ " ${CHAIN_PARAMETERS[*]} " == *" $PARAM_NAME "* ]]
                 then
-                    PARAM_VALUE=""
+                        if [[ -z $PARAM_VALUE ]]
+                        then
+                                PARAM_VALUE=""
+                        else
+                                printf -v $PARAM_NAME $PARAM_VALUE
+                        fi
+                        GIVEN_PARAMETERS+=($i)
                 else
-                    printf -v $PARAM_NAME $PARAM_VALUE
+                        echo "Unknown batch chain parameter:" `echo $PARAM_NAME | awk '{ print tolower($1) }' `>&2
                 fi
-                GIVEN_PARAMETERS+=($i)
-            else
-                echo "Unknown batch chain parameter:" `echo $PARAM_NAME | awk '{ print tolower($1) }'` 1>&2
-            fi
         done
 
         local FAILED=0
         for i in "${CHAIN_REQUIRED[@]}"
         do
-            if [[ -z ${!i} ]]
-            then
-                echo "Missing batch chain parameter:" `echo $i | awk '{ print tolower($1) }'` 1>&2
-                FAILED+=1
-            fi
+                if [[ -z ${!i} ]]
+                then
+                        echo "Missing batch chain parameter:" `echo $i | awk '{ print tolower($1) }'` >&2
+                        FAILED+=1
+                fi
         done
         [[ $FAILED -gt 0 ]] && exit 1
 }
 
 chain_step() {
         echo '=>=>=>=>=>'
-        coog_batch_exec "$@" &
+        coog_batch_exec "$@" 2>&1 &
 }
 
 chain_wait() {
@@ -63,21 +61,23 @@ chain_wait() {
         done
         if [ "$ret" -eq 0 ]
         then
-                echo "<=<=<=<=<= ok" && return 0
+                echo '<=<=<=<=<= ok' && return 0
         else
-                echo "<=<=<=<=<= ko" && return 1
+                echo '<=<=<=<=<= ko' && return 1
         fi
 }
 
 chain_end() {
         local ret=$?
-        if [ $ret -eq 0 ]
-        then
-                sed -i -e "s/Subject: $CHAIN_NAME/Subject: $CHAIN_NAME: OK/g" "$CHAIN_FILE"
-        else
-                sed -i -e "s/Subject: $CHAIN_NAME/Subject: $CHAIN_NAME: KO/g" "$CHAIN_FILE"
-        fi
         sed -i -e 's/\\n/\n/g' "$CHAIN_FILE"
-        echo "========== $CHAIN_FILE"
-        [ $ret -eq 0 ] && exit 0 || exit $ret
+        if [ $ret -ne 0 ]
+        then
+                sed -i -e "s/$CHAIN_NAME: OK/$CHAIN_NAME: KO/g" "$CHAIN_FILE"
+                cat "$CHAIN_FILE" >&2
+                echo "========== $CHAIN_FILE"
+                exit $ret
+        else
+                echo "========== $CHAIN_FILE"
+                exit 0
+        fi
 }

@@ -10,12 +10,7 @@ CHAIN_REQUIRED=()
 chain_params "$@"
 chain_begin
 
-if [ -z "$CRASH" ]
-then
-    chain_step ir.ui.view.validate --crash="$CRASH"
-else
-    chain_step ir.ui.view.validate
-fi
+chain_step ir.ui.view.validate ${GIVEN_PARAMETERS[@]}
 
 chain_wait ir.ui.view.validate || chain_end
 
