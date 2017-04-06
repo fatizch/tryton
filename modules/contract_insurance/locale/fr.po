@@ -149,6 +149,10 @@ msgctxt "field:contract.covered_element,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:contract.covered_element,contract_status:"
+msgid "Contract Status"
+msgstr "Statut du contrat"
+
 msgctxt "field:contract.covered_element,covered_name:"
 msgid "Name"
 msgstr "Nom"
@@ -328,6 +332,10 @@ msgstr "Mis à jour par"
 msgctxt "field:contract.covered_element-party,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:contract.covered_element.version,contract_status:"
+msgid "Contract Status"
+msgstr "Statut du contrat"
 
 msgctxt "field:contract.covered_element.version,covered_element:"
 msgid "Covered Element"
@@ -636,6 +644,10 @@ msgstr "Identifiant XML"
 msgctxt "field:contract.option.extra_premium,calculation_kind:"
 msgid "Calculation Kind"
 msgstr "Type de calcul"
+
+msgctxt "field:contract.option.extra_premium,contract_status:"
+msgid "Contract Status"
+msgstr "Statut du contrat"
 
 msgctxt "field:contract.option.extra_premium,covered_element:"
 msgid "Covered element"

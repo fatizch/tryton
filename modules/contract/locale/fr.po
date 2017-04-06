@@ -485,6 +485,10 @@ msgctxt "field:contract.extra_data,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:contract.extra_data,contract_status:"
+msgid "Contract Status"
+msgstr "Statut du contrat"
+
 msgctxt "field:contract.extra_data,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"

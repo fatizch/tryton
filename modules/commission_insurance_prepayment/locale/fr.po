@@ -22,6 +22,10 @@ msgctxt "field:commission.plan,adjust_prepayment:"
 msgid "Adjust Prepayment"
 msgstr "Ajustement du précompte"
 
+msgctxt "field:commission.plan,delete_unpaid_prepayment:"
+msgid "Delete Unpaid Prepayment"
+msgstr "Supprimer les précomptes non payés"
+
 msgctxt "field:commission.plan.line,prepayment_formula:"
 msgid "Prepayment Formula"
 msgstr "Formule de calcul du précompte"
@@ -30,8 +34,63 @@ msgctxt "field:contract.option,first_year_premium:"
 msgid "Premium"
 msgstr "Prime"
 
+msgctxt "field:offered.configuration,remove_commission_for_sub_status:"
+msgid "Termination Sub Status That Remove Unpaid Prepayment"
+msgstr ""
+"Motifs de résiliation déclenchant la suppression des précomptes non payés"
+
+msgctxt "field:offered.configuration-contract.sub_status,configuration:"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "field:offered.configuration-contract.sub_status,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.configuration-contract.sub_status,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.configuration-contract.sub_status,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.configuration-contract.sub_status,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:offered.configuration-contract.sub_status,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.configuration-contract.sub_status,sub_status:"
+msgid "Sub Status"
+msgstr "Sous Statut"
+
+msgctxt "field:offered.configuration-contract.sub_status,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:offered.configuration-contract.sub_status,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:offered.configuration-contract.sub_status,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "help:commission.plan,delete_unpaid_prepayment:"
+msgid ""
+"Redeemed of unpaid invoices will be deleted once contracts are terminated"
+msgstr ""
+"Suppression automatique des amortissements de précompte suite à résiliation"
+
 msgctxt "help:commission.plan.line,prepayment_formula:"
 msgid ""
 "Python expression that will be evaluated with:\n"
 "- amount: the original amount"
 msgstr "Expression python qui va être évalué avec :"
+
+msgctxt "model:offered.configuration-contract.sub_status,name:"
+msgid "Configuration to Termination Reason"
+msgstr "Relation configuration - motif de résiliation"

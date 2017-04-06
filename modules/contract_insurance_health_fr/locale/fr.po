@@ -138,6 +138,10 @@ msgctxt "field:party.party,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
 
+msgctxt "field:party.party,main_health_complement:"
+msgid "Main Health Complement"
+msgstr "Complément santé principal"
+
 msgctxt "field:party.party,main_insured_ssn:"
 msgid "Main Insured SSN"
 msgstr "Assuré"

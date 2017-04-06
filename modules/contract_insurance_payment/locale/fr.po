@@ -54,6 +54,10 @@ msgctxt "field:account.payment.merged.by_contract,merged_id:"
 msgid "Merged id"
 msgstr "Identifiant de regroupement"
 
+msgctxt "field:account.payment.merged.by_contract,merged_payment:"
+msgid "Merged Payment"
+msgstr "Paiement regroupé"
+
 msgctxt "field:account.payment.merged.by_contract,party:"
 msgid "Party"
 msgstr "Tiers"

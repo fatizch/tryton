@@ -368,6 +368,10 @@ msgctxt "field:contract.billing_information,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:contract.billing_information,contract_status:"
+msgid "Contract Status"
+msgstr "Statut du contrat"
+
 msgctxt "field:contract.billing_information,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -1413,10 +1417,6 @@ msgstr "Montant total"
 msgctxt "view:contract.billing_information:"
 msgid "Suspend Payments"
 msgstr "Suspendre les paiements"
-
-msgctxt "view:contract.billing_information:"
-msgid "Suspension"
-msgstr "Suspension"
 
 msgctxt "view:contract.billing_information:"
 msgid "Unsuspend Payments"

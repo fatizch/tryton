@@ -100,6 +100,10 @@ msgctxt "field:account.payment,manual_fail_status:"
 msgid "Manual Fail Status"
 msgstr "Statut du rejet manuel"
 
+msgctxt "field:account.payment,manual_reject_code:"
+msgid "Manual Reject Code"
+msgstr "Motif de rejet manuel"
+
 msgctxt "field:account.payment,merged_id:"
 msgid "Merged ID"
 msgstr "ID regroupement"
@@ -357,6 +361,10 @@ msgctxt "field:account.payment.merged,party:"
 msgid "Party"
 msgstr "Tiers"
 
+msgctxt "field:account.payment.merged,payments:"
+msgid "Payments"
+msgstr "Paiements"
+
 msgctxt "field:account.payment.merged,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -376,10 +384,6 @@ msgstr "Mis à jour par"
 msgctxt "field:account.payment.merged,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
-
-msgctxt "field:account.payment.merged,payments:"
-msgid "Payments"
-msgstr "Paiements"
 
 msgctxt "field:account.payment.motive,code:"
 msgid "Code"
@@ -915,12 +919,12 @@ msgid "Failed"
 msgstr "Rejeté"
 
 msgctxt "selection:account.move.line,payment_kind:account_payment."
-msgid "Payable"
-msgstr "À payer"
-
-msgctxt "selection:account.move.line,payment_kind:account_payment."
 msgid "Receivable"
 msgstr "À recevoir"
+
+msgctxt "selection:account.move.line,payment_kind:account_payment."
+msgid "Payable"
+msgstr "À payer"
 
 msgctxt "selection:account.payment.group,kind:account_payment."
 msgid "Receivable"

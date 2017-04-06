@@ -124,6 +124,10 @@ msgstr ""
 "La date de résiliation doit être postérieure à la date de début du contrat: "
 "%s"
 
+msgctxt "error:endorsement.contract.terminate:"
+msgid "You are trying to terminate the contract before its active start date"
+msgstr "Vous essayez de résiliser le contrat avant sa date d'effet courante"
+
 msgctxt "error:endorsement.contract:"
 msgid "Activation History Modifications"
 msgstr "Modifications des historiques d'activation"
@@ -2523,18 +2527,6 @@ msgctxt "wizard_button:endorsement.decline,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:endorsement.start,basic_preview,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt "wizard_button:endorsement.start,basic_preview,cancel:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:endorsement.start,basic_preview,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
 msgid "Next"
@@ -2675,10 +2667,6 @@ msgctxt ""
 "wizard_button:endorsement.start,select_endorsement,start_endorsement:"
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
-
-msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
 
 msgctxt "wizard_button:endorsement.start,summary,cancel:"
 msgid "Cancel"

@@ -120,6 +120,10 @@ msgctxt "field:extra_data,digits:"
 msgid "Digits"
 msgstr "Précision"
 
+msgctxt "field:extra_data,has_default_value:"
+msgid "Default Value"
+msgstr "Valeur par Défaut"
+
 msgctxt "field:extra_data,id:"
 msgid "ID"
 msgstr "ID"
@@ -155,10 +159,6 @@ msgstr "Sous Donnée"
 msgctxt "field:extra_data,type_:"
 msgid "Type"
 msgstr "Type"
-
-msgctxt "field:extra_data,has_default_value:"
-msgid "Default Value"
-msgstr "Valeur par Défaut"
 
 msgctxt "field:extra_data,write_date:"
 msgid "Write Date"

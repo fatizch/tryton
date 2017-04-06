@@ -22,6 +22,10 @@ msgctxt "field:commission,commission_rate:"
 msgid "Commission Rate"
 msgstr "Taux de commission"
 
+msgctxt "field:insurer_reporting.contract.configure,at_date:"
+msgid "Date"
+msgstr "Date"
+
 msgctxt "field:insurer_reporting.contract.configure,id:"
 msgid "ID"
 msgstr "ID"

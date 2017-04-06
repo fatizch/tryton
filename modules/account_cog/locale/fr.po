@@ -418,16 +418,16 @@ msgstr ""
 "valide."
 
 msgctxt "error:account.move.reconciliation:account."
+msgid "You can not modify a reconciliation."
+msgstr "Vous ne pouvez modifier un lettrage."
+
+msgctxt "error:account.move.reconciliation:account."
 msgid ""
 "You can not create a reconciliation where debit \"%(debit)s\" and credit "
 "\"%(credit)s\" differ."
 msgstr ""
 "Vous ne pouvez créer un lettrage où le débit « %(debit)s » et le crédit « "
 "%(credit)s » diffèrent."
-
-msgctxt "error:account.move.reconciliation:account."
-msgid "You can not modify a reconciliation."
-msgstr "Vous ne pouvez modifier un lettrage."
 
 msgctxt "error:account.period:account."
 msgid ""
@@ -449,13 +449,13 @@ msgctxt "model:account.reconcile.show,name:account."
 msgid "Reconcile"
 msgstr "Lettrer"
 
-msgctxt "model:ir.action,name:account.act_move_reconciliation_lines"
-msgid "Reconciliation Lines"
-msgstr "Lignes de lettrage"
-
 msgctxt "model:ir.action,name:account.act_unreconcile_lines"
 msgid "Unreconcile Lines"
 msgstr "Dé-lettrer les lignes"
+
+msgctxt "model:ir.action,name:account.act_move_reconciliation_lines"
+msgid "Reconciliation Lines"
+msgstr "Lignes de lettrage"
 
 msgctxt "model:ir.action,name:account.act_reconcile"
 msgid "Reconcile Accounts"
@@ -491,12 +491,12 @@ msgid "Receivable"
 msgstr "À recevoir"
 
 msgctxt "selection:account.account.template,kind:account."
-msgid "Payable"
-msgstr "À payer"
-
-msgctxt "selection:account.account.template,kind:account."
 msgid "Receivable"
 msgstr "À recevoir"
+
+msgctxt "selection:account.account.template,kind:account."
+msgid "Payable"
+msgstr "À payer"
 
 msgctxt "selection:account.move.line,move_state:account."
 msgid "Posted"

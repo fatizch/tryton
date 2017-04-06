@@ -449,6 +449,10 @@ msgctxt "field:endorsement.party.change_relation_displayer,to:"
 msgid "To"
 msgstr "de"
 
+msgctxt "field:endorsement.party.change_relation_displayer,to_remove:"
+msgid "Remove"
+msgstr "Supprimer"
+
 msgctxt "field:endorsement.party.change_relation_displayer,type:"
 msgid "Type"
 msgstr "Type"

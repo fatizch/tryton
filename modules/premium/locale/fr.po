@@ -771,6 +771,10 @@ msgid "Year"
 msgstr "Année"
 
 msgctxt "selection:offered.product.premium_date,type_:"
+msgid "At this date"
+msgstr "A cette date"
+
+msgctxt "selection:offered.product.premium_date,type_:"
 msgid "Duration from the contract current start date"
 msgstr "Durée à partir du début du terme courant du contrat"
 
@@ -785,10 +789,6 @@ msgstr "Annuellement, à cette date"
 msgctxt "selection:offered.product.premium_date,type_:"
 msgid "Yearly, from the contract start date"
 msgstr "Annuellement à l'anniversaire du contrat"
-
-msgctxt "selection:offered.product.premium_date,type_:"
-msgid "At this date"
-msgstr "A cette date"
 
 msgctxt "selection:rule_engine,type_:"
 msgid "Premium"
@@ -815,12 +815,8 @@ msgid "Contract Premiums"
 msgstr "Primes du contrat"
 
 msgctxt "view:contract.premium:"
-msgid "Premium"
-msgstr "Prime"
-
-msgctxt "view:contract.premium:"
-msgid "Premium Rules"
-msgstr "Règles de Cotisation"
+msgid "Amount"
+msgstr "Montant"
 
 msgctxt "view:contract:"
 msgid "Display Premium"

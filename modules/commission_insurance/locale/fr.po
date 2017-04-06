@@ -86,9 +86,29 @@ msgctxt "field:commission,commissioned_subscriber:"
 msgid "Contract Subscriber"
 msgstr "Souscripteur du contrat"
 
+msgctxt "field:commission,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
 msgctxt "field:commission,end:"
 msgid "End"
 msgstr "Date de fin"
+
+msgctxt "field:commission,line_amount:"
+msgid "Line Amount"
+msgstr "Montant de la ligne"
+
+msgctxt "field:commission,line_tax_amount:"
+msgid "Line Tax Amount"
+msgstr "Taxe de la ligne"
+
+msgctxt "field:commission,line_tax_rate:"
+msgid "Line Tax Rate"
+msgstr "Taux de taxe de la ligne"
+
+msgctxt "field:commission,line_taxed_amount:"
+msgid "Line Taxed Amount"
+msgstr "Montant taxé de la ligne"
 
 msgctxt "field:commission,party:"
 msgid "Party"
@@ -1161,13 +1181,13 @@ msgctxt "model:commission.create_invoice.ask,name:commission."
 msgid "Create Commission Invoice"
 msgstr "Générer les bordereaux de commission"
 
-msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
-msgid "Create Commission Invoices"
-msgstr "Générer les bordereaux de commission"
-
 msgctxt "model:ir.action,name:commission.act_agent_form"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
+msgid "Create Commission Invoices"
+msgstr "Générer les bordereaux de commission"
 
 msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
 msgid "Agents"
@@ -1182,12 +1202,12 @@ msgid "Product Template - Commission Agent"
 msgstr "Modèle produit - Protocole de commissionnement"
 
 msgctxt "selection:commission.agent,type_:commission."
-msgid "Agent Of"
-msgstr "Est commissionné par"
-
-msgctxt "selection:commission.agent,type_:commission."
 msgid "Principal Of"
 msgstr "Commissionne"
+
+msgctxt "selection:commission.agent,type_:commission."
+msgid "Agent Of"
+msgstr "Est commissionné par"
 
 msgctxt "view:commission.agent:commission."
 msgid "Agent"

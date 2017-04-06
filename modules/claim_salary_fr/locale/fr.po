@@ -22,13 +22,6 @@ msgstr ""
 "Ce sinistre a des périodes d'indemnisation, il faudra peut être les annuler "
 "ou les recalculer si les salaires sont modifiés"
 
-msgctxt "error:claim:"
-msgid ""
-"Declaration date %(declaration_date)s is prior to start date %(start_date)s"
-msgstr ""
-"La date de déclaration %(declaration_date)s est antérieure à la date de "
-"début %(start_date)s"
-
 msgctxt "field:claim.contributions_view,extra_data:"
 msgid "Contributions"
 msgstr "Contributions"
@@ -392,13 +385,13 @@ msgctxt "model:ir.action,name:"
 msgid "Compute net salaries"
 msgstr "Calculer les salaires nets"
 
-msgctxt "model:ir.action,name:salaries_wizard"
-msgid "Salaries Computation Wizard"
-msgstr "Assistant de saisie des salaires"
-
 msgctxt "model:ir.action,name:act_net_calculation_rule_form"
 msgid "Net Calculation Rules"
 msgstr "Règles de calcul pour le net"
+
+msgctxt "model:ir.action,name:salaries_wizard"
+msgid "Salaries Computation Wizard"
+msgstr "Assistant de saisie des salaires"
 
 msgctxt "model:ir.ui.menu,name:menu_net_calculation_rule"
 msgid "Net Calculation Rules"

@@ -32,7 +32,7 @@ msgstr "Un bordereau assureur a déja été généré aujourd'hui pour (%s)"
 
 msgctxt "error:received_premiums:"
 msgid "Received Premium"
-msgstr "Primes reçues"
+msgstr "Prime reçue"
 
 msgctxt "field:account.invoice.line,principal_lines:"
 msgid "Principal Lines"

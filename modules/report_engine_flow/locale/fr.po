@@ -198,7 +198,7 @@ msgstr "Variables de flux"
 
 msgctxt "model:mass.flow.batch,name:"
 msgid "Mass Flow Batch"
-msgstr ""
+msgstr "Batch d'extraction en masse"
 
 msgctxt "model:report.flow.variable,name:"
 msgid "Flow Variable"

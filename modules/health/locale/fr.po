@@ -66,6 +66,10 @@ msgctxt "field:offered.product,is_health:"
 msgid "Is Health"
 msgstr "Santé"
 
+msgctxt "field:party.party,birth_order:"
+msgid "Birth Order"
+msgstr "Rang de naissance"
+
 msgctxt "field:party.party,health_complement:"
 msgid "Health Complement"
 msgstr "Complément Santé"

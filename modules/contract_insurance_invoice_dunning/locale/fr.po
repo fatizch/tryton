@@ -136,6 +136,10 @@ msgid "Terminate Contract"
 msgstr "Résilier contentieux le contrat"
 
 msgctxt "selection:account.dunning.level,termination_mode:"
+msgid "At Dunning Effective Date"
+msgstr "A la date d'effet de la relance"
+
+msgctxt "selection:account.dunning.level,termination_mode:"
 msgid "At Last Paid Invoice"
 msgstr "A la dernière quittance payée"
 

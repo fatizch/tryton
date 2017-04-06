@@ -2,6 +2,50 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:offered.product.premium_date,duration:"
+msgid "Duration"
+msgstr "Durée"
+
+msgctxt "field:offered.product.premium_date,duration_unit:"
+msgid "Unit"
+msgstr "Unité"
+
+msgctxt "selection:offered.product.premium_date,duration_unit:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:offered.product.premium_date,duration_unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:offered.product.premium_date,duration_unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:offered.product.premium_date,duration_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:offered.product.premium_date,duration_unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:offered.product.premium_date,duration_unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "selection:offered.product.premium_date,duration_unit:"
+msgid "Year"
+msgstr "Année"
+
+msgctxt "selection:offered.product.premium_date,type_:"
+msgid "Duration from the contract current start date"
+msgstr "Durée à partir du début du terme courant du contrat"
+
+msgctxt "selection:offered.product.premium_date,type_:"
+msgid "Duration from the contract initial start date"
+msgstr "Durée à partir de la date d'effet initiale du contrat"
+
 msgctxt "selection:offered.product.premium_date,type_:"
 msgid "Yearly Each Covered Anniversary Date"
 msgstr "Annuellement à l'anniversaire de l'assuré"
