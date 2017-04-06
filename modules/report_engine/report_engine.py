@@ -514,14 +514,6 @@ class ReportTemplateVersion(Attachment, export.ExportImportMixin):
         return (super(ReportTemplateVersion, cls)._export_skips() |
             set(['digest', 'collision']))
 
-    @classmethod
-    def _import_json(cls, values, main_object=None):
-        pool = Pool()
-        Attachment = pool.get('ir.attachment')
-        Attachment.decode_binary_data(values)
-        return super(ReportTemplateVersion, cls)._import_json(values,
-            main_object)
-
 
 class Printable(Model):
     'Base class for printable objects'
