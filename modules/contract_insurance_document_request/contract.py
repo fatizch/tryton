@@ -213,7 +213,7 @@ class Contract(RemindableInterface):
             self.raise_user_error('non_conform_documents')
 
     def before_activate(self):
-        self.check_required_documents()
+        self.check_required_documents(only_blocking=True)
         super(Contract, self).before_activate()
 
     @classmethod
