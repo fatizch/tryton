@@ -117,6 +117,5 @@ class SetNumberInvoiceContractBatch(batch.BatchRoot):
 
     @classmethod
     def execute(cls, objects, ids, treatment_date):
-        for obj in objects:
-            obj.set_number()
+        Pool().get('account.invoice').set_number(objects)
         cls.logger.info('%d invoices numbers set' % len(objects))
