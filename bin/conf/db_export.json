@@ -77,5 +77,6 @@
     "rule_engine_log",
     "tag-object",
     "underwriting",
-    "underwriting_result"
+    "underwriting_result",
+    "report_production.request"
 ]
