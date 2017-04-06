@@ -1304,10 +1304,10 @@ class TerminateContract(EndorsementWizardStepMixin):
         endorsement = select_screen.endorsement
         contracts = []
         if endorsement:
-            contracts = [c for c in endorsement.contract_endorsements]
+            contracts = [c.contract for c in endorsement.contract_endorsements]
         elif hasattr(endorsement, 'contract'):
             contracts = [select_screen.contract]
-        return all([x.initial_start_date > select_screen.effective_date
+        return all([x.initial_start_date <= select_screen.effective_date
                 for x in contracts])
 
     def step_default(self, name):
@@ -1367,13 +1367,15 @@ class TerminateContract(EndorsementWizardStepMixin):
                     for activation_history in contract.activation_history:
                         if (activation_history.start_date >
                                 self.termination_date):
-                            history_endorsements.append(EndorsementActivationHistory(
+                            history_endorsements.append(
+                                EndorsementActivationHistory(
                                     action='remove',
                                     contract_endorsement=endorsement,
                                     activation_history=activation_history))
                         else:
                             valid_activation_history.append(activation_history)
-                    latest = max(valid_activation_history, key=attrgetter('start_date'))
+                    latest = max(valid_activation_history,
+                        key=attrgetter('start_date'))
                     history_endorsements.append(EndorsementActivationHistory(
                             action='update',
                             contract_endorsement=endorsement,
@@ -1382,7 +1384,8 @@ class TerminateContract(EndorsementWizardStepMixin):
                     endorsement.activation_history = history_endorsements
                 # remove activation_history
                 else:
-                    endorsement.activation_history = [EndorsementActivationHistory(
+                    endorsement.activation_history = [
+                        EndorsementActivationHistory(
                             action='update',
                             contract_endorsement=endorsement,
                             activation_history=last_period,
