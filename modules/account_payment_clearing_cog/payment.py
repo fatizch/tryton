@@ -24,6 +24,10 @@ class Journal:
         'what would have happened if the payment had been succeeded and then '
         'failed')
 
+    @staticmethod
+    def default_post_clearing_move():
+        return True
+
     @classmethod
     def _export_light(cls):
         return super(Journal, cls)._export_light() | {'clearing_account',
