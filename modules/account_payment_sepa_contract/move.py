@@ -16,6 +16,8 @@ class MoveLine:
         pool = Pool()
         Invoice = pool.get('account.invoice')
         payment = super(MoveLine, self).new_payment(journal, kind, amount)
+        if kind == 'payable':
+            return payment
         if (self.origin and isinstance(self.origin, Invoice) and
                 self.origin.sepa_mandate):
             payment['sepa_mandate'] = self.origin.sepa_mandate.id
