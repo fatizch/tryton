@@ -12,9 +12,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="note" colspan="3" xexpand="1"/>
         </group>
         <group id="buttons" colspan="3" col="3">
-            <button string="Calculate" name="calculate" xexpand="1"/>
-            <button string="Modify" name="modify_indemnification" xexpand="1"/>
-            <button string="Cancel" name="cancel_indemnification" xexpand="1"/>
+            <button string="Calculate" name="calculate"/>
+            <button string="Modify" name="modify_indemnification"/>
+            <button string="Cancel" name="cancel_indemnification"/>
         </group>
     </group>
     <label name="start_date"/>
