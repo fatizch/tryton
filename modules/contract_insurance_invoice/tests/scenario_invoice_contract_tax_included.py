@@ -3,11 +3,12 @@
 # #Title# #Contract Start Date Endorsement Scenario
 # #Comment# #Imports
 import datetime
-from proteus import config, Model, Wizard
+from proteus import Model, Wizard
 from trytond.tests.tools import activate_modules
 from decimal import Decimal
 
-from trytond.modules.company.tests.tools import create_company, get_company
+from trytond.modules.company.tests.tools import get_company
+from trytond.modules.company_cog.tests.tools import create_company
 from trytond.modules.currency.tests.tools import get_currency
 
 # #Comment# #Install Modules

@@ -9,7 +9,8 @@
     >>> from trytond.modules.contract.tests.tools import add_quote_number_generator
     >>> from trytond.modules.currency.tests.tools import get_currency
     >>> from trytond.modules.country_cog.tests.tools import create_country
-    >>> from trytond.modules.company.tests.tools import create_company, get_company
+    >>> from trytond.modules.company.tests.tools import get_company
+    >>> from trytond.modules.company_cog.tests.tools import create_company
     >>> from trytond.modules.offered.tests.tools import init_product
     >>> from trytond.modules.account.tests.tools import (
     ...     create_fiscalyear, create_chart, get_accounts)
@@ -194,6 +195,9 @@ Create indemnifications::
     >>> controller = Wizard('claim.indemnification.assistant',
     ...     models=indemnifications,
     ...     action=control_action)
+
+ Manually set wizard mode for apply_filters::
+
     >>> controller.form.mode = 'control'
     >>> controller.form.order_sort = 'ASC'
     >>> controller.form.control[0].action = 'validate'

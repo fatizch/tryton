@@ -5,11 +5,12 @@ Contract Start Date Endorsement Scenario
 Imports::
 
     >>> import datetime
-    >>> from proteus import config, Model, Wizard
+    >>> from proteus import Model, Wizard
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
     >>> from trytond.tests.tools import activate_modules
-    >>> from trytond.modules.company.tests.tools import create_company, get_company
+    >>> from trytond.modules.company.tests.tools import get_company
+    >>> from trytond.modules.company_cog.tests.tools import create_company
     >>> from trytond.modules.currency.tests.tools import get_currency
 
 Install Modules::
