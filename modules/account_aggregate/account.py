@@ -226,22 +226,22 @@ class LineAggregated(model.CoogSQL, model.CoogView):
     'Account Move Line Aggregated'
     __name__ = 'account.move.line.aggregated'
 
-    aggregated_move_id = fields.Char('Aggregated Move Id')
+    aggregated_move_id = fields.Char('Aggregated Move Id', readonly=True)
     account = fields.Many2One('account.account', 'Account',
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', readonly=True)
     journal = fields.Many2One('account.journal', 'Journal',
-        ondelete='RESTRICT')
-    date = fields.Date('Date')
-    post_date = fields.Date('Post Date')
+        ondelete='RESTRICT', readonly=True)
+    date = fields.Date('Date', readonly=True)
+    post_date = fields.Date('Post Date', readonly=True)
     snapshot = fields.Many2One('account.move.snapshot', 'Snapshot',
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', readonly=True)
     debit = fields.Numeric('Debit', digits=(16, Eval('currency_digits', 2)),
-        depends=['currency_digits'])
+        depends=['currency_digits'], readonly=True)
     credit = fields.Numeric('Credit', digits=(16, Eval('currency_digits', 2)),
-        depends=['currency_digits'])
+        depends=['currency_digits'], readonly=True)
     currency_digits = fields.Function(fields.Integer('Currency Digits'),
         'get_currency_digits')
-    description = fields.Char('Description')
+    description = fields.Char('Description', readonly=True)
 
     @classmethod
     def __setup__(cls):
