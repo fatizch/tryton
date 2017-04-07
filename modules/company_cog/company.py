@@ -21,6 +21,10 @@ class Company(export.ExportImportMixin):
     def __setup__(cls):
         super(Company, cls).__setup__()
         cls.party.ondelete = 'RESTRICT'
+        cls._error_messages.update({
+                'missing_lang': 'The language must be configured on company '
+                '%(party)s before going on',
+                })
 
     @classmethod
     def _export_light(cls):

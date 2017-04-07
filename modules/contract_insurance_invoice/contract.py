@@ -945,6 +945,9 @@ class Contract:
         pool = Pool()
         Invoice = pool.get('account.invoice')
         lang = self.company.party.lang
+        if not lang:
+            self.company.raise_user_error('missing_lang',
+                {'party': self.company.rec_name})
         return Invoice(
             invoice_address=None,  # Will be really set in finalize invoice
             contract=self,

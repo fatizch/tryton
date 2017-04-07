@@ -600,6 +600,9 @@ class Payment:
             return description
         if not lang:
             lang = self.journal.company.party.lang
+            if not lang:
+                self.journal.company.raise_user_error('missing_lang',
+                    {'party': self.journal.company.rec_name})
         descriptions = []
         if self.kind == 'payable':
             descriptions.append(self.raise_user_error(

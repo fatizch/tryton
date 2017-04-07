@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:company.company:"
+msgid "The language must be configured on company %(party)s before going on"
+msgstr "La langue doit d'abord être configurée sur la société %(party)s"
+
 msgctxt "field:company.company,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"

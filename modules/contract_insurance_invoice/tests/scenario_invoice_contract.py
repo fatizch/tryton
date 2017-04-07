@@ -25,7 +25,7 @@ from trytond.modules.currency.tests.tools import get_currency
 #        'conf', 'trytond.conf'))
 
 # #Comment# #Install Modules
-config = activate_modules('contract_insurance_invoice')
+activate_modules('contract_insurance_invoice')
 
 # #Comment# #Get Models
 Account = Model.get('account.account')
