@@ -18,7 +18,7 @@ class BaseMassFlowBatch(batch.MemorySavingBatch):
     def check_mandatory_parameters(cls, *args, **kwargs):
         assert kwargs.get('flush_size', None), 'flush_size is required'
         assert kwargs.get('output_filename', None), 'output_filename is'\
-            'required'
+            ' required'
 
     @classmethod
     def data_separator(cls, *args, **kwargs):

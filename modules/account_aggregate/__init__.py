@@ -17,6 +17,7 @@ def register():
         SnapshotDone,
         SnapshotTakeBatch,
         LineAggregated,
+        ExtractAggregatedMove,
         module='account_aggregate', type_='model')
     Pool.register(
         TakeSnapshot,

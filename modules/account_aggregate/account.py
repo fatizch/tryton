@@ -14,6 +14,7 @@ from trytond.pyson import Eval, PYSONEncoder
 from trytond.wizard import Wizard, StateView, StateTransition, StateAction, \
     Button
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields, model, utils
 
@@ -175,6 +176,11 @@ class Snapshot(model.CoogSQL, model.CoogView):
     'Snapshot Move'
     __name__ = 'account.move.snapshot'
     name = fields.Char('Name', required=True)
+    extracted = fields.Boolean('Extracted', readonly=True, select=True)
+
+    @staticmethod
+    def default_extracted():
+        return False
 
     @classmethod
     def __setup__(cls):
@@ -259,18 +265,39 @@ class LineAggregated(model.CoogSQL, model.CoogView):
             'account.move.line': pool.get('account.move.line'
                 ).__table__(),
             'account.move': pool.get('account.move').__table__(),
-            'account.journal': pool.get('account.journal').__table__()
+            'account.journal': pool.get('account.journal').__table__(),
+            'account.move.snapshot': Pool().get('account.move.snapshot'
+                ).__table__(),
             }
 
     @classmethod
     def where_clause(cls, tables):
-        return None
+        if not ServerContext().get('from_batch', None):
+            return None
+        move = tables['account.move']
+        snapshot = tables['account.move.snapshot']
+        snap_ref = ServerContext().get('snap_ref', None)
+        treatment_date = ServerContext().get('batch_treatment_date')
+        if snap_ref:
+            return (snapshot.name == snap_ref)
+        return ((move.post_date <= treatment_date) &
+            (snapshot.extracted == False))
+
+    @classmethod
+    def sql_wrapper_batch(cls, col, type_):
+        if ServerContext().get('from_batch', False):
+            if type_ == 'date':
+                return ToChar(col, 'YYYYMMDD')
+            elif type_ == 'decimal':
+                return Cast(col, 'VARCHAR')
+        return col
 
     @classmethod
     def fields_to_select(cls, tables):
         line = tables['account.move.line']
         move = tables['account.move']
         journal = tables['account.journal']
+
         return [Max(line.id).as_('id'),
             Literal(0).as_('create_uid'),
             Literal(0).as_('create_date'),
@@ -281,16 +308,18 @@ class LineAggregated(model.CoogSQL, model.CoogView):
                 else_=Coalesce(Max(line.description),
                     Max(move.description))).as_('description'),
             Case((journal.aggregate,
-               Concat(ToChar(move.post_date, 'YYYYMMDD'),
+                Concat(cls.sql_wrapper_batch(move.post_date, 'date'),
                 Cast(move.snapshot, 'VARCHAR'))),
                 else_=Max(move.number)).as_('aggregated_move_id'),
             line.account.as_('account'),
             move.journal.as_('journal'),
-            move.date.as_('date'),
-            move.post_date.as_('post_date'),
+            cls.sql_wrapper_batch(move.date, 'date').as_('date'),
+            cls.sql_wrapper_batch(move.post_date, 'date').as_('post_date'),
             move.snapshot.as_('snapshot'),
-            Sum(Coalesce(line.debit, 0)).as_('debit'),
-            Sum(Coalesce(line.credit, 0)).as_('credit'),
+            cls.sql_wrapper_batch(Sum(Coalesce(line.debit, 0)), 'decimal').as_(
+                'debit'),
+            cls.sql_wrapper_batch(Sum(Coalesce(line.credit, 0)), 'decimal').as_(
+                'credit'),
             ]
 
     @classmethod
@@ -304,22 +333,35 @@ class LineAggregated(model.CoogSQL, model.CoogView):
             move.journal,
             move.date,
             move.post_date,
-            move.snapshot]
+            move.snapshot,
+            ]
+
+    @classmethod
+    def having_clause(cls, tables):
+        line = tables['account.move.line']
+        return (Sum(Coalesce(line.debit, 0)) -
+                Sum(Coalesce(line.credit, 0)) > 0)
 
     @classmethod
     def join_table(cls, tables):
         line = tables['account.move.line']
         move = tables['account.move']
         journal = tables['account.journal']
-        return line.join(move, condition=line.move == move.id
+        snapshot = tables['account.move.snapshot']
+        query_table = line.join(move, condition=line.move == move.id
             ).join(journal, condition=move.journal == journal.id)
+        if ServerContext().get('from_batch', False):
+            query_table = query_table.join(snapshot, condition=(
+                    move.snapshot == snapshot.id))
+        return query_table
 
     @classmethod
     def table_query(cls):
         tables = cls.get_tables()
         return cls.join_table(tables).select(*cls.fields_to_select(tables),
             group_by=cls.get_group_by(tables),
-            where=cls.where_clause(tables))
+            where=cls.where_clause(tables),
+            having=cls.having_clause(tables))
 
 
 class OpenLineAggregated(Wizard):
@@ -374,7 +416,17 @@ class OpenLine(Wizard):
                 if line.snapshot:
                     domain_.append(('move.snapshot', '=', line.snapshot.id))
             else:
-                domain_ = [('id', '=', l.id)]
+                domain_ = [('id', '=', line.id)]
+            if line.credit > 0 or line.debit < 0:
+                domain_ = ['AND', domain_, ['OR',
+                    [('credit', '>', 0)],
+                    [('debit', '<', 0)],
+                    ]]
+            else:
+                domain_ = ['AND', domain_, ['OR',
+                    [('credit', '<', 0)],
+                    [('debit', '>', 0)],
+                    ]]
             return domain_
 
         action['pyson_domain'] = ['OR'] + [domain(l) for l in lines]

@@ -1,0 +1,16 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=extract_snapshot
+CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
+
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'FLUSH_SIZE' 'OUTPUT_FILENAME')
+CHAIN_REQUIRED=('TREATMENT_DATE' 'FLUSH_SIZE' 'OUTPUT_FILENAME')
+
+chain_params "$@"
+chain_begin
+
+chain_step account.move.aggregated.extract ${GIVEN_PARAMETERS[@]}
+chain_wait account.move.aggregated.extract
+
+chain_end
