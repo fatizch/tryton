@@ -269,7 +269,7 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
 
     @fields.depends('descriptor')
     def on_change_with_show_descriptor(self, name=None):
-        return len(self.descriptor) > 0
+        return self.descriptor and len(self.descriptor) > 0
 
     def cache_data(self):
         return {'id': self.id, 'action': self.action}
