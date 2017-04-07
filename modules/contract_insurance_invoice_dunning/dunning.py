@@ -221,7 +221,7 @@ class Level:
             'unpaid_premium_termination')
         void_reason = SubStatus.get_sub_status('unpaid_premium_void')
         for dunning in dunnings:
-            if not dunning.contract:
+            if not dunning.contract or dunning.contract.status == 'terminated':
                 continue
             if self.termination_mode == 'at_last_posted_invoice':
                 date = dunning.contract.last_posted_invoice_end
@@ -231,7 +231,8 @@ class Level:
             elif self.termination_mode == 'at_dunning_effective_date':
                 date = dunning.calculate_last_process_date()
             if (dunning.contract.termination_reason == termination_reason and
-                    dunning.contract.end_date == date):
+                    dunning.contract.end_date == date)\
+                    or dunning.contract.final_end_date <= date:
                 continue
             if not date:
                 to_void.append(dunning.contract)
