@@ -1869,7 +1869,19 @@ class Premium:
     def _custom_rrule(self, start, interval):
         if ((self.main_contract.start_date + relativedelta(days=1)).month !=
                 self.main_contract.start_date.month):
-            return CustomRrule(start, interval)
+            # If the contract start date is at the end of month, we force the
+            # rrule to follow the end of month to make sure we have full months
+            return CustomRrule(start, interval, follow_end_of_month=True)
+        if (self.main_contract.start_date.day > start.day and
+                start.month != (start + relativedelta(days=1)).month):
+            # Special case, the rrule must be synced relative to the contract
+            # start day rather than the period start. For instance, if the
+            # contract is synced on 30/03, we want a 28/02 - 29/03 to be a full
+            # month, so we force the sync date to 30/01
+            base_start = start + relativedelta(months=-1)
+            base_start = datetime.date(base_start.year, base_start.month,
+                self.main_contract.start_date.day)
+            return CustomRrule(base_start, interval)
         return CustomRrule(start, interval, follow_end_of_month=False)
 
     def _get_rrule(self, start):

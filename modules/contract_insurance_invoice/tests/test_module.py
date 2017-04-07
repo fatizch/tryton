@@ -243,6 +243,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         for period, amount in (
                 ((date(2017, 4, 30), date(2017, 5, 29)), Decimal(30)),
                 ((date(2017, 5, 30), date(2017, 6, 29)), Decimal(30)),
+                ((date(2018, 2, 28), date(2018, 3, 29)), Decimal(30)),
+                ((date(2020, 2, 29), date(2020, 3, 29)), Decimal(30)),
                 ):
             self.assertEqual(premium_worst_sync.get_amount(*period), amount)
         premium_worst_sync.amount = Decimal(31)
