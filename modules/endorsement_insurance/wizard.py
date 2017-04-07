@@ -916,9 +916,10 @@ class CoveredElementDisplayer(model.CoogView):
             displayer.display_name = covered_element.rec_name
         else:
             displayer.cur_covered_id = None
-            displayer.display_name = 'New Covered Element (%s)' % (
-                covered_element.party.rec_name if covered_element.party
-                else covered_element.name)
+            if covered_element.party:
+                displayer.display_name = covered_element.party.rec_name
+            else:
+                displayer.display_name = covered_element.name
         if getattr(covered_element, 'versions', None) is None:
             covered_element.versions = [Pool().get(
                     'contract.covered_element.version').get_default_version()]
