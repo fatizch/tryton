@@ -1,6 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from itertools import groupby
+import datetime
+
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields
 
@@ -60,6 +64,10 @@ class Indemnification:
                 'bad_dates': 'The indemnification period (%(indemn_start)s - '
                 "%(indemn_end)s) is not compatible with the contract's end "
                 'date (%(contract_end)s).',
+                'covered_element_rupture': 'The covered element '
+                '%(party_rec_name)s is in rupture for the contract '
+                '%(contract)s at %(date)s and the beneficiary should be the '
+                'covered element itself, not %(benef_rec_name)s'
                 })
 
     def get_possible_products(self, name):
@@ -74,9 +82,42 @@ class Indemnification:
         self.update_product()
 
     @classmethod
+    def covered_elements_per_party_contract(cls, indemnifications):
+        covered_elements = {}
+
+        def group_by_party_contract(x):
+            return (x.main_contract, x.party)
+
+        elements = sorted([x.service.theoretical_covered_element for x in
+                indemnifications], key=group_by_party_contract)
+        for key, sub_elements in groupby(elements, group_by_party_contract):
+            covered_elements[key] = elements[0] if elements else None
+        return covered_elements
+
+    @classmethod
     def check_calculable(cls, indemnifications):
         super(Indemnification, cls).check_calculable(indemnifications)
+        covered_elements = cls.covered_elements_per_party_contract(
+            indemnifications)
+        pool = Pool()
+        Date = pool.get('ir.date')
+        lang = pool.get('res.user')(Transaction().user).language
         for indemnification in indemnifications:
+            key = (indemnification.service.contract,
+                indemnification.service.claim.claimant)
+            covered_element = covered_elements[key]
+            if (covered_element and covered_element.contract_exit_date and
+                    indemnification.beneficiary != covered_element.party and
+                    (indemnification.start_date <=
+                        covered_element.contract_exit_date and
+                        (indemnification.end_date or datetime.date.min) >=
+                        covered_element.contract_exit_date)):
+                cls.append_functional_error('covered_element_rupture', {
+                        'party_rec_name': key[1].rec_name,
+                        'contract': key[0].contract_number,
+                        'date': Date.date_as_string(
+                            covered_element.contract_exit_date, lang),
+                        'benef_rec_name': indemnification.beneficiary.rec_name})
             if not indemnification.service:
                 continue
             contract = indemnification.service.contract
