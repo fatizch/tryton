@@ -24,7 +24,7 @@ INDEMNIFICATION_KIND = [
     ]
 INDEMNIFICATION_DETAIL_KIND = [
     ('deductible', 'Deductible'),
-    ('benefit', 'Indemnified'),
+    ('benefit', 'Benefit'),
     ]
 ANNUITY_FREQUENCIES = [
     ('', ''),

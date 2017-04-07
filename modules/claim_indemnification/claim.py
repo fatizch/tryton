@@ -75,9 +75,18 @@ class Claim:
                     for x in self.indemnifications_details]))
 
     def get_indemnifications_details(self, name):
-        IndemnificationDetail = Pool().get('claim.indemnification.detail')
-        return [i.id for i in IndemnificationDetail.search(
-                [('indemnification.service.claim', '=', self.id)])]
+        pool = Pool()
+        IndemnificationDetail = pool.get('claim.indemnification.detail')
+        config = pool.get('claim.configuration').get_singleton()
+        domain_ = [('indemnification.service.claim', '=', self.id)]
+        if config.show_indemnification_limit:
+            Indemnification = pool.get('claim.indemnification')
+            indemnifications = [x.id for x in Indemnification.search(
+                    [('service.claim', '=', self.id)], order=[(
+                                'start_date', config.sorting_method)],
+                    limit=config.show_indemnification_limit)]
+            domain_.append(('indemnification', 'in', indemnifications))
+        return [i.id for i in IndemnificationDetail.search(domain_)]
 
     def calculate(self):
         for loss in self.losses:
@@ -406,7 +415,7 @@ class ClaimService:
                                 from_date < indemn.end_date)):
                         if indemn.status == 'paid':
                             to_cancel.append(indemn)
-                        else:
+                        elif indemn.status != 'rejected':
                             to_delete.append(indemn)
         if to_cancel:
             if (service.benefit.indemnification_kind != 'capital' and
@@ -631,6 +640,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             'readonly': Eval('status') == 'cancel_paid'
             }, ondelete='RESTRICT', depends=['status'])
     is_paid = fields.Function(fields.Boolean('Paid'), 'get_is_paid')
+    note = fields.Char('Note', states={
+            'invisible': ~Bool(Eval('note'))},
+        readonly=True, depends=['note'])
 
     @classmethod
     def __setup__(cls):
@@ -958,6 +970,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     @classmethod
     @ModelView.button
     def validate_indemnification(cls, indemnifications):
+        if not indemnifications:
+            return
         validate = []
         cancelled = []
         for indemn in indemnifications:
@@ -972,14 +986,27 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         Event.notify_events(indemnifications, 'validate_indemnification')
 
     @classmethod
-    def reject_indemnification(cls, indemnifications):
-        cls.write(indemnifications, {'status': 'rejected'})
+    def reject_indemnification(cls, indemnifications_with_values):
+        """
+        This method takes a dictionnary with indemnifications a keys and
+        dictionnary of new values (mainly the note field) as values.
+        """
+        if not indemnifications_with_values:
+            return
+        to_write = []
+        for indemnification, values in indemnifications_with_values.items():
+            values.update({'status': 'rejected'})
+            to_write.extend([[indemnification], values])
+        cls.write(*to_write)
         Event = Pool().get('event')
-        Event.notify_events(indemnifications, 'reject_indemnification')
+        Event.notify_events(indemnifications_with_values.keys(),
+            'reject_indemnification')
 
     @classmethod
     @ModelView.button
     def cancel_indemnification(cls, indemnifications):
+        if not indemnifications:
+            return
         pool = Pool()
         cls.write(indemnifications, {'status': 'cancelled'})
         Event = pool.get('event')
@@ -1170,6 +1197,9 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
     benefit_description = fields.Function(
         fields.Char('Prestation'),
         'get_benefit_description')
+    indemnification_note = fields.Function(
+        fields.Char('Note'),
+        'get_indemnification_note')
 
     @classmethod
     def __setup__(cls):
@@ -1178,6 +1208,9 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
                 'capital_string': 'Capital',
                 })
         cls._order = [('start_date', 'ASC')]
+
+    def get_indemnification_note(self, name):
+        return self.indemnification.note
 
     def get_indemnification_kind(self, name):
         return self.indemnification.kind
@@ -1217,11 +1250,8 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
         return details
 
     def get_status_string(self, name):
-        if self.indemnification.status in ('cancelled', 'cancel_paid',
-                'cancel_scheduled', 'cancel_validated', 'cancel_controlled'):
-            return '%s - [%s]' % (
-                self.kind_string, self.indemnification.status_string)
-        return self.kind_string
+        return '%s - [%s]' % (
+            self.kind_string, self.indemnification.status_string)
 
 
 class IndemnificationControlRule(

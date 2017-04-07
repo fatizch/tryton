@@ -4,4 +4,10 @@ this repository contains the full copyright notices and license terms. -->
 <form>
   <label name="control_rule"/>
   <field name="control_rule"/>
+  <newline/>
+  <label name="show_indemnification_limit"/>
+  <group id="indemnification_searching">
+      <field name="show_indemnification_limit" xexpand="0"/>
+      <field name="sorting_method" xalign="0" xexpand="0"/>
+  </group>
 </form>

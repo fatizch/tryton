@@ -1,16 +1,22 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form>
+<form col="4">
     <label name="service"/>
     <field name="service"/>
     <newline/>
-    <label name="status"/>
-    <field name="status"/>
-    <button string="Calculate" name="calculate"/>
-    <button string="Modify" name="modify_indemnification"/>
-    <button string="Cancel" name="cancel_indemnification"/>
-    <newline/>
+    <group id="header" colspan="4" col="7">
+        <label name="status"/>
+        <group id="status" colspan="3" col="4">
+            <field name="status" colspan="1" xexpand="0"/>
+            <field name="note" colspan="3" xexpand="1"/>
+        </group>
+        <group id="buttons" colspan="3" col="3">
+            <button string="Calculate" name="calculate" xexpand="1"/>
+            <button string="Modify" name="modify_indemnification" xexpand="1"/>
+            <button string="Cancel" name="cancel_indemnification" xexpand="1"/>
+        </group>
+    </group>
     <label name="start_date"/>
     <field name="start_date"/>
     <label name="end_date"/>

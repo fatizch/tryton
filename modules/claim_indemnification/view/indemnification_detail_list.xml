@@ -17,4 +17,5 @@ this repository contains the full copyright notices and license terms. -->
     </field>
     <field name="benefit_description"/>
     <field name="indemnification_kind" tree_invisible="1"/>
+    <field name="indemnification_note"/>
 </tree>

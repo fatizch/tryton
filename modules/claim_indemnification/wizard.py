@@ -241,31 +241,18 @@ class IndemnificationAssistant(Wizard):
             'order_sort': 'DESC'}
 
     def transition_validation_state(self):
-        pool = Pool()
-        # Claim = pool.get('claim') # unused for the moment
-        Note = pool.get('ir.note')
-        Indemnification = pool.get('claim.indemnification')
-        claims = []
+        Indemnification = Pool().get('claim.indemnification')
         validate = []
-        reject = []
-        notes = []
+        reject = {}
         for element in self.validate_view_state.validate:
-            if element.note:
-                notes.append({
-                        'message': element.note,
-                        'resource': str(element.indemnification)})
             if element.action != 'nothing':
                 if element.action == 'validate':
-                    validate.append(element.indemnification.id)
+                    validate.append(element.indemnification)
                 elif element.action == 'refuse':
-                    reject.append(element.indemnification.id)
-                claims.append(element.claim.id)
-        Note.create(notes)
-        Indemnification.validate_indemnification(
-            Indemnification.browse(validate))
-        Indemnification.invoice(Indemnification.browse(validate))
-        Indemnification.reject_indemnification(
-            Indemnification.browse(reject))
+                    reject[element.indemnification] = {'note': element.note}
+        Indemnification.validate_indemnification(validate)
+        Indemnification.invoice(validate)
+        Indemnification.reject_indemnification(reject)
         return 'end'
 
     def transition_control_state(self):
