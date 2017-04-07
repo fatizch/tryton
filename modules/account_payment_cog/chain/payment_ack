@@ -10,6 +10,9 @@ CHAIN_REQUIRED=('TREATMENT_DATE' 'PAYMENT_KIND' 'JOURNAL_METHODS')
 chain_params "$@"
 chain_begin
 
+chain_step account.payment.succeed ${GIVEN_PARAMETERS[@]}
+chain_wait account.payment.succeed || chain_end
+
 chain_step account.payment.acknowledge ${GIVEN_PARAMETERS[@]}
 chain_wait account.payment.acknowledge || chain_end
 

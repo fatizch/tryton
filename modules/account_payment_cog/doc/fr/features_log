@@ -1,3 +1,4 @@
+* Ajout des status sur les groupes de paiement
 * Gestion de l'ordre d'exécution des actions de rejet
 * Permettre d'imprimer des paiements regroupés à l'échec
 * Amélioration des performances de l'assistant de création des paiements
@@ -26,7 +27,7 @@ Version 1.6 - 2015-12-23
 Version 1.4 - 2015-05-29
 * Calculer la date de paiement en fonction du paiement précédemment envoyé
 * Ajout de l'assistant de création des paiements
-* Gérer le processus de rejet manual 
+* Gérer le processus de rejet manual
 * Permettre de configurer les actions de rejets en fonction d'un nombre d'essais
 * Permettre de bloquer les paiements pour un tiers donné
 * Création des paiements 'à payer' par batch

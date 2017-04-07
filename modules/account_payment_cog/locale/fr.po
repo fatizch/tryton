@@ -104,6 +104,7 @@ msgctxt "field:account.payment,manual_reject_code:"
 msgid "Manual Reject Code"
 msgstr "Motif de rejet manuel"
 
+
 msgctxt "field:account.payment,merged_id:"
 msgid "Merged ID"
 msgstr "ID regroupement"
@@ -503,6 +504,10 @@ msgctxt "field:account.payment.process,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:account.payment.succeed,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:party.party,block_payable_payments:"
 msgid "Block Payments"
 msgstr "Bloquer les paiements"
@@ -622,6 +627,10 @@ msgstr "Sélection des informations de prélèvement"
 msgctxt "model:account.payment.process,name:"
 msgid "Payment Treatment Batch"
 msgstr "Batch de traitement des paiements"
+
+msgctxt "model:account.payment.succeed,name:"
+msgid "Payment Succeed Batch"
+msgstr "Batch de réussite des paiements"
 
 msgctxt "model:event.type,name:event_fail_payment"
 msgid "Fail Payment"
@@ -744,12 +753,16 @@ msgid "Pending"
 msgstr "En cours"
 
 msgctxt "selection:account.payment.group,state:"
-msgid ""
-msgstr " "
+msgid "Acknowledged"
+msgstr "Reçu"
 
 msgctxt "selection:account.payment.group,state:"
 msgid "Processing"
 msgstr "En cours de traitement"
+
+msgctxt "selection:account.payment.group,state:"
+msgid "To Acknowledge"
+msgstr "Accusé récéption planifié"
 
 msgctxt "selection:account.payment.journal.failure_action,action:"
 msgid "Manual"
@@ -818,6 +831,14 @@ msgstr "Informations du rejet"
 msgctxt "view:account.payment.group:"
 msgid "Acknowledge"
 msgstr "Accuser réception"
+
+msgctxt "view:account.payment.group:"
+msgid "Processing"
+msgstr "Traitement"
+
+msgctxt "view:account.payment.group:"
+msgid "To Acknowledge"
+msgstr "Accusé récéption planifié"
 
 msgctxt "view:account.payment.journal.failure_action:"
 msgid "Payment Journal Failure Action"

@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .batch import *
+import batch
 from .party import *
 from .payment import *
 from .company import *
@@ -26,9 +26,10 @@ def register():
         MoveLine,
         PaymentInformationSelection,
         PaymentFailInformation,
-        PaymentTreatmentBatch,
-        PaymentCreationBatch,
-        PaymentAcknowledgeBatch,
+        batch.PaymentTreatmentBatch,
+        batch.PaymentCreationBatch,
+        batch.PaymentSucceedBatch,
+        batch.PaymentAcknowledgeBatch,
         Configuration,
         Group,
         Party,

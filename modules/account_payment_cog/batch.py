@@ -8,6 +8,7 @@ from sql.operators import Equal
 from sql.aggregate import Count
 
 from trytond.pool import Pool
+from trytond.tools import grouped_slice
 from trytond.transaction import Transaction
 from trytond.config import config
 
@@ -17,6 +18,7 @@ from trytond.modules.coog_core import batch, coog_string
 __all__ = [
     'PaymentTreatmentBatch',
     'PaymentCreationBatch',
+    'PaymentSucceedBatch',
     'PaymentAcknowledgeBatch',
     ]
 
@@ -193,15 +195,50 @@ class PaymentCreationBatch(batch.BatchRoot):
             coog_string.get_print_infos([x.id for x in move_lines], 'payment'))
 
 
-class PaymentAcknowledgeBatch(batch.BatchRoot):
-    'Payment Acknowledge Batch'
-    __name__ = 'account.payment.acknowledge'
+class PaymentValidationBatchBase(batch.BatchRoot):
+    'Payment Validation Batch Base'
+
+    @classmethod
+    def base_domain_select_ids(cls, payment_kind, **kwargs):
+        return [('group.state', '=', 'to_acknowledge'),
+            ('kind', '=', payment_kind)]
+
+    @classmethod
+    def select_ids(cls, treatment_date, group_reference=None,
+            payment_kind=None, journal_methods=None):
+        pool = Pool()
+        Group = pool.get('account.payment.group')
+        Payment = pool.get('account.payment')
+        if group_reference:
+            groups = Group.search([
+                    ('number', '=', group_reference)])
+            if len(groups) != 1:
+                msg = "Payment Group Reference %s invalid" % group_reference
+                cls.logger.error('%s. Aborting' % msg)
+                raise Exception(msg)
+            return [(payment.id,) for payment in groups[0].processing_payments]
+        payment_kind = payment_kind or cls.get_conf_item('payment_kind')
+        if payment_kind and payment_kind not in PAYMENT_KINDS:
+            msg = "ignoring payment_kind: '%s' not in %s" % (payment_kind,
+                PAYMENT_KINDS)
+            cls.logger.error('%s. Aborting' % msg)
+            raise Exception(msg)
+        domain = cls.base_domain_select_ids(payment_kind)
+        if journal_methods:
+            journal_methods = [x.strip() for x in journal_methods.split(',')]
+            domain.append(('journal.process_method', 'in', journal_methods))
+        return [(payment.id,) for payment in Payment.search(domain)]
+
+
+class PaymentSucceedBatch(PaymentValidationBatchBase):
+    'Payment Succeed Batch'
+    __name__ = 'account.payment.succeed'
 
     logger = logging.getLogger(__name__)
 
     @classmethod
     def __setup__(cls):
-        super(PaymentAcknowledgeBatch, cls).__setup__()
+        super(PaymentSucceedBatch, cls).__setup__()
         cls._default_config_items.update({
                 'payment_kind': '',
                 })
@@ -215,30 +252,9 @@ class PaymentAcknowledgeBatch(batch.BatchRoot):
         return 'account.payment'
 
     @classmethod
-    def select_ids(cls, treatment_date, group_reference=None,
-            payment_kind=None, journal_methods=None):
-        pool = Pool()
-        Group = pool.get('account.payment.group')
-        Payment = pool.get('account.payment')
-        if group_reference:
-            groups = Group.search([
-                    ('reference', '=', group_reference)])
-            if len(groups) != 1:
-                msg = "Payment Group Reference %s invalid" % group_reference
-                cls.logger.error('%s. Aborting' % msg)
-                raise Exception(msg)
-            return [[payment.id] for payment in groups[0].processing_payments]
-        payment_kind = payment_kind or cls.get_conf_item('payment_kind')
-        if payment_kind and payment_kind not in PAYMENT_KINDS:
-            msg = "ignoring payment_kind: '%s' not in %s" % (payment_kind,
-                PAYMENT_KINDS)
-            cls.logger.error('%s. Aborting' % msg)
-            raise Exception(msg)
-        domain = [('state', '=', 'processing'), ('kind', '=', payment_kind)]
-        if journal_methods:
-            journal_methods = [x.strip() for x in journal_methods.split(',')]
-            domain.append(('journal.process_method', 'in', journal_methods))
-        return [[payment.id] for payment in Payment.search(domain)]
+    def base_domain_select_ids(cls, payment_kind, **kwargs):
+        return super(PaymentSucceedBatch, cls).base_domain_select_ids(
+            payment_kind, **kwargs) + [('state', '=', 'processing')]
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, group_reference=None,
@@ -250,3 +266,40 @@ class PaymentAcknowledgeBatch(batch.BatchRoot):
             Payment.succeed(objects)
         cls.logger.info('%s succeed' %
             coog_string.get_print_infos([x.id for x in objects], 'payment'))
+
+
+class PaymentAcknowledgeBatch(PaymentValidationBatchBase):
+    'Payment Acknowledge Batch'
+    __name__ = 'account.payment.acknowledge'
+
+    logger = logging.getLogger(__name__)
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'account.payment.group'
+
+    @classmethod
+    def base_domain_select_ids(cls, payment_kind, **kwargs):
+        return super(PaymentAcknowledgeBatch, cls).base_domain_select_ids(
+            payment_kind, **kwargs) + [('state', '=', 'succeeded')]
+
+    @classmethod
+    def select_ids(cls, treatment_date, group_reference=None,
+            payment_kind=None, journal_methods=None):
+        pool = Pool()
+        Payment = pool.get('account.payment')
+        ids = [x[0] for x in
+            super(PaymentAcknowledgeBatch, cls).select_ids(treatment_date,
+            group_reference, payment_kind, journal_methods)]
+        for ids_slice in grouped_slice(ids):
+            payments = Payment.browse(list(ids_slice))
+            for group in {x.group.id for x in payments
+                    if not any(p.state == 'processing'
+                        for p in x.group.payments)}:
+                yield (group,)
+
+    @classmethod
+    def execute(cls, objects, ids, treatment_date, group_reference=None,
+            payment_kind=None, journal_methods=None):
+        Pool().get('account.payment.group').acknowledge(objects)
+        return ids

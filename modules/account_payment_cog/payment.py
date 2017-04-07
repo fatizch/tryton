@@ -8,7 +8,7 @@ from sql import Literal, Null
 
 from trytond import backend
 from trytond.transaction import Transaction
-from trytond.model import ModelView, Unique
+from trytond.model import Workflow, ModelView, Unique
 from trytond.wizard import StateView, Button, StateTransition, Wizard
 from trytond.wizard import StateAction
 from trytond.pool import Pool, PoolMeta
@@ -717,16 +717,13 @@ class Configuration:
         return self.direct_debit_journal
 
 
-class Group(ModelCurrency, export.ExportImportMixin, Printable):
+class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
     __name__ = 'account.payment.group'
     _func_key = 'number'
 
     processing_payments = fields.One2ManyDomain('account.payment', 'group',
         'Processing Payments',
         domain=[('state', '=', 'processing')])
-    state = fields.Function(
-        fields.Selection([('', ''), ('processing', 'Processing')], 'State'),
-        'get_state')
     amount = fields.Function(
         fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
@@ -734,15 +731,55 @@ class Group(ModelCurrency, export.ExportImportMixin, Printable):
     payment_dates = fields.Function(
         fields.Char('Payment Dates'),
         'get_payment_dates')
+    state = fields.Selection([
+            ('processing', 'Processing'),
+            ('to_acknowledge', 'To Acknowledge'),
+            ('acknowledged', 'Acknowledged'),
+            ], 'State', readonly=True, select=True)
 
     @classmethod
     def __setup__(cls):
         super(Group, cls).__setup__()
+        cls._transitions |= set((
+                ('processing', 'to_acknowledge'),
+                ('to_acknowledge', 'acknowledged'),
+                ('to_acknowledge', 'processing'),
+                ('processing', 'acknowledged'),
+                ))
         cls._buttons.update({
+                'processing': {
+                    'invisible': Eval('state') == 'acknowledged',
+                    },
+                'to_acknowledge': {
+                    'invisible': Eval('state') == 'acknowledged',
+                    },
                 'acknowledge': {
-                    'invisible': Eval('state') != 'processing',
+                    'invisible': Eval('state') == 'acknowledged',
                     },
                 })
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        group_h = TableHandler(cls, module_name)
+        to_migrate = not group_h.column_exist('state')
+        super(Group, cls).__register__(module_name)
+        if to_migrate:
+            pool = Pool()
+            cursor = Transaction().connection.cursor()
+            payment = pool.get('account.payment').__table__()
+            group = cls.__table__()
+
+            group_selection = payment.select(payment.group,
+                where=((payment.state == 'succeeded') &
+                    (payment.group != Null)))
+
+            cursor.execute(*group.update(columns=[group.state],
+                values=[Literal('acknowledged')],
+                where=group.id.in_(group_selection)))
+            cursor.execute(*group.update(columns=[group.state],
+                    values=[Literal('processing')],
+                    where=group.state == Null))
 
     @classmethod
     def view_attributes(cls):
@@ -762,33 +799,35 @@ class Group(ModelCurrency, export.ExportImportMixin, Printable):
     def _export_light(cls):
         return super(Group, cls)._export_light() | {'journal', 'company'}
 
+    @staticmethod
+    def default_state():
+        return 'processing'
+
     @classmethod
     @ModelView.button
+    @Workflow.transition('processing')
+    def processing(cls, groups):
+        pass
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('to_acknowledge')
+    def to_acknowledge(cls, groups):
+        pass
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('acknowledged')
     def acknowledge(cls, groups):
         Payment = Pool().get('account.payment')
         payments = []
         for group in groups:
             payments.extend(group.processing_payments)
-        Payment.succeed(payments)
+        if payments:
+            Payment.succeed(payments)
 
     def get_currency(self):
         return self.journal.currency if self.journal else None
-
-    @classmethod
-    def get_state(cls, groups, name):
-        pool = Pool()
-        cursor = Transaction().connection.cursor()
-        account_payment = pool.get('account.payment').__table__()
-        result = {x.id: False for x in groups}
-
-        cursor.execute(*account_payment.select(account_payment.group,
-                where=((account_payment.state == 'processing')
-                    & (account_payment.group.in_([x.id for x in groups]))),
-                group_by=[account_payment.group]))
-
-        for group_id, in cursor.fetchall():
-            result[group_id] = 'processing'
-        return result
 
     @classmethod
     def get_amount(cls, groups, name):

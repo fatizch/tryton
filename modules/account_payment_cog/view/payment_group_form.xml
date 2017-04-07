@@ -3,8 +3,14 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='kind']" position="after">
-        <label name="state"/>
-        <field name="state"/>
-        <button string="Acknowledge" name="acknowledge" colspan="2"/>
+        <group id="payment_group_status" colspan="4" col="5">
+            <label name="state"/>
+            <field name="state"/>
+            <group id="payment_group_buttons" col="3">
+                <button string="Processing" name="processing"/>
+                <button string="To Acknowledge" name="to_acknowledge"/>
+                <button string="Acknowledge" name="acknowledge"/>
+            </group>
+        </group>
     </xpath>
 </data>
