@@ -273,7 +273,7 @@ class LineAggregated(model.CoogSQL, model.CoogView):
     @classmethod
     def where_clause(cls, tables):
         if not ServerContext().get('from_batch', None):
-            return None
+            return Literal(True)
         move = tables['account.move']
         snapshot = tables['account.move.snapshot']
         snap_ref = ServerContext().get('snap_ref', None)
@@ -281,7 +281,7 @@ class LineAggregated(model.CoogSQL, model.CoogView):
         if snap_ref:
             return (snapshot.name == snap_ref)
         return ((move.post_date <= treatment_date) &
-            (snapshot.extracted == False))
+            (snapshot.extracted == False)) # NOQA
 
     @classmethod
     def sql_wrapper_batch(cls, col, type_):
