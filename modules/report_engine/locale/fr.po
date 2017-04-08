@@ -75,8 +75,8 @@ msgid "The document template code must be unique"
 msgstr "Le code du modèle de courrier doit être unique"
 
 msgctxt "error:report.template:"
-msgid "xls"
-msgstr "xls"
+msgid "xlsx"
+msgstr "xlsx"
 
 msgctxt "field:event.type.action,report_templates:"
 msgid "Report Templates"
@@ -789,8 +789,8 @@ msgid "Pdf"
 msgstr "Pdf"
 
 msgctxt "selection:report.template,format_for_internal_edm:"
-msgid "xls"
-msgstr "xls"
+msgid "xlsx"
+msgstr "xlsx"
 
 msgctxt "selection:report.template,output_kind:"
 msgid "From Model"

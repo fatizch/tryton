@@ -161,7 +161,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 'output_kind_from_model': 'From File',
                 'format_original': 'Original',
                 'format_pdf': 'Pdf',
-                'format_xls': 'xls',
+                'format_xlsx': 'xlsx',
                 })
 
     @classmethod
@@ -215,6 +215,12 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             # Migration from 1.10: New module report_engine_email
             report_template.drop_column('mail_body')
 
+        # Migration from 1.10: Replace support from xls to xlsx
+        cursor.execute(*to_update.update(
+            columns=[to_update.format_for_internal_edm],
+            values=['xlsx'],
+            where=to_update.format_for_internal_edm == 'xls95'))
+
     @classmethod
     def default_output_method(cls):
         return 'open_document'
@@ -239,8 +245,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                         'format_original', raise_exception=False)),
                 ('pdf', self.__class__.raise_user_error(
                         'format_pdf', raise_exception=False)),
-                ('xls95', self.__class__.raise_user_error(
-                        'format_xls', raise_exception=False)),
+                ('xlsx', self.__class__.raise_user_error(
+                        'format_xlsx', raise_exception=False)),
             ]
         elif self.output_method == 'flat_document':
             available_format += [
