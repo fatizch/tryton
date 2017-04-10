@@ -5,6 +5,7 @@ from trytond.pool import Pool
 from .wizard import *
 from .report_engine import *
 from .account import *
+from .contract import *
 
 
 def register():
@@ -14,6 +15,8 @@ def register():
         ReportTemplate,
         Invoice,
         InvoiceLine,
+        Contract,
+        ContractOption,
         module='insurer_reporting', type_='model')
     Pool.register(
         InsurerReportContract,

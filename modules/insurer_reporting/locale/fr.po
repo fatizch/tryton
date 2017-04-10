@@ -22,6 +22,54 @@ msgctxt "field:commission,commission_rate:"
 msgid "Commission Rate"
 msgstr "Taux de commission"
 
+msgctxt "field:contract,first_not_null_invoice:"
+msgid "First Not Null Invoice"
+msgstr "Première quittance non nulle"
+
+msgctxt "field:contract,last_paid_invoice:"
+msgid "Last Paid Invoice"
+msgstr "Dernière quittance payée"
+
+msgctxt "field:contract,number_paid_premiums:"
+msgid "Number of Paid Premiums"
+msgstr "Nombre de primes payées"
+
+msgctxt "field:contract,paid_amount_excl_tax:"
+msgid "Paid Amount Excluding Tax"
+msgstr "Montant payé HT"
+
+msgctxt "field:contract,paid_amount_incl_tax:"
+msgid "Paid Amount Including Tax"
+msgstr "Montant payé TTC"
+
+msgctxt "field:contract,paid_amount_taxes:"
+msgid "Paid Amount Taxes"
+msgstr "Taxes payées"
+
+msgctxt "field:contract.option,annual_premium_excl_tax:"
+msgid "Annual Premium Excluding Taxes"
+msgstr "Prime annuelle hors taxe"
+
+msgctxt "field:contract.option,annual_premium_incl_tax:"
+msgid "Annual Premium Including Taxes"
+msgstr "Prime annuelle TTC"
+
+msgctxt "field:contract.option,annual_taxes:"
+msgid "Annual Taxes"
+msgstr "Taxes annuelles"
+
+msgctxt "field:contract.option,monthly_premium_excl_tax:"
+msgid "Monthly Premium Excluding Taxes"
+msgstr "Prime mensuelle HT"
+
+msgctxt "field:contract.option,monthly_premium_incl_tax:"
+msgid "Monthly Premium Including Taxes"
+msgstr "Prime mensuelle TTC"
+
+msgctxt "field:contract.option,monthly_taxes:"
+msgid "Monthly Taxes"
+msgstr "Taxes mensuelles"
+
 msgctxt "field:insurer_reporting.contract.configure,at_date:"
 msgid "Date"
 msgstr "Date"
