@@ -126,6 +126,9 @@ class ReportGenerate:
                         'utf-8'))
         msg['From'] = selected_letter.genshi_evaluated_email_sender
         msg['To'] = selected_letter.genshi_evaluated_email_dest
+        msg['Cc'] = selected_letter.genshi_evaluated_email_cc
+        # We must not set BCC header. Bcc is implicit because the mail is sent
+        # to recipients + cc + others which will be implicitly hidden.
         msg['Subject'] = selected_letter.genshi_evaluated_email_subject.encode(
             'utf-8')
         return {
@@ -147,6 +150,10 @@ class ReportGenerate:
                 report_context)
             msg = data_email['message']
             attachments = data_email['attachments']
+            cc = [x.strip() for x in
+                selected_letter.genshi_evaluated_email_cc.split(',')]
+            bcc = [x.strip() for x in
+                selected_letter.genshi_evaluated_email_bcc.split(',')]
             recipients = [x.strip() for x in
                 selected_letter.genshi_evaluated_email_dest.split(',')]
             if not send:
@@ -155,7 +162,7 @@ class ReportGenerate:
                 try:
                     sendmail(
                         selected_letter.genshi_evaluated_email_sender,
-                        recipients, msg)
+                        recipients + cc + bcc, msg)
                     logging.getLogger('report.generate').info(
                         'Mail sent to %s' % recipients)
                 except Exception as e:
@@ -167,20 +174,26 @@ class ReportGenerate:
             else:
                 sendmail_transactional(
                     selected_letter.genshi_generated_email_sender,
-                    recipients, msg, Transaction())
+                    recipients + cc + bcc, msg, Transaction())
         return ([x['report_type'] for x in attachments],
             [x['data'] for x in attachments],
                 False, [x['report_name'] for x in attachments])
 
 
-@model.genshi_evaluated_fields('email_sender', 'email_dest', 'email_subject',
-    'email_body')
+@model.genshi_evaluated_fields('email_sender', 'email_dest', 'email_cc',
+    'email_bcc', 'email_subject', 'email_body')
 class ReportTemplate:
     __name__ = 'report.template'
 
     email_sender = fields.Char('Email Sender', states=EMAIL_REQUIRED_STATES,
         depends=['output_kind'])
     email_dest = fields.Char('Email Recipients', states=EMAIL_REQUIRED_STATES,
+        depends=['output_kind'])
+    email_cc = fields.Char('Email CC', states={
+            'invisible': Eval('output_kind') != 'email'},
+        depends=['output_kind'])
+    email_bcc = fields.Char('Email BCC', states={
+            'invisible': Eval('output_kind') != 'email'},
         depends=['output_kind'])
     email_subject = fields.Char('eMail Subject', states={
             'invisible': Eval('output_kind') != 'email'},
@@ -252,18 +265,21 @@ class ReportTemplate:
 
     @fields.depends('output_kind', 'convert_to_pdf', 'email_subject',
         'email_body', 'email_blocking,' 'split_reports', 'email_dest',
-        'email_sender', 'atachments')
+        'email_cc', 'email_bcc', 'email_sender', 'atachments')
     def on_change_output_kind(self):
         if self.output_kind == 'email':
             self.convert_to_pdf = False
+            self.split_reports = True
+            self.attachments = []
+            self.version = []
+        else:
+            self.email_dest = ''
             self.email_subject = ''
             self.email_body = ''
             self.email_blocking = False
-            self.split_reports = True
-            self.email_dest = ''
+            self.email_cc = ''
+            self.email_bcc = ''
             self.email_sender = ''
-            self.attachments = []
-            self.version = []
         super(ReportTemplate, self).on_change_output_kind()
 
     @fields.depends('output_kind')
@@ -368,7 +384,10 @@ class ReportCreate:
             else:
                 recipients = \
                     self.select_template.template.genshi_evaluated_email_dest
-            action['email'] = {'to': recipients,
+            action['email'] = {
+                'to': recipients,
+                'cc': self.select_template.template.genshi_evaluated_email_cc,
+                'bcc': self.select_template.template.genshi_evaluated_email_bcc,
                 'from':
                 self.select_template.template.genshi_evaluated_email_sender,
                 'subject':

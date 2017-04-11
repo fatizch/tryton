@@ -44,6 +44,14 @@ msgctxt "field:report.template,email_dest:"
 msgid "Email Recipients"
 msgstr "Destinataires de l'eMail"
 
+msgctxt "field:report.template,email_cc:"
+msgid "Email CC"
+msgstr "CC"
+
+msgctxt "field:report.template,email_bcc:"
+msgid "Email BCC"
+msgstr "CCI"
+
 msgctxt "field:report.template,email_sender:"
 msgid "Email Sender"
 msgstr "Emetteur de l'eMail"
