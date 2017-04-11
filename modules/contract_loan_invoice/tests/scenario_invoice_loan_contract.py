@@ -2,23 +2,16 @@
 # this repository contains the full copyright notices and license terms.
 # #Title# #Contract Start Date Endorsement Scenario
 # #Comment# #Imports
-import datetime
-from proteus import config, Model, Wizard
-from trytond.tests.tools import activate_modules
-from dateutil.relativedelta import relativedelta
-from trytond.modules.currency.tests.tools import get_currency
 from decimal import Decimal
+import datetime
+from dateutil.relativedelta import relativedelta
 
-# #Comment# #Init Database
-# Useful for updating the tests without having to recreate a db from scratch
-# import os
-# config = config.set_trytond(
-#     database='postgresql://tryton:tryton@localhost:5432/test_db',
-#     user='admin',
-#     language='en',
-#     config_file=os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
-#         'conf', 'trytond.conf'))
-# config.pool.test = True
+from proteus import Model
+
+from trytond.tests.tools import activate_modules
+from trytond.modules.currency.tests.tools import get_currency
+from trytond.modules.company.tests.tools import get_company
+from trytond.modules.company_cog.tests.tools import create_company
 
 # #Comment# #Install Modules
 config = activate_modules('contract_loan_invoice')
@@ -72,19 +65,8 @@ else:
     country, = countries
 
 # #Comment# #Create Company
-company_config = Wizard('company.company.config')
-company_config.execute('company')
-company = company_config.form
-party = Party(name='World Company')
-party.save()
-company.party = party
-company.currency = currency
-company_config.execute('add')
-company, = Company.find([])
-user = User(1)
-user.main_company = company
-user.company = company
-user.save()
+_ = create_company(currency=currency)
+company = get_company()
 
 # #Comment# #Reload the context
 config._context = User.get_preferences(True, config.context)

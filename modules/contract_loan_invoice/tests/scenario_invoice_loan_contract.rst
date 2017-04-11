@@ -4,15 +4,14 @@ Contract Start Date Endorsement Scenario
 
 Imports::
 
-    >>> import datetime
-    >>> from proteus import config, Model, Wizard
-    >>> from trytond.tests.tools import activate_modules
-    >>> from dateutil.relativedelta import relativedelta
-    >>> from trytond.modules.currency.tests.tools import get_currency
     >>> from decimal import Decimal
-
-Init Database::
-
+    >>> import datetime
+    >>> from dateutil.relativedelta import relativedelta
+    >>> from proteus import Model
+    >>> from trytond.tests.tools import activate_modules
+    >>> from trytond.modules.currency.tests.tools import get_currency
+    >>> from trytond.modules.company.tests.tools import get_company
+    >>> from trytond.modules.company_cog.tests.tools import create_company
 
 Install Modules::
 
@@ -72,19 +71,8 @@ Create or fetch Country::
 
 Create Company::
 
-    >>> company_config = Wizard('company.company.config')
-    >>> company_config.execute('company')
-    >>> company = company_config.form
-    >>> party = Party(name='World Company')
-    >>> party.save()
-    >>> company.party = party
-    >>> company.currency = currency
-    >>> company_config.execute('add')
-    >>> company, = Company.find([])
-    >>> user = User(1)
-    >>> user.main_company = company
-    >>> user.company = company
-    >>> user.save()
+    >>> _ = create_company(currency=currency)
+    >>> company = get_company()
 
 Reload the context::
 
