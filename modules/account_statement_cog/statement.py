@@ -26,7 +26,9 @@ class Line:
     'Account Statement Line'
     __name__ = 'account.statement.line'
 
-    party_payer = fields.Many2One('party.party', 'Payer', required=True)
+    party_payer = fields.Many2One('party.party', 'Payer', required=True,
+        states={'readonly': Eval('statement_state') != 'draft'},
+        depends=['statement_state'])
     in_bank_deposit_ticket = fields.Function(
         fields.Boolean('In Bank Deposit Ticket'),
         'on_change_with_in_bank_deposit_ticket')
@@ -51,7 +53,11 @@ class Line:
         super(Line, cls).__setup__()
         cls.number.depends += ['in_bank_deposit_ticket']
         cls.number.states['required'] = Bool(Eval('in_bank_deposit_ticket'))
+        cls.number.states = {'readonly': Eval('statement_state') != 'draft'}
+        cls.number.depends = ['statement_state']
         cls.party.string = 'Beneficiary'
+        cls.sequence.states = {'readonly': Eval('statement_state') != 'draft'}
+        cls.sequence.depends = ['statement_state']
 
     @fields.depends('statement')
     def on_change_statement(self):

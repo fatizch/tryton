@@ -21,7 +21,8 @@ class Line:
         domain=[('status', '!=', 'quote'),
             If(Bool(Eval('party')),
                 [('subscriber', '=', Eval('party')), ], [])],
-        depends=['party'])
+        states={'readonly': Eval('statement_state') != 'draft'},
+        depends=['party', 'statement_state'])
 
     @classmethod
     def __setup__(cls):

@@ -16,8 +16,10 @@ class Line:
     __name__ = 'account.statement.line'
 
     bank = fields.Many2One('bank', 'Bank',
-        states={'invisible': ~Eval('in_bank_deposit_ticket')},
-        depends=['in_bank_deposit_ticket'])
+        states={
+            'invisible': ~Eval('in_bank_deposit_ticket'),
+            'readonly': Eval('statement_state') != 'draft',
+            }, depends=['in_bank_deposit_ticket', 'statement_state'])
 
 
 class Statement:
