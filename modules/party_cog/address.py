@@ -3,7 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 from collections import OrderedDict
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Bool, Eval
 from trytond.modules.coog_core import fields, export
 from trytond.modules.country_cog import country
 
@@ -20,7 +20,10 @@ class Address(export.ExportImportMixin):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     zip_and_city = fields.Function(
-        fields.Many2One('country.zip', 'Zip'),
+        fields.Many2One('country.zip', 'Zip', states={
+            'invisible': ~Eval('zip_and_city') & (
+                Bool(Eval('city') & Bool(Eval('zip'))))
+            }),
         'get_zip_and_city', 'setter_void', searcher='search_zip_and_city')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
@@ -31,12 +34,12 @@ class Address(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Address, cls).__setup__()
-        if not cls.city.states:
-            cls.city.states = {}
-        cls.city.states['invisible'] = True
-        if not cls.zip.states:
-            cls.zip.states = {}
-        cls.zip.states['invisible'] = True
+        cls.city.states['invisible'] = Bool(Eval('zip_and_city') | ~Eval(
+                'city'))
+        cls.city.depends += ['zip_and_city']
+        cls.zip.states['invisible'] = Bool(Eval('zip_and_city') | ~Eval(
+                'zip'))
+        cls.zip.depends += ['zip_and_city']
         cls.subdivision.states['invisible'] = ~Eval('needs_subdivision')
         cls.subdivision.depends += ['country']
 

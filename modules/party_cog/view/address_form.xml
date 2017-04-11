@@ -32,15 +32,31 @@ this repository contains the full copyright notices and license terms. -->
         </group>
     </xpath>
     <xpath expr="/form/group[@id='left']" position="after">
-        <group id="right" colspan="2" col="2">
-            <label name="zip_and_city"/>
-            <field name="zip_and_city"/>
-            <label name="country"/>
-            <field name="country"/>
+        <group id="right" colspan="2" col="2" xfill="1" xexpand="1">
+            <group id="label" col="1" xexpand="0" xfill="0" xalign="1" yfill="1" yexpand="1">
+                <group id="label_zip" col="99" yfill="1" yexpand="1">
+                    <label name="zip_and_city"/>
+                    <label name="zip"/>
+                </group>
+                <label name="country" yfill="1" yexpand="1"/>
+            </group>
+            <group id="field" col="1">
+                <group id="zip_and_city" colspan="2" col="99">
+                    <field name="zip_and_city"/>
+                    <field name="zip"/>
+                    <label name="city"/>
+                    <field name="city"/>
+                </group>
+                <field name="country"/>
+            </group>
             <label name="subdivision"/>
             <field name="subdivision" widget="selection"/>
             <newline/>
             <field name="needs_subdivision" invisible="1"/>
         </group>
     </xpath>
+    <xpath expr="/form/label[@name='zip']" position="replace"/>
+    <xpath expr="/form/field[@name='zip']" position="replace"/>
+    <xpath expr="/form/label[@name='city']" position="replace"/>
+    <xpath expr="/form/field[@name='city']" position="replace"/>
 </data>
