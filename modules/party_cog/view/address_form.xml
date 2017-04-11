@@ -5,9 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/field[@name='sequence']" position="replace_attributes">
         <field name="sequence" invisible="1"/>
     </xpath>
-    <xpath expr="/form/label[@name='sequence']" position="replace_attributes">
-        <field name="sequence" invisible="1"/>
-    </xpath>
+    <xpath expr="/form/label[@name='sequence']" position="replace"/>
     <xpath expr="/form/field[@name='name']" position="replace_attributes">
         <field name="name" invisible="1"/>
     </xpath>
