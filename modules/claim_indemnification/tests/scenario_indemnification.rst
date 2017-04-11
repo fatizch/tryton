@@ -241,10 +241,10 @@ Generate Regularisation::
 
 Schedule the indemnification::
 
-    >>> indemnifications[1].click('schedule')
-    >>> indemnifications[1].status == 'scheduled'
+    >>> indemnifications[0].click('schedule')
+    >>> indemnifications[0].status == 'scheduled'
     True
-    >>> indemnifications[0].status == 'cancelled'
+    >>> indemnifications[1].status == 'cancelled'
     True
     >>> controller = Wizard('claim.indemnification.assistant',
     ...     models=indemnifications, action=control_action)
@@ -252,11 +252,11 @@ Schedule the indemnification::
     >>> controller.form.order_sort = 'ASC'
     >>> controller.form.control[0].action = 'validate'
     >>> controller.execute('control_state')
-    >>> indemnifications[0].status == 'cancelled'
+    >>> indemnifications[1].status == 'cancelled'
     True
-    >>> indemnifications[1].control_reason == control_reason
+    >>> indemnifications[0].control_reason == control_reason
     True
-    >>> indemnifications[1].status == 'controlled'
+    >>> indemnifications[0].status == 'controlled'
     True
     >>> validator = Wizard('claim.indemnification.assistant',
     ...     models=indemnifications, action=validate_action)
@@ -265,9 +265,9 @@ Schedule the indemnification::
     >>> validator.form.validate[0].action = 'validate'
     >>> validator.form.validate[1].action = 'validate'
     >>> validator.execute('validation_state')
-    >>> indemnifications[0].status == 'cancel_paid'
+    >>> indemnifications[1].status == 'cancel_paid'
     True
-    >>> indemnifications[1].status == 'paid'
+    >>> indemnifications[0].status == 'paid'
     True
     >>> claim.invoices[0].total_amount < 0
     True

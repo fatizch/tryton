@@ -267,12 +267,12 @@ len(indemnifications) == 2
 # #Res# #True
 
 # #Comment# #Schedule the indemnification
-indemnifications[1].click('schedule')
+indemnifications[0].click('schedule')
 
-indemnifications[1].status == 'scheduled'
+indemnifications[0].status == 'scheduled'
 # #Res# #True
 
-indemnifications[0].status == 'cancelled'
+indemnifications[1].status == 'cancelled'
 # #Res# #True
 
 controller = Wizard('claim.indemnification.assistant',
@@ -283,11 +283,11 @@ controller.form.order_sort = 'ASC'
 controller.form.control[0].action = 'validate'
 controller.execute('control_state')
 
-indemnifications[0].status == 'cancelled'
+indemnifications[1].status == 'cancelled'
 # #Res# #True
-indemnifications[1].control_reason == control_reason
+indemnifications[0].control_reason == control_reason
 # #Res# #True
-indemnifications[1].status == 'controlled'
+indemnifications[0].status == 'controlled'
 # #Res# #True
 
 validator = Wizard('claim.indemnification.assistant',
@@ -300,10 +300,10 @@ validator.form.validate[0].action = 'validate'
 validator.form.validate[1].action = 'validate'
 validator.execute('validation_state')
 
-indemnifications[0].status == 'cancel_paid'
+indemnifications[1].status == 'cancel_paid'
 # #Res# #True
 
-indemnifications[1].status == 'paid'
+indemnifications[0].status == 'paid'
 # #Res# #True
 
 claim.invoices[0].total_amount < 0
