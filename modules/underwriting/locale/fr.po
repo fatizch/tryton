@@ -259,7 +259,7 @@ msgstr "Date de fin requise"
 
 msgctxt "field:underwriting.result,final_decision:"
 msgid "Final Decision"
-msgstr "Dévision finale"
+msgstr "Décision finale"
 
 msgctxt "field:underwriting.result,id:"
 msgid "ID"
@@ -271,7 +271,7 @@ msgstr "Décision provisionnelle"
 
 msgctxt "field:underwriting.result,rec_name:"
 msgid "Name"
-msgstr "Numéro"
+msgstr "Nom"
 
 msgctxt "field:underwriting.result,state:"
 msgid "State"
