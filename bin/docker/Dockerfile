@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libldap2-dev \
         libsasl2-dev \
         libreoffice-writer \
+        libreoffice-calc \
         unoconv \
         redis-tools \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
