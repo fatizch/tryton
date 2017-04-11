@@ -665,7 +665,7 @@ class ReportGenerate(Report):
             data['doc_template'][0])
         version = selected_letter.get_selected_version(utils.today(),
             selected_obj.get_lang())
-        extension = os.path.splitext(version.name)[1]
+        extension = os.path.splitext(version.name)[1][1:]
         name_giver = data.get('resource', None) or SelectedModel(data['id'])
         selected_party = pool.get('party.party')(data['party'])
         filename = cls.get_filename(selected_letter, name_giver,
