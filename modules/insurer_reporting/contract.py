@@ -105,27 +105,33 @@ class ContractOption:
 
     annual_premium_incl_tax = fields.Function(
         fields.Numeric('Annual Premium Including Taxes',
-            digits=(16, Eval('currency_digits', 2))),
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
         'get_premium')
     annual_premium_excl_tax = fields.Function(
         fields.Numeric('Annual Premium Excluding Taxes',
-            digits=(16, Eval('currency_digits', 2))),
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
         'get_premium')
     annual_taxes = fields.Function(
         fields.Numeric('Annual Taxes',
-            digits=(16, Eval('currency_digits', 2))),
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
         'get_premium')
     monthly_premium_incl_tax = fields.Function(
         fields.Numeric('Monthly Premium Including Taxes',
-            digits=(16, Eval('currency_digits', 2))),
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
         'get_premium')
     monthly_premium_excl_tax = fields.Function(
         fields.Numeric('Monthly Premium Excluding Taxes',
-            digits=(16, Eval('currency_digits', 2))),
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
         'get_premium')
     monthly_taxes = fields.Function(
         fields.Numeric('Monthly Taxes',
-            digits=(16, Eval('currency_digits', 2))),
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
         'get_premium')
 
     def get_void_annual_premium_incl_tax(self):
