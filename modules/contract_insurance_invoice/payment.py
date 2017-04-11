@@ -122,6 +122,7 @@ class JournalFailureAction:
             ('suspend', 'Suspend Payments (Automatic un-suspend)'),
             ('suspend_manual', 'Suspend Payments (Manual un-suspend)'),
             ]
+        cls._fail_actions_order += ['suspend', 'suspend_manual']
 
 
 class Payment:

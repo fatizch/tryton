@@ -146,7 +146,7 @@ class JournalFailureAction(model.CoogSQL, model.CoogView):
         cls._error_messages.update({
                 'unknown_reject_reason_code': 'Unknown reject code : %s',
                 })
-        cls._fail_actions_order = ['retry', 'print']
+        cls._fail_actions_order = ['manual', 'retry', 'print']
 
     @classmethod
     def _export_light(cls):
