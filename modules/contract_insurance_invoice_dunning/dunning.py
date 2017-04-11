@@ -230,9 +230,10 @@ class Level:
                     dunning.contract.last_posted_invoice_end
             elif self.termination_mode == 'at_dunning_effective_date':
                 date = dunning.calculate_last_process_date()
-            if (dunning.contract.termination_reason == termination_reason and
-                    dunning.contract.end_date == date)\
-                    or dunning.contract.final_end_date <= date:
+            if date and dunning.contract.final_end_date and (
+                    dunning.contract.end_date == date and
+                    dunning.contract.termination_reason == termination_reason
+                    or dunning.contract.final_end_date <= date):
                 continue
             if not date:
                 to_void.append(dunning.contract)
