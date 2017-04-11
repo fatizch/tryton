@@ -12,6 +12,16 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/label[@name='name']" position="replace_attributes">
         <field name="name" invisible="1"/>
     </xpath>
+    <xpath expr="/form/label[@name='name']" position="replace"/>
+    <xpath expr="/form/field[@name='name']" position="replace"/>
+    <xpath expr="/form/label[@name='country']" position="replace"/>
+    <xpath expr="/form/field[@name='country']" position="replace"/>
+    <xpath expr="/form/label[@name='street']" position="replace"/>
+    <xpath expr="/form/field[@name='street']" position="replace"/>
+    <xpath expr="/form/label[@name='subdivision']" position="replace"/>
+    <xpath expr="/form/field[@name='subdivision']" position="replace_attributes">
+        <field name="subdivision" invisible="1"/>
+    </xpath>
     <xpath expr="/form/group[@id='checkboxes']" position="before">
         <newline/>
         <label name="start_date"/>
@@ -21,19 +31,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="end_date"/>
         </group>
     </xpath>
-    <xpath expr="/form/label[@name='country']" position="before">
-        <label name="zip_and_city"/>
-        <field name="zip_and_city"/>
+    <xpath expr="/form/group[@id='left']" position="after">
+        <group id="right" colspan="2" col="2">
+            <label name="zip_and_city"/>
+            <field name="zip_and_city"/>
+            <label name="country"/>
+            <field name="country"/>
+            <label name="subdivision"/>
+            <field name="subdivision" widget="selection"/>
+            <newline/>
+            <field name="needs_subdivision" invisible="1"/>
+        </group>
     </xpath>
-    <xpath expr="/form/label[@name='street']" position="replace">
-        <separator name="street" colspan="4"/>
-    </xpath>
-    <xpath expr="/form/field[@name='street']" position="replace_attributes">
-        <field name="street" colspan="4"/>
-    </xpath>
-    <xpath expr="/form/label[@name='subdivision']" position="before">
-        <newline/>
-    </xpath>
-    <xpath expr="/form/label[@name='name']" position="replace"/>
-    <xpath expr="/form/field[@name='name']" position="replace"/>
 </data>

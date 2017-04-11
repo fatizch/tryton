@@ -24,9 +24,12 @@ class Address:
         'on_change_with_has_address_lines')
 
     @classmethod
-    def __setup__(cls):
-        super(Address, cls).__setup__()
-        cls.street.states['invisible'] = Bool(Eval('has_address_lines', False))
+    def view_attributes(cls):
+        return super(Address, cls).view_attributes() + [(
+                '/form/group[@id="left"]/group[@id="street"]',
+                'states',
+                {'invisible': Bool(Eval('has_address_lines'))}
+                )]
 
     @classmethod
     def setter_void(cls, *args, **kwargs):

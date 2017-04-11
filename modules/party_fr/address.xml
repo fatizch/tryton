@@ -3,11 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <record model="ir.ui.view" id="address_view_form">
-            <field name="model">party.address</field>
-            <field name="inherit" ref="party.address_view_form"/>
-            <field name="name">address_form</field>
-        </record>
         <record model="ir.ui.view" id="address_view_tree_sequence">
             <field name="model">party.address</field>
             <field name="inherit" ref="party.address_view_tree_sequence"/>

@@ -4,8 +4,16 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/label[@name='street']" position="after">
         <newline/>
-        <field name="address_lines" colspan="4" no_command="1"/>
-        <field name="has_address_lines" invisible="1"/>
+        <group id="left" colspan="2" col="1">
+            <field name="address_lines" no_command="1" xfill="1" xexpand="1"/>
+            <group id="street" xfill="1" xexpand="1" col="1">
+                <separator name="street" xfill="1" xexpand="1"/>
+                <field name="street" xfill="1" xexpand="1"/>
+            </group>
+        </group>
+    </xpath>
+    <xpath expr="/form" position="inside">
         <newline/>
+        <field name="has_address_lines"/>
     </xpath>
 </data>

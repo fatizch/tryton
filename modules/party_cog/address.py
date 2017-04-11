@@ -3,6 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 from collections import OrderedDict
 from trytond.pool import Pool, PoolMeta
+from trytond.pyson import Eval
 from trytond.modules.coog_core import fields, export
 from trytond.modules.country_cog import country
 
@@ -23,6 +24,9 @@ class Address(export.ExportImportMixin):
         'get_zip_and_city', 'setter_void', searcher='search_zip_and_city')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
+    needs_subdivision = fields.Function(
+        fields.Boolean('Needs Subdivision'),
+        'on_change_with_needs_subdivision')
 
     @classmethod
     def __setup__(cls):
@@ -33,6 +37,8 @@ class Address(export.ExportImportMixin):
         if not cls.zip.states:
             cls.zip.states = {}
         cls.zip.states['invisible'] = True
+        cls.subdivision.states['invisible'] = ~Eval('needs_subdivision')
+        cls.subdivision.depends += ['country']
 
     @classmethod
     def _export_light(cls):
@@ -84,6 +90,10 @@ class Address(export.ExportImportMixin):
         if self.zip_and_city:
             self.city = self.zip_and_city.city
             self.zip = self.zip_and_city.zip
+
+    @fields.depends('country')
+    def on_change_with_needs_subdivision(self, name=None):
+        return self.country.code != 'FR' if self.country else True
 
     @fields.depends('zip', 'country')
     def autocomplete_city(self):
