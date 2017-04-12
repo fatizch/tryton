@@ -57,7 +57,7 @@ def genshi_evaluated_fields(*fields_):
         original_field_value = getattr(self, '_'.join(name.split('_')[2:]))
         genshi_context = self.get_genshi_context([self], name) if hasattr(
             self, 'get_genshi_context') else {}
-        return evaluate_string(genshi_context, original_field_value)
+        return evaluate_string(genshi_context, original_field_value or '')
 
     @classmethod
     def get_genshi_context(cls, records, field_name):
@@ -68,7 +68,7 @@ def genshi_evaluated_fields(*fields_):
             evaluated_field_name = 'genshi_evaluated_' + field_
             original_field = getattr(klass, field_)
             setattr(klass, evaluated_field_name, fields.Function(
-                    fields.Char(original_field.string + 'Genshi Evaluated'),
+                    fields.Char(original_field.string + ' Genshi Evaluated'),
                     loader='get_genshi_evaluated'))
             setattr(klass, 'get_genshi_evaluated', get_evaluated_field)
         setattr(klass, 'get_genshi_context', get_genshi_context)
