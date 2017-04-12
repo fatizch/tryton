@@ -7,5 +7,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Part Time</field>
             <field name="code">part_time</field>
         </record>
+        <!-- IJSS extra data -->
+        <record model="extra_data" id="ijss_extra_data">
+            <field name="has_default_value" eval="False"/>
+            <field name="string">IJSS</field>
+            <field name="name">ijss</field>
+            <field name="kind">benefit</field>
+            <field name="type_">numeric</field>
+            <field name="digits" eval="2"/>
+        </record>
     </data>
 </tryton>

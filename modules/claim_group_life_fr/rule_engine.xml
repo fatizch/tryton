@@ -12,5 +12,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_total_hospitalisation_period</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+        <record model="rule_engine.function" id="ijss_before_part_time">
+            <field name="translated_technical_name">ijss_avant_mi_temps</field>
+            <field name="description">IJSS avant mi-temps</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_ijss_before_part_time</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
     </data>
 </tryton>
