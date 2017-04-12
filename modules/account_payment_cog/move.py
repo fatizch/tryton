@@ -307,11 +307,12 @@ class PaymentCreationStart(model.CoogView):
     motive = fields.Many2One('account.payment.motive', 'Motive',
         states={
             'invisible': Bool(Eval('free_motive')),
-            'required': ~Eval('free_motive') & ~Eval('multiple_parties'),
-            })
+            'required': ~Eval('free_motive') & ~Eval('multiple_parties') & (
+                Eval('kind') == 'payable'),
+            }, depends=['free_motive', 'multiple_parties', 'kind'])
     free_motive = fields.Boolean('Free motive')
     description = fields.Char('Description', states={
-            'required': ~Eval('multiple_parties'),
+            'required': ~Eval('multiple_parties') & (Eval('kind') == 'payable'),
             'invisible': ~Eval('free_motive'),
             })
     process_validate_payment = fields.Boolean('Process and Validate Payments',
@@ -421,12 +422,15 @@ class PaymentCreation(model.CoogWizard):
                 return {}
             kind = self.get_lines_amount_per_kind(lines)
             parties = list(set([l.party for l in lines]))
+            payment_dates = list(set([l.payment_date for l in lines]))
             return {
                 'lines_to_pay': active_ids,
                 'total_amount': kind.values()[0],
                 'kind': kind.keys()[0],
                 'multiple_parties': len(parties) != 1,
-                'party': parties[0].id if len(parties) == 1 else None
+                'party': parties[0].id if len(parties) == 1 else None,
+                'payment_date': (payment_dates[0]
+                    if len(payment_dates) == 1 else None),
                 }
         elif model == 'party.party':
             active_id = Transaction().context.get('active_id', None)
@@ -441,11 +445,14 @@ class PaymentCreation(model.CoogWizard):
                     ('reconciliation', '=', None)
                     ])
             move_line_ids = [x.id for x in lines if x.payment_amount != 0]
+            payment_dates = list(set([l.payment_date for l in lines]))
             return {
                 'kind': 'payable',
                 'multiple_parties': False,
                 'party': active_id,
                 'lines_to_pay': move_line_ids,
+                'payment_date': (payment_dates[0]
+                    if len(payment_dates) == 1 else None),
                 }
         return {'kind': 'payable'}
 
