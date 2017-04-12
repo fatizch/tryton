@@ -29,8 +29,8 @@ coog_redis_exec() { # execute redis command - <context> [args*]
 
 _coog_redis_script() {
         [ -z "$1" ] && >&2 echo missing context && return 1
-        [ -f "$COOG_ROOT/coog/bin/redis/$1.lua" ] && echo "$COOG_ROOT/coog/bin/redis/$1.lua" && return 0
-        [ -d "$COOG_ROOT/coog/bin/redis/$1" ] && echo "$COOG_ROOT/coog/bin/redis/$1/main.lua" && return 0
+        [ -f "$COOG_ROOT/coog/bin/redis-lua/$1.lua" ] && echo "$COOG_ROOT/coog/bin/redis-lua/$1.lua" && return 0
+        [ -d "$COOG_ROOT/coog/bin/redis-lua/$1" ] && echo "$COOG_ROOT/coog/bin/redis-lua/$1/main.lua" && return 0
         >&2 echo "no script for $1" && return 1
 }
 
