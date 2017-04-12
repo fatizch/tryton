@@ -260,8 +260,7 @@ class Contract:
             return
         new_billing_information = self.billing_informations[-1]
         new_billing_information.date = None
-        if not new_billing_information.payer:
-            new_billing_information.payer = self.subscriber
+        new_billing_information.payer = self.subscriber
         if new_billing_information.direct_debit_account:
             if (new_billing_information.payer not in
                     new_billing_information.direct_debit_account.owners):
