@@ -433,6 +433,12 @@ class ContractOption(Printable):
     @classmethod
     def __setup__(cls):
         super(ContractOption, cls).__setup__()
+        table = cls.__table__()
+        cls._sql_constraints += [
+            ('check_option_parent_field', utils.multi_column_required(
+                    table, ['contract', 'covered_element']),
+                'An option must have either a contract or a covered element'),
+            ]
         cls._buttons.update({
                 'propagate_extra_premiums': _CONTRACT_STATUS_STATES,
                 'propagate_exclusions': _CONTRACT_STATUS_STATES,

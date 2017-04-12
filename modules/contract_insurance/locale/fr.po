@@ -29,6 +29,10 @@ msgstr ""
 "Sur la surprime %s, la date de début (%s) doit être postérieure à celle de "
 "la garantie (%s)"
 
+msgctxt "error:contract.option:"
+msgid "An option must have either a contract or a covered element"
+msgstr "Une garantie doit être rattachée à un contrat ou à un risque couvert"
+
 msgctxt "error:contract:"
 msgid ""
 "Cannot add functional key : both quotenumber and contract_number are missing"

@@ -6,12 +6,14 @@ import time
 import json
 from filelock import FileLock
 
-from sql import Column, Window
+from sql import Column, Window, Null
 from sql.conditionals import Coalesce
+from sql.operators import Add
+from sql.conditionals import Case
 from sql.aggregate import Max
 
 from trytond.pool import Pool
-from trytond.model import fields as tryton_fields
+from trytond.model import fields as tryton_fields, Check
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice, cursor_dict
@@ -50,6 +52,12 @@ class FileLocker:
 
     def close(self):
         return self.file_obj.close()
+
+
+def multi_column_required(table, column_names):
+    clause = reduce(Add,
+        (Case((Column(table, x) == Null, 0), else_=1) for x in column_names))
+    return Check(table, clause == 1)
 
 
 def safe_open(filepath, *args, **kwargs):
