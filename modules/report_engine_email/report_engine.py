@@ -86,9 +86,12 @@ class ReportGenerate:
     @classmethod
     def generate_email(self, selected_letter, cur_object, report_context):
         if selected_letter.attachments or selected_letter.images:
-            attachments = sum([tmpl._generate_reports(
-                 [cur_object], {}) for tmpl in
-                    selected_letter.attachments], [])
+            attachments = []
+            for tmpl in selected_letter.attachments:
+                generated_reports = tmpl._generate_reports([cur_object], {})
+                if tmpl.format_for_internal_edm:
+                    tmpl.save_reports_in_edm(generated_reports)
+                attachments += generated_reports
             if attachments or selected_letter.images:
                 if selected_letter.html_body:
                     msg = MIMEMultipart('related')
