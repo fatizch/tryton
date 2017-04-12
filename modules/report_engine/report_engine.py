@@ -301,16 +301,18 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return True
 
     def get_selected_version(self, date, language):
-        for version in self.versions:
-            if (not version.language == language and
-                    not version.language.code == language):
-                continue
-            if version.start_date > date:
-                continue
-            if not version.end_date:
-                return version
-            if version.end_date >= date:
-                return version
+        versions = [v for v in self.versions
+            if (not v.start_date or v.start_date <= date)
+            and (not v.end_date or v.end_date > date)]
+        languages = [v.language.code for v in versions]
+        if len(languages) > 1:
+            if language not in languages:
+                language = Transaction().language
+            version_lang = [v for v in versions if v.language.code == language]
+            if version_lang:
+                return version_lang[0]
+        if versions:
+            return versions[0]
         self.raise_user_error('no_version_match', (date, language))
 
     def on_change_output_kind(self):
@@ -549,7 +551,7 @@ class Printable(Model):
         try:
             return self.get_contact().lang.code
         except:
-            return 'en_us'
+            return Transaction().language
 
     def get_address(self):
         contact = self.get_contact()
