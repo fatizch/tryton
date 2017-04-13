@@ -1,0 +1,41 @@
+#!/bin/bash
+# vim: set ft=sh:
+# This is the exact same script as payment
+# (modules/account_payment_sepa_cog/chain/payment) taking in account
+# working days, conf code and connection date
+
+CHAIN_NAME="payment_working_days"
+CHAIN_FILE=/tmp/"$HOSTNAME"-"$CHAIN_NAME"-"$(date +'%y-%m-%d@%H:%M:%S')"
+
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'WORKING_DAYS' 'CONF_CODE' \
+                    'CONNEXION_DATE' 'PAYMENT_KIND' 'JOURNAL_METHODS' 'OUT')
+CHAIN_REQUIRED=('CONNEXION_DATE' 'WORKING_DAYS' 'CONF_CODE' \
+                    'PAYMENT_KIND' 'JOURNAL_METHODS')
+
+chain_params "$@"
+chain_begin
+
+chain_step account.payment.create --connexion-date="$CONNEXION_DATE" \
+                            --payment_kind="$PAYMENT_KIND" \
+                            --working_days="$WORKING_DAYS" \
+                            --conf_code="$CONF_CODE"
+chain_wait account.payment.create || chain_end
+
+[[ -z  "$OUT" ]] && chain_step account.payment.process \
+                            --connexion-date="$CONNEXION_DATE" \
+                            --payment_kind="$PAYMENT_KIND" \
+                            --journal_methods="$JOURNAL_METHODS" \
+                            --working_days="$WORKING_DAYS" \
+                            --conf_code="$CONF_CODE"
+chain_wait account.payment.process || chain_end
+
+[[ ! -z  "$OUT" ]] && chain_step account.payment.process \
+                            ---connexion-date="$CONNEXION_DATE" \
+                            --payment_kind="$PAYMENT_KIND" \
+                            --journal_methods="$JOURNAL_METHODS" \
+                            --out=$OUT \
+                            --working_days="$WORKING_DAYS" \
+                            --conf_code="$CONF_CODE"
+chain_wait account.payment.process || chain_end
+
+chain_end

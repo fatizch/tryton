@@ -1,0 +1,77 @@
+#!/bin/bash
+# vim: set ft=sh: 
+# This chain merges all the chains user in monthly_chain.
+# We won't use this version in theory, except if we want to run separately the different chains.
+# The present version neither take into account working days, nor the week or
+# month days like in the monthly_chain, but this features can be added easily.
+
+CHAIN_NAME=daily
+CHAIN_FILE="/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')"
+
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'IN' 'OUT' 'AGENT_TYPE'
+'WITH_DRAFT' 'PAYMENT_KIND' 'JOURNAL_METHODS')
+CHAIN_REQUIRED=('TREATMENT_DATE' 'IN' 'OUT' 'AGENT_TYPE' 'PAYMENT_KIND'
+'JOURNAL_METHODS')
+
+chain_params "$@"
+chain begin
+
+chain_step account.payment.fail --treatment-date="$TREATMENT_DATE"
+chain_wait account.payment.fail || chain_end
+
+chain_step account.dunning.update --treatment-date="$TREATMENT_DATE" 
+chain_wait account.dunning.update || chain_end
+
+chain_step account.dunning.create --treatment-date="$TREATMENT_DATE"
+chain_wait account.dunning.create || chain_end
+
+chain_step account.dunning.treat
+chain_wait account.dunning.treat || chain_end
+
+chain_step contract.termination.process --treatment-date="$TREATMENT_DATE"
+chain_wait contract.termination.process || chain_end
+
+#monthly
+
+chain_step commission.invoice.create --treatment-date="$TREATMENT_DATE" \
+agent_type="$AGENT_TYPE"
+chain_wait commission.invoice.create || chain_end
+[[ -z  $WITH_DRAFT ]] && chain_step commission.invoice.post \
+    --treatment-date="$TREATMENT_DATE" --agent_type="$AGENT_TYPE"
+[[ ! -z  $WITH_DRAFT ]] && chain_step commission.invoice.post \
+    --treatment-date="$TREATMENT_DATE" --agent_type="$AGENT_TYPE" \
+    --with_draft="$WITH_DRAFT"
+chain_wait commission.invoice.post || chain_end
+
+chain_step commission.invoice_principal.create_empty --treatment-date="$TREATMENT_DATE"
+chain_wait commission.invoice_principal.create_empty || chain_end
+chain_step commission.invoice_principal.link --treatment-date="$TREATMENT_DATE" 
+chain_wait commission.invoice_principal.link || chain_end
+chain_step commission.invoice_principal.finalize --treatment-date="$TREATMENT_DATE"
+chain_wait commission.invoice_principal.finalize || chain_end
+
+###########
+
+chain_step contract.invoice.create --treatment-date="$TREATMENT_DATE"
+chain_wait contract.invoice.create || chain_end
+
+chain_step contract.invoice.set_number --treatment-date="$TREATMENT_DATE"
+chain_wait contract.invoice.set_number || chain_end
+
+chain_step contract.invoice.post --treatment-date="$TREATMENT_DATE"
+chain_wait contract.invoice.post || chain_end
+
+chain_step account.payment.create --treatment-date="$TREATMENT_DATE" \
+    --payment_kind="$PAYMENT_KIND"
+chain_wait account.payment.create || chain_end
+
+[[ -z  $OUT ]] && chain_step account.payment.process \
+    --treatment-date="$TREATMENT_DATE" --payment_kind="$PAYMENT_KIND" \
+    --journal_methods="$JOURNAL_METHODS"
+chain_wait account.payment.process || chain_end
+[[ ! -z  $OUT ]] && chain_step account.payment.process \
+    --treatment-date="$TREATMENT_DATE" --payment_kind="$PAYMENT_KIND" \
+    --journal_methods="$JOURNAL_METHODS" --out=$OUT
+chain_wait account.payment.process || chain_end
+
+chain_end
