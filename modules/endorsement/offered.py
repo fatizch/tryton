@@ -157,7 +157,7 @@ class EndorsementDefinition(model.CoogSQL, model.CoogView):
         if value is not None:
             return cls(value[code])
         cls._endorsement_by_code_cache.set(None, {x.code: x.id
-                for x in cls.search([('active', '=', True)])})
+                for x in cls.search([('active', 'in', [True, False])])})
         return cls.get_definition_by_code(code)
 
     @classmethod

@@ -324,6 +324,10 @@ msgctxt "field:endorsement.part,billing_information_fields:"
 msgid "Billing Information Fields"
 msgstr "Champs des paramètres de quittancement"
 
+msgctxt "field:endorsement.recalculate.batch,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:endorsement.start.preview_changes,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
@@ -406,6 +410,10 @@ msgctxt ""
 "model:endorsement.part,name:recalculate_and_reinvoice_contract_revision_part"
 msgid "Recalculate and Reinvoice Contract"
 msgstr "Recalculer et requittancer le contrat"
+
+msgctxt "model:endorsement.recalculate.batch,name:"
+msgid "Recalculate Endorsement Batch"
+msgstr "Batch d'avenant de recalcul"
 
 msgctxt ""
 "selection:contract.billing_information.change.contract_displayer,to_propagate:"
