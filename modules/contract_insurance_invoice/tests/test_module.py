@@ -783,8 +783,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     line_pay_2, line_pay_3])
             patched_search.assert_called_with([
                     ('reconciliation', '=', None),
-                    ('date', '<=', datetime.date.today()),
                     ('move_state', 'not in', ('draft', 'validated')),
+                    ('date', '<=', datetime.date.today()),
                     ['OR', [
                             ('party', '=', 456),
                             ('account', '=', 789),
