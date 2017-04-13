@@ -2,70 +2,73 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .batch import *
-from .invoice import *
-from .party import *
-from .offered import *
-from .contract import *
-from .account import *
-from .move import *
-from .rule_engine import *
-from .event import *
-from .bank import *
-from .configuration import *
+import batch
+import invoice
+import party
+import offered
+import contract
+import account
+import move
+import rule_engine
+import event
+import bank
+import configuration
 import payment
 
 
 def register():
     Pool.register(
-        BillingMode,
-        BillingModeFeeRelation,
-        ProductBillingModeRelation,
-        Product,
-        BillingModePaymentTermRelation,
-        OptionDescription,
-        OptionDescriptionPremiumRule,
-        ContractInvoice,
-        Invoice,
-        InvoiceLine,
-        Configuration,
-        Fee,
-        Contract,
-        ContractSubStatus,
-        ContractFee,
-        ContractOption,
-        ExtraPremium,
-        ContractBillingInformation,
-        Premium,
-        Move,
-        MoveLine,
-        ReconcileShow,
-        InvoiceLineDetail,
-        InvoiceLineAggregatesDisplay,
-        InvoiceLineAggregatesDisplayLine,
-        InvoiceContractStart,
-        CreateInvoiceContractBatch,
-        PostInvoiceContractBatch,
-        SetNumberInvoiceContractBatch,
-        PaymentTerm,
-        PaymentTermLine,
-        PaymentTermLineRelativeDelta,
-        SynthesisMenuInvoice,
-        SynthesisMenu,
-        RuleEngineRuntime,
-        Event,
-        EventLog,
-        EventTypeAction,
-        BankAccount,
-        OfferedConfiguration,
+        account.Configuration,
+        account.Fee,
+        bank.BankAccount,
+        batch.CreateInvoiceContractBatch,
+        batch.InvoiceAgainstBalanceBatch,
+        batch.PostInvoiceAgainstBalanceBatch,
+        batch.PostInvoiceContractBatch,
+        batch.SetNumberInvoiceAgainstBalanceBatch,
+        batch.SetNumberInvoiceContractBatch,
+        configuration.OfferedConfiguration,
+        contract.Contract,
+        contract.ContractBillingInformation,
+        contract.ContractFee,
+        contract.ContractInvoice,
+        contract.ContractOption,
+        contract.ContractSubStatus,
+        contract.ExtraPremium,
+        contract.InvoiceContractStart,
+        contract.Premium,
+        event.Event,
+        event.EventLog,
+        event.EventTypeAction,
+        invoice.Invoice,
+        invoice.InvoiceLine,
+        invoice.InvoiceLineAggregatesDisplay,
+        invoice.InvoiceLineAggregatesDisplayLine,
+        invoice.InvoiceLineDetail,
+        move.Move,
+        move.MoveLine,
+        move.ReconcileShow,
+        offered.BillingMode,
+        offered.BillingModeFeeRelation,
+        offered.BillingModePaymentTermRelation,
+        offered.OptionDescription,
+        offered.OptionDescriptionPremiumRule,
+        offered.PaymentTerm,
+        offered.PaymentTermLine,
+        offered.PaymentTermLineRelativeDelta,
+        offered.Product,
+        offered.ProductBillingModeRelation,
+        party.SynthesisMenu,
+        party.SynthesisMenuInvoice,
+        payment.JournalFailureAction,
         payment.Payment,
         payment.PaymentSuspension,
-        payment.JournalFailureAction,
+        rule_engine.RuleEngineRuntime,
         module='contract_insurance_invoice', type_='model')
     Pool.register(
-        InvoiceContract,
-        SynthesisMenuOpen,
-        DisplayContractPremium,
-        Reconcile,
-        InvoiceLineAggregates,
+        contract.DisplayContractPremium,
+        contract.InvoiceContract,
+        invoice.InvoiceLineAggregates,
+        move.Reconcile,
+        party.SynthesisMenuOpen,
         module='contract_insurance_invoice', type_='wizard')

@@ -1028,8 +1028,34 @@ class Contract:
         if invoices_to_post:
             Invoice.post(invoices_to_post)
 
+    def is_invoiced_to_end(self):
+        return self.last_invoice_end and self.last_invoice_end >= self.end_date
+
+    def invoice_next_period(self):
+        pool = Pool()
+        Contract = pool.get('contract')
+        if self.is_invoiced_to_end():
+            return
+        if self.last_invoice_end:
+            to_date = coog_date.add_day(self.last_invoice_end, 1)
+        else:
+            to_date = self.start_date
+        new_invoice, = Contract.invoice([self], to_date)
+        return new_invoice
+
+    def invoice_against_balance(self):
+        balance = self.balance + sum(x.invoice.total_amount
+            for x in self.invoices if x.invoice.state == 'validated')
+        next_date = self.last_invoice_end or self.initial_start_date
+        while balance < 0 and next_date < self.end_date:
+            new_invoice = self.invoice_next_period()
+            if not new_invoice:
+                break
+            balance += new_invoice.invoice.total_amount
+            next_date = coop_date.add_day(new_invoice.end, 1)
+
     @classmethod
-    def get_lines_to_reconcile(cls, contracts):
+    def get_lines_to_reconcile(cls, contracts, limit_date=True):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         # Find all not reconciled lines
@@ -1040,8 +1066,9 @@ class Contract:
             subscribers[contract.subscriber].append(contract)
         clause = [
             ('reconciliation', '=', None),
-            ('date', '<=', date),
             ('move_state', 'not in', ('draft', 'validated'))]
+        if limit_date:
+            clause.append(('date', '<=', date))
         subscriber_clause = ['OR']
         for subscriber, contract_group in subscribers.iteritems():
             subscriber_clause.append([
@@ -1182,11 +1209,11 @@ class Contract:
         return get_key
 
     @dualmethod
-    def reconcile(cls, contracts):
+    def reconcile(cls, contracts, limit_date=True):
         pool = Pool()
         Reconciliation = pool.get('account.move.reconciliation')
         lines_to_reconcile, reconciliations = [], []
-        lines_to_reconcile = cls.get_lines_to_reconcile(contracts)
+        lines_to_reconcile = cls.get_lines_to_reconcile(contracts, limit_date)
         for reconciliation_lines in lines_to_reconcile:
             if not reconciliation_lines:
                 continue
