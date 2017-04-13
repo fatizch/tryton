@@ -1174,9 +1174,11 @@ class Contract:
     @classmethod
     def key_func_for_reconciliation_order(cls):
         def get_key(x):
+            invoice_date = None
             if x.origin and x.origin.__name__ == 'account.invoice':
-                return x.origin.start or x.date
-            return x.date
+                invoice_date = x.origin.start
+            return (x.maturity_date or datetime.date.min,
+                invoice_date or x.date)
         return get_key
 
     @dualmethod

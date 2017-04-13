@@ -706,54 +706,63 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract.subscriber = subscriber
         contract.subscriber.account_receivable = account
 
-        line_invoice_1 = mock.Mock()
+        line_invoice_1 = mock.Mock(name='line_invoice_1')
         line_invoice_1.origin = mock.Mock()
         line_invoice_1.origin.__name__ = 'account.invoice'
         line_invoice_1.origin.start = datetime.date(2020, 1, 1)
+        line_invoice_1.maturity_date = datetime.date(2020, 3, 1)
         line_invoice_1.debit = 10
         line_invoice_1.credit = 0
         line_invoice_1.contract = contract
 
-        line_invoice_2 = mock.Mock()
+        line_invoice_2 = mock.Mock(name='line_invoice_2')
         line_invoice_2.origin = mock.Mock()
         line_invoice_2.origin.__name__ = 'account.invoice'
         line_invoice_2.origin.start = datetime.date(2020, 2, 1)
-        line_invoice_2.date = datetime.date(2020, 1, 1)
+        line_invoice_2.maturity_date = datetime.date(2020, 3, 1)
         line_invoice_2.debit = 10
         line_invoice_2.credit = 0
         line_invoice_2.contract = contract
 
-        line_to_pay = mock.Mock()
+        line_to_pay = mock.Mock(name='line_to_pay')
         line_to_pay.origin = mock.Mock()
         line_to_pay.origin.__name__ = 'random'
+        line_to_pay.maturity_date = datetime.date(2020, 3, 1)
         line_to_pay.date = datetime.date(2020, 1, 15)
         line_to_pay.debit = 10
         line_to_pay.credit = 0
         line_to_pay.contract = contract
+        line_to_pay.name = 'line_to_pay'
 
-        line_pay_1 = mock.Mock()
+        line_pay_1 = mock.Mock(name='line_pay_1')
         line_pay_1.origin = mock.Mock()
         line_pay_1.origin.__name__ = 'random'
         line_pay_1.date = datetime.date(2020, 1, 1)
+        line_pay_1.maturity_date = None
         line_pay_1.debit = 0
         line_pay_1.credit = 10
         line_pay_1.contract = contract
+        line_pay_1.name = 'line_pay_1'
 
-        line_pay_2 = mock.Mock()
+        line_pay_2 = mock.Mock(name='line_pay_2')
         line_pay_2.origin = mock.Mock()
         line_pay_2.origin.__name__ = 'random'
         line_pay_2.date = datetime.date(2020, 2, 1)
+        line_pay_2.maturity_date = None
         line_pay_2.debit = 0
         line_pay_2.credit = 10
         line_pay_2.contract = contract
+        line_pay_2.name = 'line_pay_2'
 
-        line_pay_3 = mock.Mock()
+        line_pay_3 = mock.Mock(name='line_pay_3')
         line_pay_3.origin = mock.Mock()
         line_pay_3.origin.__name__ = 'random'
         line_pay_3.date = datetime.date(2019, 12, 1)
+        line_pay_3.maturity_date = None
         line_pay_3.debit = 0
         line_pay_3.credit = 5
         line_pay_3.contract = contract
+        line_pay_3.name = 'line_pay_3'
 
         patched_search = mock.MagicMock(return_value=[
                 line_invoice_1, line_invoice_2, line_to_pay, line_pay_1,
