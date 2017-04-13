@@ -145,12 +145,18 @@ class ContractOption:
             'agent': agent,
             'option': self,
             }
-        amount = plan.compute_prepayment(self.product, pattern=pattern)
-        if amount:
-            rate = (amount / pattern['first_year_premium']).quantize(
-                Decimal(10) ** -COMMISSION_RATE_DIGITS)
+        results = plan.compute_prepayment(self.product, pattern=pattern)
+        if type(results) is tuple:
+            amount, rate = (
+                Decimal(results[0] if results[0] is not None else 0),
+                Decimal(results[1] if results[1] is not None else 0))
         else:
-            rate = None
+            amount = Decimal(results if results is not None else 0)
+            if amount:
+                rate = (amount / pattern['first_year_premium']).quantize(
+                    Decimal(10) ** -COMMISSION_RATE_DIGITS)
+            else:
+                rate = Decimal(0)
         return amount, rate
 
     def compute_commission_with_prepayment_schedule(self, agent, plan, rate,

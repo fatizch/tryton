@@ -78,6 +78,12 @@ msgctxt "field:commission.plan.prepayment.payment_rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:commission.plan.line,prepayment_rule:"
+msgid ""
+"Returns a tuple with the prepayment commission amount and rate"
+msgstr ""
+"Retourne un tuple avec le montant de la commission en précompte et le taux"
+
 msgctxt "model:commission.plan.prepayment.payment_rule,name:"
 msgid "Prepayment Payment Date Rule"
 msgstr "Règle de calcul de la date de paiement du précompte"

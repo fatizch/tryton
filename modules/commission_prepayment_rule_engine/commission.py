@@ -104,6 +104,8 @@ class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule')):
         cls.prepayment_formula.states['invisible'] = Eval('use_rule_engine',
             True)
         cls.prepayment_formula.depends.append('use_rule_engine')
+        cls.prepayment_rule.help = (
+            'Returns a tuple with the prepayment commission amount and rate')
 
     def get_formula_description(self, name):
         if self.use_rule_engine:
@@ -121,7 +123,7 @@ class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule')):
         if 'option' in context['names']:
             context['names']['option'].init_dict_for_rule_engine(args)
             args['date'] = context['names']['option'].initial_start_date
-        return Decimal(self.calculate_prepayment_rule(args))
+        return self.calculate_prepayment_rule(args)
 
     @fields.depends('prepayment_rule', 'prepayment_rule_extra_data')
     def on_change_with_prepayment_rule_extra_data(self):
