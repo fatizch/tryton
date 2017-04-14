@@ -1,3 +1,4 @@
+* Si l'application d'un avenant sur un seul contract génère un document, ce dernier est maintenant stocké sur le contrat et non plus sur l'avenant
 * Gestion des données complémentaires liées dans l'avenant de gestion des garanties
 
 Version 1.10 - 2016-11-02

@@ -1297,6 +1297,11 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
         return (self.write_date if self.write_date else self.create_date
             ).replace(microsecond=0)
 
+    def get_reference_object_for_edm(self, template):
+        if len(self.contracts) == 1:
+            return self.contracts[0]
+        return super(Endorsement, self).get_reference_object_for_edm(template)
+
     @fields.depends('application_date')
     def on_change_with_application_date_str(self, name=None):
         if self.application_date:
