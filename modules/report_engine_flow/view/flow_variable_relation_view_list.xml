@@ -5,5 +5,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="variable"/>
     <field name="kind"/>
     <field name="data"/>
+    <field name="template" tree_invisible="1"/>
     <field name="order" tree_invisible="1"/>
 </tree>

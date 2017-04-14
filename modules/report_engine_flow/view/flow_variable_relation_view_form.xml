@@ -13,5 +13,6 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <label name="data"/>
     <field name="data"/>
+    <field name="template" invisible="1"/>
     <field name="order" invisible="1"/>
 </form>

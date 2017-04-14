@@ -346,7 +346,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                     genshi_context=ReportGenerate.get_context(records, data)):
                 self.export_reports(reports)
 
-    def export_reports(self, reports):
+    def get_export_dirname(self):
         export_root_dir = config.get('report', 'export_root_dir')
         if not export_root_dir:
             raise Exception('Error', "No 'export_root_dir' configuration "
@@ -360,6 +360,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 'root directory'))
         if not os.path.exists(export_dirname):
             os.makedirs(export_dirname)
+        return export_dirname
+
+    def export_reports(self, reports):
+        export_dirname = self.get_export_dirname()
         for report in reports:
             filename, ext = os.path.splitext(report['report_name'])
             out_path = os.path.join(

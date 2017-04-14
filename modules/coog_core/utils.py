@@ -33,7 +33,14 @@ class FileLocker:
     def __init__(self, path, *args, **kwargs):
         self.path = path
         self.lock_extension = kwargs.pop('lock_extension', 'lck')
-        self.locker = FileLock(self.path + '.' + self.lock_extension)
+        self.lock_path = kwargs.pop('lock_directory', None)
+        if not self.lock_path:
+            self.lock_path = self.path
+        else:
+            self.lock_path = os.path.join(self.lock_path,
+                os.path.basename(self.path))
+        self.lock_path += ('.' + self.lock_extension)
+        self.locker = FileLock(self.lock_path)
         self.args = args
         self.kwargs = kwargs
         self.file_obj = None

@@ -2,15 +2,15 @@
 # this repository contains the full copyright notices and license terms.
 import inspect
 import os
-import time
-import datetime
 
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Not, Or
-from trytond.config import config
 from trytond.model import Unique
+from trytond.config import config
 
-from trytond.modules.coog_core import fields, model, coog_string
+from trytond.modules.coog_core import fields, model, coog_string, utils
+
+from trytond.server_context import ServerContext
 
 import func_library
 
@@ -45,7 +45,8 @@ class TemplateVariableRelation(model.CoogSQL, model.CoogView):
         ondelete='CASCADE', required=True, domain=[
             ('variable', '=', None),
             ])
-    order = fields.Integer('Order', states={'invisible': True})
+    order = fields.Integer('Order', states={'invisible': True},
+        required=True)
     name = fields.Function(fields.Char('Name'),
         'get_variable_field')
     description = fields.Function(fields.Char('Description'),
@@ -59,6 +60,19 @@ class TemplateVariableRelation(model.CoogSQL, model.CoogView):
         if name == 'kind':
             return coog_string.translate_value(self.variable, 'kind')
         return getattr(self.variable, name)
+
+    @fields.depends('template')
+    def on_change_with_order(self, name=None):
+        # TODO: Delete this method when client is patched:
+        # See https://bugs.tryton.org/issue6439
+        if not self.template:
+            return 0
+        previous_order = 0
+        for relation in self.template.variables_relation:
+            if relation == self:
+                break
+            previous_order = relation.order
+        return previous_order + 1
 
 
 class FlowVariable(model.CoogSQL, model.CoogView):
@@ -232,25 +246,36 @@ class ReportGenerate:
         report_context = super(ReportGenerate, cls).get_context(records, data)
         report_context.update({x[0]: getattr(func_library, 'eval_%s' % x[0])
                 for x in func_library.EVAL_METHODS})
+        from itertools import groupby
+
+        def copy_groupby(*args, **kwargs):
+            for key, values in groupby(*args, **kwargs):
+                yield key, list(values)
+        report_context['groupby'] = copy_groupby
         return report_context
 
     @classmethod
     def process_default_flux(cls, ids, data, **kwargs):
         from genshi.template import NewTextTemplate
-        timestamp = datetime.datetime.fromtimestamp(time.time()
-            ).strftime('%Y%m%d%H%f')
         selected_template = Pool().get('report.template')(
             data['doc_template'][0])
         records = cls._get_records(ids, data['model'], data)
         template_content = selected_template.generated_code
         tmpl = NewTextTemplate(template_content)
         result = tmpl.generate(**cls.get_context(records, data)).render()
-        return 'txt', bytearray(result, 'utf-8'), False, 'COOG_%s' % timestamp
+        filename, ext = os.path.splitext(
+            selected_template.genshi_evaluated_output_filename)
+        return ext[1:], bytearray(result, 'utf-8'), False, filename
 
 
+@model.genshi_evaluated_fields('output_filename')
 class ReportTemplate:
     __name__ = 'report.template'
 
+    output_filename = fields.Char('Output Filename', states={
+            'invisible': Eval('output_kind') != 'flow',
+            'required': Eval('output_kind') == 'flow',
+            }, depends=['output_kind'])
     variables_relation = fields.One2Many(
         'report.template.flow_variable.relation', 'template',
         'Flow Variables Relation', order=[('order', 'ASC')],
@@ -260,6 +285,15 @@ class ReportTemplate:
                 'invisible': Eval('output_kind') != 'flow',
                 }, depends=['output_kind']),
         'get_generated_code')
+    override_loop = fields.Boolean('Override Loop',
+        states={'invisible': Eval('output_kind') != 'flow',
+            }, depends=['output_kind'])
+    loop_condition = fields.Char('Object Line Loop',
+        states={'invisible': Or(Eval('output_kind') != 'flow',
+                ~Eval('override_loop')),
+            }, depends=['output_kind', 'override_loop'],
+        help='Genshi condition which define the loop condition to generate the '
+        'flow lines')
 
     @classmethod
     def __setup__(cls):
@@ -272,7 +306,7 @@ class ReportTemplate:
                 })
         for fname in ['modifiable_before_printing', 'convert_to_pdf',
                 'split_reports', 'template_extension', 'document_desc',
-                'export_dir', 'format_for_internal_edm', 'versions']:
+                'format_for_internal_edm', 'versions']:
             field = getattr(cls, fname)
             field.states['invisible'] = Or(Eval('output_kind') == 'flow',
                 field.states.get('invisible', False))
@@ -303,7 +337,10 @@ class ReportTemplate:
                         raise_exception=False))]
 
     def get_generated_code(self, name=None):
-        output = '{%for record in records%}'
+        if not self.override_loop:
+            output = '{%for record in records%}'
+        else:
+            output = self.loop_condition
         for var_relation in self.variables_relation:
             output += var_relation.variable.generated_code
         output += '\n'
@@ -324,14 +361,35 @@ class ReportTemplate:
         if self.output_kind == 'flow':
             self.split_reports = False
             self.convert_to_pdf = False
+        else:
+            self.variables_relations = []
+            self.output_filename = ''
+            self.override_loop = False
+            self.loop_condition = ''
+
 
     def print_reports(self, reports, context_):
-        if self.output_kind == 'flow':
-            ReportModel = Pool().get('report.create', type='wizard')
-            for report in reports:
-                ReportModel.create_flow_file(report['report_name'],
-                    report['data'])
-        return super(ReportTemplate, self).print_reports(reports, context_)
+        if self.output_kind != 'flow':
+            return super(ReportTemplate, self).print_reports(reports, context_)
+        pool = Pool()
+        ReportModel = pool.get('report.create', type='wizard')
+        if self.export_dir:
+            ReportGenerate = pool.get('report.generate', type='report')
+            data = context_['reporting_data']
+            report_template = pool.get('report.template')(
+                data['doc_template'][0])
+
+            records = ReportGenerate._get_records(
+                data['ids'], data['model'], data)
+            with ServerContext().set_context(
+                    genshi_context=ReportGenerate.get_context
+                    (records, data)):
+                filename = report_template.get_export_dirname()
+        else:
+            filename = report_template.get_export_dirname()
+        for report in reports:
+            ReportModel.create_flow_file(os.path.join(filename,
+                    report['report_name']), report['data'])
 
 
 class ReportCreate:
@@ -345,6 +403,8 @@ class ReportCreate:
         ext, filedata, prnt, file_basename = ReportModel.execute(ids,
             report_context, immediate_conversion=False)
         filename = '%s.%s' % (file_basename, ext)
+        filename = os.path.join(doc_template.get_export_dirname(),
+            filename)
         created_file = self.create_flow_file(filename, filedata)
         return {
             'generated_report': created_file,
@@ -354,11 +414,10 @@ class ReportCreate:
             }
 
     @classmethod
-    def create_flow_file(cls, file_basename, content):
-        destination_folder = config.get('EDM', 'server_shared_folder',
-            default='/tmp')
-        filepath = os.path.join(destination_folder, file_basename)
-        with open(filepath, 'wb+') as _file:
+    def create_flow_file(cls, filepath, content):
+        temporary_folder = config.get('TMP', 'folder') or '/tmp/'
+        with utils.safe_open(filepath, 'ab',
+                lock_directory=temporary_folder) as _file:
             _file.write(content)
         return filepath
 
