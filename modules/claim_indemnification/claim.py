@@ -1062,6 +1062,15 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             description='%s' % (party.full_name),
             )
 
+    def invoice_line_description(self):
+        return u'%s - %s- %s - %s' % (
+            self.service.loss.covered_person.rec_name,
+            self.service.loss.rec_name,
+            coog_string.translate_value(self, 'start_date')
+            if self.start_date else '',
+            coog_string.translate_value(self, 'end_date')
+            if self.end_date else '')
+
     @classmethod
     def _get_invoice_line(cls, key, invoice, indemnification):
         pool = Pool()
@@ -1073,6 +1082,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         invoice_line.type = 'line'
         invoice_line.product = key['product']
         invoice_line.quantity = 1
+        invoice_line.description = indemnification.invoice_line_description()
         invoice_line.party = invoice.party
         invoice_line.on_change_product()
         if invoice_line.product.taxes_included:

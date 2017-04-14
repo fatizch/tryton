@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
+from trytond.tools import grouped_slice
 
 from trytond.modules.coog_core import model, fields, utils
 
@@ -63,6 +65,24 @@ class InvoiceLine:
 
     claim_details = fields.One2Many('account.invoice.line.claim_detail',
         'invoice_line', 'Claim Details', readonly=True, size=1)
+    claim_detail = fields.Function(
+        fields.Many2One('account.invoice.line.claim_detail', 'Claim Detail'),
+        'get_claim_detail')
+
+    @classmethod
+    def get_claim_detail(cls, lines, name):
+        result = {x.id: None for x in lines}
+        cursor = Transaction().connection.cursor()
+        detail_table = Pool().get(
+            'account.invoice.line.claim_detail').__table__()
+
+        for line_slice in grouped_slice(lines):
+            cursor.execute(*detail_table.select(detail_table.invoice_line,
+                    detail_table.id, where=detail_table.invoice_line.in_(
+                        [x.id for x in line_slice])))
+
+            result.update(dict(cursor.fetchall()))
+        return result
 
 
 class ClaimInvoiceLineDetail(model.CoogSQL, model.CoogView):
@@ -105,3 +125,6 @@ class ClaimInvoiceLineDetail(model.CoogSQL, model.CoogView):
 
     def get_service(self, name):
         return self.indemnification.service.id
+
+    def get_rec_name(self, name):
+        return self.indemnification.rec_name

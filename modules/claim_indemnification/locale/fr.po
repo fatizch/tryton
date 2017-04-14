@@ -120,6 +120,10 @@ msgstr ""
 "Il n'est pas possible d'avoir plusieurs indemnisations de type 'capital', "
 "celle existante sera annulée."
 
+msgctxt "field:account.invoice.line,claim_detail:"
+msgid "Claim Detail"
+msgstr "Détail du sinistre"
+
 msgctxt "field:account.invoice.line,claim_details:"
 msgid "Claim Details"
 msgstr "Détails du sinistre"
