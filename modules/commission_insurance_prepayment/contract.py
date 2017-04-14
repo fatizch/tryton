@@ -219,9 +219,8 @@ class ContractOption:
             for agent, plan in agents_plans_to_compute:
                 if (agent.id, self.id) not in outstanding_prepayment:
                     continue
-                amount, base_amount = outstanding_prepayment[
-                    (agent.id, self.id)]
-                rate = amount / base_amount if base_amount else 0
+                amount = outstanding_prepayment[(agent.id, self.id)][0]
+                _, rate = self._get_prepayment_amount_and_rate(agent, plan)
                 commissions += self.compute_commission_with_prepayment_schedule(
                     agent, plan, rate, -amount)
             return commissions
