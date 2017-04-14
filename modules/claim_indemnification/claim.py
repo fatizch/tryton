@@ -206,7 +206,7 @@ class Loss:
                     'no_indemnifications')
                 continue
             unpaid = [x for x in service.indemnifications
-                if x.status in ('calculated', 'cancelled')]
+                if x.status == 'calculated']
             if unpaid:
                 self.__class__.raise_user_error(
                     'unpaid_indemnification', len(unpaid))
