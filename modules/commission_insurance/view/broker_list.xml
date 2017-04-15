@@ -7,5 +7,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="name"/>
     <field name="commercial_name"/>
     <field name="negative_payable_today" icon="payable_today_icon"/>
-    <field name="is_broker"/>
+    <field name="is_broker" tree_invisible="1"/>
 </tree>

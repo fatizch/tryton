@@ -2,7 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/tree" position="inside">
-        <field name="is_broker" tree_invisible="1"/>
+    <xpath expr="/tree/field[@name='tax_identifier']" position="replace_attributes">
+        <field name="tax_identifier" tree_invisible="1"/>
     </xpath>
 </data>

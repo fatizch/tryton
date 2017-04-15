@@ -8,7 +8,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/tree/field[@name='name']" position="replace"/>
     <xpath expr="/tree/field[@name='lang']" position="replace"/>
     <xpath expr="/tree" position="inside">
-        <field name="is_person"/>
+        <field name="is_person" tree_invisible="1"/>
         <field name="main_address"/>
     </xpath>
 </data>
