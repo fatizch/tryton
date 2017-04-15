@@ -73,6 +73,9 @@ class PartyRelation(export.ExportImportMixin):
             return '%s %s %s' % (self.type.name, u'→', self.to.rec_name)
         return ''
 
+    def get_summary_content(self, label, at_date=None, lang=None):
+        return (None, '%s : %s' % (self.type.reverse.name, self.to.rec_name))
+
 
 class PartyRelationAll(PartyRelation):
     __name__ = 'party.relation.all'

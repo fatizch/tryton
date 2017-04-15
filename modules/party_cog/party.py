@@ -412,10 +412,14 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
                 at_date, lang))
             value.append(coog_string.get_field_summary(self, 'birth_date',
                 True, at_date, lang))
-            value.append(coog_string.get_field_summary(self, 'birth_name',
-                True, at_date, lang))
+            if self.birth_name:
+                value.append(coog_string.get_field_summary(self, 'birth_name',
+                    True, at_date, lang))
         if self.identifiers:
             value.append(coog_string.get_field_summary(self, 'identifiers',
+                True, at_date, lang))
+        if self.relations:
+            value.append(coog_string.get_field_summary(self, 'relations',
                 True, at_date, lang))
         if self.addresses:
             value.append(coog_string.get_field_summary(self, 'addresses', True,

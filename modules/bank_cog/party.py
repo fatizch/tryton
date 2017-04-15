@@ -55,8 +55,9 @@ class Party:
 
     def get_summary_content(self, label, at_date=None, lang=None):
         res = super(Party, self).get_summary_content(label, at_date, lang)
-        res[1].append(coog_string.get_field_summary(self, 'bank_accounts',
-                True, at_date, lang))
+        if self.bank_accounts:
+            res[1].append(coog_string.get_field_summary(self, 'bank_accounts',
+                    True, at_date, lang))
         if self.bank_role:
             res[1].append(coog_string.get_field_summary(self, 'bank_role',
                     True, at_date, lang))

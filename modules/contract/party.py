@@ -88,8 +88,9 @@ class Party:
 
     def get_summary_content(self, label, at_date=None, lang=None):
         res = super(Party, self).get_summary_content(label, at_date, lang)
-        res[1].append(coog_string.get_field_summary(self, 'contracts', True,
-            at_date, lang))
+        if self.contracts:
+            res[1].append(coog_string.get_field_summary(self, 'contracts', True,
+                at_date, lang))
         return res
 
     def ws_get_covered_contracts_at_date(self, date):
