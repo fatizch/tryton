@@ -31,6 +31,12 @@ class InvoiceLine:
     @classmethod
     def __setup__(cls):
         super(InvoiceLine, cls).__setup__()
+        cls.quantity.states['invisible'] = ~Eval('unit')
+        cls.quantity.depends += ['unit']
+        cls.unit_price.states['invisible'] = ~Eval('unit')
+        cls.unit_price.depends += ['unit']
+        cls.unit.states['invisible'] = ~Eval('unit')
+        cls.principal.readonly = True
         cls.account.domain.pop(1)
         cls._error_messages.update({
                 'no_broker_define_for_broker_fee': 'No broker define on '

@@ -174,6 +174,8 @@ class Line(export.ExportImportMixin):
     def __setup__(cls):
         super(Line, cls).__setup__()
         cls.account.select = False
+        cls.tax_lines.states['readonly'] = Eval('move_state') == 'posted'
+        cls.tax_lines.depends += ['move_state']
         cls._error_messages.update({
                 'split_move_description': 'Automatic Split Move',
                 })

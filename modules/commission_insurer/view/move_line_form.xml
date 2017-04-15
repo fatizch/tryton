@@ -2,8 +2,9 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page[@id='info']/field[@name='second_currency']" position="after">
-        <label name="payment_date"/>
-        <field name="payment_date"/>
+    <xpath expr="/form/notebook/page[@id='info']" position="inside">
+        <newline/>
+        <label name="principal_invoice_line"/>
+        <field name="principal_invoice_line"/>
     </xpath>
 </data>

@@ -47,7 +47,7 @@ class MoveLine:
     __name__ = 'account.move.line'
 
     contract = fields.Many2One('contract', 'Contract', select=True,
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', readonly=True)
 
     @classmethod
     def __setup__(cls):
