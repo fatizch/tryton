@@ -124,24 +124,27 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     contract.covered_elements[0].options):
                 for option in contract.covered_elements[0].options:
                     self.Option.delete([option])
-            option_cov_ant = self.Option()
-            option_cov_ant.coverage = coverage.id
-            option_cov_ant.manual_start_date = ant_date
-            option_cov_ant.save()
-
-            option_cov_post = self.Option()
-            option_cov_post.coverage = coverage.id
-            option_cov_post.manual_start_date = post_date
-            option_cov_post.save()
-
             covered_element = self.CoveredElement()
-            covered_element.options = [option_cov_ant.id, option_cov_post.id]
             covered_element.item_desc = coverage.item_desc
             covered_element.contract = contract
             covered_element.product = covered_element.on_change_with_product()
             party = self.Party.search([('is_person', '=', True)])[0]
             covered_element.party = party
             covered_element.save()
+
+            option_cov_ant = self.Option()
+            option_cov_ant.coverage = coverage.id
+            option_cov_ant.manual_start_date = ant_date
+            option_cov_ant.covered_element = covered_element
+            option_cov_ant.save()
+
+            option_cov_post = self.Option()
+            option_cov_post.coverage = coverage.id
+            option_cov_post.manual_start_date = post_date
+            option_cov_post.covered_element = covered_element
+            option_cov_post.save()
+
+            # covered_element.options = [option_cov_ant.id, option_cov_post.id]
             contract.covered_elements = [covered_element.id]
             contract.save()
 
@@ -381,8 +384,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract_end_date = start_date + datetime.timedelta(weeks=70)
         early_date = start_date - datetime.timedelta(weeks=1)
         late_date = contract_end_date + datetime.timedelta(weeks=1)
-        contract.options = []
-        contract.covered_elements[0].options = []
+        self.Option.delete(contract.covered_elements[0].options
+            + contract.options)
         contract.end_date = contract_end_date
         contract.save()
 
