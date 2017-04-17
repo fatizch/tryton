@@ -243,6 +243,8 @@ class Agent:
         result = cls.sum_of_prepayments(agents)
         for key, prepayment_amount_base in \
                 cls.sum_of_redeemed_prepayment(agents).iteritems():
+            if key not in result:
+                continue
             result[key][0] -= prepayment_amount_base[0]
             result[key][1] -= prepayment_amount_base[1]
         return result
