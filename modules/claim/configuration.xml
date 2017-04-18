@@ -17,7 +17,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="claim_configuration_form"/>
             <field name="act_window" ref="act_claim_configuration"/>
         </record>
-        <menuitem id="menu_claim_conf"  name="Claim Configuration" parent="claim.menu_claim_configuration"
+        <menuitem id="menu_claim_conf"  name="Claim Configuration" parent="menu_claim_configuration"
             icon="tryton-preferences" action="act_claim_configuration"/>
 
     </data>
