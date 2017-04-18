@@ -1075,7 +1075,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
 
     def invoice_line_description(self):
         return u'%s - %s- %s - %s' % (
-            self.service.loss.covered_person.rec_name,
+            self.service.loss.claim.claimant.rec_name,
             self.service.loss.rec_name,
             coog_string.translate_value(self, 'start_date')
             if self.start_date else '',

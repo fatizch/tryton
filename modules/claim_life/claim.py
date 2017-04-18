@@ -5,7 +5,7 @@ from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool, In, And, Or, Equal
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, coog_string
 
 from datetime import timedelta
 
@@ -14,6 +14,7 @@ __all__ = [
     'Loss',
     'ClaimService',
     'ClaimServiceExtraDataRevision',
+    'Indemnification',
     ]
 
 
@@ -291,6 +292,22 @@ class ClaimService:
             if person and self.option.covered_element.party == person:
                 return self.option.covered_element.id
         return super(ClaimService, self).get_theoretical_covered_element(name)
+
+
+class Indemnification:
+    __metaclass__ = PoolMeta
+    __name__ = 'claim.indemnification'
+
+    def invoice_line_description(self):
+        return u'%s - %s- %s - %s' % (
+            self.service.loss.covered_person.rec_name
+            if self.service.loss.covered_person
+            else self.service.loss.claim.claimant.rec_name,
+            self.service.loss.rec_name,
+            coog_string.translate_value(self, 'start_date')
+            if self.start_date else '',
+            coog_string.translate_value(self, 'end_date')
+            if self.end_date else '')
 
 
 class ClaimServiceExtraDataRevision:

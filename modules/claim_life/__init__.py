@@ -18,6 +18,7 @@ def register():
         ClaimServiceExtraDataRevision,
         Claim,
         Loss,
+        Indemnification,
         RuleEngineRuntime,
         TestCaseModel,
         IndemnificationValidateElement,
