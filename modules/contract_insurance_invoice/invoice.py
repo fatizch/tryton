@@ -338,6 +338,7 @@ class Invoice:
             # invoices were posted
             invoices += invoices[0].check_previous_invoices_posted()
 
+        invoices = sorted(invoices, key=lambda o: o.start)
         for invoice in invoices:
             if invoice.state in ('posted', 'paid'):
                 continue
