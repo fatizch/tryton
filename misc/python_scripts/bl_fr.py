@@ -6,7 +6,7 @@ import requests
 import sys
 from collections import defaultdict
 
-REDMINE_URL = 'https://redmine.coopengo.com'
+REDMINE_URL = 'https://support.coopengo.com'
 
 try:
     _, redmine_api_key, project_name, version_name, test_version = sys.argv
@@ -88,10 +88,13 @@ def get_issues():
                 yield issue
             offset += 100
 
+version['custom_fields'] = {x['id']: x.get('value', '').encode('utf-8')
+        for x in version['custom_fields'] if not x.get('multiple', False)}
+
 features, bugs, params, scripts = defaultdict(list), defaultdict(list), [], []
 for issue in get_issues():
     issue['custom_fields'] = {x['id']: x.get('value', '').encode('utf-8')
-        for x in issue['custom_fields']}
+        for x in issue['custom_fields'] if not x.get('multiple', False)}
     if issue['status']['id'] == 6:
         # Rejected => ignored
         continue
@@ -113,7 +116,7 @@ for issue in get_issues():
 
 
 def get_issue_id(issue):
-    return '<a href="https://redmine.coopengo.com/issues/%i' % issue['id'] + \
+    return '<a href="https://support.coopengo.com/issues/%i' % issue['id'] + \
         '">%i</a>' % issue['id']
 
 print '<html>'
@@ -122,6 +125,9 @@ print '<meta charset="utf-8"/>'
 print '<style>'
 print '''
 h1 {
+    font-size: 150%;
+}
+h2 {
     font-size: 120%;
 }
 table {
@@ -163,8 +169,11 @@ print '</head>'
 print '<body>'
 
 count = 1
+print '<h2>Version: %s</h2>' % version_name
+print '<p>Livraison en recette: %s</p>' % version['custom_fields'][5]
+print '<p>Livraison en production: %s</p>' % version['custom_fields'][6]
 if features:
-    print '<h1>%i. Features</h1>' % count
+    print '<h2>%i. Fonctionnalités</h2>' % count
     count += 1
     print '<table>'
     print '    <tr><th>#</th><th>Priorité</th><th>Sujet</th>' + \
@@ -182,7 +191,7 @@ if features:
     print '</table>'
 
 if bugs:
-    print '<h1>%i. Bugs</h1>' % count
+    print '<h2>%i. Anomalies</h2>' % count
     count += 1
     print '<table>'
     print '    <tr><th>#</th><th>Priorité</th><th>Sujet</th>' + \
@@ -201,7 +210,7 @@ if bugs:
 
 
 if params:
-    print '<h1>%i. Params</h1>' % count
+    print '<h2>%i. Params</h2>' % count
     count += 1
     print '<table>'
     print '    <tr><th>#</th><th>Subject</th><th width="200">Param</th> ' + \
@@ -215,7 +224,7 @@ if params:
 
 
 if scripts:
-    print '<h1>%i. Scripts</h1>' % count
+    print '<h2>%i. Scripts</h2>' % count
     count += 1
     print '<table>'
     print '    <tr><th>#</th><th>Subject</th><th width="200">Script</th>' + \
