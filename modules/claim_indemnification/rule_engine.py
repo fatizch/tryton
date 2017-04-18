@@ -5,7 +5,6 @@ from dateutil import rrule
 from decimal import Decimal
 
 from sql.aggregate import Count
-from dateutil.relativedelta import relativedelta
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -173,7 +172,7 @@ class RuleEngineRuntime:
         for detail in args['indemnification'].details:
             if not detail.start_date or not detail.end_date:
                 continue
-            days = relativedelta(detail.end_date, detail.start_date).days + 1
+            days = (detail.end_date - detail.start_date).days + 1
             amounts.append(detail.amount / days)
         return max(amounts) or Decimal(0)
 
