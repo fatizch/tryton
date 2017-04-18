@@ -261,7 +261,7 @@ class IndemnificationAssistant(Wizard):
         Indemnification = pool.get('claim.indemnification')
         notes = []
         validate = []
-        reject = []
+        reject = {}
         for element in self.control_view_state.control:
             if element.note:
                 notes.append({
@@ -269,14 +269,12 @@ class IndemnificationAssistant(Wizard):
                         'resource': str(element.indemnification)})
             if element.action != 'nothing':
                 if element.action == 'validate':
-                    validate.append(element.indemnification.id)
+                    validate.append(element.indemnification)
                 elif element.action == 'refuse':
-                    reject.append(element.indemnification.id)
+                    reject[element.indemnification] = {'note': element.note}
         Note.create(notes)
-        Indemnification.control_indemnification(
-            Indemnification.browse(validate))
-        Indemnification.reject_indemnification(
-            Indemnification.browse(reject))
+        Indemnification.control_indemnification(validate)
+        Indemnification.reject_indemnification(reject)
         return 'end'
 
 
