@@ -54,6 +54,8 @@ this repository contains the full copyright notices and license terms. -->
         <field name="local_currency"/>
     </group>
     <field name="details" colspan="4"/>
+    <label name="journal"/>
+    <field name="journal"/>
     <field name="kind" invisible="1"/>
     <field name="possible_products" invisible="1"/>
 </form>

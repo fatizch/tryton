@@ -383,6 +383,8 @@ class IndemnificationDefinition(model.CoogView):
     service = fields.Many2One('claim.service', 'Claim Service')
     is_period = fields.Boolean('Is Period')
     beneficiary = fields.Many2One('party.party', 'Beneficiary')
+    journal = fields.Many2One('account.payment.journal', 'Journal',
+        required=True)
     product = fields.Many2One('product.product', 'Product', states={
             'invisible': Bool(Eval('product', False)) &
             (Len(Eval('possible_products', [])) == 1),
@@ -630,6 +632,7 @@ class CreateIndemnification(Wizard):
         if end_date and start_date > end_date:
             start_date = None
             end_date = None
+        configuration = Pool().get('claim.configuration').get_singleton()
         res = {
             'service': service.id,
             'start_date': start_date,
@@ -637,6 +640,7 @@ class CreateIndemnification(Wizard):
             'beneficiary': beneficiary.id,
             'extra_data': extra_data.extra_data_values,
             'product': product_id,
+            'journal': configuration.payment_journal.id,
             }
         return res
 
@@ -665,6 +669,7 @@ class CreateIndemnification(Wizard):
         loss = self.definition.service.loss
         indemnification.start_date = self.definition.start_date
         indemnification.end_date = self.definition.end_date
+        indemnification.journal = self.definition.journal
         extra_data_values = self.definition.get_extra_data_values()
         extra_date = self.definition.start_date or loss.start_date
         extra_data = utils.get_value_at_date(

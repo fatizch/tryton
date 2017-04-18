@@ -15,6 +15,9 @@ class Configuration:
 
     __name__ = 'claim.configuration'
 
+    payment_journal = fields.Many2One('account.payment.journal',
+        'Default Payment Journal',
+        required=True)
     control_rule = fields.Many2One('claim.indemnification.control.rule',
         'Control Rule', ondelete='RESTRICT')
     show_indemnification_limit = fields.Integer('Show Indemnification Limit')

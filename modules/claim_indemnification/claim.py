@@ -643,6 +643,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     note = fields.Char('Note', states={
             'invisible': ~Bool(Eval('note'))},
         readonly=True, depends=['note'])
+    journal = fields.Many2One('account.payment.journal', 'Journal',
+        ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
@@ -672,6 +674,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'did not allow to pay indemnifications.',
                 'cannot_schedule_draft_loss': 'Cannot schedule '
                 'indemnifications for draft loss %(loss)s',
+                'no_bank_account': 'No bank account found for the beneficiary '
+                '%s on loss %s',
                 })
         cls._order = [('start_date', 'ASC')]
 
@@ -889,6 +893,13 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             if indemnification.service.loss.state == 'draft':
                 cls.append_functional_error('cannot_schedule_draft_loss',
                     {'loss': indemnification.service.loss.rec_name})
+            journal = indemnification.journal
+            if (journal and journal.needs_bank_account() and
+                    not indemnification.beneficiary.get_bank_account(
+                        indemnification.start_date)):
+                    cls.append_functional_error('no_bank_account', (
+                            indemnification.beneficiary.rec_name,
+                            indemnification.service.claim.name))
 
     @classmethod
     @ModelView.button
@@ -1109,6 +1120,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             'product': self.product,
             'company': self.service.contract.company,
             'currency': self.currency,
+            'journal': self.journal,
             }
 
     @classmethod

@@ -695,6 +695,11 @@ class Journal:
         return super(Journal, cls)._export_light() | {
             'sepa_bank_account_number'}
 
+    def needs_bank_account(self):
+        if self.process_method == 'sepa':
+            return True
+        return super(Journal, self).needs_bank_account()
+
 
 class Message:
     __name__ = 'account.payment.sepa.message'

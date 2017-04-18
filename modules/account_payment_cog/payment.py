@@ -61,6 +61,9 @@ class Journal(export.ExportImportMixin):
     def process_actions_when_payments_failed(self, payments):
         return True
 
+    def needs_bank_account(self):
+        return False
+
     def get_fail_actions(self, payments):
         """
         Payments is a list of payments processed in the same payment

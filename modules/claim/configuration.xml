@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="claim_configuration_form">
+            <field name="model">claim.configuration</field>
+            <field name="type">form</field>
+            <field name="name">claim_configuration_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_claim_configuration">
+            <field name="name">Claim Configuration</field>
+            <field name="res_model">claim.configuration</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_claim_configuration_view">
+            <field name="sequence" eval="1"/>
+            <field name="view" ref="claim_configuration_form"/>
+            <field name="act_window" ref="act_claim_configuration"/>
+        </record>
+        <menuitem id="menu_claim_conf"  name="Claim Configuration" parent="claim.menu_claim_configuration"
+            icon="tryton-preferences" action="act_claim_configuration"/>
+
+    </data>
+</tryton>

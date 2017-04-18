@@ -10,6 +10,7 @@ from .configuration import *
 from .event import *
 from .party import *
 from .batch import *
+import move
 
 
 def register():
@@ -42,6 +43,7 @@ def register():
         Configuration,
         EventTypeAction,
         CreateClaimIndemnificationBatch,
+        move.MoveLine,
         module='claim_indemnification', type_='model')
     Pool.register(
         FillExtraData,

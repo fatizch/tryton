@@ -10,6 +10,8 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <label name="beneficiary"/>
     <field name="beneficiary"/>
+    <label name="journal"/>
+    <field name="journal"/>
     <label name="product"/>
     <field name="product" widget="selection"/>
     <field name="service" invisible="1"/>

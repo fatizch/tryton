@@ -1,13 +1,18 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form>
-  <label name="control_rule"/>
-  <field name="control_rule"/>
-  <newline/>
-  <label name="show_indemnification_limit"/>
-  <group id="indemnification_searching">
-      <field name="show_indemnification_limit" xexpand="0"/>
-      <field name="sorting_method" xalign="0" xexpand="0"/>
-  </group>
-</form>
+<data>
+    <xpath expr="/form" position="inside">
+        <label name="payment_journal"/>
+        <field name="payment_journal"/>
+        <newline/>
+        <label name="control_rule"/>
+        <field name="control_rule"/>
+        <newline/>
+        <label name="show_indemnification_limit"/>
+        <group id="indemnification_searching">
+            <field name="show_indemnification_limit" xexpand="0"/>
+            <field name="sorting_method" xalign="0" xexpand="0"/>
+        </group>
+    </xpath>
+</data>

@@ -1142,10 +1142,6 @@ msgctxt "model:claim.closing_reason,name:"
 msgid "Closing Reason"
 msgstr "Motif de fin"
 
-msgctxt "model:claim.configuration,name:"
-msgid "Claim Configuration"
-msgstr "Configuration"
-
 msgctxt "model:claim.loss,name:"
 msgid "Loss"
 msgstr "Préjudice"

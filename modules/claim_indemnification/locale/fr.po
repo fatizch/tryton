@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:claim.configuration,name:"
+msgid "Claim Configuration"
+msgstr "Configuration"
+
 msgctxt "error:claim.create_indemnification:"
 msgid "End date is required"
 msgstr "La date de fin est requise"
@@ -49,6 +53,10 @@ msgstr "La date de fin ne doit pas exceder la date fin du préjudice"
 msgctxt "error:claim.indemnification.detail:"
 msgid "Capital"
 msgstr "Capital"
+
+msgctxt "error:claim.indemnification:"
+msgid "No bank account found for the beneficiary %s on loss %s"
+msgstr "Aucun compte bancaire pour le bénéficiaire %s du sinistre %s"
 
 msgctxt "error:claim.indemnification:"
 msgid "Cannot schedule indemnifications for draft loss %(loss)s"
@@ -328,6 +336,10 @@ msgctxt "field:claim,is_services_deductible:"
 msgid "Is Services Deductible"
 msgstr "Le service est une période de franchise"
 
+msgctxt "field:claim.configuration,payment_journal:"
+msgid "Default Payment Journal"
+msgstr "Journal de paiement par défaut"
+
 msgctxt "field:claim.configuration,control_rule:"
 msgid "Control Rule"
 msgstr "Règle de contrôle des prestations"
@@ -371,6 +383,10 @@ msgstr "ID"
 msgctxt "field:claim.extra_datas_displayers,service:"
 msgid "Claim Service"
 msgstr "Prestation fournie"
+
+msgctxt "field:claim.indemnification,journal:"
+msgid "Journal"
+msgstr "Journal"
 
 msgctxt "field:claim.indemnification,amount:"
 msgid "Amount"
