@@ -83,8 +83,6 @@ class Mandate(model.CoogSQL, model.CoogView):
     def __setup__(cls):
         super(Mandate, cls).__setup__()
         cls.identification.select = True
-        cls._sql_constraints = [x for x in cls._sql_constraints if x[0]
-            != 'identification_unique']
         cls._error_messages.update({
                 'bad_place_holders': 'Bad placeholders in SEPA Sequence. '
                 "The following fields do not exist on Party model:\n\t%s\n"
