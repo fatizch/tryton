@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
+
 from decimal import Decimal
 from dateutil.relativedelta import relativedelta
 
@@ -22,21 +24,26 @@ class Contract:
     __name__ = 'contract'
 
     @dualmethod
-    def create_prepayment_commissions(cls, contracts, adjustement):
+    def create_prepayment_commissions(cls, contracts, adjustement,
+            start_date=None, end_date=None):
         pool = Pool()
         Commission = pool.get('commission')
         commissions = []
-        options = []
         for contract in contracts:
-            options.extend(list(contract.covered_element_options +
-                contract.options))
-        for option in options:
-            commissions.extend(option.compute_prepayment(adjustement))
-
+            if not start_date and not end_date:
+                # This is the case of first year prepayment when there is no
+                # adjustment to make
+                start_date = contract.initial_start_date
+                end_date = start_date + relativedelta(years=1, days=-1)
+            options = list(contract.covered_element_options + contract.options)
+            for option in options:
+                commissions.extend(option.compute_prepayment(adjustement,
+                        start_date, end_date))
         Commission.save(commissions)
 
     @dualmethod
-    def adjust_prepayment_commissions_once_terminated(cls, contracts):
+    def adjust_prepayment_commissions_once_terminated(cls, contracts,
+            start_date, end_date):
         pool = Pool()
         Commission = pool.get('commission')
         commissions = []
@@ -46,7 +53,8 @@ class Contract:
             options.extend(list(contract.covered_element_options +
                 contract.options))
         for option in options:
-            commissions.extend(option.adjust_prepayment_once_terminated())
+            commissions.extend(option.adjust_prepayment_once_terminated(
+                    start_date, end_date))
         Commission.save(commissions)
 
     @classmethod
@@ -85,17 +93,24 @@ class Contract:
         Commission.save(to_save)
 
     def rebill(self, start=None, end=None, post_end=None):
+        start_date = start if start and start != datetime.date.min else \
+            self.initial_start_date
+        end_date = end or max((self.final_end_date or self.end_date),
+            self.initial_start_date + relativedelta(years=1, days=-1))
         super(Contract, self).rebill(start, end, post_end)
         if self.termination_reason or self.status == 'void':
-            self.adjust_prepayment_commissions_once_terminated()
+            self.adjust_prepayment_commissions_once_terminated(start_date,
+                end_date)
         else:
-            self.create_prepayment_commissions(adjustement=True)
+            self.create_prepayment_commissions(adjustment=True,
+                start_date=start_date, end_date=end_date)
 
     @classmethod
     def reactivate(cls, contracts):
         super(Contract, cls).reactivate(contracts)
         # Force prepayment recalculation
-        cls.create_prepayment_commissions(contracts, adjustement=False)
+        cls.create_prepayment_commissions(contracts, adjustement=False,
+            start_date=None, end_date=None)
 
 
 class ContractOption:
@@ -160,7 +175,7 @@ class ContractOption:
         return amount, rate
 
     def compute_commission_with_prepayment_schedule(self, agent, plan, rate,
-            amount):
+            amount, start_date, end_date):
         pool = Pool()
         Commission = pool.get('commission')
         commissions = []
@@ -169,6 +184,8 @@ class ContractOption:
             return commissions
         for (date, percentage) in plan.compute_prepayment_schedule(self, agent):
             commission = Commission()
+            commission.start = start_date
+            commission.end = end_date
             commission.is_prepayment = True
             commission.date = date
             commission.origin = self
@@ -182,7 +199,7 @@ class ContractOption:
             commissions.append(commission)
         return commissions
 
-    def compute_prepayment(self, adjustment):
+    def compute_prepayment(self, adjustment, start_date, end_date):
         pool = Pool()
         Agent = pool.get('commission.agent')
         commissions = []
@@ -204,10 +221,10 @@ class ContractOption:
                 if (agent.id, self.id) in all_prepayments:
                     amount = amount - all_prepayments[(agent.id, self.id)][0]
                 commissions += self.compute_commission_with_prepayment_schedule(
-                    agent, plan, rate, amount)
+                    agent, plan, rate, amount, start_date, end_date)
         return commissions
 
-    def adjust_prepayment_once_terminated(self):
+    def adjust_prepayment_once_terminated(self, start_date, end_date):
         pool = Pool()
         Agent = pool.get('commission.agent')
 
@@ -222,5 +239,5 @@ class ContractOption:
                 amount = outstanding_prepayment[(agent.id, self.id)][0]
                 _, rate = self._get_prepayment_amount_and_rate(agent, plan)
                 commissions += self.compute_commission_with_prepayment_schedule(
-                    agent, plan, rate, -amount)
+                    agent, plan, rate, -amount, start_date, end_date)
             return commissions
