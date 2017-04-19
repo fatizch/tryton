@@ -59,7 +59,7 @@ class Commission:
         fields.Many2One('contract', 'Commissioned Contract'),
         'get_commissioned_contract', searcher='search_commissioned_contract')
     commissioned_option = fields.Many2One('contract.option',
-        'Commissioned Option', select=True, ondelete='RESTRICT')
+        'Commissioned Option', select=True, ondelete='RESTRICT', readonly=True)
     party = fields.Function(
         fields.Many2One('party.party', 'Party'),
         'get_party', searcher='search_party')
@@ -67,7 +67,7 @@ class Commission:
         fields.Many2One('distribution.network', 'Broker'),
         'get_broker', searcher='search_broker')
     commission_rate = fields.Numeric('Commission Rate',
-        digits=(16, COMMISSION_RATE_DIGITS))
+        digits=(16, COMMISSION_RATE_DIGITS), readonly=True)
     base_amount = fields.Function(
         fields.Numeric('Base Amount', digits=(16, COMMISSION_AMOUNT_DIGITS)),
         'get_base_amount')
@@ -75,8 +75,8 @@ class Commission:
         fields.Many2One('party.party', 'Contract Subscriber'),
         'get_commissioned_subscriber',
         searcher='search_commissioned_subscriber')
-    start = fields.Date('Start')
-    end = fields.Date('End')
+    start = fields.Date('Start', readonly=True)
+    end = fields.Date('End', readonly=True)
     line_tax_rate = fields.Function(
         fields.Numeric('Line Tax Rate', digits=(16, 2),
             depends=['currency_digits']),

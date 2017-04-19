@@ -7,5 +7,6 @@ this repository contains the full copyright notices and license terms. -->
         <field name="is_prepayment"/>
         <label name="redeemed_prepayment"/>
         <field name="redeemed_prepayment"/>
+        <field name="extra_details" no_command="1" colspan="4"/>
     </xpath>
 </data>

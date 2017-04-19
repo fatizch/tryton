@@ -8,6 +8,10 @@ this repository contains the full copyright notices and license terms. -->
         <field name="commissioned_contract"/>
         <label name="commissioned_option"/>
         <field name="commissioned_option"/>
+        <label name="start"/>
+        <field name="start"/>
+        <label name="end"/>
+        <field name="end"/>
     </xpath>
     <xpath expr="/form/field[@name='currency']" position="after">
         <label name="base_amount" xexpand="0"/>

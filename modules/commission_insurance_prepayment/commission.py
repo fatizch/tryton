@@ -53,6 +53,7 @@ class Commission(WithExtraDetails):
                 'prepayment_amortization': 'Prepayment Amortization',
                 'prepayment': 'Prepayment',
                 })
+        cls.extra_details.readonly = True
 
     @classmethod
     def _get_origin(cls):
