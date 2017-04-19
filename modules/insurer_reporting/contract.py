@@ -140,12 +140,6 @@ class ContractOption:
     def get_void_annual_premium_excl_tax(self):
         return Decimal('0.0')
 
-    def compute_premium_with_extra_premium(self, amount, extra_premiums):
-        premium_amount = amount or Decimal('0.0')
-        for extra_premium in extra_premiums:
-            premium_amount += sum([x.amount for x in extra_premium.premiums], 0)
-        return premium_amount
-
     @classmethod
     def get_premium(cls, options, names, date=None):
         annual_premiums_incl_tax = {o.id: Decimal('0.0') for o in options}

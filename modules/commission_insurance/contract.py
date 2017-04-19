@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
+from decimal import Decimal
 
 from sql.operators import Concat
 from trytond.pool import PoolMeta, Pool
@@ -12,6 +13,7 @@ from trytond.modules.contract import _STATES, _DEPENDS
 
 __all__ = [
     'Contract',
+    'ContractOption',
     ]
 __metaclass__ = PoolMeta
 
@@ -208,3 +210,13 @@ class Contract:
             None: (query, (query.contract == table.id))
             }
         return [query.order]
+
+
+class ContractOption:
+    __name__ = 'contract.option'
+
+    def compute_premium_with_extra_premium(self, amount, extra_premiums):
+        premium_amount = amount or Decimal('0.0')
+        for extra_premium in extra_premiums:
+            premium_amount += sum([x.amount for x in extra_premium.premiums], 0)
+        return premium_amount
