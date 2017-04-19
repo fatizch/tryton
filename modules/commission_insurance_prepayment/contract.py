@@ -9,9 +9,10 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import dualmethod
 from trytond.server_context import ServerContext
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, utils
 from trytond.modules.commission_insurance.commission import \
     COMMISSION_AMOUNT_DIGITS, COMMISSION_RATE_DIGITS
+from trytond.modules.coog_core.coog_date import FREQUENCY_CONVERSION_TABLE
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -102,7 +103,7 @@ class Contract:
             self.adjust_prepayment_commissions_once_terminated(start_date,
                 end_date)
         else:
-            self.create_prepayment_commissions(adjustment=True,
+            self.create_prepayment_commissions(adjustement=True,
                 start_date=start_date, end_date=end_date)
 
     @classmethod
@@ -174,8 +175,30 @@ class ContractOption:
                 rate = Decimal(0)
         return amount, rate
 
+    def get_com_premiums(self, start_date, end_date):
+        premiums = utils.get_good_versions_at_date(self, 'premiums', start_date,
+            'start', 'end')
+        extra_premiums = utils.get_good_versions_at_date(self, 'extra_premiums',
+            start_date, 'start', 'end')
+        if premiums:
+            premiums.sort(key=lambda x: x.start)
+            latest_premium = premiums[0]
+            if latest_premium.frequency in ['yearly', 'monthly', 'quaterly',
+                    'half_yearly']:
+                monthly_premium_incl_tax = \
+                    self.compute_premium_with_extra_premium(
+                        latest_premium.amount, extra_premiums) / \
+                    Decimal(FREQUENCY_CONVERSION_TABLE[
+                            latest_premium.frequency])
+                Tax = Pool().get('account.tax')
+                monthly_premium_excl_tax = self.currency.round(
+                            Tax._reverse_unit_compute(monthly_premium_incl_tax,
+                                latest_premium.taxes, start_date))
+                return monthly_premium_incl_tax, monthly_premium_excl_tax
+        return None, None
+
     def compute_commission_with_prepayment_schedule(self, agent, plan, rate,
-            amount, start_date, end_date):
+            amount, start_date, end_date, details):
         pool = Pool()
         Commission = pool.get('commission')
         commissions = []
@@ -196,6 +219,16 @@ class ContractOption:
             commission.amount = (percentage * amount).quantize(
                 Decimal(10) ** -COMMISSION_AMOUNT_DIGITS)
             commission.commissioned_option = self
+            commission.extra_details = details
+            monthly_premium_incl_tax, monthly_premium_excl_tax = \
+                self.get_com_premiums(start_date, end_date)
+            commission.extra_details.update({
+                'first_year_premium': self.first_year_premium,
+                'is_adjustment': ServerContext().get('prepayment_adjustment',
+                    False),
+                'monthly_premium_incl_tax': monthly_premium_incl_tax,
+                'monthly_premium_excl_tax': monthly_premium_excl_tax,
+                })
             commissions.append(commission)
         return commissions
 
@@ -217,11 +250,13 @@ class ContractOption:
                 amount, rate = self._get_prepayment_amount_and_rate(agent, plan)
                 if amount is None:
                     continue
-
+                sum_of_prepayments = 0
                 if (agent.id, self.id) in all_prepayments:
                     amount = amount - all_prepayments[(agent.id, self.id)][0]
+                    sum_of_prepayments = all_prepayments[(agent.id, self.id)][0]
                 commissions += self.compute_commission_with_prepayment_schedule(
-                    agent, plan, rate, amount, start_date, end_date)
+                    agent, plan, rate, amount, start_date, end_date,
+                    {'sum_of_prepayments': sum_of_prepayments})
         return commissions
 
     def adjust_prepayment_once_terminated(self, start_date, end_date):
@@ -236,8 +271,9 @@ class ContractOption:
             for agent, plan in agents_plans_to_compute:
                 if (agent.id, self.id) not in outstanding_prepayment:
                     continue
-                amount = outstanding_prepayment[(agent.id, self.id)][0]
+                amount, base_amount, details = outstanding_prepayment[
+                    (agent.id, self.id)]
                 _, rate = self._get_prepayment_amount_and_rate(agent, plan)
                 commissions += self.compute_commission_with_prepayment_schedule(
-                    agent, plan, rate, -amount, start_date, end_date)
+                    agent, plan, rate, -amount, start_date, end_date, details)
             return commissions

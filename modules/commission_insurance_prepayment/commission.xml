@@ -34,5 +34,55 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="commission.commission_view_list"/>
             <field name="name">commission_list</field>
         </record>
+        <!-- ############################################################ -->
+        <!-- ########### Extra Details Configuration ########### -->
+        <!-- ############################################################ -->
+        <record model="extra_details.configuration" id="commission_extra_details_configuration">
+            <field name="model_name">commission</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Commission Detail ########### -->
+        <!-- ############################################################ -->
+        <record model="extra_details.configuration.line" id="commission_premium">
+            <field name="configuration" ref="commission_extra_details_configuration"/>
+            <field name="string">First year premium</field>
+            <field name="name">first_year_premium</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+        </record>
+        <record model="extra_details.configuration.line" id="commission_adjustment">
+            <field name="configuration" ref="commission_extra_details_configuration"/>
+            <field name="string">Is adjustment</field>
+            <field name="name">is_adjustment</field>
+            <field name="type_">boolean</field>
+        </record>
+        <record model="extra_details.configuration.line" id="commission_sum_prepayments">
+            <field name="configuration" ref="commission_extra_details_configuration"/>
+            <field name="string">Sum of prepayments</field>
+            <field name="name">sum_of_prepayments</field>
+            <field name="type_">numeric</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_details.configuration.line" id="commission_sum_redeemed_prepayments">
+            <field name="configuration" ref="commission_extra_details_configuration"/>
+            <field name="string">Sum of redeemed prepayments</field>
+            <field name="name">sum_of_redeemed_prepayments</field>
+            <field name="type_">numeric</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_details.configuration.line" id="commission_monthly_premium_incl_tax">
+            <field name="configuration" ref="commission_extra_details_configuration"/>
+            <field name="string">Monthly premium including tax</field>
+            <field name="name">monthly_premium_incl_tax</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+        </record>
+        <record model="extra_details.configuration.line" id="commission_monthly_premium_excl_tax">
+            <field name="configuration" ref="commission_extra_details_configuration"/>
+            <field name="string">Monthly premium excluding tax</field>
+            <field name="name">monthly_premium_excl_tax</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+        </record>
     </data>
 </tryton>

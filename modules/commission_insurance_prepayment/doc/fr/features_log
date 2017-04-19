@@ -1,3 +1,4 @@
+*  Ajout de détails complémentaires sur les commissions
 * Alimentation des dates de début et fin de commissions de type précompte
 * Configuration du comportement du précompte sur quittances impayées
 * Prise en compte de l'amortissement lors du calcul de l'assiette de commission.

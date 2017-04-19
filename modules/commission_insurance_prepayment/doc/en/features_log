@@ -1,3 +1,4 @@
+* Add extra details on commissions
 * Set start and end dates of prepayment commissions
 * Configure prepayment behaviour for unpaid invoices
 * Take redeemed prepayments into account when computing a commission's base amount

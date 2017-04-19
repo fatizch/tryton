@@ -10,6 +10,18 @@ msgctxt "error:commission:"
 msgid "Prepayment Amortization"
 msgstr "Amortissement du précompte"
 
+msgctxt "error:contract.option:"
+msgid "An option must have either a contract or a covered element"
+msgstr "Une option doit avoir un contrat ou un élément couvert"
+
+msgctxt "field:commission,extra_details:"
+msgid "Extra Details"
+msgstr "Détails complémentaires"
+
+msgctxt "field:commission,extra_summary:"
+msgid "Extra Summary"
+msgstr "Résumé complémentaire"
+
 msgctxt "field:commission,is_prepayment:"
 msgid "Is Prepayment"
 msgstr "Précompte"
@@ -90,6 +102,34 @@ msgid ""
 "Python expression that will be evaluated with:\n"
 "- amount: the original amount"
 msgstr "Expression python qui va être évalué avec :"
+
+msgctxt "model:extra_details.configuration.line,string:commission_adjustment"
+msgid "Is adjustment"
+msgstr "Est un ajustement"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:commission_monthly_premium_excl_tax"
+msgid "Monthly premium excluding tax"
+msgstr "Prime mensuelle HT"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:commission_monthly_premium_incl_tax"
+msgid "Monthly premium including tax"
+msgstr "Prime mensuelle TTC"
+
+msgctxt "model:extra_details.configuration.line,string:commission_premium"
+msgid "Base Premium"
+msgstr "Prime de base"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:commission_sum_prepayments"
+msgid "Sum of prepayments"
+msgstr "Somme des précomptes"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:commission_sum_redeemed_prepayments"
+msgid "Sum of redeemed prepayments"
+msgstr "Somme des amortissements"
 
 msgctxt "model:offered.configuration-contract.sub_status,name:"
 msgid "Configuration to Termination Reason"

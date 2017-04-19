@@ -17,6 +17,7 @@ from trytond.modules.coog_core import fields, utils
 
 from trytond.modules.commission_insurance.commission import \
     COMMISSION_AMOUNT_DIGITS
+from trytond.modules.coog_core.extra_details import WithExtraDetails
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -29,7 +30,7 @@ __all__ = [
     ]
 
 
-class Commission:
+class Commission(WithExtraDetails):
     __name__ = 'commission'
 
     is_prepayment = fields.Boolean('Is Prepayment',
@@ -241,12 +242,22 @@ class Agent:
                 and [outstanding amount, outstanding_base_amount] as value
         """
         result = cls.sum_of_prepayments(agents)
-        for key, prepayment_amount_base in \
-                cls.sum_of_redeemed_prepayment(agents).iteritems():
-            if key not in result:
-                continue
-            result[key][0] -= prepayment_amount_base[0]
-            result[key][1] -= prepayment_amount_base[1]
+        redeemed_prepayments = cls.sum_of_redeemed_prepayment(agents)
+        # TODO: improve this condition
+        if not redeemed_prepayments:
+            for key, _ in result.iteritems():
+                if key not in result:
+                    continue
+                result[key] += [{'sum_of_prepayments': result[key][0]}, ]
+        else:
+            for key, prepayment_amount_base in redeemed_prepayments.iteritems():
+                if key not in result:
+                    continue
+                result[key] += [{'sum_of_redeemed_prepayments':
+                    prepayment_amount_base[0],
+                    'sum_of_prepayments': result[key][0]}, ]
+                result[key][0] -= prepayment_amount_base[0]
+                result[key][1] -= prepayment_amount_base[1]
         return result
 
 
