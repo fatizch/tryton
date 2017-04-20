@@ -11,9 +11,6 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/group/group[@id='buttons']/button[@name='fail']" position="replace">
         <button string="Fail" name="button_fail_payments"/>
     </xpath>
-    <xpath expr="/form/group[@id='state_buttons']" position="replace_attributes">
-        <group id="state_buttons" invisible="1"/>
-    </xpath>
     <xpath expr="/form/notebook" position="before">
         <label name="state"/>
         <field name="state"/>

@@ -505,6 +505,10 @@ class Payment(export.ExportImportMixin, Printable):
                 '/form/field[@name="state"]',
                 'states',
                 {'field_color': Eval('color')}
+                ), (
+                '/form/group[@id="state_buttons"]',
+                'states',
+                {'invisible': True}
                 )]
 
     def get_reject_description(self, name):
