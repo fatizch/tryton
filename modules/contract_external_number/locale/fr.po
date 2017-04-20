@@ -1,0 +1,11 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract:"
+msgid "The external number must be unique"
+msgstr "Le numéro externe doit être unique"
+
+msgctxt "field:contract,external_number:"
+msgid "External Number"
+msgstr "Numéro externe"

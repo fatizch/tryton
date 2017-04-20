@@ -1,0 +1,1 @@
+- **Numéro externe :** Un contrat a un identifiant externe unique fourni par un autre sytème.
