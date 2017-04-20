@@ -67,6 +67,16 @@ Create Product::
     >>> product = add_quote_number_generator(product)
     >>> product.save()
 
+Create Payment Journal::
+
+    >>> Journal = Model.get('account.payment.journal')
+    >>> journal = Journal()
+    >>> journal.name = 'Manual Journal'
+    >>> journal.company = company
+    >>> journal.currency = currency
+    >>> journal.process_method = 'manual'
+    >>> journal.save()
+
 Create Claim Configuration::
 
     >>> EventDescriptionLossDescriptionRelation = Model.get(
@@ -168,6 +178,7 @@ Create Claim Configuration::
     >>> Config = Model.get('claim.configuration')
     >>> claim_config = Config()
     >>> claim_config.control_rule = control_rule
+    >>> claim_config.default_journal = journal
     >>> claim_config.save()
     >>> Action = Model.get('ir.action')
     >>> action, = Action.find(['name', '=', 'Indemnification Validation Wizard'])
@@ -188,6 +199,8 @@ Create indemnifications::
     >>> len(indemnifications) == 1
     True
     >>> indemnifications[0].amount == 8988
+    True
+    >>> indemnifications[0].journal == journal
     True
     >>> indemnifications[0].click('schedule')
     >>> indemnifications[0].status == 'scheduled'

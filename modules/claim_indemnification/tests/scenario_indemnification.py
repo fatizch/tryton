@@ -70,6 +70,17 @@ product = init_product(start_date=datetime.date(2009, 3, 15))
 product = add_quote_number_generator(product)
 product.save()
 
+# #Comment# #Create Payment Journal
+
+Journal = Model.get('account.payment.journal')
+journal = Journal()
+journal.name = 'Manual Journal'
+journal.company = company
+journal.currency = currency
+journal.process_method = 'manual'
+journal.save()
+
+
 # #Comment# #Create Claim Configuration
 EventDescriptionLossDescriptionRelation = Model.get(
     'benefit.event.description-loss.description')
@@ -185,6 +196,7 @@ payment_term.save()
 Config = Model.get('claim.configuration')
 claim_config = Config()
 claim_config.control_rule = control_rule
+claim_config.default_journal = journal
 claim_config.save()
 
 Action = Model.get('ir.action')
@@ -209,6 +221,9 @@ len(indemnifications) == 1
 # #Res# #True
 
 indemnifications[0].amount == 8988
+# #Res# #True
+
+indemnifications[0].journal == journal
 # #Res# #True
 
 indemnifications[0].click('schedule')
