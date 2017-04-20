@@ -98,7 +98,9 @@ class Contract:
             self.initial_start_date
         end_date = end or min(
             (self.final_end_date or self.end_date or datetime.date.max),
-            self.initial_start_date + relativedelta(years=1, days=-1))
+            (self.initial_start_date + relativedelta(years=1, days=-1) if
+                self.initial_start_date else datetime.date.max))
+        end_date = end_date if end_date != datetime.date.max else None
         super(Contract, self).rebill(start, end, post_end)
         if self.termination_reason or self.status == 'void':
             self.adjust_prepayment_commissions_once_terminated(start_date,
