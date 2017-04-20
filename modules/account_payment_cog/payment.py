@@ -6,6 +6,7 @@ from itertools import groupby
 from sql.aggregate import Sum, Max
 from sql import Literal, Null
 
+from trytond.rpc import RPC
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.model import Workflow, ModelView, Unique
@@ -239,6 +240,8 @@ class RejectReason(model.CoogSQL, model.CoogView):
     process_method = fields.Selection('get_process_method',
         'Process method', required=True)
     payment_kind = fields.Selection(KINDS, 'Payment Kind')
+    failure_actions = fields.One2Many('account.payment.journal.failure_action',
+        'reject_reason', 'Failure Actions')
 
     @classmethod
     def __setup__(cls):
@@ -488,11 +491,7 @@ class Payment(export.ExportImportMixin, Printable):
                     'invisible': Eval('state') != 'approved',
                     'icon': 'tryton-go-next'
                 },
-                'button_process_fail_payments': {
-                    'invisible': Eval('manual_fail_status') != 'pending',
-                    'icon': 'tryton-go-next'
-                }
-        })
+                })
         cls.state_string = cls.state.translated('state')
 
     @classmethod
@@ -789,6 +788,12 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
                     'invisible': Eval('state') == 'acknowledged',
                     },
                 })
+        cls._error_messages.update({
+                'reject_reason_not_found': 'The reason code on journal %s '
+                'is not found',
+                })
+        cls.__rpc__.update({'reject_payment_group': RPC(readonly=False,
+                    instantiate=0)})
 
     @classmethod
     def __register__(cls, module_name):
@@ -857,6 +862,38 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
             payments.extend(group.processing_payments)
         if payments:
             Payment.succeed(payments)
+
+    @classmethod
+    def fail_payments(cls, groups):
+        Payment = Pool().get('account.payment')
+        for group in groups:
+            if group.processing_payments:
+                Payment.fail(group.processing_payments)
+        group.write(groups, {'state': 'acknowledged'})
+
+    @classmethod
+    def reject_payment_group(cls, groups, reject_code):
+        pool = Pool()
+        RejectReason = pool.get('account.payment.journal.reject_reason')
+        Payment = pool.get('account.payment')
+        Group = pool.get('account.payment.group')
+
+        def group_per_journal(g):
+            return g.journal
+
+        groups = sorted(groups, key=group_per_journal)
+        for journal, sub_groups in groupby(groups, group_per_journal):
+            sub_groups = list(sub_groups)
+            reject_reasons = RejectReason.search([
+                    ('code', '=', reject_code),
+                    ('failure_actions.journal', '=', journal.id)
+                    ])
+            if not reject_reasons:
+                cls.raise_user_error('reject_reason_not_found', journal.name)
+            reject_reason, = reject_reasons
+            payments = sum([list(g.processing_payments) for g in sub_groups], [])
+            Payment.manual_set_reject_reason(payments, reject_reason)
+            Group.fail_payments(sub_groups)
 
     def get_currency(self):
         return self.journal.currency if self.journal else None

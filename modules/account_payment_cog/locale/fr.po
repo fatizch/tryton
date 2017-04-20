@@ -15,6 +15,11 @@ msgstr ""
 "Les lignes sélectionnées sont incompatibles: certaines sont des lignes à "
 "payer d'autres des lignes à recevoir"
 
+msgctxt "error:account.payment.group:"
+msgid "The reason code on journal %s is not found"
+msgstr ""
+"Le motif de rejet sur le journal %s est introuvable"
+
 msgctxt "error:account.payment.fail_information:"
 msgid "Trying to fail different payment kinds at the same time"
 msgstr ""
@@ -292,6 +297,10 @@ msgstr "Créé par"
 msgctxt "field:account.payment.journal.reject_reason,description:"
 msgid "Description"
 msgstr "Description"
+
+msgctxt "field:account.payment.journal.reject_reason,failure_actions:"
+msgid "Failure Actions"
+msgstr "Actions en cas de rejet"
 
 msgctxt "field:account.payment.journal.reject_reason,id:"
 msgid "ID"
@@ -838,6 +847,10 @@ msgstr "Informations du rejet"
 msgctxt "view:account.payment.group:"
 msgid "Acknowledge"
 msgstr "Accuser réception"
+
+msgctxt "view:account.payment.group:"
+msgid "Fail Payments"
+msgstr "Rejeter les paiements"
 
 msgctxt "view:account.payment.group:"
 msgid "Processing"

@@ -14,5 +14,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/tree/field[@name='kind']" position="after">
         <field name="state"/>
         <button string="Acknowledge" name="acknowledge" tree_invisible="1"/>
+        <button string="Fail Payments" name="fail_payments" tree_invisible="1"/>
+        <field name="processing_payments" tree_invisible="1"/>
     </xpath>
 </data>
