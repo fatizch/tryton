@@ -486,11 +486,15 @@ class Payment(export.ExportImportMixin, Printable):
                     'invisible': Not(In(Eval('state'),
                             ['processing', 'succeeded'])),
                     'icon': 'tryton-cancel',
-                },
+                    },
                 'process_payments': {
                     'invisible': Eval('state') != 'approved',
                     'icon': 'tryton-go-next'
-                },
+                    },
+                'button_process_fail_payments': {
+                    'invisible': Eval('manual_fail_status') != 'pending',
+                    'icon': 'tryton-go-next'
+                    },
                 })
         cls.state_string = cls.state.translated('state')
 
