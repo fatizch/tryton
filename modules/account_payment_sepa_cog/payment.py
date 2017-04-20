@@ -440,9 +440,11 @@ class Payment:
         ondelete='RESTRICT', domain=[If(Eval('kind', '') == 'payable',
                 [('owners', '=', Eval('party'))],
                 [('owners', '=', Eval('payer'))])],
-        states={'invisible': (~Eval('payer') & (Eval('kind') == 'receivable'))
-            | (~Eval('party') & (Eval('kind') == 'payable'))},
-        depends=['kind', 'party', 'payer'])
+        states={
+            'invisible': (~Eval('payer') & (Eval('kind') == 'receivable'))
+            | (~Eval('party') & (Eval('kind') == 'payable')),
+            'readonly': Eval('state') != 'draft',
+            }, depends=['kind', 'party', 'payer', 'state'])
     sepa_bank_reject_date = fields.Date('SEPA Bank Reject Date',
         states={'invisible': Or(
                 Eval('state') != 'failed',
@@ -474,8 +476,9 @@ class Payment:
                 'missing_bank_acount': ('Missing bank account for "%(party)s" '
                     'at "%(date)s"'),
                 })
-        cls.sepa_mandate.states = {'invisible': Eval('kind') == 'payable'}
-        cls.sepa_mandate.depends += ['kind', 'payer']
+        cls.sepa_mandate.states['invisible'] = Eval('kind') == 'payable'
+        cls.sepa_mandate.states['readonly'] = Eval('state') != 'draft'
+        cls.sepa_mandate.depends += ['kind', 'payer', 'state']
         cls.sepa_mandate.domain = [x for x in cls.sepa_mandate.domain
             if x[0] != 'party']
         cls.sepa_mandate.domain.append(('party', '=', Eval('payer', -1)))

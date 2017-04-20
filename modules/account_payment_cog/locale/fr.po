@@ -92,6 +92,10 @@ msgctxt "field:account.move.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.payment,color:"
+msgid "Color"
+msgstr "Couleur"
+
 msgctxt "field:account.payment,icon:"
 msgid "Icon"
 msgstr "Icône"
@@ -103,7 +107,6 @@ msgstr "Statut du rejet manuel"
 msgctxt "field:account.payment,manual_reject_code:"
 msgid "Manual Reject Code"
 msgstr "Motif de rejet manuel"
-
 
 msgctxt "field:account.payment,merged_id:"
 msgid "Merged ID"
@@ -668,6 +671,10 @@ msgctxt "model:ir.action,name:act_payment_motive_form"
 msgid "Payment Motive"
 msgstr "Motif de paiement"
 
+msgctxt "model:ir.action,name:act_payment_relate_form"
+msgid "Payments"
+msgstr "Paiements"
+
 msgctxt "model:ir.action,name:act_process_payments_button"
 msgid "Process Payments"
 msgstr "Traiter les paiements"
@@ -940,12 +947,12 @@ msgid "Failed"
 msgstr "Rejeté"
 
 msgctxt "selection:account.move.line,payment_kind:account_payment."
-msgid "Receivable"
-msgstr "À recevoir"
-
-msgctxt "selection:account.move.line,payment_kind:account_payment."
 msgid "Payable"
 msgstr "À payer"
+
+msgctxt "selection:account.move.line,payment_kind:account_payment."
+msgid "Receivable"
+msgstr "À recevoir"
 
 msgctxt "selection:account.payment.group,kind:account_payment."
 msgid "Receivable"

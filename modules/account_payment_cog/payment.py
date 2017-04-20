@@ -437,9 +437,6 @@ class Payment(export.ExportImportMixin, Printable):
     __name__ = 'account.payment'
     _func_key = 'id'
 
-    icon = fields.Function(
-        fields.Char('Icon'),
-        'get_icon')
     manual_reject_code = fields.Char('Manual Reject Code')
     manual_fail_status = fields.Selection([
         ('', ''),
@@ -451,7 +448,11 @@ class Payment(export.ExportImportMixin, Printable):
         fields.Char('Reject Description', states={
                 'invisible': ~Eval('reject_description')}),
         'get_reject_description')
-    merged_id = fields.Char('Merged ID', select=True)
+    merged_id = fields.Char('Merged ID', select=True,
+        states={'readonly': Eval('state') != 'draft'},
+        depends=['state'])
+    icon = fields.Function(fields.Char('Icon'), 'get_icon')
+    color = fields.Function(fields.Char('Color'), 'get_color')
     related_invoice = fields.Function(fields.Many2One(
             'account.invoice', 'Related Invoice'), 'get_related_invoice')
     related_invoice_business_kind = fields.Function(fields.Char(
@@ -467,17 +468,6 @@ class Payment(export.ExportImportMixin, Printable):
         if payment_h.column_exist('sepa_merged_id'):
             payment_h.column_rename('sepa_merged_id', 'merged_id')
         super(Payment, cls).__register__(module_name)
-
-    def get_reject_description(self, name):
-        pool = Pool()
-        RejectReason = pool.get('account.payment.journal.reject_reason')
-        if not self.fail_code:
-            return ''
-        reject_reason, = RejectReason.search([
-                ('code', '=', self.fail_code),
-                ('payment_kind', '=', self.kind),
-                ])
-        return reject_reason.description
 
     @classmethod
     def __setup__(cls):
@@ -505,8 +495,43 @@ class Payment(export.ExportImportMixin, Printable):
         })
         cls.state_string = cls.state.translated('state')
 
+    @classmethod
+    def view_attributes(cls):
+        return super(Payment, cls).view_attributes() + [(
+                '/tree',
+                'colors',
+                Eval('color', 'black')
+                ), (
+                '/form/field[@name="state"]',
+                'states',
+                {'field_color': Eval('color')}
+                )]
+
+    def get_reject_description(self, name):
+        pool = Pool()
+        RejectReason = pool.get('account.payment.journal.reject_reason')
+        if not self.fail_code:
+            return ''
+        reject_reasons = RejectReason.search([
+                ('code', '=', self.fail_code),
+                ('payment_kind', '=', self.kind),
+                ])
+        return reject_reasons[0].description if reject_reasons else None
+
     def get_icon(self, name=None):
-        return 'payment'
+        icon_names = ['payment']
+        if self.journal and self.journal.process_method != 'manual':
+            icon_names.append('auto')
+            icon_names.append({'payable': 'out', 'receivable': 'in'}[self.kind])
+        elif self.journal and self.journal.process_method == 'manual':
+            icon_names.append('manual')
+        if self.fail_code:
+            icon_names.append('cancel')
+        return '_'.join(icon_names)
+
+    def get_color(self, name=None):
+        return {'draft': 'grey', 'processing': 'blue', 'succeeded': 'green',
+            'failed': 'red'}.get(self.state, 'black')
 
     def get_synthesis_rec_name(self, name):
         Date = Pool().get('ir.date')

@@ -71,6 +71,12 @@ class Payment:
         return (self.journal.process_method == 'cheque_letter' if self.journal
             else False)
 
+    def get_icon(self, name=None):
+        if self.is_cheque_letter:
+            return ('cheque_letter'
+                if self.state != 'failed' else 'cheque_letter_cancel')
+        return super(Payment, self).get_icon(name)
+
     @classmethod
     def finalize_cheque_letter_processing(cls, group_ids):
         pool = Pool()

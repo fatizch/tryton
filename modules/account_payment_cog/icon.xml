@@ -7,6 +7,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">payment</field>
             <field name="path">icons/payment.svg</field>
         </record>
+        <record model="ir.ui.icon" id="payment_cancel_icon">
+            <field name="name">payment_cancel</field>
+            <field name="path">icons/payment_cancel.svg</field>
+        </record>
         <record model="ir.ui.icon" id="payment_auto_in_icon">
             <field name="name">payment_auto_in</field>
             <field name="path">icons/payment_auto_in.svg</field>
@@ -22,6 +26,14 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.ui.icon" id="payment_auto_out_cancel_icon">
             <field name="name">payment_auto_out_cancel</field>
             <field name="path">icons/payment_auto_out_cancel.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="payment_manual_icon">
+            <field name="name">payment_manual</field>
+            <field name="path">icons/cheque.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="payment_manual_cancel_icon">
+            <field name="name">payment_manual_cancel</field>
+            <field name="path">icons/cheque_cancel.svg</field>
         </record>
     </data>
 </tryton>

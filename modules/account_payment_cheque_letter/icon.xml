@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="cheque_letter_icon">
+            <field name="name">cheque_letter</field>
+            <field name="path">icons/cheque_letter.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="cheque_letter_cancel_icon">
+            <field name="name">cheque_letter_cancel</field>
+            <field name="path">icons/cheque_letter_cancel.svg</field>
+        </record>
+    </data>
+</tryton>

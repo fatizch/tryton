@@ -115,7 +115,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="account_payment.payment_view_form"/>
             <field name="act_window" ref="act_payment_fail_status_form"/>
         </record>
-        <menuitem parent="account_payment.menu_payments" sequence="20" action="act_payment_fail_status_form" id="menu_fail_payment_status_form"/>
+        <menuitem parent="account_payment.menu_payments" sequence="20" action="act_payment_fail_status_form" id="menu_fail_payment_status_form" icon="payment_cancel"/>
         <!-- ################################## -->
         <!-- ########### Event Type ########### -->
         <!-- ################################## -->
@@ -212,5 +212,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <menuitem parent="account_payment.menu_payment_configuration" id="menu_payment_motive_form"
             icon="tryton-list" action="act_payment_motive_form"/>
+        <menuitem id="account_payment.menu_payment_form" action="account_payment.act_payment_form" icon="payment"/>
+        <menuitem id="account_payment.menu_payments" name="Payments" icon="payment"/>
     </data>
 </tryton>
