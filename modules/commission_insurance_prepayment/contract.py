@@ -96,7 +96,8 @@ class Contract:
     def rebill(self, start=None, end=None, post_end=None):
         start_date = start if start and start != datetime.date.min else \
             self.initial_start_date
-        end_date = end or max((self.final_end_date or self.end_date),
+        end_date = end or min(
+            (self.final_end_date or self.end_date or datetime.date.max),
             self.initial_start_date + relativedelta(years=1, days=-1))
         super(Contract, self).rebill(start, end, post_end)
         if self.termination_reason or self.status == 'void':
