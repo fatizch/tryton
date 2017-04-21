@@ -1,7 +1,5 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import datetime
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
@@ -11,6 +9,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Party',
     'HealthPartyComplement',
+    'PartyReplace'
     ]
 
 
@@ -62,3 +61,13 @@ class HealthPartyComplement(model._RevisionMixin, model.CoogSQL,
     @classmethod
     def add_func_key(cls, values):
         values['_func_key'] = values['date'] if 'date' in values else None
+
+
+class PartyReplace:
+    __name__ = 'party.replace'
+
+    @classmethod
+    def fields_to_replace(cls):
+        return super(PartyReplace, cls).fields_to_replace() + [
+            ('health.party_complement', 'party'),
+            ]

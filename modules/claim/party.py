@@ -17,6 +17,7 @@ __all__ = [
     'SynthesisMenu',
     'SynthesisMenuOpen',
     'InsurerDelegation',
+    'PartyReplace',
     ]
 
 
@@ -147,3 +148,14 @@ class InsurerDelegation:
     @classmethod
     def default_claim_create(cls):
         return True
+
+
+class PartyReplace:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.replace'
+
+    @classmethod
+    def fields_to_replace(cls):
+        return super(PartyReplace, cls).fields_to_replace() + [
+            ('claim', 'claimant'),
+            ]

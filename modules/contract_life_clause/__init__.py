@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 from .contract import *
+import party
 
 
 def register():
@@ -10,3 +11,6 @@ def register():
         ContractOption,
         Beneficiary,
         module='contract_life_clause', type_='model')
+    Pool.register(
+        party.PartyReplace,
+        module='contract_life_clause', type_='wizard')

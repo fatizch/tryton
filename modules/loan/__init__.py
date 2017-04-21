@@ -5,7 +5,7 @@ from .offered import *
 from .contract import *
 from .rule_engine import *
 from .loan import *
-from .party import *
+import party
 from .wizard import *
 from .extra_data import *
 
@@ -30,18 +30,19 @@ def register():
         OptionsDisplayer,
         WizardOption,
         LoanShareTreeExpansion,
-        Party,
-        SynthesisMenuLoan,
-        SynthesisMenu,
-        InsuredOutstandingLoanBalanceView,
-        InsuredOutstandingLoanBalanceLineView,
-        InsuredOutstandingLoanBalanceSelectDate,
-        Lender,
+        party.Party,
+        party.SynthesisMenuLoan,
+        party.SynthesisMenu,
+        party.InsuredOutstandingLoanBalanceView,
+        party.InsuredOutstandingLoanBalanceLineView,
+        party.InsuredOutstandingLoanBalanceSelectDate,
+        party.Lender,
         module='loan', type_='model')
     Pool.register(
         OptionSubscription,
         DisplayContractPremium,
         CreateExtraPremium,
-        SynthesisMenuOpen,
-        DisplayInsuredOutstandingLoanBalance,
+        party.SynthesisMenuOpen,
+        party.DisplayInsuredOutstandingLoanBalance,
+        party.PartyReplace,
         module='loan', type_='wizard')

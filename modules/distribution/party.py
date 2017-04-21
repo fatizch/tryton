@@ -8,6 +8,7 @@ from trytond.modules.coog_core import fields
 __metaclass__ = PoolMeta
 __all__ = [
     'Party',
+    'PartyReplace',
     ]
 
 
@@ -23,3 +24,13 @@ class Party:
                 'states',
                 {'invisible': ~Eval('network')}
                 )]
+
+
+class PartyReplace:
+    __name__ = 'party.replace'
+
+    @classmethod
+    def fields_to_replace(cls):
+        return super(PartyReplace, cls).fields_to_replace() + [
+            ('distribution.network', 'party'),
+            ]

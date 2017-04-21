@@ -5,6 +5,7 @@ from .statement import *
 from .test_case import *
 from .journal import *
 from .move import *
+import party
 
 
 def register():
@@ -22,4 +23,5 @@ def register():
         module='account_statement_cog', type_='model')
     Pool.register(
         CancelLineGroup,
+        party.PartyReplace,
         module='account_statement_cog', type_='wizard')

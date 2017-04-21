@@ -6,6 +6,7 @@ from .batch import *
 from .document import *
 from .attachment import *
 from .report_engine import *
+import party
 
 
 def register():
@@ -21,6 +22,7 @@ def register():
         module='document_request', type_='model')
     Pool.register(
         ReceiveDocument,
+        party.PartyReplace,
         module='document_request', type_='wizard')
     Pool.register(
         ReportGenerate,

@@ -14,6 +14,7 @@ from .offered import *
 from .batch import *
 from .event import *
 from .notification import *
+import party
 
 
 def register():
@@ -59,4 +60,5 @@ def register():
         ContractHold,
         ContractReactivate,
         RelatedAttachments,
+        party.PartyReplace,
         module='contract', type_='wizard')

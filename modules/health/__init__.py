@@ -6,6 +6,7 @@ from .offered import *
 from .party import *
 from .contract import *
 from .rule_engine import *
+import party
 
 
 def register():
@@ -20,3 +21,6 @@ def register():
         CoveredElement,
         RuleEngineRuntime,
         module='health', type_='model')
+    Pool.register(
+        party.PartyReplace,
+        module='health', type_='wizard')

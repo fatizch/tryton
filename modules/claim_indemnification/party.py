@@ -6,6 +6,7 @@ from trytond.modules.coog_core import fields
 
 __all__ = [
     'InsurerDelegation',
+    'PartyReplace',
     ]
 
 
@@ -29,3 +30,14 @@ class InsurerDelegation:
     @classmethod
     def default_claim_pay_indemnifications(cls):
         return True
+
+
+class PartyReplace:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.replace'
+
+    @classmethod
+    def fields_to_replace(cls):
+        return super(PartyReplace, cls).fields_to_replace() + [
+            ('claim.indemnification', 'beneficiary'),
+            ]

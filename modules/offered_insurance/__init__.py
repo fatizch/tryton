@@ -10,6 +10,7 @@ from .test_case import *
 from .batch import *
 from .exclusion import *
 from .extra_premium import *
+import party
 
 
 def register():
@@ -34,3 +35,6 @@ def register():
         Process,
         TestCaseModel,
         module='offered_insurance', type_='model')
+    Pool.register(
+        party.PartyReplace,
+        module='offered_insurance', type_='wizard')

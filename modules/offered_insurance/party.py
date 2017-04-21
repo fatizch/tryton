@@ -17,6 +17,7 @@ __all__ = [
     'Party',
     'Insurer',
     'InsurerDelegation',
+    'PartyReplace',
     ]
 
 
@@ -185,3 +186,13 @@ class InsurerDelegation(model.CoogView, model.CoogSQL):
         cursor.execute(*delegation.insert(columns=[delegation.insurer,
                     delegation.insurance_kind],
                 values=insurer.select(insurer.id, Literal(''))))
+
+
+class PartyReplace:
+    __name__ = 'party.replace'
+
+    @classmethod
+    def fields_to_replace(cls):
+        return super(PartyReplace, cls).fields_to_replace() + [
+            ('insurer', 'party'),
+            ]

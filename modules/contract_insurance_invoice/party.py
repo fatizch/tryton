@@ -4,7 +4,7 @@ import copy
 from sql.aggregate import Max
 from sql import Literal
 
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
 from trytond.modules.coog_core import model, fields, coog_string, UnionMixin
@@ -13,6 +13,7 @@ __all__ = [
     'SynthesisMenuInvoice',
     'SynthesisMenu',
     'SynthesisMenuOpen',
+    'PartyReplace',
     ]
 
 
@@ -113,3 +114,14 @@ class SynthesisMenuOpen(Wizard):
                             ])[0].id, 'form')]
         }
         return actions
+
+
+class PartyReplace:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.replace'
+
+    @classmethod
+    def fields_to_replace(cls):
+        return super(PartyReplace, cls).fields_to_replace() + [
+            ('contract.billing_information', 'payer'),
+            ]

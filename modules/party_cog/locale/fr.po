@@ -32,6 +32,11 @@ msgctxt "error:party.party:"
 msgid "The SSN of the party must be unique."
 msgstr "Le NIR du tiers doit être unique"
 
+msgctxt "error:party.replace:"
+msgid "Parties have different first names: %(source_name)s vs %(destination_name)s."
+msgstr ""
+"Les tiers ont des prénoms différents: %(source_name)s vs %(destination_name)s."
+
 msgctxt "field:ir.test_case,adult_age_max:"
 msgid "Maximum age for adults"
 msgstr "Age maximum des adultes"

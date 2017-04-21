@@ -48,10 +48,12 @@ def register():
         party.SynthesisMenu,
         party.SynthesisMenuOpenState,
         PartyMenuTreeExpansion,
+        party.PartyReplaceAsk,
         module='party_cog', type_='model')
     Pool.register(
         party.SynthesisMenuSet,
         party.SynthesisMenuOpen,
+        party.PartyReplace,
         module='party_cog', type_='wizard')
 
     Pool.register_post_init_hooks(migrate_1_10_include_name_in_street,

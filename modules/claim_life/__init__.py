@@ -7,6 +7,7 @@ from .test_case import *
 from .benefit import *
 from .wizard import *
 from .rule_engine import *
+import party
 
 
 def register():
@@ -24,3 +25,6 @@ def register():
         IndemnificationValidateElement,
         IndemnificationControlElement,
         module='claim_life', type_='model')
+    Pool.register(
+        party.PartyReplace,
+        module='claim_life', type_='wizard')

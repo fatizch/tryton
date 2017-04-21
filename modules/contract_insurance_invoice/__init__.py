@@ -71,4 +71,5 @@ def register():
         invoice.InvoiceLineAggregates,
         move.Reconcile,
         party.SynthesisMenuOpen,
+        party.PartyReplace,
         module='contract_insurance_invoice', type_='wizard')

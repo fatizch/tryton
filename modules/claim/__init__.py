@@ -12,6 +12,7 @@ from .benefit import *
 from .wizard import *
 from .event import *
 from .configuration import *
+import party
 
 
 def register():
@@ -51,4 +52,5 @@ def register():
         CloseClaim,
         DeliverBenefits,
         SynthesisMenuOpen,
+        party.PartyReplace,
         module='claim', type_='wizard')

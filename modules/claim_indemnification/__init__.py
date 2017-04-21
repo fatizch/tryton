@@ -11,6 +11,7 @@ from .event import *
 from .party import *
 from .batch import *
 import move
+import party
 
 
 def register():
@@ -49,4 +50,5 @@ def register():
         FillExtraData,
         CreateIndemnification,
         IndemnificationAssistant,
+        party.PartyReplace,
         module='claim_indemnification', type_='wizard')

@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 from .payment import *
 from .configuration import *
+import party
 
 
 def register():
@@ -11,3 +12,6 @@ def register():
         Configuration,
         PartyJournalRelation,
         module='account_payment_extended_conf', type_='model')
+    Pool.register(
+        party.PartyReplace,
+        module='account_payment_extended_conf', type_='wizard')

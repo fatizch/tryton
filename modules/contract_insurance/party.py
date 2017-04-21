@@ -9,6 +9,7 @@ __metaclass__ = PoolMeta
 
 _all_ = [
     'Party',
+    'PartyReplace',
     ]
 
 
@@ -74,3 +75,14 @@ class Party:
         result = super(Party, cls)._export_skips()
         result.add('covered_elements')
         return result
+
+
+class PartyReplace:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.replace'
+
+    @classmethod
+    def fields_to_replace(cls):
+        return super(PartyReplace, cls).fields_to_replace() + [
+            ('contract.covered_element', 'party'),
+            ]

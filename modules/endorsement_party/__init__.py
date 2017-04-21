@@ -5,6 +5,7 @@ from .endorsement import *
 from .offered import *
 from .wizard import *
 from .event import *
+import party
 
 
 def register():
@@ -35,4 +36,5 @@ def register():
 
     Pool.register(
         StartEndorsement,
+        party.PartyReplace,
         module='endorsement_party', type_='wizard')

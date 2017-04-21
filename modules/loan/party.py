@@ -28,6 +28,7 @@ __all__ = [
     'InsuredOutstandingLoanBalanceView',
     'InsuredOutstandingLoanBalanceLineView',
     'InsuredOutstandingLoanBalanceSelectDate',
+    'PartyReplace',
     ]
 
 
@@ -378,3 +379,13 @@ class InsuredOutstandingLoanBalanceSelectDate(model.CoogView):
             domain=[('id', 'in', Eval('possible_currencies'))])
     possible_currencies = fields.Many2Many('currency.currency',
              None, None, 'Possible Currencies')
+
+
+class PartyReplace:
+    __name__ = 'party.replace'
+
+    @classmethod
+    def fields_to_replace(cls):
+        return super(PartyReplace, cls).fields_to_replace() + [
+            ('lender', 'party'),
+            ]

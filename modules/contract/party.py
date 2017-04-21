@@ -19,6 +19,7 @@ __all__ = [
     'SynthesisMenu',
     'SynthesisMenuOpen',
     'SynthesisMenuContrat',
+    'PartyReplace',
     ]
 
 
@@ -184,3 +185,15 @@ class SynthesisMenuOpen(Wizard):
             'views': [(None, 'tree'), (None, 'form')]
         }
         return actions
+
+
+class PartyReplace:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.replace'
+
+    @classmethod
+    def fields_to_replace(cls):
+        return super(PartyReplace, cls).fields_to_replace() + [
+            ('contract', 'subscriber'),
+            ('contract.contact', 'party'),
+            ]

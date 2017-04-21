@@ -8,6 +8,7 @@ from .party import *
 from .report_engine import *
 from .wizard import *
 from .rule_engine import *
+import party
 
 from trytond.modules.coog_core import expand_tree
 CoveredElementTreeExpansion = expand_tree('contract.covered_element')
@@ -47,4 +48,5 @@ def register():
         ManageExtraPremium,
         ManageExclusion,
         CreateExtraPremium,
+        party.PartyReplace,
         module='contract_insurance', type_='wizard')

@@ -4,13 +4,16 @@ from trytond.pool import Pool
 
 from .distribution import *
 from .test_case import *
-from .party import *
+import party
 
 
 def register():
     Pool.register(
         DistributionNetwork,
         DistributionNetworkContactMechanism,
-        Party,
+        party.Party,
         TestCaseModel,
         module='distribution', type_='model')
+    Pool.register(
+        party.PartyReplace,
+        module='distribution', type_='wizard')

@@ -6,6 +6,7 @@ from .offered import *
 from .wizard import *
 from .event import *
 from .document import *
+import party
 
 
 def register():
@@ -65,4 +66,5 @@ def register():
         EndorsementDecline,
         OpenGeneratedEndorsements,
         ReceiveDocument,
+        party.PartyReplace,
         module='endorsement', type_='wizard')

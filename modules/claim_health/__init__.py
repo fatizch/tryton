@@ -5,6 +5,7 @@ from .claim import *
 from .contract import *
 from .wizard import *
 from .benefit import *
+import party
 
 
 def register():
@@ -20,3 +21,6 @@ def register():
         ModifyCoveredElement,
         CoveredElementDisplayer,
         module='claim_health', type_='model')
+    Pool.register(
+        party.PartyReplace,
+        module='claim_health', type_='wizard')

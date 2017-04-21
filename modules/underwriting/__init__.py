@@ -5,6 +5,7 @@ from trytond.pool import Pool
 import underwriting
 import document
 import batch
+import party
 
 
 def register():
@@ -22,4 +23,5 @@ def register():
 
     Pool.register(
         underwriting.PlanUnderwriting,
+        party.PartyReplace,
         module='underwriting', type_='wizard')

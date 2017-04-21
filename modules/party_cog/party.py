@@ -44,6 +44,8 @@ __all__ = [
     'SynthesisMenuActionCloseSynthesis',
     'SynthesisMenuActionRefreshSynthesis',
     'SynthesisMenuRelationship',
+    'PartyReplace',
+    'PartyReplaceAsk',
     ]
 
 GENDER = [
@@ -61,6 +63,7 @@ LONG_GENDER = [
 
 STATES_PERSON = Bool(Eval('is_person'))
 STATES_COMPANY = ~Eval('is_person')
+STATES_ACTIVE = ~Eval('active', True)
 
 
 class Party(export.ExportImportMixin, summary.SummaryMixin):
@@ -75,11 +78,13 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         fields.Boolean('Has Active Address'), 'get_has_active_address')
     ####################################
     # Person information
-    is_person = fields.Boolean('Person')
+    is_person = fields.Boolean('Person', states={'readonly': STATES_ACTIVE},
+        depends=['active'])
     gender = fields.Selection(GENDER, 'Gender', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
-            }, depends=['is_person'])
+            'readonly': STATES_ACTIVE,
+            }, depends=['is_person', 'active'])
     long_gender = fields.Function(
         fields.Selection(LONG_GENDER, 'Gender Long',
             states={'invisible': True}),
@@ -89,27 +94,34 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
     first_name = fields.Char('First Name', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
-            }, depends=['is_person'])
+            'readonly': STATES_ACTIVE,
+            }, depends=['is_person', 'active'])
     birth_name = fields.Char('Birth Name', states={
-            'invisible': ~STATES_PERSON
-            }, depends=['is_person'])
+            'invisible': ~STATES_PERSON,
+            'readonly': STATES_ACTIVE,
+            }, depends=['is_person', 'active'])
     birth_date = fields.Date('Birth Date', states={
             'invisible': ~STATES_PERSON,
+            'readonly': STATES_ACTIVE,
             'required': STATES_PERSON,
-            }, depends=['is_person'])
+            }, depends=['is_person', 'active'])
     ssn = fields.EmptyNullChar('SSN', states={
             'invisible': ~STATES_PERSON,
+            'readonly': STATES_ACTIVE,
             'required': Eval('ssn_required', False)
-            }, depends=['is_person', 'ssn_required'])
+            }, depends=['is_person', 'ssn_required', 'active'])
     ssn_required = fields.Function(fields.Boolean('SSN Required'),
         'get_SSN_required')
     ####################################
     # Company information
-    commercial_name = fields.Char('Commercial Name',
-        states={'invisible': ~STATES_COMPANY},
-        depends=['is_person'])
-    logo = fields.Binary('Logo', states={'invisible': ~STATES_COMPANY},
-        depends=['is_person'])
+    commercial_name = fields.Char('Commercial Name', states={
+            'invisible': ~STATES_COMPANY,
+            'readonly': STATES_ACTIVE,
+            }, depends=['is_person', 'active'])
+    logo = fields.Binary('Logo', states={
+            'invisible': ~STATES_COMPANY,
+            'readonly': STATES_ACTIVE,
+            }, depends=['is_person', 'active'])
     ####################################
     synthesis = fields.One2Many('party.synthesis.menu', 'party', 'Synthesis',
         readonly=True)
@@ -154,7 +166,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
                 })
         cls.__rpc__.update({'ws_create_person': RPC(readonly=False)})
         cls._buttons.update({
-                'button_start_synthesis_menu': {},
+                'button_start_synthesis_menu': {'readonly': STATES_ACTIVE},
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
         for contact_type in ('phone', 'mobile', 'fax', 'email', 'website'):
@@ -162,6 +174,19 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             contact_field.setter = 'set_contact'
             contact_field.readonly = False
         cls.full_name.searcher = 'search_full_name'
+
+        cls.relations.states['readonly'] = STATES_ACTIVE
+        cls.relations.depends += ['active']
+        cls.phone.states['readonly'] = STATES_ACTIVE
+        cls.phone.depends += ['active']
+        cls.mobile.states['readonly'] = STATES_ACTIVE
+        cls.mobile.depends += ['active']
+        cls.fax.states['readonly'] = STATES_ACTIVE
+        cls.fax.depends += ['active']
+        cls.email.states['readonly'] = STATES_ACTIVE
+        cls.email.depends += ['active']
+        cls.website.states['readonly'] = STATES_ACTIVE
+        cls.website.depends += ['active']
 
     @classmethod
     def view_attributes(cls):
@@ -1169,3 +1194,74 @@ class SynthesisMenuSet(Wizard):
 
     def end(self):
         return 'reload menu'
+
+
+class PartyReplace:
+    __name__ = 'party.replace'
+
+    @classmethod
+    def __setup__(cls):
+        super(PartyReplace, cls).__setup__()
+        cls._error_messages.update({
+                'different_first_name': ("Parties have different first names: "
+                    "%(source_name)s vs %(destination_name)s."),
+                })
+
+    @classmethod
+    def fields_to_replace(cls):
+        return super(PartyReplace, cls).fields_to_replace() + [
+            ('party.interaction', 'party'),
+            ('party.relation', 'from_'),
+            ('party.relation', 'to'),
+            ]
+
+    def check_similarity(self):
+        super(PartyReplace, self).check_similarity()
+        source = self.ask.source
+        destination = self.ask.destination
+        if source.first_name != destination.first_name:
+            key = 'party.replace first_name %s %s' % (source.id, destination.id)
+            self.raise_user_warning(key, 'different_first_name', {
+                    'source_name': '%s %s' % (source.name, source.first_name),
+                    'destination_name': '%s %s' % (destination.name,
+                        destination.first_name),
+                    })
+
+
+class PartyReplaceAsk:
+    __name__ = 'party.replace.ask'
+
+    is_person = fields.Function(
+        fields.Boolean('Person'), 'on_change_with_is_person')
+    gender = fields.Function(
+        fields.Char('Gender'), 'on_change_with_gender')
+    birth_date = fields.Function(
+        fields.Date('Birth Date'), 'on_change_with_birth_date')
+
+    @classmethod
+    def __setup__(cls):
+        super(PartyReplaceAsk, cls).__setup__()
+        cls.destination.domain += [
+            ('is_person', '=', Eval('is_person')),
+            ('gender', '=', Eval('gender')),
+            ('birth_date', '=', Eval('birth_date')),
+            ]
+        cls.destination.depends += ['is_person', 'gender', 'birth_date']
+
+    @fields.depends('source')
+    def on_change_with_is_person(self, name=None):
+        return self.source.is_person if self.source else None
+
+    @fields.depends('source')
+    def on_change_with_gender(self, name=None):
+        return self.source.gender if self.source else None
+
+    @fields.depends('source')
+    def on_change_with_birth_date(self, name=None):
+        return self.source.birth_date if self.source else None
+
+    @fields.depends('destination')
+    def on_change_source(self):
+        super(PartyReplaceAsk, self)
+        if not self.source and self.destination:
+            self.destination = None

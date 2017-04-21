@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 from .invoice import *
 from .product import *
+import party
 
 
 def register():
@@ -12,3 +13,6 @@ def register():
         InvoiceLine,
         Product,
         module='supplier_invoice_insurance', type_='model')
+    Pool.register(
+        party.PartyReplace,
+        module='supplier_invoice_insurance', type_='wizard')

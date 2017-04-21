@@ -5,6 +5,7 @@ from .offered import *
 from .benefit import *
 from .claim import *
 from .contract import *
+import party
 
 
 def register():
@@ -15,3 +16,6 @@ def register():
         Contract,
         TerminateContract,
         module='claim_group', type_='model')
+    Pool.register(
+        party.PartyReplace,
+        module='claim_group', type_='wizard')
