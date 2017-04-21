@@ -37,6 +37,7 @@ __all__ = [
     'ManualPaymentFail',
     'PaymentMotive',
     'ProcessManualFailPament',
+    'ProcessPayment',
     ]
 
 
@@ -1085,3 +1086,24 @@ class ProcessManualFailPament(model.CoogWizard):
         Payment.write(Payment.browse(active_ids),
             {'manual_fail_status': 'done'})
         return 'end'
+
+
+class ProcessPayment:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.payment.process'
+
+    pre_process = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(ProcessPayment, cls).__setup__()
+        for button in cls.start.buttons:
+            if button.state == 'process':
+                button.state = 'pre_process'
+                break
+
+    def transition_pre_process(self):
+        return 'process'
+
+    def default_start(self, fields):
+        return {}

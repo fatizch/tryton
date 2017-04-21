@@ -7,7 +7,7 @@ from trytond.model import fields
 from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Equal, PYSONEncoder, Bool
-from trytond.wizard import StateAction, StateTransition
+from trytond.wizard import StateAction
 
 __metaclass__ = PoolMeta
 
@@ -228,15 +228,6 @@ class ProcessPayment:
 
     process_with_cheque_letter = StateAction(
         'account_payment_cog.act_payment_group_merged_form')
-    pre_process = StateTransition()
-
-    @classmethod
-    def __setup__(cls):
-        super(ProcessPayment, cls).__setup__()
-        for button in cls.start.buttons:
-            if button.state == 'process':
-                button.state = 'pre_process'
-                break
 
     def do_process_with_cheque_letter(self, action):
         Payment = Pool().get('account.payment')
@@ -254,9 +245,10 @@ class ProcessPayment:
         if self.start.is_cheque_letter:
             return 'process_with_cheque_letter'
         else:
-            return 'process'
+            return super(ProcessPayment, self).transition_pre_process()
 
     def default_start(self, fields):
+        super(ProcessPayment, self).default_start(fields)
         Payment = Pool().get('account.payment')
         is_cheque_letter = bool(Payment.search([
                     ('journal.process_method', '=', 'cheque_letter'),

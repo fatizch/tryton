@@ -1,9 +1,9 @@
-.. custom_tryton_coog
+.. payment
 
-Tryton Coog - Payment
-======================
+Tryton Coog - "Paybox System" Payment Support
+=============================================
 
-Summary
+summary
 -------
 
 .. include:: summary.rst
@@ -12,12 +12,6 @@ Features
 --------
 
 .. include:: features.rst
-
-User Help
----------
-
-.. toctree::
-    user/batch.rst
 
 .. toctree::
     :hidden:

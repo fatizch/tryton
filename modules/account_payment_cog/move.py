@@ -320,6 +320,8 @@ class PaymentCreationStart(model.CoogView):
         depends=['process_method'])
     total_amount = fields.Numeric('Total Amount', readonly=True)
     have_lines_payment_date = fields.Boolean('Lines Have Payment Date')
+    created_payments = fields.Many2Many('account.payment', None, None,
+        'Created Payments')
 
     @classmethod
     def view_attributes(cls):
@@ -385,7 +387,8 @@ class PaymentCreation(model.CoogWizard):
         Button('Cancel', 'end', 'tryton-cancel'),
         Button('Create Payments', 'create_payments', 'tryton-ok', default=True)
         ])
-    create_payments = StateAction('account_payment.act_payment_form')
+    create_payments = StateTransition()
+    created_payments = StateAction('account_payment.act_payment_form')
 
     @classmethod
     def __setup__(cls):
@@ -460,7 +463,7 @@ class PaymentCreation(model.CoogWizard):
         if self.start.description:
             payment['description'] = self.start.description
 
-    def do_create_payments(self, action):
+    def transition_create_payments(self):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         Payment = pool.get('account.payment')
@@ -485,8 +488,15 @@ class PaymentCreation(model.CoogWizard):
                 return group
             Payment.process(payments, group)
             Payment.succeed(payments)
+        action_meth = getattr(self, 'action_%s' % self.start.process_method,
+            lambda: 'created_payments')
+        Payment.save(payments)
+        self.start.created_payments = [x.id for x in payments]
+        return action_meth()
+
+    def do_created_payments(self, action):
         encoder = PYSONEncoder()
-        action['pyson_domain'] = encoder.encode(
-            [('id', 'in', [p.id for p in payments])])
+        payment_ids = [x.id for x in self.start.created_payments]
+        action['pyson_domain'] = encoder.encode([('id', 'in', payment_ids)])
         action['pyson_search_value'] = encoder.encode([])
-        return action, {}
+        return action, {'extra_context': {'created_payments': payment_ids}}

@@ -10,7 +10,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields
-from trytond.modules.account_payment_cog import MergedPaymentsMixin
+from trytond.modules.account_payment_cog.payment import MergedPaymentsMixin
 
 
 __metaclass__ = PoolMeta

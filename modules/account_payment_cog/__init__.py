@@ -3,45 +3,46 @@
 from trytond.pool import Pool
 
 import batch
-from .party import *
-from .payment import *
-from .company import *
-from .move import *
-from .report import *
-from .invoice import *
+import party
+import company
+import move
+import report
+import invoice
+import payment
 
 
 def register():
     Pool.register(
-        Journal,
-        RejectReason,
-        JournalFailureAction,
-        Payment,
-        MergedPayments,
-        PaymentMotive,
-        SynthesisMenuPayment,
-        SynthesisMenu,
-        Company,
-        Move,
-        MoveLine,
-        PaymentInformationSelection,
-        PaymentFailInformation,
+        payment.Journal,
+        payment.RejectReason,
+        payment.JournalFailureAction,
+        payment.Payment,
+        payment.MergedPayments,
+        payment.PaymentMotive,
+        party.SynthesisMenuPayment,
+        party.SynthesisMenu,
+        company.Company,
+        move.Move,
+        move.MoveLine,
+        move.PaymentInformationSelection,
+        payment.PaymentFailInformation,
         batch.PaymentTreatmentBatch,
         batch.PaymentCreationBatch,
         batch.PaymentSucceedBatch,
         batch.PaymentAcknowledgeBatch,
-        Configuration,
-        Group,
-        Party,
-        PaymentCreationStart,
-        ReportTemplate,
-        Invoice,
+        payment.Configuration,
+        payment.Group,
+        party.Party,
+        move.PaymentCreationStart,
+        report.ReportTemplate,
+        invoice.Invoice,
         module='account_payment_cog', type_='model')
     Pool.register(
-        SynthesisMenuOpen,
-        PaymentInformationModification,
-        PaymentCreation,
-        FilterPaymentsPerMergedId,
-        ManualPaymentFail,
-        ProcessManualFailPament,
+        party.SynthesisMenuOpen,
+        move.PaymentInformationModification,
+        move.PaymentCreation,
+        payment.FilterPaymentsPerMergedId,
+        payment.ManualPaymentFail,
+        payment.ProcessManualFailPament,
+        payment.ProcessPayment,
         module='account_payment_cog', type_='wizard')
