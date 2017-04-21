@@ -196,7 +196,7 @@ payment_term.save()
 Config = Model.get('claim.configuration')
 claim_config = Config()
 claim_config.control_rule = control_rule
-claim_config.default_journal = journal
+claim_config.payment_journal = journal
 claim_config.save()
 
 Action = Model.get('ir.action')
@@ -222,6 +222,7 @@ len(indemnifications) == 1
 
 indemnifications[0].amount == 8988
 # #Res# #True
+
 
 indemnifications[0].journal == journal
 # #Res# #True

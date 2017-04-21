@@ -601,6 +601,7 @@ class CreateIndemnification(Wizard):
 
     def default_definition(self, name):
         result = getattr(self, 'result', None)
+        configuration = Pool().get('claim.configuration').get_singleton()
         if self.result and getattr(result, 'indemnification', None):
             service = self.result.indemnification[0].service
             beneficiary = self.result.indemnification[0].beneficiary
@@ -613,7 +614,7 @@ class CreateIndemnification(Wizard):
             if definition and hasattr(definition, 'service'):
                 service = definition.service
             else:
-                return {}
+                return {'journal': configuration.payment_journal.id}
             non_cancelled = []
             for indemnification in service.indemnifications:
                 if indemnification.status != 'cancelled':
@@ -631,7 +632,6 @@ class CreateIndemnification(Wizard):
         if end_date and start_date > end_date:
             start_date = None
             end_date = None
-        configuration = Pool().get('claim.configuration').get_singleton()
         res = {
             'service': service.id,
             'start_date': start_date,
