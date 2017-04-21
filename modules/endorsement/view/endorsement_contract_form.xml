@@ -4,12 +4,12 @@ this repository contains the full copyright notices and license terms. -->
 <form>
     <label name="contract"/>
     <field name="contract"/>
+    <label name="state"/>
+    <field name="state"/>
     <field name="values" colspan="4"/>
     <notebook>
         <page string="Options" id="options">
             <field name="options"/>
         </page>
     </notebook>
-    <label name="state"/>
-    <field name="state"/>
 </form>

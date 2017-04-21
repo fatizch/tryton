@@ -129,7 +129,8 @@ class Endorsement:
     __name__ = 'endorsement'
 
     party_endorsements = fields.One2Many('endorsement.party', 'endorsement',
-        'Party Endorsements', delete_missing=True)
+        'Party Endorsements', delete_missing=True,
+        states={'readonly': Eval('state') != 'draft'}, depends=['state'])
     parties = fields.Function(
         fields.Many2Many('party.party', '', '', 'Parties'),
         'get_parties', searcher='search_parties')
@@ -147,7 +148,7 @@ class Endorsement:
         return super(Endorsement, self).get_sender()
 
     def get_object_for_contact(self):
-        if not self.parties:
+        if not self.parties or len(self.contracts) == 1:
             return super(Endorsement, self).get_object_for_contact()
         return self.parties[0]
 

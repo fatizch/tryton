@@ -113,11 +113,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Resume Endorsement</field>
             <field name="wiz_name">endorsement.start</field>
         </record>
-        <record model="ir.action.keyword" id="act_resume_endorsement_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">endorsement,-1</field>
-            <field name="action" ref="act_resume_endorsement"/>
-        </record>
         <!-- ##################################### -->
         <!-- # Open Contract at Application Date # -->
         <!-- ##################################### -->

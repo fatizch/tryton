@@ -4,7 +4,7 @@ this repository contains the full copyright notices and license terms. -->
 <form>
     <label name="party"/>
     <field name="party"/>
-    <field name="values" colspan="4"/>
     <label name="state"/>
     <field name="state"/>
+    <field name="values" colspan="4"/>
 </form>

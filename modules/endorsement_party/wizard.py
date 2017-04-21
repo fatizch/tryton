@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, If
 
-from trytond.modules.coog_core import fields, model, coog_string
+from trytond.modules.coog_core import fields, model, coog_string, utils
 from trytond.modules.endorsement import (EndorsementWizardStepMixin,
     add_endorsement_step)
 from trytond.modules.party_relationship import PartyRelationAll
@@ -617,8 +617,11 @@ class SelectEndorsement(model.CoogView):
 
     __name__ = 'endorsement.start.select_endorsement'
 
-    party = fields.Many2One('party.party', 'Party',
-        states={'invisible': ~Eval('party', False)})
+    party = fields.Many2One('party.party', 'Party', domain=[
+            If(Bool(Eval('possible_parties', False)),
+                [('id', 'in', Eval('possible_parties'))],
+                [])], depends=['possible_parties'])
+    possible_parties = fields.Many2Many('party.party', None, None, 'Parties')
 
     @classmethod
     def __setup__(cls):
@@ -633,10 +636,25 @@ class SelectEndorsement(model.CoogView):
                             'party')],
                     []))]
         cls.endorsement_definition.depends += ['contract', 'party']
+        cls.contract.domain = [
+            If(Bool(Eval('party', False)),
+                [('parties', '=', Eval('party'))],
+                [])]
+        cls.contract.depends += ['party']
 
-    @fields.depends('applicant', 'party')
+    @fields.depends('parties', 'party')
+    def on_change_contract(self):
+        super(SelectEndorsement, self).on_change_contract()
+        self.possible_parties = self.contract.parties if self.contract else []
+        if not self.party:
+            self.party = utils.auto_complete_with_domain(self, 'party')
+
+    @fields.depends('applicant', 'party', 'contract')
     def on_change_party(self):
-        self.applicant = self.party
+        if self.party:
+            self.applicant = self.party
+        if not self.contract:
+            self.contract = utils.auto_complete_with_domain(self, 'contract')
 
     def _get_new_endorsement(self):
         endorsement = super(SelectEndorsement, self)._get_new_endorsement()

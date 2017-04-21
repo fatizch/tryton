@@ -2508,6 +2508,10 @@ msgid "Delete"
 msgstr "Supprimer"
 
 msgctxt "view:endorsement:"
+msgid "Resume"
+msgstr "Reprendre"
+
+msgctxt "view:endorsement:"
 msgid "Open Contract"
 msgstr "Ouvrir le Contrat"
 

@@ -6,14 +6,18 @@ this repository contains the full copyright notices and license terms. -->
     <field name="effective_date"/>
     <label name="number"/>
     <field name="number"/>
+    <label name="application_date"/>
+    <field name="application_date"/>
+    <label name="applied_by"/>
+    <field name="applied_by"/>
     <label name="definition"/>
     <field name="definition"/>
+    <label name="applicant"/>
+    <field name="applicant"/>
     <label name="state"/>
     <field name="state"/>
     <label name="generated_by"/>
     <field name="generated_by"/>
-    <label name="applicant"/>
-    <field name="applicant"/>
     <newline/>
     <group id="endorsements" colspan="2" yexpand="1" yfill="1">
         <field name="contract_endorsements"/>
@@ -23,17 +27,11 @@ this repository contains the full copyright notices and license terms. -->
     <group id="application" colspan="4">
         <group id="application_buttons" yfill="1">
             <button string="Apply" name="apply"/>
-            <button string="Cancel" name="cancel"/>
-        </group>
-        <group id="application_info" xfill="0">
-            <label name="application_date"/>
-            <field name="application_date"/>
-            <newline/>
-            <label name="applied_by"/>
-            <field name="applied_by"/>
+            <button string="Resume" name="start_endorsement"/>
         </group>
     </group>
     <group id="invisible" string="">
         <button string="Open Contract before Application" name="open_contract"/>
+        <button string="Cancel" name="cancel"/>
     </group>
 </form>

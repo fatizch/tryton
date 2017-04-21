@@ -232,7 +232,9 @@ class EndorsementRoot(object):
 def values_mixin(value_model):
 
     class Mixin(EndorsementRoot, model.CoogSQL, model.CoogView):
-        values = fields.Dict(value_model, 'Values')
+        values = fields.Dict(value_model, 'Values',
+            states={'readonly': Bool(Eval('applied_on'))},
+            depends=['applied_on'])
         # applied_on need to be stored to be used as datetime_field
         applied_on = fields.Timestamp('Applied On', readonly=True)
 
@@ -1111,7 +1113,8 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
 
     number = fields.Char('Number', readonly=True, required=True)
     applicant = fields.Many2One('party.party', 'Applicant',
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', states={'readonly': Eval('state') != 'draft'},
+        depends=['state'])
     application_date = fields.DateTime('Application Date', readonly=True,
         states={'invisible': Eval('state', '') == 'draft'},
         depends=['state'])
@@ -1123,12 +1126,13 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
         states={'invisible': Eval('state', '') == 'draft'},
         depends=['state'], ondelete='RESTRICT')
     contract_endorsements = fields.One2Many('endorsement.contract',
-        'endorsement', 'Contract Endorsement', delete_missing=True)
+        'endorsement', 'Contract Endorsement', delete_missing=True,
+        states={'readonly': Eval('state') != 'draft'}, depends=['state'])
     definition = fields.Many2One('endorsement.definition', 'Definition',
         required=True, ondelete='RESTRICT',
-        states={'readonly': Eval('state') != 'draft'})
+        states={'readonly': Eval('state') != 'draft'}, depends=['state'])
     effective_date = fields.Date('Effective Date',
-        states={'readonly': Eval('state') != 'draft'})
+        states={'readonly': Eval('state') != 'draft'}, depends=['state'])
     state = fields.Selection([
             ('draft', 'Draft'),
             ('in_progress', 'In Progress'),
@@ -1140,7 +1144,8 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
     sub_state = fields.Many2One('endorsement.sub_state', 'Details on state',
         states={
             'required': Bool(Eval('sub_state_required')),
-            'invisible': ~Eval('sub_state_required')
+            'invisible': ~Eval('sub_state_required'),
+            'readonly': Eval('state') != 'draft',
             },
         domain=[('state', '=', Eval('state'))],
         depends=['state', 'sub_state_required'], ondelete='RESTRICT')
@@ -1165,7 +1170,8 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
         ondelete='SET NULL', select=True, readonly=True,
         states={'invisible': ~Eval('generated_by')})
     generated_endorsements = fields.One2Many('endorsement', 'generated_by',
-        'Generated Endorsements', target_not_required=True)
+        'Generated Endorsements', target_not_required=True,
+        states={'readonly': Eval('state') != 'draft'}, depends=['state'])
     definition_code = fields.Function(
         fields.Char('Definition Code'),
         'get_definition_code')
