@@ -9,6 +9,7 @@ from trytond.pyson import Eval, Len, Bool, If, Equal
 from trytond.model import Model
 
 from trytond.modules.coog_core import model, fields, utils, coog_date
+from trytond.modules.contract_insurance.contract import IS_PARTY
 from trytond.modules.endorsement import EndorsementWizardStepMixin, \
     add_endorsement_step
 
@@ -540,6 +541,7 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
         None, 'Possible Item Descriptors', readonly=True)
     new_item_desc = fields.Many2One('offered.item.description',
         'New Covered Element',
+        states={'invisible': Len(Eval('possible_item_descs', [])) == 1},
         domain=[('id', 'in', Eval('possible_item_descs'))],
         depends=['possible_item_descs'])
 
@@ -590,6 +592,8 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             raise NotImplementedError
         if self.contract:
             self.possible_item_descs = self.contract.product.item_descriptors
+            if len(self.possible_item_descs) == 1:
+                self.new_item_desc = self.possible_item_descs[0]
         else:
             self.possible_item_descs = []
 
@@ -657,6 +661,8 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
                 contract_endorsement.contract._save_values)
             if not contract_endorsement.clean_up():
                 new_endorsements.append(contract_endorsement)
+        if not new_endorsements:
+            new_endorsements = [endorsement.contract_endorsements[0]]
         endorsement.contract_endorsements = new_endorsements
         endorsement.save()
 
@@ -675,7 +681,7 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
                 self._update_modified(new_covered, parent, per_id)
             elif new_covered.action == 'add':
                 self._update_added(new_covered, parent, per_id)
-            elif new_covered.action == 'terminate':
+            elif new_covered.action in ['terminate', 'void']:
                 self._update_terminated(new_covered, parent, per_id)
 
     def cancel_versions_changes(self, new_covered_element, per_id):
@@ -734,9 +740,13 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             options.append(option)
             if option.end_date and option.end_date < self.effective_date:
                 continue
-            option.manual_end_date = coog_date.add_day(self.effective_date, -1)
+            if option.start_date == self.effective_date:
+                option.status = 'void'
+            else:
+                option.manual_end_date = coog_date.add_day(self.effective_date,
+                    -1)
+                option.status = 'terminated'
             option.sub_status = new_covered_element.sub_status
-            option.status = 'terminated'
         good_covered.options = options
 
     def get_covered_from_parent(self, parent):
@@ -764,18 +774,26 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             terminated = [x for x in covered_element.options
                 if x.manual_end_date == coog_date.add_day(
                     self.effective_date, -1)]
+            void_status = [x.sub_status for x in covered_element.options
+                if x.status == 'void']
             still_active = [x for x in covered_element.options
                 if not x.manual_end_date or
                 x.manual_end_date >= self.effective_date]
             if terminated and not still_active:
                 displayer.action = 'terminate'
                 displayer.sub_status = terminated[0].sub_status
+                displayer.applied = True
+            elif len(void_status) == len(covered_element.options):
+                displayer.action = 'void'
+                displayer.sub_status = void_status.pop()
+                displayer.applied = True
             elif not version_date or version_date == self.effective_date:
                 displayer.action = 'modified'
             else:
                 displayer.action = 'nothing'
         else:
             displayer.action = 'add'
+        displayer.update_icon()
         return [displayer]
 
     def get_parent_name(self, parent):
@@ -814,9 +832,10 @@ class CoveredElementDisplayer(model.CoogView):
     __name__ = 'contract.covered_element.modify.displayer'
 
     action = fields.Selection([('nothing', ''), ('modified', 'Modified'),
-            ('add', 'Add'), ('terminate', 'Terminate')], 'Action',
+            ('cancelled', 'Cancelled'), ('add', 'Add'),
+            ('terminate', 'Terminate'), ('void', 'Void')], 'Action',
         domain=[If(Eval('action') == 'add',
-                [('action', 'in', ['add', 'terminate'])],
+                [('action', 'in', ['add', 'terminate', 'void'])],
                 [('action', '!=', 'add')])])
     parent = fields.Char('Parent Reference', readonly=True)
     parent_rec_name = fields.Char('Parent', readonly=True)
@@ -828,32 +847,68 @@ class CoveredElementDisplayer(model.CoogView):
     cur_covered_id = fields.Integer('Existing Covered Element', readonly=True)
     effective_date = fields.Date('Effective Date', readonly=True)
     party = fields.Many2One('party.party', 'Party', states={
-            'readonly': Eval('action') != 'add'})
+            'readonly': Eval('action') != 'add',
+            'invisible': ~IS_PARTY,
+            'required': IS_PARTY,
+            }, domain=[
+            If(
+                Eval('item_kind') == 'person',
+                ('is_person', '=', True),
+                ()),
+            If(
+                Eval('item_kind') == 'company',
+                ('is_person', '=', False),
+                ())], depends=['item_kind'])
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         readonly=True)
-    name = fields.Char('Name', states={'readonly': Eval('action') != 'add'})
+    item_kind = fields.Function(fields.Char('Item Kind'),
+        'on_change_with_item_kind')
+    name = fields.Char('Name', states={
+            'readonly': Eval('action') != 'add',
+            'invisible': IS_PARTY,
+            }, depends=['item_kind'])
     sub_status = fields.Many2One('contract.sub_status', 'Sub Status',
         states={
-            'required': (Eval('action') == 'terminate') &
-            ~Eval('cur_covered_id'),
-            'invisible': (Eval('action') != 'terminate') |
-            (Eval('action') == 'terminate') & ~Eval('cur_covered_id')},
+            'required': (Eval('action').in_(['terminate', 'void'])) & Bool(
+                Eval('cur_covered_id')),
+            'invisible': (~Eval('action') |
+                ~Eval('action').in_(['terminate', 'void']) |
+                ~Eval('cur_covered_id'))},
         domain=[If((Eval('action') == 'terminate') &
                 Bool(Eval('cur_covered_id')),
                 [('status', '=', 'terminated')],
-                [])], depends=['action', 'cur_covered_id'])
+                If((Eval('action') == 'void') &
+                Bool(Eval('cur_covered_id')),
+                [('status', '=', 'void')],
+                []))],
+        depends=['action', 'cur_covered_id', 'start_date'])
+    start_date = fields.Date('Start Date')
+    applied = fields.Boolean('Applied')  # Set to true when coming back
+    icon = fields.Char('Icon')
 
     @classmethod
     def __setup__(cls):
         super(CoveredElementDisplayer, cls).__setup__()
         cls._buttons.update({'terminate': {
-                    'readonly': Eval('action') == 'terminate',
-                    'invisible': Eval('action') == 'terminate',
+                    'readonly': Eval('action').in_(['terminate', 'void']),
+                    'invisible': Eval('action').in_(['terminate', 'void']),
                     },
                 'unterminate': {
-                    'readonly': Eval('action') != 'terminate',
-                    'invisible': Eval('action') != 'terminate',
+                    'readonly': (~Eval('action').in_(['terminate', 'void']) |
+                        Bool(Eval('applied'))),
+                    'invisible': (~Eval('action').in_(['terminate', 'void']) |
+                        Bool(Eval('applied'))),
                     }})
+
+    @classmethod
+    def view_attributes(cls):
+        return super(CoveredElementDisplayer, cls).view_attributes() + [
+            ('/form/group[@id="termination_button"]', 'states',
+                {'invisible': ~Eval('cur_covered_id')}),
+            ('/form/group[@id="cancellation_button"]', 'states',
+                {'invisible': Bool(Eval('cur_covered_id')) |
+                    (Eval('action', '') == 'cancelled')}),
+            ]
 
     @property
     def _parent(self):
@@ -874,20 +929,35 @@ class CoveredElementDisplayer(model.CoogView):
             self.extra_data = pool.get('contract.covered_element')(
                 self.cur_covered_id).get_version_at_date(
                 self.effective_date).extra_data
-        if self.action != 'terminate':
+        if self.action not in ['terminate', 'void']:
             self.sub_status = None
         self.update_extra_data_string()
+        self.update_icon()
 
     @fields.depends('action', 'cur_covered_id', 'effective_date',
         'extra_data', 'extra_data_as_string')
     def on_change_extra_data(self):
         self.update_extra_data_string()
-        if self.action in ('add', 'terminate'):
+        if self.action in ('add', 'terminate', 'void'):
             return
         if self.check_modified():
             self.action = 'modified'
         else:
             self.action = 'nothing'
+
+    @fields.depends('item_desc')
+    def on_change_with_item_kind(self, name=None):
+        return self.item_desc.kind if self.item_desc else None
+
+    def update_icon(self):
+        if self.action == 'terminate':
+            self.icon = 'stop'
+        elif self.action == 'void':
+            self.icon = 'void'
+        elif self.action == 'add':
+            self.icon = 'plus'
+        else:
+            self.icon = ''
 
     def check_versions_modified(self):
         previous_extra_data = Pool().get('contract.covered_element')(
@@ -907,19 +977,20 @@ class CoveredElementDisplayer(model.CoogView):
         self.extra_data_as_string = Pool().get(
             'extra_data').get_extra_data_summary([self], 'extra_data')[self.id]
 
+    @fields.depends('name', 'party')
+    def on_change_with_display_name(self):
+        return self.name or (self.party.rec_name if self.party else None)
+
     @classmethod
     def new_displayer(cls, covered_element, effective_date):
         displayer = cls()
         displayer.effective_date = effective_date
         if getattr(covered_element, 'id', None):
             displayer.cur_covered_id = covered_element.id
-            displayer.display_name = covered_element.rec_name
+            displayer.start_date = covered_element.start_date
         else:
             displayer.cur_covered_id = None
-            if covered_element.party:
-                displayer.display_name = covered_element.party.rec_name
-            else:
-                displayer.display_name = covered_element.name
+            displayer.start_date = effective_date
         if getattr(covered_element, 'versions', None) is None:
             covered_element.versions = [Pool().get(
                     'contract.covered_element.version').get_default_version()]
@@ -927,6 +998,7 @@ class CoveredElementDisplayer(model.CoogView):
         displayer.party = getattr(covered_element, 'party', None)
         displayer.name = covered_element.name
         displayer.item_desc = covered_element.item_desc
+        displayer.item_kind = covered_element.item_desc.kind
         displayer.extra_data = covered_element.get_version_at_date(
             effective_date).extra_data
         displayer.party = covered_element.party
@@ -936,6 +1008,7 @@ class CoveredElementDisplayer(model.CoogView):
         assert self.action == 'add'
         covered = Pool().get('contract.covered_element')()
         covered.item_desc = self.item_desc
+        covered.item_kind = self.item_desc.kind
         covered.party = self.party
         covered.name = self.name
         covered.versions = [self.to_version()]
@@ -968,17 +1041,26 @@ class CoveredElementDisplayer(model.CoogView):
             'contract.covered_element.version': ['extra_data'],
             }
 
-    @model.CoogView.button_change('action')
+    @model.CoogView.button_change('action', 'cur_covered_id', 'start_date',
+        'effective_date', 'icon')
     def terminate(self):
-        self.action = 'terminate'
+        if self.cur_covered_id:
+            if self.start_date == self.effective_date:
+                self.action = 'void'
+            else:
+                self.action = 'terminate'
+        else:
+            self.action = 'cancelled'
+        self.update_icon()
 
-    @model.CoogView.button_change('action', 'cur_covered_id')
+    @model.CoogView.button_change('action', 'cur_covered_id', 'icon')
     def unterminate(self):
         if self.cur_covered_id:
             self.action = 'nothing'
         else:
             self.action = 'add'
         self.sub_status = None
+        self.update_icon()
 
 
 class ExtraPremiumDisplayer(model.CoogView):

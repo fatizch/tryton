@@ -2,12 +2,12 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tree>
-    <field name="action"/>
-    <field name="display_name"/>
+    <field name="display_name" expand="1" icon="icon"/>
     <field name="extra_data_as_string" expand="1"/>
     <field name="parent" tree_invisible="1"/>
     <field name="cur_covered_id" tree_invisible="1"/>
     <field name="effective_date" tree_invisible="1"/>
     <field name="parent_rec_name" tree_invisible="1"/>
     <field name="party" tree_invisible="1"/>
+    <field name="action" tree_invisible="1"/>
 </tree>

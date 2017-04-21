@@ -9,11 +9,14 @@ this repository contains the full copyright notices and license terms. -->
     <label name="current_parent"/>
     <field name="current_parent"/>
     <newline/>
+    <label name="new_coverage"/>
+    <group id="coverage">
+        <field name="new_coverage" widget="selection"/>
+        <button name="add_option" string="Add Option" icon="plus"/>
+    </group>
+    <newline/>
     <field name="current_options" group="options" mode="tree" colspan="2" expand_toolbar="0"/>
     <field name="current_options" group="options" mode="form" colspan="2" expand_toolbar="0"/>
-    <label name="new_coverage"/>
-    <field name="new_coverage" widget="selection" colspan="2"/>
-    <button name="add_option" string="Add Option" icon="tryton-new"/>
     <group id="invisible" string="">
         <field name="endorsement_definition"/>
         <field name="possible_coverages"/>

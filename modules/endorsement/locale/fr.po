@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.manage_options.option_displayer:"
-msgid "New Option (%s)"
-msgstr "Nouvelle garantie (%s)"
-
-msgctxt "error:contract.manage_options:"
-msgid "New Option (%s)"
-msgstr "Nouvelle garantie (%s)"
-
 msgctxt "error:contract:"
 msgid "Enter a value for field '%s' of '%s'"
 msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
@@ -306,6 +298,10 @@ msgstr "Données Complémentaires"
 msgctxt "field:contract.manage_options.option_displayer,extra_data_as_string:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
+
+msgctxt "field:contract.manage_options.option_displayer,icon:"
+msgid "Icon"
+msgstr "Icône"
 
 msgctxt "field:contract.manage_options.option_displayer,id:"
 msgid "ID"

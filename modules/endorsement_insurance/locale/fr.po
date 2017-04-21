@@ -256,6 +256,10 @@ msgctxt "field:contract.covered_element.modify.displayer,action:"
 msgid "Action"
 msgstr "Action"
 
+msgctxt "field:contract.covered_element.modify.displayer,applied:"
+msgid "Applied"
+msgstr "Appliqué"
+
 msgctxt "field:contract.covered_element.modify.displayer,cur_covered_id:"
 msgid "Existing Covered Element"
 msgstr "Risque couvert existant"
@@ -277,6 +281,10 @@ msgctxt ""
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
+msgctxt "field:contract.covered_element.modify.displayer,icon:"
+msgid "Icon"
+msgstr "Icône"
+
 msgctxt "field:contract.covered_element.modify.displayer,id:"
 msgid "ID"
 msgstr "ID"
@@ -284,6 +292,10 @@ msgstr "ID"
 msgctxt "field:contract.covered_element.modify.displayer,item_desc:"
 msgid "Item Description"
 msgstr "Description du Risque"
+
+msgctxt "field:contract.covered_element.modify.displayer,item_kind:"
+msgid "Item Kind"
+msgstr "Type de Bien"
 
 msgctxt "field:contract.covered_element.modify.displayer,name:"
 msgid "Name"
@@ -300,6 +312,10 @@ msgstr "Parent"
 msgctxt "field:contract.covered_element.modify.displayer,party:"
 msgid "Party"
 msgstr "Tiers"
+
+msgctxt "field:contract.covered_element.modify.displayer,start_date:"
+msgid "Start Date"
+msgstr "Date de début"
 
 msgctxt "field:contract.covered_element.modify.displayer,sub_status:"
 msgid "Sub Status"
@@ -1428,12 +1444,20 @@ msgid "Add"
 msgstr "Ajouter"
 
 msgctxt "selection:contract.covered_element.modify.displayer,action:"
+msgid "Cancelled"
+msgstr "Annulé"
+
+msgctxt "selection:contract.covered_element.modify.displayer,action:"
 msgid "Modified"
 msgstr "Modifié"
 
 msgctxt "selection:contract.covered_element.modify.displayer,action:"
 msgid "Terminate"
 msgstr "Résilier"
+
+msgctxt "selection:contract.covered_element.modify.displayer,action:"
+msgid "Void"
+msgstr "Sans Effet"
 
 msgctxt ""
 "selection:contract.covered_element.option.remove.option_selector,action:"
@@ -1552,6 +1576,10 @@ msgstr "Surprime"
 msgctxt "view:contract.covered_element.add_option:"
 msgid "Add Option"
 msgstr "Souscrire une garantie"
+
+msgctxt "view:contract.covered_element.modify.displayer:"
+msgid "Remove"
+msgstr "Enlever"
 
 msgctxt "view:contract.covered_element.modify.displayer:"
 msgid "Restore"

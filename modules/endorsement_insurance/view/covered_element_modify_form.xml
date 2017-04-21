@@ -11,12 +11,20 @@ this repository contains the full copyright notices and license terms. -->
     <label name="party"/>
     <field name="party"/>
     <label name="sub_status"/>
-    <field name="sub_status"/>
+    <field name="sub_status" widget="selection"/>
     <newline/>
     <field name="extra_data" no_command="1" colspan="2"/>
     <newline/>
-    <button string="Terminate" name="terminate" colspan="2" type="instance"/>
-    <button string="Restore" name="unterminate" colspan="2" type="instance"/>
+    <group id="termination_button" string="" colspan="2">
+        <button string="Terminate" name="terminate" type="instance" icon="stop"/>
+    </group>
+    <group id="cancellation_button" string="" colspan="2">
+        <button string="Remove" name="terminate" type="instance" icon="minus"/>
+    </group>
+    <button string="Restore" name="unterminate" colspan="2" type="instance" icon="play"/>
     <field name="action" invisible="1"/>
     <field name="cur_covered_id" invisible="1"/>
+    <field name="item_kind" invisible="1"/>
+    <field name="start_date" invisible="1"/>
+    <field name="applied" invisible="1"/>
 </form>

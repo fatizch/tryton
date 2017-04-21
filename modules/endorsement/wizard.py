@@ -715,6 +715,7 @@ class ManageOptions(EndorsementWizardStepMixin):
         'contract.manage_options.option_displayer', None, 'Current Options')
     new_coverage = fields.Many2One('offered.option.description',
         'New Coverage', domain=[('id', 'in', Eval('possible_coverages'))],
+        states={'invisible': ~Eval('possible_coverages')},
         depends=['possible_coverages'])
     possible_coverages = fields.Many2Many('offered.option.description', None,
         None, 'Possible Coverages')
@@ -725,10 +726,8 @@ class ManageOptions(EndorsementWizardStepMixin):
         super(ManageOptions, cls).__setup__()
         cls._buttons.update({'add_option': {
                     'readonly': ~Eval('new_coverage'),
-                    'invisible': ~Eval('new_coverage')}})
-        cls._error_messages.update({
-                'new_option': 'New Option (%s)',
-                })
+                    'invisible': ~Eval('possible_coverages'),
+                    }})
 
     @classmethod
     def view_attributes(cls):
@@ -812,6 +811,8 @@ class ManageOptions(EndorsementWizardStepMixin):
         self.possible_coverages = list(
             self.get_all_possible_coverages(self._parent) - current_coverages
             - exclusions)
+        if len(self.possible_coverages) == 1:
+            self.new_coverage = self.possible_coverages[0]
 
     def step_default(self, field_names):
         defaults = super(ManageOptions, self).step_default()
@@ -1009,6 +1010,7 @@ class ManageOptions(EndorsementWizardStepMixin):
                     break
                 # New option
                 displayer.action = 'added'
+                displayer.update_icon()
         return all_options
 
     def get_parent_name(self, parent):
@@ -1042,12 +1044,12 @@ class ManageOptions(EndorsementWizardStepMixin):
         new_option = Pool().get('contract.manage_options.option_displayer')()
         new_option.coverage_id = self.new_coverage.id
         new_option.action = 'added'
+        new_option.update_icon()
         new_option.parent = self.current_parent
         new_option.parent_rec_name = self.get_parent_name(self._parent)
         new_option.start_date = self.effective_date
         new_option.effective_date = self.effective_date
-        new_option.display_name = self.raise_user_error('new_option', (
-                self.new_coverage.rec_name,), raise_exception=False)
+        new_option.display_name = self.new_coverage.rec_name
         new_option.end_date = None
         new_option.sub_status = None
         new_option.extra_data = self.get_default_extra_data(self.new_coverage)
@@ -1098,6 +1100,7 @@ class OptionDisplayer(model.CoogView):
         domain=[If(In(Eval('action'), ['terminated', 'void']),
                 [('status', '=', Eval('action'))],
                 [])], depends=['action'])
+    icon = fields.Char('Icon')
 
     @classmethod
     def __setup__(cls):
@@ -1150,6 +1153,17 @@ class OptionDisplayer(model.CoogView):
                     self.end_date = pool.get('contract.option')(
                         self.cur_option_id).end_date
 
+    def update_icon(self):
+        self.icon = ''
+        if self.action == 'terminated':
+            self.icon = 'stop'
+        elif self.action == 'added':
+            self.icon = 'plus'
+        elif self.action == 'void':
+            self.icon = 'void'
+        elif self.action == 'modified':
+            self.icon = 'shuffle'
+
     @fields.depends('action', 'cur_option_id', 'effective_date', 'extra_data',
         'extra_data_as_string', 'parent', 'coverage_id')
     def on_change_extra_data(self):
@@ -1168,6 +1182,7 @@ class OptionDisplayer(model.CoogView):
         elif self.extra_data == previous_extra_data and (
                 self.action == 'modified'):
             self.action = 'nothing'
+        self.update_icon()
 
     def refresh_extra_data(self):
         if not self.product:

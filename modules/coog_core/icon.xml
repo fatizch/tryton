@@ -35,5 +35,33 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">rounded_warning</field>
             <field name="path">icons/rounded_warning.svg</field>
         </record>
+        <record model="ir.ui.icon" id="play_icon">
+            <field name="name">play</field>
+            <field name="path">icons/play.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="pause_icon">
+            <field name="name">pause</field>
+            <field name="path">icons/pause.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="void_icon">
+            <field name="name">void</field>
+            <field name="path">icons/void.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="stop_icon">
+            <field name="name">stop</field>
+            <field name="path">icons/stop.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="plus_icon">
+            <field name="name">plus</field>
+            <field name="path">icons/plus.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="minus_icon">
+            <field name="name">minus</field>
+            <field name="path">icons/minus.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="shuffle_icon">
+            <field name="name">shuffle</field>
+            <field name="path">icons/shuffle.svg</field>
+        </record>
     </data>
 </tryton>

@@ -802,6 +802,9 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             },
         depends=['contract', 'item_kind', 'id'],
         target_not_required=True)
+    start_date = fields.Function(
+        fields.Date('Start Date'),
+        'get_start_date')
     manual_start_date = fields.Date('Start Date', states={
             'invisible': ~Eval('parent'),
             'required': Bool(Eval('parent', False)),
@@ -1117,6 +1120,8 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
 
         self.update_default_options()
 
+        self.start_date = self.get_start_date()
+
     def update_main_contract(self):
         self.main_contract = self.parent.main_contract if self.parent else \
             self.contract
@@ -1289,6 +1294,21 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
                 return False
 
         return True
+
+    def get_start_date(self, name=None):
+        dates = []
+        date = None
+        options = [o.start_date for o in self.options
+            if o.status not in ['void', 'declined']]
+        if options:
+            dates.append(min(options))
+        if getattr(self, 'manual_start_date', None):
+            dates.append(self.manual_start_date)
+        if dates:
+            date = min(dates)
+        if self.parent:
+            date = max(date or datetime.date.min, self.parent.start_date)
+        return max(self.main_contract.start_date, date or datetime.date.min)
 
     def get_covered_parties(self, at_date):
         '''

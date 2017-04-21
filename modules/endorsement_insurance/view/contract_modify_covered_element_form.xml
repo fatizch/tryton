@@ -8,13 +8,14 @@ this repository contains the full copyright notices and license terms. -->
     <field name="contract"/>
     <label name="current_parent"/>
     <field name="current_parent"/>
+    <label name="new_item_desc"/>
+    <field name="new_item_desc" widget="selection"/>
+    <newline/>
+    <button string="Add covered element" name="add_covered_element" icon="plus" colspan="2"/>
     <newline/>
     <field name="current_covered" group="covered" mode="tree" colspan="2" expand_toolbar="0"/>
     <field name="current_covered" group="covered" mode="form" colspan="2" expand_toolbar="0"/>
     <newline/>
-    <label name="new_item_desc"/>
-    <field name="new_item_desc" widget="selection" colspan="2"/>
-    <button string="Add covered element" name="add_covered_element"/>
     <group id="invisible" string="">
         <field name="endorsement_definition"/>
         <field name="possible_parents"/>
