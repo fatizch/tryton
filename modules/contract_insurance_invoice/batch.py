@@ -86,12 +86,13 @@ class PostInvoiceContractBatch(batch.BatchRoot):
         query_table = contract_invoice.join(account_invoice, 'LEFT',
             condition=(account_invoice.id == contract_invoice.invoice)
             ).join(contract,
-                condition=(Not(contract.status.in_(['hold', 'quote']))
-                    & (contract.id == contract_invoice.contract)))
+                condition=(Not(contract.status.in_(['hold', 'quote'])) &
+                    (contract.id == contract_invoice.contract)))
 
         cursor.execute(*query_table.select(account_invoice.id,
-                where=((contract_invoice.start <= treatment_date)
-                    & (account_invoice.state == 'validated'))))
+                where=((contract_invoice.start <= treatment_date) &
+                    (account_invoice.state == 'validated')),
+                    order_by=contract_invoice.start.asc))
 
         return cursor.fetchall()
 
