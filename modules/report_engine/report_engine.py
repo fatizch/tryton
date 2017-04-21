@@ -362,14 +362,15 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             os.makedirs(export_dirname)
         return export_dirname
 
-    def export_reports(self, reports):
+    def export_reports(self, reports, add_time=True):
         export_dirname = self.get_export_dirname()
         for report in reports:
             filename, ext = os.path.splitext(report['report_name'])
-            out_path = os.path.join(
-                export_dirname,
-                '%s_%s%s' % (coog_string.slugify(filename),
-                    datetime.now().strftime("%H%M%S%f"), ext))
+            filename = coog_string.slugify(filename)
+            if add_time:
+                filename += '_' + datetime.now().strftime("%H%M%S%f")
+            filename += ext
+            out_path = os.path.join(export_dirname, filename)
             with open(out_path, 'a') as out:
                 out.write(report['data'])
 
@@ -728,7 +729,7 @@ class ReportGenerate(Report):
 
     @classmethod
     def get_filename_separator(cls):
-        return ' - '
+        return '-'
 
     @classmethod
     def get_date_suffix(cls, language):
