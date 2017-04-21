@@ -1308,7 +1308,9 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             date = min(dates)
         if self.parent:
             date = max(date or datetime.date.min, self.parent.start_date)
-        return max(self.main_contract.start_date, date or datetime.date.min)
+        return max(self.main_contract.start_date
+            if self.main_contract else datetime.date.min,
+            date or datetime.date.min)
 
     def get_covered_parties(self, at_date):
         '''
