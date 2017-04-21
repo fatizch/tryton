@@ -23,7 +23,12 @@ class Claim:
     __name__ = 'claim'
 
     def add_new_relapse(self, loss_desc_code):
-        self.add_new_loss(loss_desc_code, is_a_relapse=True)
+        event_desc = None
+        for loss in self.losses:
+            if loss.loss_desc.loss_kind == 'std':
+                event_desc = loss.event_desc
+        self.add_new_loss(loss_desc_code, is_a_relapse=True,
+            event_desc=event_desc.id if event_desc else None)
 
     def add_new_long_term_disability(self, loss_desc_code):
         self.add_new_loss(loss_desc_code)
