@@ -4,7 +4,7 @@
 
 from dateutil.relativedelta import relativedelta
 
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Equal, Bool, Len
@@ -14,7 +14,6 @@ from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.coog_core.coog_date import FREQUENCY_CONVERSION_TABLE
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'CreateIndemnification',
     'IndemnificationCalculationResult',
