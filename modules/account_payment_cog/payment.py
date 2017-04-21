@@ -6,7 +6,6 @@ from itertools import groupby
 from sql.aggregate import Sum, Max
 from sql import Literal, Null
 
-from trytond.rpc import RPC
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.model import Workflow, ModelView, Unique
@@ -755,6 +754,7 @@ class Configuration:
 
 class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
     __name__ = 'account.payment.group'
+
     _func_key = 'number'
 
     processing_payments = fields.One2ManyDomain('account.payment', 'group',
@@ -797,8 +797,7 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
                 'reject_reason_not_found': 'The reason code on journal %s '
                 'is not found',
                 })
-        cls.__rpc__.update({'reject_payment_group': RPC(readonly=False,
-                    instantiate=0)})
+
 
     @classmethod
     def __register__(cls, module_name):
@@ -869,15 +868,13 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
             Payment.succeed(payments)
 
     @classmethod
-    def fail_payments(cls, groups):
-        Payment = Pool().get('account.payment')
-        for group in groups:
-            if group.processing_payments:
-                Payment.fail(group.processing_payments)
-        group.write(groups, {'state': 'acknowledged'})
+    def update_processing_payments(cls, groups, method_name):
+        super(Group, cls).update_processing_payments(groups, method_name)
+        if method_name == 'fail':
+            cls.write(groups, {'state': 'acknowledged'})
 
     @classmethod
-    def reject_payment_group(cls, groups, reject_code):
+    def reject_payment_group(cls, groups, reject_code, *args):
         pool = Pool()
         RejectReason = pool.get('account.payment.journal.reject_reason')
         Payment = pool.get('account.payment')
@@ -898,7 +895,11 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
             reject_reason, = reject_reasons
             payments = sum([list(g.processing_payments) for g in sub_groups], [])
             Payment.manual_set_reject_reason(payments, reject_reason)
-            Group.fail_payments(sub_groups)
+            Group.update_processing_payments(sub_groups, 'fail')
+
+    @classmethod
+    def succeed_payment_group(cls, groups, **kwargs):
+        cls.to_acknowledge(groups)
 
     def get_currency(self):
         return self.journal.currency if self.journal else None
@@ -1104,6 +1105,3 @@ class ProcessPayment:
 
     def transition_pre_process(self):
         return 'process'
-
-    def default_start(self, fields):
-        return {}

@@ -8,12 +8,10 @@ def register():
     Pool.register(
         payment.Group,
         payment.Payment,
-        payment.Journal,
         payment.PaymentCreationStart,
-        payment.ProcessPaymentStart,
         payment.ProcessPayboxUrl,
-        module='account_payment_paybox', type_='model')
+        module='account_payment_paybox_cog', type_='model')
     Pool.register(
         payment.PaymentCreation,
         payment.ProcessPayment,
-        module='account_payment_paybox', type_='wizard')
+        module='account_payment_paybox_cog', type_='wizard')

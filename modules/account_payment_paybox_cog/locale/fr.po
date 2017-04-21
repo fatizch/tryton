@@ -1,0 +1,23 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.payment.payment_creation.start,payment_url:"
+msgid "Payment URL"
+msgstr "URL de paiement"
+
+msgctxt "field:account.payment.process.paybox_url,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account.payment.process.paybox_url,paybox_url:"
+msgid "Click To Open"
+msgstr "Cliquer pour ouvrir"
+
+msgctxt "model:account.payment.process.paybox_url,name:"
+msgid "Process Paybox Url"
+msgstr "Traitement Paybox URL"
+
+msgctxt "wizard_button:account.payment.process,paybox_url_view,end:"
+msgid "close"
+msgstr "Fermer"
