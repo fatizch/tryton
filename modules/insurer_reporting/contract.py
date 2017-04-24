@@ -148,6 +148,7 @@ class ContractOption:
         monthly_premiums_incl_tax = {o.id: Decimal('0.0') for o in options}
         monthly_premiums_excl_tax = {o.id: Decimal('0.0') for o in options}
         monthly_premiums_taxes = {o.id: Decimal('0.0') for o in options}
+        InvoiceLine = Pool().get('account.invoice.line')
 
         date = date or utils.today()
         for option in options:
@@ -175,7 +176,9 @@ class ContractOption:
                                 ANNUAL_CONVERSION_TABLE[last_premium.frequency])
                     annual_premium_excl_tax = option.currency.round(
                         Tax._reverse_unit_compute(annual_premium_incl_tax,
-                            last_premium.taxes, date))
+                            last_premium.taxes, date).quantize(
+                            Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1])
+                            )
                 if option.status != 'void' and option.start_date and \
                     option.start_date <= date <= (option.end_date or datetime.
                         date.max):
@@ -189,7 +192,9 @@ class ContractOption:
                                     latest_premium.frequency])
                         monthly_premium_excl_tax = option.currency.round(
                             Tax._reverse_unit_compute(monthly_premium_incl_tax,
-                                latest_premium.taxes, date))
+                                latest_premium.taxes, date).quantize(
+                                Decimal(1)
+                                / 10 ** InvoiceLine.unit_price.digits[1]))
 
             annual_premiums_incl_tax[option.id] = annual_premium_incl_tax
             annual_premiums_excl_tax[option.id] = annual_premium_excl_tax

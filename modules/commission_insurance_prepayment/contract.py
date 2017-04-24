@@ -185,7 +185,7 @@ class ContractOption:
             start_date, 'start', 'end')
         if premiums:
             premiums.sort(key=lambda x: x.start)
-            latest_premium = premiums[0]
+            latest_premium = premiums[-1]
             if latest_premium.frequency in ['yearly', 'monthly', 'quaterly',
                     'half_yearly']:
                 monthly_premium_incl_tax = \
@@ -194,9 +194,12 @@ class ContractOption:
                     Decimal(FREQUENCY_CONVERSION_TABLE[
                             latest_premium.frequency])
                 Tax = Pool().get('account.tax')
+                InvoiceLine = Pool().get('account.invoice.line')
                 monthly_premium_excl_tax = self.currency.round(
                             Tax._reverse_unit_compute(monthly_premium_incl_tax,
-                                latest_premium.taxes, start_date))
+                                latest_premium.taxes, start_date).quantize(
+                                Decimal(1) /
+                                10 ** InvoiceLine.unit_price.digits[1]))
                 return monthly_premium_incl_tax, monthly_premium_excl_tax
         return None, None
 
