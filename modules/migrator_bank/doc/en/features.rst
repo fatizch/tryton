@@ -1,0 +1,3 @@
+- **Bank migration batch**
+- **Bank agency migration batch**
+- **Bank account and sepa mandate migration batch**
