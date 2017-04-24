@@ -143,7 +143,7 @@ coog_module_create() { # creates a new module in the modules folder - <module_na
         echo "from trytond.modules.coog_core import test_framework" >> "$module_folder"/tests/test_module.py
         echo "" >> "$module_folder"/tests/test_module.py
         echo "" >> "$module_folder"/tests/test_module.py
-        echo "class ModuleTestCase(test_framework.CoopTestCase):" >> "$module_folder"/tests/test_module.py
+        echo "class ModuleTestCase(test_framework.CoogTestCase):" >> "$module_folder"/tests/test_module.py
         echo "    'Module Test Case'" >> "$module_folder"/tests/test_module.py
         echo "" >> "$module_folder"/tests/test_module.py
         echo "    module = '$module_name'" >> "$module_folder"/tests/test_module.py
