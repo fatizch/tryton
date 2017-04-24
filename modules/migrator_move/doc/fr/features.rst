@@ -1,0 +1,2 @@
+- **Batch de migration des lignes comptables**
+- **Batch de migration des lignes de lettrage**
