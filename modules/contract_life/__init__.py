@@ -10,4 +10,5 @@ def register():
         OptionDescription,
         Contract,
         ContractOption,
+        CoveredElement,
         module='contract_life', type_='model')

@@ -14,6 +14,8 @@ def register():
         Benefit,
         Claim,
         Contract,
+        Option,
+        CoveredElement,
         TerminateContract,
         module='claim_group', type_='model')
     Pool.register(

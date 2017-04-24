@@ -11,6 +11,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
+        <!-- ############ -->
+        <!-- # Option # -->
+        <!-- ############ -->
+        <record model="ir.ui.view" id="option_view_form">
+            <field name="model">contract.option</field>
+            <field name="inherit" ref="contract.option_view_form"/>
+            <field name="name">option_form</field>
+        </record>
     </data>
     <data depends="endorsement">
         <!-- ###################### -->

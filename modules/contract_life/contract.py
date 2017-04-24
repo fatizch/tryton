@@ -8,6 +8,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ContractOption',
+    'CoveredElement',
     ]
 
 
@@ -56,7 +57,14 @@ class ContractOption:
         options = super(ContractOption, cls).get_covered_options_from_party(
             party, at_date)
         for covered in CoveredElement.search([('party', '=', party.id)]):
-            if not covered.is_valid_at_date(at_date):
-                continue
-            options.extend(covered.fill_list_with_covered_options(at_date))
+            options += covered.find_options_for_covered(at_date)
         return options
+
+
+class CoveredElement:
+    __name__ = 'contract.covered_element'
+
+    def find_options_for_covered(self, at_date):
+        if not self.is_valid_at_date(at_date):
+            return []
+        return self.fill_list_with_covered_options(at_date)

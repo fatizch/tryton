@@ -2,6 +2,11 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:claim:"
+msgid "Declaration date cannot be posterior to today's date"
+msgstr ""
+"La date de déclaration ne peut être postérieure à la date d'aujourd'hui"
+
 msgctxt "field:benefit,is_group:"
 msgid "Group Benefit"
 msgstr "Prestation collective"
@@ -17,6 +22,14 @@ msgstr "Société"
 msgctxt "field:contract,post_termination_claim_behaviour:"
 msgid "Post Termination Claim Behaviour"
 msgstr "Comportement des sinistres suite à résiliation"
+
+msgctxt "field:contract.option,full_management_start_date:"
+msgid "Full Management Start Date"
+msgstr "Date de début de la gestion complète"
+
+msgctxt "field:contract.option,previous_claims_management_rule:"
+msgid "Previous Claims Management Rule"
+msgstr "Règle de reprise de la gestion des prestations"
 
 msgctxt "field:endorsement.contract.terminate,is_group:"
 msgid "Is Group"
@@ -50,6 +63,18 @@ msgstr "Continuer les indemnisations"
 msgctxt "selection:contract,post_termination_claim_behaviour:"
 msgid "Stop Indemnifications"
 msgstr "Arrêter les indemnisations"
+
+msgctxt "selection:contract.option,previous_claims_management_rule:"
+msgid "Full management"
+msgstr "Reprise complète de la gestion"
+
+msgctxt "selection:contract.option,previous_claims_management_rule:"
+msgid "In Complement of Previous Insurer"
+msgstr "Reprise au niveau atteint"
+
+msgctxt "selection:contract.option,previous_claims_management_rule:"
+msgid "No management"
+msgstr "Aucune reprise de gestion "
 
 msgctxt ""
 "selection:endorsement.contract.terminate,post_termination_claim_behaviour:"
