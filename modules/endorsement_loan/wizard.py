@@ -1452,17 +1452,20 @@ class StartEndorsement:
             if displayer.contract.id in per_contract:
                 endorsement = per_contract[displayer.contract.id]
                 if not displayer.to_update:
+                    endorsement.keep_if_empty = False
                     endorsement.values.pop('end_date', None)
                     if not endorsement.clean_up():
                         to_save.append(endorsement)
                 else:
+                    endorsement.keep_if_empty = True
                     to_save.append(endorsement)
             else:
                 if not displayer.to_update:
                     continue
                 endorsement = ContractEndorsement(
                     endorsement=self.endorsement.id,
-                    contract=displayer.contract.id, values={})
+                    contract=displayer.contract.id, values={},
+                    keep_if_empty=True)
                 to_save.append(endorsement)
             endorsement.values['end_date'] = displayer.new_end_date
             endorsement.values = dict(endorsement.values)

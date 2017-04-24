@@ -155,6 +155,10 @@ msgctxt "field:endorsement.contract.beneficiary,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:endorsement.contract.beneficiary,keep_if_empty:"
+msgid "Keep if Empty"
+msgstr "Conserver si vide"
+
 msgctxt "field:endorsement.contract.beneficiary,rec_name:"
 msgid "Name"
 msgstr "Nom"

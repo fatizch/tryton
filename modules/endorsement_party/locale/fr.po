@@ -107,6 +107,10 @@ msgctxt "field:endorsement.party,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:endorsement.party,keep_if_empty:"
+msgid "Keep if Empty"
+msgstr "Conserver si vide"
+
 msgctxt "field:endorsement.party,party:"
 msgid "Party"
 msgstr "Tiers"
@@ -174,6 +178,10 @@ msgstr "Clé fonctionnelle"
 msgctxt "field:endorsement.party.address,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:endorsement.party.address,keep_if_empty:"
+msgid "Keep if Empty"
+msgstr "Conserver si vide"
 
 msgctxt "field:endorsement.party.address,party_endorsement:"
 msgid "Party Endorsement"
@@ -596,6 +604,10 @@ msgstr "Clé fonctionnelle"
 msgctxt "field:endorsement.party.relation,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:endorsement.party.relation,keep_if_empty:"
+msgid "Keep if Empty"
+msgstr "Conserver si vide"
 
 msgctxt "field:endorsement.party.relation,party_endorsement:"
 msgid "Party Endorsement"

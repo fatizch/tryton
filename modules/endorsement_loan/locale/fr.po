@@ -218,6 +218,10 @@ msgctxt "field:endorsement.contract.loan,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:endorsement.contract.loan,keep_if_empty:"
+msgid "Keep if Empty"
+msgstr "Conserver si vide"
+
 msgctxt "field:endorsement.contract.loan,loan:"
 msgid "Loan"
 msgstr "Prêt"
@@ -345,6 +349,10 @@ msgstr "ID"
 msgctxt "field:endorsement.loan,increments:"
 msgid "Loan Increments"
 msgstr "Paliers"
+
+msgctxt "field:endorsement.loan,keep_if_empty:"
+msgid "Keep if Empty"
+msgstr "Conserver si vide"
 
 msgctxt "field:endorsement.loan,loan:"
 msgid "Loan"
@@ -618,6 +626,10 @@ msgctxt "field:endorsement.loan.increment,increment:"
 msgid "Loan Increments"
 msgstr "Paliers"
 
+msgctxt "field:endorsement.loan.increment,keep_if_empty:"
+msgid "Keep if Empty"
+msgstr "Conserver si vide"
+
 msgctxt "field:endorsement.loan.increment,loan_endorsement:"
 msgid "Loan Endorsement"
 msgstr "Modification de quotité"
@@ -765,6 +777,10 @@ msgstr "Clé fonctionnelle"
 msgctxt "field:endorsement.loan.share,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:endorsement.loan.share,keep_if_empty:"
+msgid "Keep if Empty"
+msgstr "Conserver si vide"
 
 msgctxt "field:endorsement.loan.share,loan:"
 msgid "Loan"

@@ -191,10 +191,12 @@ class EndorsementRoot(object):
 
     def is_null(self):
         '''
-            Returns False if all endorsement related values (the 'values' dict
+            Returns True if all endorsement related values (the 'values' dict
             field and recursively all endorsement related one2manys) are
-            considered null, else True
+            considered null, else False
         '''
+        if getattr(self, 'keep_if_empty', False):
+            return False
         if getattr(self, 'values', None):
             return False
         for fname in self.__class__._endorsed_dicts:
@@ -237,6 +239,7 @@ def values_mixin(value_model):
             depends=['applied_on'])
         # applied_on need to be stored to be used as datetime_field
         applied_on = fields.Timestamp('Applied On', readonly=True)
+        keep_if_empty = fields.Boolean('Keep if Empty')
 
         @classmethod
         def default_values(cls):
