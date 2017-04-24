@@ -1,0 +1,6 @@
+- **Batch de migration des primes**
+- **Batch de migration des garanties**
+- **Batch de migration des exonérations**
+- **Batch de migration des données versionnées**
+- **Batch de migration des évènements**
+- **Batch de migration des contrats**
