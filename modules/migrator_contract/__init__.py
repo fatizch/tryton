@@ -1,14 +1,14 @@
 from trytond.pool import Pool
 
-from .contract import *
+import contract
 
 
 def register():
     Pool.register(
-        MigratorContract,
-        MigratorContractVersion,
-        MigratorContractOption,
-        MigratorContractEvent,
-        MigratorContractPremium,
-        MigratorContractPremiumWaiver,
+        contract.MigratorContract,
+        contract.MigratorContractVersion,
+        contract.MigratorContractOption,
+        contract.MigratorContractEvent,
+        contract.MigratorContractPremium,
+        contract.MigratorContractPremiumWaiver,
         module='migrator_contract', type_='model')

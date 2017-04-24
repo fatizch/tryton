@@ -4,7 +4,8 @@ import datetime
 
 from collections import defaultdict
 from itertools import groupby, chain, tee, izip
-from sql import Table
+from sql import Table, Column
+from sql.aggregate import Count
 
 from trytond.pool import Pool
 
@@ -18,7 +19,7 @@ __all__ = [
     'MigratorContractPremium',
     'MigratorContractPremiumWaiver',
     'MigratorContractVersion'
-]
+    ]
 
 
 class MigratorContractPremium(migrator.Migrator):
@@ -32,8 +33,8 @@ class MigratorContractPremium(migrator.Migrator):
         cls.table = Table('premium')
         cls.model = 'contract.premium'
         cls.columns = {k: k for k in ('id', 'amount', 'contract',
-            'covered_element', 'start', 'end', 'frequency', 'loan', 'option',
-            'invoice_number')}
+                'covered_element', 'start', 'end', 'frequency', 'loan', 'option',
+                'invoice_number')}
         cls.error_messages.update({
                 'premiums_overlap': ('Premiums overlap on contract %s: %s '
                     'end at %s, %s starts at %s'),
@@ -142,8 +143,8 @@ class MigratorContract(migrator.Migrator):
         super(MigratorContract, cls).__setup__()
 
         cls._default_config_items.update({
-            'skip_extra_migrators': '',
-        })
+                'skip_extra_migrators': '',
+                })
         if not cls.table:
             cls.table = Table('contract')
             cls.func_key = 'contract_id'
@@ -210,7 +211,7 @@ class MigratorContract(migrator.Migrator):
             'migrator.contract.option',
             'migrator.contract.event',
             'migrator.contract.premium',
-        ]
+            ]
 
     @classmethod
     def sanitize(cls, row):
@@ -312,12 +313,12 @@ class MigratorContract(migrator.Migrator):
         version.extra_data = {}
         version.extra_data['qualite'] = row['qualite_assure']
         covered_element = CoveredElement(
-                party=row['covered_person'],
-                start_date=row['start_date'],
-                item_desc=Product(row['product']).coverages[0].item_desc,
-                product=row['product'],
-                versions=[version]
-                )
+            party=row['covered_person'],
+            start_date=row['start_date'],
+            item_desc=Product(row['product']).coverages[0].item_desc,
+            product=row['product'],
+            versions=[version]
+            )
         return covered_element
 
     @classmethod
@@ -613,12 +614,11 @@ class MigratorContractOption(migrator.Migrator):
         delete_numbers = [x['contract_number']
             for x in [cls.sanitize({'contract_id': k})
                 for k in set(ids).difference(to_create.keys())]
-            ]
+                ]
         for number in set(delete_numbers) - set(contracts_in_error):
             cls.logger.error(cls.error_message('no_option') % (number, ))
         Contract.delete(Contract.search(
-            ['contract_number', 'in', delete_numbers]))
-
+                ['contract_number', 'in', delete_numbers]))
         return to_create
 
 
@@ -676,7 +676,6 @@ class MigratorContractPremiumWaiver(migrator.Migrator):
                 waiver_options.append({'waiver': waiver.id,
                     'option': waiver.contract.covered_element_options[0].id, })
             WaiverOption.create(waiver_options)
-
         return ids
 
 

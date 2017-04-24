@@ -3,13 +3,13 @@
 
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
 __all__ = [
     'MigratorContract',
-]
+    ]
 
 
 class MigratorContract:
+    __metaclass__ = PoolMeta
     __name__ = 'migrator.contract'
 
     @classmethod

@@ -1,12 +1,12 @@
 from trytond.pool import Pool
 
-from .contract import *
-from .invoice import *
+import contract
+import invoice
 
 
 def register():
     Pool.register(
-        MigratorContract,
-        MigratorInvoice,
-        MigratorInvoiceLine,
+        contract.MigratorContract,
+        invoice.MigratorInvoice,
+        invoice.MigratorInvoiceLine,
         module='migrator_invoice', type_='model')

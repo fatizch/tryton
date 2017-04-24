@@ -12,11 +12,11 @@ from trytond.modules.migrator import migrator, tools
 __all__ = [
     'MigratorInvoice',
     'MigratorInvoiceLine'
-]
+    ]
 
 
 class MigratorInvoice(migrator.Migrator):
-    """Migrator Invoice."""
+    """Migrator Invoice"""
 
     __name__ = 'migrator.invoice'
 
@@ -28,13 +28,13 @@ class MigratorInvoice(migrator.Migrator):
         cls.func_key = 'number'
         cls.cache_obj = {'journal': {}, 'contract': {}}
         cls.columns = {k: k for k in ('contract_number', 'number',
-            'invoice_date', 'start', 'end', 'state', 'description',
-            'account', 'company', 'currency',
-            'invoice_address', 'is_commission_invoice', 'journal', 'party',
-            'payment_term', 'type', 'business_kind')}
+                'invoice_date', 'start', 'end', 'state', 'description',
+                'account', 'company', 'currency',
+                'invoice_address', 'is_commission_invoice', 'journal', 'party',
+                'payment_term', 'type', 'business_kind')}
         cls.error_messages.update({
-            'no_address': "no address on subscriber '%s'",
-            })
+                'no_address': "no address on subscriber '%s'",
+                })
 
     @classmethod
     def init_cache(cls, rows):
@@ -94,7 +94,7 @@ class MigratorInvoice(migrator.Migrator):
                     ))
 
         if to_create:
-            ids = ContractInvoice.create([x._save_values
+            ContractInvoice.create([x._save_values
                 for x in chain.from_iterable(to_create.values())])
             for _migrator in cls.extra_migrator_names():
                 pool.get(_migrator).migrate([r['number'] for r in rows])
@@ -102,7 +102,7 @@ class MigratorInvoice(migrator.Migrator):
 
 
 class MigratorInvoiceLine(migrator.Migrator):
-    """Migrator Invoice Line."""
+    """Migrator Invoice Line"""
 
     __name__ = 'migrator.invoice.line'
 
@@ -114,8 +114,8 @@ class MigratorInvoiceLine(migrator.Migrator):
         cls.func_key = 'invoice_number'
         cls.cache_obj = {'invoice': {}, 'loan': {}, 'party': {}}
         cls.columns = {k: k for k in ('id', 'invoice_number', 'coverage_start',
-            'coverage_end', 'amount', 'party', 'covered_element', 'loan',
-            'taxed_amount')}
+                'coverage_end', 'amount', 'party', 'covered_element', 'loan',
+                'taxed_amount')}
 
     @classmethod
     def init_cache(cls, rows):

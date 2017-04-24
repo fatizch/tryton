@@ -1,12 +1,12 @@
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
 __all__ = [
     'MigratorInvoice',
-]
+    ]
 
 
 class MigratorInvoice:
+    __metaclass__ = PoolMeta
     __name__ = 'migrator.invoice'
 
     @classmethod

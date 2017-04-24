@@ -1,12 +1,12 @@
 from trytond.pool import Pool
 
-from .move import *
-from .invoice import *
+import move
+import invoice
 
 
 def register():
     Pool.register(
-        MigratorInvoiceMoveLine,
-        MigratorMoveReconciliation,
-        MigratorInvoice,
+        move.MigratorInvoiceMoveLine,
+        move.MigratorMoveReconciliation,
+        invoice.MigratorInvoice,
         module='migrator_move', type_='model')

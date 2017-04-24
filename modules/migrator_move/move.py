@@ -11,11 +11,11 @@ from trytond.modules.coog_core import utils
 __all__ = [
     'MigratorInvoiceMoveLine',
     'MigratorMoveReconciliation',
-]
+    ]
 
 
 class MigratorInvoiceMoveLine(migrator.Migrator):
-    """Migrator Invoice Move Line."""
+    """Migrator Invoice Move Line"""
 
     __name__ = 'migrator.invoice.move.line'
 
@@ -129,10 +129,10 @@ class MigratorMoveReconciliation(migrator.Migrator):
         cls.columns = {k: k for k in ('name', 'payment', 'amount',
             'move_line')}
         cls.error_messages.update({
-            'no_payment': 'no payment',
-            'no_line_to_pay': 'no move line to pay',
-            'invalid_line_to_pay': 'invalid line to pay (%s)',
-            })
+                'no_payment': 'no payment',
+                'no_line_to_pay': 'no move line to pay',
+                'invalid_line_to_pay': 'invalid line to pay (%s)',
+                })
 
     @classmethod
     def select(cls, extra_args):
@@ -171,14 +171,14 @@ class MigratorMoveReconciliation(migrator.Migrator):
         payment = Table('paiement')
         columns = cls.select_columns()
         columns.extend([
-            payment.tiers.as_('party'),
-            payment.type.as_('kind'),
-            payment.etat.as_('state'),
-            payment.date.as_('date'),
-            payment.mandat_sepa.as_('sepa_mandate'),
-            payment.id_regroupement_sepa.as_('merged_id'),
-            payment.type_sequence_mandat.as_('sepa_mandate_sequence_type'),
-            ])
+                payment.tiers.as_('party'),
+                payment.type.as_('kind'),
+                payment.etat.as_('state'),
+                payment.date.as_('date'),
+                payment.mandat_sepa.as_('sepa_mandate'),
+                payment.id_regroupement_sepa.as_('merged_id'),
+                payment.type_sequence_mandat.as_('sepa_mandate_sequence_type'),
+                ])
         select = cls.table.join(payment,
             condition=((cls.table.identifiant_paiement ==
                 payment.identifiant_paiement))

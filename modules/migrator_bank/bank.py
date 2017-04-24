@@ -14,7 +14,7 @@ __all__ = [
     'MigratorBank',
     'MigratorBankAccount',
     'MigratorBankAgency'
-]
+    ]
 
 
 class MigratorBank(migrator.Migrator):
@@ -30,8 +30,8 @@ class MigratorBank(migrator.Migrator):
         cls.model = 'bank'
         cls.columns = {k: k for k in ('bic', 'party')}
         cls.error_messages.update({
-            'existing_bic': "bank already exists with bic '%s'",
-            })
+                'existing_bic': "bank already exists with bic '%s'",
+                })
 
     @classmethod
     def init_cache(cls, rows):
@@ -80,7 +80,7 @@ class MigratorBankAgency(migrator.Migrator):
                 'branch_code')}
         cls.error_messages.update({
                 'existing_agency': ("bank agency already exists with code '%s'"
-                    " and branch '%s'"),
+                " and branch '%s'"),
                 })
 
     @classmethod
@@ -110,7 +110,6 @@ class MigratorBankAgency(migrator.Migrator):
     @classmethod
     def migrate_rows(cls, rows, ids):
         BankAgency = Pool().get('bank.agency')
-
         to_create = []
         for agency, _rows in groupby(rows, lambda row: row['bic']):
             agency_rows = list(_rows)
@@ -139,11 +138,11 @@ class MigratorBankAccount(migrator.Migrator):
         super(MigratorBankAccount, cls).__setup__()
         cls.table = Table('bank_account')
         cls.error_messages.update({
-            'no_account_owner': 'No owner for account %s',
-            'no_mandate_account': 'No account for mandate %s: %s'
-            })
+                'no_account_owner': 'No owner for account %s',
+                'no_mandate_account': 'No account for mandate %s: %s'
+                })
         cls.columns = {k: k for k in ('id', 'party', 'start_date', 'end_date',
-            'iban', 'bic', 'identification', 'signature_date')}
+                'iban', 'bic', 'identification', 'signature_date')}
         cls.cache_obj = {'bank': {}, 'account': {}, 'sepa_mandate': {},
             'party': {}}
 
@@ -276,7 +275,7 @@ class MigratorBankAccount(migrator.Migrator):
                         'identification': iban_row['identification'],
                         'party': iban_row['party_obj'],
                         'state': 'validated',
-                    }
+                        }
         if sepa_to_create:
             SepaMandate.create(sepa_to_create.values())
             cls.cache_obj['sepa_mandate'].update(sepa_to_create)

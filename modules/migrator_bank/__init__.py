@@ -2,11 +2,11 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .bank import *
+import bank
 
 def register():
     Pool.register(
-        MigratorBank,
-        MigratorBankAccount,
-        MigratorBankAgency,
+        bank.MigratorBank,
+        bank.MigratorBankAccount,
+        bank.MigratorBankAgency,
         module='migrator_bank', type_='model')
