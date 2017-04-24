@@ -994,7 +994,8 @@ class ViewDescription(model.CoogSQL, model.CoogView):
     def on_change_with_view_name(self):
         if (hasattr(self, 'view_model') and self.view_model):
             if not (hasattr(self, 'attribute') and self.attribute):
-                return self.view_model.model.split('.')[1].replace('.', '_')
+                return self.view_model.model.split('.')[1].replace('.', '_') \
+                    if '.' in self.view_model.model else self.view_model.model
 
     @fields.depends('view_name', 'view_kind', 'view_model')
     def on_change_with_view_final_name(self, name=None):
