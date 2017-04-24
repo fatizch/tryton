@@ -34,4 +34,7 @@ this repository contains the full copyright notices and license terms. -->
         <button string="Open Contract before Application" name="open_contract"/>
         <button string="Cancel" name="cancel"/>
     </group>
+    <group id="invisible" string="">
+        <button name="start_endorsement" string="Resume Endorsement"/>
+    </group>
 </form>

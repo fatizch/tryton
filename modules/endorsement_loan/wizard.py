@@ -840,24 +840,25 @@ class LoanContractDisplayer(model.CoogView):
             add_endorsement = True
 
         with Transaction().new_transaction() as transaction:
-            try:
-                if add_endorsement:
-                    ContractEndorsement(contract=contract_id,
-                        endorsement=endorsement_id, values={}).save()
+            with transaction.set_context(_check_access=False):
+                try:
+                    if add_endorsement:
+                        ContractEndorsement(contract=contract_id,
+                            endorsement=endorsement_id, values={}).save()
 
-                _endorsement = Endorsement(endorsement_id)
-                _contract_endorsement = [x
-                    for x in _endorsement.contract_endorsements
-                    if x.contract.id == contract_id][0]
-                _contract_endorsement.values.pop('end_date', None)
-                _contract_endorsement.values['start_date'] = \
-                    self.new_start_date
-                Endorsement.soft_apply([_endorsement])
-                _contract = Contract(contract_id)
-                _contract.calculate()
-                new_end_date = _contract.end_date
-            finally:
-                transaction.rollback()
+                    _endorsement = Endorsement(endorsement_id)
+                    _contract_endorsement = [x
+                        for x in _endorsement.contract_endorsements
+                        if x.contract.id == contract_id][0]
+                    _contract_endorsement.values.pop('end_date', None)
+                    _contract_endorsement.values['start_date'] = \
+                        self.new_start_date
+                    Endorsement.soft_apply([_endorsement])
+                    _contract = Contract(contract_id)
+                    _contract.calculate()
+                    new_end_date = _contract.end_date
+                finally:
+                    transaction.rollback()
 
         self.new_end_date = new_end_date
 

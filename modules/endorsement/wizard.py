@@ -2175,7 +2175,8 @@ class StartEndorsement(Wizard):
 
     def transition_apply_endorsement(self):
         Endorsement = Pool().get('endorsement')
-        Endorsement.apply([self.endorsement])
+        with Transaction().set_context(_check_access=True):
+            Endorsement.apply([self.endorsement])
         # Look for possibly created endorsements
         next_endorsements = Endorsement.search([
                 ('generated_by', '=', self.endorsement)])

@@ -18,10 +18,6 @@ msgctxt "error:contract:"
 msgid "Select a date that is not in the future for field(s): %s"
 msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
 
-msgctxt "error:document.receive:"
-msgid "A contract must be set !"
-msgstr "Un contrat doit être sélectionné !"
-
 msgctxt "error:endorsement.contract.activation_history:"
 msgid "New version"
 msgstr "Nouvelle version"
@@ -2514,6 +2510,10 @@ msgstr "Ouvrir le Contrat"
 msgctxt "view:endorsement:"
 msgid "Open Contract before Application"
 msgstr "Ouvrir le contrat avant application"
+
+msgctxt "view:endorsement:"
+msgid "Resume Endorsement"
+msgstr "Reprendre l'avenant"
 
 msgctxt "view:offered.product:"
 msgid "Endorsements"

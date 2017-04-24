@@ -15,4 +15,5 @@ this repository contains the full copyright notices and license terms. -->
     <button string="Apply" name="apply" tree_invisible="1"/>
     <button string="Resume" name="start_endorsement" tree_invisible="1"/>
     <button string="Open Contract" name="open_contract" tree_invisible="1"/>
+    <button name="start_endorsement" string="Resume Endorsement" tree_invisible="1"/>
 </tree>
