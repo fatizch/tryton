@@ -623,6 +623,7 @@ class CreateIndemnification(Wizard):
                 start_date = non_cancelled[-1].end_date + \
                     relativedelta(days=1)
                 beneficiary = non_cancelled[-1].beneficiary
+                product_id = non_cancelled[-1].product.id
             else:
                 start_date = service.loss.start_date
                 beneficiary = service.contract.get_policy_owner(

@@ -64,6 +64,7 @@ class CreateIndemnification:
                 })
 
     def default_definition(self, name):
+        Party = Pool().get('party.party')
         defaults = super(CreateIndemnification, self).default_definition(name)
         if not defaults.get('service', None) or not defaults.get('start_date',
                 None):
@@ -77,6 +78,15 @@ class CreateIndemnification:
                     self.raise_user_error('bad_start_date', {
                             'indemn_start': defaults['start_date'],
                             'contract_end': contract_end})
+        # beneficiary become the employee once he leave the company
+        if (service.contract.is_group and
+                not Party(defaults['beneficiary']).is_person):
+            if (service.theoretical_covered_element and
+                    service.theoretical_covered_element.contract_exit_date and
+                    defaults['start_date'] >=
+                    service.theoretical_covered_element.contract_exit_date):
+                defaults['beneficiary'] = service.loss.covered_person.id
+                defaults['product'] = None
         return defaults
 
     def check_input(self):

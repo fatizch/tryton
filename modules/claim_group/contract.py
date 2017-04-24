@@ -70,9 +70,13 @@ class CoveredElement:
                 self.fill_list_with_previous_covered_options(at_date)))
 
     def fill_list_with_previous_covered_options(self, at_date):
+        if self.manual_start_date and self.manual_start_date > at_date:
+            return []
+        if self.manual_end_date and self.manual_end_date < at_date:
+            return []
         options = [option for option in self.options
             if (option.previous_claims_management_rule == 'full_management' and
-                    option.full_management_start_date <= at_date)]
+                option.full_management_start_date <= at_date)]
         if not self.parent:
             return options
         return options + self.parent.fill_list_with_previous_covered_options(
