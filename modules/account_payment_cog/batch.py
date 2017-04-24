@@ -279,9 +279,8 @@ class PaymentAcknowledgeBatch(PaymentValidationBatchBase):
         return 'account.payment.group'
 
     @classmethod
-    def base_domain_select_ids(cls, payment_kind, **kwargs):
-        return super(PaymentAcknowledgeBatch, cls).base_domain_select_ids(
-            payment_kind, **kwargs) + [('state', '=', 'succeeded')]
+    def payment_invalid(cls, payment):
+        return payment.state == 'processing'
 
     @classmethod
     def select_ids(cls, treatment_date, group_reference=None,
@@ -294,8 +293,8 @@ class PaymentAcknowledgeBatch(PaymentValidationBatchBase):
         for ids_slice in grouped_slice(ids):
             payments = Payment.browse(list(ids_slice))
             for group in {x.group.id for x in payments
-                    if not any(p.state == 'processing'
-                        for p in x.group.payments)}:
+                    if not any(cls.payment_invalid(p)
+                    for p in x.group.payments)}:
                 yield (group,)
 
     @classmethod

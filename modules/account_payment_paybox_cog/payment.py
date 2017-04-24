@@ -1,17 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import logging
-import binascii
-import hmac
-import hashlib
-import datetime
-from collections import OrderedDict
 
-from trytond.config import config
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateAction
-from trytond.transaction import Transaction
-from trytond.pyson import Eval, Bool, If, Equal
+from trytond.pyson import Eval, Bool, If
 from trytond.wizard import StateView, Button, StateTransition
 
 from trytond.modules.coog_core import fields, model
@@ -38,6 +30,19 @@ class Group:
         if self.payments:
             Payment.write(list(self.payments), {'merged_id': self.number})
         return url
+
+    @classmethod
+    def acknowledge(cls, groups):
+        super(Group, cls).acknowledge(groups)
+        Payment = Pool().get('account.payment')
+        payments = []
+        for group in groups:
+            payments.extend([x for x in group.get_payments()
+                if x.state == 'processing'
+                or (x.state == 'failed'
+                    and x.journal.process_method == 'paybox')])
+        if payments:
+            Payment.succeed(payments)
 
 
 class Payment:

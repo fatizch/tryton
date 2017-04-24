@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 import payment
+import batch
 
 
 def register():
@@ -10,6 +11,7 @@ def register():
         payment.Payment,
         payment.PaymentCreationStart,
         payment.ProcessPayboxUrl,
+        batch.PaymentAcknowledgeBatch,
         module='account_payment_paybox_cog', type_='model')
     Pool.register(
         payment.PaymentCreation,

@@ -682,6 +682,9 @@ class Payment(export.ExportImportMixin, Printable):
         pool = Pool()
         Event = pool.get('event')
         super(Payment, cls).succeed(payments)
+        cls.write(payments, {
+            'manual_reject_code': None,
+            'manual_fail_status': ''})
         Event.notify_events(payments, 'succeed_payment')
 
     def get_doc_template_kind(self):
@@ -779,6 +782,7 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
         cls._transitions |= set((
                 ('processing', 'to_acknowledge'),
                 ('to_acknowledge', 'acknowledged'),
+                ('acknowledged', 'to_acknowledge'),
                 ('to_acknowledge', 'processing'),
                 ('processing', 'acknowledged'),
                 ))
@@ -868,8 +872,8 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
             Payment.succeed(payments)
 
     @classmethod
-    def update_processing_payments(cls, groups, method_name):
-        super(Group, cls).update_processing_payments(groups, method_name)
+    def update_payments(cls, groups, method_name, state=None):
+        super(Group, cls).update_payments(groups, method_name, state)
         if method_name == 'fail':
             cls.write(groups, {'state': 'acknowledged'})
 
@@ -895,7 +899,7 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
             reject_reason, = reject_reasons
             payments = sum([list(g.processing_payments) for g in sub_groups], [])
             Payment.manual_set_reject_reason(payments, reject_reason)
-            Group.update_processing_payments(sub_groups, 'fail')
+            Group.update_payments(sub_groups, 'fail')
 
     @classmethod
     def succeed_payment_group(cls, groups, **kwargs):
