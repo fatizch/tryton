@@ -1262,6 +1262,6 @@ class PartyReplaceAsk:
 
     @fields.depends('destination')
     def on_change_source(self):
-        super(PartyReplaceAsk, self)
+        super(PartyReplaceAsk, self).on_change_source()
         if not self.source and self.destination:
             self.destination = None

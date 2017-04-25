@@ -266,7 +266,7 @@ payment.click('approve')
 
 # #Comment# Process payment
 process_payment = Wizard('account.payment.process', [payment])
-process_payment.execute('process')
+process_payment.execute('pre_process')
 payment.reload()
 
 # #Comment# Fail payment

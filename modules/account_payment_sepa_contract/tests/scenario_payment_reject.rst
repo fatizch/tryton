@@ -200,7 +200,7 @@ Create and process first Payment::
     >>> payment.save()
     >>> payment.click('approve')
     >>> process_payment = Wizard('account.payment.process', [payment])
-    >>> process_payment.execute('process')
+    >>> process_payment.execute('pre_process')
 
 Fail payment::
 
@@ -248,7 +248,7 @@ Create and process second Payment::
     >>> payment.save()
     >>> payment.click('approve')
     >>> process_payment = Wizard('account.payment.process', [payment])
-    >>> process_payment.execute('process')
+    >>> process_payment.execute('pre_process')
 
 Fail payment::
 
@@ -309,7 +309,7 @@ Create payment for second and third invoice::
     >>> payment_third_invoice.click('approve')
     >>> payments = [payment_second_invoice, payment_third_invoice]
     >>> process_payment = Wizard('account.payment.process', payments)
-    >>> process_payment.execute('process')
+    >>> process_payment.execute('pre_process')
 
 Fail payments::
 

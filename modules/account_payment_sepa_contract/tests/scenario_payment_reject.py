@@ -187,7 +187,7 @@ initial_payment_date = payment.date
 payment.save()
 payment.click('approve')
 process_payment = Wizard('account.payment.process', [payment])
-process_payment.execute('process')
+process_payment.execute('pre_process')
 
 # #Comment# #Fail payment
 payment.sepa_return_reason_code = 'BE04'
@@ -234,7 +234,7 @@ initial_payment_date = payment.date
 payment.save()
 payment.click('approve')
 process_payment = Wizard('account.payment.process', [payment])
-process_payment.execute('process')
+process_payment.execute('pre_process')
 
 # #Comment# #Fail payment
 payment.sepa_return_reason_code = 'AM04'
@@ -295,7 +295,7 @@ payment_third_invoice.save()
 payment_third_invoice.click('approve')
 payments = [payment_second_invoice, payment_third_invoice]
 process_payment = Wizard('account.payment.process', payments)
-process_payment.execute('process')
+process_payment.execute('pre_process')
 
 # #Comment# #Fail payments
 payment_second_invoice.sepa_return_reason_code = 'AM04'

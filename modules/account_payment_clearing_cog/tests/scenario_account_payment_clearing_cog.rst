@@ -94,7 +94,7 @@ Partially pay the line::
     >>> payment.state
     u'approved'
     >>> process_payment = Wizard('account.payment.process', [payment])
-    >>> process_payment.execute('process')
+    >>> process_payment.execute('pre_process')
     >>> payment.reload()
     >>> payment.state
     u'processing'

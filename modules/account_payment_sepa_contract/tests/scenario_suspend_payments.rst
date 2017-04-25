@@ -246,7 +246,7 @@ Create invoice::
     >>> payment, = Payment.find([()])
     >>> payment.click('approve')
     >>> process_payment = Wizard('account.payment.process', [payment])
-    >>> process_payment.execute('process')
+    >>> process_payment.execute('pre_process')
     >>> payment.reload()
     >>> fail_payment = Wizard('account.payment.manual_payment_fail', [payment])
     >>> fail_payment.form.reject_reason = reject_reason
