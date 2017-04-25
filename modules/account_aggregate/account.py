@@ -293,6 +293,14 @@ class LineAggregated(model.CoogSQL, model.CoogView):
         return col
 
     @classmethod
+    def get_aggregate_prefix(cls):
+        return ''
+
+    @classmethod
+    def get_move_prefix(cls):
+        return ''
+
+    @classmethod
     def fields_to_select(cls, tables):
         line = tables['account.move.line']
         move = tables['account.move']
@@ -308,9 +316,13 @@ class LineAggregated(model.CoogSQL, model.CoogView):
                 else_=Coalesce(Max(line.description),
                     Max(move.description))).as_('description'),
             Case((journal.aggregate,
-                Concat(cls.sql_wrapper_batch(move.post_date, 'date'),
-                Cast(move.snapshot, 'VARCHAR'))),
-                else_=Max(move.number)).as_('aggregated_move_id'),
+                Concat(Concat(
+                        cls.get_aggregate_prefix(),
+                        ToChar(move.post_date, 'YYYYMMDD')),
+                    Cast(move.snapshot, 'VARCHAR'))),
+                else_=Concat(
+                    cls.get_move_prefix(),
+                    Max(move.number))).as_('aggregated_move_id'),
             line.account.as_('account'),
             move.journal.as_('journal'),
             cls.sql_wrapper_batch(move.date, 'date').as_('date'),
@@ -340,7 +352,7 @@ class LineAggregated(model.CoogSQL, model.CoogView):
     def having_clause(cls, tables):
         line = tables['account.move.line']
         return (Sum(Coalesce(line.debit, 0)) -
-                Sum(Coalesce(line.credit, 0)) > 0)
+                Sum(Coalesce(line.credit, 0)) != 0)
 
     @classmethod
     def join_table(cls, tables):
@@ -417,16 +429,6 @@ class OpenLine(Wizard):
                     domain_.append(('move.snapshot', '=', line.snapshot.id))
             else:
                 domain_ = [('id', '=', line.id)]
-            if line.credit > 0 or line.debit < 0:
-                domain_ = ['AND', domain_, ['OR',
-                    [('credit', '>', 0)],
-                    [('debit', '<', 0)],
-                    ]]
-            else:
-                domain_ = ['AND', domain_, ['OR',
-                    [('credit', '<', 0)],
-                    [('debit', '>', 0)],
-                    ]]
             return domain_
 
         action['pyson_domain'] = ['OR'] + [domain(l) for l in lines]

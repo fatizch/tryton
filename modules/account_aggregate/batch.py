@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 import logging
 import datetime
-import itertools
 
 from trytond.pool import Pool
 from trytond.modules.coog_core import batch
@@ -63,11 +62,7 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
                 ).table_query()
 
         cursor.execute(*table_query)
-        if not table_query.group_by:
-            return (tuple(rows) for rows in cursor.fetchall())
-        else:
-            return (tuple(rows) for rows in itertools.islice(
-                    cursor.fetchall(), len(table_query.group_by)))
+        return (tuple(rows) for rows in cursor.fetchall())
 
     @classmethod
     def check_mandatory_parameters(cls, *args, **kwargs):
@@ -106,7 +101,7 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
         snapshots = Snapshot.browse(x[11] for x in values)
         debits = (x[12] for x in values)
         credits = (x[13] for x in values)
-        directions_moves = ['C' if l.credit > 0 or l.debit < 0 else 'D'
+        directions_moves = ['C' if l.credit - l.debit > 0 else 'D'
             for l in lines]
         return (snapshots, lines, accounts, journals, aggregated_ids,
             descriptions, move_dates, post_dates, debits, credits,
