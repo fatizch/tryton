@@ -1899,13 +1899,14 @@ class SelectEndorsement(model.CoogView):
         states={'invisible': True})
     endorsement_definition = fields.Many2One('endorsement.definition',
         'Endorsement', domain=[
+            [('id', 'in', Eval('endorsement_definition_candidates', []))],
             [('is_technical', '=', False)],
             ['OR', [
                     If(Bool(Eval('product', False)),
                         [('products', '=', Eval('product'))],
                         [])],
                 [('products', '=', None)]]],
-        depends=['product'])
+        depends=['product', 'endorsement_definition_candidates'])
     endorsement_summary = fields.Text('Endorsement Summary')
     product = fields.Many2One('offered.product', 'Product', readonly=True,
         states={'invisible': True})
@@ -1917,6 +1918,8 @@ class SelectEndorsement(model.CoogView):
         'Contract has future endorsement', states={'invisible': True})
     effective_date_before_today = fields.Boolean('Effective date is in past',
         states={'invisible': True})
+    endorsement_definition_candidates = fields.Many2Many(
+        'endorsement.definition', None, None, 'Endorsement Definition')
 
     @classmethod
     def view_attributes(cls):
@@ -1988,6 +1991,15 @@ class SelectEndorsement(model.CoogView):
                     'values': {},
                     }]
         return endorsement
+
+    @staticmethod
+    def default_endorsement_definition_candidates():
+        pool = Pool()
+        user = pool.get('res.user')(Transaction().user)
+        candidates = pool.get('endorsement.definition').search([
+                'OR', ('groups', '=', None),
+                ('groups', 'in', [x.id for x in user.groups])])
+        return [x.id for x in candidates]
 
     def _fields_to_copy(self):
         return ['applicant', 'effective_date']

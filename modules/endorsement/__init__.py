@@ -7,7 +7,7 @@ from .wizard import *
 from .event import *
 from .document import *
 import party
-
+import group
 
 def register():
     Pool.register(
@@ -43,6 +43,7 @@ def register():
         RecalculateContract,
         ChangeContractStartDate,
         ReactivateContract,
+        EndorsementDefinitionGroupRelation,
         ChangeContractExtraData,
         ManageOptions,
         OptionDisplayer,
@@ -58,6 +59,7 @@ def register():
         EventTypeAction,
         EventLog,
         DocumentDescription,
+        group.Group,
         module='endorsement', type_='model')
 
     Pool.register(

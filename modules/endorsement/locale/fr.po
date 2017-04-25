@@ -1437,6 +1437,10 @@ msgctxt "field:endorsement.definition,endorsement_parts:"
 msgid "Endorsement Parts"
 msgstr "Avenants unitaires"
 
+msgctxt "field:endorsement.definition,groups:"
+msgid "Groups"
+msgstr "Groupes"
+
 msgctxt "field:endorsement.definition,id:"
 msgid "ID"
 msgstr "ID"
@@ -1610,6 +1614,46 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:endorsement.definition-report.template,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.definition-res.group,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.definition-res.group,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.definition-res.group,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.definition-res.group,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.definition-res.group,group:"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "field:endorsement.definition-res.group,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.definition-res.group,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.definition-res.group,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.definition-res.group,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.definition-res.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -1819,6 +1863,11 @@ msgctxt "field:endorsement.start.select_endorsement,endorsement_definition:"
 msgid "Endorsement"
 msgstr "Modèle d'Avenant"
 
+msgctxt ""
+"field:endorsement.start.select_endorsement,endorsement_definition_candidates:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
 msgctxt "field:endorsement.start.select_endorsement,endorsement_summary:"
 msgid "Endorsement Summary"
 msgstr "Résumé de l'avenant"
@@ -1894,6 +1943,14 @@ msgstr "Avenant de résiliation sans effet automatique"
 msgctxt "field:offered.product,endorsement_definitions:"
 msgid "Endorsement Definitions"
 msgstr "Définitions d'avenant"
+
+msgctxt "field:res.group,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:res.group,endorsement_definitions:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
 
 msgctxt "model:contract.manage_options,name:"
 msgid "Manage Options"
@@ -2022,6 +2079,10 @@ msgstr "Relation entre définition d'avenant et produit"
 msgctxt "model:endorsement.definition-report.template,name:"
 msgid "Endorsement Definition Report Template Relation"
 msgstr "Relation avenant - Modèle de courrier"
+
+msgctxt "model:endorsement.definition-res.group,name:"
+msgid "Endorsement Definition Group Relation"
+msgstr "Relation définition d'avenant - groupe"
 
 msgctxt "model:endorsement.manage_contacts,name:"
 msgid "Manage Contacts"

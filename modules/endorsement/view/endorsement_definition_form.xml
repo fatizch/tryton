@@ -21,5 +21,8 @@ this repository contains the full copyright notices and license terms. -->
         <page name="report_templates">
             <field name="report_templates"/>
         </page>
+        <page name="groups">
+            <field name="groups"/>
+        </page>
     </notebook>
 </form>

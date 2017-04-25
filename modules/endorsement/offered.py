@@ -15,6 +15,7 @@ from .wizard import EndorsementWizardPreviewMixin
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'EndorsementDefinitionGroupRelation',
     'EndorsementDefinition',
     'EndorsementPart',
     'EndorsementDefinitionPartRelation',
@@ -60,6 +61,9 @@ class EndorsementDefinition(model.CoogSQL, model.CoogView):
     report_templates = fields.Many2Many(
         'endorsement.definition-report.template', 'definition',
         'report_template', 'Report Templates')
+    groups = fields.Many2Many(
+        'endorsement.definition-res.group', 'definition',
+        'group', 'Groups')
 
     _endorsement_by_code_cache = Cache('endorsement_definition_by_code')
 
@@ -413,3 +417,14 @@ class EndorsementSubState(model.CoogSQL, model.CoogView):
         if self.code:
             return self.code
         return coog_string.slugify(self.name)
+
+
+class EndorsementDefinitionGroupRelation(model.CoogSQL, model.CoogView):
+    'Endorsement Definition Group Relation'
+
+    __name__ = 'endorsement.definition-res.group'
+
+    definition = fields.Many2One('endorsement.definition', 'Definition',
+        required=True, ondelete='CASCADE', select=True)
+    group = fields.Many2One('res.group', 'Group', required=True, 
+        ondelete='RESTRICT', select=True)
