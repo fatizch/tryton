@@ -231,6 +231,7 @@ class Snapshot(model.CoogSQL, model.CoogView):
 class LineAggregated(model.CoogSQL, model.CoogView):
     'Account Move Line Aggregated'
     __name__ = 'account.move.line.aggregated'
+    _rec_name = 'aggregated_move_id'
 
     aggregated_move_id = fields.Char('Aggregated Move Id', readonly=True)
     account = fields.Many2One('account.account', 'Account',
