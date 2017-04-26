@@ -9,6 +9,8 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Line',
     'Statement',
+    'PaymentInformations',
+    'CreateStatement',
     ]
 
 
@@ -23,6 +25,7 @@ class Line:
 
 
 class Statement:
+    __metaclass__ = PoolMeta
     __name__ = 'account.statement'
 
     @classmethod
@@ -49,3 +52,23 @@ class Statement:
                 return self.lines[0].bank
 
         return LineWithBank
+
+
+class PaymentInformations:
+    __name__ = 'account_statement.payment_informations'
+    
+    bank = fields.Many2One('bank', 'Bank', states={
+            'invisible': Eval('process_method') != 'cheque'},
+        depends=['process_method'])
+    
+
+class CreateStatement:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.statement.create'
+    
+    def get_line_values(self, statement, invoice, line):
+        values = super(CreateStatement, self).get_line_values(statement,
+            invoice, line)
+        values['bank'] = self.payment_informations.bank
+        return values
+

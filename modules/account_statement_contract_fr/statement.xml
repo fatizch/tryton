@@ -30,5 +30,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="report_name">account.statement.bank_deposit_ticket_report</field>
             <field name="report">account_statement_contract_fr/bank_deposit_ticket_fr.odt</field>
         </record>
+        <!-- ######################## -->
+        <!-- # Payment Informations # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="payment_informations_view_form">
+            <field name="model">account_statement.payment_informations</field>
+            <field name="inherit" ref="account_statement_cog.payment_informations_view_form"/>
+            <field name="name">payment_informations_form</field>
+        </record>
     </data>
 </tryton>

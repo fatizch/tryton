@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- #################### -->
+        <!-- # Statement Wizard # -->
+        <!-- #################### -->
+        <record model="ir.action.keyword" id="act_create_statement_party_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="account_statement_cog.act_statement_creation_wizard"/>
+        </record>
+    </data>
+</tryton>

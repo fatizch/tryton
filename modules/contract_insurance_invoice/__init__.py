@@ -14,6 +14,7 @@ import event
 import bank
 import configuration
 import payment
+import wizard
 
 
 def register():
@@ -66,6 +67,7 @@ def register():
         rule_engine.RuleEngineRuntime,
         module='contract_insurance_invoice', type_='model')
     Pool.register(
+        wizard.CreateStatement,
         contract.DisplayContractPremium,
         contract.InvoiceContract,
         invoice.InvoiceLineAggregates,

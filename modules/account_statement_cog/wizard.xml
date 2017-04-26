@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- #################### -->
+        <!-- # Statement Wizard # -->
+        <!-- #################### -->
+        <record model="ir.action.wizard" id="act_statement_creation_wizard">
+            <field name="name">Create Statement</field>
+            <field name="wiz_name">account.statement.create</field>
+        </record>
+        <record model="ir.action.keyword" id="act_create_statement_party_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="act_statement_creation_wizard"/>
+        </record>
+        <record model="ir.action.keyword" id="act_create_statement_line_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">account.move.line,-1</field>
+            <field name="action" ref="act_statement_creation_wizard"/>
+        </record>
+        <record model="ir.action.keyword" id="act_create_statement_invoice_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">account.invoice,-1</field>
+            <field name="action" ref="act_statement_creation_wizard"/>
+        </record>
+        <!-- ########################## -->
+        <!-- # Start Create Statement # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="start_create_statement_view_form">
+            <field name="model">account_statement.start_create_statement</field>
+            <field name="type">form</field>
+            <field name="name">start_create_statement_form</field>
+        </record>
+        <!-- ######################## -->
+        <!-- # Payment Informations # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="payment_informations_view_form">
+            <field name="model">account_statement.payment_informations</field>
+            <field name="type">form</field>
+            <field name="name">payment_informations_form</field>
+        </record>
+    </data>
+</tryton>

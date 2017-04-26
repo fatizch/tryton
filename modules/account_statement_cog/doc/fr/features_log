@@ -1,16 +1,18 @@
+* Ajout de l'assistant de création de relevé
+
 Version 1.10 - 2016-11-02
 
 Version 1.8 - 2016-07-06
-* Add feature: cashing cancel
+* Ajout de fonctionnalité: Annulation de relevé
 
 Version 1.6 - 2015-12-23
-* Add payer party on statement line
+* Ajout du payeur sur la lige de relevé
 
 Version 1.4 - 2015-05-29
 
 Version 1.3 - 2015-01-22
-* Fill statement name with a sequence
-* Add manual validation on statement
+* Remplissage du nom de relevé avec une séquence
+* Ajout de la validation manuelle du relevé
 
 Version 1.2 - 2014-07-01
-* Changelog file creation
+* Création du fichier de changelog

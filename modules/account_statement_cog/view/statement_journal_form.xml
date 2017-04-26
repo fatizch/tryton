@@ -3,10 +3,12 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form" position="inside">
+        <label name="process_method"/>
+        <field name="process_method"/>
+        <label name="auto_post"/>
+        <field name="auto_post"/>
         <label name="sequence"/>
         <field name="sequence"/>
-        <label name="bank_deposit_ticket_statement"/>
-        <field name="bank_deposit_ticket_statement"/>
         <field name="cancel_motives" colspan="4"/>
     </xpath>
 </data>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="number"/>
+    <field name="number"/>
+    <newline/>
+    <label name="description"/> 
+    <field name="description" colspan="3"/>
+    <group id="payment_informations_footer" colspan="4">
+        <label name="error"/>
+        <field name="error"/>
+    </group>
+    <field name="journal" invisible="1"/>
+    <field name="process_method" invisible="1"/>
+</form>

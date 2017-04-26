@@ -6,9 +6,55 @@ msgctxt "error:account.move:"
 msgid "The statement is already cancelled"
 msgstr "Le relevé est déja annulé"
 
+msgctxt "error:account.statement.create:"
+msgid "All selected records are not receivable"
+msgstr "Tous les enregistrements ne sont pas à recevoir"
+
+msgctxt "error:account.statement.create:"
+msgid "All selected records must have a link to an invoice"
+msgstr ""
+"Tous les enregistrements selectionnés doivent avoir un lien vers une "
+"quittance"
+
+msgctxt "error:account.statement.create:"
+msgid "No company found"
+msgstr "Pas de société trouvée"
+
+msgctxt "error:account.statement.create:"
+msgid "No currency for company %s"
+msgstr "Pas de devise pour la société %s"
+
+msgctxt "error:account.statement.create:"
+msgid "No record selected"
+msgstr "Aucun enregistrement selectionné"
+
+msgctxt "error:account.statement.create:"
+msgid "The amount is insufficient"
+msgstr "Le montant est insuffisant"
+
+msgctxt "error:account.statement.create:"
+msgid "The cheque number is required"
+msgstr "Le numéro de chèque est requis"
+
+msgctxt "error:account.statement.create:"
+msgid "The statement amount differs from calculation: %s > %s (calculated)"
+msgstr "Le montant du relevé diffère des calculs: %s > %s (calculé)"
+
+msgctxt "error:account.statement.create:"
+msgid "Too many parties selected"
+msgstr "Trop de tiers selectionnés"
+
 msgctxt "error:account.statement.journal.cancel_motive:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
+
+msgctxt "error:account.statement.journal:"
+msgid "Cheque"
+msgstr "Chèque"
+
+msgctxt "error:account.statement.journal:"
+msgid "Other"
+msgstr "Autre"
 
 msgctxt "error:account.statement.journal:"
 msgid "You can not cancel two statements with different statement journals"
@@ -31,13 +77,17 @@ msgctxt "field:account.statement,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:account.statement.journal,bank_deposit_ticket_statement:"
-msgid "Bank Deposit Ticket Statement"
-msgstr "Bordereaux de chèques"
+msgctxt "field:account.statement.journal,auto_post:"
+msgid "Auto Post Statement"
+msgstr "Emettre automatiquement"
 
 msgctxt "field:account.statement.journal,cancel_motives:"
 msgid "Cancel Motives"
 msgstr "Motifs d'annulation"
+
+msgctxt "field:account.statement.journal,process_method:"
+msgid "Process Method"
+msgstr "Méthode de traitement"
 
 msgctxt "field:account.statement.journal,sequence:"
 msgid "Statement Sequence"
@@ -123,6 +173,74 @@ msgctxt "field:account.statement.line.group.cancel.start,moves:"
 msgid "Moves"
 msgstr "Mouvements"
 
+msgctxt "field:account_statement.payment_informations,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:account_statement.payment_informations,error:"
+msgid "Error"
+msgstr "Erreur"
+
+msgctxt "field:account_statement.payment_informations,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account_statement.payment_informations,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:account_statement.payment_informations,number:"
+msgid "Number"
+msgstr "Numéro"
+
+msgctxt "field:account_statement.payment_informations,process_method:"
+msgid "Process Method"
+msgstr "Méthode de traitement"
+
+msgctxt "field:account_statement.start_create_statement,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:account_statement.start_create_statement,auto_post:"
+msgid "Automatically Post Statement"
+msgstr "Emettre automatiquement le relevé"
+
+msgctxt "field:account_statement.start_create_statement,auto_validate:"
+msgid "Automatically Validate Statement"
+msgstr "Valider automatiquement le relevé"
+
+msgctxt "field:account_statement.start_create_statement,available_lines:"
+msgid "Available Lines"
+msgstr "Lignes disponibles"
+
+msgctxt "field:account_statement.start_create_statement,currency:"
+msgid "Currency"
+msgstr "Devise"
+
+msgctxt "field:account_statement.start_create_statement,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:account_statement.start_create_statement,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:account_statement.start_create_statement,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account_statement.start_create_statement,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:account_statement.start_create_statement,lines:"
+msgid "Lines To Pay"
+msgstr "Lignes à payer"
+
+msgctxt "field:account_statement.start_create_statement,party:"
+msgid "Party"
+msgstr "Tiers"
+
 msgctxt "field:statement.journal-statement.journal.cancel_motive,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -164,6 +282,14 @@ msgctxt "field:statement.journal-statement.journal.cancel_motive,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:account.statement.journal,auto_post:"
+msgid ""
+"If set, the statement wizard will automatically validate and post created "
+"statement"
+msgstr ""
+"Si coché, l'assistant de relevé validera et emettra automatiquement le "
+"relevé créé "
+
 msgctxt "model:account.statement.journal.cancel_motive,name:"
 msgid "Statement Journal Cancel Motives"
 msgstr "Motif Annulation Journal Relevé"
@@ -172,6 +298,14 @@ msgctxt "model:account.statement.line.group.cancel.start,name:"
 msgid "Cancel Line Group Start"
 msgstr "Lancement Annulation Groupe de Lignes"
 
+msgctxt "model:account_statement.payment_informations,name:"
+msgid "Payment Informations"
+msgstr "Informations de paiement"
+
+msgctxt "model:account_statement.start_create_statement,name:"
+msgid "Start Create Statement"
+msgstr "Création de relevé"
+
 msgctxt "model:ir.action,name:act_cancel_line_group"
 msgid "Cancel"
 msgstr "Annuler"
@@ -179,6 +313,10 @@ msgstr "Annuler"
 msgctxt "model:ir.action,name:act_statement_bank_deposit_form"
 msgid "Bank Deposit Ticket"
 msgstr "Bordereaux de chèques"
+
+msgctxt "model:ir.action,name:act_statement_creation_wizard"
+msgid "Create Statement"
+msgstr "Créer un relevé"
 
 msgctxt "model:ir.action,name:act_statement_journal_cancel_motive_form"
 msgid "Cancel motives"
@@ -249,6 +387,23 @@ msgid "Cancel line group"
 msgstr "Annulation Groupe de ligne"
 
 msgctxt "view:account.statement.line.group:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:account.statement.create,payment_informations,process_pay:"
+msgid "Pay"
+msgstr "Payer"
+
+msgctxt "wizard_button:account.statement.create,payment_informations,start:"
+msgid "Back"
+msgstr "Retour"
+
+msgctxt "wizard_button:account.statement.create,start,check_inputs:"
+msgid "Payment Informations"
+msgstr "Informations de paiement"
+
+msgctxt "wizard_button:account.statement.create,start,end:"
 msgid "Cancel"
 msgstr "Annuler"
 

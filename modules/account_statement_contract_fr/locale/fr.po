@@ -6,6 +6,10 @@ msgctxt "field:account.statement.line,bank:"
 msgid "Bank"
 msgstr "Banque"
 
+msgctxt "field:account_statement.payment_informations,bank:"
+msgid "Bank"
+msgstr "Banque"
+
 msgctxt "view:account.statement.line:"
 msgid "Amount"
 msgstr "Montant"

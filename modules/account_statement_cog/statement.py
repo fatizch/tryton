@@ -131,7 +131,7 @@ class Statement(export.ExportImportMixin):
 
     @fields.depends('journal')
     def on_change_with_in_bank_deposit_ticket(self, name=None):
-        return self.journal and self.journal.bank_deposit_ticket_statement
+        return self.journal and self.journal.process_method == 'cheque'
 
     @fields.depends('lines')
     def on_change_lines(self):
@@ -145,10 +145,6 @@ class Statement(export.ExportImportMixin):
 
     def get_total_statement_amount(self, name):
         return sum(l.amount for l in self.lines)
-
-    @classmethod
-    def search_in_bank_deposit_ticket(cls, name, clause):
-        return [('journal.bank_deposit_ticket_statement',) + tuple(clause[1:])]
 
     @classmethod
     def validate_manual(cls):

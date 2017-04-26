@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <group id="top" colspan="4">
+        <label name="party"/>
+        <field name="party"/>
+        <label name="journal"/>
+        <field name="journal"/>
+    </group>
+    <group id="mid" colspan="4">
+        <label name="date"/>
+        <field name="date"/>
+        <label name="amount"/>
+        <field name="amount"/>
+    </group>
+    <field name="lines" colspan="4"/>
+    <field name="available_lines" invisible="1"/>
+    <newline/>
+    <label name="auto_validate"/>
+    <field name="auto_validate"/>
+    <field name="auto_post" invisible="1"/>
+</form>
