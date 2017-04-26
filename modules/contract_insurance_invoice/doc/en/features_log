@@ -1,6 +1,6 @@
 * Take maturity date into account for automatic reconciliation order
 * Color in red voided/terminated contracts with non zero balance_today
-* Add billing suspensions for a contract
+* Add payment suspensions for a contract
 
 Version 1.10 - 2016-11-02
 * Manage payer for direct debit billing mode
