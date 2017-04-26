@@ -440,7 +440,7 @@ msgstr "Moteur de Règle"
 
 msgctxt "field:offered.option.description.premium_rule,rule_extra_data:"
 msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
+msgstr "Paramètres de règle"
 
 msgctxt "field:offered.option.description.premium_rule,write_date:"
 msgid "Write Date"

@@ -332,7 +332,7 @@ msgstr "Moteur de Règle"
 
 msgctxt "field:underwriting.rule,rule_extra_data:"
 msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
+msgstr "Paramètres de règle"
 
 msgctxt "field:underwriting.rule,write_date:"
 msgid "Write Date"

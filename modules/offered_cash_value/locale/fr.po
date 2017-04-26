@@ -40,7 +40,7 @@ msgstr "Moteur de Règle"
 
 msgctxt "field:cash_value.cash_value_rule,rule_extra_data:"
 msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
+msgstr "Paramètres de règle"
 
 msgctxt "field:cash_value.cash_value_rule,saving_account:"
 msgid "saving_account"

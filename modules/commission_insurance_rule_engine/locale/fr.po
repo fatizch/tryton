@@ -72,7 +72,7 @@ msgstr "Moteur de Règle"
 
 msgctxt "field:commission.plan.line,rule_extra_data:"
 msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
+msgstr "Paramètres de règle"
 
 msgctxt "field:commission.plan.line,use_rule_engine:"
 msgid "Use Rule Engine"
