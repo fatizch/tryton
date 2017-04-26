@@ -100,20 +100,22 @@ class ContractBillingInformation:
             company=self.contract.company,
             state=state)
 
+    def unicity_key_for_mandate(self, numbers_id):
+        return [
+            ('type', '=', 'recurrent'),
+            ('scheme', '=', 'CORE'),
+            ('account_number', 'in', numbers_id),
+            ('party', '=', self.contract.payer.id),
+            ]
+
     def init_sepa_mandate(self):
         pool = Pool()
         Mandate = pool.get('account.payment.sepa.mandate')
         if (not self.direct_debit or self.sepa_mandate or
                 not self.direct_debit_account):
             return
-        numbers_id = [number.id
-            for number in self.direct_debit_account.numbers]
-        mandates = Mandate.search([
-                ('type', '=', 'recurrent'),
-                ('scheme', '=', 'CORE'),
-                ('account_number', 'in', numbers_id),
-                ('party', '=', self.contract.payer.id),
-                ])
+        mandates = Mandate.search(self.unicity_key_for_mandate([number.id
+                    for number in self.direct_debit_account.numbers]))
         for mandate in mandates:
             self.sepa_mandate = mandate
             self.save()
