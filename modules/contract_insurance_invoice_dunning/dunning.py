@@ -8,6 +8,7 @@ from sql.aggregate import Min, Max
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields, utils
 
@@ -318,7 +319,8 @@ class Level:
             Contract._finalize_invoices(contract_invoices_to_create)
             Invoice.save(invoices_to_create)
             ContractInvoice.save(contract_invoices_to_create)
-            Invoice.post(invoices_to_create)
+            with ServerContext().set_context(default_maturity_date=True):
+                Invoice.post(invoices_to_create)
             lines_to_write = []
             for invoice in invoice_to_update:
                 lines_to_write += list(invoice.lines_to_pay)
