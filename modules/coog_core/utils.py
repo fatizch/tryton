@@ -17,6 +17,7 @@ from trytond.model import fields as tryton_fields, Check
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice, cursor_dict
+from trytond.config import config
 
 # Needed for Pyson evaluation
 from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT
@@ -33,7 +34,8 @@ class FileLocker:
     def __init__(self, path, *args, **kwargs):
         self.path = path
         self.lock_extension = kwargs.pop('lock_extension', 'lck')
-        self.lock_path = kwargs.pop('lock_directory', None)
+        temporary_folder = config.get('TMP', 'folder')
+        self.lock_path = kwargs.pop('lock_directory', temporary_folder)
         if not self.lock_path:
             self.lock_path = self.path
         else:
