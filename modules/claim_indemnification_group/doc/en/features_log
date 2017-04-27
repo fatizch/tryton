@@ -1,4 +1,5 @@
 Version 1.10 - 2016-11-02
+* Check if the beneficiary is correct (In case of rupture)
 * Transfer claim services between contracts
 * Filter complementary data on delivered service according to selected rules
 

@@ -1,5 +1,6 @@
 * Ajout du paramètre de batch "output_folder"
 * Ajout de la chaine de batch
+* Ajout du batch générique d'extraction des agrégats comptables
 
 Version 1.10 - 2016-11-02
 

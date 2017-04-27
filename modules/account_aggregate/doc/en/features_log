@@ -1,5 +1,6 @@
 * Add "output_folder" batch parameter
 * Add chain batches
+* Add batch to generate a generic flux of account moves aggregates
 
 Version 1.10 - 2016-11-02
 
