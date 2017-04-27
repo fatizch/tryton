@@ -56,7 +56,7 @@ class Dunning:
                 where=main_dunnings.max_seq == main_dunnings.sequence,
                 group_by=main_dunnings.contract))
 
-        per_contract = {}
+        per_contract = defaultdict(int)
         for dunning, contract in cursor.fetchall():
             per_contract[contract] = dunning
 
