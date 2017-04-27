@@ -84,6 +84,20 @@ class PaymentCreation:
     start_process_wizard = StateAction(
         'account_payment_cog.act_process_payments_button')
 
+    @classmethod
+    def __setup__(cls):
+        super(PaymentCreation, cls).__setup__()
+        cls._error_messages.update({
+                'email_required': 'The email is required on the party %(party)s',
+                })
+
+    def transition_create_payments(self):
+        if (self.start.process_method == 'paybox'
+                and not self.start.party.email):
+            self.raise_user_error('email_required', 
+                {'party': self.start.party.rec_name})
+        return super(PaymentCreation, self).transition_create_payments()
+
     def action_paybox(self):
         return 'start_process_wizard'
 

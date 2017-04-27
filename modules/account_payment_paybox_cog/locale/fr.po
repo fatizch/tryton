@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.payment.creation:"
+msgid "The email is required on the party %(party)s"
+msgstr "L'email est requis pour le tiers %(party)s"
+
 msgctxt "field:account.payment.payment_creation.start,payment_url:"
 msgid "Payment URL"
 msgstr "URL de paiement"
