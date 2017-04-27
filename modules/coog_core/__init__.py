@@ -117,6 +117,7 @@ def register():
         module='coog_core', type_='wizard')
 
     Pool.register_post_init_hooks(cache_fields_get, module='ir')
+    Pool.register_post_init_hooks(event_process_buttons, module='process')
 
 
 def cache_fields_get(pool, update):
@@ -141,3 +142,43 @@ def cache_fields_get(pool, update):
         return res
 
     Model.fields_get = patched_fields_get
+
+
+def event_process_buttons(pool, update):
+    # We allow process classes to handle dynamic buttons to trigger events.
+    # The pattern _button_event_<event_code> is used for detection
+    Module = pool.get('ir.module')
+    process = Module.search([('name', '=', 'process'),
+            ('state', '=', 'activated')])
+    if not process:
+        return
+
+    from trytond.modules.process.process_framework import ProcessFramework
+    if hasattr(ProcessFramework, '__event_button_patched'):
+        return
+
+    logging.getLogger('modules').info('Adding event button on processes')
+    orig_button_method = ProcessFramework._default_button_method.__func__
+    orig_button_states = ProcessFramework.calculate_button_states.__func__
+
+    def get_event_method(code):
+        def event_method(instances):
+            pool.get('event').notify_events(instances, code)
+        return event_method
+
+    @classmethod
+    def patched_method(cls, button_name):
+        data = button_name.split('_')
+        if data[0] != 'event':
+            return orig_button_method(cls, button_name)
+        return get_event_method('_'.join(data[1:]))
+
+    @classmethod
+    def patched_states(cls, button_data):
+        if button_data[0] != 'event':
+            return orig_button_states(cls, button_data)
+        return {}
+
+    ProcessFramework._default_button_method = patched_method
+    ProcessFramework.calculate_button_states = patched_states
+    ProcessFramework.__event_button_patched = True
