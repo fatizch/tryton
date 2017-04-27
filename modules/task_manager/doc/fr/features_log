@@ -1,3 +1,4 @@
+* Ajout d'un champ présentant les équipes sur les tâches
 * Possibilité via configuration d'autoriser la reprise de tâche d'un autre utilisateur
 * Utilisation du gris clair pour les tâches non autorisées de l'utilisateur courant
 
