@@ -1,6 +1,6 @@
 * Possibilité de formatter le fichier d'export json
-* Les actions par type d'événement activés et désactivés sont distingués par des onglets
-* Les actions par type d'événement peuvent être activé/désactivé
+* Les actions par type d'événement activées et désactivées sont distinguées par des onglets
+* Les actions par type d'événement peuvent être activées/désactivées
 * Outil de benchmarking déplacé dans un module indépendant
 * Mixin de détails configurable
 

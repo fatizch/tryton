@@ -1,2 +1,3 @@
-* support cc and bcc
+* Support internal ged storing for generated template attachments
+* Support mail carbon copy and blind carbon copy
 * Module creation
