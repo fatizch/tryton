@@ -166,7 +166,7 @@ class ChangePartyAddress(EndorsementWizardStepMixin):
                     })
 
                 defaults['displayers'].append(displayer)
-                defaults['party_id'] =\
+                defaults['party_id'] = \
                     self.wizard.endorsement.party_endorsements[0].party.id
         return defaults
 
@@ -642,7 +642,7 @@ class SelectEndorsement(model.CoogView):
                 [])]
         cls.contract.depends += ['party']
 
-    @fields.depends('parties', 'party')
+    @fields.depends('party', 'possible_parties')
     def on_change_contract(self):
         super(SelectEndorsement, self).on_change_contract()
         self.possible_parties = self.contract.parties if self.contract else []
@@ -655,6 +655,10 @@ class SelectEndorsement(model.CoogView):
             self.applicant = self.party
         if not self.contract:
             self.contract = utils.auto_complete_with_domain(self, 'contract')
+
+    @fields.depends('party', 'possible_parties')
+    def on_change_effective_date(self):
+        super(SelectEndorsement, self).on_change_effective_date()
 
     def _get_new_endorsement(self):
         endorsement = super(SelectEndorsement, self)._get_new_endorsement()
