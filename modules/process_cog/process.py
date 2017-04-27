@@ -557,9 +557,10 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
             visible = False
         if visible:
             return
-        self.current_log.end_time = datetime.datetime.now()
-        self.current_log.to_state = self.current_state
-        self.current_log.save()
+        if self.current_log:
+            self.current_log.end_time = datetime.datetime.now()
+            self.current_log.to_state = self.current_state
+            self.current_log.save()
 
     @classmethod
     def notify_events(cls, objects, event_code, description=None, **kwargs):
