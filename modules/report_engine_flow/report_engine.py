@@ -403,9 +403,13 @@ class ReportCreate:
         ext, filedata, prnt, file_basename = ReportModel.execute(ids,
             report_context, immediate_conversion=False)
         filename = '%s.%s' % (file_basename, ext)
-        filename = os.path.join(doc_template.get_export_dirname(),
-            filename)
-        created_file = self.create_flow_file(filename, filedata)
+        records = ReportModel._get_records(ids, report_context['model'],
+            report_context)
+        report_context = ReportModel.get_context(records, report_context)
+        with ServerContext().set_context(genshi_context=report_context):
+            filename = os.path.join(doc_template.get_export_dirname(),
+                filename)
+            created_file = self.create_flow_file(filename, filedata)
         return {
             'generated_report': created_file,
             'server_filepath': created_file,
