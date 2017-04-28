@@ -1,4 +1,4 @@
-Ce module permet de gérer la spécificité française des banques.
+This modules allows to manage french banks.
 
-- Gestion des agences avec le code banque et le code guichet
-- Jeu d'essai des codes banque et code guichet
+- Manage agencies with bank codes and branch codes
+- Test cases for bank codes and branch codes

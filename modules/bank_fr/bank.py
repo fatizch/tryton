@@ -18,7 +18,8 @@ __all__ = [
 class Bank:
     __name__ = 'bank'
 
-    agencies = fields.One2Many('bank.agency', 'bank', 'Agencies')
+    agencies = fields.One2Many('bank.agency', 'bank', 'Agencies',
+        delete_missing=True)
 
     @classmethod
     def search_rec_name(cls, name, clause):
@@ -33,7 +34,8 @@ class Agency(model.CoogSQL, model.CoogView):
     'Agency'
     __name__ = 'bank.agency'
 
-    bank = fields.Many2One('bank', 'Bank', required=True, ondelete='CASCADE')
+    bank = fields.Many2One('bank', 'Bank', required=True, ondelete='CASCADE',
+        select=True)
     name = fields.Char('Name')
     bank_code = fields.Char('Bank Code', size=5)
     branch_code = fields.Char('Branch Code', size=5)
