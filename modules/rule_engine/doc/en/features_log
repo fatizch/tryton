@@ -1,6 +1,7 @@
 * Add the "Tool" rule engine type
 * Add randomization functions in rule engine
 * Add rule engine business data to calculate the date index for a table
+* Show rule algorithm in debug logs
 
 Version 1.10 - 2016-11-02
 

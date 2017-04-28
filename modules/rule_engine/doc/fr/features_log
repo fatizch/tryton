@@ -1,6 +1,7 @@
 * Ajout du type de règle "Outillage"
 * Ajout de fonctions de génération aléatoires dans le moteur de règles
 * Ajout d'une donnée métier pour calculer l'indice d'une table pour une période
+* Affichage de l'algorithme de la règle dans les vues de débogage
 
 Version 1.10 - 2016-11-02
 
