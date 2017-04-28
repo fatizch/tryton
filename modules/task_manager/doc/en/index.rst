@@ -1,16 +1,16 @@
 .. transversal
 
-Transverse - Gestion des tâches
-===============================
+Transversal - Task Manager
+==========================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

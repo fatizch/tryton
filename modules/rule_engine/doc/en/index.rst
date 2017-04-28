@@ -1,20 +1,20 @@
-.. transversal
+.. MAIN TOPIC
 
-Transverse - Moteur de règles
+MAIN TOPIC - Rule engine
 =============================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 
-Aide utilisateur
-----------------
+User help
+---------
 
 .. toctree::
    :maxdepth: 2

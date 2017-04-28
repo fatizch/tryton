@@ -1,23 +1,19 @@
-Le moteur de règle permet de définir des règles métiers complexes directement
-dans le paramétrage. Ces règles vont de points simples (définition de l'âge
-maximum d'éligibilité sur une garantie) aux règles de tarifications les plus
-évoluées. Il inclut des fonctionnalités avancées de tests, ainsi que des outils
-permettant de comprendre le comportement précis des règles les plus
-travaillées :
+Rule engine allows creating complex business rules in the setting. These rules
+can be simple or complex. It includes advanced testing features, and tools which
+allow to understand the rule's behaviour :
 
-- Création de règles métier via paramétrage
+- Business rules creation in the setting
 
-- Possibilité de réutiliser des règles dans d'autres règles
+- Possibility to use rules in other rules
 
-- Utilisation de tables pour stocker les données de calcul
+- Use tables to store computation data
 
-- Paramétrage de règles : Possibilité de réutiliser une règle avec des éléments
-  de configuration différents
+- Rules setting: possibility to use a rule with different configuration elements
 
-- Aide à la création / maintenance des règles :
+- Help creating / maintaining rules:
 
-  * Saisie de jeux d'essai de non-régression
+    * Creating non regression test cases
 
-  * Mode debug pour comprendre en détail le déroulement des calculs
+    * Debug mode to understand the computation steps
 
-- Règles pré-paramétrées
+- Pre-parametered rules

@@ -1,4 +1,3 @@
-Ce module permet de créer et d'utiliser des tables de paramétrage. Ces tables
-peuvent avoir un nombre arbitraire de dimensions, et supportent plusieurs
-types de données en entrée (date, valeur, entier, plages de dates /
-valeurs...).
+This module allows creating and using settings tables. These tables have an
+arbitrary number of dimensions, and support many entry data types (date,
+value, integer, date / value ranges...)

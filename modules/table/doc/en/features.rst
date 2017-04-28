@@ -1,34 +1,31 @@
-La saisie des tables se fait en général via un import depuis un fichier csv,
-ou bien par copier / coller. Pour les tables à plusieurs dimensions, il
-est possible d'afficher les données sous forme d'un tableau à deux
-dimensions, en fixant les valeurs des autres dimensions.
+Tables' creation is generally done through an import from a csv file, or a
+  copy / paste. For multi dimensional tables, it is possible to display data as
+  a two dimensional table by fixating other dimensions values.
 
+- **Tables creation :** Creating a table is done through two steps:
 
-- **Création de tables :** La création d'une table se fait en deux parties :
+  - Entry of data defining the table (data type, dimensions number, possible
+    values for each dimension...)
 
-  - Saisie des données définissant la table (type de donnée, nombre de
-    dimensions, valeurs possibles pour chaque dimension...)
+  - Entry of the table's content. This can be achieved through:
 
-  - Saisie du contenu de la table. Cette saisie peut se faire :
+    - Import / export of *Coog* setting
 
-    - Via import / export de paramétrage **Coog**
+    - Import of a formatted csv file
 
-    - Via import de fichier csv spécialement formaté
+    - Copy paste of data
 
-    - Via copier-coller des données
+    - Manually, cell by cell (only on small size tables)
 
-    - Manuellement, cellule par cellule (à limiter aux tables de petite taille)
+- ** Tables display :** A multi dimensional table's content can be hard to
+  visualize. ``table`` module allows to display this content in two ways:
 
-- **Visualisation de tables :** Le contenu d'une table à plusieurs dimensions
-  (plus de 2) peut être difficile à visualiser. Le module ``table`` permet de
-  visualiser ces données de deux façons :
+    - Simple list:  each line of the list contains each dimension's value,
+    and the resulting value.
 
-  - Liste simple : chaque ligne de cette liste contient la valeur de chaque
-    dimension, ainsi que la valeur résultante.
+    - 2D table: classic table display. This view is useful for 2 dimensions
+    tables, and can be used in N dimensions tables by fixating the values of
+    N - 2 dimensions.
 
-  - Tableau 2D : Affichage sour forme de tableau classique. Cette vue est utile
-    pour les tables à 2 dimensions, et peut également être utilisée pour des
-    tables à N dimensions en figeant les valeurs de N - 2 dimensions.
-
-- **Index :** Un index étant une table à une dimension, ce module permet de
-  les gérer correctement.
+- **Index :** An index being a one dimension table, this module allows to handle
+  them properly.

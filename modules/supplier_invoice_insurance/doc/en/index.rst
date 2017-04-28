@@ -1,15 +1,15 @@
 .. accounting
 
-Comptabilité - Factures assureur
+Accounting- Insurer invoices
 ================================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

@@ -1,3 +1,2 @@
-- **Gestion des factures assureur** : Ajoute la possibilité de créer des
-  factures destinées à l'assureur dans le cas par exemple de la délégation des
-  remboursements d'honoraires médicaux.
+- **Handle insurer invoices :** Allow creating insurer destinated invoices for
+  instance in the case of delegating refund of medical honoraries.

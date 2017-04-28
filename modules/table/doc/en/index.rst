@@ -1,20 +1,20 @@
 .. transversal
 
-Transverse - Tables à N dimensions
+Transversal - N dimensions tables
 ==================================
 
-Résumé
-------
+Sumamry
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 
-Aide utilisateur
-----------------
+User help
+---------
 
 .. toctree::
    :maxdepth: 2

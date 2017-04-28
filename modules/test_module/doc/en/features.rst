@@ -1,2 +1,2 @@
-- **Test global des modules :** Lancer les tests sur ce module permet de
-  vérifier qu'il n'y a pas d'incompatibilité entre l'ensemble des modules.
+- **Global modules testing :** Launch tests on this module allows to check that
+there is no inconsistency between all modules.

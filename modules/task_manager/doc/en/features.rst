@@ -1,4 +1,4 @@
-- **Gestion des équipes de gestion**
-- **Définition des priorités d'affectation des tâches**
-- **Affectation automatisée de la tâche la plus prioritaire**
-- **Tableau de bord de gestion des activités des équipes**
+- **Handle management teams**
+- **Define tasks assignment priority**
+- **Automatic assignment of the highest priority task**
+- **Team activities management dashboard**

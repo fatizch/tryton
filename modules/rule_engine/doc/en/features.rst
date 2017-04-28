@@ -1,45 +1,38 @@
-- **Moteur de règle :** Permet de créer des règles via un macro-language
-  simplifié. Lors de l'exécution de la règle, les symboles utilisés seront
-  remplacés par les données métier correspondantes.
+- **Rule engine :** Allows creating rules using a simplified macro language.
+  When executing the rule, used symbols are replaced by corresponding business
+  data.
 
-- **Règles récursives :** Il est possible depuis une règle d'appeler une autre
-  règle. Cela permet de mutualiser au maximum le paramétrage entre les
-  différentes lignes métier, ou des différentes garanties.
+- **Recursive rules :** It is possible to call a rule from another rule.
+  This allows maximum mutualisation of the setting between different business
+  lines, or different options.
 
-- **Utilisation de tables :** Les tables sont un moyen concis de créer du
-  paramétrage. Il est possible depuis une règle de rechercher le résultat d'une
-  table à partir de paramètres arbitraires, et de manipuler / utiliser la
-  valeur résultante dans l'algorithme de la règle.
+- **Tables use :** Tables are a concise way of creating settings. From a rule,
+  it is possible to look for a table's result using arbitrary parameters, and
+  to manipulate / use the resulting value in the rule's algorithm.
 
-- **Paramètres de règles :** Certaines règles sont très souvent utilisées.
-  Typiquement, une règle d'éligibilité basée sur l'âge de l'assuré en
-  prévoyance ou en santé. Il est possible de définir un paramètre sur la règle
-  (ex : l'âge maximum), qui sera demandé à chaque fois que la règle sera
-  paramétrée sur une garantie.
+- **Rule parameters :** Some rules are often used. Typically, the eligibility
+  rule is based on the insured person's age in health and life claims. It is
+  possible to define a parameter for the rule (for example: maximum allowed
+  age), which will be asked for each time the rule is parametered on a coverage.
 
-- **Jeux d'essai :** Les algorithmes complexes (la tarification par exemple)
-  sont difficiles à mettre à jour. Il est facile de faire une erreur
-  d'inattention qui fausserait les résultats. Il est donc possible de créer
-  des jeux d'essais sur une règle, lesquels permettent de stocker une
-  configuration d'entrée, ainsi que le résultat attendu. Suite à une
-  modification, il suffit d'exécuter ces jeux d'essai pour s'assurer que les
-  résultats sont ceux attendus.
 
-- **Mode debug :** Afin de comprendre ce qui se passe lors de l'exécution des
-  règles, un mode debug permet au paramétreur de visualiser les différentes
-  exécutions de la règle, avec tous les paramètres associés. Il est également
-  possible de générer des jeux d'essai à partir de ces exécutions.
-  Concrètement, cela permet au paramétreur :
+- ** Test cases :** Complex algorithms are difficult to update. Making an
+  attention mistake is possible. Therefore, it is possible to create test cases
+  on a rule. They allow to store an entry configuration, and the expected
+  result. After a change, test cases are executed to make sure results are the
+  ones expected.
 
-  - D'exécuter des cas réels (nouvelle souscription)
+- **Debug mode :** Debug mode allows to picture different steps of the rule's
+  execution, with all its associated parameters. It is possible to generate
+  test cases from these steps. It allows to:
 
-  - De comprendre pourquoi le résultat ne correspond pas à celui attendu
-    (typo dans l'algorithme)
+  - Execute real cases
 
-  - De corriger, puis de retester
+  - Understand why the obtained result does not match the expected one
 
-  - Une fois le résultat correct, de générer des jeux d'essais, afin de
-    s'assurer des non-régressions ultérieures.
+  - Correct and retest
 
-- **Règles pré-paramétrées :** Les règles les plus courantes peuvent être
-  fournies par défaut dans *Coog*.
+  - Once the result is correct, generate test cases
+
+- **Pre-parametered rules :** Most used rules can be provided by default
+  in *Coog*
