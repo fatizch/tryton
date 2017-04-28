@@ -1,7 +1,7 @@
-.. claim_group_life_fr
+.. claim
 
-Prévoyance - Gestion des hopistalisations
-=============================
+Sinistres - Gestion des hopistalisations
+=========================================
 
 Résumé
 ------

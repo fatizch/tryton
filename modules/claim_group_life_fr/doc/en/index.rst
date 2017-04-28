@@ -1,15 +1,15 @@
-.. claim_group_life_fr
+.. claim
 
-Prévoyance - Gestion des hopistalisations
-=============================
+Claim - Hospitalisation management
+==================================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 
