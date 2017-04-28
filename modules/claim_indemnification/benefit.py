@@ -108,6 +108,11 @@ class BenefitRule(
     @classmethod
     def __setup__(cls):
         super(BenefitRule, cls).__setup__()
+        cls._error_messages.update({
+                'msg_beneficiary_share': 'Share for current beneficiary : '
+                '%(share)s %%',
+                'msg_final_result': 'Total after share : %(amount).2f',
+                })
         cls.indemnification_rule.domain = [('type_', '=', 'benefit')]
         cls.deductible_rule.domain = [('type_', '=', 'benefit_deductible')]
         cls.revaluation_rule.domain = [('type_', '=', 'revaluation_rule')]
@@ -251,7 +256,21 @@ class BenefitRule(
         return res
 
     def do_calculate_indemnification_rule(self, args):
-        return self.calculate_indemnification_rule(args)
+        result = self.calculate_indemnification_rule(args)
+        if args['indemnification'].share == 1:
+            return result
+        for elem in result:
+            for key in ('amount', 'base_amount', 'amount_per_unit'):
+                elem[key] = (args['indemnification'].share *
+                    elem.get(key, 0)).quantize(elem.get(key, 0))
+            elem['description'] += '\n\n' + self.raise_user_error(
+                'msg_beneficiary_share', {
+                    'share': args['indemnification'].share * 100},
+                raise_exception=False)
+            elem['description'] += '\n\n' + self.raise_user_error(
+                'msg_final_result', {'amount': elem.get('amount')},
+                raise_exception=False)
+        return result
 
     def do_calculate_deductible_rule(self, args):
         return self.calculate_deductible_rule(args)

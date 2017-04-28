@@ -6,16 +6,20 @@ this repository contains the full copyright notices and license terms. -->
     <field name="start_date"/>
     <label name="end_date"/>
     <field name="end_date"/>
+    <label name="indemnification_date"/>
+    <field name="indemnification_date"/>
     <field name="extra_data" colspan="4" no_command="1"/>
     <newline/>
     <label name="beneficiary"/>
     <field name="beneficiary"/>
-    <label name="journal"/>
-    <field name="journal"/>
     <label name="product"/>
     <field name="product" widget="selection"/>
+    <label name="journal"/>
+    <field name="journal"/>
     <field name="service" invisible="1"/>
     <field name="possible_products" invisible="1"/>
     <field name="is_period" invisible="1"/>
+    <field name="possible_beneficiaries" invisible="1"/>
+    <field name="beneficiary_share" invisible="1"/>
     <newline/>
 </form>

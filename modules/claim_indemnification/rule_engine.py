@@ -57,6 +57,12 @@ class RuleEngineRuntime:
             return args['indemnification'].end_date
 
     @classmethod
+    @check_args('indemnification')
+    def _re_indemnification_share(cls, args):
+        share = args['indemnification'].share
+        return share if share is not None else 1
+
+    @classmethod
     @check_args('benefit', 'option', 'loss')
     def _re_number_of_deductible_days(cls, args, from_date, to_date):
         pool = Pool()
@@ -186,3 +192,10 @@ class RuleEngineRuntime:
     def _re_annuity_periods(cls, args, start_date, end_date):
         return args['service'].calculate_annuity_periods(start_date,
             end_date)
+
+    @classmethod
+    @check_args('indemnification', 'service')
+    def _re_beneficiary_documents_reception_date(cls, args):
+        beneficiary, = [x for x in args['service'].beneficiaries
+            if x.party == args['indemnification'].beneficiary]
+        return beneficiary.documents_reception_date

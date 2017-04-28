@@ -3,6 +3,17 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- ########### -->
+        <!-- # Benefit # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="benefit_view_form">
+            <field name="model">benefit</field>
+            <field name="inherit" ref="claim.benefit_view_form"/>
+            <field name="name">benefit_form</field>
+        </record>
+        <!-- #################### -->
+        <!-- # Loss Description # -->
+        <!-- #################### -->
         <record model="ir.ui.view" id="loss_desc_view_form">
             <field name="model">benefit.loss.description</field>
             <field name="inherit" ref="claim.loss_desc_view_form"/>

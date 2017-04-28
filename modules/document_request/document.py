@@ -60,7 +60,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     matching_attachments = fields.Function(
         fields.Many2Many('ir.attachment', None, None, 'Matching Attachments'),
         'get_matching_attachments')
-    blocking = fields.Boolean('Blocking', readonly=True)
+    blocking = fields.Boolean('Blocking', states={'readonly': True})
     last_reminder_date = fields.Date('Last Reminder Date',
         states={'invisible': True})
     reminders_sent = fields.Integer('Reminders Sent')

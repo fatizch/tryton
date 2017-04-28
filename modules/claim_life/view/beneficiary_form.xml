@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form col="2">
+    <label name="service"/>
+    <field name="service"/>
+    <newline/>
+    <label name="party"/>
+    <group name="party" string="">
+        <field name="party"/>
+        <button string="Identify" name="identify"/>
+    </group>
+    <label name="share"/>
+    <group name="share" string="">
+        <field name="share" xexpand="0" factor="100"/>
+        <label string="%" name="share" xexpand="0" xalign="0"/>
+    </group>
+    <label name="documents_reception_date"/>
+    <field name="documents_reception_date"/>
+    <separator name="description" colspan="2"/>
+    <field name="description" colspan="2"/>
+    <separator name="document_request_lines" colspan="2"/>
+    <field name="document_request_lines" colspan="2"/>
+    <field name="identified" invisible="1"/>
+</form>

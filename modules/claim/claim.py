@@ -855,6 +855,13 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
         res.update(self.benefit.get_all_extra_data(at_date))
         return res
 
+    def get_beneficiaries_data(self, at_date):
+        # Returns a list of beneficiaries with their associated share
+        if self.benefit.beneficiary_kind == 'other':
+            return []
+        if self.benefit.beneficiary_kind == 'subscriber':
+            return [(self.option.parent_contract.subscriber, 1)]
+
 
 class ClaimSubStatus(model.CoogSQL, model.CoogView):
     'Claim Close Reason'

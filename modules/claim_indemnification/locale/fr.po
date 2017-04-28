@@ -6,6 +6,10 @@ msgctxt "model:claim.configuration,name:"
 msgid "Claim Configuration"
 msgstr "Configuration"
 
+msgctxt "error:benefit.rule:"
+msgid "Total after share : %(amount).2f"
+msgstr "Montant total après répartition : %(amount).2f"
+
 msgctxt "error:claim.create_indemnification:"
 msgid "End date is required"
 msgstr "La date de fin est requise"
@@ -110,6 +114,13 @@ msgctxt "error:claim.loss:"
 msgid "The end date is missing on the loss"
 msgstr "La date de fin est manquante sur l'événement"
 
+msgctxt "error:claim.loss:"
+msgid ""
+"Total share amount for service %(service)s should be 100: %(total_share).2f"
+msgstr ""
+"La somme des répartition pour la prestation %(service)s devrait être 100%% :"
+" %(total_share).2f %%"
+
 msgctxt "error:claim.service:"
 msgid "Are you sure you want to cancel the periods between %s and %s?"
 msgstr ""
@@ -191,10 +202,6 @@ msgstr "Calcul automatique des périodes"
 msgctxt "field:benefit,benefit_rules:"
 msgid "Benefit Rules"
 msgstr "Règles de Prestation"
-
-msgctxt "field:benefit,indemnification_note:"
-msgid "Note"
-msgstr "Note"
 
 msgctxt "field:benefit,indemnification_kind:"
 msgid "Indemnification Kind"
@@ -492,6 +499,10 @@ msgctxt "field:claim.indemnification,service:"
 msgid "Claim Service"
 msgstr "Prestation fournie"
 
+msgctxt "field:claim.indemnification,share:"
+msgid "Share"
+msgstr "Part du bénéficiaire"
+
 msgctxt "field:claim.indemnification,start_date:"
 msgid "Start Date"
 msgstr "Date de début"
@@ -538,7 +549,7 @@ msgstr "Prestation"
 
 msgctxt "field:claim.indemnification.assistant.control.element,claim:"
 msgid "Claim"
-msgstr "Sinistre"
+msgstr "Dossier de prestations"
 
 msgctxt "field:claim.indemnification.assistant.control.element,contract:"
 msgid "Contract"
@@ -602,7 +613,7 @@ msgstr "Prestation"
 
 msgctxt "field:claim.indemnification.assistant.validate.element,claim:"
 msgid "Claim"
-msgstr "Sinistre"
+msgstr "Dossier de prestations"
 
 msgctxt "field:claim.indemnification.assistant.validate.element,contract:"
 msgid "Contract"
@@ -796,6 +807,11 @@ msgctxt "field:claim.indemnification.detail,indemnification_kind:"
 msgid "Indemnification Kind"
 msgstr "Type d'indemnisation"
 
+#, fuzzy
+msgctxt "field:claim.indemnification.detail,indemnification_note:"
+msgid "Note"
+msgstr "Note"
+
 msgctxt "field:claim.indemnification.detail,kind:"
 msgid "Kind"
 msgstr "Type de donnée"
@@ -842,7 +858,11 @@ msgstr "Prestations"
 
 msgctxt "field:claim.indemnification_definition,beneficiary:"
 msgid "Beneficiary"
-msgstr "Bénéficiaire"
+msgstr "Destinataire du paiement"
+
+msgctxt "field:claim.indemnification_definition,beneficiary_share:"
+msgid "Beneficiary Share"
+msgstr "Part du bénéficiaire"
 
 msgctxt "field:claim.indemnification_definition,end_date:"
 msgid "End Date"
@@ -859,6 +879,10 @@ msgstr "ID"
 msgctxt "field:claim.indemnification_definition,is_period:"
 msgid "Is Period"
 msgstr "Est périodique"
+
+msgctxt "field:claim.indemnification_definition,possible_beneficiaries:"
+msgid "Possible Beneficiaries"
+msgstr "Bénéficiaires possibles"
 
 msgctxt "field:claim.indemnification_definition,possible_products:"
 msgid "Possible Products"

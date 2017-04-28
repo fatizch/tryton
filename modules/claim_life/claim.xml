@@ -12,14 +12,27 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">claim.loss</field>
             <field name="inherit" ref="claim.loss_without_service_view_form"/>
             <field name="name">loss_without_service_form</field>
-	</record>
-        <!--################################################################ -->
-        <!-- Claim Service -->
-        <!--################################################################ -->
+        </record>
+        <!-- ################# -->
+        <!-- # Claim Service # -->
+        <!-- ################# -->
         <record model="ir.ui.view" id="claim_service_view_form">
             <field name="model">claim.service</field>
             <field name="inherit" ref="claim.claim_service_view_form"/>
             <field name="name">service_form</field>
+        </record>
+        <!-- ##################### -->
+        <!-- # Claim Beneficiary # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="beneficiary_view_form">
+            <field name="model">claim.beneficiary</field>
+            <field name="type">form</field>
+            <field name="name">beneficiary_form</field>
+        </record>
+        <record model="ir.ui.view" id="beneficiary_view_list">
+            <field name="model">claim.beneficiary</field>
+            <field name="type">tree</field>
+            <field name="name">beneficiary_list</field>
         </record>
     </data>
 </tryton>

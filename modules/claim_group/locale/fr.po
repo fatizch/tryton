@@ -48,6 +48,10 @@ msgctxt "model:ir.ui.menu,name:menu_benefit_collective"
 msgid "Collective Benefits"
 msgstr "Prestations collectives"
 
+msgctxt "selection:benefit,beneficiary_kind:"
+msgid "Subscriber then Covered"
+msgstr "Le souscripteur puis l'assuré"
+
 msgctxt "selection:contract,post_termination_claim_behaviour:"
 msgid ""
 msgstr " "

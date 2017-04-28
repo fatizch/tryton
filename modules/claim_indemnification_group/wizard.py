@@ -33,6 +33,7 @@ class IndemnificationDefinition:
 
     @fields.depends('beneficiary', 'possible_products', 'product', 'service')
     def on_change_beneficiary(self):
+        super(IndemnificationDefinition, self).on_change_beneficiary()
         self.update_product()
 
     def get_possible_products(self, name):
@@ -79,7 +80,7 @@ class CreateIndemnification:
                             'indemn_start': defaults['start_date'],
                             'contract_end': contract_end})
         # beneficiary become the employee once he leave the company
-        if (service.contract.is_group and
+        if (service.contract.is_group and not service.manual_beneficiaries and
                 not Party(defaults['beneficiary']).is_person):
             if (service.theoretical_covered_element and
                     service.theoretical_covered_element.contract_exit_date and

@@ -1,3 +1,4 @@
+* Manage manual beneficiary list
 * Set end date to return_to_work_date - 1 when return_to_work_date is set
 * Auto set initial short term disability date when converting to long term
 * Verify delay between first std and relapse

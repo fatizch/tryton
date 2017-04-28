@@ -1,16 +1,24 @@
 # -*- coding:utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
 from decimal import Decimal
+
+from sql import Literal
+from sql.aggregate import Max
+from sql.conditionals import Coalesce
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool, In, And, Or, Equal
-from trytond.modules.coog_core import fields, coog_string
+from trytond.transaction import Transaction
+from trytond.modules.coog_core import fields, model, coog_string
+from trytond.modules.report_engine import Printable
 
 from datetime import timedelta
 
 __all__ = [
     'Claim',
+    'ClaimBeneficiary',
     'Loss',
     'ClaimService',
     'ClaimServiceExtraDataRevision',
@@ -21,6 +29,29 @@ __all__ = [
 class Claim:
     __metaclass__ = PoolMeta
     __name__ = 'claim'
+
+    beneficiaries = fields.Function(
+        fields.Many2Many('claim.beneficiary', None, None, 'Beneficiaries',
+            help='The beneficiaries for the different services for which '
+            'they must be set manually',
+            domain=[('service', 'in', Eval('services_with_beneficiaries'))],
+            states={'invisible': ~Eval('services_with_beneficiaries')},
+            depends=['services_with_beneficiaries']),
+        'getter_beneficiaries', 'setter_void')
+    services_with_beneficiaries = fields.Function(
+        fields.Many2Many('claim.service', None, None,
+            'Services with beneficiaries'),
+        'getter_services_with_beneficiaries')
+
+    def getter_beneficiaries(self, name):
+        return [beneficiary.id for loss in self.losses
+            for service in loss.services
+            for beneficiary in service.beneficiaries]
+
+    def getter_services_with_beneficiaries(self, name):
+        return [service.id for loss in self.losses
+            for service in loss.services
+            if service.benefit.beneficiary_kind == 'manual_list']
 
     def add_new_relapse(self, loss_desc_code):
         event_desc = None
@@ -270,6 +301,14 @@ class ClaimService:
     __metaclass__ = PoolMeta
     __name__ = 'claim.service'
 
+    beneficiaries = fields.One2Many('claim.beneficiary', 'service',
+        'Beneficiaries', states={'invisible': ~Eval('manual_beneficiaries'),
+            'readonly': ~Eval('manual_beneficiaries')}, delete_missing=True,
+        depends=['manual_beneficiaries'])
+    manual_beneficiaries = fields.Function(
+        fields.Boolean('Has Beneficiaries'),
+        'get_manual_beneficiaries')
+
     def get_covered_person(self):
         return self.loss.get_covered_person()
 
@@ -297,6 +336,160 @@ class ClaimService:
             if person and self.option.covered_element.party == person:
                 return self.option.covered_element.id
         return super(ClaimService, self).get_theoretical_covered_element(name)
+
+    def init_from_option(self, option):
+        super(ClaimService, self).init_from_option(option)
+        self.beneficiaries = self.init_beneficiaries()
+
+    def init_beneficiaries(self):
+        return []
+
+    def get_manual_beneficiaries(self, name):
+        return self.benefit.beneficiary_kind == 'manual_list'
+
+    def get_beneficiaries_data(self, at_date):
+        if self.benefit.beneficiary_kind == 'manual_list':
+            return [(x.party, x.share) for x in self.beneficiaries
+                if x.identified]
+        return super(ClaimService, self).get_beneficiaries_data(at_date)
+
+
+class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
+    'Claim Beneficiary'
+
+    __name__ = 'claim.beneficiary'
+
+    service = fields.Many2One('claim.service', 'Service', ondelete='CASCADE',
+        required=True, select=True, states={'readonly': ~Eval('id')},
+        depends=['id'])
+    identified = fields.Boolean('Identified Party',
+        help='The beneficiary has properly been identified')
+    party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT',
+        help='The identified party that will receive part of (or all of) the '
+        'calculated indemnification',
+        domain=[('is_person', '=', True)],
+        states={'required': Bool(Eval('identified', False)),
+            'readonly': Bool(Eval('identified', False))},
+        depends=['identified'])
+    share = fields.Numeric('Share', domain=['OR', [('share', '=', None)],
+            [('share', '>', 0), ('share', '<=', 1)]],
+        help='The percentage of the calculated indemnification that will be '
+        'paid to this beneficiary',
+        states={'readonly': Bool(Eval('identified', False))},
+        depends=['identified'])
+    description = fields.Text('Description',
+        help='In case the party is not properly identified, this field should '
+        'be used to write down identifying informations',
+        states={'required': ~Eval('party'),
+            'invisible': Bool(Eval('identified', False))},
+        depends=['identified', 'party'])
+    document_request_lines = fields.One2Many('document.request.line',
+        'for_object', 'Documents', delete_missing=True,
+        help='The list of documents that will be required from the '
+        'beneficiary before indemnifications can be made',
+        states={'invisible': ~Eval('identified')}, depends=['identified'])
+    documents_reception_date = fields.Function(
+        fields.Date('Documents Reception Date',
+            help='Reception date of the last document, empty if all documents '
+            'are not received yet',
+            states={'invisible': ~Eval('identified')}, depends=['identified']),
+        'getter_documents_reception_date')
+
+    @classmethod
+    def __setup__(cls):
+        super(ClaimBeneficiary, cls).__setup__()
+        cls._buttons.update({
+                'identify': {
+                    'readonly': ~Eval('party'),
+                    'invisible': Bool(Eval('identified', False)),
+                    },
+                'generic_send_letter': {
+                    'readonly': ~Eval('identified'),
+                    'invisible': Bool(Eval('documents_reception_date')),
+                    },
+                })
+
+    @classmethod
+    def delete(cls, beneficiaries):
+        if beneficiaries:
+            RequestLine = Pool().get('document.request.line')
+            to_delete = RequestLine.search([
+                    ('for_object', 'in', [str(x) for x in beneficiaries])])
+            if to_delete:
+                RequestLine.delete(to_delete)
+        super(ClaimBeneficiary, cls).delete(beneficiaries)
+
+    @fields.depends('document_request_lines')
+    def on_change_with_documents_reception_date(self):
+        res = None
+        for document in self.document_request_lines:
+            if not document.blocking:
+                continue
+            if not document.reception_date:
+                return None
+            res = max(res or datetime.date.min, document.reception_date)
+        return res
+
+    @fields.depends('document_request_lines')
+    def on_change_document_request_lines(self):
+        self.documents_reception_date = \
+            self.on_change_with_documents_reception_date()
+
+    @classmethod
+    def getter_documents_reception_date(cls, beneficiaries, name):
+        cursor = Transaction().connection.cursor()
+        dates = {x.id: None for x in beneficiaries}
+        request_line = Pool().get('document.request.line').__table__()
+        cursor.execute(*request_line.select(request_line.for_object,
+                Max(Coalesce(request_line.reception_date, datetime.date.max)),
+                where=(request_line.blocking == Literal(True))
+                & request_line.for_object.in_(
+                    [str(x) for x in beneficiaries]),
+                group_by=[request_line.for_object]))
+        for beneficiary, date in cursor.fetchall():
+            if date == datetime.date.max:
+                date = None
+            dates[int(beneficiary.split(',')[1])] = date
+        return dates
+
+    @model.CoogView.button_change('document_request_lines', 'identified',
+        'party', 'service')
+    def identify(self):
+        assert self.party
+        self.identified = True
+        self.update_documents()
+
+    def update_documents(self):
+        DocumentRequestLine = Pool().get('document.request.line')
+        documents = []
+        for descriptor in self.service.benefit.beneficiary_documents:
+            documents.append(DocumentRequestLine(
+                    document_desc=descriptor,
+                    for_object=self,
+                    claim=self.service.claim,
+                    blocking=True,
+                    ))
+        self.document_request_lines = documents
+
+    def get_rec_name(self, name):
+        if self.party:
+            name = self.party.rec_name
+        else:
+            if len(self.description) > 50:
+                name = self.description[:50] + '...'
+            else:
+                name = self.description
+        identified = ''
+        if self.identified:
+            identified = '[%s] ' % coog_string.translate_field(self,
+                'identified', self.__class__.identified.string)
+        return identified + '(%.2f%%) %s' % ((self.share or 0) * 100, name)
+
+    def get_contact(self):
+        return self.party
+
+    def get_sender(self):
+        return None
 
 
 class Indemnification:

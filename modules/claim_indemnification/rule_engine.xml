@@ -96,16 +96,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="fct_args">Date debut periode, Date fin periode, Frequence, Mois de synchronisation, Jours de synchronisation</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
-         <record model="rule_engine.function" id="sub_periods">
-             <field name="translated_technical_name">sous_periodes</field>
-             <field name="description">Calcul des sous périodes</field>
-             <field name="type">function</field>
-             <field name="language" ref="ir.lang_fr"/>
-             <field name="namespace">rule_engine.runtime</field>
-             <field name="name">_re_revaluation_sub_periods</field>
-             <field name="fct_args">Dates pivot, Date debut periode, Date fin periode</field>
-             <field name="parent" ref="claim.dossier_sinistre"/>
-         </record>
+        <record model="rule_engine.function" id="sub_periods">
+            <field name="translated_technical_name">sous_periodes</field>
+            <field name="description">Calcul des sous périodes</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_revaluation_sub_periods</field>
+            <field name="fct_args">Dates pivot, Date debut periode, Date fin periode</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
         <record model="rule_engine.function" id="salary_calculation_description">
             <field name="translated_technical_name">description_du_calcul_du_salaire</field>
             <field name="description">Description du calcul du salaire journalier</field>
@@ -150,6 +150,26 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_maximum_daily_amount_for_indemnification</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="indemnification_share">
+            <field name="translated_technical_name">part_d_indemnisation</field>
+            <field name="description">Part d'indemnisation</field>
+            <field name="long_description">Part d'indemnisation pour le bénéficiaire (entre 0 et 1)</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_indemnification_share</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="beneficiary_documents_reception_date">
+            <field name="translated_technical_name">reception_des_documents_beneficiaire</field>
+            <field name="description">Réception des documents bénéficiaire</field>
+            <field name="long_description">Date de réception du dernier document requis pour le bénéficiaire</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_beneficiary_documents_reception_date</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
     </data>

@@ -158,6 +158,8 @@ class Loss:
         cls._error_messages.update({
                 'indemnized_losses': 'Some draft losses have active '
                 'indemnifications, they may have to be reevaluated:\n\n%s',
+                'bad_indemnification_shares': 'Total share amount for service '
+                '%(service)s should be 100: %(total_share).2f',
                 'missing_end_date': 'The end date is missing on the loss',
                 'missing_closing_reason': 'The closing reason is missing on the'
                 ' loss',
@@ -213,6 +215,14 @@ class Loss:
             if not self.end_date:
                 return
             self.check_indemnification_gaps(service)
+        for service in self.services:
+            if self.benefit.indemnification_kind != 'capital':
+                continue
+            total_share = sum(x.share for x in self.indemnifications)
+            if total_share != 1:
+                self.append_functional_error('bad_indemnification_shares', {
+                        'service': self.rec_name,
+                        'total_share': str(int(total_share * 100))})
 
     @classmethod
     def activate(cls, losses):
@@ -243,20 +253,20 @@ class ClaimService:
         'service', 'Indemnifications', delete_missing=True)
     paid_until_date = fields.Function(fields.Date('Paid Until Date',
             readonly=True,
-            states={'invisible': ~(Bool(Eval(
-                            'has_automatic_period_calculation')))},
+            states={'invisible': ~Eval(
+                    'has_automatic_period_calculation')},
             depends=['has_automatic_period_calculation']),
         getter='get_paid_until_date', searcher='search_paid_until_date')
     has_automatic_period_calculation = fields.Function(
         fields.Boolean('has_automatic_period_calculation'),
         getter='getter_has_automatic_period_calculation')
     payment_accepted_until_date = fields.Date('Payments Accepted Until:',
-          states={'invisible': ~(Bool(Eval(
-                    'has_automatic_period_calculation')))},
+          states={'invisible': ~Eval(
+                'has_automatic_period_calculation')},
           depends=['has_automatic_period_calculation'])
     annuity_frequency = fields.Selection(ANNUITY_FREQUENCIES,
         'Annuity Frequency', states={
-            'invisible': ~(Bool(Eval('has_automatic_period_calculation')))},
+            'invisible': ~(Eval('has_automatic_period_calculation'))},
           depends=['has_automatic_period_calculation'])
     deductible_end_date = fields.Function(
         fields.Date('Deductible End Date'),
@@ -280,8 +290,8 @@ class ClaimService:
                 'the periods between %s and %s?',
                 'offset_date': 'The date is not equal to the cancelled date',
                 'multiple_capital_indemnifications': 'There may not be '
-                'multiple capital indemnifications, the current one will be '
-                'cancelled',
+                'multiple capital indemnifications for a given beneficiary, '
+                'the current one will be cancelled',
                 })
 
     @classmethod
@@ -380,14 +390,17 @@ class ClaimService:
             deductible_end_date = self.get_deductible_end_date() or \
                 coog_date.add_day(self.loss.start_date, -1)
             if self.loss.end_date < deductible_end_date:
-                indemnification = Indemnification(
-                    start_date=self.loss.start_date,
-                    end_date=self.loss.end_date
-                    )
-                indemnification.init_from_service(self)
-                indemnification.save()
-                Indemnification.calculate([indemnification])
-                self.indemnifications = [indemnification]
+                beneficiary = self.get_beneficiaries_data(self.loss.start_date)
+                if len(beneficiary) == 1 and beneficiary[0][1] == 1:
+                    indemnification = Indemnification(
+                        start_date=self.loss.start_date,
+                        end_date=self.loss.end_date
+                        )
+                    indemnification.init_from_service(self)
+                    indemnification.beneficiary = beneficiary[0]
+                    indemnification.save()
+                    Indemnification.calculate([indemnification])
+                    self.indemnifications = [indemnification]
 
     def regularize_indemnification(self, indemnification, details_dict,
             currency):
@@ -401,22 +414,29 @@ class ClaimService:
                 }]
 
     @classmethod
-    def cancel_indemnification(cls, services, from_date, to_date=None):
+    def cancel_indemnification(cls, services, from_date, to_date=None,
+            beneficiary=None):
+        # We cancel / delete all indemnifications whose period overstep
+        # the given `at_date` parameter. For capitals, we only check the
+        # `beneficiary` parameter, `None` will clear all
         Date = Pool().get('ir.date')
         to_cancel = []
         to_delete = []
         ClaimIndemnification = Pool().get('claim.indemnification')
         for service in services:
             for indemn in service.indemnifications:
-                if (indemn.status != 'cancelled' and
-                        indemn.status != 'cancel_paid'):
-                    if (service.benefit.indemnification_kind == 'capital' or
-                            ((not to_date or indemn.start_date <= to_date) and
-                                from_date < indemn.end_date)):
-                        if indemn.status == 'paid':
-                            to_cancel.append(indemn)
-                        elif indemn.status != 'rejected':
-                            to_delete.append(indemn)
+                if indemn.status in ('cancelled', 'cancel_paid'):
+                    continue
+                if (service.benefit.indemnification_kind != 'capital' and
+                        ((not to_date or indemn.start_date <= to_date) and
+                            from_date < indemn.end_date)) or (
+                        service.benefit.indemnification_kind == 'capital' and
+                        (beneficiary is None or
+                            indemn.beneficiary == beneficiary)):
+                    if indemn.status == 'paid':
+                        to_cancel.append(indemn)
+                    elif indemn.status != 'rejected':
+                        to_delete.append(indemn)
         if to_cancel:
             if (service.benefit.indemnification_kind != 'capital' and
                     (from_date > to_cancel[0].start_date or
@@ -540,7 +560,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     __name__ = 'claim.indemnification'
 
     beneficiary = fields.Many2One('party.party', 'Beneficiary',
-        ondelete='RESTRICT', states={'readonly': Eval('status') == 'paid'},
+        ondelete='RESTRICT',
+        states={'readonly': Eval('status') != 'calculated'},
         depends=['status'])
     service = fields.Many2One('claim.service', 'Claim Service',
         ondelete='CASCADE', select=True, required=True,
@@ -551,9 +572,11 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     kind_string = kind.translated('kind')
     start_date = fields.Date('Start Date', states={
             'readonly': Or(~Eval('manual'), Eval('status') == 'paid'),
+            'invisible': ~Eval('service.loss.with_end_date')
             }, depends=['manual', 'status', 'kind'], required=True)
     end_date = fields.Date('End Date', states={
             'readonly': Or(~Eval('manual'), Eval('status') == 'paid'),
+            'invisible': ~Eval('service.loss.with_end_date')
             }, depends=['manual', 'status', 'kind'])
     product = fields.Many2One('product.product', 'Product', states={
             'invisible': Bool(Eval('product', False)) &
@@ -640,6 +663,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             'readonly': Eval('status') == 'cancel_paid'
             }, ondelete='RESTRICT', depends=['status'])
     is_paid = fields.Function(fields.Boolean('Paid'), 'get_is_paid')
+    share = fields.Numeric('Share', domain=['OR', [('share', '=', None)],
+            [('share', '>', 0), ('share', '<=', 1)]])
     note = fields.Char('Note', states={
             'invisible': ~Bool(Eval('note'))},
         readonly=True, depends=['note'])
@@ -759,17 +784,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     def init_from_service(self, service):
         self.status = 'calculated'
         self.service = service
-        self.beneficiary = self.get_beneficiary(
-            service.benefit.beneficiary_kind, service)
         self.update_product()
-
-    def get_beneficiary(self, beneficiary_kind, del_service):
-        if beneficiary_kind == 'covered_person':
-            res = del_service.loss.covered_person
-        if beneficiary_kind == 'subscriber':
-            res = del_service.contract.get_policy_owner(
-                del_service.loss.start_date)
-        return res
 
     def get_kind(self, name=None):
         if self.service:
@@ -897,9 +912,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             if (journal and journal.needs_bank_account() and
                     not indemnification.beneficiary.get_bank_account(
                         indemnification.start_date)):
-                    cls.append_functional_error('no_bank_account', (
-                            indemnification.beneficiary.rec_name,
-                            indemnification.service.claim.name))
+                cls.append_functional_error('no_bank_account', (
+                        indemnification.beneficiary.rec_name,
+                        indemnification.service.claim.name))
 
     @classmethod
     @ModelView.button
@@ -1222,6 +1237,9 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
     indemnification_note = fields.Function(
         fields.Char('Note'),
         'get_indemnification_note')
+    indemnification_beneficiary = fields.Function(
+        fields.Many2One('party.party', 'Beneficiary'),
+        'getter_indemnification_beneficiary')
 
     @classmethod
     def __setup__(cls):
@@ -1236,6 +1254,10 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
 
     def get_indemnification_kind(self, name):
         return self.indemnification.kind
+
+    def getter_indemnification_beneficiary(self, name):
+        if self.indemnification.beneficiary:
+            return self.indemnification.beneficiary.id
 
     def get_duration_description(self, name):
         if self.indemnification.kind == 'capital':

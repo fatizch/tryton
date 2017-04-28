@@ -104,18 +104,24 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         super(OptionBenefit, cls).__setup__()
         cls.deductible_rule.domain = [
             ('id', 'in', Eval('available_deductible_rules'))]
-        cls.deductible_rule.states['readonly'] = Len(
-            'available_deductible_rules') <= 1
+        cls.deductible_rule.states['readonly'] = Len(Eval(
+                'available_deductible_rules')) == 1
+        cls.deductible_rule.states['invisible'] = Len(Eval(
+                'available_deductible_rules')) == 0
         cls.deductible_rule.depends = ['available_deductible_rules']
         cls.indemnification_rule.domain = [
             ('id', 'in', Eval('available_indemnification_rules'))]
-        cls.indemnification_rule.states['readonly'] = Len(
-            'available_indemnification_rules') <= 1
+        cls.indemnification_rule.states['readonly'] = Len(Eval(
+                'available_indemnification_rules')) == 1
+        cls.indemnification_rule.states['invisible'] = Len(Eval(
+                'available_indemnification_rules')) == 0
         cls.indemnification_rule.depends = ['available_indemnification_rules']
         cls.revaluation_rule.domain = [
             ('id', 'in', Eval('available_revaluation_rules'))]
-        cls.revaluation_rule.states['readonly'] = Len(
-            'available_revaluation_rules') <= 1
+        cls.revaluation_rule.states['readonly'] = Len(Eval(
+                'available_revaluation_rules')) == 1
+        cls.revaluation_rule.states['invisible'] = Len(Eval(
+                'available_revaluation_rules')) == 0
         cls.revaluation_rule.depends = ['available_revaluation_rules']
 
     @fields.depends('benefit', 'available_deductible_rules',

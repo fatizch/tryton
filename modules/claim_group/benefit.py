@@ -14,3 +14,9 @@ class Benefit:
     __name__ = 'benefit'
 
     is_group = fields.Boolean('Group Benefit')
+
+    @classmethod
+    def get_beneficiary_kind(cls):
+        return super(Benefit, cls).get_beneficiary_kind() + [
+            ('subscriber_then_covered', 'Subscriber then Covered'),
+            ]

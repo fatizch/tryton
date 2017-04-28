@@ -190,6 +190,7 @@ Create indemnifications::
 
     >>> create = Wizard('claim.create_indemnification', models=[service])
     >>> create.form.start_date = datetime.date(2016, 1, 1)
+    >>> create.form.indemnification_date = datetime.date(2016, 1, 1)
     >>> create.form.end_date = datetime.date(2016, 8, 1)
     >>> create.form.extra_data = {}
     >>> create.form.service = service
@@ -235,6 +236,7 @@ Generate Regularisation::
 
     >>> create = Wizard('claim.create_indemnification', models=[service])
     >>> create.form.start_date = datetime.date(2016, 1, 1)
+    >>> create.form.indemnification_date = datetime.date(2016, 1, 1)
     >>> create.form.end_date = datetime.date(2016, 6, 1)
     >>> create.form.extra_data = {}
     >>> create.form.service = service

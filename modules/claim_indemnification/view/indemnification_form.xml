@@ -4,6 +4,13 @@ this repository contains the full copyright notices and license terms. -->
 <form col="4">
     <label name="service"/>
     <field name="service"/>
+    <label name="status"/>
+    <field name="status"/>
+    <newline/>
+    <label name="beneficiary"/>
+    <field name="beneficiary"/>
+    <label name="journal"/>
+    <field name="journal"/>
     <newline/>
     <group id="header" colspan="4" col="7">
         <label name="status"/>
@@ -11,19 +18,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="status" colspan="1" xexpand="0"/>
             <field name="note" colspan="3" xexpand="1"/>
         </group>
-        <group id="buttons" colspan="3" col="3">
-            <button string="Calculate" name="calculate"/>
-            <button string="Modify" name="modify_indemnification"/>
-            <button string="Cancel" name="cancel_indemnification"/>
-        </group>
     </group>
     <label name="start_date"/>
     <field name="start_date"/>
     <label name="end_date"/>
     <field name="end_date"/>
     <newline/>
-    <label name="beneficiary"/>
-    <field name="beneficiary"/>
     <label name="product"/>
     <field name="product"/>
     <newline/>
@@ -54,8 +54,6 @@ this repository contains the full copyright notices and license terms. -->
         <field name="local_currency"/>
     </group>
     <field name="details" colspan="4"/>
-    <label name="journal"/>
-    <field name="journal"/>
     <field name="kind" invisible="1"/>
     <field name="possible_products" invisible="1"/>
 </form>

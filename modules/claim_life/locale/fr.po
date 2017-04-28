@@ -25,9 +25,117 @@ msgid "The previous std doesn't have an end date defined"
 msgstr ""
 "La date de fin d'arrêt de travail du précédent arrêt n'est pas définie"
 
+msgctxt "field:benefit,beneficiary_documents:"
+msgid "Beneficiary Documents"
+msgstr "Documents requis pour les bénéficiaires"
+
+msgctxt "field:benefit-beneficiary_document,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:benefit-beneficiary_document,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-beneficiary_document,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-beneficiary_document,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit-beneficiary_document,document:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:benefit-beneficiary_document,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:benefit-beneficiary_document,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit-beneficiary_document,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:benefit-beneficiary_document,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:benefit-beneficiary_document,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:benefit.loss.description,with_end_date:"
 msgid "With End Date"
 msgstr "Avec Date de Fin"
+
+msgctxt "field:claim,beneficiaries:"
+msgid "Beneficiaries"
+msgstr "Bénéficiaires"
+
+msgctxt "field:claim,services_with_beneficiaries:"
+msgid "Services with beneficiaries"
+msgstr "Prestations avec bénéficiaires"
+
+msgctxt "field:claim.beneficiary,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.beneficiary,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.beneficiary,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.beneficiary,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:claim.beneficiary,document_request_lines:"
+msgid "Documents"
+msgstr "Documents requis"
+
+msgctxt "field:claim.beneficiary,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.beneficiary,identified:"
+msgid "Identified Party"
+msgstr "Tiers identifié"
+
+msgctxt "field:claim.beneficiary,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:claim.beneficiary,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:claim.beneficiary,service:"
+msgid "Service"
+msgstr "Service"
+
+msgctxt "field:claim.beneficiary,share:"
+msgid "Share"
+msgstr "Part du bénéficiaire"
+
+msgctxt "field:claim.beneficiary,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:claim.beneficiary,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.beneficiary,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt ""
 "field:claim.indemnification.assistant.control.element,covered_person:"
@@ -41,7 +149,7 @@ msgstr "Personne Couverte"
 
 msgctxt "field:claim.loss,covered_person:"
 msgid "Covered Person"
-msgstr "Personne Couverte"
+msgstr "Personne assurée"
 
 msgctxt "field:claim.loss,end_date:"
 msgid "End Date"
@@ -55,6 +163,10 @@ msgctxt "field:claim.loss,is_a_relapse:"
 msgid "Is A Relapse"
 msgstr "Est une rechute"
 
+msgctxt "field:claim.loss,loss_kind:"
+msgid "Loss Kind"
+msgstr "Type d'évènement"
+
 msgctxt "field:claim.loss,ltd_end_date:"
 msgid "LTD End Date"
 msgstr "Date de fin de l'invalidité"
@@ -65,7 +177,7 @@ msgstr "Date de début de l'invalidité"
 
 msgctxt "field:claim.loss,possible_covered_persons:"
 msgid "Covered Persons"
-msgstr "Personnes couvertes"
+msgstr "Personnes assurées"
 
 msgctxt "field:claim.loss,return_to_work_date:"
 msgid "Return to Work"
@@ -82,6 +194,67 @@ msgstr "Date d'arrêt de travail"
 msgctxt "field:claim.loss,with_end_date:"
 msgid "With End Date"
 msgstr "Avec Date de Fin"
+
+msgctxt "field:claim.service,beneficiaries:"
+msgid "Beneficiaries"
+msgstr "Bénéficiaires"
+
+msgctxt "field:claim.service,manual_beneficiaries:"
+msgid "Has Beneficiaries"
+msgstr "Avec bénéficiaires saisis manuellement"
+
+msgctxt "help:benefit,beneficiary_documents:"
+msgid ""
+"The list of documents that will be required from each beneficiary before "
+"indemnification can occur"
+msgstr ""
+"Documents requis pour pouvoir déclencher le paiement des indemnisations"
+
+msgctxt "help:claim,beneficiaries:"
+msgid ""
+"The beneficiaries for the different services for which they must be set "
+"manually"
+msgstr "Les bénéficiaires des prestations manuelles"
+
+msgctxt "help:claim.beneficiary,description:"
+msgid ""
+"In case the party is not properly identified, this field should be used to "
+"write down identifying informations"
+msgstr ""
+"Si le tiers n'est pas formellement identifié, ce champ permet de stocker les"
+" informations existantes aidant à l'identification"
+
+msgctxt "help:claim.beneficiary,document_request_lines:"
+msgid ""
+"The list of documents that will be required from the beneficiary before "
+"indemnifications can be made"
+msgstr ""
+"Documents requis pour pouvoir déclencher le paiement des indemnisations"
+
+msgctxt "help:claim.beneficiary,identified:"
+msgid "The beneficiary has properly been identified"
+msgstr "Le bénéficiaire a été formellement identifié"
+
+msgctxt "help:claim.beneficiary,party:"
+msgid ""
+"The identified party that will receive part of (or all of) the calculated "
+"indemnification"
+msgstr ""
+"Le tiers qui percevra le montant calculé (en totalité ou partiellement)"
+
+msgctxt "help:claim.beneficiary,share:"
+msgid ""
+"The percentage of the calculated indemnification that will be paid to this "
+"beneficiary"
+msgstr "Le pourcentage du montant calculé qui reviendra à ce bénéficiaire"
+
+msgctxt "model:benefit-beneficiary_document,name:"
+msgid "Benefit - Beneficiary Document"
+msgstr "Relation prestation - Documents bénéficiaires"
+
+msgctxt "model:claim.beneficiary,name:"
+msgid "Claim Beneficiary"
+msgstr "Bénéficiaire"
 
 msgctxt "model:ir.action,name:"
 msgid "Create Indemnification"
@@ -102,6 +275,18 @@ msgstr "Invalidité de travail"
 msgctxt "selection:benefit.loss.description,loss_kind:"
 msgid "Short Term"
 msgstr "Incapacité de travail"
+
+msgctxt "view:claim.beneficiary:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:claim.beneficiary:"
+msgid "Identify"
+msgstr "Identifier"
+
+msgctxt "view:claim.beneficiary:"
+msgid "Send Letter"
+msgstr "Envoyer un courrier"
 
 msgctxt "view:claim.service:"
 msgid "Add New Indemnification"
