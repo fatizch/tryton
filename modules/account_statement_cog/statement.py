@@ -104,6 +104,12 @@ class Statement(export.ExportImportMixin):
     total_statement_amount = fields.Function(
         fields.Numeric('Total Amount'),
         'get_total_statement_amount')
+    color = fields.Function(
+        fields.Char('Color'),
+        'get_color')
+    form_color = fields.Function(
+        fields.Char('Color'),
+        'get_color')
 
     @classmethod
     def __setup__(cls):
@@ -129,6 +135,22 @@ class Statement(export.ExportImportMixin):
                 vals['name'] = Sequence.get_id(journal.sequence.id)
         return super(Statement, cls).create(vlist)
 
+    @classmethod
+    def view_attributes(cls):
+        return super(Statement, cls).view_attributes() + [(
+                '/tree',
+                'colors',
+                Eval('color', 'black')
+                ), (
+                '/form/notebook/page/group/field[@name="state"]',
+                'states',
+                {'field_color': Eval('form_color')}
+                ), (
+                '/form/group[@id="invisible"]',
+                'states',
+                {'invisible': True})
+                ]
+
     @fields.depends('journal')
     def on_change_with_in_bank_deposit_ticket(self, name=None):
         return self.journal and self.journal.process_method == 'cheque'
@@ -145,6 +167,17 @@ class Statement(export.ExportImportMixin):
 
     def get_total_statement_amount(self, name):
         return sum(l.amount for l in self.lines)
+
+    def get_color(self, name):
+        if self.state == 'posted' and name == 'form_color':
+            return 'green'
+        elif self.state == 'cancel' and name == 'color':
+            return 'grey'
+        elif self.state == 'cancel' and name == 'form_color':
+            return 'red'
+        elif self.state == 'validated':
+            return 'blue'
+        return 'black'
 
     @classmethod
     def validate_manual(cls):

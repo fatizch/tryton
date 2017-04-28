@@ -65,6 +65,14 @@ msgctxt "error:account.statement:"
 msgid "No lines associated to the statement(s) %s"
 msgstr "Pas de lignes associées au(x) relevé(s) %s"
 
+msgctxt "field:account.statement,color:"
+msgid "Color"
+msgstr "Couleur"
+
+msgctxt "field:account.statement,form_color:"
+msgid "Color"
+msgstr "Couleur"
+
 msgctxt "field:account.statement,in_bank_deposit_ticket:"
 msgid "In Bank Deposit Ticket"
 msgstr "Bordereau de chèque"
@@ -387,6 +395,10 @@ msgid "Cancel line group"
 msgstr "Annulation Groupe de ligne"
 
 msgctxt "view:account.statement.line.group:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "view:account.statement:"
 msgid "Cancel"
 msgstr "Annuler"
 

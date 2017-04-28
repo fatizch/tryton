@@ -1,3 +1,6 @@
+* Le bouton annuler pouvait être confondu avec le fait de fermer la fenêtre
+le bouton n'est donc plus affiché sur la vue détail mais dans la barre d'action
+
 Version 1.10 - 2016-11-02
 * Allow to modify invoicing date in change payment term invoice wizard
 * Add reconciliation date to invoices

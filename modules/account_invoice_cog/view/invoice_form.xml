@@ -21,4 +21,15 @@ this repository contains the full copyright notices and license terms. -->
     </xpath>
     <xpath expr="/form/label[@name='type']" position="replace"/>
     <xpath expr="/form/field[@name='type']" position="replace"/>
+    <xpath expr="/form/notebook/page/group/group/group/button[@name='cancel']" position="replace"/>
+    <xpath expr="/form/notebook/page/group/group/group/button[@name='pay']" position="replace"/>
+    <xpath expr="/form" position="inside">
+        <newline/>
+        <group id="invisible">
+            <button name="cancel" string="Cancel"
+                confirm="Are you sure to cancel the invoice?"/>
+            <button name="pay" string="Pay Cash"/>
+        <field name="form_color"/>
+        </group>
+    </xpath>
 </data>

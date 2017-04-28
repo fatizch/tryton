@@ -1,3 +1,6 @@
+* Cancel button on invoice could be confused with the action to close the window
+so the action is not displayed any more on the form view but in the action toolbar
+
 Version 1.10 - 2016-11-02
 * Allow to modify invoicing date in change payment term invoice wizard
 * Add reconciliation date to invoices

@@ -140,6 +140,18 @@ msgctxt "view:account.invoice.change_payment_term.select_term:"
 msgid "Change Payment Term"
 msgstr "Ré-échelonner la quittance"
 
+msgctxt "view:account.invoice:"
+msgid "Are you sure to cancel the invoice?"
+msgstr "Êtes-vous sûr d'annuler la facture ?"
+
+msgctxt "view:account.invoice:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "view:account.invoice:"
+msgid "Pay Cash"
+msgstr "Payer cash"
+
 msgctxt ""
 "wizard_button:account.invoice.change_payment_term,select_term,change:"
 msgid "Change"
@@ -199,19 +211,19 @@ msgctxt ""
 msgid "Posted"
 msgstr "Emis"
 
+msgctxt "model:ir.action,name:account_invoice.print"
+msgid "Invoice"
+msgstr "Quittance"
+
 msgctxt "model:ir.action,name:account_invoice.act_invoice_form2"
 msgid "Invoices"
 msgstr "Quittances"
-
-msgctxt "model:ir.action,name:account_invoice.report_invoice"
-msgid "Invoice"
-msgstr "Quittance"
 
 msgctxt "model:ir.action,name:account_invoice.act_invoice_out_form"
 msgid "Customer Invoices"
 msgstr "Quittances"
 
-msgctxt "model:ir.action,name:account_invoice.print"
+msgctxt "model:ir.action,name:account_invoice.report_invoice"
 msgid "Invoice"
 msgstr "Quittance"
 
@@ -224,25 +236,25 @@ msgctxt ""
 msgid "Invoice"
 msgstr "Quittance"
 
-msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoices"
-msgid "Invoices"
-msgstr "Quittances"
-
 msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoice_out_form"
 msgid "Customer Invoices"
 msgstr "Quittances"
 
+msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoices"
+msgid "Invoices"
+msgstr "Quittances"
+
 msgctxt "selection:account.invoice,state:account_invoice."
-msgid "Validated"
-msgstr "Validée"
+msgid "Canceled"
+msgstr "Annulée"
 
 msgctxt "selection:account.invoice,state:account_invoice."
 msgid "Posted"
 msgstr "Emise"
 
 msgctxt "selection:account.invoice,state:account_invoice."
-msgid "Canceled"
-msgstr "Annulée"
+msgid "Validated"
+msgstr "Validée"
 
 msgctxt "view:account.invoice:account_invoice."
 msgid "Invoice"

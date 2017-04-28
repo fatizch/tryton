@@ -49,6 +49,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="account_payment_sepa.message_view_form"/>
             <field name="act_window" ref="act_message_form"/>
         </record>
+        <record model="ir.ui.view" id="message_view_list">
+            <field name="model">account.payment.sepa.message</field>
+            <field name="inherit" ref="account_payment_sepa.message_view_list"/>
+            <field name="name">message_list</field>
+        </record>
         <menuitem parent="account_payment.menu_payments" sequence="50" action="act_message_form" id="menu_reject_message_form" icon="tryton-list"/>
         <record model="ir.ui.view" id="payment_creation_start_view_form">
             <field name="model">account.payment.payment_creation.start</field>

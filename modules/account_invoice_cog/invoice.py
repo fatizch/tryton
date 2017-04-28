@@ -57,6 +57,9 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
     color = fields.Function(
         fields.Char('Color'),
         'get_color')
+    form_color = fields.Function(
+        fields.Char('Color'),
+        'get_color')
     business_kind = fields.Selection([('', '')], 'Business Kind',
         states={'readonly': Eval('state') != 'draft'}, depends=['state'])
     business_kind_string = business_kind.translated('business_kind')
@@ -97,6 +100,12 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
     def view_attributes(cls):
         return super(Invoice, cls).view_attributes() + [
             ('/tree', 'colors', Eval('color')),
+            ('/form/group[@id="invisible"]', 'states', {'invisible': True}),
+            (
+                '/form/notebook/page/group/group/group/field[@name="state"]',
+                'states',
+                {'field_color': Eval('form_color')}
+                ),
             ]
 
     def get_reconciliation_date(self, name):
@@ -169,9 +178,10 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
     def get_color(self, name):
         if self.state == 'paid':
             return 'green'
-        elif self.state == 'cancel':
+        elif self.state == 'cancel' and name == 'color':
             return 'grey'
-        elif self.amount_to_pay_today > 0 or self.total_amount < 0:
+        elif (self.amount_to_pay_today > 0 or self.total_amount < 0
+                or self.state == 'cancel' and name == 'form_color'):
             return 'red'
         elif self.state == 'posted':
             return 'blue'
