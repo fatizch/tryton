@@ -1,1 +1,1 @@
-Ce module permet de gérer les sinistres emprunteur
+Plug loan related informations in claim management
