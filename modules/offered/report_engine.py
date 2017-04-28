@@ -24,6 +24,12 @@ class ReportTemplate:
     def _export_skips(cls):
         return super(ReportTemplate, cls)._export_skips() | {'products'}
 
+    @classmethod
+    def copy(cls, reports, default=None):
+        default = {} if default is None else default.copy()
+        default.setdefault('products', None)
+        return super(ReportTemplate, cls).copy(reports, default=default)
+
 
 class ReportProductRelation(model.CoogSQL):
     'Report template to Product relation'

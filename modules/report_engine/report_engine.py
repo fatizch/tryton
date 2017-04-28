@@ -222,6 +222,12 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             where=to_update.format_for_internal_edm == 'xls95'))
 
     @classmethod
+    def copy(cls, reports, default=None):
+        default = {} if default is None else default.copy()
+        default.setdefault('event_type_actions', None)
+        return super(ReportTemplate, cls).copy(reports, default=default)
+
+    @classmethod
     def default_output_method(cls):
         return 'open_document'
 

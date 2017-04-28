@@ -38,6 +38,7 @@ EMAIL_REQUIRED_STATES = {
     'required': Eval('output_kind') == 'email',
     }
 
+
 class ImageAttachment(model.CoogSQL, model.CoogView):
     'Image Attachment'
 
@@ -64,7 +65,7 @@ class TemplateTemplateRelation(model.CoogSQL, model.CoogView):
     __name__ = 'report.template.report.template.relation'
 
     parent_template = fields.Many2One('report.template', 'Template',
-        ondelete='RESTRICT', required=True, select=True)
+        ondelete='CASCADE', required=True, select=True)
     child_template = fields.Many2One('report.template', 'Template',
         ondelete='RESTRICT', required=True, select=True)
 
