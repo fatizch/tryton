@@ -1,15 +1,15 @@
-.. claim_group_life_fr
+.. claim
 
- - Gestion des hopistalisations
-=============================
+Claim - Salary management (fr)
+==============================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

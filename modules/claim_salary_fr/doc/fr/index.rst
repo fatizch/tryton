@@ -1,7 +1,7 @@
-.. claim_group_life_fr
+.. claim
 
- - Gestion des hopistalisations
-=============================
+Sinistre - Gestion des salaires
+===============================
 
 Résumé
 ------
