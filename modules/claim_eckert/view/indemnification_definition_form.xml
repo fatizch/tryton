@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='indemnification_date']" position="after">
+        <label name="eckert_payment_date"/>
+        <field name="eckert_payment_date"/>
+    </xpath>
+    <xpath expr="/form/field[@name='extra_data']" position="before">
+        <group id="eckert_warning" string="" colspan="4">
+            <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
+            <label string="The target indemnification date is posterior to the maximum date accoring to Eckert Law, penalties will be applied" id="eckert_warning" yalign="0.0" xalign="0.0" xexpand="1" colspan="3"/>
+            <newline/>
+            <field name="is_eckert" invisible="1"/>
+            <field name="show_eckert_warning" invisible="1"/>
+        </group>
+    </xpath>
+</data>

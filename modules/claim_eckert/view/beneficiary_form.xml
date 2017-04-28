@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='documents_reception_date']" position="after">
+        <label name="identification_date"/>
+        <field name="identification_date"/>
+        <label name="expected_indemnification_date"/>
+        <field name="expected_indemnification_date"/>
+        <label name="indemnification"/>
+        <field name="indemnification"/>
+    </xpath>
+    <xpath expr="/form/field[@name='service']" position="after">
+        <field name="is_eckert" invisible="1"/>
+    </xpath>
+</data>

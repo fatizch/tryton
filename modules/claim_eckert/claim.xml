@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############### -->
+        <!-- # Beneficiary # -->
+        <!-- ############### -->
+        <record model="ir.ui.view" id="beneficiary_view_form">
+            <field name="model">claim.beneficiary</field>
+            <field name="inherit" ref="claim_life.beneficiary_view_form"/>
+            <field name="name">beneficiary_form</field>
+        </record>
+        <record model="ir.ui.view" id="beneficiary_view_list">
+            <field name="model">claim.beneficiary</field>
+            <field name="inherit" ref="claim_life.beneficiary_view_list"/>
+            <field name="name">beneficiary_list</field>
+        </record>
+    </data>
+</tryton>

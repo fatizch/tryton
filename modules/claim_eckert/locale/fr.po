@@ -1,0 +1,180 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:benefit.rule:"
+msgid "Share for current beneficiary : %(share)s %%"
+msgstr "Répartition pour le bénéficiaire courant : %(share)s %%"
+
+msgctxt "error:document.request.line:"
+msgid ""
+"Documents must all be requested together for beneficiary %(beneficiary)s"
+msgstr ""
+"Les documents doivent être demandés simultanéments pour le bénéficiaire "
+"%(beneficiary)s"
+
+msgctxt "field:benefit,is_eckert:"
+msgid "Apply Eckert Rules"
+msgstr "Appliquer la loi Eckert"
+
+msgctxt "field:claim,death_certificate_reception_date:"
+msgid "Death certificate reception date"
+msgstr "Date de réception du certificat de décès"
+
+msgctxt "field:claim,eckert_notes:"
+msgid "Eckert notes"
+msgstr "Notes recherche bénéficiaires"
+
+msgctxt "field:claim,is_eckert:"
+msgid "Is Eckert"
+msgstr "Appliquer la loi Eckert"
+
+msgctxt "field:claim.beneficiary,documents_reception_date:"
+msgid "Documents Reception Date"
+msgstr "Date de réception des documents"
+
+msgctxt "field:claim.beneficiary,expected_indemnification_date:"
+msgid "Expected Indemnification Date"
+msgstr "Date de règlement avant pénalités"
+
+msgctxt "field:claim.beneficiary,identification_date:"
+msgid "Identification Date"
+msgstr "Date d'identification formelle"
+
+msgctxt "field:claim.beneficiary,indemnification:"
+msgid "Indemnification"
+msgstr "Indemnisation"
+
+msgctxt "field:claim.beneficiary,is_eckert:"
+msgid "Is Eckert"
+msgstr "Appliquer la loi Eckert"
+
+msgctxt "field:claim.configuration,eckert_law_default_delay:"
+msgid "Eckert Law Delay"
+msgstr "Délai par défaut pour la loi Eckert"
+
+msgctxt "field:claim.configuration,eckert_law_target_delay:"
+msgid "Eckert Law Target Delay"
+msgstr "Délai Eckert avant pénalités"
+
+msgctxt "field:claim.indemnification.detail,indemnification_beneficiary:"
+msgid "Beneficiary"
+msgstr "Bénéficiaire"
+
+msgctxt "field:claim.indemnification_definition,eckert_payment_date:"
+msgid "Eckert Payment Date Limit"
+msgstr "Date limite de paiement (loi Eckert)"
+
+msgctxt "field:claim.indemnification_definition,indemnification_date:"
+msgid "Indemnification Date"
+msgstr "Date d'indemnisation"
+
+msgctxt "field:claim.indemnification_definition,is_eckert:"
+msgid "Is Eckert"
+msgstr "Appliquer la loi Eckert"
+
+msgctxt "field:claim.indemnification_definition,show_eckert_warning:"
+msgid "Show Eckert Warning"
+msgstr "Afficher l'avertissement Eckert"
+
+msgctxt "help:benefit,is_eckert:"
+msgid ""
+"If True, business rules defined in the French Eckert Law will be applied "
+"when creating services which use this benefit"
+msgstr ""
+"Si coché, les règles spécifiques à la loi Eckert seront appliquées lors de "
+"la création des prestations associées"
+
+msgctxt "help:claim,death_certificate_reception_date:"
+msgid ""
+"The date at which the death certificate was received. In case there were "
+"multiple documents, the latest one is used"
+msgstr ""
+"La date de réception du certificat de décès. Si plusieurs documents ont été "
+"reçu, le plus récent est considéré"
+
+msgctxt "help:claim,eckert_notes:"
+msgid "Notes related to Eckert Law beneficiary search / payment"
+msgstr ""
+"Notes liées à la recherche de bénéficiaires (conformément à la loi Eckert)"
+
+msgctxt "help:claim.beneficiary,documents_reception_date:"
+msgid ""
+"Reception date of the last document, empty if all documents are not received"
+" yet"
+msgstr ""
+"Date de réception du dernier document bloquant, vide tant que tous les "
+"documents n'ont pas été reçus"
+
+msgctxt "help:claim.beneficiary,expected_indemnification_date:"
+msgid ""
+"For Eckert benefits, indemnification should be paid at most after a "
+"configured date (see Claim Configuration)"
+msgstr ""
+"Pour les prestation Eckert, Les prestations doivent être réglées au plus "
+"tard après un délai configuré (voir Configuration des sinistres)"
+
+msgctxt "help:claim.beneficiary,identification_date:"
+msgid "The date at which the beneficiary party is clearly identified"
+msgstr "La date à laquelle le tiers est formellement identifié"
+
+msgctxt "help:claim.beneficiary,indemnification:"
+msgid "The indemnification that paid the benefit for this beneficiary"
+msgstr "L'indemnisation qui a payé la prestation pour ce bénéficiaire"
+
+msgctxt "help:claim.configuration,eckert_law_default_delay:"
+msgid ""
+"The number of days that will be set by default between the current date and "
+"the target indemnification date for Eckert capital indemnifications"
+msgstr ""
+"Le délai (en jours) qui sera prévu pour le processus de validation des "
+"indemnisations suivant la loi Eckert"
+
+msgctxt "help:claim.configuration,eckert_law_target_delay:"
+msgid "Number of days which is allowed to pay Eckert Law capitals"
+msgstr ""
+"Le délai de paiement légal (loi Eckert) avant l'application de pénalités de "
+"retard, compté à partir de la date de réceptions des documents du "
+"bénéficiaire"
+
+msgctxt "help:claim.indemnification_definition,beneficiary:"
+msgid "The party to which the indemnification will be paid"
+msgstr "Le tiers auquel sera versé l'indemnisation"
+
+msgctxt "help:claim.indemnification_definition,eckert_payment_date:"
+msgid ""
+"The date at which the indemnification should be paid according to Eckert Law"
+msgstr ""
+"La date à laquelle l'indemnisation doit être réglée selon la loi Eckert"
+
+msgctxt "help:claim.indemnification_definition,indemnification_date:"
+msgid ""
+"For capital indemnifications, the date at which the indemnification is "
+"expected to be paid"
+msgstr ""
+"Pour les indemnisations de type \"capital\", la date à laquelle "
+"l'indemnisation sera versée"
+
+msgctxt "model:document.description,name:death_certificate_document"
+msgid "Death Certificate"
+msgstr "Certificat de décès"
+
+msgctxt "model:ir.note.type,name:None"
+msgid "Eckert Related"
+msgstr "Loi Eckert"
+
+msgctxt "model:ir.note.type,name:eckert_note_type"
+msgid "Eckert Related"
+msgstr "Loi Eckert"
+
+msgctxt "view:claim.configuration:"
+msgid "Eckert Law"
+msgstr "Loi Eckert"
+
+msgctxt "view:claim.indemnification_definition:"
+msgid ""
+"The target indemnification date is posterior to the maximum date accoring to"
+" Eckert Law, penalties will be applied"
+msgstr ""
+"La date d'indemnisation planifiée est postérieure à la date limite de la loi"
+" Eckert, des pénalités seront appliquées"

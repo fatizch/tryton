@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath  expr="/form/notebook/page[@id='admin']/group[@id='left']/field[@name='indemnification_kind']" position="after">
+        <label name="is_eckert"/>
+        <field name="is_eckert"/>
+    </xpath>
+</data>

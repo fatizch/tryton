@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ########### -->
+        <!-- # Benefit # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="benefit_view_form">
+            <field name="model">benefit</field>
+            <field name="inherit" ref="claim.benefit_view_form"/>
+            <field name="name">benefit_form</field>
+        </record>
+        <!-- ######## -->
+        <!-- # Data # -->
+        <!-- ######## -->
+        <!-- Death Certificate -->
+        <record model="document.description" id="death_certificate_document">
+            <field name="code">death_certificate</field>
+            <field name="name">Death Certificate</field>
+        </record>
+        <!-- Eckert note type -->
+        <record model="ir.note.type" id="eckert_note_type">
+            <field name="code">eckert</field>
+            <field name="name">Eckert Related</field>
+        </record>
+        <record model="ir.note.type-res.group" id="eckert_note_type_admin_access">
+            <field name="type_" ref="eckert_note_type"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+    </data>
+</tryton>
