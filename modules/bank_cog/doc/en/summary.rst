@@ -1,5 +1,5 @@
-- ``[Tryton]`` Configuration des banques, gestion des bics
-- ``[Tryton]`` Saisie des comptes bancaires. Ces comptes peuvent avoir :
+- ``[Tryton]`` Bank configuration, BIC management
+- ``[Tryton]`` Bank account number creation, which can have:
 
-  * Plusieurs numéros (e.g. RIB + IBAN)
-  * Plusieurs propriétaires (comptes partagés)
+  * Multiple numbers (e.g. RIB + IBAN)
+  * Multiple owners (shared accounts)
