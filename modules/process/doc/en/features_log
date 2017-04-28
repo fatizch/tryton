@@ -1,6 +1,7 @@
 * Add process configuration entry point
 * Possibility to configure the default start step
 * Add "start" transitions which are called only once per process
+* Allow to add multiple complete transitions
 
 Version 1.10 - 2016-11-02
 
