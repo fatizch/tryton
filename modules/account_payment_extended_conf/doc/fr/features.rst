@@ -1,0 +1,3 @@
+- **Configuration des journaux de paiement par tiers** : Permet de configurer
+  des journaux de paiement spécifiques pour certains tiers. Cas typique
+  d'utilisation : paiement des assureurs, etc...
