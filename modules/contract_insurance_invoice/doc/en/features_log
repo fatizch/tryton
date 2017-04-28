@@ -1,3 +1,4 @@
+* Add batches to invoice contracts against their balance
 * Take maturity date into account for automatic reconciliation order
 * Color in red voided/terminated contracts with non zero balance_today
 * Add payment suspensions for a contract

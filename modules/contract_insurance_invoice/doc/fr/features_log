@@ -1,3 +1,4 @@
+* Ajout de batchs pour épuiser le trop perçu des contrats par quittancement
 * Prise en compte la date d'échéance pour l'ordre du lettrage automatique
 * Afficher en rouge les contrats terminés/sans effets où la balance du jour n'est pas à 0
 * Ajout de la suspension des prélèvements pour un contrat

@@ -58,3 +58,7 @@
 - **Réconciliation plus flexible :** Il est maintenant possible lors des
   opérations de réconciliation de transférer un éventuel reste sur un compte
   tiers, voire de le rattacher à un contrat.
+
+- **Epuisement du trop perçu par quittancement:** Un traitement par batch
+  est désormais disponible pour permettre d'épuiser le trop perçu d'un contrat
+  par lettrage avec des quittances générées pour le futur.
