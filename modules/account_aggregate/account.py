@@ -369,12 +369,28 @@ class LineAggregated(model.CoogSQL, model.CoogView):
         return query_table
 
     @classmethod
+    def order_by(cls, tables):
+        line = tables['account.move.line']
+        move = tables['account.move']
+        journal = tables['account.journal']
+        return [
+            move.date,
+            move.post_date,
+            move.snapshot,
+            move.journal,
+            Case((journal.aggregate, move.journal), else_=line.id),
+            journal.aggregate,
+            line.account,
+            ]
+
+    @classmethod
     def table_query(cls):
         tables = cls.get_tables()
         return cls.join_table(tables).select(*cls.fields_to_select(tables),
             group_by=cls.get_group_by(tables),
             where=cls.where_clause(tables),
-            having=cls.having_clause(tables))
+            having=cls.having_clause(tables),
+            order_by=cls.order_by(tables))
 
 
 class OpenLineAggregated(Wizard):
