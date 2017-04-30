@@ -71,6 +71,10 @@ msgctxt "model:claim.loss.hospitalisation.period,name:"
 msgid "HospitalisationPeriod"
 msgstr "Période d'hospitalisation"
 
+msgctxt "model:extra_data,string:ijss_extra_data"
+msgid "IJSS"
+msgstr "Indémnité journalière de la sécurité sociale"
+
 msgctxt "selection:claim.indemnification.detail,kind:"
 msgid "Part Time"
 msgstr "Mi-temps thérapeutique"

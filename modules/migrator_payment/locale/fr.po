@@ -1,0 +1,11 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:migrator.payment,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "model:migrator.payment,name:"
+msgid "Migrator Payment."
+msgstr "Migration des paiements"

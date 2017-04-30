@@ -1,0 +1,27 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:migrator.lender,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.loan,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.loan.increment,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "model:migrator.lender,name:"
+msgid "Migrator Lender"
+msgstr "Migration des organismes prêteurs"
+
+msgctxt "model:migrator.loan,name:"
+msgid "Migrator loan"
+msgstr "Migration des prêts"
+
+msgctxt "model:migrator.loan.increment,name:"
+msgid "Migrator loan increment"
+msgstr "Migration des paliers de prêt"

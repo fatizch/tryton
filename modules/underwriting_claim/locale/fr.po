@@ -12,13 +12,13 @@ msgstr ""
 "\n"
 "%(claims)s"
 
-msgctxt "field:benefit,underwriting_delay:"
-msgid "Underwriting Delay (Days)"
-msgstr "Délai de demande de décisions (jours)"
-
-msgctxt "field:benefit,underwriting_type:"
-msgid "Underwriting Type"
+msgctxt "field:benefit,underwriting_rule:"
+msgid "Underwriting Rule"
 msgstr "Règle de demande de décisions"
+
+msgctxt "field:benefit,underwriting_rule_extra_data:"
+msgid "Underwriting Rule Extra Data"
+msgstr "Données complémentaires de règle de demande décision"
 
 msgctxt "field:claim,underwritings:"
 msgid "Underwritings"
@@ -64,6 +64,10 @@ msgctxt "model:ir.action,name:act_claim_underwritings"
 msgid "Underwritings"
 msgstr "Demandes de décisions"
 
+msgctxt "selection:rule_engine,type_:"
+msgid "Underwriting Type"
+msgstr "Type de demande de décisions"
+
 msgctxt "selection:underwriting,on_object:"
 msgid "Claim"
 msgstr "Sinistre"
@@ -91,3 +95,7 @@ msgstr "Prestation fournie"
 msgctxt "selection:underwriting.result,underwriting_state:"
 msgid "Processing"
 msgstr "En cours"
+
+msgctxt "view:benefit:"
+msgid "Underwriting Rule"
+msgstr "Règle de demande de décisions"

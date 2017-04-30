@@ -1,0 +1,51 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:migrator.address,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.contact,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.country,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.party,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.party.relation,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.zip,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "model:migrator.address,name:"
+msgid "Migrator address"
+msgstr "Migration des adresses"
+
+msgctxt "model:migrator.contact,name:"
+msgid "Migrator contact"
+msgstr "Migration des contrats"
+
+msgctxt "model:migrator.country,name:"
+msgid "Migrator country"
+msgstr "Migration des pays"
+
+msgctxt "model:migrator.party,name:"
+msgid "Migrator Party."
+msgstr "Migration des tiers"
+
+msgctxt "model:migrator.party.relation,name:"
+msgid "Migrator Party Relation."
+msgstr "Migration des relations entre tiers"
+
+msgctxt "model:migrator.zip,name:"
+msgid "Migrator zip"
+msgstr "Migration des codes postaux"

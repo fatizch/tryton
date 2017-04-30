@@ -112,17 +112,29 @@ msgctxt "field:report.flow.variable,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:report.template,output_filename:"
-msgid "Output Filename"
-msgstr "Nom de fichier de sortie"
-
 msgctxt "field:report.template,generated_code:"
 msgid "Generated code"
 msgstr "Code généré"
 
+msgctxt "field:report.template,genshi_evaluated_output_filename:"
+msgid "Output Filename Genshi Evaluated"
+msgstr "Nom du fichier de sorti (dynamique)"
+
+msgctxt "field:report.template,loop_condition:"
+msgid "Object Line Loop"
+msgstr "Condition de la boucle"
+
+msgctxt "field:report.template,output_filename:"
+msgid "Output Filename"
+msgstr "Nom de fichier de sortie"
+
 msgctxt "field:report.template,output_method:"
 msgid "Output method"
 msgstr "Méthode de sortie"
+
+msgctxt "field:report.template,override_loop:"
+msgid "Override Loop"
+msgstr "Surcharge de boucle"
 
 msgctxt "field:report.template,variables_relation:"
 msgid "Flow Variables Relation"
@@ -187,6 +199,13 @@ msgstr "Modifié par"
 msgctxt "field:report.template.flow_variable.relation,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "help:report.template,loop_condition:"
+msgid ""
+"Genshi condition which define the loop condition to generate the flow lines"
+msgstr ""
+"Condition genshi définissant la règle d'itération pour la génération des "
+"lignes de flux"
 
 msgctxt "model:ir.action,name:"
 msgid "Flow variable relation"

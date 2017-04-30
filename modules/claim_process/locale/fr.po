@@ -240,7 +240,7 @@ msgstr "Clore"
 
 msgctxt "wizard_button:claim.declare,process_parameters,close_claim:"
 msgid "Close claims"
-msgstr "Clôturer les sinistres"
+msgstr "Clore les sinistres"
 
 msgctxt "wizard_button:claim.declare,process_parameters,confirm_declaration:"
 msgid "Start Process"

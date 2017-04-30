@@ -126,6 +126,10 @@ msgctxt "field:endorsement.contract.benefit,indemnification_rule_extra_data:"
 msgid "Indemnification Extra Data"
 msgstr "Données complementaire pour les indemnisations"
 
+msgctxt "field:endorsement.contract.benefit,keep_if_empty:"
+msgid "Keep if Empty"
+msgstr "Conserver si vide"
+
 msgctxt "field:endorsement.contract.benefit,option_version_endorsement:"
 msgid "Option Version Endorsement"
 msgstr "Avenant pour la version de garantie"

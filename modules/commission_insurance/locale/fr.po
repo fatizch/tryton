@@ -1181,21 +1181,21 @@ msgctxt "model:commission.create_invoice.ask,name:commission."
 msgid "Create Commission Invoice"
 msgstr "Générer les bordereaux de commission"
 
-msgctxt "model:ir.action,name:commission.act_agent_form"
-msgid "Agents"
-msgstr "Protocoles de commissionnement"
-
 msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
 msgid "Create Commission Invoices"
 msgstr "Générer les bordereaux de commission"
 
-msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
+msgctxt "model:ir.action,name:commission.act_agent_form"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
 
 msgctxt "model:ir.ui.menu,name:commission.menu_commission_create_invoice"
 msgid "Create Commission Invoices"
 msgstr "Générer les bordereaux de commission"
+
+msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "model:product.template-commission.agent,name:commission."
 msgid "Product Template - Commission Agent"
@@ -1210,12 +1210,12 @@ msgid "Agent Of"
 msgstr "Est commissionné par"
 
 msgctxt "view:commission.agent:commission."
-msgid "Agent"
-msgstr "Protocole de commissionnement"
-
-msgctxt "view:commission.agent:commission."
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "view:commission.agent:commission."
+msgid "Agent"
+msgstr "Protocole de commissionnement"
 
 msgctxt "view:commission.create_invoice.ask:commission."
 msgid "Create Commission Invoice"

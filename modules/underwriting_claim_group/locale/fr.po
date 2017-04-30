@@ -1,3 +1,67 @@
 #
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:benefit,force_underwriting_rule:"
+msgid "Force Underwriting Rule"
+msgstr "Forcer la règle de demande de décision"
+
+msgctxt "field:benefit,underwriting_rules:"
+msgid "Underwriting Rules"
+msgstr "Règles de demande de décisions"
+
+msgctxt "field:benefit-underwriting_rule,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:benefit-underwriting_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-underwriting_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-underwriting_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit-underwriting_rule,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:benefit-underwriting_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit-underwriting_rule,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:benefit-underwriting_rule,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:benefit-underwriting_rule,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:benefit-underwriting_rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.option.benefit,available_underwriting_rules:"
+msgid "Available Underwriting Rules"
+msgstr "Règles de demande de décisions disponibles"
+
+msgctxt "field:contract.option.benefit,underwriting_rule:"
+msgid "Underwriting Rule"
+msgstr "Règle de demande de décisions"
+
+msgctxt "field:contract.option.benefit,underwriting_rule_extra_data:"
+msgid "Underwriting Rule Extra Data"
+msgstr "Données complémentaires de règle de demande de décision"
+
+msgctxt "model:benefit-underwriting_rule,name:"
+msgid "Benefit - Underwriting Rule"
+msgstr "Relation Prestation - Règle de demande de décisions"

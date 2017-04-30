@@ -277,6 +277,10 @@ msgctxt "field:contract.covered_element,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:contract.covered_element,start_date:"
+msgid "Start Date"
+msgstr "Date de début"
+
 msgctxt "field:contract.covered_element,sub_covered_elements:"
 msgid "Sub Covered Elements"
 msgstr "Sous Risques Couverts"

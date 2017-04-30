@@ -135,11 +135,11 @@ msgid "Configuration"
 msgstr "Configuration"
 
 msgctxt "model:work_days.configuration,name:work_days_config_fr"
-msgid "french work days"
+msgid "French Work Days"
 msgstr "Jours Fériés Français"
 
 msgctxt "model:work_days.configuration,name:work_days_config_fr_alsace"
-msgid "french work days alsace"
+msgid "French Work Days in Alsace"
 msgstr "Jours Fériés Français en Alsace"
 
 msgctxt "model:work_days.holiday,name:"

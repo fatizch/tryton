@@ -291,8 +291,8 @@ msgid "Format for internal EDM"
 msgstr "Format pour la GED interne"
 
 msgctxt "field:report.template,genshi_evaluated_export_dir:"
-msgid "Export DirectoryGenshi Evaluated"
-msgstr "Dossier d'export"
+msgid "Export Directory Genshi Evaluated"
+msgstr "Dossier d'export (dynamique)"
 
 msgctxt "field:report.template,id:"
 msgid "ID"

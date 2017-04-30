@@ -1,0 +1,27 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:migrator.bank,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.bank_account,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.bank_agency,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "model:migrator.bank,name:"
+msgid "Migrator Bank"
+msgstr "Migration des banques"
+
+msgctxt "model:migrator.bank_account,name:"
+msgid "Migrator bank account"
+msgstr "Migration des comptes bancaires"
+
+msgctxt "model:migrator.bank_agency,name:"
+msgid "Migrator Bank agency"
+msgstr "Migration des agences bancaires"

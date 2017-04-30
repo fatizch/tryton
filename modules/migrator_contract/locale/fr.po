@@ -1,0 +1,51 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:migrator.contract,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.contract.event,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.contract.option,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.contract.premium,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.contract.premium_waiver,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.contract.version,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "model:migrator.contract,name:"
+msgid "Migrator Contract."
+msgstr "Migration des contrats"
+
+msgctxt "model:migrator.contract.event,name:"
+msgid "Migrator contract event."
+msgstr "Migration des événements sur les contrats"
+
+msgctxt "model:migrator.contract.option,name:"
+msgid "Migrator contract option"
+msgstr "Migration des garanties"
+
+msgctxt "model:migrator.contract.premium,name:"
+msgid "Migrator Contract Premium"
+msgstr "Migration des tarifs"
+
+msgctxt "model:migrator.contract.premium_waiver,name:"
+msgid "Migrator contract premium waiver"
+msgstr "Migration des périodes de non-paiement"
+
+msgctxt "model:migrator.contract.version,name:"
+msgid "Migrator Contract Version."
+msgstr "Migration des versions de contrat"

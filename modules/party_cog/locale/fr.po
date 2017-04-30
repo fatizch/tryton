@@ -33,9 +33,11 @@ msgid "The SSN of the party must be unique."
 msgstr "Le NIR du tiers doit être unique"
 
 msgctxt "error:party.replace:"
-msgid "Parties have different first names: %(source_name)s vs %(destination_name)s."
+msgid ""
+"Parties have different first names: %(source_name)s vs %(destination_name)s."
 msgstr ""
-"Les tiers ont des prénoms différents: %(source_name)s vs %(destination_name)s."
+"Les tiers ont des prénoms différents: %(source_name)s vs "
+"%(destination_name)s."
 
 msgctxt "field:ir.test_case,adult_age_max:"
 msgid "Maximum age for adults"
@@ -80,6 +82,10 @@ msgstr "Date de Fin"
 msgctxt "field:party.address,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
+
+msgctxt "field:party.address,needs_subdivision:"
+msgid "Needs Subdivision"
+msgstr "Subdivision requise"
 
 msgctxt "field:party.address,start_date:"
 msgid "Start Date"
@@ -376,6 +382,18 @@ msgstr "Code"
 msgctxt "field:party.relation.type,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:party.replace.ask,birth_date:"
+msgid "Birth Date"
+msgstr "Date de Naissance"
+
+msgctxt "field:party.replace.ask,gender:"
+msgid "Gender"
+msgstr "Genre"
+
+msgctxt "field:party.replace.ask,is_person:"
+msgid "Person"
+msgstr "Personne Physique"
 
 msgctxt "field:party.synthesis.menu,childs:"
 msgid "Childs"

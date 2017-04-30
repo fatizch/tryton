@@ -7,10 +7,9 @@ msgid "Share for current beneficiary : %(share)s %%"
 msgstr "Répartition pour le bénéficiaire courant : %(share)s %%"
 
 msgctxt "error:document.request.line:"
-msgid ""
-"Documents must all be requested together for beneficiary %(beneficiary)s"
+msgid "Documents must be requested together for beneficiary %(beneficiary)s"
 msgstr ""
-"Les documents doivent être demandés simultanéments pour le bénéficiaire "
+"Les documents doivent être demandés simultanément pour le bénéficiaire "
 "%(beneficiary)s"
 
 msgctxt "field:benefit,is_eckert:"
@@ -159,7 +158,7 @@ msgctxt "model:document.description,name:death_certificate_document"
 msgid "Death Certificate"
 msgstr "Certificat de décès"
 
-msgctxt "model:ir.note.type,name:None"
+msgctxt "model:ir.note.type,name:"
 msgid "Eckert Related"
 msgstr "Loi Eckert"
 

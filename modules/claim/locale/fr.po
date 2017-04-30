@@ -1142,6 +1142,10 @@ msgctxt "model:claim.closing_reason,name:"
 msgid "Closing Reason"
 msgstr "Motif de fin"
 
+msgctxt "model:claim.configuration,name:"
+msgid "Claim Configuration"
+msgstr "Configuration Sinistre"
+
 msgctxt "model:claim.loss,name:"
 msgid "Loss"
 msgstr "Préjudice"
@@ -1177,6 +1181,10 @@ msgstr "Délivrer une prestation"
 msgctxt "model:ir.action,name:act_benefit_form"
 msgid "Benefits"
 msgstr "Prestations"
+
+msgctxt "model:ir.action,name:act_claim_configuration"
+msgid "Claim Configuration"
+msgstr "Configuration Sinistre"
 
 msgctxt "model:ir.action,name:act_claim_event_log_relate_form"
 msgid "Event Logs"
@@ -1257,6 +1265,10 @@ msgstr "Prestations"
 msgctxt "model:ir.ui.menu,name:menu_claim"
 msgid "Claim"
 msgstr "Sinistre"
+
+msgctxt "model:ir.ui.menu,name:menu_claim_conf"
+msgid "Claim Configuration"
+msgstr "Configuration Sinistre"
 
 msgctxt "model:ir.ui.menu,name:menu_claim_configuration"
 msgid "Configuration"

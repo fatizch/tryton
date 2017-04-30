@@ -118,8 +118,8 @@ msgid "Monthly premium including tax"
 msgstr "Prime mensuelle TTC"
 
 msgctxt "model:extra_details.configuration.line,string:commission_premium"
-msgid "Base Premium"
-msgstr "Prime de base"
+msgid "First year premium"
+msgstr "Prime de la première année"
 
 msgctxt ""
 "model:extra_details.configuration.line,string:commission_sum_prepayments"

@@ -1,0 +1,19 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:migrator.invoice,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.invoice.line,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "model:migrator.invoice,name:"
+msgid "Migrator Invoice"
+msgstr "Migration des quittances"
+
+msgctxt "model:migrator.invoice.line,name:"
+msgid "Migrator Invoice Line"
+msgstr "Migration des lignes de quittance"

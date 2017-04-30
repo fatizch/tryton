@@ -79,8 +79,7 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "help:commission.plan.line,prepayment_rule:"
-msgid ""
-"Returns a tuple with the prepayment commission amount and rate"
+msgid "Returns a tuple with the prepayment commission amount and rate"
 msgstr ""
 "Retourne un tuple avec le montant de la commission en précompte et le taux"
 

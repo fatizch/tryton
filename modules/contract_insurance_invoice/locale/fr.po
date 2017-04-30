@@ -528,6 +528,18 @@ msgctxt "field:contract.invoice,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract.invoice.against_balance.batch,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.invoice.against_balance.post.batch,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.invoice.against_balance.set_number.batch,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:contract.invoice.create,id:"
 msgid "ID"
 msgstr "ID"
@@ -1105,6 +1117,18 @@ msgstr "Génération des quittances"
 msgctxt "model:contract.invoice,name:"
 msgid "Contract Invoice"
 msgstr "Quittance"
+
+msgctxt "model:contract.invoice.against_balance.batch,name:"
+msgid "Invoice Against Contract Balance Batch"
+msgstr "Batch de quittancement par rapport aux balances contrat"
+
+msgctxt "model:contract.invoice.against_balance.post.batch,name:"
+msgid "Post Invoice Against Contract Balance Batch"
+msgstr "Batch d'émission des quittances par rapport aux balances contrat"
+
+msgctxt "model:contract.invoice.against_balance.set_number.batch,name:"
+msgid "Number Invoice Against Contract Balance Batch"
+msgstr "Numérotation des quittances par rapport aux balances contrat"
 
 msgctxt "model:contract.invoice.create,name:"
 msgid "Contract Invoice Creation Batch"

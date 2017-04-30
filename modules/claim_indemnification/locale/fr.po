@@ -2,9 +2,9 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:claim.configuration,name:"
-msgid "Claim Configuration"
-msgstr "Configuration"
+msgctxt "error:benefit.rule:"
+msgid "Share for current beneficiary : %(share)s %%"
+msgstr "Répartition pour le bénéficiaire courant : %(share)s %%"
 
 msgctxt "error:benefit.rule:"
 msgid "Total after share : %(amount).2f"
@@ -59,14 +59,14 @@ msgid "Capital"
 msgstr "Capital"
 
 msgctxt "error:claim.indemnification:"
-msgid "No bank account found for the beneficiary %s on loss %s"
-msgstr "Aucun compte bancaire pour le bénéficiaire %s du sinistre %s"
-
-msgctxt "error:claim.indemnification:"
 msgid "Cannot schedule indemnifications for draft loss %(loss)s"
 msgstr ""
 "Impossible de valider les indemnisations sur l'événement en brouillon "
 "%(loss)s"
+
+msgctxt "error:claim.indemnification:"
+msgid "No bank account found for the beneficiary %s on loss %s"
+msgstr "Aucun compte bancaire pour le bénéficiaire %s du sinistre %s"
 
 msgctxt "error:claim.indemnification:"
 msgid ""
@@ -133,11 +133,11 @@ msgstr "Le date n'est pas égale à la date d'annulation"
 
 msgctxt "error:claim.service:"
 msgid ""
-"There may not be multiple capital indemnifications, the current one will be "
-"cancelled"
+"There may not be multiple capital indemnifications for a given beneficiary, "
+"the current one will be cancelled"
 msgstr ""
-"Il n'est pas possible d'avoir plusieurs indemnisations de type 'capital', "
-"celle existante sera annulée."
+"Il ne peut pas y avoir plusieurs indemnisations de type capital pour un "
+"bénéficiaire donné, l'existante sera annulée"
 
 msgctxt "field:account.invoice.line,claim_detail:"
 msgid "Claim Detail"
@@ -343,13 +343,13 @@ msgctxt "field:claim,is_services_deductible:"
 msgid "Is Services Deductible"
 msgstr "Le service est une période de franchise"
 
-msgctxt "field:claim.configuration,payment_journal:"
-msgid "Default Payment Journal"
-msgstr "Journal de paiement par défaut"
-
 msgctxt "field:claim.configuration,control_rule:"
 msgid "Control Rule"
 msgstr "Règle de contrôle des prestations"
+
+msgctxt "field:claim.configuration,payment_journal:"
+msgid "Default Payment Journal"
+msgstr "Journal de paiement par défaut"
 
 msgctxt "field:claim.configuration,show_indemnification_limit:"
 msgid "Show Indemnification Limit"
@@ -390,10 +390,6 @@ msgstr "ID"
 msgctxt "field:claim.extra_datas_displayers,service:"
 msgid "Claim Service"
 msgstr "Prestation fournie"
-
-msgctxt "field:claim.indemnification,journal:"
-msgid "Journal"
-msgstr "Journal"
 
 msgctxt "field:claim.indemnification,amount:"
 msgid "Amount"
@@ -450,6 +446,10 @@ msgstr "ID"
 msgctxt "field:claim.indemnification,is_paid:"
 msgid "Paid"
 msgstr "Payée"
+
+msgctxt "field:claim.indemnification,journal:"
+msgid "Journal"
+msgstr "Journal"
 
 msgctxt "field:claim.indemnification,kind:"
 msgid "Kind"
@@ -803,11 +803,14 @@ msgctxt "field:claim.indemnification.detail,indemnification:"
 msgid "Indemnification"
 msgstr "Prestations"
 
+msgctxt "field:claim.indemnification.detail,indemnification_beneficiary:"
+msgid "Beneficiary"
+msgstr "Destinataire du paiement"
+
 msgctxt "field:claim.indemnification.detail,indemnification_kind:"
 msgid "Indemnification Kind"
 msgstr "Type d'indemnisation"
 
-#, fuzzy
 msgctxt "field:claim.indemnification.detail,indemnification_note:"
 msgid "Note"
 msgstr "Note"
@@ -876,9 +879,17 @@ msgctxt "field:claim.indemnification_definition,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:claim.indemnification_definition,indemnification_date:"
+msgid "Indemnification Date"
+msgstr "Date d'indemnisation"
+
 msgctxt "field:claim.indemnification_definition,is_period:"
 msgid "Is Period"
 msgstr "Est périodique"
+
+msgctxt "field:claim.indemnification_definition,journal:"
+msgid "Journal"
+msgstr "Journal"
 
 msgctxt "field:claim.indemnification_definition,possible_beneficiaries:"
 msgid "Possible Beneficiaries"
@@ -1021,6 +1032,18 @@ msgid "This value will be used to sort indemnifications by start date"
 msgstr ""
 "Cette valeur sera utilisée pour trier les indémnisations par date de début"
 
+msgctxt "help:claim.indemnification_definition,beneficiary:"
+msgid "The party to which the indemnification will be paid"
+msgstr "Le tiers auquel sera versé l'indemnisation"
+
+msgctxt "help:claim.indemnification_definition,indemnification_date:"
+msgid ""
+"For capital indemnifications, the date at which the indemnification is "
+"expected to be paid"
+msgstr ""
+"Pour les indemnisations de type \"capital\", la date à laquelle "
+"l'indemnisation sera versée"
+
 msgctxt "model:account.invoice.line.claim_detail,name:"
 msgid "Claim Invoice Line Detail"
 msgstr "Détail d'une période"
@@ -1040,6 +1063,10 @@ msgstr "Relation Prestation - Produit"
 msgctxt "model:benefit.rule,name:"
 msgid "Benefit Rule"
 msgstr "Prestation"
+
+msgctxt "model:claim.configuration,name:"
+msgid "Claim Configuration"
+msgstr "Configuration"
 
 msgctxt "model:claim.extra_data_value_displayer,name:"
 msgid "Extra Data Value Displayer"
@@ -1113,10 +1140,6 @@ msgctxt "model:ir.action,name:"
 msgid "Claim Indemnification Validate"
 msgstr "Validation des Indemnisations"
 
-msgctxt "model:ir.action,name:act_claim_configuration"
-msgid "Claim Configuration"
-msgstr "Configuration"
-
 msgctxt "model:ir.action,name:act_claim_invoice"
 msgid "Claim Invoices"
 msgstr "Remboursements sinistre"
@@ -1144,10 +1167,6 @@ msgstr "Assistant de contrôle des prestations"
 msgctxt "model:ir.action,name:indemnification_validate_wizard"
 msgid "Indemnification Validation Wizard"
 msgstr "Assistant de validation des prestations"
-
-msgctxt "model:ir.ui.menu,name:menu_claim_conf"
-msgid "Claim Configuration"
-msgstr "Configuration"
 
 msgctxt "model:ir.ui.menu,name:menu_control_indemnification"
 msgid "Controler les Indemnifications"
@@ -1512,14 +1531,6 @@ msgstr "Règle de contrôle des prestations"
 msgctxt "view:claim.indemnification.detail:"
 msgid "Indemnification Detail"
 msgstr "Détail de l'indemnisation"
-
-msgctxt "view:claim.indemnification:"
-msgid "Calculate"
-msgstr "Calculer"
-
-msgctxt "view:claim.indemnification:"
-msgid "Cancel"
-msgstr "Annuler"
 
 msgctxt "view:claim.indemnification:"
 msgid "Modify"

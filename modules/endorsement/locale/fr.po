@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.manage_options.option_displayer:"
+msgid "New Option (%s)"
+msgstr "Nouvelle garantie (%s)"
+
 msgctxt "error:contract:"
 msgid "Enter a value for field '%s' of '%s'"
 msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
@@ -17,6 +21,10 @@ msgstr "Tout est bon!"
 msgctxt "error:contract:"
 msgid "Select a date that is not in the future for field(s): %s"
 msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
+
+msgctxt "error:document.receive:"
+msgid "A contract must be set !"
+msgstr "Un contrat doit être renseigné !"
 
 msgctxt "error:endorsement.contract.activation_history:"
 msgid "New version"
@@ -2585,10 +2593,6 @@ msgid "Delete"
 msgstr "Supprimer"
 
 msgctxt "view:endorsement:"
-msgid "Resume"
-msgstr "Reprendre"
-
-msgctxt "view:endorsement:"
 msgid "Open Contract"
 msgstr "Ouvrir le Contrat"
 
@@ -2597,20 +2601,16 @@ msgid "Open Contract before Application"
 msgstr "Ouvrir le contrat avant application"
 
 msgctxt "view:endorsement:"
+msgid "Resume"
+msgstr "Reprendre"
+
+msgctxt "view:endorsement:"
 msgid "Resume Endorsement"
 msgstr "Reprendre l'avenant"
 
 msgctxt "view:offered.product:"
 msgid "Endorsements"
 msgstr "Avenants"
-
-msgctxt "wizard_button:endorsement.decline,select_reason,decline:"
-msgid "Decline"
-msgstr "Décliner"
-
-msgctxt "wizard_button:endorsement.decline,select_reason,end:"
-msgid "Cancel"
-msgstr "Annuler"
 
 msgctxt "wizard_button:endorsement.start,basic_preview,apply_endorsement:"
 msgid "Apply"
@@ -2623,6 +2623,14 @@ msgstr "Annuler"
 msgctxt "wizard_button:endorsement.start,basic_preview,summary:"
 msgid "Summary"
 msgstr "Synthèse"
+
+msgctxt "wizard_button:endorsement.decline,select_reason,decline:"
+msgid "Decline"
+msgstr "Décliner"
+
+msgctxt "wizard_button:endorsement.decline,select_reason,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
@@ -2760,14 +2768,14 @@ msgctxt "wizard_button:endorsement.start,select_endorsement,cancel:"
 msgid "Cancel"
 msgstr "Annuler"
 
+msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
+
 msgctxt ""
 "wizard_button:endorsement.start,select_endorsement,start_endorsement:"
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
-
-msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
 
 msgctxt "wizard_button:endorsement.start,summary,cancel:"
 msgid "Cancel"

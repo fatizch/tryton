@@ -15,11 +15,6 @@ msgstr ""
 "Les lignes sélectionnées sont incompatibles: certaines sont des lignes à "
 "payer d'autres des lignes à recevoir"
 
-msgctxt "error:account.payment.group:"
-msgid "The reason code on journal %s is not found"
-msgstr ""
-"Le motif de rejet sur le journal %s est introuvable"
-
 msgctxt "error:account.payment.fail_information:"
 msgid "Trying to fail different payment kinds at the same time"
 msgstr ""
@@ -31,6 +26,10 @@ msgid "Trying to fail different payment methods at the same time"
 msgstr ""
 "Ne pas essayer de faire échouer en même temps des paiements de différentes "
 "méthodes"
+
+msgctxt "error:account.payment.group:"
+msgid "The reason code on journal %s is not found"
+msgstr "Le motif de rejet sur le journal %s est introuvable"
 
 msgctxt "error:account.payment.journal.failure_action:"
 msgid "Unknown reject code : %s"
@@ -437,6 +436,10 @@ msgstr "Mis à jour par"
 msgctxt "field:account.payment.motive,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:account.payment.payment_creation.start,created_payments:"
+msgid "Created Payments"
+msgstr "Paiements créés"
 
 msgctxt "field:account.payment.payment_creation.start,description:"
 msgid "Description"
@@ -960,28 +963,28 @@ msgid "Failed"
 msgstr "Rejeté"
 
 msgctxt "selection:account.move.line,payment_kind:account_payment."
-msgid "Payable"
-msgstr "À payer"
+msgid "Receivable"
+msgstr "À recevoir"
 
 msgctxt "selection:account.move.line,payment_kind:account_payment."
-msgid "Receivable"
-msgstr "À recevoir"
-
-msgctxt "selection:account.payment.group,kind:account_payment."
-msgid "Receivable"
-msgstr "À recevoir"
+msgid "Payable"
+msgstr "À payer"
 
 msgctxt "selection:account.payment.group,kind:account_payment."
 msgid "Payable"
 msgstr "À payer"
 
-msgctxt "selection:account.payment,kind:account_payment."
+msgctxt "selection:account.payment.group,kind:account_payment."
 msgid "Receivable"
 msgstr "À recevoir"
 
 msgctxt "selection:account.payment,kind:account_payment."
 msgid "Payable"
 msgstr "À payer"
+
+msgctxt "selection:account.payment,kind:account_payment."
+msgid "Receivable"
+msgstr "À recevoir"
 
 msgctxt "selection:account.payment,state:account_payment."
 msgid "Failed"
