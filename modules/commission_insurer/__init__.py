@@ -2,24 +2,25 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .commission import *
-from .account import *
-from .party import *
-from .batch import *
+import commission
+import account
+import party
+import batch
 
 
 def register():
     Pool.register(
-        Commission,
-        CreateInvoicePrincipalAsk,
-        MoveLine,
-        InvoiceLine,
-        Invoice,
-        Insurer,
-        CreateEmptyInvoicePrincipalBatch,
-        LinkInvoicePrincipalBatch,
-        FinalizeInvoicePrincipalBatch,
+        commission.Agent,
+        commission.Commission,
+        commission.CreateInvoicePrincipalAsk,
+        account.MoveLine,
+        account.InvoiceLine,
+        account.Invoice,
+        party.Insurer,
+        batch.CreateEmptyInvoicePrincipalBatch,
+        batch.LinkInvoicePrincipalBatch,
+        batch.FinalizeInvoicePrincipalBatch,
         module='commission_insurer', type_='model')
     Pool.register(
-        CreateInvoicePrincipal,
+        commission.CreateInvoicePrincipal,
         module='commission_insurer', type_='wizard')

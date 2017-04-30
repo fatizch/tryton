@@ -24,7 +24,7 @@ __all__ = [
 class Party:
     __name__ = 'party.party'
 
-    insurer_role = fields.One2Many('insurer', 'party', 'Insurer', size=1,
+    insurer_role = fields.One2Many('insurer', 'party', 'Insurer',
         states={'invisible': ~Eval('is_insurer', False) | Not(STATES_COMPANY)},
         depends=['is_insurer', 'is_person'])
     is_insurer = fields.Function(

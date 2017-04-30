@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 from trytond.tools import grouped_slice
 from trytond.model import ModelView, Workflow
 from trytond.transaction import Transaction
@@ -55,6 +55,38 @@ class InvoiceLine:
 
 class Invoice:
     __name__ = 'account.invoice'
+
+    insurer_role = fields.Many2One('insurer', 'Insurer', ondelete='RESTRICT',
+        readonly=True, states={
+            'invisible': ~Eval('is_for_insurer'),
+            'required': Bool(Eval('is_for_insurer')),
+            }, depends=['is_for_insurer'])
+    is_for_insurer = fields.Function(
+        fields.Boolean('For insurer'), 'on_change_with_is_for_insurer')
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().connection.cursor()
+        handler = TableHandler(cls, module_name)
+        to_migrate = not handler.column_exist('insurer_role')
+
+        super(Invoice, cls).__register__(module_name)
+
+        # Migration from 1.10 : Store insurer
+        if to_migrate:
+            pool = Pool()
+            to_update = cls.__table__()
+            insurer = pool.get('insurer').__table__()
+            party = pool.get('party.party').__table__()
+            update_data = party.join(insurer, condition=(
+                    insurer.party == party.id)
+                ).select(insurer.id.as_('insurer_id'), party.id)
+            cursor.execute(*to_update.update(
+                    columns=[to_update.insurer_role],
+                    values=[update_data.insurer_id],
+                    from_=[update_data],
+                    where=update_data.id == to_update.party))
 
     @classmethod
     def __setup__(cls):
@@ -148,3 +180,7 @@ class Invoice:
             move.lines = lines
             moves.append(move)
         return moves
+
+    @fields.depends('party')
+    def on_change_with_is_for_insurer(self, name=None):
+        return self.party.is_insurer if self.party else False

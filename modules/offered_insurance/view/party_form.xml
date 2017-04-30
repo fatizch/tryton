@@ -8,7 +8,7 @@ this repository contains the full copyright notices and license terms. -->
     </xpath>
     <xpath expr="/form/notebook/page[@id='role']/notebook" position="inside">
         <page id="insurer" string="Insurer">
-            <field name="insurer_role" mode="form"/>
+            <field name="insurer_role" mode="form,tree"/>
         </page>
     </xpath>
 </data>

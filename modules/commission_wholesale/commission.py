@@ -76,6 +76,7 @@ class Commission:
             type=key['type'],
             journal=cls.get_journal(),
             party=insurer.party,
+            insurer_role=insurer,
             invoice_address=insurer.party.address_get(type='invoice'),
             currency=key['currency'],
             account=account,
@@ -123,7 +124,7 @@ class CreateInvoicePrincipal:
             finalize_invoices_and_lines(insurers, company, journal,
                 date, description)
         for commission_invoice in commission_invoices:
-            account = commission_invoice.party.insurer_role[0].waiting_account
+            account = commission_invoice.insurer_role.waiting_account
             if not account:
                 return commission_invoice
 

@@ -7,16 +7,63 @@ from sql.operators import Concat, Not
 from sql.aggregate import Sum
 from decimal import Decimal
 
+from trytond import backend
 from trytond.wizard import Wizard, StateView, StateAction, Button
 from trytond.model import ModelView
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import PYSONEncoder
+from trytond.pyson import PYSONEncoder, Bool, Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, utils, coog_date
 
 __metaclass__ = PoolMeta
-__all__ = ['Commission', 'CreateInvoicePrincipal', 'CreateInvoicePrincipalAsk']
+__all__ = [
+    'Agent',
+    'Commission',
+    'CreateInvoicePrincipal',
+    'CreateInvoicePrincipalAsk',
+    ]
+
+
+class Agent:
+    __name__ = 'commission.agent'
+
+    insurer = fields.Many2One('insurer', 'Insurer', ondelete='RESTRICT',
+        states={
+            'invisible': ~Eval('is_for_insurer'),
+            'required': Bool(Eval('is_for_insurer')),
+            }, domain=[('party', '=', Eval('party'))],
+        depends=['is_for_insurer', 'party'])
+    is_for_insurer = fields.Function(
+        fields.Boolean('For insurer'), 'on_change_with_is_for_insurer')
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().connection.cursor()
+        handler = TableHandler(cls, module_name)
+        to_migrate = not handler.column_exist('insurer')
+
+        super(Agent, cls).__register__(module_name)
+
+        # Migration from 1.10 : Store insurer
+        if to_migrate:
+            pool = Pool()
+            to_update = cls.__table__()
+            insurer = pool.get('insurer').__table__()
+            party = pool.get('party.party').__table__()
+            update_data = party.join(insurer, condition=(
+                    insurer.party == party.id)
+                ).select(insurer.id.as_('insurer_id'), party.id)
+            cursor.execute(*to_update.update(
+                    columns=[to_update.insurer],
+                    values=[update_data.insurer_id],
+                    from_=[update_data],
+                    where=update_data.id == to_update.party))
+
+    @fields.depends('party')
+    def on_change_with_is_for_insurer(self, name=None):
+        return self.party.is_insurer if self.party else False
 
 
 class Commission:
@@ -35,21 +82,22 @@ class Commission:
                 'generated today for (%s)'})
 
     @classmethod
-    def get_insurer_invoice(cls, company, party, journal, date,
+    def get_insurer_invoice(cls, company, insurer, journal, date,
             new_invoice=False):
         Invoice = Pool().get('account.invoice')
         date = utils.today() if date is None else date
         matchs = Invoice.search([
                 ('company', '=', company),
                 ('journal', '=', journal),
-                ('party', '=', party),
+                ('party', '=', insurer.party),
+                ('insurer_role', '=', insurer),
                 ('invoice_date', '=', date),
                 ('type', '=', 'in'),
                 ('state', '=', 'draft'),
                 ], limit=2)
         if matchs:
             if new_invoice:
-                cls.raise_user_error('already_generated', party.full_name)
+                cls.raise_user_error('already_generated', insurer.rec_name)
             if len(matchs) != 1:
                 cls.raise_user_error('invoice_error', len(matchs))
             return matchs[0]
@@ -57,11 +105,12 @@ class Commission:
             company=company,
             type='in',
             journal=journal,
-            party=party,
-            invoice_address=party.address_get(type='invoice'),
+            party=insurer.party,
+            insurer_role=insurer,
+            invoice_address=insurer.party.address_get(type='invoice'),
             currency=company.currency,
-            account=party.account_payable,
-            payment_term=party.supplier_payment_term,
+            account=insurer.party.account_payable,
+            payment_term=insurer.party.supplier_payment_term,
             invoice_date=date,
             business_kind='insurer_invoice',
             )
@@ -114,7 +163,7 @@ class Commission:
 
         for insurer in insurers:
             invoice_lines = []
-            invoice = cls.get_insurer_invoice(company, insurer.party, journal,
+            invoice = cls.get_insurer_invoice(company, insurer, journal,
                 date, new_invoice=True)
             invoice_line = cls.get_insurer_invoice_line(
                 insurer.waiting_account, 0, desc)
@@ -135,7 +184,7 @@ class Commission:
             date):
         insurers_invoices = {}
         for insurer in insurers:
-            invoice = cls.get_insurer_invoice(company, insurer.party, journal,
+            invoice = cls.get_insurer_invoice(company, insurer, journal,
                 date)
             invoice_line = cls.get_insurer_invoice_line(description=desc,
                 account=insurer.waiting_account, invoice=invoice)
@@ -221,7 +270,7 @@ class Commission:
         insurer = pool.get('insurer').__table__()
 
         query_table = line.join(insurer
-            .join(agent, condition=(insurer.party == agent.party))
+            .join(agent, condition=(insurer.id == agent.insurer))
             .join(commission, condition=(agent.id == commission.agent)),
             condition=(commission.origin == Concat('account.invoice.line,',
                         Cast(line.id, 'VARCHAR'))))
@@ -533,15 +582,15 @@ class CreateInvoicePrincipal(Wizard):
         action['pyson_search_value'] = encoder.encode([])
         return action, {}
 
-    def get_invoice(self, party):
-        Commission = Pool().get('commission')
-        return Commission.get_insurer_invoice(self.ask.company,
-            party, self.ask.journal, self.ask.until_date)
+    # def get_invoice(self, insurer):
+    #     Commission = Pool().get('commission')
+    #     return Commission.get_insurer_invoice(self.ask.company,
+    #         insurer, self.ask.journal, self.ask.until_date)
 
-    def get_invoice_line(self, amount, account):
-        Commission = Pool().get('commission')
-        return Commission.get_insurer_invoice_line(account, amount,
-            self.ask.description)
+    # def get_invoice_line(self, amount, account):
+    #     Commission = Pool().get('commission')
+    #     return Commission.get_insurer_invoice_line(account, amount,
+    #         self.ask.description)
 
 
 class CreateInvoicePrincipalAsk(ModelView):

@@ -34,6 +34,14 @@ msgctxt "error:received_premiums:"
 msgid "Received Premium"
 msgstr "Primes reçues"
 
+msgctxt "field:account.invoice,insurer_role:"
+msgid "Insurer"
+msgstr "Assureur"
+
+msgctxt "field:account.invoice,is_for_insurer:"
+msgid "For insurer"
+msgstr "Pour assureur"
+
 msgctxt "field:account.invoice.line,principal_lines:"
 msgid "Principal Lines"
 msgstr "Lignes "
@@ -45,6 +53,14 @@ msgstr "Ligne de facturation assureur"
 msgctxt "field:account.move.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:commission.agent,insurer:"
+msgid "Insurer"
+msgstr "Assureur"
+
+msgctxt "field:commission.agent,is_for_insurer:"
+msgid "For insurer"
+msgstr "Pour assureur"
 
 msgctxt "field:commission.create_invoice_principal.ask,company:"
 msgid "Company"
