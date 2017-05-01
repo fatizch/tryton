@@ -118,6 +118,7 @@ agent = Agent(party=insurer.party)
 agent.type_ = 'principal'
 agent.plan = insurer_plan
 agent.currency = company.currency
+agent.insurer = insurer
 agent.save()
 
 # #Comment# #Create Subscriber
