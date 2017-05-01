@@ -241,7 +241,7 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return result
 
     def get_report_style_content(self, at_date, template, contract=None):
-        if template.template_extension == 'odt':
+        if template.input_kind == 'libre_office_odt':
             return self.report_style_template
 
     @fields.depends('currency')

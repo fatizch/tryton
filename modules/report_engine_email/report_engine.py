@@ -34,8 +34,8 @@ __all__ = [
     ]
 
 EMAIL_REQUIRED_STATES = {
-    'invisible': Eval('output_kind') != 'email',
-    'required': Eval('output_kind') == 'email',
+    'invisible': Eval('input_kind') != 'email',
+    'required': Eval('input_kind') == 'email',
     }
 
 
@@ -190,64 +190,63 @@ class ReportTemplate:
     __name__ = 'report.template'
 
     email_sender = fields.Char('Email Sender', states=EMAIL_REQUIRED_STATES,
-        depends=['output_kind'])
+        depends=['input_kind'])
     email_dest = fields.Char('Email Recipients', states=EMAIL_REQUIRED_STATES,
-        depends=['output_kind'])
+        depends=['input_kind'])
     email_cc = fields.Char('Email CC', states={
-            'invisible': Eval('output_kind') != 'email'},
-        depends=['output_kind'])
+            'invisible': Eval('input_kind') != 'email'},
+        depends=['input_kind'])
     email_bcc = fields.Char('Email BCC', states={
-            'invisible': Eval('output_kind') != 'email'},
-        depends=['output_kind'])
+            'invisible': Eval('input_kind') != 'email'},
+        depends=['input_kind'])
     email_subject = fields.Char('eMail Subject', states={
-            'invisible': Eval('output_kind') != 'email'},
-        depends=['output_kind'])
+            'invisible': Eval('input_kind') != 'email'},
+        depends=['input_kind'])
     html_body = fields.Boolean('HTML Body', states={
-            'invisible': Eval('output_kind') != 'email'},
-        depends=['output_kind'])
+            'invisible': Eval('input_kind') != 'email'},
+        depends=['input_kind'])
     email_body = fields.Text('eMail Body', states={
-            'invisible': Eval('output_kind') != 'email'},
-        depends=['output_kind'])
+            'invisible': Eval('input_kind') != 'email'},
+        depends=['input_kind'])
     email_blocking = fields.Boolean('Email is blocking', states={
-            'invisible': Eval('output_kind') != 'email',
+            'invisible': Eval('input_kind') != 'email',
             },
-        depends=['output_kind'])
+        depends=['input_kind'])
     allow_manual_sending = fields.Boolean('Allow Manual Sending', states={
-            'invisible': Eval('output_kind') != 'email',
+            'invisible': Eval('input_kind') != 'email',
             },
         help='Be careful: Do not exceed the operating system max command '
         'line length with your attachments',
-        depends=['output_kind'])
+        depends=['input_kind'])
     attachments = fields.Many2Many(
         'report.template.report.template.relation', 'parent_template',
         'child_template', 'Attachments', states={
-            'invisible': Eval('output_kind') != 'email'},
-        domain=[('output_kind', '!=', 'email'), ('on_model', '=',
+            'invisible': Eval('input_kind') != 'email'},
+        domain=[('input_kind', '!=', 'email'), ('on_model', '=',
                 Eval('on_model'))],
         depends=['on_model'])
     images = fields.Many2Many(
         'report.template-report.template.image_attachment',
         'template', 'image', 'Images', states={
-            'invisible': Eval('output_kind') != 'email'},
+            'invisible': Eval('input_kind') != 'email'},
         depends=['on_model'])
 
     @classmethod
     def __setup__(cls):
         super(ReportTemplate, cls).__setup__()
-        for fname in ['modifiable_before_printing', 'convert_to_pdf',
-                'template_extension', 'document_desc', 'versions',
-                'export_dir', 'format_for_internal_edm']:
+        for fname in ['modifiable_before_printing', 'document_desc',
+                'versions', 'export_dir', 'format_for_internal_edm']:
             field = getattr(cls, fname)
-            field.states['invisible'] = Or(Eval('output_kind') == 'email',
+            field.states['invisible'] = Or(Eval('input_kind') == 'email',
                 field.states.get('invisible', False))
-            field.depends.append('output_kind')
-        cls.split_reports.states['readonly'] = Or(Eval('output_kind') ==
+            field.depends.append('input_kind')
+        cls.split_reports.states['readonly'] = Or(Eval('input_kind') ==
             'email', cls.split_reports.states.get('readonly', False))
-        cls.split_reports.depends.append('output_kind')
+        cls.split_reports.depends.append('input_kind')
         cls._error_messages.update({'email_not_sent':
                 'The email could not be sent',
                 'manual_send': 'The template does not allow email editing',
-                'output_kind_email': 'Email',
+                'input_email': 'Email',
                 })
 
     @classmethod
@@ -262,17 +261,16 @@ class ReportTemplate:
             ]
 
     @classmethod
-    def get_possible_output_kinds(cls):
-        return super(ReportTemplate, cls).get_possible_output_kinds() + \
-            [('email', cls.raise_user_error('output_kind_email',
+    def get_possible_input_kinds(cls):
+        return super(ReportTemplate, cls).get_possible_input_kinds() + \
+            [('email', cls.raise_user_error('input_email',
                         raise_exception=False))]
 
-    @fields.depends('output_kind', 'convert_to_pdf', 'email_subject',
+    @fields.depends('input_kind', 'email_subject',
         'email_body', 'email_blocking,' 'split_reports', 'email_dest',
         'email_cc', 'email_bcc', 'email_sender', 'atachments')
-    def on_change_output_kind(self):
-        if self.output_kind == 'email':
-            self.convert_to_pdf = False
+    def on_change_input_kind(self):
+        if self.input_kind == 'email':
             self.split_reports = True
             self.attachments = []
             self.version = []
@@ -284,17 +282,17 @@ class ReportTemplate:
             self.email_cc = ''
             self.email_bcc = ''
             self.email_sender = ''
-        super(ReportTemplate, self).on_change_output_kind()
+        super(ReportTemplate, self).on_change_input_kind()
 
-    @fields.depends('output_kind')
-    def get_possible_output_methods(self):
-        if self.output_kind == 'email':
-            return [('email', self.raise_user_error('output_kind_email',
+    @fields.depends('input_kind')
+    def get_possible_process_methods(self):
+        if self.input_kind == 'email':
+            return [('email', self.raise_user_error('input_email',
                         raise_exception=False))]
-        return super(ReportTemplate, self).get_possible_output_methods()
+        return super(ReportTemplate, self).get_possible_process_methods()
 
     def print_reports(self, reports, context_):
-        if self.output_kind == 'email':
+        if self.input_kind == 'email':
             return None
         return super(ReportTemplate, self).print_reports(reports, context_)
 
@@ -346,30 +344,27 @@ class ReportCreate:
                 ])
 
     def report_execute(self, ids, doc_template, report_context):
-        if doc_template.output_kind != 'email':
+        if doc_template.input_kind != 'email':
             return super(ReportCreate, self).report_execute(ids, doc_template,
                 report_context)
         ReportModel = Pool().get('report.generate', type='report')
-        ReportModel.execute(ids,
-            report_context, immediate_conversion=(
-                not doc_template.convert_to_pdf and
-                not doc_template.modifiable_before_printing))
+        ReportModel.execute(ids, report_context)
         return {}
 
     def transition_generate(self):
         next_state = super(ReportCreate, self).transition_generate()
-        if self.select_template.template.output_kind == 'email':
+        if self.select_template.template.input_kind == 'email':
             return 'end'
         return next_state
 
     def finalize_report(self, report, instance):
-        if self.select_template.template.output_kind == 'email':
+        if self.select_template.template.input_kind == 'email':
             return None
         return super(ReportCreate, self).finalize_report(report, instance)
 
     def do_open_email(self, action):
         if (not self.select_template.template or
-                self.select_template.template.output_kind != 'email' or
+                self.select_template.template.input_kind != 'email' or
                 not self.select_template.template.allow_manual_sending):
             self.select_template.template.raise_user_error('manual_send')
         ReportGenerate = Pool().get('report.generate', type='report')

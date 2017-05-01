@@ -1,3 +1,5 @@
+* Support de toutes les combinaisons de conversion entre le stockage en ged et
+l'export final pour libre office, microsoft office ou pdf.
 * Le champs "répertoire d'export" supporte désormais les expressions genshi
 * Ajout de la méthode de sortie qui n'évalue pas le document à attacher
 * La fonctionnalité des emails à été sortie de ce module au profit d'un nouveau module "report_engine_email"

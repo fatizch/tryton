@@ -273,25 +273,25 @@ class ReportTemplate:
     __name__ = 'report.template'
 
     output_filename = fields.Char('Output Filename', states={
-            'invisible': Eval('output_kind') != 'flow',
-            'required': Eval('output_kind') == 'flow',
-            }, depends=['output_kind'])
+            'invisible': Eval('input_kind') != 'flow',
+            'required': Eval('input_kind') == 'flow',
+            }, depends=['input_kind'])
     variables_relation = fields.One2Many(
         'report.template.flow_variable.relation', 'template',
         'Flow Variables Relation', order=[('order', 'ASC')],
-        delete_missing=True, depends=['output_kind'])
+        delete_missing=True, depends=['input_kind'])
     generated_code = fields.Function(fields.Text('Generated code',
             states={
-                'invisible': Eval('output_kind') != 'flow',
-                }, depends=['output_kind']),
+                'invisible': Eval('input_kind') != 'flow',
+                }, depends=['input_kind']),
         'get_generated_code')
     override_loop = fields.Boolean('Override Loop',
-        states={'invisible': Eval('output_kind') != 'flow',
-            }, depends=['output_kind'])
+        states={'invisible': Eval('input_kind') != 'flow',
+            }, depends=['input_kind'])
     loop_condition = fields.Char('Object Line Loop',
-        states={'invisible': Or(Eval('output_kind') != 'flow',
+        states={'invisible': Or(Eval('input_kind') != 'flow',
                 ~Eval('override_loop')),
-            }, depends=['output_kind', 'override_loop'],
+            }, depends=['input_kind', 'override_loop'],
         help='Genshi condition which define the loop condition to generate the '
         'flow lines')
 
@@ -301,16 +301,16 @@ class ReportTemplate:
         cls._error_messages.update({
                 'output_mixin': 'You cannot print a flow'
                 ' and a model at the same time',
-                'output_kind_flow_variable': 'From Flow Variable',
-                'output_method_default_flux': 'Default Flux'
+                'input_flow_variable': 'From Flow Variable',
+                'process_method_default_flux': 'Default Flux'
                 })
-        for fname in ['modifiable_before_printing', 'convert_to_pdf',
-                'split_reports', 'template_extension', 'document_desc',
+        for fname in ['modifiable_before_printing',
+                'split_reports', 'document_desc',
                 'format_for_internal_edm', 'versions']:
             field = getattr(cls, fname)
-            field.states['invisible'] = Or(Eval('output_kind') == 'flow',
+            field.states['invisible'] = Or(Eval('input_kind') == 'flow',
                 field.states.get('invisible', False))
-            field.depends.append('output_kind')
+            field.depends.append('input_kind')
 
     @classmethod
     def view_attributes(cls):
@@ -319,21 +319,21 @@ class ReportTemplate:
                 {'invisible': getattr(cls, 'versions').states.get(
                         'invisible')}),
             ('/form/notebook/page[@id="generated_code"]', 'states',
-                {'invisible': Eval('output_kind') != 'flow'}),
+                {'invisible': Eval('input_kind') != 'flow'}),
             ('/form/notebook/page[@id="flow"]', 'states',
-                {'invisible': Eval('output_kind') != 'flow'}),
+                {'invisible': Eval('input_kind') != 'flow'}),
             ]
 
     def get_selected_version(self, date, language):
-        if self.output_kind == 'flow':
+        if self.input_kind == 'flow':
             return None
         return super(ReportTemplate, self).get_selected_version(date,
             language)
 
     @classmethod
-    def get_possible_output_kinds(cls):
-        return super(ReportTemplate, cls).get_possible_output_kinds() + \
-            [('flow', cls.raise_user_error('output_kind_flow_variable',
+    def get_possible_input_kinds(cls):
+        return super(ReportTemplate, cls).get_possible_input_kinds() + \
+            [('flow', cls.raise_user_error('input_flow_variable',
                         raise_exception=False))]
 
     def get_generated_code(self, name=None):
@@ -347,29 +347,27 @@ class ReportTemplate:
         output += '{%end%}'
         return output
 
-    @fields.depends('output_kind')
-    def get_possible_output_methods(self):
-        if self.output_kind == 'flow':
+    @fields.depends('input_kind')
+    def get_possible_process_methods(self):
+        if self.input_kind == 'flow':
             return [('default_flux',
-                    self.raise_user_error('output_method_default_flux',
+                    self.raise_user_error('process_method_default_flux',
                         raise_exception=False))]
-        return super(ReportTemplate, self).get_possible_output_methods()
+        return super(ReportTemplate, self).get_possible_process_methods()
 
-    @fields.depends('output_kind', 'split_reports', 'convert_to_pdf')
-    def on_change_output_kind(self):
-        super(ReportTemplate, self).on_change_output_kind()
-        if self.output_kind == 'flow':
+    @fields.depends('input_kind', 'split_reports')
+    def on_change_input_kind(self):
+        super(ReportTemplate, self).on_change_input_kind()
+        if self.input_kind == 'flow':
             self.split_reports = False
-            self.convert_to_pdf = False
         else:
             self.variables_relations = []
             self.output_filename = ''
             self.override_loop = False
             self.loop_condition = ''
 
-
     def print_reports(self, reports, context_):
-        if self.output_kind != 'flow':
+        if self.input_kind != 'flow':
             return super(ReportTemplate, self).print_reports(reports, context_)
         pool = Pool()
         ReportModel = pool.get('report.create', type='wizard')
@@ -396,12 +394,12 @@ class ReportCreate:
     __name__ = 'report.create'
 
     def report_execute(self, ids, doc_template, report_context):
-        if doc_template.output_kind != 'flow':
+        if doc_template.input_kind != 'flow':
             return super(ReportCreate, self).report_execute(
                 ids, doc_template, report_context)
         ReportModel = Pool().get('report.generate', type='report')
         ext, filedata, prnt, file_basename = ReportModel.execute(ids,
-            report_context, immediate_conversion=False)
+            report_context)
         filename = '%s.%s' % (file_basename, ext)
         records = ReportModel._get_records(ids, report_context['model'],
             report_context)
@@ -427,6 +425,6 @@ class ReportCreate:
 
     def transition_generate(self):
         next_state = super(ReportCreate, self).transition_generate()
-        if self.select_template.template.output_kind != 'flow':
+        if self.select_template.template.input_kind != 'flow':
             return next_state
         return 'end'

@@ -6,7 +6,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="code"/>
     <field name="on_model"/>
     <field name="kind"/>
-    <field name="output_kind"/>
+    <field name="input_kind"/>
     <field name="document_desc"/>
     <field name="tags_name"/>
 </tree>

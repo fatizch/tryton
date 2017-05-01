@@ -116,6 +116,10 @@ msgctxt "field:report.template,generated_code:"
 msgid "Generated code"
 msgstr "Code généré"
 
+msgctxt "field:report.template,process_method:"
+msgid "Process Method"
+msgstr "Méthode de traitement"
+
 msgctxt "field:report.template,genshi_evaluated_output_filename:"
 msgid "Output Filename Genshi Evaluated"
 msgstr "Nom du fichier de sorti (dynamique)"
@@ -127,10 +131,6 @@ msgstr "Condition de la boucle"
 msgctxt "field:report.template,output_filename:"
 msgid "Output Filename"
 msgstr "Nom de fichier de sortie"
-
-msgctxt "field:report.template,output_method:"
-msgid "Output method"
-msgstr "Méthode de sortie"
 
 msgctxt "field:report.template,override_loop:"
 msgid "Override Loop"
@@ -255,7 +255,7 @@ msgctxt "selection:report.template,output_kind:"
 msgid "From Variables"
 msgstr "Depuis des variables"
 
-msgctxt "selection:report.template,output_method:"
+msgctxt "selection:report.template,process_method:"
 msgid "Default"
 msgstr "Défaut"
 

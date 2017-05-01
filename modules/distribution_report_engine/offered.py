@@ -18,7 +18,7 @@ class CommercialProduct:
     report_style_template = fields.Binary('Report Style')
 
     def get_report_style_content(self, at_date, template, contract=None):
-        if template.template_extension == 'odt':
+        if template.input_kind == 'libre_office_odt':
             return self.report_style_template
 
     @classmethod

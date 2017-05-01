@@ -56,13 +56,6 @@ __all__ = [
     'ReportCreatePreviewLine',
     ]
 
-FILE_EXTENSIONS = [
-    ('odt', 'Open Document Text (.odt)'),
-    ('odp', 'Open Document Presentation (.odp)'),
-    ('ods', 'Open Document Spreadsheet (.ods)'),
-    ('odg', 'Open Document Graphics (.odg)'),
-    ]
-
 
 class TemplateParameter(DictSchemaMixin, model.CoogSQL, model.CoogView):
     'Template Parameter'
@@ -113,27 +106,28 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     versions = fields.One2Many('report.template.version', 'resource',
         'Versions', delete_missing=True)
     kind = fields.Selection('get_possible_kinds', 'Kind')
-    output_kind = fields.Selection('get_possible_output_kinds',
-        'Output kind', required=True)
+    input_kind = fields.Selection('get_possible_input_kinds',
+        'Input Kind', required=True)
     format_for_internal_edm = fields.Selection('get_available_formats',
         'Format for internal EDM',
         help="If no format is specified, the document will not be stored "
         "in the internal EDM")
+    output_format = fields.Selection([('libre_office', 'Libre Office'),
+            ('pdf', 'Pdf'), ('microsoft_office', 'Microsoft Office')],
+        'Output Format', states={
+            'required': Eval('process_method') == 'libre_office',
+            'invisible': Eval('process_method') != 'libre_office',
+        })
     document_desc = fields.Many2One('document.description',
         'Document Description', ondelete='SET NULL')
     modifiable_before_printing = fields.Boolean('Modifiable',
         help='Set to true if you want to modify the generated document before '
         'sending or printing')
-    template_extension = fields.Selection(FILE_EXTENSIONS,
-        'Template Extension')
     export_dir = fields.Char('Export Directory', help='Store a copy of each '
         'generated document in specified server directory')
-    convert_to_pdf = fields.Boolean('Convert to pdf', states={
-            'invisible': Equal(Eval('output_method'), 'flat_document')},
-        depends=['output_method'])
     split_reports = fields.Boolean('Split Reports', states={
-            'invisible': Equal(Eval('output_method'), 'flat_document')},
-        depends=['output_method'],
+            'invisible': Equal(Eval('process_method'), 'flat_document')},
+        depends=['process_method'],
         help="If checked, one document will be produced for each object. "
         "If not checked a single document will be produced for several "
         "objects.")
@@ -141,9 +135,13 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             'report_template', 'event_type_action', 'Event Type Actions')
     parameters = fields.Many2Many('report.template-report.template.parameter',
         'report_template', 'parameter', 'Parameters')
-    output_method = fields.Selection('get_possible_output_methods',
-        'Output method', states={
-            }, depends=['output_kind'])
+    process_method = fields.Selection('get_possible_process_methods',
+        'Process Method', states={
+            'invisible': Eval('nb_of_possible_process_methods', 0) <= 1
+            }, depends=['input_kind', 'nb_of_possible_process_methods'])
+    nb_of_possible_process_methods = fields.Function(
+        fields.Integer('Number of possible process methods',),
+        'on_change_with_nb_of_possible_process_methods')
 
     @classmethod
     def __setup__(cls):
@@ -156,58 +154,69 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         cls._error_messages.update({
                 'no_version_match': 'No letter model found for date %s '
                 'and language %s',
-                'output_method_open_document': 'Open Document',
-                'output_method_flat_document': 'Flat Document',
-                'output_kind_from_model': 'From File',
+                'libre_office': 'Libre Office',
+                'flat_document': 'Flat Document',
+                'libre_office_odt': 'Libre Office Writer',
+                'libre_office_ods': 'Libre Office Calc',
                 'format_original': 'Original',
                 'format_pdf': 'Pdf',
-                'format_xlsx': 'xlsx',
+                'microsoft_office': 'Microsoft Office',
                 })
 
     @classmethod
     def __register__(cls, module_name):
-        # Migration from 1.3: rename 'document_template' => 'report_template'
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().connection.cursor()
-        if TableHandler.table_exist('document_template'):
-            TableHandler.table_rename('document_template',
-                'report_template')
         report_template = TableHandler(cls)
+        to_update = cls.__table__()
+
+        # Migration from 1.10 Rename output kind to input_kind kind
+        has_column_output_kind = report_template.column_exist('output_kind')
+        if has_column_output_kind:
+            report_template.column_rename('output_kind', 'input_kind')
+
         has_column_template_extension = report_template.column_exist(
             'template_extension')
-        has_column_internal_edm = report_template.column_exist('internal_edm')
-        has_column_output_kind = report_template.column_exist('output_kind')
         has_column_mail_subject = report_template.column_exist('mail_subject')
         has_column_mail_body = report_template.column_exist('mail_body')
+        # Migration from 1.11 Rename output_method
+        has_column_output_method = report_template.column_exist('output_method')
+        if has_column_output_method:
+            report_template.column_rename('output_method', 'process_method')
+            cursor.execute(*to_update.update(
+                columns=[to_update.process_method],
+                values=['libre_office'],
+                where=to_update.process_method == 'open_document'))
+
         super(ReportTemplate, cls).__register__(module_name)
-        to_update = cls.__table__()
-        if not has_column_template_extension:
-            # Migration from 1.4 : set default values for new columns
+        if has_column_template_extension:
+            # Migration from 1.10 Merge template extension and input_kind
             cursor.execute("UPDATE report_template "
-                "SET template_extension = 'odt' "
-                "WHERE template_extension IS NULL")
-            cursor.execute("UPDATE report_template SET convert_to_pdf = 'TRUE'"
-                "WHERE convert_to_pdf IS NULL")
-            cursor.execute("UPDATE report_template SET split_reports = 'TRUE'"
-                "WHERE split_reports IS NULL")
-        if has_column_internal_edm:
-            # Migration from 1.4 : Store template format for internal edm
+                "SET input_kind = 'libre_office_odt' "
+                "WHERE template_extension = 'odt' "
+                "and input_kind='model'")
             cursor.execute("UPDATE report_template "
-                "SET format_for_internal_edm = 'pdf' "
-                "WHERE internal_edm = 'TRUE' and convert_to_pdf = 'TRUE'")
+                "SET input_kind = 'libre_office_ods' "
+                "WHERE template_extension = 'ods' "
+                "and input_kind='model'")
             cursor.execute("UPDATE report_template "
-                "SET format_for_internal_edm = 'original' "
-                "WHERE internal_edm = 'TRUE' and convert_to_pdf = 'FALSE'")
-            report_template.drop_column('internal_edm')
+                "SET input_kind = 'flat_document' "
+                "WHERE process_method = 'flat_document'")
+            cursor.execute("UPDATE report_template "
+                "SET process_method = 'libre_office' "
+                "WHERE process_method = 'open_document'")
+            report_template.drop_column('template_extension')
+
         if not has_column_output_kind:
-            cursor.execute(*to_update.update(columns=[to_update.output_kind],
-                    values=[Literal(cls.default_output_kind())],
-                    where=to_update.output_kind == Null))
-        if has_column_mail_subject or has_column_mail_body:
+            cursor.execute(*to_update.update(columns=[to_update.input_kind],
+                    values=[Literal(cls.default_input_kind())],
+                    where=to_update.input_kind == Null))
+
+        if not has_column_output_method:
             # Migration from 1.10: New module report_engine_email
-            cursor.execute(*to_update.update(columns=[to_update.output_method],
-                    values=[Literal(cls.default_output_method())],
-                    where=to_update.output_method == ''))
+            cursor.execute(*to_update.update(columns=[to_update.process_method],
+                    values=[Literal(cls.default_process_method())],
+                    where=to_update.process_method == ''))
         if has_column_mail_subject:
             # Migration from 1.10: New module report_engine_email
             report_template.drop_column('mail_subject')
@@ -218,48 +227,78 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         # Migration from 1.10: Replace support from xls to xlsx
         cursor.execute(*to_update.update(
             columns=[to_update.format_for_internal_edm],
-            values=['xlsx'],
-            where=to_update.format_for_internal_edm == 'xls95'))
+            values=['microsoft_office'],
+            where=to_update.format_for_internal_edm.in_(['xls95', 'xlsx'])))
+
+        # Migration from 1.10 move convert_to_pdf to output_format
+        if report_template.column_exist('convert_to_pdf'):
+            cursor.execute(*to_update.update(columns=[to_update.output_format],
+                    values=['libre_office'],
+                    where=to_update.convert_to_pdf == Literal(False) &
+                    to_update.input_kind.in_(
+                        ['libre_office_odt', 'libre_office_ods'])))
+            cursor.execute(*to_update.update(columns=[to_update.output_format],
+                    values=['pdf'],
+                    where=to_update.convert_to_pdf == Literal(True)))
+            report_template.drop_column('convert_to_pdf')
 
     @classmethod
+    def default_process_method(cls):
+        return 'libre_office'
+
+    @fields.depends('input_kind')
+    def get_possible_process_methods(self):
+        if self.input_kind and self.input_kind.startswith('libre_office'):
+            return [('libre_office',
+                self.raise_user_error('libre_office', raise_exception=False))]
+        elif self.input_kind == 'flat_document':
+            return [('flat_document',
+                self.raise_user_error('flat_document', raise_exception=False))]
+        return [('', '')]
+      
     def copy(cls, reports, default=None):
         default = {} if default is None else default.copy()
         default.setdefault('event_type_actions', None)
         return super(ReportTemplate, cls).copy(reports, default=default)
+      
+    @fields.depends('input_kind')
+    def on_change_with_nb_of_possible_process_methods(self, name=None):
+        return len(self.get_possible_process_methods())
 
-    @classmethod
-    def default_output_method(cls):
-        return 'open_document'
-
-    @fields.depends('output_kind')
-    def get_possible_output_methods(self):
-        return [('open_document',
-                self.raise_user_error('output_method_open_document',
-                    raise_exception=False)),
-            ('flat_document',
-                self.raise_user_error('output_method_flat_document',
-                    raise_exception=False))]
-
-    @fields.depends('output_method')
+    @fields.depends('process_method', 'output_format')
     def get_available_formats(self):
         available_format = [
             ('', ''),
             ]
-        if self.output_method == 'open_document':
+        if self.process_method == 'libre_office':
             available_format += [
                 ('original', self.__class__.raise_user_error(
                         'format_original', raise_exception=False)),
+                ('microsoft_office', self.__class__.raise_user_error(
+                        'microsoft_office', raise_exception=False)),
                 ('pdf', self.__class__.raise_user_error(
-                        'format_pdf', raise_exception=False)),
-                ('xlsx', self.__class__.raise_user_error(
-                        'format_xlsx', raise_exception=False)),
-            ]
-        elif self.output_method == 'flat_document':
+                        'format_pdf', raise_exception=False))]
+        elif self.process_method == 'flat_document':
             available_format += [
                 ('original', self.__class__.raise_user_error(
                         'format_original', raise_exception=False)),
                 ]
         return available_format
+
+    def get_extension(self, var_name='output_format'):
+        format_ = getattr(self, var_name)
+        if not format_:
+            return None
+        if (format_ == 'microsoft_office'
+                and self.input_kind.startswith('libre_office')):
+            return {'odt': 'docx', 'ods': 'xlsx'}[self.input_kind[-3:]]
+        elif format_ == 'pdf':
+            return 'pdf'
+        elif self.input_kind.startswith('libre_office') and (
+                format_.startswith('libre_office') or format_ == 'original'):
+            return self.input_kind[-3:]
+        elif self.input_kind == 'flat_document':
+            return os.path.splitext(self.versions[0].name)[1][1:]
 
     @classmethod
     def search(cls, domain, *args, **kwargs):
@@ -275,14 +314,19 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return super(ReportTemplate, cls).search(domain, *args, **kwargs)
 
     @classmethod
-    def default_output_kind(cls):
-        return 'model'
+    def default_input_kind(cls):
+        return 'libre_office_odt'
 
     @classmethod
-    def get_possible_output_kinds(cls):
+    def get_possible_input_kinds(cls):
         return [
-            ('model', cls.raise_user_error('output_kind_from_model',
-                    raise_exception=False))]
+            ('libre_office_odt', cls.raise_user_error('libre_office_odt',
+                    raise_exception=False)),
+            ('libre_office_ods', cls.raise_user_error('libre_office_ods',
+                    raise_exception=False)),
+            ('flat_document', cls.raise_user_error('flat_document',
+                    raise_exception=False)),
+            ]
 
     @classmethod
     def _export_light(cls):
@@ -293,14 +337,6 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def _export_skips(cls):
         return super(ReportTemplate, cls)._export_skips() | {
             'event_type_actions'}
-
-    @classmethod
-    def default_convert_to_pdf(cls):
-        return True
-
-    @classmethod
-    def default_template_extension(cls):
-        return 'odt'
 
     @classmethod
     def default_split_reports(cls):
@@ -321,14 +357,22 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             return versions[0]
         self.raise_user_error('no_version_match', (date, language))
 
-    def on_change_output_kind(self):
-        pass
+    @fields.depends('input_kind')
+    def on_change_input_kind(self):
+        possible_process_methods = self.get_possible_process_methods()
+        if len(possible_process_methods) == 1:
+            self.process_method = possible_process_methods[0][0]
+        elif (not possible_process_methods or self.process_method not in
+                [m[0] for m in self.possible_process_methods]):
+            self.process_method = None
+        if (not self.input_kind
+                or not self.input_kind.startswith('libre_office')):
+            self.output_format = None
 
-    @fields.depends('output_method', 'format_for_internal_edm')
-    def on_change_output_method(self):
-        if self.output_method == 'flat_document':
+    @fields.depends('process_method', 'format_for_internal_edm')
+    def on_change_process_method(self):
+        if self.process_method == 'flat_document':
             self.format_for_internal_edm = 'original'
-            self.convert_to_pdf = False
 
     @fields.depends('on_model')
     def get_possible_kinds(self):
@@ -380,6 +424,16 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             with open(out_path, 'a') as out:
                 out.write(report['data'])
 
+    def convert(self, data, to_ext, from_ext=None):
+        pool = Pool()
+        ReportModel = pool.get('report.generate', type='report')
+        Report = pool.get('ir.action.report')
+        input_ext = from_ext or self.get_extension('input_kind')
+        if input_ext == to_ext:
+            return to_ext, data
+        return ReportModel.convert(
+            Report(template_extension=input_ext, extension=to_ext), data)
+
     def _create_attachment_from_report(self, report):
         """ Report is a dictionary with:
             object_instance, report type, data, report name"""
@@ -387,10 +441,13 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         pool = Pool()
         Attachment = pool.get('ir.attachment')
         attachment = Attachment()
-        attachment.resource = report['resource'] or \
-            report['object'].get_reference_object_for_edm(self)
-        attachment.data = report['data']
-        attachment.name = report['report_name']
+        attachment.resource = (report['resource'] or
+            report['object'].get_reference_object_for_edm(self))
+        oext, attachment.data = self.convert(
+            report['original_data'] or report['data'],
+            self.get_extension('format_for_internal_edm'),
+            report['report_type'])
+        attachment.name = report['report_name_wo_ext'] + os.extsep + oext
         attachment.document_desc = self.document_desc
         attachment.origin = report.get('origin', None)
         return attachment
@@ -430,16 +487,21 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         if functional_date and functional_date != utils.today():
             with Transaction().set_context(
                     client_defined_date=functional_date):
-                extension, data, _, report_name = ReportModel.execute(
-                    objects_ids, reporting_data, immediate_conversion=True)
+                orig_ext, orig_data, _, report_name = ReportModel.execute(
+                    objects_ids, reporting_data)
         else:
-            extension, data, _, report_name = ReportModel.execute(
-                objects_ids, reporting_data, immediate_conversion=True)
+            orig_ext, orig_data, _, report_name = ReportModel.execute(
+                objects_ids, reporting_data)
+        extension, data = self.convert(orig_data,
+            self.get_extension('output_format'))
         return {
                 'object': objects[0],
                 'report_type': extension,
+                'original_data': orig_data,
+                'original_ext': orig_ext,
                 'data': data,
                 'report_name': '%s.%s' % (report_name, extension),
+                'report_name_wo_ext': report_name,
                 'origin': context_.get('origin', None),
                 'resource': context_.get('resource', None),
                 }
@@ -666,72 +728,47 @@ class ReportGenerate(Report):
     __name__ = 'report.generate'
 
     @classmethod
-    def process_flat_document(cls, ids, data, immediate_conversion):
+    def process_flat_document(cls, ids, data):
         pool = Pool()
-        ActionReport = pool.get('ir.action.report')
-        action_reports = ActionReport.search([
-                ('report_name', '=', cls.__name__)
-                ])
-        SelectedModel = Pool().get(data['model'])
-        selected_obj = SelectedModel(data['id'])
-        selected_letter = Pool().get('report.template')(
-            data['doc_template'][0])
-        version = selected_letter.get_selected_version(utils.today(),
-            selected_obj.get_lang())
+        name_giver = data.get('resource', None) or pool.get(data['model'])(
+            data['id'])
+        template = pool.get('report.template')(data['doc_template'][0])
+        party = pool.get('party.party')(data['party'])
+        version = template.get_selected_version(utils.today(), party.lang)
         extension = os.path.splitext(version.name)[1][1:]
-        name_giver = data.get('resource', None) or SelectedModel(data['id'])
-        selected_party = pool.get('party.party')(data['party'])
-        filename = cls.get_filename(selected_letter, name_giver,
-            selected_party)
-        return (extension, version.data, action_reports[0].direct_print,
-            filename)
+        return (extension, version.data, False, cls.get_filename(template,
+                name_giver, pool.get('party.party')(data['party'])))
 
     @classmethod
-    def process_open_document(cls, ids, data, immediate_conversion):
+    def process_libre_office(cls, ids, data):
         pool = Pool()
-        ActionReport = pool.get('ir.action.report')
-        action_reports = ActionReport.search([
-                ('report_name', '=', cls.__name__)
-                ])
-        if not action_reports:
+        action_reports = pool.get('ir.action.report').search([
+                ('report_name', '=', cls.__name__)])
+        if len(action_reports) != 1:
             raise Exception('Error', 'Report (%s) not find!' % cls.__name__)
-        action_report = action_reports[0]
-        records = None
-        records = cls._get_records(ids, data['model'], data)
-        selected_letter = Pool().get('report.template')(
-            data['doc_template'][0])
-        SelectedModel = pool.get(data['model'])
-        name_giver = data.get('resource', None) or SelectedModel(data['id'])
-        selected_party = pool.get('party.party')(data['party'])
-        filename = cls.get_filename(selected_letter, name_giver,
-            selected_party)
-        report_context = cls.get_context(records, data)
-        action_report.template_extension = selected_letter.template_extension
-        # ABD: We should consider convert_to_pdf
-        # event if format_for_internal_edm is not set
-        if immediate_conversion and selected_letter.format_for_internal_edm \
-                not in ('', 'original'):
-            action_report.extension = selected_letter.format_for_internal_edm
-        elif selected_letter.convert_to_pdf:
-            action_report.extension = 'pdf'
-        oext, content = cls.convert(action_report,
-            cls.render(action_report, report_context))
-        return (oext, bytearray(content), action_report.direct_print, filename)
+        action_report, = action_reports
+        template = Pool().get('report.template')(data['doc_template'][0])
+        action_report.template_extension = template.input_kind[-3:]
+        oext, content = cls.convert(action_report, cls.render(action_report,
+            ServerContext().get('genshi_context', {})))
+        name_giver = data.get('resource', None) or pool.get(data['model'])(
+            data['id'])
+        return (oext, bytearray(content), False, cls.get_filename(template,
+            name_giver, pool.get('party.party')(data['party'])))
 
     @classmethod
-    def execute(cls, ids, data, immediate_conversion=False):
+    def execute(cls, ids, data):
         report_template = Pool().get('report.template')(
             data['doc_template'][0])
-        method_name = 'process_%s' % report_template.output_method
+        method_name = 'process_%s' % report_template.process_method
         records = cls._get_records(ids, data['model'], data)
         report_context = cls.get_context(records, data)
         with ServerContext().set_context(genshi_context=report_context):
             if hasattr(cls, method_name):
-                return getattr(cls, method_name)(ids, data,
-                    immediate_conversion=immediate_conversion)
+                return getattr(cls, method_name)(ids, data)
             else:
                 raise NotImplementedError('Unknown kind %s' %
-                    report_template.output_method)
+                    report_template.process_method)
 
     @classmethod
     def get_filename_separator(cls):
@@ -975,40 +1012,36 @@ class ReportGenerateFromFile(Report):
                 os.path.basename(data['output_report_filepath']))[0])
 
     @classmethod
-    def convert_single_attachment(cls, input_paths, output_report_filepath):
-        pdf_paths = cls.unoconv(input_paths, 'odt', 'pdf')
-        if len(pdf_paths) > 1:
+    def convert_from_file(cls, input_paths, output_report_filepath,
+            input_format, output_format):
+        conv_paths = []
+        report = Pool().get('ir.action.report')(
+            template_extension=input_format, extension=output_format)
+        for input_path in input_paths:
+            with open(input_path, 'r') as f:
+                data = bytearray(f.read())
+            oext, conv_data = cls.convert(report, data)
+            output_path = os.path.splitext(input_path)[0] + '.' + oext
+            with open(output_path, 'w') as f:
+                f.write(conv_data)
+            conv_paths.append(output_path)
+        if len(conv_paths) > 1:
             if os.path.splitext(output_report_filepath)[1] == '.pdf':
                 cmd = ['gs', '-dBATCH', '-dNOPAUSE', '-q', '-sDEVICE=pdfwrite',
-                    '-sOutputFile=%s' % output_report_filepath] + pdf_paths
+                    '-sOutputFile=%s' % output_report_filepath] + conv_paths
                 proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
                 stdoutdata, stderrdata = proc.communicate()
                 if proc.wait() != 0:
                     raise Exception(stderrdata)
+                return output_report_filepath
             # TODO: handle 'zip' format for grouping of mixed files formats
         else:
-            shutil.move(pdf_paths[0], output_report_filepath)
-
-    @classmethod
-    def unoconv(cls, filepaths, input_format, output_format):
-        from trytond.report import FORMAT2EXT
-        oext = FORMAT2EXT.get(output_format, output_format)
-        cmd = ['unoconv', '--no-launch', '--connection=%s' % config.get(
-                'report', 'unoconv'), '-f', oext] + filepaths
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE, close_fds=True)
-        stdoutdata, stderrdata = proc.communicate()
-        if proc.returncode != 0:
-            logger.error('unoconv.stdout : ' + stdoutdata)
-            logger.error('unoconv.errorcode: ' + str(proc.returncode))
-            logger.error('unoconv.stderr : ' + stderrdata)
-            raise Exception(stderrdata)
-        else:
-            logger.debug('unoconv.stdout : ' + stdoutdata)
-            logger.debug('unoconv.stderr : ' + stderrdata)
-        output_paths = [os.path.splitext(f)[0] + '.' + output_format for
-            f in filepaths]
-        return output_paths
+            if os.path.split(output_report_filepath)[0] != os.path.split(
+                    conv_paths[0])[0]:
+                shutil.move(conv_paths[0], os.path.split(
+                    output_report_filepath)[0])
+        return os.path.join(os.path.split(output_report_filepath)[0],
+            os.path.split(conv_paths[0])[1])
 
 
 class ReportCreate(Wizard):
@@ -1110,9 +1143,7 @@ class ReportCreate(Wizard):
     def report_execute(self, ids, doc_template, report_context):
         ReportModel = Pool().get('report.generate', type='report')
         ext, filedata, prnt, file_basename = ReportModel.execute(ids,
-            report_context, immediate_conversion=(
-                not doc_template.convert_to_pdf and
-                not doc_template.modifiable_before_printing))
+            report_context)
         client_filepath, server_filepath = ReportModel.edm_write_tmp_report(
             filedata, '%s.%s' % (file_basename, ext))
         return {
@@ -1144,15 +1175,15 @@ class ReportCreate(Wizard):
         return 'post_generation'
 
     def action_open_report(self, action, email_print):
-        pool = Pool()
-        Report = pool.get('report.generate_from_file', type='report')
-        if (self.select_template.template.convert_to_pdf and not
-                self.preview_document.reports[0].server_filepath.endswith(
-                    '.pdf')):
-            Report.convert_single_attachment(
+        ext = self.select_template.template.get_extension('output_format')
+        if (ext and not self.preview_document.reports[
+                0].server_filepath.endswith(ext)):
+            Report = Pool().get('report.generate_from_file', type='report')
+            filename = Report.convert_from_file(
                 [self.preview_document.reports[0].server_filepath],
-                self.preview_document.output_report_filepath)
-            filename = self.preview_document.output_report_filepath
+                self.preview_document.output_report_filepath,
+                self.select_template.template.get_extension('input_kind'),
+                ext)
         else:
             filename = [self.preview_document.reports[0].server_filepath][0]
         action['email_print'] = email_print
@@ -1181,18 +1212,18 @@ class ReportCreate(Wizard):
         return contact
 
     def set_attachment(self, resource):
-        if self.select_template.template.format_for_internal_edm == 'original':
-            file_name = self.preview_document.reports[0].server_filepath
-        else:
-            file_name = self.preview_document.output_report_filepath
-        Attachment = Pool().get('ir.attachment')
-        attachment = Attachment()
-        attachment.resource = resource
-        with open(file_name, 'r') as f:
-            attachment.data = bytearray(f.read())
-        attachment.name = os.path.basename(file_name)
-        attachment.document_desc = self.select_template.template.document_desc
-        return attachment
+        report_name_wo_ext, ext = os.path.splitext(os.path.basename(
+                self.preview_document.reports[0].server_filepath))
+        with open(self.preview_document.reports[0].server_filepath, 'r') as f:
+            original_data = bytearray(f.read())
+        return self.select_template.template._create_attachment_from_report({
+                'report_type': ext.split(os.extsep)[-1],
+                'object': self.get_instance(),
+                'resource': resource,
+                'original_data': original_data,
+                'origin': self.get_instance(),
+                'report_name_wo_ext': report_name_wo_ext,
+                })
 
 
 class ReportCreateSelectTemplate(model.CoogView):
@@ -1249,7 +1280,7 @@ class ReportCreatePreview(model.CoogView):
 
     @fields.depends('output_report_name', 'reports')
     def on_change_with_output_report_filepath(self, name=None):
-        if all([x.template.convert_to_pdf and not os.path.isfile(
+        if all([x.template.output_format == 'pdf' and not os.path.isfile(
                         x.server_filepath) for x in self.reports]):
             # Generate unique temporary output report filepath
             return os.path.join(tempfile.mkdtemp(), coog_string.slugify(

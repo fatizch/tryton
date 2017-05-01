@@ -3,6 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='split_reports']" position="after">
+        <newline/>
         <label name="email_sender"/>
         <field name="email_sender" colspan="3"/>
         <label name="email_dest"/>

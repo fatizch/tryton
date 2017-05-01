@@ -2,35 +2,33 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <form>
-    <label name="name" xalign="0"/>
+    <label name="name"/>
     <field name="name"/>
-    <label name="code" xalign="0"/>
+    <label name="code"/>
     <field name="code"/>
-    <label name="on_model" xalign="0"/>
-    <field name="on_model" colspan="3" widget="selection"/>
-    <label name="kind" xalign="0"/>
-    <field name="kind" colspan="3"/>
-    <label name="output_kind"/>
-    <field name="output_kind" colspan="1"/>
-    <label name="output_method" colspan="1"/>
-    <field name="output_method" colspan="1"/>
-    <newline/>
-    <label name="format_for_internal_edm" xalign="0"/>
+    <label name="on_model"/>
+    <field name="on_model" widget="selection"/>
+    <label name="kind"/>
+    <field name="kind"/>
+    <label name="input_kind"/>
+    <field name="input_kind"/>
+    <label name="process_method"/>
+    <field name="process_method"/>
+    <label name="format_for_internal_edm"/>
     <field name="format_for_internal_edm"/>
+    <label name="output_format"/>
+    <field name="output_format"/>
     <label name="document_desc"/>
     <field name="document_desc"/>
     <label name="modifiable_before_printing"/>
     <field name="modifiable_before_printing"/>
-    <label name="template_extension"/>
-    <field name="template_extension"/>
     <label name="export_dir"/>
     <field name="export_dir"/>
     <separator id="automatic_generation" string="Automatic Generation" colspan="4"/>
-    <label name="convert_to_pdf"/>
-    <field name="convert_to_pdf" colspan="3"/>
+    <newline/>
     <label name="split_reports"/>
-    <field name="split_reports" colspan="3"/>
-    <notebook>
+    <field name="split_reports"/>
+    <notebook colspan="4">
         <page string="Versions" id="versions">
             <field name="versions"/>
         </page>
@@ -44,4 +42,5 @@ this repository contains the full copyright notices and license terms. -->
             <field name="parameters" colspan="4"/>
         </page>
     </notebook>
+    <field name="nb_of_possible_process_methods" invisible="1"/>
 </form>

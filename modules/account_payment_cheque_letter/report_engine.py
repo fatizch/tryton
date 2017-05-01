@@ -13,10 +13,9 @@ class ReportGenerate:
     __name__ = 'report.generate'
 
     @classmethod
-    def execute(cls, ids, data, immediate_conversion=False):
+    def execute(cls, ids, data):
         if data['model'] != 'account.payment.merged':
-            return super(ReportGenerate, cls).execute(ids, data,
-                immediate_conversion)
+            return super(ReportGenerate, cls).execute(ids, data)
         Payment = Pool().get('account.payment')
         active_ids = data['ids']
         other = False
@@ -47,5 +46,4 @@ class ReportGenerate:
                 data['ids'] = [x.id for x in sorted_payments]
         else:
             data['ids'] = [x.id for x in merged_payments]
-        return super(ReportGenerate, cls).execute(ids, data,
-            immediate_conversion)
+        return super(ReportGenerate, cls).execute(ids, data)

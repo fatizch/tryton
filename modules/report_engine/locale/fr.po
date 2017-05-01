@@ -51,16 +51,24 @@ msgid "Flat Document"
 msgstr "Document plat"
 
 msgctxt "error:report.template:"
-msgid "From File"
-msgstr "Depuis un fichier"
+msgid "Libre Office"
+msgstr "Libre Office"
+
+msgctxt "error:report.template:"
+msgid "Libre Office Calc"
+msgstr "Libre Office Calc"
+
+msgctxt "error:report.template:"
+msgid "Libre Office Writer"
+msgstr "Libre Office Writer"
+
+msgctxt "error:report.template:"
+msgid "Microsoft Office"
+msgstr "Microsoft Office"
 
 msgctxt "error:report.template:"
 msgid "No letter model found for date %s and language %s"
 msgstr "Pas de modèle de courrier trouvé pour le %s et la langue %s"
-
-msgctxt "error:report.template:"
-msgid "Open Document"
-msgstr "Modèle ODT"
 
 msgctxt "error:report.template:"
 msgid "Original"
@@ -73,10 +81,6 @@ msgstr "Pdf"
 msgctxt "error:report.template:"
 msgid "The document template code must be unique"
 msgstr "Le code du modèle de courrier doit être unique"
-
-msgctxt "error:report.template:"
-msgid "xlsx"
-msgstr "xlsx"
 
 msgctxt "field:event.type.action,report_templates:"
 msgid "Report Templates"
@@ -258,10 +262,6 @@ msgctxt "field:report.template,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:report.template,convert_to_pdf:"
-msgid "Convert to pdf"
-msgstr "Convertir en pdf"
-
 msgctxt "field:report.template,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -298,6 +298,10 @@ msgctxt "field:report.template,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:report.template,input_kind:"
+msgid "Input Kind"
+msgstr "Type d'entrée"
+
 msgctxt "field:report.template,kind:"
 msgid "Kind"
 msgstr "Type de donnée"
@@ -310,21 +314,25 @@ msgctxt "field:report.template,name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:report.template,nb_of_possible_process_methods:"
+msgid "Number of possible process methods"
+msgstr "Nombre de méthode de traitement possible"
+
 msgctxt "field:report.template,on_model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:report.template,output_kind:"
-msgid "Output kind"
-msgstr "Type de sortie"
-
-msgctxt "field:report.template,output_method:"
-msgid "Output method"
-msgstr "Méthode de sortie"
+msgctxt "field:report.template,output_format:"
+msgid "Output Format"
+msgstr "Format de sortie"
 
 msgctxt "field:report.template,parameters:"
 msgid "Parameters"
 msgstr "Paramètres"
+
+msgctxt "field:report.template,process_method:"
+msgid "Process Method"
+msgstr "Méthode de traitement"
 
 msgctxt "field:report.template,rec_name:"
 msgid "Name"
@@ -341,10 +349,6 @@ msgstr "Labels"
 msgctxt "field:report.template,tags_name:"
 msgid "Tags"
 msgstr "Labels"
-
-msgctxt "field:report.template,template_extension:"
-msgid "Template Extension"
-msgstr "Extension du modèle"
 
 msgctxt "field:report.template,versions:"
 msgid "Versions"
@@ -781,6 +785,10 @@ msgid ""
 msgstr " "
 
 msgctxt "selection:report.template,format_for_internal_edm:"
+msgid "Microsoft Office"
+msgstr "Microsoft Office"
+
+msgctxt "selection:report.template,format_for_internal_edm:"
 msgid "Original"
 msgstr "Originel"
 
@@ -788,29 +796,21 @@ msgctxt "selection:report.template,format_for_internal_edm:"
 msgid "Pdf"
 msgstr "Pdf"
 
-msgctxt "selection:report.template,format_for_internal_edm:"
-msgid "xlsx"
-msgstr "xlsx"
+msgctxt "selection:report.template,input_kind:"
+msgid "Input Kind"
+msgstr "Type d'entrée"
 
-msgctxt "selection:report.template,output_kind:"
-msgid "From Model"
-msgstr "Depuis un modèle"
+msgctxt "selection:report.template,output_format:"
+msgid "Libre Office"
+msgstr "Libre Office"
 
-msgctxt "selection:report.template,template_extension:"
-msgid "Open Document Graphics (.odg)"
-msgstr "Dessin Open Document"
+msgctxt "selection:report.template,output_format:"
+msgid "Microsoft Office"
+msgstr "Microsoft Office"
 
-msgctxt "selection:report.template,template_extension:"
-msgid "Open Document Presentation (.odp)"
-msgstr "Présentation Open Document"
-
-msgctxt "selection:report.template,template_extension:"
-msgid "Open Document Spreadsheet (.ods)"
-msgstr "Tableau Open Document"
-
-msgctxt "selection:report.template,template_extension:"
-msgid "Open Document Text (.odt)"
-msgstr "Texte Open Document"
+msgctxt "selection:report.template,output_format:"
+msgid "Pdf"
+msgstr "Pdf"
 
 msgctxt "selection:report.template.parameter,type_:"
 msgid "Boolean"
