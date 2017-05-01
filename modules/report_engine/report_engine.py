@@ -255,12 +255,12 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             return [('flat_document',
                 self.raise_user_error('flat_document', raise_exception=False))]
         return [('', '')]
-      
+
     def copy(cls, reports, default=None):
         default = {} if default is None else default.copy()
         default.setdefault('event_type_actions', None)
         return super(ReportTemplate, cls).copy(reports, default=default)
-      
+
     @fields.depends('input_kind')
     def on_change_with_nb_of_possible_process_methods(self, name=None):
         return len(self.get_possible_process_methods())
@@ -446,7 +446,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         oext, attachment.data = self.convert(
             report['original_data'] or report['data'],
             self.get_extension('format_for_internal_edm'),
-            report['report_type'])
+            report['original_ext'] or report['report_type'])
         attachment.name = report['report_name_wo_ext'] + os.extsep + oext
         attachment.document_desc = self.document_desc
         attachment.origin = report.get('origin', None)
@@ -1217,7 +1217,7 @@ class ReportCreate(Wizard):
         with open(self.preview_document.reports[0].server_filepath, 'r') as f:
             original_data = bytearray(f.read())
         return self.select_template.template._create_attachment_from_report({
-                'report_type': ext.split(os.extsep)[-1],
+                'original_ext': ext.split(os.extsep)[-1],
                 'object': self.get_instance(),
                 'resource': resource,
                 'original_data': original_data,
