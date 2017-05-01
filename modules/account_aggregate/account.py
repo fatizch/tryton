@@ -369,7 +369,7 @@ class LineAggregated(model.CoogSQL, model.CoogView):
         return query_table
 
     @classmethod
-    def order_by(cls, tables):
+    def get_order_by(cls, tables):
         line = tables['account.move.line']
         move = tables['account.move']
         journal = tables['account.journal']
@@ -390,7 +390,7 @@ class LineAggregated(model.CoogSQL, model.CoogView):
             group_by=cls.get_group_by(tables),
             where=cls.where_clause(tables),
             having=cls.having_clause(tables),
-            order_by=cls.order_by(tables))
+            order_by=cls.get_order_by(tables))
 
 
 class OpenLineAggregated(Wizard):
