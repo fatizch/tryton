@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * 'Sub-status' field indicates if all results of an underwriting are finalized, abandoned, or mixed
 * Add party-based rec_name
 * Field documents_received indicates if all requested documents have been received for an underwriting

@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Add a set of select_* functions to facilitate the grouping/removing of selected ids
 * Make code pypy compatible by using a single connection to source database 
 

@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Support de toutes les combinaisons de conversion entre le stockage en ged et
 l'export final pour libre office, microsoft office ou pdf.
 * Le champs "répertoire d'export" supporte désormais les expressions genshi

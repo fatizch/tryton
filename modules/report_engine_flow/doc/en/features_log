@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Use safe open to support concurrent file writing
 * Add filename and export directory on flow report template
 

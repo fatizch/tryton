@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Add process configuration entry point
 * Possibility to configure the default start step
 * Add "start" transitions which are called only once per process

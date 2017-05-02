@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Ajout d'un écran de configuration des processus
 * Possibilité de configurer l'étape de départ par défaut
 * Création de transitions de démarrage exécutées une fois en début de process

@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Add termination mode at dunning effective date
 * Deactivate terminated contract's dunnings
 * Set void state on a contract in case an unpaid premium event occurs before the contract start date

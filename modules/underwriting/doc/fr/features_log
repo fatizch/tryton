@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Ajout du champ 'Sous-statut' permettant de déterminer si tous les résultats d'une analyse sont terminés, abandonnés ou un mélange des deux.
 * Ajout d'un nom d'affichage basé sur le tiers
 * Champ documents_received indiquant si tous les documents demandés pour une analyse ont été reçus

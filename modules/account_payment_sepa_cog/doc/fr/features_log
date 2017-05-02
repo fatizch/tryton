@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Remplacer process batch avec un batch qui appele le methode 'do'
 * Renommage du fichier xml contenant le message d'un groupe de paiements en 'group.rec_name + group.journal.name + group.kind + group.payment_date' avec payment_date ajoutée uniquement s'il y en a une seule
 * Ajout des chaines de batch

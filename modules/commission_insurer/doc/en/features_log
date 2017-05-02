@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Allow to have several waiting accounts for an insurer (one per product for example)
 to generate several insurer invoices
 * Adding the chain batch

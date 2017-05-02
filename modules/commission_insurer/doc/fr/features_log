@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Possibilité d'avoir plusieurs comptes d'attente pour un assureur (un par produit
 par exemple) afin de générer des bordereaux différents.
 * Ajout de la chaîne de batch

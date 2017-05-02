@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Ajout du mode de résiliation à date d'effet de la relance
 * Désactivation des relances liées à un contract terminé
 * Passage en sans effet dans le cas d'un impayé antérieur à la prise d'effet du contrat

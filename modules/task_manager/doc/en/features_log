@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Add calculated team field on tasks
 * Add a configuration to allow a user to resume another one's tasks
 * Use light grey color for unauthorized tasks of the current user

@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Les agrégats sont triés de façon à être équilibrés
 * Ajout du paramètre de batch "output_folder"
 * Ajout de la chaine de batch

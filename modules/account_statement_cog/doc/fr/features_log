@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Le bouton annuler pouvait être confondu avec le fait de fermer la fenêtre
 le bouton n'est donc plus affiché sur la vue détail mais dans la barre d'action
 * Ajout de l'assistant de création de relevé

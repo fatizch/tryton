@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * L'assiette d'une commission est égale à son montant divisé par son taux.
 * Amélioration des performances à l'annulation des quittances
 * Ajout de la chaine de batch

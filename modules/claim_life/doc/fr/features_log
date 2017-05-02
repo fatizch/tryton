@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * Gestion d'une liste de bénéficiaires manuelle
 * Initialisation de la date d'arret quand la date de reprise d'activité est initialisé
 * Initialisation de la date d'arrêt initiale lors du passage en invalidité

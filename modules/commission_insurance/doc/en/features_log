@@ -1,3 +1,5 @@
+Version 1.12 - 2017-04-28
+
 * A commission's base amount is equal to its amount divided by its rate.
 * Improve performances on invoice cancellation
 * Add batch chain
