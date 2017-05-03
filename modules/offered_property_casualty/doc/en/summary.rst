@@ -1,1 +1,1 @@
-Ce module permet de paramétrer un produit IARD simple
+Add support for simple P&C products
