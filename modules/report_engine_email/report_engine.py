@@ -390,10 +390,10 @@ class ReportCreate:
                 'from':
                 self.select_template.template.genshi_evaluated_email_sender,
                 'subject':
-                self.select_template.template.genshi_evaluated_email_subject.\
+                self.select_template.template.genshi_evaluated_email_subject.
                     encode('utf-8-'),
                 'body':
-                self.select_template.template.genshi_evaluated_email_body.\
+                self.select_template.template.genshi_evaluated_email_body.
                     encode('utf-8'),
                 }
 
