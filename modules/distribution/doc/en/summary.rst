@@ -1,4 +1,1 @@
-Ce module permet de définir un réseau de distribution
-
-- Définition de la hierarchie d'un réseau de distribution
-
+Define a distribution network hierarchy and bind it to parties
