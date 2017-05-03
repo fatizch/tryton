@@ -1,5 +1,4 @@
-Ce module permet de gérer les décomptes santé et le paramétrage des
-prestations santé.
+This module allows handling health counts and setting up health beenfits.
 
-- Descripteurs d'actes médicaux
-- Descripteurs de famille d'actes médicaux
+- Medical acts description
+- Medical acts' family description

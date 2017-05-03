@@ -1,1 +1,1 @@
-- **Exonération de primes :** Gestion de l'exonération de primes
+- **Premiums waiver :** Handle premiums waiver

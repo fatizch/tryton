@@ -1,2 +1,1 @@
-- **Sélection d'un modèle de lettre à générer lors du traitement d'un niveau de
-  relance**
+- **Choose a report template to generate while processing a dunning level**

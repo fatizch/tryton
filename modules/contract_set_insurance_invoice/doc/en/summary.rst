@@ -1,6 +1,5 @@
-Ce module enrichit le module ``contract_set`` en ajoutant la gestion du recalcul
-des primes d'un ensemble de contrats.
+This module extends ``contract_set`` by adding recomputing premiums on a
+contracts set.
 
-- Recalcul des primes de l'ensemble des contrats lors de la modification d'un
-  des contrats
-- Gestion de frais par ensemble de contrats
+- Recompute the contracts set premiums when changing one of its contracts
+-Handle fees by contracts set

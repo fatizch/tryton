@@ -1,15 +1,15 @@
 .. capital
 
-Capitalisation - Produit
-========================
+Capital - Product
+=================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

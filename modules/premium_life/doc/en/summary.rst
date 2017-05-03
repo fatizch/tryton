@@ -1,2 +1,2 @@
-Ce module ajoute la possibilité de forcer un recalcul des primes à la date de
-l'anniversaire de l'assuré.
+This modules adds the possibility to force a premium recomputation at the
+insured anniversary.

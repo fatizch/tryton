@@ -1,7 +1,6 @@
-- **Frais sur des plans de commissionnement :** Permet de définir sur un plan
-  de commissionnement les frais qui seront automatiquement ajoutés au contrat
-  lors de la souscription. Ces frais seront ou pas dérogeables en fonction de
-  leur paramétrage.
+- **Commission plans premium :** Allows defining fees which will be
+  automatically added to the contract when subscribing, on the commission plan.
+  These premiums may be derogable or not depending on their setting.
 
-- **Frais sur l'apporteur :** Permet de définir sur un apporteur des frais à
-  ajouter automatiquement lors de la souscription.
+- **Broker fees :** Allows defining broker fees to automatically add when
+  subscribing.

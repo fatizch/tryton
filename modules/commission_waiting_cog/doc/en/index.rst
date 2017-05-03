@@ -1,15 +1,15 @@
 .. commission
 
-Commission - Mouvement comptable d'attente
-==========================================
+Commission - Waiting account move
+=================================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

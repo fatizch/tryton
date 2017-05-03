@@ -1,21 +1,21 @@
 .. transversal
 
-Transverse - Génération de documents
-====================================
+Transverse - Report engine
+==========================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 
 
-Aide utilisateur
-----------------
+User guide
+----------
 
 .. toctree::
    :maxdepth: 2

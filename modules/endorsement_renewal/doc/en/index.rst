@@ -1,15 +1,15 @@
 .. endorsement
 
-Avenant - Renouvellement
-========================
+Endorsement - Renewal
+=====================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

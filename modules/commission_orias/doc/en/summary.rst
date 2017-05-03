@@ -1,1 +1,1 @@
-Ce module ajoute la gestion du code ORIAS.
+This module adds ORIAS code handling

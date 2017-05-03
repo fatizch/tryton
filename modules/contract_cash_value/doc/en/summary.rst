@@ -1,2 +1,2 @@
-Ce module adapte les contrats afin qu'ils supportent les mécaniques des
-produits de capitalisation.
+This module adapts contracts so that they support capitalization products
+mechanisms.

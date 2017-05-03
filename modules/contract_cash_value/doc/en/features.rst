@@ -1,6 +1,5 @@
-- **Configuration du journal de dépôts :** Permet de configurer dans la
-  configuration comptable le journal à utiliser lors des dépôts sur le contrat.
+- **Deposit journal configuration :** allows to configure the journal to use for
+  contracts deposits in the accounting configuration.
 
-- **Enregistrement des dépôts :** Afin de pouvoir calculer le capital actualisé
-  , il faut pouvoir enregistrer sur les contrats les différents dépôts
-  effectués, avec leurs dates.
+- **Record deposits :** In order to compute the updated capital, all made
+  deposits are saved in the contract, with their dates.

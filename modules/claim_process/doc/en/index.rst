@@ -1,15 +1,15 @@
 .. claim
 
-Sinistre - Processus de déclaration
-===================================
+Claim - Declaration process
+===========================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

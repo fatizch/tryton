@@ -1,3 +1,2 @@
-Ce module permet d'ajouter des frais d'apporteurs sur les plans de
-commissionnement. Ces frais seront affichés et éventuellement modifiables lors
-de la souscription du contract.
+This module allows adding broker fees in commission plans. These fees will be
+displayed and eventually editable when susbcribing a contract.

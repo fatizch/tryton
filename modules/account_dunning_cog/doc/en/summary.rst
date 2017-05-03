@@ -1,8 +1,7 @@
-Ce module personnalise le module ``account_dunning`` pour les besoins du
-métier de l'assurance.
+This module customizes ``account_dunning`` for insurers' business needs.
 
-- ``[Tryton]`` Paramétrage des procédures de relances
-- ``[Tryton]`` Génération des relances
-- ``[Tryton]`` Traitement des relances
-- Ajout des batchs de traitement et de génération des relances
-- Ajout de paramétrage sur un niveau de relance
+- ``[Tryton]`` Set up dunning procedures
+- ``[Tryton]`` Generate dunnings
+- ``[Tryton]`` Process dunnings
+- Add dunnings processing and generation batches
+- Add settings on a dunning level

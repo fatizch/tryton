@@ -1,4 +1,3 @@
-- **Paramétrage du montant du précompte via le moteur de règle**
+- **Prepayment's amount set up using the rule engine**
 
-- **Paramétrage via le moteur de règle de l'échéancier de versement du
-  précompte:**
+- **Prepayment's payment schedule set up using the rule engine**

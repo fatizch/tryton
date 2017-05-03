@@ -1,1 +1,1 @@
-- **Ajout du groupe de droits 'Consultation de quittances'**
+- **Add 'Invoice consultation' rights group

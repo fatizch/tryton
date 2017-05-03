@@ -1,15 +1,15 @@
 .. commission
 
-Commission - Moteur de règles de précompte
-==========================================
+Commission - Prepayment's rule engine
+=====================================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

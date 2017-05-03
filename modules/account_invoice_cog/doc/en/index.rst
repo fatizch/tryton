@@ -1,15 +1,15 @@
 .. custom_tryton_coog
 
-Tryton Coog - Quittance
-=======================
+Tryton Coog - Invoice
+=====================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

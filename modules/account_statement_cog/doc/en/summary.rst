@@ -1,5 +1,5 @@
-Ce module personnalise le module ``account_statement`` pour les besoins du
-métier de l'assurance.
+This module customizes the ``account_statement`` module for insurance business
+needs.
 
-- Gestion des bordereaux de chèques
-- Gestion du tiers payeur
+-Handle in bank deposit tickets
+- Handle the paying party

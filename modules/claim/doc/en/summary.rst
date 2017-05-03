@@ -1,9 +1,9 @@
-Ce module permet de gérer le paramétrage des prestations et les
-sinistres d'un contrat d'assurance
+This module allows to configure benefits and claims set up on an
+insurer contract
 
-* Gestion des événements couverts
-* Gestion des descripteurs de préjudice
-* Ouverture de sinistre
-* Enregistrement des événements
-* Clotûre de sinistre
-* Réouverture de sinistre
+* Handle covered events
+* Handle loss descriptions
+* Claim creation
+* Events saving
+* Claim closing
+* Claim reopening

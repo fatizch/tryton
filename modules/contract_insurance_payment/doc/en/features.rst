@@ -1,6 +1,6 @@
-- **Paramétrage du mode de quittancement en cas d'échec :** Permet de définir
-  sur un journal de paiement le mode de quittancement sur lequel basculer un
-  contrat pour lequel une quittance émise et censé être payée par
-  prélèvement automatique revient en rejet de prélèvement.
+- **Configure an invoicing mode in case of failure :** Allows to define, on
+  a payment's journal, the invoicing mode which a contract should use if a
+  posted and supposed to automatically be paid invoice returns with a sample
+  rejection.
 
-- **Paramétrage du journal de paiement à utiliser en fonction du produit**
+- **Configure payment's journal to use depending on the product**

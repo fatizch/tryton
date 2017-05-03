@@ -1,14 +1,14 @@
 .. custom_tryton_coog
 
-Tryton Coog - Monnaie
-=====================
+Tryton Coog - Currency
+======================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

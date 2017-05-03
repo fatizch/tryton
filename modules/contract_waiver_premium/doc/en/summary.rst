@@ -1,2 +1,2 @@
-Ce module complète le module ``contract_insurance_invoice`` pour permettre
-de gérer l'exonération de primes
+This module completes ``contract_insurance_invoice`` to allow handling premiums
+waiver.

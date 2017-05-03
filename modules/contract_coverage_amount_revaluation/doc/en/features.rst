@@ -1,4 +1,6 @@
-- **Saisie d'une règle de revalorisation du montant de couverture:**
+- **Entry of the coverage amount revaluation rule:**
 
-  - Possibilité de saisir sur une garantie de produit une règle de revalorisation du montant de couverture. La règle retourne le montant revalorisé sachant que la règle peut se baser sur l'ancien montant de couverture.
-  - Lors du renouvellement du contrat, on insère une nouvelle version du montant de couverture avec cette valeur revalorisée.
+  - Allow to enter a coverage amount revaluation rule. The rule returns the
+    revaluated ammount and can be based on the previous coverage amount.
+  - During the contract's renewal, a new version of the revaluated coverage
+    amount is inserted.

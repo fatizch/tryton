@@ -1,1 +1,1 @@
-- **Emission automatique des mouvements comptables d'attente**
+- **Automatic posting of waiting account moves**
