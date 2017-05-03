@@ -3,13 +3,13 @@
 Planned Event
 =============
 
-Summary
--------
+Resume
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalities
+---------------
 
 .. include:: features.rst
 

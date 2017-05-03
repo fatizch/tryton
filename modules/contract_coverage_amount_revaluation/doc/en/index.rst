@@ -1,15 +1,15 @@
 .. contract
 
-Contrat - Revaluated coverage amount
-====================================
+Contrat - Montant de Couverture Revalorisé
+==========================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

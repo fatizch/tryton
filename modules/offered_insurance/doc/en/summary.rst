@@ -1,3 +1,4 @@
-This module completes product configuration to handle insurance contracts. 
-It adds *Item descriptions*, uses extra data, handles exclusions, and different
-business rules (term, renewal, etc.)
+Ce module complète le paramétrage produit pour gérer les contrats d'assurance.
+Cela passe par l'ajout du paramétrage des *Descripteurs de risque*,
+l'utilisation des données complémentaires, la gestion des exclusions,
+les différentes règles métier (terme, renouvellement, etc...).

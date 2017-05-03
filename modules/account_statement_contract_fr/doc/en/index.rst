@@ -1,15 +1,15 @@
 .. contract
 
-Contract - Handle statements (fr)
-=================================
+Contrat - Gestion des relevés (fr)
+==================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

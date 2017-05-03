@@ -1,15 +1,15 @@
 .. claim
 
-Claim - Group benefits
-======================
+Sinistre - Prestations Collectives
+==================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

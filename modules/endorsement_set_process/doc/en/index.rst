@@ -1,20 +1,20 @@
 .. endorsement
 
-Endorsement - Endorsement set process
-=====================================
+Avenant - Processus d'ensemble d'avenants
+=========================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 
-User guide
-----------
+Aide utilisateur
+----------------
 
 .. toctree::
     :maxdepth: 2

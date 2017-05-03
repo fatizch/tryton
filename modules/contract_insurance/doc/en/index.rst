@@ -1,20 +1,20 @@
 .. contract
 
-Contrat - Insurance
+Contrat - Assurance
 ===================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 
-User guide
-----------
+Aide utilisateur
+----------------
 
 .. toctree::
    :maxdepth: 1

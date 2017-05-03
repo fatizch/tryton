@@ -1,15 +1,15 @@
 .. contract
 
-Contract - Premiums waiver
-==========================
+Contrat - Exonération de primes
+===============================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

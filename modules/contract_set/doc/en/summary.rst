@@ -1,2 +1,6 @@
-This module allows to relate contracts in a 'Contracts set'. It is then possible
-to use a contracts set information to parameter business rules.
+Ce module permet de lier des contrats dans un 'Ensemble de contrats'.
+Il est ainsi possible d'utiliser les informations d'un ensemble de
+contrats pour paramétrer des règles métiers.
+
+Par exemple, une réduction tarifaire s'applique si un contrat prévoyance
+est souscrit en même temps qu'un contrat santé.

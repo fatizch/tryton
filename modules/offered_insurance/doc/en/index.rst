@@ -1,20 +1,20 @@
 .. laboratory
 
-Product laboratory - Insurance
-==============================
+Laboratoire Produit - Assurance
+===============================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 
-User guide
-----------
+Aide utilisateur
+----------------
 
 .. toctree::
    :maxdepth: 2

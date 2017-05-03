@@ -1,15 +1,15 @@
 .. commission
 
-Commission - Insurer invoices
-=============================
+Commission - Bordereaux assureurs
+=================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

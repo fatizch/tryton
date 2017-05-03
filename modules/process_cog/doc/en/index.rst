@@ -1,15 +1,15 @@
 .. transversal
 
-Transversal - Process step configuration
-========================================
+Transverse - Paramétrage de processus par étapes
+================================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

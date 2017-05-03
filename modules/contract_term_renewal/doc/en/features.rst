@@ -1,11 +1,13 @@
-- **Term and renewal rule:** allows defining the contract's term policy:
-  term at subscription's anniversary date, term at data synchronization date,
-  or any specific rule through the rule engine. The possibility to renew the
-  contract or not is also configurable in this rule.
+- **Règle de Terme et de Renouvellement:**  Permet de définir la politique de
+  terme du contrat: terme à la date anniversaire de souscription, terme à une
+  date de synchronisation donnée, ou toute autre règle spécifique via le moteur
+  de règles. La possibilité de renouveller ou non les contrats est également
+  paramétrable à partir de cette règle.
 
-- **Renewal batch:** allows batch processing contracts renewal
+- **Batch de renouvellement:** Permet de renouveller les contrats par lots.
 
-- **Renewal wizard:** allows renewing a contract
+- **Assistant de renouvellement:** Permet de renouveller un contrat.
 
-- **Renewal rejection wizard:** allows to reject a contract's renewal. Rejection
-  reason is observable in the contract's activation history.
+- **Assistant de refus de renouvellement:** Permet de refuser le renouvellement
+  d'un contrat. La raison du refus sera visible dans l'historique d'activation
+  du contrat.

@@ -1,4 +1,4 @@
-This module adds SEPA mandate handling at a contract level.
+Ce module ajoute la gestion du mandat SEPA au niveau d'un contrat.
 
-- Handle SEPA mandate at a contract level
-- Initialize payment information in the invoice.
+- Gestion du mandat SEPA au niveau d'un contrat
+- Initialisation des informations de paiement au niveau de la facture

@@ -1,15 +1,15 @@
 .. life
 
-Life - Contract subscription
-============================
+Prévoyance - Souscription de contrat
+====================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

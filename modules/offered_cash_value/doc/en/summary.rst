@@ -1,1 +1,1 @@
-This module allows handling capital products.
+Ce module permet de gérer les produits de type capitalisation.

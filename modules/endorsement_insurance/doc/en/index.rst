@@ -1,15 +1,15 @@
 .. endorsement
 
-Endorsement - Insurance
-=======================
+Avenant - Assurance
+===================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

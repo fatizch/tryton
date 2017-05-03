@@ -1,3 +1,3 @@
-This module allows batch launching from the client.
+Ce module permet le lancement des batch depuis le client.
 
-- Batch launching from the application
+- Lancement des batchs (traitements de masse) depuis l'application.

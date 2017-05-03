@@ -1,15 +1,15 @@
 .. commission
 
-Commission - Broker fee
-=======================
+Commission - Frais d'apporteur
+==============================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

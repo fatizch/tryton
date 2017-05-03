@@ -1,15 +1,15 @@
 .. contract
 
-Contract - Contract set premium
-===============================
+Contrat - Prime sur ensemble de contrats
+========================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

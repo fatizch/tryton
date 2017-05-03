@@ -1,21 +1,20 @@
-- **Amounts' to pay and to receive sings, and icons:**
+- **Signe des montants à payer, à recevoir et icônes:**
 
-  - The amount to receive is positive and the icon red if the concerned party 
-  owes the company money
+  - Le montant à recevoir est positif et l'icône est au rouge si le tiers concerné doit de l'argent à la société
 
-  - The amount to receive is negative and the icon green if the company owes the
-  concerned party money
+  - Le montant à recevoir est négatif et l'icône est au vert si la société doit de l'argent au tiers concerné
 
-  - The amount to pay is positive and the icon green if the company owes the
-  concerned party money
+  - Le montants à payer est positif et l'icône est au vert si la société doit de l'argent au tiers concerné
 
-  - The amount to pay is negative and the icon red if the concerned party owes
-  the company money
+  - Le montant à payer est négatif et l'icône est au rouge si le tiers concerné doit de l'argent à la société
 
-- **Expenses definition :** Tryton does not allow to define expenses, which
-  are an essential element of insurance contracts management.
+  .. image :: images/negative_payable_icon.png
 
-- **Add accounting informatiion to actor synthesis :** Improve actor's display
-  and gather accounting data
 
-- **Accounting settings import/export configuration**
+- **Définition des frais :** Tryton ne permet pas de base de définir des frais,
+  qui sont un élément indispensable de la gestion des contrats d'assurance.
+
+- **Ajout des informations comptables à la synthèse acteur :** Amélioration de
+  la vision acteur et regroupement des données comptables
+
+- **Configuration des exports/imports de paramétrage comptable**

@@ -1,15 +1,15 @@
 .. claim
 
-Claim - Group contracts benefits
-================================
+Sinistre - Prestations des contrats collectifs
+==============================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

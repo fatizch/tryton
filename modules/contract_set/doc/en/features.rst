@@ -1,18 +1,18 @@
-- **Unique identifier for a set of contracts**
+- **Identifiant unique sur un ensemble de contrats**
 
-- **Available report engine for a set of contracts**
+- **Moteur d'impression disponible pour un ensemble de contrats**
 
-- **Instant activation/declination for a set of contracts**
+- **Activation/déclinaison simultanée des contrats d'un ensemble**
 
-- **Add the contracts set business data in the rule engine**
-    This module adds business data which allows using related contracts
-    information to the rule engine:
+- **Ajout de données métiers de l'ensemble dans le moteur de règles**
+    Le module ajoute des données métiers au moteur de règles qui permettent
+    d'utiliser les informations des contrats liés :
 
-    Relation number in the contracts set (relation name): checks for a contract
-    and its related contracts which place the person occupies among the persons
-    with the same relation according to birth order from the oldest to the
-    youngest
+    Numéro de la relation dans groupe de contrat (nom de la relation): cette
+    donnée regarde sur le contrat et les contrats liés la place de la personne
+    selon l'ordre de naissance du plus vieux au plus jeune et parmi les
+    personnes avec la même relation.
 
-    Number of persons covered with the relationship in a group of contracts
-    (relation name): allows knowing how many covered persons are there on
-    all contracts related to the relation defined as a parameter.
+    Nombre de personnes couvertes avec la relation dans groupe de contrat
+    (nom de la relation): permet de connaître le nombre de personnes couvertes
+    sur l'ensemble des contrats liés avec la relation définie en paramètre.

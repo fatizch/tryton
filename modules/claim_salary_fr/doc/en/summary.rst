@@ -1,3 +1,3 @@
-This module adds salaries management for claims.
+Ce module ajoute la gestion des salaires pour les sinistrés.
 
-- Handle salaries with net salary computation from gross salary.
+- Gestion des salaires avec calcul du salaire NET en fonction du salaire BRUT.

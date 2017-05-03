@@ -1,6 +1,9 @@
-- **Salaries entry**: When entering a claim, it is possible to enter salaries
-  and compute net salaries using A, B and C ranges.
+- **Saisie des salaires**: Lors de la saisie d'un sinistre, il est
+  possible de saisir des salaires et de calculer le NET en fonction
+  des tranches A, B et C.
 
-- **Salaries computation set up**: It is possible to add extra data of "Salary"
-  type and use it to create fields of type FIXED or variable RATE. These fields
-  are used while computing the net salary using the gross salary.
+- **Saisie du paramétrage pour le calcul des salaires**: Il est
+  possible d'ajouter des données complémentaire de type "Salaire", puis
+  de les utiliser afin de créer des champs de type valeur FIXE ou bien "TAUX
+  variable. Ces champs sont utilisés lors du calcul du salaire NET en fonction
+  du salaire FIXE.

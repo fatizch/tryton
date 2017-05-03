@@ -1,15 +1,15 @@
 .. life
 
-Life - Beneficiary clause
-=========================
+Prévoyance - Clause bénéficiaire
+================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

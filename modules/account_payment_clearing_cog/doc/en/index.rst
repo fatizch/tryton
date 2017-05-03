@@ -1,15 +1,15 @@
 .. custom_tryton_coog
 
-Tryton Coog - Account compensation moves
-========================================
+Tryton Coog - Mouvements comptables de compensation
+===================================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

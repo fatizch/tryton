@@ -1,15 +1,15 @@
 .. commission
 
-Commission - Insurance
+Commission - Assurance
 ======================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

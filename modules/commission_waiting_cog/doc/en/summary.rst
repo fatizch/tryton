@@ -1,3 +1,4 @@
-This module extends ``commission_waiting`` for insurance business needs.
+Ce module personnalise le module ``commission_waiting`` pour les besoins du
+métier de l'assurance.
 
-- Automatic posting of waiting account moves.
+- Emission automatique des mouvements comptables d'attente

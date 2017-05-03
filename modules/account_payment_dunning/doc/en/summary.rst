@@ -1,2 +1,2 @@
-This module allows configuration and automatic triggering of dunnings after
-payments' rejections.
+Ce module permet de configurer et de déclencher des relances automatiquement
+suite à des rejets de paiement.

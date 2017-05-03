@@ -1,15 +1,15 @@
 .. life
 
-Life - Premiums
-===============
+Prévoyance - Primes
+===================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

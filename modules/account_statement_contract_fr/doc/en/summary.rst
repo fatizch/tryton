@@ -1,4 +1,4 @@
-This module extends ``account_statement_contract`` to handle bank entry in an in
-bank deposit ticket (french specificity)
+Ce module étend le module ``account_statement_contract`` pour gérer la saisie
+de la banque au niveau d'un bordereau de chèque (spécificité française).
 
--Possible entry of the bank on an in bank deposit check
+- Saisie possible de la banque sur un bordereau de chèque

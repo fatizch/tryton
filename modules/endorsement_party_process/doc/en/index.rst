@@ -1,15 +1,15 @@
 .. endorsement
 
-Endorsement - Party endorsement process
-=======================================
+Avenant - Processus d'avenant de personne
+=========================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

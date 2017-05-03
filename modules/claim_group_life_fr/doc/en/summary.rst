@@ -1,3 +1,3 @@
-This module adds hospitalisation periods management.
+Ce module ajoute la gestion des périodes d'hospitalisations.
 
-- Handle hospitalisation periods on a claim
+- Gestion des périodes d'hospitalisations sur un sinistre

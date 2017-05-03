@@ -1,15 +1,15 @@
 .. contract
 
-Contract - Handle SEPA
-======================
+Contrat - Gestion du SEPA
+=========================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

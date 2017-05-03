@@ -1,7 +1,8 @@
-This module allows handling active contracts loan changes. Changes include:
+Ce module permet de gérer les modifications sur des prêts rattachés à des
+contrats actifs. Ces modifications incluent :
 
-  - Changing a loan's settings
+ - La modification des paramètres du prêt.
 
-  - Changing shares on attached contracts
+ - La modification des quotités sur les contrats rattachés.
 
-  - Attached contracts end date update
+ - La mise à jour des dates de fins des contrats rattachés.

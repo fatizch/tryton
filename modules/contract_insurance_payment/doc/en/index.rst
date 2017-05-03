@@ -1,15 +1,15 @@
 .. contract
 
-Contrat - Payments
-==================
+Contrat - Paiements
+===================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

@@ -1,15 +1,15 @@
 .. custom_tryton_coog
 
-Tryton Coog - Accounting (fr)
-=============================
+Tryton Coog - Comptabilité (fr)
+===============================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

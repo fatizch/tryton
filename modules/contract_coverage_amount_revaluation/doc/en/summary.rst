@@ -1,1 +1,1 @@
-- **Coverage amount revaluation**
+- **Revalorisation du montant de couverture**

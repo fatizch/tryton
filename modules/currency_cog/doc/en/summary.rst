@@ -1,5 +1,5 @@
-This module introduces the "currency" and "rate" concepts.
+Ce module introduit les concepts de "monnaie" et de "taux".
 
-- ``[Tryton]`` Currency configuration
-- ``[Tryton]`` Conversion rates configuration
-- ``[Tryton]`` Symbols and precision configuration
+- ``[Tryton]`` Paramétrage des monnaies
+- ``[Tryton]`` Configuration des taux de conversion
+- ``[Tryton]`` Configuration des symboles et de la précision à utiliser

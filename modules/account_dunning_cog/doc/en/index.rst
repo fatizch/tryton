@@ -1,15 +1,15 @@
 .. custom_tryton_coog
 
-Tryton Coog - Dunning management
-================================
+Tryton Coog - Gestion des relances
+==================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 
@@ -19,8 +19,8 @@ Features
     summary.rst
     features.rst
 
-User guide
-----------
+Aide utilisateur
+----------------
 
 .. toctree::
     user/batch.rst

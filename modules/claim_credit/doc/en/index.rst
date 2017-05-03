@@ -1,15 +1,15 @@
 .. credit
 
-Credit - Claim
-==============
+Emprunteur - Sinistre
+=====================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

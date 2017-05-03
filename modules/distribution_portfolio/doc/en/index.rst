@@ -1,16 +1,16 @@
 .. contract
 
-Contrat - Client portfolio
-==========================
+Contrat - Portefeuille client
+=============================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

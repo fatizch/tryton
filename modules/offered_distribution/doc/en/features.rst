@@ -1,2 +1,3 @@
-- **Network distribution** : Allows attaching a product to a distribution
-  network, in order to easily partition the distribution.
+- **Distribution par réseau** : Ajoute la possibilité de rattacher un produit à
+  un réseau de distribution, cela afin de plus facilement cloisonner la
+  distribution.

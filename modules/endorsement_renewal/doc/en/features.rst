@@ -1,2 +1,2 @@
-- **Renewal by endorsement**
-- **Renewal endorsements batch**
+- **Renouvellement par avenant**
+- **Création et application en masse d'avenants de renouvellement (batch)**

@@ -1,15 +1,15 @@
 .. contract
 
-Contract - Set of contracts
-===========================
+Contrat - Ensemble de contrats
+==============================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

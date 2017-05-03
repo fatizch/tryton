@@ -1,3 +1,4 @@
-This module allows to configure a set of possible rules instead of forcing a
-rule's execution on a benefit. Possible rules are then used in group contracts
-subscription in order to customize them.
+Ce module permet de configurer au niveau des prestations un ensemble de règles
+possibles plutôt que de forcer chaque règle. Les règles possibles sont ensuite
+utilisées dans le cadre de la souscription des contrats collectifs pour
+personnaliser les contrats.

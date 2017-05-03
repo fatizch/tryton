@@ -1,15 +1,15 @@
 .. contract
 
-Contrat - Insurance premium
-===========================
+Contrat - Primes assurance
+==========================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

@@ -1,16 +1,16 @@
 .. accounting
 
-Accounting - Payments extended configuration
-============================================
+Comptabilité - Configuration avancée des paiements
+==================================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

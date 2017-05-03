@@ -1,2 +1,2 @@
-This module enhances ``endorsement_insurance_invoice`` to handle involving SEPA
-bank accounts changes.
+Ce module enrichit le module ``endorsement_insurance_invoice`` pour gérer les
+modifications de comptes bancaires impliquant le SEPA

@@ -1,2 +1,3 @@
-- **Recompute at insurer's anniversary date :** Allows handling the frequent
-  case in life insurance of premiums changing with the insurer's anniversary.
+- **Recalcul à la date anniversaire de l'assuré :** Permet de gérer le cas,
+  fréquent en prévoyance, des primes variant avec la date anniversaire de
+  l'assuré.

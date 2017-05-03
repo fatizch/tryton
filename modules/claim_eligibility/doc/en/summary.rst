@@ -1,3 +1,4 @@
-This module allows setting a claim eligibility's conditions. Through a rule,
-Coog will compute whether the benefit can be exercised during the claim's
-instruction based on claim declaration elements.
+Ce module permet de gérer les conditions d'éligibilité à une prestation. Via le
+paramétrage d'une règle, Coog va calculer si la prestation peut être excercée
+lors de l'instruction du sinistre à partir des éléments de déclaration du
+préjudice.

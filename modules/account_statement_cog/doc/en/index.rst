@@ -1,15 +1,15 @@
 .. custom_tryton_coog
 
-Tryton Coog - Statement's management
-====================================
+Tryton Coog - Gestion des relevés
+=================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

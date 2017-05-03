@@ -1,15 +1,15 @@
 .. custom_tryton_coog
 
-Tryton Coog - Bank
-==================
+Tryton Coog - Banque
+====================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

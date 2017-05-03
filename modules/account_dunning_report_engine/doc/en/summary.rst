@@ -1,3 +1,4 @@
-This module allows printing a report template while processing a dunning level.
+Ce module permet l'impression d'un modèle de lettre lors du traitement d'un
+niveau de relance.
 
-- Choose a report template to generateon a dunning level
+- Sélection d'un modèle de lettre à générer sur un niveau de relance

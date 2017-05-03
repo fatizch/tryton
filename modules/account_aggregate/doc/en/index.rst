@@ -1,20 +1,20 @@
 .. accounting
 
-Accounting- Account aggregate
-=============================
+Comptabilité - Agrégat comptable
+================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 
-User guide
-----------
+Aide utilisateur
+----------------
 
 .. toctree::
 

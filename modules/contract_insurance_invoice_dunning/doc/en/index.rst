@@ -1,20 +1,20 @@
 .. contract
 
-Contrat - Oustandings
-=====================
+Contrat - Impayés
+=================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 
-User guide
-----------
+Aide utilisateur
+----------------
 
 .. toctree::
     :hidden:

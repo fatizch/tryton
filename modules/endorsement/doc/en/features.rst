@@ -1,29 +1,35 @@
-- **Endorsement configuration :** It is possible to create endorsements by
-  combining basic endorsements on the interface. These endorsements can be
-  attached to products, or be available no matter what the product is.
+- **Paramétrage d'avenant :** Il est possible depuis l'interface de créé des
+  avenants en combinant des avenants basiques. Ces avenants peuvent être
+  rattachés à des produits, ou bien être disponibles quelque soit le produit.
 
-- **Entry suspension :** An endorsement's entry can be done in many times
-  without loss. Changes in the endorsement are saved without impacting the
-  contract. A suspended endorsement can be recovered any time.
+- **Suspension de saisie :** La saisie d'un avenant peut se faire en plusieurs
+  fois sans perte. Les modifications demandées par l'avenant sont
+  sauvegardées sans aucun impact sur le contrat. Un avenant suspendu peut être
+  repris à n'importe quel moment.
 
-- **Endorsement cancellation :** An applied endorsement can be cancelled under
-  certain conditions. This cancellation re-established the contract's state
-  before applying the endorsement.
+- **Annulation d'avenant :** Un avenant appliqué peut être annulé sous
+  certaines conditions. Cette annulation restaure le contrat dans l'état où il
+  était juste avant l'application de l'avenant.
 
-- **Endorsement synthesis :** It is possible to consult the changes brought by
-  the endorsement before and after applying it as a text synthesis.
+- **Synthèse de l'avenant :** Avant et après application, il est possible de
+  consulter les modifications apportées par l'avenant sous la forme d'une
+  synthèse textuelle.
 
-- **Endorsement preview :** After entry (and before appliance), it is possible
-  to display a before / after screen which shows changes made by an endorsment,
-  in terms of a contract's premiums for example.
+- **Prévisualisation de l'avenant :** Après la saisie (mais avant
+  l'application), il est possible d'afficher un écran avant / après, qui
+  permet de se rendre compte des modifications apportées par l'avenant en
+  termes par exemple de primes calculées sur le contrat.
 
-- **Options management endorsement :** Allows to handle options after
-  subscribing to a contract. It includes new options subscription, existing
-  options termination, and extra data changes on current options.
+- **Avenant de gestion des garanties :** Permet de gérer les garanties après
+  souscription du contrat. Cela inclut la souscription de nouvelles garanties,
+  la résiliation de garanties existantes, ainsi que la modification des données
+  complémentaires sur des garanties en cours.
 
-- **Developer tools :** A tools set is available to make writing endorsements
-  easier
+- **Outils de développement :** Un ensemble d'outils sont mis à disposition
+  des développeurs pour faciliter l'écriture de nouveaux avenants.
 
-- **Report templates :** Allows to configure report templates to generate when
-  applying or cancelling an endorsement in endorsement models. To be generated,
-  the template must be referenced from the event type and the concerned product.
+- **Modèles de lettre :**  Permet de paramétrer, depuis les modèles d'avenants,
+  des modèles de lettres à générer lors de l'application ou l'annulation de
+  l'avenant. Pour être généré, le modèle de lettre doit aussi être référencé
+  depuis le type d'évènement (application / annulation d'avenant) et le
+  produit du contrat concerné.

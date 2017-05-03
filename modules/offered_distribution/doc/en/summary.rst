@@ -1,3 +1,3 @@
-This module allows handling a products distribution on a network.
+Ce module permet de gérer la distribution d'un produit sur un réseau.
 
-- Commercial product management
+- Gestion du produit commercial (marque blanche)

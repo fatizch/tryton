@@ -1,15 +1,15 @@
 .. endorsement
 
-Endorsement - SEPA data management
+Avenant - Gestion des données SEPA
 ==================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

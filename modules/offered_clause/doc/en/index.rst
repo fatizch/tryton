@@ -1,15 +1,15 @@
 .. laboratory
 
-Product laboratory - Clause
-===========================
+Laboratoire Produit - Clause
+============================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

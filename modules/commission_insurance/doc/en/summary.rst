@@ -1,12 +1,15 @@
-This module customizes the ``commission`` module for insurance business needs.
+Ce module personnalise le module ``commission`` pour les besoins du métier de
+l'assurance.
 
-- ``[Tryton]`` Creation and management of commissionned entities.
-- ``[Tryton]`` Configuration of commission plans using a simplified rule engine
-  to compute commission amounts from commissioned amounts.
-- ``[Tryton]`` Commmissions computing and accounting from customer's invoice
-  generating or payment.
-- Add commission agent notion
-- Improve brokers and agents creation ergonomics
-- Simplified generation of broker invoices
-- Handle broker fees
-- Portfolio transfer
+- ``[Tryton]`` Création et gestion des entités commissionnées
+- ``[Tryton]`` Configuration des plans de commissionnements, utilisant un
+  moteur de règle simplifié pour calculer les montants de commission à partir
+  des montants commissionnés
+- ``[Tryton]`` Calcul et comptabilisation des commissions à partir de la
+  génération ou du paiement des quittances client
+- Ajout de la notion de protocole de commissionnement
+- Amélioration de l'ergonomie de la création de courtiers et de protocoles de
+  commissionnement
+- Génération simplifiée des bordereaux des courtiers
+- Gestion des frais d'apporteur
+- Transfert de portefeuille

@@ -1,3 +1,3 @@
-- **Handle SEPA mandate at a contract's level**
+- **Gestion du mandat SEPA au niveau d'un contrat**
 
-- **Initialize payment information in the invoice**
+- **Initialisation des informations de paiement au niveau de la facture**

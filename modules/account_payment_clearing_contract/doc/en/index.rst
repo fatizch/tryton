@@ -1,15 +1,15 @@
 .. contract
 
-Contrat - Account payment clearing
-==================================
+Contrat - Mouvement comptable de compensation
+=============================================
 
-Summary
--------
+Résumé
+------
 
 .. include:: summary.rst
 
-Features
---------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

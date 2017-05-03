@@ -1,2 +1,3 @@
-- **Developer tools :** Add *ModelCurrency* to allow displaying amounts with
-  the corresponding currency symbol as easily as possible.
+- **Outils de développement :** Ajoute *ModelCurrency* pour permettre de plus
+  facilement afficher des montants avec le symbole monétaire correspondant
+  si applicable.

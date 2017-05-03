@@ -1,5 +1,5 @@
-- **Waiting account :** Allows to configure which account to use for deposits on
-  capitalization product.
+- **Compte d'attente :** Permet de configurer sur un produit de
+  capitalisation le compte à utiliser pour les dépôts.
 
-- **Update rule :** Computation rule to use to determine the updated capital at
-  a given moment.
+- **Règle d'actualisation :** Règle de calcul à utiliser pour déterminer le
+  capital actualisé à un instant donné.

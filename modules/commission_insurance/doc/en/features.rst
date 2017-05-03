@@ -1,32 +1,41 @@
-- **Commission plans**
+- **Plans de Commissionnement**
 
-    - The *commission method* allows defining when commissions are due when
-      *posting* or *paying* the invoice
-    - The plan *type* allows to make the difference between the insurer's
-      commission plan and the broker's commission plan.
-    - The *insurer plan* allows to associate a broker's commission plan to an
-      insurer's commission plan
-    - *Lines* allow defining the commission formula to apply for a set of
-      options (which can be attached to different products)
-    - *Computation dates* allow specifying at which dates the commission rate is
-      likely to change for the different lines.
+    - La *Méthode de commissionnement* permet de définir quand les commissions
+      sont dues *A l'émission* ou *Au Paiement* de la quittance
+    - Le *Type* de plan permet de différencier le plan de commissionnement de
+      l'assureur et le plan de commissionnement du courtier
+    - Le *Plan lié* permet d'associer à un plan de commissionnement courtier le
+      plan de commissionnement assureur
+    - Les *Lignes* permettent de définir pour un ensemble de garantie (qui
+      peuvent être liées à des produits différents) la formule de commission à
+      appliquer. Selon le paramétrage de la formule il est possible de calculer
+      une commission linéaire ou en escompte (taux variant au fil du temps).
+    - Les *Dates de calcul* permettent de spécifier à quelles dates le taux de
+      commissionnement est susceptible de changer pour les différentes lignes,
+      afin de retrouver les changements de taux aux bonnes dates dans les
+      lignes de commission.
 
-- The **commission agent** is the link between an insurer's intermediate (
-  an insurer or a broker) and an associated commission plan.
-  The agent can have a start date and an end date.
+- Le **Protocole de commissionnement** est le lien entre un intermédiaire
+  d'assurance (un assureur ou un courtier) et un plan de commissionnement
+  associé.
+  Le protocole peut avoir une date de début et une date de fin.
 
-- **The commission agent creation wizard** allows mass entry of all necessary
-  information to compute different commissions for a set of brokers
-  a set of brokers
+- L'**Assistant de création des protocoles de commissionnement** permet de
+  saisir en masse pour un ensemble de courtier toutes les informations
+  nécessaires pour calculer les différentes commissions
 
-- The **Commission invoices generation wizard** allows generating different
-  broker invoices
+- L'**Assistant de génération des bordereaux de commissions** permet de générer
+  les différents bordereaux des courtiers
 
-- **Broker fee management**: A fee can be typed as a broker fee. This fee's
-  generates a credit in the fee's account. When generating the broker's invoice,
-  a line will be generated for all fees of which invoices have been paid.
+- **Gestion des frais d'apporteur**: Un frais peut être typé frais d'apporteur.
+  Le quittancement de ce frais va générer un credit dans le compte défini au
+  niveau du frais. A la génération du bordereaux de l'apporteur, une ligne dans
+  le bordereau sera généré pour tous les frais dont les quittances ont été
+  payées.
 
-- **Portfolio's transfer**: An entry point in the application allows transfering
-  a portfolio from a broker to another. The transfer may concern all contracts,
-  or a set of contracts. It checks agent commissions accounting between the old
-  and new broker, and blocks changes in case of incompatibilities.
+- **Transfert de portefeuille**: Un point d'entrée dans l'application permet de
+  transférer le portefeuille d'un courtier vers un autre. Ce transfert peut
+  concerner la totalité des contrats, ou juste un sous-ensemble. Le transfert
+  vérifie la compatibilité des protocoles de commissionnement entre le courtier
+  d'origine et le nouveau courtier, et bloque les modifications en cas
+  d'incompatibilité.

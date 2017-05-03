@@ -1,2 +1,2 @@
-- **Hospitalisations entry**: When entering a claim, it is possible to add
-  hospitalisation periods.
+- **Saisie des hospitalisations**: Lors de la saisie d'un sinistre, il est
+  possible d'ajouter des périodes d'hospitalisations.
