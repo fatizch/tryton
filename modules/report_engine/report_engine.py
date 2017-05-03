@@ -112,8 +112,9 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         'Format for internal EDM',
         help="If no format is specified, the document will not be stored "
         "in the internal EDM")
-    output_format = fields.Selection([('libre_office', 'Libre Office'),
-            ('pdf', 'Pdf'), ('microsoft_office', 'Microsoft Office')],
+    output_format = fields.Selection([('', ''),
+        ('libre_office', 'Libre Office'), ('pdf', 'Pdf'),
+        ('microsoft_office', 'Microsoft Office')],
         'Output Format', states={
             'required': Eval('process_method') == 'libre_office',
             'invisible': Eval('process_method') != 'libre_office',
