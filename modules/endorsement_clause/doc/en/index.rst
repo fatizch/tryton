@@ -1,4 +1,20 @@
-Module Endorsement Clause
-=========================
+.. endorsement
 
-This module allows to create endorsements to modify the clauses on a contract.
+Endorsement - Clauses
+=====================
+
+Summary
+-------
+
+.. include:: summary.rst
+
+Features
+--------
+
+.. include:: features.rst
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst
