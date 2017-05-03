@@ -1,14 +1,14 @@
 .. endorsement
 
-Avenant - Sauvegarde et recalcul des primes
-===========================================
+Endorsement - Saving and recalculation of premiums
+==================================================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

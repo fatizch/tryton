@@ -1,14 +1,14 @@
 .. commission
 
-Commission - Avenants
-=====================
+Commission - Endorsements
+=========================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

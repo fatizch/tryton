@@ -1,8 +1,7 @@
-- *Paramétrage du montant de commissionement à partir du moteur de règle*:
-  en selectionnant l'option 'utiliser le moteur de règle', il devient possible
-  de paramétrer le montant de commissionnement avec toutes les fonctionnalités
-  du moteur de règle.
+- **Configuration of commission amount using the rule engine**:
+  Depending if the option 'use the rule engine' is selected, it becomes
+  possible to configure the commission amount using all the features of the
+  rule engine.
 
-- *Règles de commissionnement prédéfinie*: ce module ajoute des règles de
-  commissionnement pré-paramétrée : 'commission en escompte' et 'commission
-  linéaire'
+- **Predefined commission rules**: This module adds predefined commission rules:
+  'Discount commission' and 'linear commission'

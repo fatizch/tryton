@@ -1,2 +1,2 @@
-Ajoute la possibilité de créer des clauses par paramétrage. Ces clauses seront
-ensuite utilisées dans d'autres modules.
+This module adds the possibility to create clauses via configuration. These
+clauses are then used in other modules.

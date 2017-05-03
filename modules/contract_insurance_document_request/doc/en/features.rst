@@ -1,5 +1,5 @@
-- **Paramétrage des documents requis à la souscription d'un contrat**
+- **Configuration of required document during contract subscription**
 
-- **Saisie des documents reçus à la souscription**
+- **Input received documents at subscription**
 
-- **Gestion des demandes de documents manquants**
+- **Manage missing required documents**

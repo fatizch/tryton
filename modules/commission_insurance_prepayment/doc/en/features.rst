@@ -1,5 +1,5 @@
-- **Paramétrage du mode précompte**
+- **Configuration of deduction mode**
 
-- **Génération du précompte à la souscription d'un contrat**
+- **Generation of deductions when subscribing to a contract**
 
-- **Ajustement ou non du précompte suite à un avenant ou une résiliation**
+- **Adjust deductions following an endorsement or a termination**

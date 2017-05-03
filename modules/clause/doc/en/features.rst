@@ -1,3 +1,2 @@
-- **Création de clause :** Permet de créer des clauses depuis le paramétrage.
-  Il est possible de marquer la clause comme étant modifiable lors de son
-  utilisation.
+- **Creation of clause**: Allows the creation of clauses via configuration.
+  It is possible to mark a clause as modifiable during its use.

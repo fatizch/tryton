@@ -1,37 +1,37 @@
-- **Paramétrage des frais :** Possibilité de définir des frais dans
-  l'application. Ces frais sont rattachés à des produits (et éventuellement
-  sur d'autres entités, réseau de distribution, apporteurs d'affaires...),
-  et éventuellement dérogeables (selon le paramétrage) au niveau des contrats.
+- **Configuration of fees:** Possibility to define fees in the application.
+  These fees are attached to products (and eventually other entities).
 
-- **Paramétrage des règles de tarification :** Les produits / garanties peuvent
-  avoir une liste de règles de tarification. Ces règles sont constituées de :
+- **Configuration of tarification rules:** Product / guarantees can have
+  a list of tarification rules. The rules constitute:
 
-  - Une règle de calcul
+  - A calculation rule
 
-  - Une fréquence de calcul. Cette fréquence indique quelle est l'unité de
-    retournée par la règle. Par exemple, si la règle retourne "10" et que la
-    fréquence est "Annuel", le tarif résultant est "10 € annuellement".
+  - The frequency of calculations. This frequency indicates which unit is 
+    returned by the rule. For example, if the rule returns "10" and that the
+    frequency is "Yearly", the resulting rate is "10 euro yearly".
 
-  - L'élément servant de base à la tarification. Dans ce module, les niveaux
-    possibles sont "Contrat" et "Option". La règle sera calculée pour chaque
-    élément correspondant sur le contrat en cours de tarification.
+  - The basis of pricing. In this module the possible levels are "Contract"
+    and "Option". The rule will be calculated for each corresponding element
+    on the contract with an on-going rate.
 
-  A noter qu'il peut y avoir plusieurs règles, qui seront alors toutes
-  évaluées en fonction du contexte.
+  It is important to note that there can be multiple rules, who will all
+  be evaluated depending on the context.
 
-- **Paramétrage des taxes :** A côté des règles de tarification, il est
-  possible de spécifier les taxes qui s'appliquent sur le résultat des calculs
-  de ces règles.
+- **Configuration of taxes:** Next to the tarification rules, it is possible
+  to specify the taxes which apply to the result of calculations of these
+  rules.
 
-- **Premium date configuration :** List of dates for premium calculation. The contract start date is used by default but other dates could be added :
-    * annually at the contract anniversary
-    * annually at a custom date (January 1st for example)
-    * with a relative duration from the contract start date (1 month after the contract start date for a free month for example)
+- **Premium date configuration :** List of dates for premium calculation. 
+  The contract start date is used by default but other dates could be added :
+    + annually at the contract anniversary
+    + annually at a custom date (January 1st for example)
+    + with a relative duration from the contract start date 
+      (1 month after the contract start date for a free month for example)
 
-- **Calcul des primes sur le contrat :** Le fait de recalculer le contrat
-  déclenche un recalcul des primes du contrat. Ces primes sont les sorties
-  brutes des règles de tarification, et sont utilisées dans le module
-  **contract_insurance_invoice** pour générer les quittances du contrat.
+- **Calculation of premiums on a contract:** Recalculating the contract triggers
+  a recalculation of premiums on a contract. These premiums are the output
+  of the tarification rules, and are used in the module ``contract_insurance_invoice``
+  to generate the invoices of a contract.
 
-- **Visualisation des primes :** Il est possible depuis le contrat de
-  visualiser les primes calculées si le contrat est actif.
+- **Preview premiums:** It is possible from a contract to preview the premiums
+  calculated if the contract is active.

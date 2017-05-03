@@ -1,2 +1,2 @@
-- **Possibilité de renseigner le contrat sur un paiement (chèque, carte
-  bancaire, virement...) pour permettre le lettrage**
+- **Possibility to retrieve the contract from a payment (check, bank card, transfeer...)
+  to allow lettering**

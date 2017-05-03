@@ -1,6 +1,6 @@
-Le module endorsement_set définit la notion d'ensemble d'avenants.
-Il permet d'appliquer ou de décliner simultanément des avenants concernant
-tous les contrats d'un ensemble de contrats.
+This module defines the notion of a set of endorsements.
+It allows the simultaneous application or declination  of endoresments
+concerning all the contracts in a set of contracts.
 
-- Application simultanée des avenants sur un ensemble de contrats
-- Déclinaison simultanée des avenants sur un ensemble de contrats
+- Simultaneous application of endorsements on a set of contracts
+- Simultaneous declination of endorsements on a set of contracts

@@ -1,14 +1,14 @@
 .. transversal
 
-Transverse - Processus paramétrable
+Transverse - Configurable Process
 ===================================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

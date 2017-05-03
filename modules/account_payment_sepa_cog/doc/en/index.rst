@@ -1,14 +1,14 @@
 .. custom_tryton_coog
 
-Tryton Coog - Gestion du SEPA
+Tryton Coog - SEPA Management
 =============================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

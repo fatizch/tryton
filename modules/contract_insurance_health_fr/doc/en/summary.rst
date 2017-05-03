@@ -1,4 +1,4 @@
-Ce module gère les spécificités françaises d'un contrat d'assurance santé.
+This module handles French specific of a health insurance contract.
 
-- Gestion des régimes de l'assurance maladie
-- Gestion des caisses d'affiliation
+- Manage health insurance schemes
+- Manage affiliates

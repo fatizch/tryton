@@ -1,14 +1,14 @@
 .. life
 
-Prévoyance - Sinistre
+Planning - Claim
 =====================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

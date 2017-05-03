@@ -1,8 +1,5 @@
-Ce module permet de gérer les contrats collectifs :
+This module allows the management of group contracts:
 
-- Paramétrage des produits offerts
-
-- Paramétrage des prestations collectives
-
-- Souscription de contrats ayant plusieurs niveaux d'éléments couverts (
-  population -> personnes)
+- Configuration of offered products
+- Configuration of collective benefits
+- Subscribe contract with multiple covered elements

@@ -1,14 +1,14 @@
 .. claim
 
-Sinistre - Processus de déclaration collectif
+Claim - Group declaration process
 =============================================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Summary
 ---------------
 
 .. include:: features.rst

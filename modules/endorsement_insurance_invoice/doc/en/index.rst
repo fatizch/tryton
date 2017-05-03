@@ -1,14 +1,14 @@
 .. endorsement
 
-Avenant - Quittancement
+Endorsement - Invoicing
 =======================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

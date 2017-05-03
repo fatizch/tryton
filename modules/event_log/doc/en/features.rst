@@ -1,15 +1,15 @@
-- **Enregistrement des évènements sur les objets métiers:** Un
-  enregistrement d'évènement contient un lien vers l'object métier, le
-  type d'évènement, le nom de l'utilisateur ayant effectué l'action,
-  la date précise de l'évènement, ainsi qu'une description.
-  Exemples d'évènements enregistrés:
+- **Log events on triggered on business objects:** A 
+  recording of an event contains a link to the business object,
+  the type of event and name of the user who triggered the
+  event, the date of the event and a description.
+  Examples of recored events:
 
-  + Changement de statut d'un contrat
+  + Status change on a contract
 
-  + Génération d'une quittance
+  + Generation of an invoice
 
-  + Application d'un avenant
+  + The application of an endorsement
 
-- **Configuration de déclencheurs pour l'enregistrement d'évènement**
+- **Configuration of the triggers which log an event**
 
-- **Visualisation des logs depuis l'application**
+- **View the logs from the Coog application**

@@ -1,1 +1,1 @@
-Ce module permet de générer des rapports comptables.
+This modules allows the generation of account reports

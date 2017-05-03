@@ -1,2 +1,2 @@
-Ce module permet de définir comment plusieurs courtiers vont être commissionnés
-pour le même contrat.
+This module allows to define how multiple brokers will be commissioned for
+the same contract.

@@ -1,2 +1,2 @@
-- **Visualisation de la société sur un sinistre**: Lors de la saisie d'un
-sinistre, Coog affiche la société à laquelle appartient l'adhérent
+- **Visualise society on a claim**: During the declaration of a claim,
+  Coog displays the society to which the member belongs

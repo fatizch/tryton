@@ -1,22 +1,22 @@
 .. transversal
 
-Transverse - Demande de pièce
+Transverse - Document Request
 =============================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
 
-Fonctionnalités
+Features
 ---------------
 
 
 .. include:: features.rst
 
 
-Aide utilisateur
+User help
 ----------------
 
 .. toctree::

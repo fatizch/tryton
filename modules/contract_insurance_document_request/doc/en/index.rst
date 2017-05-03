@@ -1,14 +1,14 @@
 .. contract
 
-Contrat - Demande de pièces
-===========================
+Contract - Required documents
+============================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

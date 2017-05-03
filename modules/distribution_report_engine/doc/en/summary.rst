@@ -1,1 +1,1 @@
-Ce module permet de définir des modèles de lettres sur les produits commerciaux
+This module defines document templates on commercial products

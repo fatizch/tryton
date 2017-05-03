@@ -1,4 +1,4 @@
-Ce module ajoute la gestion des pièces dans un sinistre.
+This module adds document management for claims.
 
-- Paramétrage des pièces demandées à l'ouverture d'un sinistre
-- Gestion des pièces demandées sur un sinistre
+- Configuration of requested document when declaring a claim
+- Manage request documents on a claim

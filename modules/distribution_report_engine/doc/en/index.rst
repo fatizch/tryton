@@ -1,14 +1,14 @@
 .. laboratory
 
-Laboratoire Produit - Distribution sur réseau - Courriers
+Labratory Product - Distribution Network - Letters
 =========================================================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

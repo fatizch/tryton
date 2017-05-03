@@ -1,14 +1,14 @@
 .. credit
 
-Emprunteur - Quittancement
+Mortgager - Invoicing
 ==========================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

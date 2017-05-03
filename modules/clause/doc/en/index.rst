@@ -1,14 +1,14 @@
 .. transversal
 
-Transverse - Clausier
+Transverse - Clause
 =====================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

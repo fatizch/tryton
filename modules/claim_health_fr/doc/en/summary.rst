@@ -1,1 +1,1 @@
-Ce module permet de gérer les spécificités françaises des décomptes santé.
+This module allows the management of specific french health calcultations.

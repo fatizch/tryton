@@ -1,14 +1,14 @@
 .. contract
 
-Contrat - Réseau de distribution
+Contract - Distribution network
 ================================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

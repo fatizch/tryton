@@ -1,14 +1,14 @@
 .. custom_tryton_coog
 
-Tryton Coog - Tiers
-===================
+Tryton Coog - Parties
+=====================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

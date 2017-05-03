@@ -1,1 +1,1 @@
-- **Gestion de la norme HEXAPOSTE** 
+- **Manage the Hexaposte standard**

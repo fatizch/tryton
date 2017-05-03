@@ -1,9 +1,10 @@
-Génération de groupes de paiement.
+Generation of payment groups.
 
-- ``[Tryton]`` Gestion des prélèvements automatiques
-- ``[Tryton]`` Regroupement des prélèvements
-- ``[Tryton]`` Comptabilisation et lettrage des prélèvements générés
-- Batch de création et de traitement des paiements
-- Ajout des informations de paiement sur la synthèse acteur
-- Gestion automatisée des rejets de paiement
-- Possibilité de blocage des reversements à un acteur
+- ``[Tryton]`` Manage automatic payments
+- ``[Tryton]`` Group payments
+- ``[Tryton]`` Accounting and lettering of generated payments
+- Batch for creating and treating payments
+- Add information about payment to actors synthesis
+- Manage automatic payment rejections
+- Possibility to block payments to an actor
+

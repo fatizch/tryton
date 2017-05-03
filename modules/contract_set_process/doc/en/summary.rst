@@ -1,3 +1,3 @@
-Ce module permet de paramétrer des processus de travail
-sur l'objet métier "ensemble de contrats". Chaque étape du processus est
-configurable, de même que chaque transition entre étapes.
+This module allows configuration of work processes on 
+the business object "set of contracts". Each step in the process
+is configurable, and also each transition between the steps.

@@ -1,20 +1,20 @@
-- **Calcul du taux moyen prêt :** Le taux moyen prêt est une donnée
-  obligatoire en France. Ce module ajoute la possibilité de configurer une
-  règle de calcul de ce taux, avec la possibilité de définir sur quel prêt
-  rattacher les différents frais sur le contrat (prêt le plus long, le plus
-  gros capital, la plus grosse prime d'assurance).
+- **Calculate average loan rate :** The average loan rate is information
+  that is required in France. This module adds the possibility to configure
+  a rule which calculates this rate, with also the possibility to define
+  on which loan to attach the different expenses on a contract (longest
+  loan, biggest capital, biggest premium).
 
-- **Calcul de prime à chaque remboursement :** Il est possible de configurer
-  au niveau des règles de tarification si la tarification se fait en capital
-  restant dû ou bien en capital initial.
+- **Calculate premium at each refund :** It is possible to configure 
+  the tarification rule engine if the tarification is done with an
+  outstanding capital or initial capital.
 
-- **Définitions de surprimes en capital :** Il est fréquent en assurance
-  emprunteur de définir des surprimes en pourmillage du capital initial.
-  Ce module ajoute cette possibilité. La surprime sera répartie sur la période
-  et avec la fréquence définie lors de la souscription du contrat.
-
-- **Echéancier de quittances :** Le calcul des quittances doit se faire lors
-  de la souscription du contrat, et rester valide sur toute la durée de vie du
-  contrat (~25 ans typiquement). Ce module force la génération des quittances
-  sur toute la durée du contrat, et fournit les outils permettant de manipuler
-  / afficher cet échéancier lors de la souscription.
+- **Definitions of capital premiums :** It is frequent in insurance loans
+  to define decorated surcharges on the initial capital.
+  This module adds the possibility. The surcharge is distributed over the
+  period and with the frequence defined when subscribing to a contract.
+ 
+- **Schedule of receipts :** The calculation of invoices must be done when
+  subscribing to a contract, and must stay valid during the contracts lifetime
+  (typically 25 years). This module forcees the generation of invoices for
+  the lifetime of a contract, and provides tools allowing to manipulate and
+  show the schedules when subscribing.

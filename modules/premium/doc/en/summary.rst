@@ -1,4 +1,4 @@
-Ce module ajoute le nécessaire permettant de tarifer les produits / garanties
-paramétrées. Il permet de calculer les primes de base sur les contrats, de
-manipuler (activer / modifier / désactiver) les frais, et de visualiser les
-primes d'un contrat.
+This module allows the configuration of pricing for products / guarantees.
+It allows the calculation of premiums base on the contracts, to manipulate
+these premiums (activate, modify, deactivate), fees, and previewing the
+premiums on a contract.

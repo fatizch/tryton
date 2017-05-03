@@ -1,5 +1,5 @@
-Ce module étend le module ``account_statement_cog`` pour gérer la notion de
-contrat au niveau d'un relevé (carte bancaire, virement) ou d'un bordereau.
+This module extends the ``account_statement_cog`` module to handle the notion
+of contracts at statements level (bank card, bank transfer) or a form.
 
-- Possibilité de renseigner le contrat sur un paiement (chèque, carte
-  bancaire, virement...) pour permettre le lettrage
+- Possibility to retrieve the contract from a payment (check, bank card, transfeer...)
+  to allow lettering

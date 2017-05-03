@@ -1,3 +1,3 @@
-Ce module permet de paramétrer des processus de travail sur l'objet métier
-avenant. Chaque étape du processus est configurable, de même que chaque
-transition entre étapes.
+This module allows the configuration of work processes on an endorsement
+of a business object. Each step of the process is configurable, including
+transitions between each step.

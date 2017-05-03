@@ -1,6 +1,6 @@
-Ce module permet d'utiliser les fonctionnalités des modules ``document`` et
-``document_request`` au sein d'un produit et d'un contrat.
+This module gives the user the features from the modules ``document`` and
+``document_request`` within a product and a contract.
 
-- Paramétrage des documents requis à la souscription d'un contrat
-- Saisie des documents reçus à la souscription
-- Gestion des demandes de documents manquants
+- Configure required documents during subscription to a contract
+- Input receieved documents at beginning of subscription
+- Manage missing document requests

@@ -1,14 +1,14 @@
 .. transversal
 
-Transverse - Gestion de documents
+Transverse - Document Management
 =================================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

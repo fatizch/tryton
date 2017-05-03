@@ -1,3 +1,3 @@
-Ce module enrichit le module ``endorsement`` pour gérer les modifications
-d'informations concernant des personnes, et permettre de générer des avenants
-sur tous les contrats concernés par ces changements
+This module enriches the ``endorsement`` module to handle modifications
+concerning a persons information, and allows the generation of endorsements
+to modify the information relevant on the persons contracts.

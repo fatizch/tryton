@@ -1,6 +1,6 @@
 - **Payment suspensions :** It is now possible to suspend the payments for a
   given contract billing information. These suspensions could be automatics 
-  (Actuib defined in a journal failure action) or manuals via a button in the 
+  (Actually defined in a journal failure action) or manuals via a button in the 
   contract billing informations list page. The un-suspension can also be
   automatic (suspension is inactive when the associated account move line
   is reconciled) or manual (The same way as the manual suspension).
@@ -8,57 +8,54 @@
   Finally, a new page showing all contracts with a suspended billing information
   has been added to the contract list view.
 
-- **Paramétrage des paramètres de quittancement :** Il est possible de définir
-  par paramétrage un ensemble de règles de quittancement, ainsi que les
-  produits et / ou conditions sous lesquelles ces règles sont disponible.
-  Ces règles contiennent typiquement le moyen de paiement utilisé et la
-  fréquence de quittancement.
+- **Configuration of invoice settings :** It is possible to define using
+  configuration a set of invoice rules, as well as products and / or conditions
+  under which these rules are available. These rules contain typically the payment
+  method used and the frequency of invoicing.
 
-- **Gestion des paramètres de quittancement :** Les contrats nécessitent que
-  des paramètres de quittancement soient renseignés, afin que le système soit
-  capable de décider quand et comment générer les quittances. Ces paramétres
-  sont limités à ceux disponibles pour le produit sélectionné sur le contrat.
+- **Manage configuration of invoicing :** The contracts requiring invoice
+  configuration to be filled, so that the system is capable of deciding when
+  and how to generate invoices. These configurations are limited to those
+  available for the selected product on a contract.
 
-- **Branchement de la comptabilité :** A partir du moment où des quittances
-  sont générées, il est nécessaire de les comptabiliser. Les données de
-  paramétrage pur (Produits, Garanties offertes, Frais...) requièrent
-  maintenant de renseigner les comptes comptables à utiliser lors des
-  opérations de quittancement.
+- **Connecting Accounts :** From the time invoices are generated, it is necessary
+  to account for them. The pure configuration data 
+  (products, offered guarentees, fees...) now require to fill the accounts
+  to be used during an invoice operation.
 
-- **Quittances d'assurance :** Les quittances d'assurance comportent des
-  informations supplémentaires par rapport aux quittances *standard*.
-  En particulier, elles sont rattachées à une période de couverture sur le
-  contrat qui les a générées. De plus, on introduit la séparation des montants
-  de frais.
+- **Insurance receipts :** The insurance receipts invluce extra
+  information in relation to *standard* invoices.
+  In particuliar, they are attached to a covered period on a contract, who
+  has generated them. Furthermore, we introduce the seperation of fees.
 
-- **Détails de quittance :** Afin de comprendre précisément l'origine de
-  chaque ligne des quittances générées, les lignes des quittances générées
-  suite à une facturation de contrat ont des *détails* qui relie la ligne aux
-  données métier qui l'ont généré. Ceci permet également de faciliter les
-  extractions basées sur les primes.
+- **Invoice details :** In order to precisely understand the origin of each
+  generated invoice line, following a billing of a contract, each generated
+  invoice line has a *details* who links the line to the business data that
+  generated the invoice. This equally allows the simplification of 
+  extractions based on premiums.
 
-- **Modification de compte bancaire :** Permet de modifier le compte bancaire
-  à utiliser pour le quittancement sur un contrat, et de le propager aux
-  contrats qui utilisaient le même compte.
+- **Modified bank account :** Allow the modification of a bank account
+  to be used for the invoicing on a contract, and to propagate to contract
+  who use the same account.
 
-- **API de tarification :** Il est possible d'obtenir via un appel RPC
-  les tarifs pour un contrat potentiel. Rien n'est sauvegardé en base.
+- **Tarification API :** It is possible to obtain via a RPC call
+  the rates for a potential contract. Nothing is saved in the database.
 
-- **Taxes incluses :** Il est possible de définir dans le paramétrage que la
-  prime est définie taxes incluses ou taxes exclues. Cette option n'est
-  disponible au niveau d'un produit que si la stratégie d'arrondi définie dans
-  la configuration est l'arrondi par ligne.
+- **Included taxes :** It is possible to define in the configuration that the
+  premium is defined taxes included or taxes excluded. This option is not
+  available from a product only if the rounding method defined in the configuration
+  is rounded by line.
 
-- **Comptabilité par contrat :** Les lignes de mouvement comptable rattachées à
-  un contrat sont liées à ce contrat. Ce lien est propagé par les
-  reconciliations (autrement dit, les lignes réconciliant des lignes rattachées
-  à un contrat sont rattachées à ce contrat), à condition qu'il n'y ait pas
-  d'ambigüité sur le contrat concerné.
+- **Accounting by contract :** The account movement lines attached to a
+  contract are linked to this contract. This link is propagated by the 
+  reconciliation (the lines reconcile the lines attached to a contract are
+  reattached to this contract), only under the condition that there is no
+  ambiguity on a concered contract.
 
-- **Réconciliation plus flexible :** Il est maintenant possible lors des
-  opérations de réconciliation de transférer un éventuel reste sur un compte
-  tiers, voire de le rattacher à un contrat.
+- **More flexible reconciliation :** It is now possible during reconciliation
+  operations to transfer the eventual remains to an parties account, or even
+  attach to a contract.
 
-- **Epuisement du trop perçu par quittancement:** Un traitement par batch
-  est désormais disponible pour permettre d'épuiser le trop perçu d'un contrat
-  par lettrage avec des quittances générées pour le futur.
+- **Exhaustion of overpayment by invoicing:** A batch is available to allow
+  the exhaustion of overpayment for a contract by lettering with invoices
+  generated in the future.

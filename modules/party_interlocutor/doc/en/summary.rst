@@ -1,1 +1,2 @@
-Ce module permet de définir les interlocuteurs d'une société.
+This module allows the definition of interlocutors for
+a society.

@@ -1,19 +1,19 @@
 .. health
 
-Santé - Contrat (fr)
+Health - Contract (fr)
 ====================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst
 
-Aide utilisateur
+User Help
 ----------------
 
 .. toctree::

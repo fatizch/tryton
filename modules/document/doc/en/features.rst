@@ -1,3 +1,3 @@
-- **Paramétrage des types de document**
+- **Configuration of document types**
 
-- **Typage des pièces jointes**
+- **Attachment types**

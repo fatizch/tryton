@@ -1,3 +1,2 @@
-- **Définition des interlocuteurs d'une société**: Depuis une société, il est
-possible de définir le nom des interlocuteurs, leurs adresses, leurs moyens de
-contacts
+- **Definition of interlocutors for a society:** From a society, it is
+  possible to define the name, address and means of contact for an interlocutor.

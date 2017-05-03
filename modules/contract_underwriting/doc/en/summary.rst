@@ -1,2 +1,2 @@
-Ce module gère l'analyse de risque: acceptation manuelle ou automatique du
-risque pour une garantie donnée.
+This module handles underwritings: manually or automatically approving
+a risk for a given guarantee.

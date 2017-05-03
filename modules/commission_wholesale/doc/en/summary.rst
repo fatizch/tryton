@@ -1,7 +1,7 @@
-Ce module gère le commissionnement pour un courtier grossiste.
+This module handles the commissions for a wholesale broker.
 
-- Permet de définir la notion de courtier grossiste sur un plan de
-  commissionnement.
-- Configuration de la délégation de paiement de l'assureur au gestionnaire pour
-  payer la commission du courtier grossiste.
-- Génération des bordereaux pour le courtier grossiste.
+- Allows to define the notion of a wholesale broker in a commission
+  plan.
+- Configuration of payment delegation from an insurer to manager to pay
+  for a wholesales broker commission.
+- Generation of slips for a wholesale broker.

@@ -1,1 +1,1 @@
-- **Ajout des champs spécifiques à l'interface avec la sécurité sociale française**
+- **Add a specific fields to interface for French social security

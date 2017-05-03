@@ -1,12 +1,10 @@
-- **Permet de définir la notion de courtier grossiste sur un plan de
-  commissionnement**
-- **Configuration de la délégation de paiement de l'assureur au gestionnaire
-  pour payer la commission du courtier grossiste.**: la société qui gère le
-  contrat peut définir le type de délégation de paiement du courtier grossiste
-  en fonction de son accord avec l'assureur.
-- **Génération des bordereaux pour le courtier grossiste**: dans le cas d'une
-  délégation de paiement, la société gestionnaire du contrat émet et paie la
-  commission au courtier grossiste. Cette commission est déduite ensuite du
-  bordereau envoyé à l'assureur. Dans le cas de la non délégation et selon le
-  paramétrage, il est possible de générer la facture du courtier grossiste vers
-  l'assureur.
+- **Allow defenetion of broker wholesaler on a commissionning plan**
+- **Configuration of the delegation of payments for the insurer to
+  the manager to pay the brokers commission**: the society who manages
+  the contract can define the type of payment delegation for the broker
+  wholesaler depending on the agreement with the insurer.
+- **Generation of slips for the wholesale broker**: In the case of an payment
+  delegation, the managing society emits and pays the commission for the
+  wholesale broker. This commission is deducted from the slip sent to the insurer.
+  In the case of a non-delegation and depending on the configuration, it is
+  possible to generate the invoice of the wholesale broker to the insurer.

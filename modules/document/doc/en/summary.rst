@@ -1,4 +1,4 @@
-Ce module gère la définition de type de document.
+This module handles the defenition of document types.
 
-- Paramétrage des types de document
-- Typage des pièces jointes
+- Configure document types
+- Attachment types

@@ -1,2 +1,1 @@
-Ce module permet de renseigner la société d'un assuré lors de la déclaration
-d'un sinistre
+This module allows the retreival of a society when declaraing a claim

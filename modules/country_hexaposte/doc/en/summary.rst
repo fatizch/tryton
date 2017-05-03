@@ -1,5 +1,5 @@
-Ce module permet de gérer la norme HEXAPOSTENV 2011 pour le référentiel
-des codes postaux.
+This module handles the HEXAPOSTENV 2011 standard for
+referencing postal codes.
 
-- Import des fichiers HEXAPOST
-- Mise à jour du référentiel
+- Import HEXAPOST files
+- Reference updates

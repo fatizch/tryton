@@ -1,14 +1,14 @@
 .. claim
 
-Sinistre - Décompte santé français
+Claim - French Health calculation
 ==================================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

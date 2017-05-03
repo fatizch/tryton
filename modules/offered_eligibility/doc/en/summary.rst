@@ -1,2 +1,2 @@
-Le module offered_eligibility ajoute la possibilité d'employer le moteur de
-règles pour ajouter des conditions d'éligibilité à une garantie.
+This module adds the possibility to use the rule engine to add eligibility
+conditions to a guarantee.

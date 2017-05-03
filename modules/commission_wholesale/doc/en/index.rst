@@ -1,14 +1,14 @@
 .. commission
 
-Commission - Courtier Grossiste
+Commission - Wholesale broker
 ===============================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

@@ -1,14 +1,14 @@
-Ce module permet de créer des processus paramétrés directement depuis
-l'application. Cela permet d'éviter d'imposer un format de processus pour une
-action métier donnée. Pour une souscription de contrat par exemple, le
-processus peut varier selon le workflow interne de l'entreprise, la ligne
-métier, voire même le produit. Pour répondre à ce besoin, ce module permet
-via l'interface de créer et de customiser les processus métier :
+This module allows the creation of configurable processes directly 
+in the application. It avoids imposiing a format for specific business data.
+To subscribe to a contract, for example the process can vary depending
+on the internal workflow of the company, the type of business, even
+the product. To meet this need, this modules allows the creation and 
+customisation of business processes via an interface:
 
- - L'ordre de saisie des données
+  - The order in which data is inputted
 
- - Les contrôles à appliquer (et quand les appliquer)
+  - The controls to applied (and when they should be applied)
 
- - Le design de chaque écran
+  - The design of each window
 
- - Les habilitations sur chaque écran
+  - The authorizations on each screen

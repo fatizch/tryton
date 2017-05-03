@@ -1,14 +1,15 @@
 - **Payment creation and processing batches**
 
-- **Gestion automatisée des rejets de paiement**
+- **Add payment information to Actor Synthesis**
 
-    - Paramétrage des raisons d'un rejet
-    - Paramétrage par raisons des actions à exécuter suite à un rejet
-    - Paramétrage de la lettre de notification de rejet selon la raison de rejet
+- **Automated payment rejection management**
 
-- **Blocage des reversements d'un acteur**
-    Il est possible de bloquer depuis un acteur tous les versements qu'on aurait
-    été amené à lui faire. La dette est bien comptabilisée (montant négatif sur
-    le compte à payer) mais tant que le blocage existe aucun paiement ne peut
-    être généré. Utile si l'acteur est en virement automatique et que l'on
-    souhaite suspendre temporairement ses reversements.
+    - Configure reject reasons
+    - Configure actions to be executed after a rejected payment
+    - Configure rejection notification depending on rejection reason
+
+- **Block an actor's payments**
+    It is possible to block all payments that have been made to a certain actor.
+    The debt is recorded (negative amount on the account), but as long as the account
+    is blocked no payment can be generated. This is useful if the actor uses automatic
+    payments and the account requires a temporary suspensions of payments.

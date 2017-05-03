@@ -1,14 +1,14 @@
 .. claim
 
-Sinistre - Gestion des pièces
+Claim - Document Management
 =============================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

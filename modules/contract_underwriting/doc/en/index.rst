@@ -1,14 +1,14 @@
 .. contract
 
-Contrat - Analyse de risque
+Contract - Underwriting
 ===========================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

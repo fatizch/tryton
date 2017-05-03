@@ -1,3 +1,3 @@
-- **Gestion des rejets SEPA automatisé**
-- **Gestion des frais de rejets**
-- **Gestion des amendements de mandats**
+- **Manage automatic SEPA rejections**
+- **Manage reject fees**
+- **Manage amendments to mandates**

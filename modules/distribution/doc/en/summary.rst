@@ -1,1 +1,4 @@
-Define a distribution network hierarchy and bind it to parties
+This module defines a distribution network
+
+- Definition of a distribution network hierarchey
+

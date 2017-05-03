@@ -1,5 +1,7 @@
-- **Vérification du calcul de la table d'amortissement :**
-
-  Un avertissement apparaît si le montant de la dernière échéance est très différent du montant du palier correspondant, à savoir plus n de centimes de différence, n étant le nombre d'échéances du prêt.
+- **Verification of Amortization table:**
+  A warning appears if the amount of the last deadline
+  is very different to the corresponding incremented amount,
+  Namely *n* more cents in difference, *n* being the 
+  number of deadlines for a loan.
 
   .. image :: images/warning_last_payment.png

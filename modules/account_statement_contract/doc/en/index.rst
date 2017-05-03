@@ -1,14 +1,14 @@
 .. contract
 
-Contrat - Gestion des relevés
-=============================
+Contract - Statement Management
+===============================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

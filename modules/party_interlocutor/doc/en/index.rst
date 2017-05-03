@@ -1,15 +1,15 @@
 .. transversal
 
-Transverse - Interlocuteurs de tiers
+Transverse - Party Interlocutors
 ====================================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

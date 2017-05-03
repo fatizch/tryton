@@ -1,14 +1,14 @@
 .. commission
 
-Commission - Reprise
-====================
+Commission - Recovery
+=====================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

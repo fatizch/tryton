@@ -1,5 +1,5 @@
-Ce module permet de gérer les sinistres prévoyances :
+This module allows the management of claim planning:
 
-- Enrichissement des sinistres pour les rattacher à une personne couverte
+- Enhance claims to attach to covered person
 
-- Recherche automatique des personnes couvertes
+- Automatically search for covered persons

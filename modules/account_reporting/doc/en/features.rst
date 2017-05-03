@@ -1,1 +1,1 @@
-- Rapport de revenus agrégés par produit et période
+- Aggregate revenue reports by product and period

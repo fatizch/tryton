@@ -1,24 +1,23 @@
-- **Avenant unitaire de manipulation des données de quittancement :** Permet de
-  modifier sur un contrat les paramètres de quittancement. Ces modifications
-  peuvent être prévues dans le futur, et porter sur la fréquence, le mode de
-  paiement, le compte à utiliser, etc...
+- **Unitary amendment for modifying invoicing data :** Allow modification, on a
+  contract, the invoicing options. These modifications can be planned for the 
+  future, and modify the frequency, the payment mode, the user account, etc ...
 
-- **Notion d'avenant tarifant :** Il est possible de marquer un avenant comme
-  *tarifant*. Cela signifie que :
+- **Concept of endorsement rates :** It is possible to mark an endorsements as
+  *rates*. This signifies that:
 
- - L'application de l'avenant déclenchera un recalcul des tarifs sur le
-   contrats à partir de la date d'effet
+  - The application of the endorsment will trigger the recalculation of
+    rates on the contracts starting from the effective date.
 
- - Ce recalcul sera suivi d'une suppression / annulation des quittances
-   antérieures à ou incluant la date d'effet de l'avenant, en fonction de leur
-   statut (les quittances en brouillon ou simplement validée seront supprimées,
-   celles émises ou payées seront annulées, et la comptabilité sera mise à jour
-   en fonction).
+  - This recalculation will be following by the deletion / cancellation of
+    invoices prior to the endorsment, depending on their status (invoices in
+    draft or valid invoices will be deleted, issued or paid invoices will
+    be cancelled, and accounting will be updated).
 
- - Les quittances seront ensuite recréées / émises pour prendre en compte les
-   nouveaux tarifs.
+  - The invoices will then be recreated / emitted to take in account the new
+    rates.
 
- - Tout ces comportement seront répliqués en cas d'annulation de l'avenant.
+  - These features will be replicated in the case of a cancelled
+    endorsement.
 
- Il est important de noter que les avenants tarifants forcent la génération
- d'une quittance débutant à leur date d'effet.
+It is important to note that these rate endorsements force the generation of an
+invoice starting at their effective date.

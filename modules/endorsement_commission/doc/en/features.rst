@@ -1,5 +1,5 @@
-- **Avenant unitaire de modification de plan de commissionnement :** Permet de
-  modifier le plan de commissionnement auquel est rattaché le contrat.
+- **Unitary amendment for commissioning plan :** Allow the modification of 
+  commission plans to which the contract is attached.
 
-- **Avenant unitaire de changement d'apporteur :** Permet de modifier
-  l'apporteur sur le contrat.
+- **Unitary amendment for modifying contributer :** Allow the modification
+  of the contributer on a contract.

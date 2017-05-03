@@ -1,6 +1,6 @@
-Ce module permet de retrouver les fonctionnalités du moteur de règle pour
-paramétrer le commissionnement.
+This module makes use of the rule engines features for commission
+configuration.
 
-- Paramétrage du montant de commissionement à partir du moteur de règle
-- Ajout d'une donnée metier permettant de retrouver le plan de commissionnement
-  utilisé au sein d'un contrat.
+- Configuration of a commission amount using the rule engine
+- Add business data allowing to find the commission plan used with
+  a contract.

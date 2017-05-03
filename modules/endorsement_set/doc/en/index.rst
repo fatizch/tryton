@@ -1,14 +1,14 @@
 .. endorsement
 
-Avenant - Ensemble d'avenants
+Endorsement - Endorsement set
 =============================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst

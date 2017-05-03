@@ -1,1 +1,1 @@
-- **Sélection de modèles de lettre sur les produits commerciaux**
+- **Select document templates on commercial products**

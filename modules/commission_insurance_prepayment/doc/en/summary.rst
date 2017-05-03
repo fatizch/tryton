@@ -1,6 +1,6 @@
-Ce module permet de gérer le versement du commissionnement sous forme d'un
-précompte que ce soit pour la partie courtier ou assureur.
+This module allows the management of payments for commissions in the form 
+of a deduction be it for a broker or an insurer.
 
-- Paramétrage du mode précompte
-- Génération du précompte à la souscription d'un contrat
-- Ajustement ou non du précompte suite à un avenant ou une résiliation
+- Configuration of deduction mode
+- Generation of deduction when subscribing to a contract
+- Adjust deductions following an endorsement or a termination

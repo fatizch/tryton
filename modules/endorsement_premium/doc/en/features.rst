@@ -1,2 +1,2 @@
-- **Prévisualisation des primes :** Permet de prévisusaliser les nouvelles
-  primes en fin d'avenant (avant application).
+- **Preview premiums:** Allow previewing of new premiums before applying
+  an endorsement.

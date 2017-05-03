@@ -1,14 +1,14 @@
 .. laboratory
 
-Laboratoire Produit - Conditions d'éligibilité
+Product laboratory -  Eligibility conditions
 ==============================================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
+Features
 ---------------
 
 .. include:: features.rst
