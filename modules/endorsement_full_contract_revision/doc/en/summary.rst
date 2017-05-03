@@ -1,4 +1,3 @@
-Ce module permet de déclencher une Reprise Intégrale de Contrat via le
-processus d'avenant. Cet avenant particulier est réservé aux cas où le contrat
-est à reprendre en totalité. Afin de faciliter la saisie, il réutilise un
-processus similaire au processus de souscription.
+This module triggers a full contract revision via the endorsement process. This
+particular endorsement should only be used when the contract should totally be
+rewritten, and uses a subscription like process for ease of use.

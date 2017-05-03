@@ -1,5 +1,5 @@
-- **Avenant de reprise intégrale de contrat :** Bascule le contrat en devis
-  le temps de l'avenant. Les modifications ont lieu en temps réel sur le
-  contrat, ce qui est moins propre que pour les avenants classiques. Cela
-  permet en revanche une interface plus simple lors de la saisie. Annulation
-  des modifications possibles en cours de reprise.
+- **Full contract revision endorsement**: Converts the contract back to a quote
+  while the endorsement lasts. Modification are actually done on the contract,
+  which is less clean than on an actual endorsement (where nothing is effective
+  until the endorsement is applied). This in place allows for a better
+  readability in the process. It is possible to cancel everything at any time
