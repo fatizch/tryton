@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import logging
 import datetime
+from decimal import Decimal
 
 from trytond.pool import Pool
 from trytond.modules.coog_core import batch
@@ -101,8 +102,8 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
         snapshots = Snapshot.browse(x[11] for x in values)
         debits = (x[12] for x in values)
         credits = (x[13] for x in values)
-        directions_moves = ['C' if l.credit - l.debit > 0 else 'D'
-            for l in lines]
+        directions_moves = ('C' if Decimal(x[13]) - Decimal(x[12]) > 0 else 'D'
+            for x in values)
         return (snapshots, lines, accounts, journals, aggregated_ids,
             descriptions, move_dates, post_dates, debits, credits,
             directions_moves)

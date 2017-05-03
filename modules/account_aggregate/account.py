@@ -253,11 +253,21 @@ class LineAggregated(model.CoogSQL, model.CoogView):
     @classmethod
     def __setup__(cls):
         super(LineAggregated, cls).__setup__()
-        cls._order.insert(0, ('snapshot', 'DESC'))
-        cls._order.insert(1, ('create_date', 'DESC'))
+        cls._order = [
+            ('snapshot', 'DESC'),
+            ('post_date', 'DESC'),
+            ('date', 'DESC'),
+            ('aggregated_move_id', 'DESC'),
+            ('journal', 'DESC'),
+            ]
 
     def get_currency_digits(self, name):
         return self.account.currency_digits
+
+    @classmethod
+    def order_snapshot(cls, tables):
+        table, _ =  tables[None]
+        return [table.snapshot]
 
     @classmethod
     def get_tables(cls):
@@ -340,7 +350,7 @@ class LineAggregated(model.CoogSQL, model.CoogView):
         line = tables['account.move.line']
         move = tables['account.move']
         journal = tables['account.journal']
-        return [line.account,
+        group_by = [line.account,
             Case((journal.aggregate, move.journal), else_=line.id),
             journal.aggregate,
             move.journal,
@@ -348,6 +358,10 @@ class LineAggregated(model.CoogSQL, model.CoogView):
             move.post_date,
             move.snapshot,
             ]
+        if ServerContext().get('from_batch', False):
+            snapshot = tables['account.move.snapshot']
+            group_by.append(snapshot.id)
+        return group_by
 
     @classmethod
     def having_clause(cls, tables):
@@ -370,17 +384,25 @@ class LineAggregated(model.CoogSQL, model.CoogView):
 
     @classmethod
     def get_order_by(cls, tables):
-        line = tables['account.move.line']
         move = tables['account.move']
         journal = tables['account.journal']
-        return [
-            move.date,
-            move.post_date,
-            move.snapshot,
-            move.journal,
-            Case((journal.aggregate, move.journal), else_=line.id),
-            journal.aggregate,
-            line.account,
+        snapshot = tables['account.move.snapshot']
+        if ServerContext().get('from_batch', False):
+            order = [snapshot.id.desc]
+        else:
+            order = []
+        return order + [
+            move.post_date.desc,
+            move.date.desc,
+            Case((journal.aggregate,
+                Concat(Concat(
+                        cls.get_aggregate_prefix(),
+                        ToChar(move.post_date, 'YYYYMMDD')),
+                    Cast(move.snapshot, 'VARCHAR'))),
+                else_=Concat(
+                    cls.get_move_prefix(),
+                    Max(move.number))).as_('aggregated_move_id').desc,
+            move.journal.desc,
             ]
 
     @classmethod
