@@ -1,16 +1,16 @@
 .. claim
 
-Sinistre - Indemnisations
-=========================
+Claim - Indemnifications
+========================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

@@ -1,3 +1,2 @@
-Ce module ajoute une liste de clauses sur les contrats. Ces clauses sont
-librement modifiables ou pas en fonction de leur configuration (cf module
-``clause``)
+This module adds a clauses list on contracts. This clauses are freely editable
+or not depending on their configuration (cf module ``clause``)

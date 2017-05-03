@@ -1,1 +1,1 @@
-Ce module permet de générer les rapports assureurs.
+This module allows generating insurer reports.

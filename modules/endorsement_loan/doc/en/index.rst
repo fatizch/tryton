@@ -1,15 +1,15 @@
 .. credit
 
-Emprunteur - Avenant de modification de prêt
-============================================
+Credit - Loan change endorsement
+================================
 
-Résumé
+Summary
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

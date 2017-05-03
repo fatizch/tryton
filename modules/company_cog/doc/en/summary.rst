@@ -1,6 +1,6 @@
-Ce module permet d'étendre la notion de "tiers" aux sociétés et leurs employés.
+This module extends the "party" notion to companies and their employees.
 
-- ``[Tryton]`` Configuration de la société utilisatrice du logiciel
-- ``[Tryton]`` Cloisonnement de la configuration
-- ``[Tryton]`` Cloisonnement par sous-entité des données métiers / comptables
-- ``[Tryton]`` Possibilité de rattacher un utilisateur à une entité
+- ``[Tryton]`` Configure the company which uses the software
+- ``[Tryton]`` Compartmentalization of the configuration
+- ``[Tryton]`` Compartmentalization by sub-entity of business / accounting data
+- ``[Tryton]`` Possibility to link a user to an entity

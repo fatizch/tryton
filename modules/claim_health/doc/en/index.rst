@@ -1,15 +1,15 @@
 .. claim
 
-Sinistre - Décompte Santé
-=========================
+Claim - Health count
+====================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

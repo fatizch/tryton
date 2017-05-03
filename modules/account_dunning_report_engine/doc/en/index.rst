@@ -1,15 +1,15 @@
 .. contract
 
-Contrat - Gestion des courriers de relances
-===========================================
+Contrat - Handle dunning reports
+================================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

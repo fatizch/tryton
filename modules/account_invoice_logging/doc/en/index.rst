@@ -1,15 +1,15 @@
 .. accounting
 
-Comptabilité - Historisation des états des quittances
-=====================================================
+Accounting - Invoice's states logging
+=====================================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

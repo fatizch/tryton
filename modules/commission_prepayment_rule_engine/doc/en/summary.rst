@@ -1,5 +1,5 @@
-Ce module étend le module ``commission_prepayment`` pour permettre
-l'utilisation du moteur de règle pour paramétrer certaines règles du précompte.
+This module extends ``commission_prepayment`` to allow using the rule engine to
+parameter some prepayment rules.
 
-- Paramétrage du montant de précompte via le moteur de règle
-- Paramétrage via le moteur de règle de l'échéancier de versement du précompte
+- Configure prepayment's amount using the rule engine
+- Configure the prepayment's payment schedule using the rule engine

@@ -1,9 +1,7 @@
-Ce module permet de générer des mouvements comptables de compensation.
+This module allows generating clearing moves
 
-- ``[Tryton]`` Gestion des mouvements comptables de compensation utilisé le
-  temps des transactions bancaires (i.e transfert de la dette entre le client
-  et l'établissement bancaire).
-- ajout d'une description au mouvement comptable de compensation à partir
-  du nom du journal.
-- possibilité de définir sur le journal de paiement si le mouvement de
-  compensation doit être émis automatiquement à la validation d'un paiement.
+- ``[Tryton]`` Handle clearing moves which are used during bank transactions
+  (debt transfer between the customer and the bank).
+- Add a clearing move description from the journal's name
+- Ability to define whether the clearing move has to be automatically created
+  when validating a payment in the payment journal.

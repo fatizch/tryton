@@ -1,5 +1,5 @@
-- **Rapport assureur : contrats:**  Permet de générer les rapports assureurs
-  concernant les contrats et les éléments couverts.
+- **Insurer reporting: contracts:** Allows generating insurer reports about
+  contracts and covered elements
 
-- **Rapport assureur : commissions:**  Permet de générer les rapports assureurs
-  concernant les factures fournisseurs.
+- **Insurer reporting: commissions:** Allows generating insurer reports about
+  supplier invoices.

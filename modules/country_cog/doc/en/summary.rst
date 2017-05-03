@@ -1,1 +1,1 @@
-``[Tryton]`` Base de données des pays et de leurs subdivisions administratives
+``[Tryton]`` Countries data base with their administrative sub divisions

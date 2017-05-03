@@ -1,9 +1,9 @@
-- **Ajout des batchs de génération et de traitement des relances**
+- **Add dunning's generation and processing batches**
 
-- **Ajout de paramétrage sur un niveau de relance**:
-    - Ajout d'un nom sur un niveau de relance
-    - Ajout d'un type d'évènement à générer lors de l'éxécution d'une relance
-    - L'option 'Jours définis depuis la précédente étape' permet de lancer la
-      relance en fonction de la précédente.
-    - L'option 'Non obligatoire' permet de traiter le niveau de relance suivant
-      si celui est atteint sans traiter le niveau non obligatoire.
+- **Add settings on a dunning level**:
+  - Add a name on a dunning level
+  - Add a type of events to generate while executing a dunning
+  - 'Days defined since previous step' option allows launching a dunning
+    depending on the previous one.
+  - 'Non mandatory' option allows processing the next dunning level if it is
+    reached without processing the non mandatory level.

@@ -1,20 +1,20 @@
 .. contract
 
-Contrat - Montant de Couverture
-===============================
+Contrat - Coverage amount
+=========================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 
-Aide utilisateur
-----------------
+User guide
+----------
 
 .. toctree::
     :hidden:

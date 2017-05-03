@@ -1,16 +1,16 @@
 .. laboratory
 
-Laboratoire Produit - Distribution sur réseau
-=============================================
+Product laboratory - Network distribution
+=========================================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

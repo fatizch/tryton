@@ -1,3 +1,4 @@
-- **Saisie d'une règle de validation du montant de couverture:**
+- **Entry of the coverage amount's validation rule:**
 
-  - Possibilité de saisir sur une garantie de produit une règle permettant de valider le montant de couverture (si le montant est libre) ou une règle de valeurs possibles
+  - Enable entry of a rule which validates the coverage amount (if the amount
+  is free) or a rule of possible values on a product's option.

@@ -1,1 +1,1 @@
-- **Saisie possible de la banque sur un bordereau de chèque**
+- **Possible entry of the bank in an in bank deposit ticket**

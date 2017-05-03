@@ -1,23 +1,18 @@
-- **Avenant unitaire de modification des paramètres du prêt :** Permet de
-  modifier les données du prêt. Ces modifications donnent lieu à une
-  prévisualisation de l'échéancier du prêt, et permettent ensuite de
-  sélectionner les contrats à impacter. Les contrats non impactés ne seront
-  pas recalculés, mais toute modification ultérieure prendra en compte les
-  nouvelles données du prêt.
+- **Loan configuration change part endorsement :** Allows to change a loan's
+  data. These changes give a loan schedule preview, and allows to chose which
+  contracts should be impacted. Non impacted contracts won't be recomputed, but
+  each further change will take the new loan data into account.
 
-- **Avenant unitaire de modification des paliers :** Permet de modifier les
-  paliers du prêt à une date différente de la date de début. Cet avenant permet
-  de gérer les remboursements anticipés, de même que la vie des prêts à
-  paliers.
+- **Increment changes part endorsement :** Allows to change a loan's increments
+  at a different date from the start date. This endorsement allows handling
+  anticipated refunds, and increment loans life.
 
-- **Avenant unitaire de modification des quotités :** Permet de modifier les
-  quotités du ou des contrats rattachés au prêt. Ces modifications sont
-  versionnées et peuvent se faire dans le passé ou le futur. Il est également
-  possible de créer de nouvelles quotités si souhaité.
+- **Shares change part endorsement :** Allows changing the loan's contract or
+  contracts shares. The changes are versio ned and can be made in the past or
+  the future. It is possible to create new shares as well.
 
-- **Modification des surprimes (gestion du pourmillage) :** Permet de gérer les
-  avenants portant sur des surprimes en pourmillage du capital du prêt.
+- **Extra premiums modification (per mil management) :** Allows handling
+  endorsement which are on loan's per mil capital extra premiums.
 
-- **Prévisualisation de l'échéancier de quittances :** Permet lors de l'étape
-  de prévisualisation de consulter l'échéancier des quittances qui sera
-  généré suite à l'application de l'avenant.
+- **Preview invoices schedule :** Allows to preview invoices schedule which will
+  be generated after applying the endorsement.

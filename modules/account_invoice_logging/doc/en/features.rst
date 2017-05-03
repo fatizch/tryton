@@ -1,4 +1,3 @@
-- **Historisation des états des quittances** : Toute modification de l'état
-  d'une quittance génère une ligne dans une table dédiée. Cela permet via
-  l'application de consulter les changements d'états ayant eu lieu sur la
-  quittance ainsi que leur date.
+- **Invoice's states logging**: Each invoice's state modification generates
+  a line in a dedicated table. This allows to check all state changes of the
+  invoice and their date on the application.

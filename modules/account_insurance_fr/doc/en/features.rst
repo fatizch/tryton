@@ -1,1 +1,1 @@
-- **Ajout du modèle de plan comptable assurance français**
+- **Add french insurer's accounting plan model**

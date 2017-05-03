@@ -1,5 +1,5 @@
-- **Définition du niveau d'agrégat par journal comptable**
+- **New aggregate level by accounting journal**
 
-- **Visualisation des lignes agrégées et de leurs détails**
+- **Display aggregated lines and their details**
 
-- **Batch d'agrégation des lignes comptables**
+- **Accounting lines aggregation batch**

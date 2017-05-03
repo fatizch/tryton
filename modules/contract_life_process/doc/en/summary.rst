@@ -1,2 +1,2 @@
-Ce module permet de rendre le souscripteur d'un contrat automatiquement
-assuré par le contrat.
+This module allows to automatically make a contract's subscriber a party covered
+by the contract.

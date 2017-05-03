@@ -1,13 +1,11 @@
-- **Avenant unitaire d'ajout d'élément couvert :** Permet d'ajouter un nouvel
-  élément couvert sur un contrat.
+- **Covered element addition part endorsement :** Allows adding a new covered
+  element on a contract.
 
-- **Avenant d'ajout de garantie à un élément couvert :** Permet d'ajouter des
-  garanties sur un élément couvert.
+- **Option addition endorsement :** Allows adding an option on a covered element
 
-- **Avenant unitaire d'ajout / modification de surprime :** Permet de manipuler
-  les données de surprime : ajout / suppression / modification sur une ou
-  plusieurs garanties, sur un ou plusieurs éléments couverts.
+- **Premium addition / change endorsement :** Allows manipulation extra premium
+  data : add / delete / change premiums on one or many options, on one or many
+  covered elements.
 
-- **Avenant de suppression de garanties d'un élément couvert :** Permet de
-  supprimer des garanties d'un élément couvert. Cet avenant permet
-  aussi de supprimer des options du contrat.
+- **Deleting options endorsement :** Allows deleting options on a covered
+  element. It also allows deleting a contract's options.

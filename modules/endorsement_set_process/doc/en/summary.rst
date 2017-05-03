@@ -1,3 +1,2 @@
-Ce module permet de paramétrer des processus de travail
-sur l'objet métier "ensemble d'avenants". Chaque étape du processus est
-configurable, de même que chaque transition entre étapes.
+This module allows configuring a workflow process on the business object
+"endorsement set". Each process step and transition is configurable.

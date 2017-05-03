@@ -1,15 +1,15 @@
 .. contract
 
-Contrat - Règles de renouvellement
-==================================
+Contract - Renewal rules
+========================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

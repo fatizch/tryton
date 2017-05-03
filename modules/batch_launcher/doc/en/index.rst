@@ -1,15 +1,15 @@
 .. batch_launcher
 
- - Lancement des batchs depuis le client
-=============================
+ - Batch launching from the client
+==================================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

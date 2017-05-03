@@ -1,15 +1,15 @@
 .. accounting
 
-Comptabilité - Gestion des impayés
-==================================
+Accounting - Outstandings management
+====================================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

@@ -1,15 +1,15 @@
 .. claim
 
-Sinistre - Conditions d'éligibilité
-===================================
+Claim - Eligibility conditions
+==============================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

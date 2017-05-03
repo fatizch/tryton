@@ -1,2 +1,2 @@
-Ce module ajoute des fonctionnalités liées à la génération de documents,
-paramétrables individuellement sur chaque modèle de lettres.
+This module adds report generation related features. These features are
+configurable on each report template.

@@ -1,15 +1,15 @@
 .. health
 
-Santé - Avenant sur les personnes (fr)
-======================================
+Health - Party endorsement (fr)
+================================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

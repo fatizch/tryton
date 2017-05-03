@@ -1,5 +1,4 @@
-- **Paramétrage des relances par motif de rejet** : Permettre de configurer par
-  motif de rejet les actions de relance à entreprendre suite aux occurences du
-  motif.
-- **Déclenchement automatique des relances** : Suite à un rejet, des relances
-  peuvent être créées automatiquement en fonction du paramétrage précédent.
+- **Set up dunnings by reject reason** : Allow configuring dunning actions to do
+  by reject reason after the reason's occurences.
+- **Automatic dunnings triggering** : After a rejection, dunnings can be created
+  automatically according the previous set up.

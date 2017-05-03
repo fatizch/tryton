@@ -1,1 +1,1 @@
-Gère l'historisation des états des factures : état et date fonctionnelle
+Invoices states logging: state and functional date

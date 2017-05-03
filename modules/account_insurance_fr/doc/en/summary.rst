@@ -1,4 +1,4 @@
-Ce module ajoute le plan comptable assurance français comme modèle de plan
-comptable.
+This module adds the french insurer's accounting plan as an aaccounting plan
+template
 
-- Ajout du modèle de plan comptable assurance français
+- Add french insurer's accounting plan
