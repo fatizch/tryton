@@ -27,7 +27,7 @@ Example :
 ''')
         sys.exit()
 
-r = requests.get(REDMINE_URL + '/projects.json',
+r = requests.get(REDMINE_URL + '/projects.json?limit=100',
     auth=(redmine_api_key, ''), verify=False)
 parsed = r.json()['projects']
 possible_projects = []
