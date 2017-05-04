@@ -431,8 +431,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         ReportModel = pool.get('report.generate', type='report')
         Report = pool.get('ir.action.report')
         input_ext = from_ext or self.get_extension('input_kind')
-        if input_ext == to_ext:
-            return to_ext, data
+        if input_ext == to_ext or not to_ext:
+            return input_ext, data
         return ReportModel.convert(
             Report(template_extension=input_ext, extension=to_ext), data)
 
@@ -470,16 +470,16 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         ReportModel = pool.get('report.generate', type='report')
         objects_ids = [x.id for x in objects]
         reporting_data = {
-                'id': objects_ids[0],
-                'ids': objects_ids,
-                'model': objects[0].__name__,
-                'doc_template': [self],
-                'party': objects[0].get_contact(),
-                'address': objects[0].get_address(),
-                'sender': objects[0].get_sender(),
-                'sender_address': objects[0].get_sender_address(),
-                'origin': None,
-                }
+            'id': objects_ids[0],
+            'ids': objects_ids,
+            'model': objects[0].__name__,
+            'doc_template': [self],
+            'party': objects[0].get_contact(),
+            'address': objects[0].get_address(),
+            'sender': objects[0].get_sender(),
+            'sender_address': objects[0].get_sender_address(),
+            'origin': None,
+            }
         reporting_data.update(context_)
         context_['reporting_data'] = reporting_data
         if self.parameters:
@@ -495,18 +495,18 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             orig_ext, orig_data, _, report_name = ReportModel.execute(
                 objects_ids, reporting_data)
         extension, data = self.convert(orig_data,
-            self.get_extension('output_format'))
+            self.get_extension('output_format'), orig_ext)
         return {
-                'object': objects[0],
-                'report_type': extension,
-                'original_data': orig_data,
-                'original_ext': orig_ext,
-                'data': data,
-                'report_name': '%s.%s' % (report_name, extension),
-                'report_name_wo_ext': report_name,
-                'origin': context_.get('origin', None),
-                'resource': context_.get('resource', None),
-                }
+            'object': objects[0],
+            'report_type': extension,
+            'original_data': orig_data,
+            'original_ext': orig_ext,
+            'data': data,
+            'report_name': '%s.%s' % (report_name, extension),
+            'report_name_wo_ext': report_name,
+            'origin': context_.get('origin', None),
+            'resource': context_.get('resource', None),
+            }
 
     def _generate_reports(self, objects, context_):
         """ Return a list of dictionnary with:
