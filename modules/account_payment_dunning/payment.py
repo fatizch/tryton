@@ -125,11 +125,12 @@ class Payment:
         Dunning.save(dunnings)
 
     def _set_dunning(self, level):
-        if self.line.dunning:
-            if level.sequence > self.line.dunning.level.sequence:
-                self.line.dunning.level = level
-                self.line.dunning.state = 'draft'
-                return self.line.dunning
+        if self.line.dunnings:
+            dunning = self.line.dunnings[-1]
+            if level.sequence > dunning.level.sequence:
+                dunning.level = level
+                dunning.state = 'draft'
+                return dunning
             return None
         return Pool().get('account.dunning')(
             line=self.line, level=level, procedure=level.procedure)
