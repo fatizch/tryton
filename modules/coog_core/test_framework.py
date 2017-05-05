@@ -139,6 +139,25 @@ class CoogTestCase(ModuleTestCase):
                     v, type='wizard')
             self._models.update({k: good_model})
 
+    def test9989_check_documentation(self):
+        module_path = os.path.abspath(os.path.join(os.path.normpath(__file__),
+                '..', '..', self.__class__.module))
+        doc_folder = os.path.join(module_path, 'doc')
+        for lang in ('fr', 'en'):
+            self.assert_(os.path.isdir(os.path.join(doc_folder, lang)),
+                'Missing %s doc folder' % lang)
+            log = os.path.join(doc_folder, lang, 'features_log')
+            self.assert_(os.path.isfile(log),
+                'Missing %s features_log file' % (lang,))
+            self.assertNotEqual(os.stat(log).st_size, 0,
+                'File features_log for %s looks empty' % (lang,))
+            for filename in ('index', 'summary', 'features'):
+                filepath = os.path.join(doc_folder, lang, '%s.rst' % filename)
+                self.assert_(os.path.isfile(filepath),
+                    'Missing %s %s.rst doc file' % (lang, filename))
+                self.assertNotEqual(os.stat(filepath).st_size, 0,
+                    'File %s.rst for %s doc looks empty' % (filename, lang))
+
     def test9999_launch_test_cases(self):
         if not os.environ.get('DO_TEST_CASES'):
             return
