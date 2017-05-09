@@ -1252,6 +1252,16 @@ class FilterCommissions(Wizard):
                 ' do not have any invoice.',
                 })
 
+    def get_domain_from_invoice_business_kind(self, ids, kinds):
+        in_domain = [('invoice_line.invoice', 'in', ids)]
+        out_domain = [('origin.invoice', 'in', ids, 'account.invoice.line')]
+        if len(kinds) != 1:
+            return ['OR', in_domain[0], out_domain[0]]
+        kind = kinds[0]
+        if kind in ['broker_invoice', 'insurer_invoice']:
+            return in_domain
+        return out_domain
+
     def transition_choose_action(self):
         pool = Pool()
         Invoice = pool.get('account.invoice')
@@ -1266,27 +1276,19 @@ class FilterCommissions(Wizard):
             return 'aggregated_commissions'
         ids = Transaction().context.get('active_ids')
         AccountInvoice = Pool().get('account.invoice')
-        types = set([x.type for x in AccountInvoice.browse(ids)])
-        if len(types) != 1:
+        kinds = set([x.business_kind for x in AccountInvoice.browse(ids)])
+        if len(kinds) != 1:
             return 'filter_commission'
-        elif types == {'in'}:
-            return 'filter_commission'
-        else:
+        if kinds == {'contract_invoice'}:
             return 'aggregated_commissions'
+        return 'filter_commission'
 
     def do_filter_commission(self, action):
         assert Transaction().context.get('active_model') == 'account.invoice'
         ids = Transaction().context.get('active_ids')
         AccountInvoice = Pool().get('account.invoice')
-        in_domain = [('invoice_line.invoice', 'in', ids)]
-        out_domain = [('origin.invoice', 'in', ids, 'account.invoice.line')]
-        types = set([x.type for x in AccountInvoice.browse(ids)])
-        if len(types) != 1:
-            domain = ['OR', in_domain[0], out_domain[0]]
-        elif types == {'in'}:
-            domain = in_domain
-        else:
-            domain = out_domain
+        kinds = set([x.business_kind for x in AccountInvoice.browse(ids)])
+        domain = self.get_domain_from_invoice_business_kind(ids, list(kinds))
         action.update({
                 'pyson_domain': PYSONEncoder().encode(domain)
                 })

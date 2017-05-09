@@ -11,6 +11,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Agent',
     'Commission',
+    'FilterCommissions',
     'CreateInvoicePrincipal',
     ]
 
@@ -160,3 +161,18 @@ class CreateInvoicePrincipal:
             'wholesale_broker_reimbursement', party.rec_name,
             raise_exception=False)
         return line
+
+
+class FilterCommissions:
+    __metaclass__ = PoolMeta
+    __name__ = 'commission.filter_commission'
+
+    def get_domain_from_invoice_business_kind(self, ids, kinds):
+        if len(kinds) != 1:
+            return super(FilterCommissions,
+                self).get_domain_from_invoice_business_kind(ids, kinds)
+        kind = kinds[0]
+        if kind == 'wholesale_invoice':
+            return [('invoice_line.invoice', 'in', ids)]
+        return super(FilterCommissions,
+            self).get_domain_from_invoice_business_kind(ids, kinds)
