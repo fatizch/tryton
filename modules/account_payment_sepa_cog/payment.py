@@ -378,7 +378,7 @@ class Group:
         self.generate_message(_save=False)
         self.update_last_sepa_receivable_date()
 
-    def get_remittance_info(self):
+    def get_remittance_info(self, payments):
         return ''
 
     @property
@@ -399,7 +399,12 @@ class Group:
             grouped_payments = sorted(grouped_payments, key=keyfunc)
             for mkey, payments in groupby(grouped_payments, key=keyfunc):
                 mkey = dict(mkey)
-                amount = sum(p.amount for p in payments)
+                # create payments list in order to use it twice: to compute
+                # payments amount, and to generate remittance information
+                # as it is an iterable, not storing it in a variable would lead
+                # to data loss
+                payments_list = [p for p in payments]
+                amount = sum(p.amount for p in payments_list)
                 payment = Payment(
                     sepa_instruction_id=mkey['merged_id'],
                     sepa_end_to_end_id=mkey['merged_id'],
@@ -409,7 +414,8 @@ class Group:
                     sepa_bank_account_number=mkey[
                         'sepa_bank_account_number'],
                     party=mkey['party'],
-                    sepa_remittance_information=self.get_remittance_info(),
+                    sepa_remittance_information=self.get_remittance_info(
+                        payments_list),
                     )
                 merged_payments.append(payment)
             yield key, merged_payments

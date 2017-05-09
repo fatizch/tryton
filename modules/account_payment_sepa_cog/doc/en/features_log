@@ -1,3 +1,5 @@
+* Allow to add single payments information in remittance information
+
 Version 1.12 - 2017-04-28
 
 * Replace process batch with batch that calls the 'do' method on sepa messages
