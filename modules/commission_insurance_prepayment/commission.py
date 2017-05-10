@@ -295,8 +295,7 @@ class FilterAggregatedCommissions:
         if commission.origin.__name__ != 'contract.option':
             return super(FilterAggregatedCommissions,
                 self).do_filter_commission(action)
-        origins = context.get('origins', [])
-        clause = [('origin', 'in', origins)] if origins else []
+        clause = [('origin', '=', str(commission.origin))]
         clause += [('agent', '=', commission.agent.id)]
         action.update({'pyson_domain': PYSONEncoder().encode(clause)})
         return action, {}
