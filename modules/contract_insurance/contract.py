@@ -1215,21 +1215,16 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         existing = dict(((x.coverage, x) for x in getattr(
                     self, 'options', [])))
         good_options = []
-        to_delete = [elem for elem in existing.itervalues()]
         OptionModel = Pool().get('contract.option')
         for coverage in self.get_coverages(product, self.item_desc):
             good_opt = None
             if coverage in existing:
                 good_opt = existing[coverage]
-                to_delete.remove(good_opt)
             elif coverage.subscription_behaviour == 'mandatory':
                 good_opt = OptionModel.new_option_from_coverage(coverage,
                     product, start_date)
             if good_opt:
-                good_opt.save()
                 good_options.append(good_opt)
-        if to_delete:
-            OptionModel.delete(to_delete)
         self.options = good_options
 
     def check_at_least_one_covered(self):
