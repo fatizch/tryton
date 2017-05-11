@@ -168,6 +168,14 @@ _print_conf() {
         cat $COOG_CONF_BAT
 }
 
+_modules() {
+    . "$COOG_ROOT/coog/bin/coog-module"
+    PGHOST="$COOG_POSTGRES_HOST" \
+        PGPASSWORD="$COOG_DB_PASSWORD" \
+        PGUSER="$COOG_DB_USER" \
+        PGDATABASE="$COOG_DB_NAME" coog_module_main "$@"
+}
+
 _admin() {
         _init || return $?
         [ -z "$COOG_DB_NAME" ] && echo missing db name && return 1
@@ -259,6 +267,7 @@ usage() {
         echo "  version       -> gets image version (git trees)"
         echo "  env           -> gets container env vars"
         echo "  conf          -> gets container coog configuration"
+        echo "  module        -> gets list of installed modules"
         echo "  admin         -> launch admin utils - <args>"
         echo "  server        -> starts coog server - <workers nb>"
         echo "  celery        -> starts celery workers - <workers nb> <queue,+>"
@@ -277,6 +286,7 @@ main() {
         [ "$cmd" = version ] && { _print_version; return $?; }
         [ "$cmd" = env ] && { _print_env; return $?; }
         [ "$cmd" = conf ] && { _print_conf; return $?; }
+        [ "$cmd" = module ] && { _modules "$@"; return $?; }
         [ "$cmd" = admin ] && { _admin "$@"; return $?; }
         [ "$cmd" = server ] && { _server "$@"; return $?; }
         [ "$cmd" = celery ] && { _celery "$@"; return $?; }

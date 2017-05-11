@@ -1,13 +1,8 @@
 # vim: set ft=sh:
 # modules management - install, update, etc
 
-coog_module_main() { # list installed modules - <db> - default: db uri
-        [ ! -z $1 ] && PGDATABASE=$1
-        local module
-        for module in `psql -w -t -c "select name from ir_module where state='installed'"`
-        do
-                echo $module
-        done
+coog_module_main() {
+    python "$COOG_BIN/tryton-modules.py" "$@"
 }
 
 coog_module_update() { # install / update modules - [modules] - default: all
@@ -25,22 +20,12 @@ coog_module_update() { # install / update modules - [modules] - default: all
         trytond-admin $args
 }
 
-coog_module_check() { # check if module is installed - <module>
-        psql -w -t -c "select name from ir_module where name='$1' and state='activated'" | sed '/^\s*$/d' | wc -l
+coog_module_list() { # returns list of installed Coog modules
+    python "$COOG_BIN/tryton-modules.py" "list"
 }
 
-coog_module_list() { # list installed module from repo - <repo>
-        local modules_folder
-        modules_folder=$COOG_ROOT/$1/modules
-        for module in $modules_folder/*
-        do
-                [ ! -d $module ] && continue
-                local m
-                m=`basename "$module"`
-                local i
-                i=`coog_module_check $m`
-                [ $i -eq 1 ] && echo $m
-        done
+coog_module_status() {
+    python "$COOG_BIN/tryton-modules.py" "status" "$@"
 }
 
 coog_module_translate() { # generate module translations
