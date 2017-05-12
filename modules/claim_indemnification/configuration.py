@@ -28,6 +28,8 @@ class Configuration:
             'invisible': ~Eval('show_indemnification_limit'),
             },
         help='This value will be used to sort indemnifications by start date')
+    claim_default_payment_term = fields.Many2One('account.invoice.payment_term',
+        'Default Payment Term', required=True)
 
     @staticmethod
     def default_show_indemnification_limit():

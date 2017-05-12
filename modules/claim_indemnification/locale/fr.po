@@ -343,6 +343,10 @@ msgctxt "field:claim,is_services_deductible:"
 msgid "Is Services Deductible"
 msgstr "Le service est une période de franchise"
 
+msgctxt "field:claim.configuration,claim_default_payment_term:"
+msgid "Default Payment Term"
+msgstr "Condition de paiement par défaut"
+
 msgctxt "field:claim.configuration,control_rule:"
 msgid "Control Rule"
 msgstr "Règle de contrôle des prestations"

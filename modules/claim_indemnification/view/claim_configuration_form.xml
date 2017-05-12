@@ -14,5 +14,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="show_indemnification_limit" xexpand="0"/>
             <field name="sorting_method" xalign="0" xexpand="0"/>
         </group>
+        <newline/>
+        <label name="claim_default_payment_term"/>
+        <field name="claim_default_payment_term"/>
     </xpath>
 </data>
