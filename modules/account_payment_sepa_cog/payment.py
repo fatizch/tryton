@@ -756,7 +756,8 @@ class Message:
     def get_filename(self, name):
         pool = Pool()
         Group = pool.get('account.payment.group')
-        assert isinstance(self.origin, Group)
+        if not self.origin or not isinstance(self.origin, Group):
+            return ''
         names = [self.origin.rec_name, self.origin.journal.name,
             self.origin.kind_string]
         payment_dates = Group.get_payment_dates_per_group(
