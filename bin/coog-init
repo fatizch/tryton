@@ -18,10 +18,6 @@ coog_init_bin() { # link useful bin to venv (tryton, coog, upload.py, etc)
         ln -s "$COOG_TRYTOND/trytond/tests/run-tests.py"
         [ -h coog ] && rm coog
         ln -s $wd/coog
-        [ -h upload.py ] && rm upload.py
-        ln -s $wd/vendor/upload.py
-        [ -h git-cl ] && rm git-cl
-        ln -s $wd/vendor/git-cl
         cd $wd
 }
 
