@@ -1,0 +1,1 @@
+- Creation of rights suspensions periods when having a dunning which suspend a contract

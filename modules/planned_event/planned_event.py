@@ -119,7 +119,7 @@ class PlannedEvent(model.CoogSQL, model.CoogView):
             event_code)['id']
         to_create = [cls.create_event_dict(
                 description=description,
-                object=x,
+                on_object=x,
                 planned_date=planned_date,
                 event_type=event_type_id)
             for x in objects]

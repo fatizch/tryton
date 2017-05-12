@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='action']" position="after">
+        <label name="delay"/>
+        <group id="delay">
+            <field name="delay" xexpand="0" xalign="0"/>
+            <field name="delay_unit" xexpand="0" xalign="0"/>
+        </group>
+    </xpath>
+    <xpath expr="/form/field[@name='event_types']" position="after">
+        <newline/>
+        <field name="planned_event_types" colspan="4"/>
+    </xpath>
+</data>

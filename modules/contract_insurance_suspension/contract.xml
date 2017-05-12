@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ##################################### -->
+        <!-- ########### Contract form ########### -->
+        <!-- ##################################### -->
+        <record model="ir.ui.view" id="contract_view_form">
+            <field name="model">contract</field>
+            <field name="inherit" ref="contract.contract_view_form"/>
+            <field name="name">contract_form</field>
+        </record>
+        <!-- ################################################# -->
+        <!-- ########### Contract Right Suspension ########### -->
+        <!-- ################################################# -->
+        <record model="ir.ui.view" id="contract_right_suspension_view_form">
+            <field name="model">contract.right_suspension</field>
+            <field name="type">form</field>
+            <field name="name">contract_right_suspension_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_right_suspension_view_list">
+            <field name="model">contract.right_suspension</field>
+            <field name="type">tree</field>
+            <field name="name">contract_right_suspension_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_contract_right_suspension_filter_form">
+            <field name="name">Rights Suspensions</field>
+            <field name="res_model">contract.right_suspension</field>
+            <field name="domain" eval="[('active', 'in', [True, False]), ('contract', 'in', Eval('active_ids', []))]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_contract_right_suspension_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="contract_right_suspension_view_list"/>
+            <field name="act_window" ref="act_contract_right_suspension_filter_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_contract_right_suspension_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="contract_right_suspension_view_form"/>
+            <field name="act_window" ref="act_contract_right_suspension_filter_form"/>
+        </record>
+        <!-- Actives -->
+        <record model="ir.action.act_window.domain" id="act_active_contract_right_suspension">
+            <field name="name">Actives</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain" eval="[('active', '=', True)]" pyson="1"/>
+            <field name="act_window" ref="act_contract_right_suspension_filter_form"/>
+        </record>
+        <!-- Inactives -->
+        <record model="ir.action.act_window.domain" id="act_inactive_contract_right_suspension">
+            <field name="name">Inactives</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[('active', '!=', True)]" pyson="1"/>
+            <field name="act_window" ref="act_contract_right_suspension_filter_form"/>
+        </record>
+        <record model="ir.action.keyword" id="act_contract_suspensions_form_relate">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_contract_right_suspension_filter_form"/>
+        </record>
+    </data>
+</tryton>

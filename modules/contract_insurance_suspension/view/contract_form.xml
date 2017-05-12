@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/notebook/page[@id='data']" position="after">
+        <page string="Actives Rights Suspensions" id="actives_rights_suspensions">
+            <field name="actives_rights_suspensions" mode="tree" view_ids="contract_insurance_suspension.contract_right_suspension_view_list" expand_toolbar="0"/>
+        </page>
+    </xpath>
+</data>

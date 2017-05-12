@@ -1,0 +1,1 @@
+- Creation of rights suspensions periods when contract is hold

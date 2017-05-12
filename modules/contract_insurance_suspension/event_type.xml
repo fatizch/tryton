@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="event.type" id="contract_right_suspension_creation">
+            <field name="name">Contract Right Suspension Creation</field>
+            <field name="code">contract_right_suspension_creation</field>
+        </record>
+        <record model="event.type" id="contract_disable_right_suspension">
+            <field name="name">Contract Disable Right Suspension</field>
+            <field name="code">contract_disable_right_suspension</field>
+        </record>
+        <record model="event.type" id="contract_disable_temporary_right_suspension">
+            <field name="name">Contract Disable Temporary Right Suspension</field>
+            <field name="code">contract_disable_temporary_right_suspension</field>
+        </record>
+    </data>
+</tryton>

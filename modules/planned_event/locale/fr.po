@@ -2,6 +2,62 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:event.type.action:"
+msgid "Generate Planned Event"
+msgstr "Générer un événement plannifié"
+
+msgctxt "field:event.type.action,delay:"
+msgid "Planned In"
+msgstr "Planifié dans"
+
+msgctxt "field:event.type.action,planned_event_types:"
+msgid "Planned Event Types"
+msgstr "Types des événements plannifiés"
+
+msgctxt "field:event.type.action,unit:"
+msgid "Unit"
+msgstr "Unité"
+
+msgctxt "field:event.type.action-planned_event.type,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:event.type.action-planned_event.type,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:event.type.action-planned_event.type,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:event.type.action-planned_event.type,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:event.type.action-planned_event.type,event_type:"
+msgid "Event Type"
+msgstr "Type d'événement"
+
+msgctxt "field:event.type.action-planned_event.type,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:event.type.action-planned_event.type,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:event.type.action-planned_event.type,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:event.type.action-planned_event.type,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:event.type.action-planned_event.type,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:planned.event,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -40,11 +96,11 @@ msgstr "Traité"
 
 msgctxt "field:planned.event,rec_name:"
 msgid "Name"
-msgstr "Numéro"
+msgstr "Nom"
 
 msgctxt "field:planned.event,write_date:"
 msgid "Write Date"
-msgstr "Modifié par"
+msgstr "Modifié le"
 
 msgctxt "field:planned.event,write_uid:"
 msgid "Write User"
@@ -57,6 +113,15 @@ msgstr "Identifiant XML"
 msgctxt "field:planned.event.process,id:"
 msgid "ID"
 msgstr "Identifiant"
+
+msgctxt "help:event.type.action,delay:"
+msgid "Planned gap after the event date"
+msgstr "Délai entre l’événement déclencheur et l’événement plannifié"
+
+msgctxt "model:event.type.action-planned_event.type,name:"
+msgid "Event Type Action Planned Event Type Relation"
+msgstr ""
+"Relation entre Type d'action par événement et Type d'événement planifié"
 
 msgctxt "model:ir.action,name:act_planned_event_form"
 msgid "Planned Events"
@@ -81,6 +146,34 @@ msgstr "Evénement planifié"
 msgctxt "model:planned.event.process,name:"
 msgid "Process Planned Event"
 msgstr "Traitement des événements planifiés"
+
+msgctxt "selection:event.type.action,delay_unit:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:event.type.action,delay_unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:event.type.action,delay_unit:"
+msgid "Half-year"
+msgstr "Semestre"
+
+msgctxt "selection:event.type.action,delay_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:event.type.action,delay_unit:"
+msgid "Quarter"
+msgstr "Trimestre"
+
+msgctxt "selection:event.type.action,delay_unit:"
+msgid "Week"
+msgstr "Semaine"
+
+msgctxt "selection:event.type.action,delay_unit:"
+msgid "Year"
+msgstr "Année"
 
 msgctxt "selection:rule_engine,type_:"
 msgid "Planning Rule"

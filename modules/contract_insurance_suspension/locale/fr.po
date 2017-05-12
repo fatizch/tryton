@@ -1,0 +1,127 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.right_suspension:"
+msgid "Start date greater than end date (%s > %s)"
+msgstr "La date de début est supérieure à la date de fin (%s > %s)"
+
+msgctxt "field:contract,actives_rights_suspensions:"
+msgid "Actives Rights Suspensions"
+msgstr "Suspensions de droits actives"
+
+msgctxt "field:contract.activate.confirm,suspension_end_date:"
+msgid "Suspension End Date"
+msgstr "Date de fin de suspension"
+
+msgctxt "field:contract.right_suspension,active:"
+msgid "Active"
+msgstr "Active"
+
+msgctxt "field:contract.right_suspension,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.right_suspension,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.right_suspension,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.right_suspension,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.right_suspension,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:contract.right_suspension,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.right_suspension,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.right_suspension,start_date:"
+msgid "Start Date"
+msgstr "Date de début"
+
+msgctxt "field:contract.right_suspension,type_:"
+msgid "Suspension Type"
+msgstr "Type de suspension"
+
+msgctxt "field:contract.right_suspension,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:contract.right_suspension,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.right_suspension,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "help:contract.activate.confirm,suspension_end_date:"
+msgid "If defined, the automatically calculated suspension end date will be "
+"replaced"
+msgstr "Si définit, la date de fin de suspension calculée automatiquement"
+" sera remplacée"
+
+msgctxt "model:contract.right_suspension,name:"
+msgid "Contract Right Suspension"
+msgstr "Suspension de droit d'un contrat"
+
+msgctxt "model:event.type,name:contract_disable_right_suspension"
+msgid "Contract Disable Right Suspension"
+msgstr "Désactivation de suspension de droit (contrat)"
+
+msgctxt "model:event.type,name:contract_disable_temporary_right_suspension"
+msgid "Contract Disable Temporary Right Suspension"
+msgstr "Désactivation de suspension de droit temporaraire (contrat)"
+
+msgctxt "model:event.type,name:contract_right_suspension_creation"
+msgid "Contract Right Suspension Creation"
+msgstr "Création d'une suspension de droits sur le contrat"
+
+msgctxt "model:ir.action,name:act_contract_right_suspension_filter_form"
+msgid "Rights Suspensions"
+msgstr "Suspensions de droits"
+
+msgctxt "model:ir.action.act_window.domain,name:"
+msgid "Active"
+msgstr "Active"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_active_contract_right_suspension"
+msgid "Actives"
+msgstr "Actives"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_inactive_contract_right_suspension"
+msgid "Inactives"
+msgstr "Inactives"
+
+msgctxt "model:ir.ui.menu,name:"
+msgid "Contract Rights Suspensions"
+msgstr "Suspensions de droits"
+
+msgctxt "selection:contract.right_suspension,type_:"
+msgid "Definitive"
+msgstr "Définitif"
+
+msgctxt "selection:contract.right_suspension,type_:"
+msgid "Temporary"
+msgstr "Temporaire"
+
+msgctxt "view:contract.right_suspension:"
+msgid "activate"
+msgstr "Activer"
+
+msgctxt "view:contract:"
+msgid "Actives Rights Suspensions"
+msgstr "Suspensions de droits actives"

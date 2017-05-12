@@ -287,6 +287,7 @@ class Invoice:
 
     def _get_move_line(self, date, amount):
         line = super(Invoice, self)._get_move_line(date, amount)
+        line.move = self.move
         if not self.contract or not self.contract_invoice or not line:
             return line
         line.contract = self.contract.id

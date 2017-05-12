@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ####################################### -->
+        <!-- # Contract Reactivate Check Contracts # -->
+        <!-- ####################################### -->
+        <record model="ir.ui.view" id="activate_confirm_view_form">
+            <field name="model">contract.activate.confirm</field>
+            <field name="inherit" ref="contract.activate_confirm_view_form"/>
+            <field name="name">activate_confirm_form</field>
+        </record>
+    </data>
+</tryton>
