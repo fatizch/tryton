@@ -266,10 +266,10 @@ class BenefitRule(
             elem['description'] += '\n\n' + self.raise_user_error(
                 'msg_beneficiary_share', {
                     'share': args['indemnification'].share * 100},
-                raise_exception=False)
+                raise_exception=False).encode('utf-8')
             elem['description'] += '\n\n' + self.raise_user_error(
                 'msg_final_result', {'amount': elem.get('amount')},
-                raise_exception=False)
+                raise_exception=False).encode('utf-8')
         return result
 
     def do_calculate_deductible_rule(self, args):
