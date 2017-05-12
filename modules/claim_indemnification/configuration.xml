@@ -5,6 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <record model="ir.ui.view" id="claim_configuration_form">
             <field name="model">claim.configuration</field>
+            <field name="type" eval="None"/>
             <field name="inherit" ref="claim.claim_configuration_form"/>
             <field name="name">claim_configuration_form</field>
         </record>
