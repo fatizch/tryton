@@ -24,6 +24,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="modifiable_before_printing"/>
     <label name="export_dir"/>
     <field name="export_dir"/>
+    <label name="output_filename"/>
+    <field name="output_filename"/>
     <separator id="automatic_generation" string="Automatic Generation" colspan="4"/>
     <newline/>
     <label name="split_reports"/>

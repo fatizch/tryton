@@ -105,13 +105,9 @@ class ReportGenerate:
                         selected_letter.genshi_evaluated_email_body.encode(
                             'utf-8'))
                 for i, attachment in enumerate(attachments):
-                    at_name = attachment['report_name']
-                    part = MIMEApplication(
-                        attachment['data'])
+                    part = MIMEApplication(attachment['data'])
                     part.add_header('Content-Disposition', 'attachment; '
-                        'filename="%s_%s.%s"' % (i,
-                            coog_string.slugify(at_name.split('.')[0]),
-                            at_name.split('.')[1]))
+                        'filename="%s_%s"' % (i, attachment['report_name']))
                     msg.attach(part)
                 for image in selected_letter.images:
                     img = MIMEImage(image.image)
@@ -235,7 +231,8 @@ class ReportTemplate:
     def __setup__(cls):
         super(ReportTemplate, cls).__setup__()
         for fname in ['modifiable_before_printing', 'document_desc',
-                'versions', 'export_dir', 'format_for_internal_edm']:
+                'versions', 'export_dir', 'format_for_internal_edm',
+                'output_filename']:
             field = getattr(cls, fname)
             field.states['invisible'] = Or(Eval('input_kind') == 'email',
                 field.states.get('invisible', False))
@@ -273,6 +270,7 @@ class ReportTemplate:
         if self.input_kind == 'email':
             self.split_reports = True
             self.attachments = []
+            self.output_filename = ''
             self.version = []
         else:
             self.email_dest = ''

@@ -34,6 +34,14 @@ msgstr ""
 "  Erreur:\n"
 "%s"
 
+msgctxt "field:report.template,genshi_evaluated_output_filename:"
+msgid "Output Filename Genshi Evaluated"
+msgstr "Nom du fichier de sorti (dynamique)"
+
+msgctxt "field:report.template,output_filename:"
+msgid "Output Filename"
+msgstr "Nom de fichier de sortie"
+
 msgctxt "error:report.create:"
 msgid "Report is impossible: No contact available."
 msgstr "La génération du courrier est impossible: pas de contact disponible"

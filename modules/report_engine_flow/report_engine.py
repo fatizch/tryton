@@ -268,14 +268,9 @@ class ReportGenerate:
         return ext[1:], bytearray(result, 'utf-8'), False, filename
 
 
-@model.genshi_evaluated_fields('output_filename')
 class ReportTemplate:
     __name__ = 'report.template'
 
-    output_filename = fields.Char('Output Filename', states={
-            'invisible': Eval('input_kind') != 'flow',
-            'required': Eval('input_kind') == 'flow',
-            }, depends=['input_kind'])
     variables_relation = fields.One2Many(
         'report.template.flow_variable.relation', 'template',
         'Flow Variables Relation', order=[('order', 'ASC')],
@@ -311,6 +306,9 @@ class ReportTemplate:
             field.states['invisible'] = Or(Eval('input_kind') == 'flow',
                 field.states.get('invisible', False))
             field.depends.append('input_kind')
+        cls.output_filename.states['required'] |= (Eval('input_kind') ==
+            'flow')
+        cls.output_filename.depends.append('input_kind')
 
     @classmethod
     def view_attributes(cls):
@@ -360,9 +358,9 @@ class ReportTemplate:
         super(ReportTemplate, self).on_change_input_kind()
         if self.input_kind == 'flow':
             self.split_reports = False
+            self.format_for_internal_edm = ''
         else:
             self.variables_relations = []
-            self.output_filename = ''
             self.override_loop = False
             self.loop_condition = ''
 
@@ -412,6 +410,7 @@ class ReportCreate:
             'generated_report': created_file,
             'server_filepath': created_file,
             'file_basename': file_basename,
+            'extension': ext,
             'template': doc_template,
             }
 

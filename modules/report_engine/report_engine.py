@@ -92,7 +92,7 @@ class TemplateTemplateParameterRelation(model.CoogSQL):
         ondelete='RESTRICT')
 
 
-@model.genshi_evaluated_fields('export_dir')
+@model.genshi_evaluated_fields('export_dir', 'output_filename')
 class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     'Report Template'
 
@@ -119,6 +119,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             'required': Eval('process_method') == 'libre_office',
             'invisible': Eval('process_method') != 'libre_office',
         })
+    # Do not remove required: False in state.
+    # It is required to avoid checks in children modules
+    output_filename = fields.Char('Output Filename',
+        states={'required': False})
     document_desc = fields.Many2One('document.description',
         'Document Description', ondelete='SET NULL')
     modifiable_before_printing = fields.Boolean('Modifiable',
@@ -449,7 +453,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             report['original_data'] or report['data'],
             self.get_extension('format_for_internal_edm'),
             report['original_ext'] or report['report_type'])
-        attachment.name = report['report_name_wo_ext'] + os.extsep + oext
+        os_extsep = os.extsep if oext else ''
+        attachment.name = report['report_name_wo_ext'] + os_extsep + oext
         attachment.document_desc = self.document_desc
         attachment.origin = report.get('origin', None)
         return attachment
@@ -502,7 +507,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             'original_data': orig_data,
             'original_ext': orig_ext,
             'data': data,
-            'report_name': '%s.%s' % (report_name, extension),
+            'report_name': '%s%s%s' % (report_name, os.extsep if extension else
+                '', extension),
             'report_name_wo_ext': report_name,
             'origin': context_.get('origin', None),
             'resource': context_.get('resource', None),
@@ -738,8 +744,10 @@ class ReportGenerate(Report):
         party = pool.get('party.party')(data['party'])
         version = template.get_selected_version(utils.today(), party.lang)
         extension = os.path.splitext(version.name)[1][1:]
-        return (extension, version.data, False, cls.get_filename(template,
-                name_giver, pool.get('party.party')(data['party'])))
+        filename, ext = cls.get_filename(template, name_giver,
+            pool.get('party.party')(data['party']))
+        extension = ext or extension
+        return (extension, version.data, False, filename)
 
     @classmethod
     def process_libre_office(cls, ids, data):
@@ -755,8 +763,10 @@ class ReportGenerate(Report):
             ServerContext().get('genshi_context', {})))
         name_giver = data.get('resource', None) or pool.get(data['model'])(
             data['id'])
-        return (oext, bytearray(content), False, cls.get_filename(template,
-            name_giver, pool.get('party.party')(data['party'])))
+        filename, ext = cls.get_filename(template, name_giver,
+            pool.get('party.party')(data['party']))
+        oext = ext or oext
+        return (oext, bytearray(content), False, filename)
 
     @classmethod
     def execute(cls, ids, data):
@@ -789,11 +799,14 @@ class ReportGenerate(Report):
 
     @classmethod
     def get_filename(cls, template, object_, party):
+        if template.output_filename:
+            fn, ext = os.path.splitext(template.genshi_evaluated_output_filename)
+            return fn, ext[1:]
         separator = cls.get_filename_separator()
         date_suffix = cls.get_date_suffix(party.lang)
         time_suffix = cls.get_time_suffix()
         return separator.join([x for x in [template.name, object_.rec_name,
-                    date_suffix, time_suffix] if x])
+                    date_suffix, time_suffix] if x]), None
 
     @classmethod
     def get_context(cls, records, data):
@@ -1146,12 +1159,14 @@ class ReportCreate(Wizard):
         ReportModel = Pool().get('report.generate', type='report')
         ext, filedata, prnt, file_basename = ReportModel.execute(ids,
             report_context)
+        os_extsep = os.extsep if ext else ''
         client_filepath, server_filepath = ReportModel.edm_write_tmp_report(
-            filedata, '%s.%s' % (file_basename, ext))
+            filedata, '%s%s%s' % (file_basename, os_extsep, ext))
         return {
             'generated_report': client_filepath,
             'server_filepath': server_filepath,
             'file_basename': file_basename,
+            'extension': ext,
             'template': doc_template,
             }
 
@@ -1214,12 +1229,13 @@ class ReportCreate(Wizard):
         return contact
 
     def set_attachment(self, resource):
-        report_name_wo_ext, ext = os.path.splitext(os.path.basename(
-                self.preview_document.reports[0].server_filepath))
+        report = self.preview_document.reports[0]
+        report_name_wo_ext, ext = report.file_basename, report.extension
         with open(self.preview_document.reports[0].server_filepath, 'r') as f:
             original_data = bytearray(f.read())
         return self.select_template.template._create_attachment_from_report({
                 'original_ext': ext.split(os.extsep)[-1],
+                'report_type': ext.split(os.extsep)[-1],
                 'object': self.get_instance(),
                 'resource': resource,
                 'original_data': original_data,
@@ -1301,3 +1317,4 @@ class ReportCreatePreviewLine(model.CoogView):
     server_filepath = fields.Char('Server Filename',
         states={'invisible': True})
     file_basename = fields.Char('Filename')
+    extension = fields.Char('Extension')
