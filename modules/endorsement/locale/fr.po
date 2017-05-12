@@ -124,6 +124,12 @@ msgctxt "error:endorsement.contract.terminate:"
 msgid "You are trying to terminate the contract before its active start date"
 msgstr "Vous essayez de résiliser le contrat avant sa date d'effet courante"
 
+msgctxt "error:endorsement.contract.void:"
+msgid ""
+"You are trying to void a renewed contract"
+msgstr ""
+"Vous essayez d'annuler un contrat qui a été renouvelé"
+
 msgctxt "error:endorsement.contract:"
 msgid "Activation History Modifications"
 msgstr "Modifications des historiques d'activation"

@@ -1,3 +1,5 @@
+* Ajout de la possibilité de passer sans effet un contrat qui a déjà été renouvellé
+
 Version 1.12 - 2017-04-28
 
 * Si l'application d'un avenant sur un seul contract génère un document, ce dernier est maintenant stocké sur le contrat et non plus sur l'avenant

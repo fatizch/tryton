@@ -1449,6 +1449,14 @@ class VoidContract(EndorsementWizardStepMixin):
     current_end_date = fields.Date('Current End Date', readonly=True)
 
     @classmethod
+    def __setup__(cls):
+        super(VoidContract, cls).__setup__()
+        cls._error_messages.update({
+                'void_renewed_contract': 'You are trying to void a renewed '
+                'contract',
+                })
+
+    @classmethod
     def is_multi_instance(cls):
         return False
 
@@ -1491,6 +1499,35 @@ class VoidContract(EndorsementWizardStepMixin):
     @classmethod
     def state_view_name(cls):
         return 'endorsement.endorsement_void_contract_view_form'
+
+    @classmethod
+    def check_before_start(cls, select_screen):
+        super(VoidContract, cls).check_before_start(select_screen)
+        contracts = []
+        endorsement = select_screen.endorsement
+        if endorsement:
+            contracts = [x.contract
+                for x in getattr(endorsement, 'contract_endorsements', [])]
+        elif hasattr(select_screen, 'contract'):
+            contracts = [select_screen.contract]
+        to_warn = []
+        for contract in contracts:
+            if select_screen.effective_date < contract.start_date:
+                to_warn.append(str(contract.id))
+        if to_warn:
+            cls.raise_user_warning(
+                'void_renewed_contract', 'void_renewed_contract')
+
+    @classmethod
+    def allow_effective_date_before_contract(cls, select_screen):
+        endorsement = select_screen.endorsement
+        contracts = []
+        if endorsement:
+            contracts = [c.contract for c in endorsement.contract_endorsements]
+        elif hasattr(endorsement, 'contract'):
+            contracts = [select_screen.contract]
+        return all([x.initial_start_date <= select_screen.effective_date
+                for x in contracts])
 
 
 class ChangeContractSubscriber(EndorsementWizardStepMixin):
