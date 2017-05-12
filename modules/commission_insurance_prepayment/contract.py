@@ -102,7 +102,7 @@ class Contract:
                 self.initial_start_date else datetime.date.max))
         end_date = end_date if end_date != datetime.date.max else None
         super(Contract, self).rebill(start, end, post_end)
-        if self.termination_reason or self.status == 'void':
+        if self.status in ['void', 'terminated']:
             self.adjust_prepayment_commissions_once_terminated(start_date,
                 end_date)
         else:
@@ -115,6 +115,15 @@ class Contract:
         # Force prepayment recalculation
         cls.create_prepayment_commissions(contracts, adjustement=False,
             start_date=None, end_date=None)
+
+    @classmethod
+    def do_terminate(cls, contracts):
+        super(Contract, cls).do_terminate(contracts)
+        if not ServerContext().get('from_batch', False):
+            return
+        for contract in contracts:
+            contract.adjust_prepayment_commissions_once_terminated(
+                contract.final_end_date, contract.final_end_date)
 
 
 class ContractOption:

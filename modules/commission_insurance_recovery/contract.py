@@ -37,7 +37,7 @@ class Contract:
 
     def rebill(self, start=None, end=None, post_end=None):
         super(Contract, self).rebill(start, end, post_end)
-        if self.termination_reason or self.status == 'void':
+        if self.status in ['void', 'terminated']:
             self.calculate_commission_recovery()
 
 
