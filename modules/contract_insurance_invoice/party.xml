@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.action.act_window" id="act_contract_invoice_form">
+            <field name="name">Contract Invoices</field>
+            <field name="res_model">account.invoice</field>
+            <field name="domain" eval="['AND', [('party', 'in', Eval('active_ids'))], [('business_kind', '=', 'contract_invoice')]]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_open_contract_invoice_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="act_contract_invoice_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_contract_invoice_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="premium_notice_view_list"/>
+            <field name="act_window" ref="act_contract_invoice_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_contract_invoice_view2">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="invoice_view_form"/>
+            <field name="act_window" ref="act_contract_invoice_form"/>
+        </record>
+    </data>
+</tryton>*

@@ -8,5 +8,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="party.party_view_tree"/>
             <field name="name">party_list</field>
         </record>
+        <record model="ir.action.act_window" id="account_invoice.act_invoice_form2">
+            <field name="active" eval="False"/>
+        </record>
     </data>
 </tryton>

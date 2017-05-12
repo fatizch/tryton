@@ -1,3 +1,5 @@
+* Invoice relate on a party only shows contract invoices instead of invoices of all business kinds
+
 Version 1.12 - 2017-04-28
 
 * Cancel button on invoice could be confused with the action to close the window

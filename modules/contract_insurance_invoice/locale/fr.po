@@ -1162,6 +1162,10 @@ msgctxt "model:ir.action,name:"
 msgid "Invoice Frequencies"
 msgstr "Fréquences de quittancement"
 
+msgctxt "model:ir.action,name:act_contract_invoice_form"
+msgid "Contract Invoices"
+msgstr "Quittances"
+
 msgctxt "model:ir.action,name:act_contract_payment_suspension_form"
 msgid "Payment Suspensions"
 msgstr "Suspensions de paiement"
