@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
+import datetime
 
 from sql import Null, Literal
 from sql.aggregate import Sum, Max
@@ -338,7 +339,8 @@ class Invoice:
             # invoices were posted
             invoices += invoices[0].check_previous_invoices_posted()
 
-        invoices = sorted(invoices, key=lambda o: o.start)
+        # Post aperiodic invoices first
+        invoices = sorted(invoices, key=lambda o: o.start or datetime.date.min)
         for invoice in invoices:
             if invoice.state in ('posted', 'paid'):
                 continue
