@@ -87,59 +87,96 @@ class Payment:
         Invoice = pool.get('account.invoice')
         if not isinstance(payment.line.move.origin, Invoice):
             return None
-        return payment.line.move.origin.contract
+        return (payment.line.move.origin.contract,)
 
     @classmethod
     def fail_move_to_manual_payment(cls, payments):
         pool = Pool()
-        ContractBillingInformation = pool.get('contract.billing_information')
         Contract = pool.get('contract')
         Invoice = pool.get('account.invoice')
-        Date = pool.get('ir.date')
+        MoveLine = pool.get('account.move.line')
+        contracts_to_save = []
         invoices = []
+        lines_to_update = []
         payments = sorted(payments, key=cls._group_per_contract_key)
-        for contract, _grouped_payments in groupby(payments,
+        for contracts, _grouped_payments in groupby(payments,
                 key=cls._group_per_contract_key):
-            if contract is None or contract.status != 'active':
+            if not contracts:
                 continue
-            grouped_payments = list(_grouped_payments)
-            current_billing_mode = contract.billing_information.billing_mode
-            if not current_billing_mode.direct_debit:
-                continue
-            failure_billing_mode = current_billing_mode.failure_billing_mode \
-                if current_billing_mode.failure_billing_mode \
-                else grouped_payments[0].journal.failure_billing_mode
-            if not failure_billing_mode:
-                raise Exception('no failure_billing_mode on journal %s'
-                    % (grouped_payments[0].journal.rec_name))
+            for contract in contracts:
+                to_save = cls.move_contract_to_manual_payment(contract,
+                    _grouped_payments)
+                if to_save:
+                    contracts_to_save.append(to_save)
 
-            next_invoice_dates = [payment.line.move.origin.end
-                for payment in grouped_payments
-                if (payment.line.move.origin and
-                    getattr(payment.line.move.origin, 'end', None))]
-            if next_invoice_dates:
-                next_invoice_date = max(next_invoice_dates)
-            else:
-                # case when only non periodic invoice payment is failed
-                next_invoice_date = max(contract.start_date,
-                    contract.last_paid_invoice_end or datetime.date.min)
+        if contracts_to_save:
+            Contract.save([x[0] for x in contracts_to_save])
+        for contract, billing_info_date, next_invoice_date \
+                in contracts_to_save:
+            Contract.calculate_prices([contract], start=billing_info_date)
+            invoices.extend(Contract.invoice([contract],
+                up_to_date=next_invoice_date))
+            for invoice in contract.invoices:
+                if (invoice.invoice_state == 'posted' and invoice.start
+                        and invoice.start >= next_invoice_date):
+                    lines_to_update += invoice.invoice.lines_to_pay
 
-            new_billing_date = (next_invoice_date + relativedelta(days=1)) if \
-                next_invoice_dates else next_invoice_date
+        if lines_to_update:
+            MoveLine.write(lines_to_update, {'payment_date': None})
+
+        Invoice.post([contract_invoice.invoice
+                for contract_invoice in invoices])
+
+    @classmethod
+    def move_contract_to_manual_payment(cls, contract, payments):
+        pool = Pool()
+        ContractBillingInformation = pool.get('contract.billing_information')
+        Date = pool.get('ir.date')
+        today = Date.today()
+        if contract is None or contract.status != 'active':
+            return
+        grouped_payments = list(payments)
+        current_billing_mode = contract.billing_information.billing_mode
+        if not current_billing_mode.direct_debit:
+            return
+        failure_billing_mode = current_billing_mode.failure_billing_mode \
+            if current_billing_mode.failure_billing_mode \
+            else grouped_payments[0].journal.failure_billing_mode
+        if not failure_billing_mode:
+            raise Exception('no failure_billing_mode on journal %s'
+                % (grouped_payments[0].journal.rec_name))
+
+        start_dates = [payment.line.move.origin.start
+            for payment in grouped_payments
+            if getattr(payment.line.move.origin, 'start', None)]
+        if start_dates:
+            billing_change_date = min(start_dates)
+        else:
+            # case when only non periodic invoice payment is failed
+            billing_change_date = max(contract.initial_start_date,
+                contract.last_paid_invoice_end or datetime.date.min)\
+                + relativedelta(days=1)
+
+        for billing_info in contract.billing_informations:
+            if billing_info.date == billing_change_date or (
+                        not billing_info.date
+                        and today < contract.initial_start_date):
+                billing_info.billing_mode = failure_billing_mode
+                billing_info.payment_term = \
+                    failure_billing_mode.allowed_payment_terms[0]
+                date = billing_info.date
+                break
+        else:
             new_billing_information = ContractBillingInformation(
-                date=max(Date.today(), new_billing_date),
+                date=billing_change_date,
                 billing_mode=failure_billing_mode,
                 payment_term=failure_billing_mode.allowed_payment_terms[0])
             contract.billing_informations = contract.billing_informations + \
                 (new_billing_information,)
-            contract.save()
-            Contract.calculate_prices([contract],
-                start=new_billing_information.date)
+            date = new_billing_information.date
 
-            invoices.extend(Contract.invoice([contract],
-                up_to_date=next_invoice_date))
-        Invoice.post([contract_invoice.invoice
-                for contract_invoice in invoices])
+        contract.billing_informations = list(contract.billing_informations)
+        return contract, date, billing_change_date
 
     @classmethod
     def fail_retry(cls, payments):
