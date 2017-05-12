@@ -87,9 +87,9 @@ class Contract:
             ContractRightSuspension.write(*to_write)
 
     def activate_contract(self):
-        super(Contract, self).activate_contract()
         if self.status == 'hold' and self.right_suspension_allowed():
             self.disable_right_suspensions()
+        super(Contract, self).activate_contract()
 
     def get_suspension(self, type_, start_date, end_date=None, active=True):
         ContractRightSuspension = Pool().get('contract.right_suspension')
