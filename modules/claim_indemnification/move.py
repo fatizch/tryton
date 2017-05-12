@@ -14,7 +14,7 @@ class MoveLine:
 
     def get_payment_journal(self):
         # checking hasattr() to skip this code when using a fake Line object
-        if (hasattr(self, 'move') and self.move.origin
+        if (hasattr(self, 'move') and self.move and self.move.origin
                 and self.move.origin.__name__ == 'account.invoice'
                 and self.move.origin.business_kind == 'claim_invoice'):
             claim_details = self.origin.lines[0].claim_details
