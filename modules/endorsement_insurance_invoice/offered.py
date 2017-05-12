@@ -36,6 +36,13 @@ class EndorsementDefinition:
             # contract.start_date to manage start date modification)
             return datetime.date.min
 
+        # Redmine #6192
+        # From a business point of view, the contract ends the day after
+        # termination endorsement's effective date
+        for part in self.endorsement_parts:
+            if part.code == 'stop_contract':
+                return coog_date.add_day(effective_date, 1)
+
         pool = Pool()
         config = pool.get('offered.configuration')(1)
         if not config.split_invoices_on_endorsement_dates:
