@@ -271,6 +271,17 @@ class Invoice:
 
     def update_move_line_from_billing_information(self, line,
             billing_information):
+        if self.contract and self.fees:
+            all_fee_in_product = True
+            for cur_line in self.lines:
+                if (cur_line.detail and cur_line.detail.fee and
+                        cur_line.detail.fee not in self.contract.product.fees):
+                    all_fee_in_product = False
+                    break
+            if all_fee_in_product:
+                line.payment_date = \
+                    self.contract.get_non_periodic_payment_date()
+                return
         line.payment_date = billing_information.get_direct_debit_planned_date(
             line)
 
