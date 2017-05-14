@@ -16,4 +16,4 @@ def register():
         module='contract_insurance_suspension', type_='model')
     Pool.register(
         wizard.ContractActivate,
-        module='contract', type_='wizard')
+        module='contract_insurance_suspension', type_='wizard')
