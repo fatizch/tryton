@@ -4,23 +4,39 @@ coog_autocomplete_update_bash() { # Set up tab completion for bash
         _completion_list() { # Bash Completion List
                 local cur=${COMP_WORDS[COMP_CWORD]}
                 local completion=""
+                local command_path=`which coog`
+                local script_path=`readlink -f $command_path`
+                local script_dir=`dirname $script_path`
+                _wd=`pwd`
+                cd $script_dir
                 case "$COMP_CWORD" in
                 1)
-                        # managing 'coog'
+                        # managing 'coog' commands
                         for fn in ./coog-*; do
-                                completion="$completion \
-                                `(echo $fn | cut -d'-' -f 2)`"
+                                completion="$completion `(echo $fn | cut -d'-' -f 2)`"
                         done
                         ;;
                 2)
-                        # managing 'coog help'
-                        local prev=${COMP_WORDS[COMP_CWORD-1]}
-                        if [ $prev = 'help' ] ; then
-                            for fn in ./coog-*; do
-                                    completion="$completion \
-                                    `(echo $fn | cut -d'-' -f 2)`"
-                            done
-                        fi
+                        # managing 'coog' sub-commands
+                        local com=${COMP_WORDS[COMP_CWORD-1]}
+                        case "$com" in
+                        'help') # coog help: return all commands
+                                for fn in ./coog-*; do
+                                        completion="$completion `(echo $fn | cut -d'-' -f 2)`"
+                                done
+                                ;;
+                        *) # other coog commands: return related subcommands
+                                grep "^coog_" coog-$com | while read -r line
+                                do
+                                        local subcom=`echo $line | cut -d '_' -f 3 | cut -d '(' -f 1`
+                                        if [ "$subcom" = main ]
+                                        then
+                                                continue
+                                        fi
+                                        completion="$completion $subcom"
+                                done
+                                ;;
+                        esac
                         ;;
                 esac
                 COMPREPLY=( $(compgen -W "$completion" -- $cur) )
