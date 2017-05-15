@@ -85,11 +85,11 @@ class ReportGenerate:
         return context_
 
     @classmethod
-    def generate_email(self, selected_letter, cur_object, report_context):
+    def generate_email(self, selected_letter, cur_objects, report_context):
         if selected_letter.attachments or selected_letter.images:
             attachments = []
             for tmpl in selected_letter.attachments:
-                generated_reports = tmpl._generate_reports([cur_object], {})
+                generated_reports = tmpl._generate_reports(cur_objects, {})
                 if tmpl.format_for_internal_edm:
                     tmpl.save_reports_in_edm(generated_reports)
                 attachments += generated_reports
@@ -138,43 +138,39 @@ class ReportGenerate:
 
     @classmethod
     def process_email(cls, ids, data, **kwargs):
-        # We should always be sending mail with one object
-        assert len(ids) == 1
         records = cls._get_records(ids, data['model'], data)
         report_context = cls.get_context(records, data)
         send = ServerContext().get('auto_send', True)
         selected_letter = Pool().get('report.template')(
             data['doc_template'][0])
-        for record in records:
-            data_email = cls.generate_email(selected_letter, record,
-                report_context)
-            msg = data_email['message']
-            attachments = data_email['attachments']
-            cc = [x.strip() for x in
-                selected_letter.genshi_evaluated_email_cc.split(',')]
-            bcc = [x.strip() for x in
-                selected_letter.genshi_evaluated_email_bcc.split(',')]
-            recipients = [x.strip() for x in
-                selected_letter.genshi_evaluated_email_dest.split(',')]
-            if not send:
-                continue
-            if not selected_letter.email_blocking:
-                try:
-                    sendmail(
-                        selected_letter.genshi_evaluated_email_sender,
-                        recipients + cc + bcc, msg)
-                    logging.getLogger('report.generate').info(
-                        'Mail sent to %s' % recipients)
-                except Exception as e:
-                    logging.getLogger('report.generate').error(
-                        'Could not send email for object %s on template'
-                        ' %s. Error : %s' %
-                        (str(record), str(selected_letter), str(e)))
-                    selected_letter.raise_user_error('email_not_sent')
-            else:
-                sendmail_transactional(
-                    selected_letter.genshi_generated_email_sender,
-                    recipients + cc + bcc, msg, Transaction())
+        data_email = cls.generate_email(selected_letter, records,
+            report_context)
+        msg = data_email['message']
+        attachments = data_email['attachments']
+        cc = [x.strip() for x in
+            selected_letter.genshi_evaluated_email_cc.split(',')]
+        bcc = [x.strip() for x in
+            selected_letter.genshi_evaluated_email_bcc.split(',')]
+        recipients = [x.strip() for x in
+            selected_letter.genshi_evaluated_email_dest.split(',')]
+        if not send:
+            return '', '', False, ''
+        if not selected_letter.email_blocking:
+            try:
+                sendmail(
+                    selected_letter.genshi_evaluated_email_sender,
+                    recipients + cc + bcc, msg)
+                logging.getLogger('report.generate').info(
+                    'Mail sent to %s' % recipients)
+            except Exception as e:
+                logging.getLogger('report.generate').error(
+                    'Could not send email for template %s. Error : %s' %
+                    (str(selected_letter), str(e)))
+                selected_letter.raise_user_error('email_not_sent')
+        else:
+            sendmail_transactional(
+                selected_letter.genshi_evaluated_email_sender,
+                recipients + cc + bcc, msg, Transaction())
         return ([x['report_type'] for x in attachments],
             [x['data'] for x in attachments],
                 False, [x['report_name'] for x in attachments])
@@ -237,14 +233,20 @@ class ReportTemplate:
             field.states['invisible'] = Or(Eval('input_kind') == 'email',
                 field.states.get('invisible', False))
             field.depends.append('input_kind')
-        cls.split_reports.states['readonly'] = Or(Eval('input_kind') ==
-            'email', cls.split_reports.states.get('readonly', False))
-        cls.split_reports.depends.append('input_kind')
         cls._error_messages.update({'email_not_sent':
                 'The email could not be sent',
                 'manual_send': 'The template does not allow email editing',
                 'input_email': 'Email',
+                'split_email': 'Split reports on email templates is'
+                ' recommended, you must be sure of your genshi fields',
                 })
+
+    @classmethod
+    def validate(cls, records):
+        super(ReportTemplate, cls).validate(records)
+        for record in records:
+            if record.input_kind == 'email' and not record.split_reports:
+                cls.raise_user_warning(str(record), 'split_email')
 
     @classmethod
     def view_attributes(cls):

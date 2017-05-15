@@ -7,6 +7,12 @@ msgid "Email"
 msgstr "Email"
 
 msgctxt "error:report.template:"
+msgid "Split reports on email templates is recommended, you must"
+" be sure of your genshi fields"
+msgstr "Ne pas scinder les documents sur les modèles d'emails n'est pas"
+" recommandé, vous devez être sur de vos champs genshi"
+
+msgctxt "error:report.template:"
 msgid "The email could not be sent"
 msgstr "L'eMail n'a pas pu être envoyé"
 
