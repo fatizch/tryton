@@ -179,6 +179,14 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
                 used_steps.add(relation.step.id)
 
     @classmethod
+    def copy(cls, processes, default=None):
+        default = {} if default is None else default
+        default['steps_to_display'] = []
+        default['menu_items'] = []
+        default['action_windows'] = []
+        return super(Process, cls).copy(processes, default)
+
+    @classmethod
     def default_step_button_group_position(cls):
         return 'right'
 
@@ -287,7 +295,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         ProcessActWindow = pool.get('process.process-act_window')
 
         good_action = None
-        if (hasattr(self, 'menu_items') and self.menu_items):
+        if getattr(self, 'menu_items', None):
             for menu in self.menu_items:
                 if not menu.name == '%s_%s' % (self.technical_name, lang.code):
                     continue
@@ -595,16 +603,33 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
     @classmethod
     def write(cls, *args):
         # Each time we write the process, we update the view
-        super(Process, cls).write(*args)
+        pool = Pool()
+        Menu = pool.get('ir.ui.menu')
+        ActWin = pool.get('ir.action.act_window')
+        View = pool.get('ir.ui.view')
         actions = iter(args)
+        to_refresh = []
+        menus, actions, views = [], [], []
         for instances, values in zip(actions, actions):
+            if 'technical_name' in values:
+                # Clear menus / actions
+                for menu in sum([list(x.menu_items) for x in instances], []):
+                    menus.append(menu)
+                    actions.append(menu.action)
+                    for view in menu.action.act_window_views:
+                        views.append(view.view)
             if 'menu_items' in values:
                 continue
-            for process in instances:
-                existing_menus = [x.id for x in process.menu_items]
-                menus = process.create_update_menu_entry()
-                menus_ids = [x.id for x in menus]
-                process.set_menu_item_list(existing_menus, menus_ids)
+            to_refresh += instances
+        Menu.delete(menus)
+        ActWin.delete(actions)
+        View.delete(views)
+        super(Process, cls).write(*args)
+        for process in to_refresh:
+            existing_menus = [x.id for x in process.menu_items]
+            menus = process.create_update_menu_entry()
+            menus_ids = [x.id for x in menus]
+            process.set_menu_item_list(existing_menus, menus_ids)
 
     @classmethod
     def delete(cls, processes):
