@@ -1,3 +1,5 @@
+* Ajout de la fonction strftime dans le contexte du rapport pour formatter les dates de toutes les façons possibles
+
 Version 1.12 - 2017-04-28
 
 * Support de toutes les combinaisons de conversion entre le stockage en ged et

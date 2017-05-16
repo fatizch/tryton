@@ -48,6 +48,7 @@ __all__ = [
     'ReportTemplate',
     'ReportTemplateVersion',
     'Printable',
+    'CoogReport',
     'ReportGenerate',
     'ReportGenerateFromFile',
     'ReportCreate',
@@ -732,7 +733,28 @@ class Printable(Model):
         return all_reports, all_attachments
 
 
-class ReportGenerate(Report):
+class CoogReport(Report):
+
+    @classmethod
+    def strftime(cls, value, format, lang=None):
+        pool = Pool()
+        Lang = pool.get('ir.lang')
+        Config = pool.get('ir.configuration')
+
+        if lang:
+            code = lang.code
+        else:
+            code = Config.get_language()
+        return Lang.strftime(value, code, format)
+
+    @classmethod
+    def get_context(cls, records, data):
+        report_context = super(CoogReport, cls).get_context(records, data)
+        report_context['strftime'] = cls.strftime
+        return report_context
+
+
+class ReportGenerate(CoogReport):
     __name__ = 'report.generate'
 
     @classmethod
@@ -1015,7 +1037,7 @@ class ReportGenerate(Report):
         return fd, path
 
 
-class ReportGenerateFromFile(Report):
+class ReportGenerateFromFile(CoogReport):
     __name__ = 'report.generate_from_file'
 
     @classmethod

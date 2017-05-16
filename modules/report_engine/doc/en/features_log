@@ -1,3 +1,5 @@
+* Add strftime function to report context to format date in any possible way
+
 Version 1.12 - 2017-04-28
 
 * Support for all conversion combination between storage in EDM and export format

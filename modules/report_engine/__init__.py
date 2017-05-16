@@ -31,6 +31,7 @@ def register():
         module='report_engine', type_='model')
 
     Pool.register(
+        report_engine.CoogReport,
         report_engine.ReportGenerate,
         report_engine.ReportGenerateFromFile,
         module='report_engine', type_='report')
