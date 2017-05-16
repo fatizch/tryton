@@ -179,6 +179,7 @@ Create Claim Configuration::
     >>> claim_config = Config()
     >>> claim_config.control_rule = control_rule
     >>> claim_config.payment_journal = journal
+    >>> claim_config.claim_default_payment_term = payment_term
     >>> claim_config.save()
     >>> Action = Model.get('ir.action')
     >>> action, = Action.find(['name', '=', 'Indemnification Validation Wizard'])
