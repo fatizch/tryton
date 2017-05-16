@@ -380,6 +380,9 @@ class BatchParamsConfig(Model):
         if params.get('treatment_date'):
             c_params['treatment_date'] = datetime.strptime(
                 params['treatment_date'], '%Y-%m-%d').date()
+        if params.get('connection_date'):
+            c_params['connection_date'] = datetime.strptime(
+                params['connection_date'], '%Y-%m-%d').date()
         return c_params
 
 
