@@ -16,7 +16,7 @@ this repository contains the full copyright notices and license terms. -->
     <label string="Motive" id="desc"/>
     <group id="description" col="99">
         <field name="description"/>
-        <field name="motive"/>
+        <field name="motive" widget="selection"/>
     </group>
     <label name="process_validate_payment"/>
     <field name="process_validate_payment"/>

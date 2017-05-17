@@ -22,21 +22,27 @@ class Payment:
     __metaclass__ = PoolMeta
     __name__ = 'account.payment'
 
-    @fields.depends('contract', 'payment_date', 'sepa_mandate')
+    @fields.depends('contract', 'date')
     def on_change_with_payer(self, name=None):
-        payer = super(Payment, self).on_change_with_payer(name)
-        if not payer and self.contract:
+        return super(Payment, self).on_change_with_payer(name)
+
+    def init_payer(self):
+        if self.contract:
             with Transaction().set_context(
                     contract_revision_date=self.date):
-                payer = self.contract.payer.id
-        return payer
+                payer = self.contract.payer
+                if payer:
+                    return payer.id
+        return super(Payment, self).init_payer()
 
     @fields.depends('line', 'date', 'sepa_mandate', 'bank_account', 'payer',
-        'amount')
+        'amount', 'kind')
     def on_change_line(self, name=None):
         super(Payment, self).on_change_line()
         self.sepa_mandate = None
+        self.contract = None
         self.bank_account = None
+        self.payer = None
         if self.line:
             contract = self.line.contract
             if contract:
@@ -45,8 +51,11 @@ class Payment:
                         contract_revision_date=self.date):
                     mandate = contract.billing_information.sepa_mandate
                 self.sepa_mandate = mandate
-                self.bank_account = self.sepa_mandate.account_number.account
+                if mandate:
+                    self.bank_account = mandate.account_number.account
         self.payer = self.on_change_with_payer()
+        if not self.bank_account and self.kind == 'payable':
+            self.bank_account = self.payer.get_bank_account(self.date)
 
     @classmethod
     def fail_create_reject_fee(cls, payments):
@@ -195,6 +204,7 @@ class PaymentCreationStart:
         for contract in self.party.contracts:
             for bill_info in contract.billing_informations:
                 mandate = bill_info.sepa_mandate
-                if mandate and mandate.signature_date <= self.payment_date:
+                if mandate and (mandate.signature_date <= self.payment_date or
+                        self.kind == 'payable'):
                     payers.append(mandate.party.id)
         return list(set(payers)) or default_payers

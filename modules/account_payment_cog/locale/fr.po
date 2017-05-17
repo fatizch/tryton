@@ -852,10 +852,6 @@ msgid "Acknowledge"
 msgstr "Accuser réception"
 
 msgctxt "view:account.payment.group:"
-msgid "Fail Payments"
-msgstr "Rejeter les paiements"
-
-msgctxt "view:account.payment.group:"
 msgid "Processing"
 msgstr "Traitement"
 
@@ -954,6 +950,10 @@ msgctxt ""
 "wizard_button:account.payment.payment_information_modification,payment_information_selection,finalize:"
 msgid "Next"
 msgstr "Suivant"
+
+msgctxt "wizard_button:account.payment.process,start,pre_process:"
+msgid "Process"
+msgstr "Traiter"
 
 # Custom translations below
 

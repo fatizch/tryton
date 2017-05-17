@@ -1,3 +1,4 @@
 - **Gestion des rejets SEPA automatisé**
 - **Gestion des frais de rejets**
 - **Gestion des amendements de mandats**
+- **Gestion de la notion de payeur pour tous les types de paiement**

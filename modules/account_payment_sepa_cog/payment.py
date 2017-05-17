@@ -443,14 +443,11 @@ class Payment:
     __name__ = 'account.payment'
 
     bank_account = fields.Many2One('bank.account', 'Bank Account',
-        ondelete='RESTRICT', domain=[If(Eval('kind', '') == 'payable',
-                [('owners', '=', Eval('party'))],
-                [('owners', '=', Eval('payer'))])],
+        ondelete='RESTRICT', domain=[('owners', '=', Eval('payer'))],
         states={
-            'invisible': (~Eval('payer') & (Eval('kind') == 'receivable'))
-            | (~Eval('party') & (Eval('kind') == 'payable')),
-            'readonly': Eval('state') != 'draft',
-            }, depends=['kind', 'party', 'payer', 'state'])
+            'invisible': ~Eval('payer'),
+            'readonly': Eval('state') != 'draft'
+            }, depends=['payer', 'state'])
     sepa_bank_reject_date = fields.Date('SEPA Bank Reject Date',
         states={'invisible': Or(
                 Eval('state') != 'failed',
@@ -462,8 +459,7 @@ class Payment:
             depends=['currency_digits']),
         'get_reject_fee_amount')
     payer = fields.Function(
-        fields.Many2One('party.party', 'Payer',
-            states={'invisible': (Eval('kind') == 'payable')}),
+        fields.Many2One('party.party', 'Payer'),
         'on_change_with_payer')
 
     @classmethod
@@ -489,10 +485,15 @@ class Payment:
             if x[0] != 'party']
         cls.sepa_mandate.domain.append(('party', '=', Eval('payer', -1)))
 
-    @fields.depends('sepa_mandate')
+    @fields.depends('sepa_mandate', 'kind', 'party')
     def on_change_with_payer(self, name=None):
         if self.sepa_mandate:
             return self.sepa_mandate.party.id
+        return self.init_payer()
+
+    def init_payer(self):
+        if self.kind == 'payable' and self.party:
+            return self.party.id
 
     @fields.depends('bank_account', 'sepa_mandate', 'payer')
     def on_change_party(self):
@@ -515,15 +516,15 @@ class Payment:
     def sepa_bank_account_number(self):
         if self.kind == 'receivable':
             return super(Payment, self).sepa_bank_account_number
-        elif not self.bank_account:
-            bank_account = self.party.get_bank_account(self.date)
+        if not self.bank_account:
+            if self.payer:
+                bank_account = self.payer.get_bank_account(self.date)
             if not bank_account:
                 self.raise_user_error('missing_bank_acount', {
                         'party': self.party.rec_name,
                         'date': self.date,
                         })
             self.bank_account = bank_account
-
         for number in self.bank_account.numbers:
             if number.type == 'iban':
                 return number
@@ -819,10 +820,8 @@ class PaymentCreationStart:
         states={
             'invisible': ((~Bool(Eval('process_method')) |
                 (Eval('process_method') != 'sepa')) & Bool(
-                Eval('payer')) | (Eval('kind') == 'payable') |
-                Eval('multiple_parties')),
+                Eval('payer')) | Eval('multiple_parties')),
             'required': ((Eval('process_method') == 'sepa') &
-                (Eval('kind') == 'receivable') &
                 ~Eval('multiple_parties'))
             },
         depends=['payer', 'process_method', 'payment_date',
@@ -836,16 +835,14 @@ class PaymentCreationStart:
         states={
             'invisible': (~Bool(Eval('process_method')) |
                 (Eval('process_method') != 'sepa') |
-                (Eval('kind') == 'payable') |
                 Eval('multiple_parties')),
             'required': ((Eval('process_method') == 'sepa') &
-                (Eval('kind') == 'receivable') &
                 ~Eval('multiple_parties'))
             },
         depends=['available_payers', 'process_method', 'payment_date', 'kind'])
 
     @fields.depends('payment_date', 'party', 'available_payers', 'payer',
-        'available_bank_accounts', 'bank_account')
+        'available_bank_accounts', 'bank_account', 'kind')
     def on_change_party(self):
         self.available_payers = self.update_available_payers()
         self.payer = self.update_payer()
@@ -853,13 +850,13 @@ class PaymentCreationStart:
         self.bank_account = self.update_bank_account()
 
     @fields.depends('payment_date', 'available_payers', 'payer',
-        'available_bank_accounts', 'bank_account')
+        'available_bank_accounts', 'bank_account', 'kind')
     def on_change_payer(self):
         self.available_bank_accounts = self.update_available_bank_accounts()
         self.bank_account = self.update_bank_account()
 
     @fields.depends('payment_date', 'party', 'available_payers', 'payer',
-        'available_bank_accounts', 'bank_account')
+        'available_bank_accounts', 'bank_account', 'kind')
     def on_change_payment_date(self):
         self.available_payers = self.update_available_payers()
         self.payer = self.update_payer()
@@ -874,14 +871,20 @@ class PaymentCreationStart:
         Mandate = pool.get('account.payment.sepa.mandate')
         if not self.payer or not self.payment_date:
             return []
-        possible_mandates = Mandate.search([
-                ('party', '=', self.payer.id),
-                ('signature_date', '<=', self.payment_date)])
-        return [m.account_number.account.id for m in possible_mandates
-            if (not m.account_number.account.start_date or
-                m.account_number.account.start_date <= self.payment_date) and
-            (not m.account_number.account.end_date or
-                m.account_number.account.end_date >= self.payment_date)]
+        if self.kind == 'receivable':
+            possible_mandates = Mandate.search([
+                    ('party', '=', self.payer.id),
+                    ('signature_date', '<=', self.payment_date)])
+            return [m.account_number.account.id for m in possible_mandates
+                if (not m.account_number.account.start_date or
+                    m.account_number.account.start_date <= self.payment_date)
+                and (not m.account_number.account.end_date or
+                    m.account_number.account.end_date >= self.payment_date)]
+        if self.kind == 'payable':
+            return [a.id for a in self.payer.bank_accounts
+                if (not a.start_date or a.start_date <= self.payment_date) and
+                (not a.end_date or a.end_date >= self.payment_date)]
+        return []
 
     def update_payer(self):
         if not self.available_payers:

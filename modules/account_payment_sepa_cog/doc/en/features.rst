@@ -1,3 +1,4 @@
 - **Manage automatic SEPA rejections**
 - **Manage reject fees**
 - **Manage amendments to mandates**
+- **Manage payer for all payment kinds**
