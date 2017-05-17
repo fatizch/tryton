@@ -313,8 +313,7 @@ payment_second_invoice.manual_fail_status
 payment_third_invoice.manual_fail_status
 len(contract.billing_informations)
 # #Res# #2
-contract.billing_informations[-1].date == third_invoice.end + \
-    relativedelta(days=1)
+contract.billing_informations[-1].date == second_invoice.start
 # #Res# #True
 contract.reload()
 len(contract.invoices) == 3
