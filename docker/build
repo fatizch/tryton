@@ -1,43 +1,32 @@
 #!/bin/bash
 
-clone_repo() {  # <WD> <REPO_URI> <REPO_NAME>
-	[ $# -ne 3 ] && echo bad args && return 1
-	git clone --depth=1 --recursive $2 "$1/workspace/$3"
+clone_repo() { # <wd> <repo_uri> <repo_name>
+        [ $# -ne 3 ] && echo bad args >&2 && return 1
+        git clone --depth=1 --recursive "$2" "$1/workspace/$3"
+        printf "%s:" "$3" >> "$1/workspace/.version"
+        (cd "$1/workspace/$3" && git rev-parse HEAD >> "$1/workspace/.version")
 }
 
-main() {    # build docker image [docker-build-arg*]
-        [ $# -lt 1 ] && echo "Usage: ./build <IMAGE_NAME> [docker-build-args]" && \
-                return 1
+main() { # <image-tag> [docker-build-arg*]
+        [ $# -lt 1 ] && echo "Usage: ./build <image-tag> [docker-build-args]" >&2 && return 1
 
-        local script_path; script_path=$(readLink -f "$0")
-
+        local script_path; script_path=$(readlink -f "$0")
         local wd; wd=$(dirname "$script_path")
         local workspace="$wd/workspace"
 
-        # Creating workspace directory
-        mkdir "$workspace" 2> /dev/null
+        mkdir "$workspace" || return 1
 
-        local image; image=$1
-        shift
-	while read repository
+        while read repository
         do
-                local repo; repo=`echo $repository | cut -d ";" -f 1`
-                local uri; uri=`echo $repository | cut -d ";" -f 2`
+                local repo; repo=$(echo "$repository" | cut -d ";" -f 1)
+                local uri; uri=$(echo "$repository" | cut -d ";" -f 2)
+                echo "cloning $repo from $uri"
+                clone_repo "$wd" "$uri" "$repo" || return 1
+        done < "$wd/repositories"
 
-                if [ ! -d $wd/workspace/$repo ]
-                then
-                        echo "Working on $repo..."
-			echo "Adress is $uri."
-			clone_repo "$wd" "$uri" "$repo"
-                else
-                        echo "$repo detected."
-                fi
-        done < $wd/repositories
+        docker build -t "$@" "$wd"
 
-        docker build -t $image $* .
-
-        echo "Removing temporary files." &&
         rm -rf "$workspace"
 }
 
-main $@
+main "$@"
