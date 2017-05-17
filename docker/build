@@ -1,14 +1,12 @@
 #!/bin/bash
 
-clone_repo() {  # <wd> <REPO_NAME>
-		local cwd; cwd="$1"
-		shift
-        git clone --depth=1 --recursive git@github.com:coopengo/$1 "$cwd/workspace/$1"
+clone_repo() {  # <WD> <REPO_URI> <REPO_NAME>
+	[ $# -ne 3 ] && echo bad args && return 1
+	git clone --depth=1 --recursive $2 "$1/workspace/$3"
 }
 
-main() {    # build docker image - [image*] -- [docker-build-arg*]
-        [ $# -lt 4 ] && echo "Usage: ./build <IMAGE_NAME> <Images...> -- [docker-biuld-args]" && \
-                echo "<Images> must contain at least trytond, trytond-modules and coog to build a stable image." && \
+main() {    # build docker image [docker-build-arg*]
+        [ $# -lt 1 ] && echo "Usage: ./build <IMAGE_NAME> [docker-build-args]" && \
                 return 1
 
         local script_path; script_path=$(readLink -f "$0")
@@ -16,29 +14,27 @@ main() {    # build docker image - [image*] -- [docker-build-arg*]
         local wd; wd=$(dirname "$script_path")
         local workspace="$wd/workspace"
 
-        Creating workspace directory
+        # Creating workspace directory
         mkdir "$workspace" 2> /dev/null
 
         local image; image=$1
         shift
-        while [ ! -z $1 ]
+	while read repository
         do
-                [ $1 = "--" ] && shift && break
-                local component; component=$1
-                shift
-                local repo; repo=`echo $component | cut -d ":" -f 1`
-                local tree; tree=`echo $component | cut -d ":" -f 2`
+                local repo; repo=`echo $repository | cut -d ";" -f 1`
+                local uri; uri=`echo $repository | cut -d ";" -f 2`
 
                 if [ ! -d $wd/workspace/$repo ]
                 then
                         echo "Working on $repo..."
-                        echo "$repo does not exist, cloning..." && clone_repo "$wd" "$repo"
+			echo "Adress is $uri."
+			clone_repo "$wd" "$uri" "$repo"
                 else
                         echo "$repo detected."
                 fi
-        done
+        done < $wd/repositories
 
-        # docker build -t $image $* .
+        docker build -t $image $* .
 
         echo "Removing temporary files." &&
         rm -rf "$workspace"
