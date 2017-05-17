@@ -1,0 +1,47 @@
+#!/bin/bash
+
+clone_repo() {  # <wd> <REPO_NAME>
+		local cwd; cwd="$1"
+		shift
+        git clone --depth=1 --recursive git@github.com:coopengo/$1 "$cwd/workspace/$1"
+}
+
+main() {    # build docker image - [image*] -- [docker-build-arg*]
+        [ $# -lt 4 ] && echo "Usage: ./build <IMAGE_NAME> <Images...> -- [docker-biuld-args]" && \
+                echo "<Images> must contain at least trytond, trytond-modules and coog to build a stable image." && \
+                return 1
+
+        local script_path; script_path=$(readLink -f "$0")
+
+        local wd; wd=$(dirname "$script_path")
+        local workspace="$wd/workspace"
+
+        Creating workspace directory
+        mkdir "$workspace" 2> /dev/null
+
+        local image; image=$1
+        shift
+        while [ ! -z $1 ]
+        do
+                [ $1 = "--" ] && shift && break
+                local component; component=$1
+                shift
+                local repo; repo=`echo $component | cut -d ":" -f 1`
+                local tree; tree=`echo $component | cut -d ":" -f 2`
+
+                if [ ! -d $wd/workspace/$repo ]
+                then
+                        echo "Working on $repo..."
+                        echo "$repo does not exist, cloning..." && clone_repo "$wd" "$repo"
+                else
+                        echo "$repo detected."
+                fi
+        done
+
+        # docker build -t $image $* .
+
+        echo "Removing temporary files." &&
+        rm -rf "$workspace"
+}
+
+main $@

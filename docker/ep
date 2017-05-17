@@ -2,7 +2,7 @@
 # vim: set ft=sh:
 # docker entrypoint
 
-COOG_ROOT=/coog
+COOG_ROOT=/workspace
 COOG_BIN=$COOG_ROOT/coog/bin/bin
 COOG_LIB=$COOG_ROOT/coog/bin/lib
 COOG_TRYTOND=$COOG_ROOT/trytond

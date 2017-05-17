@@ -45,13 +45,16 @@ RUN pip install \
         rq \
     && rm -rf /root/.cache
 
-RUN mkdir /coog && mkdir /coog/data
-COPY . /coog/
+RUN mkdir /workspace && mkdir /workspace/data
+# coog-related repositories
+COPY ./workspace /workspace
+# entrypoint
+COPY ./ep /workspace/
 
-RUN ln -s /coog/trytond/bin/trytond /usr/local/bin
-RUN ln -s /coog/trytond/bin/trytond-admin /usr/local/bin
-RUN ln -s /coog/trytond/bin/trytond-cron /usr/local/bin
-RUN ln -s /coog/coog/bin/docker/ep /usr/local/bin/ep
+RUN ln -s /workspace/trytond/bin/trytond /usr/local/bin
+RUN ln -s /workspace/trytond/bin/trytond-admin /usr/local/bin
+RUN ln -s /workspace/trytond/bin/trytond-cron /usr/local/bin
+RUN ln -s /workspace/ep /usr/local/bin/ep
 RUN ep link
 
 VOLUME ["/coog/sao", "/coog/coog-bench"]
