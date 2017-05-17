@@ -320,8 +320,8 @@ class OptionDescription:
     def get_match_rule(cls, rated_instance):
         return {'premium_base': rated_instance.__name__}
 
-    def calculate_premiums(self, contract, lines):
-        for rated_instance in self.get_rated_instances(contract):
+    def calculate_premiums(self, base_instance, lines):
+        for rated_instance in self.get_rated_instances(base_instance):
             match_rule = self.get_match_rule(rated_instance)
             for premium_rule in self.premium_rules:
                 if premium_rule.match(match_rule):
