@@ -426,14 +426,18 @@ class PaymentCreation(model.CoogWizard):
             kind = self.get_lines_amount_per_kind(lines)
             parties = list(set([l.party for l in lines]))
             payment_dates = list(set([l.payment_date for l in lines]))
+            journals = list(set([x.get_payment_journal() for x in lines]))
+            journal = journals[0] if len(journals) == 1 else None
             return {
                 'lines_to_pay': active_ids,
                 'total_amount': kind.values()[0],
                 'kind': kind.keys()[0],
                 'multiple_parties': len(parties) != 1,
                 'party': parties[0].id if len(parties) == 1 else None,
-                'payment_date': (payment_dates[0]
-                    if len(payment_dates) == 1 else None),
+                'payment_date': payment_dates[0]
+                 if len(payment_dates) == 1 else None,
+                'journal': journal.id if journal else None
+                if len(lines) == 1 else None,
                 }
         elif model == 'party.party':
             active_id = Transaction().context.get('active_id', None)
@@ -454,8 +458,8 @@ class PaymentCreation(model.CoogWizard):
                 'multiple_parties': False,
                 'party': active_id,
                 'lines_to_pay': move_line_ids,
-                'payment_date': (payment_dates[0]
-                    if len(payment_dates) == 1 else None),
+                'payment_date': payment_dates[0]
+                if len(payment_dates) == 1 else None,
                 }
         return {'kind': 'payable'}
 
