@@ -4,7 +4,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, utils
 from trytond.modules.process_cog import ProcessFinder, ProcessStart
 
 
@@ -13,6 +13,7 @@ __all__ = [
     'Process',
     'ContractSubscribeFindProcess',
     'ContractSubscribe',
+    'ProcessResume',
     ]
 
 
@@ -105,3 +106,29 @@ class ContractSubscribe(ProcessFinder):
             return
         document = Pool().get('document.reception')(document_reception)
         document.transfer(obj)
+
+
+class ProcessResume:
+    __name__ = 'process.resume'
+
+    def do_resume(self, action):
+        pool = Pool()
+        active_id = Transaction().context.get('active_id')
+        active_model = Transaction().context.get('active_model')
+        instance = pool.get(active_model)(active_id)
+        if (instance.current_state or active_model != 'contract'
+                or instance.status != 'quote'):
+            return super(ProcessResume, self).do_resume(action)
+        model, = pool.get('ir.model').search(('model', '=', active_model),
+            limit=1)
+        process_finder = pool.get('contract.subscribe.find_process')(
+            model=model,
+            effective_date=instance.start_date,
+            product=instance.product,
+            party=instance.subscriber)
+        process = utils.get_domain_instances(process_finder, 'good_process')
+        if process:
+            process = process[0]
+            instance.current_state = process.all_steps[0]
+            instance.save()
+        return super(ProcessResume, self).do_resume(action)

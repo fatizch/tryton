@@ -1,5 +1,6 @@
-Version 1.12 - 2017-04-28
+* Find a process for a pending subscription without task. Usefull for subscriptions created from an external system.
 
+Version 1.12 - 2017-04-28
 * Contract Notifications are now processable
 
 Version 1.10 - 2016-11-02

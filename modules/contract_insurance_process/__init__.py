@@ -2,24 +2,25 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .process import *
-from .contract import *
-from .event import *
-from .document import *
+import process
+import contract
+import event
+import document
 
 
 def register():
     Pool.register(
-        Contract,
-        ContractOption,
-        ContractNotification,
-        Process,
-        ContractSubscribeFindProcess,
-        EventTypeAction,
-        DocumentDescription,
+        contract.Contract,
+        contract.ContractOption,
+        contract.ContractNotification,
+        process.Process,
+        process.ContractSubscribeFindProcess,
+        event.EventTypeAction,
+        document.DocumentDescription,
         module='contract_insurance_process', type_='model')
 
     Pool.register(
-        ContractSubscribe,
-        ReceiveDocument,
+        process.ContractSubscribe,
+        document.ReceiveDocument,
+        process.ProcessResume,
         module='contract_insurance_process', type_='wizard')

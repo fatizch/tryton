@@ -1,5 +1,6 @@
-Version 1.12 - 2017-04-28
+* Retrouve un processus pour une souscription en cours sans tâche associée. Utile pour les souscriptions créées depuis un système externe.
 
+Version 1.12 - 2017-04-28
 * Possibilité d'utiliser les processus sur les notifications
 
 Version 1.10 - 2016-11-02

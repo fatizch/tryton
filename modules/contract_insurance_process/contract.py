@@ -41,6 +41,9 @@ class Contract(CoogProcessFramework):
         cls._buttons['button_activate']['invisible'] = Or(
             cls._buttons['button_activate']['invisible'],
             Bool(Eval('current_state', False)))
+        cls._buttons['button_resume']['invisible'] = (
+            cls._buttons['button_resume']['invisible']
+            & (Eval('status') != 'quote'))
 
     @classmethod
     def copy(cls, contracts, default=None):
