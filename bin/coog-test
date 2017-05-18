@@ -266,3 +266,10 @@ coog_test_fullcheck() { # check and report a full test - <branch>
         coog_test_stop
         rm -rf "$COOG_TMP/$1"
 }
+
+coog_test_convert() { # convert test scenarios from python to rst
+        for i in $(find "$COOG_COOG" -name "scenario*.py")
+        do
+                "$COOG_COOG"/misc/python_scripts/test_converter.py "$i" "${i::-2}"rst
+        done
+}
