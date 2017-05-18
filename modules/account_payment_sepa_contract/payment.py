@@ -31,13 +31,14 @@ class Payment:
             with Transaction().set_context(
                     contract_revision_date=self.date):
                 payer = self.contract.payer
-                if payer:
+                if payer and (not self.bank_account or
+                        payer in self.bank_account.owners):
                     return payer.id
         return super(Payment, self).init_payer()
 
     @fields.depends('line', 'date', 'sepa_mandate', 'bank_account', 'payer',
-        'amount', 'kind')
-    def on_change_line(self, name=None):
+        'party', 'kind')
+    def on_change_line(self):
         super(Payment, self).on_change_line()
         self.sepa_mandate = None
         self.contract = None
