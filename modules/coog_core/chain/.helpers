@@ -36,6 +36,16 @@ chain_params() {
         do
                 if [[ -z ${!i} ]]
                 then
+                        if [[ $i == "TREATMENT_DATE" ]] && [[ -n "$WORKING_DAYS" ]]; then
+                            echo "Skipping treatment_date parameter, using working_days" >&2
+                            continue
+                        elif [[ $i == "WORKING_DAYS" ]] && [[ -n "$TREATMENT_DATE" ]]; then
+                            echo "Skipping working_days parameter, using treatment_date" >&2
+                            continue
+                        elif [[ $i == "CONF_CODE" ]] && [[ -n "$TREATMENT_DATE" ]]; then
+                            echo "Skipping conf_code parameter, using treatment_date" >&2
+                            continue
+                        fi
                         echo "Missing batch chain parameter:" `echo $i | awk '{ print tolower($1) }'` >&2
                         FAILED+=1
                 fi

@@ -38,7 +38,7 @@ class Dunning:
         dunning = cls.__table__()
         cursor = Transaction().connection.cursor()
 
-        contracts = [x.contract.id for x in dunnings]
+        contracts = [x.contract.id for x in dunnings if x.contract]
 
         # Order by level sequence (it's ok if we assume that the dunning
         # procedure will always be the same for a given contract), then by id
@@ -46,10 +46,14 @@ class Dunning:
             & (line.reconciliation == Null) & (line.contract != Null)
             ).join(level, condition=dunning.level == level.id)
 
+        where_clause = None
+        if contracts:
+            where_clause = line.contract.in_(contracts)
+
         main_dunnings = query_table.select(dunning.id, level.sequence,
             line.contract,
             Max(level.sequence, window=Window([line.contract])).as_('max_seq'),
-            where=line.contract.in_(contracts))
+            where=where_clause)
 
         cursor.execute(*main_dunnings.select(Min(main_dunnings.id),
                 main_dunnings.contract,

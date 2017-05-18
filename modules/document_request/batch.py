@@ -40,6 +40,7 @@ class DocumentRequestBatch(batch.BatchRoot):
     def get_batch_domain(cls, treatment_date):
         return [
             ('reception_date', '=', None),
+            ('request', '!=', None),
             [
                 'OR',
                 ('send_date', '=', None),

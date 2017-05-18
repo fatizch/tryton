@@ -70,9 +70,7 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
     def execute(cls, object, ids, **kwargs):
         in_directory = kwargs.get('in', None) or cls.get_conf_item('in')
         out_directory = kwargs.get('out', None) or cls.get_conf_item('out')
-        treatment_date_str = kwargs.get('treatment_date', None)
-        treatment_date = datetime.datetime.strptime(treatment_date_str,
-            '%Y-%m-%d').date()
+        treatment_date = kwargs.get('treatment_date', None)
         if not in_directory or not out_directory:
             raise Exception("'in' and 'out' are required")
         files = cls.get_file_names_and_paths(in_directory)

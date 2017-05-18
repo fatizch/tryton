@@ -8,34 +8,40 @@ CHAIN_NAME="payment_working_days"
 CHAIN_FILE=/tmp/"$HOSTNAME"-"$CHAIN_NAME"-"$(date +'%y-%m-%d@%H:%M:%S')"
 
 CHAIN_PARAMETERS=('TREATMENT_DATE' 'WORKING_DAYS' 'CONF_CODE' \
-                    'CONNEXION_DATE' 'PAYMENT_KIND' 'JOURNAL_METHODS' 'OUT')
-CHAIN_REQUIRED=('CONNEXION_DATE' 'WORKING_DAYS' 'CONF_CODE' \
+                    'CONNEXION_DATE' 'PAYMENT_KIND' 'JOURNAL_METHODS')
+CHAIN_REQUIRED=('TREATMENT_DATE' 'CONNEXION_DATE' 'WORKING_DAYS' 'CONF_CODE' \
                     'PAYMENT_KIND' 'JOURNAL_METHODS')
+
 
 chain_params "$@"
 chain_begin
 
-chain_step account.payment.create --connexion-date="$CONNEXION_DATE" \
-                            --payment_kind="$PAYMENT_KIND" \
-                            --working_days="$WORKING_DAYS" \
-                            --conf_code="$CONF_CODE"
+chain_step contract.invoice.create \
+    --working_days="$WORKING_DAYS" \
+    --conf_code="$CONF_CODE"
+chain_wait contract.invoice.create || chain_end
+
+chain_step contract.invoice.set_number  \
+    --working_days="$WORKING_DAYS"      \
+    --conf_code="$CONF_CODE"
+chain_wait contract.invoice.set_number || chain_end
+
+chain_step contract.invoice.post \
+    --working_days="$WORKING_DAYS" \
+    --conf_code="$CONF_CODE"
+chain_wait contract.invoice.post || chain_end
+
+chain_step account.payment.create       \
+    --payment_kind="$PAYMENT_KIND"      \
+    --working_days="$WORKING_DAYS"      \
+    --conf_code="$CONF_CODE"
 chain_wait account.payment.create || chain_end
 
-[[ -z  "$OUT" ]] && chain_step account.payment.process \
-                            --connexion-date="$CONNEXION_DATE" \
-                            --payment_kind="$PAYMENT_KIND" \
-                            --journal_methods="$JOURNAL_METHODS" \
-                            --working_days="$WORKING_DAYS" \
-                            --conf_code="$CONF_CODE"
-chain_wait account.payment.process || chain_end
-
-[[ ! -z  "$OUT" ]] && chain_step account.payment.process \
-                            ---connexion-date="$CONNEXION_DATE" \
-                            --payment_kind="$PAYMENT_KIND" \
-                            --journal_methods="$JOURNAL_METHODS" \
-                            --out=$OUT \
-                            --working_days="$WORKING_DAYS" \
-                            --conf_code="$CONF_CODE"
+chain_step account.payment.process      \
+    --payment_kind="$PAYMENT_KIND"      \
+    --journal_methods="$JOURNAL_METHODS"\
+    --working_days="$WORKING_DAYS"      \
+    --conf_code="$CONF_CODE"
 chain_wait account.payment.process || chain_end
 
 chain_end

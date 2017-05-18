@@ -4,13 +4,13 @@
 CHAIN_NAME=renew
 CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
 
-CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE')
-CHAIN_REQUIRED=('TREATMENT_DATE')
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'WORKING_DAYS' 'CONF_CODE')
+CHAIN_REQUIRED=('TREATMENT_DATE' 'WORKING_DAYS' 'CONF_CODE')
 
 chain_params "$@"
 chain_begin
 
-chain_step contract.renew --treatment_date="$TREATMENT_DATE"
+chain_step contract.renew ${GIVEN_PARAMETERS[@]}
 chain_wait contract.renew || chain_end
 
 chain_end

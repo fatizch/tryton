@@ -11,14 +11,12 @@ CHAIN_REQUIRED=('TREATMENT_DATE' 'AGENT_TYPE')
 chain_params "$@"
 chain_begin
 
-chain_step commission.invoice.create --treatment_date="$TREATMENT_DATE" \
+chain_step commission.invoice.create \
+    --treatment_date="$TREATMENT_DATE" \
     --agent_type="$AGENT_TYPE"
 chain_wait commission.invoice.create || chain_end
 
-[[ -z  $WITH_DRAFT ]] && chain_step commission.invoice.post \
-    --treatment_date="$TREATMENT_DATE" --agent_type="$AGENT_TYPE"
-[[ ! -z  $WITH_DRAFT ]] && chain_step commission.invoice.post \
-    --agent_type="$AGENT_TYPE" --with_draft="$WITH_DRAFT"
+chain_step commission.invoice.post ${GIVEN_PARAMETERS[@]}
 chain_wait commission.invoice.post || chain_end
 
 chain_end
