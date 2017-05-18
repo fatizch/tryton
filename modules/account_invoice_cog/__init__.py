@@ -1,30 +1,32 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .test_case import *
-from .party import *
-from .invoice import *
-from .report_engine import *
-from .move import *
-from .configuration import *
-from .payment_term import *
-from .wizard import *
+import test_case
+import party
+import invoice
+import report_engine
+import move
+import configuration
+import payment_term
+import wizard
 
 
 def register():
     Pool.register(
-        InvoiceLine,
-        Invoice,
-        TestCaseModel,
-        Party,
-        ReportTemplate,
-        Move,
-        MoveLine,
-        Configuration,
-        PaymentTerm,
-        SelectTerm,
+        invoice.InvoiceLine,
+        invoice.Invoice,
+        test_case.TestCaseModel,
+        party.Party,
+        report_engine.ReportTemplate,
+        move.Move,
+        move.MoveLine,
+        configuration.Configuration,
+        payment_term.PaymentTerm,
+        payment_term.PaymentTermLine,
+        payment_term.PaymentTermLineRelativeDelta,
+        wizard.SelectTerm,
         module='account_invoice_cog', type_='model')
 
     Pool.register(
-        ChangePaymentTerm,
+        wizard.ChangePaymentTerm,
         module='account_invoice_cog', type_='wizard')

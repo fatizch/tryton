@@ -76,6 +76,10 @@ msgctxt "field:account.invoice.payment_term,is_one_shot:"
 msgid "One Shot"
 msgstr "En une fois"
 
+msgctxt "field:account.invoice.payment_term.line.delta,quarter:"
+msgid "Quarter"
+msgstr "Trimestre"
+
 msgctxt "field:account.move,invoice:"
 msgid "Invoice"
 msgstr "Quittance"
@@ -99,6 +103,11 @@ msgstr "Jeux de Test"
 msgctxt "field:report.template,event_type_actions:"
 msgid "Event Type Actions"
 msgstr "Actions par type d'événement"
+
+msgctxt "help:account.invoice.payment_term.line.delta,quarter:"
+msgid "Synchronise to calendar quarter -> march, june, september, december"
+msgstr ""
+"Synchroniser au calendrier civil -> mars, juin, septembre, décembre"
 
 msgctxt "model:account.invoice.change_payment_term.select_term,name:"
 msgid "Select Term"
