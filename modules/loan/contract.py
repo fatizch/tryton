@@ -765,7 +765,8 @@ class WizardOption:
             loan_shares.remove(existing_loan_share)
             LoanShare.delete([existing_loan_share])
         option.loan_shares = loan_shares
-        option.save()
+        if option.id:
+            option.save()
 
 
 class DisplayContractPremium:
