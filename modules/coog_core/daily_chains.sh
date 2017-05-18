@@ -57,13 +57,11 @@ if is_weekday; then
 
     check_modules "contract" &&                             \
         coog chain -- contract terminate_contract           \
-            --working_days="$WORKING_DAYS"                  \
-            --conf_code="$WORKING_DAYS_CONF"
+            --treatment_date="$TODAY_DATE"
 
     check_modules "underwriting" &&                         \
         coog chain -- underwriting underwriting             \
-            --working_days="$WORKING_DAYS"                  \
-            --conf_code="$WORKING_DAYS_CONF"
+            --treatment_date="$TODAY_DATE"
 
     # Executed for each new month
     if [ "$TODAY_WEEK_DAY" == "5" ] && [ "$MONDAY_DATE" -lt  "04" ] \

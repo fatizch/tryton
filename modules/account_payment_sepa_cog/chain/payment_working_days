@@ -16,21 +16,6 @@ CHAIN_REQUIRED=('TREATMENT_DATE' 'CONNEXION_DATE' 'WORKING_DAYS' 'CONF_CODE' \
 chain_params "$@"
 chain_begin
 
-chain_step contract.invoice.create \
-    --working_days="$WORKING_DAYS" \
-    --conf_code="$CONF_CODE"
-chain_wait contract.invoice.create || chain_end
-
-chain_step contract.invoice.set_number  \
-    --working_days="$WORKING_DAYS"      \
-    --conf_code="$CONF_CODE"
-chain_wait contract.invoice.set_number || chain_end
-
-chain_step contract.invoice.post \
-    --working_days="$WORKING_DAYS" \
-    --conf_code="$CONF_CODE"
-chain_wait contract.invoice.post || chain_end
-
 chain_step account.payment.create       \
     --payment_kind="$PAYMENT_KIND"      \
     --working_days="$WORKING_DAYS"      \
