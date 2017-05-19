@@ -17,6 +17,18 @@ from trytond.perf_analyzer import PerfLog, profile, logger as perf_logger
 
 import coog_string
 
+try:
+    import async.broker as async_broker
+    if config.get('async', 'celery', default=None) is not None:
+        async_broker.set_module('celery')
+    elif config.get('async', 'rq', default=None) is not None:
+        async_broker.set_module('rq')
+    else:
+        raise Exception('no async broker')
+except Exception as error:
+    logging.getLogger(__name__).error(error)
+    async_broker = None
+
 
 __all__ = [
     'BatchRoot',
@@ -194,6 +206,18 @@ class BatchRoot(ModelView):
             files = [(f, os.path.join(path, f)) for f in os.listdir(path)
                 if os.path.isfile(os.path.join(path, f))]
         return files
+
+    @classmethod
+    def enqueue(cls, records, params):
+        '''
+        enqueue a new job
+        ex: ViewValidationBatch.enqueue([(100,), (101,)], {'crash': 100})
+        '''
+        assert async_broker
+        broker = async_broker.get_module()
+        assert broker
+        broker.enqueue(cls.__name__, 'batch_exec', (cls.__name__, records,
+                params))
 
 
 class BatchRootNoSelect(BatchRoot):
