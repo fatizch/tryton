@@ -2079,7 +2079,7 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             ).join(option, condition=(
                 option.contract == contract.id))
         company_id = Transaction().context.get('company', None)
-        cursor.execute(*query_table.select(contract.id,
+        cursor.execute(*query_table.select(option.id,
                 where=(contract.company == company_id) if company_id else
                 None))
         options = cls.browse([x['id'] for x in cursor_dict(cursor)])
