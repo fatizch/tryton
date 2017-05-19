@@ -423,9 +423,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         export_dirname = self.get_export_dirname()
         for report in reports:
             filename, ext = os.path.splitext(report['report_name'])
-            filename = coog_string.slugify(filename)
-            if add_time and not self.output_filename:
-                filename += '_' + datetime.now().strftime("%H%M%S%f")
+            if not self.output_filename:
+                filename = coog_string.slugify(filename)
+                if add_time:
+                    filename += '_' + datetime.now().strftime("%H%M%S%f")
             filename += ext
             out_path = os.path.join(export_dirname, filename)
             with open(out_path, 'a') as out:
