@@ -210,6 +210,10 @@ class Loss:
             if service.benefit.indemnification_kind != 'capital':
                 continue
             total_share = sum(x.share for x in service.indemnifications)
+            service_delegation = service.option.coverage.insurer. \
+                get_delegation(service.option.coverage.insurance_kind)
+            if not service_delegation:
+                continue
             if total_share != 1:
                 if service_delegation.claim_create_indemnifications or \
                         service_delegation.claim_pay_indemnifications:
