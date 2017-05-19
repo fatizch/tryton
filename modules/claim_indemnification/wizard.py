@@ -586,7 +586,7 @@ class CreateIndemnification(Wizard):
         if not active_id:
             return 'end'
         if Transaction().context.get('active_model') == 'claim.service':
-            self.select_service.selected_service = Service(active_id)
+            self.definition.service = Service(active_id)
             return 'definition'
         elif Transaction().context.get('active_model') == 'claim':
             claim_service = self.default_service_for_treatment(
@@ -655,8 +655,10 @@ class CreateIndemnification(Wizard):
             definition = getattr(self, 'definition', None)
             if definition and hasattr(definition, 'service'):
                 service = definition.service
-            else:
+            elif configuration:
                 return {'journal': configuration.payment_journal.id}
+            else:
+                return {}
             non_cancelled = []
             for indemnification in service.indemnifications:
                 if indemnification.status != 'cancelled':
