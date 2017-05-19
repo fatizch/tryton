@@ -111,27 +111,18 @@ class Claim:
         invoices = list(set(invoices))
         return [invoice.id for invoice in invoices]
 
-    def complete_indemnifications(self):
-        Service = Pool().get('claim.service')
-        res = True, []
-        to_save = []
+    def validate_indemnifications(self):
+        Indemnification = Pool().get('claim.indemnification')
+        to_validate = []
         for loss in self.losses:
             for service in loss.services:
                 for indemnification in service.indemnifications:
-                    utils.concat_res(res,
-                        indemnification.complete_indemnification())
-                pending_indemnification = False
-                indemnification_paid = False
-                for indemnification in service.indemnifications:
-                    if indemnification.is_pending():
-                        pending_indemnification = True
-                    else:
-                        indemnification_paid = True
-                if indemnification_paid and not pending_indemnification:
-                    service.status = 'delivered'
-                    to_save.append(service)
-        Service.save(to_save)
-        return res
+                    if indemnification.status == 'controlled':
+                        to_validate.append(indemnification)
+        if not to_validate:
+            return
+        Indemnification.validate_indemnification(to_validate)
+        Indemnification.invoice(to_validate)
 
     @classmethod
     @ModelView.button_action(
@@ -894,11 +885,6 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             if self.amount else '',
             coog_string.translate_value(self, 'status') if self.status else '',
             )
-
-    def complete_indemnification(self):
-        if self.status == 'validated' and self.amount:
-            self.invoice([self])
-        return True, []
 
     def is_pending(self):
         return self.amount > 0 and self.status not in ['paid', 'rejected']
