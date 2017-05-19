@@ -384,7 +384,8 @@ class ClaimService:
         pool = Pool()
         Indemnification = pool.get('claim.indemnification')
         super(ClaimService, self).init_from_loss(loss, benefit)
-        self.annuity_frequency = benefit.benefit_rules[0].annuity_frequency
+        if benefit.benefit_rules:
+            self.annuity_frequency = benefit.benefit_rules[0].annuity_frequency
         self.indemnifications = []
         if self.loss.start_date and self.loss.end_date:
             deductible_end_date = self.get_deductible_end_date() or \
