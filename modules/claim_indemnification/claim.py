@@ -216,9 +216,9 @@ class Loss:
                 return
             self.check_indemnification_gaps(service)
         for service in self.services:
-            if self.benefit.indemnification_kind != 'capital':
+            if service.benefit.indemnification_kind != 'capital':
                 continue
-            total_share = sum(x.share for x in self.indemnifications)
+            total_share = sum(x.share for x in service.indemnifications)
             if total_share != 1:
                 self.append_functional_error('bad_indemnification_shares', {
                         'service': self.rec_name,
