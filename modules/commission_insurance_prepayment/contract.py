@@ -103,6 +103,8 @@ class Contract:
         end_date = end_date if end_date != datetime.date.max else None
         super(Contract, self).rebill(start, end, post_end)
         if self.status in ['void', 'terminated']:
+            start_date = min(start_date, self.final_end_date
+                or datetime.date.max)
             self.adjust_prepayment_commissions_once_terminated(start_date,
                 end_date)
         else:
