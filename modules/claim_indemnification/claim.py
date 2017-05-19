@@ -211,9 +211,17 @@ class Loss:
                 continue
             total_share = sum(x.share for x in service.indemnifications)
             if total_share != 1:
-                self.append_functional_error('bad_indemnification_shares', {
-                        'service': self.rec_name,
-                        'total_share': str(int(total_share * 100))})
+                if service_delegation.claim_create_indemnifications or \
+                        service_delegation.claim_pay_indemnifications:
+                    self.append_functional_error('bad_indemnification_shares', {
+                            'service': self.rec_name,
+                            'total_share': str(int(total_share * 100))})
+                else:
+                    self.raise_user_warning('bad_indemnification_shares_%s'
+                        % str(self.id), 'bad_indemnification_shares', {
+                            'service': self.rec_name,
+                            'total_share': str(int(total_share * 100))}
+                        )
 
     @classmethod
     def activate(cls, losses):
