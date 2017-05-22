@@ -5,6 +5,7 @@ from trytond.pool import Pool
 
 import sequence
 
+
 def register():
     Pool.register(
         sequence.Sequence,

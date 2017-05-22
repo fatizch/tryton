@@ -10,4 +10,4 @@ def register():
         benefit.Benefit,
         claim.ClaimService,
         claim.Claim,
-       module='claim_service_number', type_='model')
+        module='claim_service_number', type_='model')
