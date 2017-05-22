@@ -144,7 +144,8 @@ class InvoiceAgainstBalanceBatch(batch.BatchRoot):
     def execute(cls, objects, ids, treatment_date, ids_list):
         for contract in objects:
             contract.reconcile()
-            contract.invoice_against_balance()
+            if contract.status not in ['void', 'declined', 'quote']:
+                contract.invoice_against_balance()
         return ids
 
 
