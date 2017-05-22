@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']/field[@name='loss_descs']" position="after">
+        <label name="define_sequence"/>
+        <group id="sequence">
+            <field name="define_sequence"/>
+            <field name="normal_sequence" xalign="0" xexpand="0"/>
+            <field name="strict_sequence" xalign="0" xexpand="0"/>
+        </group>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='admin']/field[@name='tags']" position="before">
+    </xpath>
+</data>

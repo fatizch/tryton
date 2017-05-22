@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- Claim -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="claim_view_form">
+            <field name="model">claim</field>
+            <field name="inherit" ref="claim.claim_view_form"/>
+            <field name="name">claim_form</field>
+        </record>
+        <record model="ir.ui.view" id="claim_view_list">
+            <field name="model">claim</field>
+            <field name="inherit" ref="claim.claim_view_list"/>
+            <field name="name">claim_list</field>
+        </record>
+    </data>
+</tryton>
+

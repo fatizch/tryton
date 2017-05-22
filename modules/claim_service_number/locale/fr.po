@@ -1,0 +1,59 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:benefit,define_sequence:"
+msgid "Defined Sequence"
+msgstr "Séquence définie"
+
+msgctxt "field:benefit,normal_sequence:"
+msgid "Normal Sequence"
+msgstr "Séquence normal"
+
+msgctxt "field:benefit,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:benefit,strict_sequence:"
+msgid "Strict Sequence"
+msgstr "Séquence stricte"
+
+msgctxt "field:claim,delivered_services_numbers:"
+msgid "Delivered Services Numbers"
+msgstr "Numéros de service délivrés"
+
+msgctxt "field:claim.service,benefit_sequence:"
+msgid "Benefit Sequence"
+msgstr "Séquence de prestation"
+
+msgctxt "field:claim.service,number:"
+msgid "Number"
+msgstr "Numéro"
+
+msgctxt "selection:benefit,define_sequence:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:benefit,define_sequence:"
+msgid "Normal"
+msgstr "Normal"
+
+msgctxt "selection:benefit,define_sequence:"
+msgid "Strict"
+msgstr "Stricte"
+
+msgctxt "selection:benefit,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "selection:benefit,sequence:"
+msgid "Sequence Strict"
+msgstr "Séquence stricte"
+
+msgctxt "selection:claim.service,benefit_sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "selection:claim.service,benefit_sequence:"
+msgid "Sequence Strict"
+msgstr "Séquence stricte"

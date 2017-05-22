@@ -1,56 +1,55 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .claim import *
-from .offered import *
-from .contract import *
-from .rule_engine import *
-from .party import *
-from .test_case import *
-from .report_engine import *
-from .benefit import *
-from .wizard import *
-from .event import *
-from .configuration import *
+import claim
+import offered
+import contract
+import rule_engine
 import party
+import test_case
+import report_engine
+import benefit
+import wizard
+import event
+import configuration
 
 
 def register():
     Pool.register(
-        ClosingReason,
-        EventDescription,
-        LossDescription,
-        LossDescriptionClosingReason,
-        Benefit,
-        EventDescriptionLossDescriptionRelation,
-        BenefitLossDescriptionRelation,
-        OptionDescriptionBenefitRelation,
-        LossDescriptionExtraDataRelation,
-        BenefitExtraDataRelation,
-        ClaimSubStatus,
-        Claim,
-        Loss,
-        ClaimService,
-        ClaimServiceExtraDataRevision,
-        Contract,
-        Option,
-        RuleEngineRuntime,
-        Party,
-        OptionDescription,
-        TestCaseModel,
-        BenefitToDeliver,
-        SelectBenefits,
-        SynthesisMenuClaim,
-        SynthesisMenu,
-        InsurerDelegation,
-        ReportTemplate,
-        EventLog,
-        Configuration,
-        ClaimCloseReasonView,
+        benefit.ClosingReason,
+        benefit.EventDescription,
+        benefit.LossDescription,
+        benefit.LossDescriptionClosingReason,
+        benefit.Benefit,
+        benefit.EventDescriptionLossDescriptionRelation,
+        benefit.BenefitLossDescriptionRelation,
+        benefit.OptionDescriptionBenefitRelation,
+        benefit.LossDescriptionExtraDataRelation,
+        benefit.BenefitExtraDataRelation,
+        claim.ClaimSubStatus,
+        claim.Claim,
+        claim.Loss,
+        claim.ClaimService,
+        claim.ClaimServiceExtraDataRevision,
+        contract.Contract,
+        contract.Option,
+        rule_engine.RuleEngineRuntime,
+        party.Party,
+        offered.OptionDescription,
+        test_case.TestCaseModel,
+        wizard.BenefitToDeliver,
+        wizard.SelectBenefits,
+        party.SynthesisMenuClaim,
+        party.SynthesisMenu,
+        party.InsurerDelegation,
+        report_engine.ReportTemplate,
+        event.EventLog,
+        configuration.Configuration,
+        wizard.ClaimCloseReasonView,
         module='claim', type_='model')
     Pool.register(
-        CloseClaim,
-        DeliverBenefits,
-        SynthesisMenuOpen,
+        wizard.CloseClaim,
+        wizard.DeliverBenefits,
+        party.SynthesisMenuOpen,
         party.PartyReplace,
         module='claim', type_='wizard')
