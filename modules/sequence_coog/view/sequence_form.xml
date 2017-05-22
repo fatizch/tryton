@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/group[@id='incremental']/field[@name='number_next']" position="after">
+        <label name='max_number'/>
+        <field name='max_number'/>
+        <label name='start_date'/>
+        <field name='start_date'/>
+        <label name='end_date'/>
+        <field name='end_date'/>
+        <newline/>
+        <label name='sub_sequences'/>
+        <field name='sub_sequences' colspan="3" view_ids="sequence_coog.sequence_view_list_ordered"/>
+        <label name='iteration_before_notification'/>
+        <field name='iteration_before_notification'/>
+        <field name='parent' invisible="1"/>
+    </xpath>
+</data>

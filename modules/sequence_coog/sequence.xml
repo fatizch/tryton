@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="sequence_view_form">
+            <field name="model">ir.sequence</field>
+            <field name="inherit" ref="ir.sequence_view_form"/>
+            <field name="name">sequence_form</field>
+        </record>
+        <record model="ir.ui.view" id="sequence_view_list">
+            <field name="model">ir.sequence</field>
+            <field name="inherit" ref="ir.sequence_view_tree"/>
+            <field name="name">sequence_list</field>
+        </record>
+        <record model="ir.ui.view" id="sequence_view_list_ordered">
+            <field name="model">ir.sequence</field>
+            <field name="type">tree</field>
+            <field name="name">sequence_list_ordered</field>
+        </record>
+        <record model="ir.action.act_window" id="ir.act_sequence_form">
+            <field name="search_value" eval="[('parent', '=', None)]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window" id="ir.act_sequence_strict_form">
+            <field name="search_value" eval="[('parent', '=', None)]" pyson="1"/>
+        </record>
+    </data>
+</tryton>
