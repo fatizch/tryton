@@ -1246,6 +1246,16 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
                 ['party', 'person', 'company']):
             return self.item_desc.extra_data_def
 
+    def get_package(self, at_date=None):
+        if not at_date:
+            at_date = utils.today()
+        for package in self.main_contract.product.packages:
+            coverages = [c for c in package.options if not c.is_service]
+            if not coverages or not all([self.is_covered_at_date(at_date, c)
+                    for c in coverages]):
+                continue
+            return package
+
     def is_covered_at_date(self, at_date, coverage=None):
         if not self.main_contract:
             return False
@@ -1253,9 +1263,7 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             return False
         for option in self.options:
             if ((not coverage or option.coverage == coverage) and
-                    option.status not in ['void', 'declined'] and
-                    utils.is_effective_at_date(option, at_date,
-                        end_var_name='final_end_date')):
+                    option.is_active_at_date(at_date)):
                 return True
         if not self.item_desc.has_sub_options():
             return False
@@ -1364,6 +1372,9 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         res = current_version.extra_data if current_version else {}
         if self.contract:
             res.update(self.contract.get_all_extra_data(at_date))
+        package = self.get_package(at_date)
+        if package:
+            res.update(package.get_all_extra_data(at_date))
         return res
 
     def init_dict_for_rule_engine(self, args):

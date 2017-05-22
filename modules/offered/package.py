@@ -21,6 +21,9 @@ class Package(model.CoogSQL, model.CoogView):
     name = fields.Char('Name', required=True, translate=True)
     options = fields.Many2Many('offered.package-option.description',
         'package', 'option', 'Options')
+    extra_data = fields.Dict('extra_data', 'Extra Data',
+        domain=[('kind', '=', 'package')])
+    extra_data_string = extra_data.translated('extra_data')
 
     @classmethod
     def __setup__(cls):
@@ -39,6 +42,9 @@ class Package(model.CoogSQL, model.CoogView):
         if self.code:
             return self.code
         return coog_string.slugify(self.name)
+
+    def get_all_extra_data(self, at_date):
+        return dict(getattr(self, 'extra_data', {}))
 
 
 class PackageOptionDescriptionRelation(model.CoogSQL):

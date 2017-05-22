@@ -1,6 +1,5 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from collections import defaultdict
 import datetime
 try:
     import simplejson as json
@@ -1322,6 +1321,19 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     def get_coverages(cls, product):
         return [x.coverage for x in product.ordered_coverages]
 
+    def get_package(self, at_date=None):
+        if not at_date:
+            at_date = utils.today()
+        subscribed = set([o.coverage.id for o in self.options
+                if o.is_active_at_date(at_date)])
+        if not subscribed:
+            return None
+        for package in self.product.packages:
+            coverages = set([c.id for c in package.options if c.is_service])
+            if coverages != subscribed:
+                continue
+            return package
+
     def init_options(self):
         Option = Pool().get('contract.option')
         options = list(getattr(self, 'options', []))
@@ -1419,8 +1431,10 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         if not at_date:
             return res
         extra_data = utils.get_value_at_date(self.extra_datas, at_date)
-        good_extra_data = extra_data.extra_data_values if extra_data else {}
-        res.update(good_extra_data)
+        res.update(extra_data.extra_data_values if extra_data else {})
+        package = self.get_package(at_date)
+        if package:
+            res.update(package.get_all_extra_data(at_date))
         return res
 
     def get_extra_data_values(self, at_date=None, translated=False):
@@ -2056,7 +2070,8 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         self.sub_status = reason
 
     def is_active_at_date(self, at_date):
-        return (at_date >= (self.initial_start_date or datetime.date.min) and
+        return self.status not in ['void', 'declined'] and (
+            at_date >= (self.initial_start_date or datetime.date.min) and
             at_date <= (self.final_end_date or datetime.date.max))
 
     @classmethod

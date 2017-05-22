@@ -1,3 +1,5 @@
+* Ajout de données complémentaires au niveau d'une formule pour pouvoir l'utiliser au niveau du moteur de règle (pour appliquer une réduction par exemple lors de la souscription d'une formule)
+
 Version 1.12 - 2017-04-28
 
 Version 1.10 - 2016-11-02

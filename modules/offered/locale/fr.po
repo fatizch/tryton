@@ -492,6 +492,10 @@ msgctxt "field:offered.package,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:offered.package,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:offered.package,id:"
 msgid "ID"
 msgstr "ID"
@@ -999,6 +1003,10 @@ msgstr "Préjudice"
 msgctxt "selection:extra_data,kind:"
 msgid "Option"
 msgstr "Option"
+
+msgctxt "selection:extra_data,kind:"
+msgid "Package"
+msgstr "Formule"
 
 msgctxt "selection:extra_data,kind:"
 msgid "Product"
