@@ -369,12 +369,10 @@ class ReportTemplate:
             return super(ReportTemplate, self).print_reports(reports, context_)
         pool = Pool()
         ReportModel = pool.get('report.create', type='wizard')
+        data = context_['reporting_data']
+        report_template = pool.get('report.template')(data['doc_template'][0])
         if self.export_dir:
             ReportGenerate = pool.get('report.generate', type='report')
-            data = context_['reporting_data']
-            report_template = pool.get('report.template')(
-                data['doc_template'][0])
-
             records = ReportGenerate._get_records(
                 data['ids'], data['model'], data)
             with ServerContext().set_context(
