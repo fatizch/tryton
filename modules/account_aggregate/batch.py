@@ -111,7 +111,7 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
     @classmethod
     def parse_select_ids(cls, fetched_data, *args, **kwargs):
         for values in utils.iterator_slice(fetched_data,
-                int(kwargs.get('flush_size'))):
+                int(cls.get_flush_size(*args, **kwargs))):
             for single_values in zip(*cls.transform_values(values)):
                 yield single_values
 

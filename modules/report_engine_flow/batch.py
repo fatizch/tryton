@@ -15,10 +15,18 @@ class BaseMassFlowBatch(batch.MemorySavingBatch):
     __name__ = 'mass.flow.batch'
 
     @classmethod
+    def write_header(cls, *args, **kwargs):
+        filename = cls.get_filename(*args, **kwargs)
+        header_values = [x[0]
+                for x in cls.object_fields_mapper(*args, **kwargs)]
+        with utils.safe_open(filename, 'ab') as fo_:
+            fo_.write(cls.line_definition(*args, **kwargs) %
+                    tuple(header_values) + '\n')
+
+    @classmethod
     def check_mandatory_parameters(cls, *args, **kwargs):
-        assert kwargs.get('flush_size', None), 'flush_size is required'
-        assert kwargs.get('output_filename', None), 'output_filename is'\
-            ' required'
+        assert cls.get_flush_size(*args, **kwargs), 'flush_size is required'
+        assert cls.get_filename(*args, **kwargs), 'output_filename is required'
 
     @classmethod
     def data_separator(cls, *args, **kwargs):
@@ -31,11 +39,11 @@ class BaseMassFlowBatch(batch.MemorySavingBatch):
     def object_fields_mapper(cls, *args, **kwargs):
         """
         Return a list of tuple which the first element
-        is the field name and the second element, the way to get it's value.
+        is the column name and the second element, the way to get it's value.
         For instance:
-        return [('id', lambda *largs: largs[0])]
+        return [('Id', lambda *largs: largs[0])]
         """
-        return {}
+        return []
 
     @classmethod
     def line_definition(cls, *args, **kwargs):
@@ -78,14 +86,21 @@ class BaseMassFlowBatch(batch.MemorySavingBatch):
         Lines is a generator expression and we use flush_size argument
         to control the memory usage when flushing data.
         """
-        flush_size = int(kwargs['flush_size'])
+        flush_size = int(cls.get_flush_size(*args, **kwargs))
         for lines in utils.iterator_slice(lines, flush_size):
             with utils.safe_open(filename, 'ab') as fo_:
                 fo_.write('\n'.join(lines) + '\n')
 
     @classmethod
     def get_filename(cls, *args, **kwargs):
-        return kwargs['output_filename']
+        return kwargs.get('output_filename', cls.get_conf_item(
+                'output_filename'))
+
+    @classmethod
+    def get_flush_size(cls, *args, **kwargs):
+        return kwargs.get('flush_size', cls.get_conf_item(
+                'flush_size'))
+
 
     @classmethod
     def execute(cls, objects, ids, *args, **kwargs):
