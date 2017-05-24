@@ -3,6 +3,10 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <record model="event.type" id="event_create_quote">
+            <field name="name">Create Quote</field>
+            <field name="code">create_quote</field>
+        </record>
         <record model="event.type" id="event_activate_contract">
             <field name="name">Activate Contract</field>
             <field name="code">activate_contract</field>

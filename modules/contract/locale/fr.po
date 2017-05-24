@@ -1232,6 +1232,11 @@ msgctxt "model:event.type,name:event_activate_contract"
 msgid "Activate Contract"
 msgstr "Activation du contrat"
 
+
+msgctxt "model:event.type,name:event_create_quote"
+msgid "Create Quote"
+msgstr "Création d'un devis"
+
 msgctxt "model:event.type,name:event_decline_contract"
 msgid "Decline Contract"
 msgstr "Déclinaison du contrat"

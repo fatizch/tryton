@@ -298,6 +298,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                 'ws_subscribe_contracts': RPC(readonly=False),
                 'calculate': RPC(readonly=False, instantiate=0),
                 'activate_contract': RPC(readonly=False, instantiate=0),
+                'notify_quote_created': RPC(readonly=False, instantiate=0),
                 })
         cls._buttons.update({
                 'option_subscription': {},
@@ -1146,6 +1147,10 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         # TODO: to enhance
         if getattr(self, 'subscriber', None):
             return self.subscriber
+
+    def notify_quote_created(self):
+        Event = Pool().get('event')
+        Event.notify_events([self], 'create_quote')
 
     def activate_contract(self):
         pool = Pool()
