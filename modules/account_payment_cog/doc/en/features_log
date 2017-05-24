@@ -1,3 +1,4 @@
+* Add a batch chain for parallelizable payment treatment
 * Automatically add a payment journal if possible in the payment creation wizard
 * Improve Motive display in Create Payment Process
 

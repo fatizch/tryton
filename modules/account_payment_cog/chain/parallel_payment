@@ -1,0 +1,29 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=payment
+CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
+
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'PAYMENT_KIND' 'JOURNAL_METHODS' 'UPDATE_METHOD' 'JOURNAL_METHODS' )
+CHAIN_REQUIRED=('TREATMENT_DATE' 'PAYMENT_KIND')
+
+chain_params "$@"
+chain_begin
+
+chain_step account.payment.create --treatment_date="$TREATMENT_DATE" \
+    --payment_kind="$PAYMENT_KIND"
+chain_wait account.payment.create || chain_end
+
+chain_step account.payment.group.create --treatment_date="$TREATMENT_DATE" \
+    --payment_kind="$PAYMENT_KIND" --journal_methods="$JOURNAL_METHODS"
+chain_wait account.payment.group.create || chain_end
+
+chain_step account.payment.update --treatment_date="$TREATMENT_DATE" \
+    --payment_kind="$PAYMENT_KIND" --update_method="$UPDATE_METHOD"
+chain_wait account.payment.update || chain_end
+
+chain_step account.payment.group.process --treatment_date="$TREATMENT_DATE" \
+    --payment_kind="$PAYMENT_KIND" --journal_methods="$JOURNAL_METHODS"
+chain_wait account.payment.group.process || chain_end
+
+chain_end

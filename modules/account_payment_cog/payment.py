@@ -662,10 +662,11 @@ class Payment(export.ExportImportMixin, Printable):
         super(Payment, cls).approve(payments)
 
     @classmethod
-    def process(cls, payments, group):
-        pool = Pool()
-        Event = pool.get('event')
-        group = super(Payment, cls).process(payments, group)
+    def _set_group(cls, payment_ids, group):
+        cls.write(cls.browse(payment_ids), {'group': group.id})
+
+    @classmethod
+    def set_description(cls, payments):
         to_write = []
         for payment in payments:
             description = payment.get_description()
@@ -673,6 +674,14 @@ class Payment(export.ExportImportMixin, Printable):
                 to_write += [[payment], {'description': description}]
         if to_write:
             cls.write(*to_write)
+
+    @classmethod
+    @Workflow.transition('processing')
+    def process(cls, payments, group):
+        pool = Pool()
+        Event = pool.get('event')
+        group = super(Payment, cls).process(payments, group)
+        cls.set_description(payments)
         Event.notify_events([group], 'payment_group_created')
         Event.notify_events(payments, 'process_payment')
         return group

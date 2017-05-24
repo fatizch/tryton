@@ -8,7 +8,7 @@ from itertools import groupby
 from collections import namedtuple
 from dateutil.relativedelta import relativedelta
 from collections import defaultdict
-from sql.aggregate import Sum
+from sql.aggregate import Sum, Max
 from sql import Null
 from sql.conditionals import Case
 from sql.operators import Not
@@ -317,16 +317,33 @@ class Group:
             ('date', payment.date),
             ]
 
-    def update_last_sepa_receivable_date(self):
-        if self.kind != 'receivable':
+    @classmethod
+    def update_last_sepa_receivable_date(cls):
+        pool = Pool()
+        payment = pool.get('account.payment').__table__()
+        Journal = Pool().get('account.payment.journal')
+        journals_ids = [x.id for x in Journal.search([
+                    ('process_method', '=', 'sepa')])]
+        if not journals_ids:
             return
-        new_date = max([payment.date for payment in self.payments] +
-                [datetime.date.min])
-        if (not self.journal.last_sepa_receivable_payment_creation_date or
-                new_date >
-                self.journal.last_sepa_receivable_payment_creation_date):
-            self.journal.last_sepa_receivable_payment_creation_date = new_date
-            self.journal.save()
+        query = payment.select(Max(payment.date), payment.journal, where=(
+                (payment.group != Null) & (payment.kind == 'receivable') &
+                (payment.journal.in_(journals_ids))),
+            group_by=payment.journal)
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*query)
+        res = cursor.fetchall()
+        if not res:
+            return
+        for last_date, journal_id in res:
+            if not last_date:
+                continue
+            journal = Journal(journal_id)
+            if (not journal.last_sepa_receivable_payment_creation_date or
+                    last_date >
+                    journal.last_sepa_receivable_payment_creation_date):
+                journal.last_sepa_receivable_payment_creation_date = last_date
+                journal.save()
 
     def process_sepa(self):
         # This methods does not call super (defined in account_payment_sepa
@@ -339,21 +356,59 @@ class Group:
         # to do so in this method.
         #
         # See https://redmine.coopengo.com/issues/1443
+        self.payments_update_sepa(self.payments, self.kind)
+        self.generate_message(_save=False)
+        if self.kind == 'receivable':
+            self.update_last_sepa_receivable_date()
+
+    @classmethod
+    def payments_update_select_ids_sepa(cls, treatment_date, payment_kind):
         pool = Pool()
-        Payment = pool.get('account.payment')
+        payment = pool.get('account.payment').__table__()
+        cursor = Transaction().connection.cursor()
+        select_kwargs = {}
+        # grouping by sepa_mandate only makes sense
+        # for receivable payments
+        if payment_kind == 'receivable':
+            select_args = (payment.id, payment.sepa_mandate)
+            select_kwargs.update({'order_by': payment.sepa_mandate})
+        else:
+            select_args = (payment.id,)
+        where_clause = (payment.date <= treatment_date) & \
+            (payment.kind == payment_kind) & \
+            (payment.state == 'approved') & \
+            (payment.group != None)
+        if payment_kind == 'receivable':
+            where_clause &= (payment.sepa_mandate != None)
+        select_kwargs.update({'where': where_clause})
+        query = payment.select(*select_args, **select_kwargs)
+        cursor.execute(*query)
+        results = cursor.fetchall()
+        payment_ids = []
+        if payment_kind == 'receivable':
+            for group_key, grouped_results in groupby(
+                    results, lambda x: x[1]):
+                payment_ids.append([(x[0],) for x in grouped_results])
+            return payment_ids
+        return results
+
+    @classmethod
+    def payments_update_sepa(cls, payments, kind):
+        pool = Pool()
         Sequence = pool.get('ir.sequence')
         Mandate = pool.get('account.payment.sepa.mandate')
+        Payment = pool.get('account.payment')
         to_write = []
-        keyfunc = self.merge_payment_key
-        sorted_payments = sorted(self.payments, key=keyfunc)
-        if self.kind == 'receivable':
-            all_mandates = Payment.get_sepa_mandates(self.payments)
+        keyfunc = cls().merge_payment_key
+        sorted_payments = sorted(payments, key=keyfunc)
+        if kind == 'receivable':
+            all_mandates = Payment.get_sepa_mandates(payments)
             mandate_type = Mandate.get_initial_sequence_type_per_mandates(
                 set(all_mandates))
         for key, payments in groupby(sorted_payments, key=keyfunc):
             values = {}
             payments = list(payments)
-            if self.kind == 'payable':
+            if kind == 'payable':
                 bank_account = next((x.bank_account for x in payments if
                         x.bank_account), None)
                 if not bank_account:
@@ -361,12 +416,12 @@ class Group:
                         key['date'])
                     if bank_account:
                         values['bank_account'] = bank_account
-            elif self.kind == 'receivable':
+            elif kind == 'receivable':
                 mandate = [x[1] for x in key if x[0] == 'sepa_mandate'][0]
                 if not mandate:
                     with model.error_manager():
                         for payment in payments:
-                            self.append_functional_error('no_mandate',
+                            cls.append_functional_error('no_mandate',
                                 payment.rec_name)
                 values['sepa_mandate'] = mandate
                 values['sepa_mandate_sequence_type'] = mandate_type[mandate.id]
@@ -374,9 +429,6 @@ class Group:
             to_write.extend([payments, values])
         if to_write:
             Payment.write(*to_write)
-
-        self.generate_message(_save=False)
-        self.update_last_sepa_receivable_date()
 
     def get_remittance_info(self, payments):
         return ''

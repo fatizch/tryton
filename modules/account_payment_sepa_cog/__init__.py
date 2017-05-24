@@ -31,6 +31,9 @@ def register():
         PaymentCreationStart,
         MoveLine,
         MergedPayments,
+        PaymentGroupCreationBatch,
+        PaymentGroupProcessBatch,
+        PaymentJournalUpdateSepa,
         module='account_payment_sepa_cog', type_='model')
     Pool.register(
         PaymentCreation,

@@ -10,3 +10,32 @@ pour chaque fichier dans le répértoire spécifié en entrée.
   traités.
 
 **Les deux arguments in et out sont necessaires au batch pour fonctionner**
+
+
+Batch de mise à jour des journaux de paiements SEPA  [``account.payment.journal.update.sepa``]
+==============================================================================================
+
+Description :
+-------------
+
+Mise à jour de la date de la dernière génération des prélèvements SEPA
+
+Dépendances :
+-------------
+A lancer après le batch de traitements des groupes de paiements [``account.payment.group.process``]
+
+Fréquence :
+-----------
+Pour chaque génération de bande de virement/prélèvement.
+
+Paramètres d'entrée :
+---------------------
+ - Aucun
+
+Parallélisation:
+----------------
+Non supportée
+
+Exemple :
+---------
+``coog batch exec account.payment.journal.update.sepa 1``

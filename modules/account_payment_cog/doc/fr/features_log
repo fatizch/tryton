@@ -1,3 +1,4 @@
+* Ajout d'une chaine de batchs parallélisables pour le traitement des paiements
 * Ajout automatique d'un journal de paiement si possible dans l'assistant de création de paiement
 * Amélioration de l'affichage du motif dans le processus de création de paiements
 

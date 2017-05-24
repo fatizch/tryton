@@ -1,8 +1,8 @@
+* Add a batch chain for parallelizable payment treatment
 * Manage payer for all payment kinds
 * Allow to add single payments information in remittance information
 
 Version 1.12 - 2017-04-28
-
 * Replace process batch with batch that calls the 'do' method on sepa messages
 * Rename the xml file of a payments group message into 'group.rec_name + group.journal.name + group.kind + group.payment_date' with payment_date only added if there is only exactly one
 * Add the chain batch

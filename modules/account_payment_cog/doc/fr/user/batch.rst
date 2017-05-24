@@ -45,6 +45,7 @@ Exemple :
 
 Batch de traitement de paiements [``account.payment.process``]
 ==============================================================
+
 Description :
 -------------
 Passe les paiements du statut *Approuvé* au statut *Traitement*, génère les groupes de paiement et les fichiers de prélèvements/virement SEPA éventuels à transmettre à la banque.
@@ -90,7 +91,7 @@ Batch de validation des paiements [``account.payment.acknowledge``]
 ===================================================================
 Description :
 -------------
-Passe le statut des paiements de *Traité* à *Validé* et les groupes de paiement à l'état *Fait*.
+Passe le statut des paiements de *Traitement* à *Reçu* et les groupes de paiement à l'état *Fait*.
 
 Si le module account_payment_clearing est installé, ce batch permet également de lettrer les quittances avec les paiements associés.
 
@@ -98,7 +99,7 @@ Ce batch automatise la tâche d'aller manuellement sur les groupes de paiement e
 
 Dépendances :
 -------------
-A lancer après le batch de traitement des paiements, soit dans la foulée, soit après constatation sur le compte bancaire de l'encaissement/décaissement du groupe de paiement.
+A lancer après le batch de traitement des paiements ou de traitement des groupes de paiements, soit dans la foulée, soit après constatation sur le compte bancaire de l'encaissement/décaissement du groupe de paiement.
 
 Fréquence :
 -----------
@@ -139,3 +140,146 @@ Exemple :
 ---------
 
 ``coog batch exec account.payment.acknowledge 2 --payment_kind=receivable --journal_methods=sepa,manual``
+
+
+Batch de création des groupes de paiements [``account.payment.group.create``]
+=============================================================================
+
+Description :
+-------------
+
+Création des groupes de paiements prêts à être traités
+
+Dépendances :
+-------------
+A lancer après le batch de création des paiements [``account.payment.create``]
+
+Fréquence :
+-----------
+Pour chaque génération de bande de virement/prélèvement.
+
+Paramètres d'entrée :
+---------------------
+- ``treatment_date (YYYY-MM-DD)`` [obligatoire]
+    Date de paiement (dans le cas du prélèvement SEPA, c'est la date du prochain prélèvement par exemple le 5 du mois).
+
+- ``payment_kind (payable, receivable)`` [obligatoire]
+    Sens des de paiements à traiter (virement ou prélèvement par exemple).
+
+- ``journal_methods (sepa,manual)``
+   Méthodes de traitement des journaux pour les paiements à traiter, séparés par des virgules sans espace. Si non renseigné, traite tous les journaux.
+
+- ``job_size`` (fichier de configuration)
+    Nombre de paiements maximum dans un groupe
+    [Si module ``account_payment_sepa_cog`` installé : nombre maximum de mandats différents dans un groupe]
+
+Filtres :
+---------
+
+Sélection de tous les paiements dont :
+
+- le sens correspond au paramètre
+- la date est <= à la date de traitement
+- le statut est à l'état *Approuvé*
+- associé à un journal de paiement dont le code de la méthode de traitement est dans la liste des paramètres
+- non associé à un groupe
+
+Parallélisation:
+----------------
+Supportée
+
+Exemple :
+---------
+``coog batch exec account.payment.group.create 2 --treatment_date=YYYY-MM-05 --payment_kind=receivable --journal_methods=sepa,manual``
+
+
+Batch de mise à jour des paiements avant traitement [``account.payment.update``]
+================================================================================
+
+Description :
+-------------
+
+Mise à jour des paiements avant leur traitement
+
+Dépendances :
+-------------
+A lancer après le batch de création des groupes de paiements [``account.payment.group.create``]
+
+Fréquence :
+-----------
+Pour chaque génération de bande de virement/prélèvement.
+
+Paramètres d'entrée :
+---------------------
+- ``treatment_date (YYYY-MM-DD)`` [obligatoire]
+    Date de paiement (dans le cas du prélèvement SEPA, c'est la date du prochain prélèvement par exemple le 5 du mois).
+
+- ``payment_kind (payable, receivable)`` [obligatoire]
+    Sens des paiements à traiter (virement ou prélèvement par exemple).
+
+- ``update_method (sepa, manual)`` [obligatoire]
+   Méthode de traitement des journaux pour les paiements à traiter. Attention, une seule méthode est supportée par exécution de batch.
+
+Filtres :
+---------
+
+Sélection des groupes dont les paiements répondent aux critères suivants :
+
+- le sens correspond au paramètre
+- la date est <= à la date de traitement
+- le statut est à l'état *Approuvé*
+- associé à un journal de paiement dont le code de la méthode de traitement correspond au paramétre ``update_method``
+
+Parallélisation:
+----------------
+Supportée
+
+Exemple :
+---------
+``coog batch exec account.payment.update 5 --treatment_date=YYYY-MM-05 --payment_kind=receivable --update_method=sepa``
+
+
+Batch de traitement des groupes de paiements [``account.payment.group.process``]
+================================================================================
+
+Description :
+-------------
+
+Traitement des groupes de paiements
+
+Dépendances :
+-------------
+A lancer après le batch de mise à jour des paiements [``account.payment.update``]
+
+Fréquence :
+-----------
+Pour chaque génération de bande de virement/prélèvement.
+
+Paramètres d'entrée :
+---------------------
+- ``treatment_date (YYYY-MM-DD)`` [obligatoire]
+    Date de paiement (dans le cas du prélèvement SEPA, c'est la date du prochain prélèvement par exemple le 5 du mois).
+
+- ``payment_kind (payable, receivable)`` [obligatoire]
+    Sens des paiements à traiter (virement ou prélèvement par exemple).
+
+- ``journal_methods (sepa,manual)``
+   Méthodes de traitement des journaux pour les paiements à traiter, séparés par des virgules sans espace. Si non renseigné, traite tous les journaux.
+
+Filtres :
+---------
+
+Sélection des groupes dont les paiements répondent aux critères suivants :
+
+- le sens correspond au paramètre
+- la date est <= à la date de traitement
+- le statut est à l'état *Approuvé*
+- associé à un journal de paiement dont le code de la méthode de traitement est dans la liste des paramètres
+
+Parallélisation:
+----------------
+Supportée
+
+Exemple :
+---------
+``coog batch exec account.payment.group.process 2 --treatment_date=YYYY-MM-05 --payment_kind=receivable --journal_methods=sepa,manual``

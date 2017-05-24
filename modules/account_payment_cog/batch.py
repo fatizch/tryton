@@ -17,6 +17,9 @@ from trytond.modules.coog_core import batch, coog_string
 
 __all__ = [
     'PaymentTreatmentBatch',
+    'PaymentGroupCreationBatch',
+    'PaymentUpdateBatch',
+    'PaymentGroupProcessBatch',
     'PaymentCreationBatch',
     'PaymentSucceedBatch',
     'PaymentAcknowledgeBatch',
@@ -100,6 +103,219 @@ class PaymentTreatmentBatch(batch.BatchRoot):
             cls.logger.info('%s processed' %
                 coog_string.get_print_infos(groups, 'payments group'))
             return [group.id for group in groups]
+
+
+class PaymentGroupCreationBatch(batch.BatchRoot):
+    'Payment Group Creation Batch'
+
+    __name__ = 'account.payment.group.create'
+
+    logger = logging.getLogger(__name__)
+
+    @classmethod
+    def __setup__(cls):
+        super(PaymentGroupCreationBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'job_size': 0,
+                'payment_kind': '',
+                })
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'account.payment'
+
+    @classmethod
+    def convert_to_instances(cls, ids, *args, **kwargs):
+        return []
+
+    @classmethod
+    def _group_payment_key(cls, payment):
+        return (payment.journal, payment.kind)
+
+    @classmethod
+    def get_payment_where_clause(cls, payment, payment_kind, treatment_date,
+            journal_methods):
+        pool = Pool()
+        journal = pool.get('account.payment.journal').__table__()
+        clause = (payment.group == None) & \
+            (payment.kind == payment_kind) & \
+            (payment.date <= treatment_date) & \
+            (payment.state == 'approved')
+        if journal_methods:
+            journal_methods = [x.strip() for x in journal_methods.split(',')]
+            journal_ids = journal.select(journal.id,
+                where=(journal.process_method.in_(journal_methods)))
+            clause &= (payment.journal.in_(journal_ids))
+        return clause
+
+    @classmethod
+    def select_ids(cls, treatment_date, payment_kind=None,
+            journal_methods=None):
+        pool = Pool()
+        payment = pool.get('account.payment').__table__()
+        cursor = Transaction().connection.cursor()
+        payment_kind = payment_kind or cls.get_conf_item('payment_kind')
+        assert payment_kind in PAYMENT_KINDS
+        query = payment.select(payment.id, *cls._group_payment_key(payment),
+            where=(cls.get_payment_where_clause(payment, payment_kind,
+                    treatment_date, journal_methods)),
+                order_by=cls._group_payment_key(payment))
+        cursor.execute(*query)
+        results = cursor.fetchall()
+        payment_ids = []
+        for group_key, grouped_results in groupby(
+                results, lambda x: x[1:]):
+            payment_ids.append([(x[0],) for x in grouped_results])
+        return payment_ids
+
+    @classmethod
+    def execute(cls, objects, ids, treatment_date, payment_kind=None,
+            journal_methods=None):
+        pool = Pool()
+        Group = pool.get('account.payment.group')
+        Payment = pool.get('account.payment')
+        Event = pool.get('event')
+        payment = Payment.__table__()
+        cursor = Transaction().connection.cursor()
+        query = payment.select(payment.id, *cls._group_payment_key(payment),
+            where=(payment.id.in_(ids)),
+            order_by=cls._group_payment_key(payment))
+        cursor.execute(*query)
+        results = cursor.fetchall()
+        all_groups = []
+        for group_key, grouped_results in groupby(
+                results, key=cls.group_by_key_func):
+            group = Group(journal=group_key[0], kind=group_key[1])
+            group.save()
+            all_groups.append(group)
+            for payment_ids in grouped_slice([x[0] for x in grouped_results]):
+                Payment._set_group(payment_ids, group)
+        Event.notify_events(all_groups, 'payment_group_created')
+        return [x.id for x in all_groups]
+
+    @classmethod
+    def group_by_key_func(cls, payment_row):
+        # one group per journal and kind
+        return payment_row[1:3]
+
+
+class PaymentUpdateBatch(batch.BatchRoot):
+    'Payment Updating Batch'
+    __name__ = 'account.payment.update'
+
+    logger = logging.getLogger(__name__)
+
+    @classmethod
+    def __setup__(cls):
+        super(PaymentUpdateBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'job_size': 1000,
+                })
+
+    @classmethod
+    def convert_to_instances(cls, ids, *args, **kwargs):
+        return []
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'account.payment'
+
+    @classmethod
+    def select_ids(cls, treatment_date, update_method, payment_kind=None):
+        if not update_method:
+            return []
+        assert payment_kind in PAYMENT_KINDS
+        Group = Pool().get('account.payment.group')
+        name = 'payments_update_select_ids_' + update_method
+        select_ids = getattr(Group, name, None)
+        if not select_ids:
+            cls.logger.warning('There is no method %s. Nothing to do.' % name)
+            return []
+        return select_ids(treatment_date, payment_kind)
+
+    @classmethod
+    def execute(cls, objects, ids, treatment_date, update_method,
+            payment_kind=None):
+        pool = Pool()
+        Payment = pool.get('account.payment')
+        Group = pool.get('account.payment.group')
+        update_method = getattr(Group, 'payments_update_' + update_method,
+            None)
+        if not update_method:
+            return []
+        for _ids in grouped_slice(ids):
+            update_method(Payment.browse(_ids), payment_kind)
+
+
+class PaymentGroupProcessBatch(batch.BatchRoot):
+    'Payment Group Processing Batch'
+    __name__ = 'account.payment.group.process'
+
+    logger = logging.getLogger(__name__)
+
+    @classmethod
+    def __setup__(cls):
+        super(PaymentGroupProcessBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'job_size': 1,
+                })
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'account.payment.group'
+
+    @classmethod
+    def select_ids(cls, treatment_date, payment_kind=None,
+            journal_methods=None):
+        pool = Pool()
+        payment = pool.get('account.payment').__table__()
+        journal = pool.get('account.payment.journal').__table__()
+        group = pool.get('account.payment.group').__table__()
+        cursor = Transaction().connection.cursor()
+        payment_kind = payment_kind or cls.get_conf_item('payment_kind')
+        assert payment_kind in PAYMENT_KINDS
+        where_clause = (payment.kind == payment_kind) & \
+            (payment.group != None) & \
+            (payment.date <= treatment_date) & \
+            (payment.state == 'approved')
+        if journal_methods:
+            journal_methods = [x.strip() for x in journal_methods.split(',')]
+            by_journal = group.join(journal, condition=(
+                    (group.journal == journal.id) &
+                    (journal.process_method.in_(journal_methods)))
+                ).select(group.id)
+            where_clause &= (payment.group.in_(by_journal))
+
+        query = payment.select(payment.group, where=where_clause,
+            group_by=payment.group)
+        cursor.execute(*query)
+        return cursor.fetchall()
+
+    @classmethod
+    def _process_group(cls, group):
+        Group = Pool().get('account.payment.group')
+        process_method = getattr(Group,
+            'process_%s' % group.journal.process_method, None)
+        if process_method:
+            process_method(group)
+            group.save()
+
+    @classmethod
+    def execute(cls, objects, ids, treatment_date, payment_kind=None,
+            journal_methods=None):
+        pool = Pool()
+        Payment = pool.get('account.payment')
+        Event = pool.get('event')
+        if not ids:
+            return
+        groups = []
+        with Transaction().set_context(_record_cache_size=int(
+                    cls.get_conf_item('cache_size'))):
+            for group in objects:
+                cls._process_group(group)
+                Payment.set_description(group.payments)
+                Event.notify_events(group.payments, 'process_payment')
+        return [group.id for group in groups]
 
 
 class PaymentCreationBatch(batch.BatchRoot):
