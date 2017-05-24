@@ -165,7 +165,7 @@ class ClaimService:
                 'eligibility_status': 'refused',
                 'rejection_extra_data_values': extra_data,
                 })
-        Pool().get('event').notify_events(self, 'refuse_claim_service')
+        Pool().get('event').notify_events([self], 'refuse_claim_service')
 
 
 class ClaimIndemnification:
