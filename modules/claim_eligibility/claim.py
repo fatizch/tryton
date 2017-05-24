@@ -51,20 +51,18 @@ class ClaimService:
         fields.Text('Eligibility Extra Data Summary',
             depends=['eligibility_extra_data_values']),
         'get_eligibility_extra_data_summary')
+    rejection_extra_data_values = fields.Dict('extra_data',
+        'Rejection Extra Data')
 
     @classmethod
     def __setup__(cls):
         super(ClaimService, cls).__setup__()
         cls._buttons.update({
-            'refuse_services': {
-                'invisible': Eval('eligibility_status') != 'study_in_progress',
-                },
-            'validate_services': {
-                'invisible': Eval('eligibility_status') == 'refused',
-                },
+            'validate_services': {},
             'check_eligibility': {
                 'invisible': Eval('eligibility_status') != 'study_in_progress',
-                }
+                },
+            'reject_services': {},
             })
         cls._error_messages.update({
                 'warning_refuse_service': 'Confirm service refusal'
@@ -81,6 +79,7 @@ class ClaimService:
 
     def init_from_loss(self, loss, benefit):
         self.eligibility_extra_data_values = {}
+        self.rejection_extra_data_values = {}
         super(ClaimService, self).init_from_loss(loss, benefit)
 
     @classmethod
@@ -126,21 +125,15 @@ class ClaimService:
             Event.notify_events(accepted, 'accept_claim_service')
 
     @classmethod
-    @model.CoogView.button
-    def refuse_services(cls, services):
-        cls.raise_user_warning('warning_refuse_service',
-            'warning_refuse_service')
-        pool = Pool()
-        Event = pool.get('event')
-        cls.write(services, {
-                'eligibility_status': 'refused',
-                })
-        Event.notify_events(services, 'refuse_claim_service')
-
-    @classmethod
     @model.CoogView.button_action(
         'claim_eligibility.act_validate_eligibility_wizard')
     def validate_services(cls, services):
+        pass
+
+    @classmethod
+    @model.CoogView.button_action(
+        'claim_eligibility.act_reject_eligibility_wizard')
+    def reject_services(cls, services):
         pass
 
     def init_eligibility_extra_data_values(self):
@@ -148,6 +141,13 @@ class ClaimService:
         extra_datas = ExtraData.search(
             [('kind', '=', 'manual_eligibility_reason')])
         self.eligibility_extra_data_values = {
+            x.name: None for x in extra_datas}
+
+    def init_rejection_extra_data_values(self):
+        ExtraData = Pool().get('extra_data')
+        extra_datas = ExtraData.search(
+            [('kind', '=', 'manual_rejection_reason')])
+        self.rejection_extra_data_values = {
             x.name: None for x in extra_datas}
 
     def get_all_extra_data(self, at_date):
@@ -159,6 +159,13 @@ class ClaimService:
         self.__class__.write([self], {
                 'eligibility_status': 'accepted',
                 'eligibility_extra_data_values': extra_data})
+
+    def reject_eligibility(self, extra_data):
+        self.__class__.write([self], {
+                'eligibility_status': 'refused',
+                'rejection_extra_data_values': extra_data,
+                })
+        Pool().get('event').notify_events(self, 'refuse_claim_service')
 
 
 class ClaimIndemnification:
@@ -187,4 +194,6 @@ class ExtraData:
     def __setup__(cls):
         super(ExtraData, cls).__setup__()
         cls.kind.selection.append(('manual_eligibility_reason',
-                'Manual Eligibility Reason'))
+                'Claim: Manual Eligibility Reason'))
+        cls.kind.selection.append(('manual_rejection_reason',
+                'Claim: Manual Rejection Reason'))

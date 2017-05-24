@@ -15,5 +15,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Validate Eligibility</field>
             <field name="wiz_name">claim.manual_validation_eligibility</field>
         </record>
+        <!-- ############################################################ -->
+        <!-- ########### Reject Eligibility wizard ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="reject_eligibility_view_form">
+            <field name="model">claim.service</field>
+            <field name="type">form</field>
+            <field name="name">reject_eligibility_form</field>
+        </record>
+        <record model="ir.action.wizard" id="act_reject_eligibility_wizard">
+            <field name="name">Reject Eligibility</field>
+            <field name="wiz_name">claim.manual_rejection_eligibility</field>
+        </record>
     </data>
 </tryton>

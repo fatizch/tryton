@@ -17,4 +17,5 @@ def register():
         module='claim_eligibility', type_='model')
     Pool.register(
         ManualValidationEligibility,
+        ManualRejectionEligibility,
         module='claim_eligibility', type_='wizard')
