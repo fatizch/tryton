@@ -45,6 +45,9 @@ class Party:
                 'button_commissions_synthesis': {
                     'invisible': ~Eval('is_broker'),
                     },
+                'button_party_invoices': {
+                    'readonly': (~Eval('is_broker') & ~Eval('is_insurer'))
+                    }
                 })
 
     @classmethod
@@ -68,6 +71,12 @@ class Party:
     @model.CoogView.button_action(
         'commission_insurance.act_commission_synthesis_display')
     def button_commissions_synthesis(cls, contracts):
+        pass
+
+    @classmethod
+    @model.CoogView.button_action(
+        'commission_insurance.act_commission_invoice_form')
+    def button_party_invoices(cls, parties):
         pass
 
     @classmethod

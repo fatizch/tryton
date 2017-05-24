@@ -1,3 +1,5 @@
+* Ajout d'une relation bordereaux pour les tiers assureur ou courtier
+
 Version 1.12 - 2017-04-28
 
 * L'assiette d'une commission est égale à son montant divisé par son taux.

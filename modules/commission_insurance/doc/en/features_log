@@ -1,3 +1,5 @@
+* Add relate on insurer and broker parties to display invoices
+
 Version 1.12 - 2017-04-28
 
 * A commission's base amount is equal to its amount divided by its rate.

@@ -707,6 +707,10 @@ msgctxt "model:ir.action,name:act_commission_create_agents"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
 
+msgctxt "model:ir.action,name:act_commission_invoice_form"
+msgid "Commission Invoices"
+msgstr "Bordereaux de commissions"
+
 msgctxt "model:ir.action,name:act_commission_synthesis_display"
 msgid "Commissions Synthesis"
 msgstr "Synthèse des commissions"
@@ -1114,6 +1118,10 @@ msgstr "Montant"
 msgctxt "view:party.party:"
 msgid "Broker"
 msgstr "Courtier"
+
+msgctxt "view:party.party:"
+msgid "Commission Invoices"
+msgstr "Bordereaux de commissions"
 
 msgctxt "view:party.party:"
 msgid "Show commissions synthesis"
