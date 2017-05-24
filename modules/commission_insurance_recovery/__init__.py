@@ -12,6 +12,7 @@ def register():
         commission.CommissionRecoveryRule,
         commission.Plan,
         commission.Commission,
+        commission.Agent,
         rule_engine.RuleEngineRuntime,
         contract.Contract,
         contract.ContractOption,
