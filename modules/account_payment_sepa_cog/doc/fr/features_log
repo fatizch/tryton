@@ -1,4 +1,6 @@
+* Envoyer le nom complet (nom + prénom) dans les fichiers SEPA
 * Ajout d'une chaine de batchs parallélisables pour le traitement des paiements
+* Envoyer le nom complet (nom + prénom) dans les fichiers SEPA
 * Gestion de la notion de payeur pour tous les types de paiement
 * Possibilité d'ajouter des informations liées aux paiements individuels dans le libellé de prélèvement
 

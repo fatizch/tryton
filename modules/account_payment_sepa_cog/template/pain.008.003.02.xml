@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.003.02"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -90,7 +90,7 @@ this repository contains the full copyright notices and license terms. -->
                     ${FinancialInstitution(payment.sepa_bank_account_number.account.bank, only_bic=True)}
                 </DbtrAgt>
                 <Dbtr>
-                    ${PartyIdentification(payment.party)}
+                    ${PartyIdentification(payment.party, full_name=True)}
                 </Dbtr>
                 <DbtrAcct>
                     ${Account(payment.sepa_bank_account_number, with_ccy=False)}

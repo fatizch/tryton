@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <py:strip xmlns:py="http://genshi.edgewall.org/">
-    <py:def function="PartyIdentification(party, id=True)">
+    <py:def function="PartyIdentification(party, id=True, full_name=False)">
         <!-- EPC limits to 70 instead of 140 -->
-        <Nm>${party.name[:70]}</Nm>
+        <Nm py:if="not full_name">${party.name[:70]}</Nm>
+        <Nm py:if="full_name">${party.full_name[:70]}</Nm>
         <py:with vars="address = party.address_get()">
             <PstlAdr py:if="address">
                 ${PostalAddress(address)}

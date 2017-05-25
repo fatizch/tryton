@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <py:strip xmlns:py="http://genshi.edgewall.org/">
     <!-- only ASCII -->
-    <py:def function="PartyIdentification(party, id=True, with_name=True, with_address=True)">
+    <py:def function="PartyIdentification(party, id=True, with_name=True, with_address=True, full_name=False)">
         <!-- EPC limits to 70 instead of 140 -->
-        <Nm py:if="with_name">${normalize('NFKD', party.name).encode('ascii', 'replace')[:70]}</Nm>
+        <Nm py:if="with_name and not full_name">${normalize('NFKD', party.name).encode('ascii', 'replace')[:70]}</Nm>
+        <Nm py:if="with_name and full_name">${normalize('NFKD', party.full_name).encode('ascii', 'replace')[:70]}</Nm>
         <py:if test="with_address">
             <py:with vars="address = party.address_get()">
                 <PstlAdr py:if="address">

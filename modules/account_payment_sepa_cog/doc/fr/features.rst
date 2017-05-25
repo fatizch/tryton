@@ -2,3 +2,4 @@
 - **Gestion des frais de rejets**
 - **Gestion des amendements de mandats**
 - **Gestion de la notion de payeur pour tous les types de paiement**
+- **Envoyer le nom complet (nom + prénom) dans les fichiers SEPA**

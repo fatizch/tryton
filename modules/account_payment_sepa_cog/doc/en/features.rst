@@ -2,3 +2,4 @@
 - **Manage reject fees**
 - **Manage amendments to mandates**
 - **Manage payer for all payment kinds**
+- **Display Full Name (First Name + Last Name) in SEPA files**

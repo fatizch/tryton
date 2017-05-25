@@ -1,4 +1,6 @@
+* Display Full Name (First Name + Last Name) in SEPA files
 * Add a batch chain for parallelizable payment treatment
+* Display Full Name (First Name + Last Name) in SEPA files
 * Manage payer for all payment kinds
 * Allow to add single payments information in remittance information
 

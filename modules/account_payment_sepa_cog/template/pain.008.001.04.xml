@@ -2,8 +2,10 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.04" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:py="http://genshi.edgewall.org/">
-    <py:def function="PartyIdentification(party)">
-        <Nm>${party.name[:140]}</Nm>
+    <py:def function="PartyIdentification(party, full_name=False)">
+        <!-- EPC limits to 70 instead of 140 -->
+        <Nm py:if="not full_name">${party.name[:70]}</Nm>
+        <Nm py:if="full_name">${party.full_name[:70]}</Nm>
         <py:with vars="address = party.address_get()">
             <PstlAdr py:if="address">
                 ${PostalAddress(party.address_get())}
@@ -131,7 +133,7 @@ this repository contains the full copyright notices and license terms. -->
                     </DbtrAgt>
                     <!-- DbtrAgtAcct -->
                     <Dbtr>
-                        ${PartyIdentification(payment.party)}
+                        ${PartyIdentification(payment.party, full_name=True)}
                     </Dbtr>
                     <DbtrAcct>
                         ${Account(payment.sepa_bank_account_number)}
