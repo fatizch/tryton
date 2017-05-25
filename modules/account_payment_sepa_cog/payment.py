@@ -370,9 +370,9 @@ class Group:
         where_clause = (payment.date <= treatment_date) & \
             (payment.kind == payment_kind) & \
             (payment.state == 'approved') & \
-            (payment.group != None)
+            (payment.group != None)  # NOQA
         if payment_kind == 'receivable':
-            where_clause &= (payment.sepa_mandate != None)
+            where_clause &= (payment.sepa_mandate != None) # NOQA
         select_kwargs.update({'where': where_clause})
         query = payment.select(*select_args, **select_kwargs)
         cursor.execute(*query)
