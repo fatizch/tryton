@@ -583,6 +583,8 @@ class Payment(export.ExportImportMixin, Printable):
         return self.manual_reject_code
 
     @classmethod
+    @ModelView.button
+    @Workflow.transition('failed')
     def fail(cls, payments):
         pool = Pool()
         Line = pool.get('account.move.line')

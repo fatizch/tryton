@@ -17,6 +17,7 @@ def register():
         PaymentTreatmentBatch,
         PaymentSepaDoBatch,
         PaymentFailBatch,
+        PaymentFailMessageCreationBatch,
         Payment,
         Mandate,
         Group,

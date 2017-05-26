@@ -1,15 +1,24 @@
 Batch de traitement des rejets [account.payment.fail]
 =======================================================
 
-Ce batch créé un message SEPA, y associe le message de rejet et traite les paiements
-pour chaque fichier dans le répértoire spécifié en entrée.
+Ce batch traite les paiements pour chaque fichier dans le répertoire spécifié en entrée.
 
 - *Fréquence suggérée:* quotidienne
-- *in*: Argument spécifiant le dossier d'entrée comportant les fichiers de rejet.
-- *out*: Argument spécifiant le dossier de sortie qui comportera les fichiers de rejet
+- *in_directory*: Argument spécifiant le dossier d'entrée comportant les fichiers de rejet.
+
+
+Batch de création du message de rejets [account.payment.fail.message.create]
+============================================================================
+
+Ce batch créé un message SEPA, y associe le message de rejet pour chaque fichier
+dans le répertoire spécifié en entrée.
+
+- *Fréquence suggérée:* quotidienne
+- *in_directory*: Argument spécifiant le dossier d'entrée comportant les fichiers de rejet.
+- *archive*: Argument spécifiant le dossier de sortie qui comportera les fichiers de rejet
   traités.
 
-**Les deux arguments in et out sont necessaires au batch pour fonctionner**
+**Les deux arguments in_directory et archive sont necessaires au batch pour fonctionner**
 
 
 Batch de mise à jour des journaux de paiements SEPA  [``account.payment.journal.update.sepa``]

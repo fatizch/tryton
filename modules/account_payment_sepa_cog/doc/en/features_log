@@ -1,3 +1,4 @@
+* Split the payment fail batch to improve performances
 * Display Full Name (First Name + Last Name) in SEPA files
 * Add a batch chain for parallelizable payment treatment
 * Display Full Name (First Name + Last Name) in SEPA files

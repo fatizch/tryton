@@ -549,8 +549,10 @@ class Payment:
             self.payer = None
 
     def get_sepa_end_to_end_id(self, name):
-        value = super(Payment, self).get_sepa_end_to_end_id(name)
-        return self.merged_id or value
+        # No need to call super : the end_to_end_id is simply
+        # the merged_id and in no case the id as defined
+        # in account_payment
+        return self.merged_id
 
     def _get_transaction_key(self):
         if self.sepa_end_to_end_id:
@@ -576,17 +578,10 @@ class Payment:
 
     @classmethod
     def search_end_to_end_id(cls, name, domain):
-        result = super(Payment, cls).search_end_to_end_id(name, domain)
-        return [
-            'OR',
-            [
-                ('merged_id', '=', None),
-                result,
-                ],
-            [
-                ('merged_id',) + tuple(domain[1:]),
-                ]
-            ]
+        # No need to call super : the end_to_end_id is simply
+        # the merged_id and in no case the id as defined
+        # in account_payment
+        return [('merged_id',) + tuple(domain[1:])]
 
     @classmethod
     def search_sepa_instruction_id(cls, name, clause):

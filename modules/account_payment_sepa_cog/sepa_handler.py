@@ -4,10 +4,11 @@ from lxml import etree
 from dateutil.parser import parse
 
 from trytond.modules.account_payment_sepa.payment import CAMT054
+from trytond.pool import Pool
 
 from trytond.modules.coog_core import utils
 
-__all__ = ['CAMT054Coog']
+__all__ = ['CAMT054Coog', 'CAMT054CoogPassive']
 
 
 class CAMT054Coog(CAMT054):
@@ -31,3 +32,8 @@ class CAMT054Coog(CAMT054):
                 {'ns': tag.namespace})
         if date is not None:
             return parse(date.text).date()
+
+
+class CAMT054CoogPassive(CAMT054Coog):
+    def __init__(self):
+        self.Payment = Pool().get('account.payment')

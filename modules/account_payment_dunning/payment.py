@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
-from trytond.model import Unique
+from trytond.model import Unique, ModelView, Workflow
 from trytond.cache import Cache
 
 from trytond.modules.coog_core import fields, model
@@ -94,6 +94,8 @@ class Payment:
     __name__ = 'account.payment'
 
     @classmethod
+    @ModelView.button
+    @Workflow.transition('failed')
     def fail(cls, payments):
         super(Payment, cls).fail(payments)
         cls.fail_generate_dunnings(payments)

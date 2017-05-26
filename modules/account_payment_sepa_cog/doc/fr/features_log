@@ -1,3 +1,4 @@
+* Diviser le batch de rejet de paiement pour améliorer les performances
 * Envoyer le nom complet (nom + prénom) dans les fichiers SEPA
 * Ajout d'une chaine de batchs parallélisables pour le traitement des paiements
 * Envoyer le nom complet (nom + prénom) dans les fichiers SEPA
