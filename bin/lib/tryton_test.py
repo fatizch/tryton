@@ -1,12 +1,8 @@
 import os
-import time
+import uuid
 import unittest
 from rq import get_current_job
 import async.broker_rq as broker
-
-
-def hash32(val):
-    return hex(hash(val) & 0xffffffff).lstrip('0x').rstrip('L').zfill(8)
 
 
 def test(module, options=None):
@@ -17,12 +13,7 @@ def test(module, options=None):
     if backend.name() == 'sqlite':
         db_name = ':memory:'
     else:
-        venv = os.environ.get('VIRTUAL_ENV', None)
-        if venv is None:
-            key = (module, time.time())
-        else:
-            key = (venv, module, time.time())
-        db_name = 'test_%s' % hash32(key)
+        db_name = 'test_' + str(uuid.uuid4().int)
     os.environ.setdefault('DB_NAME', db_name)
     from trytond.tests.test_tryton import modules_suite
     suite = modules_suite([module], doc=opts['doc'])
