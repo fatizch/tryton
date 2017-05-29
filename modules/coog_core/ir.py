@@ -50,87 +50,92 @@ FORM_WIDGETS = ['icon', 'many2many_selection']
 FORM_ATTRIBUTES = """
 <grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
     xmlns="http://relaxng.org/ns/structure/1.0">
-<define name="attlist.field" combine="interleave">
-    <optional>
-        <attribute name="context_tree"/>
-    </optional>
-</define>
-<define name="attlist.field" combine="interleave">
-    <optional>
-        <attribute name="no_command">
-            <choice>
-                <value>0</value>
-                <value>1</value>
-            </choice>
-        </attribute>
-    </optional>
-</define>
     <define name="attlist.field" combine="interleave">
-    <optional>
-        <attribute name="relation"/>
-    </optional>
+        <optional>
+            <attribute name="context_tree"/>
+        </optional>
     </define>
     <define name="attlist.field" combine="interleave">
-    <optional>
-        <attribute name="relation_field"/>
-    </optional>
+        <optional>
+            <attribute name="no_command">
+                <choice>
+                    <value>0</value>
+                    <value>1</value>
+                </choice>
+            </attribute>
+        </optional>
     </define>
     <define name="attlist.field" combine="interleave">
-    <optional>
-        <attribute name="group"/>
-    </optional>
+        <optional>
+            <attribute name="relation"/>
+        </optional>
     </define>
     <define name="attlist.field" combine="interleave">
-    <optional>
-        <attribute name="states"/>
-    </optional>
+        <optional>
+            <attribute name="relation_field"/>
+        </optional>
     </define>
     <define name="attlist.field" combine="interleave">
-    <optional>
-        <attribute name="expand_toolbar" a:defaultValue="0">
-            <choice>
-                <value>0</value>
-              <value>1</value>
-            </choice>
-      </attribute>
-    </optional>
+        <optional>
+            <attribute name="group"/>
+        </optional>
+    </define>
+    <define name="attlist.field" combine="interleave">
+        <optional>
+            <attribute name="states"/>
+        </optional>
+    </define>
+    <define name="attlist.field" combine="interleave">
+        <optional>
+            <attribute name="expand_toolbar" a:defaultValue="0">
+                <choice>
+                    <value>0</value>
+                    <value>1</value>
+                </choice>
+            </attribute>
+        </optional>
+    </define>
+    <define name="attlist.button" combine="interleave">
+        <optional>
+            <attribute name="keywords"/>
+        </optional>
     </define>
 </grammar>
 """
 
 TREE_ATTRIBUTES = """
 <grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
-    xmlns="http://relaxng.org/ns/structure/1.0">
-  <define name="attlist.tree" combine="interleave">
-    <optional>
-      <attribute name="always_expand">
-        <choice>
-          <value>0</value>
-          <value>1</value>
-        </choice>
-      </attribute>
-    </optional>
-  </define>
-  <define name="attlist.tree" combine="interleave">
-    <optional>
-      <attribute name="editable_open">
-        <choice>
-          <value>0</value>
-          <value>1</value>
-        </choice>
-      </attribute>
-    </optional>
-  </define>
-  <define name="attlist.tree" combine="interleave">
-    <optional>
-      <attribute name="colors"/>
-    </optional>
-  </define>
-  <define name="attlist.button" combine="interleave">
-    <optional>
-      <attribute name="keywords"/>
-    </optional>
-  </define>
+        xmlns="http://relaxng.org/ns/structure/1.0">
+    <define name="attlist.tree" combine="interleave">
+        <optional>
+            <attribute name="always_expand">
+                <choice>
+                    <value>0</value>
+                    <value>1</value>
+                </choice>
+            </attribute>
+        </optional>
+    </define>
+    <define name="attlist.tree" combine="interleave">
+        <optional>
+            <attribute name="editable_open">
+                <choice>
+                    <value>0</value>
+                    <value>1</value>
+                </choice>
+            </attribute>
+        </optional>
+    </define>
+    <define name="attlist.tree" combine="interleave">
+        <optional>
+            <attribute name="colors"/>
+        </optional>
+    </define>
+    <define name="attlist.button" combine="interleave">
+        <optional>
+            <attribute name="keywords"/>
+        </optional>
+    </define>
 </grammar>
 """
 
