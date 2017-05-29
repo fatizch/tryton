@@ -11,5 +11,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="contract.activate_confirm_view_form"/>
             <field name="name">activate_confirm_form</field>
         </record>
+        <record model="ir.ui.view" id="contract_select_hold_status_view_form">
+            <field name="model">contract.hold.select_hold_status</field>
+            <field name="inherit" ref="contract.contract_select_hold_status_view_form"/>
+            <field name="name">contract_select_hold_status_form</field>
+        </record>
     </data>
 </tryton>

@@ -4,6 +4,7 @@
 from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import utils
 
@@ -37,7 +38,9 @@ class Contract:
     @classmethod
     def calculate_suspensions_from_date(cls, contracts):
         dunnings_per_contract = cls.get_action_dunnings(contracts, 'hold')
-        res = {}
+        res = super(Contract, cls).calculate_suspensions_from_date(contracts)
+        if ServerContext().get('suspension_start_date'):
+            return res
         for contract in contracts:
             dunnings = dunnings_per_contract[contract]
             dunning = dunnings[0] if dunnings else None
@@ -46,6 +49,4 @@ class Contract:
             # suspension period
             if dunning and dunning.level.contract_action == 'hold':
                 res[contract] = dunning.calculate_last_process_date()
-            else:
-                res[contract] = utils.today()
         return res

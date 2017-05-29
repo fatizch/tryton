@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 
 import datetime
+from dateutil.relativedelta import relativedelta
 
 from trytond.pool import PoolMeta, Pool
 from trytond.server_context import ServerContext
@@ -29,7 +30,8 @@ class Contract:
 
     @classmethod
     def calculate_suspensions_from_date(cls, contracts):
-        return {c: utils.today() for c in contracts}
+        return {c: ServerContext().get('suspension_start_date', utils.today())
+            for c in contracts}
 
     @classmethod
     def hold(cls, contracts, hold_reason):
@@ -54,12 +56,12 @@ class Contract:
     def right_suspension_allowed(self):
         return True
 
-    def disable_right_suspensions(self, type_=None, to_date=None):
+    def disable_right_suspensions(self, type_=None, to_date=None, days_delta=1):
         pool = Pool()
         ContractRightSuspension = pool.get('contract.right_suspension')
         Event = pool.get('event')
-        to_date = to_date or ServerContext().get('suspension_date',
-            utils.today())
+        to_date = to_date or ServerContext().get('suspension_end_date',
+            utils.today() + relativedelta(days=days_delta))
         search_clause = [
             ('start_date', '<=', to_date),
             ('end_date', '=', None),
@@ -69,16 +71,24 @@ class Contract:
             search_clause.append(('type_', '=', type_)),
         suspensions_to_disable = ContractRightSuspension.search(search_clause)
         if suspensions_to_disable:
+            due_invoices = sorted([x for x in self.due_invoices if x.end],
+                key=lambda x: x.end)
             to_write = []
-            temporary_supensions = [x for x in suspensions_to_disable if
+            temporary_suspensions = [x for x in suspensions_to_disable if
                 x.type_ == 'temporary']
             definitive_suspensions = [x for x in suspensions_to_disable if
                 x.type_ == 'definitive']
-            if temporary_supensions:
-                to_write.extend([temporary_supensions,
-                    {'end_date': to_date, 'active': False}])
-                Event.notify_events(temporary_supensions,
+            if temporary_suspensions:
+                to_write.extend([temporary_suspensions,
+                    {'end_date': utils.today() + relativedelta(days=days_delta)
+                        if not due_invoices
+                        else to_date, 'active': False}])
+                Event.notify_events(temporary_suspensions,
                     'contract_disable_temporary_right_suspension')
+                if due_invoices:
+                    suspension = self.get_suspension('temporary', to_date +
+                        relativedelta(days=1))
+                    suspension.save()
             if definitive_suspensions:
                 to_write.extend([definitive_suspensions,
                     {'end_date': to_date}])
@@ -104,7 +114,7 @@ class ContractRightSuspension(model.CoogSQL, model.CoogView):
 
     contract = fields.Many2One('contract', 'Contract',
         states=SUSPENSION_STATES, depends=['active', 'type_'],
-        ondelete='CASCADE', select=True)
+        ondelete='CASCADE', select=True, required=True)
     start_date = fields.Date('Start Date', states=SUSPENSION_STATES,
         depends=['active', 'type_'])
     end_date = fields.Date('End Date', states=SUSPENSION_STATES,

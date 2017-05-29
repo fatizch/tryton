@@ -2285,6 +2285,9 @@ class ContractHold(Wizard):
                 self.select_hold_status.hold_reason)
         return 'end'
 
+    def default_select_hold_status(self, name):
+        return {}
+
 
 class ContractSelectStartDate(model.CoogView):
     'Start date selector for contract'

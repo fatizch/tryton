@@ -181,20 +181,25 @@ len(active_suspensions) == 2
 Wizard('contract.activate', models=[contract]).execute('apply')
 contract.reload()
 
-active_suspensions = Model.get('contract.right_suspension').find([])
-len(active_suspensions) == 1
-# #Res# #True
-
-# #Comment# #Definitive suspension should now have a end_date
-active_suspensions[0].end_date == datetime.date.today()
-# #Res# #True
-
 # #Comment# #Temporary suspension should now have a end_date and should be inactive
 inactive_suspensions = Model.get('contract.right_suspension').find([('active',
     '=', False)])
 len(inactive_suspensions) == 1
 # #Res# #True
 
-# #Comment# #Definitive suspension should now have a end_date
-inactive_suspensions[0].end_date == datetime.date.today()
+active_suspensions = Model.get('contract.right_suspension').find([])
+len(active_suspensions) == 2
+# #Res# #True
+
+active_suspensions[-1].start_date - relativedelta(days=1) == \
+    inactive_suspensions[0].end_date
+# #Res# #True
+
+# #Comment# #Definitive suspension should now have an end_date
+active_suspensions[0].end_date == datetime.date.today() + relativedelta(days=1)
+# #Res# #True
+
+# #Comment# #Definitive suspension should now have an end_date
+inactive_suspensions[0].end_date == datetime.date.today() + \
+    relativedelta(days=1)
 # #Res# #True
