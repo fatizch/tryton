@@ -5,8 +5,9 @@ import datetime
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, And, Bool
 from trytond.transaction import Transaction
+from trytond.model import dualmethod
 
-from trytond.modules.coog_core import fields, utils
+from trytond.modules.coog_core import model, fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -18,10 +19,20 @@ __all__ = [
 class Contract:
     __name__ = 'contract'
 
-    def init_sepa_mandate(self):
+    @classmethod
+    def __setup__(cls):
+        super(Contract, cls).__setup__()
+        cls._buttons.update({
+                'init_sepa_mandate': {},
+                })
+
+    @dualmethod
+    @model.CoogView.button
+    def init_sepa_mandate(cls, contracts):
         # Force refresh of link as contract version could be outdated
-        self.billing_information.contract = self
-        self.billing_information.init_sepa_mandate()
+        for contract in contracts:
+            contract.billing_information.contract = contract
+            contract.billing_information.init_sepa_mandate()
 
     def after_activate(self):
         super(Contract, self).after_activate()
