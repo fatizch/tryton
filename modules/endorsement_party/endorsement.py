@@ -61,6 +61,10 @@ class EndorsementPartyAddress(relation_mixin(
     def updated_struct(cls, address):
         return {}
 
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return {'party', 'has_address_lines'}
+
 
 class EndorsementPartyRelation(relation_mixin(
             'endorsement.party.relation.field', 'relationship',
