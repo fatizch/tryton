@@ -752,6 +752,7 @@ class CoogReport(Report):
     def get_context(cls, records, data):
         report_context = super(CoogReport, cls).get_context(records, data)
         report_context['strftime'] = cls.strftime
+        report_context['event_code'] = data.get('event_code', None)
         return report_context
 
 

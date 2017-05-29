@@ -96,10 +96,9 @@ class EventTypeAction:
                     template, objects_to_report, context_)
 
     def build_context(self, objects_to_report, origin, event_code):
+        context_ = {'event_code': event_code}
         if origin:
-            context_ = {'origin': origin}
-        else:
-            context_ = {}
+            context_.update({'origin': origin})
         if origin and isinstance(origin, Printable):
             functional_date = origin.get_report_functional_date(event_code)
         else:
