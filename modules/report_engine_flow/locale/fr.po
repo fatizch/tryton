@@ -120,6 +120,10 @@ msgctxt "field:report.template,process_method:"
 msgid "Process Method"
 msgstr "Méthode de traitement"
 
+msgctxt "field:report.template,header:"
+msgid "File Header"
+msgstr "En tête de fichier"
+
 msgctxt "field:report.template,loop_condition:"
 msgid "Object Line Loop"
 msgstr "Condition de la boucle"
@@ -191,6 +195,11 @@ msgstr "Modifié par"
 msgctxt "field:report.template.flow_variable.relation,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "help:report.template,header:"
+msgid "File Header (Genshi supported)"
+msgstr "En tête de fichier (Genshi supporté)"
+
 
 msgctxt "help:report.template,loop_condition:"
 msgid ""

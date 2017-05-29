@@ -10,6 +10,9 @@ this repository contains the full copyright notices and license terms. -->
             <label name="loop_condition"/>
             <field name="loop_condition"/>
             <newline/>
+            <label name="header"/>
+            <field name="header" colspan="3"/>
+            <newline/>
             <field name="variables_relation" colspan="2" product="variable" mode="tree,form" view_ids="report_engine_flow.flow_variable_relation_view_list,report_engine_flow.flow_variable_relation_view_form"/>
         </page>
         <page string="Generated Code" id="generated_code">

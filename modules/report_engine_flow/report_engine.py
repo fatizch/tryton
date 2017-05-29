@@ -65,7 +65,8 @@ class TemplateVariableRelation(model.CoogSQL, model.CoogView):
     def on_change_with_order(self, name=None):
         # TODO: Delete this method when client is patched:
         # See https://bugs.tryton.org/issue6439
-        if not self.template:
+        if not self.template or not hasattr(self.template,
+                'variables_relation'):
             return 0
         previous_order = 0
         for relation in self.template.variables_relation:
@@ -261,10 +262,16 @@ class ReportGenerate:
             data['doc_template'][0])
         records = cls._get_records(ids, data['model'], data)
         template_content = selected_template.generated_code
-        tmpl = NewTextTemplate(template_content)
-        result = tmpl.generate(**cls.get_context(records, data)).render()
         filename, ext = os.path.splitext(
             selected_template.genshi_evaluated_output_filename)
+        file_ = os.path.join(selected_template.get_export_dirname(),
+            filename + ext)
+        if (not os.path.exists(file_) and
+                selected_template.header):
+            template_content = '%s\n%s' % (selected_template.header,
+                template_content)
+        tmpl = NewTextTemplate(template_content)
+        result = tmpl.generate(**cls.get_context(records, data)).render()
         return ext[1:], bytearray(result, 'utf-8'), False, filename
 
 
@@ -289,6 +296,10 @@ class ReportTemplate:
             }, depends=['input_kind', 'override_loop'],
         help='Genshi condition which define the loop condition to generate the '
         'flow lines')
+    header = fields.Char('File Header',
+        states={'invisible': Eval('input_kind') != 'flow',
+            }, depends=['input_kind'],
+        help='File Header (Genshi supported)')
 
     @classmethod
     def __setup__(cls):
