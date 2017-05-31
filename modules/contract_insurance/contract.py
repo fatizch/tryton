@@ -916,7 +916,8 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
                     if val[0] != 'create':
                         continue
                     for sub_cov_elem in val[1]:
-                        sub_cov_elem['contract'] = covered_element.contract.id
+                        sub_cov_elem['contract'] = \
+                            covered_element.main_contract.id
         super(CoveredElement, cls).write(*args)
 
     @classmethod
@@ -989,7 +990,7 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
     def on_change_with_covered_name(self, name=None):
         if self.party:
             return self.party.rec_name
-        return ''
+        return self.name
 
     @fields.depends('is_person')
     def on_change_with_icon(self, name=None):
@@ -1065,7 +1066,7 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             if relations:
                 return '%s (%s)' % (res, relations)
             return res
-        names = [super(CoveredElement, self).get_rec_name(name)]
+        names = [self.name]
         names.append(self.item_desc.rec_name if self.item_desc else None)
         return ' '.join([x for x in names if x])
 
