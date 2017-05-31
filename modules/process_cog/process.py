@@ -1370,12 +1370,16 @@ class ProcessResume(Wizard):
                 })
 
     def do_resume(self, action):
+        return self.resume()
+
+    @classmethod
+    def resume(cls):
         pool = Pool()
         active_id = Transaction().context.get('active_id')
         active_model = Transaction().context.get('active_model')
         instance = pool.get(active_model)(active_id)
         if not instance.current_state:
-            self.raise_user_error('no_process_found')
+            cls.raise_user_error('no_process_found')
         Log = pool.get('process.log')
         active_logs = Log.search([
                 ('latest', '=', True),
