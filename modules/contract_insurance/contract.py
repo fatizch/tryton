@@ -986,7 +986,7 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             self.versions[-1].on_change_with_extra_data_as_string()
         self.versions = list(self.versions)
 
-    @fields.depends('party')
+    @fields.depends('name', 'party')
     def on_change_with_covered_name(self, name=None):
         if self.party:
             return self.party.rec_name
