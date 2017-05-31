@@ -207,12 +207,12 @@ class Contract:
 
             new_list = sorted(to_update + premiums, key=lambda x: x._get_key())
 
-            final_list, prev_value, cur_end = [], None, None
+            final_list, prev_value = [], None
             for elem in new_list:
-                cur_end = elem.end
                 if elem.same_value(prev_value):
                     # The current element is considered equal to the
                     # previous one, so we can discard it
+                    prev_value.end = elem.end
                     continue
                 if prev_value:
                     if prev_value._get_key(no_date=True) == elem._get_key(
@@ -222,16 +222,18 @@ class Contract:
                         # the new one if it is a dated premium
                         if prev_value.start:
                             prev_value.end = coog_date.add_day(elem.start, -1)
-                        to_save.append(prev_value)
                     else:
-                        if getattr(prev_value, 'id', -1) < 0:
-                            prev_value.end = cur_end
-                            to_save.append(prev_value)
+                        if (getattr(prev_value, 'end', None) is None and
+                                getattr(prev_value, 'id', -1) < 0 and
+                                elem.end and prev_value.start and
+                                elem.end >= prev_value.start):
+                            prev_value.end = elem.end
+                    to_save.append(prev_value)
                     final_list.append(prev_value)
                 prev_value = elem if elem.amount else None
             if prev_value and prev_value.amount:
                 # Do not forget the last iteration !
-                prev_value.end = cur_end
+                prev_value.end = elem.end
                 to_save.append(prev_value)
                 final_list.append(prev_value)
             parent.premiums = to_ignore + final_list
