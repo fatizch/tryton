@@ -474,6 +474,12 @@ class InvoiceLine:
             return model.id
 
     def get_covered_element(self, name=None):
+        if not self.detail:
+            return
+        if self.detail.covered_element:
+            return self.detail.covered_element.id
+        if self.detail.option and self.detail.option.covered_element:
+            return self.detail.option.covered_element.id
         if self.detail and self.detail.premium:
             covered_element = getattr(self.detail.premium.parent,
                 'covered_element', None)
