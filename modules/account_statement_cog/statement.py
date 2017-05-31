@@ -155,6 +155,10 @@ class Statement(export.ExportImportMixin):
     def on_change_with_in_bank_deposit_ticket(self, name=None):
         return self.journal and self.journal.process_method == 'cheque'
 
+    @classmethod
+    def search_in_bank_deposit_ticket(cls, name, clause):
+        return [('journal.process_method', clause[1], 'cheque')]
+
     @fields.depends('lines')
     def on_change_lines(self):
         # Workaround for issue #2743 : assume that we are in a recursion if
