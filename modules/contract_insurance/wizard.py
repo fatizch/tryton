@@ -405,7 +405,7 @@ class CreateExtraPremiumOptionSelector(model.CoogView):
         depends=['contract', 'hide_covered_element'])
     hide_covered_element = fields.Boolean('Hide Covered Element')
     options = fields.One2Many('contract.manage_extra_premium.select.option',
-        None, 'Options')
+        None, 'Options', readonly=True)
 
     @classmethod
     def get_option_name(cls, option):

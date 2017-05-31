@@ -5,7 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <label name="covered_element"/>
     <field name="covered_element" widget="selection"/>
     <newline/>
-    <field name="options" colspan="2"/>
+    <field name="options" colspan="2" expand_toolbar="0"/>
     <field name="contract" invisible="1"/>
     <field name="hide_covered_element" invisible="1"/>
 </form>
