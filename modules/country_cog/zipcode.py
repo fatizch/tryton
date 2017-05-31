@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 from trytond import backend
 
-from trytond.modules.coog_core import export, utils
+from trytond.modules.coog_core import export
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -26,12 +26,6 @@ class Zip(export.ExportImportMixin):
         cls.city.select = True
 
         t = cls.__table__()
-        # country_fr removes the 'zip_uniq' constraint
-        # but there is apparently no way to prevent
-        # its creation by overloading __setup__
-        # or __register__ in country_fr
-        if utils.is_module_installed('country_fr'):
-            return
         cls._sql_constraints += [
             ('zip_uniq', Unique(t, t.zip, t.city, t.country),
                 'This city and this zipcode already exist for this country!'),

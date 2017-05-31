@@ -24,8 +24,6 @@ class Zip:
         super(Zip, cls).__setup__()
         cls._order.insert(3, ('line5', 'ASC'))
         t = cls.__table__()
-        cls._sql_constraints = [x for x in cls._sql_constraints if x[0]
-            is not 'zip_uniq']
         cls._sql_constraints += [
             ('zip_uniq_all', Unique(t, t.zip, t.city, t.line5, t.country),
                 'This city, zipcode, line5 combination already exists'
