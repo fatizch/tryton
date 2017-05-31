@@ -1379,13 +1379,14 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         return res
 
     def init_dict_for_rule_engine(self, args):
-        args['elem'] = self
+        args = args if args else {}
         if self.contract:
             self.contract.init_dict_for_rule_engine(args)
         elif self.parent:
             self.parent.init_dict_for_rule_engine(args)
         else:
             raise Exception('Orphan covered element')
+        args['elem'] = self
 
     def get_publishing_values(self):
         result = super(CoveredElement, self).get_publishing_values()
