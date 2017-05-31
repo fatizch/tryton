@@ -51,9 +51,19 @@ class AddressDisplayer(model.CoogView):
 
     @classmethod
     def default_new_address(cls):
+        Country = Pool().get('country.country')
         good_id = Transaction().context.get('good_party')
         effective_date = Transaction().context.get('effective_date')
-        return [{'party': good_id, 'start_date': effective_date}]
+        new_address = {'party': good_id, 'start_date': effective_date,
+            'name': '', 'street': '', 'zip': '', 'city': '',
+            'subdivision': None}
+        country = Country._default_country()
+        if country:
+            address_lines = {x: '' for x in country.get_address_lines()}
+            new_address['country'] = country.id
+            new_address['has_address_lines'] = bool(address_lines)
+            new_address['address_lines'] = address_lines
+        return [new_address]
 
     @fields.depends('date', 'is_new', 'new_address', 'party')
     def on_change_new_address(self):

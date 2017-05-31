@@ -1,5 +1,6 @@
-Version 1.12 - 2017-04-28
+* Set default country on new addresses
 
+Version 1.12 - 2017-04-28
 * Launch party endorsement from contract and propose all parties linked to the contract
 * Allow to remove relations through endorsements
 

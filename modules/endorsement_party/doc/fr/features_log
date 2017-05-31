@@ -1,5 +1,6 @@
-Version 1.12 - 2017-04-28
+* Sélection du pays par défaut lors de l'ajout d'une nouvelle adresse
 
+Version 1.12 - 2017-04-28
 * Lancement d'un avenant de tiers depuis un contrat en proposant tous les tiers rattachés au contrat
 * Suppression de relations via avenant
 
