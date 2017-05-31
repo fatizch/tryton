@@ -83,7 +83,16 @@ class Claim:
             else:
                 tmp_save, tmp_create = claim.calculate_underwritings()
                 to_create += tmp_create
-                to_save += tmp_save
+                for elem in tmp_save:
+                    # If the underwriting is empty after update, we close /
+                    # delete it depending on its state
+                    if not elem.results:
+                        if elem.state == 'draft':
+                            to_delete.append(elem)
+                        else:
+                            to_close.append(elem)
+                    else:
+                        to_save.append(elem)
         if to_create or to_save or to_close:
             Underwriting.save(to_create + to_save + to_close)
         if to_close:
