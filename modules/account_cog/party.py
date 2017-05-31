@@ -132,9 +132,7 @@ class SynthesisMenuMoveLine(model.CoogSQL):
         return coog_string.translate_label(Move_Line_Synthesis, 'name')
 
 
-class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView):
-    'Party Synthesis Menu'
-
+class SynthesisMenu:
     __name__ = 'party.synthesis.menu'
 
     @classmethod

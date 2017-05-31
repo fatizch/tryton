@@ -240,7 +240,7 @@ class Contract:
         if self.status in ['void', 'terminated'] and self.balance_today != 0:
             return 'red'
 
-    def get_color(self, name=None):
+    def get_color(self, name):
         if self.billing_information and self.billing_information.suspended:
             return 'red'
         return (self.get_color_from_balance_today() or

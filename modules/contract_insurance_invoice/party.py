@@ -50,8 +50,8 @@ class SynthesisMenuInvoice(model.CoogSQL):
         return coog_string.translate_label(InvoiceSynthesis, 'name')
 
 
-class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView):
-    'Party Synthesis Menu'
+class SynthesisMenu:
+    __metaclass__ = PoolMeta
     __name__ = 'party.synthesis.menu'
 
     @classmethod

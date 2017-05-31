@@ -192,8 +192,7 @@ class SynthesisMenuLoan(model.CoogSQL):
         return coog_string.translate_label(LoanSynthesis, 'name')
 
 
-class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView):
-    'Party Synthesis Menu'
+class SynthesisMenu:
     __name__ = 'party.synthesis.menu'
 
     @classmethod

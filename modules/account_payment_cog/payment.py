@@ -241,7 +241,8 @@ class RejectReason(model.CoogSQL, model.CoogView):
         'Process method', required=True)
     payment_kind = fields.Selection(KINDS, 'Payment Kind')
     failure_actions = fields.One2Many('account.payment.journal.failure_action',
-        'reject_reason', 'Failure Actions')
+        'reject_reason', 'Failure Actions', delete_missing=True,
+        target_not_indexed=True)
 
     @classmethod
     def __setup__(cls):

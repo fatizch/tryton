@@ -64,7 +64,7 @@ class Contract(CoogProcessFramework):
                 clone.save()
         return clones
 
-    def get_task_name(self, name):
+    def get_task_name(self, name=None):
         names = []
         if self.product:
             names.append(self.product.rec_name)

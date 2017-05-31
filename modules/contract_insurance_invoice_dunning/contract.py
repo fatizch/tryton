@@ -80,7 +80,7 @@ class Contract:
             result[dunning.contract.id] = dunning.id
         return result
 
-    def get_synthesis_rec_name(self, name):
+    def get_synthesis_rec_name(self, name=None):
         synthesis = super(Contract, self).get_synthesis_rec_name(name)
         if not self.dunning_status:
             return synthesis

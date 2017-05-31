@@ -157,8 +157,7 @@ class SynthesisMenuBankAccoount(model.CoogSQL):
         return coog_string.translate_label(BankAccountSynthesis, 'name')
 
 
-class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView):
-    'Party Synthesis Menu'
+class SynthesisMenu:
     __name__ = 'party.synthesis.menu'
 
     @classmethod
