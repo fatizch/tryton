@@ -39,7 +39,7 @@ class ClaimService:
 
     def get_benefit_sequence(self, name):
         if self.benefit:
-            return self.benefit.sequence
+            return str(self.benefit.sequence)
 
 
 class Claim:

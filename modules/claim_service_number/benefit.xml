@@ -11,6 +11,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="claim.benefit_view_form"/>
             <field name="name">benefit_form</field>
         </record>
+        <!-- ############################################################ -->
+        <!-- Sequence Type -->
+        <!-- ############################################################ -->
+        <record model="ir.sequence.type" id="sequence_type_benefit">
+            <field name="name">Claim Service</field>
+            <field name="code">claim.service</field>
+        </record>
     </data>
 </tryton>
 

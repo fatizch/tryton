@@ -34,12 +34,12 @@ class Benefit:
     normal_sequence = fields.Many2One('ir.sequence', 'Normal Sequence',
         states={
             'invisible': Eval('define_sequence') != 'normal',
-            },
+            }, domain=[('code', '=', 'claim.service')],
         depends=['define_sequence'])
     strict_sequence = fields.Many2One('ir.sequence.strict', 'Strict Sequence',
         states={
             'invisible': Eval('define_sequence') != 'strict',
-            },
+            }, domain=[('code', '=', 'claim.service')],
         depends=['define_sequence'])
     sequence = fields.Function(fields.Reference('Sequence',
         SEQUENCE_REFERENCE, states={
