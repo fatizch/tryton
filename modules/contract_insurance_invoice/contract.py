@@ -1163,7 +1163,7 @@ class Contract:
                 per_invoice[line.origin.origin]['canceled'].append(line)
                 continue
             if (line.origin.__name__ == 'account.payment' and
-                    line.origin.line and
+                    line.origin.line and line.origin.line.origin and
                     line.origin.line.origin.__name__ == 'account.invoice' and
                     line.origin.line.origin.move == line.origin.line.move):
                 per_invoice[line.origin.line.origin]['paid'].append(line)
