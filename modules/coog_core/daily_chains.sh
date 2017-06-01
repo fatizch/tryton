@@ -97,6 +97,11 @@ if is_weekday; then
             --payment_kind=payable                          \
             --journal_methods=sepa
 
+    check_modules "account_payment_cog" &&                  \
+        coog chain -- account_payment_cog payment_ack       \
+            --treatment_date="$TODAY_DATE"                  \
+            --journal_methods=sepa
+
     check_modules "account_aggregate" &&                    \
         coog chain -- account_aggregate snapshot
 

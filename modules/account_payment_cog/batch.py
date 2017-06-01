@@ -416,8 +416,10 @@ class PaymentValidationBatchBase(batch.BatchRoot):
 
     @classmethod
     def base_domain_select_ids(cls, payment_kind, **kwargs):
-        return [('group.state', '=', 'to_acknowledge'),
-            ('kind', '=', payment_kind)]
+        domain = [('group.state', '=', 'to_acknowledge')]
+        if payment_kind:
+            domain.append(('kind', '=', payment_kind))
+        return domain
 
     @classmethod
     def select_ids(cls, treatment_date, group_reference=None,
