@@ -5,13 +5,15 @@
 # You can add chain regarding the executing frequencies.
 # This script is executed every day, thanks to a crontab.
 
-if [[ "$#" -ne 2 ]]; then
-    echo 'Usage: daily_chains WORKING_DAYS WORKING_DAYS_CONF' 2>&1
+if [[ "$#" -ne 3 ]]; then
+    echo 'Usage: daily_chains WORKING_DAYS WORKING_DAYS_CONF SNAPSHOT_OUTPUT' 2>&1
     exit 1
 fi
 
 WORKING_DAYS="$1"
 WORKING_DAYS_CONF="$2"
+SNAPSHOT_OUTPUT="$3"
+
 
 TODAY_DATE="$(date --iso)"
 TOMORROW_DATE="$(date --date=tomorrow +%d)"
@@ -108,8 +110,7 @@ if is_weekday; then
     check_modules "account_aggregate" &&                    \
         coog chain -- account_aggregate extract_snapshot    \
             --treatment_date="$TODAY_DATE"                  \
-            --flush_size=1024                               \
-            --output_filename=/tmp/coog_snapshot.txt
+            --output_filename="$SNAPSHOT_OUTPUT"
 
     check_modules "planned_event" &&                        \
         coog chain -- planned_event process                 \
