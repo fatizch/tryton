@@ -24,6 +24,7 @@ from .diff_blame import *
 from .note import *
 from .access import *
 import extra_details
+import wizard_context
 
 
 def register():
@@ -87,6 +88,7 @@ def register():
         BatchParamsConfig,
         extra_details.ExtraDetailsConfiguration,
         extra_details.ExtraDetailsConfigurationLine,
+        wizard_context.PersistentDataView,
         module='coog_core', type_='model')
 
     if config.get('env', 'testing') == 'True':
@@ -114,6 +116,7 @@ def register():
         ExportToFile,
         TranslationOverride,
         RevisionBlameWizard,
+        wizard_context.PersistentContextWizard,
         module='coog_core', type_='wizard')
 
     Pool.register_post_init_hooks(cache_fields_get, module='ir')

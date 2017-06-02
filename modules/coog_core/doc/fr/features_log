@@ -1,5 +1,6 @@
-Version 1.12 - 2017-04-28
+* Ajout d'un contexte persistant dans les assistants
 
+Version 1.12 - 2017-04-28
 * Possibilité de formatter le fichier d'export json
 * Les actions par type d'événement activées et désactivées sont distinguées par des onglets
 * Les actions par type d'événement peuvent être activées/désactivées

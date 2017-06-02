@@ -1,5 +1,6 @@
-Version 1.12 - 2017-04-28
+* Add persistent wizard context
 
+Version 1.12 - 2017-04-28
 * New option to beautify json exported file
 * Add tabs to identify enabled/disabled event type actions
 * Add active field to event_type_action model
