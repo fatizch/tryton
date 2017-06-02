@@ -28,7 +28,7 @@ from trytond import backend
 from trytond.pool import Pool
 from trytond.config import config
 from trytond.model import Model, Unique
-from trytond.wizard import Wizard, StateAction, StateView, Button
+from trytond.wizard import StateAction, StateView, Button
 from trytond.wizard import StateTransition
 from trytond.report import Report
 from trytond.ir import Attachment
@@ -39,6 +39,7 @@ from trytond.model import DictSchemaMixin
 from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields, model, utils, coog_string, export
+from trytond.modules.coog_core import wizard_context
 
 logger = logging.getLogger(__name__)
 
@@ -394,13 +395,13 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def print_reports(self, reports, context_):
         """ Reports is a list of dicts with keys:
             object, origin, report type, data, report name"""
-        if self.export_dir:
-            ReportGenerate = Pool().get('report.generate', type='report')
-            data = context_['reporting_data']
-            records = ReportGenerate._get_records(data['ids'], data['model'],
-                data)
-            with ServerContext().set_context(
-                    genshi_context=ReportGenerate.get_context(records, data)):
+        ReportGenerate = Pool().get('report.generate', type='report')
+        data = context_['reporting_data']
+        records = ReportGenerate._get_records(data['ids'], data['model'],
+            data)
+        with ServerContext().set_context(
+                genshi_context=ReportGenerate.get_context(records, data)):
+            if self.genshi_evaluated_export_dir:
                 self.export_reports(reports)
 
     def get_export_dirname(self):
@@ -1083,7 +1084,7 @@ class ReportGenerateFromFile(CoogReport):
             os.path.split(conv_paths[0])[1])
 
 
-class ReportCreate(Wizard):
+class ReportCreate(wizard_context.PersistentContextWizard):
     'Report Creation'
 
     __name__ = 'report.create'
@@ -1181,18 +1182,26 @@ class ReportCreate(Wizard):
 
     def report_execute(self, ids, doc_template, report_context):
         ReportModel = Pool().get('report.generate', type='report')
+        records = ReportModel._get_records(ids, report_context['model'],
+            report_context)
+        self.wizard_context.update({
+                'records': records,
+                'report_context': report_context,
+                })
         ext, filedata, prnt, file_basename = ReportModel.execute(ids,
             report_context)
         os_extsep = os.extsep if ext else ''
         client_filepath, server_filepath = ReportModel.edm_write_tmp_report(
             filedata, '%s%s%s' % (file_basename, os_extsep, ext))
-        return {
+        report = {
             'generated_report': client_filepath,
             'server_filepath': server_filepath,
             'file_basename': file_basename,
             'extension': ext,
             'template': doc_template,
             }
+        self.wizard_context.update({'report': report})
+        return report
 
     def finalize_report(self, report, instance):
         self.preview_document.reports = [report]
