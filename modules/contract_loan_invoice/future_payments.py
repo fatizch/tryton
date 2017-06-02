@@ -36,6 +36,13 @@ class ShowAllInvoices(Wizard):
             LineDisplayer.update_detail_for_display(invoice)
         return {
             'invoices': future_invoices,
+            'currency_digits': contract.currency_digits,
+            'currency_symbol': contract.currency_symbol,
+            'amount': sum(x['amount'] for x in future_invoices),
+            'tax_amount': sum(x['tax_amount'] for x in future_invoices),
+            'total_amount': sum(x['total_amount'] for x in future_invoices),
+            'contract': contract.id,
+            'contract.rec_name': contract.rec_name,
             }
 
 
@@ -44,6 +51,17 @@ class ShowAllInvoicesMain(model.CoogView):
 
     __name__ = 'contract.invoice.show_all.show'
 
+    amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'], readonly=True)
+    tax_amount = fields.Numeric('Tax Amount',
+        digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'], readonly=True)
+    total_amount = fields.Numeric('Total Premium Amount',
+        digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'], readonly=True)
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    currency_digits = fields.Integer('Currency Digits', readonly=True)
+    currency_symbol = fields.Char('Currency Symbol', readonly=True)
     invoices = fields.One2Many('contract.invoice.show_all.line', None,
         'Invoices', readonly=True)
 

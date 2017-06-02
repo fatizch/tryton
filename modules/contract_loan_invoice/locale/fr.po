@@ -62,6 +62,22 @@ msgctxt "field:contract.invoice.show_all.line,total_amount:"
 msgid "Total Amount"
 msgstr "Montant Total"
 
+msgctxt "field:contract.invoice.show_all.show,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:contract.invoice.show_all.show,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.invoice.show_all.show,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:contract.invoice.show_all.show,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
 msgctxt "field:contract.invoice.show_all.show,id:"
 msgid "ID"
 msgstr "ID"
@@ -69,6 +85,14 @@ msgstr "ID"
 msgctxt "field:contract.invoice.show_all.show,invoices:"
 msgid "Invoices"
 msgstr "Quittances"
+
+msgctxt "field:contract.invoice.show_all.show,tax_amount:"
+msgid "Tax Amount"
+msgstr "Taxe"
+
+msgctxt "field:contract.invoice.show_all.show,total_amount:"
+msgid "Total Premium Amount"
+msgstr "Montant de prime total"
 
 msgctxt "field:contract.premium,loan:"
 msgid "Loan"
@@ -311,12 +335,16 @@ msgid "On Each Loan Payment"
 msgstr "A chaque échéance"
 
 msgctxt "view:contract.invoice.show_all.line:"
-msgid "Premium"
-msgstr "Prime"
+msgid "Amount"
+msgstr "Montant"
 
 msgctxt "view:contract.invoice.show_all.line:"
-msgid "Premiums"
-msgstr "Primes"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "view:contract.invoice.show_all.line:"
+msgid "Total"
+msgstr "Total"
 
 msgctxt "view:contract.invoice.show_all.show:"
 msgid "All Invoices"
