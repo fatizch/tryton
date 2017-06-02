@@ -56,14 +56,86 @@ msgstr ""
 "La période de sous-séquence est invalide: %(start_date)s est plus grand que "
 "%(end_date)s"
 
+msgctxt "field:ir.sequence,create_date:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.sequence,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ir.sequence,iteration_before_notification:"
+msgid "Iteration(s) Before Notification"
+msgstr "Itération(s) avant notification"
+
+msgctxt "help:ir.sequence,iteration_before_notification:"
+msgid "Integer which defines how much sequence(s) it must remains"
+" before sending a notification"
+msgstr "Entier qui définit combien de numéro(s) il doit rester"
+" avant d'envoyer une notification"
+
+msgctxt "field:ir.sequence,max_number:"
+msgid "Max Number"
+msgstr "Limite haute"
+
+msgctxt "field:ir.sequence,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:ir.sequence,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:ir.sequence,sub_order:"
+msgid "Sub order"
+msgstr "Ordre secondaire"
+
+msgctxt "field:ir.sequence,sub_sequences:"
+msgid "Sub Sequences"
+msgstr "Sous-séquences"
+
+msgctxt "field:ir.sequence.strict,create_date:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.sequence.strict,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:ir.sequence.strict,iteration_before_notification:"
+msgid "Iteration(s) Before Notification"
+msgstr "Itération(s) avant notification"
+
+msgctxt "help:ir.sequence.strict,iteration_before_notification:"
+msgid "Integer which defines how much sequence(s) it must remains"
+" before sending a notification"
+msgstr "Entier qui définit combien de numéro(s) il doit rester"
+" avant d'envoyer une notification"
+
+msgctxt "field:ir.sequence.strict,max_number:"
+msgid "Max Number"
+msgstr "Limite haute"
+
+msgctxt "field:ir.sequence.strict,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:ir.sequence.strict,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:ir.sequence.strict,sub_order:"
+msgid "Sub order"
+msgstr "Ordre secondaire"
+
+msgctxt "field:ir.sequence.strict,sub_sequences:"
+msgid "Sub Sequences"
+msgstr "Sous-séquences"
+
 msgctxt "model:event.type,name:sequence_limit_notification"
 msgid "Sequence Limit Notification"
 msgstr "Notification de limite de séquence"
 
-msgctxt "model:ir.action.act_window.domain,name:act_children_sequence_form"
+msgctxt "model:ir.action.act_window.domain,name:"
 msgid "Sub Sequences"
 msgstr "Sous-séquences"
-
-msgctxt "model:ir.action.act_window.domain,name:act_main_sequence_form"
-msgid "Main sequences"
-msgstr "Séquences principales"

@@ -45,9 +45,10 @@ class Sequence(model.CoogSQL):
             'invisible': ~Eval('parent'),
             }, depends=['parent'])
     iteration_before_notification = fields.Integer(
-        'Iteration Before Notification', states={
+        'Iteration(s) Before Notification', states={
             'invisible': (Eval('type') != 'incremental') | Bool(Eval('parent')),
-            }, depends=['type', 'parent'])
+            }, depends=['type', 'parent'], help='Integer which defines how'
+        ' much sequence(s) it must remains before sending a notification')
 
     @classmethod
     def __setup__(cls):
@@ -64,7 +65,7 @@ class Sequence(model.CoogSQL):
                 ' %(start_date)s greater than %(end_date)s',
                 })
         for field_ in ('prefix', 'suffix', 'type', 'padding',
-            'timestamp_rounding'):
+                'timestamp_rounding', 'number_increment'):
             field_ = getattr(cls, field_)
             if 'invisible' not in field_.states:
                 field_.states['invisible'] = False
@@ -144,6 +145,7 @@ class Sequence(model.CoogSQL):
     @classmethod
     def _get_sequence(cls, sequence):
         Event = Pool().get('event')
+        prefix, suffix = '', ''
         if not sequence.sub_sequences:
             value = super(Sequence, cls)._get_sequence(sequence)
             if sequence.max_number and int(value) > sequence.max_number:
@@ -154,12 +156,13 @@ class Sequence(model.CoogSQL):
         else:
             valid_sequence = sequence.get_valid_sequence_at_date()
             value = valid_sequence._get_sequence(valid_sequence)
+            prefix, suffix = valid_sequence.prefix, valid_sequence.suffix
         if (sequence.type == 'incremental' and sequence.max_number
                 and sequence.max_number - int(value) <=
                 sequence.iteration_before_notification):
             Event.notify_events([sequence],
                 'sequence_limit_notification')
-        return value
+        return '%s%s%s' % (prefix, value, suffix)
 
 
 class SequenceStrict(Sequence):
