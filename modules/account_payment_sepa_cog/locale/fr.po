@@ -41,8 +41,8 @@ msgid "Bank Account"
 msgstr "Compte Bancaire"
 
 msgctxt "field:account.payment,payer:"
-msgid "Payer"
-msgstr "Payeur"
+msgid "Account Owner"
+msgstr "Titulaire du compte"
 
 msgctxt "field:account.payment,reject_fee_amount:"
 msgid "Reject Fee Amount"
@@ -107,8 +107,8 @@ msgid "Bank Account"
 msgstr "Compte Bancaire"
 
 msgctxt "field:account.payment.payment_creation.start,payer:"
-msgid "Payer"
-msgstr "Payeur"
+msgid "Account Owner"
+msgstr "Titulaire du compte"
 
 msgctxt "field:account.payment.sepa.mandate,amendment_of:"
 msgid "Amendment Of"

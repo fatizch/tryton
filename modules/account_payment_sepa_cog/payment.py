@@ -504,7 +504,7 @@ class Payment:
             depends=['currency_digits']),
         'get_reject_fee_amount')
     payer = fields.Function(
-        fields.Many2One('party.party', 'Payer'),
+        fields.Many2One('party.party', 'Account Owner'),
         'on_change_with_payer')
 
     @classmethod
@@ -870,7 +870,7 @@ class PaymentCreationStart:
          'Available Payers')
     available_bank_accounts = fields.Many2Many('bank.account', None, None,
          'Available Bank Accounts')
-    payer = fields.Many2One('party.party', 'Payer',
+    payer = fields.Many2One('party.party', 'Account Owner',
         domain=[('id', 'in', Eval('available_payers'))],
         states={
             'invisible': (~Bool(Eval('process_method')) |
@@ -965,11 +965,13 @@ class PaymentCreation:
     def _get_sepa_mandate(self):
         pool = Pool()
         Mandate = pool.get('account.payment.sepa.mandate')
-        return Mandate.search([
+        mandates = Mandate.search([
                 ('state', '=', 'validated'),
                 ('party', '=', self.start.payer.id),
                 ('account_number.account', '=', self.start.bank_account.id),
-                ('signature_date', '<=', self.start.payment_date)])[0]
+                ('signature_date', '<=', self.start.payment_date)])
+        if mandates:
+            return mandates[0]
 
     def default_start(self, values):
         start = super(PaymentCreation, self).default_start(values)
