@@ -17,7 +17,7 @@ from trytond.pyson import Eval, Or
 from trytond.sendmail import sendmail, sendmail_transactional
 from trytond.wizard import Button, StateAction
 
-from trytond.modules.coog_core import fields, model, coog_string
+from trytond.modules.coog_core import fields, model
 
 
 __metaclass__ = PoolMeta
