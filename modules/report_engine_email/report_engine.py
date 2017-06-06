@@ -106,8 +106,9 @@ class ReportGenerate:
                             'utf-8'))
                 for i, attachment in enumerate(attachments):
                     part = MIMEApplication(attachment['data'])
-                    part.add_header('Content-Disposition', 'attachment; '
-                        'filename="%s_%s"' % (i, attachment['report_name']))
+                    part.add_header('Content-Disposition', 'attachment',
+                        filename=('%s_%s' % (i, attachment['report_name'])
+                            ).encode('utf-8'))
                     msg.attach(part)
                 for image in selected_letter.images:
                     img = MIMEImage(image.image)
@@ -154,7 +155,9 @@ class ReportGenerate:
         recipients = [x.strip() for x in
             selected_letter.genshi_evaluated_email_dest.split(',')]
         if not send:
-            return '', '', False, ''
+            return ([x['report_type'] for x in attachments],
+                [x['data'] for x in attachments],
+                    False, [x['report_name'] for x in attachments])
         if not selected_letter.email_blocking:
             try:
                 sendmail(
@@ -378,23 +381,22 @@ class ReportCreate:
             report_context['model'], report_context)
         report_context = ReportGenerate.get_context(records, report_context)
         with ServerContext().set_context(genshi_context=report_context):
-            if self.select_template.recipient_email:
-                recipients = self.select_template.recipient_email.email
+            tmpl = self.select_template
+            if tmpl.recipient_email:
+                recipients = tmpl.recipient_email.email
             else:
                 recipients = \
-                    self.select_template.template.genshi_evaluated_email_dest
+                    tmpl.template.genshi_evaluated_email_dest
             action['email'] = {
                 'to': recipients,
-                'cc': self.select_template.template.genshi_evaluated_email_cc,
-                'bcc': self.select_template.template.genshi_evaluated_email_bcc,
+                'cc': tmpl.template.genshi_evaluated_email_cc,
+                'bcc': tmpl.template.genshi_evaluated_email_bcc,
                 'from':
-                self.select_template.template.genshi_evaluated_email_sender,
+                tmpl.template.genshi_evaluated_email_sender,
                 'subject':
-                self.select_template.template.genshi_evaluated_email_subject.
-                    encode('utf-8-'),
+                tmpl.template.genshi_evaluated_email_subject.encode('utf-8'),
                 'body':
-                self.select_template.template.genshi_evaluated_email_body.
-                    encode('utf-8'),
+                tmpl.template.genshi_evaluated_email_body.encode('utf-8'),
                 }
 
         _, base_path = ReportGenerate.create_shared_tmp_dir()
