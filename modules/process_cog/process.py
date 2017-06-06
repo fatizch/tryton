@@ -1370,10 +1370,10 @@ class ProcessResume(Wizard):
                 })
 
     def do_resume(self, action):
-        return self.resume()
+        return self._resume()
 
     @classmethod
-    def resume(cls):
+    def _resume(cls):
         pool = Pool()
         active_id = Transaction().context.get('active_id')
         active_model = Transaction().context.get('active_model')
