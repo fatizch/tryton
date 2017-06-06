@@ -432,20 +432,25 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     def get_func_key(self, name):
         return '%s|%s' % ((self.quote_number, self.contract_number))
 
-    def get_all_periods(self, limit=0):
-        kwargs = {'order': [('start_date', 'ASC')]}
-        if limit:
-            kwargs['limit'] = limit
-        pool = Pool()
-        History = pool.get('contract.activation_history')
-        all_periods = History.search([('contract', '=', self.id),
-                ('active', 'in', [True, False])], **kwargs)
-        return all_periods
+    @classmethod
+    def get_initial_start_date(cls, contracts, name):
+        ActivationHistory = Pool().get('contract.activation_history')
+        activation_history = ActivationHistory.__table__()
+        cursor = Transaction().connection.cursor()
 
-    def get_initial_start_date(self, name):
-        all_periods = self.get_all_periods(limit=1)
-        if all_periods:
-            return all_periods[0].start_date
+        res = {x.id: None for x in contracts}
+        for contract_slice in grouped_slice(contracts):
+            where_clause = activation_history.contract.in_(
+                [x.id for x in contract_slice])
+            cursor.execute(*activation_history.select(
+                    activation_history.contract,
+                    Min(activation_history.start_date),
+                    where=where_clause,
+                    group_by=[activation_history.contract]))
+
+            for contract, start in cursor.fetchall():
+                res[contract] = start
+        return res
 
     def related_attachments_resources(self):
         return [str(self)]
