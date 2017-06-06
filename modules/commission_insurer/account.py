@@ -117,7 +117,7 @@ class Invoice:
             cursor.execute(*invoice_line_query)
             invoice_line_ids = [x[0] for x in cursor.fetchall()]
             if not invoice_line_ids:
-                return
+                continue
             move_line_query = move_line.select(move_line.id, where=(
                     move_line.principal_invoice_line.in_(invoice_line_ids)))
             cursor.execute(*move_line_query)
