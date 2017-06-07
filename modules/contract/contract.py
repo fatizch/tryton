@@ -510,8 +510,10 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             dates = [contract.get_date_used_for_contract_end_date()]
             dates.append(contract.get_maximum_end_date())
             dates = [x for x in dates if x] or [None]
-            contract.end_date = min(dates)
-            updated.append(contract)
+            end_date = min(dates)
+            if contract.end_date != end_date:
+                contract.end_date = end_date
+                updated.append(contract)
         if updated:
             cls.save(updated)
 
