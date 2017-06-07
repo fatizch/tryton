@@ -9,10 +9,9 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import dualmethod
 from trytond.server_context import ServerContext
 
-from trytond.modules.coog_core import fields, utils
+from trytond.modules.coog_core import fields
 from trytond.modules.commission_insurance.commission import \
     COMMISSION_AMOUNT_DIGITS, COMMISSION_RATE_DIGITS
-from trytond.modules.coog_core.coog_date import FREQUENCY_CONVERSION_TABLE
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -189,31 +188,6 @@ class ContractOption:
                 rate = Decimal(0)
         return amount, rate
 
-    def get_com_premiums(self, start_date, end_date):
-        premiums = utils.get_good_versions_at_date(self, 'premiums', start_date,
-            'start', 'end')
-        extra_premiums = utils.get_good_versions_at_date(self, 'extra_premiums',
-            start_date, 'start', 'end')
-        if premiums:
-            premiums.sort(key=lambda x: x.start)
-            latest_premium = premiums[-1]
-            if latest_premium.frequency in ['yearly', 'monthly', 'quaterly',
-                    'half_yearly']:
-                monthly_premium_incl_tax = \
-                    self.compute_premium_with_extra_premium(
-                        latest_premium.amount, extra_premiums) / \
-                    Decimal(FREQUENCY_CONVERSION_TABLE[
-                            latest_premium.frequency])
-                Tax = Pool().get('account.tax')
-                InvoiceLine = Pool().get('account.invoice.line')
-                monthly_premium_excl_tax = self.currency.round(
-                            Tax._reverse_unit_compute(monthly_premium_incl_tax,
-                                latest_premium.taxes, start_date).quantize(
-                                Decimal(1) /
-                                10 ** InvoiceLine.unit_price.digits[1]))
-                return monthly_premium_incl_tax, monthly_premium_excl_tax
-        return None, None
-
     def compute_commission_with_prepayment_schedule(self, agent, plan, rate,
             amount, start_date, end_date, details):
         pool = Pool()
@@ -237,14 +211,12 @@ class ContractOption:
                 Decimal(10) ** -COMMISSION_AMOUNT_DIGITS)
             commission.commissioned_option = self
             commission.extra_details = details
-            monthly_premium_incl_tax, monthly_premium_excl_tax = \
-                self.get_com_premiums(start_date, end_date)
             commission.extra_details.update({
                 'first_year_premium': self.first_year_premium,
                 'is_adjustment': ServerContext().get('prepayment_adjustment',
                     False),
-                'monthly_premium_incl_tax': monthly_premium_incl_tax,
-                'monthly_premium_excl_tax': monthly_premium_excl_tax,
+                'monthly_premium_incl_tax': self.monthly_premium_incl_tax,
+                'monthly_premium_excl_tax': self.monthly_premium_excl_tax,
                 })
             commissions.append(commission)
         return commissions

@@ -1,27 +1,15 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import datetime
-
 from decimal import Decimal
 
-from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pool import PoolMeta
 
-from trytond.modules.coog_core import fields, utils
-from trytond.modules.coog_core.coog_date import FREQUENCY_CONVERSION_TABLE
+from trytond.modules.coog_core import fields
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
-    'ContractOption',
     ]
-
-ANNUAL_CONVERSION_TABLE = {
-    'yearly': 1,
-    'half_yearly': 2,
-    'quaterly': 4,
-    'monthly': 12,
-    }
 
 
 class Contract:
@@ -96,121 +84,5 @@ class Contract:
             'paid_amount_incl_tax': paid_amounts_incl_tax,
             'paid_amount_excl_tax': paid_amounts_excl_tax,
             'paid_amount_taxes': paid_amounts_taxes,
-            }
-        return {key: result[key] for key in names}
-
-
-class ContractOption:
-    __name__ = 'contract.option'
-
-    annual_premium_incl_tax = fields.Function(
-        fields.Numeric('Annual Premium Including Taxes',
-            digits=(16, Eval('currency_digits', 2)),
-            depends=['currency_digits']),
-        'get_premium')
-    annual_premium_excl_tax = fields.Function(
-        fields.Numeric('Annual Premium Excluding Taxes',
-            digits=(16, Eval('currency_digits', 2)),
-            depends=['currency_digits']),
-        'get_premium')
-    annual_taxes = fields.Function(
-        fields.Numeric('Annual Taxes',
-            digits=(16, Eval('currency_digits', 2)),
-            depends=['currency_digits']),
-        'get_premium')
-    monthly_premium_incl_tax = fields.Function(
-        fields.Numeric('Monthly Premium Including Taxes',
-            digits=(16, Eval('currency_digits', 2)),
-            depends=['currency_digits']),
-        'get_premium')
-    monthly_premium_excl_tax = fields.Function(
-        fields.Numeric('Monthly Premium Excluding Taxes',
-            digits=(16, Eval('currency_digits', 2)),
-            depends=['currency_digits']),
-        'get_premium')
-    monthly_taxes = fields.Function(
-        fields.Numeric('Monthly Taxes',
-            digits=(16, Eval('currency_digits', 2)),
-            depends=['currency_digits']),
-        'get_premium')
-
-    def get_void_annual_premium_incl_tax(self):
-        return Decimal('0.0')
-
-    def get_void_annual_premium_excl_tax(self):
-        return Decimal('0.0')
-
-    @classmethod
-    def get_premium(cls, options, names, date=None):
-        annual_premiums_incl_tax = {o.id: Decimal('0.0') for o in options}
-        annual_premiums_excl_tax = {o.id: Decimal('0.0') for o in options}
-        annual_premiums_taxes = {o.id: Decimal('0.0') for o in options}
-        monthly_premiums_incl_tax = {o.id: Decimal('0.0') for o in options}
-        monthly_premiums_excl_tax = {o.id: Decimal('0.0') for o in options}
-        monthly_premiums_taxes = {o.id: Decimal('0.0') for o in options}
-        InvoiceLine = Pool().get('account.invoice.line')
-
-        date = date or utils.today()
-        for option in options:
-            premiums = utils.get_good_versions_at_date(option, 'premiums', date,
-                'start', 'end')
-            extra_premiums = utils.get_good_versions_at_date(option,
-                'extra_premiums', date, 'start', 'end')
-            annual_premium_incl_tax = annual_premium_excl_tax = \
-                monthly_premium_incl_tax = monthly_premium_excl_tax = \
-                Decimal('0.0')
-            if not premiums:
-                annual_premium_incl_tax = option. \
-                    get_void_annual_premium_incl_tax()
-                annual_premium_excl_tax = option. \
-                    get_void_annual_premium_excl_tax()
-            else:
-                premiums.sort(key=lambda x: x.start)
-                last_premium = premiums[-1]
-                Tax = Pool().get('account.tax')
-                if last_premium.frequency in ['yearly', 'monthly', 'quaterly',
-                        'half_yearly']:
-                    annual_premium_incl_tax = option. \
-                        compute_premium_with_extra_premium(last_premium.amount,
-                            extra_premiums) * Decimal(
-                                ANNUAL_CONVERSION_TABLE[last_premium.frequency])
-                    annual_premium_excl_tax = option.currency.round(
-                        Tax._reverse_unit_compute(annual_premium_incl_tax,
-                            last_premium.taxes, date).quantize(
-                            Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1])
-                            )
-                if option.status != 'void' and option.start_date and \
-                    option.start_date <= date <= (option.end_date or datetime.
-                        date.max):
-                    latest_premium = premiums[0]
-                    if latest_premium.frequency in ['yearly', 'monthly',
-                            'quaterly', 'half_yearly']:
-                        monthly_premium_incl_tax = option. \
-                            compute_premium_with_extra_premium(
-                                latest_premium.amount, extra_premiums) / \
-                            Decimal(FREQUENCY_CONVERSION_TABLE[
-                                    latest_premium.frequency])
-                        monthly_premium_excl_tax = option.currency.round(
-                            Tax._reverse_unit_compute(monthly_premium_incl_tax,
-                                latest_premium.taxes, date).quantize(
-                                Decimal(1)
-                                / 10 ** InvoiceLine.unit_price.digits[1]))
-
-            annual_premiums_incl_tax[option.id] = annual_premium_incl_tax
-            annual_premiums_excl_tax[option.id] = annual_premium_excl_tax
-            annual_premiums_taxes[option.id] = annual_premium_incl_tax - \
-                annual_premium_excl_tax
-            monthly_premiums_incl_tax[option.id] = monthly_premium_incl_tax
-            monthly_premiums_excl_tax[option.id] = monthly_premium_excl_tax
-            monthly_premiums_taxes[option.id] = monthly_premium_incl_tax - \
-                monthly_premium_excl_tax
-
-        result = {
-            'annual_premium_incl_tax': annual_premiums_incl_tax,
-            'annual_premium_excl_tax': annual_premiums_excl_tax,
-            'annual_taxes': annual_premiums_taxes,
-            'monthly_premium_incl_tax': monthly_premiums_incl_tax,
-            'monthly_premium_excl_tax': monthly_premiums_excl_tax,
-            'monthly_taxes': monthly_premiums_taxes,
             }
         return {key: result[key] for key in names}

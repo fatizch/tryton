@@ -16,7 +16,6 @@ def register():
         Invoice,
         InvoiceLine,
         Contract,
-        ContractOption,
         module='insurer_reporting', type_='model')
     Pool.register(
         InsurerReportContract,
