@@ -1793,12 +1793,13 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
             self.direct_debit_day_selector = ''
             self.direct_debit_account = None
             return
-        if (self.billing_mode.direct_debit and str(self.direct_debit_day)
+        if (self.billing_mode.direct_debit and
+                (str(self.direct_debit_day), str(self.direct_debit_day))
                 not in self.billing_mode.get_allowed_direct_debit_days()):
-                self.direct_debit_day = int(
-                    self.billing_mode.get_allowed_direct_debit_days()[0][0])
-                self.direct_debit_day_selector = \
-                    self.get_direct_debit_day_selector()
+            self.direct_debit_day = int(
+                self.billing_mode.get_allowed_direct_debit_days()[0][0])
+            self.direct_debit_day_selector = \
+                self.get_direct_debit_day_selector()
 
     @fields.depends('billing_mode')
     def on_change_with_direct_debit(self, name=None):
