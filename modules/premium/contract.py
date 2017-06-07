@@ -266,7 +266,8 @@ class Contract:
         for fee in required_fees - current_fees:
             contract_fees[fee] = ContractFee.new_fee(fee)
         for fee in current_fees & required_fees:
-            contract_fees[fee].manual = False
+            if contract_fees[fee].manual:
+                contract_fees[fee].manual = False
 
         self.fees = sorted(contract_fees.values(), key=lambda x: x.fee)
         if to_delete:
