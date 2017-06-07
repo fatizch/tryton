@@ -2026,7 +2026,9 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         return dates
 
     def set_automatic_end_date(self):
-        self.automatic_end_date = self.calculate_automatic_end_date()
+        calculated = self.calculate_automatic_end_date()
+        if calculated != self.automatic_end_date:
+            self.automatic_end_date = calculated
         if (self.manual_end_date and self.automatic_end_date and
                 self.automatic_end_date <= self.manual_end_date):
             self.manual_end_date = None
