@@ -23,9 +23,12 @@ def migrate_1_12_remove_zip_constraint(pool, update):
     if not country_cog:
         return
 
-    logging.getLogger('modules').info('Running post init hook %s' %
-        'migrate_1_12_remove_zip_contraint')
-
     Zip = pool.get('country.zip')
-    Zip._sql_constraints = [x for x in Zip._sql_constraints
-        if x[0] is not 'zip_uniq']
+    new_constraints = []
+    for x in Zip._sql_constraints:
+        if x[0] == 'zip_uniq':
+            logging.getLogger('modules').info('Running post init hook %s' %
+                'migrate_1_12_remove_zip_contraint')
+            continue
+        new_constraints.append(x)
+    Zip._sql_constraints = new_constraints
