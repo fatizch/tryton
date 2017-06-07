@@ -257,11 +257,39 @@ class ContractOption:
             depends=['currency_digits']),
         'get_premium')
 
-    def get_void_annual_premium_incl_tax(self):
-        return Decimal('0.0')
-
-    def get_void_annual_premium_excl_tax(self):
-        return Decimal('0.0')
+    def get_void_premium(self, date):
+        res = {
+            'annual_void_premium_incl_tax': 0,
+            'annual_void_premium_excl_tax': 0,
+            'monthly_void_premium_incl_tax': 0,
+            'monthly_void_premium_excl_tax': 0,
+            }
+        rule_dict_template = self.coverage.premium_rules[
+            0].get_base_premium_dict(self)
+        self.init_dict_for_rule_engine(rule_dict_template)
+        rule_dict_template['date'] = date
+        lines = self.coverage.premium_rules[0].do_calculate(rule_dict_template)
+        for cur_line in lines:
+            if (cur_line.amount and self.coverage.premium_rules[0].frequency in
+                    ANNUAL_CONVERSION_TABLE):
+                res['annual_void_premium_incl_tax'] += cur_line.amount * \
+                    Decimal(ANNUAL_CONVERSION_TABLE[
+                            self.coverage.premium_rules[0].frequency])
+                res['monthly_void_premium_incl_tax'] += cur_line.amount / \
+                    Decimal(FREQUENCY_CONVERSION_TABLE[
+                            self.coverage.premium_rules[0].frequency])
+        pool = Pool()
+        Tax = pool.get('account.tax')
+        InvoiceLine = pool.get('account.invoice.line')
+        res['annual_void_premium_excl_tax'] = self.currency.round(
+            Tax._reverse_unit_compute(res['annual_void_premium_incl_tax'],
+                self.coverage.taxes, date).quantize(
+                Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1]))
+        res['monthly_void_premium_excl_tax'] = self.currency.round(
+            Tax._reverse_unit_compute(res['monthly_void_premium_incl_tax'],
+                self.coverage.taxes, date).quantize(
+                Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1]))
+        return res
 
     @classmethod
     def get_premium(cls, options, names, date=None):
@@ -283,12 +311,16 @@ class ContractOption:
                 monthly_premium_incl_tax = monthly_premium_excl_tax = \
                 Decimal('0.0')
             if not premiums:
-                annual_premium_incl_tax = option. \
-                    get_void_annual_premium_incl_tax()
-                monthly_premium_incl_tax = annual_premium_incl_tax / 12
-                annual_premium_excl_tax = option. \
-                    get_void_annual_premium_excl_tax()
-                monthly_premiums_excl_tax = annual_premium_excl_tax / 12
+                void_premiums = option.get_void_premium(
+                    option.initial_start_date)
+                annual_premium_incl_tax = void_premiums.get(
+                    'annual_void_premium_incl_tax', 0)
+                monthly_premium_incl_tax = void_premiums.get(
+                    'monthly_void_premium_incl_tax')
+                annual_premium_excl_tax = void_premiums.get(
+                    'annual_void_premium_excl_tax')
+                monthly_premiums_excl_tax = void_premiums.get(
+                    'monthly_void_premium_excl_tax')
             else:
                 premiums.sort(key=lambda x: x.start)
                 last_premium = premiums[-1]
