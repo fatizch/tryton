@@ -6,6 +6,7 @@ from sql.aggregate import Sum
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import utils
 
@@ -39,6 +40,16 @@ class Contract:
         super(Contract, self).rebill(start, end, post_end)
         if self.status in ['void', 'terminated']:
             self.calculate_commission_recovery()
+
+    @classmethod
+    def do_terminate(cls, contracts):
+        super(Contract, cls).do_terminate(contracts)
+        # recovery commission should not be computed until the contract is
+        # actually terminated
+        if not ServerContext().get('from_batch', False):
+            return
+        for contract in contracts:
+            contract.calculate_commission_recovery()
 
 
 class ContractOption:
