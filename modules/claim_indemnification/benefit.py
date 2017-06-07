@@ -257,7 +257,8 @@ class BenefitRule(
 
     def do_calculate_indemnification_rule(self, args):
         result = self.calculate_indemnification_rule(args)
-        if args['indemnification'].share == 1:
+        if (not args['indemnification'].share or
+                args['indemnification'].share == 1):
             return result
         for elem in result:
             for key in ('amount', 'base_amount', 'amount_per_unit'):
