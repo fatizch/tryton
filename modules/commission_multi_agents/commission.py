@@ -37,7 +37,8 @@ class Agent:
     commissioned_agents = fields.Many2Many('commission.agent-agent',
         'from_agent', 'to_second_level_agent', 'Commissioned Agent',
         domain=[
-            ('second_level_commission', '=', True),
+            ('OR', ('second_level_commission', '=', True),
+                ('type_', '!=', 'agent')),
             ('id', '!=', Eval('id')),
             ],
         states={'invisible': Eval('type_') != 'agent'},
