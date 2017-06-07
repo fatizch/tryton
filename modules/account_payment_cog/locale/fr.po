@@ -180,6 +180,10 @@ msgctxt "field:account.payment.group,payment_dates:"
 msgid "Payment Dates"
 msgstr "Dates de paiement"
 
+msgctxt "field:account.payment.group,process_method:"
+msgid "Process Method"
+msgstr "Méthode de traitement"
+
 msgctxt "field:account.payment.group,processing_payments:"
 msgid "Processing Payments"
 msgstr "Traitement des paiements"

@@ -787,6 +787,8 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
             ('to_acknowledge', 'To Acknowledge'),
             ('acknowledged', 'Acknowledged'),
             ], 'State', readonly=True, select=True)
+    process_method = fields.Function(
+        fields.Char('Process Method'), 'on_change_with_process_method')
 
     @classmethod
     def __setup__(cls):
@@ -813,7 +815,6 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
                 'reject_reason_not_found': 'The reason code on journal %s '
                 'is not found',
                 })
-
 
     @classmethod
     def __register__(cls, module_name):
@@ -909,7 +910,8 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
             if not reject_reasons:
                 cls.raise_user_error('reject_reason_not_found', journal.name)
             reject_reason, = reject_reasons
-            payments = sum([list(g.processing_payments) for g in sub_groups], [])
+            payments = sum(
+                [list(g.processing_payments) for g in sub_groups], [])
             Payment.manual_set_reject_reason(payments, reject_reason)
             Group.update_payments(sub_groups, 'fail')
 
@@ -971,6 +973,10 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
 
     def get_sender(self):
         return self.journal.company.party
+
+    @fields.depends('journal')
+    def on_change_with_process_method(self, name=None):
+        return self.journal.process_method if self.journal else None
 
 
 class PaymentMotive(model.CoogSQL, model.CoogView):
