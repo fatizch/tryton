@@ -319,7 +319,7 @@ class ContractOption:
                     'monthly_void_premium_incl_tax')
                 annual_premium_excl_tax = void_premiums.get(
                     'annual_void_premium_excl_tax')
-                monthly_premiums_excl_tax = void_premiums.get(
+                monthly_premium_excl_tax = void_premiums.get(
                     'monthly_void_premium_excl_tax')
             else:
                 premiums.sort(key=lambda x: x.start)
