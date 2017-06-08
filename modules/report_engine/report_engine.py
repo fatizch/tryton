@@ -784,6 +784,7 @@ class ReportGenerate(CoogReport):
         action_report, = action_reports
         template = Pool().get('report.template')(data['doc_template'][0])
         action_report.template_extension = template.input_kind[-3:]
+        action_report.extension = template.output_format
         oext, content = cls.convert(action_report, cls.render(action_report,
             ServerContext().get('genshi_context', {})))
         name_giver = data.get('resource', None) or pool.get(data['model'])(
@@ -1200,7 +1201,7 @@ class ReportCreate(wizard_context.PersistentContextWizard):
             'extension': ext,
             'template': doc_template,
             }
-        self.wizard_context.update({'report': report})
+        self.wizard_context['report'] = report
         return report
 
     def finalize_report(self, report, instance):
@@ -1249,6 +1250,7 @@ class ReportCreate(wizard_context.PersistentContextWizard):
         attachment = self.set_attachment(
             contact.for_object_ref or contact.party)
         attachment.save()
+        self.wizard_context['attachment'] = attachment
         return 'end'
 
     def set_contact(self):
