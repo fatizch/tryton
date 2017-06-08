@@ -254,17 +254,27 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
 
     @property
     def _save_values(self):
+        # This overrides serves two purposes :
+        #   - Automatically convert removal to deletions for O2M fields
+        #     according to the "delete_missing" attribute
+        #   - Optimize writes by cleaning up empty write actions on O2M fields.
+        #     No need to trigger a write for :
+        #         [('write', [...], {'my_list': []})]
         values = super(CoogSQL, self)._save_values
+        new_values = {}
         for fname, fvalues in values.iteritems():
             field = self._fields[fname]
+            if isinstance(field, fields.One2Many) and not fvalues:
+                continue
+            new_values[fname] = fvalues
             if not isinstance(field, fields.One2Many):
                 continue
-            if not field._delete_missing:
-                continue
             for idx, action in enumerate(fvalues):
+                if not field._delete_missing:
+                    continue
                 if action[0] == 'remove':
                     fvalues[idx] = ('delete', action[1])
-        return values
+        return new_values
 
     def __getattr__(self, name):
         cls = self.__class__
