@@ -247,13 +247,11 @@ class ProcessPayment:
         else:
             return super(ProcessPayment, self).transition_pre_process()
 
-    def default_start(self, fields):
-        super(ProcessPayment, self).default_start(fields)
+    def default_start(self, name):
+        defaults = super(ProcessPayment, self).default_start(name)
         Payment = Pool().get('account.payment')
-        is_cheque_letter = bool(Payment.search([
+        defaults['is_cheque_letter'] = bool(Payment.search([
                     ('journal.process_method', '=', 'cheque_letter'),
                     ('id', 'in', Transaction().context.get('active_ids')),
                     ], limit=1))
-        return {
-            'is_cheque_letter': is_cheque_letter,
-            }
+        return defaults

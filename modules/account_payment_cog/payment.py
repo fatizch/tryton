@@ -1125,5 +1125,9 @@ class ProcessPayment:
                 button.state = 'pre_process'
                 break
 
+    def default_start(self, name):
+        # Do not remove, overriden in other modules
+        return {}
+
     def transition_pre_process(self):
         return 'process'
