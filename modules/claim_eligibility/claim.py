@@ -51,6 +51,10 @@ class ClaimService:
         fields.Text('Eligibility Extra Data Summary',
             depends=['eligibility_extra_data_values']),
         'get_eligibility_extra_data_summary')
+    rejection_extra_eligibility_data_summary = fields.Function(
+        fields.Text('Rejection Eligibility Extra Data Summary',
+            depends=['rejection_extra_data_values']),
+        'get_rejection_extra_data_summary')
     rejection_extra_data_values = fields.Dict('extra_data',
         'Rejection Extra Data')
 
@@ -77,6 +81,11 @@ class ClaimService:
         return Pool().get('extra_data').get_extra_data_summary(services,
             'eligibility_extra_data_values')
 
+    @classmethod
+    def get_rejection_extra_data_summary(cls, services, name):
+        return Pool().get('extra_data').get_extra_data_summary(services,
+            'rejection_extra_data_values')
+
     def init_from_loss(self, loss, benefit):
         self.eligibility_extra_data_values = {}
         self.rejection_extra_data_values = {}
@@ -92,6 +101,9 @@ class ClaimService:
         if (self.eligibility_status == 'accepted' and
                 self.extra_eligibility_data_summary):
             comment = '%s\n' % self.extra_eligibility_data_summary
+        if (self.eligibility_status == 'refused' and
+                self.rejection_extra_data_values):
+            comment = '%s\n' % self.rejection_extra_eligibility_data_summary
         if not self.eligibility_comment:
             return comment
         wrapper = self.get_wrapper()
