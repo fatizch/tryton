@@ -3,7 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 from itertools import groupby
-from sql.aggregate import Sum, Max
+from sql.aggregate import Sum, Max, Min
 from sql import Literal, Null
 
 from trytond import backend
@@ -767,7 +767,8 @@ class Configuration:
         return self.direct_debit_journal
 
 
-class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
+class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
+        model.FunctionalErrorMixIn):
     __name__ = 'account.payment.group'
 
     _func_key = 'number'
@@ -787,6 +788,9 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
             ('to_acknowledge', 'To Acknowledge'),
             ('acknowledged', 'Acknowledged'),
             ], 'State', readonly=True, select=True)
+    payment_date_min = fields.Function(fields.Date(
+            'Payment Date Min'),
+        'get_payment_date_min', searcher='search_payment_date_min')
     process_method = fields.Function(
         fields.Char('Process Method'), 'on_change_with_process_method')
 
@@ -814,6 +818,8 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
         cls._error_messages.update({
                 'reject_reason_not_found': 'The reason code on journal %s '
                 'is not found',
+                'prematurely_ack_group': 'The payment group %(number)s '
+                'should not be acknowledged: %(date)s < %(payment_date)s'
                 })
 
     @classmethod
@@ -879,8 +885,15 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
     def acknowledge(cls, groups):
         Payment = Pool().get('account.payment')
         payments = []
-        for group in groups:
-            payments.extend(group.processing_payments)
+        with model.error_manager():
+            for group in groups:
+                if group.payment_date_min > utils.today():
+                    cls.append_functional_error('prematurely_ack_group', {
+                            'number': group.number,
+                            'payment_date': group.payment_date_min,
+                            'date': utils.today(),
+                            })
+                payments.extend(group.processing_payments)
         if payments:
             Payment.succeed(payments)
 
@@ -961,6 +974,36 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable):
         for group_id, date in cursor.fetchall():
             res_dict[group_id].append(date)
         return res_dict
+
+    @classmethod
+    def search_payment_date_min(cls, name, clause):
+        group = cls.__table__()
+        Payment = Pool().get('account.payment')
+        payment = Payment.__table__()
+        _, operator, value = clause
+        Operator = fields.SQL_OPERATORS[operator]
+        query = payment.join(
+            group, condition=(payment.group == group.id)).select(
+            group.id, group_by=[group.id], having=Operator(
+                Min(payment.date), Payment.date.sql_format(value)))
+        return [('id', 'in', query)]
+
+    @classmethod
+    def get_payment_date_min(cls, groups, name=None):
+        res = {}
+        if not groups:
+            return res
+        cursor = Transaction().connection.cursor()
+        group = cls.__table__()
+        payment = Pool().get('account.payment').__table__()
+        query_table = payment.join(group, condition=(
+                payment.group == group.id))
+        cursor.execute(*query_table.select(group.id, Min(payment.date),
+                where=group.id.in_([x.id for x in groups]),
+                group_by=[group.id]))
+        for group_id, min_date in cursor.fetchall():
+            res[group_id] = min_date
+        return res
 
     def merge_payment_key(self, payment):
         return (('merged_id', payment.merged_id),

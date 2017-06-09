@@ -416,14 +416,21 @@ class PaymentValidationBatchBase(batch.BatchRoot):
 
     @classmethod
     def base_domain_select_ids(cls, payment_kind, **kwargs):
-        domain = [('group.state', '=', 'to_acknowledge')]
+        domain = [
+            ('group.payment_date_min', '<=', kwargs.get('treatment_date')),
+            ]
+        if kwargs.get('auto_acknowledge', None):
+            domain.append(('group.state', 'in',
+                    ['to_acknowledge', 'processing']))
+        else:
+            domain.append(('group.state', '=', 'to_acknowledge'))
         if payment_kind:
             domain.append(('kind', '=', payment_kind))
         return domain
 
     @classmethod
     def select_ids(cls, treatment_date, group_reference=None,
-            payment_kind=None, journal_methods=None):
+            payment_kind=None, journal_methods=None, auto_acknowledge=None):
         pool = Pool()
         Group = pool.get('account.payment.group')
         Payment = pool.get('account.payment')
@@ -441,7 +448,8 @@ class PaymentValidationBatchBase(batch.BatchRoot):
                 PAYMENT_KINDS)
             cls.logger.error('%s. Aborting' % msg)
             raise Exception(msg)
-        domain = cls.base_domain_select_ids(payment_kind)
+        domain = cls.base_domain_select_ids(payment_kind,
+            treatment_date=treatment_date, auto_acknowledge=auto_acknowledge)
         if journal_methods:
             journal_methods = [x.strip() for x in journal_methods.split(',')]
             domain.append(('journal.process_method', 'in', journal_methods))
@@ -476,7 +484,7 @@ class PaymentSucceedBatch(PaymentValidationBatchBase):
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, group_reference=None,
-            payment_kind=None, journal_methods=None):
+            payment_kind=None, journal_methods=None, auto_acknowledge=None):
         pool = Pool()
         Payment = pool.get('account.payment')
         with Transaction().set_context(disable_auto_aggregate=True,
@@ -502,12 +510,13 @@ class PaymentAcknowledgeBatch(PaymentValidationBatchBase):
 
     @classmethod
     def select_ids(cls, treatment_date, group_reference=None,
-            payment_kind=None, journal_methods=None):
+            payment_kind=None, journal_methods=None, auto_acknowledge=None):
         pool = Pool()
         Payment = pool.get('account.payment')
         ids = [x[0] for x in
             super(PaymentAcknowledgeBatch, cls).select_ids(treatment_date,
-            group_reference, payment_kind, journal_methods)]
+                group_reference, payment_kind, journal_methods,
+                auto_acknowledge)]
         for ids_slice in grouped_slice(ids):
             payments = Payment.browse(list(ids_slice))
             for group in {x.group.id for x in payments
@@ -517,6 +526,6 @@ class PaymentAcknowledgeBatch(PaymentValidationBatchBase):
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, group_reference=None,
-            payment_kind=None, journal_methods=None):
+            payment_kind=None, journal_methods=None, auto_acknowledge=None):
         Pool().get('account.payment.group').acknowledge(objects)
         return ids

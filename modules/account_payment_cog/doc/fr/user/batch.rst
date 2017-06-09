@@ -87,15 +87,15 @@ Exemple :
 ``coog batch exec account.payment.process 1 --payment_kind=receivable --treatment_date=YYYY-MM-05 --journal_methods=sepa,manual``
 
 
-Batch de validation des paiements [``account.payment.acknowledge``]
-===================================================================
+Batch de validation des paiements [``account.payment.succeed``]
+===============================================================
 Description :
 -------------
-Passe le statut des paiements de *Traitement* à *Reçu* et les groupes de paiement à l'état *Fait*.
+Passe le statut des paiements de *Traitement* à *Réussi*.
 
 Si le module account_payment_clearing est installé, ce batch permet également de lettrer les quittances avec les paiements associés.
 
-Ce batch automatise la tâche d'aller manuellement sur les groupes de paiement et de lancer l'action d'*Accuser réception*
+Ce batch automatise la validation des paiements (passer à l'état réussi) des groupes de paiement dont le filtre s'applique.
 
 Dépendances :
 -------------
@@ -112,12 +112,15 @@ Paramètres d'entrée :
    Sens des paiements à valider (entrant ou sortant par exemple).
 - ``journal_methods (sepa,manual)``
    Méthode de traitement des journaux pour les paiements à traiter, séparés par des virgules sans espace. Si non renseigné, traite tous les journaux.
+- ``treatment_date``
+   Date de traitement utilisée pour sélectionner tous les paiements d'un groupe de paiement dont la date minimale de paiement est inférieure ou égale
+- ``auto_acknowledge``
+   Si ce paramètre est à 1, alors la selection des groupe de paiement incluera également ceux dans l'état "En traitement" au lieu de ne séléctionner uniquement ceux dont l'accusé réception est planifié.
 
 ou
 
 - ``group_reference``
     Permet de spécifier l'identifiant précis d'un groupe de paiement (prioritaire sur les autres filtres).
-
 
 Filtres :
 ---------
@@ -125,8 +128,9 @@ Filtres :
 Sélection de tous les paiements :
 
 - dont le type de paiement correspond au paramètre
-- dont le statut est à l'état *Traitement*
+- dont le statut est à l'état *Traitement* ou *Accusé réception planifié* en fonction de auto_acknowledge
 - associé à un journal de paiement dont le code de la méthode de traitement est dans la liste des paramètres
+- dont la date minimale de paiement sur le groupe de paiement est inférieure ou égale à la date de traitement.
 
 ou
 
@@ -139,7 +143,67 @@ Supportée
 Exemple :
 ---------
 
-``coog batch exec account.payment.acknowledge 2 --payment_kind=receivable --journal_methods=sepa,manual``
+``coog batch exec account.payment.succeed 2 --payment_kind=receivable --journal_methods=sepa,manual --treatment_date=$(date --iso) --auto_acknowledge=1``
+
+
+
+Batch d'accusé récéption des paiements [``account.payment.acknowledge``]
+========================================================================
+Description :
+-------------
+Passe le statut des paiements de *Traitement* à *Reçu* et les groupes de paiement à l'état *Reçu*.
+
+Si le module account_payment_clearing est installé, ce batch permet également de lettrer les quittances avec les paiements associés.
+
+Ce batch automatise l'action manuelle d'*Accuser réception* les groupes de paiements.
+
+Dépendances :
+-------------
+A lancer après le batch de traitement de validation des paiements
+
+Fréquence :
+-----------
+Postérieurement à chaque génération de bande de virement/prélèvement.
+
+Paramètres d'entrée :
+---------------------
+
+- ``payment_kind (payable, receivable)`` [obligatoire]
+   Sens des paiements à valider (entrant ou sortant par exemple).
+- ``journal_methods (sepa,manual)``
+   Méthode de traitement des journaux pour les paiements à traiter, séparés par des virgules sans espace. Si non renseigné, traite tous les journaux.
+- ``treatment_date``
+   Date de traitement utilisée pour sélectionner tous les paiements d'un groupe de paiement dont la date minimale de paiement est inférieure ou égale
+- ``auto_acknowledge``
+   Si ce paramètre est à 1, alors la selection des groupes de paiements incluera également ceux dans l'état "En traitement" au lieu de ne séléctionner uniquement ceux dont l'accusé réception est planifié.
+
+ou
+
+- ``group_reference``
+    Permet de spécifier l'identifiant précis d'un groupe de paiement (prioritaire sur les autres filtres).
+
+Filtres :
+---------
+
+Sélection de tous les paiements :
+
+- dont le type de paiement correspond au paramètre
+- dont le statut est à l'état *Traitement* ou *Accusé réception planifié* en fonction de auto_acknowledge
+- associé à un journal de paiement dont le code de la méthode de traitement est dans la liste des paramètres
+- dont la date minimale de paiement sur le groupe de paiement est inférieure ou égale à la date de traitement.
+
+ou
+
+- rattachés au groupe de paiement dont l'identifiant est celui passé en paramètre.
+
+Parallélisation:
+----------------
+Supportée
+
+Exemple :
+---------
+
+``coog batch exec account.payment.acknowledge 2 --payment_kind=receivable --journal_methods=sepa,manual --treatment_date=$(date --iso) --auto_acknowledge=1``
 
 
 Batch de création des groupes de paiements [``account.payment.group.create``]

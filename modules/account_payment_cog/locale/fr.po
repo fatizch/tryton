@@ -28,6 +28,11 @@ msgstr ""
 "méthodes"
 
 msgctxt "error:account.payment.group:"
+msgid "The payment group %(number)s should not be acknowledged: %(date)s < " "%(payment_date)s"
+msgstr "Un groupe de paiement ne devrait pas être reçui aujourd'hui: "
+"%(date)s < %(payment_date)s"
+
+msgctxt "error:account.payment.group:"
 msgid "The reason code on journal %s is not found"
 msgstr "Le motif de rejet sur le journal %s est introuvable"
 
@@ -159,6 +164,10 @@ msgstr "Méthode de traitement"
 msgctxt "field:account.payment.fail_information,reject_reason:"
 msgid "Reject Reason"
 msgstr "Motif de rejet"
+
+msgctxt "field:account.payment.group,payment_date_min:"
+msgid "Payment Date Min"
+msgstr "Date de paiement minimale"
 
 msgctxt "field:account.payment.group,amount:"
 msgid "Amount"

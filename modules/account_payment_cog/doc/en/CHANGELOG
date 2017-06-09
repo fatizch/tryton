@@ -1,6 +1,8 @@
-* Add a batch chain for parallelizable payment treatment
-* Automatically add a payment journal if possible in the payment creation wizard
-* Improve Motive display in Create Payment Process
+* FEA6316 Add a batch parameter which allow to force the acknowledge on payment groups which are not planned to be acknowledge but in the processing state
+* FEA6316 The acknowledge chain now use the treatment date to retrieve payment groups with a minimal start date which is less of equal.
+* FEA#0000 Add a batch chain for parallelizable payment treatment
+* FEA#0000 Automatically add a payment journal if possible in the payment creation wizard
+* FEA#0000 Improve Motive display in Create Payment Process
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Trigger an event when creating a payment group
