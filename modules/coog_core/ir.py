@@ -438,7 +438,8 @@ class IrModule:
         module = cls.__table__()
         cursor.execute(*module.select(module.name, module.state))
         for name, state in cursor.fetchall():
-            cls._is_module_installed_cache.set(name, state == 'installed')
+            cls._is_module_installed_cache.set(name,
+                state in ('activated', 'to upgrade', 'to activate'))
         cls._is_module_installed_cache.set('_check_initialized', True)
         return cls._is_module_installed_cache.get(module_name, False)
 
