@@ -67,6 +67,13 @@ class Contract:
     def button_show_all_invoices(cls, contracts):
         pass
 
+    @classmethod
+    def _calculate_methods(cls, product):
+        methods = super(Contract, cls)._calculate_methods(product)
+        if product.is_loan:
+            return [x for x in methods if x[1] != 'calculate_prices']
+        return methods
+
 
 class ExtraPremium:
     __name__ = 'contract.option.extra_premium'
