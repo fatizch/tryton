@@ -579,12 +579,13 @@ class ReactivateContract(EndorsementWizardStepMixin):
             break
         defaults = super(ReactivateContract, self).step_default()
         defaults['current_end_date'] = contract.end_date
-        defaults['end_motive'] = contract.sub_status.id
+        defaults['end_motive'] = (contract.sub_status.id if contract.sub_status
+            else None)
         defaults['contract'] = contract.id
         return defaults
 
     def step_update(self):
-        # No input data, everything will be handle in the endorsement methods
+        # No input data, everything will be handled in the endorsement methods
         pass
 
 
