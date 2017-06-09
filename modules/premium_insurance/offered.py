@@ -53,7 +53,8 @@ class OptionDescriptionPremiumRule:
         cls.premium_base.selection.append(
             ('contract.covered_element', 'Covered Element'))
 
-    def get_appliable_extra_premiums(self, rule_dict):
+    @classmethod
+    def get_appliable_extra_premiums(cls, rule_dict):
         return [extra for extra in rule_dict['option'].extra_premiums
             if ((extra.start_date or datetime.date.min) <= rule_dict['date'] <=
                 (extra.end_date or datetime.date.max))]
@@ -81,6 +82,17 @@ class OptionDescriptionPremiumRule:
                 line.frequency = line.rated_instance.flat_amount_frequency
         super(OptionDescriptionPremiumRule, self).set_line_frequencies(
             lines, rated_instance, date)
+
+    @classmethod
+    def get_not_rated_line(cls, rule_dict, date):
+        lines = super(OptionDescriptionPremiumRule, cls).get_not_rated_line(
+            rule_dict, date)
+        for extra_premium in cls.get_appliable_extra_premiums(rule_dict):
+            extra_dict = rule_dict.copy()
+            extra_dict['extra_premium'] = extra_premium
+            extra_dict['_rated_instance'] = extra_premium
+            lines.append(cls._premium_result_class(0, extra_dict))
+        return lines
 
 
 class OptionDescription:
