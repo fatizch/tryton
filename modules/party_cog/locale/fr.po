@@ -87,6 +87,10 @@ msgctxt "field:party.address,needs_subdivision:"
 msgid "Needs Subdivision"
 msgstr "Subdivision requise"
 
+msgctxt "field:party.address,return_to_sender:"
+msgid "Return To Sender"
+msgstr "N'habite pas à l'adresse indiquée"
+
 msgctxt "field:party.address,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
@@ -270,6 +274,10 @@ msgstr "Mis à jour par"
 msgctxt "field:party.interaction,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:party.party,all_addresses:"
+msgid "All Addresses"
+msgstr "Adresses"
 
 msgctxt "field:party.party,birth_date:"
 msgid "Birth Date"
@@ -719,7 +727,7 @@ msgctxt "model:ir.action,name:"
 msgid "Parties Synthesis"
 msgstr "Synthèse acteur"
 
-msgctxt "model:ir.action,name:act_address_relate_form"
+msgctxt "model:ir.action,name:act_all_address_relate_form"
 msgid "Addresses"
 msgstr "Adresses"
 
@@ -734,10 +742,6 @@ msgstr "Historique des Contacts"
 msgctxt "model:ir.action,name:act_contact_mechanisms_relate_form"
 msgid "Contact Mechanisms"
 msgstr "Moyens de contact"
-
-msgctxt "model:ir.action,name:act_inactive_addresses_relate_form"
-msgid "Inactive Addresses"
-msgstr "Adresses inactives"
 
 msgctxt "model:ir.action,name:act_menu_form"
 msgid "Synthesis"

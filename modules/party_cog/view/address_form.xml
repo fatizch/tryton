@@ -31,6 +31,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="end_date"/>
         </group>
     </xpath>
+    <xpath expr="/form/group[@id='checkboxes']/field[@name='active']" position="before">
+        <label name="return_to_sender"/>
+        <field name="return_to_sender" xexpand="0" width="25"/>
+    </xpath>
     <xpath expr="/form/group[@id='left']" position="after">
         <group id="right" colspan="2" col="2" xfill="1" xexpand="1">
             <group id="label" col="1" xexpand="0" xfill="0" yfill="1" yexpand="1">

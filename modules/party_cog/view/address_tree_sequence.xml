@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/tree/field[@name='name']" position="before">
-        <field name="start_date"/>
+        <field name="start_date" icon="icon"/>
         <field name="end_date"/>
     </xpath>
     <xpath expr="/tree/field[@name='name']" position="before">

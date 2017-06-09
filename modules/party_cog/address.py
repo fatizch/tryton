@@ -1,10 +1,12 @@
 # -*- coding:utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+
 from collections import OrderedDict
+
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Bool, Eval
-from trytond.modules.coog_core import fields, export
+from trytond.modules.coog_core import fields, export, utils
 from trytond.modules.country_cog import country
 
 __all__ = [
@@ -30,6 +32,13 @@ class Address(export.ExportImportMixin):
     needs_subdivision = fields.Function(
         fields.Boolean('Needs Subdivision'),
         'on_change_with_needs_subdivision')
+    return_to_sender = fields.Function(fields.Boolean('Return To Sender'),
+        'get_return_to_sender', setter='set_return_to_sender',
+        searcher='search_return_to_sender')
+    color = fields.Function(fields.Char('Color', states={'invisile': True}),
+        'get_color')
+    icon = fields.Function(fields.Char('Icon', states={'invisile': True}),
+        'get_icon')
 
     @classmethod
     def __setup__(cls):
@@ -42,6 +51,13 @@ class Address(export.ExportImportMixin):
         cls.zip.depends += ['zip_and_city']
         cls.subdivision.states['invisible'] = ~Eval('needs_subdivision')
         cls.subdivision.depends += ['country']
+        cls.active.states['invisible'] = True
+
+    @classmethod
+    def view_attributes(cls):
+        return super(Address, cls).view_attributes() + [
+            ('/tree', 'colors', Eval('color')),
+            ]
 
     @classmethod
     def _export_light(cls):
@@ -59,6 +75,39 @@ class Address(export.ExportImportMixin):
     def get_zips_from_city(city, country):
         return Pool().get('country.zip').search([
                 ('city', '=', city), ('country', '=', country)])
+
+    def get_return_to_sender(self, name):
+        return not self.active
+
+    @classmethod
+    def set_return_to_sender(cls, addresses, name, value):
+        cls.write(addresses, {'active': not value})
+
+    @classmethod
+    def search_return_to_sender(cls, name, clause):
+        reverse = {
+            '=': '!=',
+            '!=': '=',
+            }
+        if clause[1] in reverse:
+            return [('active', reverse[clause[1]], clause[2])]
+        else:
+            return []
+
+    def get_color(self, name):
+        if self.return_to_sender:
+            return 'grey'
+        if utils.is_effective_at_date(self):
+            return 'blue'
+        return 'black'
+
+    def get_icon(self, name=None):
+        color = self.get_color(name)
+        if color == 'grey':
+            return 'cancel-list'
+        elif color == 'blue':
+            return 'coopengo-address'
+        return ''
 
     @fields.depends('zip', 'country', 'zip_and_city')
     def on_change_zip(self):
@@ -175,9 +224,6 @@ class Address(export.ExportImportMixin):
         result['multiline'] = self.full_address
         result['oneline'] = self.full_address.replace('\n', ' ')
         return result
-
-    def get_icon(self):
-        return 'coopengo-address'
 
     def get_func_key(self, values):
         return '|'.join((self.zip or '', self.street or ''))

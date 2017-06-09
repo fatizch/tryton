@@ -24,25 +24,15 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ############################################################ -->
         <!-- ########### Relate ########### -->
         <!-- ############################################################ -->
-        <record model="ir.action.act_window" id="act_address_relate_form">
+        <record model="ir.action.act_window" id="act_all_address_relate_form">
             <field name="name">Addresses</field>
             <field name="res_model">party.address</field>
-            <field name="domain" eval="[('party', '=', Eval('active_id'))]" pyson="1"/>
+            <field name="domain" eval="[('party', '=', Eval('active_id')), ('active', 'in', [True, False])]" pyson="1"/>
         </record>
-        <record model="ir.action.keyword" id="act_address_relate_keyword">
+        <record model="ir.action.keyword" id="act_all_address_relate_keyword">
             <field name="keyword">form_relate</field>
             <field name="model">party.party,-1</field>
-            <field name="action" ref="act_address_relate_form"/>
-        </record>
-        <record model="ir.action.act_window" id="act_inactive_addresses_relate_form">
-            <field name="name">Inactive Addresses</field>
-            <field name="res_model">party.address</field>
-            <field name="domain" eval="[('party', '=', Eval('active_id')), ('active', '=', False)]" pyson="1"/>
-        </record>
-        <record model="ir.action.keyword" id="act_inactive_addresseses_relate_keyword">
-            <field name="keyword">form_relate</field>
-            <field name="model">party.party,-1</field>
-            <field name="action" ref="act_inactive_addresses_relate_form"/>
+            <field name="action" ref="act_all_address_relate_form"/>
         </record>
     </data>
 </tryton>

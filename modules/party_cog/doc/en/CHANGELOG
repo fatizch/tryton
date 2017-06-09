@@ -1,3 +1,5 @@
+* FEA#6310 Improve the return to sender flag using active/inactive field on addresses
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Merge party functionality
 * FEA#0000 Add long gender field

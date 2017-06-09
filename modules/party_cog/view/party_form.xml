@@ -70,6 +70,16 @@ this repository contains the full copyright notices and license terms. -->
         </group>
         <field name="relations" colspan="2" view_ids="party_cog.relation_view_editable_list"/>
     </xpath>
+    <xpath expr="/form/notebook/page/field[@name='addresses']" position="replace">
+        <field name="all_addresses" invisible="1"/>
+        <field name="addresses" invisible="1"/>
+        <group id="one_address" col="4" colspan="4" yexpand="1" yfill="1">
+            <field name="all_addresses" mode="form,tree" colspan="4" yexpand="1" yfill="1" view_ids="party.address_view_form,party.address_view_tree_sequence"/>
+        </group>
+        <group id="several_addresses" col="4" colspan="4" yexpand="1" yfill="1">
+            <field name="all_addresses" mode="tree,from" colspan="4" yexpand="1" yfill="1" view_ids="party.address_view_tree_sequence,party.address_view_form"/>
+        </group>
+    </xpath>
     <!-- Add Company and Role pages-->
     <xpath expr="/form/notebook" position="inside">
         <page string="Roles" id="role">

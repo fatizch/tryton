@@ -16,7 +16,7 @@ from sql.conditionals import Coalesce
 
 from trytond import backend
 from trytond.model import Unique
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Len
 from trytond.pool import PoolMeta, Pool
 from trytond.tools import grouped_slice, cursor_dict
 from trytond.cache import Cache
@@ -76,6 +76,9 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         'get_main_address_id', searcher='search_main_address')
     has_active_address = fields.Function(
         fields.Boolean('Has Active Address'), 'get_has_active_address')
+    all_addresses = fields.One2ManyDomain('party.address', 'party',
+        'All Addresses', domain=[('active', 'in', [True, False])],
+        target_not_required=True)
     ####################################
     # Person information
     is_person = fields.Boolean('Person', states={'readonly': STATES_ACTIVE},
@@ -197,6 +200,10 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
                 {'invisible': Bool(Eval('is_person'))}),
             ('/form/notebook/page[@id="tree"]', 'states',
                 {'invisible': Bool(Eval('is_person'))}),
+            ("/form/notebook/page/group[@id='several_addresses']", 'states', {
+                    'invisible': Len(Eval('all_addresses', [])) == 1}),
+            ("/form/notebook/page/group[@id='one_address']", 'states', {
+                    'invisible': Len(Eval('all_addresses', [])) > 1}),
             ]
 
     @classmethod
