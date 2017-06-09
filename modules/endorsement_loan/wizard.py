@@ -450,6 +450,14 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoogView):
     new_increments = fields.One2Many('loan.increment', None, 'New Increments')
 
     @classmethod
+    def __setup__(cls):
+        super(ChangeLoanAtDate, cls).__setup__()
+        cls._error_messages.update({
+                'incomplete_loan_data': 'There may be insufficiant data '
+                'to properly compute the loan payments, please double-check',
+                })
+
+    @classmethod
     def view_attributes(cls):
         return super(ChangeLoanAtDate, cls).view_attributes() + [(
                 '/form/group[@id="invisible"]',
@@ -545,6 +553,7 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoogView):
     def step_update(self):
         # Update all_increments
         self.on_change_current_loan()
+        self.check_increments()
         LoanEndorsement = Pool().get('endorsement.loan')
         endorsement_data = self.get_default_loans()
         updated_loans = self.updated_loans(endorsement_data)
@@ -574,6 +583,13 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoogView):
     def step_next(self):
         super(ChangeLoanAtDate, self).step_next()
         return 'display_updated_payments'
+
+    def check_increments(self):
+        for increment in self.new_increments[:-1]:
+            if not increment.payment_amount and not increment.deferral:
+                self.raise_user_warning('incomplete_loan_data_%s' %
+                    self.wizard._session_id, 'incomplete_loan_data')
+                return
 
     def update_increment_displayer(self, increment, loan):
         # Force set for new increments
