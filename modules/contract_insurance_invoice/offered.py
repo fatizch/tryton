@@ -203,7 +203,9 @@ class BillingMode(model.CoogSQL, model.CoogView):
             freq = MONTHLY
             bymonth = None
         elif self.frequency == 'once_per_contract':
-            return [start, datetime.date.max], until
+            return [datetime.datetime.combine(start, datetime.time()),
+                datetime.datetime.combine(datetime.date.max, datetime.time())
+                ], until
         else:
             return [], until
         return (rrule(freq, dtstart=start, until=until, bymonthday=bymonthday,
