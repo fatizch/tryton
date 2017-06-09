@@ -120,7 +120,7 @@ class EventLog:
     __name__ = 'event.log'
 
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
-        select=True)
+        select=True, readonly=True)
 
     @classmethod
     def __register__(cls, module_name):

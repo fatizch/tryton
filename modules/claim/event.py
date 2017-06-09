@@ -14,7 +14,8 @@ class EventLog:
     __metaclass__ = PoolMeta
     __name__ = 'event.log'
 
-    claim = fields.Many2One('claim', 'Claim', ondelete='SET NULL', select=True)
+    claim = fields.Many2One('claim', 'Claim', ondelete='SET NULL', select=True,
+        readonly=True)
 
     @classmethod
     def get_related_instances(cls, object_, model_name):

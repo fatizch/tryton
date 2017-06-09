@@ -34,7 +34,7 @@ class EventLog(model.CoogSQL, model.CoogView):
     user = fields.Many2One('res.user', 'User', readonly=True, required=True,
         ondelete='RESTRICT')
     event_type = fields.Many2One('event.type', 'Event Type', required=True,
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', readonly=True)
 
     @classmethod
     def __setup__(cls):
