@@ -1,5 +1,6 @@
+* OTH#0000 Correctif: Utilisation de template.get_extension au lieu de template.output_format
 * FEA#2227 Store template version data in database
-* Add strftime function to report context to format date in any possible way
+* FEA#0000 Add strftime function to report context to format date in any possible way
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Support for all conversion combination between storage in EDM and export format

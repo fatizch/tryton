@@ -88,8 +88,12 @@ class ReportGenerate:
     def generate_email(self, selected_letter, cur_objects, report_context):
         if selected_letter.attachments or selected_letter.images:
             attachments = []
+            fake_event_action = Pool().get('event.type.action')()
             for tmpl in selected_letter.attachments:
-                generated_reports = tmpl._generate_reports(cur_objects, {})
+                fake_event_action.report_templates = [tmpl]
+                valid_objects = fake_event_action.filter_objects_for_report(
+                    cur_objects, tmpl)
+                generated_reports = tmpl._generate_reports(valid_objects, {})
                 if tmpl.format_for_internal_edm:
                     tmpl.save_reports_in_edm(generated_reports)
                 attachments += generated_reports

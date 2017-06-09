@@ -801,7 +801,7 @@ class ReportGenerate(CoogReport):
         action_report, = action_reports
         template = Pool().get('report.template')(data['doc_template'][0])
         action_report.template_extension = template.input_kind[-3:]
-        action_report.extension = template.output_format
+        action_report.extension = template.get_extension()
         oext, content = cls.convert(action_report, cls.render(action_report,
             ServerContext().get('genshi_context', {})))
         name_giver = data.get('resource', None) or pool.get(data['model'])(

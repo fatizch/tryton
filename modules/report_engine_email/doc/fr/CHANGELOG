@@ -1,3 +1,5 @@
+* FEA#6356 Filtre les pièces jointes des emails de lamême façcon que les actions par type d'événement 
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Support du stockage dans la GED interne pour les modèles de courrier en pièce jointe
 * FEA#0000 Support des copies cachées et copies cachées invisibles dans les mails
