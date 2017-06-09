@@ -146,11 +146,11 @@ class CoogTestCase(ModuleTestCase):
         for lang in ('fr', 'en'):
             self.assert_(os.path.isdir(os.path.join(doc_folder, lang)),
                 'Missing %s doc folder' % lang)
-            log = os.path.join(doc_folder, lang, 'features_log')
+            log = os.path.join(doc_folder, lang, 'CHANGELOG')
             self.assert_(os.path.isfile(log),
-                'Missing %s features_log file' % (lang,))
+                'Missing %s CHANGELOG file' % (lang,))
             self.assertNotEqual(os.stat(log).st_size, 0,
-                'File features_log for %s looks empty' % (lang,))
+                'File CHANGELOG for %s looks empty' % (lang,))
             for filename in ('index', 'summary', 'features'):
                 filepath = os.path.join(doc_folder, lang, '%s.rst' % filename)
                 self.assert_(os.path.isfile(filepath),
