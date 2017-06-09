@@ -410,7 +410,6 @@ class IndemnificationDefinition(model.CoogView):
         'possible_beneficiaries', 'possible_products', 'product', 'start_date',
         'service', 'indemnification_date')
     def on_change_service(self):
-        self.update_product()
         if not self.service:
             self.is_period = False
             self.beneficiary = None
@@ -428,6 +427,7 @@ class IndemnificationDefinition(model.CoogView):
                 if len(beneficiary_data) == 1:
                     self.beneficiary = beneficiary_data[0][0]
                     self.beneficiary_share = beneficiary_data[0][1]
+        self.update_product()
 
     @fields.depends('beneficiary', 'beneficiary_share', 'service',
         'start_date')
