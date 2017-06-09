@@ -9,6 +9,7 @@ from sql.aggregate import Max, Min, Count
 
 from trytond import backend
 from trytond.pool import Pool, PoolMeta
+from trytond.tools import grouped_slice
 from trytond.pyson import Eval, If, Or, Bool, Len
 from trytond.transaction import Transaction
 from trytond.model import ModelView
@@ -124,10 +125,27 @@ class Contract(Printable):
             return []
         return [x.id for x in self.product.item_descriptors]
 
-    def get_covered_element_options(self, name):
-        return [option.id
-            for covered_element in self.covered_elements
-            for option in covered_element.options]
+    @classmethod
+    def get_covered_element_options(cls, contracts, name):
+        pool = Pool()
+        covered_element = pool.get('contract.covered_element').__table__()
+        option = pool.get('contract.option').__table__()
+        cursor = Transaction().connection.cursor()
+
+        res = {x.id: [] for x in contracts}
+        query_table = option.join(covered_element,
+            condition=option.covered_element == covered_element.id)
+        where_clause = option.status != 'declined'
+        for contract_slice in grouped_slice(contracts):
+            id_clause = covered_element.contract.in_(
+                [x.id for x in contract_slice])
+            cursor.execute(*query_table.select(
+                    covered_element.contract, option.id,
+                    where=where_clause & id_clause))
+
+            for contract, option in cursor.fetchall():
+                res[contract].append(option)
+        return res
 
     @classmethod
     def get_initial_number_of_sub_covered_elements(cls, contracts, name):
