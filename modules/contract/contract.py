@@ -357,6 +357,12 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                 '%s address is defined',
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
+        # if issue with following code, apply SQL script from Github PR #815
+        t = cls.__table__()
+        cls._sql_constraints = [
+            ('contract_number_uniq', Unique(t, t.contract_number),
+                'The contract number must be unique.'),
+            ]
 
     @classmethod
     def __register__(cls, module_name):
