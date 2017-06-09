@@ -3,7 +3,7 @@
 from collections import defaultdict
 from sql import Null, Cast
 from sql.conditionals import Coalesce
-from sql.operators import Concat, Not
+from sql.operators import Not
 from sql.aggregate import Sum
 from decimal import Decimal
 
@@ -14,7 +14,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import PYSONEncoder, Bool, Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields, utils, coog_date
+from trytond.modules.coog_core import fields, utils, coog_date, coog_sql
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -225,7 +225,7 @@ class Commission:
             condition=(move.id.in_([invoice.move, invoice.cancel_move])
                 & invoice.state.in_(['paid', 'cancel'])
                 & Not(move.journal.in_([x.id for x in commission_journals])))
-            | ((move.origin == Concat('account.invoice,',
+            | ((move.origin == coog_sql.TextCat('account.invoice,',
                         Cast(invoice.id, 'VARCHAR')))
                 & move.journal.in_([x.id for x in reset_journals])))
 
@@ -272,8 +272,8 @@ class Commission:
         query_table = line.join(insurer
             .join(agent, condition=(insurer.id == agent.insurer))
             .join(commission, condition=(agent.id == commission.agent)),
-            condition=(commission.origin == Concat('account.invoice.line,',
-                        Cast(line.id, 'VARCHAR'))))
+            condition=(commission.origin == coog_sql.TextCat(
+                    'account.invoice.line,', Cast(line.id, 'VARCHAR'))))
 
         query = query_table.select(
             line.invoice, commission.id, commission.date,
@@ -581,16 +581,6 @@ class CreateInvoicePrincipal(Wizard):
             [('id', 'in', [x.id for x in invoices])])
         action['pyson_search_value'] = encoder.encode([])
         return action, {}
-
-    # def get_invoice(self, insurer):
-    #     Commission = Pool().get('commission')
-    #     return Commission.get_insurer_invoice(self.ask.company,
-    #         insurer, self.ask.journal, self.ask.until_date)
-
-    # def get_invoice_line(self, amount, account):
-    #     Commission = Pool().get('commission')
-    #     return Commission.get_insurer_invoice_line(account, amount,
-    #         self.ask.description)
 
 
 class CreateInvoicePrincipalAsk(ModelView):

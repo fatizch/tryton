@@ -12,6 +12,7 @@ from sql.operators import Add
 from sql.conditionals import Case
 from sql.aggregate import Max
 
+from trytond import backend
 from trytond.pool import Pool
 from trytond.model import fields as tryton_fields, Check
 from trytond.protocols.jsonrpc import JSONDecoder
@@ -67,6 +68,21 @@ def multi_column_required(table, column_names):
     clause = reduce(Add,
         (Case((Column(table, x) == Null, 0), else_=1) for x in column_names))
     return Check(table, clause == 1)
+
+
+def add_reference_index(klass, module_name):
+    TableHandler = backend.get('TableHandler')
+    table = TableHandler(klass, module_name)
+
+    # Manually add index for references match
+    ref_index = table.table_name + '_reference_index'
+    if ref_index in table._indexes:
+        return
+    with Transaction().connection.cursor() as cursor:
+        cursor.execute('CREATE INDEX "' + ref_index + '" ON "' +
+            table.table_name + '" (textcat(\'' + klass.__name__ +
+            ',\', CAST("id" AS VARCHAR)))')
+        table._update_definitions(indexes=True)
 
 
 def safe_open(filepath, *args, **kwargs):

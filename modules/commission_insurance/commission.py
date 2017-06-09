@@ -20,7 +20,7 @@ from trytond.tools import grouped_slice
 from trytond.cache import Cache
 
 from trytond.modules.coog_core import (fields, model, export, coog_string,
-    coog_date, utils)
+    coog_date, utils, coog_sql)
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
@@ -417,8 +417,8 @@ class AggregatedCommission(model.CoogSQL, model.CoogView):
             condition=commission.agent == agent.id)
 
         per_agent = commission_agent.join(invoice_line, type_='LEFT OUTER',
-                condition=(commission.origin == Concat('account.invoice.line,',
-                Cast(invoice_line.id, 'VARCHAR')))
+                condition=(commission.origin == coog_sql.TextCat(
+                    'account.invoice.line,', Cast(invoice_line.id, 'VARCHAR')))
                 )
 
         return per_agent.select(

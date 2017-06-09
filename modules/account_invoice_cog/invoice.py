@@ -8,7 +8,7 @@ from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 
-from trytond.modules.coog_core import export, fields, model
+from trytond.modules.coog_core import export, fields, model, utils
 from trytond.modules.report_engine import Printable
 
 __metaclass__ = PoolMeta
@@ -75,6 +75,7 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
         TableHandler = backend.get('TableHandler')
         table = TableHandler(cls, module_name)
         table.index_action(['state', 'company'], 'add')
+        utils.add_reference_index(cls, module_name)
 
     @classmethod
     def __setup__(cls):

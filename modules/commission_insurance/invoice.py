@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
-from sql.operators import Concat
 from sql import Cast, Null, Literal
 
 from trytond.pool import PoolMeta, Pool
@@ -11,7 +10,7 @@ from trytond.transaction import Transaction
 from trytond.model import ModelView, Workflow
 from trytond.tools import grouped_slice
 
-from trytond.modules.coog_core import utils, fields, coog_date
+from trytond.modules.coog_core import utils, fields, coog_date, coog_sql
 from .commission import COMMISSION_AMOUNT_DIGITS, COMMISSION_RATE_DIGITS
 
 __all__ = [
@@ -42,6 +41,11 @@ class InvoiceLine:
                 'no_broker_define_for_broker_fee': 'No broker define on '
                 'contract %s for broker fee %s'
                 })
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(InvoiceLine, cls).__register__(module_name)
+        utils.add_reference_index(cls, module_name)
 
     def get_commissions(self):
         # Total override of tryton method just to add the agent parameter to
@@ -233,7 +237,8 @@ class Invoice:
         cursor = Transaction().connection.cursor()
 
         sub_query = invoice_line.select(
-            Concat('account.invoice.line,', Cast(invoice_line.id, 'VARCHAR')),
+            coog_sql.TextCat('account.invoice.line,',
+                Cast(invoice_line.id, 'VARCHAR')),
             where=invoice_line.invoice.in_(ids))
 
         cursor.execute(*commission.select(commission.id, where=(

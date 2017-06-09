@@ -31,14 +31,6 @@ class MoveLine:
         cls._check_modify_exclude.add('principal_invoice_line')
 
     @classmethod
-    def __register__(cls, module):
-        super(MoveLine, cls).__register__(module)
-        TableHandler = backend.get('TableHandler')
-        table = TableHandler(cls, module)
-        table.index_action('principal_invoice_line', 'remove')
-        table.index_action(['principal_invoice_line', 'account'], 'add')
-
-    @classmethod
     def copy(cls, lines, default=None):
         default = {} if default is None else default
         default.setdefault('principal_invoice_line', None)

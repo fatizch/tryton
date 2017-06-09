@@ -3,9 +3,8 @@
 from collections import defaultdict
 import datetime
 
-from sql import Null, Literal
+from sql import Null, Literal, Cast
 from sql.aggregate import Sum, Max
-from sql.operators import Concat
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
 from trytond.rpc import RPC
@@ -14,7 +13,7 @@ from trytond.pyson import Eval, Bool, Not
 from trytond.wizard import Wizard, StateView, Button
 from trytond.model import ModelView, Workflow
 
-from trytond.modules.coog_core import utils, model, fields
+from trytond.modules.coog_core import utils, model, fields, coog_sql
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
 
 __metaclass__ = PoolMeta
@@ -414,8 +413,8 @@ class Invoice:
                 ).join(move, condition=(
                     line.move == move.id)
                 ).join(invoice_table, condition=(
-                    move.origin == Concat(cls.__name__ + ',',
-                        invoice_table.id)))
+                    move.origin == coog_sql.TextCat(cls.__name__ + ',',
+                        Cast(invoice_table.id, 'VARCHAR'))))
 
             cursor.execute(*query_table.select(invoice_table.id,
                 Max(reconciliation.create_date),
