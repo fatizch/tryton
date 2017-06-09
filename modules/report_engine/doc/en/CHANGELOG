@@ -1,4 +1,4 @@
-* OTH#0000 Correctif: Utilisation de template.get_extension au lieu de template.output_format
+* OTH#0000 Fix typo: use template.get_extension instead of template.output_format
 * FEA#2227 Store template version data in database
 * FEA#0000 Add strftime function to report context to format date in any possible way
 
