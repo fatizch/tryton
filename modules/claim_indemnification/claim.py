@@ -492,7 +492,7 @@ class ClaimService:
             return []
         periods = []
         for period in self.get_new_indemnification_periods(until):
-            periods.append(self.new_indemnification(*period))
+            periods.append(self.clone_last_indemnification(*period))
         return periods
 
     def get_full_period(self, from_date):
@@ -512,14 +512,18 @@ class ClaimService:
         while end_date < until:
             base_date = coog_date.add_day(end_date, 1)
             start_date, end_date = self.get_full_period(base_date)
-            periods.append((base_date, end_date))
+            if end_date <= until:
+                periods.append((base_date, end_date))
         return periods
 
-    def new_indemnification(self, start, end):
+    def clone_last_indemnification(self, start, end):
         Indemnification = Pool().get('claim.indemnification')
         indemnification = Indemnification(start_date=start, end_date=end)
-        indemnification.init_from_service(self)
         indemnification.beneficiary = self.indemnifications[-1].beneficiary
+        indemnification.status = 'calculated'
+        indemnification.service = self
+        indemnification.product = self.indemnifications[-1].product
+        indemnification.share = self.indemnifications[-1].share
         return indemnification
 
     def calculate_annuity_periods(self, from_date, to_date):

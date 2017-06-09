@@ -434,8 +434,11 @@ class IndemnificationDefinition(model.CoogView):
     def on_change_beneficiary(self):
         if not self.beneficiary or not self.service:
             return
-        for party, share in self.service.get_beneficiaries_data(
-                self.start_date or utils.today()):
+        beneficiaries_data = self.service.get_beneficiaries_data(
+            self.start_date or utils.today())
+        if not beneficiaries_data:
+            return
+        for party, share in beneficiaries_data:
             if party == self.beneficiary:
                 self.beneficiary_share = share
                 return
