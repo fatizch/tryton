@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import copy
-from datetime import datetime
+import datetime
 from decimal import Decimal
 from functools import partial
 try:
@@ -575,45 +575,47 @@ class TableDefinitionDimension(ModelSQL, ModelView):
 
     @classmethod
     def get_dimension_ids(cls, definition, dimension_idx, value):
-        key = (definition.id, dimension_idx, value)
-        dimension_ids = cls._get_dimension_cache.get(key)
-        if dimension_ids:
-            return dimension_ids
-
         kind = getattr(definition, 'dimension_kind%d' % (dimension_idx + 1))
-        clause = [
-            ('definition', '=', definition.id),
-            ('type', '=', 'dimension%d' % (dimension_idx + 1)),
-        ]
-        if kind == 'value':
-            clause.append(('value', '=', str(value)))
-        elif kind == 'date':
-            clause.append(('date', '=', value))
-        elif kind == 'range':
-            clause.extend([
-                ['OR',
-                    ('start', '=', None),
-                    ('start', '<=', float(value)),
-                ],
-                ['OR',
-                    ('end', '=', None),
-                    ('end', '>', float(value)),
-                ],
-            ])
-        elif kind == 'range-date':
-            clause.extend([
-                    ['OR',
-                        ('start_date', '=', None),
-                        ('start_date', '<=', value),
-                        ],
-                    ['OR',
-                        ('end_date', '=', None),
-                        ('end_date', '>', value),
-                        ],
-                    ])
-        dimension_ids = [x.id for x in cls.search(clause)]
-        cls._get_dimension_cache.set(key, dimension_ids)
-        return dimension_ids
+        if kind is None:
+            return []
+        key = (definition.id, dimension_idx)
+        dimension_data = cls._get_dimension_cache.get(key, -1)
+        if dimension_data == -1:
+            dimensions = [x for x in cls.search([
+                        ('definition', '=', definition.id),
+                        ('type', '=', 'dimension%d' % (dimension_idx + 1)),
+                        ])]
+            if kind == 'value':
+                dimension_data = {x.value: x.id for x in dimensions}
+            elif kind == 'date':
+                dimension_data = {x.date: x.id for x in dimensions}
+            elif kind == 'range':
+                dimension_data = sorted([(dim.start or float('-inf'),
+                            dim.end or float('inf'), dim.id)
+                    for dim in dimensions],
+                    key=lambda x: (x[0], x[1]))
+            elif kind == 'range-date':
+                dimension_data = sorted([(dim.start_date or datetime.date.min,
+                            dim.end_date or datetime.date.max, dim.id)
+                    for dim in dimensions],
+                    key=lambda x: (x[0], x[1]))
+            cls._get_dimension_cache.set(key, dimension_data)
+        if kind in ('value', 'date'):
+            value = str(value) if kind == 'value' else value
+            if value in dimension_data:
+                return [dimension_data[value]]
+            return []
+        # If further optimization is required, consider using intervaltree
+        res = []
+        value = float(value) if kind == 'range' else value
+        for start, end, dim_id in dimension_data:
+            if start > value:
+                return res
+            if end < value:
+                continue
+            if end > value or end == datetime.date.max:
+                res.append(dim_id)
+        return res
 
     @classmethod
     def delete(cls, tables):
@@ -771,7 +773,7 @@ class TableCell(ModelSQL, ModelView):
                 return True
             return False
         elif type_ == 'date':
-            return datetime.strptime(value, '%Y-%m-%d').date()
+            return datetime.datetime.strptime(value, '%Y-%m-%d').date()
         return value
 
     def get_value_with_type(self):
