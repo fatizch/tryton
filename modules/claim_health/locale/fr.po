@@ -10,6 +10,13 @@ msgctxt "error:benefit.act.family:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
 
+msgctxt "error:endorsement.contract.subscriber_change:"
+msgid ""
+"The new subscriber must have a bank account in order to receive his benefits"
+msgstr ""
+"Le nouveau souscripteur doit avoir un compte bancaire pour le versement de "
+"ses prestations"
+
 msgctxt "field:benefit.act.description,code:"
 msgid "Code"
 msgstr "Code"

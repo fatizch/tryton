@@ -20,6 +20,7 @@ def register():
         CoveredElement,
         ModifyCoveredElement,
         CoveredElementDisplayer,
+        ChangeContractSubscriber,
         module='claim_health', type_='model')
     Pool.register(
         party.PartyReplace,

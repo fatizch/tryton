@@ -10,6 +10,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'ModifyCoveredElement',
     'CoveredElementDisplayer',
+    'ChangeContractSubscriber',
     ]
 
 
@@ -113,3 +114,24 @@ class CoveredElementDisplayer:
         result['contract.covered_element'].append(
             'claim_specific_bank_account')
         return result
+
+
+class ChangeContractSubscriber:
+    __name__ = 'endorsement.contract.subscriber_change'
+
+    @classmethod
+    def __setup__(cls):
+        super(ChangeContractSubscriber, cls).__setup__()
+        cls._error_messages.update({
+                'check_party_bank_account': 'The new subscriber must have a '
+                'bank account in order to receive his benefits',
+                })
+
+    def step_update(self):
+        for endorsement_contract in self._get_contracts().values():
+            if endorsement_contract.contract.is_health and \
+                    not self.new_subscriber.bank_accounts:
+                self.raise_user_warning('check_party_bank_account',
+                'check_party_bank_account')
+                break
+        super(ChangeContractSubscriber, self).step_update()
