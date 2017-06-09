@@ -20,7 +20,8 @@ try:
 except ImportError:
     Manifest, MANIFEST = None, None
 
-from sql import Null, Literal
+from sql import Cast, Null, Literal
+from sql.functions import Substring, Position
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -37,6 +38,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, Equal
 from trytond.model import DictSchemaMixin
 from trytond.server_context import ServerContext
+from trytond.filestore import filestore
 
 from trytond.modules.coog_core import fields, model, utils, coog_string, export
 from trytond.modules.coog_core import wizard_context
@@ -105,7 +107,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     on_model = fields.Many2One('ir.model', 'Model',
         domain=[('printable', '=', True)], required=True, ondelete='RESTRICT')
     code = fields.Char('Code', required=True)
-    versions = fields.One2Many('report.template.version', 'resource',
+    versions = fields.One2Many('report.template.version', 'template',
         'Versions', delete_missing=True)
     kind = fields.Selection('get_possible_kinds', 'Kind')
     input_kind = fields.Selection('get_possible_input_kinds',
@@ -561,50 +563,65 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             return style_method(at_date, self)
 
 
-class ReportTemplateVersion(Attachment, export.ExportImportMixin):
+class ReportTemplateVersion(model.CoogSQL, model.CoogView):
     'Report Template Version'
 
     __name__ = 'report.template.version'
-    _table = None
 
+    template = fields.Many2One('report.template', 'Template',
+        required=True, ondelete='CASCADE', select=True)
     start_date = fields.Date('Start date', required=True)
     end_date = fields.Date('End date')
     language = fields.Many2One('ir.lang', 'Language', required=True,
-        ondelete='RESTRICT')
+       ondelete='RESTRICT')
+    data = fields.Binary('Data', filename='name')
+    name = fields.Char('Name', required=True)
 
     @classmethod
     def __register__(cls, module_name):
-        # Migration from 1.3: rename 'document_template' => 'report_template'
+        super(ReportTemplateVersion, cls).__register__(module_name)
+        # Migration from 1.12: migrate data from filesystem to DB
+        table = cls.__table__()
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().connection.cursor()
-        if TableHandler.table_exist('document_template_version'):
-            TableHandler.table_rename(
-                'document_template_version', 'report_template_version')
-            cursor.execute("UPDATE report_template_version "
-                "SET resource = REPLACE(resource, 'document.', 'report.')")
-        super(ReportTemplateVersion, cls).__register__(module_name)
+        transaction = Transaction()
+        table_handler = TableHandler(cls, module_name)
+        if table_handler.column_exist('resource'):
+            cursor.execute(*table.update([table.template],
+                [Cast(Substring(table.resource,
+                            Position(',', table.resource) +
+                            Literal(1)), 'INTEGER')]))
+            table_handler.drop_column('resource')
+        if table_handler.column_exist('file_id'):
+            prefix = config.get('attachment', 'store_prefix',
+                default=transaction.database.name)
+            cursor.execute(*table.select(table.id, table.file_id,
+                where=(table.file_id != Null)))
+            for version_id, file_id in list(cursor.fetchall()):
+                filename = filestore._filename(file_id, prefix=prefix)
+                try:
+                    data = filestore.get(file_id, prefix=prefix)
+                except:
+                    logger.warning('Could not find template version %s' %
+                        filestore._filename(file_id, prefix=prefix))
+                else:
+                    logger.info('Inserting data from %s' % filename)
+                    cursor.execute(*table.update(
+                            [table.data], [fields.Binary.sql_format(data)],
+                            where=(table.id == version_id)))
+            table_handler.drop_column('file_id')
+        table_handler.drop_column('type')
+        table_handler.drop_column('link')
 
     @classmethod
     def __setup__(cls):
         super(ReportTemplateVersion, cls).__setup__()
-        cls.type.states = {'readonly': True}
-        cls.resource.selection = [('report.template', 'Document Template')]
-        cls.resource.required = True
         cls._export_binary_fields.add('data')
-
-    @classmethod
-    def default_type(cls):
-        return 'data'
 
     @classmethod
     def _export_light(cls):
         return (super(ReportTemplateVersion, cls)._export_light() |
-            set(['resource', 'language']))
-
-    @classmethod
-    def _export_skips(cls):
-        return (super(ReportTemplateVersion, cls)._export_skips() |
-            set(['digest', 'collision']))
+            set(['template', 'language']))
 
 
 class Printable(Model):

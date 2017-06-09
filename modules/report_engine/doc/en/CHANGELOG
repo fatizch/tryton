@@ -1,3 +1,4 @@
+* FEA#2227 Store template version data in database
 * Add strftime function to report context to format date in any possible way
 
 Version 1.12 - 2017-04-28
