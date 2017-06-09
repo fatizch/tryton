@@ -97,7 +97,7 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
                 ('year', 'Year')],
             'Payment Frequency', sort=False, required=True,
             states=_STATES, depends=_DEPENDS),
-        'get_non_deferral_increment_field', 'setter_void')
+        'getter_payment_frequency', 'setter_void')
     payment_frequency_string = payment_frequency.translated(
         'payment_frequency')
     amount = fields.Numeric('Amount',
@@ -614,6 +614,13 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
         increments = [x for x in self.increments if not x.deferral]
         if increments:
             return getattr(increments[0], name)
+
+    def getter_payment_frequency(self, name):
+        value = self.get_non_deferral_increment_field(name)
+        if (value or self.kind in ('balloon', 'intermediate') or not
+                self.increments):
+            return value
+        return self.increments[0].payment_frequency
 
     @classmethod
     def get_insured_persons(cls, loans, name=None):
