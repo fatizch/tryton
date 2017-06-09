@@ -1,0 +1,10 @@
+Version 1.12 - 2017-04-28
+
+Version 1.10 - 2016-11-02
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Merge benefit_health in claim_health
+
+Version 1.6 - 2015-12-23
+* FEA#0000 Add claim bank account on covered element
+* FEA#0000 Module creation

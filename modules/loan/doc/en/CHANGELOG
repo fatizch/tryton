@@ -1,0 +1,32 @@
+Version 1.12 - 2017-04-28
+
+Version 1.10 - 2016-11-02
+* FEA#0000 Add lender address on loan
+* FEA#0000 Add lender role on party
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Add outstanding amount to rule engine
+* FEA#0000 Add extra data on loan
+* FEA#0000 Add lender field on loan
+* FEA#0000 Calculate and store early repayments on increments
+* FEA#0000 Allow to use first payment end balance rather than begin balance on increments
+* FEA#0000 Allow deferral on any kind of loan including graduated and balloon
+* FEA#0000 Allow to recalculate increment dates from first payment date
+
+Version 1.6 - 2015-12-23
+* FEA#0000 Manage extra premium depending on remaining capital amount
+* FEA#0000 Allow to insert manual increments to modify the loan at effective date (reimbursement, rate modification...)
+* FEA#0000 Add warning on loan if last payment is way different from last increment payment amount
+* FEA#0000 Allow to have different payment frequency during the life of the loan (one per increment)
+* FEA#0000 Allow to enter the loan duration in month or year, regardless of the payment frequency
+
+Version 1.4 - 2015-05-29
+* FEA#0000 Allow user to force loan modification even if there is another active contract using it
+
+Version 1.3 - 2015-01-22
+* FEA#0000 Use workflow to compute loan payments
+* FEA#0000 Use bisect to speed up payment by date finding
+
+Version 1.2 - 2014-07-01
+* FEA#0000 Changelog file creation
+* FEA#0000 Add wizard to display outstanding amounts

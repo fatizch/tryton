@@ -1,0 +1,11 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Show underwritings related to the claim legal entity
+
+Version 1.10 - 2016-11-02
+* FEA#0000 Add relation to interlocutor on claim
+* FEA#0000 Manage claim behaviour following contract termination
+* FEA#0000 Add legal entity on claim
+* FEA#0000 Add Relate to get Claims per party and Companies
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Module creation

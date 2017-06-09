@@ -1,0 +1,19 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 New rule engine function to detect if an option is already subscribed
+* FEA#0000 Add insurer delegation flags
+
+Version 1.10 - 2016-11-02
+
+Version 1.8 - 2016-07-06
+
+Version 1.6 - 2015-12-23
+
+Version 1.4 - 2015-05-29
+
+Version 1.3 - 2015-01-22
+* FEA#0000 Store final .pdf file in the EDM instead of intermediary .odt
+* FEA#0000 Send mail with one attachment made of many documents merged into a single pdf file
+* FEA#0000 Remove business rules, use separate modules
+
+Version 1.2 - 2014-07-01
+* FEA#0000 Changelog file creation

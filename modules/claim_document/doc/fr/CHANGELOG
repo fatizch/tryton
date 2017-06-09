@@ -1,0 +1,10 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Ajouter un bouton pour relancer le wizard de demande des documents dans le processus des sinistres  
+
+Version 1.10 - 2016-11-02
+* FEA#0000 Requesting a document is now available as a process step
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Module Creation
+* FEA#0000 Make document request a process step which calls a report wizard
+* FEA#0000 Allow Claim's Documents to be automatically reminded

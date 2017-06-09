@@ -1,0 +1,47 @@
+* Ajout d'un contexte persistant dans les assistants
+
+Version 1.12 - 2017-04-28* FEA#0000 Possibilité de formatter le fichier d'export json
+* FEA#0000 Les actions par type d'événement activées et désactivées sont distinguées par des onglets
+* FEA#0000 Les actions par type d'événement peuvent être activées/désactivées
+* FEA#0000 Outil de benchmarking déplacé dans un module indépendant
+* FEA#0000 Mixin de détails configurable
+
+Version 1.10 - 2016-11-02
+* FEA#0000 Outil de benchmarking basique pour l'analyse des performances du serveur
+* FEA#0000 Extension de l'API des événements pour filtrer le type d'événement et d'autres paramètres
+* FEA#0000 Utilitaire de création de nouveaux modules
+* FEA#0000 Affichage des habilitations consolidées d'un utilisateur
+* FEA#0000 Configuration via l'application des modèles historisables
+* FEA#0000 Renommage de cog_utils en coog_core
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Mise à disposition d'un script de création de bases de paramétrage pur
+* FEA#0000 Ajout d'une fonction "safe_open" permettant des opérations concurrentes sur des fichiers
+* FEA#0000 Champs fonction dynamiques utilisant les méthodes "loader" et "updater"
+* FEA#0000 Visualisation de l'historique via une vue dédiée
+* FEA#0000 Gestion des batchs mono-process
+
+Version 1.6 - 2015-12-23
+* FEA#0000 Filtrage pyson des actions sur les types d'événements
+* FEA#0000 Gestion d'une liste d'action déclenchée par des événements
+* FEA#0000 Ajout d'accesseurs pour les données versionnées
+* FEA#0000 Mise en place du webservice ws_create_objects
+* FEA#0000 Possibilité d'ajouter des labels sur les séquences
+* FEA#0000 Assistant de surcharge des traductions pour faciliter la personnalisation
+
+Version 1.4 - 2015-05-29
+* FEA#0000 Inclusion automatique des fichiers liés aux pièces jointes dans l'export / import
+* FEA#0000 Gestion des pièces jointe directement dans cog_utils
+* FEA#0000 Prise en compte de paramètres supplémentaire sur la ligne de commande des batchs
+* FEA#0000 Configuration des One2Many pour supprimer automatiquement les éléments manquants
+* FEA#0000 Possibilité de configurer des données requises dans un export
+* FEA#0000 Appels aux ir.model.methods avec des listes d'instances
+
+
+Version 1.3 - 2015-01-22
+* FEA#0000 Stockage de la configuration des batchs dans un fichier indépendant
+* FEA#0000 Retravail de la fonctionnalité d'export / import
+
+Version 1.2 - 2014-07-01
+* FEA#0000 Gestion des événements et types d'événements
+* FEA#0000 Création du fichier de suivi

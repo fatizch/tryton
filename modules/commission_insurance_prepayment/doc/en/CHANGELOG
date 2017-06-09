@@ -1,0 +1,18 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Add extra details on commissions
+* FEA#0000 Set start and end dates of prepayment commissions
+* FEA#0000 Configure prepayment behaviour for unpaid invoices
+* FEA#0000 Take redeemed prepayments into account when computing a commission's base amount
+* FEA#0000 Add rule engine function _re_get_prepayment_adjustment which determines whether a contract requires prepayments adjustment
+* FEA#0000 Keep track of all commission lines instead of deleting them and recreating them.
+
+
+Version 1.10 - 2016-11-02
+
+Version 1.8 - 2016-07-06
+
+Version 1.6 - 2015-12-23
+* FEA#0000 Calculate redeemed commissions based on contract rather than option
+
+Version 1.4 - 2015-05-29
+* FEA#0000 Module Creation

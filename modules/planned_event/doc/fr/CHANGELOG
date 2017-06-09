@@ -1,0 +1,5 @@
+* Ajout d'un nouveau type d'action par événement permettant la génération
+  d'événements planifiés
+
+Version 1.12 - 2017-04-28
+* FEA#0000 Création dumodule

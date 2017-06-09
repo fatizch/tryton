@@ -1,0 +1,16 @@
+* Sélection du pays par défaut lors de l'ajout d'une nouvelle adresse
+
+Version 1.12 - 2017-04-28* FEA#0000 Lancement d'un avenant de tiers depuis un contrat en proposant tous les tiers rattachés au contrat
+* FEA#0000 Suppression de relations via avenant
+
+Version 1.10 - 2016-11-02
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Amélioration de la flexibilité de l'avenant de modification des tiers
+
+Version 1.6 - 2015-12-23
+* FEA#0000 Avenant de gestion des relations
+* FEA#0000 Possibilité de modifier les noms de plusieurs tiers simultanément
+
+Version 1.4 - 2015-05-29
+* FEA#0000 Création du module

@@ -1,0 +1,15 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Add salaries wizard which allows to enter salaries and compute net salaries
+* FEA#0000 Fixed amount contributions are no longer related to salary ranges
+* FEA#0000 Review rates per range retrieval method: add an optional rates list to be limited
+* FEA#0000 Add tutorial on how to parameter coog to calculate net salary
+* FEA#0000 Improve salary display
+* FEA#0000 Review salary range calculation
+* FEA#0000 Add last 4 quarters as salary mode
+* FEA#0000 Handle annual salaries
+
+Version 1.10 - 2016-11-02
+* FEA#0000 Adding fixed rates for the net salary computing
+* FEA#0000 Adding the sum of bonuses amount, gross salaries and net salaries in the footer
+* FEA#0000 Net salary computing using the gross salary and french income brackets
+* FEA#0000 Module creation

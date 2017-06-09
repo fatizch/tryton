@@ -1,0 +1,31 @@
+* Ajout de la fonction strftime dans le contexte du rapport pour formatter les dates de toutes les façons possibles
+
+Version 1.12 - 2017-04-28
+* FEA#0000 Support de toutes les combinaisons de conversion entre le stockage en ged et
+* FEA#0000 Support de toutes les combinaisons de conversion entre le stockage en ged et l'export final pour libre office, microsoft office ou pdf.
+* FEA#0000 Le champs "répertoire d'export" supporte désormais les expressions genshi
+* FEA#0000 Ajout de la méthode de sortie qui n'évalue pas le document à attacher
+* FEA#0000 La fonctionnalité des emails à été sortie de ce module au profit d'un nouveau module "report_engine_email"
+* FEA#0000 Ajout de la chaine de batchs
+* FEA#0000 Sélection du destinataire, simplification de l'assistant de génération
+
+Version 1.10 - 2016-11-02
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Ajout d'une fonction d'arrondi personnalisée
+* FEA#0000 Gestion des styles sur les modèles
+* FEA#0000 Configuration, saisie et utilisation de données personnalisées lors de la génération
+* FEA#0000 Utilisation de sous-dossiers pour les exports automatiques
+
+Version 1.6 - 2015-12-23
+* FEA#0000 Gestion asynchrone de la génération des rapports
+* FEA#0000 Ajout d'un assistant permettant de faciliter les modifications en masse des modèles
+* FEA#0000 Branchement d'impressions déclenchées par des événements
+* FEA#0000 Possibilité d'exporter le document généré dans le système de fichier du serveur
+* FEA#0000 Sélection du format d'enregistrement en GED interne
+* FEA#0000 Conversion en pdf optionnelle pour les générations automatiques
+* FEA#0000 Activation de la fonctionnalité d'impression en un clic
+
+Version 1.4 - 2015-05-29
+* FEA#0000 Méthode de génération générique
+* FEA#0000 Création du module

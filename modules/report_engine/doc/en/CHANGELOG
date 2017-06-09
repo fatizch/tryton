@@ -1,0 +1,31 @@
+* Add strftime function to report context to format date in any possible way
+
+Version 1.12 - 2017-04-28
+* FEA#0000 Support for all conversion combination between storage in EDM and export format
+* FEA#0000 Support for all conversion combination between storage in EDM and export format for either microsoft office, libre office or pdf
+* FEA#0000 The "Export directory" field now support genshi expression
+* FEA#0000 Add output method which does not evaluate the document
+* FEA#0000 Extract email feature from current module to the new report_engine_email module
+* FEA#0000 Add the batches chain
+* FEA#0000 Choose recipient, streamline report wizard
+
+Version 1.10 - 2016-11-02
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Add custom rounding function
+* FEA#0000 Allow to generate reports with a style template
+* FEA#0000 Add custom input parameters to report template
+* FEA#0000 Authorize entering paths with subfolders as export destination
+
+Version 1.6 - 2015-12-23
+* FEA#0000 Handle asynchronous report production
+* FEA#0000 Add wizard to ease migration of names in report templates
+* FEA#0000 Allow to define report templates to be printed at given event
+* FEA#0000 Add option to export the document on generation to the server filesystem
+* FEA#0000 Add option to store the original generated document in the internal edm even if the final output is converted to pdf
+* FEA#0000 Make conversion to pdf optional for automatic generation of documents
+* FEA#0000 Enable one click printing or mail
+
+Version 1.4 - 2015-05-29
+* FEA#0000 Add generic process report method
+* FEA#0000 Module creation

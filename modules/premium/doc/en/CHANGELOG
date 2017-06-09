@@ -1,0 +1,20 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Add 'at given date' premium date rule type
+* FEA#0000 Add new premium calculation dates based on contract start date
+
+Version 1.10 - 2016-11-02
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Remove premium-tax relation, recompute dynamically
+
+Version 1.6 - 2015-12-23
+* FEA#0000 Allow "Once per Year" fee frequency
+* FEA#0000 Restrict default fee permissions to read only
+
+Version 1.4 - 2015-05-29
+* FEA#0000 Manage non periodic premiums - premiums without dates
+* FEA#0000 add display premium button in contract form
+
+Version 1.3 - 2015-01-22
+* FEA#0000 Manage fee overloading
+* FEA#0000 Module Creation

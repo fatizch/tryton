@@ -1,0 +1,4 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Give access to indemnification decisions in the Rule Engine
+* FEA#0000 Add block / halve indemnification decisions
+* FEA#0000 Module creation

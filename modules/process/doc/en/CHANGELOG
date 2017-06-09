@@ -1,0 +1,23 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Add process configuration entry point
+* FEA#0000 Possibility to configure the default start step
+* FEA#0000 Add "start" transitions which are called only once per process
+* FEA#0000 Allow to add multiple complete transitions
+
+Version 1.10 - 2016-11-02
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Add process status field
+* FEA#0000 Allow more flexibility on process actions overrides
+
+Version 1.6 - 2015-12-23
+
+Version 1.4 - 2015-05-29
+
+Version 1.3 - 2015-01-22
+* FEA#0000 Allow to pass parameters to process actions
+* FEA#0000 Clean up buttons
+* FEA#0000 Use an Icon to mark the current step
+
+Version 1.2 - 2014-07-01
+* FEA#0000 Changelog file creation

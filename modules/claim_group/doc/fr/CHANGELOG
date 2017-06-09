@@ -1,0 +1,11 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Affichage des demandes de décisions liées à des sinistres rattachées à une société
+
+Version 1.10 - 2016-11-02
+* FEA#0000 Ajout d'un lien vers un interlocuteur sur les sinistres
+* FEA#0000 Gestion du comportement des sinistres suite à résiliation
+* FEA#0000 Rattachement des sinistres aux sociétés souscriptrices
+* FEA#0000 Ajout d'un raccourcis permettant de consulter les sinitres rattachés à un tiers
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Création du module

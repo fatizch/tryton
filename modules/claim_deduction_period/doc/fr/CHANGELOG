@@ -1,0 +1,9 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Affichage des deductions dans la vue des préjudices
+* FEA#0000 Ajout d'un tutoriel
+* FEA#0000 Amélioration de la saisie des périodes de déductions
+
+Version 1.10 - 2016-11-02
+* FEA#0000 Ajout des données liées aux périodes de décutions dans le moteur de règles
+* FEA#0000 Définition des type de périodes et montants sur les périodes de déductions
+* FEA#0000 Création du module

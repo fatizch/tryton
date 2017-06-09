@@ -1,0 +1,13 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 'Sub-status' field indicates if all results of an underwriting are finalized, abandoned, or mixed
+* FEA#0000 Add party-based rec_name
+* FEA#0000 Field documents_received indicates if all requested documents have been received for an underwriting
+* FEA#0000 Separate entry point for planned underwritings
+* FEA#0000 Possibility to force a manual activation
+* FEA#0000 Use rule engine to configure default documents
+* FEA#0000 Rulable underwritings for custom validation rules
+* FEA#0000 Display attachments on underwritings
+* FEA#0000 Plan a copy of an underwriting in the future
+* FEA#0000 Provisional decision configuration
+* FEA#0000 Underwriting type configuration
+* FEA#0000 Module creation

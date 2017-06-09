@@ -1,0 +1,16 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Add termination mode at dunning effective date
+* FEA#0000 Deactivate terminated contract's dunnings
+* FEA#0000 Set void state on a contract in case an unpaid premium event occurs before the contract start date
+
+Version 1.10 - 2016-11-02
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Allow to define maturity date from payment date
+* FEA#0000 Add dunning fee
+
+Version 1.6 - 2015-12-23
+* FEA#0000 Manage hold_invoice action
+
+Version 1.4 - 2015-05-29
+* FEA#0000 Module Creation

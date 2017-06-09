@@ -1,0 +1,4 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Support du stockage dans la GED interne pour les modèles de courrier en pièce jointe
+* FEA#0000 Support des copies cachées et copies cachées invisibles dans les mails
+* FEA#0000 Création du module

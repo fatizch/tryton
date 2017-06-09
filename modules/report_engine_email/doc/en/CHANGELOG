@@ -1,0 +1,4 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Support internal ged storing for generated template attachments
+* FEA#0000 Support mail carbon copy and blind carbon copy
+* FEA#0000 Module creation

@@ -1,0 +1,8 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Partitionnement de la fonction ``select_ids`` en sous-fonctions pour
+* FEA#0000 Partitionnement de la fonction ``select_ids`` en sous-fonctions pour faciliter les groupement/suppression d'identifiants de la sélection
+* FEA#0000 Code rendu compatible avec pypy par l'usage d'une seule connection à la base
+* FEA#0000 Code rendu compatible avec pypy par l'usage d'une seule connection à la base de données source
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Module creation

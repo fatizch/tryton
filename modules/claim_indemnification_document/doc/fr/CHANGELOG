@@ -1,0 +1,6 @@
+Version 1.12 - 2017-04-28
+
+Version 1.10 - 2016-11-02
+* FEA#0000 Add rule to calculate required documents when validating an indemnification
+* FEA#0000 Allow indemnifications to reference a document request
+* FEA#0000 Module Creation

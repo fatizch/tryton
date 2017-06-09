@@ -1,0 +1,30 @@
+* Diviser le batch de rejet de paiement pour améliorer les performances
+* Envoyer le nom complet (nom + prénom) dans les fichiers SEPA
+* Ajout d'une chaine de batchs parallélisables pour le traitement des paiements
+* Envoyer le nom complet (nom + prénom) dans les fichiers SEPA
+* Gestion de la notion de payeur pour tous les types de paiement
+* Possibilité d'ajouter des informations liées aux paiements individuels dans le libellé de prélèvement
+
+Version 1.12 - 2017-04-28
+* FEA#0000 Remplacer process batch avec un batch qui appele le methode 'do'
+* FEA#0000 Renommage du fichier xml contenant le message d'un groupe de paiements en 'group.rec_name + group.journal.name + group.kind + group.payment_date' avec payment_date ajoutée uniquement s'il y en a une seule
+* FEA#0000 Ajout des chaines de batch
+
+Version 1.10 - 2016-11-02
+* FEA#0000 Possibilité d'amender un mandat sepa pour changer son compte bancaire
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Possibilité d'ajouter des informations tiers dans l'identification sepa
+* FEA#0000 Possibilité de choisir un compte bancaire spécifique dans l'assistant de création de paiement
+* FEA#0000 Possibilité de séparer les messages sepa par RECUR vs FIRST
+* FEA#0000 Ajout de la date de rejet d'un paiement bancaire sepa sur un paiement
+* FEA#0000 Déplacement de sepa_merged_id vers account_payment_cog en tant que merged_id
+
+Version 1.6 - 2015-12-23
+* FEA#0000 Affichage de l'id de regroupement SEPA dans la vue liste afin de faciliter la recherche lors du rejet manuel des paiements
+Version 1.4 - 2015-05-29
+
+Version 1.3 - 2015-01-22
+
+Version 1.2 - 2014-07-01
+* FEA#0000 Création du fichier Changelog

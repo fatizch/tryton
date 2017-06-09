@@ -1,0 +1,16 @@
+* Set default country on new addresses
+
+Version 1.12 - 2017-04-28* FEA#0000 Launch party endorsement from contract and propose all parties linked to the contract
+* FEA#0000 Allow to remove relations through endorsements
+
+Version 1.10 - 2016-11-02
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Improve flexibility of party modification endorsement
+
+Version 1.6 - 2015-12-23
+* FEA#0000 Manage party relation endorsement
+* FEA#0000 Change Party Name endorsement handles several parties.
+
+Version 1.4 - 2015-05-29
+* FEA#0000 Module creation

@@ -1,0 +1,34 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Add batches to invoice contracts against their balance
+* FEA#0000 Take maturity date into account for automatic reconciliation order
+* FEA#0000 Color in red voided/terminated contracts with non zero balance_today
+* FEA#0000 Add payment suspensions for a contract
+
+Version 1.10 - 2016-11-02
+* FEA#0000 Manage payer for direct debit billing mode
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Add hold billing on hold sub status
+* FEA#0000 Use intervaltree to speed up premium filtering
+* FEA#0000 Allow to not prorate premiums
+* FEA#0000 Add wizard to show aggregated lines on invoices
+
+Version 1.6 - 2015-12-23
+* FEA#0000 Allow to define specific fees for billing modes
+* FEA#0000 Add set_number batch to let invoice.post be out scalable
+* FEA#0000 Allow other uses for remainder when reconciling
+* FEA#0000 Allow to configure premium with tax included
+
+Version 1.4 - 2015-05-29
+* FEA#0000 Invoice premiums with at_contract_signature frequency at contract activation
+* FEA#0000 Manage invoicing of non periodic frequencies
+* FEA#0000 Add a wizard to change contract bank account
+* FEA#0000 Add rating webservice
+* FEA#0000 Add invoice dates to description for contract insurance invoices
+* FEA#0000 Display invoices in list view in different colors according to state
+
+Version 1.3 - 2015-01-22
+* FEA#0000 Add invoice line details
+
+Version 1.2 - 2014-07-01
+* FEA#0000 Changelog file creation

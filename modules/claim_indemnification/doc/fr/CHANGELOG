@@ -1,0 +1,21 @@
+* Ajout d'une fonction de validation des prestations
+* Ajout d'une valeur par défaut pour la condition de paiement dans la configuration de sinistre
+
+Version 1.12 - 2017-04-28
+* FEA#0000 Amélioration de l'experience utilisateur (amélioration de l'interface)
+* FEA#0000 Ajout de la date de début d'indemnisation dans les prestations fournies
+* FEA#0000 Ajout de la chaîne de batch
+* FEA#0000 Ajout de détails complémentaires sur les détails d'indemnisation
+* FEA#0000 Filtrage des indemnisations par type d'évènement dans les assistants de contrôle / validation
+
+Version 1.10 - 2016-11-02
+* FEA#0000 Ordonnancement des indemnisations en un clic
+* FEA#0000 Amélioration du processus de quittancement des sinistres
+* FEA#0000 Configuration de la comptabilité par prestation, gestion des taxes
+* FEA#0000 Création automatique des périodes de rente
+* FEA#0000 Etape de sélection du service délivré dans l'assistant de création d'indemnisation
+* FEA#0000 Détection et annulation des chevauchement de périodes d'indemnisation
+* FEA#0000 Calcul de la date de franchise sur les services délivrés, mise à disposition dans le moteur de règle
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Création du module

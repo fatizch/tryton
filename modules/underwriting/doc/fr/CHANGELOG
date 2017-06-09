@@ -1,0 +1,14 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Ajout du champ 'Sous-statut' permettant de déterminer si tous les résultats d'une analyse sont terminés, abandonnés ou un mélange des deux.
+* FEA#0000 Ajout d'un nom d'affichage basé sur le tiers
+* FEA#0000 Champ documents_received indiquant si tous les documents demandés pour une analyse ont été reçus
+* FEA#0000 Point d'entrée séparé pour les demandes de décisions planifiées
+* FEA#0000 Possibilité de forcer l'activation manuelle
+* FEA#0000 Utilisation du moteur de règle pour configurer les documents demandés par défaut
+* FEA#0000 Branchement du moteur de règle sur les demandes de décisions
+* FEA#0000 Tutoriel de paramétrage et utilisation des demdandes de décision
+* FEA#0000 Affichage de la liste des documents en attente sur les demandes de décision
+* FEA#0000 Possibilité de programmer une nouvelle demande dans le futur
+* FEA#0000 Gestion des décisions provisoires
+* FEA#0000 Paramétrage de types de demandes de décisions
+* FEA#0000 Création du module

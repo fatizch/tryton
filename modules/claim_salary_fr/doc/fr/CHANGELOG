@@ -1,0 +1,15 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Ajout de l'assistant de salaires permettant de saisir les salaires et de calculer les salaires nets.
+* FEA#0000 Les contributions à montant fixe ne sont plus liée à des tranches de salaire
+* FEA#0000 Evolution de la méthode de récuperation des taux par tranche: ajout d'une liste optionnelle de taux auxquels se limiter
+* FEA#0000 Ajout d'un tutoriel sur le paramétrage du calcul du salaire net
+* FEA#0000 Amélioration de l'affichage des salaires
+* FEA#0000 Evolution du calcul des tranches de salaires
+* FEA#0000 Ajout du mode de salaire 'les 4 derniers trimestres'
+* FEA#0000 Ajout du mode de salaire 'sur la dernière année'
+
+Version 1.10 - 2016-11-02
+* FEA#0000 Ajout de la gestion des montants fixes sur le calcul du salaire net
+* FEA#0000 Ajout de la somme des montant des salaires nets, bruts et bonus
+* FEA#0000 Calcul du salaire net sur la base du salaire brut
+* FEA#0000 Création du module

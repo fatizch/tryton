@@ -1,0 +1,9 @@
+Version 1.12 - 2017-04-28
+
+Version 1.10 - 2016-11-02
+* FEA#0000 Check if the beneficiary is correct (In case of rupture)
+* FEA#0000 Transfer claim services between contracts
+* FEA#0000 Filter complementary data on delivered service according to selected rules
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Module creation

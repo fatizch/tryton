@@ -1,0 +1,23 @@
+Version 1.12 - 2017-04-28
+* FEA#0000 Les agrégats sont triés de façon à être équilibrés
+* FEA#0000 Ajout du paramètre de batch "output_folder"
+* FEA#0000 Ajout de la chaine de batch
+* FEA#0000 Ajout du batch générique d'extraction des agrégats comptables
+
+Version 1.10 - 2016-11-02
+
+Version 1.8 - 2016-07-06
+
+Version 1.6 - 2015-12-23
+* FEA#0000 Allow to configure which fiscal years are exported
+
+Version 1.4 - 2015-05-29
+
+Version 1.3 - 2015-01-22
+* FEA#0000 Allow to use move date as a parameter
+* FEA#0000 Improve description
+* FEA#0000 Add aggregate posting option on a journal
+* FEA#0000 Add aggregate option on journal
+
+Version 1.2 - 2014-07-01
+* FEA#0000 Changelog file creation
