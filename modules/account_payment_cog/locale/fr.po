@@ -28,8 +28,9 @@ msgstr ""
 "méthodes"
 
 msgctxt "error:account.payment.group:"
-msgid "The payment group %(number)s should not be acknowledged: %(date)s < " "%(payment_date)s"
-msgstr "Un groupe de paiement ne devrait pas être reçui aujourd'hui: "
+msgid "The payment group %(number)s should not be acknowledged: %(date)s < "
+"%(payment_date)s"
+msgstr "Un groupe de paiement ne devrait pas être reçu aujourd'hui: "
 "%(date)s < %(payment_date)s"
 
 msgctxt "error:account.payment.group:"
