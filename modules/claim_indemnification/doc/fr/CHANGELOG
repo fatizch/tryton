@@ -1,3 +1,4 @@
+* BUG#6358 Utiliser la date du jour pour valider l'existence d'un compte bancaire à l'ordonnancement
 * BUG#6346 Le batch de création de prestations créé des prestations ayant les mêmes propriétés que la dernière prestation créée pour un service donné
 * Ajout d'une fonction de validation des prestations
 * Ajout d'une valeur par défaut pour la condition de paiement dans la configuration de sinistre

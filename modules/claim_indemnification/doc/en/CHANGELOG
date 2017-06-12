@@ -1,3 +1,4 @@
+* BUG#6358 Use today to check bank account when scheduling an indemnification
 * BUG#6346 The indemnification creation batch will create indemnifications with the same properties as the last one created for a given service
 * Add indemnifications validation function
 * Add default value for payment term in claim configuration

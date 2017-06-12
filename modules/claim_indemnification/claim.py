@@ -914,7 +914,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             journal = indemnification.journal
             if (journal and journal.needs_bank_account() and
                     not indemnification.beneficiary.get_bank_account(
-                        indemnification.start_date)):
+                        utils.today())):
                 cls.append_functional_error('no_bank_account', (
                         indemnification.beneficiary.rec_name,
                         indemnification.service.claim.name))
