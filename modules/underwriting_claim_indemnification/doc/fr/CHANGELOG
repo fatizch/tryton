@@ -1,3 +1,5 @@
+# BUG#6357: Appliquer la réduction suite à l'analyse médicale sur le montant de base
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Accès aux décisions applicables lors du calcul des indemnisations dans le moteur de règles
 * FEA#0000 Possibilité de décider de bloquer / diminuer les prestations

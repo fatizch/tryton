@@ -51,15 +51,15 @@ class BenefitRule:
                 decision = elem.get_decision()
                 if decision.decision != 'reduce_indemnification':
                     continue
-                period['amount'] = service.currency.round(period['amount']
-                    * (1 - decision.reduction_percentage))
-                period['amount_per_unit'] = service.currency.round(
-                    period['amount_per_unit'] * (
-                        1 - decision.reduction_percentage))
+                for data in ('amount', 'base_amount', 'amount_per_unit'):
+                    if data not in period:
+                        continue
+                    period[data] = service.currency.round(period[data]
+                        * (1 - decision.reduction_percentage))
                 period['description'] = period.get('description', '') + \
                     '\n' + self.raise_user_error('applied_reduction_decision',
                         {'reduction': decision.reduction_percentage * 100},
-                        raise_exception=False).encode('utf-8')
+                        raise_exception=False).encode('utf-8') + '\n'
         return periods
 
 
