@@ -1,0 +1,77 @@
+workspace:
+  base: /workspace/drone
+  path: coog
+
+clone:
+  git:
+    image: plugins/git
+    recursive: true
+    skip_verify: true
+    submodule_override:
+      bin/vendor/tryton-perf-analyzer: https://github.com/coopengo/tryton-perf-analyzer.git
+
+pipeline:
+  check-title:
+    image: coog-test/node-base
+    group: checks
+    secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
+    commands:
+      - node /workspace/drone/coog/drone/routine-checks.js title
+    when:
+      status: [ success, failure ]
+
+  check-body:
+    image: coog-test/node-base
+    group: checks
+    secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
+    commands:
+      - node /workspace/drone/coog/drone/routine-checks.js body
+    when:
+      status: [ success, failure ]
+
+  check-labels:
+    image: coog-test/node-base
+    group: checks
+    secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
+    commands:
+      - node /workspace/drone/coog/drone/routine-checks.js labels
+    when:
+      status: [ success, failure ]
+
+  check-content:
+    image: coog-test/node-base
+    group: checks
+    secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
+    commands:
+      - node /workspace/drone/coog/drone/routine-checks.js content
+    when:
+      status: [ success, failure ]
+
+  check-flake8:
+    image: coog-test/python-base
+    group: checks
+    commands:
+      - /workspace/drone/coog/drone/check_flake8
+    status: [ success, failure ]
+    event: [pull_request]
+
+  test-modules:
+    image: coog-test/python-base
+    environment:
+      - PYTHONPATH=/workspace/drone/coog/bin/lib:/workspace/trytond:/workspace/proteus
+      - DB_CACHE="/workspace/drone/coog-test-manual-db-cache"
+    commands:
+      - /workspace/drone/coog/drone/ep
+    when:
+      status: [ success, failure ]
+      event: [pull_request]
+
+services:
+  database:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  redis:
+    image: redis
