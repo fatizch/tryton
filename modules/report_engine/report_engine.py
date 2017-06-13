@@ -843,7 +843,8 @@ class ReportGenerate(CoogReport):
     @classmethod
     def get_filename(cls, template, object_, party):
         if template.output_filename:
-            fn, ext = os.path.splitext(template.genshi_evaluated_output_filename)
+            fn, ext = os.path.splitext(
+                template.genshi_evaluated_output_filename)
             return fn, ext[1:]
         separator = cls.get_filename_separator()
         date_suffix = cls.get_date_suffix(party.lang)

@@ -37,7 +37,7 @@ class Country:
 
     def get_address_lines(self):
         cached = self.__class__._address_line_cache.get(self.id, None)
-        if cached != None:
+        if cached is not None:
             return cached
         address_lines = [x.name for x in self.address_lines]
         self.__class__._address_line_cache.set(self.id, address_lines)

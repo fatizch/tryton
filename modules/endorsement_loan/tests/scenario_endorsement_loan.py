@@ -371,7 +371,7 @@ contract_displayer.new_start_date == contract.start_date
 contract_displayer.new_end_date == new_end_date
 # #Res# #True
 contract_displayer.to_update = False
-contract_displayer.new_end_date == None
+contract_displayer.new_end_date is None
 # #Res# #True
 contract_displayer.to_update = True
 contract_displayer.new_start_date == contract.start_date

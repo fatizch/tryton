@@ -162,13 +162,13 @@ suspension.start_date == dunning.last_process_date
 # #Res# #True
 suspension.type_ == 'definitive'
 # #Res# #True
-suspension.end_date == None
+suspension.end_date is None
 # #Res# #True
 
 # Create temporary suspension
 temporary_suspension = Suspension()
 temporary_suspension.contract = contract
-temporary_suspension.type_= 'temporary'
+temporary_suspension.type_ = 'temporary'
 temporary_suspension.start_date = datetime.date.today()
 temporary_suspension.click('button_activate')
 temporary_suspension.save()
@@ -181,7 +181,7 @@ len(active_suspensions) == 2
 Wizard('contract.activate', models=[contract]).execute('apply')
 contract.reload()
 
-# #Comment# #Temporary suspension should now have a end_date and should be inactive
+# #Comment# #Temporary suspension should now have a end_date and be inactive
 inactive_suspensions = Model.get('contract.right_suspension').find([('active',
     '=', False)])
 len(inactive_suspensions) == 1

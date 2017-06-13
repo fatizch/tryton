@@ -37,7 +37,8 @@ class EventTypeAction:
             'required': Eval('action') == 'generate_planned_event',
             },
         depends=['action'])
-    planned_event_types = fields.Many2Many('event.type.action-planned_event.type',
+    planned_event_types = fields.Many2Many(
+        'event.type.action-planned_event.type',
         'action', 'event_type', 'Planned Event Types',
         states={
             'invisible': Eval('action') != 'generate_planned_event',

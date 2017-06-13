@@ -51,6 +51,7 @@ def rename_rule_engine_function(to_renames):
         else:
             transaction.commit()
 
+
 if __name__ == "__main__":
     with open(filename, 'r') as f:
         to_rename = eval(f.read())

@@ -655,7 +655,7 @@ class _RevisionMixin(object):
             where_parent = reduce_ids(parent_column, sub_ids)
             subquery = table.select(parent_column,
                 Max(Coalesce(table.date, datetime.date.min)).as_('date'),
-                where=((table.date <= date) | (table.date == None))
+                where=((table.date <= date) | (table.date == Null))
                 & where_parent,
                 group_by=parent_column)
             cursor.execute(*table.join(subquery,

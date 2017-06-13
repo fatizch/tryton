@@ -52,7 +52,7 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
                 where=(contract.status == 'active'),
                 having=(
                     (Max(contract_invoice.end) < treatment_date)
-                    | (Max(contract_invoice.end) == None))))
+                    | (Max(contract_invoice.end) == Null))))
 
         return cursor.fetchall()
 

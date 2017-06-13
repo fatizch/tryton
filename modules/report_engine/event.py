@@ -237,12 +237,12 @@ class ReportProductionRequest(model.CoogSQL, model.CoogView):
         for template, values in groupby(report_production_requests,
                 group_prod_requests):
             values = list(values)
-            if not template.split_reports:
-                # Grouped by context and template
-                genexp_sort = lambda x: x.context_
-            else:
-                # Grouped by request id
-                genexp_sort = lambda x: x.id
+
+            def genexp_sort(x):
+                if not template.split_reports:
+                    return x.context_
+                else:
+                    return x.id
 
             values = sorted(values, key=genexp_sort)
             for _, requests in groupby(values, genexp_sort):

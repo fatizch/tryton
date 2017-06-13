@@ -101,7 +101,6 @@ class BaseMassFlowBatch(batch.MemorySavingBatch):
         return kwargs.get('flush_size', cls.get_conf_item(
                 'flush_size'))
 
-
     @classmethod
     def execute(cls, objects, ids, *args, **kwargs):
         """

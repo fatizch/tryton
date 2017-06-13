@@ -3,7 +3,7 @@
 # #Title# #Endorsement Insurance Scenario
 # #Comment# #Imports
 import datetime
-from proteus import config, Model, Wizard
+from proteus import Model, Wizard
 from trytond.tests.tools import activate_modules
 from trytond.modules.currency.tests.tools import get_currency
 
@@ -256,9 +256,9 @@ option2.exclusions.append(exclusion_1)
 contract.subscriber = subscriber
 contract.save()
 
-contract.covered_elements[0].options[0].end_date == None
+contract.covered_elements[0].options[0].end_date is None
 # #Res# #True
-contract.covered_elements[1].options[0].end_date == None
+contract.covered_elements[1].options[0].end_date is None
 # #Res# #True
 
 # #Comment# #New Manage Exclusions Endorsement
@@ -342,9 +342,9 @@ option2.end_date == endorsement_effective_date
 # #Res# #True
 option2.sub_status == termination_status
 # #Res# #True
-option.end_date == None
+option.end_date is None
 # #Res# #True
-option.sub_status == None
+option.sub_status is None
 # #Res# #True
 
 endorsement_last, = Endorsement.find([], order=[('create_date', 'DESC')],
@@ -353,11 +353,11 @@ endorsement_last.click('cancel')
 contract = Contract(contract.id)
 option, = Option.find([('covered_element.party.name', '=', 'Doe')])
 option2, = Option.find([('covered_element.party.name', '=', 'Vercotti')])
-option2.end_date == None
+option2.end_date is None
 # #Res# #True
-option2.sub_status == None
+option2.sub_status is None
 # #Res# #True
-option.end_date == None
+option.end_date is None
 # #Res# #True
-option.sub_status == None
+option.sub_status is None
 # #Res# #True

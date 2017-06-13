@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 import bank
 
+
 def register():
     Pool.register(
         bank.MigratorBank,

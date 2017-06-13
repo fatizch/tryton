@@ -10,7 +10,7 @@ except ImportError:
     import json
 
 from lxml import etree
-from sql import Column, Literal
+from sql import Column, Literal, Null
 from sql.functions import Function, CurrentTimestamp
 
 from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
@@ -1133,7 +1133,7 @@ class Table2D(ModelSQL, ModelView):
             if context.get(dimension_name) is not None:
                 dimensions_clause &= column == context[dimension_name]
             else:
-                dimensions_clause &= column == None
+                dimensions_clause &= column == Null
 
         source = dimension.join(cell, 'LEFT',
             (dimension.id == cell.dimension1) & dimensions_clause
@@ -1145,7 +1145,7 @@ class Table2D(ModelSQL, ModelView):
             where=(dimension.type == 'dimension2')
             & (dimension.definition == definition_id),
             order_by=[
-                dimension.sequence == None,
+                dimension.sequence == Null,
                 dimension.sequence.asc,
                 dimension.value.asc,
                 dimension.date.asc,

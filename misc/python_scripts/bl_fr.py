@@ -88,6 +88,7 @@ def get_issues():
                 yield issue
             offset += 100
 
+
 version['custom_fields'] = {x['id']: x.get('value', '').encode('utf-8')
         for x in version['custom_fields'] if not x.get('multiple', False)}
 
@@ -118,6 +119,7 @@ for issue in get_issues():
 def get_issue_id(issue):
     return '<a href="https://support.coopengo.com/issues/%i' % issue['id'] + \
         '">%i</a>' % issue['id']
+
 
 print '<html>'
 print '<head>'

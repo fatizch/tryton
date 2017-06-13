@@ -1052,7 +1052,7 @@ class Contract:
             if not new_invoice:
                 break
             balance += new_invoice.invoice.total_amount
-            next_date = coog_date.add_day(new_invoice.end, 1)
+            next_date = coog_date.add_day(new_invoice.end, 1)   # NOQA
 
     @classmethod
     def get_lines_to_reconcile(cls, contracts, limit_date=True):

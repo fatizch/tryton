@@ -33,7 +33,7 @@ class EventTypeAction:
         cls._error_messages.update({
                 'create_contract_notification': 'Create Contract Notification',
                 'notification_descriptor': 'WARNING: The Pyson'
-                    ' Condition is applied on contract.'})
+                ' Condition is applied on contract.'})
 
     @classmethod
     def get_action_types(cls):

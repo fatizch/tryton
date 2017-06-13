@@ -137,7 +137,7 @@ class PaymentGroupCreationBatch(batch.BatchRoot):
             journal_methods):
         pool = Pool()
         journal = pool.get('account.payment.journal').__table__()
-        clause = (payment.group == None) & \
+        clause = (payment.group == Null) & \
             (payment.kind == payment_kind) & \
             (payment.date <= treatment_date) & \
             (payment.state == 'approved')
@@ -275,7 +275,7 @@ class PaymentGroupProcessBatch(batch.BatchRoot):
         payment_kind = payment_kind or cls.get_conf_item('payment_kind')
         assert payment_kind in PAYMENT_KINDS
         where_clause = (payment.kind == payment_kind) & \
-            (payment.group != None) & \
+            (payment.group != Null) & \
             (payment.date <= treatment_date) & \
             (payment.state == 'approved')
         if journal_methods:

@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool, Or
+from trytond.pyson import Eval, Bool
 from trytond.model import Unique, ModelView
 
 from trytond.modules.coog_core import fields, model, utils
@@ -415,14 +415,15 @@ class ClaimService:
                         (getattr(cur_salary, salary_def, 0) or 0)
                     if salary_to_add:
                         if self.salary_mode != 'last_year':
-                            pmss += TableCell.get(pmss_table, cur_salary.from_date
+                            pmss += TableCell.get(pmss_table,
+                                cur_salary.from_date
                                 ) * prorata
                         sum_prorata += prorata
                         salary_to_use += salary_to_add
             if self.salary_mode == 'last_year':
                 for i in range(0, 11):
-                    pmss += TableCell.get(pmss_table, cur_salary.from_date + relativedelta(months=i)
-                        ) * prorata
+                    pmss += TableCell.get(pmss_table, cur_salary.from_date
+                        + relativedelta(months=i)) * prorata
 
         # Calculate monthly salary
         if self.salary_mode != 'last_year' and not current_salary and \

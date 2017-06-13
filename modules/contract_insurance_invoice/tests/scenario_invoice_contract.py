@@ -301,6 +301,7 @@ def test_posting(ids_to_test):
     except UserWarning:
         pass
 
+
 test_posting([all_invoices[-1].invoice.id])
 AccountInvoice.post([all_invoices[0].invoice.id], config.context)
 all_invoices[0].invoice.state

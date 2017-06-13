@@ -13,5 +13,6 @@ __all__ = [
 class Group(model.CoogSQL, model.CoogView):
     "Group"
     __name__ = "res.group"
-    endorsement_definitions = fields.Many2Many('endorsement.definition-res.group',
+    endorsement_definitions = fields.Many2Many(
+        'endorsement.definition-res.group',
         'group', 'definition', 'Endorsement Definition')

@@ -153,6 +153,7 @@ class EventType(model.CoogSQL, model.CoogView):
             return self.code
         return coog_string.slugify(self.name)
 
+
 class ActionEventTypeRelation(model.CoogSQL, model.CoogView):
     'Action Event Type Relation'
 

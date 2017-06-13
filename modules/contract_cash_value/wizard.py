@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from sql import Cast, Literal
+from sql import Cast, Literal, Null
 from sql.functions import Substring, Position
 from sql.aggregate import Sum
 from sql.operators import Concat
@@ -85,7 +85,7 @@ class CollectionToCashValue(Wizard):
                         SelectDate.to_date.sql_format(to_date)))
             ).join(cash_value_table, type_='LEFT',
             condition=(
-                (cash_value_table.id == None)
+                (cash_value_table.id == Null)
                 & (cash_value_table.collection == collection_table.id))
             ).join(payment_table, condition=(
                     (payment_table.line == line_table.id)))
@@ -146,7 +146,7 @@ class CollectionToCashValue(Wizard):
 
         cursor.execute(*query_table.select(contract_table.id,
                 collection_table.id, move_table.post_date, where=(
-                    cash_value_table.id == None)))
+                    cash_value_table.id == Null)))
 
         contracts, collections, dates = zip(*cursor.fetchall())
         contracts = Contract.browse(contracts)

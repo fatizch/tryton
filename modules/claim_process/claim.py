@@ -75,7 +75,8 @@ class Claim(CoogProcessFramework):
                     continue
                 args = {}
                 delivered.init_dict_for_rule_engine(args)
-                default_docs = delivered.benefit.calculate_required_documents(args)
+                default_docs = delivered.benefit.calculate_required_documents(
+                    args)
                 if default_docs:
                     # to do: Use cache
                     docs = DocumentDescription.search(
@@ -255,7 +256,7 @@ class ClaimDeclareFindProcess(ProcessStart):
         selected = False
         for claim in available_claims:
             element = Element.from_claim(claim)
-            if ((not force_claim and not selected and claim.status in ('open', 
+            if ((not force_claim and not selected and claim.status in ('open',
                         'reopened'))
                     or (force_claim and claim.id == force_claim)):
                 selected = True

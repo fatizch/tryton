@@ -4,7 +4,7 @@
 from trytond.pool import PoolMeta, Pool
 
 __all__ = [
-        'MoveLine',
+    'MoveLine',
     ]
 
 

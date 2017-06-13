@@ -1,7 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import logging
-from itertools import groupby
+
+from sql import Literal
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -31,7 +32,7 @@ class ReportProductionRequestTreatmentBatch(batch.BatchRoot):
         cursor = Transaction().connection.cursor()
         main_table = pool.get('report_production.request').__table__()
         query = main_table.select(main_table.report_template,
-            where=(main_table.treated == False),
+            where=(main_table.treated == Literal(False)),
             group_by=[main_table.report_template])
         cursor.execute(*query)
         return cursor.fetchall()

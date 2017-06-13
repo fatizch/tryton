@@ -14,6 +14,7 @@ def eval_today(fmt=None):
     return Lang.strftime(datetime.datetime.now(),
         lang.code, lang.date)
 
+
 EVAL_METHODS = [
     ('today', eval_today),
     ]

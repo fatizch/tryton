@@ -18,6 +18,7 @@ from dateutil.relativedelta import relativedelta
 
 from StringIO import StringIO
 from pyflakes.checker import Checker
+from sql import Null
 from sql.aggregate import Count
 from sql.conditionals import Coalesce
 
@@ -961,7 +962,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
         cursor.execute(*rule.join(test_case, 'LEFT OUTER', condition=(
                     (test_case.rule == rule.id) &
-                    (test_case.last_passing_date == None))
+                    (test_case.last_passing_date == Null))
                 ).select(rule.id, Count(test_case.id),
                 where=(rule.id.in_([x.id for x in instances])),
                 group_by=rule.id))
@@ -975,7 +976,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def search_passing_test_cases(cls, name, clause):
         test_case = Pool().get('rule_engine.test_case').__table__()
         query = test_case.select(test_case.rule,
-            where=(test_case.last_passing_date == None),
+            where=(test_case.last_passing_date == Null),
             group_by=test_case.rule)
 
         if clause[2] is True:

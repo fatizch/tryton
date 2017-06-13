@@ -3,7 +3,7 @@
 # #Title# #Life Endorsement Scenario
 # #Comment# #Imports
 import datetime
-from proteus import config, Model, Wizard
+from proteus import Model, Wizard
 from trytond.tests.tools import activate_modules
 from decimal import Decimal
 

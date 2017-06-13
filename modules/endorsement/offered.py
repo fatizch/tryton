@@ -426,5 +426,5 @@ class EndorsementDefinitionGroupRelation(model.CoogSQL, model.CoogView):
 
     definition = fields.Many2One('endorsement.definition', 'Definition',
         required=True, ondelete='CASCADE', select=True)
-    group = fields.Many2One('res.group', 'Group', required=True, 
+    group = fields.Many2One('res.group', 'Group', required=True,
         ondelete='RESTRICT', select=True)

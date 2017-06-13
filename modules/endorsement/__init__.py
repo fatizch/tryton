@@ -9,6 +9,7 @@ from .document import *
 import party
 import group
 
+
 def register():
     Pool.register(
         EndorsementConfiguration,

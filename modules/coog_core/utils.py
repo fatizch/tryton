@@ -356,7 +356,7 @@ def apply_dict(instance, data_dict):
             if value and value.id == v:
                 continue
             if v is None:
-                if not hasattr(instance, k) or value != None:
+                if not hasattr(instance, k) or value is not None:
                     setattr(instance, k, v)
             else:
                 setattr(instance, k, pool.get(field.model_name)(v))

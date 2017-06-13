@@ -44,8 +44,9 @@ class Journal(export.ExportImportMixin):
         has_bank_desposit_ticket_statement = journal_h.column_exist(
                 'bank_deposit_ticket_statement')
         if has_bank_desposit_ticket_statement:
-            cursor.execute(*table.select(table.id, where=(
-                    table.bank_deposit_ticket_statement == True)))
+            cursor.execute(*table.select(table.id,
+                    where=table.bank_deposit_ticket_statement == Literal(True)
+                    ))
             cheque_ids = [x for x, in cursor.fetchall()]
         super(Journal, cls).__register__(module_name)
         # migraton from 1.10

@@ -73,6 +73,7 @@ def get_translation_file(path_to_coog, module, language):
         os.makedirs(os.path.join(path, 'locale'))
         return os.path.join(path, 'locale', '%s.po' % language)
 
+
 if __name__ == '__main__':
     if not len(sys.argv) == 3:
         print 'Usage : python override_translations.py input_file \

@@ -178,7 +178,7 @@ class Invoice:
 
         query_table = invoice_line.join(invoice_line_detail,
             condition=(invoice_line.id == invoice_line_detail.invoice_line)
-            & (invoice_line_detail.fee != None))
+            & (invoice_line_detail.fee != Null))
 
         for invoice_slice in grouped_slice(invoices):
             slice_clause = invoice_line.invoice.in_(

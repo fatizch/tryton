@@ -435,7 +435,7 @@ class PaymentCreation(model.CoogWizard):
                 'multiple_parties': len(parties) != 1,
                 'party': parties[0].id if len(parties) == 1 else None,
                 'payment_date': payment_dates[0]
-                 if len(payment_dates) == 1 else None,
+                if len(payment_dates) == 1 else None,
                 'journal': journal.id if journal else None
                 if len(lines) == 1 else None,
                 }

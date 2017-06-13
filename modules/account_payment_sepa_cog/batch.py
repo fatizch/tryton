@@ -5,6 +5,8 @@ import os
 from lxml import etree
 from io import BytesIO
 
+from sql import Null
+
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
@@ -188,7 +190,7 @@ class PaymentGroupCreationBatch:
             cls).get_payment_where_clause(payment, payment_kind, treatment_date,
                 journal_methods)
         if payment_kind == 'receivable' and journal_methods == 'sepa':
-            clause &= (payment.sepa_mandate != None)
+            clause &= (payment.sepa_mandate != Null)
         return clause
 
 

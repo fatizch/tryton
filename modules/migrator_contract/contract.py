@@ -33,8 +33,8 @@ class MigratorContractPremium(migrator.Migrator):
         cls.table = Table('premium')
         cls.model = 'contract.premium'
         cls.columns = {k: k for k in ('id', 'amount', 'contract',
-                'covered_element', 'start', 'end', 'frequency', 'loan', 'option',
-                'invoice_number')}
+                'covered_element', 'start', 'end', 'frequency',
+                'loan', 'option', 'invoice_number')}
         cls.error_messages.update({
                 'premiums_overlap': ('Premiums overlap on contract %s: %s '
                     'end at %s, %s starts at %s'),

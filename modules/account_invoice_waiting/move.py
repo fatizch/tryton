@@ -39,7 +39,7 @@ class Move:
                     'description': x.description,
                     'date': utils.today(),
                     'party': x.origin.party if x.account.party_required else
-                        None,
+                    None,
                     })
             for x in lines]
         waiting_lines_to_destination_account = [Line(**{
@@ -50,7 +50,7 @@ class Move:
                     'description': x.description,
                     'date': utils.today(),
                     'party': x.origin.party if
-                        x.account.waiting_for_account.party_required else None,
+                    x.account.waiting_for_account.party_required else None,
                     })
             for x in lines]
         move.lines = lines_waiting_account + \

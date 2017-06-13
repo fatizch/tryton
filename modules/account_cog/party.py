@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import copy
 from sql.aggregate import Max
-from sql import Literal
+from sql import Literal, Null
 
 from trytond.modules.coog_core import UnionMixin
 from trytond.pool import Pool, PoolMeta
@@ -178,7 +178,7 @@ class SynthesisMenu:
                 & (account.kind == 'receivable'))).\
             join(move, condition=((move.id == table.move))).\
             select(*columns,
-                where=((table.credit > 0) & (table.reconciliation == None)))
+                where=((table.credit > 0) & (table.reconciliation == Null)))
 
 
 class SynthesisMenuOpen(Wizard):

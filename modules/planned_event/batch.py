@@ -4,6 +4,8 @@
 import logging
 from itertools import groupby
 
+from sql import Literal
+
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
@@ -32,7 +34,7 @@ class ProcessPlannedEvent(batch.BatchRoot):
         cursor.execute(*planned_event.select(planned_event.id,
                 planned_event.event_type, planned_event.on_object,
                 where=((planned_event.planned_date <= treatment_date) &
-                    (planned_event.processed == False)),
+                    (planned_event.processed == Literal(False))),
                 order_by=[planned_event.event_type,
                     planned_event.on_object]))
         ids = []

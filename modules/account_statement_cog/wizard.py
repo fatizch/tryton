@@ -192,7 +192,7 @@ class CreateStatement(Wizard):
                 }
         values = {
             'journal': possible_journals[0].id if len(possible_journals) == 1
-                else None,
+            else None,
             'currency': company.currency.id,
             'currency_digits': company.currency.digits,
             'party': None,

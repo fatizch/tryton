@@ -1,11 +1,12 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.modules.coog_core import utils, model, fields
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval
 
 __all__ = [
     'ContractNotification',
     ]
+
 
 class ContractNotification(model.CoogSQL, model.CoogView):
     'Contract Notification'

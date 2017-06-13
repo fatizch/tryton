@@ -266,7 +266,7 @@ class LineAggregated(model.CoogSQL, model.CoogView):
 
     @classmethod
     def order_snapshot(cls, tables):
-        table, _ =  tables[None]
+        table, _ = tables[None]
         return [table.snapshot]
 
     @classmethod

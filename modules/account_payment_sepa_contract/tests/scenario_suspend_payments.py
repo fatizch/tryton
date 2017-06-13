@@ -278,14 +278,14 @@ payment.reload()
 
 # #Comment# Billing information should now be suspended
 contract.reload()
-contract.billing_information.suspended == True
+contract.billing_information.suspended is True
 # #Res# #True
 
 payment.click('succeed')
 contract.billing_information.reload()
 
 # #Comment# Billing information should now be automatically un-suspended
-contract.billing_information.suspended == False
+contract.billing_information.suspended is False
 # #Res# #True
 
 # #Comment# Fail payment again
@@ -297,12 +297,12 @@ payment.reload()
 
 # #Comment# Billing information should be suspended
 contract.reload()
-contract.billing_information.suspended == True
+contract.billing_information.suspended is True
 # #Res# #True
 
 payment.click('succeed')
 contract.billing_information.reload()
 
 # #Comment# Billing information should not be automatically un-suspended
-contract.billing_information.suspended == True
+contract.billing_information.suspended is True
 # #Res# #True
