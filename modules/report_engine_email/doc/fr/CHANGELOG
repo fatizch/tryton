@@ -1,3 +1,4 @@
+* FIX#0000 Attachments variable moved at the top of the function to avoid crash
 * FEA#6356 Filtre les pièces jointes des emails de lamême façcon que les actions par type d'événement 
 
 Version 1.12 - 2017-04-28
