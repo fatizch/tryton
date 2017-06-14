@@ -14,8 +14,8 @@ export TEST_DRONE_GITHUB_CLIENT=SDFGHJK2345678
 export TEST_DRONE_GITHUB_SECRET=EDFGHJ456789HGVJK
 export TEST_DRONE_SECRET=anyStringYouWant
 ```
-6. Run `/path/to/drone/server/start-server.sh`
-7. All clear!
+6. Run `cd path/to/drone/server && docker-compose up -d`
+7. All clear! Now you can do the `Configuration part`.
 
 ## Configuration
 You will need to configure global secrets for your server to be able to access redmine and github.

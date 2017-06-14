@@ -25,7 +25,6 @@ const _throw = (msg) => {
   throw msg
 }
 
-
 const getData = () => {
   return new Promise((resolve, reject) => {
     axios.get(githubUri, githubParams).then(({data}) => {
@@ -196,7 +195,6 @@ const checkContents = (json, labels) => {
               const patch = file.patch
               if (filename.includes('CHANGELOG')) {
                 console.log(`CHANGELOG file detected in ${filename}.`)
-                ++counter
 
                 const logs = patch.split('\n').filter((log) => { return log.includes('* FEA#') || log.includes('* BUG#') || log.includes('* OTH:') })
 
@@ -231,7 +229,7 @@ const main = () => {
       'title': checkTitle,
       'body': checkBody,
       'content': checkContents,
-      'labels': checkLabels
+      'label': checkLabels
     }
 
     if (labels.includes(`bypass ${arg} check`))
@@ -239,7 +237,7 @@ const main = () => {
       console.log(`${arg} forced.`.toUpperCase())
     }
     else {
-      if (arg === 'labels') checks[arg](process.RAW_JSON, labels)
+      if (arg === 'label') checks[arg](process.RAW_JSON, labels)
       else if (arg === 'content')
       {
         checks[arg](process.RAW_JSON, labels)
