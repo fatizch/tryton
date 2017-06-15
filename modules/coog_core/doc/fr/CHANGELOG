@@ -1,3 +1,4 @@
+* FEA#6355 Ajout du batch de création de prestations aux chaines de batch quotidiennes
 * OTH#6373 Ajout après commit de transaction dans la file des batchs
 * FEA#0000 Ajout d'un contexte persistant dans les assistants
 

@@ -112,6 +112,10 @@ if is_weekday; then
             --treatment_date="$TODAY_DATE"                  \
             --output_filename="$SNAPSHOT_OUTPUT"
 
+    check_modules "claim_indemnification" &&                \
+        coog chain -- claim_indemnification create_indemnifications \
+            --treatment_date="$TODAY_DATE"
+
     check_modules "planned_event" &&                        \
         coog chain -- planned_event process                 \
             --treatment_date="$TODAY_DATE"
