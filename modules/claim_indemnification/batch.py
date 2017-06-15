@@ -42,5 +42,9 @@ class CreateClaimIndemnificationBatch(batch.BatchRoot):
 
     @classmethod
     def execute(cls, objects, ids, treatment_date):
-        Pool().get('claim.service').create_indemnifications(objects,
+        pool = Pool()
+        Service = pool.get('claim.service')
+        Indemnification = pool.get('claim.indemnification')
+        indemnifications = Service.create_indemnifications(objects,
             treatment_date)
+        Indemnification.schedule_indemnifications(indemnifications)

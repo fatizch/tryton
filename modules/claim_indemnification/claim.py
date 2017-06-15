@@ -15,6 +15,7 @@ from trytond.model import ModelView
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 from trytond.tools import grouped_slice
+from trytond.error import UserError
 
 from trytond.modules.coog_core import fields, model, coog_string, utils, \
     coog_date
@@ -482,6 +483,7 @@ class ClaimService:
             return
         Indemnification.calculate(indemnifications)
         Indemnification.save(indemnifications)
+        return indemnifications
 
     def create_missing_indemnifications(self, until):
         if self.paid_until_date >= until:
@@ -907,28 +909,33 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
 
     @classmethod
     def check_schedulability(cls, indemnifications):
-        for indemnification in indemnifications:
-            if indemnification.service.loss.state == 'draft':
-                cls.append_functional_error('cannot_schedule_draft_loss',
-                    {'loss': indemnification.service.loss.rec_name})
-            journal = indemnification.journal
-            if (journal and journal.needs_bank_account() and
-                    not indemnification.beneficiary.get_bank_account(
-                        utils.today())):
-                cls.append_functional_error('no_bank_account', (
-                        indemnification.beneficiary.rec_name,
-                        indemnification.service.claim.name))
+        with model.error_manager():
+            for indemnification in indemnifications:
+                if indemnification.service.loss.state == 'draft':
+                    cls.append_functional_error('cannot_schedule_draft_loss',
+                        {'loss': indemnification.service.loss.rec_name})
+                journal = indemnification.journal
+                if (journal and journal.needs_bank_account() and
+                        not indemnification.beneficiary.get_bank_account(
+                            utils.today())):
+                    cls.append_functional_error('no_bank_account', (
+                            indemnification.beneficiary.rec_name,
+                            indemnification.service.claim.name))
 
     @classmethod
     @ModelView.button
     def schedule(cls, indemnifications):
+        cls.check_schedulability(indemnifications)
+        cls.do_schedule(indemnifications)
+
+    @classmethod
+    def do_schedule(cls, indemnifications):
         Event = Pool().get('event')
-        schedule = []
-        schedule_cancel = []
         control = []
         control_cancel = []
-        with model.error_manager():
-            cls.check_schedulability(indemnifications)
+        schedule = []
+        schedule_cancel = []
+        reason = ''
         for indemnification in indemnifications:
             do_control, reason = indemnification.require_control()
             if do_control is True:
@@ -951,6 +958,19 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             control, {'status': 'controlled'},
             control_cancel, {'status': 'cancel_controlled'})
         Event.notify_events(indemnifications, 'schedule_indemnification')
+
+    @classmethod
+    def schedule_indemnifications(cls, indemnifications):
+        if not indemnifications:
+            return
+        indemnifications_to_schedule = []
+        for indemnification in indemnifications:
+            try:
+                cls.check_schedulability([indemnification])
+                indemnifications_to_schedule.append(indemnification)
+            except UserError:
+                continue
+        cls.do_schedule(indemnifications_to_schedule)
 
     def get_claim_sub_status(self):
         if self.status == 'calculated':
