@@ -6,6 +6,7 @@ except ImportError:
     import json
 
 from itertools import groupby
+from collections import defaultdict
 import datetime
 
 from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
@@ -85,15 +86,28 @@ class EventTypeAction:
 
         objects_origins_templates = \
             self.get_objects_origins_templates_for_event(objects)
+        ProductionRequestBatch = pool.get(
+            'report_production.request.batch_treat')
+        requests_per_template = defaultdict(list)
 
         for objects_to_report, origin, template in objects_origins_templates:
             context_ = self.build_context(objects_to_report, origin,
                 event_code)
             if self.treatment_kind == 'synchronous':
                 template.produce_reports(objects_to_report, context_)
-            else:
+            elif self.treatment_kind == 'asynchronous':
                 ReportProductionRequest.create_report_production_requests(
                     template, objects_to_report, context_)
+            elif self.treatment_kind == 'asynchronous_queue':
+                requests = \
+                    ReportProductionRequest.create_report_production_requests(
+                        template, objects_to_report, context_)
+                requests_per_template[template.id].extend(requests)
+        for template, requests in requests_per_template.items():
+            if not requests:
+                continue
+            ProductionRequestBatch.enqueue([(x.id,) for x in requests], {})
+
 
     def build_context(self, objects_to_report, origin, event_code):
         context_ = {'event_code': event_code}

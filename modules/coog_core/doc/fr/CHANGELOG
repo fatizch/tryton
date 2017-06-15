@@ -1,4 +1,5 @@
-* Ajout d'un contexte persistant dans les assistants
+* OTH#6373 Ajout après commit de transaction dans la file des batchs
+* FEA#0000 Ajout d'un contexte persistant dans les assistants
 
 Version 1.12 - 2017-04-28* FEA#0000 Possibilité de formatter le fichier d'export json
 * FEA#0000 Les actions par type d'événement activées et désactivées sont distinguées par des onglets

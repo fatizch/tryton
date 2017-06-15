@@ -16,6 +16,7 @@ from trytond.model import ModelView, ModelSQL, Model, fields
 from trytond.perf_analyzer import PerfLog, profile, logger as perf_logger
 
 import coog_string
+import model
 
 try:
     import async.broker as async_broker
@@ -208,16 +209,21 @@ class BatchRoot(ModelView):
         return files
 
     @classmethod
-    def enqueue(cls, records, params):
-        '''
-        enqueue a new job
-        ex: ViewValidationBatch.enqueue([(100,), (101,)], {'crash': 100})
-        '''
+    def _enqueue(cls, records, params, **kwargs):
         assert async_broker
         broker = async_broker.get_module()
         assert broker
         broker.enqueue(cls.__name__, 'batch_exec', (cls.__name__, records,
                 params))
+
+    @classmethod
+    @model.post_transaction(model.BrokerCheckDataManager)
+    def enqueue(cls, records, params, **kwargs):
+        '''
+        enqueue a new job
+        ex: ViewValidationBatch.enqueue([(100,), (101,)], {'crash': 100})
+        '''
+        cls._enqueue(records, params, **kwargs)
 
 
 class BatchRootNoSelect(BatchRoot):

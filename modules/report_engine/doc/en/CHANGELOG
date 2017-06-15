@@ -1,3 +1,4 @@
+* FEA#6373 Add Asynchronous Immediate on event type actions
 * OTH#0000 Fix missing import Printable
 * OTH#0000 Fix typo: use template.get_extension instead of template.output_format
 * FEA#2227 Store template version data in database

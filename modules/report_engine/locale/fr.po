@@ -780,14 +780,6 @@ msgctxt "model:res.group,name:group_report_admin"
 msgid "Report Administration"
 msgstr "Administration des courriers/rapports"
 
-msgctxt "selection:event.type.action,treatment_kind:"
-msgid "Asynchronous"
-msgstr "Asynchrone"
-
-msgctxt "selection:event.type.action,treatment_kind:"
-msgid "Synchronous"
-msgstr "Synchrone"
-
 msgctxt "selection:report.template,format_for_internal_edm:"
 msgid ""
 msgstr " "

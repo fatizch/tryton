@@ -1,8 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import logging
-
-from sql import Literal
+from sql import Literal, Null
+from itertools import groupby
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -23,27 +23,36 @@ class ReportProductionRequestTreatmentBatch(batch.BatchRoot):
     logger = logging.getLogger(__name__)
 
     @classmethod
+    def __setup__(cls):
+        super(ReportProductionRequestTreatmentBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'job_size': 1,
+                })
+
+    @classmethod
     def get_batch_main_model_name(cls):
-        return 'report.template'
+        return 'report_production.request'
 
     @classmethod
     def select_ids(cls):
-        pool = Pool()
         cursor = Transaction().connection.cursor()
-        main_table = pool.get('report_production.request').__table__()
-        query = main_table.select(main_table.report_template,
-            where=(main_table.treated == Literal(False)),
-            group_by=[main_table.report_template])
+        ProductionRequest = Pool().get('report_production.request')
+        main_table = ProductionRequest.__table__()
+        query = main_table.select(main_table.report_template, main_table.id,
+            where=(main_table.treated == Literal(False) &
+                (main_table.report_template != Literal(Null))),
+            order_by=[main_table.report_template])
         cursor.execute(*query)
-        return cursor.fetchall()
+        records = [(tmpl, req) for tmpl, req in cursor.fetchall()]
+        selected = []
+        for template, requests in groupby(records, lambda x:
+                x[0]):
+            selected.append([(x[1],) for x in requests])
+        return selected
 
     @classmethod
     def execute(cls, objects, ids):
-        pool = Pool()
-        ProductionRequest = pool.get('report_production.request')
-        ReportProductionRequest = pool.get('report_production.request')
-        objects = ProductionRequest.search([('report_template', 'in', ids),
-                ('treated', '=', False)])
+        ReportProductionRequest = Pool().get('report_production.request')
         reports, attachments = ReportProductionRequest.treat_requests(objects)
         cls.logger.info('Produced %s reports, and created %s attachments' %
             (len(reports), len(attachments)))

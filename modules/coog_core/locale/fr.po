@@ -1622,8 +1622,12 @@ msgid "Relation tag to object"
 msgstr "Relation objet label"
 
 msgctxt "selection:event.type.action,treatment_kind:"
-msgid "Asynchronous"
-msgstr "Asynchrone"
+msgid "Immediate Asynchronous"
+msgstr "Asynchrone avec traitement immédiat"
+
+msgctxt "selection:event.type.action,treatment_kind:"
+msgid "Asynchronous Batch"
+msgstr "Asynchrone avec traitement par batch"
 
 msgctxt "selection:event.type.action,treatment_kind:"
 msgid "Synchronous"

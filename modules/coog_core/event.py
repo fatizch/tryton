@@ -184,8 +184,11 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
         fields.Boolean('Handles asynchronous treatment', states={
             'invisible': True}),
         'on_change_with_handles_asynchronous')
-    treatment_kind = fields.Selection([('synchronous', 'Synchronous'),
-            ('asynchronous', 'Asynchronous')], 'Treatment kind', states={
+    treatment_kind = fields.Selection([
+            ('synchronous', 'Synchronous'),
+            ('asynchronous', 'Asynchronous Batch'),
+            ('asynchronous_queue', 'Immediate Asynchronous'),
+            ], 'Treatment kind', states={
                 'invisible': ~Eval('handles_asynchronous')})
     event_types = fields.Many2Many('event.type.action-event.type', 'action',
         'event_type', 'Event Types')

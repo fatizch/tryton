@@ -21,10 +21,24 @@ from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 from trytond.wizard import Wizard, StateAction
 from trytond.tools import reduce_ids, cursor_dict, memoize
+from trytond.config import config
 
 import fields
 import export
 import summary
+import types
+
+try:
+    import async.broker as async_broker
+    if config.get('async', 'celery', default=None) is not None:
+        async_broker.set_module('celery')
+    elif config.get('async', 'rq', default=None) is not None:
+        async_broker.set_module('rq')
+    else:
+        raise Exception('no async broker')
+except Exception:
+    async_broker = None
+
 
 _dictionarize_fields_cache = Cache('dictionarize_fields', context=False)
 
@@ -40,6 +54,78 @@ __all__ = [
     'MethodDefinition',
     ]
 
+
+class PostExecutionDataManager(object):
+
+    _instance = None
+
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = object.__new__(cls)
+        return cls._instance
+
+    def __init__(self):
+        self.queue = []
+
+    def put(self, func, *args, **kwargs):
+        self.queue.append((func, args, kwargs))
+
+    def abort(self, trans):
+        self._finish()
+
+    def tpc_begin(self, trans):
+        pass
+
+    def commit(self, trans):
+        pass
+
+    def tpc_vote(self, trans):
+        pass
+
+    def tpc_finish(self, trans):
+        """
+        Post commit function execution.
+        Function must never do C(reate)U(pdate)D(elete) operations
+        """
+        with Transaction().new_transaction(readonly=True):
+            for fct, args, kwargs in self.queue:
+                fct(*args, **kwargs)
+        self._finish()
+
+    def tpc_abort(self, trans):
+        self._finish()
+
+    def _finish(self):
+        self.queue = []
+
+
+class BrokerCheckDataManager(PostExecutionDataManager):
+
+    def tpc_begin(self, trans):
+        assert async_broker
+        async_broker.get_module().connection.ping()
+
+
+def post_transaction(DataManager=PostExecutionDataManager):
+    '''
+    The decorated method will be executed AFTER the commit of the current
+    transaction.
+    It will be also executed in a readonly transaction so you must never write
+    code which may do update / write operations.
+    '''
+    def wrapper(func):
+        assert (isinstance(func, types.UnboundMethodType)
+            or isinstance(func, types.FunctionType)), type(func)
+
+        def decorate(*args, **kwargs):
+            transaction = Transaction()
+            datamanager = transaction.join(DataManager())
+            datamanager.put(func, *args, **kwargs)
+            return True
+
+        return decorate
+    return wrapper
 
 def genshi_evaluated_fields(*fields_):
     # Do the magic
