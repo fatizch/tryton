@@ -1,0 +1,129 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:event.type.action:"
+msgid "Process Task"
+msgstr "Traitement de tâche en file d'attente"
+
+msgctxt "field:event.type.action,task_queues:"
+msgid "Task Queues"
+msgstr "Files d'attentes"
+
+msgctxt "field:task.queue.definition,available_batches:"
+msgid "Available Batches"
+msgstr "Batchs disponibles"
+
+msgctxt "field:task.queue.definition,batch:"
+msgid "Batch"
+msgstr "Batch"
+
+msgctxt "field:task.queue.definition,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:task.queue.definition,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:task.queue.definition,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:task.queue.definition,event_type_action:"
+msgid "Event Type Action"
+msgstr "Action par type d'événement"
+
+msgctxt "field:task.queue.definition,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:task.queue.definition,order:"
+msgid "Order"
+msgstr "Ordre"
+
+msgctxt "field:task.queue.definition,parameters:"
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgctxt "field:task.queue.definition,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:task.queue.definition,task_queue_model:"
+msgid "Task Queue Model"
+msgstr "Modèle pour la file d'attente"
+
+msgctxt "field:task.queue.definition,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:task.queue.definition,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:task.queue.definition,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:task.queue.definition.parameter,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:task.queue.definition.parameter,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:task.queue.definition.parameter,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:task.queue.definition.parameter,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:task.queue.definition.parameter,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:task.queue.definition.parameter,genshi_evaluated_value:"
+msgid "Value Genshi Evaluated"
+msgstr "Valeur evaluée en genshi"
+
+msgctxt "field:task.queue.definition.parameter,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:task.queue.definition.parameter,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:task.queue.definition.parameter,value:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:task.queue.definition.parameter,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:task.queue.definition.parameter,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:task.queue.definition.parameter,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "help:task.queue.definition.parameter,value:"
+msgid "Genshi syntax is supported. Records are available as 'records'"
+msgstr ""
+"la syntax genshi est supportée. Les enregistrements sont disponibles via "
+"'records'"
+
+msgctxt "model:task.queue.definition,name:"
+msgid "Task Queue Definition"
+msgstr "Définition de la file d'attente"
+
+msgctxt "model:task.queue.definition.parameter,name:"
+msgid "Task Queue Definition Parameter"
+msgstr "Paramètre de définition de la file d'attente"

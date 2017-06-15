@@ -59,7 +59,6 @@ class PostExecutionDataManager(object):
 
     _instance = None
 
-
     def __new__(cls):
         if cls._instance is None:
             cls._instance = object.__new__(cls)
@@ -126,6 +125,7 @@ def post_transaction(DataManager=PostExecutionDataManager):
 
         return decorate
     return wrapper
+
 
 def genshi_evaluated_fields(*fields_):
     # Do the magic

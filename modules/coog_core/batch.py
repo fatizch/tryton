@@ -15,8 +15,8 @@ from trytond.transaction import Transaction
 from trytond.model import ModelView, ModelSQL, Model, fields
 from trytond.perf_analyzer import PerfLog, profile, logger as perf_logger
 
-import coog_string
 import model
+import coog_string
 
 try:
     import async.broker as async_broker
@@ -207,6 +207,11 @@ class BatchRoot(ModelView):
             files = [(f, os.path.join(path, f)) for f in os.listdir(path)
                 if os.path.isfile(os.path.join(path, f))]
         return files
+
+    @classmethod
+    def enqueue_filter_objects(cls, records):
+        return [x for x in records
+            if x.__name__ == cls.get_batch_main_model_name()]
 
     @classmethod
     def _enqueue(cls, records, params, **kwargs):

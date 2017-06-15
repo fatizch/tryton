@@ -1,0 +1,1 @@
+- **Nouvelle action par type d'événement afin d'ajouter une tâche dans la file d'un batch**

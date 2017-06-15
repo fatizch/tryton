@@ -1,0 +1,1 @@
+- **New action event type to push object directly into a batch queue**

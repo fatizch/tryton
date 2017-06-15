@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################### -->
+        <!-- # Event Tasks Queue Definition # -->
+        <!-- ############################### -->
+        <record model="ir.ui.view" id="task_queue_definition_view_form">
+            <field name="model">task.queue.definition</field>
+            <field name="type">form</field>
+            <field name="name">task_queue_definition_form</field>
+        </record>
+        <record model="ir.ui.view" id="task_queue_definition_view_list">
+            <field name="model">task.queue.definition</field>
+            <field name="type">tree</field>
+            <field name="name">task_queue_definition_list</field>
+        </record>
+        <record model="ir.ui.view" id="task_queue_definition_parameter_view_form">
+            <field name="model">task.queue.definition.parameter</field>
+            <field name="type">form</field>
+            <field name="name">task_queue_definition_parameter_form</field>
+        </record>
+        <record model="ir.ui.view" id="task_queue_definition_parameter_view_list">
+            <field name="model">task.queue.definition.parameter</field>
+            <field name="type">tree</field>
+            <field name="name">task_queue_definition_parameter_list</field>
+        </record>
+    </data>
+</tryton>

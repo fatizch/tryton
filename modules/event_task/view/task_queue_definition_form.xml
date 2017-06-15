@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="batch"/>
+    <field name="batch" colspan="3"/>
+    <label name="task_queue_model"/>
+    <field name="task_queue_model"/>
+    <newline/>
+    <label name="parameters"/>
+    <field name="parameters" colspan="3"/>
+    <field name="order" invisible="1"/>
+    <field name="available_batches" invisible="1"/>
+</form>

@@ -470,6 +470,15 @@ class PaymentSucceedBatch(PaymentValidationBatchBase):
                 })
 
     @classmethod
+    def enqueue_filter_objects(cls, records):
+        filtered_records = super(
+            PaymentSucceedBatch, cls).enqueue_filter_objects(records)
+        for record in records:
+            if record.__name__ == 'account.payment.group':
+                filtered_records.extend(record.processing_payments)
+        return filtered_records
+
+    @classmethod
     def get_batch_main_model_name(cls):
         return 'account.payment'
 
