@@ -4,6 +4,7 @@
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.server_context import ServerContext
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, utils
 
@@ -43,6 +44,7 @@ class EventTypeAction:
             'records': objects,
             'event_code': event_code,
             'Today': utils.today,
+            'user': Pool().get('res.user')(Transaction().user),
             }
 
     def execute(self, objects, event_code, description=None, **kwargs):
@@ -58,4 +60,3 @@ class EventTypeAction:
                 batch = pool.get(queue.batch.model)
                 batch.enqueue([(x.id,) for x in batch.enqueue_filter_objects(
                             objects)], parameters)
-
