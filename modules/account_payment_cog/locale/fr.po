@@ -8,6 +8,10 @@ msgstr ""
 "Les lignes sélectionnées sont incompatibles avec le type de paiement "
 "sélectionné."
 
+msgctxt "model:event.type,name:event_group_acknowledge_planned"
+msgid "Payment Group Acknowledge Planned"
+msgstr "Accusé réception du groupe de paiement planifié "
+
 msgctxt "error:account.payment.creation:"
 msgid ""
 "Selected lines are incompatible. Some are payable lines some are receivable."

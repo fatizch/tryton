@@ -1,5 +1,6 @@
-* FEA6316 Ajout d'un paramétre de batch permettant de forcer l'accusé réception sur des groupes de paiement sans accusé réception planifié mais qui sont en traitement.
-* FEA6316 Utilisation de la date de traitement du batch pour récuperer les groupes de paiement avec une date de paiement minimale inférieure ou égale.
+* FEA#6402 Notification d'événement lors de la planfication de l'accusé récéption d'un groupe de paiement
+* FEA#6316 Ajout d'un paramétre de batch permettant de forcer l'accusé réception sur des groupes de paiement sans accusé réception planifié mais qui sont en traitement.
+* FEA#6316 Utilisation de la date de traitement du batch pour récuperer les groupes de paiement avec une date de paiement minimale inférieure ou égale.
 * FEA#0000 Ajout d'une chaine de batchs parallélisables pour le traitement des paiements
 * FEA#0000 Ajout automatique d'un journal de paiement si possible dans l'assistant de création de paiement
 * FEA#0000 Amélioration de l'affichage du motif dans le processus de création de paiements

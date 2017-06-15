@@ -877,7 +877,7 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
     @ModelView.button
     @Workflow.transition('to_acknowledge')
     def to_acknowledge(cls, groups):
-        pass
+        Pool().get('event').notify_events(groups, 'group_acknowledge_planned')
 
     @classmethod
     @ModelView.button
