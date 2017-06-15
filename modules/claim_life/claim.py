@@ -351,6 +351,9 @@ class ClaimService:
         if self.benefit.beneficiary_kind == 'manual_list':
             return [(x.party, x.share) for x in self.beneficiaries
                 if x.identified]
+        elif (self.benefit.beneficiary_kind == 'covered_party' and
+                self.loss.covered_person):
+            return [(self.loss.covered_person, 1)]
         return super(ClaimService, self).get_beneficiaries_data(at_date)
 
 

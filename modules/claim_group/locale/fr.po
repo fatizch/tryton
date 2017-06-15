@@ -7,6 +7,10 @@ msgid "Declaration date cannot be posterior to today's date"
 msgstr ""
 "La date de déclaration ne peut être postérieure à la date d'aujourd'hui"
 
+msgctxt "error:benefit:"
+msgid "Subscriber then Covered"
+msgstr "Le souscripteur puis l'assuré"
+
 msgctxt "field:benefit,is_group:"
 msgid "Group Benefit"
 msgstr "Prestation collective"

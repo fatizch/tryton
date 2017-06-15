@@ -24,9 +24,20 @@ class Benefit:
         depends=['beneficiary_kind'])
 
     @classmethod
+    def __setup__(cls):
+        super(Benefit, cls).__setup__()
+        cls._error_messages.update({
+                'covered_party_enum': 'Covered Party',
+                'manual_list_enum': 'Manual List',
+                })
+
+    @classmethod
     def get_beneficiary_kind(cls):
         res = super(Benefit, cls).get_beneficiary_kind()
-        res.append(['manual_list', 'Manual List'])
+        res.append(['covered_party', cls.raise_user_error(
+                    'covered_party_enum', raise_exception=False)])
+        res.append(['manual_list', cls.raise_user_error(
+                    'manual_list_enum', raise_exception=False)])
         return res
 
     @fields.depends('beneficiary_documents', 'beneficiary_kind')

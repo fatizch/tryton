@@ -14,6 +14,14 @@ msgctxt "error:benefit:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
 
+msgctxt "error:benefit:"
+msgid "Other"
+msgstr "Autre"
+
+msgctxt "error:benefit:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
 msgctxt "error:claim.closing_reason:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"

@@ -1,3 +1,5 @@
+* FEA#6385 Allow to define covered party as default beneficiary in claim
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Manage manual beneficiary list
 * FEA#0000 Set end date to return_to_work_date - 1 when return_to_work_date is set

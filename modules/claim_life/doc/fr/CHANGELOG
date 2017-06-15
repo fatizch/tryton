@@ -1,3 +1,5 @@
+* FEA#6385 Permettre d'initialiser le bénéficiare comme étant l'assuré par défaut 
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Gestion d'une liste de bénéficiaires manuelle
 * FEA#0000 Initialisation de la date d'arret quand la date de reprise d'activité est initialisé

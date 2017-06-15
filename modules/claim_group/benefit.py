@@ -16,7 +16,15 @@ class Benefit:
     is_group = fields.Boolean('Group Benefit')
 
     @classmethod
+    def __setup__(cls):
+        super(Benefit, cls).__setup__()
+        cls._error_messages.update({
+                'subscriber_then_covered_enum': 'Subscriber then Covered',
+                })
+
+    @classmethod
     def get_beneficiary_kind(cls):
         return super(Benefit, cls).get_beneficiary_kind() + [
-            ('subscriber_then_covered', 'Subscriber then Covered'),
+            ('subscriber_then_covered', cls.raise_user_error(
+                    'subscriber_then_covered_enum', raise_exception=False)),
             ]

@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:benefit:"
+msgid "Covered Party"
+msgstr "Assuré"
+
+msgctxt "error:benefit:"
+msgid "Manual List"
+msgstr "Liste manuelle de bénéficiaires"
+
 msgctxt "error:claim.loss:"
 msgid "An inital std must be created in order to declare a relapse"
 msgstr "Un arrêt initial est requis avant de pouvoir créer une rechute"

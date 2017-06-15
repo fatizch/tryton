@@ -2,27 +2,25 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .offered import *
-from .contract import *
-from .benefit import *
-from .party import *
-from .wizard import *
+import offered
+import contract
+import party
+import wizard
 
 
 def register():
     Pool.register(
-        Product,
-        OptionDescription,
-        Benefit,
-        Contract,
-        Option,
-        CoveredElement,
-        Party,
-        TransferCoveredElementsContracts,
-        TransferCoveredElementsItemDescs,
-        TransferCoveredElementsItemDescLine,
+        offered.Product,
+        offered.OptionDescription,
+        contract.Contract,
+        contract.Option,
+        contract.CoveredElement,
+        party.Party,
+        wizard.TransferCoveredElementsContracts,
+        wizard.TransferCoveredElementsItemDescs,
+        wizard.TransferCoveredElementsItemDescLine,
         module='contract_group', type_='model')
 
     Pool.register(
-        TransferCoveredElements,
+        wizard.TransferCoveredElements,
         module='contract_group', type_='wizard')

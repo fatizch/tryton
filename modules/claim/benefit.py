@@ -248,6 +248,10 @@ class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
+        cls._error_messages.update({
+                'other_enum': 'Other',
+                'subscriber_enum': 'Subscriber',
+                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -268,8 +272,10 @@ class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @classmethod
     def get_beneficiary_kind(cls):
         return [
-            ('subscriber', 'Subscriber'),
-            ('other', 'Other'),
+            ('subscriber', cls.raise_user_error(
+                    'subscriber_enum', raise_exception=False)),
+            ('other', cls.raise_user_error(
+                    'other_enum', raise_exception=False)),
             ]
 
     @staticmethod
