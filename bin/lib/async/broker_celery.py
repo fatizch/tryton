@@ -88,7 +88,8 @@ def enqueue(queue, fname, args, **kwargs):
 
 def split(job_key):
     job = connection.get('coog:job:%s' % job_key)
-    assert job, 'can not find %s' % job_key
+    if not job:
+        exit(code=1)
     job = json.loads(job)
     args = job['args']
     ids = args[1]

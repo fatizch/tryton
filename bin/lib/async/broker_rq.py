@@ -43,7 +43,8 @@ def enqueue(queue, fname, args):
 
 def split(job_key):
     job = connection.hget('rq:job:%s' % job_key, 'coog')
-    assert job, 'can not find %s' % job_key
+    if not job:
+        exit(code=1)
     job = json.loads(job)
     args = job['args']
     ids = args[1]

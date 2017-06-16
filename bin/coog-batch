@@ -73,7 +73,6 @@ coog_batch_report() { # report batch execution - name
                 for jid in $(coog_batch_query "fail" "$1")
                 do
                         coog_batch_query j "$jid"
-                        echo
                 done
         fi
 }

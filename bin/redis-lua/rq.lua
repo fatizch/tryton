@@ -8,6 +8,7 @@ Usage: only ARGV are used (no KEYS). Possible commands are:
   - help: print this text
 
   - fail: list failed jobs ids - <queue>
+  - flist: list all failed jobs
 
   - q: print queue summary - <queue>
   - qlist: list queue jobs - <queue> [filters]
@@ -48,6 +49,27 @@ local function is_eligible(job, queue, filter)
         return false
     end
     return filter[job.status]
+end
+
+local function list_init()
+    local header = {'queue', 'id', 'status', 'context', 'records', 'args',
+        'result'}
+    local result = {table.concat(header, '\t')}
+    return header, result
+end
+
+local function list_append(header, result, job)
+    job.id = job.id:sub(1, 8)
+    if #job.records > 20 then
+        local head = job.records:sub(1, 9)
+        local tail = job.records:sub(-9, -1)
+        job.records = head .. '..' .. tail
+    end
+    local item = {}
+    for _, k in ipairs(header) do
+        item[#item+1] = job[k]
+    end
+    result[#result+1] = table.concat(item, '\t')
 end
 
 -- specific
@@ -149,7 +171,6 @@ api.help = function()
 end
 
 api.fail = function(queue)
-    assert(queue, 'missing queue')
     local filter = check_filter({2, 1})
     local result = {}
     local fails = redis.call('LRANGE', broker.fail_list, 0, -1)
@@ -157,6 +178,21 @@ api.fail = function(queue)
         local job = broker.prepare(id)
         if is_eligible(job, queue, filter) then
             result[#result+1] = id
+        end
+    end
+    return result
+end
+
+api.flist = function()
+    local filter = check_filter({2, 1})
+    local header, result = list_init()
+
+    local fails = redis.call('LRANGE', broker.fail_list, 0, -1)
+    for _, id in ipairs(fails) do
+        local job = broker.prepare(id)
+        if is_eligible(job, nil, filter) then
+            broker.fill(id, job)
+            list_append(header, result, job)
         end
     end
     return result
@@ -208,24 +244,7 @@ end
 api.qlist = function(queue, ...)
     assert(queue, 'missing queue')
     local filter = check_filter({0, 1}, ...)
-
-    local header = {'queue', 'id', 'status', 'context', 'records', 'args',
-        'result'}
-    local result = {table.concat(header, '\t')}
-
-    local function insert(job)
-        job.id = job.id:sub(1, 8)
-        if #job.records > 20 then
-            local head = job.records:sub(1, 9)
-            local tail = job.records:sub(-9, -1)
-            job.records =  head .. '..' .. tail
-        end
-        local item = {}
-        for _, k in ipairs(header) do
-            item[#item+1] = job[k]
-        end
-        result[#result+1] = table.concat(item, '\t')
-    end
+    local header, result = list_init()
 
     local pattern = broker.patterns[1]
     local keys = redis.call('KEYS', pattern .. '*')
@@ -234,7 +253,7 @@ api.qlist = function(queue, ...)
         local job = broker.prepare(id)
         if is_eligible(job, queue, filter) then
             broker.fill(id, job)
-            insert(job)
+            list_append(header, result, job)
         end
     end
     return result
@@ -321,15 +340,7 @@ local function generate_job_api(act)
         assert(id, 'missing job id')
         local pattern = broker.patterns[1]
         local keys = redis.call('KEYS', pattern .. id .. '*')
-        if #keys > 1 then
-            local ret = {string.format('%d jobs matching', #keys)}
-            for _, key in ipairs(keys) do
-                ret[#ret+1] = key:sub(#pattern+1)
-            end
-            return ret
-        elseif #keys == 0 then
-            return 'no jobs matching'
-        elseif #keys == 1 then
+        if #keys == 1 then
             local key = keys[1]
             local id = key:sub(#pattern+1)
             return broker[act](id)
