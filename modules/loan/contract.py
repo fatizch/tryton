@@ -295,7 +295,7 @@ class ContractOption:
             if loan_id in active_loans:
                 continue
             shares.append(cur_shares[-1])
-        return [x.id for x in shares]
+        return [x.id for x in sorted(shares, key=lambda x: x.loan.number)]
 
     def get_shares_at_date(self, at_date, include_removed=False):
         shares = []

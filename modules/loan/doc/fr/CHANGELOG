@@ -1,32 +1,34 @@
+* BUG#6398 Tri des quotités par numéro de prêt sur la vue contrat
+
 Version 1.12 - 2017-04-28
 
 Version 1.10 - 2016-11-02
-* FEA#0000 Add lender address on loan
-* FEA#0000 Add lender role on party
+* FEA#0000 Ajout de l'adresse de l'emprunteur sur le prêt
+* FEA#0000 Ajout du rôle emprunteur sur le tiers
 
 Version 1.8 - 2016-07-06
-* FEA#0000 Add outstanding amount to rule engine
-* FEA#0000 Add extra data on loan
-* FEA#0000 Add lender field on loan
-* FEA#0000 Calculate and store early repayments on increments
-* FEA#0000 Allow to use first payment end balance rather than begin balance on increments
-* FEA#0000 Allow deferral on any kind of loan including graduated and balloon
-* FEA#0000 Allow to recalculate increment dates from first payment date
+* FEA#0000 Ajout du capital sous risque au moteur de règle
+* FEA#0000 Ajout des données complémentaire sur le prêt
+* FEA#0000 Ajout du champs emprunteur sur le tiers
+* FEA#0000 Calcul et stockage des remboursement anticipés sur les paliers
+* FEA#0000 Possibilité de saisir le montant du capital restant dû avant ou après le premier paiement du palier
+* FEA#0000 Possibilité de reporter tout type de prêt, y compris à palier et in fine
+* FEA#0000 Possibilité de recalculer les dates de paliers à partir du premier remboursement 
 
 Version 1.6 - 2015-12-23
-* FEA#0000 Manage extra premium depending on remaining capital amount
-* FEA#0000 Allow to insert manual increments to modify the loan at effective date (reimbursement, rate modification...)
-* FEA#0000 Add warning on loan if last payment is way different from last increment payment amount
-* FEA#0000 Allow to have different payment frequency during the life of the loan (one per increment)
-* FEA#0000 Allow to enter the loan duration in month or year, regardless of the payment frequency
+* FEA#0000 Gestion des surprimes en fonction du capital restant dû
+* FEA#0000 Possibilité d'insérer manuellement un palier pour modifier le prêt à date  d'effet (remboursement, modification du taux, ...)
+* FEA#0000 Ajout d'une alerte sur le prêt si le dernier remboursement diffère sensiblement du montant du dernier palier
+* FEA#0000 Possibilité d'avoir différentes fréquences de remboursement durant la duréee du prêt (une par palier)
+* FEA#0000 Possibilité d'entrer une durée de prêt en mois ou en années, indifféremment de la fréquence de remboursement
 
 Version 1.4 - 2015-05-29
-* FEA#0000 Allow user to force loan modification even if there is another active contract using it
+* FEA#0000  Possibilité de forcer la modification d'un prêt même s'il est déjà utilisé par un contrat actif
 
 Version 1.3 - 2015-01-22
-* FEA#0000 Use workflow to compute loan payments
-* FEA#0000 Use bisect to speed up payment by date finding
+* FEA#0000 Utilisation d'un workflow pour calculer les remboursements du prêt
+* FEA#0000 Utilisation d'une recherche dichotomique pour accélérer la recherche d'un remboursement à une date donnée
 
 Version 1.2 - 2014-07-01
-* FEA#0000 Changelog file creation
+* FEA#0000 Création du fichier CHANGELOG
 * FEA#0000 Add wizard to display outstanding amounts

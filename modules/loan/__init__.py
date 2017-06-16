@@ -1,34 +1,34 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .offered import *
-from .contract import *
-from .rule_engine import *
-from .loan import *
+import offered
+import contract
+import rule_engine
+import loan
 import party
-from .wizard import *
-from .extra_data import *
+import wizard
+import extra_data
 
-from trytond.modules.coog_core import expand_tree
-LoanShareTreeExpansion = expand_tree('loan.share')
+from trytond.modules.coog_core import model
+LoanShareTreeExpansion = model.expand_tree('loan.share')
 
 
 def register():
     Pool.register(
-        Product,
-        OptionDescription,
-        RuleEngineRuntime,
-        Loan,
-        LoanIncrement,
-        LoanPayment,
-        Contract,
-        ContractLoan,
-        ContractOption,
-        ExtraPremium,
-        LoanShare,
-        ExtraData,
-        OptionsDisplayer,
-        WizardOption,
+        offered.Product,
+        offered.OptionDescription,
+        rule_engine.RuleEngineRuntime,
+        loan.Loan,
+        loan.LoanIncrement,
+        loan.LoanPayment,
+        contract.Contract,
+        contract.ContractLoan,
+        contract.ContractOption,
+        contract.ExtraPremium,
+        contract.LoanShare,
+        extra_data.ExtraData,
+        contract.OptionsDisplayer,
+        contract.WizardOption,
         LoanShareTreeExpansion,
         party.Party,
         party.SynthesisMenuLoan,
@@ -39,9 +39,9 @@ def register():
         party.Lender,
         module='loan', type_='model')
     Pool.register(
-        OptionSubscription,
-        DisplayContractPremium,
-        CreateExtraPremium,
+        contract.OptionSubscription,
+        contract.DisplayContractPremium,
+        wizard.CreateExtraPremium,
         party.SynthesisMenuOpen,
         party.DisplayInsuredOutstandingLoanBalance,
         party.PartyReplace,
