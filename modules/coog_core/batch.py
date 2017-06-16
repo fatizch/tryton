@@ -184,7 +184,7 @@ class BatchRoot(ModelView):
         return MainModel.browse([x[0] for x in ids])
 
     @classmethod
-    def on_job_failure(cls, task_id, objects, exc, *args, **kwargs):
+    def on_job_fail(cls, task_id, objects, exc, *args, **kwargs):
         '''
         This method is called on failure by the celery Task itself
         If the task has been enqueued and does not come from a batch,

@@ -1,3 +1,4 @@
+* OTH#0000 Correctif de typo dans le renommage d'une fonction
 * FEA#6392 Ajout d'événements lors du succès ou l'échec du traitement d'une tâche asynchrone
 * FEA#6355 Ajout du batch de création de prestations aux chaines de batch quotidiennes
 * OTH#6373 Ajout après commit de transaction dans la file des batchs
