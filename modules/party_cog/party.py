@@ -166,6 +166,8 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         cls.name.required = True
         cls._error_messages.update({
                 'duplicate_party': ('Duplicate(s) already exist(s) : %s'),
+                'invalid_birth_date': ('Birth date can\'t be in the future :'
+                    '\n%(name)s - %(birthdate)s'),
                 })
         cls.__rpc__.update({'ws_create_person': RPC(readonly=False)})
         cls._buttons.update({
@@ -304,6 +306,12 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
     def validate(cls, parties):
         super(Party, cls).validate(parties)
         cls.check_duplicates(parties)
+        with model.error_manager():
+            for party in parties:
+                if party.birth_date > utils.today():
+                    cls.append_functional_error('invalid_birth_date', {
+                            'name': party.rec_name,
+                            'birthdate': party.birth_date})
 
     @classmethod
     def copy(cls, parties, default=None):

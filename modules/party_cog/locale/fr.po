@@ -32,6 +32,10 @@ msgctxt "error:party.party:"
 msgid "The SSN of the party must be unique."
 msgstr "Le NIR du tiers doit être unique"
 
+msgctxt "error:party.party:"
+msgid "Birth date can't be in the future :\n%(name)s - %(birthdate)s"
+msgstr "La date de naissance ne peut être future :\n%(name)s - %(birthdate)s"
+
 msgctxt "error:party.replace:"
 msgid ""
 "Parties have different first names: %(source_name)s vs %(destination_name)s."
