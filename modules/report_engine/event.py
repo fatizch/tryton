@@ -106,8 +106,8 @@ class EventTypeAction:
         for template, requests in requests_per_template.items():
             if not requests:
                 continue
-            ProductionRequestBatch.enqueue([(x.id,) for x in requests], {})
-
+            ProductionRequestBatch.enqueue([(x.id,) for x in requests], {},
+                user=Transaction().user)
 
     def build_context(self, objects_to_report, origin, event_code):
         context_ = {'event_code': event_code}

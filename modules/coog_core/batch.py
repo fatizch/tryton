@@ -184,6 +184,32 @@ class BatchRoot(ModelView):
         return MainModel.browse([x[0] for x in ids])
 
     @classmethod
+    def on_job_failure(cls, task_id, objects, exc, *args, **kwargs):
+        '''
+        This method is called on failure by the celery Task itself
+        If the task has been enqueued and does not come from a batch,
+        A user variable should be set in the kwargs.
+        '''
+        user = kwargs.get('user', None)
+        if user:
+            Pool().get('event').notify_events(objects,
+                'asynchronous_task_failure', description=exc.msg,
+                **kwargs)
+
+    @classmethod
+    def on_job_success(cls, task_id, objects, retval, *args, **kwargs):
+        '''
+        This method is called on success by the celery Task itself
+        If the task has been enqueued and does not come from a batch,
+        A user variable should be set in the kwargs.
+        '''
+        user = kwargs.get('user', None)
+        if user:
+            Pool().get('event').notify_events(objects,
+                'asynchronous_task_success', description=str(retval),
+                **kwargs)
+
+    @classmethod
     def write_batch_output(cls, _buffer, filename):
         batch_outpath = cls.generate_filepath(filename)
         with open(batch_outpath, 'w') as f:
@@ -219,7 +245,7 @@ class BatchRoot(ModelView):
         broker = async_broker.get_module()
         assert broker
         broker.enqueue(cls.__name__, 'batch_exec', (cls.__name__, records,
-                params))
+                params), **kwargs)
 
     @classmethod
     @model.post_transaction(model.BrokerCheckDataManager)

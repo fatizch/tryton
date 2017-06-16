@@ -29,8 +29,43 @@ connection = redis.StrictRedis(host=broker_host, port=broker_port,
 class CoogTask(Task):
     abstract = True
 
+    def batch_trigger_event(self, method, task_id, batch_name, ids,
+            *args, **kwargs):
+        from tryton_init import database
+        from trytond.transaction import Transaction
+        from trytond.pool import Pool
+        user_id = kwargs.get('user', None)
+        with Transaction().start(database, 0, readonly=True):
+            User = Pool().get('res.user')
+            if not user_id:
+                user, = User.search([('login', '=', 'admin')])
+                user_id = user.id
+        with Transaction().start(database, user_id):
+            pool = Pool()
+            with Transaction().set_context(
+                    User.get_preferences(context_only=True)):
+                batch = pool.get(batch_name)
+                objects = batch.convert_to_instances(ids)
+                if objects == ids:
+                    # This case occurs when the batch is a NoSelect
+                    objects = pool.get(batch.get_batch_main_model_name()
+                        ).browse(ids[0])
+                getattr(batch, method)(task_id, objects, *args, **kwargs)
+
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         connection.lpush('coog:fail', task_id)
+        extra_args = {}
+        extra_args.update(args[2])
+        extra_args.update(kwargs)
+        self.batch_trigger_event('on_job_fail', task_id, args[0],
+           args[1], exc, **extra_args)
+
+    def on_success(self, retval, task_id, args, kwargs):
+        extra_args = {}
+        extra_args.update(args[2])
+        extra_args.update(kwargs)
+        self.batch_trigger_event('on_job_success', task_id, args[0], args[1],
+            retval, **extra_args)
 
 
 for name, func in tasks.iteritems():
@@ -43,11 +78,12 @@ def log_job(job, queue, fname, args):
         json.dumps({'queue': queue, 'func': fname, 'args': args}))
 
 
-def enqueue(queue, fname, args):
+def enqueue(queue, fname, args, **kwargs):
     task = app.tasks[fname]
-    job = task.apply_async(queue=queue, args=args, expires=config.JOB_TTL,
-        retry=False)
+    job = task.apply_async(queue=queue, args=args, kwargs=kwargs,
+        expires=config.JOB_TTL, retry=False)
     log_job(job, queue, fname, args)
+    return job.task_id
 
 
 def split(job_key):

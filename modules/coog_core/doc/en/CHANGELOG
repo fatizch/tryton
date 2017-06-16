@@ -1,3 +1,4 @@
+* FEA#6392 Notify event on success or failure of asynchronous task processing
 * FEA#6355 Add indemnifications creation batch to batch daily chains
 * OTH#6373 Post transaction commit enqueue
 * FEA#0000 Add persistent wizard context

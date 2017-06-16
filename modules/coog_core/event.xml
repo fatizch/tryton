@@ -52,6 +52,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="event_type_action_view_form"/>
             <field name="act_window" ref="act_event_type_action_form"/>
         </record>
+        <record model="event.type" id="event_async_task_failuret">
+            <field name="name">Asynchronous Task Failure</field>
+            <field name="code">asynchronous_task_failure</field>
+        </record>
+        <record model="event.type" id="event_async_task_successt">
+            <field name="name">Asynchronous Task Success</field>
+            <field name="code">asynchronous_task_success</field>
+        </record>
         <!-- Tabs -->
         <record model="ir.action.act_window.domain" id="act_event_type_action_domain_active">
             <field name="name">Enabled</field>

@@ -54,7 +54,8 @@ def batch_generate(name, params):
                 with ServerContext().set_context(from_batch=True):
                     for l in split_batch(BatchModel.select_ids(**batch_params),
                             job_size):
-                        broker.enqueue(name, 'batch_exec', (name, l, params))
+                        broker.enqueue(name, 'batch_exec',
+                            (name, l, params))
                         res.append(len(l))
             except Exception:
                 logger.exception('generate crashed')
@@ -75,7 +76,7 @@ def split_job(l, n):
             yield l[i:i + n]
 
 
-def batch_exec(name, ids, params):
+def batch_exec(name, ids, params, **kwargs):
     assert name, 'Batch name is required'
     assert type(ids) is list, 'Ids list is required'
     assert type(params) is dict, 'Params dict is required'

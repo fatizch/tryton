@@ -1,6 +1,8 @@
-* FEA6402 Notification of an event when planifying akwnowledge a payment group
-* FEA6316 Add a batch parameter which allow to force the acknowledge on payment groups which are not planned to be acknowledge but in the processing state
-* FEA6316 The acknowledge chain now use the treatment date to retrieve payment groups with a minimal start date which is less of equal.
+* FEA#6316 Allow to force the acknowledge on payment groups which are not planned to be acknowledge but in the processing state
+* FEA#6316 The acknowledge chain now use the treatment date to retrieve payment groups with a minimal start date which is less of equal.
+* FEA#6402 Notification of an event when planifying akwnowledge a payment group
+* FEA#6316 Add a batch parameter which allow to force the acknowledge on payment groups which are not planned to be acknowledge but in the processing state
+* FEA#6316 The acknowledge chain now use the treatment date to retrieve payment groups with a minimal start date which is less of equal.
 * FEA#0000 Add a batch chain for parallelizable payment treatment
 * FEA#0000 Automatically add a payment journal if possible in the payment creation wizard
 * FEA#0000 Improve Motive display in Create Payment Process

@@ -58,5 +58,6 @@ class EventTypeAction:
                 parameters = {x.code: x.genshi_evaluated_value
                     for x in queue.parameters}
                 batch = pool.get(queue.batch.model)
-                batch.enqueue([(x.id,) for x in batch.enqueue_filter_objects(
-                            objects)], parameters)
+                batch.enqueue(
+                    [(x.id,) for x in batch.enqueue_filter_objects(objects)
+                        ], parameters, user=Transaction().user)
