@@ -1,3 +1,4 @@
+* OTH#0000 Fix typo in retrieving error message from job fail handler
 * OTH#0000 Fix typo in function renaming
 * FEA#6392 Notify event on success or failure of asynchronous task processing
 * FEA#6355 Add indemnifications creation batch to batch daily chains

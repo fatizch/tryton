@@ -193,7 +193,7 @@ class BatchRoot(ModelView):
         user = kwargs.get('user', None)
         if user:
             Pool().get('event').notify_events(objects,
-                'asynchronous_task_failure', description=exc.msg,
+                'asynchronous_task_failure', description=exc.message,
                 **kwargs)
 
     @classmethod
