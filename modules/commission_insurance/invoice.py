@@ -205,7 +205,7 @@ class Invoice:
         if (getattr(self, 'business_kind', None) in
                 ['insurer_invoice', 'broker_invoice'] and
                 self.type == 'in' and self.total_amount > 0):
-            line.payment_date = utils.today()
+            line.payment_date = line.maturity_date or utils.today()
         return line
 
     def get_synthesis_rec_name(self, name):

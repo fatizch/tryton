@@ -1,4 +1,5 @@
-* Add relate on insurer and broker parties to display invoices
+* BUG#6395 Do not override payment date if a maturity date exists
+* FEA#0000 Add relate on insurer and broker parties to display invoices
 
 Version 1.12 - 2017-04-28
 * FEA#0000 A commission's base amount is equal to its amount divided by its rate.
