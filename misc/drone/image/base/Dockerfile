@@ -1,4 +1,6 @@
-FROM alpine:3.5
+FROM node:8-alpine
+
+RUN npm install axios
 
 RUN apk add --no-cache\
     git \

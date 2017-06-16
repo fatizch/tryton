@@ -12,7 +12,7 @@ clone:
 
 pipeline:
   check-title:
-    image: coog-test/node-base
+    image: coog-test/base-tests
     group: checks
     secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
     commands:
@@ -21,7 +21,7 @@ pipeline:
       status: [ success, failure ]
 
   check-body:
-    image: coog-test/node-base
+    image: coog-test/base-tests
     group: checks
     secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
     commands:
@@ -30,7 +30,7 @@ pipeline:
       status: [ success, failure ]
 
   check-labels:
-    image: coog-test/node-base
+    image: coog-test/base-tests
     group: checks
     secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
     commands:
@@ -39,7 +39,7 @@ pipeline:
       status: [ success, failure ]
 
   check-content:
-    image: coog-test/node-base
+    image: coog-test/base-tests
     group: checks
     secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
     commands:
@@ -48,7 +48,7 @@ pipeline:
       status: [ success, failure ]
 
   check-flake8:
-    image: coog-test/python-base
+    image: coog-test/base-tests
     group: checks
     commands:
       - /workspace/drone/coog/drone/check-flake8
@@ -56,13 +56,14 @@ pipeline:
     event: [pull_request]
 
   test-modules:
-    image: coog-test/python-base
+    image: coog-test/base-tests
+    secrets: [ GITHUB_TOKEN ]
     environment:
       - PYTHONPATH=/workspace/drone/coog/bin/lib:/workspace/trytond:/workspace/proteus
       - DB_CACHE="/workspace/drone/coog-test-manual-db-cache"
       - TRYTOND_ASYNC_RQ="redis://127.0.0.1:6379/1"
     commands:
-      - /workspace/drone/coog/drone/check-tests
+      - node /workspace/drone/coog/drone/check-meta.js tests || /workspace/drone/coog/drone/check-tests
     when:
       status: [ success, failure ]
       event: [pull_request]

@@ -21,7 +21,7 @@ const githubParams = {
 }
 
 const _throw = (msg) => {
-  throw msg
+  throw new Error(msg)
 }
 
 const getData = () => {
@@ -199,7 +199,7 @@ const checkContents = (json, labels) => {
 
             checkIssues(issues, labels).catch((err) => { reject(err) })
 
-            resolve('Body seems ok.')
+            resolve('CHANGELOGs seem ok.')
           }
         })
       } else {
@@ -229,15 +229,27 @@ const main = () => {
     if (labels.includes(`bypass ${arg} check`)) {
       console.log(`${arg} forced.`.toUpperCase())
     } else {
-      if (arg === 'label') checks[arg](process.RAW_JSON, labels)
-      else if (arg === 'content') {
-        checks[arg](process.RAW_JSON, labels)
-        .then((msg) => { console.log(msg) })
-        .catch((err) => {
-          console.log(err)
+      switch (arg) {
+        case 'label':
+          checks[arg](process.RAW_JSON, labels)
+          break
+
+        case 'content':
+          checks[arg](process.RAW_JSON, labels)
+            .then((msg) => { console.log(msg) })
+            .catch((err) => {
+              console.log(err)
+              process.exit(1)
+            })
+          break
+
+        case 'tests':
           process.exit(1)
-        })
-      } else checks[arg](process.RAW_JSON)
+
+        default:
+          checks[arg](process.RAW_JSON)
+          break
+      }
     }
   }).catch((err) => {
     console.log(err)
