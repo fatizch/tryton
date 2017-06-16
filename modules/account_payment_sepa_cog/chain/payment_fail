@@ -4,15 +4,16 @@
 CHAIN_NAME=payment_fail
 CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
 
-CHAIN_PARAMETERS=('IN_DIRECTORY' 'ARCHIVE')
+CHAIN_PARAMETERS=('IN' 'OUT')
+CHAIN_REQUIRED=('IN' 'OUT')
 
 chain_params "$@"
 chain_begin
 
-chain_step account.payment.fail --in_directory="$IN_DIRECTORY"
+chain_step account.payment.fail --in_directory="$IN"
 chain_wait account.payment.fail || chain_end
 
-chain_step account.payment.fail.message.create  --in_directory="$IN_DIRECTORY" --archive="$ARCHIVE"
+chain_step account.payment.fail.message.create  --in_directory="$IN" --archive="$OUT"
 chain_wait account.payment.fail.message.create || chain_end
 
 chain_end
