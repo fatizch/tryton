@@ -1,3 +1,4 @@
+* OTH#0000 Supprimer les champs inutilisés sur le vue du report_template_version
 * FEA#6373 Ajout du type de traitement asynchrone immédiat sur les actions par type d'événement
 * OTH#0000 Corriger import manquant 
 * OTH#0000 Correctif: Utilisation de template.get_extension au lieu de template.output_format

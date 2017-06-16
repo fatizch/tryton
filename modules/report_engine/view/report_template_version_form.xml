@@ -16,10 +16,4 @@ this repository contains the full copyright notices and license terms. -->
         <field name="language"/>
     </group>
     <field name="data" widget="image" readonly="1"/>
-    <group id="last" col="4" colspan="2">
-        <label name="last_user"/>
-        <field name="last_user"/>
-        <label name="last_modification"/>
-        <field name="last_modification"/>
-    </group>
 </form>

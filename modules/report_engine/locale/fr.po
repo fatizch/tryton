@@ -34,14 +34,6 @@ msgstr ""
 "  Erreur:\n"
 "%s"
 
-msgctxt "field:report.template,genshi_evaluated_output_filename:"
-msgid "Output Filename Genshi Evaluated"
-msgstr "Nom du fichier de sorti (dynamique)"
-
-msgctxt "field:report.template,output_filename:"
-msgid "Output Filename"
-msgstr "Nom de fichier de sortie"
-
 msgctxt "error:report.create:"
 msgid "Report is impossible: No contact available."
 msgstr "La génération du courrier est impossible: pas de contact disponible"
@@ -49,10 +41,6 @@ msgstr "La génération du courrier est impossible: pas de contact disponible"
 msgctxt "error:report.template.parameter:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
-
-msgctxt "error:report.template.version:"
-msgid "The names of attachments must be unique by resource."
-msgstr "Les noms des pièces jointes doivent être unique par ressource."
 
 msgctxt "error:report.template:"
 msgid "Flat Document"
@@ -218,6 +206,10 @@ msgctxt "field:report.create.preview,reports:"
 msgid "Reports"
 msgstr "Rapports"
 
+msgctxt "field:report.create.preview.line,extension:"
+msgid "Extension"
+msgstr "Extension"
+
 msgctxt "field:report.create.preview.line,file_basename:"
 msgid "Filename"
 msgstr "Nom du Fichier"
@@ -302,6 +294,10 @@ msgctxt "field:report.template,genshi_evaluated_export_dir:"
 msgid "Export Directory Genshi Evaluated"
 msgstr "Dossier d'export (dynamique)"
 
+msgctxt "field:report.template,genshi_evaluated_output_filename:"
+msgid "Output Filename Genshi Evaluated"
+msgstr "Nom du fichier de sortie (dynamique)"
+
 msgctxt "field:report.template,id:"
 msgid "ID"
 msgstr "ID"
@@ -329,6 +325,10 @@ msgstr "Nombre de méthode de traitement possible"
 msgctxt "field:report.template,on_model:"
 msgid "Model"
 msgstr "Modèle"
+
+msgctxt "field:report.template,output_filename:"
+msgid "Output Filename"
+msgstr "Nom du fichier en sortie"
 
 msgctxt "field:report.template,output_format:"
 msgid "Output Format"
@@ -478,6 +478,10 @@ msgctxt "field:report.template.version,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
 
+msgctxt "field:report.template.version,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
 msgctxt "field:report.template.version,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -486,21 +490,9 @@ msgctxt "field:report.template.version,data:"
 msgid "Data"
 msgstr "Données"
 
-msgctxt "field:report.template.version,data_size:"
-msgid "Data size"
-msgstr "Taille des données"
-
-msgctxt "field:report.template.version,description:"
-msgid "Description"
-msgstr "Description"
-
 msgctxt "field:report.template.version,end_date:"
 msgid "End date"
 msgstr "Date de Fin"
-
-msgctxt "field:report.template.version,file_id:"
-msgid "File ID"
-msgstr "ID du fichier"
 
 msgctxt "field:report.template.version,id:"
 msgid "ID"
@@ -510,18 +502,6 @@ msgctxt "field:report.template.version,language:"
 msgid "Language"
 msgstr "Langues"
 
-msgctxt "field:report.template.version,last_modification:"
-msgid "Last Modification"
-msgstr "Dernière modification"
-
-msgctxt "field:report.template.version,last_user:"
-msgid "Last User"
-msgstr "Dernier utilisateur"
-
-msgctxt "field:report.template.version,link:"
-msgid "Link"
-msgstr "Lien"
-
 msgctxt "field:report.template.version,name:"
 msgid "Name"
 msgstr "Nom"
@@ -530,21 +510,13 @@ msgctxt "field:report.template.version,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:report.template.version,resource:"
-msgid "Resource"
-msgstr "Ressource"
-
 msgctxt "field:report.template.version,start_date:"
 msgid "Start date"
 msgstr "Date de Début"
 
-msgctxt "field:report.template.version,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
-msgctxt "field:report.template.version,type:"
-msgid "Type"
-msgstr "Type"
+msgctxt "field:report.template.version,template:"
+msgid "Template"
+msgstr "Modèle"
 
 msgctxt "field:report.template.version,write_date:"
 msgid "Write Date"
@@ -801,6 +773,10 @@ msgid "Input Kind"
 msgstr "Type d'entrée"
 
 msgctxt "selection:report.template,output_format:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:report.template,output_format:"
 msgid "Libre Office"
 msgstr "Libre Office"
 
@@ -843,18 +819,6 @@ msgstr "Numérique"
 msgctxt "selection:report.template.parameter,type_:"
 msgid "Selection"
 msgstr "Sélection"
-
-msgctxt "selection:report.template.version,resource:"
-msgid "Document Template"
-msgstr "Modèle de courrier"
-
-msgctxt "selection:report.template.version,type:"
-msgid "Data"
-msgstr "Données"
-
-msgctxt "selection:report.template.version,type:"
-msgid "Link"
-msgstr "Lien"
 
 msgctxt "view:report.convert.match:"
 msgid "Templates"
