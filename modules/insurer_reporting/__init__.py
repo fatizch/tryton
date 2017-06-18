@@ -2,21 +2,22 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .wizard import *
-from .report_engine import *
-from .account import *
-from .contract import *
+import wizard
+import report_engine
+import account
+import contract
 
 
 def register():
     Pool.register(
-        InsurerReportContractConfigure,
-        InsurerReportResult,
-        ReportTemplate,
-        Invoice,
-        InvoiceLine,
-        Contract,
+        wizard.InsurerReportContractConfigure,
+        wizard.InsurerReportResult,
+        report_engine.ReportTemplate,
+        account.Invoice,
+        account.InvoiceLine,
+        contract.Contract,
+        contract.CoveredElement,
         module='insurer_reporting', type_='model')
     Pool.register(
-        InsurerReportContract,
+        wizard.InsurerReportContract,
         module='insurer_reporting', type_='wizard')
