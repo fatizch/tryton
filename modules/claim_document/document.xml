@@ -21,10 +21,10 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ############# -->
         <!-- # Document  # -->
         <!-- ############# -->
-        <record model="ir.ui.view" id="document_view_tree">
+        <record model="ir.ui.view" id="document_request_line_view_list">
             <field name="model">document.request.line</field>
-            <field name="inherit" ref="document_request.document_tree"/>
-            <field name="name">document_view_tree</field>
+            <field name="inherit" ref="document_request.document_request_line_view_list"/>
+            <field name="name">document_request_line_list</field>
         </record>
     </data>
 </tryton>

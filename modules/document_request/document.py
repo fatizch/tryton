@@ -156,13 +156,9 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
             self.attachment_name = self.attachment.name
             self.attachment_data = self.attachment.data
             self.received = True
-            if not self.reception_date:
-                self.reception_date = utils.today()
-            if not self.first_reception_date:
-                self.first_reception_date = utils.today()
         else:
             self.received = False
-            self.reception_date = None
+        self.on_change_received()
 
     @fields.depends('reception_date')
     def on_change_with_received(self, name=None):
@@ -218,22 +214,33 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
         attachments = []
         to_save = []
         for request in requests:
-            if not request.attachment:
+            if not request.attachment and value:
                 attachment = Attachment()
                 attachment.resource = request.for_object
                 attachment.document_desc = request.document_desc
                 attachment.data = value
                 attachment.name = request.document_desc.name
+                if request.matching_attachments:
+                    attachment.name += '_%s' % (
+                        len(request.matching_attachments) + 1)
                 attachments.append(attachment)
                 request.attachment = attachment
+                request.received = True
+                request.on_change_received()
                 to_save.append(request)
-            else:
+            elif request.attachment and value:
                 request.attachment.data = value
                 attachments.append(request.attachment)
-        if attachments:
-            Attachment.save(attachments)
+            elif request.attachment and not value:
+                request.received = False
+                request.on_change_received()
+                request.reception_date = None
+                request.attachment = None
+                to_save.append(request)
         if to_save:
             cls.save(to_save)
+        if attachments:
+            Attachment.save(attachments)
 
     def get_matching_attachments(self, name):
         Attachment = Pool().get('ir.attachment')
@@ -480,8 +487,8 @@ class RemindableInterface(object):
                 return False
             else:
                 return True
-        delta = relativedelta(days=+delay) if unit == 'day' \
-                else relativedelta(months=+delay)
+        delta = (relativedelta(days=+delay) if unit == 'day'
+            else relativedelta(months=+delay))
         if doc.document_desc.code not in documents.keys():
             return False
         doc_max_reminders = documents[

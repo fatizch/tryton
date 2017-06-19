@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="printer_icon">
+            <field name="name">printer</field>
+            <field name="path">icons/printer.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="printer_timer_icon">
+            <field name="name">printer_timer</field>
+            <field name="path">icons/printer_timer.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="document_template_icon">
+            <field name="name">document_template</field>
+            <field name="path">icons/document_template.svg</field>
+        </record>
+    </data>
+</tryton>

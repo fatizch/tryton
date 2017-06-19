@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="document_icon">
+            <field name="name">document</field>
+            <field name="path">icons/document.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="document_basket_icon">
+            <field name="name">document_basket</field>
+            <field name="path">icons/document_basket.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="notebook_icon">
+            <field name="name">notebook</field>
+            <field name="path">icons/notebook.svg</field>
+        </record>
+    </data>
+</tryton>

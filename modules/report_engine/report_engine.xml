@@ -51,7 +51,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ##################### -->
         <!-- # Report Template   # -->
         <!-- ##################### -->
-        <menuitem name="Report" id="menu_report" sequence="20"/>
+        <menuitem name="Report" id="menu_report" sequence="20" icon="printer"/>
         <record model="ir.ui.view" id="report_template_form">
             <field name="model">report.template</field>
             <field name="type">form</field>
@@ -77,7 +77,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="report_template_form"/>
             <field name="act_window" ref="act_doc_template"/>
         </record>
-        <menuitem parent="menu_report" sequence="30" action="act_doc_template" id="menu_doc_template"/>
+        <menuitem parent="menu_report" sequence="30" action="act_doc_template" id="menu_doc_template" icon="document_template"/>
         <!-- ################################ -->
         <!-- # Report Template Access Right # -->
         <!-- ################################ -->

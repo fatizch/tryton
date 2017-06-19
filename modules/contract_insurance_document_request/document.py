@@ -50,7 +50,7 @@ class DocumentRequestLine:
     def update_values_from_target(cls, data_dict):
         super(DocumentRequestLine, cls).update_values_from_target(data_dict)
         for target, values in data_dict.iteritems():
-            if not target.startswith('contract,'):
+            if not target or not target.startswith('contract,'):
                 continue
             contract_id = int(target.split(',')[1])
             for value in values:

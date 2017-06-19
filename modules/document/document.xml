@@ -6,8 +6,8 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ######## -->
         <!-- # Menu # -->
         <!-- ######## -->
-        <menuitem name="Document" id="menu_document" sequence="15"/>
-        <menuitem name="Configuration" parent="menu_document" id="menu_document_configuration" sequence="100"/>
+        <menuitem name="Document" id="menu_document" sequence="15" icon="document"/>
+        <menuitem name="Configuration" parent="menu_document" id="menu_document_configuration" sequence="100" icon="tryton-preferences"/>
         <!-- ######################## -->
         <!-- # Document Description # -->
         <!-- ######################## -->
@@ -36,7 +36,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="document_desc_form"/>
             <field name="act_window" ref="act_document_desc"/>
         </record>
-        <menuitem parent="menu_document_configuration" sequence="30" action="act_document_desc" id="menu_document_desc"/>
+        <menuitem parent="menu_document_configuration" sequence="30" action="act_document_desc" id="menu_document_desc" icon="notebook"/>
         <!-- Access Rights -->
         <record model="res.group" id="group_document_admin">
             <field name="name">Document Administration</field>
@@ -95,7 +95,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="document_reception_view_form"/>
             <field name="act_window" ref="act_document_reception"/>
         </record>
-        <menuitem parent="menu_document" sequence="30" action="act_document_reception" id="menu_document_reception"/>
+        <menuitem parent="menu_document" sequence="30" action="act_document_reception" id="menu_document_reception" icon="document_basket"/>
         <!-- Access Rights -->
         <record model="res.group" id="group_document_reception">
             <field name="name">Document Reception</field>

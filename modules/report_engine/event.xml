@@ -24,6 +24,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_report_production_request_form">
             <field name="name">Report Production Requests</field>
             <field name="res_model">report_production.request</field>
+            <field name="search_value" eval="[('treated', '=', False)]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_report_production_request_form_view1">
             <field name="sequence" eval="10"/>
@@ -57,6 +58,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">report_production.request,-1</field>
             <field name="action" ref="report_engine.act_treat_report_production_request"/>
         </record>
-        <menuitem parent="report_engine.menu_report" sequence="40" id="menu_report_production_requests" icon="tryton-list" action="act_report_production_request_form"/>
+        <menuitem parent="report_engine.menu_report" sequence="40" id="menu_report_production_requests" icon="printer_timer" action="act_report_production_request_form"/>
     </data>
 </tryton>

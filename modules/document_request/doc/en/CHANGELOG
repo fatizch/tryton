@@ -1,3 +1,5 @@
+* FEA#6408 Add new global entry point for pending document request
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Add a 'details' field on the request lines
 

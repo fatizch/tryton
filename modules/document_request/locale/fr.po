@@ -4,7 +4,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:document.request:"
 msgid "Document Request For"
-msgstr "Demande de documents pour"
+msgstr "Demande de document pour"
 
 msgctxt "field:batch.remind.documents,id:"
 msgid "ID"
@@ -44,7 +44,7 @@ msgstr "Tiers"
 
 msgctxt "field:document.reception,request:"
 msgid "Document Request"
-msgstr "Demande de Documents"
+msgstr "Demande de document"
 
 msgctxt "field:document.request,create_date:"
 msgid "Create Date"
@@ -176,7 +176,7 @@ msgstr "Nombre de relances envoyées"
 
 msgctxt "field:document.request.line,request:"
 msgid "Document Request"
-msgstr "Demande de Documents"
+msgstr "Demande de documents"
 
 msgctxt "field:document.request.line,request_date:"
 msgid "Request Date"
@@ -242,9 +242,17 @@ msgctxt "model:ir.action,name:"
 msgid "Document Reception"
 msgstr "Réception des documents"
 
+msgctxt "model:ir.action,name:act_document_request_line_form"
+msgid "Document Request Lines"
+msgstr "Demandes de document"
+
 msgctxt "model:ir.ui.menu,name:"
 msgid "Receive Documents"
 msgstr "Documents reçus"
+
+msgctxt "model:ir.ui.menu,name:menu_document_request_line_form"
+msgid "Document Request Lines"
+msgstr "Demandes de document"
 
 msgctxt "selection:document.request,needed_by:"
 msgid ""
