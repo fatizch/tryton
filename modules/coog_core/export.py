@@ -186,6 +186,10 @@ class ExportImportMixin(Historizable):
                     for l in getattr(main_object, field_name))
 
     @classmethod
+    def keep_existing_line(cls, field_name):
+        return False
+
+    @classmethod
     def _import_json(cls, values, main_object=None):
         logging.getLogger('import').debug('Importing [%s] %s' % (
                 cls.__name__, values['_func_key']))
@@ -254,7 +258,8 @@ class ExportImportMixin(Historizable):
                     obj_to_create = Target._import_json(line, None)
                     if obj_to_create:
                         to_create.append(obj_to_create)
-            if existing_lines:
+            if existing_lines and not cls.keep_existing_line(main_object,
+                    field_name):
                 if isinstance(field, tryton_fields.Many2Many):
                     to_remove.append(
                         ('remove', [l.id for l in

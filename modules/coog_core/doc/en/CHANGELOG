@@ -1,3 +1,4 @@
+* FEA#6406 Allow to keep lines on JSON import
 * OTH#0000 Fix typo in retrieving error message from job fail handler
 * OTH#0000 Fix typo in function renaming
 * FEA#6392 Notify event on success or failure of asynchronous task processing
