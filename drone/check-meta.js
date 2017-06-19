@@ -252,7 +252,7 @@ const main = () => {
       }
     }
   }).catch((err) => {
-    console.log(err)
+    console.log(err.message)
     process.exit(1)
   })
 }
