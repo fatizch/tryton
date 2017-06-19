@@ -308,7 +308,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         cls.check_duplicates(parties)
         with model.error_manager():
             for party in parties:
-                if party.birth_date > utils.today():
+                if party.birth_date and party.birth_date > utils.today():
                     cls.append_functional_error('invalid_birth_date', {
                             'name': party.rec_name,
                             'birthdate': party.birth_date})
