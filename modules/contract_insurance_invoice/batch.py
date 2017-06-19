@@ -8,6 +8,7 @@ from itertools import groupby
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import batch, coog_string
 
@@ -123,7 +124,9 @@ class SetNumberInvoiceContractBatch(batch.BatchRoot):
 
     @classmethod
     def execute(cls, objects, ids, treatment_date):
-        Pool().get('account.invoice').set_number(objects)
+        with ServerContext().set_context(disable_invoice_validation=True,
+                forced_invoice_type='_invoice'):
+            Pool().get('account.invoice').set_number(objects)
         cls.logger.info('%d invoices numbers set' % len(objects))
 
 

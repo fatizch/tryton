@@ -6,6 +6,7 @@ import datetime
 from sql import Null, Literal, Cast
 from sql.aggregate import Sum, Max
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 from trytond.tools import grouped_slice
 from trytond.rpc import RPC
 from trytond.pool import Pool, PoolMeta
@@ -110,6 +111,18 @@ class Invoice:
                 columns=[to_update.business_kind],
                 values=[Literal('contract_invoice')],
                 where=to_update.id.in_(query)))
+
+    @classmethod
+    def validate(cls, *args, **kwargs):
+        if ServerContext().get('disable_invoice_validation', False):
+            return
+        return super(Invoice, cls).validate(*args, **kwargs)
+
+    @classmethod
+    def _validate(cls, *args, **kwargs):
+        if ServerContext().get('disable_invoice_validation', False):
+            return
+        return super(Invoice, cls)._validate(*args, **kwargs)
 
     @classmethod
     def view_attributes(cls):
