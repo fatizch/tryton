@@ -92,6 +92,13 @@ class EventTypeAction:
             contracts.extend(self.get_contracts_from_object(o))
         return super(EventTypeAction, self).filter_objects(contracts)
 
+    def get_contracts_from_object(self, object_):
+        contracts = super(EventTypeAction,
+            self).get_contracts_from_object(object_)
+        if object_.__name__ == 'account.invoice' and object_.contract:
+            contracts.append(object_.contract)
+        return contracts
+
     def execute(self, objects, event_code, description=None, **kwargs):
         pool = Pool()
         Contract = pool.get('contract')
