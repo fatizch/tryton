@@ -29,7 +29,7 @@ coog_dep_main() { # install base deps
                 werkzeug \
                 Mock \
                 simpleeval \
-                ldap3 \
+                "ldap3<2.0" \
                 requests \
                 chardet \
                 vobject \
