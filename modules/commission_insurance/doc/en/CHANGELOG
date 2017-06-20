@@ -1,3 +1,4 @@
+* BUG#6445 Manually set post parameters in batch chain
 * BUG#6395 Do not override payment date if a maturity date exists
 * FEA#0000 Add relate on insurer and broker parties to display invoices
 

@@ -1,3 +1,4 @@
+* BUG#6445 Définition manuelle des paramètres de la chaîne de batch
 * BUG#6395 Ne pas écraser la date de paiement si une date de maturité existe
 * FEA#0000 Ajout d'une relation bordereaux pour les tiers assureur ou courtier
 
