@@ -213,6 +213,17 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
             return self.beneficiary_clause.content
         return self.customized_beneficiary_clause
 
+    @fields.depends('beneficiaries', 'option_id')
+    def on_change_beneficiaries(self):
+        if not self.option_id:
+            return
+        option = Pool().get('contract.option')(self.option_id)
+        for beneficiary in self.beneficiaries:
+            if beneficiary.beneficiary:
+                beneficiary.beneficiary[0].option = option
+                beneficiary.beneficiary = list(beneficiary.beneficiary)
+        self.beneficiaries = list(self.beneficiaries)
+
     @classmethod
     def new_displayer(cls, option):
         pool = Pool()
