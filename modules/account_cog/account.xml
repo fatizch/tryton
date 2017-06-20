@@ -10,6 +10,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Split</field>
             <field name="code">split</field>
         </record>
+        <record model="ir.ui.view" id="aged_balance_view_list">
+            <field name="model">account.aged_balance</field>
+            <field name="inherit" ref="account.aged_balance_view_list"/>
+            <field name="name">aged_balance_list</field>
+        </record>
     </data>
     <data noupdate="1">
         <!-- ########### -->

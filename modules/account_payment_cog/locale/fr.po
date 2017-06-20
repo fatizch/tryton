@@ -914,6 +914,10 @@ msgid "Payment Date Modification"
 msgstr "Modification de la date de paiement"
 
 msgctxt "view:account.payment:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "view:account.payment:"
 msgid "Approve"
 msgstr "Approuver"
 

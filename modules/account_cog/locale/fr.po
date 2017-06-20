@@ -326,6 +326,26 @@ msgctxt "selection:ir.test_case,fiscal_year_periods_frequency:"
 msgid "Yearly"
 msgstr "Annuel"
 
+msgctxt "view:account.aged_balance:"
+msgid "Balance"
+msgstr "Balance"
+
+msgctxt "view:account.aged_balance:"
+msgid "First Term"
+msgstr "Premier terme"
+
+msgctxt "view:account.aged_balance:"
+msgid "Now"
+msgstr "Maintenant"
+
+msgctxt "view:account.aged_balance:"
+msgid "Second Term"
+msgstr "Deuxième terme"
+
+msgctxt "view:account.aged_balance:"
+msgid "Third Term"
+msgstr "Troisième terme"
+
 msgctxt "view:account.move.line:"
 msgid "Balance"
 msgstr "Balance"
@@ -404,22 +424,12 @@ msgid "Account Receivable"
 msgstr "Compte à recevoir"
 
 msgctxt "error:account.move.line:account."
-msgid "Line \"%s\" (%d) already reconciled."
-msgstr "La ligne \"%s\" (%d) est déjà  lettrée."
-
-msgctxt "error:account.move.line:account."
 msgid "You can not modify line \"%s\" because it is reconciled."
 msgstr "Vous ne pouvez modifier la ligne « %s » car elle est lettrée."
 
-msgctxt "error:account.move.reconciliation:account."
-msgid "You can not modify a reconciliation."
-msgstr "Vous ne pouvez modifier un lettrage."
-
-msgctxt "error:account.move.reconciliation:account."
-msgid "You can not reconcile line \"%s\" because it is not in valid state."
-msgstr ""
-"Vous ne pouvez lettrer la ligne « %s » car elle n'est pas dans un état "
-"valide."
+msgctxt "error:account.move.line:account."
+msgid "Line \"%s\" (%d) already reconciled."
+msgstr "La ligne \"%s\" (%d) est déjà  lettrée."
 
 msgctxt "error:account.move.reconciliation:account."
 msgid ""
@@ -428,6 +438,16 @@ msgid ""
 msgstr ""
 "Vous ne pouvez créer un lettrage où le débit « %(debit)s » et le crédit « "
 "%(credit)s » diffèrent."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid "You can not reconcile line \"%s\" because it is not in valid state."
+msgstr ""
+"Vous ne pouvez lettrer la ligne « %s » car elle n'est pas dans un état "
+"valide."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid "You can not modify a reconciliation."
+msgstr "Vous ne pouvez modifier un lettrage."
 
 msgctxt "error:account.period:account."
 msgid ""
@@ -453,6 +473,10 @@ msgctxt "model:ir.action,name:account.act_reconcile_lines"
 msgid "Reconcile Lines"
 msgstr "Lettrer les lignes"
 
+msgctxt "model:ir.action,name:account.act_move_reconciliation_lines"
+msgid "Reconciliation Lines"
+msgstr "Lignes de lettrage"
+
 msgctxt "model:ir.action,name:account.act_reconcile"
 msgid "Reconcile Accounts"
 msgstr "Lettrer les comptes"
@@ -460,10 +484,6 @@ msgstr "Lettrer les comptes"
 msgctxt "model:ir.action,name:account.act_unreconcile_lines"
 msgid "Unreconcile Lines"
 msgstr "Dé-lettrer les lignes"
-
-msgctxt "model:ir.action,name:account.act_move_reconciliation_lines"
-msgid "Reconciliation Lines"
-msgstr "Lignes de lettrage"
 
 msgctxt "model:ir.sequence,name:account.sequence_account_move_reconciliation"
 msgid "Default Account Move Reconciliation"

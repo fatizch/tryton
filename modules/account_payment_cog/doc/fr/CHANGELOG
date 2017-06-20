@@ -1,3 +1,4 @@
+* FEA#6439 Possibilité de sommer les paiements sélectionnés
 * FEA#6316 Possibilité de forcer l'accusé réception sur des groupes de paiement sans qu'il y ai eu planification.
 * FEA#6402 Notification d'événement lors de la planfication de l'accusé récéption d'un groupe de paiement
 * FEA#6316 Ajout d'un paramétre de batch permettant de forcer l'accusé réception sur des groupes de paiement sans accusé réception planifié mais qui sont en traitement.
