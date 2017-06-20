@@ -73,7 +73,7 @@ class LinkInvoicePrincipalBatch(batch.BatchRoot):
         invoices = pool.get('commission').select_lines(
                 [a.waiting_account.id for a in insurers], with_data=False,
                 max_date=until_date)
-        return ([invoice] for invoice in invoices)
+        return ([[invoice]] for invoice in invoices)
 
     @classmethod
     def execute(cls, objects, ids, treatment_date):

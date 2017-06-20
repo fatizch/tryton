@@ -1,3 +1,5 @@
+* BUG#6425 Mise à jour de l'API de la requête du batch de bordereaux assureurs
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Possibilité d'avoir plusieurs comptes d'attente pour un assureur (un par produit
 * FEA#0000 Possibilité d'avoir plusieurs comptes d'attente pour un assureur (un par produit par exemple) afin de générer des bordereaux différents.

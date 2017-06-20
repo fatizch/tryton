@@ -1,3 +1,5 @@
+* BUG#6425 Update link batch select_ids API
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Allow to have several waiting accounts for an insurer (one per product for example)
 * FEA#0000 Allow to have several waiting accounts for an insurer (one per product for example) to generate several insurer invoices
