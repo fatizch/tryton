@@ -1,11 +1,12 @@
-* Split the payment fail batch to improve performances
-* Display Full Name (First Name + Last Name) in SEPA files
-* Add a batch chain for parallelizable payment treatment
-* Display Full Name (First Name + Last Name) in SEPA files
-* Manage payer for all payment kinds
-* Allow to add single payments information in remittance information
+* FEA#6441 Automatically search for mandates by their party / account number
+* FEA#0000 Split the payment fail batch to improve performances
+* FEA#0000 Add a batch chain for parallelizable payment treatment
+* FEA#0000 Display Full Name (First Name + Last Name) in SEPA files
+* FEA#0000 Manage payer for all payment kinds
+* FEA#0000 Allow to add single payments information in remittance information
 
-Version 1.12 - 2017-04-28* FEA#0000 Replace process batch with batch that calls the 'do' method on sepa messages
+Version 1.12 - 2017-04-28
+* FEA#0000 Replace process batch with batch that calls the 'do' method on sepa messages
 * FEA#0000 Rename the xml file of a payments group message into 'group.rec_name + group.journal.name + group.kind + group.payment_date' with payment_date only added if there is only exactly one
 * FEA#0000 Add the chain batch
 

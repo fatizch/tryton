@@ -128,6 +128,12 @@ class Mandate(model.CoogSQL, model.CoogView):
         return '%s - %s' % (self.identification, self.party.get_rec_name(None))
 
     @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            ('party.rec_name',) + tuple(clause[1:]),
+            ('account_number.rec_name',) + tuple(clause[1:])]
+
+    @classmethod
     def _export_skips(cls):
         return (super(Mandate, cls)._export_skips() |
             set(['payments', 'party']))
