@@ -277,6 +277,8 @@ class Address(export.ExportImportMixin):
 
     @fields.depends('street')
     def on_change_with_one_line_street(self, name=None):
+        if not self.street:
+            return ''
         return ' '.join(filter(None, (x.strip() for x in
                         self.street.splitlines())))
 
