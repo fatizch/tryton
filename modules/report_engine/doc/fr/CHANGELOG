@@ -1,3 +1,4 @@
+* BUG#6438 Restauration du fonctionnement des paramètres sur les courriers
 * OTH#0000 Supprimer les champs inutilisés sur le vue du report_template_version
 * FEA#6373 Ajout du type de traitement asynchrone immédiat sur les actions par type d'événement
 * OTH#0000 Corriger import manquant 

@@ -1183,7 +1183,7 @@ class ReportCreate(wizard_context.PersistentContextWizard):
         template = self.select_template.template
         if self.select_template.parameters:
             report_context.update(TemplateParameter.get_data_for_report(
-                    self.input_parameters.parameters))
+                    self.select_template.parameters))
         report = self.report_execute([instance.id], template, report_context)
         self.finalize_report(report, instance)
         if self.select_template.template.modifiable_before_printing:
@@ -1316,7 +1316,7 @@ class ReportCreateSelectTemplate(model.CoogView):
         domain=[('party', '=', Eval('recipient'))], states={
             'invisible': ~Eval('recipient') | ~Eval('template')},
         depends=['recipient', 'template'])
-    parameters = fields.Dict('report.template.parameters', 'Parameters',
+    parameters = fields.Dict('report.template.parameter', 'Parameters',
         states={'invisible': ~Eval('parameters')}, depends=['parameters'])
 
     @fields.depends('parameters', 'recipient', 'recipient_address', 'template')

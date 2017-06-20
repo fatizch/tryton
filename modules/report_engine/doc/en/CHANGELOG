@@ -1,3 +1,4 @@
+* BUG#6438 Make reports parameter work again
 * OTH#0000 Remove unused attachment fields from report template version view
 * FEA#6373 Add Asynchronous Immediate on event type actions
 * OTH#0000 Fix missing import Printable
