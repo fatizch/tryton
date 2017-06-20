@@ -10,7 +10,7 @@ _coog_daily_is_weekday() {  # return 0 if date is a work day
 }
 
 
-_coog_daily__coog_daily_check_modules() {
+_coog_daily_check_modules() {
     coog_module_status "$1" | grep -q 'not activated'
     if [ "$?" -eq 0 ]; then
         echo "Missing module $1 Skipping chain..."
