@@ -1,3 +1,5 @@
+* Bug#6436 Mise à disposition des frais dans le précalcul d'échéancier assurance
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout de batchs pour épuiser le trop perçu des contrats par quittancement
 * FEA#0000 Prise en compte la date d'échéance pour l'ordre du lettrage automatique

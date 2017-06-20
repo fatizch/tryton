@@ -1413,6 +1413,7 @@ class Contract:
             'premium': None,
             'amount': 0,
             'tax_amount': 0,
+            'fees': 0,
             'total_amount': 0,
             'details': [],
             }
@@ -1457,6 +1458,8 @@ class Contract:
             displayer['amount'] += amount
             displayer['tax_amount'] += tax_amount
             displayer['total_amount'] += amount + tax_amount
+            if premium.fee:
+                displayer['fees'] += amount
     ###########################################################################
     # End calculation cache                                                   #
     ###########################################################################

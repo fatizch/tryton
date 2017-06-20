@@ -1,3 +1,5 @@
+* BUG#6436 Restore fee availability in future invoices
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Add batches to invoice contracts against their balance
 * FEA#0000 Take maturity date into account for automatic reconciliation order
