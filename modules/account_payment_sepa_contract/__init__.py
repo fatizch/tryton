@@ -5,26 +5,26 @@ import logging
 from trytond import backend
 from trytond.pool import Pool
 
-from .contract import *
-from .invoice import *
-from .move import *
-from .payment import *
-from .event import *
+import contract
+import invoice
+import move
+import payment
+import event
 
 
 def register():
     Pool.register(
-        Contract,
-        ContractBillingInformation,
-        Invoice,
-        MoveLine,
-        Mandate,
-        Payment,
-        Journal,
-        JournalFailureAction,
-        PaymentCreationStart,
-        EventLog,
-        MergedPaymentsByContracts,
+        contract.Contract,
+        contract.ContractBillingInformation,
+        invoice.Invoice,
+        move.MoveLine,
+        payment.Mandate,
+        payment.Payment,
+        payment.Journal,
+        payment.JournalFailureAction,
+        payment.PaymentCreationStart,
+        event.EventLog,
+        payment.MergedPaymentsByContracts,
         module='account_payment_sepa_contract', type_='model')
 
     Pool.register_post_init_hooks(migrate_1_8_add_payer_from_mandate,

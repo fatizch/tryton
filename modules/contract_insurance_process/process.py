@@ -93,10 +93,10 @@ class ContractSubscribe(ProcessFinder):
         res, errs = super(ContractSubscribe,
             self).init_main_object_from_process(obj, process_param)
         if res:
-            obj.init_from_product(process_param.product,
-                process_param.effective_date)
             if process_param.party:
                 obj.subscriber = process_param.party
+            obj.init_from_product(process_param.product,
+                process_param.effective_date)
         return res, errs
 
     def finalize_main_object(self, obj):
