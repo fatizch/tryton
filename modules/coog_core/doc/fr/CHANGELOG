@@ -1,3 +1,4 @@
+* BUG#6440 Pas de remplacement automatique des contraintes en copie sur les champs vides
 * FEA#6406 Possibilité de conserver des lignes lors d'un import JSON
 * OTH#0000 Correctif de typo dans la récupération du message d'échec de la tâche
 * OTH#0000 Correctif de typo dans le renommage d'une fonction

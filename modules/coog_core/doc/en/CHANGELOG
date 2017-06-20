@@ -1,3 +1,4 @@
+* BUG#6440 No need to overwrite constrained fields in copies if they are empty
 * FEA#6406 Allow to keep lines on JSON import
 * OTH#0000 Fix typo in retrieving error message from job fail handler
 * OTH#0000 Fix typo in function renaming

@@ -503,18 +503,20 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
                 constraints.append(column.name)
         if not constraints:
             return super(CoogSQL, cls).copy(objects, default=default)
-        default = default.copy() if default is not None else {}
 
-        for constraint in constraints:
-            default[constraint] = 'temp_for_copy'
         logging.getLogger('model').warning('Automatically changing %s when '
             'copying instances of %s' % (', '.join(constraints), cls.__name__))
 
         def single_copy(obj):
-            copy = super(CoogSQL, cls).copy([obj], default)[0]
+            new_defaults = default.copy() if default is not None else {}
             for constraint in constraints:
-                setattr(copy, constraint, '%s_%s' % (
-                    getattr(objects[0], constraint), copy.id))
+                value = new_defaults.get(constraint, getattr(obj, constraint))
+                default[constraint] = None if value is None else 'temp_for_copy'
+            copy = super(CoogSQL, cls).copy([obj], new_defaults)[0]
+            for constraint in constraints:
+                value = getattr(copy, constraint)
+                if value is not None:
+                    setattr(copy, constraint, '%s_%s' % (value, copy.id))
             copy.save()
             return copy
 
