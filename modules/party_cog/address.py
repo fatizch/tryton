@@ -39,6 +39,8 @@ class Address(export.ExportImportMixin):
         'get_color')
     icon = fields.Function(fields.Char('Icon', states={'invisile': True}),
         'get_icon')
+    one_line_street = fields.Function(fields.Char('Street'),
+        'on_change_with_one_line_street')
 
     @classmethod
     def __setup__(cls):
@@ -272,3 +274,12 @@ class Address(export.ExportImportMixin):
             for f in address_fnames:
                 values[f] = getattr(zip_and_city, equivalents[f], None)
         return super(Address, cls)._import_json(values, main_object)
+
+    @fields.depends('street')
+    def on_change_with_one_line_street(self, name=None):
+        return ' '.join(filter(None, (x.strip() for x in
+                        self.street.splitlines())))
+
+    def _update_street(self):
+        super(Address, self)._update_street()
+        self.one_line_street = self.on_change_with_one_line_street()

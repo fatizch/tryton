@@ -7,7 +7,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="end_date"/>
     </xpath>
     <xpath expr="/tree/field[@name='name']" position="before">
-        <field name="street"/>
+        <field name="one_line_street"/>
     </xpath>
     <xpath expr="/tree/field[@name='country']" position="before">
         <field name="zip_and_city"/>
