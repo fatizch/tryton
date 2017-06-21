@@ -1031,25 +1031,9 @@ msgctxt "field:event.log,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:event.type.action,notification_delay:"
-msgid "Notification Delay (in days)"
-msgstr "Délai avant notifications (en jours)"
-
-msgctxt "field:offered.configuration,automatic_decline_reason:"
-msgid "Automatic Decline Reason"
-msgstr "Raison de la déclinaison automatique"
-
 msgctxt "field:offered.configuration,default_quote_number_sequence:"
 msgid "Default quote number sequence"
 msgstr "Sequence de numéro de devis par défaut"
-
-msgctxt "field:offered.configuration,delay_unit:"
-msgid "Delay Unit"
-msgstr "Unité du délai"
-
-msgctxt "field:offered.configuration,inactivity_delay:"
-msgid "Inactivity Delay"
-msgstr "Délai d'inactivité"
 
 msgctxt "field:offered.product,quote_number_sequence:"
 msgid "Quote number sequence"

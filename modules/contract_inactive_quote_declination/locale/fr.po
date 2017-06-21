@@ -1,0 +1,19 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:event.type.action,notification_delay:"
+msgid "Notification Delay (in days)"
+msgstr "Délai avant notifications (en jours)"
+
+msgctxt "field:offered.configuration,automatic_decline_reason:"
+msgid "Automatic Decline Reason"
+msgstr "Raison de la déclinaison automatique"
+
+msgctxt "field:offered.configuration,delay_unit:"
+msgid "Delay Unit"
+msgstr "Unité du délai"
+
+msgctxt "field:offered.configuration,inactivity_delay:"
+msgid "Inactivity Delay"
+msgstr "Délai d'inactivité"

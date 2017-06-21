@@ -5,14 +5,5 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form" position="inside">
         <label name="default_quote_number_sequence"/>
         <field name="default_quote_number_sequence"/>
-        <newline/>
-        <label name="inactivity_delay" colspan="1"/>
-        <group id="inactivity">
-            <field name="inactivity_delay" xexpand="0"/>
-            <field name="delay_unit" xexpand="0" xalign="0"/>
-        </group>
-        <newline/>
-        <label name="automatic_decline_reason"/>
-        <field name="automatic_decline_reason"/>
     </xpath>
 </data>

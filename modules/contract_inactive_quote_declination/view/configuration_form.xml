@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form" position="inside">
+        <newline/>
+        <label name="inactivity_delay" colspan="1"/>
+        <group id="inactivity">
+            <field name="inactivity_delay" xexpand="0"/>
+            <field name="delay_unit" xexpand="0" xalign="0"/>
+        </group>
+        <newline/>
+        <label name="automatic_decline_reason"/>
+        <field name="automatic_decline_reason"/>
+    </xpath>
+</data>

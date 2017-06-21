@@ -53,10 +53,9 @@ coog_daily_main() {
         )
 
         (
-        _coog_daily_check_modules "contract" &&                               \
-            coog_chain_main contract decline_inactive             \
-                --working_days="$WORKING_DAYS"                    \
-                --conf_code="$WORKING_DAYS_CONF"
+        _coog_daily_check_modules "contract_inactive_quote_declination" &&    \
+            coog_chain_main contract_inactive_quote_declination decline_inactive \
+                --treatment_date="$TODAY_DATE"
         )
 
         (

@@ -48,7 +48,6 @@ def register():
         ContractNotification,
         EventTypeAction,
         EventLog,
-        ContractDeclineInactiveQuotes,
         module='contract', type_='model')
     Pool.register(
         OptionSubscription,
