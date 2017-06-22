@@ -487,10 +487,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
         premium_1 = self.Premium(10)
         premium_1.rec_name = 'Coverage A'
         premium_1.rated_entity = coverage_2
+        premium_1.fee = None
 
         premium_2 = self.Premium(11)
         premium_2.rec_name = 'Coverage B'
         premium_2.rated_entity = coverage_2
+        premium_2.fee = None
 
         product = self.Product(taxes_included_in_premium=True)
         contract = self.Contract(product=product)
@@ -588,6 +590,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'premium': None,
                     'start': datetime.date(2017, 1, 20),
                     'tax_amount': Decimal('1.82'),
+                    'fees': 0,
                     'total_amount': Decimal('53.57')},
                 {'amount': Decimal('39.47'),
                     'currency_digits': 2,
@@ -620,6 +623,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'premium': None,
                     'start': datetime.date(2017, 2, 20),
                     'tax_amount': Decimal('0.72'),
+                    'fees': 0,
                     'total_amount': Decimal('40.19')},
                 ],
             'premium_ids': [10, 11],
