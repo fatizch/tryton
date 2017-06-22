@@ -794,8 +794,10 @@ class Message:
         Event.notify_events([self], 'parse_sepa_message')
 
     def send(self):
-        outdir = os.path.normpath(config.get('sepa_payment', 'out_dir'))
-        self.dump_sepa_message(outdir)
+        outdir = config.get('sepa_payment', 'out_dir')
+        if outdir:
+            outdir = os.path.normpath(outdir)
+            self.dump_sepa_message(outdir)
         Event = Pool().get('event')
         super(Message, self).send()
         Event.notify_events([self], 'send_sepa_message')
