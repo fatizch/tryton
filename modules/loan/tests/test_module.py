@@ -436,7 +436,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         loan.state = 'draft'
         loan.increments = list(loan.increments) + [
             self.LoanIncrement(
-                start_date=datetime.date(2015, 7, 15),
+                start_date=datetime.date(2015, 7, 16),
                 begin_balance=Decimal('65074.66'),
                 number_of_payments=228,
                 rate=Decimal('0.024'),
@@ -458,13 +458,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(loan.increments[2].number_of_payments, 228)
         self.assertEqual(loan.increments[3].begin_balance, Decimal('16070.03'))
         self.assertEqual(loan.increments[3].start_date,
-            datetime.date(2034, 7, 15))
-        self.assertEqual(loan.duration, 266)
-        self.assert_payment(loan, datetime.date(2034, 6, 15), 254,
+            datetime.date(2034, 7, 16))
+        self.assertEqual(loan.duration, 267)
+        self.assert_payment(loan, datetime.date(2034, 6, 16), 255,
             begin_balance='16337.36', amount='300',
             principal='267.33', interest='32.67',
             outstanding_balance='16070.03')
-        self.assert_payment(loan, datetime.date(2035, 6, 15), 266,
+        self.assert_payment(loan, datetime.date(2035, 6, 16), 267,
             begin_balance='1353.97', amount='1356.68',
             principal='1353.97', interest='2.71',
             outstanding_balance='0')

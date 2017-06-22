@@ -439,6 +439,9 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
             increment.number = i
             if increment.manual and increment.start_date:
                 from_date = increment.start_date
+                # Reset base date and counters on a new manual increment
+                initial_date = increment.start_date
+                n, shift = 0, 0
             else:
                 increment.start_date = from_date
             if increment.manual and increment.begin_balance:
@@ -459,7 +462,7 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
                 coeff = Decimal(coog_date.convert_frequency(
                         increment.payment_frequency, 'month'))
                 number_of_payments_in_months += 1 / coeff
-                payment = Payment.create_payment(from_date, n,
+                payment = Payment.create_payment(from_date, len(payments),
                     begin_balance, increment, increment.payment_frequency,
                     self.currency,
                     number_of_payments_in_months == duration)

@@ -1,3 +1,4 @@
+* BUG#6458 Correction du calcul de l'échéancier suite à insertion de paliers
 * BUG#6398 Tri des quotités par numéro de prêt sur la vue contrat
 
 Version 1.12 - 2017-04-28
