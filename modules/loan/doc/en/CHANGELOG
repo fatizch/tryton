@@ -1,3 +1,4 @@
+* FEA#6457 Allow to override 'latest_loan_shares' sorting way
 * BUG#6458 Fix payments calculation after increment insertion
 * BUG#6398 Order loan shares by loan number in contract view form
 
