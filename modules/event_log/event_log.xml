@@ -32,6 +32,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="ir.trigger_view_form"/>
             <field name="name">trigger_form</field>
         </record>
+        <!-- Access Rights -->
+        <record model="ir.model.access" id="acess_event_logs">
+            <field name="model" search="[('model', '=', 'event.log')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <menuitem parent="coog_core.menu_event" sequence="20" id="menu_event_log" action="act_event_log_form"/>
     </data>
 </tryton>
