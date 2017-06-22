@@ -58,14 +58,12 @@ __all__ = [
 class PostExecutionDataManager(object):
 
     _instance = None
+    queue = []
 
     def __new__(cls):
         if cls._instance is None:
             cls._instance = object.__new__(cls)
         return cls._instance
-
-    def __init__(self):
-        self.queue = []
 
     def put(self, func, *args, **kwargs):
         self.queue.append((func, args, kwargs))
