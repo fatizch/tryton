@@ -1,3 +1,4 @@
+* OTH#0000 Fix translation of asynchronous events
 * OTH#0000 Fix typo in the post commit function call decorator
 * BUG#6440 No need to overwrite constrained fields in copies if they are empty
 * FEA#6406 Allow to keep lines on JSON import

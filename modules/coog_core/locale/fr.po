@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:event.type,name:event_async_task_failure"
+msgid "Asynchronous Task Failure"
+msgstr "Echec de tâche asynchrone"
+
+msgctxt "model:event.type,name:event_async_task_success"
+msgid "Asynchronous Task Success"
+msgstr "Succès de tâche asynchrone"
+
 msgctxt "error:diff_blame.revision_blame_wizard:"
 msgid "The model %s has no revisions."
 msgstr "L'historique n'est pas disponible"

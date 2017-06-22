@@ -1,3 +1,4 @@
+* OTH#0000 Correction de la traduction de l'événement des tâches asynchrones
 * OTH#0000 Correction typo dans le décorateur d'appel de fonction après transaction
 * BUG#6440 Pas de remplacement automatique des contraintes en copie sur les champs vides
 * FEA#6406 Possibilité de conserver des lignes lors d'un import JSON
