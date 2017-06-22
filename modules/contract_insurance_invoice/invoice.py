@@ -283,10 +283,10 @@ class Invoice:
 
     def update_move_line_from_billing_information(self, line,
             billing_information):
-        if self.contract and self.fees:
+        if self.contract and self.fees and billing_information.direct_debit:
             all_fee_in_product = True
             for cur_line in self.lines:
-                if (cur_line.detail and cur_line.detail.fee and
+                if (not cur_line.detail or not cur_line.detail.fee or
                         cur_line.detail.fee not in self.contract.product.fees):
                     all_fee_in_product = False
                     break
