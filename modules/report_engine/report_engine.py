@@ -254,6 +254,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def default_process_method(cls):
         return 'libre_office'
 
+    @classmethod
+    def default_kind(cls):
+        return ''
+
     @fields.depends('input_kind')
     def get_possible_process_methods(self):
         if self.input_kind and self.input_kind.startswith('libre_office'):
@@ -682,7 +686,7 @@ class Printable(Model):
         return [
             ('on_model.model', '=', self.__name__),
             ['OR'] + template_holders_sub_domains,
-            ['OR', domain_kind, ('kind', '=', '')]
+            ['OR', [domain_kind], [('kind', '=', '')]]
             ]
 
     def get_template_holders_sub_domains(self):

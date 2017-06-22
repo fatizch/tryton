@@ -2,6 +2,22 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:report.template:"
+msgid "Insurer Report Contract"
+msgstr "Rapport assureur contrat"
+
+msgctxt "error:report.template:"
+msgid "Insurer Report Covered"
+msgstr "Rapport assureur bénéficiaire"
+
+msgctxt "error:report.template:"
+msgid "Insurer Invoice Report"
+msgstr "Bordereau assureur"
+
+msgctxt "error:report.template:"
+msgid "Broker Invoice Report"
+msgstr "Bordereau apporteur"
+
 msgctxt "field:account.invoice,report_commissions:"
 msgid "Commissions To Report"
 msgstr "Commissions incluses dans le rapport"

@@ -1,3 +1,4 @@
+* FEA#6453 Ajout de la gestion des filtres sur les quittances pour les rapports
 * Nouvelle option sur les conditions de paiement pour synchroniser une date d'échéance à la fin du trimstre par exemple
 * Les quittances liées à un tiers sont les quittances du contrat au lieu de tous les types métier de quittances
 

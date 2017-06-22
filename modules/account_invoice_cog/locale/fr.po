@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:report.template:"
+msgid "Contract Invoice"
+msgstr "Quittance de contrat"
+
 msgctxt "error:account.invoice.change_payment_term:"
 msgid "The invoice must be posted !"
 msgstr "La quittance doit être émise !"

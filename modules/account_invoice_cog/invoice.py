@@ -152,6 +152,19 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
     def is_master_object(cls):
         return True
 
+    def get_doc_template_kind(self):
+        return super(Invoice, self).get_doc_template_kind() + [
+            self.business_kind]
+
+    def get_template_holders_sub_domains(self):
+        res = super(Invoice, self).get_template_holders_sub_domains()
+        res.append(['OR', [
+                    ('kind', '!=', ''), ('kind', '=', self.business_kind)],
+                [
+                    ('kind', '=', '')],
+                ])
+        return res
+
     @fields.depends('state', 'amount_to_pay_today', 'total_amount')
     def on_change_with_icon(self, name=None):
         if self.state == 'cancel':

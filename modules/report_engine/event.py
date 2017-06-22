@@ -78,12 +78,10 @@ class EventTypeAction:
         return super(EventTypeAction, cls)._export_light() | {
             'report_templates'}
 
-    def execute(self, objects, event_code, description=None, **kwargs):
+    def action_generate_documents(self, objects, event_code, description,
+            **kwargs):
         pool = Pool()
         ReportProductionRequest = pool.get('report_production.request')
-        if self.action != 'generate_documents':
-            return super(EventTypeAction, self).execute(objects, event_code)
-
         objects_origins_templates = \
             self.get_objects_origins_templates_for_event(objects)
         ProductionRequestBatch = pool.get(
@@ -108,6 +106,12 @@ class EventTypeAction:
                 continue
             ProductionRequestBatch.enqueue([(x.id,) for x in requests], {},
                 user=Transaction().user)
+
+    def execute(self, objects, event_code, description=None, **kwargs):
+        if self.action != 'generate_documents':
+            return super(EventTypeAction, self).execute(objects, event_code)
+        self.action_generate_documents(objects, event_code, description,
+            **kwargs)
 
     def build_context(self, objects_to_report, origin, event_code):
         context_ = {'event_code': event_code}
@@ -135,8 +139,7 @@ class EventTypeAction:
         else:
             return object_
 
-    def template_matches(self, event_object, filtering_objects,
-            template):
+    def template_matches(self, event_object, filtering_objects, template):
         return all([template in self.get_templates_list(filtering_object)
                 for filtering_object in filtering_objects])
 

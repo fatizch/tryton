@@ -6,6 +6,10 @@ msgctxt "error:commission.create_invoice_principal:"
 msgid "Wholesale broker reimbursement %s"
 msgstr "Remboursement du courtier grossiste %s"
 
+msgctxt "error:report.template:"
+msgid "Whole Sale Invoice Report"
+msgstr "Rapport bordereau courtier grossiste"
+
 msgctxt "field:commission.agent,delegation_of_payment:"
 msgid "Delegation of Commission Payment"
 msgstr "Délégation de paiement"
