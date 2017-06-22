@@ -26,6 +26,10 @@ class Contract:
                 'init_sepa_mandate': {},
                 })
 
+    @fields.depends('subscriber')
+    def on_change_product(self):
+        super(Contract, self).on_change_product()
+
     @dualmethod
     @model.CoogView.button
     def init_sepa_mandate(cls, contracts):
