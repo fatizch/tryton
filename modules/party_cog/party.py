@@ -203,10 +203,20 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             ('/form/notebook/page[@id="tree"]', 'states',
                 {'invisible': Bool(Eval('is_person'))}),
             ("/form/notebook/page/group[@id='several_addresses']", 'states', {
-                    'invisible': Len(Eval('all_addresses', [])) == 1}),
+                    'invisible': Len(Eval('all_addresses', [])) <= 1}),
             ("/form/notebook/page/group[@id='one_address']", 'states', {
                     'invisible': Len(Eval('all_addresses', [])) > 1}),
             ]
+
+    @staticmethod
+    def default_addresses():
+        return None
+
+    @staticmethod
+    def default_all_addresses():
+        if Transaction().user == 0:
+            return []
+        return [{}]
 
     @classmethod
     def add_func_key(cls, values):

@@ -1,3 +1,5 @@
+* FIX#0000 Fix 'all_addresses' field in party form view
+* FEA#6130 Improve "REFLEX" flag by using the  active/inactive field on addresses
 * BUG#6423 Display : full address field holds in one line
 * BUG#6366 Add control on party birth date 
 * FEA#6310 Improve the return to sender flag using active/inactive field on addresses

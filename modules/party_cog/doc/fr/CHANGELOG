@@ -1,3 +1,5 @@
+* FIX#0000 Correction du champs 'all_addresses' dans la vue form des tiers
+* FEA#6130 Amélioration du sigle "REFLEX" en utilisant le champ actif/inactif sur les adresses
 * BUG#6423 Affichage : champs d'adresse complet tient en une ligne
 * BUG#6366 Ajout d'un contrôle sur la date de naissance d'un tiers
 * FEA6130 Amélioration du sigle "REFLEX" en utilisant le champ actif/inactif sur les adresses
