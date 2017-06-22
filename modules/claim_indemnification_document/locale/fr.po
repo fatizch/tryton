@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:report.template:"
+msgid "Claim Invoice"
+msgstr "Facture Fournisseur"
+
 msgctxt "error:claim.indemnification:"
 msgid "The document \"%s\" is required"
 msgstr "Le document \"%s\" est requis"

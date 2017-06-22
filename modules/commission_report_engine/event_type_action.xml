@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data noupdate="1">
+        <record model="event.type.action" id="event_action_notification_invoice_commission_doc">
+            <field name="name">Generate Reports On Commission Invoice Generation</field>
+            <field name="code">generate_reports_on_commission_invoice_generation</field>
+            <field name="priority">10001</field>
+            <field name="action">generate_invoice_commission_doc</field>
+            <field name="active">True</field>
+        </record>
+        <record model="event.type.action-event.type" id="event_action_notification_invoice_commission_relation">
+            <field name="event_type" ref="commission_insurance.event_invoice_commission_generated"/>
+            <field name="action" ref="event_action_notification_invoice_commission_doc"/>
+        </record>
+    </data>
+</tryton>

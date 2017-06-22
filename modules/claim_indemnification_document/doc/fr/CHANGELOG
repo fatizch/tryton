@@ -1,6 +1,8 @@
+* FEA#6453 Ajout du type métier facture fournisseur comme type de modèle de courrier
+
 Version 1.12 - 2017-04-28
 
 Version 1.10 - 2016-11-02
-* FEA#0000 Add rule to calculate required documents when validating an indemnification
-* FEA#0000 Allow indemnifications to reference a document request
-* FEA#0000 Module Creation
+* FEA#0000 Ajout d'une règle de calcul des documents requis lors de la validation d'une indemnisation
+* FEA#0000 Possibilité de référencer une demande de document depuis les indemnisations
+* FEA#0000 Création du module

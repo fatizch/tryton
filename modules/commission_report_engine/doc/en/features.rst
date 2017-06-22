@@ -1,0 +1,1 @@
+- **reporting: commissions:** This module allows to generate more finely and easily commission invoice report. It is also possible to automatically generate commission invoice reports once they are created.s

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="invoice_report_definition_view_form">
+            <field name="model">invoice.report.definition</field>
+            <field name="type">form</field>
+            <field name="name">invoice_report_definition_form</field>
+        </record>
+        <record model="ir.ui.view" id="invoice_report_definition_view_list">
+            <field name="model">invoice.report.definition</field>
+            <field name="type">tree</field>
+            <field name="name">invoice_report_definition_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_invoice_report_definition_form">
+            <field name="name">Report Invoice Definition Filters</field>
+            <field name="res_model">invoice.report.definition</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_invoice_report_definition_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="invoice_report_definition_view_list"/>
+            <field name="act_window" ref="act_invoice_report_definition_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_invoice_report_definition_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="invoice_report_definition_view_form"/>
+            <field name="act_window" ref="act_invoice_report_definition_form"/>
+        </record>
+        <menuitem parent="commission.menu_configuration" sequence="40" id="menu_configuration_invoice_report_definition" action="act_invoice_report_definition_form"/>
+    </data>
+</tryton>

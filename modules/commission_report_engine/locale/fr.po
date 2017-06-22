@@ -1,0 +1,72 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:event.type.action:"
+msgid "Generate Invoice Commissions Document"
+msgstr "Générer les bordereaux de commission"
+
+msgctxt "field:invoice.report.definition,business_kind:"
+msgid "Business Kind"
+msgstr "Type métier"
+
+msgctxt "field:invoice.report.definition,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:invoice.report.definition,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:invoice.report.definition,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:invoice.report.definition,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:invoice.report.definition,on_model:"
+msgid "Model"
+msgstr "Modèle"
+
+msgctxt "field:invoice.report.definition,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:invoice.report.definition,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:invoice.report.definition,report_template:"
+msgid "Report Template"
+msgstr "Modèle de courrier"
+
+msgctxt "field:invoice.report.definition,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:invoice.report.definition,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:invoice.report.definition,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt ""
+"model:event.type.action,name:event_action_notification_invoice_commission_doc"
+msgid "Generate Reports On Commission Invoice Generation"
+msgstr "Génération des rapports à la création des bordereaux de commission "
+
+msgctxt "model:invoice.report.definition,name:"
+msgid "Invoice Report Configuration"
+msgstr "Configuration des rapports de bordereaux commission"
+
+msgctxt "model:ir.action,name:act_invoice_report_definition_form"
+msgid "Report Invoice Definitions"
+msgstr "Définition des rapports de bordereaux de commission"
+
+msgctxt "model:ir.ui.menu,name:menu_configuration_invoice_report_definition"
+msgid "Report Invoice Definitions"
+msgstr "Définition des rapports de quittance"

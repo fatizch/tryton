@@ -1,0 +1,1 @@
+- **Rapports: commissions:** Ce module permet de configurer plus finement et plus facilement la génération des bordereaux de commission. Il est  également possible de configurer l'impression automatique des bordereaux de commission à leur création. 
