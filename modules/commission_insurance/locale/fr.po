@@ -670,6 +670,10 @@ msgctxt "model:commission_plan-commission_plan,name:"
 msgid "Commission Plan - Commission Plan"
 msgstr "Lien entre plans de commissionnement"
 
+msgctxt "model:event.type,name:event_invoice_commission_generated"
+msgid "Commission Invoice Generated"
+msgstr "Bordereau de commission généré"
+
 msgctxt "model:event.type,name:event_contract_broker_changed"
 msgid "Broker Changed"
 msgstr "Transfert de portefeuille"

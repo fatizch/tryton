@@ -510,6 +510,7 @@ class CreateInvoicePrincipal(Wizard):
         Line = pool.get('account.invoice.line')
         MoveLine = pool.get('account.move.line')
         Commission = pool.get('commission')
+        Event = pool.get('event')
         LineTable = MoveLine.__table__()
         insurers_invoices = Commission.retrieve_empty_insurer_invoices(
             insurers, company, journal, description, date)
@@ -546,6 +547,8 @@ class CreateInvoicePrincipal(Wizard):
         Invoice.update_taxes(commission_invoices)
         Line.delete(set(to_clean))
         Line.save(to_save)
+        Event.notify_events(commission_invoices,
+            'commission_invoice_generated')
         return commission_invoices
 
     def create_insurers_notice(self, insurers):

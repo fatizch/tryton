@@ -235,10 +235,12 @@ class Commission:
     @classmethod
     def invoice(cls, commissions):
         pool = Pool()
+        Event = pool.get('event')
         Fee = pool.get('account.fee')
         super(Commission, cls).invoice(commissions)
         invoices = list(set([c.invoice_line.invoice for c in commissions]))
         Fee.add_broker_fees_to_invoice(invoices)
+        Event.notify_events(invoices, 'commission_invoice_generated')
         return invoices
 
     @classmethod

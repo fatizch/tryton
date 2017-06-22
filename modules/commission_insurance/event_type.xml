@@ -7,5 +7,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Broker Changed</field>
             <field name="code">broker_changed</field>
         </record>
+        <record model="event.type" id="event_invoice_commission_generated">
+            <field name="name">Commission Invoice Generated</field>
+            <field name="code">commission_invoice_generated</field>
+        </record>
     </data>
 </tryton>
