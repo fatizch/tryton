@@ -149,7 +149,7 @@ New Endorsement::
     True
     >>> new_address = Address(john.addresses[1].id)
     >>> test_values_against_model(new_address, new_data)
-    >>> new_address.end_date == None
+    >>> new_address.end_date is None
     True
     >>> new_address.start_date == endorsement_effective_date
     True

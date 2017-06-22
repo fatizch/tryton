@@ -5,7 +5,7 @@ Loan Endorsement Scenario
 Imports::
 
     >>> import datetime
-    >>> from proteus import config, Model, Wizard
+    >>> from proteus import Model, Wizard
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.currency.tests.tools import get_currency
 
@@ -133,7 +133,7 @@ Test Endorsement::
     >>> new_endorsement.form.new_clause = clause_1
     >>> new_endorsement.form.click('add_clause', change=['contract', 'current_clauses',
     ...         'new_clause', 'possible_clauses'])
-    >>> new_endorsement.form.new_clause == None
+    >>> new_endorsement.form.new_clause is None
     True
     >>> {x.id for x in new_endorsement.form.possible_clauses} == {clause_2.id}
     True
@@ -143,7 +143,7 @@ Test Endorsement::
     True
     >>> new_endorsement.form.current_clauses[0].clause == clause_1
     True
-    >>> new_endorsement.form.current_clauses[0].clause_id == None
+    >>> new_endorsement.form.current_clauses[0].clause_id is None
     True
     >>> new_endorsement.form.current_clauses[0].customizable is False
     True
@@ -155,9 +155,9 @@ Test Endorsement::
     True
     >>> new_endorsement.form.current_clauses[1].action == 'added'
     True
-    >>> new_endorsement.form.current_clauses[1].clause == None
+    >>> new_endorsement.form.current_clauses[1].clause is None
     True
-    >>> new_endorsement.form.current_clauses[1].clause_id == None
+    >>> new_endorsement.form.current_clauses[1].clause_id is None
     True
     >>> new_endorsement.form.current_clauses[1].customizable is True
     True
@@ -204,7 +204,7 @@ Try again::
     True
     >>> new_endorsement.form.current_clauses[1].action == 'nothing'
     True
-    >>> new_endorsement.form.current_clauses[1].clause == None
+    >>> new_endorsement.form.current_clauses[1].clause is None
     True
     >>> new_endorsement.form.current_clauses[1].clause_id == contract.clauses[1].id
     True

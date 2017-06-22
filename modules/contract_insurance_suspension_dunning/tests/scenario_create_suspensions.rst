@@ -176,11 +176,11 @@ Process dunning::
     True
     >>> suspension.type_ == 'definitive'
     True
-    >>> suspension.end_date == None
+    >>> suspension.end_date is None
     True
     >>> temporary_suspension = Suspension()
     >>> temporary_suspension.contract = contract
-    >>> temporary_suspension.type_= 'temporary'
+    >>> temporary_suspension.type_ = 'temporary'
     >>> temporary_suspension.start_date = datetime.date.today()
     >>> temporary_suspension.click('button_activate')
     >>> temporary_suspension.save()
@@ -193,7 +193,7 @@ Reactivate Contract::
     >>> Wizard('contract.activate', models=[contract]).execute('apply')
     >>> contract.reload()
 
-Temporary suspension should now have a end_date and should be inactive::
+Temporary suspension should now have a end_date and be inactive::
 
     >>> inactive_suspensions = Model.get('contract.right_suspension').find([('active',
     ...     '=', False)])

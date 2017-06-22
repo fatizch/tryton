@@ -5,7 +5,7 @@ Renew Contract Scenario
 Imports::
 
     >>> import datetime
-    >>> from proteus import config, Model, Wizard
+    >>> from proteus import Model, Wizard
     >>> from dateutil.relativedelta import relativedelta
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.currency.tests.tools import get_currency

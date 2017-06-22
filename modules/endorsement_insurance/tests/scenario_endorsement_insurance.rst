@@ -5,7 +5,7 @@ Endorsement Insurance Scenario
 Imports::
 
     >>> import datetime
-    >>> from proteus import config, Model, Wizard
+    >>> from proteus import Model, Wizard
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.currency.tests.tools import get_currency
 
@@ -267,9 +267,9 @@ Create Test Contract::
     >>> option2.exclusions.append(exclusion_1)
     >>> contract.subscriber = subscriber
     >>> contract.save()
-    >>> contract.covered_elements[0].options[0].end_date == None
+    >>> contract.covered_elements[0].options[0].end_date is None
     True
-    >>> contract.covered_elements[1].options[0].end_date == None
+    >>> contract.covered_elements[1].options[0].end_date is None
     True
 
 New Manage Exclusions Endorsement::
@@ -353,9 +353,9 @@ New Remove Option Endorsement::
     True
     >>> option2.sub_status == termination_status
     True
-    >>> option.end_date == None
+    >>> option.end_date is None
     True
-    >>> option.sub_status == None
+    >>> option.sub_status is None
     True
     >>> endorsement_last, = Endorsement.find([], order=[('create_date', 'DESC')],
     ...     limit=1)
@@ -363,11 +363,11 @@ New Remove Option Endorsement::
     >>> contract = Contract(contract.id)
     >>> option, = Option.find([('covered_element.party.name', '=', 'Doe')])
     >>> option2, = Option.find([('covered_element.party.name', '=', 'Vercotti')])
-    >>> option2.end_date == None
+    >>> option2.end_date is None
     True
-    >>> option2.sub_status == None
+    >>> option2.sub_status is None
     True
-    >>> option.end_date == None
+    >>> option.end_date is None
     True
-    >>> option.sub_status == None
+    >>> option.sub_status is None
     True

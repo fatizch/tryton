@@ -254,11 +254,11 @@ Create invoice::
     >>> fail_payment.execute('fail_payments')
     >>> payment.reload()
     >>> contract.reload()
-    >>> contract.billing_information.suspended == True
+    >>> contract.billing_information.suspended is True
     True
     >>> payment.click('succeed')
     >>> contract.billing_information.reload()
-    >>> contract.billing_information.suspended == False
+    >>> contract.billing_information.suspended is False
     True
     >>> fail_payment = Wizard('account.payment.manual_payment_fail', [payment])
     >>> fail_payment.form.reject_reason = reject_reason_2
@@ -266,9 +266,9 @@ Create invoice::
     >>> fail_payment.execute('fail_payments')
     >>> payment.reload()
     >>> contract.reload()
-    >>> contract.billing_information.suspended == True
+    >>> contract.billing_information.suspended is True
     True
     >>> payment.click('succeed')
     >>> contract.billing_information.reload()
-    >>> contract.billing_information.suspended == True
+    >>> contract.billing_information.suspended is True
     True

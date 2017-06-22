@@ -5,7 +5,7 @@ Loan Contract Creation
 Imports::
 
     >>> import datetime
-    >>> from proteus import config, Model, Wizard
+    >>> from proteus import Model, Wizard
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
     >>> from trytond.tests.tools import activate_modules

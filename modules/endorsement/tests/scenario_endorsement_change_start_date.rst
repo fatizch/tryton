@@ -5,7 +5,7 @@ Contract Start Date Endorsement Scenario
 Imports::
 
     >>> import datetime
-    >>> from proteus import config, Model, Wizard
+    >>> from proteus import Model, Wizard
     >>> from dateutil.relativedelta import relativedelta
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.currency.tests.tools import get_currency
@@ -266,9 +266,9 @@ New Endorsement::
     >>> contract = Contract(contract.id)
     >>> contract.start_date == contract_start_date
     True
-    >>> contract.end_date == None
+    >>> contract.end_date is None
     True
-    >>> contract.termination_reason == None
+    >>> contract.termination_reason is None
     True
 
 Test Void Endorsement::
@@ -289,7 +289,7 @@ New Endorsement::
     >>> new_endorsement.execute('void_contract_next')
     >>> new_endorsement.execute('apply_endorsement')
     >>> contract = Contract(contract.id)
-    >>> contract.start_date == None
+    >>> contract.start_date is None
     True
     >>> contract.initial_start_date == contract_start_date
     True

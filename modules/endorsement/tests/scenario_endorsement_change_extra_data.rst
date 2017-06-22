@@ -5,7 +5,7 @@ Contract Extra Data Endorsement Scenario
 Imports::
 
     >>> import datetime
-    >>> from proteus import config, Model, Wizard
+    >>> from proteus import Model, Wizard
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.currency.tests.tools import get_currency
 
@@ -170,7 +170,7 @@ New Endorsement::
     >>> new_endorsement.form.applicant = None
     >>> new_endorsement.form.effective_date = effective_date
     >>> new_endorsement.execute('start_endorsement')
-    >>> new_endorsement.form.current_extra_data_date == None
+    >>> new_endorsement.form.current_extra_data_date is None
     True
     >>> new_endorsement.form.new_extra_data_date == effective_date
     True
@@ -182,7 +182,7 @@ New Endorsement::
     True
     >>> contract.extra_datas[0].extra_data_values == {'formula': 1}
     True
-    >>> contract.extra_datas[0].date == None
+    >>> contract.extra_datas[0].date is None
     True
     >>> contract.extra_datas[1].extra_data_values == {'formula': 2}
     True
@@ -196,7 +196,7 @@ New Endorsement::
     True
     >>> contract.extra_datas[0].extra_data_values == {'formula': 1}
     True
-    >>> contract.extra_datas[0].date == None
+    >>> contract.extra_datas[0].date is None
     True
 
 New Endorsement::
@@ -208,9 +208,9 @@ New Endorsement::
     >>> new_endorsement.form.applicant = None
     >>> new_endorsement.form.effective_date = contract_start_date
     >>> new_endorsement.execute('start_endorsement')
-    >>> new_endorsement.form.current_extra_data_date == None
+    >>> new_endorsement.form.current_extra_data_date is None
     True
-    >>> new_endorsement.form.new_extra_data_date == None
+    >>> new_endorsement.form.new_extra_data_date is None
     True
     >>> new_endorsement.form.new_extra_data = {'formula': 3}
     >>> new_endorsement.execute('change_contract_extra_data_next')
@@ -220,5 +220,5 @@ New Endorsement::
     True
     >>> contract.extra_datas[0].extra_data_values == {'formula': 3}
     True
-    >>> contract.extra_datas[0].date == None
+    >>> contract.extra_datas[0].date is None
     True
