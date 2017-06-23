@@ -347,7 +347,7 @@ loan.save()
 Loan.calculate_loan([loan.id], {})
 
 # #Comment# #Revert Current process
-Contract.revert_current_endorsement([contract.id], {})
+Contract.revert_current_endorsement([contract.id], config._context)
 # #Res# #'close'
 loan = Loan(loan.id)
 loan.amount == Decimal('250000')
@@ -377,7 +377,7 @@ Loan.calculate_loan([loan.id], {})
 # #Comment# #This time, complete
 end_process, = Action.find([
         ('xml_id', '=', 'process_cog.act_end_process')])
-Contract._proxy._button_next_1([contract.id], {}) == end_process.id
+Contract._proxy._button_next_1([contract.id], config._context) == end_process.id
 # #Res# #True
 contract = Contract(contract.id)
 loan = Loan(loan.id)

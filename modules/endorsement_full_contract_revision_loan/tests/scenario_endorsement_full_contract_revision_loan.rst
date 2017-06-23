@@ -358,7 +358,7 @@ Modify Contract::
 
 Revert Current process::
 
-    >>> Contract.revert_current_endorsement([contract.id], {})
+    >>> Contract.revert_current_endorsement([contract.id], config._context)
     'close'
     >>> loan = Loan(loan.id)
     >>> loan.amount == Decimal('250000')
@@ -391,7 +391,7 @@ This time, complete::
 
     >>> end_process, = Action.find([
     ...         ('xml_id', '=', 'process_cog.act_end_process')])
-    >>> Contract._proxy._button_next_1([contract.id], {}) == end_process.id
+    >>> Contract._proxy._button_next_1([contract.id], config._context) == end_process.id
     True
     >>> contract = Contract(contract.id)
     >>> loan = Loan(loan.id)
