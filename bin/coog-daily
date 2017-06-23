@@ -42,8 +42,7 @@ coog_daily_main() {
 
         (
         _coog_daily_check_modules "account_payment_sepa_cog" &&               \
-            coog_chain_main account_payment_sepa_cog payment_fail \
-                --treatment_date="$TODAY_DATE"
+            coog_chain_main account_payment_sepa_cog payment_fail
         )
 
         (
