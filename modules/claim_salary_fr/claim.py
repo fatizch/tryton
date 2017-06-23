@@ -270,12 +270,33 @@ class ClaimService:
             depends=['currency_digits']),
         'get_salary_field')
     salary_bonus = fields.Function(
-        fields.Numeric('Gross Salary', digits=(16, Eval('currency_digits', 2)),
+        fields.Numeric('Gross Salary Bonus',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_salary_field')
+    net_salary_bonus = fields.Function(
+        fields.Numeric('Net Salary Bonus',
+            digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
         'get_salary_field')
     salary_mode = fields.Function(
         fields.Char('Salary Mode'),
         'get_salary_mode')
+    ta_gross_salary = fields.Function(
+        fields.Numeric('TA Gross Salary',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_salary_range')
+    tb_gross_salary = fields.Function(
+        fields.Numeric('TB Gross Salary',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_salary_range')
+    tc_gross_salary = fields.Function(
+        fields.Numeric('TC Gross Salary',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_salary_range')
 
     def calculate_salaries_period_dates(self):
         if self.salary_mode in ('last_12_months', 'last_12_months_last_year'):
@@ -416,14 +437,13 @@ class ClaimService:
                     if salary_to_add:
                         if self.salary_mode != 'last_year':
                             pmss += TableCell.get(pmss_table,
-                                cur_salary.from_date
-                                ) * prorata
+                                cur_salary.from_date) * prorata
                         sum_prorata += prorata
                         salary_to_use += salary_to_add
             if self.salary_mode == 'last_year':
                 for i in range(0, 11):
-                    pmss += TableCell.get(pmss_table, cur_salary.from_date
-                        + relativedelta(months=i)) * prorata
+                    pmss += TableCell.get(pmss_table, cur_salary.from_date +
+                        relativedelta(months=i)) * prorata
 
         # Calculate monthly salary
         if self.salary_mode != 'last_year' and not current_salary and \
@@ -442,6 +462,24 @@ class ClaimService:
         salary_range['TC'] = year_range['TC']
 
         return salary_range
+
+    @classmethod
+    def get_salary_range(cls, services, names):
+        ta_gross_salary = {s.id: Decimal('0.0') for s in services}
+        tb_gross_salary = {s.id: Decimal('0.0') for s in services}
+        tc_gross_salary = {s.id: Decimal('0.0') for s in services}
+        for service in services:
+            salary_range = service.calculate_basic_salary(
+                ['gross_salary', 'salary_bonus'])
+            ta_gross_salary[service.id] = salary_range['TA']
+            tb_gross_salary[service.id] = salary_range['TB']
+            tc_gross_salary[service.id] = salary_range['TC']
+        result = {
+            'ta_gross_salary': ta_gross_salary,
+            'tb_gross_salary': tb_gross_salary,
+            'tc_gross_salary': tc_gross_salary
+            }
+        return {key: result[key] for key in names}
 
     def get_salary_field(self, name):
         res = 0

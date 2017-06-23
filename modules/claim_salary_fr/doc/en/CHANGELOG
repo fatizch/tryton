@@ -1,3 +1,5 @@
+* FEA#6465 Allow to access TA, TB, TC salary range from coog-api 
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Add salaries wizard which allows to enter salaries and compute net salaries
 * FEA#0000 Fixed amount contributions are no longer related to salary ranges

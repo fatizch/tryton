@@ -1,3 +1,5 @@
+* FEA#6465 Permettre d'accéder aux tranches TA, TB, TC depuis coog-api
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout de l'assistant de salaires permettant de saisir les salaires et de calculer les salaires nets.
 * FEA#0000 Les contributions à montant fixe ne sont plus liée à des tranches de salaire

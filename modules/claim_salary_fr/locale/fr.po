@@ -207,8 +207,12 @@ msgid "Gross Salary"
 msgstr "Salaire brut"
 
 msgctxt "field:claim.service,net_salary:"
-msgid "Gross Salary"
-msgstr "Salaire brut"
+msgid "Net Salary"
+msgstr "Salaire net"
+
+msgctxt "field:claim.service,net_salary_bonus:"
+msgid "Net Salary Bonus"
+msgstr "Primes nettes"
 
 msgctxt "field:claim.service,salary:"
 msgid "Salary"
@@ -221,6 +225,18 @@ msgstr "Salaire brut"
 msgctxt "field:claim.service,salary_mode:"
 msgid "Salary Mode"
 msgstr "Mode de salaire"
+
+msgctxt "field:claim.service,ta_gross_salary:"
+msgid "TA Gross Salary"
+msgstr "Tranche TA brute"
+
+msgctxt "field:claim.service,tb_gross_salary:"
+msgid "TB Gross Salary"
+msgstr "Tranche TB brute"
+
+msgctxt "field:claim.service,tc_gross_salary:"
+msgid "TC Gross Salary"
+msgstr "Tranche TC brute"
 
 msgctxt "field:claim.start_set_contributions,fixed_amounts:"
 msgid "Fixed Amounts"
