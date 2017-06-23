@@ -2,10 +2,41 @@
 
 # ------------- FETCHING ------------- #
 update_git() {
-        git clone --depth=1 --recursive --branch "$DRONE_BRANCH" https://github.com/coopengo/trytond.git /workspace/trytond &&
-        git clone --depth=1 --recursive --branch "$DRONE_BRANCH" https://github.com/coopengo/trytond-modules.git /workspace/trytond-modules &&
-        git clone --depth=1 --recursive --branch "$DRONE_BRANCH" https://github.com/coopengo/proteus.git /workspace/proteus
-        (cd /workspace/drone/coog && git fetch --recurse-submodules=yes origin "$DRONE_BRANCH")
+        local branch; branch="$DRONE_BRANCH"
+
+        if [ "$DRONE_REPO_NAME" == "coog" ]
+        then
+                (cd /workspace/drone/coog && git fetch --recurse-submodules=yes origin "$branch")
+        else
+                echo "$DRONE_BRANCH" | grep -qV "[a-z]+$"
+
+                if [ $? -eq 0 ]
+                then
+                        branch="master"
+                else
+                        echo "$DRONE_BRANCH" | grep -qV "coog-1\.(10|12)"
+
+                        if [ $? -eq 0 ]
+                        then
+                                branch=$(echo "$DRONE_BRANCH" | cut -d "-" -f 2,3)
+                        else
+                                exit 0
+                        fi
+                fi
+
+                (cd /workspace/drone/coog && git checkout "$branch")
+
+                if [ -f /workspace/drone/customers/modules ]
+                then
+                        cp /workspace/drone/customers/modules/* /workspace/drone/coog/modules/
+                else
+                        exit 0
+                fi
+        fi
+
+        git clone --depth=1 --recursive --branch "$branch" https://github.com/coopengo/trytond.git /workspace/trytond &&
+        git clone --depth=1 --recursive --branch "$branch" https://github.com/coopengo/trytond-modules.git /workspace/trytond-modules &&
+        git clone --depth=1 --recursive --branch "$branch" https://github.com/coopengo/proteus.git /workspace/proteus
 }
 
 # ----- GETTING MODULES TO TEST ------ #

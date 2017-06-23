@@ -11,7 +11,7 @@ const ALLOWED_PROJECTS = {
   ]
 }
 
-const githubUri = `https://api.github.com/repos/coopengo/coog/pulls/${process.env.DRONE_PULL_REQUEST}`
+const githubUri = `https://api.github.com/repos/coopengo/${process.env.DRONE_REPO_NAME}/pulls/${process.env.DRONE_PULL_REQUEST}`
 const redmineUri = 'https://support.coopengo.com'
 
 const githubParams = {
