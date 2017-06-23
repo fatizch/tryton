@@ -8,13 +8,13 @@ update_git() {
         then
                 (cd /workspace/drone/coog && git fetch --recurse-submodules=yes origin "$branch")
         else
-                echo "$DRONE_BRANCH" | grep -qV "[a-z]+$"
+                echo "$DRONE_BRANCH" | grep -qE "[a-z]+$"
 
                 if [ $? -eq 0 ]
                 then
                         branch="master"
                 else
-                        echo "$DRONE_BRANCH" | grep -qV "coog-1\.(10|12)"
+                        echo "$DRONE_BRANCH" | grep -qE "coog-1\.(10|12)"
 
                         if [ $? -eq 0 ]
                         then
