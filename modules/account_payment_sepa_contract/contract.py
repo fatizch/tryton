@@ -83,7 +83,7 @@ class Contract:
 
     def init_billing_information(self):
         super(Contract, self).init_billing_information()
-        if self.subscriber and self.billing_informations:
+        if getattr(self, 'subscriber', None) and self.billing_informations:
             self.billing_informations[0].payer = self.subscriber
 
 
