@@ -22,6 +22,11 @@ msgstr ""
 "La date de fin devrait être antérieure à la date de fin automatique : %s"
 
 msgctxt "error:contract.option:"
+msgid "Option manual start date %s is anterior to contract initial start date %s"
+msgstr ""
+"La date de début de l'option %s est antérieure à la date de début du contrat %s"
+
+msgctxt "error:contract.option:"
 msgid "End date should be posterior to start date: %s"
 msgstr "La date de fin devrait être postérieure à la date de début : %s"
 

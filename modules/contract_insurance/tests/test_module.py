@@ -411,10 +411,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
             # test check
             if should_raise:
                 self.assertRaises(UserError,
-                    self.Contract.check_option_end_dates,
+                    self.Contract.check_option_dates,
                     [option.parent_contract])
             else:
-                self.Contract.check_option_end_dates([option.parent_contract])
+                self.Contract.check_option_dates([option.parent_contract])
 
         # option with auto end date
         test_option(automatic_end_date=date2, expected=date2,
@@ -443,6 +443,19 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # try setting setting end date posterior to option automatic end date
         test_option(automatic_end_date=date2, expected=date2, to_set=date3,
             should_raise=True)
+
+        # try setting manual start date anterior to contract initial start date
+        test_option(automatic_end_date=date2, expected=date2, to_set=date1,
+            start_date=early_date, should_raise=True)
+
+        # try setting manual start date anterior to covered manual start date
+        date4 = start_date + datetime.timedelta(weeks=1)
+        covered_element.manual_start_date = start_date + datetime.timedelta(
+            weeks=2)
+        covered_element.save()
+
+        test_option(automatic_end_date=date2, expected=date2, to_set=date1,
+            start_date=date4, should_raise=True)
 
     @test_framework.prepare_test(
         'contract_insurance.test0012_testContractCreation',

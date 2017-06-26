@@ -1,3 +1,5 @@
+* BUG#6468 Calcul de la date de début de l'option en intégrant la date manuelle de début d'un élément couvert si définie
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout du nombre de sous éléments couverts à la date d'effet du contrat
 

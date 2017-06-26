@@ -1,3 +1,5 @@
+* BUG#6468 Compute option start date using the manual_start_date on covered element if it is defined
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Add a contract field with the number of sub covered elements when the contract started
 

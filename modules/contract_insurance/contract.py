@@ -228,9 +228,9 @@ class Contract(Printable):
         self.covered_elements = self.covered_elements
 
     @classmethod
-    def check_option_end_dates(cls, contracts):
-        super(Contract, cls).check_option_end_dates(contracts)
-        Pool().get('contract.option').check_end_date([option
+    def check_option_dates(cls, contracts):
+        super(Contract, cls).check_option_dates(contracts)
+        Pool().get('contract.option').check_dates([option
                 for contract in contracts
                 for option in contract.covered_element_options])
 
@@ -461,6 +461,10 @@ class ContractOption(Printable):
                 'propagate_extra_premiums': _CONTRACT_STATUS_STATES,
                 'propagate_exclusions': _CONTRACT_STATUS_STATES,
                 })
+        cls._error_messages.update({
+                'option_start_anterior_to_covered_start': 'Manual option start '
+                'date %s is anterior to covered element manual start date %s'
+                })
 
     @classmethod
     def order_coverage(cls, tables):
@@ -501,6 +505,23 @@ class ContractOption(Printable):
     def get_extra_data_summary(cls, extra_datas, name):
         return Pool().get('extra_data').get_extra_data_summary(extra_datas,
             'current_extra_data')
+
+    def get_initial_start_date(self, name):
+        if (not self.manual_start_date and self.covered_element
+                and self.covered_element.manual_start_date):
+            return self.covered_element.manual_start_date
+        return super(ContractOption, self).get_initial_start_date(name)
+
+    @classmethod
+    def get_start_date(cls, options, names):
+        res = super(ContractOption, cls).get_start_date(options, names)
+        for option in options:
+            if (res['start_date'][option.id] and option.covered_element
+                    and option.covered_element.manual_start_date):
+                res['start_date'][option.id] = max(
+                    option.covered_element.manual_start_date,
+                    res['start_date'][option.id])
+        return res
 
     @classmethod
     def _export_skips(cls):
@@ -598,7 +619,11 @@ class ContractOption(Printable):
             [
                 ('manual_start_date', '=', None),
                 ('covered_element', '!=', None),
-                ('covered_element.contract.start_date',) + tuple(clause[1:]),
+                ['OR',
+                    ('covered_element.contract.start_date',)
+                    + tuple(clause[1:]),
+                    ('covered_element.manual_start_date',) + tuple(clause[1:])
+                ],
             ],
         ]
 
@@ -699,6 +724,21 @@ class ContractOption(Printable):
 
     def get_sender(self):
         return self.covered_element.party or self.main_contract.get_contact()
+
+    @classmethod
+    def check_dates(cls, options):
+        Date = Pool().get('ir.date')
+        super(ContractOption, cls).check_dates(options)
+        for option in options:
+            if (option.covered_element and
+                    option.covered_element.manual_start_date and
+                    option.manual_start_date and
+                    option.covered_element.manual_start_date >
+                    option.manual_start_date):
+                cls.raise_user_error('option_start_anterior_to_covered_start',
+                        Date.date_as_string(option.manual_start_date),
+                        Date.date_as_string(
+                            option.covered_element.manual_start_date))
 
 
 class ContractOptionVersion:
@@ -1084,9 +1124,9 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             if relations:
                 return '%s (%s)' % (res, relations)
             return res
-        names = [self.name]
-        names.append(self.item_desc.rec_name if self.item_desc else None)
-        return ' '.join([x for x in names if x])
+        if self.item_desc:
+            return '%s: %s' % (self.item_desc.rec_name, self.name)
+        return self.name
 
     @classmethod
     def set_party_extra_data(cls, instances, name, vals):

@@ -18,6 +18,10 @@ msgctxt "error:contract.manage_extra_premium:"
 msgid "There may be only one coverage selected for this action"
 msgstr "Une seule garantie doit être sélectionnée pour continuer"
 
+msgctxt "error:contract.option:"
+msgid "Manual option start date %s is anterior to covered element manual start date %s"
+msgstr "La date de début de l'option %s est antérieure à la date de début de l'élément couvert %s"
+
 msgctxt "error:contract.option.extra_premium.create:"
 msgid "An option must be subscribed on the contract before going on"
 msgstr "Au moins une garantie doit être souscrite avant de continuer"

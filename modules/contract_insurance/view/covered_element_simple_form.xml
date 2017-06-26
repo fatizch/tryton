@@ -14,6 +14,10 @@ this repository contains the full copyright notices and license terms. -->
     <field name="party"/>
     <field name="current_extra_data" colspan="2" no_command="1"/>
     <newline/>
+    <label name="manual_start_date"/>
+    <field name="manual_start_date"/>
+    <label name="manual_end_date"/>
+    <field name="manual_end_date"/>
     <field name="item_kind"/>
     <field name="is_person"/>
     <field name="party_extra_data" invisible="1"/>

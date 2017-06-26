@@ -879,11 +879,11 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         super(Contract, cls).validate(contracts)
         for contract in contracts:
             contract.check_activation_dates()
-        cls.check_option_end_dates(contracts)
+        cls.check_option_dates(contracts)
 
     @classmethod
-    def check_option_end_dates(cls, contracts):
-        Pool().get('contract.option').check_end_date([option
+    def check_option_dates(cls, contracts):
+        Pool().get('contract.option').check_dates([option
                 for contract in contracts
                 for option in contract.options])
 
@@ -1693,6 +1693,9 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
                 'anterior to end date of contract: %s',
                 'end_date_posterior_to_automatic_end_date': 'End date should '
                 'be anterior to option automatic end date : %s',
+                'manual_start_date_anterior_to_contract_initial_start_date':
+                'Option manual start date %s is anterior to contract initial '
+                'start date %s'
                 })
 
     @classmethod
@@ -1976,7 +1979,7 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             self.automatic_end_date = None
 
     @classmethod
-    def check_end_date(cls, options):
+    def check_dates(cls, options):
         Date = Pool().get('ir.date')
         for option in options:
             if option.status == 'void':
@@ -1984,6 +1987,13 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             end_date = option.manual_end_date
             if not end_date or not option.start_date:
                 continue
+            if (option.manual_start_date and option.manual_start_date <
+                    option.parent_contract.initial_start_date):
+                cls.raise_user_error(
+                    'manual_start_date_anterior_to_contract_initial_start_date',
+                    (Date.date_as_string(option.manual_start_date),
+                        Date.date_as_string(
+                            option.parent_contract.initial_start_date)))
             if end_date >= option.start_date:
                 if not option.parent_contract:
                     continue
