@@ -1169,8 +1169,7 @@ class ProcessPayment:
                 break
 
     def default_start(self, name):
-        # Do not remove, overriden in other modules
-        return {}
+        return super(ProcessPayment, self).default_start(name)
 
     def transition_pre_process(self):
         return 'process'
