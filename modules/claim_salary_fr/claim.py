@@ -298,6 +298,15 @@ class ClaimService:
             depends=['currency_digits']),
         'get_salary_range')
 
+    def get_salary_reference_date(self):
+        Covered = Pool().get('contract.covered_element')
+        reference = self.loss.get_salary_reference_date()
+        covered = self.get_theoretical_covered_element(None)
+        if covered:
+            return min(reference,
+                Covered(covered).contract_exit_date or datetime.date.max)
+        return reference
+
     def calculate_salaries_period_dates(self):
         if self.salary_mode in ('last_12_months', 'last_12_months_last_year'):
             nb_iteration = 12
@@ -311,18 +320,16 @@ class ClaimService:
         else:
             return []
 
+        salary_date = self.get_salary_reference_date()
         if self.salary_mode in ('last_12_months', 'last_3_months',
                 'last_month', 'last_year'):
-            reference_date = self.loss.get_salary_reference_date()
+            reference_date = salary_date
         elif self.salary_mode in ('last_12_months_last_year',
                 'last_3_months_last_year', 'last_month_last_year'):
-            reference_date = datetime.date(
-                self.loss.get_salary_reference_date().year - 1, 12, 31)
+            reference_date = datetime.date(salary_date.year - 1, 12, 31)
         elif self.salary_mode == 'last_4_quarters':
-            reference_date = self.loss.get_salary_reference_date() + \
-                relativedelta(day=1,
-                month=((self.loss.get_salary_reference_date().month - 1) // 3
-                        ) * 3 + 1)
+            reference_date = salary_date + relativedelta(day=1,
+                    month=((salary_date.month - 1) // 3) * 3 + 1)
         else:
             return []
 

@@ -1,3 +1,4 @@
+* BUG#6499 L'initialisation des périodes de salaire doit se baser sur la date de sortie de l'entreprise
 * FEA#6465 Permettre d'accéder aux tranches TA, TB, TC depuis coog-api
 
 Version 1.12 - 2017-04-28
