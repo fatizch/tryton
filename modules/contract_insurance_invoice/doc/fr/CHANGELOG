@@ -1,3 +1,4 @@
+* BUG#6491  Prise en compte des paiements à payer à l'état brouillon et approuvé avant le quittancement dans le batch d'épuisement du trop perçu par quittancement
 * BUG#6454 Pas de dates de paiements pour les quittances non prélevées
 * OTH#0000 Correction des tests
 * Bug#6436 Mise à disposition des frais dans le précalcul d'échéancier assurance

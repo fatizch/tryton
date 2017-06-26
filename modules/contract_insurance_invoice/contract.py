@@ -1043,9 +1043,17 @@ class Contract:
         new_invoice, = Contract.invoice([self], to_date)
         return new_invoice
 
-    def invoice_against_balance(self):
+    def invoice_against_balance(self, ignore_payments=False):
         balance = self.balance + sum(x.invoice.total_amount
             for x in self.invoices if x.invoice.state == 'validated')
+        if not ignore_payments:
+            Payment = Pool().get('account.payment')
+            payable_payments = [x for x in Payment.search([
+                        ('line.contract', '=', self),
+                        ('state', 'in', ['approved', 'draft']),
+                        ('kind', '=', 'payable')])]
+            if payable_payments:
+                balance += sum(x.amount for x in payable_payments)
         next_date = self.last_invoice_end or self.initial_start_date
         while balance < 0 and next_date < self.end_date:
             new_invoice = self.invoice_next_period()
