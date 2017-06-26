@@ -249,6 +249,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                     values=['pdf'],
                     where=to_update.convert_to_pdf == Literal(True)))
             report_template.drop_column('convert_to_pdf')
+        # Ensure we have no "Null" kind in report _template table
+        cursor.execute(*to_update.update(columns=[to_update.kind],
+                values=[''],
+                where=to_update.kind == Null))
 
     @classmethod
     def default_process_method(cls):
