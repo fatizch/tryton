@@ -12,6 +12,7 @@ import party
 def register():
     Pool.register(
         offered.OptionDescription,
+        offered.Product,
         benefit.Benefit,
         claim.Claim,
         claim.ClaimService,

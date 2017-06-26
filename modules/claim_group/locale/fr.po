@@ -2,14 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:benefit:"
+msgid "Subscriber then Covered"
+msgstr "Le souscripteur puis l'assuré"
+
 msgctxt "error:claim:"
 msgid "Declaration date cannot be posterior to today's date"
 msgstr ""
 "La date de déclaration ne peut être postérieure à la date d'aujourd'hui"
-
-msgctxt "error:benefit:"
-msgid "Subscriber then Covered"
-msgstr "Le souscripteur puis l'assuré"
 
 msgctxt "field:benefit,is_group:"
 msgid "Group Benefit"
@@ -43,6 +43,10 @@ msgctxt ""
 "field:endorsement.contract.terminate,post_termination_claim_behaviour:"
 msgid "Post Termination Claim Behaviour"
 msgstr "Comportement des sinistres suite à résiliation"
+
+msgctxt "field:offered.product,default_termination_claim_behaviour:"
+msgid "Default Post Termination Claim Behaviour"
+msgstr "Comportement par défaut des sinistres suite à résiliation"
 
 msgctxt "model:ir.action,name:act_benefit_collective"
 msgid "Collective Benefits"
@@ -103,3 +107,23 @@ msgctxt ""
 "selection:endorsement.contract.terminate,post_termination_claim_behaviour:"
 msgid "Stop Indemnifications"
 msgstr "Arrêter les indemnisations"
+
+msgctxt "selection:offered.product,default_termination_claim_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:offered.product,default_termination_claim_behaviour:"
+msgid "Lock Indemnifications"
+msgstr "Bloquer les prestations au niveau atteint"
+
+msgctxt "selection:offered.product,default_termination_claim_behaviour:"
+msgid "Normal Indemnifications"
+msgstr "Continuer les indemnisations"
+
+msgctxt "selection:offered.product,default_termination_claim_behaviour:"
+msgid "Stop Indemnifications"
+msgstr "Arrêter les indemnisations"
+
+msgctxt "view:offered.product:"
+msgid "Claim"
+msgstr "Sinistre"

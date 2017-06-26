@@ -17,6 +17,7 @@ class Contract:
     __metaclass__ = PoolMeta
     __name__ = 'contract'
 
+    # TODO: move to claim_indemnification_group
     post_termination_claim_behaviour = fields.Selection([('', ''),
             ('stop_indemnifications', 'Stop Indemnifications'),
             ('lock_indemnifications', 'Lock Indemnifications'),
@@ -109,7 +110,8 @@ class TerminateContract:
         values = getattr(contracts[contract.id], 'values', {})
         defaults['is_group'] = values.get('is_group', contract.is_group)
         defaults['post_termination_claim_behaviour'] = values.get(
-            'post_termination_claim_behaviour', '')
+            'post_termination_claim_behaviour',
+            contract.product.default_termination_claim_behaviour)
         return defaults
 
     def step_update(self):
