@@ -620,9 +620,9 @@ class ContractOption(Printable):
                 ('manual_start_date', '=', None),
                 ('covered_element', '!=', None),
                 ['OR',
-                    ('covered_element.contract.start_date',)
-                    + tuple(clause[1:]),
-                    ('covered_element.manual_start_date',) + tuple(clause[1:])
+                    [('covered_element.contract.start_date',)
+                    + tuple(clause[1:])],
+                    [('covered_element.manual_start_date',) + tuple(clause[1:])]
                 ],
             ],
         ]
