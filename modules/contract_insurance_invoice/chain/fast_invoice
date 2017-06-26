@@ -1,0 +1,22 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=fast_invoice
+CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
+
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'WORKING_DAYS' 'CONF_CODE')
+CHAIN_REQUIRED=('TREATMENT_DATE' 'WORKING_DAYS' 'CONF_CODE')
+
+chain_params "$@"
+chain_begin
+
+chain_step contract.invoice.create ${GIVEN_PARAMETERS[@]}
+chain_wait contract.invoice.create || chain_end
+
+chain_step contract.invoice.bulk_set_number ${GIVEN_PARAMETERS[@]}
+chain_wait contract.invoice.bulk_set_number || chain_end
+
+chain_step contract.invoice.post ${GIVEN_PARAMETERS[@]}
+chain_wait contract.invoice.post || chain_end
+
+chain_end

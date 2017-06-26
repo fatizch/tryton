@@ -12,10 +12,11 @@ début est inférieure ou égale à la date de traitement et leur donne le statu
 Batch de numérotation des quittances [contract.invoice.set_number]
 ==================================================================
 
-Attribut une référence à toutes les quittances validées dont la date de
-début est inférieure ou égale à la date de traitement
+Attribut un numéro à toutes les quittances validées dont la date de
+début est inférieure ou égale à la date de traitement.
 
-**Ce batch doit tourner avant le batch d'émission**
+**Ce batch doit tourner avant le batch d'émission.**
+**Ce batch doit avoir un job_size de 0.**
 
 - *Fréquence suggérée:* quotidienne
 - *Date de traitement à fournir:* date du jour
@@ -29,6 +30,21 @@ inférieure ou égale à la date de traitement au statut "émises" et crée
 les lignes de mouvements correspondantes.
 
 **Ce batch doit tourner après le batch de numérotation**
+
+- *Fréquence suggérée:* quotidienne
+- *Date de traitement à fournir:* date du jour
+
+
+Batch de numérotation en masse des quittances [contract.invoice.bulk_set_number]
+==================================================================
+
+Une alternative au batch de numérotation des quittances s'appuyant sur la base de donnée
+pour améliorer les temps de traitement. Il attribut un numéro à toutes les quittances
+validées dont la date de début est inférieure ou égale à la date de traitement.
+
+**Ce batch doit tourner avant le batch d'émission**
+**Ce batch doit avoir un job_size de 1.**
+**Ce batch n'est pas parallélisable, un seul worker doit être lancé.**
 
 - *Fréquence suggérée:* quotidienne
 - *Date de traitement à fournir:* date du jour

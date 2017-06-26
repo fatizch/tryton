@@ -7,7 +7,7 @@ from sql import Literal
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
-from trytond.modules.coog_core import model, fields, coog_string, UnionMixin
+from trytond.modules.coog_core import model, fields, coog_string
 
 __all__ = [
     'SynthesisMenuInvoice',

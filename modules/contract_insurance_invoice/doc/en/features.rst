@@ -59,3 +59,7 @@
 - **Exhaustion of overpayment by invoicing:** A batch is available to allow
   the exhaustion of overpayment for a contract by lettering with invoices
   generated in the future.
+
+- **Invoice Set Number Batch:** A separate batch is available to set invoice numbers
+  using database features and respecting sequence settings. This drastically
+  improves batch speed.

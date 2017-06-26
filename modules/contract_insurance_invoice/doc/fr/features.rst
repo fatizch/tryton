@@ -64,3 +64,8 @@
 - **Epuisement du trop perçu par quittancement:** Un traitement par batch
   est désormais disponible pour permettre d'épuiser le trop perçu d'un contrat
   par lettrage avec des quittances générées pour le futur.
+
+- **Batch de numérotation des quittances:** Un nouveau traitement par batch est
+  disponible pour numéroter les quittances. Il utilise les fonctionnalités de la
+  base de données et respecte le paramétrage des séquences. Les temps
+  d'exécution en est drastiquement amélioré (de l'ordre de quelques secondes).

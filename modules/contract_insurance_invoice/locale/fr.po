@@ -552,6 +552,10 @@ msgctxt "field:contract.invoice.set_number,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.invoice.bulk_set_number,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:contract.option,premiums:"
 msgid "Premiums"
 msgstr "Primes"
@@ -1139,6 +1143,10 @@ msgid "Post Contract Invoice Batch"
 msgstr "Batch d'émission des quittances"
 
 msgctxt "model:contract.invoice.set_number,name:"
+msgid "Set Contract Invoice Number Batch"
+msgstr "Batch de numérotation des quittances"
+
+msgctxt "model:contract.invoice.bulk_set_number,name:"
 msgid "Set Contract Invoice Number Batch"
 msgstr "Batch de numérotation des quittances"
 

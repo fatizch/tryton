@@ -28,6 +28,7 @@ def register():
         batch.PostInvoiceContractBatch,
         batch.SetNumberInvoiceAgainstBalanceBatch,
         batch.SetNumberInvoiceContractBatch,
+        batch.BulkSetNumberInvoiceContractBatch,
         configuration.OfferedConfiguration,
         offered.BillingMode,
         offered.BillingModeFeeRelation,
