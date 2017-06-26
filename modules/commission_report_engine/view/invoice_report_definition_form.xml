@@ -8,6 +8,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="report_template"/>
     <label name="business_kind"/>
     <field name="business_kind"/>
-    <label name="on_model" invisible="1"/>
     <field name="on_model" invisible="1"/>
 </form>

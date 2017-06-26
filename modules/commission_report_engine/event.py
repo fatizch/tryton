@@ -4,6 +4,7 @@
 
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields
+from trytond.pyson import Eval, And
 
 
 __all__ = [
@@ -22,6 +23,10 @@ class EventTypeAction:
                 'generate_invoice_commission_doc':
                 'Generate Invoice Commissions Document',
                 })
+        initial_invisible_states = cls.report_templates.states['invisible']
+        cls.report_templates.states['invisible'] = And(
+            initial_invisible_states,
+            Eval('action') != 'generate_invoice_commission_doc')
 
     @classmethod
     def possible_asynchronous_actions(cls):
