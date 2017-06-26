@@ -85,8 +85,7 @@ class ChangeContractCommission(EndorsementWizardStepMixin):
     @classmethod
     def _contract_fields_to_extract(cls):
         return {
-            'contract': ['agency', 'agent', 'broker', 'broker_party',
-                'product'],
+            'contract': ['agency', 'agent', 'broker'],
             }
 
     @classmethod
@@ -98,6 +97,9 @@ class ChangeContractCommission(EndorsementWizardStepMixin):
             cur_value = cur_value.id if cur_value else cur_value
             new_defaults[fname] = updated_values.get(fname, cur_value)
             new_defaults['current_%s' % fname] = cur_value
+        new_defaults['product'] = endorsement.contract.product.id
+        new_defaults['broker_party'] = getattr(
+            endorsement.contract.broker_party, 'id', None)
         return new_defaults
 
     def update_endorsement(self, base_endorsement, wizard):
@@ -139,11 +141,15 @@ class ChangeContractBroker(ChangeContractCommission):
 
     @classmethod
     def get_methods_for_model(cls, model_name):
-        return {'update_commissions_after_endorsement_application'}
+        if model_name == 'contract':
+            return {'update_commissions_after_endorsement_application'}
+        return set()
 
     @classmethod
     def get_draft_methods_for_model(cls, model_name):
-        return {'update_commissions_after_endorsement_cancellation'}
+        if model_name == 'contract':
+            return {'update_commissions_after_endorsement_cancellation'}
+        return set()
 
     @classmethod
     def update_default_values(cls, wizard, endorsement, default_values):
