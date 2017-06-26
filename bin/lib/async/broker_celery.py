@@ -1,4 +1,5 @@
 import os
+import time
 import json
 import redis
 
@@ -75,7 +76,12 @@ for name, func in tasks.iteritems():
 def log_job(job, queue, fname, args):
     # not stored by celery
     connection.setex('coog:job:%s' % str(job), config.JOB_RESULT_TTL,
-        json.dumps({'queue': queue, 'func': fname, 'args': args}))
+        json.dumps({
+                'date': time.strftime('%Y-%m-%dT%H:%M:%S'),
+                'queue': queue,
+                'func': fname,
+                'args': args
+                }))
 
 
 def enqueue(queue, fname, args, **kwargs):

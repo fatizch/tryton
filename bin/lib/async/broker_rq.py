@@ -20,8 +20,12 @@ connection = redis.StrictRedis(host=broker_host, port=broker_port,
 
 def log_job(job, queue, fname, args):
     # stored by rq but pickled
-    connection.hset(job.key, 'coog', json.dumps(
-        {'queue': queue, 'func': fname, 'args': args}))
+    connection.hset(job.key, 'coog',
+        json.dumps({
+                'queue': queue,
+                'func': fname,
+                'args': args
+                }))
 
 
 def log_result(job, result):

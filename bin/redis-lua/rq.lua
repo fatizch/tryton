@@ -7,6 +7,8 @@ Usage: only ARGV are used (no KEYS). Possible commands are:
 
   - help: print this text
 
+  - list: list jobs inside date interval - <from~to>
+
   - fail: list failed jobs ids - <queue>
   - flist: list all failed jobs
 
@@ -25,6 +27,24 @@ Usage: only ARGV are used (no KEYS). Possible commands are:
 -- general
 
 local STATUS = {'wait', 'success', 'fail', 'archive'}
+
+local function parse_criteria(criteria)
+    local from, to
+    local r = string.find(criteria, '~')
+    if r then
+        from = string.sub(criteria, 1, r-1)
+        if #from == 0 then
+            from = nil
+        end
+        to = string.sub(criteria, r+1)
+        if #to == 0 then
+            to = nil
+        end
+    else
+        from = criteria
+    end
+    return from, to
+end
 
 local function check_filter(default, ...)
     local filters = {...}
@@ -52,8 +72,8 @@ local function is_eligible(job, queue, filter)
 end
 
 local function list_init()
-    local header = {'queue', 'id', 'status', 'context', 'records', 'args',
-        'result'}
+    local header = {'date', 'queue', 'id', 'status', 'context', 'records',
+        'args', 'result'}
     local result = {table.concat(header, '\t')}
     return header, result
 end
@@ -97,6 +117,7 @@ end
 broker.prepare = function(id)
     local job = {id=id}
     local key = broker.patterns[1] .. id
+    job.date = redis.call('HGET', key, 'created_at')
     job.queue = redis.call('HGET', key, 'origin')
     local status = redis.call('HGET', key, 'status')
     if status == 'queued' or status == 'started' then
@@ -178,6 +199,24 @@ api.fail = function(queue)
         local job = broker.prepare(id)
         if is_eligible(job, queue, filter) then
             result[#result+1] = id
+        end
+    end
+    return result
+end
+
+api.list = function(criteria)
+    assert(criteria, 'missing criteria')
+    local from, to = parse_criteria(criteria)
+    local header, result = list_init()
+
+    local pattern = broker.patterns[1]
+    local keys = redis.call('KEYS', pattern .. '*')
+    for _, key in ipairs(keys) do
+        local id = key:sub(#pattern+1)
+        local job = broker.prepare(id)
+        if (not from or job.date >= from) and (not to or job.date <= to .. '~') then
+            broker.fill(id, job)
+            list_append(header, result, job)
         end
     end
     return result
