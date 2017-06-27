@@ -68,6 +68,14 @@ class PaymentTreatmentBatch:
                     or payment.sepa_mandate.sequence_type),)
         return res
 
+    @classmethod
+    def select_ids_regroup_key(cls, payment, payment_kind):
+        if payment.journal.process_method == 'sepa':
+            return payment.sepa_mandate if payment_kind == 'receivable' \
+                else payment.payer
+        return super(PaymentTreatmentBatch, cls).select_ids_regroup_key(
+            payment, payment_kind)
+
 
 class PaymentFailBatch(batch.BatchRootNoSelect):
     'Payment Fail Batch'
@@ -178,9 +186,9 @@ class PaymentGroupCreationBatch:
         Mandate = Pool().get('account.payment.sepa.mandate')
         if (journal.process_method == 'sepa' and payment_row[2] == 'receivable'
                 and journal.split_sepa_messages_by_sequence_type):
-            # index 4 is the sequence_type and index 3 is the mandate
-            return res + tuple([payment_row[4] or
-                Mandate(payment_row[3]).sequence_type])
+            # index 5 is the sequence_type and index 4 is the mandate
+            return res + tuple([payment_row[5] or
+                Mandate(payment_row[4]).sequence_type])
         return res
 
     @classmethod
@@ -201,8 +209,6 @@ class PaymentGroupProcessBatch:
     def _process_group(cls, group):
         if group.journal.process_method != 'sepa':
             return super(PaymentGroupProcessBatch, cls)._process_group(group)
-        Payment = Pool().get('account.payment')
-        Payment.write(list(group.payments), {'state': 'processing'})
         group.generate_message(_save=True)
 
 

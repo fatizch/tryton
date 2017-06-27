@@ -363,20 +363,24 @@ class Group:
     @classmethod
     def payments_update_select_ids_sepa(cls, treatment_date, payment_kind):
         pool = Pool()
+        Journal = pool.get('account.payment.journal')
         payment = pool.get('account.payment').__table__()
         cursor = Transaction().connection.cursor()
-        select_kwargs = {}
-        # grouping by sepa_mandate only makes sense
-        # for receivable payments
         if payment_kind == 'receivable':
-            select_args = (payment.id, payment.sepa_mandate)
-            select_kwargs.update({'order_by': payment.sepa_mandate})
+            key_field = payment.sepa_mandate
         else:
-            select_args = (payment.id,)
+            key_field = payment.bank_account
+        journals_ids = [x.id for x in Journal.search([
+                    ('process_method', '=', 'sepa')])]
+        if not journals_ids:
+            return []
+        select_args = (payment.id, key_field)
+        select_kwargs = {'order_by': key_field}
         where_clause = (payment.date <= treatment_date) & \
             (payment.kind == payment_kind) & \
             (payment.state == 'approved') & \
-            (payment.group != None)  # NOQA
+            (payment.group != None) & \
+            (payment.journal.in_(journals_ids))
         if payment_kind == 'receivable':
             where_clause &= (payment.sepa_mandate != None)  # NOQA
         select_kwargs.update({'where': where_clause})
@@ -384,12 +388,10 @@ class Group:
         cursor.execute(*query)
         results = cursor.fetchall()
         payment_ids = []
-        if payment_kind == 'receivable':
-            for group_key, grouped_results in groupby(
-                    results, lambda x: x[1]):
-                payment_ids.append([(x[0],) for x in grouped_results])
-            return payment_ids
-        return results
+        for group_key, grouped_results in groupby(
+                results, lambda x: x[1]):
+            payment_ids.append([(x[0],) for x in grouped_results])
+        return payment_ids
 
     @classmethod
     def payments_update_sepa(cls, payments, kind):

@@ -1,3 +1,4 @@
+* BUG#6345 Regroup payments by party for batch processing
 * BUG#6498 Hide the current state button transition on account payment groups
 * OTH#0000 Hotfix: Add super on the process payment default_start method
 * FEA#6439 Allow to display the sum of selected payments

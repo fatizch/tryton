@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import logging
 from itertools import groupby
+from collections import defaultdict
 
 from sql import Null, Literal
 from sql.operators import Equal
@@ -73,6 +74,30 @@ class PaymentTreatmentBatch(batch.BatchRoot):
         return res
 
     @classmethod
+    def select_ids_regroup_key(cls, payment, payment_kind):
+        return payment.party
+
+    @classmethod
+    def select_ids(cls, treatment_date, payment_kind=None,
+            journal_methods=None):
+        Payment = Pool().get('account.payment')
+        res = super(PaymentTreatmentBatch, cls).select_ids(treatment_date,
+            payment_kind, journal_methods)
+        groups = defaultdict(list)
+        for sub_res in grouped_slice(res):
+            payments = Payment.browse([x[0] for x in sub_res])
+            for payment in payments:
+                key = cls.select_ids_regroup_key(payment, payment_kind)
+                groups[key].append((payment.id,))
+        res = []
+        for k, v in groups.iteritems():
+            if not k:
+                res.extend(v)
+            else:
+                res.append(v)
+        return res
+
+    @classmethod
     def _group_payment_key(cls, payment):
         return (('journal', payment.journal.id), ('kind', payment.kind))
 
@@ -130,7 +155,7 @@ class PaymentGroupCreationBatch(batch.BatchRoot):
 
     @classmethod
     def _group_payment_key(cls, payment):
-        return (payment.journal, payment.kind)
+        return (payment.journal, payment.kind, payment.party)
 
     @classmethod
     def get_payment_where_clause(cls, payment, payment_kind, treatment_date,
@@ -312,6 +337,8 @@ class PaymentGroupProcessBatch(batch.BatchRoot):
         with Transaction().set_context(_record_cache_size=int(
                     cls.get_conf_item('cache_size'))):
             for group in objects:
+                for payments_slice in grouped_slice(group.payments):
+                    Payment.write(list(payments_slice), {'state': 'processing'})
                 cls._process_group(group)
                 Payment.set_description(group.payments)
                 Event.notify_events(group.payments, 'process_payment')

@@ -123,7 +123,7 @@ class BatchRoot(ModelView):
         raise NotImplementedError
 
     @classmethod
-    def get_batch_domain(cls, **kwargs):
+    def get_batch_domain(cls, *args, **kwargs):
         return []
 
     @classmethod
@@ -135,11 +135,11 @@ class BatchRoot(ModelView):
         return 'id'
 
     @classmethod
-    def select_ids(cls, **kwargs):
+    def select_ids(cls, *args, **kwargs):
         cursor = Transaction().connection.cursor()
         SearchModel = Pool().get(cls.get_batch_search_model())
         tables, expression = SearchModel.search_domain(
-            cls.get_batch_domain(**kwargs))
+            cls.get_batch_domain(*args, **kwargs))
         main_table, _ = tables[None]
 
         def convert_from(table, tables):

@@ -1,3 +1,4 @@
+* BUG#6345 regroup SEPA payments by mandate or payer for batch processing
 * FEA#6441 Automatically search for mandates by their party / account number
 * FEA#0000 Split the payment fail batch to improve performances
 * FEA#0000 Add a batch chain for parallelizable payment treatment
