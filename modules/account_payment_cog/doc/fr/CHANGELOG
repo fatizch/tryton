@@ -1,3 +1,4 @@
+* BUG#6498 Les boutons de l'état courant de groupe de paiement sont désormais cachés
 * OTH#0000 Ajout de l'appel au super dans la méthode 'default_start' de l'assistant de traitement des paiements
 * FEA#6439 Possibilité de sommer les paiements sélectionnés
 * FEA#6316 Possibilité de forcer l'accusé réception sur des groupes de paiement sans qu'il y ai eu planification.

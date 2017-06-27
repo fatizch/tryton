@@ -806,13 +806,15 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
                 ))
         cls._buttons.update({
                 'processing': {
-                    'invisible': Eval('state') == 'acknowledged',
+                    'invisible': (Eval('state') == 'acknowledged') |
+                    (Eval('state') == 'processing'),
                     },
                 'to_acknowledge': {
-                    'invisible': Eval('state') == 'acknowledged',
+                    'invisible': (Eval('state') == 'acknowledged') |
+                    (Eval('state') == 'to_acknowledge'),
                     },
                 'acknowledge': {
-                    'invisible': Eval('state') == 'acknowledged',
+                    'invisible': (Eval('state') == 'acknowledged'),
                     },
                 })
         cls._error_messages.update({
