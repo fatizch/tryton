@@ -468,54 +468,61 @@ class Contract:
         return result
 
     def invoices_report(self):
-        pool = Pool()
-        ContractInvoice = pool.get('contract.invoice')
-        all_invoices = ContractInvoice.search([
-                ('contract', '=', self),
-                ('invoice.state', 'not in', ('cancel', 'paid', 'draft'))])
-        amount_per_date = defaultdict(lambda: {'amount': 0, 'components': []})
-        taxes = defaultdict(int)
-        for invoice in all_invoices:
-            if invoice.invoice.lines_to_pay:
-                for line in invoice.invoice.lines_to_pay:
-                    date = line.payment_date or line.maturity_date or line.date
-                    amount_per_date[date]['amount'] += line.amount
-                    amount_per_date[date]['components'].append({
-                            'kind': 'line_to_pay', 'amount': line.amount,
-                            'line': line, 'invoice': invoice,
-                            'term': invoice.invoice.payment_term})
+        # invoices_report must be generated with the real today
+        # to calculate correctly the planned_payment_date
+        with Transaction().set_context(
+                    client_defined_date=datetime.date.today()):
+            pool = Pool()
+            ContractInvoice = pool.get('contract.invoice')
+            all_invoices = ContractInvoice.search([
+                    ('contract', '=', self),
+                    ('invoice.state', 'not in', ('cancel', 'paid', 'draft'))])
+            amount_per_date = defaultdict(
+                lambda: {'amount': 0, 'components': []})
+            taxes = defaultdict(int)
+            for invoice in all_invoices:
+                if invoice.invoice.lines_to_pay:
+                    for line in invoice.invoice.lines_to_pay:
+                        date = line.payment_date or line.maturity_date or \
+                            line.date
+                        amount_per_date[date]['amount'] += line.amount
+                        amount_per_date[date]['components'].append({
+                                'kind': 'line_to_pay', 'amount': line.amount,
+                                'line': line, 'invoice': invoice,
+                                'term': invoice.invoice.payment_term})
+                else:
+                    date = invoice.planned_payment_date or invoice.start \
+                        or invoice.invoice.invoice_date
+                    total_amount = invoice.invoice.total_amount
+                    payment_term = invoice.invoice.payment_term
+                    terms = payment_term.compute(total_amount,
+                        self.get_currency(),
+                        invoice.planned_payment_date or invoice.start
+                        or invoice.invoice_date)
+                    for date, term_amount in iter(terms):
+                        amount_per_date[date]['amount'] += term_amount
+                        amount_per_date[date]['components'].append({
+                                'kind': 'invoice_term', 'amount': term_amount,
+                                'term': invoice.invoice.payment_term,
+                                'invoice': invoice})
+                for tax in invoice.invoice.taxes:
+                    taxes[tax.tax] += tax.amount
+            invoices = [{
+                    'total_amount': amount_per_date[key]['amount'],
+                    'planned_payment_date': key,
+                    'components': amount_per_date[key]['components']}
+                for key in sorted(amount_per_date.keys())]
+            total_amount = sum(x['total_amount'] for x in invoices)
+            invoices = self.substract_balance_from_invoice_reports(invoices)
+            total_amount_after_substract = sum(x['total_amount']
+                for x in invoices)
+            if total_amount != 0:
+                ratio_taxes = total_amount_after_substract / total_amount
             else:
-                date = invoice.planned_payment_date or invoice.start \
-                    or invoice.invoice.invoice_date
-                total_amount = invoice.invoice.total_amount
-                payment_term = invoice.invoice.payment_term
-                terms = payment_term.compute(total_amount,
-                    self.get_currency(),
-                    invoice.planned_payment_date or invoice.start
-                    or invoice.invoice_date)
-                for date, term_amount in iter(terms):
-                    amount_per_date[date]['amount'] += term_amount
-                    amount_per_date[date]['components'].append({
-                            'kind': 'invoice_term', 'amount': term_amount,
-                            'term': invoice.invoice.payment_term,
-                            'invoice': invoice})
-            for tax in invoice.invoice.taxes:
-                taxes[tax.tax] += tax.amount
-        invoices = [{
-                'total_amount': amount_per_date[key]['amount'],
-                'planned_payment_date': key,
-                'components': amount_per_date[key]['components']}
-            for key in sorted(amount_per_date.keys())]
-        total_amount = sum(x['total_amount'] for x in invoices)
-        invoices = self.substract_balance_from_invoice_reports(invoices)
-        total_amount_after_substract = sum(x['total_amount'] for x in invoices)
-        if total_amount != 0:
-            ratio_taxes = total_amount_after_substract / total_amount
-        else:
-            ratio_taxes = 1
-        taxes = {code: self.currency.round(amount * ratio_taxes)
-            for code, amount in taxes.iteritems()}
-        return [invoices, sum(x['total_amount'] for x in invoices), taxes]
+                ratio_taxes = 1
+            taxes = {code: self.currency.round(amount * ratio_taxes)
+                for code, amount in taxes.iteritems()}
+            return [invoices, sum(x['total_amount'] for x in invoices), taxes]
 
     def substract_balance_from_invoice_reports(self, invoice_reports):
         outstanding_amount = self.balance_today - self.receivable_today
@@ -1621,7 +1628,8 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
             'readonly': Bool(Eval('contract_status')) & (
                     Eval('contract_status') != 'quote'),
 
-            }, depends=['direct_debit', 'contract_status'], ondelete='RESTRICT')
+            }, depends=['direct_debit', 'contract_status'],
+            ondelete='RESTRICT')
     suspended = fields.Function(fields.Boolean('Suspended'),
         'get_suspended')
     icon = fields.Function(fields.Char('Icon'),
