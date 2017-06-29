@@ -356,31 +356,34 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoogView):
             # Sync loan shares
             for covered in contract.covered_elements:
                 for option in covered.options:
-                    existing_shares = Option(option.id).loan_shares
+                    existing_shares = []
                     per_loan = defaultdict(list)
                     for share in option.loan_shares:
                         per_loan[share.loan.id].append(share)
                     if getattr(option, 'id', None):
                         prev_option = Option(option.id)
+                        existing_shares = prev_option.loan_shares
                         for loan_id in existing_loans[contract_id]:
                             if loan_id in per_loan:
                                 continue
-                            per_loan[loan_id] = prev_option.loan_shares
+                            per_loan[loan_id] = [x
+                                for x in prev_option.loan_shares
+                                if x.loan.id == loan_id]
                     new_shares = []
                     for loan_id, shares in per_loan.items():
                         if loan_id in final_loans:
                             new_shares += {x for x in shares if x.share}
                             continue
                         if loan_id in existing_loans[contract_id]:
-                            zero_found = None
+                            zero_found = False
                             for share in shares:
                                 if share.start_date == self.effective_date:
                                     share.share = 0
                                     zero_found = True
-                                if not share.start_date or (share.start_date <=
-                                        self.effective_date):
+                                elif not share.start_date or (share.start_date
+                                        <= self.effective_date):
                                     new_shares.append(share)
-                            if not zero_found:
+                            if shares and not zero_found:
                                 new_shares.append(Share(share=0, loan=loan_id,
                                         start_date=self.effective_date))
                         else:
