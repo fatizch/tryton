@@ -18,7 +18,7 @@ chain_wait commission.invoice.create || chain_end
 
 chain_step commission.invoice.post \
     --agent_type="$AGENT_TYPE" \
-    --with_draft="$WITH_DRAFT" \
+    --with_draft="$WITH_DRAFT"
 chain_wait commission.invoice.post || chain_end
 
 chain_end
