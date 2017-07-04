@@ -145,8 +145,7 @@ class PartyBalance(ModelCurrency, model.CoogView):
 
     __name__ = 'account.party_balance'
 
-    all_lines = fields.Many2Many('account.move.line', None, None,
-        'Lines', states={'invisible': True})
+    all_lines = fields.Char('Lines', states={'invisible': True})
     lines = fields.One2Many('account.party_balance.line', None,
         'Accounting Lines', readonly=True)
     scheduled_lines = fields.One2Many('account.party_balance.line', None,
@@ -228,10 +227,12 @@ class PartyBalance(ModelCurrency, model.CoogView):
 
     @model.CoogView.button_change(*_FIELDS)
     def refresh(self):
-        Line = Pool().get('account.party_balance.line')
+        pool = Pool()
+        MoveLine = pool.get('account.move.line')
+        Line = pool.get('account.party_balance.line')
         lines = []
         scheduled_lines = []
-        for x in self.all_lines:
+        for x in MoveLine.browse([int(x) for x in self.all_lines.split(',')]):
             if not self.show_line(x):
                 continue
             fake_line = Line()
@@ -299,6 +300,7 @@ class PartyBalance(ModelCurrency, model.CoogView):
         if self.contract:
             self.balance_today = self.contract.balance_today
             self.balance = self.contract.balance
+            self.is_balance_positive = self.balance_today > 0
         else:
             if self.party.receivable or self.party.receivable_today:
                 self.balance_today = self.party.receivable_today
@@ -354,7 +356,7 @@ class OpenPartyBalance(Wizard):
                     ('date', 'DESC'),
                     ])
         return {
-            'all_lines': [x.id for x in lines],
+            'all_lines': ','.join([str(x.id) for x in lines]),
             'hide_reconciled_lines': False,
             'hide_canceled_invoices': True,
             'from_date': coog_date.add_year(utils.today(), -1),
