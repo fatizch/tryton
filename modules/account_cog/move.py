@@ -56,8 +56,8 @@ class Move(export.ExportImportMixin):
         'get_synthesis_rec_name')
 
     @classmethod
-    def __register__(cls, module_name):
-        super(Move, cls).__register__(module_name)
+    def __setup__(cls):
+        super(Move, cls).__setup__()
         cls.origin.select = True
 
     def get_kind(self, name):

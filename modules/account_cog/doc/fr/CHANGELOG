@@ -1,5 +1,6 @@
+* OTH#0000 Ajout d'un index sur l'origine des mouvements comptables
 * FEA#6549 Amélioration des performances du calcul du mouvement d'annulation
-* FEA#6439 Possibilité de sommer des lignes intérmédiaires dans la balance agée
+* FEA#6439 Possibilité de sommer des lignes intermédiaires dans la balance agée
 
 Version 1.12 - 2017-04-28
 
