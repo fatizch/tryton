@@ -22,7 +22,7 @@ class MoveLine:
                 mandate = self.origin.sepa_mandate
             billing_info = self.contract.billing_information \
                 if self.contract else None
-            if billing_info:
+            if billing_info and journal.process_method == 'sepa':
                 payment['date'] = \
                     billing_info.get_direct_debit_planned_date(self) \
                     or payment['date']
