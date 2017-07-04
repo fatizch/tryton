@@ -3,12 +3,11 @@
 from trytond.pool import Pool
 
 import event
-from .contract import *
-from .party import *
-from .report_engine import *
-from .wizard import *
-from .rule_engine import *
+import contract
 import party
+import report_engine
+import wizard
+import rule_engine
 
 from trytond.modules.coog_core import expand_tree
 CoveredElementTreeExpansion = expand_tree('contract.covered_element')
@@ -19,34 +18,34 @@ def register():
     Pool.register(
         event.EventTypeAction,
         event.EventLog,
-        Party,
-        Contract,
-        CoveredElement,
-        CoveredElementVersion,
-        ContractOption,
-        ContractOptionVersion,
+        party.Party,
+        contract.Contract,
+        contract.CoveredElement,
+        contract.CoveredElementVersion,
+        contract.ContractOption,
+        contract.ContractOptionVersion,
         CoveredElementTreeExpansion,
-        CoveredElementPartyRelation,
-        ExtraPremium,
-        OptionExclusionKindRelation,
+        contract.CoveredElementPartyRelation,
+        contract.ExtraPremium,
+        contract.OptionExclusionKindRelation,
         OptionTreeExpansion,
-        ReportTemplate,
-        OptionsDisplayer,
-        WizardOption,
-        ExtraPremiumSelector,
-        CreateExtraPremiumOptionSelector,
-        OptionSelector,
-        ExclusionOptionSelector,
-        ExtraPremiumDisplay,
-        ExclusionSelector,
-        ExclusionDisplay,
-        RuleEngineRuntime,
+        report_engine.ReportTemplate,
+        wizard.OptionsDisplayer,
+        wizard.WizardOption,
+        wizard.ExtraPremiumSelector,
+        wizard.CreateExtraPremiumOptionSelector,
+        wizard.OptionSelector,
+        wizard.ExclusionOptionSelector,
+        wizard.ExtraPremiumDisplay,
+        wizard.ExclusionSelector,
+        wizard.ExclusionDisplay,
+        rule_engine.RuleEngineRuntime,
         module='contract_insurance', type_='model')
 
     Pool.register(
-        OptionSubscription,
-        ManageExtraPremium,
-        ManageExclusion,
-        CreateExtraPremium,
+        wizard.OptionSubscription,
+        wizard.ManageExtraPremium,
+        wizard.ManageExclusion,
+        wizard.CreateExtraPremium,
         party.PartyReplace,
         module='contract_insurance', type_='wizard')

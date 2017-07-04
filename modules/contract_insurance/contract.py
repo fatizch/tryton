@@ -1809,7 +1809,7 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
                 abs(self.rate) * 100)
 
     def get_time_limited(self, name):
-        return self.duration != 0 or self.manual_end_date
+        return bool(self.duration != 0 or self.manual_end_date)
 
     @fields.depends('option')
     def on_change_with_covered_element(self, name=None):

@@ -662,7 +662,7 @@ class EndorsementExtraPremium(relation_mixin(
 
     @classmethod
     def _ignore_fields_for_matching(cls):
-        return {'option'}
+        return {'option', 'contract_status', 'start_date'}
 
 
 class EndorsementExclusion(relation_mixin(

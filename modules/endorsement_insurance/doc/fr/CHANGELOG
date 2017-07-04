@@ -1,3 +1,5 @@
+* BUG#6510 Prise en compte du statut du contrat dans la gestion des surprimes
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Refonte de l'interface de gestion des éléments couverts
 

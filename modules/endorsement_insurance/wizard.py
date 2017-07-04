@@ -1097,6 +1097,12 @@ class ExtraPremiumDisplayer(model.CoogView):
                     If(Eval('to_add', False), 'green', 'grey'))),
             ]
 
+    @fields.depends('extra_premium')
+    def on_change_extra_premium(self):
+        for elem in self.extra_premium:
+            elem.contract_status = 'quote'
+        self.extra_premium = list(self.extra_premium)
+
 
 class ManageExtraPremium(EndorsementWizardStepMixin):
     'Manage Extra Premium'
@@ -1129,7 +1135,7 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
             'currency_digits', 'currency_symbol', 'duration', 'duration_unit',
             'end_date', 'flat_amount', 'is_discount', 'max_rate',
             'max_value', 'motive', 'option', 'rate', 'start_date',
-            'flat_amount_frequency']
+            'time_limited', 'flat_amount_frequency']
 
     @classmethod
     def create_displayer(cls, extra_premium, template):
@@ -1153,6 +1159,7 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
         displayer['extra_premium'] = [model.dictionarize(instance,
                 cls._extra_premium_fields_to_extract())]
         displayer['extra_premium'][0]['option'] = template['fake_option']
+        displayer['extra_premium'][0]['contract_status'] = 'quote'
         return displayer
 
     @classmethod
@@ -1542,13 +1549,19 @@ class NewExtraPremium(model.CoogView):
             covered_element.selected = False
         self.covered_elements = self.covered_elements
 
+    @fields.depends('new_extra_premium')
+    def on_change_new_extra_premium(self):
+        for elem in self.new_extra_premium:
+            elem.contract_status = 'quote'
+        self.new_extra_premium = list(self.new_extra_premium)
+
     @classmethod
     def _extra_premium_fields_to_extract(cls):
         return ['calculation_kind', 'capital_per_mil_rate', 'currency',
             'currency_digits', 'currency_symbol', 'duration', 'duration_unit',
             'end_date', 'flat_amount', 'is_discount', 'is_loan', 'max_rate',
             'max_value', 'motive', 'option', 'rate', 'start_date',
-            'flat_amount_frequency']
+            'time_limited', 'contract_status', 'flat_amount_frequency']
 
     def update_endorsement(self, wizard):
         all_endorsements = {x.contract.id: x
@@ -1569,6 +1582,7 @@ class NewExtraPremium(model.CoogView):
                 self._extra_premium_fields_to_extract()),
             }
         new_values['values'].pop('option', None)
+        options_to_create = set()
         for option_selector in self.options:
             if not option_selector.selected:
                 continue
@@ -1591,11 +1605,13 @@ class NewExtraPremium(model.CoogView):
                 elif option_selector.covered_element_endorsement_id:
                     option_endorsement.covered_element_endorsement = \
                         option_selector.covered_element_endorsement_id
+                    options_to_create.add(option_endorsement)
                 else:
                     covered_endorsement = new_covered_elements[
                         option_selector.covered_element_id]
                     covered_endorsement.options = list(
                         covered_endorsement.options) + [option_endorsement]
+                    options_to_create.add(option_endorsement)
 
             save_values = new_values.copy()
             if option_selector.option_endorsement_id:
@@ -1608,9 +1624,9 @@ class NewExtraPremium(model.CoogView):
                     ExtraPremiumEndorsement(**save_values)]
         if to_create:
             ExtraPremiumEndorsement.create(to_create)
-        if new_options:
+        if options_to_create:
             OptionEndorsement.create([x._save_values
-                    for x in new_options.itervalues()
+                    for x in options_to_create
                     if getattr(x, 'covered_element_endorsement', None)])
         if new_covered_elements:
             CoveredElementEndorsement.create([x._save_values
@@ -2044,6 +2060,7 @@ class StartEndorsement:
         contract = endorsements[0].contract
         default_values = {
             'new_extra_premium': [{
+                    'contract_status': 'quote',
                     'start_date': self.select_endorsement.effective_date,
                     'manual_start_date':
                     self.select_endorsement.effective_date,

@@ -1,3 +1,5 @@
+* BUG#6510 Handle contract status in extra_premium endorsement
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Rework covered element modification UI
 
