@@ -3,7 +3,7 @@
 from collections import defaultdict
 
 from sql import Null
-from sql.aggregate import Sum
+from sql.aggregate import Sum, Max
 from sql.conditionals import Case
 
 from trytond import backend
@@ -78,11 +78,21 @@ class Move(export.ExportImportMixin):
             if origin_item:
                 return '%s,%s' % (origin_item.__name__, origin_item.id)
 
-    def get_cancel_move(self, name):
-        return self.cancel_moves[0].id if self.cancel_moves else None
+    @classmethod
+    def get_cancel_move(cls, moves, name):
+        cursor = Transaction().connection.cursor()
+        res = {x.id: None for x in moves}
+        move = cls.__table__()
+        cursor.execute(*move.select(move.origin, Max(move.id),
+                where=move.origin.in_([str(x) for x in moves]),
+                group_by=move.origin
+                ))
+        for origin, cancel_move in cursor.fetchall():
+            res[int(origin.split(',')[1])] = cancel_move
+        return res
 
     def get_is_origin_canceled(self, name):
-        return (self.cancel_move is not None
+        return (bool(self.cancel_move)
             or self.origin and self.origin.__name__ == 'account.move')
 
     def get_synthesis_rec_name(self, name):

@@ -4,7 +4,6 @@ import copy
 from sql.aggregate import Max
 from sql import Literal, Null
 
-from trytond.modules.coog_core import UnionMixin
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder, Eval
