@@ -917,11 +917,10 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
 
     @classmethod
     def search_rec_name(cls, name, clause):
-        return ['OR', [
-                ('party.full_name',) + tuple(clause[1:]),
-                ], [
-                ('item_desc.rec_name',) + tuple(clause[1:]),
-                ],
+        return ['OR',
+            [('party.full_name',) + tuple(clause[1:])],
+            [('item_desc.rec_name',) + tuple(clause[1:])],
+            [('name',) + tuple(clause[1:])],
             ]
 
     @classmethod
