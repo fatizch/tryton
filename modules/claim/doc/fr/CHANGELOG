@@ -1,3 +1,5 @@
+* BUG#6573 Correction d'un blocage lié à la tentative d'afficher les sinistres par la synthèse d'un tiers
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout du paramétrage u motif de fermeture des sinistres
 * FEA#0000 Avertissement si la date de déclaration de sinistre est antérieur à la date d'arrêt

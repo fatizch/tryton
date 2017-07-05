@@ -1,3 +1,5 @@
+* BUG#6573 Fix crash related to the attempt to display losses from party synthesis
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Add closing reason configuration on losses
 * FEA#0000 Add user warning if claim's declaration date is prior to loss start date

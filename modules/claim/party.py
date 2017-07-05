@@ -7,7 +7,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import PYSONEncoder
 from trytond.wizard import Wizard
 
-from trytond.modules.coog_core import model, fields, coog_string, UnionMixin
+from trytond.modules.coog_core import model, fields, coog_string
 
 __metaclass__ = PoolMeta
 
@@ -124,7 +124,7 @@ class SynthesisMenuOpen(Wizard):
             'res_model': 'claim',
             'pyson_domain': domain,
             'views': [(Pool().get('ir.ui.view').search([('xml_id', '=',
-                    'claim.claim_view_tree')
+                    'claim.claim_view_list')
                         ])[0].id, 'tree'),
                     (Pool().get('ir.ui.view').search([('xml_id', '=',
                         'claim.claim_view_form')
