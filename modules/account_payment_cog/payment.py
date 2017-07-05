@@ -12,7 +12,7 @@ from trytond.model import Workflow, ModelView, Unique
 from trytond.wizard import StateView, Button, StateTransition, Wizard
 from trytond.wizard import StateAction
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Not, In, Bool, If, PYSONEncoder
+from trytond.pyson import Eval, Not, In, Bool, PYSONEncoder
 
 from trytond.modules.account_payment.payment import KINDS
 from trytond.modules.coog_core import export, fields, model
@@ -787,41 +787,51 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
             ('processing', 'Processing'),
             ('to_acknowledge', 'To Acknowledge'),
             ('acknowledged', 'Acknowledged'),
+            ('failed', 'Failed'),
             ], 'State', readonly=True, select=True)
     payment_date_min = fields.Function(fields.Date(
             'Payment Date Min'),
         'get_payment_date_min', searcher='search_payment_date_min')
     process_method = fields.Function(
         fields.Char('Process Method'), 'on_change_with_process_method')
+    color = fields.Function(fields.Char('color'), 'get_color')
 
     @classmethod
     def __setup__(cls):
         super(Group, cls).__setup__()
         cls._transitions |= set((
                 ('processing', 'to_acknowledge'),
+                ('processing', 'failed'),
                 ('to_acknowledge', 'acknowledged'),
-                ('acknowledged', 'to_acknowledge'),
+                ('to_acknowledge', 'failed'),
+                ('failed', 'acknowledged'),
                 ('to_acknowledge', 'processing'),
                 ('processing', 'acknowledged'),
                 ))
         cls._buttons.update({
                 'processing': {
                     'invisible': (Eval('state') == 'acknowledged') |
-                    (Eval('state') == 'processing'),
+                    (Eval('state') == 'processing') |
+                    (Eval('state') == 'failed'),
                     },
                 'to_acknowledge': {
                     'invisible': (Eval('state') == 'acknowledged') |
-                    (Eval('state') == 'to_acknowledge'),
+                    (Eval('state') == 'to_acknowledge') |
+                    (Eval('state') == 'failed'),
                     },
                 'acknowledge': {
                     'invisible': (Eval('state') == 'acknowledged'),
+                    },
+                'fail': {
+                    'invisible': (Eval('state') == 'failed') |
+                    (Eval('state') == 'to_acknowledge'),
                     },
                 })
         cls._error_messages.update({
                 'reject_reason_not_found': 'The reason code on journal %s '
                 'is not found',
                 'prematurely_ack_group': 'The payment group %(number)s '
-                'should not be acknowledged: %(date)s < %(payment_date)s'
+                'should not be acknowledged: %(date)s < %(payment_date)s',
                 })
 
     @classmethod
@@ -850,10 +860,7 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
     @classmethod
     def view_attributes(cls):
         return super(Group, cls).view_attributes() + [
-            ('/tree', 'colors', If(
-                    Eval('state') == 'processing',
-                    'blue',
-                    'black')),
+            ('/tree', 'colors', Eval('color')),
             ]
 
     @classmethod
@@ -868,6 +875,23 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
     @staticmethod
     def default_state():
         return 'processing'
+
+    def get_color(self, name):
+        if self.state == 'processing':
+            return 'blue'
+        elif self.state == 'failed':
+            return 'grey'
+        return 'black'
+
+    @classmethod
+    @Workflow.transition('failed')
+    def _failed(cls, groups):
+        pass
+
+    @classmethod
+    @ModelView.button_action('account_payment_cog.manual_payment_fail_wizard')
+    def fail(cls, groups):
+        pass
 
     @classmethod
     @ModelView.button
@@ -1109,7 +1133,9 @@ class ManualPaymentFail(model.CoogWizard):
                 'not_same_payment_method': 'Selected payments must have the '
                 'same payment method.',
                 'payment_must_be_succeed_processing': 'Selected payments '
-                'status must be succeeded or processing'
+                'status must be succeeded or processing',
+                'multiple_journal_fail': 'You cannot fail payments with '
+                'differents journal process methods at the same time',
                 })
 
     def default_fail_information(self, values):
@@ -1122,6 +1148,12 @@ class ManualPaymentFail(model.CoogWizard):
             merged_ids = [x.merged_id for x in payments]
             active_ids = [x.id for x in Payment.search(
                     [('merged_id', 'in', merged_ids)])]
+        if active_model == 'account.payment.group':
+            Group = pool.get('account.payment.group')
+            groups = Group.browse(active_ids)
+            if len({x.process_method for x in groups}) > 1:
+                self.raise_user_error('multiple_journal_fail')
+            active_ids = [p.id for group in groups for p in payments]
         if any([x.state not in ('succeeded', 'processing')
                 for x in Payment.browse(active_ids)]):
             self.raise_user_error('payment_must_be_succeed_processing')
@@ -1131,12 +1163,17 @@ class ManualPaymentFail(model.CoogWizard):
 
     def transition_fail_payments(self):
         pool = Pool()
+        active_model = Transaction().context.get('active_model')
         Payment = pool.get('account.payment')
         if not self.fail_information.process_method:
             self.raise_user_error('not_same_payment_method')
         Payment.manual_set_reject_reason(list(self.fail_information.payments),
             self.fail_information.reject_reason)
         Payment.fail(list(self.fail_information.payments))
+        if active_model == 'account.payment.group':
+            Group = pool.get('account.payment.group')
+            groups = list({p.group for p in self.fail_information.payments})
+            Group._failed(groups)
         return 'end'
 
 

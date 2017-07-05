@@ -6,10 +6,12 @@ this repository contains the full copyright notices and license terms. -->
         <group id="payment_group_status" colspan="4" col="5">
             <label name="state"/>
             <field name="state"/>
-            <group id="payment_group_buttons" col="3">
+            <field name="color" invisible="1"/>
+            <group id="payment_group_buttons" col="4">
                 <button string="Processing" name="processing"/>
                 <button string="To Acknowledge" name="to_acknowledge"/>
                 <button string="Acknowledge" name="acknowledge"/>
+                <button string="Fail" name="fail"/>
             </group>
         </group>
     </xpath>

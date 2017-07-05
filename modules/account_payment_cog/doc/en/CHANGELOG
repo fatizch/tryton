@@ -1,3 +1,4 @@
+* FEA#6565 Add the 'Failed' state on account payments groups
 * BUG#6345 Regroup payments by party for batch processing
 * BUG#6498 Hide the current state button transition on account payment groups
 * OTH#0000 Hotfix: Add super on the process payment default_start method

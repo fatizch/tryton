@@ -44,6 +44,11 @@ class Group:
         if payments:
             Payment.succeed(payments)
 
+    @classmethod
+    def reject_payment_group(cls, groups, *args):
+        super(Group, cls).reject_payment_group(groups, *args)
+        cls._failed(groups)
+
 
 class Payment:
     __metaclass__ = PoolMeta
