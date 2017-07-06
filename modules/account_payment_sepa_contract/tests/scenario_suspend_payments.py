@@ -262,7 +262,6 @@ create_payment.execute('create_payments')
 # #Comment# A payment should be created
 Payment = Model.get('account.payment')
 payment, = Payment.find([()])
-payment.click('approve')
 
 # #Comment# Process payment
 process_payment = Wizard('account.payment.process', [payment])

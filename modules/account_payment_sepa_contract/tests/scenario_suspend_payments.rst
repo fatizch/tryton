@@ -244,7 +244,6 @@ Create invoice::
     >>> create_payment.execute('create_payments')
     >>> Payment = Model.get('account.payment')
     >>> payment, = Payment.find([()])
-    >>> payment.click('approve')
     >>> process_payment = Wizard('account.payment.process', [payment])
     >>> process_payment.execute('pre_process')
     >>> payment.reload()
