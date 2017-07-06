@@ -2,12 +2,12 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .contract import *
-from .loan import *
+import contract
+import loan
 
 
 def register():
     Pool.register(
-        Contract,
-        Loan,
+        contract.Contract,
+        loan.Loan,
         module='loan_apr_fr', type_='model')

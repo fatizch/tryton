@@ -139,6 +139,12 @@ def prorata_365(date1, date2):
     return nb_days / Decimal(365)
 
 
+def prorata_exact(date1, date2):
+    assert date2 >= date1
+    nb_days = (date2 - date1).days
+    return nb_days / Decimal(((date1 + relativedelta(years=1)) - date1).days)
+
+
 def number_of_years_between(date1, date2, prorata_method=None):
     if date1 > date2:
         return -number_of_years_between(date2, date1, prorata_method)

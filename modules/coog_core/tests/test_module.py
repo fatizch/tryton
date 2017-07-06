@@ -231,6 +231,28 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(coog_date.get_last_day_of_last_month(
             datetime.date(2016, 3, 15)), datetime.date(2016, 2, 29))
 
+        # test exact prorata
+        start_date = datetime.date(2015, 2, 12)
+        end_date = datetime.date(2016, 3, 10)
+        self.assertEqual(coog_date.number_of_years_between(start_date,
+                end_date), 1)
+        self.assertEqual(coog_date.number_of_years_between(end_date,
+                start_date), -1)
+        self.assertEqual(coog_date.number_of_years_between(start_date,
+                end_date, prorata_method=coog_date.prorata_exact),
+            1 + Decimal(28) / Decimal(366))
+
+        # Test leap year
+        start_date = datetime.date(2016, 2, 29)
+        end_date = datetime.date(2017, 3, 27)
+        self.assertEqual(coog_date.number_of_years_between(start_date,
+                end_date, prorata_method=coog_date.prorata_exact),
+            1 + Decimal(28) / Decimal(365))
+        # Test negative
+        self.assertEqual(coog_date.number_of_years_between(end_date,
+                start_date, prorata_method=coog_date.prorata_exact),
+            -1 - Decimal(28) / Decimal(365))
+
     def test0035_functional_error(self):
         class PatchedView(self.View, model.FunctionalErrorMixIn):
             @classmethod
