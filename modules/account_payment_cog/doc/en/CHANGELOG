@@ -1,3 +1,4 @@
+* OTH#0000 Fix corrupted translation file because of merge
 * FEA#6542 Allow to delete payments groups
 * FEA#6565 Add the 'Failed' state on account payments groups
 * BUG#6345 Regroup payments by party for batch processing

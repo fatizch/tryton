@@ -693,7 +693,7 @@ msgstr ""
 msgctxt "model:account.payment.group.process,name:"
 msgid "Payment Group Processing Batch"
 msgstr ""
-msgstr "Batch de création des groupes de paiement"
+"Batch de création des groupes de paiement"
 
 msgctxt "model:account.payment.group.process,name:"
 msgid "Payment Group Processing Batch"

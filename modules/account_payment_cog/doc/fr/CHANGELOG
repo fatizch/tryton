@@ -1,3 +1,4 @@
+* OTH#0000 Correctif fichier de traduction corrompu suite à un merge.
 * FEA#6542 Ajout de la possibilité de supprimer des groupes de paiements
 * FEA#6565 Ajout de l'état 'Echoué' sur les groupes de paiements
 * BUG#6345 Regrouper les paiements par tiers pour le traitement par batch
