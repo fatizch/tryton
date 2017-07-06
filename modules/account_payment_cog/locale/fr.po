@@ -692,11 +692,6 @@ msgstr ""
 
 msgctxt "model:account.payment.group.process,name:"
 msgid "Payment Group Processing Batch"
-msgstr ""
-"Batch de création des groupes de paiement"
-
-msgctxt "model:account.payment.group.process,name:"
-msgid "Payment Group Processing Batch"
 msgstr "Batch de traitement des groupes de paiement"
 
 msgctxt "model:account.payment.journal.failure_action,name:"
@@ -1061,11 +1056,6 @@ msgid "Process"
 msgstr "Traiter"
 
 # Custom translations below
-
-msgctxt ""
-"model:ir.action.act_window.domain,name:account_payment.act_payment_form_domain_failed"
-msgid "Failed"
-msgstr "Rejeté"
 
 msgctxt "selection:account.move.line,payment_kind:account_payment."
 msgid "Receivable"
