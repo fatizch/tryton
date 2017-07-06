@@ -284,6 +284,8 @@ class Group:
             ('done', 'Done'),
             ('canceled', 'Canceled'),
             ]
+        cls._buttons['generate_message'].update({
+                'invisible': Eval('journal_method') != 'sepa'})
 
     def get_sepa_template(self):
         if self.kind == 'payable':

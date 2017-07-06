@@ -6,6 +6,22 @@ msgctxt "error:account.payment.creation:"
 msgid "The email is required on the party %(party)s"
 msgstr "L'email est requis pour le tiers %(party)s"
 
+msgctxt "error:account.payment.creation:"
+msgid ""
+"The paybox payment must have a payment date less or equal than today "
+"(payment date: %(payment_date)s)"
+msgstr ""
+"Le paiement paybox doit avoir une date inférieure ou égale à aujourd'hui "
+"(date de paiement: %s(payment_date)s)"
+
+msgctxt "error:account.payment:"
+msgid "Multiple parties is not supported"
+msgstr "La création du paiement avec plusieurs tiers n'est pas supportée"
+
+msgctxt "field:account.payment,line_valid:"
+msgid "Line Not Valid"
+msgstr "Ligne non valide"
+
 msgctxt "field:account.payment.payment_creation.start,payment_url:"
 msgid "Payment URL"
 msgstr "URL de paiement"
@@ -21,6 +37,28 @@ msgstr "Cliquer pour ouvrir"
 msgctxt "model:account.payment.process.paybox_url,name:"
 msgid "Process Paybox Url"
 msgstr "Traitement Paybox URL"
+
+msgctxt "model:ir.action,name:act_create_paybox_from_rejected_payment"
+msgid "Create Paybox Payment"
+msgstr "Créer un paiement Paybox"
+
+msgctxt "model:ir.action,name:act_process_paybox_payment"
+msgid "Process Paybox Payment"
+msgstr "Traitement Paiement Paybox"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_payment_group_domain_non_paybox"
+msgid "Payment Groups"
+msgstr "Groupes de paiements"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_payment_group_domain_paybox"
+msgid "Paybox Groups"
+msgstr "Groupes Paybox"
+
+msgctxt "view:account.payment:"
+msgid "Generate Paybox Payment"
+msgstr "Générer le paiement Paybox"
 
 msgctxt "wizard_button:account.payment.process,paybox_url_view,end:"
 msgid "close"

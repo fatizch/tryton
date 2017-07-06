@@ -1,3 +1,4 @@
+* FEA#6542 Improvements: Payment creation from rejected payment, user interface enhancements
 * FEA#6565 Fails the payment group on paybox payment failure
 
 Version 1.12 - 2017-04-28

@@ -1,3 +1,4 @@
+* OTH#0000 Le bouton "Générer le message" est désormais caché si le groupe de paiement n'est pas de type SEPA
 * BUG#6345 regrouper les paiments SEPA par mandat ou payeur pour le traitement par batch
 * FEA#6441 Recherche automatique des mandats via leur tiers / numéro de compte
 * FEA#0000 Diviser le batch de rejet de paiement pour améliorer les performances

@@ -4,4 +4,5 @@ this repository contains the full copyright notices and license terms. -->
 <form>
     <label name="paybox_url"/>
     <field name="paybox_url" widget="url" xexpand="0" xfill="0"/>
+    <field name="paybox_url" xexpand="1" xfill="1"/>
 </form>
