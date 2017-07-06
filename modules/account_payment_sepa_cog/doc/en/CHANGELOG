@@ -1,3 +1,4 @@
+* FEA#6541 Support payments groups deletion and update the last sepa date on journal
 * OTH#0000 Properly hide "Generate Message" button when it is not a SEPA payment group
 * BUG#6345 regroup SEPA payments by mandate or payer for batch processing
 * FEA#6441 Automatically search for mandates by their party / account number

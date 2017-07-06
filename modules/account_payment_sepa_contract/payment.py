@@ -6,7 +6,8 @@ from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields
 from trytond.transaction import Transaction
 
-from trytond.modules.account_payment_sepa_cog import MergedBySepaPartyMixin
+from trytond.modules.account_payment_sepa_cog.payment import \
+    MergedBySepaPartyMixin
 
 __all__ = [
     'Mandate',

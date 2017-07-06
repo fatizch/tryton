@@ -12,7 +12,7 @@ from trytond.model import Workflow, ModelView, Unique
 from trytond.wizard import StateView, Button, StateTransition, Wizard
 from trytond.wizard import StateAction
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Not, In, Bool, PYSONEncoder
+from trytond.pyson import Eval, Not, In, Bool, If, PYSONEncoder, And
 
 from trytond.modules.account_payment.payment import KINDS
 from trytond.modules.coog_core import export, fields, model
@@ -50,6 +50,7 @@ class Journal(export.ExportImportMixin):
         depends=['default_reject_fee'])
     default_reject_fee = fields.Many2One('account.fee',
         'Default Fee', ondelete='RESTRICT')
+    allow_group_deletion = fields.Boolean('Allow Group Deletion')
 
     @classmethod
     def __setup__(cls):
@@ -437,7 +438,8 @@ class MergedPayments(MergedPaymentsMixin):
         pass
 
 
-class Payment(export.ExportImportMixin, Printable):
+class Payment(export.ExportImportMixin, Printable,
+        model.FunctionalErrorMixIn):
     __name__ = 'account.payment'
     _func_key = 'id'
 
@@ -462,6 +464,11 @@ class Payment(export.ExportImportMixin, Printable):
     related_invoice_business_kind = fields.Function(fields.Char(
             'Related Invoice Business Kind'),
         'get_related_invoice_business_kind')
+    journal_method = fields.Function(fields.Char(
+            'Journal Method'),
+        'get_journal_method')
+    can_approve = fields.Function(fields.Boolean('Can Approve'),
+        'get_can_approve')
 
     @classmethod
     def __register__(cls, module_name):
@@ -481,6 +488,9 @@ class Payment(export.ExportImportMixin, Printable):
                 'payments_blocked_for_party': 'Payments blocked for party %s',
                 'missing_payments': 'Payments with same merged_id must '
                 'be failed at the same time.',
+                'transition_approve_refused': 'The transition to the approved '
+                'state is not allowed on the payment with the merged id '
+                '%(merged_id)s'
                 })
         cls._buttons.update({
                 'button_fail_payments': {
@@ -498,6 +508,13 @@ class Payment(export.ExportImportMixin, Printable):
                     },
                 })
         cls.state_string = cls.state.translated('state')
+        approve_states = cls._buttons['approve']['invisible']
+        cls._buttons['approve']['invisible'] = And(
+            approve_states, ~Eval('can_approve'))
+
+        cls._transitions |= set((
+                ('processing', 'approved'),
+                ))
 
     @classmethod
     def view_attributes(cls):
@@ -514,6 +531,15 @@ class Payment(export.ExportImportMixin, Printable):
                 'states',
                 {'invisible': True}
                 )]
+
+    def get_can_approve(self, name):
+        if self.journal and self.journal.allow_group_deletion:
+            return self.state in ('draft', 'processing')
+        return self.state == 'draft'
+
+    def get_journal_method(self, name):
+        if self.journal:
+            return self.journal.process_method
 
     def get_reject_description(self, name):
         pool = Pool()
@@ -657,11 +683,17 @@ class Payment(export.ExportImportMixin, Printable):
 
     @classmethod
     def approve(cls, payments):
-        for payment in payments:
-            if (payment.kind == 'payable'
-                    and payment.party.block_payable_payments):
-                cls.raise_user_error(
-                    'payments_blocked_for_party', payment.party.rec_name)
+        with model.error_manager():
+            for payment in payments:
+                if (payment.kind == 'payable'
+                        and payment.party.block_payable_payments):
+                    cls.append_functional_error(
+                        'payments_blocked_for_party', payment.party.rec_name)
+                if not payment.can_approve:
+                    cls.append_functional_error(
+                        'transition_approve_refused', {
+                            'merged_id': payment.merged_id,
+                            })
         super(Payment, cls).approve(payments)
 
     @classmethod
@@ -832,6 +864,10 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
                 'is not found',
                 'prematurely_ack_group': 'The payment group %(number)s '
                 'should not be acknowledged: %(date)s < %(payment_date)s',
+                'non_deletable': 'The payment group %(number)s is not '
+                'deletable',
+                'group_with_invalid_payments': 'The payment group %(number)s '
+                'has payment(s) which does not allow the deletion',
                 })
 
     @classmethod
@@ -862,6 +898,11 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
         return super(Group, cls).view_attributes() + [
             ('/tree', 'colors', Eval('color')),
             ]
+
+    @classmethod
+    def delete(cls, instances):
+        cls.delete_payments(instances)
+        super(Group, cls).delete(instances)
 
     @classmethod
     def _export_skips(cls):
@@ -922,6 +963,47 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
                 payments.extend(group.processing_payments)
         if payments:
             Payment.succeed(payments)
+
+    @classmethod
+    def delete_payments(cls, groups):
+        to_process = defaultdict(list)
+
+        def order_state(p):
+            return p.state
+        with model.error_manager():
+            for group in groups:
+                group.check_deletable()
+                payments = sorted(group.payments, key=order_state)
+                for state, payments in groupby(payments, order_state):
+                    to_process[state].extend(list(payments))
+        actions = cls.get_delete_actions()
+        for state, payments in to_process.iteritems():
+            next_state = state
+            while next_state:
+                function, next_state = actions[next_state]
+                function(payments)
+
+    @classmethod
+    def get_delete_actions(cls):
+        Payment = Pool().get('account.payment')
+        return {
+            'processing': (lambda x: Payment.approve(x), 'approved'),
+            'approved': (lambda x: Payment.draft(x), 'draft'),
+            'draft': (lambda x: Payment.delete(x), None),
+            }
+
+    def is_deletable(self):
+        if self.journal:
+            return self.journal.allow_group_deletion
+
+    def check_deletable(self):
+        if not self.is_deletable():
+            self.append_functional_error('non_deletable',
+                {'number': self.number})
+        if any(x.state in ('succeeded', 'failed')
+                for x in self.payments):
+            self.append_functional_error('group_with_invalid_payments',
+                {'number': self.number})
 
     @classmethod
     def update_payments(cls, groups, method_name, state=None):

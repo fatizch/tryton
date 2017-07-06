@@ -6,5 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <label name="default_reject_fee"/>
         <field name="default_reject_fee"/>
         <field name="failure_actions" colspan="4"/>
+        <label name="allow_group_deletion"/>
+        <field name="allow_group_deletion"/>
     </xpath>
 </data>

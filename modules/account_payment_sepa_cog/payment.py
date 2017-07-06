@@ -319,7 +319,17 @@ class Group:
             ]
 
     @classmethod
-    def update_last_sepa_receivable_date(cls):
+    def delete(cls, instances):
+        update_sepa_date = any(x.journal.process_method == 'sepa'
+            and x.kind == 'receivable' for x in instances)
+        Message = Pool().get('account.payment.sepa.message')
+        Message.delete(sum([list(g.sepa_messages) for g in instances], []))
+        super(Group, cls).delete(instances)
+        if update_sepa_date:
+            cls.update_last_sepa_receivable_date(overwrite=True)
+
+    @classmethod
+    def update_last_sepa_receivable_date(cls, overwrite=False):
         pool = Pool()
         payment = pool.get('account.payment').__table__()
         Journal = Pool().get('account.payment.journal')
@@ -341,6 +351,7 @@ class Group:
                 continue
             journal = Journal(journal_id)
             if (not journal.last_sepa_receivable_payment_creation_date or
+                    overwrite or
                     last_date >
                     journal.last_sepa_receivable_payment_creation_date):
                 journal.last_sepa_receivable_payment_creation_date = last_date
@@ -381,7 +392,7 @@ class Group:
         where_clause = (payment.date <= treatment_date) & \
             (payment.kind == payment_kind) & \
             (payment.state == 'approved') & \
-            (payment.group != None) & \
+            (payment.group != Null) & \
             (payment.journal.in_(journals_ids))
         if payment_kind == 'receivable':
             where_clause &= (payment.sepa_mandate != None)  # NOQA

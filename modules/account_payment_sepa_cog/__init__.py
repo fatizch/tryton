@@ -2,40 +2,40 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .batch import *
-from .payment import *
-from .bank import *
-from .test_case import *
-from .account import *
-from .party import *
-from .move import *
+import batch
+import payment
+import bank
+import test_case
+import account
+import party
+import move
 
 
 def register():
     Pool.register(
-        Party,
-        PaymentTreatmentBatch,
-        PaymentSepaDoBatch,
-        PaymentFailBatch,
-        PaymentFailMessageCreationBatch,
-        Payment,
-        Mandate,
-        Group,
-        Bank,
-        BankAccount,
-        BankAccountNumber,
-        InvoiceLine,
-        Journal,
-        TestCaseModel,
-        Configuration,
-        Message,
-        PaymentCreationStart,
-        MoveLine,
-        MergedPayments,
-        PaymentGroupCreationBatch,
-        PaymentGroupProcessBatch,
-        PaymentJournalUpdateSepa,
+        party.Party,
+        batch.PaymentTreatmentBatch,
+        batch.PaymentSepaDoBatch,
+        batch.PaymentFailBatch,
+        batch.PaymentFailMessageCreationBatch,
+        payment.Payment,
+        payment.Mandate,
+        payment.Group,
+        bank.Bank,
+        bank.BankAccount,
+        bank.BankAccountNumber,
+        payment.InvoiceLine,
+        payment.Journal,
+        test_case.TestCaseModel,
+        account.Configuration,
+        payment.Message,
+        payment.PaymentCreationStart,
+        move.MoveLine,
+        payment.MergedPayments,
+        batch.PaymentGroupCreationBatch,
+        batch.PaymentGroupProcessBatch,
+        batch.PaymentJournalUpdateSepa,
         module='account_payment_sepa_cog', type_='model')
     Pool.register(
-        PaymentCreation,
+        payment.PaymentCreation,
         module='account_payment_sepa_cog', type_='wizard')

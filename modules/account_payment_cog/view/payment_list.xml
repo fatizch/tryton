@@ -29,6 +29,8 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/tree" position="inside">
         <field name="merged_id"/>
         <field name="color" tree_invisible="1"/>
+        <field name='journal_method' tree_invisible="1"/>
+        <field name="can_approve" tree_invisible="1"/>
     </xpath>
     <xpath expr="/tree/field[@name='amount']" position="replace_attributes">
         <field name="amount" sum="Amount"/>
