@@ -734,7 +734,7 @@ msgstr "Batch de réussite des paiements"
 msgctxt "model:account.payment.update,name:"
 msgid "Payment Updating Batch"
 msgstr ""
-msgstr "Batch de mise à jour des groupes de paiement "
+"Batch de mise à jour des groupes de paiement "
 
 msgctxt "model:event.type,name:event_fail_payment"
 msgid "Fail Payment"
