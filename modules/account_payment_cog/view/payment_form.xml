@@ -16,6 +16,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="state"/>
         <field name='journal_method' invisible="1"/>
         <field name="can_approve" invisible="1"/>
+        <field name="line_reconciled" invisible="1"/>
     </xpath>
     <xpath expr="/form" position="inside">
         <newline/>

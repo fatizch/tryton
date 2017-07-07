@@ -469,6 +469,9 @@ class Payment(export.ExportImportMixin, Printable,
         'get_journal_method')
     can_approve = fields.Function(fields.Boolean('Can Approve'),
         'get_can_approve')
+    line_reconciled = fields.Function(fields.Boolean(
+            'Line Reconciled'),
+        'get_line_reconciled', searcher='search_line_reconciled')
 
     @classmethod
     def __register__(cls, module_name):
@@ -537,6 +540,24 @@ class Payment(export.ExportImportMixin, Printable,
             return self.state in ('draft', 'processing')
         return self.state == 'draft'
 
+    def get_line_reconciled(self, name):
+        if self.line:
+            return bool(self.line.reconciliation)
+
+    @classmethod
+    def search_line_reconciled(cls, name, clause):
+        reverse = {
+            '=': '!=',
+            '!=': '=',
+            }
+        if clause[1] in reverse:
+            if clause[2]:
+                return [('line.reconciliation', reverse[clause[1]], None)]
+            else:
+                return [('line.reconciliation', clause[1], None)]
+        else:
+            return []
+
     def get_journal_method(self, name):
         if self.journal:
             return self.journal.process_method
@@ -564,8 +585,17 @@ class Payment(export.ExportImportMixin, Printable,
         return '_'.join(icon_names)
 
     def get_color(self, name=None):
-        return {'draft': 'grey', 'processing': 'blue', 'succeeded': 'green',
-            'failed': 'red'}.get(self.state, 'black')
+        key = self.state
+        if key == 'failed':
+            key = '%s_%s' % (key, 'reconciled' if self.line.reconciliation else
+                'not_reconciled')
+        return {
+            'draft': 'grey',
+            'processing': 'blue',
+            'succeeded': 'green',
+            'failed_not_reconciled': 'red',
+            'failed_reconciled': 'grey',
+            }.get(key, 'black')
 
     def get_synthesis_rec_name(self, name):
         Date = Pool().get('ir.date')

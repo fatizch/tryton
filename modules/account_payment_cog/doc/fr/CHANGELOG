@@ -1,3 +1,4 @@
+* FEA#6588 Ajout d'un onglet à part pour les paiements rejetés réconcilés
 * OTH#0000 Correctif fichier de traduction corrompu suite à un merge.
 * FEA#6542 Ajout de la possibilité de supprimer des groupes de paiements
 * FEA#6565 Ajout de l'état 'Echoué' sur les groupes de paiements
