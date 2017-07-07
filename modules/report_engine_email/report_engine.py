@@ -364,10 +364,10 @@ class ReportCreate:
             return 'end'
         return next_state
 
-    def finalize_report(self, report, instance):
+    def finalize_report(self, report, instances):
         if self.select_template.template.input_kind == 'email':
-            return None
-        return super(ReportCreate, self).finalize_report(report, instance)
+            return
+        return super(ReportCreate, self).finalize_report(report, instances)
 
     def do_open_email(self, action):
         if (not self.select_template.template or

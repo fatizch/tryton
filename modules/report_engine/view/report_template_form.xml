@@ -30,6 +30,8 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <label name="split_reports"/>
     <field name="split_reports"/>
+    <label name="recipient_needed"/>
+    <field name="recipient_needed"/>
     <notebook colspan="4">
         <page string="Versions" id="versions">
             <field name="versions"/>

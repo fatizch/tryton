@@ -34,7 +34,7 @@ from trytond.wizard import StateTransition
 from trytond.report import Report
 from trytond.exceptions import UserError
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, Equal
+from trytond.pyson import Eval, Equal, Bool
 from trytond.model import DictSchemaMixin
 from trytond.server_context import ServerContext
 from trytond.filestore import filestore
@@ -150,6 +150,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     nb_of_possible_process_methods = fields.Function(
         fields.Integer('Number of possible process methods',),
         'on_change_with_nb_of_possible_process_methods')
+    recipient_needed = fields.Boolean('Recipient Needed',
+        help='If True, the recipient will be required when printing the '
+        'document. This will make simultaneous printing impossible for this '
+        'model.')
 
     @classmethod
     def __setup__(cls):
@@ -177,6 +181,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         cursor = Transaction().connection.cursor()
         report_template = TableHandler(cls)
         to_update = cls.__table__()
+
+        # Migration from 1.10 : Set recipient_needed to True for existing
+        # reports
+        has_recipient_needed = report_template.column_exist('recipient_needed')
 
         # Migration from 1.10 Rename output kind to input_kind kind
         has_column_output_kind = report_template.column_exist('output_kind')
@@ -214,6 +222,11 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 "SET process_method = 'libre_office' "
                 "WHERE process_method = 'open_document'")
             report_template.drop_column('template_extension')
+
+        if not has_recipient_needed:
+            cursor.execute(*to_update.update(
+                    columns=[to_update.recipient_needed],
+                    values=[Literal(True)]))
 
         if not has_column_output_kind:
             cursor.execute(*to_update.update(columns=[to_update.input_kind],
@@ -257,6 +270,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @classmethod
     def default_process_method(cls):
         return 'libre_office'
+
+    @classmethod
+    def default_recipient_needed(cls):
+        return False
 
     @classmethod
     def default_kind(cls):
@@ -854,7 +871,8 @@ class ReportGenerate(CoogReport):
                 template.genshi_evaluated_output_filename)
             return fn, ext[1:]
         separator = cls.get_filename_separator()
-        date_suffix = cls.get_date_suffix(party.lang)
+        lang = getattr(party, 'lang', utils.get_user_language())
+        date_suffix = cls.get_date_suffix(lang)
         time_suffix = cls.get_time_suffix()
         return separator.join([x for x in [template.name, object_.rec_name,
                     date_suffix, time_suffix] if x]), None
@@ -874,13 +892,19 @@ class ReportGenerate(CoogReport):
                 return round(amount, number)
 
         report_context['round'] = custom_round
-        report_context['Party'] = pool.get('party.party')(data['party'])
-        report_context['Address'] = pool.get('party.address')(data['address'])
+        if data['party']:
+            report_context['Party'] = pool.get('party.party')(data['party'])
+        else:
+            report_context['Party'] = None
+        if data['address']:
+            report_context['Address'] = pool.get('party.address')(
+                data['address'])
+        else:
+            report_context['address'] = None
         try:
             report_context['Lang'] = report_context['Party'].lang.code
         except AttributeError:
-            report_context['Lang'] = pool.get('ir.lang').search([
-                    ('code', '=', 'en')])[0]
+            report_context['Lang'] = utils.get_user_language()
         if data['sender']:
             report_context['Sender'] = pool.get('party.party')(data['sender'])
         else:
@@ -893,7 +917,7 @@ class ReportGenerate(CoogReport):
 
         def format_date(value, lang=None):
             if lang is None:
-                lang = report_context['Party'].lang
+                lang = report_context['Lang']
             return pool.get('ir.lang').strftime(value, lang.code, lang.date)
 
         report_context.update({k: v for k, v in data.iteritems() if k not in
@@ -1142,59 +1166,108 @@ class ReportCreate(wizard_context.PersistentContextWizard):
                 'No contact available.',
                 })
 
+    @property
+    def multi_objects(self):
+        ids = Transaction().context.get('active_ids', None)
+        return ids and len(ids) > 1
+
     def get_instance(self):
         transaction = Transaction()
         ActiveModel = Pool().get(transaction.context.get('active_model'))
         return ActiveModel(transaction.context.get('active_id'))
 
+    def get_instances(self):
+        transaction = Transaction()
+        ActiveModel = Pool().get(transaction.context.get('active_model'))
+        return ActiveModel.browse(transaction.context.get('active_ids'))
+
     def transition_init_templates(self):
-        instance = self.get_instance()
         kind = Transaction().context.get('report_kind', None)
-        possible_templates = instance.get_available_doc_templates(kind)
-        self.select_template.possible_templates = possible_templates
-        if len(self.select_template.possible_templates) == 1:
-            self.select_template.template = possible_templates[0]
-        possible_recipients = instance.get_recipients()
-        if not possible_recipients:
-            self.raise_user_error('contact_not_provided')
-        self.select_template.possible_recipients = possible_recipients
-        self.select_template.recipient = possible_recipients[0]
-        return 'select_template'
+        if self.multi_objects:
+            instances = self.get_instances()
+            possible_templates = None
+            for instance in instances:
+                if possible_templates is None:
+                    possible_templates = set(
+                        instance.get_available_doc_templates(kind))
+                else:
+                    possible_templates &= set(
+                        instance.get_available_doc_templates(kind))
+            self.select_template.possible_templates = [
+                x for x in possible_templates if not x.recipient_needed]
+            if len(self.select_template.possible_templates) == 1:
+                self.select_template.template = \
+                    self.select_template.possible_templates[0]
+                if not self.select_template.template.parameters:
+                    self.select_template.parameters = {}
+                    self.select_template.recipient = None
+                    self.select_template.recipient_address = None
+                    return 'generate'
+            return 'select_template'
+        else:
+            instance = self.get_instance()
+            possible_templates = instance.get_available_doc_templates(kind)
+            self.select_template.possible_templates = possible_templates
+            if len(self.select_template.possible_templates) == 1:
+                self.select_template.template = possible_templates[0]
+            possible_recipients = instance.get_recipients()
+            if possible_recipients:
+                self.select_template.possible_recipients = possible_recipients
+                self.select_template.recipient = possible_recipients[0]
+            return 'select_template'
 
     def default_select_template(self, fields):
         return self.select_template._default_values
 
-    def create_report_context(self):
-        instance = self.get_instance()
+    def create_report_context(self, instances):
+        template = self.select_template.template
+        instance = instances[0]
+        if self.multi_objects or not template.recipient_needed:
+            recipient = None
+            recipient_address = None
+        else:
+            recipient = self.select_template.recipient
+            recipient_address = self.select_template.recipient_address
         template = self.select_template.template
         sender = instance.get_sender()
         sender_address = instance.get_sender_address()
         return {
             'id': instance.id,
-            'ids': [instance.id],
+            'ids': [x.id for x in instances],
             'model': instance.__name__,
             'doc_template': [template.id],
-            'party': self.select_template.recipient.id,
-            'address': self.select_template.recipient_address.id
-            if self.select_template.recipient_address else None,
+            'party': recipient.id if recipient else None,
+            'address': recipient_address.id if recipient_address else None,
             'sender': sender.id if sender else None,
             'sender_address': sender_address.id if sender_address else None,
             'origin': None,
             }
 
     def transition_generate(self):
-        self.remove_edm_temp_files()
-        instance = self.get_instance()
-        report_context = self.create_report_context()
         pool = Pool()
         TemplateParameter = pool.get('report.template.parameter')
         template = self.select_template.template
-        if self.select_template.parameters:
-            report_context.update(TemplateParameter.get_data_for_report(
-                    self.select_template.parameters))
-        report = self.report_execute([instance.id], template, report_context)
-        self.finalize_report(report, instance)
-        if self.select_template.template.modifiable_before_printing:
+        parameters = {}
+        if template.parameters:
+            parameters = TemplateParameter.get_data_for_report(
+                self.select_template.parameters)
+        self.remove_edm_temp_files()
+        instances = self.get_instances()
+        reports = []
+        groups = [instances] if not template.split_reports else [
+            [x] for x in instances]
+        self.wizard_context['reports'] = []
+        self.wizard_context['records'] = []
+        self.wizard_context['report_context'] = []
+        for group in groups:
+            report_context = self.create_report_context(group)
+            report_context.update(parameters)
+            report = self.report_execute([x.id for x in group], template,
+                report_context)
+            self.finalize_report(report, group)
+            reports.append(report)
+        self.preview_document.reports = reports
+        if template.modifiable_before_printing:
             return 'preview_document'
         return 'open_document'
 
@@ -1210,10 +1283,9 @@ class ReportCreate(wizard_context.PersistentContextWizard):
         ReportModel = Pool().get('report.generate', type='report')
         records = ReportModel._get_records(ids, report_context['model'],
             report_context)
-        self.wizard_context.update({
-                'records': records,
-                'report_context': report_context,
-                })
+        self.wizard_context['records'].append((tuple(ids), records))
+        self.wizard_context['report_context'].append(
+            (tuple(ids), report_context))
         ext, filedata, prnt, file_basename = ReportModel.execute(ids,
             report_context)
         os_extsep = os.extsep if ext else ''
@@ -1226,80 +1298,114 @@ class ReportCreate(wizard_context.PersistentContextWizard):
             'extension': ext,
             'template': doc_template,
             }
-        self.wizard_context['report'] = report
+        self.wizard_context['reports'].append((tuple(ids), report))
         return report
 
-    def finalize_report(self, report, instance):
-        self.preview_document.reports = [report]
+    def finalize_report(self, report, instances):
+        instance = instances[0]
         output = instance.get_document_filename()
-        self.preview_document.output_report_name = coog_string.slugify(output,
+        report['output_report_name'] = coog_string.slugify(output,
             lower=False)
-        self.preview_document.output_report_filepath = \
-            self.preview_document.on_change_with_output_report_filepath()
-        self.preview_document.recipient = self.select_template.recipient.id
+        report['output_report_filepath'] = self._get_report_filepath(report)
+
+    def _get_report_filepath(self, report):
+        if (self.select_template.template.output_format == 'pdf' and
+                not os.path.isfile(report['server_filepath'])):
+            # Generate unique temporary output report filepath
+            return os.path.join(tempfile.mkdtemp(), coog_string.slugify(
+                    report['output_report_name'], lower=False) + '.pdf')
+        else:
+            return report['server_filepath']
 
     def default_preview_document(self, fields):
         return self.preview_document._default_values
 
+    def _line_to_display(self):
+        for line in self.preview_document.reports:
+            if hasattr(line, '_displayed'):
+                continue
+            return line
+
     def do_open_document(self, action):
+        to_open = self._line_to_display()
+        to_open._displayed = True
         return self.action_open_report(action,
-            Transaction().context.get('email_print'))
+            Transaction().context.get('email_print'), to_open)
 
     def transition_open_document(self):
-        if not self.select_template.template.format_for_internal_edm:
-            return 'end'
-        return 'post_generation'
+        if not self._line_to_display():
+            if not self.select_template.template.format_for_internal_edm:
+                return 'end'
+            return 'post_generation'
+        return 'open_document'
 
-    def action_open_report(self, action, email_print):
+    def action_open_report(self, action, email_print, report):
         ext = self.select_template.template.get_extension('output_format')
-        if (ext and not self.preview_document.reports[
-                0].server_filepath.endswith(ext)):
+        if (ext and not report.server_filepath.endswith(ext)):
             Report = Pool().get('report.generate_from_file', type='report')
             filename = Report.convert_from_file(
-                [self.preview_document.reports[0].server_filepath],
-                self.preview_document.output_report_filepath,
+                [report.server_filepath],
+                report.output_report_filepath,
                 self.select_template.template.get_extension('input_kind'),
                 ext)
         else:
-            filename = [self.preview_document.reports[0].server_filepath][0]
+            filename = report.server_filepath
         action['email_print'] = email_print
         action['direct_print'] = Transaction().context.get('direct_print')
         action['email'] = {'to': ''}
         return action, {'output_report_filepath': filename}
 
     def transition_post_generation(self):
-        instance = self.get_instance()
-        instance.post_generation()
-        contact = self.set_contact()
-        contact.save()
-        attachment = self.set_attachment(
-            contact.for_object_ref or contact.party)
-        attachment.save()
-        self.wizard_context['attachment'] = attachment
+        pool = Pool()
+        ContactHistory = pool.get('party.interaction')
+        Attachment = pool.get('ir.attachment')
+        instances = self.get_instances()
+        for instance in instances:
+            instance.post_generation()
+        reports = {cur_id: report
+            for ids, report in self.wizard_context['reports']
+            for cur_id in ids}
+        self.wizard_context['attachments'] = []
+        contacts, attachments = [], []
+        for instance in instances:
+            contact = self.set_contact(instance)
+            if contact:
+                contacts.append(contact)
+            attachment = self.set_attachment(instance, reports[instance.id])
+            if attachment:
+                attachments.append(attachment)
+                self.wizard_context['attachments'].append(
+                    (instance.id, attachment))
+        if contacts:
+            ContactHistory.save(contacts)
+        if attachments:
+            Attachment.save(attachments)
         return 'end'
 
-    def set_contact(self):
+    def set_contact(self, instance):
         ContactHistory = Pool().get('party.interaction')
         contact = ContactHistory()
-        contact.party = self.select_template.recipient
+        recipient = self.select_template.recipient
+        if recipient is None:
+            recipient = instance.get_recipients()[0]
+        contact.party = recipient
         contact.media = 'mail'
         contact.address = self.select_template.recipient_address
         contact.title = self.select_template.template.name
-        contact.for_object_ref = self.get_instance().get_object_for_contact()
+        contact.for_object_ref = instance.get_object_for_contact()
         return contact
 
-    def set_attachment(self, resource):
-        report = self.preview_document.reports[0]
-        report_name_wo_ext, ext = report.file_basename, report.extension
-        with open(self.preview_document.reports[0].server_filepath, 'r') as f:
+    def set_attachment(self, instance, report):
+        report_name_wo_ext, ext = report['file_basename'], report['extension']
+        with open(report['server_filepath'], 'r') as f:
             original_data = bytearray(f.read())
         return self.select_template.template._create_attachment_from_report({
                 'original_ext': ext.split(os.extsep)[-1],
                 'report_type': ext.split(os.extsep)[-1],
-                'object': self.get_instance(),
-                'resource': resource,
+                'object': instance,
+                'resource': instance.get_object_for_contact(),
                 'original_data': original_data,
-                'origin': self.get_instance(),
+                'origin': instance,
                 'report_name_wo_ext': report_name_wo_ext,
                 })
 
@@ -1314,16 +1420,20 @@ class ReportCreateSelectTemplate(model.CoogView):
         depends=['possible_templates'])
     possible_templates = fields.Many2Many('report.template', None, None,
         'Possible Templates', states={'invisible': True})
-    recipient = fields.Many2One('party.party', 'Recipient', required=True,
-        states={'invisible': ~Eval('template')},
+    recipient_needed = fields.Boolean('Recipient Needed',
+        states={'invisible': True})
+    recipient = fields.Many2One('party.party', 'Recipient',
+        states={'invisible': ~Eval('template') | ~Eval('recipient_needed'),
+            'required': Bool(Eval('recipient_needed', False))},
         domain=[('id', 'in', Eval('possible_recipients'))],
-        depends=['possible_recipients'])
+        depends=['possible_recipients', 'recipient_needed'])
     possible_recipients = fields.Many2Many('party.party', None, None,
         'Possible Recipients', states={'invisible': True})
     recipient_address = fields.Many2One('party.address', 'Recipient Address',
         domain=[('party', '=', Eval('recipient'))], states={
-            'invisible': ~Eval('recipient') | ~Eval('template')},
-        depends=['recipient', 'template'])
+            'invisible': ~Eval('recipient') | ~Eval('template') |
+            ~Eval('recipient_needed')},
+        depends=['recipient', 'recipient_needed', 'template'])
     parameters = fields.Dict('report.template.parameter', 'Parameters',
         states={'invisible': ~Eval('parameters')}, depends=['parameters'])
 
@@ -1333,9 +1443,11 @@ class ReportCreateSelectTemplate(model.CoogView):
             self.recipient = None
             self.on_change_recipient()
             self.parameters = {}
+            self.recipient_needed = False
         else:
             self.parameters = {
                 str(x.name): None for x in self.template.parameters}
+            self.recipient_needed = self.template.recipient_needed
 
     @fields.depends('recipient', 'recipient_address')
     def on_change_recipient(self):
@@ -1352,19 +1464,6 @@ class ReportCreatePreview(model.CoogView):
 
     reports = fields.One2Many('report.create.preview.line', None,
         'Reports', states={'readonly': True})
-    output_report_name = fields.Char('Output Report Name')
-    output_report_filepath = fields.Char('Output Report Filepath',
-        states={'invisible': True})
-
-    @fields.depends('output_report_name', 'reports')
-    def on_change_with_output_report_filepath(self, name=None):
-        if all([x.template.output_format == 'pdf' and not os.path.isfile(
-                        x.server_filepath) for x in self.reports]):
-            # Generate unique temporary output report filepath
-            return os.path.join(tempfile.mkdtemp(), coog_string.slugify(
-                        self.output_report_name, lower=False) + '.pdf')
-        else:
-            return self.reports[0].server_filepath
 
 
 class ReportCreatePreviewLine(model.CoogView):

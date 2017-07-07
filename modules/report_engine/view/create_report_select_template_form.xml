@@ -13,4 +13,5 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <field name="possible_templates"/>
     <field name="possible_recipients"/>
+    <field name="recipient_needed"/>
 </form>

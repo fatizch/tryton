@@ -1,9 +1,10 @@
+* BUG#6569 Remise en place de la possibilité d'imprimer plusieurs entités simultanément
 * OTH#0000 Correction: migration qui remplace la valeur Null par chaîne vide pour la colonne 'kind' de 'report_template'
 * OTH#0000 Corrections du domaine sur les type de modèle de courrier
 * BUG#6438 Restauration du fonctionnement des paramètres sur les courriers
 * OTH#0000 Supprimer les champs inutilisés sur le vue du report_template_version
 * FEA#6373 Ajout du type de traitement asynchrone immédiat sur les actions par type d'événement
-* OTH#0000 Corriger import manquant 
+* OTH#0000 Correction d'import manquant : Printable
 * OTH#0000 Correctif: Utilisation de template.get_extension au lieu de template.output_format
 * FEA#2227 Stocker les modèles de courriers dans la base de données
 * FEA#0000 Ajout de la fonction strftime dans le contexte du rapport pour formatter les dates de toutes les façons possibles

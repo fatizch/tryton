@@ -3,7 +3,4 @@
 this repository contains the full copyright notices and license terms. -->
 <form>
     <field name="reports" colspan="4"/>
-    <label name="output_report_name"/>
-    <field name="output_report_name" colspan="3"/>
-    <field name="output_report_filepath"/>
 </form>
