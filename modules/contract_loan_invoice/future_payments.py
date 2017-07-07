@@ -40,6 +40,7 @@ class ShowAllInvoices(Wizard):
             'currency_symbol': contract.currency_symbol,
             'amount': sum(x['amount'] for x in future_invoices),
             'tax_amount': sum(x['tax_amount'] for x in future_invoices),
+            'fee': sum(x['fee'] for x in future_invoices),
             'total_amount': sum(x['total_amount'] for x in future_invoices),
             'contract': contract.id,
             'contract.rec_name': contract.rec_name,
@@ -55,6 +56,8 @@ class ShowAllInvoicesMain(model.CoogView):
         depends=['currency_digits'], readonly=True)
     tax_amount = fields.Numeric('Tax Amount',
         digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'], readonly=True)
+    fee = fields.Numeric('Fee', digits=(16, Eval('currency_digits', 2)),
         depends=['currency_digits'], readonly=True)
     total_amount = fields.Numeric('Total Premium Amount',
         digits=(16, Eval('currency_digits', 2)),
@@ -79,6 +82,8 @@ class ShowAllInvoicesLine(model.CoogView):
         depends=['currency_digits'])
     tax_amount = fields.Numeric('Tax Amount',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
+    fee = fields.Numeric('Fee', digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])
     total_amount = fields.Numeric('Total Amount',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     currency_digits = fields.Integer('Currency Digits', readonly=True)

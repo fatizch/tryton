@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form col="6">
+<form col="8">
     <label name="contract"/>
-    <field name="contract" colspan="5"/>
+    <field name="contract" colspan="7"/>
     <label name="amount"/>
     <group id="amount">
         <field name="amount" xexpand="0"/>
@@ -14,11 +14,16 @@ this repository contains the full copyright notices and license terms. -->
         <field name="tax_amount" xexpand="0"/>
         <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
     </group>
+    <label name="fee"/>
+    <group id="fee">
+        <field name="fee" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
     <label name="total_amount"/>
     <group id="total_amount">
         <field name="total_amount" xexpand="0"/>
         <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
     </group>
-    <field name="invoices" colspan="6" expand_toolbar="0"/>
+    <field name="invoices" colspan="8" expand_toolbar="0"/>
     <field name="currency_digits" invisible="1"/>
 </form>

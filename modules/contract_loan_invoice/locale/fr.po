@@ -34,6 +34,10 @@ msgctxt "field:contract.invoice.show_all.line,end:"
 msgid "End"
 msgstr "Terminer"
 
+msgctxt "field:contract.invoice.show_all.line,fee:"
+msgid "Fee"
+msgstr "Frais"
+
 msgctxt "field:contract.invoice.show_all.line,id:"
 msgid "ID"
 msgstr "ID"
@@ -77,6 +81,10 @@ msgstr "Précision"
 msgctxt "field:contract.invoice.show_all.show,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
+
+msgctxt "field:contract.invoice.show_all.show,fee:"
+msgid "Fee"
+msgstr "Frais"
 
 msgctxt "field:contract.invoice.show_all.show,id:"
 msgid "ID"
@@ -337,6 +345,10 @@ msgstr "A chaque échéance"
 msgctxt "view:contract.invoice.show_all.line:"
 msgid "Amount"
 msgstr "Montant"
+
+msgctxt "view:contract.invoice.show_all.line:"
+msgid "Fees"
+msgstr "Frais"
 
 msgctxt "view:contract.invoice.show_all.line:"
 msgid "Taxes"

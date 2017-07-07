@@ -12,6 +12,9 @@ this repository contains the full copyright notices and license terms. -->
     <field name="tax_amount" sum="Taxes">
         <suffix name="currency_symbol"/>
     </field>
+    <field name="fee" sum="Fees">
+        <suffix name="currency_symbol"/>
+    </field>
     <field name="total_amount" sum="Total">
         <suffix name="currency_symbol"/>
     </field>
