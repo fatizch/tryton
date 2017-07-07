@@ -11,12 +11,6 @@ msgid "All selected records are not receivable"
 msgstr "Tous les enregistrements ne sont pas à recevoir"
 
 msgctxt "error:account.statement.create:"
-msgid "All selected records must have a link to an invoice"
-msgstr ""
-"Tous les enregistrements selectionnés doivent avoir un lien vers une "
-"quittance"
-
-msgctxt "error:account.statement.create:"
 msgid "No company found"
 msgstr "Pas de société trouvée"
 

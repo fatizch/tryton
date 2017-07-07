@@ -1,3 +1,5 @@
+* OTH#0000 L'assistant de création des relevés ne requiert plus de quittances
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Le bouton annuler pouvait être confondu avec le fait de fermer la fenêtre
 * FEA#0000 Le bouton annuler pouvait être confondu avec le fait de fermer la fenêtre le bouton n'est donc plus affiché sur la vue détail mais dans la barre d'action

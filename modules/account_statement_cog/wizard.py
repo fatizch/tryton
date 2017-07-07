@@ -113,8 +113,6 @@ class CreateStatement(Wizard):
                 'no_currency_for_company': 'No currency for company %s',
                 'selection_not_receivable': 'All selected records are not '
                 'receivable',
-                'no_invoice_for_selection': 'All selected records must have a '
-                'link to an invoice',
                 'amount_not_match': 'The statement amount differs from '
                 'calculation: %s > %s (calculated)',
                 'missing_cheque_number': 'The cheque number is required',
@@ -211,9 +209,6 @@ class CreateStatement(Wizard):
                 self.raise_user_error('too_many_parties')
             if any((x.account.kind != 'receivable' for x in instances)):
                 self.raise_user_error('selection_not_receivable')
-            if any((not x.origin or str(x.move.origin).split(',')[0]
-                        != 'account.invoice' for x in instances)):
-                self.raise_user_warning('no_invoice_for_selection')
             values['party'] = instances[0].party.id
         elif active_model == 'account.invoice':
             if len(list({x.party.id for x in instances})) > 1:
@@ -315,10 +310,14 @@ class CreateStatement(Wizard):
         sorted_lines = sorted(self.start.lines,
             key=self.group_key)
         total_amount = Decimal('0')
-        for invoice, lines in groupby(sorted_lines,
+        for origin, lines in groupby(sorted_lines,
                 self.group_key):
             lines = list(lines)
             for line in lines:
+                if origin and origin.__name__ == 'account.invoice':
+                    invoice = origin
+                else:
+                    invoice = None
                 statement_line = Line(**self.get_line_values(statement,
                         invoice, line))
                 total_amount += line.amount
