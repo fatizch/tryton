@@ -1265,7 +1265,7 @@ class ManualPaymentFail(model.CoogWizard):
             groups = Group.browse(active_ids)
             if len({x.process_method for x in groups}) > 1:
                 self.raise_user_error('multiple_journal_fail')
-            active_ids = [p.id for group in groups for p in payments]
+            active_ids = [p.id for group in groups for p in group.payments]
         if any([x.state not in ('succeeded', 'processing')
                 for x in Payment.browse(active_ids)]):
             self.raise_user_error('payment_must_be_succeed_processing')
