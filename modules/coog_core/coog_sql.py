@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from sql.operators import UnaryOperator
 from sql.functions import Function as SqlFunction
 
 
@@ -17,4 +18,15 @@ class TextCat(SqlFunction):
 
     '''
     __slots__ = ()
-    _function = 'textcat'
+    _function = 'TEXTCAT'
+
+
+class Interval(UnaryOperator):
+    '''
+        Allows to define Date intervals.
+
+        Exemple:
+            Interval('1 year')
+    '''
+    __slots__ = ()
+    _operator = 'INTERVAL'
