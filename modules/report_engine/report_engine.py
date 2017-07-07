@@ -802,6 +802,42 @@ class ReportGenerate(CoogReport):
     __name__ = 'report.generate'
 
     @classmethod
+    def _get_records(cls, ids, model, data):
+        translated = super(ReportGenerate, cls)._get_records(ids, model,
+            data)
+        if not translated:
+            return translated
+        TranslateModel = cls._get_report_record_class(translated[0].__class__,
+            model)
+        return [TranslateModel(id) for id in ids]
+
+    @classmethod
+    def get_report_record_class(cls, klass, model):
+        Model = Pool().get(model)
+
+        class TranslateModel(klass):
+            def __init__(self, *args, **kwargs):
+                klass.__init__(self, *args, **kwargs)
+                self.__report_fields = {}
+
+            def __getattr__(self, name):
+                try:
+                    return klass.__getattr__(self, name)
+                except AttributeError:
+                    if name in self.__report_fields:
+                        return self.__report_fields[name]
+                    report_method = '_report_field_' + name
+                    if not hasattr(Model, report_method):
+                        raise
+                # Assume super call went at least to id2record init
+                record = klass._languages[self._language][self.id]
+                value = getattr(record, report_method)()
+                self.__report_fields[name] = value
+                return value
+
+        return TranslateModel
+
+    @classmethod
     def process_flat_document(cls, ids, data):
         pool = Pool()
         name_giver = data.get('resource', None) or pool.get(data['model'])(
@@ -919,6 +955,17 @@ class ReportGenerate(CoogReport):
             if lang is None:
                 lang = report_context['Lang']
             return pool.get('ir.lang').strftime(value, lang.code, lang.date)
+
+        report_context['_stored_variables'] = {}
+
+        def setVar(var_name, value):
+            report_context['_stored_variables'][var_name] = value
+
+        def getVar(var_name, default=''):
+            return report_context['_stored_variables'].get(var_name, default)
+
+        report_context['setVar'] = setVar
+        report_context['getVar'] = getVar
 
         report_context.update({k: v for k, v in data.iteritems() if k not in
                 ['party', 'address', 'sender', 'sender_address']})
