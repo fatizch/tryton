@@ -812,7 +812,7 @@ class ReportGenerate(CoogReport):
         return [TranslateModel(id) for id in ids]
 
     @classmethod
-    def get_report_record_class(cls, klass, model):
+    def _get_report_record_class(cls, klass, model):
         Model = Pool().get(model)
 
         class TranslateModel(klass):
