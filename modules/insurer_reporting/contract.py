@@ -41,10 +41,10 @@ class Contract:
         for contract in contracts:
             first_not_null_invoice = Pool().get('contract.invoice').search([
                     ('contract', '=', contract.id),
-                    ('total_amount', '!=', 0)],
+                    ('invoice.total_amount', '!=', 0)],
                 order=[('start', 'ASC')], limit=1)
             if first_not_null_invoice:
-                res[contract.id] = first_not_null_invoice[0]
+                res[contract.id] = first_not_null_invoice[0].id
         return res
 
     @classmethod
@@ -56,7 +56,7 @@ class Contract:
                     ('invoice_state', '=', 'paid')],
                 order=[('start', 'DESC')], limit=1)
             if last_paid_invoice:
-                res[contract.id] = last_paid_invoice[0]
+                res[contract.id] = last_paid_invoice[0].id
         return res
 
     @classmethod
