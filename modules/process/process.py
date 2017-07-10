@@ -181,17 +181,15 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         super(Process, cls).__register__(module_name)
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().connection.cursor()
-        if TableHandler.table_exist('process-menu'):
+        if 'menu_items' in cls._fields:
             menu = Table('ir_ui_menu')
             process_menu = Table('process-menu')
             cursor.execute(*process_menu.select(process_menu.menu))
             menu_ids = [r[0] for r in cursor.fetchall()]
             TableHandler.drop_table('process-menu', 'process-menu')
-            #  cursor.execute(*process_menu.delete())
             cursor.execute(*menu.delete(
                     where=(menu.id.in_(menu_ids))))
 
-        if TableHandler.table_exist('process_process-act_window'):
             action_table = Table('process_process-act_window')
             view = Table('ir_ui_view')
             act_window = Table('ir_action_act_window')
@@ -206,8 +204,6 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
             ids = [r[0] for r in cursor.fetchall()]
             cursor.execute(*act_window.delete(where=(act_window.id.in_(ids))))
             cursor.execute(*view.delete(where=(view.module == 'process_views')))
-            TableHandler.drop_table(
-                'process_process-act_window', 'process_process-act_window')
 
     @classmethod
     def validate(cls, processes):
