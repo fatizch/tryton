@@ -229,6 +229,17 @@ class View(ExportImportMixin):
     __name__ = 'ir.ui.view'
     _func_key = 'name'
 
+    _view_id_cache = Cache('ir_ui_view_id')
+
+    @classmethod
+    def get_view_from_xml_id(cls, xml_id):
+        view = cls._view_id_cache.get(xml_id, None)
+        if view is None:
+            view, = cls.search([('xml_id', '=', xml_id)], limit=1)
+            cls._view_id_cache.set(xml_id, view.id)
+            return view.id
+        return view
+
     @classmethod
     def get_rng(cls, type_):
         rng = super(View, cls).get_rng(type_)

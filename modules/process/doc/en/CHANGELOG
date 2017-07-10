@@ -1,3 +1,5 @@
+* FEA#6394 Split process views into a seperate view for each process step
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Add process configuration entry point
 * FEA#0000 Possibility to configure the default start step

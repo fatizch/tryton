@@ -1,3 +1,5 @@
+* FEA#6394 Diviser les vues de processus en une vue séparée pour chaque étape de processus
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout d'un écran de configuration des processus
 * FEA#0000 Possibilité de configurer l'étape de départ par défaut

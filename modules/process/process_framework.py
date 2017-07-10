@@ -216,11 +216,21 @@ class ProcessFramework(ModelSQL, ModelView):
         instruction = button_data[0]
         Process = Pool().get('process')
         process = Process(button_data[1])
-        try:
-            return getattr(cls, 'build_instruction_%s_method' % instruction)(
-                process, button_data[2:])
-        except AttributeError:
-            return void
+        method = getattr(cls, 'build_instruction_%s_method' % instruction)(
+            process, button_data[2:])
+
+        def toggle_process_view_wrapper(*args, **kwargs):
+            result = method(*args, **kwargs)
+            instance = args[0][0]
+            language = Transaction().context.get('language')
+
+            View = Pool().get('ir.ui.view')
+            view_name = 'process_view_%s_%s' % (
+                str(instance.current_state.id), language)
+            view, = View.search([('name', '=', view_name)], limit=1)
+
+            return [result, 'toggle_view:%s' % str(view.id)]
+        return toggle_process_view_wrapper
 
     def set_state(self, value, process_name=None):
         if value is None:

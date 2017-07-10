@@ -114,7 +114,6 @@ class StartEndorsement:
 
     def do_full_contract_revision_action(self, action):
         pool = Pool()
-        Action = pool.get('ir.action')
         Contract = pool.get('contract')
         Process = pool.get('process')
         contract = Contract(self.select_endorsement.contract.id)
@@ -135,18 +134,17 @@ class StartEndorsement:
         if not candidates:
             self.raise_user_error('no_process_found')
 
-        process = candidates[0]
-        action = process.get_act_window()
-        values = Action.get_action_values('ir.action.act_window', [action.id])
-        values[0]['views'] = [view for view in values[0]['views']
-            if view[1] == 'form']
-
         # Update contract state
+        process = candidates[0]
         contract.current_state = process.first_step()
         contract.current_state.step.execute_before(contract)
         contract.save()
 
-        return values[0], {'res_id': [contract.id]}
+        action = process.get_action(contract)
+
+        return action, {
+            'res_id': [contract.id]
+            }
 
     def do_resume_contract_process(self, action):
         endorsement = Pool().get('endorsement')(

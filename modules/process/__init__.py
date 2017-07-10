@@ -17,10 +17,8 @@ def register():
         process.ProcessTransition,
         process.ProcessAction,
         process.TransitionAuthorization,
-        process.ProcessMenuRelation,
         process.ProcessStepRelation,
         process.StepGroupRelation,
-        process.ProcessActWindow,
         ir.Model,
         configuration.ProcessConfiguration,
         module='process', type_='model')

@@ -7,7 +7,6 @@ this repository contains the full copyright notices and license terms. -->
         <!-- # Main Menu # -->
         <!-- ############# -->
         <menuitem name="Process Main Menu" id="process_menu_id" sequence="11" icon="workflow"/>
-        <menuitem parent="process_menu_id" sequence="100" id="menu_process_lang" name="Processes" icon="workflow"/>
         <!-- Group Access to Menu -->
         <record model="res.group" id="group_process_admin">
             <field name="name">Process Administration</field>

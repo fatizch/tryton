@@ -49,9 +49,6 @@ this repository contains the full copyright notices and license terms. -->
         <page name="xml_tree">
             <field name="xml_tree"/>
         </page>
-        <page name="menu_items">
-            <field name="menu_items"/>
-        </page>
     </notebook>
     <button string="Update Menu" name="update_view"/>
 </form>

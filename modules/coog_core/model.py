@@ -590,6 +590,22 @@ class CoogView(ModelView, FunctionalErrorMixIn):
     def getter_void(self, name):
         pass
 
+    @staticmethod
+    def button_toggle(xml_view_id):
+        def decorator(func):
+            func = ModelView.button(func)
+
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                View = Pool().get('ir.ui.view')
+
+                assert func(*args, **kwargs) is None
+
+                view_id = View.get_view_from_xml_id(xml_view_id)
+                return 'toggle_view:%s' % str(view_id)
+            return wrapper
+        return decorator
+
 
 class ExpandTreeMixin(object):
     must_expand_tree = fields.Function(

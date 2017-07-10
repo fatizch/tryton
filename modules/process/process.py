@@ -7,7 +7,7 @@ import ast
 import json
 from unidecode import unidecode
 
-from sql import Literal
+from sql import Literal, Table
 
 from trytond import backend
 from trytond.model import ModelView, ModelSQL, Unique
@@ -25,7 +25,6 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Status',
     'ProcessStepRelation',
-    'ProcessMenuRelation',
     'Process',
     'TransitionAuthorization',
     'ProcessAction',
@@ -34,7 +33,6 @@ __all__ = [
     'StepGroupRelation',
     'GenerateGraph',
     'GenerateGraphWizard',
-    'ProcessActWindow',
     ]
 
 
@@ -103,14 +101,27 @@ class ProcessStepRelation(export.ExportImportMixin, ModelSQL, ModelView):
             res = super(ProcessStepRelation, self).get_rec_name(name)
         return res
 
+    @classmethod
+    def delete(cls, relations):
+        pool = Pool()
+        Lang = pool.get('ir.lang')
+        View = pool.get('ir.ui.view')
+        languages = Lang.search(['OR',
+                ('translatable', '=', True),
+                ('code', '=', 'en'),
+                ])
 
-class ProcessMenuRelation(ModelSQL):
-    'Process Menu Relation'
+        def get_view_name(x):
+            names = []
+            for lang in languages:
+                names.append('process_view_%s_%s' % (x.id, lang.code))
+            return names
 
-    __name__ = 'process-menu'
-
-    process = fields.Many2One('process', 'Process', ondelete='CASCADE')
-    menu = fields.Many2One('ir.ui.menu', 'Menu', ondelete='RESTRICT')
+        view_names = map(get_view_name, relations)
+        views = View.search(
+            [('name', 'in', [x for names in view_names for x in names])])
+        View.delete(views)
+        super(ProcessStepRelation, cls).delete(relations)
 
 
 class Process(ModelSQL, ModelView, model.TaggedMixin):
@@ -142,11 +153,8 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
     step_button_group_position = fields.Selection([
             ('', 'None'), ('right', 'Right'), ('bottom', 'Bottom')],
         'Process Overview Positioning')
-    menu_items = fields.Many2Many('process-menu', 'process', 'menu', 'Menus')
     menu_icon = fields.Selection('list_icons', 'Menu Icon')
     menu_name = fields.Char('Menu name')
-    action_windows = fields.One2Many('process.process-act_window',
-        'process', 'Action Windows', delete_missing=True)
     end_step_name = fields.Char('End Step Name')
 
     @classmethod
@@ -168,6 +176,40 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
                 })
 
     @classmethod
+    def __register__(cls, module_name):
+        # process view migration
+        super(Process, cls).__register__(module_name)
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().connection.cursor()
+        if TableHandler.table_exist('process-menu'):
+            menu = Table('ir_ui_menu')
+            process_menu = Table('process-menu')
+            cursor.execute(*process_menu.select(process_menu.menu))
+            menu_ids = [r[0] for r in cursor.fetchall()]
+            TableHandler.drop_table('process-menu', 'process-menu')
+            #  cursor.execute(*process_menu.delete())
+            cursor.execute(*menu.delete(
+                    where=(menu.id.in_(menu_ids))))
+
+        if TableHandler.table_exist('process_process-act_window'):
+            action_table = Table('process_process-act_window')
+            view = Table('ir_ui_view')
+            act_window = Table('ir_action_act_window')
+            act_window_view = Table('ir_action_act_window_view')
+            query_table = action_table.join(act_window_view,
+                condition=(
+                    action_table.action_window == act_window_view.act_window))
+            cursor.execute(
+                *query_table.select(
+                    act_window_view.act_window, act_window_view.view))
+
+            ids = [r[0] for r in cursor.fetchall()]
+            cursor.execute(*act_window.delete(where=(act_window.id.in_(ids))))
+            cursor.execute(*view.delete(where=(view.module == 'process_views')))
+            TableHandler.drop_table(
+                'process_process-act_window', 'process_process-act_window')
+
+    @classmethod
     def validate(cls, processes):
         super(Process, cls).validate(processes)
         for process in processes:
@@ -182,8 +224,6 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
     def copy(cls, processes, default=None):
         default = {} if default is None else default
         default['steps_to_display'] = []
-        default['menu_items'] = []
-        default['action_windows'] = []
         return super(Process, cls).copy(processes, default)
 
     @classmethod
@@ -229,14 +269,14 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
             for process in processes:
                 if isinstance(process, int):
                     process = cls(process)
-                good_menus = process.create_update_menu_entry()
-                if good_menus:
-                    process.menu_items = good_menus
-                    process.save()
+                process.refresh_views()
 
     def get_all_steps(self):
         for elem in self.all_steps:
             yield elem.step
+
+    def get_action_context(self):
+        return {'running_process': '%s' % self.technical_name}
 
     def calculate_buttons_for_step(self, step_relation):
         result = {}
@@ -257,77 +297,6 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         if complete_buttons:
             result['complete'] = complete_buttons
         return result
-
-    def get_or_create_root_menu_for_lang(self, lang):
-        ModelData = Pool().get('ir.model.data')
-        good_model, = ModelData.search([
-                ('module', '=', 'process'),
-                ('fs_id', '=', 'menu_process_lang')])
-        Menu = Pool().get('ir.ui.menu')
-        lang_menu = Menu.search([
-                ('name', '=', lang.code),
-                ('parent', '=', good_model.db_id)])
-        if not lang_menu:
-            lang_menu = Menu()
-            lang_menu.name = lang.code
-            lang_menu.parent = good_model.db_id
-            lang_menu.save()
-            return lang_menu
-        else:
-            return lang_menu[0]
-
-    def create_or_update_menu(self, good_action, lang):
-        MenuItem = Pool().get('ir.ui.menu')
-        good_menu = MenuItem.search([
-                ('name', '=', '%s_%s' % (self.technical_name, lang.code))])
-        good_menu = good_menu[0] if good_menu else MenuItem()
-        good_menu.parent = self.get_or_create_root_menu_for_lang(lang)
-        good_menu.name = '%s_%s' % (self.technical_name, lang.code)
-        good_menu.sequence = 10
-        good_menu.action = good_action
-        good_menu.icon = self.menu_icon
-        good_menu.save()
-        return good_menu
-
-    def create_or_update_action(self, lang):
-        pool = Pool()
-        ActWin = pool.get('ir.action.act_window')
-        ProcessActWindow = pool.get('process.process-act_window')
-
-        good_action = None
-        if getattr(self, 'menu_items', None):
-            for menu in self.menu_items:
-                if not menu.name == '%s_%s' % (self.technical_name, lang.code):
-                    continue
-                if hasattr(menu, 'action') and menu.action:
-                    good_action = menu.action
-                    break
-        if not good_action:
-            good_action = ActWin()
-        good_action.name = self.fancy_name
-        good_action.res_model = self.on_model.model
-        good_action.context = json.dumps(self.get_action_context())
-        good_action.domain = '[["current_state", "in", [%s]]]' % (
-            ','.join(map(lambda x: str(x.id), self.all_steps)))
-        good_action.sequence = 10
-        good_action.save()
-
-        existing = [x for x in self.action_windows if
-            x.action_window == good_action and x.language == lang]
-
-        if existing:
-            return good_action
-
-        new_relation = ProcessActWindow()
-        new_relation.process = self
-        new_relation.language = lang
-        new_relation.action_window = good_action
-        new_relation.save()
-
-        return good_action
-
-    def get_action_context(self):
-        return {"running_process": "%s" % self.technical_name}
 
     def get_xml_header(self, colspan="4"):
         xml = ''
@@ -414,15 +383,14 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
             xml += button.build_button()
         return nb_buttons, xml
 
-    def get_xml_for_steps(self):
+    def get_xml_for_step(self, step):
         xml = ''
-        for step_relation in self.all_steps:
-            xml += '<newline/>'
-            xml += self.build_step_group_header(
-                step_relation, col=step_relation.step.colspan, string="")
-            xml += step_relation.step.calculate_form_view(self)
-            xml += '</group>'
-            xml += self.build_step_auth_group_if_needed(step_relation)
+        xml += '<newline/>'
+        xml += self.build_step_group_header(
+            step, col=step.step.colspan, string='')
+        xml += step.step.calculate_form_view(self)
+        xml += '</group>'
+        xml += self.build_step_auth_group_if_needed(step)
         xml += '<newline/>'
         return xml
 
@@ -440,19 +408,18 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
 
         return xml
 
-    def get_xml_for_buttons(self):
+    def get_xml_for_buttons(self, step_relation):
         xml = ''
-        for step_relation in self.all_steps:
-            xml += '<newline/>'
-            nb_buttons, buttons_xml = self.build_step_buttons(step_relation)
-            if self.step_button_group_position == 'right':
-                xml += self.build_step_group_header(
-                    step_relation, group_name='buttons', col=1, yexp=False)
-            else:
-                xml += self.build_step_group_header(
-                    step_relation, group_name='buttons', col=nb_buttons)
-            xml += buttons_xml
-            xml += '</group>'
+        xml += '<newline/>'
+        nb_buttons, buttons_xml = self.build_step_buttons(step_relation)
+        if self.step_button_group_position == 'right':
+            xml += self.build_step_group_header(
+                step_relation, group_name='buttons', col=1, yexp=False)
+        else:
+            xml += self.build_step_group_header(
+                step_relation, group_name='buttons', col=nb_buttons)
+        xml += buttons_xml
+        xml += '</group>'
         return xml
 
     def get_xml_footer(self, colspan=4):
@@ -465,13 +432,13 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
 
         return xml
 
-    def build_xml_form_view(self):
+    def build_xml_step_form(self, step):
         xml = '<?xml version="1.0"?>'
         xml += '<form col="4">'
         xml += '<group id="process_content" '
         xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1">'
         xml += self.get_xml_header()
-        xml += self.get_xml_for_steps()
+        xml += self.get_xml_for_step(step)
         xml += '<newline/>'
         xml += self.get_finished_process_xml()
         xml += '</group>'
@@ -483,7 +450,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
                 xml += 'xexpand="0" xfill="0" yexpand="1" yfill="1">'
             elif self.step_button_group_position == 'bottom':
                 xml += 'xexpand="1" xfill="1" yexpand="0" yfill="0">'
-            xml += self.get_xml_for_buttons()
+            xml += self.get_xml_for_buttons(step)
             xml += '</group>'
         xml += '<newline/>'
         xml += self.get_xml_footer()
@@ -492,67 +459,44 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         return lxml.etree.tostring(lxml.etree.fromstring(xml),
             pretty_print=True)
 
-    def build_xml_tree_view(self):
-        xml = '<?xml version="1.0"?>'
-        xml += '<tree>'
-        xml += self.xml_tree
-        xml += '</tree>'
-        return xml
+    def get_view(self, relation_step):
+        pool = Pool()
+        View = pool.get('ir.ui.view')
+        current_lang = Transaction().context.get('language')
 
-    def create_or_update_view(self, for_action, kind):
-        if kind not in ('tree', 'form'):
-            raise Exception
-        ActView = Pool().get('ir.action.act_window.view')
-        View = Pool().get('ir.ui.view')
-        try:
-            act_views = ActView.search([('act_window', '=', for_action)])
-            act_view = None
-            for act in act_views:
-                if not act.view.type == kind:
-                    continue
-                act_view = act
-                break
-        except ValueError:
-            act_view = None
-        if not act_view:
-            good_view = View()
-            act_view = ActView()
+        view_name = 'process_view_%s_%s' % (str(relation_step.id), current_lang)
+        views = View.search([('name', '=', view_name)], limit=1)
+
+        if not views:
+            view = View()
+            view.model = self.on_model.model
+            view.name = view_name
+            view.type = 'form'
+            view.module = 'process_views'
+            view.priority = 100
         else:
-            good_view = act_view.view
-        good_view.model = self.on_model.model
-        good_view.name = '%s_%s' % (self.technical_name, kind)
-        good_view.type = kind
-        good_view.module = 'process_views'
-        good_view.priority = 100
-        if kind == 'tree':
-            good_view.arch = self.build_xml_tree_view()
-        elif kind == 'form':
-            good_view.arch = self.build_xml_form_view()
-        good_view.save()
-        act_view.act_window = for_action
-        act_view.sequence = 100
-        act_view.view = good_view
-        act_view.save()
-        return act_view, good_view
+            view = views[0]
+        view.arch = self.build_xml_step_form(relation_step)
+        return view
 
-    def create_update_menu_entry(self):
-        # Views are calculated depending on the process' steps and a few other
-        # things. In order to avoid runtime calculation, we store the views in
-        # the database and provide access to them through a dedicated entry
-        # point which is calculated, then can be modified / cloned.
-        Lang = Pool().get('ir.lang')
-        good_langs = Lang.search(['OR',
+    def refresh_views(self):
+        # A process view is created from the proces configuration for each step
+        # and for each language.
+        pool = Pool()
+        Lang = pool.get('ir.lang')
+        View = pool.get('ir.ui.view')
+        languages = Lang.search(['OR',
                 ('translatable', '=', True),
                 ('code', '=', 'en'),
                 ])
-        good_menus = []
-        for lang in good_langs:
-            good_action = self.create_or_update_action(lang)
-            good_menus.append(self.create_or_update_menu(good_action, lang))
+
+        views = []
+        for lang in languages:
             with Transaction().set_context(language=lang.code):
-                self.create_or_update_view(good_action, 'tree')
-                self.create_or_update_view(good_action, 'form')
-        return good_menus
+                for relation_step in self.all_steps:
+                    views.append(self.get_view(relation_step))
+
+        View.save(views)
 
     def get_step_relation(self, step):
         for elem in self.all_steps:
@@ -570,82 +514,70 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
     def get_rec_name(self, name):
         return self.fancy_name
 
-    def set_menu_item_list(self, previous_ids, new_ids):
-        Menu = Pool().get('ir.ui.menu')
-        Process = Pool().get('process')
-        MenuItem = Pool().get('ir.ui.menu')
-        ActWin = Pool().get('ir.action.act_window')
-        View = Pool().get('ir.ui.view')
-        to_delete = set(previous_ids) - set(new_ids)
-        Process.write([self], {'menu_items': [('add', new_ids)]})
-        menus = []
-        act_wins = []
-        views = []
-        for menu in Menu.browse(to_delete):
-            menus.append(menu)
-            act_wins.append(menu.action)
-            for view in menu.action.act_window_views:
-                views.append(view.view)
-        MenuItem.delete(menus)
-        ActWin.delete(act_wins)
-        View.delete(views)
-
     @classmethod
     def create(cls, values):
         processes = super(Process, cls).create(values)
         for process in processes:
-            existing_menus = [x.id for x in process.menu_items]
-            menus = process.create_update_menu_entry()
-            menus_ids = [x.id for x in menus]
-            process.set_menu_item_list(existing_menus, menus_ids)
+            process.refresh_views()
         return processes
 
     @classmethod
     def write(cls, *args):
         # Each time we write the process, we update the view
-        pool = Pool()
-        Menu = pool.get('ir.ui.menu')
-        ActWin = pool.get('ir.action.act_window')
-        View = pool.get('ir.ui.view')
-        actions = iter(args)
-        to_refresh = []
-        menus, actions, views = [], [], []
-        for instances, values in zip(actions, actions):
-            if 'technical_name' in values:
-                # Clear menus / actions
-                for menu in sum([list(x.menu_items) for x in instances], []):
-                    menus.append(menu)
-                    actions.append(menu.action)
-                    for view in menu.action.act_window_views:
-                        views.append(view.view)
-            if 'menu_items' in values:
-                continue
-            to_refresh += instances
-        Menu.delete(menus)
-        ActWin.delete(actions)
-        View.delete(views)
         super(Process, cls).write(*args)
-        for process in to_refresh:
-            existing_menus = [x.id for x in process.menu_items]
-            menus = process.create_update_menu_entry()
-            menus_ids = [x.id for x in menus]
-            process.set_menu_item_list(existing_menus, menus_ids)
+        for process in sum(args[0::2], []):
+            process.refresh_views()
 
     @classmethod
     def delete(cls, processes):
-        for process in processes:
-            process.set_menu_item_list([x.id for x in process.menu_items], [])
+        pool = Pool()
+        Lang = pool.get('ir.lang')
+        View = pool.get('ir.ui.view')
+        languages = Lang.search(['OR',
+                ('translatable', '=', True),
+                ('code', '=', 'en'),
+                ])
+        views = []
+        for lang in languages:
+            for process in processes:
+                for relation_step in process.all_steps:
+                    views.append(
+                        'process_view_%s_%s' % (relation_step.id, lang.code))
+        if views:
+            View.delete(View.search([('name', 'in', views)]))
         super(Process, cls).delete(processes)
 
-    def get_act_window(self):
-        if not self.menu_items:
-            return None
 
+    def get_action(self, instance):
+        # Create a temporary act_window action and insert the process views
+        View = Pool().get('ir.ui.view')
         lang = Transaction().context.get('language') or Transaction().language
+        act_window = {}
+        act_window['id'] = None
+        act_window['res_model'] = instance.__name__
+        act_window['context'] = json.dumps(self.get_action_context())
+        act_window['domain'] = '[["current_state", "in", (%s)]]' % (
+            ','.join(map(lambda x: str(x.id), self.all_steps)))
+        act_window['context_module'] = None
+        act_window['type'] = 'ir.action.act_window'
+        act_window['pyson_order'] = 'null'
+        act_window['pyson_search_value'] = '[]'
+        act_window['domains'] = []
+        act_window['context_model'] = None
+        act_window['name'] = self.fancy_name
 
-        action, = [x.action_window for x in self.action_windows if
-            x.language.code == lang]
-        return action
+        view_names = ['process_view_%s_%s' % (s.id, lang)
+            for s in self.all_steps]
+
+        views = View.search([('name', 'in', view_names)])
+        act_window['views'] = []
+        for index, view in enumerate(views):
+            if (hasattr(instance, 'current_state') and
+                    int(view.name.split('_')[2]) == instance.current_state.id):
+                act_window['views'].insert(0, (view.id, view.type))
+            else:
+                act_window['views'].append((view.id, view.type))
+        return act_window
 
     @fields.depends('fancy_name', 'technical_name')
     def on_change_with_technical_name(self):
@@ -993,7 +925,7 @@ class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
             return
         Process = Pool().get('process')
         for process in processes:
-            Process(process).create_update_menu_entry()
+            Process(process).refresh_views()
 
     def execute_before(self, target):
         for code in self.code_before:
@@ -1147,24 +1079,3 @@ class GenerateGraphWizard(Wizard):
 
     def do_print_(self, action):
         return action, {'id': Transaction().context.get('active_id')}
-
-
-class ProcessActWindow(model.CoogSQL):
-    'Process to Action Window Relation'
-
-    __name__ = 'process.process-act_window'
-
-    process = fields.Many2One('process', 'Process', ondelete='CASCADE',
-        required=True, select=True)
-    action_window = fields.Many2One('ir.action.act_window', 'Action Window',
-        ondelete='CASCADE', required=True)
-    language = fields.Many2One('ir.lang', 'Language', ondelete='RESTRICT')
-
-    @classmethod
-    def __setup__(cls):
-        super(ProcessActWindow, cls).__setup__()
-        t = cls.__table__()
-        cls._sql_constraints = [
-            ('process_language_unique', Unique(t, t.process, t.language),
-                'The action must be unique per process / language'),
-            ]

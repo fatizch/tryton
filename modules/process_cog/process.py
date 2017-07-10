@@ -3,6 +3,7 @@
 import pydot
 import datetime
 import lxml
+import json
 
 from sql import Null, Literal
 from sql.functions import CurrentTimestamp
@@ -1261,18 +1262,16 @@ class ProcessFinder(Wizard):
         cls.process_parameters.view = cls.get_parameters_view()
 
     def do_action(self, action):
-        Action = Pool().get('ir.action')
-        good_action = self.process_parameters.good_process.get_act_window()
-        good_values = Action.get_action_values(
-            'ir.action.act_window', [good_action.id])
-        good_values[0]['views'] = [
-            view for view in good_values[0]['views'] if view[1] == 'form']
-        good_obj = self.get_or_create_object()
-        if (hasattr(good_obj, 'current_state') and good_obj.current_state):
-            good_obj.current_state.step.execute_before(good_obj)
-        good_obj.save()
-        self.finalize_main_object(good_obj)
-        return good_values[0], {'res_id': [good_obj.id]}
+        process_obj = self.get_or_create_object()
+        if ((hasattr(process_obj, 'current_state') and
+                process_obj.current_state)):
+            process_obj.current_state.step.execute_before(process_obj)
+        process_obj.save()
+        self.finalize_main_object(process_obj)
+        process = self.process_parameters.good_process
+        process_action = process.get_action(process_obj)
+        return process_action, {
+            'res_id': [process_obj.id]}
 
     def search_main_object(self):
         return None
@@ -1380,16 +1379,13 @@ class ProcessResume(Wizard):
         instance = pool.get(active_model)(active_id)
         if not instance.current_state:
             cls.raise_user_error('no_process_found')
+
         Log = pool.get('process.log')
         active_logs = Log.search([
                 ('latest', '=', True),
                 ('task', '=', '%s,%i' % (active_model, active_id))])
         if active_logs:
             active_log, = active_logs
-        process_action = instance.current_state.process.get_act_window()
-        Action = pool.get('ir.action')
-        process_action = Action.get_action_values(process_action.__name__,
-            [process_action.id])[0]
 
         if active_log:
             active_log.end_time = CurrentTimestamp()
@@ -1404,13 +1400,11 @@ class ProcessResume(Wizard):
             else CurrentTimestamp()
         new_log.save()
 
-        views = process_action['views']
-        if len(views) > 1:
-            for view in views:
-                if view[1] == 'form':
-                    process_action['views'] = [view]
-                    break
-        return (process_action, {
+        process = instance.current_state.process
+
+        act_window = process.get_action(instance)
+
+        return (act_window, {
                 'id': active_id,
                 'model': active_model,
                 'res_id': [active_id],
