@@ -2,11 +2,11 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .test_case import *
+import test_case
 
 
 def register():
     Pool.register(
         # From test_case
-        TestCaseModel,
+        test_case.TestCaseModel,
         module='account_insurance_fr', type_='model')
