@@ -37,7 +37,7 @@ class Sequence(model.CoogSQL):
         order=[('start_date', 'ASC'), ('sub_order', 'ASC')])
     parent = fields.Many2One('ir.sequence', 'Parent',
         states={
-            }, ondelete='CASCADE')
+            }, ondelete='CASCADE', select=True)
     start_date = fields.Date('Start Date', states={
             'invisible': ~Eval('parent'),
             }, depends=['parent'])
