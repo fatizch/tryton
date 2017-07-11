@@ -711,6 +711,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'indemnifications for draft loss %(loss)s',
                 'no_bank_account': 'No bank account found for the beneficiary '
                 '%s on loss %s',
+                'not_enough_money': 'The invoices for %(party_names)s '
+                'are negative and contain a continuous payback: '
+                'they will not be validated',
                 })
         cls._order = [('start_date', 'ASC')]
 
@@ -1175,18 +1178,17 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         def group_key(x):
             return x._group_to_claim_invoice_key()
 
+        warning_invoices = []
         indemnifications.sort(key=group_key)
         for key, group_indemnification in groupby(indemnifications,
                 key=group_key):
             invoice = cls._get_invoice(key)
             lines = []
-            for indemnification in group_indemnification:
+            indemns = list(group_indemnification)
+            for indemnification in indemns:
                 if indemnification.status == 'cancel_validated':
                     cancelled.append(indemnification)
-                    if indemnification.payback_method == 'immediate':
-                        # do something special here, discuss with Fred
-                        pass
-                    elif indemnification.payback_method == 'planned':
+                    if indemnification.payback_method == 'planned':
                         key.update({'payment_term':
                                 indemnification.payment_term})
                 else:
@@ -1194,7 +1196,31 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 lines.extend([cls._get_invoice_line(key, invoice,
                         indemnification)])
             invoice.lines = lines
-            invoices.append(invoice)
+
+            if sum([line.unit_price * line.quantity for line in lines], 0) < 0:
+                to_remove = False
+                for indemnification in indemns:
+                    if (indemnification.payback_method == 'continuous'):
+                        to_remove = True
+                        break
+                if to_remove is True:
+                    for indemnification in indemns:
+                        if indemnification in paid:
+                            paid.remove(indemnification)
+                        elif indemnification in cancelled:
+                            cancelled.remove(indemnification)
+                    warning_invoices.append(invoice)
+                    invoice = None
+
+            if invoice is not None:
+                invoices.append(invoice)
+        if warning_invoices:
+            parties = {(i.party.id, i.party.rec_name)
+                 for i in warning_invoices[:10]}
+            warn_id = 'not_enough_money_%s' % '_'.join(
+                [str(p[0]) for p in list(parties)])
+            cls.raise_user_warning(warn_id, 'not_enough_money', {
+                    'party_names': ', '.join([p[1] for p in list(parties)])})
         Invoice.save(invoices)
         Invoice.post(invoices)
         cls.write(paid, {'status': 'paid'},

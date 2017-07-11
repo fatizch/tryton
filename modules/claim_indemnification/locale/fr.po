@@ -84,6 +84,13 @@ msgctxt "error:claim.indemnification:"
 msgid "The insurer %(insurer)s did not allow to pay indemnifications."
 msgstr "L'assureur %(insurer)s n'a pas autorisé le paiement d'indemnisations."
 
+msgctxt "error:claim.indemnification:"
+msgid ""
+"The invoices for %(party_names)s are negative and contain a continuous payback: they will not be validated"
+msgstr ""
+"Des remboursements pour %(party_names)s sont négatifs et contiennent des régularisations par compensation: "
+"la validation ne sera pas faite pour ces remboursements"
+
 msgctxt "error:claim.loss:"
 msgid "%s indemnification(s) remains unpaid"
 msgstr "%s indémnisation(s) reste(nt) impayée(s)"

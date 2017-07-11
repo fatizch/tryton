@@ -277,7 +277,7 @@ warning.name = 'multiple_capital_indemnifications_[1]'
 warning.save()
 create.execute('calculate')
 create.execute('regularisation')
-create.form.payback_method = 'continuous'
+create.form.payback_method = 'planned'
 create.execute('apply_regularisation')
 
 indemnifications = service.indemnifications

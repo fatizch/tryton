@@ -717,7 +717,8 @@ class CreateIndemnification(Wizard):
                 input_start_date < service.loss.start_date):
             self.raise_user_error('wrong_date')
         return Pool().get('claim.service').cancel_indemnification([service],
-            input_start_date, beneficiary=self.definition.beneficiary)
+            input_start_date, input_end_date,
+            beneficiary=self.definition.beneficiary)
 
     def init_indemnification(self, indemnification):
         ExtraData = Pool().get('claim.service.extra_data')

@@ -249,7 +249,7 @@ Generate Regularisation::
     >>> warning.save()
     >>> create.execute('calculate')
     >>> create.execute('regularisation')
-    >>> create.form.payback_method = 'continuous'
+    >>> create.form.payback_method = 'planned'
     >>> create.execute('apply_regularisation')
     >>> indemnifications = service.indemnifications
     >>> len(indemnifications) == 2
