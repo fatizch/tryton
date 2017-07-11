@@ -3,26 +3,26 @@
 from trytond.pool import Pool
 
 import payment
-from .dunning import *
-from .offered import *
-from .contract import *
-from .account import *
-from .event import *
-from .invoice import *
-from .batch import *
+import dunning
+import offered
+import contract
+import account
+import event
+import invoice
+import batch
 
 
 def register():
     Pool.register(
-        Dunning,
-        Procedure,
-        Level,
-        Contract,
-        Product,
-        MoveLine,
-        EventLog,
-        Invoice,
+        dunning.Dunning,
+        dunning.Procedure,
+        dunning.Level,
+        contract.Contract,
+        offered.Product,
+        account.MoveLine,
+        event.EventLog,
+        invoice.Invoice,
         payment.Payment,
-        DunningTreatmentBatch,
-        DunningCreationBatch,
+        batch.DunningTreatmentBatch,
+        batch.DunningCreationBatch,
         module='contract_insurance_invoice_dunning', type_='model')
