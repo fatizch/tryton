@@ -172,17 +172,17 @@ class Loss:
         indemnifications = sorted(indemnifications, key=lambda x: x.start_date)
         indemn = None
         for index, indemn in enumerate(indemnifications[1:]):
-            previous_indemn = indemnifications[index - 1]
-            if (previous_indemn.end_date and indemn.start_date -
-                    previous_indemn.end_date > datetime.timedelta(0)):
+            previous_indemn = indemnifications[index]
+            if (previous_indemn.end_date and (indemn.start_date -
+                    previous_indemn.end_date).days > 1):
                 self.__class__.raise_user_warning('gap_found_in_period_%s' %
-                    '-'.join([previous_indemn.id, indemn.id]),
+                    '-'.join([str(previous_indemn.id), str(indemn.id)]),
                     'gap_found_in_period',
                     (Date.date_as_string(previous_indemn.end_date, lang),
                         Date.date_as_string(indemn.start_date, lang)))
         if indemnifications and indemn and indemn.end_date < self.end_date:
             self.__class__.raise_user_warning('gap_found_in_period_%s' %
-                '-'.join([indemn.id, self.id]),
+                '-'.join([str(indemn.id), str(self.id)]),
                 'gap_found_in_period', (
                     Date.date_as_string(indemn.end_date, lang),
                     Date.date_as_string(self.end_date, lang)))
