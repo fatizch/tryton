@@ -1,31 +1,29 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import Pool
-
+import contract
 import configuration
-
-from .contract import *
-from .commission import *
-from .invoice import *
-from .event import *
-from .rule_engine import *
+import commission
+import invoice
+import event
+import rule_engine
+from trytond.pool import Pool
 
 
 def register():
     Pool.register(
         configuration.Configuration,
         configuration.ConfigurationTerminationReason,
-        Contract,
-        ContractOption,
-        PlanLines,
-        Commission,
-        Plan,
-        Agent,
-        Invoice,
-        Event,
-        RuleEngineRuntime,
+        contract.Contract,
+        contract.ContractOption,
+        commission.PlanLines,
+        commission.Commission,
+        commission.Plan,
+        commission.Agent,
+        invoice.Invoice,
+        event.Event,
+        rule_engine.RuleEngineRuntime,
         module='commission_insurance_prepayment', type_='model')
     Pool.register(
-        FilterCommissions,
-        FilterAggregatedCommissions,
+        commission.FilterCommissions,
+        commission.FilterAggregatedCommissions,
         module='commission_insurance_prepayment', type_='wizard')
