@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.process_cog import ProcessFinder, ProcessStart
+from trytond.modules.process_cog.process import ProcessFinder, ProcessStart
 
 
 __metaclass__ = PoolMeta

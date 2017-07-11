@@ -3,7 +3,6 @@
 import pydot
 import datetime
 import lxml
-import json
 
 from sql import Null, Literal
 from sql.functions import CurrentTimestamp

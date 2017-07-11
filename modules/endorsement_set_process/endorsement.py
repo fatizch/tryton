@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.process_cog import CoogProcessFramework
+from trytond.modules.process_cog.process import CoogProcessFramework
 from trytond.modules.process import ClassAttr
 from trytond.modules.coog_core import fields, model
 from trytond.pyson import Eval

@@ -2,47 +2,46 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 from trytond.config import config
-from .process import *
-from .process_timings import *
-from .models_for_test import *
-from .event import *
-from .document import *
+import process
+import process_timings
+import models_for_test
+import event
+import document
 
 
 def register():
     Pool.register(
-        # From process
-        Status,
-        ProcessAction,
-        ProcessLog,
-        ProcessTransition,
-        ProcessStepRelation,
-        Process,
-        ViewDescription,
-        ProcessStep,
-        ProcessStart,
-        PostponeParameters,
-        ProcessTimingDisplayer,
-        ProcessTimingSelectDates,
-        EventTypeAction,
-        ReattachDocument,
+        process.Status,
+        process.ProcessAction,
+        process.ProcessLog,
+        process.ProcessTransition,
+        process.ProcessStepRelation,
+        process.Process,
+        process.ViewDescription,
+        process.ProcessStep,
+        process.ProcessStart,
+        process.PostponeParameters,
+        process_timings.ProcessTimingDisplayer,
+        process_timings.ProcessTimingSelectDates,
+        event.EventTypeAction,
+        document.ReattachDocument,
         module='process_cog', type_='model')
 
     Pool.register(
-        GenerateGraph,
+        process.GenerateGraph,
         module='process_cog', type_='report')
 
     Pool.register(
-        ProcessFinder,
-        ProcessEnd,
-        ProcessResume,
-        PostponeTask,
-        GetDatesForProcessTimings,
-        ProcessTimings,
-        ReceiveDocument,
+        process.ProcessFinder,
+        process.ProcessEnd,
+        process.ProcessResume,
+        process.PostponeTask,
+        process_timings.GetDatesForProcessTimings,
+        process_timings.ProcessTimings,
+        document.ReceiveDocument,
         module='process_cog', type_='wizard')
 
     if config.get('env', 'testing') == 'True':
         Pool.register(
-            ModelProcess,
+            models_for_test.ModelProcess,
             module='process_cog', type_='model')

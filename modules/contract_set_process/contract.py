@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
 from trytond.modules.process import ClassAttr
-from trytond.modules.process_cog import CoogProcessFramework
+from trytond.modules.process_cog.process import CoogProcessFramework
 from trytond.modules.coog_core import fields
 
 __metaclass__ = PoolMeta

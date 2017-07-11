@@ -5,8 +5,8 @@ from trytond.pyson import Eval, If, Bool
 from trytond.transaction import Transaction
 from trytond.modules.process import ClassAttr
 from trytond.modules.coog_core import utils, fields, model
-from trytond.modules.process_cog import CoogProcessFramework
-from trytond.modules.process_cog import ProcessFinder, ProcessStart
+from trytond.modules.process_cog.process import CoogProcessFramework
+from trytond.modules.process_cog.process import ProcessFinder, ProcessStart
 from trytond.wizard import Button, StateTransition, StateAction
 
 

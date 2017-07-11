@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 from trytond.modules.coog_core import fields
 
 from trytond.modules.process import ClassAttr
-from trytond.modules.process_cog import CoogProcessFramework
+from trytond.modules.process_cog.process import CoogProcessFramework
 
 __metaclass__ = PoolMeta
 __all__ = [

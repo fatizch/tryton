@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.transaction import Transaction
-from trytond.modules.process_cog import ProcessFinder, ProcessStart
+from trytond.modules.process_cog.process import ProcessFinder, ProcessStart
 from trytond.modules.coog_core import fields, model
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval

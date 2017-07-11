@@ -5,7 +5,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import fields, model
-from trytond.modules.process_cog import ProcessFinder, ProcessStart
+from trytond.modules.process_cog.process import ProcessFinder, ProcessStart
 
 
 __all__ = [

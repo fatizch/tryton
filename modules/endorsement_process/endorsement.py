@@ -4,7 +4,7 @@ from sql import Literal
 from sql.operators import Mul
 
 from trytond.modules.process import ClassAttr
-from trytond.modules.process_cog import CoogProcessFramework
+from trytond.modules.process_cog.process import CoogProcessFramework
 from trytond.modules.coog_core import model, fields
 from trytond.pool import Pool
 from trytond.transaction import Transaction
