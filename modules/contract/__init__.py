@@ -2,62 +2,72 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .contract import *
-from .rule_engine import *
-from .party import *
-from .test_case import *
-from .wizard import *
-from .service import *
-from .contact_type import *
-from .configuration import *
-from .offered import *
-from .batch import *
-from .event import *
-from .notification import *
+import contract
+import rule_engine
 import party
+import test_case
+import wizard
+import service
+import contact_type
+import configuration
+import offered
+import batch
+import event
+import notification
+
+from contract import _STATES, _DEPENDS
+from contract import _CONTRACT_STATUS_STATES, _CONTRACT_STATUS_DEPENDS
+
+
+__all__ = [
+    '_STATES',
+    '_DEPENDS',
+    '_CONTRACT_STATUS_STATES',
+    '_CONTRACT_STATUS_DEPENDS',
+    ]
 
 
 def register():
     Pool.register(
-        Product,
-        ContractSubStatus,
-        Configuration,
-        Contract,
-        ActivationHistory,
-        ContractOption,
-        ContractOptionVersion,
-        ContractEndDateTerminationBatch,
-        ContractExtraDataRevision,
-        ContractSelectStartDate,
-        ContractService,
-        RuleEngineRuntime,
-        Party,
-        TestCaseModel,
-        PackageSelection,
-        OptionsDisplayer,
-        WizardOption,
-        ContactType,
-        ContractContact,
-        SynthesisMenuContrat,
-        SynthesisMenu,
-        ContractActivateConfirm,
-        ContractSelectDeclineReason,
-        ContractStopSelectContracts,
-        ContractSelectHoldReason,
-        ContractReactivateCheck,
-        ContractNotification,
-        EventTypeAction,
-        EventLog,
+        offered.Product,
+        contract.ContractSubStatus,
+        configuration.Configuration,
+        contract.Contract,
+        contract.ActivationHistory,
+        contract.ContractOption,
+        contract.ContractOptionVersion,
+        batch.ContractEndDateTerminationBatch,
+        contract.ContractExtraDataRevision,
+        contract.ContractSelectStartDate,
+        service.ContractService,
+        rule_engine.RuleEngineRuntime,
+        party.Party,
+        test_case.TestCaseModel,
+        wizard.PackageSelection,
+        wizard.OptionsDisplayer,
+        wizard.WizardOption,
+        contact_type.ContactType,
+        contact_type.ContractContact,
+        party.SynthesisMenuContrat,
+        party.SynthesisMenu,
+        wizard.ContractActivateConfirm,
+        wizard.ContractSelectDeclineReason,
+        wizard.ContractStopSelectContracts,
+        contract.ContractSelectHoldReason,
+        wizard.ContractReactivateCheck,
+        notification.ContractNotification,
+        event.EventTypeAction,
+        event.EventLog,
         module='contract', type_='model')
     Pool.register(
-        OptionSubscription,
-        SynthesisMenuOpen,
-        ContractChangeStartDate,
-        ContractActivate,
-        ContractDecline,
-        ContractStop,
-        ContractHold,
-        ContractReactivate,
-        RelatedAttachments,
+        wizard.OptionSubscription,
+        party.SynthesisMenuOpen,
+        contract.ContractChangeStartDate,
+        wizard.ContractActivate,
+        wizard.ContractDecline,
+        wizard.ContractStop,
+        contract.ContractHold,
+        wizard.ContractReactivate,
+        wizard.RelatedAttachments,
         party.PartyReplace,
         module='contract', type_='wizard')
