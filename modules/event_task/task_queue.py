@@ -21,7 +21,7 @@ class TaskQueueDefinition(model.CoogSQL, model.CoogView):
 
     order = fields.Integer('Order', states={'invisible': True})
     event_type_action = fields.Many2One('event.type.action',
-        'Event Type Action', ondelete='CASCADE', required=True)
+        'Event Type Action', ondelete='CASCADE', required=True, select=True)
     available_batches = fields.Function(fields.Many2Many(
             'ir.model', None, None, 'Available Batches'),
         'get_available_batches')
