@@ -95,7 +95,8 @@ class BankAccount:
         self.bank = self.get_bank_from_number()
 
     def get_bank_identifiers_fr(self, number):
-        if not number or not number.startswith('FR') or len(number) < 15:
+        if (not number or not number.upper().startswith('FR') or
+                len(number) < 15):
             return
         return (number[4:9], number[9:14])
 
