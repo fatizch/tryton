@@ -2,27 +2,27 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from waiver import *
-from offered import *
-from contract import *
-from wizard import *
-from invoice import *
+import waiver
+import offered
+import contract
+import wizard
+import invoice
 
 
 def register():
     Pool.register(
-        PremiumWaiver,
-        PremiumWaiverContractOption,
-        OptionDescription,
-        OptionDescriptionTaxRelationForWaiver,
-        Contract,
-        ContractOption,
-        CreateWaiverChoice,
-        SetWaiverEndDateChoice,
-        InvoiceLineDetail,
+        waiver.PremiumWaiver,
+        waiver.PremiumWaiverContractOption,
+        offered.OptionDescription,
+        offered.OptionDescriptionTaxRelationForWaiver,
+        contract.Contract,
+        contract.ContractOption,
+        wizard.CreateWaiverChoice,
+        wizard.SetWaiverEndDateChoice,
+        invoice.InvoiceLineDetail,
         module='contract_waiver_premium', type_='model')
 
     Pool.register(
-        CreateWaiver,
-        SetWaiverEndDate,
+        wizard.CreateWaiver,
+        wizard.SetWaiverEndDate,
         module='contract_waiver_premium', type_='wizard')
