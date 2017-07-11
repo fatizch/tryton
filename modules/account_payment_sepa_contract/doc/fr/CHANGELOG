@@ -1,3 +1,4 @@
+* BUG#6607 Pas de mise à jour du mandat sur les quittances en chèque
 * OTH#0000 Correctif du test de suspension des paiements
 * OTH#0000 Mise à jour des depends de on_change_product
 * BUG#6451 Ajout d'un payeur par défaut lors de la souscription

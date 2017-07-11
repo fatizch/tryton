@@ -54,9 +54,14 @@ class Contract:
         # date. The basic idea is to modify existing validated or posted
         # invoices for which there is a planned payment after the date.
         Invoice = Pool().get('account.invoice')
-        update_data = {contract.id: utils.get_value_at_date(
+        update_data = {}
+        for contract in contracts:
+            value = utils.get_value_at_date(
                 contract.billing_informations, date).sepa_mandate
-            for contract in contracts}
+            if value:
+                update_data[contract.id] = value
+        if not update_data:
+            return
         clause = ['OR'] + [
             [('contract', '=', contract), ('state', '=', 'posted'),
                 ('party', '=', mandate.party)]
