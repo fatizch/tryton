@@ -1,33 +1,27 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .account import *
-from .contract import *
-from .rule_engine import *
-from .wizard import *
-from .test_case import *
+import account
+import contract
+import rule_engine
+import wizard
+import test_case
 
 
 def register():
     Pool.register(
-        # From file account
-        Configuration,
-        MoveLine,
-        # From file contract
-        CashValueCollection,
-        Contract,
-        # From file rule_engine
-        CoveredDataRuleSet,
-        # From file wizard
-        SelectDate,
-        CashSurrenderParameters,
-        # From file test_case
-        TestCaseModel,
+        account.Configuration,
+        account.MoveLine,
+        contract.CashValueCollection,
+        contract.Contract,
+        rule_engine.CoveredDataRuleSet,
+        wizard.SelectDate,
+        wizard.CashSurrenderParameters,
+        test_case.TestCaseModel,
         module='contract_cash_value', type_='model')
 
     Pool.register(
-        # From file wizard
-        CollectionToCashValue,
-        CashValueUpdate,
-        CashSurrenderWizard,
+        wizard.CollectionToCashValue,
+        wizard.CashValueUpdate,
+        wizard.CashSurrenderWizard,
         module='contract_cash_value', type_='wizard')
