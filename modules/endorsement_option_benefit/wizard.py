@@ -4,7 +4,7 @@ from collections import defaultdict
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Len
 from trytond.modules.coog_core import fields, model, utils
-from trytond.modules.endorsement import (EndorsementWizardStepMixin,
+from trytond.modules.endorsement.wizard import (EndorsementWizardStepMixin,
     add_endorsement_step)
 
 

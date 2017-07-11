@@ -5,9 +5,9 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Len, If
 
 from trytond.modules.coog_core import model, fields, utils
-from trytond.modules.endorsement import EndorsementWizardStepMixin
-from trytond.modules.endorsement import EndorsementRecalculateMixin
-from trytond.modules.endorsement import add_endorsement_step
+from trytond.modules.endorsement.wizard import EndorsementWizardStepMixin
+from trytond.modules.endorsement.wizard import EndorsementRecalculateMixin
+from trytond.modules.endorsement.wizard import add_endorsement_step
 
 __metaclass__ = PoolMeta
 __all__ = [

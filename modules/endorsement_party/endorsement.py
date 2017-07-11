@@ -7,7 +7,8 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import fields, model, utils
-from trytond.modules.endorsement import values_mixin, relation_mixin
+from trytond.modules.endorsement.endorsement import values_mixin, \
+    relation_mixin
 
 
 __metaclass__ = PoolMeta

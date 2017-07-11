@@ -6,7 +6,7 @@ from trytond.pyson import Eval, Len, If
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import model, fields, utils
-from trytond.modules.endorsement import (EndorsementWizardStepMixin,
+from trytond.modules.endorsement.wizard import (EndorsementWizardStepMixin,
     add_endorsement_step)
 
 

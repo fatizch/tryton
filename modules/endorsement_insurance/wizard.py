@@ -10,7 +10,7 @@ from trytond.model import Model
 
 from trytond.modules.coog_core import model, fields, utils, coog_date
 from trytond.modules.contract_insurance.contract import IS_PARTY
-from trytond.modules.endorsement import EndorsementWizardStepMixin, \
+from trytond.modules.endorsement.wizard import EndorsementWizardStepMixin, \
     add_endorsement_step
 
 __metaclass__ = PoolMeta

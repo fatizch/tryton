@@ -7,7 +7,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, If
 
 from trytond.modules.coog_core import fields, model, coog_string, utils
-from trytond.modules.endorsement import (EndorsementWizardStepMixin,
+from trytond.modules.endorsement.wizard import (EndorsementWizardStepMixin,
     add_endorsement_step)
 from trytond.modules.party_relationship import PartyRelationAll
 from trytond.modules.party_cog.relationship \

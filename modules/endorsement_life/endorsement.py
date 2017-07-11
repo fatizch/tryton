@@ -5,7 +5,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import model, fields
-from trytond.modules.endorsement import relation_mixin
+from trytond.modules.endorsement.endorsement import relation_mixin
 
 
 __all__ = [

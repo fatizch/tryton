@@ -7,7 +7,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import fields, model, coog_date
-from trytond.modules.endorsement import field_mixin
+from trytond.modules.endorsement.endorsement import field_mixin
 
 
 __metaclass__ = PoolMeta

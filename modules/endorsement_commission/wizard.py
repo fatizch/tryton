@@ -5,7 +5,7 @@ from trytond.wizard import StateView, StateTransition, Button
 from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.coog_core import fields, utils
-from trytond.modules.endorsement import EndorsementWizardStepMixin
+from trytond.modules.endorsement.wizard import EndorsementWizardStepMixin
 
 __metaclass__ = PoolMeta
 __all__ = [

@@ -9,7 +9,7 @@ from trytond.wizard import StateView, Button
 from trytond.pyson import Eval, Len
 
 from trytond.modules.coog_core import model, fields
-from trytond.modules.endorsement import EndorsementWizardPreviewMixin
+from trytond.modules.endorsement.wizard import EndorsementWizardPreviewMixin
 
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
 

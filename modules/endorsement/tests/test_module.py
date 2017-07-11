@@ -100,7 +100,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
     def test0001_check_possible_views(self):
         from trytond.pool import Pool
         from trytond.wizard import StateView
-        from trytond.modules.endorsement import EndorsementWizardStepMixin
+        from trytond.modules.endorsement.wizard import \
+            EndorsementWizardStepMixin
         from trytond.modules.endorsement.wizard import StartEndorsement
 
         class SimpleContractModification(EndorsementWizardStepMixin):
@@ -343,7 +344,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     ]))
 
     def test0099_test_automatic_endorsement(self):
-        from trytond.modules.endorsement import EndorsementWizardStepMixin
+        from trytond.modules.endorsement.wizard import \
+            EndorsementWizardStepMixin
 
         _save_values = {
             'company': 1,

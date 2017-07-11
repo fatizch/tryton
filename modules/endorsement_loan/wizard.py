@@ -9,9 +9,9 @@ from trytond.wizard import StateView, Button, StateTransition
 from trytond.pyson import Eval, Bool, Len, If, Not
 
 from trytond.modules.coog_core import fields, model, utils, coog_date
-from trytond.modules.endorsement import EndorsementWizardPreviewMixin
-from trytond.modules.endorsement import EndorsementWizardStepMixin, \
-    add_endorsement_step
+from trytond.modules.endorsement.wizard import EndorsementWizardPreviewMixin
+from trytond.modules.endorsement.wizard import \
+    EndorsementWizardStepMixin, add_endorsement_step
 
 PAYMENT_FIELDS = ['kind', 'number', 'start_date', 'begin_balance',
     'amount', 'principal', 'interest', 'outstanding_balance',
