@@ -1,3 +1,4 @@
+* OTH#0000 Correctifs des warnings sur la classe Configuration lors du lancement du serveur
 * BUG#6358 Utiliser la date du jour pour valider l'existence d'un compte bancaire à l'ordonnancement
 * BUG#6346 Le batch de création de prestations créé des prestations ayant les mêmes propriétés que la dernière prestation créée pour un service donné
 * FEA#6352 Dans le batch de création des périodes d'indemnisation (périodes de rente), ordonnancement automatique des périodes si possible (e.g.: aucun document requis)

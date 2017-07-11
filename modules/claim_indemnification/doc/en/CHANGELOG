@@ -1,3 +1,4 @@
+* OTH#0000 Warning fixes on class Configuration when server starts
 * BUG#6358 Use today to check bank account when scheduling an indemnification
 * BUG#6346 The indemnification creation batch will create indemnifications with the same properties as the last one created for a given service
 * FEA#6352 In indemnification creation batch, automatically schedule indemnifications when possible (e.g: no required documents)

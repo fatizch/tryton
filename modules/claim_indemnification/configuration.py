@@ -17,7 +17,7 @@ class Configuration:
 
     payment_journal = fields.Many2One('account.payment.journal',
         'Default Payment Journal',
-        required=True)
+        required=True, ondelete='RESTRICT')
     control_rule = fields.Many2One('claim.indemnification.control.rule',
         'Control Rule', ondelete='RESTRICT')
     show_indemnification_limit = fields.Integer('Show Indemnification Limit')
@@ -28,8 +28,9 @@ class Configuration:
             'invisible': ~Eval('show_indemnification_limit'),
             },
         help='This value will be used to sort indemnifications by start date')
-    claim_default_payment_term = fields.Many2One('account.invoice.payment_term',
-        'Default Payment Term', required=True)
+    claim_default_payment_term = fields.Many2One(
+        'account.invoice.payment_term', 'Default Payment Term', required=True,
+        ondelete='RESTRICT')
 
     @staticmethod
     def default_show_indemnification_limit():
