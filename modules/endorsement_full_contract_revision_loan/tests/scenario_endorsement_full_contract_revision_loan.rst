@@ -62,6 +62,7 @@ Get Models::
     >>> User = Model.get('res.user')
     >>> Insurer = Model.get('insurer')
     >>> ZipCode = Model.get('country.zip')
+    >>> View = Model.get('ir.ui.view')
 
 Constants::
 
@@ -389,9 +390,12 @@ Modify Contract::
 
 This time, complete::
 
+    >>> end_view, = View.find([
+    ...         ('name', '=', 'process_view_contract_terminated_en')])
     >>> end_process, = Action.find([
     ...         ('xml_id', '=', 'process_cog.act_end_process')])
-    >>> Contract._proxy._button_next_1([contract.id], config._context) == end_process.id
+    >>> Contract._proxy._button_next_1([contract.id], config._context) == [
+    ...     end_process.id, 'toggle_view:%s' % end_view.id]
     True
     >>> contract = Contract(contract.id)
     >>> loan = Loan(loan.id)

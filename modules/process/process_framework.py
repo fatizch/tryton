@@ -221,13 +221,19 @@ class ProcessFramework(ModelSQL, ModelView):
 
         def toggle_process_view_wrapper(*args, **kwargs):
             result = method(*args, **kwargs)
+            if result == 'close':
+                return result
             instance = args[0][0]
             language = Transaction().context.get('language')
 
             View = Pool().get('ir.ui.view')
-            view_name = 'process_view_%s_%s' % (
-                str(instance.current_state.id), language)
-            view, = View.search([('name', '=', view_name)], limit=1)
+            if not instance.current_state:
+                view_name = 'process_view_%s_terminated_%s' % (
+                    process.on_model.model, language)
+            else:
+                view_name = 'process_view_%s_%s' % (
+                    str(instance.current_state.id), language)
+            view, = View.search([('name', '=', view_name)])
 
             return [result, 'toggle_view:%s' % str(view.id)]
         return toggle_process_view_wrapper

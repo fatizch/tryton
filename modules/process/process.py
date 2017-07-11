@@ -393,7 +393,10 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
     def get_finished_process_xml(self):
         pyson = Bool(Eval('current_state'))
         invisible_def = utils.get_json_from_pyson(pyson)
-        xml = '<group id="group_tech_complete" '
+
+        xml = '<?xml version="1.0"?>'
+        xml += '<form col="4">'
+        xml += '<group id="group_tech_complete" '
         xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1" '
         xml += 'states="{'
         xml += "&quot;invisible&quot;: %s" % invisible_def
@@ -401,6 +404,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         xml += '<label id="complete_text" string="%s"/>' % (
             self.raise_user_error('process_completed', raise_exception=False))
         xml += '</group>'
+        xml += '</form>'
 
         return xml
 
@@ -436,7 +440,6 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         xml += self.get_xml_header()
         xml += self.get_xml_for_step(step)
         xml += '<newline/>'
-        xml += self.get_finished_process_xml()
         xml += '</group>'
         if self.step_button_group_position:
             if self.step_button_group_position == 'bottom':
@@ -491,6 +494,20 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
             with Transaction().set_context(language=lang.code):
                 for relation_step in self.all_steps:
                     views.append(self.get_view(relation_step))
+            view_name = 'process_view_%s_terminated_%s' % (
+                self.on_model.model, lang.code)
+            terminated_views = View.search([('name', '=', view_name)], limit=1)
+            if not terminated_views:
+                terminated_view = View()
+                terminated_view.name = view_name
+                terminated_view.model = self.on_model.model
+                terminated_view.type = 'form'
+                terminated_view.module = 'process_views'
+                terminated_view.priority = 100
+            else:
+                terminated_view = terminated_views[0]
+            terminated_view.arch = self.get_finished_process_xml()
+            views.append(terminated_view)
 
         View.save(views)
 
@@ -542,7 +559,6 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         if views:
             View.delete(View.search([('name', 'in', views)]))
         super(Process, cls).delete(processes)
-
 
     def get_action(self, instance):
         # Create a temporary act_window action and insert the process views

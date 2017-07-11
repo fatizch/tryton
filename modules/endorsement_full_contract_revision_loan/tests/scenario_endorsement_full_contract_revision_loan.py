@@ -67,6 +67,7 @@ SequenceType = Model.get('ir.sequence.type')
 User = Model.get('res.user')
 Insurer = Model.get('insurer')
 ZipCode = Model.get('country.zip')
+View = Model.get('ir.ui.view')
 
 # #Comment# #Constants
 today = datetime.date.today()
@@ -375,9 +376,12 @@ loan.save()
 Loan.calculate_loan([loan.id], {})
 
 # #Comment# #This time, complete
+end_view, = View.find([
+        ('name', '=', 'process_view_contract_terminated_en')])
 end_process, = Action.find([
         ('xml_id', '=', 'process_cog.act_end_process')])
-Contract._proxy._button_next_1([contract.id], config._context) == end_process.id
+Contract._proxy._button_next_1([contract.id], config._context) == [
+    end_process.id, 'toggle_view:%s' % end_view.id]
 # #Res# #True
 contract = Contract(contract.id)
 loan = Loan(loan.id)

@@ -31,6 +31,7 @@ Get Models::
     >>> Sequence = Model.get('ir.sequence')
     >>> SequenceType = Model.get('ir.sequence.type')
     >>> User = Model.get('res.user')
+    >>> View = Model.get('ir.ui.view')
 
 Constants::
 
@@ -222,9 +223,12 @@ Modify Contract::
     >>> contract.contract_number = 'New Number'
     >>> contract.status = 'active'
     >>> contract.save()
+    >>> end_view, = View.find([
+    ...         ('name', '=', 'process_view_contract_terminated_en')])
     >>> end_process, = Action.find([
     ...         ('xml_id', '=', 'process_cog.act_end_process')])
-    >>> Contract._proxy._button_next_1([contract.id], {}) == end_process.id
+    >>> Contract._proxy._button_next_1([contract.id], {'language': 'en'}) == [
+    ...     end_process.id, 'toggle_view:%s' % end_view.id]
     True
 
 Check Application::
