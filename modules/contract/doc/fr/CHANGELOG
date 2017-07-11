@@ -1,3 +1,5 @@
+* BUG#6616 Résiliation possible sur un terme antérieur
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout des notifications sur les contrats
 * FEA#0000 Ajout des chaînes pour les batchs de déclinaison des devis inactifs et des contrats à clôre.

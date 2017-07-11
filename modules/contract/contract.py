@@ -1287,11 +1287,16 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         if not contracts:
             return
         for contract in contracts:
-            contract.end_date = at_date
-            contract.activation_history[-1].termination_reason = \
-                termination_reason
-            contract.activation_history = list(contract.activation_history)
-            contract.save()
+            new_activation_history = []
+            for activation_history in contract.activation_history:
+                new_activation_history.append(activation_history)
+                if (not activation_history.end_date or
+                        activation_history.end_date >= at_date):
+                    break
+            activation_history.end_date = at_date
+            activation_history.termination_reason = termination_reason
+            contract.activation_history = new_activation_history
+        cls.save(contracts)
         cls.plan_termination_or_terminate(contracts)
 
     @classmethod
