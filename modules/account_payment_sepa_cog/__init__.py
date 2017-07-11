@@ -14,6 +14,7 @@ import move
 def register():
     Pool.register(
         party.Party,
+        party.Address,
         batch.PaymentTreatmentBatch,
         batch.PaymentSepaDoBatch,
         batch.PaymentFailBatch,

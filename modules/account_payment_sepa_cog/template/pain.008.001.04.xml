@@ -19,7 +19,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- AdrTp -->
         <!-- Dept -->
         <!-- SubDept -->
-        <StrtNm py:if="address.street">${address.street[:70]}</StrtNm>
+        <StrtNm py:if="address.street">${address.street_for_sepa()[:70]}</StrtNm>
         <!-- BldgNb -->
         <PstCd py:if="address.zip">${address.zip}</PstCd>
         <TwnNm py:if="address.city">${address.city}</TwnNm>
