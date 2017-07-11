@@ -1,3 +1,5 @@
+* BUG#6617 Void contracts that were never paid
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Add termination mode at dunning effective date
 * FEA#0000 Deactivate terminated contract's dunnings

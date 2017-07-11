@@ -231,8 +231,7 @@ class Level:
             if self.termination_mode == 'at_last_posted_invoice':
                 date = dunning.contract.last_posted_invoice_end
             elif self.termination_mode == 'at_last_paid_invoice':
-                date = dunning.contract.last_paid_invoice_end or \
-                    dunning.contract.last_posted_invoice_end
+                date = dunning.contract.last_paid_invoice_end or None
             elif self.termination_mode == 'at_dunning_effective_date':
                 date = dunning.calculate_last_process_date()
             if date and dunning.contract.final_end_date and (
