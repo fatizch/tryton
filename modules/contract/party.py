@@ -11,7 +11,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Len, PYSONEncoder
 
 from trytond.modules.coog_core import fields, coog_string, model
-from trytond.modules.coog_core import UnionMixin
 
 __metaclass__ = PoolMeta
 __all__ = [
