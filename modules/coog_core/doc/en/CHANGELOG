@@ -1,3 +1,4 @@
+* OTH#0000 Add 'delete_missing' flag on actives contract suspensions
 * FEA#6575 Add an Interval operator for SQL operations
 * OTH#0000 Fix translation of asynchronous events
 * OTH#0000 Fix typo in the post commit function call decorator

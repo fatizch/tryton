@@ -26,7 +26,7 @@ class Contract:
     __name__ = 'contract'
 
     actives_rights_suspensions = fields.One2Many('contract.right_suspension',
-        'contract', 'Actives Rights Suspensions')
+        'contract', 'Actives Rights Suspensions', delete_missing=True)
 
     @classmethod
     def calculate_suspensions_from_date(cls, contracts):
