@@ -2,11 +2,11 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .payment import *
+import payment
 
 
 def register():
     Pool.register(
-        Payment,
-        Journal,
+        payment.Payment,
+        payment.Journal,
         module='account_payment_clearing_cog', type_='model')
