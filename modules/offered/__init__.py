@@ -2,33 +2,33 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .rule_engine import *
-from .offered import *
-from .extra_data import *
-from .test_case import *
-from .configuration import *
-from .package import *
-from .report_engine import *
+import configuration
+import extra_data
+import offered
+import package
+import report_engine
+import rule_engine
+import test_case
 
 
 def register():
     Pool.register(
-        Configuration,
-        OptionDescription,
-        Product,
-        ProductOptionDescriptionRelation,
-        OptionDescriptionRequired,
-        OptionDescriptionExcluded,
-        Package,
-        PackageOptionDescriptionRelation,
-        ProductPackageRelation,
-        ExtraData,
-        ExtraDataSubExtraDataRelation,
-        ProductExtraDataRelation,
-        OptionDescriptionExtraDataRelation,
-        RuleEngine,
-        OptionDescriptionEndingRule,
-        TestCaseModel,
-        ReportProductRelation,
-        ReportTemplate,
+        configuration.Configuration,
+        offered.OptionDescription,
+        offered.Product,
+        offered.ProductOptionDescriptionRelation,
+        offered.OptionDescriptionRequired,
+        offered.OptionDescriptionExcluded,
+        package.Package,
+        package.PackageOptionDescriptionRelation,
+        package.ProductPackageRelation,
+        extra_data.ExtraData,
+        extra_data.ExtraDataSubExtraDataRelation,
+        offered.ProductExtraDataRelation,
+        offered.OptionDescriptionExtraDataRelation,
+        rule_engine.RuleEngine,
+        rule_engine.OptionDescriptionEndingRule,
+        test_case.TestCaseModel,
+        report_engine.ReportProductRelation,
+        report_engine.ReportTemplate,
         module='offered', type_='model')
