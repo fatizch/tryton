@@ -1,24 +1,25 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .endorsement import *
-from .process import *
-from .wizard import *
-from .document import *
+
+import endorsement
+import process
+import wizard
+import document
 
 
 def register():
     Pool.register(
-        Process,
-        Endorsement,
-        EndorsementFindProcess,
-        EndorsementPartUnion,
-        Contract,
-        DocumentDescription,
+        process.Process,
+        endorsement.Endorsement,
+        wizard.EndorsementFindProcess,
+        endorsement.EndorsementPartUnion,
+        process.Contract,
+        document.DocumentDescription,
         module='endorsement_process', type_='model')
     Pool.register(
-        StartEndorsement,
-        EndorsementStartProcess,
-        PreviewChangesWizard,
-        ReceiveDocument,
+        wizard.StartEndorsement,
+        wizard.EndorsementStartProcess,
+        wizard.PreviewChangesWizard,
+        document.ReceiveDocument,
         module='endorsement_process', type_='wizard')
