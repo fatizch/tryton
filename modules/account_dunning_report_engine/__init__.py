@@ -2,13 +2,13 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .dunning import *
-from .report_engine import *
+import dunning
+import report_engine
 
 
 def register():
     Pool.register(
-        ReportTemplate,
-        Dunning,
-        Level,
+        report_engine.ReportTemplate,
+        dunning.Dunning,
+        dunning.Level,
         module='account_dunning_report_engine', type_='model')
