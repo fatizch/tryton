@@ -1,19 +1,19 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .rule_engine import *
-from .offered import *
-from .contract import *
+import rule_engine
+import offered
+import contract
 
 
 def register():
     Pool.register(
-        RuleEngine,
-        RuleEngineRuntime,
-        OptionDescription,
-        CoverageAmountRule,
-        Contract,
-        CoveredElement,
-        ContractOption,
-        ContractOptionVersion,
+        rule_engine.RuleEngine,
+        rule_engine.RuleEngineRuntime,
+        offered.OptionDescription,
+        offered.CoverageAmountRule,
+        contract.Contract,
+        contract.CoveredElement,
+        contract.ContractOption,
+        contract.ContractOptionVersion,
         module='contract_coverage_amount', type_='model')
