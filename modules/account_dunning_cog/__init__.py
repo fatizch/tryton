@@ -2,20 +2,20 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .dunning import *
-from .batch import *
-from .party import *
-from .event import *
+import batch
+import dunning
+import event
+import party
 
 
 def register():
     Pool.register(
-        Dunning,
-        Level,
-        Procedure,
-        DunningUpdateBatch,
-        DunningCreationBatch,
-        DunningTreatmentBatch,
-        Party,
-        EventLog,
+        dunning.Dunning,
+        dunning.Level,
+        dunning.Procedure,
+        batch.DunningUpdateBatch,
+        batch.DunningCreationBatch,
+        batch.DunningTreatmentBatch,
+        party.Party,
+        event.EventLog,
         module='account_dunning_cog', type_='model')
