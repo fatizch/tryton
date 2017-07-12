@@ -1,15 +1,16 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .clause import *
-from .test_case import *
-from .offered import *
+
+import clause
+import test_case
+import offered
 
 
 def register():
     Pool.register(
-        OptionDescription,
-        Clause,
-        OptionDescriptionBeneficiaryClauseRelation,
-        TestCaseModel,
+        offered.OptionDescription,
+        clause.Clause,
+        offered.OptionDescriptionBeneficiaryClauseRelation,
+        test_case.TestCaseModel,
         module='offered_life_clause', type_='model')
