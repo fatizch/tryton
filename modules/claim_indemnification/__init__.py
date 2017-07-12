@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.pool import Pool
+
 import batch
 import benefit
 import configuration
@@ -10,8 +12,11 @@ import event
 import move
 import party
 import wizard
-from trytond.pool import Pool
-from benefit import BenefitRule  # NOQA
+from benefit import BenefitRule
+
+__all__ = [
+    'BenefitRule'
+    ]
 
 
 def register():
