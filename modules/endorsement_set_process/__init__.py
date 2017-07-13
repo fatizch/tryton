@@ -2,19 +2,19 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .process import *
-from .endorsement import *
+import process
+import endorsement
 
 
 def register():
     Pool.register(
-        Endorsement,
-        EndorsementPartUnion,
-        EndorsementSet,
-        Process,
-        EndorsementFindProcess,
+        endorsement.Endorsement,
+        endorsement.EndorsementPartUnion,
+        endorsement.EndorsementSet,
+        process.Process,
+        process.EndorsementFindProcess,
         module='endorsement_set_process', type_='model')
 
     Pool.register(
-        EndorsementStartProcess,
+        process.EndorsementStartProcess,
         module='endorsement_set_process', type_='wizard')
