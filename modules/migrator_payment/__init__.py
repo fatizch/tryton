@@ -2,10 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .payment import *
+import payment
 
 
 def register():
     Pool.register(
-        MigratorPayment,
+        payment.MigratorPayment,
         module='migrator_payment', type_='model')
