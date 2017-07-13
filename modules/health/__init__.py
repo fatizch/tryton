@@ -2,24 +2,22 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .offered import *
-from .party import *
-from .contract import *
-from .rule_engine import *
+import offered
+import contract
+import rule_engine
 import party
 
 
 def register():
     Pool.register(
-        # From offered
-        Product,
-        OptionDescription,
-        Party,
-        HealthPartyComplement,
-        Contract,
-        Option,
-        CoveredElement,
-        RuleEngineRuntime,
+        offered.Product,
+        offered.OptionDescription,
+        party.Party,
+        party.HealthPartyComplement,
+        contract.Contract,
+        contract.Option,
+        contract.CoveredElement,
+        rule_engine.RuleEngineRuntime,
         module='health', type_='model')
     Pool.register(
         party.PartyReplace,
