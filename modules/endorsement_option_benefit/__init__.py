@@ -2,24 +2,24 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .endorsement import *
-from .benefit import *
-from .wizard import *
+import benefit
+import endorsement
+import wizard
 
 
 def register():
     Pool.register(
-        OptionBenefit,
-        OptionDisplayer,
-        ManageOptionBenefits,
-        ManageOptionBenefitsDisplayer,
-        EndorsementContract,
-        EndorsementPart,
-        EndorsementBenefitField,
-        EndorsementOptionBenefit,
-        EndorsementOptionVersion,
+        benefit.OptionBenefit,
+        wizard.OptionDisplayer,
+        wizard.ManageOptionBenefits,
+        wizard.ManageOptionBenefitsDisplayer,
+        endorsement.EndorsementContract,
+        endorsement.EndorsementPart,
+        endorsement.EndorsementBenefitField,
+        endorsement.EndorsementOptionBenefit,
+        endorsement.EndorsementOptionVersion,
         module='endorsement_option_benefit', type_='model')
 
     Pool.register(
-        StartEndorsement,
+        wizard.StartEndorsement,
         module='endorsement_option_benefit', type_='wizard')
