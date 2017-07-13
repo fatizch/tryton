@@ -1,28 +1,28 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .claim import *
-from .document import *
-from .benefit import *
-from .rule_engine import *
-from .report_engine import *
+import claim
+import document
+import benefit
+import rule_engine
+import report_engine
 
 
 def register():
     Pool.register(
-        Benefit,
-        DocumentRule,
-        LossDescription,
-        LossDescriptionDocumentDescriptionRelation,
-        Claim,
-        DocumentRequest,
-        RuleEngineRuntime,
-        DocumentRequestLine,
-        DocumentReception,
-        ReportTemplate,
+        benefit.Benefit,
+        benefit.DocumentRule,
+        benefit.LossDescription,
+        benefit.LossDescriptionDocumentDescriptionRelation,
+        claim.Claim,
+        document.DocumentRequest,
+        rule_engine.RuleEngineRuntime,
+        document.DocumentRequestLine,
+        document.DocumentReception,
+        report_engine.ReportTemplate,
         module='claim_document', type_='model')
 
     Pool.register(
-        DocumentRequestReport,
-        ReceiveDocument,
+        report_engine.DocumentRequestReport,
+        document.ReceiveDocument,
         module='claim_document', type_='wizard')
