@@ -2,25 +2,25 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .distribution import *
-from .configuration import *
-from .party import *
-from .res import *
-from .contract import *
-from .process import *
-from .rule_engine import *
+import distribution
+import configuration
+import party
+import res
+import contract
+import process
+import rule_engine
 
 
 def register():
     Pool.register(
-        DistributionNetwork,
-        Configuration,
-        Party,
-        User,
-        Contract,
-        CoveredElement,
-        Beneficiary,
-        ContractBillingInformation,
-        ContractSubscribeFindProcess,
-        RuleEngineRuntime,
+        distribution.DistributionNetwork,
+        configuration.Configuration,
+        party.Party,
+        res.User,
+        contract.Contract,
+        contract.CoveredElement,
+        contract.Beneficiary,
+        contract.ContractBillingInformation,
+        process.ContractSubscribeFindProcess,
+        rule_engine.RuleEngineRuntime,
         module='distribution_portfolio', type_='model')
