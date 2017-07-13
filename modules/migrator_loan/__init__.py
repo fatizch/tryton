@@ -2,13 +2,13 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .loan import *
-from .party import *
+import loan
+import party
 
 
 def register():
     Pool.register(
-        MigratorLender,
-        MigratorLoan,
-        MigratorLoanIncrement,
+        party.MigratorLender,
+        loan.MigratorLoan,
+        loan.MigratorLoanIncrement,
         module='migrator_loan', type_='model')
