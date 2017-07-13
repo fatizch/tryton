@@ -2,10 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .offered import *
+import offered
 
 
 def register():
     Pool.register(
-        ProductPremiumDate,
+        offered.ProductPremiumDate,
         module='premium_life', type_='model')
