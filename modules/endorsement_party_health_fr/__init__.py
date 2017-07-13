@@ -1,20 +1,20 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .endorsement import *
-from .offered import *
-from .wizard import *
+import endorsement
+import offered
+import wizard
 
 
 def register():
     Pool.register(
-        HealthComplement,
-        EndorsementHealthComplementField,
-        EndorsementPartyHealthComplement,
-        EndorsementParty,
-        ChangePartyHealthComplement,
+        endorsement.HealthComplement,
+        endorsement.EndorsementParty,
+        offered.EndorsementHealthComplementField,
+        endorsement.EndorsementPartyHealthComplement,
+        wizard.ChangePartyHealthComplement,
         module='endorsement_party_health_fr', type_='model')
 
     Pool.register(
-        StartEndorsement,
+        wizard.StartEndorsement,
         module='endorsement_party_health_fr', type_='wizard')
