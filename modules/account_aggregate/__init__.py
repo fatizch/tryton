@@ -1,26 +1,27 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .account import *
-from .batch import *
+
+import account
+import batch
 
 
 def register():
     Pool.register(
-        FiscalYear,
-        Journal,
-        Snapshot,
-        Move,
-        Line,
-        Configuration,
-        SnapshotStart,
-        SnapshotDone,
-        SnapshotTakeBatch,
-        LineAggregated,
-        ExtractAggregatedMove,
+        account.FiscalYear,
+        account.Journal,
+        account.Snapshot,
+        account.Move,
+        account.Line,
+        account.Configuration,
+        account.SnapshotStart,
+        account.SnapshotDone,
+        batch.SnapshotTakeBatch,
+        account.LineAggregated,
+        batch.ExtractAggregatedMove,
         module='account_aggregate', type_='model')
     Pool.register(
-        TakeSnapshot,
-        OpenLineAggregated,
-        OpenLine,
+        account.TakeSnapshot,
+        account.OpenLineAggregated,
+        account.OpenLine,
         module='account_aggregate', type_='wizard')
