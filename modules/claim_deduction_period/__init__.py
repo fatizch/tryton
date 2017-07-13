@@ -2,23 +2,23 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .benefit import *
-from .claim import *
-from .rule_engine import *
-from .wizard import *
+import benefit
+import claim
+import rule_engine
+import wizard
 
 
 def register():
     Pool.register(
-        LossDescription,
-        DeductionPeriodKind,
-        LossDescriptionDeductionPeriodKindRelation,
-        BenefitRule,
-        Loss,
-        DeductionPeriod,
-        IndemnificationDefinition,
-        RuleRuntime,
+        benefit.LossDescription,
+        benefit.DeductionPeriodKind,
+        benefit.LossDescriptionDeductionPeriodKindRelation,
+        benefit.BenefitRule,
+        claim.Loss,
+        claim.DeductionPeriod,
+        wizard.IndemnificationDefinition,
+        rule_engine.RuleRuntime,
         module='claim_deduction_period', type_='model')
     Pool.register(
-        CreateIndemnification,
+        wizard.CreateIndemnification,
         module='claim_deduction_period', type_='wizard')
