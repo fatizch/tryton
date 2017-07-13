@@ -1,32 +1,33 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .account import *
-from .offered import *
-from .contract import *
-from .wizard import *
-from .rule_engine import *
+
+import account
+import offered
+import contract
+import wizard
+import rule_engine
 
 
 def register():
     Pool.register(
-        Fee,
-        ProductPremiumDate,
-        Product,
-        ProductFeeRelation,
-        OptionDescriptionPremiumRule,
-        OptionDescription,
-        OptionDescriptionFeeRelation,
-        OptionDescriptionTaxRelation,
-        Contract,
-        ContractOption,
-        ContractFee,
-        RuleEngine,
-        Premium,
-        DisplayContractPremiumDisplayer,
-        DisplayContractPremiumDisplayerPremiumLine,
+        account.Fee,
+        offered.ProductPremiumDate,
+        offered.Product,
+        offered.ProductFeeRelation,
+        offered.OptionDescriptionPremiumRule,
+        offered.OptionDescription,
+        offered.OptionDescriptionFeeRelation,
+        offered.OptionDescriptionTaxRelation,
+        contract.Contract,
+        contract.ContractOption,
+        contract.ContractFee,
+        rule_engine.RuleEngine,
+        contract.Premium,
+        wizard.DisplayContractPremiumDisplayer,
+        wizard.DisplayContractPremiumDisplayerPremiumLine,
         module='premium', type_='model')
 
     Pool.register(
-        DisplayContractPremium,
+        wizard.DisplayContractPremium,
         module='premium', type_='wizard')
