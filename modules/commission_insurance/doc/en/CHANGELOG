@@ -1,3 +1,4 @@
+* BUG#6619 Fix management of dunnings on non-periodic invoices
 * OTH#0000 Notify with a new event when a commission invoice is generated
 * BUG#6445 Manually set post parameters in batch chain
 * BUG#6395 Do not override payment date if a maturity date exists

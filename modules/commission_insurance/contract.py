@@ -82,7 +82,7 @@ class Contract:
         domain = [('type_', '=', 'principal')]
         if self.agent and self.agent.plan.insurer_plan:
             domain.append(('plan', '=', self.agent.plan.insurer_plan))
-        if not coverage and line:
+        if not coverage and line and getattr(line, 'details', None):
             coverage = getattr(line.details[0], 'rated_entity', None)
         if coverage and getattr(coverage, 'insurer', None):
             domain.append(('party', '=', coverage.insurer.party))
