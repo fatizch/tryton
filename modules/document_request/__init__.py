@@ -2,28 +2,28 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .batch import *
-from .document import *
-from .attachment import *
-from .report_engine import *
+import batch
+import document
+import attachment
+import report_engine
 import party
 
 
 def register():
     Pool.register(
-        DocumentRequest,
-        DocumentRequestLine,
-        DocumentRequestBatch,
-        DocumentReception,
-        ReattachDocument,
-        ReceiveDocumentLine,
-        BatchRemindDocuments,
-        Attachment,
+        document.DocumentRequest,
+        document.DocumentRequestLine,
+        batch.DocumentRequestBatch,
+        document.DocumentReception,
+        document.ReattachDocument,
+        document.ReceiveDocumentLine,
+        batch.BatchRemindDocuments,
+        attachment.Attachment,
         module='document_request', type_='model')
     Pool.register(
-        ReceiveDocument,
+        document.ReceiveDocument,
         party.PartyReplace,
         module='document_request', type_='wizard')
     Pool.register(
-        ReportGenerate,
+        report_engine.ReportGenerate,
         module='document_request', type_='report')
