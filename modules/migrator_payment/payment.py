@@ -57,9 +57,9 @@ class MigratorPayment(migrator.Migrator):
         cls.cache_obj['group'] = tools.cache_from_search(
             'account.payment.group', 'number')
         cls.cache_obj['account'] = Account.search(
-            [('code', '=', cls.get_conf_item('account_code'))])[0]
+            [('code', '=', kwargs.get('account_code'))])[0]
         cls.cache_obj['journal'] = Journal.search(
-            [('code', '=', cls.get_conf_item('journal_code'))])[0]
+            [('code', '=', kwargs.get('journal_code'))])[0]
 
     @classmethod
     def create_move_line(cls, row):

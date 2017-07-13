@@ -26,6 +26,23 @@ class SnapshotTakeBatch(batch.BatchRootNoSelect):
     logger = logging.getLogger(__name__)
 
     @classmethod
+    def __setup__(cls):
+        super(SnapshotTakeBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'job_size': 0,
+                })
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'account.move.snapshot'
+
+    @classmethod
+    def parse_params(cls, params):
+        params = super(SnapshotTakeBatch, cls).parse_params(params)
+        assert params.get('job_size') == 0
+        return params
+
+    @classmethod
     def execute(cls, objects, ids):
         pool = Pool()
         Snapshot = pool.get('account.move.snapshot')
@@ -37,6 +54,13 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
     'Extract Aggregated Move'
 
     __name__ = 'account.move.aggregated.extract'
+
+    @classmethod
+    def __setup__(cls):
+        super(ExtractAggregatedMove, cls).__setup__()
+        cls._default_config_items.update({
+                'flush_size': 1024,
+                })
 
     @classmethod
     def get_batch_main_model_name(cls):

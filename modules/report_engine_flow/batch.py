@@ -93,13 +93,11 @@ class BaseMassFlowBatch(batch.MemorySavingBatch):
 
     @classmethod
     def get_filename(cls, *args, **kwargs):
-        return kwargs.get('output_filename', cls.get_conf_item(
-                'output_filename'))
+        return kwargs.get('output_filename')
 
     @classmethod
     def get_flush_size(cls, *args, **kwargs):
-        return kwargs.get('flush_size', cls.get_conf_item(
-                'flush_size'))
+        return kwargs.get('flush_size')
 
     @classmethod
     def execute(cls, objects, ids, *args, **kwargs):

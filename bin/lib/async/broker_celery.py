@@ -32,10 +32,11 @@ class CoogTask(Task):
 
     def batch_trigger_event(self, method, task_id, batch_name, ids,
             *args, **kwargs):
-        from tryton_init import database
+        import tryton_init
         from trytond.transaction import Transaction
         from trytond.pool import Pool
         user_id = kwargs.get('user', None)
+        database = tryton_init.database(kwargs.get('database'))
         with Transaction().start(database, 0, readonly=True):
             User = Pool().get('res.user')
             if not user_id:
@@ -73,14 +74,15 @@ for name, func in tasks.iteritems():
     app.task(func, base=CoogTask, name=name, serializer='json')
 
 
-def log_job(job, queue, fname, args):
+def log_job(job, queue, fname, args, kwargs):
     # not stored by celery
     connection.setex('coog:job:%s' % str(job), config.JOB_RESULT_TTL,
         json.dumps({
                 'date': time.strftime('%Y-%m-%dT%H:%M:%S'),
                 'queue': queue,
                 'func': fname,
-                'args': args
+                'args': args,
+                'kwargs': kwargs,
                 }))
 
 
@@ -88,7 +90,7 @@ def enqueue(queue, fname, args, **kwargs):
     task = app.tasks[fname]
     job = task.apply_async(queue=queue, args=args, kwargs=kwargs,
         expires=config.JOB_TTL, retry=False)
-    log_job(job, queue, fname, args)
+    log_job(job, queue, fname, args, kwargs)
     return job.task_id
 
 
@@ -98,9 +100,10 @@ def split(job_key):
         exit(code=1)
     job = json.loads(job)
     args = job['args']
+    kwargs = job['kwargs']
     ids = args[1]
     if len(ids) <= 1:
         exit(code=1)
     args_list = [[args[0], [id], args[2]] for id in ids]
     for args in args_list:
-        enqueue(job['queue'], job['func'], args)
+        enqueue(job['queue'], job['func'], args, **kwargs)

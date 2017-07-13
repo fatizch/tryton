@@ -1,4 +1,5 @@
 import logging
+import datetime
 import async.broker as async_broker
 
 
@@ -28,40 +29,60 @@ def batch_generate(name, params):
     from trytond.pool import Pool
     from trytond.transaction import Transaction
     from trytond.server_context import ServerContext
-    from tryton_init import database
+    import tryton_init
 
+    # Get database from ENV variable
+    database = tryton_init.database()
     logger = logging.getLogger(name)
-    logger.info('generate with params: %s', params)
+    logger.info('batch arguments: %s', params)
     broker = async_broker.get_module()
-    batch_params = params.copy()
-    job_size = batch_params.pop('job_size', None)
-    batch_params.pop('transaction_size', None)
     res = []
     with Transaction().start(database, 0, readonly=True):
         User = Pool().get('res.user')
         # TODO: add batch user
         admin, = User.search([('login', '=', 'admin')])
         BatchModel = Pool().get(name)
-        batch_params = BatchModel.check_params(batch_params)
-        with Transaction().set_context(User.get_preferences(context_only=True),
-                client_defined_date=batch_params['connection_date']):
+
+        # Batch params computation
+        batch_params = BatchModel._default_config_items.copy()
+        batch_params.update(BatchModel.get_batch_configuration())
+        batch_params.update(params)
+
+        batch_params = BatchModel.parse_params(batch_params)
+
+        # Remove non business params (batch_params to be passed to select_ids)
+        job_size = int(batch_params.pop('job_size'))
+        transaction_size = int(batch_params.pop('transaction_size', 0))
+        connection_date = batch_params.pop('connection_date',
+           datetime.datetime.now().date())
+
+        # Prepare serialized params (to be saved on redis)
+        job_params = batch_params.copy()
+        job_params['job_size'] = job_size
+        job_params['transaction_size'] = transaction_size
+        job_params['connection_date'] = connection_date
+        job_params = BatchModel.serializable_params(job_params)
+
+        with Transaction().set_context(
+                User.get_preferences(context_only=True),
+                client_defined_date=connection_date):
             Cache.clean(database)
-            batch_params.pop('connection_date', None)
             try:
-                if job_size is None:
-                    job_size = BatchModel.get_conf_item('job_size')
-                job_size = int(job_size)
-                with ServerContext().set_context(from_batch=True):
+                with ServerContext().set_context(
+                        from_batch=True,
+                        job_size=job_size,
+                        transaction_size=transaction_size):
                     for l in split_batch(BatchModel.select_ids(**batch_params),
                             job_size):
                         broker.enqueue(name, 'batch_exec',
-                            (name, l, params))
+                            (name, l, job_params), database=database)
                         res.append(len(l))
             except Exception:
                 logger.exception('generate crashed')
                 raise
             finally:
                 Cache.resets(database)
+    logger.info('generated with params: %s', batch_params)
     return res
 
 
@@ -85,33 +106,35 @@ def batch_exec(name, ids, params, **kwargs):
     from trytond.pool import Pool
     from trytond.transaction import Transaction
     from trytond.server_context import ServerContext
-    from tryton_init import database
+    import tryton_init
 
     logger = logging.getLogger(name)
     logger.info('exec %s items with params: %s', len(ids), params)
 
+    database = tryton_init.database(kwargs.get('database'))
+    logger.info('Executing batch on database %s' % database)
     with Transaction().start(database, 0, readonly=True):
         User = Pool().get('res.user')
         # TODO: add batch user
         admin, = User.search([('login', '=', 'admin')])
         BatchModel = Pool().get(name)
 
-    batch_params = params.copy()
-    batch_params.pop('job_size', None)
-    transaction_size = batch_params.pop('transaction_size', None)
+        batch_params = params.copy()
+        batch_params = BatchModel.parse_params(batch_params)
+
+        # Remove non business params (batch_params to be passed to select_ids)
+        job_size = batch_params.pop('job_size')
+        transaction_size = batch_params.pop('transaction_size')
+        connection_date = batch_params.pop('connection_date')
 
     res = []
     with Transaction().start(database, admin.id):
-        batch_params = BatchModel.check_params(batch_params)
         with Transaction().set_context(User.get_preferences(context_only=True),
-                client_defined_date=batch_params['connection_date']):
-            batch_params.pop('connection_date', None)
+                client_defined_date=connection_date):
             Cache.clean(database)
-            if transaction_size is None:
-                transaction_size = BatchModel.get_conf_item('transaction_size')
-            transaction_size = int(transaction_size)
             try:
-                with ServerContext().set_context(from_batch=True):
+                with ServerContext().set_context(from_batch=True,
+                        job_size=job_size, transaction_size=transaction_size):
                     for l in split_job(ids, transaction_size):
                         to_treat = BatchModel.convert_to_instances(l,
                             **batch_params)

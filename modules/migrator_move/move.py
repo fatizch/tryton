@@ -51,7 +51,7 @@ class MigratorInvoiceMoveLine(migrator.Migrator):
         return select
 
     @classmethod
-    def migrate_rows(cls, rows_all, ids):
+    def migrate_rows(cls, rows_all, ids, **kwargs):
         pool = Pool()
         Move = pool.get('account.move')
         Period = pool.get('account.period')
@@ -229,7 +229,7 @@ class MigratorMoveReconciliation(migrator.Migrator):
             load_payments_cache(rows)
 
     @classmethod
-    def migrate_rows(cls, rows_all, ids):
+    def migrate_rows(cls, rows_all, ids, **kwargs):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         Move = pool.get('account.move')

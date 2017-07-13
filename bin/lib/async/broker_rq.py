@@ -18,13 +18,14 @@ connection = redis.StrictRedis(host=broker_host, port=broker_port,
     db=broker_db)
 
 
-def log_job(job, queue, fname, args):
+def log_job(job, queue, fname, args, kwargs):
     # stored by rq but pickled
     connection.hset(job.key, 'coog',
         json.dumps({
                 'queue': queue,
                 'func': fname,
-                'args': args
+                'args': args,
+                'kwargs', kwargs,
                 }))
 
 
@@ -32,7 +33,7 @@ def log_result(job, result):
     connection.hset(job.key, 'coog-result', json.dumps(result))
 
 
-def enqueue(queue, fname, args):
+def enqueue(queue, fname, args, **kwargs):
     if isinstance(fname, basestring):
         func = tasks[fname]
     else:
@@ -40,9 +41,10 @@ def enqueue(queue, fname, args):
         fname = func.__name__
     assert func and callable(func), 'task %s does not exist' % fname
     q = Queue(queue, connection=connection)
-    job = q.enqueue_call(func=func, args=args, timeout=config.JOB_TIMEOUT,
-        ttl=config.JOB_TTL, result_ttl=config.JOB_RESULT_TTL)
-    log_job(job, queue, fname, args)
+    job = q.enqueue_call(func=func, args=args, kwargs=kwargs,
+        timeout=config.JOB_TIMEOUT, ttl=config.JOB_TTL,
+        result_ttl=config.JOB_RESULT_TTL)
+    log_job(job, queue, fname, args, kwargs)
 
 
 def split(job_key):
@@ -51,9 +53,10 @@ def split(job_key):
         exit(code=1)
     job = json.loads(job)
     args = job['args']
+    kwargs = job['kwargs']
     ids = args[1]
     if len(ids) <= 1:
         exit(code=1)
     args_list = [[args[0], [id], args[2]] for id in ids]
     for args in args_list:
-        enqueue(job['queue'], job['func'], args)
+        enqueue(job['queue'], job['func'], args, **kwargs)

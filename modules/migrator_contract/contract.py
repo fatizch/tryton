@@ -106,7 +106,7 @@ class MigratorContractPremium(migrator.Migrator):
         return to_create
 
     @classmethod
-    def migrate_rows(cls, rows_all, ids):
+    def migrate_rows(cls, rows_all, ids, **kwargs):
         pool = Pool()
         Premium = pool.get('contract.premium')
         Contract = pool.get('contract')
@@ -268,7 +268,7 @@ class MigratorContract(migrator.Migrator):
                 continue
 
     @classmethod
-    def migrate_rows(cls, rows, ids):
+    def migrate_rows(cls, rows, ids, **kwargs):
         pool = Pool()
         Contract = pool.get('contract')
         contracts = {}
@@ -283,7 +283,7 @@ class MigratorContract(migrator.Migrator):
         Contract.save(contracts.values())
 
         skip_extra_migrators = cls.extra_args.get('skip_extra_migrators',
-            cls.get_conf_item('skip_extra_migrators')).split(',')
+            kwargs.get('skip_extra_migrators')).split(',')
         extra_migrators = [x for x in cls.extra_migrator_names() if x not in
             skip_extra_migrators]
 
@@ -468,7 +468,7 @@ class MigratorContractVersion(MigratorContract):
         return contract
 
     @classmethod
-    def migrate_rows(cls, rows_all, ids):
+    def migrate_rows(cls, rows_all, ids, **kwargs):
         contracts = {}
         cls.logger.info('migrating %s versions rows' % len(rows_all))
         for contract_number, _rows in groupby(rows_all,
@@ -563,7 +563,7 @@ class MigratorContractOption(migrator.Migrator):
         return row
 
     @classmethod
-    def migrate_rows(cls, rows, ids):
+    def migrate_rows(cls, rows, ids, **kwargs):
         pool = Pool()
 
         Option = pool.get('contract.option')
@@ -651,7 +651,7 @@ class MigratorContractPremiumWaiver(migrator.Migrator):
         return row
 
     @classmethod
-    def migrate_rows(cls, rows, ids):
+    def migrate_rows(cls, rows, ids, **kwargs):
         pool = Pool()
         Model = pool.get(cls.model)
         WaiverOption = Pool().get('contract.waiver_premium-contract.option')
@@ -705,7 +705,7 @@ class MigratorContractEvent(migrator.Migrator):
         return row
 
     @classmethod
-    def migrate_rows(cls, rows, ids):
+    def migrate_rows(cls, rows, ids, **kwargs):
         Event = Pool().get('event')
         pool = Pool()
         EventLog = pool.get('event.log')

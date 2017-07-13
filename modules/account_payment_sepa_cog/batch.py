@@ -59,6 +59,12 @@ class PaymentTreatmentBatch:
                 })
 
     @classmethod
+    def parse_params(cls, params):
+        params = super(PaymentTreatmentBatch, cls).parse_params(params)
+        assert params.get('job_size') == 0
+        return params
+
+    @classmethod
     def _group_payment_key(cls, payment):
         res = super(PaymentTreatmentBatch, cls)._group_payment_key(payment)
         journal = payment.journal
@@ -95,7 +101,6 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
 
     @classmethod
     def select_ids(cls, in_directory):
-        in_directory = in_directory or cls.get_conf_item('in_directory')
         if not in_directory:
             raise Exception("'in_directory' is required")
         files = cls.get_file_names_and_paths(in_directory)
@@ -140,10 +145,14 @@ class PaymentFailMessageCreationBatch(batch.BatchRootNoSelect):
                 })
 
     @classmethod
+    def parse_params(cls, params):
+        params = super(PaymentFailBatch, cls).parse_params(params)
+        assert params.get('job_size') == 0
+        return params
+
+    @classmethod
     def execute(cls, objects, ids, in_directory=None, archive=None):
         Message = Pool().get('account.payment.sepa.message')
-        in_directory = in_directory or cls.get_conf_item('in_directory')
-        archive = archive or cls.get_conf_item('archive')
         if not in_directory or not archive:
             raise Exception("'in_directory' and 'archive' are required")
         files = cls.get_file_names_and_paths(in_directory)

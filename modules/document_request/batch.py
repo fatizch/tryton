@@ -4,6 +4,7 @@ import logging
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
+from trytond.config import config
 
 from trytond.modules.coog_core import batch, coog_date
 
@@ -19,6 +20,14 @@ class DocumentRequestBatch(batch.BatchRoot):
     __name__ = 'document.request.process'
 
     logger = logging.getLogger(__name__)
+
+    @classmethod
+    def __setup__(cls):
+        super(DocumentRequestBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'filepath_template': u'%{BATCHNAME}/%{FILENAME}',
+                'filepath_timestamp_format': u'%Y%m%d_%Hh%Mm%Ss',
+                })
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -37,7 +46,7 @@ class DocumentRequestBatch(batch.BatchRoot):
         return [('request', 'ASC')]
 
     @classmethod
-    def get_batch_domain(cls, treatment_date):
+    def get_batch_domain(cls, treatment_date, **kwargs):
         return [
             ('reception_date', '=', None),
             ('request', '!=', None),
@@ -47,7 +56,7 @@ class DocumentRequestBatch(batch.BatchRoot):
                 ('send_date', '<=', coog_date.add_month(treatment_date, -3))]]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date):
+    def execute(cls, objects, ids, treatment_date, **kwargs):
         ReportCreate = Pool().get(
             'report.create', type='wizard')
         for cur_object in objects:
@@ -61,7 +70,8 @@ class DocumentRequestBatch(batch.BatchRoot):
                 report_def, data = data['actions'][0]
                 Report = Pool().get(report_def['report_name'], type='report')
                 ext, _buffer, _, name = Report.execute([data['id']], data)
-                cls.write_batch_output(_buffer, '%s.%s' % (name, ext))
+                cls.write_batch_output(_buffer, '%s.%s' % (name, ext),
+                    **kwargs)
                 wizard.execute(wizard_id, {}, 'post_generation')
                 cls.logger.info('Processed report request for %s' %
                     cur_object.get_rec_name(None))

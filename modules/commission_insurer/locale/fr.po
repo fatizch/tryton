@@ -6,6 +6,10 @@ msgctxt "error:account.invoice:"
 msgid "Commission Reset following unreconciliation of invoice %s"
 msgstr "Annulation de commission suite à délettrage de la quittance %s"
 
+msgctxt "error:account.invoice:"
+msgid "Premiums Received"
+msgstr "Primes reçues"
+
 msgctxt "error:account.move.line:"
 msgid "Automatic Split Move"
 msgstr "Découpage automatique"

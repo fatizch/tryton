@@ -112,13 +112,27 @@ class SetNumberInvoiceContractBatch(batch.BatchRoot):
     logger = logging.getLogger(__name__)
 
     @classmethod
+    def __setup__(cls):
+        super(SetNumberInvoiceContractBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'job_size': 0,
+                'transaction_size': 1000,
+                })
+
+    @classmethod
+    def parse_params(cls, params):
+        params = super(SetNumberInvoiceContractBatch, cls).parse_params(params)
+        assert params.get('job_size') == 0
+        return params
+
+    @classmethod
     def get_batch_main_model_name(cls):
         return 'account.invoice'
 
     @classmethod
     def select_ids(cls, treatment_date):
-        job_size = cls.get_conf_item('job_size')
-        assert job_size == '0', 'Can not scale out'
+        job_size = ServerContext().get('job_size')
+        assert job_size == 0, 'Can not scale out (job_size: %s)' % job_size
         pool = Pool()
         post_batch = pool.get('contract.invoice.post')
         return post_batch.select_ids(treatment_date)
@@ -283,7 +297,7 @@ class BulkSetNumberInvoiceContractBatch(batch.BatchRoot):
 
     @classmethod
     def select_ids(cls, treatment_date):
-        job_size = cls.get_conf_item('job_size')
+        job_size = ServerContext().get('job_size')
         assert job_size == '1', 'job_size must be set to 1, current value: %s' \
             % (job_size)
 

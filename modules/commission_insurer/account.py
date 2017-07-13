@@ -86,6 +86,7 @@ class Invoice:
         cls._error_messages.update({
                 'reset_commission_description':
                 'Commission Reset following unreconciliation of invoice %s',
+                'batch_premiums_received': 'Premiums Received',
                 })
 
     @classmethod

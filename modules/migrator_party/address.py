@@ -79,7 +79,8 @@ class MigratorZip(migrator.Migrator):
     def sanitize(cls, row):
         row = super(MigratorZip, cls).sanitize(row)
         if not row.get('country_code', None):
-            row['country_code'] = cls.get_conf_item('default_country_code')
+            row['country_code'] = cls._default_config_items.get(
+                'default_country_code')
         return row
 
     @classmethod

@@ -73,7 +73,7 @@ end
 
 local function list_init()
     local header = {'date', 'queue', 'id', 'status', 'context', 'records',
-        'args', 'result'}
+        'args', 'kwargs', 'result'}
     local result = {table.concat(header, '\t')}
     return header, result
 end
@@ -133,10 +133,12 @@ end
 
 broker.fill = function(id, job)
     local args = job.args
+    local kwargs = job.kwargs
     job.task = job.func
     job.context = args[1]
     job.records = cjson.encode(args[2])
     job.args = cjson.encode(args[3])
+    job.kwargs = cjson.encode(kwargs)
     if job.result then
         job.result = cjson.encode(job.result)
     else

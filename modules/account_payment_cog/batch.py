@@ -46,6 +46,12 @@ class PaymentTreatmentBatch(batch.BatchRoot):
                 })
 
     @classmethod
+    def parse_params(cls, params):
+        params = super(PaymentTreatmentBatch, cls).parse_params(params)
+        assert params.get('job_size') == 0
+        return params
+
+    @classmethod
     def get_batch_main_model_name(cls):
         return 'account.payment'
 
@@ -55,8 +61,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
 
     @classmethod
     def get_batch_domain(cls, treatment_date, payment_kind=None,
-            journal_methods=None):
-        payment_kind = payment_kind or cls.get_conf_item('payment_kind')
+            journal_methods=None, **kwargs):
         res = [
             ('state', '=', 'approved'),
             ('date', '<=', treatment_date)]
@@ -74,12 +79,12 @@ class PaymentTreatmentBatch(batch.BatchRoot):
         return res
 
     @classmethod
-    def select_ids_regroup_key(cls, payment, payment_kind):
+    def select_ids_regroup_key(cls, payment, payment_kind, **kwargs):
         return payment.party
 
     @classmethod
     def select_ids(cls, treatment_date, payment_kind=None,
-            journal_methods=None):
+            journal_methods=None, **kwargs):
         Payment = Pool().get('account.payment')
         res = super(PaymentTreatmentBatch, cls).select_ids(treatment_date,
             payment_kind, journal_methods)
@@ -103,9 +108,9 @@ class PaymentTreatmentBatch(batch.BatchRoot):
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, payment_kind=None,
-            journal_methods=None):
+            journal_methods=None, **kwargs):
         with Transaction().set_context(
-                _record_cache_size=int(cls.get_conf_item('cache_size'))):
+                _record_cache_size=int(kwargs.get('cache_size'))):
             groups = []
             Payment = Pool().get('account.payment')
             payments = sorted(objects, key=cls._group_payment_key)
@@ -146,6 +151,12 @@ class PaymentGroupCreationBatch(batch.BatchRoot):
                 })
 
     @classmethod
+    def parse_params(cls, params):
+        params = super(PaymentGroupCreationBatch, cls).parse_params(params)
+        assert params.get('job_size') == 0
+        return params
+
+    @classmethod
     def get_batch_main_model_name(cls):
         return 'account.payment'
 
@@ -179,7 +190,6 @@ class PaymentGroupCreationBatch(batch.BatchRoot):
         pool = Pool()
         payment = pool.get('account.payment').__table__()
         cursor = Transaction().connection.cursor()
-        payment_kind = payment_kind or cls.get_conf_item('payment_kind')
         assert payment_kind in PAYMENT_KINDS
         query = payment.select(payment.id, *cls._group_payment_key(payment),
             where=(cls.get_payment_where_clause(payment, payment_kind,
@@ -297,7 +307,6 @@ class PaymentGroupProcessBatch(batch.BatchRoot):
         journal = pool.get('account.payment.journal').__table__()
         group = pool.get('account.payment.group').__table__()
         cursor = Transaction().connection.cursor()
-        payment_kind = payment_kind or cls.get_conf_item('payment_kind')
         assert payment_kind in PAYMENT_KINDS
         where_clause = (payment.kind == payment_kind) & \
             (payment.group != Null) & \
@@ -327,7 +336,7 @@ class PaymentGroupProcessBatch(batch.BatchRoot):
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, payment_kind=None,
-            journal_methods=None):
+            journal_methods=None, **kwargs):
         pool = Pool()
         Payment = pool.get('account.payment')
         Event = pool.get('event')
@@ -335,7 +344,7 @@ class PaymentGroupProcessBatch(batch.BatchRoot):
             return
         groups = []
         with Transaction().set_context(_record_cache_size=int(
-                    cls.get_conf_item('cache_size'))):
+                    kwargs.get('cache_size'))):
             for group in objects:
                 for payments_slice in grouped_slice(group.payments):
                     Payment.write(list(payments_slice), {'state': 'processing'})
@@ -383,7 +392,6 @@ class PaymentCreationBatch(batch.BatchRoot):
         move_line = pool.get('account.move.line').__table__()
         account = pool.get('account.account').__table__()
         party = pool.get('party.party').__table__()
-        payment_kind = payment_kind or cls.get_conf_item('payment_kind')
         if payment_kind and payment_kind not in PAYMENT_KINDS:
             msg = "ignore payment_kind: '%s' not in %s" % (payment_kind,
                 PAYMENT_KINDS)
@@ -469,7 +477,6 @@ class PaymentValidationBatchBase(batch.BatchRoot):
                 cls.logger.error('%s. Aborting' % msg)
                 raise Exception(msg)
             return [(payment.id,) for payment in groups[0].processing_payments]
-        payment_kind = payment_kind or cls.get_conf_item('payment_kind')
         if payment_kind and payment_kind not in PAYMENT_KINDS:
             msg = "ignoring payment_kind: '%s' not in %s" % (payment_kind,
                 PAYMENT_KINDS)

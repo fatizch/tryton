@@ -23,6 +23,20 @@ class CreateEmptyInvoicePrincipalBatch(batch.BatchRoot):
     logger = logging.getLogger(__name__)
 
     @classmethod
+    def __setup__(cls):
+        super(CreateEmptyInvoicePrincipalBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'job_size': 0,
+                })
+
+    @classmethod
+    def parse_params(cls, params):
+        params = super(CreateEmptyInvoicePrincipalBatch, cls).parse_params(
+            params)
+        assert params.get('job_size') == 0
+        return params
+
+    @classmethod
     def get_batch_main_model_name(cls):
         return 'insurer'
 
@@ -46,10 +60,12 @@ class CreateEmptyInvoicePrincipalBatch(batch.BatchRoot):
 
         company = Company(Transaction().context.get('company'))
         journal = Journal.search([('type', '=', 'commission')], limit=1)[0]
-        description = cls.get_conf_item('premium_line_description')
+        premium_line_description = pool.get('account.invoice'
+            ).raise_user_error('batch_premiums_received',
+                raise_exception=False)
 
-        CreateInvoicePrincipal.create_empty_invoices(
-            objects, company, journal, treatment_date, description)
+        CreateInvoicePrincipal.create_empty_invoices(objects, company, journal,
+            treatment_date, premium_line_description)
 
 
 class LinkInvoicePrincipalBatch(batch.BatchRoot):
@@ -87,11 +103,13 @@ class LinkInvoicePrincipalBatch(batch.BatchRoot):
 
         company = Company(Transaction().context.get('company'))
         journal = Journal.search([('type', '=', 'commission')], limit=1)[0]
-        description = cls.get_conf_item('premium_line_description')
 
+        premium_line_description = pool.get('account.invoice'
+            ).raise_user_error('batch_premiums_received',
+                raise_exception=False)
         CreateInvoicePrincipal.link_invoices_and_lines(
-            insurers, treatment_date, company, journal, description,
-            invoice_ids=ids)
+            insurers, treatment_date, company, journal,
+            premium_line_description, invoice_ids=ids)
 
 
 class FinalizeInvoicePrincipalBatch(batch.BatchRoot):
@@ -100,6 +118,19 @@ class FinalizeInvoicePrincipalBatch(batch.BatchRoot):
     __name__ = 'commission.invoice_principal.finalize'
 
     logger = logging.getLogger(__name__)
+
+    @classmethod
+    def __setup__(cls):
+        super(FinalizeInvoicePrincipalBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'job_size': 0,
+                })
+
+    @classmethod
+    def parse_params(cls, params):
+        params = super(FinalizeInvoicePrincipalBatch, cls).parse_params(params)
+        assert params.get('job_size') == 0
+        return params
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -124,7 +155,10 @@ class FinalizeInvoicePrincipalBatch(batch.BatchRoot):
             'commission.create_invoice_principal', type='wizard')
         company = Company(Transaction().context.get('company'))
         journal = Journal.search([('type', '=', 'commission')], limit=1)[0]
-        description = cls.get_conf_item('premium_line_description')
 
+        premium_line_description = pool.get('account.invoice'
+            ).raise_user_error('batch_premiums_received',
+                raise_exception=False)
         CreateInvoicePrincipal.finalize_invoices_and_lines(
-            objects, company, journal, treatment_date, description)
+            objects, company, journal, treatment_date,
+            premium_line_description)

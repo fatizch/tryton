@@ -64,45 +64,56 @@ def analyze(meth):
     return wrap
 
 
+def load_batch_config():
+    config = ConfigParser.RawConfigParser()
+    config_file = os.environ.get('TRYTOND_BATCH_CONFIG')
+    if config_file:
+        try:
+            with open(config_file, 'r') as fconf:
+                config.readfp(fconf)
+        except IOError:
+            pass
+    return config
+
+
 class BatchRoot(ModelView):
     'Root class for batches'
+
+    _config = load_batch_config()
 
     @classmethod
     def __setup__(cls):
         super(BatchRoot, cls).__setup__()
         cls._default_config_items = {
-            'root_dir': config.get('batch', 'log_dir', default=''),
-            'filepath_template': u'%{BATCHNAME}/%{FILENAME}',
-            'filepath_timestamp_format': u'%Y%m%d_%Hh%Mm%Ss',
             'job_size': '1000',
-            'transaction_size': '0'
+            'transaction_size': '0',
         }
-        cls._config = ConfigParser.RawConfigParser()
-        config_file = os.environ.get('TRYTOND_BATCH_CONFIG')
-        if config_file:
-            try:
-                with open(config_file, 'r') as fconf:
-                    cls._config.readfp(fconf)
-            except IOError:
-                pass
-        for section in cls._config.sections():
-            if cls._config.has_option(section, 'filepath_template'):
-                assert('%{FILENAME}' in cls._config.get(section,
-                    'filepath_template'))
 
     @classmethod
-    def get_conf_item(cls, key):
-        if cls._config.has_option(cls.__name__, key):
-            item = cls._config.get(cls.__name__, key)
-        elif cls._config.has_option('default', key):
-            item = cls._config.get('default', key)
-        else:
-            item = cls._default_config_items.get(key, None)
-        return item
+    def get_batch_configuration(cls):
+        config = {}
+        if cls._config.has_section(cls.__name__):
+            for key, value in cls._config.items(cls.__name__):
+                config[key] = value
+        return config
 
     @classmethod
-    def check_params(cls, params):
+    def serializable_params(cls, params):
+        serializable = {}
+
+        for key, value in params.items():
+            if isinstance(value, date):
+                serializable[key] = value.strftime('%Y-%m-%d')
+            else:
+                serializable[key] = value
+        return serializable
+
+    @classmethod
+    def parse_params(cls, params):
         logger = logging.getLogger(cls.__name__)
+        filepath_template = params.get('filepath_template', None)
+        if filepath_template:
+            assert('%{FILENAME}' in filepath_template)
         if not params.get('connection_date'):
             logger.warning('Missing parameter: connection_date')
         params.setdefault('connection_date', date.today())
@@ -161,17 +172,17 @@ class BatchRoot(ModelView):
         return res
 
     @classmethod
-    def generate_filepath(cls, filename='', makedirs=True):
-        filepath_template = cls.get_conf_item('filepath_template')
+    def generate_filepath(cls, filename='', makedirs=True, **kwargs):
+        filepath_template = kwargs.get('filepath_template')
         filepath_template = filepath_template.\
             replace('%{FILENAME}', filename). \
             replace('%{BATCHNAME}', coog_string.slugify(cls.__name__))
         if '%{TIMESTAMP}' in filepath_template:
-            date_format = cls.get_conf_item('filepath_timestamp_format')
+            date_format = kwargs.get('filepath_timestamp_format')
             timestamp = datetime.now().strftime(date_format)
             filepath_template = filepath_template.replace('%{TIMESTAMP}',
                 timestamp)
-        filepath = os.path.join(cls.get_conf_item('root_dir'),
+        filepath = os.path.join(cls.kwargs('root_dir'),
             filepath_template)
         dirpath = os.path.dirname(filepath)
         if makedirs and not os.path.exists(dirpath):
@@ -210,8 +221,8 @@ class BatchRoot(ModelView):
                 **kwargs)
 
     @classmethod
-    def write_batch_output(cls, _buffer, filename):
-        batch_outpath = cls.generate_filepath(filename)
+    def write_batch_output(cls, _buffer, filename, **kwargs):
+        batch_outpath = cls.generate_filepath(filename, **kwargs)
         with open(batch_outpath, 'w') as f:
             f.write(_buffer)
 
@@ -259,11 +270,6 @@ class BatchRoot(ModelView):
 
 class BatchRootNoSelect(BatchRoot):
     "Root class for batches that don't query the database."
-
-    @classmethod
-    def __setup__(cls):
-        super(BatchRootNoSelect, cls).__setup__()
-        cls._default_config_items.update({'job_size': '0'})
 
     @classmethod
     def convert_to_instances(cls, ids, *args, **kwargs):
@@ -343,6 +349,14 @@ class CleanDatabaseBatch(BatchRoot):
     logger = logging.getLogger(__name__)
 
     @classmethod
+    def __setup__(cls):
+        super(CleanDatabaseBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'filepath_template': u'%{BATCHNAME}/%{FILENAME}',
+                'filepath_timestamp_format': u'%Y%m%d_%Hh%Mm%Ss',
+                })
+
+    @classmethod
     def get_batch_main_model_name(cls):
         return 'ir.model'
 
@@ -390,7 +404,7 @@ class CleanDatabaseBatch(BatchRoot):
 
     @classmethod
     def execute(cls, objects, ids, connection_date, treatment_date,
-            module=None, drop_const=None, drop_index=None):
+            module=None, drop_const=None, drop_index=None, **kwargs):
         tables = []
         buf = []
         TableHandler = backend.get('TableHandler')
@@ -427,7 +441,7 @@ class CleanDatabaseBatch(BatchRoot):
         if drop_const is not None or drop_index is not None:
             for table in tables:
                 cls.create_pk(buf, table)
-        cls.write_batch_output('\n'.join(buf), 'clean.sql')
+        cls.write_batch_output('\n'.join(buf), 'clean.sql', **kwargs)
 
 
 class BatchParamsConfig(Model):
@@ -445,6 +459,10 @@ class BatchParamsConfig(Model):
         if connection_date and isinstance(connection_date, basestring):
             c_params['connection_date'] = datetime.strptime(
                 params['connection_date'], '%Y-%m-%d').date()
+        if params.get('job_size'):
+            c_params['job_size'] = int(params['job_size'])
+        if params.get('transaction_size'):
+            c_params['transaction_size'] = int(params['transaction_size'])
         return c_params
 
 

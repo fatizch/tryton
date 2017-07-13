@@ -37,7 +37,8 @@ def depends(modules):
     from trytond.transaction import Transaction
     from trytond.modules import create_graph, get_module_list
 
-    from tryton_init import database
+    import tryton_init
+    database = tryton_init.database()
 
     modules_with_deps = set()
     with Transaction().start(database, 0, readonly=True):

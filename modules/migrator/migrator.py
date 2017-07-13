@@ -339,7 +339,7 @@ class Migrator(batch.BatchRootNoSelect):
         return row
 
     @classmethod
-    def check_params(cls, params):
-        super(Migrator, cls).check_params(params)
+    def parse_params(cls, params):
+        super(Migrator, cls).parse_params(params)
         params.setdefault('update', False)
         return params

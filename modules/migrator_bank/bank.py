@@ -108,7 +108,7 @@ class MigratorBankAgency(migrator.Migrator):
         return row
 
     @classmethod
-    def migrate_rows(cls, rows, ids):
+    def migrate_rows(cls, rows, ids, **kwargs):
         BankAgency = Pool().get('bank.agency')
         to_create = []
         for agency, _rows in groupby(rows, lambda row: row['bic']):
@@ -203,7 +203,7 @@ class MigratorBankAccount(migrator.Migrator):
         return row
 
     @classmethod
-    def migrate_rows(cls, rows, ids, cursor_src=None):
+    def migrate_rows(cls, rows, ids, cursor_src=None, **kwargs):
         pool = Pool()
         BankAccount = pool.get('bank.account')
 

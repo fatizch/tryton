@@ -74,7 +74,7 @@ class MigratorInvoice(migrator.Migrator):
         return row
 
     @classmethod
-    def migrate_rows(cls, rows, ids):
+    def migrate_rows(cls, rows, ids, **kwargs):
         pool = Pool()
         Invoice = pool.get('account.invoice')
         ContractInvoice = pool.get('contract.invoice')
@@ -161,7 +161,7 @@ class MigratorInvoiceLine(migrator.Migrator):
         return row
 
     @classmethod
-    def migrate_rows(cls, rows, ids):
+    def migrate_rows(cls, rows, ids, **kwargs):
         pool = Pool()
         InvoiceLine = pool.get('account.invoice.line')
         InvoiceLineDetail = Pool().get('account.invoice.line.detail')

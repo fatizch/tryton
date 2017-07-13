@@ -12,7 +12,7 @@ from trytond.model import Workflow, ModelView, Unique
 from trytond.wizard import StateView, Button, StateTransition, Wizard
 from trytond.wizard import StateAction
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Not, In, Bool, If, PYSONEncoder, And
+from trytond.pyson import Eval, Not, In, Bool, PYSONEncoder, And
 
 from trytond.modules.account_payment.payment import KINDS
 from trytond.modules.coog_core import export, fields, model
