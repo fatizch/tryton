@@ -1,22 +1,22 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .contract import *
+import contract
 from .rule_engine import *
 from .event import *
 
 
 def register():
     Pool.register(
-        ContractSet,
-        Contract,
-        RuleEngineRuntime,
-        ContractSetSelectDeclineReason,
-        ReportTemplate,
-        Configuration,
-        EventTypeAction,
-        EventLog,
+        contract.ContractSet,
+        contract.Contract,
+        rule_engine.RuleEngineRuntime,
+        contract.ContractSetSelectDeclineReason,
+        contract.ReportTemplate,
+        contract.Configuration,
+        event.EventTypeAction,
+        event.EventLog,
         module='contract_set', type_='model')
     Pool.register(
-        ContractSetDecline,
+        contract.ContractSetDecline,
         module='contract_set', type_='wizard')
