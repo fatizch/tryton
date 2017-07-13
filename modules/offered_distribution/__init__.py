@@ -2,18 +2,18 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .distribution import *
-from .offered import *
-from .contract import *
-from .test_case import *
+import distribution
+import offered
+import contract
+import test_case
 
 
 def register():
     Pool.register(
-        DistributionNetwork,
-        CommercialProduct,
-        DistributionNetworkComProductRelation,
-        Product,
-        Contract,
-        TestCaseModel,
+        distribution.DistributionNetwork,
+        distribution.CommercialProduct,
+        distribution.DistributionNetworkComProductRelation,
+        offered.Product,
+        contract.Contract,
+        test_case.TestCaseModel,
         module='offered_distribution', type_='model')
