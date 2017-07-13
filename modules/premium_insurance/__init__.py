@@ -2,17 +2,17 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .offered import *
-from .contract import *
+import offered
+import contract
 
 
 def register():
     Pool.register(
-        Product,
-        OptionDescription,
-        OptionDescriptionPremiumRule,
-        Contract,
-        CoveredElement,
-        ExtraPremium,
-        Premium,
+        offered.Product,
+        offered.OptionDescription,
+        offered.OptionDescriptionPremiumRule,
+        contract.Contract,
+        contract.CoveredElement,
+        contract.ExtraPremium,
+        contract.Premium,
         module='premium_insurance', type_='model')
