@@ -2,17 +2,17 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .process import *
-from .contract import *
+import process
+import contract
 
 
 def register():
     Pool.register(
-        ContractSet,
-        Process,
-        ContractSetValidateFindProcess,
+        contract.ContractSet,
+        process.Process,
+        process.ContractSetValidateFindProcess,
         module='contract_set_process', type_='model')
 
     Pool.register(
-        ContractSetValidate,
+        process.ContractSetValidate,
         module='contract_set_process', type_='wizard')
