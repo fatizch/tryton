@@ -2,17 +2,17 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from report_engine import *
-from offered import *
-from contract import *
-from event import *
+import report_engine
+import offered
+import contract
+import event
 
 
 def register():
     Pool.register(
-        CommercialProduct,
-        ReportComProductRelation,
-        ReportTemplate,
-        Contract,
-        EventTypeAction,
+        offered.CommercialProduct,
+        report_engine.ReportComProductRelation,
+        report_engine.ReportTemplate,
+        contract.Contract,
+        event.EventTypeAction,
         module='distribution_report_engine', type_='model')
