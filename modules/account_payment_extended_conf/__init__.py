@@ -2,15 +2,15 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .payment import *
-from .configuration import *
+import payment
+import configuration
 import party
 
 
 def register():
     Pool.register(
-        Configuration,
-        PartyJournalRelation,
+        configuration.Configuration,
+        payment.PartyJournalRelation,
         module='account_payment_extended_conf', type_='model')
     Pool.register(
         party.PartyReplace,
