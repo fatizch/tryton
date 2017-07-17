@@ -6,86 +6,89 @@ from trytond.pool import Pool
 from trytond.config import config
 from trytond.cache import Cache, freeze
 
-from .batch import *
-from .utils import *
-from .coog_date import *
-from .coog_string import *
-from .export import *
-from .ir import *
-from .res import *
-from .model import *
-from .many2one_form import *
-from .test_case_framework import *
-from .models_for_tests import *
-from .tag import *
-from .event import *
-from .attachment import *
-from .diff_blame import *
-from .note import *
-from .access import *
+import batch
+import export
+import ir
+import res
+import model
+import test_case_framework
+import models_for_tests
+import tag
+import event
+import attachment
+import diff_blame
+import note
+import access
 import extra_details
 import wizard_context
+
+from model import UnionMixin, expand_tree
+
+__all__ = [
+    'UnionMixin',
+    'expand_tree',
+    ]
 
 
 def register():
     Pool.register(
-        ExportPackage,
-        ExportInstance,
-        ExportConfiguration,
-        ExportModelConfiguration,
-        ExportFieldConfiguration,
-        ExportModelExportConfigurationRelation,
-        ExportSelectFields,
-        Add2ExportPackageWizardStart,
-        Tag,
-        Sequence,
-        SequenceStrict,
-        DateClass,
-        View,
-        UIMenu,
-        Rule,
-        RuleGroup,
-        Action,
-        ActionKeyword,
-        IrModule,
-        IrModel,
-        IrModelField,
-        IrModelFieldAccess,
-        ModelAccess,
-        Property,
-        Lang,
-        Icon,
-        Group,
-        User,
-        ResUserWarning,
-        FileSelector,
-        ViewValidationBatch,
-        CleanDatabaseBatch,
-        NoSelectBatchExample,
-        TestCaseModel,
-        TestCaseInstance,
-        TestCaseRequirementRelation,
-        TestCaseSelector,
-        SelectTestCase,
-        TestCaseFileSelector,
-        TagObjectRelation,
-        MethodDefinition,
-        Event,
-        EventType,
-        EventTypeAction,
-        ActionEventTypeRelation,
-        ExportSummary,
-        ExportConfigurationSelection,
-        Translation,
-        TranslationOverrideStart,
-        Attachment,
-        RevisionBlame,
-        RevisionFormatTranslator,
-        Note,
-        Model,
-        ModelField,
-        UIMenuAccess,
-        BatchParamsConfig,
+        export.ExportPackage,
+        export.ExportInstance,
+        export.ExportConfiguration,
+        export.ExportModelConfiguration,
+        export.ExportFieldConfiguration,
+        export.ExportModelExportConfigurationRelation,
+        export.ExportSelectFields,
+        export.Add2ExportPackageWizardStart,
+        tag.Tag,
+        ir.Sequence,
+        ir.SequenceStrict,
+        ir.DateClass,
+        ir.View,
+        ir.UIMenu,
+        ir.Rule,
+        ir.RuleGroup,
+        ir.Action,
+        ir.ActionKeyword,
+        ir.IrModule,
+        ir.IrModel,
+        ir.IrModelField,
+        ir.IrModelFieldAccess,
+        ir.ModelAccess,
+        ir.Property,
+        ir.Lang,
+        ir.Icon,
+        res.Group,
+        res.User,
+        res.ResUserWarning,
+        export.FileSelector,
+        batch.ViewValidationBatch,
+        batch.CleanDatabaseBatch,
+        batch.NoSelectBatchExample,
+        test_case_framework.TestCaseModel,
+        test_case_framework.TestCaseInstance,
+        test_case_framework.TestCaseRequirementRelation,
+        test_case_framework.TestCaseSelector,
+        test_case_framework.SelectTestCase,
+        test_case_framework.TestCaseFileSelector,
+        tag.TagObjectRelation,
+        model.MethodDefinition,
+        event.Event,
+        event.EventType,
+        event.EventTypeAction,
+        event.ActionEventTypeRelation,
+        export.ExportSummary,
+        export.ExportConfigurationSelection,
+        ir.Translation,
+        ir.TranslationOverrideStart,
+        attachment.Attachment,
+        diff_blame.RevisionBlame,
+        diff_blame.RevisionFormatTranslator,
+        note.Note,
+        access.Model,
+        access.ModelField,
+        access.UIMenuAccess,
+        batch.BatchParamsConfig,
         extra_details.ExtraDetailsConfiguration,
         extra_details.ExtraDetailsConfigurationLine,
         wizard_context.PersistentDataView,
@@ -93,29 +96,29 @@ def register():
 
     if config.get('env', 'testing') == 'True':
         Pool.register(
-            TestMethodDefinitions,
-            TestDictSchema,
-            ExportTestTarget,
-            ExportTestTargetSlave,
-            ExportTest,
-            ExportTestTarget2,
-            ExportTestTargetSlave2,
-            ExportTestRelation,
-            O2MDeletionMaster,
-            O2MDeletionChild,
-            TestHistoryTable,
-            TestHistoryChildTable,
-            TestLoaderUpdater,
+            models_for_tests.TestMethodDefinitions,
+            models_for_tests.TestDictSchema,
+            models_for_tests.ExportTestTarget,
+            models_for_tests.ExportTestTargetSlave,
+            models_for_tests.ExportTest,
+            models_for_tests.ExportTestTarget2,
+            models_for_tests.ExportTestTargetSlave2,
+            models_for_tests.ExportTestRelation,
+            models_for_tests.O2MDeletionMaster,
+            models_for_tests.O2MDeletionChild,
+            models_for_tests.TestHistoryTable,
+            models_for_tests.TestHistoryChildTable,
+            models_for_tests.TestLoaderUpdater,
             module='coog_core', type_='model')
 
     Pool.register(
-        ImportWizard,
-        Add2ExportPackageWizard,
-        TestCaseWizard,
-        ExportFieldsSelection,
-        ExportToFile,
-        TranslationOverride,
-        RevisionBlameWizard,
+        export.ImportWizard,
+        export.Add2ExportPackageWizard,
+        test_case_framework.TestCaseWizard,
+        export.ExportFieldsSelection,
+        export.ExportToFile,
+        ir.TranslationOverride,
+        diff_blame.RevisionBlameWizard,
         wizard_context.PersistentContextWizard,
         module='coog_core', type_='wizard')
 
