@@ -2,17 +2,17 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .distribution import *
-from .test_case import *
+import distribution
+import test_case
 import party
 
 
 def register():
     Pool.register(
-        DistributionNetwork,
-        DistributionNetworkContactMechanism,
+        distribution.DistributionNetwork,
+        distribution.DistributionNetworkContactMechanism,
         party.Party,
-        TestCaseModel,
+        test_case.TestCaseModel,
         module='distribution', type_='model')
     Pool.register(
         party.PartyReplace,
