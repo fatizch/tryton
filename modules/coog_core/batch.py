@@ -409,28 +409,29 @@ class CleanDatabaseBatch(BatchRoot):
         buf = []
         TableHandler = backend.get('TableHandler')
         pool = Pool()
-        for model in objects:
+        for cur_model in objects:
             try:
-                c = pool.get(model.model)
+                c = pool.get(cur_model.model)
             except:
-                buf.append('DROP TABLE "%s";' % model.model.replace('.', '_'))
+                buf.append('DROP TABLE "%s";' % cur_model.model.replace(
+                        '.', '_'))
                 buf.append('DROP SEQUENCE "%s_id_seq";' %
-                    model.model.replace('.', '_'))
+                    cur_model.model.replace('.', '_'))
                 buf.append('DROP TABLE "%s__history";' %
-                    model.model.replace('.', '_'))
+                    cur_model.model.replace('.', '_'))
                 buf.append('DROP SEQUENCE "%s__history___id_seq";' %
-                    model.model.replace('.', '_'))
+                    cur_model.model.replace('.', '_'))
                 continue
             if not issubclass(c, ModelSQL):
-                cls.logger.debug('not SQL model: %s' % model)
+                cls.logger.debug('not SQL model: %s' % cur_model)
                 continue
             if c.table_query():
-                cls.logger.debug('model is table_query: %s' % model)
+                cls.logger.debug('model is table_query: %s' % cur_model)
                 continue
             fields = [k for k, v in c._fields.iteritems()
                 if cls.check_field(v)]
             table = TableHandler(c)
-            cls.check_model(buf, model.model, fields, table)
+            cls.check_model(buf, cur_model.model, fields, table)
             tables.append(table)
         if drop_const is not None:
             for table in tables:

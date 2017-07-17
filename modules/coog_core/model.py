@@ -4,6 +4,8 @@ import inspect
 import logging
 import datetime
 import json
+
+from functools import wraps
 from genshi.template import NewTextTemplate
 
 from sql import Union, Column, Literal, Window, Null
