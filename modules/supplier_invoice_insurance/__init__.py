@@ -2,16 +2,16 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .invoice import *
-from .product import *
+import invoice
+import product
 import party
 
 
 def register():
     Pool.register(
-        Invoice,
-        InvoiceLine,
-        Product,
+        invoice.Invoice,
+        invoice.InvoiceLine,
+        product.Product,
         module='supplier_invoice_insurance', type_='model')
     Pool.register(
         party.PartyReplace,
