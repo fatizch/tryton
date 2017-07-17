@@ -111,10 +111,16 @@ end
 
 broker.prepare = function(id)
     local job = redis.call('GET', broker.patterns[1] .. id)
+    if not job then
+        return nil
+    end
     job = cjson.decode(job)
     job.id = id
     job.date = job.date or '2000-01-01T00:00:00'
     local meta = redis.call('GET', broker.patterns[2] .. id)
+    if not job then
+        return nil
+    end
     if meta then
         meta = cjson.decode(meta)
         if not job.status then
@@ -190,8 +196,12 @@ api.fail = function(queue)
     local fails = redis.call('LRANGE', broker.fail_list, 0, -1)
     for _, id in ipairs(fails) do
         local job = broker.prepare(id)
-        if is_eligible(job, queue, filter) then
-            result[#result+1] = id
+        if job then
+            if is_eligible(job, queue, filter) then
+                result[#result+1] = id
+            end
+        else
+            redis.call('LREM', broker.fail_list, 0, id)
         end
     end
     return result
@@ -222,9 +232,13 @@ api.flist = function()
     local fails = redis.call('LRANGE', broker.fail_list, 0, -1)
     for _, id in ipairs(fails) do
         local job = broker.prepare(id)
-        if is_eligible(job, nil, filter) then
-            broker.fill(id, job)
-            list_append(header, result, job)
+        if job then
+            if is_eligible(job, nil, filter) then
+                broker.fill(id, job)
+                list_append(header, result, job)
+            end
+        else
+            redis.call('LREM', broker.fail_list, 0, id)
         end
     end
     return result

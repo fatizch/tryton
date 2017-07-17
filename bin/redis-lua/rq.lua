@@ -117,6 +117,9 @@ end
 broker.prepare = function(id)
     local job = {id=id}
     local key = broker.patterns[1] .. id
+    if not redis.call('EXISTS', key) then
+        return nil
+    end
     job.date = redis.call('HGET', key, 'created_at')
     job.queue = redis.call('HGET', key, 'origin')
     local status = redis.call('HGET', key, 'status')
@@ -197,8 +200,12 @@ api.fail = function(queue)
     local fails = redis.call('LRANGE', broker.fail_list, 0, -1)
     for _, id in ipairs(fails) do
         local job = broker.prepare(id)
-        if is_eligible(job, queue, filter) then
-            result[#result+1] = id
+        if job then
+            if is_eligible(job, queue, filter) then
+                result[#result+1] = id
+            end
+        else
+            redis.call('LREM', broker.fail_list, 0, id)
         end
     end
     return result
@@ -229,9 +236,13 @@ api.flist = function()
     local fails = redis.call('LRANGE', broker.fail_list, 0, -1)
     for _, id in ipairs(fails) do
         local job = broker.prepare(id)
-        if is_eligible(job, nil, filter) then
-            broker.fill(id, job)
-            list_append(header, result, job)
+        if job then
+            if is_eligible(job, nil, filter) then
+                broker.fill(id, job)
+                list_append(header, result, job)
+            end
+        else
+            redis.call('LREM', broker.fail_list, 0, id)
         end
     end
     return result
