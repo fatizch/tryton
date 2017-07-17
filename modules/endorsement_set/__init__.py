@@ -1,19 +1,19 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .endorsement import *
-from .event import *
+import endorsement
+import event
 
 
 def register():
     Pool.register(
-        Configuration,
-        EndorsementSet,
-        Endorsement,
-        EndorsementSetSelectDeclineReason,
-        EventLog,
-        EventTypeAction,
+        endorsement.Configuration,
+        endorsement.EndorsementSet,
+        endorsement.Endorsement,
+        endorsement.EndorsementSetSelectDeclineReason,
+        event.EventLog,
+        event.EventTypeAction,
         module='endorsement_set', type_='model')
     Pool.register(
-        EndorsementSetDecline,
+        endorsement.EndorsementSetDecline,
         module='endorsement_set', type_='wizard')
