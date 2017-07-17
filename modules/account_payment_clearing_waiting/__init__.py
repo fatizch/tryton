@@ -2,19 +2,19 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .payment import *
-from .statement import *
-from .move import *
+import payment
+import statement
+import move
 
 
 def register():
     Pool.register(
-        Payment,
-        Move,
-        Journal,
-        StatementJournal,
+        payment.Payment,
+        payment.Journal,
+        move.Move,
+        statement.StatementJournal,
         module='account_payment_clearing_waiting', type_='model')
 
     Pool.register(
-        CancelLineGroup,
+        statement.CancelLineGroup,
         module='account_payment_clearing_waiting', type_='wizard')
