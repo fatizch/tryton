@@ -1,19 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-
 from trytond.modules.coog_core import batch, utils
 
 
-__all__ = [
-    'BaseMassFlowBatch',
-    ]
-
-
 class BaseMassFlowBatch(batch.MemorySavingBatch):
-    'Mass Flow Batch'
-
-    __name__ = 'mass.flow.batch'
-
     @classmethod
     def write_header(cls, *args, **kwargs):
         filename = cls.get_filename(*args, **kwargs)

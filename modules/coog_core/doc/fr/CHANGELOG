@@ -1,3 +1,4 @@
+* OTH#0000 Retrait des classes de batch des register
 * OTH#0000 Ajout du flag 'delete_missing' sur les suspensions actives du contrat
 * FEA#6575 Ajout d'un operateur de durée pour les requête SQL
 * OTH#0000 Correction de la traduction de l'événement des tâches asynchrones

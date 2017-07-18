@@ -38,7 +38,6 @@ __all__ = [
     'CleanDatabaseBatch',
     'NoSelectBatchExample',
     'BatchParamsConfig',
-    'MemorySavingBatch',
     ]
 
 
@@ -468,10 +467,6 @@ class BatchParamsConfig(Model):
 
 
 class MemorySavingBatch(BatchRoot):
-    'Memory Save Batch'
-
-    __name__ = 'memory.save.batch'
-
     @classmethod
     def get_tables(cls, *args, **kwargs):
         main_model_name = cls.get_batch_main_model_name()
