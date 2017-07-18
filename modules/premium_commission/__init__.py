@@ -2,19 +2,19 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-from .contract import *
-from .commission import *
+import contract
+import commission
 
 
 def register():
     Pool.register(
-        Contract,
-        CommissionPlan,
-        CommissionPlanFee,
-        Agent,
-        AgentFee,
-        CreateAgentsAsk,
+        contract.Contract,
+        commission.CommissionPlan,
+        commission.CommissionPlanFee,
+        commission.Agent,
+        commission.AgentFee,
+        commission.CreateAgentsAsk,
         module='premium_commission', type_='model')
     Pool.register(
-        CreateAgents,
+        commission.CreateAgents,
         module='premium_commission', type_='wizard')
