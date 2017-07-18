@@ -938,7 +938,7 @@ class ReportGenerate(CoogReport):
         else:
             report_context['address'] = None
         try:
-            report_context['Lang'] = report_context['Party'].lang.code
+            report_context['Lang'] = report_context['Party'].lang
         except AttributeError:
             report_context['Lang'] = utils.get_user_language()
         if data['sender']:

@@ -1,3 +1,4 @@
+* BUG#6648 Unify the 'Lang' data type when generating reports
 * FEA#6536 Manage light function fields for reports
 * BUG#6569 Restore multi-entity printing capabilities
 * OTH#0000 Fix: Migration which replace Null values with an empty string for the column 'kind' of 'report_template'
