@@ -73,7 +73,7 @@ end
 
 local function list_init()
     local header = {'date', 'queue', 'id', 'status', 'context', 'records',
-        'args', 'result'}
+        'args', 'kwargs', 'result'}
     local result = {table.concat(header, '\t')}
     return header, result
 end
@@ -139,10 +139,12 @@ broker.fill = function(id, job)
     local data = redis.call('HGET', broker.patterns[1] .. id, 'coog')
     data = cjson.decode(data)
     local args = data.args
+    local kwargs = data.kwargs
     job.task = data.func
     job.context = args[1]
     job.records = cjson.encode(args[2])
     job.args = cjson.encode(args[3])
+    job.kwargs = cjson.encode(kwargs)
     job.result = 'pickled!'
 end
 

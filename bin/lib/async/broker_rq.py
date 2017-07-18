@@ -25,7 +25,7 @@ def log_job(job, queue, fname, args, kwargs):
                 'queue': queue,
                 'func': fname,
                 'args': args,
-                'kwargs', kwargs,
+                'kwargs': kwargs,
                 }))
 
 
