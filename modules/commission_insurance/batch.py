@@ -110,7 +110,7 @@ class PostCommissionInvoiceBatch(batch.BatchRoot):
             domain.append(('business_kind', '=', 'insurer_invoice'),)
 
         invoices = AccountInvoice.search(domain)
-        return [[invoice.id] for invoice in invoices]
+        return [(invoice.id,) for invoice in invoices]
 
     @classmethod
     def execute(cls, objects, ids, agent_type, with_draft=False):

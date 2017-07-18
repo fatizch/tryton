@@ -1,3 +1,4 @@
+* BUG#6643 Correction de la génération du batch d'émission des bordereaux courtier
 * BUG#6619 Correction de la gestion des relances sur les quittances apériodiques
 * OTH#0000 Notification d'un nouvel événement lors de la génération des bordereaux de commission
 * BUG#6445 Définition manuelle des paramètres de la chaîne de batch
