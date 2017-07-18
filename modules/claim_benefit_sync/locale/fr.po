@@ -1,0 +1,71 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:benefit,parent_benefits:"
+msgid "Parent Benefits"
+msgstr "Prestations de base"
+
+msgctxt "field:benefit,sub_benefits:"
+msgid "Sub Benefits"
+msgstr "Prestation complémentaires"
+
+msgctxt "field:benefit-benefit,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-benefit,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-benefit,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit-benefit,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:benefit-benefit,master:"
+msgid "Master"
+msgstr "Base"
+
+msgctxt "field:benefit-benefit,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit-benefit,slave:"
+msgid "Slave"
+msgstr "Complémentaire"
+
+msgctxt "field:benefit-benefit,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:benefit-benefit,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:benefit-benefit,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:claim.loss,main_services:"
+msgid "Main services"
+msgstr "Services de base"
+
+msgctxt "field:claim.service,is_main_service:"
+msgid "Is main service"
+msgstr "Est un service de base"
+
+msgctxt "field:claim.service,parent_service:"
+msgid "Parent service"
+msgstr "Service de base"
+
+msgctxt "field:claim.service,sub_services:"
+msgid "Sub services"
+msgstr "Services complémentaires"
+
+msgctxt "model:benefit-benefit,name:"
+msgid "Benefit Dependency Relation"
+msgstr "Relation entre prestations"

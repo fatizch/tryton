@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/notebook/page[@id='managers']" position="after">
+        <page name="sub_benefits">
+            <separator name="sub_benefits" colspan="4"/>
+            <field name="sub_benefits" colspan="4"/>
+            <separator name="parent_benefits" colspan="4"/>
+            <field name="parent_benefits" colspan="4"/>
+        </page>
+    </xpath>
+</data>
