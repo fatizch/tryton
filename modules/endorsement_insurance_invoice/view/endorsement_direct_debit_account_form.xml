@@ -2,6 +2,9 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <form col="6">
+    <label name="payer"/>
+    <field name="payer" colspan="5"/>
+    <newline/>
     <label name="direct_debit_account"/>
     <field name="direct_debit_account"/>
     <label name="direct_debit_account_selector"/>
