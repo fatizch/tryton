@@ -1,39 +1,38 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from .rule_engine import *
-from .offered import *
-from .coverage import *
-from .process import *
-from .party import *
-from .test_case import *
-from .batch import *
-from .exclusion import *
-from .extra_premium import *
+import rule_engine
+import offered
+import coverage
+import process
+import test_case
+import batch
+import exclusion
+import extra_premium
 import party
 
 
 def register():
     Pool.register(
-        Party,
-        Insurer,
-        InsurerDelegation,
-        ItemDescription,
-        OptionDescription,
-        Product,
-        ItemDescSubItemDescRelation,
-        ItemDescriptionExtraDataRelation,
-        CoveredElementEndReason,
-        ItemDescriptionEndReasonRelation,
-        ProductValidationBatch,
-        RuleEngineExtraData,
-        RuleEngine,
-        ExclusionKind,
-        ExtraPremiumKind,
-        RuleEngineRuntime,
-        ProcessProductRelation,
-        Process,
-        TestCaseModel,
+        party.Party,
+        party.Insurer,
+        party.InsurerDelegation,
+        offered.ItemDescription,
+        coverage.OptionDescription,
+        offered.Product,
+        offered.ItemDescSubItemDescRelation,
+        offered.ItemDescriptionExtraDataRelation,
+        offered.CoveredElementEndReason,
+        offered.ItemDescriptionEndReasonRelation,
+        batch.ProductValidationBatch,
+        rule_engine.RuleEngineExtraData,
+        rule_engine.RuleEngine,
+        exclusion.ExclusionKind,
+        extra_premium.ExtraPremiumKind,
+        rule_engine.RuleEngineRuntime,
+        process.ProcessProductRelation,
+        process.Process,
+        test_case.TestCaseModel,
         module='offered_insurance', type_='model')
     Pool.register(
         party.PartyReplace,
