@@ -1,3 +1,4 @@
+* BUG#6657 Remove the "Processing payments" field from payment group views
 * FEA#6588 Add tab for the reconciled rejected payments
 * OTH#0000 Fix corrupted translation file because of merge
 * FEA#6542 Allow to delete payments groups

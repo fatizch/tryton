@@ -1,3 +1,4 @@
+* BUG#6657 Retrait du champs "Paiements en attente" de la vue des groupes de payments
 * FEA#6588 Ajout d'un onglet à part pour les paiements rejetés réconcilés
 * OTH#0000 Correctif fichier de traduction corrompu suite à un merge.
 * FEA#6542 Ajout de la possibilité de supprimer des groupes de paiements

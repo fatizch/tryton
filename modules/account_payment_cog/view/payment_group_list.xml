@@ -17,6 +17,5 @@ this repository contains the full copyright notices and license terms. -->
         <button string="Fail" name="fail" tree_invisible="1"/>
         <button string="Acknowledge" name="acknowledge" tree_invisible="1"/>
         <button string="To Acknowledge" name="to_acknowledge" tree_invisible="1"/>
-        <field name="processing_payments" tree_invisible="1"/>
     </xpath>
 </data>
