@@ -1,4 +1,5 @@
-* BUG#6632: Fix crash in calculating indemnification gaps when closing a claim
+* FEA#5907 Manage multiple indemnifications on a given period
+* BUG#6632 Fix crash in calculating indemnification gaps when closing a claim
 * BUG#6504 Don't invoice when payback method is continuous and invoice has a negative sum
 * OTH#0000 Warning fixes on class Configuration when server starts
 * BUG#6358 Use today to check bank account when scheduling an indemnification

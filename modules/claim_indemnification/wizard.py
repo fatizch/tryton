@@ -469,7 +469,16 @@ class IndemnificationCalculationResult(model.CoogView):
     __name__ = 'claim.indemnification_calculation_result'
 
     indemnification = fields.One2Many('claim.indemnification', None,
-        'Indemnification')
+        'Indemnification', readonly=True)
+
+    @classmethod
+    def view_attributes(cls):
+        return super(IndemnificationCalculationResult, cls).view_attributes() \
+            + [
+                ("/form/group[@id='indemnification_request_group']/" +
+                    "group[@id='warning_multiple']", 'states',
+                    {'invisible': Len(Eval('indemnification', [])) <= 1}),
+                ]
 
 
 class IndemnificationRegularisation(model.CoogView):
@@ -525,7 +534,8 @@ class CreateIndemnification(Wizard):
     select_service = StateView('claim.select_service',
         'claim_indemnification.select_service_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Continue', 'service_selected', 'tryton-go-next')])
+            Button('Continue', 'service_selected', 'tryton-go-next',
+                default=True)])
     service_selected = StateTransition()
     definition = StateView('claim.indemnification_definition',
         'claim_indemnification.indemnification_definition_view_form', [
@@ -536,13 +546,15 @@ class CreateIndemnification(Wizard):
     result = StateView('claim.indemnification_calculation_result',
         'claim_indemnification.indemnification_calculation_result_view_form', [
             Button('Previous', 'definition', 'tryton-go-previous'),
-            Button('Validate', 'regularisation', 'tryton-go-next')])
+            Button('Validate', 'regularisation', 'tryton-go-next',
+                default=True)])
     regularisation = StateTransition()
     init_previous = StateTransition()
     select_regularisation = StateView('claim.indemnification_regularisation',
         'claim_indemnification.indemnification_regularisation_view_form', [
             Button('Previous', 'init_previous', 'tryton-go-previous'),
-            Button('Valider', 'apply_regularisation', 'tryton-go-next')])
+            Button('Valider', 'apply_regularisation', 'tryton-go-next',
+                default=True)])
     apply_regularisation = StateTransition()
 
     @classmethod
@@ -558,7 +570,7 @@ class CreateIndemnification(Wizard):
                 'start_date_required': 'Start date is required',
                 })
 
-    def default_service_for_treatment(self, claim):
+    def possible_services(self, claim):
         res = []
         for delivered in claim.delivered_services:
             if not delivered.loss.end_date or not delivered.indemnifications:
@@ -578,7 +590,7 @@ class CreateIndemnification(Wizard):
                         indemn.end_date + relativedelta(days=1)):
                     res.append(delivered)
                     break
-        return res[0] if res and len(res) == 1 else None
+        return res
 
     def transition_select_service_needed(self):
         pool = Pool()
@@ -592,10 +604,9 @@ class CreateIndemnification(Wizard):
             self.definition.service = Service(active_id)
             return 'definition'
         elif Transaction().context.get('active_model') == 'claim':
-            claim_service = self.default_service_for_treatment(
-                Claim(active_id))
-            if claim_service:
-                self.definition.service = claim_service
+            possible_services = self.possible_services(Claim(active_id))
+            if len(possible_services) == 1:
+                self.definition.service = possible_services[0]
                 return 'definition'
             return 'select_service'
         elif (Transaction().context.get('active_model') ==
@@ -618,11 +629,11 @@ class CreateIndemnification(Wizard):
         if not Transaction().context.get('active_model') == 'claim':
             return {}
         claim = Claim(Transaction().context.get('active_id'))
-        claim_services = claim.delivered_services
-        default_service = self.default_service_for_treatment(claim)
+        possible_services = self.possible_services(claim)
         return {
-            'possible_services': [s.id for s in claim_services],
-            'selected_service': default_service.id if default_service else None,
+            'possible_services': [s.id for s in possible_services],
+            'selected_service': possible_services[0].id
+            if len(possible_services) == 1 else None,
             }
 
     def transition_service_selected(self):
@@ -678,7 +689,13 @@ class CreateIndemnification(Wizard):
             if service.benefit.indemnification_kind == 'capital':
                 start_date = utils.today()
                 end_date = None
-        extra_data = utils.get_value_at_date(service.extra_datas, start_date)
+        extra_data = utils.get_value_at_date(service.extra_datas,
+            start_date).extra_data_values
+        # Update initial extra_data with the current version if necessary
+        new_data = service.benefit.get_extra_data_def(service)
+        for k, v in new_data.items():
+            if k not in extra_data:
+                extra_data[k] = v
         if end_date and start_date > end_date:
             start_date = None
             end_date = None
@@ -688,7 +705,7 @@ class CreateIndemnification(Wizard):
             'indemnification_date': start_date,
             'end_date': end_date,
             'beneficiary': beneficiary.id if beneficiary else None,
-            'extra_data': extra_data.extra_data_values,
+            'extra_data': extra_data,
             'product': product_id,
             'beneficiary_share': share,
             'journal': configuration.payment_journal.id,
@@ -716,49 +733,46 @@ class CreateIndemnification(Wizard):
                 input_end_date < input_start_date or
                 input_start_date < service.loss.start_date):
             self.raise_user_error('wrong_date')
-        return Pool().get('claim.service').cancel_indemnification([service],
-            input_start_date, input_end_date,
-            beneficiary=self.definition.beneficiary)
 
-    def init_indemnification(self, indemnification):
-        ExtraData = Pool().get('claim.service.extra_data')
+    def update_service_extra_data(self, values):
+        service = self.definition.service
         if self.definition.is_period:
             input_start_date = self.definition.start_date
         else:
             input_start_date = self.definition.indemnification_date
-        loss = self.definition.service.loss
+        service.update_extra_data(input_start_date or
+            service.loss.start_date, values)
+        service.save()
+
+    def init_indemnifications(self):
+        Indemnification = Pool().get('claim.indemnification')
+        indemnifications = getattr(self.result, 'indemnification', None)
+        if not indemnifications:
+            indemnifications = [
+                Indemnification(service=self.definition.service)]
+        for indemnification in indemnifications:
+            self.update_indemnification(indemnification)
+        return indemnifications
+
+    def update_indemnification(self, indemnification):
+        if self.definition.is_period:
+            input_start_date = self.definition.start_date
+        else:
+            input_start_date = self.definition.indemnification_date
         indemnification.start_date = input_start_date
         indemnification.end_date = self.definition.end_date
         indemnification.journal = self.definition.journal
-        extra_data_values = self.definition.get_extra_data_values()
-        extra_date = input_start_date or loss.start_date
-        extra_data = utils.get_value_at_date(
-            self.definition.service.extra_datas, extra_date)
-        if (extra_data.extra_data_values != extra_data_values):
-            if (extra_date == extra_data.date or
-                    extra_date == self.definition.service.loss.start_date and
-                    not extra_data.date):
-                extra_data.extra_data_values = extra_data_values
-            else:
-                extra_data = ExtraData(
-                    extra_data_values=extra_data_values, date=extra_date,
-                    claim_service=self.definition.service)
-            extra_data.save()
-        self.definition.service.save()
-        indemnification.init_from_service(self.definition.service)
         indemnification.amount = 0
         indemnification.total_amount = 0
         indemnification.currency = indemnification.service.get_currency()
         indemnification.currency_digits = indemnification.currency.digits
         indemnification.beneficiary = self.definition.beneficiary
         indemnification.share = self.definition.beneficiary_share
+        indemnification.init_from_service(indemnification.service)
         indemnification.product = self.definition.product
 
-    def transition_calculate(self):
-        pool = Pool()
-        ClaimService = pool.get('claim.service')
-        Indemnification = pool.get('claim.indemnification')
-        self.check_input()
+    def clear_indemnifications(self):
+        ClaimService = Pool().get('claim.service')
         if self.definition.is_period:
             input_start_date = self.definition.start_date
         else:
@@ -766,14 +780,22 @@ class CreateIndemnification(Wizard):
         ClaimService.cancel_indemnification([self.definition.service],
             input_start_date, self.definition.end_date,
             beneficiary=self.definition.beneficiary)
-        if hasattr(self.result, 'indemnification'):
-            indemnification = self.result.indemnification[0]
-        else:
-            indemnification = Indemnification()
-        indemnification.beneficiary = self.definition.beneficiary
-        self.init_indemnification(indemnification)
-        Indemnification.calculate([indemnification])
-        self.result.indemnification = [indemnification]
+        indemnifications = getattr(self.result, 'indemnification', None)
+        if not indemnifications:
+            return
+        self.result.indemnification = [x.id
+            for x in Pool().get('claim.indemnification').search([
+                    ('id', 'in', [x.id for x in indemnifications])])]
+
+    def transition_calculate(self):
+        pool = Pool()
+        Indemnification = pool.get('claim.indemnification')
+        self.check_input()
+        self.clear_indemnifications()
+        self.update_service_extra_data(self.definition.get_extra_data_values())
+        indemnifications = self.init_indemnifications()
+        Indemnification.calculate(indemnifications)
+        self.result.indemnification = indemnifications
         return 'result'
 
     def default_result(self, name):
@@ -788,6 +810,9 @@ class CreateIndemnification(Wizard):
         return 'result'
 
     def transition_regularisation(self):
+        if self.result.indemnification:
+            Pool().get('claim.indemnification').save(
+                self.result.indemnification)
         cancelled = self.get_cancelled_indemnification(
             self.result.indemnification[0].service)
         if cancelled:

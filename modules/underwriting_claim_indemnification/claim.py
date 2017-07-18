@@ -191,8 +191,8 @@ class CreateIndemnification(model.FunctionalErrorMixIn):
                 return self.check_input()
         return result
 
-    def init_indemnification(self, indemnification):
-        super(CreateIndemnification, self).init_indemnification(
+    def update_indemnification(self, indemnification):
+        super(CreateIndemnification, self).update_indemnification(
             indemnification)
         if not self.definition.underwriting_reduction:
             indemnification.apply_underwriting_reduction = False

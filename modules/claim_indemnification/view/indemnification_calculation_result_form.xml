@@ -3,6 +3,10 @@
 this repository contains the full copyright notices and license terms. -->
 <form>
     <group id="indemnification_request_group" yfill="1" yexpand="1" colspan="4">
+        <group id="warning_multiple" string="" colspan="4">
+            <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
+            <label id="warning_label" string="Multiple indemnifications were calculated"/>
+        </group>
         <field name="indemnification" colspan="4" mode="form,tree"/>
     </group>
 </form>

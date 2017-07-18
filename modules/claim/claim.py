@@ -158,8 +158,7 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
         return self.status == 'closed'
 
     def get_delivered_services(self, name):
-        Service = Pool().get('claim.service')
-        return [s.id for s in Service.search([('claim', '=', self.id)])]
+        return [service.id for loss in self.losses for service in loss.services]
 
     @classmethod
     def set_delivered_services(cls, claims, name, value):
@@ -861,6 +860,24 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
             return []
         if self.benefit.beneficiary_kind == 'subscriber':
             return [(self.option.parent_contract.subscriber, 1)]
+
+    def update_extra_data(self, at_date, base_values):
+        ExtraData = Pool().get('claim.service.extra_data')
+        extra_data = utils.get_value_at_date(self.extra_datas, at_date)
+        new_data = self.benefit.get_extra_data_def(self)
+
+        # Only use matching extra_data
+        values = {x: base_values.get(x, None)
+            for x in extra_data.extra_data_values.keys() + new_data.keys()}
+        if (extra_data.extra_data_values != values):
+            if (at_date == extra_data.date or
+                    at_date == self.loss.start_date and not extra_data.date):
+                extra_data.extra_data_values = values
+                self.extra_datas = self.extra_datas
+            else:
+                extra_data = ExtraData(extra_data_values=values, date=at_date)
+                self.extra_datas = [x for x in self.extra_datas
+                    if not x.date or x.date < at_date] + [extra_data]
 
 
 class ClaimSubStatus(model.CoogSQL, model.CoogView):

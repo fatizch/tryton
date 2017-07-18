@@ -494,7 +494,7 @@ class ClaimService:
             return []
         periods = []
         for period in self.get_new_indemnification_periods(until):
-            periods.append(self.clone_last_indemnification(*period))
+            periods.append(self.clone_last_indemnifications(*period))
         return periods
 
     def get_full_period(self, from_date):
@@ -518,7 +518,7 @@ class ClaimService:
                 periods.append((base_date, end_date))
         return periods
 
-    def clone_last_indemnification(self, start, end):
+    def clone_last_indemnifications(self, start, end):
         Indemnification = Pool().get('claim.indemnification')
         indemnification = Indemnification(start_date=start, end_date=end)
         indemnification.beneficiary = self.indemnifications[-1].beneficiary
@@ -526,7 +526,7 @@ class ClaimService:
         indemnification.service = self
         indemnification.product = self.indemnifications[-1].product
         indemnification.share = self.indemnifications[-1].share
-        return indemnification
+        return [indemnification]
 
     def calculate_annuity_periods(self, from_date, to_date):
         '''
@@ -570,9 +570,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     __name__ = 'claim.indemnification'
 
     beneficiary = fields.Many2One('party.party', 'Beneficiary',
-        ondelete='RESTRICT',
         states={'readonly': Eval('status') != 'calculated'},
-        depends=['status'])
+        ondelete='RESTRICT', required=True, depends=['status'])
     service = fields.Many2One('claim.service', 'Claim Service',
         ondelete='CASCADE', select=True, required=True,
         states={'readonly': Eval('status') == 'paid'}, depends=['status'])
@@ -988,11 +987,15 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     @classmethod
     @ModelView.button
     def calculate(cls, indemnifications):
-        pool = Pool()
-        IndemnificationDetail = pool.get('claim.indemnification.detail')
-        Indemnification = pool.get('claim.indemnification')
         with model.error_manager():
             cls.check_calculable(indemnifications)
+        to_save = cls.do_calculate(indemnifications)
+        if to_save:
+            cls.save(to_save)
+
+    @classmethod
+    def do_calculate(cls, indemnifications):
+        IndemnificationDetail = Pool().get('claim.indemnification.detail')
         to_save = []
         for indemnification in indemnifications:
             cur_dict = {}
@@ -1013,7 +1016,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 indemnification.amount = amount
                 indemnification.update_amounts()
             to_save.append(indemnification)
-        Indemnification.save(to_save)
+        return to_save
 
     @classmethod
     def check_calculable(cls, indemnifications):
