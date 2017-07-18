@@ -177,11 +177,11 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
 
     @classmethod
     def __register__(cls, module_name):
-        # process view migration
         super(Process, cls).__register__(module_name)
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().connection.cursor()
-        if 'menu_items' in cls._fields:
+        # Migrate from 1.12 : Remove process generated menus
+        if TableHandler.table_exist('process-menu'):
+            cursor = Transaction().connection.cursor()
             menu = Table('ir_ui_menu')
             process_menu = Table('process-menu')
             cursor.execute(*process_menu.select(process_menu.menu))
