@@ -17,7 +17,9 @@ class Party:
     __name__ = 'party.party'
 
     health_complement = fields.One2Many('health.party_complement', 'party',
-        'Health Complement', delete_missing=True)
+        'Health Complement', delete_missing=True,
+        states={'invisible': ~Eval('is_person')},
+        depends=['is_person'])
     health_contract = fields.Function(
         fields.Many2One('contract', 'Health Contract', states={
                 'invisible': Eval('context', {}).get('synthesis') != 'health',

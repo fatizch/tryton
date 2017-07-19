@@ -42,6 +42,6 @@ class Contract:
     def check_ssn_on_covered_elements(cls, contracts):
         for contract in contracts:
             for covered in contract.covered_elements:
-                if covered.party.get_SSN_required() and not \
+                if covered.party and covered.party.get_SSN_required() and not \
                         covered.party.ssn:
                     cls.raise_user_error('ssn_required', covered.rec_name)

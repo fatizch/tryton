@@ -30,7 +30,7 @@ class Product:
     def get_covered_element_dates(self, dates, covered_element):
         super(Product, self).get_covered_element_dates(dates,
             covered_element)
-        if self.is_health:
+        if covered_element.party and self.is_health:
             for complement in covered_element.party.health_complement:
                 if complement.date:
                     dates.add(complement.date)
