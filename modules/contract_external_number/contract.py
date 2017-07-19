@@ -28,3 +28,9 @@ class Contract:
             ('external_number_unique', Unique(t, t.external_number),
                 'The external number must be unique'),
             ]
+
+    @classmethod
+    def copy(cls, contracts, default=None):
+        default = default.copy() if default else {}
+        default.setdefault('external_number', None)
+        return super(Contract, cls).copy(contracts, default=default)
