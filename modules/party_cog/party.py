@@ -329,6 +329,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         default.setdefault('synthesis', None)
         default.setdefault('first_name', 'temp_for_copy')
         default.setdefault('name', 'temp_for_copy')
+        default.setdefault('addresses', [])
         clones = super(Party, cls).copy(parties, default=default)
         for clone, original in zip(clones, parties):
             if original.first_name:
@@ -355,7 +356,8 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
 
     @classmethod
     def _export_skips(cls):
-        return super(Party, cls)._export_skips() | {'code_length', 'synthesis'}
+        return super(Party, cls)._export_skips() | {
+            'code_length', 'synthesis', 'addresses'}
 
     @classmethod
     def _export_light(cls):
